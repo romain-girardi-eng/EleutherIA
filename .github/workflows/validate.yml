@@ -1,0 +1,40 @@
+name: Validate Database
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'ancient_free_will_database.json'
+      - 'schema.json'
+      - 'examples/validate_database.py'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'ancient_free_will_database.json'
+      - 'schema.json'
+      - 'examples/validate_database.py'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install jsonschema
+    
+    - name: Validate database schema
+      run: |
+        python examples/validate_database.py --input ancient_free_will_database.json --schema schema.json --verbose
+    
+    - name: Check database integrity
+      run: |
+        python examples/validate_database.py --input ancient_free_will_database.json --no-schema --verbose

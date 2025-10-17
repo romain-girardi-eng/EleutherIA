@@ -1,0 +1,46 @@
+name: Test Examples
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'examples/**'
+      - 'requirements*.txt'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'examples/**'
+      - 'requirements*.txt'
+
+jobs:
+  test-examples:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Test basic queries
+      run: |
+        python examples/basic_queries.py
+    
+    - name: Test network analysis
+      run: |
+        python examples/network_analysis.py --input ancient_free_will_database.json --centrality
+    
+    - name: Test Cytoscape export
+      run: |
+        python examples/export_cytoscape.py --input ancient_free_will_database.json --output-prefix test
+    
+    - name: Test database validation
+      run: |
+        python examples/validate_database.py --input ancient_free_will_database.json --no-schema
