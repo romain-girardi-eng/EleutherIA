@@ -67,3 +67,6 @@ exported_texts/
 
 # Docker volumes (if any)
 docker-volumes/
+
+# Wiki (managed separately)
+wiki/

@@ -5,6 +5,7 @@ import SearchPage from './pages/SearchPage';
 import GraphRAGPage from './pages/GraphRAGPage';
 import TextExplorerPage from './pages/TextExplorerPage';
 import AboutPage from './pages/AboutPage';
+import ReportErrorPage from './pages/ReportErrorPage';
 import './index.css';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
                 <NavLink to="/graphrag">GraphRAG Q&A</NavLink>
                 <NavLink to="/texts">Ancient Texts</NavLink>
                 <NavLink to="/about">About</NavLink>
+                <NavLink to="/report-error">Report Error</NavLink>
               </div>
             </div>
           </nav>
@@ -45,6 +47,7 @@ function App() {
             <Route path="/graphrag" element={<GraphRAGPage />} />
             <Route path="/texts" element={<TextExplorerPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/report-error" element={<ReportErrorPage />} />
           </Routes>
         </main>
 

@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { Network, Search, MessageSquare, BookOpen } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function HomePage() {
   return (
@@ -24,39 +26,42 @@ export default function HomePage() {
           to="/visualizer"
           title="Knowledge Graph"
           description="Explore 465 nodes and 740 relationships in an interactive network visualization"
-          icon="🕸️"
+          icon={<Network className="w-12 h-12" />}
         />
 
         <FeatureCard
           to="/search"
           title="Hybrid Search"
           description="Full-text, lemmatic, and semantic search across 289 ancient texts"
-          icon="🔍"
+          icon={<Search className="w-12 h-12" />}
         />
 
         <FeatureCard
           to="/graphrag"
           title="GraphRAG Q&A"
           description="Ask questions and get scholarly answers grounded in the knowledge graph"
-          icon="💬"
+          icon={<MessageSquare className="w-12 h-12" />}
         />
 
         <FeatureCard
           to="/texts"
           title="Ancient Texts"
           description="Browse and read 289 ancient Greek and Latin texts with lemmatization"
-          icon="📜"
+          icon={<BookOpen className="w-12 h-12" />}
         />
       </section>
 
       {/* Statistics */}
-      <section className="academic-card">
-        <h3 className="text-2xl font-serif font-bold mb-6">Database Statistics</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <StatItem label="KG Nodes" value="465" />
-          <StatItem label="Edges" value="740" />
-          <StatItem label="Ancient Texts" value="289" />
-          <StatItem label="Citations" value="200+" />
+      <section className="academic-card relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-academic-bg to-transparent opacity-50"></div>
+        <div className="relative z-10">
+          <h3 className="text-2xl font-serif font-bold mb-6">Database Statistics</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <StatItem label="KG Nodes" value="465" delay={0} />
+            <StatItem label="Edges" value="740" delay={100} />
+            <StatItem label="Ancient Texts" value="289" delay={200} />
+            <StatItem label="Citations" value="200+" delay={300} />
+          </div>
         </div>
       </section>
 
@@ -108,25 +113,104 @@ function FeatureCard({
   to: string;
   title: string;
   description: string;
-  icon: string;
+  icon: React.ReactNode;
 }) {
   return (
     <Link
       to={to}
-      className="academic-card transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:border-primary-400 group"
+      className="academic-card transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group"
+      style={{
+        ['--hover-border-color' as any]: '#769687'
+      }}
+      onMouseEnter={(e) => e.currentTarget.style.borderColor = '#769687'}
+      onMouseLeave={(e) => e.currentTarget.style.borderColor = ''}
     >
-      <div className="text-4xl mb-4 transition-transform duration-300 group-hover:scale-110">{icon}</div>
-      <h3 className="text-xl font-semibold mb-2 group-hover:text-primary-600 transition-colors">{title}</h3>
-      <p className="text-sm text-academic-muted">{description}</p>
+      <div className="flex gap-4">
+        <div className="flex-shrink-0 transition-all duration-300 group-hover:scale-110" style={{ color: '#769687' }}>
+          {icon}
+        </div>
+        <div className="flex-grow">
+          <h3 className="text-xl font-semibold mb-2 transition-colors group-hover:text-[#769687]" style={{ ['--hover-color' as any]: '#769687' }}>{title}</h3>
+          <p className="text-sm text-academic-muted">{description}</p>
+        </div>
+      </div>
     </Link>
   );
 }
 
-// Stat Item Component
-function StatItem({ label, value }: { label: string; value: string }) {
+// Animated Stat Item Component
+function StatItem({ label, value, delay = 0 }: { label: string; value: string; delay?: number }) {
+  const [displayValue, setDisplayValue] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  // Parse the target value (handle "200+" format)
+  const targetValue = parseInt(value.replace(/\D/g, '')) || 0;
+  const suffix = value.match(/\D+$/)?.[0] || '';
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasAnimated) {
+          setIsVisible(true);
+          setHasAnimated(true);
+
+          // Start animation after delay
+          setTimeout(() => {
+            // Animation parameters
+            const duration = 2000; // 2 seconds
+            const steps = 60;
+            const stepDuration = duration / steps;
+            const increment = targetValue / steps;
+
+            let currentStep = 0;
+
+            const timer = setInterval(() => {
+              currentStep++;
+              const newValue = Math.min(
+                Math.floor(increment * currentStep),
+                targetValue
+              );
+              setDisplayValue(newValue);
+
+              if (currentStep >= steps) {
+                clearInterval(timer);
+                setDisplayValue(targetValue);
+              }
+            }, stepDuration);
+
+            return () => clearInterval(timer);
+          }, delay);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
+    }
+
+    return () => {
+      if (elementRef.current) {
+        observer.unobserve(elementRef.current);
+      }
+    };
+  }, [targetValue, hasAnimated, delay]);
+
   return (
-    <div className="text-center">
-      <div className="text-3xl font-bold text-primary-600 mb-1">{value}</div>
+    <div
+      ref={elementRef}
+      className={`text-center transition-all duration-700 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+      }`}
+    >
+      <div
+        className="text-3xl font-bold mb-1 transition-all duration-300 hover:scale-110 cursor-default"
+        style={{ color: '#b61b21' }}
+      >
+        {displayValue}{suffix}
+      </div>
       <div className="text-sm text-academic-muted">{label}</div>
     </div>
   );
