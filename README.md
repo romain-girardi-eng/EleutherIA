@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/branding/logo-transparent-png.png" alt="EleutherIA Logo" width="400"/>
+  <img src="assets/branding/logo-transparent-png.png" alt="EleutherIA Logo" width="800"/>
 </p>
 
 # EleutherIA - Ancient Free Will Database
