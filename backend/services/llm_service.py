@@ -246,7 +246,7 @@ class LLMService:
         
         return health_status
     
-    def get_available_providers(self) -> List[str]:
+    async def get_available_providers(self) -> List[str]:
         """Get list of available providers"""
         available = []
         health = await self.health_check()
