@@ -1,6 +1,8 @@
-# Examples - Eleutheria Ancient Free Will Database
+# Examples - EleutherIA Ancient Free Will Database
 
-This folder contains example scripts for working with the **Eleutheria** database, including GraphRAG, semantic search, and embeddings examples.
+This folder contains example scripts for working with the **EleutherIA** database, including GraphRAG, semantic search, and embeddings examples.
+
+**EleutherIA** = Ἐλευθερία (freedom) + IA (Intelligence Artificielle/AI)
 
 ## Available Examples
 
