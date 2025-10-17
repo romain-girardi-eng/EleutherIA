@@ -18,6 +18,7 @@ The name reflects the project's dual nature: ancient philosophical debates on fr
 
 ---
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17379490.svg)](https://doi.org/10.5281/zenodo.17379490)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://semver.org/)
 [![FAIR](https://img.shields.io/badge/FAIR-compliant-green.svg)](https://www.go-fair.org/fair-principles/)
@@ -389,10 +390,10 @@ This database adheres to **FAIR principles** (Findable, Accessible, Interoperabl
 
 ### Findable
 
-- **F1:** Persistent identifier (DOI) to be assigned upon publication
+- **F1:** Persistent identifier: DOI 10.5281/zenodo.17379490
 - **F2:** Rich metadata describing content, coverage, and provenance
 - **F3:** Unique IDs for all nodes
-- **F4:** Will be registered in research data repositories (Zenodo, etc.)
+- **F4:** Registered in Zenodo research data repository
 
 ### Accessible
 

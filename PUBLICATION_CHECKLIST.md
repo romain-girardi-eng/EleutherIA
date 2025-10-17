@@ -54,7 +54,7 @@
 - [ ] Add metadata (title, author, keywords, description)
 - [ ] Select "Open Access" and "CC BY 4.0" license
 - [ ] Publish and obtain DOI
-- [ ] Update all `[to-be-assigned]` placeholders in documentation with actual DOI
+- [x] Update all `[to-be-assigned]` placeholders in documentation with actual DOI (10.5281/zenodo.17379490)
 
 **Alternative: Institutional Repository**
 - [ ] Contact Université Côte d'Azur library
@@ -217,8 +217,8 @@ Before publishing, verify:
 > - 200+ bibliography references
 >
 > 🔓 **Open Access:** CC BY 4.0 license
-> 📍 **DOI:** [to be inserted]
-> 💾 **GitHub:** [to be inserted]
+> 📍 **DOI:** 10.5281/zenodo.17379490
+> 💾 **GitHub:** https://github.com/romain-girardi-eng/EleutherIA
 >
 > Covers major positions: Aristotelian, Epicurean, Stoic, Academic Skeptic, Middle Platonist, Patristic/Early Christian, and more.
 >
