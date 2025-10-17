@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/branding/logo-transparent-png.png" alt="EleutherIA Logo" width="200"/>
+</p>
+
 # EleutherIA - Ancient Free Will Database
 
 **A Comprehensive FAIR-Compliant Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility**
