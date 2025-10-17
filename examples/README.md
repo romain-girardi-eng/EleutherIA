@@ -1,6 +1,6 @@
-# Examples - Ancient Free Will Database
+# Examples - Eleutheria Ancient Free Will Database
 
-This folder contains example scripts for working with the Ancient Free Will Database.
+This folder contains example scripts for working with the **Eleutheria** database, including GraphRAG, semantic search, and embeddings examples.
 
 ## Available Examples
 
@@ -21,6 +21,36 @@ Simple queries demonstrating how to:
 ```bash
 python basic_queries.py
 ```
+
+### 2. `generate_embeddings.py` (Coming Soon)
+
+Generate vector embeddings using Google Gemini for semantic search:
+- Load database and generate embeddings for all nodes
+- Combine multiple fields (label, description, sources)
+- Save embeddings for reuse
+- Compatible with Gemini text-embedding-004
+
+**Requirements:** `google-generativeai`
+
+### 3. `semantic_search.py` (Coming Soon)
+
+Perform semantic search across the database:
+- Query by meaning rather than keywords
+- Find conceptually similar arguments
+- Cross-lingual search (Greek/Latin/English)
+- Combine with graph traversal
+
+**Requirements:** `google-generativeai`, `numpy`
+
+### 4. `graphrag_example.py` (Coming Soon)
+
+Complete GraphRAG pipeline demonstration:
+- Semantic search to find relevant nodes
+- Graph traversal to expand context
+- Format context for LLM consumption
+- Generate answers with citations
+
+**Requirements:** `google-generativeai`, `langchain` (optional)
 
 ## Working with the Database
 
