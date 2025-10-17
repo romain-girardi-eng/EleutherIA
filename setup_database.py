@@ -449,11 +449,14 @@ class AncientFreeWillDatabaseSetup:
                 """, 
                 kg_work_id, text_data['title'], text_data['author'], category,
                 text_data['raw_text'], text_data['normalized_text'], text_data['tei_xml'],
-                text_data['lemmas'], text_data['pos_tags'], text_data['named_entities'],
+                json.dumps(text_data['lemmas']) if text_data['lemmas'] else None,
+                json.dumps(text_data['pos_tags']) if text_data['pos_tags'] else None,
+                json.dumps(text_data['named_entities']) if text_data['named_entities'] else None,
                 text_data['embedding'], text_data['embedding_model'], 
                 text_data['embedding_dimensions'], text_data['embedding_hash'],
                 embedding_created_at, text_data['language'], text_data['date_created'],
-                text_data['source'], text_data['notes'], text_data['metadata']
+                text_data['source'], text_data['notes'], 
+                json.dumps(text_data['metadata']) if text_data['metadata'] else None
                 )
                 
                 # Migrate divisions
@@ -581,7 +584,7 @@ class AncientFreeWillDatabaseSetup:
             logger.info("SETUP COMPLETED SUCCESSFULLY!")
             logger.info("=" * 60)
             logger.info(f"Total texts: {stats['total_texts']:,}")
-            logger.info(f"Total characters: {stats['total_characters']:,}")
+            logger.info(f"Total characters: {stats['total_characters'] or 0:,}")
             logger.info(f"Categories: {stats['categories']}")
             logger.info(f"Texts with embeddings: {stats['texts_with_embeddings']}")
             logger.info("=" * 60)

@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Academic styling */
+@layer base {
+  body {
+    @apply bg-academic-bg text-academic-text antialiased;
+    font-family: 'Georgia', 'Times New Roman', serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-academic-text;
+  }
+
+  /* Code and Greek/Latin text */
+  code, .greek-text, .latin-text {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  }
+}
+
+@layer components {
+  /* Academic paper style container */
+  .academic-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+  }
+
+  /* Academic card */
+  .academic-card {
+    @apply bg-academic-paper border border-academic-border rounded-lg shadow-sm p-6;
+  }
+
+  /* Academic button */
+  .academic-button {
+    @apply px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700
+           transition-colors font-medium text-sm;
+  }
+
+  .academic-button-outline {
+    @apply px-4 py-2 bg-white border border-primary-600 text-primary-600 rounded
+           hover:bg-primary-50 transition-colors font-medium text-sm;
+  }
+
+  /* Citation style */
+  .citation {
+    @apply text-sm text-academic-muted italic border-l-4 border-primary-200 pl-4 py-2;
+  }
+
+  /* Greek text styling */
+  .greek-text {
+    @apply text-primary-700 font-medium;
+  }
+
+  /* Latin text styling */
+  .latin-text {
+    @apply text-primary-600 font-medium italic;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply animate-spin rounded-full border-4 border-primary-200 border-t-primary-600;
+  }
+
+  /* Network graph container */
+  .graph-container {
+    @apply w-full h-full bg-white border border-academic-border rounded-lg overflow-hidden;
+  }
+
+  /* Search result highlight */
+  .search-highlight {
+    @apply bg-yellow-100 text-academic-text font-medium px-1;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Markdown content styling */
+.markdown-content {
+  @apply prose prose-slate max-w-none;
+}
+
+.markdown-content h1 {
+  @apply text-3xl font-bold mb-4 mt-8;
+}
+
+.markdown-content h2 {
+  @apply text-2xl font-bold mb-3 mt-6;
+}
+
+.markdown-content h3 {
+  @apply text-xl font-semibold mb-2 mt-4;
+}
+
+.markdown-content p {
+  @apply mb-4 leading-relaxed;
+}
+
+.markdown-content ul, .markdown-content ol {
+  @apply mb-4 ml-6;
+}
+
+.markdown-content li {
+  @apply mb-2;
+}
+
+.markdown-content code {
+  @apply bg-gray-100 px-1 py-0.5 rounded text-sm;
+}
+
+.markdown-content pre {
+  @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4;
+}
+
+.markdown-content blockquote {
+  @apply border-l-4 border-primary-300 pl-4 italic text-academic-muted mb-4;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}

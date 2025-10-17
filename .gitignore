@@ -1,4 +1,47 @@
-# Operating System Files
+# Environment files - NEVER COMMIT THESE!
+.env
+.env.local
+.env.*.local
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
 .DS_Store
 .DS_Store?
 ._*
@@ -7,43 +50,20 @@
 ehthumbs.db
 Thumbs.db
 
-# Editor Files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.project
-.settings/
+# Logs
+*.log
+logs/
 
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-.venv
+# Database files
+*.db
+*.sqlite
+*.sqlite3
 
-# Backup files
-*.bak
-*.backup
-*~
-
-# Temporary files
+# Generated files
+kg_embeddings.json
+exported_texts/
 *.tmp
 *.temp
-.cache/
 
-# Local development
-local/
-scratch/
-test/
-experiments/
-
-# Personal notes (not for publication)
-NOTES.md
-TODO.md
-personal/
+# Docker volumes (if any)
+docker-volumes/
