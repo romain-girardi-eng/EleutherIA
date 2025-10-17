@@ -24,7 +24,199 @@ This database represents the **first comprehensive digital mapping** of ancient 
 - **200+ bibliography references** (ancient sources + modern scholarship)
 - **Greek/Latin terminology** preserved with transliterations
 - **FAIR-compliant** (Findable, Accessible, Interoperable, Reusable)
+- **GraphRAG-ready** with support for embeddings and semantic search
 - **Publication-ready** with full citation metadata
+
+## Modern AI Integration: GraphRAG
+
+**Eleutheria** leverages cutting-edge **GraphRAG (Graph-based Retrieval-Augmented Generation)** techniques, making it ideal for modern AI applications:
+
+### 🔬 What is GraphRAG?
+
+GraphRAG combines traditional knowledge graphs with modern AI capabilities:
+- **Structured Knowledge:** 465 nodes and 745 edges provide explicit relationships
+- **Semantic Embeddings:** Rich textual descriptions ready for vector embeddings
+- **Contextual Retrieval:** Navigate complex philosophical arguments through graph traversal
+- **LLM Integration:** Feed structured context to large language models for accurate reasoning
+
+### 🚀 AI-Ready Features
+
+**Vector Embeddings Support:**
+- Every node contains rich descriptions suitable for embedding generation
+- Optimized for **Google Gemini** highest quality embeddings (text-embedding-004)
+- Also compatible with OpenAI, Anthropic, Cohere, and open-source embedding models
+- Multi-field embeddings: combine labels, descriptions, ancient sources, and modern scholarship
+
+**Semantic Search:**
+- Find conceptually related arguments across different philosophical schools
+- Discover implicit connections between Stoic, Epicurean, and Patristic positions
+- Query by meaning rather than exact keyword matching
+
+**RAG Pipeline Integration:**
+- Use graph structure to provide relevant context to LLMs
+- Navigate from concepts → arguments → persons → works automatically
+- Retrieve multi-hop relationships (e.g., "Who influenced those who refuted Stoic compatibilism?")
+
+**Hybrid Search:**
+- Combine graph traversal with semantic similarity
+- Filter by historical period, school, or node type before semantic ranking
+- Leverage explicit relationships (edges) alongside implicit semantic connections
+
+### 💡 Example Use Cases
+
+**1. Philosophical Question Answering:**
+```python
+# Query: "How did early Christians respond to Stoic determinism?"
+# GraphRAG approach:
+# 1. Find Stoic determinism concepts via semantic search
+# 2. Traverse 'refutes' edges to find counter-arguments
+# 3. Filter by period='Patristic' to get Christian responses
+# 4. Generate embeddings for all relevant nodes
+# 5. Feed to LLM with structured context
+```
+
+**2. Argument Mining:**
+- Extract all arguments pro/con free will across 8 centuries
+- Cluster similar arguments using embeddings
+- Trace influence chains through graph edges
+
+**3. Comparative Analysis:**
+- Compare Aristotelian vs. Christian concepts of freedom using semantic similarity
+- Find terminology evolution (Greek eph' hêmin → Latin liberum arbitrium)
+- Map conceptual reformulations across philosophical traditions
+
+**4. Interactive Research Assistant:**
+- Ask questions in natural language
+- Retrieve relevant nodes via semantic search
+- Navigate graph structure for comprehensive context
+- Generate historically-grounded answers with citations
+
+### 🛠️ Implementation Examples
+
+**Generate Embeddings (Google Gemini - Recommended):**
+```python
+import google.generativeai as genai
+import json
+
+# Configure Gemini
+genai.configure(api_key='YOUR_API_KEY')
+
+with open('ancient_free_will_database.json') as f:
+    db = json.load(f)
+
+for node in db['nodes']:
+    # Combine fields for rich embeddings
+    text = f"{node['label']}: {node['description']}"
+    if 'ancient_sources' in node:
+        text += " Sources: " + "; ".join(node['ancient_sources'])
+    if 'modern_scholarship' in node:
+        text += " Scholarship: " + "; ".join(node['modern_scholarship'])
+
+    # Generate embedding with Gemini's highest quality model
+    result = genai.embed_content(
+        model="models/text-embedding-004",
+        content=text,
+        task_type="retrieval_document"
+    )
+    node['embedding'] = result['embedding']
+
+print(f"Generated {len(db['nodes'])} embeddings with Gemini")
+```
+
+**Alternative: OpenAI Embeddings:**
+```python
+import openai
+import json
+
+with open('ancient_free_will_database.json') as f:
+    db = json.load(f)
+
+for node in db['nodes']:
+    text = f"{node['label']}: {node['description']}"
+    embedding = openai.Embedding.create(
+        input=text,
+        model="text-embedding-3-large"
+    )
+    node['embedding'] = embedding['data'][0]['embedding']
+```
+
+**Semantic Search + Graph Traversal:**
+```python
+from sentence_transformers import SentenceTransformer
+import numpy as np
+
+# Load model
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# Query
+query = "arguments against determinism"
+query_embedding = model.encode(query)
+
+# Find most similar nodes
+similarities = []
+for node in db['nodes']:
+    if 'embedding' in node:
+        sim = np.dot(query_embedding, node['embedding'])
+        similarities.append((sim, node))
+
+# Get top results
+top_nodes = sorted(similarities, reverse=True)[:5]
+
+# Traverse graph for related content
+for score, node in top_nodes:
+    # Find all edges connected to this node
+    related = [e for e in db['edges']
+               if e['source'] == node['id'] or e['target'] == node['id']]
+```
+
+**LangChain Integration:**
+```python
+from langchain.vectorstores import FAISS
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.schema import Document
+
+# Convert nodes to documents
+documents = [
+    Document(
+        page_content=f"{n['label']}: {n['description']}",
+        metadata={
+            'id': n['id'],
+            'type': n['type'],
+            'period': n.get('period', ''),
+            'school': n.get('school', '')
+        }
+    )
+    for n in db['nodes']
+]
+
+# Create vector store
+vectorstore = FAISS.from_documents(documents, OpenAIEmbeddings())
+
+# Semantic search with metadata filtering
+results = vectorstore.similarity_search(
+    "Stoic arguments for compatibilism",
+    filter={"school": "Stoic"}
+)
+```
+
+### 📊 Why GraphRAG for Philosophy?
+
+**Precision:** Graph edges encode explicit logical relationships (refutes, supports, influenced)
+**Context:** Multi-hop traversal provides comprehensive philosophical context
+**Provenance:** Every claim traceable to ancient sources
+**Terminology:** Preserve Greek/Latin terms while enabling semantic search
+**Chronology:** Temporal structure shows evolution of ideas across centuries
+
+**Traditional RAG limitations:**
+- ❌ Loses explicit relationships between arguments
+- ❌ Cannot distinguish "influences" from "refutes"
+- ❌ Struggles with technical terminology across languages
+
+**GraphRAG advantages:**
+- ✅ Preserves logical structure of philosophical debates
+- ✅ Combines semantic similarity with explicit relationships
+- ✅ Maintains historical and conceptual context
+- ✅ Enables multi-lingual reasoning (Greek/Latin/English)
 
 ## Coverage
 

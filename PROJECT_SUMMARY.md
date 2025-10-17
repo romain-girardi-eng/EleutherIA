@@ -1,4 +1,4 @@
-# Ancient Free Will Database - Project Summary
+# Eleutheria - Ancient Free Will Database - Project Summary
 
 **Version 1.0.0 | October 17, 2025**
 **Status:** ✅ **COMPLETE AND READY FOR PUBLICATION**
@@ -8,6 +8,8 @@
 ## Project Overview
 
 This project delivers a comprehensive, FAIR-compliant digital knowledge graph documenting ancient debates on free will, fate, and moral responsibility from Aristotle (4th c. BCE) to Boethius (6th c. CE). The database represents the first systematic digital mapping of ancient free will philosophy and theology, suitable for doctoral research, teaching, and interdisciplinary scholarship across philosophy, theology, classics, and digital humanities.
+
+**Eleutheria** leverages cutting-edge **GraphRAG (Graph-based Retrieval-Augmented Generation)** techniques, making it ideal for modern AI applications including semantic search, vector embeddings, and LLM integration.
 
 ---
 
@@ -188,6 +190,46 @@ JSON Schema (Draft 07) for validation:
 ✅ Comprehensive descriptions
 ✅ Consistent naming conventions
 ✅ Schema validation
+
+### AI Integration: GraphRAG
+
+**Eleutheria** implements cutting-edge **GraphRAG (Graph-based Retrieval-Augmented Generation)** capabilities:
+
+✅ **Google Gemini Embeddings**
+- Optimized for Gemini text-embedding-004 (highest quality)
+- Multi-field embeddings combining labels, descriptions, and sources
+- 768-dimensional semantic vectors for all 465 nodes
+
+✅ **Semantic Search**
+- Find conceptually related arguments across philosophical schools
+- Query by meaning rather than exact keywords
+- Cross-lingual search (Greek/Latin/English)
+- Discover implicit connections between traditions
+
+✅ **Hybrid Graph + Vector Search**
+- Combine graph traversal with semantic similarity
+- Filter by period, school, or node type before semantic ranking
+- Multi-hop relationship queries (e.g., "who refuted those influenced by Stoics?")
+
+✅ **RAG Pipeline Integration**
+- Structured context for LLM reasoning
+- Navigate relationships: concepts → arguments → persons → works
+- Compatible with LangChain, LlamaIndex, Haystack
+- Metadata filtering and contextual retrieval
+
+✅ **Use Cases**
+- Philosophical question answering with citations
+- Argument mining and clustering
+- Comparative analysis across traditions
+- Interactive research assistants
+- Terminology evolution tracking
+- Influence network analysis
+
+**Why GraphRAG for Philosophy:**
+- Preserves logical structure of arguments (refutes, supports, influenced)
+- Maintains historical and conceptual context
+- Combines semantic similarity with explicit relationships
+- Enables multi-lingual reasoning with preserved Greek/Latin terminology
 
 ---
 
