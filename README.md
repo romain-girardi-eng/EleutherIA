@@ -1,4 +1,4 @@
-# Ancient Free Will Database
+# Eleutheria - Ancient Free Will Database
 
 **A Comprehensive FAIR-Compliant Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility**
 
@@ -224,13 +224,13 @@ patristics = [node for node in db['nodes']
 When using this database in publications, please cite:
 
 **APA:**
-> Girardi, R. (2025). *Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility* (Version 1.0.0) [Data set]. https://doi.org/[to-be-assigned]
+> Girardi, R. (2025). *Eleutheria - Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility* (Version 1.0.0) [Data set]. https://doi.org/[to-be-assigned]
 
 **BibTeX:**
 ```bibtex
-@dataset{girardi2025ancient,
+@dataset{girardi2025eleutheria,
   author = {Girardi, Romain},
-  title = {Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility},
+  title = {Eleutheria - Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility},
   year = {2025},
   version = {1.0.0},
   publisher = {[To be assigned]},
