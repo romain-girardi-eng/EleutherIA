@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this database, please cite it as below."
-title: "Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility"
+title: "Eleutheria - Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility"
 version: 1.0.0
 date-released: 2025-10-17
 authors:
@@ -9,8 +9,8 @@ authors:
     email: romain.girardi@univ-cotedazur.fr
     affiliation: "Université Côte d'Azur, CEPAM; Université de Genève, Faculté de Théologie Jean Calvin"
     orcid: "https://orcid.org/0000-0002-5310-5346"
-repository-code: "https://github.com/[to-be-added]/ancient-free-will-database"
-url: "https://github.com/[to-be-added]/ancient-free-will-database"
+repository-code: "https://github.com/romain-girardi-eng/eleutheria"
+url: "https://github.com/romain-girardi-eng/eleutheria"
 abstract: >
   This knowledge graph represents the first comprehensive digital mapping
   of ancient free will debates in Greco-Roman and early Christian philosophy
