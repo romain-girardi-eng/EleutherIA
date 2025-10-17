@@ -6,7 +6,14 @@ The **Ancient Free Will Database** is a standalone academic/scholarly project th
 
 ## Sematika Project
 
-**Sematika** is a cross-platform OCR application focused on Ancient/Modern Greek, with AI review, layout analysis, TEI export, semantic search, and a REST API.
+**Sematika** is a comprehensive digital humanities platform focused on Ancient and Modern Greek texts, featuring:
+- OCR (Ancient Greek, Modern Greek, English, French)
+- AI-powered text analysis and review
+- Corpus management and local library
+- Semantic search with embeddings
+- TEI XML export and scholarly formats
+- Layout analysis
+- REST API for integration
 
 **Location:** Sematika MVP repository
 
