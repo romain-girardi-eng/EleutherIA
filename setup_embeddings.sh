@@ -12,12 +12,18 @@ echo "🧠 Knowledge Graph + 🗄️ PostgreSQL + 🔍 Vector DB"
 echo "🎯 MAXIMUM 3072-dimensional Gemini embeddings!"
 echo "=================================================="
 
-# Set up environment configuration
-echo "🔧 Setting up environment configuration..."
-python3 setup_environment.py --api-key AIzaSyDB_n4uxyXFIijMeN0imzZ3cbNjR-w3hrw
+# Check if .env file exists and has GEMINI_API_KEY
+if [ ! -f .env ]; then
+    echo "❌ .env file not found!"
+    echo "   Please create .env file with your GEMINI_API_KEY"
+    echo "   Example: cp .env.example .env"
+    echo "   Then edit .env and add your API key"
+    exit 1
+fi
 
 # Load environment variables
-source .env 2>/dev/null || echo "⚠️  .env file not found, using system environment"
+echo "🔧 Loading environment configuration from .env..."
+source .env 2>/dev/null
 
 # Check if Gemini API key is set
 if [ -z "$GEMINI_API_KEY" ]; then
