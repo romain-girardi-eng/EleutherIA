@@ -6,7 +6,7 @@ The **Ancient Free Will Database** is a standalone academic/scholarly project th
 
 ## Sematika Project
 
-**Sematika** is a brand name that develops a commercial application for knowledge graph visualization and exploration.
+**Sematika** is a cross-platform OCR application focused on Ancient/Modern Greek, with AI review, layout analysis, TEI export, semantic search, and a REST API.
 
 **Location:** Sematika MVP repository
 
