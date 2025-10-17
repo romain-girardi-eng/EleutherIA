@@ -1,0 +1,39 @@
+# EleutherIA Ancient Free Will Database - Python Dependencies
+
+# Core dependencies for working with the database
+google-generativeai>=0.3.0
+openai>=1.0.0
+langchain>=0.1.0
+langchain-google-genai>=0.0.6
+langchain-community>=0.0.20
+chromadb>=0.4.0
+
+# Data processing and analysis
+numpy>=1.24.0
+pandas>=2.0.0
+networkx>=3.1
+matplotlib>=3.7.0
+
+# Validation and schema
+jsonschema>=4.17.0
+
+# Optional dependencies for advanced features
+# Uncomment as needed:
+
+# For community detection in network analysis
+# python-louvain>=0.16
+
+# For additional embedding models
+# sentence-transformers>=2.2.0
+# cohere>=4.0.0
+
+# For advanced visualization
+# plotly>=5.0.0
+# seaborn>=0.12.0
+
+# For Neo4j integration
+# neo4j>=5.0.0
+
+# For additional vector databases
+# qdrant-client>=1.6.0
+# pinecone-client>=2.2.0
