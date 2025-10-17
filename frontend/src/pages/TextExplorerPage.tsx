@@ -381,14 +381,6 @@ function TextDetailModal({
                   </div>
                 </div>
               )}
-
-              {/* Notes */}
-              {text.notes && (
-                <div>
-                  <h3 className="font-semibold mb-2">Notes</h3>
-                  <p className="text-sm text-academic-muted">{text.notes}</p>
-                </div>
-              )}
             </div>
           )}
         </div>
