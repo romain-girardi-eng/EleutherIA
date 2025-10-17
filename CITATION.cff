@@ -52,7 +52,7 @@ license: CC-BY-4.0
 type: dataset
 identifiers:
   - type: doi
-    value: "[to-be-assigned]"
+    value: "10.5281/zenodo.17379490"
     description: "DOI for this dataset"
 references:
   - type: generic

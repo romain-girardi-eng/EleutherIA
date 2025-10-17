@@ -486,7 +486,7 @@ patristics = [node for node in db['nodes']
 When using this database in publications, please cite:
 
 **APA:**
-> Girardi, R. (2025). *EleutherIA - Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility* (Version 1.0.0) [Data set]. https://doi.org/[to-be-assigned]
+> Girardi, R. (2025). *EleutherIA - Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility* (Version 1.0.0) [Data set]. https://doi.org/10.5281/zenodo.17379490
 
 **BibTeX:**
 ```bibtex
@@ -495,9 +495,9 @@ When using this database in publications, please cite:
   title = {EleutherIA - Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility},
   year = {2025},
   version = {1.0.0},
-  publisher = {[To be assigned]},
-  doi = {[To be assigned]},
-  url = {[To be assigned]}
+  publisher = {Zenodo},
+  doi = {10.5281/zenodo.17379490},
+  url = {https://doi.org/10.5281/zenodo.17379490}
 }
 ```
 
