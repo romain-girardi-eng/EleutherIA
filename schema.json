@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://[to-be-assigned]/ancient-free-will-database-schema.json",
+  "title": "Ancient Free Will Database JSON Schema",
+  "description": "JSON Schema for the Ancient Free Will Database - a FAIR-compliant knowledge graph of ancient debates on freedom, fate, and moral responsibility",
+  "version": "1.0.0",
+  "type": "object",
+  "required": ["metadata", "nodes", "edges"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "FAIR-compliant metadata describing the database",
+      "required": ["title", "version", "date_created", "author", "license"],
+      "properties": {
+        "title": {"type": "string"},
+        "short_title": {"type": "string"},
+        "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+        "date_created": {"type": "string", "format": "date"},
+        "date_published": {"type": "string", "format": "date-time"},
+        "language": {"type": "string"},
+        "author": {
+          "type": "object",
+          "properties": {
+            "primary": {"type": "string"},
+            "affiliation": {"type": "string"},
+            "email": {"type": "string"},
+            "orcid": {"type": "string"}
+          }
+        },
+        "description": {
+          "type": "object",
+          "properties": {
+            "short": {"type": "string"},
+            "full": {"type": "string"},
+            "scope": {"type": "string"},
+            "coverage": {"type": "string"}
+          }
+        },
+        "keywords": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "license": {
+          "type": "object",
+          "properties": {
+            "type": {"type": "string"},
+            "name": {"type": "string"},
+            "url": {"type": "string", "format": "uri"},
+            "description": {"type": "string"}
+          }
+        },
+        "citation": {
+          "type": "object",
+          "properties": {
+            "apa": {"type": "string"},
+            "bibtex": {"type": "string"},
+            "how_to_cite": {"type": "string"}
+          }
+        },
+        "statistics": {
+          "type": "object",
+          "properties": {
+            "total_nodes": {"type": "integer"},
+            "total_edges": {"type": "integer"},
+            "node_types": {"type": "object"},
+            "time_span": {"type": "string"}
+          }
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "description": "Array of all nodes (persons, works, concepts, arguments, etc.)",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "type", "category", "description"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the node",
+            "pattern": "^[a-z_]+_[a-z0-9_]+$"
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable name/title"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["person", "work", "concept", "argument", "debate", "controversy", "reformulation", "event", "school", "group", "argument_framework"],
+            "description": "Node type classification"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["free_will"],
+            "description": "Topical category (free_will for this database)"
+          },
+          "period": {
+            "type": "string",
+            "description": "Historical period (e.g., 'Classical Greek', 'Hellenistic', 'Patristic')"
+          },
+          "dates": {
+            "type": "string",
+            "description": "Birth-death dates for persons, composition dates for works"
+          },
+          "description": {
+            "type": "string",
+            "description": "Comprehensive description of the node"
+          },
+          "school": {
+            "type": "string",
+            "description": "Philosophical school affiliation (for persons)"
+          },
+          "ancient_sources": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Primary ancient textual sources with citations"
+          },
+          "modern_scholarship": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Secondary literature references"
+          },
+          "key_concepts": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Associated philosophical concepts"
+          },
+          "position_on_free_will": {
+            "type": "string",
+            "description": "Summary of position on free will (for persons)"
+          },
+          "historical_importance": {
+            "type": "string",
+            "description": "Historical influence and legacy"
+          },
+          "major_works": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Major works (for persons)"
+          },
+          "affiliations": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Institutional or school affiliations"
+          },
+          "teachers": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Teachers/influences (for persons)"
+          },
+          "students": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Students/followers (for persons)"
+          },
+          "languages": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Languages used"
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "description": "Array of all edges (relationships between nodes)",
+      "items": {
+        "type": "object",
+        "required": ["source", "target", "relation"],
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "Source node ID"
+          },
+          "target": {
+            "type": "string",
+            "description": "Target node ID"
+          },
+          "relation": {
+            "type": "string",
+            "enum": [
+              "formulated", "authored", "influenced", "refutes", "supports", "defends",
+              "opposes", "transmitted", "appropriates", "reinterprets", "develops",
+              "targets", "employs", "synthesizes", "exemplifies", "transmitted_in_writing_by",
+              "component_of", "related_to", "reformulated_as", "used", "adapted",
+              "centers_on", "includes", "structures", "translates"
+            ],
+            "description": "Type of relationship between nodes"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the relationship"
+          },
+          "ancient_source": {
+            "type": "string",
+            "description": "Primary source citation for this relationship"
+          },
+          "type": {
+            "type": "string",
+            "description": "Edge classification"
+          }
+        }
+      }
+    }
+  }
+}
