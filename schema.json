@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://[to-be-assigned]/ancient-free-will-database-schema.json",
+  "$id": "https://doi.org/10.5281/zenodo.17379490/ancient-free-will-database-schema.json",
   "title": "Ancient Free Will Database JSON Schema",
   "description": "JSON Schema for the Ancient Free Will Database - a FAIR-compliant knowledge graph of ancient debates on freedom, fate, and moral responsibility",
   "version": "1.0.0",
