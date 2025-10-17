@@ -1,6 +1,18 @@
-# Eleutheria - Ancient Free Will Database
+# EleutherIA - Ancient Free Will Database
 
 **A Comprehensive FAIR-Compliant Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility**
+
+---
+
+## About the Name
+
+**EleutherIA** is a bilingual wordplay combining:
+- **Ἐλευθερία** (*eleutheria*) - Ancient Greek for "freedom" or "liberty"
+- **IA** - Intelligence Artificielle (Artificial Intelligence)
+
+The name reflects the project's dual nature: ancient philosophical debates on freedom powered by modern AI techniques (GraphRAG, embeddings, semantic search).
+
+---
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://semver.org/)
@@ -29,7 +41,7 @@ This database represents the **first comprehensive digital mapping** of ancient 
 
 ## Modern AI Integration: GraphRAG
 
-**Eleutheria** leverages cutting-edge **GraphRAG (Graph-based Retrieval-Augmented Generation)** techniques, making it ideal for modern AI applications:
+**EleutherIA** leverages cutting-edge **GraphRAG (Graph-based Retrieval-Augmented Generation)** techniques, making it ideal for modern AI applications:
 
 ### 🔬 What is GraphRAG?
 
@@ -416,13 +428,13 @@ patristics = [node for node in db['nodes']
 When using this database in publications, please cite:
 
 **APA:**
-> Girardi, R. (2025). *Eleutheria - Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility* (Version 1.0.0) [Data set]. https://doi.org/[to-be-assigned]
+> Girardi, R. (2025). *EleutherIA - Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility* (Version 1.0.0) [Data set]. https://doi.org/[to-be-assigned]
 
 **BibTeX:**
 ```bibtex
 @dataset{girardi2025eleutheria,
   author = {Girardi, Romain},
-  title = {Eleutheria - Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility},
+  title = {EleutherIA - Ancient Free Will Database: A Comprehensive Knowledge Graph of Greco-Roman and Early Christian Debates on Freedom, Fate, and Moral Responsibility},
   year = {2025},
   version = {1.0.0},
   publisher = {[To be assigned]},

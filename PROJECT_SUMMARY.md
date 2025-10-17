@@ -1,7 +1,17 @@
-# Eleutheria - Ancient Free Will Database - Project Summary
+# EleutherIA - Ancient Free Will Database - Project Summary
 
 **Version 1.0.0 | October 17, 2025**
 **Status:** ✅ **COMPLETE AND READY FOR PUBLICATION**
+
+---
+
+## About the Name
+
+**EleutherIA** is a bilingual wordplay:
+- **Ἐλευθερία** (*eleutheria*) - Ancient Greek for "freedom/liberty"
+- **IA** - Intelligence Artificielle (Artificial Intelligence)
+
+This name captures the project's essence: ancient philosophical debates on freedom powered by modern AI.
 
 ---
 
@@ -9,7 +19,7 @@
 
 This project delivers a comprehensive, FAIR-compliant digital knowledge graph documenting ancient debates on free will, fate, and moral responsibility from Aristotle (4th c. BCE) to Boethius (6th c. CE). The database represents the first systematic digital mapping of ancient free will philosophy and theology, suitable for doctoral research, teaching, and interdisciplinary scholarship across philosophy, theology, classics, and digital humanities.
 
-**Eleutheria** leverages cutting-edge **GraphRAG (Graph-based Retrieval-Augmented Generation)** techniques, making it ideal for modern AI applications including semantic search, vector embeddings, and LLM integration.
+**EleutherIA** leverages cutting-edge **GraphRAG (Graph-based Retrieval-Augmented Generation)** techniques, making it ideal for modern AI applications including semantic search, vector embeddings, and LLM integration.
 
 ---
 
@@ -193,7 +203,7 @@ JSON Schema (Draft 07) for validation:
 
 ### AI Integration: GraphRAG
 
-**Eleutheria** implements cutting-edge **GraphRAG (Graph-based Retrieval-Augmented Generation)** capabilities:
+**EleutherIA** implements cutting-edge **GraphRAG (Graph-based Retrieval-Augmented Generation)** capabilities:
 
 ✅ **Google Gemini Embeddings**
 - Optimized for Gemini text-embedding-004 (highest quality)
