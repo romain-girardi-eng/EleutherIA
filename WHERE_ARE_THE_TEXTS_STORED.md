@@ -1,6 +1,24 @@
-# 📚 WHERE ARE THE TEXTS STORED? - Complete Guide
+# 📚 WHERE ARE THE TEXTS STORED? - Complete Multi-Modal Guide
 
-## 🗄️ **The texts are stored in PostgreSQL database tables, NOT as separate files**
+## 🎯 **The Ancient Free Will Database is a TRIPLE-THREAT System:**
+
+### 🧠 **Knowledge Graph (GraphRAG)** - `ancient_free_will_database.json`
+- **465 nodes** (persons, works, concepts, arguments)
+- **745 edges** (relationships, influences, citations)
+- **GraphRAG capabilities** for complex philosophical relationship queries
+- **13MB JSON file** with comprehensive metadata
+
+### 🗄️ **PostgreSQL Database** - `ancient_free_will_db` (localhost:5433)
+- **289 texts** with full content and metadata
+- **35+ million characters** of ancient Greek and Latin
+- **Full-text search** with linguistic analysis
+- **Structured storage** with divisions and sections
+
+### 🔍 **Vector Database** - Integrated with PostgreSQL
+- **285 texts** with Gemini embeddings
+- **Semantic search** capabilities
+- **Cross-lingual similarity** matching
+- **Concept clustering** and analysis
 
 ### **Database Location:**
 - **Host:** localhost
@@ -187,11 +205,28 @@ docker exec -it ancient_free_will_postgres psql -U free_will_user -d ancient_fre
 
 ## 🎯 **Key Points:**
 
-1. **All 289 texts are stored in PostgreSQL database tables**
-2. **Access via SQL queries, Python scripts, or PgAdmin web interface**
-3. **Full-text search available in Greek and Latin**
-4. **Structured metadata: lemmas, POS tags, embeddings, TEI XML**
-5. **Export capabilities to create individual text files**
-6. **Database size: 296 MB with 35+ million characters**
+### 🧠 **Knowledge Graph Access:**
+1. **465 nodes** with philosophical concepts and relationships
+2. **GraphRAG queries** for complex relationship traversal
+3. **JSON format** with comprehensive metadata and citations
+4. **13MB file** containing the complete knowledge structure
 
-The texts are **database records**, not files, providing powerful search and analysis capabilities that wouldn't be possible with individual text files!
+### 🗄️ **PostgreSQL Access:**
+1. **289 texts** stored in database tables with full content
+2. **SQL queries** for full-text search in Greek and Latin
+3. **Structured metadata**: lemmas, POS tags, embeddings, TEI XML
+4. **Database size**: 296 MB with 35+ million characters
+
+### 🔍 **Vector Database Access:**
+1. **285 texts** with Gemini embeddings for semantic search
+2. **Cross-lingual similarity** matching across Greek and Latin
+3. **Concept clustering** and philosophical analysis
+4. **Integrated storage** within PostgreSQL BYTEA columns
+
+### 🔄 **Multi-Modal Integration:**
+- **`kg_work_id`** fields link all three systems
+- **Bidirectional queries** across Knowledge Graph and PostgreSQL
+- **Semantic enrichment** of graph nodes with text embeddings
+- **Unified research workflow** combining all three modalities
+
+**EleutherIA** - The Ancient Free Will Database: Where Knowledge Graphs meet Full-Text Search meets Semantic AI! 🚀
