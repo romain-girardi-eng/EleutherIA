@@ -9,14 +9,23 @@ from typing import List, Dict, Any, Optional
 from collections import defaultdict
 import google.generativeai as genai
 import os
+from dotenv import load_dotenv
 
 from services.db import DatabaseService
 from services.qdrant_service import QdrantService
 
+# Load environment variables
+load_dotenv()
+
 logger = logging.getLogger(__name__)
 
 # Configure Gemini for embeddings
-genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+    logger.info("✅ Gemini configured for hybrid search embeddings")
+else:
+    logger.warning("⚠️ GEMINI_API_KEY not found - semantic search will fail")
 
 
 class HybridSearchService:
