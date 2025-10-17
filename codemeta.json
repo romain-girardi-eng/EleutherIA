@@ -1,0 +1,275 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "identifier": "https://github.com/romain-girardi-eng/EleutherIA",
+  "name": "EleutherIA - Ancient Free Will Database",
+  "description": "A comprehensive, FAIR-compliant knowledge graph documenting ancient debates on free will, fate, and moral responsibility from Aristotle (4th c. BCE) to Boethius (6th c. CE). Features 465 nodes, 745 edges, and GraphRAG capabilities with Google Gemini embeddings for modern AI applications.",
+  "version": "1.0.0",
+  "dateCreated": "2025-10-17",
+  "datePublished": "2025-10-17",
+  "dateModified": "2025-10-17",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Romain",
+      "familyName": "Girardi",
+      "email": "romain.girardi@univ-cotedazur.fr",
+      "@id": "https://orcid.org/0000-0002-5310-5346",
+      "affiliation": [
+        {
+          "@type": "Organization",
+          "name": "Université Côte d'Azur",
+          "department": "CEPAM"
+        },
+        {
+          "@type": "Organization",
+          "name": "Université de Genève",
+          "department": "Faculté de Théologie Jean Calvin"
+        }
+      ]
+    }
+  ],
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Arnaud",
+      "familyName": "Zucker",
+      "roleName": "Doctoral Advisor",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Université Côte d'Azur",
+        "department": "CEPAM"
+      }
+    },
+    {
+      "@type": "Person",
+      "givenName": "Andreas",
+      "familyName": "Dettwiler",
+      "roleName": "Doctoral Advisor",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Université de Genève",
+        "department": "Faculté de Théologie Jean Calvin"
+      }
+    }
+  ],
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "keywords": [
+    "ancient philosophy",
+    "free will",
+    "knowledge graph",
+    "GraphRAG",
+    "FAIR data",
+    "semantic search",
+    "embeddings",
+    "Google Gemini",
+    "ancient Greece",
+    "Stoicism",
+    "patristics",
+    "theology",
+    "philosophy",
+    "RAG",
+    "artificial intelligence",
+    "vector database",
+    "classics",
+    "philology",
+    "digital humanities",
+    "open data"
+  ],
+  "programmingLanguage": [
+    {
+      "@type": "ComputerLanguage",
+      "name": "Python",
+      "version": "3.7+",
+      "url": "https://www.python.org/"
+    },
+    {
+      "@type": "ComputerLanguage",
+      "name": "JavaScript",
+      "url": "https://www.javascript.com/"
+    }
+  ],
+  "runtimePlatform": [
+    "Python 3.7+",
+    "Node.js",
+    "Any platform with JSON parser"
+  ],
+  "operatingSystem": [
+    "Linux",
+    "macOS",
+    "Windows",
+    "Platform-independent"
+  ],
+  "softwareRequirements": [
+    "Python 3.7 or higher (for Python examples)",
+    "Node.js (for JavaScript examples)",
+    "google-generativeai (for Gemini embeddings)",
+    "langchain (for RAG pipelines)",
+    "chromadb (for vector storage - recommended)",
+    "JSON parser (built-in for most languages)"
+  ],
+  "applicationCategory": [
+    "Data",
+    "Research Tool",
+    "Knowledge Graph",
+    "AI/ML Dataset"
+  ],
+  "applicationSubCategory": [
+    "Digital Humanities",
+    "Philosophy",
+    "Theology",
+    "Classics",
+    "GraphRAG"
+  ],
+  "isAccessibleForFree": true,
+  "funder": [
+    {
+      "@type": "Organization",
+      "name": "Université Côte d'Azur"
+    },
+    {
+      "@type": "Organization",
+      "name": "Université de Genève"
+    }
+  ],
+  "readme": "https://github.com/romain-girardi-eng/EleutherIA/blob/main/README.md",
+  "issueTracker": "https://github.com/romain-girardi-eng/EleutherIA/issues",
+  "codeRepository": "https://github.com/romain-girardi-eng/EleutherIA",
+  "releaseNotes": "https://github.com/romain-girardi-eng/EleutherIA/releases",
+  "citation": "https://github.com/romain-girardi-eng/EleutherIA/blob/main/CITATION.cff",
+  "referencePublication": [
+    {
+      "@type": "ScholarlyArticle",
+      "name": "Determinism and Freedom in Stoic Philosophy",
+      "author": "Susanne Bobzien",
+      "datePublished": "1998",
+      "publisher": "Oxford University Press"
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "name": "A Free Will: Origins of the Notion in Ancient Thought",
+      "author": "Michael Frede",
+      "datePublished": "2011",
+      "publisher": "University of California Press"
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "name": "Necessity, Cause and Blame: Perspectives on Aristotle's Theory",
+      "author": "Richard Sorabji",
+      "datePublished": "1980",
+      "publisher": "Duckworth"
+    }
+  ],
+  "fileFormat": [
+    "application/json",
+    "text/markdown",
+    "application/pdf"
+  ],
+  "fileSize": "13MB",
+  "contentSize": "13MB",
+  "encodingFormat": "application/json",
+  "spatialCoverage": "Mediterranean (Ancient Greece and Rome)",
+  "temporalCoverage": "4th century BCE to 6th century CE",
+  "inLanguage": [
+    "en",
+    "grc",
+    "la"
+  ],
+  "developmentStatus": "active",
+  "maintainer": {
+    "@type": "Person",
+    "givenName": "Romain",
+    "familyName": "Girardi",
+    "email": "romain.girardi@univ-cotedazur.fr",
+    "@id": "https://orcid.org/0000-0002-5310-5346"
+  },
+  "funding": "Doctoral research funding from Université Côte d'Azur and Université de Genève",
+  "hasPart": [
+    {
+      "@type": "Dataset",
+      "name": "ancient_free_will_database.json",
+      "description": "Main knowledge graph database with 465 nodes and 745 edges",
+      "encodingFormat": "application/json",
+      "contentSize": "13MB"
+    },
+    {
+      "@type": "DataCatalog",
+      "name": "Documentation",
+      "description": "Comprehensive documentation including README, data dictionary, schema, and examples",
+      "hasPart": [
+        "README.md",
+        "DATA_DICTIONARY.md",
+        "schema.json",
+        "CITATION.cff",
+        "examples/"
+      ]
+    }
+  ],
+  "usageInfo": "https://github.com/romain-girardi-eng/EleutherIA/wiki/Getting-Started",
+  "softwareHelp": "https://github.com/romain-girardi-eng/EleutherIA/wiki",
+  "contIntegration": "https://github.com/romain-girardi-eng/EleutherIA/actions",
+  "targetProduct": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Research Tool",
+      "applicationCategory": "Academic Research"
+    },
+    {
+      "@type": "Dataset",
+      "name": "AI Training Data",
+      "applicationCategory": "Machine Learning"
+    }
+  ],
+  "releaseOf": {
+    "@type": "Project",
+    "name": "Ancient Free Will Debates Documentation",
+    "description": "PhD research project documenting ancient philosophical and theological debates on free will"
+  },
+  "sameAs": [
+    "https://github.com/romain-girardi-eng/EleutherIA",
+    "https://orcid.org/0000-0002-5310-5346"
+  ],
+  "producer": {
+    "@type": "Organization",
+    "name": "Université Côte d'Azur",
+    "department": "CEPAM"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "GitHub",
+    "url": "https://github.com"
+  },
+  "review": {
+    "@type": "Review",
+    "reviewAspect": "Academic quality assured by doctoral advisors and institutional review"
+  },
+  "softwareVersion": "1.0.0",
+  "relatedLink": [
+    "https://github.com/romain-girardi-eng/EleutherIA/wiki",
+    "https://www.go-fair.org/fair-principles/"
+  ],
+  "downloadUrl": "https://github.com/romain-girardi-eng/EleutherIA/archive/refs/heads/main.zip",
+  "installUrl": "https://github.com/romain-girardi-eng/EleutherIA#getting-started",
+  "memoryRequirements": "~50MB RAM for loading database",
+  "storageRequirements": "~13MB disk space",
+  "processorRequirements": "Any modern processor",
+  "softwareAddOn": [
+    "google-generativeai",
+    "langchain",
+    "chromadb",
+    "openai",
+    "sentence-transformers"
+  ],
+  "supportingData": [
+    {
+      "@type": "Dataset",
+      "name": "Ancient Sources",
+      "description": "200+ primary source citations from ancient Greek and Latin texts"
+    },
+    {
+      "@type": "Dataset",
+      "name": "Modern Scholarship",
+      "description": "200+ secondary literature references"
+    }
+  ]
+}
