@@ -47,3 +47,4 @@ __pycache__/ binary
 *.conf text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
+*.json
