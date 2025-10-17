@@ -185,11 +185,17 @@ for score, node in top_nodes:
                if e['source'] == node['id'] or e['target'] == node['id']]
 ```
 
-**LangChain Integration:**
+**LangChain Integration (with Gemini + Chroma):**
 ```python
-from langchain.vectorstores import FAISS
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_community.vectorstores import Chroma
 from langchain.schema import Document
+
+# Initialize Gemini embeddings
+embeddings = GoogleGenerativeAIEmbeddings(
+    model="models/text-embedding-004",
+    google_api_key="YOUR_GEMINI_API_KEY"
+)
 
 # Convert nodes to documents
 documents = [
@@ -199,20 +205,67 @@ documents = [
             'id': n['id'],
             'type': n['type'],
             'period': n.get('period', ''),
-            'school': n.get('school', '')
+            'school': n.get('school', ''),
+            'label': n['label']
         }
     )
     for n in db['nodes']
 ]
 
-# Create vector store
-vectorstore = FAISS.from_documents(documents, OpenAIEmbeddings())
+# Create Chroma vector store (persistent, local)
+vectorstore = Chroma.from_documents(
+    documents=documents,
+    embedding=embeddings,
+    persist_directory="./chroma_db"  # Saved locally
+)
 
 # Semantic search with metadata filtering
 results = vectorstore.similarity_search(
     "Stoic arguments for compatibilism",
+    k=5,
     filter={"school": "Stoic"}
 )
+
+for doc in results:
+    print(f"• {doc.metadata['label']} ({doc.metadata['type']})")
+    print(f"  {doc.page_content[:100]}...")
+```
+
+**Alternative Vector Databases:**
+
+**Qdrant (High Performance):**
+```python
+from langchain_community.vectorstores import Qdrant
+from qdrant_client import QdrantClient
+
+client = QdrantClient(path="./qdrant_db")  # Local storage
+vectorstore = Qdrant.from_documents(
+    documents,
+    embeddings,
+    client=client,
+    collection_name="eleutheria"
+)
+```
+
+**Pinecone (Cloud-Based):**
+```python
+from langchain_pinecone import PineconeVectorStore
+import pinecone
+
+pinecone.init(api_key="YOUR_API_KEY")
+vectorstore = PineconeVectorStore.from_documents(
+    documents,
+    embeddings,
+    index_name="eleutheria"
+)
+```
+
+**FAISS (Fast, In-Memory):**
+```python
+from langchain_community.vectorstores import FAISS
+
+# Good for quick prototyping, but not persistent
+vectorstore = FAISS.from_documents(documents, embeddings)
 ```
 
 ### 📊 Why GraphRAG for Philosophy?
