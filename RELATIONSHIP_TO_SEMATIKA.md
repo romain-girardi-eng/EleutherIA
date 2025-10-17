@@ -6,12 +6,19 @@ The **Ancient Free Will Database** is a standalone academic/scholarly project th
 
 ## Sematika Project
 
-**Sematika** is a commercial knowledge graph platform featuring:
-- Semativerse 3D visualization engine
-- Multi-domain knowledge graphs (literature, philosophy, zoology, geography, etc.)
-- Commercial application (SematikaMVP)
+**Sematika** is a brand name that develops a commercial application for knowledge graph visualization and exploration.
 
 **Location:** Sematika MVP repository
+
+## Semativerse
+
+**Semativerse** is a 3D visualization engine for knowledge graphs developed by:
+- Romain Girardi
+- Benjamin Mathias
+
+**Usage rights:**
+- Sematika has the right to use Semativerse
+- The Ancient Free Will Database project has the right to use Semativerse
 
 ## Ancient Free Will Database
 
@@ -25,7 +32,7 @@ This repository contains a **pure scholarly/academic project**:
 
 ## Visualization
 
-While the Ancient Free Will Database was initially developed using Sematika's Semativerse visualization:
+While the Ancient Free Will Database was initially developed using Semativerse for visualization:
 
 ✅ **Permission granted** to use Semativerse for visualizing this database
 ✅ **Not required** - can use any visualization tool:
@@ -74,8 +81,9 @@ This ensures the academic database remains freely available to the research comm
 - Arnaud Zucker (CEPAM, Université Côte d'Azur)
 - Andreas Dettwiler (Faculté de Théologie Jean Calvin, Université de Genève)
 
-**Acknowledgment:**
-Development tools and initial visualization provided by the Sematika project.
+**Acknowledgments:**
+- Initial visualization developed with Semativerse 3D engine (Romain Girardi & Benjamin Mathias)
+- Development infrastructure provided by the Sematika project
 
 ## Questions?
 
