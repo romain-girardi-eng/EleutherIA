@@ -4,6 +4,7 @@ import KGVisualizerPage from './pages/KGVisualizerPage';
 import SearchPage from './pages/SearchPage';
 import GraphRAGPage from './pages/GraphRAGPage';
 import TextExplorerPage from './pages/TextExplorerPage';
+import DatabasePage from './pages/DatabasePage';
 import AboutPage from './pages/AboutPage';
 import ReportErrorPage from './pages/ReportErrorPage';
 import './index.css';
@@ -27,12 +28,12 @@ function App() {
 
               {/* Navigation Links - Hidden on mobile */}
               <div className="hidden lg:flex items-center space-x-6">
+                <NavLink to="/database">Database</NavLink>
                 <NavLink to="/visualizer">Knowledge Graph</NavLink>
                 <NavLink to="/search">Search</NavLink>
                 <NavLink to="/graphrag">GraphRAG Q&A</NavLink>
                 <NavLink to="/texts">Ancient Texts</NavLink>
                 <NavLink to="/about">About</NavLink>
-                <NavLink to="/report-error">Report Error</NavLink>
               </div>
 
               {/* Mobile Menu Button */}
@@ -52,12 +53,12 @@ function App() {
             {/* Mobile Menu */}
             <div id="mobile-menu" className="hidden lg:hidden pb-2 pt-1.5 border-t border-academic-border mt-1">
               <div className="flex flex-col space-y-1.5">
+                <NavLink to="/database">Database</NavLink>
                 <NavLink to="/visualizer">Knowledge Graph</NavLink>
                 <NavLink to="/search">Search</NavLink>
                 <NavLink to="/graphrag">GraphRAG Q&A</NavLink>
                 <NavLink to="/texts">Ancient Texts</NavLink>
                 <NavLink to="/about">About</NavLink>
-                <NavLink to="/report-error">Report Error</NavLink>
               </div>
             </div>
           </nav>
@@ -67,6 +68,7 @@ function App() {
         <main className="academic-container pt-0 pb-12 sm:pb-8">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/database" element={<DatabasePage />} />
             <Route path="/visualizer" element={<KGVisualizerPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/graphrag" element={<GraphRAGPage />} />
