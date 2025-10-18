@@ -5,6 +5,7 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: .
     plan: free
+    buildCommand: "echo 'Files migrated from LFS - using regular git'"
     envVars:
       - key: GEMINI_API_KEY
         sync: false
