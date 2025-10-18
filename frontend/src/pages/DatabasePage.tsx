@@ -1,53 +1,6 @@
-import { useState, useEffect } from 'react';
-import { BookOpen, Network, GraduationCap, Search, Database, FileText, ChevronDown, ChevronUp } from 'lucide-react';
-import { apiClient } from '../api/client';
+import { BookOpen, Network, GraduationCap, Search, Database, FileText } from 'lucide-react';
 
 export default function DatabasePage() {
-  const [ancientTexts, setAncientTexts] = useState<any[]>([]);
-  const [bibliography, setBibliography] = useState<Set<string>>(new Set());
-  const [showTexts, setShowTexts] = useState(false);
-  const [showBibliography, setShowBibliography] = useState(false);
-  const [textFilter, setTextFilter] = useState('');
-  const [bibFilter, setBibFilter] = useState('');
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    try {
-      // Fetch ancient texts
-      const textsResponse = await apiClient.listTexts({ limit: 1000 });
-      setAncientTexts(textsResponse.texts || []);
-
-      // Fetch KG nodes to extract bibliography
-      const nodesResponse: any = await apiClient.getNodes();
-      const nodes = nodesResponse.nodes || [];
-
-      // Extract all unique modern scholarship references
-      const bibSet = new Set<string>();
-      nodes.forEach((node: any) => {
-        if (node.modern_scholarship && Array.isArray(node.modern_scholarship)) {
-          node.modern_scholarship.forEach((ref: string) => bibSet.add(ref));
-        }
-      });
-
-      setBibliography(bibSet);
-    } catch (error) {
-      console.error('Error loading data:', error);
-    }
-  };
-
-  const filteredTexts = ancientTexts.filter(text =>
-    !textFilter ||
-    text.title?.toLowerCase().includes(textFilter.toLowerCase()) ||
-    text.author?.toLowerCase().includes(textFilter.toLowerCase()) ||
-    text.category?.toLowerCase().includes(textFilter.toLowerCase())
-  );
-
-  const filteredBibliography = Array.from(bibliography).filter(ref =>
-    !bibFilter || ref.toLowerCase().includes(bibFilter.toLowerCase())
-  ).sort();
 
   return (
     <div className="space-y-8">
@@ -125,54 +78,27 @@ export default function DatabasePage() {
           </p>
         </div>
 
-        {/* Expandable Full Corpus List */}
+        {/* Link to Full Corpus Browser */}
         <div className="mt-6">
-          <button
-            onClick={() => setShowTexts(!showTexts)}
-            className="w-full flex items-center justify-between p-4 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg transition-colors"
+          <a
+            href="/texts"
+            className="w-full flex items-center justify-between p-4 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg transition-colors group"
           >
             <div className="flex items-center gap-3">
               <BookOpen className="w-5 h-5 text-primary-600" />
-              <span className="font-semibold text-primary-700">
-                View Complete Corpus ({ancientTexts.length} texts)
-              </span>
-            </div>
-            {showTexts ? (
-              <ChevronUp className="w-5 h-5 text-primary-600" />
-            ) : (
-              <ChevronDown className="w-5 h-5 text-primary-600" />
-            )}
-          </button>
-
-          {showTexts && (
-            <div className="mt-4 academic-card bg-academic-bg">
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Filter by author, title, or category..."
-                  value={textFilter}
-                  onChange={(e) => setTextFilter(e.target.value)}
-                  className="w-full px-4 py-2 border border-academic-border rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
-                />
-              </div>
-              <div className="text-sm text-academic-muted mb-3">
-                Showing {filteredTexts.length} of {ancientTexts.length} texts
-              </div>
-              <div className="max-h-96 overflow-y-auto space-y-2">
-                {filteredTexts.map((text, index) => (
-                  <div
-                    key={index}
-                    className="p-3 bg-white border border-academic-border rounded hover:border-primary-300 transition-colors"
-                  >
-                    <div className="font-medium text-academic-text">{text.title}</div>
-                    <div className="text-sm text-academic-muted mt-1">
-                      {text.author} • {text.language} • {text.category}
-                    </div>
-                  </div>
-                ))}
+              <div>
+                <div className="font-semibold text-primary-700 group-hover:text-primary-800">
+                  Browse Complete Corpus
+                </div>
+                <div className="text-sm text-academic-muted mt-0.5">
+                  Explore all 289 texts with advanced filtering and search
+                </div>
               </div>
             </div>
-          )}
+            <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
         </div>
       </section>
 
@@ -305,51 +231,21 @@ export default function DatabasePage() {
           </p>
         </div>
 
-        {/* Expandable Full Bibliography List */}
-        <div className="mt-6">
-          <button
-            onClick={() => setShowBibliography(!showBibliography)}
-            className="w-full flex items-center justify-between p-4 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <GraduationCap className="w-5 h-5 text-primary-600" />
-              <span className="font-semibold text-primary-700">
-                View Complete Bibliography ({bibliography.size} references)
-              </span>
+        {/* Bibliography Access Note */}
+        <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+          <div className="flex items-start gap-3">
+            <GraduationCap className="w-5 h-5 text-amber-700 flex-shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <div className="font-semibold text-amber-900 mb-1">
+                Accessing Bibliography References
+              </div>
+              <p className="text-amber-800 leading-relaxed">
+                All 200+ modern scholarship references are embedded directly in knowledge graph node metadata.
+                Access them through <a href="/graphrag" className="text-primary-600 hover:underline font-medium">GraphRAG Q&A</a> queries,
+                which automatically cite sources, or explore individual nodes in the <a href="/visualizer" className="text-primary-600 hover:underline font-medium">Knowledge Graph Visualizer</a>.
+              </p>
             </div>
-            {showBibliography ? (
-              <ChevronUp className="w-5 h-5 text-primary-600" />
-            ) : (
-              <ChevronDown className="w-5 h-5 text-primary-600" />
-            )}
-          </button>
-
-          {showBibliography && (
-            <div className="mt-4 academic-card bg-academic-bg">
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Filter by author, title, or keyword..."
-                  value={bibFilter}
-                  onChange={(e) => setBibFilter(e.target.value)}
-                  className="w-full px-4 py-2 border border-academic-border rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
-                />
-              </div>
-              <div className="text-sm text-academic-muted mb-3">
-                Showing {filteredBibliography.length} of {bibliography.size} references
-              </div>
-              <div className="max-h-96 overflow-y-auto space-y-3">
-                {filteredBibliography.map((ref, index) => (
-                  <div
-                    key={index}
-                    className="p-3 bg-white border border-academic-border rounded text-sm leading-relaxed"
-                  >
-                    {ref}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       </section>
 
