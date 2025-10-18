@@ -31,8 +31,10 @@ if not GEMINI_API_KEY:
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-# Path to KG database (relative to backend directory)
-KG_PATH = Path(__file__).parent.parent.parent / "ancient_free_will_database.json"
+# Path to KG database
+# In Docker: /app/services/graphrag_service.py -> /app/ancient_free_will_database.json
+# Locally: backend/services/graphrag_service.py -> ancient_free_will_database.json
+KG_PATH = Path(__file__).parent.parent / "ancient_free_will_database.json"
 
 
 class GraphRAGService:
