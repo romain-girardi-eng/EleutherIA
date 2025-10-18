@@ -359,7 +359,7 @@ export default function GraphRAGPage() {
       </div>
 
       {/* Sidebar - Hidden on mobile, shown on desktop */}
-      <div className="hidden lg:block lg:col-span-1 space-y-4">
+      <div className="hidden lg:block lg:col-span-1 space-y-4 max-h-[calc(100vh-250px)] overflow-y-auto">
         {/* How GraphRAG Works Section - Collapsible */}
         <div className="academic-card bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
           <button
