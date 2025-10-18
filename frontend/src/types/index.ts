@@ -39,11 +39,17 @@ export interface SearchQuery {
 }
 
 export interface SearchResult {
-  id: string;
-  title: string;
-  author: string;
-  category: string;
-  language: string;
+  id: number;
+  score?: number;
+  payload: {
+    text_id?: string;
+    title: string;
+    author: string;
+    category: string;
+    language: string;
+    text_length?: number;
+    generated_at?: number;
+  };
   rank?: number;
   rrf_score?: number;
   snippet?: string;
