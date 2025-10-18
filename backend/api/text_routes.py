@@ -18,9 +18,11 @@ async def list_texts(
     category: Optional[str] = None,
     author: Optional[str] = None,
     language: Optional[str] = None,
+    offset: int = 0,
+    limit: int = 1000,  # Default to large number to show all texts
     request: Request = None
 ):
-    """List all texts with optional filtering"""
+    """List all texts with optional filtering and pagination"""
     try:
         db = request.app.state.db
 
@@ -46,6 +48,15 @@ async def list_texts(
 
         where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
 
+        # Get total count first
+        count_sql = f"""
+        SELECT COUNT(*) as total
+        FROM free_will.texts
+        {where_clause}
+        """
+        total = await db.fetchval(count_sql, *params)
+
+        # Get paginated results
         sql = f"""
         SELECT id, title, author, category, language,
                LENGTH(raw_text) as text_length,
@@ -53,13 +64,15 @@ async def list_texts(
         FROM free_will.texts
         {where_clause}
         ORDER BY title
+        LIMIT ${param_count} OFFSET ${param_count + 1}
         """
+        params.extend([limit, offset])
 
         texts = await db.fetch(sql, *params)
 
         return {
             'texts': texts,
-            'total': len(texts)
+            'total': total
         }
 
     except Exception as e:

@@ -15,7 +15,7 @@ export default function TextExplorerPage() {
 
   // Pagination
   const [offset, setOffset] = useState(0);
-  const [limit] = useState(20);
+  const [limit] = useState(100);  // Show 100 texts per page
   const [totalCount, setTotalCount] = useState(0);
 
   // Selected text for detail view
