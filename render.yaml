@@ -3,7 +3,7 @@ services:
     name: ancient-free-will-api
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
-    dockerContext: ./backend
+    dockerContext: .
     envVars:
       - key: GEMINI_API_KEY
         sync: false
