@@ -20,6 +20,7 @@ export default function GraphRAGPage() {
   const [maxContext, setMaxContext] = useState(15);
   const [useStreaming, setUseStreaming] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+  const [showBenefits, setShowBenefits] = useState(true);
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -169,21 +170,22 @@ export default function GraphRAGPage() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-200px)]">
+    <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4 lg:gap-6 lg:h-[calc(100vh-200px)] pb-8 lg:pb-0">
       {/* Main Chat Area */}
-      <div className="lg:col-span-2 flex flex-col h-full">
+      <div className="lg:col-span-2 flex flex-col lg:h-full">
         {/* Header */}
         <div className="academic-card mb-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h1 className="text-3xl font-serif font-bold mb-2">GraphRAG Question Answering</h1>
-              <p className="text-academic-muted">
-                Ask questions about ancient philosophy, grounded in the knowledge graph
+              <h1 className="text-2xl sm:text-3xl font-serif font-bold mb-1 sm:mb-2">GraphRAG Question Answering</h1>
+              <p className="text-sm sm:text-base text-academic-muted leading-relaxed">
+                Graph-based Retrieval-Augmented Generation combines vector search with knowledge graph
+                traversal to provide scholarly answers grounded in primary sources and modern scholarship.
               </p>
             </div>
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className="academic-button-outline"
+              className="academic-button-outline whitespace-nowrap self-start sm:self-auto"
             >
               ⚙️ Settings
             </button>
@@ -194,7 +196,7 @@ export default function GraphRAGPage() {
         {showSettings && (
           <div className="academic-card mb-4 bg-blue-50 border-blue-200">
             <h3 className="font-semibold mb-3">Advanced Settings</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Semantic K</label>
                 <input
@@ -203,7 +205,7 @@ export default function GraphRAGPage() {
                   onChange={(e) => setSemanticK(Number(e.target.value))}
                   min={1}
                   max={50}
-                  className="w-full px-3 py-1 border border-academic-border rounded text-sm"
+                  className="w-full px-3 py-2 border border-academic-border rounded text-sm"
                 />
                 <p className="text-xs text-academic-muted mt-1">Starting nodes from search</p>
               </div>
@@ -215,7 +217,7 @@ export default function GraphRAGPage() {
                   onChange={(e) => setGraphDepth(Number(e.target.value))}
                   min={1}
                   max={5}
-                  className="w-full px-3 py-1 border border-academic-border rounded text-sm"
+                  className="w-full px-3 py-2 border border-academic-border rounded text-sm"
                 />
                 <p className="text-xs text-academic-muted mt-1">BFS traversal depth</p>
               </div>
@@ -227,7 +229,7 @@ export default function GraphRAGPage() {
                   onChange={(e) => setMaxContext(Number(e.target.value))}
                   min={5}
                   max={30}
-                  className="w-full px-3 py-1 border border-academic-border rounded text-sm"
+                  className="w-full px-3 py-2 border border-academic-border rounded text-sm"
                 />
                 <p className="text-xs text-academic-muted mt-1">Nodes in LLM context</p>
               </div>
@@ -248,19 +250,24 @@ export default function GraphRAGPage() {
         )}
 
         {/* Messages Area */}
-        <div className="flex-1 academic-card overflow-y-auto mb-4 p-4 space-y-4">
+        <div className="flex-1 academic-card overflow-y-auto mb-4 p-3 sm:p-4 space-y-4 min-h-[300px] lg:min-h-0">
           {messages.length === 0 && !streaming && (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">💬</div>
-              <h2 className="text-2xl font-semibold mb-2">Ask a Question</h2>
-              <p className="text-academic-muted mb-4">
-                Get scholarly answers grounded in the Ancient Free Will Database
+            <div className="text-center py-8 sm:py-12">
+              <div className="text-5xl sm:text-6xl mb-3 sm:mb-4">💬</div>
+              <h2 className="text-xl sm:text-2xl font-semibold mb-2">Ask a Question</h2>
+              <p className="text-sm sm:text-base text-academic-muted mb-2 px-4 leading-relaxed">
+                GraphRAG retrieves relevant nodes from the knowledge graph, traverses their connections,
+                and synthesizes scholarly answers with automatic citations.
               </p>
-              <div className="text-sm text-academic-muted space-y-1">
-                <p><strong>Try asking:</strong></p>
-                <p>"What is Aristotle's concept of voluntary action?"</p>
-                <p>"How did the Stoics view fate and free will?"</p>
-                <p>"What is Augustine's position on grace and free will?"</p>
+              <p className="text-xs sm:text-sm text-academic-muted mb-3 sm:mb-4 px-4">
+                <strong>465 nodes • 745 relationships • 200+ sources</strong>
+              </p>
+              <div className="text-xs sm:text-sm text-academic-muted space-y-1 px-4">
+                <p className="font-medium mb-1">Example questions:</p>
+                <p className="italic">"What is Aristotle's concept of voluntary action?"</p>
+                <p className="italic">"How did the Stoics reconcile fate with moral responsibility?"</p>
+                <p className="italic">"What arguments did Carneades use against Stoic determinism?"</p>
+                <p className="italic">"How does Augustine's view of grace relate to free will?"</p>
               </div>
             </div>
           )}
@@ -270,13 +277,13 @@ export default function GraphRAGPage() {
           ))}
 
           {streaming && (
-            <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
+            <div className="bg-primary-50 border border-primary-200 rounded-lg p-3 sm:p-4">
               <div className="flex items-center space-x-2 mb-2">
-                <div className="spinner w-4 h-4"></div>
-                <span className="text-sm text-primary-700 font-medium">{streamStatus}</span>
+                <div className="spinner w-4 h-4 flex-shrink-0"></div>
+                <span className="text-xs sm:text-sm text-primary-700 font-medium break-words">{streamStatus}</span>
               </div>
               {streamedAnswer && (
-                <div className="markdown-content prose prose-sm">
+                <div className="markdown-content prose prose-sm max-w-none overflow-x-auto">
                   <ReactMarkdown>{streamedAnswer}</ReactMarkdown>
                 </div>
               )}
@@ -284,8 +291,8 @@ export default function GraphRAGPage() {
           )}
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
-              <p className="font-medium">Error: {error}</p>
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 text-red-800">
+              <p className="font-medium text-sm sm:text-base break-words">Error: {error}</p>
             </div>
           )}
 
@@ -294,20 +301,20 @@ export default function GraphRAGPage() {
 
         {/* Input Area */}
         <form onSubmit={handleSubmit} className="academic-card">
-          <div className="flex space-x-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ask a question about ancient free will debates..."
               disabled={loading || streaming}
-              className="flex-1 px-4 py-2 border border-academic-border rounded focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50"
+              className="flex-1 px-3 sm:px-4 py-2 border border-academic-border rounded focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 text-sm sm:text-base"
             />
             {streaming ? (
               <button
                 type="button"
                 onClick={stopStreaming}
-                className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 font-medium whitespace-nowrap"
               >
                 Stop
               </button>
@@ -315,7 +322,7 @@ export default function GraphRAGPage() {
               <button
                 type="submit"
                 disabled={loading || !query.trim()}
-                className="academic-button disabled:opacity-50 disabled:cursor-not-allowed"
+                className="academic-button disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
               >
                 {loading ? 'Thinking...' : 'Ask'}
               </button>
@@ -324,42 +331,180 @@ export default function GraphRAGPage() {
         </form>
       </div>
 
-      {/* Sidebar */}
-      <div className="lg:col-span-1 space-y-4">
+      {/* Sidebar - Hidden on mobile, shown on desktop */}
+      <div className="hidden lg:block lg:col-span-1 space-y-4">
         {/* Info Card */}
         <div className="academic-card">
-          <h3 className="font-semibold mb-3">How It Works</h3>
-          <ol className="text-sm text-academic-text space-y-2 list-decimal list-inside">
-            <li>Semantic search finds relevant KG nodes</li>
-            <li>Graph traversal expands context via BFS</li>
-            <li>Citations are extracted automatically</li>
-            <li>Gemini 2.5 Pro generates grounded answer</li>
-            <li>Reasoning path shows which nodes were used</li>
-          </ol>
+          <h3 className="font-semibold mb-3 text-base">How GraphRAG Works</h3>
+          <div className="text-xs sm:text-sm text-academic-text space-y-3">
+            <div>
+              <div className="font-medium text-primary-600 mb-1">1. Vector Search</div>
+              <p className="text-academic-muted leading-relaxed">
+                Your query is embedded using Gemini and compared against 465 KG node embeddings
+                in Qdrant to find semantically relevant starting points.
+              </p>
+            </div>
+            <div>
+              <div className="font-medium text-primary-600 mb-1">2. Graph Expansion</div>
+              <p className="text-academic-muted leading-relaxed">
+                Breadth-first search traverses relationships (authored, influenced, refutes)
+                to gather connected nodes, creating rich contextual networks.
+              </p>
+            </div>
+            <div>
+              <div className="font-medium text-primary-600 mb-1">3. Context Building</div>
+              <p className="text-academic-muted leading-relaxed">
+                Ancient sources and modern scholarship are extracted from retrieved nodes,
+                prioritized by node type (persons, arguments, concepts).
+              </p>
+            </div>
+            <div>
+              <div className="font-medium text-primary-600 mb-1">4. LLM Synthesis</div>
+              <p className="text-academic-muted leading-relaxed">
+                An LLM generates a scholarly answer grounded exclusively in the retrieved
+                Knowledge Graph context, with strict citation requirements.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Why It's Brilliant Section */}
+        <div className="academic-card bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+          <button
+            onClick={() => setShowBenefits(!showBenefits)}
+            className="w-full flex items-center justify-between text-left mb-3 hover:opacity-80 transition-opacity"
+          >
+            <h3 className="font-semibold text-base text-blue-900">
+              ✨ Why It's Brilliant!
+            </h3>
+            <span className="text-blue-600 text-sm">
+              {showBenefits ? '▼' : '▶'}
+            </span>
+          </button>
+          {showBenefits && (
+            <div className="text-xs sm:text-sm text-academic-text space-y-3">
+
+            {/* Benefit 1: Relationship Discovery */}
+            <div className="bg-white/70 rounded p-2.5 border border-blue-100">
+              <div className="font-medium text-blue-700 mb-1.5 flex items-start gap-2">
+                <span className="text-base">🔗</span>
+                <span>Discovers Hidden Relationships</span>
+              </div>
+              <p className="text-academic-muted leading-relaxed mb-2">
+                <strong>Traditional search:</strong> "Augustine free will" → finds Augustine's writings.
+              </p>
+              <p className="text-academic-muted leading-relaxed mb-2">
+                <strong>GraphRAG:</strong> Finds Augustine → traverses to Pelagius (opponent) →
+                discovers the Pelagian Controversy → connects to earlier Stoic concepts Augustine adapted
+                → reveals the complete debate context.
+              </p>
+              <p className="text-blue-600 text-xs italic">
+                Result: You understand Augustine's position through his intellectual battles and sources.
+              </p>
+            </div>
+
+            {/* Benefit 2: Contextual Understanding */}
+            <div className="bg-white/70 rounded p-2.5 border border-blue-100">
+              <div className="font-medium text-blue-700 mb-1.5 flex items-start gap-2">
+                <span className="text-base">🧠</span>
+                <span>Provides Rich Historical Context</span>
+              </div>
+              <p className="text-academic-muted leading-relaxed mb-2">
+                <strong>Simple RAG:</strong> Retrieves isolated text chunks about "ἐφ' ἡμῖν" (in our power).
+              </p>
+              <p className="text-academic-muted leading-relaxed mb-2">
+                <strong>GraphRAG:</strong> Shows how the concept evolved from Aristotle (4th c. BCE) →
+                adopted by Stoics → critiqued by Carneades → reformulated by Epictetus →
+                transmitted to Latin as "in nostra potestate" → influenced Christian theology.
+              </p>
+              <p className="text-blue-600 text-xs italic">
+                Result: You see the intellectual genealogy spanning 800 years.
+              </p>
+            </div>
+
+            {/* Benefit 3: Argument Networks */}
+            <div className="bg-white/70 rounded p-2.5 border border-blue-100">
+              <div className="font-medium text-blue-700 mb-1.5 flex items-start gap-2">
+                <span className="text-base">⚔️</span>
+                <span>Maps Complete Argument Networks</span>
+              </div>
+              <p className="text-academic-muted leading-relaxed mb-2">
+                <strong>Keyword search:</strong> "Chrysippus determinism" → scattered mentions.
+              </p>
+              <p className="text-academic-muted leading-relaxed mb-2">
+                <strong>GraphRAG:</strong> Retrieves Chrysippus's arguments → follows "refutes" edges to
+                Carneades's counter-arguments → finds Cicero's synthesis → discovers later Neoplatonic
+                responses → extracts all cited sources.
+              </p>
+              <p className="text-blue-600 text-xs italic">
+                Result: You get the full dialectical landscape, not isolated opinions.
+              </p>
+            </div>
+
+            {/* Benefit 4: Automatic Citations */}
+            <div className="bg-white/70 rounded p-2.5 border border-blue-100">
+              <div className="font-medium text-blue-700 mb-1.5 flex items-start gap-2">
+                <span className="text-base">📚</span>
+                <span>Grounds Every Claim in Sources</span>
+              </div>
+              <p className="text-academic-muted leading-relaxed mb-2">
+                <strong>Standard LLM:</strong> Might hallucinate "Plato discussed compatibilism in Republic X."
+              </p>
+              <p className="text-academic-muted leading-relaxed mb-2">
+                <strong>GraphRAG:</strong> Only uses information from retrieved nodes. Automatically extracts
+                ancient sources (e.g., "Aristotle, <em>EN</em> III.1, 1110a1-4") and modern scholarship
+                (e.g., "Bobzien 1998, Frede 2011") from node metadata.
+              </p>
+              <p className="text-blue-600 text-xs italic">
+                Result: Verifiable, academically rigorous answers you can cite in your own research.
+              </p>
+            </div>
+
+            {/* Benefit 5: Multi-hop Reasoning */}
+            <div className="bg-white/70 rounded p-2.5 border border-blue-100">
+              <div className="font-medium text-blue-700 mb-1.5 flex items-start gap-2">
+                <span className="text-base">🎯</span>
+                <span>Enables Multi-Hop Reasoning</span>
+              </div>
+              <p className="text-academic-muted leading-relaxed mb-2">
+                <strong>Question:</strong> "How did Aristotelian ethics influence Christian theology?"
+              </p>
+              <p className="text-academic-muted leading-relaxed mb-2">
+                <strong>GraphRAG path:</strong> Aristotle → "influenced" → Alexander of Aphrodisias →
+                "transmitted_by" → Arabic commentators → "influenced" → Thomas Aquinas →
+                "synthesized_with" → Augustine's theology.
+              </p>
+              <p className="text-blue-600 text-xs italic">
+                Result: Traces intellectual transmission across cultures and centuries in a single query.
+              </p>
+            </div>
+
+            </div>
+          )}
         </div>
 
         {/* Last Response Stats */}
         {messages.length > 0 && messages[messages.length - 1].role === 'assistant' && (
           <div className="academic-card">
-            <h3 className="font-semibold mb-3">Last Response</h3>
+            <h3 className="font-semibold mb-3 text-base">Last Response</h3>
             {messages[messages.length - 1].citations && (
-              <div className="space-y-2 text-sm">
-                <div>
-                  <span className="font-medium">Ancient Sources:</span>{' '}
-                  <span className="text-primary-600">
+              <div className="space-y-2 text-xs sm:text-sm">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">Ancient Sources:</span>
+                  <span className="text-primary-600 font-semibold">
                     {messages[messages.length - 1].citations!.ancient_sources.length}
                   </span>
                 </div>
-                <div>
-                  <span className="font-medium">Modern Scholarship:</span>{' '}
-                  <span className="text-primary-600">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">Modern Scholarship:</span>
+                  <span className="text-primary-600 font-semibold">
                     {messages[messages.length - 1].citations!.modern_scholarship.length}
                   </span>
                 </div>
                 {messages[messages.length - 1].reasoning_path && (
-                  <div>
-                    <span className="font-medium">Nodes Used:</span>{' '}
-                    <span className="text-primary-600">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Nodes Used:</span>
+                    <span className="text-primary-600 font-semibold">
                       {messages[messages.length - 1].reasoning_path!.total_nodes}
                     </span>
                   </div>
@@ -378,19 +523,19 @@ function MessageBubble({ message }: { message: GraphRAGChatMessage }) {
   const [showCitations, setShowCitations] = useState(false);
 
   return (
-    <div className={`${message.role === 'user' ? 'ml-auto max-w-2xl' : 'mr-auto max-w-3xl'}`}>
+    <div className={`${message.role === 'user' ? 'ml-auto max-w-[95%] sm:max-w-2xl' : 'mr-auto max-w-[98%] sm:max-w-3xl'}`}>
       <div
-        className={`rounded-lg p-4 ${
+        className={`rounded-lg p-3 sm:p-4 ${
           message.role === 'user'
             ? 'bg-primary-600 text-white'
             : 'bg-academic-paper border border-academic-border'
         }`}
       >
         {message.role === 'user' ? (
-          <p>{message.content}</p>
+          <p className="text-sm sm:text-base break-words">{message.content}</p>
         ) : (
           <div className="space-y-3">
-            <div className="markdown-content prose prose-sm max-w-none">
+            <div className="markdown-content prose prose-sm max-w-none overflow-x-auto">
               <ReactMarkdown>{message.content}</ReactMarkdown>
             </div>
 
@@ -398,7 +543,7 @@ function MessageBubble({ message }: { message: GraphRAGChatMessage }) {
               <div className="border-t border-academic-border pt-3">
                 <button
                   onClick={() => setShowCitations(!showCitations)}
-                  className="text-sm font-medium text-primary-600 hover:text-primary-700"
+                  className="text-xs sm:text-sm font-medium text-primary-600 hover:text-primary-700"
                 >
                   {showCitations ? '▼' : '▶'} View Citations (
                   {message.citations.ancient_sources.length +
@@ -407,13 +552,13 @@ function MessageBubble({ message }: { message: GraphRAGChatMessage }) {
                 </button>
 
                 {showCitations && (
-                  <div className="mt-3 space-y-3 text-sm">
+                  <div className="mt-3 space-y-3 text-xs sm:text-sm">
                     {message.citations.ancient_sources.length > 0 && (
                       <div>
                         <h4 className="font-semibold mb-2">Ancient Sources:</h4>
-                        <ul className="list-disc list-inside space-y-1 text-academic-muted">
+                        <ul className="list-disc list-inside space-y-1 text-academic-muted pl-2">
                           {message.citations.ancient_sources.slice(0, 5).map((source, i) => (
-                            <li key={i} className="citation">
+                            <li key={i} className="citation break-words">
                               {source}
                             </li>
                           ))}
@@ -429,9 +574,9 @@ function MessageBubble({ message }: { message: GraphRAGChatMessage }) {
                     {message.citations.modern_scholarship.length > 0 && (
                       <div>
                         <h4 className="font-semibold mb-2">Modern Scholarship:</h4>
-                        <ul className="list-disc list-inside space-y-1 text-academic-muted">
+                        <ul className="list-disc list-inside space-y-1 text-academic-muted pl-2">
                           {message.citations.modern_scholarship.slice(0, 3).map((source, i) => (
-                            <li key={i} className="citation">
+                            <li key={i} className="citation break-words">
                               {source}
                             </li>
                           ))}
