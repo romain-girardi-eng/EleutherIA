@@ -5,6 +5,7 @@ import { apiClient } from '../api/client';
 export default function BibliographyPage() {
   const [bibliography, setBibliography] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -14,6 +15,7 @@ export default function BibliographyPage() {
   const loadBibliography = async () => {
     try {
       setLoading(true);
+      setError(null);
 
       // Fetch all KG nodes to extract bibliography
       const nodesResponse: any = await apiClient.getNodes();
@@ -42,6 +44,7 @@ export default function BibliographyPage() {
       setBibliography(sortedBib);
     } catch (error) {
       console.error('Error loading bibliography:', error);
+      setError('Failed to load bibliography. The backend may be starting up (this can take 30 seconds on first request). Please try again in a moment.');
     } finally {
       setLoading(false);
     }
@@ -116,7 +119,22 @@ export default function BibliographyPage() {
           <h2 className="text-2xl font-serif font-bold">References</h2>
         </div>
 
-        {loading ? (
+        {error ? (
+          <div className="text-center py-12">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-2xl mx-auto">
+              <svg className="w-12 h-12 text-red-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-red-800 font-medium mb-3">{error}</p>
+              <button
+                onClick={loadBibliography}
+                className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        ) : loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
             <p className="mt-4 text-academic-muted">Loading bibliography...</p>
