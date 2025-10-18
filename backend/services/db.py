@@ -5,19 +5,11 @@ Database Service - PostgreSQL connection management
 
 import asyncpg
 import logging
+import os
 from typing import Optional, List, Dict, Any
 from contextlib import asynccontextmanager
 
 logger = logging.getLogger(__name__)
-
-# Database configuration
-DB_CONFIG = {
-    'host': 'localhost',
-    'port': 5433,
-    'database': 'ancient_free_will_db',
-    'user': 'free_will_user',
-    'password': 'free_will_password'
-}
 
 
 class DatabaseService:
@@ -29,12 +21,24 @@ class DatabaseService:
     async def connect(self) -> None:
         """Establish connection pool to PostgreSQL"""
         try:
-            self.pool = await asyncpg.create_pool(
-                **DB_CONFIG,
-                min_size=5,
-                max_size=20,
-                command_timeout=60
-            )
+            # Get database configuration from environment variables
+            db_config = {
+                'host': os.getenv('POSTGRES_HOST', 'localhost'),
+                'port': int(os.getenv('POSTGRES_PORT', '5432')),
+                'database': os.getenv('POSTGRES_DB', 'postgres'),
+                'user': os.getenv('POSTGRES_USER', 'postgres'),
+                'password': os.getenv('POSTGRES_PASSWORD', ''),
+                'min_size': 5,
+                'max_size': 20,
+                'command_timeout': 60
+            }
+
+            # Add SSL if POSTGRES_SSLMODE is set (for cloud databases like Supabase)
+            ssl_mode = os.getenv('POSTGRES_SSLMODE', None)
+            if ssl_mode:
+                db_config['ssl'] = ssl_mode
+
+            self.pool = await asyncpg.create_pool(**db_config)
             logger.info("PostgreSQL connection pool created")
 
         except Exception as e:
