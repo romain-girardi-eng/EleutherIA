@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 # Qdrant configuration from environment
 QDRANT_HOST = os.getenv('QDRANT_HOST', 'localhost')
 QDRANT_PORT = int(os.getenv('QDRANT_HTTP_PORT', '6333'))
+QDRANT_API_KEY = os.getenv('QDRANT_API_KEY', None)
 EMBEDDING_DIMENSIONS = int(os.getenv('EMBEDDING_DIMENSIONS', '3072'))
 
 
@@ -30,17 +31,27 @@ class QdrantService:
     async def connect(self) -> None:
         """Connect to Qdrant with proper error handling"""
         try:
-            logger.info(f"Connecting to Qdrant at {QDRANT_HOST}:{QDRANT_PORT}")
-            self.client = QdrantClient(
-                host=QDRANT_HOST, 
-                port=QDRANT_PORT,
-                check_compatibility=False  # Suppress version warnings
-            )
+            if QDRANT_API_KEY:
+                # Cloud connection with API key and HTTPS
+                logger.info(f"Connecting to Qdrant Cloud at {QDRANT_HOST}")
+                self.client = QdrantClient(
+                    url=f"https://{QDRANT_HOST}:{QDRANT_PORT}",
+                    api_key=QDRANT_API_KEY,
+                    check_compatibility=False  # Suppress version warnings
+                )
+            else:
+                # Local connection with HTTP
+                logger.info(f"Connecting to local Qdrant at {QDRANT_HOST}:{QDRANT_PORT}")
+                self.client = QdrantClient(
+                    host=QDRANT_HOST,
+                    port=QDRANT_PORT,
+                    check_compatibility=False  # Suppress version warnings
+                )
 
             # Verify connection
             collections = self.client.get_collections()
             logger.info(f"✅ Connected to Qdrant - {len(collections.collections)} collections available")
-            
+
             # Log available collections
             for collection in collections.collections:
                 logger.debug(f"   - {collection.name}")
