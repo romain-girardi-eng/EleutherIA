@@ -7,17 +7,17 @@ RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
-COPY requirements.txt .
+# Copy requirements from backend directory
+COPY backend/requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY . .
+# Copy application code from backend directory
+COPY backend/ .
 
-# Copy Knowledge Graph database from parent directory
-COPY ../ancient_free_will_database.json /app/ancient_free_will_database.json
+# Copy Knowledge Graph database from root directory
+COPY ancient_free_will_database.json /app/ancient_free_will_database.json
 
 # Expose port
 EXPOSE 8000
