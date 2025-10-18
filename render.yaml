@@ -2,7 +2,7 @@ services:
   - type: web
     name: ancient-free-will-api
     runtime: docker
-    dockerfilePath: ./backend/Dockerfile
+    dockerfilePath: ./Dockerfile
     dockerContext: .
     plan: free
     envVars:
