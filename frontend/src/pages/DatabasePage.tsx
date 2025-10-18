@@ -231,21 +231,27 @@ export default function DatabasePage() {
           </p>
         </div>
 
-        {/* Bibliography Access Note */}
-        <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-          <div className="flex items-start gap-3">
-            <GraduationCap className="w-5 h-5 text-amber-700 flex-shrink-0 mt-0.5" />
-            <div className="text-sm">
-              <div className="font-semibold text-amber-900 mb-1">
-                Accessing Bibliography References
+        {/* Link to Bibliography */}
+        <div className="mt-6">
+          <a
+            href="/bibliography"
+            className="w-full flex items-center justify-between p-4 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg transition-colors group"
+          >
+            <div className="flex items-center gap-3">
+              <GraduationCap className="w-5 h-5 text-primary-600" />
+              <div>
+                <div className="font-semibold text-primary-700 group-hover:text-primary-800">
+                  View Complete Bibliography
+                </div>
+                <div className="text-sm text-academic-muted mt-0.5">
+                  Browse all 200+ modern scholarship references cited in the database
+                </div>
               </div>
-              <p className="text-amber-800 leading-relaxed">
-                All 200+ modern scholarship references are embedded directly in knowledge graph node metadata.
-                Access them through <a href="/graphrag" className="text-primary-600 hover:underline font-medium">GraphRAG Q&A</a> queries,
-                which automatically cite sources, or explore individual nodes in the <a href="/visualizer" className="text-primary-600 hover:underline font-medium">Knowledge Graph Visualizer</a>.
-              </p>
             </div>
-          </div>
+            <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
         </div>
       </section>
 

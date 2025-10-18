@@ -5,6 +5,7 @@ import SearchPage from './pages/SearchPage';
 import GraphRAGPage from './pages/GraphRAGPage';
 import TextExplorerPage from './pages/TextExplorerPage';
 import DatabasePage from './pages/DatabasePage';
+import BibliographyPage from './pages/BibliographyPage';
 import AboutPage from './pages/AboutPage';
 import ReportErrorPage from './pages/ReportErrorPage';
 import './index.css';
@@ -33,6 +34,7 @@ function App() {
                 <NavLink to="/search">Search</NavLink>
                 <NavLink to="/graphrag">GraphRAG Q&A</NavLink>
                 <NavLink to="/texts">Ancient Texts</NavLink>
+                <NavLink to="/bibliography">Bibliography</NavLink>
                 <NavLink to="/about">About</NavLink>
               </div>
 
@@ -58,6 +60,7 @@ function App() {
                 <NavLink to="/search">Search</NavLink>
                 <NavLink to="/graphrag">GraphRAG Q&A</NavLink>
                 <NavLink to="/texts">Ancient Texts</NavLink>
+                <NavLink to="/bibliography">Bibliography</NavLink>
                 <NavLink to="/about">About</NavLink>
               </div>
             </div>
@@ -73,6 +76,7 @@ function App() {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/graphrag" element={<GraphRAGPage />} />
             <Route path="/texts" element={<TextExplorerPage />} />
+            <Route path="/bibliography" element={<BibliographyPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/report-error" element={<ReportErrorPage />} />
           </Routes>
