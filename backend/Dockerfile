@@ -16,6 +16,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
+# Copy Knowledge Graph database from parent directory
+COPY ../ancient_free_will_database.json /app/ancient_free_will_database.json
+
 # Expose port
 EXPOSE 8000
 
