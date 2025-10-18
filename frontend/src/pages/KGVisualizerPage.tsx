@@ -3,11 +3,14 @@ import CytoscapeVisualizer from '../components/CytoscapeVisualizer';
 import { apiClient } from '../api/client';
 import type { CytoscapeData } from '../types';
 
+type VisualizerMode = 'cytoscape' | 'semativerse';
+
 export default function KGVisualizerPage() {
   const [data, setData] = useState<CytoscapeData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [stats, setStats] = useState<any>(null);
+  const [mode, setMode] = useState<VisualizerMode>('cytoscape');
 
   useEffect(() => {
     loadData();
@@ -65,7 +68,7 @@ export default function KGVisualizerPage() {
       {/* Header */}
       <div className="academic-card">
         <div className="flex items-center justify-between">
-          <div>
+          <div className="flex-1">
             <h1 className="text-3xl font-serif font-bold mb-2">Knowledge Graph Visualizer</h1>
             <p className="text-academic-muted">
               Interactive network visualization of ancient philosophical debates
@@ -87,6 +90,38 @@ export default function KGVisualizerPage() {
         </div>
       </div>
 
+      {/* Visualizer Mode Toggle */}
+      <div className="academic-card">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold mb-1">Visualization Engine</h3>
+            <p className="text-sm text-academic-muted">Choose between different graph visualization technologies</p>
+          </div>
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setMode('cytoscape')}
+              className={`px-4 py-2 rounded transition-colors ${
+                mode === 'cytoscape'
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-gray-100 text-academic-text hover:bg-gray-200'
+              }`}
+            >
+              Cytoscape.js
+            </button>
+            <button
+              onClick={() => setMode('semativerse')}
+              className={`px-4 py-2 rounded transition-colors ${
+                mode === 'semativerse'
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-gray-100 text-academic-text hover:bg-gray-200'
+              }`}
+            >
+              Semativerse
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Legend */}
       <div className="academic-card">
         <h3 className="font-semibold mb-3">Node Types</h3>
@@ -99,13 +134,39 @@ export default function KGVisualizerPage() {
         </div>
       </div>
 
+      {/* Attribution */}
+      {mode === 'semativerse' && (
+        <div className="academic-card bg-purple-50 border-purple-200">
+          <p className="text-sm text-academic-text">
+            <strong>Semativerse</strong> visualization is used with permission from its co-creators:{' '}
+            <strong>Benjamin Mathias</strong> and <strong>Romain Girardi</strong>.
+          </p>
+        </div>
+      )}
+
       {/* Visualizer */}
       <div className="academic-card p-0 overflow-hidden" style={{ height: '600px' }}>
-        <CytoscapeVisualizer
-          data={data}
-          onNodeClick={(nodeId) => console.log('Node clicked:', nodeId)}
-          onEdgeClick={(edgeId) => console.log('Edge clicked:', edgeId)}
-        />
+        {mode === 'cytoscape' ? (
+          <CytoscapeVisualizer
+            data={data}
+            onNodeClick={(nodeId) => console.log('Node clicked:', nodeId)}
+            onEdgeClick={(edgeId) => console.log('Edge clicked:', edgeId)}
+          />
+        ) : (
+          <div className="flex items-center justify-center h-full bg-gradient-to-br from-purple-50 to-blue-50">
+            <div className="text-center p-8">
+              <div className="text-6xl mb-4">🌌</div>
+              <h3 className="text-2xl font-semibold mb-2">Semativerse Integration</h3>
+              <p className="text-academic-muted mb-4 max-w-md">
+                Semativerse provides an advanced 3D knowledge graph visualization platform.
+                Contact the development team for access credentials.
+              </p>
+              <p className="text-sm text-academic-muted italic">
+                Co-created by Benjamin Mathias & Romain Girardi
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Instructions */}
