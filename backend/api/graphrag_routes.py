@@ -43,9 +43,10 @@ async def graphrag_query(graphrag_query: GraphRAGQuery, request: Request):
         # Get services from app state
         db = request.app.state.db
         qdrant = request.app.state.qdrant
+        llm = getattr(request.app.state, "llm", None)
 
         # Create GraphRAG service
-        graphrag_service = GraphRAGService(qdrant, db)
+        graphrag_service = GraphRAGService(qdrant, db, llm)
 
         # Execute complete pipeline
         result = await graphrag_service.answer_question(
@@ -85,9 +86,10 @@ async def graphrag_query_stream(graphrag_query: GraphRAGQuery, request: Request)
             # Get services from app state
             db = request.app.state.db
             qdrant = request.app.state.qdrant
+            llm = getattr(request.app.state, "llm", None)
 
             # Create GraphRAG service
-            graphrag_service = GraphRAGService(qdrant, db)
+            graphrag_service = GraphRAGService(qdrant, db, llm)
 
             # Step 1: Semantic search
             yield f"data: {json.dumps({'type': 'status', 'message': 'Performing semantic search...', 'step': 1, 'total_steps': 6})}\n\n"

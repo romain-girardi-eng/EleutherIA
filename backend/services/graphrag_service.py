@@ -31,10 +31,36 @@ if not GEMINI_API_KEY:
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-# Path to KG database
-# In Docker: /app/services/graphrag_service.py -> /app/ancient_free_will_database.json
-# Locally: backend/services/graphrag_service.py -> ancient_free_will_database.json
-KG_PATH = Path(__file__).parent.parent / "ancient_free_will_database.json"
+# Path to KG database with flexible resolution for local/dev environments
+def _resolve_kg_path() -> Path:
+    """Resolve Knowledge Graph path across local and container setups."""
+    env_path = os.getenv("KG_PATH")
+    candidate_paths = [
+        Path(env_path) if env_path else None,
+        Path(__file__).resolve().parent / "ancient_free_will_database.json",
+        Path(__file__).resolve().parents[1] / "ancient_free_will_database.json",
+        Path(__file__).resolve().parents[2] / "ancient_free_will_database.json",
+        Path.cwd() / "ancient_free_will_database.json",
+    ]
+
+    seen: Set[Path] = set()
+    for candidate in candidate_paths:
+        if not candidate:
+            continue
+        candidate = candidate.resolve()
+        if candidate in seen:
+            continue
+        seen.add(candidate)
+        if candidate.exists():
+            return candidate
+
+    raise FileNotFoundError(
+        "Knowledge Graph file 'ancient_free_will_database.json' not found. "
+        "Set KG_PATH or place the file in repository root."
+    )
+
+
+KG_PATH = _resolve_kg_path()
 
 
 class GraphRAGService:

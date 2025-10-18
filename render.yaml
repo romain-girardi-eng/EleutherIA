@@ -33,6 +33,8 @@ services:
         value: gemini-embedding-001
       - key: EMBEDDING_DIMENSIONS
         value: 3072
+      - key: LLM_PREFERRED_PROVIDER
+        value: gemini
       - key: PORT
         value: 8000
     healthCheckPath: /api/health

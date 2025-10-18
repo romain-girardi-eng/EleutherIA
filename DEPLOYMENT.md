@@ -81,9 +81,12 @@ QDRANT_API_KEY=your-api-key
 
 # Generate embeddings and upload to Qdrant
 python3 setup_complete_embeddings.py
+
+# Upload knowledge-graph node embeddings used by GraphRAG
+python3 upload_kg_embeddings_to_cloud.py
 ```
 
-This will create embeddings for all 42 texts using Gemini and upload them to Qdrant Cloud.
+This will create text embeddings (semantic search) and knowledge-graph embeddings (GraphRAG) in Qdrant Cloud.
 
 ---
 
@@ -114,6 +117,7 @@ QDRANT_API_KEY=[your-qdrant-api-key]
 LOG_LEVEL=INFO
 EMBEDDING_MODEL=gemini-embedding-001
 EMBEDDING_DIMENSIONS=3072
+LLM_PREFERRED_PROVIDER=gemini
 ```
 
 6. Click "Create Web Service"
