@@ -33,9 +33,10 @@ class QdrantService:
         try:
             if QDRANT_API_KEY:
                 # Cloud connection with API key and HTTPS
+                # Note: Qdrant Cloud uses standard HTTPS port (443), don't specify port
                 logger.info(f"Connecting to Qdrant Cloud at {QDRANT_HOST}")
                 self.client = QdrantClient(
-                    url=f"https://{QDRANT_HOST}:{QDRANT_PORT}",
+                    url=f"https://{QDRANT_HOST}",
                     api_key=QDRANT_API_KEY,
                     check_compatibility=False  # Suppress version warnings
                 )
