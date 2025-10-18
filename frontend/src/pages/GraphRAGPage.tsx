@@ -20,7 +20,7 @@ export default function GraphRAGPage() {
   const [maxContext, setMaxContext] = useState(15);
   const [useStreaming, setUseStreaming] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
-  const [showBenefits, setShowBenefits] = useState(true);
+  const [showBenefits, setShowBenefits] = useState(false); // Start collapsed to prevent layout issues
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -249,6 +249,32 @@ export default function GraphRAGPage() {
           </div>
         )}
 
+        {/* Why It's Brilliant Section - Mobile Only */}
+        <div className="lg:hidden mb-4">
+          <div className="academic-card bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+            <button
+              onClick={() => setShowBenefits(!showBenefits)}
+              className="w-full flex items-center justify-between text-left hover:opacity-80 transition-opacity"
+            >
+              <h3 className="font-semibold text-base text-green-900 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+                Why It's Brilliant
+              </h3>
+              <span className="text-green-700 text-sm font-medium">
+                {showBenefits ? '▼ Hide' : '▶ Show'}
+              </span>
+            </button>
+            {showBenefits && <div className="mt-3 pt-3 border-t border-green-200"></div>}
+            {showBenefits && (
+              <div className="text-xs space-y-2.5 max-h-96 overflow-y-auto">
+                <BenefitsContent />
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Messages Area */}
         <div className="flex-1 academic-card overflow-y-auto mb-4 p-3 sm:p-4 space-y-4 min-h-[300px] lg:min-h-0">
           {messages.length === 0 && !streaming && (
@@ -369,116 +395,25 @@ export default function GraphRAGPage() {
         </div>
 
         {/* Why It's Brilliant Section */}
-        <div className="academic-card bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+        <div className="academic-card bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
           <button
             onClick={() => setShowBenefits(!showBenefits)}
-            className="w-full flex items-center justify-between text-left mb-3 hover:opacity-80 transition-opacity"
+            className="w-full flex items-center justify-between text-left hover:opacity-80 transition-opacity"
           >
-            <h3 className="font-semibold text-base text-blue-900">
-              ✨ Why It's Brilliant!
+            <h3 className="font-semibold text-base text-green-900 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              Why It's Brilliant
             </h3>
-            <span className="text-blue-600 text-sm">
-              {showBenefits ? '▼' : '▶'}
+            <span className="text-green-700 text-sm font-medium">
+              {showBenefits ? '▼ Hide' : '▶ Show'}
             </span>
           </button>
+          {showBenefits && <div className="mt-3 pt-3 border-t border-green-200"></div>}
           {showBenefits && (
-            <div className="text-xs sm:text-sm text-academic-text space-y-3">
-
-            {/* Benefit 1: Relationship Discovery */}
-            <div className="bg-white/70 rounded p-2.5 border border-blue-100">
-              <div className="font-medium text-blue-700 mb-1.5 flex items-start gap-2">
-                <span className="text-base">🔗</span>
-                <span>Discovers Hidden Relationships</span>
-              </div>
-              <p className="text-academic-muted leading-relaxed mb-2">
-                <strong>Traditional search:</strong> "Augustine free will" → finds Augustine's writings.
-              </p>
-              <p className="text-academic-muted leading-relaxed mb-2">
-                <strong>GraphRAG:</strong> Finds Augustine → traverses to Pelagius (opponent) →
-                discovers the Pelagian Controversy → connects to earlier Stoic concepts Augustine adapted
-                → reveals the complete debate context.
-              </p>
-              <p className="text-blue-600 text-xs italic">
-                Result: You understand Augustine's position through his intellectual battles and sources.
-              </p>
-            </div>
-
-            {/* Benefit 2: Contextual Understanding */}
-            <div className="bg-white/70 rounded p-2.5 border border-blue-100">
-              <div className="font-medium text-blue-700 mb-1.5 flex items-start gap-2">
-                <span className="text-base">🧠</span>
-                <span>Provides Rich Historical Context</span>
-              </div>
-              <p className="text-academic-muted leading-relaxed mb-2">
-                <strong>Simple RAG:</strong> Retrieves isolated text chunks about "ἐφ' ἡμῖν" (in our power).
-              </p>
-              <p className="text-academic-muted leading-relaxed mb-2">
-                <strong>GraphRAG:</strong> Shows how the concept evolved from Aristotle (4th c. BCE) →
-                adopted by Stoics → critiqued by Carneades → reformulated by Epictetus →
-                transmitted to Latin as "in nostra potestate" → influenced Christian theology.
-              </p>
-              <p className="text-blue-600 text-xs italic">
-                Result: You see the intellectual genealogy spanning 800 years.
-              </p>
-            </div>
-
-            {/* Benefit 3: Argument Networks */}
-            <div className="bg-white/70 rounded p-2.5 border border-blue-100">
-              <div className="font-medium text-blue-700 mb-1.5 flex items-start gap-2">
-                <span className="text-base">⚔️</span>
-                <span>Maps Complete Argument Networks</span>
-              </div>
-              <p className="text-academic-muted leading-relaxed mb-2">
-                <strong>Keyword search:</strong> "Chrysippus determinism" → scattered mentions.
-              </p>
-              <p className="text-academic-muted leading-relaxed mb-2">
-                <strong>GraphRAG:</strong> Retrieves Chrysippus's arguments → follows "refutes" edges to
-                Carneades's counter-arguments → finds Cicero's synthesis → discovers later Neoplatonic
-                responses → extracts all cited sources.
-              </p>
-              <p className="text-blue-600 text-xs italic">
-                Result: You get the full dialectical landscape, not isolated opinions.
-              </p>
-            </div>
-
-            {/* Benefit 4: Automatic Citations */}
-            <div className="bg-white/70 rounded p-2.5 border border-blue-100">
-              <div className="font-medium text-blue-700 mb-1.5 flex items-start gap-2">
-                <span className="text-base">📚</span>
-                <span>Grounds Every Claim in Sources</span>
-              </div>
-              <p className="text-academic-muted leading-relaxed mb-2">
-                <strong>Standard LLM:</strong> Might hallucinate "Plato discussed compatibilism in Republic X."
-              </p>
-              <p className="text-academic-muted leading-relaxed mb-2">
-                <strong>GraphRAG:</strong> Only uses information from retrieved nodes. Automatically extracts
-                ancient sources (e.g., "Aristotle, <em>EN</em> III.1, 1110a1-4") and modern scholarship
-                (e.g., "Bobzien 1998, Frede 2011") from node metadata.
-              </p>
-              <p className="text-blue-600 text-xs italic">
-                Result: Verifiable, academically rigorous answers you can cite in your own research.
-              </p>
-            </div>
-
-            {/* Benefit 5: Multi-hop Reasoning */}
-            <div className="bg-white/70 rounded p-2.5 border border-blue-100">
-              <div className="font-medium text-blue-700 mb-1.5 flex items-start gap-2">
-                <span className="text-base">🎯</span>
-                <span>Enables Multi-Hop Reasoning</span>
-              </div>
-              <p className="text-academic-muted leading-relaxed mb-2">
-                <strong>Question:</strong> "How did Aristotelian ethics influence Christian theology?"
-              </p>
-              <p className="text-academic-muted leading-relaxed mb-2">
-                <strong>GraphRAG path:</strong> Aristotle → "influenced" → Alexander of Aphrodisias →
-                "transmitted_by" → Arabic commentators → "influenced" → Thomas Aquinas →
-                "synthesized_with" → Augustine's theology.
-              </p>
-              <p className="text-blue-600 text-xs italic">
-                Result: Traces intellectual transmission across cultures and centuries in a single query.
-              </p>
-            </div>
-
+            <div className="text-xs space-y-3 max-h-[500px] overflow-y-auto pr-2">
+              <BenefitsContent />
             </div>
           )}
         </div>
@@ -515,6 +450,103 @@ export default function GraphRAGPage() {
         )}
       </div>
     </div>
+  );
+}
+
+// Benefits Content Component (reusable for mobile and desktop)
+function BenefitsContent() {
+  return (
+    <>
+      {/* Benefit 1: Relationship Discovery */}
+      <div className="bg-white/80 rounded-lg p-3 border border-green-100">
+        <div className="font-semibold text-green-800 mb-2">
+          Discovers Hidden Relationships
+        </div>
+        <p className="text-academic-muted leading-relaxed mb-2 text-xs">
+          <strong>Traditional search:</strong> "Augustine free will" → finds Augustine's writings.
+        </p>
+        <p className="text-academic-muted leading-relaxed mb-2 text-xs">
+          <strong>GraphRAG:</strong> Finds Augustine → traverses to Pelagius (opponent) →
+          discovers the Pelagian Controversy → connects to earlier Stoic concepts Augustine adapted
+          → reveals the complete debate context.
+        </p>
+        <p className="text-green-700 text-xs font-medium italic">
+          → You understand Augustine's position through his intellectual battles and sources.
+        </p>
+      </div>
+
+      {/* Benefit 2: Contextual Understanding */}
+      <div className="bg-white/80 rounded-lg p-3 border border-green-100">
+        <div className="font-semibold text-green-800 mb-2">
+          Provides Rich Historical Context
+        </div>
+        <p className="text-academic-muted leading-relaxed mb-2 text-xs">
+          <strong>Simple RAG:</strong> Retrieves isolated text chunks about "ἐφ' ἡμῖν" (in our power).
+        </p>
+        <p className="text-academic-muted leading-relaxed mb-2 text-xs">
+          <strong>GraphRAG:</strong> Shows how the concept evolved from Aristotle (4th c. BCE) →
+          adopted by Stoics → critiqued by Carneades → reformulated by Epictetus →
+          transmitted to Latin as "in nostra potestate" → influenced Christian theology.
+        </p>
+        <p className="text-green-700 text-xs font-medium italic">
+          → You see the intellectual genealogy spanning 800 years.
+        </p>
+      </div>
+
+      {/* Benefit 3: Argument Networks */}
+      <div className="bg-white/80 rounded-lg p-3 border border-green-100">
+        <div className="font-semibold text-green-800 mb-2">
+          Maps Complete Argument Networks
+        </div>
+        <p className="text-academic-muted leading-relaxed mb-2 text-xs">
+          <strong>Keyword search:</strong> "Chrysippus determinism" → scattered mentions.
+        </p>
+        <p className="text-academic-muted leading-relaxed mb-2 text-xs">
+          <strong>GraphRAG:</strong> Retrieves Chrysippus's arguments → follows "refutes" edges to
+          Carneades's counter-arguments → finds Cicero's synthesis → discovers later Neoplatonic
+          responses → extracts all cited sources.
+        </p>
+        <p className="text-green-700 text-xs font-medium italic">
+          → You get the full dialectical landscape, not isolated opinions.
+        </p>
+      </div>
+
+      {/* Benefit 4: Automatic Citations */}
+      <div className="bg-white/80 rounded-lg p-3 border border-green-100">
+        <div className="font-semibold text-green-800 mb-2">
+          Grounds Every Claim in Sources
+        </div>
+        <p className="text-academic-muted leading-relaxed mb-2 text-xs">
+          <strong>Standard LLM:</strong> Might hallucinate "Plato discussed compatibilism in Republic X."
+        </p>
+        <p className="text-academic-muted leading-relaxed mb-2 text-xs">
+          <strong>GraphRAG:</strong> Only uses information from retrieved nodes. Automatically extracts
+          ancient sources (e.g., "Aristotle, <em>EN</em> III.1, 1110a1-4") and modern scholarship
+          (e.g., "Bobzien 1998, Frede 2011") from node metadata.
+        </p>
+        <p className="text-green-700 text-xs font-medium italic">
+          → Verifiable, academically rigorous answers you can cite in your own research.
+        </p>
+      </div>
+
+      {/* Benefit 5: Multi-hop Reasoning */}
+      <div className="bg-white/80 rounded-lg p-3 border border-green-100">
+        <div className="font-semibold text-green-800 mb-2">
+          Enables Multi-Hop Reasoning
+        </div>
+        <p className="text-academic-muted leading-relaxed mb-2 text-xs">
+          <strong>Question:</strong> "How did Aristotelian ethics influence Christian theology?"
+        </p>
+        <p className="text-academic-muted leading-relaxed mb-2 text-xs">
+          <strong>GraphRAG path:</strong> Aristotle → "influenced" → Alexander of Aphrodisias →
+          "transmitted_by" → Arabic commentators → "influenced" → Thomas Aquinas →
+          "synthesized_with" → Augustine's theology.
+        </p>
+        <p className="text-green-700 text-xs font-medium italic">
+          → Traces intellectual transmission across cultures and centuries in a single query.
+        </p>
+      </div>
+    </>
   );
 }
 
