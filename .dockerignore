@@ -1,0 +1,14 @@
+# Ignore everything by default
+*
+
+# Include backend code
+!backend/
+!backend/**
+
+# Include database file
+!ancient_free_will_database.json
+
+# Exclude Python cache from backend
+backend/__pycache__
+backend/**/__pycache__
+backend/**/*.pyc
