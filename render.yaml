@@ -2,8 +2,9 @@ services:
   - type: web
     name: ancient-free-will-api
     runtime: docker
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./backend/Dockerfile
     dockerContext: .
+    plan: free
     envVars:
       - key: GEMINI_API_KEY
         sync: false
@@ -17,6 +18,8 @@ services:
         sync: false
       - key: POSTGRES_PASSWORD
         sync: false
+      - key: POSTGRES_SSLMODE
+        value: require
       - key: QDRANT_HOST
         sync: false
       - key: QDRANT_HTTP_PORT
