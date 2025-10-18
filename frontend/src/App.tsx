@@ -15,13 +15,13 @@ function App() {
         {/* Header / Navigation */}
         <header className="bg-academic-paper border-b border-academic-border shadow-sm sticky top-0 z-50">
           <nav className="academic-container">
-            <div className="flex items-center justify-between py-2 sm:py-0 sm:h-12">
+            <div className="flex items-center justify-between py-1 sm:py-0 sm:h-12">
               {/* Logo */}
               <Link to="/" className="hover:opacity-80 transition-opacity flex-shrink-0">
                 <img
                   src="/logo.svg"
                   alt="EleutherIA - Ancient Free Will Database"
-                  className="h-14 sm:h-20 w-auto"
+                  className="h-10 sm:h-20 w-auto"
                 />
               </Link>
 
@@ -37,21 +37,21 @@ function App() {
 
               {/* Mobile Menu Button */}
               <button
-                className="lg:hidden p-2 text-academic-text hover:text-primary-600"
+                className="lg:hidden p-1.5 text-academic-text hover:text-primary-600"
                 onClick={() => {
                   const mobileMenu = document.getElementById('mobile-menu');
                   mobileMenu?.classList.toggle('hidden');
                 }}
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
             </div>
 
             {/* Mobile Menu */}
-            <div id="mobile-menu" className="hidden lg:hidden pb-3 pt-2 border-t border-academic-border mt-2">
-              <div className="flex flex-col space-y-2">
+            <div id="mobile-menu" className="hidden lg:hidden pb-2 pt-1.5 border-t border-academic-border mt-1">
+              <div className="flex flex-col space-y-1.5">
                 <NavLink to="/visualizer">Knowledge Graph</NavLink>
                 <NavLink to="/search">Search</NavLink>
                 <NavLink to="/graphrag">GraphRAG Q&A</NavLink>
@@ -164,7 +164,7 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to}
-      className="text-academic-text hover:text-primary-600 font-medium text-sm transition-colors block py-1"
+      className="text-academic-text hover:text-primary-600 font-medium text-sm transition-colors block lg:inline-block py-0.5 lg:py-0"
       onClick={() => {
         // Close mobile menu when clicking a link
         const mobileMenu = document.getElementById('mobile-menu');
