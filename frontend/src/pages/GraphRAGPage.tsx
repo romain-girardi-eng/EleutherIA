@@ -20,6 +20,7 @@ export default function GraphRAGPage() {
   const [maxContext, setMaxContext] = useState(15);
   const [useStreaming, setUseStreaming] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+  const [showHowItWorks, setShowHowItWorks] = useState(false); // Collapsible How It Works
   const [showBenefits, setShowBenefits] = useState(false); // Start collapsed to prevent layout issues
 
   // Scroll to bottom when messages change
@@ -358,44 +359,60 @@ export default function GraphRAGPage() {
       </div>
 
       {/* Sidebar - Hidden on mobile, shown on desktop */}
-      <div className="hidden lg:block lg:col-span-1 space-y-4 overflow-y-auto max-h-[calc(100vh-200px)]">
-        {/* Info Card */}
-        <div className="academic-card">
-          <h3 className="font-semibold mb-3 text-base">How GraphRAG Works</h3>
-          <div className="text-xs sm:text-sm text-academic-text space-y-3">
-            <div>
-              <div className="font-medium text-primary-600 mb-1">1. Vector Search</div>
-              <p className="text-academic-muted leading-relaxed">
-                Your query is embedded using Gemini and compared against 465 KG node embeddings
-                in Qdrant to find semantically relevant starting points.
-              </p>
+      <div className="hidden lg:flex lg:flex-col lg:col-span-1 space-y-4">
+        {/* How GraphRAG Works Section - Collapsible */}
+        <div className="academic-card bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 flex-1 flex flex-col">
+          <button
+            onClick={() => setShowHowItWorks(!showHowItWorks)}
+            className="w-full flex items-center justify-between text-left hover:opacity-80 transition-opacity"
+          >
+            <h3 className="font-semibold text-base text-blue-900 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              How GraphRAG Works
+            </h3>
+            <span className="text-blue-700 text-sm font-medium">
+              {showHowItWorks ? '▼ Hide' : '▶ Show'}
+            </span>
+          </button>
+          {showHowItWorks && <div className="mt-3 pt-3 border-t border-blue-200"></div>}
+          {showHowItWorks && (
+            <div className="text-xs space-y-2.5 overflow-y-auto pr-2 flex-1">
+              <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
+                <div className="font-semibold text-blue-800 mb-1.5">1. Vector Search</div>
+                <p className="text-academic-muted leading-relaxed text-xs">
+                  Your query is embedded using Gemini and compared against 465 KG node embeddings
+                  in Qdrant to find semantically relevant starting points.
+                </p>
+              </div>
+              <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
+                <div className="font-semibold text-blue-800 mb-1.5">2. Graph Expansion</div>
+                <p className="text-academic-muted leading-relaxed text-xs">
+                  Breadth-first search traverses relationships (authored, influenced, refutes)
+                  to gather connected nodes, creating rich contextual networks.
+                </p>
+              </div>
+              <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
+                <div className="font-semibold text-blue-800 mb-1.5">3. Context Building</div>
+                <p className="text-academic-muted leading-relaxed text-xs">
+                  Ancient sources and modern scholarship are extracted from retrieved nodes,
+                  prioritized by node type (persons, arguments, concepts).
+                </p>
+              </div>
+              <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
+                <div className="font-semibold text-blue-800 mb-1.5">4. LLM Synthesis</div>
+                <p className="text-academic-muted leading-relaxed text-xs">
+                  An LLM generates a scholarly answer grounded exclusively in the retrieved
+                  Knowledge Graph context, with strict citation requirements.
+                </p>
+              </div>
             </div>
-            <div>
-              <div className="font-medium text-primary-600 mb-1">2. Graph Expansion</div>
-              <p className="text-academic-muted leading-relaxed">
-                Breadth-first search traverses relationships (authored, influenced, refutes)
-                to gather connected nodes, creating rich contextual networks.
-              </p>
-            </div>
-            <div>
-              <div className="font-medium text-primary-600 mb-1">3. Context Building</div>
-              <p className="text-academic-muted leading-relaxed">
-                Ancient sources and modern scholarship are extracted from retrieved nodes,
-                prioritized by node type (persons, arguments, concepts).
-              </p>
-            </div>
-            <div>
-              <div className="font-medium text-primary-600 mb-1">4. LLM Synthesis</div>
-              <p className="text-academic-muted leading-relaxed">
-                An LLM generates a scholarly answer grounded exclusively in the retrieved
-                Knowledge Graph context, with strict citation requirements.
-              </p>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Why It's Brilliant Section */}
-        <div className="academic-card bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+        <div className="academic-card bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 flex-1 flex flex-col">
           <button
             onClick={() => setShowBenefits(!showBenefits)}
             className="w-full flex items-center justify-between text-left hover:opacity-80 transition-opacity"
@@ -412,7 +429,7 @@ export default function GraphRAGPage() {
           </button>
           {showBenefits && <div className="mt-3 pt-3 border-t border-green-200"></div>}
           {showBenefits && (
-            <div className="text-xs space-y-2.5 max-h-72 overflow-y-auto pr-2">
+            <div className="text-xs space-y-2.5 overflow-y-auto pr-2 flex-1">
               <BenefitsContent />
             </div>
           )}
