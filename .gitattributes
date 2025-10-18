@@ -1,10 +1,8 @@
 # Git attributes for EleutherIA Ancient Free Will Database
 
-# Handle large files with Git LFS
-*.json filter=lfs diff=lfs merge=lfs -text
-*.png filter=lfs diff=lfs merge=lfs -text
-*.pdf filter=lfs diff=lfs merge=lfs -text
-*.svg filter=lfs diff=lfs merge=lfs -text
+# Handle large files with Git LFS (frontend images only)
+frontend/public/*.png filter=lfs diff=lfs merge=lfs -text
+frontend/public/*.svg filter=lfs diff=lfs merge=lfs -text
 
 # Ensure proper line endings
 *.py text eol=lf
