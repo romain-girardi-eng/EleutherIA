@@ -168,20 +168,20 @@ export default function BibliographyPage() {
       </section>
 
       {/* Citation Info */}
-      <section className="academic-card bg-primary-50 border border-primary-200">
+      <section className="academic-card bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
-            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div className="text-sm">
-            <div className="font-semibold text-primary-900 mb-2">How to Cite This Database</div>
-            <div className="bg-white p-3 rounded border border-primary-300 font-mono text-xs text-academic-text mb-3">
+            <div className="font-semibold text-amber-900 mb-2">How to Cite This Database</div>
+            <div className="bg-white p-3 rounded border border-amber-300 font-mono text-xs text-academic-text mb-3">
               Girardi, R. (2025). <span className="italic">EleutherIA: Ancient Free Will Database</span>.
               Zenodo. https://doi.org/10.5281/zenodo.17379490
             </div>
-            <p className="text-primary-800 leading-relaxed">
+            <p className="text-amber-900 leading-relaxed">
               All references listed above are cited within knowledge graph node metadata and
               automatically included in GraphRAG responses with proper attribution.
             </p>
