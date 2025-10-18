@@ -1,14 +1,27 @@
-# Ignore everything by default
-*
+# Exclude frontend (not needed for backend)
+frontend/
+node_modules/
 
-# Include backend code
-!backend/
-!backend/**
+# Exclude git and docs
+.git/
+.github/
+*.md
+!README.md
 
-# Include database file
-!ancient_free_will_database.json
+# Exclude Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
 
-# Exclude Python cache from backend
-backend/__pycache__
-backend/**/__pycache__
-backend/**/*.pyc
+# Exclude dev files
+.env
+.env.local
+venv/
+.vscode/
+.idea/
+
+# Exclude Railway/Railway files
+railway.toml
+RAILWAY_DEPLOY.md
