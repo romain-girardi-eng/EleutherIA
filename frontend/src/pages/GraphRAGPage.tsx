@@ -195,7 +195,7 @@ export default function GraphRAGPage() {
 
         {/* Settings Panel */}
         {showSettings && (
-          <div className="academic-card mb-4 bg-blue-50 border-blue-200">
+          <div className="academic-card mb-4 bg-primary-50 border-primary-200">
             <h3 className="font-semibold mb-3">Advanced Settings</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -361,47 +361,47 @@ export default function GraphRAGPage() {
       {/* Sidebar - Hidden on mobile, shown on desktop */}
       <div className="hidden lg:block lg:col-span-1 space-y-4 max-h-[calc(100vh-250px)] overflow-y-auto">
         {/* How GraphRAG Works Section - Collapsible */}
-        <div className="academic-card bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+        <div className="academic-card bg-gradient-to-br from-blue-50 to-indigo-50 border-primary-200">
           <button
             onClick={() => setShowHowItWorks(!showHowItWorks)}
             className="w-full flex items-center justify-between text-left hover:opacity-80 transition-opacity"
           >
-            <h3 className="font-semibold text-base text-blue-900 flex items-center gap-2">
+            <h3 className="font-semibold text-base text-primary-900 flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
               How GraphRAG Works
             </h3>
-            <span className="text-blue-700 text-sm font-medium">
+            <span className="text-primary-700 text-sm font-medium">
               {showHowItWorks ? '▼ Hide' : '▶ Show'}
             </span>
           </button>
-          {showHowItWorks && <div className="mt-3 pt-3 border-t border-blue-200"></div>}
+          {showHowItWorks && <div className="mt-3 pt-3 border-t border-primary-200"></div>}
           {showHowItWorks && (
             <div className="text-xs space-y-2.5 max-h-96 overflow-y-auto pr-2">
               <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
-                <div className="font-semibold text-blue-800 mb-1.5">1. Vector Search</div>
+                <div className="font-semibold text-primary-800 mb-1.5">1. Vector Search</div>
                 <p className="text-academic-muted leading-relaxed text-xs">
                   Your query is embedded using Gemini and compared against 465 KG node embeddings
                   in Qdrant to find semantically relevant starting points.
                 </p>
               </div>
               <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
-                <div className="font-semibold text-blue-800 mb-1.5">2. Graph Expansion</div>
+                <div className="font-semibold text-primary-800 mb-1.5">2. Graph Expansion</div>
                 <p className="text-academic-muted leading-relaxed text-xs">
                   Breadth-first search traverses relationships (authored, influenced, refutes)
                   to gather connected nodes, creating rich contextual networks.
                 </p>
               </div>
               <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
-                <div className="font-semibold text-blue-800 mb-1.5">3. Context Building</div>
+                <div className="font-semibold text-primary-800 mb-1.5">3. Context Building</div>
                 <p className="text-academic-muted leading-relaxed text-xs">
                   Ancient sources and modern scholarship are extracted from retrieved nodes,
                   prioritized by node type (persons, arguments, concepts).
                 </p>
               </div>
               <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
-                <div className="font-semibold text-blue-800 mb-1.5">4. LLM Synthesis</div>
+                <div className="font-semibold text-primary-800 mb-1.5">4. LLM Synthesis</div>
                 <p className="text-academic-muted leading-relaxed text-xs">
                   An LLM generates a scholarly answer grounded exclusively in the retrieved
                   Knowledge Graph context, with strict citation requirements.

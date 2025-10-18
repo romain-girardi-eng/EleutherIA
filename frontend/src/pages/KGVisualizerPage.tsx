@@ -170,7 +170,7 @@ export default function KGVisualizerPage() {
       </div>
 
       {/* Instructions */}
-      <div className="academic-card bg-blue-50 border-blue-200">
+      <div className="academic-card bg-primary-50 border-primary-200">
         <h3 className="font-semibold mb-2">How to Use</h3>
         <ul className="text-sm text-academic-text space-y-1 list-disc list-inside">
           <li>Click and drag to pan the graph</li>
