@@ -41,9 +41,15 @@ def simplify_and_create_favicons(input_image_path):
     threshold = 200
     gray = gray.point(lambda x: 255 if x > threshold else 0)
 
-    # Dilate to make lines thicker (makes small details merge and thicken)
-    for i in range(2):  # Apply twice for thicker lines
-        gray = gray.filter(ImageFilter.MaxFilter(3))
+    # First, erode to remove small isolated details (tiny nodes/dots)
+    # This eliminates noise while keeping main structure
+    for i in range(2):
+        gray = gray.filter(ImageFilter.MinFilter(3))
+
+    # Then dilate MUCH more to make lines very thick
+    # Use 5x5 kernel and apply 6 times for very thick lines
+    for i in range(6):  # Apply 6 times for much thicker, more visible lines
+        gray = gray.filter(ImageFilter.MaxFilter(5))
 
     # Convert back to RGBA with original colors
     # Get the red color from original
