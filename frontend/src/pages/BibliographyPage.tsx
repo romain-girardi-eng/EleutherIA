@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { GraduationCap, Search, BookOpen } from 'lucide-react';
+import { GraduationCap, Search, BookOpen, ChevronDown, ChevronRight, Filter } from 'lucide-react';
 import { apiClient } from '../api/client';
 
 export default function BibliographyPage() {
@@ -7,6 +7,10 @@ export default function BibliographyPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [expandedLetters, setExpandedLetters] = useState<Set<string>>(new Set());
+  const [filterType, setFilterType] = useState<string>('all');
+  const [filterYear, setFilterYear] = useState<string>('all');
+  const [filterPublisher, setFilterPublisher] = useState<string>('all');
 
   useEffect(() => {
     loadBibliography();
@@ -50,10 +54,104 @@ export default function BibliographyPage() {
     }
   };
 
-  // Filter bibliography by search query
-  const filteredBibliography = bibliography.filter(ref =>
-    !searchQuery || ref.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Toggle letter expansion
+  const toggleLetter = (letter: string) => {
+    const newExpanded = new Set(expandedLetters);
+    if (newExpanded.has(letter)) {
+      newExpanded.delete(letter);
+    } else {
+      newExpanded.add(letter);
+    }
+    setExpandedLetters(newExpanded);
+  };
+
+  // Expand all letters
+  const expandAll = () => {
+    const allLetters = new Set(bibliography.map(ref => ref[0].toUpperCase()));
+    setExpandedLetters(allLetters);
+  };
+
+  // Collapse all letters
+  const collapseAll = () => {
+    setExpandedLetters(new Set());
+  };
+
+  // Extract metadata from references
+  const extractYear = (ref: string): string | null => {
+    const yearMatch = ref.match(/\b(19\d{2}|20\d{2})\b/);
+    return yearMatch ? yearMatch[0] : null;
+  };
+
+  const extractPublisher = (ref: string): string | null => {
+    // Common academic publishers
+    const publishers = [
+      'Oxford', 'Cambridge', 'Princeton', 'Harvard', 'Yale', 'MIT',
+      'Clarendon', 'Springer', 'Routledge', 'Brill', 'Blackwell',
+      'Penguin', 'Hackett', 'Cornell', 'Chicago', 'Stanford'
+    ];
+    for (const publisher of publishers) {
+      if (ref.includes(publisher)) return publisher;
+    }
+    return 'Other';
+  };
+
+  const getReferenceType = (ref: string): string => {
+    if (ref.includes('ed.') || ref.includes('(ed.)') || ref.includes('(eds.)')) return 'edited-volume';
+    if (ref.includes('trans.') || ref.includes('(trans.)')) return 'translation';
+    if (ref.includes('Journal') || ref.includes('Review') || ref.match(/\d+\(\d+\)/)) return 'journal';
+    if (ref.includes('Stanford Encyclopedia') || ref.includes('SEP')) return 'encyclopedia';
+    return 'monograph';
+  };
+
+  // Get unique values for filters
+  const uniqueYears = Array.from(new Set(
+    bibliography.map(extractYear).filter(Boolean)
+  )).sort().reverse();
+
+  const uniquePublishers = Array.from(new Set(
+    bibliography.map(extractPublisher).filter(Boolean)
+  )).sort();
+
+  // Filter bibliography
+  const filteredBibliography = bibliography.filter(ref => {
+    // Search query filter
+    if (searchQuery && !ref.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+
+    // Type filter
+    if (filterType !== 'all' && getReferenceType(ref) !== filterType) {
+      return false;
+    }
+
+    // Year filter
+    if (filterYear !== 'all') {
+      const refYear = extractYear(ref);
+      if (filterYear === '2000+' && (!refYear || parseInt(refYear) < 2000)) return false;
+      if (filterYear === '1990-1999' && (!refYear || parseInt(refYear) < 1990 || parseInt(refYear) >= 2000)) return false;
+      if (filterYear === '1980-1989' && (!refYear || parseInt(refYear) < 1980 || parseInt(refYear) >= 1990)) return false;
+      if (filterYear === 'pre-1980' && (!refYear || parseInt(refYear) >= 1980)) return false;
+    }
+
+    // Publisher filter
+    if (filterPublisher !== 'all' && extractPublisher(ref) !== filterPublisher) {
+      return false;
+    }
+
+    return true;
+  });
+
+  // Group by first letter
+  const groupedBibliography: { [key: string]: string[] } = {};
+  filteredBibliography.forEach(ref => {
+    const letter = ref[0].toUpperCase();
+    if (!groupedBibliography[letter]) {
+      groupedBibliography[letter] = [];
+    }
+    groupedBibliography[letter].push(ref);
+  });
+
+  const letters = Object.keys(groupedBibliography).sort();
 
   return (
     <div className="space-y-6">
@@ -93,30 +191,111 @@ export default function BibliographyPage() {
         </div>
       </div>
 
-      {/* Search */}
+      {/* Search and Filters */}
       <div className="academic-card">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-academic-muted w-5 h-5" />
-          <input
-            type="text"
-            placeholder="Search by author, title, publisher, year..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-academic-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          />
-        </div>
-        {searchQuery && (
-          <div className="mt-3 text-sm text-academic-muted">
-            Found {filteredBibliography.length} of {bibliography.length} references
+        <div className="space-y-4">
+          {/* Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-academic-muted w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search by author, title, publisher, year..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-academic-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            />
           </div>
-        )}
+
+          {/* Filters Row */}
+          <div className="flex items-center gap-3 pt-2 border-t border-academic-border">
+            <Filter className="w-4 h-4 text-academic-muted flex-shrink-0" />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 flex-1">
+              {/* Type Filter */}
+              <select
+                value={filterType}
+                onChange={(e) => setFilterType(e.target.value)}
+                className="px-3 py-2 border border-academic-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              >
+                <option value="all">All Types</option>
+                <option value="monograph">Monographs</option>
+                <option value="edited-volume">Edited Volumes</option>
+                <option value="journal">Journal Articles</option>
+                <option value="translation">Translations</option>
+                <option value="encyclopedia">Encyclopedia Entries</option>
+              </select>
+
+              {/* Year Filter */}
+              <select
+                value={filterYear}
+                onChange={(e) => setFilterYear(e.target.value)}
+                className="px-3 py-2 border border-academic-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              >
+                <option value="all">All Years</option>
+                <option value="2000+">2000+</option>
+                <option value="1990-1999">1990-1999</option>
+                <option value="1980-1989">1980-1989</option>
+                <option value="pre-1980">Pre-1980</option>
+              </select>
+
+              {/* Publisher Filter */}
+              <select
+                value={filterPublisher}
+                onChange={(e) => setFilterPublisher(e.target.value)}
+                className="px-3 py-2 border border-academic-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              >
+                <option value="all">All Publishers</option>
+                {uniquePublishers.map(pub => (
+                  <option key={pub} value={pub}>{pub}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Filter Results Summary */}
+          {(searchQuery || filterType !== 'all' || filterYear !== 'all' || filterPublisher !== 'all') && (
+            <div className="flex items-center justify-between pt-2 border-t border-academic-border">
+              <div className="text-sm text-academic-muted">
+                Found {filteredBibliography.length} of {bibliography.length} references
+              </div>
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setFilterType('all');
+                  setFilterYear('all');
+                  setFilterPublisher('all');
+                }}
+                className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+              >
+                Clear All Filters
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Bibliography List */}
       <section className="academic-card">
-        <div className="flex items-center gap-3 mb-6">
-          <BookOpen className="w-6 h-6 text-primary-600" />
-          <h2 className="text-2xl font-serif font-bold">References</h2>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <BookOpen className="w-6 h-6 text-primary-600" />
+            <h2 className="text-2xl font-serif font-bold">References</h2>
+          </div>
+          {!loading && !error && filteredBibliography.length > 0 && (
+            <div className="flex gap-2">
+              <button
+                onClick={expandAll}
+                className="px-3 py-1.5 text-sm text-primary-600 hover:bg-primary-50 border border-primary-300 rounded-lg transition-colors"
+              >
+                Expand All
+              </button>
+              <button
+                onClick={collapseAll}
+                className="px-3 py-1.5 text-sm text-primary-600 hover:bg-primary-50 border border-primary-300 rounded-lg transition-colors"
+              >
+                Collapse All
+              </button>
+            </div>
+          )}
         </div>
 
         {error ? (
@@ -143,26 +322,60 @@ export default function BibliographyPage() {
           <div className="text-center py-12">
             <GraduationCap className="w-16 h-16 text-academic-muted mx-auto mb-4" />
             <p className="text-academic-muted">
-              {searchQuery ? 'No references found matching your search.' : 'No references available.'}
+              {searchQuery || filterType !== 'all' || filterYear !== 'all' || filterPublisher !== 'all'
+                ? 'No references found matching your filters.'
+                : 'No references available.'}
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {filteredBibliography.map((ref, index) => (
-              <div
-                key={index}
-                className="p-4 bg-academic-bg border border-academic-border rounded-lg hover:border-primary-300 transition-colors"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 text-sm text-academic-muted font-mono">
-                    [{index + 1}]
-                  </div>
-                  <div className="flex-1 text-sm text-academic-text leading-relaxed">
-                    {ref}
-                  </div>
+          <div className="space-y-2">
+            {letters.map(letter => {
+              const isExpanded = expandedLetters.has(letter);
+              const refs = groupedBibliography[letter];
+
+              return (
+                <div key={letter} className="border border-academic-border rounded-lg overflow-hidden">
+                  {/* Letter Header */}
+                  <button
+                    onClick={() => toggleLetter(letter)}
+                    className="w-full flex items-center justify-between p-4 bg-academic-bg hover:bg-primary-50 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      {isExpanded ? (
+                        <ChevronDown className="w-5 h-5 text-primary-600" />
+                      ) : (
+                        <ChevronRight className="w-5 h-5 text-primary-600" />
+                      )}
+                      <span className="text-2xl font-serif font-bold text-primary-700">{letter}</span>
+                      <span className="text-sm text-academic-muted">
+                        ({refs.length} {refs.length === 1 ? 'reference' : 'references'})
+                      </span>
+                    </div>
+                  </button>
+
+                  {/* References List */}
+                  {isExpanded && (
+                    <div className="border-t border-academic-border bg-white">
+                      {refs.map((ref, index) => (
+                        <div
+                          key={index}
+                          className="p-4 border-b border-academic-border last:border-b-0 hover:bg-primary-50 transition-colors"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="flex-shrink-0 w-8 text-sm text-academic-muted font-mono">
+                              [{filteredBibliography.indexOf(ref) + 1}]
+                            </div>
+                            <div className="flex-1 text-sm text-academic-text leading-relaxed">
+                              {ref}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>
