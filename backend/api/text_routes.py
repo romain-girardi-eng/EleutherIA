@@ -47,7 +47,8 @@ async def list_texts(
         where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
 
         sql = f"""
-        SELECT id, title, author, category, language, text_length,
+        SELECT id, title, author, category, language,
+               LENGTH(raw_text) as text_length,
                date_created, kg_work_id
         FROM free_will.texts
         {where_clause}
@@ -73,7 +74,8 @@ async def get_text(text_id: str, request: Request):
         db = request.app.state.db
 
         sql = """
-        SELECT id, title, author, category, language, text_length,
+        SELECT id, title, author, category, language,
+               LENGTH(raw_text) as text_length,
                raw_text, normalized_text, tei_xml, lemmas,
                date_created, kg_work_id, metadata
         FROM free_will.texts
@@ -136,7 +138,7 @@ async def get_text_stats(request: Request):
             COUNT(CASE WHEN language = 'lat' THEN 1 END) as latin_texts,
             COUNT(CASE WHEN lemmas IS NOT NULL THEN 1 END) as texts_with_lemmas,
             COUNT(CASE WHEN embedding IS NOT NULL THEN 1 END) as texts_with_embeddings,
-            SUM(text_length) as total_characters
+            SUM(LENGTH(raw_text)) as total_characters
         FROM free_will.texts
         """
 
