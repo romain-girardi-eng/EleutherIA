@@ -29,8 +29,15 @@ class LLMService:
     
     def __init__(self, preferred_provider: ModelProvider = ModelProvider.OLLAMA):
         """Initialize LLM service with preferred provider"""
+        env_provider = os.getenv("LLM_PREFERRED_PROVIDER")
+        if env_provider:
+            try:
+                preferred_provider = ModelProvider(env_provider.lower())
+            except ValueError:
+                logger.warning(f"Unrecognized LLM_PREFERRED_PROVIDER '{env_provider}', defaulting to {preferred_provider.value}")
+
         self.preferred_provider = preferred_provider
-        self.ollama_url = "http://localhost:11434"
+        self.ollama_url = os.getenv("OLLAMA_URL", "http://localhost:11434")
         self.gemini_api_key = os.getenv('GEMINI_API_KEY')
         
         # Configure Gemini if API key is available
