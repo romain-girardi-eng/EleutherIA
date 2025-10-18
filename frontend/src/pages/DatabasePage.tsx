@@ -77,29 +77,6 @@ export default function DatabasePage() {
             <a href="/search" className="text-primary-600 hover:underline font-medium">Hybrid Search</a> interface.
           </p>
         </div>
-
-        {/* Link to Full Corpus Browser */}
-        <div className="mt-6">
-          <a
-            href="/texts"
-            className="w-full flex items-center justify-between p-4 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg transition-colors group"
-          >
-            <div className="flex items-center gap-3">
-              <BookOpen className="w-5 h-5 text-primary-600" />
-              <div>
-                <div className="font-semibold text-primary-700 group-hover:text-primary-800">
-                  Browse Complete Corpus
-                </div>
-                <div className="text-sm text-academic-muted mt-0.5">
-                  Explore all 289 texts with advanced filtering and search
-                </div>
-              </div>
-            </div>
-            <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
-        </div>
       </section>
 
       {/* Knowledge Graph */}
@@ -226,32 +203,9 @@ export default function DatabasePage() {
 
         <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <p className="text-sm text-academic-text">
-            <span className="font-semibold">Provenance:</span> All scholarly references are embedded in knowledge graph
-            node metadata and automatically extracted during GraphRAG queries for citation generation.
+            <span className="font-semibold">Access:</span> View the complete bibliography at{' '}
+            <a href="/bibliography" className="text-primary-600 hover:underline font-medium">Bibliography</a> page.
           </p>
-        </div>
-
-        {/* Link to Bibliography */}
-        <div className="mt-6">
-          <a
-            href="/bibliography"
-            className="w-full flex items-center justify-between p-4 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg transition-colors group"
-          >
-            <div className="flex items-center gap-3">
-              <GraduationCap className="w-5 h-5 text-primary-600" />
-              <div>
-                <div className="font-semibold text-primary-700 group-hover:text-primary-800">
-                  View Complete Bibliography
-                </div>
-                <div className="text-sm text-academic-muted mt-0.5">
-                  Browse all 200+ modern scholarship references cited in the database
-                </div>
-              </div>
-            </div>
-            <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
         </div>
       </section>
 
