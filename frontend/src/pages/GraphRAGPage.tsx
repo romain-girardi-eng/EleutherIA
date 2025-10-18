@@ -359,9 +359,9 @@ export default function GraphRAGPage() {
       </div>
 
       {/* Sidebar - Hidden on mobile, shown on desktop */}
-      <div className="hidden lg:flex lg:flex-col lg:col-span-1 space-y-4">
+      <div className="hidden lg:block lg:col-span-1 space-y-4">
         {/* How GraphRAG Works Section - Collapsible */}
-        <div className="academic-card bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 flex-1 flex flex-col">
+        <div className="academic-card bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
           <button
             onClick={() => setShowHowItWorks(!showHowItWorks)}
             className="w-full flex items-center justify-between text-left hover:opacity-80 transition-opacity"
@@ -378,7 +378,7 @@ export default function GraphRAGPage() {
           </button>
           {showHowItWorks && <div className="mt-3 pt-3 border-t border-blue-200"></div>}
           {showHowItWorks && (
-            <div className="text-xs space-y-2.5 overflow-y-auto pr-2 flex-1">
+            <div className="text-xs space-y-2.5 max-h-96 overflow-y-auto pr-2">
               <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
                 <div className="font-semibold text-blue-800 mb-1.5">1. Vector Search</div>
                 <p className="text-academic-muted leading-relaxed text-xs">
@@ -412,7 +412,7 @@ export default function GraphRAGPage() {
         </div>
 
         {/* Why It's Brilliant Section */}
-        <div className="academic-card bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 flex-1 flex flex-col">
+        <div className="academic-card bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
           <button
             onClick={() => setShowBenefits(!showBenefits)}
             className="w-full flex items-center justify-between text-left hover:opacity-80 transition-opacity"
@@ -429,7 +429,7 @@ export default function GraphRAGPage() {
           </button>
           {showBenefits && <div className="mt-3 pt-3 border-t border-green-200"></div>}
           {showBenefits && (
-            <div className="text-xs space-y-2.5 overflow-y-auto pr-2 flex-1">
+            <div className="text-xs space-y-2.5 max-h-96 overflow-y-auto pr-2">
               <BenefitsContent />
             </div>
           )}
