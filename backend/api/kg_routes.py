@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Path to KG database
-KG_PATH = Path("/Users/romaingirardi/Documents/Ancient Free Will Database/ancient_free_will_database.json")
+# Path to KG database (relative to backend directory)
+KG_PATH = Path(__file__).parent.parent.parent / "ancient_free_will_database.json"
 
 
 def load_kg_data() -> Dict[str, Any]:
