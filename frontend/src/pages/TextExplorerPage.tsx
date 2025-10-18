@@ -335,7 +335,7 @@ function TextDetailModal({
             <div className="space-y-4">
               {/* Metadata */}
               {text.source && (
-                <div className="bg-blue-50 border border-blue-200 rounded p-4">
+                <div className="bg-primary-50 border border-primary-200 rounded p-4">
                   <h3 className="font-semibold mb-2">Source</h3>
                   <p className="text-sm">{text.source}</p>
                 </div>

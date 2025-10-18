@@ -69,7 +69,7 @@ export default function DatabasePage() {
           </div>
         </div>
 
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mt-6 p-4 bg-primary-50 border border-primary-200 rounded-lg">
           <p className="text-sm text-academic-text">
             <span className="font-semibold">Access:</span> All ancient texts are available through the{' '}
             <a href="/texts" className="text-primary-600 hover:underline font-medium">Ancient Texts</a> browser
@@ -133,7 +133,7 @@ export default function DatabasePage() {
           </div>
         </div>
 
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mt-6 p-4 bg-primary-50 border border-primary-200 rounded-lg">
           <p className="text-sm text-academic-text">
             <span className="font-semibold">Visualization:</span> Explore the knowledge graph interactively through the{' '}
             <a href="/visualizer" className="text-primary-600 hover:underline font-medium">Knowledge Graph Visualizer</a>
@@ -201,7 +201,7 @@ export default function DatabasePage() {
           </div>
         </div>
 
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mt-6 p-4 bg-primary-50 border border-primary-200 rounded-lg">
           <p className="text-sm text-academic-text">
             <span className="font-semibold">Access:</span> View the complete bibliography at{' '}
             <a href="/bibliography" className="text-primary-600 hover:underline font-medium">Bibliography</a> page.

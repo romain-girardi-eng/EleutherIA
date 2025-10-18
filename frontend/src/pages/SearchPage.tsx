@@ -221,7 +221,7 @@ export default function SearchPage() {
 
       {/* Help Section */}
       {!results && !loading && (
-        <div className="academic-card bg-blue-50 border-blue-200">
+        <div className="academic-card bg-primary-50 border-primary-200">
           <h3 className="font-semibold mb-2">Search Tips</h3>
           <ul className="text-sm text-academic-text space-y-1 list-disc list-inside">
             <li><strong>Greek text:</strong> Try "ἐφ' ἡμῖν", "ἑκούσιον", "προαίρεσις"</li>
