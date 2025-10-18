@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: ancient-free-will-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: POSTGRES_HOST
+        sync: false
+      - key: POSTGRES_PORT
+        sync: false
+      - key: POSTGRES_DB
+        sync: false
+      - key: POSTGRES_USER
+        sync: false
+      - key: POSTGRES_PASSWORD
+        sync: false
+      - key: QDRANT_HOST
+        sync: false
+      - key: QDRANT_HTTP_PORT
+        value: 6333
+      - key: QDRANT_API_KEY
+        sync: false
+      - key: LOG_LEVEL
+        value: INFO
+      - key: EMBEDDING_MODEL
+        value: gemini-embedding-001
+      - key: EMBEDDING_DIMENSIONS
+        value: 3072
+      - key: PORT
+        value: 8000
+    healthCheckPath: /api/health
+    autoDeploy: true
