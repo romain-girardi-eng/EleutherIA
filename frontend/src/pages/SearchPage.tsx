@@ -274,21 +274,21 @@ function SearchResultCard({ result, index }: { result: SearchResult; index: numb
             </span>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-academic-text mb-1">
-                {result.title}
+                {result.payload.title}
               </h3>
 
               {/* Metadata */}
               <div className="flex flex-wrap gap-3 text-sm text-academic-muted mb-2">
                 <span>
-                  <strong>Author:</strong> {result.author}
+                  <strong>Author:</strong> {result.payload.author}
                 </span>
                 <span>•</span>
                 <span>
-                  <strong>Category:</strong> {result.category}
+                  <strong>Category:</strong> {result.payload.category}
                 </span>
                 <span>•</span>
                 <span>
-                  <strong>Language:</strong> {result.language}
+                  <strong>Language:</strong> {result.payload.language}
                 </span>
               </div>
 
