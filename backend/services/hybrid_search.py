@@ -38,6 +38,10 @@ class HybridSearchService:
     async def generate_query_embedding(self, query: str) -> List[float]:
         """Generate embedding for search query using Gemini (3072 dimensions)"""
         try:
+            # Reconfigure API key before each call to ensure it's set
+            if GEMINI_API_KEY:
+                genai.configure(api_key=GEMINI_API_KEY)
+
             result = genai.embed_content(
                 model="models/gemini-embedding-001",
                 content=query
