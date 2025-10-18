@@ -31,13 +31,13 @@ class GraphRAGQuery(BaseModel):
 @router.post("/query")
 async def graphrag_query(graphrag_query: GraphRAGQuery, request: Request):
     """
-    Answer questions using GraphRAG:
-    1. Semantic search (Qdrant) - find relevant starting nodes
-    2. Graph traversal (BFS) - expand to connected nodes
-    3. Context building - create rich context with citations
-    4. LLM synthesis (Gemini) - generate grounded answer
+    Answer questions using GraphRAG (Graph-based Retrieval-Augmented Generation):
+    1. Semantic search (Qdrant) - find relevant starting nodes via vector similarity
+    2. Graph traversal (BFS) - expand to connected nodes using graph relationships
+    3. Context building - create rich context with citations from retrieved nodes
+    4. LLM synthesis - generate grounded answer using knowledge graph context
     5. Citation extraction - track ancient sources and modern scholarship
-    6. Reasoning path - visualize graph traversal
+    6. Reasoning path - visualize which nodes and edges were used
     """
     try:
         # Get services from app state
@@ -126,7 +126,7 @@ async def graphrag_query_stream(graphrag_query: GraphRAGQuery, request: Request)
             )
 
             # Step 5: Generate answer
-            yield f"data: {json.dumps({'type': 'status', 'message': 'Generating answer with Gemini...', 'step': 5, 'total_steps': 6})}\n\n"
+            yield f"data: {json.dumps({'type': 'status', 'message': 'Generating answer with LLM...', 'step': 5, 'total_steps': 6})}\n\n"
 
             answer = await graphrag_service.synthesize_answer(
                 query=graphrag_query.query,
@@ -189,12 +189,12 @@ async def graphrag_status():
     return {
         'status': 'available',
         'features': [
-            'Semantic search via Qdrant',
-            'Graph traversal (BFS)',
-            'Citation tracking',
-            'LLM synthesis (Gemini)',
-            'Deep mode (includes full-text search)',
-            'Streaming responses (SSE)'
+            'Semantic search via Qdrant vector database',
+            'Graph traversal via breadth-first search',
+            'Automatic citation extraction',
+            'LLM-powered answer synthesis',
+            'Deep mode (includes PostgreSQL full-text search)',
+            'Real-time streaming responses (SSE)'
         ],
         'endpoints': {
             '/query': 'Standard query (returns complete result)',
