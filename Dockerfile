@@ -1,5 +1,6 @@
 FROM python:3.11-slim
 
+# Force cache bust - files migrated from LFS to regular git
 WORKDIR /app
 
 # Install system dependencies
