@@ -171,9 +171,9 @@ export default function GraphRAGPage() {
   };
 
   return (
-    <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4 lg:gap-6 pb-12 lg:pb-8">
+    <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4 lg:gap-6 lg:h-[calc(100vh-180px)]">
       {/* Main Chat Area */}
-      <div className="lg:col-span-2 flex flex-col lg:max-h-[calc(100vh-300px)]">
+      <div className="lg:col-span-2 flex flex-col lg:h-full">
         {/* Header */}
         <div className="academic-card mb-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -277,7 +277,7 @@ export default function GraphRAGPage() {
         </div>
 
         {/* Messages Area */}
-        <div className="flex-1 academic-card overflow-y-auto mb-4 p-3 sm:p-4 space-y-4 min-h-[300px] max-h-[600px] lg:max-h-[calc(100vh-450px)]">
+        <div className="flex-1 academic-card overflow-y-auto mb-4 p-3 sm:p-4 space-y-4 min-h-[300px] max-h-[600px] lg:max-h-none">
           {messages.length === 0 && !streaming && (
             <div className="text-center py-8 sm:py-12">
               <div className="text-5xl sm:text-6xl mb-3 sm:mb-4">💬</div>
@@ -359,7 +359,7 @@ export default function GraphRAGPage() {
       </div>
 
       {/* Sidebar - Hidden on mobile, shown on desktop */}
-      <div className="hidden lg:block lg:col-span-1 space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto">
+      <div className="hidden lg:block lg:col-span-1 space-y-4 h-full overflow-y-auto">
         {/* How GraphRAG Works Section - Collapsible */}
         <div className="academic-card bg-gradient-to-br from-blue-50 to-indigo-50 border-primary-200">
           <button
