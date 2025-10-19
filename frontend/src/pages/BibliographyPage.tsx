@@ -1,9 +1,23 @@
-import { useState, useEffect } from 'react';
-import { GraduationCap, Search, BookOpen, ChevronDown, ChevronRight, Filter } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { GraduationCap, Search, BookOpen, ChevronDown, ChevronRight, Filter, ExternalLink, MoreVertical } from 'lucide-react';
 import { apiClient } from '../api/client';
+
+interface AccessLink {
+  type: string;
+  url: string;
+  label: string;
+  verified?: boolean;
+}
+
+interface BibliographyEntry {
+  citation: string;
+  access_links?: AccessLink[];
+  verified_links?: AccessLink[];
+}
 
 export default function BibliographyPage() {
   const [bibliography, setBibliography] = useState<string[]>([]);
+  const [bibliographyData, setBibliographyData] = useState<Map<string, BibliographyEntry>>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -46,6 +60,22 @@ export default function BibliographyPage() {
       });
 
       setBibliography(sortedBib);
+
+      // Try to load online access data
+      try {
+        const response = await fetch('/online_access_results.json');
+        if (response.ok) {
+          const accessData: BibliographyEntry[] = await response.json();
+          const dataMap = new Map<string, BibliographyEntry>();
+          accessData.forEach(entry => {
+            dataMap.set(entry.citation, entry);
+          });
+          setBibliographyData(dataMap);
+        }
+      } catch (e) {
+        // Online access data not available yet - that's okay
+        console.log('Online access data not available');
+      }
     } catch (error) {
       console.error('Error loading bibliography:', error);
       setError('Failed to load bibliography. The backend may be starting up (this can take 30 seconds on first request). Please try again in a moment.');
@@ -170,7 +200,7 @@ export default function BibliographyPage() {
       </section>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="academic-card bg-primary-50 text-center">
           <div className="text-4xl font-bold text-primary-600 mb-1">
             {bibliography.length}
@@ -182,6 +212,18 @@ export default function BibliographyPage() {
             {filteredBibliography.length}
           </div>
           <div className="text-sm font-medium text-academic-text">Filtered Results</div>
+        </div>
+        <div className="academic-card bg-primary-50 text-center">
+          <div className="text-4xl font-bold text-primary-600 mb-1">
+            {(() => {
+              const withAccess = bibliography.filter(ref => {
+                const entry = bibliographyData.get(ref);
+                return entry && entry.verified_links && entry.verified_links.length > 0;
+              }).length;
+              return bibliographyData.size > 0 ? withAccess : '...';
+            })()}
+          </div>
+          <div className="text-sm font-medium text-academic-text">Online Access</div>
         </div>
         <div className="academic-card bg-primary-50 text-center">
           <div className="text-4xl font-bold text-primary-600 mb-1">
@@ -356,21 +398,67 @@ export default function BibliographyPage() {
                   {/* References List */}
                   {isExpanded && (
                     <div className="border-t border-academic-border bg-white">
-                      {refs.map((ref, index) => (
-                        <div
-                          key={index}
-                          className="p-4 border-b border-academic-border last:border-b-0 hover:bg-primary-50 transition-colors"
-                        >
-                          <div className="flex items-start gap-3">
-                            <div className="flex-shrink-0 w-8 text-sm text-academic-muted font-mono">
-                              [{filteredBibliography.indexOf(ref) + 1}]
-                            </div>
-                            <div className="flex-1 text-sm text-academic-text leading-relaxed">
-                              {ref}
+                      {refs.map((ref, index) => {
+                        const entry = bibliographyData.get(ref);
+                        const hasAccess = entry && entry.verified_links && entry.verified_links.length > 0;
+                        const multipleLinks = hasAccess && entry.verified_links!.length > 1;
+
+                        return (
+                          <div
+                            key={index}
+                            className="p-4 border-b border-academic-border last:border-b-0 hover:bg-primary-50 transition-colors"
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="flex-shrink-0 w-8 text-sm text-academic-muted font-mono">
+                                [{filteredBibliography.indexOf(ref) + 1}]
+                              </div>
+                              <div className="flex-1 text-sm text-academic-text leading-relaxed">
+                                {ref}
+                              </div>
+                              {hasAccess && (
+                                <div className="flex-shrink-0 flex gap-2">
+                                  <a
+                                    href={entry.verified_links![0].url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-600 hover:bg-primary-700 text-white text-xs font-medium rounded-md transition-colors shadow-sm hover:shadow"
+                                    title={entry.verified_links![0].label}
+                                  >
+                                    <ExternalLink className="w-3.5 h-3.5" />
+                                    <span>Access</span>
+                                  </a>
+                                  {multipleLinks && (
+                                    <div className="relative group">
+                                      <button
+                                        className="inline-flex items-center px-2 py-1.5 bg-primary-100 hover:bg-primary-200 text-primary-700 text-xs font-medium rounded-md transition-colors"
+                                        title="More access options"
+                                      >
+                                        <MoreVertical className="w-3.5 h-3.5" />
+                                      </button>
+                                      <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-academic-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+                                        {entry.verified_links!.map((link, linkIdx) => (
+                                          <a
+                                            key={linkIdx}
+                                            href={link.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block px-3 py-2 text-xs text-academic-text hover:bg-primary-50 first:rounded-t-lg last:rounded-b-lg"
+                                          >
+                                            <div className="flex items-center gap-2">
+                                              <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                                              <span className="truncate">{link.label}</span>
+                                            </div>
+                                          </a>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
