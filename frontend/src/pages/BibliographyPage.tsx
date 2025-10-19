@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { GraduationCap, Search, BookOpen, ChevronDown, ChevronRight, Filter, ExternalLink, MoreVertical } from 'lucide-react';
 import { apiClient } from '../api/client';
 
@@ -134,12 +134,8 @@ export default function BibliographyPage() {
   };
 
   // Get unique values for filters
-  const uniqueYears = Array.from(new Set(
-    bibliography.map(extractYear).filter(Boolean)
-  )).sort().reverse();
-
   const uniquePublishers = Array.from(new Set(
-    bibliography.map(extractPublisher).filter(Boolean)
+    bibliography.map(extractPublisher).filter((p): p is string => p !== null)
   )).sort();
 
   // Filter bibliography
