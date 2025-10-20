@@ -1,0 +1,222 @@
+{
+  "extraction_metadata": {
+    "source": "Mémoire M1 - Romain Girardi",
+    "extraction_date": "2025-10-19",
+    "extraction_method": "Deep philosophical analysis with exact citations"
+  },
+
+  "primary_sources_second_temple": {
+    "josephus_antiquities": {
+      "reference": "Antiquités XIII, 171-173",
+      "topic": "Classification of Jewish sects on fate/free will",
+      "pharisees": "Compatibilists (soft determinists)",
+      "essenes": "Hard determinists",
+      "sadducees": "Libertarians",
+      "significance": "First systematic classification of Jewish positions on free will",
+      "page": 17
+    },
+
+    "qumran_hodayot": {
+      "text": "Je sais par Ta connaissance que ce n'est pas par la force humaine [...] l'homme n'est [pas] maître de lui-même, et qu'un être humain ne peut régler son destin",
+      "continuation": "Mais je sais que dans Ta main réside l'inclination de tout esprit [... et toutes] ses [œuvres] Tu les détermines avant même de l'avoir créé",
+      "elect": "Toi seul as [cré]é le juste et, dès le ventre de sa mère, Tu as décrété qu'il observerait Ton alliance",
+      "reprobate": "Mais les impies, Tu les as créés pour [le temps de] Ta [c]olère et, dès leur conception, Tu les as réservés pour le jour du massacre",
+      "page": 209,
+      "analysis": "Strong predestination theology with asymmetric causality"
+    },
+
+    "ben_sirah": {
+      "reference": "Siracide 15:11-20",
+      "position": "Libertarian 'two ways theology'",
+      "key_phrase": "God and human as two agents totally independent from each other",
+      "girardi_assessment": "Ben Sirah can be qualified as libertarian, following the competitive model",
+      "page": 228
+    },
+
+    "4_esdras": {
+      "concept": "cor malignum (evil heart)",
+      "significance": "Embryonic doctrine of original sin",
+      "page": "Referenced but not quoted directly"
+    }
+  },
+
+  "scholarly_theses_m1": {
+    "barclay_tanner_framework": {
+      "authors": "John M.G. Barclay and Kathryn E. Tanner",
+      "contribution": "Three models of divine-human agency",
+      "page": 118,
+      "models": {
+        "competitive": "God and human as autonomous agents, either/or, inverse proportion",
+        "inclusive": "Human as part of God, compatibilist, Spinozist",
+        "transcendent": "God both transcendent and immanent, direct proportion"
+      }
+    },
+
+    "sanders_new_perspective": {
+      "author": "E.P. Sanders",
+      "thesis": "Covenantal nomism - works don't get you in but keep you in",
+      "qumran_modification": "Works not even keeping you in but consequence of election",
+      "girardi_critique": "For Qumran there is no merita humana",
+      "page": 211
+    },
+
+    "alfred_marx": {
+      "quote": "On ne trouvera jamais dans un hymne l'insistance sur la libre volonté de l'homme. Mais cela ne veut pas dire qu'elle n'existe pas : soli deo gloria!",
+      "context": "Warning about genre considerations in Qumran hymns",
+      "page": 212
+    },
+
+    "levi": {
+      "assessment": "Qualifies rabbis as 'Pelagians avant la lettre'",
+      "explanation": "Judaism of Second Temple period was mostly libertarian",
+      "reasons": "Strict monotheism rejecting dualism, conception of God's justice, works as theodicy",
+      "page": 229
+    },
+
+    "fitzmyer": {
+      "contribution": "Qumran-Paul comparisons",
+      "focus": "Predestination parallels",
+      "page": "Referenced in bibliography"
+    },
+
+    "engsberg_pedersen": {
+      "work": "Paul and the Stoics",
+      "thesis": "Stoic influence on Paul",
+      "page": "Referenced in bibliography"
+    }
+  },
+
+  "girardi_arguments_m1": {
+    "main_thesis": {
+      "statement": "Paul adopts transcendent compatibilism - third model beyond competitive and inclusive",
+      "elaboration": "Same action can be attributed to both human and God without competition",
+      "biblical_support": "Philippians 2:12-13 - God working in believers 'to will and to work'",
+      "page": 145
+    },
+
+    "anthropological_pessimism": {
+      "definition": "Human as morally incompetent agent",
+      "jewish_origins": "Traceable to Genesis, survived in certain forms of Judaism, reinforced in Paul",
+      "not_neutral": "peccatum originale originatum - humans born in state of sin with inclination to evil",
+      "page": 127
+    },
+
+    "asymmetric_causality": {
+      "principle": "God's relationship to good and evil is not the same",
+      "qumran_example": "Just saved by God's action, unjust condemned by their own works",
+      "significance": "Key to understanding divine causality in Qumran, Paul, Greek Fathers, and Augustine",
+      "page": 211
+    },
+
+    "against_uniformity": {
+      "claim": "Not one Judaism but 'Judaisms' divided precisely on divine causality and free will",
+      "evidence": "Extreme diversity from Qumran determinism to Ben Sirah libertarianism",
+      "page": 229
+    },
+
+    "genre_consideration": {
+      "warning": "Hymns magnify God by lowering humans - be careful drawing doctrinal teachings",
+      "but": "Qumran hymns were widely distributed, possibly considered canonical",
+      "page": 212
+    }
+  },
+
+  "conceptual_frameworks": {
+    "three_models_divine_human_agency": {
+      "competitive": {
+        "description": "Two autonomous agents, action attributed to one cannot be to other",
+        "proportion": "Inverse - more to God = less to human",
+        "philosophy": "Incompatibilist, libertarian or hard determinist",
+        "examples": "Certain Lutheran positions and Tridentine positions",
+        "page": 119
+      },
+      "inclusive": {
+        "description": "Human as part of God, what human does attributed to God",
+        "proportion": "Both can be true simultaneously",
+        "philosophy": "Compatibilist (soft determinism), Spinozist",
+        "free_will": "Redefinition not rejection - control necessary for moral responsibility",
+        "page": 120
+      },
+      "transcendent": {
+        "description": "God totally transcendent and totally immanent",
+        "proportion": "Direct - more to human = more to God",
+        "paradox": "Human totally dependent yet becomes free by affirming dependence",
+        "biblical": "1 Cor 15:10 'would make no sense for a libertarian'",
+        "page": 121
+      }
+    },
+
+    "original_sin_development": {
+      "christian_doctrine": {
+        "originans": "Adam's original disobedience",
+        "originatum": "All descendants born in state of sin",
+        "peccability": "Not just possibility but inclination to evil",
+        "page": 127
+      },
+      "jewish_precursors": {
+        "not_doctrine": "No doctrine of original sin in Genesis",
+        "but_intuition": "Jewish readers could sense postlapsarian change affecting free will",
+        "various_answers": "Different degrees of affectation",
+        "page": 127
+      }
+    }
+  },
+
+  "pauline_texts_analyzed": {
+    "philippians_2_12_13": {
+      "text": "Work out your salvation with fear and trembling, for it is God who works in you to will and to act",
+      "significance": "Paradigmatic of transcendent model - both human and divine agency",
+      "page": "Referenced multiple times"
+    },
+
+    "romans_9_11": {
+      "topic": "Divine predestination and election",
+      "girardi_approach": "Must be read through lens of divine-human agency models",
+      "pages": "50-52"
+    },
+
+    "1_corinthians_15_10": {
+      "significance": "Autobiographical statement incomprehensible for libertarian",
+      "demonstrates": "Paul's transcendent model of agency",
+      "page": 121
+    }
+  },
+
+  "methodological_insights": {
+    "spurgeon_quote": {
+      "text": "I don't reconcile friends",
+      "context": "Response to reconciling divine sovereignty and human responsibility",
+      "girardi_comment": "Modern mind sees these in conflictual terms but nothing shows Paul read them this way",
+      "page": 116
+    },
+
+    "framework_limitations": {
+      "admission": "Framework not absolutely exhaustive",
+      "missing": "Other agents (Satan, sons of God, demons, angels, Evil)",
+      "page": 118
+    },
+
+    "diversity_recognition": {
+      "principle": "Must recognize extreme diversity of Second Temple Judaism",
+      "implication": "Cannot presuppose uniform Jewish anthropology",
+      "page": 229
+    }
+  },
+
+  "historical_development": {
+    "second_temple_spectrum": {
+      "qumran": "Strong predestination, human inability, divine determination",
+      "ben_sirah": "Libertarian free will, human autonomy",
+      "philo": "Synthesis attempts",
+      "josephus_classification": "Systematic categorization of positions",
+      "page": "17-29"
+    },
+
+    "christian_reception": {
+      "early": "Struggle with Paul's pessimistic anthropology",
+      "tendency": "Move toward libertarianism to combat fatalism",
+      "exception": "Augustine returns to Pauline pessimism",
+      "page": "Referenced throughout"
+    }
+  }
+}

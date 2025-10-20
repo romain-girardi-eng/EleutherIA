@@ -1,0 +1,36 @@
+======================================================================
+QUALITY ASSURANCE REPORT
+======================================================================
+
+DATABASE SIZE
+  Total nodes: 3,388
+  Total edges: 778
+  Avg edges/node: 0.46
+
+NODE TYPES
+  quote                 2,903 ( 85.7%)
+  person                  156 (  4.6%)
+  argument                121 (  3.6%)
+  concept                  80 (  2.4%)
+  reformulation            53 (  1.6%)
+  work                     48 (  1.4%)
+  debate                   12 (  0.4%)
+  controversy               5 (  0.1%)
+  group                     3 (  0.1%)
+  conceptual_evolution      3 (  0.1%)
+  event                     2 (  0.1%)
+  argument_framework        1 (  0.0%)
+  school                    1 (  0.0%)
+
+QUOTE LANGUAGES
+  Greek       2,893
+  unknown        10
+
+FIXES APPLIED: 0
+
+QUALITY METRICS
+  Nodes with descriptions: 405 (11%)
+  Nodes with categories: 3,388 (100%)
+  Quotes with context: 2,893 (99%)
+
+======================================================================

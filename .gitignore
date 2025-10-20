@@ -73,3 +73,22 @@ docker-volumes/
 
 # Wiki (managed separately)
 wiki/
+
+# Archive folders
+.archive_*/
+archive_*/
+
+# PDF text chunks and samples
+*_text.txt
+*_chunk_*.txt
+*_SAMPLE.txt
+
+# Temporary extraction files
+*_preliminary.json
+*_separated_extraction*.json
+pilot_*.json
+
+# Cleanup scripts and reports
+cleanup_*.sh
+analyze_and_cleanup_files.py
+smart_cleanup.sh

@@ -1,0 +1,161 @@
+
+================================================================================
+EXTRACTION SUMMARY: Bobzien's "Determinism and Freedom in Stoic Philosophy"
+================================================================================
+
+SOURCE: Bobzien, Susanne. Determinism and Freedom in Stoic Philosophy. 
+        Oxford: Oxford University Press, 2001.
+
+EXTRACTION DATE: 2025-10-19
+
+SCOPE: Comprehensive extraction of ancient Greek and Latin sources, Stoic 
+       fragments, and key philosophical arguments from Bobzien's major work
+       on Stoic determinism.
+
+================================================================================
+STATISTICS
+================================================================================
+
+Ancient Source Citations: 218
+  - SVF (Stoicorum Veterum Fragmenta): 17
+  - Cicero, De Fato: 110
+  - Gellius, Noctes Atticae: 9
+  - Diogenes Laertius: 57
+  - Plutarch: 4
+  - Alexander of Aphrodisias: 20
+  - Stobaeus: 1
+
+Chrysippus-Specific Passages: 50
+
+Key Arguments Extracted: 273
+  - Cylinder Analogy: 84
+  - Lazy/Idle Argument: 152
+  - Confatalia: 7
+  - Modal Logic: 30
+
+Greek/Latin Terminology: 5 distinct terms
+
+================================================================================
+KEY SVF FRAGMENTS CITED
+================================================================================
+
+  - SVF I 98
+  - SVF I 160
+  - SVF II 198
+  - SVF II 202
+  - SVF II 912
+  - SVF II 943
+  - SVF II 957
+  - SVF II 963
+  - SVF II 973
+  - SVF II 978
+  - SVF II 981
+  - SVF II 988
+  - SVF II 991
+  - SVF II 998
+  - SVF II 1007
+  - SVF III 356
+  - SVF III 359
+
+================================================================================
+MAJOR TOPICS COVERED
+================================================================================
+
+1. CYLINDER AND CONE ANALOGY
+   - Primary sources: Gellius NA 7.2, Cicero De Fato 42-43
+   - Demonstrates Chrysippus' compatibilism
+   - Distinguishes external causes from internal nature
+   - 84 passages extracted
+
+2. LAZY/IDLE ARGUMENT (Argos Logos)
+   - Classic objection to Stoic fate
+   - "If it is fated that X will happen, it will happen regardless of what you do"
+   - Chrysippus' refutation using confatalia
+   - 152 passages extracted
+
+3. CONFATALIA (Co-fated Events)
+   - Chrysippus' distinction between simple and conjoined events
+   - Example: "You will recover" vs. "You will recover IF you call a doctor"
+   - Key to refuting fatalism
+   - 7 passages extracted
+
+4. MODAL LOGIC
+   - Chrysippean definitions of necessary, possible, impossible
+   - Connection to fate and determinism
+   - 30 passages extracted
+
+5. STOIC FATE THEORY
+   - Fate as eternal causal chain
+   - Heimarmenē (εἱμαρμένη)
+   - Providence and determinism
+   - 40 Chrysippus passages
+
+6. ASSENT AND MORAL RESPONSIBILITY
+   - Synkatathesis (συγκατάθεσις) - assent
+   - Eph' hēmin (ἐφ' ἡμῖν) - that which depends on us
+   - In nostra potestate (Latin equivalent)
+   - Compatibilist account of responsibility
+
+================================================================================
+GREEK AND LATIN TERMINOLOGY EXTRACTED
+================================================================================
+
+  - confatalia (co-fated): 5 occurrences
+  - visum (presentation, Latin): 5 occurrences
+  - in nostra potestate (in our power): 5 occurrences
+  - to autoexousion: 1 occurrences
+  - heimarmene (fate): 1 occurrences
+
+================================================================================
+NOTE ON EXTRACTION LIMITATIONS
+================================================================================
+
+- Greek characters appear to have been corrupted in PDF-to-text conversion
+- Many Greek terms appear only in transliteration or Latin translation
+- Original Greek quotations may not be recoverable from these files
+- For precise Greek text, consult the original printed edition
+- Context and citations are accurately preserved
+
+================================================================================
+FILE STRUCTURE
+================================================================================
+
+The JSON file (bobzien_2001_ancient_quotes.json) contains:
+
+1. metadata - Source information and extraction details
+2. sections/
+   - svf_references - Stoicorum Veterum Fragmenta citations
+   - cicero_de_fato - All De Fato references with context
+   - gellius - Noctes Atticae references
+   - diogenes_laertius - DL references
+   - plutarch - Plutarch references
+   - alexander_aphrodisias - Alexander references
+   - stobaeus - Stobaeus references
+   - chrysippus_passages - Chrysippus-specific passages by type
+   - key_arguments/
+     * cylinder_analogy - Cylinder and cone passages
+     * lazy_argument - Lazy/idle argument passages
+     * confatalia - Confatalia passages
+     * modal_logic - Modal logic passages
+   - key_philosophical_passages/
+     * fate_definition
+     * cylinder_mechanism
+     * assent_theory
+     * confatalia_distinction
+   - greek_latin_terms - Technical terminology with examples
+
+3. extraction_statistics - Quantitative summary
+4. reading_guide - How to navigate the extracted data
+
+================================================================================
+RECOMMENDED USES
+================================================================================
+
+1. Identifying ancient sources for Stoic determinism
+2. Finding specific SVF fragments discussed by Bobzien
+3. Understanding key arguments (cylinder, lazy argument, confatalia)
+4. Locating Cicero De Fato and Gellius NA 7.2 discussions
+5. Tracking Greek/Latin philosophical terminology
+6. Preparing secondary source citations for research on Stoic compatibilism
+
+================================================================================
