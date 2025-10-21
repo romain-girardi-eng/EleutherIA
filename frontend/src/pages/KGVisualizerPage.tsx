@@ -1,225 +1,275 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import CytoscapeVisualizerEnhanced from '../components/CytoscapeVisualizerEnhanced';
 import { apiClient } from '../api/client';
-import type { CytoscapeData } from '../types';
+import type { CytoscapeData, CytoscapeElement } from '../types';
+import { KGWorkspaceProvider, useKGWorkspace } from '../context/KGWorkspaceContext';
+import WorkspaceHeader from '../components/workspace/WorkspaceHeader';
+import WorkspaceFilterBar from '../components/workspace/WorkspaceFilterBar';
+import TimelinePanel from '../components/workspace/TimelinePanel';
+import ArgumentEvidenceBoard from '../components/workspace/ArgumentEvidenceBoard';
+import ConceptClusterGrid from '../components/workspace/ConceptClusterGrid';
+import InfluenceMatrixPanel from '../components/workspace/InfluenceMatrixPanel';
+import PathInspectorPanel from '../components/workspace/PathInspectorPanel';
 
-type VisualizerMode = 'cytoscape' | 'semativerse';
+type VisualizerMode = 'observatory' | 'semativerse';
 
 export default function KGVisualizerPage() {
-  const [data, setData] = useState<CytoscapeData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [stats, setStats] = useState<any>(null);
-  const [mode, setMode] = useState<VisualizerMode>('cytoscape');
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      // Fetch cytoscape data and stats in parallel
-      const [cytoscapeData, kgStats] = await Promise.all([
-        apiClient.getCytoscapeData(),
-        apiClient.getKGStats(),
-      ]);
-
-      setData(cytoscapeData);
-      setStats(kgStats);
-    } catch (err: any) {
-      console.error('Error loading KG data:', err);
-      setError(err.message || 'Failed to load knowledge graph data');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-center">
-          <div className="spinner w-16 h-16 mx-auto mb-4"></div>
-          <p className="text-academic-muted">Loading knowledge graph...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="academic-card">
-        <div className="text-center py-12">
-          <div className="text-red-600 text-5xl mb-4">⚠</div>
-          <h2 className="text-2xl font-semibold mb-2">Error Loading Data</h2>
-          <p className="text-academic-muted mb-4">{error}</p>
-          <button onClick={loadData} className="academic-button">
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="academic-card">
-        <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <h1 className="text-3xl font-serif font-bold mb-2">Knowledge Graph Visualizer</h1>
-            <p className="text-academic-muted">
-              Interactive network visualization of ancient philosophical debates
-            </p>
-          </div>
-
-          {stats && (
-            <div className="flex space-x-6 text-center">
-              <div>
-                <div className="text-2xl font-bold text-primary-600">{stats.total_nodes}</div>
-                <div className="text-sm text-academic-muted">Nodes</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-primary-600">{stats.total_edges}</div>
-                <div className="text-sm text-academic-muted">Edges</div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Visualizer Mode Toggle */}
-      <div className="academic-card">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-semibold mb-1">Visualization Engine</h3>
-            <p className="text-sm text-academic-muted">Choose between different graph visualization technologies</p>
-          </div>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => setMode('cytoscape')}
-              className={`px-4 py-2 rounded transition-colors ${
-                mode === 'cytoscape'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-gray-100 text-academic-text hover:bg-gray-200'
-              }`}
-            >
-              Cytoscape.js
-            </button>
-            <button
-              onClick={() => setMode('semativerse')}
-              className={`px-4 py-2 rounded transition-colors ${
-                mode === 'semativerse'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-gray-100 text-academic-text hover:bg-gray-200'
-              }`}
-            >
-              Semativerse
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Legend */}
-      <div className="academic-card">
-        <h3 className="font-semibold mb-3">Node Types</h3>
-        <div className="flex flex-wrap gap-4">
-          <LegendItem color="#0284c7" label="Person" />
-          <LegendItem color="#7dd3fc" label="Work" />
-          <LegendItem color="#fbbf24" label="Concept" />
-          <LegendItem color="#f87171" label="Argument" />
-          <LegendItem color="#a78bfa" label="Debate" />
-        </div>
-      </div>
-
-      {/* Attribution */}
-      {mode === 'semativerse' && (
-        <div className="academic-card bg-purple-50 border-purple-200">
-          <p className="text-sm text-academic-text">
-            <strong>Semativerse</strong> visualization is used with permission from its co-creators:{' '}
-            <strong>Benjamin Mathias</strong> and <strong>Romain Girardi</strong>.
-          </p>
-        </div>
-      )}
-
-      {/* Visualizer */}
-      <div className="academic-card p-4 overflow-hidden">
-        {mode === 'cytoscape' ? (
-          <CytoscapeVisualizerEnhanced
-            data={data}
-            onNodeClick={(nodeId) => console.log('Node clicked:', nodeId)}
-            onEdgeClick={(edgeId) => console.log('Edge clicked:', edgeId)}
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg">
-            <div className="text-center p-8">
-              <div className="text-6xl mb-4">🌌</div>
-              <h3 className="text-2xl font-semibold mb-2">Semativerse Integration</h3>
-              <p className="text-academic-muted mb-4 max-w-md">
-                Semativerse provides an advanced 3D knowledge graph visualization platform.
-                Contact the development team for access credentials.
-              </p>
-              <p className="text-sm text-academic-muted italic">
-                Co-created by Benjamin Mathias & Romain Girardi
-              </p>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Instructions */}
-      <div className="academic-card bg-primary-50 border-primary-200">
-        <h3 className="font-semibold mb-3">Enhanced Features</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <div>
-            <h4 className="font-medium mb-2">🎯 Navigation</h4>
-            <ul className="text-academic-text space-y-1">
-              <li>• Click & drag to pan</li>
-              <li>• Scroll to zoom in/out</li>
-              <li>• Double-click node to center</li>
-              <li>• Press <kbd className="px-1 py-0.5 bg-white rounded text-xs">R</kbd> to reset view</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-medium mb-2">📊 Controls</h4>
-            <ul className="text-academic-text space-y-1">
-              <li>• Filter by node type (top-left)</li>
-              <li>• Change graph layout</li>
-              <li>• Export as PNG/SVG/CSV</li>
-              <li>• Generate bibliography</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-medium mb-2">📖 Node Details</h4>
-            <ul className="text-academic-text space-y-1">
-              <li>• Click node for full details</li>
-              <li>• View ancient sources</li>
-              <li>• Copy formatted citation</li>
-              <li>• Navigate to connections</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-medium mb-2">⌨️ Shortcuts</h4>
-            <ul className="text-academic-text space-y-1">
-              <li>• Press <kbd className="px-1 py-0.5 bg-white rounded text-xs">H</kbd> for help overlay</li>
-              <li>• <kbd className="px-1 py-0.5 bg-white rounded text-xs">ESC</kbd> to deselect</li>
-              <li>• <kbd className="px-1 py-0.5 bg-white rounded text-xs">+/-</kbd> to zoom</li>
-              <li>• <kbd className="px-1 py-0.5 bg-white rounded text-xs">C</kbd> to center selected</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+    <KGWorkspaceProvider>
+      <KGVisualizerContent />
+    </KGWorkspaceProvider>
   );
 }
 
-function LegendItem({ color, label }: { color: string; label: string }) {
+function KGVisualizerContent() {
+  const {
+    state,
+    updateSelection,
+  } = useKGWorkspace();
+  const [mode, setMode] = useState<VisualizerMode>('observatory');
+  const [cyData, setCyData] = useState<CytoscapeData | null>(null);
+  const [cyLoading, setCyLoading] = useState<boolean>(true);
+  const [cyError, setCyError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setCyLoading(true);
+        const data = await apiClient.getCytoscapeData();
+        setCyData(data);
+      } catch (err: any) {
+        console.error('Failed to load Cytoscape data', err);
+        setCyError(err?.message || 'Failed to load network visualization');
+      } finally {
+        setCyLoading(false);
+      }
+    };
+    void load();
+  }, []);
+
+  const filteredData = useMemo(() => {
+    if (!cyData) {
+      return null;
+    }
+
+    const { nodeTypes, periods, schools, relations, searchTerm } = state.filters;
+    const search = (searchTerm || '').trim().toLowerCase();
+
+    const degreeMap = new Map<string, number>();
+    cyData.elements.edges.forEach((edge) => {
+      const src = edge.data.source ?? '';
+      const tgt = edge.data.target ?? '';
+      if (src) degreeMap.set(src, (degreeMap.get(src) || 0) + 1);
+      if (tgt) degreeMap.set(tgt, (degreeMap.get(tgt) || 0) + 1);
+    });
+
+    const matchesNode = (element: CytoscapeElement) => {
+      const data = element.data;
+      if (nodeTypes.length && data.type && !nodeTypes.includes(data.type)) {
+        return false;
+      }
+      if (periods.length && data.period && !periods.includes(data.period)) {
+        return false;
+      }
+      if (schools.length && data.school && !schools.includes(data.school)) {
+        return false;
+      }
+      if (search) {
+        const haystack = [
+          data.label,
+          data.description,
+          data.summary,
+          data.period,
+          data.school,
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase();
+        if (!haystack.includes(search)) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    const nodeMap = new Map(cyData.elements.nodes.map((node) => [node.data.id, node]));
+    const baseNodes: CytoscapeElement[] = cyData.elements.nodes.filter(matchesNode);
+
+    // Always include explicitly selected nodes even if filters would exclude them
+    state.selection.nodes.forEach((nodeId) => {
+      if (!baseNodes.some((node) => node.data.id === nodeId)) {
+        const selectedNode = nodeMap.get(nodeId);
+        if (selectedNode) {
+          baseNodes.push(selectedNode);
+        }
+      }
+    });
+
+    const relationFilter = new Set(relations);
+    const nodeIdSet = new Set(baseNodes.map((node) => node.data.id));
+
+    const filteredEdges = cyData.elements.edges.filter((edge) => {
+      const relation = edge.data.relation ?? '';
+      const source = edge.data.source ?? '';
+      const target = edge.data.target ?? '';
+      if (relationFilter.size && relation && !relationFilter.has(relation)) {
+        return false;
+      }
+      return source && target && nodeIdSet.has(source) && nodeIdSet.has(target);
+    });
+
+    // ensure nodes referenced by retained edges are included
+    filteredEdges.forEach((edge) => {
+      const source = edge.data.source ?? '';
+      const target = edge.data.target ?? '';
+      if (source) nodeIdSet.add(source);
+      if (target) nodeIdSet.add(target);
+    });
+
+    let finalNodes = cyData.elements.nodes.filter((node) => nodeIdSet.has(node.data.id));
+
+    const MAX_NODES = 200;
+    if (finalNodes.length > MAX_NODES) {
+      finalNodes = finalNodes
+        .slice()
+        .sort((a, b) => {
+          const degreeDiff = (degreeMap.get(b.data.id) || 0) - (degreeMap.get(a.data.id) || 0);
+          if (degreeDiff !== 0) {
+            return degreeDiff;
+          }
+          return (a.data.label || '').localeCompare(b.data.label || '');
+        })
+        .slice(0, MAX_NODES);
+      const limitedSet = new Set(finalNodes.map((node) => node.data.id));
+      const limitedEdges = filteredEdges.filter((edge) => {
+        const source = edge.data.source ?? '';
+        const target = edge.data.target ?? '';
+        return source && target && limitedSet.has(source) && limitedSet.has(target);
+      });
+      return {
+        elements: {
+          nodes: finalNodes,
+          edges: limitedEdges,
+        },
+      };
+    }
+
+    return {
+      elements: {
+        nodes: finalNodes,
+        edges: filteredEdges,
+      },
+    };
+  }, [cyData, state.filters, state.selection]);
+
+  const totals = state.timeline?.totals;
+  const typeCounts = totals?.byType || {};
+
   return (
-    <div className="flex items-center space-x-2">
-      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: color }}></div>
-      <span className="text-sm text-academic-muted">{label}</span>
+    <div className="space-y-6">
+      <div className="academic-card">
+        <div className="flex items-center justify-between">
+          <div>
+            <span className="text-xs uppercase text-academic-muted tracking-wide font-semibold">Mode</span>
+            <div className="mt-1 flex overflow-hidden border border-gray-200 rounded-md">
+              <button
+                onClick={() => setMode('observatory')}
+                className={`px-4 py-2 text-sm font-medium transition-colors ${
+                  mode === 'observatory' ? 'bg-primary-600 text-white' : 'bg-white text-academic-text'
+                }`}
+              >
+                Observatory
+              </button>
+              <button
+                onClick={() => setMode('semativerse')}
+                className={`px-4 py-2 text-sm font-medium transition-colors ${
+                  mode === 'semativerse' ? 'bg-primary-600 text-white' : 'bg-white text-academic-text'
+                }`}
+              >
+                Semativerse
+              </button>
+            </div>
+          </div>
+          <div className="text-xs text-academic-muted max-w-sm text-right">
+            Observatory blends timeline, evidence flow, clusters, and matrix analytics with a focused Cytoscape view.
+            Semativerse remains available for full 3D exploration when credentials are provided.
+          </div>
+        </div>
+      </div>
+
+      {mode === 'semativerse' ? (
+        <>
+          <div className="academic-card bg-purple-50 border-purple-200">
+            <p className="text-sm text-academic-text">
+              <strong>Semativerse</strong> visualization is used with permission from its co-creators{' '}
+              <strong>Benjamin Mathias</strong> and <strong>Romain Girardi</strong>. Contact the development team for
+              access credentials.
+            </p>
+          </div>
+          <div className="academic-card p-8 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-6xl mb-4">🌌</div>
+              <h3 className="text-2xl font-semibold mb-2">Semativerse Integration</h3>
+              <p className="text-academic-muted max-w-md">
+                Use Semativerse for 3D/VR exploration of the Ancient Free Will Database. Authentication is required.
+              </p>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <WorkspaceHeader
+            totalNodes={totals?.nodes || 0}
+            totalEdges={totals?.edges || 0}
+            byType={typeCounts}
+          />
+          <WorkspaceFilterBar />
+          <TimelinePanel />
+          <ArgumentEvidenceBoard />
+          <div className="grid gap-6 xl:grid-cols-[2fr,1fr]">
+            <ConceptClusterGrid />
+            <PathInspectorPanel />
+          </div>
+          <InfluenceMatrixPanel />
+          <div className="academic-card">
+            <h3 className="text-lg font-semibold text-academic-text mb-3">Focused Network View</h3>
+            <p className="text-sm text-academic-muted mb-4">
+              The Cytoscape view mirrors the filters and selections across the observatory. Nodes are limited to the
+              most connected entities within the current slice to keep the layout legible.
+            </p>
+
+            {cyError && (
+              <div className="text-sm text-red-500 mb-4">
+                {cyError}
+              </div>
+            )}
+
+            <div className="relative border border-gray-200 rounded-lg h-[600px] overflow-hidden">
+              {cyLoading ? (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="spinner w-12 h-12 mx-auto mb-2"></div>
+                    <div className="text-sm text-academic-muted">Loading network...</div>
+                  </div>
+                </div>
+              ) : (
+                <CytoscapeVisualizerEnhanced
+                  data={filteredData}
+                  onNodeClick={(nodeId) =>
+                    updateSelection({
+                      nodes: [nodeId],
+                      focusNodeId: nodeId,
+                    })
+                  }
+                  onEdgeClick={() => undefined}
+                  selectedNodeIds={state.selection.nodes}
+                  focusNodeId={state.selection.focusNodeId}
+                />
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

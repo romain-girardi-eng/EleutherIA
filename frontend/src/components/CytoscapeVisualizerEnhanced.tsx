@@ -10,12 +10,16 @@ interface CytoscapeVisualizerProps {
   data: CytoscapeData | null;
   onNodeClick?: (nodeId: string) => void;
   onEdgeClick?: (edgeId: string) => void;
+  selectedNodeIds?: string[];
+  focusNodeId?: string | null;
 }
 
 export default function CytoscapeVisualizerEnhanced({
   data,
   onNodeClick,
   onEdgeClick,
+  selectedNodeIds,
+  focusNodeId,
 }: CytoscapeVisualizerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<cytoscape.Core | null>(null);
@@ -24,6 +28,15 @@ export default function CytoscapeVisualizerEnhanced({
   const [showHelp, setShowHelp] = useState(false);
   const [nodeStats, setNodeStats] = useState<Record<string, number>>({});
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    if (!data && cyRef.current) {
+      cyRef.current.destroy();
+      cyRef.current = null;
+      setSelectedNode(null);
+      setNodeStats({});
+    }
+  }, [data]);
 
   // Initialize Cytoscape
   useEffect(() => {
@@ -202,6 +215,45 @@ export default function CytoscapeVisualizerEnhanced({
       cy.destroy();
     };
   }, [data, onNodeClick, onEdgeClick]);
+
+  useEffect(() => {
+    const cy = cyRef.current;
+    if (!cy) return;
+
+    cy.$(':selected').unselect();
+
+    if (selectedNodeIds && selectedNodeIds.length > 0) {
+      selectedNodeIds.forEach((id) => {
+        const node = cy.getElementById(id);
+        if (node && !node.empty()) {
+          node.select();
+        }
+      });
+      const firstSelected = cy.getElementById(selectedNodeIds[0]);
+      if (firstSelected && !firstSelected.empty()) {
+        setSelectedNode(firstSelected.data());
+      }
+    } else if (focusNodeId) {
+      const focusNode = cy.getElementById(focusNodeId);
+      if (focusNode && !focusNode.empty()) {
+        focusNode.select();
+        setSelectedNode(focusNode.data());
+      }
+    } else {
+      setSelectedNode(null);
+    }
+
+    if (focusNodeId) {
+      const focusNode = cy.getElementById(focusNodeId);
+      if (focusNode && !focusNode.empty()) {
+        cy.animate({
+          center: { eles: focusNode },
+          duration: 300,
+          zoom: Math.min(Math.max(cy.zoom(), 1.2), 2),
+        });
+      }
+    }
+  }, [selectedNodeIds, focusNodeId]);
 
   // Fullscreen toggle
   const toggleFullscreen = () => {

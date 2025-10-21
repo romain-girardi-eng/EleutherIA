@@ -42,13 +42,18 @@ npm run preview
 ## 📊 Features
 
 ### 1. Knowledge Graph Visualizer (`/visualizer`)
-- **Interactive Cytoscape.js network visualization**
-- 509 nodes (164 persons, 117 arguments, 85 concepts, 50 works, 53 reformulations, 13 quotes, 27 other types)
-- 820 edges (relationships, influences, critiques)
-- Color-coded by node type
-- Click nodes to see details
-- Pan, zoom, fit controls
-- COSE layout algorithm
+- **Observatory mode** replaces the single force-directed view with coordinated panels:
+  - Chrono-Storyline timeline showing periods, lifelines, and top nodes per era
+  - Argument Evidence Board with argument → ancient evidence → modern reception flows
+  - Concept Constellations (clustered mini-maps from embeddings)
+  - Influence Matrix heat map (schools × relation types)
+  - Path Inspector for guided shortest-path exploration across the KG
+  - Focused Cytoscape lens synced with filters and selections (auto-limits to ~200 nodes)
+- Global filters (types, periods, schools, relation types, search) drive every panel simultaneously
+- Cross-highlighting: selecting a node anywhere centers it everywhere
+- Export controls, fullscreen, and layout toggles retained from the Cytoscape view
+- Semativerse mode remains available for authenticated 3D exploration
+- **Next refinements**: add persisted analytical bookmarks, richer evidence weighting, and server-side caching for heavy analytics responses.
 
 **Node Types:**
 - 🔵 Person (philosophers, theologians) - `#0284c7`
