@@ -70,21 +70,27 @@ export function KGWorkspaceProvider({ children }: { children: ReactNode }) {
       setError(null);
 
       try {
-        const [timelineData, argumentData, clusterData, matrixData] = await Promise.all([
+        // Load fast endpoints first for immediate feedback
+        const [timelineData, matrixData] = await Promise.all([
           apiClient.getTimelineOverview(activeFilters),
-          apiClient.getArgumentEvidenceOverview(activeFilters),
-          apiClient.getConceptClusterOverview(activeFilters),
           apiClient.getInfluenceMatrix(activeFilters),
         ]);
 
         setTimeline(timelineData);
+        setInfluenceMatrix(matrixData);
+        setLoading(false); // Allow UI to render with partial data
+
+        // Load slower endpoints in background
+        const [argumentData, clusterData] = await Promise.all([
+          apiClient.getArgumentEvidenceOverview(activeFilters),
+          apiClient.getConceptClusterOverview(activeFilters),
+        ]);
+
         setArgumentEvidence(argumentData);
         setConceptClusters(clusterData);
-        setInfluenceMatrix(matrixData);
       } catch (err: any) {
         console.error('Error loading KG workspace data:', err);
         setError(err?.message || 'Failed to load knowledge graph analytics');
-      } finally {
         setLoading(false);
       }
     },
