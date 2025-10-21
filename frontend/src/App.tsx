@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
+import { useState } from 'react';
 import HomePage from './pages/HomePage';
 import KGVisualizerPage from './pages/KGVisualizerPage';
 import SearchPage from './pages/SearchPage';
@@ -9,6 +10,7 @@ import DatabasePage from './pages/DatabasePage';
 import BibliographyPage from './pages/BibliographyPage';
 import AboutPage from './pages/AboutPage';
 import ReportErrorPage from './pages/ReportErrorPage';
+import InteractiveTour from './components/InteractiveTour';
 import './index.css';
 
 function App() {
@@ -19,19 +21,200 @@ function App() {
   );
 }
 
+// Page-specific tour configurations
+const pageTours: Record<string, { title: string; steps: Array<{ title: string; content: string; target: string }> }> = {
+  '/': {
+    title: 'Welcome to EleutherIA',
+    steps: [
+      {
+        title: 'Welcome to EleutherIA',
+        content: 'A comprehensive knowledge graph documenting ancient debates on free will from Aristotle to Boethius. Let us guide you through the key features.',
+        target: 'body'
+      },
+      {
+        title: 'Knowledge Graph',
+        content: 'Start here to explore the network of 505 philosophical concepts, arguments, and thinkers. Visualize complex relationships in an interactive graph.',
+        target: '[data-tour="kg-card"]'
+      },
+      {
+        title: 'Hybrid Search',
+        content: 'Search across 289 ancient texts using full-text, lemmatic, or AI-powered semantic search to find exactly what you need.',
+        target: '[data-tour="search-card"]'
+      },
+      {
+        title: 'GraphRAG Q&A',
+        content: 'Ask questions in natural language and receive scholarly answers grounded in the knowledge graph with proper citations.',
+        target: '[data-tour="graphrag-card"]'
+      },
+      {
+        title: 'Ancient Texts',
+        content: 'Browse and read 289 ancient Greek and Latin texts with advanced lemmatization for deeper textual analysis.',
+        target: '[data-tour="texts-card"]'
+      },
+      {
+        title: 'Database Statistics',
+        content: 'Our database contains over 860 verified citations from ancient sources and modern scholarship, ensuring academic rigor.',
+        target: '[data-tour="stats"]'
+      }
+    ]
+  },
+  '/visualizer': {
+    title: 'Knowledge Graph Visualizer',
+    steps: [
+      {
+        title: 'Interactive Knowledge Graph',
+        content: 'Explore 505 nodes and 870 relationships representing ancient philosophical debates on free will.',
+        target: 'body'
+      },
+      {
+        title: 'Graph Controls',
+        content: 'Use these controls to filter nodes by type, change layout algorithms, and customize the visualization.',
+        target: '[data-tour="graph-controls"]'
+      },
+      {
+        title: 'Node Details',
+        content: 'Click any node to see detailed information including ancient sources, modern scholarship, and terminology.',
+        target: '[data-tour="graph-canvas"]'
+      },
+      {
+        title: 'Export Tools',
+        content: 'Export the graph as PNG, SVG, CSV, or generate a bibliography of visible sources.',
+        target: '[data-tour="export-tools"]'
+      },
+      {
+        title: 'Keyboard Shortcuts',
+        content: 'Press H for help, R to reset view, F to fit screen, C to center selected node, and ESC to deselect.',
+        target: 'body'
+      }
+    ]
+  },
+  '/search': {
+    title: 'Hybrid Search',
+    steps: [
+      {
+        title: 'Multi-Modal Search',
+        content: 'Search across 289 ancient texts using three different search modes: full-text, lemmatic, and semantic.',
+        target: 'body'
+      },
+      {
+        title: 'Search Modes',
+        content: 'Full-text finds exact matches, lemmatic finds word forms, and semantic uses AI to understand meaning.',
+        target: '[data-tour="search-modes"]'
+      },
+      {
+        title: 'Advanced Filters',
+        content: 'Filter results by author, time period, philosophical school, or work type.',
+        target: '[data-tour="filters"]'
+      },
+      {
+        title: 'View Results',
+        content: 'Click any result to see the full passage with highlighting and context.',
+        target: '[data-tour="results"]'
+      }
+    ]
+  },
+  '/graphrag': {
+    title: 'GraphRAG Question Answering',
+    steps: [
+      {
+        title: 'Ask Questions',
+        content: 'Ask natural language questions about ancient debates on free will and get scholarly answers with citations.',
+        target: 'body'
+      },
+      {
+        title: 'Question Input',
+        content: 'Type your question here. Be specific for best results, e.g., "What was Aristotle\'s view on moral responsibility?"',
+        target: '[data-tour="question-input"]'
+      },
+      {
+        title: 'AI-Powered Answers',
+        content: 'Answers are grounded in the knowledge graph and include citations to ancient sources and modern scholarship.',
+        target: '[data-tour="answer-area"]'
+      },
+      {
+        title: 'Suggested Questions',
+        content: 'Not sure what to ask? Try one of these suggested questions to get started.',
+        target: '[data-tour="suggestions"]'
+      }
+    ]
+  },
+  '/texts': {
+    title: 'Ancient Texts Explorer',
+    steps: [
+      {
+        title: 'Browse Ancient Texts',
+        content: 'Access 289 ancient Greek and Latin texts with advanced search and lemmatization.',
+        target: 'body'
+      },
+      {
+        title: 'Text List',
+        content: 'Browse texts by author, period, or philosophical school.',
+        target: '[data-tour="text-list"]'
+      },
+      {
+        title: 'Reader View',
+        content: 'Read texts with original language, translation, and lemmatic analysis.',
+        target: '[data-tour="reader"]'
+      },
+      {
+        title: 'Lemmatization',
+        content: 'Click any word to see its dictionary form, grammatical analysis, and related passages.',
+        target: '[data-tour="lemma"]'
+      }
+    ]
+  },
+  '/database': {
+    title: 'Database Overview',
+    steps: [
+      {
+        title: 'Database Documentation',
+        content: 'Comprehensive technical documentation for the EleutherIA knowledge graph.',
+        target: 'body'
+      },
+      {
+        title: 'Schema & Structure',
+        content: 'Learn about node types, edge relationships, and data organization.',
+        target: '[data-tour="schema"]'
+      },
+      {
+        title: 'API Access',
+        content: 'Access the database programmatically via REST API or download the complete dataset.',
+        target: '[data-tour="api"]'
+      }
+    ]
+  }
+};
+
 function AppContent() {
   const location = useLocation();
-  const isHomePage = location.pathname === '/';
+  const [showTour, setShowTour] = useState(false);
 
-  const handleTourClick = () => {
-    const trigger = document.querySelector('[data-tour-trigger="true"]') as HTMLButtonElement;
-    if (trigger) {
-      trigger.click();
-    }
+  const currentTour = pageTours[location.pathname] || pageTours['/'];
+
+  const handleTourComplete = () => {
+    setShowTour(false);
   };
 
   return (
     <div className="min-h-screen bg-academic-bg">
+      {/* Global Tour Button - Visible on all pages */}
+      <button
+        onClick={() => setShowTour(true)}
+        className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-full p-3 sm:p-4 shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 flex items-center gap-2 group cursor-pointer touch-manipulation"
+        style={{
+          WebkitTapHighlightColor: 'transparent',
+          minWidth: '56px',
+          minHeight: '56px'
+        }}
+        title="Start Interactive Tour"
+        aria-label="Start Interactive Tour"
+      >
+        <HelpCircle className="w-6 h-6 sm:w-6 sm:h-6 animate-pulse" />
+        <span className="hidden sm:inline font-medium whitespace-nowrap">Take a Tour</span>
+      </button>
+
+      {/* Interactive Tour Component */}
+      {showTour && <InteractiveTour autoStart={true} onComplete={handleTourComplete} tourSteps={currentTour.steps} />}
       {/* Header / Navigation */}
       <header className="bg-academic-paper border-b border-academic-border shadow-sm sticky top-0 z-50">
         <nav className="academic-container">
@@ -54,18 +237,6 @@ function AppContent() {
               <NavLink to="/texts">Ancient Texts</NavLink>
               <NavLink to="/bibliography">Bibliography</NavLink>
               <NavLink to="/about">About</NavLink>
-
-              {/* Tour Button - Only visible on homepage */}
-              {isHomePage && (
-                <button
-                  onClick={handleTourClick}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary-600 to-primary-700 text-white text-sm font-medium hover:from-primary-700 hover:to-primary-800 transition-all duration-200 hover:shadow-md hover:scale-105 group"
-                  aria-label="Take an interactive tour"
-                >
-                  <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-                  <span>Take a Tour</span>
-                </button>
-              )}
             </div>
 
               {/* Mobile Menu Button */}
@@ -92,21 +263,6 @@ function AppContent() {
                 <NavLink to="/texts">Ancient Texts</NavLink>
                 <NavLink to="/bibliography">Bibliography</NavLink>
                 <NavLink to="/about">About</NavLink>
-
-                {/* Tour Button in Mobile Menu - Only visible on homepage */}
-                {isHomePage && (
-                  <button
-                    onClick={() => {
-                      handleTourClick();
-                      const mobileMenu = document.getElementById('mobile-menu');
-                      mobileMenu?.classList.add('hidden');
-                    }}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-primary-600 to-primary-700 text-white text-sm font-medium hover:from-primary-700 hover:to-primary-800 transition-all duration-200 mt-2"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                    <span>Take a Tour</span>
-                  </button>
-                )}
               </div>
             </div>
           </nav>
@@ -142,8 +298,8 @@ function AppContent() {
               <div className="pb-4 sm:pb-0">
                 <h3 className="font-semibold text-sm mb-3">Data</h3>
                 <ul className="text-xs text-academic-muted space-y-1">
-                  <li>508 Knowledge Graph Nodes</li>
-                  <li>831 Edges & Relationships</li>
+                  <li>505 Knowledge Graph Nodes</li>
+                  <li>870 Edges & Relationships</li>
                   <li>289 Ancient Texts</li>
                   <li>860+ Bibliography References</li>
                 </ul>

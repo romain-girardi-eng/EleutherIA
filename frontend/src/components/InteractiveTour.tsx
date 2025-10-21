@@ -10,42 +10,20 @@ interface TourStep {
 interface InteractiveTourProps {
   autoStart?: boolean;
   onComplete?: () => void;
+  tourSteps?: TourStep[];
 }
 
-const tourSteps: TourStep[] = [
-  {
-    title: 'Welcome to EleutherIA',
-    content: 'A comprehensive knowledge graph documenting ancient debates on free will from Aristotle to Boethius. Let us guide you through the key features.',
-    target: 'body'
-  },
-  {
-    title: 'Knowledge Graph',
-    content: 'Start here to explore the network of 508 philosophical concepts, arguments, and thinkers. Visualize complex relationships in an interactive graph.',
-    target: '[data-tour="kg-card"]'
-  },
-  {
-    title: 'Hybrid Search',
-    content: 'Search across 289 ancient texts using full-text, lemmatic, or AI-powered semantic search to find exactly what you need.',
-    target: '[data-tour="search-card"]'
-  },
-  {
-    title: 'GraphRAG Q&A',
-    content: 'Ask questions in natural language and receive scholarly answers grounded in the knowledge graph with proper citations.',
-    target: '[data-tour="graphrag-card"]'
-  },
-  {
-    title: 'Ancient Texts',
-    content: 'Browse and read 289 ancient Greek and Latin texts with advanced lemmatization for deeper textual analysis.',
-    target: '[data-tour="texts-card"]'
-  },
-  {
-    title: 'Database Statistics',
-    content: 'Our database contains over 860 verified citations from ancient sources and modern scholarship, ensuring academic rigor.',
-    target: '[data-tour="stats"]'
-  }
-];
+export default function InteractiveTour({ autoStart = false, onComplete, tourSteps }: InteractiveTourProps) {
+  // Default tour steps if none provided
+  const defaultTourSteps: TourStep[] = [
+    {
+      title: 'Welcome to EleutherIA',
+      content: 'A comprehensive knowledge graph documenting ancient debates on free will from Aristotle to Boethius. Let us guide you through the key features.',
+      target: 'body'
+    }
+  ];
 
-export default function InteractiveTour({ autoStart = false, onComplete }: InteractiveTourProps) {
+  const steps = tourSteps || defaultTourSteps;
   const [tourInstance, setTourInstance] = useState<TourGuideClient | null>(null);
   const [isReady, setIsReady] = useState(false);
 
@@ -60,7 +38,7 @@ export default function InteractiveTour({ autoStart = false, onComplete }: Inter
       dialogWidth: 380,
       dialogClass: 'eleutheriate-tour-dialog',
       backdropColor: 'rgba(28, 25, 23, 0.6)',
-      steps: tourSteps.map((step, index) => ({
+      steps: steps.map((step, index) => ({
         title: step.title,
         content: step.content,
         target: step.target,
@@ -79,24 +57,25 @@ export default function InteractiveTour({ autoStart = false, onComplete }: Inter
         tg.finishTour();
       }
     };
-  }, []);
+  }, [steps]);
 
   useEffect(() => {
     if (isReady && tourInstance && autoStart) {
-      const hasVisited = localStorage.getItem('eleutheriate_tour_completed');
-      if (!hasVisited) {
-        tourInstance.start();
+      // Always start the tour when requested (user clicked the button)
+      tourInstance.start();
 
-        // Mark as visited when tour completes
-        const checkCompletion = setInterval(() => {
-          const dialog = document.querySelector('.eleutheriate-tour-dialog');
-          if (!dialog) {
-            localStorage.setItem('eleutheriate_tour_completed', 'true');
-            onComplete?.();
-            clearInterval(checkCompletion);
-          }
-        }, 500);
-      }
+      // Check for tour completion
+      const checkCompletion = setInterval(() => {
+        const dialog = document.querySelector('.eleutheriate-tour-dialog');
+        if (!dialog) {
+          localStorage.setItem('eleutheriate_tour_completed', 'true');
+          onComplete?.();
+          clearInterval(checkCompletion);
+        }
+      }, 500);
+
+      // Cleanup interval on unmount
+      return () => clearInterval(checkCompletion);
     }
   }, [isReady, tourInstance, autoStart, onComplete]);
 
@@ -106,8 +85,40 @@ export default function InteractiveTour({ autoStart = false, onComplete }: Inter
     }
   };
 
+  const exitTour = () => {
+    if (tourInstance) {
+      tourInstance.finishTour();
+      onComplete?.();
+    }
+  };
+
+  // Add keyboard shortcut to exit tour (ESC key)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && tourInstance) {
+        tourInstance.finishTour();
+        onComplete?.();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [tourInstance, onComplete]);
+
   return (
     <>
+      {/* Exit Tour Button - Always visible during tour */}
+      <button
+        onClick={exitTour}
+        className="fixed top-20 right-6 z-[10000] bg-white hover:bg-gray-100 text-gray-700 rounded-full p-2 shadow-lg transition-all hover:scale-110 active:scale-95 border border-gray-200"
+        title="Exit Tour (ESC)"
+        aria-label="Exit Tour"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
       {/* Elegant CSS styles for the tour */}
       <style>{`
         /* Main tour dialog styling */

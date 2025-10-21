@@ -1,25 +1,10 @@
 import { Link } from 'react-router-dom';
-import { Network, Search, MessageSquare, BookOpen, HelpCircle } from 'lucide-react';
+import { Network, Search, MessageSquare, BookOpen } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
-import InteractiveTour from '../components/InteractiveTour';
 
 export default function HomePage() {
-  const [showTour, setShowTour] = useState(false);
-
   return (
     <div className="space-y-12">
-      {/* Interactive Tour Component - only when requested */}
-      {showTour && <InteractiveTour autoStart={true} />}
-
-      {/* Tour Button */}
-      <button
-        onClick={() => setShowTour(true)}
-        className="fixed bottom-6 right-6 z-50 bg-primary-600 hover:bg-primary-700 text-white rounded-full p-4 shadow-lg transition-all hover:scale-110 flex items-center gap-2"
-        title="Start Interactive Tour"
-      >
-        <HelpCircle className="w-6 h-6" />
-        <span className="hidden sm:inline font-medium">Take a Tour</span>
-      </button>
 
       {/* Hero Section */}
       <section className="text-center -mt-4 pt-0 pb-12">
@@ -41,7 +26,7 @@ export default function HomePage() {
         <FeatureCard
           to="/visualizer"
           title="Knowledge Graph"
-          description="Explore 508 nodes and 831 relationships in an interactive network visualization"
+          description="Explore 505 nodes and 870 relationships in an interactive network visualization"
           icon={<Network className="w-12 h-12" />}
           dataTour="kg-card"
         />
@@ -77,8 +62,8 @@ export default function HomePage() {
         <div className="relative z-10">
           <h3 className="text-2xl font-serif font-bold mb-6">Database Statistics</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <StatItem label="KG Nodes" value="508" delay={0} />
-            <StatItem label="Edges" value="831" delay={100} />
+            <StatItem label="KG Nodes" value="505" delay={0} />
+            <StatItem label="Edges" value="870" delay={100} />
             <StatItem label="Ancient Texts" value="289" delay={200} />
             <StatItem label="Citations" value="860+" delay={300} />
           </div>

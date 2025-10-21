@@ -1,6 +1,46 @@
-import { BookOpen, Network, GraduationCap, Search, Database, FileText } from 'lucide-react';
+import { BookOpen, Network, GraduationCap, Search, Database, FileText, ChevronDown, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function DatabasePage() {
+  const [nodeTypeData, setNodeTypeData] = useState<Record<string, string[]>>({});
+  const [expandedTypes, setExpandedTypes] = useState<Set<string>>(new Set());
+
+  // Load node type data from the JSON database
+  useEffect(() => {
+    fetch('/api/knowledge-graph/nodes')
+      .then(res => res.json())
+      .then(data => {
+        // Organize nodes by type
+        const typeData: Record<string, string[]> = {};
+        data.forEach((node: any) => {
+          const type = node.type || 'unknown';
+          if (!typeData[type]) {
+            typeData[type] = [];
+          }
+          typeData[type].push(node.label || 'Unnamed');
+        });
+
+        // Sort each type's items alphabetically (case-insensitive)
+        Object.keys(typeData).forEach(type => {
+          typeData[type].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+        });
+
+        setNodeTypeData(typeData);
+      })
+      .catch(error => {
+        console.error('Error loading node type data:', error);
+      });
+  }, []);
+
+  const toggleType = (type: string) => {
+    const newExpanded = new Set(expandedTypes);
+    if (newExpanded.has(type)) {
+      newExpanded.delete(type);
+    } else {
+      newExpanded.add(type);
+    }
+    setExpandedTypes(newExpanded);
+  };
 
   return (
     <div className="space-y-8">
@@ -92,20 +132,132 @@ export default function DatabasePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <StatCard number="508" label="Nodes" sublabel="Entities & Concepts" icon={<Network className="w-5 h-5" />} />
-          <StatCard number="831" label="Edges" sublabel="Relationships" icon={<Network className="w-5 h-5" />} />
+          <StatCard number="505" label="Nodes" sublabel="Entities & Concepts" icon={<Network className="w-5 h-5" />} />
+          <StatCard number="870" label="Edges" sublabel="Relationships" icon={<Network className="w-5 h-5" />} />
           <StatCard number="13" label="Node Types" icon={<Database className="w-5 h-5" />} />
         </div>
 
         <div className="bg-academic-bg rounded-lg p-6">
           <h3 className="font-semibold text-lg mb-4">Node Types Distribution</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <NodeTypeItem type="Persons" count={156} description="Philosophers, theologians, authors" />
-            <NodeTypeItem type="Arguments" count={113} description="Specific philosophical arguments" />
-            <NodeTypeItem type="Concepts" count={80} description="Key philosophical terms and ideas" />
-            <NodeTypeItem type="Works" count={48} description="Treatises, dialogues, letters" />
-            <NodeTypeItem type="Reformulations" count={53} description="Conceptual redefinitions" />
-            <NodeTypeItem type="Other" count={15} description="Debates, schools, events, frameworks" />
+          <p className="text-sm text-academic-muted mb-4">Click on any node type to view all items in alphabetical order</p>
+          <div className="space-y-3">
+            <NodeTypeItem
+              type="Persons"
+              typeKey="person"
+              count={156}
+              description="Philosophers, theologians, authors"
+              items={nodeTypeData['person'] || []}
+              expanded={expandedTypes.has('person')}
+              onToggle={() => toggleType('person')}
+            />
+            <NodeTypeItem
+              type="Arguments"
+              typeKey="argument"
+              count={117}
+              description="Specific philosophical arguments"
+              items={nodeTypeData['argument'] || []}
+              expanded={expandedTypes.has('argument')}
+              onToggle={() => toggleType('argument')}
+            />
+            <NodeTypeItem
+              type="Concepts"
+              typeKey="concept"
+              count={87}
+              description="Key philosophical terms and ideas"
+              items={nodeTypeData['concept'] || []}
+              expanded={expandedTypes.has('concept')}
+              onToggle={() => toggleType('concept')}
+            />
+            <NodeTypeItem
+              type="Works"
+              typeKey="work"
+              count={51}
+              description="Treatises, dialogues, letters"
+              items={nodeTypeData['work'] || []}
+              expanded={expandedTypes.has('work')}
+              onToggle={() => toggleType('work')}
+            />
+            <NodeTypeItem
+              type="Reformulations"
+              typeKey="reformulation"
+              count={53}
+              description="Conceptual redefinitions"
+              items={nodeTypeData['reformulation'] || []}
+              expanded={expandedTypes.has('reformulation')}
+              onToggle={() => toggleType('reformulation')}
+            />
+            <NodeTypeItem
+              type="Quotes"
+              typeKey="quote"
+              count={14}
+              description="Textual quotations from ancient sources"
+              items={nodeTypeData['quote'] || []}
+              expanded={expandedTypes.has('quote')}
+              onToggle={() => toggleType('quote')}
+            />
+            <NodeTypeItem
+              type="Debates"
+              typeKey="debate"
+              count={12}
+              description="Philosophical debates and controversies"
+              items={nodeTypeData['debate'] || []}
+              expanded={expandedTypes.has('debate')}
+              onToggle={() => toggleType('debate')}
+            />
+            <NodeTypeItem
+              type="Controversies"
+              typeKey="controversy"
+              count={5}
+              description="Major intellectual controversies"
+              items={nodeTypeData['controversy'] || []}
+              expanded={expandedTypes.has('controversy')}
+              onToggle={() => toggleType('controversy')}
+            />
+            <NodeTypeItem
+              type="Groups"
+              typeKey="group"
+              count={3}
+              description="Philosophical schools and groups"
+              items={nodeTypeData['group'] || []}
+              expanded={expandedTypes.has('group')}
+              onToggle={() => toggleType('group')}
+            />
+            <NodeTypeItem
+              type="Conceptual Evolutions"
+              typeKey="conceptual_evolution"
+              count={3}
+              description="Evolutionary developments of concepts"
+              items={nodeTypeData['conceptual_evolution'] || []}
+              expanded={expandedTypes.has('conceptual_evolution')}
+              onToggle={() => toggleType('conceptual_evolution')}
+            />
+            <NodeTypeItem
+              type="Events"
+              typeKey="event"
+              count={2}
+              description="Historical philosophical events"
+              items={nodeTypeData['event'] || []}
+              expanded={expandedTypes.has('event')}
+              onToggle={() => toggleType('event')}
+            />
+            <NodeTypeItem
+              type="Argument Framework"
+              typeKey="argument_framework"
+              count={1}
+              description="Systematic argument frameworks"
+              items={nodeTypeData['argument_framework'] || []}
+              expanded={expandedTypes.has('argument_framework')}
+              onToggle={() => toggleType('argument_framework')}
+            />
+            <NodeTypeItem
+              type="School"
+              typeKey="school"
+              count={1}
+              description="Philosophical school"
+              items={nodeTypeData['school'] || []}
+              expanded={expandedTypes.has('school')}
+              onToggle={() => toggleType('school')}
+            />
           </div>
 
           <div className="mt-6 pt-6 border-t border-academic-border">
@@ -326,20 +478,55 @@ function PeriodBar({ period, percentage }: { period: string; percentage: number 
 // Node Type Item Component
 function NodeTypeItem({
   type,
+  typeKey,
   count,
   description,
+  items,
+  expanded,
+  onToggle,
 }: {
   type: string;
+  typeKey: string;
   count: number;
   description: string;
+  items: string[];
+  expanded: boolean;
+  onToggle: () => void;
 }) {
   return (
-    <div className="flex justify-between items-start p-3 bg-white rounded border border-academic-border">
-      <div>
-        <div className="font-medium text-academic-text">{type}</div>
-        <div className="text-xs text-academic-muted mt-0.5">{description}</div>
-      </div>
-      <div className="text-lg font-bold text-primary-600">{count}</div>
+    <div className="bg-white rounded border border-academic-border overflow-hidden">
+      <button
+        onClick={onToggle}
+        className="w-full flex justify-between items-start p-3 hover:bg-gray-50 transition-colors cursor-pointer text-left"
+      >
+        <div className="flex items-start gap-2 flex-1">
+          {expanded ? (
+            <ChevronDown className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
+          ) : (
+            <ChevronRight className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
+          )}
+          <div>
+            <div className="font-medium text-academic-text">{type}</div>
+            <div className="text-xs text-academic-muted mt-0.5">{description}</div>
+          </div>
+        </div>
+        <div className="text-lg font-bold text-primary-600 ml-4">{count}</div>
+      </button>
+
+      {expanded && items.length > 0 && (
+        <div className="border-t border-academic-border bg-gray-50 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 max-h-96 overflow-y-auto">
+            {items.map((item, index) => (
+              <div
+                key={`${typeKey}-${index}`}
+                className="text-sm text-academic-text p-2 bg-white rounded border border-gray-200 hover:border-primary-300 transition-colors"
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

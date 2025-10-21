@@ -10,6 +10,13 @@ import type {
   AncientText,
   SemativersePermissionRequest,
   SemativersePermissionResponse,
+  TimelineOverview,
+  ArgumentEvidenceOverview,
+  ConceptClusterOverview,
+  InfluenceMatrixOverview,
+  KGFilterState,
+  KGPathRequest,
+  KGPathResponse,
 } from '../types';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -61,6 +68,31 @@ class ApiClient {
 
   async getKGStats() {
     const response = await this.client.get('/api/kg/stats');
+    return response.data;
+  }
+
+  async getTimelineOverview(filters?: Partial<KGFilterState>): Promise<TimelineOverview> {
+    const response = await this.client.get('/api/kg/analytics/timeline', { params: filters });
+    return response.data;
+  }
+
+  async getArgumentEvidenceOverview(filters?: Partial<KGFilterState>): Promise<ArgumentEvidenceOverview> {
+    const response = await this.client.get('/api/kg/analytics/argument-flow', { params: filters });
+    return response.data;
+  }
+
+  async getConceptClusterOverview(filters?: Partial<KGFilterState>): Promise<ConceptClusterOverview> {
+    const response = await this.client.get('/api/kg/analytics/concept-clusters', { params: filters });
+    return response.data;
+  }
+
+  async getInfluenceMatrix(filters?: Partial<KGFilterState>): Promise<InfluenceMatrixOverview> {
+    const response = await this.client.get('/api/kg/analytics/influence-matrix', { params: filters });
+    return response.data;
+  }
+
+  async computeGraphPath(request: KGPathRequest): Promise<KGPathResponse> {
+    const response = await this.client.post('/api/kg/analytics/path', request);
     return response.data;
   }
 

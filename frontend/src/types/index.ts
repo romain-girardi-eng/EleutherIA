@@ -183,3 +183,182 @@ export interface GraphRAGChatMessage {
   reasoning_path?: GraphRAGResponse['reasoning_path'];
   timestamp: Date;
 }
+
+// Visualization Aggregates
+export interface TimelineNodeSummary {
+  id: string;
+  label: string;
+  type: string;
+  period?: string | null;
+  school?: string | null;
+  startYear?: number | null;
+  endYear?: number | null;
+  description?: string | null;
+  significance?: string | null;
+  relationCount?: number;
+  relatedTypes?: string[];
+}
+
+export interface TimelinePeriodSummary {
+  key: string;
+  label: string;
+  startYear?: number | null;
+  endYear?: number | null;
+  counts: Record<string, number>;
+  nodes: TimelineNodeSummary[];
+}
+
+export interface TimelineOverview {
+  periods: TimelinePeriodSummary[];
+  totals: {
+    nodes: number;
+    edges: number;
+    byType: Record<string, number>;
+  };
+  range: {
+    minYear?: number | null;
+    maxYear?: number | null;
+  };
+}
+
+export type EvidenceNodeGroup = 'argument' | 'ancient_source' | 'modern_reception';
+
+export interface EvidenceNode {
+  id: string;
+  label: string;
+  group: EvidenceNodeGroup;
+  size: number;
+  argumentIds?: string[];
+  metadata?: Record<string, any>;
+}
+
+export interface EvidenceLink {
+  source: string;
+  target: string;
+  value: number;
+  argumentId?: string;
+  relation?: string;
+}
+
+export interface ArgumentEvidenceSummary {
+  id: string;
+  label: string;
+  period?: string | null;
+  school?: string | null;
+  ancientCount: number;
+  modernCount: number;
+  totalConnections: number;
+  description?: string | null;
+}
+
+export interface ArgumentEvidenceOverview {
+  nodes: EvidenceNode[];
+  links: EvidenceLink[];
+  arguments: ArgumentEvidenceSummary[];
+  stats: {
+    totalArguments: number;
+    totalAncientSources: number;
+    totalModernReception: number;
+  };
+}
+
+export interface ConceptClusterNode {
+  id: string;
+  label: string;
+  type: string;
+  x: number;
+  y: number;
+  period?: string | null;
+  school?: string | null;
+  keywords?: string[];
+}
+
+export interface ConceptClusterSummary {
+  id: string;
+  label: string;
+  size: number;
+  keywords: string[];
+  nodes: ConceptClusterNode[];
+  metadata?: Record<string, any>;
+}
+
+export interface ConceptClusterOverview {
+  clusters: ConceptClusterSummary[];
+  stats: {
+    totalConcepts: number;
+    clusterCount: number;
+  };
+}
+
+export interface MatrixAxis {
+  key: string;
+  label: string;
+  type: 'school' | 'relation' | 'period' | 'node_type';
+  order?: number;
+  metadata?: Record<string, any>;
+}
+
+export interface InfluenceMatrixCell {
+  rowKey: string;
+  columnKey: string;
+  count: number;
+  sampleEdges?: string[];
+}
+
+export interface InfluenceMatrixOverview {
+  rows: MatrixAxis[];
+  columns: MatrixAxis[];
+  cells: InfluenceMatrixCell[];
+  totals: {
+    relationsConsidered: number;
+    schoolsCovered: number;
+    edgesMapped: number;
+  };
+}
+
+export interface KGPathNode {
+  id: string;
+  label: string;
+  type: string;
+  period?: string | null;
+  school?: string | null;
+  description?: string | null;
+}
+
+export interface KGPathEdge {
+  source: string;
+  target: string;
+  relation: string;
+  description?: string | null;
+}
+
+export interface KGPathResponse {
+  nodes: KGPathNode[];
+  edges: KGPathEdge[];
+  length: number;
+  summary?: string;
+  warnings?: string[];
+}
+
+export interface KGPathRequest {
+  sourceId: string;
+  targetId: string;
+  maxDepth?: number;
+  allowBidirectional?: boolean;
+  relationWhitelist?: string[];
+  relationBlacklist?: string[];
+}
+
+export interface KGFilterState {
+  nodeTypes: string[];
+  periods: string[];
+  schools: string[];
+  relations: string[];
+  searchTerm?: string;
+}
+
+export interface KGSelectionState {
+  nodes: string[];
+  edges: string[];
+  focusNodeId?: string | null;
+}
