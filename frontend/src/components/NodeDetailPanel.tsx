@@ -1,15 +1,24 @@
-import { X, BookOpen, Quote, Users, GitBranch, Calendar, GraduationCap, ExternalLink } from 'lucide-react';
+import { X, BookOpen, Quote, Users, GitBranch, Calendar, GraduationCap, ExternalLink, ArrowRight } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { useState } from 'react';
 import type { KGNode } from '../types';
+
+interface RelatedNode {
+  id: string;
+  label: string;
+  type: string;
+  relation: string;
+  direction: 'incoming' | 'outgoing';
+}
 
 interface NodeDetailPanelProps {
   node: KGNode | null;
   onClose: () => void;
   onNavigateToNode?: (nodeId: string) => void;
+  relationships?: RelatedNode[];
 }
 
-export default function NodeDetailPanel({ node, onClose, onNavigateToNode }: NodeDetailPanelProps) {
+export default function NodeDetailPanel({ node, onClose, onNavigateToNode, relationships = [] }: NodeDetailPanelProps) {
   const [copiedCitation, setCopiedCitation] = useState(false);
 
   if (!node) return null;
@@ -205,6 +214,56 @@ export default function NodeDetailPanel({ node, onClose, onNavigateToNode }: Nod
                     </li>
                   ))}
                 </ul>
+              </details>
+            </section>
+          )}
+
+          {/* Relationships */}
+          {relationships && relationships.length > 0 && (
+            <section className="border-t border-academic-border pt-4 sm:pt-6">
+              <details className="group" open>
+                <summary className="text-sm font-semibold text-academic-muted uppercase tracking-wide mb-3 cursor-pointer flex items-center gap-2 hover:text-primary-600 transition-colors">
+                  <GitBranch className="w-4 h-4" />
+                  Relationships ({relationships.length})
+                  <span className="ml-auto text-xs group-open:rotate-180 transition-transform">▼</span>
+                </summary>
+                <div className="mt-3 space-y-2">
+                  {relationships.map((rel, i) => (
+                    <button
+                      key={`${rel.id}-${i}`}
+                      onClick={() => onNavigateToNode && onNavigateToNode(rel.id)}
+                      className="w-full text-left p-3 bg-gray-50 hover:bg-primary-50 rounded-lg transition-colors group/rel border border-gray-200 hover:border-primary-300"
+                    >
+                      <div className="flex items-start gap-2">
+                        <div className="flex-shrink-0 mt-0.5">
+                          <div
+                            className="w-3 h-3 rounded-full"
+                            style={{ backgroundColor: getTypeColor(rel.type) }}
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            {rel.direction === 'outgoing' ? (
+                              <ArrowRight className="w-3.5 h-3.5 text-primary-600 flex-shrink-0" />
+                            ) : (
+                              <ArrowRight className="w-3.5 h-3.5 text-primary-600 flex-shrink-0 rotate-180" />
+                            )}
+                            <span className="text-xs font-medium text-primary-600 uppercase tracking-wide">
+                              {rel.relation}
+                            </span>
+                          </div>
+                          <p className="text-sm font-semibold text-gray-900 group-hover/rel:text-primary-700 transition-colors truncate">
+                            {rel.label}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-0.5">
+                            {rel.type}
+                          </p>
+                        </div>
+                        <ExternalLink className="w-4 h-4 text-gray-400 group-hover/rel:text-primary-600 transition-colors flex-shrink-0 mt-1" />
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </details>
             </section>
           )}

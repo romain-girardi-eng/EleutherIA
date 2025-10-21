@@ -1,13 +1,26 @@
 import { Link } from 'react-router-dom';
-import { Network, Search, MessageSquare, BookOpen } from 'lucide-react';
+import { Network, Search, MessageSquare, BookOpen, HelpCircle } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import InteractiveTour from '../components/InteractiveTour';
 
 export default function HomePage() {
+  const [showTour, setShowTour] = useState(false);
+
   return (
     <div className="space-y-12">
-      {/* Interactive Tour Component */}
-      <InteractiveTour autoStart={true} />
+      {/* Interactive Tour Component - only when requested */}
+      {showTour && <InteractiveTour autoStart={true} />}
+
+      {/* Tour Button */}
+      <button
+        onClick={() => setShowTour(true)}
+        className="fixed bottom-6 right-6 z-50 bg-primary-600 hover:bg-primary-700 text-white rounded-full p-4 shadow-lg transition-all hover:scale-110 flex items-center gap-2"
+        title="Start Interactive Tour"
+      >
+        <HelpCircle className="w-6 h-6" />
+        <span className="hidden sm:inline font-medium">Take a Tour</span>
+      </button>
+
       {/* Hero Section */}
       <section className="text-center -mt-4 pt-0 pb-12">
         <div className="flex justify-center mb-4">

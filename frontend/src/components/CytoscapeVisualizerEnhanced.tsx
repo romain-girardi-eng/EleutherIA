@@ -386,14 +386,65 @@ export default function CytoscapeVisualizerEnhanced({
           onNavigateToNode={(nodeId) => {
             const node = cyRef.current?.$(`#${nodeId}`).first();
             if (node && node.length > 0) {
+              // Unselect previous node
+              cyRef.current?.$(':selected').unselect();
+              // Select new node
+              node.select();
+              // Animate to new node
               cyRef.current?.animate({
                 center: { eles: node },
                 zoom: 1.5,
                 duration: 300,
               });
+              // Update selected node
               setSelectedNode(node.data());
             }
           }}
+          relationships={
+            cyRef.current && selectedNode
+              ? (() => {
+                  const cy = cyRef.current;
+                  const nodeId = selectedNode.id;
+                  const relationships: Array<{
+                    id: string;
+                    label: string;
+                    type: string;
+                    relation: string;
+                    direction: 'incoming' | 'outgoing';
+                  }> = [];
+
+                  // Get outgoing edges (this node is source)
+                  cy.edges(`[source="${nodeId}"]`).forEach((edge) => {
+                    const targetNode = cy.$(`#${edge.data('target')}`).first();
+                    if (targetNode.length > 0) {
+                      relationships.push({
+                        id: targetNode.id(),
+                        label: targetNode.data('label') || targetNode.id(),
+                        type: targetNode.data('type') || 'unknown',
+                        relation: edge.data('relation') || 'related_to',
+                        direction: 'outgoing',
+                      });
+                    }
+                  });
+
+                  // Get incoming edges (this node is target)
+                  cy.edges(`[target="${nodeId}"]`).forEach((edge) => {
+                    const sourceNode = cy.$(`#${edge.data('source')}`).first();
+                    if (sourceNode.length > 0) {
+                      relationships.push({
+                        id: sourceNode.id(),
+                        label: sourceNode.data('label') || sourceNode.id(),
+                        type: sourceNode.data('type') || 'unknown',
+                        relation: edge.data('relation') || 'related_to',
+                        direction: 'incoming',
+                      });
+                    }
+                  });
+
+                  return relationships;
+                })()
+              : []
+          }
         />
       )}
 
