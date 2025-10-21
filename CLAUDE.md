@@ -6,17 +6,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **EleutherIA** (Ἐλευθερία = freedom + IA = Intelligence Artificielle) is a FAIR-compliant knowledge graph documenting ancient debates on free will, fate, and moral responsibility from Aristotle (4th c. BCE) to Boethius (6th c. CE).
 
-This is an **academic research database** (13 MB JSON) containing:
-- **465 nodes**: persons, works, concepts, arguments, debates
-- **745 edges**: relationships, influences, critiques
-- **8 historical phases**: Classical Greek through Late Antiquity
-- **200+ bibliography references**: ancient sources + modern scholarship
+This is an **academic research database** (12.7 MB JSON) containing:
+- **509 nodes**: 164 persons, 117 arguments, 85 concepts, 50 works, 53 reformulations, 13 quotes, 27 other types
+- **820 edges**: relationships, influences, critiques
+- **68 historical periods**: Classical Greek through Late Antiquity
+- **1,706 bibliography references**: 785 ancient sources + 921 modern scholarship
 - **GraphRAG-ready**: optimized for vector embeddings, semantic search, and LLM integration
 
 ## Core Files
 
 ### Main Database
-- **`ancient_free_will_database.json`** (13 MB) - The complete knowledge graph
+- **`ancient_free_will_database.json`** (12.7 MB) - The complete knowledge graph
   - Structure: `{metadata, nodes[], edges[]}`
   - All nodes have: `id`, `label`, `type`, `category`, `description`
   - All edges have: `source`, `target`, `relation`
@@ -36,12 +36,13 @@ This is an **academic research database** (13 MB JSON) containing:
 
 ### Node Types
 Valid values for `node.type`:
-- `person` (156) - Philosophers, theologians, authors
-- `argument` (113) - Specific philosophical arguments
-- `concept` (80) - Philosophical concepts and terms
+- `person` (164) - Philosophers, theologians, authors
+- `argument` (117) - Specific philosophical arguments
+- `concept` (85) - Philosophical concepts and terms
 - `reformulation` (53) - Conceptual reformulations
-- `work` (48) - Treatises, dialogues, letters
-- `debate`, `controversy`, `event`, `school`, `group`, `argument_framework`
+- `work` (50) - Treatises, dialogues, letters
+- `quote` (13) - Textual quotations from ancient sources
+- `debate` (12), `controversy` (5), `group` (3), `conceptual_evolution` (3), `event` (2), `argument_framework` (1), `school` (1)
 
 ### Relation Types
 Common edge relations:

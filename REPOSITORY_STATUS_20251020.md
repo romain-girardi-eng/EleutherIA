@@ -6,8 +6,11 @@
 ## 📊 Current Database Status
 
 **File**: `ancient_free_will_database.json`
-- **Nodes**: 3,414
-- **Edges**: 813
+- **Nodes**: 509 (164 persons, 117 arguments, 85 concepts, 50 works, 53 reformulations, 13 quotes, 27 other types)
+- **Edges**: 820
+- **Bibliography**: 1,706 references (785 ancient sources, 921 modern scholarship)
+- **Historical Periods**: 68
+- **File Size**: 12.7 MB
 - **Quality**: 10 critical errors fixed today
 - **Status**: Continuing deep fact-checking
 
@@ -36,7 +39,7 @@
 
 ### Essential Database
 ```
-ancient_free_will_database.json (3,414 nodes, 813 edges)
+ancient_free_will_database.json (509 nodes, 820 edges, 12.7 MB)
 ```
 
 ### Core Documentation (16 files)

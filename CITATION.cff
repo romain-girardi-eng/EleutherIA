@@ -14,16 +14,16 @@ url: "https://github.com/romain-girardi-eng/EleutherIA"
 abstract: >
   This knowledge graph represents the first comprehensive digital mapping
   of ancient free will debates in Greco-Roman and early Christian philosophy
-  and theology. It covers 8 historical phases spanning from Aristotle (4th c. BCE)
+  and theology. It covers 68 historical periods spanning from Aristotle (4th c. BCE)
   to Boethius (6th c. CE), documenting the evolution of concepts like eph' hêmin
   (in our power), heimarmenê (fate), and autexousion (self-determining power).
-  The database includes 465 nodes (persons, works, concepts, arguments) with
-  745 interconnecting edges, representing the major philosophical and theological
+  The database includes 509 nodes (persons, works, concepts, arguments, quotes) with
+  820 interconnecting edges, representing the major philosophical and theological
   positions: Aristotelian voluntariness, Stoic compatibilism, Epicurean
   indeterminism, Academic incompatibilism, Middle Platonist synthesis, and
-  Christian libertarianism. All entries include ancient source citations,
+  Christian free will doctrine. All entries include ancient source citations,
   modern scholarship references, and Greek/Latin terminology. Based on
-  comprehensive doctoral research with 200+ bibliography references.
+  comprehensive doctoral research with 1,706 bibliography references (785 ancient sources, 921 modern scholarship).
 keywords:
   - free will
   - ancient philosophy

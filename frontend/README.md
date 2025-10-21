@@ -1,6 +1,6 @@
 # EleutherIA Frontend - Ancient Free Will Database
 
-React + TypeScript frontend for the Ancient Free Will Database, providing interactive visualization and exploration of 465 knowledge graph nodes, 289 ancient texts, and GraphRAG-powered question answering.
+React + TypeScript frontend for the Ancient Free Will Database, providing interactive visualization and exploration of 509 knowledge graph nodes, 289 ancient texts, and GraphRAG-powered question answering.
 
 ## 🚀 Quick Start
 
@@ -43,8 +43,8 @@ npm run preview
 
 ### 1. Knowledge Graph Visualizer (`/visualizer`)
 - **Interactive Cytoscape.js network visualization**
-- 465 nodes (persons, works, concepts, arguments, debates)
-- 740 edges (relationships, influences, critiques)
+- 509 nodes (164 persons, 117 arguments, 85 concepts, 50 works, 53 reformulations, 13 quotes, 27 other types)
+- 820 edges (relationships, influences, critiques)
 - Color-coded by node type
 - Click nodes to see details
 - Pan, zoom, fit controls
@@ -378,7 +378,7 @@ eventSource.onerror = () => {
 ### Manual Testing Checklist
 
 **Knowledge Graph:**
-- [ ] Graph loads with 465 nodes, 740 edges
+- [ ] Graph loads with 509 nodes, 820 edges
 - [ ] Click node to see details in inspector panel
 - [ ] Pan, zoom, fit controls work
 - [ ] Colors match node types

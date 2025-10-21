@@ -3,10 +3,10 @@
 ## 🎯 **The Ancient Free Will Database is a TRIPLE-THREAT System:**
 
 ### 🧠 **Knowledge Graph (GraphRAG)** - `ancient_free_will_database.json`
-- **465 nodes** (persons, works, concepts, arguments)
-- **745 edges** (relationships, influences, citations)
+- **509 nodes** (164 persons, 117 arguments, 85 concepts, 50 works, 53 reformulations, 13 quotes, 27 other types)
+- **820 edges** (relationships, influences, citations)
 - **GraphRAG capabilities** for complex philosophical relationship queries
-- **13MB JSON file** with comprehensive metadata
+- **12.7 MB JSON file** with comprehensive metadata
 
 ### 🗄️ **PostgreSQL Database** - `ancient_free_will_db` (localhost:5433)
 - **289 texts** with full content and metadata
@@ -206,10 +206,10 @@ docker exec -it ancient_free_will_postgres psql -U free_will_user -d ancient_fre
 ## 🎯 **Key Points:**
 
 ### 🧠 **Knowledge Graph Access:**
-1. **465 nodes** with philosophical concepts and relationships
+1. **509 nodes** with philosophical concepts and relationships
 2. **GraphRAG queries** for complex relationship traversal
 3. **JSON format** with comprehensive metadata and citations
-4. **13MB file** containing the complete knowledge structure
+4. **12.7 MB file** containing the complete knowledge structure
 
 ### 🗄️ **PostgreSQL Access:**
 1. **289 texts** stored in database tables with full content

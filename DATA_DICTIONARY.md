@@ -208,14 +208,46 @@ Valid values for `type` field:
 
 ### Historical Periods
 
+**Note:** This database tracks ancient free will concepts (4th BCE - 6th CE) **and their reception history** through modern philosophy (Medieval - Contemporary).
+
 Standard values for `period` field:
 
+#### Ancient Periods (4th BCE - 6th CE) - Core Focus
+
+- **Presocratic**: 6th-5th century BCE (Parmenides, Leucippus, Democritus)
 - **Classical Greek**: 5th-4th century BCE (Socrates, Plato, Aristotle)
 - **Hellenistic Greek**: 3rd-1st century BCE (Epicurus, Stoics, Skeptics)
-- **Roman Republican**: 2nd-1st century BCE (Cicero)
-- **Roman Imperial**: 1st-3rd century CE (Seneca, Epictetus, Marcus Aurelius)
-- **Patristic**: 2nd-5th century CE (Early Christian Fathers)
-- **Late Antiquity**: 4th-6th century CE (Neoplatonism, Boethius)
+- **Roman Republican**: 2nd-1st century BCE (Cicero, Lucretius)
+- **Roman Imperial**: 1st-3rd century CE (Seneca, Epictetus, Marcus Aurelius, Philo, Alexander of Aphrodisias)
+- **Patristic**: 2nd-5th century CE (Early Christian Fathers - Justin, Origen, Augustine)
+- **Late Antiquity**: 4th-6th century CE (Neoplatonism, late Patristics, Boethius)
+
+#### Medieval Periods (7th-15th c. CE) - Reception History
+
+- **Early Medieval**: 7th-11th century CE (John of Damascus, Anselm, early Islamic philosophy)
+- **High Medieval**: 12th-13th century CE (Thomas Aquinas, high Scholasticism)
+- **Late Medieval**: 14th-15th century CE (Duns Scotus, Ockham, Buridan, late Scholasticism)
+
+#### Early Modern Periods (15th-18th c. CE) - Reception History
+
+- **Renaissance**: 15th-16th century CE (Erasmus, humanist debates)
+- **Reformation**: 16th-17th century CE (Luther, Calvin, Protestant theology)
+- **Counter-Reformation**: 16th-17th century CE (Molina, Suárez, Jansenism, De Auxiliis controversy)
+- **Early Modern Rationalism**: 17th century CE (Descartes, Spinoza, Leibniz)
+- **Early Modern Empiricism**: 17th-18th century CE (Hobbes, Locke, Hume, Reid)
+- **Enlightenment**: 18th century CE (Kant, Wolff, Edwards)
+
+#### Modern and Contemporary Periods (19th-21st c. CE) - Reception History
+
+- **19th Century**: 1800-1900 CE (Schopenhauer, Mill, Nietzsche, James, Bergson)
+- **20th Century Analytic**: 1900-2000 CE (Ayer, Strawson, Frankfurt, van Inwagen, Kane)
+- **20th Century Continental**: 1900-2000 CE (Sartre, Camus, existentialism)
+- **21st Century**: 2000-present (contemporary debates, neuroscience)
+
+#### Special Categories
+
+- **Second Temple Judaism**: c. 516 BCE - 70 CE (Dead Sea Scrolls, Philo, Biblical texts)
+- **Rabbinic Judaism**: c. 70 CE - 600 CE (early rabbinic concepts)
 
 ### Philosophical Schools
 

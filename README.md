@@ -2,8 +2,8 @@
 
 A revolutionary **triple-threat** digital humanities platform combining:
 
-1. **🧠 Knowledge Graph (KG)** with GraphRAG capabilities - 465 nodes, 745 edges
-2. **🗄️ PostgreSQL Database** with full-text search and linguistic analysis - 289 texts, 35M+ characters  
+1. **🧠 Knowledge Graph (KG)** with GraphRAG capabilities - 509 nodes, 820 edges
+2. **🗄️ PostgreSQL Database** with full-text search and linguistic analysis - 289 texts, 35M+ characters
 3. **🔍 Vector Database** for semantic search with Gemini embeddings - 285 texts with embeddings
 
 This comprehensive system enables unprecedented research across ancient philosophical and theological works relevant to free will debates, spanning from Aristotle (4th c. BCE) through Augustine (5th c. CE).
@@ -38,9 +38,10 @@ This will:
 ## 📊 System Overview
 
 ### 🧠 Knowledge Graph (GraphRAG)
-- **Nodes:** 465 (persons, works, concepts, arguments)
-- **Edges:** 745 (relationships, citations, influences)
-- **Coverage:** 8 historical phases from Aristotle to Boethius
+- **Nodes:** 509 (164 persons, 117 arguments, 85 concepts, 50 works, 53 reformulations, 13 quotes, 27 other types)
+- **Edges:** 820 (relationships, citations, influences)
+- **Coverage:** 68 historical periods from Aristotle to Boethius
+- **Bibliography:** 1,706 references (785 ancient sources, 921 modern scholarship)
 - **GraphRAG:** Advanced retrieval-augmented generation capabilities
 - **Format:** JSON with comprehensive metadata and citations
 
@@ -70,7 +71,7 @@ kg_query = {
 }
 
 # Semantic traversal of philosophical influences
-traversal_path = "Aristotle -> Nicomachean Ethics -> Stoic compatibilism -> Christian libertarianism"
+traversal_path = "Aristotle -> Nicomachean Ethics -> Stoic compatibilism -> Christian free will doctrine"
 ```
 
 ### 🗄️ PostgreSQL Full-Text Search
@@ -197,6 +198,16 @@ Access PgAdmin for visual database management:
 
 ## 🔗 Multi-Modal Integration
 
+This **triple-threat system** represents the most comprehensive digital collection of ancient free will debates, combining:
+
+- **🧠 Knowledge Graph (GraphRAG)**: 509 nodes, 820 edges mapping philosophical relationships
+- **🗄️ PostgreSQL Database**: 289 texts, 35M+ characters with full-text search
+- **🔍 Vector Database**: 285 texts with Gemini embeddings for semantic search
+
+Spanning from Aristotle (4th c. BCE) through Augustine (5th c. CE), this multi-modal platform enables unprecedented research across Greek and Latin philosophical and theological literature with advanced AI-powered capabilities.
+
+**EleutherIA** - The Ancient Free Will Database: Where Knowledge Graphs meet Full-Text Search meets Semantic AI!
+
 The system provides seamless integration across all three components:
 
 ### 🧠 Knowledge Graph ↔ PostgreSQL
@@ -272,16 +283,3 @@ def comprehensive_research(query):
 
 All texts maintain proper attribution and source information, with links to original manuscripts, modern scholarly references, and linguistic analysis sources.
 
----
-
-## 🏆 Revolutionary Achievement
-
-This **triple-threat system** represents the most comprehensive digital collection of ancient free will debates, combining:
-
-- **🧠 Knowledge Graph (GraphRAG)**: 465 nodes, 745 edges mapping philosophical relationships
-- **🗄️ PostgreSQL Database**: 289 texts, 35M+ characters with full-text search  
-- **🔍 Vector Database**: 285 texts with Gemini embeddings for semantic search
-
-Spanning from Aristotle (4th c. BCE) through Augustine (5th c. CE), this multi-modal platform enables unprecedented research across Greek and Latin philosophical and theological literature with advanced AI-powered capabilities.
-
-**EleutherIA** - The Ancient Free Will Database: Where Knowledge Graphs meet Full-Text Search meets Semantic AI! 🚀
