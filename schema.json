@@ -168,7 +168,9 @@
               "event",
               "school",
               "group",
-              "argument_framework"
+              "argument_framework",
+              "quote",
+              "conceptual_evolution"
             ],
             "description": "Node type classification"
           },

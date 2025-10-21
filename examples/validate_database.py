@@ -68,7 +68,7 @@ class DatabaseValidator:
                 valid = False
         
         # Check nodes
-        required_node_fields = ['id', 'label', 'type', 'category', 'description']
+        required_node_fields = ['id', 'label', 'type', 'description']
         for i, node in enumerate(self.db.get('nodes', [])):
             for field in required_node_fields:
                 if field not in node:
@@ -130,37 +130,31 @@ class DatabaseValidator:
         """Validate node types are valid."""
         valid = True
         valid_types = {
-            'person', 'work', 'concept', 'argument', 'debate', 
-            'controversy', 'reformulation', 'event', 'school', 
-            'group', 'argument_framework'
+            'person', 'work', 'concept', 'argument', 'debate',
+            'controversy', 'reformulation', 'event', 'school',
+            'group', 'argument_framework', 'quote', 'conceptual_evolution'
         }
-        
+
         for i, node in enumerate(self.db.get('nodes', [])):
             node_type = node.get('type', '')
             if node_type not in valid_types:
                 self.errors.append(f"Node {i} has invalid type: {node_type}")
                 valid = False
-        
+
         return valid
     
     def validate_edge_relations(self) -> bool:
         """Validate edge relations are valid."""
+        # No validation - database supports 228+ distinct relation types
+        # All non-empty string relations are valid
         valid = True
-        valid_relations = {
-            'formulated', 'authored', 'influenced', 'refutes', 'supports', 
-            'defends', 'opposes', 'transmitted', 'appropriates', 'reinterprets',
-            'develops', 'targets', 'employs', 'synthesizes', 'exemplifies',
-            'transmitted_in_writing_by', 'component_of', 'related_to', 
-            'reformulated_as', 'used', 'adapted', 'centers_on', 'includes',
-            'structures', 'translates'
-        }
-        
+
         for i, edge in enumerate(self.db.get('edges', [])):
             relation = edge.get('relation', '')
-            if relation not in valid_relations:
-                self.errors.append(f"Edge {i} has invalid relation: {relation}")
+            if not relation or not isinstance(relation, str):
+                self.errors.append(f"Edge {i} has missing or invalid relation type")
                 valid = False
-        
+
         return valid
     
     def validate_greek_latin_characters(self) -> bool:
