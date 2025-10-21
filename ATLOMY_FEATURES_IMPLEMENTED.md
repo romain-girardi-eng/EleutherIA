@@ -1,7 +1,7 @@
 # ATLOMY-Inspired Features - Implementation Complete
 
 **Date:** 2025-10-21
-**Developer:** Claude Code (for Romain Girardi)
+**Developer:** Romain Girardi
 **Status:** ✅ All core features implemented
 
 ---
@@ -597,6 +597,3 @@ Romain Girardi
 ---
 
 **Happy visualizing! 📊🎓**
-
-*Generated with ❤️ by Claude Code for the EleutherIA project*
-*October 21, 2025*

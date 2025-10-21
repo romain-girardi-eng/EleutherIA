@@ -423,13 +423,7 @@ Answer (with citations):"""
                 answer = result["response"]
                 provider_used = result.get("provider", "unknown")
                 logger.info(f"✅ Generated answer with {provider_used}: {len(answer)} characters")
-                
-                # Add provider info to the answer for transparency
-                if provider_used == "ollama":
-                    answer = f"[Generated with local Mistral 7B]\n\n{answer}"
-                elif provider_used == "gemini":
-                    answer = f"[Generated with Gemini 2.0 Flash]\n\n{answer}"
-                
+
                 return answer
             else:
                 logger.error(f"❌ Empty response from LLM service: {result}")

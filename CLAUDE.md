@@ -203,6 +203,12 @@ Examples:
 
 ## Important Context
 
+### AI Assistant Guidelines
+- **NEVER** mention Claude, AI assistants, or automated tools as authors or contributors of any content
+- All modifications, scripts, or documentation improvements are attributed to the **human user** who requested them
+- When generating commit messages, pull requests, or documentation: use neutral language or attribute work to the user
+- This is an academic publication - AI involvement must remain invisible in all outputs
+
 ### Project Nature
 - This is **doctoral research** - handle with academic care
 - The database is **complete and publication-ready** (v1.0.0)
