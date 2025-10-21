@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import CytoscapeVisualizer from '../components/CytoscapeVisualizer';
+import CytoscapeVisualizerEnhanced from '../components/CytoscapeVisualizerEnhanced';
 import { apiClient } from '../api/client';
 import type { CytoscapeData } from '../types';
 
@@ -145,15 +145,15 @@ export default function KGVisualizerPage() {
       )}
 
       {/* Visualizer */}
-      <div className="academic-card p-0 overflow-hidden" style={{ height: '600px' }}>
+      <div className="academic-card p-4 overflow-hidden">
         {mode === 'cytoscape' ? (
-          <CytoscapeVisualizer
+          <CytoscapeVisualizerEnhanced
             data={data}
             onNodeClick={(nodeId) => console.log('Node clicked:', nodeId)}
             onEdgeClick={(edgeId) => console.log('Edge clicked:', edgeId)}
           />
         ) : (
-          <div className="flex items-center justify-center h-full bg-gradient-to-br from-purple-50 to-blue-50">
+          <div className="flex items-center justify-center h-full bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg">
             <div className="text-center p-8">
               <div className="text-6xl mb-4">🌌</div>
               <h3 className="text-2xl font-semibold mb-2">Semativerse Integration</h3>
@@ -171,13 +171,45 @@ export default function KGVisualizerPage() {
 
       {/* Instructions */}
       <div className="academic-card bg-primary-50 border-primary-200">
-        <h3 className="font-semibold mb-2">How to Use</h3>
-        <ul className="text-sm text-academic-text space-y-1 list-disc list-inside">
-          <li>Click and drag to pan the graph</li>
-          <li>Scroll to zoom in/out</li>
-          <li>Click on nodes to see details</li>
-          <li>Use the controls in the bottom-right to navigate</li>
-        </ul>
+        <h3 className="font-semibold mb-3">Enhanced Features</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div>
+            <h4 className="font-medium mb-2">🎯 Navigation</h4>
+            <ul className="text-academic-text space-y-1">
+              <li>• Click & drag to pan</li>
+              <li>• Scroll to zoom in/out</li>
+              <li>• Double-click node to center</li>
+              <li>• Press <kbd className="px-1 py-0.5 bg-white rounded text-xs">R</kbd> to reset view</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-medium mb-2">📊 Controls</h4>
+            <ul className="text-academic-text space-y-1">
+              <li>• Filter by node type (top-left)</li>
+              <li>• Change graph layout</li>
+              <li>• Export as PNG/SVG/CSV</li>
+              <li>• Generate bibliography</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-medium mb-2">📖 Node Details</h4>
+            <ul className="text-academic-text space-y-1">
+              <li>• Click node for full details</li>
+              <li>• View ancient sources</li>
+              <li>• Copy formatted citation</li>
+              <li>• Navigate to connections</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-medium mb-2">⌨️ Shortcuts</h4>
+            <ul className="text-academic-text space-y-1">
+              <li>• Press <kbd className="px-1 py-0.5 bg-white rounded text-xs">H</kbd> for help overlay</li>
+              <li>• <kbd className="px-1 py-0.5 bg-white rounded text-xs">ESC</kbd> to deselect</li>
+              <li>• <kbd className="px-1 py-0.5 bg-white rounded text-xs">+/-</kbd> to zoom</li>
+              <li>• <kbd className="px-1 py-0.5 bg-white rounded text-xs">C</kbd> to center selected</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );

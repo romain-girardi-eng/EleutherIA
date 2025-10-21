@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
 import { Network, Search, MessageSquare, BookOpen } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+import InteractiveTour from '../components/InteractiveTour';
 
 export default function HomePage() {
   return (
     <div className="space-y-12">
+      {/* Interactive Tour Component */}
+      <InteractiveTour autoStart={true} />
       {/* Hero Section */}
       <section className="text-center -mt-4 pt-0 pb-12">
         <div className="flex justify-center mb-4">
@@ -27,6 +30,7 @@ export default function HomePage() {
           title="Knowledge Graph"
           description="Explore 508 nodes and 831 relationships in an interactive network visualization"
           icon={<Network className="w-12 h-12" />}
+          dataTour="kg-card"
         />
 
         <FeatureCard
@@ -34,6 +38,7 @@ export default function HomePage() {
           title="Hybrid Search"
           description="Full-text, lemmatic, and semantic search across 289 ancient texts"
           icon={<Search className="w-12 h-12" />}
+          dataTour="search-card"
         />
 
         <FeatureCard
@@ -41,6 +46,7 @@ export default function HomePage() {
           title="GraphRAG Q&A"
           description="Ask questions and get scholarly answers grounded in the knowledge graph"
           icon={<MessageSquare className="w-12 h-12" />}
+          dataTour="graphrag-card"
         />
 
         <FeatureCard
@@ -48,11 +54,12 @@ export default function HomePage() {
           title="Ancient Texts"
           description="Browse and read 289 ancient Greek and Latin texts with lemmatization"
           icon={<BookOpen className="w-12 h-12" />}
+          dataTour="texts-card"
         />
       </section>
 
       {/* Statistics */}
-      <section className="academic-card relative overflow-hidden">
+      <section className="academic-card relative overflow-hidden" data-tour="stats">
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-academic-bg to-transparent opacity-50"></div>
         <div className="relative z-10">
           <h3 className="text-2xl font-serif font-bold mb-6">Database Statistics</h3>
@@ -109,11 +116,13 @@ function FeatureCard({
   title,
   description,
   icon,
+  dataTour,
 }: {
   to: string;
   title: string;
   description: string;
   icon: React.ReactNode;
+  dataTour?: string;
 }) {
   return (
     <Link
@@ -124,6 +133,7 @@ function FeatureCard({
       }}
       onMouseEnter={(e) => e.currentTarget.style.borderColor = '#769687'}
       onMouseLeave={(e) => e.currentTarget.style.borderColor = ''}
+      data-tour={dataTour}
     >
       <div className="flex gap-4">
         <div className="flex-shrink-0 transition-all duration-300 group-hover:scale-110" style={{ color: '#769687' }}>

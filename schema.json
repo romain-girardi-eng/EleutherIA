@@ -257,6 +257,29 @@
               "type": "string"
             },
             "description": "Languages used"
+          },
+          "scholarly_role": {
+            "type": "string",
+            "description": "Role classification situating person nodes within historical through modern reception contexts",
+            "enum": [
+              "ancient_primary",
+              "late_antique_theologian",
+              "medieval_development",
+              "early_modern_transition",
+              "modern_analytic_philosopher",
+              "modern_scholar",
+              "unspecified"
+            ]
+          },
+          "ancient_source_status": {
+            "type": "string",
+            "description": "Quality-control flag indicating whether required ancient/primary sources are documented, pending, or intentionally not applicable",
+            "enum": [
+              "documented",
+              "missing_required",
+              "not_applicable",
+              "needs_classification"
+            ]
           }
         }
       }

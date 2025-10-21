@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Sparkles } from 'lucide-react';
 import HomePage from './pages/HomePage';
 import KGVisualizerPage from './pages/KGVisualizerPage';
 import SearchPage from './pages/SearchPage';
@@ -13,30 +14,59 @@ import './index.css';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-academic-bg">
-        {/* Header / Navigation */}
-        <header className="bg-academic-paper border-b border-academic-border shadow-sm sticky top-0 z-50">
-          <nav className="academic-container">
-            <div className="flex items-center justify-between py-1 sm:py-0 sm:h-12">
-              {/* Logo */}
-              <Link to="/" className="hover:opacity-80 transition-opacity flex-shrink-0">
-                <img
-                  src="/logo.svg"
-                  alt="EleutherIA - Ancient Free Will Database"
-                  className="h-10 sm:h-20 w-auto"
-                />
-              </Link>
+      <AppContent />
+    </Router>
+  );
+}
 
-              {/* Navigation Links - Hidden on mobile */}
-              <div className="hidden lg:flex items-center space-x-6">
-                <NavLink to="/database">Database</NavLink>
-                <NavLink to="/visualizer">Knowledge Graph</NavLink>
-                <NavLink to="/search">Search</NavLink>
-                <NavLink to="/graphrag">GraphRAG Q&A</NavLink>
-                <NavLink to="/texts">Ancient Texts</NavLink>
-                <NavLink to="/bibliography">Bibliography</NavLink>
-                <NavLink to="/about">About</NavLink>
-              </div>
+function AppContent() {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
+  const handleTourClick = () => {
+    const trigger = document.querySelector('[data-tour-trigger="true"]') as HTMLButtonElement;
+    if (trigger) {
+      trigger.click();
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-academic-bg">
+      {/* Header / Navigation */}
+      <header className="bg-academic-paper border-b border-academic-border shadow-sm sticky top-0 z-50">
+        <nav className="academic-container">
+          <div className="flex items-center justify-between py-1 sm:py-0 sm:h-12">
+            {/* Logo */}
+            <Link to="/" className="hover:opacity-80 transition-opacity flex-shrink-0">
+              <img
+                src="/logo.svg"
+                alt="EleutherIA - Ancient Free Will Database"
+                className="h-10 sm:h-20 w-auto"
+              />
+            </Link>
+
+            {/* Navigation Links - Hidden on mobile */}
+            <div className="hidden lg:flex items-center space-x-6">
+              <NavLink to="/database">Database</NavLink>
+              <NavLink to="/visualizer">Knowledge Graph</NavLink>
+              <NavLink to="/search">Search</NavLink>
+              <NavLink to="/graphrag">GraphRAG Q&A</NavLink>
+              <NavLink to="/texts">Ancient Texts</NavLink>
+              <NavLink to="/bibliography">Bibliography</NavLink>
+              <NavLink to="/about">About</NavLink>
+
+              {/* Tour Button - Only visible on homepage */}
+              {isHomePage && (
+                <button
+                  onClick={handleTourClick}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary-600 to-primary-700 text-white text-sm font-medium hover:from-primary-700 hover:to-primary-800 transition-all duration-200 hover:shadow-md hover:scale-105 group"
+                  aria-label="Take an interactive tour"
+                >
+                  <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+                  <span>Take a Tour</span>
+                </button>
+              )}
+            </div>
 
               {/* Mobile Menu Button */}
               <button
@@ -62,6 +92,21 @@ function App() {
                 <NavLink to="/texts">Ancient Texts</NavLink>
                 <NavLink to="/bibliography">Bibliography</NavLink>
                 <NavLink to="/about">About</NavLink>
+
+                {/* Tour Button in Mobile Menu - Only visible on homepage */}
+                {isHomePage && (
+                  <button
+                    onClick={() => {
+                      handleTourClick();
+                      const mobileMenu = document.getElementById('mobile-menu');
+                      mobileMenu?.classList.add('hidden');
+                    }}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-primary-600 to-primary-700 text-white text-sm font-medium hover:from-primary-700 hover:to-primary-800 transition-all duration-200 mt-2"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    <span>Take a Tour</span>
+                  </button>
+                )}
               </div>
             </div>
           </nav>
@@ -161,7 +206,6 @@ function App() {
           </div>
         </footer>
       </div>
-    </Router>
   );
 }
 
