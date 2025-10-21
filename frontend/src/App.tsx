@@ -97,10 +97,10 @@ function App() {
               <div className="pb-4 sm:pb-0">
                 <h3 className="font-semibold text-sm mb-3">Data</h3>
                 <ul className="text-xs text-academic-muted space-y-1">
-                  <li>465 Knowledge Graph Nodes</li>
-                  <li>740 Edges & Relationships</li>
+                  <li>508 Knowledge Graph Nodes</li>
+                  <li>831 Edges & Relationships</li>
                   <li>289 Ancient Texts</li>
-                  <li>200+ Bibliography References</li>
+                  <li>860+ Bibliography References</li>
                 </ul>
               </div>
 

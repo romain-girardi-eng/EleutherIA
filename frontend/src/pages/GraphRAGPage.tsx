@@ -287,7 +287,7 @@ export default function GraphRAGPage() {
                 and synthesizes scholarly answers with automatic citations.
               </p>
               <p className="text-xs sm:text-sm text-academic-muted mb-3 sm:mb-4 px-4">
-                <strong>465 nodes • 745 relationships • 200+ sources</strong>
+                <strong>508 nodes • 831 relationships • 860+ sources</strong>
               </p>
               <div className="text-xs sm:text-sm text-academic-muted space-y-1 px-4">
                 <p className="font-medium mb-1">Example questions:</p>
@@ -382,7 +382,7 @@ export default function GraphRAGPage() {
               <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
                 <div className="font-semibold text-primary-800 mb-1.5">1. Vector Search</div>
                 <p className="text-academic-muted leading-relaxed text-xs">
-                  Your query is embedded using Gemini and compared against 465 KG node embeddings
+                  Your query is embedded using Gemini and compared against 508 KG node embeddings
                   in Qdrant to find semantically relevant starting points.
                 </p>
               </div>

@@ -25,7 +25,7 @@ export default function HomePage() {
         <FeatureCard
           to="/visualizer"
           title="Knowledge Graph"
-          description="Explore 465 nodes and 740 relationships in an interactive network visualization"
+          description="Explore 508 nodes and 831 relationships in an interactive network visualization"
           icon={<Network className="w-12 h-12" />}
         />
 
@@ -57,10 +57,10 @@ export default function HomePage() {
         <div className="relative z-10">
           <h3 className="text-2xl font-serif font-bold mb-6">Database Statistics</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <StatItem label="KG Nodes" value="465" delay={0} />
-            <StatItem label="Edges" value="740" delay={100} />
+            <StatItem label="KG Nodes" value="508" delay={0} />
+            <StatItem label="Edges" value="831" delay={100} />
             <StatItem label="Ancient Texts" value="289" delay={200} />
-            <StatItem label="Citations" value="200+" delay={300} />
+            <StatItem label="Citations" value="860+" delay={300} />
           </div>
         </div>
       </section>

@@ -92,9 +92,9 @@ export default function DatabasePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <StatCard number="465" label="Nodes" sublabel="Entities & Concepts" icon={<Network className="w-5 h-5" />} />
-          <StatCard number="745" label="Edges" sublabel="Relationships" icon={<Network className="w-5 h-5" />} />
-          <StatCard number="11" label="Node Types" icon={<Database className="w-5 h-5" />} />
+          <StatCard number="508" label="Nodes" sublabel="Entities & Concepts" icon={<Network className="w-5 h-5" />} />
+          <StatCard number="831" label="Edges" sublabel="Relationships" icon={<Network className="w-5 h-5" />} />
+          <StatCard number="13" label="Node Types" icon={<Database className="w-5 h-5" />} />
         </div>
 
         <div className="bg-academic-bg rounded-lg p-6">
@@ -156,8 +156,8 @@ export default function DatabasePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <StatCard number="200+" label="Bibliography References" icon={<GraduationCap className="w-5 h-5" />} />
-          <StatCard number="100%" label="Citation Coverage" sublabel="All KG nodes cited" icon={<FileText className="w-5 h-5" />} />
+          <StatCard number="860+" label="Bibliography References" icon={<GraduationCap className="w-5 h-5" />} />
+          <StatCard number="91.8%" label="Citation Coverage" sublabel="Critical nodes cited" icon={<FileText className="w-5 h-5" />} />
         </div>
 
         <div className="bg-academic-bg rounded-lg p-6">
