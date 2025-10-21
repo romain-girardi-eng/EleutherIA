@@ -1,0 +1,665 @@
+{
+  "summary": {
+    "total_nodes": 508,
+    "total_uncited": 107,
+    "uncited_percentage": 21.062992125984252
+  },
+  "by_type": {
+    "conceptual_evolution": [
+      {
+        "id": "evolution_eph_hemin_6284cf6d",
+        "label": "Evolution of τὸ ἐφ' ἡμῖν (to eph' hêmin)",
+        "period": null,
+        "description": ""
+      },
+      {
+        "id": "evolution_heimarmene_2b989ed0",
+        "label": "Evolution of εἱμαρμένη (heimarmenê)",
+        "period": null,
+        "description": ""
+      },
+      {
+        "id": "evolution_will_concept_c68f04bd",
+        "label": "Evolution of Will (various terms)",
+        "period": null,
+        "description": ""
+      }
+    ],
+    "controversy": [
+      {
+        "id": "controversy_luther_erasmus_1m5h6i24",
+        "label": "Luther vs. Erasmus Debate on Free Will",
+        "period": "Reformation",
+        "description": "Foundational Reformation controversy between Martin Luther and Erasmus on the bondage vs. freedom of the will. Erasmus (1524): humans possess weakened but genuine free will; Scripture ambiguous; moder"
+      },
+      {
+        "id": "controversy_de_auxiliis_2n6i7j35",
+        "label": "De Auxiliis Controversy",
+        "period": "Counter-Reformation",
+        "description": "Major Catholic theological controversy between Jesuits (Molinists) and Dominicans (Bañezians) over reconciling divine grace with human freedom. Molinists defended middle knowledge and simultaneous con"
+      },
+      {
+        "id": "controversy_hobbes_bramhall_3o7j8k46",
+        "label": "Hobbes vs. Bramhall Debate on Liberty and Necessity",
+        "period": "Reformation",
+        "description": "Extended debate between Thomas Hobbes and Bishop John Bramhall on freedom, determinism, and moral responsibility. Hobbes defended mechanistic determinism and compatibilism (liberty = absence of extern"
+      },
+      {
+        "id": "controversy_hume_reid_4p8k9l57",
+        "label": "Hume vs. Reid on Causation and Free Will",
+        "period": "Enlightenment",
+        "description": "Scottish Enlightenment debate between David Hume's compatibilism and Thomas Reid's agent-causation libertarianism. Hume argued for regularity theory of causation and compatibilism. Reid rejected Hume'"
+      },
+      {
+        "id": "controversy_synod_of_dort_5q9l0m68",
+        "label": "Synod of Dort",
+        "period": "Reformation",
+        "description": "International Reformed synod convened to address Arminian Remonstrant challenge to Calvinist orthodoxy. Condemned five points of Arminianism; affirmed five points of Calvinism (TULIP): Total depravity"
+      }
+    ],
+    "debate": [
+      {
+        "id": "debate_compatibility_question_ea55e118",
+        "label": "The Compatibility Question",
+        "period": "Classical Greek",
+        "description": "The central question in free will debates: **Is freedom compatible with determinism?** This question divides philosophers into compatibilists (freedom and determinism can coexist) and incompatibilists"
+      },
+      {
+        "id": "debate_source_of_action_90c57974",
+        "label": "Internal vs External Causes",
+        "period": "Classical Greek",
+        "description": "The debate over whether actions originate from **internal** (character, desires, reason) or **external** (fate, environment, prior causes) sources. Related to the ancient debate between **eph' hêmin**"
+      },
+      {
+        "id": "debate_divine_foreknowledge_235f2530",
+        "label": "Providence, Foreknowledge, and Freedom",
+        "period": "Patristic",
+        "description": "The ancient theological problem: **If God foreknows all future events, are they necessary?** If so, human freedom seems impossible.\n\n**Origins**: Discussed by Aristotle (sea battle, De Int. 9), intens"
+      },
+      {
+        "id": "debate_reason_vs_will_830c90c2",
+        "label": "Intellectualism vs Voluntarism",
+        "period": "High Medieval",
+        "description": "The medieval debate: Which faculty is **primary** in human action - **intellect** (reason) or **will**?\n\n**Intellectualism** (Aquinas, Dominicans):\n- Intellect is primary: **will necessarily follows l"
+      },
+      {
+        "id": "debate_randomness_objection_ae34a974",
+        "label": "The Randomness/Luck Objection to Libertarianism",
+        "period": "20th Century Analytic",
+        "description": "The objection that **libertarian free will makes choices random/lucky** rather than free. If choices are not determined by reasons/character, they seem arbitrary.\n\n**The objection**: If agent has genu"
+      },
+      {
+        "id": "debate_stoic_academic_hellenistic",
+        "label": "Stoic-Academic Debate on Fate",
+        "period": "Hellenistic Greek",
+        "description": "Central Hellenistic debate between Stoics (esp. Chrysippus) and Academic Skeptics (esp. Carneades) on fate, determinism, and moral responsibility"
+      },
+      {
+        "id": "debate_christian_gnostic_freedom",
+        "label": "Christian-Gnostic Debate on Freedom",
+        "period": "Patristic",
+        "description": "Patristic debate on human freedom (autexousion) vs cosmic determinism between Christian theologians and Gnostic teachers"
+      },
+      {
+        "id": "debate_augustine_pelagius_grace",
+        "label": "Augustine-Pelagius on Grace and Free Will",
+        "period": "Late Antiquity",
+        "description": "Foundational Christian debate on the relationship between divine grace and human free will"
+      },
+      {
+        "id": "debate_alexander_stoics_determinism",
+        "label": "Alexander vs Stoics on Determinism",
+        "period": "Roman Imperial",
+        "description": "Alexander of Aphrodisias' Peripatetic defense of libertarian free will against Stoic compatibilism"
+      }
+    ],
+    "event": [
+      {
+        "id": "council_carthage_418",
+        "label": "Council of Carthage (418 CE)",
+        "period": null,
+        "description": "Major council that condemned Pelagianism as heresy in eight (or nine) canons, fully approved Augustine's views on original sin, grace, and infant baptism. Gave 'death blow' to Pelagianism"
+      },
+      {
+        "id": "council_orange_529",
+        "label": "Second Council of Orange (529 CE)",
+        "period": null,
+        "description": "Council that condemned Semi-Pelagianism, affirmed Augustinian doctrines of corruption, human inability, prevenient grace, and baptismal regeneration, while denying strict double predestination"
+      }
+    ],
+    "person": [
+      {
+        "id": "person_jean_buridan_attributed_e5990f67",
+        "label": "Jean Buridan (attributed)",
+        "period": "Late Medieval",
+        "description": "Jean Buridan (c. 1300-1358 CE) was a French nominalist philosopher at the University of Paris, known for logic, physics, and the famous thought experiment \"Buridan's Ass.\" Though never formally attrib"
+      },
+      {
+        "id": "person_pierre_bayle_701cb0a7",
+        "label": "Pierre Bayle",
+        "period": "Early Modern Empiricism",
+        "description": "Pierre Bayle (1647-1706 CE), French Huguenot philosopher and skeptic, authored the influential *Historical and Critical Dictionary*. He argued that reason cannot resolve the problem of evil, divine fo"
+      },
+      {
+        "id": "person_erasmus_of_rotterdam_9g3b4c02",
+        "label": "Erasmus of Rotterdam",
+        "period": "Renaissance",
+        "description": "Dutch Renaissance humanist and Catholic theologian. Defended human free will against Luther's determinism, arguing for synergistic cooperation between divine grace and human choice. Emphasized moral r"
+      },
+      {
+        "id": "person_jacobus_arminius_1i5d6e24",
+        "label": "Jacobus Arminius",
+        "period": "Reformation",
+        "description": "Dutch Reformed theologian who challenged strict Calvinist predestination. Argued for conditional predestination based on God's foreknowledge of faith, prevenient grace enabling free choice, and resist"
+      },
+      {
+        "id": "person_franciscus_gomarus_2j6e7f35",
+        "label": "Franciscus Gomarus",
+        "period": "Reformation",
+        "description": "Dutch Calvinist theologian and primary opponent of Arminius. Defended strict supralapsarian predestination and unconditional election. Leading voice at Synod of Dort against Arminian 'Remonstrants'."
+      },
+      {
+        "id": "person_luis_de_molina_expanded_3k7f8g46",
+        "label": "Luis de Molina (expanded)",
+        "period": "Counter-Reformation",
+        "description": "Spanish Jesuit theologian who developed the doctrine of middle knowledge (scientia media) to reconcile divine sovereignty with human free will. Argued God knows what every possible free creature would"
+      },
+      {
+        "id": "person_domingo_bañez_4l8g9h57",
+        "label": "Domingo Báñez",
+        "period": "Counter-Reformation",
+        "description": "Spanish Dominican theologian and opponent of Molinism. Defended Thomist doctrine of physical premotion (praemotio physica): God physically predetermines all free acts while preserving their freedom. A"
+      },
+      {
+        "id": "person_cornelius_jansen_5m9h0i68",
+        "label": "Cornelius Jansen (Jansenius)",
+        "period": "Counter-Reformation",
+        "description": "Dutch Catholic theologian and Bishop of Ypres. Developed rigorous Augustinian theology emphasizing human depravity, irresistible grace, and limited atonement—anticipating aspects of Calvinism within C"
+      },
+      {
+        "id": "person_blaise_pascal_6n0i1j79",
+        "label": "Blaise Pascal",
+        "period": "Reformation",
+        "description": "French mathematician, physicist, and theologian allied with Jansenist movement at Port-Royal. Defended Jansenism against Jesuits in Provincial Letters. Emphasized human wretchedness without grace, lim"
+      },
+      {
+        "id": "person_antoine_arnauld_7o1j2k80",
+        "label": "Antoine Arnauld",
+        "period": "Reformation",
+        "description": "French Catholic theologian, philosopher, and leading Jansenist. Collaborated with Pascal defending Jansenism. Engaged in major philosophical debates with Descartes, Malebranche, and Leibniz on ideas, "
+      },
+      {
+        "id": "person_rene_descartes_1aa22692_expanded",
+        "label": "René Descartes (expanded)",
+        "period": "Renaissance",
+        "description": "French philosopher and founder of modern rationalism. Developed systematic philosophy based on methodological doubt and cogito argument. On free will: defended libertarian freedom grounded in infinite"
+      },
+      {
+        "id": "person_nicolas_malebranche_9q3l4m02",
+        "label": "Nicolas Malebranche",
+        "period": "Reformation",
+        "description": "French Oratorian priest and Cartesian philosopher who developed occasionalism: God is the only true cause; finite beings are merely occasions for divine action. On free will: defended libertarian free"
+      },
+      {
+        "id": "person_gottfried_leibniz_0r4m5n13",
+        "label": "Gottfried Wilhelm Leibniz",
+        "period": "Reformation",
+        "description": "German polymath and rationalist philosopher. Developed compatibilist theory reconciling determinism with freedom through distinction between necessity and contingency, and between moral necessity and "
+      },
+      {
+        "id": "person_christian_wolff_1s5n6o24",
+        "label": "Christian Wolff",
+        "period": "Enlightenment",
+        "description": "German philosopher who systematized and popularized Leibnizian philosophy. Developed compatibilist position based on Principle of Sufficient Reason. Defended determinism while arguing for moral respon"
+      },
+      {
+        "id": "person_thomas_hobbes_2t6o7p35",
+        "label": "Thomas Hobbes",
+        "period": "Renaissance",
+        "description": "English philosopher who developed mechanistic materialism and compatibilist theory of freedom. Defined liberty as absence of external impediments; denied liberty of indifference. Freedom compatible wi"
+      },
+      {
+        "id": "person_john_bramhall_3u7p8q46",
+        "label": "John Bramhall",
+        "period": "Renaissance",
+        "description": "Anglican Bishop of Derry and defender of libertarian free will against Hobbes's determinism. Argued that Hobbesian necessity destroys moral responsibility, deliberation, and divine justice. Defended l"
+      },
+      {
+        "id": "person_john_locke_4v8q9r57",
+        "label": "John Locke",
+        "period": "Reformation",
+        "description": "English empiricist philosopher. Developed influential analysis of freedom, power, and moral responsibility. Distinguished freedom of action from liberty of will. Argued the will is not free (category "
+      },
+      {
+        "id": "person_anthony_collins_5w9r0s68",
+        "label": "Anthony Collins",
+        "period": "Enlightenment",
+        "description": "English deist and determinist who argued for universal necessity and denied libertarian free will. Maintained determinism supports morality by making behavior predictable and improvable through educat"
+      },
+      {
+        "id": "person_samuel_clarke_6x0s1t79",
+        "label": "Samuel Clarke",
+        "period": "Enlightenment",
+        "description": "English philosopher and Anglican clergyman. Defended libertarian free will as necessary for moral responsibility and divine justice. Argued against Leibnizian sufficient reason and Hobbesian necessity"
+      },
+      {
+        "id": "person_david_hume_7y1t2u80",
+        "label": "David Hume",
+        "period": "Enlightenment",
+        "description": "Scottish empiricist and skeptical philosopher. Developed influential compatibilist position: liberty = acting according to will; necessity = regular conjunction. Argued liberty and necessity are compa"
+      },
+      {
+        "id": "person_thomas_reid_8z2u3v91",
+        "label": "Thomas Reid",
+        "period": "Enlightenment",
+        "description": "Scottish philosopher and founder of Common Sense school. Developed agent-causation theory of free will in explicit opposition to Hume's compatibilism. Argued persons as agents cause their actions with"
+      },
+      {
+        "id": "person_immanuel_kant_0b4w5x13",
+        "label": "Immanuel Kant",
+        "period": "Enlightenment",
+        "description": "German Enlightenment philosopher who revolutionized Western philosophy. Developed transcendental idealism distinguishing phenomena from noumena. On free will: argued Third Antinomy shows theoretical r"
+      },
+      {
+        "id": "person_bobzien_susanne_contemporary",
+        "label": "Susanne Bobzien",
+        "period": "20th Century Analytic",
+        "description": "Leading scholar on ancient free will debates and their modern reception. Author of \"Determinism and Freedom in Stoic Philosophy\" (1998) and \"The Inadvertent Conception and Late Birth of the Free Will "
+      },
+      {
+        "id": "person_frede_michael_1940_2007",
+        "label": "Michael Frede",
+        "period": "20th Century Analytic",
+        "description": "Influential historian of ancient philosophy who traced the origins of free will concept. Author of \"A Free Will: Origins of the Notion in Ancient Thought\" (2011). Argued that the notion of free will f"
+      },
+      {
+        "id": "person_sorabji_richard_contemporary",
+        "label": "Richard Sorabji",
+        "period": "20th Century Analytic",
+        "description": "Scholar of ancient philosophy and its reception. Director of the Ancient Commentators Project. Author of \"Emotion and Peace of Mind\" (2000) on Stoic emotion theory and its modern relevance."
+      },
+      {
+        "id": "person_salles_ricardo_contemporary",
+        "label": "Ricardo Salles",
+        "period": "20th Century Analytic",
+        "description": "Scholar of Stoic philosophy and its modern parallels. Author of \"The Stoics on Determinism and Compatibilism\" (2008), comparing ancient Stoic arguments with contemporary analytical philosophy."
+      },
+      {
+        "id": "person_inwood_brad_contemporary",
+        "label": "Brad Inwood",
+        "period": "20th Century Analytic",
+        "description": "Leading Stoic scholar examining ancient ethics in contemporary philosophy. Editor and translator of major Stoic texts. Studies how Stoic concepts inform modern moral philosophy."
+      },
+      {
+        "id": "person_nussbaum_martha_contemporary",
+        "label": "Martha Nussbaum",
+        "period": "20th Century Analytic",
+        "description": "Philosopher connecting ancient Stoic and Aristotelian ethics to contemporary issues. Author of \"The Therapy of Desire\" examining Hellenistic philosophy's relevance to modern ethics."
+      },
+      {
+        "id": "person_annas_julia_contemporary",
+        "label": "Julia Annas",
+        "period": "20th Century Analytic",
+        "description": "Scholar reviving ancient virtue ethics in contemporary philosophy. Author of \"The Morality of Happiness\" showing how ancient eudaimonism relates to modern ethics."
+      },
+      {
+        "id": "person_bernath_laszlo_contemporary",
+        "label": "László Bernáth",
+        "period": "20th Century Analytic",
+        "description": "Scholar comparing Stoic and Frankfurtian approaches to free will. Author of \"Stoicism and Frankfurtian Compatibilism\" (2018), identifying crucial differences despite surface similarities."
+      }
+    ],
+    "reformulation": [
+      {
+        "id": "reformulation_chrysippus_reform_1f5d3806",
+        "label": "Chrysippus's reformulation",
+        "period": "Hellenistic Greek",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_cleanthes_stoic_reform_c576fe67",
+        "label": "Cleanthes (Stoic)'s reformulation",
+        "period": "Hellenistic Greek",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_chrysippus_stoic_reform_ddff96ae",
+        "label": "Chrysippus (Stoic)'s reformulation",
+        "period": "Hellenistic Greek",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_philo_the_dialectician_reform_e7c46946",
+        "label": "Philo the Dialectician's reformulation",
+        "period": "Hellenistic Greek",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_epicureans_reform_9b771ca1",
+        "label": "Epicureans's reformulation",
+        "period": "Hellenistic Greek",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_stoics_reform_f734ea75",
+        "label": "Stoics's reformulation",
+        "period": "Hellenistic Greek",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_carneades_reform_e0c2db9c",
+        "label": "Carneades's reformulation",
+        "period": "Hellenistic Greek",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_aspasius_reform_6afe87ac",
+        "label": "Aspasius's reformulation",
+        "period": "Roman Imperial",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_medieval_scholastics_aquinas_reform_ad897818",
+        "label": "Medieval scholastics (Aquinas)'s reformulation",
+        "period": "High Medieval",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_lucretius_reform_d144b3da",
+        "label": "Lucretius's reformulation",
+        "period": "Roman Republican",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_diogenes_of_oenoanda_reform_8fad58cc",
+        "label": "Diogenes of Oenoanda's reformulation",
+        "period": "Roman Imperial",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_cicero_reform_156df2f5",
+        "label": "Cicero's reformulation",
+        "period": "Roman Republican",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_aulus_gellius_reform_01ef18e6",
+        "label": "Aulus Gellius's reformulation",
+        "period": "Roman Imperial",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_origen_reform_e1e2458e",
+        "label": "Origen's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_cleanthes_reform_4128938b",
+        "label": "Cleanthes's reformulation",
+        "period": "Hellenistic Greek",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_seneca_reform_2f1a5d99",
+        "label": "Seneca's reformulation",
+        "period": "Roman Imperial",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_melissus_of_samos_reform_e1359785",
+        "label": "Melissus of Samos's reformulation",
+        "period": "Presocratic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_zeno_of_elea_reform_8d876b50",
+        "label": "Zeno of Elea's reformulation",
+        "period": "Presocratic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_epicurus_reform_6fa6ecf5",
+        "label": "Epicurus's reformulation",
+        "period": "Hellenistic Greek",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_marcus_aurelius_reform_d0f5561d",
+        "label": "Marcus Aurelius's reformulation",
+        "period": "Roman Imperial",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_plutarch_reform_5724dac6",
+        "label": "Plutarch's reformulation",
+        "period": "Roman Imperial",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_neoplatonists_plotinus_proclus_reform_98f42f33",
+        "label": "Neoplatonists (Plotinus, Proclus)'s reformulation",
+        "period": "Late Antiquity",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_aristotle_reform_bfee6d58",
+        "label": "Aristotle's reformulation",
+        "period": "Classical Greek",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_plotinus_reform_b06e63cb",
+        "label": "Plotinus's reformulation",
+        "period": "Late Antiquity",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_thomas_aquinas_reform_24cffd94",
+        "label": "Thomas Aquinas's reformulation",
+        "period": "High Medieval",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_christian_church_fathers_reform_1fd435f1",
+        "label": "Christian Church Fathers's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_porphyry_reform_7c9edeb4",
+        "label": "Porphyry's reformulation",
+        "period": "Late Antiquity",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_proclus_reform_59f4bb4f",
+        "label": "Proclus's reformulation",
+        "period": "Late Antiquity",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_tatian_the_assyrian_reform_1e3e9386",
+        "label": "Tatian the Assyrian's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_athenagoras_of_athens_reform_b22f68ec",
+        "label": "Athenagoras of Athens's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_john_hick_reform_f27ff4ec",
+        "label": "John Hick's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_eastern_orthodox_tradition_reform_542663db",
+        "label": "Eastern Orthodox tradition's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_gregory_of_nyssa_reform_19459ad8",
+        "label": "Gregory of Nyssa's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_evagrius_ponticus_reform_493066e2",
+        "label": "Evagrius Ponticus's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_didymus_the_blind_reform_8531a2f7",
+        "label": "Didymus the Blind's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_lactantius_reform_0a4443f7",
+        "label": "Lactantius's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_early_augustine_reform_9ebd9b25",
+        "label": "Early Augustine's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_later_augustine_himself_reform_2882c68a",
+        "label": "Later Augustine himself's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_anselm_of_canterbury_reform_160bc058",
+        "label": "Anselm of Canterbury's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_prosper_of_aquitaine_reform_cb1a4041",
+        "label": "Prosper of Aquitaine's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_council_of_orange_ii_reform_62ec4086",
+        "label": "Council of Orange II's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_martin_luther_reform_a7c7729f",
+        "label": "Martin Luther's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_john_calvin_reform_bc99fcc7",
+        "label": "John Calvin's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_søren_kierkegaard_reform_6d1630de",
+        "label": "Søren Kierkegaard's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_caelestius_reform_325746f0",
+        "label": "Caelestius's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_julian_of_eclanum_reform_db2360f6",
+        "label": "Julian of Eclanum's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_modern_arminianism_reform_64925e3f",
+        "label": "Modern Arminianism's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_maximus_the_confessor_reform_59191184",
+        "label": "Maximus the Confessor's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_john_of_damascus_reform_0f5b3ec4",
+        "label": "John of Damascus's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_theodore_of_mopsuestia_reform_eec8ab1a",
+        "label": "Theodore of Mopsuestia's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_theodoret_of_cyrus_reform_a4e4d121",
+        "label": "Theodoret of Cyrus's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_byzantine_homiletic_tradition_reform_39df3dd7",
+        "label": "Byzantine homiletic tradition's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      },
+      {
+        "id": "reformulation_john_scotus_eriugena_reform_29520543",
+        "label": "John Scotus Eriugena's reformulation",
+        "period": "Patristic",
+        "description": "Philosophical position reformulated for new context or in response to criticism."
+      }
+    ],
+    "work": [
+      {
+        "id": "work_frede_free_will_2011",
+        "label": "A Free Will: Origins of the Notion in Ancient Thought",
+        "period": null,
+        "description": "Traces the emergence of free will concept from Epictetus through Augustine. Argues free will is a late ancient innovation, not present in classical Greek philosophy."
+      },
+      {
+        "id": "work_bobzien_determinism_freedom_1998",
+        "label": "Determinism and Freedom in Stoic Philosophy",
+        "period": null,
+        "description": "Comprehensive analysis of Stoic compatibilism and its influence on modern debates. Links Chrysippus to contemporary compatibilist theories."
+      },
+      {
+        "id": "work_salles_stoics_determinism_2008",
+        "label": "The Stoics on Determinism and Compatibilism",
+        "period": null,
+        "description": "Examines Stoic arguments in light of contemporary analytical philosophy, showing parallels and differences."
+      },
+      {
+        "id": "work_sorabji_emotion_peace_2000",
+        "label": "Emotion and Peace of Mind",
+        "period": null,
+        "description": "Studies Stoic emotion theory and its reception in modern philosophy of mind and cognitive therapy."
+      },
+      {
+        "id": "work_bernath_stoicism_frankfurt_2018",
+        "label": "Stoicism and Frankfurtian Compatibilism",
+        "period": null,
+        "description": "Compares Stoic and Frankfurt's hierarchical theories, finding important differences despite surface similarities."
+      }
+    ]
+  }
+}

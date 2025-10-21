@@ -1,0 +1,331 @@
+{
+  "summary": {
+    "total_concepts": 85,
+    "has_greek": 35,
+    "has_latin": 52,
+    "has_both": 35,
+    "needs_work": 50
+  },
+  "needs_latin": [],
+  "needs_greek": [
+    {
+      "id": "concept_pelagianism",
+      "label": "Pelagianism",
+      "latin_term": "Pelagianismus",
+      "period": "Patristic",
+      "description": "Movement associated with British monk Pelagius (fl. 400-420 CE) emphasizing human moral capacity and rejecting Augustine's doctrines of original sin and absolute necessity of grace. Key tenets: (1) Ad"
+    },
+    {
+      "id": "concept_semi_pelagianism",
+      "label": "Semi-Pelagianism",
+      "latin_term": "Semi-Pelagianismus",
+      "period": "Patristic",
+      "description": "5th-century mediating position between Pelagianism and Augustinianism, associated with John Cassian and monks of Lérins (Gaul). Accepted human fallenness and need for grace but rejected Augustinian do"
+    },
+    {
+      "id": "concept_liberum_arbitrium_u3v4w5x6",
+      "label": "Free Choice (Liberum Arbitrium)",
+      "latin_term": "liberum arbitrium",
+      "period": "High Medieval",
+      "description": "Central medieval term for freedom of choice. Etymology: liberum (free) + arbitrium (judgment/decision). Refers to human capacity for self-determined choice among goods. For scholastics, liberum arbitr"
+    },
+    {
+      "id": "concept_voluntas_y7z8a9b0",
+      "label": "Will (Voluntas)",
+      "latin_term": "voluntas",
+      "period": "High Medieval",
+      "description": "The will as faculty of rational soul. For scholastics, voluntas is rational appetite (appetitus rationalis) that follows upon intellectual apprehension of good. Major debate: does intellect necessitat"
+    },
+    {
+      "id": "concept_intellectus_c1d2e3f4",
+      "label": "Intellect (Intellectus)",
+      "latin_term": "intellectus",
+      "period": "High Medieval",
+      "description": "Medieval term for intellect encompasses agent intellect (intellectus agens) which abstracts forms, and possible/patient intellect (intellectus possibilis/patiens) which receives intelligible forms. Ce"
+    },
+    {
+      "id": "concept_synderesis_g5h6i7j8",
+      "label": "Synderesis",
+      "latin_term": "synderesis / synteresis",
+      "period": "High Medieval",
+      "description": "Mysterious medieval concept possibly from Jerome's mistranscription of Stoic syneidesis (moral consciousness). Scholastics debated whether synderesis is habit in intellect (Aquinas) or affective power"
+    },
+    {
+      "id": "concept_potentia_absoluta_ordinata_k9l0m1n2",
+      "label": "Absolute and Ordained Power (Potentia Absoluta et Ordinata)",
+      "latin_term": "potentia absoluta et ordinata",
+      "period": "High Medieval",
+      "description": "Crucial scholastic distinction for understanding divine freedom and contingency of created order. De potentia absoluta, God could create different natural laws, different moral order, save/damn anyone"
+    },
+    {
+      "id": "concept_synchronic_contingency_s7t8u9v0",
+      "label": "Synchronic Contingency",
+      "latin_term": "contingentia synchronica",
+      "period": "High Medieval",
+      "description": "Scotus' radical view of freedom: at the very instant (in instanti) the will chooses A, it has real power (potentia realis) to choose not-A instead. This contrasts with diachronic contingency (could ha"
+    },
+    {
+      "id": "concept_diachronic_contingency_w1x2y3z4",
+      "label": "Diachronic Contingency",
+      "latin_term": "contingentia diachronica",
+      "period": "High Medieval",
+      "description": "Aquinas' view: will necessarily follows last practical judgment of intellect. At the moment of choice, given that judgment, will necessarily chooses accordingly. But agent was free in earlier moments:"
+    },
+    {
+      "id": "concept_occasionalism_a5b6c7d8",
+      "label": "Occasionalism",
+      "latin_term": "occasionalismus",
+      "period": "Early Modern Rationalism",
+      "description": "Developed by Cartesians (especially Malebranche) to solve mind-body interaction problem. If mind and body are heterogeneous substances, they cannot causally interact. Solution: God causes bodily event"
+    },
+    {
+      "id": "concept_intellectualism_medieval_i3j4k5l6",
+      "label": "Intellectualism (Medieval)",
+      "latin_term": "intellectualismus",
+      "period": "High Medieval",
+      "description": "Aquinas' position in medieval debates. Will is rational appetite moved by good as presented by intellect. Will cannot choose against what intellect finally judges best. Freedom locates primarily in in"
+    },
+    {
+      "id": "concept_voluntarism_medieval_m7n8o9p0",
+      "label": "Voluntarism (Medieval)",
+      "latin_term": "voluntarismus",
+      "period": "High Medieval",
+      "description": "Position of Scotus, Ockham, and Franciscan tradition against Thomistic intellectualism. Will doesn't necessarily follow intellect's judgment; even given intellect's presentation of A as best, will ret"
+    },
+    {
+      "id": "concept_bondage_of_will_1c5x6y24",
+      "label": "Bondage of the Will (Servum Arbitrium)",
+      "latin_term": "servum arbitrium",
+      "period": "Reformation",
+      "description": "Central Reformation doctrine opposing Erasmian synergism. Luther argued the will is either servant of God or Satan—never neutral. Post-Fall, will necessarily sins unless liberated by grace. Salvation "
+    },
+    {
+      "id": "concept_scientia_media_2d6y7z35",
+      "label": "Middle Knowledge (Scientia Media)",
+      "latin_term": "scientia media",
+      "period": "Counter-Reformation",
+      "description": "Though systematically developed by Molina (1588), concept has medieval roots in discussions of divine foreknowledge and future contingents. Attempts to reconcile libertarian free will with comprehensi"
+    },
+    {
+      "id": "concept_praemotio_physica_3e7z8a46",
+      "label": "Physical Premotion (Praemotio Physica)",
+      "latin_term": "praemotio physica",
+      "period": "Counter-Reformation",
+      "description": "God moves secondary causes to their acts by a physical divine impulse that precedes and determines the effect. For free acts, this premotion is intrinsically efficacious and infallible, yet preserves "
+    },
+    {
+      "id": "concept_libertas_indifferentiae_4f8a9b57",
+      "label": "Liberty of Indifference (Libertas Indifferentiae)",
+      "latin_term": "libertas indifferentiae",
+      "period": "Early Modern Rationalism",
+      "description": "Classical libertarian account of freedom. Descartes initially endorsed it as highest degree of freedom. Scholastics debated whether it's essential to freedom or merely its lowest degree (when will lac"
+    },
+    {
+      "id": "concept_libertas_spontaneitatis_5g9b0c68",
+      "label": "Liberty of Spontaneity (Libertas Spontaneitatis)",
+      "latin_term": "libertas spontaneitatis",
+      "period": "Early Modern Rationalism",
+      "description": "Standard compatibilist account of freedom. Agent acts freely if: (1) action flows from agent's will/desires (spontaneity), (2) no external impediment prevents action (absence of constraint). Will's de"
+    }
+  ],
+  "needs_both": [
+    {
+      "id": "concept_yetzer_ha_ra_u3v4w5x6",
+      "label": "Evil Inclination (Yetzer Ha-Ra)",
+      "period": "Second Temple Judaism",
+      "description": "The 'evil inclination' or 'evil impulse' - human proclivity toward sin and selfishness. Not demonic possession but innate tendency. Rabbinic tradition (post-70 CE) develops doctrine of two inclination"
+    },
+    {
+      "id": "concept_yetzer_ha_tov_y7z8a9b0",
+      "label": "Good Inclination (Yetzer Ha-Tov)",
+      "period": "Rabbinic Judaism",
+      "description": "The 'good inclination' or 'good impulse' - human capacity for obedience, love of Torah, and righteousness. Paired with yetzer ha-ra in rabbinic anthropology. Torah study and commandments strengthen th"
+    },
+    {
+      "id": "concept_bechirah_c1d2e3f4",
+      "label": "Choice/Free Will (Bechirah)",
+      "period": "Second Temple Judaism",
+      "description": "Hebrew term for 'choice' or 'free will' - human capacity to choose between alternatives, especially between obedience and disobedience. Central to biblical covenant theology: God commands, humans choo"
+    },
+    {
+      "id": "concept_ratzon_g5h6i7j8",
+      "label": "Will/Desire (Ratzon)",
+      "period": "Second Temple Judaism",
+      "description": "Hebrew term for 'will', 'desire', 'pleasure', 'favor'. Used of both divine will (ratzon Hashem) and human will. Central to understanding freedom as alignment of human will with divine will."
+    },
+    {
+      "id": "concept_covenant_nomism_k9l0m1n2",
+      "label": "Covenant Nomism",
+      "period": "Second Temple Judaism",
+      "description": "E.P. Sanders' term for Jewish soteriological pattern: (1) God elects Israel and gives Torah; (2) Torah defines how to maintain covenant relationship; (3) obedience maintains but does not earn covenant"
+    },
+    {
+      "id": "concept_hashgachah_o3p4q5r6",
+      "label": "Divine Providence (Hashgachah)",
+      "period": "Rabbinic Judaism",
+      "description": "Divine providence or supervision - God's ongoing care, governance, and foreknowledge of the world. Central tension in Jewish theology: reconciling hashgachah (providence) with human bechirah (free cho"
+    },
+    {
+      "id": "concept_two_spirits_doctrine_s7t8u9v0",
+      "label": "Two Spirits Doctrine (Qumran)",
+      "period": "Second Temple Judaism",
+      "description": "Qumran sectarian doctrine of cosmic dualism: God created two spirits (Spirit of Truth and Spirit of Deceit) and assigned all humanity to one or the other. Found in 1QS 3:13-4:26. Predestinarian anthro"
+    },
+    {
+      "id": "concept_kasb_acquisition_e9f0g1h2",
+      "label": "Acquisition (Kasb/Iktisab)",
+      "period": "High Medieval",
+      "description": "Al-Ash'ari's solution to reconciling divine omnipotence with moral responsibility. God creates (khalq) both the power to act and the act itself in the human agent. The human 'acquires' (kasb) the act "
+    },
+    {
+      "id": "concept_transcendental_freedom_7i1d2e80",
+      "label": "Transcendental Freedom",
+      "period": "Enlightenment",
+      "description": "Kant distinguishes practical freedom (independence from sensuous impulses) from transcendental freedom (absolute spontaneity). Transcendental freedom is theoretically unprovable but practically necess"
+    },
+    {
+      "id": "concept_autonomy_8j2e3f91",
+      "label": "Autonomy",
+      "period": "Enlightenment",
+      "description": "The will is autonomous when it legislates universal moral law to itself through pure practical reason. Autonomy ≠ doing what you want; rather, rational self-governance under categorical imperative. He"
+    },
+    {
+      "id": "concept_categorical_imperative_9k3f4g02",
+      "label": "Categorical Imperative",
+      "period": "Enlightenment",
+      "description": "The fundamental law of morality derived from pure practical reason. Commands categorically (not if you want X, then do Y, but simply: do Y). Three main formulations: (1) Universal Law, (2) Humanity as"
+    },
+    {
+      "id": "concept_agent_causation_0l4g5h13",
+      "label": "Agent Causation",
+      "period": "20th Century Analytic",
+      "description": "Reid argued persons as agents possess active power—irreducible to Humean regularity or event causation. When I freely act, I as agent cause the action, but no prior event causes me to cause it. This e"
+    },
+    {
+      "id": "concept_self_forming_actions_4r5s6t7u",
+      "label": "Self-Forming Actions (SFAs)",
+      "period": "20th Century Analytic",
+      "description": "Robert Kane's account of free will based on indeterministic decision-making moments. SFAs are situations of inner conflict where agent faces genuine choice between competing motivations (e.g., moral d"
+    },
+    {
+      "id": "concept_principle_alternative_possibilities_5s6t7u8v",
+      "label": "Principle of Alternative Possibilities (PAP)",
+      "period": "20th Century Analytic",
+      "description": "The principle that a person is morally responsible for what they have done only if they could have done otherwise. PAP has been central to free will debates. Frankfurt cases purport to show PAP is fal"
+    },
+    {
+      "id": "concept_semicompatibilism_6t7u8v9w",
+      "label": "Semicompatibilism",
+      "period": "20th Century Analytic",
+      "description": "John Martin Fischer's position that moral responsibility is compatible with determinism even if free will (understood as requiring alternative possibilities) is not. Accepts that Frankfurt cases show "
+    },
+    {
+      "id": "concept_reactive_attitudes_7u8v9w0x",
+      "label": "Reactive Attitudes",
+      "period": "20th Century Analytic",
+      "description": "P.F. Strawson's framework for understanding moral responsibility. Reactive attitudes are emotions and attitudes constitutive of interpersonal relationships: resentment, gratitude, forgiveness, love, h"
+    },
+    {
+      "id": "concept_hierarchical_mesh_8v9w0x1y",
+      "label": "Hierarchical Mesh Theory",
+      "period": "20th Century Analytic",
+      "description": "Harry Frankfurt's theory that free will consists in alignment between first-order desires (desires to act) and second-order desires (desires about which desires to have). A person acts freely when the"
+    },
+    {
+      "id": "concept_reasons_responsiveness_0x1y2z3a",
+      "label": "Reasons-Responsiveness",
+      "period": "20th Century Analytic",
+      "description": "Fischer and Ravizza's account of moral responsibility. An agent is responsible for action when the action flows from a reasons-responsive mechanism. A mechanism is reasons-responsive when: (1) it is r"
+    },
+    {
+      "id": "concept_bypassing_1y2z3a4b",
+      "label": "Bypassing",
+      "period": "21st Century",
+      "description": "Eddy Nahmias' explanation for why people sometimes have incompatibilist intuitions. Bypassing occurs when an agent's conscious reasoning processes (beliefs, desires, values, reasoning) are circumvente"
+    },
+    {
+      "id": "concept_knobe_effect_2z3a4b5c",
+      "label": "Knobe Effect",
+      "period": "21st Century",
+      "description": "Joshua Knobe's discovery that people's judgments about whether a side effect was brought about intentionally depend on whether the side effect is morally good or bad. When CEO knowingly brings about b"
+    },
+    {
+      "id": "concept_readiness_potential_3a4b5c6d",
+      "label": "Readiness Potential (Bereitschaftspotential)",
+      "period": "20th Century Analytic",
+      "description": "Neural signal (measured via EEG) consisting of gradual buildup of electrical activity in motor cortex and supplementary motor area, beginning ~350-400ms before conscious intention to move (in Libet's "
+    },
+    {
+      "id": "concept_luck_argument_4b5c6d7e",
+      "label": "Luck Argument",
+      "period": "20th Century Analytic",
+      "description": "Family of arguments claiming that if an action is undetermined, it is random/lucky, and if it is determined, it is not up to the agent. Either way, agent lacks control necessary for responsibility. Pr"
+    },
+    {
+      "id": "concept_source_vs_leeway_5c6d7e8f",
+      "label": "Source vs. Leeway Freedom",
+      "period": "20th Century Analytic",
+      "description": "Distinction between two conceptions of freedom and control. Leeway (alternative possibilities): agent could have done otherwise; multiple futures accessible to agent. Source (origination, sourcehood):"
+    },
+    {
+      "id": "concept_illusionism_free_will_6d7e8f9g",
+      "label": "Free Will Illusionism",
+      "period": "21st Century",
+      "description": "Saul Smilansky's position that libertarian free will is an illusion, but this illusion is necessary for morality and human flourishing. We should maintain fundamental dualism: acknowledge truth of har"
+    },
+    {
+      "id": "concept_public_health_model_7e8f9g0h",
+      "label": "Public Health-Quarantine Model of Criminal Justice",
+      "period": "21st Century",
+      "description": "Gregg Caruso and Derk Pereboom's alternative to retributive punishment based on free will skepticism. Rejects desert-based punishment (people don't deserve suffering for wrongdoing if they lack free w"
+    },
+    {
+      "id": "concept_terminology_evolution_greek_latin_y5z6a7b8",
+      "label": "Terminology Evolution: Greek → Latin Free Will Vocabulary",
+      "period": "Late Antiquity",
+      "description": "The evolution of free will terminology from Greek to Latin is a crucial chapter in the history of philosophy, as Latin translations and neologisms shaped all later Western (Christian, medieval, modern"
+    },
+    {
+      "id": "concept_ancient_free_will_debate_structure_z6a7b8c9",
+      "label": "Ancient Free Will Debate: Compatibilism vs. Incompatibilism",
+      "period": "Roman Imperial",
+      "description": "The ancient debate structure on fate and freedom established the conceptual framework that persists in contemporary philosophy. The core issue: **Is universal causal determinism (fate, heimarmenê) com"
+    },
+    {
+      "id": "concept_ultimate_responsibility_kane",
+      "label": "Ultimate Responsibility (UR)",
+      "period": null,
+      "description": "Robert Kane's development of Aristotelian ultimate origination, requiring that agents be ultimate sources of their actions through self-forming actions (SFAs)"
+    },
+    {
+      "id": "concept_hierarchical_compatibilism_frankfurt",
+      "label": "Hierarchical Compatibilism",
+      "period": null,
+      "description": "Harry Frankfurt's theory that freedom consists in harmony between first-order desires and higher-order volitions, paralleling Stoic assent"
+    },
+    {
+      "id": "concept_source_incompatibilism",
+      "label": "Source Incompatibilism",
+      "period": null,
+      "description": "The view that determinism is incompatible with being the ultimate source of one's actions, developed from Alexander of Aphrodisias"
+    },
+    {
+      "id": "concept_frankfurt_cases",
+      "label": "Frankfurt Cases",
+      "period": "20th Century Analytic",
+      "description": "Harry Frankfurt's thought experiments (1969) challenging the Principle of Alternative Possibilities (PAP). Frankfurt Cases present scenarios where agents are morally responsible despite lacking altern"
+    },
+    {
+      "id": "concept_manipulation_argument",
+      "label": "Manipulation Argument",
+      "period": null,
+      "description": "Modern incompatibilist argument (Pereboom) that manipulated agents lack free will. Develops ancient concerns about external causation."
+    },
+    {
+      "id": "concept_consequence_argument",
+      "label": "Consequence Argument",
+      "period": "20th Century Analytic",
+      "description": "Peter van Inwagen's formal argument (1983) that determinism is incompatible with free will. If determinism is true, our acts are consequences of laws of nature and past events. We have no power over l"
+    }
+  ]
+}
