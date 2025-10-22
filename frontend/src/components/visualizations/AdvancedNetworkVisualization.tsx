@@ -1,8 +1,8 @@
 import { useEffect, useRef, useMemo } from 'react';
 import * as d3 from 'd3';
-import { Network, Zap, Users, BookOpen, Lightbulb } from 'lucide-react';
+import { Network } from 'lucide-react';
 import { useKGWorkspace } from '../../context/KGWorkspaceContext';
-import type { CytoscapeData, CytoscapeElement } from '../../types';
+import type { CytoscapeData } from '../../types';
 
 interface NetworkNode {
   id: string;
@@ -34,15 +34,6 @@ const NetworkColors = {
   default: '#6b7280'
 };
 
-function getNodeIcon(type: string) {
-  switch (type) {
-    case 'person': return Users;
-    case 'work': return BookOpen;
-    case 'concept': return Lightbulb;
-    default: return Zap;
-  }
-}
-
 function getNodeColor(type: string) {
   return NetworkColors[type as keyof typeof NetworkColors] || NetworkColors.default;
 }
@@ -60,8 +51,7 @@ function createAdvancedNetworkLayout(nodes: NetworkNode[], links: NetworkLink[],
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collision', d3.forceCollide()
       .radius(25))
-    .force('radial', d3.forceRadial()
-      .radius(150)
+    .force('radial', d3.forceRadial(150, width / 2, height / 2)
       .strength(0.1));
 
   // Run simulation
@@ -142,13 +132,13 @@ function drawAdvancedNetwork(svg: d3.Selection<SVGSVGElement, unknown, null, und
   // Transform data
   const nodes: NetworkNode[] = data.elements.nodes.map(node => ({
     id: node.data.id,
-    label: node.data.label,
+    label: node.data.label || node.data.id,
     type: node.data.type || 'concept'
   }));
 
   const links: NetworkLink[] = data.elements.edges.map(edge => ({
-    source: edge.data.source,
-    target: edge.data.target,
+    source: edge.data.source || '',
+    target: edge.data.target || '',
     relation: edge.data.relation || '',
     strength: 1
   }));

@@ -1,6 +1,6 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import { Sparkles, Star, Zap } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { useKGWorkspace } from '../../context/KGWorkspaceContext';
 import type { ConceptClusterSummary, ConceptClusterNode } from '../../types';
 
@@ -135,8 +135,8 @@ function drawConstellation(svg: d3.Selection<SVGSVGElement, unknown, null, undef
 
     // Draw constellation nodes
     const nodesGroup = svg.append('g').attr('class', `cluster-${clusterIndex}`);
-    
-    nodes.forEach((node, nodeIndex) => {
+
+    nodes.forEach((node) => {
       const nodeGroup = nodesGroup.append('g')
         .attr('class', 'constellation-node')
         .attr('transform', `translate(${node.x}, ${node.y})`)

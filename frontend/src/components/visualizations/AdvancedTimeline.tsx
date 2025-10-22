@@ -1,14 +1,8 @@
 import { useEffect, useRef, useMemo } from 'react';
 import * as d3 from 'd3';
-import { Clock, Users, BookOpen, Lightbulb } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { useKGWorkspace } from '../../context/KGWorkspaceContext';
-import type { TimelineNodeSummary, TimelinePeriodSummary } from '../../types';
-
-interface TimelineData {
-  periods: TimelinePeriodSummary[];
-  nodes: TimelineNodeSummary[];
-  range: { minYear: number; maxYear: number };
-}
+import type { TimelineNodeSummary } from '../../types';
 
 const AcademicColors = {
   person: '#2563eb',      // Blue
@@ -25,15 +19,6 @@ function formatYear(year?: number | null) {
   if (year < 0) return `${Math.abs(year)} BCE`;
   if (year === 0) return '0';
   return `${year} CE`;
-}
-
-function getNodeIcon(type: string) {
-  switch (type) {
-    case 'person': return Users;
-    case 'work': return BookOpen;
-    case 'concept': return Lightbulb;
-    default: return Clock;
-  }
 }
 
 export default function AdvancedTimeline() {
@@ -74,7 +59,7 @@ export default function AdvancedTimeline() {
 
     // Create scales
     const xScale = d3.scaleLinear()
-      .domain([processedData.range.minYear, processedData.range.maxYear])
+      .domain([processedData.range.minYear || -400, processedData.range.maxYear || 600])
       .range([margin.left, width - margin.right]);
 
     const yScale = d3.scaleBand()
@@ -84,7 +69,10 @@ export default function AdvancedTimeline() {
 
     // Create timeline axis
     const xAxis = d3.axisBottom(xScale)
-      .tickFormat(d => formatYear(d as number))
+      .tickFormat(d => {
+        const num = typeof d === 'number' ? d : Number(d);
+        return formatYear(num);
+      })
       .ticks(8);
 
     svg.append('g')
@@ -97,18 +85,18 @@ export default function AdvancedTimeline() {
 
     // Draw period blocks
     const periodGroup = svg.append('g').attr('class', 'periods');
-    
-    processedData.periods.forEach((period, i) => {
-      const x1 = xScale(period.startYear ?? processedData.range.minYear);
-      const x2 = xScale(period.endYear ?? processedData.range.maxYear);
-      const y = yScale('periods')!;
-      const height = yScale.bandwidth();
 
-      const periodRect = periodGroup.append('rect')
+    processedData.periods.forEach((period) => {
+      const x1 = xScale((period.startYear ?? processedData.range.minYear) ?? -400);
+      const x2 = xScale((period.endYear ?? processedData.range.maxYear) ?? 600);
+      const y = yScale('periods')!;
+      const bandHeight = yScale.bandwidth();
+
+      periodGroup.append('rect')
         .attr('x', x1)
         .attr('y', y)
         .attr('width', Math.max(x2 - x1, 20))
-        .attr('height', height)
+        .attr('height', bandHeight)
         .attr('fill', AcademicColors.period)
         .attr('opacity', 0.3)
         .attr('rx', 4);
@@ -116,7 +104,7 @@ export default function AdvancedTimeline() {
       // Add period label
       periodGroup.append('text')
         .attr('x', x1 + 10)
-        .attr('y', y + height/2)
+        .attr('y', y + bandHeight/2)
         .attr('dy', '0.35em')
         .text(period.label)
         .style('font-family', 'Georgia, serif')
@@ -128,7 +116,7 @@ export default function AdvancedTimeline() {
       const totalNodes = Object.values(period.counts).reduce((sum, count) => sum + count, 0);
       periodGroup.append('text')
         .attr('x', x1 + 10)
-        .attr('y', y + height/2 + 15)
+        .attr('y', y + bandHeight/2 + 15)
         .attr('dy', '0.35em')
         .text(`${totalNodes} entities`)
         .style('font-family', 'Georgia, serif')
@@ -150,8 +138,7 @@ export default function AdvancedTimeline() {
       // Distribute nodes vertically
       nodes.forEach((node, i) => {
         const y = baseY + (i * 8) + 4;
-        const IconComponent = getNodeIcon(node.type || 'concept');
-        
+
         // Draw node circle
         nodeGroup.append('circle')
           .attr('cx', x)
