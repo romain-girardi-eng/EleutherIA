@@ -104,6 +104,9 @@ export interface GraphRAGResponse {
   };
   nodes_used: number;
   edges_traversed: number;
+  tokens_used?: number;
+  llm_provider?: string;
+  llm_model?: string;
   success: boolean;
 }
 
@@ -181,6 +184,9 @@ export interface GraphRAGChatMessage {
   content: string;
   citations?: GraphRAGResponse['citations'];
   reasoning_path?: GraphRAGResponse['reasoning_path'];
+  tokens_used?: number;
+  llm_provider?: string;
+  llm_model?: string;
   timestamp: Date;
 }
 

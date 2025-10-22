@@ -93,6 +93,9 @@ export default function GraphRAGPage() {
         content: response.answer,
         citations: response.citations,
         reasoning_path: response.reasoning_path,
+        tokens_used: response.tokens_used,
+        llm_provider: response.llm_provider,
+        llm_model: response.llm_model,
         timestamp: new Date(),
       };
 
@@ -202,6 +205,9 @@ export default function GraphRAGPage() {
           content: finalResponse.answer,
           citations: finalResponse.citations,
           reasoning_path: finalResponse.reasoning_path,
+          tokens_used: finalResponse.tokens_used,
+          llm_provider: finalResponse.llm_provider,
+          llm_model: finalResponse.llm_model,
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, assistantMessage]);
@@ -676,6 +682,22 @@ export default function GraphRAGPage() {
                     <span className="font-medium">Nodes Used:</span>
                     <span className="text-primary-600 font-semibold">
                       {messages[messages.length - 1].reasoning_path!.total_nodes}
+                    </span>
+                  </div>
+                )}
+                {messages[messages.length - 1].tokens_used !== undefined && (
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Tokens Used:</span>
+                    <span className="text-primary-600 font-semibold">
+                      {messages[messages.length - 1].tokens_used!.toLocaleString()}
+                    </span>
+                  </div>
+                )}
+                {messages[messages.length - 1].llm_model && (
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Model:</span>
+                    <span className="text-xs text-academic-muted">
+                      {messages[messages.length - 1].llm_model}
                     </span>
                   </div>
                 )}

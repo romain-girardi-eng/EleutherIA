@@ -406,7 +406,7 @@ class GraphRAGService:
         context: str,
         temperature: float = 0.7,
         provider: Optional[ModelProvider] = None
-    ) -> str:
+    ) -> Dict[str, Any]:
         """
         Step 5: Generate answer using unified LLM service
         Uses context from Knowledge Graph to ground the answer
@@ -453,16 +453,32 @@ Answer (with citations):"""
             if result.get("response"):
                 answer = result["response"]
                 provider_used = result.get("provider", "unknown")
-                logger.info(f"✅ Generated answer with {provider_used}: {len(answer)} characters")
+                tokens_used = result.get("tokens_used", 0)
+                logger.info(f"✅ Generated answer with {provider_used}: {len(answer)} characters, {tokens_used} tokens")
 
-                return answer
+                return {
+                    "answer": answer,
+                    "tokens_used": tokens_used,
+                    "provider": provider_used,
+                    "model": result.get("model", "unknown")
+                }
             else:
                 logger.error(f"❌ Empty response from LLM service: {result}")
-                return "I apologize, but I was unable to generate a response. Please try rephrasing your question."
+                return {
+                    "answer": "I apologize, but I was unable to generate a response. Please try rephrasing your question.",
+                    "tokens_used": 0,
+                    "provider": "unknown",
+                    "model": "unknown"
+                }
 
         except Exception as e:
             logger.error(f"❌ Error generating answer: {e}")
-            return f"I encountered an error while generating an answer: {str(e)}"
+            return {
+                "answer": f"I encountered an error while generating an answer: {str(e)}",
+                "tokens_used": 0,
+                "provider": "unknown",
+                "model": "unknown"
+            }
 
     def create_reasoning_path(
         self,
@@ -580,7 +596,7 @@ Answer (with citations):"""
             )
 
             # Step 5: Synthesize answer
-            answer = await self.synthesize_answer(
+            synthesis_result = await self.synthesize_answer(
                 query=query,
                 context=context,
                 temperature=temperature
@@ -596,11 +612,14 @@ Answer (with citations):"""
             # Build response
             response = {
                 'query': query,
-                'answer': answer,
+                'answer': synthesis_result['answer'],
                 'citations': citations,
                 'reasoning_path': reasoning_path,
                 'nodes_used': len(expanded_nodes),
                 'edges_traversed': len(traversed_edges),
+                'tokens_used': synthesis_result['tokens_used'],
+                'llm_provider': synthesis_result['provider'],
+                'llm_model': synthesis_result['model'],
                 'parameters': {
                     'semantic_k': semantic_k,
                     'graph_depth': graph_depth,
