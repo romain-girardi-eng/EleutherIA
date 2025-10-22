@@ -7,6 +7,7 @@ Combines semantic search, graph traversal, and LLM synthesis
 import logging
 import json
 import os
+import asyncio
 from typing import List, Dict, Any, Set, Optional, Tuple
 from pathlib import Path
 from collections import defaultdict, deque
@@ -131,27 +132,48 @@ class GraphRAGService:
                 logger.warning("Empty query provided for semantic search")
                 return []
 
-            # Generate query embedding with proper error handling
+            # Generate query embedding with proper error handling and timeout
             logger.debug("Generating query embedding with Gemini...")
-            result = genai.embed_content(
-                model="models/gemini-embedding-001",
-                content=query,
-                output_dimensionality=3072
-            )
-            
+            try:
+                result = await asyncio.wait_for(
+                    asyncio.to_thread(
+                        genai.embed_content,
+                        model="models/gemini-embedding-001",
+                        content=query,
+                        output_dimensionality=3072
+                    ),
+                    timeout=30.0  # 30 second timeout
+                )
+            except asyncio.TimeoutError:
+                logger.error("Gemini embedding API timed out after 30 seconds")
+                return []
+            except Exception as e:
+                logger.error(f"Error generating embedding: {e}")
+                return []
+
             if 'embedding' not in result:
                 logger.error("No embedding returned from Gemini API")
                 return []
-                
+
             query_vector = result['embedding']
             logger.debug(f"Generated embedding: {len(query_vector)} dimensions")
 
-            # Search in Qdrant with proper error handling
+            # Search in Qdrant with proper error handling and timeout
             logger.debug(f"Searching Qdrant for {limit} nodes...")
-            search_results = await self.qdrant.search_nodes(
-                query_vector=query_vector,
-                limit=limit
-            )
+            try:
+                search_results = await asyncio.wait_for(
+                    self.qdrant.search_nodes(
+                        query_vector=query_vector,
+                        limit=limit
+                    ),
+                    timeout=30.0  # 30 second timeout
+                )
+            except asyncio.TimeoutError:
+                logger.error("Qdrant search timed out after 30 seconds")
+                return []
+            except Exception as e:
+                logger.error(f"Error searching Qdrant: {e}")
+                return []
 
             if not search_results:
                 logger.warning("No results returned from Qdrant search")
@@ -524,11 +546,12 @@ Answer (with citations):"""
             if not starting_nodes:
                 return {
                     'query': query,
-                    'answer': 'I could not find any relevant information in the Knowledge Graph to answer this question.',
+                    'answer': 'Unable to perform semantic search. This may be due to: (1) Gemini API timeout or error, (2) Qdrant vector database connection issue, or (3) No relevant nodes found in the Knowledge Graph. Please check backend logs for details.',
                     'citations': {'ancient_sources': [], 'modern_scholarship': []},
                     'reasoning_path': {},
                     'nodes_used': 0,
-                    'success': False
+                    'success': False,
+                    'error': 'Semantic search returned no results'
                 }
 
             # Step 2: Graph traversal
