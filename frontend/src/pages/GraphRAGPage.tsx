@@ -195,6 +195,7 @@ export default function GraphRAGPage() {
   };
 
   return (
+    <>
     <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4 lg:gap-6 lg:h-[calc(100vh-180px)]">
       {/* Main Chat Area */}
       <div className="lg:col-span-2 flex flex-col lg:h-full">
@@ -503,6 +504,7 @@ export default function GraphRAGPage() {
       title="Authentication Required"
       message="Please log in to use GraphRAG Q&A. This feature uses AI to provide scholarly answers."
     />
+    </>
   );
 }
 

@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { HelpCircle, LogOut, User } from 'lucide-react';
 import { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import KGVisualizerPage from './pages/KGVisualizerPage';
