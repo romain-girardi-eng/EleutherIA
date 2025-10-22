@@ -28,7 +28,7 @@ interface VisualizationTab {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   description: string;
-  render: () => JSX.Element;
+  render: () => React.ReactElement;
 }
 
 interface AdvancedVisualizationDashboardProps {

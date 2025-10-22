@@ -74,10 +74,10 @@ function createAdvancedNetworkLayout(
     ...link,
     source: typeof link.source === 'string'
       ? nodes.find((node) => node.id === link.source) ?? nodes[0]
-      : link.source,
+      : link.source as SimulationNode,
     target: typeof link.target === 'string'
       ? nodes.find((node) => node.id === link.target) ?? nodes[0]
-      : link.target,
+      : link.target as SimulationNode,
   }));
 
   return { nodes, links: resolvedLinks };
