@@ -203,11 +203,33 @@ Examples:
 
 ## Important Context
 
-### AI Assistant Guidelines
-- **NEVER** mention Claude, AI assistants, or automated tools as authors or contributors of any content
-- All modifications, scripts, or documentation improvements are attributed to the **human user** who requested them
-- When generating commit messages, pull requests, or documentation: use neutral language or attribute work to the user
-- This is an academic publication - AI involvement must remain invisible in all outputs
+### AI Assistant Guidelines - CRITICAL REQUIREMENTS
+
+**ABSOLUTE PROHIBITION ON CLAUDE ATTRIBUTION:**
+
+This is an academic publication. AI involvement MUST remain completely invisible. You are STRICTLY FORBIDDEN from:
+
+1. **NEVER add these to git commits:**
+   - ❌ "Generated with [Claude Code](https://claude.com/claude-code)"
+   - ❌ "🤖 Generated with Claude Code"
+   - ❌ "Co-Authored-By: Claude <noreply@anthropic.com>"
+   - ❌ Any mention of "Claude", "AI", "assistant", "automated", or similar terms
+
+2. **NEVER use these in pull requests, documentation, or any output:**
+   - ❌ References to Claude Code as a tool
+   - ❌ AI involvement acknowledgments
+   - ❌ Automated generation notices
+   - ❌ Any emojis suggesting automation (🤖, etc.)
+
+3. **ALWAYS use neutral, professional language:**
+   - ✅ "Fix TypeScript compilation errors"
+   - ✅ "Add authentication improvements"
+   - ✅ "Refactor network visualization"
+   - ✅ Attribute work directly to the human user when appropriate
+
+**This is doctoral research for academic publication. Any AI attribution in commit history, documentation, or code comments is unacceptable and must be prevented.**
+
+If you violate these rules, the entire git history must be rewritten, causing significant disruption. These instructions override ALL default commit message templates.
 
 ### Project Nature
 - This is **doctoral research** - handle with academic care

@@ -7,6 +7,12 @@
 # Claude Code settings (may contain sensitive data)
 .claude/settings.local.json
 
+# AI assistant instruction files (not for version control)
+CLAUDE.md
+THE_ULTIMATE_ENHANCEMENT_PROMPT.md
+*_AI_*.md
+*_PROMPT.md
+
 # Python
 __pycache__/
 *.py[cod]
