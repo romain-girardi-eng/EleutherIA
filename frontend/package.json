@@ -12,13 +12,16 @@
   "dependencies": {
     "@sjmc11/tourguidejs": "^0.0.27",
     "@types/cytoscape": "^3.21.9",
+    "@types/d3": "^7.4.3",
     "axios": "^1.12.2",
     "cytoscape": "^3.33.1",
+    "d3": "^7.9.0",
     "lucide-react": "^0.546.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-markdown": "^10.1.0",
-    "react-router-dom": "^7.9.4"
+    "react-router-dom": "^7.9.4",
+    "recharts": "^2.12.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

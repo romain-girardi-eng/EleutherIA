@@ -10,8 +10,9 @@ import ArgumentEvidenceBoard from '../components/workspace/ArgumentEvidenceBoard
 import ConceptClusterGrid from '../components/workspace/ConceptClusterGrid';
 import InfluenceMatrixPanel from '../components/workspace/InfluenceMatrixPanel';
 import PathInspectorPanel from '../components/workspace/PathInspectorPanel';
+import AdvancedVisualizationDashboard from '../components/visualizations/AdvancedVisualizationDashboard';
 
-type VisualizerMode = 'observatory' | 'semativerse';
+type VisualizerMode = 'observatory' | 'semativerse' | 'advanced';
 
 export default function KGVisualizerPage() {
   return (
@@ -26,7 +27,7 @@ function KGVisualizerContent() {
     state,
     updateSelection,
   } = useKGWorkspace();
-  const [mode, setMode] = useState<VisualizerMode>('observatory');
+  const [mode, setMode] = useState<VisualizerMode>('advanced');
   const [cyData, setCyData] = useState<CytoscapeData | null>(null);
   const [cyLoading, setCyLoading] = useState<boolean>(true);
   const [cyError, setCyError] = useState<string | null>(null);
@@ -173,6 +174,14 @@ function KGVisualizerContent() {
             <span className="text-xs uppercase text-academic-muted tracking-wide font-semibold">Mode</span>
             <div className="mt-1 flex overflow-hidden border border-gray-200 rounded-md">
               <button
+                onClick={() => setMode('advanced')}
+                className={`px-4 py-2 text-sm font-medium transition-colors ${
+                  mode === 'advanced' ? 'bg-primary-600 text-white' : 'bg-white text-academic-text'
+                }`}
+              >
+                Advanced
+              </button>
+              <button
                 onClick={() => setMode('observatory')}
                 className={`px-4 py-2 text-sm font-medium transition-colors ${
                   mode === 'observatory' ? 'bg-primary-600 text-white' : 'bg-white text-academic-text'
@@ -191,13 +200,15 @@ function KGVisualizerContent() {
             </div>
           </div>
           <div className="text-xs text-academic-muted max-w-sm text-right">
-            Observatory blends timeline, evidence flow, clusters, and matrix analytics with a focused Cytoscape view.
-            Semativerse remains available for full 3D exploration when credentials are provided.
+            Advanced mode features sophisticated academic visualizations. Observatory provides traditional analytics.
+            Semativerse offers 3D exploration when credentials are provided.
           </div>
         </div>
       </div>
 
-      {mode === 'semativerse' ? (
+      {mode === 'advanced' ? (
+        <AdvancedVisualizationDashboard />
+      ) : mode === 'semativerse' ? (
         <>
           <div className="academic-card bg-purple-50 border-purple-200">
             <p className="text-sm text-academic-text">
