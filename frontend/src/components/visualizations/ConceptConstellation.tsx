@@ -241,7 +241,24 @@ function drawConstellation(
 
 export default function ConceptConstellation() {
   const svgRef = useRef<SVGSVGElement>(null);
-  const { state: { conceptClusters, loading } } = useKGWorkspace();
+  const { state, setFilters } = useKGWorkspace();
+  const { conceptClusters, loading, filters } = state;
+  const filtersActive =
+    filters.nodeTypes.length > 0 ||
+    filters.periods.length > 0 ||
+    filters.schools.length > 0 ||
+    filters.relations.length > 0 ||
+    Boolean(filters.searchTerm?.trim());
+
+  const handleResetFilters = () => {
+    setFilters(() => ({
+      nodeTypes: [],
+      periods: [],
+      schools: [],
+      relations: [],
+      searchTerm: '',
+    }));
+  };
 
   useEffect(() => {
     if (!svgRef.current || !conceptClusters) return;
@@ -267,8 +284,17 @@ export default function ConceptConstellation() {
   if (!conceptClusters || conceptClusters.clusters.length === 0) {
     return (
       <div className="academic-card">
-        <div className="py-12 text-center text-academic-muted text-sm">
-          No clustered concepts for the current slice.
+        <div className="py-12 text-center text-academic-muted text-sm space-y-3">
+          <div>No clustered concepts for the current slice.</div>
+          {filtersActive && (
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="inline-flex items-center rounded-md border border-primary-300 bg-primary-50 px-3 py-1.5 text-xs font-semibold text-primary-700 transition hover:bg-primary-100"
+            >
+              Clear filters and reload concepts
+            </button>
+          )}
         </div>
       </div>
     );

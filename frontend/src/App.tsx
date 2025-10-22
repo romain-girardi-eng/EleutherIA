@@ -205,17 +205,23 @@ function AppContent() {
       {/* Global Tour Button - Visible on all pages */}
       <button
         onClick={() => setShowTour(true)}
-        className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-full p-3 sm:p-4 shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 flex items-center gap-2 group cursor-pointer touch-manipulation"
+        className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer touch-manipulation"
         style={{
-          WebkitTapHighlightColor: 'transparent',
-          minWidth: '56px',
-          minHeight: '56px'
+          WebkitTapHighlightColor: 'transparent'
         }}
         title="Start Interactive Tour"
         aria-label="Start Interactive Tour"
       >
-        <HelpCircle className="w-6 h-6 sm:w-6 sm:h-6 animate-pulse" />
-        <span className="hidden sm:inline font-medium whitespace-nowrap">Take a Tour</span>
+        {/* Mobile: Icon only, centered - Fixed 56x56px circle */}
+        <div className="sm:hidden w-14 h-14 flex items-center justify-center">
+          <HelpCircle className="w-6 h-6 animate-pulse" />
+        </div>
+
+        {/* Desktop: Icon + Text - Auto-width pill shape */}
+        <div className="hidden sm:flex items-center gap-2 px-4 py-3">
+          <HelpCircle className="w-6 h-6 animate-pulse" />
+          <span className="font-medium whitespace-nowrap">Take a Tour</span>
+        </div>
       </button>
 
       {/* Interactive Tour Component */}

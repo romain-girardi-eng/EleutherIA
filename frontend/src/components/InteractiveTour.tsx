@@ -245,16 +245,9 @@ export default function InteractiveTour({ autoStart = false, onComplete, tourSte
           border-color: #a8a29e;
         }
 
+        /* Hide the built-in close button - we have our own floating close button */
         .tg-dialog-btn-close {
-          background: transparent;
-          color: #78716c;
-          border: none;
-          padding: 0.375rem;
-        }
-
-        .tg-dialog-btn-close:hover {
-          color: #44403c;
-          background: #f5f5f4;
+          display: none !important;
         }
 
         /* Backdrop animation */

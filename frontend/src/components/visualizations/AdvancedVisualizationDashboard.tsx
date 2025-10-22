@@ -1,18 +1,18 @@
 import { useMemo, useState } from 'react';
-import { 
-  Clock, 
-  Sparkles, 
-  TrendingUp, 
-  Network, 
-  BarChart3, 
-  PieChart,
+import {
+  Clock,
+  Sparkles,
+  TrendingUp,
+  Network,
+  BarChart3,
   Activity,
-  Layers
+  Layers,
 } from 'lucide-react';
 import AdvancedTimeline from './AdvancedTimeline';
 import ConceptConstellation from './ConceptConstellation';
 import InfluenceFlowDiagram from './InfluenceFlowDiagram';
 import AdvancedNetworkVisualization from './AdvancedNetworkVisualization';
+import AdvancedAnalyticsPanel from './AdvancedAnalyticsPanel';
 import type { CytoscapeData } from '../../types';
 
 type VisualizationMode = 
@@ -28,7 +28,7 @@ interface VisualizationTab {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   description: string;
-  render: () => React.ReactElement;
+  render: () => JSX.Element;
 }
 
 interface AdvancedVisualizationDashboardProps {
@@ -107,19 +107,7 @@ export default function AdvancedVisualizationDashboard({
         label: 'Analytics',
         icon: BarChart3,
         description: 'Statistical analysis and data insights',
-        render: () => (
-          <div className="academic-card">
-            <div className="flex items-center gap-2 text-sm font-semibold text-academic-text uppercase mb-4">
-              <BarChart3 className="w-4 h-4 text-primary-600" />
-              Advanced Analytics
-            </div>
-            <div className="text-center py-16 text-academic-muted">
-              <PieChart className="w-16 h-16 mx-auto mb-4 opacity-50" />
-              <p className="text-lg font-medium mb-2">Analytics Dashboard</p>
-              <p className="text-sm">Advanced statistical analysis and insights coming soon...</p>
-            </div>
-          </div>
-        ),
+        render: () => <AdvancedAnalyticsPanel />,
       },
     ],
     [networkData, networkLoading, networkError],

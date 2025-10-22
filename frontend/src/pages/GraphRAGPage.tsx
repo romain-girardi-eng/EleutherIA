@@ -336,6 +336,73 @@ export default function GraphRAGPage() {
           </div>
         </div>
 
+        {/* How GraphRAG Works Section - Mobile Only */}
+        <div className="lg:hidden mb-4">
+          <div className="academic-card bg-gradient-to-br from-blue-50 to-indigo-50 border-primary-200">
+            <button
+              onClick={() => setShowHowItWorks(!showHowItWorks)}
+              className="w-full flex items-center justify-between text-left hover:opacity-80 transition-opacity"
+            >
+              <h3 className="font-semibold text-base text-primary-900 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                How GraphRAG Works
+              </h3>
+              <span className="text-primary-700 text-sm font-medium">
+                {showHowItWorks ? '▼ Hide' : '▶ Show'}
+              </span>
+            </button>
+            {showHowItWorks && <div className="mt-3 pt-3 border-t border-primary-200"></div>}
+            {showHowItWorks && (
+              <div className="text-xs space-y-2.5 max-h-96 overflow-y-auto pr-2">
+                <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
+                  <div className="font-semibold text-primary-800 mb-1.5">1. Vector Search</div>
+                  <p className="text-academic-muted leading-relaxed text-xs">
+                    Your query is embedded using Gemini and compared against 508 KG node embeddings
+                    in Qdrant to find semantically relevant starting points.
+                  </p>
+                </div>
+                <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
+                  <div className="font-semibold text-primary-800 mb-1.5">2. Graph Expansion</div>
+                  <p className="text-academic-muted leading-relaxed text-xs">
+                    Breadth-first search traverses relationships (authored, influenced, refutes)
+                    to gather connected nodes, creating rich contextual networks.
+                  </p>
+                </div>
+                <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
+                  <div className="font-semibold text-primary-800 mb-1.5">3. Context Building</div>
+                  <p className="text-academic-muted leading-relaxed text-xs">
+                    Retrieved nodes are formatted with their descriptions, ancient sources,
+                    and modern scholarship to create comprehensive context.
+                  </p>
+                </div>
+                <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
+                  <div className="font-semibold text-primary-800 mb-1.5">4. LLM Synthesis</div>
+                  <p className="text-academic-muted leading-relaxed text-xs">
+                    Gemini generates a scholarly answer grounded in the knowledge graph context,
+                    ensuring accuracy and academic rigor.
+                  </p>
+                </div>
+                <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
+                  <div className="font-semibold text-primary-800 mb-1.5">5. Citation Extraction</div>
+                  <p className="text-academic-muted leading-relaxed text-xs">
+                    Ancient sources and modern scholarship are automatically extracted and
+                    formatted for proper academic citation.
+                  </p>
+                </div>
+                <div className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
+                  <div className="font-semibold text-primary-800 mb-1.5">6. Reasoning Path</div>
+                  <p className="text-academic-muted leading-relaxed text-xs">
+                    The system tracks which nodes and relationships were used, providing
+                    transparency and allowing verification of the reasoning process.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Messages Area */}
         <div className="flex-1 academic-card overflow-y-auto mb-4 p-3 sm:p-4 space-y-4 min-h-[300px] max-h-[600px] lg:max-h-none">
           {messages.length === 0 && !streaming && (
