@@ -189,7 +189,7 @@ function drawAdvancedNetwork(
 
   const getNodeFromRef = (ref: string | number | SimulationNode): SimulationNode | undefined => {
     if (typeof ref === 'object') {
-      return ref;
+      return ref as SimulationNode;
     }
     if (typeof ref === 'string') {
       return nodeLookup.get(ref);
@@ -202,7 +202,7 @@ function drawAdvancedNetwork(
 
   const getNodeIdFromRef = (ref: string | number | SimulationNode): string => {
     if (typeof ref === 'object') {
-      return ref.id;
+      return (ref as SimulationNode).id;
     }
     if (typeof ref === 'string') {
       return ref;
@@ -218,12 +218,13 @@ function drawAdvancedNetwork(
     return getNodeFromRef(ref)?.type;
   };
 
-  const getNodePosition = (ref: string | number | SimulationNode) => {
+  const getNodePosition = (
+    ref: string | number | SimulationNode,
+  ): { x: number; y: number } => {
     const node = getNodeFromRef(ref);
-    return {
-      x: node?.x ?? width / 2,
-      y: node?.y ?? height / 2,
-    };
+    const x = node?.x ?? width / 2;
+    const y = node?.y ?? height / 2;
+    return { x, y };
   };
 
   const clusterHullGroup = content.append('g').attr('class', 'network-cluster-hulls');
@@ -366,14 +367,11 @@ function drawAdvancedNetwork(
   let activeCluster: string | null = null;
 
   const colorWithOpacity = (cluster: string, opacity: number) => {
-    const base =
-      d3.color(getNodeColor(cluster)) ||
-      d3.color('#94a3b8') ||
+    const baseColor =
+      d3.color(getNodeColor(cluster)) ??
+      d3.color('#94a3b8') ??
       d3.rgb(148, 163, 184);
-    if (!base) {
-      return `rgba(148, 163, 184, ${opacity})`;
-    }
-    const copy = base.copy();
+    const copy = baseColor.copy();
     copy.opacity = opacity;
     return copy.formatRgb();
   };
