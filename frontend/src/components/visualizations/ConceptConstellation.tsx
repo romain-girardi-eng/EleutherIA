@@ -243,6 +243,7 @@ export default function ConceptConstellation() {
   const svgRef = useRef<SVGSVGElement>(null);
   const { state, setFilters } = useKGWorkspace();
   const { conceptClusters, loading, filters } = state;
+
   const filtersActive =
     filters.nodeTypes.length > 0 ||
     filters.periods.length > 0 ||
@@ -265,7 +266,7 @@ export default function ConceptConstellation() {
 
     const width = 960;
     const height = 520;
-    
+
     const svg = d3.select(svgRef.current);
     svg.attr('viewBox', `0 0 ${width} ${height}`);
 

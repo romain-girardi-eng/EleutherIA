@@ -108,7 +108,7 @@ export default function GraphRAGPage() {
   const handleStreamingQuery = async (queryText: string) => {
     setStreaming(true);
     setStreamedAnswer('');
-    setStreamStatus('Initializing...');
+    setStreamStatus('Connecting to server... (This may take 30-60s if the server is waking up)');
 
     try {
       const token = Cookies.get('auth_token');
@@ -117,6 +117,11 @@ export default function GraphRAGPage() {
       // Create abort controller for cancellation
       const abortController = new AbortController();
       abortControllerRef.current = abortController;
+
+      // Add timeout for connection (2 minutes to handle cold starts)
+      const timeoutId = setTimeout(() => {
+        abortController.abort();
+      }, 120000); // 120 seconds
 
       const response = await fetch(`${apiUrl}/api/graphrag/query/stream`, {
         method: 'POST',
@@ -132,6 +137,8 @@ export default function GraphRAGPage() {
         }),
         signal: abortController.signal,
       });
+
+      clearTimeout(timeoutId); // Clear timeout once connected
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -212,7 +219,14 @@ export default function GraphRAGPage() {
       setStreamStatus('');
     } catch (err: any) {
       console.error('Streaming error:', err);
-      setError(err.message || 'Failed to stream answer');
+
+      // Check if it was an abort (timeout or user cancel)
+      if (err.name === 'AbortError') {
+        setError('Connection timeout. The server may be waking up from sleep (Render free tier). Please try again in a moment.');
+      } else {
+        setError(err.message || 'Failed to stream answer');
+      }
+
       setStreaming(false);
       setStreamedAnswer('');
       setStreamStatus('');
@@ -256,55 +270,132 @@ export default function GraphRAGPage() {
         {/* Settings Panel */}
         {showSettings && (
           <div className="academic-card mb-4 bg-primary-50 border-primary-200">
-            <h3 className="font-semibold mb-3">Advanced Settings</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <h3 className="font-semibold mb-3">Search Settings</h3>
+            <p className="text-sm text-academic-muted mb-4">
+              Adjust how GraphRAG searches and processes your questions. The defaults work well for most queries.
+            </p>
+            
+            <div className="space-y-4">
+              {/* Search Breadth */}
               <div>
-                <label className="block text-sm font-medium mb-1">Semantic K</label>
-                <input
-                  type="number"
-                  value={semanticK}
-                  onChange={(e) => setSemanticK(Number(e.target.value))}
-                  min={1}
-                  max={50}
-                  className="w-full px-3 py-2 border border-academic-border rounded text-sm"
-                />
-                <p className="text-xs text-academic-muted mt-1">Starting nodes from search</p>
+                <label className="block text-sm font-medium mb-2">
+                  Search Breadth: <span className="text-primary-600 font-semibold">{semanticK} nodes</span>
+                </label>
+                <div className="flex items-center space-x-3">
+                  <span className="text-xs text-academic-muted">Narrow</span>
+                  <input
+                    type="range"
+                    value={semanticK}
+                    onChange={(e) => setSemanticK(Number(e.target.value))}
+                    min={5}
+                    max={20}
+                    step={1}
+                    className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                  />
+                  <span className="text-xs text-academic-muted">Broad</span>
+                </div>
+                <p className="text-xs text-academic-muted mt-1">
+                  How many starting points to find from your question. More = broader search, fewer = more focused.
+                </p>
               </div>
+
+              {/* Connection Depth */}
               <div>
-                <label className="block text-sm font-medium mb-1">Graph Depth</label>
-                <input
-                  type="number"
-                  value={graphDepth}
-                  onChange={(e) => setGraphDepth(Number(e.target.value))}
-                  min={1}
-                  max={5}
-                  className="w-full px-3 py-2 border border-academic-border rounded text-sm"
-                />
-                <p className="text-xs text-academic-muted mt-1">BFS traversal depth</p>
+                <label className="block text-sm font-medium mb-2">
+                  Connection Depth: <span className="text-primary-600 font-semibold">{graphDepth} levels</span>
+                </label>
+                <div className="flex items-center space-x-3">
+                  <span className="text-xs text-academic-muted">Shallow</span>
+                  <input
+                    type="range"
+                    value={graphDepth}
+                    onChange={(e) => setGraphDepth(Number(e.target.value))}
+                    min={1}
+                    max={3}
+                    step={1}
+                    className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                  />
+                  <span className="text-xs text-academic-muted">Deep</span>
+                </div>
+                <p className="text-xs text-academic-muted mt-1">
+                  How far to explore connections from starting points. Deeper = more context, shallower = faster.
+                </p>
               </div>
+
+              {/* Context Size */}
               <div>
-                <label className="block text-sm font-medium mb-1">Max Context</label>
-                <input
-                  type="number"
-                  value={maxContext}
-                  onChange={(e) => setMaxContext(Number(e.target.value))}
-                  min={5}
-                  max={30}
-                  className="w-full px-3 py-2 border border-academic-border rounded text-sm"
-                />
-                <p className="text-xs text-academic-muted mt-1">Nodes in LLM context</p>
+                <label className="block text-sm font-medium mb-2">
+                  Context Size: <span className="text-primary-600 font-semibold">{maxContext} nodes</span>
+                </label>
+                <div className="flex items-center space-x-3">
+                  <span className="text-xs text-academic-muted">Concise</span>
+                  <input
+                    type="range"
+                    value={maxContext}
+                    onChange={(e) => setMaxContext(Number(e.target.value))}
+                    min={10}
+                    max={25}
+                    step={1}
+                    className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                  />
+                  <span className="text-xs text-academic-muted">Detailed</span>
+                </div>
+                <p className="text-xs text-academic-muted mt-1">
+                  How much information to include in the answer. More = comprehensive, fewer = concise.
+                </p>
               </div>
-              <div>
-                <label className="flex items-center space-x-2">
+
+              {/* Streaming Toggle */}
+              <div className="border-t border-primary-200 pt-4">
+                <label className="flex items-center space-x-3">
                   <input
                     type="checkbox"
                     checked={useStreaming}
                     onChange={(e) => setUseStreaming(e.target.checked)}
-                    className="rounded"
+                    className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
                   />
-                  <span className="text-sm">Enable Streaming</span>
+                  <div>
+                    <span className="text-sm font-medium">Real-time Updates</span>
+                    <p className="text-xs text-academic-muted">Show progress as the answer is generated</p>
+                  </div>
                 </label>
-                <p className="text-xs text-academic-muted mt-1">Real-time progress updates</p>
+              </div>
+
+              {/* Preset Buttons */}
+              <div className="border-t border-primary-200 pt-4">
+                <p className="text-sm font-medium mb-2">Quick Presets:</p>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => {
+                      setSemanticK(8);
+                      setGraphDepth(2);
+                      setMaxContext(12);
+                    }}
+                    className="px-3 py-1 text-xs bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+                  >
+                    Fast & Focused
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSemanticK(10);
+                      setGraphDepth(2);
+                      setMaxContext(15);
+                    }}
+                    className="px-3 py-1 text-xs bg-primary-100 border border-primary-300 rounded hover:bg-primary-200 transition-colors"
+                  >
+                    Balanced (Default)
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSemanticK(15);
+                      setGraphDepth(3);
+                      setMaxContext(20);
+                    }}
+                    className="px-3 py-1 text-xs bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+                  >
+                    Comprehensive
+                  </button>
+                </div>
               </div>
             </div>
           </div>

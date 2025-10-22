@@ -81,9 +81,17 @@ export function KGWorkspaceProvider({ children }: { children: ReactNode }) {
         setLoading(false); // Allow UI to render with partial data
 
         // Load slower endpoints in background
+        const clusterFilters: KGFilterState = {
+          ...activeFilters,
+          nodeTypes:
+            activeFilters.nodeTypes && activeFilters.nodeTypes.length > 0
+              ? Array.from(new Set([...activeFilters.nodeTypes, 'concept']))
+              : ['concept'],
+        };
+
         const [argumentData, clusterData] = await Promise.all([
           apiClient.getArgumentEvidenceOverview(activeFilters),
-          apiClient.getConceptClusterOverview(activeFilters),
+          apiClient.getConceptClusterOverview(clusterFilters),
         ]);
 
         setArgumentEvidence(argumentData);
