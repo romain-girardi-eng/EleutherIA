@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { Sparkles } from 'lucide-react';
 import { useKGWorkspace } from '../../context/KGWorkspaceContext';
-import type { ConceptClusterSummary, ConceptClusterNode } from '../../types';
+import type { ConceptClusterSummary } from '../../types';
 
 interface ConstellationData {
   clusters: ConceptClusterSummary[];
@@ -14,192 +14,213 @@ interface ConstellationData {
 
 const ConstellationColors = {
   primary: '#3b82f6',
-  secondary: '#8b5cf6', 
+  secondary: '#8b5cf6',
   accent: '#f59e0b',
   highlight: '#ef4444',
-  neutral: '#6b7280'
+  neutral: '#6b7280',
 };
 
-function createConstellationLayout(nodes: ConceptClusterNode[], width: number, height: number) {
-  // Create a force simulation for constellation positioning
-  const simulation = d3.forceSimulation(nodes as any)
-    .force('charge', d3.forceManyBody().strength(-300))
-    .force('center', d3.forceCenter(width / 2, height / 2))
-    .force('collision', d3.forceCollide().radius(20))
-    .stop();
-
-  // Run simulation to get positions
-  for (let i = 0; i < 100; ++i) simulation.tick();
-
-  return nodes.map(node => ({
-    ...node,
-    x: (node as any).x,
-    y: (node as any).y
-  }));
-}
-
-function drawConstellation(svg: d3.Selection<SVGSVGElement, unknown, null, undefined>, 
-                          data: ConstellationData, 
-                          width: number, 
-                          height: number) {
+function drawConstellation(
+  svg: d3.Selection<SVGSVGElement, unknown, null, undefined>,
+  data: ConstellationData,
+  width: number,
+  height: number,
+) {
   svg.selectAll('*').remove();
 
-  // Create gradient definitions
   const defs = svg.append('defs');
-  
-  // Star gradient
-  const starGradient = defs.append('radialGradient')
-    .attr('id', 'starGradient')
+
+  const nodeGradient = defs
+    .append('radialGradient')
+    .attr('id', 'constellationNode')
     .attr('cx', '50%')
     .attr('cy', '50%')
     .attr('r', '50%');
-  
-  starGradient.append('stop')
-    .attr('offset', '0%')
-    .attr('stop-color', ConstellationColors.primary)
-    .attr('stop-opacity', 0.8);
-  
-  starGradient.append('stop')
-    .attr('offset', '100%')
-    .attr('stop-color', ConstellationColors.secondary)
-    .attr('stop-opacity', 0.3);
+  nodeGradient.append('stop').attr('offset', '0%').attr('stop-color', '#ffffff').attr('stop-opacity', 0.8);
+  nodeGradient.append('stop').attr('offset', '100%').attr('stop-color', '#dbeafe').attr('stop-opacity', 0.3);
 
-  // Connection gradient
-  const connectionGradient = defs.append('linearGradient')
-    .attr('id', 'connectionGradient')
+  const linkGradient = defs
+    .append('linearGradient')
+    .attr('id', 'constellationLink')
     .attr('x1', '0%')
     .attr('y1', '0%')
     .attr('x2', '100%')
-    .attr('y2', '100%');
-  
-  connectionGradient.append('stop')
-    .attr('offset', '0%')
-    .attr('stop-color', ConstellationColors.accent)
-    .attr('stop-opacity', 0.6);
-  
-  connectionGradient.append('stop')
-    .attr('offset', '100%')
-    .attr('stop-color', ConstellationColors.primary)
-    .attr('stop-opacity', 0.2);
+    .attr('y2', '0%');
+  linkGradient.append('stop').attr('offset', '0%').attr('stop-color', ConstellationColors.primary).attr('stop-opacity', 0.45);
+  linkGradient.append('stop').attr('offset', '100%').attr('stop-color', ConstellationColors.secondary).attr('stop-opacity', 0.2);
 
-  // Draw constellation background
-  svg.append('rect')
-    .attr('width', width)
-    .attr('height', height)
-    .attr('fill', 'url(#constellationBg)')
-    .attr('rx', 8)
-    .attr('ry', 8);
-
-  // Create constellation background gradient
-  const bgGradient = defs.append('radialGradient')
-    .attr('id', 'constellationBg')
+  const backgroundGradient = defs
+    .append('radialGradient')
+    .attr('id', 'constellationBackground')
     .attr('cx', '50%')
     .attr('cy', '50%')
-    .attr('r', '70%');
-  
-  bgGradient.append('stop')
-    .attr('offset', '0%')
-    .attr('stop-color', '#f8fafc')
-    .attr('stop-opacity', 0.1);
-  
-  bgGradient.append('stop')
-    .attr('offset', '100%')
-    .attr('stop-color', '#1e293b')
-    .attr('stop-opacity', 0.05);
+    .attr('r', '75%');
+  backgroundGradient.append('stop').attr('offset', '0%').attr('stop-color', '#f8fafc').attr('stop-opacity', 0.15);
+  backgroundGradient.append('stop').attr('offset', '100%').attr('stop-color', '#e0f2fe').attr('stop-opacity', 0.1);
 
-  // Draw connections between related concepts
-  const connectionsGroup = svg.append('g').attr('class', 'connections');
-  
-  data.clusters.forEach((cluster, clusterIndex) => {
-    const nodes = createConstellationLayout(cluster.nodes, width, height);
-    
-    // Draw connections within cluster
-    nodes.forEach((node, i) => {
-      nodes.slice(i + 1).forEach(otherNode => {
-        const distance = Math.sqrt(
-          Math.pow(node.x - otherNode.x, 2) + Math.pow(node.y - otherNode.y, 2)
-        );
-        
-        if (distance < 80) { // Only connect nearby nodes
-          connectionsGroup.append('line')
-            .attr('x1', node.x)
-            .attr('y1', node.y)
-            .attr('x2', otherNode.x)
-            .attr('y2', otherNode.y)
-            .attr('stroke', 'url(#connectionGradient)')
-            .attr('stroke-width', 1)
-            .attr('opacity', 0.4);
-        }
-      });
-    });
+  svg
+    .append('rect')
+    .attr('width', width)
+    .attr('height', height)
+    .attr('fill', 'url(#constellationBackground)')
+    .attr('rx', 16);
 
-    // Draw constellation nodes
-    const nodesGroup = svg.append('g').attr('class', `cluster-${clusterIndex}`);
+  const clusterCount = data.clusters.length;
+  const cols = clusterCount > 3 ? Math.ceil(Math.sqrt(clusterCount)) : clusterCount;
+  const rows = Math.max(1, Math.ceil(clusterCount / Math.max(cols, 1)));
+  const padding = 60;
+  const effectiveCols = Math.max(cols, 1);
+  const effectiveRows = Math.max(rows, 1);
+  const cellWidth = (width - padding * 2) / effectiveCols;
+  const cellHeight = (height - padding * 2) / effectiveRows;
+  const baseRadius = Math.max(40, Math.min(cellWidth, cellHeight) / 2 - 30);
 
-    nodes.forEach((node) => {
-      const nodeGroup = nodesGroup.append('g')
-        .attr('class', 'constellation-node')
-        .attr('transform', `translate(${node.x}, ${node.y})`)
-        .style('cursor', 'pointer');
+  data.clusters.forEach((cluster, index) => {
+    const row = Math.floor(index / effectiveCols);
+    const col = index % effectiveCols;
+    const cx =
+      clusterCount === 1
+        ? width / 2
+        : padding + col * cellWidth + cellWidth / 2;
+    const cy =
+      clusterCount === 1
+        ? height / 2
+        : padding + row * cellHeight + cellHeight / 2;
 
-      // Draw star shape
-      const starPoints = 5;
-      const outerRadius = 12;
-      const innerRadius = 6;
-      
-      const starPath = d3.lineRadial()
-        .angle((d: any) => d.angle)
-        .radius((d: any) => d.radius)
-        .curve(d3.curveLinearClosed);
+    const clusterGroup = svg.append('g').attr('transform', `translate(${cx}, ${cy})`);
 
-      const starData = Array.from({ length: starPoints * 2 }, (_, i) => ({
-        angle: (i * Math.PI) / starPoints,
-        radius: i % 2 === 0 ? outerRadius : innerRadius
-      }));
+    clusterGroup
+      .append('circle')
+      .attr('r', baseRadius + 28)
+      .attr('fill', index % 2 === 0 ? '#e0e7ff' : '#ede9fe')
+      .attr('opacity', 0.25);
 
-      nodeGroup.append('path')
-        .attr('d', starPath(starData as any))
-        .attr('fill', 'url(#starGradient)')
-        .attr('stroke', ConstellationColors.primary)
-        .attr('stroke-width', 1)
-        .attr('opacity', 0.8);
+    clusterGroup
+      .append('circle')
+      .attr('r', baseRadius + 6)
+      .attr('stroke', '#c7d2fe')
+      .attr('stroke-dasharray', '6 6')
+      .attr('fill', 'none')
+      .attr('opacity', 0.6);
 
-      // Add glow effect
-      nodeGroup.append('circle')
-        .attr('r', outerRadius + 4)
-        .attr('fill', ConstellationColors.primary)
-        .attr('opacity', 0.1)
-        .style('filter', 'blur(2px)');
+    clusterGroup
+      .append('text')
+      .attr('text-anchor', 'middle')
+      .attr('y', -baseRadius - 24)
+      .text(cluster.label || `Cluster ${index + 1}`)
+      .style('font-family', 'Georgia, serif')
+      .style('font-size', '13px')
+      .style('font-weight', '600')
+      .style('fill', '#1f2937');
 
-      // Add node label
-      nodeGroup.append('text')
+    clusterGroup
+      .append('text')
+      .attr('text-anchor', 'middle')
+      .attr('y', -baseRadius - 8)
+      .text(`${cluster.size} concepts`)
+      .style('font-family', 'Georgia, serif')
+      .style('font-size', '11px')
+      .style('fill', '#6b7280');
+
+    const keywords = (cluster.keywords || []).slice(0, 3);
+    if (keywords.length > 0) {
+      clusterGroup
+        .append('text')
         .attr('text-anchor', 'middle')
-        .attr('dy', outerRadius + 20)
-        .text(node.label)
+        .attr('y', baseRadius + 28)
+        .text(keywords.join(' • '))
         .style('font-family', 'Georgia, serif')
-        .style('font-size', '10px')
-        .style('font-weight', '500')
-        .style('fill', '#374151')
-        .style('text-shadow', '0 1px 2px rgba(255,255,255,0.8)');
+        .style('font-size', '11px')
+        .style('fill', '#4338ca');
+    }
 
-      // Add school indicator if available
-      if (node.school) {
-        nodeGroup.append('text')
-          .attr('text-anchor', 'middle')
-          .attr('dy', outerRadius + 32)
-          .text(node.school)
-          .style('font-family', 'Georgia, serif')
-          .style('font-size', '8px')
-          .style('fill', '#6b7280')
-          .style('font-style', 'italic');
-      }
+    const nodes = (cluster.nodes || []).slice(0, 32);
+    if (nodes.length === 0) {
+      clusterGroup
+        .append('text')
+        .attr('text-anchor', 'middle')
+        .attr('y', 8)
+        .text('No concepts in cluster')
+        .style('font-family', 'Georgia, serif')
+        .style('font-size', '11px')
+        .style('fill', '#6b7280');
+      return;
+    }
+    const positions = nodes.map((node, nodeIndex) => {
+      const angle = (2 * Math.PI * nodeIndex) / Math.max(nodes.length, 1);
+      const radialBand = 0.55 + ((nodeIndex % 5) / 5) * 0.4;
+      const radius = baseRadius * Math.min(1, radialBand);
+      return {
+        node,
+        x: radius * Math.cos(angle),
+        y: radius * Math.sin(angle),
+        angle,
+      };
     });
+
+    if (positions.length > 1) {
+      const linkGroup = clusterGroup.append('g').attr('class', 'cluster-links');
+      positions.forEach((position, idx) => {
+        const next = positions[(idx + 1) % positions.length];
+        linkGroup
+          .append('line')
+          .attr('x1', position.x)
+          .attr('y1', position.y)
+          .attr('x2', next.x)
+          .attr('y2', next.y)
+          .attr('stroke', 'url(#constellationLink)')
+          .attr('stroke-width', 1.2)
+          .attr('opacity', 0.6);
+      });
+    }
+
+    const nodeGroup = clusterGroup.append('g').attr('class', 'cluster-nodes');
+    const nodesSelection = nodeGroup
+      .selectAll('g.node')
+      .data(positions)
+      .enter()
+      .append('g')
+      .attr('class', 'node')
+      .attr('transform', (d) => `translate(${d.x}, ${d.y})`);
+
+    nodesSelection
+      .append('circle')
+      .attr('r', 12)
+      .attr('fill', 'url(#constellationNode)')
+      .attr('stroke', '#1d4ed8')
+      .attr('stroke-width', 1.2)
+      .attr('opacity', 0.9);
+
+    nodesSelection
+      .append('circle')
+      .attr('r', 18)
+      .attr('fill', ConstellationColors.primary)
+      .attr('opacity', 0.12);
+
+    nodesSelection
+      .append('text')
+      .attr('text-anchor', 'middle')
+      .attr('dy', 28)
+      .text((d) => d.node.label)
+      .style('font-family', 'Georgia, serif')
+      .style('font-size', '10px')
+      .style('font-weight', '500')
+      .style('fill', '#1f2937');
+
+    nodesSelection
+      .append('title')
+      .text(
+        (d) =>
+          `${d.node.label}\n${d.node.period || 'No period specified'}${
+            d.node.school ? ` · ${d.node.school}` : ''
+          }${d.node.keywords?.length ? `\nKeywords: ${d.node.keywords.join(', ')}` : ''}`,
+      );
   });
 
-  // Add constellation title
-  svg.append('text')
+  svg
+    .append('text')
     .attr('x', width / 2)
-    .attr('y', 30)
+    .attr('y', 34)
     .attr('text-anchor', 'middle')
     .text('Concept Constellations')
     .style('font-family', 'Georgia, serif')
@@ -207,10 +228,10 @@ function drawConstellation(svg: d3.Selection<SVGSVGElement, unknown, null, undef
     .style('font-weight', '600')
     .style('fill', '#1f2937');
 
-  // Add stats
-  svg.append('text')
+  svg
+    .append('text')
     .attr('x', width / 2)
-    .attr('y', height - 20)
+    .attr('y', height - 26)
     .attr('text-anchor', 'middle')
     .text(`${data.stats.totalConcepts} concepts across ${data.stats.clusterCount} thematic clusters`)
     .style('font-family', 'Georgia, serif')
@@ -225,8 +246,8 @@ export default function ConceptConstellation() {
   useEffect(() => {
     if (!svgRef.current || !conceptClusters) return;
 
-    const width = 800;
-    const height = 500;
+    const width = 960;
+    const height = 520;
     
     const svg = d3.select(svgRef.current);
     svg.attr('viewBox', `0 0 ${width} ${height}`);
@@ -268,7 +289,7 @@ export default function ConceptConstellation() {
       <div className="overflow-x-auto -mx-4 px-4">
         <svg
           ref={svgRef}
-          className="w-full h-[500px] border border-gray-200 rounded-lg bg-gradient-to-br from-slate-50 to-blue-50"
+          className="w-full h-[520px] border border-gray-200 rounded-lg bg-gradient-to-br from-slate-50 to-blue-50"
         />
       </div>
 

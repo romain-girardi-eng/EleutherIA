@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { 
   Clock, 
   Sparkles, 
@@ -13,6 +13,7 @@ import AdvancedTimeline from './AdvancedTimeline';
 import ConceptConstellation from './ConceptConstellation';
 import InfluenceFlowDiagram from './InfluenceFlowDiagram';
 import AdvancedNetworkVisualization from './AdvancedNetworkVisualization';
+import type { CytoscapeData } from '../../types';
 
 type VisualizationMode = 
   | 'timeline' 
@@ -27,80 +28,104 @@ interface VisualizationTab {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   description: string;
-  component: React.ComponentType;
+  render: () => JSX.Element;
 }
 
-const visualizationTabs: VisualizationTab[] = [
-  {
-    id: 'overview',
-    label: 'Overview',
-    icon: Layers,
-    description: 'Comprehensive dashboard with all visualizations',
-    component: () => (
-      <div className="space-y-6">
-        <div className="grid gap-6 lg:grid-cols-2">
-          <AdvancedTimeline />
-          <ConceptConstellation />
-        </div>
-        <InfluenceFlowDiagram />
-        <AdvancedNetworkVisualization />
-      </div>
-    )
-  },
-  {
-    id: 'timeline',
-    label: 'Timeline',
-    icon: Clock,
-    description: 'Advanced chronological analysis with stream visualization',
-    component: AdvancedTimeline
-  },
-  {
-    id: 'constellation',
-    label: 'Constellations',
-    icon: Sparkles,
-    description: 'Concept clusters visualized as stellar constellations',
-    component: ConceptConstellation
-  },
-  {
-    id: 'influence',
-    label: 'Influence Flow',
-    icon: TrendingUp,
-    description: 'Sankey diagram showing philosophical influence patterns',
-    component: InfluenceFlowDiagram
-  },
-  {
-    id: 'network',
-    label: 'Network',
-    icon: Network,
-    description: 'Advanced force-directed network with intelligent clustering',
-    component: AdvancedNetworkVisualization
-  },
-  {
-    id: 'analytics',
-    label: 'Analytics',
-    icon: BarChart3,
-    description: 'Statistical analysis and data insights',
-    component: () => (
-      <div className="academic-card">
-        <div className="flex items-center gap-2 text-sm font-semibold text-academic-text uppercase mb-4">
-          <BarChart3 className="w-4 h-4 text-primary-600" />
-          Advanced Analytics
-        </div>
-        <div className="text-center py-16 text-academic-muted">
-          <PieChart className="w-16 h-16 mx-auto mb-4 opacity-50" />
-          <p className="text-lg font-medium mb-2">Analytics Dashboard</p>
-          <p className="text-sm">Advanced statistical analysis and insights coming soon...</p>
-        </div>
-      </div>
-    )
-  }
-];
+interface AdvancedVisualizationDashboardProps {
+  networkData: CytoscapeData | null;
+  networkLoading: boolean;
+  networkError: string | null;
+}
 
-export default function AdvancedVisualizationDashboard() {
+export default function AdvancedVisualizationDashboard({
+  networkData,
+  networkLoading,
+  networkError,
+}: AdvancedVisualizationDashboardProps) {
   const [activeMode, setActiveMode] = useState<VisualizationMode>('overview');
 
-  const activeTab = visualizationTabs.find(tab => tab.id === activeMode);
-  const ActiveComponent = activeTab?.component;
+  const visualizationTabs: VisualizationTab[] = useMemo(
+    () => [
+      {
+        id: 'overview',
+        label: 'Overview',
+        icon: Layers,
+        description: 'Comprehensive dashboard with all visualizations',
+        render: () => (
+          <div className="space-y-6">
+            <div className="grid gap-6 lg:grid-cols-2">
+              <AdvancedTimeline />
+              <ConceptConstellation />
+            </div>
+            <InfluenceFlowDiagram />
+            <AdvancedNetworkVisualization
+              data={networkData}
+              loading={networkLoading}
+              error={networkError}
+              standalone
+            />
+          </div>
+        ),
+      },
+      {
+        id: 'timeline',
+        label: 'Timeline',
+        icon: Clock,
+        description: 'Advanced chronological analysis with stream visualization',
+        render: () => <AdvancedTimeline />,
+      },
+      {
+        id: 'constellation',
+        label: 'Constellations',
+        icon: Sparkles,
+        description: 'Concept clusters visualized as stellar constellations',
+        render: () => <ConceptConstellation />,
+      },
+      {
+        id: 'influence',
+        label: 'Influence Flow',
+        icon: TrendingUp,
+        description: 'Sankey diagram showing philosophical influence patterns',
+        render: () => <InfluenceFlowDiagram />,
+      },
+      {
+        id: 'network',
+        label: 'Network',
+        icon: Network,
+        description: 'Advanced force-directed network with intelligent clustering',
+        render: () => (
+          <AdvancedNetworkVisualization
+            data={networkData}
+            loading={networkLoading}
+            error={networkError}
+            standalone={false}
+          />
+        ),
+      },
+      {
+        id: 'analytics',
+        label: 'Analytics',
+        icon: BarChart3,
+        description: 'Statistical analysis and data insights',
+        render: () => (
+          <div className="academic-card">
+            <div className="flex items-center gap-2 text-sm font-semibold text-academic-text uppercase mb-4">
+              <BarChart3 className="w-4 h-4 text-primary-600" />
+              Advanced Analytics
+            </div>
+            <div className="text-center py-16 text-academic-muted">
+              <PieChart className="w-16 h-16 mx-auto mb-4 opacity-50" />
+              <p className="text-lg font-medium mb-2">Analytics Dashboard</p>
+              <p className="text-sm">Advanced statistical analysis and insights coming soon...</p>
+            </div>
+          </div>
+        ),
+      },
+    ],
+    [networkData, networkLoading, networkError],
+  );
+
+  const activeTab = visualizationTabs.find((tab) => tab.id === activeMode);
 
   return (
     <div className="space-y-6">
@@ -154,25 +179,23 @@ export default function AdvancedVisualizationDashboard() {
       </div>
 
       {/* Active Visualization */}
-      {ActiveComponent && (
+      {activeTab && (
         <div className="academic-card">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              {activeTab && (
-                <>
-                  <activeTab.icon className="w-5 h-5 text-primary-600" />
-                  <h3 className="text-lg font-semibold text-academic-text">
-                    {activeTab.label}
-                  </h3>
-                </>
-              )}
+              <>
+                <activeTab.icon className="w-5 h-5 text-primary-600" />
+                <h3 className="text-lg font-semibold text-academic-text">
+                  {activeTab.label}
+                </h3>
+              </>
             </div>
             <div className="text-xs text-academic-muted">
               {activeTab?.description}
             </div>
           </div>
           
-          <ActiveComponent />
+          {activeTab.render()}
         </div>
       )}
 

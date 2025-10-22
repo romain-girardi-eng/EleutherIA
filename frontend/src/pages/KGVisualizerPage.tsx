@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import CytoscapeVisualizerEnhanced from '../components/CytoscapeVisualizerEnhanced';
 import { apiClient } from '../api/client';
-import type { CytoscapeData, CytoscapeElement } from '../types';
+import type { CytoscapeData } from '../types';
 import { KGWorkspaceProvider, useKGWorkspace } from '../context/KGWorkspaceContext';
 import WorkspaceHeader from '../components/workspace/WorkspaceHeader';
 import WorkspaceFilterBar from '../components/workspace/WorkspaceFilterBar';
@@ -11,6 +11,7 @@ import ConceptClusterGrid from '../components/workspace/ConceptClusterGrid';
 import InfluenceMatrixPanel from '../components/workspace/InfluenceMatrixPanel';
 import PathInspectorPanel from '../components/workspace/PathInspectorPanel';
 import AdvancedVisualizationDashboard from '../components/visualizations/AdvancedVisualizationDashboard';
+import { filterCytoscapeData } from '../utils/cytoscapeFilters';
 
 type VisualizerMode = 'observatory' | 'semativerse' | 'advanced';
 
@@ -38,9 +39,10 @@ function KGVisualizerContent() {
         setCyLoading(true);
         const data = await apiClient.getCytoscapeData();
         setCyData(data);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Failed to load Cytoscape data', err);
-        setCyError(err?.message || 'Failed to load network visualization');
+        const message = err instanceof Error ? err.message : 'Failed to load network visualization';
+        setCyError(message);
       } finally {
         setCyLoading(false);
       }
@@ -48,120 +50,10 @@ function KGVisualizerContent() {
     void load();
   }, []);
 
-  const filteredData = useMemo(() => {
-    if (!cyData) {
-      return null;
-    }
-
-    const { nodeTypes, periods, schools, relations, searchTerm } = state.filters;
-    const search = (searchTerm || '').trim().toLowerCase();
-
-    const degreeMap = new Map<string, number>();
-    cyData.elements.edges.forEach((edge) => {
-      const src = edge.data.source ?? '';
-      const tgt = edge.data.target ?? '';
-      if (src) degreeMap.set(src, (degreeMap.get(src) || 0) + 1);
-      if (tgt) degreeMap.set(tgt, (degreeMap.get(tgt) || 0) + 1);
-    });
-
-    const matchesNode = (element: CytoscapeElement) => {
-      const data = element.data;
-      if (nodeTypes.length && data.type && !nodeTypes.includes(data.type)) {
-        return false;
-      }
-      if (periods.length && data.period && !periods.includes(data.period)) {
-        return false;
-      }
-      if (schools.length && data.school && !schools.includes(data.school)) {
-        return false;
-      }
-      if (search) {
-        const haystack = [
-          data.label,
-          data.description,
-          data.summary,
-          data.period,
-          data.school,
-        ]
-          .filter(Boolean)
-          .join(' ')
-          .toLowerCase();
-        if (!haystack.includes(search)) {
-          return false;
-        }
-      }
-      return true;
-    };
-
-    const nodeMap = new Map(cyData.elements.nodes.map((node) => [node.data.id, node]));
-    const baseNodes: CytoscapeElement[] = cyData.elements.nodes.filter(matchesNode);
-
-    // Always include explicitly selected nodes even if filters would exclude them
-    state.selection.nodes.forEach((nodeId) => {
-      if (!baseNodes.some((node) => node.data.id === nodeId)) {
-        const selectedNode = nodeMap.get(nodeId);
-        if (selectedNode) {
-          baseNodes.push(selectedNode);
-        }
-      }
-    });
-
-    const relationFilter = new Set(relations);
-    const nodeIdSet = new Set(baseNodes.map((node) => node.data.id));
-
-    const filteredEdges = cyData.elements.edges.filter((edge) => {
-      const relation = edge.data.relation ?? '';
-      const source = edge.data.source ?? '';
-      const target = edge.data.target ?? '';
-      if (relationFilter.size && relation && !relationFilter.has(relation)) {
-        return false;
-      }
-      return source && target && nodeIdSet.has(source) && nodeIdSet.has(target);
-    });
-
-    // ensure nodes referenced by retained edges are included
-    filteredEdges.forEach((edge) => {
-      const source = edge.data.source ?? '';
-      const target = edge.data.target ?? '';
-      if (source) nodeIdSet.add(source);
-      if (target) nodeIdSet.add(target);
-    });
-
-    let finalNodes = cyData.elements.nodes.filter((node) => nodeIdSet.has(node.data.id));
-
-    const MAX_NODES = 200;
-    if (finalNodes.length > MAX_NODES) {
-      finalNodes = finalNodes
-        .slice()
-        .sort((a, b) => {
-          const degreeDiff = (degreeMap.get(b.data.id) || 0) - (degreeMap.get(a.data.id) || 0);
-          if (degreeDiff !== 0) {
-            return degreeDiff;
-          }
-          return (a.data.label || '').localeCompare(b.data.label || '');
-        })
-        .slice(0, MAX_NODES);
-      const limitedSet = new Set(finalNodes.map((node) => node.data.id));
-      const limitedEdges = filteredEdges.filter((edge) => {
-        const source = edge.data.source ?? '';
-        const target = edge.data.target ?? '';
-        return source && target && limitedSet.has(source) && limitedSet.has(target);
-      });
-      return {
-        elements: {
-          nodes: finalNodes,
-          edges: limitedEdges,
-        },
-      };
-    }
-
-    return {
-      elements: {
-        nodes: finalNodes,
-        edges: filteredEdges,
-      },
-    };
-  }, [cyData, state.filters, state.selection]);
+  const filteredData = useMemo(
+    () => filterCytoscapeData(cyData, state.filters, state.selection),
+    [cyData, state.filters, state.selection],
+  );
 
   const totals = state.timeline?.totals;
   const typeCounts = totals?.byType || {};
@@ -207,7 +99,11 @@ function KGVisualizerContent() {
       </div>
 
       {mode === 'advanced' ? (
-        <AdvancedVisualizationDashboard />
+        <AdvancedVisualizationDashboard
+          networkData={cyData}
+          networkLoading={cyLoading}
+          networkError={cyError}
+        />
       ) : mode === 'semativerse' ? (
         <>
           <div className="academic-card bg-purple-50 border-purple-200">

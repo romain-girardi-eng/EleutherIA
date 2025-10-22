@@ -26,6 +26,7 @@ pydantic>=2.5.0
 # Security
 python-jose[cryptography]>=3.3.0
 passlib[bcrypt]>=1.7.4
+slowapi>=0.1.9
 
 # Development
 pytest>=7.4.0

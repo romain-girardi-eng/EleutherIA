@@ -1,7 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { HelpCircle } from 'lucide-react';
+import { HelpCircle, LogOut, User } from 'lucide-react';
 import { useState } from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
 import KGVisualizerPage from './pages/KGVisualizerPage';
 import SearchPage from './pages/SearchPage';
 import GraphRAGPage from './pages/GraphRAGPage';
@@ -15,9 +18,11 @@ import './index.css';
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </AuthProvider>
   );
 }
 
@@ -188,6 +193,7 @@ const pageTours: Record<string, { title: string; steps: Array<{ title: string; c
 function AppContent() {
   const location = useLocation();
   const [showTour, setShowTour] = useState(false);
+  const { user, logout, isAuthenticated } = useAuth();
 
   const currentTour = pageTours[location.pathname] || pageTours['/'];
 
@@ -237,6 +243,26 @@ function AppContent() {
               <NavLink to="/texts">Ancient Texts</NavLink>
               <NavLink to="/bibliography">Bibliography</NavLink>
               <NavLink to="/about">About</NavLink>
+              
+              {/* User Menu */}
+              {isAuthenticated ? (
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 text-sm text-academic-muted">
+                    <User className="w-4 h-4" />
+                    <span>{user?.username}</span>
+                  </div>
+                  <button
+                    onClick={logout}
+                    className="flex items-center space-x-1 text-academic-text hover:text-primary-600 transition-colors"
+                    title="Logout"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span className="text-sm">Logout</span>
+                  </button>
+                </div>
+              ) : (
+                <NavLink to="/login">Login</NavLink>
+              )}
             </div>
 
               {/* Mobile Menu Button */}
@@ -272,11 +298,12 @@ function AppContent() {
         <main className="academic-container pt-0 pb-12 sm:pb-8">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/database" element={<DatabasePage />} />
-            <Route path="/visualizer" element={<KGVisualizerPage />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/graphrag" element={<GraphRAGPage />} />
-            <Route path="/texts" element={<TextExplorerPage />} />
+            <Route path="/visualizer" element={<ProtectedRoute><KGVisualizerPage /></ProtectedRoute>} />
+            <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
+            <Route path="/graphrag" element={<ProtectedRoute><GraphRAGPage /></ProtectedRoute>} />
+            <Route path="/texts" element={<ProtectedRoute><TextExplorerPage /></ProtectedRoute>} />
             <Route path="/bibliography" element={<BibliographyPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/report-error" element={<ReportErrorPage />} />

@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import { Network } from 'lucide-react';
 import { useKGWorkspace } from '../../context/KGWorkspaceContext';
 import type { CytoscapeData } from '../../types';
+import { filterCytoscapeData } from '../../utils/cytoscapeFilters';
 
 interface NetworkNode {
   id: string;
@@ -16,12 +17,15 @@ interface NetworkNode {
   fy?: number;
 }
 
-interface NetworkLink {
-  source: string | NetworkNode;
-  target: string | NetworkNode;
+type SimulationNode = NetworkNode & d3.SimulationNodeDatum;
+type SimulationLink = d3.SimulationLinkDatum<SimulationNode> & {
   relation: string;
   strength: number;
-}
+};
+type ResolvedLink = SimulationLink & {
+  source: SimulationNode;
+  target: SimulationNode;
+};
 
 const NetworkColors = {
   person: '#2563eb',
@@ -38,11 +42,20 @@ function getNodeColor(type: string) {
   return NetworkColors[type as keyof typeof NetworkColors] || NetworkColors.default;
 }
 
-function createAdvancedNetworkLayout(nodes: NetworkNode[], links: NetworkLink[], width: number, height: number) {
+function createAdvancedNetworkLayout(
+  nodes: SimulationNode[],
+  links: SimulationLink[],
+  width: number,
+  height: number,
+): { nodes: SimulationNode[]; links: ResolvedLink[] } {
+  if (nodes.length === 0) {
+    return { nodes, links: [] };
+  }
+
   // Create force simulation with sophisticated physics
-  const simulation = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(links)
-      .id((d: any) => d.id)
+  const simulation = d3.forceSimulation<SimulationNode>(nodes)
+    .force('link', d3.forceLink<SimulationNode, SimulationLink>(links)
+      .id((d) => d.id)
       .distance(100)
       .strength(0.1))
     .force('charge', d3.forceManyBody()
@@ -57,7 +70,17 @@ function createAdvancedNetworkLayout(nodes: NetworkNode[], links: NetworkLink[],
   // Run simulation
   simulation.tick(300);
 
-  return { nodes, links };
+  const resolvedLinks: ResolvedLink[] = links.map((link) => ({
+    ...link,
+    source: typeof link.source === 'string'
+      ? nodes.find((node) => node.id === link.source) ?? nodes[0]
+      : link.source,
+    target: typeof link.target === 'string'
+      ? nodes.find((node) => node.id === link.target) ?? nodes[0]
+      : link.target,
+  }));
+
+  return { nodes, links: resolvedLinks };
 }
 
 function drawAdvancedNetwork(svg: d3.Selection<SVGSVGElement, unknown, null, undefined>, 
@@ -130,32 +153,33 @@ function drawAdvancedNetwork(svg: d3.Selection<SVGSVGElement, unknown, null, und
     .attr('ry', 8);
 
   // Transform data
-  const nodes: NetworkNode[] = data.elements.nodes.map(node => ({
+  const nodes: SimulationNode[] = data.elements.nodes.map((node) => ({
     id: node.data.id,
     label: node.data.label || node.data.id,
-    type: node.data.type || 'concept'
-  }));
+    type: node.data.type || 'concept',
+  })) as SimulationNode[];
 
-  const links: NetworkLink[] = data.elements.edges.map(edge => ({
+  const links: SimulationLink[] = data.elements.edges.map((edge) => ({
     source: edge.data.source || '',
     target: edge.data.target || '',
     relation: edge.data.relation || '',
-    strength: 1
-  }));
+    strength: 1,
+  })) as SimulationLink[];
 
   const { nodes: positionedNodes, links: positionedLinks } = createAdvancedNetworkLayout(nodes, links, width, height);
 
   // Draw links
   const linkGroup = svg.append('g').attr('class', 'links');
   
-  linkGroup.selectAll('.link')
+  linkGroup.selectAll<SVGLineElement, ResolvedLink>('.link')
     .data(positionedLinks)
-    .enter().append('line')
+    .enter()
+    .append('line')
     .attr('class', 'link')
-    .attr('x1', (d: any) => d.source.x)
-    .attr('y1', (d: any) => d.source.y)
-    .attr('x2', (d: any) => d.target.x)
-    .attr('y2', (d: any) => d.target.y)
+    .attr('x1', (d) => d.source.x ?? 0)
+    .attr('y1', (d) => d.source.y ?? 0)
+    .attr('x2', (d) => d.target.x ?? 0)
+    .attr('y2', (d) => d.target.y ?? 0)
     .attr('stroke', 'url(#linkGradient)')
     .attr('stroke-width', 1.5)
     .attr('opacity', 0.6);
@@ -163,17 +187,19 @@ function drawAdvancedNetwork(svg: d3.Selection<SVGSVGElement, unknown, null, und
   // Draw nodes
   const nodeGroup = svg.append('g').attr('class', 'nodes');
   
-  const node = nodeGroup.selectAll('.node')
+  const node = nodeGroup
+    .selectAll<SVGGElement, SimulationNode>('.node')
     .data(positionedNodes)
-    .enter().append('g')
+    .enter()
+    .append('g')
     .attr('class', 'node')
-    .attr('transform', (d: any) => `translate(${d.x}, ${d.y})`)
+    .attr('transform', (d) => `translate(${d.x ?? width / 2}, ${d.y ?? height / 2})`)
     .style('cursor', 'pointer');
 
   // Draw node circles
   node.append('circle')
     .attr('r', 15)
-    .attr('fill', (d: any) => getNodeColor(d.type))
+    .attr('fill', (d) => getNodeColor(d.type))
     .attr('stroke', '#ffffff')
     .attr('stroke-width', 2)
     .attr('opacity', 0.9);
@@ -181,7 +207,7 @@ function drawAdvancedNetwork(svg: d3.Selection<SVGSVGElement, unknown, null, und
   // Add node glow effect
   node.append('circle')
     .attr('r', 20)
-    .attr('fill', (d: any) => getNodeColor(d.type))
+    .attr('fill', (d) => getNodeColor(d.type))
     .attr('opacity', 0.2)
     .style('filter', 'blur(3px)');
 
@@ -189,7 +215,7 @@ function drawAdvancedNetwork(svg: d3.Selection<SVGSVGElement, unknown, null, und
   node.append('text')
     .attr('text-anchor', 'middle')
     .attr('dy', 25)
-    .text((d: any) => d.label)
+    .text((d) => d.label)
     .style('font-family', 'Georgia, serif')
     .style('font-size', '10px')
     .style('font-weight', '500')
@@ -200,7 +226,7 @@ function drawAdvancedNetwork(svg: d3.Selection<SVGSVGElement, unknown, null, und
   node.append('text')
     .attr('text-anchor', 'middle')
     .attr('dy', 35)
-    .text((d: any) => d.type)
+    .text((d) => d.type)
     .style('font-family', 'Georgia, serif')
     .style('font-size', '8px')
     .style('fill', '#6b7280')
@@ -229,24 +255,39 @@ function drawAdvancedNetwork(svg: d3.Selection<SVGSVGElement, unknown, null, und
     .style('fill', '#6b7280');
 }
 
-export default function AdvancedNetworkVisualization() {
+interface AdvancedNetworkVisualizationProps {
+  data: CytoscapeData | null;
+  loading: boolean;
+  error: string | null;
+  standalone?: boolean;
+}
+
+export default function AdvancedNetworkVisualization({
+  data,
+  loading,
+  error,
+  standalone = true,
+}: AdvancedNetworkVisualizationProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { state } = useKGWorkspace();
 
-  // Get filtered data (simplified for now)
-  const networkData = useMemo(() => {
-    // This would normally use the filtered data from the workspace
-    // For now, we'll create a mock structure
-    return {
-      elements: {
-        nodes: [],
-        edges: []
-      }
-    } as CytoscapeData;
-  }, [state]);
+  const networkData = useMemo(
+    () =>
+      filterCytoscapeData(
+        data,
+        state.filters,
+        state.selection,
+        {
+          maxNodes: 150,
+        },
+      ),
+    [data, state.filters, state.selection],
+  );
 
   useEffect(() => {
-    if (!svgRef.current || !networkData) return;
+    if (!svgRef.current || !networkData || networkData.elements.nodes.length === 0) {
+      return;
+    }
 
     const width = 1000;
     const height = 600;
@@ -258,19 +299,51 @@ export default function AdvancedNetworkVisualization() {
 
   }, [networkData]);
 
-  return (
-    <div className="academic-card">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2 text-sm font-semibold text-academic-text uppercase">
-          <Network className="w-4 h-4 text-primary-600" />
-          Advanced Network Analysis
-        </div>
-        <div className="text-xs text-academic-muted">
-          Sophisticated force-directed layout with intelligent clustering
+  const isEmpty = !networkData || networkData.elements.nodes.length === 0;
+
+  const renderStatus = (message: string, isError: boolean = false) => {
+    const content = (
+      <div className="py-16 text-center text-sm">
+        <div className={isError ? 'text-red-500' : 'text-academic-muted'}>
+          {message}
         </div>
       </div>
+    );
 
-      <div className="overflow-x-auto -mx-4 px-4">
+    if (standalone) {
+      return <div className="academic-card">{content}</div>;
+    }
+
+    return content;
+  };
+
+  if (loading) {
+    return renderStatus('Loading network data…');
+  }
+
+  if (error) {
+    return renderStatus(error, true);
+  }
+
+  if (isEmpty) {
+    return renderStatus('No network entities match the current filters.');
+  }
+
+  const chart = (
+    <>
+      {standalone && (
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2 text-sm font-semibold text-academic-text uppercase">
+            <Network className="w-4 h-4 text-primary-600" />
+            Advanced Network Analysis
+          </div>
+          <div className="text-xs text-academic-muted">
+            Sophisticated force-directed layout with intelligent clustering
+          </div>
+        </div>
+      )}
+
+      <div className={`overflow-x-auto ${standalone ? '-mx-4 px-4' : ''}`}>
         <svg
           ref={svgRef}
           className="w-full h-[600px] border border-gray-200 rounded-lg bg-gradient-to-br from-slate-50 to-blue-50"
@@ -303,6 +376,16 @@ export default function AdvancedNetworkVisualization() {
           <span>Schools</span>
         </div>
       </div>
-    </div>
+    </>
   );
+
+  if (standalone) {
+    return (
+      <div className="academic-card">
+        {chart}
+      </div>
+    );
+  }
+
+  return chart;
 }

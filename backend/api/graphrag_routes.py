@@ -4,7 +4,7 @@ GraphRAG API Routes
 Endpoints for question answering using Graph RAG
 """
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, AsyncGenerator
@@ -12,6 +12,8 @@ import logging
 import json
 
 from services.graphrag_service import GraphRAGService
+from services.auth_service import check_rate_limit
+from api.auth import get_current_user_dependency, User
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +31,11 @@ class GraphRAGQuery(BaseModel):
 
 
 @router.post("/query")
-async def graphrag_query(graphrag_query: GraphRAGQuery, request: Request):
+async def graphrag_query(
+    graphrag_query: GraphRAGQuery, 
+    request: Request,
+    current_user: User = Depends(get_current_user_dependency)
+):
     """
     Answer questions using GraphRAG (Graph-based Retrieval-Augmented Generation):
     1. Semantic search (Qdrant) - find relevant starting nodes via vector similarity
@@ -40,6 +46,17 @@ async def graphrag_query(graphrag_query: GraphRAGQuery, request: Request):
     6. Reasoning path - visualize which nodes and edges were used
     """
     try:
+        # Rate limiting check
+        client_ip = request.client.host
+        identifier = f"{current_user.username}:{client_ip}"
+        
+        if not check_rate_limit(identifier, limit=30, window_minutes=15):
+            raise HTTPException(
+                status_code=429,
+                detail="Rate limit exceeded. Please wait before making another request.",
+                headers={"Retry-After": "900"}  # 15 minutes
+            )
+        
         # Get services from app state
         db = request.app.state.db
         qdrant = request.app.state.qdrant
@@ -60,13 +77,19 @@ async def graphrag_query(graphrag_query: GraphRAGQuery, request: Request):
 
         return result
 
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error in GraphRAG query: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/query/stream")
-async def graphrag_query_stream(graphrag_query: GraphRAGQuery, request: Request):
+async def graphrag_query_stream(
+    graphrag_query: GraphRAGQuery, 
+    request: Request,
+    current_user: User = Depends(get_current_user_dependency)
+):
     """
     Answer questions using GraphRAG with real-time streaming updates.
     Uses Server-Sent Events (SSE) to stream progress and final answer.
@@ -83,6 +106,14 @@ async def graphrag_query_stream(graphrag_query: GraphRAGQuery, request: Request)
     async def generate_stream() -> AsyncGenerator[str, None]:
         """Generate SSE stream with progress updates"""
         try:
+            # Rate limiting check
+            client_ip = request.client.host
+            identifier = f"{current_user.username}:{client_ip}"
+            
+            if not check_rate_limit(identifier, limit=30, window_minutes=15):
+                yield f"data: {json.dumps({'type': 'error', 'message': 'Rate limit exceeded. Please wait before making another request.'})}\n\n"
+                return
+            
             # Get services from app state
             db = request.app.state.db
             qdrant = request.app.state.qdrant

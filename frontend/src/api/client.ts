@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import type { AxiosInstance } from 'axios';
 import type {
   KGData,
@@ -18,6 +19,7 @@ import type {
   KGPathRequest,
   KGPathResponse,
 } from '../types';
+import type { User, LoginCredentials } from '../context/AuthContext';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -32,6 +34,31 @@ class ApiClient {
       },
       timeout: 60000, // 60 second timeout for GraphRAG queries
     });
+
+    // Add request interceptor to include auth token
+    this.client.interceptors.request.use((config) => {
+      const token = Cookies.get('auth_token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    });
+
+    // Add response interceptor to handle auth errors
+    this.client.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401) {
+          // Token expired or invalid, clear it
+          Cookies.remove('auth_token');
+          // Optionally redirect to login
+          if (window.location.pathname !== '/login') {
+            window.location.href = '/login';
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
   }
 
   // Health Check
@@ -177,6 +204,21 @@ class ApiClient {
   }
 
   // Authentication Endpoints
+  async login(credentials: LoginCredentials): Promise<{ access_token: string; token_type: string; expires_in: number }> {
+    const response = await this.client.post('/api/auth/login', credentials);
+    return response.data;
+  }
+
+  async getCurrentUser(): Promise<User> {
+    const response = await this.client.get('/api/auth/me');
+    return response.data;
+  }
+
+  async getRateLimitStatus(): Promise<{ user: string; ip: string; rate_limit: any }> {
+    const response = await this.client.get('/api/auth/rate-limit');
+    return response.data;
+  }
+
   async checkSemativersePermission(
     request: SemativersePermissionRequest
   ): Promise<SemativersePermissionResponse> {
