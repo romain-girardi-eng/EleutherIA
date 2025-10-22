@@ -801,6 +801,8 @@ function BenefitsContent() {
 // Message Bubble Component
 function MessageBubble({ message }: { message: GraphRAGChatMessage }) {
   const [showCitations, setShowCitations] = useState(false);
+  const [showAllAncient, setShowAllAncient] = useState(false);
+  const [showAllModern, setShowAllModern] = useState(false);
 
   return (
     <div className={`${message.role === 'user' ? 'ml-auto max-w-[95%] sm:max-w-2xl' : 'mr-auto max-w-[98%] sm:max-w-3xl'}`}>
@@ -835,37 +837,55 @@ function MessageBubble({ message }: { message: GraphRAGChatMessage }) {
                   <div className="mt-3 space-y-3 text-xs sm:text-sm">
                     {message.citations.ancient_sources.length > 0 && (
                       <div>
-                        <h4 className="font-semibold mb-2">Ancient Sources:</h4>
+                        <h4 className="font-semibold mb-2">Ancient Sources ({message.citations.ancient_sources.length}):</h4>
                         <ul className="list-disc list-inside space-y-1 text-academic-muted pl-2">
-                          {message.citations.ancient_sources.slice(0, 5).map((source, i) => (
+                          {(showAllAncient
+                            ? message.citations.ancient_sources
+                            : message.citations.ancient_sources.slice(0, 5)
+                          ).map((source, i) => (
                             <li key={i} className="citation break-words">
                               {source}
                             </li>
                           ))}
-                          {message.citations.ancient_sources.length > 5 && (
-                            <li className="text-xs">
-                              ...and {message.citations.ancient_sources.length - 5} more
-                            </li>
-                          )}
                         </ul>
+                        {message.citations.ancient_sources.length > 5 && (
+                          <button
+                            onClick={() => setShowAllAncient(!showAllAncient)}
+                            className="mt-2 text-xs text-primary-600 hover:text-primary-700 font-medium"
+                          >
+                            {showAllAncient
+                              ? '▲ Show less'
+                              : `▼ Show all ${message.citations.ancient_sources.length} sources`
+                            }
+                          </button>
+                        )}
                       </div>
                     )}
 
                     {message.citations.modern_scholarship.length > 0 && (
                       <div>
-                        <h4 className="font-semibold mb-2">Modern Scholarship:</h4>
+                        <h4 className="font-semibold mb-2">Modern Scholarship ({message.citations.modern_scholarship.length}):</h4>
                         <ul className="list-disc list-inside space-y-1 text-academic-muted pl-2">
-                          {message.citations.modern_scholarship.slice(0, 3).map((source, i) => (
+                          {(showAllModern
+                            ? message.citations.modern_scholarship
+                            : message.citations.modern_scholarship.slice(0, 3)
+                          ).map((source, i) => (
                             <li key={i} className="citation break-words">
                               {source}
                             </li>
                           ))}
-                          {message.citations.modern_scholarship.length > 3 && (
-                            <li className="text-xs">
-                              ...and {message.citations.modern_scholarship.length - 3} more
-                            </li>
-                          )}
                         </ul>
+                        {message.citations.modern_scholarship.length > 3 && (
+                          <button
+                            onClick={() => setShowAllModern(!showAllModern)}
+                            className="mt-2 text-xs text-primary-600 hover:text-primary-700 font-medium"
+                          >
+                            {showAllModern
+                              ? '▲ Show less'
+                              : `▼ Show all ${message.citations.modern_scholarship.length} sources`
+                            }
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
