@@ -161,14 +161,19 @@ async def graphrag_query_stream(
             # Step 5: Generate answer
             yield f"data: {json.dumps({'type': 'status', 'message': 'Generating answer with LLM...', 'step': 5, 'total_steps': 6})}\n\n"
 
-            answer = await graphrag_service.synthesize_answer(
+            synthesis_result = await graphrag_service.synthesize_answer(
                 query=graphrag_query.query,
                 context=context,
                 temperature=graphrag_query.temperature
             )
 
+            answer_text = synthesis_result['answer']
+            tokens_used = synthesis_result['tokens_used']
+            llm_provider = synthesis_result['provider']
+            llm_model = synthesis_result['model']
+
             # Stream answer (simulate token-by-token for now)
-            words = answer.split()
+            words = answer_text.split()
             for i, word in enumerate(words):
                 yield f"data: {json.dumps({'type': 'answer_chunk', 'data': word + ' ', 'progress': (i + 1) / len(words)})}\n\n"
 
@@ -186,11 +191,14 @@ async def graphrag_query_stream(
                 'type': 'complete',
                 'data': {
                     'query': graphrag_query.query,
-                    'answer': answer,
+                    'answer': answer_text,
                     'citations': citations,
                     'reasoning_path': reasoning_path,
                     'nodes_used': len(expanded_nodes),
                     'edges_traversed': len(traversed_edges),
+                    'tokens_used': tokens_used,
+                    'llm_provider': llm_provider,
+                    'llm_model': llm_model,
                     'success': True
                 }
             }
