@@ -184,6 +184,47 @@ function drawAdvancedNetwork(
   } = createSimulation(data, width, height);
   const clusterKeys = Array.from(centerMap.keys());
   const nodeLookup = new Map(nodes.map((node) => [node.id, node]));
+  const nodeIndexLookup = new Map<number, SimulationNode>();
+  nodes.forEach((node, index) => nodeIndexLookup.set(index, node));
+
+  const getNodeFromRef = (ref: string | number | SimulationNode): SimulationNode | undefined => {
+    if (typeof ref === 'object') {
+      return ref;
+    }
+    if (typeof ref === 'string') {
+      return nodeLookup.get(ref);
+    }
+    if (typeof ref === 'number') {
+      return nodeIndexLookup.get(ref);
+    }
+    return undefined;
+  };
+
+  const getNodeIdFromRef = (ref: string | number | SimulationNode): string => {
+    if (typeof ref === 'object') {
+      return ref.id;
+    }
+    if (typeof ref === 'string') {
+      return ref;
+    }
+    if (typeof ref === 'number') {
+      const node = nodeIndexLookup.get(ref);
+      return node?.id ?? String(ref);
+    }
+    return '';
+  };
+
+  const getNodeTypeFromRef = (ref: string | number | SimulationNode): string | undefined => {
+    return getNodeFromRef(ref)?.type;
+  };
+
+  const getNodePosition = (ref: string | number | SimulationNode) => {
+    const node = getNodeFromRef(ref);
+    return {
+      x: node?.x ?? width / 2,
+      y: node?.y ?? height / 2,
+    };
+  };
 
   const clusterHullGroup = content.append('g').attr('class', 'network-cluster-hulls');
   const linkGroup = content.append('g').attr('class', 'network-links');
@@ -267,10 +308,10 @@ function drawAdvancedNetwork(
     nodeSelection.attr('transform', (d) => `translate(${d.x ?? width / 2}, ${d.y ?? height / 2})`);
 
     linkSelection
-      .attr('x1', (d) => (typeof d.source === 'string' ? width / 2 : d.source.x ?? width / 2))
-      .attr('y1', (d) => (typeof d.source === 'string' ? height / 2 : d.source.y ?? height / 2))
-      .attr('x2', (d) => (typeof d.target === 'string' ? width / 2 : d.target.x ?? width / 2))
-      .attr('y2', (d) => (typeof d.target === 'string' ? height / 2 : d.target.y ?? height / 2));
+      .attr('x1', (d) => getNodePosition(d.source).x)
+      .attr('y1', (d) => getNodePosition(d.source).y)
+      .attr('x2', (d) => getNodePosition(d.target).x)
+      .attr('y2', (d) => getNodePosition(d.target).y);
   };
 
   const hullPadding = 36;
@@ -318,14 +359,20 @@ function drawAdvancedNetwork(
       })
       .attr('display', (cluster) => {
         const points = nodes.filter((node) => node.type === cluster);
-        return points.length === 0 ? 'none' : undefined;
+        return points.length === 0 ? 'none' : null;
       });
   };
 
   let activeCluster: string | null = null;
 
   const colorWithOpacity = (cluster: string, opacity: number) => {
-    const base = d3.color(getNodeColor(cluster)) ?? d3.color('#94a3b8');
+    const base =
+      d3.color(getNodeColor(cluster)) ||
+      d3.color('#94a3b8') ||
+      d3.rgb(148, 163, 184);
+    if (!base) {
+      return `rgba(148, 163, 184, ${opacity})`;
+    }
     const copy = base.copy();
     copy.opacity = opacity;
     return copy.formatRgb();
@@ -374,8 +421,8 @@ function drawAdvancedNetwork(
 
     linkSelection
       .attr('stroke-width', (d) => {
-        const sourceId = typeof d.source === 'string' ? d.source : d.source.id;
-        const targetId = typeof d.target === 'string' ? d.target : d.target.id;
+        const sourceId = getNodeIdFromRef(d.source);
+        const targetId = getNodeIdFromRef(d.target);
         if (focusId === sourceId || focusId === targetId) {
           return 2.4;
         }
@@ -383,8 +430,8 @@ function drawAdvancedNetwork(
           return 2;
         }
         if (activeCluster) {
-          const sourceType = (typeof d.source === 'string' ? nodeLookup.get(sourceId) : d.source)?.type;
-          const targetType = (typeof d.target === 'string' ? nodeLookup.get(targetId) : d.target)?.type;
+          const sourceType = getNodeTypeFromRef(d.source);
+          const targetType = getNodeTypeFromRef(d.target);
           if (sourceType === activeCluster || targetType === activeCluster) {
             return 1.6;
           }
@@ -395,8 +442,8 @@ function drawAdvancedNetwork(
         if (!hasHighlightedNodes && !activeCluster) {
           return 0.55;
         }
-        const sourceId = typeof d.source === 'string' ? d.source : d.source.id;
-        const targetId = typeof d.target === 'string' ? d.target : d.target.id;
+        const sourceId = getNodeIdFromRef(d.source);
+        const targetId = getNodeIdFromRef(d.target);
         if (
           focusId === sourceId ||
           focusId === targetId ||
@@ -406,8 +453,8 @@ function drawAdvancedNetwork(
           return 0.85;
         }
         if (activeCluster) {
-          const sourceType = (typeof d.source === 'string' ? nodeLookup.get(sourceId) : d.source)?.type;
-          const targetType = (typeof d.target === 'string' ? nodeLookup.get(targetId) : d.target)?.type;
+          const sourceType = getNodeTypeFromRef(d.source);
+          const targetType = getNodeTypeFromRef(d.target);
           if (sourceType === activeCluster || targetType === activeCluster) {
             return 0.5;
           }
@@ -591,7 +638,7 @@ export default function AdvancedNetworkVisualization({
       height,
       {
         selectedIds: new Set(state.selection.nodes),
-        focusId: state.selection.focusNodeId,
+        focusId: state.selection.focusNodeId ?? null,
         onNodeClick: (nodeId) => {
           if (!nodeId) {
             updateSelection({ nodes: [], focusNodeId: null });

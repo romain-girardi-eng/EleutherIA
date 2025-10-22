@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactElement } from 'react';
 import {
   Clock,
   Sparkles,
@@ -28,7 +28,7 @@ interface VisualizationTab {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   description: string;
-  render: () => JSX.Element;
+  render: () => ReactElement;
 }
 
 interface AdvancedVisualizationDashboardProps {
