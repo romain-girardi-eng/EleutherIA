@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import Cookies from 'js-cookie';
 import { apiClient } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import AuthModal from '../components/AuthModal';
@@ -16,7 +17,7 @@ export default function GraphRAGPage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [pendingQuery, setPendingQuery] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const eventSourceRef = useRef<EventSource | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
   
   const { isAuthenticated } = useAuth();
 
@@ -110,84 +111,118 @@ export default function GraphRAGPage() {
     setStreamStatus('Initializing...');
 
     try {
-      const params = new URLSearchParams({
-        query: queryText,
-        semantic_k: semanticK.toString(),
-        graph_depth: graphDepth.toString(),
-        max_context: maxContext.toString(),
+      const token = Cookies.get('auth_token');
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+      // Create abort controller for cancellation
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
+
+      const response = await fetch(`${apiUrl}/api/graphrag/query/stream`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          query: queryText,
+          semantic_k: semanticK,
+          graph_depth: graphDepth,
+          max_context: maxContext,
+        }),
+        signal: abortController.signal,
       });
 
-      const eventSource = new EventSource(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/graphrag/query/stream?${params}`
-      );
-      eventSourceRef.current = eventSource;
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error('No response body');
+      }
 
       let fullAnswer = '';
       let finalResponse: GraphRAGResponse | null = null;
+      let buffer = '';
 
-      eventSource.onmessage = (event) => {
-        try {
-          const data: GraphRAGStreamEvent = JSON.parse(event.data);
+      while (true) {
+        const { done, value } = await reader.read();
 
-          switch (data.type) {
-            case 'status':
-              setStreamStatus(data.message || 'Processing...');
-              break;
+        if (done) break;
 
-            case 'answer_chunk':
-              fullAnswer += data.data;
-              setStreamedAnswer(fullAnswer);
-              break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
 
-            case 'complete':
-              finalResponse = data.data as GraphRAGResponse;
-              break;
+        for (const line of lines) {
+          if (!line.trim() || !line.startsWith('data: ')) continue;
 
-            case 'error':
-              setError(data.message || 'Stream error');
-              break;
+          try {
+            const data: GraphRAGStreamEvent = JSON.parse(line.substring(6));
+
+            switch (data.type) {
+              case 'status':
+                setStreamStatus(data.message || 'Processing...');
+                break;
+
+              case 'answer_chunk':
+                fullAnswer += data.data;
+                setStreamedAnswer(fullAnswer);
+                break;
+
+              case 'complete':
+                finalResponse = data.data as GraphRAGResponse;
+                break;
+
+              case 'error':
+                setError(data.message || 'Stream error');
+                break;
+            }
+          } catch (err) {
+            console.error('Error parsing SSE line:', line, err);
           }
-        } catch (err) {
-          console.error('Error parsing stream event:', err);
         }
-      };
+      }
 
-      eventSource.onerror = () => {
-        eventSource.close();
+      // After stream completes
+      if (finalResponse) {
+        const assistantMessage: GraphRAGChatMessage = {
+          role: 'assistant',
+          content: finalResponse.answer,
+          citations: finalResponse.citations,
+          reasoning_path: finalResponse.reasoning_path,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+      } else if (fullAnswer) {
+        const assistantMessage: GraphRAGChatMessage = {
+          role: 'assistant',
+          content: fullAnswer,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+      }
 
-        if (finalResponse) {
-          const assistantMessage: GraphRAGChatMessage = {
-            role: 'assistant',
-            content: finalResponse.answer,
-            citations: finalResponse.citations,
-            reasoning_path: finalResponse.reasoning_path,
-            timestamp: new Date(),
-          };
-          setMessages((prev) => [...prev, assistantMessage]);
-        } else if (fullAnswer) {
-          const assistantMessage: GraphRAGChatMessage = {
-            role: 'assistant',
-            content: fullAnswer,
-            timestamp: new Date(),
-          };
-          setMessages((prev) => [...prev, assistantMessage]);
-        }
-
-        setStreaming(false);
-        setStreamedAnswer('');
-        setStreamStatus('');
-      };
+      setStreaming(false);
+      setStreamedAnswer('');
+      setStreamStatus('');
     } catch (err: any) {
       console.error('Streaming error:', err);
       setError(err.message || 'Failed to stream answer');
       setStreaming(false);
+      setStreamedAnswer('');
+      setStreamStatus('');
     }
   };
 
   const stopStreaming = () => {
-    if (eventSourceRef.current) {
-      eventSourceRef.current.close();
-      eventSourceRef.current = null;
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
     }
     setStreaming(false);
     setStreamedAnswer('');
