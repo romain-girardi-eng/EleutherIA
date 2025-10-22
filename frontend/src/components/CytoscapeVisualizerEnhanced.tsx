@@ -6,6 +6,19 @@ import GraphControls, { type NodeFilters } from './GraphControls';
 import GraphExportTools from './GraphExportTools';
 import { Maximize, Minimize } from 'lucide-react';
 
+const INITIAL_FILTERS: NodeFilters = {
+  person: true,
+  work: true,
+  concept: true,
+  argument: true,
+  debate: true,
+  reformulation: true,
+  quote: true,
+  showLabels: true,
+  showEdgeLabels: true,
+  colorByCommunity: false,
+};
+
 interface CytoscapeVisualizerProps {
   data: CytoscapeData | null;
   onNodeClick?: (nodeId: string) => void;
@@ -24,10 +37,13 @@ export default function CytoscapeVisualizerEnhanced({
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<cytoscape.Core | null>(null);
   const containerDivRef = useRef<HTMLDivElement | null>(null);
+  const colorModeRef = useRef<boolean>(INITIAL_FILTERS.colorByCommunity);
   const [selectedNode, setSelectedNode] = useState<KGNode | null>(null);
   const [showHelp, setShowHelp] = useState(false);
   const [nodeStats, setNodeStats] = useState<Record<string, number>>({});
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [currentFilters, setCurrentFilters] = useState<NodeFilters>(INITIAL_FILTERS);
+  const [communityColors, setCommunityColors] = useState<Record<number, string>>({});
 
   useEffect(() => {
     if (!data && cyRef.current) {
@@ -35,8 +51,25 @@ export default function CytoscapeVisualizerEnhanced({
       cyRef.current = null;
       setSelectedNode(null);
       setNodeStats({});
+      setCommunityColors({});
     }
   }, [data]);
+
+  useEffect(() => {
+    if (!data?.meta?.community?.communities?.length) {
+      setCommunityColors({});
+      return;
+    }
+    const palette: Record<number, string> = {};
+    for (const community of data.meta.community.communities) {
+      palette[community.id] = community.color;
+    }
+    setCommunityColors(palette);
+  }, [data]);
+
+  useEffect(() => {
+    colorModeRef.current = currentFilters.colorByCommunity;
+  }, [currentFilters.colorByCommunity]);
 
   // Initialize Cytoscape
   useEffect(() => {
@@ -210,6 +243,10 @@ export default function CytoscapeVisualizerEnhanced({
       lastTapTime = now;
     });
 
+    if (colorModeRef.current) {
+      applyColorMode(true);
+    }
+
     // Cleanup
     return () => {
       cy.destroy();
@@ -347,30 +384,69 @@ export default function CytoscapeVisualizerEnhanced({
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [isFullscreen]);
 
+  const applyColorMode = (useCommunity: boolean) => {
+    if (!cyRef.current) return;
+
+    if (useCommunity && Object.keys(communityColors).length > 0) {
+      cyRef.current.nodes().forEach((node) => {
+        const communityId = node.data('communityId');
+        if (communityId === undefined || communityId === null) {
+          node.style('background-color', '#94a3b8');
+          return;
+        }
+        const color = communityColors[Number(communityId)];
+        node.style('background-color', color || '#38bdf8');
+      });
+    } else {
+      cyRef.current.nodes().forEach((node) => {
+        node.removeStyle('background-color');
+      });
+    }
+  };
+
   // Handle filter changes
   const handleFilterChange = (filters: NodeFilters) => {
     if (!cyRef.current) return;
 
-    // Show/hide node types
-    Object.keys(filters).forEach(key => {
-      if (key === 'showLabels') {
-        cyRef.current?.style()
-          .selector('node')
-          .style({ 'text-opacity': filters.showLabels ? 1 : 0 })
-          .update();
-      } else if (key === 'showEdgeLabels') {
-        cyRef.current?.style()
-          .selector('edge')
-          .style({ 'text-opacity': filters.showEdgeLabels ? 1 : 0 })
-          .update();
-      } else if (key in filters) {
-        const shouldShow = filters[key as keyof NodeFilters];
-        cyRef.current?.nodes(`[type="${key}"]`).style({
-          display: shouldShow ? 'element' : 'none'
-        });
-      }
+    setCurrentFilters(filters);
+
+    const typeKeys: Array<keyof NodeFilters> = [
+      'person',
+      'work',
+      'concept',
+      'argument',
+      'debate',
+      'reformulation',
+      'quote',
+    ];
+
+    typeKeys.forEach((key) => {
+      const shouldShow = filters[key];
+      cyRef.current?.nodes(`[type="${key}"]`).style({
+        display: shouldShow ? 'element' : 'none',
+      });
     });
+
+    cyRef.current
+      .style()
+      .selector('node')
+      .style({ 'text-opacity': filters.showLabels ? 1 : 0 })
+      .update();
+
+    cyRef.current
+      .style()
+      .selector('edge')
+      .style({ 'text-opacity': filters.showEdgeLabels ? 1 : 0 })
+      .update();
+
+    applyColorMode(filters.colorByCommunity);
   };
+
+  useEffect(() => {
+    if (currentFilters.colorByCommunity) {
+      applyColorMode(true);
+    }
+  }, [communityColors, currentFilters.colorByCommunity]);
 
   // Handle layout changes
   const handleLayoutChange = (layoutName: string) => {
@@ -413,6 +489,7 @@ export default function CytoscapeVisualizerEnhanced({
         onFilterChange={handleFilterChange}
         onLayoutChange={handleLayoutChange}
         stats={nodeStats}
+        canColorByCommunity={Boolean(data?.meta?.community?.communities?.length)}
       />
 
       {/* Export Tools */}

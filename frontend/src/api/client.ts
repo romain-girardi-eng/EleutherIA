@@ -88,9 +88,69 @@ class ApiClient {
     return response.data;
   }
 
-  async getCytoscapeData(): Promise<CytoscapeData> {
-    const response = await this.client.get('/api/kg/viz/cytoscape');
-    return response.data;
+  async getCytoscapeData(options?: { algorithm?: string }): Promise<CytoscapeData> {
+    const params = options?.algorithm
+      ? { communityAlgorithm: options.algorithm }
+      : undefined;
+    const response = await this.client.get('/api/kg/viz/cytoscape', { params });
+    const data = response.data as CytoscapeData & {
+      meta?: {
+        community?: any;
+      };
+    };
+
+    if (!data.meta?.community) {
+      return data;
+    }
+
+    const community = data.meta.community;
+
+    const transformed: CytoscapeData = {
+      elements: data.elements,
+      meta: {
+        ...data.meta,
+        community: {
+          algorithmRequested:
+            community.algorithmRequested ??
+            community.algorithm_requested ??
+            (options?.algorithm ?? 'auto'),
+          algorithmUsed:
+            community.algorithmUsed ??
+            community.algorithm_used ??
+            'none',
+          quality:
+            typeof community.quality === 'number'
+              ? community.quality
+              : community.quality != null
+                ? Number(community.quality)
+                : null,
+          communities: Array.isArray(community.communities)
+            ? community.communities.map((entry: any) => ({
+                id: Number(entry.id ?? entry.community_id ?? 0),
+                size: Number(entry.size ?? 0),
+                order: Number(entry.order ?? 0),
+                color: entry.color ?? '#3b82f6',
+                label:
+                  entry.label ??
+                  `Community ${
+                    typeof entry.order === 'number'
+                      ? entry.order + 1
+                      : Number(entry.id ?? 0) + 1
+                  }`,
+              }))
+            : [],
+          availableAlgorithms: Array.isArray(community.availableAlgorithms ?? community.available_algorithms)
+            ? (community.availableAlgorithms ?? community.available_algorithms).map((option: any) => ({
+                name: option.name ?? 'unknown',
+                available: Boolean(option.available ?? false),
+                description: option.description ?? '',
+              }))
+            : [],
+        },
+      },
+    };
+
+    return transformed;
   }
 
   async getKGStats() {

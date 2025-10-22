@@ -17,6 +17,7 @@ from services.kg_analytics import (
     build_influence_matrix,
     build_timeline_overview,
     compute_shortest_path,
+    detect_communities,
 )
 from services.kg_cache import (
     cached,
@@ -124,16 +125,35 @@ async def get_node_connections(node_id: str):
 
 
 @router.get("/viz/cytoscape")
-async def get_cytoscape_data():
+async def get_cytoscape_data(
+    community_algorithm: str = Query(
+        "auto", alias="communityAlgorithm", description="Community detection algorithm"
+    )
+):
     """Get KG data formatted for Cytoscape.js (cached)"""
     cache = get_analytics_cache()
-    cache_key = "cytoscape:full"
+    normalized_algorithm = (community_algorithm or "auto").lower()
+    cache_key = f"cytoscape:full:{normalized_algorithm}"
 
     cached_result = cache.get(cache_key)
     if cached_result is not None:
         return cached_result
 
     kg_data = load_kg_data()
+    community_result: Optional[Dict[str, Any]] = None
+    available_algorithms: List[Dict[str, Any]] = []
+
+    if normalized_algorithm not in {"none", "off", "disabled"}:
+        community_result = detect_communities(kg_data, algorithm=normalized_algorithm)
+        available_algorithms = community_result.get("available_algorithms", [])
+    else:
+        snapshot = detect_communities(kg_data, algorithm="auto")
+        available_algorithms = snapshot.get("available_algorithms", [])
+
+    node_assignments = (
+        community_result.get("node_assignments", {}) if community_result else {}
+    )
+    color_map = community_result.get("colors", {}) if community_result else {}
 
     # Format for Cytoscape.js
     cytoscape_data = {
@@ -146,7 +166,17 @@ async def get_cytoscape_data():
                         'type': node.get('type', ''),
                         'period': node.get('period', ''),
                         'school': node.get('school', ''),
-                        **node  # Include all node properties
+                        'communityId': (
+                            int(node_assignments[node['id']])
+                            if node['id'] in node_assignments
+                            else None
+                        ),
+                        'communityColor': (
+                            color_map.get(int(node_assignments[node['id']]))
+                            if node['id'] in node_assignments
+                            else None
+                        ),
+                        **node,  # Include all node properties
                     }
                 }
                 for node in kg_data.get('nodes', [])
@@ -164,7 +194,26 @@ async def get_cytoscape_data():
                 }
                 for edge in kg_data.get('edges', [])
             ]
-        }
+        },
+        'meta': {
+            'community': {
+                "algorithm_requested": normalized_algorithm,
+                "algorithm_used": (
+                    community_result.get("algorithm_used")
+                    if community_result
+                    else "none"
+                ),
+                "quality": (
+                    community_result.get("quality") if community_result else None
+                ),
+                "communities": (
+                    community_result.get("communities")
+                    if community_result
+                    else []
+                ),
+                "available_algorithms": available_algorithms,
+            }
+        },
     }
 
     cache.set(cache_key, cytoscape_data, ttl=0)  # Never expire

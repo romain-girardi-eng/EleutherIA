@@ -150,10 +150,36 @@ export interface CytoscapeElement {
   classes?: string;
 }
 
+export interface CommunityAlgorithmOption {
+  name: string;
+  available: boolean;
+  description: string;
+}
+
+export interface CommunitySummary {
+  id: number;
+  size: number;
+  order: number;
+  color: string;
+  label: string;
+}
+
+export interface CommunityMeta {
+  algorithmRequested: string;
+  algorithmUsed: string;
+  quality: number | null;
+  communities: CommunitySummary[];
+  availableAlgorithms: CommunityAlgorithmOption[];
+}
+
 export interface CytoscapeData {
   elements: {
     nodes: CytoscapeElement[];
     edges: CytoscapeElement[];
+  };
+  meta?: {
+    community?: CommunityMeta;
+    [key: string]: unknown;
   };
 }
 

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Compact Quick Reference Card -->
+  <defs>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f3f7f5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:1" />
+    </linearGradient>
+
+    <filter id="compact-shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="#fafaf9"/>
+
+  <!-- Main Card -->
+  <g filter="url(#compact-shadow)">
+    <rect x="40" y="40" width="720" height="520" rx="12" fill="url(#cardGrad)" stroke="#769687" stroke-width="3"/>
+
+    <!-- Header -->
+    <rect x="40" y="40" width="720" height="80" rx="12" fill="#769687"/>
+    <text x="400" y="75" font-family="Georgia, serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      GraphRAG Quick Reference
+    </text>
+    <text x="400" y="100" font-family="Palatino, serif" font-size="14" fill="#e2ebe7" text-anchor="middle" font-style="italic">
+      How EleutherIA combines graph, search, and AI
+    </text>
+
+    <!-- Step 1 -->
+    <circle cx="90" cy="175" r="18" fill="#769687" opacity="0.2"/>
+    <text x="90" y="182" font-family="Georgia, serif" font-size="18" fill="#769687" text-anchor="middle" font-weight="bold">1</text>
+    <text x="120" y="182" font-family="Georgia, serif" font-size="16" fill="#1c1917" font-weight="bold">Vector Search</text>
+    <text x="120" y="202" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Semantic embeddings (Gemini) match query to 285 texts
+    </text>
+
+    <!-- Step 2 -->
+    <circle cx="90" cy="255" r="18" fill="#769687" opacity="0.2"/>
+    <text x="90" y="262" font-family="Georgia, serif" font-size="18" fill="#769687" text-anchor="middle" font-weight="bold">2</text>
+    <text x="120" y="262" font-family="Georgia, serif" font-size="16" fill="#1c1917" font-weight="bold">Graph Traversal</text>
+    <text x="120" y="282" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Navigate 509 nodes, 820 edges for related concepts
+    </text>
+
+    <!-- Step 3 -->
+    <circle cx="90" cy="335" r="18" fill="#769687" opacity="0.2"/>
+    <text x="90" y="342" font-family="Georgia, serif" font-size="18" fill="#769687" text-anchor="middle" font-weight="bold">3</text>
+    <text x="120" y="342" font-family="Georgia, serif" font-size="16" fill="#1c1917" font-weight="bold">Context Assembly</text>
+    <text x="120" y="362" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Combine graph relationships + full-text passages
+    </text>
+
+    <!-- Step 4 -->
+    <circle cx="90" cy="415" r="18" fill="#769687" opacity="0.2"/>
+    <text x="90" y="422" font-family="Georgia, serif" font-size="18" fill="#769687" text-anchor="middle" font-weight="bold">4</text>
+    <text x="120" y="422" font-family="Georgia, serif" font-size="16" fill="#1c1917" font-weight="bold">AI Synthesis</text>
+    <text x="120" y="442" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Claude Sonnet generates answer with citations
+    </text>
+
+    <!-- Divider -->
+    <line x1="70" y1="480" x2="730" y2="480" stroke="#c5d7cf" stroke-width="1"/>
+
+    <!-- Stats -->
+    <text x="90" y="510" font-family="Georgia, serif" font-size="12" fill="#769687" font-weight="600">
+      📊 Coverage:
+    </text>
+    <text x="180" y="510" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      4th c. BCE → 6th c. CE
+    </text>
+
+    <text x="340" y="510" font-family="Georgia, serif" font-size="12" fill="#769687" font-weight="600">
+      📚 Sources:
+    </text>
+    <text x="420" y="510" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      1,706 references
+    </text>
+
+    <text x="590" y="510" font-family="Georgia, serif" font-size="12" fill="#769687" font-weight="600">
+      🗄️ Data:
+    </text>
+    <text x="650" y="510" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      35M+ chars
+    </text>
+
+    <!-- Footer -->
+    <text x="400" y="540" font-family="Georgia, serif" font-size="10" fill="#8baf9f" text-anchor="middle">
+      EleutherIA: Ancient Free Will Database | CC BY 4.0
+    </text>
+  </g>
+</svg>

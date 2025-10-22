@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="900" viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+  <!-- EleutherIA Triple-Threat Architecture -->
+  <defs>
+    <linearGradient id="paperGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fafaf9;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="sageGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#769687;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8baf9f;stop-opacity:1" />
+    </linearGradient>
+
+    <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
+      <feOffset dx="0" dy="3" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <marker id="connectionArrow" markerWidth="12" markerHeight="12" refX="10" refY="3" orient="auto">
+      <polygon points="0 0, 12 3, 0 6" fill="#769687" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="900" fill="#fafaf9"/>
+
+  <!-- Main Title -->
+  <text x="700" y="50" font-family="Georgia, serif" font-size="40" font-weight="bold" fill="#1c1917" text-anchor="middle">
+    EleutherIA Architecture
+  </text>
+  <text x="700" y="85" font-family="Georgia, serif" font-size="20" fill="#78716c" text-anchor="middle" font-style="italic">
+    A Triple-Threat Multi-Modal Knowledge System
+  </text>
+
+  <!-- Decorative line -->
+  <line x1="400" y1="100" x2="1000" y2="100" stroke="url(#sageGradient)" stroke-width="2"/>
+
+  <!-- Component 1: Knowledge Graph -->
+  <g filter="url(#cardShadow)">
+    <rect x="80" y="150" width="360" height="280" rx="12" fill="url(#paperGradient)" stroke="#769687" stroke-width="4"/>
+
+    <!-- Icon area -->
+    <circle cx="260" cy="200" r="35" fill="#769687" opacity="0.15"/>
+    <text x="260" y="213" font-family="Georgia, serif" font-size="40" fill="#769687" text-anchor="middle">🧠</text>
+
+    <!-- Title -->
+    <text x="260" y="260" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Knowledge Graph
+    </text>
+    <text x="260" y="285" font-family="Palatino, serif" font-size="14" fill="#769687" text-anchor="middle" font-style="italic">
+      GraphRAG-Enabled
+    </text>
+
+    <!-- Divider -->
+    <line x1="100" y1="300" x2="420" y2="300" stroke="#c5d7cf" stroke-width="1"/>
+
+    <!-- Stats -->
+    <text x="110" y="330" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      509 nodes
+    </text>
+    <text x="110" y="352" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      • 164 persons (philosophers)
+    </text>
+    <text x="110" y="370" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      • 117 arguments
+    </text>
+    <text x="110" y="388" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      • 85 concepts | 50 works
+    </text>
+
+    <text x="110" y="415" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      820 edges
+    </text>
+  </g>
+
+  <!-- Component 2: PostgreSQL Database -->
+  <g filter="url(#cardShadow)">
+    <rect x="520" y="150" width="360" height="280" rx="12" fill="url(#paperGradient)" stroke="#769687" stroke-width="4"/>
+
+    <!-- Icon area -->
+    <circle cx="700" cy="200" r="35" fill="#769687" opacity="0.15"/>
+    <text x="700" y="213" font-family="Georgia, serif" font-size="40" fill="#769687" text-anchor="middle">🗄️</text>
+
+    <!-- Title -->
+    <text x="700" y="260" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      PostgreSQL Database
+    </text>
+    <text x="700" y="285" font-family="Palatino, serif" font-size="14" fill="#769687" text-anchor="middle" font-style="italic">
+      Full-Text Search
+    </text>
+
+    <!-- Divider -->
+    <line x1="540" y1="300" x2="860" y2="300" stroke="#c5d7cf" stroke-width="1"/>
+
+    <!-- Stats -->
+    <text x="550" y="330" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      289 texts
+    </text>
+    <text x="550" y="352" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      • 35M+ characters total
+    </text>
+    <text x="550" y="370" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      • Greek (225) | Latin (64)
+    </text>
+    <text x="550" y="388" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      • TEI XML | Linguistic metadata
+    </text>
+
+    <text x="550" y="415" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      GIN Indexes
+    </text>
+  </g>
+
+  <!-- Component 3: Vector Database -->
+  <g filter="url(#cardShadow)">
+    <rect x="960" y="150" width="360" height="280" rx="12" fill="url(#paperGradient)" stroke="#769687" stroke-width="4"/>
+
+    <!-- Icon area -->
+    <circle cx="1140" cy="200" r="35" fill="#769687" opacity="0.15"/>
+    <text x="1140" y="213" font-family="Georgia, serif" font-size="40" fill="#769687" text-anchor="middle">🔍</text>
+
+    <!-- Title -->
+    <text x="1140" y="260" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Vector Database
+    </text>
+    <text x="1140" y="285" font-family="Palatino, serif" font-size="14" fill="#769687" text-anchor="middle" font-style="italic">
+      Semantic Search
+    </text>
+
+    <!-- Divider -->
+    <line x1="980" y1="300" x2="1300" y2="300" stroke="#c5d7cf" stroke-width="1"/>
+
+    <!-- Stats -->
+    <text x="990" y="330" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      285 embeddings
+    </text>
+    <text x="990" y="352" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      • Gemini text-embedding-004
+    </text>
+    <text x="990" y="370" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      • 768-3072 dimensions
+    </text>
+    <text x="990" y="388" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      • Cross-lingual similarity
+    </text>
+
+    <text x="990" y="415" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      Cosine similarity
+    </text>
+  </g>
+
+  <!-- Integration Connections -->
+  <!-- KG <-> PostgreSQL -->
+  <g>
+    <path d="M 440 290 L 520 290" stroke="#769687" stroke-width="3" stroke-dasharray="8,4" marker-end="url(#connectionArrow)"/>
+    <path d="M 520 310 L 440 310" stroke="#769687" stroke-width="3" stroke-dasharray="8,4" marker-end="url(#connectionArrow)"/>
+    <rect x="445" y="270" width="70" height="60" rx="4" fill="#f3f7f5" stroke="#8baf9f" stroke-width="1"/>
+    <text x="480" y="290" font-family="Georgia, serif" font-size="10" fill="#5d7769" text-anchor="middle" font-weight="600">
+      kg_work_id
+    </text>
+    <text x="480" y="305" font-family="Georgia, serif" font-size="9" fill="#78716c" text-anchor="middle">
+      bidirectional
+    </text>
+    <text x="480" y="318" font-family="Georgia, serif" font-size="9" fill="#78716c" text-anchor="middle">
+      queries
+    </text>
+  </g>
+
+  <!-- PostgreSQL <-> Vector -->
+  <g>
+    <path d="M 880 290 L 960 290" stroke="#769687" stroke-width="3" stroke-dasharray="8,4" marker-end="url(#connectionArrow)"/>
+    <path d="M 960 310 L 880 310" stroke="#769687" stroke-width="3" stroke-dasharray="8,4" marker-end="url(#connectionArrow)"/>
+    <rect x="885" y="270" width="70" height="60" rx="4" fill="#f3f7f5" stroke="#8baf9f" stroke-width="1"/>
+    <text x="920" y="290" font-family="Georgia, serif" font-size="10" fill="#5d7769" text-anchor="middle" font-weight="600">
+      embeddings
+    </text>
+    <text x="920" y="305" font-family="Georgia, serif" font-size="9" fill="#78716c" text-anchor="middle">
+      hybrid
+    </text>
+    <text x="920" y="318" font-family="Georgia, serif" font-size="9" fill="#78716c" text-anchor="middle">
+      search
+    </text>
+  </g>
+
+  <!-- KG <-> Vector (curved) -->
+  <g>
+    <path d="M 420 180 Q 700 100 980 180" stroke="#769687" stroke-width="3" stroke-dasharray="8,4" fill="none" marker-end="url(#connectionArrow)"/>
+    <path d="M 980 220 Q 700 140 420 220" stroke="#769687" stroke-width="3" stroke-dasharray="8,4" fill="none" marker-end="url(#connectionArrow)"/>
+    <rect x="660" y="110" width="80" height="50" rx="4" fill="#f3f7f5" stroke="#8baf9f" stroke-width="1"/>
+    <text x="700" y="128" font-family="Georgia, serif" font-size="10" fill="#5d7769" text-anchor="middle" font-weight="600">
+      semantic
+    </text>
+    <text x="700" y="142" font-family="Georgia, serif" font-size="9" fill="#78716c" text-anchor="middle">
+      clustering
+    </text>
+    <text x="700" y="155" font-family="Georgia, serif" font-size="9" fill="#78716c" text-anchor="middle">
+      concepts
+    </text>
+  </g>
+
+  <!-- Unified Research Workflow Section -->
+  <g filter="url(#cardShadow)">
+    <rect x="80" y="480" width="1240" height="340" rx="12" fill="#769687" stroke="#5d7769" stroke-width="3"/>
+
+    <text x="700" y="525" font-family="Georgia, serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      Unified Research Workflow
+    </text>
+
+    <!-- Workflow Steps -->
+    <!-- Step 1 -->
+    <g>
+      <rect x="120" y="560" width="250" height="220" rx="8" fill="#ffffff" stroke="#e7e5e4" stroke-width="2"/>
+      <circle cx="245" cy="595" r="22" fill="#769687" opacity="0.2"/>
+      <text x="245" y="603" font-family="Georgia, serif" font-size="22" fill="#769687" text-anchor="middle" font-weight="bold">1</text>
+
+      <text x="245" y="635" font-family="Georgia, serif" font-size="16" fill="#1c1917" text-anchor="middle" font-weight="bold">
+        GraphRAG Query
+      </text>
+      <text x="130" y="665" font-family="Georgia, serif" font-size="12" fill="#78716c">
+        • Semantic search via embeddings
+      </text>
+      <text x="130" y="685" font-family="Georgia, serif" font-size="12" fill="#78716c">
+        • Graph traversal (influences)
+      </text>
+      <text x="130" y="705" font-family="Georgia, serif" font-size="12" fill="#78716c">
+        • Find related concepts/persons
+      </text>
+
+      <text x="245" y="735" font-family="Palatino, serif" font-size="11" fill="#8baf9f" text-anchor="middle" font-style="italic">
+        Returns: concept IDs,
+      </text>
+      <text x="245" y="750" font-family="Palatino, serif" font-size="11" fill="#8baf9f" text-anchor="middle" font-style="italic">
+        work IDs, influence paths
+      </text>
+      <text x="245" y="765" font-family="Palatino, serif" font-size="11" fill="#8baf9f" text-anchor="middle" font-style="italic">
+        + 1,706 bibliographic refs
+      </text>
+    </g>
+
+    <!-- Arrow -->
+    <line x1="370" y1="670" x2="410" y2="670" stroke="#ffffff" stroke-width="3" marker-end="url(#connectionArrow)"/>
+
+    <!-- Step 2 -->
+    <g>
+      <rect x="420" y="560" width="250" height="220" rx="8" fill="#ffffff" stroke="#e7e5e4" stroke-width="2"/>
+      <circle cx="545" cy="595" r="22" fill="#769687" opacity="0.2"/>
+      <text x="545" y="603" font-family="Georgia, serif" font-size="22" fill="#769687" text-anchor="middle" font-weight="bold">2</text>
+
+      <text x="545" y="635" font-family="Georgia, serif" font-size="16" fill="#1c1917" text-anchor="middle" font-weight="bold">
+        Full-Text Search
+      </text>
+      <text x="430" y="665" font-family="Georgia, serif" font-size="12" fill="#78716c">
+        • Query PostgreSQL by work IDs
+      </text>
+      <text x="430" y="685" font-family="Georgia, serif" font-size="12" fill="#78716c">
+        • GIN-indexed search (Greek/Latin)
+      </text>
+      <text x="430" y="705" font-family="Georgia, serif" font-size="12" fill="#78716c">
+        • Extract relevant passages
+      </text>
+
+      <text x="545" y="735" font-family="Palatino, serif" font-size="11" fill="#8baf9f" text-anchor="middle" font-style="italic">
+        Returns: text snippets,
+      </text>
+      <text x="545" y="750" font-family="Palatino, serif" font-size="11" fill="#8baf9f" text-anchor="middle" font-style="italic">
+        metadata, citations with
+      </text>
+      <text x="545" y="765" font-family="Palatino, serif" font-size="11" fill="#8baf9f" text-anchor="middle" font-style="italic">
+        manuscript references
+      </text>
+    </g>
+
+    <!-- Arrow -->
+    <line x1="670" y1="670" x2="710" y2="670" stroke="#ffffff" stroke-width="3" marker-end="url(#connectionArrow)"/>
+
+    <!-- Step 3 -->
+    <g>
+      <rect x="720" y="560" width="250" height="220" rx="8" fill="#ffffff" stroke="#e7e5e4" stroke-width="2"/>
+      <circle cx="845" cy="595" r="22" fill="#769687" opacity="0.2"/>
+      <text x="845" y="603" font-family="Georgia, serif" font-size="22" fill="#769687" text-anchor="middle" font-weight="bold">3</text>
+
+      <text x="845" y="635" font-family="Georgia, serif" font-size="16" fill="#1c1917" text-anchor="middle" font-weight="bold">
+        Semantic Expansion
+      </text>
+      <text x="730" y="665" font-family="Georgia, serif" font-size="12" fill="#78716c">
+        • Vector similarity on content
+      </text>
+      <text x="730" y="685" font-family="Georgia, serif" font-size="12" fill="#78716c">
+        • Cross-lingual matching
+      </text>
+      <text x="730" y="705" font-family="Georgia, serif" font-size="12" fill="#78716c">
+        • Concept clustering
+      </text>
+
+      <text x="845" y="735" font-family="Palatino, serif" font-size="11" fill="#8baf9f" text-anchor="middle" font-style="italic">
+        Returns: semantically
+      </text>
+      <text x="845" y="750" font-family="Palatino, serif" font-size="11" fill="#8baf9f" text-anchor="middle" font-style="italic">
+        similar passages not found
+      </text>
+      <text x="845" y="765" font-family="Palatino, serif" font-size="11" fill="#8baf9f" text-anchor="middle" font-style="italic">
+        by keywords alone
+      </text>
+    </g>
+
+    <!-- Arrow -->
+    <line x1="970" y1="670" x2="1010" y2="670" stroke="#ffffff" stroke-width="3" marker-end="url(#connectionArrow)"/>
+
+    <!-- Step 4 -->
+    <g>
+      <rect x="1020" y="560" width="250" height="220" rx="8" fill="#ffffff" stroke="#e7e5e4" stroke-width="2"/>
+      <circle cx="1145" cy="595" r="22" fill="#769687" opacity="0.2"/>
+      <text x="1145" y="603" font-family="Georgia, serif" font-size="22" fill="#769687" text-anchor="middle" font-weight="bold">4</text>
+
+      <text x="1145" y="635" font-family="Georgia, serif" font-size="16" fill="#1c1917" text-anchor="middle" font-weight="bold">
+        AI Synthesis
+      </text>
+      <text x="1030" y="665" font-family="Georgia, serif" font-size="12" fill="#78716c">
+        • Claude Sonnet 4 integration
+      </text>
+      <text x="1030" y="685" font-family="Georgia, serif" font-size="12" fill="#78716c">
+        • Context-aware generation
+      </text>
+      <text x="1030" y="705" font-family="Georgia, serif" font-size="12" fill="#78716c">
+        • Citation preservation
+      </text>
+
+      <text x="1145" y="735" font-family="Palatino, serif" font-size="11" fill="#8baf9f" text-anchor="middle" font-style="italic">
+        Returns: scholarly answer
+      </text>
+      <text x="1145" y="750" font-family="Palatino, serif" font-size="11" fill="#8baf9f" text-anchor="middle" font-style="italic">
+        with ancient sources,
+      </text>
+      <text x="1145" y="765" font-family="Palatino, serif" font-size="11" fill="#8baf9f" text-anchor="middle" font-style="italic">
+        modern scholarship refs
+      </text>
+    </g>
+  </g>
+
+  <!-- Footer -->
+  <text x="700" y="865" font-family="Georgia, serif" font-size="14" fill="#1c1917" text-anchor="middle" font-weight="bold">
+    Coverage: Aristotle (4th c. BCE) → Augustine (5th c. CE)
+  </text>
+  <text x="700" y="885" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+    EleutherIA: Ancient Free Will Database | Romain Girardi | CC BY 4.0
+  </text>
+</svg>

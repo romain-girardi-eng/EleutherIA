@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" xmlns="http://www.w3.org/2000/svg">
+  <!-- Video Tools Comparison 2025 - Clear, Beautiful, No Overlaps -->
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#769687;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8baf9f;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fafaf9;stop-opacity:1" />
+    </linearGradient>
+
+    <filter id="cardElevation">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+      <feOffset dx="0" dy="3"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#769687" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="1000" fill="#fafaf9"/>
+
+  <!-- Header -->
+  <rect width="1600" height="100" fill="url(#headerGrad)"/>
+  <text x="800" y="55" font-family="Georgia, serif" font-size="40" font-weight="bold" fill="#ffffff" text-anchor="middle">
+    Best Video Tools for Developers 2025
+  </text>
+  <text x="800" y="82" font-family="Palatino, serif" font-size="16" fill="#e2ebe7" text-anchor="middle" font-style="italic">
+    Code-First, AI-Powered, Fully Automated — Choose Your Stack
+  </text>
+
+  <!-- Category 1: Code-First Programmatic -->
+  <text x="80" y="150" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c1917">
+    🎨 Code-First Programmatic
+  </text>
+  <text x="80" y="175" font-family="Georgia, serif" font-size="13" fill="#78716c">
+    Write animations with TypeScript/React • Maximum control • Developer-friendly
+  </text>
+
+  <!-- Motion Canvas Card -->
+  <g filter="url(#cardElevation)">
+    <rect x="80" y="200" width="340" height="280" rx="12" fill="url(#cardBg)" stroke="#769687" stroke-width="3"/>
+
+    <!-- Badge -->
+    <rect x="95" y="215" width="140" height="28" rx="14" fill="#769687"/>
+    <text x="165" y="234" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      ⭐ RECOMMENDED
+    </text>
+
+    <text x="245" y="260" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Motion Canvas
+    </text>
+    <text x="245" y="282" font-family="Palatino, serif" font-size="12" fill="#769687" text-anchor="middle" font-style="italic">
+      TypeScript • Educational Focus
+    </text>
+
+    <!-- Divider -->
+    <line x1="100" y1="295" x2="400" y2="295" stroke="#c5d7cf" stroke-width="1"/>
+
+    <!-- Features -->
+    <text x="110" y="320" font-family="Georgia, serif" font-size="13" fill="#1c1917" font-weight="600">
+      ✓ FREE (MIT open-source)
+    </text>
+    <text x="110" y="342" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Real-time preview with Vite
+    </text>
+    <text x="110" y="360" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Perfect for academic content
+    </text>
+    <text x="110" y="378" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Procedural API (step-by-step)
+    </text>
+    <text x="110" y="396" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Canvas-based rendering
+    </text>
+
+    <!-- Best For -->
+    <rect x="100" y="415" width="280" height="50" rx="6" fill="#f3f7f5" stroke="#8baf9f" stroke-width="1"/>
+    <text x="240" y="435" font-family="Georgia, serif" font-size="11" fill="#5d7769" text-anchor="middle" font-weight="600">
+      PERFECT FOR:
+    </text>
+    <text x="240" y="453" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Educational explainers • Technical docs
+    </text>
+  </g>
+
+  <!-- Remotion Card -->
+  <g filter="url(#cardElevation)">
+    <rect x="450" y="200" width="340" height="280" rx="12" fill="url(#cardBg)" stroke="#8baf9f" stroke-width="2"/>
+
+    <text x="620" y="245" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Remotion
+    </text>
+    <text x="620" y="267" font-family="Palatino, serif" font-size="12" fill="#769687" text-anchor="middle" font-style="italic">
+      React • Production-Grade
+    </text>
+
+    <line x1="470" y1="280" x2="770" y2="280" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="480" y="305" font-family="Georgia, serif" font-size="13" fill="#1c1917" font-weight="600">
+      ✓ $100/mo (company license)
+    </text>
+    <text x="480" y="327" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      React ecosystem (hooks, CSS)
+    </text>
+    <text x="480" y="345" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      24k GitHub stars, 400k installs/mo
+    </text>
+    <text x="480" y="363" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Server-side + Lambda rendering
+    </text>
+    <text x="480" y="381" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      700+ pages documentation
+    </text>
+
+    <rect x="470" y="400" width="280" height="50" rx="6" fill="#f3f7f5" stroke="#8baf9f" stroke-width="1"/>
+    <text x="610" y="420" font-family="Georgia, serif" font-size="11" fill="#5d7769" text-anchor="middle" font-weight="600">
+      PERFECT FOR:
+    </text>
+    <text x="610" y="438" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Production videos • React teams
+    </text>
+  </g>
+
+  <!-- Revideo Card -->
+  <g filter="url(#cardElevation)">
+    <rect x="820" y="200" width="340" height="280" rx="12" fill="url(#cardBg)" stroke="#a8c3b7" stroke-width="2"/>
+
+    <text x="990" y="245" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Revideo
+    </text>
+    <text x="990" y="267" font-family="Palatino, serif" font-size="12" fill="#769687" text-anchor="middle" font-style="italic">
+      TypeScript • API-Based
+    </text>
+
+    <line x1="840" y1="280" x2="1140" y2="280" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="850" y="305" font-family="Georgia, serif" font-size="13" fill="#1c1917" font-weight="600">
+      ✓ FREE (MIT open-source)
+    </text>
+    <text x="850" y="327" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Fork of Motion Canvas
+    </text>
+    <text x="850" y="345" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      API rendering capability
+    </text>
+    <text x="850" y="363" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      React player component
+    </text>
+    <text x="850" y="381" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Canvas-based (like Motion Canvas)
+    </text>
+
+    <rect x="840" y="400" width="280" height="50" rx="6" fill="#f3f7f5" stroke="#8baf9f" stroke-width="1"/>
+    <text x="980" y="420" font-family="Georgia, serif" font-size="11" fill="#5d7769" text-anchor="middle" font-weight="600">
+      PERFECT FOR:
+    </text>
+    <text x="980" y="438" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Open-source projects • Templates
+    </text>
+  </g>
+
+  <!-- Manim Card -->
+  <g filter="url(#cardElevation)">
+    <rect x="1190" y="200" width="340" height="280" rx="12" fill="url(#cardBg)" stroke="#a8c3b7" stroke-width="2"/>
+
+    <text x="1360" y="245" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Manim
+    </text>
+    <text x="1360" y="267" font-family="Palatino, serif" font-size="12" fill="#769687" text-anchor="middle" font-style="italic">
+      Python • Mathematical
+    </text>
+
+    <line x1="1210" y1="280" x2="1510" y2="280" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="1220" y="305" font-family="Georgia, serif" font-size="13" fill="#1c1917" font-weight="600">
+      ✓ FREE (MIT open-source)
+    </text>
+    <text x="1220" y="327" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Used by 3Blue1Brown
+    </text>
+    <text x="1220" y="345" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      17k+ GitHub stars
+    </text>
+    <text x="1220" y="363" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Jupyter notebook integration
+    </text>
+    <text x="1220" y="381" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      MIT, Stanford, Khan Academy use it
+    </text>
+
+    <rect x="1210" y="400" width="280" height="50" rx="6" fill="#f3f7f5" stroke="#8baf9f" stroke-width="1"/>
+    <text x="1350" y="420" font-family="Georgia, serif" font-size="11" fill="#5d7769" text-anchor="middle" font-weight="600">
+      PERFECT FOR:
+    </text>
+    <text x="1350" y="438" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Math/science • Data visualization
+    </text>
+  </g>
+
+  <!-- Category 2: AI-Powered -->
+  <text x="80" y="530" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c1917">
+    🤖 AI-Powered Generation
+  </text>
+  <text x="80" y="555" font-family="Georgia, serif" font-size="13" fill="#78716c">
+    Text-to-video • AI avatars • Automated editing • Less coding required
+  </text>
+
+  <!-- Runway Card -->
+  <g filter="url(#cardElevation)">
+    <rect x="80" y="580" width="350" height="210" rx="12" fill="url(#cardBg)" stroke="#8baf9f" stroke-width="2"/>
+
+    <text x="255" y="620" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Runway Gen-3
+    </text>
+    <text x="255" y="640" font-family="Palatino, serif" font-size="11" fill="#769687" text-anchor="middle" font-style="italic">
+      Creative AI Video Generation
+    </text>
+
+    <line x1="100" y1="652" x2="410" y2="652" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="110" y="675" font-family="Georgia, serif" font-size="12" fill="#1c1917" font-weight="600">
+      $15-95/mo
+    </text>
+    <text x="110" y="695" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      Text-to-video, image-to-video
+    </text>
+    <text x="110" y="712" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      Motion brush, keyframes, camera control
+    </text>
+    <text x="110" y="729" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      Used by filmmakers
+    </text>
+
+    <rect x="100" y="745" width="310" height="30" rx="6" fill="#f3f7f5" stroke="#8baf9f" stroke-width="1"/>
+    <text x="255" y="767" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      Good for: B-roll, abstract visuals
+    </text>
+  </g>
+
+  <!-- Synthesia Card -->
+  <g filter="url(#cardElevation)">
+    <rect x="460" y="580" width="350" height="210" rx="12" fill="url(#cardBg)" stroke="#8baf9f" stroke-width="2"/>
+
+    <text x="635" y="620" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Synthesia
+    </text>
+    <text x="635" y="640" font-family="Palatino, serif" font-size="11" fill="#769687" text-anchor="middle" font-style="italic">
+      AI Avatar Presenters
+    </text>
+
+    <line x1="480" y1="652" x2="790" y2="652" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="490" y="675" font-family="Georgia, serif" font-size="12" fill="#1c1917" font-weight="600">
+      $29-89/mo
+    </text>
+    <text x="490" y="695" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      180+ AI avatars, 140+ languages
+    </text>
+    <text x="490" y="712" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      Text-to-speech generation
+    </text>
+    <text x="490" y="729" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      Screen recording integration
+    </text>
+
+    <rect x="480" y="745" width="310" height="30" rx="6" fill="#f3f7f5" stroke="#8baf9f" stroke-width="1"/>
+    <text x="635" y="767" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      Good for: Training, presenter-led videos
+    </text>
+  </g>
+
+  <!-- Descript Card -->
+  <g filter="url(#cardElevation)">
+    <rect x="840" y="580" width="350" height="210" rx="12" fill="url(#cardBg)" stroke="#8baf9f" stroke-width="2"/>
+
+    <text x="1015" y="620" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Descript
+    </text>
+    <text x="1015" y="640" font-family="Palatino, serif" font-size="11" fill="#769687" text-anchor="middle" font-style="italic">
+      Text-Based Video Editing
+    </text>
+
+    <line x1="860" y1="652" x2="1170" y2="652" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="870" y="675" font-family="Georgia, serif" font-size="12" fill="#1c1917" font-weight="600">
+      $12-40/mo
+    </text>
+    <text x="870" y="695" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      Edit video by editing transcript
+    </text>
+    <text x="870" y="712" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      AI voice cloning, Studio Sound
+    </text>
+    <text x="870" y="729" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      Filler word removal, auto-captions
+    </text>
+
+    <rect x="860" y="745" width="310" height="30" rx="6" fill="#f3f7f5" stroke="#8baf9f" stroke-width="1"/>
+    <text x="1015" y="767" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      Good for: Editing, podcasts, voiceovers
+    </text>
+  </g>
+
+  <!-- ElevenLabs Card (Essential) -->
+  <g filter="url(#cardElevation)">
+    <rect x="1220" y="580" width="310" height="210" rx="12" fill="url(#cardBg)" stroke="#769687" stroke-width="3"/>
+
+    <rect x="1235" y="595" width="100" height="24" rx="12" fill="#769687"/>
+    <text x="1285" y="612" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      ⭐ ESSENTIAL
+    </text>
+
+    <text x="1375" y="640" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      ElevenLabs
+    </text>
+    <text x="1375" y="660" font-family="Palatino, serif" font-size="11" fill="#769687" text-anchor="middle" font-style="italic">
+      AI Voiceovers (#1 in 2025)
+    </text>
+
+    <line x1="1240" y1="672" x2="1510" y2="672" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="1250" y="695" font-family="Georgia, serif" font-size="12" fill="#1c1917" font-weight="600">
+      $5-99/mo
+    </text>
+    <text x="1250" y="715" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      Most natural AI voices
+    </text>
+    <text x="1250" y="732" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      5,000+ voices, 70+ languages
+    </text>
+    <text x="1250" y="749" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      Voice cloning, emotional delivery
+    </text>
+
+    <rect x="1240" y="763" width="270" height="12" rx="6" fill="#769687"/>
+    <text x="1375" y="773" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      USE FOR ALL VOICEOVERS
+    </text>
+  </g>
+
+  <!-- Category 3: Full Automation -->
+  <text x="80" y="840" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c1917">
+    ⚙️ Complete Automation
+  </text>
+  <text x="80" y="865" font-family="Georgia, serif" font-size="13" fill="#78716c">
+    End-to-end workflows • AI orchestration • Multi-platform publishing • Set and forget
+  </text>
+
+  <!-- n8n Card -->
+  <g filter="url(#cardElevation)">
+    <rect x="80" y="890" width="720" height="90" rx="12" fill="url(#cardBg)" stroke="#769687" stroke-width="3"/>
+
+    <rect x="95" y="905" width="140" height="28" rx="14" fill="#769687"/>
+    <text x="165" y="924" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      ⭐ FOR SCALING
+    </text>
+
+    <text x="280" y="925" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#1c1917">
+      n8n Workflows
+    </text>
+    <text x="280" y="947" font-family="Palatino, serif" font-size="12" fill="#769687" font-style="italic">
+      FREE (self-hosted) • 500+ integrations
+    </text>
+
+    <text x="280" y="970" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      Orchestrate: AI script generation → voiceover → video assembly → auto-publish (all platforms)
+    </text>
+
+    <rect x="620" y="905" width="160" height="65" rx="6" fill="#f3f7f5" stroke="#769687" stroke-width="2"/>
+    <text x="700" y="925" font-family="Georgia, serif" font-size="11" fill="#5d7769" text-anchor="middle" font-weight="600">
+      PERFECT FOR:
+    </text>
+    <text x="700" y="943" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      Weekly tips videos
+    </text>
+    <text x="700" y="958" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      "What's new" updates
+    </text>
+  </g>
+
+  <!-- Creatomate Card -->
+  <g filter="url(#cardElevation)">
+    <rect x="830" y="890" width="700" height="90" rx="12" fill="url(#cardBg)" stroke="#8baf9f" stroke-width="2"/>
+
+    <text x="1030" y="925" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#1c1917">
+      Creatomate API
+    </text>
+    <text x="1030" y="945" font-family="Palatino, serif" font-size="11" fill="#769687" font-style="italic">
+      $49/mo • Template-based video assembly
+    </text>
+
+    <text x="1030" y="968" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      Combine with n8n: Pre-built templates + dynamic data = automated video generation
+    </text>
+
+    <text x="1350" y="925" font-family="Georgia, serif" font-size="10" fill="#8baf9f" font-weight="600">
+      + ElevenLabs
+    </text>
+    <text x="1350" y="943" font-family="Georgia, serif" font-size="10" fill="#8baf9f" font-weight="600">
+      + Claude API
+    </text>
+    <text x="1350" y="961" font-family="Georgia, serif" font-size="10" fill="#8baf9f" font-weight="600">
+      = Full Pipeline
+    </text>
+  </g>
+
+  <!-- Footer -->
+  <text x="800" y="1030" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+    EleutherIA Research 2025 | Choose based on your use case: Custom videos = Motion Canvas | Scaling = n8n automation | Always use ElevenLabs
+  </text>
+</svg>

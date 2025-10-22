@@ -1,5 +1,5 @@
 import { Filter, Eye, Layout, Palette, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface GraphControlsProps {
   onFilterChange: (filters: NodeFilters) => void;
@@ -13,6 +13,7 @@ interface GraphControlsProps {
     reformulation?: number;
     quote?: number;
   };
+  canColorByCommunity?: boolean;
 }
 
 export interface NodeFilters {
@@ -25,9 +26,10 @@ export interface NodeFilters {
   quote: boolean;
   showLabels: boolean;
   showEdgeLabels: boolean;
+  colorByCommunity: boolean;
 }
 
-export default function GraphControls({ onFilterChange, onLayoutChange, stats }: GraphControlsProps) {
+export default function GraphControls({ onFilterChange, onLayoutChange, stats, canColorByCommunity }: GraphControlsProps) {
   const [showControls, setShowControls] = useState(true);
   const [filters, setFilters] = useState<NodeFilters>({
     person: true,
@@ -39,6 +41,7 @@ export default function GraphControls({ onFilterChange, onLayoutChange, stats }:
     quote: true,
     showLabels: true,
     showEdgeLabels: true,
+    colorByCommunity: false,
   });
 
   const nodeTypes = [
@@ -81,20 +84,38 @@ export default function GraphControls({ onFilterChange, onLayoutChange, stats }:
     onFilterChange(newFilters);
   };
 
-  const deselectAll = () => {
-    const newFilters = {
-      ...filters,
-      person: false,
-      work: false,
-      concept: false,
-      argument: false,
-      debate: false,
-      reformulation: false,
-      quote: false,
-    };
+const deselectAll = () => {
+  const newFilters = {
+    ...filters,
+    person: false,
+    work: false,
+    concept: false,
+    argument: false,
+    debate: false,
+    reformulation: false,
+    quote: false,
+  };
+  setFilters(newFilters);
+  onFilterChange(newFilters);
+  };
+
+  const setColorMode = (useCommunity: boolean) => {
+    if (filters.colorByCommunity === useCommunity) {
+      return;
+    }
+    const newFilters = { ...filters, colorByCommunity: useCommunity };
     setFilters(newFilters);
     onFilterChange(newFilters);
   };
+
+  useEffect(() => {
+    if (!canColorByCommunity && filters.colorByCommunity) {
+      const newFilters = { ...filters, colorByCommunity: false };
+      setFilters(newFilters);
+      onFilterChange(newFilters);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canColorByCommunity]);
 
   return (
     <div className="absolute top-4 left-4 z-10 max-w-[calc(100vw-2rem)] sm:max-w-sm">
@@ -213,6 +234,39 @@ export default function GraphControls({ onFilterChange, onLayoutChange, stats }:
                   className="w-4 h-4 text-primary-600 rounded focus:ring-2 focus:ring-primary-500"
                 />
               </label>
+              {canColorByCommunity && (
+                <div className="p-2 rounded border border-gray-100 bg-gray-50">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-700">Node Coloring</span>
+                    <span className="text-xs text-gray-500">Choose palette</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => setColorMode(false)}
+                      className={`px-2 py-1.5 text-xs font-medium rounded border transition-colors ${
+                        !filters.colorByCommunity
+                          ? 'border-primary-500 bg-white text-primary-700 shadow-sm'
+                          : 'border-gray-200 bg-white text-gray-600 hover:border-primary-300'
+                      }`}
+                    >
+                      By Type
+                    </button>
+                    <button
+                      onClick={() => setColorMode(true)}
+                      className={`px-2 py-1.5 text-xs font-medium rounded border transition-colors ${
+                        filters.colorByCommunity
+                          ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-sm'
+                          : 'border-gray-200 bg-white text-gray-600 hover:border-primary-300'
+                      }`}
+                    >
+                      By Community
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-gray-500 mt-2 leading-snug">
+                    Community colors use the selected detection algorithm. Switch back to type colors any time.
+                  </p>
+                </div>
+              )}
             </div>
           </section>
 

@@ -18,8 +18,9 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+import importlib.util
+import tempfile
 import networkx as nx
-import matplotlib.pyplot as plt
 import numpy as np
 from collections import Counter
 
@@ -31,12 +32,123 @@ except ImportError:
     PANDAS_AVAILABLE = False
 
 
+plt = None
+MATPLOTLIB_ERROR: Optional[str] = None
+
+
+def _ensure_matplotlib_config_dir() -> None:
+    """Ensure MPLCONFIGDIR points to a writable directory."""
+    _ensure_fontconfig_cache_dir()
+    existing = os.environ.get("MPLCONFIGDIR")
+    if existing:
+        path = Path(existing)
+        try:
+            path.mkdir(parents=True, exist_ok=True)
+        except Exception:
+            pass
+        else:
+            if os.access(path, os.W_OK | os.X_OK):
+                return
+
+    temp_path = Path(tempfile.gettempdir()) / "matplotlib-cache"
+    try:
+        temp_path.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        return
+    os.environ["MPLCONFIGDIR"] = str(temp_path)
+
+
+def _ensure_fontconfig_cache_dir() -> None:
+    """Ensure Fontconfig can write its cache."""
+    cache_home = os.environ.get("XDG_CACHE_HOME")
+    if cache_home:
+        cache_root = Path(cache_home)
+    else:
+        cache_root = Path(tempfile.gettempdir()) / "xdg-cache"
+        os.environ["XDG_CACHE_HOME"] = str(cache_root)
+
+    try:
+        cache_root.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        return
+
+    fontconfig_cache = cache_root / "fontconfig"
+    try:
+        fontconfig_cache.mkdir(parents=True, exist_ok=True)
+        os.environ.setdefault("FC_CACHEDIR", str(fontconfig_cache))
+    except Exception:
+        pass
+
+
+def _ensure_matplotlib() -> bool:
+    """Lazily import matplotlib when needed."""
+    global plt, MATPLOTLIB_ERROR
+    if plt is not None:
+        return True
+    try:
+        _ensure_matplotlib_config_dir()
+        import matplotlib.pyplot as _plt  # type: ignore
+
+        plt = _plt
+        MATPLOTLIB_ERROR = None
+        return True
+    except Exception as exc:
+        MATPLOTLIB_ERROR = str(exc)
+        return False
+
+
+COMMUNITY_ALGORITHMS_INFO = {
+    "leiden": (
+        "Leiden (requires python-igraph + leidenalg): guarantees well-connected communities "
+        "and often yields higher modularity while remaining fast on large graphs."
+    ),
+    "louvain": (
+        "Louvain (requires python-louvain): classic modularity optimisation; fast but may leave "
+        "disconnected communities."
+    ),
+    "greedy": (
+        "Greedy modularity (built into NetworkX): dependency-free fallback; slower and lower-quality "
+        "on large graphs but always available."
+    ),
+    "auto": (
+        "Auto: prioritises Leiden, then Louvain, then greedy based on what is installed."
+    ),
+}
+
+
+def _algorithm_is_available(name: str) -> bool:
+    """Check if dependencies for a given algorithm are available."""
+    if name == "leiden":
+        return bool(
+            importlib.util.find_spec("igraph")
+            and importlib.util.find_spec("leidenalg")
+        )
+    if name == "louvain":
+        return bool(importlib.util.find_spec("community"))
+    if name == "greedy":
+        return True
+    if name == "auto":
+        return any(_algorithm_is_available(algo) for algo in ("leiden", "louvain", "greedy"))
+    return False
+
+
+def list_available_algorithms() -> List[str]:
+    """Return user-friendly strings describing availability."""
+    lines = []
+    for algo in ("leiden", "louvain", "greedy"):
+        status = "available" if _algorithm_is_available(algo) else "missing dependencies"
+        lines.append(f"{algo.title():<8} — {status}. {COMMUNITY_ALGORITHMS_INFO[algo]}")
+    return lines
+
+
 class NetworkAnalyzer:
     """Network analysis for EleutherIA knowledge graph."""
     
     def __init__(self, db: Dict):
         self.db = db
         self.G = self._build_graph()
+        self.last_community_algorithm: Optional[str] = None
+        self.last_partition_quality: Optional[float] = None
     
     def _build_graph(self) -> nx.Graph:
         """Build NetworkX graph from database."""
@@ -95,26 +207,113 @@ class NetworkAnalyzer:
         """Calculate PageRank for all nodes."""
         return nx.pagerank(self.G)
     
-    def community_detection(self, algorithm: str = 'louvain') -> Dict[str, int]:
-        """Detect communities in the network."""
+    def community_detection(self, algorithm: str = 'auto') -> Dict[str, int]:
+        """Detect communities in the network.
+
+        Args:
+            algorithm: 'auto', 'leiden', 'louvain', or 'greedy'
+        """
+        self.last_community_algorithm = None
+        self.last_partition_quality = None
+
+        algorithm = (algorithm or 'auto').lower()
+        if algorithm == 'auto':
+            for preferred in ('leiden', 'louvain', 'greedy'):
+                communities = self._detect_communities(preferred)
+                if communities:
+                    return communities
+            return {}
+
+        return self._detect_communities(algorithm)
+
+    def _detect_communities(self, algorithm: str) -> Dict[str, int]:
+        """Internal helper for community detection."""
+        if algorithm == 'leiden':
+            try:
+                _ensure_matplotlib_config_dir()
+                import igraph as ig
+                import leidenalg
+            except ImportError:
+                print("Warning: python-igraph and leidenalg are required for Leiden; skipping.")
+                return {}
+
+            node_to_index = {node: idx for idx, node in enumerate(self.G.nodes())}
+            index_to_node = {idx: node for node, idx in node_to_index.items()}
+
+            edges: List[Tuple[int, int]] = []
+            weights: List[float] = []
+            use_weights = False
+
+            for u, v, data in self.G.edges(data=True):
+                edges.append((node_to_index[u], node_to_index[v]))
+                if 'weight' in data:
+                    use_weights = True
+                    value = data.get('weight', 1.0)
+                    try:
+                        weights.append(float(value))
+                    except (TypeError, ValueError):
+                        weights.append(1.0)
+                else:
+                    weights.append(1.0)
+
+            g = ig.Graph(n=len(node_to_index), edges=edges, directed=self.G.is_directed())
+            g.vs['name'] = [index_to_node[idx] for idx in range(len(index_to_node))]
+
+            if use_weights:
+                g.es['weight'] = weights
+                partition = leidenalg.find_partition(
+                    g,
+                    leidenalg.ModularityVertexPartition,
+                    weights=g.es['weight'],
+                )
+            else:
+                partition = leidenalg.find_partition(
+                    g,
+                    leidenalg.ModularityVertexPartition,
+                )
+
+            membership = partition.membership
+            communities = {index_to_node[idx]: comm for idx, comm in enumerate(membership)}
+            self.last_community_algorithm = 'leiden'
+            try:
+                self.last_partition_quality = float(partition.quality())
+            except Exception:
+                self.last_partition_quality = None
+            return communities
+
         if algorithm == 'louvain':
             try:
                 import community as community_louvain
                 communities = community_louvain.best_partition(self.G)
+                self.last_community_algorithm = 'louvain'
+                # python-louvain exposes modularity helper
+                try:
+                    self.last_partition_quality = float(
+                        community_louvain.modularity(communities, self.G)
+                    )
+                except Exception:
+                    self.last_partition_quality = None
                 return communities
             except ImportError:
                 print("Warning: python-louvain not installed. Using greedy modularity instead.")
-                algorithm = 'greedy'
-        
+                return {}
+
         if algorithm == 'greedy':
             communities = nx.community.greedy_modularity_communities(self.G)
-            # Convert to node -> community mapping
             community_dict = {}
             for i, community in enumerate(communities):
                 for node in community:
                     community_dict[node] = i
+            self.last_community_algorithm = 'greedy'
+            try:
+                self.last_partition_quality = float(
+                    nx.algorithms.community.quality.modularity(self.G, communities)
+                )
+            except Exception:
+                self.last_partition_quality = None
             return community_dict
-        
+
+        print(f"Warning: Unknown community detection algorithm '{algorithm}'.")
         return {}
     
     def find_most_central_nodes(self, 
@@ -184,6 +383,12 @@ class NetworkAnalyzer:
                          show_labels: bool = False,
                          color_by: str = 'type') -> None:
         """Visualize the network."""
+
+        if not _ensure_matplotlib():
+            error_msg = MATPLOTLIB_ERROR or "Matplotlib could not be imported."
+            print(f"Warning: Visualization skipped – {error_msg}")
+            print("Install matplotlib and ensure MPLCONFIGDIR points to a writable directory to enable plots.")
+            return
         
         # Set up the plot
         plt.figure(figsize=(15, 12))
@@ -327,6 +532,7 @@ def main():
 Examples:
   python network_analysis.py --input ancient_free_will_database.json
   python network_analysis.py --centrality --community-detection --visualize
+  python network_analysis.py --community-detection --list-community-algorithms
   python network_analysis.py --export-csv --output-stats network_stats.csv
         """
     )
@@ -347,6 +553,19 @@ Examples:
         "--community-detection",
         action="store_true",
         help="Perform community detection"
+    )
+    
+    parser.add_argument(
+        "--community-algorithm",
+        choices=["auto", "leiden", "louvain", "greedy"],
+        default="auto",
+        help="Community detection algorithm (default: auto, prioritizing Leiden)"
+    )
+
+    parser.add_argument(
+        "--list-community-algorithms",
+        action="store_true",
+        help="Print available community detection algorithms and exit"
     )
     
     parser.add_argument(
@@ -401,6 +620,13 @@ Examples:
     )
     
     args = parser.parse_args()
+
+    if args.list_community_algorithms:
+        print("\nCommunity detection algorithms:")
+        for line in list_available_algorithms():
+            print(f"  • {line}")
+        print("\nUse --community-algorithm to pick one explicitly.")
+        return
     
     try:
         # Load database
@@ -453,9 +679,30 @@ Examples:
             print("\n" + "="*60)
             print("COMMUNITY DETECTION")
             print("="*60)
+
+            requested_algorithm = args.community_algorithm
+
+            if requested_algorithm == "auto":
+                print("Auto mode: trying Leiden → Louvain → Greedy based on installed packages.")
+            else:
+                availability_note = "available" if _algorithm_is_available(requested_algorithm) else "missing dependencies"
+                print(f"Requested algorithm: {requested_algorithm} ({availability_note}).")
+                if availability_note != "available":
+                    print("Falling back to auto mode.\n")
+                    requested_algorithm = "auto"
             
-            communities = analyzer.community_detection()
+            communities = analyzer.community_detection(requested_algorithm)
             if communities:
+                algorithm_used = analyzer.last_community_algorithm or args.community_algorithm
+                if algorithm_used:
+                    algo_info = COMMUNITY_ALGORITHMS_INFO.get(algorithm_used)
+                    if algo_info:
+                        print(f"Algorithm used: {algorithm_used} — {algo_info}")
+                    else:
+                        print(f"Algorithm used: {algorithm_used}")
+                if analyzer.last_partition_quality is not None:
+                    print(f"Partition quality (modularity): {analyzer.last_partition_quality:.4f}")
+
                 # Count communities
                 community_counts = Counter(communities.values())
                 print(f"Found {len(community_counts)} communities")

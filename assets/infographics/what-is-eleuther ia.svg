@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="900" viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+  <!-- What is EleutherIA - Clear, Beautiful Overview -->
+  <defs>
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#769687;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8baf9f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#769687;stop-opacity:1" />
+    </linearGradient>
+
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fafaf9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f3f7f5;stop-opacity:1" />
+    </radialGradient>
+
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
+      <feOffset dx="0" dy="4"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.25"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="900" fill="url(#bgGrad)"/>
+
+  <!-- Header -->
+  <g filter="url(#glow)">
+    <rect x="100" y="40" width="1200" height="120" rx="15" fill="url(#titleGrad)"/>
+    <text x="700" y="90" font-family="Georgia, serif" font-size="48" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      What is EleutherIA?
+    </text>
+    <text x="700" y="130" font-family="Palatino, serif" font-size="20" fill="#e2ebe7" text-anchor="middle" font-style="italic">
+      Ἐλευθερία (Freedom) + IA (Intelligence Artificielle)
+    </text>
+  </g>
+
+  <!-- Tagline -->
+  <text x="700" y="195" font-family="Georgia, serif" font-size="18" fill="#1c1917" text-anchor="middle" font-weight="600">
+    The Most Comprehensive Digital Resource for Ancient Free Will Debates
+  </text>
+
+  <!-- Three Pillars Section -->
+  <text x="100" y="250" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#769687">
+    Three Integrated Systems
+  </text>
+
+  <!-- Pillar 1: Knowledge Graph -->
+  <g filter="url(#shadow)">
+    <rect x="100" y="280" width="360" height="240" rx="12" fill="#ffffff" stroke="#769687" stroke-width="4"/>
+
+    <circle cx="280" cy="330" r="28" fill="#769687" opacity="0.2"/>
+    <text x="280" y="340" font-family="Georgia, serif" font-size="32" fill="#769687" text-anchor="middle">🧠</text>
+
+    <text x="280" y="380" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Knowledge Graph
+    </text>
+
+    <line x1="120" y1="395" x2="440" y2="395" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="280" y="420" font-family="Georgia, serif" font-size="16" fill="#5d7769" text-anchor="middle" font-weight="600">
+      509 nodes | 820 edges
+    </text>
+
+    <text x="130" y="450" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • 164 persons (philosophers)
+    </text>
+    <text x="130" y="472" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • 117 arguments & positions
+    </text>
+    <text x="130" y="494" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • 85 concepts & 50 works
+    </text>
+  </g>
+
+  <!-- Pillar 2: PostgreSQL -->
+  <g filter="url(#shadow)">
+    <rect x="520" y="280" width="360" height="240" rx="12" fill="#ffffff" stroke="#769687" stroke-width="4"/>
+
+    <circle cx="700" cy="330" r="28" fill="#769687" opacity="0.2"/>
+    <text x="700" y="340" font-family="Georgia, serif" font-size="32" fill="#769687" text-anchor="middle">🗄️</text>
+
+    <text x="700" y="380" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Full-Text Database
+    </text>
+
+    <line x1="540" y1="395" x2="860" y2="395" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="700" y="420" font-family="Georgia, serif" font-size="16" fill="#5d7769" text-anchor="middle" font-weight="600">
+      289 texts | 35M+ characters
+    </text>
+
+    <text x="550" y="450" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • Greek (225) & Latin (64) texts
+    </text>
+    <text x="550" y="472" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • Full-text search (GIN indexes)
+    </text>
+    <text x="550" y="494" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • Linguistic analysis & TEI XML
+    </text>
+  </g>
+
+  <!-- Pillar 3: Vector Database -->
+  <g filter="url(#shadow)">
+    <rect x="940" y="280" width="360" height="240" rx="12" fill="#ffffff" stroke="#769687" stroke-width="4"/>
+
+    <circle cx="1120" cy="330" r="28" fill="#769687" opacity="0.2"/>
+    <text x="1120" y="340" font-family="Georgia, serif" font-size="32" fill="#769687" text-anchor="middle">🔍</text>
+
+    <text x="1120" y="380" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Semantic Search
+    </text>
+
+    <line x1="960" y1="395" x2="1280" y2="395" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="1120" y="420" font-family="Georgia, serif" font-size="16" fill="#5d7769" text-anchor="middle" font-weight="600">
+      285 embeddings (Gemini)
+    </text>
+
+    <text x="970" y="450" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • Vector similarity search
+    </text>
+    <text x="970" y="472" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • Cross-lingual matching
+    </text>
+    <text x="970" y="494" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • Concept clustering (AI)
+    </text>
+  </g>
+
+  <!-- Coverage Section -->
+  <text x="100" y="570" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#769687">
+    Historical Coverage
+  </text>
+
+  <g filter="url(#shadow)">
+    <rect x="100" y="600" width="1200" height="100" rx="12" fill="#ffffff" stroke="#8baf9f" stroke-width="2"/>
+
+    <text x="700" y="635" font-family="Georgia, serif" font-size="18" fill="#1c1917" text-anchor="middle" font-weight="600">
+      4th Century BCE → 6th Century CE
+    </text>
+
+    <line x1="150" y1="655" x2="1250" y2="655" stroke="#769687" stroke-width="3"/>
+
+    <!-- Timeline markers -->
+    <circle cx="200" cy="655" r="5" fill="#769687"/>
+    <text x="200" y="680" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Aristotle
+    </text>
+
+    <circle cx="400" cy="655" r="5" fill="#769687"/>
+    <text x="400" y="680" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Stoics
+    </text>
+
+    <circle cx="600" cy="655" r="5" fill="#769687"/>
+    <text x="600" y="680" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Cicero
+    </text>
+
+    <circle cx="800" cy="655" r="5" fill="#769687"/>
+    <text x="800" y="680" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Origen
+    </text>
+
+    <circle cx="1000" cy="655" r="5" fill="#769687"/>
+    <text x="1000" y="680" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Augustine
+    </text>
+
+    <circle cx="1200" cy="655" r="5" fill="#769687"/>
+    <text x="1200" y="680" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Boethius
+    </text>
+  </g>
+
+  <!-- Key Features Section -->
+  <text x="100" y="750" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#769687">
+    What Makes It Unique
+  </text>
+
+  <!-- Feature Boxes -->
+  <g filter="url(#shadow)">
+    <rect x="100" y="780" width="380" height="90" rx="10" fill="#f3f7f5" stroke="#8baf9f" stroke-width="2"/>
+    <text x="290" y="810" font-family="Georgia, serif" font-size="15" fill="#5d7769" text-anchor="middle" font-weight="600">
+      GraphRAG-Powered
+    </text>
+    <text x="290" y="835" font-family="Georgia, serif" font-size="12" fill="#78716c" text-anchor="middle">
+      Combine graph traversal + semantic search +
+    </text>
+    <text x="290" y="855" font-family="Georgia, serif" font-size="12" fill="#78716c" text-anchor="middle">
+      LLM generation for scholarly answers
+    </text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="510" y="780" width="380" height="90" rx="10" fill="#f3f7f5" stroke="#8baf9f" stroke-width="2"/>
+    <text x="700" y="810" font-family="Georgia, serif" font-size="15" fill="#5d7769" text-anchor="middle" font-weight="600">
+      1,706 References
+    </text>
+    <text x="700" y="835" font-family="Georgia, serif" font-size="12" fill="#78716c" text-anchor="middle">
+      785 ancient sources + 921 modern
+    </text>
+    <text x="700" y="855" font-family="Georgia, serif" font-size="12" fill="#78716c" text-anchor="middle">
+      scholarship with full citations
+    </text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="920" y="780" width="380" height="90" rx="10" fill="#f3f7f5" stroke="#8baf9f" stroke-width="2"/>
+    <text x="1110" y="810" font-family="Georgia, serif" font-size="15" fill="#5d7769" text-anchor="middle" font-weight="600">
+      FAIR-Compliant
+    </text>
+    <text x="1110" y="835" font-family="Georgia, serif" font-size="12" fill="#78716c" text-anchor="middle">
+      Findable, Accessible, Interoperable,
+    </text>
+    <text x="1110" y="855" font-family="Georgia, serif" font-size="12" fill="#78716c" text-anchor="middle">
+      Reusable (CC BY 4.0, DOI, open data)
+    </text>
+  </g>
+
+  <!-- Footer -->
+  <rect x="100" y="880" width="1200" height="1" fill="#c5d7cf"/>
+  <text x="700" y="910" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+    EleutherIA: Ancient Free Will Database | Romain Girardi | Université Côte d'Azur & Université de Genève | CC BY 4.0
+  </text>
+</svg>

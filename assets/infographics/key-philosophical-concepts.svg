@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1600" height="1100" viewBox="0 0 1600 1100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Key Philosophical Concepts - Greek, Latin, English -->
+  <defs>
+    <linearGradient id="conceptGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#769687;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8baf9f;stop-opacity:1" />
+    </linearGradient>
+
+    <filter id="conceptShadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+      <feOffset dx="0" dy="3"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.22"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="1100" fill="#fafaf9"/>
+
+  <!-- Header -->
+  <rect width="1600" height="110" fill="url(#conceptGrad)"/>
+  <text x="800" y="60" font-family="Georgia, serif" font-size="42" font-weight="bold" fill="#ffffff" text-anchor="middle">
+    Key Philosophical Concepts
+  </text>
+  <text x="800" y="92" font-family="Palatino, serif" font-size="17" fill="#e2ebe7" text-anchor="middle" font-style="italic">
+    The Terminology of Ancient Free Will Debates
+  </text>
+
+  <!-- Concept 1: Eph' hêmin -->
+  <g filter="url(#conceptShadow)">
+    <rect x="80" y="150" width="700" height="160" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <text x="110" y="190" font-family="Palatino, serif" font-size="28" fill="#769687" font-weight="bold">
+      ἐφ' ἡμῖν
+    </text>
+    <text x="250" y="193" font-family="Palatino, serif" font-size="16" fill="#8baf9f" font-style="italic">
+      (eph' hêmin)
+    </text>
+
+    <line x1="100" y1="205" x2="760" y2="205" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="110" y="235" font-family="Palatino, serif" font-size="16" fill="#5d7769" font-style="italic" font-weight="600">
+      Latin: in nostra potestate
+    </text>
+    <text x="110" y="260" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      English: "in our power" or "up to us"
+    </text>
+
+    <text x="110" y="288" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      Core Aristotelian concept: things that are within our control. Foundation
+    </text>
+    <text x="110" y="306" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      for voluntary action and moral responsibility across all ancient schools.
+    </text>
+  </g>
+
+  <!-- Concept 2: Hekousion -->
+  <g filter="url(#conceptShadow)">
+    <rect x="820" y="150" width="700" height="160" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <text x="850" y="190" font-family="Palatino, serif" font-size="28" fill="#769687" font-weight="bold">
+      ἑκούσιον
+    </text>
+    <text x="980" y="193" font-family="Palatino, serif" font-size="16" fill="#8baf9f" font-style="italic">
+      (hekousion)
+    </text>
+
+    <line x1="840" y1="205" x2="1500" y2="205" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="850" y="235" font-family="Palatino, serif" font-size="16" fill="#5d7769" font-style="italic" font-weight="600">
+      Latin: voluntarium
+    </text>
+    <text x="850" y="260" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      English: "voluntary" or "willing"
+    </text>
+
+    <text x="850" y="288" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      Actions done voluntarily, originating from an internal principle with knowledge
+    </text>
+    <text x="850" y="306" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      of circumstances. Opposite: ἀκούσιον (akousion, involuntary).
+    </text>
+  </g>
+
+  <!-- Concept 3: Prohairesis -->
+  <g filter="url(#conceptShadow)">
+    <rect x="80" y="340" width="700" height="160" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <text x="110" y="380" font-family="Palatino, serif" font-size="28" fill="#769687" font-weight="bold">
+      προαίρεσις
+    </text>
+    <text x="280" y="383" font-family="Palatino, serif" font-size="16" fill="#8baf9f" font-style="italic">
+      (prohairesis)
+    </text>
+
+    <line x1="100" y1="395" x2="760" y2="395" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="110" y="425" font-family="Palatino, serif" font-size="16" fill="#5d7769" font-style="italic" font-weight="600">
+      Latin: electio, propositum
+    </text>
+    <text x="110" y="450" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      English: "deliberate choice" or "decision"
+    </text>
+
+    <text x="110" y="478" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      Aristotelian term for rational choice following deliberation (βούλευσις). The
+    </text>
+    <text x="110" y="496" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      capacity to choose means to achieve ends through reasoning.
+    </text>
+  </g>
+
+  <!-- Concept 4: Heimarmenê -->
+  <g filter="url(#conceptShadow)">
+    <rect x="820" y="340" width="700" height="160" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <text x="850" y="380" font-family="Palatino, serif" font-size="28" fill="#769687" font-weight="bold">
+      εἱμαρμένη
+    </text>
+    <text x="1010" y="383" font-family="Palatino, serif" font-size="16" fill="#8baf9f" font-style="italic">
+      (heimarmenê)
+    </text>
+
+    <line x1="840" y1="395" x2="1500" y2="395" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="850" y="425" font-family="Palatino, serif" font-size="16" fill="#5d7769" font-style="italic" font-weight="600">
+      Latin: fatum
+    </text>
+    <text x="850" y="450" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      English: "fate" or "destiny"
+    </text>
+
+    <text x="850" y="478" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      Stoic universal fate: the unbreakable chain of causation governing all events.
+    </text>
+    <text x="850" y="496" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      Central to the compatibilism/incompatibilism debate.
+    </text>
+  </g>
+
+  <!-- Concept 5: Autexousion -->
+  <g filter="url(#conceptShadow)">
+    <rect x="80" y="530" width="700" height="160" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <text x="110" y="570" font-family="Palatino, serif" font-size="28" fill="#769687" font-weight="bold">
+      αὐτεξούσιον
+    </text>
+    <text x="310" y="573" font-family="Palatino, serif" font-size="16" fill="#8baf9f" font-style="italic">
+      (autexousion)
+    </text>
+
+    <line x1="100" y1="585" x2="760" y2="585" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="110" y="615" font-family="Palatino, serif" font-size="16" fill="#5d7769" font-style="italic" font-weight="600">
+      Latin: liberum arbitrium
+    </text>
+    <text x="110" y="640" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      English: "self-determining power" or "free will"
+    </text>
+
+    <text x="110" y="668" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      Christian Patristic term emphasizing genuine self-determination. Essential for
+    </text>
+    <text x="110" y="686" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      divine justice and theodicy (Origen, Justin Martyr, Tertullian).
+    </text>
+  </g>
+
+  <!-- Concept 6: Synkatathesis -->
+  <g filter="url(#conceptShadow)">
+    <rect x="820" y="530" width="700" height="160" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <text x="850" y="570" font-family="Palatino, serif" font-size="28" fill="#769687" font-weight="bold">
+      συγκατάθεσις
+    </text>
+    <text x="1090" y="573" font-family="Palatino, serif" font-size="16" fill="#8baf9f" font-style="italic">
+      (synkatathesis)
+    </text>
+
+    <line x1="840" y1="585" x2="1500" y2="585" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="850" y="615" font-family="Palatino, serif" font-size="16" fill="#5d7769" font-style="italic" font-weight="600">
+      Latin: adsensio, assensus
+    </text>
+    <text x="850" y="640" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      English: "assent" or "consent"
+    </text>
+
+    <text x="850" y="668" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      Stoic concept: our mental assent to impressions. The key to compatibilist
+    </text>
+    <text x="850" y="686" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      freedom: assent is "in our power" even under universal fate.
+    </text>
+  </g>
+
+  <!-- Concept 7: Parenklisis -->
+  <g filter="url(#conceptShadow)">
+    <rect x="80" y="720" width="700" height="160" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <text x="110" y="760" font-family="Palatino, serif" font-size="28" fill="#769687" font-weight="bold">
+      παρέγκλισις
+    </text>
+    <text x="305" y="763" font-family="Palatino, serif" font-size="16" fill="#8baf9f" font-style="italic">
+      (parenklisis)
+    </text>
+
+    <line x1="100" y1="775" x2="760" y2="775" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="110" y="805" font-family="Palatino, serif" font-size="16" fill="#5d7769" font-style="italic" font-weight="600">
+      Latin: clinamen
+    </text>
+    <text x="110" y="830" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      English: "atomic swerve" or "deviation"
+    </text>
+
+    <text x="110" y="858" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      Epicurean indeterminism: atoms occasionally swerve unpredictably, breaking
+    </text>
+    <text x="110" y="876" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      causal chains and grounding libertarian free will (Lucretius, De Rerum Natura).
+    </text>
+  </g>
+
+  <!-- Concept 8: Pronoia -->
+  <g filter="url(#conceptShadow)">
+    <rect x="820" y="720" width="700" height="160" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <text x="850" y="760" font-family="Palatino, serif" font-size="28" fill="#769687" font-weight="bold">
+      πρόνοια
+    </text>
+    <text x="970" y="763" font-family="Palatino, serif" font-size="16" fill="#8baf9f" font-style="italic">
+      (pronoia)
+    </text>
+
+    <line x1="840" y1="775" x2="1500" y2="775" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="850" y="805" font-family="Palatino, serif" font-size="16" fill="#5d7769" font-style="italic" font-weight="600">
+      Latin: providentia
+    </text>
+    <text x="850" y="830" font-family="Georgia, serif" font-size="15" fill="#1c1917" font-weight="600">
+      English: "providence" or "forethought"
+    </text>
+
+    <text x="850" y="858" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      Divine providence (Middle Platonist & Christian): God's rational care for the
+    </text>
+    <text x="850" y="876" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      world, distinguished from mechanical fate. Allows contingency and freedom.
+    </text>
+  </g>
+
+  <!-- Key Insight Box -->
+  <g filter="url(#conceptShadow)">
+    <rect x="80" y="920" width="1440" height="120" rx="12" fill="#f3f7f5" stroke="#769687" stroke-width="3"/>
+
+    <text x="800" y="960" font-family="Georgia, serif" font-size="18" fill="#5d7769" text-anchor="middle" font-weight="bold">
+      Why Terminology Matters
+    </text>
+
+    <text x="800" y="990" font-family="Georgia, serif" font-size="14" fill="#78716c" text-anchor="middle">
+      These Greek concepts shaped 2,000+ years of Western philosophy. Each term carries specific technical meanings
+    </text>
+    <text x="800" y="1012" font-family="Georgia, serif" font-size="14" fill="#78716c" text-anchor="middle">
+      that don't translate perfectly. Understanding the original vocabulary is essential for accurate historical research.
+    </text>
+  </g>
+
+  <!-- Footer -->
+  <text x="800" y="1080" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+    EleutherIA preserves Greek/Latin terminology with proper transliterations | All terms grounded in ancient sources
+  </text>
+</svg>

@@ -116,6 +116,7 @@ export function filterCytoscapeData(
         nodes: finalNodes,
         edges: limitedEdges,
       },
+      meta: data.meta,
     };
   }
 
@@ -124,5 +125,6 @@ export function filterCytoscapeData(
       nodes: finalNodes,
       edges: filteredEdges,
     },
+    meta: data.meta,
   };
 }

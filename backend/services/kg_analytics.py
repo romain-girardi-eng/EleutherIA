@@ -6,11 +6,16 @@ Knowledge Graph analytics helpers for high-level visualizations
 from __future__ import annotations
 
 from collections import Counter, defaultdict, deque
+import importlib.util
+import logging
 import math
 import re
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 import numpy as np
+import networkx as nx
+
+logger = logging.getLogger(__name__)
 
 KGNode = Dict[str, Any]
 KGEdge = Dict[str, Any]
@@ -55,6 +60,40 @@ MODERN_WORK_CATEGORIES: Set[str] = {
     "contemporary_scholar",
 }
 
+COMMUNITY_ALGORITHM_DESCRIPTIONS: Dict[str, str] = {
+    "leiden": (
+        "Leiden (requires python-igraph + leidenalg): guarantees well-connected communities and "
+        "iteratively refines partitions for higher modularity."
+    ),
+    "louvain": (
+        "Louvain (requires python-louvain): classic modularity optimisation; fast but may produce "
+        "disconnected communities."
+    ),
+    "greedy": (
+        "Greedy modularity (NetworkX built-in): dependency-free fallback that maximises modularity "
+        "hierarchically; slower and less precise on large graphs."
+    ),
+}
+
+COMMUNITY_COLOR_PALETTE: List[str] = [
+    "#2563eb",
+    "#16a34a",
+    "#db2777",
+    "#f97316",
+    "#0ea5e9",
+    "#9333ea",
+    "#22c55e",
+    "#facc15",
+    "#ef4444",
+    "#8b5cf6",
+    "#14b8a6",
+    "#f59e0b",
+    "#3b82f6",
+    "#ec4899",
+    "#10b981",
+    "#6366f1",
+]
+
 STOPWORDS: Set[str] = {
     "the",
     "and",
@@ -86,6 +125,235 @@ STOPWORDS: Set[str] = {
     "will",
     "fate",
 }
+
+
+def _algorithm_available(name: str) -> bool:
+    """Check whether the dependencies for a community detection algorithm are available."""
+    if name == "leiden":
+        return bool(
+            importlib.util.find_spec("igraph") and importlib.util.find_spec("leidenalg")
+        )
+    if name == "louvain":
+        return bool(importlib.util.find_spec("community"))
+    if name == "greedy":
+        return True
+    return False
+
+
+def _build_network_graph(kg_data: KGData) -> nx.Graph:
+    """Build an undirected NetworkX graph from KG data."""
+    graph = nx.Graph()
+    nodes = kg_data.get("nodes", [])
+    edges = kg_data.get("edges", [])
+
+    for node in nodes:
+        node_id = node.get("id")
+        if node_id:
+            graph.add_node(node_id)
+
+    for edge in edges:
+        source = edge.get("source")
+        target = edge.get("target")
+        if not source or not target:
+            continue
+        weight = edge.get("weight", 1.0)
+        try:
+            weight_value = float(weight)
+        except (TypeError, ValueError):
+            weight_value = 1.0
+        if graph.has_edge(source, target):
+            graph[source][target]["weight"] += weight_value
+        else:
+            graph.add_edge(source, target, weight=weight_value)
+
+    return graph
+
+
+def _run_leiden(graph: nx.Graph) -> Tuple[Dict[str, int], Optional[float]]:
+    """Execute the Leiden algorithm using igraph and leidenalg."""
+    import igraph as ig  # type: ignore
+    import leidenalg  # type: ignore
+
+    if graph.number_of_nodes() == 0:
+        return {}, None
+
+    node_to_index = {node: idx for idx, node in enumerate(graph.nodes())}
+    index_to_node = {idx: node for node, idx in node_to_index.items()}
+
+    ig_graph = ig.Graph(
+        n=len(node_to_index),
+        edges=[(node_to_index[u], node_to_index[v]) for u, v in graph.edges()],
+        directed=False,
+    )
+    weights = [graph[u][v].get("weight", 1.0) for u, v in graph.edges()]
+    if weights:
+        ig_graph.es["weight"] = weights
+        partition = leidenalg.find_partition(
+            ig_graph,
+            leidenalg.ModularityVertexPartition,
+            weights=weights,
+        )
+    else:
+        partition = leidenalg.find_partition(
+            ig_graph,
+            leidenalg.ModularityVertexPartition,
+        )
+
+    membership = partition.membership
+    assignments = {
+        index_to_node[idx]: community_id for idx, community_id in enumerate(membership)
+    }
+    try:
+        quality = float(partition.quality())
+    except Exception:
+        quality = None
+    return assignments, quality
+
+
+def _run_louvain(graph: nx.Graph) -> Tuple[Dict[str, int], Optional[float]]:
+    """Execute the Louvain algorithm using python-louvain."""
+    import community as community_louvain  # type: ignore
+
+    if graph.number_of_nodes() == 0:
+        return {}, None
+
+    assignments = community_louvain.best_partition(graph, weight="weight")
+    try:
+        quality = float(community_louvain.modularity(assignments, graph))
+    except Exception:
+        quality = None
+    return assignments, quality
+
+
+def _run_greedy(graph: nx.Graph) -> Tuple[Dict[str, int], Optional[float]]:
+    """Execute greedy modularity maximisation using NetworkX."""
+    if graph.number_of_nodes() == 0:
+        return {}, None
+
+    communities = list(
+        nx.algorithms.community.greedy_modularity_communities(graph, weight="weight")
+    )
+    assignments: Dict[str, int] = {}
+    for idx, community in enumerate(communities):
+        for node in community:
+            assignments[node] = idx
+    try:
+        quality = float(
+            nx.algorithms.community.quality.modularity(
+                graph, communities, weight="weight"
+            )
+        )
+    except Exception:
+        quality = None
+    return assignments, quality
+
+
+def detect_communities(
+    kg_data: KGData, algorithm: str = "auto"
+) -> Dict[str, Any]:
+    """Detect communities using the requested algorithm with intelligent fallbacks."""
+    requested = (algorithm or "auto").lower()
+    available_map = {
+        name: _algorithm_available(name) for name in ("leiden", "louvain", "greedy")
+    }
+
+    graph = _build_network_graph(kg_data)
+    if graph.number_of_edges() == 0 or graph.number_of_nodes() == 0:
+        return {
+            "algorithm_requested": requested,
+            "algorithm_used": "none",
+            "quality": None,
+            "communities": [],
+            "node_assignments": {},
+            "available_algorithms": [
+                {"name": name, "available": available, "description": desc}
+                for name, available in available_map.items()
+                for desc in [COMMUNITY_ALGORITHM_DESCRIPTIONS[name]]
+            ],
+        }
+
+    def execute(algo: str) -> Optional[Tuple[Dict[str, int], Optional[float]]]:
+        try:
+            if algo == "leiden" and available_map["leiden"]:
+                return _run_leiden(graph)
+            if algo == "louvain" and available_map["louvain"]:
+                return _run_louvain(graph)
+            if algo == "greedy":
+                return _run_greedy(graph)
+        except Exception as exc:  # pragma: no cover - defensive logging
+            logger.warning("Community detection failed for %s: %s", algo, exc)
+        return None
+
+    assignments: Dict[str, int] = {}
+    quality: Optional[float] = None
+    algorithm_used = "none"
+
+    if requested == "auto" or requested not in ("leiden", "louvain", "greedy"):
+        for candidate in ("leiden", "louvain", "greedy"):
+            result = execute(candidate)
+            if result:
+                assignments, quality = result
+                algorithm_used = candidate
+                break
+    else:
+        result = execute(requested)
+        if result:
+            assignments, quality = result
+            algorithm_used = requested
+        else:
+            # fall back to greedy
+            fallback = execute("greedy")
+            if fallback:
+                assignments, quality = fallback
+                algorithm_used = "greedy"
+
+    if not assignments:
+        return {
+            "algorithm_requested": requested,
+            "algorithm_used": "none",
+            "quality": None,
+            "communities": [],
+            "node_assignments": {},
+            "available_algorithms": [
+                {"name": name, "available": available, "description": desc}
+                for name, available in available_map.items()
+                for desc in [COMMUNITY_ALGORITHM_DESCRIPTIONS[name]]
+            ],
+        }
+
+    counts = Counter(assignments.values())
+    sorted_counts = sorted(
+        counts.items(), key=lambda item: (-item[1], item[0])
+    )
+
+    community_summaries: List[Dict[str, Any]] = []
+    color_map: Dict[int, str] = {}
+    for index, (community_id, size) in enumerate(sorted_counts):
+        color = COMMUNITY_COLOR_PALETTE[index % len(COMMUNITY_COLOR_PALETTE)]
+        color_map[int(community_id)] = color
+        community_summaries.append(
+            {
+                "id": int(community_id),
+                "size": int(size),
+                "order": index,
+                "color": color,
+                "label": f"Community {index + 1}",
+            }
+        )
+
+    return {
+        "algorithm_requested": requested,
+        "algorithm_used": algorithm_used,
+        "quality": quality,
+        "communities": community_summaries,
+        "node_assignments": assignments,
+        "available_algorithms": [
+            {"name": name, "available": available, "description": desc}
+            for name, available in available_map.items()
+            for desc in [COMMUNITY_ALGORITHM_DESCRIPTIONS[name]]
+        ],
+        "colors": color_map,
+    }
 
 
 def apply_filters(

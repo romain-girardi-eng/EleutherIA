@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="1000" viewBox="0 0 1200 1000" xmlns="http://www.w3.org/2000/svg">
+  <!-- Multi-Modal Integration: Circular Design -->
+  <defs>
+    <linearGradient id="centerGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#769687;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#8baf9f;stop-opacity:0.1" />
+    </linearGradient>
+
+    <radialGradient id="haloEffect" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#f3f7f5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fafaf9;stop-opacity:1" />
+    </radialGradient>
+
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="elevate">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.25"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <marker id="dataFlow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#769687" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="1000" fill="url(#haloEffect)"/>
+
+  <!-- Title -->
+  <text x="600" y="60" font-family="Georgia, serif" font-size="42" font-weight="bold" fill="#1c1917" text-anchor="middle">
+    Multi-Modal Integration
+  </text>
+  <text x="600" y="95" font-family="Palatino, serif" font-size="18" fill="#78716c" text-anchor="middle" font-style="italic">
+    Seamless Knowledge Flow Across Three Modalities
+  </text>
+
+  <!-- Central Hub -->
+  <g filter="url(#glow)">
+    <circle cx="600" cy="500" r="140" fill="url(#centerGlow)" stroke="#769687" stroke-width="4"/>
+    <circle cx="600" cy="500" r="120" fill="#ffffff" stroke="#8baf9f" stroke-width="2"/>
+
+    <text x="600" y="470" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Unified
+    </text>
+    <text x="600" y="500" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Research
+    </text>
+    <text x="600" y="530" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Platform
+    </text>
+
+    <text x="600" y="560" font-family="Palatino, serif" font-size="13" fill="#769687" text-anchor="middle" font-style="italic">
+      EleutherIA Core
+    </text>
+  </g>
+
+  <!-- Knowledge Graph (Top Left) -->
+  <g filter="url(#elevate)">
+    <rect x="80" y="180" width="320" height="200" rx="12" fill="#ffffff" stroke="#769687" stroke-width="4"/>
+
+    <circle cx="240" cy="230" r="30" fill="#769687" opacity="0.15"/>
+    <text x="240" y="241" font-family="Georgia, serif" font-size="36" fill="#769687" text-anchor="middle">🧠</text>
+
+    <text x="240" y="280" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Knowledge Graph
+    </text>
+    <line x1="100" y1="295" x2="380" y2="295" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="100" y="320" font-family="Georgia, serif" font-size="13" fill="#78716c" font-weight="600">
+      509 nodes | 820 edges
+    </text>
+    <text x="100" y="340" font-family="Georgia, serif" font-size="12" fill="#8baf9f">
+      Philosophical relationships
+    </text>
+    <text x="100" y="357" font-family="Georgia, serif" font-size="12" fill="#8baf9f">
+      Influences, refutations, arguments
+    </text>
+  </g>
+
+  <!-- PostgreSQL Database (Top Right) -->
+  <g filter="url(#elevate)">
+    <rect x="800" y="180" width="320" height="200" rx="12" fill="#ffffff" stroke="#769687" stroke-width="4"/>
+
+    <circle cx="960" cy="230" r="30" fill="#769687" opacity="0.15"/>
+    <text x="960" y="241" font-family="Georgia, serif" font-size="36" fill="#769687" text-anchor="middle">🗄️</text>
+
+    <text x="960" y="280" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      PostgreSQL
+    </text>
+    <line x1="820" y1="295" x2="1100" y2="295" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="820" y="320" font-family="Georgia, serif" font-size="13" fill="#78716c" font-weight="600">
+      289 texts | 35M+ characters
+    </text>
+    <text x="820" y="340" font-family="Georgia, serif" font-size="12" fill="#8baf9f">
+      Full-text search (Greek/Latin)
+    </text>
+    <text x="820" y="357" font-family="Georgia, serif" font-size="12" fill="#8baf9f">
+      TEI XML, linguistic metadata
+    </text>
+  </g>
+
+  <!-- Vector Database (Bottom) -->
+  <g filter="url(#elevate)">
+    <rect x="440" y="720" width="320" height="200" rx="12" fill="#ffffff" stroke="#769687" stroke-width="4"/>
+
+    <circle cx="600" cy="770" r="30" fill="#769687" opacity="0.15"/>
+    <text x="600" y="781" font-family="Georgia, serif" font-size="36" fill="#769687" text-anchor="middle">🔍</text>
+
+    <text x="600" y="820" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c1917" text-anchor="middle">
+      Vector Database
+    </text>
+    <line x1="460" y1="835" x2="740" y2="835" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="460" y="860" font-family="Georgia, serif" font-size="13" fill="#78716c" font-weight="600">
+      285 embeddings (Gemini)
+    </text>
+    <text x="460" y="880" font-family="Georgia, serif" font-size="12" fill="#8baf9f">
+      Semantic similarity search
+    </text>
+    <text x="460" y="897" font-family="Georgia, serif" font-size="12" fill="#8baf9f">
+      Cross-lingual concept matching
+    </text>
+  </g>
+
+  <!-- Connection: KG → Center -->
+  <g>
+    <path d="M 360 280 L 500 450" stroke="#769687" stroke-width="4" marker-end="url(#dataFlow)"/>
+    <rect x="370" y="340" width="100" height="85" rx="6" fill="#f3f7f5" stroke="#8baf9f" stroke-width="2"/>
+    <text x="420" y="360" font-family="Georgia, serif" font-size="11" fill="#5d7769" text-anchor="middle" font-weight="600">
+      Provides:
+    </text>
+    <text x="420" y="378" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      • Concept IDs
+    </text>
+    <text x="420" y="393" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      • Work IDs
+    </text>
+    <text x="420" y="408" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      • Influence paths
+    </text>
+    <text x="420" y="423" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      • Bibliography
+    </text>
+  </g>
+
+  <!-- Connection: Center → KG -->
+  <g>
+    <path d="M 480 460 L 370 300" stroke="#8baf9f" stroke-width="3" stroke-dasharray="6,3" marker-end="url(#dataFlow)"/>
+  </g>
+
+  <!-- Connection: PostgreSQL → Center -->
+  <g>
+    <path d="M 840 280 L 700 450" stroke="#769687" stroke-width="4" marker-end="url(#dataFlow)"/>
+    <rect x="730" y="340" width="100" height="85" rx="6" fill="#f3f7f5" stroke="#8baf9f" stroke-width="2"/>
+    <text x="780" y="360" font-family="Georgia, serif" font-size="11" fill="#5d7769" text-anchor="middle" font-weight="600">
+      Provides:
+    </text>
+    <text x="780" y="378" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      • Text content
+    </text>
+    <text x="780" y="393" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      • Citations
+    </text>
+    <text x="780" y="408" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      • Metadata
+    </text>
+    <text x="780" y="423" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      • Lemmas
+    </text>
+  </g>
+
+  <!-- Connection: Center → PostgreSQL -->
+  <g>
+    <path d="M 720 460 L 830 300" stroke="#8baf9f" stroke-width="3" stroke-dasharray="6,3" marker-end="url(#dataFlow)"/>
+  </g>
+
+  <!-- Connection: Vector → Center -->
+  <g>
+    <path d="M 600 720 L 600 640" stroke="#769687" stroke-width="4" marker-end="url(#dataFlow)"/>
+    <rect x="620" y="650" width="110" height="85" rx="6" fill="#f3f7f5" stroke="#8baf9f" stroke-width="2"/>
+    <text x="675" y="670" font-family="Georgia, serif" font-size="11" fill="#5d7769" text-anchor="middle" font-weight="600">
+      Provides:
+    </text>
+    <text x="675" y="688" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      • Similarity scores
+    </text>
+    <text x="675" y="703" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      • Semantic clusters
+    </text>
+    <text x="675" y="718" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      • Related passages
+    </text>
+  </g>
+
+  <!-- Connection: Center → Vector -->
+  <g>
+    <path d="M 580 640 L 580 720" stroke="#8baf9f" stroke-width="3" stroke-dasharray="6,3" marker-end="url(#dataFlow)"/>
+  </g>
+
+  <!-- Lateral Connection: KG ↔ PostgreSQL -->
+  <g>
+    <path d="M 400 230 L 800 230" stroke="#769687" stroke-width="3" stroke-dasharray="8,4" marker-end="url(#dataFlow)"/>
+    <path d="M 800 250 L 400 250" stroke="#8baf9f" stroke-width="3" stroke-dasharray="6,3" marker-end="url(#dataFlow)"/>
+    <rect x="540" y="205" width="120" height="60" rx="6" fill="#ffffff" stroke="#769687" stroke-width="2"/>
+    <text x="600" y="225" font-family="Georgia, serif" font-size="11" fill="#5d7769" text-anchor="middle" font-weight="600">
+      kg_work_id field
+    </text>
+    <text x="600" y="242" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      Bidirectional linking
+    </text>
+    <text x="600" y="257" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      for citation mapping
+    </text>
+  </g>
+
+  <!-- Lateral Connection: KG ↔ Vector -->
+  <g>
+    <path d="M 360 350 Q 450 620 520 780" stroke="#769687" stroke-width="3" stroke-dasharray="8,4" fill="none" marker-end="url(#dataFlow)"/>
+    <path d="M 540 780 Q 480 620 380 360" stroke="#8baf9f" stroke-width="3" stroke-dasharray="6,3" fill="none" marker-end="url(#dataFlow)"/>
+    <rect x="350" y="540" width="130" height="70" rx="6" fill="#ffffff" stroke="#769687" stroke-width="2"/>
+    <text x="415" y="560" font-family="Georgia, serif" font-size="11" fill="#5d7769" text-anchor="middle" font-weight="600">
+      Concept clustering
+    </text>
+    <text x="415" y="577" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      Embed graph nodes
+    </text>
+    <text x="415" y="592" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      for semantic
+    </text>
+    <text x="415" y="607" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      similarity
+    </text>
+  </g>
+
+  <!-- Lateral Connection: PostgreSQL ↔ Vector -->
+  <g>
+    <path d="M 840 350 Q 750 620 680 780" stroke="#769687" stroke-width="3" stroke-dasharray="8,4" fill="none" marker-end="url(#dataFlow)"/>
+    <path d="M 660 780 Q 720 620 820 360" stroke="#8baf9f" stroke-width="3" stroke-dasharray="6,3" fill="none" marker-end="url(#dataFlow)"/>
+    <rect x="720" y="540" width="130" height="70" rx="6" fill="#ffffff" stroke="#769687" stroke-width="2"/>
+    <text x="785" y="560" font-family="Georgia, serif" font-size="11" fill="#5d7769" text-anchor="middle" font-weight="600">
+      Hybrid search
+    </text>
+    <text x="785" y="577" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      Embeddings stored
+    </text>
+    <text x="785" y="592" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      as BYTEA in
+    </text>
+    <text x="785" y="607" font-family="Georgia, serif" font-size="10" fill="#78716c" text-anchor="middle">
+      PostgreSQL
+    </text>
+  </g>
+
+  <!-- Example Query Flow -->
+  <g filter="url(#elevate)">
+    <rect x="100" y="950" width="1000" height="30" rx="6" fill="#769687"/>
+    <text x="600" y="972" font-family="Georgia, serif" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="bold">
+      Example: "What did Aristotle say about free will?" → Graph nodes → PostgreSQL texts → Vector similarity → Unified answer
+    </text>
+  </g>
+
+  <!-- Footer -->
+  <text x="600" y="1020" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+    EleutherIA: Triple-Threat Architecture | Seamless integration for comprehensive research
+  </text>
+</svg>

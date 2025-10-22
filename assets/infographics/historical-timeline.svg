@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1800" height="900" viewBox="0 0 1800 900" xmlns="http://www.w3.org/2000/svg">
+  <!-- Historical Timeline: 4th BCE - 6th CE -->
+  <defs>
+    <linearGradient id="timeGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:#769687;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#8baf9f;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#a8c3b7;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#8baf9f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#769687;stop-opacity:1" />
+    </linearGradient>
+
+    <filter id="periodShadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1800" height="900" fill="#fafaf9"/>
+
+  <!-- Header -->
+  <rect width="1800" height="100" fill="url(#timeGrad)"/>
+  <text x="900" y="55" font-family="Georgia, serif" font-size="40" font-weight="bold" fill="#ffffff" text-anchor="middle">
+    Historical Timeline: Ancient Free Will Debates
+  </text>
+  <text x="900" y="85" font-family="Palatino, serif" font-size="16" fill="#e2ebe7" text-anchor="middle" font-style="italic">
+    From Aristotle (4th c. BCE) to Boethius (6th c. CE) — 1,000 Years of Philosophy
+  </text>
+
+  <!-- Main Timeline -->
+  <line x1="150" y1="450" x2="1650" y2="450" stroke="#769687" stroke-width="6"/>
+
+  <!-- Period 1: Classical Greek (4th BCE) -->
+  <g filter="url(#periodShadow)">
+    <rect x="100" y="180" width="240" height="200" rx="10" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <circle cx="220" cy="450" r="12" fill="#769687"/>
+    <line x1="220" y1="380" x2="220" y2="438" stroke="#769687" stroke-width="2"/>
+
+    <text x="220" y="215" font-family="Georgia, serif" font-size="18" fill="#769687" text-anchor="middle" font-weight="bold">
+      4th c. BCE
+    </text>
+    <text x="220" y="238" font-family="Georgia, serif" font-size="14" fill="#5d7769" text-anchor="middle" font-style="italic">
+      Classical Greek
+    </text>
+
+    <line x1="120" y1="250" x2="320" y2="250" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="220" y="275" font-family="Georgia, serif" font-size="15" fill="#1c1917" text-anchor="middle" font-weight="600">
+      Aristotle
+    </text>
+    <text x="220" y="295" font-family="Palatino, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      (384-322 BCE)
+    </text>
+
+    <text x="120" y="320" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • ἐφ' ἡμῖν (eph' hêmin)
+    </text>
+    <text x="120" y="337" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • ἑκούσιον (voluntary)
+    </text>
+    <text x="120" y="354" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • Nicomachean Ethics
+    </text>
+  </g>
+
+  <!-- Period 2: Hellenistic (3rd-2nd BCE) - Epicurus -->
+  <g filter="url(#periodShadow)">
+    <rect x="380" y="520" width="240" height="200" rx="10" fill="#ffffff" stroke="#8baf9f" stroke-width="3"/>
+
+    <circle cx="500" cy="450" r="12" fill="#8baf9f"/>
+    <line x1="500" y1="462" x2="500" y2="520" stroke="#8baf9f" stroke-width="2"/>
+
+    <text x="500" y="555" font-family="Georgia, serif" font-size="18" fill="#8baf9f" text-anchor="middle" font-weight="bold">
+      3rd c. BCE
+    </text>
+    <text x="500" y="578" font-family="Georgia, serif" font-size="14" fill="#5d7769" text-anchor="middle" font-style="italic">
+      Hellenistic Greek
+    </text>
+
+    <line x1="400" y1="590" x2="600" y2="590" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="500" y="615" font-family="Georgia, serif" font-size="15" fill="#1c1917" text-anchor="middle" font-weight="600">
+      Epicurus & Stoics
+    </text>
+    <text x="500" y="635" font-family="Palatino, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Epicurus (341-270), Chrysippus
+    </text>
+
+    <text x="400" y="660" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • Atomic swerve
+    </text>
+    <text x="400" y="677" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • Stoic compatibilism
+    </text>
+    <text x="400" y="694" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • εἱμαρμένη (fate)
+    </text>
+  </g>
+
+  <!-- Period 3: Academic Skepticism (2nd-1st BCE) -->
+  <g filter="url(#periodShadow)">
+    <rect x="660" y="180" width="240" height="200" rx="10" fill="#ffffff" stroke="#a8c3b7" stroke-width="3"/>
+
+    <circle cx="780" cy="450" r="12" fill="#a8c3b7"/>
+    <line x1="780" y1="380" x2="780" y2="438" stroke="#a8c3b7" stroke-width="2"/>
+
+    <text x="780" y="215" font-family="Georgia, serif" font-size="18" fill="#a8c3b7" text-anchor="middle" font-weight="bold">
+      2nd-1st c. BCE
+    </text>
+    <text x="780" y="238" font-family="Georgia, serif" font-size="14" fill="#5d7769" text-anchor="middle" font-style="italic">
+      Academic Skeptic
+    </text>
+
+    <line x1="680" y1="250" x2="880" y2="250" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="780" y="275" font-family="Georgia, serif" font-size="15" fill="#1c1917" text-anchor="middle" font-weight="600">
+      Carneades & Cicero
+    </text>
+    <text x="780" y="295" font-family="Palatino, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Carneades (214-129), Cicero
+    </text>
+
+    <text x="680" y="320" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • CAFMA argument
+    </text>
+    <text x="680" y="337" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • Incompatibilism
+    </text>
+    <text x="680" y="354" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • De Fato (Cicero)
+    </text>
+  </g>
+
+  <!-- Period 4: Roman Imperial (1st-3rd CE) - Alexander -->
+  <g filter="url(#periodShadow)">
+    <rect x="940" y="520" width="240" height="200" rx="10" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <circle cx="1060" cy="450" r="12" fill="#769687"/>
+    <line x1="1060" y1="462" x2="1060" y2="520" stroke="#769687" stroke-width="2"/>
+
+    <text x="1060" y="555" font-family="Georgia, serif" font-size="18" fill="#769687" text-anchor="middle" font-weight="bold">
+      2nd-3rd c. CE
+    </text>
+    <text x="1060" y="578" font-family="Georgia, serif" font-size="14" fill="#5d7769" text-anchor="middle" font-style="italic">
+      Roman Imperial
+    </text>
+
+    <line x1="960" y1="590" x2="1160" y2="590" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="1060" y="615" font-family="Georgia, serif" font-size="15" fill="#1c1917" text-anchor="middle" font-weight="600">
+      Alexander & Alcinous
+    </text>
+    <text x="1060" y="635" font-family="Palatino, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Alexander of Aphrodisias
+    </text>
+
+    <text x="960" y="660" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • Libertarian defense
+    </text>
+    <text x="960" y="677" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • Middle Platonism
+    </text>
+    <text x="960" y="694" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • De Fato (Alexander)
+    </text>
+  </g>
+
+  <!-- Period 5: Patristic (2nd-5th CE) -->
+  <g filter="url(#periodShadow)">
+    <rect x="1220" y="180" width="240" height="200" rx="10" fill="#ffffff" stroke="#8baf9f" stroke-width="3"/>
+
+    <circle cx="1340" cy="450" r="12" fill="#8baf9f"/>
+    <line x1="1340" y1="380" x2="1340" y2="438" stroke="#8baf9f" stroke-width="2"/>
+
+    <text x="1340" y="215" font-family="Georgia, serif" font-size="18" fill="#8baf9f" text-anchor="middle" font-weight="bold">
+      2nd-5th c. CE
+    </text>
+    <text x="1340" y="238" font-family="Georgia, serif" font-size="14" fill="#5d7769" text-anchor="middle" font-style="italic">
+      Patristic
+    </text>
+
+    <line x1="1240" y1="250" x2="1440" y2="250" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="1340" y="275" font-family="Georgia, serif" font-size="15" fill="#1c1917" text-anchor="middle" font-weight="600">
+      Origen & Augustine
+    </text>
+    <text x="1340" y="295" font-family="Palatino, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      Origen (185-254), Augustine
+    </text>
+
+    <text x="1240" y="320" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • αὐτεξούσιον
+    </text>
+    <text x="1240" y="337" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • Christian libertarianism
+    </text>
+    <text x="1240" y="354" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • Theodicy & divine justice
+    </text>
+  </g>
+
+  <!-- Period 6: Late Antiquity (6th CE) -->
+  <g filter="url(#periodShadow)">
+    <rect x="1500" y="520" width="240" height="200" rx="10" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <circle cx="1620" cy="450" r="12" fill="#769687"/>
+    <line x1="1620" y1="462" x2="1620" y2="520" stroke="#769687" stroke-width="2"/>
+
+    <text x="1620" y="555" font-family="Georgia, serif" font-size="18" fill="#769687" text-anchor="middle" font-weight="bold">
+      6th c. CE
+    </text>
+    <text x="1620" y="578" font-family="Georgia, serif" font-size="14" fill="#5d7769" text-anchor="middle" font-style="italic">
+      Late Antiquity
+    </text>
+
+    <line x1="1520" y1="590" x2="1720" y2="590" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="1620" y="615" font-family="Georgia, serif" font-size="15" fill="#1c1917" text-anchor="middle" font-weight="600">
+      Boethius
+    </text>
+    <text x="1620" y="635" font-family="Palatino, serif" font-size="11" fill="#78716c" text-anchor="middle">
+      (480-524 CE)
+    </text>
+
+    <text x="1520" y="660" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • Divine eternity solution
+    </text>
+    <text x="1520" y="677" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • Foreknowledge problem
+    </text>
+    <text x="1520" y="694" font-family="Georgia, serif" font-size="11" fill="#78716c">
+      • Consolation of Philosophy
+    </text>
+  </g>
+
+  <!-- Timeline Labels -->
+  <text x="220" y="480" font-family="Georgia, serif" font-size="12" fill="#5d7769" text-anchor="middle" font-weight="600">
+    384 BCE
+  </text>
+  <text x="500" y="480" font-family="Georgia, serif" font-size="12" fill="#5d7769" text-anchor="middle" font-weight="600">
+    341 BCE
+  </text>
+  <text x="780" y="480" font-family="Georgia, serif" font-size="12" fill="#5d7769" text-anchor="middle" font-weight="600">
+    214 BCE
+  </text>
+  <text x="1060" y="480" font-family="Georgia, serif" font-size="12" fill="#5d7769" text-anchor="middle" font-weight="600">
+    200 CE
+  </text>
+  <text x="1340" y="480" font-family="Georgia, serif" font-size="12" fill="#5d7769" text-anchor="middle" font-weight="600">
+    254 CE
+  </text>
+  <text x="1620" y="480" font-family="Georgia, serif" font-size="12" fill="#5d7769" text-anchor="middle" font-weight="600">
+    524 CE
+  </text>
+
+  <!-- Legend -->
+  <g filter="url(#periodShadow)">
+    <rect x="100" y="780" width="1640" height="90" rx="10" fill="#f3f7f5" stroke="#769687" stroke-width="2"/>
+
+    <text x="900" y="815" font-family="Georgia, serif" font-size="16" fill="#5d7769" text-anchor="middle" font-weight="bold">
+      Key Debates Across 1,000 Years
+    </text>
+
+    <text x="150" y="845" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • <tspan font-weight="600">Determinism vs. Indeterminism:</tspan> Stoics (fate) vs. Epicureans (swerve)
+    </text>
+    <text x="150" y="863" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • <tspan font-weight="600">Compatibilism vs. Incompatibilism:</tspan> Stoics vs. Academic Skeptics (CAFMA)
+    </text>
+
+    <text x="900" y="845" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • <tspan font-weight="600">Internal vs. Self-Originated:</tspan> Stoics vs. Alexander (libertarianism)
+    </text>
+    <text x="900" y="863" font-family="Georgia, serif" font-size="13" fill="#78716c">
+      • <tspan font-weight="600">Providence vs. Fate:</tspan> Christians adopt/adapt philosophical concepts
+    </text>
+  </g>
+
+  <!-- Footer -->
+  <text x="900" y="905" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+    EleutherIA documents 509 nodes and 820 relationships across these periods | All dates and attributions verified from ancient sources
+  </text>
+</svg>

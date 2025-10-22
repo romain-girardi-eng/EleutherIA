@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import CytoscapeVisualizerEnhanced from '../components/CytoscapeVisualizerEnhanced';
 import { apiClient } from '../api/client';
-import type { CytoscapeData } from '../types';
+import type { CytoscapeData, CommunityMeta } from '../types';
 import { KGWorkspaceProvider, useKGWorkspace } from '../context/KGWorkspaceContext';
 import WorkspaceHeader from '../components/workspace/WorkspaceHeader';
 import WorkspaceFilterBar from '../components/workspace/WorkspaceFilterBar';
@@ -32,23 +32,39 @@ function KGVisualizerContent() {
   const [cyData, setCyData] = useState<CytoscapeData | null>(null);
   const [cyLoading, setCyLoading] = useState<boolean>(true);
   const [cyError, setCyError] = useState<string | null>(null);
+  const [communityAlgorithm, setCommunityAlgorithm] = useState<string>('auto');
+  const [communityMeta, setCommunityMeta] = useState<CommunityMeta | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const load = async () => {
       try {
         setCyLoading(true);
-        const data = await apiClient.getCytoscapeData();
+        setCyError(null);
+        const data = await apiClient.getCytoscapeData({ algorithm: communityAlgorithm });
+        if (!isMounted) return;
         setCyData(data);
+        setCommunityMeta(data.meta?.community ?? null);
       } catch (err: unknown) {
         console.error('Failed to load Cytoscape data', err);
+        if (!isMounted) return;
         const message = err instanceof Error ? err.message : 'Failed to load network visualization';
         setCyError(message);
+        setCommunityMeta(null);
       } finally {
-        setCyLoading(false);
+        if (isMounted) {
+          setCyLoading(false);
+        }
       }
     };
+
     void load();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [communityAlgorithm]);
 
   const filteredData = useMemo(
     () => filterCytoscapeData(cyData, state.filters, state.selection),
@@ -57,6 +73,47 @@ function KGVisualizerContent() {
 
   const totals = state.timeline?.totals;
   const typeCounts = totals?.byType || {};
+
+  const availabilityMap = useMemo(() => {
+    const map = new Map<string, boolean>();
+    communityMeta?.availableAlgorithms.forEach((option) => {
+      map.set(option.name.toLowerCase(), option.available);
+    });
+    return map;
+  }, [communityMeta]);
+
+  const algorithmOptions: Array<{ value: string; label: string; description: string; disabled?: boolean }> = [
+    {
+      value: 'auto',
+      label: 'Auto (recommended)',
+      description: 'Try Leiden → Louvain → Greedy based on available libraries.',
+    },
+    {
+      value: 'leiden',
+      label: 'Leiden algorithm',
+      description: 'Well-connected communities, fastest on large graphs (python-igraph + leidenalg).',
+      disabled: availabilityMap.get('leiden') === false,
+    },
+    {
+      value: 'louvain',
+      label: 'Louvain algorithm',
+      description: 'Classic modularity clustering (python-louvain).',
+      disabled: availabilityMap.get('louvain') === false,
+    },
+    {
+      value: 'greedy',
+      label: 'Greedy modularity',
+      description: 'Pure Python fallback using NetworkX.',
+      disabled: availabilityMap.get('greedy') === false,
+    },
+    {
+      value: 'none',
+      label: 'No community overlay',
+      description: 'Disable community detection; color nodes by type.',
+    },
+  ];
+
+  const selectedAlgorithm = algorithmOptions.find((option) => option.value === communityAlgorithm) ?? algorithmOptions[0];
 
   return (
     <div className="space-y-6">
@@ -94,6 +151,115 @@ function KGVisualizerContent() {
           <div className="text-xs text-academic-muted max-w-sm text-right">
             Advanced mode features sophisticated academic visualizations. Observatory provides traditional analytics.
             Semativerse offers 3D exploration when credentials are provided.
+          </div>
+        </div>
+      </div>
+
+      <div className="academic-card">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+          <div className="flex-1 space-y-3">
+            <div>
+              <span className="text-xs uppercase text-academic-muted tracking-wide font-semibold">Community Detection</span>
+              <div className="mt-2 flex flex-col sm:flex-row sm:items-center gap-3">
+                <select
+                  value={communityAlgorithm}
+                  onChange={(event) => setCommunityAlgorithm(event.target.value)}
+                  className="w-full sm:w-64 border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                >
+                  {algorithmOptions.map((option) => (
+                    <option
+                      key={option.value}
+                      value={option.value}
+                      disabled={Boolean(option.disabled)}
+                    >
+                      {option.label}
+                      {option.disabled ? ' (unavailable)' : ''}
+                    </option>
+                  ))}
+                </select>
+                <div className="text-xs text-academic-muted">
+                  {cyLoading ? (
+                    <span>Updating communities…</span>
+                  ) : communityMeta ? (
+                    <span>
+                      Active:&nbsp;
+                      <span className="font-semibold text-academic-text capitalize">
+                        {communityMeta.algorithmUsed}
+                      </span>
+                      {communityMeta.algorithmUsed !== communityMeta.algorithmRequested &&
+                        communityMeta.algorithmRequested !== 'auto' &&
+                        communityMeta.algorithmRequested !== 'none' && (
+                          <span className="text-amber-600">
+                            {' '}
+                            (fallback from {communityMeta.algorithmRequested})
+                          </span>
+                        )}
+                    </span>
+                  ) : (
+                    <span>Communities disabled.</span>
+                  )}
+                </div>
+              </div>
+              <p className="text-xs text-academic-muted mt-2 leading-relaxed">
+                {selectedAlgorithm.description}
+              </p>
+            </div>
+
+            {communityMeta && (
+              <div className="text-xs text-academic-muted bg-gray-50 border border-gray-100 rounded-md p-3 leading-relaxed">
+                {communityMeta.algorithmUsed !== 'none' ? (
+                  <>
+                    <span className="font-semibold text-academic-text capitalize">{communityMeta.algorithmUsed}</span>
+                    {typeof communityMeta.quality === 'number' && (
+                      <span>
+                        {' '}• Modularity {communityMeta.quality.toFixed(4)}
+                      </span>
+                    )}
+                    {communityMeta.communities.length > 0 && (
+                      <span>
+                        {' '}• {communityMeta.communities.length} communities detected
+                      </span>
+                    )}
+                    . Use the graph controls to toggle between coloring by node type or community palette.
+                  </>
+                ) : (
+                  <span>
+                    Community detection is disabled—nodes will retain their type-based colors. Switch algorithms above to explore clustered views.
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="lg:w-72 bg-gray-50 border border-gray-100 rounded-lg p-4 text-xs text-academic-muted space-y-3">
+            <div>
+              <h4 className="font-semibold text-academic-text mb-2 flex items-center gap-2">
+                <span className="text-sm">Algorithm status</span>
+              </h4>
+              <ul className="space-y-2">
+                {(communityMeta?.availableAlgorithms ?? []).map((option) => (
+                  <li key={option.name} className="leading-snug">
+                    <span
+                      className={`inline-flex items-center gap-2 font-medium ${option.available ? 'text-emerald-600' : 'text-gray-500'}`}
+                    >
+                      <span className="text-base">{option.available ? '●' : '○'}</span>
+                      {option.name.charAt(0).toUpperCase() + option.name.slice(1)}
+                    </span>
+                    <div className="text-[11px] text-gray-500 mt-1">
+                      {option.description}
+                    </div>
+                  </li>
+                ))}
+                {communityMeta?.availableAlgorithms?.length === 0 && (
+                  <li className="text-[11px] text-gray-500">
+                    Waiting for availability information…
+                  </li>
+                )}
+              </ul>
+            </div>
+            <p className="text-[11px] text-gray-500">
+              Tip: After switching algorithms, use the graph controls (color palette section) to color nodes by community and surface cohesion patterns instantly.
+            </p>
           </div>
         </div>
       </div>

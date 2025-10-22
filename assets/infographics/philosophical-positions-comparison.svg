@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1600" height="1200" viewBox="0 0 1600 1200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Philosophical Positions Comparison -->
+  <defs>
+    <linearGradient id="posGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#769687;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8baf9f;stop-opacity:1" />
+    </linearGradient>
+
+    <filter id="posShadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+      <feOffset dx="0" dy="3"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="1200" fill="#fafaf9"/>
+
+  <!-- Header -->
+  <rect width="1600" height="110" fill="url(#posGrad)"/>
+  <text x="800" y="60" font-family="Georgia, serif" font-size="42" font-weight="bold" fill="#ffffff" text-anchor="middle">
+    Major Philosophical Positions
+  </text>
+  <text x="800" y="92" font-family="Palatino, serif" font-size="17" fill="#e2ebe7" text-anchor="middle" font-style="italic">
+    Competing Views on Free Will, Fate, and Moral Responsibility
+  </text>
+
+  <!-- Position 1: Aristotelian Framework -->
+  <g filter="url(#posShadow)">
+    <rect x="80" y="150" width="480" height="230" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <rect x="95" y="165" width="180" height="30" rx="15" fill="#769687"/>
+    <text x="185" y="186" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      ARISTOTELIAN
+    </text>
+
+    <text x="300" y="225" font-family="Georgia, serif" font-size="20" fill="#1c1917" text-anchor="middle" font-weight="bold">
+      Voluntary Action Framework
+    </text>
+    <text x="300" y="250" font-family="Palatino, serif" font-size="13" fill="#769687" text-anchor="middle" font-style="italic">
+      Aristotle (4th c. BCE) | Classical Greek
+    </text>
+
+    <line x1="100" y1="265" x2="540" y2="265" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="110" y="292" font-family="Georgia, serif" font-size="13" fill="#1c1917" font-weight="600">
+      Core Claim:
+    </text>
+    <text x="110" y="312" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Actions are voluntary (ἑκούσιον) when they originate from
+    </text>
+    <text x="110" y="330" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      internal principle with knowledge. Some things are "in our
+    </text>
+    <text x="110" y="348" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      power" (ἐφ' ἡμῖν). Deliberation (προαίρεσις) precedes choice.
+    </text>
+
+    <text x="110" y="370" font-family="Georgia, serif" font-size="11" fill="#8baf9f" font-weight="600">
+      Status: Foundation for all later debates
+    </text>
+  </g>
+
+  <!-- Position 2: Stoic Compatibilism -->
+  <g filter="url(#posShadow)">
+    <rect x="600" y="150" width="480" height="230" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <rect x="615" y="165" width="180" height="30" rx="15" fill="#769687"/>
+    <text x="705" y="186" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      STOIC
+    </text>
+
+    <text x="840" y="225" font-family="Georgia, serif" font-size="20" fill="#1c1917" text-anchor="middle" font-weight="bold">
+      Compatibilist Determinism
+    </text>
+    <text x="840" y="250" font-family="Palatino, serif" font-size="13" fill="#769687" text-anchor="middle" font-style="italic">
+      Chrysippus (3rd c. BCE) | Hellenistic Stoic
+    </text>
+
+    <line x1="620" y1="265" x2="1060" y2="265" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="630" y="292" font-family="Georgia, serif" font-size="13" fill="#1c1917" font-weight="600">
+      Core Claim:
+    </text>
+    <text x="630" y="312" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Universal fate (εἱμαρμένη) governs all events, BUT freedom
+    </text>
+    <text x="630" y="330" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      is compatible via internal causation. Assent (συγκατάθεσις)
+    </text>
+    <text x="630" y="348" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      is "in our power." Cylinder analogy: nature determines response.
+    </text>
+
+    <text x="630" y="370" font-family="Georgia, serif" font-size="11" fill="#8baf9f" font-weight="600">
+      Status: Most influential ancient compatibilism
+    </text>
+  </g>
+
+  <!-- Position 3: Epicurean Indeterminism -->
+  <g filter="url(#posShadow)">
+    <rect x="1120" y="150" width="420" height="230" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <rect x="1135" y="165" width="180" height="30" rx="15" fill="#769687"/>
+    <text x="1225" y="186" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      EPICUREAN
+    </text>
+
+    <text x="1330" y="225" font-family="Georgia, serif" font-size="20" fill="#1c1917" text-anchor="middle" font-weight="bold">
+      Libertarian Indeterminism
+    </text>
+    <text x="1330" y="250" font-family="Palatino, serif" font-size="13" fill="#769687" text-anchor="middle" font-style="italic">
+      Epicurus/Lucretius | Hellenistic
+    </text>
+
+    <line x1="1140" y1="265" x2="1520" y2="265" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="1150" y="292" font-family="Georgia, serif" font-size="13" fill="#1c1917" font-weight="600">
+      Core Claim:
+    </text>
+    <text x="1150" y="312" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Atomic swerve (παρέγκλισις/clinamen)
+    </text>
+    <text x="1150" y="330" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      breaks causal chains. Indeterminism
+    </text>
+    <text x="1150" y="348" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      grounds freedom at atomic level.
+    </text>
+
+    <text x="1150" y="370" font-family="Georgia, serif" font-size="11" fill="#8baf9f" font-weight="600">
+      Status: First libertarian account
+    </text>
+  </g>
+
+  <!-- Position 4: Academic Incompatibilism (CAFMA) -->
+  <g filter="url(#posShadow)">
+    <rect x="80" y="420" width="740" height="230" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <rect x="95" y="435" width="200" height="30" rx="15" fill="#769687"/>
+    <text x="195" y="456" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      ACADEMIC SKEPTIC
+    </text>
+
+    <text x="450" y="495" font-family="Georgia, serif" font-size="20" fill="#1c1917" text-anchor="middle" font-weight="bold">
+      Incompatibilist Critique (CAFMA)
+    </text>
+    <text x="450" y="520" font-family="Palatino, serif" font-size="13" fill="#769687" text-anchor="middle" font-style="italic">
+      Carneades (2nd c. BCE) | Academic Skepticism
+    </text>
+
+    <line x1="100" y1="535" x2="800" y2="535" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="110" y="562" font-family="Georgia, serif" font-size="13" fill="#1c1917" font-weight="600">
+      Core Claim: Five-Part Anti-Fatalist Argument
+    </text>
+    <text x="110" y="582" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      1. <tspan font-weight="600">Conflict Resolution:</tspan> No point deliberating if fate determines outcome
+    </text>
+    <text x="110" y="600" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      2. <tspan font-weight="600">Assent:</tspan> Not truly "up to us" under universal fate
+    </text>
+    <text x="110" y="618" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      3. <tspan font-weight="600">Moral Responsibility:</tspan> Can't be responsible for fated actions
+    </text>
+    <text x="110" y="636" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      4. <tspan font-weight="600">Administration of Justice:</tspan> Punishment unjust if actions determined
+    </text>
+
+    <text x="110" y="658" font-family="Georgia, serif" font-size="11" fill="#8baf9f" font-weight="600">
+      Status: Foundation for incompatibilism; refutes Stoic compatibilism
+    </text>
+  </g>
+
+  <!-- Position 5: Alexandrian Libertarianism -->
+  <g filter="url(#posShadow)">
+    <rect x="860" y="420" width="680" height="230" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <rect x="875" y="435" width="200" height="30" rx="15" fill="#769687"/>
+    <text x="975" y="456" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      PERIPATETIC
+    </text>
+
+    <text x="1200" y="495" font-family="Georgia, serif" font-size="20" fill="#1c1917" text-anchor="middle" font-weight="bold">
+      Libertarian Self-Origination
+    </text>
+    <text x="1200" y="520" font-family="Palatino, serif" font-size="13" fill="#769687" text-anchor="middle" font-style="italic">
+      Alexander of Aphrodisias (2nd-3rd c. CE) | Aristotelian
+    </text>
+
+    <line x1="880" y1="535" x2="1520" y2="535" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="890" y="562" font-family="Georgia, serif" font-size="13" fill="#1c1917" font-weight="600">
+      Core Claim:
+    </text>
+    <text x="890" y="582" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Humans are true <tspan font-weight="600">origins</tspan> (ἀρχαί) of actions, not merely
+    </text>
+    <text x="890" y="600" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      internally caused. Goes beyond Stoics: self-originated vs.
+    </text>
+    <text x="890" y="618" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      internally-caused. Appropriates CAFMA against Stoics. Rejects
+    </text>
+    <text x="890" y="636" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      universal fate. "De Fato" = sustained libertarian defense.
+    </text>
+
+    <text x="890" y="658" font-family="Georgia, serif" font-size="11" fill="#8baf9f" font-weight="600">
+      Status: Most sophisticated ancient libertarianism
+    </text>
+  </g>
+
+  <!-- Position 6: Christian Autexousion -->
+  <g filter="url(#posShadow)">
+    <rect x="80" y="690" width="740" height="230" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <rect x="95" y="705" width="180" height="30" rx="15" fill="#769687"/>
+    <text x="185" y="726" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      CHRISTIAN
+    </text>
+
+    <text x="450" y="765" font-family="Georgia, serif" font-size="20" fill="#1c1917" text-anchor="middle" font-weight="bold">
+      Libertarian Free Will (Autexousion)
+    </text>
+    <text x="450" y="790" font-family="Palatino, serif" font-size="13" fill="#769687" text-anchor="middle" font-style="italic">
+      Origen, Justin Martyr (2nd-5th c. CE) | Patristic
+    </text>
+
+    <line x1="100" y1="805" x2="800" y2="805" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="110" y="832" font-family="Georgia, serif" font-size="13" fill="#1c1917" font-weight="600">
+      Core Claim:
+    </text>
+    <text x="110" y="852" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Self-determining power (αὐτεξούσιον = liberum arbitrium) necessary
+    </text>
+    <text x="110" y="870" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      for divine justice. Theodicy: evil from misuse of freedom. Uses
+    </text>
+    <text x="110" y="888" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      CAFMA against pagan determinism. Providence ≠ mechanical fate.
+    </text>
+
+    <text x="110" y="910" font-family="Georgia, serif" font-size="11" fill="#8baf9f" font-weight="600">
+      Status: Became orthodox Christian doctrine
+    </text>
+  </g>
+
+  <!-- Position 7: Boethian Solution -->
+  <g filter="url(#posShadow)">
+    <rect x="860" y="690" width="680" height="230" rx="12" fill="#ffffff" stroke="#769687" stroke-width="3"/>
+
+    <rect x="875" y="705" width="180" height="30" rx="15" fill="#769687"/>
+    <text x="965" y="726" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">
+      LATE ANTIQUE
+    </text>
+
+    <text x="1200" y="765" font-family="Georgia, serif" font-size="20" fill="#1c1917" text-anchor="middle" font-weight="bold">
+      Divine Eternity Solution
+    </text>
+    <text x="1200" y="790" font-family="Palatino, serif" font-size="13" fill="#769687" text-anchor="middle" font-style="italic">
+      Boethius (6th c. CE) | Late Ancient/Christian
+    </text>
+
+    <line x1="880" y1="805" x2="1520" y2="805" stroke="#c5d7cf" stroke-width="1"/>
+
+    <text x="890" y="832" font-family="Georgia, serif" font-size="13" fill="#1c1917" font-weight="600">
+      Core Claim:
+    </text>
+    <text x="890" y="852" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      God exists outside time, sees all events in "eternal present."
+    </text>
+    <text x="890" y="870" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      Divine knowledge doesn't cause events—temporal contingency
+    </text>
+    <text x="890" y="888" font-family="Georgia, serif" font-size="12" fill="#78716c">
+      preserved. Solves foreknowledge problem via eternalism.
+    </text>
+
+    <text x="890" y="910" font-family="Georgia, serif" font-size="11" fill="#8baf9f" font-weight="600">
+      Status: Standard medieval Christian answer; bridge to modernity
+    </text>
+  </g>
+
+  <!-- Comparison Matrix -->
+  <g filter="url(#posShadow)">
+    <rect x="80" y="960" width="1460" height="160" rx="12" fill="#f3f7f5" stroke="#769687" stroke-width="3"/>
+
+    <text x="810" y="995" font-family="Georgia, serif" font-size="18" fill="#5d7769" text-anchor="middle" font-weight="bold">
+      Quick Comparison Matrix
+    </text>
+
+    <line x1="100" y1="1008" x2="1520" y2="1008" stroke="#c5d7cf" stroke-width="1"/>
+
+    <!-- Column Headers -->
+    <text x="180" y="1030" font-family="Georgia, serif" font-size="11" fill="#5d7769" font-weight="600">Position</text>
+    <text x="450" y="1030" font-family="Georgia, serif" font-size="11" fill="#5d7769" font-weight="600">Determinism?</text>
+    <text x="700" y="1030" font-family="Georgia, serif" font-size="11" fill="#5d7769" font-weight="600">Freedom?</text>
+    <text x="950" y="1030" font-family="Georgia, serif" font-size="11" fill="#5d7769" font-weight="600">Responsibility?</text>
+    <text x="1250" y="1030" font-family="Georgia, serif" font-size="11" fill="#5d7769" font-weight="600">Key Innovation</text>
+
+    <!-- Row 1 -->
+    <text x="120" y="1055" font-family="Georgia, serif" font-size="10" fill="#78716c">Stoic</text>
+    <text x="450" y="1055" font-family="Georgia, serif" font-size="10" fill="#78716c">✓ Yes (fate)</text>
+    <text x="700" y="1055" font-family="Georgia, serif" font-size="10" fill="#78716c">✓ Yes (internal)</text>
+    <text x="950" y="1055" font-family="Georgia, serif" font-size="10" fill="#78716c">✓ Yes</text>
+    <text x="1250" y="1055" font-family="Georgia, serif" font-size="10" fill="#78716c">Compatibilism</text>
+
+    <!-- Row 2 -->
+    <text x="120" y="1075" font-family="Georgia, serif" font-size="10" fill="#78716c">Academic</text>
+    <text x="450" y="1075" font-family="Georgia, serif" font-size="10" fill="#78716c">✗ Rejects fate</text>
+    <text x="700" y="1075" font-family="Georgia, serif" font-size="10" fill="#78716c">✓ Requires it</text>
+    <text x="950" y="1075" font-family="Georgia, serif" font-size="10" fill="#78716c">✓ Yes</text>
+    <text x="1250" y="1075" font-family="Georgia, serif" font-size="10" fill="#78716c">Incompatibilism (CAFMA)</text>
+
+    <!-- Row 3 -->
+    <text x="120" y="1095" font-family="Georgia, serif" font-size="10" fill="#78716c">Alexandrian</text>
+    <text x="450" y="1095" font-family="Georgia, serif" font-size="10" fill="#78716c">✗ No</text>
+    <text x="700" y="1095" font-family="Georgia, serif" font-size="10" fill="#78716c">✓ Self-originated</text>
+    <text x="950" y="1095" font-family="Georgia, serif" font-size="10" fill="#78716c">✓ Yes</text>
+    <text x="1250" y="1095" font-family="Georgia, serif" font-size="10" fill="#78716c">Libertarian origination</text>
+
+    <!-- Row 4 -->
+    <text x="120" y="1115" font-family="Georgia, serif" font-size="10" fill="#78716c">Christian</text>
+    <text x="450" y="1115" font-family="Georgia, serif" font-size="10" fill="#78716c">✗ Providence ≠ fate</text>
+    <text x="700" y="1115" font-family="Georgia, serif" font-size="10" fill="#78716c">✓ Autexousion</text>
+    <text x="950" y="1115" font-family="Georgia, serif" font-size="10" fill="#78716c">✓ Yes</text>
+    <text x="1250" y="1115" font-family="Georgia, serif" font-size="10" fill="#78716c">Theological grounding</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="800" y="1180" font-family="Georgia, serif" font-size="11" fill="#78716c" text-anchor="middle">
+    EleutherIA documents 117 arguments across these positions | All claims grounded in ancient sources with full citations
+  </text>
+</svg>

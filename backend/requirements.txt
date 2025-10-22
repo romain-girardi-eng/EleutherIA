@@ -18,6 +18,10 @@ google-generativeai>=0.3.0
 # Data processing
 numpy>=1.24.0
 pandas>=2.0.0
+networkx>=3.2.0
+python-igraph>=0.11
+leidenalg>=0.10
+python-louvain>=0.16
 
 # Utilities
 python-dotenv>=1.0.0
