@@ -245,7 +245,7 @@ export default function GraphRAGPage() {
 
   return (
     <>
-    <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4 lg:gap-6 lg:h-[calc(100vh-180px)]">
+    <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4 lg:gap-6 pb-8 lg:pb-4 lg:h-[calc(100vh-180px)]">
       {/* Main Chat Area */}
       <div className="lg:col-span-2 flex flex-col lg:h-full">
         {/* Header */}
@@ -495,7 +495,7 @@ export default function GraphRAGPage() {
         </div>
 
         {/* Messages Area */}
-        <div className="flex-1 academic-card overflow-y-auto mb-4 p-3 sm:p-4 space-y-4 min-h-[300px] max-h-[600px] lg:max-h-none">
+        <div className="flex-1 academic-card overflow-y-auto mb-4 p-3 sm:p-4 space-y-4 min-h-[300px] max-h-[70vh] lg:max-h-full">
           {messages.length === 0 && !streaming && (
             <div className="text-center py-8 sm:py-12">
               <div className="text-5xl sm:text-6xl mb-3 sm:mb-4">💬</div>
