@@ -293,23 +293,32 @@ class GraphRAGService:
         """
         logger.info("GraphRAG Step 3: Extracting citations")
 
-        ancient_sources = set()
-        modern_scholarship = set()
+        # Use lists to preserve order of relevance (nodes are already ordered by importance)
+        ancient_sources_list = []
+        modern_scholarship_list = []
+        ancient_seen = set()
+        modern_seen = set()
 
         for node in nodes:
-            # Extract ancient sources
+            # Extract ancient sources (maintain order, avoid duplicates)
             if 'ancient_sources' in node and node['ancient_sources']:
                 if isinstance(node['ancient_sources'], list):
-                    ancient_sources.update(node['ancient_sources'])
+                    for source in node['ancient_sources']:
+                        if source not in ancient_seen:
+                            ancient_sources_list.append(source)
+                            ancient_seen.add(source)
 
-            # Extract modern scholarship
+            # Extract modern scholarship (maintain order, avoid duplicates)
             if 'modern_scholarship' in node and node['modern_scholarship']:
                 if isinstance(node['modern_scholarship'], list):
-                    modern_scholarship.update(node['modern_scholarship'])
+                    for source in node['modern_scholarship']:
+                        if source not in modern_seen:
+                            modern_scholarship_list.append(source)
+                            modern_seen.add(source)
 
         citations = {
-            'ancient_sources': sorted(list(ancient_sources)),
-            'modern_scholarship': sorted(list(modern_scholarship))
+            'ancient_sources': ancient_sources_list,
+            'modern_scholarship': modern_scholarship_list
         }
 
         logger.info(f"Extracted {len(citations['ancient_sources'])} ancient sources, "
