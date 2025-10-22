@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { apiClient } from '../api/client';
+import { useAuth } from '../context/AuthContext';
+import AuthModal from '../components/AuthModal';
 import type { GraphRAGResponse, GraphRAGStreamEvent, GraphRAGChatMessage } from '../types';
 
 export default function GraphRAGPage() {
@@ -11,8 +13,12 @@ export default function GraphRAGPage() {
   const [streamedAnswer, setStreamedAnswer] = useState('');
   const [streamStatus, setStreamStatus] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingQuery, setPendingQuery] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
+  
+  const { isAuthenticated } = useAuth();
 
   // Advanced settings
   const [semanticK, setSemanticK] = useState(10);
@@ -33,22 +39,40 @@ export default function GraphRAGPage() {
 
     if (!query.trim() || loading || streaming) return;
 
+    // Check authentication first
+    if (!isAuthenticated) {
+      setPendingQuery(query.trim());
+      setShowAuthModal(true);
+      return;
+    }
+
+    // Proceed with authenticated query
+    await processQuery(query.trim());
+  };
+
+  const processQuery = async (queryText: string) => {
     // Add user message
     const userMessage: GraphRAGChatMessage = {
       role: 'user',
-      content: query.trim(),
+      content: queryText,
       timestamp: new Date(),
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    const currentQuery = query.trim();
     setQuery('');
     setError(null);
 
     if (useStreaming) {
-      await handleStreamingQuery(currentQuery);
+      await handleStreamingQuery(queryText);
     } else {
-      await handleStandardQuery(currentQuery);
+      await handleStandardQuery(queryText);
+    }
+  };
+
+  const handleAuthSuccess = () => {
+    if (pendingQuery) {
+      processQuery(pendingQuery);
+      setPendingQuery(null);
     }
   };
 
@@ -467,6 +491,18 @@ export default function GraphRAGPage() {
         )}
       </div>
     </div>
+    
+    {/* Authentication Modal */}
+    <AuthModal
+      isOpen={showAuthModal}
+      onClose={() => {
+        setShowAuthModal(false);
+        setPendingQuery(null);
+      }}
+      onSuccess={handleAuthSuccess}
+      title="Authentication Required"
+      message="Please log in to use GraphRAG Q&A. This feature uses AI to provide scholarly answers."
+    />
   );
 }
 

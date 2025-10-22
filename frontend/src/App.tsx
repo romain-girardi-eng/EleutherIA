@@ -244,8 +244,8 @@ function AppContent() {
               <NavLink to="/bibliography">Bibliography</NavLink>
               <NavLink to="/about">About</NavLink>
               
-              {/* User Menu */}
-              {isAuthenticated ? (
+              {/* User Menu - Only show when authenticated */}
+              {isAuthenticated && (
                 <div className="flex items-center space-x-2">
                   <div className="flex items-center space-x-2 text-sm text-academic-muted">
                     <User className="w-4 h-4" />
@@ -260,8 +260,6 @@ function AppContent() {
                     <span className="text-sm">Logout</span>
                   </button>
                 </div>
-              ) : (
-                <NavLink to="/login">Login</NavLink>
               )}
             </div>
 
@@ -289,6 +287,23 @@ function AppContent() {
                 <NavLink to="/texts">Ancient Texts</NavLink>
                 <NavLink to="/bibliography">Bibliography</NavLink>
                 <NavLink to="/about">About</NavLink>
+                
+                {/* Mobile Login/User Menu */}
+                {isAuthenticated && (
+                  <div className="flex items-center justify-between pt-2 border-t border-academic-border">
+                    <div className="flex items-center space-x-2 text-sm text-academic-muted">
+                      <User className="w-4 h-4" />
+                      <span>{user?.username}</span>
+                    </div>
+                    <button
+                      onClick={logout}
+                      className="flex items-center space-x-1 text-academic-text hover:text-primary-600 transition-colors text-sm"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </nav>
@@ -300,10 +315,10 @@ function AppContent() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/database" element={<DatabasePage />} />
-            <Route path="/visualizer" element={<ProtectedRoute><KGVisualizerPage /></ProtectedRoute>} />
-            <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
-            <Route path="/graphrag" element={<ProtectedRoute><GraphRAGPage /></ProtectedRoute>} />
-            <Route path="/texts" element={<ProtectedRoute><TextExplorerPage /></ProtectedRoute>} />
+            <Route path="/visualizer" element={<KGVisualizerPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/graphrag" element={<GraphRAGPage />} />
+            <Route path="/texts" element={<TextExplorerPage />} />
             <Route path="/bibliography" element={<BibliographyPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/report-error" element={<ReportErrorPage />} />

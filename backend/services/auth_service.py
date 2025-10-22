@@ -6,10 +6,10 @@ Handles JWT token creation, verification, and user management
 
 import os
 import time
+import hashlib
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 from pydantic import BaseModel
 import logging
 
@@ -20,8 +20,9 @@ SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-secret-key-change-in-production")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
 
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+def simple_hash(password: str) -> str:
+    """Simple hash function for demo purposes"""
+    return hashlib.sha256(password.encode()).hexdigest()
 
 # Simple user store (in production, use a database)
 # Format: {username: {"username": str, "email": str, "hashed_password": str, "role": str}}
@@ -29,13 +30,13 @@ USERS_DB = {
     "admin": {
         "username": "admin",
         "email": "admin@example.com",
-        "hashed_password": pwd_context.hash("admin123"),  # Change this!
+        "hashed_password": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",  # admin123
         "role": "admin"
     },
     "researcher": {
         "username": "researcher", 
         "email": "researcher@example.com",
-        "hashed_password": pwd_context.hash("research123"),  # Change this!
+        "hashed_password": "381fa94c49882e0a06845ff8aa9df705412448592bc9a4e637dc3dcd0e543968",  # research123
         "role": "researcher"
     }
 }
@@ -63,12 +64,12 @@ class TokenData(BaseModel):
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash"""
-    return pwd_context.verify(plain_password, hashed_password)
+    return simple_hash(plain_password) == hashed_password
 
 
 def get_password_hash(password: str) -> str:
     """Hash a password"""
-    return pwd_context.hash(password)
+    return simple_hash(password)
 
 
 def get_user(username: str) -> Optional[UserInDB]:
