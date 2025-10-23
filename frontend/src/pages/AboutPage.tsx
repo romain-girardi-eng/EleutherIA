@@ -165,18 +165,18 @@ export default function AboutPage() {
           {/* Data Exchange Visualization */}
           <div className="flex justify-center py-8">
             <DatabaseWithRestApi
-              circleText="API"
+              circleText="REST"
               badgeTexts={{
-                first: "Nodes",
-                second: "Edges",
-                third: "Texts",
-                fourth: "Queries"
+                first: "Question",
+                second: "Context",
+                third: "Synthesis",
+                fourth: "Answer"
               }}
               buttonTexts={{
-                first: "EleutherIA",
-                second: "GraphRAG"
+                first: "Knowledge Graph",
+                second: "AI Model"
               }}
-              title="Knowledge Graph & GraphRAG Data Exchange"
+              title="GraphRAG Pipeline: Database to AI-Generated Responses"
               lightColor="#769687"
             />
           </div>
