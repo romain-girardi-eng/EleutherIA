@@ -297,15 +297,10 @@ function KGVisualizerContent() {
             byType={typeCounts}
           />
           <WorkspaceFilterBar />
-          <TimelinePanel />
-          <ArgumentEvidenceBoard />
-          <div className="grid gap-6 xl:grid-cols-[2fr,1fr]">
-            <ConceptClusterGrid />
-            <PathInspectorPanel />
-          </div>
-          <InfluenceMatrixPanel />
+
+          {/* Cytoscape Network View - Moved to Top */}
           <div className="academic-card">
-            <h3 className="text-lg font-semibold text-academic-text mb-3">Focused Network View</h3>
+            <h3 className="text-lg font-semibold text-academic-text mb-3">Interactive Network View</h3>
             <p className="text-sm text-academic-muted mb-4">
               The Cytoscape view mirrors the filters and selections across the observatory. Nodes are limited to the
               most connected entities within the current slice to keep the layout legible.
@@ -341,6 +336,14 @@ function KGVisualizerContent() {
               )}
             </div>
           </div>
+
+          <TimelinePanel />
+          <ArgumentEvidenceBoard />
+          <div className="grid gap-6 xl:grid-cols-[2fr,1fr]">
+            <ConceptClusterGrid />
+            <PathInspectorPanel />
+          </div>
+          <InfluenceMatrixPanel />
         </>
       )}
     </div>
