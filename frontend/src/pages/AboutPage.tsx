@@ -1,3 +1,5 @@
+import DatabaseWithRestApi from '@/components/ui/database-with-rest-api';
+
 export default function AboutPage() {
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
@@ -155,10 +157,29 @@ export default function AboutPage() {
       <section className="academic-card">
         <h2 className="text-3xl font-serif font-bold mb-6">Implementation</h2>
 
-        <div className="space-y-4 text-academic-text leading-relaxed">
+        <div className="space-y-6 text-academic-text leading-relaxed">
           <p>
             The database combines traditional philological expertise with modern computational infrastructure:
           </p>
+
+          {/* Data Exchange Visualization */}
+          <div className="flex justify-center py-8">
+            <DatabaseWithRestApi
+              circleText="API"
+              badgeTexts={{
+                first: "Nodes",
+                second: "Edges",
+                third: "Texts",
+                fourth: "Queries"
+              }}
+              buttonTexts={{
+                first: "EleutherIA",
+                second: "GraphRAG"
+              }}
+              title="Knowledge Graph & GraphRAG Data Exchange"
+              lightColor="#769687"
+            />
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-academic-bg p-4 rounded">

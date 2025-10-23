@@ -25,7 +25,17 @@ export default {
           text: '#1c1917',
           muted: '#78716c',
           border: '#e7e5e4',
-        }
+        },
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        muted: {
+          DEFAULT: '#78716c',
+          foreground: '#1c1917',
+        },
+        accent: {
+          DEFAULT: '#e7e5e4',
+          foreground: '#1c1917',
+        },
       },
       fontFamily: {
         serif: ['Georgia', 'Palatino', 'Times New Roman', 'serif'],
