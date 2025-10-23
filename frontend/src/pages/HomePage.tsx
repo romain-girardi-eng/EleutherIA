@@ -103,6 +103,18 @@ export default function HomePage() {
             </a>
           </p>
         </div>
+
+        <div className="mt-6 flex justify-center">
+          <Link
+            to="/about"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow-md"
+          >
+            To know more
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
       </section>
     </div>
   );
