@@ -1,4 +1,4 @@
-import DatabaseWithRestApi from '@/components/ui/database-with-rest-api';
+import DatabaseWithRestApi from '../components/ui/database-with-rest-api';
 
 export default function AboutPage() {
   return (

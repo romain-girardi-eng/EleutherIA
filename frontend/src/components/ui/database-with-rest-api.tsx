@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { Folder, HeartHandshakeIcon, SparklesIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 interface DatabaseWithRestApiProps {
   className?: string;
