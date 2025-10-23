@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { GraduationCap, Search, BookOpen, ChevronDown, ChevronRight, Filter, ExternalLink, MoreVertical } from 'lucide-react';
 import { apiClient } from '../api/client';
 
@@ -20,20 +20,37 @@ export default function BibliographyPage() {
   const [bibliographyData, setBibliographyData] = useState<Map<string, BibliographyEntry>>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const [loadingMessage, setLoadingMessage] = useState('Loading bibliography...');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedLetters, setExpandedLetters] = useState<Set<string>>(new Set());
   const [filterType, setFilterType] = useState<string>('all');
   const [filterYear, setFilterYear] = useState<string>('all');
   const [filterPublisher, setFilterPublisher] = useState<string>('all');
+  const retryTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     loadBibliography();
+
+    // Cleanup function to clear any pending retry timeouts
+    return () => {
+      if (retryTimeoutRef.current !== null) {
+        clearTimeout(retryTimeoutRef.current);
+        retryTimeoutRef.current = null;
+      }
+    };
   }, []);
 
-  const loadBibliography = async () => {
+  const loadBibliography = async (isRetry = false) => {
     try {
       setLoading(true);
       setError(null);
+
+      if (!isRetry) {
+        setLoadingMessage('Loading bibliography...');
+      } else {
+        setLoadingMessage(`Retrying (attempt ${retryCount + 1})... Backend may be starting up.`);
+      }
 
       // Fetch all KG nodes to extract bibliography
       const nodesResponse: any = await apiClient.getNodes();
@@ -60,6 +77,7 @@ export default function BibliographyPage() {
       });
 
       setBibliography(sortedBib);
+      setRetryCount(0); // Reset retry count on success
 
       // Try to load online access data
       try {
@@ -78,9 +96,31 @@ export default function BibliographyPage() {
       }
     } catch (error) {
       console.error('Error loading bibliography:', error);
-      setError('Failed to load bibliography. The backend may be starting up (this can take 30 seconds on first request). Please try again in a moment.');
+
+      // Auto-retry up to 2 times with delays (wait 30 seconds total)
+      if (retryCount < 2) {
+        const delay = retryCount === 0 ? 15000 : 15000; // 15s + 15s = 30s total
+        setLoadingMessage(`Backend is starting up. Retrying in ${delay / 1000} seconds...`);
+
+        // Clear any existing timeout first
+        if (retryTimeoutRef.current !== null) {
+          clearTimeout(retryTimeoutRef.current);
+        }
+
+        // Store the timeout ID so we can clear it on unmount
+        retryTimeoutRef.current = window.setTimeout(() => {
+          retryTimeoutRef.current = null;
+          setRetryCount(prev => prev + 1);
+          loadBibliography(true);
+        }, delay);
+      } else {
+        setError('Failed to load bibliography. The backend may still be starting up. Please try again in a moment.');
+        setLoading(false);
+      }
     } finally {
-      setLoading(false);
+      if (retryCount >= 2 || error) {
+        setLoading(false);
+      }
     }
   };
 
@@ -344,7 +384,10 @@ export default function BibliographyPage() {
               </svg>
               <p className="text-red-800 font-medium mb-3">{error}</p>
               <button
-                onClick={loadBibliography}
+                onClick={() => {
+                  setRetryCount(0);
+                  loadBibliography(false);
+                }}
                 className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
               >
                 Retry
@@ -354,7 +397,12 @@ export default function BibliographyPage() {
         ) : loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-            <p className="mt-4 text-academic-muted">Loading bibliography...</p>
+            <p className="mt-4 text-academic-muted">{loadingMessage}</p>
+            {retryCount > 0 && (
+              <p className="mt-2 text-sm text-amber-600">
+                This is normal on first request. The backend may take up to 30 seconds to start.
+              </p>
+            )}
           </div>
         ) : filteredBibliography.length === 0 ? (
           <div className="text-center py-12">

@@ -1,5 +1,6 @@
 import { BookOpen, Network, GraduationCap, Search, Database, FileText, ChevronDown, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { apiClient } from '../api/client';
 
 export default function DatabasePage() {
   const [nodeTypeData, setNodeTypeData] = useState<Record<string, string[]>>({});
@@ -7,8 +8,7 @@ export default function DatabasePage() {
 
   // Load node type data from the JSON database
   useEffect(() => {
-    fetch('/api/knowledge-graph/nodes')
-      .then(res => res.json())
+    apiClient.getNodes()
       .then(data => {
         // Organize nodes by type
         const typeData: Record<string, string[]> = {};

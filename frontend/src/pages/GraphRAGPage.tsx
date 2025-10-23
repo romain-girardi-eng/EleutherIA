@@ -4,7 +4,10 @@ import Cookies from 'js-cookie';
 import { apiClient } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import AuthModal from '../components/AuthModal';
-import type { GraphRAGResponse, GraphRAGStreamEvent, GraphRAGChatMessage } from '../types';
+import { ShineBorder } from '../components/ui/shine-border';
+import NodeDetailPanel from '../components/NodeDetailPanel';
+import { CitationPreview } from '../components/ui/citation-preview';
+import type { GraphRAGResponse, GraphRAGStreamEvent, GraphRAGChatMessage, KGNode } from '../types';
 
 export default function GraphRAGPage() {
   const [messages, setMessages] = useState<GraphRAGChatMessage[]>([]);
@@ -16,9 +19,10 @@ export default function GraphRAGPage() {
   const [error, setError] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [pendingQuery, setPendingQuery] = useState<string | null>(null);
+  const [selectedNode, setSelectedNode] = useState<KGNode | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
-  
+
   const { isAuthenticated } = useAuth();
 
   // Advanced settings
@@ -34,6 +38,16 @@ export default function GraphRAGPage() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, streamedAnswer]);
+
+  // Cleanup abort controller and streaming on unmount
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
+      }
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,43 +173,48 @@ export default function GraphRAGPage() {
       let finalResponse: GraphRAGResponse | null = null;
       let buffer = '';
 
-      while (true) {
-        const { done, value } = await reader.read();
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
 
-        if (done) break;
+          if (done) break;
 
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || '';
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
 
-        for (const line of lines) {
-          if (!line.trim() || !line.startsWith('data: ')) continue;
+          for (const line of lines) {
+            if (!line.trim() || !line.startsWith('data: ')) continue;
 
-          try {
-            const data: GraphRAGStreamEvent = JSON.parse(line.substring(6));
+            try {
+              const data: GraphRAGStreamEvent = JSON.parse(line.substring(6));
 
-            switch (data.type) {
-              case 'status':
-                setStreamStatus(data.message || 'Processing...');
-                break;
+              switch (data.type) {
+                case 'status':
+                  setStreamStatus(data.message || 'Processing...');
+                  break;
 
-              case 'answer_chunk':
-                fullAnswer += data.data;
-                setStreamedAnswer(fullAnswer);
-                break;
+                case 'answer_chunk':
+                  fullAnswer += data.data;
+                  setStreamedAnswer(fullAnswer);
+                  break;
 
-              case 'complete':
-                finalResponse = data.data as GraphRAGResponse;
-                break;
+                case 'complete':
+                  finalResponse = data.data as GraphRAGResponse;
+                  break;
 
-              case 'error':
-                setError(data.message || 'Stream error');
-                break;
+                case 'error':
+                  setError(data.message || 'Stream error');
+                  break;
+              }
+            } catch (err) {
+              console.error('Error parsing SSE line:', line, err);
             }
-          } catch (err) {
-            console.error('Error parsing SSE line:', line, err);
           }
         }
+      } finally {
+        // CRITICAL: Always release the reader to prevent memory leaks
+        reader.releaseLock();
       }
 
       // After stream completes
@@ -247,6 +266,17 @@ export default function GraphRAGPage() {
     setStreaming(false);
     setStreamedAnswer('');
     setStreamStatus('');
+  };
+
+  const handleNodeClick = async (nodeId: string) => {
+    try {
+      const node = await apiClient.getNode(nodeId);
+      if (node) {
+        setSelectedNode(node);
+      }
+    } catch (err) {
+      console.error('Failed to fetch node:', err);
+    }
   };
 
   return (
@@ -501,8 +531,15 @@ export default function GraphRAGPage() {
         </div>
 
         {/* Messages Area */}
-        <div className="flex-1 academic-card overflow-y-auto mb-4 p-3 sm:p-4 space-y-4 min-h-[300px] max-h-[70vh] lg:max-h-full">
-          {messages.length === 0 && !streaming && (
+        <ShineBorder
+          className="flex-1 w-full p-0 bg-white dark:bg-black min-w-0 mb-4"
+          borderRadius={12}
+          borderWidth={2}
+          duration={14}
+          color={["#3b82f6", "#8b5cf6", "#ec4899"]}
+        >
+          <div className="overflow-y-auto p-3 sm:p-4 space-y-4 min-h-[300px] max-h-[70vh] lg:max-h-[calc(100vh-400px)]">
+            {messages.length === 0 && !streaming && (
             <div className="text-center py-8 sm:py-12">
               <div className="text-5xl sm:text-6xl mb-3 sm:mb-4">💬</div>
               <h2 className="text-xl sm:text-2xl font-semibold mb-2">Ask a Question</h2>
@@ -524,7 +561,7 @@ export default function GraphRAGPage() {
           )}
 
           {messages.map((message, index) => (
-            <MessageBubble key={index} message={message} />
+            <MessageBubble key={index} message={message} onNodeClick={handleNodeClick} />
           ))}
 
           {streaming && (
@@ -541,17 +578,25 @@ export default function GraphRAGPage() {
             </div>
           )}
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 text-red-800">
-              <p className="font-medium text-sm sm:text-base break-words">Error: {error}</p>
-            </div>
-          )}
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 text-red-800">
+                <p className="font-medium text-sm sm:text-base break-words">Error: {error}</p>
+              </div>
+            )}
 
-          <div ref={messagesEndRef} />
-        </div>
+            <div ref={messagesEndRef} />
+          </div>
+        </ShineBorder>
 
         {/* Input Area */}
-        <form onSubmit={handleSubmit} className="academic-card">
+        <ShineBorder
+          className="w-full p-0 bg-white dark:bg-black min-w-0"
+          borderRadius={12}
+          borderWidth={2}
+          duration={12}
+          color={["#3b82f6", "#8b5cf6", "#ec4899"]}
+        >
+          <form onSubmit={handleSubmit} className="p-4">
           <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="text"
@@ -579,7 +624,8 @@ export default function GraphRAGPage() {
               </button>
             )}
           </div>
-        </form>
+          </form>
+        </ShineBorder>
       </div>
 
       {/* Sidebar - Hidden on mobile, shown on desktop */}
@@ -719,6 +765,14 @@ export default function GraphRAGPage() {
       title="Authentication Required"
       message="Please log in to use GraphRAG Q&A. This feature uses AI to provide scholarly answers."
     />
+
+    {/* Node Detail Panel */}
+    {selectedNode && (
+      <NodeDetailPanel
+        node={selectedNode}
+        onClose={() => setSelectedNode(null)}
+      />
+    )}
     </>
   );
 }
@@ -821,10 +875,17 @@ function BenefitsContent() {
 }
 
 // Message Bubble Component
-function MessageBubble({ message }: { message: GraphRAGChatMessage }) {
+function MessageBubble({
+  message,
+  onNodeClick
+}: {
+  message: GraphRAGChatMessage;
+  onNodeClick: (nodeId: string) => void;
+}) {
   const [showCitations, setShowCitations] = useState(false);
   const [showAllAncient, setShowAllAncient] = useState(false);
   const [showAllModern, setShowAllModern] = useState(false);
+  const [showReasoningPath, setShowReasoningPath] = useState(false);
 
   return (
     <div className={`${message.role === 'user' ? 'ml-auto max-w-[95%] sm:max-w-2xl' : 'mr-auto max-w-[98%] sm:max-w-3xl'}`}>
@@ -843,8 +904,78 @@ function MessageBubble({ message }: { message: GraphRAGChatMessage }) {
               <ReactMarkdown>{message.content}</ReactMarkdown>
             </div>
 
-            {message.citations && (
+            {/* Reasoning Path with Clickable Nodes */}
+            {message.reasoning_path && (
               <div className="border-t border-academic-border pt-3">
+                <button
+                  onClick={() => setShowReasoningPath(!showReasoningPath)}
+                  className="text-xs sm:text-sm font-medium text-primary-600 hover:text-primary-700"
+                >
+                  {showReasoningPath ? '▼' : '▶'} View Knowledge Graph Path (
+                  {message.reasoning_path.total_nodes} nodes)
+                </button>
+
+                {showReasoningPath && (
+                  <div className="mt-3 space-y-3 text-xs sm:text-sm">
+                    {/* Starting Nodes */}
+                    {message.reasoning_path.starting_nodes.length > 0 && (
+                      <div>
+                        <h4 className="font-semibold mb-2">Starting Points ({message.reasoning_path.starting_nodes.length}):</h4>
+                        <div className="space-y-2">
+                          {message.reasoning_path.starting_nodes.map((node, i) => (
+                            <button
+                              key={i}
+                              onClick={() => onNodeClick(node.id)}
+                              className="w-full text-left p-2 bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition-colors"
+                            >
+                              <div className="flex items-start gap-2">
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-200 text-blue-800">
+                                  {node.type}
+                                </span>
+                                <div className="flex-1">
+                                  <div className="font-semibold text-blue-900">{node.label}</div>
+                                  <div className="text-xs text-blue-700 mt-0.5">{node.reason}</div>
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Expanded Nodes */}
+                    {message.reasoning_path.expanded_nodes.length > 0 && (
+                      <div>
+                        <h4 className="font-semibold mb-2">Related Nodes ({message.reasoning_path.expanded_nodes.length}):</h4>
+                        <div className="space-y-2 max-h-60 overflow-y-auto">
+                          {message.reasoning_path.expanded_nodes.map((node, i) => (
+                            <button
+                              key={i}
+                              onClick={() => onNodeClick(node.id)}
+                              className="w-full text-left p-2 bg-gray-50 hover:bg-gray-100 rounded border border-gray-200 transition-colors"
+                            >
+                              <div className="flex items-start gap-2">
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-200 text-gray-800">
+                                  {node.type}
+                                </span>
+                                <div className="flex-1">
+                                  <div className="font-semibold text-gray-900">{node.label}</div>
+                                  <div className="text-xs text-gray-700 mt-0.5">{node.reason}</div>
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Citations */}
+            {message.citations && (
+              <div className="border-t border-academic-border pt-3 mt-3">
                 <button
                   onClick={() => setShowCitations(!showCitations)}
                   className="text-xs sm:text-sm font-medium text-primary-600 hover:text-primary-700"
@@ -860,13 +991,18 @@ function MessageBubble({ message }: { message: GraphRAGChatMessage }) {
                     {message.citations.ancient_sources.length > 0 && (
                       <div>
                         <h4 className="font-semibold mb-2">Ancient Sources ({message.citations.ancient_sources.length}):</h4>
-                        <ul className="list-disc list-inside space-y-1 text-academic-muted pl-2">
+                        <ul className="list-disc list-inside space-y-1.5 text-academic-muted pl-2">
                           {(showAllAncient
                             ? message.citations.ancient_sources
                             : message.citations.ancient_sources.slice(0, 5)
                           ).map((source, i) => (
                             <li key={i} className="citation break-words">
-                              {source}
+                              <CitationPreview
+                                citation={source}
+                                type="ancient"
+                              >
+                                {source}
+                              </CitationPreview>
                             </li>
                           ))}
                         </ul>
@@ -887,13 +1023,18 @@ function MessageBubble({ message }: { message: GraphRAGChatMessage }) {
                     {message.citations.modern_scholarship.length > 0 && (
                       <div>
                         <h4 className="font-semibold mb-2">Modern Scholarship ({message.citations.modern_scholarship.length}):</h4>
-                        <ul className="list-disc list-inside space-y-1 text-academic-muted pl-2">
+                        <ul className="list-disc list-inside space-y-1.5 text-academic-muted pl-2">
                           {(showAllModern
                             ? message.citations.modern_scholarship
                             : message.citations.modern_scholarship.slice(0, 3)
                           ).map((source, i) => (
                             <li key={i} className="citation break-words">
-                              {source}
+                              <CitationPreview
+                                citation={source}
+                                type="modern"
+                              >
+                                {source}
+                              </CitationPreview>
                             </li>
                           ))}
                         </ul>

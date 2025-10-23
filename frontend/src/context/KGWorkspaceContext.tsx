@@ -52,7 +52,7 @@ interface WorkspaceContextValue {
   computePath: (request: KGPathRequest) => Promise<KGPathResponse>;
 }
 
-const KGWorkspaceContext = createContext<WorkspaceContextValue | undefined>(undefined);
+export const KGWorkspaceContext = createContext<WorkspaceContextValue | undefined>(undefined);
 
 export function KGWorkspaceProvider({ children }: { children: ReactNode }) {
   const [filters, setFilters] = useState<KGFilterState>(defaultFilters);

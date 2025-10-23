@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import CytoscapeVisualizerEnhanced from '../components/CytoscapeVisualizerEnhanced';
 import { apiClient } from '../api/client';
 import type { CytoscapeData, CommunityMeta } from '../types';
-import { KGWorkspaceProvider, useKGWorkspace } from '../context/KGWorkspaceContext';
+import { KGWorkspaceProvider, KGWorkspaceContext } from '../context/KGWorkspaceContext';
 import WorkspaceHeader from '../components/workspace/WorkspaceHeader';
 import WorkspaceFilterBar from '../components/workspace/WorkspaceFilterBar';
 import TimelinePanel from '../components/workspace/TimelinePanel';
@@ -17,19 +17,30 @@ import { ShineBorder } from '../components/ui/shine-border';
 type VisualizerMode = 'observatory' | 'semativerse' | 'advanced';
 
 export default function KGVisualizerPage() {
+  const [mode, setMode] = useState<VisualizerMode>('observatory');
+
+  // Only wrap with KGWorkspaceProvider if we're in a mode that needs it
+  if (mode === 'semativerse') {
+    return <KGVisualizerContent mode={mode} onModeChange={setMode} />;
+  }
+
   return (
     <KGWorkspaceProvider>
-      <KGVisualizerContent />
+      <KGVisualizerContent mode={mode} onModeChange={setMode} />
     </KGWorkspaceProvider>
   );
 }
 
-function KGVisualizerContent() {
-  const {
-    state,
-    updateSelection,
-  } = useKGWorkspace();
-  const [mode, setMode] = useState<VisualizerMode>('advanced');
+interface KGVisualizerContentProps {
+  mode: VisualizerMode;
+  onModeChange: (mode: VisualizerMode) => void;
+}
+
+function KGVisualizerContent({ mode, onModeChange }: KGVisualizerContentProps) {
+  // Try to get workspace context - will be null if not in provider (semativerse mode)
+  const workspaceContext = useContext(KGWorkspaceContext);
+  const state = workspaceContext?.state;
+  const updateSelection = workspaceContext?.updateSelection;
   const [cyData, setCyData] = useState<CytoscapeData | null>(null);
   const [cyLoading, setCyLoading] = useState<boolean>(true);
   const [cyError, setCyError] = useState<string | null>(null);
@@ -68,11 +79,15 @@ function KGVisualizerContent() {
   }, [communityAlgorithm]);
 
   const filteredData = useMemo(
-    () => filterCytoscapeData(cyData, state.filters, state.selection),
-    [cyData, state.filters, state.selection],
+    () => filterCytoscapeData(
+      cyData,
+      state?.filters || { nodeTypes: [], periods: [], schools: [], relations: [], searchTerm: '' },
+      state?.selection
+    ),
+    [cyData, state?.filters, state?.selection],
   );
 
-  const totals = state.timeline?.totals;
+  const totals = state?.timeline?.totals;
   const typeCounts = totals?.byType || {};
 
   const availabilityMap = useMemo(() => {
@@ -124,7 +139,7 @@ function KGVisualizerContent() {
             <span className="text-xs uppercase text-academic-muted tracking-wide font-semibold">Mode</span>
             <div className="mt-1 flex overflow-hidden border border-gray-200 rounded-md">
               <button
-                onClick={() => setMode('advanced')}
+                onClick={() => onModeChange('advanced')}
                 className={`px-4 py-2 text-sm font-medium transition-colors ${
                   mode === 'advanced' ? 'bg-primary-600 text-white' : 'bg-white text-academic-text'
                 }`}
@@ -132,7 +147,7 @@ function KGVisualizerContent() {
                 Advanced
               </button>
               <button
-                onClick={() => setMode('observatory')}
+                onClick={() => onModeChange('observatory')}
                 className={`px-4 py-2 text-sm font-medium transition-colors ${
                   mode === 'observatory' ? 'bg-primary-600 text-white' : 'bg-white text-academic-text'
                 }`}
@@ -140,7 +155,7 @@ function KGVisualizerContent() {
                 Observatory
               </button>
               <button
-                onClick={() => setMode('semativerse')}
+                onClick={() => onModeChange('semativerse')}
                 className={`px-4 py-2 text-sm font-medium transition-colors ${
                   mode === 'semativerse' ? 'bg-primary-600 text-white' : 'bg-white text-academic-text'
                 }`}
@@ -332,14 +347,14 @@ function KGVisualizerContent() {
                   <CytoscapeVisualizerEnhanced
                     data={filteredData}
                     onNodeClick={(nodeId) =>
-                      updateSelection({
+                      updateSelection?.({
                         nodes: [nodeId],
                         focusNodeId: nodeId,
                       })
                     }
                     onEdgeClick={() => undefined}
-                    selectedNodeIds={state.selection.nodes}
-                    focusNodeId={state.selection.focusNodeId}
+                    selectedNodeIds={state?.selection?.nodes || []}
+                    focusNodeId={state?.selection?.focusNodeId}
                   />
                 )}
               </div>

@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-hover-card": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.3",
     "@sjmc11/tourguidejs": "^0.0.27",
     "@types/cytoscape": "^3.21.9",
@@ -19,9 +20,11 @@
     "clsx": "^2.1.1",
     "cytoscape": "^3.33.1",
     "d3": "^7.9.0",
+    "framer-motion": "^12.23.24",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
+    "qss": "^3.0.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-markdown": "^10.1.0",
