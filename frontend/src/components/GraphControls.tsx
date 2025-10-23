@@ -1,4 +1,4 @@
-import { Filter, Eye, Layout, Palette, X } from 'lucide-react';
+import { Filter, Eye, Layout, Palette, X, Target, Sliders } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface GraphControlsProps {
@@ -14,6 +14,8 @@ interface GraphControlsProps {
     quote?: number;
   };
   canColorByCommunity?: boolean;
+  visibleNodeCount?: number;
+  totalNodeCount?: number;
 }
 
 export interface NodeFilters {
@@ -27,9 +29,15 @@ export interface NodeFilters {
   showLabels: boolean;
   showEdgeLabels: boolean;
   colorByCommunity: boolean;
+  // New complexity controls
+  maxNodes: number;
+  egocentricMode: boolean;
+  hopDistance: 1 | 2 | 3;
+  minConnections: number;
+  edgeLabelsOnHover: boolean;
 }
 
-export default function GraphControls({ onFilterChange, onLayoutChange, stats, canColorByCommunity }: GraphControlsProps) {
+export default function GraphControls({ onFilterChange, onLayoutChange, stats, canColorByCommunity, visibleNodeCount, totalNodeCount }: GraphControlsProps) {
   const [showControls, setShowControls] = useState(true);
   const [filters, setFilters] = useState<NodeFilters>({
     person: true,
@@ -42,6 +50,11 @@ export default function GraphControls({ onFilterChange, onLayoutChange, stats, c
     showLabels: true,
     showEdgeLabels: true,
     colorByCommunity: false,
+    maxNodes: 150,
+    egocentricMode: false,
+    hopDistance: 1,
+    minConnections: 0,
+    edgeLabelsOnHover: true,
   });
 
   const nodeTypes = [
@@ -108,6 +121,64 @@ const deselectAll = () => {
     onFilterChange(newFilters);
   };
 
+  const getActiveFilterChips = () => {
+    const chips: Array<{ label: string; onRemove: () => void }> = [];
+
+    // Node type filters (only show if some are disabled)
+    const disabledTypes = nodeTypes.filter(type => !filters[type.key]);
+    if (disabledTypes.length > 0 && disabledTypes.length < nodeTypes.length) {
+      const enabledTypes = nodeTypes.filter(type => filters[type.key]);
+      chips.push({
+        label: `Types: ${enabledTypes.map(t => t.label).join(', ')}`,
+        onRemove: () => selectAll(),
+      });
+    }
+
+    // Egocentric mode
+    if (filters.egocentricMode) {
+      chips.push({
+        label: `Focus: ${filters.hopDistance} hop${filters.hopDistance > 1 ? 's' : ''}`,
+        onRemove: () => toggleFilter('egocentricMode'),
+      });
+    }
+
+    // Max nodes (if not default)
+    if (filters.maxNodes < 150) {
+      chips.push({
+        label: `Max: ${filters.maxNodes} nodes`,
+        onRemove: () => {
+          const newFilters = { ...filters, maxNodes: 150 };
+          setFilters(newFilters);
+          onFilterChange(newFilters);
+        },
+      });
+    }
+
+    // Min connections
+    if (filters.minConnections > 0) {
+      chips.push({
+        label: `Min connections: ${filters.minConnections}`,
+        onRemove: () => {
+          const newFilters = { ...filters, minConnections: 0 };
+          setFilters(newFilters);
+          onFilterChange(newFilters);
+        },
+      });
+    }
+
+    // Color by community
+    if (filters.colorByCommunity && canColorByCommunity) {
+      chips.push({
+        label: 'Community colors',
+        onRemove: () => setColorMode(false),
+      });
+    }
+
+    return chips;
+  };
+
+  const activeChips = getActiveFilterChips();
+
   useEffect(() => {
     if (!canColorByCommunity && filters.colorByCommunity) {
       const newFilters = { ...filters, colorByCommunity: false };
@@ -118,11 +189,48 @@ const deselectAll = () => {
   }, [canColorByCommunity]);
 
   return (
-    <div className="absolute top-4 left-4 z-10 max-w-[calc(100vw-2rem)] sm:max-w-sm">
+    <div className="absolute top-4 left-4 z-10 max-w-[calc(100vw-2rem)] sm:max-w-sm space-y-2">
+      {/* Node Count Indicator */}
+      {visibleNodeCount !== undefined && totalNodeCount !== undefined && (
+        <div className={`text-xs px-3 py-2 rounded-lg shadow-lg ${
+          visibleNodeCount > 150 ? 'bg-red-50 border border-red-200 text-red-800' :
+          visibleNodeCount > 100 ? 'bg-amber-50 border border-amber-200 text-amber-800' :
+          visibleNodeCount > 50 ? 'bg-yellow-50 border border-yellow-200 text-yellow-800' :
+          'bg-emerald-50 border border-emerald-200 text-emerald-800'
+        }`}>
+          <span className="font-semibold">{visibleNodeCount}</span> of {totalNodeCount} nodes displayed
+          {visibleNodeCount > 150 && <span className="block mt-1">❌ Graph may be difficult to read</span>}
+          {visibleNodeCount > 100 && visibleNodeCount <= 150 && <span className="block mt-1">⚠️ Best for experienced users</span>}
+          {visibleNodeCount > 50 && visibleNodeCount <= 100 && <span className="block mt-1">⚠️ Consider additional filtering</span>}
+          {visibleNodeCount <= 50 && <span className="block mt-1">✓ Optimal readability</span>}
+        </div>
+      )}
+
+      {/* Active Filter Chips */}
+      {activeChips.length > 0 && (
+        <div className="flex flex-wrap gap-2 bg-white/90 backdrop-blur-sm shadow-lg rounded-lg p-2">
+          {activeChips.map((chip, index) => (
+            <span
+              key={index}
+              className="inline-flex items-center gap-1.5 bg-primary-100 text-primary-700 px-2 py-1 rounded-md text-xs font-medium"
+            >
+              {chip.label}
+              <button
+                onClick={chip.onRemove}
+                className="hover:bg-primary-200 rounded-full p-0.5 transition-colors"
+                aria-label={`Remove filter: ${chip.label}`}
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+
       {/* Toggle Button */}
       <button
         onClick={() => setShowControls(!showControls)}
-        className="bg-white shadow-lg rounded-lg px-3 py-2 hover:bg-gray-50 transition-colors flex items-center gap-2 mb-2 text-sm font-medium"
+        className="bg-white shadow-lg rounded-lg px-3 py-2 hover:bg-gray-50 transition-colors flex items-center gap-2 text-sm font-medium w-full sm:w-auto"
         aria-label={showControls ? 'Hide controls' : 'Show controls'}
       >
         {showControls ? <X className="w-4 h-4" /> : <Filter className="w-4 h-4" />}
@@ -209,6 +317,116 @@ const deselectAll = () => {
             </div>
           </section>
 
+          {/* Complexity Controls */}
+          <section className="p-4 border-b border-gray-200">
+            <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+              <Sliders className="w-4 h-4" />
+              Graph Complexity
+            </h3>
+            <div className="space-y-4">
+              {/* Egocentric Mode */}
+              <div>
+                <label className="flex items-center justify-between cursor-pointer p-2 hover:bg-gray-50 rounded transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Target className="w-4 h-4 text-gray-500" />
+                    <span className="text-sm">Focus Mode</span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={filters.egocentricMode}
+                    onChange={() => toggleFilter('egocentricMode')}
+                    className="w-4 h-4 text-primary-600 rounded focus:ring-2 focus:ring-primary-500"
+                  />
+                </label>
+                {filters.egocentricMode && (
+                  <div className="ml-6 mt-2 space-y-2">
+                    <label className="block text-xs text-gray-600">
+                      Connection Distance:
+                    </label>
+                    <div className="flex gap-2">
+                      {[1, 2, 3].map((hop) => (
+                        <button
+                          key={hop}
+                          onClick={() => {
+                            const newFilters = { ...filters, hopDistance: hop as 1 | 2 | 3 };
+                            setFilters(newFilters);
+                            onFilterChange(newFilters);
+                          }}
+                          className={`flex-1 px-2 py-1.5 text-xs font-medium rounded border transition-colors ${
+                            filters.hopDistance === hop
+                              ? 'border-primary-500 bg-primary-50 text-primary-700'
+                              : 'border-gray-200 bg-white text-gray-600 hover:border-primary-300'
+                          }`}
+                        >
+                          {hop} hop{hop > 1 ? 's' : ''}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-gray-500 mt-1">
+                      Shows only nodes within {filters.hopDistance} connection{filters.hopDistance > 1 ? 's' : ''} of selected node
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Max Nodes Slider */}
+              <div>
+                <label className="block text-sm mb-2">
+                  Maximum Nodes: <span className="font-semibold text-primary-600">{filters.maxNodes === 500 ? 'All' : filters.maxNodes}</span>
+                </label>
+                <input
+                  type="range"
+                  min="25"
+                  max="500"
+                  step="25"
+                  value={filters.maxNodes}
+                  onChange={(e) => {
+                    const newFilters = { ...filters, maxNodes: parseInt(e.target.value) };
+                    setFilters(newFilters);
+                    onFilterChange(newFilters);
+                  }}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
+                />
+                <div className="flex justify-between text-[10px] text-gray-500 mt-1">
+                  <span>25</span>
+                  <span>50</span>
+                  <span>100</span>
+                  <span>150</span>
+                  <span>All</span>
+                </div>
+                <p className="text-[10px] text-gray-500 mt-2">
+                  {filters.maxNodes <= 50 && '✓ Optimal readability'}
+                  {filters.maxNodes > 50 && filters.maxNodes <= 100 && '⚠️ Use filters to reduce clutter'}
+                  {filters.maxNodes > 100 && filters.maxNodes <= 150 && '⚠️ Best for experienced users'}
+                  {filters.maxNodes > 150 && '❌ May be difficult to read - consider filtering'}
+                </p>
+              </div>
+
+              {/* Minimum Connections */}
+              <div>
+                <label className="block text-sm mb-2">
+                  Minimum Connections: <span className="font-semibold text-primary-600">{filters.minConnections}</span>
+                </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="20"
+                  step="1"
+                  value={filters.minConnections}
+                  onChange={(e) => {
+                    const newFilters = { ...filters, minConnections: parseInt(e.target.value) };
+                    setFilters(newFilters);
+                    onFilterChange(newFilters);
+                  }}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
+                />
+                <p className="text-[10px] text-gray-500 mt-2">
+                  Filter out less-connected nodes (degree filter)
+                </p>
+              </div>
+            </div>
+          </section>
+
           {/* Display Options */}
           <section className="p-4">
             <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
@@ -225,15 +443,28 @@ const deselectAll = () => {
                   className="w-4 h-4 text-primary-600 rounded focus:ring-2 focus:ring-primary-500"
                 />
               </label>
-              <label className="flex items-center justify-between cursor-pointer p-2 hover:bg-gray-50 rounded transition-colors">
-                <span className="text-sm">Show Edge Labels</span>
-                <input
-                  type="checkbox"
-                  checked={filters.showEdgeLabels}
-                  onChange={() => toggleFilter('showEdgeLabels')}
-                  className="w-4 h-4 text-primary-600 rounded focus:ring-2 focus:ring-primary-500"
-                />
-              </label>
+              <div className="space-y-2">
+                <label className="flex items-center justify-between cursor-pointer p-2 hover:bg-gray-50 rounded transition-colors">
+                  <span className="text-sm">Show Edge Labels</span>
+                  <input
+                    type="checkbox"
+                    checked={filters.showEdgeLabels}
+                    onChange={() => toggleFilter('showEdgeLabels')}
+                    className="w-4 h-4 text-primary-600 rounded focus:ring-2 focus:ring-primary-500"
+                  />
+                </label>
+                {filters.showEdgeLabels && (
+                  <label className="flex items-center justify-between cursor-pointer p-2 pl-6 hover:bg-gray-50 rounded transition-colors">
+                    <span className="text-xs text-gray-600">On Hover Only</span>
+                    <input
+                      type="checkbox"
+                      checked={filters.edgeLabelsOnHover}
+                      onChange={() => toggleFilter('edgeLabelsOnHover')}
+                      className="w-4 h-4 text-primary-600 rounded focus:ring-2 focus:ring-primary-500"
+                    />
+                  </label>
+                )}
+              </div>
               {canColorByCommunity && (
                 <div className="p-2 rounded border border-gray-100 bg-gray-50">
                   <div className="flex items-center justify-between mb-2">

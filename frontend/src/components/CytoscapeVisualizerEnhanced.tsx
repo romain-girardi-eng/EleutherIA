@@ -6,6 +6,28 @@ import GraphControls, { type NodeFilters } from './GraphControls';
 import GraphExportTools from './GraphExportTools';
 import { Maximize, Minimize } from 'lucide-react';
 
+// Helper functions for highlighting
+function highlightNeighborhood(cy: cytoscape.Core, node: cytoscape.NodeSingular) {
+  // Reset all to dimmed state
+  cy.elements().addClass('dimmed');
+
+  // Get the neighborhood (selected node + connected nodes + connecting edges)
+  const neighborhood = node.closedNeighborhood();
+
+  // Remove dimmed class from neighborhood
+  neighborhood.removeClass('dimmed');
+
+  // Highlight the selected node
+  node.addClass('highlighted');
+
+  // Highlight connected edges
+  node.connectedEdges().addClass('highlighted-edge');
+}
+
+function resetHighlighting(cy: cytoscape.Core) {
+  cy.elements().removeClass('dimmed highlighted highlighted-edge');
+}
+
 const INITIAL_FILTERS: NodeFilters = {
   person: true,
   work: true,
@@ -17,6 +39,11 @@ const INITIAL_FILTERS: NodeFilters = {
   showLabels: true,
   showEdgeLabels: true,
   colorByCommunity: false,
+  maxNodes: 150,
+  egocentricMode: false,
+  hopDistance: 1,
+  minConnections: 0,
+  edgeLabelsOnHover: true,
 };
 
 interface CytoscapeVisualizerProps {
@@ -44,6 +71,8 @@ export default function CytoscapeVisualizerEnhanced({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentFilters, setCurrentFilters] = useState<NodeFilters>(INITIAL_FILTERS);
   const [communityColors, setCommunityColors] = useState<Record<number, string>>({});
+  const [visibleNodeCount, setVisibleNodeCount] = useState<number>(0);
+  const [selectedNodeForEgocentric, setSelectedNodeForEgocentric] = useState<string | null>(null);
 
   useEffect(() => {
     if (!data && cyRef.current) {
@@ -106,6 +135,9 @@ export default function CytoscapeVisualizerEnhanced({
             'text-outline-color': '#fff',
             width: 30,
             height: 30,
+            'transition-property': 'background-color, border-color, border-width, opacity',
+            'transition-duration': 300,
+            'transition-timing-function': 'ease-in-out',
           },
         },
         // Node type-specific colors
@@ -160,6 +192,27 @@ export default function CytoscapeVisualizerEnhanced({
             'background-color': '#0369a1',
           },
         },
+        // Dimmed state (non-connected nodes)
+        {
+          selector: 'node.dimmed',
+          style: {
+            opacity: 0.2,
+          },
+        },
+        // Highlighted state (selected node)
+        {
+          selector: 'node.highlighted',
+          style: {
+            'border-width': 4,
+            'border-color': '#0c4a6e',
+            'border-style': 'solid',
+            'background-color': '#0369a1',
+            width: 40,
+            height: 40,
+            'font-size': '12px',
+            'z-index': 9999,
+          },
+        },
         // Edge styles
         {
           selector: 'edge',
@@ -176,6 +229,9 @@ export default function CytoscapeVisualizerEnhanced({
             'text-background-opacity': 1,
             'text-background-color': '#fff',
             'text-background-padding': '2px',
+            'transition-property': 'line-color, target-arrow-color, width, opacity',
+            'transition-duration': 300,
+            'transition-timing-function': 'ease-in-out',
           },
         },
         // Selected edge
@@ -185,6 +241,24 @@ export default function CytoscapeVisualizerEnhanced({
             'line-color': '#0369a1',
             'target-arrow-color': '#0369a1',
             width: 3,
+          },
+        },
+        // Dimmed edges
+        {
+          selector: 'edge.dimmed',
+          style: {
+            opacity: 0.1,
+          },
+        },
+        // Highlighted edges (connected to selected node)
+        {
+          selector: 'edge.highlighted-edge',
+          style: {
+            'line-color': '#0369a1',
+            'target-arrow-color': '#0369a1',
+            width: 3,
+            opacity: 1,
+            'z-index': 9998,
           },
         },
       ],
@@ -212,12 +286,48 @@ export default function CytoscapeVisualizerEnhanced({
 
     cyRef.current = cy;
 
-    // Event handlers
+    // Unified node click handler with double-click support
+    let lastTapTime = 0;
+    let lastTappedNode: cytoscape.NodeSingular | null = null;
+
     cy.on('tap', 'node', (event) => {
       const node = event.target;
+      const now = Date.now();
+      const isDoubleClick = now - lastTapTime < 300 && lastTappedNode === node;
+
+      // Highlight connected nodes
+      highlightNeighborhood(cy, node);
+
+      // Set as egocentric center
+      setSelectedNodeForEgocentric(node.id());
+
+      // Set selected node
       setSelectedNode(node.data());
       if (onNodeClick) {
         onNodeClick(node.id());
+      }
+
+      if (isDoubleClick) {
+        // Double-click: zoom to node and its immediate neighborhood
+        const neighborhood = node.closedNeighborhood();
+        cy.animate({
+          fit: {
+            eles: neighborhood,
+            padding: 100,
+          },
+          duration: 500,
+          easing: 'ease-in-out-cubic',
+        });
+      }
+
+      lastTapTime = now;
+      lastTappedNode = node;
+    });
+
+    // Click on background to reset highlighting
+    cy.on('tap', (event) => {
+      if (event.target === cy) {
+        resetHighlighting(cy);
       }
     });
 
@@ -228,19 +338,23 @@ export default function CytoscapeVisualizerEnhanced({
       }
     });
 
-    // Double-click to center on node
-    let lastTapTime = 0;
-    cy.on('tap', 'node', (event) => {
-      const now = Date.now();
-      if (now - lastTapTime < 300) {
-        // Double-click detected
-        cy.animate({
-          center: { eles: event.target },
-          zoom: 1.5,
-          duration: 300,
-        });
+    // Edge label hover handlers
+    cy.on('mouseover', 'edge', (event) => {
+      const edge = event.target;
+      // Only show label on hover if the setting is enabled
+      if (currentFilters.showEdgeLabels && currentFilters.edgeLabelsOnHover) {
+        edge.style('text-opacity', 1);
       }
-      lastTapTime = now;
+    });
+
+    cy.on('mouseout', 'edge', (event) => {
+      const edge = event.target;
+      // Hide label when not hovering (unless it's highlighted)
+      if (currentFilters.showEdgeLabels && currentFilters.edgeLabelsOnHover) {
+        if (!edge.hasClass('highlighted-edge')) {
+          edge.style('text-opacity', 0);
+        }
+      }
     });
 
     if (colorModeRef.current) {
@@ -257,6 +371,8 @@ export default function CytoscapeVisualizerEnhanced({
     const cy = cyRef.current;
     if (!cy) return;
 
+    // Reset highlighting first
+    resetHighlighting(cy);
     cy.$(':selected').unselect();
 
     if (selectedNodeIds && selectedNodeIds.length > 0) {
@@ -269,12 +385,14 @@ export default function CytoscapeVisualizerEnhanced({
       const firstSelected = cy.getElementById(selectedNodeIds[0]);
       if (firstSelected && !firstSelected.empty()) {
         setSelectedNode(firstSelected.data());
+        highlightNeighborhood(cy, firstSelected);
       }
     } else if (focusNodeId) {
       const focusNode = cy.getElementById(focusNodeId);
       if (focusNode && !focusNode.empty()) {
         focusNode.select();
         setSelectedNode(focusNode.data());
+        highlightNeighborhood(cy, focusNode);
       }
     } else {
       setSelectedNode(null);
@@ -283,10 +401,15 @@ export default function CytoscapeVisualizerEnhanced({
     if (focusNodeId) {
       const focusNode = cy.getElementById(focusNodeId);
       if (focusNode && !focusNode.empty()) {
+        // Fit to the node and its immediate neighborhood
+        const neighborhood = focusNode.closedNeighborhood();
         cy.animate({
-          center: { eles: focusNode },
-          duration: 300,
-          zoom: Math.min(Math.max(cy.zoom(), 1.2), 2),
+          fit: {
+            eles: neighborhood,
+            padding: 100,
+          },
+          duration: 500,
+          easing: 'ease-in-out-cubic',
         });
       }
     }
@@ -363,6 +486,7 @@ export default function CytoscapeVisualizerEnhanced({
           if (isFullscreen) {
             toggleFullscreen();
           } else {
+            resetHighlighting(cyRef.current);
             cyRef.current.$(':selected').unselect();
             setSelectedNode(null);
           }
@@ -410,6 +534,7 @@ export default function CytoscapeVisualizerEnhanced({
 
     setCurrentFilters(filters);
 
+    const cy = cyRef.current;
     const typeKeys: Array<keyof NodeFilters> = [
       'person',
       'work',
@@ -420,25 +545,96 @@ export default function CytoscapeVisualizerEnhanced({
       'quote',
     ];
 
+    // Step 1: Type filtering
     typeKeys.forEach((key) => {
       const shouldShow = filters[key];
-      cyRef.current?.nodes(`[type="${key}"]`).style({
+      cy.nodes(`[type="${key}"]`).style({
         display: shouldShow ? 'element' : 'none',
       });
     });
 
-    cyRef.current
+    // Step 2: Minimum connections filter
+    if (filters.minConnections > 0) {
+      cy.nodes().forEach((node) => {
+        const degree = node.degree();
+        if (degree < filters.minConnections) {
+          node.style('display', 'none');
+        }
+      });
+    }
+
+    // Step 3: Egocentric mode filter
+    if (filters.egocentricMode && selectedNodeForEgocentric) {
+      const centerNode = cy.$(`#${selectedNodeForEgocentric}`).first();
+      if (centerNode.length > 0 && centerNode.isNode()) {
+        // Hide all nodes first
+        cy.nodes().style('display', 'none');
+
+        // Show center node
+        centerNode.style('display', 'element');
+
+        // Show nodes within hop distance
+        let nodesToShow = cy.collection();
+        nodesToShow = nodesToShow.union(centerNode);
+
+        for (let i = 0; i < filters.hopDistance; i++) {
+          const neighbors = nodesToShow.neighborhood('node');
+          nodesToShow = nodesToShow.union(neighbors);
+        }
+
+        nodesToShow.style('display', 'element');
+      }
+    }
+
+    // Step 4: Max nodes limit (by degree - show most connected first)
+    const visibleNodes = cy.nodes().filter((node) => node.style('display') !== 'none');
+    if (visibleNodes.length > filters.maxNodes && !filters.egocentricMode) {
+      // Sort by degree (connectivity) descending
+      const sortedNodes = visibleNodes.sort((a, b) => {
+        const degreeA = a.isNode() ? a.degree() : 0;
+        const degreeB = b.isNode() ? b.degree() : 0;
+        return degreeB - degreeA;
+      });
+
+      // Hide nodes beyond maxNodes
+      sortedNodes.slice(filters.maxNodes).style('display', 'none');
+    }
+
+    // Step 5: Update visible node count
+    const finalVisibleNodes = cy.nodes().filter((node) => node.style('display') !== 'none');
+    setVisibleNodeCount(finalVisibleNodes.length);
+
+    // Step 6: Node labels
+    cy
       .style()
       .selector('node')
       .style({ 'text-opacity': filters.showLabels ? 1 : 0 })
       .update();
 
-    cyRef.current
-      .style()
-      .selector('edge')
-      .style({ 'text-opacity': filters.showEdgeLabels ? 1 : 0 })
-      .update();
+    // Step 7: Edge labels (base visibility)
+    if (!filters.showEdgeLabels) {
+      cy
+        .style()
+        .selector('edge')
+        .style({ 'text-opacity': 0 })
+        .update();
+    } else if (filters.edgeLabelsOnHover) {
+      // Set all edge labels to invisible initially if hover mode is on
+      cy
+        .style()
+        .selector('edge')
+        .style({ 'text-opacity': 0 })
+        .update();
+    } else {
+      // Show all edge labels if not hover mode
+      cy
+        .style()
+        .selector('edge')
+        .style({ 'text-opacity': 1 })
+        .update();
+    }
 
+    // Step 8: Apply color mode
     applyColorMode(filters.colorByCommunity);
   };
 
@@ -490,6 +686,8 @@ export default function CytoscapeVisualizerEnhanced({
         onLayoutChange={handleLayoutChange}
         stats={nodeStats}
         canColorByCommunity={Boolean(data?.meta?.community?.communities?.length)}
+        visibleNodeCount={visibleNodeCount}
+        totalNodeCount={data?.elements?.nodes?.length || 0}
       />
 
       {/* Export Tools */}
@@ -510,21 +708,40 @@ export default function CytoscapeVisualizerEnhanced({
           node={selectedNode}
           onClose={() => {
             setSelectedNode(null);
-            cyRef.current?.$(':selected').unselect();
+            if (cyRef.current) {
+              resetHighlighting(cyRef.current);
+              cyRef.current.$(':selected').unselect();
+            }
           }}
           onNavigateToNode={(nodeId) => {
-            const node = cyRef.current?.$(`#${nodeId}`).first();
-            if (node && node.length > 0) {
-              // Unselect previous node
-              cyRef.current?.$(':selected').unselect();
+            const cy = cyRef.current;
+            if (!cy) return;
+
+            const element = cy.$(`#${nodeId}`).first();
+            if (element.length > 0 && element.isNode()) {
+              const node = element as cytoscape.NodeSingular;
+
+              // Reset highlighting and selection
+              resetHighlighting(cy);
+              cy.$(':selected').unselect();
+
               // Select new node
               node.select();
-              // Animate to new node
-              cyRef.current?.animate({
-                center: { eles: node },
-                zoom: 1.5,
-                duration: 300,
+
+              // Highlight neighborhood
+              highlightNeighborhood(cy, node);
+
+              // Animate to new node and its neighborhood
+              const neighborhood = node.closedNeighborhood();
+              cy.animate({
+                fit: {
+                  eles: neighborhood,
+                  padding: 100,
+                },
+                duration: 500,
+                easing: 'ease-in-out-cubic',
               });
+
               // Update selected node
               setSelectedNode(node.data());
             }
