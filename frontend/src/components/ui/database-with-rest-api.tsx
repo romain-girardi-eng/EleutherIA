@@ -50,10 +50,10 @@ const DatabaseWithRestApi = ({
           strokeDasharray="100 100"
           pathLength="100"
         >
-          <path d="M 31 10 v 15 q 0 5 5 5 h 59 q 5 0 5 5 v 10" />
-          <path d="M 77 10 v 10 q 0 5 5 5 h 13 q 5 0 5 5 v 10" />
-          <path d="M 124 10 v 10 q 0 5 -5 5 h -14 q -5 0 -5 5 v 10" />
-          <path d="M 170 10 v 15 q 0 5 -5 5 h -60 q -5 0 -5 5 v 10" />
+          <path d="M 29 10 v 15 q 0 5 5 5 h 61 q 5 0 5 5 v 10" />
+          <path d="M 75 10 v 10 q 0 5 5 5 h 15 q 5 0 5 5 v 10" />
+          <path d="M 123 10 v 10 q 0 5 -5 5 h -13 q -5 0 -5 5 v 10" />
+          <path d="M 171 10 v 15 q 0 5 -5 5 h -61 q -5 0 -5 5 v 10" />
           {/* Animation For Path Starting */}
           <animate
             attributeName="stroke-dashoffset"
@@ -109,19 +109,19 @@ const DatabaseWithRestApi = ({
           <g>
             <rect
               fill="#18181B"
-              x="14"
+              x="8"
               y="5"
-              width="34"
+              width="42"
               height="10"
               rx="5"
             ></rect>
-            <DatabaseIcon x="18" y="7.5"></DatabaseIcon>
+            <DatabaseIcon x="12" y="7.5"></DatabaseIcon>
             <text
-              x="28"
+              x="22"
               y="12"
               fill="white"
               stroke="none"
-              fontSize="5"
+              fontSize="4.5"
               fontWeight="500"
             >
               {badgeTexts?.first || "GET"}
@@ -131,19 +131,19 @@ const DatabaseWithRestApi = ({
           <g>
             <rect
               fill="#18181B"
-              x="60"
+              x="54"
               y="5"
-              width="34"
+              width="42"
               height="10"
               rx="5"
             ></rect>
-            <DatabaseIcon x="64" y="7.5"></DatabaseIcon>
+            <DatabaseIcon x="58" y="7.5"></DatabaseIcon>
             <text
-              x="74"
+              x="68"
               y="12"
               fill="white"
               stroke="none"
-              fontSize="5"
+              fontSize="4.5"
               fontWeight="500"
             >
               {badgeTexts?.second || "POST"}
@@ -153,19 +153,19 @@ const DatabaseWithRestApi = ({
           <g>
             <rect
               fill="#18181B"
-              x="108"
+              x="100"
               y="5"
-              width="34"
+              width="46"
               height="10"
               rx="5"
             ></rect>
-            <DatabaseIcon x="112" y="7.5"></DatabaseIcon>
+            <DatabaseIcon x="104" y="7.5"></DatabaseIcon>
             <text
-              x="122"
+              x="114"
               y="12"
               fill="white"
               stroke="none"
-              fontSize="5"
+              fontSize="4.5"
               fontWeight="500"
             >
               {badgeTexts?.third || "PUT"}
@@ -177,17 +177,17 @@ const DatabaseWithRestApi = ({
               fill="#18181B"
               x="150"
               y="5"
-              width="40"
+              width="42"
               height="10"
               rx="5"
             ></rect>
             <DatabaseIcon x="154" y="7.5"></DatabaseIcon>
             <text
-              x="165"
+              x="164"
               y="12"
               fill="white"
               stroke="none"
-              fontSize="5"
+              fontSize="4.5"
               fontWeight="500"
             >
               {badgeTexts?.fourth || "DELETE"}
@@ -198,7 +198,7 @@ const DatabaseWithRestApi = ({
           {/* 1 -  user list */}
           <mask id="db-mask-1">
             <path
-              d="M 31 10 v 15 q 0 5 5 5 h 59 q 5 0 5 5 v 10"
+              d="M 29 10 v 15 q 0 5 5 5 h 61 q 5 0 5 5 v 10"
               strokeWidth="0.5"
               stroke="white"
             />
@@ -206,7 +206,7 @@ const DatabaseWithRestApi = ({
           {/* 2 - task list */}
           <mask id="db-mask-2">
             <path
-              d="M 77 10 v 10 q 0 5 5 5 h 13 q 5 0 5 5 v 10"
+              d="M 75 10 v 10 q 0 5 5 5 h 15 q 5 0 5 5 v 10"
               strokeWidth="0.5"
               stroke="white"
             />
@@ -214,7 +214,7 @@ const DatabaseWithRestApi = ({
           {/* 3 - backlogs */}
           <mask id="db-mask-3">
             <path
-              d="M 124 10 v 10 q 0 5 -5 5 h -14 q -5 0 -5 5 v 10"
+              d="M 123 10 v 10 q 0 5 -5 5 h -13 q -5 0 -5 5 v 10"
               strokeWidth="0.5"
               stroke="white"
             />
@@ -222,7 +222,7 @@ const DatabaseWithRestApi = ({
           {/* 4 - misc */}
           <mask id="db-mask-4">
             <path
-              d="M 170 10 v 15 q 0 5 -5 5 h -60 q -5 0 -5 5 v 10"
+              d="M 171 10 v 15 q 0 5 -5 5 h -61 q -5 0 -5 5 v 10"
               strokeWidth="0.5"
               stroke="white"
             />
@@ -252,11 +252,11 @@ const DatabaseWithRestApi = ({
         {/* box content */}
         <div className="relative z-10 flex h-[150px] w-full items-center justify-center overflow-hidden rounded-lg border bg-background shadow-md">
           {/* Badges */}
-          <div className="absolute bottom-8 left-12 z-10 h-7 rounded-full bg-[#101112] px-3 text-xs border flex items-center gap-2 ">
+          <div className="absolute bottom-8 left-12 z-10 h-7 rounded-full bg-[#101112] px-3 text-xs border flex items-center gap-2 text-white">
             <HeartHandshakeIcon className="size-4" />
             <span>{buttonTexts?.first || "LegionDev"}</span>
           </div>
-          <div className="absolute right-16 z-10 hidden h-7 rounded-full bg-[#101112] px-3 text-xs sm:flex border items-center gap-2">
+          <div className="absolute right-16 z-10 hidden h-7 rounded-full bg-[#101112] px-3 text-xs sm:flex border items-center gap-2 text-white">
             <Folder className="size-4" />
             <span>{buttonTexts?.second || "v2_updates"}</span>
           </div>
