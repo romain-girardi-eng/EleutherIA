@@ -8,6 +8,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import logging
+import gc
 from contextlib import asynccontextmanager
 
 from api import kg_routes, search_routes, graphrag_routes, text_routes, auth
@@ -99,6 +100,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# Memory optimization: Force garbage collection after each request
+@app.middleware("http")
+async def gc_middleware(request, call_next):
+    """Force garbage collection after each request to prevent memory leaks"""
+    response = await call_next(request)
+    # Force immediate garbage collection to free memory
+    gc.collect()
+    return response
 
 
 # Include routers

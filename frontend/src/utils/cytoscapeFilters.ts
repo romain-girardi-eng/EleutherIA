@@ -16,7 +16,8 @@ export function filterCytoscapeData(
 
   const { nodeTypes, periods, schools, relations, searchTerm } = filters;
   const search = (searchTerm || '').trim().toLowerCase();
-  const maxNodes = options?.maxNodes ?? 200;
+  // Increased default from 200 to 1000 to allow visualizer controls to manage complexity
+  const maxNodes = options?.maxNodes ?? 1000;
   const selectionState: KGSelectionState = selection || { nodes: [], edges: [], focusNodeId: null };
 
   const degreeMap = new Map<string, number>();

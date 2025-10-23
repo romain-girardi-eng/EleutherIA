@@ -6,6 +6,7 @@ Knowledge Graph analytics helpers for high-level visualizations
 from __future__ import annotations
 
 from collections import Counter, defaultdict, deque
+import gc
 import importlib.util
 import logging
 import math
@@ -258,6 +259,9 @@ def detect_communities(
     }
 
     graph = _build_network_graph(kg_data)
+
+    # Memory optimization: explicitly free unused memory
+    gc.collect()
     if graph.number_of_edges() == 0 or graph.number_of_nodes() == 0:
         return {
             "algorithm_requested": requested,
@@ -308,6 +312,9 @@ def detect_communities(
                 algorithm_used = "greedy"
 
     if not assignments:
+        # Free graph memory before returning
+        del graph
+        gc.collect()
         return {
             "algorithm_requested": requested,
             "algorithm_used": "none",
@@ -320,6 +327,10 @@ def detect_communities(
                 for desc in [COMMUNITY_ALGORITHM_DESCRIPTIONS[name]]
             ],
         }
+
+    # Free graph memory after community detection
+    del graph
+    gc.collect()
 
     counts = Counter(assignments.values())
     sorted_counts = sorted(

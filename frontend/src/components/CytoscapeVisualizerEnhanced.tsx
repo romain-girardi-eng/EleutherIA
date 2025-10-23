@@ -361,6 +361,10 @@ export default function CytoscapeVisualizerEnhanced({
       applyColorMode(true);
     }
 
+    // Set initial visible node count
+    const initialVisibleNodes = cy.nodes().filter((node) => node.style('display') !== 'none');
+    setVisibleNodeCount(initialVisibleNodes.length);
+
     // Cleanup
     return () => {
       cy.destroy();
