@@ -7,6 +7,7 @@ import AuthModal from '../components/AuthModal';
 import { ShineBorder } from '../components/ui/shine-border';
 import NodeDetailPanel from '../components/NodeDetailPanel';
 import { CitationPreview } from '../components/ui/citation-preview';
+import { ColdStartLoaderMinimal } from '../components/ColdStartLoader';
 import type { GraphRAGResponse, GraphRAGStreamEvent, GraphRAGChatMessage, KGNode } from '../types';
 
 export default function GraphRAGPage() {
@@ -566,10 +567,15 @@ export default function GraphRAGPage() {
 
           {streaming && (
             <div className="bg-primary-50 border border-primary-200 rounded-lg p-3 sm:p-4">
-              <div className="flex items-center space-x-2 mb-2">
-                <div className="spinner w-4 h-4 flex-shrink-0"></div>
-                <span className="text-xs sm:text-sm text-primary-700 font-medium break-words">{streamStatus}</span>
-              </div>
+              {/* Show cold start loader if no answer yet and taking a while */}
+              {!streamedAnswer && streamStatus.includes('waking') ? (
+                <ColdStartLoaderMinimal isLoading={true} />
+              ) : (
+                <div className="flex items-center space-x-2 mb-2">
+                  <div className="spinner w-4 h-4 flex-shrink-0"></div>
+                  <span className="text-xs sm:text-sm text-primary-700 font-medium break-words">{streamStatus}</span>
+                </div>
+              )}
               {streamedAnswer && (
                 <div className="markdown-content prose prose-sm max-w-none overflow-x-auto">
                   <ReactMarkdown>{streamedAnswer}</ReactMarkdown>

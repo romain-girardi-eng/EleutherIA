@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { HelpCircle, LogOut, User } from 'lucide-react';
 import { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { useKeepAlive } from './hooks/useKeepAlive';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import KGVisualizerPage from './pages/KGVisualizerPage';
@@ -194,6 +195,9 @@ function AppContent() {
   const location = useLocation();
   const [showTour, setShowTour] = useState(false);
   const { user, logout, isAuthenticated } = useAuth();
+
+  // Enable keep-alive to prevent backend from sleeping (Render free tier)
+  useKeepAlive();
 
   const currentTour = pageTours[location.pathname] || pageTours['/'];
 
