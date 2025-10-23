@@ -36,6 +36,16 @@ export default {
           DEFAULT: '#e7e5e4',
           foreground: '#1c1917',
         },
+        destructive: {
+          DEFAULT: '#ef4444',
+          foreground: '#ffffff',
+        },
+        secondary: {
+          DEFAULT: '#f3f4f6',
+          foreground: '#1c1917',
+        },
+        ring: '#769687',
+        input: '#e7e5e4',
       },
       fontFamily: {
         serif: ['Georgia', 'Palatino', 'Times New Roman', 'serif'],

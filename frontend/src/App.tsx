@@ -13,6 +13,7 @@ import BibliographyPage from './pages/BibliographyPage';
 import AboutPage from './pages/AboutPage';
 import ReportErrorPage from './pages/ReportErrorPage';
 import InteractiveTour from './components/InteractiveTour';
+import { NotFoundPage } from './components/ui/not-found-page';
 import './index.css';
 
 function App() {
@@ -327,6 +328,8 @@ function AppContent() {
             <Route path="/bibliography" element={<BibliographyPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/report-error" element={<ReportErrorPage />} />
+            {/* 404 - Catch all unmatched routes */}
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
 
