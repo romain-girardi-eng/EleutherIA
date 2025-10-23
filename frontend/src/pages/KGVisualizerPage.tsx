@@ -12,6 +12,7 @@ import InfluenceMatrixPanel from '../components/workspace/InfluenceMatrixPanel';
 import PathInspectorPanel from '../components/workspace/PathInspectorPanel';
 import AdvancedVisualizationDashboard from '../components/visualizations/AdvancedVisualizationDashboard';
 import { filterCytoscapeData } from '../utils/cytoscapeFilters';
+import { ShineBorder } from '../components/ui/shine-border';
 
 type VisualizerMode = 'observatory' | 'semativerse' | 'advanced';
 
@@ -312,29 +313,37 @@ function KGVisualizerContent() {
               </div>
             )}
 
-            <div className="relative border border-gray-200 rounded-lg h-[600px] overflow-hidden">
-              {cyLoading ? (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="spinner w-12 h-12 mx-auto mb-2"></div>
-                    <div className="text-sm text-academic-muted">Loading network...</div>
+            <ShineBorder
+              className="w-full p-0 bg-white dark:bg-black min-w-0"
+              borderRadius={12}
+              borderWidth={2}
+              duration={12}
+              color={["#769687", "#8baf9f", "#a8c3b7"]}
+            >
+              <div className="relative rounded-lg h-[600px] overflow-hidden">
+                {cyLoading ? (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="spinner w-12 h-12 mx-auto mb-2"></div>
+                      <div className="text-sm text-academic-muted">Loading network...</div>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <CytoscapeVisualizerEnhanced
-                  data={filteredData}
-                  onNodeClick={(nodeId) =>
-                    updateSelection({
-                      nodes: [nodeId],
-                      focusNodeId: nodeId,
-                    })
-                  }
-                  onEdgeClick={() => undefined}
-                  selectedNodeIds={state.selection.nodes}
-                  focusNodeId={state.selection.focusNodeId}
-                />
-              )}
-            </div>
+                ) : (
+                  <CytoscapeVisualizerEnhanced
+                    data={filteredData}
+                    onNodeClick={(nodeId) =>
+                      updateSelection({
+                        nodes: [nodeId],
+                        focusNodeId: nodeId,
+                      })
+                    }
+                    onEdgeClick={() => undefined}
+                    selectedNodeIds={state.selection.nodes}
+                    focusNodeId={state.selection.focusNodeId}
+                  />
+                )}
+              </div>
+            </ShineBorder>
           </div>
 
           <TimelinePanel />
