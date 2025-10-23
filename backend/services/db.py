@@ -22,14 +22,18 @@ class DatabaseService:
         """Establish connection pool to PostgreSQL"""
         try:
             # Get database configuration from environment variables
+            # Use environment variables for pool size to allow optimization per deployment
+            min_pool_size = int(os.getenv('DB_POOL_MIN_SIZE', '2'))
+            max_pool_size = int(os.getenv('DB_POOL_MAX_SIZE', '5'))
+
             db_config = {
                 'host': os.getenv('POSTGRES_HOST', 'localhost'),
                 'port': int(os.getenv('POSTGRES_PORT', '5432')),
                 'database': os.getenv('POSTGRES_DB', 'postgres'),
                 'user': os.getenv('POSTGRES_USER', 'postgres'),
                 'password': os.getenv('POSTGRES_PASSWORD', ''),
-                'min_size': 5,
-                'max_size': 20,
+                'min_size': min_pool_size,  # Reduced for memory efficiency (was 5)
+                'max_size': max_pool_size,  # Reduced for memory efficiency (was 20)
                 'command_timeout': 60
             }
 

@@ -536,7 +536,7 @@ export default function GraphRAGPage() {
           borderRadius={12}
           borderWidth={2}
           duration={14}
-          color={["#3b82f6", "#8b5cf6", "#ec4899"]}
+          color={["#769687", "#8baf9f", "#a8c3b7"]}
         >
           <div className="overflow-y-auto p-3 sm:p-4 space-y-4 min-h-[300px] max-h-[70vh] lg:max-h-[calc(100vh-400px)]">
             {messages.length === 0 && !streaming && (
@@ -594,7 +594,7 @@ export default function GraphRAGPage() {
           borderRadius={12}
           borderWidth={2}
           duration={12}
-          color={["#3b82f6", "#8b5cf6", "#ec4899"]}
+          color={["#769687", "#8baf9f", "#a8c3b7"]}
         >
           <form onSubmit={handleSubmit} className="p-4">
           <div className="flex flex-col sm:flex-row gap-2">
