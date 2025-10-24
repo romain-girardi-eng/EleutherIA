@@ -163,9 +163,9 @@ export default function AboutPage() {
           </p>
 
           {/* Data Exchange Visualization */}
-          <div className="flex justify-center py-8">
+          <div className="flex flex-col items-center py-8">
             <DatabaseWithRestApi
-              circleText="REST"
+              circleText="API"
               badgeTexts={{
                 first: "Question",
                 second: "Context",
@@ -179,6 +179,9 @@ export default function AboutPage() {
               title="GraphRAG Pipeline: Database to AI-Generated Responses"
               lightColor="#769687"
             />
+            <p className="text-sm text-academic-muted text-center mt-6 max-w-2xl">
+              The API (Application Programming Interface) allows the AI model to communicate with the Knowledge Graph database. When you ask a question, it retrieves relevant context from ancient sources and modern scholarship, which the AI then synthesizes into a scholarly answer.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

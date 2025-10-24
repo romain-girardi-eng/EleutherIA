@@ -239,14 +239,14 @@ const DatabaseWithRestApi = ({
         {/* bottom shadow */}
         <div className="absolute -bottom-4 h-[100px] w-[62%] rounded-lg bg-accent/30" />
         {/* box title */}
-        <div className="absolute -top-3 z-20 flex items-center justify-center rounded-lg border bg-[#101112] px-2 py-1 sm:-top-4 sm:py-1.5">
-          <SparklesIcon className="size-3" />
-          <span className="ml-2 text-[10px]">
-            {title ? title : "Data exchange using a customized REST API"}
+        <div className="absolute -top-3 z-20 flex items-center justify-center rounded-lg border bg-[#101112] px-3 py-1.5 sm:-top-4 sm:py-2">
+          <SparklesIcon className="size-3 text-white flex-shrink-0" />
+          <span className="ml-2 text-[11px] sm:text-xs font-medium text-white">
+            {title ? title : "Data exchange using a customized API"}
           </span>
         </div>
         {/* box outter circle */}
-        <div className="absolute -bottom-8 z-30 grid h-[60px] w-[60px] place-items-center rounded-full border-t bg-[#141516] font-semibold text-xs">
+        <div className="absolute -bottom-8 z-30 grid h-[60px] w-[60px] place-items-center rounded-full border-t bg-[#141516] font-semibold text-xs text-white">
           {circleText ? circleText : "SVG"}
         </div>
         {/* box content */}
