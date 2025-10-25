@@ -7,8 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **EleutherIA** (Ἐλευθερία = freedom + IA = Intelligence Artificielle) is a FAIR-compliant knowledge graph documenting ancient debates on free will, fate, and moral responsibility from Aristotle (4th c. BCE) to Boethius (6th c. CE).
 
 This is an **academic research database** (12.7 MB JSON) containing:
-- **509 nodes**: 164 persons, 117 arguments, 85 concepts, 50 works, 53 reformulations, 13 quotes, 27 other types
-- **820 edges**: relationships, influences, critiques
+- **534 nodes**: 161 persons, 117 arguments, 105 concepts, 57 works, 53 reformulations, 14 quotes, 27 other types
+- **923 edges**: relationships, influences, critiques
 - **68 historical periods**: Classical Greek through Late Antiquity
 - **1,706 bibliography references**: 785 ancient sources + 921 modern scholarship
 - **GraphRAG-ready**: optimized for vector embeddings, semantic search, and LLM integration
@@ -36,12 +36,12 @@ This is an **academic research database** (12.7 MB JSON) containing:
 
 ### Node Types
 Valid values for `node.type`:
-- `person` (164) - Philosophers, theologians, authors
+- `person` (161) - Philosophers, theologians, authors
 - `argument` (117) - Specific philosophical arguments
-- `concept` (85) - Philosophical concepts and terms
+- `concept` (105) - Philosophical concepts and terms
 - `reformulation` (53) - Conceptual reformulations
-- `work` (50) - Treatises, dialogues, letters
-- `quote` (13) - Textual quotations from ancient sources
+- `work` (57) - Treatises, dialogues, letters
+- `quote` (14) - Textual quotations from ancient sources
 - `debate` (12), `controversy` (5), `group` (3), `conceptual_evolution` (3), `event` (2), `argument_framework` (1), `school` (1)
 
 ### Relation Types

@@ -39,7 +39,7 @@ const pageTours: Record<string, { title: string; steps: Array<{ title: string; c
       },
       {
         title: 'Knowledge Graph',
-        content: 'Start here to explore the network of 505 philosophical concepts, arguments, and thinkers. Visualize complex relationships in an interactive graph.',
+        content: 'Start here to explore the network of 534 philosophical concepts, arguments, and thinkers. Visualize complex relationships in an interactive graph.',
         target: '[data-tour="kg-card"]'
       },
       {
@@ -69,7 +69,7 @@ const pageTours: Record<string, { title: string; steps: Array<{ title: string; c
     steps: [
       {
         title: 'Interactive Knowledge Graph',
-        content: 'Explore 505 nodes and 870 relationships representing ancient philosophical debates on free will.',
+        content: 'Explore 534 nodes and 923 relationships representing ancient philosophical debates on free will.',
         target: 'body'
       },
       {
@@ -352,8 +352,8 @@ function AppContent() {
               <div className="pb-4 sm:pb-0">
                 <h3 className="font-semibold text-sm mb-3">Data</h3>
                 <ul className="text-xs text-academic-muted space-y-1">
-                  <li>505 Knowledge Graph Nodes</li>
-                  <li>870 Edges & Relationships</li>
+                  <li>534 Knowledge Graph Nodes</li>
+                  <li>923 Edges & Relationships</li>
                   <li>289 Ancient Texts</li>
                   <li>860+ Bibliography References</li>
                 </ul>

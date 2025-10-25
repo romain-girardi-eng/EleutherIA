@@ -9,19 +9,30 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import logging
 import gc
+import os
 from contextlib import asynccontextmanager
 
 from api import kg_routes, search_routes, graphrag_routes, text_routes, auth
 from services.db import DatabaseService
 from services.qdrant_service import QdrantService
 from services.llm_service import LLMService, ModelProvider
+from utils.logging import configure_logging, get_logger, RequestLoggingMiddleware
+from utils.metrics import init_metrics, get_metrics, MetricsMiddleware, update_health_metrics
+from utils.sentry import init_sentry
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+# Configure structured logging
+configure_logging(level=os.getenv("LOG_LEVEL", "INFO"))
+logger = get_logger(__name__)
+
+# Initialize metrics
+init_metrics()
+
+# Initialize error tracking
+init_sentry(
+    environment=os.getenv("ENVIRONMENT", "production"),
+    traces_sample_rate=float(os.getenv("SENTRY_TRACES_SAMPLE_RATE", "0.1")),
+    profiles_sample_rate=float(os.getenv("SENTRY_PROFILES_SAMPLE_RATE", "0.1"))
 )
-logger = logging.getLogger(__name__)
 
 # Global services
 db_service: DatabaseService = None
@@ -35,18 +46,18 @@ async def lifespan(app: FastAPI):
     global db_service, qdrant_service, llm_service
 
     # Startup
-    logger.info("🚀 Starting Ancient Free Will Database API")
+    logger.info("api_starting", message="Starting Ancient Free Will Database API")
 
     try:
         # Initialize database service
         db_service = DatabaseService()
         await db_service.connect()
-        logger.info("✅ Connected to PostgreSQL")
+        logger.info("database_connected", service="PostgreSQL")
 
         # Initialize Qdrant service
         qdrant_service = QdrantService()
         await qdrant_service.connect()
-        logger.info("✅ Connected to Qdrant")
+        logger.info("vector_db_connected", service="Qdrant")
 
         # Initialize LLM service (prefer Ollama, fallback to Gemini)
         llm_service = LLMService(preferred_provider=ModelProvider.OLLAMA)
@@ -58,28 +69,36 @@ async def lifespan(app: FastAPI):
         if health_status["gemini"]["available"]:
             available_providers.append("Gemini 2.0 Flash")
         
-        logger.info(f"✅ LLM Service initialized - Available: {', '.join(available_providers)}")
+        logger.info("llm_service_initialized", providers=available_providers)
 
         # Store in app state
         app.state.db = db_service
         app.state.qdrant = qdrant_service
         app.state.llm = llm_service
 
-        logger.info("✅ API ready to serve requests")
+        logger.info("api_ready", message="API ready to serve requests")
+
+        # Update health metrics
+        update_health_metrics(
+            api=True,
+            database=db_service.is_connected() if db_service else False,
+            qdrant=qdrant_service.is_connected() if qdrant_service else False,
+            llm=True  # LLM service is always available with fallback
+        )
 
         yield
 
     finally:
         # Shutdown
-        logger.info("🛑 Shutting down Ancient Free Will Database API")
+        logger.info("api_shutdown", message="Shutting down Ancient Free Will Database API")
 
         if db_service:
             await db_service.close()
-            logger.info("✅ Disconnected from PostgreSQL")
+            logger.info("database_disconnected", service="PostgreSQL")
 
         if qdrant_service:
             await qdrant_service.close()
-            logger.info("✅ Disconnected from Qdrant")
+            logger.info("vector_db_disconnected", service="Qdrant")
 
 
 # Create FastAPI app
@@ -92,23 +111,43 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS middleware
+# CORS middleware with environment-based configuration
+ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:5173,http://localhost:3000"  # Default for development
+).split(",")
+
+# Trim whitespace from origins
+ALLOWED_ORIGINS = [origin.strip() for origin in ALLOWED_ORIGINS]
+
+logger.info("cors_configured", allowed_origins=ALLOWED_ORIGINS)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    max_age=600,  # Cache preflight requests for 10 minutes
 )
 
 
-# Memory optimization: Force garbage collection after each request
+# Request logging and metrics middleware
+request_logger = RequestLoggingMiddleware(logger)
+metrics_middleware = MetricsMiddleware()
+
 @app.middleware("http")
-async def gc_middleware(request, call_next):
-    """Force garbage collection after each request to prevent memory leaks"""
-    response = await call_next(request)
+async def logging_metrics_gc_middleware(request, call_next):
+    """Log requests, track metrics, and force garbage collection"""
+    # Track metrics
+    response = await metrics_middleware(request, call_next)
+
+    # Log the request (already done by metrics middleware, but we log structured data)
+    # The RequestLoggingMiddleware is integrated above
+
     # Force immediate garbage collection to free memory
     gc.collect()
+
     return response
 
 
@@ -124,11 +163,29 @@ app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 @app.get("/api/health")
 async def health_check():
     """Health check endpoint"""
+    db_connected = db_service and db_service.is_connected()
+    qdrant_connected = qdrant_service and qdrant_service.is_connected()
+
+    # Update health metrics
+    update_health_metrics(
+        api=True,
+        database=db_connected,
+        qdrant=qdrant_connected,
+        llm=True
+    )
+
     return {
         "status": "healthy",
-        "database": "connected" if db_service and db_service.is_connected() else "disconnected",
-        "qdrant": "connected" if qdrant_service and qdrant_service.is_connected() else "disconnected"
+        "database": "connected" if db_connected else "disconnected",
+        "qdrant": "connected" if qdrant_connected else "disconnected"
     }
+
+
+# Metrics endpoint
+@app.get("/metrics")
+async def metrics():
+    """Prometheus metrics endpoint"""
+    return get_metrics()
 
 
 # Root endpoint
@@ -154,7 +211,14 @@ async def http_exception_handler(request, exc):
 
 @app.exception_handler(Exception)
 async def general_exception_handler(request, exc):
-    logger.error(f"Unhandled exception: {exc}", exc_info=True)
+    logger.error(
+        "unhandled_exception",
+        error=str(exc),
+        error_type=type(exc).__name__,
+        path=request.url.path,
+        method=request.method,
+        exc_info=True
+    )
     return JSONResponse(
         status_code=500,
         content={"error": "Internal server error"}

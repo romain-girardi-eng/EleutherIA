@@ -2,7 +2,7 @@
 
 A revolutionary **triple-threat** digital humanities platform combining:
 
-1. **🧠 Knowledge Graph (KG)** with GraphRAG capabilities - 509 nodes, 820 edges
+1. **🧠 Knowledge Graph (KG)** with GraphRAG capabilities - 534 nodes, 923 edges
 2. **🗄️ PostgreSQL Database** with full-text search and linguistic analysis - 289 texts, 35M+ characters
 3. **🔍 Vector Database** for semantic search with Gemini embeddings - 285 texts with embeddings
 
@@ -38,8 +38,8 @@ This will:
 ## 📊 System Overview
 
 ### 🧠 Knowledge Graph (GraphRAG)
-- **Nodes:** 509 (164 persons, 117 arguments, 85 concepts, 50 works, 53 reformulations, 13 quotes, 27 other types)
-- **Edges:** 820 (relationships, citations, influences)
+- **Nodes:** 534 (161 persons, 117 arguments, 105 concepts, 57 works, 53 reformulations, 14 quotes, 27 other types)
+- **Edges:** 923 (relationships, citations, influences)
 - **Coverage:** 68 historical periods from Aristotle to Boethius
 - **Bibliography:** 1,706 references (785 ancient sources, 921 modern scholarship)
 - **GraphRAG:** Advanced retrieval-augmented generation capabilities

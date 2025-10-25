@@ -1,13 +1,18 @@
 {
-  "name": "frontend",
+  "name": "eleutherIA-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "3.0.0",
   "type": "module",
+  "description": "Frontend application for EleutherIA - Ancient Free Will Database",
+  "author": "Romain Girardi <romain.girardi@univ-cotedazur.fr>",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@radix-ui/react-hover-card": "^1.1.15",
@@ -35,20 +40,27 @@
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@tailwindcss/typography": "^0.5.19",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.1",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
+    "@vitest/ui": "^1.0.4",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
+    "jsdom": "^23.0.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.18",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.45.0",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "vitest": "^1.0.4",
+    "@vitest/coverage-v8": "^1.0.4"
   }
 }

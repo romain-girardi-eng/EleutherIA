@@ -26,7 +26,7 @@ export default function AboutPage() {
           <p>
             This database represents an independent effort to address that gap. Every node, edge, and citation has been
             meticulously researched and verified against ancient sources and modern scholarship. The project integrates
-            508 philosophical entities (persons, works, concepts, arguments) connected through 831 relationships, alongside
+            534 philosophical entities (persons, works, concepts, arguments) connected through 923 relationships, alongside
             289 ancient texts with full lemmatization support.
           </p>
 
@@ -188,8 +188,8 @@ export default function AboutPage() {
             <div className="bg-academic-bg p-4 rounded">
               <h4 className="font-semibold mb-2">Philological Work</h4>
               <ul className="text-sm space-y-1">
-                <li>• 508 entities verified against ancient sources</li>
-                <li>• 831 relationships documented with citations</li>
+                <li>• 534 entities verified against ancient sources</li>
+                <li>• 923 relationships documented with citations</li>
                 <li>• 289 texts with lemmatization (Greek/Latin)</li>
                 <li>• 860+ ancient sources & modern scholarship</li>
                 <li>• Controlled vocabularies & terminology</li>

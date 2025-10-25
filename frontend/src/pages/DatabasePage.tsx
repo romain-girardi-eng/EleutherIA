@@ -132,8 +132,8 @@ export default function DatabasePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <StatCard number="505" label="Nodes" sublabel="Entities & Concepts" icon={<Network className="w-5 h-5" />} />
-          <StatCard number="870" label="Edges" sublabel="Relationships" icon={<Network className="w-5 h-5" />} />
+          <StatCard number="534" label="Nodes" sublabel="Entities & Concepts" icon={<Network className="w-5 h-5" />} />
+          <StatCard number="923" label="Edges" sublabel="Relationships" icon={<Network className="w-5 h-5" />} />
           <StatCard number="13" label="Node Types" icon={<Database className="w-5 h-5" />} />
         </div>
 
@@ -144,7 +144,7 @@ export default function DatabasePage() {
             <NodeTypeItem
               type="Persons"
               typeKey="person"
-              count={156}
+              count={161}
               description="Philosophers, theologians, authors"
               items={nodeTypeData['person'] || []}
               expanded={expandedTypes.has('person')}
@@ -162,7 +162,7 @@ export default function DatabasePage() {
             <NodeTypeItem
               type="Concepts"
               typeKey="concept"
-              count={87}
+              count={105}
               description="Key philosophical terms and ideas"
               items={nodeTypeData['concept'] || []}
               expanded={expandedTypes.has('concept')}
@@ -171,7 +171,7 @@ export default function DatabasePage() {
             <NodeTypeItem
               type="Works"
               typeKey="work"
-              count={51}
+              count={57}
               description="Treatises, dialogues, letters"
               items={nodeTypeData['work'] || []}
               expanded={expandedTypes.has('work')}
