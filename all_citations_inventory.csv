@@ -1,0 +1,1492 @@
+Citation,Frequency,Sample_Context_Type,Sample_Context_ID,Sample_Context_Label
+Hebrew Bible (Masoretic Text),23,node,work_genesis_u1v2w3x4,Genesis (Bereshit)
+"Aulus Gellius, Noctes Atticae VII.2.1-15",12,node,reformulation_aulus_gellius_reform_01ef18e6,Aulus Gellius's reformulation
+"Cicero, De Fato 28-33",12,node,argument_cafma_futility_of_effort_8c3d5f21,CAFMA Argument I: Futility of Effort and Labor
+Septuagint (LXX),12,node,work_genesis_u1v2w3x4,Genesis (Bereshit)
+"Aulus Gellius, Noctes Atticae XIV.1.1-34 (Favorinus)",8,node,argument_anti_astrology_impossibility_observation_3h8i0k76,Anti-Astrological Argument I: Impossibility of Exact Observation
+Dead Sea Scrolls fragments,8,node,work_genesis_u1v2w3x4,Genesis (Bereshit)
+"Aristotle, Nicomachean Ethics III.1-5",6,node,argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188,Aristotle's Voluntary Action Argument (Eph' Hemin)
+"Augustine, De Gratia et Libero Arbitrio XVII.33",6,node,concept_gratia_praeveniens,Gratia Praeveniens (Prevenient Grace)
+"Augustine, Enchiridion IX.32",6,node,concept_gratia_praeveniens,Gratia Praeveniens (Prevenient Grace)
+Augustine of Hippo,6,node,person_john_scotus_eriugena_a1b2c3d4,John Scotus Eriugena
+"Origen, De Principiis III.1",6,node,debate_compatibility_question_ea55e118,The Compatibility Question
+"Eusebius, Praeparatio Evangelica VI.8",4,node,argument_the_lazy_argument_argos_logos_702a77ed,The Lazy Argument (Argos Logos)
+"Lucretius, De Rerum Natura II.251-293",4,node,reformulation_epicureans_reform_9b771ca1,Epicureans's reformulation
+"Lucretius, De Rerum Natura II.216-293",4,node,argument_the_epicurean_swerve_argument_clinamen_454148a8,The Epicurean Swerve Argument (Clinamen)
+"Plotinus, Enneads III.1 (On Fate)",4,node,argument_plotinus_freedom_argument_7c561972,Plotinus' Freedom Argument
+"Augustine, De gratia Christi et de peccato originali (418)",4,node,person_cornelius_jansen_36155fa3,Cornelius Jansen
+"Augustine, De correptione et gratia (427)",4,node,person_cornelius_jansen_36155fa3,Cornelius Jansen
+"Firmicus Maternus, Mathesis",4,node,argument_cafma_framework_5a7b9e12,CAFMA - Carneades' Anti-Fatalist Moral Argumentation
+"Plutarch, De Stoicorum Repugnantiis 1055e-1057a",4,node,argument_cafma_futility_of_effort_8c3d5f21,CAFMA Argument I: Futility of Effort and Labor
+"Vettius Valens, Anthologiae",4,node,concept_genethlialogia_9x4y6a32,Natal Astrology (Genethlialogia)
+"Pseudo-Plutarch, De Fato 568E-575A",4,node,concept_conditional_fate_9a5c8b4d,conditional fate
+1QH (Hodayot - thanksgiving for election),4,node,concept_two_spirits_doctrine_s7t8u9v0,Two Spirits Doctrine (Qumran)
+"Boethius, Consolation of Philosophy V",4,node,concept_liberum_arbitrium_u3v4w5x6,Free Choice (Liberum Arbitrium)
+"John of Damascus, De Fide Orthodoxa",4,node,concept_liberum_arbitrium_u3v4w5x6,Free Choice (Liberum Arbitrium)
+"Aristotle, De Interpretatione 9",4,node,debate_divine_foreknowledge_future_contingents_a7b8c9d0,Divine Foreknowledge and Future Contingents Debate
+"Boethius, Consolation of Philosophy V.6",4,node,debate_divine_foreknowledge_future_contingents_a7b8c9d0,Divine Foreknowledge and Future Contingents Debate
+"Aristotle, Nicomachean Ethics (complete text, various manuscripts)",4,node,person_aristotle_384_322bce_c2d4f6a8,Aristotle of Stagira
+"Aristotle, Nicomachean Ethics II.6, VI.2 - virtue as deliberative state",4,node,concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6,Prohairesis (Προαίρεσις) - Deliberate Choice
+"Epicurus, Letter to Menoeceus §§133-134 - human freedom and responsibility",4,node,person_epicurus_341_270bce_j0k1l2m3,Epicurus of Samos
+"Epicurus, Letter to Herodotus §§43-44 (atomic motion and causes)",4,node,person_epicurus_341_270bce_j0k1l2m3,Epicurus of Samos
+"Epicurus, Letter to Herodotus §§61-62 (rectilinear downward motion of atoms)",4,node,person_epicurus_341_270bce_j0k1l2m3,Epicurus of Samos
+"Plato, Laws (complete text)",4,node,person_plato_428_348bce_a1b2c3d4,Plato of Athens
+"Epictetus, Discourses I.17",4,node,quote_epictetus_prohairesis_3fabff35,"Epictetus: Other things are not up to us, but prohairesis (moral choice..."
+"Epictetus, Discourses I.1",4,node,debate_source_of_action_90c57974,Internal vs External Causes
+"Augustine, Confessiones VIII.9-11",4,node,debate_reason_vs_will_830c90c2,Intellectualism vs Voluntarism
+1 Corinthians 9:19-23,4,node,person_paul_apostle_1st_century,Paul the Apostle
+Galatians 2:15-21,4,node,work_epistle_to_galatians_paul,Epistle to the Galatians
+1 Clement 33.1-3,4,node,person_clement_of_rome_1st_century,Clement of Rome
+Didache 1.1-6.2,4,node,work_didache_two_ways,Didache
+"Cicero, De Fato 21-23",3,node,reformulation_epicureans_reform_9b771ca1,Epicureans's reformulation
+"Pelagius, Epistula ad Demetriadem 8-10",3,node,person_pelagius_d420,Pelagius
+"Prosper of Aquitaine, Contra Collatorem",3,node,person_prosper_aquitaine_d455,Prosper of Aquitaine
+Aristotle,3,node,person_avicenna_y5z6a7b8,Avicenna (Ibn Sīnā)
+Talmud,3,node,person_saadia_gaon_g3h4i5j6,Saadia Gaon (Saʿadya ben Yōsēf)
+Anselm of Canterbury,3,node,person_bonaventure_e7f8g9h0,Bonaventure (Giovanni di Fidanza)
+Paul the Apostle,3,node,person_martin_luther_8f2a3b91,Martin Luther
+Chrysippus,3,node,person_baruch_spinoza_8p2k3l91,Baruch Spinoza
+"Augustine, Anti-Pelagian writings",3,node,concept_bondage_of_will_1c5x6y24,Bondage of the Will (Servum Arbitrium)
+"Pereboom, Derk. Living Without Free Will. Cambridge: Cambridge University Press, 2001.",3,node,argument_four_case_manipulation_2p3q4r5s,Four-Case Manipulation Argument
+"Fischer, John Martin, and Mark Ravizza. Responsibility and Control: A Theory of Moral Responsibility. Cambridge: Cambridge University Press, 1998.",3,node,concept_semicompatibilism_6t7u8v9w,Semicompatibilism
+"Cicero, De Fato 28-29",2,node,argument_the_lazy_argument_argos_logos_702a77ed,The Lazy Argument (Argos Logos)
+"Origen, De Principiis III.1.6-12",2,node,argument_the_lazy_argument_argos_logos_702a77ed,The Lazy Argument (Argos Logos)
+"Cicero, De Fato 30-33",2,node,reformulation_chrysippus_reform_1f5d3806,Chrysippus's reformulation
+"Alexander of Aphrodisias, De Fato 39 (Bruns 203,8-204,20)",2,node,reformulation_chrysippus_reform_1f5d3806,Chrysippus's reformulation
+"Epictetus, Dissertationes II.19.1-5",2,node,argument_the_master_argument_kurieuon_logos_355f4d3f,The Master Argument (Kurieuon Logos)
+"Cicero, De Fato 13.17-19",2,node,argument_the_master_argument_kurieuon_logos_355f4d3f,The Master Argument (Kurieuon Logos)
+"Alexander of Aphrodisias, In Analytica Priora 177-184",2,node,argument_the_master_argument_kurieuon_logos_355f4d3f,The Master Argument (Kurieuon Logos)
+"Epictetus, Dissertationes 2.19.1-5 (Master Argument)",2,node,person_diodorus_cronus_48ef6200,Diodorus Cronus
+"Cicero, De Fato 12-15",2,node,person_diodorus_cronus_48ef6200,Diodorus Cronus
+"Cicero, De Fato 18-19",2,node,reformulation_cleanthes_stoic_reform_c576fe67,Cleanthes (Stoic)'s reformulation
+"Plutarch, De Stoicorum Repugnantiis 1050A-1051C",2,node,reformulation_cleanthes_stoic_reform_c576fe67,Cleanthes (Stoic)'s reformulation
+"Alexander of Aphrodisias, De Fato 183,13-184,20",2,node,reformulation_chrysippus_stoic_reform_ddff96ae,Chrysippus (Stoic)'s reformulation
+"Sextus Empiricus, Adversus mathematicos IX.112-115",2,node,reformulation_chrysippus_stoic_reform_ddff96ae,Chrysippus (Stoic)'s reformulation
+"Sextus Empiricus, Adversus mathematicos IX.112-113",2,node,reformulation_philo_the_dialectician_reform_e7c46946,Philo the Dialectician's reformulation
+"Cicero, De Fato 13-15",2,node,reformulation_philo_the_dialectician_reform_e7c46946,Philo the Dialectician's reformulation
+"Aristotle, De Interpretatione 9, 18a28-19b4",2,node,argument_aristotles_sea_battle_argument_18a501e5,Aristotle's Sea Battle Argument
+"Aristotle, Metaphysics VI.3",2,node,argument_aristotles_sea_battle_argument_18a501e5,Aristotle's Sea Battle Argument
+"Alexander of Aphrodisias, In De Interpretatione 177-187 (on future contingents)",2,node,argument_aristotles_sea_battle_argument_18a501e5,Aristotle's Sea Battle Argument
+"Cicero, De Fato 20",2,node,reformulation_stoics_reform_f734ea75,Stoics's reformulation
+"Alexander of Aphrodisias, De Fato 142,20-143,16",2,node,reformulation_stoics_reform_f734ea75,Stoics's reformulation
+"Cicero, De Fato 25-28",2,node,reformulation_carneades_reform_e0c2db9c,Carneades's reformulation
+"Cicero, Academica II.105-109",2,node,reformulation_carneades_reform_e0c2db9c,Carneades's reformulation
+"Aristotle, Eudemian Ethics II.6-11",2,node,argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188,Aristotle's Voluntary Action Argument (Eph' Hemin)
+"Aristotle, Magna Moralia I.9-17",2,node,argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188,Aristotle's Voluntary Action Argument (Eph' Hemin)
+"Aspasius, In Ethica Nicomachea III.5, 60.14-61.16 (on voluntary action)",2,node,argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188,Aristotle's Voluntary Action Argument (Eph' Hemin)
+"Aspasius, In Ethica Nicomachea 43.20-44.15 Heylbut",2,node,reformulation_aspasius_reform_6afe87ac,Aspasius's reformulation
+"Aspasius, In Ethica Nicomachea 52.10-53.5",2,node,reformulation_aspasius_reform_6afe87ac,Aspasius's reformulation
+"Aristotle, Nicomachean Ethics VII.3 (1147a25-b19)",2,node,argument_the_practical_syllogism_1d2e7506,The Practical Syllogism
+"Aristotle, De Motu Animalium 7 (701a7-25)",2,node,argument_the_practical_syllogism_1d2e7506,The Practical Syllogism
+"Aristotle, De Anima III.10-11",2,node,argument_the_practical_syllogism_1d2e7506,The Practical Syllogism
+"Thomas Aquinas, Summa Theologiae I-II q.109 a.2",2,node,reformulation_medieval_scholastics_aquinas_reform_ad897818,Medieval scholastics (Aquinas)'s reformulation
+"Thomas Aquinas, Summa contra Gentiles III.69",2,node,reformulation_medieval_scholastics_aquinas_reform_ad897818,Medieval scholastics (Aquinas)'s reformulation
+"Cicero, De Fato 22-23",2,node,argument_the_epicurean_swerve_argument_clinamen_454148a8,The Epicurean Swerve Argument (Clinamen)
+"Cicero, De Finibus I.19-20",2,node,argument_the_epicurean_swerve_argument_clinamen_454148a8,The Epicurean Swerve Argument (Clinamen)
+"Diogenes of Oenoanda, Fragment 32 (Smith edition - on free will and swerve)",2,node,argument_the_epicurean_swerve_argument_clinamen_454148a8,The Epicurean Swerve Argument (Clinamen)
+"Diogenes of Oenoanda, Fragment 32 Smith",2,node,reformulation_diogenes_of_oenoanda_reform_8fad58cc,Diogenes of Oenoanda's reformulation
+"Diogenes of Oenoanda, Fragment 54 Smith",2,node,reformulation_diogenes_of_oenoanda_reform_8fad58cc,Diogenes of Oenoanda's reformulation
+"Cicero, De Fato 23-33",2,node,argument_carneades_autonomous_mental_causation_argument_4e7e9250,Carneades' Autonomous Mental Causation Argument
+"Cicero, Academica II.97",2,node,argument_carneades_autonomous_mental_causation_argument_4e7e9250,Carneades' Autonomous Mental Causation Argument
+"Plutarch, De Stoicorum Repugnantiis 1045c-d (Carneades on autonomous mental motion)",2,node,argument_carneades_autonomous_mental_causation_argument_4e7e9250,Carneades' Autonomous Mental Causation Argument
+"Cicero, De Fato 19-21",2,node,reformulation_cicero_reform_156df2f5,Cicero's reformulation
+"Cicero, De Natura Deorum III.93",2,node,reformulation_cicero_reform_156df2f5,Cicero's reformulation
+"Cicero, De Fato 39-44",2,node,argument_chrysippus_cylinder_argument_a0eb4559,Chrysippus' Cylinder Argument
+"Aulus Gellius, Noctes Atticae VII.2",2,node,argument_chrysippus_cylinder_argument_a0eb4559,Chrysippus' Cylinder Argument
+"Alexander of Aphrodisias, De Fato 181.13-182.20 (cylinder analogy criticism)",2,node,argument_chrysippus_cylinder_argument_a0eb4559,Chrysippus' Cylinder Argument
+"Cicero, De Fato 28-30 - Lazy/Idle Argument (argos logos) and Chrysippean response via confatalia distinction",2,node,argument_the_cofated_events_argument_confatalia_b7715646,The Co-fated Events Argument (Confatalia)
+"Eusebius, Praeparatio Evangelica 6.8.25-38 - From Diogenianus reporting Chrysippus on συνειμαρμένα (co-fated events): recovery co-fated with calling doctor, child co-fated with intercourse",2,node,argument_the_cofated_events_argument_confatalia_b7715646,The Co-fated Events Argument (Confatalia)
+"Eusebius, Praeparatio Evangelica 6.8.39-41 - Examples of confatalia: winning fight co-fated with using guard, surviving battle co-fated with fleeing",2,node,argument_the_cofated_events_argument_confatalia_b7715646,The Co-fated Events Argument (Confatalia)
+"Origen, Contra Celsum II.20 - Lazy Argument and Stoic response",2,node,argument_the_cofated_events_argument_confatalia_b7715646,The Co-fated Events Argument (Confatalia)
+"Origen, De Principiis III.1.6-12 - Discussion of fate, providence, and co-fated events",2,node,argument_the_cofated_events_argument_confatalia_b7715646,The Co-fated Events Argument (Confatalia)
+"Origen, De Principiis III.1.2-3",2,node,reformulation_origen_reform_e1e2458e,Origen's reformulation
+"Origen, Contra Celsum VII.65",2,node,reformulation_origen_reform_e1e2458e,Origen's reformulation
+"Hippolytus, Refutatio Omnium Haeresium I.21",2,node,argument_the_dog_and_cart_argument_9ba60714,The Dog and Cart Argument
+"Seneca, Epistulae Morales 107.11",2,node,argument_the_dog_and_cart_argument_9ba60714,The Dog and Cart Argument
+"Epictetus, Discourses (implied analogy; not explicitly stated but consistent with I.1, II.2)",2,node,argument_the_dog_and_cart_argument_9ba60714,The Dog and Cart Argument
+"Diogenes Laertius, Lives VII.88",2,node,argument_the_dog_and_cart_argument_9ba60714,The Dog and Cart Argument
+"Cleanthes, Hymn to Zeus 5-10",2,node,reformulation_cleanthes_reform_4128938b,Cleanthes's reformulation
+"Stobaeus, Anthologium II.7.5b",2,node,reformulation_cleanthes_reform_4128938b,Cleanthes's reformulation
+"Seneca, De Providentia 5.6-7",2,node,reformulation_seneca_reform_2f1a5d99,Seneca's reformulation
+"Seneca, Epistulae Morales 107.10-12",2,node,reformulation_seneca_reform_2f1a5d99,Seneca's reformulation
+"Parmenides, Fragment 8.1-49 (DK 28B8 - ""Way of Truth"" on necessity and being)",2,node,argument_parmenides_necessity_argument_4e8e0f34,Parmenides' Necessity Argument
+"Plato, Parmenides 127a-142a (interpretation of Parmenidean monism)",2,node,argument_parmenides_necessity_argument_4e8e0f34,Parmenides' Necessity Argument
+"Aristotle, Metaphysics I.5, Physics I.2-3",2,node,argument_parmenides_necessity_argument_4e8e0f34,Parmenides' Necessity Argument
+"Parmenides, fragments of On Nature (DK 28 B1-B19)",2,node,person_parmenides_of_elea_44a65114,Parmenides of Elea
+"Aristotle, Metaphysics A.5, Physics I.2-3 (criticism of Parmenides)",2,node,person_parmenides_of_elea_44a65114,Parmenides of Elea
+"Simplicius, Commentary on Aristotle's Physics (preserves fragments)",2,node,person_parmenides_of_elea_44a65114,Parmenides of Elea
+"Simplicius, In Physica 103.20-104.6 Diels",2,node,reformulation_melissus_of_samos_reform_e1359785,Melissus of Samos's reformulation
+DK 30 B7,2,node,reformulation_melissus_of_samos_reform_e1359785,Melissus of Samos's reformulation
+"Aristotle, Physics I.3 186a22-186b9",2,node,reformulation_zeno_of_elea_reform_8d876b50,Zeno of Elea's reformulation
+"Simplicius, In Physica 139.10-140.6",2,node,reformulation_zeno_of_elea_reform_8d876b50,Zeno of Elea's reformulation
+"Leucippus, Fragment 2 (DK 67 B2) - ""Nothing occurs at random, but everything for a reason and by necessity""",2,node,argument_democritean_atomistic_determinism_c52067ec,Democritean Atomistic Determinism
+"Democritus, Fragments (DK 68 A1, A66, A68, A69 - on necessity and vortex motion)",2,node,argument_democritean_atomistic_determinism_c52067ec,Democritean Atomistic Determinism
+"Aristotle, De Generatione et Corruptione I.2",2,node,argument_democritean_atomistic_determinism_c52067ec,Democritean Atomistic Determinism
+Diogenes Laertius IX.30-49,2,node,argument_democritean_atomistic_determinism_c52067ec,Democritean Atomistic Determinism
+"Diogenes of Oenoanda, Inscription Fragment 32 (Smith edition - against atomistic determinism)",2,node,argument_democritean_atomistic_determinism_c52067ec,Democritean Atomistic Determinism
+Democritus fragments (DK 68 A1-B299),2,node,person_leucippus_and_democritus_8a42be84,Leucippus and Democritus
+"Aristotle, Metaphysics A.4, De Generatione et Corruptione I.8",2,node,person_leucippus_and_democritus_8a42be84,Leucippus and Democritus
+"Simplicius, Commentary on Aristotle's Physics",2,node,person_leucippus_and_democritus_8a42be84,Leucippus and Democritus
+"Diogenes Laertius, Lives IX.30-49 (on Democritus)",2,node,person_leucippus_and_democritus_8a42be84,Leucippus and Democritus
+Diogenes Laertius X.134-135,2,node,reformulation_epicurus_reform_6fa6ecf5,Epicurus's reformulation
+"Cicero, De Natura Deorum I.69-70",2,node,reformulation_epicurus_reform_6fa6ecf5,Epicurus's reformulation
+"Cleanthes, Hymn to Zeus (Stobaeus, Anthologium I.1.12)",2,node,argument_cleanthes_hymn_to_zeus_argument_f71f5b37,Cleanthes' Hymn to Zeus Argument
+"Epictetus, Enchiridion 53 (quotes Cleanthes: ""Lead me, Zeus, and thou Destiny"")",2,node,argument_cleanthes_hymn_to_zeus_argument_f71f5b37,Cleanthes' Hymn to Zeus Argument
+"Seneca, Epistulae 107.11 (quotes the maxim)",2,node,argument_cleanthes_hymn_to_zeus_argument_f71f5b37,Cleanthes' Hymn to Zeus Argument
+"Marcus Aurelius, Meditations IV.23, V.8, X.25 (echoes Cleanthes on providence)",2,node,argument_cleanthes_hymn_to_zeus_argument_f71f5b37,Cleanthes' Hymn to Zeus Argument
+"Cleanthes, Hymn to Zeus (SVF I.537)",2,node,person_cleanthes_of_assos_8810c569,Cleanthes of Assos
+"Hippolytus, Refutation of All Heresies I.21 (Dog and Cart analogy)",2,node,person_cleanthes_of_assos_8810c569,Cleanthes of Assos
+"Marcus Aurelius, Meditations V.8",2,node,reformulation_marcus_aurelius_reform_d0f5561d,Marcus Aurelius's reformulation
+"Marcus Aurelius, Meditations VII.57",2,node,reformulation_marcus_aurelius_reform_d0f5561d,Marcus Aurelius's reformulation
+"Epictetus, Discourses I.1, I.17, I.22, II.2, II.23, III.22, IV.1 (on prohairesis)",2,node,argument_epictetus_prohairesis_argument_aa13b932,Epictetus' Prohairesis Argument
+"Epictetus, Enchiridion 1-5",2,node,argument_epictetus_prohairesis_argument_aa13b932,Epictetus' Prohairesis Argument
+Arrian's records of Epictetus' teachings,2,node,argument_epictetus_prohairesis_argument_aa13b932,Epictetus' Prohairesis Argument
+"Epictetus, Discourses I.1 (On what is in our power)",2,node,person_epictetus_of_hierapolis_3c385bc2,Epictetus of Hierapolis
+"Epictetus, Enchiridion 1-5 (dichotomy of control: eph' hêmin vs. ouk eph' hêmin)",2,node,person_epictetus_of_hierapolis_3c385bc2,Epictetus of Hierapolis
+"Plato, Timaeus 46e-48e (Reason and Necessity), 68e-69a (auxiliary causes)",2,node,argument_platos_timaeus_necessity_argument_526846fa,Plato's Timaeus Necessity Argument
+"Aristotle, Metaphysics I.6 (criticizes Plato's account)",2,node,argument_platos_timaeus_necessity_argument_526846fa,Plato's Timaeus Necessity Argument
+"Plutarch, De Animae Procreatione in Timaeo 1014c-1030c (on Timaeus cosmology)",2,node,argument_platos_timaeus_necessity_argument_526846fa,Plato's Timaeus Necessity Argument
+"Plutarch, De animae procreatione in Timaeo 1015F-1016A",2,node,reformulation_plutarch_reform_5724dac6,Plutarch's reformulation
+"Plutarch, De Stoicorum Repugnantiis 1054C-1055A",2,node,reformulation_plutarch_reform_5724dac6,Plutarch's reformulation
+"Plotinus, Ennead III.2.5",2,node,reformulation_neoplatonists_plotinus_proclus_reform_98f42f33,"Neoplatonists (Plotinus, Proclus)'s reformulation"
+"Proclus, De providentia et fato 1.5-1.8",2,node,reformulation_neoplatonists_plotinus_proclus_reform_98f42f33,"Neoplatonists (Plotinus, Proclus)'s reformulation"
+"Plato, Laws X 891e-899d (soul as self-moving principle)",2,node,argument_platos_laws_x_selfmotion_argument_8c31a166,Plato's Laws X Self-Motion Argument
+"Plato, Phaedrus 245c-246a (soul as self-moving, immortal)",2,node,argument_platos_laws_x_selfmotion_argument_8c31a166,Plato's Laws X Self-Motion Argument
+"Aristotle, Physics VIII.4-6, 254b7-256a3 (critique of self-motion; unmoved mover)",2,node,argument_platos_laws_x_selfmotion_argument_8c31a166,Plato's Laws X Self-Motion Argument
+"Aristotle, Metaphysics XII.6-7 (1071b3-1072b3)",2,node,reformulation_aristotle_reform_bfee6d58,Aristotle's reformulation
+"Aristotle, Physics VIII.6 258b10-259a10",2,node,reformulation_aristotle_reform_bfee6d58,Aristotle's reformulation
+"Plotinus, Ennead V.1.1-3",2,node,reformulation_plotinus_reform_b06e63cb,Plotinus's reformulation
+"Plotinus, Ennead IV.8.1",2,node,reformulation_plotinus_reform_b06e63cb,Plotinus's reformulation
+"Aristotle, Metaphysics IX.1-10, especially IX.3-5 (potentiality and actuality)",2,node,argument_aristotles_potentialityactuality_argument_20c5ac91,Aristotle's Potentiality-Actuality Argument
+"Aristotle, Physics III.1-3",2,node,argument_aristotles_potentialityactuality_argument_20c5ac91,Aristotle's Potentiality-Actuality Argument
+"Aristotle, De Interpretatione 9, 19a7-19b4 (potentiality applied to future contingents)",2,node,argument_aristotles_potentialityactuality_argument_20c5ac91,Aristotle's Potentiality-Actuality Argument
+"Thomas Aquinas, Summa Theologiae I q.2 a.3",2,node,reformulation_thomas_aquinas_reform_24cffd94,Thomas Aquinas's reformulation
+"Thomas Aquinas, Summa contra Gentiles I.13",2,node,reformulation_thomas_aquinas_reform_24cffd94,Thomas Aquinas's reformulation
+"Alexander of Aphrodisias, De Fato 169-212 (esp. 181-192 on to eph' hêmin)",2,node,argument_alexander_of_aphrodisias_freedom_argument_8058a30c,Alexander of Aphrodisias' Freedom Argument
+"Alexander, Mantissa 169-172",2,node,argument_alexander_of_aphrodisias_freedom_argument_8058a30c,Alexander of Aphrodisias' Freedom Argument
+"Alexander, In Aristotelis Analyticorum Priorum 177-184",2,node,argument_alexander_of_aphrodisias_freedom_argument_8058a30c,Alexander of Aphrodisias' Freedom Argument
+"Tertullian, Adversus Marcionem II.5",2,node,reformulation_christian_church_fathers_reform_1fd435f1,Christian Church Fathers's reformulation
+"Lactantius, De Ira Dei 20",2,node,reformulation_christian_church_fathers_reform_1fd435f1,Christian Church Fathers's reformulation
+"Plotinus, Enneads VI.8 (On Free Will)",2,node,argument_plotinus_freedom_argument_7c561972,Plotinus' Freedom Argument
+"Plotinus, Enneads III.2-3 (On Providence)",2,node,argument_plotinus_freedom_argument_7c561972,Plotinus' Freedom Argument
+"Plotinus, Enneads VI.8 (On Free Will and the Will of the One)",2,node,person_plotinus_78aaedc3,Plotinus
+"Porphyry, De abstinentia III.20",2,node,reformulation_porphyry_reform_7c9edeb4,Porphyry's reformulation
+"Porphyry, Letter to Anebo 10",2,node,reformulation_porphyry_reform_7c9edeb4,Porphyry's reformulation
+"Proclus, De providentia et fato 2.13-17",2,node,reformulation_proclus_reform_59f4bb4f,Proclus's reformulation
+"Proclus, Elements of Theology proposition 124",2,node,reformulation_proclus_reform_59f4bb4f,Proclus's reformulation
+"Justin Martyr, First Apology 43-44, 61 (PG 6:391-396)",2,node,argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2,Justin Martyr's Apologetic Argument for Free Will
+"Justin Martyr, Second Apology 7 (PG 6:451-454)",2,node,argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2,Justin Martyr's Apologetic Argument for Free Will
+"Justin Martyr, Dialogue with Trypho 88, 102, 141 (PG 6:680-684, 712-716, 796-800)",2,node,argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2,Justin Martyr's Apologetic Argument for Free Will
+"Tatian, Oratio ad Graecos 7.1-3, 11.1-4 (on free will and human responsibility, influenced by Justin)",2,node,argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2,Justin Martyr's Apologetic Argument for Free Will
+"Tatian, Oratio ad Graecos 7-11",2,node,reformulation_tatian_the_assyrian_reform_1e3e9386,Tatian the Assyrian's reformulation
+"Tatian, Oratio ad Graecos 15",2,node,reformulation_tatian_the_assyrian_reform_1e3e9386,Tatian the Assyrian's reformulation
+"Athenagoras, Legatio pro Christianis 24-26",2,node,reformulation_athenagoras_of_athens_reform_b22f68ec,Athenagoras of Athens's reformulation
+"Athenagoras, De Resurrectione 13",2,node,reformulation_athenagoras_of_athens_reform_b22f68ec,Athenagoras of Athens's reformulation
+"Irenaeus, Adversus Haereses IV.37-39 (Against Heresies - on human freedom and obedience)",2,node,argument_irenaeuss_antignostic_argument_for_free_will_f54fe920,Irenaeus's Anti-Gnostic Argument for Free Will
+"Symeon the New Theologian, Hymns of Divine Love 25",2,node,reformulation_eastern_orthodox_tradition_reform_542663db,Eastern Orthodox tradition's reformulation
+"Gregory Palamas, Triads I.3.20",2,node,reformulation_eastern_orthodox_tradition_reform_542663db,Eastern Orthodox tradition's reformulation
+"Origen, De Principiis I.5-8, III.1 (GCS 22; SC 252, 268, 269, 312; PG 11:115-414)",2,node,argument_origens_de_principiis_argument_for_free_will_93d043fc,Origen's De Principiis Argument for Free Will
+"Origen, Contra Celsum IV.3, VII.50-51 (GCS 2-3; SC 132, 136, 147, 150)",2,node,argument_origens_de_principiis_argument_for_free_will_93d043fc,Origen's De Principiis Argument for Free Will
+"Origen, Philocalia 21-27 (on free will; SC 226)",2,node,argument_origens_de_principiis_argument_for_free_will_93d043fc,Origen's De Principiis Argument for Free Will
+"Origen, Commentary on Romans III.1 (on Romans 9 and divine foreknowledge)",2,node,argument_origens_de_principiis_argument_for_free_will_93d043fc,Origen's De Principiis Argument for Free Will
+"Eusebius, Historia Ecclesiastica VI.19 (biographical context)",2,node,argument_origens_de_principiis_argument_for_free_will_93d043fc,Origen's De Principiis Argument for Free Will
+"Gregory of Nyssa, De Hominis Opificio 17",2,node,reformulation_gregory_of_nyssa_reform_19459ad8,Gregory of Nyssa's reformulation
+"Gregory of Nyssa, On the Soul and the Resurrection 20",2,node,reformulation_gregory_of_nyssa_reform_19459ad8,Gregory of Nyssa's reformulation
+"Evagrius Ponticus, Praktikos 6-15",2,node,reformulation_evagrius_ponticus_reform_493066e2,Evagrius Ponticus's reformulation
+"Evagrius Ponticus, Kephalaia Gnostica I.36",2,node,reformulation_evagrius_ponticus_reform_493066e2,Evagrius Ponticus's reformulation
+"Didymus the Blind, De Spiritu Sancto 38-41",2,node,reformulation_didymus_the_blind_reform_8531a2f7,Didymus the Blind's reformulation
+"Didymus the Blind, Commentary on Genesis fragment 10 (Frag. Tura 20)",2,node,reformulation_didymus_the_blind_reform_8531a2f7,Didymus the Blind's reformulation
+"Tertullian, Adversus Marcionem II.5-9, V.17 (CCL 1; SC 365, 368; PL 2:288-360)",2,node,argument_tertullians_antimarcionite_argument_for_free_will_f49cad73,Tertullian's Anti-Marcionite Argument for Free Will
+"Lactantius, Divinae Institutiones II.8-12",2,node,reformulation_lactantius_reform_0a4443f7,Lactantius's reformulation
+"Lactantius, De Ira Dei 21",2,node,reformulation_lactantius_reform_0a4443f7,Lactantius's reformulation
+"Augustine, De Libero Arbitrio II.1-8",2,node,reformulation_early_augustine_reform_9ebd9b25,Early Augustine's reformulation
+"Augustine, Contra Academicos III.15",2,node,reformulation_early_augustine_reform_9ebd9b25,Early Augustine's reformulation
+"Augustine, De Libero Arbitrio I-III (complete treatise on free will)",2,node,argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c,Augustine's Early Anti-Manichean Argument (De Libero Arbitrio)
+"Augustine, Contra Fortunatum Manichaeum (CSEL 25; PL 42:111-130)",2,node,argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c,Augustine's Early Anti-Manichean Argument (De Libero Arbitrio)
+"Augustine, De Genesi Contra Manichaeos (CSEL 91; PL 34:173-220)",2,node,argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c,Augustine's Early Anti-Manichean Argument (De Libero Arbitrio)
+"Augustine, Contra Adimantum (CSEL 25; PL 42:129-172)",2,node,argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c,Augustine's Early Anti-Manichean Argument (De Libero Arbitrio)
+"Augustine, De Duabus Animabus (CSEL 25; PL 42:93-112)",2,node,argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c,Augustine's Early Anti-Manichean Argument (De Libero Arbitrio)
+"Augustine, Confessiones VII-VIII (autobiography of conversion period; CSEL 33; CCL 27)",2,node,argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c,Augustine's Early Anti-Manichean Argument (De Libero Arbitrio)
+"Augustine, De Spiritu et Littera 30-32",2,node,reformulation_later_augustine_himself_reform_2882c68a,Later Augustine himself's reformulation
+"Augustine, Retractationes I.9",2,node,reformulation_later_augustine_himself_reform_2882c68a,Later Augustine himself's reformulation
+"Anselm of Canterbury, De Libertate Arbitrii 1-3",2,node,reformulation_anselm_of_canterbury_reform_160bc058,Anselm of Canterbury's reformulation
+"Anselm of Canterbury, De Casu Diaboli 12",2,node,reformulation_anselm_of_canterbury_reform_160bc058,Anselm of Canterbury's reformulation
+"Prosper of Aquitaine, Contra Collatorem 14",2,node,reformulation_prosper_of_aquitaine_reform_cb1a4041,Prosper of Aquitaine's reformulation
+"Prosper of Aquitaine, De Vocatione Gentium II.5",2,node,reformulation_prosper_of_aquitaine_reform_cb1a4041,Prosper of Aquitaine's reformulation
+"Council of Orange II (529), Canon 9",2,node,reformulation_council_of_orange_ii_reform_62ec4086,Council of Orange II's reformulation
+"Council of Orange II (529), Canon 18",2,node,reformulation_council_of_orange_ii_reform_62ec4086,Council of Orange II's reformulation
+"Augustine, Confessiones VIII.8-10 (entire Book VIII on conversion; CSEL 33; CCL 27; PL 32:753-762)",2,node,argument_augustines_two_wills_argument_confessions_viii_81f95028,Augustine's Two Wills Argument (Confessions VIII)
+"Augustine, Confessiones VII (intellectual conversion via Neo-Platonism)",2,node,argument_augustines_two_wills_argument_confessions_viii_81f95028,Augustine's Two Wills Argument (Confessions VIII)
+"Augustine, Retractationes II.6 (retrospective on Confessions; CSEL 36; PL 32:629-656)",2,node,argument_augustines_two_wills_argument_confessions_viii_81f95028,Augustine's Two Wills Argument (Confessions VIII)
+"Augustine, Contra Julianum IV.3.25 (later reference to Confessions VIII on divided will)",2,node,argument_augustines_two_wills_argument_confessions_viii_81f95028,Augustine's Two Wills Argument (Confessions VIII)
+"Paul, Romans 7:14-25 (biblical foundation: 'the good I would I do not')",2,node,argument_augustines_two_wills_argument_confessions_viii_81f95028,Augustine's Two Wills Argument (Confessions VIII)
+"Pelagius, Epistula ad Demetriadem (PL 30:15-45; possibly spurious, perhaps by Julian of Eclanum)",2,node,argument_pelagiuss_argument_for_human_capacity_006c0a58,Pelagius's Argument for Human Capacity
+"Pelagius, Expositio in Epistulam Pauli ad Romanos (fragments survive)",2,node,argument_pelagiuss_argument_for_human_capacity_006c0a58,Pelagius's Argument for Human Capacity
+"Pelagius, Libellus Fidei (to Innocent I; fragments in Augustine)",2,node,argument_pelagiuss_argument_for_human_capacity_006c0a58,Pelagius's Argument for Human Capacity
+"Pelagius, Pro Libero Arbitrio (lost; fragments in Augustine's refutations)",2,node,argument_pelagiuss_argument_for_human_capacity_006c0a58,Pelagius's Argument for Human Capacity
+Augustine's extensive quotations and paraphrases in anti-Pelagian works,2,node,argument_pelagiuss_argument_for_human_capacity_006c0a58,Pelagius's Argument for Human Capacity
+"Marius Mercator, Commonitorium adversus haeresim Pelagii et Caelestii (early 5th c.)",2,node,argument_pelagiuss_argument_for_human_capacity_006c0a58,Pelagius's Argument for Human Capacity
+"Pelagius, Epistula ad Demetriadem (Letter to Demetrias) (PL 30:15-45; possibly spurious, perhaps by Julian of Eclanum)",2,node,person_pelagius_british_monk_4ba38f92,Pelagius (British monk)
+"Pelagius, Expositio in Epistulam Pauli ad Romanos (Commentary on Romans, fragments survive)",2,node,person_pelagius_british_monk_4ba38f92,Pelagius (British monk)
+"Pelagius, Libellus Fidei (Statement of Faith to Pope Innocent I; fragments in Augustine)",2,node,person_pelagius_british_monk_4ba38f92,Pelagius (British monk)
+"Augustine, De Natura et Gratia (Against Pelagius, 415 CE)",2,node,person_pelagius_british_monk_4ba38f92,Pelagius (British monk)
+"Augustine, De Gratia Christi et de Peccato Originali (418 CE)",2,node,person_pelagius_british_monk_4ba38f92,Pelagius (British monk)
+"Jerome, Dialogus adversus Pelagianos (415 CE)",2,node,person_pelagius_british_monk_4ba38f92,Pelagius (British monk)
+"Augustine, De Peccatorum Meritis et Remissione I.20-24",2,node,reformulation_caelestius_reform_325746f0,Caelestius's reformulation
+"Gennadius, De Viris Illustribus 45",2,node,reformulation_caelestius_reform_325746f0,Caelestius's reformulation
+"Julian of Eclanum, Libri VIII contra Augustinum (frg. in Augustine, Contra Julianum IV.3)",2,node,reformulation_julian_of_eclanum_reform_db2360f6,Julian of Eclanum's reformulation
+"Julian of Eclanum, Ad Florum fragment 35 (PL 45, 1335-1336)",2,node,reformulation_julian_of_eclanum_reform_db2360f6,Julian of Eclanum's reformulation
+"Gregory of Nyssa, De Hominis Opificio (On the Making of Man) 4, 16 (PG 44:125-256; SC 6)",2,node,argument_gregory_of_nyssas_image_of_god_argument_f80938fc,Gregory of Nyssa's Image of God Argument
+"Gregory of Nyssa, Oratio Catechetica Magna V-VIII (Catechetical Oration on free will)",2,node,argument_gregory_of_nyssas_image_of_god_argument_f80938fc,Gregory of Nyssa's Image of God Argument
+"Gregory of Nyssa, De Anima et Resurrectione (On the Soul and Resurrection) (PG 46:11-160)",2,node,argument_gregory_of_nyssas_image_of_god_argument_f80938fc,Gregory of Nyssa's Image of God Argument
+"Gregory of Nyssa, De Vita Moysis (Life of Moses) II.2-3 (PG 44:297-430; SC 1bis)",2,node,argument_gregory_of_nyssas_image_of_god_argument_f80938fc,Gregory of Nyssa's Image of God Argument
+"Gregory of Nyssa, In Canticum Canticorum (Commentary on Song of Songs) - progressive deification",2,node,argument_gregory_of_nyssas_image_of_god_argument_f80938fc,Gregory of Nyssa's Image of God Argument
+"Maximus the Confessor, Ambigua 7 (PG 91, 1076-1108)",2,node,reformulation_maximus_the_confessor_reform_59191184,Maximus the Confessor's reformulation
+"Maximus the Confessor, Opuscula theologica et polemica 3",2,node,reformulation_maximus_the_confessor_reform_59191184,Maximus the Confessor's reformulation
+"John of Damascus, De Fide Orthodoxa II.27",2,node,reformulation_john_of_damascus_reform_0f5b3ec4,John of Damascus's reformulation
+"John of Damascus, Expositio Fidei 26",2,node,reformulation_john_of_damascus_reform_0f5b3ec4,John of Damascus's reformulation
+"John Chrysostom, Homiliae in Epistulam ad Romanos (Homilies on Romans) 16 (on Rom 9; PG 60:547-682)",2,node,argument_john_chrysostoms_homiletic_argument_for_free_will_ea97cb61,John Chrysostom's Homiletic Argument for Free Will
+"John Chrysostom, Homiliae in Genesim (Homilies on Genesis) (PG 53-54)",2,node,argument_john_chrysostoms_homiletic_argument_for_free_will_ea97cb61,John Chrysostom's Homiletic Argument for Free Will
+"John Chrysostom, De Fato et Providentia (On Fate and Providence; PG 50:749-774)",2,node,argument_john_chrysostoms_homiletic_argument_for_free_will_ea97cb61,John Chrysostom's Homiletic Argument for Free Will
+"John Chrysostom, De Lazaro (On Lazarus, homilies; PG 48:963-1054)",2,node,argument_john_chrysostoms_homiletic_argument_for_free_will_ea97cb61,John Chrysostom's Homiletic Argument for Free Will
+"John Chrysostom, Ad Eos Qui Scandalizati Sunt (To Those Scandalized; PG 52:479-528)",2,node,argument_john_chrysostoms_homiletic_argument_for_free_will_ea97cb61,John Chrysostom's Homiletic Argument for Free Will
+"John Chrysostom, In Epistulam ad Hebraeos (Homilies on Hebrews; PG 63:9-236)",2,node,argument_john_chrysostoms_homiletic_argument_for_free_will_ea97cb61,John Chrysostom's Homiletic Argument for Free Will
+"Theodore of Mopsuestia, Catechetical Homilies 12",2,node,reformulation_theodore_of_mopsuestia_reform_eec8ab1a,Theodore of Mopsuestia's reformulation
+"Theodore of Mopsuestia, Commentary on Romans (Syriac version) 9.11-18",2,node,reformulation_theodore_of_mopsuestia_reform_eec8ab1a,Theodore of Mopsuestia's reformulation
+"Theodoret of Cyrus, Eranistes Dialogues II",2,node,reformulation_theodoret_of_cyrus_reform_a4e4d121,Theodoret of Cyrus's reformulation
+"Theodoret of Cyrus, Commentary on Romans 8.29-30",2,node,reformulation_theodoret_of_cyrus_reform_a4e4d121,Theodoret of Cyrus's reformulation
+"John Chrysostom, Homiliae in Epistolam ad Romanos 18",2,node,reformulation_byzantine_homiletic_tradition_reform_39df3dd7,Byzantine homiletic tradition's reformulation
+"Severian of Gabala, Oratio de fide et lege naturae (PG 56, 497-520)",2,node,reformulation_byzantine_homiletic_tradition_reform_39df3dd7,Byzantine homiletic tradition's reformulation
+"Pseudo-Dionysius, De Divinis Nominibus (Divine Names) 4.18-35 (PG 3:693-984; SC 578-579)",2,node,argument_pseudodionysiuss_hierarchical_causation_argument_e0d73eb9,Pseudo-Dionysius's Hierarchical Causation Argument
+"Pseudo-Dionysius, Epistulae (Letters) - Epistula VI to Sopatros on evil (PG 3:1065-1120)",2,node,argument_pseudodionysiuss_hierarchical_causation_argument_e0d73eb9,Pseudo-Dionysius's Hierarchical Causation Argument
+"Proclus, Elements of Theology (Neoplatonic source)",2,node,argument_pseudodionysiuss_hierarchical_causation_argument_e0d73eb9,Pseudo-Dionysius's Hierarchical Causation Argument
+"Pseudo-Dionysius, De Divinis Nominibus IV.23-33",2,node,person_pseudodionysius_the_areopagite_anonymous_c_500_ce_4ea569e3,"Pseudo-Dionysius the Areopagite (anonymous, c. 500 CE)"
+"Pseudo-Dionysius, Epistula VIII ad Demophilum",2,node,person_pseudodionysius_the_areopagite_anonymous_c_500_ce_4ea569e3,"Pseudo-Dionysius the Areopagite (anonymous, c. 500 CE)"
+"John Scottus Eriugena, Periphyseon IV.768C-771A",2,node,reformulation_john_scotus_eriugena_reform_29520543,John Scotus Eriugena's reformulation
+"John Scottus Eriugena, Expositiones in Hierarchiam Coelestem 208B-212C",2,node,reformulation_john_scotus_eriugena_reform_29520543,John Scotus Eriugena's reformulation
+"Boethius, Consolation of Philosophy V, prose 6",2,node,argument_boethiuss_eternity_argument_cd3d71ad,Boethius's Eternity Argument
+"Anselm, De Concordia I-II",2,node,argument_anselms_necessity_of_the_past_f7947dab,Anselm's Necessity of the Past
+"Anselm, De Libertate Arbitrii",2,node,person_anselm_of_canterbury_4e07b080,Anselm of Canterbury
+"Anselm, De Concordia",2,node,person_anselm_of_canterbury_4e07b080,Anselm of Canterbury
+"Anselm, De Casu Diaboli",2,node,person_anselm_of_canterbury_4e07b080,Anselm of Canterbury
+"Anselm, Proslogion",2,node,person_anselm_of_canterbury_4e07b080,Anselm of Canterbury
+"Aquinas, Summa Theologiae I, Q. 19, 105",2,node,argument_aquinass_primary_and_secondary_causation_12f1649a,Aquinas's Primary and Secondary Causation
+"Aquinas, Summa Contra Gentiles III.67-70",2,node,argument_aquinass_primary_and_secondary_causation_12f1649a,Aquinas's Primary and Secondary Causation
+"Aquinas, De Malo Q. 6",2,node,argument_aquinass_primary_and_secondary_causation_12f1649a,Aquinas's Primary and Secondary Causation
+"Aquinas, Summa Theologiae I-II, Q. 6-21",2,node,person_thomas_aquinas_61b633ce,Thomas Aquinas
+"Aquinas, De Malo Q. 6 (On Free Choice)",2,node,person_thomas_aquinas_61b633ce,Thomas Aquinas
+"Aquinas, De Veritate Q. 24 (On Free Choice)",2,node,person_thomas_aquinas_61b633ce,Thomas Aquinas
+"Aquinas, Summa Contra Gentiles III.73-90",2,node,person_thomas_aquinas_61b633ce,Thomas Aquinas
+"Thomas Aquinas, Summa Theologica I-II, q.1, a.6 (necessity of willing happiness)",2,node,argument_aquinass_intellectualism_f0058bf9,Aquinas's Intellectualism
+"Thomas Aquinas, Summa Theologica I-II, q.10, a.1-2 (will moves from apprehension of good)",2,node,argument_aquinass_intellectualism_f0058bf9,Aquinas's Intellectualism
+"Thomas Aquinas, De Veritate q.24, a.1-2 (liberum arbitrium)",2,node,argument_aquinass_intellectualism_f0058bf9,Aquinas's Intellectualism
+"Thomas Aquinas, Summa Contra Gentiles III, ch. 88 (will necessarily wills the ultimate end)",2,node,argument_aquinass_intellectualism_f0058bf9,Aquinas's Intellectualism
+"Thomas Aquinas, Summa Theologica I-II, q.1, a.6 (natural inclination to happiness)",2,node,argument_aquinass_natural_inclination_to_happiness_7a145771,Aquinas's Natural Inclination to Happiness
+"Thomas Aquinas, Summa Theologica I-II, q.5, a.8 (necessity of willing beatitudo)",2,node,argument_aquinass_natural_inclination_to_happiness_7a145771,Aquinas's Natural Inclination to Happiness
+"Thomas Aquinas, Summa Theologica I-II, q.10, a.2 (will free regarding particular goods)",2,node,argument_aquinass_natural_inclination_to_happiness_7a145771,Aquinas's Natural Inclination to Happiness
+"Thomas Aquinas, De Veritate q.22, a.5-6 (will and ultimate end)",2,node,argument_aquinass_natural_inclination_to_happiness_7a145771,Aquinas's Natural Inclination to Happiness
+"Scotus, Ordinatio I, d. 39; II, d. 25",2,node,argument_scotuss_synchronic_contingency_e39fc978,Scotus's Synchronic Contingency
+"Scotus, Ordinatio IV, d. 49, q. 10",2,node,person_john_duns_scotus_48daa9ee,John Duns Scotus
+"Scotus, Lectura II, d. 25",2,node,person_john_duns_scotus_48daa9ee,John Duns Scotus
+"Scotus, Quodlibetal Questions Q. 16",2,node,person_john_duns_scotus_48daa9ee,John Duns Scotus
+"Scotus, Quodlibetal Questions 16",2,node,argument_scotuss_voluntarism_501f1bf6,Scotus's Voluntarism
+"Ordinatio IV, d. 49",2,node,argument_scotuss_voluntarism_501f1bf6,Scotus's Voluntarism
+"John Duns Scotus, Ordinatio II, d.6, q.2 (two affections of the will)",2,node,argument_scotuss_two_affections_of_the_will_bb060e3d,Scotus's Two Affections of the Will
+"John Duns Scotus, Ordinatio IV, d.49, q.10 (affectio iustitiae and freedom)",2,node,argument_scotuss_two_affections_of_the_will_bb060e3d,Scotus's Two Affections of the Will
+"John Duns Scotus, Lectura II, d.6, q.2 (affections and moral worth)",2,node,argument_scotuss_two_affections_of_the_will_bb060e3d,Scotus's Two Affections of the Will
+"John Duns Scotus, Quodlibet q.16 (will's liberty and affections)",2,node,argument_scotuss_two_affections_of_the_will_bb060e3d,Scotus's Two Affections of the Will
+"Ockham, Quodlibetal Questions VI, q. 1",2,node,argument_ockhams_divine_power_argument_a0e19729,Ockham's Divine Power Argument
+"Ockham, Quodlibetal Questions I, Q. 16",2,node,person_william_of_ockham_8df17ab4,William of Ockham
+"Ockham, Ordinatio d. 38-41",2,node,person_william_of_ockham_8df17ab4,William of Ockham
+"Ockham, Summa Logicae",2,node,person_william_of_ockham_8df17ab4,William of Ockham
+"William of Ockham, Quodlibet I, q.16 (will cannot be necessitated)",2,node,argument_ockhams_rejection_of_necessitation_33c255bf,Ockham's Rejection of Necessitation
+"William of Ockham, Ordinatio I, d.1, q.6 (will's freedom)",2,node,argument_ockhams_rejection_of_necessitation_33c255bf,Ockham's Rejection of Necessitation
+"William of Ockham, Reportatio III, q.13 (will and intellect)",2,node,argument_ockhams_rejection_of_necessitation_33c255bf,Ockham's Rejection of Necessitation
+"William of Ockham, Tractatus de Praedestinatione q.1, a.1",2,node,argument_ockhams_rejection_of_necessitation_33c255bf,Ockham's Rejection of Necessitation
+"Jean Buridan, Quaestiones in Aristotelis Ethica Nicomachea III, q.1 (will and equal goods)",2,node,argument_buridans_ass_73a98d20,Buridan's Ass
+"Aristotle, De Caelo II.13, 295b (man equally hungry and thirsty)",2,node,argument_buridans_ass_73a98d20,Buridan's Ass
+"Dante Alighieri, Paradiso IV.1-6 (lamb between two wolves)",2,node,argument_buridans_ass_73a98d20,Buridan's Ass
+"Thomas Bradwardine, De Causa Dei contra Pelagium I.1-26 (divine universal causality)",2,node,argument_bradwardines_de_causa_dei_2c360b77,Bradwardine's De Causa Dei
+"Thomas Bradwardine, De Causa Dei III.1-46 (predestination and grace)",2,node,argument_bradwardines_de_causa_dei_2c360b77,Bradwardine's De Causa Dei
+"Augustine, De Gratia et Libero Arbitrio (Bradwardine's source)",2,node,argument_bradwardines_de_causa_dei_2c360b77,Bradwardine's De Causa Dei
+"Thomas Hobbes, Of Liberty and Necessity (1654)",2,node,argument_liberty_as_absence_of_external_impediment_4587b29b,Liberty as Absence of External Impediment
+"Thomas Hobbes, The Questions Concerning Liberty, Necessity, and Chance (1656) (Hobbes-Bramhall debate)",2,node,argument_liberty_as_absence_of_external_impediment_4587b29b,Liberty as Absence of External Impediment
+"Leibniz, Gottfried Wilhelm. New Essays on Human Understanding. Edited by Peter Remnant and Jonathan Bennett. Cambridge: Cambridge University Press, 1981. Book II, chapter 21.",2,node,argument_liberty_of_spontaneity_7e1184bf,Liberty of Spontaneity
+Concordia liberi arbitrii cum gratiae donis (1588),2,node,person_luis_de_molina_26dc2b96,Luis de Molina
+"Cicero, De Fato (multiple sections; see other nodes for specific passages)",2,node,argument_cafma_framework_5a7b9e12,CAFMA - Carneades' Anti-Fatalist Moral Argumentation
+Diogenianos (fragments via Eusebius),2,node,argument_cafma_framework_5a7b9e12,CAFMA - Carneades' Anti-Fatalist Moral Argumentation
+"Alexander of Aphrodisias, De Fato",2,node,argument_cafma_framework_5a7b9e12,CAFMA - Carneades' Anti-Fatalist Moral Argumentation
+"Nemesius of Emesa, De Natura Hominis 35-42 (On the Nature of Man - on fate and providence)",2,node,argument_cafma_framework_5a7b9e12,CAFMA - Carneades' Anti-Fatalist Moral Argumentation
+"Cicero, De Divinatione II.87-99",2,node,argument_anti_astrology_impossibility_observation_3h8i0k76,Anti-Astrological Argument I: Impossibility of Exact Observation
+"Cicero, De Divinatione II.90-93",2,node,argument_anti_astrology_twins_4i9j1l87,Anti-Astrological Argument II: The Twins Argument
+"Augustine, De Civitate Dei V.1-7",2,node,argument_anti_astrology_twins_4i9j1l87,Anti-Astrological Argument II: The Twins Argument
+"Cicero, De Divinatione II.97-99",2,node,argument_anti_astrology_collective_catastrophes_5j0k2m98,Anti-Astrological Argument III: Collective Catastrophes (Identity of Death)
+"Bardesanes, Book of the Laws of Countries (preserved in Eusebius, Praeparatio Evangelica VI.10)",2,node,argument_anti_astrology_nomima_barbarika_6k1l3n09,Anti-Astrological Argument IV: Diversity of Customs (Nomima Barbarika)
+"Cicero, Academica II.98, 108 (on Clitomachus as transmitter of Carneades)",2,node,person_clitomachus_of_carthage_7l2m4o10,Clitomachus of Carthage
+"Cicero, De Natura Deorum I.11 (mentions Clitomachus' writings)",2,node,person_clitomachus_of_carthage_7l2m4o10,Clitomachus of Carthage
+Posidonius (fragments),2,node,concept_sympathia_universalis_6u1v3x09,Cosmic Sympathy (Sympathia Universalis)
+"Plotinus, Enneads IV.4.32-45 (on cosmic sympathy and magic)",2,node,concept_sympathia_universalis_6u1v3x09,Cosmic Sympathy (Sympathia Universalis)
+"Cicero, De Divinatione I.118-132",2,node,concept_sympathia_universalis_6u1v3x09,Cosmic Sympathy (Sympathia Universalis)
+"Sextus Empiricus, Against the Logicians I.158-189",2,node,concept_pithanotes_7v2w4y10,Probability/Plausibility (Pithanotēs)
+"Cicero, Academica II.98-105",2,node,concept_pithanotes_7v2w4y10,Probability/Plausibility (Pithanotēs)
+"Cicero, De Fato 41-44 (cylinder analogy)",2,node,concept_perfect_vs_antecedent_causes_8w3x5z21,Perfect vs. Antecedent Causes (Chrysippean Distinction)
+"Aulus Gellius, Noctes Atticae VII.2.6-13",2,node,concept_perfect_vs_antecedent_causes_8w3x5z21,Perfect vs. Antecedent Causes (Chrysippean Distinction)
+"Alexander of Aphrodisias, De Fato 13",2,node,concept_perfect_vs_antecedent_causes_8w3x5z21,Perfect vs. Antecedent Causes (Chrysippean Distinction)
+"Ptolemy, Tetrabiblos",2,node,concept_genethlialogia_9x4y6a32,Natal Astrology (Genethlialogia)
+"Ptolemy, Tetrabiblos I-II",2,node,concept_apotelesmatic_0y5z7b43,Apotelesmatic Astrology
+"Cicero, De Fato §§28-33 (transmits Academic arguments)",2,node,concept_hypomnema_school_handbooks_1z6a8c54,School Handbooks (Hypomnemata)
+"Aulus Gellius, Noctes Atticae VII.2 (on school handbooks)",2,node,concept_hypomnema_school_handbooks_1z6a8c54,School Handbooks (Hypomnemata)
+"Alexander of Aphrodisias, De Fato (cites handbook traditions)",2,node,concept_hypomnema_school_handbooks_1z6a8c54,School Handbooks (Hypomnemata)
+"Sextus Empiricus, Outlines of Pyrrhonism (Πυρρώνειοι Ὑποτυπώσεις)",2,node,person_sextus_empiricus_c160_210ce_d4f8a2b1,Sextus Empiricus
+"Sextus Empiricus, Against the Professors (Adversus Mathematicos)",2,node,person_sextus_empiricus_c160_210ce_d4f8a2b1,Sextus Empiricus
+"Plutarch, De Stoicorum Repugnantiis (On Stoic Self-Contradictions)",2,node,person_plutarch_45_120ce_b9c2a8f3,Plutarch of Chaeronea
+"Plutarch, De Sera Numinis Vindicta (On the Delays of Divine Vengeance)",2,node,person_plutarch_45_120ce_b9c2a8f3,Plutarch of Chaeronea
+"Plutarch, De Fato (On Fate, attributed but possibly pseudo-Plutarch)",2,node,person_plutarch_45_120ce_b9c2a8f3,Plutarch of Chaeronea
+"Alcinous, Didaskalikos (Handbook of Platonism)",2,node,person_alcinous_c150ce_a7b5c4d2,Alcinous
+"Proclus, Elements of Theology (Stoicheiōsis Theologikē)",2,node,person_proclus_412_485ce_f3d8b2a9,Proclus Diadochus
+"Proclus, Tria Opuscula: De Decem Dubitationibus circa Providentiam; De Providentia et Fato; De Malorum Subsistentia",2,node,person_proclus_412_485ce_f3d8b2a9,Proclus Diadochus
+"Cicero, Academica II.32-36",2,node,concept_pithanon_8f3a6d2c,pithanon (τὸ πιθανόν)
+"Sextus Empiricus, Against the Logicians I.166-189",2,node,concept_pithanon_8f3a6d2c,pithanon (τὸ πιθανόν)
+"Sextus Empiricus, Outlines of Pyrrhonism I.226-231",2,node,concept_pithanon_8f3a6d2c,pithanon (τὸ πιθανόν)
+"Sextus Empiricus, Outlines of Pyrrhonism I.8-10, I.25-30",2,node,concept_isostheneia_4b7e9c3a,isostheneia (ἰσοσθένεια)
+"Diogenes Laertius, Lives IX.74-76 (on Pyrrho)",2,node,concept_isostheneia_4b7e9c3a,isostheneia (ἰσοσθένεια)
+"Alcinous, Didaskalikos 26",2,node,concept_conditional_fate_9a5c8b4d,conditional fate
+"Calcidius, Commentary on Plato's Timaeus 142-190",2,node,concept_conditional_fate_9a5c8b4d,conditional fate
+"Sextus Empiricus, Outlines of Pyrrhonism I.1-30 (general method)",2,node,argument_sextus_equipollence_argument_7d4b9e2a,Sextus Empiricus's Equipollence Argument for Suspension
+"Sextus Empiricus, Against the Logicians II (critiques of causation)",2,node,argument_sextus_equipollence_argument_7d4b9e2a,Sextus Empiricus's Equipollence Argument for Suspension
+"Sextus Empiricus, Against the Physicists I-II (on causation and necessity)",2,node,argument_sextus_equipollence_argument_7d4b9e2a,Sextus Empiricus's Equipollence Argument for Suspension
+"Plutarch, De Sera Numinis Vindicta 548A-568A",2,node,argument_plutarch_providence_cooperation_8c5a9d3f,Plutarch's Divine-Human Cooperation Argument
+"Plutarch, De Stoicorum Repugnantiis 1050B-1057B",2,node,argument_plutarch_providence_cooperation_8c5a9d3f,Plutarch's Divine-Human Cooperation Argument
+"Proclus, De Decem Dubitationibus circa Providentiam (Ten Doubts Concerning Providence)",2,node,argument_proclus_levels_of_providence_4e8c7b9a,Proclus's Hierarchical Providence and Fate Argument
+"Proclus, De Providentia et Fato (On Providence and Fate)",2,node,argument_proclus_levels_of_providence_4e8c7b9a,Proclus's Hierarchical Providence and Fate Argument
+"Proclus, Elements of Theology, propositions 120-122",2,node,argument_proclus_levels_of_providence_4e8c7b9a,Proclus's Hierarchical Providence and Fate Argument
+"Proclus, Commentary on Plato's Republic, essay on fate",2,node,argument_proclus_levels_of_providence_4e8c7b9a,Proclus's Hierarchical Providence and Fate Argument
+"Origen, De Principiis III.1.1-24 (On Free Will)",2,node,argument_origen_free_will_theodicy_6f9d8a3c,Origen's Free Will Theodicy Against Gnosticism
+"Origen, De Principiis I.5-6 (On rational beings)",2,node,argument_origen_free_will_theodicy_6f9d8a3c,Origen's Free Will Theodicy Against Gnosticism
+"Origen, Contra Celsum IV.3, VI.44 (Against determinism)",2,node,argument_origen_free_will_theodicy_6f9d8a3c,Origen's Free Will Theodicy Against Gnosticism
+"Origen, Philocalia 21-27 (On free will, compiled by Basil and Gregory)",2,node,argument_origen_free_will_theodicy_6f9d8a3c,Origen's Free Will Theodicy Against Gnosticism
+"Ps.-Plutarch, De Fato 568E-575A",2,node,work_de_fato_pseudo_plutarch_a8c6d4e2,De Fato (On Fate) - Pseudo-Plutarch
+"Proclus, Tria Opuscula (Latin translation by William of Moerbeke, c. 1280)",2,node,work_proclus_tria_opuscula_c9a8e4b3,Tria Opuscula (Three Essays) - Proclus
+"Plotinus, Enneads VI.8 (Chronological order: treatise 39)",2,node,work_plotinus_ennead_vi_8_d8b9c5a4,Ennead VI.8 - On the Voluntary and Free Will of the One
+"Sextus Empiricus, Outlines of Pyrrhonism (Πυρρώνειοι Ὑποτυπώσεις), 3 books",2,node,work_sextus_outlines_pyrrhonism_f9a7c8e4,Outlines of Pyrrhonism (Πυρρώνειοι Ὑποτυπώσεις) - Sextus Empiricus
+"Proclus, De Decem Dubitationibus circa Providentiam",2,node,concept_pronoia_levels_proclus_a6d8c9b4,Levels of Providence (Proclean)
+"Proclus, Elements of Theology, props. 120-122",2,node,concept_pronoia_levels_proclus_a6d8c9b4,Levels of Providence (Proclean)
+"Proclus, In Rempublicam (Commentary on Republic)",2,node,concept_pronoia_levels_proclus_a6d8c9b4,Levels of Providence (Proclean)
+"Origen, De Principiis I.6.1-4, III.6.1-9",2,node,concept_apokatastasis_origen_b8e9d7c5,apokatastasis (ἀποκατάστασις)
+"Origen, Contra Celsum VI.26, VIII.72",2,node,concept_apokatastasis_origen_b8e9d7c5,apokatastasis (ἀποκατάστασις)
+Acts 3:21 (biblical reference to apokatastasis pantōn),2,node,concept_apokatastasis_origen_b8e9d7c5,apokatastasis (ἀποκατάστασις)
+Mishnah Avot (Pirke Avot) - later compilation preserving Hillel's traditions,2,node,person_hillel_elder_m3n4o5p6,Hillel the Elder
+"Babylonian Talmud, Shabbat 31a (Golden Rule)",2,node,person_hillel_elder_m3n4o5p6,Hillel the Elder
+Mishnah (various tractates),2,node,person_shammai_q7r8s9t0,Shammai
+Avot de-Rabbi Natan,2,node,person_shammai_q7r8s9t0,Shammai
+Dead Sea Scrolls (multiple Deuteronomy manuscripts),2,node,work_deuteronomy_y5z6a7b8,Deuteronomy (Devarim)
+Septuagint (LXX - different order/content),2,node,work_jeremiah_k7l8m9n0,Jeremiah (Yirmiyahu)
+"Dead Sea Scrolls (4QJera, 4QJerb, etc.)",2,node,work_jeremiah_k7l8m9n0,Jeremiah (Yirmiyahu)
+Septuagint (LXX - shorter),2,node,work_job_o1p2q3r4,Job (Iyov)
+"Dead Sea Scrolls (4Q99, 4Q100, 11QtgJob Targum)",2,node,work_job_o1p2q3r4,Job (Iyov)
+"Dead Sea Scrolls (4QQoha, 4QQohb)",2,node,work_ecclesiastes_w9x0y1z2,Ecclesiastes (Qohelet)
+Hebrew manuscripts from Cairo Geniza and Dead Sea Scrolls (fragmentary),2,node,work_sirach_a3b4c5d6,Wisdom of Sirach (Ecclesiasticus)
+Greek translation (LXX),2,node,work_sirach_a3b4c5d6,Wisdom of Sirach (Ecclesiasticus)
+Latin Vulgate,2,node,work_sirach_a3b4c5d6,Wisdom of Sirach (Ecclesiasticus)
+Syriac Peshitta,2,node,work_sirach_a3b4c5d6,Wisdom of Sirach (Ecclesiasticus)
+1QS (Cave 1 manuscript - most complete),2,node,work_dss_community_rule_e7f8g9h0,"Community Rule (Serek HaYahad, 1QS)"
+4QSa-j (Cave 4 fragments),2,node,work_dss_community_rule_e7f8g9h0,"Community Rule (Serek HaYahad, 1QS)"
+"5Q11, 5Q13 (Cave 5 fragments)",2,node,work_dss_community_rule_e7f8g9h0,"Community Rule (Serek HaYahad, 1QS)"
+1QHa (Cave 1 - major manuscript),2,node,work_dss_hodayot_i1j2k3l4,"Thanksgiving Hymns (Hodayot, 1QH)"
+1QHb (Cave 1 fragments),2,node,work_dss_hodayot_i1j2k3l4,"Thanksgiving Hymns (Hodayot, 1QH)"
+4QHa-f (Cave 4 fragments),2,node,work_dss_hodayot_i1j2k3l4,"Thanksgiving Hymns (Hodayot, 1QH)"
+4Q394-399 (Cave 4 manuscripts),2,node,work_dss_4qmmt_m5n6o7p8,Miqsat Ma'ase ha-Torah (4QMMT)
+Cairo Geniza manuscripts (medieval copies),2,node,work_damascus_document_q9r0s1t2,Damascus Document (CD)
+4Q266-273 (Cave 4 Qumran manuscripts),2,node,work_damascus_document_q9r0s1t2,Damascus Document (CD)
+"5Q12, 6Q15 (fragmentary)",2,node,work_damascus_document_q9r0s1t2,Damascus Document (CD)
+"Genesis 6:5, 8:21 (biblical basis)",2,node,concept_yetzer_ha_ra_u3v4w5x6,Evil Inclination (Yetzer Ha-Ra)
+Sirach 15:14 - 'God created humans... and left them in power of their own yetzer',2,node,concept_yetzer_ha_ra_u3v4w5x6,Evil Inclination (Yetzer Ha-Ra)
+"4 Ezra 3:20-22, 7:92 (apocalyptic pessimism about yetzer)",2,node,concept_yetzer_ha_ra_u3v4w5x6,Evil Inclination (Yetzer Ha-Ra)
+"Rabbinic literature (Mishnah, Talmud) - fully developed doctrine",2,node,concept_yetzer_ha_ra_u3v4w5x6,Evil Inclination (Yetzer Ha-Ra)
+Rabbinic literature (fully developed),2,node,concept_yetzer_ha_tov_y7z8a9b0,Good Inclination (Yetzer Ha-Tov)
+Possible Second Temple roots in Qumran 'Two Spirits' doctrine (different conceptually),2,node,concept_yetzer_ha_tov_y7z8a9b0,Good Inclination (Yetzer Ha-Tov)
+Hebrew Bible (verb bachar - to choose),2,node,concept_bechirah_c1d2e3f4,Choice/Free Will (Bechirah)
+Rabbinic literature (noun bechirah),2,node,concept_bechirah_c1d2e3f4,Choice/Free Will (Bechirah)
+Rabbinic literature,2,node,concept_ratzon_g5h6i7j8,Will/Desire (Ratzon)
+"Deuteronomy 7:6-11 - Election by grace, commandments as response",2,node,concept_covenant_nomism_k9l0m1n2,Covenant Nomism
+Psalm 119 - Delight in Torah as covenant response,2,node,concept_covenant_nomism_k9l0m1n2,Covenant Nomism
+"Jubilees, 1 Enoch, Psalms of Solomon - Second Temple expressions",2,node,concept_covenant_nomism_k9l0m1n2,Covenant Nomism
+"Philo, De Providentia",2,node,concept_hashgachah_o3p4q5r6,Divine Providence (Hashgachah)
+"Josephus, Antiquities XIII.171-173",2,node,concept_hashgachah_o3p4q5r6,Divine Providence (Hashgachah)
+1QS 3:13-4:26 (Community Rule - Two Spirits Treatise),2,node,concept_two_spirits_doctrine_s7t8u9v0,Two Spirits Doctrine (Qumran)
+1QM (War Scroll - eschatological battle between spirits),2,node,concept_two_spirits_doctrine_s7t8u9v0,Two Spirits Doctrine (Qumran)
+"Josephus, Jewish War II.162-163",2,node,group_pharisees_w1x2y3z4,Pharisees
+"Josephus, Antiquities XIII.171-173, XVIII.12-15",2,node,group_pharisees_w1x2y3z4,Pharisees
+"New Testament (Gospels, Acts - often polemical)",2,node,group_pharisees_w1x2y3z4,Pharisees
+"Rabbinic literature (Mishnah, Talmud)",2,node,group_pharisees_w1x2y3z4,Pharisees
+"Josephus, Jewish War II.164-165",2,node,group_sadducees_a5b6c7d8,Sadducees
+"Josephus, Antiquities XIII.171-173, XVIII.16-17",2,node,group_sadducees_a5b6c7d8,Sadducees
+"New Testament (Matthew 22:23-33, Acts 23:6-8)",2,node,group_sadducees_a5b6c7d8,Sadducees
+Rabbinic literature (polemical references),2,node,group_sadducees_a5b6c7d8,Sadducees
+"Josephus, Jewish War II.119-161 (extensive description)",2,node,group_essenes_e9f0g1h2,Essenes
+"Josephus, Antiquities XIII.171-172, XV.371-379, XVIII.18-22",2,node,group_essenes_e9f0g1h2,Essenes
+"Philo, Quod Omnis Probus Liber Sit 75-91",2,node,group_essenes_e9f0g1h2,Essenes
+"Pliny the Elder, Natural History V.73",2,node,group_essenes_e9f0g1h2,Essenes
+Dead Sea Scrolls (if Essenes = Qumran),2,node,group_essenes_e9f0g1h2,Essenes
+Genesis 4:1-16 (Cain and Abel narrative),2,node,argument_genesis_cain_choice_i3j4k5l6,Genesis 4:7 - Cain's Free Choice Argument
+"Rabbinic interpretations (Midrash Rabbah, Talmud)",2,node,argument_genesis_cain_choice_i3j4k5l6,Genesis 4:7 - Cain's Free Choice Argument
+"Philo, Questions and Answers on Genesis I.70-81",2,node,argument_genesis_cain_choice_i3j4k5l6,Genesis 4:7 - Cain's Free Choice Argument
+Sirach 15:11-20 (complete passage),2,node,argument_sirach_free_will_theodicy_m7n8o9p0,Sirach 15:11-20 - Free Will Theodicy
+Sirach 17:1-14 (creation of humanity with moral knowledge),2,node,argument_sirach_free_will_theodicy_m7n8o9p0,Sirach 15:11-20 - Free Will Theodicy
+Philo (similar arguments in Quod Deus Immutabilis Sit),2,node,argument_sirach_free_will_theodicy_m7n8o9p0,Sirach 15:11-20 - Free Will Theodicy
+"Ezekiel 18:1-32, 33:10-20",2,node,argument_ezekiel_individual_responsibility_q1r2s3t4,Ezekiel 18 - Individual Moral Responsibility
+Jeremiah 31:29-30 (parallel rejection of inherited guilt),2,node,argument_ezekiel_individual_responsibility_q1r2s3t4,Ezekiel 18 - Individual Moral Responsibility
+Rabbinic interpretations,2,node,argument_ezekiel_individual_responsibility_q1r2s3t4,Ezekiel 18 - Individual Moral Responsibility
+Patristic citations,2,node,argument_ezekiel_individual_responsibility_q1r2s3t4,Ezekiel 18 - Individual Moral Responsibility
+Jeremiah 31:31-34,2,node,argument_jeremiah_new_covenant_u5v6w7x8,Jeremiah 31:31-34 - New Covenant and Divine Transformation
+Ezekiel 36:26-27 (parallel: 'I will give you a new heart'),2,node,argument_jeremiah_new_covenant_u5v6w7x8,Jeremiah 31:31-34 - New Covenant and Divine Transformation
+Deuteronomy 30:6 ('The LORD will circumcise your heart'),2,node,argument_jeremiah_new_covenant_u5v6w7x8,Jeremiah 31:31-34 - New Covenant and Divine Transformation
+"New Testament appropriations (Hebrews 8:8-12, 2 Corinthians 3:3)",2,node,argument_jeremiah_new_covenant_u5v6w7x8,Jeremiah 31:31-34 - New Covenant and Divine Transformation
+Exodus 4-14 (Pharaoh narrative),2,node,argument_divine_hardening_problem_y9z0a1b2,Divine Hardening Problem (Pharaoh's Heart)
+"Philo, De Vita Mosis I (allegorical interpretation)",2,node,argument_divine_hardening_problem_y9z0a1b2,Divine Hardening Problem (Pharaoh's Heart)
+Romans 9:14-18 (Paul's use),2,node,argument_divine_hardening_problem_y9z0a1b2,Divine Hardening Problem (Pharaoh's Heart)
+Rabbinic interpretations (Exodus Rabbah),2,node,argument_divine_hardening_problem_y9z0a1b2,Divine Hardening Problem (Pharaoh's Heart)
+1QS 3:13-4:26 (Two Spirits Treatise),2,node,argument_qumran_predestination_c3d4e5f6,Qumran Predestinarian Argument (Two Spirits)
+CD 2:2-13 (Damascus Document - foreknowledge and election),2,node,argument_qumran_predestination_c3d4e5f6,Qumran Predestinarian Argument (Two Spirits)
+"Methodius of Olympus, De libero arbitrio (fragmenta, PG 18, 244-260)",2,node,person_methodius_olympus_d311,Methodius of Olympus
+Letters,2,node,person_basil_great_d379,Basil the Great
+Sermons,2,node,person_faustus_riez_d495,Faustus of Riez
+"Augustine, De Praedestinatione Sanctorum II.5",2,node,concept_gratia_praeveniens,Gratia Praeveniens (Prevenient Grace)
+"Prosper of Aquitaine, Sententiae ex Augustino Delibatae",2,node,concept_gratia_operans,Gratia Operans (Operating Grace)
+"John Cassian, Collationes XIII.12-17.",2,node,concept_synergism,Synergism (Synergy)
+"Second Council of Orange (529), Canon 9.",2,node,concept_synergism,Synergism (Synergy)
+2 Peter 1:4 (partakers of divine nature),2,node,concept_theosis,Theosis (Deification)
+"Athanasius, De Incarnatione 54 (God became man that we might become god)",2,node,concept_theosis,Theosis (Deification)
+"Gregory of Nazianzus, Oration 29.19",2,node,concept_theosis,Theosis (Deification)
+"Maximus the Confessor, Ambigua 7",2,node,concept_theosis,Theosis (Deification)
+"Augustine, De Peccatorum Meritis et Remissione I-III",2,node,concept_original_sin,Original Sin (Peccatum Originale)
+"Augustine, Contra Julianum",2,node,concept_original_sin,Original Sin (Peccatum Originale)
+"Augustine, De Civitate Dei XIII-XIV",2,node,concept_original_sin,Original Sin (Peccatum Originale)
+"Augustine, De Praedestinatione Sanctorum",2,node,concept_predestination_augustinian,Predestination (Augustinian Double Predestination)
+"Augustine, De Dono Perseverantiae",2,node,concept_predestination_augustinian,Predestination (Augustinian Double Predestination)
+"Augustine, Enchiridion XXV-XXVII",2,node,concept_predestination_augustinian,Predestination (Augustinian Double Predestination)
+Romans 9 (Paul on election),2,node,concept_predestination_augustinian,Predestination (Augustinian Double Predestination)
+"Pelagius, Letter to Demetrias",2,node,concept_pelagianism,Pelagianism
+"Augustine, De Natura et Gratia (anti-Pelagian)",2,node,concept_pelagianism,Pelagianism
+"Augustine, De Gratia Christi et de Peccato Originali",2,node,concept_pelagianism,Pelagianism
+Canons of Council of Carthage (418),2,node,concept_pelagianism,Pelagianism
+"John Cassian, Conlationes XIII (on grace and free will)",2,node,concept_semi_pelagianism,Semi-Pelagianism
+Canons of Second Council of Orange (529),2,node,concept_semi_pelagianism,Semi-Pelagianism
+"Augustine, De Nuptiis et Concupiscentia",2,node,concept_concupiscence,Concupiscence (Concupiscentia)
+"Augustine, Contra Julianum IV-VI",2,node,concept_concupiscence,Concupiscence (Concupiscentia)
+"Augustine, Confessions VIII (struggle with concupiscence)",2,node,concept_concupiscence,Concupiscence (Concupiscentia)
+Romans 7:7-25 (Paul on desire and law),2,node,concept_concupiscence,Concupiscence (Concupiscentia)
+"Augustine, De Peccatorum Meritis et Remissione I.26.39",2,node,argument_infant_baptism,Infant Baptism Argument for Original Sin
+"Augustine, Contra Duas Epistulas Pelagianorum IV.4.6-7",2,node,argument_infant_baptism,Infant Baptism Argument for Original Sin
+"Augustine, De Gratia Christi et de Peccato Originali II.34.39",2,node,argument_infant_baptism,Infant Baptism Argument for Original Sin
+"Augustine, De Libero Arbitrio Voluntatis (Books I-III, 387-395 CE)",2,node,work_de_libero_arbitrio,De Libero Arbitrio Voluntatis (On Free Choice of the Will)
+"Augustine, Confessiones (397-400 CE), especially Books VII-VIII",2,node,work_confessions,Confessiones (Confessions)
+"Augustine, De Diversis Quaestionibus ad Simplicianum (396 CE), especially Book I, Questions 1-2",2,node,work_ad_simplicianum,Ad Simplicianum (To Simplician)
+"Prosper of Aquitaine, De Vocatione Omnium Gentium (c. 450 CE)",2,node,work_call_all_nations,De Vocatione Omnium Gentium (The Call of All Nations)
+Pseudo-Dionysius,2,node,person_john_scotus_eriugena_a1b2c3d4,John Scotus Eriugena
+Augustine (De Praedestinatione Sanctorum),2,node,person_gottschalk_of_orbais_e5f6g7h8,Gottschalk of Orbais
+Fulgentius of Ruspe,2,node,person_gottschalk_of_orbais_e5f6g7h8,Gottschalk of Orbais
+Gregory the Great,2,node,person_hincmar_of_reims_i9j0k1l2,Hincmar of Reims
+Qur'an,2,node,person_al_ashari_m3n4o5p6,Al-Ash'ari (Abū al-Ḥasan al-Ashʿarī)
+Al-Farabi,2,node,person_avicenna_y5z6a7b8,Avicenna (Ibn Sīnā)
+Commentaries on Hebrew Bible,2,node,person_saadia_gaon_g3h4i5j6,Saadia Gaon (Saʿadya ben Yōsēf)
+Augustine (primary authority),2,node,person_peter_lombard_a3b4c5d6,Peter Lombard
+Church Fathers,2,node,person_peter_lombard_a3b4c5d6,Peter Lombard
+Paul's Epistles,2,node,person_gregory_of_rimini_i1j2k3l4,Gregory of Rimini
+"Augustine, De Libero Arbitrio I-III (On Free Choice of the Will)",2,node,concept_liberum_arbitrium_u3v4w5x6,Free Choice (Liberum Arbitrium)
+"Augustine, De Trinitate (memoria-intellectus-voluntas triad)",2,node,concept_voluntas_y7z8a9b0,Will (Voluntas)
+"Aristotle, De Anima III (rational desire)",2,node,concept_voluntas_y7z8a9b0,Will (Voluntas)
+"Aristotle, De Anima III",2,node,concept_intellectus_c1d2e3f4,Intellect (Intellectus)
+"Augustine, De Trinitate",2,node,concept_intellectus_c1d2e3f4,Intellect (Intellectus)
+"Avicenna, Kitab al-Nafs",2,node,concept_intellectus_c1d2e3f4,Intellect (Intellectus)
+"Jerome, Commentary on Ezekiel (misreading of syneidesis)",2,node,concept_synderesis_g5h6i7j8,Synderesis
+Stoic concept of syneidesis (moral consciousness),2,node,concept_synderesis_g5h6i7j8,Synderesis
+Pseudo-Dionysius (divine names),2,node,concept_potentia_absoluta_ordinata_k9l0m1n2,Absolute and Ordained Power (Potentia Absoluta et Ordinata)
+Anselm (divine omnipotence),2,node,concept_potentia_absoluta_ordinata_k9l0m1n2,Absolute and Ordained Power (Potentia Absoluta et Ordinata)
+"Peter Lombard, Sentences I",2,node,concept_potentia_absoluta_ordinata_k9l0m1n2,Absolute and Ordained Power (Potentia Absoluta et Ordinata)
+"Aristotle, De Interpretatione 9 (future contingents)",2,node,concept_synchronic_contingency_s7t8u9v0,Synchronic Contingency
+Avicenna (possibility at the instant - Scotus critiques),2,node,concept_synchronic_contingency_s7t8u9v0,Synchronic Contingency
+"Aristotle, Nicomachean Ethics III (voluntary action)",2,node,concept_diachronic_contingency_w1x2y3z4,Diachronic Contingency
+Augustine (some passages suggest diachronic reading),2,node,concept_diachronic_contingency_w1x2y3z4,Diachronic Contingency
+"Malebranche, Dialogues on Metaphysics VII-VIII",2,node,concept_occasionalism_a5b6c7d8,Occasionalism
+"Malebranche, Search After Truth III.ii.3, VI.ii.3",2,node,concept_occasionalism_a5b6c7d8,Occasionalism
+Qur'anic verses emphasizing divine sovereignty,2,node,concept_occasionalism_a5b6c7d8,Occasionalism
+Rejection of Greek natural philosophy,2,node,concept_occasionalism_a5b6c7d8,Occasionalism
+"Al-Ash'ari, Al-Luma'",2,node,concept_kasb_acquisition_e9f0g1h2,Acquisition (Kasb/Iktisab)
+Developed by later Ash'arites,2,node,concept_kasb_acquisition_e9f0g1h2,Acquisition (Kasb/Iktisab)
+"Aristotle, Nicomachean Ethics (virtue as rational disposition)",2,node,concept_intellectualism_medieval_i3j4k5l6,Intellectualism (Medieval)
+"Aristotle, De Anima III (rational appetite)",2,node,concept_intellectualism_medieval_i3j4k5l6,Intellectualism (Medieval)
+"Augustine, De Libero Arbitrio (some passages)",2,node,concept_voluntarism_medieval_m7n8o9p0,Voluntarism (Medieval)
+"Anselm, De Libertate Arbitrii (On Freedom of Choice, 1080-1085 CE)",2,node,concept_voluntarism_medieval_m7n8o9p0,Voluntarism (Medieval)
+John of Damascus,2,node,concept_voluntarism_medieval_m7n8o9p0,Voluntarism (Medieval)
+Guide for the Perplexed III.20-21,2,node,argument_maimonides_divine_knowledge_different_kind_o5p6q7r8,Maimonides' Argument: Divine Knowledge as Sui Generis
+"Mishneh Torah, Hilkhot Teshuvah 5.5",2,node,argument_maimonides_divine_knowledge_different_kind_o5p6q7r8,Maimonides' Argument: Divine Knowledge as Sui Generis
+Wars of the Lord III.4-6,2,node,argument_gersonides_limited_omniscience_s9t0u1v2,Gersonides' Argument: Limited Divine Omniscience
+"Thomas Aquinas, Summa Theologiae I-II q.13 a.6",2,node,debate_intellectualism_vs_voluntarism_w3x4y5z6,Intellectualism vs Voluntarism Debate
+"John Duns Scotus, Ordinatio II d.25 q.unica",2,node,debate_intellectualism_vs_voluntarism_w3x4y5z6,Intellectualism vs Voluntarism Debate
+"William of Ockham, Quodlibeta VII q.1",2,node,debate_intellectualism_vs_voluntarism_w3x4y5z6,Intellectualism vs Voluntarism Debate
+"Augustine, De Libero Arbitrio III",2,node,debate_divine_foreknowledge_future_contingents_a7b8c9d0,Divine Foreknowledge and Future Contingents Debate
+"Al-Ghazali, Tahafut al-Falasifa 17",2,node,debate_occasionalism_vs_secondary_causation_e1f2g3h4,Occasionalism vs Secondary Causation Debate
+"Averroes, Tahafut al-Tahafut 4",2,node,debate_occasionalism_vs_secondary_causation_e1f2g3h4,Occasionalism vs Secondary Causation Debate
+"Thomas Aquinas, Summa contra Gentiles III.70-72",2,node,debate_occasionalism_vs_secondary_causation_e1f2g3h4,Occasionalism vs Secondary Causation Debate
+Commentaries on Summa Theologiae,2,node,person_luis_de_molina_expanded_3k7f8g46,Luis de Molina (expanded)
+"Romans 6-8, John 8:34",2,node,concept_bondage_of_will_1c5x6y24,Bondage of the Will (Servum Arbitrium)
+"Scotus, Ordinatio (on will's active indifference)",2,node,concept_libertas_indifferentiae_4f8a9b57,Liberty of Indifference (Libertas Indifferentiae)
+"Descartes, Meditations IV",2,node,concept_libertas_indifferentiae_4f8a9b57,Liberty of Indifference (Libertas Indifferentiae)
+"Leibniz, Theodicy §§44-50",2,node,concept_libertas_indifferentiae_4f8a9b57,Liberty of Indifference (Libertas Indifferentiae)
+"Hobbes, Leviathan ch. 21",2,node,concept_libertas_spontaneitatis_5g9b0c68,Liberty of Spontaneity (Libertas Spontaneitatis)
+"Leibniz, Theodicy §§34-37",2,node,concept_libertas_spontaneitatis_5g9b0c68,Liberty of Spontaneity (Libertas Spontaneitatis)
+"Hume, Enquiry VIII",2,node,concept_libertas_spontaneitatis_5g9b0c68,Liberty of Spontaneity (Libertas Spontaneitatis)
+"Kant, Critique of Pure Reason A533-558/B561-586 (Third Antinomy)",2,node,concept_transcendental_freedom_7i1d2e80,Transcendental Freedom
+"Kant, Groundwork 446-463",2,node,concept_transcendental_freedom_7i1d2e80,Transcendental Freedom
+"Kant, Critique of Practical Reason 5:94-106",2,node,concept_transcendental_freedom_7i1d2e80,Transcendental Freedom
+"Kant, Groundwork 431-447",2,node,concept_autonomy_8j2e3f91,Autonomy
+"Kant, Critique of Practical Reason 5:19-50",2,node,concept_autonomy_8j2e3f91,Autonomy
+"Kant, Metaphysics of Morals 6:213-221",2,node,concept_autonomy_8j2e3f91,Autonomy
+"Kant, Groundwork 421-445",2,node,concept_categorical_imperative_9k3f4g02,Categorical Imperative
+"Kant, Critique of Practical Reason 5:19-89",2,node,concept_categorical_imperative_9k3f4g02,Categorical Imperative
+"Spinoza, Ethics I (God), II (Mind), IV-V (Freedom)",2,node,argument_spinozan_necessitarianism_9u3p4q02,Spinoza's Necessitarian Argument
+"Spinoza, Letter 58 (to Schuller on freedom)",2,node,argument_spinozan_necessitarianism_9u3p4q02,Spinoza's Necessitarian Argument
+"Kant, Critique of Pure Reason A444-451/B472-479, A532-558/B560-586",2,node,argument_kantian_third_antinomy_6b0w1x79,Kant's Third Antinomy on Freedom
+"van Inwagen, Peter. An Essay on Free Will. Oxford: Clarendon Press, 1983.",2,node,argument_consequence_argument_0n1o2p3q,Consequence Argument
+"Frankfurt, Harry. “Alternate Possibilities and Moral Responsibility.” Journal of Philosophy 66 (1969): 829–839.",2,node,argument_frankfurt_cases_1o2p3q4r,Frankfurt Cases
+"Kane, Robert. The Significance of Free Will. New York: Oxford University Press, 1996.",2,node,concept_self_forming_actions_4r5s6t7u,Self-Forming Actions (SFAs)
+Echoes Aristotle's voluntary action requiring alternatives,2,node,concept_principle_alternative_possibilities_5s6t7u8v,Principle of Alternative Possibilities (PAP)
+"Fischer, John Martin. The Metaphysics of Free Will. Oxford: Blackwell, 1994.",2,node,concept_semicompatibilism_6t7u8v9w,Semicompatibilism
+"Strawson, P. F. “Freedom and Resentment.” Proceedings of the British Academy 48 (1962): 1-25.",2,node,concept_reactive_attitudes_7u8v9w0x,Reactive Attitudes
+"Mele, Alfred R. Free Will and Luck. New York: Oxford University Press, 2006.",2,node,concept_bypassing_1y2z3a4b,Bypassing
+"Cicero, De Fato (complete text, though with lacunae)",2,node,person_cicero_marcus_tullius_106_43bce_a8f3d2c1,Marcus Tullius Cicero
+"Cicero, De Natura Deorum I-III",2,node,person_cicero_marcus_tullius_106_43bce_a8f3d2c1,Marcus Tullius Cicero
+"Cicero, De Divinatione I-II",2,node,person_cicero_marcus_tullius_106_43bce_a8f3d2c1,Marcus Tullius Cicero
+"Cicero, Academica I-II",2,node,person_cicero_marcus_tullius_106_43bce_a8f3d2c1,Marcus Tullius Cicero
+"Cicero, De Fato (complete extant text)",2,node,work_de_fato_cicero_44bce_b9c4e5d2,De Fato (On Fate)
+"Cross-references: De Natura Deorum, De Divinatione, Academica",2,node,work_de_fato_cicero_44bce_b9c4e5d2,De Fato (On Fate)
+"Aristotle, De Interpretatione (complete)",2,node,person_aristotle_384_322bce_c2d4f6a8,Aristotle of Stagira
+"Ancient commentaries: Aspasius (oldest surviving), Eustratius, Anonymous",2,node,work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9,Nicomachean Ethics (Ἠθικὰ Νικομάχεια)
+"Eudemian Ethics (alternative version, overlapping content)",2,node,work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9,Nicomachean Ethics (Ἠθικὰ Νικομάχεια)
+"Aristotle, De Interpretatione (complete text)",2,node,work_de_interpretatione_aristotle_c350bce_e4f6g8h0,De Interpretatione (Περὶ Ἑρμηνείας)
+"Ancient commentaries: Ammonius (most important), Alexander of Aphrodisias, Boethius (Latin)",2,node,work_de_interpretatione_aristotle_c350bce_e4f6g8h0,De Interpretatione (Περὶ Ἑρμηνείας)
+"Aristotle, Metaphysics Book Theta (complete)",2,node,work_metaphysics_theta_aristotle_c350bce_f5g7h9i1,Metaphysics Book Theta (Potentiality and Actuality)
+"Cross-references: Nicomachean Ethics III (deliberate choice), De Interpretatione 9 (contingency)",2,node,work_metaphysics_theta_aristotle_c350bce_f5g7h9i1,Metaphysics Book Theta (Potentiality and Actuality)
+"Ancient commentaries: Alexander of Aphrodisias (CAG I), Pseudo-Alexander",2,node,work_metaphysics_theta_aristotle_c350bce_f5g7h9i1,Metaphysics Book Theta (Potentiality and Actuality)
+"Aristotle, Nicomachean Ethics III.1 (1109b30-1111b3) - primary definition",2,node,concept_hekousion_voluntary_aristotle_a1b2c3d4,Hekousion (Ἑκούσιον) - Voluntary
+"Aristotle, Eudemian Ethics II.6-9 - alternative treatment",2,node,concept_hekousion_voluntary_aristotle_a1b2c3d4,Hekousion (Ἑκούσιον) - Voluntary
+"Aristotle, Magna Moralia I.9-17 - related discussion",2,node,concept_hekousion_voluntary_aristotle_a1b2c3d4,Hekousion (Ἑκούσιον) - Voluntary
+"Alexander of Aphrodisias, De Fato - develops voluntary into incompatibilist freedom",2,node,concept_hekousion_voluntary_aristotle_a1b2c3d4,Hekousion (Ἑκούσιον) - Voluntary
+"Epictetus, Discourses - Stoic reinterpretation of voluntary under determinism",2,node,concept_hekousion_voluntary_aristotle_a1b2c3d4,Hekousion (Ἑκούσιον) - Voluntary
+"Aristotle, Nicomachean Ethics III.1 (1109b35-1110b17) - primary definition",2,node,concept_akousion_involuntary_aristotle_b2c3d4e5,Akousion (Ἀκούσιον) - Involuntary
+"Aristotle, Eudemian Ethics II.7-8 - alternative formulation",2,node,concept_akousion_involuntary_aristotle_b2c3d4e5,Akousion (Ἀκούσιον) - Involuntary
+"Aristotle, Rhetoric I.10-14 - legal/forensic contexts",2,node,concept_akousion_involuntary_aristotle_b2c3d4e5,Akousion (Ἀκούσιον) - Involuntary
+"Alexander of Aphrodisias, ethical writings - develops the concept",2,node,concept_akousion_involuntary_aristotle_b2c3d4e5,Akousion (Ἀκούσιον) - Involuntary
+Stoic sources - debated whether anything is truly involuntary under fate,2,node,concept_akousion_involuntary_aristotle_b2c3d4e5,Akousion (Ἀκούσιον) - Involuntary
+"Aristotle, Nicomachean Ethics III.2-3 (1111b4-1113a14) - primary analysis",2,node,concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6,Prohairesis (Προαίρεσις) - Deliberate Choice
+"Aristotle, Eudemian Ethics II.10 - alternative treatment",2,node,concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6,Prohairesis (Προαίρεσις) - Deliberate Choice
+"Aristotle, De Anima III.9-11 - psychology of deliberation and choice",2,node,concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6,Prohairesis (Προαίρεσις) - Deliberate Choice
+"Alexander of Aphrodisias, De Fato, Ethical Problems - develops prohairesis as libertarian freedom",2,node,concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6,Prohairesis (Προαίρεσις) - Deliberate Choice
+Epictetus - Stoic appropriation as prohairesis under fate,2,node,concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6,Prohairesis (Προαίρεσις) - Deliberate Choice
+"Aristotle, Nicomachean Ethics III.5 (1113b3-1114b25) - foundational text",2,node,concept_eph_hemin_in_our_power_aristotle_d4e5f6g7,To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power
+"Aristotle, Eudemian Ethics II.6-10 - parallel treatment",2,node,concept_eph_hemin_in_our_power_aristotle_d4e5f6g7,To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power
+"Aristotle, Metaphysics Theta 5 - two-way rational powers ground eph' hêmin",2,node,concept_eph_hemin_in_our_power_aristotle_d4e5f6g7,To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power
+"Alexander of Aphrodisias, De Fato - libertarian interpretation of eph' hêmin",2,node,concept_eph_hemin_in_our_power_aristotle_d4e5f6g7,To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power
+"Epictetus, Enchiridion 1 - Stoic distinction: eph' hêmin (virtue, judgment) vs ouk eph' hêmin (externals)",2,node,concept_eph_hemin_in_our_power_aristotle_d4e5f6g7,To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power
+"Cicero, De Fato - Latin translations and debates over 'in nostra potestate'",2,node,concept_eph_hemin_in_our_power_aristotle_d4e5f6g7,To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power
+"Aristotle, De Interpretatione 9 (18a28-19b4) - future contingents",2,node,concept_endechomenon_contingent_aristotle_e5f6g7h8,To Endechomenon (Τὸ ἐνδεχόμενον) - The Contingent
+"Aristotle, Metaphysics Theta 3-5 - potentiality and real possibilities",2,node,concept_endechomenon_contingent_aristotle_e5f6g7h8,To Endechomenon (Τὸ ἐνδεχόμενον) - The Contingent
+"Aristotle, Nicomachean Ethics III.3 - we deliberate about contingents (endechomena)",2,node,concept_endechomenon_contingent_aristotle_e5f6g7h8,To Endechomenon (Τὸ ἐνδεχόμενον) - The Contingent
+"Aristotle, Physics II.4-6 - chance, spontaneity, contingent causation",2,node,concept_endechomenon_contingent_aristotle_e5f6g7h8,To Endechomenon (Τὸ ἐνδεχόμενον) - The Contingent
+"Alexander of Aphrodisias, De Fato - defense of real contingency against Stoics",2,node,concept_endechomenon_contingent_aristotle_e5f6g7h8,To Endechomenon (Τὸ ἐνδεχόμενον) - The Contingent
+"Cicero, De Fato §§12-15 - Diodorus' Master Argument against contingency",2,node,concept_endechomenon_contingent_aristotle_e5f6g7h8,To Endechomenon (Τὸ ἐνδεχόμενον) - The Contingent
+"Aristotle, De Interpretatione 9 (18a28-19b4) - primary text",2,node,argument_sea_battle_aristotle_f6g7h8i9,Sea Battle Argument (Future Contingents)
+"Ammonius, Commentary on De Interpretatione - ancient interpretation",2,node,argument_sea_battle_aristotle_f6g7h8i9,Sea Battle Argument (Future Contingents)
+"Boethius, Commentary on De Interpretatione - Latin transmission",2,node,argument_sea_battle_aristotle_f6g7h8i9,Sea Battle Argument (Future Contingents)
+"Aristotle, Nicomachean Ethics III.1 (1109b30-1111b3)",2,node,argument_voluntary_involuntary_distinction_aristotle_g7h8i9j0,Voluntary/Involuntary Distinction Argument
+"Aristotle, Eudemian Ethics II.6-9 - parallel treatment",2,node,argument_voluntary_involuntary_distinction_aristotle_g7h8i9j0,Voluntary/Involuntary Distinction Argument
+"Aristotle, Rhetoric I.10-14 - legal/forensic applications",2,node,argument_voluntary_involuntary_distinction_aristotle_g7h8i9j0,Voluntary/Involuntary Distinction Argument
+Alexander of Aphrodisias - develops distinction into incompatibilist theory,2,node,argument_voluntary_involuntary_distinction_aristotle_g7h8i9j0,Voluntary/Involuntary Distinction Argument
+Stoic ethics - accepts distinction but claims voluntary compatible with fate,2,node,argument_voluntary_involuntary_distinction_aristotle_g7h8i9j0,Voluntary/Involuntary Distinction Argument
+"Aristotle, Nicomachean Ethics III.2-3 (1111b4-1113a14)",2,node,argument_deliberate_choice_analysis_aristotle_h8i9j0k1,Deliberate Choice (Prohairesis) Analysis Argument
+"Aristotle, Eudemian Ethics II.10",2,node,argument_deliberate_choice_analysis_aristotle_h8i9j0k1,Deliberate Choice (Prohairesis) Analysis Argument
+"Alexander of Aphrodisias, De Fato - prohairesis as libertarian freedom",2,node,argument_deliberate_choice_analysis_aristotle_h8i9j0k1,Deliberate Choice (Prohairesis) Analysis Argument
+Epictetus - Stoic appropriation of prohairesis (compatible with fate),2,node,argument_deliberate_choice_analysis_aristotle_h8i9j0k1,Deliberate Choice (Prohairesis) Analysis Argument
+"Aristotle, Metaphysics Theta 2 (1046a36-b28) - rational vs non-rational potentialities",2,node,argument_two_way_powers_aristotle_i9j0k1l2,Two-Way Powers (Rational Potentialities) Argument
+"Aristotle, Metaphysics Theta 5 (1048a1-15) - two-way powers and choice",2,node,argument_two_way_powers_aristotle_i9j0k1l2,Two-Way Powers (Rational Potentialities) Argument
+"Cross-reference: Nicomachean Ethics III.5 (1113b6-7) - 'where acting is in our power, so is not acting'",2,node,argument_two_way_powers_aristotle_i9j0k1l2,Two-Way Powers (Rational Potentialities) Argument
+"Alexander of Aphrodisias, De Fato - develops into libertarian incompatibilist theory",2,node,argument_two_way_powers_aristotle_i9j0k1l2,Two-Way Powers (Rational Potentialities) Argument
+Stoic sources - rejection or reinterpretation of two-way powers,2,node,argument_two_way_powers_aristotle_i9j0k1l2,Two-Way Powers (Rational Potentialities) Argument
+"Lucretius, De Rerum Natura II.216-293 - fullest ancient account of atomic swerve",2,node,person_epicurus_341_270bce_j0k1l2m3,Epicurus of Samos
+"Cicero, De Fato §§20-25 - critical discussion of Epicurean swerve",2,node,person_epicurus_341_270bce_j0k1l2m3,Epicurus of Samos
+"Lucretius, De Rerum Natura (complete text, 7,400 lines)",2,node,person_lucretius_99_55bce_k1l2m3n4,Titus Lucretius Carus
+"Lucretius, De Rerum Natura (complete text)",2,node,work_de_rerum_natura_lucretius_50sbce_l2m3n4o5,De Rerum Natura (On the Nature of Things)
+Cicero - possible editor/publisher of the poem,2,node,work_de_rerum_natura_lucretius_50sbce_l2m3n4o5,De Rerum Natura (On the Nature of Things)
+Jerome - biographical notice (hostile),2,node,work_de_rerum_natura_lucretius_50sbce_l2m3n4o5,De Rerum Natura (On the Nature of Things)
+"Epicurus, Letter to Menoeceus §§133-134 - implicit reference to breaking necessity",2,node,concept_clinamen_atomic_swerve_epicurus_m3n4o5p6,Clinamen / Parenklisis (Atomic Swerve)
+"Lucretius, De Rerum Natura II.216-293 - fullest exposition of swerve",2,node,concept_clinamen_atomic_swerve_epicurus_m3n4o5p6,Clinamen / Parenklisis (Atomic Swerve)
+"Cicero, De Fato §§22-23 - critical discussion of Epicurean swerve",2,node,concept_clinamen_atomic_swerve_epicurus_m3n4o5p6,Clinamen / Parenklisis (Atomic Swerve)
+"Cicero, De Finibus I.19-20 - swerve as arbitrary invention",2,node,concept_clinamen_atomic_swerve_epicurus_m3n4o5p6,Clinamen / Parenklisis (Atomic Swerve)
+"Diogenes of Oenoanda, Inscription fr. 32 - Epicurean defense of indeterminism",2,node,concept_clinamen_atomic_swerve_epicurus_m3n4o5p6,Clinamen / Parenklisis (Atomic Swerve)
+"Lucretius, De Rerum Natura II.216-293, esp. 251-293 on swerve and freedom",2,node,argument_epicurean_swerve_for_freedom_m4n5o6p7,Epicurean Atomic Swerve Argument for Freedom
+"Diogenes of Oenoanda, fr. 32 - Epicurean defense of indeterminism",2,node,argument_epicurean_swerve_for_freedom_m4n5o6p7,Epicurean Atomic Swerve Argument for Freedom
+"Alexander of Aphrodisias, De Fato (complete text in Greek)",2,node,person_alexander_aphrodisias_fl200ce_n5o6p7q8,Alexander of Aphrodisias
+"Alexander, Mantissa - Ethical Problems (sections on voluntariness and responsibility)",2,node,person_alexander_aphrodisias_fl200ce_n5o6p7q8,Alexander of Aphrodisias
+"Simplicius, Commentary on De Caelo - reports Alexander's views",2,node,person_alexander_aphrodisias_fl200ce_n5o6p7q8,Alexander of Aphrodisias
+"Philoponus, Commentary on Physics - discusses Alexander's positions",2,node,person_alexander_aphrodisias_fl200ce_n5o6p7q8,Alexander of Aphrodisias
+"Alexander of Aphrodisias, De Fato (complete Greek text)",2,node,work_de_fato_alexander_c200ce_o6p7q8r9,De Fato (Περὶ Εἱμαρμένης / On Fate)
+"Alexander, Mantissa - Ethical Problems (related discussions)",2,node,work_de_fato_alexander_c200ce_o6p7q8r9,De Fato (Περὶ Εἱμαρμένης / On Fate)
+"Cross-references: Alexander's commentaries on Aristotle Metaphysics, Nicomachean Ethics",2,node,work_de_fato_alexander_c200ce_o6p7q8r9,De Fato (Περὶ Εἱμαρμένης / On Fate)
+"Alexander, De Fato Ch. 13-15 - main incompatibilist argument",2,node,argument_incompatibilism_alexander_p7q8r9s0,Alexander's Incompatibilist Argument (Fate Destroys Freedom)
+"Alexander, De Fato Ch. 22 - refutation of Stoic cylinder analogy",2,node,argument_incompatibilism_alexander_p7q8r9s0,Alexander's Incompatibilist Argument (Fate Destroys Freedom)
+"Alexander, Mantissa - Ethical Problems on responsibility",2,node,argument_incompatibilism_alexander_p7q8r9s0,Alexander's Incompatibilist Argument (Fate Destroys Freedom)
+"Alexander, De Fato Ch. 26-28 - positive theory of agent causation",2,node,argument_agent_causation_two_way_powers_alexander_q8r9s0t1,Alexander's Agent Causation via Two-Way Powers Argument
+"Aristotle, Metaphysics Theta 2, 5 - two-way powers (Alexander's foundation)",2,node,argument_agent_causation_two_way_powers_alexander_q8r9s0t1,Alexander's Agent Causation via Two-Way Powers Argument
+"Alexander, Commentary on Aristotle Metaphysics - development of potentiality theory",2,node,argument_agent_causation_two_way_powers_alexander_q8r9s0t1,Alexander's Agent Causation via Two-Way Powers Argument
+"Plato, Republic (complete text, multiple manuscripts)",2,node,person_plato_428_348bce_a1b2c3d4,Plato of Athens
+"Plato, Timaeus (complete text)",2,node,person_plato_428_348bce_a1b2c3d4,Plato of Athens
+Aristotle - frequent references to Platonic doctrines,2,node,person_plato_428_348bce_a1b2c3d4,Plato of Athens
+"Plato's dialogues (especially early: Apology, Crito, Euthyphro, Laches, Charmides, Protagoras, Gorgias)",2,node,person_socrates_470_399bce_b2c3d4e5,Socrates of Athens
+"Xenophon, Memorabilia and Symposium",2,node,person_socrates_470_399bce_b2c3d4e5,Socrates of Athens
+"Plato, Republic (complete text, extensive manuscript tradition)",2,node,work_republic_plato_c380bce_c3d4e5f6,Republic (Πολιτεία)
+"Aristotle, Politics - critical engagement with Republic",2,node,work_republic_plato_c380bce_c3d4e5f6,Republic (Πολιτεία)
+"Neoplatonic commentaries: Proclus, Syrian",2,node,work_republic_plato_c380bce_c3d4e5f6,Republic (Πολιτεία)
+"Aristotle, EN III.1 - develops Platonic voluntary/involuntary distinction",2,node,work_laws_plato_c350bce_d4e5f6g7,Laws (Νόμοι)
+"Aristotle, Politics II - critique of Laws",2,node,work_laws_plato_c350bce_d4e5f6g7,Laws (Νόμοι)
+"Plato, Republic IV (435a-445e) - foundational argument",2,node,concept_tripartite_soul_plato_e5f6g7h8,Tripartite Soul (Τριμερής Ψυχή)
+"Plato, Phaedrus (246a-254e) - chariot allegory (reason as charioteer, spirit and appetite as horses)",2,node,concept_tripartite_soul_plato_e5f6g7h8,Tripartite Soul (Τριμερής Ψυχή)
+"Plato, Timaeus (69c-72d) - bodily location of soul parts",2,node,concept_tripartite_soul_plato_e5f6g7h8,Tripartite Soul (Τριμερής Ψυχή)
+"Aristotle, De Anima - critique and development",2,node,concept_tripartite_soul_plato_e5f6g7h8,Tripartite Soul (Τριμερής Ψυχή)
+"Plato, Protagoras 352a-358d - defense of intellectualism, denial of akrasia",2,node,concept_socratic_intellectualism_f6g7h8i9,Socratic Intellectualism (Virtue is Knowledge)
+"Plato, Meno 77b-78b - no one desires evil willingly",2,node,concept_socratic_intellectualism_f6g7h8i9,Socratic Intellectualism (Virtue is Knowledge)
+"Plato, Gorgias 466d-468e - wrongdoers don't do what they want (truly want the good)",2,node,concept_socratic_intellectualism_f6g7h8i9,Socratic Intellectualism (Virtue is Knowledge)
+"Aristotle, EN VII - explicit rejection of Socratic intellectualism",2,node,concept_socratic_intellectualism_f6g7h8i9,Socratic Intellectualism (Virtue is Knowledge)
+"Aristotle - extensive discussion of Democritean atomism (Met, De Gen et Corr, De Anima)",2,node,person_democritus_460_370bce_g7h8i9j0,Democritus of Abdera
+"Fragments collected in Diels-Kranz, Die Fragmente der Vorsokratiker",2,node,person_democritus_460_370bce_g7h8i9j0,Democritus of Abdera
+"Lucretius, De Rerum Natura - transmission of modified (Epicurean) atomism",2,node,person_democritus_460_370bce_g7h8i9j0,Democritus of Abdera
+Democritus fragments (DK 68) - Ananke in atomist physics,2,node,concept_ananke_necessity_democritus_h8i9j0k1,Ananke (Ἀνάγκη) - Necessity/Determinism
+"Plato, Timaeus 47e-48a, 56c - Ananke vs. Nous (Reason)",2,node,concept_ananke_necessity_democritus_h8i9j0k1,Ananke (Ἀνάγκη) - Necessity/Determinism
+"Aristotle, Metaphysics Δ.5 (1015a20-b15) - analysis of types of necessity",2,node,concept_ananke_necessity_democritus_h8i9j0k1,Ananke (Ἀνάγκη) - Necessity/Determinism
+Stoic sources on heimarmenê (fate) as rational Ananke,2,node,concept_ananke_necessity_democritus_h8i9j0k1,Ananke (Ἀνάγκη) - Necessity/Determinism
+"SVF II 912, 943, 957, 963, 973, 978, 981, 988, 991, 998, 1007 - Fate, determinism, and causal theory",2,node,person_chrysippus_280_206bce_i9j0k1l2,Chrysippus of Soli
+"SVF II 198, 202 - Definitions of fate and providence",2,node,person_chrysippus_280_206bce_i9j0k1l2,Chrysippus of Soli
+"SVF I 98, 160 - Early Stoic foundations",2,node,person_chrysippus_280_206bce_i9j0k1l2,Chrysippus of Soli
+"SVF III 356, 359 - Ethics and moral responsibility",2,node,person_chrysippus_280_206bce_i9j0k1l2,Chrysippus of Soli
+"Cicero, De Fato §§39-44 - cylinder analogy, assent theory",2,node,person_chrysippus_280_206bce_i9j0k1l2,Chrysippus of Soli
+"Plutarch, On Stoic Self-Contradictions - critical reports of Chrysippean doctrines",2,node,person_chrysippus_280_206bce_i9j0k1l2,Chrysippus of Soli
+"Alexander of Aphrodisias, De Fato - extensive critique of Chrysippean compatibilism",2,node,person_chrysippus_280_206bce_i9j0k1l2,Chrysippus of Soli
+"Gellius, Noctes Atticae VII.2 - cylinder analogy",2,node,person_chrysippus_280_206bce_i9j0k1l2,Chrysippus of Soli
+"Chrysippus, On Fate (fragments in SVF II.913-1000)",2,node,concept_heimarmene_fate_stoics_j0k1l2m3,Heimarmenê (Εἱμαρμένη) - Stoic Fate
+"Cicero, De Fato §39-44 - Chrysippus' position",2,node,concept_heimarmene_fate_stoics_j0k1l2m3,Heimarmenê (Εἱμαρμένη) - Stoic Fate
+Diogenes Laertius VII.149-150 - definition of heimarmenê,2,node,concept_heimarmene_fate_stoics_j0k1l2m3,Heimarmenê (Εἱμαρμένη) - Stoic Fate
+"Marcus Aurelius, Meditations - Stoic acceptance of fate",2,node,concept_heimarmene_fate_stoics_j0k1l2m3,Heimarmenê (Εἱμαρμένη) - Stoic Fate
+"Alexander, De Fato - critique of Stoic fate",2,node,concept_heimarmene_fate_stoics_j0k1l2m3,Heimarmenê (Εἱμαρμένη) - Stoic Fate
+"Cicero, De Fato 42-43 - Full exposition of cylinder and cone analogy: external push (antecedent cause) vs. shape/nature (perfect and principal cause)",2,node,argument_cylinder_analogy_chrysippus_k1l2m3n4,Cylinder Analogy (Internal vs. External Causation)
+"Gellius, Noctes Atticae 7.2.6-14 - Cylinder analogy: impressions (visum) do not necessitate assent; agent's nature (natura animi, dispositio) is decisive",2,node,argument_cylinder_analogy_chrysippus_k1l2m3n4,Cylinder Analogy (Internal vs. External Causation)
+"Gellius, Noctes Atticae 7.2.9-11 - Distinction between antecedent causes (causae antecedentes) and perfect/principal causes (causae perfectae et principales)",2,node,argument_cylinder_analogy_chrysippus_k1l2m3n4,Cylinder Analogy (Internal vs. External Causation)
+"Alexander of Aphrodisias, De Fato 181.13-182.20 - Critical discussion of Chrysippean cylinder analogy",2,node,argument_cylinder_analogy_chrysippus_k1l2m3n4,Cylinder Analogy (Internal vs. External Causation)
+"Cicero, De Fato §§28-33 - fullest report of Carneadean anti-fatalist arguments",2,node,person_carneades_214_129bce_l2m3n4o5,Carneades of Cyrene
+"Cicero, Academica - Carneades' skeptical epistemology",2,node,person_carneades_214_129bce_l2m3n4o5,Carneades of Cyrene
+"Cicero, De Natura Deorum II.58-167 (Stoic theology and providence)",2,node,person_carneades_214_129bce_l2m3n4o5,Carneades of Cyrene
+"Sextus Empiricus, Against the Professors VII.159-189 - Carneades on cataleptic impressions",2,node,person_carneades_214_129bce_l2m3n4o5,Carneades of Cyrene
+"Plutarch, Against the Stoics on Common Conceptions - Carneadean critiques",2,node,person_carneades_214_129bce_l2m3n4o5,Carneades of Cyrene
+"Cicero, De Fato §§28-33 - fullest preserved version",2,node,argument_cafma_carneades_m3n4o5p6,CAFMA: Carneadean Anti-Fatalist Moral Argumentation
+"Origen, De Principiis III.1.2-4 - Carneadean arguments used by Christian libertarian",2,node,argument_cafma_carneades_m3n4o5p6,CAFMA: Carneadean Anti-Fatalist Moral Argumentation
+"Alexander of Aphrodisias, De Fato - builds on Carneadean critique",2,node,argument_cafma_carneades_m3n4o5p6,CAFMA: Carneadean Anti-Fatalist Moral Argumentation
+"Cicero, Academica - Academic Skeptical epistemology and method",2,node,concept_academic_skepticism_epoche_n4o5p6q7,Academic Skepticism and Epochē (Ἐποχή)
+"Cicero, De Fato - Carneades' anti-fatalist arguments (skeptical method applied to fate)",2,node,concept_academic_skepticism_epoche_n4o5p6q7,Academic Skepticism and Epochē (Ἐποχή)
+"Sextus Empiricus, Outlines of Pyrrhonism - comparison of Academic and Pyrrhonian skepticism",2,node,concept_academic_skepticism_epoche_n4o5p6q7,Academic Skepticism and Epochē (Ἐποχή)
+"Sextus Empiricus, Against the Professors VII - Academic critique of Stoic epistemology",2,node,concept_academic_skepticism_epoche_n4o5p6q7,Academic Skepticism and Epochē (Ἐποχή)
+Plutarch - various works preserving Academic critiques of Stoicism,2,node,concept_academic_skepticism_epoche_n4o5p6q7,Academic Skepticism and Epochē (Ἐποχή)
+Diogenes Laertius IV.28-66 - lives of Academic Skeptics,2,node,concept_academic_skepticism_epoche_n4o5p6q7,Academic Skepticism and Epochē (Ἐποχή)
+"Cicero, De Fato §§28-33 - Carneades' incompatibilist arguments",2,node,concept_incompatibilism_ancient_o5p6q7r8,Ancient Incompatibilism
+"Alexander of Aphrodisias, De Fato - systematic incompatibilist treatise",2,node,concept_incompatibilism_ancient_o5p6q7r8,Ancient Incompatibilism
+"Origen, De Principiis III - Christian incompatibilism using Carneadean arguments",2,node,concept_incompatibilism_ancient_o5p6q7r8,Ancient Incompatibilism
+"Lucretius, De Rerum Natura II.251-293 - Epicurean critique of determinism",2,node,concept_incompatibilism_ancient_o5p6q7r8,Ancient Incompatibilism
+"Alcinous, Didaskalikos 26 (179.8-13) - Soul as master (δέσποτον ἡ ψυχή), power to act or not (ἐπὶ αὐτῇ τὸ πρᾶξαι ἢ μή)",2,node,person_alcinous_2nd_century_ce_p6q7r8s9,Alcinous (possibly Albinus)
+"Alcinous, Didaskalikos 26 (179.20-23) - Nature of the possible (δυνατόν) between true and false, undetermined",2,node,person_alcinous_2nd_century_ce_p6q7r8s9,Alcinous (possibly Albinus)
+"Alcinous, Didaskalikos 26 (179.31-33) - The possible takes on truth-value depending on τὸ ἐφ' ἡμῖν; what we choose determines truth",2,node,person_alcinous_2nd_century_ce_p6q7r8s9,Alcinous (possibly Albinus)
+"Alcinous, Didaskalikos 26 (full chapter) - Distinction between providence (πρόνοια) and fate (εἱμαρμένη)",2,node,person_alcinous_2nd_century_ce_p6q7r8s9,Alcinous (possibly Albinus)
+Some scholars identify Alcinous with Albinus mentioned by Galen,2,node,person_alcinous_2nd_century_ce_p6q7r8s9,Alcinous (possibly Albinus)
+Didaskalikos text preserved in manuscripts (various codices),2,node,work_didaskalikos_alcinous_2nd_ce_q7r8s9t0,Didaskalikos (Handbook of Platonism)
+"Identified in manuscripts sometimes as 'Alcinous,' sometimes 'Albinus'",2,node,work_didaskalikos_alcinous_2nd_ce_q7r8s9t0,Didaskalikos (Handbook of Platonism)
+"Alcinous, Didaskalikos Ch. 26 - most explicit statement",2,node,concept_middle_platonist_providence_fate_r8s9t0u1,Middle Platonist Providence/Fate Distinction
+"Plutarch, De Fato - Plutarch's own Middle Platonist take (lost, but referenced)",2,node,concept_middle_platonist_providence_fate_r8s9t0u1,Middle Platonist Providence/Fate Distinction
+"Apuleius, De Platone et eius dogmate - Middle Platonist handbook",2,node,concept_middle_platonist_providence_fate_r8s9t0u1,Middle Platonist Providence/Fate Distinction
+"Calcidius, Commentary on Plato's Timaeus 144-190 - providence/fate discussion",2,node,concept_middle_platonist_providence_fate_r8s9t0u1,Middle Platonist Providence/Fate Distinction
+"Nemesius, De Natura Hominis - Christian appropriation",2,node,concept_middle_platonist_providence_fate_r8s9t0u1,Middle Platonist Providence/Fate Distinction
+"Origen, Homilies on Jeremiah 18.3 - τὸ γὰρ αὐτεξούσιον ἐλεύθερόν ἐστι (For self-determination is freedom) - Patristic synthesis of Stoic and Christian freedom concepts",2,node,person_origen_alexandria_185_254ce_s9t0u1v2,Origen of Alexandria
+De Principiis III.1 (Rufinus' Latin translation + Greek fragments) - systematic defense of autexousion,2,node,person_origen_alexandria_185_254ce_s9t0u1v2,Origen of Alexandria
+Commentary on Romans (fragments) - free will and grace,2,node,person_origen_alexandria_185_254ce_s9t0u1v2,Origen of Alexandria
+"Jerome, Letter 124 (Against John of Jerusalem) - critical of Origen, but preserves positions",2,node,person_origen_alexandria_185_254ce_s9t0u1v2,Origen of Alexandria
+First Apology 43-44 - free will necessary for justice,2,node,person_justin_martyr_100_165ce_t0u1v2w3,Justin Martyr
+Second Apology 7 - humans have autexousion,2,node,person_justin_martyr_100_165ce_t0u1v2w3,Justin Martyr
+Dialogue with Trypho - various passages on providence and freedom,2,node,person_justin_martyr_100_165ce_t0u1v2w3,Justin Martyr
+"Eusebius, Ecclesiastical History IV.8, 11-18 - Justin's life, martyrdom, works",2,node,person_justin_martyr_100_165ce_t0u1v2w3,Justin Martyr
+Acta Justini (Acts of Justin) - martyrdom account,2,node,person_justin_martyr_100_165ce_t0u1v2w3,Justin Martyr
+"Justin Martyr, First Apology 43-44; Second Apology 7 - early use of autexousion",2,node,concept_autexousion_christian_freedom_u1v2w3x4,Autexousion (Αὐτεξούσιον) - Christian Free Will
+"Origen, De Principiis III.1 - systematic defense of autexousion",2,node,concept_autexousion_christian_freedom_u1v2w3x4,Autexousion (Αὐτεξούσιον) - Christian Free Will
+"Origen, Contra Celsum (multiple books on providence, free will, fate)",2,node,concept_autexousion_christian_freedom_u1v2w3x4,Autexousion (Αὐτεξούσιον) - Christian Free Will
+"Irenaeus, Against Heresies IV.37-39 - free will against Gnostic determinism",2,node,concept_autexousion_christian_freedom_u1v2w3x4,Autexousion (Αὐτεξούσιον) - Christian Free Will
+"Methodius of Olympus, De Autexousio (On Free Will) - lost work, title survives",2,node,concept_autexousion_christian_freedom_u1v2w3x4,Autexousion (Αὐτεξούσιον) - Christian Free Will
+"Athanasius, Against the Heathen, On the Incarnation - autexousion in creation",2,node,concept_autexousion_christian_freedom_u1v2w3x4,Autexousion (Αὐτεξούσιον) - Christian Free Will
+"Basil, Hexaemeron - humans created with autexousion",2,node,concept_autexousion_christian_freedom_u1v2w3x4,Autexousion (Αὐτεξούσιον) - Christian Free Will
+"Gregory of Nyssa, On Virginity, Catechetical Oration - systematic treatments",2,node,concept_autexousion_christian_freedom_u1v2w3x4,Autexousion (Αὐτεξούσιον) - Christian Free Will
+"John Chrysostom, Homilies on Genesis, Romans, Hebrews (various - on free will and grace)",2,node,concept_autexousion_christian_freedom_u1v2w3x4,Autexousion (Αὐτεξούσιον) - Christian Free Will
+Rufinus' Latin translation (c. 398 CE) - primary surviving text,2,node,work_de_principiis_origen_230s_v2w3x4y5,De Principiis (Περὶ Ἀρχῶν) - Origen
+Greek fragments in Philocalia (anthology by Basil & Gregory of Nazianzus),2,node,work_de_principiis_origen_230s_v2w3x4y5,De Principiis (Περὶ Ἀρχῶν) - Origen
+"Greek fragments in Justinian's Letter to Menas (553 CE, anti-Origenist)",2,node,work_de_principiis_origen_230s_v2w3x4y5,De Principiis (Περὶ Ἀρχῶν) - Origen
+Jerome's polemical retranslation of parts (Against John of Jerusalem),2,node,work_de_principiis_origen_230s_v2w3x4y5,De Principiis (Περὶ Ἀρχῶν) - Origen
+"Consolation of Philosophy - primary source, esp. Book V on foreknowledge and freedom",2,node,person_boethius_480_524ce_w3x4y5z6,Boethius (Anicius Manlius Severinus Boethius)
+Consolation of Philosophy - full text survives,2,node,work_consolation_v_boethius_524ce_x4y5z6a7,Consolation of Philosophy Book V - Boethius
+"Book V, esp. proses 3-6 and meters - divine foreknowledge and freedom",2,node,work_consolation_v_boethius_524ce_x4y5z6a7,Consolation of Philosophy Book V - Boethius
+Numerous medieval manuscripts - one of most copied medieval texts,2,node,work_consolation_v_boethius_524ce_x4y5z6a7,Consolation of Philosophy Book V - Boethius
+"Cicero - first major Greek→Latin philosophical translator (eph' hêmin → in nostra potestate, heimarmenê → fatum)",2,node,concept_terminology_evolution_greek_latin_y5z6a7b8,Terminology Evolution: Greek → Latin Free Will Vocabulary
+Jerome - translated autexousion as liberum arbitrium in Vulgate and theological works,2,node,concept_terminology_evolution_greek_latin_y5z6a7b8,Terminology Evolution: Greek → Latin Free Will Vocabulary
+Rufinus - Latin translation of Origen's De Principiis (autexousion → liberum arbitrium),2,node,concept_terminology_evolution_greek_latin_y5z6a7b8,Terminology Evolution: Greek → Latin Free Will Vocabulary
+"Augustine - developed Latin voluntas terminology, De Libero Arbitrio",2,node,concept_terminology_evolution_greek_latin_y5z6a7b8,Terminology Evolution: Greek → Latin Free Will Vocabulary
+"Boethius - translated Aristotelian works, systematized Latin philosophical vocabulary",2,node,concept_terminology_evolution_greek_latin_y5z6a7b8,Terminology Evolution: Greek → Latin Free Will Vocabulary
+Vulgate Bible - Latin translations of Greek theological concepts,2,node,concept_terminology_evolution_greek_latin_y5z6a7b8,Terminology Evolution: Greek → Latin Free Will Vocabulary
+"Stoic compatibilism: Chrysippus (via Cicero, Alexander, Plutarch)",2,node,concept_ancient_free_will_debate_structure_z6a7b8c9,Ancient Free Will Debate: Compatibilism vs. Incompatibilism
+"Incompatibilism: Carneades (via Cicero De Fato), Alexander (De Fato), Epicureans (Lucretius)",2,node,concept_ancient_free_will_debate_structure_z6a7b8c9,Ancient Free Will Debate: Compatibilism vs. Incompatibilism
+"Christian incompatibilism: Origen (De Principiis III), Justin Martyr",2,node,concept_ancient_free_will_debate_structure_z6a7b8c9,Ancient Free Will Debate: Compatibilism vs. Incompatibilism
+"Synthesis attempts: Alcinous (Middle Platonism), Boethius (eternity solution)",2,node,concept_ancient_free_will_debate_structure_z6a7b8c9,Ancient Free Will Debate: Compatibilism vs. Incompatibilism
+"Aristotle, Nicomachean Ethics III.5, 1113b-1114b",2,node,quote_aristotle_origin_principle_9cb3c262,"Aristotle: When the origin is in him, it is also up to him to act or no..."
+"Lucretius, De Rerum Natura II.253-254 (c. 50 BCE)",2,node,quote_lucretius_swerve_8bae0c52,Lucretius: nor do the atoms by swerving make a certain beginning of mot...
+"Cicero, De Fato 42-43 (citing Chrysippus, c. 279-206 BCE)",2,node,quote_chrysippus_cylinder_1da2c55b,Chrysippus (via Cicero): just as someone who pushes a cylindrical stone... gives it t...
+"Alexander of Aphrodisias, On Fate 13 (c. 200 CE)",2,node,quote_alexander_alternatives_e4d14e13,Alexander of Aphrodisias: For what is up to us consists in being able also to do the o...
+"Cicero, De Fato 31 (citing Carneades, c. 214-129 BCE)",2,node,quote_carneades_cafma_4483b50a,"Carneades (via Cicero): If everything happens through antecedent causes, everything ..."
+"Origen, De Principiis III.1 (c. 220-230 CE); Philocalia 21-27",2,node,quote_origen_autexousion_abbb5a2e,Origen: The self-determining power... is the ability to do this and ...
+"Plotinus, Enneads VI.8.13 (On Free Will and the Will of the One)",2,node,quote_plotinus_one_freedom_b1d66acd,Plotinus: If someone were to say that He is willingly what He is... th...
+"Augustine, Confessions VIII.9.21 (c. 397-400 CE)",2,node,quote_augustine_divided_will_b45d573e,"Augustine: The will commands that there be will, yet does not do it... ..."
+"Boethius, Consolation of Philosophy V.6 (c. 524 CE)",2,node,quote_boethius_eternity_7f0a8967,"Boethius: Eternity... the whole, simultaneous and perfect possession o..."
+"Cicero, De Fato 28-44",2,node,debate_compatibility_question_ea55e118,The Compatibility Question
+"Alexander of Aphrodisias, De Fato 6-15",2,node,debate_compatibility_question_ea55e118,The Compatibility Question
+"Nemesius of Emesa, De Natura Hominis 41",2,node,debate_source_of_action_90c57974,Internal vs External Causes
+"Origen, Contra Celsum IV.3",2,node,debate_divine_foreknowledge_235f2530,"Providence, Foreknowledge, and Freedom"
+"Plato, Protagoras 352b-358d",2,node,debate_reason_vs_will_830c90c2,Intellectualism vs Voluntarism
+"Thomas Aquinas, Summa Theologiae I q.82 a.1",2,node,debate_reason_vs_will_830c90c2,Intellectualism vs Voluntarism
+"Cicero, De Fato 22-27",2,node,debate_randomness_objection_ae34a974,The Randomness/Luck Objection to Libertarianism
+"Alexander of Aphrodisias, De Fato 15",2,node,debate_randomness_objection_ae34a974,The Randomness/Luck Objection to Libertarianism
+"Alexander of Aphrodisias, De Fato 14-15",2,node,evolution_eph_hemin_6284cf6d,Evolution of τὸ ἐφ' ἡμῖν (to eph' hêmin)
+"Heraclitus, Fragment B94 DK",2,node,evolution_heimarmene_2b989ed0,Evolution of εἱμαρμένη (heimarmenê)
+"Plato, Republic X 617d-621d",2,node,evolution_heimarmene_2b989ed0,Evolution of εἱμαρμένη (heimarmenê)
+"Chrysippus, SVF II.913-1007",2,node,evolution_heimarmene_2b989ed0,Evolution of εἱμαρμένη (heimarmenê)
+"Cicero, De Fato 31",2,node,evolution_heimarmene_2b989ed0,Evolution of εἱμαρμένη (heimarmenê)
+"Origen, Contra Celsum IV.69-70",2,node,evolution_heimarmene_2b989ed0,Evolution of εἱμαρμένη (heimarmenê)
+"Aristotle, Nicomachean Ethics III.2-4",2,node,evolution_will_concept_c68f04bd,Evolution of Will (various terms)
+Diogenes Laertius VII.88-90,2,node,evolution_will_concept_c68f04bd,Evolution of Will (various terms)
+"Augustine, De Libero Arbitrio II.1-3",2,node,evolution_will_concept_c68f04bd,Evolution of Will (various terms)
+"Cicero, De Fato 28-29 (argos logos, lazy argument)",2,node,argument_lazy_argument_25dab067,The Lazy Argument (ἀργὸς λόγος)
+"Origen, Contra Celsum II.20 (Christian response)",2,node,argument_lazy_argument_25dab067,The Lazy Argument (ἀργὸς λόγος)
+"Epictetus, Dissertationes II.19 (discussion of Diodorus' Master Argument)",2,node,argument_master_argument_87d96670,The Master Argument (κυριεύων λόγος)
+"Cicero, De Fato 12-15 (allusions to modal arguments)",2,node,argument_master_argument_87d96670,The Master Argument (κυριεύων λόγος)
+"Alexander of Aphrodisias, In Analytica Priora (commentary on modality)",2,node,argument_master_argument_87d96670,The Master Argument (κυριεύων λόγος)
+"Epictetus, Diss. 2.19",2,node,argument_master_diodorus,Master Argument (κύριος λόγος)
+"Alexander, In An.Pr. 183",2,node,argument_master_diodorus,Master Argument (κύριος λόγος)
+"Aristotle, De Int. 9",2,node,argument_sea_battle_aristotle,Sea Battle Tomorrow
+"Cicero, Academica II.39-43",2,node,debate_stoic_academic_hellenistic,Stoic-Academic Debate on Fate
+"Plutarch, De Stoicorum Repugnantiis 1047A-1054C",2,node,debate_stoic_academic_hellenistic,Stoic-Academic Debate on Fate
+"Irenaeus, Adversus Haereses IV.36-37",2,node,debate_christian_gnostic_freedom,Christian-Gnostic Debate on Freedom
+"Methodius, De libero arbitrio 5",2,node,debate_christian_gnostic_freedom,Christian-Gnostic Debate on Freedom
+"Augustine, De natura et gratia 37-42",2,node,debate_augustine_pelagius_grace,Augustine-Pelagius on Grace and Free Will
+"Council of Carthage (418), Canon 4",2,node,debate_augustine_pelagius_grace,Augustine-Pelagius on Grace and Free Will
+"Alexander of Aphrodisias, De Fato 6-10",2,node,debate_alexander_stoics_determinism,Alexander vs Stoics on Determinism
+"Alexander of Aphrodisias, Mantissa 23",2,node,debate_alexander_stoics_determinism,Alexander vs Stoics on Determinism
+"Simplicius, In Aristotelis De Caelo Commentaria 271.1-15",2,node,debate_alexander_stoics_determinism,Alexander vs Stoics on Determinism
+Aristotle NE III,2,node,concept_ultimate_responsibility_kane,Ultimate Responsibility (UR)
+Alexander De Fato,2,node,concept_ultimate_responsibility_kane,Ultimate Responsibility (UR)
+Epictetus on prohairesis,2,node,concept_hierarchical_compatibilism_frankfurt,Hierarchical Compatibilism
+Alexander De Fato 11-14,2,node,concept_source_incompatibilism,Source Incompatibilism
+"Plotinus, Enneads III.1.1 (On Fate)",2,node,quote_plotinus_heimarmene_31dbdc1e,Plotinus: They make heimarmenê (fate) the most sovereign cause...
+"Augustine, Confessions IX.1 (c. 397-400 CE)",2,node,quote_augustine_liberum_arbitrium_0661f946,Augustine: From what deep and hidden recess was my free choice (liberum arbitrium) called forth...
+"Plotinus, Enneads III.1.9-10 (On Fate)",2,node,quote_plotinus_autexousion_65371acd,Plotinus: The self-determining power (to autexousion) is not taken away in these matters...
+"Lucretius, De Rerum Natura II.251-293 (complete Latin text)",2,node,quote_lucretius_clinamen_ii_251_293_176829af,Lucretius on the Atomic Swerve and Free Will (De rerum natura II.251-293)
+"Alexander of Aphrodisias, De Fato 181.5 - 'ἐξουσία τοῦ ἑλέσθαι καὶ τὰ ἀντικείμενα' (power of choosing opposites)",2,node,concept_exousia_power_alexander_c87942af,Ἐξουσία (Exousia) - Power/Authority
+"Alexander of Aphrodisias, De Fato 180.26-28, 181.18-21 - exousia vs predetermining causes",2,node,concept_exousia_power_alexander_c87942af,Ἐξουσία (Exousia) - Power/Authority
+"Epictetus, Discourses - exousia over use of impressions and assent",2,node,concept_exousia_power_alexander_c87942af,Ἐξουσία (Exousia) - Power/Authority
+"Nemesius, De Natura Hominis - autexousion incorporates exousia concept",2,node,concept_exousia_power_alexander_c87942af,Ἐξουσία (Exousia) - Power/Authority
+"Alcinous, Didaskalikos 26 (179.8-33) - threefold contingency, epi ison identified with eph' hêmin",2,node,concept_epi_ison_in_equal_parts_9e1e47f1,Ἐπὶ ἴσον (Epi Ison) - In Equal Parts
+"Nemesius, De Natura Hominis 104.2-7, 114.19-22 - 'in equal parts' = we can do both it and its opposite",2,node,concept_epi_ison_in_equal_parts_9e1e47f1,Ἐπὶ ἴσον (Epi Ison) - In Equal Parts
+"Calcidius, In Timaeum 151-156 - Latin rendering of Middle-Platonist framework",2,node,concept_epi_ison_in_equal_parts_9e1e47f1,Ἐπὶ ἴσον (Epi Ison) - In Equal Parts
+"[Plutarch], De Fato 571c-d - 'τὸ ὡς ἐπίσης καὶ ὁπότερον ἔτυχεν' identified with eph' hêmin",2,node,concept_epi_ison_in_equal_parts_9e1e47f1,Ἐπὶ ἴσον (Epi Ison) - In Equal Parts
+"Ammonius, In De Int. 130.23-33 - indefiniteness necessary for ethics",2,node,concept_epi_ison_in_equal_parts_9e1e47f1,Ἐπὶ ἴσον (Epi Ison) - In Equal Parts
+"Aristotle, De Int. 9 (18b9, 19a18) - original 'no more thus than not thus' (οὐδὲν μᾶλλον)",2,node,concept_epi_ison_in_equal_parts_9e1e47f1,Ἐπὶ ἴσον (Epi Ison) - In Equal Parts
+"Aristotle, Nicomachean Ethics III.4 - πᾶσα βούλησις ἐν λογιστικῷ (all boulēsis is in the rational faculty)",2,node,concept_boulesis_rational_desire_ef9f861d,Βούλησις (Boulēsis) - Rational Desire/Will
+"Plato, Republic IV - βούλησις as rational part's desire",2,node,concept_boulesis_rational_desire_ef9f861d,Βούλησις (Boulēsis) - Rational Desire/Will
+Stoic definition: εὔλογος ὄρεξις (well-reasoned desire),2,node,concept_boulesis_rational_desire_ef9f861d,Βούλησις (Boulēsis) - Rational Desire/Will
+Philo of Alexandria - exclusive use of βούλησις for divine and human intention,2,node,concept_boulesis_rational_desire_ef9f861d,Βούλησις (Boulēsis) - Rational Desire/Will
+Septuagint (LXX) - preferred θέλησις over βούλησις for Hebrew will concepts,2,node,concept_thelesis_willing_87d2b3cf,Θέλησις (Thelēsis) - Willing/Volition
+Neoplatonic definition: ψυχῆς ἔνδοθεν κίνησις (inner motion of soul),2,node,concept_thelesis_willing_87d2b3cf,Θέλησις (Thelēsis) - Willing/Volition
+Pollux 5.165 - condemned as non-classical by Atticists,2,node,concept_thelesis_willing_87d2b3cf,Θέλησις (Thelēsis) - Willing/Volition
+Christian patristic usage - divine will (θέλημα θεοῦ),2,node,concept_thelesis_willing_87d2b3cf,Θέλησις (Thelēsis) - Willing/Volition
+Romans 6:16-23,2,node,person_paul_apostle_1st_century,Paul the Apostle
+Galatians 5:13-18,2,node,person_paul_apostle_1st_century,Paul the Apostle
+Romans 5:12-21,2,node,work_epistle_to_romans_paul,Epistle to the Romans
+Romans 7:14-25,2,node,work_epistle_to_romans_paul,Epistle to the Romans
+Romans 8:1-4,2,node,work_epistle_to_romans_paul,Epistle to the Romans
+Galatians 5:13-26,2,node,work_epistle_to_galatians_paul,Epistle to the Galatians
+1 Corinthians 6:12-20,2,node,work_epistle_first_corinthians_paul,First Epistle to the Corinthians
+1 Corinthians 8:9-13,2,node,work_epistle_first_corinthians_paul,First Epistle to the Corinthians
+Romans 3:21-26,2,node,concept_justification_by_faith_pauline,Justification by Faith
+Romans 5:1-5,2,node,concept_justification_by_faith_pauline,Justification by Faith
+1 Clement 2.1-4,2,node,person_clement_of_rome_1st_century,Clement of Rome
+1 Clement 7.4-8.1,2,node,work_first_clement_letter,1 Clement
+1 Clement 58.2-59.3,2,node,work_first_clement_letter,1 Clement
+Didache 16.1-8,2,node,work_didache_two_ways,Didache
+"Shepherd of Hermas, Mandate 12.1-6",2,node,work_shepherd_of_hermas,Shepherd of Hermas
+"Shepherd of Hermas, Similitude 5.1-7",2,node,work_shepherd_of_hermas,Shepherd of Hermas
+"Ignatius, Letter to the Romans 4.1-5.3",2,node,person_ignatius_of_antioch_c107,Ignatius of Antioch
+"Ignatius, Letter to the Romans 7.2",2,node,person_ignatius_of_antioch_c107,Ignatius of Antioch
+"Ignatius, Letter to the Magnesians 1.2-2.1",2,node,person_ignatius_of_antioch_c107,Ignatius of Antioch
+"Polycarp, Letter to the Philippians 5.3-6.1",2,node,person_polycarp_of_smyrna_c155,Polycarp of Smyrna
+Martyrdom of Polycarp 9.1-11.2,2,node,person_polycarp_of_smyrna_c155,Polycarp of Smyrna
+"Cyprian, Ad Donatum 5-7",2,node,person_cyprian_of_carthage_c258,Cyprian of Carthage
+"Cyprian, Epistle 56.3-5",2,node,person_cyprian_of_carthage_c258,Cyprian of Carthage
+"Cyprian, De Lapsis 32",2,node,person_cyprian_of_carthage_c258,Cyprian of Carthage
+Epistle of Barnabas 18-21,2,node,concept_two_ways_moral_tradition,Two Ways Moral Tradition
+"Shepherd of Hermas, Mandate 6.1-5",2,node,concept_two_ways_moral_tradition,Two Ways Moral Tradition
+Romans 1:24-32; Divine_and_Human_Agency_full.txt:8043-8053,2,node,concept_pauline_agency_framework_e6fc455c,Pauline Agency Framework
+Philippians 2:12-13; Divine_and_Human_Agency_full.txt:169-176,2,node,concept_pauline_agency_framework_e6fc455c,Pauline Agency Framework
+1QS 3:13-4:26; Divine_and_Human_Agency_full.txt:2085-2185,2,node,concept_second_temple_agency_spectrum_ad43b22a,Second Temple Agency Spectrum
+Sirach 4:1; 33:10-15; Divine_and_Human_Agency_full.txt:4201-4231,2,node,concept_second_temple_agency_spectrum_ad43b22a,Second Temple Agency Spectrum
+4 Ezra 3:21-22; 8:55-60; Divine_and_Human_Agency_full.txt:4287-4343,2,node,concept_second_temple_agency_spectrum_ad43b22a,Second Temple Agency Spectrum
+Numbers 11:31-35; Divine_and_Human_Agency_full.txt:8039-8053,2,node,concept_gathercole_revelatory_sin_economy_ef6569ea,Revelatory Sin Economy
+1 Samuel 8:5-18; Divine_and_Human_Agency_full.txt:8051-8059,2,node,concept_gathercole_revelatory_sin_economy_ef6569ea,Revelatory Sin Economy
+Galatians 2:21; Divine_and_Human_Agency_full.txt:7241-7246,2,node,concept_barclay_grace_comparison_26656e8d,Grace: Philo and Paul Compared
+Galatians 2:19-21,2,edge,concept_pauline_agency_framework_e6fc455c -> work_epistle_to_galatians_paul,draws_on
+1QS 3:13-4:26,2,edge,concept_second_temple_agency_spectrum_ad43b22a -> concept_qumran_two_spirits_economy_dd50d11a,includes_position
+"Aulus Gellius, Noctes Atticae XIX.1",1,node,reformulation_aulus_gellius_reform_01ef18e6,Aulus Gellius's reformulation
+"Irenaeus, Adversus Haereses IV.4.3-4",1,node,argument_irenaeuss_antignostic_argument_for_free_will_f54fe920,Irenaeus's Anti-Gnostic Argument for Free Will
+"John Hick, Evil and the God of Love (1966)",1,node,reformulation_john_hick_reform_f27ff4ec,John Hick's reformulation
+"John Hick, Death and Eternal Life (1976)",1,node,reformulation_john_hick_reform_f27ff4ec,John Hick's reformulation
+"Tertullian, De Praescriptione Haereticorum 5-7",1,node,argument_tertullians_antimarcionite_argument_for_free_will_f49cad73,Tertullian's Anti-Marcionite Argument for Free Will
+"Augustine, De Gratia et Libero Arbitrio (CSEL 74; CCL 29; PL 44:881-912)",1,node,argument_augustines_antipelagian_argument_grace_necessity_0b29401f,Augustine's Anti-Pelagian Argument (Grace Necessity)
+"Augustine, De Correptione et Gratia (CSEL 92; PL 44:915-946)",1,node,argument_augustines_antipelagian_argument_grace_necessity_0b29401f,Augustine's Anti-Pelagian Argument (Grace Necessity)
+"Augustine, Contra Julianum (PL 44:641-874)",1,node,argument_augustines_antipelagian_argument_grace_necessity_0b29401f,Augustine's Anti-Pelagian Argument (Grace Necessity)
+"Augustine, De Praedestinatione Sanctorum (PL 44:959-992)",1,node,argument_augustines_antipelagian_argument_grace_necessity_0b29401f,Augustine's Anti-Pelagian Argument (Grace Necessity)
+"Augustine, Enchiridion ad Laurentium (CSEL 46; CCL 46; PL 40:231-290)",1,node,argument_augustines_antipelagian_argument_grace_necessity_0b29401f,Augustine's Anti-Pelagian Argument (Grace Necessity)
+"Augustine, Contra Duas Epistulas Pelagianorum (CSEL 60; PL 44:549-638)",1,node,argument_augustines_antipelagian_argument_grace_necessity_0b29401f,Augustine's Anti-Pelagian Argument (Grace Necessity)
+"Augustine, De Natura et Gratia (CSEL 60; PL 44:247-290)",1,node,argument_augustines_antipelagian_argument_grace_necessity_0b29401f,Augustine's Anti-Pelagian Argument (Grace Necessity)
+"Augustine, Opus Imperfectum Contra Julianum (PL 45:1049-1608)",1,node,argument_augustines_antipelagian_argument_grace_necessity_0b29401f,Augustine's Anti-Pelagian Argument (Grace Necessity)
+"Martin Luther, De Servo Arbitrio (1525) §§152-153",1,node,reformulation_martin_luther_reform_a7c7729f,Martin Luther's reformulation
+"Martin Luther, Lectures on Romans (1515-1516) WA 56:355-360",1,node,reformulation_martin_luther_reform_a7c7729f,Martin Luther's reformulation
+"John Calvin, Institutio Christianae Religionis III.21-24",1,node,reformulation_john_calvin_reform_bc99fcc7,John Calvin's reformulation
+"John Calvin, De Aeterno Dei Praedestinatione (1552) ch. 3-4",1,node,reformulation_john_calvin_reform_bc99fcc7,John Calvin's reformulation
+"John Calvin, Concerning the Eternal Predestination of God (1552) chs. 1-2",1,node,reformulation_john_calvin_reform_bc99fcc7,John Calvin's reformulation
+"Søren Kierkegaard, The Sickness Unto Death (1849) Part I",1,node,reformulation_soren_kierkegaard_reform_6d1630de,Søren Kierkegaard's reformulation
+"Søren Kierkegaard, Either/Or II (1843) Judge William’s letters",1,node,reformulation_soren_kierkegaard_reform_6d1630de,Søren Kierkegaard's reformulation
+Remonstrant Articles (1610) art. 1-5,1,node,reformulation_modern_arminianism_reform_64925e3f,Modern Arminianism's reformulation
+"John Wesley, Sermon 57 “On the Fall of Man” (1767)",1,node,reformulation_modern_arminianism_reform_64925e3f,Modern Arminianism's reformulation
+"Boethius, Consolation of Philosophy V, metrum 6",1,node,argument_boethiuss_eternity_argument_cd3d71ad,Boethius's Eternity Argument
+"Anselm, De Libertate Arbitrii 1-3",1,node,argument_anselms_necessity_of_the_past_f7947dab,Anselm's Necessity of the Past
+"Scotus, Reportatio Parisiensis I-A d.2 q.1",1,node,argument_scotuss_synchronic_contingency_e39fc978,Scotus's Synchronic Contingency
+"Ockham, Tractatus de praedestinatione et de praescientia Dei, ch. 3",1,node,argument_ockhams_divine_power_argument_a0e19729,Ockham's Divine Power Argument
+"Quaestiones super decem libros Ethicorum Aristotelis III, q.1",1,node,person_jean_buridan_attributed_e5990f67,Jean Buridan (attributed)
+"Quaestiones super De Caelo et Mundo II, q.12",1,node,person_jean_buridan_attributed_e5990f67,Jean Buridan (attributed)
+"Thomas Hobbes, Leviathan ch. 21 (1651) (liberty of subjects)",1,node,argument_liberty_as_absence_of_external_impediment_4587b29b,Liberty as Absence of External Impediment
+"Gottfried Wilhelm Leibniz, Theodicy (1710) §§ 34, 44, 288-302 (spontaneity and freedom)",1,node,argument_liberty_of_spontaneity_7e1184bf,Liberty of Spontaneity
+"David Hume, Enquiry Concerning Human Understanding (1748) Section VIII (liberty and necessity)",1,node,argument_liberty_of_spontaneity_7e1184bf,Liberty of Spontaneity
+"René Descartes, Meditations on First Philosophy IV (1641) (infinite will and error)",1,node,argument_infinite_will_argument_f19a66ed,Infinite Will Argument
+"René Descartes, Principles of Philosophy I.35-42 (1644) (will and freedom)",1,node,argument_infinite_will_argument_f19a66ed,Infinite Will Argument
+"René Descartes, Letter to Mesland, 9 February 1645 (liberty of indifference)",1,node,argument_infinite_will_argument_f19a66ed,Infinite Will Argument
+"René Descartes, Letter to Mesland, 2 May 1644",1,node,argument_infinite_will_argument_f19a66ed,Infinite Will Argument
+"Meditations on First Philosophy (1641), Meditation IV",1,node,person_rene_descartes_1aa22692,René Descartes
+"Principles of Philosophy (1644), Part I §§32-42",1,node,person_rene_descartes_1aa22692,René Descartes
+"John Duns Scotus, Ordinatio I, d.39 (will's indifference)",1,node,argument_freedom_of_indifference_dab82dcc,Freedom of Indifference
+"William of Ockham, Quodlibet I, q.16 (will's liberty)",1,node,argument_freedom_of_indifference_dab82dcc,Freedom of Indifference
+"Luis de Molina, Concordia I, d.2 (1588) (freedom and indifference)",1,node,argument_freedom_of_indifference_dab82dcc,Freedom of Indifference
+"René Descartes, Letters to Mesland (1644-1645)",1,node,argument_freedom_of_indifference_dab82dcc,Freedom of Indifference
+"Baruch Spinoza, Ethics II, Prop. 48-49 (no free will)",1,node,argument_necessitarian_argument_42a52b1b,Necessitarian Argument
+"Baruch Spinoza, Ethics I Appendix",1,node,argument_necessitarian_argument_42a52b1b,Necessitarian Argument
+"Baruch Spinoza, Ethics I, Appendix (1677) (necessity and freedom)",1,node,argument_necessitarian_argument_42a52b1b,Necessitarian Argument
+"Thomas Hobbes, Leviathan ch. 21 (1651) (liberty)",1,node,argument_necessitarian_argument_42a52b1b,Necessitarian Argument
+"Anthony Collins, A Philosophical Inquiry Concerning Human Liberty (1717)",1,node,argument_necessitarian_argument_42a52b1b,Necessitarian Argument
+"Baruch Spinoza, Ethics II, Propositions 48-49 (no free will)",1,node,argument_conatus_doctrine_1588d13c,Conatus Doctrine
+"Baruch Spinoza, Ethics IV-V (freedom and bondage)",1,node,argument_conatus_doctrine_1588d13c,Conatus Doctrine
+"Baruch Spinoza, Ethics III, Propositions 4-9 (1677) (conatus doctrine)",1,node,argument_conatus_doctrine_1588d13c,Conatus Doctrine
+"Baruch Spinoza, Letter 58 to Schuller (October 1674) (freedom and necessity)",1,node,argument_conatus_doctrine_1588d13c,Conatus Doctrine
+"Gottfried Wilhelm Leibniz, Theodicy (1710) §§ 44, 282-302, 367",1,node,argument_principle_of_sufficient_reason_and_contingency_4fa546d9,Principle of Sufficient Reason and Contingency
+"Gottfried Wilhelm Leibniz, Monadology (1714) §§ 31-39",1,node,argument_principle_of_sufficient_reason_and_contingency_4fa546d9,Principle of Sufficient Reason and Contingency
+"Gottfried Wilhelm Leibniz, Correspondence with Clarke (1715-1716)",1,node,argument_principle_of_sufficient_reason_and_contingency_4fa546d9,Principle of Sufficient Reason and Contingency
+"Gottfried Wilhelm Leibniz, New System of Nature (1695)",1,node,argument_preestablished_harmony_957f794d,Pre-established Harmony
+"Gottfried Wilhelm Leibniz, Theodicy (1710) §§ 59-62, 345-353, 403",1,node,argument_preestablished_harmony_957f794d,Pre-established Harmony
+"Gottfried Wilhelm Leibniz, Monadology (1714) §§ 78-81",1,node,argument_preestablished_harmony_957f794d,Pre-established Harmony
+"Gottfried Wilhelm Leibniz, Correspondence with Arnauld (1686-1690)",1,node,argument_preestablished_harmony_957f794d,Pre-established Harmony
+"Baruch Spinoza, Ethics III, Proposition 2 (body and mind as active)",1,node,argument_spontaneity_within_determination_13fcd224,Spontaneity within Determination
+"Baruch Spinoza, Ethics IV Preface",1,node,argument_spontaneity_within_determination_13fcd224,Spontaneity within Determination
+"Baruch Spinoza, Ethics I, Definition 7 (1677) (free = self-caused)",1,node,argument_spontaneity_within_determination_13fcd224,Spontaneity within Determination
+"Gottfried Wilhelm Leibniz, Theodicy (1710) §§ 288-302",1,node,argument_spontaneity_within_determination_13fcd224,Spontaneity within Determination
+"David Hume, An Enquiry Concerning Human Understanding (1748) Section VIII",1,node,argument_spontaneity_within_determination_13fcd224,Spontaneity within Determination
+"Gottfried Wilhelm Leibniz, Theodicy Part I §§ 7-23",1,node,argument_best_of_all_possible_worlds_cb9e1741,Best of All Possible Worlds
+"Gottfried Wilhelm Leibniz, Discourse on Metaphysics §13",1,node,argument_best_of_all_possible_worlds_cb9e1741,Best of All Possible Worlds
+"Gottfried Wilhelm Leibniz, Theodicy (1710), Preliminary Dissertation §§ 1-31",1,node,argument_best_of_all_possible_worlds_cb9e1741,Best of All Possible Worlds
+"Gottfried Wilhelm Leibniz, Monadology (1714) §§ 53-55",1,node,argument_best_of_all_possible_worlds_cb9e1741,Best of All Possible Worlds
+"Gottfried Wilhelm Leibniz, On the Ultimate Origination of Things (1697)",1,node,argument_best_of_all_possible_worlds_cb9e1741,Best of All Possible Worlds
+"Nicolas Malebranche, The Search After Truth VI.2.3 (1674-1675) (will lacks efficacy)",1,node,argument_human_will_lacks_efficacy_45522d03,Human Will Lacks Efficacy
+"Nicolas Malebranche, Elucidations XV (1678)",1,node,argument_human_will_lacks_efficacy_45522d03,Human Will Lacks Efficacy
+"Nicolas Malebranche, Dialogues on Metaphysics VII.10-13 (1688)",1,node,argument_human_will_lacks_efficacy_45522d03,Human Will Lacks Efficacy
+"Nicolas Malebranche, Treatise on Ethics I.1.8 (1684)",1,node,argument_human_will_lacks_efficacy_45522d03,Human Will Lacks Efficacy
+"Nicolas Malebranche, The Search After Truth IV.1 (freedom and volition)",1,node,argument_vision_in_god_and_freedom_2a29f35e,Vision in God and Freedom
+"Nicolas Malebranche, Dialogues on Metaphysics and Religion V",1,node,argument_vision_in_god_and_freedom_2a29f35e,Vision in God and Freedom
+"Nicolas Malebranche, The Search After Truth III.2.6 (1674-1675) (vision in God)",1,node,argument_vision_in_god_and_freedom_2a29f35e,Vision in God and Freedom
+"Nicolas Malebranche, Dialogues on Metaphysics VII-VIII (1688)",1,node,argument_vision_in_god_and_freedom_2a29f35e,Vision in God and Freedom
+"Nicolas Malebranche, Treatise on Nature and Grace (1680)",1,node,argument_vision_in_god_and_freedom_2a29f35e,Vision in God and Freedom
+"Pierre Bayle, Dictionary article ""Paulicians"" (problem of evil)",1,node,argument_skeptical_argument_from_divine_power_d217cdac,Skeptical Argument from Divine Power
+"Pierre Bayle, Dictionary article ""Pyrrhon"" (skepticism)",1,node,argument_skeptical_argument_from_divine_power_d217cdac,Skeptical Argument from Divine Power
+"Pierre Bayle, Historical and Critical Dictionary (1697), article ""Rorarius"" (animal souls and freedom)",1,node,argument_skeptical_argument_from_divine_power_d217cdac,Skeptical Argument from Divine Power
+"Pierre Bayle, Continuation of Miscellaneous Thoughts (1705) (theodicy skepticism)",1,node,argument_skeptical_argument_from_divine_power_d217cdac,Skeptical Argument from Divine Power
+"Dictionnaire historique et critique (Rotterdam, 1697)",1,node,person_pierre_bayle_701cb0a7,Pierre Bayle
+Réponse aux questions d'un provincial (1704),1,node,person_pierre_bayle_701cb0a7,Pierre Bayle
+"Pierre Bayle, Historical and Critical Dictionary (1697), article ""Rorarius""",1,node,argument_argument_from_animal_rationality_4629e983,Argument from Animal Rationality
+"Michel de Montaigne, Essays II.12 (1580) (Apology for Raymond Sebond—animal rationality)",1,node,argument_argument_from_animal_rationality_4629e983,Argument from Animal Rationality
+"David Hume, Enquiry Concerning Human Understanding (1748) Section VIII (animal behavior)",1,node,argument_argument_from_animal_rationality_4629e983,Argument from Animal Rationality
+"René Descartes, Discourse on Method (1637) Part V (animals as automata)",1,node,argument_argument_from_animal_rationality_4629e983,Argument from Animal Rationality
+"Pierre Bayle, Dictionary article ""Manichaeans""",1,node,argument_theodicy_skepticism_6c745d6f,Theodicy Skepticism
+"Pierre Bayle, Dictionary article ""Marcionites""",1,node,argument_theodicy_skepticism_6c745d6f,Theodicy Skepticism
+"Pierre Bayle, Historical and Critical Dictionary (1697), article ""Paulicians""",1,node,argument_theodicy_skepticism_6c745d6f,Theodicy Skepticism
+"Gottfried Wilhelm Leibniz, Theodicy (1710) (response to Bayle)",1,node,argument_theodicy_skepticism_6c745d6f,Theodicy Skepticism
+"Thomas Aquinas, Summa Theologica I, q.105, a.5 (divine causation of all effects)",1,node,argument_compatibilism_through_divine_concurrence_d6ce2a0f,Compatibilism through Divine Concurrence
+"Thomas Aquinas, Summa Theologica I-II, q.10, a.4 (God moves the will)",1,node,argument_compatibilism_through_divine_concurrence_d6ce2a0f,Compatibilism through Divine Concurrence
+"Luis de Molina, Concordia (1588) disp. 25-28 (simultaneous concurrence)",1,node,argument_compatibilism_through_divine_concurrence_d6ce2a0f,Compatibilism through Divine Concurrence
+"Francisco Suárez, Disputationes Metaphysicae (1597) disp. 22 (divine concurrence)",1,node,argument_compatibilism_through_divine_concurrence_d6ce2a0f,Compatibilism through Divine Concurrence
+Disputationes Metaphysicae (1597),1,node,person_francisco_suarez_late_16th_c_scholastic_tradition_continued_into_17th_c_d5e0d92c,Francisco Suárez (late 16th c.) / Scholastic tradition continued into 17th c.
+De Gratia (1619),1,node,person_francisco_suarez_late_16th_c_scholastic_tradition_continued_into_17th_c_d5e0d92c,Francisco Suárez (late 16th c.) / Scholastic tradition continued into 17th c.
+"Luis de Molina, Concordia Disputation 49-53 (counterfactuals of freedom)",1,node,argument_molinism_and_middle_knowledge_3d718eca,Molinism and Middle Knowledge
+"Francisco Suárez, De Scientia Dei Futurorum Contingentium (defense of Molinism)",1,node,argument_molinism_and_middle_knowledge_3d718eca,Molinism and Middle Knowledge
+"Luis de Molina, Concordia liberi arbitrii cum gratiae donis (1588), Disputation 47 (middle knowledge)",1,node,argument_molinism_and_middle_knowledge_3d718eca,Molinism and Middle Knowledge
+De Iustitia et Iure (1593-1609),1,node,person_luis_de_molina_26dc2b96,Luis de Molina
+"Augustine, De Gratia et Libero Arbitrio (Jansenist source)",1,node,argument_jansenist_denial_of_liberty_of_indifference_73aa8ce2,Jansenist Denial of Liberty of Indifference
+"Cornelius Jansen, Augustinus II.4",1,node,argument_jansenist_denial_of_liberty_of_indifference_73aa8ce2,Jansenist Denial of Liberty of Indifference
+"Cornelius Jansen, Augustinus (1640), Vol. 2 (De gratia Christi Salvatoris)",1,node,argument_jansenist_denial_of_liberty_of_indifference_73aa8ce2,Jansenist Denial of Liberty of Indifference
+"Antoine Arnauld, De la fréquente communion (1643)",1,node,argument_jansenist_denial_of_liberty_of_indifference_73aa8ce2,Jansenist Denial of Liberty of Indifference
+"Blaise Pascal, Les Provinciales (1656-1657)",1,node,argument_jansenist_denial_of_liberty_of_indifference_73aa8ce2,Jansenist Denial of Liberty of Indifference
+"Blaise Pascal, Pensées §§ 110-145 (on the heart vs. reason)",1,node,argument_pascals_wager_and_voluntarism_4519ad75,Pascal's Wager and Voluntarism
+"Blaise Pascal, Pensées §418 (Lafuma 418)",1,node,argument_pascals_wager_and_voluntarism_4519ad75,Pascal's Wager and Voluntarism
+"Blaise Pascal, Pensées (1670) §233/418 (Brunschvicg 233, Lafuma 418) (the Wager)",1,node,argument_pascals_wager_and_voluntarism_4519ad75,Pascal's Wager and Voluntarism
+"Blaise Pascal, Provincial Letters (1656-1657) (Jansenist context)",1,node,argument_pascals_wager_and_voluntarism_4519ad75,Pascal's Wager and Voluntarism
+"René Descartes, Meditations on First Philosophy II, VI (1641) (substance dualism)",1,node,argument_cartesian_dualism_and_agent_causation_b637cc75,Cartesian Dualism and Agent Causation
+"René Descartes, Passions of the Soul (1649) art. 30-41 (mind-body interaction via pineal gland)",1,node,argument_cartesian_dualism_and_agent_causation_b637cc75,Cartesian Dualism and Agent Causation
+"René Descartes, Correspondence with Princess Elisabeth (1643-1649) (mind-body problem)",1,node,argument_cartesian_dualism_and_agent_causation_b637cc75,Cartesian Dualism and Agent Causation
+"René Descartes, Principles of Philosophy I.48, 51-53 (1644)",1,node,argument_cartesian_dualism_and_agent_causation_b637cc75,Cartesian Dualism and Agent Causation
+"Thomas Hobbes, Leviathan ch. 46 (darkness of vain philosophy)",1,node,argument_hobbess_rejection_of_immaterial_soul_02b7bcda,Hobbes's Rejection of Immaterial Soul
+"Thomas Hobbes, De Corpore I.2",1,node,argument_hobbess_rejection_of_immaterial_soul_02b7bcda,Hobbes's Rejection of Immaterial Soul
+"Thomas Hobbes, Leviathan ch. 34 (1651) (""incorporeal substance"" is contradictory)",1,node,argument_hobbess_rejection_of_immaterial_soul_02b7bcda,Hobbes's Rejection of Immaterial Soul
+"Thomas Hobbes, De Corpore (1655) Part IV (materialist metaphysics)",1,node,argument_hobbess_rejection_of_immaterial_soul_02b7bcda,Hobbes's Rejection of Immaterial Soul
+"Ralph Cudworth, The True Intellectual System of the Universe (1678) Book I, ch. 3 (plastic nature)",1,node,argument_cambridge_platonist_defense_of_plastic_nature_d49aa761,Cambridge Platonist Defense of Plastic Nature
+"Henry More, The Immortality of the Soul (1659) (soul's self-moving power)",1,node,argument_cambridge_platonist_defense_of_plastic_nature_d49aa761,Cambridge Platonist Defense of Plastic Nature
+"Benjamin Whichcote, Moral and Religious Aphorisms (1703)",1,node,argument_cambridge_platonist_defense_of_plastic_nature_d49aa761,Cambridge Platonist Defense of Plastic Nature
+"Ralph Cudworth, A Treatise Concerning Eternal and Immutable Morality (1731)",1,node,argument_cambridge_platonist_defense_of_plastic_nature_d49aa761,Cambridge Platonist Defense of Plastic Nature
+The True Intellectual System of the Universe (1678),1,node,person_ralph_cudworth_77de5c65,Ralph Cudworth
+A Treatise Concerning Eternal and Immutable Morality (1731),1,node,person_ralph_cudworth_77de5c65,Ralph Cudworth
+"John Locke, Essay II.21.47-53 (suspension and freedom)",1,node,argument_lockes_suspension_of_desire_e45dc337,Locke's Suspension of Desire
+"John Locke, Essay II.21.29-35 (uneasiness determines the will)",1,node,argument_lockes_suspension_of_desire_e45dc337,Locke's Suspension of Desire
+"John Locke, An Essay Concerning Human Understanding II.21 (2nd ed. 1694) (power of suspension)",1,node,argument_lockes_suspension_of_desire_e45dc337,Locke's Suspension of Desire
+"Baruch Spinoza, Ethics V, Propositions 1-42 (freedom through reason)",1,node,argument_spinozas_free_man_ethics_b0940e69,Spinoza's Free Man Ethics
+"Baruch Spinoza, Ethics II, Propositions 48-49 (denial of free will)",1,node,argument_spinozas_free_man_ethics_b0940e69,Spinoza's Free Man Ethics
+"Baruch Spinoza, Ethics IV, Propositions 67-73 (1677) (free man)",1,node,argument_spinozas_free_man_ethics_b0940e69,Spinoza's Free Man Ethics
+"Baruch Spinoza, Theological-Political Treatise ch. 20 (1670) (freedom to philosophize)",1,node,argument_spinozas_free_man_ethics_b0940e69,Spinoza's Free Man Ethics
+"Eusebius, Praeparatio Evangelica VI.8 (preserves Diogenianus' arguments)",1,node,person_diogenianos_8m3n5p21,Diogenianos
+"Stobaeus, Anthologion I.49.33 (Diogenianus fragment)",1,node,person_diogenianos_8m3n5p21,Diogenianos
+Against Chrysippus (fragments preserved),1,node,person_diogenianos_8m3n5p21,Diogenianos
+"Gellius, Noctes Atticae III.1, XIV.1 (extensive quotations)",1,node,person_favorinus_of_arles_9n4o6q32,Favorinus of Arles
+"Philostratus, Lives of the Sophists I.8 (biography)",1,node,person_favorinus_of_arles_9n4o6q32,Favorinus of Arles
+Against Astrology (fragments),1,node,person_favorinus_of_arles_9n4o6q32,Favorinus of Arles
+"Photius, Bibliotheca cod. 214, 251 (summaries of Hierocles' lost work)",1,node,person_hierocles_of_alexandria_1p6q8s54,Hierocles of Alexandria
+"Hierocles, Fragment 4 in Ramelli & Konstan (2009)",1,node,person_hierocles_of_alexandria_1p6q8s54,Hierocles of Alexandria
+On Providence and Fate (fragments),1,node,person_hierocles_of_alexandria_1p6q8s54,Hierocles of Alexandria
+"Firmicus Maternus, Mathesis (c. 334-337 CE)",1,node,person_firmicus_maternus_2q7r9t65,Firmicus Maternus
+"Firmicus Maternus, Mathesis II.29",1,node,person_firmicus_maternus_2q7r9t65,Firmicus Maternus
+"Mathesis (Astrological handbook, 8 books)",1,node,person_firmicus_maternus_2q7r9t65,Firmicus Maternus
+"De Errore Profanarum Religionum (anti-pagan polemic, after conversion)",1,node,person_firmicus_maternus_2q7r9t65,Firmicus Maternus
+"Eusebius, Praeparatio Evangelica VI.10 (preserves Book of the Laws of Countries)",1,node,person_bardesanes_the_syrian_3r8s0u76,Bardesanes the Syrian (Bar-Daisan)
+"Bardaisan, Book of the Laws of Countries 10-17",1,node,person_bardesanes_the_syrian_3r8s0u76,Bardesanes the Syrian (Bar-Daisan)
+Book of the Laws of Countries (Liber Legum Regionum),1,node,person_bardesanes_the_syrian_3r8s0u76,Bardesanes the Syrian (Bar-Daisan)
+"Clement of Alexandria, Stromata (Miscellanies)",1,node,person_clement_of_alexandria_4s9t1v87,Clement of Alexandria
+"Clement of Alexandria, Stromata II.4-7",1,node,person_clement_of_alexandria_4s9t1v87,Clement of Alexandria
+Stromateis (Miscellanies),1,node,person_clement_of_alexandria_4s9t1v87,Clement of Alexandria
+Protrepticus (Exhortation to the Greeks),1,node,person_clement_of_alexandria_4s9t1v87,Clement of Alexandria
+Paedagogus (The Instructor),1,node,person_clement_of_alexandria_4s9t1v87,Clement of Alexandria
+"Nemesius, De Natura Hominis 104.1-7 - Threefold classification of contingent: ἐπὶ τὸ πολύ (for the most part), ἐπὶ ἔλαττον (for the lesser part), ἐπὶ ἴσον (in equal parts)",1,node,person_nemesius_of_emesa_5t0u2w98,Nemesius of Emesa
+"Nemesius, De Natura Hominis 104.4-5, 114.19-22 - ἐπὶ ἴσον identified with τὸ ἐφ' ἡμῖν (what depends on us)",1,node,person_nemesius_of_emesa_5t0u2w98,Nemesius of Emesa
+"Nemesius, De Natura Hominis 104.6-7, 114.21-22 - Definition: we are capable both of X and its opposite (αὐτό τε δυνάμεθα καὶ τὸ ἀντικείμενον αὐτῷ)",1,node,person_nemesius_of_emesa_5t0u2w98,Nemesius of Emesa
+"Nemesius, De Natura Hominis 114.24-115.2 - Examples of what depends on us",1,node,person_nemesius_of_emesa_5t0u2w98,Nemesius of Emesa
+"Nemesius, De Natura Hominis 105-106 - Stoic account via impulse and assent",1,node,person_nemesius_of_emesa_5t0u2w98,Nemesius of Emesa
+"Nemesius, De Natura Hominis 110.5-9 - προαίρεσις and actions κατὰ προαίρεσιν depend on us",1,node,person_nemesius_of_emesa_5t0u2w98,Nemesius of Emesa
+"Nemesius, De Natura Hominis 115.22-28, 116.3-5 - Choice and action coordinated",1,node,person_nemesius_of_emesa_5t0u2w98,Nemesius of Emesa
+"Nemesius, De Natura Hominis chapters 35-42 - Christian synthesis of Greek anthropology, CAFMA framework",1,node,person_nemesius_of_emesa_5t0u2w98,Nemesius of Emesa
+De Natura Hominis (On the Nature of Man),1,node,person_nemesius_of_emesa_5t0u2w98,Nemesius of Emesa
+"Alcinous, Didaskalikos 25-27",1,node,person_alcinous_c150ce_a7b5c4d2,Alcinous
+"Ps.-Plutarch, De Fato 575A-576C",1,node,work_de_fato_pseudo_plutarch_a8c6d4e2,De Fato (On Fate) - Pseudo-Plutarch
+"Proclus, De providentia et fato 33-43",1,node,work_proclus_tria_opuscula_c9a8e4b3,Tria Opuscula (Three Essays) - Proclus
+"Plotinus, Enneads VI.8.13-15",1,node,work_plotinus_ennead_vi_8_d8b9c5a4,Ennead VI.8 - On the Voluntary and Free Will of the One
+"Sextus Empiricus, Outlines of Pyrrhonism III.2-5",1,node,work_sextus_outlines_pyrrhonism_f9a7c8e4,Outlines of Pyrrhonism (Πυρρώνειοι Ὑποτυπώσεις) - Sextus Empiricus
+"Eusebius, Historia Ecclesiastica II.4-5 (on Philo)",1,node,person_philo_alexandria_a1b2c3d4,Philo of Alexandria
+"Philo, De Providentia I.10-12",1,node,person_philo_alexandria_a1b2c3d4,Philo of Alexandria
+Quod Deus Immutabilis Sit (On the Unchangeableness of God),1,node,person_philo_alexandria_a1b2c3d4,Philo of Alexandria
+De Providentia (On Providence),1,node,person_philo_alexandria_a1b2c3d4,Philo of Alexandria
+Legum Allegoriae (Allegorical Interpretation),1,node,person_philo_alexandria_a1b2c3d4,Philo of Alexandria
+De Decalogo (On the Decalogue),1,node,person_philo_alexandria_a1b2c3d4,Philo of Alexandria
+De Vita Mosis (On the Life of Moses),1,node,person_philo_alexandria_a1b2c3d4,Philo of Alexandria
+Quod Omnis Probus Liber Sit (Every Good Person is Free),1,node,person_philo_alexandria_a1b2c3d4,Philo of Alexandria
+"Josephus, Jewish Antiquities XIII.171-173 (three schools)",1,node,person_josephus_flavius_e5f6g7h8,Flavius Josephus
+"Josephus, Jewish Antiquities XVIII.11-25 (philosophical positions)",1,node,person_josephus_flavius_e5f6g7h8,Flavius Josephus
+"Josephus, Jewish War II.162-166 (Essene determinism)",1,node,person_josephus_flavius_e5f6g7h8,Flavius Josephus
+Jewish Antiquities (Antiquitates Judaicae),1,node,person_josephus_flavius_e5f6g7h8,Flavius Josephus
+Jewish War (Bellum Judaicum),1,node,person_josephus_flavius_e5f6g7h8,Flavius Josephus
+Against Apion (Contra Apionem),1,node,person_josephus_flavius_e5f6g7h8,Flavius Josephus
+Life (Vita),1,node,person_josephus_flavius_e5f6g7h8,Flavius Josephus
+Sirach 15:11-20 (free will passage),1,node,person_ben_sira_i9j0k1l2,Ben Sira (Sirach)
+Sirach 17:1-14 (human nature and choice),1,node,person_ben_sira_i9j0k1l2,Ben Sira (Sirach)
+Sirach 33:7-15 (divine sovereignty and human diversity),1,node,person_ben_sira_i9j0k1l2,Ben Sira (Sirach)
+Wisdom of Sirach (Ecclesiasticus),1,node,person_ben_sira_i9j0k1l2,Ben Sira (Sirach)
+4Q398 (4QMMT) cols. 14-17,1,node,work_dss_4qmmt_m5n6o7p8,Miqsat Ma'ase ha-Torah (4QMMT)
+"Irenaeus, Adversus Haereses (Against Heresies), especially Books IV-V",1,node,person_irenaeus_d202,Irenaeus of Lyon
+"Irenaeus, Adversus Haereses V.6.1",1,node,person_irenaeus_d202,Irenaeus of Lyon
+adversus_haereses: Against Heresies - full text at New Advent,1,node,person_irenaeus_d202,Irenaeus of Lyon
+"Tertullian, De Anima (On the Soul)",1,node,person_tertullian_d220,Tertullian
+"Tertullian, Adversus Marcionem (Against Marcion)",1,node,person_tertullian_d220,Tertullian
+"Tertullian, De Praescriptione Haereticorum",1,node,person_tertullian_d220,Tertullian
+de_anima: De Anima - available at tertullian.org and New Advent,1,node,person_tertullian_d220,Tertullian
+"Methodius of Olympus, De resurrectione III.18-19",1,node,person_methodius_olympus_d311,Methodius of Olympus
+"on_free_will: On Free Will - also titled 'On God, Matter and Free Will' (Slavonic version)",1,node,person_methodius_olympus_d311,Methodius of Olympus
+symposium: Symposium - virgin Thecla offers anti-fatalistic arguments,1,node,person_methodius_olympus_d311,Methodius of Olympus
+"Basil of Caesarea, Homilia de gratia Dei et libero arbitrio (PG 31, 429-452)",1,node,person_basil_great_d379,Basil the Great
+"Basil of Caesarea, Epistula 236 ad Amphilochium",1,node,person_basil_great_d379,Basil the Great
+Hexaemeron,1,node,person_basil_great_d379,Basil the Great
+On the Holy Spirit,1,node,person_basil_great_d379,Basil the Great
+Ascetical Works,1,node,person_basil_great_d379,Basil the Great
+"Gregory of Nyssa, De hominis opificio 16",1,node,person_gregory_nyssa_d395,Gregory of Nyssa
+"Gregory of Nyssa, Oratio catechetica magna 35",1,node,person_gregory_nyssa_d395,Gregory of Nyssa
+on_making_of_man: On the Making of Man - New Advent Church Fathers,1,node,person_gregory_nyssa_d395,Gregory of Nyssa
+"John Chrysostom, Homilia XVIII in Epistolam ad Romanos",1,node,person_john_chrysostom_d407,John Chrysostom
+"John Chrysostom, Homilia de Lazaro II.4",1,node,person_john_chrysostom_d407,John Chrysostom
+homilies_on_providence: On the Providence of God,1,node,person_john_chrysostom_d407,John Chrysostom
+extensive_homilies: Hundreds of exegetical homilies on NT (esp. Paul) and OT (esp. Genesis),1,node,person_john_chrysostom_d407,John Chrysostom
+"Augustine, De libero arbitrio II.1-3",1,node,person_augustine_hippo_d430,Augustine of Hippo
+"Augustine, De correptione et gratia 7-9",1,node,person_augustine_hippo_d430,Augustine of Hippo
+"de_libero_arbitrio: De Libero Arbitrio (CCEL, New Advent) - Books 1-3, 387-395",1,node,person_augustine_hippo_d430,Augustine of Hippo
+confessions: Confessions - esp. Books VII-VIII on Neoplatonism and conversion,1,node,person_augustine_hippo_d430,Augustine of Hippo
+ad_simplicianum: Ad Simplicianum - turning point work (396-397),1,node,person_augustine_hippo_d430,Augustine of Hippo
+de_natura_et_gratia: De Natura et Gratia - against Pelagius (415),1,node,person_augustine_hippo_d430,Augustine of Hippo
+de_gratia_et_libero_arbitrio: De Gratia et Libero Arbitrio (426-427),1,node,person_augustine_hippo_d430,Augustine of Hippo
+de_praedestinatione: De Praedestinatione Sanctorum (428-429),1,node,person_augustine_hippo_d430,Augustine of Hippo
+npnf_anti_pelagian: NPNF1-05 - St. Augustine: Anti-Pelagian Writings (CCEL),1,node,person_augustine_hippo_d430,Augustine of Hippo
+"Pelagius, Commentarii in Epistolam ad Romanos (PL Suppl. 1, 665-808)",1,node,person_pelagius_d420,Pelagius
+limited_extant: Most works survive only in fragments or in Augustine's quotations,1,node,person_pelagius_d420,Pelagius
+"Augustine, De Perfectione Justitiae Hominis (Against Celestius)",1,node,person_celestius_d430s,Celestius (Caelestius)
+"Augustine, De Peccatorum Meritis et Remissione",1,node,person_celestius_d430s,Celestius (Caelestius)
+Canons of Council of Carthage (412 CE),1,node,person_celestius_d430s,Celestius (Caelestius)
+"paulinus_accusation: Accusations by Paulinus, deacon of Milan, at Carthage",1,node,person_celestius_d430s,Celestius (Caelestius)
+"Julian of Eclanum, Libri VIII contra Augustinum (fragmenta, PL 45, 1349-1394)",1,node,person_julian_eclanum_d454,Julian of Eclanum
+"Julian of Eclanum, Ad Florum, fragment VI",1,node,person_julian_eclanum_d454,Julian of Eclanum
+fragments: Works survive mostly in Augustine's quotations and refutations,1,node,person_julian_eclanum_d454,Julian of Eclanum
+augustine_against_julian: Augustine's Contra Julianum (421-422),1,node,person_julian_eclanum_d454,Julian of Eclanum
+"John Cassian, Collationes XIII.12-17",1,node,person_john_cassian_d435,John Cassian
+"John Cassian, De incarnatione Domini contra Nestorium V",1,node,person_john_cassian_d435,John Cassian
+Institutes,1,node,person_john_cassian_d435,John Cassian
+Conferences,1,node,person_john_cassian_d435,John Cassian
+On the Incarnation,1,node,person_john_cassian_d435,John Cassian
+"Vincent of Lérins, Commonitorium 24-26",1,node,person_vincent_lerins_d450,Vincent of Lérins
+"Vincent of Lérins, Commonitorium 32-33",1,node,person_vincent_lerins_d450,Vincent of Lérins
+commonitorium: Commonitorium - manual for determining orthodoxy,1,node,person_vincent_lerins_d450,Vincent of Lérins
+"Faustus of Riez, De Gratia (On Grace, c. 474 CE)",1,node,person_faustus_riez_d495,Faustus of Riez
+"Fulgentius of Ruspe, Contra Faustum (refutation)",1,node,person_faustus_riez_d495,Faustus of Riez
+De Gratia,1,node,person_faustus_riez_d495,Faustus of Riez
+"Prosper of Aquitaine, Pro Augustino Responsiones",1,node,person_prosper_aquitaine_d455,Prosper of Aquitaine
+"Prosper of Aquitaine, De Gratia Dei et Libero Arbitrio",1,node,person_prosper_aquitaine_d455,Prosper of Aquitaine
+de_vocatione: De vocatione omnium gentium (c. 450) - most original theological contribution,1,node,person_prosper_aquitaine_d455,Prosper of Aquitaine
+Acts of Council of Orange (529 CE) - Caesarius presided,1,node,person_caesarius_arles_d542,Caesarius of Arles
+"Caesarius of Arles, Sermon 13.3",1,node,person_caesarius_arles_d542,Caesarius of Arles
+Monastic Rules,1,node,person_caesarius_arles_d542,Caesarius of Arles
+"Maximus Confessor, Ambigua ad Ioannem 7 (PG 91, 1088-1157)",1,node,person_maximus_confessor_d662,Maximus the Confessor
+"Maximus Confessor, Quaestiones ad Thalassium 21",1,node,person_maximus_confessor_d662,Maximus the Confessor
+Ambigua,1,node,person_maximus_confessor_d662,Maximus the Confessor
+Mystagogia,1,node,person_maximus_confessor_d662,Maximus the Confessor
+Opuscula theologica et polemica,1,node,person_maximus_confessor_d662,Maximus the Confessor
+Questions to Thalassius,1,node,person_maximus_confessor_d662,Maximus the Confessor
+"John of Damascus, De fide orthodoxa II.27",1,node,person_john_damascene_d749,John of Damascus (John Damascene)
+"John of Damascus, Contra Jacobitas 92",1,node,person_john_damascene_d749,John of Damascus (John Damascene)
+"fount_of_knowledge: The Fount of Knowledge - includes Philosophical Chapters, On Heresies, Exact Exposition of Orthodox Faith",1,node,person_john_damascene_d749,John of Damascus (John Damascene)
+orthodox_faith: De Fide Orthodoxa - Latin version used in medieval West,1,node,person_john_damascene_d749,John of Damascus (John Damascene)
+Council of Carthage (418). Canon 2 (Denzinger-Hünermann 223).,1,node,council_carthage_418,Council of Carthage (418 CE)
+Council of Carthage (418). Canon 5 (Denzinger-Hünermann 226).,1,node,council_carthage_418,Council of Carthage (418 CE)
+"canons: Canons available at New Advent Church Fathers, earlychurchtexts.com",1,node,council_carthage_418,Council of Carthage (418 CE)
+Second Council of Orange (529). Canon 25 (Denzinger-Hünermann 397).,1,node,council_orange_529,Second Council of Orange (529 CE)
+Second Council of Orange (529). Canon 3 (Denzinger-Hünermann 372).,1,node,council_orange_529,Second Council of Orange (529 CE)
+"canons: Canons of Orange available at crivoice.org, monergism.com",1,node,council_orange_529,Second Council of Orange (529 CE)
+"Augustine, De libero arbitrio III.18",1,node,work_de_libero_arbitrio,De Libero Arbitrio Voluntatis (On Free Choice of the Will)
+"Augustine, Confessiones XIII.32",1,node,work_confessions,Confessiones (Confessions)
+"Augustine, De diversis quaestionibus ad Simplicianum I.2",1,node,work_ad_simplicianum,Ad Simplicianum (To Simplician)
+"Prosper of Aquitaine, Epistola ad Augustinum 225",1,node,work_call_all_nations,De Vocatione Omnium Gentium (The Call of All Nations)
+Maximus the Confessor,1,node,person_john_scotus_eriugena_a1b2c3d4,John Scotus Eriugena
+Gregory of Nyssa,1,node,person_john_scotus_eriugena_a1b2c3d4,John Scotus Eriugena
+Periphyseon (De Divisione Naturae),1,node,person_john_scotus_eriugena_a1b2c3d4,John Scotus Eriugena
+De Praedestinatione,1,node,person_john_scotus_eriugena_a1b2c3d4,John Scotus Eriugena
+Commentaries on Pseudo-Dionysius,1,node,person_john_scotus_eriugena_a1b2c3d4,John Scotus Eriugena
+Augustine (balanced reading),1,node,person_hincmar_of_reims_i9j0k1l2,Hincmar of Reims
+Prosper of Aquitaine,1,node,person_hincmar_of_reims_i9j0k1l2,Hincmar of Reims
+De Praedestinatione Dei et Libero Arbitrio,1,node,person_hincmar_of_reims_i9j0k1l2,Hincmar of Reims
+Epistolae,1,node,person_hincmar_of_reims_i9j0k1l2,Hincmar of Reims
+Hadith,1,node,person_al_ashari_m3n4o5p6,Al-Ash'ari (Abū al-Ḥasan al-Ashʿarī)
+Al-Ibanah 'an Usul al-Diyanah (Elucidation of the Foundations of Religion),1,node,person_al_ashari_m3n4o5p6,Al-Ash'ari (Abū al-Ḥasan al-Ashʿarī)
+Maqalat al-Islamiyyin (Theological Opinions of the Muslims),1,node,person_al_ashari_m3n4o5p6,Al-Ash'ari (Abū al-Ḥasan al-Ashʿarī)
+Al-Luma' fi al-Radd 'ala Ahl al-Zaygh wa al-Bida',1,node,person_al_ashari_m3n4o5p6,Al-Ash'ari (Abū al-Ḥasan al-Ashʿarī)
+"Abd al-Jabbār, al-Qāḍī. Al-Mughnī fī abwāb al-tawḥīd wa-l-ʿadl, vol. 8. Cairo: al-Maṭbaʿa al-ʿĀmiriyya, 1960.",1,node,school_mutazilites_q7r8s9t0,Mu'tazilites
+"al-Qāḍī Abd al-Jabbār. Sharḥ al-uṣūl al-khamsa. Cairo: Maktabat Wahba, 1965.",1,node,school_mutazilites_q7r8s9t0,Mu'tazilites
+Al-Ash'ari,1,node,person_al_ghazali_u1v2w3x4,Al-Ghazali (Abū Ḥāmid Muḥammad ibn Muḥammad al-Ghazālī)
+Aristotle (to critique),1,node,person_al_ghazali_u1v2w3x4,Al-Ghazali (Abū Ḥāmid Muḥammad ibn Muḥammad al-Ghazālī)
+Tahafut al-Falasifa (The Incoherence of the Philosophers),1,node,person_al_ghazali_u1v2w3x4,Al-Ghazali (Abū Ḥāmid Muḥammad ibn Muḥammad al-Ghazālī)
+Ihya 'Ulum al-Din (Revival of the Religious Sciences),1,node,person_al_ghazali_u1v2w3x4,Al-Ghazali (Abū Ḥāmid Muḥammad ibn Muḥammad al-Ghazālī)
+Al-Munqidh min al-Dalal (Deliverance from Error),1,node,person_al_ghazali_u1v2w3x4,Al-Ghazali (Abū Ḥāmid Muḥammad ibn Muḥammad al-Ghazālī)
+Al-Iqtisad fi al-I'tiqad (Moderation in Belief),1,node,person_al_ghazali_u1v2w3x4,Al-Ghazali (Abū Ḥāmid Muḥammad ibn Muḥammad al-Ghazālī)
+Plotinus (via pseudo-Theology of Aristotle),1,node,person_avicenna_y5z6a7b8,Avicenna (Ibn Sīnā)
+The Healing (Al-Shifa),1,node,person_avicenna_y5z6a7b8,Avicenna (Ibn Sīnā)
+The Salvation (Al-Najat),1,node,person_avicenna_y5z6a7b8,Avicenna (Ibn Sīnā)
+The Pointers and Reminders (Al-Isharat wa al-Tanbihat),1,node,person_avicenna_y5z6a7b8,Avicenna (Ibn Sīnā)
+Book of the Soul (Kitab al-Nafs),1,node,person_avicenna_y5z6a7b8,Avicenna (Ibn Sīnā)
+Aristotle (comprehensive commentaries),1,node,person_averroes_c9d0e1f2,Averroes (Ibn Rushd)
+Alexander of Aphrodisias,1,node,person_averroes_c9d0e1f2,Averroes (Ibn Rushd)
+Themistius,1,node,person_averroes_c9d0e1f2,Averroes (Ibn Rushd)
+Tahafut al-Tahafut (The Incoherence of the Incoherence),1,node,person_averroes_c9d0e1f2,Averroes (Ibn Rushd)
+Long Commentary on Aristotle's Metaphysics,1,node,person_averroes_c9d0e1f2,Averroes (Ibn Rushd)
+Long Commentary on De Anima,1,node,person_averroes_c9d0e1f2,Averroes (Ibn Rushd)
+Middle Commentary on Nicomachean Ethics,1,node,person_averroes_c9d0e1f2,Averroes (Ibn Rushd)
+Decisive Treatise (Fasl al-Maqal),1,node,person_averroes_c9d0e1f2,Averroes (Ibn Rushd)
+Mu'tazilite Kalam,1,node,person_saadia_gaon_g3h4i5j6,Saadia Gaon (Saʿadya ben Yōsēf)
+The Book of Beliefs and Opinions (Kitab al-Amanat wal-I'tiqadat / Emunot ve-Deot),1,node,person_saadia_gaon_g3h4i5j6,Saadia Gaon (Saʿadya ben Yōsēf)
+Guide for the Perplexed (Moreh Nevukhim / Dalalat al-Ha'irin),1,node,person_maimonides_k7l8m9n0,"Moses Maimonides (Mōšeh bēn Maymōn, Rambam)"
+Mishneh Torah (especially Hilkhot Teshuvah - Laws of Repentance),1,node,person_maimonides_k7l8m9n0,"Moses Maimonides (Mōšeh bēn Maymōn, Rambam)"
+Eight Chapters (Shemonah Peraqim),1,node,person_maimonides_k7l8m9n0,"Moses Maimonides (Mōšeh bēn Maymōn, Rambam)"
+Epistle on Astrology,1,node,person_maimonides_k7l8m9n0,"Moses Maimonides (Mōšeh bēn Maymōn, Rambam)"
+Averroes,1,node,person_gersonides_o1p2q3r4,"Gersonides (Levi ben Gershon, Ralbag)"
+Maimonides (critically engaged),1,node,person_gersonides_o1p2q3r4,"Gersonides (Levi ben Gershon, Ralbag)"
+Wars of the Lord (Milhamot ha-Shem / Sefer Milhamot Adonai),1,node,person_gersonides_o1p2q3r4,"Gersonides (Levi ben Gershon, Ralbag)"
+Commentaries on Averroes,1,node,person_gersonides_o1p2q3r4,"Gersonides (Levi ben Gershon, Ralbag)"
+Maimonides (to critique),1,node,person_hasdai_crescas_s5t6u7v8,Hasdai Crescas
+Or Adonai (Light of the Lord),1,node,person_hasdai_crescas_s5t6u7v8,Hasdai Crescas
+Refutation of Christian Principles,1,node,person_hasdai_crescas_s5t6u7v8,Hasdai Crescas
+Boethius,1,node,person_peter_abelard_w9x0y1z2,Peter Abelard
+Aristotle (logic),1,node,person_peter_abelard_w9x0y1z2,Peter Abelard
+Theologia Christiana,1,node,person_peter_abelard_w9x0y1z2,Peter Abelard
+Ethica (Scito te Ipsum - Know Thyself),1,node,person_peter_abelard_w9x0y1z2,Peter Abelard
+Dialectica,1,node,person_peter_abelard_w9x0y1z2,Peter Abelard
+Sic et Non,1,node,person_peter_abelard_w9x0y1z2,Peter Abelard
+Early scholastics,1,node,person_peter_lombard_a3b4c5d6,Peter Lombard
+Sentences (Libri Quattuor Sententiarum),1,node,person_peter_lombard_a3b4c5d6,Peter Lombard
+Commentaries on Psalms and Pauline Epistles,1,node,person_peter_lombard_a3b4c5d6,Peter Lombard
+Commentary on the Sentences,1,node,person_bonaventure_e7f8g9h0,Bonaventure (Giovanni di Fidanza)
+Breviloquium,1,node,person_bonaventure_e7f8g9h0,Bonaventure (Giovanni di Fidanza)
+Itinerarium Mentis in Deum (The Soul's Journey into God),1,node,person_bonaventure_e7f8g9h0,Bonaventure (Giovanni di Fidanza)
+Disputed Questions on the Knowledge of Christ,1,node,person_bonaventure_e7f8g9h0,Bonaventure (Giovanni di Fidanza)
+Augustine (especially anti-Pelagian works),1,node,person_gregory_of_rimini_i1j2k3l4,Gregory of Rimini
+Lectures on the Sentences (Lectura super Primum et Secundum Sententiarum),1,node,person_gregory_of_rimini_i1j2k3l4,Gregory of Rimini
+Various theological questions,1,node,person_gregory_of_rimini_i1j2k3l4,Gregory of Rimini
+Augustine (exhaustive use),1,node,person_thomas_bradwardine_m5n6o7p8,Thomas Bradwardine
+De Causa Dei contra Pelagium (On God's Cause Against Pelagius),1,node,person_thomas_bradwardine_m5n6o7p8,Thomas Bradwardine
+De Proportionibus (on mathematics),1,node,person_thomas_bradwardine_m5n6o7p8,Thomas Bradwardine
+De Continuo (on continuity),1,node,person_thomas_bradwardine_m5n6o7p8,Thomas Bradwardine
+Grosseteste,1,node,person_john_wyclif_q9r0s1t2,John Wyclif
+Bradwardine,1,node,person_john_wyclif_q9r0s1t2,John Wyclif
+De Dominio Divino,1,node,person_john_wyclif_q9r0s1t2,John Wyclif
+De Veritate Sacrae Scripturae,1,node,person_john_wyclif_q9r0s1t2,John Wyclif
+Summa de Ente,1,node,person_john_wyclif_q9r0s1t2,John Wyclif
+Trialogus,1,node,person_john_wyclif_q9r0s1t2,John Wyclif
+"Lombard, Peter. Sententiae in IV Libris Distinctae. Paris: ca. 1155.",1,node,work_sentences_peter_lombard_q1r2s3t4,Sentences (Libri Quattuor Sententiarum)
+"Peter Lombard, Sentences II d.25",1,node,work_sentences_peter_lombard_q1r2s3t4,Sentences (Libri Quattuor Sententiarum)
+"Lombard, Peter. The Sentences, Book II. Translated by Giulio Silano. Toronto: Pontifical Institute of Mediaeval Studies, 2008.",1,node,work_sentences_peter_lombard_q1r2s3t4,Sentences (Libri Quattuor Sententiarum)
+"Maimonides, Moses. Dalālat al-Ḥāʾirīn (Guide for the Perplexed). Cairo: 12th century.",1,node,work_guide_for_perplexed_maimonides_u5v6w7x8,Guide for the Perplexed (Moreh Nevukhim / Dalalat al-Ha'irin)
+"Maimonides, Guide III.17",1,node,work_guide_for_perplexed_maimonides_u5v6w7x8,Guide for the Perplexed (Moreh Nevukhim / Dalalat al-Ha'irin)
+"Maimonides, Moses. The Guide of the Perplexed. Translated by Shlomo Pines. Chicago: University of Chicago Press, 1963.",1,node,work_guide_for_perplexed_maimonides_u5v6w7x8,Guide for the Perplexed (Moreh Nevukhim / Dalalat al-Ha'irin)
+"al-Ghazālī, Abū Ḥāmid. Tahāfut al-Falāsifa (The Incoherence of the Philosophers). Damascus: 1095.",1,node,work_tahafut_al_falasifa_al_ghazali_y9z0a1b2,The Incoherence of the Philosophers (Tahafut al-Falasifa)
+"al-Ghazālī, Tahāfut al-Falāsifa, Discussion 17",1,node,work_tahafut_al_falasifa_al_ghazali_y9z0a1b2,The Incoherence of the Philosophers (Tahafut al-Falasifa)
+"al-Ghazālī, Abū Ḥāmid. The Incoherence of the Philosophers. Translated by Michael E. Marmura. Provo, UT: Brigham Young University Press, 1997.",1,node,work_tahafut_al_falasifa_al_ghazali_y9z0a1b2,The Incoherence of the Philosophers (Tahafut al-Falasifa)
+Averroes (Ibn Rushd). Tahāfut al-Tahāfut (The Incoherence of the Incoherence). Córdoba: c. 1180.,1,node,work_tahafut_al_tahafut_averroes_c3d4e5f6,The Incoherence of the Incoherence (Tahafut al-Tahafut)
+"Ibn Rushd, Tahāfut al-Tahāfut, Discussion 17",1,node,work_tahafut_al_tahafut_averroes_c3d4e5f6,The Incoherence of the Incoherence (Tahafut al-Tahafut)
+"Averroes. The Incoherence of the Incoherence. Translated by Simon van den Bergh. Oxford: Oxford University Press, 1954.",1,node,work_tahafut_al_tahafut_averroes_c3d4e5f6,The Incoherence of the Incoherence (Tahafut al-Tahafut)
+"Bradwardine, Thomas. De Causa Dei contra Pelagium. London: 1344.",1,node,work_de_causa_dei_bradwardine_g7h8i9j0,De Causa Dei contra Pelagium (On God's Cause Against Pelagius)
+"Bradwardine, De causa Dei I.38",1,node,work_de_causa_dei_bradwardine_g7h8i9j0,De Causa Dei contra Pelagium (On God's Cause Against Pelagius)
+"Bradwardine, Thomas. De Causa Dei. Edited by Henry Savile. London: 1618.",1,node,work_de_causa_dei_bradwardine_g7h8i9j0,De Causa Dei contra Pelagium (On God's Cause Against Pelagius)
+"Aquinas, Summa Contra Gentiles III.92",1,node,argument_boethian_solution_divine_eternity_k1l2m3n4,Boethian Solution: Divine Timeless Eternity
+"Gersonides, Wars of the Lord III.6",1,node,argument_gersonides_limited_omniscience_s9t0u1v2,Gersonides' Argument: Limited Divine Omniscience
+"De Servo Arbitrio (On the Bondage of the Will, 1525)",1,node,person_martin_luther_8f2a3b91,Martin Luther
+95 Theses (1517),1,node,person_martin_luther_8f2a3b91,Martin Luther
+The Freedom of a Christian (1520),1,node,person_martin_luther_8f2a3b91,Martin Luther
+"De Libero Arbitrio (On Free Will, 1524)",1,node,person_erasmus_of_rotterdam_9g3b4c02,Erasmus of Rotterdam
+Hyperaspistes (1526-27),1,node,person_erasmus_of_rotterdam_9g3b4c02,Erasmus of Rotterdam
+"Institutes of the Christian Religion (1536, final ed. 1559)",1,node,person_john_calvin_0h4c5d13,John Calvin
+Commentaries on Scripture,1,node,person_john_calvin_0h4c5d13,John Calvin
+Treatise on Predestination (1552),1,node,person_john_calvin_0h4c5d13,John Calvin
+Declaration of Sentiments (1608),1,node,person_jacobus_arminius_1i5d6e24,Jacobus Arminius
+Disputations,1,node,person_jacobus_arminius_1i5d6e24,Jacobus Arminius
+Disputationes theologicae de gratia et libero arbitrio (1609),1,node,person_franciscus_gomarus_2j6e7f35,Franciscus Gomarus
+Responsiones ad examina Remonstrantium (1615),1,node,person_franciscus_gomarus_2j6e7f35,Franciscus Gomarus
+Treatises on predestination and grace,1,node,person_domingo_banez_4l8g9h57,Domingo Báñez
+"Augustinus (1640, posthumous)",1,node,person_cornelius_jansen_5m9h0i68,Cornelius Jansen (Jansenius)
+Tetrateuchus (biblical commentary),1,node,person_cornelius_jansen_5m9h0i68,Cornelius Jansen (Jansenius)
+"Lettres provinciales (Provincial Letters, 1656-57)",1,node,person_blaise_pascal_6n0i1j79,Blaise Pascal
+"Pensées (posthumous, 1670)",1,node,person_blaise_pascal_6n0i1j79,Blaise Pascal
+On True and False Ideas (1683),1,node,person_antoine_arnauld_7o1j2k80,Antoine Arnauld
+"Port-Royal Logic (with Nicole, 1662)",1,node,person_antoine_arnauld_7o1j2k80,Antoine Arnauld
+De la fréquente communion (1643),1,node,person_antoine_arnauld_7o1j2k80,Antoine Arnauld
+Meditations on First Philosophy (1641),1,node,person_rene_descartes_1aa22692_expanded,René Descartes (expanded)
+Principles of Philosophy (1644),1,node,person_rene_descartes_1aa22692_expanded,René Descartes (expanded)
+Passions of the Soul (1649),1,node,person_rene_descartes_1aa22692_expanded,René Descartes (expanded)
+Correspondence (especially with Princess Elisabeth),1,node,person_rene_descartes_1aa22692_expanded,René Descartes (expanded)
+Stoics,1,node,person_baruch_spinoza_8p2k3l91,Baruch Spinoza
+Marcus Aurelius,1,node,person_baruch_spinoza_8p2k3l91,Baruch Spinoza
+"Ethics (1677, posthumous)",1,node,person_baruch_spinoza_8p2k3l91,Baruch Spinoza
+Theological-Political Treatise (1670),1,node,person_baruch_spinoza_8p2k3l91,Baruch Spinoza
+Political Treatise (unfinished),1,node,person_baruch_spinoza_8p2k3l91,Baruch Spinoza
+The Search After Truth (1674-75),1,node,person_nicolas_malebranche_9q3l4m02,Nicolas Malebranche
+Treatise on Nature and Grace (1680),1,node,person_nicolas_malebranche_9q3l4m02,Nicolas Malebranche
+Dialogues on Metaphysics (1688),1,node,person_nicolas_malebranche_9q3l4m02,Nicolas Malebranche
+"Gottfried Wilhelm Leibniz, Essais de Théodicée, Discours préliminaire §52-56",1,node,person_gottfried_leibniz_0r4m5n13,Gottfried Wilhelm Leibniz
+"Gottfried Wilhelm Leibniz, Discours de métaphysique §30",1,node,person_gottfried_leibniz_0r4m5n13,Gottfried Wilhelm Leibniz
+Theodicy (1710),1,node,person_gottfried_leibniz_0r4m5n13,Gottfried Wilhelm Leibniz
+Discourse on Metaphysics (1686),1,node,person_gottfried_leibniz_0r4m5n13,Gottfried Wilhelm Leibniz
+Monadology (1714),1,node,person_gottfried_leibniz_0r4m5n13,Gottfried Wilhelm Leibniz
+"New Essays on Human Understanding (1704, pub. 1765)",1,node,person_gottfried_leibniz_0r4m5n13,Gottfried Wilhelm Leibniz
+"Rational Thoughts on God, the World and the Soul (1720)",1,node,person_christian_wolff_1s5n6o24,Christian Wolff
+Philosophia rationalis sive logica (1728),1,node,person_christian_wolff_1s5n6o24,Christian Wolff
+Leviathan (1651),1,node,person_thomas_hobbes_2t6o7p35,Thomas Hobbes
+Of Liberty and Necessity (1654),1,node,person_thomas_hobbes_2t6o7p35,Thomas Hobbes
+"The Questions Concerning Liberty, Necessity and Chance (1656)",1,node,person_thomas_hobbes_2t6o7p35,Thomas Hobbes
+De Corpore (1655),1,node,person_thomas_hobbes_2t6o7p35,Thomas Hobbes
+A Defence of True Liberty (1655),1,node,person_john_bramhall_3u7p8q46,John Bramhall
+Castigations of Mr. Hobbes (1658),1,node,person_john_bramhall_3u7p8q46,John Bramhall
+"An Essay Concerning Human Understanding (1689, rev. 1694, 1700)",1,node,person_john_locke_4v8q9r57,John Locke
+Two Treatises of Government (1689),1,node,person_john_locke_4v8q9r57,John Locke
+A Philosophical Inquiry Concerning Human Liberty (1717),1,node,person_anthony_collins_5w9r0s68,Anthony Collins
+A Demonstration of the Being and Attributes of God (1704-05),1,node,person_samuel_clarke_6x0s1t79,Samuel Clarke
+Remarks upon a Book entituled A Philosophical Enquiry (1717) - reply to Collins,1,node,person_samuel_clarke_6x0s1t79,Samuel Clarke
+"A Treatise of Human Nature (1739-40), Book II Part III",1,node,person_david_hume_7y1t2u80,David Hume
+"An Enquiry Concerning Human Understanding (1748), Section VIII 'Of Liberty and Necessity'",1,node,person_david_hume_7y1t2u80,David Hume
+An Enquiry Concerning the Principles of Morals (1751),1,node,person_david_hume_7y1t2u80,David Hume
+Essays on the Active Powers of Man (1788),1,node,person_thomas_reid_8z2u3v91,Thomas Reid
+Essays on the Intellectual Powers of Man (1785),1,node,person_thomas_reid_8z2u3v91,Thomas Reid
+Freedom of the Will (1754),1,node,person_jonathan_edwards_9a3v4w02,Jonathan Edwards
+Original Sin (1758),1,node,person_jonathan_edwards_9a3v4w02,Jonathan Edwards
+Religious Affections (1746),1,node,person_jonathan_edwards_9a3v4w02,Jonathan Edwards
+"Critique of Pure Reason (1781, 1787) - Third Antinomy on Freedom",1,node,person_immanuel_kant_0b4w5x13,Immanuel Kant
+Groundwork of the Metaphysics of Morals (1785),1,node,person_immanuel_kant_0b4w5x13,Immanuel Kant
+Critique of Practical Reason (1788),1,node,person_immanuel_kant_0b4w5x13,Immanuel Kant
+Religion within the Boundaries of Mere Reason (1793),1,node,person_immanuel_kant_0b4w5x13,Immanuel Kant
+Augustine on predestination,1,node,concept_scientia_media_2d6y7z35,Middle Knowledge (Scientia Media)
+Boethius on divine foreknowledge,1,node,concept_scientia_media_2d6y7z35,Middle Knowledge (Scientia Media)
+"Molina, Concordia (1588), Disputation 47-53",1,node,concept_scientia_media_2d6y7z35,Middle Knowledge (Scientia Media)
+"Aquinas, Summa Theologiae I q.105 a.5 (interpreted by Báñez)",1,node,concept_praemotio_physica_3e7z8a46,Physical Premotion (Praemotio Physica)
+"Domingo Báñez, Scholastica commentaria in Iam q.23 a.5",1,node,concept_praemotio_physica_3e7z8a46,Physical Premotion (Praemotio Physica)
+"Báñez, Commentaries on Summa (1584-94)",1,node,concept_praemotio_physica_3e7z8a46,Physical Premotion (Praemotio Physica)
+Aristotelian unmoved mover,1,node,concept_agent_causation_0l4g5h13,Agent Causation
+"Reid, Essays on Active Powers IV",1,node,concept_agent_causation_0l4g5h13,Agent Causation
+"Scotus, Ordinatio (will as self-moving)",1,node,concept_agent_causation_0l4g5h13,Agent Causation
+"Thomas Reid, Essays on the Active Powers of Man (1788)",1,node,concept_agent_causation_0l4g5h13,Agent Causation
+"Erasmus of Rotterdam. De libero arbitrio. Basel: Froben, 1524.",1,node,controversy_luther_erasmus_1m5h6i24,Luther vs. Erasmus Debate on Free Will
+"Luther, Martin. De servo arbitrio. Wittenberg: 1525.",1,node,controversy_luther_erasmus_1m5h6i24,Luther vs. Erasmus Debate on Free Will
+"Molina, Luis de. Concordia liberi arbitrii cum gratiae donis. Lisbon: 1588.",1,node,controversy_de_auxiliis_2n6i7j35,De Auxiliis Controversy
+"Congregatio de Auxiliis. Acta Congregationum de Auxiliis (1598–1607). Rome: Typis Vaticanis, 1912.",1,node,controversy_de_auxiliis_2n6i7j35,De Auxiliis Controversy
+"Hobbes, Thomas. Of Liberty and Necessity. London: 1646.",1,node,controversy_hobbes_bramhall_3o7j8k46,Hobbes vs. Bramhall Debate on Liberty and Necessity
+"Bramhall, John. A Defence of True Liberty from Antecedent and Extrinsical Necessity. London: 1655.",1,node,controversy_hobbes_bramhall_3o7j8k46,Hobbes vs. Bramhall Debate on Liberty and Necessity
+"Hume, David. An Enquiry concerning Human Understanding. London: A. Millar, 1748.",1,node,controversy_hume_reid_4p8k9l57,Hume vs. Reid on Causation and Free Will
+"Reid, Thomas. Essays on the Active Powers of Man. Edinburgh: Bell & Robinson, 1788.",1,node,controversy_hume_reid_4p8k9l57,Hume vs. Reid on Causation and Free Will
+Synod of Dort. Canones Synodi Nationalis Dordrechanae. Dordrecht: 1619.,1,node,controversy_synod_of_dort_5q9l0m68,Synod of Dort
+Acta Synodi Nationalis... Dordrechti habitae (1618–1619). Dordrecht: 1620.,1,node,controversy_synod_of_dort_5q9l0m68,Synod of Dort
+"Martin Luther, De Servo Arbitrio §152",1,node,argument_lutheran_bondage_argument_6r0m1n79,Luther's Bondage of Will Argument
+"Luther, De Servo Arbitrio (1525)",1,node,argument_lutheran_bondage_argument_6r0m1n79,Luther's Bondage of Will Argument
+"Erasmus, Hyperaspistes I.6",1,node,argument_erasmian_free_will_7s1n2o80,Erasmus's Defense of Free Will
+"Erasmus, De Libero Arbitrio (1524)",1,node,argument_erasmian_free_will_7s1n2o80,Erasmus's Defense of Free Will
+"Molina, Concordia Disputation 47-53 (1588)",1,node,argument_molinist_middle_knowledge_8t2o3p91,Molinist Middle Knowledge Argument
+"Leibniz, Discourse on Metaphysics §13, 30",1,node,argument_leibnizian_compatibilism_0v4q5r13,Leibniz's Compatibilist Argument
+"Leibniz, New Essays II.xxi",1,node,argument_leibnizian_compatibilism_0v4q5r13,Leibniz's Compatibilist Argument
+"Leibniz, Theodicy (1710) §§1-50, 230-240, 282-310",1,node,argument_leibnizian_compatibilism_0v4q5r13,Leibniz's Compatibilist Argument
+"Hobbes, Leviathan ch. 21 (1651)",1,node,argument_hobbesian_compatibilism_1w5r6s24,Hobbes's Compatibilist Argument
+"Hobbes, Of Liberty and Necessity (1654)",1,node,argument_hobbesian_compatibilism_1w5r6s24,Hobbes's Compatibilist Argument
+"Hobbes, Questions Concerning Liberty (1656)",1,node,argument_hobbesian_compatibilism_1w5r6s24,Hobbes's Compatibilist Argument
+"Locke, Essay Concerning Human Understanding II.xxi (1689, extensively revised 1694, 1700)",1,node,argument_lockean_analysis_2x6s7t35,Locke's Analysis of Freedom
+"Hume, Treatise II.iii.1-2 (1739)",1,node,argument_humean_compatibilism_3y7t8u46,Hume's Compatibilist Argument
+"Hume, Enquiry VIII (1748)",1,node,argument_humean_compatibilism_3y7t8u46,Hume's Compatibilist Argument
+"Reid, Essays on the Active Powers of Man (1788), especially IV",1,node,argument_reidian_agent_causation_4z8u9v57,Reid's Agent Causation Argument
+"Edwards, Freedom of the Will (1754)",1,node,argument_edwardsian_compatibilism_5a9v0w68,Edwards's Compatibilist Defense of Reformed Theology
+"Kant, Prolegomena §§53-57",1,node,argument_kantian_third_antinomy_6b0w1x79,Kant's Third Antinomy on Freedom
+Die Welt als Wille und Vorstellung (1818),1,node,person_schopenhauer_arthur_1a2b3c4d,Arthur Schopenhauer
+Über die Freiheit des menschlichen Willens (1839),1,node,person_schopenhauer_arthur_1a2b3c4d,Arthur Schopenhauer
+"A System of Logic, Book VI ch. 2",1,node,person_mill_john_stuart_2b3c4d5e,John Stuart Mill
+On Liberty (1859),1,node,person_mill_john_stuart_2b3c4d5e,John Stuart Mill
+Jenseits von Gut und Böse (Beyond Good and Evil),1,node,person_nietzsche_friedrich_3c4d5e6f,Friedrich Nietzsche
+Zur Genealogie der Moral (On the Genealogy of Morality),1,node,person_nietzsche_friedrich_3c4d5e6f,Friedrich Nietzsche
+The Will to Believe and Other Essays (1897),1,node,person_james_william_4d5e6f7g,William James
+The Dilemma of Determinism (1884),1,node,person_james_william_4d5e6f7g,William James
+Essai sur les données immédiates de la conscience (1889),1,node,person_bergson_henri_5e6f7g8h,Henri Bergson
+Matière et mémoire (1896),1,node,person_bergson_henri_5e6f7g8h,Henri Bergson
+"Fragen der Ethik (Problems of Ethics, 1930)",1,node,person_schlick_moritz_6f7g8h9i,Moritz Schlick
+“When Is a Man Responsible?” Proceedings of the Aristotelian Society 30 (1929-1930),1,node,person_schlick_moritz_6f7g8h9i,Moritz Schlick
+"Language, Truth and Logic (1936)",1,node,person_ayer_alfred_jules_7g8h9i0j,A.J. Ayer
+“Freedom and Necessity” (1946),1,node,person_ayer_alfred_jules_7g8h9i0j,A.J. Ayer
+"L’Être et le néant (Being and Nothingness, 1943)",1,node,person_sartre_jean_paul_8h9i0j1k,Jean-Paul Sartre
+L’existentialisme est un humanisme (1946),1,node,person_sartre_jean_paul_8h9i0j1k,Jean-Paul Sartre
+Le Mythe de Sisyphe (1942),1,node,person_camus_albert_9i0j1k2l,Albert Camus
+L’Homme révolté (1951),1,node,person_camus_albert_9i0j1k2l,Albert Camus
+"“Determinism, Indeterminism, and Libertarianism” (Mind 43, 1934)",1,node,person_broad_charlie_dunbar_0j1k2l3m,C.D. Broad
+The Mind and Its Place in Nature (1925),1,node,person_broad_charlie_dunbar_0j1k2l3m,C.D. Broad
+“A Plea for Excuses” (Proceedings of the Aristotelian Society 1956-57),1,node,person_austin_john_langshaw_1k2l3m4n,J.L. Austin
+Philosophical Papers (1961),1,node,person_austin_john_langshaw_1k2l3m4n,J.L. Austin
+Individuals: An Essay in Descriptive Metaphysics (1959),1,node,person_strawson_peter_frederick_2l3m4n5o,P.F. Strawson
+"“Freedom and Resentment” (Proceedings of the British Academy 48, 1962)",1,node,person_strawson_peter_frederick_2l3m4n5o,P.F. Strawson
+"“Actions, Reasons, and Causes” (Journal of Philosophy 60, 1963)",1,node,person_davidson_donald_3m4n5o6p,Donald Davidson
+Essays on Actions and Events (1980),1,node,person_davidson_donald_3m4n5o6p,Donald Davidson
+"“Alternate Possibilities and Moral Responsibility” (Journal of Philosophy 66, 1969)",1,node,person_frankfurt_harry_4n5o6p7q,Harry Frankfurt
+"“Freedom of the Will and the Concept of a Person” (Journal of Philosophy 68, 1971)",1,node,person_frankfurt_harry_4n5o6p7q,Harry Frankfurt
+"“Human Freedom and the Self” (University of Kansas, 1964)",1,node,person_chisholm_roderick_5o6p7q8r,Roderick Chisholm
+Theory of Knowledge (1966),1,node,person_chisholm_roderick_5o6p7q8r,Roderick Chisholm
+Action and Purpose (1966),1,node,person_taylor_richard_6p7q8r9s,Richard Taylor
+Metaphysics (1963),1,node,person_taylor_richard_6p7q8r9s,Richard Taylor
+Free Will and Values (1985),1,node,person_kane_robert_7q8r9s0t,Robert Kane
+The Significance of Free Will (1996),1,node,person_kane_robert_7q8r9s0t,Robert Kane
+Persons and Causes (2000),1,node,person_oconnor_timothy_8r9s0t1u,Timothy O'Connor
+"“Agent Causation” in Agents, Causes, and Events (1995)",1,node,person_oconnor_timothy_8r9s0t1u,Timothy O'Connor
+"“The Incompatibility of Free Will and Determinism” (Philosophical Studies 27, 1975)",1,node,person_van_inwagen_peter_9s0t1u2v,Peter van Inwagen
+An Essay on Free Will (1983),1,node,person_van_inwagen_peter_9s0t1u2v,Peter van Inwagen
+On Action (1990),1,node,person_ginet_carl_0t1u2v3w,Carl Ginet
+“In Defense of the Principle of Alternative Possibilities” (1996),1,node,person_ginet_carl_0t1u2v3w,Carl Ginet
+"“A Libertarian Theory of Free Will” (Philosophical Studies 68, 1992)",1,node,person_ekstrom_laura_1u2v3w4x,Laura Waddell Ekstrom
+Free Will: A Philosophical Study (2000),1,node,person_ekstrom_laura_1u2v3w4x,Laura Waddell Ekstrom
+Elbow Room: The Varieties of Free Will Worth Wanting (1984),1,node,person_dennett_daniel_2v3w4x5y,Daniel Dennett
+Freedom Evolves (2003),1,node,person_dennett_daniel_2v3w4x5y,Daniel Dennett
+The Metaphysics of Free Will (1994),1,node,person_fischer_john_martin_3w4x5y6z,John Martin Fischer
+"Responsibility and Control (with Mark Ravizza, 1998)",1,node,person_fischer_john_martin_3w4x5y6z,John Martin Fischer
+Conversation and Responsibility (2012),1,node,person_mckenna_michael_4x5y6z7a,Michael McKenna
+“Alternate Possibilities and the Failure of the Counterexamples to PAP” (2003),1,node,person_mckenna_michael_4x5y6z7a,Michael McKenna
+Responsibility and the Moral Sentiments (1994),1,node,person_wallace_r_jay_5y6z7a8b,R. Jay Wallace
+The Moral Nexus (2019),1,node,person_wallace_r_jay_5y6z7a8b,R. Jay Wallace
+"Causes, Laws, and Free Will (2013)",1,node,person_vihvelin_kadri_6z7a8b9c,Kadri Vihvelin
+"“Incompatibilism and the Ability to Do Otherwise” (Synthese 150, 2006)",1,node,person_vihvelin_kadri_6z7a8b9c,Kadri Vihvelin
+Living Without Free Will (2001),1,node,person_pereboom_derk_7a8b9c0d,Derk Pereboom
+"Free Will, Agency, and Meaning in Life (2014)",1,node,person_pereboom_derk_7a8b9c0d,Derk Pereboom
+Freedom and Belief (1986),1,node,person_strawson_galen_8b9c0d1e,Galen Strawson
+“The Impossibility of Moral Responsibility” (1994),1,node,person_strawson_galen_8b9c0d1e,Galen Strawson
+Free Will and Illusion (2000),1,node,person_smilansky_saul_9c0d1e2f,Saul Smilansky
+"“Determinism and Prepunishment” (Philosophy and Phenomenological Research 50, 1990)",1,node,person_smilansky_saul_9c0d1e2f,Saul Smilansky
+Free Will and Consciousness (2012),1,node,person_caruso_gregg_0d1e2f3g,Gregg Caruso
+Rejecting Retributivism (2021),1,node,person_caruso_gregg_0d1e2f3g,Gregg Caruso
+"“Time of Conscious Intention to Act” (Brain 106, 1983)",1,node,person_libet_benjamin_1e2f3g4h,Benjamin Libet
+Mind Time: The Temporal Factor in Consciousness (2004),1,node,person_libet_benjamin_1e2f3g4h,Benjamin Libet
+"“Unconscious Determinants of Free Decisions” (Nature Neuroscience 11, 2008)",1,node,person_haynes_john_dylan_2f3g4h5i,John-Dylan Haynes
+"“Decoding Sequential Stages of Task Preparation” (NeuroImage 45, 2009)",1,node,person_haynes_john_dylan_2f3g4h5i,John-Dylan Haynes
+Free Will and Luck (2006),1,node,person_mele_alfred_3g4h5i6j,Alfred Mele
+Effective Intentions (2009),1,node,person_mele_alfred_3g4h5i6j,Alfred Mele
+"“Is Incompatibilism Intuitive?” (Philosophical Topics 33, 2005)",1,node,person_nahmias_eddy_4h5i6j7k,Eddy Nahmias
+"“Autonomous Agency and Social Psychology” (Synthese 159, 2007)",1,node,person_nahmias_eddy_4h5i6j7k,Eddy Nahmias
+"“Intentional Action and Side Effects” (Analysis 63, 2003)",1,node,person_knobe_joshua_5i6j7k8l,Joshua Knobe
+"Experimental Philosophy (edited with Shaun Nichols, 2008)",1,node,person_knobe_joshua_5i6j7k8l,Joshua Knobe
+Bound: Essays on Free Will and Responsibility (2015),1,node,person_nichols_shaun_6j7k8l9m,Shaun Nichols
+"“Moral Responsibility and Determinism” (Noûs 41, 2007)",1,node,person_nichols_shaun_6j7k8l9m,Shaun Nichols
+Personal Autonomy in Society (2006),1,node,person_oshana_marina_7k8l9m0n,Marina Oshana
+"“Personal Autonomy in Society” (Philosophy and Phenomenological Research 63, 2001)",1,node,person_oshana_marina_7k8l9m0n,Marina Oshana
+"“Selflessness and Responsibility for Self” (Philosophical Review 118, 2009)",1,node,person_westlund_andrea_8l9m0n1o,Andrea Westlund
+"“Relational Autonomy and the Social Self” (Hypatia 18, 2003)",1,node,person_westlund_andrea_8l9m0n1o,Andrea Westlund
+"Relational Autonomy (edited with Natalie Stoljar, 2000)",1,node,person_mackenzie_catriona_9m0n1o2p,Catriona Mackenzie
+"“Relational Autonomy, Normative Authority and Perfectionism” (Journal of Social Philosophy 39, 2008)",1,node,person_mackenzie_catriona_9m0n1o2p,Catriona Mackenzie
+"van Inwagen, Peter. “The Incompatibility of Free Will and Determinism.” Philosophical Studies 27 (1975): 185–199.",1,node,argument_consequence_argument_0n1o2p3q,Consequence Argument
+"Widerker, David, and Michael McKenna, eds. Moral Responsibility and Alternative Possibilities. Aldershot: Ashgate, 2003.",1,node,argument_frankfurt_cases_1o2p3q4r,Frankfurt Cases
+"Pereboom, Derk. “Determinism Al Dente.” Noûs 29 (1995): 21-45.",1,node,argument_four_case_manipulation_2p3q4r5s,Four-Case Manipulation Argument
+"Strawson, Galen. Freedom and Belief. Oxford: Clarendon Press, 1986.",1,node,argument_basic_argument_3q4r5s6t,Basic Argument (Strawson)
+"Strawson, Galen. “The Impossibility of Moral Responsibility.” Philosophical Studies 75 (1994): 5-24.",1,node,argument_basic_argument_3q4r5s6t,Basic Argument (Strawson)
+"Kane, Robert. “Responsibility, Luck, and Chance.” Journal of Philosophy 96 (1999): 217-240.",1,node,concept_self_forming_actions_4r5s6t7u,Self-Forming Actions (SFAs)
+"Leibniz, Theodicy §173",1,node,concept_principle_alternative_possibilities_5s6t7u8v,Principle of Alternative Possibilities (PAP)
+"Wallace, R. Jay. Responsibility and the Moral Sentiments. Cambridge, MA: Harvard University Press, 1994.",1,node,concept_reactive_attitudes_7u8v9w0x,Reactive Attitudes
+"Frankfurt, Harry. “Freedom of the Will and the Concept of a Person.” Journal of Philosophy 68 (1971): 5-20.",1,node,concept_hierarchical_mesh_8v9w0x1y,Hierarchical Mesh Theory
+"Watson, Gary. “Free Agency.” Journal of Philosophy 72 (1975): 205-220.",1,node,concept_hierarchical_mesh_8v9w0x1y,Hierarchical Mesh Theory
+"McKenna, Michael. Conversation and Responsibility. Oxford: Oxford University Press, 2012.",1,node,concept_reasons_responsiveness_0x1y2z3a,Reasons-Responsiveness
+"Mele, Alfred R. Manipulated Agents. New York: Oxford University Press, 2014.",1,node,concept_bypassing_1y2z3a4b,Bypassing
+"Knobe, Joshua. “Intentional Action and Side Effects in Ordinary Language.” Analysis 63 (2003): 190-194.",1,node,concept_knobe_effect_2z3a4b5c,Knobe Effect
+"Knobe, Joshua, and Shaun Nichols. “Moral Responsibility and Determinism.” Noûs 41 (2007): 663-685.",1,node,concept_knobe_effect_2z3a4b5c,Knobe Effect
+"Kornhuber, Hans Helmut, and Lüder Deecke. “Hirnpotentialänderungen bei Willkürbewegungen und passiven Bewegungen.” Archiv für Psychiatrie und Nervenkrankheiten 203 (1962): 1-20.",1,node,concept_readiness_potential_3a4b5c6d,Readiness Potential (Bereitschaftspotential)
+"Libet, Benjamin et al. “Time of Conscious Intention to Act in Relation to Cerebral Activity.” Brain 106 (1983): 623-642.",1,node,concept_readiness_potential_3a4b5c6d,Readiness Potential (Bereitschaftspotential)
+"Smilansky, Saul. Free Will and Illusion. Oxford: Oxford University Press, 2000.",1,node,concept_illusionism_free_will_6d7e8f9g,Free Will Illusionism
+"Caruso, Gregg D. Free Will and Consciousness. Lanham, MD: Lexington Books, 2012.",1,node,concept_illusionism_free_will_6d7e8f9g,Free Will Illusionism
+"Pereboom, Derk. Free Will, Agency, and Meaning in Life. Oxford: Oxford University Press, 2014.",1,node,concept_public_health_model_7e8f9g0h,Public Health-Quarantine Model of Criminal Justice
+"Caruso, Gregg D. Rejecting Retributivism. Cambridge: Cambridge University Press, 2021.",1,node,concept_public_health_model_7e8f9g0h,Public Health-Quarantine Model of Criminal Justice
+"Dennett, Daniel. Elbow Room: The Varieties of Free Will Worth Wanting. Cambridge, MA: MIT Press, 1984.",1,node,work_elbow_room_dennett_9g0h1i2j,Elbow Room: The Varieties of Free Will Worth Wanting
+"O’Connor, Timothy. Persons and Causes: The Metaphysics of Free Will. New York: Oxford University Press, 2000.",1,node,work_persons_and_causes_oconnor_4l5m6n7o,Persons and Causes: The Metaphysics of Free Will
+"Mele, Alfred R. Free: Why Science Hasn’t Disproved Free Will. New York: Oxford University Press, 2014.",1,node,work_free_mele_5m6n7o8p,Free: Why Science Hasn't Disproved Free Will
+"Cicero, De Finibus I.21-23",1,node,person_lucretius_99_55bce_k1l2m3n4,Titus Lucretius Carus
+"Boethius, De consolatione Philosophiae III.2",1,node,person_boethius_480_524ce_w3x4y5z6,Boethius (Anicius Manlius Severinus Boethius)
+"Aristotle, Eudemian Ethics II.6, 1223a7-15",1,node,quote_aristotle_origin_principle_9cb3c262,"Aristotle: When the origin is in him, it is also up to him to act or no..."
+"Lucretius, De Rerum Natura II.284-293",1,node,quote_lucretius_swerve_8bae0c52,Lucretius: nor do the atoms by swerving make a certain beginning of mot...
+"Sextus Empiricus, M IX.40 (citing Chrysippus)",1,node,quote_chrysippus_cylinder_1da2c55b,Chrysippus (via Cicero): just as someone who pushes a cylindrical stone... gives it t...
+"Alexander of Aphrodisias, De fato 14.3-6",1,node,quote_alexander_alternatives_e4d14e13,Alexander of Aphrodisias: For what is up to us consists in being able also to do the o...
+"Epictetus, Discourses I.1.7-15",1,node,quote_epictetus_prohairesis_3fabff35,"Epictetus: Other things are not up to us, but prohairesis (moral choice..."
+"Cicero, Academica II.96-98",1,node,quote_carneades_cafma_4483b50a,"Carneades (via Cicero): If everything happens through antecedent causes, everything ..."
+"Origen, Commentary on Romans V.8",1,node,quote_origen_autexousion_abbb5a2e,Origen: The self-determining power... is the ability to do this and ...
+"Plotinus, Enneads VI.8.20",1,node,quote_plotinus_one_freedom_b1d66acd,Plotinus: If someone were to say that He is willingly what He is... th...
+"Augustine, Confessiones VIII.10.22",1,node,quote_augustine_divided_will_b45d573e,"Augustine: The will commands that there be will, yet does not do it... ..."
+"Boethius, Consolation of Philosophy V, prose 5",1,node,quote_boethius_eternity_7f0a8967,"Boethius: Eternity... the whole, simultaneous and perfect possession o..."
+"Alexander of Aphrodisias, De Fato 1-3",1,node,argument_sea_battle_aristotle,Sea Battle Tomorrow
+"Augustine, De libero arbitrio II.13",1,node,concept_source_incompatibilism,Source Incompatibilism
+Determinism and Freedom in Stoic Philosophy (1998),1,node,person_bobzien_susanne_contemporary,Susanne Bobzien
+"“The Inadvertent Conception and Late Birth of the Free-Will Problem” (Phronesis 43, 1998)",1,node,person_bobzien_susanne_contemporary,Susanne Bobzien
+A Free Will: Origins of the Notion in Ancient Thought (2011),1,node,person_frede_michael_1940_2007,Michael Frede
+"“Stoic and Aristotelian Conceptions of Freedom” (Proceedings of the Boston Area Colloquium in Ancient Philosophy 2, 1986)",1,node,person_frede_michael_1940_2007,Michael Frede
+"Necessity, Cause, and Blame (1980)",1,node,person_sorabji_richard_contemporary,Richard Sorabji
+Emotion and Peace of Mind (2000),1,node,person_sorabji_richard_contemporary,Richard Sorabji
+The Stoics on Determinism and Compatibilism (2005),1,node,person_salles_ricardo_contemporary,Ricardo Salles
+"“Compatibilism: Stoics and Moderns” (Journal of Philosophical Research 33, 2008)",1,node,person_salles_ricardo_contemporary,Ricardo Salles
+Ethics and Human Action in Early Stoicism (1985),1,node,person_inwood_brad_contemporary,Brad Inwood
+The Cambridge Companion to the Stoics (2003),1,node,person_inwood_brad_contemporary,Brad Inwood
+The Therapy of Desire (1994),1,node,person_nussbaum_martha_contemporary,Martha Nussbaum
+Upheavals of Thought (2001),1,node,person_nussbaum_martha_contemporary,Martha Nussbaum
+The Morality of Happiness (1993),1,node,person_annas_julia_contemporary,Julia Annas
+"Platonic Ethics, Old and New (1999)",1,node,person_annas_julia_contemporary,Julia Annas
+"“Stoic Compatibilism and Frankfurt-Type Cases” (Philosophical Studies 175, 2018)",1,node,person_bernath_laszlo_contemporary,László Bernáth
+“Moral Responsibility Without Alternative Possibilities?” (Acta Analytica 2019),1,node,person_bernath_laszlo_contemporary,László Bernáth
+Freedom within Reason (1990),1,node,person_wolf_susan_contemporary,Susan Wolf
+Meaning in Life and Why It Matters (2010),1,node,person_wolf_susan_contemporary,Susan Wolf
+"Frede, Michael. *A Free Will: Origins of the Notion in Ancient Thought*. University of California Press, 2011.",1,node,work_frede_free_will_2011,A Free Will: Origins of the Notion in Ancient Thought
+"Bobzien, Susanne. *Determinism and Freedom in Stoic Philosophy*. Oxford University Press, 1998.",1,node,work_bobzien_determinism_freedom_1998,Determinism and Freedom in Stoic Philosophy
+"Salles, Ricardo. *The Stoics on Determinism and Compatibilism*. Ashgate, 2005.",1,node,work_salles_stoics_determinism_2008,The Stoics on Determinism and Compatibilism
+"Sorabji, Richard. *Emotion and Peace of Mind*. Oxford University Press, 2000.",1,node,work_sorabji_emotion_peace_2000,Emotion and Peace of Mind
+"Bernáth, László. ""Stoic Compatibilism and Frankfurt-Type Cases."" *Philosophical Studies* 175 (2018): 2789-2807.",1,node,work_bernath_stoicism_frankfurt_2018,Stoicism and Frankfurtian Compatibilism
+"Frankfurt, Harry. ""Alternate Possibilities and Moral Responsibility."" *Journal of Philosophy* 66 (1969): 829-839.",1,node,concept_frankfurt_cases,Frankfurt Cases (conceptual theme)
+"Pereboom, Derk. *Living Without Free Will*. Cambridge University Press, 2001.",1,node,concept_manipulation_argument,Manipulation Argument
+"van Inwagen, Peter. *An Essay on Free Will*. Clarendon Press, 1983.",1,node,concept_consequence_argument,Consequence Argument (conceptual theme)
+"Plotinus, Enneads III.1.4",1,node,quote_plotinus_heimarmene_31dbdc1e,Plotinus: They make heimarmenê (fate) the most sovereign cause...
+"Augustine, De libero arbitrio I.12",1,node,quote_augustine_liberum_arbitrium_0661f946,Augustine: From what deep and hidden recess was my free choice (liberum arbitrium) called forth...
+"Plotinus, Enneads VI.8.6",1,node,quote_plotinus_autexousion_65371acd,Plotinus: The self-determining power (to autexousion) is not taken away in these matters...
+"Lucretius, De Rerum Natura II.319-332",1,node,quote_lucretius_clinamen_ii_251_293_176829af,Lucretius on the Atomic Swerve and Free Will (De rerum natura II.251-293)
+"Methodius of Olympus, Symposium 8",1,node,work_de_libero_arbitrio_methodius_olympus,On Free Will (De libero arbitrio)
+"Methodius of Olympus, On Free Will (Slavonic version), ed. Musurillo, ACTA 27 (1963): 146-178",1,node,work_de_libero_arbitrio_methodius_olympus,On Free Will (De libero arbitrio)
+Romans 7:8-25; Divine_and_Human_Agency_full.txt:7723-7735,1,node,concept_pauline_agency_framework_e6fc455c,Pauline Agency Framework
+Galatians 2:19-21; Divine_and_Human_Agency_full.txt:7241-7246,1,node,concept_pauline_agency_framework_e6fc455c,Pauline Agency Framework
+1 Enoch 6-16; Divine_and_Human_Agency_full.txt:4385-4520,1,node,concept_second_temple_agency_spectrum_ad43b22a,Second Temple Agency Spectrum
+Pseudo-Philo LAB 12.2-10; Divine_and_Human_Agency_full.txt:4241-4275,1,node,concept_second_temple_agency_spectrum_ad43b22a,Second Temple Agency Spectrum
+4Q186 1.1-8; Divine_and_Human_Agency_full.txt:1979-2040,1,node,concept_qumran_two_spirits_economy_dd50d11a,Qumran Two-Spirits Economy
+CD 2:2-13; Divine_and_Human_Agency_full.txt:2085-2140,1,node,concept_qumran_two_spirits_economy_dd50d11a,Qumran Two-Spirits Economy
+Sifre Numbers 115; Divine_and_Human_Agency_full.txt:3088-3170,1,node,concept_rabbinic_command_response_dynamics_ab1d7f4b,Rabbinic Command-Response Dynamics
+Sifra Behuqqotai 8.10 (Lev 26:44); Divine_and_Human_Agency_full.txt:2567-2577,1,node,concept_rabbinic_command_response_dynamics_ab1d7f4b,Rabbinic Command-Response Dynamics
+b. Qiddushin 30b; Divine_and_Human_Agency_full.txt:3306-3313,1,node,concept_rabbinic_command_response_dynamics_ab1d7f4b,Rabbinic Command-Response Dynamics
+Pesiqta de-Rav Kahana 12.6; Divine_and_Human_Agency_full.txt:3373-3393,1,node,concept_rabbinic_command_response_dynamics_ab1d7f4b,Rabbinic Command-Response Dynamics
+Sifra Qedoshim 11.22; Divine_and_Human_Agency_full.txt:3406-3420,1,node,concept_rabbinic_command_response_dynamics_ab1d7f4b,Rabbinic Command-Response Dynamics
+"Barclay, Introduction, caution against modern assumptions; Divine_and_Human_Agency_full.txt:289-295",1,node,concept_modern_analytical_frameworks_ae075bec,Explicit Analytical Frameworks
+"Barclay, Introduction; Divine_and_Human_Agency_full.txt:399-464",1,node,concept_barclay_three_agency_models_16901229,Barclay's Agency Models
+"Epictetus, Diss. 4.1.99-104; Divine_and_Human_Agency_full.txt:6155-6180",1,node,concept_engberg_pedersen_agency_continuum_f2e4e3f4,Epictetus-Paul Agency Continuum
+Galatians 5:24; Divine_and_Human_Agency_full.txt:6856-6870,1,node,concept_engberg_pedersen_agency_continuum_f2e4e3f4,Epictetus-Paul Agency Continuum
+Galatians 4:4-7; Divine_and_Human_Agency_full.txt:8759-8769,1,node,concept_martyn_apocalyptic_metaethics_8c16195d,Apocalyptic Meta-Ethics
+Romans 8:29-30; Divine_and_Human_Agency_full.txt:8764-8772,1,node,concept_martyn_apocalyptic_metaethics_8c16195d,Apocalyptic Meta-Ethics
+Romans 1:18-32; Divine_and_Human_Agency_full.txt:7723-7735,1,node,concept_gathercole_revelatory_sin_economy_ef6569ea,Revelatory Sin Economy
+Romans 7:7-25; Divine_and_Human_Agency_full.txt:7723-7735,1,node,concept_gathercole_revelatory_sin_economy_ef6569ea,Revelatory Sin Economy
+Genesis 6:8; Divine_and_Human_Agency_full.txt:6886-6902,1,node,concept_barclay_grace_comparison_26656e8d,Grace: Philo and Paul Compared
+Exodus 33:13-17; Divine_and_Human_Agency_full.txt:6902-6945,1,node,concept_barclay_grace_comparison_26656e8d,Grace: Philo and Paul Compared
+Deuteronomy 6:10-11; Divine_and_Human_Agency_full.txt:6985-7029,1,node,concept_barclay_grace_comparison_26656e8d,Grace: Philo and Paul Compared
+Romans 5:15-21; Divine_and_Human_Agency_full.txt:7247-7320,1,node,concept_barclay_grace_comparison_26656e8d,Grace: Philo and Paul Compared
+4QMMT C 23-32; Divine_and_Human_Agency_full.txt:5039-5045,1,node,concept_4qmmat_galatians_interface_8502f4f3,4QMMT–Galatians Interface
+Sirach 4:1; Divine_and_Human_Agency_full.txt:4213-4216,1,node,concept_sirach_capacity_bdea9bee,Sirach on Human Capacity
+Sirach 19:16; Divine_and_Human_Agency_full.txt:4201-4209,1,node,concept_sirach_capacity_bdea9bee,Sirach on Human Capacity
+Sirach 33:10-15; Divine_and_Human_Agency_full.txt:4216-4226,1,node,concept_sirach_capacity_bdea9bee,Sirach on Human Capacity
+4 Ezra 3:21-22; Divine_and_Human_Agency_full.txt:4287-4301,1,node,concept_4ezra_evil_heart_85c73e20,4 Ezra's Evil Heart
+4 Ezra 7:48[118]; Divine_and_Human_Agency_full.txt:4314-4324,1,node,concept_4ezra_evil_heart_85c73e20,4 Ezra's Evil Heart
+4 Ezra 8:55-60; Divine_and_Human_Agency_full.txt:4325-4343,1,node,concept_4ezra_evil_heart_85c73e20,4 Ezra's Evil Heart
+Romans 1:24-32; Romans 7:8-25,1,edge,concept_pauline_agency_framework_e6fc455c -> work_epistle_to_romans_paul,draws_on
+Sirach 4:1; 19:16; 33:10-15,1,edge,concept_second_temple_agency_spectrum_ad43b22a -> concept_sirach_capacity_bdea9bee,includes_position
+4 Ezra 3:21-22; 7:48[118]; 8:55-60,1,edge,concept_second_temple_agency_spectrum_ad43b22a -> concept_4ezra_evil_heart_85c73e20,includes_position
+Romans 1:18-32; Romans 7:7-25,1,edge,concept_gathercole_revelatory_sin_economy_ef6569ea -> work_epistle_to_romans_paul,analyzes
+Numbers 11:31-35,1,edge,concept_gathercole_revelatory_sin_economy_ef6569ea -> concept_numbers11_hand_over_17bd0119,uses_type_scene
+1 Samuel 8:5-18,1,edge,concept_gathercole_revelatory_sin_economy_ef6569ea -> concept_1samuel8_hand_over_85bb735b,uses_type_scene
+Sirach 4:1; 33:10-15,1,edge,concept_sirach_capacity_bdea9bee -> work_sirach_a3b4c5d6,draws_on
+4QMMT C 23-32,1,edge,concept_4qmmat_galatians_interface_8502f4f3 -> work_dss_4qmmt_m5n6o7p8,draws_on

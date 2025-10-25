@@ -8,12 +8,15 @@ import LoginPage from './pages/LoginPage';
 import KGVisualizerPage from './pages/KGVisualizerPage';
 import SearchPage from './pages/SearchPage';
 import GraphRAGPage from './pages/GraphRAGPage';
+import GraphRAGShowcase from './pages/GraphRAGShowcase';
 import TextExplorerPage from './pages/TextExplorerPage';
 import DatabasePage from './pages/DatabasePage';
 import BibliographyPage from './pages/BibliographyPage';
 import AboutPage from './pages/AboutPage';
+import CreditsPage from './pages/CreditsPage';
 import ReportErrorPage from './pages/ReportErrorPage';
 import InteractiveTour from './components/InteractiveTour';
+import FloatingGraphRAGButton from './components/FloatingGraphRAGButton';
 import { NotFoundPage } from './components/ui/not-found-page';
 import './index.css';
 
@@ -33,33 +36,33 @@ const pageTours: Record<string, { title: string; steps: Array<{ title: string; c
     title: 'Welcome to EleutherIA',
     steps: [
       {
-        title: 'Welcome to EleutherIA',
-        content: 'A comprehensive knowledge graph documenting ancient debates on free will from Aristotle to Boethius. Let us guide you through the key features.',
+        title: '🏛️ Welcome to EleutherIA',
+        content: 'Discover 800 years of philosophical debate on free will—from Aristotle to Augustine. Let\'s explore how ancient thinkers wrestled with fate, choice, and moral responsibility.',
         target: 'body'
       },
       {
-        title: 'Knowledge Graph',
-        content: 'Start here to explore the network of 534 philosophical concepts, arguments, and thinkers. Visualize complex relationships in an interactive graph.',
+        title: '🕸️ Interactive Knowledge Graph',
+        content: 'Visualize 534 interconnected nodes: see how Stoic determinism influenced Christian theology, or trace Aristotle\'s impact through centuries.',
         target: '[data-tour="kg-card"]'
       },
       {
-        title: 'Hybrid Search',
-        content: 'Search across 289 ancient texts using full-text, lemmatic, or AI-powered semantic search to find exactly what you need.',
+        title: '🔍 Hybrid Search Engine',
+        content: 'Search 289 ancient texts with AI-powered semantic search. Find "moral responsibility" even when the text uses "ἐφ\' ἡμῖν" (Greek) or "in nostra potestate" (Latin).',
         target: '[data-tour="search-card"]'
       },
       {
-        title: 'GraphRAG Q&A',
-        content: 'Ask questions in natural language and receive scholarly answers grounded in the knowledge graph with proper citations.',
+        title: '🤖 GraphRAG Q&A',
+        content: 'Ask: "How did Stoics reconcile fate with responsibility?" Get scholarly answers with precise citations from ancient sources and modern research.',
         target: '[data-tour="graphrag-card"]'
       },
       {
-        title: 'Ancient Texts',
-        content: 'Browse and read 289 ancient Greek and Latin texts with advanced lemmatization for deeper textual analysis.',
+        title: '📜 Ancient Texts Library',
+        content: 'Read Aristotle\'s Nicomachean Ethics, Augustine\'s debates with Pelagius, or Cicero\'s De Fato—all with advanced word analysis.',
         target: '[data-tour="texts-card"]'
       },
       {
-        title: 'Database Statistics',
-        content: 'Our database contains over 860 verified citations from ancient sources and modern scholarship, ensuring academic rigor.',
+        title: '📊 Academic Rigor',
+        content: '860+ verified citations ensure every claim is grounded in scholarship. Perfect for researchers, students, and philosophy enthusiasts.',
         target: '[data-tour="stats"]'
       }
     ]
@@ -207,27 +210,8 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-academic-bg">
-      {/* Global Tour Button - Visible on all pages */}
-      <button
-        onClick={() => setShowTour(true)}
-        className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer touch-manipulation"
-        style={{
-          WebkitTapHighlightColor: 'transparent'
-        }}
-        title="Start Interactive Tour"
-        aria-label="Start Interactive Tour"
-      >
-        {/* Mobile: Icon only, centered - Fixed 56x56px circle */}
-        <div className="sm:hidden w-14 h-14 flex items-center justify-center">
-          <HelpCircle className="w-6 h-6 animate-pulse" />
-        </div>
-
-        {/* Desktop: Icon + Text - Auto-width pill shape */}
-        <div className="hidden sm:flex items-center gap-2 px-4 py-3">
-          <HelpCircle className="w-6 h-6 animate-pulse" />
-          <span className="font-medium whitespace-nowrap">Take a Tour</span>
-        </div>
-      </button>
+      {/* Floating GraphRAG Button with Cmd+K */}
+      <FloatingGraphRAGButton />
 
       {/* Interactive Tour Component */}
       {showTour && <InteractiveTour autoStart={true} onComplete={handleTourComplete} tourSteps={currentTour.steps} />}
@@ -249,11 +233,22 @@ function AppContent() {
               <NavLink to="/database">Database</NavLink>
               <NavLink to="/visualizer">Knowledge Graph</NavLink>
               <NavLink to="/search">Search</NavLink>
-              <NavLink to="/graphrag">GraphRAG Q&A</NavLink>
+              <NavLink to="/graphrag-showcase">GraphRAG Q&A</NavLink>
               <NavLink to="/texts">Ancient Texts</NavLink>
               <NavLink to="/bibliography">Bibliography</NavLink>
               <NavLink to="/about">About</NavLink>
-              
+              <NavLink to="/credits">Credits</NavLink>
+
+              {/* Tour Button */}
+              <button
+                onClick={() => setShowTour(true)}
+                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-semibold text-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                title="Start Interactive Tour"
+              >
+                <HelpCircle className="w-4 h-4" />
+                <span>Take a Tour</span>
+              </button>
+
               {/* User Menu - Only show when authenticated */}
               {isAuthenticated && (
                 <div className="flex items-center space-x-2">
@@ -293,11 +288,24 @@ function AppContent() {
                 <NavLink to="/database">Database</NavLink>
                 <NavLink to="/visualizer">Knowledge Graph</NavLink>
                 <NavLink to="/search">Search</NavLink>
-                <NavLink to="/graphrag">GraphRAG Q&A</NavLink>
+                <NavLink to="/graphrag-showcase">GraphRAG Q&A</NavLink>
                 <NavLink to="/texts">Ancient Texts</NavLink>
                 <NavLink to="/bibliography">Bibliography</NavLink>
                 <NavLink to="/about">About</NavLink>
-                
+                <NavLink to="/credits">Credits</NavLink>
+
+                {/* Tour Button - Mobile */}
+                <button
+                  onClick={() => {
+                    setShowTour(true);
+                    document.getElementById('mobile-menu')?.classList.add('hidden');
+                  }}
+                  className="flex items-center justify-center space-x-2 px-4 py-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-semibold text-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                  <span>Take a Tour</span>
+                </button>
+
                 {/* Mobile Login/User Menu */}
                 {isAuthenticated && (
                   <div className="flex items-center justify-between pt-2 border-t border-academic-border">
@@ -320,7 +328,7 @@ function AppContent() {
         </header>
 
         {/* Main Content */}
-        <main className="academic-container pt-0 pb-12 sm:pb-8">
+        <main className="academic-container pt-0 pb-2">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -328,9 +336,11 @@ function AppContent() {
             <Route path="/visualizer" element={<KGVisualizerPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/graphrag" element={<GraphRAGPage />} />
+            <Route path="/graphrag-showcase" element={<GraphRAGShowcase />} />
             <Route path="/texts" element={<TextExplorerPage />} />
             <Route path="/bibliography" element={<BibliographyPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/credits" element={<CreditsPage />} />
             <Route path="/report-error" element={<ReportErrorPage />} />
             {/* 404 - Catch all unmatched routes */}
             <Route path="*" element={<NotFoundPage />} />
@@ -338,19 +348,19 @@ function AppContent() {
         </main>
 
         {/* Footer */}
-        <footer className="bg-academic-paper border-t border-academic-border mt-12 sm:mt-16">
-          <div className="academic-container py-6 sm:py-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-4">
-              <div className="pb-4 sm:pb-0">
-                <h3 className="font-semibold text-sm mb-3">About EleutherIA</h3>
+        <footer className="bg-academic-paper border-t border-academic-border mt-2">
+          <div className="academic-container py-2">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="pb-2 sm:pb-0">
+                <h3 className="font-semibold text-sm mb-2">About EleutherIA</h3>
                 <p className="text-xs text-academic-muted leading-relaxed">
                   A FAIR-compliant knowledge graph documenting ancient debates on free will, fate,
                   and moral responsibility from Aristotle (4th c. BCE) to Boethius (6th c. CE).
                 </p>
               </div>
 
-              <div className="pb-4 sm:pb-0">
-                <h3 className="font-semibold text-sm mb-3">Data</h3>
+              <div className="pb-2 sm:pb-0">
+                <h3 className="font-semibold text-sm mb-2">Data</h3>
                 <ul className="text-xs text-academic-muted space-y-1">
                   <li>534 Knowledge Graph Nodes</li>
                   <li>923 Edges & Relationships</li>
@@ -359,8 +369,8 @@ function AppContent() {
                 </ul>
               </div>
 
-              <div className="pb-4 sm:pb-0">
-                <h3 className="font-semibold text-sm mb-3">Citation</h3>
+              <div className="pb-2 sm:pb-0">
+                <h3 className="font-semibold text-sm mb-2">Citation</h3>
                 <p className="text-xs text-academic-muted leading-relaxed break-words">
                   Girardi, R. (2025). <span className="italic">EleutherIA: Ancient Free Will Database</span>.
                   Zenodo. <a href="https://doi.org/10.5281/zenodo.17379490" className="text-primary-600 hover:underline break-all">
@@ -370,8 +380,8 @@ function AppContent() {
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-academic-border text-center text-xs text-academic-muted">
-              <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 mb-3">
+            <div className="mt-3 pt-2 border-t border-academic-border text-center text-xs text-academic-muted">
+              <div className="flex flex-wrap justify-center items-center gap-2 mb-2">
                 <a
                   href="https://github.com/romain-girardi-eng/EleutherIA"
                   target="_blank"

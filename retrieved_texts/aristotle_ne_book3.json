@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "work": "Nicomachean Ethics",
+    "author": "Aristotle",
+    "language": "Greek",
+    "source": "Perseus Digital Library",
+    "perseus_id_greek": "Perseus:text:1999.01.0053",
+    "perseus_id_english": "Perseus:text:1999.01.0054",
+    "edition_greek": "I. Bywater, Oxford: Oxford University Press, 1894",
+    "edition_english": "H. Rackham, Loeb Classical Library, 1926",
+    "retrieved_date": "2025-10-25",
+    "note": "Book III contains foundational free will passages"
+  },
+  "books": {
+    "III": {
+      "chapters": {}
+    }
+  }
+}

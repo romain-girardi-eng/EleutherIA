@@ -1,0 +1,243 @@
+{
+  "metadata": {
+    "work": "Academica",
+    "author": "Cicero",
+    "language": "Latin",
+    "source": "Perseus canonical-latinLit GitHub",
+    "source_url": "https://github.com/PerseusDL/canonical-latinLit",
+    "file_url": "https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0474/phi006/phi0474.phi006.perseus-lat2.xml",
+    "edition": "perseus-lat2",
+    "format": "TEI-XML",
+    "urn": "urn:cts:latinLit:phi0474.phi006.perseus-lat2",
+    "retrieved_date": "2025-10-25",
+    "verification_status": "github_source",
+    "passages_extracted": 56,
+    "database_citations": 13
+  },
+  "passages": {
+    "1": {
+      "section": "1",
+      "text": "A ntea sic hanc causam antea sic hanc causam  Peyron : a ...  T  a gere \n\t\t\t\t\ts tatue ra m agere statueram  Beier : a ... s ... ra.  T ,\n\t\t\t\t\t recupe ratores recuperatores  Peyron : ...\n\t\t\t\t\ttores  T  ( inter  recip.  et  recup.  variant in hac oratione\n\t\t\t\t\t\tcodd. ,  ut infitia turos ut infitiaturos  Orelli : ... turos  T \n\t\t\t\tadversarios arbitrarer tantam caedem et tam atrocem ad familiam suam pertinere.\n\t\t\t\t\t itaque  animo soluto a cura et a cogitatione veneram, quod\n\t\t\t\tintellegebam facile id me testibus planum facere posse.  nunc  vero postea\n\t\t\t\tquam non modo confessus est vir primarius, L. Quin Quin ...  T :  suppl. Peyron ctius \n\t\t\t\t \n\t\t\t\t la borabam laborabam  Peyron : borabam  T  ut, quod arguebam, id factum esse ostenderem;\n\t\t\t\tnunc in eo consumenda est oratio ut ne adversarii, quod infitiari nullo modo\n\t\t\t\tpotuerunt, cum maxime cuperent, id cum confessi sunt, meliore loco esse videantur."
+    },
+    "2": {
+      "section": "2",
+      "text": "itaque  tum vestrum difficilius\n\t\t\t\t\tiudicium diudicium  T :  corr.\n\t\t\t\t\t\tPeyron , mea facilis defensio fore videbatur.  ego  enim\n\t\t\t\tomnia in tes tibus testibus  Peyron : tes  T \n\t\t\t\t  quid est facilius quam de eo qui confitetur\n\t\t\t\tiudicare?  mihi  autem difficile est satis copiose de eo dicere quod nec\n\t\t\t\tatrocius verbis demonstrari potest quam re ipsa est, neque apertius oratione mea\n\t\t\t\tfieri quam ipsorum confessione factum est."
+    },
+    "3": {
+      "section": "3",
+      "text": "Cum in hac re quam commemoravi mihi mutanda ratio defensionis\n\t\t\t\t  minus diligenter illius existimationem\n\t\t\t\t\tquam quam  sup. lin. hab. T  rem M. Tulli\n\t\t\t\tviderer defendere.  nunc  quoniam Quinctius ad causam pertinere putavit res\n\t\t\t\tita multas, falsas praesertim et inique confictas, proferre de vita et moribus et\n\t\t\t\texistimatione M. Tulli, multis de causis mihi Fabius debebit ignoscere, si minus\n\t\t\t\teius famae parcere videbor quam antea consului."
+    },
+    "4": {
+      "section": "4",
+      "text": "Pri   . . ore putavit ad officium suum\n\t\t\t\tpertinere adversario nulla in re parcere, quid me oportet Tullium pro Tullio facere,\n\t\t\t\thomine coniuncto mecum non minus animo quam nomine?  ac  mihi magis illud\n\t\t\t\tlaborandum videtur, recuperatores, ut quod antea nihil in istum dixi probar e\n\t\t\t\t\tpossi m, quam probare possim quam  Cramer : prob\n\t\t\t\t\t... umquam  A \n\t\t\t\t ne ne  suppl. Mommsen  in eo\n\t\t\t\treprehendar quod hoc tempore respondeo."
+    },
+    "5": {
+      "section": "5",
+      "text": "verum  et tum id feci quod oportuit, et nunc faciam quod necesse\n\t\t\t\test.  nam  cum esset de re pecuniaria controversia, quod damnum datum M.\n\t\t\t\tTullio diceremus, alienum mea mea  a mea  Peyron  natura videbatur quicquam de existimatione P. Fabi\n\t\t\t\tdicere, non quia quin  A :  corr.\n\t\t\t\t\t\tMai  res postulare non videretur.  quid  ergo est?\n\t\t\t\t\t tametsi  postulat causa, tamen, nisi plane cogit ingratiis, ad male\n\t\t\t\tdicendum non soleo descendere.  nunc  cum coactus dicam, si quid forte\n\t\t\t\tdicam, tamen id ipsum verecunde modiceque modique  A :\n\t\t\t\t\t\t corr. Heinrich  faciam, tantum ut, quoniam\n\t\t\t\tsibi me non esse inimicum potuit priore actione Fabius iudicare, nunc M. Tullio\n\t\t\t\tfidelem certumque amicum esse cognoscat."
+    },
+    "6": {
+      "section": "6",
+      "text": "Vnum hoc abs te, L. Quincti, pervelim impetrare—quod tametsi eo volo quia mihi utile\n\t\t\t\test, tamen abs te idcirco quia aequum aecum  A \n\t\t\t\test, postulo—ut ita tibi multum temporis ad dicendum sumas ut his his  Cramer : is  A  aliquid ad\n\t\t\t\tiudicandum relinquas.  namque  antea non defensionis tuae modus, sed nox\n\t\t\t\ttibi finem dicendi fecit; nunc, si tibi placere potest, ne idem facias, id abs te\n\t\t\t\tpostulo.  neque  hoc idcirco postulo quod quod  A  ( Peyron ): quo  Mai  te aliquid censeam praeterire oportere aut non quam ornatissime\n\t\t\t\tet copiosissime dicere, verum ut semel una quaque de re dicas; quod si facies, non\n\t\t\t\tvereor ne dicendo dies eximatur."
+    },
+    "7": {
+      "section": "7",
+      "text": "iudicium  vestrum est, recuperatores,  Qvantae pecvniae \n\t\t\t\t paret dolo malo familiae P. Fabi vi hominibvs armatis coactisve damnvm\n\t\t\t\t\t\tdatvm datum  T : factum  A  esse M. Tvllio. \n\t\t\t\t eius  rei taxationem nos fecimus; aestimatio vestra est; iudicium datum\n\t\t\t\test in quadruplum."
+    },
+    "8": {
+      "section": "8",
+      "text": "Cum omnes leges omniaque iudicia quae paulo graviora atque asperiora videntur esse ex\n\t\t\t\timproborum iniquitate et iniuria nata sunt, tum hoc iudicium paucis hisce annis\n\t\t\t\tpropter hominum malam consuetudinem nimiamque licentiam constitutum est.\n\t\t\t\t\t nam  cum multae familiae dicerentur in agris longinquis et pascuis\n\t\t\t\tarmatae esse caedisque facere, cumque ea consuetudo non solum ad res privatorum\n\t\t\t\t\tsed sed  T : sed etiam  A  ad summam rem publicam pertinere videretur, M. Lucullus, qui\n\t\t\t\tsumma aequitate et et  T : ad  A :\n\t\t\t\t\tatque  Peyron  sapientia ius dixit, primus hoc\n\t\t\t\tiudicium composuit et id spectavit ut omnes omnes  A :\n\t\t\t\t\thomines  T  ita familias suas continerent ut non\n\t\t\t\tmodo armati damnum nemini darent verum etiam lacessiti iure se potius quam armis\n\t\t\t\tdefenderent;"
+    },
+    "9": {
+      "section": "9",
+      "text": "et cum sciret sciret  T : scirent  A  de damno\n\t\t\t\tlegem esse Aquiliam, tamen hoc hoc  hic  Heinrich  ita existimavit, apud maiores nostros cum et res et\n\t\t\t\tcupiditates minores essent et familiae non magnae magno metu continerentur ut\n\t\t\t\t\tperraro ut perraro  A : perraro  T : et perraro  Cramer  fieret ut homo\n\t\t\t\toccideretur, idque nefarium ac ac  T : et  A  singulare facinus putaretur, nihil opus fuisse\n\t\t\t\tiudicio de vi coactis armatisque hominibus; quod enim usu non veniebat, de eo si\n\t\t\t\tquis legem aut iudicium constitueret, non tam prohibere videretur videretur  T : videtur  A  quam\n\t\t\t\tadmonere."
+    },
+    "10": {
+      "section": "10",
+      "text": "his  temporibus cum ex ex  A : et  T  bello diuturno atque domestico res in eam\n\t\t\t\tconsuetudinem venisset ut homines minore religione armis uterentur, necesse putavit\n\t\t\t\tesse et in universam familiam iudicium dare, quod a familia factum diceretur, et\n\t\t\t\trecuperatores dare,"
+    },
+    "11": {
+      "section": "11",
+      "text": "ut quam primum res\n\t\t\t\tiudicaretur, et poenam graviorem constituere, ut metu comprimeretur audacia, et\n\t\t\t\tillam latebram tollere: ' damnum iniuria. '  quod  in\n\t\t\t\t\taliis aliis  T : illis  A  causis debet valere et valet lege Aquilia, id ex huius modi damno\n\t\t\t\tquod vi per servos armatos datum esset"
+    },
+    "12": {
+      "section": "12",
+      "text": "ipsi statuerent quo tempore possent suo iure arma\n\t\t\t\tcapere, manum cogere, homines occidere. Cum iudicium ita daret daret  Heinrich : daretur  A  ut\n\t\t\t\thoc solum in iudicium veniret venire  A :  corr. Beier , videreturne vi hominibus coactis\n\t\t\t\tarmatisve damnum dolo malo familiae datum, neque illud adderet aderet  A :  corr. Cramer \n\t\t\t\t\t' inivria ,' putavit se audaciam improborum sustulisse, cum spem\n\t\t\t\tdefensionis nullam reliquisset relinquisset  A  ( ita  § 21) ."
+    },
+    "13": {
+      "section": "13",
+      "text": "quoniam  quod iudicium et quo consilio constitutum sit cognostis, nunc rem\n\t\t\t\tipsam, ut gesta sit, dum breviter vobis demonstro, attendite."
+    },
+    "14": {
+      "section": "14",
+      "text": "fundum  habet in agro Thurino Thurino  Quintil.  iv. 3. 121: Thyrino  A  M. Tullius paternum, recuperatores, quem se habere usque eo non\n\t\t\t\tmoleste tulit, donec vicinum eius modi nactus est qui agri finis armis proferre\n\t\t\t\tmallet quam iure defendere.  nam  P. Fabius nuper emit agrum de C. Claudio\n\t\t\t\tsenatore, cui fundo erat adfinis M. Tullius, sane magno, dimidio fere pluris\n\t\t\t\tincultum exustis villis omnibus quam quanti integrum atque ornatissimum carissimis\n\t\t\t\tpretiis ipse Claudius  emerat emerat  suppl.\n\t\t\t\t\t\tHeinrich"
+    },
+    "15": {
+      "section": "15",
+      "text": "clam circumscripsisse isti a consulari Macedonia\n\t\t\t\tet Asia.  etiam  illud addam quod ad rem pertinet: imperatore mortuo\n\t\t\t\tpecuniam nescio quo modo quaesitam dum volt in praedio ponere, non posuit, sed\n\t\t\t\tabiecit.  nihil  adhuc m\n\t\t\t\t \n\t\t\t \n\t\t\t . . am calamitate calamitatem  A :  corr. Mai  vicinorum corrigit, et quod stomachum suum damno\n\t\t\t\tTulli  exp lere explere  Mai : plere  A  conatus est."
+    },
+    "16": {
+      "section": "16",
+      "text": "est  in eo agro centuria quae\n\t\t\t\t\tPopuliana Popiliana  A  ( Peyron ):  cf.  §§ 17, 19, 21  nominatur,\n\t\t\t\trecuperatores, quae semper M. Tulli fuit, quam etiam pater\n\t\t\t\t\tpos sederat possederat  Mai : pos  A \n\t\t\t\t  posita esse et ad fundum eius convenire.\n\t\t\t\t\t ac  primum, quod eum negoti totius et emptionis suae paenitebat,\n\t\t\t\tfundum proscripsit; eum autem emptum habebat cum socio Cn. Acerronio, viro\n\t\t\t\t\top timo optimo  Mai : op  A \n\t\t\t\t  modum proscripsisse."
+    },
+    "17": {
+      "section": "17",
+      "text": "hominem  appellat.  iste  sane adroganter\n\t\t\t\tquod commodum fuit respondit. Nequedum finis auctor demonstraverat.\n\t\t\t\t\t mittit  ad procuratorem litteras et ad vilicum Tullius\n\t\t\t\t  facturum negavit; illis absentibus finis\n\t\t\t\tAcerronio demonstravit neque tamen hanc centuriam Populianam vacuam tradidit.\n\t\t\t\tAcerronius, quo modo potuit, se de tota re se de tota me  Niebuhr : sedetorare  A  ex"
+    },
+    "18": {
+      "section": "18",
+      "text": "mine mine  A :\n\t\t\t\t\tdiscrimine  Heinrich  eius modi semustilatus\n\t\t\t\teffugit.  adducit  iste interea in saltum homines electos maximis animis et\n\t\t\t\tviribus et eis iis  Mai : is  A  arma quae cuique habilia habilia  Heinrich : abitalia  A  atque apta essent\n\t\t\t\tcomparat, prorsus ut quivis intellegeret non eos ad rem rusticam, verum ad caedem ac\n\t\t\t\tpugnam comparari."
+    },
+    "19": {
+      "section": "19",
+      "text": "brevi \n\t\t\t\t\t\tillo illo  illi  Cramer \n\t\t\t\ttempore Q. Cati Aemiliani, hominis honesti, quem vos nostis, duo homines occiderunt;\n\t\t\t\tmulta alia fecerunt; passim vagabantur armati, non obscure, sed ut plane intellegere\n\t\t\t\tviderentur ad quam rem parati essent; agros, vias denique infestas habebant.\n\t\t\t\t\t venit  in Thurinum Tyrinum  A  ( cf.  § 14)  interea Tullius.  deinde  iste\n\t\t\t\tpater familias Asiaticus beatus, novus arator et idem pecuarius, cum ambularet in\n\t\t\t\tagro, animadvertit in hac ipsa centuria Populiana aedificium non ita magnum\n\t\t\t\tservumque M. Tulli Philinum Philinum  Mai  ( e  § 22): filium  A \n\t\t\t\t\tsticnegotiimmeost  A : 'stic negoti immeo est ( `vulgarem pronuntiationem expressit orator' )  Peyron ."
+    },
+    "20": {
+      "section": "20",
+      "text": "' quid  vobis,' inquit, 'istic negoti in meo est?'  servus \n\t\t\t\trespondit pudenter, at non stulte, dominum esse ad villam; posse eum cum eo\n\t\t\t\tdisceptare si quid vellet.  rogat  Fabius Acerronium—nam ibi tum erat—ut\n\t\t\t\tsecum simul veniat ad Tullium.  venitur .  ad  villam erat\n\t\t\t\tTullius.  appellat  Fabius ut aut ipse Tullium deduceret aut ab eo\n\t\t\t\tdeduceretur.  dicit  deducturum se Tullius, vadimonium Fabio Romam\n\t\t\t\tpromissurum.  manet  in ea condicione Fabius.  mature  disceditur."
+    },
+    "21": {
+      "section": "21",
+      "text": "proxima  nocte, iam fere cum lux\n\t\t\t\tadpropinquaret, ad illud aedificium de quo antea dixi, quod erat in centuria\n\t\t\t\tPopuliana, servi P. Fabi frequentes armatique veniunt; introitum ipsi sibi\n\t\t\t\t\t vi vi  suppl. Heinrich  manuque\n\t\t\t\tpatefaciunt; homines magni preti servos M. Tulli nec opinantis adoriuntur;\n\t\t\t\t\tquod quodque  Huschke  facile factu fuit,\n\t\t\t\tneque tam multos neque repugnantis multi armati paratique occidunt tantumque odi\n\t\t\t\tcrudelitatisque  hab uerunt habuerunt  Mai : ...\n\t\t\t\t\tuerunt  A  ut eos omnis gurgulionibus insectis\n\t\t\t\trelinquerent, ne, si quem semivivum ac spirantem etiam reliquissent, minor\n\t\t\t\t\teis iis  Huschke : his  A : is\n\t\t\t\t\t\t Heinrich  honor haberetur; praeterea tectum\n\t\t\t\tvillamque disturbant."
+    },
+    "22": {
+      "section": "22",
+      "text": "hanc  rem tam\n\t\t\t\tatrocem, tam indignam, tam repentinam nuntiat M. Tullio Philinus, quem antea\n\t\t\t\tnominavi, qui graviter saucius e caede effugerat. Tullius statim dimittit ad amicos,\n\t\t\t\tquorum ex ex  Beier : ea  A \n\t\t\t\tvicinitate Thurina Thurina  Pluygers : tum illa  A  bona atque honesta copia praesto fuit."
+    },
+    "23": {
+      "section": "23",
+      "text": "omnibus  acerba res et misera\n\t\t\t\tvidebatur. Cum amici in comm  turbarunt."
+    },
+    "24": {
+      "section": "24",
+      "text": "audite , quaeso, in eas res quas commemoro hominum honestorum testimonium.\n\t\t\t\t\t haec  quae mei testes dicunt, fatetur adversarius eos vere dicere;\n\t\t\t\tquae mei testes non dicunt, quia non viderunt nec sciunt, ea dicit ipse adversarius.\n\t\t\t\t\t nostri  testes dicunt occisos homines; cruorem in locis\n\t\t\t\t\tpluribus plurimb.  T , deiectum aedificium se\n\t\t\t\tvidisse dicunt; nihil vidisse dicunt; nihil  Madvig :\n\t\t\t\t\tvidisse; dicunt nihil  priores  amplius.\n\t\t\t\t\t quid  Fabius? Horum nihil negat.  quid  ergo addit amplius?"
+    },
+    "25": {
+      "section": "25",
+      "text": "Suam familiam fecisse dicit.  quo \n\t\t\t\tmodo?  vi  hominibus armatis.  quo  animo? Vt id fieret quod\n\t\t\t\tfactum est.  quid  est id? Vt homines M. Tulli occiderentur.\n\t\t\t\t\t quod  ergo eo animo factum est ut homines unum in locum convenirent,\n\t\t\t\tut arma caperent, ut certo consilio certum in locum proficiscerentur, ut idoneum\n\t\t\t\ttempus eligerent, ut caedem facerent, id si voluerunt et cogitarunt et perfecerunt,\n\t\t\t\tpotestis eam voluntatem, id consilium, id factum a dolo malo seiungere?"
+    },
+    "26": {
+      "section": "26",
+      "text": "at  istuc totum ' dolo malo '\n\t\t\t\tadditur in hoc iudicio eius causa qui agit, non illius quicum agitur.  id \n\t\t\t\tut intellegatis, recuperatores, quaeso ut diligenter attendatis; profecto quin ita\n\t\t\t\tsit non dubitabitis."
+    },
+    "27": {
+      "section": "27",
+      "text": "si  ita iudicium daretur ut id concluderetur quod a familia factum esset,\n\t\t\t\tsi quae familia ipsa in caede interesse noluisset et homines aut servos aut liberos\n\t\t\t\tcoegisset aut conduxisset, totum hoc iudicium et praetoris severitas dissolveretur.\n\t\t\t\t\t nemo  enim potest posset  Kayser \n\t\t\t\t\thoc hoc  Müller : haec  T  iudicare, qua in re familia non interfuisset, in ea re eam ipsam\n\t\t\t\tfamiliam vi armatis hominibus damnum dedisse.  ergo , id quia poterat fieri\n\t\t\t\tet facile poterat, idcirco non satis habitum est quaeri quid familia ipsa fecisset,\n\t\t\t\tverum etiam illud, quid familiae dolo malo factum esset."
+    },
+    "28": {
+      "section": "28",
+      "text": "nam  cum facit ipsa familia vim vim  Halm : vi  T  armatis\n\t\t\t\tcoactisve hominibus et damnum cuipiam dat, id dolo malo fieri necesse est; cum autem\n\t\t\t\trationem init ut ea fiat, familia ipsa non facit, fit autem dolo malo eius.\n\t\t\t\t\t ergo  addito ' dolo malo ' actoris et petitoris fit causa\n\t\t\t\tcopiosior. Vtrum enim ostendere potest, sive eam ipsam familiam sibi damnum dedisse,\n\t\t\t\tsive consilio et opera eius familiae factum esse, vincat necesse est."
+    },
+    "29": {
+      "section": "29",
+      "text": "videtis  praetores per hos annos interdicere interdicere  Madvig : intercedere  T  hoc\n\t\t\t\t\tmodo modo  T  ( Krüger ):\n\t\t\t\t\tinterdicto  Peyron ,  velut\n\t\t\t\t\tinter velut inter  suppl. Huschke  me et\n\t\t\t\tM. Claudium:  Vnde dolo dolo  Baiter : dedolo  T  malo tvo, M. Tvlli, M. Clavdivs avt familia\n\t\t\t\t\tavt procvrator eivs vi detrvsvs est , cetera ex formula.  si ,\n\t\t\t\t\tubi si ubi  Kayser : sicut  T :\n\t\t\t\t\tsicubi  Madvig  ita interdictum est et sponsio\n\t\t\t\tfacta, ego me ad iudicem sic sic  Kayser : si  T  defendam  ut ut  suppl. Peyron  vi me deiecisse confitear, dolo\n\t\t\t\tmalo negem, ecquis etquis  T :  corr.\n\t\t\t\t\t\tOrelli  me audiat?  non  opinor equidem quidem  T :  corr. Halm , quia, si\n\t\t\t\tvi deieci M. Claudium, dolo malo deieci; in vi enim dolus malus inest,\n\t\t\t\t\t\tet et  at  Kayser  Claudio\n\t\t\t\tutrumvis satis est planum facere, vel se a me ipso vi deiectum esse vel me consilium\n\t\t\t\tinisse ut vi deiceretur."
+    },
+    "30": {
+      "section": "30",
+      "text": "plus  igitur\n\t\t\t\t\t datur  Claudio, cum igitur ... Claudio cum ...  T  ( Krüger ):  suppl.\n\t\t\t\t\t\tBeier \n\t\t\t\t ita  interdicitur, unde dolo malo meo unde dolo malo meo  T2, Keller : unde a me ( e v.  26\n\t\t\t\t\t\t geminat. )  T1  vi\n\t\t\t\tdeiectus sit, quam si daretur, unde a me vi deiectus esset.  nam  in hoc\n\t\t\t\tposteriore, nisi ipse egomet deiecissem, vincerem sponsionem; in illo priore, ubi\n\t\t\t\tdolus malus additur auditur  T :  corr.\n\t\t\t\t\t\tBeier , sive consilium inissem inissem  ut vi\n\t\t\t\t\tdeiceretur  add. T :  del. Keller \n\t\t\t\t\t\t( e  § 29  v.  24  repetitum ) sive ipse deiecissem  sup.\n\t\t\t\t\t\tlin. hab. T , sive ipse deiecissem, necesse erat te dolo malo meo\n\t\t\t\tvi deiectum iudicari."
+    },
+    "31": {
+      "section": "31",
+      "text": "hoc  persimile atque adeo plane idem est in hoc\n\t\t\t\tiudicio, recuperatores.  quaero  enim abs te, si ita iudicium datum esset:\n\t\t\t\t\t Qvantae pecvniae paret a familia P. Fabii\n\t\t\t\t\t\t vi vi  suppl.\n\t\t\t\t\t\t\t\n\t\t\t\t\t\tHuschke  hominibvs armatis damnvm M. Tvllio\n\t\t\t\t\tdatvm datum  Baiter : ... tum  T : factum  Beier , quid\n\t\t\t\thaberes quod diceres?  nihil , opinor.  fateris  enim omnia et\n\t\t\t\tfamiliam P. Fabi fecisse et vi hominibus armatis fecisse.  quod  additum\n\t\t\t\test ' dolo malo ,' id te adiuvare putas in quo opprimitur et excluditur\n\t\t\t\tomnis tua defensio?"
+    },
+    "32": {
+      "section": "32",
+      "text": "nam  si additum id\n\t\t\t\tnon esset ac tibi libitum esset ita defendere defenderem  T :  corr. Peyron , tuam familiam non\n\t\t\t\tfecisse, vinceres, si id probare potuisses.  nunc , sive illa defensione\n\t\t\t\tuti voluisses sive hac qua uteris, condemneris necesse est; nisi putamus eum  in\n\t\t\t\t\tiudi cium eum ... icium  T  ( Krüger ):  suppl. Peyron  venire qui\n\t\t\t\tconsilium inierit, illum qui fecerit non venire, cum consilium sine facto intellegi\n\t\t\t\tpossit, factum sine consilio non possit.  an , quod factum eius modi est ut\n\t\t\t\tsine occulto consilio, sine nocte, sine vi, sine damno alterius, sine armis, sine\n\t\t\t\tcaede, sine maleficio fieri non potuerit, id sine dolo malo factum iudicabitur?\n\t\t\t\t\t an , qua in re praetor praetor  Peyron : P.\n\t\t\t\t\tR.  T  illi improbam defensionem tolli voluit, in\n\t\t\t\tea re mihi difficiliorem actionem factam putabitis?"
+    },
+    "33": {
+      "section": "33",
+      "text": "hic  mihi isti singulari ingenio videntur esse qui et id quod mihi contra\n\t\t\t\tillos datum est ipsi adripiunt et scopulo atque saxis pro portu stationeque utuntur.\n\t\t\t\t\t nam  in dolo malo volunt delitiscere delitescere  Peyron , in quo, non modo cum omnia ipsi fecerunt\n\t\t\t\tquae fatentur, verum etiam si per alios id fecissent, haererent ac tenerentur."
+    },
+    "34": {
+      "section": "34",
+      "text": "ego  non in una re sola, quod mihi\n\t\t\t\tsatis est, neque in universa re solum solum  quod mihi satis est\n\t\t\t\t\t\t add. T :  ego delevi  (re solum\n\t\t\t\t\t... satis est  del. Francken ) , sed\n\t\t\t\t\tsingillatim singilatim  T :  corr.\n\t\t\t\t\t\tKlotz  in omnibus dolum malum exstare dico.  consilium \n\t\t\t\tcapiunt ut ad servos M. Tulli veniant; dolo malo faciunt.  arma  capiunt;\n\t\t\t\tdolo malo faciunt.  tempus  ad insidiandum atque celandum idoneum eligunt;\n\t\t\t\tdolo malo faciunt.  vi  in tectum inruunt; in ipsa vi dolus est.\n\t\t\t\t\t occidunt  homines, tectum diruunt; nec homo occidi nec consulto alteri\n\t\t\t\tdamnum dari sine dolo malo potest.  ergo  si omnes partes sunt eius modi ut\n\t\t\t\tin singulis dolus malus haereat, universam rem et totum facinus sine dolo malo\n\t\t\t\tfactum iudicabitis?"
+    },
+    "35": {
+      "section": "35",
+      "text": "quid  ad haec Quinctius?  sane  nihil certum neque unum, in quo\n\t\t\t\tnon modo possit verum putet se posse consistere.  primum  enim illud\n\t\t\t\t\tini e c i t ini. c. t  T :  suppl. Peyron , nihil posse dolo malo familiae\n\t\t\t\tfieri.  hoc  loco non solum fecit ut defenderet Fabium, sed ut omnino\n\t\t\t\thuiusce modi iudicia dissolveret.  nam  si venit id in iudicium de familia\n\t\t\t\tquod omnino familia nulla potest committere, nullum est iudicium, absolvantur omnes\n\t\t\t\tde  si mili de ... mili  T  ( Krüger ):  suppl. Peyron  causa necesse\n\t\t\t\t\t\test est  hoc solum  add. T :  del. Madvig  ( ex  si hoc solum  repetitum ) , bona me hercule!"
+    },
+    "36": {
+      "section": "36",
+      "text": "si  hoc solum esset esset  ex  est  T , tamen vos, tales viri, nolle\n\t\t\t\tdeberetis maximam rem coniunctam cum summa re publica publica  p.\n\t\t\t\t\t\t T  ( Keller ):  om. Peyron  fortunisque privatorum, severissimum\n\t\t\t\tiudicium maximaque ratione compositum per vos videri videri  T1 : videretur  T2  (ne severissimum ...\n\t\t\t\t\tvideretur  Huschke )  esse dissolutum.\n\t\t\t\t\t sed  non id solum agitur\n\t\t\t\t \n\t\t\t\t Priscian 6.1.5  hoc iudicium sic exspectatur ut non unae rei statui, sed\n\t\t\t\tomnibus constitui putetur."
+    },
+    "37": {
+      "section": "37",
+      "text": "ego intellego, et tamen dicendum est ad ea quae dixit Quinctius, non quo ad\n\t\t\t\trem pertineat, sed ne quid, quia a me praetermissum sit sit  Baiter : est  Peyron  ( de T\n\t\t\t\t\t\tincertum ) , pro concesso putetur."
+    },
+    "38": {
+      "section": "38",
+      "text": "dicis  oportere quaeri, homines M. Tulli iniuria occisi sint sint  Madvig : essent  T  necne.\n\t\t\t\t\t de  quo hoc primum quaero, venerit ea res in hoc iudicium necne.\n\t\t\t\t\t si  non venit, quid attinet aut nos dicere aut hos quaerere?\n\t\t\t\t\t si  autem venit, quid attinuit te tam multis verbis a praetore\n\t\t\t\tpostulare ut adderet in iudicium ' inivria ,' et, quia non impetrasses,\n\t\t\t\ttribunos pl. appellare et hic in iudicio queri praetoris iniquitatem, quod de\n\t\t\t\tiniuria non addidisset addidisset  Huschke : addiderit\n\t\t\t\t\t\t( vel  addidebet)  T ?"
+    },
+    "39": {
+      "section": "39",
+      "text": "haec  cum praetorem postulabas, cum\n\t\t\t\ttribunos appellabas, nempe  ita nempe ita  Peyron : ... m ... a  T  dicebas,\n\t\t\t\tpotestatem tibi fieri oportere ut, si posses, recuperatoribus reciperatores  T :  corr. Beier \n\t\t\t\tpersuaderes non esse iniuria M. Tullio damnum datum.  quod  ergo ideo in\n\t\t\t\tiudicium addi voluisti, ut de eo tibi apud recuperatores dicere liceret, eo non\n\t\t\t\taddito nihilo minus tamen ita dicis, quasi id ipsum a quo\n\t\t\t\t\t d e pul s u s depulsus  Peyron : e ... s. s  T  es impetraris?\n\t\t\t\t\t at  quibus verbis in decernendo\n\t\t\t\tMetellus usus est ceteri que -que  suppl.\n\t\t\t\t\t\tMadvig  quos appellasti?  nonne  haec omnium fuit\n\t\t\t\toratio, quod vi hominibus armatis coactisve familia fecisse diceretur, id tametsi\n\t\t\t\tnullo iure fieri potuerit, tamen se nihil addituros?  et  recte,\n\t\t\t\trecuperatores."
+    },
+    "40": {
+      "section": "40",
+      "text": "nam  cum perfugio nullo\n\t\t\t\tconstituto tamen haec scelera servi audacissime faciant, domini impudentissime\n\t\t\t\tconfiteantur, quid censetis fore, si praetor iudicet eius modi caedis fieri iure\n\t\t\t\tposse?  an  quicquam interest utrum magistratus peccato defensionem\n\t\t\t\tconstituant an peccandi potestatem licentiamque permittant?"
+    },
+    "41": {
+      "section": "41",
+      "text": "etenim , recuperatores, non damno commoventur\n\t\t\t\tmagistratus ut in haec verba iudicium dent.  nam \n\t\t\t\t si si  suppl. Beier  id esset, nec\n\t\t\t\trecuperatores potius darent quam iudicem nec in universam familiam, sed in eum\n\t\t\t\t\t qui cum eumcum  T :  suppl. Peyron  nominatim ageretur, nec in quadruplum, sed in\n\t\t\t\tduplum, et  ad ad  suppl. Beier \n\t\t\t\t\t' damnvm ' adderetur ' inivria. '  neque \n\t\t\t\tenim is qui hoc iudicium dedit, de ceteris damnis ab lege Aquilia recedit,\n\t\t\t\t\tin in  Peyron : id  T \n\t\t\t\tquibus nihil agitur nisi damnum, qua de re praetor animum debet debeat  Baiter  advertere."
+    },
+    "42": {
+      "section": "42",
+      "text": "in  hoc iudicio\n\t\t\t\tvidetis agi de vi, videtis agi de hominibus armatis, videtis aedificiorum\n\t\t\t\texpugnationes, agri vastationes, hominum trucidationes, incendia, rapinas, sanguinem\n\t\t\t\tin iudicium venire, et miramini satis habuisse eos qui hoc iudicium dederunt id\n\t\t\t\tquaeri, utrum haec tam acerba, tam indigna, tam atrocia facta essent necne,\n\t\t\t\t\tnon non  sup. lin. hab. T  utrum iure facta an\n\t\t\t\tiniuria?  non  ergo praetores a lege Aquilia recesserunt, quae de damno\n\t\t\t\t\t\test est  esset  T , sed de\n\t\t\t\tvi et armis armatis  T  severum iudicium\n\t\t\t\tconstituerunt, nec ius et iniuriam quaeri nusquam putarunt oportere, sed eos qui\n\t\t\t\tarmis quam iure agere maluissent de iure et iniuria disputare noluerunt."
+    },
+    "43": {
+      "section": "43",
+      "text": "neque  ideo de iniuria non addiderunt quod in\n\t\t\t\taliis rebus non adderent, sed ne ipsi iudicarent posse homines servos iure arma\n\t\t\t\tcapere et manum cogere, neque quod putarent, si additum esset, posse hoc talibus\n\t\t\t\tviris persuaderi persuadere  Peyron  ( de T incertum )  non iniuria factum, sed ne quod\n\t\t\t\t\t\ttamen quod tamen  quoddam  Peyron :\n\t\t\t\t\t\t fort.  quod tamquam  scutum dare in iudicio\n\t\t\t\tviderentur eis quos propter haec arma in iudicium vocavissent."
+    },
+    "44": {
+      "section": "44",
+      "text": "fuit  illud\n\t\t\t\tinterdictum apud maiores nostros de vi quod hodie quoque est:  Vnde tv avt\n\t\t\t\t\tfamilia avt procvrator tvvs illvm avt familiam avt procvratorem illivs in hoc\n\t\t\t\t\tanno vi deiecisti. \n\t\t\t\t deinde  additur illius iam hoc causa quicum agitur:  cvm ille\n\t\t\t\t\tpossideret , et hoc amplius:  qvod nec vi nec clam nec precario\n\t\t\t\t\tpossideret."
+    },
+    "45": {
+      "section": "45",
+      "text": "multa  dantur ei qui vi alterum\n\t\t\t\tdetrusisse dicitur; quorum si unum quodlibet quidlibet  coni.\n\t\t\t\t\t\tMüller  probare iudici potuerit, etiam si confessus erit se vi\n\t\t\t\tdeiecisse, vincat necesse est vel non possedisse eum qui deiectus sit, vel vi ab se\n\t\t\t\tpossedisse, vel clam, vel precario vel non ... vel precario \n\t\t\t\t\t colon post  iudici potuerit ( v. \n\t\t\t\t\t24)  transferendum putat Müller .  ei  qui\n\t\t\t\tde vi confessus esset tot defensiones tamen ad causam obtinendam maiores\n\t\t\t\treliquerunt."
+    },
+    "46": {
+      "section": "46",
+      "text": "age  illud alterum interdictum consideremus, quod item nunc est\n\t\t\t\tconstitutum propter eandem iniquitatem temporum nimiamque hominum\n\t\t\t\t\t licentiam licentiam  suppl. Peyron \n\t\t\t\t  boni debent dicere."
+    },
+    "47": {
+      "section": "47",
+      "text": "atque  ille legem mihi de  xii  tabulis\n\t\t\t\trecitavit, quae permittit ut furem noctu liceat occidere et luce luce  Peyron : luci  T  ( cf. vv.  10, 22) , si se telo defendat, et legem\n\t\t\t\tantiquam de legibus sacratis, quae iubeat inpune occidi eum qui tribunum pl.\n\t\t\t\tpulsaverit.  nihil , ut opinor, praeterea de legibus."
+    },
+    "48": {
+      "section": "48",
+      "text": "qua  in re hoc primum quaero, quid ad hoc iudicium\n\t\t\t\trecitari istas leges pertinuerit.  num  quem tribunum pl. servi M. Tulli\n\t\t\t\tpulsaverunt?  non  opinor.  num  furatum domum P. Fabi noctu\n\t\t\t\t\tvenerunt venerint  T :  corr.\n\t\t\t\t\t\tPeyron ?  ne  id quidem.  num \n\t\t\t\t\tluce nuncluce  T :  corr.\n\t\t\t\t\t\tBeier  furatum venerunt et se telo defenderunt?  dici \n\t\t\t\tnon potest.  ergo  istis legibus quas recitasti certe non potuit istius\n\t\t\t\tfamilia servos M. Tulli occidere."
+    },
+    "49": {
+      "section": "49",
+      "text": "' non ,' inquit, 'ad eam rem recitavi, sed ut\n\t\t\t\thoc intellegeres, non visum esse maioribus nostris tam indignum istuc nescio quid\n\t\t\t\tquam tu putas, hominem occidi.'  at  primum istae ipsae leges quas recitas,\n\t\t\t\tut mittam cetera, significant quam noluerint maiores nostri, nisi cum pernecesse\n\t\t\t\tesset, hominem occidi.  ista ista  Keller :\n\t\t\t\t\tprimum ( e v.  15  repetitum ) ista\n\t\t\t\t\t\t T  lex sacrata est, quam rogarunt armati, ut\n\t\t\t\tinermes sine periculo possent esse.  qua  re non iniuria, quo magistratu\n\t\t\t\tmunitae leges sunt, eius magistratus corpus legibus vallatum esse voluerunt."
+    },
+    "50": {
+      "section": "50",
+      "text": "Furem, hoc est praedonem et latronem, luce\n\t\t\t\toccidi vetant  xii  tabulae; cum intra parietes tuos hostem certissimum\n\t\t\t\tteneas, nisi se telo defendit defenderit  Peyron :\n\t\t\t\t\tdefendet  Baiter , inquit, etiam si cum telo\n\t\t\t\tvenerit, nisi utetur telo eo ac repugnabit, non occides; quod si quod si  Peyron : quossi  T : quid si  Madvig  repugnat, ' endoplorato ,'\n\t\t\t\thoc est conclamato, ut aliqui audiant et conveniant.  quid  ad hanc\n\t\t\t\tclementiam addi potest, qui ne hoc quidem permiserint, ut domi suae caput suum sine\n\t\t\t\ttestibus et arbitris arbitriis  T :  corr. Peyron  ferro defendere liceret?"
+    },
+    "51": {
+      "section": "51",
+      "text": "quis  est cui magis ignosci conveniat, quoniam me ad  xii  tabulas\n\t\t\t\trevocas, quam si quis quem imprudens occiderit?  nemo , opinor.\n\t\t\t\t\t haec  enim tacita lex est humanitatis ut ab homine consili, non\n\t\t\t\tfortunae poena repetatur.  tamen  huiusce rei veniam maiores non dederunt.\n\t\t\t\t\t nam  lex est in  xii  tabulis:  si  telvm\n\t\t\t\t\tmanv fvgit ma  gis qvam iecit -gis quam iecit  suppl. Peyron  ( cf. Top.  64)"
+    },
+    "52": {
+      "section": "52",
+      "text": "Iulius Rufinianus (H. p. 40.21). \n\t\t\t si  qui quis  Baiter  furem occiderit,\n\t\t\t\tiniuria occiderit.  quam  ob rem?  quia  ius constitutum nullum\n\t\t\t\test.  quid , si se telo defenderit?  non  iniuria.  quid \n\t\t\t\tita?  quia  constitutum est."
+    },
+    "53": {
+      "section": "53",
+      "text": ". . tamen per vim per vim  Beier : verum  T  factum\n\t\t\t\t\t\tesset esset  non modo servos  add.\n\t\t\t\t\t\tT  ( e v.  11  geminatum ):\n\t\t\t\t\t\t del. Beier , tamen in eo ipso loco qui tuus\n\t\t\t\tesset, non modo servos M. Tulli occidere iure non potuisti verum etiam, si tectum\n\t\t\t\thoc insciente aut per vim demolitus esses quod hic in tuo aedificasset et suum esse\n\t\t\t\tdefenderet, id vi aut clam factum iudicaretur.  tu  ipse iam statue quam\n\t\t\t\tverum sit, cum paucas tegulas deicere impune familia tua non potuerit, maximam\n\t\t\t\tcaedem sine fraude facere potuisse potuisset  T :  corr. Beier .  ego  ipse tecto illo\n\t\t\t\tdisturbato si hodie postulem, quod vi aut clam factum sit, tu aut per arbitrum\n\t\t\t\trestituas aut sponsione condemneris necesse est; nunc hoc probabis viris talibus,\n\t\t\t\tcum aedificium tuo iure disturbare non potueris quod esset, quem ad modum tu vis, in\n\t\t\t\ttuo, homines qui in eo aedificio fuerint te tuo iure potuisse occidere?"
+    },
+    "54": {
+      "section": "54",
+      "text": "' at at  ad  T  ( ita mox )  servus meus non comparet, qui visus est\n\t\t\t\tcum tuis; at casa mea est incensa a tuis.'  quid  ad haec respondeam?\n\t\t\t\t\t ostendi  falsa esse; verum tamen confitebor.  quid  postea?\n\t\t\t\t\t hoc  sequitur, ut familiam familia  T :  corr. G. Müller  M. Tulli concidi oportuerit?\n\t\t\t\t\t vix  me hercule ut corium peti, vix ut gravius expostulari; verum ut\n\t\t\t\tesses durissimus, agi quidem usitato iure et cotidiana actione potuit.\n\t\t\t\t\t quid  opus fuit vi, quid armatis hominibus, quid caede, quid sanguine?"
+    },
+    "55": {
+      "section": "55",
+      "text": "' at  enim oppugnatum me fortasse\n\t\t\t\tvenissent.'  haec  est illorum in causa perdita extrema non oratio neque\n\t\t\t\tdefensio, sed coniectura et quasi divinatio.  illi  oppugnatum venturi\n\t\t\t\terant? quem? Fabium.  quo  consilio? Vt occiderent.  quam  ob\n\t\t\t\tcausam? quid ut proficerent? qui comperisti? et ut rem perspicuam quam paucissimis\n\t\t\t\tverbis agam, dubitari hoc potest, recuperatores, utri oppugnasse videantur, qui ad\n\t\t\t\tvillam venerunt, an qui in villa manserunt?"
+    },
+    "56": {
+      "section": "56",
+      "text": "qui\n\t\t\t\toccisi sunt, an ei ex quorum numero saucius factus est nemo?\n\t\t\t\t\t\tqui qui \n\t\t\t\t\t fort.  quibus  cur facerent, causa non fuit, an ei\n\t\t\t\tqui fecisse fecissent  T  se confitentur?\n\t\t\t\t\t verum  ut hoc tibi credam, metuisse te ne oppugnarere, quis hoc\n\t\t\t\tstatuit umquam statuit umquam  Quintil. : statutumquam\n\t\t\t\t\t\t T , aut cui concedi sine summo omnium periculo\n\t\t\t\tpotest, ut eum ut eum \n\t\t\t\t\t hic desinit T  iure potuerit occidere a quo\n\t\t\t\tmetuisse se dicat ne ipse posterius occideretur quis hoc ... occideretur  hab. Quintil.  v. 13. 21 ?"
+    }
+  }
+}

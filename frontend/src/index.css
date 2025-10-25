@@ -67,7 +67,7 @@
 @layer components {
   /* Academic paper style container */
   .academic-container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+    @apply max-w-[98%] mx-auto px-1 py-2;
   }
 
   /* Academic card */

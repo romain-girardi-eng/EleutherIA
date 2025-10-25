@@ -10,9 +10,12 @@ export default function DatabasePage() {
   useEffect(() => {
     apiClient.getNodes()
       .then(data => {
+        // Handle both array and object responses
+        const nodes = Array.isArray(data) ? data : (data?.nodes || []);
+
         // Organize nodes by type
         const typeData: Record<string, string[]> = {};
-        data.forEach((node: any) => {
+        nodes.forEach((node: any) => {
           const type = node.type || 'unknown';
           if (!typeData[type]) {
             typeData[type] = [];

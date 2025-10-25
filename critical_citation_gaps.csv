@@ -1,0 +1,12 @@
+Status,Work,Citation_Count,Priority,Sample_Citations
+HAVE,"Cicero, De Fato",89,DONE,"Cicero, De Fato 13-15; Cicero, De Fato §§28-33 - Carneades' incompatibilist arguments; Cicero, De Fato 39-44"
+HAVE,"Lucretius, De Rerum Natura",28,DONE,"Lucretius, De Rerum Natura (complete text); Lucretius, De Rerum Natura II.251-293 (complete Latin text); Lucretius, De Rerum Natura II.253-254 (c. 50 BCE)"
+NEED,Other,1786,HIGH,Anselm of Canterbury; De Principiis III.1 (Rufinus' Latin translation + Greek fragments) - systematic defense of autexousion; Summa de Ente
+NEED,Augustine (various),170,HIGH,"Augustine's extensive quotations and paraphrases in anti-Pelagian works; Augustine, De Libero Arbitrio II.1-3; Augustine, De Natura et Gratia (CSEL 60; PL 44:247-290)"
+NEED,Biblical texts,142,HIGH,Galatians 2:19-21; Divine_and_Human_Agency_full.txt:7241-7246; 1 Corinthians 9:19-23; Romans 5:1-5
+NEED,"Alexander of Aphrodisias, De Fato",65,HIGH,"Alexander of Aphrodisias, De Fato - systematic incompatibilist treatise; Alexander of Aphrodisias, De Fato (cites handbook traditions); Alexander of Aphrodisias, De Fato 181.13-182.20 (cylinder analogy criticism)"
+NEED,Origen (various),63,HIGH,"Origen, Philocalia 21-27 (on free will; SC 226); Origen, De Principiis III.1.1-24 (On Free Will); Christian incompatibilism: Origen (De Principiis III), Justin Martyr"
+NEED,"Epictetus, Discourses",44,HIGH,"Epictetus, Discourses - exousia over use of impressions and assent; Epictetus, Diss. 4.1.99-104; Divine_and_Human_Agency_full.txt:6155-6180; Epictetus - Stoic appropriation of prohairesis (compatible with fate)"
+NEED,"Aristotle, Nicomachean Ethics",42,HIGH,"Aristotle, Nicomachean Ethics III.1 (1109b35-1110b17) - primary definition; Aristotle, Nicomachean Ethics II.6, VI.2 - virtue as deliberative state; Aristotle, Nicomachean Ethics III.4 - πᾶσα βούλησις ἐν λογιστικῷ (all boulēsis is in the rational faculty)"
+NEED,"Aulus Gellius, Noctes Atticae",34,HIGH,"Gellius, Noctes Atticae 7.2.9-11 - Distinction between antecedent causes (causae antecedentes) and perfect/principal causes (causae perfectae et principales); Gellius, Noctes Atticae VII.2 - cylinder analogy; Aulus Gellius, Noctes Atticae XIV.1.1-34 (Favorinus)"
+NEED,"Plotinus, Enneads",31,HIGH,"Plotinus, Enneads VI.8.13-15; Plotinus, Ennead V.1.1-3; Plotinus, Enneads IV.4.32-45 (on cosmic sympathy and magic)"

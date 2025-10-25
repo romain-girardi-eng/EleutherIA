@@ -107,18 +107,6 @@ export default function InteractiveTour({ autoStart = false, onComplete, tourSte
 
   return (
     <>
-      {/* Exit Tour Button - Always visible during tour */}
-      <button
-        onClick={exitTour}
-        className="fixed top-20 right-6 z-[10000] bg-white hover:bg-gray-100 text-gray-700 rounded-full p-2 shadow-lg transition-all hover:scale-110 active:scale-95 border border-gray-200"
-        title="Exit Tour (ESC)"
-        aria-label="Exit Tour"
-      >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-
       {/* Elegant CSS styles for the tour */}
       <style>{`
         /* Main tour dialog styling */
@@ -245,9 +233,28 @@ export default function InteractiveTour({ autoStart = false, onComplete, tourSte
           border-color: #a8a29e;
         }
 
-        /* Hide the built-in close button - we have our own floating close button */
+        /* Style the built-in close button */
         .tg-dialog-btn-close {
-          display: none !important;
+          position: absolute !important;
+          top: 0.75rem !important;
+          right: 0.75rem !important;
+          width: 28px !important;
+          height: 28px !important;
+          padding: 0 !important;
+          background: transparent !important;
+          border: none !important;
+          color: #78716c !important;
+          cursor: pointer !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          border-radius: 4px !important;
+          transition: all 0.2s !important;
+        }
+
+        .tg-dialog-btn-close:hover {
+          background: #f5f5f4 !important;
+          color: #44403c !important;
         }
 
         /* Backdrop animation */
@@ -345,14 +352,6 @@ export default function InteractiveTour({ autoStart = false, onComplete, tourSte
           }
         }
       `}</style>
-
-      {/* Hidden tour trigger button - can be activated from parent */}
-      <button
-        onClick={startTour}
-        className="hidden"
-        data-tour-trigger="true"
-        aria-label="Start interactive tour"
-      />
     </>
   );
 }

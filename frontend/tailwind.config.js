@@ -52,6 +52,7 @@ export default {
       },
       animation: {
         shine: "shine var(--duration) infinite linear",
+        shimmer: "shimmer 2s infinite linear",
       },
       keyframes: {
         shine: {
@@ -63,6 +64,14 @@ export default {
           },
           to: {
             "background-position": "0% 0%",
+          },
+        },
+        shimmer: {
+          "0%": {
+            transform: "translateX(-100%)",
+          },
+          "100%": {
+            transform: "translateX(100%)",
           },
         },
       },

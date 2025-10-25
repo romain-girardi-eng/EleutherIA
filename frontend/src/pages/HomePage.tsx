@@ -40,7 +40,7 @@ export default function HomePage() {
         />
 
         <FeatureCard
-          to="/graphrag"
+          to="/graphrag-showcase"
           title="GraphRAG Q&A"
           description="Ask questions and get scholarly answers grounded in the knowledge graph"
           icon={<MessageSquare className="w-12 h-12" />}

@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "work": "De Genesi Contra Manichaeos",
+    "author": "Augustine",
+    "language": "Latin",
+    "source": "Open Greek and Latin (OGL) CSEL GitHub",
+    "source_url": "https://github.com/OpenGreekAndLatin/csel-dev",
+    "file_url": "https://raw.githubusercontent.com/OpenGreekAndLatin/csel-dev/master/data/stoa0040/stoa017/stoa0040.stoa017.opp-lat1.xml",
+    "edition": "opp-lat1",
+    "format": "TEI-XML",
+    "urn": "urn:cts:latinLit:stoa0040.stoa017.opp-lat1",
+    "retrieved_date": "2025-10-25",
+    "verification_status": "ogl_github_source",
+    "passages_extracted": 0,
+    "database_citations": 5
+  },
+  "passages": {}
+}

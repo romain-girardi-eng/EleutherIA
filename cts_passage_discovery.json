@@ -1,0 +1,51 @@
+{
+  "Aristotle, Nicomachean Ethics": {
+    "urn_base": "urn:cts:greekLit:tlg0086.tlg010.perseus-grc1",
+    "api_responses": {},
+    "sample_passages": [],
+    "inferred_format": null,
+    "error": "HTTPSConnectionPool(host='scaife-cts-api.perseus.org', port=443): Max retries exceeded with url: /api/cts?request=GetValidReff&urn=urn:cts:greekLit:tlg0086.tlg010.perseus-grc1 (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x103d746e0>: Failed to resolve 'scaife-cts-api.perseus.org' ([Errno 8] nodename nor servname provided, or not known)\"))"
+  },
+  "Aulus Gellius, Noctes Atticae": {
+    "urn_base": "urn:cts:latinLit:phi1254.phi001.perseus-lat1",
+    "api_responses": {},
+    "sample_passages": [],
+    "inferred_format": null,
+    "error": "HTTPSConnectionPool(host='scaife-cts-api.perseus.org', port=443): Max retries exceeded with url: /api/cts?request=GetValidReff&urn=urn:cts:latinLit:phi1254.phi001.perseus-lat1 (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x103d802d0>: Failed to resolve 'scaife-cts-api.perseus.org' ([Errno 8] nodename nor servname provided, or not known)\"))"
+  },
+  "Alexander of Aphrodisias, De Fato": {
+    "urn_base": "urn:cts:greekLit:tlg0085.tlg014.perseus-grc1",
+    "api_responses": {},
+    "sample_passages": [],
+    "inferred_format": null,
+    "error": "HTTPSConnectionPool(host='scaife-cts-api.perseus.org', port=443): Max retries exceeded with url: /api/cts?request=GetValidReff&urn=urn:cts:greekLit:tlg0085.tlg014.perseus-grc1 (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x103d80e10>: Failed to resolve 'scaife-cts-api.perseus.org' ([Errno 8] nodename nor servname provided, or not known)\"))"
+  },
+  "Epictetus, Discourses": {
+    "urn_base": "urn:cts:greekLit:tlg0557.tlg001.perseus-grc1",
+    "api_responses": {},
+    "sample_passages": [],
+    "inferred_format": null,
+    "error": "HTTPSConnectionPool(host='scaife-cts-api.perseus.org', port=443): Max retries exceeded with url: /api/cts?request=GetValidReff&urn=urn:cts:greekLit:tlg0557.tlg001.perseus-grc1 (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x103d80b90>: Failed to resolve 'scaife-cts-api.perseus.org' ([Errno 8] nodename nor servname provided, or not known)\"))"
+  },
+  "Plotinus, Enneads": {
+    "urn_base": "urn:cts:greekLit:tlg0062.tlg001.perseus-grc1",
+    "api_responses": {},
+    "sample_passages": [],
+    "inferred_format": null,
+    "error": "HTTPSConnectionPool(host='scaife-cts-api.perseus.org', port=443): Max retries exceeded with url: /api/cts?request=GetValidReff&urn=urn:cts:greekLit:tlg0062.tlg001.perseus-grc1 (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x103d811d0>: Failed to resolve 'scaife-cts-api.perseus.org' ([Errno 8] nodename nor servname provided, or not known)\"))"
+  },
+  "Aristotle, De Interpretatione": {
+    "urn_base": "urn:cts:greekLit:tlg0086.tlg013.perseus-grc1",
+    "api_responses": {},
+    "sample_passages": [],
+    "inferred_format": null,
+    "error": "HTTPSConnectionPool(host='scaife-cts-api.perseus.org', port=443): Max retries exceeded with url: /api/cts?request=GetValidReff&urn=urn:cts:greekLit:tlg0086.tlg013.perseus-grc1 (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x103d81590>: Failed to resolve 'scaife-cts-api.perseus.org' ([Errno 8] nodename nor servname provided, or not known)\"))"
+  },
+  "Plutarch, De Stoicorum Repugnantiis": {
+    "urn_base": "urn:cts:greekLit:tlg0007.tlg096.perseus-grc1",
+    "api_responses": {},
+    "sample_passages": [],
+    "inferred_format": null,
+    "error": "HTTPSConnectionPool(host='scaife-cts-api.perseus.org', port=443): Max retries exceeded with url: /api/cts?request=GetValidReff&urn=urn:cts:greekLit:tlg0007.tlg096.perseus-grc1 (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x103d81950>: Failed to resolve 'scaife-cts-api.perseus.org' ([Errno 8] nodename nor servname provided, or not known)\"))"
+  }
+}

@@ -15,6 +15,11 @@ interface CitationPreviewProps {
     school?: string;
     description?: string;
   };
+  sourceText?: {
+    original?: string;
+    originalLanguage?: string;
+    translation?: string;
+  };
 }
 
 export const CitationPreview = ({
@@ -23,6 +28,7 @@ export const CitationPreview = ({
   type,
   className,
   nodeInfo,
+  sourceText,
 }: CitationPreviewProps) => {
   const [isOpen, setOpen] = React.useState(false);
 
@@ -36,7 +42,7 @@ export const CitationPreview = ({
     >
       <HoverCardPrimitive.Trigger
         className={cn(
-          "cursor-help border-b-2 border-dotted transition-colors",
+          "cursor-pointer border-b-2 border-dotted transition-colors",
           type === "ancient"
             ? "border-blue-400 hover:border-blue-600 text-blue-700 hover:text-blue-900"
             : "border-green-400 hover:border-green-600 text-green-700 hover:text-green-900",
@@ -120,16 +126,42 @@ export const CitationPreview = ({
               )}
 
               {/* Citation text */}
-              <div className="text-xs text-gray-700 leading-relaxed">
-                <p className="font-serif italic">{citation}</p>
+              <div className="text-xs text-gray-700 leading-relaxed mb-2">
+                <p className="font-semibold mb-1">{citation}</p>
               </div>
 
-              {/* Footer hint */}
-              <div className="mt-2 pt-2 border-t border-gray-200">
-                <p className="text-xs text-gray-500 italic">
-                  Click on nodes above to view full details
-                </p>
-              </div>
+              {/* Source text if available */}
+              {sourceText && (
+                <div className="space-y-3">
+                  {/* Original text */}
+                  {sourceText.original && (
+                    <div className="bg-white/60 rounded-lg p-3 border border-gray-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-semibold text-gray-600 uppercase">
+                          {sourceText.originalLanguage || "Original"}
+                        </span>
+                      </div>
+                      <p className="text-sm font-serif leading-relaxed text-gray-800 italic">
+                        {sourceText.original}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* English translation */}
+                  {sourceText.translation && (
+                    <div className="bg-white/60 rounded-lg p-3 border border-gray-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-semibold text-gray-600 uppercase">
+                          English Translation
+                        </span>
+                      </div>
+                      <p className="text-sm leading-relaxed text-gray-700">
+                        {sourceText.translation}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

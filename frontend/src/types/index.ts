@@ -214,6 +214,9 @@ export interface GraphRAGChatMessage {
   llm_provider?: string;
   llm_model?: string;
   timestamp: Date;
+  citationTexts?: Record<string, { original: string; originalLanguage: string; translation: string }>;
+  graphrag_response?: GraphRAGResponse;
+  reasoning_steps?: any[];
 }
 
 // Visualization Aggregates

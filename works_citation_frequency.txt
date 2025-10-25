@@ -1,0 +1,1075 @@
+Complete list of works by citation frequency
+================================================================================
+
+  83  Cicero, De Fato
+  38  Aristotle, Nicomachean Ethics
+  35  Alexander of Aphrodisias, De Fato
+  29  Romans
+  27  Aulus Gellius, Noctes Atticae
+  26  Origen, De Principiis
+  25  Hebrew Bible
+  24  Lucretius, De Rerum Natura
+  24  Plotinus, Enneads
+  18  Aristotle, De Interpretatione
+  18  Origen, Contra Celsum
+  16  Plutarch, De Stoicorum Repugnantiis
+  16  Sirach
+  16  Septuagint
+  15  Aristotle, Eudemian Ethics
+  15  Alcinous, Didaskalikos
+  15  Galatians
+  13  Cicero, Academica
+  13  Epictetus, Discourses
+  10  Eusebius, Praeparatio Evangelica
+  10  Aristotle, Metaphysics
+  10  Aristotle, Physics
+  10  Diogenes Laertius
+  10  Rabbinic literature
+  10  Aristotle, Metaphysics Theta
+  10  1 Clement
+   9  Augustine, De Gratia et Libero Arbitrio
+   9  Nemesius, De Natura Hominis
+   9  Sextus Empiricus, Outlines of Pyrrhonism
+   9  Augustine
+   8  Cicero, De Natura Deorum
+   8  Epictetus, Enchiridion
+   8  Augustine, Confessiones
+   8  Cicero, De Divinatione
+   8  Dead Sea Scrolls fragments
+   8  4 Ezra
+   8  Josephus, Antiquities
+   8  1QS
+   8  Epicurus, Letter to Herodotus
+   8  1 Corinthians
+   7  Gellius, Noctes Atticae
+   7  Josephus, Jewish War
+   6  Epictetus, Dissertationes
+   6  Aspasius, In Ethica Nicomachea
+   6  Thomas Aquinas, Summa contra Gentiles
+   6  Diogenes of Oenoanda, Fragment
+   6  Diogenes Laertius, Lives
+   6  Marcus Aurelius, Meditations
+   6  Plato, Timaeus
+   6  Plotinus, Ennead
+   6  Tatian, Oratio ad Graecos
+   6  Irenaeus, Adversus Haereses
+   6  Augustine, De Libero Arbitrio
+   6  Augustine, De Gratia Christi et de Peccato Originali
+   6  John of Damascus, De Fide Orthodoxa
+   6  Rabbinic interpretations
+   6  Augustine, Enchiridion
+   6  Augustine of Hippo
+   6  Aristotle
+   6  Aristotle, De Anima III
+   6  Boethius, Consolation of Philosophy
+   6  Leibniz, Theodicy
+   6  Kant, Groundwork
+   6  Kant, Critique of Practical Reason
+   6  Epicurus, Letter to Menoeceus
+   6  Alexander, De Fato Ch.
+   6  Didache
+   5  Cicero, De Finibus
+   5  Proclus, De providentia et fato
+   5  Tertullian, Adversus Marcionem
+   5  Prosper of Aquitaine, Contra Collatorem
+   5  Augustine, De Peccatorum Meritis et Remissione
+   5  Aquinas, Summa Contra Gentiles
+   5  Augustine, De correptione et gratia
+   5  Firmicus Maternus, Mathesis
+   5  Genesis
+   5  Deuteronomy
+   4  Alexander of Aphrodisias, In Analytica Priora
+   4  Sextus Empiricus, Adversus mathematicos
+   4  Aristotle, Magna Moralia
+   4  Aristotle, De Anima
+   4  Seneca, Epistulae Morales
+   4  Simplicius, Commentary on Aristotle's Physics
+   4  Simplicius, In Physica
+   4  Democritus fragments (DK
+   4  Lactantius, De Ira Dei
+   4  Justin Martyr, First Apology
+   4  Origen, Philocalia
+   4  Gregory of Nyssa, De Hominis Opificio
+   4  Augustine, De Libero Arbitrio I-III
+   4  Augustine, Retractationes
+   4  Council of Orange II (529), Canon
+   4  Augustine, Contra Julianum
+   4  Pelagius, Expositio in Epistulam Pauli ad Romanos
+   4  Pelagius, Libellus Fidei
+   4  Maximus the Confessor, Ambigua
+   4  Pseudo-Dionysius, De Divinis Nominibus
+   4  Proclus, Elements of Theology
+   4  Aquinas, De Malo Q.
+   4  Thomas Aquinas, Summa Theologica I-II, q.1, a.6
+   4  Thomas Hobbes, Leviathan ch.
+   4  Gottfried Wilhelm Leibniz, Theodicy (1710) §§
+   4  Augustine, De gratia Christi et de peccato originali
+   4  Nemesius of Emesa, De Natura Hominis
+   4  Sextus Empiricus, Against the Logicians
+   4  Vettius Valens, Anthologiae
+   4  Sextus Empiricus, Against the Professors
+   4  Plutarch, De Sera Numinis Vindicta
+   4  Pseudo-Plutarch, De Fato
+   4  Calcidius, Commentary on Plato's Timaeus
+   4  Proclus, De Decem Dubitationibus circa Providentiam
+   4  Dead Sea Scrolls
+   4  1QH
+   4  Ezekiel
+   4  Jeremiah
+   4  Augustine, De libero arbitrio
+   4  Augustine, De Praedestinatione Sanctorum
+   4  Pseudo-Dionysius
+   4  Boethius, Consolation of Philosophy V
+   4  Augustine, De Trinitate
+   4  Aristotle, Rhetoric
+   4  Alexander, Mantissa - Ethical Problems
+   4  Plato, Republic
+   4  Plato, Laws
+   4  Plato, Protagoras
+   4  SVF II
+   4  Augustine, Confessions
+   4  Aristotle, De Int.
+   4  Alexander De Fato
+   4  Shepherd of Hermas, Mandate
+   4  Ignatius, Letter to the Romans
+   3  Origen, Commentary on Romans
+   3  Eusebius, Historia Ecclesiastica
+   3  Boethius, Consolation of Philosophy V, prose
+   3  Anselm, De Libertate Arbitrii
+   3  William of Ockham, Quodlibet I, q.16
+   3  Gottfried Wilhelm Leibniz, Monadology (1714) §§
+   3  Nicolas Malebranche, The Search After Truth
+   3  Ps.-Plutarch, De Fato
+   3  Philo, De Providentia
+   3  Exodus
+   3  CD
+   3  Pelagius, Epistula ad Demetriadem
+   3  Canons of Council of Carthage
+   3  John Cassian, Collationes
+   3  Talmud
+   3  Guide for the Perplexed
+   3  Wars of the Lord
+   3  Anselm of Canterbury
+   3  Paul the Apostle
+   3  Chrysippus
+   3  Augustine, Anti-Pelagian writings
+   3  Scotus, Ordinatio
+   3  Hobbes, Leviathan ch.
+   3  Hume, Enquiry VIII
+   3  Pereboom, Derk. Living Without Free Will. Cambridge: Cambridge University Press,
+   3  Fischer, John Martin, and Mark Ravizza. Responsibility and Control: A Theory of Moral Responsibility. Cambridge: Cambridge University Press,
+   3  Epictetus, Diss.
+   3  Numbers
+   3  1 Samuel
+   2  Alexander of Aphrodisias, In De Interpretatione
+   2  Aristotle, De Motu Animalium
+   2  Thomas Aquinas, Summa Theologiae I-II q.109 a.2
+   2  Hippolytus, Refutatio Omnium Haeresium
+   2  Epictetus, Discourses (implied analogy; not explicitly stated but consistent with
+   2  Cleanthes, Hymn to Zeus
+   2  Stobaeus, Anthologium
+   2  Seneca, De Providentia
+   2  Parmenides, Fragment
+   2  Plato, Parmenides
+   2  Parmenides, fragments of On Nature (DK
+   2  Aristotle, Metaphysics A.5, Physics
+   2  DK
+   2  Leucippus, Fragment
+   2  Democritus, Fragments (DK
+   2  Aristotle, De Generatione et Corruptione
+   2  Diogenes of Oenoanda, Inscription Fragment
+   2  Aristotle, Metaphysics A.4, De Generatione et Corruptione
+   2  Cleanthes, Hymn to Zeus (Stobaeus, Anthologium
+   2  Seneca, Epistulae
+   2  Cleanthes, Hymn to Zeus (SVF
+   2  Hippolytus, Refutation of All Heresies
+   2  Arrian's records of Epictetus' teachings
+   2  Plutarch, De Animae Procreatione in Timaeo
+   2  Plutarch, De animae procreatione in Timaeo
+   2  Plato, Laws X
+   2  Plato, Phaedrus
+   2  Thomas Aquinas, Summa Theologiae I q.2 a.3
+   2  Alexander, Mantissa
+   2  Alexander, In Aristotelis Analyticorum Priorum
+   2  Porphyry, De abstinentia
+   2  Porphyry, Letter to Anebo
+   2  Proclus, Elements of Theology proposition
+   2  Justin Martyr, Second Apology
+   2  Justin Martyr, Dialogue with Trypho
+   2  Athenagoras, Legatio pro Christianis
+   2  Athenagoras, De Resurrectione
+   2  Symeon the New Theologian, Hymns of Divine Love
+   2  Gregory Palamas, Triads
+   2  Gregory of Nyssa, On the Soul and the Resurrection
+   2  Evagrius Ponticus, Praktikos
+   2  Evagrius Ponticus, Kephalaia Gnostica
+   2  Didymus the Blind, De Spiritu Sancto
+   2  Didymus the Blind, Commentary on Genesis fragment
+   2  Tertullian, De Praescriptione Haereticorum
+   2  Lactantius, Divinae Institutiones
+   2  Augustine, Contra Academicos
+   2  Augustine, Contra Fortunatum Manichaeum (CSEL
+   2  Augustine, De Genesi Contra Manichaeos (CSEL
+   2  Augustine, Contra Adimantum (CSEL
+   2  Augustine, De Duabus Animabus (CSEL
+   2  Augustine, Confessiones VII-VIII (autobiography of conversion period; CSEL
+   2  Augustine, De Spiritu et Littera
+   2  Anselm of Canterbury, De Libertate Arbitrii
+   2  Anselm of Canterbury, De Casu Diaboli
+   2  Prosper of Aquitaine, De Vocatione Gentium
+   2  Martin Luther, De Servo Arbitrio
+   2  Augustine, Confessiones VII
+   2  Paul, Romans
+   2  Pelagius, Epistula ad Demetriadem (PL
+   2  Pelagius, Pro Libero Arbitrio
+   2  Augustine's extensive quotations and paraphrases in anti-Pelagian works
+   2  Marius Mercator, Commonitorium adversus haeresim Pelagii et Caelestii (early
+   2  Pelagius, Epistula ad Demetriadem (Letter to Demetrias) (PL
+   2  Augustine, De Natura et Gratia (Against Pelagius,
+   2  Jerome, Dialogus adversus Pelagianos
+   2  Gennadius, De Viris Illustribus
+   2  Julian of Eclanum, Libri VIII contra Augustinum (frg. in Augustine, Contra Julianum
+   2  Julian of Eclanum, Ad Florum fragment
+   2  Gregory of Nyssa, Oratio Catechetica Magna V-VIII
+   2  Gregory of Nyssa, De Anima et Resurrectione (On the Soul and Resurrection) (PG
+   2  Gregory of Nyssa, De Vita Moysis
+   2  Gregory of Nyssa, In Canticum Canticorum (Commentary on Song of Songs) - progressive deification
+   2  Maximus the Confessor, Opuscula theologica et polemica
+   2  John of Damascus, Expositio Fidei
+   2  John Chrysostom, Homiliae in Epistulam ad Romanos
+   2  John Chrysostom, Homiliae in Genesim (Homilies on Genesis) (PG
+   2  John Chrysostom, De Fato et Providentia (On Fate and Providence; PG
+   2  John Chrysostom, De Lazaro (On Lazarus, homilies; PG
+   2  John Chrysostom, Ad Eos Qui Scandalizati Sunt (To Those Scandalized; PG
+   2  John Chrysostom, In Epistulam ad Hebraeos (Homilies on Hebrews; PG
+   2  Theodore of Mopsuestia, Catechetical Homilies
+   2  Theodore of Mopsuestia, Commentary on Romans
+   2  Theodoret of Cyrus, Eranistes Dialogues II
+   2  Theodoret of Cyrus, Commentary on Romans
+   2  John Chrysostom, Homiliae in Epistolam ad Romanos
+   2  Severian of Gabala, Oratio de fide et lege naturae (PG
+   2  Pseudo-Dionysius, Epistulae (Letters) - Epistula VI to Sopatros on evil (PG
+   2  Pseudo-Dionysius, Epistula VIII ad Demophilum
+   2  John Scottus Eriugena, Periphyseon
+   2  John Scottus Eriugena, Expositiones in Hierarchiam Coelestem
+   2  Anselm, De Concordia I-II
+   2  Anselm, De Concordia
+   2  Anselm, De Casu Diaboli
+   2  Anselm, Proslogion
+   2  Aquinas, Summa Theologiae I, Q.
+   2  Aquinas, Summa Theologiae I-II, Q.
+   2  Aquinas, De Veritate Q.
+   2  Thomas Aquinas, Summa Theologica I-II, q.10, a.1-2
+   2  Thomas Aquinas, De Veritate q.24, a.1-2
+   2  Thomas Aquinas, Summa Contra Gentiles III, ch.
+   2  Thomas Aquinas, Summa Theologica I-II, q.5, a.8
+   2  Thomas Aquinas, Summa Theologica I-II, q.10, a.2
+   2  Thomas Aquinas, De Veritate q.22, a.5-6
+   2  Scotus, Ordinatio I, d.
+   2  Scotus, Ordinatio IV, d.
+   2  Scotus, Lectura II, d.
+   2  Scotus, Quodlibetal Questions Q.
+   2  Scotus, Quodlibetal Questions
+   2  Ordinatio IV, d.
+   2  John Duns Scotus, Ordinatio II, d.6, q.2
+   2  John Duns Scotus, Ordinatio IV, d.49, q.10
+   2  John Duns Scotus, Lectura II, d.6, q.2
+   2  John Duns Scotus, Quodlibet q.16
+   2  Ockham, Quodlibetal Questions VI, q.
+   2  Ockham, Quodlibetal Questions I, Q.
+   2  Ockham, Ordinatio d.
+   2  Ockham, Summa Logicae
+   2  William of Ockham, Ordinatio I, d.1, q.6
+   2  William of Ockham, Reportatio III, q.13
+   2  William of Ockham, Tractatus de Praedestinatione q.1, a.1
+   2  Jean Buridan, Quaestiones in Aristotelis Ethica Nicomachea III, q.1
+   2  Aristotle, De Caelo
+   2  Dante Alighieri, Paradiso
+   2  Thomas Bradwardine, De Causa Dei contra Pelagium
+   2  Thomas Bradwardine, De Causa Dei
+   2  Thomas Hobbes, Of Liberty and Necessity
+   2  Thomas Hobbes, The Questions Concerning Liberty, Necessity, and Chance (1656)
+   2  Leibniz, Gottfried Wilhelm. New Essays on Human Understanding. Edited by Peter Remnant and Jonathan Bennett. Cambridge: Cambridge University Press,
+   2  David Hume, Enquiry Concerning Human Understanding (1748) Section VIII
+   2  René Descartes, Principles of Philosophy
+   2  René Descartes, Letter to Mesland,
+   2  Baruch Spinoza, Ethics II, Propositions
+   2  Pierre Bayle, Historical and Critical Dictionary (1697), article "Rorarius"
+   2  De Gratia
+   2  Concordia liberi arbitrii cum gratiae donis
+   2  Blaise Pascal, Pensées
+   2  John Locke, Essay
+   2  Diogenianos
+   2  Augustine, De Civitate Dei
+   2  Bardesanes, Book of the Laws of Countries (preserved in Eusebius, Praeparatio Evangelica
+   2  Clement of Alexandria, Stromata
+   2  Posidonius
+   2  Ptolemy, Tetrabiblos
+   2  Ptolemy, Tetrabiblos I-II
+   2  Plutarch, De Fato
+   2  Proclus, Tria Opuscula: De Decem Dubitationibus circa Providentiam; De Providentia et Fato; De Malorum Subsistentia
+   2  Sextus Empiricus, Against the Logicians II
+   2  Sextus Empiricus, Against the Physicists I-II
+   2  Proclus, De Providentia et Fato
+   2  Proclus, Elements of Theology, propositions
+   2  Proclus, Commentary on Plato's Republic, essay on fate
+   2  Proclus, Tria Opuscula (Latin translation by William of Moerbeke, c.
+   2  Sextus Empiricus, Outlines of Pyrrhonism (Πυρρώνειοι Ὑποτυπώσεις),
+   2  Proclus, Elements of Theology, props.
+   2  Proclus, In Rempublicam
+   2  Acts
+   2  Josephus, Jewish Antiquities
+   2  Mishnah Avot (Pirke Avot) - later compilation preserving Hillel's traditions
+   2  Babylonian Talmud, Shabbat
+   2  Mishnah
+   2  Avot de-Rabbi Natan
+   2  Dead Sea Scrolls (4QJera,
+   2  Dead Sea Scrolls (4Q99,
+   2  Dead Sea Scrolls (4QQoha,
+   2  Hebrew manuscripts from Cairo Geniza and Dead Sea Scrolls
+   2  Greek translation
+   2  Latin Vulgate
+   2  Syriac Peshitta
+   2  1QS (Cave
+   2  4QSa-j (Cave
+   2  5Q11,
+   2  1QHa (Cave
+   2  1QHb (Cave
+   2  4QHa-f (Cave
+   2  4Q394-399 (Cave
+   2  Cairo Geniza manuscripts
+   2  4Q266-273 (Cave
+   2  5Q12,
+   2  Rabbinic literature (Mishnah, Talmud) - fully developed doctrine
+   2  Possible Second Temple roots in Qumran 'Two Spirits' doctrine
+   2  Psalm
+   2  Jubilees,
+   2  1QM
+   2  New Testament
+   2  New Testament (Matthew
+   2  Philo, Quod Omnis Probus Liber Sit
+   2  Pliny the Elder, Natural History
+   2  Philo, Questions and Answers on Genesis
+   2  Philo
+   2  Patristic citations
+   2  New Testament appropriations (Hebrews
+   2  Philo, De Vita Mosis I
+   2  Methodius of Olympus, De libero arbitrio (fragmenta, PG
+   2  Letters
+   2  Vincent of Lérins, Commonitorium
+   2  Sermons
+   2  Council of Carthage (418). Canon
+   2  Second Council of Orange (529). Canon
+   2  Prosper of Aquitaine, Sententiae ex Augustino Delibatae
+   2  Second Council of Orange (529), Canon
+   2  2 Peter
+   2  Athanasius, De Incarnatione
+   2  Gregory of Nazianzus, Oration
+   2  Augustine, De Peccatorum Meritis et Remissione I-III
+   2  Augustine, De Civitate Dei XIII-XIV
+   2  Augustine, De Dono Perseverantiae
+   2  Augustine, Enchiridion XXV-XXVII
+   2  Pelagius, Letter to Demetrias
+   2  Augustine, De Natura et Gratia
+   2  John Cassian, Conlationes XIII
+   2  Canons of Second Council of Orange
+   2  Augustine, De Nuptiis et Concupiscentia
+   2  Augustine, Contra Julianum IV-VI
+   2  Augustine, Confessions VIII
+   2  Augustine, Contra Duas Epistulas Pelagianorum
+   2  Augustine, De Libero Arbitrio Voluntatis (Books I-III,
+   2  Augustine, Confessiones (397-400 CE), especially Books VII-VIII
+   2  Augustine, De Diversis Quaestionibus ad Simplicianum (396 CE), especially
+   2  Prosper of Aquitaine, De Vocatione Omnium Gentium (c.
+   2  Fulgentius of Ruspe
+   2  Gregory the Great
+   2  Qur'an
+   2  Al-Farabi
+   2  Commentaries on Hebrew Bible
+   2  Maimonides
+   2  Church Fathers
+   2  Paul's Epistles
+   2  Avicenna, Kitab al-Nafs
+   2  Jerome, Commentary on Ezekiel
+   2  Stoic concept of syneidesis
+   2  Anselm
+   2  Peter Lombard, Sentences I
+   2  Avicenna
+   2  Aristotle, Nicomachean Ethics III
+   2  Malebranche, Dialogues on Metaphysics VII-VIII
+   2  Malebranche, Search After Truth III.ii.3, VI.ii.3
+   2  Qur'anic verses emphasizing divine sovereignty
+   2  Rejection of Greek natural philosophy
+   2  Al-Ash'ari, Al-Luma'
+   2  Developed by later Ash'arites
+   2  Anselm, De Libertate Arbitrii (On Freedom of Choice,
+   2  John of Damascus
+   2  Mishneh Torah, Hilkhot Teshuvah
+   2  Thomas Aquinas, Summa Theologiae I-II q.13 a.6
+   2  John Duns Scotus, Ordinatio II d.25 q.unica
+   2  William of Ockham, Quodlibeta VII q.1
+   2  Augustine, De Libero Arbitrio III
+   2  Al-Ghazali, Tahafut al-Falasifa
+   2  Averroes, Tahafut al-Tahafut
+   2  Commentaries on Summa Theologiae
+   2  Descartes, Meditations IV
+   2  Kant, Critique of Pure Reason A533-558/B561-586
+   2  Kant, Metaphysics of Morals
+   2  Spinoza, Ethics I (God), II (Mind), IV-V
+   2  Spinoza, Letter
+   2  Kant, Critique of Pure Reason A444-451/B472-479, A532-558/B560-586
+   2  van Inwagen, Peter. An Essay on Free Will. Oxford: Clarendon Press,
+   2  Frankfurt, Harry. “Alternate Possibilities and Moral Responsibility.” Journal of Philosophy
+   2  Kane, Robert. The Significance of Free Will. New York: Oxford University Press,
+   2  Echoes Aristotle's voluntary action requiring alternatives
+   2  Fischer, John Martin. The Metaphysics of Free Will. Oxford: Blackwell,
+   2  Strawson, P. F. “Freedom and Resentment.” Proceedings of the British Academy
+   2  Mele, Alfred R. Free Will and Luck. New York: Oxford University Press,
+   2  Cicero, De Natura Deorum I-III
+   2  Cicero, De Divinatione I-II
+   2  Cicero, Academica I-II
+   2  Cross-references: De Natura Deorum, De Divinatione, Academica
+   2  Ancient commentaries: Aspasius (oldest surviving), Eustratius, Anonymous
+   2  Eudemian Ethics
+   2  Ancient commentaries: Ammonius (most important), Alexander of Aphrodisias, Boethius
+   2  Aristotle, Metaphysics Book Theta
+   2  Cross-references: Nicomachean Ethics III (deliberate choice), De Interpretatione
+   2  Ancient commentaries: Alexander of Aphrodisias (CAG I), Pseudo-Alexander
+   2  Alexander of Aphrodisias, De Fato - develops voluntary into incompatibilist freedom
+   2  Epictetus, Discourses - Stoic reinterpretation of voluntary under determinism
+   2  Alexander of Aphrodisias, ethical writings - develops the concept
+   2  Stoic sources - debated whether anything is truly involuntary under fate
+   2  Alexander of Aphrodisias, De Fato, Ethical Problems - develops prohairesis as libertarian freedom
+   2  Epictetus - Stoic appropriation as prohairesis under fate
+   2  Alexander of Aphrodisias, De Fato - libertarian interpretation of eph' hêmin
+   2  Cicero, De Fato - Latin translations and debates over 'in nostra potestate'
+   2  Alexander of Aphrodisias, De Fato - defense of real contingency against Stoics
+   2  Ammonius, Commentary on De Interpretatione - ancient interpretation
+   2  Boethius, Commentary on De Interpretatione - Latin transmission
+   2  Alexander of Aphrodisias - develops distinction into incompatibilist theory
+   2  Stoic ethics - accepts distinction but claims voluntary compatible with fate
+   2  Alexander of Aphrodisias, De Fato - prohairesis as libertarian freedom
+   2  Epictetus - Stoic appropriation of prohairesis
+   2  Cross-reference: Nicomachean Ethics
+   2  Alexander of Aphrodisias, De Fato - develops into libertarian incompatibilist theory
+   2  Stoic sources - rejection or reinterpretation of two-way powers
+   2  Lucretius, De Rerum Natura (complete text,
+   2  Cicero - possible editor/publisher of the poem
+   2  Jerome - biographical notice
+   2  Diogenes of Oenoanda, Inscription fr.
+   2  Diogenes of Oenoanda, fr.
+   2  Simplicius, Commentary on De Caelo - reports Alexander's views
+   2  Philoponus, Commentary on Physics - discusses Alexander's positions
+   2  Cross-references: Alexander's commentaries on Aristotle Metaphysics, Nicomachean Ethics
+   2  Alexander, Mantissa - Ethical Problems on responsibility
+   2  Alexander, Commentary on Aristotle Metaphysics - development of potentiality theory
+   2  Aristotle - frequent references to Platonic doctrines
+   2  Plato's dialogues
+   2  Xenophon, Memorabilia and Symposium
+   2  Aristotle, Politics - critical engagement with Republic
+   2  Neoplatonic commentaries: Proclus, Syrian
+   2  Aristotle, EN
+   2  Aristotle, Politics II - critique of Laws
+   2  Plato, Republic IV (435a-445e) - foundational argument
+   2  Plato, Phaedrus (246a-254e) - chariot allegory
+   2  Plato, Timaeus (69c-72d) - bodily location of soul parts
+   2  Aristotle, De Anima - critique and development
+   2  Plato, Meno
+   2  Plato, Gorgias
+   2  Aristotle, EN VII - explicit rejection of Socratic intellectualism
+   2  Aristotle - extensive discussion of Democritean atomism
+   2  Fragments collected in Diels-Kranz, Die Fragmente der Vorsokratiker
+   2  Lucretius, De Rerum Natura - transmission of modified (Epicurean) atomism
+   2  Aristotle, Metaphysics Δ.5 (1015a20-b15) - analysis of types of necessity
+   2  Stoic sources on heimarmenê (fate) as rational Ananke
+   2  SVF I
+   2  SVF III
+   2  Plutarch, On Stoic Self-Contradictions - critical reports of Chrysippean doctrines
+   2  Alexander of Aphrodisias, De Fato - extensive critique of Chrysippean compatibilism
+   2  Chrysippus, On Fate (fragments in SVF
+   2  Marcus Aurelius, Meditations - Stoic acceptance of fate
+   2  Alexander, De Fato - critique of Stoic fate
+   2  Cicero, Academica - Carneades' skeptical epistemology
+   2  Plutarch, Against the Stoics on Common Conceptions - Carneadean critiques
+   2  Alexander of Aphrodisias, De Fato - builds on Carneadean critique
+   2  Cicero, Academica - Academic Skeptical epistemology and method
+   2  Cicero, De Fato - Carneades' anti-fatalist arguments
+   2  Sextus Empiricus, Outlines of Pyrrhonism - comparison of Academic and Pyrrhonian skepticism
+   2  Sextus Empiricus, Against the Professors VII - Academic critique of Stoic epistemology
+   2  Plutarch - various works preserving Academic critiques of Stoicism
+   2  Alexander of Aphrodisias, De Fato - systematic incompatibilist treatise
+   2  Origen, De Principiis III - Christian incompatibilism using Carneadean arguments
+   2  Some scholars identify Alcinous with Albinus mentioned by Galen
+   2  Didaskalikos text preserved in manuscripts
+   2  Identified in manuscripts sometimes as 'Alcinous,' sometimes 'Albinus'
+   2  Alcinous, Didaskalikos Ch.
+   2  Plutarch, De Fato - Plutarch's own Middle Platonist take
+   2  Apuleius, De Platone et eius dogmate - Middle Platonist handbook
+   2  Nemesius, De Natura Hominis - Christian appropriation
+   2  Origen, Homilies on Jeremiah
+   2  De Principiis
+   2  Commentary on Romans (fragments) - free will and grace
+   2  Jerome, Letter
+   2  First Apology
+   2  Second Apology
+   2  Dialogue with Trypho - various passages on providence and freedom
+   2  Eusebius, Ecclesiastical History
+   2  Acta Justini (Acts of Justin) - martyrdom account
+   2  Irenaeus, Against Heresies
+   2  Methodius of Olympus, De Autexousio (On Free Will) - lost work, title survives
+   2  Athanasius, Against the Heathen, On the Incarnation - autexousion in creation
+   2  Basil, Hexaemeron - humans created with autexousion
+   2  Gregory of Nyssa, On Virginity, Catechetical Oration - systematic treatments
+   2  John Chrysostom, Homilies on Genesis, Romans, Hebrews
+   2  Rufinus' Latin translation (c.
+   2  Greek fragments in Philocalia
+   2  Greek fragments in Justinian's Letter to Menas
+   2  Jerome's polemical retranslation of parts
+   2  Consolation of Philosophy - primary source, esp.
+   2  Consolation of Philosophy - full text survives
+   2  Book V, esp. proses
+   2  Numerous medieval manuscripts - one of most copied medieval texts
+   2  Cicero - first major Greek→Latin philosophical translator
+   2  Jerome - translated autexousion as liberum arbitrium in Vulgate and theological works
+   2  Rufinus - Latin translation of Origen's De Principiis
+   2  Augustine - developed Latin voluntas terminology, De Libero Arbitrio
+   2  Boethius - translated Aristotelian works, systematized Latin philosophical vocabulary
+   2  Vulgate Bible - Latin translations of Greek theological concepts
+   2  Stoic compatibilism: Chrysippus
+   2  Incompatibilism: Carneades (via Cicero De Fato), Alexander (De Fato), Epicureans
+   2  Christian incompatibilism: Origen (De Principiis III), Justin Martyr
+   2  Synthesis attempts: Alcinous (Middle Platonism), Boethius
+   2  Alexander of Aphrodisias, On Fate
+   2  Thomas Aquinas, Summa Theologiae I q.82 a.1
+   2  Heraclitus, Fragment B94 DK
+   2  Plato, Republic X
+   2  Chrysippus, SVF
+   2  Alexander, In An.Pr.
+   2  Methodius, De libero arbitrio
+   2  Augustine, De natura et gratia
+   2  Council of Carthage (418), Canon
+   2  Alexander of Aphrodisias, Mantissa
+   2  Simplicius, In Aristotelis De Caelo Commentaria
+   2  Aristotle NE III
+   2  Epictetus on prohairesis
+   2  Epictetus, Discourses - exousia over use of impressions and assent
+   2  Nemesius, De Natura Hominis - autexousion incorporates exousia concept
+   2  Calcidius, In Timaeum
+   2  [Plutarch], De Fato
+   2  Ammonius, In De Int.
+   2  Plato, Republic IV - βούλησις as rational part's desire
+   2  Stoic definition: εὔλογος ὄρεξις
+   2  Philo of Alexandria - exclusive use of βούλησις for divine and human intention
+   2  Septuagint (LXX) - preferred θέλησις over βούλησις for Hebrew will concepts
+   2  Neoplatonic definition: ψυχῆς ἔνδοθεν κίνησις
+   2  Pollux
+   2  Christian patristic usage - divine will
+   2  Shepherd of Hermas, Similitude
+   2  Ignatius, Letter to the Magnesians
+   2  Polycarp, Letter to the Philippians
+   2  Martyrdom of Polycarp
+   2  Cyprian, Ad Donatum
+   2  Cyprian, Epistle
+   2  Cyprian, De Lapsis
+   2  Epistle of Barnabas
+   2  Philippians
+   2  4QMMT C
+   1  John Hick, Evil and the God of Love
+   1  John Hick, Death and Eternal Life
+   1  Augustine, De Gratia et Libero Arbitrio (CSEL
+   1  Augustine, De Correptione et Gratia (CSEL
+   1  Augustine, Contra Julianum (PL
+   1  Augustine, De Praedestinatione Sanctorum (PL
+   1  Augustine, Enchiridion ad Laurentium (CSEL
+   1  Augustine, Contra Duas Epistulas Pelagianorum (CSEL
+   1  Augustine, De Natura et Gratia (CSEL
+   1  Augustine, Opus Imperfectum Contra Julianum (PL
+   1  Martin Luther, Lectures on Romans (1515-1516) WA
+   1  John Calvin, Institutio Christianae Religionis
+   1  John Calvin, De Aeterno Dei Praedestinatione (1552) ch.
+   1  John Calvin, Concerning the Eternal Predestination of God (1552) chs.
+   1  Søren Kierkegaard, The Sickness Unto Death (1849) Part I
+   1  Søren Kierkegaard, Either/Or II (1843) Judge William’s letters
+   1  Remonstrant Articles (1610) art.
+   1  John Wesley, Sermon
+   1  Boethius, Consolation of Philosophy V, metrum
+   1  Scotus, Reportatio Parisiensis I-A d.2 q.1
+   1  Ockham, Tractatus de praedestinatione et de praescientia Dei, ch.
+   1  Quaestiones super decem libros Ethicorum Aristotelis III, q.1
+   1  Quaestiones super De Caelo et Mundo II, q.12
+   1  René Descartes, Meditations on First Philosophy IV (1641)
+   1  Meditations on First Philosophy (1641), Meditation IV
+   1  Principles of Philosophy (1644), Part I
+   1  John Duns Scotus, Ordinatio I, d.39
+   1  Luis de Molina, Concordia I, d.2 (1588)
+   1  René Descartes, Letters to Mesland
+   1  Baruch Spinoza, Ethics II, Prop.
+   1  Baruch Spinoza, Ethics I Appendix
+   1  Baruch Spinoza, Ethics I, Appendix (1677)
+   1  Anthony Collins, A Philosophical Inquiry Concerning Human Liberty
+   1  Baruch Spinoza, Ethics IV-V
+   1  Baruch Spinoza, Ethics III, Propositions
+   1  Baruch Spinoza, Letter
+   1  Gottfried Wilhelm Leibniz, Correspondence with Clarke
+   1  Gottfried Wilhelm Leibniz, New System of Nature
+   1  Gottfried Wilhelm Leibniz, Correspondence with Arnauld
+   1  Baruch Spinoza, Ethics III, Proposition
+   1  Baruch Spinoza, Ethics IV Preface
+   1  Baruch Spinoza, Ethics I, Definition
+   1  David Hume, An Enquiry Concerning Human Understanding (1748) Section VIII
+   1  Gottfried Wilhelm Leibniz, Theodicy Part I §§
+   1  Gottfried Wilhelm Leibniz, Discourse on Metaphysics
+   1  Gottfried Wilhelm Leibniz, Theodicy (1710), Preliminary Dissertation §§
+   1  Gottfried Wilhelm Leibniz, On the Ultimate Origination of Things
+   1  Nicolas Malebranche, Elucidations XV
+   1  Nicolas Malebranche, Dialogues on Metaphysics
+   1  Nicolas Malebranche, Treatise on Ethics
+   1  Nicolas Malebranche, Dialogues on Metaphysics and Religion V
+   1  Nicolas Malebranche, Dialogues on Metaphysics VII-VIII
+   1  Nicolas Malebranche, Treatise on Nature and Grace
+   1  Pierre Bayle, Dictionary article "Paulicians"
+   1  Pierre Bayle, Dictionary article "Pyrrhon"
+   1  Pierre Bayle, Continuation of Miscellaneous Thoughts (1705)
+   1  Dictionnaire historique et critique (Rotterdam,
+   1  Réponse aux questions d'un provincial
+   1  Michel de Montaigne, Essays
+   1  René Descartes, Discourse on Method (1637) Part V
+   1  Pierre Bayle, Dictionary article "Manichaeans"
+   1  Pierre Bayle, Dictionary article "Marcionites"
+   1  Pierre Bayle, Historical and Critical Dictionary (1697), article "Paulicians"
+   1  Gottfried Wilhelm Leibniz, Theodicy (1710)
+   1  Thomas Aquinas, Summa Theologica I, q.105, a.5
+   1  Thomas Aquinas, Summa Theologica I-II, q.10, a.4
+   1  Luis de Molina, Concordia (1588) disp.
+   1  Francisco Suárez, Disputationes Metaphysicae (1597) disp.
+   1  Disputationes Metaphysicae
+   1  Luis de Molina, Concordia Disputation
+   1  Francisco Suárez, De Scientia Dei Futurorum Contingentium
+   1  Luis de Molina, Concordia liberi arbitrii cum gratiae donis (1588), Disputation
+   1  De Iustitia et Iure
+   1  Cornelius Jansen, Augustinus
+   1  Cornelius Jansen, Augustinus (1640), Vol.
+   1  Antoine Arnauld, De la fréquente communion
+   1  Blaise Pascal, Les Provinciales
+   1  Blaise Pascal, Pensées §§
+   1  Blaise Pascal, Provincial Letters (1656-1657)
+   1  René Descartes, Meditations on First Philosophy II, VI (1641)
+   1  René Descartes, Passions of the Soul (1649) art.
+   1  René Descartes, Correspondence with Princess Elisabeth (1643-1649)
+   1  Thomas Hobbes, De Corpore
+   1  Thomas Hobbes, De Corpore (1655) Part IV
+   1  Ralph Cudworth, The True Intellectual System of the Universe
+   1  Henry More, The Immortality of the Soul (1659)
+   1  Benjamin Whichcote, Moral and Religious Aphorisms
+   1  Ralph Cudworth, A Treatise Concerning Eternal and Immutable Morality
+   1  The True Intellectual System of the Universe
+   1  A Treatise Concerning Eternal and Immutable Morality
+   1  John Locke, An Essay Concerning Human Understanding
+   1  Baruch Spinoza, Ethics V, Propositions
+   1  Baruch Spinoza, Ethics IV, Propositions
+   1  Baruch Spinoza, Theological-Political Treatise ch.
+   1  Stobaeus, Anthologion
+   1  Against Chrysippus
+   1  Philostratus, Lives of the Sophists
+   1  Against Astrology
+   1  Photius, Bibliotheca cod.
+   1  Hierocles, Fragment
+   1  On Providence and Fate
+   1  Firmicus Maternus, Mathesis (c.
+   1  Mathesis (Astrological handbook,
+   1  De Errore Profanarum Religionum
+   1  Bardaisan, Book of the Laws of Countries
+   1  Book of the Laws of Countries
+   1  Stromateis
+   1  Protrepticus
+   1  Paedagogus
+   1  Nemesius, De Natura Hominis chapters
+   1  De Natura Hominis
+   1  Quod Deus Immutabilis Sit
+   1  De Providentia
+   1  Legum Allegoriae
+   1  De Decalogo
+   1  De Vita Mosis
+   1  Quod Omnis Probus Liber Sit
+   1  Jewish Antiquities
+   1  Jewish War
+   1  Against Apion
+   1  Life
+   1  Wisdom of Sirach
+   1  4Q398 (4QMMT) cols.
+   1  Irenaeus, Adversus Haereses (Against Heresies), especially Books IV-V
+   1  adversus_haereses: Against Heresies - full text at New Advent
+   1  Tertullian, De Anima
+   1  de_anima: De Anima - available at tertullian.org and New Advent
+   1  Methodius of Olympus, De resurrectione
+   1  on_free_will: On Free Will - also titled 'On God, Matter and Free Will'
+   1  symposium: Symposium - virgin Thecla offers anti-fatalistic arguments
+   1  Basil of Caesarea, Homilia de gratia Dei et libero arbitrio (PG
+   1  Basil of Caesarea, Epistula
+   1  Hexaemeron
+   1  On the Holy Spirit
+   1  Ascetical Works
+   1  Gregory of Nyssa, De hominis opificio
+   1  Gregory of Nyssa, Oratio catechetica magna
+   1  on_making_of_man: On the Making of Man - New Advent Church Fathers
+   1  John Chrysostom, Homilia XVIII in Epistolam ad Romanos
+   1  John Chrysostom, Homilia de Lazaro
+   1  homilies_on_providence: On the Providence of God
+   1  extensive_homilies: Hundreds of exegetical homilies on NT (esp. Paul) and OT
+   1  de_libero_arbitrio: De Libero Arbitrio (CCEL, New Advent) - Books
+   1  confessions: Confessions - esp. Books VII-VIII on Neoplatonism and conversion
+   1  ad_simplicianum: Ad Simplicianum - turning point work
+   1  de_natura_et_gratia: De Natura et Gratia - against Pelagius
+   1  de_gratia_et_libero_arbitrio: De Gratia et Libero Arbitrio
+   1  de_praedestinatione: De Praedestinatione Sanctorum
+   1  npnf_anti_pelagian: NPNF1-05 - St. Augustine: Anti-Pelagian Writings
+   1  Pelagius, Commentarii in Epistolam ad Romanos (PL Suppl.
+   1  limited_extant: Most works survive only in fragments or in Augustine's quotations
+   1  Augustine, De Perfectione Justitiae Hominis
+   1  paulinus_accusation: Accusations by Paulinus, deacon of Milan, at Carthage
+   1  Julian of Eclanum, Libri VIII contra Augustinum (fragmenta, PL
+   1  Julian of Eclanum, Ad Florum, fragment VI
+   1  fragments: Works survive mostly in Augustine's quotations and refutations
+   1  augustine_against_julian: Augustine's Contra Julianum
+   1  John Cassian, De incarnatione Domini contra Nestorium V
+   1  Institutes
+   1  Conferences
+   1  On the Incarnation
+   1  commonitorium: Commonitorium - manual for determining orthodoxy
+   1  Faustus of Riez, De Gratia (On Grace, c.
+   1  Fulgentius of Ruspe, Contra Faustum
+   1  Prosper of Aquitaine, Pro Augustino Responsiones
+   1  Prosper of Aquitaine, De Gratia Dei et Libero Arbitrio
+   1  de_vocatione: De vocatione omnium gentium (c.
+   1  Acts of Council of Orange (529 CE) - Caesarius presided
+   1  Caesarius of Arles, Sermon
+   1  Monastic Rules
+   1  Maximus Confessor, Ambigua ad Ioannem
+   1  Maximus Confessor, Quaestiones ad Thalassium
+   1  Ambigua
+   1  Mystagogia
+   1  Opuscula theologica et polemica
+   1  Questions to Thalassius
+   1  John of Damascus, De fide orthodoxa
+   1  John of Damascus, Contra Jacobitas
+   1  fount_of_knowledge: The Fount of Knowledge - includes Philosophical Chapters, On Heresies, Exact Exposition of Orthodox Faith
+   1  orthodox_faith: De Fide Orthodoxa - Latin version used in medieval West
+   1  canons: Canons available at New Advent Church Fathers, earlychurchtexts.com
+   1  canons: Canons of Orange available at crivoice.org, monergism.com
+   1  Augustine, De diversis quaestionibus ad Simplicianum
+   1  Prosper of Aquitaine, Epistola ad Augustinum
+   1  Maximus the Confessor
+   1  Gregory of Nyssa
+   1  Periphyseon
+   1  De Praedestinatione
+   1  Commentaries on Pseudo-Dionysius
+   1  Prosper of Aquitaine
+   1  De Praedestinatione Dei et Libero Arbitrio
+   1  Epistolae
+   1  Hadith
+   1  Al-Ibanah 'an Usul al-Diyanah
+   1  Maqalat al-Islamiyyin
+   1  Al-Luma' fi al-Radd 'ala Ahl al-Zaygh wa al-Bida'
+   1  Abd al-Jabbār, al-Qāḍī. Al-Mughnī fī abwāb al-tawḥīd wa-l-ʿadl, vol.
+   1  al-Qāḍī Abd al-Jabbār. Sharḥ al-uṣūl al-khamsa. Cairo: Maktabat Wahba,
+   1  Al-Ash'ari
+   1  Tahafut al-Falasifa
+   1  Ihya 'Ulum al-Din
+   1  Al-Munqidh min al-Dalal
+   1  Al-Iqtisad fi al-I'tiqad
+   1  Plotinus
+   1  The Healing
+   1  The Salvation
+   1  The Pointers and Reminders
+   1  Book of the Soul
+   1  Alexander of Aphrodisias
+   1  Themistius
+   1  Tahafut al-Tahafut
+   1  Long Commentary on Aristotle's Metaphysics
+   1  Long Commentary on De Anima
+   1  Middle Commentary on Nicomachean Ethics
+   1  Decisive Treatise
+   1  Mu'tazilite Kalam
+   1  The Book of Beliefs and Opinions
+   1  Mishneh Torah
+   1  Eight Chapters
+   1  Epistle on Astrology
+   1  Averroes
+   1  Commentaries on Averroes
+   1  Or Adonai
+   1  Refutation of Christian Principles
+   1  Boethius
+   1  Theologia Christiana
+   1  Ethica
+   1  Dialectica
+   1  Sic et Non
+   1  Early scholastics
+   1  Sentences
+   1  Commentaries on Psalms and Pauline Epistles
+   1  Commentary on the Sentences
+   1  Breviloquium
+   1  Itinerarium Mentis in Deum
+   1  Disputed Questions on the Knowledge of Christ
+   1  Lectures on the Sentences
+   1  Various theological questions
+   1  De Causa Dei contra Pelagium
+   1  De Proportionibus
+   1  De Continuo
+   1  Grosseteste
+   1  Bradwardine
+   1  De Dominio Divino
+   1  De Veritate Sacrae Scripturae
+   1  Summa de Ente
+   1  Trialogus
+   1  Lombard, Peter. Sententiae in IV Libris Distinctae. Paris: ca.
+   1  Peter Lombard, Sentences II d.25
+   1  Lombard, Peter. The Sentences,
+   1  Maimonides, Moses. Dalālat al-Ḥāʾirīn (Guide for the Perplexed). Cairo:
+   1  Maimonides, Guide
+   1  Maimonides, Moses. The Guide of the Perplexed. Translated by Shlomo Pines. Chicago: University of Chicago Press,
+   1  al-Ghazālī, Abū Ḥāmid. Tahāfut al-Falāsifa (The Incoherence of the Philosophers). Damascus:
+   1  al-Ghazālī, Tahāfut al-Falāsifa, Discussion
+   1  al-Ghazālī, Abū Ḥāmid. The Incoherence of the Philosophers. Translated by Michael E. Marmura. Provo, UT: Brigham Young University Press,
+   1  Averroes (Ibn Rushd). Tahāfut al-Tahāfut (The Incoherence of the Incoherence). Córdoba: c.
+   1  Ibn Rushd, Tahāfut al-Tahāfut, Discussion
+   1  Averroes. The Incoherence of the Incoherence. Translated by Simon van den Bergh. Oxford: Oxford University Press,
+   1  Bradwardine, Thomas. De Causa Dei contra Pelagium. London:
+   1  Bradwardine, De causa Dei
+   1  Bradwardine, Thomas. De Causa Dei. Edited by Henry Savile. London:
+   1  Gersonides, Wars of the Lord
+   1  De Servo Arbitrio (On the Bondage of the Will,
+   1  95 Theses
+   1  The Freedom of a Christian
+   1  De Libero Arbitrio (On Free Will,
+   1  Hyperaspistes
+   1  Institutes of the Christian Religion (1536, final ed.
+   1  Commentaries on Scripture
+   1  Treatise on Predestination
+   1  Declaration of Sentiments
+   1  Disputations
+   1  Disputationes theologicae de gratia et libero arbitrio
+   1  Responsiones ad examina Remonstrantium
+   1  Treatises on predestination and grace
+   1  Augustinus
+   1  Tetrateuchus
+   1  Lettres provinciales (Provincial Letters,
+   1  Pensées (posthumous,
+   1  On True and False Ideas
+   1  Port-Royal Logic (with Nicole,
+   1  De la fréquente communion
+   1  Meditations on First Philosophy
+   1  Principles of Philosophy
+   1  Passions of the Soul
+   1  Correspondence
+   1  Stoics
+   1  Marcus Aurelius
+   1  Ethics
+   1  Theological-Political Treatise
+   1  Political Treatise
+   1  The Search After Truth
+   1  Treatise on Nature and Grace
+   1  Dialogues on Metaphysics
+   1  Gottfried Wilhelm Leibniz, Essais de Théodicée, Discours préliminaire
+   1  Gottfried Wilhelm Leibniz, Discours de métaphysique
+   1  Theodicy
+   1  Discourse on Metaphysics
+   1  Monadology
+   1  New Essays on Human Understanding (1704, pub.
+   1  Rational Thoughts on God, the World and the Soul
+   1  Philosophia rationalis sive logica
+   1  Leviathan
+   1  Of Liberty and Necessity
+   1  The Questions Concerning Liberty, Necessity and Chance
+   1  De Corpore
+   1  A Defence of True Liberty
+   1  Castigations of Mr. Hobbes
+   1  An Essay Concerning Human Understanding (1689, rev.
+   1  Two Treatises of Government
+   1  A Philosophical Inquiry Concerning Human Liberty
+   1  A Demonstration of the Being and Attributes of God
+   1  Remarks upon a Book entituled A Philosophical Enquiry (1717) - reply to Collins
+   1  A Treatise of Human Nature (1739-40),
+   1  An Enquiry Concerning Human Understanding (1748), Section VIII 'Of Liberty and Necessity'
+   1  An Enquiry Concerning the Principles of Morals
+   1  Essays on the Active Powers of Man
+   1  Essays on the Intellectual Powers of Man
+   1  Freedom of the Will
+   1  Original Sin
+   1  Religious Affections
+   1  Critique of Pure Reason (1781,
+   1  Groundwork of the Metaphysics of Morals
+   1  Critique of Practical Reason
+   1  Religion within the Boundaries of Mere Reason
+   1  Augustine on predestination
+   1  Boethius on divine foreknowledge
+   1  Molina, Concordia (1588), Disputation
+   1  Aquinas, Summa Theologiae I q.105 a.5
+   1  Domingo Báñez, Scholastica commentaria in Iam q.23 a.5
+   1  Báñez, Commentaries on Summa
+   1  Aristotelian unmoved mover
+   1  Reid, Essays on Active Powers IV
+   1  Thomas Reid, Essays on the Active Powers of Man
+   1  Erasmus of Rotterdam. De libero arbitrio. Basel: Froben,
+   1  Luther, Martin. De servo arbitrio. Wittenberg:
+   1  Molina, Luis de. Concordia liberi arbitrii cum gratiae donis. Lisbon:
+   1  Congregatio de Auxiliis. Acta Congregationum de Auxiliis (1598–1607). Rome: Typis Vaticanis,
+   1  Hobbes, Thomas. Of Liberty and Necessity. London:
+   1  Bramhall, John. A Defence of True Liberty from Antecedent and Extrinsical Necessity. London:
+   1  Hume, David. An Enquiry concerning Human Understanding. London: A. Millar,
+   1  Reid, Thomas. Essays on the Active Powers of Man. Edinburgh: Bell & Robinson,
+   1  Synod of Dort. Canones Synodi Nationalis Dordrechanae. Dordrecht:
+   1  Acta Synodi Nationalis... Dordrechti habitae (1618–1619). Dordrecht:
+   1  Luther, De Servo Arbitrio
+   1  Erasmus, Hyperaspistes
+   1  Erasmus, De Libero Arbitrio
+   1  Molina, Concordia Disputation
+   1  Leibniz, Discourse on Metaphysics
+   1  Leibniz, New Essays II.xxi
+   1  Hobbes, Of Liberty and Necessity
+   1  Hobbes, Questions Concerning Liberty
+   1  Locke, Essay Concerning Human Understanding II.xxi (1689, extensively revised
+   1  Hume, Treatise II.iii.1-2
+   1  Reid, Essays on the Active Powers of Man (1788), especially IV
+   1  Edwards, Freedom of the Will
+   1  Kant, Prolegomena
+   1  Die Welt als Wille und Vorstellung
+   1  Über die Freiheit des menschlichen Willens
+   1  A System of Logic,
+   1  On Liberty
+   1  Jenseits von Gut und Böse
+   1  Zur Genealogie der Moral
+   1  The Will to Believe and Other Essays
+   1  The Dilemma of Determinism
+   1  Essai sur les données immédiates de la conscience
+   1  Matière et mémoire
+   1  Fragen der Ethik (Problems of Ethics,
+   1  “When Is a Man Responsible?” Proceedings of the Aristotelian Society
+   1  Language, Truth and Logic
+   1  “Freedom and Necessity”
+   1  L’Être et le néant (Being and Nothingness,
+   1  L’existentialisme est un humanisme
+   1  Le Mythe de Sisyphe
+   1  L’Homme révolté
+   1  “Determinism, Indeterminism, and Libertarianism” (Mind
+   1  The Mind and Its Place in Nature
+   1  “A Plea for Excuses” (Proceedings of the Aristotelian Society
+   1  Philosophical Papers
+   1  Individuals: An Essay in Descriptive Metaphysics
+   1  “Freedom and Resentment” (Proceedings of the British Academy
+   1  “Actions, Reasons, and Causes” (Journal of Philosophy
+   1  Essays on Actions and Events
+   1  “Alternate Possibilities and Moral Responsibility” (Journal of Philosophy
+   1  “Freedom of the Will and the Concept of a Person” (Journal of Philosophy
+   1  “Human Freedom and the Self” (University of Kansas,
+   1  Theory of Knowledge
+   1  Action and Purpose
+   1  Metaphysics
+   1  Free Will and Values
+   1  The Significance of Free Will
+   1  Persons and Causes
+   1  “Agent Causation” in Agents, Causes, and Events
+   1  “The Incompatibility of Free Will and Determinism” (Philosophical Studies
+   1  An Essay on Free Will
+   1  On Action
+   1  “In Defense of the Principle of Alternative Possibilities”
+   1  “A Libertarian Theory of Free Will” (Philosophical Studies
+   1  Free Will: A Philosophical Study
+   1  Elbow Room: The Varieties of Free Will Worth Wanting
+   1  Freedom Evolves
+   1  The Metaphysics of Free Will
+   1  Responsibility and Control (with Mark Ravizza,
+   1  Conversation and Responsibility
+   1  “Alternate Possibilities and the Failure of the Counterexamples to PAP”
+   1  Responsibility and the Moral Sentiments
+   1  The Moral Nexus
+   1  Causes, Laws, and Free Will
+   1  “Incompatibilism and the Ability to Do Otherwise” (Synthese
+   1  Living Without Free Will
+   1  Free Will, Agency, and Meaning in Life
+   1  Freedom and Belief
+   1  “The Impossibility of Moral Responsibility”
+   1  Free Will and Illusion
+   1  “Determinism and Prepunishment” (Philosophy and Phenomenological Research
+   1  Free Will and Consciousness
+   1  Rejecting Retributivism
+   1  “Time of Conscious Intention to Act” (Brain
+   1  Mind Time: The Temporal Factor in Consciousness
+   1  “Unconscious Determinants of Free Decisions” (Nature Neuroscience
+   1  “Decoding Sequential Stages of Task Preparation” (NeuroImage
+   1  Free Will and Luck
+   1  Effective Intentions
+   1  “Is Incompatibilism Intuitive?” (Philosophical Topics
+   1  “Autonomous Agency and Social Psychology” (Synthese
+   1  “Intentional Action and Side Effects” (Analysis
+   1  Experimental Philosophy (edited with Shaun Nichols,
+   1  Bound: Essays on Free Will and Responsibility
+   1  “Moral Responsibility and Determinism” (Noûs
+   1  Personal Autonomy in Society
+   1  “Personal Autonomy in Society” (Philosophy and Phenomenological Research
+   1  “Selflessness and Responsibility for Self” (Philosophical Review
+   1  “Relational Autonomy and the Social Self” (Hypatia
+   1  Relational Autonomy (edited with Natalie Stoljar,
+   1  “Relational Autonomy, Normative Authority and Perfectionism” (Journal of Social Philosophy
+   1  van Inwagen, Peter. “The Incompatibility of Free Will and Determinism.” Philosophical Studies
+   1  Widerker, David, and Michael McKenna, eds. Moral Responsibility and Alternative Possibilities. Aldershot: Ashgate,
+   1  Pereboom, Derk. “Determinism Al Dente.” Noûs
+   1  Strawson, Galen. Freedom and Belief. Oxford: Clarendon Press,
+   1  Strawson, Galen. “The Impossibility of Moral Responsibility.” Philosophical Studies
+   1  Kane, Robert. “Responsibility, Luck, and Chance.” Journal of Philosophy
+   1  Wallace, R. Jay. Responsibility and the Moral Sentiments. Cambridge, MA: Harvard University Press,
+   1  Frankfurt, Harry. “Freedom of the Will and the Concept of a Person.” Journal of Philosophy
+   1  Watson, Gary. “Free Agency.” Journal of Philosophy
+   1  McKenna, Michael. Conversation and Responsibility. Oxford: Oxford University Press,
+   1  Mele, Alfred R. Manipulated Agents. New York: Oxford University Press,
+   1  Knobe, Joshua. “Intentional Action and Side Effects in Ordinary Language.” Analysis
+   1  Knobe, Joshua, and Shaun Nichols. “Moral Responsibility and Determinism.” Noûs
+   1  Kornhuber, Hans Helmut, and Lüder Deecke. “Hirnpotentialänderungen bei Willkürbewegungen und passiven Bewegungen.” Archiv für Psychiatrie und Nervenkrankheiten
+   1  Libet, Benjamin et al. “Time of Conscious Intention to Act in Relation to Cerebral Activity.” Brain
+   1  Smilansky, Saul. Free Will and Illusion. Oxford: Oxford University Press,
+   1  Caruso, Gregg D. Free Will and Consciousness. Lanham, MD: Lexington Books,
+   1  Pereboom, Derk. Free Will, Agency, and Meaning in Life. Oxford: Oxford University Press,
+   1  Caruso, Gregg D. Rejecting Retributivism. Cambridge: Cambridge University Press,
+   1  Dennett, Daniel. Elbow Room: The Varieties of Free Will Worth Wanting. Cambridge, MA: MIT Press,
+   1  O’Connor, Timothy. Persons and Causes: The Metaphysics of Free Will. New York: Oxford University Press,
+   1  Mele, Alfred R. Free: Why Science Hasn’t Disproved Free Will. New York: Oxford University Press,
+   1  Boethius, De consolatione Philosophiae
+   1  Sextus Empiricus, M
+   1  Alexander of Aphrodisias, De fato
+   1  Determinism and Freedom in Stoic Philosophy
+   1  “The Inadvertent Conception and Late Birth of the Free-Will Problem” (Phronesis
+   1  A Free Will: Origins of the Notion in Ancient Thought
+   1  “Stoic and Aristotelian Conceptions of Freedom” (Proceedings of the Boston Area Colloquium in Ancient Philosophy
+   1  Necessity, Cause, and Blame
+   1  Emotion and Peace of Mind
+   1  The Stoics on Determinism and Compatibilism
+   1  “Compatibilism: Stoics and Moderns” (Journal of Philosophical Research
+   1  Ethics and Human Action in Early Stoicism
+   1  The Cambridge Companion to the Stoics
+   1  The Therapy of Desire
+   1  Upheavals of Thought
+   1  The Morality of Happiness
+   1  Platonic Ethics, Old and New
+   1  “Stoic Compatibilism and Frankfurt-Type Cases” (Philosophical Studies
+   1  “Moral Responsibility Without Alternative Possibilities?” (Acta Analytica
+   1  Freedom within Reason
+   1  Meaning in Life and Why It Matters
+   1  Frede, Michael. *A Free Will: Origins of the Notion in Ancient Thought*. University of California Press,
+   1  Bobzien, Susanne. *Determinism and Freedom in Stoic Philosophy*. Oxford University Press,
+   1  Salles, Ricardo. *The Stoics on Determinism and Compatibilism*. Ashgate,
+   1  Sorabji, Richard. *Emotion and Peace of Mind*. Oxford University Press,
+   1  Bernáth, László. "Stoic Compatibilism and Frankfurt-Type Cases." *Philosophical Studies*
+   1  Frankfurt, Harry. "Alternate Possibilities and Moral Responsibility." *Journal of Philosophy*
+   1  Pereboom, Derk. *Living Without Free Will*. Cambridge University Press,
+   1  van Inwagen, Peter. *An Essay on Free Will*. Clarendon Press,
+   1  Methodius of Olympus, Symposium
+   1  Methodius of Olympus, On Free Will (Slavonic version), ed. Musurillo, ACTA
+   1  1 Enoch
+   1  Pseudo-Philo LAB
+   1  4Q186
+   1  Sifre Numbers
+   1  Sifra Behuqqotai
+   1  b. Qiddushin
+   1  Pesiqta de-Rav Kahana
+   1  Sifra Qedoshim
+   1  Barclay, Introduction, caution against modern assumptions; Divine_and_Human_Agency_full.txt:289-295
+   1  Barclay, Introduction; Divine_and_Human_Agency_full.txt:399-464

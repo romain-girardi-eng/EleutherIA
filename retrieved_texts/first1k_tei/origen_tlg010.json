@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "work": "Work tlg010",
+    "author": "Origen",
+    "language": "Greek",
+    "source": "OpenGreekAndLatin First1KGreek GitHub",
+    "source_url": "https://github.com/OpenGreekAndLatin/First1KGreek",
+    "file_url": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg2018/tlg010/tlg2018.tlg010.1st1K-grc1.xml",
+    "edition": "1st1K-grc1",
+    "format": "TEI-XML",
+    "urn": "urn:cts:greekLit:tlg2018.tlg010.1st1K-grc1",
+    "retrieved_date": "2025-10-25",
+    "verification_status": "first1k_github_source",
+    "passages_extracted": 0,
+    "database_citations": 5
+  },
+  "passages": {}
+}
