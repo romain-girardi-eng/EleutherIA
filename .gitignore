@@ -115,3 +115,6 @@ coverage/
 
 # Ruff
 .ruff_cache/
+
+# Claude Code instructions (local development only)
+CLAUDE.md
