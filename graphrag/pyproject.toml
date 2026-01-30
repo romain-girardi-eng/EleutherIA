@@ -1,0 +1,95 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "eleutheria-graphrag"
+version = "2.0.0"
+description = "Graph-based RAG for scholarly Q&A on ancient philosophy"
+readme = "README.md"
+license = "CC-BY-4.0"
+requires-python = ">=3.11"
+authors = [
+    { name = "Romain Girardi", email = "romain.girardi@univ-cotedazur.fr" }
+]
+keywords = [
+    "graphrag",
+    "RAG",
+    "retrieval-augmented-generation",
+    "knowledge-graph",
+    "ancient-philosophy",
+    "LLM",
+    "scholarly-search"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Linguistic",
+    "Typing :: Typed",
+]
+dependencies = [
+    "eleutheria-database>=2.0.0",
+    "eleutheria-kg>=2.0.0",
+    "pydantic>=2.0.0",
+    "httpx>=0.27.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.4.0",
+    "mypy>=1.10.0",
+]
+api = [
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.30.0",
+    "sse-starlette>=2.0.0",
+]
+llm = [
+    # LLM providers
+    "google-generativeai>=0.5.0",
+    "openai>=1.30.0",
+]
+full = [
+    "eleutheria-graphrag[dev,api,llm]",
+]
+
+[project.urls]
+Homepage = "https://github.com/romain-girardi-eng/EleutherIA"
+Documentation = "https://github.com/romain-girardi-eng/EleutherIA/tree/main/docs"
+Repository = "https://github.com/romain-girardi-eng/EleutherIA"
+Issues = "https://github.com/romain-girardi-eng/EleutherIA/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eleutheria_graphrag"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP", "ARG", "SIM"]
+ignore = ["E501", "B008"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["eleutheria_graphrag", "eleutheria_database", "eleutheria_kg"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-v --tb=short"

@@ -1,0 +1,119 @@
+/* Dock Component - Academic Theme Styling */
+
+.dock-outer {
+  margin: 0 0.5rem;
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+}
+
+.dock-panel {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  width: fit-content;
+  gap: 0.45rem;
+  border-radius: 0.6rem;
+  /* Academic sage green theme with transparency */
+  background-color: rgba(118, 150, 135, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0 0.3rem 0.3rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.2),
+    0 4px 6px -2px rgba(0, 0, 0, 0.1);
+  z-index: 30;
+}
+
+.dock-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.15),
+    0 2px 4px -1px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.2s ease;
+}
+
+.dock-item:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.dock-item:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.5),
+    0 4px 6px -1px rgba(0, 0, 0, 0.15);
+}
+
+.dock-item:active {
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: scale(0.98);
+}
+
+/* Active/selected state for toggle items */
+.dock-item-active {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.3),
+    0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+.dock-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.dock-label {
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  width: fit-content;
+  white-space: pre;
+  border-radius: 0.25rem;
+  /* Dark background with high opacity for readability */
+  background-color: rgba(28, 25, 23, 0.95);
+  border: 1px solid rgba(231, 229, 228, 0.3);
+  padding: 0.15rem 0.4rem;
+  font-size: 0.625rem;
+  line-height: 0.875rem;
+  color: #fafaf9;
+  transform: translateX(-50%);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.2),
+    0 2px 4px -1px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 640px) {
+  .dock-panel {
+    gap: 0.5rem;
+    padding: 0 0.375rem 0.375rem;
+    bottom: 0.5rem;
+  }
+
+  .dock-label {
+    font-size: 0.625rem;
+    padding: 0.125rem 0.5rem;
+  }
+}
+
+/* Ensure icons are white for contrast */
+.dock-icon svg {
+  color: #ffffff;
+}

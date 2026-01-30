@@ -1,0 +1,95 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "eleutheria-kg"
+version = "2.0.0"
+description = "Knowledge graph framework for EleutherIA ancient philosophy database"
+readme = "README.md"
+license = "CC-BY-4.0"
+requires-python = ">=3.11"
+authors = [
+    { name = "Romain Girardi", email = "romain.girardi@univ-cotedazur.fr" }
+]
+keywords = [
+    "knowledge-graph",
+    "ancient-philosophy",
+    "free-will",
+    "graph-analytics",
+    "semantic-search",
+    "digital-humanities"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Database :: Database Engines/Servers",
+    "Typing :: Typed",
+]
+dependencies = [
+    "eleutheria-database>=2.0.0",
+    "networkx>=3.0",
+    "numpy>=1.26.0",
+    "qdrant-client>=1.7.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.4.0",
+    "mypy>=1.10.0",
+]
+api = [
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.30.0",
+]
+community = [
+    # Optional community detection algorithms
+    "python-igraph>=0.11.0",
+    "leidenalg>=0.10.0",
+    "python-louvain>=0.16",
+]
+full = [
+    "eleutheria-kg[dev,api,community]",
+]
+
+[project.urls]
+Homepage = "https://github.com/romain-girardi-eng/EleutherIA"
+Documentation = "https://github.com/romain-girardi-eng/EleutherIA/tree/main/docs"
+Repository = "https://github.com/romain-girardi-eng/EleutherIA"
+Issues = "https://github.com/romain-girardi-eng/EleutherIA/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eleutheria_kg"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP", "ARG", "SIM"]
+ignore = ["E501", "B008"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["eleutheria_kg", "eleutheria_database"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-v --tb=short"

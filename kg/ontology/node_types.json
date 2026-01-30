@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EleutherIA Knowledge Graph Node Types",
+  "description": "Node type definitions for the EleutherIA ancient philosophy knowledge graph",
+  "version": "2.0.0",
+  "node_types": {
+    "Person": {
+      "description": "An individual philosopher, author, or scholar",
+      "color": "#2563eb",
+      "icon": "user",
+      "properties": {
+        "birth_date": { "type": "string", "description": "Approximate birth date" },
+        "death_date": { "type": "string", "description": "Approximate death date" },
+        "floruit": { "type": "string", "description": "Period of activity" },
+        "role": { "type": "string", "enum": ["ancient_primary", "modern_scholar", "late_antique_theologian"] }
+      },
+      "examples": ["Chrysippus", "Epictetus", "Susanne Bobzien"]
+    },
+    "Concept": {
+      "description": "A philosophical concept or technical term",
+      "color": "#16a34a",
+      "icon": "lightbulb",
+      "properties": {
+        "greek_term": { "type": "string", "description": "Original Greek term" },
+        "latin_term": { "type": "string", "description": "Latin equivalent" },
+        "transliteration": { "type": "string", "description": "Romanized form" }
+      },
+      "examples": ["to_eph_hemin", "fate", "moral_responsibility"]
+    },
+    "Argument": {
+      "description": "A philosophical argument or line of reasoning",
+      "color": "#db2777",
+      "icon": "message-square",
+      "properties": {
+        "argument_type": { "type": "string", "description": "Type of argument" },
+        "premises": { "type": "array", "description": "Argument premises" },
+        "conclusion": { "type": "string", "description": "Argument conclusion" }
+      },
+      "examples": ["lazy_argument", "master_argument", "consequence_argument"]
+    },
+    "Work": {
+      "description": "A philosophical text or scholarly work",
+      "color": "#f97316",
+      "icon": "book",
+      "properties": {
+        "cts_urn": { "type": "string", "description": "Canonical Text Services URN" },
+        "date_composed": { "type": "string", "description": "Date of composition" },
+        "language": { "type": "string", "enum": ["grc", "lat", "eng"] }
+      },
+      "examples": ["chrysippus_on_fate", "epictetus_discourses", "bobzien_determinism_freedom"]
+    },
+    "School": {
+      "description": "A philosophical school or tradition",
+      "color": "#9333ea",
+      "icon": "users",
+      "properties": {
+        "founded": { "type": "string", "description": "Founding date/period" },
+        "founder": { "type": "string", "description": "School founder" },
+        "location": { "type": "string", "description": "Primary location" }
+      },
+      "examples": ["stoicism", "epicureanism", "academic_skepticism"]
+    },
+    "Passage": {
+      "description": "A specific textual passage",
+      "color": "#0ea5e9",
+      "icon": "file-text",
+      "properties": {
+        "cts_urn": { "type": "string", "description": "CTS URN reference" },
+        "canonical_ref": { "type": "string", "description": "Standard citation" }
+      }
+    },
+    "Debate": {
+      "description": "A philosophical debate or controversy",
+      "color": "#22c55e",
+      "icon": "message-circle",
+      "properties": {
+        "participants": { "type": "array", "description": "Debate participants" },
+        "period": { "type": "string", "description": "When the debate occurred" }
+      },
+      "examples": ["free_will_determinism_debate", "fate_providence_debate"]
+    },
+    "Position": {
+      "description": "A philosophical position or stance",
+      "color": "#facc15",
+      "icon": "target",
+      "properties": {
+        "position_type": { "type": "string", "description": "Type of position" }
+      },
+      "examples": ["compatibilism", "hard_determinism", "libertarianism"]
+    },
+    "Event": {
+      "description": "A historical event relevant to philosophical development",
+      "color": "#ef4444",
+      "icon": "calendar",
+      "properties": {
+        "date": { "type": "string", "description": "Event date" },
+        "location": { "type": "string", "description": "Event location" }
+      }
+    },
+    "Institution": {
+      "description": "An educational or religious institution",
+      "color": "#8b5cf6",
+      "icon": "building",
+      "properties": {
+        "founded": { "type": "string" },
+        "location": { "type": "string" }
+      },
+      "examples": ["platonic_academy", "lyceum", "stoa_poikile"]
+    },
+    "Text_Fragment": {
+      "description": "A fragmentary text preserved in secondary sources",
+      "color": "#14b8a6",
+      "icon": "scissors",
+      "properties": {
+        "source_work": { "type": "string", "description": "Work preserving the fragment" },
+        "svf_number": { "type": "string", "description": "SVF reference if applicable" }
+      }
+    },
+    "Modern_Interpretation": {
+      "description": "A modern scholarly interpretation or theory",
+      "color": "#f59e0b",
+      "icon": "eye",
+      "properties": {
+        "interpreter": { "type": "string", "description": "Modern scholar" },
+        "publication_year": { "type": "integer", "description": "Year published" }
+      }
+    },
+    "Term": {
+      "description": "A technical philosophical term",
+      "color": "#3b82f6",
+      "icon": "type",
+      "properties": {
+        "original_form": { "type": "string", "description": "Original Greek/Latin" },
+        "definition": { "type": "string", "description": "Technical definition" }
+      }
+    },
+    "Source_Collection": {
+      "description": "A collection of ancient sources (e.g., SVF, LS)",
+      "color": "#ec4899",
+      "icon": "folder",
+      "properties": {
+        "editor": { "type": "string" },
+        "publication_year": { "type": "integer" }
+      },
+      "examples": ["svf", "long_sedley"]
+    },
+    "Doctrine": {
+      "description": "A formal philosophical doctrine",
+      "color": "#10b981",
+      "icon": "bookmark",
+      "properties": {
+        "school": { "type": "string", "description": "Associated school" }
+      }
+    }
+  }
+}

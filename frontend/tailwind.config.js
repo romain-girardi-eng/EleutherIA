@@ -1,0 +1,354 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  corePlugins: {
+    preflight: true,
+  },
+  theme: {
+    extend: {
+      colors: {
+        // Primary colors - academic green
+        primary: {
+          50: '#f3f7f5',
+          100: '#e2ebe7',
+          200: '#c5d7cf',
+          300: '#a8c3b7',
+          400: '#8baf9f',
+          500: '#769687',
+          600: '#769687',
+          700: '#5d7769',
+          800: '#475a4f',
+          900: '#313d36',
+        },
+        // Accent colors - ancient red
+        accent: {
+          50: '#fef2f2',
+          100: '#fee2e2',
+          200: '#fecaca',
+          300: '#fca5a5',
+          400: '#f87171',
+          500: '#ef4444',
+          600: '#b61b21',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
+        },
+        // Academic theme colors
+        academic: {
+          bg: '#fafaf9',
+          paper: '#ffffff',
+          text: '#1c1917',
+          muted: '#78716c',
+          border: '#e7e5e4',
+          light: '#f5f5f4',
+          dark: '#292524',
+        },
+        // Semantic colors
+        success: {
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
+        },
+        warning: {
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
+        },
+        danger: {
+          50: '#fef2f2',
+          100: '#fee2e2',
+          200: '#fecaca',
+          300: '#fca5a5',
+          400: '#f87171',
+          500: '#ef4444',
+          600: '#dc2626',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
+        },
+        // CSS Variables
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        muted: {
+          DEFAULT: '#78716c',
+          foreground: '#1c1917',
+        },
+        destructive: {
+          DEFAULT: '#ef4444',
+          foreground: '#ffffff',
+        },
+        secondary: {
+          DEFAULT: '#f3f4f6',
+          foreground: '#1c1917',
+        },
+        ring: '#769687',
+        input: '#e7e5e4',
+      },
+      fontFamily: {
+        // UI elements - modern system fonts
+        sans: [
+          'system-ui',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
+          '"Helvetica Neue"',
+          'Arial',
+          'sans-serif',
+        ],
+        // Body text - academic serif stack
+        serif: [
+          'Georgia',
+          '"Times New Roman"',
+          'Times',
+          'serif',
+        ],
+        // Ancient Greek/Latin texts - classical serif stack
+        ancient: [
+          '"Palatino Linotype"',
+          '"Book Antiqua"',
+          'Palatino',
+          'Georgia',
+          'serif',
+        ],
+        // Monospace for code/data
+        mono: [
+          'ui-monospace',
+          'SFMono-Regular',
+          '"SF Mono"',
+          'Menlo',
+          'Consolas',
+          '"Liberation Mono"',
+          '"Courier New"',
+          'monospace',
+        ],
+      },
+      fontSize: {
+        '2xs': ['0.625rem', { lineHeight: '0.875rem' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+        '4xl': ['2.25rem', { lineHeight: '2.75rem' }],
+        '5xl': ['3rem', { lineHeight: '3.5rem' }],
+        '6xl': ['3.75rem', { lineHeight: '4.25rem' }],
+        '7xl': ['4.5rem', { lineHeight: '5rem' }],
+        '8xl': ['6rem', { lineHeight: '6.5rem' }],
+        '9xl': ['8rem', { lineHeight: '8.5rem' }],
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '128': '32rem',
+        '144': '36rem',
+      },
+      maxWidth: {
+        '8xl': '88rem',
+        '9xl': '96rem',
+      },
+      animation: {
+        // Existing animations
+        shine: "shine var(--duration) infinite linear",
+        shimmer: "shimmer 2s infinite linear",
+        // Aurora animation
+        aurora: "aurora 60s linear infinite",
+        // Fade animations
+        'fade-in': 'fadeIn 0.5s ease-in-out',
+        'fade-out': 'fadeOut 0.5s ease-in-out',
+        // Slide animations
+        'slide-in': 'slideIn 0.3s ease-out',
+        'slide-out': 'slideOut 0.3s ease-in',
+        'slide-in-left': 'slideInLeft 0.3s ease-out',
+        'slide-in-right': 'slideInRight 0.3s ease-out',
+        'slide-in-up': 'slideInUp 0.3s ease-out',
+        'slide-in-down': 'slideInDown 0.3s ease-out',
+        // Scale animations
+        'scale-in': 'scaleIn 0.2s ease-out',
+        'scale-out': 'scaleOut 0.2s ease-in',
+        'bounce-in': 'bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+        // Loop animations
+        'spin-slow': 'spin 3s linear infinite',
+        'bounce-slow': 'bounce 2s infinite',
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'wiggle': 'wiggle 1s ease-in-out infinite',
+      },
+      keyframes: {
+        shine: {
+          "0%": {
+            "background-position": "0% 0%",
+          },
+          "50%": {
+            "background-position": "100% 100%",
+          },
+          to: {
+            "background-position": "0% 0%",
+          },
+        },
+        shimmer: {
+          "0%": {
+            transform: "translateX(-100%)",
+          },
+          "100%": {
+            transform: "translateX(100%)",
+          },
+        },
+        aurora: {
+          from: {
+            backgroundPosition: "50% 50%, 50% 50%",
+          },
+          to: {
+            backgroundPosition: "350% 50%, 350% 50%",
+          },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        fadeOut: {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
+        slideIn: {
+          '0%': { transform: 'translateY(-10px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        slideOut: {
+          '0%': { transform: 'translateY(0)', opacity: '1' },
+          '100%': { transform: 'translateY(-10px)', opacity: '0' },
+        },
+        slideInLeft: {
+          '0%': { transform: 'translateX(-100%)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        slideInRight: {
+          '0%': { transform: 'translateX(100%)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        slideInUp: {
+          '0%': { transform: 'translateY(100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        slideInDown: {
+          '0%': { transform: 'translateY(-100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        scaleIn: {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        scaleOut: {
+          '0%': { transform: 'scale(1)', opacity: '1' },
+          '100%': { transform: 'scale(0.95)', opacity: '0' },
+        },
+        bounceIn: {
+          '0%': { transform: 'scale(0.3)', opacity: '0' },
+          '50%': { transform: 'scale(1.05)' },
+          '70%': { transform: 'scale(0.9)' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-3deg)' },
+          '50%': { transform: 'rotate(3deg)' },
+        },
+      },
+      boxShadow: {
+        'inner-lg': 'inset 0 2px 4px 0 rgb(0 0 0 / 0.06)',
+        'soft': '0 2px 8px 0 rgb(0 0 0 / 0.04)',
+        'medium': '0 4px 12px 0 rgb(0 0 0 / 0.08)',
+        'hard': '0 10px 40px 0 rgb(0 0 0 / 0.15)',
+        'glow': '0 0 20px rgb(118 150 135 / 0.3)',
+        'glow-accent': '0 0 20px rgb(182 27 33 / 0.3)',
+      },
+      borderRadius: {
+        '2xs': '0.125rem',
+        '3xl': '1.5rem',
+        '4xl': '2rem',
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
+      transitionDuration: {
+        '400': '400ms',
+        '600': '600ms',
+        '800': '800ms',
+        '900': '900ms',
+      },
+      transitionTimingFunction: {
+        'in-expo': 'cubic-bezier(0.95, 0.05, 0.795, 0.035)',
+        'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
+        'spring': 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-soft': 'linear-gradient(135deg, var(--tw-gradient-stops))',
+      },
+      screens: {
+        '3xl': '1920px',
+        '4xl': '2560px',
+      },
+      zIndex: {
+        '60': '60',
+        '70': '70',
+        '80': '80',
+        '90': '90',
+        '100': '100',
+        '1000': '1000',
+        '9999': '9999',
+      },
+      gridTemplateColumns: {
+        '13': 'repeat(13, minmax(0, 1fr))',
+        '14': 'repeat(14, minmax(0, 1fr))',
+        '15': 'repeat(15, minmax(0, 1fr))',
+        '16': 'repeat(16, minmax(0, 1fr))',
+      },
+      gridColumn: {
+        'span-13': 'span 13 / span 13',
+        'span-14': 'span 14 / span 14',
+        'span-15': 'span 15 / span 15',
+        'span-16': 'span 16 / span 16',
+      },
+      aspectRatio: {
+        '4/3': '4 / 3',
+        '3/2': '3 / 2',
+        '2/3': '2 / 3',
+        '3/4': '3 / 4',
+        '5/4': '5 / 4',
+        '4/5': '4 / 5',
+        '9/16': '9 / 16',
+        '21/9': '21 / 9',
+      },
+    },
+  },
+  plugins: [
+    require('@tailwindcss/typography'),
+    addVariablesForColors,
+  ],
+}
+
+// This plugin adds each Tailwind color as a global CSS variable, e.g. var(--gray-200).
+function addVariablesForColors({ addBase, theme }) {
+  const flattenColorPalette = require("tailwindcss/lib/util/flattenColorPalette").default;
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+
+  addBase({
+    ":root": newVars,
+  });
+}

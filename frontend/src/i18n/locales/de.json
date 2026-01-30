@@ -1,0 +1,1656 @@
+{
+  "app": {
+    "name": "EleutherIA",
+    "tagline": "Datenbank zur antiken Willensfreiheit",
+    "description": "Ein FAIR-konformer Wissensgraph zur Dokumentation antiker Debatten über freien Willen"
+  },
+  "nav": {
+    "home": "Startseite",
+    "database": "Datenbank",
+    "visualizer": "Wissensgraph",
+    "search": "Suche",
+    "graphrag": "GraphRAG Q&A",
+    "texts": "Antike Texte",
+    "bibliography": "Bibliographie",
+    "about": "Über",
+    "credits": "Mitwirkende",
+    "admin": "Admin-Dashboard",
+    "citationNetwork": "Zitatnetzwerk",
+    "community": "Community",
+    "profile": "Profil",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "menu": "Menü",
+    "closeMenu": "Menü schließen",
+    "openMenu": "Menü öffnen"
+  },
+  "home": {
+    "welcome": "Willkommen bei EleutherIA",
+    "subtitle": "Ein FAIR-konformer Wissensgraph zur Dokumentation antiker Debatten über freien Willen, Schicksal und moralische Verantwortung von der klassischen griechischen Philosophie (6. Jh. v. Chr.) bis zur Spätantike (6. Jh. n. Chr.).",
+    "stats": {
+      "title": "Datenbankstatistiken",
+      "nodes": "KG-Knoten",
+      "edges": "Kanten",
+      "works": "Antike Werke",
+      "passages": "Passagen"
+    },
+    "features": {
+      "kg": {
+        "title": "Wissensgraph",
+        "description": "Erkunden Sie 2.159 Knoten und 7.856 Beziehungen in einer interaktiven Netzwerkvisualisierung"
+      },
+      "search": {
+        "title": "Hybride Suche",
+        "description": "Volltext-, lemmatische und semantische Suche in 151 antiken Werken mit 14.623 Passagen"
+      },
+      "graphrag": {
+        "title": "GraphRAG Q&A",
+        "description": "Stellen Sie Fragen und erhalten Sie wissenschaftlich fundierte Antworten basierend auf dem Wissensgraph"
+      },
+      "texts": {
+        "title": "Antike Texte",
+        "description": "Durchsuchen und lesen Sie 151 antike griechische und lateinische Werke mit Lemmatisierung"
+      }
+    },
+    "quickStart": "Schnellstart",
+    "quickStartDescription": "Entdecken Sie die Kernfunktionen von EleutherIA",
+    "about": {
+      "title": "Über diese Datenbank",
+      "description1": "(Ἐλευθερία = Freiheit + IA = Intelligence Artificielle) dokumentiert die historische Entwicklung antiker Debatten über freien Willen, Determinismus und moralische Verantwortung, von der klassischen griechischen Philosophie bis zur Spätantike.",
+      "description2": "Die Datenbank kombiniert einen umfassenden Wissensgraph mit 151 antiken Werken (14.623 Passagen) und ermöglicht fortgeschrittene Forschung durch:",
+      "feature1": "Interaktive Netzwerkvisualisierung mit Cytoscape.js",
+      "feature2": "Hybride Suche, die Volltext-, lemmatische und semantische Ansätze kombiniert",
+      "feature3": "GraphRAG-Fragebeantwortung mit Zitatverfolgung",
+      "feature4": "FAIR-konforme Daten mit vollständiger Provenienz",
+      "license": "Alle Daten sind lizenziert unter",
+      "availableAt": "und verfügbar unter",
+      "learnMore": "Mehr erfahren"
+    }
+  },
+  "search": {
+    "title": "Hybride Suche",
+    "subtitle": "Durchsuchen Sie 151 antike Texte mit Volltext-, lemmatischen und semantischen Ansätzen",
+    "placeholder": "Passagen, Konzepte oder Autoren suchen...",
+    "searchPlaceholder": "z.B. ἐφ' ἡμῖν, liberum arbitrium, freiwillige Handlung...",
+    "queryLabel": "Suchanfrage",
+    "queryHint": "Unterstützt griechische, lateinische und englische Begriffe",
+    "searchModes": "Suchmodi",
+    "resultsLimit": "Ergebnislimit",
+    "nResults": "{{count}} Ergebnisse",
+    "searchButton": "Suchen",
+    "searching": "Suche läuft...",
+    "searchFailed": "Suche fehlgeschlagen",
+    "loadingMessage": "Durchsuche 151 antike Texte...",
+    "foundResults": "{{count}} Ergebnisse gefunden",
+    "noResultsTitle": "Keine Ergebnisse",
+    "noResultsDesc": "Keine Ergebnisse für diesen Suchmodus gefunden. Versuchen Sie einen anderen Suchmodus oder eine andere Anfrage.",
+    "noResultsFoundCurrent": "Keine Ergebnisse für aktuellen Modus gefunden",
+    "tryDifferentMode": "Versuchen Sie einen anderen Suchmodus oder eine andere Anfrage.",
+    "author": "Autor",
+    "category": "Kategorie",
+    "language": "Sprache",
+    "viewText": "Text anzeigen",
+    "filters": "Filter",
+    "results": "{{count}} Ergebnisse gefunden",
+    "noResults": "Keine Ergebnisse gefunden",
+    "loading": "Suche läuft...",
+    "enableMode": "Aktivieren Sie mindestens einen Suchmodus",
+    "enterQuery": "Bitte geben Sie eine Suchanfrage ein",
+    "modes": {
+      "fullText": "Volltext",
+      "lemmatic": "Lemmatisch",
+      "semantic": "Semantisch",
+      "ai": "KI-Verbesserungen"
+    },
+    "filterBy": {
+      "author": "Autor",
+      "period": "Zeitraum",
+      "school": "Philosophische Schule",
+      "language": "Sprache"
+    },
+    "tips": {
+      "title": "Suchtipps",
+      "greek": "Griechischer Text",
+      "greekExamples": "Versuchen Sie \"ἐφ' ἡμῖν\", \"ἑκούσιον\", \"προαίρεσις\"",
+      "latin": "Lateinischer Text",
+      "latinExamples": "Versuchen Sie \"liberum arbitrium\", \"in nostra potestate\", \"voluntarium\"",
+      "english": "Englisch",
+      "englishExamples": "Versuchen Sie \"voluntary action\", \"free will\", \"moral responsibility\"",
+      "hybrid": "Hybride Suche",
+      "hybridDesc": "kombiniert alle drei Modi mit Reciprocal Rank Fusion (RRF)"
+    }
+  },
+  "advancedSearch": {
+    "title": "Erweiterte Suche",
+    "subtitle": "Echtzeit-Suche in 37.839 Passagen aus 258 antiken Werken",
+    "shortcuts": {
+      "focusSearch": "Suche fokussieren",
+      "toggleFilters": "Filter umschalten",
+      "navigateResults": "Ergebnisse navigieren",
+      "openSelected": "Ausgewähltes öffnen"
+    },
+    "searchLabel": "Suchanfrage",
+    "searchPlaceholder": "Suchen Sie nach griechischen, lateinischen oder englischen Begriffen... (z.B. ἐφ' ἡμῖν, liberum arbitrium)",
+    "resultsCount": "{{count}} Ergebnisse",
+    "filters": {
+      "button": "Filter",
+      "clearAll": "Alle löschen",
+      "author": "Autor",
+      "authorPlaceholder": "z.B. Cicero, Epictetus...",
+      "language": "Sprache",
+      "languageOptions": {
+        "all": "Alle Sprachen",
+        "greek": "Griechisch (Antik)",
+        "latin": "Lateinisch",
+        "english": "Englisch"
+      },
+      "period": "Zeitraum",
+      "periodOptions": {
+        "all": "Alle Zeiträume",
+        "presocratic": "Vorsokratisch (6.-5. Jh. v. Chr.)",
+        "classical": "Klassisch (5.-4. Jh. v. Chr.)",
+        "hellenistic": "Hellenistisch (4.-1. Jh. v. Chr.)",
+        "romanImperial": "Römische Kaiserzeit (1.-3. Jh. n. Chr.)",
+        "lateAntiquity": "Spätantike (4.-6. Jh. n. Chr.)"
+      }
+    },
+    "howToSearch": {
+      "title": "Wie Sie suchen",
+      "greek": "<strong>Griechisch:</strong> Versuchen Sie \"ἐφ' ἡμῖν\" (in unserer Macht), \"ἑκούσιον\" (freiwillig), \"προαίρεσις\" (Wahl)",
+      "latin": "<strong>Lateinisch:</strong> Versuchen Sie \"liberum arbitrium\" (freier Wille), \"in nostra potestate\" (in unserer Macht), \"voluntarium\" (freiwillig)",
+      "english": "<strong>Englisch:</strong> Versuchen Sie \"voluntary action\", \"moral responsibility\", \"fate and freedom\"",
+      "realtime": "<strong>Echtzeit:</strong> Ergebnisse erscheinen während Sie tippen (nach 300ms Verzögerung)",
+      "filters": "<strong>Filter:</strong> Verfeinern Sie nach Autor, Sprache oder historischem Zeitraum"
+    },
+    "results": {
+      "languageLabels": {
+        "greek": "Griechisch",
+        "latin": "Lateinisch",
+        "english": "Englisch"
+      },
+      "relevance": "Relevanz: {{percent}}%",
+      "viewButton": "Ansehen →"
+    },
+    "error": {
+      "title": "Suche fehlgeschlagen"
+    },
+    "noResults": {
+      "title": "Keine Ergebnisse gefunden",
+      "description": "Keine Passagen gefunden, die \"{{query}}\" entsprechen. Versuchen Sie andere Suchbegriffe oder passen Sie Ihre Filter an."
+    }
+  },
+  "graphrag": {
+    "title": "HiRAG Q&A",
+    "subtitle": "Hierarchische Retrieval-Augmented Generation",
+    "description": "Hierarchische Retrieval-Augmented Generation erweitert GraphRAG durch Organisation von Wissen über Abstraktionsebenen hinweg (Autoren, Werke, Konzepte, Debatten) für nuancierte wissenschaftliche Antworten.",
+    "askQuestion": "Fragen Sie zur antiken Philosophie...",
+    "askEleutherai": "Fragen Sie EleutherIA",
+    "placeholder": "Stellen Sie Fragen zu antiken Debatten über Willensfreiheit...",
+    "submit": "Absenden",
+    "ask": "Fragen",
+    "stop": "Stopp",
+    "loading": "Antwort wird generiert...",
+    "thinking": "Denke nach...",
+    "citations": "Zitate",
+    "sources": "Quellen",
+    "reasoning": "Argumentationspfad",
+    "suggestions": "Vorgeschlagene Fragen",
+    "tryDemo": "Demo ausprobieren",
+    "hide": "Verbergen",
+    "done": "Fertig",
+    "snapshot": "HiRAG-Momentaufnahme",
+    "realTimeUpdates": "Echtzeit-Updates",
+    "showProgress": "Fortschritt während der Antwortgenerierung anzeigen",
+    "settings": "Einstellungen",
+    "searchSettings": "Sucheinstellungen",
+    "searchBreadth": "Suchbreite (lokale Ausgangspunkte)",
+    "connectionDepth": "Verbindungstiefe (Brückenreichweite)",
+    "contextSize": "Kontextgröße (globales Kontextbudget)",
+    "academicMode": "Akademischer Modus",
+    "enhancedRigor": "Erhöhte wissenschaftliche Strenge mit Konfidenzbewertungen...",
+    "rigorLevel": "Strengegrad",
+    "fast": "Schnell",
+    "balanced": "Ausgewogen",
+    "deep": "Tiefgehend",
+    "citationStyle": "Zitierstil",
+    "responseMetrics": "Antwortmetriken",
+    "ancientSources": "Antike Quellen",
+    "modernScholarship": "Moderne Forschung",
+    "nodesUsed": "Verwendete Knoten",
+    "tokensUsed": "Verwendete Tokens",
+    "model": "Modell",
+    "authRequired": "Authentifizierung erforderlich",
+    "authRequiredDesc": "Bitte melden Sie sich an, um HiRAG Q&A zu nutzen. Diese Funktion verwendet KI-Dienste und erfordert Authentifizierung.",
+    "howItWorks": "Wie HiRAG funktioniert",
+    "whyBrilliant": "Warum es brillant ist",
+    "basedOn": "Basierend auf Huang et al., \"Hierarchical Retrieval-Augmented Generation,\" arXiv preprint (2025).",
+    "poweredBy": "Betrieben durch HiRAG-Technologie",
+    "benefits": {
+      "hierarchical": "Im Gegensatz zu flachem GraphRAG respektiert HiRAG die natürliche Hierarchie des Wissens",
+      "multiLevel": "Mehrstufiges Argumentieren über Autoren, Werke, Konzepte und Debatten hinweg",
+      "scholarlyAnswers": "Wissenschaftliche Antworten mit korrekter Zuschreibung und Konfidenzbewertungen",
+      "citationTracking": "Vollständige Zitatverfolgung von antiken Quellen bis zur modernen Forschung",
+      "contextAware": "Kontextbewusstes Retrieval auf jeder Abstraktionsebene"
+    },
+    "quality": {
+      "title": "Antwortqualität",
+      "subtitle": "Umfassende Qualitätsbewertung",
+      "citationDensity": "Zitatdichte",
+      "sourceDiversity": "Quellenvielfalt",
+      "confidence": "Konfidenz",
+      "excellent": "Ausgezeichnet",
+      "good": "Gut",
+      "fair": "Zufriedenstellend",
+      "needsImprovement": "Verbesserungsbedarf",
+      "detailedBreakdown": "Detaillierte Aufschlüsselung",
+      "citationsLabel": "Zitate",
+      "citationsDesc": "Anzahl der bereitgestellten Zitate",
+      "sourcesLabel": "Quellen",
+      "sourcesDesc": "Einzigartige referenzierte Quellen",
+      "nodeRelevanceLabel": "Knotenrelevanz",
+      "nodeRelevanceDesc": "Relevanz der abgerufenen Knoten",
+      "contextCoherenceLabel": "Kontextkohärenz",
+      "contextCoherenceDesc": "Wie gut der Kontext zusammenpasst",
+      "completenessLabel": "Vollständigkeit",
+      "completenessDesc": "Gründlichkeit der Antwort",
+      "whatThisMeans": "Was dies bedeutet:",
+      "excellentQuality": "Ausgezeichnete Qualität:",
+      "excellentQualityDesc": "Diese Antwort ist gut in mehreren Quellen verankert, hochrelevant und geht gründlich mit korrekten Zitaten auf Ihre Frage ein.",
+      "goodQuality": "Gute Qualität:",
+      "goodQualityDesc": "Diese Antwort bietet solide Informationen mit angemessenen Zitaten und Relevanz, obwohl es Raum für zusätzliche Details geben kann.",
+      "fairQuality": "Zufriedenstellende Qualität:",
+      "fairQualityDesc": "Diese Antwort geht auf Ihre Frage ein, könnte aber von mehr Quellen oder tieferem Kontext profitieren. Erwägen Sie, Ihre Anfrage zu verfeinern.",
+      "needsImprovementQuality": "Verbesserungsbedarf:",
+      "needsImprovementQualityDesc": "Dieser Antwort fehlen möglicherweise ausreichende Zitate oder Kontext. Versuchen Sie, Ihre Frage umzuformulieren oder spezifischer zu sein, wonach Sie suchen.",
+      "wellCited": "Gut zitiert",
+      "multiSource": "Mehrere Quellen",
+      "highlyRelevant": "Hochrelevant",
+      "coherent": "Kohärent",
+      "comprehensive": "Umfassend",
+      "tip": "Tipp:",
+      "tipText": "Klicken Sie auf einen Vorschlag, um philosophische Argumente mit Zitaten zu erkunden."
+    },
+    "argumentMapper": {
+      "title": "Argumentstruktur",
+      "premisesLabel": "Prämissen",
+      "therefore": "Folglich",
+      "conclusionLabel": "Schlussfolgerung",
+      "objectionsLabel": "Einwände",
+      "responsesLabel": "Antworten",
+      "legendTitle": "Legende",
+      "premisesDesc": "Prämissen (stützende Aussagen)",
+      "conclusionDesc": "Schlussfolgerung (Hauptbehauptung)",
+      "objectionsDesc": "Einwände (Gegenargumente)",
+      "responsesDesc": "Antworten (Verteidigungen)",
+      "analysisTitle": "Argumentanalyse"
+    },
+    "smartSuggestions": {
+      "title": "Intelligente Vorschläge",
+      "allLabel": "Alle",
+      "philosophical": "Philosophisch",
+      "comparative": "Vergleichend",
+      "historical": "Historisch",
+      "conceptual": "Konzeptionell",
+      "simple": "einfach",
+      "moderate": "mittel",
+      "complex": "komplex",
+      "noSuggestions": "Keine Vorschläge entsprechen Ihrer Anfrage. Versuchen Sie andere Suchbegriffe!",
+      "tryThisQuestion": "Diese Frage ausprobieren",
+      "clickToAsk": "Klicken Sie, um diese Frage zu stellen"
+    }
+  },
+  "texts": {
+    "title": "Bibliothek antiker Texte",
+    "subtitle": "Durchsuchen Sie {{count}} antike philosophische Texte",
+    "browseWorks": "Werke durchsuchen",
+    "totalWorks": "{{count}} Werke verfügbar",
+    "passages": "Passagen",
+    "citations": "Zitate",
+    "readMore": "Mehr lesen",
+    "lemmatization": "Lemmatisierung",
+    "morphology": "Morphologie",
+    "frequency": "Häufigkeit",
+    "relatedPassages": "Verwandte Passagen",
+    "allAuthors": "Alle Autoren",
+    "searchAuthor": "Autor suchen...",
+    "allLanguages": "Alle Sprachen",
+    "greek": "Griechisch",
+    "latin": "Lateinisch",
+    "english": "Englisch",
+    "featured": "Hervorgehoben",
+    "mostCited": "Meistzitiert",
+    "byAuthor": "Nach Autor",
+    "byTitle": "Nach Titel",
+    "mostPassages": "Meiste Passagen",
+    "reset": "Zurücksetzen",
+    "loadingWorks": "Werke werden geladen...",
+    "noWorksFound": "Keine Werke mit aktuellen Filtern gefunden",
+    "authorLabel": "Autor:",
+    "passagesLabel": "Passagen:",
+    "periodLabel": "Zeitraum:",
+    "seeInKG": "Im KG ansehen",
+    "goToCitation": "Zu Zitat gehen"
+  },
+  "ancientWorks": {
+    "title": "Bibliothek antiker Werke",
+    "subtitle": "Durchsuchen Sie {{count}} antike philosophische Texte",
+    "stats": {
+      "passages": "Passagen",
+      "citations": "Zitate"
+    },
+    "filters": {
+      "allAuthors": "Alle Autoren",
+      "searchAuthorPlaceholder": "Autor suchen...",
+      "allLanguages": "Alle Sprachen",
+      "languages": {
+        "greek": "Griechisch",
+        "latin": "Lateinisch",
+        "english": "Englisch"
+      },
+      "featured": "Hervorgehoben",
+      "reset": "Zurücksetzen"
+    },
+    "sort": {
+      "mostCited": "Meistzitiert",
+      "byAuthor": "Nach Autor",
+      "byTitle": "Nach Titel",
+      "mostPassages": "Meiste Passagen"
+    },
+    "pagination": {
+      "showing": "{{from}}–{{to}} von {{total}}"
+    },
+    "loading": "Werke werden geladen...",
+    "noResults": "Keine Werke mit aktuellen Filtern gefunden",
+    "errors": {
+      "loadWorks": "Werke konnten nicht geladen werden"
+    },
+    "card": {
+      "citedInKG": "Zitiert in {{count}} Wissensgraph-Knoten",
+      "author": "Autor",
+      "passages": "Passagen",
+      "period": "Zeitraum",
+      "actions": {
+        "seeInKG": "Im KG ansehen",
+        "goToCitation": "Zu Zitat gehen"
+      }
+    },
+    "languageIcons": {
+      "ancientGreek": "Altgriechisch",
+      "latin": "Lateinisch",
+      "english": "Englisch",
+      "unknown": "Unbekannt"
+    }
+  },
+  "textReader": {
+    "nav": {
+      "library": "Bibliothek",
+      "hide": "Verbergen",
+      "contents": "Inhalt",
+      "previous": "Vorherige (←)",
+      "next": "Nächste (→)",
+      "pageCount": "{{current}} / {{total}}",
+      "backToLibrary": "Zurück zur Bibliothek"
+    },
+    "search": {
+      "placeholder": "Zu Referenz springen (/ zum Fokussieren)",
+      "go": "Los"
+    },
+    "toc": {
+      "title": "Inhalt",
+      "book": "Buch",
+      "chapter": "Kap.",
+      "chapterFull": "Kapitel"
+    },
+    "notifications": {
+      "found": "Gefunden",
+      "notFound": "Nicht gefunden",
+      "searchFailed": "Suche fehlgeschlagen"
+    },
+    "error": {
+      "workNotFound": "Werk nicht gefunden"
+    },
+    "loading": "Lädt...",
+    "referenced": "Referenziert",
+    "footer": {
+      "language": "Sprache"
+    },
+    "shortcuts": {
+      "help": "Drücken Sie ? für Tastaturkürzel"
+    }
+  },
+  "semativerse": {
+    "exitSemativerse": "Semativerse verlassen"
+  },
+  "simpleTextReader": {
+    "loading": "Lädt...",
+    "fetchingTextId": "Abrufen der Text-ID: {{textId}}",
+    "error": "Fehler",
+    "textId": "Text-ID",
+    "backToTexts": "Zurück zu Texten",
+    "noTextFound": "Kein Text gefunden",
+    "untitled": "Ohne Titel",
+    "by": "von",
+    "unknown": "Unbekannt",
+    "unknownLanguage": "Unbekannte Sprache",
+    "textStatistics": "Textstatistiken",
+    "rawTextLength": "Rohtextlänge",
+    "characters": "Zeichen",
+    "wordsApprox": "Wörter (ca.)",
+    "hasRawText": "Hat Rohtext",
+    "yes": "JA ✓",
+    "no": "NEIN ✗",
+    "textContent": "Textinhalt",
+    "noTextContentAvailable": "Kein Textinhalt verfügbar"
+  },
+  "hirag": {
+    "pageTitle": "HiRAG-Implementierungsdetails",
+    "pageDescription": "Eine transparente Erklärung unserer hierarchischen Retrieval-Architektur, basierend auf modernster Forschung mit domänenspezifischen Anpassungen für die antike Philosophiewissenschaft.",
+    "overview": {
+      "title": "Überblick & Papierzitat",
+      "originalResearch": "Originalforschung",
+      "basedOn": "Unsere Implementierung basiert auf der HiRAG-Architektur (Hierarchical Retrieval-Augmented Generation), beschrieben in:",
+      "readPaper": "Originalpapier lesen",
+      "coreInnovation": "Kerninnovation",
+      "innovationDescription": "HiRAG erweitert Standard-GraphRAG durch Einführung einer dreistufigen hierarchischen Wissensstruktur:",
+      "localKnowledge": "Lokales Wissen: Spezifische Entitäten, abgerufen via semantischer Suche",
+      "globalKnowledge": "Globales Wissen: Community-Zusammenfassungen, die thematischen Kontext bieten",
+      "bridgeKnowledge": "Brückenwissen: Kürzeste Pfade zwischen Entitäten über Communities hinweg",
+      "paperResults": "Papierergebnisse zeigen, dass HiRAG eine 54-64% Gewinnrate vs. GraphRAG und 52-66% vs. LightRAG über Benchmark-Datensätze erreicht."
+    },
+    "implemented": {
+      "title": "Was wir aus dem Papier implementiert haben",
+      "hierarchical": {
+        "title": "1. Hierarchische Struktur",
+        "level0": "14 globale Zusammenfassungen, die wichtige philosophische Themen abdecken (Determinismus, moralische Verantwortung, göttliche Vorsehung)",
+        "level1": "11 Community-Zusammenfassungen, organisiert nach philosophischen Schulen (Stoisch, Epikureisch, Peripatetisch, Patristisch)",
+        "level2": "503 individuelle Entitätsknoten (Philosophen, Konzepte, Argumente, Werke)"
+      },
+      "bridge": {
+        "title": "2. Kürzester-Pfad-Brückenerkennung",
+        "algorithm": "Algorithmus 2 aus Papier: Für jede abgerufene Community wählen wir die Top-m-Schlüsselentitäten (m=2), dann berechnen wir kürzeste Pfade zwischen Entitäten aus verschiedenen Communities.",
+        "impact": "Auswirkung: Bietet 38-83% Recall-Abdeckung von lokalem und globalem Wissen und schafft semantische Ketten, die philosophische Schulen verbinden."
+      },
+      "perCommunity": {
+        "title": "3. Pro-Community-Schlüsselentitätsauswahl",
+        "description": "Anstatt Top-k-Entitäten insgesamt auszuwählen, wählen wir Top-m-Entitäten pro Community (m=2, wie im Papier empfohlen). Dies gewährleistet eine vielfältige Abdeckung über philosophische Schulen hinweg, anstatt einer Überrepräsentation dominanter Communities."
+      },
+      "threeLevel": {
+        "title": "4. Dreistufiges Retrieval",
+        "description": "Jede Abfrage ruft Wissen auf allen drei Ebenen gleichzeitig ab und kombiniert sie dann für umfassenden Kontext, der von spezifischen Textdetails bis zu breiten historischen Mustern reicht."
+      }
+    },
+    "adaptations": {
+      "title": "Unsere Anpassungen & Verbesserungen",
+      "keyDifference": "Hauptunterschied: Vorberechnete hochwertige Zusammenfassungen",
+      "summariesIntro": "Während das Papier Zusammenfassungen dynamisch mit DeepSeek-V3 generiert, verwenden wir vorberechnete Zusammenfassungen, erstellt mit:",
+      "opus": "Modernste Argumentation und Nuancierung",
+      "gpt5": "Maximale Qualität der Sprachgenerierung",
+      "humanReview": "Menschliche Überprüfung",
+      "humanReviewDesc": "Alle Zusammenfassungen validiert durch Domänenexperten (Romain Girardi)",
+      "whyTitle": "Warum diese Anpassung?",
+      "quality": {
+        "title": "Überlegene Qualität",
+        "description": "Opus & GPT-5 > DeepSeek-V3 in Argumentationstiefe und wissenschaftlicher Genauigkeit"
+      },
+      "consistency": {
+        "title": "Konsistenz",
+        "description": "Dieselben hochwertigen Zusammenfassungen für jede Abfrage vs. variable dynamische Generierung"
+      },
+      "performance": {
+        "title": "Leistung",
+        "description": "Kein Generierungs-Overhead; Zusammenfassungen werden sofort aus vorberechnetem Speicher geladen"
+      },
+      "rigor": {
+        "title": "Wissenschaftliche Strenge",
+        "description": "Menschlich überprüfte Zusammenfassungen gewährleisten Genauigkeit für akademische Forschung"
+      },
+      "notImplemented": "Was wir nicht implementiert haben (& Warum)",
+      "gmm": {
+        "title": "❌ GMM-Clustering",
+        "description": "Gaussian Mixture Models des Papiers → Wir verwenden Leiden-Algorithmus (besser für graphstrukturierte Daten)"
+      },
+      "sparsity": {
+        "title": "❌ Cluster-Sparsity-Stopping",
+        "description": "Iterative Konvergenz des Papiers → Wir haben eine feste 3-stufige vorberechnete Hierarchie (praktischer)"
+      },
+      "metaAttributes": {
+        "title": "❌ Meta-Attribute",
+        "description": "Explizite Meta-Zusammenfassungen des Papiers → Bereits implizit in unserem Knotentypensystem (Person, Konzept, Argument, Werk)"
+      },
+      "netResult": "🎯 Nettoresultat",
+      "netResultDescription": "Wir implementieren die algorithmischen Kerninnovationen des Papiers (Kürzester-Pfad-Brücken, Pro-Community-Auswahl, hierarchisches Retrieval), während wir die Zusammenfassungsqualitätsbasislinie durch vorberechnete expertenvalidierte Inhalte verbessern. Dies gibt uns die strukturellen Vorteile des Papiers mit höherwertiger Wissensdarstellung."
+    },
+    "technical": {
+      "title": "Technische Implementierung",
+      "architectureTitle": "Architekturüberblick",
+      "backendService": "Backend-Dienst",
+      "backendServiceDesc": "Implementiert HiRAGService mit hierarchischer Indexierung, Kürzester-Pfad-Brückenerkennung und dreistufigem Retrieval",
+      "summaryLoader": "Zusammenfassungslader",
+      "summaryLoaderDesc": "Lädt vorberechnete Opus/GPT-5-Zusammenfassungen aus hierarchical_communities_opus.json",
+      "apiEndpoints": "API-Endpunkte",
+      "apiEndpointsDesc": "Bietet 6 RESTful-Endpunkte einschließlich /query, /query/stream, /communities, /bridges",
+      "queryModes": "Abfragemodi",
+      "modes": {
+        "hi": "Vollständiges hierarchisches Retrieval (alle 3 Ebenen + Brücken)",
+        "hiBridge": "Fokus nur auf Brückenverbindungen",
+        "hiLocal": "Nur Community-lokaler Kontext",
+        "hiGlobal": "Nur globale Zusammenfassungen",
+        "hiNoBridge": "Hierarchisch ohne Brückenknoten"
+      },
+      "performanceMetrics": "Leistungsmetriken",
+      "metrics": {
+        "globalSummaries": "Globale Zusammenfassungen",
+        "communitySummaries": "Community-Zusammenfassungen",
+        "entityNodes": "Entitätsknoten",
+        "bridgeCoverage": "Brücken-Recall-Abdeckung",
+        "responseTime": "Antwortzeit (Durchschn.)"
+      },
+      "reproducibility": "🔬 Reproduzierbarkeit",
+      "reproducibilityDesc": "Alle Implementierungsdetails, einschließlich Zusammenfassungsgenerierungs-Prompts und Brückenerkennungsalgorithmen, sind in unserem Open-Source-Repository verfügbar. Die vorberechneten Zusammenfassungen (generiert am 27. Oktober 2025) sind versioniert und können mit demselben Prozess regeneriert werden.",
+      "reproducibilityMetadata": "Zusammenfassungsmetadaten umfassen: verwendetes Modell (gpt-5-high), Autoren (GPT 5-high & Romain Girardi), finaler Prüfer (Romain Girardi) und Generierungszeitstempel für vollständige Transparenz."
+    },
+    "comparison": {
+      "title": "Qualitätsvergleich & Erwartete Leistung",
+      "table": {
+        "feature": "Merkmal",
+        "paperHiRAG": "Papiers HiRAG",
+        "ourImplementation": "Unsere Implementierung",
+        "impact": "Auswirkung",
+        "hierarchicalStructure": "Hierarchische Struktur",
+        "multiLayer": "✅ Mehrschichtig (GMM)",
+        "threeLevels": "✅ 3 Ebenen (Leiden)",
+        "equivalent": "Äquivalent",
+        "shortestPath": "Kürzester-Pfad-Brücken",
+        "algorithm2": "✅ Algorithmus 2",
+        "implemented": "✅ Implementiert",
+        "perCommunity": "Pro-Community-Auswahl",
+        "summaryQuality": "Zusammenfassungsqualität",
+        "higher": "Höher",
+        "humanReview": "Menschliche Überprüfung",
+        "none": "❌ Keine",
+        "expertValidated": "✅ Expertenvalidiert",
+        "stability": "Produktionsstabilität",
+        "dynamic": "⚠️ Dynamisch",
+        "preComputed": "✅ Vorberechnet"
+      },
+      "expectedPerformance": "📊 Erwartete Leistung",
+      "performanceIntro": "Basierend auf der Ablationsstudie des Papiers (Tabelle 3) sollte unsere Implementierung erreichen:",
+      "winRate": "54-64% Gewinnrate vs. Standard-GraphRAG (volle HiRAG-Vorteile)",
+      "recallCoverage": "38-83% Recall-Abdeckung aus Brückenwissen (Tabelle 2 des Papiers)",
+      "higherQuality": "Potenziell höher als Papier aufgrund überlegener Zusammenfassungsqualität (Opus > DeepSeek)",
+      "consistency": "Konsistentere Antworten aufgrund vorberechneter vs. dynamischer Generierung",
+      "academicNote": "🎓 Hinweis zur akademischen Integrität",
+      "academicNoteText": "Diese Implementierung reproduziert getreu die algorithmischen Kernbeiträge der HiRAG-Architektur von Huang et al., während die Zusammenfassungsgenerierungskomponente für Produktionsqualität und wissenschaftliche Strenge angepasst wird. Alle Anpassungen sind hier und in unserer Codebasis klar dokumentiert. Wir würdigen die Innovationen des Originalpapers und empfehlen, sowohl das Originalwerk als auch unsere Implementierung zu zitieren, wenn auf dieses System verwiesen wird."
+    },
+    "summary": {
+      "title": "Zusammenfassung",
+      "tookFromPaper": "Was wir aus dem Papier übernommen haben",
+      "tookFromPaperText": "Hierarchische Wissensstruktur, Kürzester-Pfad-Brückenerkennung (Algorithmus 2), Pro-Community-Schlüsselentitätsauswahl und dreistufige Retrieval-Architektur.",
+      "adapted": "Was wir angepasst haben",
+      "adaptedText": "Vorberechnete expertenvalidierte Zusammenfassungen (Opus + GPT-5 + menschliche Überprüfung) anstelle dynamischer DeepSeek-Generierung, die höhere Qualität und Konsistenz gewährleistet.",
+      "why": "Warum",
+      "whyText": "Dies gibt uns die strukturellen Innovationen des Papiers mit überlegener Wissensdarstellung und kombiniert modernste Retrieval-Algorithmen mit domänenexpertischer wissenschaftlicher Strenge."
+    }
+  },
+  "kg": {
+    "title": "Wissensgraph-Visualisierer",
+    "loadingGraph": "Wissensgraph wird geladen...",
+    "statsDisplay": "2.159 Knoten · 7.856 Kanten",
+    "failedToLoad": "Graph konnte nicht geladen werden",
+    "openFilters": "Filter öffnen",
+    "openHelp": "Hilfe und Informationen öffnen",
+    "commands": "Befehle",
+    "nodes": "Knoten",
+    "edges": "Kanten",
+    "layout": "Layout",
+    "export": "Exportieren",
+    "details": "Knotendetails",
+    "of": "von",
+    "displayed": "Knoten angezeigt",
+    "warning": "Graph kann schwer lesbar sein",
+    "optimal": "Optimale Lesbarkeit",
+    "controls": "Graph-Steuerung",
+    "all": "Alle",
+    "none": "Keine",
+    "nodeTypes": {
+      "title": "Knotentypen",
+      "concept": "Konzept",
+      "person": "Person",
+      "persons": "Personen",
+      "work": "Werk",
+      "works": "Werke",
+      "school": "Schule",
+      "argument": "Argument",
+      "arguments": "Argumente",
+      "debate": "Debatte",
+      "debates": "Debatten",
+      "concepts": "Konzepte",
+      "schools": "Schulen"
+    },
+    "layoutAlgorithm": "Layout-Algorithmus",
+    "layouts": {
+      "schoolClusters": "Schulcluster (empfohlen)",
+      "semanticMap": "Semantische Karte (KI)",
+      "temporal": "Temporal (Zeitleiste)",
+      "hierarchical": "Hierarchisch",
+      "circular": "Kreisförmig",
+      "grid": "Raster"
+    },
+    "edgeCurveStyle": "Kantenkurvenstil",
+    "edgeStyles": {
+      "bezier": "Bezier (glatt)",
+      "taxi": "Taxi (Manhattan)",
+      "straight": "Gerade",
+      "segments": "Segmente"
+    },
+    "edgeColorLegend": "Kantenfarb-Legende",
+    "edgeTypes": {
+      "influence": "Einflussbeziehungen",
+      "mentions": "Erwähnungen",
+      "criticisms": "Kritiken",
+      "other": "Andere Beziehungen"
+    },
+    "graphComplexity": "Graph-Komplexität",
+    "focusMode": "Fokusmodus",
+    "connectionDistance": "Verbindungsdistanz",
+    "hops": {
+      "one": "1 Sprung",
+      "two": "2 Sprünge",
+      "three": "3 Sprünge"
+    },
+    "maximumNodes": "Maximale Knoten:",
+    "minimumConnections": "Minimale Verbindungen:",
+    "displayOptions": "Anzeigeoptionen",
+    "showNodeLabels": "Knotenbeschriftungen anzeigen",
+    "showEdgeLabels": "Kantenbeschriftungen anzeigen",
+    "onHoverOnly": "Nur beim Überfahren",
+    "nodeColoring": "Knotenfärbung",
+    "colorBy": {
+      "type": "Nach Typ",
+      "community": "Nach Community"
+    },
+    "communityDetection": "Erweitert: Community-Erkennung",
+    "algorithm": "Algorithmus",
+    "algorithms": {
+      "auto": "Automatisch (empfohlen)",
+      "leiden": "Leiden-Algorithmus",
+      "louvain": "Louvain-Methode",
+      "labelProp": "Label-Propagation"
+    },
+    "tips": {
+      "title": "Tipps:",
+      "clickNodes": "Klicken Sie auf Knoten, um Details anzuzeigen",
+      "dragNodes": "Ziehen Sie Knoten, um sie neu zu positionieren",
+      "scrollZoom": "Scrollen Sie zum Zoomen",
+      "commandK": "Drücken Sie ⌘K für die Suche"
+    },
+    "nodeDetail": {
+      "description": "Beschreibung",
+      "position": "Position zur Willensfreiheit",
+      "terminology": "Terminologie",
+      "greek": "Griechisch",
+      "latin": "Lateinisch",
+      "english": "Englisch",
+      "ancientSources": "Antike Quellen",
+      "modernScholarship": "Moderne Forschung",
+      "relationships": "Beziehungen",
+      "actions": "Aktionen",
+      "checking": "Überprüfung läuft...",
+      "openText": "Text öffnen",
+      "textNotAvailable": "Text nicht verfügbar",
+      "copyCitation": "Zitat kopieren",
+      "copied": "Kopiert!",
+      "viewConnections": "Verbindungen anzeigen",
+      "viewDatabase": "Datenbank anzeigen",
+      "nodeId": "Knoten-ID:",
+      "category": "Kategorie:"
+    }
+  },
+  "about": {
+    "title": "Über",
+    "projectTitle": "Über das Projekt",
+    "projectIntro": "(Ἐλευθερία = Freiheit + IA = Intelligence Artificielle) entstand aus dem Bedürfnis nach einer umfassenden, strukturierten Datenbank zur Dokumentation antiker philosophischer Debatten über freien Willen, Schicksal und moralische Verantwortung. Diese Forschungsinfrastruktur wurde im Rahmen einer Doktorarbeit an der Université Côte d'Azur entwickelt, die untersucht, wie frühchristliche Autoren menschliche Freiheit und Handlungsfähigkeit konzeptualisierten.",
+    "projectContext": "Bei der Untersuchung des Begriffs des freien Willens bei den ersten christlichen Autoren wurde deutlich, dass vorhandene Ressourcen die systematische Struktur fehlten, die für Computeranalysen und Kreuzverweisforschung notwendig ist. Die philosophische Landschaft vom klassischen griechischen Denken (4. Jh. v. Chr.) bis zur Spätantike (6. Jh. n. Chr.) ist unglaublich reich, mit komplexen Netzwerken von Einfluss, Argumentation und konzeptioneller Evolution, die traditionelle bibliographische Ansätze kaum erfassen können.",
+    "projectDetails": "Diese Datenbank stellt eine unabhängige Bemühung dar, diese Lücke zu schließen. Jeder Knoten, jede Kante und jedes Zitat wurde sorgfältig recherchiert und gegen antike Quellen und moderne Forschung verifiziert. Das Projekt integriert 2.159 philosophische Entitäten (Personen, Werke, Konzepte, Argumente), die durch 7.856 Beziehungen verbunden sind, zusammen mit 151 antiken Werken (14.623 Passagen) mit vollständiger Lemmatisierungsunterstützung.",
+    "projectGoal": "Das Ziel ist es, Forschern, Studierenden und allen, die sich für antike Philosophie interessieren, eine FAIR-konforme (Findable, Accessible, Interoperable, Reusable) Ressource bereitzustellen, die traditionelle philologische Strenge mit modernen Computerfähigkeiten kombiniert. Die Integration von GraphRAG (Graph-based Retrieval-Augmented Generation) ermöglicht semantische Suche und Fragebeantwortung bei gleichzeitiger Aufrechterhaltung vollständiger Provenienz und Zitatverfolgung.",
+    "projectNote": "Hinweis: Diese Datenbank stellt eine persönliche Forschungsinitiative dar. Alle Aspekte – von der Konzeptualisierung und philologischen Arbeit über Datenkuration, technische Umsetzung bis hin zum Interface-Design – wurden individuell zur Unterstützung der Doktorarbeitsanforderungen durchgeführt.",
+    "authorTitle": "Über den Autor",
+    "authorName": "Romain Girardi",
+    "authorTitle2": "Doktorand in Alten Sprachen und Literatur / Theologie",
+    "authorBio": "Romain Girardi ist Doktorand in einem gemeinsamen Promotionsprogramm (cotutelle internationale) zwischen der **Université Côte d'Azur** und der **Université de Genève** (seit Januar 2024), unter der Betreuung von Prof. Arnaud Zucker (CEPAM, UMR 7264) und Prof. Andreas Dettwiler (Faculté autonome de théologie protestante). Seine Dissertation untersucht das Entstehen und die Konzeptualisierung des freien Willens bei frühchristlichen Autoren und erforscht, warum Bezüge zur menschlichen Freiheit in der christlichen Literatur des 2. Jahrhunderts n. Chr. vermehrt auftreten, obwohl sie in biblischen Texten fehlen und in früheren philosophischen Werken relativ selten sind.",
+    "researchInterests": "Forschungsinteressen",
+    "interest1": "Antike Handlungsphilosophie und moralische Verantwortung",
+    "interest2": "Stoische und peripatetische Theorien des Determinismus und der Freiheit",
+    "interest3": "Frühchristliche theologische Anthropologie",
+    "interest4": "Paulinische Exegese und patristische Rezeption",
+    "interest5": "Begriffsgeschichte und Terminologieentwicklung (Griechisch zu Lateinisch)",
+    "interest6": "Digital Humanities und Wissensgraph-Ansätze für antike Texte",
+    "academicBackground": "Akademischer Werdegang",
+    "degree1": "Gemeinsame Promotion in Alten Sprachen und Literatur (UniCA) / Theologie (UNIGE) (2024–heute)",
+    "degree2": "Agrégation-Vorbereitungsdiplom (2020)",
+    "degree3": "Master in Klassischer Philologie, mit Auszeichnung (2019)",
+    "degree4": "Bachelor in Klassischer Philologie, mit Auszeichnung (2017)",
+    "implementationTitle": "Umsetzung & Technische Infrastruktur",
+    "poweredByHiRAG": "Betrieben durch HiRAG-Technologie",
+    "hiragDesc": "Diese Datenbank implementiert HiRAG (Hierarchical Retrieval-Augmented Generation), das GraphRAG erweitert, indem es Wissen über Abstraktionsebenen organisiert. Anstatt alle Knoten gleich zu behandeln, respektiert HiRAG die natürliche Hierarchie: Autoren schreiben Werke, Werke diskutieren Konzepte, Konzepte erscheinen in Debatten. Dieses mehrstufige Argumentieren produziert nuanciertere wissenschaftliche Antworten mit korrekter Zuschreibung.",
+    "philologicalWork": "Philologische Arbeit",
+    "philoDesc": "Alle griechischen und lateinischen Texte durchlaufen manuelle Überprüfung. Die Lemmatisierung nutzt LAULA (Lateinisch) und PAULA (Griechisch) morphologische Analysatoren, um lemmabasierte Suche zu ermöglichen. Jeder Wissensgraph-Knoten ist in Primärquellen (antike Texte) oder Sekundärliteratur (moderne Forschung) mit vollständiger bibliographischer Provenienz verankert.",
+    "technicalInfra": "Technische Infrastruktur",
+    "techStack": "React 19 + TypeScript + Vite + Tailwind CSS Frontend, FastAPI + Python Backend, PostgreSQL (strukturierte Daten) + Qdrant (Vektor-Embeddings), Cytoscape.js für Netzwerkvisualisierung, GraphRAG-Pipeline mit Gemini API, Cloudflare Workers (Produktionsdeployment)"
+  },
+  "login": {
+    "title": "Bei Ihrem Konto anmelden",
+    "subtitle": "Zugriff auf die Datenbank zur antiken Willensfreiheit",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "usernamePlaceholder": "Benutzername eingeben",
+    "passwordPlaceholder": "Passwort eingeben",
+    "signingIn": "Anmeldung läuft...",
+    "signIn": "Anmelden",
+    "demoAccounts": "Demo-Konten",
+    "admin": "Admin:",
+    "researcher": "Forscher:",
+    "footerText": "Datenbank zur antiken Willensfreiheit • EleutherIA Research",
+    "authRequired": "Authentifizierung erforderlich",
+    "authRequiredMessage": "Bitte melden Sie sich an, um diese Funktion zu nutzen",
+    "loginFailed": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "cancel": "Abbrechen"
+  },
+  "pwa": {
+    "installBanner": {
+      "install": "EleutherIA als App installieren",
+      "shortMessage": "EleutherIA für Offline-Zugriff installieren",
+      "fullMessage": "Installieren Sie EleutherIA auf Ihrem Gerät für schnelleren Zugriff und Offline-Lesen antiker Texte",
+      "installButton": "App installieren",
+      "dismiss": "Installationsbanner schließen"
+    },
+    "offlineIndicator": {
+      "offline": "Sie sind offline",
+      "online": "Online",
+      "status": "Online-Status"
+    }
+  },
+  "evidenceChain": {
+    "title": "Evidenzketten",
+    "subtitle": "Verfolgt, wie Behauptungen mit antiken Quellen und moderner Forschung verbunden sind",
+    "confidence": "Konfidenz",
+    "ancientSourcesCount": "antike Quelle",
+    "ancientSourcesCount_plural": "antike Quellen",
+    "modernSourcesCount": "moderne Quelle",
+    "modernSourcesCount_plural": "moderne Quellen",
+    "kgNodesLabel": "Wissensgraph-Knoten",
+    "ancientSourcesLabel": "Antike Quellen",
+    "modernScholarshipLabel": "Moderne Forschung",
+    "evidencePathLabel": "Evidenzpfad:",
+    "claim": "Behauptung",
+    "kgNodes": "KG-Knoten",
+    "ancientSources": "Antike Quellen",
+    "modernAnalysis": "Moderne Analyse",
+    "howToRead": "Wie zu lesen:",
+    "howToReadDesc": "Evidenzketten zeigen, wie spezifische Behauptungen in der Antwort durch Wissensgraph-Knoten, antike Texte und moderne Forschung unterstützt werden. Konfidenzbewertungen spiegeln die Stärke der Verbindung zwischen Behauptung und Quellen wider."
+  },
+  "comparisonTool": {
+    "title": "Intelligentes Vergleichswerkzeug",
+    "subtitle": "Vergleichen Sie Philosophen, Argumente und Konzepte nebeneinander",
+    "popularComparisons": "Beliebte Vergleiche",
+    "selectEntities": "Entitäten zum Vergleichen auswählen (2-4)",
+    "searchEntities": "Entitäten suchen...",
+    "compareButton": "{{count}} Entitäten vergleichen",
+    "analyzing": "Analysiere...",
+    "comparisonMatrix": "Vergleichsmatrix",
+    "dimension": "Dimension",
+    "similarities": "Ähnlichkeiten",
+    "differences": "Unterschiede",
+    "scholarlySynthesis": "Wissenschaftliche Synthese"
+  },
+  "credits": {
+    "title": "Mitwirkende und Lizenzierung",
+    "intro": "EleutherIA baut auf der Arbeit vieler Open-Source-Projekte, akademischer Ressourcen und Standards auf. Diese Seite würdigt alle Abhängigkeiten, Datenquellen und die Lizenzen, unter denen dieses Projekt operiert.",
+    "dataSources": "Primäre Datenquellen",
+    "perseus": "Perseus Digital Library",
+    "perseusDesc": "Die grundlegende Quelle für griechische und lateinische klassische Texte. Perseus bietet kanonische CTS URN-Referenzen, kritische Editionen und morphologische Daten, die lemmabasierte Suche ermöglichen.",
+    "scaife": "Scaife Viewer (CTS API)",
+    "scaifeDesc": "Die CTS-API-Spezifikation ermöglicht programmatischen Zugriff auf antike Texte mit standardisierter URN-Adressierung. Scaifes Implementierung bietet JSON-Endpunkte zum Abrufen von Passagen nach Referenz.",
+    "techInfra": "Technische Infrastruktur",
+    "vizTools": "Visualisierungs- und Graph-Werkzeuge",
+    "frontendFramework": "Frontend-Framework",
+    "backendServices": "Backend-Dienste",
+    "devTools": "Entwicklungswerkzeuge und Dienste",
+    "standards": "Standards und Protokolle",
+    "projectLicense": "EleutherIA-Lizenz",
+    "ccBy4": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "ccByDesc": "Alle Originalinhalte in der EleutherIA-Datenbank (Wissensgraph-Knoten, Beziehungen, Annotationen und Metadaten) sind unter CC BY 4.0 lizenziert. Antike Texte behalten ihre ursprünglichen Public-Domain- oder Open-Access-Lizenzen.",
+    "freeToShare": "Sie dürfen:",
+    "share": "Teilen",
+    "shareDesc": "Das Material in jedem Medium oder Format kopieren und weiterverbreiten",
+    "adapt": "Anpassen",
+    "adaptDesc": "Das Material remixen, verändern und darauf aufbauen für jeden Zweck, sogar kommerziell",
+    "underTerms": "Unter folgenden Bedingungen:",
+    "attribution": "Namensnennung",
+    "attributionDesc": "Sie müssen angemessene Urheber- und Rechteangaben machen, einen Link zur Lizenz beifügen und angeben, ob Änderungen vorgenommen wurden",
+    "suggestedCitation": "Vorgeschlagene Zitierweise:",
+    "citationText": "Girardi, R. (2025). EleutherIA: A FAIR-Compliant Knowledge Graph for Ancient Free Will Debates [Data set]. Zenodo. https://doi.org/10.5281/zenodo.17379490",
+    "acknowledgments": "Danksagungen",
+    "thanksIntro": "Besonderer Dank gilt der Open-Source-Community, den Betreuern der Perseus Digital Library und allen Wissenschaftlern, deren Arbeit in dieser Datenbank zitiert wird."
+  },
+  "bibliography": {
+    "title": "Bibliographie moderner Forschung",
+    "subtitle": "Vollständige Bibliographie der im Wissensgraph zitierten Sekundärliteratur",
+    "totalReferences": "Gesamtreferenzen",
+    "filteredResults": "Gefilterte Ergebnisse",
+    "onlineAccess": "Online-Zugriff",
+    "citationCoverage": "Zitatumfang",
+    "searchPlaceholder": "Suchen nach Autor, Titel, Verlag, Jahr...",
+    "allTypes": "Alle Typen",
+    "monographs": "Monographien",
+    "editedVolumes": "Sammelbände",
+    "journalArticles": "Zeitschriftenartikel",
+    "translations": "Übersetzungen",
+    "encyclopediaEntries": "Enzyklopädie-Einträge",
+    "allYears": "Alle Jahre",
+    "allPublishers": "Alle Verlage",
+    "featured": "Hervorgehoben",
+    "mostCited": "Meistzitiert",
+    "byAuthor": "Nach Autor",
+    "byTitle": "Nach Titel",
+    "mostPassages": "Meiste Passagen",
+    "reset": "Zurücksetzen",
+    "references": "Referenzen",
+    "reference": "Referenz",
+    "expandAll": "Alle erweitern",
+    "collapseAll": "Alle einklappen",
+    "access": "Zugriff",
+    "moreAccessOptions": "Weitere Zugriffsoptionen",
+    "howToCite": "Wie diese Datenbank zitiert wird",
+    "citationNote": "Alle oben aufgeführten Referenzen werden in Wissensgraph-Knoten oder Passagenannotationen zitiert. Vollständige bibliographische Details folgen dem Chicago Manual of Style (17. Aufl.)."
+  },
+  "reportError": {
+    "title": "Fehler melden",
+    "intro": "EleutherIA verpflichtet sich den Prinzipien der Open Science und akademischen Integrität. Wenn Sie einen Fehler in der Datenbank gefunden haben (philologisch, bibliographisch oder strukturell), melden Sie ihn bitte mit dem untenstehenden Formular. Ihr Beitrag hilft, die Qualität und Zuverlässigkeit dieser Forschungsinfrastruktur aufrechtzuerhalten.",
+    "howHandled": "Wie Ihre Meldung behandelt wird:",
+    "errorDetails": "Fehlerdetails",
+    "errorType": "Fehlertyp *",
+    "errorTypes": {
+      "philological": "Philologischer Fehler",
+      "bibliographic": "Bibliographischer Fehler",
+      "relationship": "Beziehungsfehler",
+      "metadata": "Metadatenfehler",
+      "technical": "Technisches Problem",
+      "other": "Sonstiges"
+    },
+    "nodeId": "Knoten-/Entitäts-ID (falls zutreffend)",
+    "nodeIdPlaceholder": "z.B. stoic_determinism, person_chrysippus",
+    "edgeId": "Kante/Beziehung (falls zutreffend)",
+    "edgeIdPlaceholder": "z.B. chrysippus → INFLUENCES → epictetus",
+    "description": "Fehlerbeschreibung *",
+    "descriptionPlaceholder": "Beschreiben Sie den Fehler im Detail. Was ist falsch? Was sollte es sein?",
+    "suggestedCorrection": "Vorgeschlagene Korrektur",
+    "correctionPlaceholder": "Wenn Sie die korrekten Informationen kennen, geben Sie sie bitte hier mit Quellen an",
+    "supportingSources": "Unterstützende Quellen",
+    "sourcesPlaceholder": "Zitieren Sie antike Texte, moderne Forschung oder Referenzwerke, die Ihre Korrektur unterstützen",
+    "contactInfo": "Kontaktinformationen (optional)",
+    "name": "Name",
+    "namePlaceholder": "Ihr Name",
+    "email": "E-Mail",
+    "emailPlaceholder": "ihre.email@institution.edu",
+    "orcid": "ORCID iD",
+    "orcidPlaceholder": "0000-0000-0000-0000",
+    "submitReport": "Ihre Meldung einreichen",
+    "githubIssue": "GitHub Issue",
+    "githubDesc": "Bevorzugt zur Nachverfolgung",
+    "emailReport": "E-Mail",
+    "emailDesc": "Direkter Kontakt",
+    "copyClipboard": "In Zwischenablage kopieren",
+    "copyDesc": "Überall einfügen",
+    "guidelines": "Melderichtlinien",
+    "whatToReport": "Was zu melden:",
+    "whatNotToReport": "Was NICHT zu melden:"
+  },
+  "admin": {
+    "title": "Admin-Dashboard",
+    "overview": "Übersicht",
+    "statistics": "Datenbankstatistiken",
+    "dataQuality": "Datenqualität",
+    "performance": "Leistung",
+    "recentActivity": "Aktuelle Aktivität",
+    "healthChecks": "Gesundheitschecks",
+    "lemmatizationCoverage": "Lemmatisierungsabdeckung",
+    "nodesWithSources": "Knoten mit Quellen",
+    "validUrns": "Gültige CTS URNs",
+    "avgResponseTime": "Durchschn. Antwortzeit",
+    "errorRate": "Fehlerrate",
+    "cacheHitRate": "Cache-Trefferrate",
+    "authRequired": "Authentifizierung erforderlich",
+    "authRequiredDesc": "Bitte melden Sie sich an, um auf das Admin-Dashboard zuzugreifen.",
+    "refreshMetrics": "Metriken aktualisieren",
+    "overall": "Gesamt:",
+    "kgNodes": "KG-Knoten",
+    "kgEdges": "KG-Kanten",
+    "ancientWorks": "Antike Werke",
+    "passagesCount": "Passagen",
+    "overallScore": "Gesamtbewertung",
+    "qualityIssues": "Qualitätsprobleme",
+    "criticalIssues": "Kritische Probleme",
+    "warnings": "Warnungen",
+    "totalIssues": "Gesamtprobleme",
+    "componentScores": "Komponentenbewertungen",
+    "worksByLanguage": "Werke nach Sprache",
+    "worksByPeriod": "Werke nach Zeitraum"
+  },
+  "community": {
+    "title": "Community",
+    "submitCorrection": "Korrektur einreichen",
+    "contributionForm": "Beitragsformular",
+    "nodeToEdit": "Zu bearbeitender Knoten",
+    "proposedChange": "Vorgeschlagene Änderung",
+    "justification": "Begründung",
+    "sources": "Unterstützende Quellen",
+    "submit": "Zur Überprüfung einreichen",
+    "thankYou": "Vielen Dank für Ihren Beitrag!",
+    "pendingReview": "Ihre Einreichung wird überprüft.",
+    "submitAnother": "Eine weitere Korrektur einreichen",
+    "pageIntro": "Helfen Sie mit, die EleutherIA-Datenbank zu verbessern, indem Sie Korrekturen, Ergänzungen oder Vorschläge einreichen. Alle Beiträge werden von unserem Wissenschaftsteam überprüft, bevor sie integriert werden.",
+    "guidelinesIntro": "Ihr Beitrag hilft, die wissenschaftliche Integrität der EleutherIA-Datenbank aufrechtzuerhalten. Wir werden Ihre Einreichung überprüfen und Sie kontaktieren, wenn wir zusätzliche Informationen benötigen.",
+    "guidelinesTitle": "Beitragsrichtlinien",
+    "guideline1": "Alle Korrekturen müssen in antiken Quellen oder moderner Forschung mit spezifischen Zitaten begründet sein.",
+    "guideline2": "Bei griechischen/lateinischen Textkorrekturen geben Sie genaue Referenzen an (CTS URN, Passagen-ID, usw.).",
+    "guideline3": "Begründen Sie Ihre vorgeschlagenen Änderungen mit wissenschaftlicher Argumentation.",
+    "guideline4": "Beiträge werden innerhalb von 2-3 Werktagen überprüft.",
+    "whatCorrecting": "Was korrigieren Sie?",
+    "kgNode": "Wissensgraph-Knoten",
+    "ancientPassage": "Antike Passage",
+    "workMetadata": "Werk-Metadaten",
+    "targetIdPlaceholder": "z.B. stoic_determinism, urn:cts:greekLit:..., oder Seiten-URL",
+    "changeType": "Änderungstyp",
+    "correction": "Korrektur (Fehler beheben)",
+    "addition": "Ergänzung (fehlende Information hinzufügen)",
+    "removal": "Entfernung (falsche Daten entfernen)",
+    "proposedChangeDesc": "Beschreiben Sie die spezifische Änderung, die Sie vorschlagen. Seien Sie so detailliert wie möglich.",
+    "justificationDesc": "Warum ist diese Änderung notwendig? Welche Evidenz unterstützt sie?",
+    "sourcesPlaceholder": "Listen Sie Ihre Quellen auf (z.B. Bobzien 1998, S. 234-256; SVF 3.191; Perseus TLG-Datenbank)",
+    "sourcesHint": "Geben Sie vollständige bibliographische Details für alle zitierten Quellen an.",
+    "contactEmail": "Kontakt-E-Mail",
+    "emailInputPlaceholder": "ihre.email@institution.edu",
+    "emailHint": "Wir kontaktieren Sie, wenn wir Klärung benötigen oder Sie über das Ergebnis informieren möchten.",
+    "submitting": "Wird eingereicht...",
+    "noteTitle": "Hinweis:",
+    "noteText": "Alle akzeptierten Beiträge werden in unseren Danksagungen genannt. Mit der Einreichung stimmen Sie zu, dass Ihr Beitrag unter der CC BY 4.0-Lizenz in die EleutherIA-Datenbank integriert werden kann.",
+    "authRequired": "Authentifizierung erforderlich",
+    "authRequiredDesc": "Bitte melden Sie sich an, um Ihr Profil anzuzeigen.",
+    "badgesTitle": "Abzeichen",
+    "totalContributions": "Gesamtbeiträge",
+    "approved": "Genehmigt",
+    "pendingReviewShort": "In Überprüfung",
+    "noContributions": "Noch keine Beiträge.",
+    "makeFirst": "Leisten Sie Ihren ersten Beitrag",
+    "badges": {
+      "bronze": "Bronze-Beitragender",
+      "silver": "Silber-Beitragender",
+      "gold": "Gold-Beitragender"
+    },
+    "profile": {
+      "contributions": "Beiträge",
+      "joinDate": "Mitglied seit",
+      "researchInterests": "Forschungsinteressen"
+    },
+    "newsletter": {
+      "title": "Bleiben Sie auf dem Laufenden",
+      "description": "Erhalten Sie monatliche Updates zu neuen Funktionen und Top-Beiträgen.",
+      "emailPlaceholder": "Ihre E-Mail eingeben",
+      "subscribe": "Abonnieren"
+    }
+  },
+  "citationNetwork": {
+    "title": "Zitatnetzwerk-Analytik",
+    "subtitle": "Analysieren Sie Einflussmuster und Zitatnetzwerke über 1200 Jahre philosophischer Debatte",
+    "influenceScores": "Einflussbewertungen",
+    "temporalFlow": "Zeitliche Entwicklung",
+    "clusters": "Zitatcluster",
+    "bridges": "Brückenfiguren",
+    "topInfluential": "Einflussreichste Autoren",
+    "exportGephi": "Für Gephi exportieren",
+    "totalNodes": "Gesamtknoten",
+    "totalEdges": "Gesamtkanten",
+    "rank": "Rang",
+    "node": "Knoten",
+    "type": "Typ",
+    "period": "Zeitraum",
+    "school": "Schule",
+    "score": "Bewertung",
+    "inOut": "Ein/Aus",
+    "clusterTitle": "Cluster #{{id}}",
+    "nodesCount": "{{count}} Knoten",
+    "sampleNodes": "Beispielknoten:",
+    "bridgeScore": "Brückenbewertung: {{score}}",
+    "connectedSchools": "Verbundene Schulen ({{count}})",
+    "connectedPeriods": "Verbundene Zeiträume ({{count}})",
+    "bridgeDescription": "Philosophen und Konzepte, die verschiedene Schulen und Zeiträume verbinden und traditionsübergreifenden Dialog ermöglichen.",
+    "temporalFlowTitle": "Zeitlicher Einflussfluss",
+    "temporalDescription": "Einflussreichste Knoten nach Jahrhundert, Verfolgung der Evolution philosophischen Einflusses im Laufe der Zeit.",
+    "centuryBCE": "{{century}}. Jahrhundert v. Chr.",
+    "centuryCE": "{{century}}. Jahrhundert n. Chr."
+  },
+  "database": {
+    "title": "Datenbankschema",
+    "subtitle": "EleutherIA-Datenbankstruktur und -beziehungen",
+    "schema": "Schema-Visualisierung",
+    "tables": "Datenbanktabellen",
+    "relationships": "Tabellenbeziehungen"
+  },
+  "footer": {
+    "about": "Über EleutherIA",
+    "aboutText": "Ein FAIR-konformer Wissensgraph zur Dokumentation antiker Debatten über freien Willen, Schicksal und moralische Verantwortung von der klassischen griechischen Philosophie bis zur Spätantike.",
+    "data": "Daten",
+    "citation": "Zitierweise",
+    "license": "Lizenziert unter",
+    "copyright": "© {{year}} Romain Girardi"
+  },
+  "common": {
+    "loading": "Lädt...",
+    "error": "Ein Fehler ist aufgetreten",
+    "retry": "Erneut versuchen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Vorherige",
+    "yes": "Ja",
+    "no": "Nein",
+    "confirm": "Bestätigen",
+    "language": "Sprache",
+    "selectLanguage": "Sprache auswählen",
+    "viewDetails": "Details anzeigen",
+    "moreInfo": "Weitere Informationen",
+    "showMore": "Mehr anzeigen",
+    "showLess": "Weniger anzeigen",
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "download": "Herunterladen",
+    "upload": "Hochladen",
+    "search": "Suchen",
+    "clear": "Löschen",
+    "apply": "Anwenden",
+    "select": "Auswählen",
+    "deselect": "Abwählen",
+    "selectAll": "Alle auswählen",
+    "deselectAll": "Alle abwählen",
+    "actions": "Aktionen",
+    "options": "Optionen",
+    "settings": "Einstellungen",
+    "help": "Hilfe",
+    "info": "Information",
+    "warning": "Warnung",
+    "success": "Erfolg",
+    "copied": "In Zwischenablage kopiert",
+    "copyFailed": "Kopieren fehlgeschlagen"
+  },
+  "accessibility": {
+    "skipToContent": "Zum Hauptinhalt springen",
+    "skipToNav": "Zur Navigation springen",
+    "pageLoading": "Seite wird geladen",
+    "navigatedTo": "Navigiert zu {{page}}",
+    "menuOpened": "Menü geöffnet",
+    "menuClosed": "Menü geschlossen",
+    "tourStarted": "Interaktive Tour gestartet",
+    "tourEnded": "Interaktive Tour beendet",
+    "expandPanel": "Panel erweitern",
+    "collapsePanel": "Panel einklappen",
+    "openDialog": "Dialog öffnen",
+    "closeDialog": "Dialog schließen"
+  },
+  "errors": {
+    "notFound": "Seite nicht gefunden",
+    "notFoundDesc": "Die gesuchte Seite existiert nicht.",
+    "serverError": "Serverfehler",
+    "serverErrorDesc": "Auf unserer Seite ist etwas schief gelaufen. Bitte versuchen Sie es später erneut.",
+    "networkError": "Netzwerkfehler",
+    "networkErrorDesc": "Verbindung zum Server nicht möglich. Bitte überprüfen Sie Ihre Internetverbindung.",
+    "unauthorized": "Bitte melden Sie sich an, um fortzufahren",
+    "unauthorizedDesc": "Sie müssen angemeldet sein, um auf diese Seite zuzugreifen.",
+    "forbidden": "Zugriff verweigert",
+    "forbiddenDesc": "Sie haben keine Berechtigung, auf diese Ressource zuzugreifen.",
+    "validationError": "Validierungsfehler",
+    "requiredField": "Dieses Feld ist erforderlich",
+    "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+    "invalidUrl": "Bitte geben Sie eine gültige URL ein",
+    "tryAgain": "Erneut versuchen",
+    "goHome": "Zur Startseite",
+    "contactSupport": "Support kontaktieren",
+    "general": {
+      "title": "Etwas ist schief gelaufen",
+      "description": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "network": {
+      "title": "Verbindungsproblem",
+      "description": "Verbindung zum Server nicht möglich. Bitte überprüfen Sie Ihre Internetverbindung."
+    },
+    "permission": {
+      "title": "Zugriff verweigert",
+      "description": "Sie haben keine Berechtigung, diesen Inhalt anzuzeigen."
+    },
+    "notFoundError": {
+      "title": "Nicht gefunden",
+      "description": "Die gesuchte Seite existiert nicht oder wurde verschoben."
+    },
+    "server": {
+      "title": "Serverfehler",
+      "description": "Der Server hat einen Fehler festgestellt. Bitte versuchen Sie es später erneut."
+    },
+    "errorDetails": "Fehlerdetails",
+    "stackTrace": "Stack-Trace",
+    "actions": {
+      "goBack": "Zurück",
+      "tryAgain": "Erneut versuchen",
+      "goHome": "Zur Startseite",
+      "logIn": "Anmelden"
+    },
+    "boundary": {
+      "title": "Anwendungsfehler",
+      "description": "Die Anwendung hat einen unerwarteten Fehler festgestellt. Wir entschuldigen uns für die Unannehmlichkeiten."
+    },
+    "toast": {
+      "defaultTitle": "Fehler",
+      "closeLabel": "Schließen"
+    }
+  },
+  "empty": {
+    "noResults": {
+      "title": "Keine Ergebnisse gefunden",
+      "withQuery": "Wir konnten keine Ergebnisse für \"{{query}}\" finden. Versuchen Sie, Ihre Suchbegriffe anzupassen.",
+      "withoutQuery": "Versuchen Sie, Ihre Filter oder Suchbegriffe anzupassen."
+    },
+    "noData": {
+      "title": "Noch keine {{entity}}",
+      "description": "{{entity}} werden hier angezeigt, sobald sie hinzugefügt wurden."
+    },
+    "inbox": {
+      "title": "Posteingang ist leer",
+      "description": "Alles erledigt! Keine neuen Nachrichten zum Anzeigen."
+    },
+    "noContent": {
+      "title": "Keine {{type}} verfügbar",
+      "description": "Beginnen Sie damit, einige {{type}} hinzuzufügen, um sie hier zu sehen."
+    },
+    "folder": {
+      "titleWithName": "{{folderName}} ist leer",
+      "titleDefault": "Ordner ist leer",
+      "description": "Noch keine Dateien in diesem Ordner."
+    },
+    "members": {
+      "title": "Keine Teammitglieder",
+      "description": "Laden Sie Teammitglieder ein, um an diesem Projekt zusammenzuarbeiten."
+    },
+    "comments": {
+      "title": "Noch keine Kommentare",
+      "description": "Beginnen Sie die Konversation, indem Sie den ersten Kommentar hinzufügen."
+    },
+    "events": {
+      "title": "Keine bevorstehenden Ereignisse",
+      "description": "Ihr Kalender ist leer. Planen Sie ein Ereignis, um zu beginnen."
+    },
+    "texts": {
+      "title": "Keine antiken Texte gefunden",
+      "description": "Keine Texte entsprechen Ihren aktuellen Filtern. Versuchen Sie, Ihre Suchkriterien anzupassen."
+    },
+    "philosophers": {
+      "title": "Keine Philosophen gefunden",
+      "withPeriod": "Keine Philosophen für den Zeitraum {{period}} gefunden.",
+      "withoutPeriod": "Keine Philosophen entsprechen Ihren aktuellen Filtern."
+    },
+    "citations": {
+      "title": "Keine Zitate gefunden",
+      "description": "Keine Zitate für diese Passage oder dieses Konzept verfügbar."
+    },
+    "actions": {
+      "clearSearch": "Suche löschen",
+      "addEntity": "{{entity}} hinzufügen",
+      "addType": "{{type}} hinzufügen",
+      "uploadFiles": "Dateien hochladen",
+      "inviteMembers": "Mitglieder einladen",
+      "addComment": "Kommentar hinzufügen",
+      "createEvent": "Ereignis erstellen",
+      "exploreTexts": "Alle Texte erkunden",
+      "clearFilters": "Filter löschen",
+      "searchTexts": "Texte suchen"
+    }
+  },
+  "notFound": {
+    "title": "Sie scheinen sich verirrt zu haben",
+    "message": "Die von Ihnen gesuchte Seite ist nicht verfügbar!",
+    "goHome": "Zur Startseite"
+  },
+  "mobileNav": {
+    "home": "Startseite",
+    "search": "Suche",
+    "graph": "Graph",
+    "qa": "Fragen & Antworten",
+    "texts": "Texte",
+    "ariaLabel": "Mobile Navigation",
+    "moreOptions": "Weitere Optionen",
+    "more": "Mehr",
+    "fab": "Schwebendes Aktionsmenü"
+  },
+  "citation": {
+    "ancientSource": "Antike Quelle",
+    "modernScholarship": "Moderne Forschung",
+    "original": "Original",
+    "englishTranslation": "Englische Übersetzung"
+  },
+  "workspace": {
+    "title": "Wissensgraph-Observatorium",
+    "itemsCount": "{{count}} Einträge",
+    "description": "Koordinierte Ansichten der Datenbank zur antiken Willensfreiheit zeigen den historischen Verlauf der Argumente auf, verfolgen textuelle Belege und offenbaren Rezeptionsdynamiken, ohne in einem kräftegeleiteten Gewirr unterzugehen.",
+    "nodes": "Knoten",
+    "edges": "Kanten",
+    "types": {
+      "persons": "Personen",
+      "works": "Werke",
+      "concepts": "Konzepte",
+      "arguments": "Argumente",
+      "debates": "Debatten",
+      "reformulations": "Reformulierungen",
+      "quotes": "Zitate"
+    }
+  },
+  "bottomNav": {
+    "ariaLabel": "Visualisierungsmodus-Umschalter",
+    "observatory": "Observatorium",
+    "observatoryAria": "Zum Observatorium-Modus wechseln (2D-Netzwerk)",
+    "semativerse": "Semativerse",
+    "semativerseAria": "Zum Semativerse-Modus wechseln (3D/2D-Erkundung)"
+  },
+  "learn": {
+    "nav": {
+      "title": "EleutherIA kennenlernen",
+      "overview": "Überblick",
+      "knowledgeGraph": "Wissensgraph",
+      "embeddings": "Embeddings",
+      "graphrag": "GraphRAG",
+      "hybridSearch": "Hybridsuche",
+      "ancientTexts": "Antike Texte",
+      "fair": "FAIR-Prinzipien",
+      "glossary": "Glossar",
+      "tryGraphRAG": "GraphRAG ausprobieren"
+    },
+    "hero": {
+      "slogan": "So funktioniert es",
+      "title": "Antike Philosophie",
+      "titleHighlight": "trifft moderne KI",
+      "subtitle": "Entdecken Sie, wie Wissensgraphen, semantische Embeddings und GraphRAG zusammenwirken, um 1.200 Jahre philosophisches Denken zu erhellen. 2.159 Knoten, 151 antike Werke und 14.600+ Passagen griffbereit.",
+      "cta": "Jetzt lernen",
+      "doi": "DOI: 10.5281/zenodo.17379490",
+      "license": "CC BY 4.0 Lizenz",
+      "openSource": "Open Source"
+    },
+    "overview": {
+      "title": "Projektüberblick",
+      "subtitle": "Was ist EleutherIA und welches Problem löst es?",
+      "challenge": {
+        "title": "Die traditionelle Herausforderung",
+        "intro": "Die Erforschung antiker Philosophie erfordert traditionell:",
+        "items": [
+          "Suche in mehreren Datenbanken (TLG, PHI, Perseus)",
+          "Abgleich mit moderner Forschung",
+          "Lesen von Texten auf Griechisch und Latein",
+          "Manuelle Zuordnung von Argumenten über Traditionen hinweg",
+          "Verfolgung der Konzeptentwicklung über Jahrhunderte"
+        ],
+        "timeRequired": "Benötigte Zeit:",
+        "timeDays": "Tage bis Wochen"
+      },
+      "solution": {
+        "title": "Die EleutherIA-Lösung",
+        "intro": "EleutherIA automatisiert den gesamten Prozess:",
+        "items": [
+          "Stellen Sie Fragen in natürlicher Sprache",
+          "KI findet relevante Wissensgraph-Knoten",
+          "Graph-Traversierung erweitert Kontext automatisch",
+          "LLM synthetisiert Antwort mit Inline-Zitaten",
+          "Klicken Sie durch zu den originalen antiken Texten"
+        ],
+        "timeRequired": "Benötigte Zeit:",
+        "timeSeconds": "5 Sekunden"
+      },
+      "stats": {
+        "nodes": "Wissensgraph-Knoten",
+        "relationships": "Beziehungen",
+        "works": "Antike Werke",
+        "passages": "Textpassagen"
+      },
+      "pillars": {
+        "title": "Drei integrierte Systeme",
+        "kg": {
+          "title": "Wissensgraph",
+          "description": "2.159 vernetzte Konzepte, Personen, Argumente und Werke über 1.200 Jahre philosophischer Debatte.",
+          "features": [
+            "199 Philosophen",
+            "176 Konzepte",
+            "174 Argumente",
+            "31 Beziehungstypen"
+          ]
+        },
+        "texts": {
+          "title": "Antike Texte",
+          "description": "151 kanonische Werke mit 14.623 Passagen auf Griechisch, Latein, Hebräisch und Englisch mit vollständiger morphologischer Analyse.",
+          "features": [
+            "Vollständiges SBLGNT",
+            "LXX Septuaginta",
+            "CTS URN Zitate",
+            "Klick-zum-Lemmatisieren"
+          ]
+        },
+        "ai": {
+          "title": "KI-Assistent",
+          "description": "GraphRAG kombiniert Wissensgraph-Traversierung mit semantischer Suche und LLM-Synthese für zitierte Antworten.",
+          "features": [
+            "3.072-dim Embeddings",
+            "Hybridsuche",
+            "Streaming-Antworten",
+            "Quellenverankerung"
+          ]
+        }
+      }
+    },
+    "knowledgeGraph": {
+      "title": "Der Wissensgraph",
+      "subtitle": "Wie wir 1.200 Jahre philosophischer Debatte strukturieren",
+      "whatIs": {
+        "title": "Was ist ein Wissensgraph?",
+        "description": "Ein Wissensgraph ist ein Netzwerk vernetzter Informationen, bei dem:",
+        "nodes": {
+          "title": "Knoten = Entitäten",
+          "description": "Personen, Konzepte, Argumente, Werke"
+        },
+        "edges": {
+          "title": "Kanten = Beziehungen",
+          "description": "\"formulierte\", \"widerspricht\", \"beeinflusste\""
+        }
+      },
+      "nodeTypes": {
+        "title": "Arten von Knoten",
+        "persons": "Personen",
+        "concepts": "Konzepte",
+        "arguments": "Argumente",
+        "works": "Werke",
+        "reformulations": "Reformulierungen",
+        "quotes": "Zitate"
+      },
+      "timeline": {
+        "title": "1.200 Jahre philosophischer Debatte",
+        "periods": {
+          "presocratic": { "era": "Vorsokratisch", "years": "6.-5. Jh. v. Chr." },
+          "classical": { "era": "Klassisch", "years": "5.-4. Jh. v. Chr." },
+          "hellenistic": { "era": "Hellenistisch", "years": "4.-1. Jh. v. Chr." },
+          "imperial": { "era": "Kaiserzeit", "years": "1.-3. Jh. n. Chr." },
+          "lateAntiquity": { "era": "Spätantike", "years": "3.-6. Jh. n. Chr." }
+        }
+      },
+      "demo": {
+        "school": "Schule",
+        "person": "Person",
+        "concept": "Konzept",
+        "argument": "Argument"
+      }
+    },
+    "embeddings": {
+      "title": "Embeddings verstehen",
+      "subtitle": "Wie Computer durch Zahlen Bedeutung verstehen",
+      "gpsAnalogy": {
+        "title": "Embeddings als GPS für Ideen",
+        "description": "So wie GPS-Koordinaten angeben, wo eine Stadt im physischen Raum liegt, geben Embeddings an, wo eine Idee im",
+        "semanticSpace": "semantischen Raum liegt",
+        "physical": {
+          "title": "Physische Welt",
+          "closeMeans": "Nah = Ähnlicher Ort"
+        },
+        "semantic": {
+          "title": "Semantische Welt",
+          "closeMeans": "Nah = Ähnliche Bedeutung"
+        }
+      },
+      "steps": {
+        "input": {
+          "title": "Texteingabe",
+          "description": "Jeder Text kann in ein Embedding umgewandelt werden",
+          "example": "\"Die Stoiker glaubten, dass Schicksal mit Freiheit vereinbar ist\""
+        },
+        "processing": {
+          "title": "KI-Verarbeitung",
+          "description": "Google Gemini liest den Text und kodiert seine Bedeutung"
+        },
+        "output": {
+          "title": "Vektor-Ausgabe",
+          "description": "3.072 Zahlen, die die Bedeutung erfassen",
+          "comment": "// 3.072 Dimensionen"
+        }
+      },
+      "comparison": {
+        "keyword": {
+          "title": "Stichwortsuche",
+          "description": "Findet nur exakte Wortübereinstimmungen. Verpasst Synonyme und verwandte Konzepte.",
+          "finds": "Findet: \"freier Wille\"",
+          "misses": "Verpasst: \"Freiheit\", \"ἐφ' ἡμῖν\", \"liberum arbitrium\""
+        },
+        "semantic": {
+          "title": "Semantische Suche",
+          "description": "Findet Texte nach Bedeutung, unabhängig von den verwendeten Wörtern.",
+          "finds1": "Findet: \"freier Wille\", \"Freiheit\", \"ἐφ' ἡμῖν\"",
+          "finds2": "Findet: \"liberum arbitrium\", \"moralische Handlungsfähigkeit\""
+        }
+      },
+      "journey": {
+        "title": "Beobachten Sie, wie Text zum Vektor wird",
+        "description": "Erleben Sie die magische Reise, wie philosophischer Text zu einem 3.072-dimensionalen Embedding wird. Klicken Sie auf Abspielen, um den 6-stufigen Prozess zu sehen.",
+        "loading": "Embedding-Reise wird geladen..."
+      },
+      "semanticSpace": {
+        "title": "Den semantischen Raum erkunden",
+        "description": "Jeder leuchtende Punkt repräsentiert ein philosophisches Konzept. Konzepte mit ähnlichen Bedeutungen gruppieren sich im 3D-Raum. Ziehen zum Drehen, Scrollen zum Zoomen.",
+        "loading": "3D-Visualisierung wird geladen...",
+        "legend": {
+          "stoic": "Stoische Konzepte",
+          "epicurean": "Epikureische Konzepte",
+          "aristotelian": "Aristotelische Konzepte",
+          "platonic": "Platonische Konzepte",
+          "freeWill": "Kern-Konzepte der Willensfreiheit"
+        }
+      }
+    },
+    "graphrag": {
+      "title": "Die GraphRAG-Pipeline",
+      "subtitle": "Wie EleutherIA Ihre Fragen beantwortet",
+      "controls": {
+        "play": "Animation abspielen",
+        "pause": "Pause",
+        "reset": "Zurücksetzen"
+      },
+      "steps": {
+        "semanticSearch": {
+          "title": "Semantische Suche",
+          "description": "Frage in Embedding umwandeln → Ähnliche Knoten im Wissensgraph finden",
+          "detail": "Ihre Frage wird zu einem 3.072-Zahlen-Vektor. Wir vergleichen ihn mit allen 2.159 KG-Knoten und finden die 10 ähnlichsten.",
+          "input": "\"Was sagten die Stoiker über das Schicksal?\"",
+          "output": "Gefunden: Stoizismus (0,89), Schicksal (0,87), Chrysipp (0,84)..."
+        },
+        "graphTraversal": {
+          "title": "Graph-Traversierung",
+          "description": "Von Startknoten erweitern → Beziehungen zu verwandten Konzepten folgen",
+          "detail": "Von den 10 Startknoten folgen wir Kanten wie \"formulierte\", \"widerspricht\", \"beeinflusste\", um ~25-50 verwandte Knoten zu finden.",
+          "input": "Start: Stoizismus, Schicksal, Chrysipp",
+          "output": "Erweitert: +Determinismus, +Epiktet, +Kompatibilismus..."
+        },
+        "citationExtraction": {
+          "title": "Zitatextraktion",
+          "description": "Antike Quellen und moderne Forschung aus erweiterten Knoten sammeln",
+          "detail": "Jeder KG-Knoten hat \"antike_quellen\" und \"moderne_forschung\" Felder. Wir extrahieren und deduplizieren alle Zitate.",
+          "input": "25 erweiterte Knoten",
+          "output": "10 antike Quellen + 12 moderne Zitate"
+        },
+        "contextBuilding": {
+          "title": "Kontextaufbau",
+          "description": "In LOKAL (direkt), GLOBAL (thematisch), BRÜCKEN (Pfade) organisieren",
+          "detail": "Dreistufiger Kontext: LOKAL = direkte Antworten, GLOBAL = Community-Zusammenfassungen, BRÜCKEN = Argumentationspfade.",
+          "input": "Rohe Knoten und Zitate",
+          "output": "~3.000 Zeichen strukturierter Kontext"
+        },
+        "aiSynthesis": {
+          "title": "KI-Synthese",
+          "description": "LLM generiert wissenschaftliche Antwort mit Inline-Zitaten",
+          "detail": "Gemini liest den Kontext und generiert eine Antwort nach strengen Regeln: Quellen zitieren, niemals griechischen/lateinischen Text erfinden.",
+          "input": "Kontext + Frage",
+          "output": "Zitierte Antwort mit [1], [2] Referenzen"
+        }
+      },
+      "stage": "Stufe"
+    },
+    "hybridSearch": {
+      "title": "Hybridsuche",
+      "subtitle": "Drei Suchmethoden kombiniert für optimale Ergebnisse",
+      "methods": {
+        "fullText": {
+          "title": "Volltextsuche",
+          "description": "Exakte Stichwortübereinstimmung in Passagen. Schnell und präzise.",
+          "speed": "< 100ms",
+          "strength": "Geschwindigkeit & Präzision",
+          "example": "Anfrage: \"freier Wille\" → Findet exakte Übereinstimmungen"
+        },
+        "lemmatic": {
+          "title": "Lemmatische Suche",
+          "description": "Findet alle Formen eines Wortes (λόγος → λόγου, λόγῳ...)",
+          "speed": "< 500ms",
+          "strength": "Morphologisches Bewusstsein",
+          "example": "Anfrage: \"λόγος\" → Findet alle 10+ griechischen Formen"
+        },
+        "semantic": {
+          "title": "Semantische Suche",
+          "description": "Findet Texte nach Bedeutung mittels Embeddings",
+          "speed": "< 2s",
+          "strength": "Konzeptuelles Verständnis",
+          "example": "Anfrage: \"freier Wille\" → Findet auch \"Freiheit\", \"ἐφ' ἡμῖν\""
+        }
+      },
+      "rrf": {
+        "title": "Reciprocal Rank Fusion (RRF)",
+        "description": "Ergebnisse aus allen drei Methoden werden mit einer Formel zusammengeführt, die Einträge verstärkt, die in mehreren Listen erscheinen. Einträge, die von allen drei Methoden gefunden werden, rangieren am höchsten.",
+        "fullText": "Volltext",
+        "lemmatic": "Lemmatisch",
+        "semantic": "Semantisch",
+        "bestResults": "Beste Ergebnisse",
+        "formula": "RRF-Score = Σ (1 / (k + Rang)) wobei k = 60"
+      },
+      "speed": "Geschwindigkeit:",
+      "strengthLabel": "Stärke:"
+    },
+    "ancientTexts": {
+      "title": "Datenbank antiker Texte",
+      "subtitle": "151 Werke, 14.623 Passagen, 5 Sprachen",
+      "schools": {
+        "stoic": "Stoisch",
+        "aristotelian": "Aristotelisch",
+        "epicurean": "Epikureisch",
+        "christian": "Christlich",
+        "biblical": "Biblisch"
+      },
+      "cts": {
+        "title": "Kanonisches Zitatssystem (CTS URN)",
+        "description": "Jede Passage hat eine permanente, maschinenlesbare Kennung nach wissenschaftlichen Standards:",
+        "breakdown": "└── namespace: textgroup: work: edition: passage",
+        "compatibility": "Kompatibel mit Perseus, TLG und PHI-Standards für Interoperabilität."
+      }
+    },
+    "fair": {
+      "title": "FAIR-Prinzipien",
+      "subtitle": "Auffindbar, Zugänglich, Interoperabel, Wiederverwendbar",
+      "principles": {
+        "findable": {
+          "letter": "F",
+          "title": "Auffindbar",
+          "description": "Persistente Identifikatoren (CTS URNs, UUIDs), maschinenlesbare Metadaten, indexiert und durchsuchbar"
+        },
+        "accessible": {
+          "letter": "A",
+          "title": "Zugänglich",
+          "description": "Offene API ohne Authentifizierung für Lesezugriffe, Swagger-Dokumentation, JSON-Antworten"
+        },
+        "interoperable": {
+          "letter": "I",
+          "title": "Interoperabel",
+          "description": "CTS URN, JSON/RDF-Formate, TEI XML-Erhaltung, kompatibel mit Perseus/TLG/PHI"
+        },
+        "reusable": {
+          "letter": "R",
+          "title": "Wiederverwendbar",
+          "description": "CC BY 4.0 Lizenz, dokumentierte Provenienz, Zenodo DOI, nachverfolgbare Zitate"
+        }
+      }
+    },
+    "glossary": {
+      "title": "Glossar",
+      "subtitle": "Fachbegriffe für Wissenschaftler erklärt",
+      "searchPlaceholder": "Glossar durchsuchen...",
+      "terms": {
+        "embedding": {
+          "term": "Embedding",
+          "definition": "Eine Liste von Zahlen (3.072), die die Bedeutung von Text repräsentiert. Ähnliche Bedeutungen haben ähnliche Vektoren."
+        },
+        "vector": {
+          "term": "Vektor",
+          "definition": "Eine Liste von Zahlen. In EleutherIA wird jeder Text durch 3.072 Zahlen repräsentiert."
+        },
+        "semanticSearch": {
+          "term": "Semantische Suche",
+          "definition": "Texte nach Bedeutung finden, nicht nur nach Stichwörtern. \"Freier Wille\" findet auch \"Freiheit\" und \"ἐφ' ἡμῖν\"."
+        },
+        "knowledgeGraph": {
+          "term": "Wissensgraph",
+          "definition": "Ein Netzwerk vernetzter Konzepte. Knoten = Entitäten, Kanten = Beziehungen."
+        },
+        "graphrag": {
+          "term": "GraphRAG",
+          "definition": "Graph-based Retrieval-Augmented Generation. Kombiniert KG + Suche + KI für Fragen & Antworten."
+        },
+        "lemma": {
+          "term": "Lemma",
+          "definition": "Die Wörterbuchform eines Wortes. \"λόγου\" → \"λόγος\". Ermöglicht das Finden aller Wortformen."
+        },
+        "rrf": {
+          "term": "RRF",
+          "definition": "Reciprocal Rank Fusion. Eine Formel zur Kombination mehrerer Ranglisten zu einer."
+        },
+        "ctsUrn": {
+          "term": "CTS URN",
+          "definition": "Canonical Text Services Uniform Resource Name. Standard-Zitierformat für antike Texte."
+        },
+        "fairPrinciples": {
+          "term": "FAIR",
+          "definition": "Findable, Accessible, Interoperable, Reusable. Internationale Prinzipien für offene Daten."
+        },
+        "llm": {
+          "term": "LLM",
+          "definition": "Large Language Model. Die KI, die Antworten aus dem Kontext synthetisiert."
+        },
+        "cosineSimilarity": {
+          "term": "Kosinus-Ähnlichkeit",
+          "definition": "Maß für Vektor-Ähnlichkeit. 1,0 = identisch, 0,0 = völlig unterschiedlich."
+        },
+        "qdrant": {
+          "term": "Qdrant",
+          "definition": "Vektordatenbank, optimiert für effizientes Speichern und Suchen von Embeddings."
+        }
+      }
+    },
+    "cta": {
+      "title": "Bereit zum Erkunden?",
+      "description": "Fragen Sie EleutherIA über antike Philosophie der Willensfreiheit. Erhalten Sie zitierte Antworten, basierend auf 1.200 Jahren Forschung.",
+      "tryGraphRAG": "GraphRAG ausprobieren",
+      "exploreGraph": "Den Graphen erkunden"
+    },
+    "footer": {
+      "description": "EleutherIA - Ein FAIR-konformer Wissensgraph antiker Philosophie der Willensfreiheit",
+      "license": "CC BY 4.0"
+    }
+  }
+}

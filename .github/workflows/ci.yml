@@ -1,0 +1,156 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Ruff
+        run: pip install ruff
+
+      - name: Run Ruff linter
+        run: ruff check database/src kg/src graphrag/src
+
+      - name: Run Ruff formatter check
+        run: ruff format --check database/src kg/src graphrag/src
+
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install mypy
+          pip install -e database/
+          pip install -e kg/
+          pip install -e graphrag/
+
+      - name: Run mypy
+        run: mypy database/src kg/src graphrag/src
+
+  test-database:
+    name: Test Database Package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: pip install -e "database/[dev]"
+
+      - name: Run tests
+        run: cd database && python -m pytest tests/ -v
+
+  test-kg:
+    name: Test KG Package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: |
+          pip install -e database/
+          pip install -e "kg/[dev]"
+
+      - name: Run tests
+        run: cd kg && python -m pytest tests/ -v
+
+  test-graphrag:
+    name: Test GraphRAG Package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: |
+          pip install -e database/
+          pip install -e kg/
+          pip install -e "graphrag/[dev]"
+
+      - name: Run tests
+        run: cd graphrag && python -m pytest tests/ -v
+
+  test-frontend:
+    name: Test Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: cd frontend && npm ci
+
+      - name: Run linter
+        run: cd frontend && npm run lint
+
+      - name: Run tests
+        run: cd frontend && npm test -- --run
+
+      - name: Build
+        run: cd frontend && npm run build
+
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deploy/docker/Dockerfile.backend
+          push: false
+          tags: eleutheria-backend:test
+
+      - name: Build frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deploy/docker/Dockerfile.frontend
+          push: false
+          tags: eleutheria-frontend:test

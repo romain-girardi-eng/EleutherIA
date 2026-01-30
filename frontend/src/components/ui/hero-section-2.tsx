@@ -1,0 +1,208 @@
+import React from 'react';
+import { cn } from "@/lib/utils";
+import { motion, type Variants } from 'framer-motion';
+
+// Icon component for contact details
+const InfoIcon = ({ type }: { type: 'website' | 'phone' | 'address' | 'doi' | 'github' | 'email' }) => {
+    const icons = {
+        website: (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-primary">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" x2="22" y1="12" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+        ),
+        phone: (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-primary">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+        ),
+        address: (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-primary">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+        ),
+        doi: (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-primary">
+                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+            </svg>
+        ),
+        github: (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-primary">
+                <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
+                <path d="M9 18c-4.51 2-5-2-7-2"></path>
+            </svg>
+        ),
+        email: (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-primary">
+                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+        ),
+    };
+    return <div className="mr-2 flex-shrink-0">{icons[type]}</div>;
+};
+
+
+// Prop types for the HeroSection component
+interface HeroSectionProps {
+  className?: string;
+  logo?: {
+    url: string;
+    alt: string;
+    text?: string;
+  };
+  slogan?: string;
+  title: React.ReactNode;
+  subtitle: string;
+  callToAction: {
+    text: string;
+    href: string;
+  };
+  backgroundImage?: string;
+  backgroundComponent?: React.ReactNode;
+  contactInfo: {
+    type: 'website' | 'phone' | 'address' | 'doi' | 'github' | 'email';
+    label: string;
+    href?: string;
+  }[];
+}
+
+const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
+  ({ className, logo, slogan, title, subtitle, callToAction, backgroundImage, backgroundComponent, contactInfo }, ref) => {
+
+    // Animation variants for the container to orchestrate children animations
+    const containerVariants: Variants = {
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: 0.15,
+          delayChildren: 0.2,
+        },
+      },
+    };
+
+    // Animation variants for individual text/UI elements
+    const itemVariants: Variants = {
+      hidden: { y: 20, opacity: 0 },
+      visible: {
+        y: 0,
+        opacity: 1,
+        transition: {
+          duration: 0.5,
+          ease: "easeOut" as const,
+        },
+      },
+    };
+
+    return (
+      <motion.section
+        ref={ref}
+        className={cn(
+          "relative flex flex-col overflow-hidden bg-white text-foreground md:flex-row m-0 p-0",
+          className
+        )}
+        style={{
+          height: 'calc(100dvh + 3rem)',
+          marginTop: '-3rem'
+        }}
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        {/* Left Side: Content */}
+        <div className="flex w-full h-[55%] md:h-full flex-col justify-center px-4 pt-14 pb-4 md:w-1/2 md:px-6 md:pt-16 md:pb-6 lg:w-1/2 lg:px-8 lg:pt-16 lg:pb-6 xl:px-10 bg-white">
+            {/* Centered Content Block */}
+            <div className="max-w-2xl mx-auto w-full">
+                {/* Large Logo Section */}
+                {logo && (
+                    <motion.header variants={itemVariants}>
+                        <div className="flex flex-col items-center md:items-start">
+                            <img
+                              src={logo.url}
+                              alt={logo.alt}
+                              className="h-32 sm:h-40 md:h-48 lg:h-56 xl:h-64 2xl:h-72 max-h-[30vh]"
+                            />
+                        </div>
+                    </motion.header>
+                )}
+
+                {/* Main Content */}
+                <motion.main variants={containerVariants}>
+                    <motion.h1 className="text-xl sm:text-2xl font-bold leading-tight text-academic-text md:text-3xl lg:text-4xl xl:text-5xl" variants={itemVariants}>
+                        {title}
+                    </motion.h1>
+                    {slogan && (
+                      <motion.p className="text-sm sm:text-base md:text-lg lg:text-xl text-academic-muted leading-snug mt-1" variants={itemVariants}>
+                        {slogan}
+                      </motion.p>
+                    )}
+                    <motion.p className="mt-2 mb-2 lg:mb-4 text-xs sm:text-sm text-academic-muted leading-snug md:text-base" variants={itemVariants}>
+                        {subtitle}
+                    </motion.p>
+                    <motion.a
+                        href={callToAction.href}
+                        className="inline-flex items-center gap-2 text-xs sm:text-sm md:text-base font-bold tracking-widest text-primary-600 transition-colors hover:text-primary-700 uppercase"
+                        variants={itemVariants}
+                    >
+                        {callToAction.text}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </motion.a>
+                </motion.main>
+
+                {/* Footer Info */}
+                <motion.footer className="mt-2 lg:mt-4 pt-2 lg:pt-3 border-t border-academic-muted/20" variants={itemVariants}>
+                    <div className="flex flex-wrap gap-x-3 lg:gap-x-4 gap-y-0.5 text-[10px] sm:text-xs text-academic-muted">
+                        {contactInfo.map((info, index) => (
+                            <div key={index} className="flex items-center">
+                                <InfoIcon type={info.type} />
+                                {info.href ? (
+                                    <a
+                                        href={info.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:text-primary-600 transition-colors"
+                                    >
+                                        {info.label}
+                                    </a>
+                                ) : (
+                                    <span>{info.label}</span>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </motion.footer>
+            </div>
+        </div>
+
+        {/* Right Side: Background with Clip Path Animation */}
+        <motion.div
+          className="w-full h-[45%] md:h-full md:w-1/2 lg:w-1/2 relative overflow-hidden flex-shrink-0"
+          style={backgroundImage && !backgroundComponent ? {
+            backgroundImage: `url(${backgroundImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          } : undefined}
+          initial={{ clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)' }}
+          animate={{ clipPath: 'polygon(10% 0, 101% 0, 101% 100%, 0% 100%)' }}
+          transition={{ duration: 1.2, ease: "circOut" as const }}
+        >
+          {backgroundComponent && (
+            <div className="absolute inset-0">
+              {backgroundComponent}
+            </div>
+          )}
+        </motion.div>
+      </motion.section>
+    );
+  }
+);
+
+HeroSection.displayName = "HeroSection";
+
+export { HeroSection };

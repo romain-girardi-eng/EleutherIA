@@ -1,0 +1,1665 @@
+{
+  "app": {
+    "name": "EleutherIA",
+    "tagline": "Base de données sur le libre arbitre antique",
+    "description": "Un graphe de connaissances conforme aux principes FAIR documentant les débats antiques sur le libre arbitre"
+  },
+  "nav": {
+    "home": "Accueil",
+    "database": "Base de données",
+    "visualizer": "Graphe de connaissances",
+    "search": "Recherche",
+    "graphrag": "GraphRAG Q&R",
+    "texts": "Textes antiques",
+    "bibliography": "Bibliographie",
+    "about": "À propos",
+    "credits": "Crédits",
+    "admin": "Tableau de bord admin",
+    "citationNetwork": "Réseau de citations",
+    "community": "Communauté",
+    "profile": "Profil",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "menu": "Menu",
+    "closeMenu": "Fermer le menu",
+    "openMenu": "Ouvrir le menu"
+  },
+  "home": {
+    "welcome": "Bienvenue sur EleutherIA",
+    "subtitle": "Un graphe de connaissances conforme aux principes FAIR documentant les débats antiques sur le libre arbitre, le destin et la responsabilité morale de la philosophie grecque classique (VIe s. av. J.-C.) à l'Antiquité tardive (VIe s. apr. J.-C.).",
+    "stats": {
+      "title": "Statistiques de la base de données",
+      "nodes": "Nœuds du graphe",
+      "edges": "Arêtes",
+      "works": "Œuvres antiques",
+      "passages": "Passages"
+    },
+    "features": {
+      "kg": {
+        "title": "Graphe de connaissances",
+        "description": "Explorez 2 159 nœuds et 7 856 relations dans une visualisation de réseau interactive"
+      },
+      "search": {
+        "title": "Recherche hybride",
+        "description": "Recherche plein texte, lemmatique et sémantique sur 151 œuvres antiques avec 14 623 passages"
+      },
+      "graphrag": {
+        "title": "GraphRAG Q&R",
+        "description": "Posez des questions et obtenez des réponses scientifiques ancrées dans le graphe de connaissances"
+      },
+      "texts": {
+        "title": "Textes antiques",
+        "description": "Parcourez et lisez 151 œuvres grecques et latines antiques avec lemmatisation"
+      }
+    },
+    "quickStart": "Démarrage rapide",
+    "quickStartDescription": "Explorez les fonctionnalités principales d'EleutherIA",
+    "about": {
+      "title": "À propos de cette base de données",
+      "description1": "(Ἐλευθερία = liberté + IA = Intelligence Artificielle) documente le développement historique des débats antiques sur le libre arbitre, le déterminisme et la responsabilité morale, de la philosophie grecque classique à l'Antiquité tardive.",
+      "description2": "La base de données combine un graphe de connaissances complet avec 151 œuvres antiques (14 623 passages), permettant une recherche avancée grâce à :",
+      "feature1": "Visualisation de réseau interactive avec Cytoscape.js",
+      "feature2": "Recherche hybride combinant approches plein texte, lemmatique et sémantique",
+      "feature3": "Système de questions-réponses GraphRAG avec suivi des citations",
+      "feature4": "Données conformes aux principes FAIR avec provenance complète",
+      "license": "Toutes les données sont sous licence",
+      "availableAt": "et disponibles sur",
+      "learnMore": "En savoir plus"
+    }
+  },
+  "search": {
+    "title": "Recherche hybride",
+    "subtitle": "Recherchez dans 151 textes antiques en utilisant des approches plein texte, lemmatique et sémantique",
+    "placeholder": "Rechercher des passages, concepts ou auteurs...",
+    "searchPlaceholder": "ex. : ἐφ' ἡμῖν, liberum arbitrium, action volontaire...",
+    "queryLabel": "Requête de recherche",
+    "queryHint": "Supporte les termes grecs, latins et anglais",
+    "searchModes": "Modes de recherche",
+    "resultsLimit": "Limite de résultats",
+    "nResults": "{{count}} résultats",
+    "searchButton": "Rechercher",
+    "searching": "Recherche en cours...",
+    "searchFailed": "Échec de la recherche",
+    "loadingMessage": "Recherche dans 151 textes antiques...",
+    "foundResults": "{{count}} résultats trouvés",
+    "noResultsTitle": "Aucun résultat",
+    "noResultsDesc": "Aucun résultat trouvé pour ce mode de recherche. Essayez un autre mode ou une autre requête.",
+    "noResultsFoundCurrent": "Aucun résultat trouvé pour le mode actuel",
+    "tryDifferentMode": "Essayez un autre mode de recherche ou une autre requête.",
+    "author": "Auteur",
+    "category": "Catégorie",
+    "language": "Langue",
+    "viewText": "Voir le texte",
+    "filters": "Filtres",
+    "results": "{{count}} résultats trouvés",
+    "noResults": "Aucun résultat trouvé",
+    "loading": "Recherche en cours...",
+    "enableMode": "Activez au moins un mode de recherche",
+    "enterQuery": "Veuillez entrer une requête de recherche",
+    "modes": {
+      "fullText": "Plein texte",
+      "lemmatic": "Lemmatique",
+      "semantic": "Sémantique",
+      "ai": "Améliorations IA"
+    },
+    "filterBy": {
+      "author": "Auteur",
+      "period": "Période",
+      "school": "École philosophique",
+      "language": "Langue"
+    },
+    "tips": {
+      "title": "Conseils de recherche",
+      "greek": "Texte grec",
+      "greekExamples": "Essayez « ἐφ' ἡμῖν », « ἑκούσιον », « προαίρεσις »",
+      "latin": "Texte latin",
+      "latinExamples": "Essayez « liberum arbitrium », « in nostra potestate », « voluntarium »",
+      "english": "Anglais",
+      "englishExamples": "Essayez « voluntary action », « free will », « moral responsibility »",
+      "hybrid": "Recherche hybride",
+      "hybridDesc": "combine les trois modes en utilisant la fusion de rang réciproque (RRF)"
+    }
+  },
+  "advancedSearch": {
+    "title": "Recherche avancée",
+    "subtitle": "Recherche en temps réel dans 37 839 passages de 258 œuvres antiques",
+    "shortcuts": {
+      "focusSearch": "Activer la recherche",
+      "toggleFilters": "Basculer les filtres",
+      "navigateResults": "Naviguer dans les résultats",
+      "openSelected": "Ouvrir la sélection"
+    },
+    "searchLabel": "Requête de recherche",
+    "searchPlaceholder": "Recherchez des termes grecs, latins ou anglais... (ex. : ἐφ' ἡμῖν, liberum arbitrium)",
+    "resultsCount": "{{count}} résultats",
+    "filters": {
+      "button": "Filtres",
+      "clearAll": "Tout effacer",
+      "author": "Auteur",
+      "authorPlaceholder": "ex. : Cicéron, Épictète...",
+      "language": "Langue",
+      "languageOptions": {
+        "all": "Toutes les langues",
+        "greek": "Grec (ancien)",
+        "latin": "Latin",
+        "english": "Anglais"
+      },
+      "period": "Période",
+      "periodOptions": {
+        "all": "Toutes les périodes",
+        "presocratic": "Présocratique (VIe-Ve s. av. J.-C.)",
+        "classical": "Classique (Ve-IVe s. av. J.-C.)",
+        "hellenistic": "Hellénistique (IVe-Ier s. av. J.-C.)",
+        "romanImperial": "Impérial romain (Ier-IIIe s. apr. J.-C.)",
+        "lateAntiquity": "Antiquité tardive (IVe-VIe s. apr. J.-C.)"
+      }
+    },
+    "howToSearch": {
+      "title": "Comment rechercher",
+      "greek": "<strong>Grec :</strong> Essayez « ἐφ' ἡμῖν » (en notre pouvoir), « ἑκούσιον » (volontaire), « προαίρεσις » (choix)",
+      "latin": "<strong>Latin :</strong> Essayez « liberum arbitrium » (libre arbitre), « in nostra potestate » (en notre pouvoir), « voluntarium » (volontaire)",
+      "english": "<strong>Anglais :</strong> Essayez « voluntary action », « moral responsibility », « fate and freedom »",
+      "realtime": "<strong>Temps réel :</strong> Les résultats apparaissent au fur et à mesure de la saisie (délai de 300 ms)",
+      "filters": "<strong>Filtres :</strong> Affinez par auteur, langue ou période historique"
+    },
+    "results": {
+      "languageLabels": {
+        "greek": "Grec",
+        "latin": "Latin",
+        "english": "Anglais"
+      },
+      "relevance": "Pertinence : {{percent}} %",
+      "viewButton": "Voir →"
+    },
+    "error": {
+      "title": "Échec de la recherche"
+    },
+    "noResults": {
+      "title": "Aucun résultat trouvé",
+      "description": "Aucun passage trouvé correspondant à « {{query}} ». Essayez d'autres termes de recherche ou ajustez vos filtres."
+    }
+  },
+  "graphrag": {
+    "title": "HiRAG Q&R",
+    "subtitle": "Génération augmentée par récupération hiérarchique",
+    "description": "La génération augmentée par récupération hiérarchique étend GraphRAG en organisant les connaissances à travers des niveaux d'abstraction (auteurs, œuvres, concepts, débats) pour des réponses académiques nuancées.",
+    "askQuestion": "Posez une question sur la philosophie antique...",
+    "askEleutherai": "Interroger EleutherIA",
+    "placeholder": "Posez des questions sur les débats antiques sur le libre arbitre...",
+    "submit": "Soumettre",
+    "ask": "Demander",
+    "stop": "Arrêter",
+    "loading": "Génération de la réponse...",
+    "thinking": "Réflexion en cours...",
+    "citations": "Citations",
+    "sources": "Sources",
+    "reasoning": "Chemin de raisonnement",
+    "suggestions": "Questions suggérées",
+    "tryDemo": "Essayer la démo",
+    "hide": "Masquer",
+    "done": "Terminé",
+    "snapshot": "Instantané HiRAG",
+    "realTimeUpdates": "Mises à jour en temps réel",
+    "showProgress": "Afficher la progression pendant la génération de la réponse",
+    "settings": "Paramètres",
+    "searchSettings": "Paramètres de recherche",
+    "searchBreadth": "Largeur de recherche (graines locales)",
+    "connectionDepth": "Profondeur de connexion (portée de pont)",
+    "contextSize": "Taille du contexte (budget de contexte global)",
+    "academicMode": "Mode académique",
+    "enhancedRigor": "Rigueur scientifique renforcée avec scores de confiance...",
+    "rigorLevel": "Niveau de rigueur",
+    "fast": "Rapide",
+    "balanced": "Équilibré",
+    "deep": "Approfondi",
+    "citationStyle": "Style de citation",
+    "responseMetrics": "Métriques de réponse",
+    "ancientSources": "Sources antiques",
+    "modernScholarship": "Études modernes",
+    "nodesUsed": "Nœuds utilisés",
+    "tokensUsed": "Jetons utilisés",
+    "model": "Modèle",
+    "authRequired": "Authentification requise",
+    "authRequiredDesc": "Veuillez vous connecter pour utiliser HiRAG Q&R. Cette fonctionnalité utilise des services d'IA et nécessite une authentification.",
+    "howItWorks": "Comment fonctionne HiRAG",
+    "whyBrilliant": "Pourquoi c'est brillant",
+    "basedOn": "Basé sur Huang et al., « Hierarchical Retrieval-Augmented Generation », arXiv preprint (2025).",
+    "poweredBy": "Propulsé par la technologie HiRAG",
+    "benefits": {
+      "hierarchical": "Contrairement à GraphRAG plat, HiRAG respecte la hiérarchie naturelle des connaissances",
+      "multiLevel": "Raisonnement multi-niveaux à travers auteurs, œuvres, concepts et débats",
+      "scholarlyAnswers": "Réponses académiques avec attribution appropriée et scores de confiance",
+      "citationTracking": "Suivi complet des citations depuis les sources antiques jusqu'aux études modernes",
+      "contextAware": "Récupération contextuelle à chaque niveau d'abstraction"
+    },
+    "quality": {
+      "title": "Qualité de la réponse",
+      "subtitle": "Évaluation de qualité complète",
+      "citationDensity": "Densité de citations",
+      "sourceDiversity": "Diversité des sources",
+      "confidence": "Confiance",
+      "excellent": "Excellent",
+      "good": "Bon",
+      "fair": "Correct",
+      "needsImprovement": "À améliorer",
+      "detailedBreakdown": "Détail complet",
+      "citationsLabel": "Citations",
+      "citationsDesc": "Nombre de citations fournies",
+      "sourcesLabel": "Sources",
+      "sourcesDesc": "Sources uniques référencées",
+      "nodeRelevanceLabel": "Pertinence des nœuds",
+      "nodeRelevanceDesc": "Pertinence des nœuds récupérés",
+      "contextCoherenceLabel": "Cohérence du contexte",
+      "contextCoherenceDesc": "Cohérence du contexte assemblé",
+      "completenessLabel": "Complétude",
+      "completenessDesc": "Exhaustivité de la réponse",
+      "whatThisMeans": "Ce que cela signifie :",
+      "excellentQuality": "Qualité excellente :",
+      "excellentQualityDesc": "Cette réponse est bien fondée sur plusieurs sources, hautement pertinente et répond en profondeur à votre question avec des citations appropriées.",
+      "goodQuality": "Bonne qualité :",
+      "goodQualityDesc": "Cette réponse fournit des informations solides avec des citations et une pertinence adéquates, bien qu'il puisse y avoir place à des détails supplémentaires.",
+      "fairQuality": "Qualité correcte :",
+      "fairQualityDesc": "Cette réponse traite votre question mais pourrait bénéficier de plus de sources ou d'un contexte plus approfondi. Envisagez d'affiner votre requête.",
+      "needsImprovementQuality": "À améliorer :",
+      "needsImprovementQualityDesc": "Cette réponse peut manquer de citations ou de contexte suffisants. Essayez de reformuler votre question ou d'être plus précis sur ce que vous recherchez.",
+      "wellCited": "Bien citée",
+      "multiSource": "Multisource",
+      "highlyRelevant": "Très pertinent",
+      "coherent": "Cohérent",
+      "comprehensive": "Complet",
+      "tip": "Conseil :",
+      "tipText": "Cliquez sur n'importe quelle suggestion pour explorer les arguments philosophiques avec citations."
+    },
+    "argumentMapper": {
+      "title": "Structure de l'argument",
+      "premisesLabel": "Prémisses",
+      "therefore": "Par conséquent",
+      "conclusionLabel": "Conclusion",
+      "objectionsLabel": "Objections",
+      "responsesLabel": "Réponses",
+      "legendTitle": "Légende",
+      "premisesDesc": "Prémisses (affirmations de soutien)",
+      "conclusionDesc": "Conclusion (affirmation principale)",
+      "objectionsDesc": "Objections (contre-arguments)",
+      "responsesDesc": "Réponses (défenses)",
+      "analysisTitle": "Analyse de l'argument"
+    },
+    "smartSuggestions": {
+      "title": "Suggestions intelligentes",
+      "allLabel": "Toutes",
+      "philosophical": "Philosophique",
+      "comparative": "Comparative",
+      "historical": "Historique",
+      "conceptual": "Conceptuelle",
+      "simple": "simple",
+      "moderate": "modérée",
+      "complex": "complexe",
+      "noSuggestions": "Aucune suggestion ne correspond à votre requête. Essayez d'autres mots-clés !",
+      "tryThisQuestion": "Essayez cette question",
+      "clickToAsk": "Cliquez pour poser cette question"
+    }
+  },
+  "texts": {
+    "title": "Bibliothèque de textes antiques",
+    "subtitle": "Parcourez {{count}} textes philosophiques antiques",
+    "browseWorks": "Parcourir les œuvres",
+    "totalWorks": "{{count}} œuvres disponibles",
+    "passages": "passages",
+    "citations": "Citations",
+    "readMore": "Lire plus",
+    "lemmatization": "Lemmatisation",
+    "morphology": "Morphologie",
+    "frequency": "Fréquence",
+    "relatedPassages": "Passages liés",
+    "allAuthors": "Tous les auteurs",
+    "searchAuthor": "Rechercher un auteur...",
+    "allLanguages": "Toutes les langues",
+    "greek": "Grec",
+    "latin": "Latin",
+    "english": "Anglais",
+    "featured": "En vedette",
+    "mostCited": "Plus cités",
+    "byAuthor": "Par auteur",
+    "byTitle": "Par titre",
+    "mostPassages": "Plus de passages",
+    "reset": "Réinitialiser",
+    "loadingWorks": "Chargement des œuvres...",
+    "noWorksFound": "Aucune œuvre trouvée avec les filtres actuels",
+    "authorLabel": "Auteur :",
+    "passagesLabel": "Passages :",
+    "periodLabel": "Période :",
+    "seeInKG": "Voir dans le graphe",
+    "goToCitation": "Aller à la citation"
+  },
+  "ancientWorks": {
+    "title": "Bibliothèque d'œuvres antiques",
+    "subtitle": "Parcourez {{count}} textes philosophiques antiques",
+    "stats": {
+      "passages": "Passages",
+      "citations": "Citations"
+    },
+    "filters": {
+      "allAuthors": "Tous les auteurs",
+      "searchAuthorPlaceholder": "Rechercher un auteur...",
+      "allLanguages": "Toutes les langues",
+      "languages": {
+        "greek": "Grec",
+        "latin": "Latin",
+        "english": "Anglais"
+      },
+      "featured": "En vedette",
+      "reset": "Réinitialiser"
+    },
+    "sort": {
+      "mostCited": "Plus cités",
+      "byAuthor": "Par auteur",
+      "byTitle": "Par titre",
+      "mostPassages": "Plus de passages"
+    },
+    "pagination": {
+      "showing": "{{from}}–{{to}} sur {{total}}"
+    },
+    "loading": "Chargement des œuvres...",
+    "noResults": "Aucune œuvre trouvée avec les filtres actuels",
+    "errors": {
+      "loadWorks": "Échec du chargement des œuvres"
+    },
+    "card": {
+      "citedInKG": "Cité dans {{count}} nœuds du graphe de connaissances",
+      "author": "Auteur",
+      "passages": "Passages",
+      "period": "Période",
+      "actions": {
+        "seeInKG": "Voir dans le graphe",
+        "goToCitation": "Aller à la citation"
+      }
+    },
+    "languageIcons": {
+      "ancientGreek": "Grec ancien",
+      "latin": "Latin",
+      "english": "Anglais",
+      "unknown": "Inconnu"
+    }
+  },
+  "textReader": {
+    "nav": {
+      "library": "Bibliothèque",
+      "hide": "Masquer",
+      "contents": "Sommaire",
+      "previous": "Précédent (←)",
+      "next": "Suivant (→)",
+      "pageCount": "{{current}} / {{total}}",
+      "backToLibrary": "Retour à la bibliothèque"
+    },
+    "search": {
+      "placeholder": "Aller à la référence (/ pour activer)",
+      "go": "Aller"
+    },
+    "toc": {
+      "title": "Sommaire",
+      "book": "Livre",
+      "chapter": "Ch.",
+      "chapterFull": "Chapitre"
+    },
+    "notifications": {
+      "found": "Trouvé",
+      "notFound": "Non trouvé",
+      "searchFailed": "Échec de la recherche"
+    },
+    "error": {
+      "workNotFound": "Œuvre non trouvée"
+    },
+    "loading": "Chargement...",
+    "referenced": "Référencé",
+    "footer": {
+      "language": "Langue"
+    },
+    "shortcuts": {
+      "help": "Appuyez sur ? pour les raccourcis"
+    }
+  },
+  "semativerse": {
+    "exitSemativerse": "Quitter Semativerse"
+  },
+  "simpleTextReader": {
+    "loading": "Chargement...",
+    "fetchingTextId": "Récupération de l'ID du texte : {{textId}}",
+    "error": "Erreur",
+    "textId": "ID du texte",
+    "backToTexts": "Retour aux textes",
+    "noTextFound": "Aucun texte trouvé",
+    "untitled": "Sans titre",
+    "by": "par",
+    "unknown": "Inconnu",
+    "unknownLanguage": "Langue inconnue",
+    "textStatistics": "Statistiques du texte",
+    "rawTextLength": "Longueur du texte brut",
+    "characters": "caractères",
+    "wordsApprox": "Mots (approx.)",
+    "hasRawText": "Contient du texte brut",
+    "yes": "OUI ✓",
+    "no": "NON ✗",
+    "textContent": "Contenu du texte",
+    "noTextContentAvailable": "Aucun contenu textuel disponible"
+  },
+  "hirag": {
+    "pageTitle": "Détails de l'implémentation HiRAG",
+    "pageDescription": "Une explication transparente de notre architecture de récupération hiérarchique, basée sur des recherches de pointe avec des adaptations spécifiques au domaine pour l'érudition en philosophie antique.",
+    "overview": {
+      "title": "Vue d'ensemble et citation de l'article",
+      "originalResearch": "Recherche originale",
+      "basedOn": "Notre implémentation est basée sur l'architecture HiRAG (Hierarchical Retrieval-Augmented Generation) décrite dans :",
+      "readPaper": "Lire l'article original",
+      "coreInnovation": "Innovation principale",
+      "innovationDescription": "HiRAG étend GraphRAG standard en introduisant une structure de connaissances hiérarchique à trois niveaux :",
+      "localKnowledge": "Connaissances locales : Entités spécifiques récupérées via recherche sémantique",
+      "globalKnowledge": "Connaissances globales : Résumés au niveau des communautés fournissant un contexte thématique",
+      "bridgeKnowledge": "Connaissances de pont : Chemins les plus courts entre entités à travers les communautés",
+      "paperResults": "Les résultats de l'article montrent que HiRAG atteint un taux de réussite de 54-64 % contre GraphRAG et 52-66 % contre LightRAG sur les ensembles de données de référence."
+    },
+    "implemented": {
+      "title": "Ce que nous avons implémenté de l'article",
+      "hierarchical": {
+        "title": "1. Structure hiérarchique",
+        "level0": "14 résumés globaux couvrant les principaux thèmes philosophiques (déterminisme, responsabilité morale, providence divine)",
+        "level1": "11 résumés de communautés organisés par écoles philosophiques (stoïcienne, épicurienne, péripatéticienne, patristique)",
+        "level2": "503 nœuds d'entités individuelles (philosophes, concepts, arguments, œuvres)"
+      },
+      "bridge": {
+        "title": "2. Détection de ponts par chemin le plus court",
+        "algorithm": "Algorithme 2 de l'article : Pour chaque communauté récupérée, nous sélectionnons les m principales entités clés (m=2), puis calculons les chemins les plus courts entre entités de différentes communautés.",
+        "impact": "Impact : Fournit une couverture de rappel de 38-83 % des connaissances locales et globales, créant des chaînes sémantiques qui relient les écoles philosophiques."
+      },
+      "perCommunity": {
+        "title": "3. Sélection d'entités clés par communauté",
+        "description": "Au lieu de sélectionner les k meilleures entités globalement, nous sélectionnons les m meilleures entités par communauté (m=2 comme recommandé dans l'article). Cela garantit une couverture diversifiée à travers les écoles philosophiques plutôt qu'une surreprésentation des communautés dominantes."
+      },
+      "threeLevel": {
+        "title": "4. Récupération à trois niveaux",
+        "description": "Chaque requête récupère simultanément des connaissances aux trois niveaux, puis les mélange pour un contexte complet qui s'étend des détails textuels spécifiques aux grandes tendances historiques."
+      }
+    },
+    "adaptations": {
+      "title": "Nos adaptations et améliorations",
+      "keyDifference": "Différence clé : Résumés pré-calculés de haute qualité",
+      "summariesIntro": "Alors que l'article génère des résumés dynamiquement en utilisant DeepSeek-V3, nous utilisons des résumés pré-calculés créés avec :",
+      "opus": "Raisonnement et nuance de pointe",
+      "gpt5": "Génération de langage de qualité maximale",
+      "humanReview": "Révision humaine",
+      "humanReviewDesc": "Tous les résumés validés par un expert du domaine (Romain Girardi)",
+      "whyTitle": "Pourquoi cette adaptation ?",
+      "quality": {
+        "title": "Qualité supérieure",
+        "description": "Opus et GPT-5 > DeepSeek-V3 en profondeur de raisonnement et précision académique"
+      },
+      "consistency": {
+        "title": "Cohérence",
+        "description": "Mêmes résumés de haute qualité pour chaque requête vs génération dynamique variable"
+      },
+      "performance": {
+        "title": "Performance",
+        "description": "Aucune surcharge de génération ; résumés chargés instantanément depuis le stockage pré-calculé"
+      },
+      "rigor": {
+        "title": "Rigueur académique",
+        "description": "Les résumés révisés par des humains garantissent la précision pour la recherche académique"
+      },
+      "notImplemented": "Ce que nous n'avons pas implémenté (et pourquoi)",
+      "gmm": {
+        "title": "❌ Clustering GMM",
+        "description": "Modèles de mélange gaussien de l'article → Nous utilisons l'algorithme de Leiden (meilleur pour les données structurées en graphe)"
+      },
+      "sparsity": {
+        "title": "❌ Arrêt par parcimonie de cluster",
+        "description": "Convergence itérative de l'article → Nous avons une hiérarchie pré-calculée fixe à 3 niveaux (plus pratique)"
+      },
+      "metaAttributes": {
+        "title": "❌ Méta-attributs",
+        "description": "Méta-résumés explicites de l'article → Déjà implicite dans notre système de types de nœuds (personne, concept, argument, œuvre)"
+      },
+      "netResult": "🎯 Résultat net",
+      "netResultDescription": "Nous implémentons les innovations algorithmiques de base de l'article (ponts par chemin le plus court, sélection par communauté, récupération hiérarchique) tout en améliorant la base de qualité des résumés grâce à du contenu pré-calculé validé par des experts. Cela nous donne les avantages structurels de l'article avec une représentation des connaissances de meilleure qualité."
+    },
+    "technical": {
+      "title": "Implémentation technique",
+      "architectureTitle": "Vue d'ensemble de l'architecture",
+      "backendService": "Service backend",
+      "backendServiceDesc": "Implémente HiRAGService avec indexation hiérarchique, détection de ponts par chemin le plus court et récupération à trois niveaux",
+      "summaryLoader": "Chargeur de résumés",
+      "summaryLoaderDesc": "Charge les résumés Opus/GPT-5 pré-calculés depuis hierarchical_communities_opus.json",
+      "apiEndpoints": "Points de terminaison API",
+      "apiEndpointsDesc": "Fournit 6 points de terminaison RESTful incluant /query, /query/stream, /communities, /bridges",
+      "queryModes": "Modes de requête",
+      "modes": {
+        "hi": "Récupération hiérarchique complète (tous les 3 niveaux + ponts)",
+        "hiBridge": "Focus uniquement sur les connexions de pont",
+        "hiLocal": "Contexte local à la communauté uniquement",
+        "hiGlobal": "Résumés globaux uniquement",
+        "hiNoBridge": "Hiérarchique sans nœuds de pont"
+      },
+      "performanceMetrics": "Métriques de performance",
+      "metrics": {
+        "globalSummaries": "Résumés globaux",
+        "communitySummaries": "Résumés de communautés",
+        "entityNodes": "Nœuds d'entités",
+        "bridgeCoverage": "Couverture de rappel des ponts",
+        "responseTime": "Temps de réponse (moy.)"
+      },
+      "reproducibility": "🔬 Reproductibilité",
+      "reproducibilityDesc": "Tous les détails de l'implémentation, y compris les prompts de génération de résumés et les algorithmes de détection de ponts, sont disponibles dans notre dépôt open source. Les résumés pré-calculés (générés le 27 octobre 2025) sont versionnés et peuvent être régénérés avec le même processus.",
+      "reproducibilityMetadata": "Les métadonnées des résumés incluent : modèle utilisé (gpt-5-high), auteurs (GPT 5-high & Romain Girardi), réviseur final (Romain Girardi) et horodatage de génération pour une transparence complète."
+    },
+    "comparison": {
+      "title": "Comparaison de qualité et performance attendue",
+      "table": {
+        "feature": "Fonctionnalité",
+        "paperHiRAG": "HiRAG de l'article",
+        "ourImplementation": "Notre implémentation",
+        "impact": "Impact",
+        "hierarchicalStructure": "Structure hiérarchique",
+        "multiLayer": "✅ Multi-couches (GMM)",
+        "threeLevels": "✅ 3 niveaux (Leiden)",
+        "equivalent": "Équivalent",
+        "shortestPath": "Ponts par chemin le plus court",
+        "algorithm2": "✅ Algorithme 2",
+        "implemented": "✅ Implémenté",
+        "perCommunity": "Sélection par communauté",
+        "summaryQuality": "Qualité des résumés",
+        "higher": "Supérieure",
+        "humanReview": "Révision humaine",
+        "none": "❌ Aucune",
+        "expertValidated": "✅ Validé par expert",
+        "stability": "Stabilité en production",
+        "dynamic": "⚠️ Dynamique",
+        "preComputed": "✅ Pré-calculé"
+      },
+      "expectedPerformance": "📊 Performance attendue",
+      "performanceIntro": "Basé sur l'étude d'ablation de l'article (Tableau 3), notre implémentation devrait atteindre :",
+      "winRate": "Taux de réussite de 54-64 % contre GraphRAG standard (avantages complets de HiRAG)",
+      "recallCoverage": "Couverture de rappel de 38-83 % des connaissances de pont (Tableau 2 de l'article)",
+      "higherQuality": "Potentiellement supérieur à l'article grâce à la qualité supérieure des résumés (Opus > DeepSeek)",
+      "consistency": "Réponses plus cohérentes grâce au pré-calcul vs génération dynamique",
+      "academicNote": "🎓 Note sur l'intégrité académique",
+      "academicNoteText": "Cette implémentation reproduit fidèlement les contributions algorithmiques de base de l'architecture HiRAG de Huang et al. tout en adaptant le composant de génération de résumés pour la qualité de production et la rigueur académique. Toutes les adaptations sont clairement documentées ici et dans notre code. Nous reconnaissons les innovations de l'article original et recommandons de citer à la fois le travail original et notre implémentation lors de la référence à ce système."
+    },
+    "summary": {
+      "title": "Résumé",
+      "tookFromPaper": "Ce que nous avons pris de l'article",
+      "tookFromPaperText": "Structure de connaissances hiérarchique, détection de ponts par chemin le plus court (Algorithme 2), sélection d'entités clés par communauté et architecture de récupération à trois niveaux.",
+      "adapted": "Ce que nous avons adapté",
+      "adaptedText": "Résumés pré-calculés validés par des experts (Opus + GPT-5 + révision humaine) au lieu de génération dynamique DeepSeek, garantissant une qualité et une cohérence supérieures.",
+      "why": "Pourquoi",
+      "whyText": "Cela nous donne les innovations structurelles de l'article avec une représentation des connaissances supérieure, combinant des algorithmes de récupération de pointe avec la rigueur académique d'experts du domaine."
+    }
+  },
+  "kg": {
+    "title": "Visualiseur de graphe de connaissances",
+    "loadingGraph": "Chargement du graphe de connaissances...",
+    "statsDisplay": "2 159 nœuds · 7 856 arêtes",
+    "failedToLoad": "Échec du chargement du graphe",
+    "openFilters": "Ouvrir les filtres",
+    "openHelp": "Ouvrir l'aide et les informations",
+    "commands": "Commandes",
+    "nodes": "Nœuds",
+    "edges": "Arêtes",
+    "layout": "Disposition",
+    "export": "Exporter",
+    "details": "Détails du nœud",
+    "of": "sur",
+    "displayed": "nœuds affichés",
+    "warning": "Le graphe peut être difficile à lire",
+    "optimal": "Lisibilité optimale",
+    "controls": "Contrôles du graphe",
+    "all": "Tous",
+    "none": "Aucun",
+    "nodeTypes": {
+      "title": "Types de nœuds",
+      "concept": "Concept",
+      "person": "Personne",
+      "persons": "Personnes",
+      "work": "Œuvre",
+      "works": "Œuvres",
+      "school": "École",
+      "argument": "Argument",
+      "arguments": "Arguments",
+      "debate": "Débat",
+      "debates": "Débats",
+      "concepts": "Concepts",
+      "schools": "Écoles"
+    },
+    "layoutAlgorithm": "Algorithme de disposition",
+    "layouts": {
+      "schoolClusters": "Groupes d'écoles (recommandé)",
+      "semanticMap": "Carte sémantique (IA)",
+      "temporal": "Temporel (chronologie)",
+      "hierarchical": "Hiérarchique",
+      "circular": "Circulaire",
+      "grid": "Grille"
+    },
+    "edgeCurveStyle": "Style de courbe des arêtes",
+    "edgeStyles": {
+      "bezier": "Bézier (lisse)",
+      "taxi": "Taxi (Manhattan)",
+      "straight": "Droite",
+      "segments": "Segments"
+    },
+    "edgeColorLegend": "Légende des couleurs d'arêtes",
+    "edgeTypes": {
+      "influence": "Relations d'influence",
+      "mentions": "Mentions",
+      "criticisms": "Critiques",
+      "other": "Autres relations"
+    },
+    "graphComplexity": "Complexité du graphe",
+    "focusMode": "Mode focus",
+    "connectionDistance": "Distance de connexion",
+    "hops": {
+      "one": "1 saut",
+      "two": "2 sauts",
+      "three": "3 sauts"
+    },
+    "maximumNodes": "Nœuds maximum :",
+    "minimumConnections": "Connexions minimum :",
+    "displayOptions": "Options d'affichage",
+    "showNodeLabels": "Afficher les étiquettes des nœuds",
+    "showEdgeLabels": "Afficher les étiquettes des arêtes",
+    "onHoverOnly": "Au survol uniquement",
+    "nodeColoring": "Coloration des nœuds",
+    "colorBy": {
+      "type": "Par type",
+      "community": "Par communauté"
+    },
+    "communityDetection": "Avancé : Détection de communautés",
+    "algorithm": "Algorithme",
+    "algorithms": {
+      "auto": "Auto (recommandé)",
+      "leiden": "Algorithme de Leiden",
+      "louvain": "Méthode de Louvain",
+      "labelProp": "Propagation d'étiquettes"
+    },
+    "tips": {
+      "title": "Conseils :",
+      "clickNodes": "Cliquez sur les nœuds pour voir les détails",
+      "dragNodes": "Faites glisser les nœuds pour les repositionner",
+      "scrollZoom": "Faites défiler pour zoomer",
+      "commandK": "Appuyez sur ⌘K pour rechercher"
+    },
+    "nodeDetail": {
+      "description": "Description",
+      "position": "Position sur le libre arbitre",
+      "terminology": "Terminologie",
+      "greek": "Grec",
+      "latin": "Latin",
+      "english": "Anglais",
+      "ancientSources": "Sources antiques",
+      "modernScholarship": "Études modernes",
+      "relationships": "Relations",
+      "actions": "Actions",
+      "checking": "Vérification...",
+      "openText": "Ouvrir le texte",
+      "textNotAvailable": "Texte non disponible",
+      "copyCitation": "Copier la citation",
+      "copied": "Copié !",
+      "viewConnections": "Voir les connexions",
+      "viewDatabase": "Voir la base de données",
+      "nodeId": "ID du nœud :",
+      "category": "Catégorie :"
+    }
+  },
+  "about": {
+    "title": "À propos",
+    "projectTitle": "À propos du projet",
+    "projectIntro": "(Ἐλευθερία = liberté + IA = Intelligence Artificielle) est née du besoin d'une base de données complète et structurée documentant les débats philosophiques antiques sur le libre arbitre, le destin et la responsabilité morale. Cette infrastructure de recherche a été développée dans le cadre d'une recherche doctorale à l'Université Côte d'Azur, étudiant comment les premiers auteurs chrétiens conceptualisaient la liberté et l'agentivité humaines.",
+    "projectContext": "En examinant la notion de libre arbitre chez les premiers auteurs chrétiens, il est devenu évident que les ressources existantes manquaient de structure systématique nécessaire pour l'analyse computationnelle et la recherche croisée. Le paysage philosophique s'étendant de la pensée grecque classique (IVe s. av. J.-C.) à l'Antiquité tardive (VIe s. apr. J.-C.) est incroyablement riche, avec des réseaux complexes d'influence, d'argumentation et d'évolution conceptuelle que les approches bibliographiques traditionnelles peinent à capturer.",
+    "projectDetails": "Cette base de données représente un effort indépendant pour combler cette lacune. Chaque nœud, arête et citation a été méticuleusement recherché et vérifié par rapport aux sources antiques et aux études modernes. Le projet intègre 2 159 entités philosophiques (personnes, œuvres, concepts, arguments) connectées par 7 856 relations, ainsi que 151 œuvres antiques (14 623 passages) avec support complet de lemmatisation.",
+    "projectGoal": "L'objectif est de fournir aux chercheurs, étudiants et toute personne intéressée par la philosophie antique une ressource conforme aux principes FAIR (trouvable, accessible, interopérable, réutilisable) qui combine la rigueur philologique traditionnelle avec les capacités computationnelles modernes. L'intégration de GraphRAG (génération augmentée par récupération basée sur graphe) permet la recherche sémantique et les questions-réponses tout en maintenant une provenance complète et un suivi des citations.",
+    "projectNote": "Note : Cette base de données représente une initiative de recherche personnelle. Tous les aspects — de la conceptualisation et du travail philologique à la curation des données, l'implémentation technique et la conception de l'interface — ont été entrepris individuellement pour soutenir les besoins de recherche doctorale.",
+    "authorTitle": "À propos de l'auteur",
+    "authorName": "Romain Girardi",
+    "authorTitle2": "Doctorant en Langues et Littératures anciennes / Théologie",
+    "authorBio": "Romain Girardi est doctorant dans un programme de doctorat conjoint (cotutelle internationale) entre l'**Université Côte d'Azur** et l'**Université de Genève** (depuis janvier 2024), travaillant sous la direction du Prof. Arnaud Zucker (CEPAM, UMR 7264) et du Prof. Andreas Dettwiler (Faculté autonome de théologie protestante). Sa thèse examine l'émergence et la conceptualisation du libre arbitre chez les premiers auteurs chrétiens, explorant pourquoi les références à la liberté humaine prolifèrent dans la littérature chrétienne du IIe siècle apr. J.-C. malgré leur absence des textes bibliques et leur relative rareté dans les œuvres philosophiques antérieures.",
+    "researchInterests": "Intérêts de recherche",
+    "interest1": "Philosophie antique de l'action et de la responsabilité morale",
+    "interest2": "Théories stoïciennes et péripatéticiennes du déterminisme et de la liberté",
+    "interest3": "Anthropologie théologique chrétienne primitive",
+    "interest4": "Exégèse paulinienne et réception patristique",
+    "interest5": "Histoire conceptuelle et évolution de la terminologie (du grec au latin)",
+    "interest6": "Humanités numériques et approches par graphes de connaissances des textes antiques",
+    "academicBackground": "Formation académique",
+    "degree1": "Doctorat conjoint en Langues et Littératures anciennes (UniCA) / Théologie (UNIGE) (2024–présent)",
+    "degree2": "Diplôme de préparation à l'Agrégation (2020)",
+    "degree3": "Master en Lettres classiques, mention (2019)",
+    "degree4": "Licence en Lettres classiques, mention (2017)",
+    "implementationTitle": "Implémentation et infrastructure technique",
+    "poweredByHiRAG": "Propulsé par la technologie HiRAG",
+    "hiragDesc": "Cette base de données implémente HiRAG (génération augmentée par récupération hiérarchique), étendant GraphRAG en organisant les connaissances à travers des niveaux d'abstraction. Au lieu de traiter tous les nœuds de manière égale, HiRAG respecte la hiérarchie naturelle : les auteurs écrivent des œuvres, les œuvres discutent de concepts, les concepts apparaissent dans les débats. Ce raisonnement multi-niveaux produit des réponses académiques plus nuancées avec attribution appropriée.",
+    "philologicalWork": "Travail philologique",
+    "philoDesc": "Tous les textes grecs et latins font l'objet d'une vérification manuelle. La lemmatisation utilise les analyseurs morphologiques LAULA (latin) et PAULA (grec) pour permettre la recherche par lemme. Chaque nœud du graphe de connaissances est ancré dans des sources primaires (textes antiques) ou de la littérature secondaire (études modernes) avec provenance bibliographique complète.",
+    "technicalInfra": "Infrastructure technique",
+    "techStack": "Frontend React 19 + TypeScript + Vite + Tailwind CSS, backend FastAPI + Python, PostgreSQL (données structurées) + Qdrant (embeddings vectoriels), Cytoscape.js pour la visualisation de réseaux, pipeline GraphRAG avec API Gemini, Cloudflare Workers (déploiement en production)"
+  },
+  "login": {
+    "title": "Connectez-vous à votre compte",
+    "subtitle": "Accédez à la base de données sur le libre arbitre antique",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "usernamePlaceholder": "Entrez votre nom d'utilisateur",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "signingIn": "Connexion en cours...",
+    "signIn": "Se connecter",
+    "demoAccounts": "Comptes de démonstration",
+    "admin": "Admin :",
+    "researcher": "Chercheur :",
+    "footerText": "Base de données sur le libre arbitre antique • Recherche EleutherIA",
+    "authRequired": "Authentification requise",
+    "authRequiredMessage": "Veuillez vous connecter pour utiliser cette fonctionnalité",
+    "loginFailed": "Échec de la connexion. Veuillez réessayer.",
+    "cancel": "Annuler"
+  },
+  "pwa": {
+    "installBanner": {
+      "install": "Installer EleutherIA comme application",
+      "shortMessage": "Installer EleutherIA pour un accès hors ligne",
+      "fullMessage": "Installez EleutherIA sur votre appareil pour un accès plus rapide et une lecture hors ligne des textes antiques",
+      "installButton": "Installer l'application",
+      "dismiss": "Fermer la bannière d'installation"
+    },
+    "offlineIndicator": {
+      "offline": "Vous êtes hors ligne",
+      "online": "En ligne",
+      "status": "État de connexion"
+    }
+  },
+  "evidenceChain": {
+    "title": "Chaînes de preuves",
+    "subtitle": "Retrace comment les affirmations se connectent aux sources antiques et aux études modernes",
+    "confidence": "confiance",
+    "ancientSourcesCount": "source antique",
+    "ancientSourcesCount_plural": "sources antiques",
+    "modernSourcesCount": "source moderne",
+    "modernSourcesCount_plural": "sources modernes",
+    "kgNodesLabel": "Nœuds du graphe de connaissances",
+    "ancientSourcesLabel": "Sources antiques",
+    "modernScholarshipLabel": "Études modernes",
+    "evidencePathLabel": "Chemin de preuve :",
+    "claim": "Affirmation",
+    "kgNodes": "Nœuds du graphe",
+    "ancientSources": "Sources antiques",
+    "modernAnalysis": "Analyse moderne",
+    "howToRead": "Comment lire :",
+    "howToReadDesc": "Les chaînes de preuves montrent comment des affirmations spécifiques dans la réponse sont soutenues par les nœuds du graphe de connaissances, les textes antiques et les études modernes. Les scores de confiance reflètent la force de la connexion entre l'affirmation et les sources."
+  },
+  "comparisonTool": {
+    "title": "Outil de comparaison intelligent",
+    "subtitle": "Comparez philosophes, arguments et concepts côte à côte",
+    "popularComparisons": "Comparaisons populaires",
+    "selectEntities": "Sélectionnez les entités à comparer (2-4)",
+    "searchEntities": "Rechercher des entités...",
+    "compareButton": "Comparer {{count}} entités",
+    "analyzing": "Analyse en cours...",
+    "comparisonMatrix": "Matrice de comparaison",
+    "dimension": "Dimension",
+    "similarities": "Similitudes",
+    "differences": "Différences",
+    "scholarlySynthesis": "Synthèse académique"
+  },
+  "credits": {
+    "title": "Crédits et licences",
+    "intro": "EleutherIA s'appuie sur le travail de nombreux projets open source, ressources académiques et normes. Cette page reconnaît toutes les dépendances, sources de données et les licences sous lesquelles ce projet opère.",
+    "dataSources": "Sources de données primaires",
+    "perseus": "Perseus Digital Library",
+    "perseusDesc": "La source fondamentale pour les textes classiques grecs et latins. Perseus fournit des références CTS URN canoniques, des éditions critiques et des données morphologiques qui permettent la recherche par lemme.",
+    "scaife": "Scaife Viewer (API CTS)",
+    "scaifeDesc": "La spécification API CTS permet un accès programmatique aux textes antiques avec un adressage URN standardisé. L'implémentation de Scaife fournit des points de terminaison JSON pour récupérer des passages par référence.",
+    "techInfra": "Infrastructure technique",
+    "vizTools": "Outils de visualisation et de graphes",
+    "frontendFramework": "Framework frontend",
+    "backendServices": "Services backend",
+    "devTools": "Outils et services de développement",
+    "standards": "Normes et protocoles",
+    "projectLicense": "Licence EleutherIA",
+    "ccBy4": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "ccByDesc": "Tout le contenu original de la base de données EleutherIA (nœuds du graphe de connaissances, relations, annotations et métadonnées) est sous licence CC BY 4.0. Les textes antiques conservent leurs licences originales de domaine public ou d'accès ouvert.",
+    "freeToShare": "Vous êtes libre de :",
+    "share": "Partager",
+    "shareDesc": "Copier et redistribuer le matériel sur tout support ou format",
+    "adapt": "Adapter",
+    "adaptDesc": "Remixer, transformer et construire à partir du matériel à toute fin, même commerciale",
+    "underTerms": "Selon les conditions suivantes :",
+    "attribution": "Attribution",
+    "attributionDesc": "Vous devez donner le crédit approprié, fournir un lien vers la licence et indiquer si des modifications ont été apportées",
+    "suggestedCitation": "Citation suggérée :",
+    "citationText": "Girardi, R. (2025). EleutherIA : Un graphe de connaissances conforme aux principes FAIR pour les débats antiques sur le libre arbitre [Ensemble de données]. Zenodo. https://doi.org/10.5281/zenodo.17379490",
+    "acknowledgments": "Remerciements",
+    "thanksIntro": "Remerciements particuliers à la communauté open source, aux mainteneurs de la Perseus Digital Library et à tous les chercheurs dont les travaux sont cités dans cette base de données."
+  },
+  "bibliography": {
+    "title": "Bibliographie des études modernes",
+    "subtitle": "Bibliographie complète de la littérature secondaire citée dans le graphe de connaissances",
+    "totalReferences": "Références totales",
+    "filteredResults": "Résultats filtrés",
+    "onlineAccess": "Accès en ligne",
+    "citationCoverage": "Couverture des citations",
+    "searchPlaceholder": "Rechercher par auteur, titre, éditeur, année...",
+    "allTypes": "Tous les types",
+    "monographs": "Monographies",
+    "editedVolumes": "Volumes édités",
+    "journalArticles": "Articles de revues",
+    "translations": "Traductions",
+    "encyclopediaEntries": "Entrées d'encyclopédie",
+    "allYears": "Toutes les années",
+    "allPublishers": "Tous les éditeurs",
+    "featured": "En vedette",
+    "mostCited": "Plus cités",
+    "byAuthor": "Par auteur",
+    "byTitle": "Par titre",
+    "mostPassages": "Plus de passages",
+    "reset": "Réinitialiser",
+    "references": "références",
+    "reference": "référence",
+    "expandAll": "Tout développer",
+    "collapseAll": "Tout réduire",
+    "access": "Accès",
+    "moreAccessOptions": "Plus d'options d'accès",
+    "howToCite": "Comment citer cette base de données",
+    "citationNote": "Toutes les références listées ci-dessus sont citées dans les nœuds du graphe de connaissances ou les annotations de passages. Les détails bibliographiques complets suivent le Chicago Manual of Style (17e éd.)."
+  },
+  "reportError": {
+    "title": "Signaler une erreur",
+    "intro": "EleutherIA s'engage à respecter les principes de la Science Ouverte et de l'intégrité académique. Si vous avez trouvé une erreur dans la base de données (philologique, bibliographique ou structurelle), veuillez la signaler en utilisant le formulaire ci-dessous. Votre contribution aide à maintenir la qualité et la fiabilité de cette infrastructure de recherche.",
+    "howHandled": "Comment votre signalement est traité :",
+    "errorDetails": "Détails de l'erreur",
+    "errorType": "Type d'erreur *",
+    "errorTypes": {
+      "philological": "Erreur philologique",
+      "bibliographic": "Erreur bibliographique",
+      "relationship": "Erreur de relation",
+      "metadata": "Erreur de métadonnées",
+      "technical": "Problème technique",
+      "other": "Autre"
+    },
+    "nodeId": "ID du nœud/entité (si applicable)",
+    "nodeIdPlaceholder": "ex. : stoic_determinism, person_chrysippus",
+    "edgeId": "Arête/Relation (si applicable)",
+    "edgeIdPlaceholder": "ex. : chrysippus → INFLUENCES → epictetus",
+    "description": "Description de l'erreur *",
+    "descriptionPlaceholder": "Décrivez l'erreur en détail. Qu'est-ce qui est incorrect ? Que devrait-il être ?",
+    "suggestedCorrection": "Correction suggérée",
+    "correctionPlaceholder": "Si vous connaissez l'information correcte, veuillez la fournir ici avec des sources",
+    "supportingSources": "Sources de support",
+    "sourcesPlaceholder": "Citez des textes antiques, des études modernes ou des ouvrages de référence qui soutiennent votre correction",
+    "contactInfo": "Informations de contact (facultatif)",
+    "name": "Nom",
+    "namePlaceholder": "Votre nom",
+    "email": "E-mail",
+    "emailPlaceholder": "votre.email@institution.edu",
+    "orcid": "Identifiant ORCID",
+    "orcidPlaceholder": "0000-0000-0000-0000",
+    "submitReport": "Soumettre votre signalement",
+    "githubIssue": "Issue GitHub",
+    "githubDesc": "Préféré pour le suivi",
+    "emailReport": "E-mail",
+    "emailDesc": "Contact direct",
+    "copyClipboard": "Copier dans le presse-papiers",
+    "copyDesc": "Coller n'importe où",
+    "guidelines": "Directives de signalement",
+    "whatToReport": "Que signaler :",
+    "whatNotToReport": "Que NE PAS signaler :"
+  },
+  "admin": {
+    "title": "Tableau de bord administrateur",
+    "overview": "Aperçu",
+    "statistics": "Statistiques de la base de données",
+    "dataQuality": "Qualité des données",
+    "performance": "Performance",
+    "recentActivity": "Activité récente",
+    "healthChecks": "Vérifications de santé",
+    "lemmatizationCoverage": "Couverture de lemmatisation",
+    "nodesWithSources": "Nœuds avec sources",
+    "validUrns": "URN CTS valides",
+    "avgResponseTime": "Temps de réponse moyen",
+    "errorRate": "Taux d'erreur",
+    "cacheHitRate": "Taux de succès du cache",
+    "authRequired": "Authentification requise",
+    "authRequiredDesc": "Veuillez vous connecter pour accéder au tableau de bord administrateur.",
+    "refreshMetrics": "Actualiser les métriques",
+    "overall": "Global :",
+    "kgNodes": "Nœuds du graphe",
+    "kgEdges": "Arêtes du graphe",
+    "ancientWorks": "Œuvres antiques",
+    "passagesCount": "Passages",
+    "overallScore": "Score global",
+    "qualityIssues": "Problèmes de qualité",
+    "criticalIssues": "Problèmes critiques",
+    "warnings": "Avertissements",
+    "totalIssues": "Total des problèmes",
+    "componentScores": "Scores des composants",
+    "worksByLanguage": "Œuvres par langue",
+    "worksByPeriod": "Œuvres par période"
+  },
+  "community": {
+    "title": "Communauté",
+    "submitCorrection": "Soumettre une correction",
+    "contributionForm": "Formulaire de contribution",
+    "nodeToEdit": "Nœud à modifier",
+    "proposedChange": "Changement proposé",
+    "justification": "Justification",
+    "sources": "Sources de support",
+    "submit": "Soumettre pour examen",
+    "thankYou": "Merci pour votre contribution !",
+    "pendingReview": "Votre soumission est en attente d'examen.",
+    "submitAnother": "Soumettre une autre correction",
+    "pageIntro": "Aidez à améliorer la base de données EleutherIA en soumettant des corrections, des ajouts ou des suggestions. Toutes les contributions sont examinées par notre équipe scientifique avant d'être intégrées.",
+    "guidelinesIntro": "Votre contribution aide à maintenir l'intégrité scientifique de la base de données EleutherIA. Nous examinerons votre soumission et vous contacterons si nous avons besoin d'informations supplémentaires.",
+    "guidelinesTitle": "Directives de contribution",
+    "guideline1": "Toutes les corrections doivent être fondées sur des sources antiques ou des études modernes avec des citations spécifiques.",
+    "guideline2": "Pour les corrections de textes grecs/latins, fournissez des références exactes (URN CTS, ID de passage, etc.).",
+    "guideline3": "Justifiez vos changements proposés avec un raisonnement scientifique.",
+    "guideline4": "Les contributions sont examinées dans un délai de 2-3 jours ouvrables.",
+    "whatCorrecting": "Que corrigez-vous ?",
+    "kgNode": "Nœud du graphe de connaissances",
+    "ancientPassage": "Passage antique",
+    "workMetadata": "Métadonnées d'œuvre",
+    "targetIdPlaceholder": "ex. : stoic_determinism, urn:cts:greekLit:..., ou URL de la page",
+    "changeType": "Type de changement",
+    "correction": "Correction (corriger une erreur)",
+    "addition": "Ajout (ajouter des informations manquantes)",
+    "removal": "Suppression (supprimer des données incorrectes)",
+    "proposedChangeDesc": "Décrivez le changement spécifique que vous proposez. Soyez aussi détaillé que possible.",
+    "justificationDesc": "Pourquoi ce changement est-il nécessaire ? Quelles preuves le soutiennent ?",
+    "sourcesPlaceholder": "Listez vos sources (ex. : Bobzien 1998, pp. 234-256 ; SVF 3.191 ; base de données Perseus TLG)",
+    "sourcesHint": "Fournissez des détails bibliographiques complets pour toutes les sources citées.",
+    "contactEmail": "E-mail de contact",
+    "emailInputPlaceholder": "votre.email@institution.edu",
+    "emailHint": "Nous vous contacterons si nous avons besoin de clarifications ou pour vous informer du résultat.",
+    "submitting": "Soumission en cours...",
+    "noteTitle": "Note :",
+    "noteText": "Toutes les contributions acceptées seront créditées dans nos remerciements. En soumettant, vous acceptez que votre contribution puisse être incorporée dans la base de données EleutherIA sous la licence CC BY 4.0.",
+    "authRequired": "Authentification requise",
+    "authRequiredDesc": "Veuillez vous connecter pour voir votre profil.",
+    "badgesTitle": "Badges",
+    "totalContributions": "Contributions totales",
+    "approved": "Approuvées",
+    "pendingReviewShort": "En attente d'examen",
+    "noContributions": "Aucune contribution pour le moment.",
+    "makeFirst": "Faites votre première contribution",
+    "badges": {
+      "bronze": "Contributeur bronze",
+      "silver": "Contributeur argent",
+      "gold": "Contributeur or"
+    },
+    "profile": {
+      "contributions": "Contributions",
+      "joinDate": "Membre depuis",
+      "researchInterests": "Intérêts de recherche"
+    },
+    "newsletter": {
+      "title": "Restez informé",
+      "description": "Recevez des mises à jour mensuelles sur les nouvelles fonctionnalités et les meilleures contributions.",
+      "emailPlaceholder": "Entrez votre e-mail",
+      "subscribe": "S'abonner"
+    }
+  },
+  "citationNetwork": {
+    "title": "Analyse de réseau de citations",
+    "subtitle": "Analysez les modèles d'influence et les réseaux de citations à travers 1200 ans de débat philosophique",
+    "influenceScores": "Scores d'influence",
+    "temporalFlow": "Évolution temporelle",
+    "clusters": "Groupes de citations",
+    "bridges": "Figures de pont",
+    "topInfluential": "Auteurs les plus influents",
+    "exportGephi": "Exporter pour Gephi",
+    "totalNodes": "Nœuds totaux",
+    "totalEdges": "Arêtes totales",
+    "rank": "Rang",
+    "node": "Nœud",
+    "type": "Type",
+    "period": "Période",
+    "school": "École",
+    "score": "Score",
+    "inOut": "Entrée/Sortie",
+    "clusterTitle": "Groupe #{{id}}",
+    "nodesCount": "{{count}} nœuds",
+    "sampleNodes": "Exemples de nœuds :",
+    "bridgeScore": "Score de pont : {{score}}",
+    "connectedSchools": "Écoles connectées ({{count}})",
+    "connectedPeriods": "Périodes connectées ({{count}})",
+    "bridgeDescription": "Philosophes et concepts qui connectent différentes écoles et périodes, permettant un dialogue inter-tradition.",
+    "temporalFlowTitle": "Flux d'influence temporel",
+    "temporalDescription": "Nœuds les plus influents par siècle, suivant l'évolution de l'influence philosophique au fil du temps.",
+    "centuryBCE": "{{century}}e siècle av. J.-C.",
+    "centuryCE": "{{century}}e siècle apr. J.-C."
+  },
+  "database": {
+    "title": "Schéma de la base de données",
+    "subtitle": "Structure et relations de la base de données EleutherIA",
+    "schema": "Visualisation du schéma",
+    "tables": "Tables de la base de données",
+    "relationships": "Relations entre tables"
+  },
+  "footer": {
+    "about": "À propos d'EleutherIA",
+    "aboutText": "Un graphe de connaissances conforme aux principes FAIR documentant les débats antiques sur le libre arbitre, le destin et la responsabilité morale de la philosophie grecque classique à l'Antiquité tardive.",
+    "data": "Données",
+    "citation": "Citation",
+    "license": "Sous licence",
+    "copyright": "© {{year}} Romain Girardi"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "yes": "Oui",
+    "no": "Non",
+    "confirm": "Confirmer",
+    "language": "Langue",
+    "selectLanguage": "Sélectionner la langue",
+    "viewDetails": "Voir les détails",
+    "moreInfo": "Plus d'informations",
+    "showMore": "Afficher plus",
+    "showLess": "Afficher moins",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "download": "Télécharger",
+    "upload": "Téléverser",
+    "search": "Rechercher",
+    "clear": "Effacer",
+    "apply": "Appliquer",
+    "select": "Sélectionner",
+    "deselect": "Désélectionner",
+    "selectAll": "Tout sélectionner",
+    "deselectAll": "Tout désélectionner",
+    "actions": "Actions",
+    "options": "Options",
+    "settings": "Paramètres",
+    "help": "Aide",
+    "info": "Information",
+    "warning": "Avertissement",
+    "success": "Succès",
+    "copied": "Copié dans le presse-papiers",
+    "copyFailed": "Échec de la copie"
+  },
+  "accessibility": {
+    "skipToContent": "Aller au contenu principal",
+    "skipToNav": "Aller à la navigation",
+    "pageLoading": "Chargement de la page",
+    "navigatedTo": "Navigation vers {{page}}",
+    "menuOpened": "Menu ouvert",
+    "menuClosed": "Menu fermé",
+    "tourStarted": "Visite interactive démarrée",
+    "tourEnded": "Visite interactive terminée",
+    "expandPanel": "Développer le panneau",
+    "collapsePanel": "Réduire le panneau",
+    "openDialog": "Ouvrir le dialogue",
+    "closeDialog": "Fermer le dialogue"
+  },
+  "errors": {
+    "notFound": "Page non trouvée",
+    "notFoundDesc": "La page que vous recherchez n'existe pas.",
+    "serverError": "Erreur du serveur",
+    "serverErrorDesc": "Quelque chose s'est mal passé de notre côté. Veuillez réessayer plus tard.",
+    "networkError": "Erreur réseau",
+    "networkErrorDesc": "Impossible de se connecter au serveur. Veuillez vérifier votre connexion Internet.",
+    "unauthorized": "Veuillez vous connecter pour continuer",
+    "unauthorizedDesc": "Vous devez être connecté pour accéder à cette page.",
+    "forbidden": "Accès refusé",
+    "forbiddenDesc": "Vous n'avez pas la permission d'accéder à cette ressource.",
+    "validationError": "Erreur de validation",
+    "requiredField": "Ce champ est obligatoire",
+    "invalidEmail": "Veuillez entrer une adresse e-mail valide",
+    "invalidUrl": "Veuillez entrer une URL valide",
+    "tryAgain": "Réessayer",
+    "goHome": "Aller à l'accueil",
+    "contactSupport": "Contacter le support",
+    "general": {
+      "title": "Une erreur s'est produite",
+      "description": "Une erreur inattendue s'est produite. Veuillez réessayer."
+    },
+    "network": {
+      "title": "Problème de connexion",
+      "description": "Impossible de se connecter au serveur. Veuillez vérifier votre connexion Internet."
+    },
+    "permission": {
+      "title": "Accès refusé",
+      "description": "Vous n'avez pas la permission de voir ce contenu."
+    },
+    "notFoundError": {
+      "title": "Non trouvé",
+      "description": "La page que vous recherchez n'existe pas ou a été déplacée."
+    },
+    "server": {
+      "title": "Erreur du serveur",
+      "description": "Le serveur a rencontré une erreur. Veuillez réessayer plus tard."
+    },
+    "errorDetails": "Détails de l'erreur",
+    "stackTrace": "Trace de la pile",
+    "actions": {
+      "goBack": "Retour",
+      "tryAgain": "Réessayer",
+      "goHome": "Aller à l'accueil",
+      "logIn": "Se connecter"
+    },
+    "boundary": {
+      "title": "Erreur d'application",
+      "description": "L'application a rencontré une erreur inattendue. Nous nous excusons pour le désagrément."
+    },
+    "toast": {
+      "defaultTitle": "Erreur",
+      "closeLabel": "Fermer"
+    }
+  },
+  "empty": {
+    "noResults": {
+      "title": "Aucun résultat trouvé",
+      "withQuery": "Nous n'avons trouvé aucun résultat pour « {{query}} ». Essayez d'ajuster vos termes de recherche.",
+      "withoutQuery": "Essayez d'ajuster vos filtres ou vos termes de recherche."
+    },
+    "noData": {
+      "title": "Pas encore de {{entity}}",
+      "description": "Les {{entity}} apparaîtront ici une fois qu'ils seront ajoutés."
+    },
+    "inbox": {
+      "title": "Boîte de réception vide",
+      "description": "Tout est à jour ! Aucun nouveau message à afficher."
+    },
+    "noContent": {
+      "title": "Aucun {{type}} disponible",
+      "description": "Commencez par ajouter des {{type}} pour les voir ici."
+    },
+    "folder": {
+      "titleWithName": "{{folderName}} est vide",
+      "titleDefault": "Le dossier est vide",
+      "description": "Aucun fichier dans ce dossier pour le moment."
+    },
+    "members": {
+      "title": "Aucun membre de l'équipe",
+      "description": "Invitez des membres de l'équipe à collaborer sur ce projet."
+    },
+    "comments": {
+      "title": "Pas encore de commentaires",
+      "description": "Commencez la conversation en ajoutant le premier commentaire."
+    },
+    "events": {
+      "title": "Aucun événement à venir",
+      "description": "Votre calendrier est vide. Planifiez un événement pour commencer."
+    },
+    "texts": {
+      "title": "Aucun texte antique trouvé",
+      "description": "Aucun texte ne correspond à vos filtres actuels. Essayez d'ajuster vos critères de recherche."
+    },
+    "philosophers": {
+      "title": "Aucun philosophe trouvé",
+      "withPeriod": "Aucun philosophe trouvé pour la période {{period}}.",
+      "withoutPeriod": "Aucun philosophe ne correspond à vos filtres actuels."
+    },
+    "citations": {
+      "title": "Aucune citation trouvée",
+      "description": "Aucune citation disponible pour ce passage ou ce concept."
+    },
+    "actions": {
+      "clearSearch": "Effacer la recherche",
+      "addEntity": "Ajouter {{entity}}",
+      "addType": "Ajouter {{type}}",
+      "uploadFiles": "Téléverser des fichiers",
+      "inviteMembers": "Inviter des membres",
+      "addComment": "Ajouter un commentaire",
+      "createEvent": "Créer un événement",
+      "exploreTexts": "Explorer tous les textes",
+      "clearFilters": "Effacer les filtres",
+      "searchTexts": "Rechercher des textes"
+    }
+  },
+  "notFound": {
+    "title": "Il semblerait que vous soyez perdu",
+    "message": "La page que vous recherchez n'est pas disponible !",
+    "goHome": "Retour à l'accueil"
+  },
+  "mobileNav": {
+    "home": "Accueil",
+    "search": "Recherche",
+    "graph": "Graphe",
+    "qa": "Q&R",
+    "texts": "Textes",
+    "ariaLabel": "Navigation mobile",
+    "moreOptions": "Plus d'options",
+    "more": "Plus",
+    "fab": "Bouton d'action flottant"
+  },
+  "citation": {
+    "ancientSource": "Source antique",
+    "modernScholarship": "Érudition moderne",
+    "original": "Original",
+    "englishTranslation": "Traduction anglaise"
+  },
+  "workspace": {
+    "title": "Observatoire du graphe de connaissances",
+    "itemsCount": "{{count}} éléments",
+    "description": "Les vues coordonnées de la base de données Ancient Free Will révèlent l'arc historique des arguments, retracent les preuves textuelles et dévoilent les dynamiques de réception sans se noyer dans une pelote de force dirigée.",
+    "nodes": "Nœuds",
+    "edges": "Arêtes",
+    "types": {
+      "persons": "Personnes",
+      "works": "Œuvres",
+      "concepts": "Concepts",
+      "arguments": "Arguments",
+      "debates": "Débats",
+      "reformulations": "Reformulations",
+      "quotes": "Citations"
+    }
+  },
+  "bottomNav": {
+    "ariaLabel": "Sélecteur de mode de visualisation",
+    "observatory": "Observatoire",
+    "observatoryAria": "Passer au mode Observatoire (réseau 2D)",
+    "semativerse": "Semativerse",
+    "semativerseAria": "Passer au mode Semativerse (exploration 3D/2D)"
+  },
+  "learn": {
+    "nav": {
+      "title": "Apprendre EleutherIA",
+      "tryGraphRAG": "Essayer le GraphRAG",
+      "overview": "Vue d'ensemble",
+      "knowledgeGraph": "Graphe de connaissances",
+      "embeddings": "Embeddings",
+      "graphrag": "GraphRAG",
+      "hybridSearch": "Recherche hybride",
+      "ancientTexts": "Textes anciens",
+      "fair": "Principes FAIR",
+      "glossary": "Glossaire"
+    },
+    "hero": {
+      "slogan": "Comment ça marche",
+      "title": "La philosophie antique",
+      "titleHighlight": "rencontre l'IA moderne",
+      "subtitle": "Découvrez comment les graphes de connaissances, les embeddings sémantiques et le GraphRAG s'unissent pour illuminer 1 200 ans de pensée philosophique. 2 159 nœuds, 151 œuvres antiques et plus de 14 600 passages à portée de main.",
+      "cta": "Commencer l'apprentissage",
+      "doi": "DOI : 10.5281/zenodo.17379490",
+      "license": "Licence CC BY 4.0",
+      "openSource": "Open Source"
+    },
+    "overview": {
+      "title": "Présentation du projet",
+      "subtitle": "Qu'est-ce qu'EleutherIA et quel problème résout-il ?",
+      "challenge": {
+        "title": "Le défi traditionnel",
+        "intro": "La recherche en philosophie antique nécessite traditionnellement :",
+        "items": [
+          "Rechercher dans plusieurs bases de données (TLG, PHI, Perseus)",
+          "Croiser avec les études modernes",
+          "Lire des textes en grec et en latin",
+          "Cartographier manuellement les arguments entre les traditions",
+          "Suivre l'évolution des concepts sur plusieurs siècles"
+        ],
+        "timeRequired": "Temps requis :",
+        "timeDays": "Jours à semaines"
+      },
+      "solution": {
+        "title": "La solution EleutherIA",
+        "intro": "EleutherIA automatise l'ensemble du processus :",
+        "items": [
+          "Posez des questions en langage naturel",
+          "L'IA trouve les nœuds pertinents du graphe",
+          "Le parcours du graphe étend automatiquement le contexte",
+          "Le LLM synthétise la réponse avec des citations intégrées",
+          "Accédez directement aux textes antiques originaux"
+        ],
+        "timeRequired": "Temps requis :",
+        "timeSeconds": "5 secondes"
+      },
+      "stats": {
+        "nodes": "Nœuds du graphe",
+        "relationships": "Relations",
+        "works": "Œuvres antiques",
+        "passages": "Passages de textes"
+      },
+      "pillars": {
+        "title": "Trois systèmes intégrés",
+        "kg": {
+          "title": "Graphe de connaissances",
+          "description": "2 159 concepts, personnes, arguments et œuvres interconnectés couvrant 1 200 ans de débat philosophique.",
+          "features": [
+            "199 philosophes",
+            "176 concepts",
+            "174 arguments",
+            "31 types de relations"
+          ]
+        },
+        "texts": {
+          "title": "Textes anciens",
+          "description": "151 œuvres canoniques avec 14 623 passages en grec, latin, hébreu et anglais avec analyse morphologique complète.",
+          "features": [
+            "SBLGNT complet",
+            "Septante LXX",
+            "Citations CTS URN",
+            "Lemmatisation au clic"
+          ]
+        },
+        "ai": {
+          "title": "Assistant IA",
+          "description": "GraphRAG combine le parcours du graphe avec la recherche sémantique et la synthèse LLM pour des réponses citées.",
+          "features": [
+            "Embeddings 3 072 dim.",
+            "Recherche hybride",
+            "Réponses en streaming",
+            "Ancrage aux sources"
+          ]
+        }
+      }
+    },
+    "knowledgeGraph": {
+      "title": "Le graphe de connaissances",
+      "subtitle": "Comment nous structurons 1 200 ans de débat philosophique",
+      "whatIs": {
+        "title": "Qu'est-ce qu'un graphe de connaissances ?",
+        "description": "Un graphe de connaissances est un réseau d'informations interconnectées où :",
+        "nodes": {
+          "title": "Nœuds = Entités",
+          "description": "Personnes, concepts, arguments, œuvres"
+        },
+        "edges": {
+          "title": "Arêtes = Relations",
+          "description": "« a formulé », « s'oppose à », « a influencé »"
+        }
+      },
+      "nodeTypes": {
+        "title": "Types de nœuds",
+        "persons": "Personnes",
+        "concepts": "Concepts",
+        "arguments": "Arguments",
+        "works": "Œuvres",
+        "reformulations": "Reformulations",
+        "quotes": "Citations"
+      },
+      "timeline": {
+        "title": "1 200 ans de débat philosophique",
+        "periods": {
+          "presocratic": {
+            "era": "Présocratique",
+            "years": "VIe-Ve s. av. J.-C."
+          },
+          "classical": { "era": "Classique", "years": "Ve-IVe s. av. J.-C." },
+          "hellenistic": {
+            "era": "Hellénistique",
+            "years": "IVe-Ier s. av. J.-C."
+          },
+          "imperial": { "era": "Impérial", "years": "Ier-IIIe s. apr. J.-C." },
+          "lateAntiquity": {
+            "era": "Antiquité tardive",
+            "years": "IIIe-VIe s. apr. J.-C."
+          }
+        }
+      },
+      "demo": {
+        "school": "école",
+        "person": "personne",
+        "concept": "concept",
+        "argument": "argument"
+      }
+    },
+    "embeddings": {
+      "title": "Comprendre les embeddings",
+      "subtitle": "Comment les ordinateurs comprennent le sens grâce aux nombres",
+      "gpsAnalogy": {
+        "title": "Pensez aux embeddings comme un GPS pour les idées",
+        "description": "Tout comme les coordonnées GPS indiquent où se trouve une ville dans l'espace physique, les embeddings indiquent où se trouve une idée dans",
+        "semanticSpace": "l'espace sémantique",
+        "physical": {
+          "title": "Monde physique",
+          "closeMeans": "Proche = Même localisation"
+        },
+        "semantic": {
+          "title": "Monde sémantique",
+          "closeMeans": "Proche = Sens similaire"
+        }
+      },
+      "steps": {
+        "input": {
+          "title": "Entrée de texte",
+          "description": "Tout texte peut être converti en embedding",
+          "example": "« Les stoïciens croyaient que le destin est compatible avec la liberté »"
+        },
+        "processing": {
+          "title": "Traitement IA",
+          "description": "Google Gemini lit le texte et encode son sens"
+        },
+        "output": {
+          "title": "Sortie vectorielle",
+          "description": "3 072 nombres qui capturent le sens",
+          "comment": "// 3 072 dimensions"
+        }
+      },
+      "comparison": {
+        "keyword": {
+          "title": "Recherche par mots-clés",
+          "description": "Ne trouve que les correspondances exactes. Manque les synonymes et concepts liés.",
+          "finds": "Trouve : « libre arbitre »",
+          "misses": "Manque : « liberté », « ἐφ' ἡμῖν », « liberum arbitrium »"
+        },
+        "semantic": {
+          "title": "Recherche sémantique",
+          "description": "Trouve les textes par le sens, quel que soit le vocabulaire utilisé.",
+          "finds1": "Trouve : « libre arbitre », « liberté », « ἐφ' ἡμῖν »",
+          "finds2": "Trouve : « liberum arbitrium », « agentivité morale »"
+        }
+      },
+      "journey": {
+        "title": "Regardez le texte devenir un vecteur",
+        "description": "Vivez le voyage magique de la transformation d'un texte philosophique en un embedding de 3 072 dimensions. Cliquez sur Lecture pour voir le processus en 6 étapes.",
+        "loading": "Chargement du voyage de l'embedding..."
+      },
+      "semanticSpace": {
+        "title": "Explorez l'espace sémantique",
+        "description": "Chaque point lumineux représente un concept philosophique. Les concepts de sens similaire se regroupent dans l'espace 3D. Faites glisser pour tourner, défilez pour zoomer.",
+        "loading": "Chargement de la visualisation 3D...",
+        "legend": {
+          "stoic": "Concepts stoïciens",
+          "epicurean": "Concepts épicuriens",
+          "aristotelian": "Concepts aristotéliciens",
+          "platonic": "Concepts platoniciens",
+          "freeWill": "Concepts fondamentaux du libre arbitre"
+        }
+      }
+    },
+    "graphrag": {
+      "title": "Le pipeline GraphRAG",
+      "subtitle": "Comment EleutherIA répond à vos questions",
+      "controls": {
+        "play": "Lancer l'animation",
+        "pause": "Pause",
+        "reset": "Réinitialiser"
+      },
+      "steps": {
+        "semanticSearch": {
+          "title": "Recherche sémantique",
+          "description": "Convertir la question en embedding → Trouver les nœuds similaires",
+          "detail": "Votre question devient un vecteur de 3 072 nombres. Nous le comparons aux 2 159 nœuds du graphe et trouvons les 10 plus similaires.",
+          "input": "« Que disaient les stoïciens sur le destin ? »",
+          "output": "Trouvé : Stoïcisme (0,89), Destin (0,87), Chrysippe (0,84)..."
+        },
+        "graphTraversal": {
+          "title": "Parcours du graphe",
+          "description": "Étendre depuis les nœuds de départ → Suivre les relations",
+          "detail": "Depuis les 10 nœuds de départ, nous suivons les arêtes comme « a formulé », « s'oppose à », « a influencé » pour trouver 25-50 nœuds connexes.",
+          "input": "Départ : Stoïcisme, Destin, Chrysippe",
+          "output": "Étendu : +Déterminisme, +Épictète, +Compatibilisme..."
+        },
+        "citationExtraction": {
+          "title": "Extraction des citations",
+          "description": "Collecter les sources antiques et les études modernes",
+          "detail": "Chaque nœud du graphe a des champs « sources_antiques » et « études_modernes ». Nous extrayons et dédupliquons toutes les citations.",
+          "input": "25 nœuds étendus",
+          "output": "10 sources antiques + 12 citations modernes"
+        },
+        "contextBuilding": {
+          "title": "Construction du contexte",
+          "description": "Organiser en LOCAL (direct), GLOBAL (thématique), BRIDGE (chemins)",
+          "detail": "Contexte à trois niveaux : LOCAL = réponses directes, GLOBAL = résumés communautaires, BRIDGE = chemins de raisonnement.",
+          "input": "Nœuds et citations bruts",
+          "output": "~3 000 caractères de contexte structuré"
+        },
+        "aiSynthesis": {
+          "title": "Synthèse IA",
+          "description": "Le LLM génère une réponse savante avec citations intégrées",
+          "detail": "Gemini lit le contexte et génère une réponse, en suivant des règles strictes : citer les sources, ne jamais fabriquer de texte grec/latin.",
+          "input": "Contexte + question",
+          "output": "Réponse citée avec références [1], [2]"
+        }
+      },
+      "stage": "Étape"
+    },
+    "hybridSearch": {
+      "title": "Recherche hybride",
+      "subtitle": "Trois méthodes de recherche combinées pour des résultats optimaux",
+      "methods": {
+        "fullText": {
+          "title": "Recherche plein texte",
+          "description": "Correspondance exacte des mots-clés dans les passages. Rapide et précise.",
+          "speed": "< 100 ms",
+          "strength": "Vitesse et précision",
+          "example": "Requête : « libre arbitre » → Trouve les correspondances exactes"
+        },
+        "lemmatic": {
+          "title": "Recherche lemmatique",
+          "description": "Trouve toutes les formes d'un mot (λόγος → λόγου, λόγῳ...)",
+          "speed": "< 500 ms",
+          "strength": "Conscience morphologique",
+          "example": "Requête : « λόγος » → Trouve les 10+ formes grecques"
+        },
+        "semantic": {
+          "title": "Recherche sémantique",
+          "description": "Trouve les textes par le sens grâce aux embeddings",
+          "speed": "< 2 s",
+          "strength": "Compréhension conceptuelle",
+          "example": "Requête : « libre arbitre » → Trouve aussi « liberté », « ἐφ' ἡμῖν »"
+        }
+      },
+      "rrf": {
+        "title": "Fusion par rang réciproque (RRF)",
+        "description": "Les résultats des trois méthodes sont fusionnés avec une formule qui favorise les éléments apparaissant dans plusieurs listes. Les éléments trouvés par les trois méthodes sont classés en premier.",
+        "fullText": "Plein texte",
+        "lemmatic": "Lemmatique",
+        "semantic": "Sémantique",
+        "bestResults": "Meilleurs résultats",
+        "formula": "Score RRF = Σ (1 / (k + rang)) où k = 60"
+      },
+      "speed": "Vitesse :",
+      "strengthLabel": "Force :"
+    },
+    "ancientTexts": {
+      "title": "Base de textes anciens",
+      "subtitle": "151 œuvres, 14 623 passages, 5 langues",
+      "schools": {
+        "stoic": "Stoïcien",
+        "aristotelian": "Aristotélicien",
+        "epicurean": "Épicurien",
+        "christian": "Chrétien",
+        "biblical": "Biblique"
+      },
+      "cts": {
+        "title": "Système de citation canonique (CTS URN)",
+        "description": "Chaque passage a un identifiant permanent et lisible par machine selon les normes savantes :",
+        "breakdown": "└── espace de noms : groupe de textes : œuvre : édition : passage",
+        "compatibility": "Compatible avec les standards Perseus, TLG et PHI pour l'interopérabilité."
+      }
+    },
+    "fair": {
+      "title": "Principes FAIR",
+      "subtitle": "Trouvable, Accessible, Interopérable, Réutilisable",
+      "principles": {
+        "findable": {
+          "letter": "F",
+          "title": "Trouvable",
+          "description": "Identifiants persistants (CTS URN, UUID), métadonnées lisibles par machine, indexé et recherchable"
+        },
+        "accessible": {
+          "letter": "A",
+          "title": "Accessible",
+          "description": "API ouverte sans authentification pour la lecture, documentation Swagger, réponses JSON"
+        },
+        "interoperable": {
+          "letter": "I",
+          "title": "Interopérable",
+          "description": "CTS URN, formats JSON/RDF, préservation TEI XML, compatible avec Perseus/TLG/PHI"
+        },
+        "reusable": {
+          "letter": "R",
+          "title": "Réutilisable",
+          "description": "Licence CC BY 4.0, provenance documentée, DOI Zenodo, citations traçables"
+        }
+      }
+    },
+    "glossary": {
+      "title": "Glossaire",
+      "subtitle": "Termes techniques expliqués pour les chercheurs",
+      "searchPlaceholder": "Rechercher dans le glossaire...",
+      "terms": {
+        "embedding": {
+          "term": "Embedding",
+          "definition": "Une liste de nombres (3 072) qui représente le sens d'un texte. Les sens similaires ont des vecteurs similaires."
+        },
+        "vector": {
+          "term": "Vecteur",
+          "definition": "Une liste de nombres. Dans EleutherIA, chaque texte est représenté par 3 072 nombres."
+        },
+        "semanticSearch": {
+          "term": "Recherche sémantique",
+          "definition": "Trouver des textes par le sens, pas seulement par mots-clés. « Libre arbitre » trouve aussi « liberté » et « ἐφ' ἡμῖν »."
+        },
+        "knowledgeGraph": {
+          "term": "Graphe de connaissances",
+          "definition": "Un réseau de concepts interconnectés. Nœuds = entités, Arêtes = relations."
+        },
+        "graphrag": {
+          "term": "GraphRAG",
+          "definition": "Génération augmentée par récupération basée sur un graphe. Combine graphe de connaissances + recherche sémantique + IA pour les questions-réponses."
+        },
+        "lemma": {
+          "term": "Lemme",
+          "definition": "La forme dictionnaire d'un mot. « λόγου » → « λόγος ». Permet de trouver toutes les formes du mot."
+        },
+        "rrf": {
+          "term": "RRF",
+          "definition": "Fusion par rang réciproque. Une formule pour combiner plusieurs listes classées en une seule."
+        },
+        "ctsUrn": {
+          "term": "CTS URN",
+          "definition": "Uniform Resource Name des services de textes canoniques. Format standard de citation pour les textes anciens."
+        },
+        "fairPrinciples": {
+          "term": "FAIR",
+          "definition": "Trouvable, Accessible, Interopérable, Réutilisable. Principes internationaux pour les données ouvertes."
+        },
+        "llm": {
+          "term": "LLM",
+          "definition": "Grand modèle de langage. L'IA qui synthétise les réponses à partir du contexte."
+        },
+        "cosineSimilarity": {
+          "term": "Similarité cosinus",
+          "definition": "Mesure de similarité vectorielle. 1,0 = identique, 0,0 = complètement différent."
+        },
+        "qdrant": {
+          "term": "Qdrant",
+          "definition": "Base de données vectorielle optimisée pour stocker et rechercher efficacement les embeddings."
+        }
+      }
+    },
+    "cta": {
+      "title": "Prêt à explorer ?",
+      "description": "Essayez de poser des questions à EleutherIA sur la philosophie antique du libre arbitre. Obtenez des réponses citées fondées sur 1 200 ans d'érudition.",
+      "tryGraphRAG": "Essayer GraphRAG",
+      "exploreGraph": "Explorer le graphe"
+    },
+    "footer": {
+      "description": "Un graphe de connaissances conforme FAIR de la philosophie antique du libre arbitre",
+      "license": "CC BY 4.0"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+cff-version: 1.2.0
+title: "EleutherIA: A FAIR-Compliant Knowledge Graph for Ancient Philosophy on Free Will"
+message: "If you use this software or dataset, please cite it as below."
+type: software
+authors:
+  - family-names: Girardi
+    given-names: Romain
+    email: romain.girardi@univ-cotedazur.fr
+    orcid: "https://orcid.org/0009-0000-3608-1817"
+    affiliation: "Universite Cote d'Azur"
+repository-code: "https://github.com/romain-girardi-eng/EleutherIA"
+url: "https://eleutheria.dev"
+abstract: >-
+  EleutherIA is a FAIR-compliant knowledge graph documenting ancient
+  philosophical debates on free will, fate, and moral responsibility
+  from the Greco-Roman and Early Christian periods (6th c. BCE - 6th c. CE).
+  It combines 2,193 knowledge graph nodes with 8,616 edges, 189 ancient
+  Greek/Latin works with 16,968 passages, and features GraphRAG for
+  scholarly Q&A with citation grounding.
+keywords:
+  - ancient philosophy
+  - free will
+  - knowledge graph
+  - GraphRAG
+  - digital humanities
+  - FAIR data
+  - Stoicism
+  - ancient Greek
+  - Latin
+  - moral responsibility
+license: CC-BY-4.0
+version: "2.0.0"
+date-released: "2025-01-30"
+doi: "10.5281/zenodo.17379490"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.17379490"
+    description: "Zenodo dataset DOI"
+references:
+  - type: dataset
+    title: "EleutherIA Ancient Philosophy Knowledge Graph"
+    authors:
+      - family-names: Girardi
+        given-names: Romain
+    doi: "10.5281/zenodo.17379490"
+    repository: "https://zenodo.org/records/17379490"

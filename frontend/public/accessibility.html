@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibility Statement - EleutherIA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.7;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 16px;
+      color: #0f172a;
+    }
+
+    .date {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-top: 32px;
+      margin-bottom: 16px;
+      color: #1e293b;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    h3 {
+      font-size: 18px;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      color: #334155;
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    ul, ol {
+      margin-bottom: 16px;
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    a {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+
+    a:hover, a:focus {
+      text-decoration: underline;
+    }
+
+    a:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .status-partial {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+
+    .table th, .table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .table th {
+      background: #f1f5f9;
+      font-weight: 600;
+    }
+
+    .conformance {
+      font-weight: 600;
+    }
+
+    .conformance.full {
+      color: #16a34a;
+    }
+
+    .conformance.partial {
+      color: #d97706;
+    }
+
+    .conformance.none {
+      color: #dc2626;
+    }
+
+    .keyboard-shortcuts {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+
+    .shortcut {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .shortcut:last-child {
+      border-bottom: none;
+    }
+
+    kbd {
+      background: #e2e8f0;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+
+    .contact-box {
+      background: #eff6ff;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #3b82f6;
+      margin-top: 24px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 24px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container" id="main-content" tabindex="-1">
+    <a href="/" class="back-link">← Back to EleutherIA</a>
+
+    <h1>Accessibility Statement</h1>
+    <p class="date">Last updated: November 2025</p>
+
+    <span class="status-badge status-partial">WCAG 2.1 AA - Partially Conformant</span>
+
+    <p>
+      EleutherIA is committed to ensuring digital accessibility for people with disabilities.
+      We are continually improving the user experience for everyone, and applying the relevant
+      accessibility standards.
+    </p>
+
+    <h2>Conformance Status</h2>
+    <p>
+      The Web Content Accessibility Guidelines (WCAG) defines requirements for designers and
+      developers to improve accessibility for people with disabilities. It defines three levels
+      of conformance: Level A, Level AA, and Level AAA.
+    </p>
+    <p>
+      <strong>EleutherIA is partially conformant with WCAG 2.1 level AA.</strong> Partially conformant
+      means that some parts of the content do not fully conform to the accessibility standard.
+    </p>
+
+    <h2>Accessibility Features</h2>
+
+    <h3>Navigation and Structure</h3>
+    <ul>
+      <li>Skip navigation links to jump directly to main content</li>
+      <li>Consistent navigation across all pages</li>
+      <li>Proper heading hierarchy (H1-H6)</li>
+      <li>Landmark regions (header, nav, main, footer)</li>
+      <li>Breadcrumb navigation for wayfinding</li>
+    </ul>
+
+    <h3>Visual Design</h3>
+    <ul>
+      <li>Minimum color contrast ratio of 4.5:1 for normal text</li>
+      <li>Text resizable up to 200% without loss of functionality</li>
+      <li>No content that flashes more than three times per second</li>
+      <li>Respects user preferences for reduced motion</li>
+      <li>Visible focus indicators for keyboard navigation</li>
+    </ul>
+
+    <h3>Interactive Elements</h3>
+    <ul>
+      <li>All interactive elements are keyboard accessible</li>
+      <li>Clear focus indicators on all focusable elements</li>
+      <li>Form inputs have associated labels</li>
+      <li>Error messages are descriptive and helpful</li>
+      <li>Touch targets are at least 44x44 pixels</li>
+    </ul>
+
+    <h3>Assistive Technology Support</h3>
+    <ul>
+      <li>Compatible with screen readers (NVDA, JAWS, VoiceOver)</li>
+      <li>ARIA attributes for dynamic content</li>
+      <li>Live regions for status updates</li>
+      <li>Semantic HTML for proper structure</li>
+    </ul>
+
+    <h2>Keyboard Shortcuts</h2>
+    <div class="keyboard-shortcuts">
+      <div class="shortcut">
+        <span>Skip to main content</span>
+        <kbd>Alt + 1</kbd>
+      </div>
+      <div class="shortcut">
+        <span>Skip to navigation</span>
+        <kbd>Alt + 2</kbd>
+      </div>
+      <div class="shortcut">
+        <span>Skip to search</span>
+        <kbd>Alt + 3</kbd>
+      </div>
+      <div class="shortcut">
+        <span>Skip to footer</span>
+        <kbd>Alt + 4</kbd>
+      </div>
+      <div class="shortcut">
+        <span>Open keyboard shortcuts help</span>
+        <kbd>?</kbd>
+      </div>
+      <div class="shortcut">
+        <span>Close dialog/modal</span>
+        <kbd>Escape</kbd>
+      </div>
+    </div>
+
+    <h2>Known Limitations</h2>
+    <p>
+      Despite our efforts, some content may not be fully accessible. The following known issues
+      are being addressed:
+    </p>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Area</th>
+          <th>Issue</th>
+          <th>Conformance</th>
+          <th>Plan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Knowledge Graph Visualization</td>
+          <td>Complex interactive graph may be difficult to navigate with screen readers</td>
+          <td class="conformance partial">Partial</td>
+          <td>Providing alternative text-based view</td>
+        </tr>
+        <tr>
+          <td>Ancient Greek/Latin Text</td>
+          <td>Some polytonic Greek text may not be announced correctly by all screen readers</td>
+          <td class="conformance partial">Partial</td>
+          <td>Adding transliterations where possible</td>
+        </tr>
+        <tr>
+          <td>Third-party Content</td>
+          <td>External links (Perseus, TLG) may not meet accessibility standards</td>
+          <td class="conformance none">External</td>
+          <td>Clearly marked as external links</td>
+        </tr>
+        <tr>
+          <td>PDF Exports</td>
+          <td>Generated PDFs may lack proper document structure</td>
+          <td class="conformance partial">Partial</td>
+          <td>Improving PDF accessibility tags</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Testing and Evaluation</h2>
+    <p>We evaluate accessibility using:</p>
+    <ul>
+      <li><strong>Automated Testing:</strong> axe-core for continuous monitoring</li>
+      <li><strong>Manual Testing:</strong> Keyboard-only navigation, screen reader testing</li>
+      <li><strong>User Testing:</strong> Feedback from users with disabilities</li>
+      <li><strong>Standards Review:</strong> Regular WCAG 2.1 AA compliance audits</li>
+    </ul>
+
+    <h2>Technical Specifications</h2>
+    <p>Accessibility of EleutherIA relies on the following technologies:</p>
+    <ul>
+      <li>HTML5</li>
+      <li>WAI-ARIA (Web Accessibility Initiative - Accessible Rich Internet Applications)</li>
+      <li>CSS3</li>
+      <li>JavaScript (ES2020+)</li>
+    </ul>
+    <p>These technologies are relied upon for conformance with WCAG 2.1.</p>
+
+    <h2>Feedback</h2>
+    <p>
+      We welcome your feedback on the accessibility of EleutherIA. Please let us know if you
+      encounter accessibility barriers:
+    </p>
+
+    <div class="contact-box">
+      <p><strong>Contact Information:</strong></p>
+      <ul>
+        <li>Email: <a href="mailto:romain.girardi@univ-cotedazur.fr">romain.girardi@univ-cotedazur.fr</a></li>
+        <li>GitHub Issues: <a href="https://github.com/romain-girardi-eng/eleutherai/issues">Report accessibility issues</a></li>
+      </ul>
+      <p>We try to respond to accessibility feedback within 5 business days.</p>
+    </div>
+
+    <h2>Enforcement Procedure</h2>
+    <p>
+      If you are not satisfied with our response to your accessibility concern, you may contact:
+    </p>
+    <ul>
+      <li>Université Côte d'Azur - Digital Accessibility Office</li>
+      <li>Your local disability rights organization</li>
+    </ul>
+
+    <h2>Assessment Approach</h2>
+    <p>
+      EleutherIA assessed the accessibility of this website by the following approaches:
+    </p>
+    <ul>
+      <li>Self-evaluation using automated tools (axe-core, Lighthouse)</li>
+      <li>Manual testing with assistive technologies</li>
+      <li>User feedback and testing sessions</li>
+    </ul>
+
+    <h2>Formal Approval</h2>
+    <p>
+      This accessibility statement is approved by:<br>
+      <strong>Romain Girardi</strong><br>
+      Principal Developer, EleutherIA Project<br>
+      Université Côte d'Azur
+    </p>
+  </main>
+</body>
+</html>

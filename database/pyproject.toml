@@ -1,0 +1,109 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "eleutheria-database"
+version = "2.0.0"
+description = "Ancient Greek/Latin texts corpus for EleutherIA knowledge graph"
+readme = "README.md"
+license = "CC-BY-4.0"
+requires-python = ">=3.11"
+authors = [
+    { name = "Romain Girardi", email = "romain.girardi@univ-cotedazur.fr" }
+]
+keywords = [
+    "ancient-greek",
+    "latin",
+    "corpus",
+    "digital-humanities",
+    "classical-texts",
+    "CTS-URN",
+    "TEI-XML"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Database",
+    "Typing :: Typed",
+]
+dependencies = [
+    "asyncpg>=0.29.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.4.0",
+    "mypy>=1.10.0",
+]
+api = [
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.30.0",
+]
+full = [
+    "eleutheria-database[dev,api]",
+    "alembic>=1.13.0",
+    "psycopg2-binary>=2.9.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/romain-girardi-eng/EleutherIA"
+Documentation = "https://github.com/romain-girardi-eng/EleutherIA/tree/main/docs"
+Repository = "https://github.com/romain-girardi-eng/EleutherIA"
+Issues = "https://github.com/romain-girardi-eng/EleutherIA/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eleutheria_database"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+src = ["src"]
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # Pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "ARG",    # flake8-unused-arguments
+    "SIM",    # flake8-simplify
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "B008",   # do not perform function calls in argument defaults
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["eleutheria_database"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"

@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EleutherIA Knowledge Graph Edge Types",
+  "description": "Edge (relationship) type definitions for the EleutherIA ancient philosophy knowledge graph",
+  "version": "2.0.0",
+  "edge_types": {
+    "argues_for": {
+      "description": "Source argues in favor of target position/concept",
+      "category": "argumentative",
+      "inverse": "supported_by",
+      "source_types": ["Person", "Argument", "Work"],
+      "target_types": ["Concept", "Position", "Argument"]
+    },
+    "argues_against": {
+      "description": "Source argues against target position/concept",
+      "category": "argumentative",
+      "inverse": "opposed_by",
+      "source_types": ["Person", "Argument", "Work"],
+      "target_types": ["Concept", "Position", "Argument"]
+    },
+    "refutes": {
+      "description": "Source refutes target argument",
+      "category": "argumentative",
+      "inverse": "refuted_by",
+      "source_types": ["Person", "Argument"],
+      "target_types": ["Argument"]
+    },
+    "responds_to": {
+      "description": "Source is a response to target",
+      "category": "argumentative",
+      "inverse": "has_response",
+      "source_types": ["Argument", "Work"],
+      "target_types": ["Argument", "Work"]
+    },
+    "influences": {
+      "description": "Source intellectually influences target",
+      "category": "intellectual",
+      "inverse": "influenced_by",
+      "source_types": ["Person", "School", "Work"],
+      "target_types": ["Person", "School", "Work"]
+    },
+    "influenced_by": {
+      "description": "Source is influenced by target",
+      "category": "intellectual",
+      "inverse": "influences",
+      "source_types": ["Person", "School", "Work"],
+      "target_types": ["Person", "School", "Work"]
+    },
+    "taught_by": {
+      "description": "Source was taught by target",
+      "category": "intellectual",
+      "inverse": "teaches",
+      "source_types": ["Person"],
+      "target_types": ["Person"]
+    },
+    "teaches": {
+      "description": "Source teaches target",
+      "category": "intellectual",
+      "inverse": "taught_by",
+      "source_types": ["Person"],
+      "target_types": ["Person"]
+    },
+    "belongs_to_school": {
+      "description": "Source belongs to target school",
+      "category": "affiliation",
+      "inverse": "has_member",
+      "source_types": ["Person"],
+      "target_types": ["School"]
+    },
+    "has_member": {
+      "description": "Source school has target as member",
+      "category": "affiliation",
+      "inverse": "belongs_to_school",
+      "source_types": ["School"],
+      "target_types": ["Person"]
+    },
+    "founded": {
+      "description": "Source founded target school/institution",
+      "category": "affiliation",
+      "inverse": "founded_by",
+      "source_types": ["Person"],
+      "target_types": ["School", "Institution"]
+    },
+    "wrote": {
+      "description": "Source wrote target work",
+      "category": "authorship",
+      "inverse": "authored_by",
+      "source_types": ["Person"],
+      "target_types": ["Work"]
+    },
+    "authored_by": {
+      "description": "Source was authored by target",
+      "category": "authorship",
+      "inverse": "wrote",
+      "source_types": ["Work"],
+      "target_types": ["Person"]
+    },
+    "cites": {
+      "description": "Source cites target",
+      "category": "citation",
+      "inverse": "cited_by",
+      "source_types": ["Work", "Passage"],
+      "target_types": ["Work", "Passage", "Person"]
+    },
+    "cited_by": {
+      "description": "Source is cited by target",
+      "category": "citation",
+      "inverse": "cites",
+      "source_types": ["Work", "Passage", "Person"],
+      "target_types": ["Work", "Passage"]
+    },
+    "preserves": {
+      "description": "Source preserves target fragment",
+      "category": "textual",
+      "inverse": "preserved_in",
+      "source_types": ["Work", "Person"],
+      "target_types": ["Text_Fragment"]
+    },
+    "preserved_in": {
+      "description": "Source is preserved in target",
+      "category": "textual",
+      "inverse": "preserves",
+      "source_types": ["Text_Fragment"],
+      "target_types": ["Work"]
+    },
+    "contains": {
+      "description": "Source contains target",
+      "category": "structural",
+      "inverse": "part_of",
+      "source_types": ["Work", "Source_Collection"],
+      "target_types": ["Passage", "Text_Fragment", "Work"]
+    },
+    "part_of": {
+      "description": "Source is part of target",
+      "category": "structural",
+      "inverse": "contains",
+      "source_types": ["Passage", "Text_Fragment"],
+      "target_types": ["Work", "Source_Collection"]
+    },
+    "discusses": {
+      "description": "Source discusses target concept",
+      "category": "semantic",
+      "inverse": "discussed_in",
+      "source_types": ["Work", "Passage", "Person"],
+      "target_types": ["Concept", "Argument", "Debate"]
+    },
+    "discussed_in": {
+      "description": "Source concept is discussed in target",
+      "category": "semantic",
+      "inverse": "discusses",
+      "source_types": ["Concept", "Argument"],
+      "target_types": ["Work", "Passage"]
+    },
+    "defines": {
+      "description": "Source defines target term/concept",
+      "category": "semantic",
+      "inverse": "defined_by",
+      "source_types": ["Person", "Work", "Passage"],
+      "target_types": ["Concept", "Term"]
+    },
+    "related_to": {
+      "description": "Source is related to target",
+      "category": "semantic",
+      "inverse": "related_to",
+      "source_types": ["*"],
+      "target_types": ["*"]
+    },
+    "contrasts_with": {
+      "description": "Source concept contrasts with target",
+      "category": "semantic",
+      "inverse": "contrasts_with",
+      "source_types": ["Concept", "Position"],
+      "target_types": ["Concept", "Position"]
+    },
+    "holds_position": {
+      "description": "Source holds target philosophical position",
+      "category": "doctrinal",
+      "inverse": "held_by",
+      "source_types": ["Person", "School"],
+      "target_types": ["Position"]
+    },
+    "endorses": {
+      "description": "Source endorses target doctrine",
+      "category": "doctrinal",
+      "inverse": "endorsed_by",
+      "source_types": ["Person", "School"],
+      "target_types": ["Doctrine", "Position"]
+    },
+    "rejects": {
+      "description": "Source rejects target doctrine",
+      "category": "doctrinal",
+      "inverse": "rejected_by",
+      "source_types": ["Person", "School"],
+      "target_types": ["Doctrine", "Position"]
+    },
+    "participates_in": {
+      "description": "Source participates in target debate",
+      "category": "debate",
+      "inverse": "has_participant",
+      "source_types": ["Person", "School"],
+      "target_types": ["Debate"]
+    },
+    "interprets": {
+      "description": "Source interprets target",
+      "category": "hermeneutic",
+      "inverse": "interpreted_by",
+      "source_types": ["Person", "Modern_Interpretation"],
+      "target_types": ["Person", "Concept", "Work", "Argument"]
+    },
+    "interpreted_by": {
+      "description": "Source is interpreted by target",
+      "category": "hermeneutic",
+      "inverse": "interprets",
+      "source_types": ["Person", "Concept", "Work"],
+      "target_types": ["Person", "Modern_Interpretation"]
+    },
+    "contemporary_of": {
+      "description": "Source is contemporary of target",
+      "category": "temporal",
+      "inverse": "contemporary_of",
+      "source_types": ["Person"],
+      "target_types": ["Person"]
+    },
+    "precedes": {
+      "description": "Source chronologically precedes target",
+      "category": "temporal",
+      "inverse": "follows",
+      "source_types": ["Person", "Event", "Work"],
+      "target_types": ["Person", "Event", "Work"]
+    }
+  },
+  "categories": {
+    "argumentative": "Logical and argumentative relationships",
+    "intellectual": "Intellectual influence and education",
+    "affiliation": "School and institutional membership",
+    "authorship": "Writing and attribution",
+    "citation": "Citation and reference",
+    "textual": "Text preservation and transmission",
+    "structural": "Compositional structure",
+    "semantic": "Conceptual relationships",
+    "doctrinal": "Doctrinal positions",
+    "debate": "Philosophical debates",
+    "hermeneutic": "Interpretation relationships",
+    "temporal": "Chronological relationships"
+  }
+}

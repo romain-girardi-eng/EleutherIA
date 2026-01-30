@@ -1,0 +1,157 @@
+# Pre-commit hooks for EleutherIA
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+default_language_version:
+  python: python3.11
+  node: 20.0.0
+
+repos:
+  # ==========================================
+  # Universal File Checks (Fast)
+  # ==========================================
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      # File formatting
+      - id: trailing-whitespace
+        name: Trim trailing whitespace
+        exclude: \.md$
+      - id: end-of-file-fixer
+        name: Fix end of files
+      - id: mixed-line-ending
+        name: Fix line endings
+        args: ["--fix=lf"]
+
+      # File validation
+      - id: check-yaml
+        name: Check YAML syntax
+        exclude: ^frontend/node_modules/
+      - id: check-json
+        name: Check JSON syntax
+        exclude: ^frontend/node_modules/
+      - id: check-toml
+        name: Check TOML syntax
+
+      # Git hygiene
+      - id: check-added-large-files
+        name: Check for large files
+        args: ["--maxkb=5000"] # Warn on files >5MB
+      - id: check-merge-conflict
+        name: Check for merge conflicts
+      - id: check-case-conflict
+        name: Check for case conflicts
+
+      # Security
+      - id: detect-private-key
+        name: Detect private keys
+
+      # Python-specific
+      - id: check-ast
+        name: Check Python AST
+        files: \.py$
+      - id: check-builtin-literals
+        name: Check builtin literals
+        files: \.py$
+      - id: check-docstring-first
+        name: Check docstring first
+        files: \.py$
+      - id: debug-statements
+        name: Check for debug statements
+        files: \.py$
+
+  # ==========================================
+  # Python: Ruff (Fast Linter + Formatter)
+  # ==========================================
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.4
+    hooks:
+      - id: ruff
+        name: Ruff linting
+        args:
+          - --fix
+          - --exit-non-zero-on-fix
+        files: ^(database|kg|graphrag)/.*\.py$
+
+      - id: ruff-format
+        name: Ruff formatting
+        files: ^(database|kg|graphrag)/.*\.py$
+
+  # ==========================================
+  # Python: Mypy (Type Checking)
+  # ==========================================
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        name: Mypy type checking
+        files: ^(database|kg|graphrag)/.*\.py$
+        args:
+          - --ignore-missing-imports
+        additional_dependencies:
+          - types-requests
+          - types-redis
+        # Only warn, don't block commits (for now)
+        verbose: true
+        stages: [manual] # Run with: pre-commit run --hook-stage manual mypy
+
+  # ==========================================
+  # Security: Detect Secrets
+  # ==========================================
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        name: Detect secrets
+        args:
+          - "--baseline"
+          - ".secrets.baseline"
+          - "--exclude-files"
+          - "package-lock.json"
+          - "--exclude-files"
+          - "frontend/node_modules/.*"
+          - "--exclude-files"
+          - '\.git/.*'
+
+  # ==========================================
+  # Markdown: Linting
+  # ==========================================
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.42.0
+    hooks:
+      - id: markdownlint
+        name: Markdown linting
+        args:
+          - "--fix"
+          - "--disable"
+          - "MD013" # Line length (often too strict)
+          - "--disable"
+          - "MD033" # Inline HTML (needed for academic content)
+        exclude: ^(frontend/node_modules|CHANGELOG)
+
+  # ==========================================
+  # YAML: Prettier Formatting
+  # ==========================================
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+        name: Prettier formatting (YAML/JSON)
+        types_or: [yaml, json]
+        exclude: ^(frontend/node_modules|\.vscode|package-lock\.json)
+
+# ==========================================
+# CI Configuration (skip some hooks in CI)
+# ==========================================
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ""
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
+  autoupdate_schedule: weekly
+  skip:
+    - mypy # Too slow for CI, covered by GitHub Actions
+  submodules: false

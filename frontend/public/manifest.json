@@ -1,0 +1,80 @@
+{
+  "name": "EleutherIA - Ancient Free Will Database",
+  "short_name": "EleutherIA",
+  "description": "FAIR-compliant knowledge graph documenting 1200 years of ancient philosophical debates on free will (6th c. BCE - 6th c. CE)",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f172a",
+  "theme_color": "#3b82f6",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "categories": ["education", "books", "reference"],
+  "iarc_rating_id": "",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1280x640",
+      "type": "image/png",
+      "label": "EleutherIA Knowledge Graph Visualization"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Search Ancient Texts",
+      "short_name": "Search",
+      "description": "Search across 69,277 passages using hybrid search",
+      "url": "/search",
+      "icons": [{ "src": "/favicon-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Knowledge Graph",
+      "short_name": "Graph",
+      "description": "Explore 534 nodes and 923 relationships",
+      "url": "/visualizer",
+      "icons": [{ "src": "/favicon-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Ask a Question",
+      "short_name": "Ask",
+      "description": "Use GraphRAG to get AI-powered answers with citations",
+      "url": "/graphrag",
+      "icons": [{ "src": "/favicon-32x32.png", "sizes": "32x32" }]
+    }
+  ],
+  "related_applications": [],
+  "handle_links": "auto"
+}
