@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eleutheria"
-version = "1.1.1"
+version = "1.1.2"
 description = "Ancient Philosophy Knowledge Graph - CLI Tools"
 readme = "README.md"
 license = {text = "CC-BY-4.0"}
