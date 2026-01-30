@@ -1,15 +1,15 @@
 <p align="center">
-  <img src="frontend/public/logo.svg" alt="EleutherIA Logo" width="120" height="120">
+  <img src="frontend/public/logo.svg" alt="EleutherIA Logo" width="140" height="140">
 </p>
 
 <h1 align="center">EleutherIA</h1>
 
-<p align="center">
-  <strong>A FAIR-compliant knowledge graph for ancient philosophical debates on free will, fate, and moral responsibility (6th c. BCE - 6th c. CE)</strong>
-</p>
+<h3 align="center">
+  <a href="https://free-will.app">🌐 https://free-will.app</a>
+</h3>
 
 <p align="center">
-  <a href="https://free-will.app"><img src="https://img.shields.io/badge/🌐_Live_Demo-free--will.app-blue?style=for-the-badge" alt="Live Demo"></a>
+  <strong>A FAIR-compliant knowledge graph for ancient philosophical debates on free will, fate, and moral responsibility (6th c. BCE - 6th c. CE)</strong>
 </p>
 
 <p align="center">
