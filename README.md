@@ -1,12 +1,10 @@
 <p align="center">
-  <img src="frontend/public/logo.svg" alt="EleutherIA Logo" width="140" height="140">
+  <img src="frontend/public/logo.svg" alt="EleutherIA" width="400">
 </p>
 
-<h1 align="center">EleutherIA</h1>
-
-<h3 align="center">
-  <a href="https://free-will.app">🌐 https://free-will.app</a>
-</h3>
+<h2 align="center">
+  <a href="https://free-will.app">https://free-will.app</a>
+</h2>
 
 <p align="center">
   <strong>A FAIR-compliant knowledge graph for ancient philosophical debates on free will, fate, and moral responsibility (6th c. BCE - 6th c. CE)</strong>
