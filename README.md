@@ -18,12 +18,12 @@
 ## Quick Start
 
 ```bash
-# Clone and install CLI
+# Install CLI
+pip install eleutheria
+
+# Clone and configure
 git clone https://github.com/romain-girardi-eng/EleutherIA.git
 cd EleutherIA
-pip install -e .
-
-# Configure
 cp .env.example .env
 # Add your API key(s) to .env
 
