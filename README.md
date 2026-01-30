@@ -1,6 +1,21 @@
-# EleutherIA
+<p align="center">
+  <img src="frontend/public/logo.svg" alt="EleutherIA Logo" width="120" height="120">
+</p>
 
-A FAIR-compliant knowledge graph for ancient philosophical debates on free will, fate, and moral responsibility (6th c. BCE - 6th c. CE).
+<h1 align="center">EleutherIA</h1>
+
+<p align="center">
+  <strong>A FAIR-compliant knowledge graph for ancient philosophical debates on free will, fate, and moral responsibility (6th c. BCE - 6th c. CE)</strong>
+</p>
+
+<p align="center">
+  <a href="https://free-will.app"><img src="https://img.shields.io/badge/🌐_Live_Demo-free--will.app-blue?style=for-the-badge" alt="Live Demo"></a>
+</p>
+
+<p align="center">
+  <a href="https://doi.org/10.5281/zenodo.17379490"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.17379490.svg" alt="DOI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg" alt="License: CC BY 4.0"></a>
+</p>
 
 ## Quick Start
 
