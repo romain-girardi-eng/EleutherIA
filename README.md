@@ -36,21 +36,37 @@ eleutheria run
 ## CLI Commands
 
 ```bash
+# Services
 eleutheria run              # Start all services (Docker)
-eleutheria run -p full      # Start with monitoring (Prometheus + Grafana)
-eleutheria stop             # Stop all services
-eleutheria logs             # View logs
-eleutheria dev -s backend   # Development mode (no Docker)
-eleutheria dev -s frontend
+eleutheria run -p full      # With monitoring (Prometheus + Grafana)
+eleutheria stop             # Stop services
+eleutheria status           # Check service health
+eleutheria doctor           # Diagnose issues
 
+# Search & Query
+eleutheria search "Stoic fate"           # Search knowledge graph
+eleutheria ask "What is free will?"      # Ask with GraphRAG
+eleutheria ask -t "Complex question"     # Extended reasoning mode
+
+# Explore Data
+eleutheria stats            # Database statistics
+eleutheria philosophers     # List philosophers
+eleutheria concepts         # List concepts
+eleutheria works -l grc     # List works by language
+
+# Export/Import
+eleutheria export kg        # Export knowledge graph
+eleutheria export passages  # Export passages
+
+# Development
 eleutheria test all         # Run all tests
-eleutheria test database    # Test specific package
-eleutheria lint             # Check code quality
-eleutheria lint --fix       # Auto-fix issues
+eleutheria lint --fix       # Lint + auto-fix
 eleutheria quality          # Full quality check
 
-eleutheria info             # Show project stats
-eleutheria --help           # All commands
+# Quick Access
+eleutheria web              # Open free-will.app
+eleutheria docs             # Open documentation
+eleutheria shell            # Interactive mode
 ```
 
 ## The Three Systems
