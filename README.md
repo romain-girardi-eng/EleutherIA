@@ -18,18 +18,40 @@
 ## Quick Start
 
 ```bash
-# Clone and start
+# Clone and install CLI
 git clone https://github.com/romain-girardi-eng/EleutherIA.git
 cd EleutherIA
+pip install -e .
+
+# Configure
 cp .env.example .env
 # Add your API key(s) to .env
 
 # Start all services
-make run
-# Or: docker compose -f deploy/docker/docker-compose.yml up
+eleutheria run
 ```
 
 **Access:** http://localhost (frontend) | http://localhost:8000/docs (API)
+
+## CLI Commands
+
+```bash
+eleutheria run              # Start all services (Docker)
+eleutheria run -p full      # Start with monitoring (Prometheus + Grafana)
+eleutheria stop             # Stop all services
+eleutheria logs             # View logs
+eleutheria dev -s backend   # Development mode (no Docker)
+eleutheria dev -s frontend
+
+eleutheria test all         # Run all tests
+eleutheria test database    # Test specific package
+eleutheria lint             # Check code quality
+eleutheria lint --fix       # Auto-fix issues
+eleutheria quality          # Full quality check
+
+eleutheria info             # Show project stats
+eleutheria --help           # All commands
+```
 
 ## The Three Systems
 

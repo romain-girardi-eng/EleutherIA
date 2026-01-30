@@ -1,6 +1,53 @@
 # EleutherIA - Root configuration
 # Individual packages have their own pyproject.toml in database/, kg/, graphrag/
 
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eleutheria"
+version = "1.0.0"
+description = "Ancient Philosophy Knowledge Graph - CLI Tools"
+readme = "README.md"
+license = {text = "CC-BY-4.0"}
+authors = [{name = "Romain Girardi", email = "romain.girardi@univ-cotedazur.fr"}]
+requires-python = ">=3.11"
+keywords = ["ancient-philosophy", "knowledge-graph", "graphrag", "stoicism", "free-will"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+
+[project.scripts]
+eleutheria = "cli.main:main"
+
+[project.urls]
+Homepage = "https://free-will.app"
+Repository = "https://github.com/romain-girardi-eng/EleutherIA"
+Documentation = "https://github.com/romain-girardi-eng/EleutherIA/tree/main/docs"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cli*"]
+
 [tool.pytest.ini_options]
 testpaths = ["database/tests", "kg/tests", "graphrag/tests"]
 python_files = "test_*.py"
