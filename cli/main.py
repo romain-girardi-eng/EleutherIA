@@ -349,12 +349,26 @@ def stats():
     table.add_column("Metric", style="cyan")
     table.add_column("Count", style="green", justify="right")
 
-    table.add_row("Knowledge Graph Nodes", f"{result.get('nodes', 2193):,}")
-    table.add_row("Knowledge Graph Edges", f"{result.get('edges', 8616):,}")
-    table.add_row("Ancient Works", f"{result.get('works', 189):,}")
-    table.add_row("Text Passages", f"{result.get('passages', 16968):,}")
-    table.add_row("Node Types", f"{result.get('node_types', 15):,}")
-    table.add_row("Relation Types", f"{result.get('edge_types', 32):,}")
+    # Handle both simple counts and detailed stats from API
+    nodes = result.get('total_nodes', result.get('nodes', 2193))
+    edges = result.get('total_edges', result.get('edges', 8616))
+    works = result.get('works', 189)
+    passages = result.get('passages', 16968)
+    node_types = result.get('node_types', 15)
+    edge_types = result.get('relation_types', result.get('edge_types', 32))
+
+    # If node_types/edge_types are dicts, get the count
+    if isinstance(node_types, dict):
+        node_types = len(node_types)
+    if isinstance(edge_types, dict):
+        edge_types = len(edge_types)
+
+    table.add_row("Knowledge Graph Nodes", f"{nodes:,}")
+    table.add_row("Knowledge Graph Edges", f"{edges:,}")
+    table.add_row("Ancient Works", f"{works:,}")
+    table.add_row("Text Passages", f"{passages:,}")
+    table.add_row("Node Types", f"{node_types:,}")
+    table.add_row("Relation Types", f"{edge_types:,}")
 
     console.print(table)
 
