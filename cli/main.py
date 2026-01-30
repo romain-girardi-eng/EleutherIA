@@ -16,6 +16,7 @@ import sys
 import webbrowser
 from pathlib import Path
 from typing import Optional
+from urllib.parse import quote
 
 import typer
 from rich.console import Console
@@ -226,9 +227,10 @@ def search(
     ) as progress:
         progress.add_task("Searching knowledge graph...", total=None)
 
-        params = f"?q={query}&limit={limit}"
+        # URL encode user input to prevent injection
+        params = f"?q={quote(query)}&limit={limit}"
         if node_type:
-            params += f"&node_type={node_type}"
+            params += f"&node_type={quote(node_type)}"
 
         result = api_request(f"/kg/nodes{params}")
 
@@ -388,7 +390,7 @@ def philosophers(
 
         params = f"?node_type=philosopher&limit={limit}"
         if school:
-            params += f"&school={school}"
+            params += f"&school={quote(school)}"
         result = api_request(f"/kg/nodes{params}")
 
     if not result:
@@ -458,9 +460,9 @@ def works(
 
         params = f"?limit={limit}"
         if language:
-            params += f"&language={language}"
+            params += f"&language={quote(language)}"
         if author:
-            params += f"&author={author}"
+            params += f"&author={quote(author)}"
         result = api_request(f"/works{params}")
 
     if not result:
@@ -537,7 +539,7 @@ def export_passages(
 
         params = ""
         if work:
-            params = f"?work={work}"
+            params = f"?work={quote(work)}"
         result = api_request(f"/works/passages/export{params}")
 
     if not result:
