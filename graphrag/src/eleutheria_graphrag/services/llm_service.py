@@ -10,8 +10,9 @@ import logging
 import os
 import time
 from collections import defaultdict
+from collections.abc import AsyncIterator
 from enum import Enum
-from typing import Any, AsyncIterator
+from typing import Any
 
 import httpx
 

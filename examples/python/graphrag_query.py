@@ -23,8 +23,8 @@ async def main():
     os.environ.setdefault("QDRANT_HOST", "localhost")
 
     from eleutheria_database import DatabaseService
-    from eleutheria_kg import QdrantService
     from eleutheria_graphrag import GraphRAGService
+    from eleutheria_kg import QdrantService
 
     # Connect services
     db = DatabaseService()
@@ -57,7 +57,7 @@ async def main():
     for citation in result["citations"]:
         print(f"  [{citation['ref']}] {citation['label']}")
 
-    print(f"\nMetadata:")
+    print("\nMetadata:")
     print(f"  Seed nodes: {len(result['seed_nodes'])}")
     print(f"  Context nodes: {len(result['context_nodes'])}")
     print(f"  Passages used: {result['passages_used']}")

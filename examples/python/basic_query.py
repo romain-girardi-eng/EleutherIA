@@ -24,7 +24,7 @@ async def main():
     os.environ.setdefault("QDRANT_HOST", "localhost")
 
     from eleutheria_database import DatabaseService
-    from eleutheria_kg import QdrantService, KGAnalytics
+    from eleutheria_kg import QdrantService
 
     # Connect to database
     db = DatabaseService()

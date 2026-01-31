@@ -1,12 +1,13 @@
 """Tests for LLMService."""
 
 from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
 
 from eleutheria_graphrag.services.llm_service import (
+    PROVIDER_CONFIGS,
     LLMService,
     ModelProvider,
-    PROVIDER_CONFIGS,
 )
 
 
@@ -144,7 +145,7 @@ class TestLLMService:
             mock_client.post = AsyncMock(return_value=mock_response)
             llm._client = mock_client
 
-            result = await llm.generate(
+            await llm.generate(
                 "User prompt",
                 system_prompt="You are a helpful assistant."
             )

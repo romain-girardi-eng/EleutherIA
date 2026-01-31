@@ -8,7 +8,7 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from eleutheria_kg.models.kg import KGNode, KGEdge, KGStatistics
+from eleutheria_kg.models.kg import KGStatistics
 from eleutheria_kg.services.analytics import KGAnalytics
 from eleutheria_kg.services.cache import KGCache
 

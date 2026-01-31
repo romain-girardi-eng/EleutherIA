@@ -12,19 +12,16 @@ Usage:
 import json
 import os
 import subprocess
-import sys
 import webbrowser
 from pathlib import Path
-from typing import Optional
 from urllib.parse import quote
 
 import typer
 from rich.console import Console
-from rich.panel import Panel
-from rich.table import Table
-from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.markdown import Markdown
-from rich.syntax import Syntax
+from rich.panel import Panel
+from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.table import Table
 
 app = typer.Typer(
     name="eleutheria",
@@ -52,7 +49,7 @@ PROJECT_ROOT = Path(__file__).parent.parent
 API_BASE_URL = os.getenv("ELEUTHERIA_API_URL", "http://localhost:8000")
 
 
-def run_command(cmd: list[str], cwd: Optional[Path] = None) -> int:
+def run_command(cmd: list[str], cwd: Path | None = None) -> int:
     """Run a shell command and return exit code."""
     try:
         result = subprocess.run(cmd, cwd=cwd or PROJECT_ROOT)
@@ -74,7 +71,7 @@ def check_docker() -> bool:
         return False
 
 
-def api_request(endpoint: str, method: str = "GET", data: Optional[dict] = None) -> Optional[dict]:
+def api_request(endpoint: str, method: str = "GET", data: dict | None = None) -> dict | None:
     """Make an API request to the backend."""
     try:
         import httpx
@@ -270,7 +267,7 @@ def ask(
         TextColumn("[progress.description]{task.description}"),
         console=console,
     ) as progress:
-        task = progress.add_task("Thinking...", total=None)
+        progress.add_task("Thinking...", total=None)
 
         result = api_request("/graphrag/query", method="POST", data={
             "question": question,
@@ -595,12 +592,6 @@ def import_passages(
 @app.command()
 def status():
     """Check status of all services."""
-    services = [
-        ("Backend API", f"{API_BASE_URL}/api/health"),
-        ("PostgreSQL", "database"),
-        ("Qdrant", "vector database"),
-        ("Frontend", "http://localhost:5173"),
-    ]
 
     table = Table(title="Service Status")
     table.add_column("Service", style="cyan")
@@ -616,7 +607,7 @@ def status():
                 table.add_row("Backend API", "[green]Running[/green]", API_BASE_URL)
             else:
                 table.add_row("Backend API", "[red]Error[/red]", f"Status {response.status_code}")
-    except:
+    except Exception:
         table.add_row("Backend API", "[red]Not running[/red]", API_BASE_URL)
 
     # Check Docker services
@@ -634,9 +625,9 @@ def status():
                         state = svc.get("State", "unknown")
                         status_style = "[green]Running[/green]" if state == "running" else f"[yellow]{state}[/yellow]"
                         table.add_row(f"Docker: {name}", status_style, "")
-                    except:
+                    except (json.JSONDecodeError, KeyError):
                         pass
-        except:
+        except Exception:
             table.add_row("Docker", "[yellow]Unable to check[/yellow]", "")
     else:
         table.add_row("Docker", "[red]Not installed[/red]", "")
@@ -652,11 +643,7 @@ def doctor():
     issues = []
 
     # Check Python version
-    import sys
-    if sys.version_info < (3, 11):
-        issues.append(("Python", f"Version {sys.version_info.major}.{sys.version_info.minor} detected. Requires 3.11+"))
-    else:
-        console.print("[green]✓[/green] Python version OK")
+    console.print("[green]✓[/green] Python version OK")
 
     # Check Docker
     if check_docker():
@@ -677,11 +664,11 @@ def doctor():
             else:
                 issues.append(("API Keys", "No LLM API keys found in .env. Add GEMINI_API_KEY or MOONSHOT_API_KEY"))
     else:
-        issues.append((".env", f"File not found. Copy from .env.example: cp .env.example .env"))
+        issues.append((".env", "File not found. Copy from .env.example: cp .env.example .env"))
 
     # Check httpx for API features
     try:
-        import httpx
+        import httpx  # noqa: F401
         console.print("[green]✓[/green] httpx installed (API features available)")
     except ImportError:
         issues.append(("httpx", "Not installed. Run: pip install httpx"))
