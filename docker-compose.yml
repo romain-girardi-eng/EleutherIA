@@ -8,7 +8,7 @@
 #   docker compose --profile full up -d        # Everything
 # =============================================================================
 
-name: eleutherai
+name: eleutheria
 
 services:
   # ---------------------------------------------------------------------------
@@ -16,7 +16,7 @@ services:
   # ---------------------------------------------------------------------------
   postgres:
     image: postgres:16-alpine
-    container_name: eleutherai-postgres
+    container_name: EleutherIA-postgres
     restart: unless-stopped
     init: true
     environment:
@@ -61,7 +61,7 @@ services:
   # ---------------------------------------------------------------------------
   qdrant:
     image: qdrant/qdrant:v1.13.3
-    container_name: eleutherai-qdrant
+    container_name: EleutherIA-qdrant
     restart: unless-stopped
     init: true
     environment:
@@ -96,8 +96,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
       target: production
-    image: eleutherai/backend:${TAG:-latest}
-    container_name: eleutherai-backend
+    image: eleutheria/backend:${TAG:-latest}
+    container_name: EleutherIA-backend
     restart: unless-stopped
     init: true
     read_only: true
@@ -157,8 +157,8 @@ services:
       target: production
       args:
         VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
-    image: eleutherai/frontend:${TAG:-latest}
-    container_name: eleutherai-frontend
+    image: eleutheria/frontend:${TAG:-latest}
+    container_name: EleutherIA-frontend
     restart: unless-stopped
     init: true
     read_only: true
@@ -190,7 +190,7 @@ services:
   # ---------------------------------------------------------------------------
   pgadmin:
     image: dpage/pgadmin4:8
-    container_name: eleutherai-pgadmin
+    container_name: EleutherIA-pgadmin
     restart: unless-stopped
     profiles:
       - admin
@@ -213,7 +213,7 @@ services:
   # ---------------------------------------------------------------------------
   prometheus:
     image: prom/prometheus:v2.51.0
-    container_name: eleutherai-prometheus
+    container_name: EleutherIA-prometheus
     restart: unless-stopped
     profiles:
       - monitoring
@@ -236,7 +236,7 @@ services:
   # ---------------------------------------------------------------------------
   grafana:
     image: grafana/grafana:10.4.0
-    container_name: eleutherai-grafana
+    container_name: EleutherIA-grafana
     restart: unless-stopped
     profiles:
       - monitoring
