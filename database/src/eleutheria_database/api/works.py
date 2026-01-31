@@ -4,7 +4,7 @@ FastAPI routes for ancient works and passages.
 Provides REST endpoints for browsing the ancient texts corpus.
 """
 
-from typing import Annotated
+from typing import Annotated, Any
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -34,7 +34,9 @@ async def get_db() -> DatabaseService:
 @router.get("/works", response_model=list[AncientWork])
 async def list_works(
     db: Annotated[DatabaseService, Depends(get_db)],
-    language: str | None = Query(None, description="Filter by language (grc, lat, eng)"),
+    language: str | None = Query(
+        None, description="Filter by language (grc, lat, eng)"
+    ),
     author: str | None = Query(None, description="Filter by author (partial match)"),
     school: str | None = Query(None, description="Filter by philosophical school"),
     limit: int = Query(100, ge=1, le=1000),
@@ -45,8 +47,8 @@ async def list_works(
 
     Returns paginated list of works with metadata.
     """
-    conditions = []
-    params = []
+    conditions: list[str] = []
+    params: list[Any] = []
     param_count = 0
 
     if language:

@@ -12,7 +12,7 @@ import time
 from collections import defaultdict
 from collections.abc import AsyncIterator
 from enum import Enum
-from typing import Any
+from typing import Any, cast
 
 import httpx
 
@@ -54,6 +54,7 @@ class RateLimiter:
 
 class ModelProvider(Enum):
     """Supported LLM providers."""
+
     KIMI = "kimi"
     OPENROUTER = "openrouter"
     GEMINI = "gemini"
@@ -123,8 +124,9 @@ class LLMService:
         if enable_rate_limiting:
             for provider in ModelProvider:
                 config = PROVIDER_CONFIGS[provider]
+                rate_limit = cast(int, config.get("rate_limit", 60))
                 self._rate_limiters[provider] = RateLimiter(
-                    requests_per_minute=config.get("rate_limit", 60)
+                    requests_per_minute=rate_limit
                 )
 
         # Determine available providers
@@ -137,7 +139,8 @@ class LLMService:
         available = []
         for provider in ModelProvider:
             config = PROVIDER_CONFIGS[provider]
-            if os.getenv(config["env_key"]):
+            env_key = cast(str, config["env_key"])
+            if os.getenv(env_key):
                 available.append(provider)
                 logger.info(f"LLM provider available: {provider.value}")
         return available
@@ -157,7 +160,11 @@ class LLMService:
             return self.preferred_provider
 
         # Fallback chain: gemini -> openrouter -> kimi
-        for provider in [ModelProvider.GEMINI, ModelProvider.OPENROUTER, ModelProvider.KIMI]:
+        for provider in [
+            ModelProvider.GEMINI,
+            ModelProvider.OPENROUTER,
+            ModelProvider.KIMI,
+        ]:
             if provider in self.available_providers:
                 logger.info(f"Using fallback provider: {provider.value}")
                 return provider
@@ -206,7 +213,8 @@ class LLMService:
             await self._rate_limiters[provider].wait_if_needed()
 
         config = PROVIDER_CONFIGS[provider]
-        api_key = os.getenv(config["env_key"])
+        env_key = cast(str, config["env_key"])
+        api_key = os.getenv(env_key) or ""
 
         if provider == ModelProvider.GEMINI:
             return await self._generate_gemini(
@@ -249,7 +257,8 @@ class LLMService:
         )
         response.raise_for_status()
         data = response.json()
-        return data["choices"][0]["message"]["content"]
+        result: str = data["choices"][0]["message"]["content"]
+        return result
 
     async def _generate_gemini(
         self,
@@ -282,7 +291,8 @@ class LLMService:
         )
         response.raise_for_status()
         data = response.json()
-        return data["candidates"][0]["content"]["parts"][0]["text"]
+        result: str = data["candidates"][0]["content"]["parts"][0]["text"]
+        return result
 
     async def stream(
         self,
@@ -314,7 +324,8 @@ class LLMService:
             await self._rate_limiters[provider].wait_if_needed()
 
         config = PROVIDER_CONFIGS[provider]
-        api_key = os.getenv(config["env_key"])
+        env_key = cast(str, config["env_key"])
+        api_key = os.getenv(env_key) or ""
 
         if provider == ModelProvider.GEMINI:
             async for chunk in self._stream_gemini(
@@ -367,8 +378,13 @@ class LLMService:
                         break
                     try:
                         import json
+
                         chunk = json.loads(data)
-                        content = chunk.get("choices", [{}])[0].get("delta", {}).get("content", "")
+                        content = (
+                            chunk.get("choices", [{}])[0]
+                            .get("delta", {})
+                            .get("content", "")
+                        )
                         if content:
                             yield content
                     except json.JSONDecodeError:
@@ -409,6 +425,7 @@ class LLMService:
                 if line.startswith("data: "):
                     try:
                         import json
+
                         data = json.loads(line[6:])
                         text = (
                             data.get("candidates", [{}])[0]

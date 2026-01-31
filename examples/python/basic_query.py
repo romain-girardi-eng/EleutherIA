@@ -15,7 +15,7 @@ import asyncio
 import os
 
 
-async def main():
+async def main() -> None:
     # Set up environment for local development
     os.environ.setdefault("POSTGRES_HOST", "localhost")
     os.environ.setdefault("POSTGRES_USER", "eleutheria")
@@ -73,8 +73,9 @@ async def main():
             (SELECT COUNT(*) FROM free_will.kg_nodes) as nodes,
             (SELECT COUNT(*) FROM free_will.kg_edges) as edges
     """)
-    print(f"  Nodes: {stats['nodes']}")
-    print(f"  Edges: {stats['edges']}")
+    if stats:
+        print(f"  Nodes: {stats['nodes']}")
+        print(f"  Edges: {stats['edges']}")
 
     # Clean up
     await db.close()

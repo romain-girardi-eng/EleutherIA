@@ -14,7 +14,7 @@ import asyncio
 import os
 
 
-async def main():
+async def main() -> None:
     # Environment setup
     os.environ.setdefault("POSTGRES_HOST", "localhost")
     os.environ.setdefault("POSTGRES_USER", "eleutheria")

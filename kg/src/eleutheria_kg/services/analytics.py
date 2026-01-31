@@ -12,7 +12,7 @@ from __future__ import annotations
 import importlib.util
 import logging
 from collections import Counter, defaultdict
-from typing import Any
+from typing import Any, cast
 
 import networkx as nx
 
@@ -46,9 +46,21 @@ ANCIENT_PERIODS: set[str] = {
 
 # Community detection color palette
 COMMUNITY_COLORS: list[str] = [
-    "#2563eb", "#16a34a", "#db2777", "#f97316", "#0ea5e9",
-    "#9333ea", "#22c55e", "#facc15", "#ef4444", "#8b5cf6",
-    "#14b8a6", "#f59e0b", "#3b82f6", "#ec4899", "#10b981",
+    "#2563eb",
+    "#16a34a",
+    "#db2777",
+    "#f97316",
+    "#0ea5e9",
+    "#9333ea",
+    "#22c55e",
+    "#facc15",
+    "#ef4444",
+    "#8b5cf6",
+    "#14b8a6",
+    "#f59e0b",
+    "#3b82f6",
+    "#ec4899",
+    "#10b981",
 ]
 
 
@@ -121,14 +133,12 @@ class KGAnalytics:
 
         # Node type distribution
         node_types = Counter(
-            node.get("type", "unknown")
-            for node in self.kg_data.get("nodes", [])
+            node.get("type", "unknown") for node in self.kg_data.get("nodes", [])
         )
 
         # Edge type distribution
         edge_types = Counter(
-            edge.get("relation", "unknown")
-            for edge in self.kg_data.get("edges", [])
+            edge.get("relation", "unknown") for edge in self.kg_data.get("edges", [])
         )
 
         return {
@@ -161,7 +171,9 @@ class KGAnalytics:
             Dictionary mapping node IDs to community IDs
         """
         if not _algorithm_available(algorithm):
-            logger.warning(f"Algorithm {algorithm} not available, falling back to greedy")
+            logger.warning(
+                f"Algorithm {algorithm} not available, falling back to greedy"
+            )
             algorithm = "greedy"
 
         graph = self._build_graph()
@@ -178,9 +190,7 @@ class KGAnalytics:
         self._communities = communities
         return communities
 
-    def _leiden_communities(
-        self, graph: nx.Graph, resolution: float
-    ) -> dict[str, int]:
+    def _leiden_communities(self, graph: nx.Graph, resolution: float) -> dict[str, int]:
         """Detect communities using Leiden algorithm."""
         import igraph as ig
         import leidenalg
@@ -205,7 +215,10 @@ class KGAnalytics:
         """Detect communities using Louvain algorithm."""
         import community as community_louvain
 
-        return community_louvain.best_partition(graph, resolution=resolution)
+        result: dict[str, int] = community_louvain.best_partition(
+            graph, resolution=resolution
+        )
+        return result
 
     def _greedy_communities(self, graph: nx.Graph) -> dict[str, int]:
         """Detect communities using greedy modularity optimization."""
@@ -251,9 +264,7 @@ class KGAnalytics:
                 continue
 
             # Find connected persons
-            connected_persons = [
-                n for n in edges_by_node[node_id] if n in person_nodes
-            ]
+            connected_persons = [n for n in edges_by_node[node_id] if n in person_nodes]
 
             if connected_persons:
                 # Assign to first connected person's community
@@ -293,14 +304,16 @@ class KGAnalytics:
                 logger.warning("Eigenvector centrality failed, using degree")
                 scores = dict(graph.degree())
         else:  # degree
-            scores = {node: deg / (graph.number_of_nodes() - 1)
-                     for node, deg in graph.degree()}
+            scores = {
+                node: deg / (graph.number_of_nodes() - 1)
+                for node, deg in graph.degree()
+            }
 
         if top_k:
             sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
-            return dict(sorted_scores[:top_k])
+            return cast(dict[str, float], dict(sorted_scores[:top_k]))
 
-        return scores
+        return cast(dict[str, float], scores)
 
     def get_shortest_path(
         self,
@@ -320,7 +333,8 @@ class KGAnalytics:
         graph = self._build_graph()
 
         try:
-            return nx.shortest_path(graph, source, target)
+            path: list[str] = nx.shortest_path(graph, source, target)
+            return path
         except (nx.NetworkXNoPath, nx.NodeNotFound):
             return None
 
@@ -362,7 +376,10 @@ class KGAnalytics:
 
         # Convert back to node/edge format
         nodes = [
-            next((n for n in self.kg_data["nodes"] if n["id"] == node_id), {"id": node_id})
+            next(
+                (n for n in self.kg_data["nodes"] if n["id"] == node_id),
+                {"id": node_id},
+            )
             for node_id in visited
         ]
 
@@ -391,14 +408,16 @@ class KGAnalytics:
             ]
 
             if period_nodes:
-                timeline.append({
-                    "period": period_name,
-                    "label": metadata["label"],
-                    "start_year": metadata["start"],
-                    "end_year": metadata["end"],
-                    "node_count": len(period_nodes),
-                    "nodes": period_nodes,
-                })
+                timeline.append(
+                    {
+                        "period": period_name,
+                        "label": metadata["label"],
+                        "start_year": metadata["start"],
+                        "end_year": metadata["end"],
+                        "node_count": len(period_nodes),
+                        "nodes": period_nodes,
+                    }
+                )
 
         return sorted(timeline, key=lambda x: x["start_year"] or 0)
 

@@ -7,6 +7,7 @@ for the ancient texts corpus.
 
 import logging
 import os
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Any
 
@@ -96,7 +97,7 @@ class DatabaseService:
         return self.pool is not None and not self.pool._closed
 
     @asynccontextmanager
-    async def connection(self):
+    async def connection(self) -> AsyncIterator[asyncpg.Connection]:
         """
         Get a connection from the pool.
 
