@@ -8,7 +8,7 @@ other computationally expensive graph analytics.
 import logging
 import time
 from collections.abc import Callable
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 logger = logging.getLogger(__name__)
 
@@ -133,11 +133,12 @@ class KGCache:
             def expensive_function():
                 return compute_something()
         """
+
         def decorator(func: Callable[..., T]) -> Callable[..., T]:
             def wrapper(*args: Any, **kwargs: Any) -> T:
                 cached_value = self.get(key)
                 if cached_value is not None:
-                    return cached_value
+                    return cast(T, cached_value)
 
                 result = func(*args, **kwargs)
                 self.set(key, result, ttl)
@@ -156,12 +157,10 @@ class KGCache:
         """
         now = time.time()
         active_keys = [
-            key for key, (_, expires_at) in self._cache.items()
-            if expires_at > now
+            key for key, (_, expires_at) in self._cache.items() if expires_at > now
         ]
         expired_keys = [
-            key for key, (_, expires_at) in self._cache.items()
-            if expires_at <= now
+            key for key, (_, expires_at) in self._cache.items() if expires_at <= now
         ]
 
         return {

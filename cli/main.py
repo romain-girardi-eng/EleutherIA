@@ -13,7 +13,9 @@ import json
 import os
 import subprocess
 import webbrowser
+from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 from urllib.parse import quote
 
 import typer
@@ -71,7 +73,7 @@ def check_docker() -> bool:
         return False
 
 
-def api_request(endpoint: str, method: str = "GET", data: dict | None = None) -> dict | None:
+def api_request(endpoint: str, method: str = "GET", data: dict[str, Any] | None = None) -> dict[str, Any] | None:
     """Make an API request to the backend."""
     try:
         import httpx
@@ -82,7 +84,8 @@ def api_request(endpoint: str, method: str = "GET", data: dict | None = None) ->
             else:
                 response = client.post(url, json=data)
             response.raise_for_status()
-            return response.json()
+            result: dict[str, Any] = response.json()
+            return result
     except ImportError:
         console.print("[yellow]Install httpx for API features: pip install httpx[/yellow]")
         return None
@@ -102,7 +105,7 @@ def run(
     profile: str = typer.Option(
         "default", "--profile", "-p", help="Profile: default, admin, full"
     ),
-):
+) -> None:
     """
     Start all services with Docker Compose.
 
@@ -143,7 +146,7 @@ def dev(
     service: str = typer.Option(
         "all", "--service", "-s", help="Service: all, backend, frontend"
     ),
-):
+) -> None:
     """Start development servers (without Docker)."""
     if service == "backend":
         console.print("[blue]Starting backend on http://localhost:8000[/blue]")
@@ -163,7 +166,7 @@ def dev(
 
 
 @app.command()
-def stop():
+def stop() -> None:
     """Stop all Docker services."""
     if not check_docker():
         console.print("[red]Docker is not installed or not running.[/red]")
@@ -175,7 +178,7 @@ def stop():
 
 
 @app.command()
-def clean():
+def clean() -> None:
     """Stop services and remove all data volumes."""
     if not check_docker():
         console.print("[red]Docker is not installed or not running.[/red]")
@@ -194,7 +197,7 @@ def clean():
 def logs(
     service: str = typer.Argument(None, help="Service name (optional)"),
     follow: bool = typer.Option(True, "--follow/--no-follow", "-f", help="Follow logs"),
-):
+) -> None:
     """View Docker service logs."""
     compose_file = PROJECT_ROOT / "deploy" / "docker" / "docker-compose.yml"
     cmd = ["docker", "compose", "-f", str(compose_file), "logs"]
@@ -213,9 +216,9 @@ def logs(
 @app.command()
 def search(
     query: str = typer.Argument(..., help="Search query"),
-    node_type: str = typer.Option(None, "--type", "-t", help="Filter by node type"),
+    node_type: str | None = typer.Option(None, "--type", "-t", help="Filter by node type"),
     limit: int = typer.Option(10, "--limit", "-n", help="Number of results"),
-):
+) -> None:
     """Search the knowledge graph for nodes."""
     with Progress(
         SpinnerColumn(),
@@ -258,7 +261,7 @@ def search(
 def ask(
     question: str = typer.Argument(..., help="Question to ask"),
     thinking: bool = typer.Option(False, "--thinking", "-t", help="Use extended reasoning mode"),
-):
+) -> None:
     """Ask a question using GraphRAG."""
     console.print(Panel(f"[bold]{question}[/bold]", title="Question"))
 
@@ -291,7 +294,7 @@ def ask(
 @app.command()
 def passage(
     urn: str = typer.Argument(..., help="CTS URN or passage ID"),
-):
+) -> None:
     """Look up a passage by CTS URN or ID."""
     with Progress(
         SpinnerColumn(),
@@ -322,7 +325,7 @@ def passage(
 
 
 @app.command()
-def stats():
+def stats() -> None:
     """Show live database statistics."""
     with Progress(
         SpinnerColumn(),
@@ -374,9 +377,9 @@ def stats():
 
 @app.command()
 def philosophers(
-    school: str = typer.Option(None, "--school", "-s", help="Filter by school (stoic, epicurean, etc.)"),
+    school: str | None = typer.Option(None, "--school", "-s", help="Filter by school (stoic, epicurean, etc.)"),
     limit: int = typer.Option(20, "--limit", "-n", help="Number of results"),
-):
+) -> None:
     """List philosophers in the knowledge graph."""
     with Progress(
         SpinnerColumn(),
@@ -412,7 +415,7 @@ def philosophers(
 @app.command()
 def concepts(
     limit: int = typer.Option(20, "--limit", "-n", help="Number of results"),
-):
+) -> None:
     """List philosophical concepts in the knowledge graph."""
     with Progress(
         SpinnerColumn(),
@@ -443,10 +446,10 @@ def concepts(
 
 @app.command()
 def works(
-    language: str = typer.Option(None, "--language", "-l", help="Filter by language (grc, lat)"),
-    author: str = typer.Option(None, "--author", "-a", help="Filter by author"),
+    language: str | None = typer.Option(None, "--language", "-l", help="Filter by language (grc, lat)"),
+    author: str | None = typer.Option(None, "--author", "-a", help="Filter by author"),
     limit: int = typer.Option(20, "--limit", "-n", help="Number of results"),
-):
+) -> None:
     """List ancient works in the database."""
     with Progress(
         SpinnerColumn(),
@@ -492,7 +495,7 @@ def works(
 def export_kg(
     format: str = typer.Option("json", "--format", "-f", help="Format: json, csv, rdf"),
     output: str = typer.Option("eleutheria_kg", "--output", "-o", help="Output filename"),
-):
+) -> None:
     """Export knowledge graph data."""
     with Progress(
         SpinnerColumn(),
@@ -525,7 +528,7 @@ def export_kg(
 def export_passages(
     work: str = typer.Option(None, "--work", "-w", help="Filter by work title"),
     output: str = typer.Option("passages", "--output", "-o", help="Output filename"),
-):
+) -> None:
     """Export passage data."""
     with Progress(
         SpinnerColumn(),
@@ -559,7 +562,7 @@ def export_passages(
 def import_passages(
     file: str = typer.Argument(..., help="JSON file to import"),
     dry_run: bool = typer.Option(True, "--dry-run/--apply", help="Preview without applying"),
-):
+) -> None:
     """Import passages from JSON file."""
     filepath = Path(file)
     if not filepath.exists():
@@ -590,7 +593,7 @@ def import_passages(
 
 
 @app.command()
-def status():
+def status() -> None:
     """Check status of all services."""
 
     table = Table(title="Service Status")
@@ -636,7 +639,7 @@ def status():
 
 
 @app.command()
-def doctor():
+def doctor() -> None:
     """Diagnose common issues and suggest fixes."""
     console.print(Panel("[bold]Running diagnostics...[/bold]", title="EleutherIA Doctor"))
 
@@ -688,7 +691,7 @@ def doctor():
 
 
 @app.command()
-def docs():
+def docs() -> None:
     """Open documentation in browser."""
     url = "https://github.com/romain-girardi-eng/EleutherIA/tree/main/docs"
     console.print(f"[blue]Opening documentation: {url}[/blue]")
@@ -696,7 +699,7 @@ def docs():
 
 
 @app.command()
-def web():
+def web() -> None:
     """Open free-will.app in browser."""
     url = "https://free-will.app"
     console.print(f"[blue]Opening: {url}[/blue]")
@@ -704,7 +707,7 @@ def web():
 
 
 @app.command()
-def api():
+def api() -> None:
     """Open API documentation in browser."""
     url = f"{API_BASE_URL}/docs"
     console.print(f"[blue]Opening API docs: {url}[/blue]")
@@ -717,7 +720,7 @@ def api():
 
 
 @app.command()
-def shell():
+def shell() -> None:
     """Start interactive exploration shell."""
     console.print(Panel(
         "[bold]EleutherIA Interactive Shell[/bold]\n\n"
@@ -779,7 +782,7 @@ def shell():
 def test_all(
     coverage: bool = typer.Option(False, "--coverage", "-c", help="Generate coverage report"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
-):
+) -> None:
     """Run all tests across all packages."""
     console.print("[blue]Running all tests...[/blue]")
 
@@ -793,28 +796,28 @@ def test_all(
 
 
 @test_app.command("database")
-def test_database():
+def test_database() -> None:
     """Run database package tests."""
     console.print("[blue]Running database tests...[/blue]")
     raise typer.Exit(run_command(["pytest", "database/tests/", "-v"]))
 
 
 @test_app.command("kg")
-def test_kg():
+def test_kg() -> None:
     """Run knowledge graph package tests."""
     console.print("[blue]Running KG tests...[/blue]")
     raise typer.Exit(run_command(["pytest", "kg/tests/", "-v"]))
 
 
 @test_app.command("graphrag")
-def test_graphrag():
+def test_graphrag() -> None:
     """Run GraphRAG package tests."""
     console.print("[blue]Running GraphRAG tests...[/blue]")
     raise typer.Exit(run_command(["pytest", "graphrag/tests/", "-v"]))
 
 
 @test_app.command("frontend")
-def test_frontend():
+def test_frontend() -> None:
     """Run frontend tests."""
     console.print("[blue]Running frontend tests...[/blue]")
     raise typer.Exit(run_command(["npm", "test"], cwd=PROJECT_ROOT / "frontend"))
@@ -828,7 +831,7 @@ def test_frontend():
 @app.command()
 def lint(
     fix: bool = typer.Option(False, "--fix", "-f", help="Auto-fix issues"),
-):
+) -> None:
     """Run linter (Ruff) on all Python code."""
     console.print("[blue]Running Ruff linter...[/blue]")
 
@@ -842,7 +845,7 @@ def lint(
 @app.command()
 def format(
     check: bool = typer.Option(False, "--check", help="Check only, don't modify"),
-):
+) -> None:
     """Format Python code with Ruff."""
     console.print("[blue]Formatting code...[/blue]")
 
@@ -854,14 +857,14 @@ def format(
 
 
 @app.command()
-def typecheck():
+def typecheck() -> None:
     """Run type checker (mypy) on all Python code."""
     console.print("[blue]Running mypy type checker...[/blue]")
     raise typer.Exit(run_command(["mypy", "database/", "kg/", "graphrag/"]))
 
 
 @app.command()
-def quality():
+def quality() -> None:
     """Run all code quality checks (lint + typecheck)."""
     console.print("[blue]Running all quality checks...[/blue]\n")
 
@@ -887,7 +890,7 @@ def quality():
 
 
 @db_app.command("migrate")
-def db_migrate():
+def db_migrate() -> None:
     """Apply database migrations."""
     console.print("[blue]Applying database migrations...[/blue]")
     schema_file = PROJECT_ROOT / "database" / "schema" / "schema.sql"
@@ -902,7 +905,7 @@ def db_migrate():
 
 
 @db_app.command("shell")
-def db_shell():
+def db_shell() -> None:
     """Open PostgreSQL shell."""
     console.print("[blue]Opening database shell...[/blue]")
     raise typer.Exit(run_command(["psql", "${DATABASE_URL}"]))
@@ -914,7 +917,7 @@ def db_shell():
 
 
 @app.command()
-def info():
+def info() -> None:
     """Show project information."""
     table = Table(title="EleutherIA Project Info")
     table.add_column("Property", style="cyan")
@@ -938,7 +941,7 @@ def info():
 
 
 @app.command()
-def version():
+def version() -> None:
     """Show CLI version."""
     from cli import __version__
     console.print(f"eleutheria CLI v{__version__}")
@@ -949,7 +952,7 @@ def version():
 # =============================================================================
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     app()
 

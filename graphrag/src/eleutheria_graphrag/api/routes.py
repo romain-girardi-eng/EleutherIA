@@ -2,6 +2,7 @@
 FastAPI routes for GraphRAG Q&A.
 """
 
+from collections.abc import AsyncIterator
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -66,7 +67,8 @@ async def query_stream(
 
     Returns Server-Sent Events (SSE) with answer chunks.
     """
-    async def generate():
+
+    async def generate() -> AsyncIterator[str]:
         try:
             async for chunk in graphrag.query_stream(
                 question=question,

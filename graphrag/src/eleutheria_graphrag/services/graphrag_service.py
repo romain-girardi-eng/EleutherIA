@@ -13,7 +13,7 @@ import logging
 import re
 from collections import deque
 from collections.abc import AsyncIterator
-from typing import Any
+from typing import Any, cast
 
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
 
@@ -173,7 +173,9 @@ class GraphRAGService:
             if passages:
                 context += "\n\n## Ancient Passages\n"
                 for i, p in enumerate(passages[:10], 1):
-                    context += f"\n[P{i}] {p['author']}, {p['title']} {p['canonical_ref']}:\n"
+                    context += (
+                        f"\n[P{i}] {p['author']}, {p['title']} {p['canonical_ref']}:\n"
+                    )
                     context += f'"{p["text_content"][:500]}..."\n'
 
         # Stage 4: LLM synthesis
@@ -291,7 +293,9 @@ Provide a scholarly answer with citations to the sources above using [1], [2] no
     def _format_node(self, node: dict[str, Any], is_seed: bool = False) -> str:
         """Format a node for context."""
         marker = "[SEED] " if is_seed else ""
-        parts = [f"{marker}**{node.get('label', node['id'])}** ({node.get('type', 'Unknown')})"]
+        parts = [
+            f"{marker}**{node.get('label', node['id'])}** ({node.get('type', 'Unknown')})"
+        ]
 
         if node.get("period"):
             parts.append(f"Period: {node['period']}")
@@ -313,7 +317,8 @@ Provide a scholarly answer with citations to the sources above using [1], [2] no
 
         # Get passages via citation links
         placeholders = ", ".join(f"${i+1}" for i in range(len(node_ids)))
-        passages = await self.db.fetch(f"""
+        passages = await self.db.fetch(
+            f"""
             SELECT DISTINCT
                 p.passage_id,
                 p.text_content,
@@ -327,9 +332,11 @@ Provide a scholarly answer with citations to the sources above using [1], [2] no
             WHERE pc.kg_node_id IN ({placeholders})
             ORDER BY pc.confidence DESC
             LIMIT {limit}
-        """, *node_ids)
+        """,
+            *node_ids,
+        )
 
-        return passages
+        return cast(list[dict[str, Any]], passages)
 
     async def _get_embedding(self, text: str) -> list[float]:
         """Get embedding for text using Gemini."""
@@ -358,7 +365,7 @@ Provide a scholarly answer with citations to the sources above using [1], [2] no
         citations = []
 
         # Find [1], [2], etc. in answer
-        citation_refs = re.findall(r'\[(\d+)\]', answer)
+        citation_refs = re.findall(r"\[(\d+)\]", answer)
 
         # Map to nodes (simplified - could be enhanced)
         for _i, ref in enumerate(set(citation_refs)):
@@ -367,25 +374,29 @@ Provide a scholarly answer with citations to the sources above using [1], [2] no
                 node_id = node_ids[ref_num - 1]
                 if node_id in self.node_lookup:
                     node = self.node_lookup[node_id]
-                    citations.append({
-                        "ref": ref,
-                        "type": "node",
-                        "id": node_id,
-                        "label": node.get("label", node_id),
-                    })
+                    citations.append(
+                        {
+                            "ref": ref,
+                            "type": "node",
+                            "id": node_id,
+                            "label": node.get("label", node_id),
+                        }
+                    )
 
         # Also check for passage refs [P1], [P2]
-        passage_refs = re.findall(r'\[P(\d+)\]', answer)
+        passage_refs = re.findall(r"\[P(\d+)\]", answer)
         for ref in set(passage_refs):
             ref_num = int(ref)
             if ref_num <= len(passages):
                 p = passages[ref_num - 1]
-                citations.append({
-                    "ref": f"P{ref}",
-                    "type": "passage",
-                    "id": str(p["passage_id"]),
-                    "label": f"{p['author']}, {p['title']} {p['canonical_ref']}",
-                })
+                citations.append(
+                    {
+                        "ref": f"P{ref}",
+                        "type": "passage",
+                        "id": str(p["passage_id"]),
+                        "label": f"{p['author']}, {p['title']} {p['canonical_ref']}",
+                    }
+                )
 
         return citations
 

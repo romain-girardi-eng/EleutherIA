@@ -4,7 +4,7 @@ FastAPI routes for knowledge graph operations.
 Provides REST endpoints for browsing and analyzing the knowledge graph.
 """
 
-from typing import Annotated, Any
+from typing import Annotated, Any, cast
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
@@ -65,13 +65,14 @@ async def list_nodes(
     if search:
         search_lower = search.lower()
         nodes = [
-            n for n in nodes
+            n
+            for n in nodes
             if search_lower in n.get("label", "").lower()
             or search_lower in n.get("description", "").lower()
         ]
 
     # Paginate
-    return nodes[offset:offset + limit]
+    return cast(list[dict[str, Any]], nodes[offset : offset + limit])
 
 
 @router.get("/nodes/{node_id}")
@@ -82,7 +83,7 @@ async def get_node(
     """Get a specific node by ID."""
     for node in analytics.kg_data.get("nodes", []):
         if node.get("id") == node_id:
-            return node
+            return cast(dict[str, Any], node)
 
     raise HTTPException(status_code=404, detail="Node not found")
 
@@ -127,7 +128,7 @@ async def list_edges(
     if target:
         edges = [e for e in edges if e.get("target") == target]
 
-    return edges[offset:offset + limit]
+    return cast(list[dict[str, Any]], edges[offset : offset + limit])
 
 
 @router.get("/statistics", response_model=KGStatistics)
@@ -138,7 +139,7 @@ async def get_statistics(
     """Get knowledge graph statistics."""
     cached = cache.get("kg_statistics")
     if cached:
-        return cached
+        return cast(dict[str, Any], cached)
 
     stats = analytics.get_statistics()
     cache.set("kg_statistics", stats, ttl=300)
@@ -149,7 +150,9 @@ async def get_statistics(
 async def get_communities(
     analytics: Annotated[KGAnalytics, Depends(get_analytics)],
     cache: Annotated[KGCache, Depends(get_cache)],
-    algorithm: str = Query("leiden", description="Algorithm: leiden, louvain, greedy, semantic"),
+    algorithm: str = Query(
+        "leiden", description="Algorithm: leiden, louvain, greedy, semantic"
+    ),
     resolution: float = Query(1.0, ge=0.1, le=5.0, description="Resolution parameter"),
 ) -> dict[str, Any]:
     """
@@ -158,7 +161,7 @@ async def get_communities(
     cache_key = f"communities_{algorithm}_{resolution}"
     cached = cache.get(cache_key)
     if cached:
-        return cached
+        return cast(dict[str, Any], cached)
 
     communities = analytics.detect_communities(algorithm, resolution)
     colors = analytics.get_community_colors()
@@ -195,7 +198,9 @@ async def get_communities(
 async def get_centrality(
     analytics: Annotated[KGAnalytics, Depends(get_analytics)],
     cache: Annotated[KGCache, Depends(get_cache)],
-    metric: str = Query("betweenness", description="Metric: betweenness, pagerank, degree, eigenvector"),
+    metric: str = Query(
+        "betweenness", description="Metric: betweenness, pagerank, degree, eigenvector"
+    ),
     top_k: int = Query(20, ge=1, le=100, description="Number of top nodes to return"),
 ) -> dict[str, Any]:
     """
@@ -204,7 +209,7 @@ async def get_centrality(
     cache_key = f"centrality_{metric}_{top_k}"
     cached = cache.get(cache_key)
     if cached:
-        return cached
+        return cast(dict[str, Any], cached)
 
     scores = analytics.calculate_centrality(metric, top_k)
 
@@ -243,8 +248,7 @@ async def get_shortest_path(
 
     if path is None:
         raise HTTPException(
-            status_code=404,
-            detail=f"No path found between {source} and {target}"
+            status_code=404, detail=f"No path found between {source} and {target}"
         )
 
     # Enrich with node info
@@ -272,7 +276,7 @@ async def get_timeline(
     """
     cached = cache.get("timeline")
     if cached:
-        return cached
+        return cast(list[dict[str, Any]], cached)
 
     timeline = analytics.get_timeline_data()
     cache.set("timeline", timeline, ttl=600)
