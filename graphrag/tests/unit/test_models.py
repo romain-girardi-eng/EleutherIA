@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from eleutheria_graphrag.models.query import QueryRequest, QueryResponse, Citation
+from eleutheria_graphrag.models.query import Citation, QueryRequest, QueryResponse
 
 
 class TestQueryRequest:

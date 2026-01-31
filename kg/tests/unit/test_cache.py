@@ -1,7 +1,6 @@
 """Tests for KG cache service."""
 
 import time
-import pytest
 
 from eleutheria_kg.services.cache import KGCache
 
@@ -191,14 +190,14 @@ class TestKGCacheDecorator:
             return "computed_value"
 
         # First call
-        result1 = expensive_function()
+        expensive_function()
         assert call_count == 1
 
         # Wait for expiration
         time.sleep(1.1)
 
         # Should recompute
-        result2 = expensive_function()
+        expensive_function()
         assert call_count == 2
 
     def test_cached_decorator_with_arguments(self):

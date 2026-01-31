@@ -1,6 +1,7 @@
 """Tests for DatabaseService."""
 
 from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
 
 from eleutheria_database.services.db import DatabaseService
@@ -36,15 +37,17 @@ class TestDatabaseService:
         mock_pool = MagicMock()
         mock_pool._closed = False
 
-        with patch("asyncpg.create_pool", new_callable=AsyncMock, return_value=mock_pool):
-            with patch.dict("os.environ", {
+        with (
+            patch("asyncpg.create_pool", new_callable=AsyncMock, return_value=mock_pool),
+            patch.dict("os.environ", {
                 "POSTGRES_HOST": "localhost",
                 "POSTGRES_PORT": "5432",
                 "POSTGRES_DB": "test",
                 "POSTGRES_USER": "test",
                 "POSTGRES_PASSWORD": "test",
-            }):
-                await db.connect()
+            }),
+        ):
+            await db.connect()
 
         assert db.pool is not None
         assert db.is_connected() is True
@@ -86,9 +89,9 @@ class TestDatabaseService:
         db = DatabaseService()
 
         mock_row = MagicMock()
-        mock_row.__iter__ = lambda self: iter([("id", 1), ("name", "test")])
+        mock_row.__iter__ = lambda _self: iter([("id", 1), ("name", "test")])
         mock_row.keys = lambda: ["id", "name"]
-        mock_row.__getitem__ = lambda self, key: {"id": 1, "name": "test"}[key]
+        mock_row.__getitem__ = lambda _self, key: {"id": 1, "name": "test"}[key]
 
         mock_conn = AsyncMock()
         mock_conn.fetchrow = AsyncMock(return_value=mock_row)

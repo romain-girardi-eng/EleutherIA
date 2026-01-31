@@ -15,7 +15,6 @@ from collections import Counter, defaultdict
 from typing import Any
 
 import networkx as nx
-import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -359,7 +358,7 @@ class KGAnalytics:
             current_level = next_level
 
         # Extract subgraph
-        subgraph = graph.subgraph(visited)
+        graph.subgraph(visited)
 
         # Convert back to node/edge format
         nodes = [

@@ -12,7 +12,8 @@ GraphRAG Service - Graph-based Retrieval-Augmented Generation.
 import logging
 import re
 from collections import deque
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
 
@@ -333,6 +334,7 @@ Provide a scholarly answer with citations to the sources above using [1], [2] no
     async def _get_embedding(self, text: str) -> list[float]:
         """Get embedding for text using Gemini."""
         import os
+
         import google.generativeai as genai
 
         api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
@@ -359,7 +361,7 @@ Provide a scholarly answer with citations to the sources above using [1], [2] no
         citation_refs = re.findall(r'\[(\d+)\]', answer)
 
         # Map to nodes (simplified - could be enhanced)
-        for i, ref in enumerate(set(citation_refs)):
+        for _i, ref in enumerate(set(citation_refs)):
             ref_num = int(ref)
             if ref_num <= len(node_ids):
                 node_id = node_ids[ref_num - 1]
