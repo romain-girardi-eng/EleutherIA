@@ -1,0 +1,35 @@
+# =============================================================================
+# EleutherIA - Root Docker Ignore
+# =============================================================================
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.vscode
+.idea
+*.swp
+
+# Documentation
+*.md
+docs/
+
+# Development files
+.env
+.env.*
+!.env.example
+*.log
+.pytest_cache
+__pycache__
+node_modules
+dist
+build
+
+# CI/CD
+.github
+
+# OS files
+.DS_Store
+Thumbs.db
