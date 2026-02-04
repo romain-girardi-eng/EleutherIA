@@ -25,7 +25,7 @@ import './index.css';
 // These pages contain large dependencies (Cosmograph, D3, etc.)
 const CosmographPage = lazy(() => import('./pages/CosmographPage'));
 const SearchPage = lazy(() => import('./pages/SearchPage'));
-const GraphRAGPage = lazy(() => import('./pages/GraphRAGPageModern'));
+const GraphRAGPage = lazy(() => import('./pages/GraphRAGPage'));
 const GraphRAGShowcase = lazy(() => import('./pages/GraphRAGShowcase'));
 const AncientWorksListingPage = lazy(() => import('./pages/AncientWorksListingPage'));
 const SimpleTextReader = lazy(() => import('./pages/SimpleTextReader'));
