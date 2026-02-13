@@ -122,3 +122,6 @@ coverage/
 
 # Claude Code instructions (local development only)
 CLAUDE.md
+
+# Git worktrees
+.worktrees/
