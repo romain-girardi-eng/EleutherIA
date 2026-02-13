@@ -29,7 +29,9 @@ class Citation(BaseModel):
     type: str = Field(..., description="Citation type: 'node' or 'passage'")
     id: str = Field(..., description="Node or passage ID")
     label: str = Field(..., description="Display label")
-    confidence: float | None = Field(None, ge=0.0, le=1.0, description="Citation confidence")
+    confidence: float | None = Field(
+        None, ge=0.0, le=1.0, description="Citation confidence"
+    )
 
 
 class SourceCitationMetadata(BaseModel):
@@ -101,4 +103,6 @@ class QueryResponse(BaseModel):
     seed_nodes: list[str] = Field(default_factory=list, description="Semantic search seed nodes")
     context_nodes: list[str] = Field(default_factory=list, description="All context nodes")
     passages_used: int = Field(0, ge=0, description="Number of passages in context")
-    metadata: dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
+    metadata: dict[str, Any] = Field(
+        default_factory=dict, description="Additional metadata"
+    )

@@ -47,7 +47,9 @@ class QdrantService:
                 )
             else:
                 # Local connection with HTTP
-                logger.info(f"Connecting to local Qdrant at {QDRANT_HOST}:{QDRANT_PORT}")
+                logger.info(
+                    f"Connecting to local Qdrant at {QDRANT_HOST}:{QDRANT_PORT}"
+                )
                 self.client = QdrantClient(
                     host=QDRANT_HOST,
                     port=QDRANT_PORT,
@@ -105,11 +107,13 @@ class QdrantService:
             results = []
             for hit in search_result:
                 payload = hit.payload or {}
-                results.append({
-                    "id": payload.get("id"),
-                    "score": hit.score,
-                    "payload": payload,
-                })
+                results.append(
+                    {
+                        "id": payload.get("id"),
+                        "score": hit.score,
+                        "payload": payload,
+                    }
+                )
 
             return results
 
@@ -162,16 +166,18 @@ class QdrantService:
             results = []
             for hit in search_result:
                 payload = hit.payload or {}
-                results.append({
-                    "id": str(hit.id),
-                    "score": hit.score,
-                    "passage_id": payload.get("passage_id"),
-                    "work_id": payload.get("work_id"),
-                    "text_content": payload.get("text_content", ""),
-                    "author": payload.get("author"),
-                    "title": payload.get("title"),
-                    "canonical_ref": payload.get("canonical_ref"),
-                })
+                results.append(
+                    {
+                        "id": str(hit.id),
+                        "score": hit.score,
+                        "passage_id": payload.get("passage_id"),
+                        "work_id": payload.get("work_id"),
+                        "text_content": payload.get("text_content", ""),
+                        "author": payload.get("author"),
+                        "title": payload.get("title"),
+                        "canonical_ref": payload.get("canonical_ref"),
+                    }
+                )
 
             return results
 
@@ -207,20 +213,110 @@ class QdrantService:
             results = []
             for hit in search_result:
                 payload = hit.payload or {}
-                results.append({
-                    "id": str(hit.id),
-                    "score": hit.score,
-                    "source": payload.get("source"),
-                    "target": payload.get("target"),
-                    "relation": payload.get("relation"),
-                    "description": payload.get("description"),
-                })
+                results.append(
+                    {
+                        "id": str(hit.id),
+                        "score": hit.score,
+                        "source": payload.get("source"),
+                        "target": payload.get("target"),
+                        "relation": payload.get("relation"),
+                        "description": payload.get("description"),
+                    }
+                )
 
             return results
 
         except Exception as e:
             logger.error(f"Error searching kg_edges: {e}")
             raise
+
+    async def search_contextual_passages(
+        self,
+        query_vector: list[float],
+        limit: int = 10,
+        filters: dict[str, Any] | None = None,
+        score_threshold: float | None = None,
+    ) -> list[dict[str, Any]]:
+        """
+        Search contextual passage embeddings by vector similarity.
+
+        Uses the ``passages_contextual`` collection which contains
+        passages re-embedded with author/work/period context headers.
+        Falls back to ``text_embeddings`` if contextual collection
+        does not exist.
+
+        Args:
+            query_vector: Query embedding
+            limit: Maximum results
+            filters: Optional field filters
+            score_threshold: Minimum similarity score
+
+        Returns:
+            List of matching text passages with scores
+        """
+        if not self.client:
+            raise RuntimeError("Qdrant not connected")
+
+        collection = "passages_contextual"
+        try:
+            self.client.get_collection(collection)
+        except Exception:
+            # Fall back to standard text_embeddings
+            return await self.search_texts(
+                query_vector,
+                limit,
+                filters,
+                score_threshold,
+            )
+
+        try:
+            qdrant_filter = None
+            if filters:
+                qdrant_filter = models.Filter(
+                    must=[
+                        models.FieldCondition(
+                            key=key, match=models.MatchValue(value=value)
+                        )
+                        for key, value in filters.items()
+                    ]
+                )
+
+            search_result = self.client.search(
+                collection_name=collection,
+                query_vector=query_vector,
+                limit=limit,
+                query_filter=qdrant_filter,
+                score_threshold=score_threshold,
+            )
+
+            results = []
+            for hit in search_result:
+                payload = hit.payload or {}
+                results.append(
+                    {
+                        "id": str(hit.id),
+                        "score": hit.score,
+                        "passage_id": payload.get("passage_id"),
+                        "text_content": payload.get("text_content", ""),
+                        "author": payload.get("author"),
+                        "title": payload.get("title"),
+                        "canonical_ref": payload.get("canonical_ref"),
+                        "period": payload.get("period"),
+                        "contextual_text": payload.get("contextual_text", ""),
+                    }
+                )
+
+            return results
+
+        except Exception as e:
+            logger.error(f"Error searching {collection}: {e}")
+            # Fall back to standard collection
+            return await self.search_texts(
+                query_vector,
+                limit,
+                filters,
+                score_threshold,
+            )
 
     async def get_collection_info(self, collection_name: str) -> dict[str, Any]:
         """Get information about a collection."""

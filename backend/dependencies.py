@@ -2,12 +2,13 @@
 Shared dependency injection for all backend services.
 
 Holds singleton instances of DatabaseService, QdrantService, LLMService,
-GraphRAGService, KGAnalytics, and KGCache — initialized once at startup
-and shared across all routes.
+GraphRAGService, KGAnalytics, KGCache, RerankerService, and CitationVerifier
+— initialized once at startup and shared across all routes.
 """
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -19,6 +20,8 @@ from eleutheria_kg.services.analytics import KGAnalytics
 from eleutheria_kg.services.cache import KGCache
 from eleutheria_kg.services.qdrant import QdrantService
 
+logger = logging.getLogger(__name__)
+
 
 @dataclass
 class Services:
@@ -26,7 +29,9 @@ class Services:
 
     db: DatabaseService = field(default_factory=DatabaseService)
     qdrant: QdrantService = field(default_factory=QdrantService)
-    llm: LLMService = field(default_factory=lambda: LLMService(preferred_provider=ModelProvider.GEMINI))
+    llm: LLMService = field(
+        default_factory=lambda: LLMService(preferred_provider=ModelProvider.GEMINI)
+    )
     analytics: KGAnalytics = field(default_factory=KGAnalytics)
     cache: KGCache = field(default_factory=lambda: KGCache(default_ttl=300))
     search: HybridSearchService | None = None
@@ -47,11 +52,21 @@ class Services:
         kg_data = await self._load_kg_data()
         self.analytics.set_data(kg_data)
 
-        # 5. GraphRAG (wraps db + qdrant + llm)
+        # 5. Optional: Cross-encoder reranker
+        reranker = self._init_reranker()
+
+        # 6. Citation verifier
+        verifier = self._init_verifier()
+
+        # 7. GraphRAG (wraps db + qdrant + llm + new services)
         self.graphrag = GraphRAGService(
             db_service=self.db,
             qdrant_service=self.qdrant,
             llm_service=self.llm,
+            analytics=self.analytics,
+            search_service=self.search,
+            reranker=reranker,
+            verifier=verifier,
         )
         await self.graphrag.load_kg()
 
@@ -70,6 +85,32 @@ class Services:
             FROM free_will.kg_edges
         """)
         return {"nodes": nodes, "edges": edges}
+
+    def _init_reranker(self) -> Any:
+        """Initialize the cross-encoder reranker (optional, CPU-based)."""
+        try:
+            from eleutheria_graphrag.services.reranker import RerankerService
+
+            reranker = RerankerService()
+            logger.info("RerankerService initialized")
+            return reranker
+        except ImportError:
+            logger.info("sentence-transformers not installed, reranker disabled")
+            return None
+
+    def _init_verifier(self) -> Any:
+        """Initialize the citation verifier."""
+        try:
+            from eleutheria_graphrag.services.citation_verifier import (
+                CitationVerifier,
+            )
+
+            verifier = CitationVerifier(llm=self.llm, db=self.db)
+            logger.info("CitationVerifier initialized")
+            return verifier
+        except ImportError:
+            logger.info("CitationVerifier import failed, disabled")
+            return None
 
     async def shutdown(self) -> None:
         """Gracefully close all connections."""
