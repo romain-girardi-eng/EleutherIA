@@ -1,6 +1,6 @@
 # EleutherIA Deployment
 
-Two deployment modes: **local** (self-contained) and **production** (managed services).
+Three deployment options: **local** (self-contained Docker), **production Docker** (managed services), and **Cloudflare Workers** (edge, current free-will.app).
 
 ## Local — Self-Contained
 
@@ -51,7 +51,22 @@ make prod
 # Or: docker compose -f deploy/production/docker-compose.yml up -d --build
 ```
 
+## Production (Cloudflare Workers) — Edge Backend
+
+The current [free-will.app](https://free-will.app) backend runs on Cloudflare Workers using Hono (TypeScript). No containers needed.
+
+See [`cloudflare/README.md`](cloudflare/README.md) for full setup instructions.
+
+```bash
+cd deploy/cloudflare
+npm install
+npx wrangler login
+# Set secrets (see README)
+npx wrangler deploy
+```
+
 ## Environment Variables
 
 - **Local:** See `.env.example` in repo root
-- **Production:** See `deploy/production/.env.example`
+- **Production (Docker):** See `deploy/production/.env.example`
+- **Cloudflare Workers:** Secrets via `wrangler secret put`, vars in `wrangler.toml`

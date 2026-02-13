@@ -7,13 +7,9 @@ mounts package routers, and adds cross-cutting middleware/routes.
 
 import logging
 import os
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-import backend.dependencies as deps
-from backend.dependencies import Services
+from typing import Any
 
 # Package routers
 from eleutheria_database.api.works import router as works_router
@@ -22,6 +18,11 @@ from eleutheria_graphrag.api.routes import router as graphrag_router
 from eleutheria_graphrag.api.routes import set_service as set_graphrag_service
 from eleutheria_kg.api.routes import router as kg_router
 from eleutheria_kg.api.routes import set_services as set_kg_services
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+import backend.dependencies as deps
+from backend.dependencies import Services
 
 # Backend-specific routers
 from backend.routes.auth import router as auth_router
@@ -36,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """Application lifespan: initialize all services on startup, close on shutdown."""
     logger.info("Starting EleutherIA backend...")
 
@@ -82,6 +83,7 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=allowed_origins,
+        allow_origin_regex=r"https://.*\.eleutheria\.pages\.dev|https://visual-pulpit.*\.vercel\.app",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -108,7 +110,7 @@ def create_app() -> FastAPI:
     # ---------- Health endpoint ----------
 
     @app.get("/api/health")
-    async def health():
+    async def health() -> dict[str, Any]:
         """Composite health check across all services."""
         svc = deps.services
         if svc is None:

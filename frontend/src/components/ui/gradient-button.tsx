@@ -63,4 +63,5 @@ const GradientButton = React.forwardRef<HTMLButtonElement, GradientButtonProps>(
 )
 GradientButton.displayName = "GradientButton"
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { GradientButton, gradientButtonVariants }

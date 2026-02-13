@@ -484,6 +484,9 @@ export default function EmbeddingsVisualization3D({ className = '', onConceptSel
     initScene();
 
     const currentMount = mountRef.current;
+    const currentMeshes = meshesRef.current;
+    const currentMaterials = materialsRef.current;
+    const currentPoints = pointsRef.current;
     currentMount?.addEventListener('mousemove', handleMouseMove);
     currentMount?.addEventListener('click', handleClick);
 
@@ -512,9 +515,9 @@ export default function EmbeddingsVisualization3D({ className = '', onConceptSel
       }
 
       // Clear all refs to prevent stale data on HMR
-      meshesRef.current.clear();
-      materialsRef.current.clear();
-      pointsRef.current.clear();
+      currentMeshes.clear();
+      currentMaterials.clear();
+      currentPoints.clear();
       hoveredIdRef.current = null;
       highlightedCategoryRef.current = null;
 

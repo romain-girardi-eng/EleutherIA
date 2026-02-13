@@ -59,8 +59,9 @@ export function IntersectionObserverProvider({
   }, []);
 
   useEffect(() => {
+    const currentObservers = observers.current;
     return () => {
-      observers.current.forEach((observer) => observer.disconnect());
+      currentObservers.forEach((observer) => observer.disconnect());
     };
   }, []);
 

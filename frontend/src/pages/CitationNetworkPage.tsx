@@ -75,13 +75,14 @@ const CitationNetworkPage: React.FC = () => {
     try {
       const response = await apiClient.get<CitationAnalysis>('/api/admin/citation-network');
       setAnalysis(response.data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Handle authentication errors specifically (401 or 403)
-      if (err.response?.status === 401 || err.response?.status === 403) {
+      const axiosErr = err as { response?: { status?: number; data?: { error?: string } } };
+      if (axiosErr.response?.status === 401 || axiosErr.response?.status === 403) {
         setError('Authentication required. Please log in to view citation network analysis.');
-      } else if (err.response?.data?.error) {
+      } else if (axiosErr.response?.data?.error) {
         // Show specific error message from backend
-        setError(`Error: ${err.response.data.error}`);
+        setError(`Error: ${axiosErr.response.data.error}`);
       } else {
         setError('Failed to load citation network analysis');
       }

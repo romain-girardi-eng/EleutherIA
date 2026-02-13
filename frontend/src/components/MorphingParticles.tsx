@@ -11,7 +11,7 @@
  * Morphing particle effects adapted for GraphRAG visualization.
  */
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -1054,7 +1054,31 @@ export function MorphingParticles(props: MorphingParticlesProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
 
-  const config = { ...defaultConfig, ...props };
+  // Memoize config to prevent re-creating the object on every render,
+  // which would cause the heavy THREE.js scene to reinitialize unnecessarily.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const config = useMemo(() => ({ ...defaultConfig, ...props }), [
+    props.particleCount,
+    props.morphDuration,
+    props.rotationSpeed,
+    props.particleSize,
+    props.lineOpacity,
+    props.connectionDistance,
+    props.colorScheme,
+    props.selectedShape,
+    props.enableBloom,
+    props.bloomIntensity,
+    props.enableTrails,
+    props.trailLength,
+    props.enableDepthOfField,
+    props.enableZoom,
+    props.enableHover,
+    props.enableKeyboard,
+    props.enableBreathing,
+    props.breathingSpeed,
+    props.enableStaggeredMorph,
+    props.staggerDirection,
+  ]);
 
   const initScene = useCallback(() => {
     console.log('[MorphingParticles] initScene called');

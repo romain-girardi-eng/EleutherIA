@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 declare module 'd3-force-webgpu' {
   export interface ForceNode {
     index?: number;

@@ -8,13 +8,13 @@ import logging
 from typing import Annotated, Any
 from uuid import UUID
 
+from eleutheria_database.services.db import DatabaseService
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from backend.dependencies import get_db
 from backend.routes.auth import get_current_user
 from backend.services.conversation_service import ConversationService
-from eleutheria_database.services.db import DatabaseService
 
 logger = logging.getLogger(__name__)
 

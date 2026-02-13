@@ -45,6 +45,7 @@ export default function BibliographyPage() {
         retryTimeoutRef.current = null;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentionally mount-only: loadBibliography handles its own retry logic internally
   }, []);
 
   const loadBibliography = async (isRetry = false) => {

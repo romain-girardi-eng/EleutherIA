@@ -153,6 +153,7 @@ export default function GraphRAGShowcase() {
       setActiveDemo((prev) => (prev + 1) % demoQueries.length);
     }, 4000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- demoQueries is a local constant array; its .length never changes
   }, []);
 
   return (

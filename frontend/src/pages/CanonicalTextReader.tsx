@@ -119,6 +119,27 @@ export default function CanonicalTextReader() {
     loadWork();
   }, [textId, API_URL]);
 
+  const scrollToPassageIndex = useCallback((index: number) => {
+    const passage = passages[index];
+    if (passage) {
+      const element = passageRefs.current.get(passage.passage_id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setCurrentPassageIndex(index);
+      }
+    }
+  }, [passages]);
+
+  const navigatePassage = useCallback((direction: 'prev' | 'next') => {
+    const newIndex = direction === 'prev'
+      ? Math.max(0, currentPassageIndex - 1)
+      : Math.min(passages.length - 1, currentPassageIndex + 1);
+
+    if (newIndex !== currentPassageIndex) {
+      scrollToPassageIndex(newIndex);
+    }
+  }, [currentPassageIndex, passages.length, scrollToPassageIndex]);
+
   // Scroll to passage on load if specified
   useEffect(() => {
     if (scrollToPassage && passages.length > 0) {
@@ -127,7 +148,7 @@ export default function CanonicalTextReader() {
         setTimeout(() => scrollToPassageIndex(idx), 300);
       }
     }
-  }, [scrollToPassage, passages]);
+  }, [scrollToPassage, passages, scrollToPassageIndex]);
 
   // Keyboard shortcuts (silent)
   useEffect(() => {
@@ -152,28 +173,7 @@ export default function CanonicalTextReader() {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [currentPassageIndex, passages.length, showTOC]);
-
-  const scrollToPassageIndex = (index: number) => {
-    const passage = passages[index];
-    if (passage) {
-      const element = passageRefs.current.get(passage.passage_id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setCurrentPassageIndex(index);
-      }
-    }
-  };
-
-  const navigatePassage = (direction: 'prev' | 'next') => {
-    const newIndex = direction === 'prev'
-      ? Math.max(0, currentPassageIndex - 1)
-      : Math.min(passages.length - 1, currentPassageIndex + 1);
-
-    if (newIndex !== currentPassageIndex) {
-      scrollToPassageIndex(newIndex);
-    }
-  };
+  }, [navigatePassage, showTOC]);
 
   const handleReferenceSearch = async (e: React.FormEvent) => {
     e.preventDefault();

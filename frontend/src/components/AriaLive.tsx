@@ -48,6 +48,7 @@ export function AriaLiveProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAriaLive() {
   const context = useContext(AriaLiveContext);
   if (!context) {

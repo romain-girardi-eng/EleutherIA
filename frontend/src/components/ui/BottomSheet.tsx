@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import type { PanInfo } from 'framer-motion';
@@ -85,13 +85,6 @@ export function BottomSheet({
   const [currentSnapIndex, setCurrentSnapIndex] = useState(initialSnapPoint);
   const dragConstraintsRef = useRef<HTMLDivElement>(null);
 
-  // Initialize controls
-  useEffect(() => {
-    if (isOpen) {
-      controls.start({ y: snapPoints.length > 0 ? getSnapPosition(currentSnapIndex) : 0 });
-    }
-  }, [isOpen, currentSnapIndex, snapPoints.length]);
-
   // Calculate height based on prop
   const getHeight = () => {
     if (height === 'auto') return 'auto';
@@ -102,11 +95,18 @@ export function BottomSheet({
   };
 
   // Calculate snap point positions
-  const getSnapPosition = (index: number) => {
+  const getSnapPosition = useCallback((index: number) => {
     if (snapPoints.length === 0) return 0;
     const snapPercentage = snapPoints[Math.min(index, snapPoints.length - 1)];
     return `${100 - snapPercentage}%`;
-  };
+  }, [snapPoints]);
+
+  // Initialize controls
+  useEffect(() => {
+    if (isOpen) {
+      controls.start({ y: snapPoints.length > 0 ? getSnapPosition(currentSnapIndex) : 0 });
+    }
+  }, [isOpen, currentSnapIndex, snapPoints.length, controls, getSnapPosition]);
 
   useEffect(() => {
     if (isOpen) {

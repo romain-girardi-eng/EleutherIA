@@ -11,14 +11,14 @@ import logging
 import time
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel, Field
-
-from backend.dependencies import get_analytics, get_cache, get_db, get_graphrag
 from eleutheria_database.services.db import DatabaseService
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
 from eleutheria_kg.services.analytics import KGAnalytics
 from eleutheria_kg.services.cache import KGCache
+from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel, Field
+
+from backend.dependencies import get_analytics, get_cache, get_db, get_graphrag
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +74,7 @@ async def graphrag_answer(
         )
     except Exception as e:
         logger.exception("GraphRAG query failed")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
     elapsed = time.time() - start
 

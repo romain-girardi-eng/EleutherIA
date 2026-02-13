@@ -184,6 +184,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = 'Button';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { Button, buttonVariants };
 
 /**
@@ -214,9 +215,9 @@ export function ButtonGroup({
       const isFirst = index === 0;
       const isLast = index === React.Children.count(children) - 1;
 
-      return React.cloneElement(child as React.ReactElement<any>, {
+      return React.cloneElement(child as React.ReactElement<{ className?: string; size?: string }>, {
         className: cn(
-          (child as React.ReactElement<any>).props.className,
+          (child as React.ReactElement<{ className?: string }>).props.className,
           orientation === 'horizontal' ? [
             !isFirst && '-ml-px',
             !isFirst && !isLast && 'rounded-none',
@@ -229,7 +230,7 @@ export function ButtonGroup({
             isLast && 'rounded-t-none',
           ]
         ),
-        size: (child as React.ReactElement<any>).props.size || size,
+        size: (child as React.ReactElement<{ size?: string }>).props.size || size,
       });
     }
     return child;

@@ -6,13 +6,12 @@ import logging
 import os
 import time
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import jwt
-from passlib.context import CryptContext
-
 from eleutheria_database.services.db import DatabaseService
+from passlib.context import CryptContext
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +39,7 @@ def verify_password(plain: str, hashed: str) -> bool:
 
 def create_access_token(data: dict[str, Any], expires_hours: int | None = None) -> str:
     """Create a signed JWT token."""
-    expire = datetime.now(timezone.utc) + timedelta(hours=expires_hours or JWT_EXPIRATION_HOURS)
+    expire = datetime.now(UTC) + timedelta(hours=expires_hours or JWT_EXPIRATION_HOURS)
     payload = {**data, "exp": expire}
     return jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
 
@@ -74,7 +73,7 @@ async def authenticate_user(
     # Check account lock
     if user.get("locked_until"):
         locked = user["locked_until"]
-        if isinstance(locked, datetime) and locked > datetime.now(timezone.utc):
+        if isinstance(locked, datetime) and locked > datetime.now(UTC):
             logger.warning(f"Account locked: {username}")
             return None
 
@@ -88,7 +87,7 @@ async def authenticate_user(
         attempts = (user.get("failed_login_attempts") or 0) + 1
         lock_until = None
         if attempts >= 5:
-            lock_until = datetime.now(timezone.utc) + timedelta(minutes=15)
+            lock_until = datetime.now(UTC) + timedelta(minutes=15)
         await db.execute(
             """
             UPDATE free_will.users

@@ -15,6 +15,8 @@ import type {
   KGFilterState,
   KGPathRequest,
   KGPathResponse,
+  Conversation,
+  ConversationMessage,
 } from '../types';
 import type { User, LoginCredentials } from '../context/AuthContext';
 
@@ -439,7 +441,7 @@ class ApiClient {
   }
 
   // Compare original vs enhanced GraphRAG
-  async graphragCompare(query: string): Promise<any> {
+  async graphragCompare(query: string): Promise<Record<string, unknown>> {
     const response = await this.client.get('/api/graphrag/compare', {
       params: { query },
       timeout: 240000, // 4 minutes for comparison
@@ -448,13 +450,13 @@ class ApiClient {
   }
 
   // Get node relationships
-  async getNodeRelationships(nodeId: string): Promise<any> {
+  async getNodeRelationships(nodeId: string): Promise<Record<string, unknown>> {
     const response = await this.client.get(`/api/graphrag/relationships/${nodeId}`);
     return response.data;
   }
 
   // Get philosophical debates
-  async getPhilosophicalDebates(limit: number = 10): Promise<any> {
+  async getPhilosophicalDebates(limit: number = 10): Promise<Record<string, unknown>> {
     const response = await this.client.get('/api/graphrag/debates', {
       params: { limit }
     });
@@ -462,7 +464,7 @@ class ApiClient {
   }
 
   // Get influence chains
-  async getInfluenceChains(limit: number = 10): Promise<any> {
+  async getInfluenceChains(limit: number = 10): Promise<Record<string, unknown>> {
     const response = await this.client.get('/api/graphrag/influence-chains', {
       params: { limit }
     });
@@ -470,7 +472,7 @@ class ApiClient {
   }
 
   // Get enhanced GraphRAG statistics
-  async getGraphRAGStats(): Promise<any> {
+  async getGraphRAGStats(): Promise<Record<string, unknown>> {
     const response = await this.client.get('/api/graphrag/stats');
     return response.data;
   }
@@ -491,7 +493,7 @@ class ApiClient {
       rigor_level?: string;
       citation_style?: string;
     };
-  }): Promise<{ success: boolean; conversation: any }> {
+  }): Promise<{ success: boolean; conversation: Conversation }> {
     const response = await this.client.post('/api/graphrag/conversations', options || {});
     return response.data;
   }
@@ -499,7 +501,7 @@ class ApiClient {
   // List user's conversations
   async listConversations(limit: number = 50, offset: number = 0): Promise<{
     success: boolean;
-    conversations: any[];
+    conversations: Conversation[];
     count: number;
   }> {
     const response = await this.client.get('/api/graphrag/conversations', {
@@ -511,7 +513,7 @@ class ApiClient {
   // Get a specific conversation
   async getConversation(conversationId: string): Promise<{
     success: boolean;
-    conversation: any;
+    conversation: Conversation;
   }> {
     const response = await this.client.get(`/api/graphrag/conversations/${conversationId}`);
     return response.data;
@@ -533,7 +535,7 @@ class ApiClient {
     offset: number = 0
   ): Promise<{
     success: boolean;
-    messages: any[];
+    messages: ConversationMessage[];
     count: number;
   }> {
     const response = await this.client.get(
@@ -558,7 +560,7 @@ class ApiClient {
         citation_style?: string;
       };
     }
-  ): Promise<{ success: boolean; conversation: any }> {
+  ): Promise<{ success: boolean; conversation: Conversation }> {
     const response = await this.client.put(
       `/api/graphrag/conversations/${conversationId}`,
       options
@@ -569,7 +571,7 @@ class ApiClient {
   // Search conversations by content
   async searchConversations(query: string, limit: number = 20): Promise<{
     success: boolean;
-    conversations: any[];
+    conversations: Conversation[];
     count: number;
   }> {
     const response = await this.client.get('/api/graphrag/conversations/search', {

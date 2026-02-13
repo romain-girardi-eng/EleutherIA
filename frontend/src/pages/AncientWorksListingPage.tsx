@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../api/client';
@@ -53,12 +53,7 @@ export default function TextExplorerPage() {
   const [showKGModal, setShowKGModal] = useState(false);
   const [selectedWorkKGData, setSelectedWorkKGData] = useState<WorkKGNodesResponse | null>(null);
 
-  useEffect(() => {
-    loadWorks();
-    loadStats();
-  }, [categoryFilter, authorFilter, languageFilter, featuredWorksFilter, sortBy, offset, pageSize]);
-
-  const loadWorks = async () => {
+  const loadWorks = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -78,7 +73,7 @@ export default function TextExplorerPage() {
         setWorks(featuredWorks as AncientWork[]);
         setTotalCount(featuredWorks.length);
       } else {
-        const filters: Record<string, any> = {};
+        const filters: Record<string, string | number> = {};
         const isPaginated = pageSize !== 'all';
         const limitValue = isPaginated ? pageSize : 500;
 
@@ -101,7 +96,12 @@ export default function TextExplorerPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [categoryFilter, authorFilter, languageFilter, featuredWorksFilter, sortBy, offset, pageSize, stats, t]);
+
+  useEffect(() => {
+    loadWorks();
+    loadStats();
+  }, [loadWorks]);
 
   const loadStats = async () => {
     try {

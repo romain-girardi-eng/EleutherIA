@@ -291,7 +291,7 @@ export function SourcesPanel({
   className = ''
 }: {
   sources: SourceCitation[];
-  evidenceMap?: Record<string, any>;
+  evidenceMap?: Record<string, { nodePath?: string[] }>;
   onNodeClick?: (nodeId: string) => void;
   className?: string;
 }) {
@@ -407,9 +407,9 @@ export function SourcesPanel({
               </div>
             </div>
 
-            {evidenceMap && evidenceMap[source.id.toString()] && evidenceMap[source.id.toString()].nodePath && (
+            {evidenceMap?.[source.id.toString()]?.nodePath && (
               <div className="ml-9 mt-1 text-xs text-gray-500">
-                Path: {evidenceMap[source.id.toString()].nodePath.join(' → ')}
+                Path: {evidenceMap[source.id.toString()].nodePath!.join(' → ')}
               </div>
             )}
           </div>

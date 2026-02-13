@@ -9,12 +9,12 @@ and what the eleutheria_kg package exposes.
 import logging
 from typing import Annotated, Any
 
+from eleutheria_kg.services.analytics import ANCIENT_PERIODS, KGAnalytics
+from eleutheria_kg.services.cache import KGCache
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 
 from backend.dependencies import get_analytics, get_cache
-from eleutheria_kg.services.analytics import KGAnalytics, ANCIENT_PERIODS
-from eleutheria_kg.services.cache import KGCache
 
 logger = logging.getLogger(__name__)
 
@@ -200,7 +200,6 @@ async def get_influence_matrix(
 
     edges = analytics.kg_data.get("edges", [])
     nodes = analytics.kg_data.get("nodes", [])
-    nodes_by_id = {n["id"]: n for n in nodes}
 
     # Collect person nodes
     persons = [n for n in nodes if n.get("type") == "Person"]

@@ -116,6 +116,7 @@ export function useLazyPassages(
     };
 
     loadInitial();
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- prefetchNext is stable (empty deps useCallback) and defined below; its identity never changes
   }, [workId, initialLimit, batchSize]);
 
   // Prefetch next batch in background

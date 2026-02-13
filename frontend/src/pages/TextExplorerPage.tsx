@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../api/client';
@@ -39,12 +39,7 @@ export default function TextExplorerPage() {
   const [pageSize, setPageSize] = useState<number | 'all'>('all');
   const [totalCount, setTotalCount] = useState(0);
 
-  useEffect(() => {
-    loadWorks();
-    loadStats();
-  }, [categoryFilter, authorFilter, languageFilter, featuredWorksFilter, sortBy, offset, pageSize]);
-
-  const loadWorks = async () => {
+  const loadWorks = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -98,7 +93,12 @@ export default function TextExplorerPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [categoryFilter, authorFilter, languageFilter, featuredWorksFilter, sortBy, offset, pageSize, stats]);
+
+  useEffect(() => {
+    loadWorks();
+    loadStats();
+  }, [loadWorks]);
 
   const loadStats = async () => {
     try {

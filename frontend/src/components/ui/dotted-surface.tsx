@@ -9,10 +9,11 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 
     useEffect(() => {
         if (!containerRef.current) return;
+        const currentContainer = containerRef.current;
 
         // Clear any existing canvas elements (React Strict Mode creates duplicates)
-        while (containerRef.current.firstChild) {
-            containerRef.current.removeChild(containerRef.current.firstChild);
+        while (currentContainer.firstChild) {
+            currentContainer.removeChild(currentContainer.firstChild);
         }
 
         const SEPARATION = 150;
@@ -52,7 +53,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
         renderer.domElement.style.display = 'block';
         renderer.domElement.style.overflow = 'hidden';
 
-        containerRef.current.appendChild(renderer.domElement);
+        currentContainer.appendChild(renderer.domElement);
 
         // Create particles
         const positions: number[] = [];
@@ -180,7 +181,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
             material.dispose();
             renderer.dispose();
 
-            if (containerRef.current && renderer.domElement.parentNode) {
+            if (currentContainer && renderer.domElement.parentNode) {
                 renderer.domElement.parentNode.removeChild(renderer.domElement);
             }
         };

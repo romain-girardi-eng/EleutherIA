@@ -860,9 +860,9 @@ function SearchResultCard({ result, index }: { result: SearchResult; index: numb
                       RRF Score: {result.rrf_score.toFixed(4)}
                     </span>
                   )}
-                  {(result as any).reranker_score !== undefined && (
+                  {(result as SearchResult & { reranker_score?: number }).reranker_score !== undefined && (
                     <span className="text-indigo-600 dark:text-indigo-400 font-medium">
-                      ✨ AI Score: {(result as any).reranker_score.toFixed(4)}
+                      ✨ AI Score: {(result as SearchResult & { reranker_score?: number }).reranker_score!.toFixed(4)}
                     </span>
                   )}
                   {result.rank !== undefined && (

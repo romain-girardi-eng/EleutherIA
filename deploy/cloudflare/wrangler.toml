@@ -1,0 +1,42 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "ancient-free-will-api"
+main = "src/index.ts"
+compatibility_date = "2024-11-27"
+compatibility_flags = ["nodejs_compat"]
+
+# Cloudflare Workers Configuration
+workers_dev = true
+route = { pattern = "free-will.app/api/*", zone_name = "free-will.app" }
+
+[observability]
+enabled = true
+
+# Environment Variables (will be set via wrangler secret)
+# SUPABASE_URL - Supabase project URL
+# SUPABASE_KEY - Supabase anon/service key
+# QDRANT_HOST - Qdrant Cloud host
+# QDRANT_API_KEY - Qdrant Cloud API key
+# GEMINI_API_KEY - Google Gemini API key
+# ALLOWED_ORIGINS - CORS allowed origins (comma-separated)
+
+# Development environment variables (for testing)
+[vars]
+ENVIRONMENT = "production"
+LOG_LEVEL = "INFO"
+EMBEDDING_DIMENSIONS = "3072"
+ALLOWED_ORIGINS = "https://free-will.app,https://eleutheria.pages.dev,http://localhost:5173,http://localhost:3000,https://visual-pulpit.vercel.app"
+
+# KV Namespaces for caching
+[[kv_namespaces]]
+binding = "TEXT_CACHE"
+id = "9506f86aab4845818bd7644508d504e6"
+
+# Cloudflare Workflows for long-running GraphRAG operations (disabled — class not implemented)
+# [[workflows]]
+# name = "graphrag-workflow"
+# binding = "GRAPHRAG_WORKFLOW"
+# class_name = "GraphRAGWorkflow"
+
+# Analytics Engine (enable in Cloudflare Dashboard first)
+# [[analytics_engine_datasets]]
+# binding = "API_ANALYTICS"
