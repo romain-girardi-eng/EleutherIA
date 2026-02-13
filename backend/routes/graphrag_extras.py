@@ -128,26 +128,47 @@ async def graphrag_answer(
                 "reason": "Expanded via graph traversal",
             })
 
+    # Build evidenceMap keyed by citation number
+    evidence_map: dict[str, Any] = {}
+    for s in sources:
+        evidence_map[str(s["id"])] = {
+            "nodeId": s["nodeId"],
+            "confidence": s["metadata"].get("confidence") or 0.75,
+            "type": s["nodeType"],
+        }
+
+    # Compute quality metrics from citation count + node coverage
+    citation_count = len(result.get("citations", []))
+    node_count = len(context_nodes)
+    completeness = min(1.0, node_count / 20)
+    accuracy = min(1.0, citation_count / 5) if citation_count > 0 else 0.5
+    confidence_score = round((completeness * 40 + accuracy * 40 + 20) if sources else 50)
+
     return {
         "query": body.query,
         "answer": result.get("answer", ""),
+        "confidence": round(confidence_score / 100, 2),
         "citations": {
             "ancient_sources": ancient_sources,
             "modern_scholarship": modern_sources,
         },
         "sources": sources,
+        "evidenceMap": evidence_map,
         "reasoning_path": {
             "starting_nodes": seed_nodes_detail,
             "expanded_nodes": expanded_detail[:20],
             "traversed_edges": [],
-            "total_nodes": len(context_nodes),
+            "total_nodes": node_count,
             "total_edges": 0,
         },
-        "nodes_used": len(context_nodes),
+        "nodes_used": node_count,
         "edges_traversed": 0,
         "quality_metrics": {
-            "confidence_score": 75,
-            "quality_badge": "Medium",
+            "confidence_score": confidence_score,
+            "completeness": round(completeness, 2),
+            "accuracy": round(accuracy, 2),
+            "clarity": 0.85,
+            "quality_badge": "High" if confidence_score >= 75 else "Medium" if confidence_score >= 50 else "Low",
             "caveats": [],
         },
         "retrieval_stats": {
