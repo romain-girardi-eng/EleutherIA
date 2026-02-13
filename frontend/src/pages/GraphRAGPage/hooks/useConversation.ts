@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { apiClient } from '../../../api/client';
 import type { Conversation } from '../../../components/graphrag/ConversationSidebar';
-import type { GraphRAGChatMessage } from '../../../types';
+import type { GraphRAGChatMessage, ConversationMessage } from '../../../types';
 
 export interface ConversationState {
   conversationId: string | null;
@@ -69,11 +69,13 @@ export function useConversation(
       const response = await apiClient.getConversationMessages(id);
       if (response.success) {
         // Convert messages to GraphRAGChatMessage format
-        const loadedMessages: GraphRAGChatMessage[] = response.messages.map((msg: any) => ({
-          role: msg.role,
+        const loadedMessages: GraphRAGChatMessage[] = response.messages
+          .filter((msg: ConversationMessage) => msg.role === 'user' || msg.role === 'assistant')
+          .map((msg: ConversationMessage) => ({
+          role: msg.role as 'user' | 'assistant',
           content: msg.content,
-          citations: msg.citations,
-          reasoning_path: msg.reasoning_path,
+          citations: msg.citations as GraphRAGChatMessage['citations'],
+          reasoning_path: msg.reasoning_path as GraphRAGChatMessage['reasoning_path'],
           thinking_process: msg.thinking_process,
           tokens_used: msg.tokens_used,
           llm_provider: msg.llm_provider,

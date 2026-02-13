@@ -3,10 +3,18 @@ import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AuroraBackground } from '../components/ui/aurora-background';
 
+interface SimpleText {
+  id: string;
+  title: string;
+  author: string;
+  language: string;
+  raw_text: string;
+}
+
 export default function SimpleTextReader() {
   const { t } = useTranslation();
   const { textId } = useParams<{ textId: string }>();
-  const [text, setText] = useState<any>(null);
+  const [text, setText] = useState<SimpleText | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
 

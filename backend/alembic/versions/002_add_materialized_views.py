@@ -13,16 +13,15 @@ Adds materialized views for frequently accessed aggregations:
 These views are refreshed periodically (e.g., hourly) to provide
 fast access to expensive aggregate queries.
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
 from alembic import op
 
-
 # revision identifiers, used by Alembic.
 revision: str = '002_materialized'
-down_revision: Union[str, Sequence[str], None] = '93f054a88815'
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = '93f054a88815'
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:

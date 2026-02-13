@@ -10,16 +10,15 @@ Adds performance indexes for common query patterns:
 - Composite indexes for filtered queries
 - Partial indexes for common filters
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
 from alembic import op
 
-
 # revision identifiers, used by Alembic.
 revision: str = '003_indexes'
-down_revision: Union[str, Sequence[str], None] = '002_materialized'
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = '002_materialized'
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:

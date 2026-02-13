@@ -5,6 +5,7 @@ Authentication routes — login, current user, rate limit status, semativerse pe
 import logging
 from typing import Annotated, Any
 
+from eleutheria_database.services.db import DatabaseService
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
@@ -16,7 +17,6 @@ from backend.services.auth_service import (
     decode_token,
     record_request,
 )
-from eleutheria_database.services.db import DatabaseService
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +50,7 @@ async def get_current_user(
         payload = decode_token(token)
     except Exception:
         logger.debug("Token decode failed", exc_info=True)
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
+        raise HTTPException(status_code=401, detail="Invalid or expired token") from None
 
     user_id = payload.get("sub")
     if not user_id:

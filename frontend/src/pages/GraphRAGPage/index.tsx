@@ -105,6 +105,7 @@ export default function GraphRAGPage() {
       }
     };
     fetchStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentionally mount-only: state.setKgStats is a stable setState dispatcher
   }, []);
 
   // Scroll to bottom during streaming
@@ -112,6 +113,7 @@ export default function GraphRAGPage() {
     if (state.streaming) {
       state.messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- state.messagesEndRef is a stable useRef; destructuring state on every render would cause unnecessary re-runs
   }, [state.messages, state.streamedAnswer, state.streaming]);
 
   // Process query (main handler)
@@ -131,6 +133,7 @@ export default function GraphRAGPage() {
     } else {
       await handleStandardQuery(queryText);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- handleStreamingQuery/handleStandardQuery are non-memoized closures that capture current state; adding them would cause infinite re-creation. state.setMessages/setQuery/setError are stable setState dispatchers.
   }, [state.settings.useStreaming]);
 
   // Handle initial query from location state
@@ -146,6 +149,7 @@ export default function GraphRAGPage() {
         window.history.replaceState({}, document.title);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- state.setPendingQuery and state.setShowAuthModal are stable setState dispatchers
   }, [location.state, isAuthenticated, processQuery]);
 
   // Streaming query handler

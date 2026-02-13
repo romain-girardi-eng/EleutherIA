@@ -103,6 +103,10 @@ data/exports/
 # Docker
 .docker/
 
+# Cloudflare Workers
+.wrangler/
+.dev.vars
+
 # Temporary files
 tmp/
 temp/

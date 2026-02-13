@@ -8,13 +8,13 @@ semantic search via Qdrant and lemma autocomplete.
 import logging
 from typing import Annotated, Any
 
+from eleutheria_database.services.db import DatabaseService
+from eleutheria_database.services.hybrid_search import HybridSearchService
+from eleutheria_kg.services.qdrant import QdrantService
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel, Field
 
 from backend.dependencies import get_db, get_qdrant, get_search
-from eleutheria_database.services.db import DatabaseService
-from eleutheria_database.services.hybrid_search import HybridSearchService
-from eleutheria_kg.services.qdrant import QdrantService
 
 logger = logging.getLogger(__name__)
 

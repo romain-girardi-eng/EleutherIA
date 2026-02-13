@@ -160,7 +160,7 @@ const animationVariants = {
  *   columns={{ sm: 1, md: 2, lg: 3 }}
  * />
  */
-export function AnimatedList<T = any>({
+export function AnimatedList<T = unknown>({
   items,
   renderItem,
   keyExtractor,
@@ -317,7 +317,7 @@ interface VirtualizedAnimatedListProps<T> extends AnimatedListProps<T> {
   overscan?: number;
 }
 
-export function VirtualizedAnimatedList<T = any>({
+export function VirtualizedAnimatedList<T = unknown>({
   items,
   renderItem,
   itemHeight,
@@ -427,7 +427,7 @@ interface AnimatedGridProps<T> extends Omit<AnimatedListProps<T>, 'layout'> {
   aspectRatio?: string;
 }
 
-export function AnimatedGrid<T = any>({
+export function AnimatedGrid<T = unknown>({
   columns = { sm: 1, md: 2, lg: 3, xl: 4 },
   aspectRatio,
   className,
@@ -454,7 +454,7 @@ interface AnimatedMasonryProps<T> extends Omit<AnimatedListProps<T>, 'layout'> {
   columns?: number;
 }
 
-export function AnimatedMasonry<T = any>({
+export function AnimatedMasonry<T = unknown>({
   columns = 3,
   className,
   ...rest
@@ -482,7 +482,7 @@ interface InfiniteAnimatedListProps<T> extends AnimatedListProps<T> {
   threshold?: number;
 }
 
-export function InfiniteAnimatedList<T = any>({
+export function InfiniteAnimatedList<T = unknown>({
   onLoadMore,
   hasMore,
   loadingMore = false,

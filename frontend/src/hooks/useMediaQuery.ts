@@ -58,9 +58,9 @@ export function useMediaQuery(query: string): boolean {
     }
     // Fallback for older browsers
     else {
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
+       
       mediaQuery.addListener(handleChange);
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
+       
       return () => mediaQuery.removeListener(handleChange);
     }
   }, [query]);

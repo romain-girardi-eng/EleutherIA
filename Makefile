@@ -3,6 +3,7 @@
 
 .PHONY: help install install-database install-kg install-graphrag \
         run local stop local-clean prod prod-stop \
+        cf-deploy cf-dev cf-logs \
         test test-database test-kg test-graphrag test-coverage \
         lint format typecheck quality fix \
         frontend-install frontend-dev frontend-build frontend-test \
@@ -51,6 +52,11 @@ help:
 	@echo "Docker (Production — Supabase + Qdrant Cloud):"
 	@echo "  make prod             Start backend + frontend"
 	@echo "  make prod-stop        Stop production services"
+	@echo ""
+	@echo "Cloudflare Workers (Production — free-will.app):"
+	@echo "  make cf-deploy        Deploy to Cloudflare Workers"
+	@echo "  make cf-dev           Start local CF dev server"
+	@echo "  make cf-logs          Tail production logs"
 	@echo ""
 	@echo "Database:"
 	@echo "  make db-backup        Backup PostgreSQL"
@@ -109,6 +115,19 @@ prod:
 
 prod-stop:
 	docker compose -f deploy/production/docker-compose.yml down
+
+# =============================================================================
+# Cloudflare Workers (Production — free-will.app)
+# =============================================================================
+
+cf-deploy:
+	cd deploy/cloudflare && npx wrangler deploy
+
+cf-dev:
+	cd deploy/cloudflare && npx wrangler dev
+
+cf-logs:
+	cd deploy/cloudflare && npx wrangler tail
 
 # =============================================================================
 # Testing

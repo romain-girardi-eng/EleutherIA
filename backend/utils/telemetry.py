@@ -17,7 +17,7 @@ Usage:
 import logging
 import os
 from contextlib import contextmanager
-from typing import Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -149,7 +149,7 @@ def get_tracer() -> Any:
 @contextmanager
 def trace_span(
     name: str,
-    attributes: Optional[dict[str, Any]] = None,
+    attributes: dict[str, Any] | None = None,
     record_exception: bool = True,
 ):
     """
@@ -194,7 +194,7 @@ def add_span_attribute(key: str, value: Any) -> None:
         span.set_attribute(key, str(value))
 
 
-def add_span_event(name: str, attributes: Optional[dict[str, Any]] = None) -> None:
+def add_span_event(name: str, attributes: dict[str, Any] | None = None) -> None:
     """Add an event to the current span."""
     if not OTEL_AVAILABLE:
         return

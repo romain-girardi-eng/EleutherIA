@@ -7,10 +7,10 @@ import logging
 from typing import Annotated, Any
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from eleutheria_database.services.db import DatabaseService
+from fastapi import APIRouter, Depends, Query
 
 from backend.dependencies import get_db
-from eleutheria_database.services.db import DatabaseService
 
 logger = logging.getLogger(__name__)
 

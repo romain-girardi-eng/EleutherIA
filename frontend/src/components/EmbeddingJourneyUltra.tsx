@@ -1352,10 +1352,11 @@ export default function EmbeddingJourneyUltra({ className = '', autoPlay = false
 
   // Clean up Three.js
   useEffect(() => {
+    const currentMount = mountRef.current;
     return () => {
       if (frameIdRef.current) cancelAnimationFrame(frameIdRef.current);
-      if (rendererRef.current && mountRef.current) {
-        mountRef.current.removeChild(rendererRef.current.domElement);
+      if (rendererRef.current && currentMount) {
+        currentMount.removeChild(rendererRef.current.domElement);
         rendererRef.current.dispose();
       }
       sceneRef.current = null;
@@ -1568,7 +1569,7 @@ export default function EmbeddingJourneyUltra({ className = '', autoPlay = false
     let position3d = { x: 0, y: 0, z: 0 };
     let cluster = 'Core';
     let clusterColor = '#fbbf24';
-    let similarNodes: any[] = [];
+    let similarNodes: { school?: string; score: number }[] = [];
 
     try {
       // Call the real embedding API
