@@ -122,3 +122,6 @@ coverage/
 
 # Local development notes (untracked)
 CLAUDE.md
+
+# Git worktrees
+.worktrees/
