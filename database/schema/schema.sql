@@ -202,6 +202,78 @@ CREATE INDEX IF NOT EXISTS idx_auth_audit_event_type ON auth_audit_log(event_typ
 CREATE INDEX IF NOT EXISTS idx_auth_audit_created_at ON auth_audit_log(created_at);
 
 -- ============================================
+-- Knowledge Graph Tables
+-- ============================================
+
+-- KG Nodes: Philosophers, concepts, arguments, texts, positions
+CREATE TABLE IF NOT EXISTS kg_nodes (
+    node_id TEXT PRIMARY KEY,
+    label TEXT NOT NULL,
+    type TEXT NOT NULL,        -- Person, Concept, Argument, Text, Position, School, etc.
+    description TEXT,
+    period TEXT,               -- Presocratic, Classical Greek, Hellenistic, etc.
+    school TEXT,               -- Stoic, Epicurean, Peripatetic, etc.
+    role TEXT,                 -- For Person nodes: philosopher, commentator, etc.
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Indexes for kg_nodes
+CREATE INDEX IF NOT EXISTS idx_kg_nodes_type ON kg_nodes(type);
+CREATE INDEX IF NOT EXISTS idx_kg_nodes_period ON kg_nodes(period);
+CREATE INDEX IF NOT EXISTS idx_kg_nodes_school ON kg_nodes(school);
+CREATE INDEX IF NOT EXISTS idx_kg_nodes_label ON kg_nodes USING GIN (to_tsvector('simple', label));
+
+-- KG Edges: Relationships between nodes
+CREATE TABLE IF NOT EXISTS kg_edges (
+    edge_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    source_id TEXT NOT NULL REFERENCES kg_nodes(node_id) ON DELETE CASCADE,
+    target_id TEXT NOT NULL REFERENCES kg_nodes(node_id) ON DELETE CASCADE,
+    relation TEXT NOT NULL,    -- influences, argues_for, develops, criticizes, etc.
+    description TEXT,
+    weight DOUBLE PRECISION DEFAULT 1.0,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Indexes for kg_edges
+CREATE INDEX IF NOT EXISTS idx_kg_edges_source ON kg_edges(source_id);
+CREATE INDEX IF NOT EXISTS idx_kg_edges_target ON kg_edges(target_id);
+CREATE INDEX IF NOT EXISTS idx_kg_edges_relation ON kg_edges(relation);
+
+-- ============================================
+-- Conversations
+-- ============================================
+
+-- Conversations: GraphRAG chat sessions
+CREATE TABLE IF NOT EXISTS conversations (
+    conversation_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    title TEXT NOT NULL DEFAULT 'New conversation',
+    settings JSONB NOT NULL DEFAULT '{}',
+    message_count INTEGER NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_conversations_user ON conversations(user_id);
+CREATE INDEX IF NOT EXISTS idx_conversations_updated ON conversations(updated_at);
+
+-- Conversation Messages
+CREATE TABLE IF NOT EXISTS conversation_messages (
+    message_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversation_id UUID NOT NULL
+        REFERENCES conversations(conversation_id) ON DELETE CASCADE,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('user', 'assistant', 'system')),
+    content TEXT NOT NULL,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_conv_messages_conv ON conversation_messages(conversation_id);
+CREATE INDEX IF NOT EXISTS idx_conv_messages_created ON conversation_messages(created_at);
+
+-- ============================================
 -- OGA (Open Greek and Latin) Morphology
 -- ============================================
 
