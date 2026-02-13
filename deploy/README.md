@@ -1,71 +1,57 @@
 # EleutherIA Deployment
 
-Docker-based deployment for the EleutherIA platform.
+Two deployment modes: **local** (self-contained) and **production** (managed services).
 
-## Quick Start
+## Local — Self-Contained
+
+Everything runs in Docker: PostgreSQL, Qdrant, backend, and frontend. Zero external dependencies.
 
 ```bash
 # From repo root
 cp .env.example .env
-# Edit .env with your API keys
+# Add at least one LLM API key to .env
 
-# Start all services
-docker compose -f deploy/docker/docker-compose.yml up -d
-
-# Or use Makefile
 make run
+# Or: docker compose up -d --build
 ```
 
-## Services
+| Service    | Port | URL                              |
+|------------|------|----------------------------------|
+| Frontend   | 80   | http://localhost                  |
+| Backend    | 8000 | http://localhost:8000/docs        |
+| PostgreSQL | 5432 | localhost:5432                    |
+| Qdrant     | 6333 | http://localhost:6333/dashboard   |
 
-| Service | Port | Description |
-|---------|------|-------------|
-| Frontend | 80 | React UI |
-| Backend | 8000 | FastAPI server |
-| PostgreSQL | 5432 | Database |
-| Qdrant | 6333 | Vector DB |
-
-## Configurations
-
-### docker-compose.yml (Production)
-Full stack with all services, optimized for production.
-
-### docker-compose.dev.yml (Development)
-Development setup with hot reload and debugging.
-
-## Monitoring (Optional)
+Optional profiles:
 
 ```bash
-# Start with monitoring
-docker compose -f deploy/docker/docker-compose.yml \
-               -f deploy/monitoring/docker-compose.monitoring.yml up -d
+docker compose --profile admin up -d       # + PgAdmin on :8080
+docker compose --profile monitoring up -d  # + Prometheus + Grafana
+docker compose --profile full up -d        # Everything
 ```
 
-Adds:
-- Prometheus (metrics) - port 9090
-- Grafana (dashboards) - port 3000
+```bash
+make stop         # Stop services
+make local-clean  # Stop + delete volumes
+make logs         # Tail logs
+```
 
-## Commands
+## Production — Supabase + Qdrant Cloud
+
+Only backend and frontend run as containers. PostgreSQL and Qdrant are external managed services.
+
+See [`production/README.md`](production/README.md) for full setup instructions.
 
 ```bash
-# View logs
-docker compose -f deploy/docker/docker-compose.yml logs -f
+cd deploy/production
+cp .env.example .env
+# Fill in Supabase URL, Qdrant host, API keys
 
-# Backend logs only
-docker compose -f deploy/docker/docker-compose.yml logs -f backend
-
-# Stop services
-docker compose -f deploy/docker/docker-compose.yml down
-
-# Stop and remove volumes (data loss!)
-docker compose -f deploy/docker/docker-compose.yml down -v
+make prod
+# Or: docker compose -f deploy/production/docker-compose.yml up -d --build
 ```
 
 ## Environment Variables
 
-See `.env.example` in repo root for all configuration options.
-
-Required:
-- `MOONSHOT_API_KEY` or `GEMINI_API_KEY` (for LLM)
-- `DATABASE_URL` (auto-configured in Docker)
-- `QDRANT_URL` (auto-configured in Docker)
+- **Local:** See `.env.example` in repo root
+- **Production:** See `deploy/production/.env.example`

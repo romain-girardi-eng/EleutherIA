@@ -38,6 +38,7 @@ class DatabaseService:
         Establish connection pool to PostgreSQL.
 
         Configuration via environment variables:
+            DATABASE_URL: Full PostgreSQL DSN (preferred, e.g. for Supabase)
             POSTGRES_HOST: Database host (default: localhost)
             POSTGRES_PORT: Database port (default: 5432)
             POSTGRES_DB: Database name (default: postgres)
@@ -47,6 +48,9 @@ class DatabaseService:
             DB_POOL_MIN_SIZE: Minimum pool size (default: 5)
             DB_POOL_MAX_SIZE: Maximum pool size (default: 15)
             DB_POOL_ACQUIRE_TIMEOUT: Connection acquire timeout (default: 10)
+
+        If DATABASE_URL is set, it takes precedence over individual POSTGRES_* vars.
+        asyncpg natively parses DSNs including ?sslmode=require.
         """
         try:
             min_pool_size = int(os.getenv("DB_POOL_MIN_SIZE", "5"))
@@ -54,34 +58,51 @@ class DatabaseService:
             acquire_timeout = float(os.getenv("DB_POOL_ACQUIRE_TIMEOUT", "10"))
             self._acquire_timeout = acquire_timeout
 
-            db_config: dict[str, Any] = {
-                "host": os.getenv("POSTGRES_HOST", "localhost"),
-                "port": int(os.getenv("POSTGRES_PORT", "5432")),
-                "database": os.getenv("POSTGRES_DB", "postgres"),
-                "user": os.getenv("POSTGRES_USER", "postgres"),
-                "password": os.getenv("POSTGRES_PASSWORD", ""),
-                "min_size": min_pool_size,
-                "max_size": max_pool_size,
-                "command_timeout": 60,
-                "statement_cache_size": 0,  # Disable for pgbouncer compatibility
-                "timeout": acquire_timeout,
-            }
+            database_url = os.getenv("DATABASE_URL")
 
-            # Add SSL for cloud databases
-            ssl_mode = os.getenv("POSTGRES_SSLMODE")
-            if ssl_mode:
-                db_config["ssl"] = ssl_mode
-
-            self.pool = await asyncpg.create_pool(**db_config)
-            logger.info(
-                "PostgreSQL connection pool created",
-                extra={
+            if database_url:
+                # DSN mode — used by Supabase and other cloud databases
+                self.pool = await asyncpg.create_pool(
+                    dsn=database_url,
+                    min_size=min_pool_size,
+                    max_size=max_pool_size,
+                    command_timeout=60,
+                    statement_cache_size=0,  # Disable for pgbouncer compatibility
+                    timeout=acquire_timeout,
+                )
+                logger.info(
+                    "PostgreSQL pool created from DATABASE_URL",
+                    extra={"min_size": min_pool_size, "max_size": max_pool_size},
+                )
+            else:
+                # Individual vars mode — used by Docker Compose local setup
+                db_config: dict[str, Any] = {
+                    "host": os.getenv("POSTGRES_HOST", "localhost"),
+                    "port": int(os.getenv("POSTGRES_PORT", "5432")),
+                    "database": os.getenv("POSTGRES_DB", "postgres"),
+                    "user": os.getenv("POSTGRES_USER", "postgres"),
+                    "password": os.getenv("POSTGRES_PASSWORD", ""),
                     "min_size": min_pool_size,
                     "max_size": max_pool_size,
-                    "acquire_timeout": acquire_timeout,
-                },
-            )
+                    "command_timeout": 60,
+                    "statement_cache_size": 0,  # Disable for pgbouncer compatibility
+                    "timeout": acquire_timeout,
+                }
 
+                # Add SSL for cloud databases
+                ssl_mode = os.getenv("POSTGRES_SSLMODE")
+                if ssl_mode:
+                    db_config["ssl"] = ssl_mode
+
+                self.pool = await asyncpg.create_pool(**db_config)
+                logger.info(
+                    "PostgreSQL pool created from POSTGRES_* vars",
+                    extra={
+                        "host": db_config["host"],
+                        "min_size": min_pool_size,
+                        "max_size": max_pool_size,
+                    },
+                )
         except Exception as e:
             logger.error(f"Failed to connect to PostgreSQL: {e}")
             raise

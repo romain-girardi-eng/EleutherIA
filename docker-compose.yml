@@ -1,32 +1,37 @@
 # =============================================================================
-# EleutherIA - Production-Ready Docker Compose
+# EleutherIA — Local Development (self-contained)
 # =============================================================================
+# All services run locally: PostgreSQL + Qdrant + Backend + Frontend.
+# No external dependencies required.
+#
 # Usage:
-#   docker compose up -d                       # Core services
-#   docker compose --profile admin up -d       # + PgAdmin
-#   docker compose --profile monitoring up -d  # + Prometheus/Grafana
-#   docker compose --profile full up -d        # Everything
+#   docker compose up -d --build              # Core services
+#   docker compose --profile admin up -d      # + PgAdmin
+#   docker compose --profile monitoring up -d # + Prometheus/Grafana
+#   docker compose --profile full up -d       # Everything
+#
+# For production (Supabase + Qdrant Cloud), see deploy/production/
 # =============================================================================
 
 name: eleutheria
 
 services:
   # ---------------------------------------------------------------------------
-  # PostgreSQL - Primary Database
+  # PostgreSQL — Primary Database
   # ---------------------------------------------------------------------------
   postgres:
     image: postgres:16-alpine
-    container_name: EleutherIA-postgres
+    container_name: eleutheria-postgres
     restart: unless-stopped
     init: true
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-ancient_free_will_db}
-      POSTGRES_USER: ${POSTGRES_USER:-free_will_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-free_will_password} # pragma: allowlist secret
+      POSTGRES_DB: ${POSTGRES_DB:-eleutheria}
+      POSTGRES_USER: ${POSTGRES_USER:-eleutheria}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-eleutheria} # pragma: allowlist secret
       POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=en_US.UTF-8"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backend/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/schema:/docker-entrypoint-initdb.d:ro
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     command:
@@ -43,7 +48,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "pg_isready -U ${POSTGRES_USER:-free_will_user} -d ${POSTGRES_DB:-ancient_free_will_db}",
+          "pg_isready -U ${POSTGRES_USER:-eleutheria} -d ${POSTGRES_DB:-eleutheria}",
         ]
       interval: 10s
       timeout: 5s
@@ -57,11 +62,11 @@ services:
           memory: 1G
 
   # ---------------------------------------------------------------------------
-  # Qdrant - Vector Database
+  # Qdrant — Vector Database
   # ---------------------------------------------------------------------------
   qdrant:
     image: qdrant/qdrant:v1.13.3
-    container_name: EleutherIA-qdrant
+    container_name: eleutheria-qdrant
     restart: unless-stopped
     init: true
     environment:
@@ -89,15 +94,14 @@ services:
           memory: 2G
 
   # ---------------------------------------------------------------------------
-  # Backend - FastAPI Application
+  # Backend — FastAPI Application
   # ---------------------------------------------------------------------------
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
-      target: production
+      context: .
+      dockerfile: backend/Dockerfile
     image: eleutheria/backend:${TAG:-latest}
-    container_name: EleutherIA-backend
+    container_name: eleutheria-backend
     restart: unless-stopped
     init: true
     read_only: true
@@ -108,9 +112,9 @@ services:
     environment:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
-      POSTGRES_DB: ${POSTGRES_DB:-ancient_free_will_db}
-      POSTGRES_USER: ${POSTGRES_USER:-free_will_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-free_will_password} # pragma: allowlist secret
+      POSTGRES_DB: ${POSTGRES_DB:-eleutheria}
+      POSTGRES_USER: ${POSTGRES_USER:-eleutheria}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-eleutheria} # pragma: allowlist secret
       DB_POOL_MIN_SIZE: ${DB_POOL_MIN_SIZE:-5}
       DB_POOL_MAX_SIZE: ${DB_POOL_MAX_SIZE:-20}
       QDRANT_HOST: qdrant
@@ -148,17 +152,16 @@ services:
           memory: 1G
 
   # ---------------------------------------------------------------------------
-  # Frontend - React + Nginx
+  # Frontend — React + Nginx
   # ---------------------------------------------------------------------------
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      target: production
       args:
         VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
     image: eleutheria/frontend:${TAG:-latest}
-    container_name: EleutherIA-frontend
+    container_name: eleutheria-frontend
     restart: unless-stopped
     init: true
     read_only: true
@@ -190,7 +193,7 @@ services:
   # ---------------------------------------------------------------------------
   pgadmin:
     image: dpage/pgadmin4:8
-    container_name: EleutherIA-pgadmin
+    container_name: eleutheria-pgadmin
     restart: unless-stopped
     profiles:
       - admin
@@ -213,7 +216,7 @@ services:
   # ---------------------------------------------------------------------------
   prometheus:
     image: prom/prometheus:v2.51.0
-    container_name: EleutherIA-prometheus
+    container_name: eleutheria-prometheus
     restart: unless-stopped
     profiles:
       - monitoring
@@ -236,7 +239,7 @@ services:
   # ---------------------------------------------------------------------------
   grafana:
     image: grafana/grafana:10.4.0
-    container_name: EleutherIA-grafana
+    container_name: eleutheria-grafana
     restart: unless-stopped
     profiles:
       - monitoring

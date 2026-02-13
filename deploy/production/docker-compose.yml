@@ -1,0 +1,92 @@
+# =============================================================================
+# EleutherIA — Production Deployment
+# =============================================================================
+# Backend + Frontend only. PostgreSQL (Supabase) and Qdrant (Cloud) are
+# external managed services.
+#
+# Usage:
+#   cp .env.example .env   # Fill in Supabase + Qdrant Cloud credentials
+#   docker compose up -d --build
+#
+# For local self-contained setup, use the root docker-compose.yml instead.
+# =============================================================================
+
+name: eleutheria-prod
+
+services:
+  # ---------------------------------------------------------------------------
+  # Backend — FastAPI Application
+  # ---------------------------------------------------------------------------
+  backend:
+    build:
+      context: ../..
+      dockerfile: backend/Dockerfile
+    image: eleutheria/backend:${TAG:-latest}
+    container_name: eleutheria-backend
+    restart: unless-stopped
+    init: true
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:mode=1777,size=100M
+    env_file:
+      - .env
+    environment:
+      PYTHONUNBUFFERED: "1"
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+    networks:
+      - frontend
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1G
+
+  # ---------------------------------------------------------------------------
+  # Frontend — React + Nginx
+  # ---------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-https://free-will.app}
+    image: eleutheria/frontend:${TAG:-latest}
+    container_name: eleutheria-frontend
+    restart: unless-stopped
+    init: true
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /var/cache/nginx:mode=1777,size=50M
+      - /var/run:mode=1777,size=10M
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - frontend
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 256M
+
+networks:
+  frontend:
+    driver: bridge

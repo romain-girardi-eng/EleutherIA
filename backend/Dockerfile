@@ -1,10 +1,12 @@
 # syntax=docker/dockerfile:1.7
 # =============================================================================
-# EleutherIA Backend - Production-Ready Multi-Stage Build
+# EleutherIA Backend — Multi-Stage Production Build
 # =============================================================================
+# Build context must be the repository root:
+#   docker build -f backend/Dockerfile .
 
 # -----------------------------------------------------------------------------
-# Stage 1: Build dependencies
+# Stage 1: Build dependencies + install packages
 # -----------------------------------------------------------------------------
 FROM python:3.11-slim-bookworm AS builder
 
@@ -17,14 +19,30 @@ RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 WORKDIR /build
-COPY requirements.txt .
+
+# Copy package metadata first for better layer caching
+COPY database/pyproject.toml database/README.md ./database/
+COPY database/src ./database/src/
+
+COPY kg/pyproject.toml kg/README.md ./kg/
+COPY kg/src ./kg/src/
+
+COPY graphrag/pyproject.toml graphrag/README.md ./graphrag/
+COPY graphrag/src ./graphrag/src/
+
+# Install all three packages + auth dependencies
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --no-compile -r requirements.txt
+    pip install --no-compile \
+    ./database \
+    ./kg \
+    "./graphrag[api,llm]" \
+    "passlib[bcrypt]" \
+    PyJWT
 
 # -----------------------------------------------------------------------------
 # Stage 2: Production runtime
 # -----------------------------------------------------------------------------
-FROM python:3.11-slim-bookworm AS production
+FROM python:3.11-slim-bookworm
 
 LABEL org.opencontainers.image.title="EleutherIA Backend" \
       org.opencontainers.image.description="FastAPI backend for ancient philosophy knowledge graph" \
@@ -49,9 +67,8 @@ ENV PATH="/opt/venv/bin:$PATH" \
 
 WORKDIR /app
 
-COPY --chown=eleutherai:eleutherai api/ ./api/
-COPY --chown=eleutherai:eleutherai services/ ./services/
-COPY --chown=eleutherai:eleutherai utils/ ./utils/
+# Copy backend orchestrator (main.py, routes/, dependencies.py, etc.)
+COPY --chown=eleutherai:eleutherai backend/ ./backend/
 
 USER eleutherai
 
@@ -62,4 +79,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
-CMD ["sh", "-c", "uvicorn api.main:app --host 0.0.0.0 --port 8000 --workers ${UVICORN_WORKERS:-1} --loop uvloop --http httptools"]
+CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port 8000 --workers ${UVICORN_WORKERS:-1} --loop uvloop --http httptools"]

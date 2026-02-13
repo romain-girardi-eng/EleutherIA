@@ -2,11 +2,11 @@
 # Simple commands for development, testing, and deployment
 
 .PHONY: help install install-database install-kg install-graphrag \
-        run dev stop clean test test-database test-kg test-graphrag test-coverage \
+        run local stop local-clean prod prod-stop \
+        test test-database test-kg test-graphrag test-coverage \
         lint format typecheck quality fix \
         frontend-install frontend-dev frontend-build frontend-test \
-        docker-build docker-up docker-down docker-logs \
-        db-migrate db-backup db-restore docs docs-serve
+        logs docs docs-serve clean
 
 # Default target
 help:
@@ -14,8 +14,8 @@ help:
 	@echo ""
 	@echo "Quick Start:"
 	@echo "  make install          Install all 3 packages in editable mode"
-	@echo "  make run              Start full stack (Docker)"
-	@echo "  make dev              Start development servers"
+	@echo "  make run              Start local stack (Docker, self-contained)"
+	@echo "  make stop             Stop local stack"
 	@echo ""
 	@echo "Individual Packages:"
 	@echo "  make install-database Install database package only"
@@ -42,20 +42,19 @@ help:
 	@echo "  make frontend-build   Build frontend for production"
 	@echo "  make frontend-test    Run frontend tests"
 	@echo ""
-	@echo "Docker:"
-	@echo "  make docker-build     Build all Docker images"
-	@echo "  make docker-up        Start full stack"
-	@echo "  make docker-down      Stop full stack"
-	@echo "  make docker-logs      View logs"
+	@echo "Docker (Local):"
+	@echo "  make run              Start all services (PG + Qdrant + backend + frontend)"
+	@echo "  make stop             Stop all services"
+	@echo "  make local-clean      Stop and remove volumes (data loss!)"
+	@echo "  make logs             Tail service logs"
+	@echo ""
+	@echo "Docker (Production — Supabase + Qdrant Cloud):"
+	@echo "  make prod             Start backend + frontend"
+	@echo "  make prod-stop        Stop production services"
 	@echo ""
 	@echo "Database:"
-	@echo "  make db-migrate       Run database migrations"
 	@echo "  make db-backup        Backup PostgreSQL"
 	@echo "  make db-restore       Restore from backup"
-	@echo ""
-	@echo "Documentation:"
-	@echo "  make docs             Build documentation"
-	@echo "  make docs-serve       Serve docs locally"
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean            Remove cache files"
@@ -77,22 +76,39 @@ install-graphrag:
 	cd graphrag && pip install -e ".[dev]"
 
 # =============================================================================
-# Running
+# Docker — Local (self-contained)
 # =============================================================================
 
-run:
-	docker compose -f deploy/docker/docker-compose.yml up -d
+run local:
+	docker compose up -d --build
 	@echo ""
 	@echo "EleutherIA is running!"
 	@echo "  Frontend: http://localhost"
 	@echo "  API Docs: http://localhost:8000/docs"
 	@echo "  Qdrant:   http://localhost:6333/dashboard"
 
-dev:
-	docker compose -f deploy/docker/docker-compose.dev.yml up -d
-
 stop:
-	docker compose -f deploy/docker/docker-compose.yml down
+	docker compose down
+
+local-clean:
+	docker compose down -v --remove-orphans
+
+logs:
+	docker compose logs -f
+
+# =============================================================================
+# Docker — Production (Supabase + Qdrant Cloud)
+# =============================================================================
+
+prod:
+	docker compose -f deploy/production/docker-compose.yml up -d --build
+	@echo ""
+	@echo "Production services started."
+	@echo "  Backend:  http://localhost:8000/api/health"
+	@echo "  Frontend: http://localhost"
+
+prod-stop:
+	docker compose -f deploy/production/docker-compose.yml down
 
 # =============================================================================
 # Testing
@@ -154,27 +170,8 @@ frontend-test:
 	cd frontend && npm test
 
 # =============================================================================
-# Docker
-# =============================================================================
-
-docker-build:
-	docker compose -f deploy/docker/docker-compose.yml build
-
-docker-up:
-	docker compose -f deploy/docker/docker-compose.yml up -d
-
-docker-down:
-	docker compose -f deploy/docker/docker-compose.yml down
-
-docker-logs:
-	docker compose -f deploy/docker/docker-compose.yml logs -f
-
-# =============================================================================
 # Database
 # =============================================================================
-
-db-migrate:
-	cd database && alembic upgrade head
 
 db-backup:
 	@echo "Backing up database..."
@@ -191,7 +188,7 @@ db-restore:
 # =============================================================================
 
 docs:
-	@echo "Documentation is in docs/ - no build step required (Markdown)"
+	@echo "Documentation is in docs/ — no build step required (Markdown)"
 
 docs-serve:
 	cd docs && python -m http.server 8080
