@@ -67,7 +67,7 @@ export interface Contradiction {
 export interface Evidence {
   source: string;
   content: string;
-  type: 'node' | 'edge' | 'community' | 'bridge' | 'context' | 'concepts';
+  type: 'node' | 'edge' | 'community' | 'bridge' | 'context' | 'concepts' | 'passage';
   confidence: number;
   isPrimary: boolean;
   citationId?: number;  // Unique citation number for [1], [2], etc.
@@ -75,6 +75,13 @@ export interface Evidence {
   nodeLabel?: string;   // Human-readable node name
   nodeType?: string;    // Type: person/concept/argument/work/quote
   nodePath?: string[];  // For bridge evidence: chain of node IDs
+  // Passage-level fields for textual grounding
+  passageId?: string;
+  canonicalRef?: string;
+  author?: string;
+  workTitle?: string;
+  textContent?: string;
+  ctsUrn?: string;
   metadata?: {
     period?: string;
     school?: string;
@@ -83,6 +90,8 @@ export interface Evidence {
     nodeCount?: number;
     level?: number;
     conceptCount?: number;
+    relevanceScore?: number;
+    matchReasons?: string[];
   };
 }
 
@@ -236,4 +245,24 @@ export interface AgentState {
   totalSteps: number;
   status: 'idle' | 'planning' | 'retrieving' | 'reasoning' | 'verifying' | 'refining' | 'complete' | 'error';
   error?: string;
+}
+
+// ============================================================================
+// PIPELINE CONFIGURATION
+// ============================================================================
+
+export interface PipelineConfig {
+  useHyDE: boolean;
+  useCRAG: boolean;
+  useReranking: boolean;
+  useSelfRAG: boolean;
+  useExpansion: boolean;
+  useGrounding: boolean;
+}
+
+export interface SufficiencyResult {
+  sufficient: boolean;
+  refinedQuery?: string;
+  passageCount: number;
+  primaryCount: number;
 }

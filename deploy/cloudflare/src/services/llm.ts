@@ -388,6 +388,33 @@ export class LLMService {
   }
 
   /**
+   * Task-based model routing — auto-selects model for the task type.
+   *
+   * - classification, reranking, sufficiency → Gemini Flash (fast, cheap, structured JSON)
+   * - synthesis, reasoning → Kimi K2.5 Thinking (better reasoning) with Gemini fallback
+   * - citation_verification, self_rag → Gemini Flash (structured JSON)
+   */
+  async generateForTask(
+    prompt: string,
+    taskType: 'classification' | 'reranking' | 'sufficiency' | 'synthesis' | 'reasoning' | 'citation_verification' | 'self_rag' | 'expansion'
+  ): Promise<string> {
+    const needsReasoning = taskType === 'synthesis' || taskType === 'reasoning';
+
+    if (needsReasoning && this.moonshotApiKey) {
+      // Use Kimi K2 for reasoning-heavy tasks, with Gemini fallback
+      try {
+        const result = await this.generateWithKimi(prompt, undefined, true);
+        return result.response;
+      } catch (error: any) {
+        logger.warn(`Kimi K2 failed for ${taskType}, falling back to Gemini:`, error?.message);
+      }
+    }
+
+    // Gemini Flash for lightweight or structured tasks (and as fallback)
+    return this.generate(prompt, 'gemini-3-flash-preview', true);
+  }
+
+  /**
    * Health check - Does not waste API calls
    * Just verifies the service is configured correctly
    */
