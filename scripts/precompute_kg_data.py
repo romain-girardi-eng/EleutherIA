@@ -52,7 +52,23 @@ DEFAULT_KV_NAMESPACE_ID = "9506f86aab4845818bd7644508d504e6"
 
 async def get_connection(database_url: str) -> asyncpg.Connection:
     """Create an asyncpg connection with free_will search_path."""
-    conn = await asyncpg.connect(database_url)
+    from urllib.parse import urlparse, parse_qs, unquote
+
+    parsed = urlparse(database_url)
+    ssl_mode = parse_qs(parsed.query).get("sslmode", [None])[0]
+    ssl: Any = "require" if ssl_mode == "require" else None
+
+    # Use explicit params to avoid issues with special chars in passwords
+    password = unquote(parsed.password) if parsed.password else None
+    conn = await asyncpg.connect(
+        host=parsed.hostname,
+        port=parsed.port or 5432,
+        user=unquote(parsed.username) if parsed.username else None,
+        password=password,
+        database=parsed.path.lstrip("/") or "postgres",
+        ssl=ssl,
+        statement_cache_size=0,  # Required for PgBouncer/Supabase pooler
+    )
     await conn.execute("SET search_path = free_will, public;")
     return conn
 
@@ -67,8 +83,6 @@ async def load_nodes(conn: asyncpg.Connection) -> list[dict[str, Any]]:
             type,
             description,
             period,
-            school,
-            role,
             metadata
         FROM kg_nodes
         ORDER BY node_id
@@ -80,6 +94,9 @@ async def load_nodes(conn: asyncpg.Connection) -> list[dict[str, Any]]:
         # asyncpg returns JSONB as dict already, but ensure serialisability
         if node["metadata"] is not None and not isinstance(node["metadata"], dict):
             node["metadata"] = json.loads(node["metadata"])
+        # Extract school from metadata if available
+        meta = node.get("metadata") or {}
+        node["school"] = meta.get("school")
         nodes.append(node)
     logger.info("Loaded %d nodes from kg_nodes", len(nodes))
     return nodes
@@ -94,8 +111,6 @@ async def load_edges(conn: asyncpg.Connection) -> list[dict[str, Any]]:
             source_id,
             target_id,
             relation,
-            description,
-            weight,
             metadata
         FROM kg_edges
         ORDER BY source_id, target_id
@@ -340,7 +355,7 @@ def build_nodes_index(
                 "description": node.get("description"),
                 "period": node.get("period"),
                 "school": node.get("school"),
-                "role": node.get("role"),
+                "role": (node.get("metadata") or {}).get("role"),
                 "pagerank": round(pagerank_scores.get(nid, 0.0), 8),
                 "communities": node_assignments.get(nid, [None, None, None]),
             }
@@ -364,8 +379,7 @@ def build_edges_index(edges: list[dict[str, Any]]) -> dict[str, Any]:
         entry = {
             "target_id": edge["target_id"],
             "relation": edge["relation"],
-            "weight": edge.get("weight", 1.0),
-            "description": edge.get("description"),
+            "weight": (edge.get("metadata") or {}).get("weight", 1.0),
         }
         adjacency.setdefault(src, []).append(entry)
 
