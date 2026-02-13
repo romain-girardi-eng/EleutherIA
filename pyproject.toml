@@ -49,7 +49,7 @@ Documentation = "https://github.com/romain-girardi-eng/EleutherIA/tree/main/docs
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["cli*"]
+include = ["cli*", "backend*"]
 
 [tool.pytest.ini_options]
 testpaths = ["database/tests", "kg/tests", "graphrag/tests"]

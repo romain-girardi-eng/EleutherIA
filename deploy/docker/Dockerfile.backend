@@ -18,14 +18,16 @@ COPY kg/src ./kg/src/
 COPY graphrag/pyproject.toml graphrag/README.md ./graphrag/
 COPY graphrag/src ./graphrag/src/
 
-# Install packages
+# Install packages (including auth dependencies)
 RUN pip install --no-cache-dir \
     ./database \
     ./kg \
-    ./graphrag[api,llm]
+    ./graphrag[api,llm] \
+    passlib[bcrypt] \
+    PyJWT
 
-# Copy application code (if there's a main API module)
-# COPY api ./api/
+# Copy backend orchestrator
+COPY backend/ ./backend/
 
 # Expose port
 EXPOSE 8000
@@ -35,4 +37,4 @@ HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
     CMD curl -f http://localhost:8000/api/health || exit 1
 
 # Run server
-CMD ["uvicorn", "eleutheria_graphrag.api:router", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
