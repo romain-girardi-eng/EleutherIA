@@ -88,7 +88,8 @@ class TestTreeIndexService:
         ).model_dump()
         db = MagicMock()
         db.fetch = AsyncMock(return_value=[
-            {"work_id": "de_fato", "tree_index": tree_data}
+            {"work_id": "de_fato", "title": "De Fato", "author": "Alexander",
+             "period": None, "total_passages": 10, "tree_json": tree_data}
         ])
         svc = TreeIndexService(db=db)
         result = await svc.load_indices(["de_fato"])

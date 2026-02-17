@@ -84,10 +84,10 @@ def build_tree_for_work(
             "nodes": [],
         }
 
-    # Sort passages by passage_id for consistent ordering
-    passages = sorted(passages, key=lambda p: p["passage_id"])
-    first_id = passages[0]["passage_id"]
-    last_id = passages[-1]["passage_id"]
+    # Sort passages by sequence_number for consistent ordering
+    passages = sorted(passages, key=lambda p: p["sequence_number"])
+    first_seq = passages[0]["sequence_number"]
+    last_seq = passages[-1]["sequence_number"]
 
     # Group by book
     by_book: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -97,8 +97,8 @@ def build_tree_for_work(
 
     book_nodes: list[dict[str, Any]] = []
     for book_label, book_passages in sorted(by_book.items()):
-        b_first = book_passages[0]["passage_id"]
-        b_last = book_passages[-1]["passage_id"]
+        b_first = book_passages[0]["sequence_number"]
+        b_last = book_passages[-1]["sequence_number"]
 
         # Group by chapter within book
         by_chapter: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -108,8 +108,8 @@ def build_tree_for_work(
 
         chapter_nodes: list[dict[str, Any]] = []
         for ch_label, ch_passages in sorted(by_chapter.items()):
-            c_first = ch_passages[0]["passage_id"]
-            c_last = ch_passages[-1]["passage_id"]
+            c_first = ch_passages[0]["sequence_number"]
+            c_last = ch_passages[-1]["sequence_number"]
             chapter_nodes.append({
                 "node_id": f"book_{book_label}_ch_{ch_label}",
                 "title": f"Book {book_label}, Chapter {ch_label}" if ch_label != "main" else f"Book {book_label}",
@@ -131,8 +131,8 @@ def build_tree_for_work(
     return {
         "node_id": f"work_{work['work_id']}",
         "title": work["title"],
-        "start_passage": first_id,
-        "end_passage": last_id,
+        "start_passage": first_seq,
+        "end_passage": last_seq,
         "summary": (
             f"{work.get('author', 'Unknown')}: {work['title']}. "
             f"{len(passages)} passages, {len(by_book)} book(s)."
@@ -158,13 +158,13 @@ async def _fetch_works(conn: Any, schema: str) -> list[dict[str, Any]]:
 async def _fetch_passages_for_work(
     conn: Any,
     schema: str,
-    work_id: int,
+    work_id: Any,
 ) -> list[dict[str, Any]]:
     rows = await conn.fetch(f"""
-        SELECT passage_id, canonical_ref
+        SELECT passage_id, canonical_ref, sequence_number
         FROM {schema}.passages
         WHERE work_id = $1
-        ORDER BY passage_id
+        ORDER BY sequence_number
     """, work_id)
     return [dict(r) for r in rows]
 
@@ -173,7 +173,7 @@ async def _upsert_index(
     conn: Any,
     schema: str,
     work: dict[str, Any],
-    tree: dict[str, Any],
+    work_index: dict[str, Any],
     total_passages: int,
     dry_run: bool,
 ) -> None:
@@ -201,7 +201,7 @@ async def _upsert_index(
         work.get("author", "Unknown"),
         work.get("period"),
         total_passages,
-        json.dumps(tree, ensure_ascii=False),
+        json.dumps(work_index, ensure_ascii=False),
     )
 
 
@@ -235,15 +235,24 @@ async def main(schema: str, dry_run: bool) -> None:
                 continue
 
             tree = build_tree_for_work(work, passages)
-            await _upsert_index(conn, schema, work, tree, len(passages), dry_run)
+            # Store WorkTreeIndex format for TreeIndexService compatibility
+            work_index = {
+                "work_id": str(work["work_id"]),
+                "title": work["title"],
+                "author": work.get("author", "Unknown"),
+                "period": work.get("period"),
+                "total_passages": len(passages),
+                "nodes": tree["nodes"],
+            }
+            await _upsert_index(conn, schema, work, work_index, len(passages), dry_run)
             success += 1
-            logger.info(
-                "Indexed %s (%s) — %d passages, %d books",
-                work["title"],
-                work.get("author", "?"),
-                len(passages),
-                len(tree.get("nodes", [])),
-            )
+        logger.info(
+            "Indexed %s (%s) — %d passages, %d books",
+            work["title"],
+            work.get("author", "?"),
+            len(passages),
+            len(work_index.get("nodes", [])),
+        )
 
         logger.info(
             "Done. Indexed=%d skipped=%d dry_run=%s",
