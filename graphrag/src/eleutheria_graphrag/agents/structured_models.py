@@ -10,7 +10,6 @@ from pydantic import BaseModel, Field
 
 from eleutheria_graphrag.agents.pipeline_config import QueryType
 
-
 # ---------------------------------------------------------------------------
 # ClassifyQueryType
 # ---------------------------------------------------------------------------

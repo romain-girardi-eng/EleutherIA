@@ -4,6 +4,27 @@ Scholarly Agent — high-level facade wrapping the pydantic-graph FSM.
 Provides ``query()`` and ``query_stream()`` entry points that are
 API-compatible with the old ``GraphRAGService`` interface, making it
 a drop-in replacement for the routes layer.
+
+Node graph (17 nodes):
+----------------------
+ClassifyQueryType
+ ↓
+ExpandQuery
+ ├─ specific_entity / global_abstract → DirectKGLookup
+ ├─ multi_hop / comparative / temporal → HybridRetrieve
+ └─ (complex)                          → DecomposeQuery
+         ↓
+DirectKGLookup / HybridRetrieve → TreeReasoningRetrieve
+DecomposeQuery → SearchPrimarySources → EvaluateSufficiency
+                                          ├─ insufficient → SearchPrimarySources (loop)
+                                          └─ sufficient   → TreeReasoningRetrieve
+SearchSecondarySources (reached from FetchPassagesAndLayer for comparative/global_abstract)
+         ↓
+TreeReasoningRetrieve → CRAGValidate → DualRerank → FetchPassagesAndLayer
+         ↓
+Synthesize / SynthesizeWithHierarchy → VerifyCitations → SelfRAGEvaluate
+         ├─ quality ≥ threshold → End
+         └─ quality <  threshold → RefineSynthesis → VerifyCitations (loop)
 """
 
 from __future__ import annotations
@@ -17,33 +38,55 @@ from pydantic_graph import Graph
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.graph_nodes import (
     ClassifyComplexity,
+    ClassifyQueryType,
+    CRAGValidate,
     DecomposeQuery,
     DirectKGLookup,
+    DualRerank,
     EvaluateSufficiency,
+    ExpandQuery,
+    FetchPassagesAndLayer,
     HybridRetrieve,
+    RefineSynthesis,
     SearchPrimarySources,
     SearchSecondarySources,
+    SelfRAGEvaluate,
     Synthesize,
     SynthesizeWithHierarchy,
+    TreeReasoningRetrieve,
     VerifyCitations,
 )
 from eleutheria_graphrag.agents.state import RAGState, ScholarlyAnswer
 
 logger = logging.getLogger(__name__)
 
-# Build the pydantic-graph with all node types
+# Build the pydantic-graph with all 17 node types
 scholarly_graph = Graph(
     nodes=[
-        ClassifyComplexity,
+        # New classification / expansion nodes
+        ClassifyQueryType,
+        ExpandQuery,
+        # Retrieval nodes
         DirectKGLookup,
         HybridRetrieve,
         DecomposeQuery,
         SearchPrimarySources,
         EvaluateSufficiency,
         SearchSecondarySources,
+        # Tree reasoning + CRAG + dual reranking
+        TreeReasoningRetrieve,
+        CRAGValidate,
+        DualRerank,
+        FetchPassagesAndLayer,
+        # Synthesis nodes
         Synthesize,
         SynthesizeWithHierarchy,
+        # Post-generation quality nodes
         VerifyCitations,
+        SelfRAGEvaluate,
+        RefineSynthesis,
+        # Legacy complexity classifier (kept for backwards-compat)
+        ClassifyComplexity,
     ],
 )
 
@@ -76,7 +119,7 @@ class ScholarlyAgent:
         state = RAGState(question=question, max_iterations=max_iterations)
 
         result = await scholarly_graph.run(
-            ClassifyComplexity(),
+            ClassifyQueryType(),  # New entry point (replaces ClassifyComplexity)
             state=state,
             deps=self.deps,
         )
@@ -102,6 +145,8 @@ class ScholarlyAgent:
                 "complexity": answer.complexity.value,
                 "iterations": answer.iterations,
                 "sub_queries": answer.sub_queries,
+                "query_type": answer.query_type,
+                "quality_badge": answer.quality_badge,
             },
         }
 
