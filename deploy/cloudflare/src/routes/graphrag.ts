@@ -304,11 +304,9 @@ CRITICAL CITATION RULES:
         processingTime,
         mode,
         enhanced_mode,
-        retrievalMethod: usedDualEmbedding
-          ? 'dual-embedding + dual-level (nodes + edges with RRF)'
-          : 'gemini-only + dual-level (nodes + edges)',
-        embeddingMode: usedDualEmbedding ? 'dual-embedding-rrf' : 'gemini-only',
-        models: usedDualEmbedding ? ['sphilberta', 'gemini'] : ['gemini'],
+        retrievalMethod: 'gemini-only + dual-level (nodes + edges)',
+        embeddingMode: 'gemini-only',
+        models: ['gemini'],
         parameters: {
           semantic_k,
           graph_depth,
@@ -968,52 +966,15 @@ graphragRoutes.post('/query',
       const db = new DatabaseService(c.env);
       const qdrant = new QdrantService(c.env);
       const llm = new LLMService(c.env);
-      const sphilberta = new SPhilBERTaService(c.env);
-
-      // Try dual-embedding search for KG nodes
+      // Use Gemini embedding for KG node search
       let nodeResults: any[] = [];
-      let usedDualEmbedding = false;
-
-      if (use_dual) {
-        try {
-          const sphilbertaAvailable = await sphilberta.isAvailable();
-
-          if (sphilbertaAvailable) {
-            logger.info('GraphRAG /query using dual-embedding');
-
-            const [sphilbertaVector, geminiVector] = await Promise.all([
-              sphilberta.embed(query),
-              llm.embed(query),
-            ]);
-
-            if (sphilbertaVector) {
-              nodeResults = await qdrant.searchDualEmbedding(
-                'kg_nodes_dual',
-                sphilbertaVector,
-                geminiVector,
-                Math.min(semantic_k, 20)
-              );
-              usedDualEmbedding = true;
-            }
-          }
-        } catch (dualError) {
-          logger.warn('Dual-embedding failed, falling back', dualError);
-        }
-      }
-
-      // Fallback to Gemini-only
-      let geminiVector: number[];
-      if (!usedDualEmbedding) {
-        geminiVector = await llm.embed(query);
-        nodeResults = await qdrant.searchWithNamedVector(
-          'kg_nodes_dual',
-          'gemini',
-          geminiVector,
-          Math.min(semantic_k, 20)
-        );
-      } else {
-        geminiVector = await llm.embed(query);
-      }
+      const geminiVector = await llm.embed(query);
+      nodeResults = await qdrant.searchWithNamedVector(
+        'kg_nodes_dual',
+        'gemini',
+        geminiVector,
+        Math.min(semantic_k, 20)
+      );
 
       // Search KG edges (gracefully handle if collection doesn't exist)
       let edgeResults: any[] = [];
@@ -1121,11 +1082,9 @@ CRITICAL CITATION RULES:
         },
         processingTime,
         mode,
-        retrievalMethod: usedDualEmbedding
-          ? 'dual-embedding + dual-level (nodes + edges with RRF)'
-          : 'gemini-only + dual-level (nodes + edges)',
-        embeddingMode: usedDualEmbedding ? 'dual-embedding-rrf' : 'gemini-only',
-        models: usedDualEmbedding ? ['sphilberta', 'gemini'] : ['gemini'],
+        retrievalMethod: 'gemini-only + dual-level (nodes + edges)',
+        embeddingMode: 'gemini-only',
+        models: ['gemini'],
         parameters: {
           semantic_k,
           graph_depth,
@@ -1205,50 +1164,18 @@ graphragRoutes.get('/query/stream',
           const db = new DatabaseService(c.env);
           const qdrant = new QdrantService(c.env);
           const llm = new LLMService(c.env);
-          const sphilberta = new SPhilBERTaService(c.env);
-
-          // Step 2: Generate embeddings (try dual-embedding)
+          // Step 2: Generate embeddings
           sendEvent('status', { message: 'Generating query embeddings...', step: 2, total_steps: 5 });
 
+          // Use Gemini embedding for KG node search
           let nodeResults: any[] = [];
-          let usedDualEmbedding = false;
-
-          try {
-            const sphilbertaAvailable = await sphilberta.isAvailable();
-
-            if (sphilbertaAvailable) {
-              const [sphilbertaVector, geminiVector] = await Promise.all([
-                sphilberta.embed(query),
-                llm.embed(query),
-              ]);
-
-              if (sphilbertaVector) {
-                nodeResults = await qdrant.searchDualEmbedding(
-                  'kg_nodes_dual',
-                  sphilbertaVector,
-                  geminiVector,
-                  semantic_k
-                );
-                usedDualEmbedding = true;
-              }
-            }
-          } catch (dualError) {
-            logger.warn('Streaming dual-embedding failed', dualError);
-          }
-
-          // Fallback to Gemini-only
-          let geminiVector: number[];
-          if (!usedDualEmbedding) {
-            geminiVector = await llm.embed(query);
-            nodeResults = await qdrant.searchWithNamedVector(
-              'kg_nodes_dual',
-              'gemini',
-              geminiVector,
-              semantic_k
-            );
-          } else {
-            geminiVector = await llm.embed(query);
-          }
+          const geminiVector = await llm.embed(query);
+          nodeResults = await qdrant.searchWithNamedVector(
+            'kg_nodes_dual',
+            'gemini',
+            geminiVector,
+            semantic_k
+          );
 
           // Step 3: Search knowledge graph
           sendEvent('status', { message: 'Searching knowledge graph...', step: 3, total_steps: 5 });
@@ -1280,7 +1207,7 @@ graphragRoutes.get('/query/stream',
           sendEvent('nodes', {
             nodes_found: dualResults.nodes.length,
             edges_found: dualResults.edges.length,
-            embedding_mode: usedDualEmbedding ? 'dual-embedding-rrf' : 'gemini-only'
+            embedding_mode: 'gemini-only'
           });
 
           // Step 4: Build context
@@ -1438,13 +1365,11 @@ CRITICAL CITATION RULES:
               expanded_nodes: expandedNodes,
               total_nodes: validNodes.length
             },
-            retrievalMethod: usedDualEmbedding
-              ? 'dual-embedding + dual-level (nodes + edges with RRF)'
-              : 'gemini-only + dual-level (nodes + edges)',
-            embeddingMode: usedDualEmbedding ? 'dual-embedding-rrf' : 'gemini-only',
+            retrievalMethod: 'gemini-only + dual-level (nodes + edges)',
+            embeddingMode: 'gemini-only',
             models: use_thinking && llm.hasThinkingSupport()
               ? ['kimi-k2-thinking']
-              : (usedDualEmbedding ? ['sphilberta', 'gemini'] : ['gemini']),
+              : ['gemini'],
             parameters: {
               semantic_k,
               graph_depth,
