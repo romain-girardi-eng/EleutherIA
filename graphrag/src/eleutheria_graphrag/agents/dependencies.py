@@ -15,8 +15,11 @@ if TYPE_CHECKING:
     from eleutheria_database.services.db import DatabaseService
     from eleutheria_database.services.hybrid_search import HybridSearchService
     from eleutheria_graphrag.services.citation_verifier import CitationVerifier
+    from eleutheria_graphrag.services.hyde_service import HyDEService
+    from eleutheria_graphrag.services.llm_reranker import LLMRerankerService
     from eleutheria_graphrag.services.llm_service import LLMService
     from eleutheria_graphrag.services.reranker import RerankerService
+    from eleutheria_graphrag.services.tree_index import TreeIndexService
     from eleutheria_graphrag.services.weighted_traversal import WeightedTraversal
     from eleutheria_kg.services.analytics import KGAnalytics
     from eleutheria_kg.services.qdrant import QdrantService
@@ -48,6 +51,15 @@ class Deps:
 
     # Citation verification
     verifier: CitationVerifier | None = None
+
+    # NEW: HyDE (Hypothetical Document Embeddings) service
+    hyde: Any | None = None  # HyDEService
+
+    # NEW: LLM-based scholarly reranker
+    llm_reranker: Any | None = None  # LLMRerankerService
+
+    # NEW: Tree index service (PageIndex-inspired)
+    tree_index: Any | None = None  # TreeIndexService
 
     # Pre-loaded KG data (nodes, edges, lookup indices)
     kg_data: dict[str, Any] = field(default_factory=dict)

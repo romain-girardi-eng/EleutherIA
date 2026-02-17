@@ -35,6 +35,9 @@ class EvidenceSource(str, Enum):
     HYBRID_SEARCH = "hybrid_search"
     PASSAGE_CITATION = "passage_citation"
     DIRECT_LOOKUP = "direct_lookup"
+    HYDE_SEARCH = "hyde_search"        # NEW: hypothetical document embedding search
+    CRAG_SECONDARY = "crag_secondary"  # NEW: CRAG-triggered secondary retrieval
+    TREE_REASONING = "tree_reasoning"  # NEW: PageIndex-inspired tree navigation
 
 
 class EvidenceLayer(str, Enum):
@@ -103,12 +106,17 @@ class ScholarlyAnswer(BaseModel):
     answer: str = Field(..., description="Generated scholarly answer")
     question: str = Field(..., description="Original question")
     complexity: QueryComplexity = Field(QueryComplexity.MEDIUM)
+    query_type: Any = Field(default="temporal", description="NEW: 5-type query classification")  # QueryType
     citations: list[Citation] = Field(default_factory=list)
     seed_nodes: list[str] = Field(default_factory=list)
     context_nodes: list[str] = Field(default_factory=list)
     passages_used: int = Field(0, ge=0)
     iterations: int = Field(1, description="Number of retrieval iterations used")
     sub_queries: list[str] = Field(default_factory=list)
+    quality_badge: str = Field("", description="NEW: High / Medium / Low")
+    self_rag_evaluation: Any = Field(None, description="NEW: SelfRAGEvaluation | None")
+    crag_validation: Any = Field(None, description="NEW: CRAGValidation | None")
+    insufficient_evidence: bool = Field(False, description="NEW: evidence insufficiency flag")
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -125,6 +133,14 @@ class RAGState:
     question: str = ""
     sub_queries: list[str] = field(default_factory=list)
     complexity: QueryComplexity = QueryComplexity.MEDIUM
+
+    # --- Classification (NEW) ---
+    query_type: Any = None  # QueryType — set in __post_init__
+    pipeline_config: Any = None  # PipelineConfig — set in __post_init__
+
+    # --- Query expansion (NEW) ---
+    expanded_query: str | None = None
+    expansion_terms: Any = None  # ExpansionTerms | None
 
     # Retrieved evidence, separated by layer
     primary_evidence: list[Evidence] = field(default_factory=list)
@@ -153,8 +169,27 @@ class RAGState:
     # Passages fetched
     passages_used: int = 0
 
+    # --- CRAG validation (NEW) ---
+    crag_validation: Any = None  # CRAGValidation | None
+    insufficient_evidence: bool = False
+
+    # --- Self-RAG (NEW) ---
+    self_rag_evaluation: Any = None  # SelfRAGEvaluation | None
+    self_rag_iterations: int = 0
+    max_self_rag_iterations: int = 2
+    quality_badge: str = ""  # "High" / "Medium" / "Low"
+
     # Metadata for debugging / logging
     metadata: dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        """Set defaults that require import (avoids circular imports)."""
+        if self.query_type is None:
+            from eleutheria_graphrag.agents.pipeline_config import QueryType
+            self.query_type = QueryType.TEMPORAL
+        if self.pipeline_config is None:
+            from eleutheria_graphrag.agents.pipeline_config import PipelineConfig
+            self.pipeline_config = PipelineConfig()
 
     # ------------------------------------------------------------------
     # Helpers
