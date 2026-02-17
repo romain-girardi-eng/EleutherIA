@@ -64,8 +64,7 @@ class Community(BaseModel):
     node_count: int = Field(..., ge=0, description="Number of nodes")
     node_ids: list[str] = Field(default_factory=list, description="Member node IDs")
     central_nodes: list[str] = Field(
-        default_factory=list,
-        description="Most central nodes in community"
+        default_factory=list, description="Most central nodes in community"
     )
 
 
@@ -79,8 +78,7 @@ class CentralityResult(BaseModel):
     metric: str = Field(..., description="Centrality metric used")
     scores: dict[str, float] = Field(..., description="Node ID to score mapping")
     top_nodes: list[dict[str, Any]] = Field(
-        default_factory=list,
-        description="Top nodes by centrality"
+        default_factory=list, description="Top nodes by centrality"
     )
 
 

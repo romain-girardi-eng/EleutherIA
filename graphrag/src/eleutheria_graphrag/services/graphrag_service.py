@@ -151,9 +151,7 @@ class GraphRAGService:
     def _ensure_agent(self) -> ScholarlyAgent:
         """Return the agent or raise a clear error."""
         if self._agent is None:
-            raise RuntimeError(
-                "ScholarlyAgent not initialized — call load_kg() first"
-            )
+            raise RuntimeError("ScholarlyAgent not initialized — call load_kg() first")
         return self._agent
 
     # ------------------------------------------------------------------

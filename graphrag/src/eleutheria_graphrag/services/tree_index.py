@@ -69,7 +69,11 @@ class TreeIndexService:
                 tree_data = row["tree_json"]
                 # tree_json stores WorkTreeIndex (work_id, title, author, period, total_passages, nodes)
                 # or legacy root node format with "nodes" key (from older build script)
-                if isinstance(tree_data, dict) and "nodes" in tree_data and "work_id" not in tree_data:
+                if (
+                    isinstance(tree_data, dict)
+                    and "nodes" in tree_data
+                    and "work_id" not in tree_data
+                ):
                     idx = WorkTreeIndex(
                         work_id=str(row["work_id"]),
                         title=row["title"],
