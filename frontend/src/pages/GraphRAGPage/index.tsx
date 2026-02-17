@@ -344,9 +344,12 @@ export default function GraphRAGPage() {
       }
 
       if (finalResponse) {
+        // Build citations for display: server sends ancientCitations/modernBibliography, not citations.ancient_sources
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const serverResp = finalResponse as any;
         const citations = finalResponse.citations || {
-          ancient_sources: finalResponse.sources || [],
-          modern_scholarship: []
+          ancient_sources: (serverResp.ancientCitations || []).map((c: any) => typeof c === 'string' ? c : (c?.citationText || '')).filter(Boolean),
+          modern_scholarship: (serverResp.modernBibliography || []).map((c: any) => typeof c === 'string' ? c : (c?.citation || c?.citationText || '')).filter(Boolean),
         };
 
         if (finalResponse.sources && Array.isArray(finalResponse.sources)) {
@@ -382,10 +385,14 @@ export default function GraphRAGPage() {
           }
         }
 
-        const allCitations = [
-          ...(citations.ancient_sources || []),
-          ...(citations.modern_scholarship || [])
-        ];
+        // Server sends ancientCitations: AncientCitation[] (objects with .citationText)
+        // Extract string references for the citation lookup API
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const serverAncientCitations: any[] = (finalResponse as any).ancientCitations || [];
+        const allCitations = serverAncientCitations
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .map((c: any) => (typeof c === 'string' ? c : c?.citationText))
+          .filter((c: unknown): c is string => typeof c === 'string' && c.trim().length > 0);
 
         const formattedCitationTexts: Record<string, { original: string; originalLanguage: string; translation: string }> = {};
         if (allCitations.length > 0) {
@@ -675,22 +682,15 @@ export default function GraphRAGPage() {
                   ))}
                 </AnimatePresence>
 
-                {/* Terminal loader for non-streaming queries */}
-                {loading && !streaming && (
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex justify-center items-center w-full min-h-[50vh]">
-                    <TerminalLoader size="large" />
-                  </motion.div>
-                )}
-
                 {streaming && (
                   <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-4 flex flex-col items-center">
-                    {!streamedAnswer && reasoningSteps.length === 0 && (
+                    {!streamedAnswer && (
                       <div className="flex justify-center items-center w-full min-h-[50vh]">
                         <TerminalLoader size="large" />
                       </div>
                     )}
 
-                    {reasoningSteps.length > 0 && (
+                    {streamedAnswer && reasoningSteps.length > 0 && (
                       <ReasoningPathVisualizer query={currentQuery} steps={reasoningSteps} isActive={true} />
                     )}
 
