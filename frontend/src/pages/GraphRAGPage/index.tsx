@@ -29,7 +29,7 @@ export default function GraphRAGPage() {
   const location = useLocation();
   const [messages, setMessages] = useState<GraphRAGChatMessage[]>([]);
   const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, _setLoading] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const [streamedAnswer, setStreamedAnswer] = useState('');
   const [_streamStatus, setStreamStatus] = useState('');
@@ -47,12 +47,11 @@ export default function GraphRAGPage() {
   const [semanticK, setSemanticK] = useState(10);
   const [graphDepth, setGraphDepth] = useState(2);
   const [maxContext, setMaxContext] = useState(15);
-  const enhancedMode = true;
 
   // Academic mode settings
   const [academicMode, setAcademicMode] = useState(true);
   const [useThinking, setUseThinking] = useState(false);
-  const [citationStyle, _setCitationStyle] = useState<'chicago' | 'apa' | 'harvard'>('chicago');
+  const [_citationStyle, _setCitationStyle] = useState<'chicago' | 'apa' | 'harvard'>('chicago');
   const [ancientOnly, setAncientOnly] = useState(false);
   const [reasoningSteps, setReasoningSteps] = useState<ReasoningStep[]>([]);
   const [currentQuery, setCurrentQuery] = useState<string>('');
@@ -161,11 +160,8 @@ export default function GraphRAGPage() {
     setQuery('');
     setError(null);
 
-    if (useThinking) {
-      await handleStreamingQuery(queryText);
-    } else {
-      await handleStandardQuery(queryText);
-    }
+    // Always use streaming — /api/graphrag/answer and workflow endpoints are non-functional
+    await handleStreamingQuery(queryText);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [useThinking]);
 
@@ -191,49 +187,8 @@ export default function GraphRAGPage() {
     }
   };
 
-  const handleStandardQuery = async (queryText: string) => {
-    setLoading(true);
-
-    try {
-      const queryParams = {
-        query: queryText,
-        semantic_k: semanticK,
-        graph_depth: graphDepth,
-        max_context: maxContext,
-        enhanced_mode: enhancedMode,
-        use_thinking: useThinking,
-        ancient_only: ancientOnly,
-        ...(academicMode && {
-          academic_mode: true,
-          rigor_level: 'maximum' as const,
-          citation_style: citationStyle,
-        }),
-      };
-
-      const response = academicMode
-        ? await apiClient.graphragQueryAdvanced(queryParams)
-        : await apiClient.graphragQuery(queryParams);
-
-      const assistantMessage: GraphRAGChatMessage = {
-        role: 'assistant',
-        content: response.answer,
-        citations: response.citations,
-        reasoning_path: response.reasoning_path,
-        tokens_used: response.tokens_used,
-        llm_provider: response.llm_provider,
-        llm_model: response.llm_model,
-        timestamp: new Date(),
-        graphrag_response: response,
-      };
-
-      setMessages((prev) => [...prev, assistantMessage]);
-    } catch (err: unknown) {
-      console.error('GraphRAG error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to get answer');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // handleStandardQuery removed — /api/graphrag/answer and workflow endpoints are non-functional.
+  // All queries now go through handleStreamingQuery (/api/graphrag/query/stream).
 
   const initializeReasoningSteps = (q: string) => {
     const steps: ReasoningStep[] = [
