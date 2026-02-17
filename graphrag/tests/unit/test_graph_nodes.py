@@ -13,8 +13,10 @@ from eleutheria_graphrag.agents.graph_nodes import (
     HybridRetrieve,
     SearchPrimarySources,
     SearchSecondarySources,
+    SelfRAGEvaluate,
     Synthesize,
     SynthesizeWithHierarchy,
+    TreeReasoningRetrieve,
     VerifyCitations,
     _build_context_from_evidence,
     _build_hierarchical_context,
@@ -309,7 +311,7 @@ class TestDirectKGLookup:
         ):
             result = await node.run(ctx)
 
-        assert isinstance(result, Synthesize)
+        assert isinstance(result, TreeReasoningRetrieve)
         assert len(state.primary_evidence) == 1
         assert state.primary_evidence[0].label == "Chrysippus"
 
@@ -327,7 +329,7 @@ class TestDirectKGLookup:
         ):
             result = await node.run(ctx)
 
-        assert isinstance(result, Synthesize)
+        assert isinstance(result, TreeReasoningRetrieve)
         assert len(state.primary_evidence) == 0
 
 
@@ -369,7 +371,7 @@ class TestEvaluateSufficiency:
         node = EvaluateSufficiency()
         result = await node.run(ctx)
 
-        assert isinstance(result, SearchSecondarySources)
+        assert isinstance(result, TreeReasoningRetrieve)
 
     @pytest.mark.asyncio
     async def test_heuristic_sufficiency(self):
@@ -384,7 +386,7 @@ class TestEvaluateSufficiency:
         node = EvaluateSufficiency()
         result = await node.run(ctx)
 
-        assert isinstance(result, SearchSecondarySources)
+        assert isinstance(result, TreeReasoningRetrieve)
         assert state.sufficiency_score == 0.8
 
     @pytest.mark.asyncio
@@ -414,7 +416,7 @@ class TestEvaluateSufficiency:
         node = EvaluateSufficiency()
         result = await node.run(ctx)
 
-        assert isinstance(result, SearchSecondarySources)
+        assert isinstance(result, TreeReasoningRetrieve)
 
 
 class TestSynthesize:
@@ -488,13 +490,10 @@ class TestVerifyCitations:
         node = VerifyCitations()
         result = await node.run(ctx)
 
-        from pydantic_graph import End
-
-        assert isinstance(result, End)
-        answer: ScholarlyAnswer = result.data
-        assert len(answer.citations) == 2
-        assert answer.citations[0].ref == "1"
-        assert answer.citations[1].ref == "2"
+        assert isinstance(result, SelfRAGEvaluate)
+        assert len(state.citations) == 2
+        assert state.citations[0].ref == "1"
+        assert state.citations[1].ref == "2"
 
     @pytest.mark.asyncio
     async def test_extracts_passage_citations(self):
@@ -509,11 +508,8 @@ class TestVerifyCitations:
         node = VerifyCitations()
         result = await node.run(ctx)
 
-        from pydantic_graph import End
-
-        assert isinstance(result, End)
-        answer: ScholarlyAnswer = result.data
-        passage_cites = [c for c in answer.citations if c.type == "passage"]
+        assert isinstance(result, SelfRAGEvaluate)
+        passage_cites = [c for c in state.citations if c.type == "passage"]
         assert len(passage_cites) == 1
         assert passage_cites[0].ref == "P1"
 
@@ -527,11 +523,8 @@ class TestVerifyCitations:
         node = VerifyCitations()
         result = await node.run(ctx)
 
-        from pydantic_graph import End
-
-        assert isinstance(result, End)
-        answer: ScholarlyAnswer = result.data
-        assert answer.citations == []
+        assert isinstance(result, SelfRAGEvaluate)
+        assert state.citations == []
 
     @pytest.mark.asyncio
     async def test_uses_verifier_when_available(self):
@@ -562,8 +555,24 @@ class TestVerifyCitations:
         result = await node.run(ctx)
 
         mock_verifier.verify_citations.assert_called_once()
-        from pydantic_graph import End
+        assert isinstance(result, SelfRAGEvaluate)
+        assert state.citations[0].verified is True
 
-        assert isinstance(result, End)
-        answer: ScholarlyAnswer = result.data
-        assert answer.citations[0].verified is True
+    @pytest.mark.asyncio
+    async def test_fail_closed_on_verifier_error(self):
+        """Verification errors must leave citations unverified (fail-closed)."""
+        mock_verifier = AsyncMock()
+        mock_verifier.verify_citations = AsyncMock(side_effect=RuntimeError("DB error"))
+        deps = _make_deps()
+        deps.verifier = mock_verifier
+
+        state = RAGState(question="test")
+        state.raw_answer = "Answer [1]."
+        state.primary_evidence = [Evidence(id="n1", label="X", type="Person")]
+        ctx = _make_ctx(state, deps)
+
+        node = VerifyCitations()
+        result = await node.run(ctx)
+
+        assert isinstance(result, SelfRAGEvaluate)
+        assert all(c.verified is False for c in state.citations)

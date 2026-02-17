@@ -268,7 +268,7 @@ class DirectKGLookup(BaseNode[RAGState, Deps, ScholarlyAnswer]):
     async def run(
         self,
         ctx: GraphRunContext[RAGState, Deps],
-    ) -> Synthesize:
+    ) -> TreeReasoningRetrieve:
         question = ctx.state.question
         logger.info("Direct KG lookup for: %s", question[:80])
 
@@ -305,7 +305,7 @@ class DirectKGLookup(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             ctx.state.primary_evidence,
         )
 
-        return Synthesize()
+        return TreeReasoningRetrieve()
 
 
 # ---------------------------------------------------------------------------
@@ -315,19 +315,33 @@ class DirectKGLookup(BaseNode[RAGState, Deps, ScholarlyAnswer]):
 
 @dataclass
 class HybridRetrieve(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Medium-complexity path: semantic + hybrid search, optional reranking,
-    single-pass graph expansion, then synthesize."""
+    """Medium-complexity path: semantic + hybrid search, optional HyDE,
+    optional reranking, single-pass graph expansion, then tree reasoning."""
 
     async def run(
         self,
         ctx: GraphRunContext[RAGState, Deps],
-    ) -> Synthesize:
+    ) -> TreeReasoningRetrieve:
         question = ctx.state.question
+        config = ctx.state.pipeline_config
         logger.info("Hybrid retrieval for: %s", question[:80])
 
-        # 1. Semantic search on KG nodes
-        embedding = await _get_embedding(ctx.deps, question)
-        node_hits = await ctx.deps.qdrant.search_nodes(embedding, limit=10)
+        # 1. Run standard semantic search and (optionally) HyDE in parallel
+        embedding_coro = _get_embedding(ctx.deps, question)
+        if config.use_hyde and ctx.deps.hyde:
+            standard_emb, hyde_results = await asyncio.gather(
+                embedding_coro,
+                ctx.deps.hyde.search_nodes(question, limit=10),
+            )
+        else:
+            standard_emb = await embedding_coro
+            hyde_results = []
+
+        node_hits = await ctx.deps.qdrant.search_nodes(standard_emb, limit=10)
+
+        # If HyDE returned results, RRF-fuse with standard hits
+        if hyde_results:
+            node_hits = ctx.deps.hyde.rrf_fusion(node_hits, hyde_results, k=60)
 
         seed_ids: list[str] = []
         for hit in node_hits:
@@ -340,12 +354,17 @@ class HybridRetrieve(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 if _is_primary_node(node)
                 else EvidenceLayer.SECONDARY
             )
+            source = (
+                EvidenceSource.HYDE_SEARCH
+                if hit.get("_hyde")
+                else EvidenceSource.SEMANTIC_SEARCH
+            )
             evidence = Evidence(
                 id=node_id,
                 label=node.get("label", node_id),
                 type=node.get("type", ""),
                 layer=layer,
-                source=EvidenceSource.SEMANTIC_SEARCH,
+                source=source,
                 description=node.get("description", ""),
                 score=hit.get("score", 0.0),
                 period=node.get("period"),
@@ -424,7 +443,7 @@ class HybridRetrieve(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         # 5. Build context
         ctx.state.accumulated_context = _build_hierarchical_context(ctx.state)
 
-        return Synthesize()
+        return TreeReasoningRetrieve()
 
 
 # ---------------------------------------------------------------------------
@@ -615,7 +634,7 @@ class EvaluateSufficiency(BaseNode[RAGState, Deps, ScholarlyAnswer]):
     async def run(
         self,
         ctx: GraphRunContext[RAGState, Deps],
-    ) -> SearchPrimarySources | SearchSecondarySources:
+    ) -> SearchPrimarySources | TreeReasoningRetrieve:
         state = ctx.state
         primary_count = len(state.primary_evidence)
         passage_count = sum(1 for e in state.primary_evidence if e.type == "passage")
@@ -633,13 +652,13 @@ class EvaluateSufficiency(BaseNode[RAGState, Deps, ScholarlyAnswer]):
 
         # Hard sufficiency: enough iterations → proceed
         if state.iteration >= state.max_iterations:
-            logger.info("Max iterations reached, proceeding to secondary sources")
-            return SearchSecondarySources()
+            logger.info("Max iterations reached, proceeding to tree reasoning")
+            return TreeReasoningRetrieve()
 
         # Quick heuristic: if we have passages, likely sufficient
         if passage_count >= 3 and primary_count >= 5:
             state.sufficiency_score = 0.8
-            return SearchSecondarySources()
+            return TreeReasoningRetrieve()
 
         # Ask LLM for sufficiency assessment
         prompt = SUFFICIENCY_PROMPT.format(
@@ -660,7 +679,7 @@ class EvaluateSufficiency(BaseNode[RAGState, Deps, ScholarlyAnswer]):
 
             if sufficient or state.sufficiency_score >= 0.6:
                 logger.info("Evidence sufficient (score=%.2f)", state.sufficiency_score)
-                return SearchSecondarySources()
+                return TreeReasoningRetrieve()
 
             # Refine sub-queries and loop back
             refinement = result.get("refinement", "")
@@ -674,7 +693,7 @@ class EvaluateSufficiency(BaseNode[RAGState, Deps, ScholarlyAnswer]):
 
         except Exception:
             logger.warning("Sufficiency check failed, proceeding")
-            return SearchSecondarySources()
+            return TreeReasoningRetrieve()
 
 
 # ---------------------------------------------------------------------------
@@ -862,12 +881,15 @@ class VerifyCitations(BaseNode[RAGState, Deps, ScholarlyAnswer]):
 
     If a CitationVerifier is available, runs the full verification loop.
     Otherwise, falls back to positional regex extraction (legacy behaviour).
+
+    Fail-closed: any verification error marks citations as verified=False
+    (never silently marks unverified citations as verified).
     """
 
     async def run(
         self,
         ctx: GraphRunContext[RAGState, Deps],
-    ) -> End[ScholarlyAnswer]:
+    ) -> SelfRAGEvaluate:
         state = ctx.state
         answer = state.raw_answer
 
@@ -892,7 +914,7 @@ class VerifyCitations(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         label=ev.label,
                         layer=ev.layer,
                         confidence=ev.confidence,
-                        verified=False,
+                        verified=False,  # fail-closed: default unverified
                     )
                 )
 
@@ -910,34 +932,26 @@ class VerifyCitations(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         label=ev.label,
                         layer=ev.layer,
                         confidence=ev.confidence,
-                        verified=False,
+                        verified=False,  # fail-closed: default unverified
                     )
                 )
 
-        # Full verification if verifier is available
+        # Full verification if verifier is available — fail-closed on error
         if ctx.deps.verifier:
-            citations = await ctx.deps.verifier.verify_citations(
-                answer=answer,
-                citations=citations,
-                evidence=all_evidence,
-            )
+            try:
+                citations = await ctx.deps.verifier.verify_citations(
+                    answer=answer,
+                    citations=citations,
+                    evidence=all_evidence,
+                )
+            except Exception:
+                logger.warning("Citation verification failed — marking all unverified")
+                for c in citations:
+                    c.verified = False
 
         state.citations = citations
 
-        return End(
-            ScholarlyAnswer(
-                answer=answer,
-                question=state.question,
-                complexity=state.complexity,
-                citations=citations,
-                seed_nodes=state.seed_node_ids,
-                context_nodes=state.context_node_ids,
-                passages_used=state.passages_used,
-                iterations=state.iteration or 1,
-                sub_queries=state.sub_queries,
-                metadata=state.metadata,
-            )
-        )
+        return SelfRAGEvaluate()
 
 
 # ---------------------------------------------------------------------------
@@ -1095,3 +1109,723 @@ def _build_hierarchical_context(state: RAGState) -> str:
         sections.append(section)
 
     return "\n\n".join(sections)
+
+
+# ===========================================================================
+# NEW NODES (SOTA Agentic Pipeline v2)
+# ===========================================================================
+
+# ---------------------------------------------------------------------------
+# Prompts for new nodes
+# ---------------------------------------------------------------------------
+
+CLASSIFY_QUERY_TYPE_PROMPT = """\
+Classify the following scholarly question about ancient philosophy \
+into one of five query types.
+
+Classification criteria:
+- **specific_entity**: Single-entity factual lookup (who, what, when). \
+  E.g. "Who was Chrysippus?" or "What school did Epictetus belong to?"
+- **global_abstract**: Requires combining information about one broad topic \
+  from multiple sources. E.g. "What did the Stoics believe about fate?"
+- **multi_hop**: Requires tracing chains of influence, transmission, or \
+  argument across multiple philosophers or time periods. \
+  E.g. "How did Stoic fate evolve from Chrysippus to Epictetus?"
+- **comparative**: Requires explicit comparison between schools, philosophers, \
+  or positions. E.g. "How did Stoics and Epicureans differ on free will?"
+- **temporal**: Temporal traces, dialectical analysis, or questions that don't \
+  fit the above categories.
+
+Return ONLY valid JSON:
+{{"query_type": "<one of the five values>", "confidence": <float 0-1>, "reason": "<brief explanation>"}}
+
+Question: {question}"""
+
+EXPAND_QUERY_PROMPT = """\
+You are an expert classicist. Analyze this research question about \
+ancient philosophy and identify relevant terms.
+
+Question: "{question}"
+
+Return ONLY valid JSON with these fields:
+- greek_terms: list of objects with "greek", "transliteration", "translation"
+- latin_terms: list of objects with "latin", "translation"
+- philosophers: list of philosopher names (strings)
+- concepts: list of philosophical concept names (strings)
+- schools: list of philosophical school names (strings)
+- periods: list of historical period names (strings)
+
+Keep all lists concise (2-5 items max). Return only terms directly relevant to the question."""
+
+TREE_REASONING_PROMPT = """\
+You are a scholar of ancient philosophy navigating document indices \
+to find passages that answer a specific question.
+
+QUESTION: {question}
+
+DOCUMENT INDICES:
+{tree_indices_json}
+
+For each document, examine the section summaries and reason about \
+which sections are most likely to contain information that answers the question.
+
+Return ONLY valid JSON:
+{{"selected_nodes": [{{"work_id": "...", "node_id": "...", "reason": "...", "priority": 1}}], \
+"reasoning": "..."}}
+
+Priority: 1=must-read, 2=important, 3=supplementary."""
+
+CRAG_VALIDATE_PROMPT = """\
+You are a scholarly validation system for ancient philosophy research.
+
+TASK: Evaluate if the retrieved context can adequately answer the research question.
+
+RESEARCH QUESTION: "{question}"
+
+RETRIEVED CONTEXT:
+\"\"\"{context}\"\"\"
+
+Return ONLY valid JSON:
+{{"relevance": <0-100>, "completeness": <0-100>, "confidence": <0-100>, \
+"missing": ["..."], "suggestions": ["search query 1", ...]}}"""
+
+SELF_RAG_EVALUATE_PROMPT = """\
+You are a scholarly quality evaluator for ancient philosophy research.
+
+TASK: Evaluate this answer's quality and reliability.
+
+RESEARCH QUESTION: "{question}"
+
+GENERATED ANSWER:
+\"\"\"{answer}\"\"\"
+
+SOURCES CITED: {source_count} sources
+
+Evaluate on 0-100 scale (relevance, grounding, completeness, confidence).
+Pay special attention to GROUNDING — any claim not supported by cited evidence \
+should lower the grounding score significantly.
+
+Return ONLY valid JSON:
+{{"relevance": <0-100>, "grounding": <0-100>, "completeness": <0-100>, \
+"confidence": <0-100>, "caveats": ["..."], "improvements": ["..."]}}"""
+
+REFINE_SYNTHESIS_PROMPT = """\
+You are refining a scholarly answer based on quality feedback.
+
+ORIGINAL QUESTION: "{question}"
+
+ORIGINAL ANSWER:
+\"\"\"{raw_answer}\"\"\"
+
+QUALITY ISSUES:
+- Caveats: {caveats}
+- Improvements: {improvements}
+- Grounding score: {grounding}/100
+- Completeness score: {completeness}/100
+
+AVAILABLE CONTEXT:
+\"\"\"{context}\"\"\"
+
+TASK: Rewrite the answer to address the identified issues. \
+If a claim cannot be grounded in the evidence, remove it or state \
+"The available sources do not address this point." \
+Maintain scholarly register.
+
+Write the improved answer directly."""
+
+# Keyword heuristic for query classification fallback
+_KEYWORD_PATTERNS = {
+    "compare": "comparative",
+    "differ": "comparative",
+    " vs ": "comparative",
+    "versus": "comparative",
+    "trace": "multi_hop",
+    "influence": "multi_hop",
+    "through": "multi_hop",
+    "evolution": "multi_hop",
+    "who was": "specific_entity",
+    "what is": "specific_entity",
+    "define": "specific_entity",
+    "when did": "specific_entity",
+    "what school": "specific_entity",
+}
+
+# Static fallback expansion dictionary (matches TypeScript COMMON_GREEK_TERMS)
+_STATIC_GREEK_TERMS = {
+    "free will": {"greek": "τὸ ἐφ' ἡμῖν", "transliteration": "to eph' hēmin", "translation": "what is in our power"},
+    "in our power": {"greek": "τὸ ἐφ' ἡμῖν", "transliteration": "to eph' hēmin", "translation": "what is in our power"},
+    "self-determination": {"greek": "αὐτεξούσιον", "transliteration": "autexousion", "translation": "self-determination"},
+    "fate": {"greek": "εἱμαρμένη", "transliteration": "heimarmenē", "translation": "fate/destiny"},
+    "destiny": {"greek": "εἱμαρμένη", "transliteration": "heimarmenē", "translation": "fate/destiny"},
+    "assent": {"greek": "συγκατάθεσις", "transliteration": "synkatathesis", "translation": "assent"},
+    "moral choice": {"greek": "προαίρεσις", "transliteration": "prohairesis", "translation": "moral choice"},
+    "swerve": {"greek": "παρέγκλισις", "transliteration": "parenklisis", "translation": "swerve/clinamen"},
+    "necessity": {"greek": "ἀνάγκη", "transliteration": "anankē", "translation": "necessity"},
+    "possibility": {"greek": "δυνατόν", "transliteration": "dynaton", "translation": "possibility"},
+    "cause": {"greek": "αἰτία", "transliteration": "aitia", "translation": "cause"},
+    "impression": {"greek": "φαντασία", "transliteration": "phantasia", "translation": "impression/appearance"},
+}
+
+_STATIC_PHILOSOPHERS = [
+    "Chrysippus", "Epictetus", "Epicurus", "Aristotle", "Plato",
+    "Alexander of Aphrodisias", "Cicero", "Seneca", "Marcus Aurelius",
+    "Augustine", "Origen", "Cleanthes", "Carneades",
+]
+
+
+# ---------------------------------------------------------------------------
+# 11. ClassifyQueryType (replaces ClassifyComplexity as the new entry point)
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class ClassifyQueryType(BaseNode[RAGState, Deps, ScholarlyAnswer]):
+    """Classify query into 5-type taxonomy and configure pipeline."""
+
+    async def run(
+        self,
+        ctx: GraphRunContext[RAGState, Deps],
+    ) -> ExpandQuery:
+        from eleutheria_graphrag.agents.pipeline_config import (
+            QueryType,
+            get_pipeline_config,
+            query_type_to_complexity,
+        )
+
+        question = ctx.state.question
+        logger.info("Classifying query type: %s", question[:80])
+
+        query_type = QueryType.GLOBAL_ABSTRACT  # default
+        confidence = 0.5
+        reason = ""
+
+        # Try LLM classification
+        prompt = CLASSIFY_QUERY_TYPE_PROMPT.format(question=question)
+        try:
+            raw = await ctx.deps.llm.generate(prompt, temperature=0.0, max_tokens=256)
+            result = _parse_json(raw)
+            query_type = QueryType(result.get("query_type", "global_abstract"))
+            confidence = float(result.get("confidence", 0.5))
+            reason = result.get("reason", "")
+        except Exception:
+            logger.warning("LLM classification failed, using keyword heuristic")
+            # Keyword fallback
+            q_lower = question.lower()
+            for keyword, qt_value in _KEYWORD_PATTERNS.items():
+                if keyword in q_lower:
+                    query_type = QueryType(qt_value)
+                    break
+
+        # Set state
+        ctx.state.query_type = query_type
+        ctx.state.pipeline_config = get_pipeline_config(query_type)
+        ctx.state.complexity = query_type_to_complexity(query_type)
+        ctx.state.metadata["query_type"] = query_type.value
+        ctx.state.metadata["classification_confidence"] = confidence
+        ctx.state.metadata["classification_reason"] = reason
+
+        logger.info("Query type: %s (confidence=%.2f)", query_type.value, confidence)
+        return ExpandQuery()
+
+
+# ---------------------------------------------------------------------------
+# 12. ExpandQuery
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class ExpandQuery(BaseNode[RAGState, Deps, ScholarlyAnswer]):
+    """Philological query expansion with Greek/Latin terms, then routing."""
+
+    async def run(
+        self,
+        ctx: GraphRunContext[RAGState, Deps],
+    ) -> DirectKGLookup | HybridRetrieve | DecomposeQuery:
+        from eleutheria_graphrag.agents.pipeline_config import QueryType
+
+        question = ctx.state.question
+        config = ctx.state.pipeline_config
+        query_type = ctx.state.query_type
+
+        # --- Build expanded query ---
+        if config.use_expansion:
+            expansion = await self._expand(ctx.deps.llm, question)
+            ctx.state.expansion_terms = expansion
+            ctx.state.expanded_query = self._build_expanded_query(question, expansion)
+            logger.info("Expanded query: %s", ctx.state.expanded_query[:120])
+        else:
+            ctx.state.expanded_query = question
+
+        # --- Route based on query type ---
+        if query_type == QueryType.SPECIFIC_ENTITY:
+            return DirectKGLookup()
+        elif query_type in (QueryType.MULTI_HOP, QueryType.TEMPORAL):
+            return DecomposeQuery()
+        else:
+            # GLOBAL_ABSTRACT, COMPARATIVE
+            return HybridRetrieve()
+
+    async def _expand(self, llm: Any, question: str) -> Any:
+        """Try LLM expansion, fall back to static dictionary."""
+        from eleutheria_graphrag.agents.structured_models import (
+            ExpansionTerms,
+        )
+
+        try:
+            prompt = EXPAND_QUERY_PROMPT.format(question=question)
+            raw = await llm.generate(prompt, temperature=0.0, max_tokens=1024)
+            data = _parse_json(raw)
+            return ExpansionTerms.model_validate(data)
+        except Exception:
+            logger.warning("LLM expansion failed, using static dictionary")
+            return self._static_expand(question)
+
+    @staticmethod
+    def _static_expand(question: str) -> Any:
+        """Fallback: match known Greek terms and philosopher names."""
+        from eleutheria_graphrag.agents.structured_models import (
+            ExpansionTerms,
+            GreekTerm,
+        )
+
+        q_lower = question.lower()
+        greek_terms = []
+        for trigger, term in _STATIC_GREEK_TERMS.items():
+            if trigger in q_lower:
+                greek_terms.append(GreekTerm(**term))
+        philosophers = [p for p in _STATIC_PHILOSOPHERS if p.lower() in q_lower]
+        return ExpansionTerms(greek_terms=greek_terms[:5], philosophers=philosophers[:5])
+
+    @staticmethod
+    def _build_expanded_query(question: str, expansion: Any) -> str:
+        """Build expanded query string with transliterations."""
+        extras = []
+        for term in getattr(expansion, "greek_terms", [])[:3]:
+            extras.append(term.transliteration)
+        for p in getattr(expansion, "philosophers", [])[:3]:
+            extras.append(p)
+        if extras:
+            return f"{question} ({', '.join(extras)})"
+        return question
+
+
+# ---------------------------------------------------------------------------
+# 13. TreeReasoningRetrieve (PageIndex-inspired)
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class TreeReasoningRetrieve(BaseNode[RAGState, Deps, ScholarlyAnswer]):
+    """Navigate pre-built tree indices to extract high-precision passages."""
+
+    async def run(
+        self,
+        ctx: GraphRunContext[RAGState, Deps],
+    ) -> CRAGValidate:
+        config = ctx.state.pipeline_config
+        if not config.use_tree_reasoning or ctx.deps.tree_index is None:
+            logger.info("TreeReasoningRetrieve: disabled or no service, passthrough")
+            return CRAGValidate()
+
+        # Extract unique work IDs from current evidence
+        work_ids = list({
+            e.work_title for e in ctx.state.all_evidence()
+            if e.work_title and e.type == "passage"
+        })
+        if not work_ids:
+            # Fall back to top node labels as work IDs
+            work_ids = [
+                e.id for e in sorted(
+                    ctx.state.primary_evidence, key=lambda x: x.score, reverse=True
+                )[:5]
+                if e.type != "passage"
+            ]
+
+        # Load tree indices
+        try:
+            indices = await ctx.deps.tree_index.load_indices(work_ids[:5])
+        except Exception:
+            logger.warning("TreeReasoningRetrieve: failed to load indices")
+            return CRAGValidate()
+
+        if not indices:
+            return CRAGValidate()
+
+        # Build tree JSON for LLM navigation
+        import json as _json
+        tree_json = _json.dumps(
+            [idx.model_dump() for idx in indices],
+            ensure_ascii=False,
+        )[:6000]  # truncate for context length
+
+        # LLM navigates the tree
+        prompt = TREE_REASONING_PROMPT.format(
+            question=ctx.state.question,
+            tree_indices_json=tree_json,
+        )
+        try:
+            raw = await ctx.deps.llm.generate(prompt, temperature=0.0, max_tokens=1024)
+            nav_data = _parse_json(raw)
+            selected_nodes = nav_data.get("selected_nodes", [])
+        except Exception:
+            logger.warning("TreeReasoningRetrieve: LLM navigation failed")
+            return CRAGValidate()
+
+        # Extract passages for priority 1 and 2 nodes
+        existing_passages = sum(1 for e in ctx.state.primary_evidence if e.type == "passage")
+        for sel in selected_nodes:
+            priority = sel.get("priority", 3)
+            if priority == 3 and existing_passages >= 10:
+                continue
+            work_id = sel.get("work_id", "")
+            node_id = sel.get("node_id", "")
+            matching_idx = next((idx for idx in indices if idx.work_id == work_id), None)
+            if not matching_idx:
+                continue
+            try:
+                passages = await ctx.deps.tree_index.extract_passages(matching_idx, [node_id])
+            except Exception:
+                continue
+            for p in passages:
+                pid = str(p.get("passage_id", p.get("canonical_ref", "")))
+                existing_ids = ctx.state.all_node_ids()
+                if pid in existing_ids:
+                    continue
+                ctx.state.primary_evidence.append(
+                    Evidence(
+                        id=pid,
+                        label=f"{p.get('author', '')}, {p.get('title', '')} {p.get('canonical_ref', '')}",
+                        type="passage",
+                        layer=EvidenceLayer.PRIMARY,
+                        source=EvidenceSource.TREE_REASONING,
+                        description=p.get("text_content", "")[:800],
+                        passage_id=pid,
+                        canonical_ref=p.get("canonical_ref"),
+                        author=p.get("author"),
+                        work_title=p.get("title"),
+                        text_content=p.get("text_content"),
+                    )
+                )
+                existing_passages += 1
+
+        logger.info("TreeReasoningRetrieve: added passages, total primary=%d", len(ctx.state.primary_evidence))
+        return CRAGValidate()
+
+
+# ---------------------------------------------------------------------------
+# 14. CRAGValidate
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class CRAGValidate(BaseNode[RAGState, Deps, ScholarlyAnswer]):
+    """Corrective RAG — validate retrieval quality, trigger secondary if needed."""
+
+    async def run(
+        self,
+        ctx: GraphRunContext[RAGState, Deps],
+    ) -> DualRerank:
+        config = ctx.state.pipeline_config
+        if not config.use_crag:
+            logger.info("CRAGValidate: disabled, passthrough")
+            return DualRerank()
+
+        # Build context summary for CRAG evaluation
+        all_ev = ctx.state.all_evidence()
+        context = _build_context_from_evidence(all_ev[:20])[:3000]
+        primary_count = len([e for e in ctx.state.primary_evidence if e.type != "passage"])
+
+        prompt = CRAG_VALIDATE_PROMPT.format(
+            question=ctx.state.question,
+            context=context or "(no context retrieved)",
+        )
+        try:
+            from eleutheria_graphrag.agents.structured_models import CRAGValidation
+            raw = await ctx.deps.llm.generate(prompt, temperature=0.0, max_tokens=512)
+            data = _parse_json(raw)
+            crag = CRAGValidation.model_validate(data)
+        except Exception:
+            logger.warning("CRAGValidate: validation failed, proceeding")
+            return DualRerank()
+
+        ctx.state.crag_validation = crag
+        logger.info(
+            "CRAG: relevance=%d completeness=%d confidence=%d",
+            crag.relevance, crag.completeness, crag.confidence,
+        )
+
+        # Evidence insufficiency gate
+        if crag.confidence < 30 and primary_count < 3:
+            ctx.state.insufficient_evidence = True
+            ctx.state.metadata["insufficiency_reason"] = (
+                f"CRAG confidence {crag.confidence}/100 with only "
+                f"{primary_count} primary sources."
+            )
+            logger.warning("CRAGValidate: evidence insufficient gate triggered")
+            return DualRerank()
+
+        # Secondary retrieval if confidence < 60
+        if crag.confidence < 60:
+            logger.info("CRAGValidate: confidence low, running secondary retrieval")
+            existing_ids = ctx.state.all_node_ids()
+            search_queries = (crag.missing[:3] + crag.suggestions[:2])[:5]
+            for sq in search_queries:
+                if not sq:
+                    continue
+                try:
+                    embedding = await _get_embedding(ctx.deps, sq)
+                    hits = await ctx.deps.qdrant.search_nodes(embedding, limit=5)
+                    for hit in hits:
+                        nid = hit.get("id")
+                        if not nid or nid in existing_ids:
+                            continue
+                        if nid not in ctx.deps.node_lookup:
+                            continue
+                        node = ctx.deps.node_lookup[nid]
+                        ev = Evidence(
+                            id=nid,
+                            label=node.get("label", nid),
+                            type=node.get("type", ""),
+                            layer=EvidenceLayer.PRIMARY if _is_primary_node(node) else EvidenceLayer.SECONDARY,
+                            source=EvidenceSource.CRAG_SECONDARY,
+                            description=node.get("description", ""),
+                            score=hit.get("score", 0.0) * 0.85,  # discount
+                            period=node.get("period"),
+                            school=node.get("school"),
+                            role=node.get("role"),
+                        )
+                        if ev.layer == EvidenceLayer.PRIMARY:
+                            ctx.state.primary_evidence.append(ev)
+                        else:
+                            ctx.state.secondary_evidence.append(ev)
+                        existing_ids.add(nid)
+                except Exception:
+                    continue
+
+        return DualRerank()
+
+
+# ---------------------------------------------------------------------------
+# 15. DualRerank
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class DualRerank(BaseNode[RAGState, Deps, ScholarlyAnswer]):
+    """Two-stage reranking: cross-encoder (existing) + LLM scholarly scoring."""
+
+    async def run(
+        self,
+        ctx: GraphRunContext[RAGState, Deps],
+    ) -> FetchPassagesAndLayer:
+        config = ctx.state.pipeline_config
+        if not config.use_reranking:
+            logger.info("DualRerank: disabled, passthrough")
+            return FetchPassagesAndLayer()
+
+        question = ctx.state.question
+        all_evidence = ctx.state.all_evidence()
+        eligible = [e for e in all_evidence if len(e.description or e.label) >= 20]
+
+        if not eligible:
+            return FetchPassagesAndLayer()
+
+        # Stage 1: cross-encoder (existing RerankerService)
+        if ctx.deps.reranker:
+            try:
+                reranked = await ctx.deps.reranker.rerank(question, eligible, top_k=20)
+            except Exception:
+                reranked = eligible[:20]
+        else:
+            reranked = eligible[:20]
+
+        # Stage 2: LLM scholarly reranking
+        if ctx.deps.llm_reranker:
+            try:
+                reranked = await ctx.deps.llm_reranker.rerank(question, reranked, top_k=15)
+            except Exception:
+                reranked = reranked[:15]
+        else:
+            reranked = reranked[:15]
+
+        # Update state
+        ctx.state.primary_evidence = [e for e in reranked if e.layer == EvidenceLayer.PRIMARY]
+        ctx.state.secondary_evidence = [e for e in reranked if e.layer == EvidenceLayer.SECONDARY]
+
+        logger.info("DualRerank: primary=%d secondary=%d", len(ctx.state.primary_evidence), len(ctx.state.secondary_evidence))
+        return FetchPassagesAndLayer()
+
+
+# ---------------------------------------------------------------------------
+# 16. FetchPassagesAndLayer
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class FetchPassagesAndLayer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
+    """Convergence point: fetch passages, layer evidence, route to synthesis."""
+
+    async def run(
+        self,
+        ctx: GraphRunContext[RAGState, Deps],
+    ) -> Synthesize | SearchSecondarySources:
+        from eleutheria_graphrag.agents.pipeline_config import QueryType
+
+        # Fetch passages for all non-passage node IDs
+        node_ids = [e.id for e in ctx.state.all_evidence() if e.type != "passage"]
+        passages = await _fetch_passages(ctx.deps, node_ids)
+        existing_ids = ctx.state.all_node_ids()
+        for p in passages:
+            pid = str(p["passage_id"])
+            if pid in existing_ids:
+                continue
+            ctx.state.primary_evidence.append(
+                Evidence(
+                    id=pid,
+                    label=f"{p['author']}, {p['title']} {p['canonical_ref']}",
+                    type="passage",
+                    layer=EvidenceLayer.PRIMARY,
+                    source=EvidenceSource.PASSAGE_CITATION,
+                    description=p.get("text_content", "")[:800],
+                    passage_id=pid,
+                    canonical_ref=p.get("canonical_ref"),
+                    author=p.get("author"),
+                    work_title=p.get("title"),
+                    text_content=p.get("text_content"),
+                    confidence=p.get("confidence"),
+                )
+            )
+            existing_ids.add(pid)
+
+        ctx.state.passages_used = sum(1 for e in ctx.state.primary_evidence if e.type == "passage")
+        ctx.state.context_node_ids = list(ctx.state.all_node_ids())
+        ctx.state.accumulated_context = _build_hierarchical_context(ctx.state)
+
+        # Route by query type
+        qt = ctx.state.query_type
+        if qt in (QueryType.SPECIFIC_ENTITY, QueryType.GLOBAL_ABSTRACT):
+            return Synthesize()
+        return SearchSecondarySources()
+
+
+# ---------------------------------------------------------------------------
+# 17. SelfRAGEvaluate
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class SelfRAGEvaluate(BaseNode[RAGState, Deps, ScholarlyAnswer]):
+    """Post-generation quality evaluation with refinement trigger."""
+
+    async def run(
+        self,
+        ctx: GraphRunContext[RAGState, Deps],
+    ) -> End[ScholarlyAnswer] | RefineSynthesis:
+        config = ctx.state.pipeline_config
+        state = ctx.state
+
+        # Build final answer
+        def _make_answer() -> ScholarlyAnswer:
+            return ScholarlyAnswer(
+                answer=state.raw_answer,
+                question=state.question,
+                complexity=state.complexity,
+                query_type=state.query_type,
+                citations=state.citations,
+                seed_nodes=state.seed_node_ids,
+                context_nodes=state.context_node_ids,
+                passages_used=state.passages_used,
+                iterations=state.iteration or 1,
+                sub_queries=state.sub_queries,
+                quality_badge=state.quality_badge,
+                self_rag_evaluation=state.self_rag_evaluation,
+                crag_validation=state.crag_validation,
+                insufficient_evidence=state.insufficient_evidence,
+                metadata=state.metadata,
+            )
+
+        if not config.use_self_rag:
+            return End(_make_answer())
+
+        # Evaluate answer quality
+        source_count = len(state.citations)
+        prompt = SELF_RAG_EVALUATE_PROMPT.format(
+            question=state.question,
+            answer=state.raw_answer[:2500],
+            source_count=source_count,
+        )
+        try:
+            from eleutheria_graphrag.agents.structured_models import SelfRAGEvaluation
+            raw = await ctx.deps.llm.generate(prompt, temperature=0.0, max_tokens=512)
+            data = _parse_json(raw)
+            evaluation = SelfRAGEvaluation.model_validate(data)
+        except Exception:
+            logger.warning("SelfRAGEvaluate: evaluation failed, returning answer")
+            return End(_make_answer())
+
+        state.self_rag_evaluation = evaluation
+
+        # Assign quality badge
+        if evaluation.confidence >= 80:
+            state.quality_badge = "High"
+        elif evaluation.confidence >= 60:
+            state.quality_badge = "Medium"
+        else:
+            state.quality_badge = "Low"
+
+        logger.info(
+            "SelfRAG: confidence=%d badge=%s",
+            evaluation.confidence, state.quality_badge,
+        )
+
+        # Decide: refine or finalize
+        if evaluation.confidence >= 60 or state.self_rag_iterations >= state.max_self_rag_iterations:
+            return End(_make_answer())
+
+        return RefineSynthesis()
+
+
+# ---------------------------------------------------------------------------
+# 18. RefineSynthesis
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class RefineSynthesis(BaseNode[RAGState, Deps, ScholarlyAnswer]):
+    """Re-synthesize answer incorporating Self-RAG feedback."""
+
+    async def run(
+        self,
+        ctx: GraphRunContext[RAGState, Deps],
+    ) -> VerifyCitations:
+        state = ctx.state
+        state.self_rag_iterations += 1
+
+        evaluation = state.self_rag_evaluation
+        caveats = getattr(evaluation, "caveats", []) if evaluation else []
+        improvements = getattr(evaluation, "improvements", []) if evaluation else []
+        grounding = getattr(evaluation, "grounding", 0) if evaluation else 0
+        completeness = getattr(evaluation, "completeness", 0) if evaluation else 0
+
+        prompt = REFINE_SYNTHESIS_PROMPT.format(
+            question=state.question,
+            raw_answer=state.raw_answer[:2500],
+            caveats=caveats,
+            improvements=improvements,
+            grounding=grounding,
+            completeness=completeness,
+            context=state.accumulated_context[:3000],
+        )
+
+        try:
+            refined = await ctx.deps.llm.generate(
+                prompt,
+                system_prompt=SYSTEM_PROMPT,
+                max_tokens=4096,
+            )
+            state.raw_answer = refined
+        except Exception:
+            logger.warning("RefineSynthesis: generation failed, keeping original answer")
+
+        logger.info("RefineSynthesis: iteration=%d", state.self_rag_iterations)
+        return VerifyCitations()
