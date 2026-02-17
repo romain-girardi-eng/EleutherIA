@@ -3,6 +3,8 @@
 import pytest
 from pydantic import ValidationError
 
+from eleutheria_graphrag.agents.pipeline_config import PipelineConfig, QueryType
+from eleutheria_graphrag.agents.structured_models import CRAGValidation, SelfRAGEvaluation
 from eleutheria_graphrag.agents.state import (
     Citation,
     Evidence,
@@ -35,7 +37,7 @@ class TestEvidenceSource:
     """Tests for EvidenceSource enum."""
 
     def test_all_sources(self):
-        assert len(EvidenceSource) == 5
+        assert len(EvidenceSource) == 8  # 5 original + 3 new (hyde, crag_secondary, tree_reasoning)
         assert EvidenceSource.SEMANTIC_SEARCH.value == "semantic_search"
         assert EvidenceSource.GRAPH_TRAVERSAL.value == "graph_traversal"
         assert EvidenceSource.PASSAGE_CITATION.value == "passage_citation"
@@ -190,3 +192,84 @@ class TestRAGState:
         state.raw_answer = "The answer is..."
         assert state.complexity == QueryComplexity.COMPLEX
         assert state.iteration == 3
+
+
+class TestQueryTypeInState:
+    def test_all_values(self):
+        assert len(QueryType) == 5
+
+
+class TestEvidenceSourceNew:
+    def test_hyde_search(self):
+        assert EvidenceSource.HYDE_SEARCH == "hyde_search"
+
+    def test_crag_secondary(self):
+        assert EvidenceSource.CRAG_SECONDARY == "crag_secondary"
+
+    def test_tree_reasoning(self):
+        assert EvidenceSource.TREE_REASONING == "tree_reasoning"
+
+    def test_total_sources(self):
+        assert len(EvidenceSource) == 8
+
+
+class TestRAGStateNewFields:
+    def test_query_type_default(self):
+        s = RAGState()
+        assert s.query_type == QueryType.TEMPORAL
+
+    def test_pipeline_config_default(self):
+        s = RAGState()
+        assert isinstance(s.pipeline_config, PipelineConfig)
+        assert s.pipeline_config.use_hyde is True
+
+    def test_expanded_query(self):
+        s = RAGState(expanded_query="fate (heimarmenē, Chrysippus)")
+        assert "heimarmenē" in s.expanded_query
+
+    def test_crag_validation(self):
+        s = RAGState()
+        assert s.crag_validation is None
+        s.crag_validation = CRAGValidation(
+            relevance=80, completeness=70, confidence=75,
+        )
+        assert s.crag_validation.confidence == 75
+
+    def test_self_rag_fields(self):
+        s = RAGState()
+        assert s.self_rag_evaluation is None
+        assert s.self_rag_iterations == 0
+        assert s.max_self_rag_iterations == 2
+        assert s.quality_badge == ""
+
+    def test_insufficient_evidence(self):
+        s = RAGState()
+        assert s.insufficient_evidence is False
+
+
+class TestScholarlyAnswerNewFields:
+    def test_query_type(self):
+        a = ScholarlyAnswer(answer="test", question="test")
+        assert a.query_type == "temporal"
+
+    def test_quality_badge(self):
+        a = ScholarlyAnswer(
+            answer="test", question="test", quality_badge="High",
+        )
+        assert a.quality_badge == "High"
+
+    def test_insufficient_evidence(self):
+        a = ScholarlyAnswer(
+            answer="test", question="test", insufficient_evidence=True,
+        )
+        assert a.insufficient_evidence is True
+
+    def test_serialization_new_fields(self):
+        a = ScholarlyAnswer(
+            answer="test", question="test",
+            query_type=QueryType.COMPARATIVE,
+            quality_badge="Medium",
+        )
+        d = a.model_dump()
+        assert d["query_type"] == QueryType.COMPARATIVE
+        assert d["quality_badge"] == "Medium"
