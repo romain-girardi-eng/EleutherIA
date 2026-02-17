@@ -56,7 +56,7 @@ class TreeIndexService:
         placeholders = ", ".join(f"${i + 1}" for i in range(len(work_ids)))
         rows: list[dict[str, Any]] = await self.db.fetch(
             f"""
-            SELECT work_id, tree_index
+            SELECT work_id, title, author, period, total_passages, tree_json
             FROM {DB_SCHEMA}.work_tree_indices
             WHERE work_id::text IN ({placeholders})
             """,
@@ -66,7 +66,20 @@ class TreeIndexService:
         indices = []
         for row in rows:
             try:
-                idx = WorkTreeIndex.model_validate(row["tree_index"])
+                tree_data = row["tree_json"]
+                # tree_json stores WorkTreeIndex (work_id, title, author, period, total_passages, nodes)
+                # or legacy root node format with "nodes" key (from older build script)
+                if isinstance(tree_data, dict) and "nodes" in tree_data and "work_id" not in tree_data:
+                    idx = WorkTreeIndex(
+                        work_id=str(row["work_id"]),
+                        title=row["title"],
+                        author=row["author"],
+                        period=row.get("period"),
+                        total_passages=row["total_passages"],
+                        nodes=[TreeNode.model_validate(n) for n in tree_data["nodes"]],
+                    )
+                else:
+                    idx = WorkTreeIndex.model_validate(tree_data)
                 indices.append(idx)
             except Exception:
                 logger.warning("Failed to parse tree index for %s", row["work_id"])

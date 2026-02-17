@@ -155,40 +155,58 @@ export function useStreaming(callbacks: StreamingCallbacks) {
             if (!line.trim() || !line.startsWith('data: ')) continue;
 
             try {
-              const data: GraphRAGStreamEvent = JSON.parse(line.substring(6));
+              const parsed = JSON.parse(line.substring(6));
+              // Backend sends { type, data } - payload may be in data.data or data
+              const data = parsed as GraphRAGStreamEvent & { data?: { message?: string; data?: string } };
+              const payload = data.data;
+              const statusMsg = typeof payload === 'object' && payload && 'message' in payload
+                ? (payload as { message?: string }).message
+                : data.message;
 
               switch (data.type) {
                 case 'status':
-                  callbacks.onStatus(data.message || 'Loading...');
-                  updateReasoningFromStatus(data.message || '');
+                  callbacks.onStatus(statusMsg || 'Loading...');
+                  updateReasoningFromStatus(statusMsg || '');
                   break;
 
-                case 'thinking_chunk':
-                  callbacks.onThinkingChunk(data.data as string || '');
+                case 'thinking_chunk': {
+                  const chunk = typeof payload === 'object' && payload && 'data' in payload
+                    ? (payload as { data?: string }).data
+                    : (typeof payload === 'string' ? payload : '');
+                  callbacks.onThinkingChunk(chunk || '');
                   callbacks.onStatus('Kimi K2 is reasoning...');
                   break;
+                }
 
                 case 'thinking_complete':
                   callbacks.onThinkingComplete();
                   callbacks.onStatus('Thinking complete, generating answer...');
                   break;
 
-                case 'answer_chunk':
-                  fullAnswer += data.data;
+                case 'answer_chunk': {
+                  const chunk = typeof payload === 'object' && payload && 'data' in payload
+                    ? (payload as { data?: string }).data
+                    : (typeof payload === 'string' ? payload : '');
+                  fullAnswer += chunk || '';
                   callbacks.onAnswerChunk(fullAnswer);
                   callbacks.onAIGenerating(false);
                   break;
+                }
 
                 case 'complete':
-                  finalResponse = data.data as GraphRAGResponse;
+                  finalResponse = (typeof payload === 'object' && payload ? payload : data.data) as GraphRAGResponse;
                   callbacks.onReasoningStep(5, 'complete');
                   callbacks.onAIGenerating(false);
                   callbacks.onComplete(finalResponse);
                   break;
 
-                case 'error':
-                  callbacks.onError(data.message || 'Stream error');
+                case 'error': {
+                  const errMsg = typeof payload === 'object' && payload && 'message' in payload
+                    ? (payload as { message?: string }).message
+                    : data.message;
+                  callbacks.onError(errMsg || 'Stream error');
                   break;
+                }
               }
             } catch (err) {
               console.error('Error parsing SSE line:', line, err);
