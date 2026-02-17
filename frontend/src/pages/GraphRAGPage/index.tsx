@@ -1,122 +1,155 @@
-/**
- * GraphRAGPage - Modular Implementation
- *
- * Decomposed from 2,186 lines to ~400 lines via:
- * - hooks/useGraphRAGState.ts - State management
- * - hooks/useConversation.ts - Conversation memory
- * - hooks/useStreaming.ts - SSE streaming logic
- * - components/MessageBubble.tsx - Message display
- * - components/BenefitsContent.tsx - Info section
- */
-
-import { useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import ReactMarkdown from 'react-markdown';
+import Cookies from 'js-cookie';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import ReactMarkdown from 'react-markdown';
+import { motion, AnimatePresence } from 'framer-motion';
 import { apiClient } from '../../api/client';
 import { useAuth } from '../../context/AuthContext';
-
-// UI Components
 import AuthModal from '../../components/AuthModal';
 import { ShineBorder } from '../../components/ui/shine-border';
 import { AuroraBackground } from '../../components/ui/aurora-background';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
-import { Button } from '../../components/ui/button';
+import { Typewriter } from '../../components/ui/typewriter';
 import NodeDetailPanel from '../../components/NodeDetailPanel';
-import { StreamingOverlay } from '../../components/ui/streaming-loader';
+import { CitationPreview } from '../../components/ui/citation-preview';
 import { ReasoningPathVisualizer } from '../../components/graphrag/ReasoningPathVisualizer';
-import { ThinkingProcessPanel } from '../../components/graphrag/ThinkingProcessPanel';
-import { ConversationSidebar } from '../../components/graphrag/ConversationSidebar';
-import { SmartQuerySuggestions } from '../../components/SmartQuerySuggestions';
-
-// Local components
-import { MessageBubble, BenefitsContent } from './components';
-import { useGraphRAGState, useConversation, useStreaming } from './hooks';
-
-// Types
-import type { GraphRAGChatMessage } from '../../types';
-
-// Mock data for demo mode
-import { mockGraphRAGResponse, mockReasoningSteps } from '../../data/mockGraphRAGData';
+import { CitationRenderer, SourcesPanel } from '../../components/CitationRenderer';
+import BibliographyPanel from '../../components/BibliographyPanel';
+import EvidenceChainPanel from '../../components/EvidenceChainPanel';
+import { TerminalLoader } from '../../components/ui/terminal-loader';
+import type { GraphRAGResponse, GraphRAGStreamEvent, GraphRAGChatMessage, KGNode } from '../../types';
+import type { ReasoningStep } from '../../types/graphrag';
+import {
+  mockGraphRAGResponse,
+  mockReasoningSteps,
+} from '../../data/mockGraphRAGData';
 
 export default function GraphRAGPage() {
   const { t } = useTranslation();
   const location = useLocation();
+  const [messages, setMessages] = useState<GraphRAGChatMessage[]>([]);
+  const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [streaming, setStreaming] = useState(false);
+  const [streamedAnswer, setStreamedAnswer] = useState('');
+  const [_streamStatus, setStreamStatus] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingQuery, setPendingQuery] = useState<string | null>(null);
+  const [selectedNode, setSelectedNode] = useState<KGNode | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const { isAuthenticated } = useAuth();
 
-  // Initialize state
-  const state = useGraphRAGState();
+  // Advanced settings
+  const [semanticK, setSemanticK] = useState(10);
+  const [graphDepth, setGraphDepth] = useState(2);
+  const [maxContext, setMaxContext] = useState(15);
+  const enhancedMode = true;
 
-  // Conversation management
-  const conversation = useConversation(
-    isAuthenticated,
-    (messages) => {
-      state.setMessages(messages);
-      state.setStreamedAnswer('');
-      state.setStreamedThinking('');
-      state.setThinkingComplete(false);
-    },
-    () => {
-      state.setMessages([]);
-      state.setStreamedAnswer('');
-      state.setStreamedThinking('');
-      state.setThinkingComplete(false);
-      state.setReasoningSteps([]);
-      state.setCurrentQuery('');
-    }
-  );
+  // Academic mode settings
+  const [academicMode, setAcademicMode] = useState(true);
+  const [useThinking, setUseThinking] = useState(false);
+  const [citationStyle, _setCitationStyle] = useState<'chicago' | 'apa' | 'harvard'>('chicago');
+  const [ancientOnly, setAncientOnly] = useState(false);
+  const [reasoningSteps, setReasoningSteps] = useState<ReasoningStep[]>([]);
+  const [currentQuery, setCurrentQuery] = useState<string>('');
 
-  // Streaming handlers
-  const streaming = useStreaming({
-    onStatus: state.setStreamStatus,
-    onThinkingChunk: (chunk) => state.setStreamedThinking(prev => prev + chunk),
-    onThinkingComplete: () => state.setThinkingComplete(true),
-    onAnswerChunk: state.setStreamedAnswer,
-    onComplete: () => {},
-    onError: state.setError,
-    onReasoningStep: (stepId, status) => {
-      state.setReasoningSteps(prev =>
-        prev.map(step =>
-          step.id === stepId
-            ? { ...step, status }
-            : step.id < stepId && step.status !== 'complete'
-            ? { ...step, status: 'complete' }
-            : step
-        )
-      );
-    },
-    onAIGenerating: state.setShowAIGenerating,
+  // Dynamic KG stats
+  const [kgStats, setKgStats] = useState({
+    nodes: 0,
+    edges: 0,
+    sources: 0,
+    hierarchyLayers: 3
   });
 
-  // Fetch KG stats on mount
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const kgStatsResponse = await apiClient.getKGStats();
         const worksStatsResponse = await apiClient.getWorksStats();
-        state.setKgStats({
+        setKgStats({
           nodes: kgStatsResponse.totalNodes || 0,
           edges: kgStatsResponse.totalEdges || 0,
           sources: worksStatsResponse.total_passages || 0,
-          hierarchyLayers: 3,
+          hierarchyLayers: 3
         });
       } catch (err) {
         console.error('Failed to fetch KG stats:', err);
       }
     };
     fetchStats();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentionally mount-only: state.setKgStats is a stable setState dispatcher
   }, []);
 
-  // Scroll to bottom during streaming
+  // Scroll to bottom on new messages
   useEffect(() => {
-    if (state.streaming) {
-      state.messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- state.messagesEndRef is a stable useRef; destructuring state on every render would cause unnecessary re-runs
-  }, [state.messages, state.streamedAnswer, state.streaming]);
+  }, [messages, streamedAnswer]);
 
-  // Process query (main handler)
+  // Cleanup abort controller on unmount
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
+      }
+    };
+  }, []);
+
+  // Demo Mode
+  const loadDemoMode = () => {
+    const demoMessage: GraphRAGChatMessage = {
+      role: 'user',
+      content: mockGraphRAGResponse.query,
+      timestamp: new Date()
+    };
+
+    const citationTexts: Record<string, { original: string; originalLanguage: string; translation: string }> = {};
+
+    const assistantMessage: GraphRAGChatMessage = {
+      role: 'assistant',
+      content: mockGraphRAGResponse.answer,
+      timestamp: new Date(),
+      citations: {
+        ancient_sources: [
+          "Cicero, On Fate 41-43",
+          "Cicero, On Fate 42-43; Aulus Gellius, Attic Nights 7.2.11",
+          "Epictetus, Discourses 1.1; SVF 2.974-975",
+        ],
+        modern_scholarship: [
+          "Bobzien, S. (1998). Determinism and Freedom in Stoic Philosophy.",
+          "Frede, M. (2011). A Free Will: Origins of the Notion in Ancient Thought.",
+        ]
+      },
+      citationTexts,
+      reasoning_path: mockGraphRAGResponse.reasoning_path,
+      graphrag_response: mockGraphRAGResponse,
+      reasoning_steps: mockReasoningSteps
+    };
+
+    setMessages([demoMessage, assistantMessage]);
+    setReasoningSteps(mockReasoningSteps);
+    setCurrentQuery(mockGraphRAGResponse.query);
+    setQuery('');
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!query.trim() || loading || streaming) return;
+
+    if (!isAuthenticated) {
+      setPendingQuery(query.trim());
+      setShowAuthModal(true);
+      return;
+    }
+
+    await processQuery(query.trim());
+  };
+
   const processQuery = useCallback(async (queryText: string) => {
     const userMessage: GraphRAGChatMessage = {
       role: 'user',
@@ -124,112 +157,62 @@ export default function GraphRAGPage() {
       timestamp: new Date(),
     };
 
-    state.setMessages(prev => [...prev, userMessage]);
-    state.setQuery('');
-    state.setError(null);
+    setMessages((prev) => [...prev, userMessage]);
+    setQuery('');
+    setError(null);
 
-    if (state.settings.useStreaming) {
+    if (useThinking) {
       await handleStreamingQuery(queryText);
     } else {
       await handleStandardQuery(queryText);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- handleStreamingQuery/handleStandardQuery are non-memoized closures that capture current state; adding them would cause infinite re-creation. state.setMessages/setQuery/setError are stable setState dispatchers.
-  }, [state.settings.useStreaming]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [useThinking]);
 
-  // Handle initial query from location state
   useEffect(() => {
-    const locationState = location.state as { initialQuery?: string } | null;
-    if (locationState?.initialQuery) {
+    const state = location.state as { initialQuery?: string } | null;
+    if (state?.initialQuery) {
       if (isAuthenticated) {
-        processQuery(locationState.initialQuery);
+        processQuery(state.initialQuery);
         window.history.replaceState({}, document.title);
       } else {
-        state.setPendingQuery(locationState.initialQuery);
-        state.setShowAuthModal(true);
+        setPendingQuery(state.initialQuery);
+        setShowAuthModal(true);
         window.history.replaceState({}, document.title);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- state.setPendingQuery and state.setShowAuthModal are stable setState dispatchers
-  }, [location.state, isAuthenticated, processQuery]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state, isAuthenticated]);
 
-  // Streaming query handler
-  const handleStreamingQuery = async (queryText: string) => {
-    state.setStreaming(true);
-    state.setStreamedAnswer('');
-    state.setStreamedThinking('');
-    state.setThinkingComplete(false);
-    state.setStreamStatus('Connecting to server...');
-    state.setReasoningSteps(streaming.initializeReasoningSteps(queryText));
-    state.setCurrentQuery(queryText);
-
-    // Create conversation if needed
-    let activeConversationId = conversation.conversationId;
-    if (!activeConversationId && isAuthenticated) {
-      activeConversationId = await conversation.createConversation({
-        semantic_k: state.settings.semanticK,
-        graph_depth: state.settings.graphDepth,
-        max_context: state.settings.maxContext,
-        use_thinking: state.settings.useThinking,
-      });
-    }
-
-    try {
-      const { finalResponse, fullAnswer } = await streaming.startStreaming({
-        query: queryText,
-        settings: state.settings,
-        conversationId: activeConversationId,
-      });
-
-      if (finalResponse) {
-        const assistantMessage: GraphRAGChatMessage = {
-          role: 'assistant',
-          content: finalResponse.answer || fullAnswer,
-          citations: finalResponse.citations,
-          reasoning_path: finalResponse.reasoning_path,
-          thinking_process: state.streamedThinking || undefined,
-          tokens_used: finalResponse.tokens_used,
-          llm_provider: finalResponse.llm_provider,
-          llm_model: finalResponse.llm_model,
-          timestamp: new Date(),
-          graphrag_response: finalResponse,
-        };
-
-        state.setMessages(prev => [...prev, assistantMessage]);
-
-        if (activeConversationId) {
-          conversation.loadConversations();
-        }
-      }
-    } catch (err) {
-      console.error('Streaming error:', err);
-      state.setError(err instanceof Error ? err.message : 'Streaming failed');
-    } finally {
-      state.setStreaming(false);
-      state.setStreamStatus('');
+  const handleAuthSuccess = () => {
+    if (pendingQuery) {
+      processQuery(pendingQuery);
+      setPendingQuery(null);
     }
   };
 
-  // Standard (non-streaming) query handler
   const handleStandardQuery = async (queryText: string) => {
-    state.setLoading(true);
+    setLoading(true);
 
     try {
-      let activeConversationId = conversation.conversationId;
-      if (!activeConversationId && isAuthenticated) {
-        activeConversationId = await conversation.createConversation({
-          semantic_k: state.settings.semanticK,
-          graph_depth: state.settings.graphDepth,
-          max_context: state.settings.maxContext,
-        });
-      }
-
-      const response = await apiClient.graphragQuery({
+      const queryParams = {
         query: queryText,
-        semantic_k: state.settings.semanticK,
-        graph_depth: state.settings.graphDepth,
-        max_context: state.settings.maxContext,
-        conversation_id: activeConversationId || undefined,
-      });
+        semantic_k: semanticK,
+        graph_depth: graphDepth,
+        max_context: maxContext,
+        enhanced_mode: enhancedMode,
+        use_thinking: useThinking,
+        ancient_only: ancientOnly,
+        ...(academicMode && {
+          academic_mode: true,
+          rigor_level: 'maximum' as const,
+          citation_style: citationStyle,
+        }),
+      };
+
+      const response = academicMode
+        ? await apiClient.graphragQueryAdvanced(queryParams)
+        : await apiClient.graphragQuery(queryParams);
 
       const assistantMessage: GraphRAGChatMessage = {
         role: 'assistant',
@@ -243,445 +226,732 @@ export default function GraphRAGPage() {
         graphrag_response: response,
       };
 
-      state.setMessages(prev => [...prev, assistantMessage]);
-
-      if (activeConversationId) {
-        conversation.loadConversations();
-      }
-    } catch (err) {
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (err: unknown) {
       console.error('GraphRAG error:', err);
-      state.setError(err instanceof Error ? err.message : 'Failed to get answer');
+      setError(err instanceof Error ? err.message : 'Failed to get answer');
     } finally {
-      state.setLoading(false);
+      setLoading(false);
     }
   };
 
-  // Form submit handler
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!state.query.trim() || state.loading || state.streaming) return;
+  const initializeReasoningSteps = (q: string) => {
+    const steps: ReasoningStep[] = [
+      { id: 1, type: 'search', label: 'Semantic Search', description: 'Embedding query and searching vector database', status: 'pending' },
+      { id: 2, type: 'traverse', label: 'Graph Traversal', description: 'Expanding knowledge graph connections', status: 'pending' },
+      { id: 3, type: 'context', label: 'Context Building', description: 'Assembling citations and context', status: 'pending' },
+      { id: 4, type: 'synthesis', label: 'LLM Synthesis', description: 'Generating scholarly answer', status: 'pending' },
+      { id: 5, type: 'complete', label: 'Complete', description: 'Answer ready with citations', status: 'pending' },
+    ];
+    setReasoningSteps(steps);
+    setCurrentQuery(q);
+  };
 
-    if (!isAuthenticated) {
-      state.setPendingQuery(state.query.trim());
-      state.setShowAuthModal(true);
-      return;
+  const updateReasoningStep = (stepId: number, status: 'pending' | 'active' | 'complete' | 'error', nodes?: string[], duration?: number) => {
+    setReasoningSteps((prev) =>
+      prev.map((step) =>
+        step.id === stepId
+          ? { ...step, status, nodes, duration }
+          : step.id < stepId && step.status !== 'complete'
+          ? { ...step, status: 'complete' }
+          : step
+      )
+    );
+  };
+
+  const handleStreamingQuery = async (queryText: string) => {
+    setStreaming(true);
+    setStreamedAnswer('');
+    setStreamStatus('Connecting...');
+    initializeReasoningSteps(queryText);
+
+    try {
+      const token = Cookies.get('auth_token');
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
+
+      const timeoutId = setTimeout(() => {
+        abortController.abort();
+      }, 120000);
+
+      const params = new URLSearchParams({
+        query: queryText,
+        semantic_k: semanticK.toString(),
+        graph_depth: graphDepth.toString(),
+        max_context: maxContext.toString(),
+        ancient_only: ancientOnly.toString(),
+        use_thinking: useThinking.toString(),
+      });
+
+      const response = await fetch(`${apiUrl}/api/graphrag/query/stream?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        },
+        signal: abortController.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) throw new Error('No response body');
+
+      let fullAnswer = '';
+      let finalResponse: GraphRAGResponse | null = null;
+      let buffer = '';
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            if (!line.trim() || !line.startsWith('data: ')) continue;
+
+            try {
+              const data: GraphRAGStreamEvent = JSON.parse(line.substring(6));
+
+              switch (data.type) {
+                case 'status': {
+                  // Backend sends message nested: data.data.message
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const payload = data.data as any;
+                  const msg = (payload?.message || data.message || '').toLowerCase();
+                  setStreamStatus(msg);
+
+                  if (msg.includes('embedding') || msg.includes('searching') || msg.includes('initializ')) {
+                    updateReasoningStep(1, 'active');
+                  } else if (msg.includes('retrieving') || msg.includes('found') || msg.includes('knowledge graph')) {
+                    updateReasoningStep(1, 'complete');
+                    updateReasoningStep(2, 'active');
+                  } else if (msg.includes('expand') || msg.includes('travers') || msg.includes('node')) {
+                    updateReasoningStep(2, 'active');
+                  } else if (msg.includes('context') || msg.includes('citation') || msg.includes('building')) {
+                    updateReasoningStep(2, 'complete');
+                    updateReasoningStep(3, 'active');
+                  } else if (msg.includes('generat') || msg.includes('synthesis') || msg.includes('answer')) {
+                    updateReasoningStep(3, 'complete');
+                    updateReasoningStep(4, 'active');
+                  }
+                  break;
+                }
+
+                case 'answer_chunk': {
+                  let chunk = '';
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const chunkData = data.data as any;
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const eventObj = data as any;
+                  if (typeof chunkData === 'string') {
+                    chunk = chunkData;
+                  } else if (typeof eventObj.content === 'string') {
+                    chunk = eventObj.content;
+                  } else if (chunkData && typeof chunkData === 'object') {
+                    chunk = String(chunkData.data || chunkData.chunk || chunkData.text || '');
+                  }
+                  fullAnswer += chunk;
+                  setStreamedAnswer(fullAnswer);
+                  if (!fullAnswer) updateReasoningStep(4, 'active');
+                  break;
+                }
+
+                case 'complete':
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  finalResponse = (data.data as any) as GraphRAGResponse;
+                  updateReasoningStep(5, 'complete');
+                  break;
+
+                case 'error':
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  setError((data as any).data?.message || data.message || 'Stream error');
+                  break;
+              }
+            } catch (err) {
+              console.error('Error parsing SSE line:', line, err);
+            }
+          }
+        }
+      } finally {
+        reader.releaseLock();
+      }
+
+      if (finalResponse) {
+        const citations = finalResponse.citations || {
+          ancient_sources: finalResponse.sources || [],
+          modern_scholarship: []
+        };
+
+        if (finalResponse.sources && Array.isArray(finalResponse.sources)) {
+          const firstSource = finalResponse.sources[0] as unknown;
+          if (firstSource && typeof firstSource === 'string') {
+            const stringArray = finalResponse.sources as unknown as string[];
+            finalResponse.sources = stringArray.map((label: string, index: number) => ({
+              id: index + 1,
+              nodeId: `source_${index}`,
+              nodeLabel: label || 'Unknown',
+              nodeType: 'Unknown',
+              metadata: {}
+            }));
+          }
+        } else if (!finalResponse.sources) {
+          const reasoningPath = finalResponse.reasoning_path;
+          if (reasoningPath) {
+            const startingNodes = (reasoningPath.starting_nodes || []).map((node, index) => ({
+              id: index + 1,
+              nodeId: node.id,
+              nodeLabel: node.label || 'Unknown',
+              nodeType: node.type || 'Unknown',
+              metadata: { confidence: (node as { semantic_score?: number }).semantic_score }
+            }));
+            const expandedNodes = (reasoningPath.expanded_nodes || []).map((node, index) => ({
+              id: startingNodes.length + index + 1,
+              nodeId: node.id,
+              nodeLabel: node.label || 'Unknown',
+              nodeType: node.type || 'Unknown',
+              metadata: {}
+            }));
+            finalResponse.sources = [...startingNodes, ...expandedNodes];
+          }
+        }
+
+        const allCitations = [
+          ...(citations.ancient_sources || []),
+          ...(citations.modern_scholarship || [])
+        ];
+
+        const formattedCitationTexts: Record<string, { original: string; originalLanguage: string; translation: string }> = {};
+        if (allCitations.length > 0) {
+          try {
+            const { fetchCitationPassages } = await import('../../services/citationService');
+            const citationTexts = await fetchCitationPassages(allCitations);
+            Object.entries(citationTexts).forEach(([citation, passage]) => {
+              if (passage.original || passage.translation) {
+                formattedCitationTexts[citation] = {
+                  original: passage.original || '',
+                  originalLanguage: passage.originalLanguage || '',
+                  translation: passage.translation || ''
+                };
+              }
+            });
+          } catch (err) {
+            console.error('Failed to fetch citation texts:', err);
+          }
+        }
+
+        const assistantMessage: GraphRAGChatMessage = {
+          role: 'assistant',
+          content: finalResponse.answer,
+          citations,
+          reasoning_path: finalResponse.reasoning_path,
+          tokens_used: finalResponse.tokens_used,
+          llm_provider: finalResponse.llm_provider || 'gemini',
+          llm_model: finalResponse.llm_model || 'gemini-2.0-flash-exp',
+          timestamp: new Date(),
+          citationTexts: formattedCitationTexts,
+          graphrag_response: finalResponse,
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+      } else if (fullAnswer) {
+        const assistantMessage: GraphRAGChatMessage = {
+          role: 'assistant',
+          content: fullAnswer,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+      }
+
+      setStreaming(false);
+      setStreamedAnswer('');
+      setStreamStatus('');
+    } catch (err: unknown) {
+      console.error('Streaming error:', err);
+      if (err instanceof Error && err.name === 'AbortError') {
+        setError(t('errors.networkErrorDesc'));
+      } else {
+        setError(err instanceof Error ? err.message : 'Streaming failed');
+      }
+      setStreaming(false);
+      setStreamedAnswer('');
+      setStreamStatus('');
     }
-
-    await processQuery(state.query.trim());
   };
 
-  // Auth success handler
-  const handleAuthSuccess = () => {
-    if (state.pendingQuery) {
-      processQuery(state.pendingQuery);
-      state.setPendingQuery(null);
+  const stopStreaming = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
     }
+    setStreaming(false);
+    setStreamedAnswer('');
+    setStreamStatus('');
   };
 
-  // Demo mode handler
-  const loadDemoMode = () => {
-    const demoMessage: GraphRAGChatMessage = {
-      role: 'user',
-      content: mockGraphRAGResponse.query,
-      timestamp: new Date(),
-    };
-
-    const assistantMessage: GraphRAGChatMessage = {
-      role: 'assistant',
-      content: mockGraphRAGResponse.answer,
-      timestamp: new Date(),
-      citations: mockGraphRAGResponse.citations,
-      reasoning_path: mockGraphRAGResponse.reasoning_path,
-      graphrag_response: mockGraphRAGResponse,
-      reasoning_steps: mockReasoningSteps,
-    };
-
-    state.setMessages([demoMessage, assistantMessage]);
-    state.setReasoningSteps(mockReasoningSteps);
-    state.setCurrentQuery(mockGraphRAGResponse.query);
-    state.setQuery('');
-  };
-
-  // Node click handler
   const handleNodeClick = async (nodeId: string) => {
+    if (!nodeId || nodeId === 'undefined' || nodeId.startsWith('source_')) return;
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (uuidPattern.test(nodeId) || nodeId.startsWith('passage_')) return;
     try {
       const node = await apiClient.getNode(nodeId);
-      state.setSelectedNode(node);
+      if (node) setSelectedNode(node);
     } catch (err) {
-      console.error('Failed to load node:', err);
+      console.error('Failed to fetch node:', err);
     }
-  };
-
-  // Cancel streaming handler
-  const handleCancelStreaming = () => {
-    streaming.cancelStreaming();
-    state.setStreaming(false);
-    state.setStreamStatus('');
   };
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto !w-full pt-20 pb-12">
-      <div className="relative min-h-screen overflow-hidden pt-12">
-        {/* AI Loader */}
-        {state.showAIGenerating && (
-          <StreamingOverlay
-            status="Synthesizing Answer"
-            substatus="Analyzing knowledge graph context..."
-          />
-        )}
+    <AuroraBackground className="!min-h-screen !h-auto">
+      <div className="relative min-h-screen overflow-hidden">
 
-        {/* Main Layout */}
-        <div className="relative z-10 flex flex-col lg:flex-row gap-3 lg:gap-4 p-4 lg:p-6 min-h-0 h-[calc(100vh-5rem)] lg:h-[calc(100vh-6rem)]">
+        <div className="relative z-10 min-h-screen">
 
-          {/* Left Sidebar - Title & Stats */}
-          <LeftSidebar
-            t={t}
-            kgStats={state.kgStats}
-            showSettings={state.showSettings}
-            setShowSettings={state.setShowSettings}
-            showHowItWorks={state.showHowItWorks}
-            setShowHowItWorks={state.setShowHowItWorks}
-            showBenefits={state.showBenefits}
-            setShowBenefits={state.setShowBenefits}
-            isAuthenticated={isAuthenticated}
-            showSidebar={conversation.showSidebar}
-            setShowSidebar={conversation.setShowSidebar}
-          />
+          {/* Welcome / empty state — centered */}
+          {messages.length === 0 && !streaming && (
+            <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 py-12">
+              <div className="w-full max-w-4xl">
 
-          {/* Conversation Sidebar */}
-          {isAuthenticated && conversation.showSidebar && (
-            <ConversationSidebar
-              conversations={conversation.conversations}
-              activeConversationId={conversation.conversationId}
-              isLoading={conversation.conversationsLoading}
-              isCollapsed={conversation.sidebarCollapsed}
-              onNewConversation={conversation.handleNewConversation}
-              onSelectConversation={async (id) => {
-                state.setLoading(true);
-                try {
-                  await conversation.handleSelectConversation(id);
-                } finally {
-                  state.setLoading(false);
-                }
-              }}
-              onDeleteConversation={conversation.handleDeleteConversation}
-              onRefreshConversations={conversation.loadConversations}
-              onToggleCollapse={() => conversation.setSidebarCollapsed(!conversation.sidebarCollapsed)}
-            />
-          )}
-
-          {/* Main Chat Area */}
-          <div className="flex-1 flex flex-col min-w-0 min-h-0">
-
-            {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto space-y-4 mb-4 min-h-0 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-              {state.messages.length === 0 ? (
-                <WelcomeScreen
-                  t={t}
-                  loadDemoMode={loadDemoMode}
-                  setQuery={state.setQuery}
-                  inputRef={state.inputRef}
-                />
-              ) : (
-                <>
-                  {state.messages.map((message, index) => (
-                    <MessageBubble
-                      key={index}
-                      message={message}
-                      onNodeClick={handleNodeClick}
+                {/* Header */}
+                <motion.div
+                  className="text-center mb-12"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <h1 className="text-5xl md:text-6xl font-semibold text-gray-900 mb-4 drop-shadow-sm">
+                    <Typewriter
+                      text={["HiRAG", "Knowledge Graph", "Ancient Philosophy", "Scholarly Q&A"]}
+                      speed={100}
+                      waitTime={3500}
+                      deleteSpeed={60}
+                      className="text-gray-900"
+                      cursorChar="_"
                     />
-                  ))}
+                  </h1>
+                  <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+                    {t('graphrag.description')}
+                  </p>
 
-                  {/* Streaming Answer */}
-                  {state.streaming && state.streamedAnswer && (
-                    <div className="mr-auto max-w-[95%] lg:max-w-full animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
-                      <div className="rounded-xl p-4 sm:p-5 lg:p-6 shadow-lg bg-white/80 backdrop-blur-xl border border-gray-200/50">
-                        <div className="markdown-content prose prose-sm max-w-none overflow-x-auto">
-                          <ReactMarkdown>{state.streamedAnswer}</ReactMarkdown>
+                  {/* Stats pills */}
+                  <div className="flex flex-wrap justify-center gap-3 mt-6">
+                    <span className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 shadow-sm border border-gray-200">
+                      {kgStats.nodes.toLocaleString()} Nodes
+                    </span>
+                    <span className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 shadow-sm border border-gray-200">
+                      {kgStats.edges.toLocaleString()} Edges
+                    </span>
+                    <span className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 shadow-sm border border-gray-200">
+                      {kgStats.sources.toLocaleString()} Sources
+                    </span>
+                    <span className="px-4 py-2 bg-blue-50 backdrop-blur-sm rounded-full text-sm font-medium text-blue-700 shadow-sm border border-blue-200">
+                      {kgStats.hierarchyLayers} Hierarchy Layers
+                    </span>
+                  </div>
+                </motion.div>
+
+                {/* Input */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="space-y-4"
+                >
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <ShineBorder
+                      className="!p-0 bg-white/95 backdrop-blur-sm"
+                      borderRadius={9999}
+                      color={["#3B82F6", "#6366F1", "#06B6D4"]}
+                    >
+                      <div className="flex gap-3 p-2">
+                        <input
+                          ref={inputRef}
+                          type="text"
+                          value={query}
+                          onChange={(e) => setQuery(e.target.value)}
+                          placeholder={t('graphrag.placeholder')}
+                          className="flex-1 px-6 py-3 text-base bg-transparent focus:outline-none focus:ring-0 border-0"
+                          autoFocus
+                          disabled={loading || streaming}
+                        />
+                        <button
+                          type="submit"
+                          disabled={!query.trim() || loading || streaming}
+                          className="px-8 py-3 bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all text-base font-medium whitespace-nowrap"
+                        >
+                          {loading ? 'Thinking...' : t('graphrag.ask')}
+                        </button>
+                      </div>
+                    </ShineBorder>
+
+                    {/* Mode toggles */}
+                    <div className="space-y-3 px-2">
+                      <div className="flex justify-center">
+                        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm bg-white/60 backdrop-blur-md px-4 sm:px-6 py-3 rounded-2xl sm:rounded-full border border-gray-200">
+                          <span className="text-gray-700 font-medium w-full sm:w-auto text-center">Modes:</span>
+                          <label className="flex items-center gap-2 cursor-pointer min-h-[44px] px-2">
+                            <input
+                              type="checkbox"
+                              checked={academicMode}
+                              onChange={(e) => setAcademicMode(e.target.checked)}
+                              className="w-5 h-5 sm:w-4 sm:h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                            />
+                            <span className="text-gray-700">🎓 Academic</span>
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer min-h-[44px] px-2">
+                            <input
+                              type="checkbox"
+                              checked={useThinking}
+                              onChange={(e) => setUseThinking(e.target.checked)}
+                              className="w-5 h-5 sm:w-4 sm:h-4 text-purple-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-purple-500"
+                            />
+                            <span className="text-gray-700 text-xs sm:text-sm">🧠 Deep Reasoning</span>
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer min-h-[44px] px-2" title="Only use ancient sources (6th c. BCE – 6th c. CE)">
+                            <input
+                              type="checkbox"
+                              checked={ancientOnly}
+                              onChange={(e) => setAncientOnly(e.target.checked)}
+                              className="w-5 h-5 sm:w-4 sm:h-4 text-amber-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-amber-500"
+                            />
+                            <span className="text-gray-700 text-xs sm:text-sm">🏛️ Ancient Only</span>
+                          </label>
                         </div>
-                        <div className="text-xs mt-2 opacity-70">{state.streamStatus}</div>
+                      </div>
+
+                      {academicMode && (
+                        <div className="flex justify-center">
+                          <div className="text-xs text-amber-700 bg-amber-50/80 backdrop-blur-md px-4 py-2 rounded-full border border-amber-200 max-w-md text-center">
+                            <span className="font-medium">🌟 Academic Mode:</span> Like the Stoics debating εἱμαρμένη, some things take time.
+                            <span className="text-amber-600 ml-1">Expect 2–5 minutes for thorough analysis.</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Parameters */}
+                      <div className="flex justify-center items-center gap-2 sm:gap-4 flex-wrap">
+                        <div className="flex items-center gap-2 text-xs sm:text-sm bg-white/60 backdrop-blur-md px-3 sm:px-6 py-2 rounded-full border border-gray-200">
+                          <span className="text-gray-700">Breadth:</span>
+                          <select value={semanticK} onChange={(e) => setSemanticK(Number(e.target.value))} className="px-2 sm:px-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black min-h-[44px] sm:min-h-0">
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={15}>15</option>
+                            <option value={20}>20</option>
+                          </select>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs sm:text-sm bg-white/60 backdrop-blur-md px-3 sm:px-6 py-2 rounded-full border border-gray-200">
+                          <span className="text-gray-700">Depth:</span>
+                          <select value={graphDepth} onChange={(e) => setGraphDepth(Number(e.target.value))} className="px-2 sm:px-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black min-h-[44px] sm:min-h-0">
+                            <option value={1}>1</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                          </select>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs sm:text-sm bg-white/60 backdrop-blur-md px-3 sm:px-6 py-2 rounded-full border border-gray-200">
+                          <span className="text-gray-700">Context:</span>
+                          <select value={maxContext} onChange={(e) => setMaxContext(Number(e.target.value))} className="px-2 sm:px-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black min-h-[44px] sm:min-h-0">
+                            <option value={10}>10</option>
+                            <option value={15}>15</option>
+                            <option value={20}>20</option>
+                            <option value={25}>25</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-center">
+                        <button
+                          type="button"
+                          onClick={loadDemoMode}
+                          className="px-4 py-1.5 text-sm text-gray-500 hover:text-gray-900 hover:bg-white/80 rounded-full transition-colors"
+                        >
+                          Try Demo
+                        </button>
                       </div>
                     </div>
-                  )}
+                  </form>
 
-                  {/* Thinking Panel */}
-                  {state.streaming && state.settings.useThinking && state.streamedThinking && (
-                    <ThinkingProcessPanel
-                      thinking={state.streamedThinking}
-                      isComplete={state.thinkingComplete}
-                    />
+                  {error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-6 px-6 py-4 bg-red-50 border border-red-200 text-red-800 rounded-2xl text-sm text-center"
+                    >
+                      {error}
+                    </motion.div>
                   )}
-
-                  {/* Reasoning Steps */}
-                  {state.streaming && state.reasoningSteps.length > 0 && (
-                    <ReasoningPathVisualizer
-                      steps={state.reasoningSteps}
-                      query={state.currentQuery}
-                    />
-                  )}
-
-                  <div ref={state.messagesEndRef} />
-                </>
-              )}
+                </motion.div>
+              </div>
             </div>
+          )}
 
-            {/* Query Input */}
-            <QueryInput
-              t={t}
-              query={state.query}
-              setQuery={state.setQuery}
-              loading={state.loading}
-              streaming={state.streaming}
-              error={state.error}
-              onSubmit={handleSubmit}
-              onCancel={handleCancelStreaming}
-              inputRef={state.inputRef}
-            />
-          </div>
+          {/* Messages view */}
+          {(messages.length > 0 || streaming) && (
+            <div className="max-w-5xl mx-auto px-4 pt-4 pb-8">
+
+              {/* Compact header */}
+              <div className="flex items-center justify-center mb-6">
+                <h1 className="text-2xl font-semibold text-gray-800 tracking-tight">
+                  <Typewriter
+                    text={["HiRAG Q&A", "Knowledge Graph", "Ancient Philosophy"]}
+                    speed={100}
+                    waitTime={3000}
+                    deleteSpeed={60}
+                    className="text-gray-800"
+                    cursorChar="_"
+                    showCursor={false}
+                  />
+                </h1>
+              </div>
+
+              <div className="space-y-6 mb-6">
+                <AnimatePresence>
+                  {messages.map((message, index) => (
+                    <MessageBubble key={index} message={message} onNodeClick={handleNodeClick} />
+                  ))}
+                </AnimatePresence>
+
+                {/* Terminal loader for non-streaming queries */}
+                {loading && !streaming && (
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex justify-center items-center w-full min-h-[50vh]">
+                    <TerminalLoader size="large" />
+                  </motion.div>
+                )}
+
+                {streaming && (
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-4 flex flex-col items-center">
+                    {!streamedAnswer && reasoningSteps.length === 0 && (
+                      <div className="flex justify-center items-center w-full min-h-[50vh]">
+                        <TerminalLoader size="large" />
+                      </div>
+                    )}
+
+                    {reasoningSteps.length > 0 && (
+                      <ReasoningPathVisualizer query={currentQuery} steps={reasoningSteps} isActive={true} />
+                    )}
+
+                    {streamedAnswer && (
+                      <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-sm w-full">
+                        <div className="prose prose-sm max-w-none">
+                          <ReactMarkdown>{streamedAnswer}</ReactMarkdown>
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+
+                {error && !loading && !streaming && (
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="px-6 py-4 bg-red-50 border border-red-200 text-red-800 rounded-2xl text-sm text-center">
+                    <div className="font-medium mb-1">Query failed</div>
+                    {error}
+                    <button onClick={() => setError(null)} className="mt-2 text-red-600 hover:text-red-800 underline text-xs block mx-auto">Dismiss</button>
+                  </motion.div>
+                )}
+
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Sticky bottom input */}
+              <ShineBorder
+                className="!p-0 bg-white/95 backdrop-blur-sm shadow-lg sticky bottom-4"
+                borderRadius={9999}
+                color={["#3B82F6", "#6366F1", "#06B6D4"]}
+              >
+                <form onSubmit={handleSubmit} className="p-2">
+                  <div className="flex gap-2">
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      placeholder={t('graphrag.placeholder')}
+                      disabled={loading || streaming}
+                      className="flex-1 px-6 py-3 text-base bg-transparent focus:outline-none focus:ring-0 border-0"
+                    />
+                    {streaming ? (
+                      <button type="button" onClick={stopStreaming} className="px-6 py-3 bg-red-600 text-white rounded-full hover:bg-red-700 font-medium transition-all">
+                        Stop
+                      </button>
+                    ) : (
+                      <button type="submit" disabled={loading || !query.trim()} className="px-6 py-3 bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium">
+                        {loading ? 'Thinking...' : 'Ask'}
+                      </button>
+                    )}
+                  </div>
+                </form>
+              </ShineBorder>
+            </div>
+          )}
         </div>
 
-        {/* Modals */}
         <AuthModal
-          isOpen={state.showAuthModal}
-          onClose={() => {
-            state.setShowAuthModal(false);
-            state.setPendingQuery(null);
-          }}
+          isOpen={showAuthModal}
+          onClose={() => { setShowAuthModal(false); setPendingQuery(null); }}
           onSuccess={handleAuthSuccess}
           title="Authentication Required"
-          message="Please log in to use HiRAG Q&A. This feature uses AI to provide scholarly answers."
+          message="Please log in to use HiRAG Q&A"
         />
 
-        {state.selectedNode && (
-          <NodeDetailPanel
-            node={state.selectedNode}
-            onClose={() => state.setSelectedNode(null)}
-          />
+        {selectedNode && (
+          <NodeDetailPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
         )}
       </div>
     </AuroraBackground>
   );
 }
 
-// Sub-components (kept in same file for simplicity)
 
-interface LeftSidebarProps {
-  t: (key: string) => string;
-  kgStats: { nodes: number; edges: number; sources: number; hierarchyLayers: number };
-  showSettings: boolean;
-  setShowSettings: (show: boolean) => void;
-  showHowItWorks: boolean;
-  setShowHowItWorks: (show: boolean) => void;
-  showBenefits: boolean;
-  setShowBenefits: (show: boolean) => void;
-  isAuthenticated: boolean;
-  showSidebar: boolean;
-  setShowSidebar: (show: boolean) => void;
-}
+// ─── Message Bubble ───────────────────────────────────────────────────────────
 
-function LeftSidebar({ t, kgStats, showSettings, setShowSettings, showHowItWorks, setShowHowItWorks, showBenefits, setShowBenefits, isAuthenticated, showSidebar, setShowSidebar }: LeftSidebarProps) {
+function MessageBubble({
+  message,
+  onNodeClick
+}: {
+  message: GraphRAGChatMessage;
+  onNodeClick: (nodeId: string) => void;
+}) {
+  const [showCitations, setShowCitations] = useState(false);
+  const [showReasoningPath, setShowReasoningPath] = useState(false);
+
   return (
-    <div className="hidden lg:flex lg:flex-col lg:w-48 xl:w-56 gap-3 flex-shrink-0">
-      {/* Title Card */}
-      <Card variant="default" padding="md">
-        <CardHeader className="p-0 mb-3">
-          <CardTitle className="text-lg xl:text-xl bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">
-            {t('graphrag.title')}
-          </CardTitle>
-          <CardDescription className="text-xs leading-relaxed">
-            {t('graphrag.description')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-0">
-          <Button onClick={() => setShowSettings(!showSettings)} variant="outline" size="sm" fullWidth>
-            ⚙️ {t('graphrag.settings')}
-          </Button>
-          {isAuthenticated && (
-            <Button onClick={() => setShowSidebar(!showSidebar)} variant={showSidebar ? "default" : "outline"} size="sm" fullWidth className="mt-2">
-              💬 {showSidebar ? 'Hide' : 'Show'} History
-            </Button>
-          )}
-        </CardContent>
-      </Card>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className={`${message.role === 'user' ? 'ml-auto max-w-2xl' : 'max-w-full'}`}
+    >
+      <div className={`rounded-2xl shadow-sm ${message.role === 'user' ? 'bg-gradient-to-br from-gray-900 to-gray-800' : 'bg-white/95 backdrop-blur-sm'}`}>
+        <div className={`p-6 ${message.role === 'user' ? 'text-white' : 'text-gray-900'}`}>
+          {message.role === 'user' ? (
+            <p className="text-base leading-relaxed">{message.content}</p>
+          ) : (
+            <div className="space-y-4">
 
-      {/* Stats Card */}
-      <Card variant="elevated" padding="md" className="bg-gradient-to-br from-primary-50 via-blue-50 to-indigo-50 border-primary-200">
-        <div className="text-center space-y-2">
-          <div className="text-xs font-semibold text-primary-800 uppercase tracking-wider">{t('graphrag.snapshot')}</div>
-          <div className="grid grid-cols-1 gap-2 text-sm">
-            <StatItem value={kgStats.nodes} label={t('kg.nodes')} />
-            <StatItem value={kgStats.edges} label={t('kg.edges')} />
-            <StatItem value={kgStats.sources} label={t('graphrag.sources')} />
-            <StatItem value={kgStats.hierarchyLayers} label="Hierarchy Layers" />
+              {/* Service badge */}
+              {message.graphrag_response?.service && (
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                  <svg className="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  {message.graphrag_response.service}
+                </span>
+              )}
+
+              {/* Content */}
+              {message.graphrag_response?.sources ? (
+                <div className="prose prose-sm max-w-none">
+                  <CitationRenderer content={message.content} sources={message.graphrag_response.sources} onNodeClick={onNodeClick} />
+                </div>
+              ) : (
+                <div className="prose prose-sm max-w-none">
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
+                </div>
+              )}
+
+              {/* Sources */}
+              {message.graphrag_response?.sources && message.graphrag_response.sources.length > 0 && (
+                <SourcesPanel sources={message.graphrag_response.sources} evidenceMap={message.graphrag_response.evidenceMap} onNodeClick={onNodeClick} />
+              )}
+
+              {/* Reasoning path */}
+              {message.reasoning_path && (
+                <div className="border-t border-gray-200 pt-4">
+                  <button onClick={() => setShowReasoningPath(!showReasoningPath)} className="text-sm font-medium text-gray-700 hover:text-gray-900 flex items-center gap-2">
+                    {showReasoningPath ? '▼' : '▶'} Knowledge Graph Path ({message.reasoning_path.total_nodes || 0} nodes)
+                  </button>
+                  {showReasoningPath && message.reasoning_path.starting_nodes?.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      {message.reasoning_path.starting_nodes.map((node, i) => (
+                        <button key={i} onClick={() => onNodeClick(node.id)} className="w-full text-left p-3 bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 transition-colors">
+                          <div className="flex items-start gap-2">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-200 text-blue-800">{node.type}</span>
+                            <div className="flex-1">
+                              <div className="font-semibold text-blue-900 text-sm">{node.label}</div>
+                              <div className="text-xs text-blue-700 mt-0.5">{node.reason}</div>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Citations */}
+              {message.citations && (message.citations.ancient_sources?.length > 0 || message.citations.modern_scholarship?.length > 0) && (
+                <div className="border-t border-gray-200 pt-4">
+                  <button onClick={() => setShowCitations(!showCitations)} className="text-sm font-medium text-gray-700 hover:text-gray-900 flex items-center gap-2">
+                    {showCitations ? '▼' : '▶'} Citations ({(message.citations.ancient_sources?.length || 0) + (message.citations.modern_scholarship?.length || 0)})
+                  </button>
+                  {showCitations && (
+                    <div className="mt-4 space-y-3 text-sm">
+                      {message.citations.ancient_sources && message.citations.ancient_sources.length > 0 && (
+                        <div>
+                          <h4 className="font-semibold mb-2 text-gray-900">Ancient Sources:</h4>
+                          <ul className="list-disc list-inside space-y-1 text-gray-700">
+                            {message.citations.ancient_sources.map((source, i) => (
+                              <li key={i}>
+                                <CitationPreview citation={source} type="ancient" sourceText={message.citationTexts?.[source]}>
+                                  {source}
+                                </CitationPreview>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {message.citations.modern_scholarship && message.citations.modern_scholarship.length > 0 && (
+                        <div>
+                          <h4 className="font-semibold mb-2 text-gray-900">Modern Scholarship:</h4>
+                          <ul className="list-disc list-inside space-y-1 text-gray-700">
+                            {message.citations.modern_scholarship.map((source, i) => (
+                              <li key={i}>{source}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Academic panels */}
+              {message.graphrag_response && (
+                <>
+                  {message.graphrag_response.evidence_chains && (
+                    <EvidenceChainPanel evidenceChains={message.graphrag_response.evidence_chains} />
+                  )}
+                  {message.graphrag_response.modern_bibliography && (
+                    <BibliographyPanel
+                      bibliography={message.graphrag_response.modern_bibliography}
+                      chicagoBibliography={message.graphrag_response.chicago_bibliography}
+                      apaBibliography={message.graphrag_response.apa_bibliography}
+                      harvardBibliography={message.graphrag_response.harvard_bibliography}
+                      bibtexBibliography={message.graphrag_response.bibtex_bibliography}
+                      ctsUrns={message.graphrag_response.cts_urns ?? []}
+                    />
+                  )}
+                </>
+              )}
+            </div>
+          )}
+
+          <div className={`text-xs mt-3 ${message.role === 'user' ? 'text-white/70' : 'text-gray-500'}`}>
+            {typeof message.timestamp === 'string'
+              ? new Date(message.timestamp).toLocaleTimeString()
+              : message.timestamp.toLocaleTimeString()}
           </div>
         </div>
-      </Card>
-
-      {/* How It Works */}
-      <CollapsibleCard
-        title="How HiRAG Works"
-        icon="⚡"
-        isOpen={showHowItWorks}
-        onToggle={() => setShowHowItWorks(!showHowItWorks)}
-        variant="blue"
-      >
-        <HowItWorksContent />
-      </CollapsibleCard>
-
-      {/* Benefits */}
-      <CollapsibleCard
-        title="Why It's Brilliant"
-        icon="💡"
-        isOpen={showBenefits}
-        onToggle={() => setShowBenefits(!showBenefits)}
-        variant="green"
-      >
-        <BenefitsContent />
-      </CollapsibleCard>
-    </div>
-  );
-}
-
-function StatItem({ value, label }: { value: number; label: string }) {
-  return (
-    <div className="py-1.5 px-2 bg-white/60 rounded-lg">
-      <div className="text-2xl font-bold text-primary-600 mb-0.5">{value.toLocaleString()}</div>
-      <div className="text-xs text-academic-muted font-medium">{label}</div>
-    </div>
-  );
-}
-
-interface CollapsibleCardProps {
-  title: string;
-  icon: string;
-  isOpen: boolean;
-  onToggle: () => void;
-  variant: 'blue' | 'green';
-  children: React.ReactNode;
-}
-
-function CollapsibleCard({ title, icon, isOpen, onToggle, variant, children }: CollapsibleCardProps) {
-  const colors = variant === 'blue'
-    ? 'from-blue-50/80 via-indigo-50/80 to-purple-50/80 border-primary-200/50'
-    : 'from-green-50/80 via-emerald-50/80 to-teal-50/80 border-green-200/50';
-
-  return (
-    <div className={`academic-card bg-gradient-to-br ${colors} backdrop-blur-xl`}>
-      <button onClick={onToggle} className="w-full flex items-center justify-between text-left hover:opacity-80 transition-all">
-        <h3 className="font-semibold text-base xl:text-lg text-primary-900 flex items-center gap-2">
-          {icon} {title}
-        </h3>
-        <span className="text-primary-700 text-sm font-medium">{isOpen ? '▼' : '▶'}</span>
-      </button>
-      {isOpen && <div className="mt-3 pt-3 border-t border-primary-200 text-xs space-y-2.5 max-h-96 overflow-y-auto pr-2">{children}</div>}
-    </div>
-  );
-}
-
-function HowItWorksContent() {
-  const steps = [
-    { title: '1. HiIndex Hierarchy', desc: 'The knowledge graph is clustered into layered communities.' },
-    { title: '2. Local Retrieval', desc: 'Queries seed level-2 entities via embedding search.' },
-    { title: '3. Bridge Mode', desc: 'Cross-community connectors complete multi-hop reasoning.' },
-    { title: '4. Global Summaries', desc: 'Level-0 and level-1 digests provide thematic framing.' },
-    { title: '5. LLM Synthesis', desc: 'Gemini assembles the layered bundle into a narrative.' },
-    { title: '6. Evidence Tracking', desc: 'Citations and reasoning paths are logged for auditability.' },
-  ];
-
-  return (
-    <>
-      {steps.map((step, i) => (
-        <div key={i} className="bg-white/80 rounded-lg p-2.5 border border-blue-100">
-          <div className="font-semibold text-primary-800 mb-1.5">{step.title}</div>
-          <p className="text-academic-muted leading-relaxed text-xs">{step.desc}</p>
-        </div>
-      ))}
-    </>
-  );
-}
-
-interface WelcomeScreenProps {
-  t: (key: string) => string;
-  loadDemoMode: () => void;
-  setQuery: (query: string) => void;
-  inputRef: React.RefObject<HTMLInputElement | null>;
-}
-
-function WelcomeScreen({ t, loadDemoMode, setQuery, inputRef }: WelcomeScreenProps) {
-  return (
-    <div className="flex items-center justify-center h-full">
-      <div className="text-center max-w-2xl px-4">
-        <div className="text-5xl mb-4">🏛️</div>
-        <h2 className="text-xl sm:text-2xl font-bold text-academic-heading mb-2">{t('graphrag.welcomeTitle')}</h2>
-        <p className="text-sm sm:text-base text-academic-muted mb-6">{t('graphrag.welcomeSubtitle')}</p>
-
-        <SmartQuerySuggestions
-          currentQuery=""
-          onSuggestionClick={(suggestion: string) => {
-            setQuery(suggestion);
-            inputRef.current?.focus();
-          }}
-          className="mb-6"
-        />
-
-        <button onClick={loadDemoMode} className="text-sm text-primary-600 hover:text-primary-700 underline">
-          {t('graphrag.tryDemo')}
-        </button>
       </div>
-    </div>
-  );
-}
-
-interface QueryInputProps {
-  t: (key: string) => string;
-  query: string;
-  setQuery: (query: string) => void;
-  loading: boolean;
-  streaming: boolean;
-  error: string | null;
-  onSubmit: (e: React.FormEvent) => void;
-  onCancel: () => void;
-  inputRef: React.RefObject<HTMLInputElement | null>;
-}
-
-function QueryInput({ t, query, setQuery, loading, streaming, error, onSubmit, onCancel, inputRef }: QueryInputProps) {
-  return (
-    <ShineBorder
-      color={loading || streaming ? ["#A07CFE", "#FE8FB5", "#FFBE7B"] : ["#D4D4D4"]}
-      duration={loading || streaming ? 3 : 0}
-      className={`w-full bg-white/90 backdrop-blur-xl rounded-2xl border shadow-lg ${loading || streaming ? 'animate-pulse' : ''}`}
-    >
-      {error && (
-        <div className="px-4 py-2 text-xs sm:text-sm text-red-600 bg-red-50 border-b border-red-100">{error}</div>
-      )}
-      <form onSubmit={onSubmit} className="relative">
-        <input
-          ref={inputRef}
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={t('graphrag.placeholder')}
-          className="w-full px-4 sm:px-6 py-3 sm:py-4 pr-24 sm:pr-32 bg-transparent rounded-xl focus:outline-none text-base sm:text-lg"
-          disabled={loading || streaming}
-        />
-        {streaming ? (
-          <button
-            type="button"
-            onClick={onCancel}
-            className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 px-3 sm:px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium text-xs sm:text-sm"
-          >
-            {t('graphrag.stop')}
-          </button>
-        ) : (
-          <button
-            type="submit"
-            disabled={loading || !query.trim()}
-            className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 px-3 sm:px-5 py-1.5 sm:py-2 bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-lg hover:shadow-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
-          >
-            {loading ? t('graphrag.thinking') : t('graphrag.ask')}
-          </button>
-        )}
-      </form>
-    </ShineBorder>
+    </motion.div>
   );
 }
