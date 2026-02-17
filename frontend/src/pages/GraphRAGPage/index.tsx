@@ -12,7 +12,6 @@ import { AuroraBackground } from '../../components/ui/aurora-background';
 import { Typewriter } from '../../components/ui/typewriter';
 import NodeDetailPanel from '../../components/NodeDetailPanel';
 import { CitationPreview } from '../../components/ui/citation-preview';
-import { ReasoningPathVisualizer } from '../../components/graphrag/ReasoningPathVisualizer';
 import { CitationRenderer, SourcesPanel } from '../../components/CitationRenderer';
 import BibliographyPanel from '../../components/BibliographyPanel';
 import EvidenceChainPanel from '../../components/EvidenceChainPanel';
@@ -53,8 +52,8 @@ export default function GraphRAGPage() {
   const [useThinking, setUseThinking] = useState(false);
   const [_citationStyle, _setCitationStyle] = useState<'chicago' | 'apa' | 'harvard'>('chicago');
   const [ancientOnly, setAncientOnly] = useState(false);
-  const [reasoningSteps, setReasoningSteps] = useState<ReasoningStep[]>([]);
-  const [currentQuery, setCurrentQuery] = useState<string>('');
+  const [_reasoningSteps, setReasoningSteps] = useState<ReasoningStep[]>([]);
+  const [_currentQuery, setCurrentQuery] = useState<string>('');
 
   // Dynamic KG stats
   const [kgStats, setKgStats] = useState({
@@ -684,15 +683,9 @@ export default function GraphRAGPage() {
 
                 {streaming && (
                   <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-4 flex flex-col items-center">
-                    {!streamedAnswer && (
-                      <div className="flex justify-center items-center w-full min-h-[50vh]">
-                        <TerminalLoader size="large" />
-                      </div>
-                    )}
-
-                    {streamedAnswer && reasoningSteps.length > 0 && (
-                      <ReasoningPathVisualizer query={currentQuery} steps={reasoningSteps} isActive={true} />
-                    )}
+                    <div className={`flex justify-center items-center w-full ${streamedAnswer ? 'py-4' : 'min-h-[50vh]'}`}>
+                      <TerminalLoader size="large" />
+                    </div>
 
                     {streamedAnswer && (
                       <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-sm w-full">
