@@ -340,7 +340,7 @@ class HybridRetrieve(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         node_hits = await ctx.deps.qdrant.search_nodes(standard_emb, limit=10)
 
         # If HyDE returned results, RRF-fuse with standard hits
-        if hyde_results:
+        if hyde_results and ctx.deps.hyde:
             node_hits = ctx.deps.hyde.rrf_fusion(node_hits, hyde_results, k=60)
 
         seed_ids: list[str] = []
@@ -1252,24 +1252,78 @@ _KEYWORD_PATTERNS = {
 
 # Static fallback expansion dictionary (matches TypeScript COMMON_GREEK_TERMS)
 _STATIC_GREEK_TERMS = {
-    "free will": {"greek": "τὸ ἐφ' ἡμῖν", "transliteration": "to eph' hēmin", "translation": "what is in our power"},
-    "in our power": {"greek": "τὸ ἐφ' ἡμῖν", "transliteration": "to eph' hēmin", "translation": "what is in our power"},
-    "self-determination": {"greek": "αὐτεξούσιον", "transliteration": "autexousion", "translation": "self-determination"},
-    "fate": {"greek": "εἱμαρμένη", "transliteration": "heimarmenē", "translation": "fate/destiny"},
-    "destiny": {"greek": "εἱμαρμένη", "transliteration": "heimarmenē", "translation": "fate/destiny"},
-    "assent": {"greek": "συγκατάθεσις", "transliteration": "synkatathesis", "translation": "assent"},
-    "moral choice": {"greek": "προαίρεσις", "transliteration": "prohairesis", "translation": "moral choice"},
-    "swerve": {"greek": "παρέγκλισις", "transliteration": "parenklisis", "translation": "swerve/clinamen"},
-    "necessity": {"greek": "ἀνάγκη", "transliteration": "anankē", "translation": "necessity"},
-    "possibility": {"greek": "δυνατόν", "transliteration": "dynaton", "translation": "possibility"},
+    "free will": {
+        "greek": "τὸ ἐφ' ἡμῖν",
+        "transliteration": "to eph' hēmin",
+        "translation": "what is in our power",
+    },
+    "in our power": {
+        "greek": "τὸ ἐφ' ἡμῖν",
+        "transliteration": "to eph' hēmin",
+        "translation": "what is in our power",
+    },
+    "self-determination": {
+        "greek": "αὐτεξούσιον",
+        "transliteration": "autexousion",
+        "translation": "self-determination",
+    },
+    "fate": {
+        "greek": "εἱμαρμένη",
+        "transliteration": "heimarmenē",
+        "translation": "fate/destiny",
+    },
+    "destiny": {
+        "greek": "εἱμαρμένη",
+        "transliteration": "heimarmenē",
+        "translation": "fate/destiny",
+    },
+    "assent": {
+        "greek": "συγκατάθεσις",
+        "transliteration": "synkatathesis",
+        "translation": "assent",
+    },
+    "moral choice": {
+        "greek": "προαίρεσις",
+        "transliteration": "prohairesis",
+        "translation": "moral choice",
+    },
+    "swerve": {
+        "greek": "παρέγκλισις",
+        "transliteration": "parenklisis",
+        "translation": "swerve/clinamen",
+    },
+    "necessity": {
+        "greek": "ἀνάγκη",
+        "transliteration": "anankē",
+        "translation": "necessity",
+    },
+    "possibility": {
+        "greek": "δυνατόν",
+        "transliteration": "dynaton",
+        "translation": "possibility",
+    },
     "cause": {"greek": "αἰτία", "transliteration": "aitia", "translation": "cause"},
-    "impression": {"greek": "φαντασία", "transliteration": "phantasia", "translation": "impression/appearance"},
+    "impression": {
+        "greek": "φαντασία",
+        "transliteration": "phantasia",
+        "translation": "impression/appearance",
+    },
 }
 
 _STATIC_PHILOSOPHERS = [
-    "Chrysippus", "Epictetus", "Epicurus", "Aristotle", "Plato",
-    "Alexander of Aphrodisias", "Cicero", "Seneca", "Marcus Aurelius",
-    "Augustine", "Origen", "Cleanthes", "Carneades",
+    "Chrysippus",
+    "Epictetus",
+    "Epicurus",
+    "Aristotle",
+    "Plato",
+    "Alexander of Aphrodisias",
+    "Cicero",
+    "Seneca",
+    "Marcus Aurelius",
+    "Augustine",
+    "Origen",
+    "Cleanthes",
+    "Carneades",
 ]
 
 
@@ -1394,7 +1448,9 @@ class ExpandQuery(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             if trigger in q_lower:
                 greek_terms.append(GreekTerm(**term))
         philosophers = [p for p in _STATIC_PHILOSOPHERS if p.lower() in q_lower]
-        return ExpansionTerms(greek_terms=greek_terms[:5], philosophers=philosophers[:5])
+        return ExpansionTerms(
+            greek_terms=greek_terms[:5], philosophers=philosophers[:5]
+        )
 
     @staticmethod
     def _build_expanded_query(question: str, expansion: Any) -> str:
@@ -1428,14 +1484,18 @@ class TreeReasoningRetrieve(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             return CRAGValidate()
 
         # Extract unique work IDs from current evidence
-        work_ids = list({
-            e.work_title for e in ctx.state.all_evidence()
-            if e.work_title and e.type == "passage"
-        })
+        work_ids = list(
+            {
+                e.work_title
+                for e in ctx.state.all_evidence()
+                if e.work_title and e.type == "passage"
+            }
+        )
         if not work_ids:
             # Fall back to top node labels as work IDs
             work_ids = [
-                e.id for e in sorted(
+                e.id
+                for e in sorted(
                     ctx.state.primary_evidence, key=lambda x: x.score, reverse=True
                 )[:5]
                 if e.type != "passage"
@@ -1453,6 +1513,7 @@ class TreeReasoningRetrieve(BaseNode[RAGState, Deps, ScholarlyAnswer]):
 
         # Build tree JSON for LLM navigation
         import json as _json
+
         tree_json = _json.dumps(
             [idx.model_dump() for idx in indices],
             ensure_ascii=False,
@@ -1472,18 +1533,24 @@ class TreeReasoningRetrieve(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             return CRAGValidate()
 
         # Extract passages for priority 1 and 2 nodes
-        existing_passages = sum(1 for e in ctx.state.primary_evidence if e.type == "passage")
+        existing_passages = sum(
+            1 for e in ctx.state.primary_evidence if e.type == "passage"
+        )
         for sel in selected_nodes:
             priority = sel.get("priority", 3)
             if priority == 3 and existing_passages >= 10:
                 continue
             work_id = sel.get("work_id", "")
             node_id = sel.get("node_id", "")
-            matching_idx = next((idx for idx in indices if idx.work_id == work_id), None)
+            matching_idx = next(
+                (idx for idx in indices if idx.work_id == work_id), None
+            )
             if not matching_idx:
                 continue
             try:
-                passages = await ctx.deps.tree_index.extract_passages(matching_idx, [node_id])
+                passages = await ctx.deps.tree_index.extract_passages(
+                    matching_idx, [node_id]
+                )
             except Exception:
                 continue
             for p in passages:
@@ -1508,7 +1575,10 @@ class TreeReasoningRetrieve(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 )
                 existing_passages += 1
 
-        logger.info("TreeReasoningRetrieve: added passages, total primary=%d", len(ctx.state.primary_evidence))
+        logger.info(
+            "TreeReasoningRetrieve: added passages, total primary=%d",
+            len(ctx.state.primary_evidence),
+        )
         return CRAGValidate()
 
 
@@ -1533,7 +1603,9 @@ class CRAGValidate(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         # Build context summary for CRAG evaluation
         all_ev = ctx.state.all_evidence()
         context = _build_context_from_evidence(all_ev[:20])[:3000]
-        primary_count = len([e for e in ctx.state.primary_evidence if e.type != "passage"])
+        primary_count = len(
+            [e for e in ctx.state.primary_evidence if e.type != "passage"]
+        )
 
         prompt = CRAG_VALIDATE_PROMPT.format(
             question=ctx.state.question,
@@ -1541,6 +1613,7 @@ class CRAGValidate(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         )
         try:
             from eleutheria_graphrag.agents.structured_models import CRAGValidation
+
             raw = await ctx.deps.llm.generate(prompt, temperature=0.0, max_tokens=512)
             data = _parse_json(raw)
             crag = CRAGValidation.model_validate(data)
@@ -1551,7 +1624,9 @@ class CRAGValidate(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         ctx.state.crag_validation = crag
         logger.info(
             "CRAG: relevance=%d completeness=%d confidence=%d",
-            crag.relevance, crag.completeness, crag.confidence,
+            crag.relevance,
+            crag.completeness,
+            crag.confidence,
         )
 
         # Evidence insufficiency gate
@@ -1586,7 +1661,9 @@ class CRAGValidate(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                             id=nid,
                             label=node.get("label", nid),
                             type=node.get("type", ""),
-                            layer=EvidenceLayer.PRIMARY if _is_primary_node(node) else EvidenceLayer.SECONDARY,
+                            layer=EvidenceLayer.PRIMARY
+                            if _is_primary_node(node)
+                            else EvidenceLayer.SECONDARY,
                             source=EvidenceSource.CRAG_SECONDARY,
                             description=node.get("description", ""),
                             score=hit.get("score", 0.0) * 0.85,  # discount
@@ -1642,17 +1719,27 @@ class DualRerank(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         # Stage 2: LLM scholarly reranking
         if ctx.deps.llm_reranker:
             try:
-                reranked = await ctx.deps.llm_reranker.rerank(question, reranked, top_k=15)
+                reranked = await ctx.deps.llm_reranker.rerank(
+                    question, reranked, top_k=15
+                )
             except Exception:
                 reranked = reranked[:15]
         else:
             reranked = reranked[:15]
 
         # Update state
-        ctx.state.primary_evidence = [e for e in reranked if e.layer == EvidenceLayer.PRIMARY]
-        ctx.state.secondary_evidence = [e for e in reranked if e.layer == EvidenceLayer.SECONDARY]
+        ctx.state.primary_evidence = [
+            e for e in reranked if e.layer == EvidenceLayer.PRIMARY
+        ]
+        ctx.state.secondary_evidence = [
+            e for e in reranked if e.layer == EvidenceLayer.SECONDARY
+        ]
 
-        logger.info("DualRerank: primary=%d secondary=%d", len(ctx.state.primary_evidence), len(ctx.state.secondary_evidence))
+        logger.info(
+            "DualRerank: primary=%d secondary=%d",
+            len(ctx.state.primary_evidence),
+            len(ctx.state.secondary_evidence),
+        )
         return FetchPassagesAndLayer()
 
 
@@ -1697,7 +1784,9 @@ class FetchPassagesAndLayer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             )
             existing_ids.add(pid)
 
-        ctx.state.passages_used = sum(1 for e in ctx.state.primary_evidence if e.type == "passage")
+        ctx.state.passages_used = sum(
+            1 for e in ctx.state.primary_evidence if e.type == "passage"
+        )
         ctx.state.context_node_ids = list(ctx.state.all_node_ids())
         ctx.state.accumulated_context = _build_hierarchical_context(ctx.state)
 
@@ -1756,6 +1845,7 @@ class SelfRAGEvaluate(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         )
         try:
             from eleutheria_graphrag.agents.structured_models import SelfRAGEvaluation
+
             raw = await ctx.deps.llm.generate(prompt, temperature=0.0, max_tokens=512)
             data = _parse_json(raw)
             evaluation = SelfRAGEvaluation.model_validate(data)
@@ -1775,11 +1865,15 @@ class SelfRAGEvaluate(BaseNode[RAGState, Deps, ScholarlyAnswer]):
 
         logger.info(
             "SelfRAG: confidence=%d badge=%s",
-            evaluation.confidence, state.quality_badge,
+            evaluation.confidence,
+            state.quality_badge,
         )
 
         # Decide: refine or finalize
-        if evaluation.confidence >= 60 or state.self_rag_iterations >= state.max_self_rag_iterations:
+        if (
+            evaluation.confidence >= 60
+            or state.self_rag_iterations >= state.max_self_rag_iterations
+        ):
             return End(_make_answer())
 
         return RefineSynthesis()
@@ -1825,7 +1919,9 @@ class RefineSynthesis(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             )
             state.raw_answer = refined
         except Exception:
-            logger.warning("RefineSynthesis: generation failed, keeping original answer")
+            logger.warning(
+                "RefineSynthesis: generation failed, keeping original answer"
+            )
 
         logger.info("RefineSynthesis: iteration=%d", state.self_rag_iterations)
         return VerifyCitations()

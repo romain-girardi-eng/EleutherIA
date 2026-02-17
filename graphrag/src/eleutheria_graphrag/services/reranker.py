@@ -62,9 +62,7 @@ class RerankerService:
                 if self._model is None:
                     from sentence_transformers import CrossEncoder
 
-                    logger.info(
-                        "Loading cross-encoder model: %s", self.model_name
-                    )
+                    logger.info("Loading cross-encoder model: %s", self.model_name)
                     try:
                         self._model = CrossEncoder(self.model_name)
                     except Exception:

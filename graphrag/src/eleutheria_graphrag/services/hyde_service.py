@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 logger = logging.getLogger(__name__)
 
@@ -71,19 +71,18 @@ class HyDEService:
         prompt = HYDE_PROMPT.format(query=query)
         return await self.llm.generate(prompt, temperature=0.7, max_tokens=512)
 
-    async def search_nodes(
-        self, query: str, limit: int = 10
-    ) -> list[dict[str, Any]]:
+    async def search_nodes(self, query: str, limit: int = 10) -> list[dict[str, Any]]:
         """Generate hypothetical doc, embed it, search KG nodes."""
         hypothetical = await self.generate_hypothetical(query)
         embedding = await _get_embedding(hypothetical)
         results = await self.qdrant.search_nodes(embedding, limit=limit)
 
         # Apply confidence discount
-        for r in results:
+        typed: list[dict[str, Any]] = cast(list[dict[str, Any]], results)
+        for r in typed:
             r["score"] = r.get("score", 0.0) * CONFIDENCE_DISCOUNT
 
-        return results
+        return typed
 
     @staticmethod
     def rrf_fusion(

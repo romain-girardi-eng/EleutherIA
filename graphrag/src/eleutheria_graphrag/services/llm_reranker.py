@@ -60,7 +60,7 @@ class LLMRerankerService:
         formatted = []
         for i, ev in enumerate(candidates):
             text = (ev.text_content or ev.description or ev.label)[:TEXT_PREVIEW_LEN]
-            formatted.append(f"[{i + 1}] {ev.label}: \"{text}\"")
+            formatted.append(f'[{i + 1}] {ev.label}: "{text}"')
 
         prompt = LLM_RERANK_PROMPT.format(
             query=query,

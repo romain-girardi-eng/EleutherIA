@@ -35,7 +35,7 @@ class EvidenceSource(str, Enum):
     HYBRID_SEARCH = "hybrid_search"
     PASSAGE_CITATION = "passage_citation"
     DIRECT_LOOKUP = "direct_lookup"
-    HYDE_SEARCH = "hyde_search"        # NEW: hypothetical document embedding search
+    HYDE_SEARCH = "hyde_search"  # NEW: hypothetical document embedding search
     CRAG_SECONDARY = "crag_secondary"  # NEW: CRAG-triggered secondary retrieval
     TREE_REASONING = "tree_reasoning"  # NEW: PageIndex-inspired tree navigation
 
@@ -106,7 +106,9 @@ class ScholarlyAnswer(BaseModel):
     answer: str = Field(..., description="Generated scholarly answer")
     question: str = Field(..., description="Original question")
     complexity: QueryComplexity = Field(QueryComplexity.MEDIUM)
-    query_type: Any = Field(default="temporal", description="NEW: 5-type query classification")  # QueryType
+    query_type: Any = Field(
+        default="temporal", description="NEW: 5-type query classification"
+    )  # QueryType
     citations: list[Citation] = Field(default_factory=list)
     seed_nodes: list[str] = Field(default_factory=list)
     context_nodes: list[str] = Field(default_factory=list)
@@ -116,7 +118,9 @@ class ScholarlyAnswer(BaseModel):
     quality_badge: str = Field("", description="NEW: High / Medium / Low")
     self_rag_evaluation: Any = Field(None, description="NEW: SelfRAGEvaluation | None")
     crag_validation: Any = Field(None, description="NEW: CRAGValidation | None")
-    insufficient_evidence: bool = Field(False, description="NEW: evidence insufficiency flag")
+    insufficient_evidence: bool = Field(
+        False, description="NEW: evidence insufficiency flag"
+    )
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -186,9 +190,11 @@ class RAGState:
         """Set defaults that require import (avoids circular imports)."""
         if self.query_type is None:
             from eleutheria_graphrag.agents.pipeline_config import QueryType
+
             self.query_type = QueryType.TEMPORAL
         if self.pipeline_config is None:
             from eleutheria_graphrag.agents.pipeline_config import PipelineConfig
+
             self.pipeline_config = PipelineConfig()
 
     # ------------------------------------------------------------------
