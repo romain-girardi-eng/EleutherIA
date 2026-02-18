@@ -100,3 +100,6 @@ plugins = ["pydantic.mypy"]
 asyncio_mode = "auto"
 testpaths = ["tests"]
 addopts = "-v --tb=short"
+markers = [
+    "integration: marks tests that require live infrastructure (DATABASE_URL, Qdrant, LLM key)",
+]
