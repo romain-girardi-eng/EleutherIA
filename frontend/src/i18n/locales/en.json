@@ -1273,7 +1273,9 @@
       "hybridSearch": "Hybrid Search",
       "ancientTexts": "Ancient Texts",
       "fair": "FAIR Principles",
-      "glossary": "Glossary"
+      "glossary": "Glossary",
+      "hirag": "HiRAG Technology",
+      "hiragDetails": "Implementation"
     },
     "hero": {
       "slogan": "How It Works",

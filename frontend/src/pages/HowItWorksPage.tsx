@@ -53,8 +53,8 @@ export default function HowItWorksPage() {
     { id: 'ancient-texts', label: t('learn.nav.ancientTexts'), icon: BookOpen },
     { id: 'fair', label: t('learn.nav.fair'), icon: CheckCircle2 },
     { id: 'glossary', label: t('learn.nav.glossary'), icon: BookMarked },
-    { id: 'hirag', label: 'HiRAG Technology', icon: Cpu },
-    { id: 'hirag-details', label: 'Implementation', icon: Code },
+    { id: 'hirag', label: t('learn.nav.hirag'), icon: Cpu },
+    { id: 'hirag-details', label: t('learn.nav.hiragDetails'), icon: Code },
   ];
 
   // Update active section based on scroll
@@ -599,7 +599,7 @@ export default function HowItWorksPage() {
           <div className="max-w-6xl mx-auto">
             <SectionHeader
               icon={<Cpu className="w-8 h-8" />}
-              title="HiRAG Technology"
+              title={t('learn.nav.hirag')}
               subtitle="Hierarchical Retrieval-Augmented Generation — the AI architecture powering EleutherIA"
             />
 

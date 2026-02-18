@@ -1273,7 +1273,9 @@
       "hybridSearch": "Recherche hybride",
       "ancientTexts": "Textes anciens",
       "fair": "Principes FAIR",
-      "glossary": "Glossaire"
+      "glossary": "Glossaire",
+      "hirag": "Technologie HiRAG",
+      "hiragDetails": "Implémentation"
     },
     "hero": {
       "slogan": "Comment ça marche",
