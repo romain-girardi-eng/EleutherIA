@@ -42,7 +42,7 @@ export default defineConfig({
           // Separate charting/data visualization libraries
           'charts-vendor': ['d3', 'recharts'],
           // Separate animation libraries
-          'animation-vendor': ['framer-motion', 'canvas-confetti'],
+          'animation-vendor': ['framer-motion'],
           // Separate React ecosystem
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           // Separate markdown and UI libraries
