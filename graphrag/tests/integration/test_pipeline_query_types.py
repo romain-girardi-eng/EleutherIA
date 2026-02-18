@@ -1,283 +1,244 @@
-"""Integration tests: one full-pipeline run per query type.
+"""Production-grade integration tests: full pipeline per query type.
 
-These tests exercise the complete 17-node FSM from ClassifyQueryType
-to End, with mocked external dependencies (LLM, Qdrant, DB).
-Each test covers one of the 5 query types in the taxonomy.
+These tests hit real services — PostgreSQL, Qdrant, and a live LLM.
+They are skipped automatically when the required environment variables
+are not set, so they never break CI without infrastructure.
+
+Run locally:
+    DATABASE_URL='...' QDRANT_URL='...' MOONSHOT_API_KEY='...' \
+    pytest tests/integration/ -v -m integration
+
+Required env vars (at least one LLM key must be present):
+    DATABASE_URL     — asyncpg-compatible PostgreSQL connection string
+    QDRANT_URL       — Qdrant server URL (default: http://localhost:6333)
+    MOONSHOT_API_KEY — Kimi K2 (preferred)
+    GEMINI_API_KEY   — Gemini (fallback)
+    OPENROUTER_API_KEY — OpenRouter (fallback)
 """
 
 from __future__ import annotations
 
-from unittest.mock import AsyncMock, patch
+import os
 
 import pytest
 
-from eleutheria_graphrag.agents.dependencies import Deps
-from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
 from eleutheria_graphrag.agents.pipeline_config import QueryType
+from eleutheria_graphrag.agents.state import ScholarlyAnswer
+from eleutheria_graphrag.services.graphrag_service import GraphRAGService
+from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
 
 
 # ---------------------------------------------------------------------------
-# Shared mock factory
+# Helpers
 # ---------------------------------------------------------------------------
 
-
-def _make_deps(llm_responses: list[str]) -> Deps:
-    """Build a mock Deps with a cycling LLM response list."""
-    _responses = list(llm_responses)
-    _idx = [0]
-
-    async def _side_effect(*args, **kwargs):
-        r = _responses[min(_idx[0], len(_responses) - 1)]
-        _idx[0] += 1
-        return r
-
-    llm = AsyncMock()
-    llm.generate = AsyncMock(side_effect=_side_effect)
-
-    qdrant = AsyncMock()
-    qdrant.search_nodes = AsyncMock(
-        return_value=[
-            {"id": "chrysippus", "score": 0.93},
-            {"id": "fate_concept", "score": 0.85},
-        ]
+def _require_env() -> None:
+    """Skip the entire module if infrastructure is not available."""
+    missing = []
+    if not os.getenv("DATABASE_URL"):
+        missing.append("DATABASE_URL")
+    has_llm = any(
+        os.getenv(k)
+        for k in ("MOONSHOT_API_KEY", "GEMINI_API_KEY", "OPENROUTER_API_KEY")
     )
+    if not has_llm:
+        missing.append("MOONSHOT_API_KEY / GEMINI_API_KEY / OPENROUTER_API_KEY")
+    if missing:
+        pytest.skip(
+            f"Integration env vars not set: {', '.join(missing)}",
+            allow_module_level=True,
+        )
 
-    db = AsyncMock()
-    db.fetch = AsyncMock(return_value=[])
 
-    return Deps(
-        db=db,
-        qdrant=qdrant,
-        llm=llm,
-        node_lookup={
-            "chrysippus": {
-                "id": "chrysippus",
-                "label": "Chrysippus",
-                "type": "Person",
-                "description": "Third head of the Stoic school. Leading Stoic philosopher.",
-                "period": "Hellenistic",
-                "school": "Stoicism",
-                "role": None,
-            },
-            "fate_concept": {
-                "id": "fate_concept",
-                "label": "Fate (heimarmenē)",
-                "type": "Concept",
-                "description": "The Stoic concept of deterministic fate, linked to the world-reason.",
-                "period": "Hellenistic",
-                "school": "Stoicism",
-                "role": None,
-            },
-            "epicurus": {
-                "id": "epicurus",
-                "label": "Epicurus",
-                "type": "Person",
-                "description": "Founder of Epicureanism.",
-                "period": "Hellenistic",
-                "school": "Epicureanism",
-                "role": None,
-            },
-        },
-        outgoing_edges={},
-        incoming_edges={},
+_require_env()
+
+
+def _build_llm() -> LLMService:
+    """Return an LLMService using whichever key is available."""
+    if os.getenv("MOONSHOT_API_KEY"):
+        return LLMService(preferred_provider=ModelProvider.KIMI)
+    if os.getenv("GEMINI_API_KEY"):
+        return LLMService(preferred_provider=ModelProvider.GEMINI)
+    return LLMService(preferred_provider=ModelProvider.OPENROUTER)
+
+
+# ---------------------------------------------------------------------------
+# Session-scoped fixture — real services, KG loaded once
+# ---------------------------------------------------------------------------
+
+@pytest.fixture(scope="session")
+async def graphrag() -> GraphRAGService:
+    """Boot a real GraphRAGService backed by live DB, Qdrant, and LLM."""
+    import sys
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../../database/src"))
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../../kg/src"))
+
+    from eleutheria_database.services.db import DatabaseService
+    from eleutheria_kg.services.qdrant import QdrantService
+
+    db = DatabaseService()
+    await db.connect()
+
+    qdrant = QdrantService()
+    await qdrant.connect()
+
+    llm = _build_llm()
+
+    svc = GraphRAGService(
+        db_service=db,
+        qdrant_service=qdrant,
+        llm_service=llm,
     )
+    await svc.load_kg()
 
+    yield svc
 
-_EMB_PATCH = patch(
-    "eleutheria_graphrag.agents.graph_nodes._get_embedding",
-    new_callable=AsyncMock,
-    return_value=[0.1] * 768,
-)
-
-# Shared self-RAG eval (high quality) reused in all tests
-_SELF_RAG_OK = '{"relevance": 85, "grounding": 88, "completeness": 82, "confidence": 85, "caveats": [], "improvements": []}'
-_CRAG_OK = '{"relevance": 80, "completeness": 75, "confidence": 78, "reasoning": "sufficient"}'
+    await svc.close()
 
 
 # ---------------------------------------------------------------------------
-# Test 1: specific_entity
+# Test 1 — specific_entity
 # ---------------------------------------------------------------------------
 
-
+@pytest.mark.integration
 class TestSpecificEntityPipeline:
-    """simple: ClassifyQueryType → ExpandQuery → DirectKGLookup → TreeReasoningRetrieve
-    → CRAGValidate → DualRerank → FetchPassagesAndLayer → Synthesize
-    → VerifyCitations → SelfRAGEvaluate → End"""
+    """Single philosopher or concept: direct KG lookup path."""
 
-    @pytest.mark.asyncio
-    async def test_specific_entity_full_pipeline(self):
-        # specific_entity: use_expansion=True, use_hyde=False, use_crag=True, use_self_rag=True
-        responses = [
-            '{"query_type": "specific_entity", "complexity": "simple", "reason": "single person"}',
-            # ExpandQuery (use_expansion=True for specific_entity)
-            '{"expanded_query": "Chrysippus (Chrysippos)", "greek_terms": [], "latin_terms": [], "related_philosophers": ["Chrysippus"], "related_concepts": []}',
-            # CRAGValidate
-            _CRAG_OK,
-            # Synthesize
-            "Chrysippus (c. 280-207 BCE) was the third head of the Stoic school [1].",
-            # SelfRAGEvaluate
-            _SELF_RAG_OK,
-        ]
-        deps = _make_deps(responses)
-        agent = ScholarlyAgent(deps)
+    async def test_chrysippus_query(self, graphrag: GraphRAGService) -> None:
+        agent = graphrag._ensure_agent()
+        answer: ScholarlyAnswer = await agent.query("Who was Chrysippus?")
 
-        with _EMB_PATCH:
-            answer = await agent.query("Who was Chrysippus?")
-
+        assert isinstance(answer, ScholarlyAnswer)
+        assert len(answer.answer) > 100, "Answer should be substantive"
         assert answer.query_type == QueryType.SPECIFIC_ENTITY
-        assert "Chrysippus" in answer.answer
-        assert answer.quality_badge == "High"
+        assert answer.quality_badge in ("High", "Medium", "Low")
+        assert not answer.insufficient_evidence, "Should find Chrysippus in KG"
 
 
 # ---------------------------------------------------------------------------
-# Test 2: global_abstract
+# Test 2 — global_abstract
 # ---------------------------------------------------------------------------
 
-
+@pytest.mark.integration
 class TestGlobalAbstractPipeline:
-    """medium: ClassifyQueryType → ExpandQuery (skip) → HybridRetrieve
-    → TreeReasoningRetrieve → CRAGValidate → DualRerank → FetchPassagesAndLayer
-    → Synthesize → VerifyCitations → SelfRAGEvaluate → End"""
+    """Broad doctrinal question: hybrid retrieval + HyDE path."""
 
-    @pytest.mark.asyncio
-    async def test_global_abstract_full_pipeline(self):
-        # global_abstract: use_expansion=False, use_hyde=True (but no deps.hyde), use_crag=True
-        responses = [
-            '{"query_type": "global_abstract", "complexity": "medium", "reason": "abstract doctrine"}',
-            # ExpandQuery skips LLM (use_expansion=False for global_abstract)
-            # CRAGValidate
-            _CRAG_OK,
-            # Synthesize
-            "The Stoics believed fate (heimarmenē) was the all-encompassing causal chain [1].",
-            # SelfRAGEvaluate
-            _SELF_RAG_OK,
-        ]
-        deps = _make_deps(responses)
-        agent = ScholarlyAgent(deps)
+    async def test_stoic_fate_query(self, graphrag: GraphRAGService) -> None:
+        agent = graphrag._ensure_agent()
+        answer: ScholarlyAnswer = await agent.query(
+            "What did the Stoics believe about fate?"
+        )
 
-        with _EMB_PATCH:
-            answer = await agent.query("What did the Stoics believe about fate?")
-
+        assert isinstance(answer, ScholarlyAnswer)
+        assert len(answer.answer) > 150
         assert answer.query_type == QueryType.GLOBAL_ABSTRACT
-        assert "fate" in answer.answer.lower() or "Stoic" in answer.answer
-        assert answer.quality_badge in ("High", "Medium")
+        assert answer.quality_badge in ("High", "Medium", "Low")
+        # Stoic doctrine should be well-attested in the KG
+        assert not answer.insufficient_evidence
 
 
 # ---------------------------------------------------------------------------
-# Test 3: multi_hop
+# Test 3 — multi_hop
 # ---------------------------------------------------------------------------
 
-
+@pytest.mark.integration
 class TestMultiHopPipeline:
-    """complex: ClassifyQueryType → ExpandQuery → DecomposeQuery
-    → SearchPrimarySources → EvaluateSufficiency (LLM) → TreeReasoningRetrieve
-    → CRAGValidate → DualRerank → FetchPassagesAndLayer → SearchSecondarySources
-    → SynthesizeWithHierarchy → VerifyCitations → SelfRAGEvaluate → End"""
+    """Multi-step reasoning across philosophers: decompose + traverse path."""
 
-    @pytest.mark.asyncio
-    async def test_multi_hop_full_pipeline(self):
-        responses = [
-            # ClassifyQueryType
-            '{"query_type": "multi_hop", "complexity": "complex", "reason": "multi-hop evolution"}',
-            # ExpandQuery (use_expansion=True for multi_hop)
-            '{"expanded_query": "Stoic fate Chrysippus Epictetus", "greek_terms": [], "latin_terms": [], "related_philosophers": ["Chrysippus", "Epictetus"], "related_concepts": ["fate"]}',
-            # DecomposeQuery
-            '["What was Chrysippus\'s view of fate?", "How did Epictetus modify this?"]',
-            # EvaluateSufficiency (heuristic won't pass: 2 nodes, 0 passages)
-            '{"score": 0.85, "sufficient": true, "reason": "enough primary sources"}',
-            # CRAGValidate
-            _CRAG_OK,
-            # SynthesizeWithHierarchy
-            "Chrysippus [1] established fate as an unbroken chain of causes. Epictetus [2] emphasized what is in our power.",
-            # SelfRAGEvaluate
-            _SELF_RAG_OK,
-        ]
-        deps = _make_deps(responses)
-        agent = ScholarlyAgent(deps)
+    async def test_chrysippus_to_epictetus_evolution(
+        self, graphrag: GraphRAGService
+    ) -> None:
+        agent = graphrag._ensure_agent()
+        answer: ScholarlyAnswer = await agent.query(
+            "How did Stoic views on fate evolve from Chrysippus to Epictetus?"
+        )
 
-        with _EMB_PATCH:
-            answer = await agent.query(
-                "How did Stoic views on fate evolve from Chrysippus to Epictetus?"
-            )
-
+        assert isinstance(answer, ScholarlyAnswer)
+        assert len(answer.answer) > 150
         assert answer.query_type == QueryType.MULTI_HOP
+        assert answer.quality_badge in ("High", "Medium", "Low")
+        # Multi-hop should decompose into sub-questions
         assert len(answer.sub_queries) >= 1
-        assert answer.quality_badge in ("High", "Medium")
 
 
 # ---------------------------------------------------------------------------
-# Test 4: comparative
+# Test 4 — comparative
 # ---------------------------------------------------------------------------
 
-
+@pytest.mark.integration
 class TestComparativePipeline:
-    """complex: ClassifyQueryType → ExpandQuery → HybridRetrieve
-    → TreeReasoningRetrieve → CRAGValidate → DualRerank → FetchPassagesAndLayer
-    → SearchSecondarySources → SynthesizeWithHierarchy → VerifyCitations
-    → SelfRAGEvaluate → End"""
+    """Comparing two schools: dual retrieval + synthesis path."""
 
-    @pytest.mark.asyncio
-    async def test_comparative_full_pipeline(self):
-        responses = [
-            # ClassifyQueryType
-            '{"query_type": "comparative", "complexity": "complex", "reason": "compare two schools"}',
-            # ExpandQuery (use_expansion=True for comparative)
-            '{"expanded_query": "Stoic Epicurean fate determinism comparison", "greek_terms": [], "latin_terms": [], "related_philosophers": [], "related_concepts": ["fate", "determinism"]}',
-            # CRAGValidate
-            _CRAG_OK,
-            # SynthesizeWithHierarchy (comparative routes to SearchSecondarySources first)
-            "Stoics held fate as an unbroken causal chain [1], while Epicureans introduced the swerve [2] to escape necessity.",
-            # SelfRAGEvaluate
-            _SELF_RAG_OK,
-        ]
-        deps = _make_deps(responses)
-        agent = ScholarlyAgent(deps)
+    async def test_stoic_vs_epicurean_determinism(
+        self, graphrag: GraphRAGService
+    ) -> None:
+        agent = graphrag._ensure_agent()
+        answer: ScholarlyAnswer = await agent.query(
+            "Compare Stoic and Epicurean views on determinism and free will"
+        )
 
-        with _EMB_PATCH:
-            answer = await agent.query(
-                "Compare Stoic and Epicurean views on fate and determinism"
-            )
-
+        assert isinstance(answer, ScholarlyAnswer)
+        assert len(answer.answer) > 150
         assert answer.query_type == QueryType.COMPARATIVE
-        assert "Stoic" in answer.answer or "Epicurean" in answer.answer
+        assert answer.quality_badge in ("High", "Medium", "Low")
 
 
 # ---------------------------------------------------------------------------
-# Test 5: temporal
+# Test 5 — temporal
 # ---------------------------------------------------------------------------
 
-
+@pytest.mark.integration
 class TestTemporalPipeline:
-    """complex: ClassifyQueryType → ExpandQuery → DecomposeQuery
-    → SearchPrimarySources → EvaluateSufficiency → TreeReasoningRetrieve
-    → CRAGValidate → DualRerank → FetchPassagesAndLayer → SearchSecondarySources
-    → SynthesizeWithHierarchy → VerifyCitations → SelfRAGEvaluate → End"""
+    """Historical development across periods: chronological traversal path."""
 
-    @pytest.mark.asyncio
-    async def test_temporal_full_pipeline(self):
-        responses = [
-            # ClassifyQueryType
-            '{"query_type": "temporal", "complexity": "complex", "reason": "historical evolution"}',
-            # ExpandQuery (use_expansion=True for temporal)
-            '{"expanded_query": "Stoic free will history evolution", "greek_terms": [], "latin_terms": [], "related_philosophers": ["Chrysippus", "Epictetus", "Marcus Aurelius"], "related_concepts": ["free will"]}',
-            # DecomposeQuery
-            '["Early Stoicism on free will", "Late Stoicism on free will"]',
-            # EvaluateSufficiency
-            '{"score": 0.8, "sufficient": true, "reason": "sufficient"}',
-            # CRAGValidate
-            _CRAG_OK,
-            # SynthesizeWithHierarchy
-            "The Stoic position on free will evolved significantly from Early [1] to Late Stoicism [2].",
-            # SelfRAGEvaluate
-            _SELF_RAG_OK,
-        ]
-        deps = _make_deps(responses)
-        agent = ScholarlyAgent(deps)
+    async def test_free_will_plato_to_augustine(
+        self, graphrag: GraphRAGService
+    ) -> None:
+        agent = graphrag._ensure_agent()
+        answer: ScholarlyAnswer = await agent.query(
+            "How did debates about free will develop from Plato to Augustine?"
+        )
 
-        with _EMB_PATCH:
-            answer = await agent.query(
-                "How did Stoic views on free will change historically?"
-            )
-
+        assert isinstance(answer, ScholarlyAnswer)
+        assert len(answer.answer) > 150
         assert answer.query_type == QueryType.TEMPORAL
-        assert "Stoic" in answer.answer or "free will" in answer.answer.lower()
+        assert answer.quality_badge in ("High", "Medium", "Low")
+
+
+# ---------------------------------------------------------------------------
+# Test 6 — answer quality invariants (run on any query type)
+# ---------------------------------------------------------------------------
+
+@pytest.mark.integration
+class TestAnswerQualityInvariants:
+    """Cross-cutting quality checks that hold regardless of query type."""
+
+    async def test_answer_never_empty(self, graphrag: GraphRAGService) -> None:
+        agent = graphrag._ensure_agent()
+        answer: ScholarlyAnswer = await agent.query(
+            "What is the Stoic concept of heimarmenē?"
+        )
+        assert answer.answer.strip(), "Answer must never be empty"
+        assert answer.question == "What is the Stoic concept of heimarmenē?"
+
+    async def test_self_rag_badge_always_set(
+        self, graphrag: GraphRAGService
+    ) -> None:
+        agent = graphrag._ensure_agent()
+        answer: ScholarlyAnswer = await agent.query(
+            "What is moral responsibility in Aristotle?"
+        )
+        assert answer.quality_badge in (
+            "High", "Medium", "Low"
+        ), f"Unexpected badge: {answer.quality_badge!r}"
+
+    async def test_kg_loaded_with_real_data(
+        self, graphrag: GraphRAGService
+    ) -> None:
+        """The KG must have been loaded with production data."""
+        assert len(graphrag.node_lookup) >= 100, (
+            f"Expected ≥100 KG nodes, got {len(graphrag.node_lookup)}"
+        )
+        assert len(graphrag.outgoing_edges) >= 50, (
+            f"Expected ≥50 edge sources, got {len(graphrag.outgoing_edges)}"
+        )
