@@ -52,6 +52,7 @@ export default function GraphRAGPage() {
   const [useThinking, setUseThinking] = useState(false);
   const [_citationStyle, _setCitationStyle] = useState<'chicago' | 'apa' | 'harvard'>('chicago');
   const [ancientOnly, setAncientOnly] = useState(false);
+  const [agenticMode, setAgenticMode] = useState(false);
   const [_reasoningSteps, setReasoningSteps] = useState<ReasoningStep[]>([]);
   const [_currentQuery, setCurrentQuery] = useState<string>('');
 
@@ -160,9 +161,13 @@ export default function GraphRAGPage() {
     setError(null);
 
     // Always use streaming — /api/graphrag/answer and workflow endpoints are non-functional
-    await handleStreamingQuery(queryText);
+    if (agenticMode) {
+      await handleAgenticQuery(queryText);
+    } else {
+      await handleStreamingQuery(queryText);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [useThinking]);
+  }, [useThinking, agenticMode]);
 
   useEffect(() => {
     const state = location.state as { initialQuery?: string } | null;
@@ -213,7 +218,12 @@ export default function GraphRAGPage() {
     );
   };
 
-  const handleStreamingQuery = async (queryText: string) => {
+  const handleAgenticQuery = async (queryText: string) => {
+    const agenticUrl = import.meta.env.VITE_AGENTIC_API_URL || 'http://localhost:8000';
+    await handleStreamingQuery(queryText, agenticUrl, 'question');
+  };
+
+  const handleStreamingQuery = async (queryText: string, apiUrlOverride?: string, queryParamName: string = 'query') => {
     setStreaming(true);
     setStreamedAnswer('');
     setStreamStatus('Connecting...');
@@ -221,7 +231,7 @@ export default function GraphRAGPage() {
 
     try {
       const token = Cookies.get('auth_token');
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const apiUrl = apiUrlOverride ?? (import.meta.env.VITE_API_URL || 'http://localhost:8000');
 
       const abortController = new AbortController();
       abortControllerRef.current = abortController;
@@ -231,7 +241,7 @@ export default function GraphRAGPage() {
       }, 120000);
 
       const params = new URLSearchParams({
-        query: queryText,
+        [queryParamName]: queryText,
         semantic_k: semanticK.toString(),
         graph_depth: graphDepth.toString(),
         max_context: maxContext.toString(),
@@ -587,6 +597,15 @@ export default function GraphRAGPage() {
                             />
                             <span className="text-gray-700 text-xs sm:text-sm">🏛️ Ancient Only</span>
                           </label>
+                          <label className="flex items-center gap-2 cursor-pointer min-h-[44px] px-2" title="Full pydantic-AI pipeline on Render (experimental, 30s cold start)">
+                            <input
+                              type="checkbox"
+                              checked={agenticMode}
+                              onChange={(e) => setAgenticMode(e.target.checked)}
+                              className="w-5 h-5 sm:w-4 sm:h-4 text-orange-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
+                            />
+                            <span className="text-gray-700 text-xs sm:text-sm">⚡ Agentic</span>
+                          </label>
                         </div>
                       </div>
 
@@ -595,6 +614,15 @@ export default function GraphRAGPage() {
                           <div className="text-xs text-amber-700 bg-amber-50/80 backdrop-blur-md px-4 py-2 rounded-full border border-amber-200 max-w-md text-center">
                             <span className="font-medium">🌟 Academic Mode:</span> Like the Stoics debating εἱμαρμένη, some things take time.
                             <span className="text-amber-600 ml-1">Expect 2–5 minutes for thorough analysis.</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {agenticMode && (
+                        <div className="flex justify-center">
+                          <div className="text-xs text-orange-700 bg-orange-50/80 backdrop-blur-md px-4 py-2 rounded-full border border-orange-200 max-w-lg text-center">
+                            <span className="font-medium">⚡ Agentic Mode (Experimental):</span> Uses the full pydantic-AI pipeline (HyDE · CRAG · Self-RAG · tree reasoning).
+                            <span className="text-orange-600 ml-1">First query may take up to 30s while the backend warms up.</span>
                           </div>
                         </div>
                       )}
@@ -684,7 +712,7 @@ export default function GraphRAGPage() {
                 {streaming && (
                   <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-4 flex flex-col items-center">
                     <div className={`flex justify-center items-center w-full ${streamedAnswer ? 'py-4' : 'min-h-[50vh]'}`}>
-                      <TerminalLoader size="large" />
+                      <TerminalLoader size="large" title={agenticMode ? "Pydantic-AI Engine" : undefined} />
                     </div>
 
                     {streamedAnswer && (
