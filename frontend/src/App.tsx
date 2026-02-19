@@ -37,14 +37,11 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const SubmitCorrectionPage = lazy(() => import('./pages/SubmitCorrectionPage'));
 const UserProfilePage = lazy(() => import('./pages/UserProfilePage'));
 
-// HowItWorksPage - Explains the system architecture and pipeline
+// HowItWorksPage - Scroll-snap redesigned landing
 const HowItWorksPage = lazy(() => import('./pages/HowItWorksPage'));
 
 // HomePage - Main landing page with educational content and features overview
 const HomePage = lazy(() => import('./pages/HomePage'));
-
-// HowItWorksPage - Scroll-snap redesigned landing
-const HowItWorksPage = lazy(() => import('./pages/HowItWorksPage'));
 
 // Helper function to get page titles for screen reader announcements
 function getPageTitle(pathname: string): string {
@@ -362,7 +359,6 @@ function AppContent() {
               <Route path="/simple/:textId" element={<SimpleTextReader />} />
               <Route path="/bibliography" element={<BibliographyPage />} />
               <Route path="/about" element={<AboutPage />} />
-              <Route path="/how-it-works" element={<Suspense fallback={<PageLoadingFallback />}><HowItWorksPage /></Suspense>} />
               <Route path="/credits" element={<CreditsPage />} />
               <Route path="/report-error" element={<ReportErrorPage />} />
               {/* Admin and Community Features */}
