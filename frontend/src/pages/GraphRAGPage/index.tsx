@@ -68,22 +68,17 @@ export default function GraphRAGPage() {
   });
 
   // Right panel
-  const [rightPanelState, setRightPanelState] = useState<RightPanelState>('idle');
-  const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(null);
-  const [rightPanelResponse, setRightPanelResponse] = useState<GraphRAGResponse | null>(null);
+  const [_rightPanelState, setRightPanelState] = useState<RightPanelState>('idle');
+  const [_activeSourceIndex, setActiveSourceIndex] = useState<number | null>(null);
+  const [_rightPanelResponse, setRightPanelResponse] = useState<GraphRAGResponse | null>(null);
   const highlightNodeRef = useRef<((citationIndex: number) => void) | null>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // @ts-ignore -- will be wired to JSX in Task 6
   const handleCitationClick = (citationIndex: number) => {
     setActiveSourceIndex(citationIndex);
     setRightPanelState('source-detail');
     highlightNodeRef.current?.(citationIndex);
   };
-  // Suppress unused-variable errors until JSX wiring in next task
-  void rightPanelState;
-  void activeSourceIndex;
-  void rightPanelResponse;
-  void handleCitationClick;
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -153,7 +148,7 @@ export default function GraphRAGPage() {
     };
 
     setMessages([demoMessage, assistantMessage]);
-    setRightPanelResponse(mockGraphRAGResponse as unknown as GraphRAGResponse);
+    setRightPanelResponse(mockGraphRAGResponse);
     setRightPanelState('graph');
     setReasoningSteps(mockReasoningSteps);
     setCurrentQuery(mockGraphRAGResponse.query);
@@ -251,6 +246,7 @@ export default function GraphRAGPage() {
     setStreaming(true);
     setRightPanelState('loading');
     setRightPanelResponse(null);
+    setActiveSourceIndex(null);
     setStreamedAnswer('');
     setStreamStatus('Connecting...');
     initializeReasoningSteps(queryText);
