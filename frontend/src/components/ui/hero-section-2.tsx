@@ -114,11 +114,13 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
       >
 
         {/* ── Single background — rendered ONCE to avoid zero-size duplicate ── */}
+        {/* On desktop, translate-x-1/4 shifts canvas 25% right so particles   */}
+        {/* center at 75% screen (right-half center), matching original layout. */}
         {backgroundComponent ? (
-          <div className="absolute inset-0 bg-zinc-950">{backgroundComponent}</div>
+          <div className="absolute inset-0 bg-zinc-950 md:translate-x-1/4">{backgroundComponent}</div>
         ) : backgroundImage ? (
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 md:translate-x-1/4"
             style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
           />
         ) : (
@@ -194,12 +196,13 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
         </motion.div>
 
         {/* ── DESKTOP white panel sweeps in from right with diagonal (>= md) ── */}
-        {/*   Particles are the shared bg; the white panel clips with the same  */}
-        {/*   diagonal angle as the original right-panel clip-path animation.   */}
+        {/* Panel is 55% wide: 100% = 55% screen (top), 90.91% = 50% screen   */}
+        {/* (bottom) — identical diagonal angle to the original right-panel.   */}
         <motion.div
-          className="hidden md:flex absolute inset-y-0 left-0 w-1/2 z-10 bg-white flex-col justify-center px-6 md:pt-16 md:pb-6 lg:px-8 lg:pt-16 lg:pb-6 xl:px-10"
-          initial={{ clipPath: 'polygon(110% 0, 110% 0, 110% 100%, 110% 100%)' }}
-          animate={{ clipPath: 'polygon(0% 0, 110% 0, 100% 100%, 0% 100%)' }}
+          className="hidden md:flex absolute inset-y-0 left-0 z-10 bg-white flex-col justify-center px-6 md:pt-16 md:pb-6 lg:px-8 lg:pt-16 lg:pb-6 xl:px-10"
+          style={{ width: '55%' }}
+          initial={{ clipPath: 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)' }}
+          animate={{ clipPath: 'polygon(0% 0%, 100% 0%, 90.91% 100%, 0% 100%)' }}
           transition={{ duration: 1.2, ease: "circOut" as const }}
         >
           <div className="max-w-2xl mx-auto w-full">

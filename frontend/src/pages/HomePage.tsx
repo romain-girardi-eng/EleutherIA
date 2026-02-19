@@ -37,7 +37,7 @@ export default function HomePage() {
           title={
             <>
               {t('learn.hero.title')} <br />
-              <span className="text-primary-600">{t('learn.hero.titleHighlight')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">{t('learn.hero.titleHighlight')}</span>
             </>
           }
           subtitle={t('learn.hero.subtitle')}
