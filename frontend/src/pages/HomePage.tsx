@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Maximize2, Minimize2, ArrowRight, Network, Sparkles } from 'lucide-react';
+import { Maximize2, Minimize2, Network, Sparkles, BookOpen } from 'lucide-react';
 import { HeroSection } from '../components/ui/hero-section-2';
 import { MorphingParticles } from '../components/MorphingParticles';
 
@@ -53,16 +53,19 @@ export default function HomePage() {
 
   const ctaButtons = (
     <>
-      {/* Primary CTA */}
+      {/* How It Works — full-width top card */}
       <a
         href="/how-it-works"
-        className="group flex items-center justify-between w-full rounded-xl bg-gradient-to-r from-orange-500 to-amber-400 px-5 py-3.5 text-white font-semibold text-sm hover:from-orange-400 hover:to-amber-300 hover:shadow-[0_0_24px_rgba(249,115,22,0.35)] transition-all duration-200"
+        className="group flex flex-col gap-0.5 w-full rounded-xl px-4 py-3 border border-white/15 md:border-zinc-200 bg-white/5 md:bg-white hover:border-orange-400 transition-colors duration-200"
       >
-        <span>{t('learn.hero.cta')}</span>
-        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+        <div className="flex items-center gap-1.5">
+          <BookOpen className="w-3.5 h-3.5 text-orange-400 md:text-orange-500 flex-shrink-0" />
+          <span className="font-semibold text-xs text-white md:text-zinc-800 group-hover:text-orange-400 md:group-hover:text-orange-600 transition-colors">{t('nav.howItWorks')}</span>
+        </div>
+        <span className="text-[9px] text-white/35 md:text-zinc-400">Architecture · embeddings · RAG pipeline</span>
       </a>
 
-      {/* Secondary pair — minimal bordered cards */}
+      {/* Knowledge Graph + GraphRAG pair */}
       <div className="grid grid-cols-2 gap-2">
         <a
           href="/visualizer"
