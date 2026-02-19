@@ -11,11 +11,11 @@ import { ShineBorder } from '../../components/ui/shine-border';
 import { AuroraBackground } from '../../components/ui/aurora-background';
 import { Typewriter } from '../../components/ui/typewriter';
 import NodeDetailPanel from '../../components/NodeDetailPanel';
-import { CitationPreview } from '../../components/ui/citation-preview';
-import { CitationRenderer, SourcesPanel } from '../../components/CitationRenderer';
-import BibliographyPanel from '../../components/BibliographyPanel';
-import EvidenceChainPanel from '../../components/EvidenceChainPanel';
+import { CitationRenderer } from '../../components/CitationRenderer';
 import { TerminalLoader } from '../../components/ui/terminal-loader';
+import RightPanel from '../../components/graphrag/RightPanel';
+import AdvancedOptions from '../../components/graphrag/AdvancedOptions';
+import { BottomSheet } from '../../components/ui/BottomSheet';
 import type { GraphRAGResponse, GraphRAGStreamEvent, GraphRAGChatMessage, KGNode } from '../../types';
 import type { ReasoningStep } from '../../types/graphrag';
 import {
@@ -32,7 +32,7 @@ export default function GraphRAGPage() {
   const [query, setQuery] = useState('');
   const [loading, _setLoading] = useState(false);
   const [streaming, setStreaming] = useState(false);
-  const [streamedAnswer, setStreamedAnswer] = useState('');
+  const [_streamedAnswer, setStreamedAnswer] = useState('');
   const [_streamStatus, setStreamStatus] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -60,7 +60,7 @@ export default function GraphRAGPage() {
   const [_currentQuery, setCurrentQuery] = useState<string>('');
 
   // Dynamic KG stats
-  const [kgStats, setKgStats] = useState({
+  const [_kgStats, setKgStats] = useState({
     nodes: 0,
     edges: 0,
     sources: 0,
@@ -68,16 +68,24 @@ export default function GraphRAGPage() {
   });
 
   // Right panel
-  const [_rightPanelState, setRightPanelState] = useState<RightPanelState>('idle');
-  const [_activeSourceIndex, setActiveSourceIndex] = useState<number | null>(null);
-  const [_rightPanelResponse, setRightPanelResponse] = useState<GraphRAGResponse | null>(null);
+  const [rightPanelState, setRightPanelState] = useState<RightPanelState>('idle');
+  const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(null);
+  const [rightPanelResponse, setRightPanelResponse] = useState<GraphRAGResponse | null>(null);
   const highlightNodeRef = useRef<((citationIndex: number) => void) | null>(null);
 
-  // @ts-ignore -- will be wired to JSX in Task 6
   const handleCitationClick = (citationIndex: number) => {
     setActiveSourceIndex(citationIndex);
     setRightPanelState('source-detail');
     highlightNodeRef.current?.(citationIndex);
+  };
+
+  const onPrevSource = () => {
+    setActiveSourceIndex(prev => (prev !== null && prev > 0 ? prev - 1 : prev));
+  };
+
+  const onNextSource = () => {
+    const sources = rightPanelResponse?.sources ?? [];
+    setActiveSourceIndex(prev => (prev !== null && prev < sources.length - 1 ? prev + 1 : prev));
   };
 
   useEffect(() => {
@@ -510,22 +518,20 @@ export default function GraphRAGPage() {
   return (
     <AuroraBackground className="!min-h-screen !h-auto">
       <div className="relative min-h-screen overflow-hidden">
-
         <div className="relative z-10 min-h-screen">
 
-          {/* Welcome / empty state — centered */}
+          {/* ── WELCOME STATE ──────────────────────────────── */}
           {messages.length === 0 && !streaming && (
             <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 py-12">
-              <div className="w-full max-w-4xl">
+              <div className="w-full max-w-2xl">
 
-                {/* Header */}
                 <motion.div
-                  className="text-center mb-12"
+                  className="text-center mb-10"
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
                 >
-                  <h1 className="text-5xl md:text-6xl font-semibold text-gray-900 mb-4 drop-shadow-sm">
+                  <h1 className="text-5xl md:text-6xl font-semibold text-gray-900 mb-3 drop-shadow-sm">
                     <Typewriter
                       text={["HiRAG", "Knowledge Graph", "Ancient Philosophy", "Scholarly Q&A"]}
                       speed={100}
@@ -535,35 +541,18 @@ export default function GraphRAGPage() {
                       cursorChar="_"
                     />
                   </h1>
-                  <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+                  <p className="text-base text-gray-600 max-w-lg mx-auto">
                     {t('graphrag.description')}
                   </p>
-
-                  {/* Stats pills */}
-                  <div className="flex flex-wrap justify-center gap-3 mt-6">
-                    <span className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 shadow-sm border border-gray-200">
-                      {kgStats.nodes.toLocaleString()} Nodes
-                    </span>
-                    <span className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 shadow-sm border border-gray-200">
-                      {kgStats.edges.toLocaleString()} Edges
-                    </span>
-                    <span className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 shadow-sm border border-gray-200">
-                      {kgStats.sources.toLocaleString()} Sources
-                    </span>
-                    <span className="px-4 py-2 bg-blue-50 backdrop-blur-sm rounded-full text-sm font-medium text-blue-700 shadow-sm border border-blue-200">
-                      {kgStats.hierarchyLayers} Hierarchy Layers
-                    </span>
-                  </div>
                 </motion.div>
 
-                {/* Input */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                   className="space-y-4"
                 >
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  <form onSubmit={handleSubmit}>
                     <ShineBorder
                       className="!p-0 bg-white/95 backdrop-blur-sm"
                       borderRadius={9999}
@@ -589,116 +578,40 @@ export default function GraphRAGPage() {
                         </button>
                       </div>
                     </ShineBorder>
-
-                    {/* Mode toggles */}
-                    <div className="space-y-3 px-2">
-                      <div className="flex justify-center">
-                        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm bg-white/60 backdrop-blur-md px-4 sm:px-6 py-3 rounded-2xl sm:rounded-full border border-gray-200">
-                          <span className="text-gray-700 font-medium w-full sm:w-auto text-center">Modes:</span>
-                          <label className="flex items-center gap-2 cursor-pointer min-h-[44px] px-2">
-                            <input
-                              type="checkbox"
-                              checked={academicMode}
-                              onChange={(e) => setAcademicMode(e.target.checked)}
-                              className="w-5 h-5 sm:w-4 sm:h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
-                            />
-                            <span className="text-gray-700">🎓 Academic</span>
-                          </label>
-                          <label className="flex items-center gap-2 cursor-pointer min-h-[44px] px-2">
-                            <input
-                              type="checkbox"
-                              checked={useThinking}
-                              onChange={(e) => setUseThinking(e.target.checked)}
-                              className="w-5 h-5 sm:w-4 sm:h-4 text-purple-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-purple-500"
-                            />
-                            <span className="text-gray-700 text-xs sm:text-sm">🧠 Deep Reasoning</span>
-                          </label>
-                          <label className="flex items-center gap-2 cursor-pointer min-h-[44px] px-2" title="Only use ancient sources (6th c. BCE – 6th c. CE)">
-                            <input
-                              type="checkbox"
-                              checked={ancientOnly}
-                              onChange={(e) => setAncientOnly(e.target.checked)}
-                              className="w-5 h-5 sm:w-4 sm:h-4 text-amber-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-amber-500"
-                            />
-                            <span className="text-gray-700 text-xs sm:text-sm">🏛️ Ancient Only</span>
-                          </label>
-                          <label className="flex items-center gap-2 cursor-pointer min-h-[44px] px-2" title="Full pydantic-AI pipeline on Render (experimental, 30s cold start)">
-                            <input
-                              type="checkbox"
-                              checked={agenticMode}
-                              onChange={(e) => setAgenticMode(e.target.checked)}
-                              className="w-5 h-5 sm:w-4 sm:h-4 text-orange-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
-                            />
-                            <span className="text-gray-700 text-xs sm:text-sm">⚡ Agentic</span>
-                          </label>
-                        </div>
-                      </div>
-
-                      {academicMode && (
-                        <div className="flex justify-center">
-                          <div className="text-xs text-amber-700 bg-amber-50/80 backdrop-blur-md px-4 py-2 rounded-full border border-amber-200 max-w-md text-center">
-                            <span className="font-medium">🌟 Academic Mode:</span> Like the Stoics debating εἱμαρμένη, some things take time.
-                            <span className="text-amber-600 ml-1">Expect 2–5 minutes for thorough analysis.</span>
-                          </div>
-                        </div>
-                      )}
-
-                      {agenticMode && (
-                        <div className="flex justify-center">
-                          <div className="text-xs text-orange-700 bg-orange-50/80 backdrop-blur-md px-4 py-2 rounded-full border border-orange-200 max-w-lg text-center">
-                            <span className="font-medium">⚡ Agentic Mode (Experimental):</span> Uses the full pydantic-AI pipeline (HyDE · CRAG · Self-RAG · tree reasoning).
-                            <span className="text-orange-600 ml-1">First query may take up to 30s while the backend warms up.</span>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Parameters */}
-                      <div className="flex justify-center items-center gap-2 sm:gap-4 flex-wrap">
-                        <div className="flex items-center gap-2 text-xs sm:text-sm bg-white/60 backdrop-blur-md px-3 sm:px-6 py-2 rounded-full border border-gray-200">
-                          <span className="text-gray-700">Breadth:</span>
-                          <select value={semanticK} onChange={(e) => setSemanticK(Number(e.target.value))} className="px-2 sm:px-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black min-h-[44px] sm:min-h-0">
-                            <option value={5}>5</option>
-                            <option value={10}>10</option>
-                            <option value={15}>15</option>
-                            <option value={20}>20</option>
-                          </select>
-                        </div>
-                        <div className="flex items-center gap-2 text-xs sm:text-sm bg-white/60 backdrop-blur-md px-3 sm:px-6 py-2 rounded-full border border-gray-200">
-                          <span className="text-gray-700">Depth:</span>
-                          <select value={graphDepth} onChange={(e) => setGraphDepth(Number(e.target.value))} className="px-2 sm:px-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black min-h-[44px] sm:min-h-0">
-                            <option value={1}>1</option>
-                            <option value={2}>2</option>
-                            <option value={3}>3</option>
-                          </select>
-                        </div>
-                        <div className="flex items-center gap-2 text-xs sm:text-sm bg-white/60 backdrop-blur-md px-3 sm:px-6 py-2 rounded-full border border-gray-200">
-                          <span className="text-gray-700">Context:</span>
-                          <select value={maxContext} onChange={(e) => setMaxContext(Number(e.target.value))} className="px-2 sm:px-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black min-h-[44px] sm:min-h-0">
-                            <option value={10}>10</option>
-                            <option value={15}>15</option>
-                            <option value={20}>20</option>
-                            <option value={25}>25</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      <div className="flex justify-center">
-                        <button
-                          type="button"
-                          onClick={loadDemoMode}
-                          className="px-4 py-1.5 text-sm text-gray-500 hover:text-gray-900 hover:bg-white/80 rounded-full transition-colors"
-                        >
-                          Try Demo
-                        </button>
-                      </div>
-                    </div>
                   </form>
+
+                  <AdvancedOptions
+                    academicMode={academicMode}
+                    setAcademicMode={setAcademicMode}
+                    useThinking={useThinking}
+                    setUseThinking={setUseThinking}
+                    ancientOnly={ancientOnly}
+                    setAncientOnly={setAncientOnly}
+                    agenticMode={agenticMode}
+                    setAgenticMode={setAgenticMode}
+                    semanticK={semanticK}
+                    setSemanticK={setSemanticK}
+                    graphDepth={graphDepth}
+                    setGraphDepth={setGraphDepth}
+                    maxContext={maxContext}
+                    setMaxContext={setMaxContext}
+                  />
+
+                  <div className="flex justify-center">
+                    <button
+                      type="button"
+                      onClick={loadDemoMode}
+                      className="text-sm text-gray-400 hover:text-gray-700 transition-colors"
+                    >
+                      Try Demo
+                    </button>
+                  </div>
 
                   {error && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-6 px-6 py-4 bg-red-50 border border-red-200 text-red-800 rounded-2xl text-sm text-center"
+                      className="mt-4 px-6 py-4 bg-red-50 border border-red-200 text-red-800 rounded-2xl text-sm text-center"
                     >
                       {error}
                     </motion.div>
@@ -708,80 +621,138 @@ export default function GraphRAGPage() {
             </div>
           )}
 
-          {/* Messages view */}
+          {/* ── TWO-COLUMN LAYOUT ──────────────────────────── */}
           {(messages.length > 0 || streaming) && (
-            <div className="max-w-5xl mx-auto px-4 pt-4 pb-8">
+            <div className="flex h-screen overflow-hidden">
 
-              {/* Compact header */}
-              <div className="flex items-center justify-center mb-6">
-                <h1 className="text-2xl font-semibold text-gray-800 tracking-tight">HiRAG Q&A</h1>
-              </div>
+              {/* LEFT PANEL — 65% */}
+              <div className="flex flex-col w-full lg:w-[65%] h-full overflow-hidden border-r border-gray-100">
 
-              <div className="space-y-6 mb-6">
-                <AnimatePresence>
-                  {messages.map((message, index) => (
-                    <MessageBubble key={index} message={message} onNodeClick={handleNodeClick} />
-                  ))}
-                </AnimatePresence>
+                {/* Fixed header */}
+                <div className="shrink-0 flex items-center justify-between px-6 py-3 border-b border-gray-100 bg-white/80 backdrop-blur-sm">
+                  <h1 className="text-lg font-semibold text-gray-800 tracking-tight">HiRAG Q&A</h1>
+                </div>
 
-                {streaming && (
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-4 flex flex-col items-center">
-                    <div className={`flex justify-center items-center w-full ${streamedAnswer ? 'py-4' : 'min-h-[50vh]'}`}>
+                {/* Scrollable messages */}
+                <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
+                  <AnimatePresence>
+                    {messages.map((message, index) => (
+                      <MessageBubble
+                        key={index}
+                        message={message}
+                        onNodeClick={handleNodeClick}
+                        onCitationClick={handleCitationClick}
+                      />
+                    ))}
+                  </AnimatePresence>
+
+                  {streaming && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="flex justify-center items-center min-h-[50vh]"
+                    >
                       <TerminalLoader size="large" title={agenticMode ? "Pydantic-AI Engine" : undefined} />
-                    </div>
+                    </motion.div>
+                  )}
 
-                    {streamedAnswer && (
-                      <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-sm w-full">
-                        <div className="prose prose-sm max-w-none">
-                          <ReactMarkdown>{streamedAnswer}</ReactMarkdown>
-                        </div>
+                  {error && !loading && !streaming && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="px-6 py-4 bg-red-50 border border-red-200 text-red-800 rounded-2xl text-sm text-center"
+                    >
+                      <div className="font-medium mb-1">Query failed</div>
+                      {error}
+                      <button
+                        onClick={() => setError(null)}
+                        className="mt-2 text-red-600 hover:text-red-800 underline text-xs block mx-auto"
+                      >
+                        Dismiss
+                      </button>
+                    </motion.div>
+                  )}
+
+                  <div ref={messagesEndRef} />
+                </div>
+
+                {/* Sticky input */}
+                <div className="shrink-0 px-4 py-3 border-t border-gray-100 bg-white/80 backdrop-blur-sm">
+                  <ShineBorder
+                    className="!p-0 bg-white/95 backdrop-blur-sm shadow-sm"
+                    borderRadius={9999}
+                    color={["#3B82F6", "#6366F1", "#06B6D4"]}
+                  >
+                    <form onSubmit={handleSubmit} className="p-2">
+                      <div className="flex gap-2">
+                        <input
+                          ref={inputRef}
+                          type="text"
+                          value={query}
+                          onChange={(e) => setQuery(e.target.value)}
+                          placeholder={t('graphrag.placeholder')}
+                          disabled={loading || streaming}
+                          className="flex-1 px-6 py-3 text-base bg-transparent focus:outline-none focus:ring-0 border-0"
+                        />
+                        {streaming ? (
+                          <button
+                            type="button"
+                            onClick={stopStreaming}
+                            className="px-6 py-3 bg-red-600 text-white rounded-full hover:bg-red-700 font-medium transition-all"
+                          >
+                            Stop
+                          </button>
+                        ) : (
+                          <button
+                            type="submit"
+                            disabled={loading || !query.trim()}
+                            className="px-6 py-3 bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium"
+                          >
+                            {loading ? 'Thinking...' : 'Ask'}
+                          </button>
+                        )}
                       </div>
-                    )}
-                  </motion.div>
-                )}
-
-                {error && !loading && !streaming && (
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="px-6 py-4 bg-red-50 border border-red-200 text-red-800 rounded-2xl text-sm text-center">
-                    <div className="font-medium mb-1">Query failed</div>
-                    {error}
-                    <button onClick={() => setError(null)} className="mt-2 text-red-600 hover:text-red-800 underline text-xs block mx-auto">Dismiss</button>
-                  </motion.div>
-                )}
-
-                <div ref={messagesEndRef} />
+                    </form>
+                  </ShineBorder>
+                </div>
               </div>
 
-              {/* Sticky bottom input */}
-              <ShineBorder
-                className="!p-0 bg-white/95 backdrop-blur-sm shadow-lg sticky bottom-4"
-                borderRadius={9999}
-                color={["#3B82F6", "#6366F1", "#06B6D4"]}
-              >
-                <form onSubmit={handleSubmit} className="p-2">
-                  <div className="flex gap-2">
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                      placeholder={t('graphrag.placeholder')}
-                      disabled={loading || streaming}
-                      className="flex-1 px-6 py-3 text-base bg-transparent focus:outline-none focus:ring-0 border-0"
-                    />
-                    {streaming ? (
-                      <button type="button" onClick={stopStreaming} className="px-6 py-3 bg-red-600 text-white rounded-full hover:bg-red-700 font-medium transition-all">
-                        Stop
-                      </button>
-                    ) : (
-                      <button type="submit" disabled={loading || !query.trim()} className="px-6 py-3 bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium">
-                        {loading ? 'Thinking...' : 'Ask'}
-                      </button>
-                    )}
-                  </div>
-                </form>
-              </ShineBorder>
+              {/* RIGHT PANEL — 35% (desktop only) */}
+              <div className="hidden lg:flex flex-col w-[35%] h-full bg-gray-50/80 backdrop-blur-sm">
+                <div className="shrink-0 px-4 py-3 border-b border-gray-100">
+                  <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Knowledge Graph</h2>
+                </div>
+                <div className="flex-1 overflow-hidden">
+                  <RightPanel
+                    state={rightPanelState}
+                    response={rightPanelResponse}
+                    activeSourceIndex={activeSourceIndex}
+                    onNodeClick={handleNodeClick}
+                    onCloseDetail={() => setRightPanelState('graph')}
+                    onPrevSource={onPrevSource}
+                    onNextSource={onNextSource}
+                    onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
+                    className="h-full"
+                  />
+                </div>
+              </div>
+
+              {/* MOBILE floating button */}
+              <MobileGraphButton
+                rightPanelState={rightPanelState}
+                response={rightPanelResponse}
+                activeSourceIndex={activeSourceIndex}
+                onNodeClick={handleNodeClick}
+                onCloseDetail={() => setRightPanelState('graph')}
+                onPrevSource={onPrevSource}
+                onNextSource={onNextSource}
+                onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
+              />
+
             </div>
           )}
+
         </div>
 
         <AuthModal
@@ -805,14 +776,13 @@ export default function GraphRAGPage() {
 
 function MessageBubble({
   message,
-  onNodeClick
+  onNodeClick,
+  onCitationClick,
 }: {
   message: GraphRAGChatMessage;
   onNodeClick: (nodeId: string) => void;
+  onCitationClick: (citationIndex: number) => void;
 }) {
-  const [showCitations, setShowCitations] = useState(false);
-  const [showReasoningPath, setShowReasoningPath] = useState(false);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -826,9 +796,7 @@ function MessageBubble({
           {message.role === 'user' ? (
             <p className="text-base leading-relaxed">{message.content}</p>
           ) : (
-            <div className="space-y-4">
-
-              {/* Service badge */}
+            <div className="space-y-3">
               {message.graphrag_response?.service && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                   <svg className="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -838,100 +806,22 @@ function MessageBubble({
                 </span>
               )}
 
-              {/* Content */}
               {message.graphrag_response?.sources ? (
                 <div className="prose prose-sm max-w-none">
-                  <CitationRenderer content={message.content} sources={message.graphrag_response.sources} onNodeClick={onNodeClick} />
+                  <CitationRenderer
+                    content={message.content}
+                    sources={message.graphrag_response.sources}
+                    onNodeClick={(nodeId) => {
+                      const idx = message.graphrag_response!.sources!.findIndex(s => s.nodeId === nodeId);
+                      onNodeClick(nodeId);
+                      if (idx !== -1) onCitationClick(idx);
+                    }}
+                  />
                 </div>
               ) : (
                 <div className="prose prose-sm max-w-none">
                   <ReactMarkdown>{message.content}</ReactMarkdown>
                 </div>
-              )}
-
-              {/* Sources */}
-              {message.graphrag_response?.sources && message.graphrag_response.sources.length > 0 && (
-                <SourcesPanel sources={message.graphrag_response.sources} evidenceMap={message.graphrag_response.evidenceMap} onNodeClick={onNodeClick} />
-              )}
-
-              {/* Reasoning path */}
-              {message.reasoning_path && (
-                <div className="border-t border-gray-200 pt-4">
-                  <button onClick={() => setShowReasoningPath(!showReasoningPath)} className="text-sm font-medium text-gray-700 hover:text-gray-900 flex items-center gap-2">
-                    {showReasoningPath ? '▼' : '▶'} Knowledge Graph Path ({message.reasoning_path.total_nodes || 0} nodes)
-                  </button>
-                  {showReasoningPath && message.reasoning_path.starting_nodes?.length > 0 && (
-                    <div className="mt-4 space-y-2">
-                      {message.reasoning_path.starting_nodes.map((node, i) => (
-                        <button key={i} onClick={() => onNodeClick(node.id)} className="w-full text-left p-3 bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 transition-colors">
-                          <div className="flex items-start gap-2">
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-200 text-blue-800">{node.type}</span>
-                            <div className="flex-1">
-                              <div className="font-semibold text-blue-900 text-sm">{node.label}</div>
-                              <div className="text-xs text-blue-700 mt-0.5">{node.reason}</div>
-                            </div>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Citations */}
-              {message.citations && (message.citations.ancient_sources?.length > 0 || message.citations.modern_scholarship?.length > 0) && (
-                <div className="border-t border-gray-200 pt-4">
-                  <button onClick={() => setShowCitations(!showCitations)} className="text-sm font-medium text-gray-700 hover:text-gray-900 flex items-center gap-2">
-                    {showCitations ? '▼' : '▶'} Citations ({(message.citations.ancient_sources?.length || 0) + (message.citations.modern_scholarship?.length || 0)})
-                  </button>
-                  {showCitations && (
-                    <div className="mt-4 space-y-3 text-sm">
-                      {message.citations.ancient_sources && message.citations.ancient_sources.length > 0 && (
-                        <div>
-                          <h4 className="font-semibold mb-2 text-gray-900">Ancient Sources:</h4>
-                          <ul className="list-disc list-inside space-y-1 text-gray-700">
-                            {message.citations.ancient_sources.map((source, i) => (
-                              <li key={i}>
-                                <CitationPreview citation={source} type="ancient" sourceText={message.citationTexts?.[source]}>
-                                  {source}
-                                </CitationPreview>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      {message.citations.modern_scholarship && message.citations.modern_scholarship.length > 0 && (
-                        <div>
-                          <h4 className="font-semibold mb-2 text-gray-900">Modern Scholarship:</h4>
-                          <ul className="list-disc list-inside space-y-1 text-gray-700">
-                            {message.citations.modern_scholarship.map((source, i) => (
-                              <li key={i}>{source}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Academic panels */}
-              {message.graphrag_response && (
-                <>
-                  {message.graphrag_response.evidence_chains && (
-                    <EvidenceChainPanel evidenceChains={message.graphrag_response.evidence_chains} />
-                  )}
-                  {message.graphrag_response.modern_bibliography && (
-                    <BibliographyPanel
-                      bibliography={message.graphrag_response.modern_bibliography}
-                      chicagoBibliography={message.graphrag_response.chicago_bibliography}
-                      apaBibliography={message.graphrag_response.apa_bibliography}
-                      harvardBibliography={message.graphrag_response.harvard_bibliography}
-                      bibtexBibliography={message.graphrag_response.bibtex_bibliography}
-                      ctsUrns={message.graphrag_response.cts_urns ?? []}
-                    />
-                  )}
-                </>
               )}
             </div>
           )}
@@ -944,5 +834,70 @@ function MessageBubble({
         </div>
       </div>
     </motion.div>
+  );
+}
+
+
+// ── Mobile Graph Button ──────────────────────────────────────────────────────
+
+function MobileGraphButton({
+  rightPanelState,
+  response,
+  activeSourceIndex,
+  onNodeClick,
+  onCloseDetail,
+  onPrevSource,
+  onNextSource,
+  onHighlightRef,
+}: {
+  rightPanelState: RightPanelState;
+  response: GraphRAGResponse | null;
+  activeSourceIndex: number | null;
+  onNodeClick: (nodeId: string) => void;
+  onCloseDetail: () => void;
+  onPrevSource: () => void;
+  onNextSource: () => void;
+  onHighlightRef?: (fn: (citationIndex: number) => void) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (rightPanelState === 'idle') return null;
+
+  return (
+    <>
+      <motion.button
+        className="fixed bottom-24 right-4 z-50 flex lg:hidden items-center justify-center w-12 h-12 rounded-full bg-gray-900 text-white shadow-lg text-xl"
+        onClick={() => setIsOpen(true)}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        aria-label="Open knowledge graph"
+      >
+        📊
+      </motion.button>
+
+      <BottomSheet
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Knowledge Graph"
+        height="60%"
+        showHandle
+        dragToClose
+      >
+        <div className="h-full min-h-[300px]">
+          <RightPanel
+            state={rightPanelState}
+            response={response}
+            activeSourceIndex={activeSourceIndex}
+            onNodeClick={onNodeClick}
+            onCloseDetail={onCloseDetail}
+            onPrevSource={onPrevSource}
+            onNextSource={onNextSource}
+            onHighlightRef={onHighlightRef}
+            className="h-full"
+          />
+        </div>
+      </BottomSheet>
+    </>
   );
 }
