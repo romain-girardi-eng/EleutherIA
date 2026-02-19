@@ -393,9 +393,9 @@ const HiRAGImplementationDetails: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6 font-body">
       <div className="mb-6">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('hirag.pageTitle')}</h2>
+        <h2 className="font-display text-3xl text-gray-900 mb-2">{t('hirag.pageTitle')}</h2>
         <p className="text-gray-600">
           {t('hirag.pageDescription')}
         </p>
@@ -414,7 +414,7 @@ const HiRAGImplementationDetails: React.FC = () => {
               >
                 <div className="flex items-center space-x-3">
                   {section.icon}
-                  <h3 className="text-lg font-semibold text-gray-900">{section.title}</h3>
+                  <h3 className="font-display text-lg text-gray-900">{section.title}</h3>
                 </div>
                 {isExpanded ? (
                   <ChevronDown className="w-5 h-5 text-gray-500" />
@@ -434,7 +434,7 @@ const HiRAGImplementationDetails: React.FC = () => {
       </div>
 
       <div className="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 p-6 rounded-lg">
-        <h3 className="text-xl font-bold text-gray-900 mb-3">{t('hirag.summary.title')}</h3>
+        <h3 className="font-display text-xl text-gray-900 mb-3">{t('hirag.summary.title')}</h3>
         <div className="space-y-2 text-sm text-gray-700">
           <p>
             <strong>{t('hirag.summary.tookFromPaper')}:</strong> {t('hirag.summary.tookFromPaperText')}

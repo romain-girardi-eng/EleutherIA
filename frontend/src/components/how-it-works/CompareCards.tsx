@@ -42,7 +42,7 @@ export function CompareCards({ before, after, className }: CompareCardsProps) {
 
           <ul className="space-y-3 flex-1">
             {before.items.map((item, i) => (
-              <li key={i} className="flex items-start gap-2.5 text-sm text-red-700/80">
+              <li key={i} className="flex items-start gap-2.5 text-sm font-body text-red-700/80">
                 <span className="mt-0.5 text-red-400 flex-shrink-0">✕</span>
                 {item.text}
               </li>
@@ -82,7 +82,7 @@ export function CompareCards({ before, after, className }: CompareCardsProps) {
 
           <ul className="space-y-3 flex-1">
             {after.items.map((item, i) => (
-              <li key={i} className="flex items-start gap-2.5 text-sm text-emerald-800/80">
+              <li key={i} className="flex items-start gap-2.5 text-sm font-body text-emerald-800/80">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
                 {item.text}
               </li>
