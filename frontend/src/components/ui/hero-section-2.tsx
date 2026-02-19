@@ -60,6 +60,7 @@ interface HeroSectionProps {
     text: string;
     href: string;
   };
+  ctaArea?: React.ReactNode;
   backgroundImage?: string;
   backgroundComponent?: React.ReactNode;
   contactInfo: {
@@ -70,7 +71,7 @@ interface HeroSectionProps {
 }
 
 const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
-  ({ className, logo, slogan, title, subtitle, callToAction, backgroundImage, backgroundComponent, contactInfo }, ref) => {
+  ({ className, logo, slogan, title, subtitle, callToAction, ctaArea, backgroundImage, backgroundComponent, contactInfo }, ref) => {
 
     // Animation variants for the container to orchestrate children animations
     const containerVariants: Variants = {
@@ -166,17 +167,23 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
             <motion.p className="text-xs sm:text-sm text-white/55 leading-relaxed max-w-xs" variants={itemVariants}>
               {subtitle}
             </motion.p>
-            <motion.a
-              href={callToAction.href}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-500 hover:bg-orange-400 text-white font-semibold text-sm transition-colors"
-              variants={itemVariants}
-            >
-              {callToAction.text}
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14"></path>
-                <path d="m12 5 7 7-7 7"></path>
-              </svg>
-            </motion.a>
+            {ctaArea ? (
+              <motion.div variants={itemVariants} className="w-full max-w-sm flex flex-col gap-2.5">
+                {ctaArea}
+              </motion.div>
+            ) : (
+              <motion.a
+                href={callToAction.href}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-500 hover:bg-orange-400 text-white font-semibold text-sm transition-colors"
+                variants={itemVariants}
+              >
+                {callToAction.text}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </motion.a>
+            )}
           </div>
           <motion.div
             className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[10px] text-white/40 border-t border-white/10 pt-4 w-full"
@@ -227,17 +234,23 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
               <motion.p className="mt-2 mb-2 lg:mb-4 text-sm text-academic-muted leading-snug md:text-base" variants={itemVariants}>
                 {subtitle}
               </motion.p>
-              <motion.a
-                href={callToAction.href}
-                className="inline-flex items-center gap-2 text-sm md:text-base font-bold tracking-widest text-primary-600 transition-colors hover:text-primary-700 uppercase"
-                variants={itemVariants}
-              >
-                {callToAction.text}
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-              </motion.a>
+              {ctaArea ? (
+                <motion.div variants={itemVariants} className="flex flex-col gap-2.5">
+                  {ctaArea}
+                </motion.div>
+              ) : (
+                <motion.a
+                  href={callToAction.href}
+                  className="inline-flex items-center gap-2 text-sm md:text-base font-bold tracking-widest text-primary-600 transition-colors hover:text-primary-700 uppercase"
+                  variants={itemVariants}
+                >
+                  {callToAction.text}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </motion.a>
+              )}
             </motion.main>
             <motion.footer className="mt-2 lg:mt-4 pt-2 lg:pt-3 border-t border-academic-muted/20" variants={itemVariants}>
               <div className="flex flex-wrap gap-x-3 lg:gap-x-4 gap-y-0.5 text-[10px] sm:text-xs text-academic-muted">
