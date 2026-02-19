@@ -35,6 +35,8 @@ import {
 import type { DotNavSection } from '../components/how-it-works';
 
 import { MorphingParticles } from '../components/MorphingParticles';
+import DatabaseWithRestApi from '../components/ui/database-with-rest-api';
+import HiRAGImplementationDetails from '../components/HiRAGImplementationDetails';
 
 // ─── Section definitions ────────────────────────────────────────────────────
 
@@ -43,6 +45,7 @@ const NAV_SECTIONS: DotNavSection[] = [
   { id: 'problem',       label: 'The Problem' },
   { id: 'kg',            label: 'Knowledge Graph' },
   { id: 'pipeline',      label: 'GraphRAG Pipeline' },
+  { id: 'tech',          label: 'Architecture' },
   { id: 'search',        label: 'Hybrid Search' },
   { id: 'fair',          label: 'FAIR Data' },
   { id: 'cta',           label: 'Start Exploring' },
@@ -414,7 +417,178 @@ export default function HowItWorksPage() {
         </div>
       </ScrollSection>
 
-      {/* ── Section 5: Hybrid Search ─────────────────────────────────────── */}
+      {/* ── Section 5: Architecture / Tech ──────────────────────────────── */}
+      <ScrollSection id="tech" className="bg-white" noInner>
+        <BackgroundMesh variant="dots" color="rgba(100,100,120,1)" opacity={0.04} />
+
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 py-20">
+          <SectionLabel icon={<Layers className="w-4 h-4" />} text="Under the Hood" />
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="font-display text-4xl sm:text-5xl text-stone-800 mb-4 leading-tight"
+          >
+            HiRAG — hierarchical retrieval,{' '}
+            <span className="text-violet-700">peer-reviewed</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="font-body text-base text-stone-500 mb-12 max-w-2xl"
+          >
+            EleutherIA implements HiRAG (Hierarchical Retrieval-Augmented Generation),
+            organising knowledge in layers — from raw passage evidence to high-level conceptual
+            summaries — exactly as scholars naturally structure information.
+          </motion.p>
+
+          {/* Pipeline visualisation */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center mb-12"
+          >
+            <div className="w-full max-w-3xl">
+              <DatabaseWithRestApi
+                className="h-[420px] w-full"
+                circleText="API"
+                badgeTexts={{ first: 'Question', second: 'Context', third: 'Synthesis', fourth: 'Answer' }}
+                buttonTexts={{ first: 'Knowledge Graph', second: 'AI Model' }}
+                title="GraphRAG Pipeline: Database → AI Response"
+                lightColor="#c2410c"
+              />
+            </div>
+            <p className="text-sm font-body text-stone-400 text-center mt-6 max-w-2xl leading-relaxed">
+              The API lets the AI model communicate with the Knowledge Graph. Your question
+              retrieves relevant context from ancient sources and modern scholarship, which
+              the model synthesises into a cited scholarly answer.
+            </p>
+          </motion.div>
+
+          {/* HiRAG highlight + stats */}
+          <div className="grid lg:grid-cols-2 gap-6 mb-10">
+            {/* HiRAG card */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="rounded-2xl border-2 border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 p-7"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <h3 className="font-display text-2xl text-violet-900">Powered by HiRAG</h3>
+                <span className="text-xs font-body font-semibold bg-violet-200 text-violet-800 rounded-full px-3 py-1">
+                  EMNLP 2025
+                </span>
+              </div>
+              <p className="font-body text-sm text-stone-700 mb-5 leading-relaxed">
+                Huang et al. (2025) showed HiRAG outperforms traditional RAG and standard
+                GraphRAG by organising retrieval in three levels: LOCAL (passage-level),
+                GLOBAL (community summaries), and BRIDGE (cross-concept paths).
+              </p>
+              <div className="grid grid-cols-2 gap-3 mb-5 text-sm font-body">
+                <div className="bg-white/70 rounded-xl p-4">
+                  <p className="font-semibold text-violet-900 mb-1">vs Traditional RAG</p>
+                  <p className="text-violet-700 font-mono font-bold text-lg">87.6% <span className="text-stone-400 font-normal text-xs">vs 12.4%</span></p>
+                </div>
+                <div className="bg-white/70 rounded-xl p-4">
+                  <p className="font-semibold text-violet-900 mb-1">vs Standard GraphRAG</p>
+                  <p className="text-violet-700 font-mono font-bold text-lg">64.1% <span className="text-stone-400 font-normal text-xs">vs 35.9%</span></p>
+                </div>
+              </div>
+              <a
+                href="https://arxiv.org/abs/2503.10150"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-body text-violet-600 hover:text-violet-800 border border-violet-300 rounded-full px-4 py-1.5 hover:bg-violet-100 transition-colors"
+              >
+                arXiv:2503.10150 — EMNLP 2025 Findings
+                <ChevronRight className="w-3.5 h-3.5" />
+              </a>
+            </motion.div>
+
+            {/* Stats grid */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="grid grid-cols-2 gap-4 content-start"
+            >
+              {/* Philological */}
+              <div className="rounded-2xl border-2 border-teal-200 bg-gradient-to-br from-teal-50 to-cyan-50 p-5">
+                <h4 className="font-body font-semibold text-sm text-teal-800 mb-3 uppercase tracking-wide">Corpus</h4>
+                <ul className="space-y-2 text-xs font-body text-teal-700">
+                  {[
+                    ['2,193', 'verified entities'],
+                    ['8,616', 'cited relationships'],
+                    ['189', 'ancient works'],
+                    ['16,968', 'passages'],
+                    ['1,413', 'bibliography entries'],
+                  ].map(([n, l]) => (
+                    <li key={l} className="flex items-baseline gap-1.5">
+                      <span className="font-mono font-bold text-sm text-teal-900">{n}</span>
+                      <span className="opacity-80">{l}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Tech stack */}
+              <div className="rounded-2xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-5">
+                <h4 className="font-body font-semibold text-sm text-blue-800 mb-3 uppercase tracking-wide">Stack</h4>
+                <ul className="space-y-2 text-xs font-body text-blue-700">
+                  {[
+                    'HiRAG Architecture',
+                    'Qdrant vector DB',
+                    'PostgreSQL + GIN',
+                    'FastAPI backend',
+                    'React 19 + TS',
+                    'SSE streaming',
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Link to showcase */}
+              <div className="col-span-2">
+                <Link
+                  to="/graphrag-showcase"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-body font-medium text-sm hover:from-violet-700 hover:to-indigo-700 transition-all"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  See HiRAG in Action
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Accordion details */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="rounded-2xl border border-stone-200 bg-stone-50/60 overflow-hidden"
+          >
+            <HiRAGImplementationDetails />
+          </motion.div>
+        </div>
+      </ScrollSection>
+
+      {/* ── Section 6 (was 5): Hybrid Search ─────────────────────────────── */}
       <ScrollSection id="search" className="bg-parchment-50">
         <BackgroundMesh variant="crosses" color="rgba(160,100,30,1)" opacity={0.04} />
 
