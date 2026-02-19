@@ -13,6 +13,7 @@
     "texts": "Testi Antichi",
     "bibliography": "Bibliografia",
     "about": "Informazioni",
+    "howItWorks": "Come funziona",
     "credits": "Crediti",
     "admin": "Dashboard Admin",
     "citationNetwork": "Rete di Citazioni",
@@ -1273,7 +1274,9 @@
       "hybridSearch": "Ricerca ibrida",
       "ancientTexts": "Testi antichi",
       "fair": "Principi FAIR",
-      "glossary": "Glossario"
+      "glossary": "Glossario",
+      "hirag": "Tecnologia HiRAG",
+      "hiragDetails": "Implementazione"
     },
     "hero": {
       "slogan": "Come funziona",
