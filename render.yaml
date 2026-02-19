@@ -9,7 +9,7 @@ services:
     envVars:
       - key: DATABASE_URL
         sync: false
-      - key: QDRANT_URL
+      - key: QDRANT_HOST
         sync: false
       - key: QDRANT_API_KEY
         sync: false
@@ -17,6 +17,8 @@ services:
         sync: false
       - key: MOONSHOT_API_KEY
         sync: false
+      - key: MOONSHOT_BASE_URL
+        value: "https://api.moonshot.cn/v1"
       - key: OPENROUTER_API_KEY
         sync: false
       - key: JWT_SECRET_KEY
