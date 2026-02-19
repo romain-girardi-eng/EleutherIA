@@ -101,7 +101,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
       <motion.section
         ref={ref}
         className={cn(
-          "relative flex flex-col overflow-hidden bg-white text-foreground md:flex-row m-0 p-0",
+          "relative overflow-hidden m-0 p-0 bg-white",
           className
         )}
         style={{
@@ -112,92 +112,194 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
         animate="visible"
         variants={containerVariants}
       >
-        {/* Left Side: Content */}
-        <div className="flex w-full h-[55%] md:h-full flex-col justify-center px-4 pt-14 pb-4 md:w-1/2 md:px-6 md:pt-16 md:pb-6 lg:w-1/2 lg:px-8 lg:pt-16 lg:pb-6 xl:px-10 bg-white">
-            {/* Centered Content Block */}
-            <div className="max-w-2xl mx-auto w-full">
-                {/* Large Logo Section */}
-                {logo && (
-                    <motion.header variants={itemVariants}>
-                        <div className="flex flex-col items-center md:items-start">
-                            <img
-                              src={logo.url}
-                              alt={logo.alt}
-                              className="h-32 sm:h-40 md:h-48 lg:h-56 xl:h-64 2xl:h-72 max-h-[30vh]"
-                            />
-                        </div>
-                    </motion.header>
-                )}
 
-                {/* Main Content */}
-                <motion.main variants={containerVariants}>
-                    <motion.h1 className="text-xl sm:text-2xl font-bold leading-tight text-academic-text md:text-3xl lg:text-4xl xl:text-5xl" variants={itemVariants}>
-                        {title}
-                    </motion.h1>
-                    {slogan && (
-                      <motion.p className="text-sm sm:text-base md:text-lg lg:text-xl text-academic-muted leading-snug mt-1" variants={itemVariants}>
-                        {slogan}
-                      </motion.p>
-                    )}
-                    <motion.p className="mt-2 mb-2 lg:mb-4 text-xs sm:text-sm text-academic-muted leading-snug md:text-base" variants={itemVariants}>
-                        {subtitle}
-                    </motion.p>
-                    <motion.a
-                        href={callToAction.href}
-                        className="inline-flex items-center gap-2 text-xs sm:text-sm md:text-base font-bold tracking-widest text-primary-600 transition-colors hover:text-primary-700 uppercase"
-                        variants={itemVariants}
-                    >
-                        {callToAction.text}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M5 12h14"></path>
-                            <path d="m12 5 7 7-7 7"></path>
-                        </svg>
-                    </motion.a>
-                </motion.main>
-
-                {/* Footer Info */}
-                <motion.footer className="mt-2 lg:mt-4 pt-2 lg:pt-3 border-t border-academic-muted/20" variants={itemVariants}>
-                    <div className="flex flex-wrap gap-x-3 lg:gap-x-4 gap-y-0.5 text-[10px] sm:text-xs text-academic-muted">
-                        {contactInfo.map((info, index) => (
-                            <div key={index} className="flex items-center">
-                                <InfoIcon type={info.type} />
-                                {info.href ? (
-                                    <a
-                                        href={info.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="hover:text-primary-600 transition-colors"
-                                    >
-                                        {info.label}
-                                    </a>
-                                ) : (
-                                    <span>{info.label}</span>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </motion.footer>
-            </div>
-        </div>
-
-        {/* Right Side: Background with Clip Path Animation */}
-        <motion.div
-          className="w-full h-[45%] md:h-full md:w-1/2 lg:w-1/2 relative overflow-hidden flex-shrink-0"
-          style={backgroundImage && !backgroundComponent ? {
-            backgroundImage: `url(${backgroundImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          } : undefined}
-          initial={{ clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)' }}
-          animate={{ clipPath: 'polygon(10% 0, 101% 0, 101% 100%, 0% 100%)' }}
-          transition={{ duration: 1.2, ease: "circOut" as const }}
-        >
-          {backgroundComponent && (
-            <div className="absolute inset-0">
+        {/* ── MOBILE LAYOUT (< md): full-screen immersive ──────────────────── */}
+        <div className="md:hidden absolute inset-0">
+          {/* Particles / background fills entire screen */}
+          {backgroundComponent ? (
+            <div className="absolute inset-0 bg-zinc-950">
               {backgroundComponent}
             </div>
+          ) : backgroundImage ? (
+            <div
+              className="absolute inset-0"
+              style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+            />
+          ) : (
+            <div className="absolute inset-0 bg-zinc-950" />
           )}
+
+          {/* Radial scrim for text legibility */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 z-[2] pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse 90% 70% at 50% 55%, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.2) 100%)',
+            }}
+          />
+
+          {/* Bottom fade to help anchor the footer items */}
+          <div
+            aria-hidden="true"
+            className="absolute bottom-0 left-0 right-0 h-40 z-[2] pointer-events-none"
+            style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%)' }}
+          />
+        </div>
+
+        {/* Mobile content — centered overlay */}
+        <motion.div
+          className="md:hidden relative z-10 flex flex-col items-center justify-between min-h-full px-6 pt-24 pb-10 text-center"
+          variants={containerVariants}
+        >
+          {/* Top section: logo + text */}
+          <div className="flex flex-col items-center flex-1 justify-center gap-5">
+            {logo && (
+              <motion.div variants={itemVariants}>
+                <img
+                  src={logo.url}
+                  alt={logo.alt}
+                  className="h-20 sm:h-24 brightness-0 invert"
+                />
+              </motion.div>
+            )}
+
+            <motion.h1
+              className="font-display text-3xl sm:text-4xl font-bold leading-tight text-white"
+              variants={itemVariants}
+            >
+              {title}
+            </motion.h1>
+
+            {slogan && (
+              <motion.p
+                className="text-sm sm:text-base text-white/70 leading-snug"
+                variants={itemVariants}
+              >
+                {slogan}
+              </motion.p>
+            )}
+
+            <motion.p
+              className="text-xs sm:text-sm text-white/55 leading-relaxed max-w-xs"
+              variants={itemVariants}
+            >
+              {subtitle}
+            </motion.p>
+
+            <motion.a
+              href={callToAction.href}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-500 hover:bg-orange-400 text-white font-semibold text-sm transition-colors"
+              variants={itemVariants}
+            >
+              {callToAction.text}
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </motion.a>
+          </div>
+
+          {/* Bottom: contact info row */}
+          <motion.div
+            className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[10px] text-white/40 border-t border-white/10 pt-4 w-full"
+            variants={itemVariants}
+          >
+            {contactInfo.map((info, index) => (
+              <div key={index} className="flex items-center gap-1">
+                <InfoIcon type={info.type} />
+                {info.href ? (
+                  <a href={info.href} target="_blank" rel="noopener noreferrer" className="hover:text-white/70 transition-colors">
+                    {info.label}
+                  </a>
+                ) : (
+                  <span>{info.label}</span>
+                )}
+              </div>
+            ))}
+          </motion.div>
         </motion.div>
+
+        {/* ── DESKTOP LAYOUT (>= md): split screen ─────────────────────────── */}
+        <div className="hidden md:flex flex-row w-full h-full">
+          {/* Left Side: Content */}
+          <div className="flex h-full flex-col justify-center px-6 md:pt-16 md:pb-6 lg:px-8 lg:pt-16 lg:pb-6 xl:px-10 bg-white md:w-1/2 lg:w-1/2">
+            <div className="max-w-2xl mx-auto w-full">
+              {logo && (
+                <motion.header variants={itemVariants}>
+                  <div className="flex flex-col items-start">
+                    <img
+                      src={logo.url}
+                      alt={logo.alt}
+                      className="h-48 lg:h-56 xl:h-64 2xl:h-72 max-h-[30vh]"
+                    />
+                  </div>
+                </motion.header>
+              )}
+
+              <motion.main variants={containerVariants}>
+                <motion.h1 className="text-2xl font-bold leading-tight text-academic-text md:text-3xl lg:text-4xl xl:text-5xl" variants={itemVariants}>
+                  {title}
+                </motion.h1>
+                {slogan && (
+                  <motion.p className="text-base md:text-lg lg:text-xl text-academic-muted leading-snug mt-1" variants={itemVariants}>
+                    {slogan}
+                  </motion.p>
+                )}
+                <motion.p className="mt-2 mb-2 lg:mb-4 text-sm text-academic-muted leading-snug md:text-base" variants={itemVariants}>
+                  {subtitle}
+                </motion.p>
+                <motion.a
+                  href={callToAction.href}
+                  className="inline-flex items-center gap-2 text-sm md:text-base font-bold tracking-widest text-primary-600 transition-colors hover:text-primary-700 uppercase"
+                  variants={itemVariants}
+                >
+                  {callToAction.text}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </motion.a>
+              </motion.main>
+
+              <motion.footer className="mt-2 lg:mt-4 pt-2 lg:pt-3 border-t border-academic-muted/20" variants={itemVariants}>
+                <div className="flex flex-wrap gap-x-3 lg:gap-x-4 gap-y-0.5 text-[10px] sm:text-xs text-academic-muted">
+                  {contactInfo.map((info, index) => (
+                    <div key={index} className="flex items-center">
+                      <InfoIcon type={info.type} />
+                      {info.href ? (
+                        <a href={info.href} target="_blank" rel="noopener noreferrer" className="hover:text-primary-600 transition-colors">
+                          {info.label}
+                        </a>
+                      ) : (
+                        <span>{info.label}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </motion.footer>
+            </div>
+          </div>
+
+          {/* Right Side: Background with Clip Path Animation */}
+          <motion.div
+            className="h-full md:w-1/2 lg:w-1/2 relative overflow-hidden flex-shrink-0"
+            style={backgroundImage && !backgroundComponent ? {
+              backgroundImage: `url(${backgroundImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            } : undefined}
+            initial={{ clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)' }}
+            animate={{ clipPath: 'polygon(10% 0, 101% 0, 101% 100%, 0% 100%)' }}
+            transition={{ duration: 1.2, ease: "circOut" as const }}
+          >
+            {backgroundComponent && (
+              <div className="absolute inset-0">
+                {backgroundComponent}
+              </div>
+            )}
+          </motion.div>
+        </div>
+
       </motion.section>
     );
   }
