@@ -32,7 +32,6 @@ export default function GraphRAGPage() {
   const [query, setQuery] = useState('');
   const [loading, _setLoading] = useState(false);
   const [streaming, setStreaming] = useState(false);
-  const [_streamedAnswer, setStreamedAnswer] = useState('');
   const [_streamStatus, setStreamStatus] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -59,13 +58,6 @@ export default function GraphRAGPage() {
   const [_reasoningSteps, setReasoningSteps] = useState<ReasoningStep[]>([]);
   const [_currentQuery, setCurrentQuery] = useState<string>('');
 
-  // Dynamic KG stats
-  const [_kgStats, setKgStats] = useState({
-    nodes: 0,
-    edges: 0,
-    sources: 0,
-    hierarchyLayers: 3
-  });
 
   // Right panel
   const [rightPanelState, setRightPanelState] = useState<RightPanelState>('idle');
@@ -87,24 +79,6 @@ export default function GraphRAGPage() {
     const sources = rightPanelResponse?.sources ?? [];
     setActiveSourceIndex(prev => (prev !== null && prev < sources.length - 1 ? prev + 1 : prev));
   };
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const kgStatsResponse = await apiClient.getKGStats();
-        const worksStatsResponse = await apiClient.getWorksStats();
-        setKgStats({
-          nodes: kgStatsResponse.totalNodes || 0,
-          edges: kgStatsResponse.totalEdges || 0,
-          sources: worksStatsResponse.total_passages || 0,
-          hierarchyLayers: 3
-        });
-      } catch (err) {
-        console.error('Failed to fetch KG stats:', err);
-      }
-    };
-    fetchStats();
-  }, []);
 
   // Scroll to bottom only when a NEW message is added (not during streaming)
   useEffect(() => {
@@ -255,7 +229,6 @@ export default function GraphRAGPage() {
     setRightPanelState('loading');
     setRightPanelResponse(null);
     setActiveSourceIndex(null);
-    setStreamedAnswer('');
     setStreamStatus('Connecting...');
     initializeReasoningSteps(queryText);
 
@@ -357,7 +330,6 @@ export default function GraphRAGPage() {
                     chunk = String(chunkData.data || chunkData.chunk || chunkData.text || '');
                   }
                   fullAnswer += chunk;
-                  setStreamedAnswer(fullAnswer);
                   if (!fullAnswer) updateReasoningStep(4, 'active');
                   break;
                 }
@@ -478,7 +450,6 @@ export default function GraphRAGPage() {
       }
 
       setStreaming(false);
-      setStreamedAnswer('');
       setStreamStatus('');
     } catch (err: unknown) {
       console.error('Streaming error:', err);
@@ -488,7 +459,6 @@ export default function GraphRAGPage() {
         setError(err instanceof Error ? err.message : 'Streaming failed');
       }
       setStreaming(false);
-      setStreamedAnswer('');
       setStreamStatus('');
     }
   };
@@ -499,7 +469,6 @@ export default function GraphRAGPage() {
       abortControllerRef.current = null;
     }
     setStreaming(false);
-    setStreamedAnswer('');
     setStreamStatus('');
   };
 
@@ -724,6 +693,10 @@ export default function GraphRAGPage() {
                   <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Knowledge Graph</h2>
                 </div>
                 <div className="flex-1 overflow-hidden">
+                  {/* Note: highlightNodeRef is registered by the mounted RightPanel.
+                      On desktop, the desktop panel always registers. On mobile, the sheet
+                      registers when open; citation click still updates state correctly
+                      even when ref is null (sheet closed). */}
                   <RightPanel
                     state={rightPanelState}
                     response={rightPanelResponse}
