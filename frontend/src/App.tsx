@@ -197,7 +197,7 @@ function AppContent() {
 
             {/* Navigation Links - Hidden on mobile */}
             <div className="hidden lg:flex items-center space-x-6">
-              <NavLink to="/how-it-works">How it works</NavLink>
+              <NavLink to="/how-it-works">{t('nav.howItWorks')}</NavLink>
               <NavLink to="/database">{t('nav.database')}</NavLink>
               <NavLink to="/visualizer">{t('nav.visualizer')}</NavLink>
               <NavLink to="/search">{t('nav.search')}</NavLink>
@@ -205,7 +205,6 @@ function AppContent() {
               <NavLink to="/texts">{t('nav.texts')}</NavLink>
               <NavLink to="/bibliography">{t('nav.bibliography')}</NavLink>
               <NavLink to="/about">{t('nav.about')}</NavLink>
-              <NavLink to="/how-it-works">{t('nav.howItWorks')}</NavLink>
 
               {/* Language Switcher */}
               <LanguageSwitcher variant="dropdown" />
@@ -278,7 +277,7 @@ function AppContent() {
               >
                 <div className="py-2 space-y-1">
                   {[
-                    { to: '/how-it-works', label: 'How it works' },
+                    { to: '/how-it-works', label: t('nav.howItWorks') },
                     { to: '/database', label: t('nav.database') },
                     { to: '/visualizer', label: t('nav.visualizer') },
                     { to: '/search', label: t('nav.search') },
@@ -286,7 +285,6 @@ function AppContent() {
                     { to: '/texts', label: t('nav.texts') },
                     { to: '/bibliography', label: t('nav.bibliography') },
                     { to: '/about', label: t('nav.about') },
-                    { to: '/how-it-works', label: t('nav.howItWorks') },
                     { to: '/credits', label: t('nav.credits') },
                   ].map((item, index) => (
                     <motion.div
