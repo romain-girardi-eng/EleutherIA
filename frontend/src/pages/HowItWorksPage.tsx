@@ -2,13 +2,15 @@
  * HowItWorksPage — scroll-snap educational landing page
  *
  * Sections:
- *   1. Hero          — dark, particles, title, scroll hint
- *   2. The Problem   — parchment, compare cards, key stats
- *   3. Knowledge Graph — white, KG diagram, node types
- *   4. GraphRAG Pipeline — dark, 5-stage interactive pipeline
- *   5. Hybrid Search — parchment, 3 methods + RRF
- *   6. FAIR Data     — warm orange, FAIR badges
- *   7. CTA           — dark, links to explore
+ *   1. Hero             — dark, particles, title, scroll hint
+ *   2. The Problem      — parchment, compare cards, key stats
+ *   3. Knowledge Graph  — white, KG diagram, node types
+ *   4. Embeddings       — dark, interactive scatter plot
+ *   5. GraphRAG Pipeline — dark, 5-stage interactive pipeline
+ *   6. Architecture     — white, HiRAG + corpus stats
+ *   7. Hybrid Search    — parchment, 3 methods + RRF
+ *   8. FAIR Data        — warm orange, FAIR badges
+ *   9. CTA              — dark, links to explore
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -25,6 +27,7 @@ import {
   BackgroundMesh,
   CompareCards,
   DotNavigator,
+  EmbeddingScatterPlot,
   FAIRBadges,
   GitHubPill,
   GlassCard,
@@ -44,6 +47,7 @@ const NAV_SECTIONS: DotNavSection[] = [
   { id: 'hero',          label: 'Home' },
   { id: 'problem',       label: 'The Problem' },
   { id: 'kg',            label: 'Knowledge Graph' },
+  { id: 'embeddings',    label: 'Vector Embeddings' },
   { id: 'pipeline',      label: 'GraphRAG Pipeline' },
   { id: 'tech',          label: 'Architecture' },
   { id: 'search',        label: 'Hybrid Search' },
@@ -378,7 +382,96 @@ export default function HowItWorksPage() {
         </div>
       </ScrollSection>
 
-      {/* ── Section 4: GraphRAG Pipeline ─────────────────────────────────── */}
+      {/* ── Section 4: Vector Embeddings ─────────────────────────────────── */}
+      <ScrollSection id="embeddings" className="bg-zinc-950">
+        <BackgroundMesh variant="dots" color="rgba(255,255,255,1)" opacity={0.025} />
+
+        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-20">
+          <SectionLabel icon={<Brain className="w-4 h-4" />} text="Semantic Layer" />
+
+          <div className="grid lg:grid-cols-[2fr_3fr] gap-12 items-start mt-10">
+
+            {/* ── Left column: explainer ── */}
+            <div className="space-y-7">
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="font-display text-4xl lg:text-5xl text-white leading-tight"
+              >
+                Ideas Have<br />Coordinates
+              </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="font-body text-base text-white/65 leading-relaxed"
+              >
+                Every philosophical concept is converted into a list of 3 072 numbers — a
+                <span className="text-white/90 font-medium"> vector embedding</span> — by Gemini.
+                Concepts with similar meanings land close together in this high-dimensional space,
+                regardless of the language they were written in.
+              </motion.p>
+
+              {/* GPS analogy card */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 space-y-3"
+              >
+                <p className="text-xs font-body uppercase tracking-widest text-white/40">Analogy</p>
+                <div className="grid grid-cols-2 gap-3 text-sm font-body">
+                  <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-3">
+                    <p className="text-blue-300 font-semibold mb-1">Physical space</p>
+                    <p className="text-white/60 font-mono text-xs">Paris → (48.86°, 2.35°)</p>
+                    <p className="text-white/60 font-mono text-xs">London → (51.51°, −0.13°)</p>
+                    <p className="text-white/40 text-xs mt-1">Close = same location</p>
+                  </div>
+                  <div className="rounded-xl bg-orange-500/10 border border-orange-500/20 p-3">
+                    <p className="text-orange-300 font-semibold mb-1">Semantic space</p>
+                    <p className="text-white/60 font-mono text-xs">"Fate" → [0.89, −0.23, …]</p>
+                    <p className="text-white/60 font-mono text-xs">"Destiny" → [0.91, −0.21, …]</p>
+                    <p className="text-white/40 text-xs mt-1">Close = same meaning</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Dimension callout */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex items-baseline gap-3"
+              >
+                <span className="font-display text-5xl text-orange-400">3 072</span>
+                <span className="font-body text-sm text-white/50 leading-snug">
+                  dimensions per concept<br />
+                  <span className="text-white/30 text-xs">projected to 2D below via PCA</span>
+                </span>
+              </motion.div>
+            </div>
+
+            {/* ── Right column: interactive scatter plot ── */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.05 }}
+            >
+              <EmbeddingScatterPlot />
+            </motion.div>
+
+          </div>
+        </div>
+      </ScrollSection>
+
+      {/* ── Section 5: GraphRAG Pipeline ─────────────────────────────────── */}
       <ScrollSection id="pipeline" className="bg-zinc-950">
         <BackgroundMesh variant="dots" color="rgba(255,255,255,1)" opacity={0.025} />
 
