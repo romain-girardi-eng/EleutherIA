@@ -24,7 +24,7 @@ export default function ChatInput({
   const { t } = useTranslation();
 
   return (
-    <div className="shrink-0 px-4 py-3 border-t border-gray-100 bg-white/80 backdrop-blur-sm">
+    <div className="shrink-0 px-4 py-3 border-t border-gray-200 bg-white/80 backdrop-blur-sm">
       <ShineBorder
         className="!p-0 bg-white/95 backdrop-blur-sm shadow-sm"
         borderRadius={9999}

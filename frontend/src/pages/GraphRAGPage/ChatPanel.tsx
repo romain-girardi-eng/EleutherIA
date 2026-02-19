@@ -49,7 +49,7 @@ export default function ChatPanel({
   return (
     <div className="flex flex-col w-full lg:w-[65%] h-full overflow-hidden border-r border-gray-200">
       {/* Fixed header */}
-      <div className="shrink-0 flex items-center justify-between px-6 py-3 border-b border-gray-100 bg-white/80 backdrop-blur-sm">
+      <div className="shrink-0 flex items-center justify-between px-6 py-3 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
         <h1 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">HiRAG Q&A</h1>
       </div>
 
