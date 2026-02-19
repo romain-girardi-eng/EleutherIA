@@ -106,8 +106,8 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
           className
         )}
         style={{
-          height: 'calc(100dvh + 3rem)',
-          marginTop: '-3rem'
+          height: '100dvh',
+          marginTop: 0,
         }}
         initial="hidden"
         animate="visible"
@@ -144,7 +144,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
 
         {/* ── MOBILE content overlay (< md) ────────────────────────────────── */}
         <motion.div
-          className="md:hidden relative z-10 flex flex-col items-center justify-between min-h-full px-6 pt-24 pb-10 text-center"
+          className="md:hidden relative z-10 flex flex-col items-center justify-between min-h-full px-6 pt-14 pb-10 text-center"
           variants={containerVariants}
         >
           <div className="flex flex-col items-center flex-1 justify-center gap-5">

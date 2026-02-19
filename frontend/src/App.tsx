@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { LogOut, User, Loader2, Menu, X } from 'lucide-react';
+import { cn } from './lib/utils';
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -160,6 +161,8 @@ function AppContent() {
     }
   }, [location.pathname, announce]);
 
+  const isHomePage = location.pathname === '/';
+
   // Check if current page should hide footer (full-screen pages)
   const hideFooter = location.pathname === '/' || location.pathname === '/how-it-works' || ['/visualizer', '/graph'].some(path =>
     location.pathname === path || location.pathname.startsWith(`${path}/`)
@@ -179,13 +182,27 @@ function AppContent() {
       */}
 
       {/* Header / Navigation */}
-      <header className="bg-academic-paper border-b border-academic-border shadow-sm fixed top-0 left-0 right-0 z-50 m-0" id="navigation" style={{ marginTop: 0, paddingTop: 0 }}>
+      <header
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 m-0",
+          // Always white on desktop (lg+)
+          "lg:bg-academic-paper lg:border-b lg:border-academic-border lg:shadow-sm",
+          // Mobile: transparent overlay on homepage, normal otherwise
+          isHomePage ? "bg-transparent" : "bg-academic-paper border-b border-academic-border shadow-sm"
+        )}
+        id="navigation"
+        style={{ marginTop: 0, paddingTop: 0 }}
+      >
         <nav className="academic-container" style={{ marginTop: 0, paddingTop: 0 }}>
           <div className="flex items-center justify-between py-1 sm:py-0 sm:h-12">
             {/* Logo */}
             <Link
               to="/"
-              className="hover:opacity-80 transition-opacity flex-shrink-0 group"
+              className={cn(
+                "hover:opacity-80 transition-opacity flex-shrink-0 group",
+                // On homepage mobile, hide the header logo — it's shown in the hero section
+                isHomePage ? "hidden lg:block" : ""
+              )}
               aria-label="EleutherIA Home"
             >
               <img
@@ -232,7 +249,10 @@ function AppContent() {
 
             {/* Mobile Menu Button with Animation */}
             <button
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className={cn(
+                "lg:hidden p-2 rounded-lg transition-colors",
+                isHomePage ? "text-white hover:bg-white/10 ml-auto" : "hover:bg-gray-100"
+              )}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"
@@ -273,7 +293,12 @@ function AppContent() {
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
-                className="lg:hidden border-t border-academic-border overflow-hidden"
+                className={cn(
+                  "lg:hidden overflow-hidden",
+                  isHomePage
+                    ? "bg-zinc-900/95 backdrop-blur-md border-t border-white/10"
+                    : "border-t border-academic-border"
+                )}
               >
                 <div className="py-2 space-y-1">
                   {[
@@ -293,7 +318,7 @@ function AppContent() {
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: index * 0.05 }}
                     >
-                      <NavLink to={item.to}>{item.label}</NavLink>
+                      <NavLink to={item.to} inverted={isHomePage}>{item.label}</NavLink>
                     </motion.div>
                   ))}
 
@@ -456,11 +481,16 @@ function AppContent() {
 }
 
 // Navigation Link Component
-function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
+function NavLink({ to, children, inverted = false }: { to: string; children: React.ReactNode; inverted?: boolean }) {
   return (
     <Link
       to={to}
-      className="text-academic-text hover:text-primary-600 font-medium text-sm transition-colors block lg:inline-block py-0.5 lg:py-0 rounded px-2 lg:px-0 hover:bg-gray-50 lg:hover:bg-transparent"
+      className={cn(
+        "font-medium text-sm transition-colors block lg:inline-block py-0.5 lg:py-0 rounded px-2 lg:px-0 lg:hover:bg-transparent",
+        inverted
+          ? "text-white/80 hover:text-orange-300 hover:bg-white/5"
+          : "text-academic-text hover:text-primary-600 hover:bg-gray-50"
+      )}
     >
       {children}
     </Link>
