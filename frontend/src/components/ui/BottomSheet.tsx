@@ -104,6 +104,9 @@ export function BottomSheet({
   // Initialize controls
   useEffect(() => {
     if (isOpen) {
+      // Ensure starting position is set before animating (controls state may be
+      // uninitialized, causing Framer Motion to see no delta and skip the animation)
+      controls.set({ y: '100%' });
       controls.start({ y: snapPoints.length > 0 ? getSnapPosition(currentSnapIndex) : 0 });
     }
   }, [isOpen, currentSnapIndex, snapPoints.length, controls, getSnapPosition]);
