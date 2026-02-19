@@ -39,6 +39,7 @@ export default function GraphRAGPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const prevMessagesLengthRef = useRef(0);
 
   const { isAuthenticated } = useAuth();
 
@@ -82,12 +83,20 @@ export default function GraphRAGPage() {
     fetchStats();
   }, []);
 
-  // Scroll to bottom on new messages
+  // Scroll to bottom only when a NEW message is added
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (messages.length > prevMessagesLengthRef.current) {
+      prevMessagesLengthRef.current = messages.length;
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, streamedAnswer]);
+  }, [messages]);
+
+  // Scroll during streaming only when content is non-empty (not when cleared to '')
+  useEffect(() => {
+    if (streamedAnswer) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [streamedAnswer]);
 
   // Cleanup abort controller on unmount
   useEffect(() => {
@@ -689,17 +698,7 @@ export default function GraphRAGPage() {
 
               {/* Compact header */}
               <div className="flex items-center justify-center mb-6">
-                <h1 className="text-2xl font-semibold text-gray-800 tracking-tight">
-                  <Typewriter
-                    text={["HiRAG Q&A", "Knowledge Graph", "Ancient Philosophy"]}
-                    speed={100}
-                    waitTime={3000}
-                    deleteSpeed={60}
-                    className="text-gray-800"
-                    cursorChar="_"
-                    showCursor={false}
-                  />
-                </h1>
+                <h1 className="text-2xl font-semibold text-gray-800 tracking-tight">HiRAG Q&A</h1>
               </div>
 
               <div className="space-y-6 mb-6">
