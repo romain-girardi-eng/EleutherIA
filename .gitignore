@@ -106,6 +106,7 @@ data/exports/
 # Cloudflare Workers
 .wrangler/
 .dev.vars
+.playwright-mcp/
 
 # Temporary files
 tmp/
