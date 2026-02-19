@@ -49,12 +49,12 @@ export default function ChatPanel({
   return (
     <div className="flex flex-col w-full lg:w-[65%] h-full overflow-hidden border-r border-gray-200">
       {/* Fixed header */}
-      <div className="shrink-0 flex items-center justify-between px-6 py-3 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
-        <h1 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">HiRAG Q&A</h1>
+      <div className="shrink-0 flex items-center justify-between px-6 xl:px-10 py-3 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
+        <h1 className="text-sm xl:text-base font-semibold text-gray-500 uppercase tracking-wider">HiRAG Q&A</h1>
       </div>
 
       {/* Scrollable messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+      <div className="flex-1 overflow-y-auto px-6 xl:px-10 2xl:px-16 py-5 xl:py-8 space-y-4 xl:space-y-6">
         <AnimatePresence>
           {messages.map((message, index) => (
             <MessageBubble
