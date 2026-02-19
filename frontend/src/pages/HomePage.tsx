@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Maximize2, Minimize2 } from 'lucide-react';
+import { Maximize2, Minimize2, ArrowRight, Network, Sparkles } from 'lucide-react';
 import { HeroSection } from '../components/ui/hero-section-2';
 import { MorphingParticles } from '../components/MorphingParticles';
 
@@ -27,13 +27,84 @@ export default function HomePage() {
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
+  const ctaButtons = (
+    <>
+      <style>{`
+        @property --lit-angle {
+          syntax: '<angle>';
+          initial-value: 0deg;
+          inherits: false;
+        }
+        @keyframes lit-spin {
+          to { --lit-angle: 360deg; }
+        }
+        .lit-border-wrap {
+          background: conic-gradient(
+            from var(--lit-angle),
+            transparent 0%,
+            transparent 25%,
+            var(--c1) 44%,
+            var(--c2) 56%,
+            transparent 75%,
+            transparent 100%
+          );
+          animation: lit-spin 3s linear infinite;
+          padding: 1.5px;
+          border-radius: 0.75rem;
+          display: block;
+        }
+        .lit-border-wrap:hover {
+          animation-duration: 0.75s;
+        }
+      `}</style>
+
+      {/* Primary CTA */}
+      <a
+        href="/how-it-works"
+        className="group flex items-center justify-between w-full rounded-xl bg-gradient-to-r from-orange-500 to-amber-400 px-5 py-3.5 text-white font-semibold text-sm tracking-wide hover:from-orange-400 hover:to-amber-300 hover:shadow-[0_0_28px_rgba(249,115,22,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+      >
+        <span>{t('learn.hero.cta')}</span>
+        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+      </a>
+
+      {/* Secondary pair */}
+      <div className="grid grid-cols-2 gap-2.5">
+        <a
+          href="/visualizer"
+          className="lit-border-wrap"
+          style={{ '--c1': '#f97316', '--c2': '#22d3ee' } as React.CSSProperties}
+        >
+          <div className="rounded-[calc(0.75rem-1.5px)] px-3.5 py-2.5 flex flex-col gap-0.5 bg-zinc-900 md:bg-white h-full">
+            <div className="flex items-center gap-1.5">
+              <Network className="w-3.5 h-3.5 text-cyan-400 md:text-cyan-600" />
+              <span className="font-semibold text-xs text-white md:text-zinc-800">{t('nav.visualizer')}</span>
+            </div>
+            <span className="text-[9px] leading-tight text-white/40 md:text-zinc-400">2,193 nodes · 8,616 edges</span>
+          </div>
+        </a>
+        <a
+          href="/graphrag"
+          className="lit-border-wrap"
+          style={{ '--c1': '#a78bfa', '--c2': '#f472b6' } as React.CSSProperties}
+        >
+          <div className="rounded-[calc(0.75rem-1.5px)] px-3.5 py-2.5 flex flex-col gap-0.5 bg-zinc-900 md:bg-white h-full">
+            <div className="flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-violet-400 md:text-violet-600" />
+              <span className="font-semibold text-xs text-white md:text-zinc-800">{t('nav.graphrag')}</span>
+            </div>
+            <span className="text-[9px] leading-tight text-white/40 md:text-zinc-400">5-stage RAG · AI-powered</span>
+          </div>
+        </a>
+      </div>
+    </>
+  );
+
   return (
     <div className="min-h-screen relative">
       {/* Main Content */}
       <main className="min-h-screen relative">
         <HeroSection
           logo={{ url: "/logo.svg", alt: "EleutherIA" }}
-          slogan={t('learn.hero.slogan')}
           title={
             <>
               {t('learn.hero.title')} <br />
@@ -45,6 +116,7 @@ export default function HomePage() {
             text: t('learn.hero.cta'),
             href: "/how-it-works",
           }}
+          ctaArea={ctaButtons}
           backgroundComponent={
             <div
               ref={particleContainerRef}
