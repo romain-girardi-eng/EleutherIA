@@ -1,0 +1,112 @@
+import { useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import MessageBubble from './MessageBubble';
+import ChatInput from './ChatInput';
+import { TerminalLoader } from '../../components/ui/terminal-loader';
+import type { GraphRAGChatMessage } from '../../types';
+
+interface ChatPanelProps {
+  messages: GraphRAGChatMessage[];
+  query: string;
+  setQuery: (q: string) => void;
+  loading: boolean;
+  streaming: boolean;
+  error: string | null;
+  setError: (e: string | null) => void;
+  agenticMode: boolean;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  onSubmit: (e: React.FormEvent) => void;
+  onStop: () => void;
+  onNodeClick: (nodeId: string) => void;
+  onCitationClick: (citationIndex: number) => void;
+}
+
+export default function ChatPanel({
+  messages,
+  query,
+  setQuery,
+  loading,
+  streaming,
+  error,
+  setError,
+  agenticMode,
+  inputRef,
+  onSubmit,
+  onStop,
+  onNodeClick,
+  onCitationClick,
+}: ChatPanelProps) {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const prevMessagesLengthRef = useRef(0);
+
+  useEffect(() => {
+    if (messages.length > prevMessagesLengthRef.current) {
+      prevMessagesLengthRef.current = messages.length;
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
+  return (
+    <div className="flex flex-col w-full lg:w-[65%] h-full overflow-hidden border-r border-gray-200">
+      {/* Fixed header */}
+      <div className="shrink-0 flex items-center justify-between px-6 py-3 border-b border-gray-100 bg-white/80 backdrop-blur-sm">
+        <h1 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">HiRAG Q&A</h1>
+      </div>
+
+      {/* Scrollable messages */}
+      <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+        <AnimatePresence>
+          {messages.map((message, index) => (
+            <MessageBubble
+              key={index}
+              message={message}
+              onNodeClick={onNodeClick}
+              onCitationClick={onCitationClick}
+            />
+          ))}
+        </AnimatePresence>
+
+        {streaming && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="flex justify-center items-center min-h-[40vh]"
+          >
+            <TerminalLoader size="large" title={agenticMode ? 'Pydantic-AI Engine' : undefined} />
+          </motion.div>
+        )}
+
+        {error && !loading && !streaming && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="px-5 py-4 bg-red-50 border border-red-200 text-red-800 rounded-xl text-sm text-center"
+          >
+            <div className="font-medium mb-1">Query failed</div>
+            {error}
+            <button
+              onClick={() => setError(null)}
+              className="mt-2 text-red-600 hover:text-red-800 underline text-xs block mx-auto"
+            >
+              Dismiss
+            </button>
+          </motion.div>
+        )}
+
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Sticky input */}
+      <ChatInput
+        query={query}
+        setQuery={setQuery}
+        loading={loading}
+        streaming={streaming}
+        inputRef={inputRef}
+        onSubmit={onSubmit}
+        onStop={onStop}
+      />
+    </div>
+  );
+}

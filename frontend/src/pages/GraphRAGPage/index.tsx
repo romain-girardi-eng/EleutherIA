@@ -1,21 +1,16 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import ReactMarkdown from 'react-markdown';
 import Cookies from 'js-cookie';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { motion, AnimatePresence } from 'framer-motion';
 import { apiClient } from '../../api/client';
 import { useAuth } from '../../context/AuthContext';
 import AuthModal from '../../components/AuthModal';
-import { ShineBorder } from '../../components/ui/shine-border';
 import { AuroraBackground } from '../../components/ui/aurora-background';
-import { Typewriter } from '../../components/ui/typewriter';
 import NodeDetailPanel from '../../components/NodeDetailPanel';
-import { CitationRenderer } from '../../components/CitationRenderer';
-import { TerminalLoader } from '../../components/ui/terminal-loader';
 import RightPanel from '../../components/graphrag/RightPanel';
-import AdvancedOptions from '../../components/graphrag/AdvancedOptions';
-import { BottomSheet } from '../../components/ui/BottomSheet';
+import WelcomeHero from './WelcomeHero';
+import ChatPanel from './ChatPanel';
+import MobileGraphSheet from './MobileGraphSheet';
 import type { GraphRAGResponse, GraphRAGStreamEvent, GraphRAGChatMessage, KGNode } from '../../types';
 import type { ReasoningStep } from '../../types/graphrag';
 import {
@@ -37,10 +32,8 @@ export default function GraphRAGPage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [pendingQuery, setPendingQuery] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<KGNode | null>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const prevMessagesLengthRef = useRef(0);
 
   const { isAuthenticated } = useAuth();
 
@@ -48,16 +41,12 @@ export default function GraphRAGPage() {
   const [semanticK, setSemanticK] = useState(10);
   const [graphDepth, setGraphDepth] = useState(2);
   const [maxContext, setMaxContext] = useState(15);
-
-  // Academic mode settings
   const [academicMode, setAcademicMode] = useState(true);
   const [useThinking, setUseThinking] = useState(false);
-  const [_citationStyle, _setCitationStyle] = useState<'chicago' | 'apa' | 'harvard'>('chicago');
   const [ancientOnly, setAncientOnly] = useState(false);
   const [agenticMode, setAgenticMode] = useState(false);
   const [_reasoningSteps, setReasoningSteps] = useState<ReasoningStep[]>([]);
   const [_currentQuery, setCurrentQuery] = useState<string>('');
-
 
   // Right panel
   const [rightPanelState, setRightPanelState] = useState<RightPanelState>('idle');
@@ -90,14 +79,6 @@ export default function GraphRAGPage() {
     ro.observe(nav);
     return () => ro.disconnect();
   }, []);
-
-  // Scroll to bottom only when a NEW message is added (not during streaming)
-  useEffect(() => {
-    if (messages.length > prevMessagesLengthRef.current) {
-      prevMessagesLengthRef.current = messages.length;
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]);
 
   // Cleanup abort controller on unmount
   useEffect(() => {
@@ -172,7 +153,6 @@ export default function GraphRAGPage() {
     setQuery('');
     setError(null);
 
-    // Always use streaming — /api/graphrag/answer and workflow endpoints are non-functional
     if (agenticMode) {
       await handleAgenticQuery(queryText);
     } else {
@@ -202,9 +182,6 @@ export default function GraphRAGPage() {
       setPendingQuery(null);
     }
   };
-
-  // handleStandardQuery removed — /api/graphrag/answer and workflow endpoints are non-functional.
-  // All queries now go through handleStreamingQuery (/api/graphrag/query/stream).
 
   const initializeReasoningSteps = (q: string) => {
     const steps: ReasoningStep[] = [
@@ -304,7 +281,6 @@ export default function GraphRAGPage() {
 
               switch (data.type) {
                 case 'status': {
-                  // Backend sends message nested: data.data.message
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const payload = data.data as any;
                   const msg = (payload?.message || data.message || '').toLowerCase();
@@ -366,11 +342,12 @@ export default function GraphRAGPage() {
       }
 
       if (finalResponse) {
-        // Build citations for display: server sends ancientCitations/modernBibliography, not citations.ancient_sources
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const serverResp = finalResponse as any;
         const citations = finalResponse.citations || {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ancient_sources: (serverResp.ancientCitations || []).map((c: any) => typeof c === 'string' ? c : (c?.citationText || '')).filter(Boolean),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           modern_scholarship: (serverResp.modernBibliography || []).map((c: any) => typeof c === 'string' ? c : (c?.citation || c?.citationText || '')).filter(Boolean),
         };
 
@@ -407,8 +384,6 @@ export default function GraphRAGPage() {
           }
         }
 
-        // Server sends ancientCitations: AncientCitation[] (objects with .citationText)
-        // Extract string references for the citation lookup API
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const serverAncientCitations: any[] = (finalResponse as any).ancientCitations || [];
         const allCitations = serverAncientCitations
@@ -495,116 +470,40 @@ export default function GraphRAGPage() {
     }
   };
 
+  const advancedProps = {
+    academicMode, setAcademicMode,
+    useThinking, setUseThinking,
+    ancientOnly, setAncientOnly,
+    agenticMode, setAgenticMode,
+    semanticK, setSemanticK,
+    graphDepth, setGraphDepth,
+    maxContext, setMaxContext,
+  };
+
   return (
     <AuroraBackground className="!min-h-screen !h-auto">
       <div className="relative min-h-screen overflow-hidden">
         <div className="relative z-10 min-h-screen">
 
-          {/* ── WELCOME STATE ──────────────────────────────── */}
+          {/* WELCOME STATE */}
           {messages.length === 0 && !streaming && (
-            <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 py-12">
-              <div className="w-full max-w-2xl">
-
-                <motion.div
-                  className="text-center mb-10"
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <h1 className="text-5xl md:text-6xl font-semibold text-gray-900 mb-3 drop-shadow-sm">
-                    <Typewriter
-                      text={["HiRAG", "Knowledge Graph", "Ancient Philosophy", "Scholarly Q&A"]}
-                      speed={100}
-                      waitTime={3500}
-                      deleteSpeed={60}
-                      className="text-gray-900"
-                      cursorChar="_"
-                    />
-                  </h1>
-                  <p className="text-base text-gray-600 max-w-lg mx-auto">
-                    {t('graphrag.description')}
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="space-y-4"
-                >
-                  <form onSubmit={handleSubmit}>
-                    <ShineBorder
-                      className="!p-0 bg-white/95 backdrop-blur-sm"
-                      borderRadius={9999}
-                      color={["#3B82F6", "#6366F1", "#06B6D4"]}
-                    >
-                      <div className="flex gap-3 p-2">
-                        <input
-                          ref={inputRef}
-                          type="text"
-                          value={query}
-                          onChange={(e) => setQuery(e.target.value)}
-                          placeholder={t('graphrag.placeholder')}
-                          className="flex-1 px-6 py-3 text-base bg-transparent focus:outline-none focus:ring-0 border-0"
-                          autoFocus
-                          disabled={loading || streaming}
-                        />
-                        <button
-                          type="submit"
-                          disabled={!query.trim() || loading || streaming}
-                          className="px-8 py-3 bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all text-base font-medium whitespace-nowrap"
-                        >
-                          {loading ? 'Thinking...' : t('graphrag.ask')}
-                        </button>
-                      </div>
-                    </ShineBorder>
-                  </form>
-
-                  <AdvancedOptions
-                    academicMode={academicMode}
-                    setAcademicMode={setAcademicMode}
-                    useThinking={useThinking}
-                    setUseThinking={setUseThinking}
-                    ancientOnly={ancientOnly}
-                    setAncientOnly={setAncientOnly}
-                    agenticMode={agenticMode}
-                    setAgenticMode={setAgenticMode}
-                    semanticK={semanticK}
-                    setSemanticK={setSemanticK}
-                    graphDepth={graphDepth}
-                    setGraphDepth={setGraphDepth}
-                    maxContext={maxContext}
-                    setMaxContext={setMaxContext}
-                  />
-
-                  <div className="flex justify-center">
-                    <button
-                      type="button"
-                      onClick={loadDemoMode}
-                      className="text-sm text-gray-400 hover:text-gray-700 transition-colors"
-                    >
-                      Try Demo
-                    </button>
-                  </div>
-
-                  {error && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-4 px-6 py-4 bg-red-50 border border-red-200 text-red-800 rounded-2xl text-sm text-center"
-                    >
-                      {error}
-                    </motion.div>
-                  )}
-                </motion.div>
-              </div>
-            </div>
+            <WelcomeHero
+              query={query}
+              setQuery={setQuery}
+              loading={loading}
+              streaming={streaming}
+              error={error}
+              inputRef={inputRef}
+              onSubmit={handleSubmit}
+              onDemo={loadDemoMode}
+              advancedProps={advancedProps}
+            />
           )}
 
-          {/* ── TWO-COLUMN LAYOUT ──────────────────────────── */}
+          {/* TWO-COLUMN LAYOUT */}
           {(messages.length > 0 || streaming) && (
             <div
-              className="flex bg-academic-paper"
+              className="flex bg-white"
               style={{
                 position: 'fixed',
                 top: navHeight,
@@ -614,110 +513,28 @@ export default function GraphRAGPage() {
                 zIndex: 20,
               }}
             >
+              <ChatPanel
+                messages={messages}
+                query={query}
+                setQuery={setQuery}
+                loading={loading}
+                streaming={streaming}
+                error={error}
+                setError={setError}
+                agenticMode={agenticMode}
+                inputRef={inputRef}
+                onSubmit={handleSubmit}
+                onStop={stopStreaming}
+                onNodeClick={handleNodeClick}
+                onCitationClick={handleCitationClick}
+              />
 
-              {/* LEFT PANEL — 65% */}
-              <div className="flex flex-col w-full lg:w-[65%] h-full overflow-hidden border-r border-gray-100">
-
-                {/* Fixed header */}
-                <div className="shrink-0 flex items-center justify-between px-6 py-3 border-b border-gray-100 bg-white/80 backdrop-blur-sm">
-                  <h1 className="text-lg font-semibold text-gray-800 tracking-tight">HiRAG Q&A</h1>
-                </div>
-
-                {/* Scrollable messages */}
-                <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
-                  <AnimatePresence>
-                    {messages.map((message, index) => (
-                      <MessageBubble
-                        key={index}
-                        message={message}
-                        onNodeClick={handleNodeClick}
-                        onCitationClick={handleCitationClick}
-                      />
-                    ))}
-                  </AnimatePresence>
-
-                  {streaming && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="flex justify-center items-center min-h-[50vh]"
-                    >
-                      <TerminalLoader size="large" title={agenticMode ? "Pydantic-AI Engine" : undefined} />
-                    </motion.div>
-                  )}
-
-                  {error && !loading && !streaming && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="px-6 py-4 bg-red-50 border border-red-200 text-red-800 rounded-2xl text-sm text-center"
-                    >
-                      <div className="font-medium mb-1">Query failed</div>
-                      {error}
-                      <button
-                        onClick={() => setError(null)}
-                        className="mt-2 text-red-600 hover:text-red-800 underline text-xs block mx-auto"
-                      >
-                        Dismiss
-                      </button>
-                    </motion.div>
-                  )}
-
-                  <div ref={messagesEndRef} />
-                </div>
-
-                {/* Sticky input */}
-                <div className="shrink-0 px-4 py-3 border-t border-gray-100 bg-white/80 backdrop-blur-sm">
-                  <ShineBorder
-                    className="!p-0 bg-white/95 backdrop-blur-sm shadow-sm"
-                    borderRadius={9999}
-                    color={["#3B82F6", "#6366F1", "#06B6D4"]}
-                  >
-                    <form onSubmit={handleSubmit} className="p-2">
-                      <div className="flex gap-2">
-                        <input
-                          ref={inputRef}
-                          type="text"
-                          value={query}
-                          onChange={(e) => setQuery(e.target.value)}
-                          placeholder={t('graphrag.placeholder')}
-                          disabled={loading || streaming}
-                          className="flex-1 px-6 py-3 text-base bg-transparent focus:outline-none focus:ring-0 border-0"
-                        />
-                        {streaming ? (
-                          <button
-                            type="button"
-                            onClick={stopStreaming}
-                            className="px-6 py-3 bg-red-600 text-white rounded-full hover:bg-red-700 font-medium transition-all"
-                          >
-                            Stop
-                          </button>
-                        ) : (
-                          <button
-                            type="submit"
-                            disabled={loading || !query.trim()}
-                            className="px-6 py-3 bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium"
-                          >
-                            {loading ? 'Thinking...' : 'Ask'}
-                          </button>
-                        )}
-                      </div>
-                    </form>
-                  </ShineBorder>
-                </div>
-              </div>
-
-              {/* RIGHT PANEL — 35% (desktop only) */}
-              <div className="hidden lg:flex flex-col w-[35%] h-full bg-gray-50/80 backdrop-blur-sm">
-                <div className="shrink-0 px-4 py-3 border-b border-gray-100">
-                  <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Knowledge Graph</h2>
+              {/* RIGHT PANEL - 35% (desktop only) */}
+              <div className="hidden lg:flex flex-col w-[35%] h-full bg-gray-50">
+                <div className="shrink-0 px-4 py-3 border-b border-gray-200">
+                  <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Knowledge Graph</h2>
                 </div>
                 <div className="flex-1 overflow-hidden">
-                  {/* Note: highlightNodeRef is registered by the mounted RightPanel.
-                      On desktop, the desktop panel always registers. On mobile, the sheet
-                      registers when open; citation click still updates state correctly
-                      even when ref is null (sheet closed). */}
                   <RightPanel
                     state={rightPanelState}
                     response={rightPanelResponse}
@@ -732,8 +549,8 @@ export default function GraphRAGPage() {
                 </div>
               </div>
 
-              {/* MOBILE floating button */}
-              <MobileGraphButton
+              {/* MOBILE floating sheet */}
+              <MobileGraphSheet
                 rightPanelState={rightPanelState}
                 response={rightPanelResponse}
                 activeSourceIndex={activeSourceIndex}
@@ -743,7 +560,6 @@ export default function GraphRAGPage() {
                 onNextSource={onNextSource}
                 onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
               />
-
             </div>
           )}
 
@@ -762,136 +578,5 @@ export default function GraphRAGPage() {
         )}
       </div>
     </AuroraBackground>
-  );
-}
-
-
-// ─── Message Bubble ───────────────────────────────────────────────────────────
-
-function MessageBubble({
-  message,
-  onNodeClick,
-  onCitationClick,
-}: {
-  message: GraphRAGChatMessage;
-  onNodeClick: (nodeId: string) => void;
-  onCitationClick: (citationIndex: number) => void;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className={`${message.role === 'user' ? 'ml-auto max-w-2xl' : 'max-w-full'}`}
-    >
-      <div className={`rounded-2xl shadow-sm ${message.role === 'user' ? 'bg-gradient-to-br from-gray-900 to-gray-800' : 'bg-white/95 backdrop-blur-sm'}`}>
-        <div className={`p-6 ${message.role === 'user' ? 'text-white' : 'text-gray-900'}`}>
-          {message.role === 'user' ? (
-            <p className="text-base leading-relaxed">{message.content}</p>
-          ) : (
-            <div className="space-y-3">
-              {message.graphrag_response?.service && (
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                  <svg className="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  {message.graphrag_response.service}
-                </span>
-              )}
-
-              {message.graphrag_response?.sources ? (
-                <div className="prose prose-sm max-w-none">
-                  <CitationRenderer
-                    content={message.content}
-                    sources={message.graphrag_response.sources}
-                    onNodeClick={(nodeId) => {
-                      const idx = message.graphrag_response!.sources!.findIndex(s => s.nodeId === nodeId);
-                      onNodeClick(nodeId);
-                      if (idx !== -1) onCitationClick(idx);
-                    }}
-                  />
-                </div>
-              ) : (
-                <div className="prose prose-sm max-w-none">
-                  <ReactMarkdown>{message.content}</ReactMarkdown>
-                </div>
-              )}
-            </div>
-          )}
-
-          <div className={`text-xs mt-3 ${message.role === 'user' ? 'text-white/70' : 'text-gray-500'}`}>
-            {typeof message.timestamp === 'string'
-              ? new Date(message.timestamp).toLocaleTimeString()
-              : message.timestamp.toLocaleTimeString()}
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-
-// ── Mobile Graph Button ──────────────────────────────────────────────────────
-
-function MobileGraphButton({
-  rightPanelState,
-  response,
-  activeSourceIndex,
-  onNodeClick,
-  onCloseDetail,
-  onPrevSource,
-  onNextSource,
-  onHighlightRef,
-}: {
-  rightPanelState: RightPanelState;
-  response: GraphRAGResponse | null;
-  activeSourceIndex: number | null;
-  onNodeClick: (nodeId: string) => void;
-  onCloseDetail: () => void;
-  onPrevSource: () => void;
-  onNextSource: () => void;
-  onHighlightRef?: (fn: (citationIndex: number) => void) => void;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  if (rightPanelState === 'idle') return null;
-
-  return (
-    <>
-      <motion.button
-        className="fixed bottom-24 right-4 z-50 flex lg:hidden items-center justify-center w-12 h-12 rounded-full bg-gray-900 text-white shadow-lg text-xl"
-        onClick={() => setIsOpen(true)}
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-        aria-label="Open knowledge graph"
-      >
-        📊
-      </motion.button>
-
-      <BottomSheet
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        title="Knowledge Graph"
-        height="60%"
-        showHandle
-        dragToClose
-      >
-        <div className="h-full min-h-[300px]">
-          <RightPanel
-            state={rightPanelState}
-            response={response}
-            activeSourceIndex={activeSourceIndex}
-            onNodeClick={onNodeClick}
-            onCloseDetail={onCloseDetail}
-            onPrevSource={onPrevSource}
-            onNextSource={onNextSource}
-            onHighlightRef={onHighlightRef}
-            className="h-full"
-          />
-        </div>
-      </BottomSheet>
-    </>
   );
 }
