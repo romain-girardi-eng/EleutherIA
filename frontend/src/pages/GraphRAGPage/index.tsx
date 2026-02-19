@@ -83,20 +83,13 @@ export default function GraphRAGPage() {
     fetchStats();
   }, []);
 
-  // Scroll to bottom only when a NEW message is added
+  // Scroll to bottom only when a NEW message is added (not during streaming)
   useEffect(() => {
     if (messages.length > prevMessagesLengthRef.current) {
       prevMessagesLengthRef.current = messages.length;
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
-
-  // Scroll during streaming only when content is non-empty (not when cleared to '')
-  useEffect(() => {
-    if (streamedAnswer) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [streamedAnswer]);
 
   // Cleanup abort controller on unmount
   useEffect(() => {
