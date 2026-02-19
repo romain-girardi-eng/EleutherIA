@@ -1225,10 +1225,17 @@ export function MorphingParticles(props: MorphingParticlesProps) {
     renderer.domElement.addEventListener('contextmenu', onContextMenu);
 
     // ── TOUCH EVENTS (mobile interaction) ──────────────────────────────────
+    // Track whether the gesture is horizontal (rotate particles) or vertical (scroll page)
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchIntent: 'unknown' | 'rotate' | 'scroll' = 'unknown';
+
     const onTouchStart = (e: TouchEvent) => {
-      e.preventDefault();
       if (e.touches.length === 1) {
         const touch = e.touches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+        touchIntent = 'unknown';
         previousMouseX = touch.clientX;
         previousMouseY = touch.clientY;
         isDragging = true;
@@ -1240,11 +1247,25 @@ export function MorphingParticles(props: MorphingParticlesProps) {
     };
 
     const onTouchMove = (e: TouchEvent) => {
-      e.preventDefault();
       if (e.touches.length === 1) {
         const touch = e.touches[0];
         const deltaX = touch.clientX - previousMouseX;
         const deltaY = touch.clientY - previousMouseY;
+
+        // Determine gesture intent once we have enough movement
+        if (touchIntent === 'unknown') {
+          const totalDX = Math.abs(touch.clientX - touchStartX);
+          const totalDY = Math.abs(touch.clientY - touchStartY);
+          if (totalDX > 8 || totalDY > 8) {
+            touchIntent = totalDX > totalDY ? 'rotate' : 'scroll';
+          }
+        }
+
+        // Vertical scroll — let the browser handle it
+        if (touchIntent === 'scroll') return;
+
+        // Horizontal rotate — take over and prevent page scroll
+        e.preventDefault();
 
         velocityY = deltaX * sensitivity;
         velocityX = deltaY * sensitivity;

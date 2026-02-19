@@ -60,6 +60,17 @@ const NAV_SECTIONS: DotNavSection[] = [
 export default function HowItWorksPage() {
   const [activeId, setActiveId] = useState('hero');
   const containerRef = useRef<HTMLDivElement>(null);
+  const [navHeight, setNavHeight] = useState(48);
+
+  // Measure the actual nav height so the scroll container sits flush below it
+  useEffect(() => {
+    const nav = document.getElementById('navigation');
+    if (!nav) return;
+    setNavHeight(nav.offsetHeight);
+    const ro = new ResizeObserver(() => setNavHeight(nav.offsetHeight));
+    ro.observe(nav);
+    return () => ro.disconnect();
+  }, []);
 
   // Intersection observer for nav sync
   useEffect(() => {
@@ -92,12 +103,14 @@ export default function HowItWorksPage() {
   return (
     <div
       ref={containerRef}
-      className="overflow-y-scroll"
+      className="overflow-y-scroll relative"
       style={{
         scrollSnapType: 'y mandatory',
         scrollBehavior: 'smooth',
-        height: 'calc(100vh - 3rem)', /* subtract nav height */
-      }}
+        marginTop: `${navHeight}px`,
+        height: `calc(100dvh - ${navHeight}px)`,
+        '--snap-h': `calc(100dvh - ${navHeight}px)`,
+      } as React.CSSProperties}
     >
       {/* Dot navigation — fixed right side */}
       <DotNavigator
@@ -136,7 +149,7 @@ export default function HowItWorksPage() {
         />
 
         {/* Hero content */}
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center">
+        <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center" style={{ minHeight: 'var(--snap-h, 100dvh)' }}>
           {/* Kicker */}
           <motion.div
             initial={{ opacity: 0, y: -12 }}
@@ -859,7 +872,7 @@ export default function HowItWorksPage() {
       <ScrollSection id="cta" className="bg-zinc-950">
         <BackgroundMesh variant="dots" color="rgba(255,255,255,1)" opacity={0.025} />
 
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center">
+        <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center" style={{ minHeight: 'var(--snap-h, 100dvh)' }}>
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
