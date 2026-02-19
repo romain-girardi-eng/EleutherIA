@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Maximize2, Minimize2, Network, Sparkles, BookOpen } from 'lucide-react';
+import { Maximize2, Minimize2, ChevronRight } from 'lucide-react';
 import { HeroSection } from '../components/ui/hero-section-2';
 import { MorphingParticles } from '../components/MorphingParticles';
 
@@ -51,44 +51,74 @@ export default function HomePage() {
 
   const isFullscreen = isNativeFullscreen || isCSSFullscreen;
 
+  // Codex Index — Roman numerals + hairline rules, like an ancient manuscript's table of contents
   const ctaButtons = (
-    <>
-      {/* How It Works — full-width top card */}
+    <div className="flex flex-col w-full">
+      <div className="h-px bg-white/10 md:bg-zinc-200" />
+
+      {/* I — How It Works */}
       <a
         href="/how-it-works"
-        className="group flex flex-col gap-0.5 w-full rounded-xl px-4 py-3 border border-white/15 md:border-zinc-200 bg-white/5 md:bg-white hover:border-orange-400 transition-colors duration-200"
+        className="group flex items-center gap-3 py-3 px-1 hover:bg-white/[0.04] md:hover:bg-amber-50/60 transition-colors duration-150"
       >
-        <div className="flex items-center gap-1.5">
-          <BookOpen className="w-3.5 h-3.5 text-orange-400 md:text-orange-500 flex-shrink-0" />
-          <span className="font-semibold text-xs text-white md:text-zinc-800 group-hover:text-orange-400 md:group-hover:text-orange-600 transition-colors">{t('nav.howItWorks')}</span>
+        <span className="font-mono text-[10px] w-6 text-white/25 md:text-zinc-300 group-hover:text-amber-500 tracking-widest flex-shrink-0 transition-colors duration-150 select-none">
+          I
+        </span>
+        <div className="flex-1 min-w-0">
+          <div className="text-xs font-semibold tracking-wide text-white md:text-zinc-800 group-hover:text-amber-500 md:group-hover:text-amber-700 transition-colors duration-150 leading-tight">
+            {t('nav.howItWorks')}
+          </div>
+          <div className="text-[9px] text-white/30 md:text-zinc-400 mt-0.5 leading-tight">
+            Architecture · embeddings · pipeline
+          </div>
         </div>
-        <span className="text-[9px] text-white/35 md:text-zinc-400">Architecture · embeddings · RAG pipeline</span>
+        <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-amber-400 md:text-amber-600 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
       </a>
 
-      {/* Knowledge Graph + GraphRAG pair */}
-      <div className="grid grid-cols-2 gap-2">
-        <a
-          href="/visualizer"
-          className="group flex flex-col gap-0.5 rounded-xl px-4 py-3 border border-white/15 md:border-zinc-200 bg-white/5 md:bg-white hover:border-orange-400 md:hover:border-orange-400 transition-colors duration-200"
-        >
-          <div className="flex items-center gap-1.5">
-            <Network className="w-3.5 h-3.5 text-orange-400 md:text-orange-500 flex-shrink-0" />
-            <span className="font-semibold text-xs text-white md:text-zinc-800 group-hover:text-orange-400 md:group-hover:text-orange-600 transition-colors">{t('nav.visualizer')}</span>
+      <div className="h-px bg-white/10 md:bg-zinc-200" />
+
+      {/* II — Knowledge Graph */}
+      <a
+        href="/visualizer"
+        className="group flex items-center gap-3 py-3 px-1 hover:bg-white/[0.04] md:hover:bg-orange-50/60 transition-colors duration-150"
+      >
+        <span className="font-mono text-[10px] w-6 text-white/25 md:text-zinc-300 group-hover:text-orange-400 tracking-widest flex-shrink-0 transition-colors duration-150 select-none">
+          II
+        </span>
+        <div className="flex-1 min-w-0">
+          <div className="text-xs font-semibold tracking-wide text-white md:text-zinc-800 group-hover:text-orange-500 md:group-hover:text-orange-700 transition-colors duration-150 leading-tight">
+            {t('nav.visualizer')}
           </div>
-          <span className="text-[9px] text-white/35 md:text-zinc-400">2,193 nodes · 8,616 edges</span>
-        </a>
-        <a
-          href="/graphrag"
-          className="group flex flex-col gap-0.5 rounded-xl px-4 py-3 border border-white/15 md:border-zinc-200 bg-white/5 md:bg-white hover:border-violet-400 md:hover:border-violet-400 transition-colors duration-200"
-        >
-          <div className="flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-violet-400 md:text-violet-500 flex-shrink-0" />
-            <span className="font-semibold text-xs text-white md:text-zinc-800 group-hover:text-violet-400 md:group-hover:text-violet-600 transition-colors">{t('nav.graphrag')}</span>
+          <div className="text-[9px] text-white/30 md:text-zinc-400 mt-0.5 leading-tight">
+            2,193 nodes · 8,616 edges
           </div>
-          <span className="text-[9px] text-white/35 md:text-zinc-400">5-stage RAG · AI-powered</span>
-        </a>
-      </div>
-    </>
+        </div>
+        <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-orange-400 md:text-orange-600 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
+      </a>
+
+      <div className="h-px bg-white/10 md:bg-zinc-200" />
+
+      {/* III — GraphRAG Q&A */}
+      <a
+        href="/graphrag"
+        className="group flex items-center gap-3 py-3 px-1 hover:bg-white/[0.04] md:hover:bg-violet-50/40 transition-colors duration-150"
+      >
+        <span className="font-mono text-[10px] w-6 text-white/25 md:text-zinc-300 group-hover:text-violet-400 tracking-widest flex-shrink-0 transition-colors duration-150 select-none">
+          III
+        </span>
+        <div className="flex-1 min-w-0">
+          <div className="text-xs font-semibold tracking-wide text-white md:text-zinc-800 group-hover:text-violet-500 md:group-hover:text-violet-700 transition-colors duration-150 leading-tight">
+            {t('nav.graphrag')}
+          </div>
+          <div className="text-[9px] text-white/30 md:text-zinc-400 mt-0.5 leading-tight">
+            5-stage RAG · AI-powered Q&A
+          </div>
+        </div>
+        <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-violet-400 md:text-violet-600 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
+      </a>
+
+      <div className="h-px bg-white/10 md:bg-zinc-200" />
+    </div>
   );
 
   return (
