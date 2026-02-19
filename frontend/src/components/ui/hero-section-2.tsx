@@ -158,7 +158,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                 <img
                   src={logo.url}
                   alt={logo.alt}
-                  className="h-20 sm:h-24 brightness-0 invert"
+                  className="h-20 sm:h-24"
                 />
               </motion.div>
             )}
