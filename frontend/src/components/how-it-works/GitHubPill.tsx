@@ -1,4 +1,4 @@
-import { Star, GitFork } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
 interface GitHubPillProps {
