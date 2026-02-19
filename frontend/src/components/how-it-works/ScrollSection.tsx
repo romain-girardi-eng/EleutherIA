@@ -25,23 +25,24 @@ export const ScrollSection = forwardRef<HTMLElement, ScrollSectionProps>(
           // Scroll snap
           'scroll-snap-align-start',
           // Layout
-          'relative min-h-screen w-full',
+          'relative w-full',
           // Overflow guard
           'overflow-hidden',
           className,
         )}
-        style={{ scrollSnapAlign: 'start' }}
+        style={{ scrollSnapAlign: 'start', minHeight: 'var(--snap-h, 100dvh)' }}
       >
         {noInner ? (
           children
         ) : (
           <div
             className={cn(
-              'relative z-10 flex flex-col items-center justify-center min-h-screen',
+              'relative z-10 flex flex-col items-center justify-center',
               'px-4 sm:px-6 lg:px-8',
               'max-w-7xl mx-auto w-full',
               innerClassName,
             )}
+            style={{ minHeight: 'var(--snap-h, 100dvh)' }}
           >
             {children}
           </div>
