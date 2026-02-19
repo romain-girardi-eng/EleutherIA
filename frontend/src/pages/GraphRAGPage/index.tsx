@@ -23,6 +23,8 @@ import {
   mockReasoningSteps,
 } from '../../data/mockGraphRAGData';
 
+type RightPanelState = 'idle' | 'loading' | 'graph' | 'source-detail';
+
 export default function GraphRAGPage() {
   const { t } = useTranslation();
   const location = useLocation();
@@ -64,6 +66,24 @@ export default function GraphRAGPage() {
     sources: 0,
     hierarchyLayers: 3
   });
+
+  // Right panel
+  const [rightPanelState, setRightPanelState] = useState<RightPanelState>('idle');
+  const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(null);
+  const [rightPanelResponse, setRightPanelResponse] = useState<GraphRAGResponse | null>(null);
+  const highlightNodeRef = useRef<((citationIndex: number) => void) | null>(null);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleCitationClick = (citationIndex: number) => {
+    setActiveSourceIndex(citationIndex);
+    setRightPanelState('source-detail');
+    highlightNodeRef.current?.(citationIndex);
+  };
+  // Suppress unused-variable errors until JSX wiring in next task
+  void rightPanelState;
+  void activeSourceIndex;
+  void rightPanelResponse;
+  void handleCitationClick;
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -133,6 +153,8 @@ export default function GraphRAGPage() {
     };
 
     setMessages([demoMessage, assistantMessage]);
+    setRightPanelResponse(mockGraphRAGResponse as unknown as GraphRAGResponse);
+    setRightPanelState('graph');
     setReasoningSteps(mockReasoningSteps);
     setCurrentQuery(mockGraphRAGResponse.query);
     setQuery('');
@@ -227,6 +249,8 @@ export default function GraphRAGPage() {
 
   const handleStreamingQuery = async (queryText: string, apiUrlOverride?: string, queryParamName: string = 'query') => {
     setStreaming(true);
+    setRightPanelState('loading');
+    setRightPanelResponse(null);
     setStreamedAnswer('');
     setStreamStatus('Connecting...');
     initializeReasoningSteps(queryText);
@@ -437,6 +461,8 @@ export default function GraphRAGPage() {
           graphrag_response: finalResponse,
         };
         setMessages((prev) => [...prev, assistantMessage]);
+        setRightPanelResponse(finalResponse);
+        setRightPanelState('graph');
       } else if (fullAnswer) {
         const assistantMessage: GraphRAGChatMessage = {
           role: 'assistant',
@@ -444,6 +470,7 @@ export default function GraphRAGPage() {
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, assistantMessage]);
+        setRightPanelState('idle');
       }
 
       setStreaming(false);
