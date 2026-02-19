@@ -1,7 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import DatabaseWithRestApi from '../components/ui/database-with-rest-api';
-import HiRAGImplementationDetails from '../components/HiRAGImplementationDetails';
 import { AuroraBackground } from '../components/ui/aurora-background';
 import { motion } from 'framer-motion';
 import { Typewriter } from '../components/ui/typewriter';
@@ -197,174 +195,26 @@ export default function AboutPage() {
           </div>
         </motion.div>
 
-        {/* Technical Details */}
+        {/* Technical details → How It Works page */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
+          className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6"
         >
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">{t('about.implementationTitle')}</h2>
-
-          <div className="space-y-8 text-gray-700 leading-relaxed">
-            <p>{t('about.hiragDesc')}</p>
-
-            {/* Data Exchange Visualization */}
-            <div className="flex flex-col items-center py-10">
-              <div className="w-full max-w-[800px]">
-                <DatabaseWithRestApi
-                  className="h-[500px] max-w-[800px]"
-                  circleText="API"
-                  badgeTexts={{
-                    first: "Question",
-                    second: "Context",
-                    third: "Synthesis",
-                    fourth: "Answer"
-                  }}
-                  buttonTexts={{
-                    first: "Knowledge Graph",
-                    second: "AI Model"
-                  }}
-                  title="GraphRAG Pipeline: Database to AI-Generated Responses"
-                  lightColor="#769687"
-                />
-              </div>
-              <p className="text-sm text-gray-600 text-center mt-8 max-w-3xl leading-relaxed">
-                The API (Application Programming Interface) allows the AI model to communicate with the Knowledge Graph database.
-                When you ask a question, it retrieves relevant context from ancient sources and modern scholarship through a
-                hierarchical retrieval process, which the AI then synthesizes into a scholarly answer with full citation tracking.
-              </p>
-            </div>
-
-            {/* HiRAG Technology Highlight */}
-            <div className="bg-gradient-to-br from-purple-50 to-indigo-50 p-8 rounded-2xl border-2 border-purple-200 shadow-md">
-              <h3 className="text-2xl font-bold text-purple-900 mb-4 flex items-center gap-2">
-                {t('about.poweredByHiRAG')}
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-200 text-purple-800">
-                  EMNLP 2025
-                </span>
-              </h3>
-              <p className="text-gray-800 mb-4 leading-relaxed">
-                EleutherIA implements <strong>HiRAG (Hierarchical Retrieval-Augmented Generation)</strong>, a cutting-edge
-                approach that organizes knowledge in hierarchical layers—from detailed textual evidence to high-level conceptual
-                summaries. This mirrors how scholars naturally organize information and enables simultaneous access to precise
-                citations and broad thematic patterns.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
-                <div className="bg-white/70 p-4 rounded-xl">
-                  <span className="font-semibold text-purple-900">Performance:</span> HiRAG outperforms traditional RAG by
-                  <strong className="text-purple-700"> 87.6% vs 12.4%</strong> and standard GraphRAG by
-                  <strong className="text-purple-700"> 64.1% vs 35.9%</strong>
-                </div>
-                <div className="bg-white/70 p-4 rounded-xl">
-                  <span className="font-semibold text-purple-900">Source:</span> Huang et al. (2025).{' '}
-                  <a
-                    href="https://arxiv.org/abs/2503.10150"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-purple-600 hover:text-purple-800 underline"
-                  >
-                    arXiv:2503.10150
-                  </a>
-                  {' '}(EMNLP 2025 Findings)
-                </div>
-              </div>
-
-              <div className="flex justify-center pt-2">
-                <Link
-                  to="/graphrag-showcase"
-                  className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-full shadow-md hover:shadow-xl hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105"
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  See HiRAG in Action
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </Link>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Philological Work */}
-              <div className="bg-gradient-to-br from-teal-50 to-cyan-50 p-6 rounded-xl border-2 border-teal-200 shadow-sm">
-                <h4 className="text-lg font-bold mb-4 text-teal-800">{t('about.philologicalWork')}</h4>
-                <ul className="text-sm space-y-2">
-                  <li className="flex items-start gap-2">
-                    <span className="text-teal-600 font-bold">•</span>
-                    <span><strong>2,193 entities</strong> verified against ancient sources</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-teal-600 font-bold">•</span>
-                    <span><strong>8,616 relationships</strong> with full citations</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-teal-600 font-bold">•</span>
-                    <span><strong>189 ancient works</strong> with lemmatization</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-teal-600 font-bold">•</span>
-                    <span><strong>16,968 passages</strong> hierarchically structured</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-teal-600 font-bold">•</span>
-                    <span><strong>1,413 bibliography entries</strong></span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-teal-600 font-bold">•</span>
-                    <span><strong>CTS URN canonical references</strong></span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Technical Infrastructure */}
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl border-2 border-blue-200 shadow-sm">
-                <h4 className="text-lg font-bold mb-4 text-blue-800">{t('about.technicalInfra')}</h4>
-                <ul className="text-sm space-y-2">
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 font-bold">•</span>
-                    <span><strong>HiRAG Architecture</strong></span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 font-bold">•</span>
-                    <span><strong>Hybrid Search:</strong> RRF fusion</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 font-bold">•</span>
-                    <span><strong>Vector Database:</strong> Qdrant</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 font-bold">•</span>
-                    <span><strong>PostgreSQL</strong> with GIN indexes</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 font-bold">•</span>
-                    <span><strong>FastAPI</strong> backend</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 font-bold">•</span>
-                    <span><strong>React 19</strong> + TypeScript frontend</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 font-bold">•</span>
-                    <span><strong>Streaming Responses</strong></span>
-                  </li>
-                </ul>
-              </div>
-            </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('about.implementationTitle')}</h2>
+            <p className="text-gray-600 text-sm max-w-lg">
+              HiRAG architecture, GraphRAG pipeline, hybrid search, corpus statistics and full
+              technical documentation have moved to the <strong>How It Works</strong> page.
+            </p>
           </div>
-        </motion.div>
-
-        {/* HiRAG Implementation Details */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
-        >
-          <HiRAGImplementationDetails />
+          <Link
+            to="/how-it-works"
+            className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-full shadow hover:shadow-lg hover:from-violet-700 hover:to-indigo-700 transition-all text-sm whitespace-nowrap"
+          >
+            View technical docs →
+          </Link>
         </motion.div>
 
         {/* Open Source Info */}
