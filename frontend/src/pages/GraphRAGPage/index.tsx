@@ -52,6 +52,7 @@ export default function GraphRAGPage() {
   const [rightPanelState, setRightPanelState] = useState<RightPanelState>('idle');
   const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(null);
   const [rightPanelResponse, setRightPanelResponse] = useState<GraphRAGResponse | null>(null);
+  const [allResponses, setAllResponses] = useState<GraphRAGResponse[]>([]);
   const highlightNodeRef = useRef<((citationIndex: number) => void) | null>(null);
 
   const handleCitationClick = (citationIndex: number) => {
@@ -123,6 +124,7 @@ export default function GraphRAGPage() {
 
     setMessages([demoMessage, assistantMessage]);
     setRightPanelResponse(mockGraphRAGResponse);
+    setAllResponses((prev) => [...prev, mockGraphRAGResponse]);
     setRightPanelState('graph');
     setReasoningSteps(mockReasoningSteps);
     setCurrentQuery(mockGraphRAGResponse.query);
@@ -424,6 +426,7 @@ export default function GraphRAGPage() {
         };
         setMessages((prev) => [...prev, assistantMessage]);
         setRightPanelResponse(finalResponse);
+        setAllResponses((prev) => [...prev, finalResponse]);
         setRightPanelState('graph');
       } else if (fullAnswer) {
         const assistantMessage: GraphRAGChatMessage = {
@@ -538,6 +541,7 @@ export default function GraphRAGPage() {
                   <RightPanel
                     state={rightPanelState}
                     response={rightPanelResponse}
+                    allResponses={allResponses}
                     activeSourceIndex={activeSourceIndex}
                     onNodeClick={handleNodeClick}
                     onCloseDetail={() => setRightPanelState('graph')}
@@ -553,6 +557,7 @@ export default function GraphRAGPage() {
               <MobileGraphSheet
                 rightPanelState={rightPanelState}
                 response={rightPanelResponse}
+                allResponses={allResponses}
                 activeSourceIndex={activeSourceIndex}
                 onNodeClick={handleNodeClick}
                 onCloseDetail={() => setRightPanelState('graph')}

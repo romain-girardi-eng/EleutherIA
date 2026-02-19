@@ -10,6 +10,7 @@ type RightPanelState = 'idle' | 'loading' | 'graph' | 'source-detail';
 interface RightPanelProps {
   state: RightPanelState;
   response: GraphRAGResponse | null;
+  allResponses?: GraphRAGResponse[];
   activeSourceIndex: number | null;
   onNodeClick: (nodeId: string) => void;
   onCloseDetail: () => void;
@@ -22,6 +23,7 @@ interface RightPanelProps {
 export default function RightPanel({
   state,
   response,
+  allResponses,
   activeSourceIndex,
   onNodeClick,
   onCloseDetail,
@@ -129,6 +131,7 @@ export default function RightPanel({
           >
             <CosmographView
               response={response}
+              allResponses={allResponses}
               highlightedNodeIndex={null}
               onNodeClick={onNodeClick}
               onHighlightRef={onHighlightRef}
@@ -150,6 +153,7 @@ export default function RightPanel({
             <div style={{ flex: '0 0 40%' }} className="relative overflow-hidden">
               <CosmographView
                 response={response}
+                allResponses={allResponses}
                 highlightedNodeIndex={activeSourceIndex}
                 onNodeClick={onNodeClick}
                 onHighlightRef={onHighlightRef}

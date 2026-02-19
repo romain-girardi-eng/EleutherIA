@@ -10,6 +10,7 @@ type RightPanelState = 'idle' | 'loading' | 'graph' | 'source-detail';
 interface MobileGraphSheetProps {
   rightPanelState: RightPanelState;
   response: GraphRAGResponse | null;
+  allResponses?: GraphRAGResponse[];
   activeSourceIndex: number | null;
   onNodeClick: (nodeId: string) => void;
   onCloseDetail: () => void;
@@ -21,6 +22,7 @@ interface MobileGraphSheetProps {
 export default function MobileGraphSheet({
   rightPanelState,
   response,
+  allResponses,
   activeSourceIndex,
   onNodeClick,
   onCloseDetail,
@@ -57,6 +59,7 @@ export default function MobileGraphSheet({
           <RightPanel
             state={rightPanelState}
             response={response}
+            allResponses={allResponses}
             activeSourceIndex={activeSourceIndex}
             onNodeClick={onNodeClick}
             onCloseDetail={onCloseDetail}

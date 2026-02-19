@@ -36,9 +36,13 @@ function InnerControls({
     (citationIndex: number) => {
       const point = points[citationIndex];
       if (point && cosmograph) {
-        const idx = point.index as number;
-        cosmograph.selectPoint(idx, false, true);
-        cosmograph.zoomToPoint(idx, 800, 1.5, true);
+        try {
+          cosmograph.selectPoint(point.index as number, false, true);
+          cosmograph.zoomToPoint(point.index as number, 800, 1.5, true);
+        } catch {
+          // Fallback: just fit view if selection fails
+          cosmograph.fitView(400, 0.1);
+        }
       }
     },
     [points, cosmograph],
@@ -83,6 +87,8 @@ function InnerControls({
 
 interface CosmographViewProps {
   response: GraphRAGResponse | null;
+  /** All accumulated responses from the conversation for building a growing graph */
+  allResponses?: GraphRAGResponse[];
   highlightedNodeIndex: number | null;
   onNodeClick: (nodeId: string) => void;
   onHighlightRef?: (fn: (citationIndex: number) => void) => void;
@@ -92,6 +98,7 @@ interface CosmographViewProps {
 
 export default function CosmographView({
   response,
+  allResponses,
   highlightedNodeIndex,
   onNodeClick,
   onHighlightRef,
@@ -99,22 +106,40 @@ export default function CosmographView({
   showControls = true,
 }: CosmographViewProps) {
   const { points, links } = useMemo(() => {
-    if (!response) return { points: [] as Record<string, unknown>[], links: [] as Record<string, unknown>[] };
+    // Build graph from all accumulated responses (or just the current one)
+    const responses = allResponses?.length ? allResponses : response ? [response] : [];
+    if (responses.length === 0) return { points: [] as Record<string, unknown>[], links: [] as Record<string, unknown>[] };
 
     const nodeMap = new Map<string, { id: string; label: string; type: string }>();
     const addNode = (id: string, label: string, type: string) => {
       if (!nodeMap.has(id)) nodeMap.set(id, { id, label, type });
     };
 
-    response.sources?.slice(0, 25).forEach((s) => addNode(s.nodeId, s.nodeLabel, s.nodeType));
-    response.reasoning_path?.starting_nodes?.forEach((n) => addNode(n.id, n.label, n.type));
-    response.reasoning_path?.expanded_nodes?.slice(0, 15).forEach((n) => addNode(n.id, n.label, n.type));
+    const linkSet = new Set<string>();
+    const allLinks: { source: string; target: string }[] = [];
+    const addLink = (source: string, target: string) => {
+      const key = `${source}->${target}`;
+      if (!linkSet.has(key)) {
+        linkSet.add(key);
+        allLinks.push({ source, target });
+      }
+    };
 
-    const idToIndex = new Map<string, number>();
+    for (const resp of responses) {
+      resp.sources?.slice(0, 25).forEach((s) => addNode(s.nodeId, s.nodeLabel, s.nodeType));
+      resp.reasoning_path?.starting_nodes?.forEach((n) => addNode(n.id, n.label, n.type));
+      resp.reasoning_path?.expanded_nodes?.slice(0, 15).forEach((n) => addNode(n.id, n.label, n.type));
+
+      if (resp.reasoning_path?.traversed_edges) {
+        resp.reasoning_path.traversed_edges.slice(0, 30).forEach((e) => {
+          addLink(e.source, e.target);
+        });
+      }
+    }
+
     const points: Record<string, unknown>[] = [];
     let idx = 0;
     for (const [, node] of nodeMap) {
-      idToIndex.set(node.id, idx);
       points.push({
         index: idx,
         id: node.id,
@@ -126,23 +151,25 @@ export default function CosmographView({
       idx++;
     }
 
+    // Filter links to only include those where both endpoints exist
+    const nodeIds = new Set(nodeMap.keys());
     const links: Record<string, unknown>[] = [];
-    if (response.reasoning_path?.traversed_edges) {
-      response.reasoning_path.traversed_edges.slice(0, 30).forEach((e) => {
-        const si = idToIndex.get(e.source);
-        const ti = idToIndex.get(e.target);
-        if (si !== undefined && ti !== undefined) {
-          links.push({ source: si, target: ti });
-        }
-      });
-    } else if (points.length > 1) {
+    for (const l of allLinks) {
+      if (nodeIds.has(l.source) && nodeIds.has(l.target)) {
+        links.push({ source: l.source, target: l.target });
+      }
+    }
+
+    // If no edges but we have nodes, create star topology from first node
+    if (links.length === 0 && points.length > 1) {
+      const firstId = points[0].id as string;
       for (let i = 1; i < Math.min(points.length, 8); i++) {
-        links.push({ source: 0, target: i });
+        links.push({ source: firstId, target: points[i].id as string });
       }
     }
 
     return { points, links };
-  }, [response]);
+  }, [response, allResponses]);
 
   const handleClick = useCallback(
     (clickedIndex: number | undefined) => {
@@ -166,8 +193,8 @@ export default function CosmographView({
           pointColorBy="color"
           pointSizeBy="size"
           pointLabelBy="label"
-          linkSourceIndexBy="source"
-          linkTargetIndexBy="target"
+          linkSourceBy="source"
+          linkTargetBy="target"
           linkDefaultColor="#D1D5DB"
           linkDefaultWidth={1}
           backgroundColor="#ffffff"
