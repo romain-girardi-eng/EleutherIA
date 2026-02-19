@@ -40,6 +40,9 @@ const UserProfilePage = lazy(() => import('./pages/UserProfilePage'));
 // HomePage - Main landing page with educational content and features overview
 const HomePage = lazy(() => import('./pages/HomePage'));
 
+// HowItWorksPage - Scroll-snap redesigned landing
+const HowItWorksPage = lazy(() => import('./pages/HowItWorksPage'));
+
 // Helper function to get page titles for screen reader announcements
 function getPageTitle(pathname: string): string {
   const routes: Record<string, string> = {
@@ -157,7 +160,7 @@ function AppContent() {
   }, [location.pathname, announce]);
 
   // Check if current page should hide footer (full-screen pages)
-  const hideFooter = location.pathname === '/' || ['/visualizer', '/graph'].some(path =>
+  const hideFooter = location.pathname === '/' || location.pathname === '/how-it-works' || ['/visualizer', '/graph'].some(path =>
     location.pathname === path || location.pathname.startsWith(`${path}/`)
   );
 
@@ -193,6 +196,7 @@ function AppContent() {
 
             {/* Navigation Links - Hidden on mobile */}
             <div className="hidden lg:flex items-center space-x-6">
+              <NavLink to="/how-it-works">How it works</NavLink>
               <NavLink to="/database">{t('nav.database')}</NavLink>
               <NavLink to="/visualizer">{t('nav.visualizer')}</NavLink>
               <NavLink to="/search">{t('nav.search')}</NavLink>
@@ -272,6 +276,7 @@ function AppContent() {
               >
                 <div className="py-2 space-y-1">
                   {[
+                    { to: '/how-it-works', label: 'How it works' },
                     { to: '/database', label: t('nav.database') },
                     { to: '/visualizer', label: t('nav.visualizer') },
                     { to: '/search', label: t('nav.search') },
@@ -336,6 +341,7 @@ function AppContent() {
             <Suspense fallback={<PageLoadingFallback />}>
               <Routes>
               <Route path="/" element={<Suspense fallback={<PageLoadingFallback />}><HomePage /></Suspense>} />
+              <Route path="/how-it-works" element={<Suspense fallback={<PageLoadingFallback />}><HowItWorksPage /></Suspense>} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/database" element={<DatabasePage />} />
               <Route path="/visualizer" element={<CosmographPage />} />

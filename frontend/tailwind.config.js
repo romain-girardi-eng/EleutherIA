@@ -83,6 +83,32 @@ export default {
           800: '#991b1b',
           900: '#7f1d1d',
         },
+        // Orange accent — warm burnt-orange palette
+        orange: {
+          50: '#fff8f0',
+          100: '#ffedd8',
+          200: '#fed7aa',
+          300: '#fdba74',
+          400: '#fb923c',
+          500: '#f97316',
+          600: '#ea580c',
+          700: '#c2410c',
+          800: '#9a3412',
+          900: '#7c2d12',
+        },
+        // Parchment — warm cream for scholarly backgrounds
+        parchment: {
+          50: '#fffdf9',
+          100: '#fef9f0',
+          200: '#fef3e2',
+          300: '#fde8c8',
+          400: '#fbd9a6',
+          500: '#f8c980',
+          600: '#f0b050',
+          700: '#d48c2a',
+          800: '#a86a1a',
+          900: '#7c4d0f',
+        },
         // CSS Variables
         background: 'var(--background)',
         foreground: 'var(--foreground)',
@@ -102,8 +128,23 @@ export default {
         input: '#e7e5e4',
       },
       fontFamily: {
+        // Display headings — Instrument Serif (elegant academic serif)
+        display: [
+          '"Instrument Serif"',
+          'Georgia',
+          '"Times New Roman"',
+          'serif',
+        ],
+        // Body text — DM Sans (clean modern sans)
+        body: [
+          '"DM Sans"',
+          'system-ui',
+          '-apple-system',
+          'sans-serif',
+        ],
         // UI elements - modern system fonts
         sans: [
+          '"DM Sans"',
           'system-ui',
           '-apple-system',
           'BlinkMacSystemFont',
