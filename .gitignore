@@ -123,6 +123,7 @@ coverage/
 
 # Local development notes (untracked)
 CLAUDE.md
+agents.md
 
 # Git worktrees
 .worktrees/
