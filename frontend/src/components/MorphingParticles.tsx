@@ -1224,6 +1224,62 @@ export function MorphingParticles(props: MorphingParticlesProps) {
     renderer.domElement.addEventListener('mouseleave', onMouseLeave);
     renderer.domElement.addEventListener('contextmenu', onContextMenu);
 
+    // ── TOUCH EVENTS (mobile interaction) ──────────────────────────────────
+    const onTouchStart = (e: TouchEvent) => {
+      e.preventDefault();
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        previousMouseX = touch.clientX;
+        previousMouseY = touch.clientY;
+        isDragging = true;
+        velocityY = 0;
+        velocityX = 0;
+        autoRotationPaused = true;
+        if (autoRotationResumeTimeout) clearTimeout(autoRotationResumeTimeout);
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - previousMouseX;
+        const deltaY = touch.clientY - previousMouseY;
+
+        velocityY = deltaX * sensitivity;
+        velocityX = deltaY * sensitivity;
+
+        userRotationY += velocityY;
+        userRotationX += velocityX;
+        userRotationX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, userRotationX));
+
+        previousMouseX = touch.clientX;
+        previousMouseY = touch.clientY;
+
+        // Also drive the particle hover/swirl effect with the touch position
+        const rect = renderer.domElement.getBoundingClientRect();
+        targetMouseX = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+        targetMouseY = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
+        isMouseOverCanvas = true;
+        hoverInfluence = 1;
+      }
+    };
+
+    const onTouchEnd = () => {
+      if (isDragging) {
+        isDragging = false;
+        autoRotationResumeTimeout = setTimeout(() => {
+          autoRotationPaused = false;
+        }, 3000);
+      }
+      isMouseOverCanvas = false;
+      hoverInfluence = 0;
+    };
+
+    renderer.domElement.addEventListener('touchstart', onTouchStart, { passive: false });
+    renderer.domElement.addEventListener('touchmove', onTouchMove, { passive: false });
+    renderer.domElement.addEventListener('touchend', onTouchEnd);
+
     // ========================================================================
     // POST-PROCESSING
     // ========================================================================
@@ -2812,6 +2868,9 @@ export function MorphingParticles(props: MorphingParticlesProps) {
       renderer.domElement.removeEventListener('mouseup', onMouseUp);
       renderer.domElement.removeEventListener('mouseleave', onMouseLeave);
       renderer.domElement.removeEventListener('contextmenu', onContextMenu);
+      renderer.domElement.removeEventListener('touchstart', onTouchStart);
+      renderer.domElement.removeEventListener('touchmove', onTouchMove);
+      renderer.domElement.removeEventListener('touchend', onTouchEnd);
       if (config.enableZoom) {
         renderer.domElement.removeEventListener('wheel', onWheel);
       }
