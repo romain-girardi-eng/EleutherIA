@@ -80,6 +80,17 @@ export default function GraphRAGPage() {
     setActiveSourceIndex(prev => (prev !== null && prev < sources.length - 1 ? prev + 1 : prev));
   };
 
+  // Measure nav height so two-column layout sits flush below the fixed nav
+  const [navHeight, setNavHeight] = useState(57);
+  useEffect(() => {
+    const nav = document.getElementById('navigation');
+    if (!nav) return;
+    setNavHeight(nav.offsetHeight);
+    const ro = new ResizeObserver(() => setNavHeight(nav.offsetHeight));
+    ro.observe(nav);
+    return () => ro.disconnect();
+  }, []);
+
   // Scroll to bottom only when a NEW message is added (not during streaming)
   useEffect(() => {
     if (messages.length > prevMessagesLengthRef.current) {
@@ -592,7 +603,17 @@ export default function GraphRAGPage() {
 
           {/* ── TWO-COLUMN LAYOUT ──────────────────────────── */}
           {(messages.length > 0 || streaming) && (
-            <div className="flex h-screen overflow-hidden">
+            <div
+              className="flex bg-academic-paper"
+              style={{
+                position: 'fixed',
+                top: navHeight,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 20,
+              }}
+            >
 
               {/* LEFT PANEL — 65% */}
               <div className="flex flex-col w-full lg:w-[65%] h-full overflow-hidden border-r border-gray-100">
