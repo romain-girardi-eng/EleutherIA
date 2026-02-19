@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { AuroraBackground } from '../components/ui/aurora-background';
 import { motion } from 'framer-motion';
 import { Typewriter } from '../components/ui/typewriter';
@@ -195,33 +194,11 @@ export default function AboutPage() {
           </div>
         </motion.div>
 
-        {/* Technical details → How It Works page */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6"
-        >
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('about.implementationTitle')}</h2>
-            <p className="text-gray-600 text-sm max-w-lg">
-              HiRAG architecture, GraphRAG pipeline, hybrid search, corpus statistics and full
-              technical documentation have moved to the <strong>How It Works</strong> page.
-            </p>
-          </div>
-          <Link
-            to="/how-it-works"
-            className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-full shadow hover:shadow-lg hover:from-violet-700 hover:to-indigo-700 transition-all text-sm whitespace-nowrap"
-          >
-            View technical docs →
-          </Link>
-        </motion.div>
-
         {/* Open Source Info */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.4 }}
           className="bg-gradient-to-br from-green-50 to-emerald-50 backdrop-blur-sm rounded-2xl p-6 border border-green-200 shadow-sm"
         >
           <p className="text-sm text-gray-800 leading-relaxed">

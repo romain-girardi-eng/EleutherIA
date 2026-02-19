@@ -13,6 +13,7 @@
     "texts": "Antike Texte",
     "bibliography": "Bibliographie",
     "about": "Über",
+    "howItWorks": "Wie es funktioniert",
     "credits": "Mitwirkende",
     "admin": "Admin-Dashboard",
     "citationNetwork": "Zitatnetzwerk",
@@ -1273,6 +1274,8 @@
       "ancientTexts": "Antike Texte",
       "fair": "FAIR-Prinzipien",
       "glossary": "Glossar",
+      "hirag": "HiRAG-Technologie",
+      "hiragDetails": "Implementierung",
       "tryGraphRAG": "GraphRAG ausprobieren"
     },
     "hero": {

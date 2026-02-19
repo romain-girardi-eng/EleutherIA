@@ -37,6 +37,9 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const SubmitCorrectionPage = lazy(() => import('./pages/SubmitCorrectionPage'));
 const UserProfilePage = lazy(() => import('./pages/UserProfilePage'));
 
+// HowItWorksPage - Explains the system architecture and pipeline
+const HowItWorksPage = lazy(() => import('./pages/HowItWorksPage'));
+
 // HomePage - Main landing page with educational content and features overview
 const HomePage = lazy(() => import('./pages/HomePage'));
 
@@ -55,6 +58,7 @@ function getPageTitle(pathname: string): string {
     '/texts': 'Ancient Texts',
     '/bibliography': 'Bibliography',
     '/about': 'About',
+    '/how-it-works': 'How It Works',
     '/credits': 'Credits',
     '/login': 'Login',
     '/report-error': 'Report Error',
@@ -204,6 +208,7 @@ function AppContent() {
               <NavLink to="/texts">{t('nav.texts')}</NavLink>
               <NavLink to="/bibliography">{t('nav.bibliography')}</NavLink>
               <NavLink to="/about">{t('nav.about')}</NavLink>
+              <NavLink to="/how-it-works">{t('nav.howItWorks')}</NavLink>
 
               {/* Language Switcher */}
               <LanguageSwitcher variant="dropdown" />
@@ -284,6 +289,7 @@ function AppContent() {
                     { to: '/texts', label: t('nav.texts') },
                     { to: '/bibliography', label: t('nav.bibliography') },
                     { to: '/about', label: t('nav.about') },
+                    { to: '/how-it-works', label: t('nav.howItWorks') },
                     { to: '/credits', label: t('nav.credits') },
                   ].map((item, index) => (
                     <motion.div
@@ -356,6 +362,7 @@ function AppContent() {
               <Route path="/simple/:textId" element={<SimpleTextReader />} />
               <Route path="/bibliography" element={<BibliographyPage />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/how-it-works" element={<Suspense fallback={<PageLoadingFallback />}><HowItWorksPage /></Suspense>} />
               <Route path="/credits" element={<CreditsPage />} />
               <Route path="/report-error" element={<ReportErrorPage />} />
               {/* Admin and Community Features */}

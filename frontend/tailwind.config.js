@@ -10,18 +10,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Primary colors - academic green
+        // Primary colors - warm amber-orange
         primary: {
-          50: '#f3f7f5',
-          100: '#e2ebe7',
-          200: '#c5d7cf',
-          300: '#a8c3b7',
-          400: '#8baf9f',
-          500: '#769687',
-          600: '#769687',
-          700: '#5d7769',
-          800: '#475a4f',
-          900: '#313d36',
+          50: '#fff7ed',
+          100: '#ffedd5',
+          200: '#fed7aa',
+          300: '#fdba74',
+          400: '#fb923c',
+          500: '#f97316',
+          600: '#ea580c',
+          700: '#c2410c',
+          800: '#9a3412',
+          900: '#7c2d12',
         },
         // Accent colors - ancient red
         accent: {
@@ -124,7 +124,7 @@ export default {
           DEFAULT: '#f3f4f6',
           foreground: '#1c1917',
         },
-        ring: '#769687',
+        ring: '#f97316',
         input: '#e7e5e4',
       },
       fontFamily: {
@@ -311,7 +311,7 @@ export default {
         'soft': '0 2px 8px 0 rgb(0 0 0 / 0.04)',
         'medium': '0 4px 12px 0 rgb(0 0 0 / 0.08)',
         'hard': '0 10px 40px 0 rgb(0 0 0 / 0.15)',
-        'glow': '0 0 20px rgb(118 150 135 / 0.3)',
+        'glow': '0 0 20px rgb(249 115 22 / 0.3)',
         'glow-accent': '0 0 20px rgb(182 27 33 / 0.3)',
       },
       borderRadius: {
