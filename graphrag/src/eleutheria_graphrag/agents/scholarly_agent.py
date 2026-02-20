@@ -29,7 +29,9 @@ Synthesize / SynthesizeWithHierarchy → VerifyCitations → SelfRAGEvaluate
 
 from __future__ import annotations
 
+import json
 import logging
+import textwrap
 from collections.abc import AsyncIterator
 from typing import Any
 
@@ -140,6 +142,8 @@ class ScholarlyAgent:
             "seed_nodes": answer.seed_nodes,
             "context_nodes": answer.context_nodes,
             "passages_used": answer.passages_used,
+            "llm_model": self.deps.llm.last_model_used,
+            "llm_provider": self.deps.llm.last_provider_used,
             "metadata": {
                 **answer.metadata,
                 "complexity": answer.complexity.value,
@@ -165,8 +169,34 @@ class ScholarlyAgent:
         Future: integrate true streaming into the synthesis nodes.
         """
         answer = await self.query(question, max_iterations=max_iterations)
-        # Yield the answer in chunks to preserve SSE contract
-        chunk_size = 80
+        # Chunk at word boundaries to preserve UTF-8 multi-byte characters
         text = answer.answer
-        for i in range(0, len(text), chunk_size):
-            yield text[i : i + chunk_size]
+        for chunk in textwrap.wrap(text, width=200, break_on_hyphens=False):
+            yield chunk
+        # Yield a final complete event with full metadata (JSON-encoded)
+        def _safe_default(obj: Any) -> Any:
+            """Fallback serializer for non-JSON-serializable objects."""
+            return str(obj)
+
+        complete_data = {
+            "answer": answer.answer,
+            "question": answer.question,
+            "citations": [c.model_dump() for c in answer.citations],
+            "seed_nodes": answer.seed_nodes,
+            "context_nodes": answer.context_nodes,
+            "passages_used": answer.passages_used,
+            "llm_model": self.deps.llm.last_model_used,
+            "llm_provider": self.deps.llm.last_provider_used,
+            "metadata": {
+                **answer.metadata,
+                "complexity": answer.complexity.value,
+                "iterations": answer.iterations,
+                "sub_queries": answer.sub_queries,
+                "query_type": answer.query_type,
+                "quality_badge": answer.quality_badge,
+            },
+        }
+        yield json.dumps(
+            {"type": "complete", "data": complete_data},
+            default=_safe_default,
+        )

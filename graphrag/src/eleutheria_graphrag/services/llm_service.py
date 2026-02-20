@@ -62,23 +62,23 @@ class ModelProvider(Enum):
 
 # Provider configurations
 PROVIDER_CONFIGS = {
+    ModelProvider.GEMINI: {
+        "base_url": "https://generativelanguage.googleapis.com/v1beta",
+        "model": "gemini-3.1-pro-preview",  # Upgraded: most capable model
+        "env_key": "GEMINI_API_KEY",
+        "rate_limit": 30,  # Pro model has lower rate limits
+    },
+    ModelProvider.OPENROUTER: {
+        "base_url": "https://openrouter.ai/api/v1",
+        "model": "google/gemini-3-flash-preview",  # Fallback: fast model
+        "env_key": "OPENROUTER_API_KEY",
+        "rate_limit": 60,
+    },
     ModelProvider.KIMI: {
         "base_url": "https://api.moonshot.cn/v1",
         "model": "kimi-k2.5-thinking-preview",  # Extended reasoning model
         "env_key": "MOONSHOT_API_KEY",
         "rate_limit": 20,  # requests per minute
-    },
-    ModelProvider.OPENROUTER: {
-        "base_url": "https://openrouter.ai/api/v1",
-        "model": "google/gemini-3-flash",
-        "env_key": "OPENROUTER_API_KEY",
-        "rate_limit": 60,
-    },
-    ModelProvider.GEMINI: {
-        "base_url": "https://generativelanguage.googleapis.com/v1beta",
-        "model": "gemini-3-flash",  # Primary model
-        "env_key": "GEMINI_API_KEY",
-        "rate_limit": 60,
     },
 }
 
@@ -119,6 +119,8 @@ class LLMService:
         self.timeout = timeout
         self._client: httpx.AsyncClient | None = None
         self._rate_limiters: dict[ModelProvider, RateLimiter] = {}
+        self.last_model_used: str = ""
+        self.last_provider_used: str = ""
 
         # Initialize rate limiters
         if enable_rate_limiting:
@@ -183,6 +185,13 @@ class LLMService:
             await self._client.aclose()
             self._client = None
 
+    def get_model_info(self) -> dict[str, str]:
+        """Return the last-used provider and model names."""
+        return {
+            "provider": self.last_provider_used,
+            "model": self.last_model_used,
+        }
+
     async def generate(
         self,
         prompt: str,
@@ -215,6 +224,10 @@ class LLMService:
         config = PROVIDER_CONFIGS[provider]
         env_key = cast(str, config["env_key"])
         api_key = os.getenv(env_key) or ""
+
+        # Track which provider+model is being used
+        self.last_provider_used = provider.value
+        self.last_model_used = cast(str, config["model"])
 
         if provider == ModelProvider.GEMINI:
             return await self._generate_gemini(
@@ -326,6 +339,10 @@ class LLMService:
         config = PROVIDER_CONFIGS[provider]
         env_key = cast(str, config["env_key"])
         api_key = os.getenv(env_key) or ""
+
+        # Track which provider+model is being used
+        self.last_provider_used = provider.value
+        self.last_model_used = cast(str, config["model"])
 
         if provider == ModelProvider.GEMINI:
             async for chunk in self._stream_gemini(

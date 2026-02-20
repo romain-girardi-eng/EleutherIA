@@ -419,7 +419,7 @@ export default function GraphRAGPage() {
           reasoning_path: finalResponse.reasoning_path,
           tokens_used: finalResponse.tokens_used,
           llm_provider: finalResponse.llm_provider || 'gemini',
-          llm_model: finalResponse.llm_model || 'gemini-2.0-flash-exp',
+          llm_model: finalResponse.llm_model || 'gemini-3.1-pro-preview',
           timestamp: new Date(),
           citationTexts: formattedCitationTexts,
           graphrag_response: finalResponse,
