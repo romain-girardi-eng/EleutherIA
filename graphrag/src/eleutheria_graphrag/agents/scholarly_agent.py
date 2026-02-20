@@ -31,11 +31,14 @@ from __future__ import annotations
 
 import json
 import logging
-import textwrap
+import re
 from collections.abc import AsyncIterator
 from typing import Any
 
 from pydantic_graph import Graph
+
+# Sentence boundary regex for paragraph-preserving streaming chunking
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;·?!])\s+")
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.graph_nodes import (
@@ -169,10 +172,26 @@ class ScholarlyAgent:
         Future: integrate true streaming into the synthesis nodes.
         """
         answer = await self.query(question, max_iterations=max_iterations)
-        # Chunk at word boundaries to preserve UTF-8 multi-byte characters
+        # Paragraph-preserving chunking (textwrap.wrap destroys markdown)
         text = answer.answer
-        for chunk in textwrap.wrap(text, width=200, break_on_hyphens=False):
-            yield chunk
+        paragraphs = re.split(r"\n\n+", text)
+        for i, para in enumerate(paragraphs):
+            if i > 0:
+                yield "\n\n"
+            if len(para) <= 500:
+                yield para
+            else:
+                # Split long paragraphs at sentence boundaries
+                sentences = _SENTENCE_SPLIT_RE.split(para)
+                buf = ""
+                for sent in sentences:
+                    if buf and len(buf) + len(sent) + 1 > 500:
+                        yield buf
+                        buf = sent
+                    else:
+                        buf = f"{buf} {sent}" if buf else sent
+                if buf:
+                    yield buf
         # Yield a final complete event with full metadata (JSON-encoded)
         def _safe_default(obj: Any) -> Any:
             """Fallback serializer for non-JSON-serializable objects."""

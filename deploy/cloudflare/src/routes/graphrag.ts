@@ -30,6 +30,31 @@ import { HierarchicalRetrievalService } from '../services/hierarchical-retrieval
 
 const logger = getLogger('GraphRAGRoutes');
 
+/**
+ * Sentence-aware text truncation that preserves Unicode diacritics.
+ * Cuts at the last sentence boundary before maxChars, falling back to
+ * the last whitespace. Appends " [...]" when text is truncated.
+ */
+function truncateText(text: string | undefined | null, maxChars: number): string {
+  if (!text) return '';
+  if (text.length <= maxChars) return text;
+  const suffix = ' [...]';
+  const budget = maxChars - suffix.length;
+  if (budget <= 0) return text.slice(0, maxChars);
+  const window = text.slice(0, budget);
+  // Find last sentence boundary (period, semicolon, question mark, exclamation, Greek ano teleia)
+  const sentenceEnd = /[.;·?!]\s/g;
+  let lastBoundary = -1;
+  let match: RegExpExecArray | null;
+  while ((match = sentenceEnd.exec(window)) !== null) {
+    lastBoundary = match.index + match[0].length;
+  }
+  if (lastBoundary > 0) return text.slice(0, lastBoundary).trimEnd() + suffix;
+  const lastSpace = window.lastIndexOf(' ');
+  if (lastSpace > 0) return text.slice(0, lastSpace).trimEnd() + suffix;
+  return window + suffix;
+}
+
 export const graphragRoutes = new Hono<{ Bindings: Env }>();
 
 // Legacy V1 and V2 endpoints were removed (replaced by HiRAG V2 on 2025-12-31)
@@ -1101,7 +1126,7 @@ CRITICAL CITATION RULES:
     }
 
     const headers: Record<string, string> = {
-      'Content-Type': 'text/event-stream',
+      'Content-Type': 'text/event-stream; charset=utf-8',
       'Cache-Control': 'no-cache',
       'Connection': 'keep-alive',
       'X-Accel-Buffering': 'no', // Disable nginx buffering
@@ -1417,14 +1442,16 @@ graphragRoutes.post('/answer', async (c) => {
 
     contextParts.push('=== SCHOLARLY CONTEXT FROM KNOWLEDGE GRAPH ===');
 
-    // Add top text results
+    // Add top text results (generous limits — Gemini has ~1M token context)
     for (const result of rerankedResults.slice(0, max_context)) {
       if (!result?.payload) continue;
       const p = result.payload;
       const author = p.author || 'Unknown';
       const work = p.title || 'Unknown';
       const text = p.text_content || p.text_preview || p.description || '';
-      contextParts.push(`[Passage] ${author}, ${work}: ${text.slice(0, 500)}`);
+      const ref = p.canonical_ref || p.cts_urn || '';
+      const label = ref ? `[Passage] ${author}, ${work} (${ref})` : `[Passage] ${author}, ${work}`;
+      contextParts.push(`${label}: ${truncateText(text, 4000)}`);
     }
 
     // Add KG nodes
@@ -1433,7 +1460,7 @@ graphragRoutes.post('/answer', async (c) => {
       const node = nodeResult.payload;
       const name = node.label || node.node_id || 'Unknown';
       const desc = node.description || '';
-      contextParts.push(`[Entity] ${name}: ${desc}`);
+      contextParts.push(`[Entity] ${name}: ${truncateText(desc, 2000)}`);
     }
 
     // Add relationships from edges
@@ -1639,7 +1666,7 @@ CRITICAL CITATION RULES:
       ctsUrn: p.ctsUrn,
       title: p.workTitle,
       author: p.author,
-      originalText: p.textContent.substring(0, 500),
+      originalText: truncateText(p.textContent, 2000),
       language: p.ctsUrn?.includes('latinLit') ? 'latin' : 'greek',
       reference: p.section,
       confidence: 1.0,

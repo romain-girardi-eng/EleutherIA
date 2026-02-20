@@ -19,6 +19,8 @@ import logging
 import re
 from typing import TYPE_CHECKING, Any
 
+from eleutheria_graphrag.agents.text_utils import truncate_text
+
 if TYPE_CHECKING:
     from eleutheria_graphrag.agents.state import Citation, Evidence
     from eleutheria_graphrag.services.llm_service import LLMService
@@ -124,7 +126,9 @@ class CitationVerifier:
                 continue
 
             # Verify with LLM
-            supported = await self._verify_single(claim, source_text[:1000])
+            supported = await self._verify_single(
+                claim, truncate_text(source_text, 1500)
+            )
             citation.verified = supported
             citation.verification_note = (
                 "Claim supported by source"
@@ -164,8 +168,8 @@ class CitationVerifier:
             True if the source supports the claim.
         """
         prompt = VERIFY_PROMPT.format(
-            claim=claim[:500],
-            source_text=source_text[:1000],
+            claim=truncate_text(claim, 600),
+            source_text=truncate_text(source_text, 1500),
         )
 
         try:
