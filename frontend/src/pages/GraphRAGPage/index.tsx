@@ -533,9 +533,9 @@ export default function GraphRAGPage() {
               />
 
               {/* RIGHT PANEL - 35% (desktop only) */}
-              <div className="hidden lg:flex flex-col w-[35%] h-full bg-gray-50">
-                <div className="shrink-0 px-4 py-3 border-b border-gray-200">
-                  <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Knowledge Graph</h2>
+              <div className="hidden lg:flex flex-col w-[35%] h-full bg-[#020617]">
+                <div className="shrink-0 px-4 py-3 border-b border-white/10">
+                  <h2 className="text-sm font-semibold text-white/40 uppercase tracking-wider">Knowledge Graph</h2>
                 </div>
                 <div className="flex-1 overflow-hidden">
                   <RightPanel
