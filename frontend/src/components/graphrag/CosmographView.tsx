@@ -137,9 +137,11 @@ export default function CosmographView({
       }
     }
 
+    const idToIndex = new Map<string, number>();
     const points: Record<string, unknown>[] = [];
     let idx = 0;
     for (const [, node] of nodeMap) {
+      idToIndex.set(node.id, idx);
       points.push({
         index: idx,
         id: node.id,
@@ -151,12 +153,13 @@ export default function CosmographView({
       idx++;
     }
 
-    // Filter links to only include those where both endpoints exist
-    const nodeIds = new Set(nodeMap.keys());
+    // Build links with both ID-based and index-based columns (Cosmograph requires all four)
     const links: Record<string, unknown>[] = [];
     for (const l of allLinks) {
-      if (nodeIds.has(l.source) && nodeIds.has(l.target)) {
-        links.push({ source: l.source, target: l.target });
+      const si = idToIndex.get(l.source);
+      const ti = idToIndex.get(l.target);
+      if (si !== undefined && ti !== undefined) {
+        links.push({ source: l.source, target: l.target, sourceIndex: si, targetIndex: ti });
       }
     }
 
@@ -164,7 +167,12 @@ export default function CosmographView({
     if (links.length === 0 && points.length > 1) {
       const firstId = points[0].id as string;
       for (let i = 1; i < Math.min(points.length, 8); i++) {
-        links.push({ source: firstId, target: points[i].id as string });
+        links.push({
+          source: firstId,
+          target: points[i].id as string,
+          sourceIndex: 0,
+          targetIndex: i,
+        });
       }
     }
 
@@ -194,7 +202,9 @@ export default function CosmographView({
           pointSizeBy="size"
           pointLabelBy="label"
           linkSourceBy="source"
+          linkSourceIndexBy="sourceIndex"
           linkTargetBy="target"
+          linkTargetIndexBy="targetIndex"
           linkDefaultColor="#D1D5DB"
           linkDefaultWidth={1}
           backgroundColor="#ffffff"
