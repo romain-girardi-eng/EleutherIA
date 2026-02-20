@@ -16,6 +16,8 @@ import logging
 import threading
 from typing import TYPE_CHECKING
 
+from eleutheria_graphrag.agents.text_utils import truncate_text
+
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder
 
@@ -105,7 +107,7 @@ class RerankerService:
             text = ev.text_content or ev.description or ev.label
             if not text:
                 text = ev.label
-            pairs.append((query, text[:512]))  # Truncate for efficiency
+            pairs.append((query, truncate_text(text, 512)))
 
         # Score all pairs — run in thread to avoid blocking the event loop
         try:

@@ -36,6 +36,7 @@ from typing import Any
 from pydantic_graph import BaseNode, End, GraphRunContext
 
 from eleutheria_graphrag.agents.dependencies import Deps
+from eleutheria_graphrag.agents.text_utils import truncate_json, truncate_text
 from eleutheria_graphrag.agents.state import (
     Citation,
     Evidence,
@@ -47,6 +48,19 @@ from eleutheria_graphrag.agents.state import (
 )
 
 logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Context budget constants (sized for Gemini 3.1 Pro ~1M token window)
+# ---------------------------------------------------------------------------
+
+MAX_PASSAGE_DESCRIPTION = 2000  # Evidence.description for passages
+MAX_PASSAGE_IN_CONTEXT = 4000  # Full passage text in context builder
+MAX_NODE_DESC_IN_CONTEXT = 2000  # Node description in context builder
+MAX_SECONDARY_DESC_IN_CONTEXT = 1200  # Secondary evidence descriptions
+MAX_TREE_JSON = 15000  # Tree index JSON for LLM navigation
+MAX_CRAG_CONTEXT = 12000  # Context for CRAG validation
+MAX_ANSWER_FOR_EVAL = 8000  # raw_answer for SelfRAG/Refine
+MAX_CONTEXT_FOR_REFINE = 20000  # accumulated_context for RefineSynthesis
 
 # ---------------------------------------------------------------------------
 # System prompts
@@ -433,7 +447,9 @@ class HybridRetrieve(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     type="passage",
                     layer=EvidenceLayer.PRIMARY,
                     source=EvidenceSource.PASSAGE_CITATION,
-                    description=p.get("text_content", "")[:800],
+                    description=truncate_text(
+                        p.get("text_content", ""), MAX_PASSAGE_DESCRIPTION
+                    ),
                     passage_id=str(p["passage_id"]),
                     canonical_ref=p.get("canonical_ref"),
                     author=p.get("author"),
@@ -608,7 +624,9 @@ class SearchPrimarySources(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     type="passage",
                     layer=EvidenceLayer.PRIMARY,
                     source=EvidenceSource.PASSAGE_CITATION,
-                    description=p.get("text_content", "")[:800],
+                    description=truncate_text(
+                        p.get("text_content", ""), MAX_PASSAGE_DESCRIPTION
+                    ),
                     passage_id=pid,
                     canonical_ref=p.get("canonical_ref"),
                     author=p.get("author"),
@@ -854,7 +872,9 @@ exactly as provided. NEVER generate or approximate Greek/Latin text.
 4. Include CTS URNs from passage metadata when available.
 5. If insufficient source material is available, state this explicitly."""
 
-        answer = await ctx.deps.llm.generate(prompt, system_prompt=SYSTEM_PROMPT)
+        answer = await ctx.deps.llm.generate(
+            prompt, system_prompt=SYSTEM_PROMPT, max_tokens=4096
+        )
         ctx.state.raw_answer = answer
 
         return VerifyCitations()
@@ -1074,7 +1094,15 @@ def _build_context_from_evidence(evidence: list[Evidence]) -> str:
         if ev.type == "passage":
             passage_idx += 1
             text = ev.text_content or ev.description
-            parts.append(f'[P{passage_idx}] {ev.label}:\n"{text[:600]}"')
+            ref_parts = [f"[P{passage_idx}] {ev.label}"]
+            if ev.canonical_ref:
+                ref_parts.append(f"(ref: {ev.canonical_ref})")
+            if ev.cts_urn:
+                ref_parts.append(f"[{ev.cts_urn}]")
+            header = " ".join(ref_parts)
+            parts.append(
+                f'{header}:\n"{truncate_text(text, MAX_PASSAGE_IN_CONTEXT)}"'
+            )
         else:
             node_idx += 1
             header = f"[{node_idx}] **{ev.label}** ({ev.type})"
@@ -1084,7 +1112,9 @@ def _build_context_from_evidence(evidence: list[Evidence]) -> str:
             if ev.school:
                 extras.append(f"School: {ev.school}")
             if ev.description:
-                extras.append(ev.description[:500])
+                extras.append(
+                    truncate_text(ev.description, MAX_NODE_DESC_IN_CONTEXT)
+                )
             parts.append(header + "\n" + "\n".join(extras))
 
     return "\n\n".join(parts)
@@ -1094,9 +1124,17 @@ def _build_hierarchical_context(state: RAGState) -> str:
     """Build context with clear primary/secondary layering."""
     sections: list[str] = []
 
-    # Primary Ancient Sources
-    primary_nodes = [e for e in state.primary_evidence if e.type != "passage"]
-    primary_passages = [e for e in state.primary_evidence if e.type == "passage"]
+    # Primary Ancient Sources (sorted by relevance score to mitigate "lost in the middle")
+    primary_nodes = sorted(
+        [e for e in state.primary_evidence if e.type != "passage"],
+        key=lambda e: e.score,
+        reverse=True,
+    )
+    primary_passages = sorted(
+        [e for e in state.primary_evidence if e.type == "passage"],
+        key=lambda e: e.confidence or e.score,
+        reverse=True,
+    )
 
     if primary_nodes or primary_passages:
         section = "## Primary Ancient Sources (authoritative)\n"
@@ -1108,12 +1146,23 @@ def _build_hierarchical_context(state: RAGState) -> str:
             if ev.school:
                 extras.append(f"School: {ev.school}")
             if ev.description:
-                extras.append(ev.description[:500])
+                extras.append(
+                    truncate_text(ev.description, MAX_NODE_DESC_IN_CONTEXT)
+                )
             section += "\n" + header + "\n" + "\n".join(extras) + "\n"
 
         for i, ev in enumerate(primary_passages, 1):
             text = ev.text_content or ev.description
-            section += f'\n[P{i}] {ev.label}:\n"{text[:600]}"\n'
+            ref_parts = [f"[P{i}] {ev.label}"]
+            if ev.canonical_ref:
+                ref_parts.append(f"(ref: {ev.canonical_ref})")
+            if ev.cts_urn:
+                ref_parts.append(f"[{ev.cts_urn}]")
+            header = " ".join(ref_parts)
+            section += (
+                f'\n{header}:\n'
+                f'"{truncate_text(text, MAX_PASSAGE_IN_CONTEXT)}"\n'
+            )
         sections.append(section)
 
     # Secondary Modern Scholarship
@@ -1125,7 +1174,9 @@ def _build_hierarchical_context(state: RAGState) -> str:
             if ev.role:
                 extras.append(f"Role: {ev.role}")
             if ev.description:
-                extras.append(ev.description[:400])
+                extras.append(
+                    truncate_text(ev.description, MAX_SECONDARY_DESC_IN_CONTEXT)
+                )
             section += "\n" + header + "\n" + "\n".join(extras) + "\n"
         sections.append(section)
 
@@ -1533,12 +1584,9 @@ class TreeReasoningRetrieve(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             return CRAGValidate()
 
         # Build tree JSON for LLM navigation
-        import json as _json
-
-        tree_json = _json.dumps(
-            [idx.model_dump() for idx in indices],
-            ensure_ascii=False,
-        )[:6000]  # truncate for context length
+        tree_json = truncate_json(
+            [idx.model_dump() for idx in indices], MAX_TREE_JSON
+        )
 
         # LLM navigates the tree
         prompt = TREE_REASONING_PROMPT.format(
@@ -1586,7 +1634,9 @@ class TreeReasoningRetrieve(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         type="passage",
                         layer=EvidenceLayer.PRIMARY,
                         source=EvidenceSource.TREE_REASONING,
-                        description=p.get("text_content", "")[:800],
+                        description=truncate_text(
+                            p.get("text_content", ""), MAX_PASSAGE_DESCRIPTION
+                        ),
                         passage_id=pid,
                         canonical_ref=p.get("canonical_ref"),
                         author=p.get("author"),
@@ -1623,7 +1673,9 @@ class CRAGValidate(BaseNode[RAGState, Deps, ScholarlyAnswer]):
 
         # Build context summary for CRAG evaluation
         all_ev = ctx.state.all_evidence()
-        context = _build_context_from_evidence(all_ev[:20])[:3000]
+        context = truncate_text(
+            _build_context_from_evidence(all_ev[:20]), MAX_CRAG_CONTEXT
+        )
         primary_count = len(
             [e for e in ctx.state.primary_evidence if e.type != "passage"]
         )
@@ -1794,7 +1846,9 @@ class FetchPassagesAndLayer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     type="passage",
                     layer=EvidenceLayer.PRIMARY,
                     source=EvidenceSource.PASSAGE_CITATION,
-                    description=p.get("text_content", "")[:800],
+                    description=truncate_text(
+                        p.get("text_content", ""), MAX_PASSAGE_DESCRIPTION
+                    ),
                     passage_id=pid,
                     canonical_ref=p.get("canonical_ref"),
                     author=p.get("author"),
@@ -1861,7 +1915,7 @@ class SelfRAGEvaluate(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         source_count = len(state.citations)
         prompt = SELF_RAG_EVALUATE_PROMPT.format(
             question=state.question,
-            answer=state.raw_answer[:2500],
+            answer=truncate_text(state.raw_answer, MAX_ANSWER_FOR_EVAL),
             source_count=source_count,
         )
         try:
@@ -1924,12 +1978,14 @@ class RefineSynthesis(BaseNode[RAGState, Deps, ScholarlyAnswer]):
 
         prompt = REFINE_SYNTHESIS_PROMPT.format(
             question=state.question,
-            raw_answer=state.raw_answer[:2500],
+            raw_answer=truncate_text(state.raw_answer, MAX_ANSWER_FOR_EVAL),
             caveats=caveats,
             improvements=improvements,
             grounding=grounding,
             completeness=completeness,
-            context=state.accumulated_context[:3000],
+            context=truncate_text(
+                state.accumulated_context, MAX_CONTEXT_FOR_REFINE
+            ),
         )
 
         try:

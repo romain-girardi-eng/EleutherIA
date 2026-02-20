@@ -8,6 +8,7 @@ import re
 from typing import TYPE_CHECKING
 
 from eleutheria_graphrag.agents.state import Evidence
+from eleutheria_graphrag.agents.text_utils import truncate_text
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +60,9 @@ class LLMRerankerService:
         # Format candidates for prompt
         formatted = []
         for i, ev in enumerate(candidates):
-            text = (ev.text_content or ev.description or ev.label)[:TEXT_PREVIEW_LEN]
+            text = truncate_text(
+                ev.text_content or ev.description or ev.label, TEXT_PREVIEW_LEN
+            )
             formatted.append(f'[{i + 1}] {ev.label}: "{text}"')
 
         prompt = LLM_RERANK_PROMPT.format(
