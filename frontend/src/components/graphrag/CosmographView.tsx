@@ -5,18 +5,88 @@ import GraphLegend from './GraphLegend';
 import { cn } from '../../utils/cn';
 import type { GraphRAGResponse } from '../../types';
 
-const NODE_COLORS: Record<string, string> = {
-  person: '#60A5FA',
-  concept: '#4ADE80',
-  argument: '#C084FC',
-  work: '#FBBF24',
-  school: '#4ADE80',
-  debate: '#FB7185',
-  quote: '#FACC15',
-  passage: '#94A3B8',
-  publication: '#06B6D4',
-  default: '#94A3B8',
+// Vibrant neon colors matching the main KG visualizer
+const TYPE_COLORS: Record<string, string> = {
+  person: '#60a5fa',
+  work: '#fbbf24',
+  concept: '#c084fc',
+  argument: '#f472b6',
+  debate: '#fb7185',
+  school: '#4ade80',
+  event: '#fb923c',
+  quote: '#facc15',
+  reformulation: '#a78bfa',
+  passage: '#94a3b8',
+  publication: '#06b6d4',
+  synthesis: '#10b981',
+  controversy: '#f43f5e',
+  conceptual_evolution: '#818cf8',
+  group: '#84cc16',
+  argument_framework: '#e879f9',
+  default: '#94a3b8',
 };
+
+// Size by type importance
+const TYPE_SIZES: Record<string, number> = {
+  person: 18,
+  school: 16,
+  concept: 14,
+  argument: 14,
+  debate: 13,
+  work: 12,
+  event: 11,
+  quote: 10,
+  passage: 8,
+  publication: 10,
+  default: 10,
+};
+
+// Label weight by type (higher = shown first)
+const LABEL_WEIGHTS: Record<string, number> = {
+  person: 10,
+  school: 9,
+  concept: 8,
+  argument: 7,
+  debate: 7,
+  work: 6,
+  event: 5,
+  publication: 4,
+  quote: 3,
+  passage: 2,
+  default: 1,
+};
+
+// --- Color blending for edges (matches main visualizer) ---
+
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) return { r: 148, g: 163, b: 184 };
+  return {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16),
+  };
+}
+
+function rgbToHex(r: number, g: number, b: number): string {
+  return (
+    '#' +
+    [r, g, b]
+      .map((x) => {
+        const hex = Math.round(x).toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+      })
+      .join('')
+  );
+}
+
+function blendColors(c1: string, c2: string): string {
+  const a = hexToRgb(c1);
+  const b = hexToRgb(c2);
+  return rgbToHex((a.r + b.r) / 2, (a.g + b.g) / 2, (a.b + b.b) / 2);
+}
+
+// -----------------------------------------------------------
 
 function InnerControls({
   points,
@@ -40,7 +110,6 @@ function InnerControls({
           cosmograph.selectPoint(point.index as number, false, true);
           cosmograph.zoomToPoint(point.index as number, 800, 1.5, true);
         } catch {
-          // Fallback: just fit view if selection fails
           cosmograph.fitView(400, 0.1);
         }
       }
@@ -69,12 +138,16 @@ function InnerControls({
     <div className="absolute top-3 right-3 flex flex-col gap-1.5 z-10">
       {[
         { icon: Maximize2, onClick: handleFitView, label: 'Fit view' },
-        { icon: isPaused ? Play : Pause, onClick: handleTogglePause, label: isPaused ? 'Resume' : 'Pause' },
+        {
+          icon: isPaused ? Play : Pause,
+          onClick: handleTogglePause,
+          label: isPaused ? 'Resume' : 'Pause',
+        },
       ].map(({ icon: Icon, onClick, label }) => (
         <button
           key={label}
           onClick={onClick}
-          className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/90 border border-gray-200 text-gray-500 hover:text-gray-700 hover:border-gray-300 shadow-sm transition-all hover:shadow"
+          className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10 text-white/60 hover:text-white hover:bg-white/15 hover:border-white/20 shadow-sm transition-all"
           aria-label={label}
           title={label}
         >
@@ -106,9 +179,12 @@ export default function CosmographView({
   showControls = true,
 }: CosmographViewProps) {
   const { points, links } = useMemo(() => {
-    // Build graph from all accumulated responses (or just the current one)
     const responses = allResponses?.length ? allResponses : response ? [response] : [];
-    if (responses.length === 0) return { points: [] as Record<string, unknown>[], links: [] as Record<string, unknown>[] };
+    if (responses.length === 0)
+      return {
+        points: [] as Record<string, unknown>[],
+        links: [] as Record<string, unknown>[],
+      };
 
     const nodeMap = new Map<string, { id: string; label: string; type: string }>();
     const addNode = (id: string, label: string, type: string) => {
@@ -138,40 +214,63 @@ export default function CosmographView({
     }
 
     const idToIndex = new Map<string, number>();
+    const idToColor = new Map<string, string>();
     const points: Record<string, unknown>[] = [];
     let idx = 0;
     for (const [, node] of nodeMap) {
+      const typeLower = node.type?.toLowerCase() ?? 'default';
+      const color = TYPE_COLORS[typeLower] ?? TYPE_COLORS.default;
+      const size = TYPE_SIZES[typeLower] ?? TYPE_SIZES.default;
+      const labelWeight = LABEL_WEIGHTS[typeLower] ?? LABEL_WEIGHTS.default;
+
       idToIndex.set(node.id, idx);
+      idToColor.set(node.id, color);
       points.push({
         index: idx,
         id: node.id,
         label: node.label,
         type: node.type,
-        color: NODE_COLORS[node.type?.toLowerCase()] ?? NODE_COLORS.default,
-        size: 8,
+        color,
+        size,
+        labelWeight,
       });
       idx++;
     }
 
-    // Build links with both ID-based and index-based columns (Cosmograph requires all four)
+    // Build links with blended colors (both ID and index columns required by Cosmograph)
     const links: Record<string, unknown>[] = [];
     for (const l of allLinks) {
       const si = idToIndex.get(l.source);
       const ti = idToIndex.get(l.target);
       if (si !== undefined && ti !== undefined) {
-        links.push({ source: l.source, target: l.target, sourceIndex: si, targetIndex: ti });
+        const srcColor = idToColor.get(l.source) ?? TYPE_COLORS.default;
+        const tgtColor = idToColor.get(l.target) ?? TYPE_COLORS.default;
+        links.push({
+          source: l.source,
+          target: l.target,
+          sourceIndex: si,
+          targetIndex: ti,
+          sourceColor: srcColor,
+          targetColor: tgtColor,
+          color: blendColors(srcColor, tgtColor),
+        });
       }
     }
 
-    // If no edges but we have nodes, create star topology from first node
+    // Star topology fallback when no edges exist
     if (links.length === 0 && points.length > 1) {
       const firstId = points[0].id as string;
+      const firstColor = points[0].color as string;
       for (let i = 1; i < Math.min(points.length, 8); i++) {
+        const tgtColor = points[i].color as string;
         links.push({
           source: firstId,
           target: points[i].id as string,
           sourceIndex: 0,
           targetIndex: i,
+          sourceColor: firstColor,
+          targetColor: tgtColor,
+          color: blendColors(firstColor, tgtColor),
         });
       }
     }
@@ -191,29 +290,56 @@ export default function CosmographView({
   if (points.length === 0) return null;
 
   return (
-    <div className={cn('relative w-full h-full', className)}>
+    <div className={cn('relative w-full h-full rounded-xl overflow-hidden', className)}>
       <CosmographProvider>
         <Cosmograph
           points={points}
           links={links}
+          // Point identification
           pointIndexBy="index"
           pointIdBy="id"
           pointColorBy="color"
           pointSizeBy="size"
           pointLabelBy="label"
+          pointLabelWeightBy="labelWeight"
+          // Link identification (all four required by Cosmograph v2)
           linkSourceBy="source"
           linkSourceIndexBy="sourceIndex"
           linkTargetBy="target"
           linkTargetIndexBy="targetIndex"
-          linkDefaultColor="#D1D5DB"
-          linkDefaultWidth={1}
-          backgroundColor="#ffffff"
-          simulationRepulsion={0.5}
-          simulationLinkSpring={1.0}
-          simulationLinkDistance={5}
-          simulationGravity={0.15}
-          simulationDecay={3000}
+          // Link styling - blended colors
+          linkColorBy="color"
+          linkDefaultWidth={0.5}
+          linkDefaultArrows
+          linkArrowsSizeScale={0.3}
+          // Dark canvas matching main KG visualizer
+          backgroundColor="#020617"
+          spaceSize={4096}
+          pointSizeRange={[4, 30]}
+          pointSizeScale={1.0}
+          scalePointsOnZoom
+          scaleLinksOnZoom
+          // Labels
+          showLabels
           showDynamicLabels
+          showTopLabels
+          showTopLabelsLimit={30}
+          showHoveredPointLabel
+          pointLabelClassName="cosmograph-point-label"
+          hoveredPointLabelClassName="cosmograph-hovered-label"
+          // Selection & hover
+          pointGreyoutOpacity={0.15}
+          linkGreyoutOpacity={0.05}
+          renderHoveredPointRing
+          hoveredPointRingColor="#8b5cf6"
+          // Interaction
+          selectPointOnClick
+          focusPointOnClick
+          // Disable physics for a static, clean layout
+          enableSimulation={false}
+          // Fit view on init
+          fitViewOnInit
+          fitViewDelay={200}
           onClick={handleClick}
           style={{ width: '100%', height: '100%' }}
         />

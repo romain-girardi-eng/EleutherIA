@@ -1,10 +1,12 @@
 import { cn } from '../../utils/cn';
 
 const LEGEND_ITEMS = [
-  { type: 'person', label: 'Person', color: '#60A5FA' },
-  { type: 'concept', label: 'Concept', color: '#4ADE80' },
-  { type: 'argument', label: 'Argument', color: '#C084FC' },
-  { type: 'work', label: 'Work', color: '#FBBF24' },
+  { type: 'person', label: 'Person', color: '#60a5fa' },
+  { type: 'concept', label: 'Concept', color: '#c084fc' },
+  { type: 'argument', label: 'Argument', color: '#f472b6' },
+  { type: 'work', label: 'Work', color: '#fbbf24' },
+  { type: 'school', label: 'School', color: '#4ade80' },
+  { type: 'debate', label: 'Debate', color: '#fb7185' },
 ];
 
 interface GraphLegendProps {
@@ -13,14 +15,19 @@ interface GraphLegendProps {
 
 export default function GraphLegend({ className }: GraphLegendProps) {
   return (
-    <div className={cn('flex items-center gap-3 px-3 py-2 bg-white/90 backdrop-blur-sm rounded-lg border border-gray-100 shadow-sm', className)}>
+    <div
+      className={cn(
+        'flex items-center gap-3 px-3 py-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10',
+        className,
+      )}
+    >
       {LEGEND_ITEMS.map((item) => (
         <div key={item.type} className="flex items-center gap-1.5">
           <span
-            className="inline-block w-2.5 h-2.5 rounded-full"
+            className="inline-block w-2 h-2 rounded-full"
             style={{ backgroundColor: item.color }}
           />
-          <span className="text-[10px] font-medium text-gray-500">{item.label}</span>
+          <span className="text-[10px] font-medium text-white/50">{item.label}</span>
         </div>
       ))}
     </div>
