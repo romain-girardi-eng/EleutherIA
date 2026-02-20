@@ -223,14 +223,6 @@ searchRoutes.post('/hybrid', async (c) => {
   }
 });
 
-// Morphological search - Deprecated (SPhilBERTa removed)
-searchRoutes.post('/morphological', async (c) => {
-  return c.json({
-    error: 'Morphological search is not available',
-    message: 'This feature required SPhilBERTa which has been deprecated. Use /semantic for semantic search instead.',
-  }, 503);
-});
-
 // Dual-level search (Nodes + Edges) - NEW!
 searchRoutes.post('/dual', async (c) => {
   try {

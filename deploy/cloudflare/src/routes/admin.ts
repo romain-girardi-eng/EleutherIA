@@ -71,9 +71,9 @@ adminRoutes.post('/qdrant/create-dual-collections', async (c) => {
     logger.info('Creating dual-vector collections in Qdrant Cloud');
 
     const collections = [
-      { name: 'passages_dual', description: 'Passage chunks with SPhilBERTa + Gemini embeddings' },
-      { name: 'kg_nodes_dual', description: 'KG nodes with SPhilBERTa + Gemini embeddings' },
-      { name: 'kg_edges_dual', description: 'KG edges with SPhilBERTa + Gemini embeddings' },
+      { name: 'passages_dual', description: 'Passage chunks with Gemini embeddings' },
+      { name: 'kg_nodes_dual', description: 'KG nodes with Gemini embeddings' },
+      { name: 'kg_edges_dual', description: 'KG edges with Gemini embeddings' },
     ];
 
     const results = [];
@@ -92,7 +92,6 @@ adminRoutes.post('/qdrant/create-dual-collections', async (c) => {
             },
             body: JSON.stringify({
               vectors: {
-                sphilberta: { size: 768, distance: 'Cosine' },
                 gemini: { size: 3072, distance: 'Cosine' },
               },
             }),
