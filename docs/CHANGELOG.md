@@ -5,6 +5,32 @@ All notable changes to EleutherIA will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2026-02-20
+
+### Changed
+- **GraphRAG: PageIndex V3** — Replaced 13-stage HiRAG V2 pipeline with direct retrieval architecture
+  - 2 LLM calls instead of 10+ (1 embedding + 1 synthesis)
+  - `passage_citations` table as primary retrieval signal (curated KG-to-passage links)
+  - No context truncation — leverages Gemini's ~1M token context window
+  - Full ancient text passages with CTS URNs in LLM context
+- Bundle size reduced from 628 KiB to 606 KiB
+
+### Removed
+- HyDE (Hypothetical Document Embeddings)
+- CRAG (Corrective RAG) validation
+- Self-RAG evaluation
+- LLM reranking
+- Query expansion
+- Sufficiency loop
+- Evidence layering
+- Weighted graph traversal
+- Pipeline config selection
+
+### Fixed
+- SSE line-splitting bug in Cloudflare LLM streaming (TCP buffer handling)
+- Context truncation destroying Greek diacritics and corrupting passage text
+- `charset=utf-8` added to SSE Content-Type header
+
 ## [2.0.0] - 2025-01-30
 
 ### Added

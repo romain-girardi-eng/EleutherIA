@@ -46,50 +46,50 @@ print(f"Sources: {result['citations']}")
 
 ## Features
 
-- **5-stage RAG pipeline:**
-  1. Semantic search (Qdrant vectors)
-  2. Graph traversal (BFS expansion)
-  3. Context building (node descriptions + passages)
-  4. LLM synthesis (Kimi K2 / Gemini)
-  5. Citation extraction (grounded in ancient sources)
+- **PageIndex V3 pipeline** (2 LLM calls, direct retrieval):
+  1. Embed query → parallel Qdrant search (KG nodes + passages + edges)
+  2. Enrich → passage_citations lookup + KG neighbor expansion
+  3. Build FULL context (no truncation — Gemini 1M token context)
+  4. ONE synthesis call → scholarly answer with citations
 
 - **Streaming responses** via Server-Sent Events
-- **Citation grounding** to specific ancient passages
-- **Multi-provider LLM support** (Kimi K2, OpenRouter, Gemini)
+- **Citation grounding** to specific ancient passages with CTS URNs
+- **Multi-provider LLM support** (Kimi K2, Gemini)
+- **passage_citations** as primary retrieval signal (curated KG-to-passage links)
 
-## Pipeline Overview
+## Pipeline Overview (PageIndex V3)
 
 ```
 User Query
     │
     ▼
 ┌─────────────────┐
-│ 1. Semantic     │  Query → embedding → Qdrant top-k
-│    Search       │  Returns relevant KG nodes
+│ 1. Embed +      │  Query → Gemini embedding
+│    Detect Refs  │  + CTS URN reference detection
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│ 2. Graph        │  BFS from seed nodes
-│    Traversal    │  Configurable depth (1-3)
+│ 2. Parallel     │  KG nodes + passages + edges
+│    Search       │  via Qdrant (no LLM calls)
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│ 3. Context      │  Aggregate descriptions
-│    Building     │  Include ancient passages
+│ 3. Enrich       │  passage_citations → full text
+│                 │  + KG neighbor expansion
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│ 4. LLM          │  Academic prompt template
-│    Synthesis    │  Streaming generation
+│ 4. Build FULL   │  No truncation
+│    Context      │  Gemini handles ~1M tokens
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│ 5. Citation     │  Parse [1], [2] refs
-│    Extraction   │  Map to KG nodes/passages
+│ 5. ONE          │  Kimi K2 / Gemini
+│    Synthesis    │  → Answer + citations
 └────────┴────────┘
          │
          ▼

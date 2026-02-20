@@ -258,3 +258,11 @@ npx wrangler deploy
 2. **Bridge paths** are not yet reported in the response metadata (count shows 0 even when bridge mode is active) — the bridge retrieval service logs internally but doesn't surface path details.
 3. **Precompute script** requires manual re-run when the KG changes; consider a scheduled Cloudflare Cron Trigger or GitHub Action.
 4. **Pydantic-AI ScholarlyAgent** (Python FSM) is not used in the Cloudflare Workers pipeline. It remains available for the FastAPI backend but is a separate execution path.
+
+---
+
+## Superseded by PageIndex V3 (2026-02-20)
+
+The 13-stage HiRAG V2 pipeline documented above has been replaced by **PageIndex V3**, a direct retrieval architecture that reduces the pipeline to 5 steps and 2 LLM calls. The key insight: with Gemini's ~1M token context window and the curated `passage_citations` database, most of the meta-reasoning stages (HyDE, CRAG, Self-RAG, LLM reranking, query expansion) were adding latency and compounding errors without improving answer quality.
+
+See [PageIndex V3 documentation](PAGEINDEX_V3.md) for the current architecture.

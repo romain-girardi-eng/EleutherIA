@@ -602,7 +602,7 @@ Returns nodes grouped by historical period for timeline visualization.
 
 ## GraphRAG API
 
-Graph-based Retrieval Augmented Generation for scholarly Q&A.
+Graph-based Retrieval Augmented Generation for scholarly Q&A. Uses the **PageIndex V3** pipeline: direct KG + passage retrieval with ONE synthesis call (see [PageIndex V3 docs](../PAGEINDEX_V3.md)).
 
 ### Query (Non-Streaming)
 
@@ -610,35 +610,27 @@ Graph-based Retrieval Augmented Generation for scholarly Q&A.
 POST /graphrag/query
 ```
 
-Executes a GraphRAG query combining semantic search, graph traversal, and LLM synthesis.
+Executes a PageIndex V3 query: parallel vector search, passage_citations enrichment, and LLM synthesis.
 
 **Request Body:**
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `question` | string | **required** | User question (min 3 characters) |
-| `semantic_k` | integer | 10 | Number of semantic search results (1-50) |
-| `graph_depth` | integer | 2 | Graph traversal depth (1-4) |
-| `max_context_nodes` | integer | 30 | Maximum nodes in LLM context (5-100) |
-| `include_passages` | boolean | true | Include ancient text passages in context |
-| `stream` | boolean | false | Enable streaming (use GET endpoint instead) |
 
 **Example:**
 ```bash
-curl -X POST "http://localhost:8000/api/graphrag/query" \
+curl -X POST "https://free-will.app/api/graphrag/answer" \
   -H "Content-Type: application/json" \
   -d '{
-    "question": "What did the Stoics believe about fate and moral responsibility?",
-    "semantic_k": 15,
-    "graph_depth": 2,
-    "include_passages": true
+    "question": "What did the Stoics believe about fate and moral responsibility?"
   }'
 ```
 
 **Response:**
 ```json
 {
-  "answer": "The Stoics, particularly Chrysippus, developed a sophisticated compatibilist position on fate and moral responsibility. They held that all events are causally determined by fate (εἱμαρμένη), yet moral responsibility remains meaningful because our actions depend on our character and assent [1].\n\nChrysippus distinguished between 'principal' and 'auxiliary' causes to explain how our choices can be 'up to us' (τὸ ἐφ' ἡμῖν) even within a deterministic framework [2]. External circumstances provide occasions for action, but our responses flow from our internal character [P1].\n\nThis position was criticized by the Epicureans, who argued that genuine freedom requires the 'atomic swerve' (clinamen) to break causal chains [3].",
+  "answer": "The Stoics, particularly Chrysippus, developed a sophisticated compatibilist position...",
   "question": "What did the Stoics believe about fate and moral responsibility?",
   "citations": [
     {
@@ -649,35 +641,28 @@ curl -X POST "http://localhost:8000/api/graphrag/query" \
       "confidence": 0.92
     },
     {
-      "ref": "2",
-      "type": "node",
-      "id": "chrysippus_cylinder",
-      "label": "Cylinder Argument",
-      "confidence": 0.88
-    },
-    {
       "ref": "P1",
       "type": "passage",
       "id": "660e8400...",
       "label": "Cicero, De Fato 43",
+      "cts_urn": "urn:cts:latinLit:phi0474.phi049:43",
       "confidence": 0.95
-    },
-    {
-      "ref": "3",
-      "type": "node",
-      "id": "epicurean_clinamen",
-      "label": "Epicurean Clinamen",
-      "confidence": 0.85
     }
   ],
-  "seed_nodes": ["fate", "stoic", "moral_responsibility"],
-  "context_nodes": ["chrysippus", "fate", "stoic_determinism", "to_eph_hemin", "cylinder_argument", "cleanthes", "zeno", "epicurus", "clinamen"],
-  "passages_used": 5,
+  "sources": [...],
   "metadata": {
-    "llm_provider": "gemini",
-    "model": "gemini-3-flash",
-    "thinking_mode": false,
-    "query_time_ms": 2340
+    "llm_provider": "kimi",
+    "model": "kimi-latest",
+    "pipeline": "pageindex-v3",
+    "quality_score": 0.85,
+    "quality_badge": "High"
+  },
+  "pageIndexInfo": {
+    "linkedPassagesCount": 12,
+    "neighborsCount": 8,
+    "semanticPassagesCount": 5,
+    "totalContextChars": 28500,
+    "estimatedTokens": 7125
   }
 }
 ```

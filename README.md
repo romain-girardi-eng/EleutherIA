@@ -83,7 +83,7 @@ Install only what you need. Each package works independently.
 
 - **Dual-layer structure:** Primary layer (ancient sources) + secondary layer (modern scholarship)
 - **Hybrid search:** Full-text + lemmatic + semantic search with RRF fusion
-- **GraphRAG:** 5-stage RAG pipeline with citation grounding to ancient passages
+- **GraphRAG:** PageIndex V3 direct retrieval pipeline (2 LLM calls) with citation grounding to ancient passages
 - **Lemmatization:** Token-level analysis of Ancient Greek and Latin texts
 - **Interactive visualization:** Cosmograph GPU-accelerated graph exploration
 

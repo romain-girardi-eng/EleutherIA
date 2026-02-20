@@ -58,15 +58,16 @@ make run
 3. Enter a Greek term (e.g., "ἐφ' ἡμῖν") or English query
 4. Results show passages with highlighted matches
 
-### Ask Questions (GraphRAG)
+### Ask Questions (GraphRAG — PageIndex V3)
 
 1. Go to http://localhost/graphrag
 2. Enter a question like "What did the Stoics believe about fate?"
 3. The system will:
-   - Search the knowledge graph
-   - Traverse related concepts
-   - Generate a scholarly answer
-   - Cite ancient sources
+   - Search the knowledge graph and passage database in parallel
+   - Retrieve linked ancient text passages (via passage_citations)
+   - Build full context with no truncation
+   - Generate a scholarly answer with ONE synthesis call
+   - Cite ancient sources with CTS URNs
 
 ### Explore the Knowledge Graph
 
