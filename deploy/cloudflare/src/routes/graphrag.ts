@@ -18,7 +18,10 @@ import { getLogger } from '../utils/logger';
 import { resolveCorsOrigin } from '../utils/cors';
 import { authMiddleware, optionalAuthMiddleware, rateLimitMiddleware, validateGraphRAGInput } from '../middleware/auth';
 
-// 2025 Advanced RAG Services
+// PageIndex direct retrieval (v3 — simplified pipeline)
+import { getLinkedPassages, getNodeNeighbors, buildPageIndexContext } from '../services/pageindex-retrieval';
+
+// 2025 Advanced RAG Services (kept for legacy endpoint)
 import { hydeSearch, hydeEnhancedSearch, generateHypotheticalDocument } from '../services/hyde';
 import { expandPhilologicalQuery, quickExpand, expandedSearch } from '../services/query-expander';
 import { llmRerank, scholarlyRerank, RerankCandidate } from '../services/reranker';
@@ -1142,35 +1145,35 @@ CRITICAL CITATION RULES:
   });
 
 // =============================================================================
-// DEFAULT: HiRAG V2 - Production GraphRAG Endpoint (2025-12-31)
+// DEFAULT: PageIndex V3 — Direct Agentic Search (2026-02-20)
 // =============================================================================
-// This is the primary /answer endpoint, combining HiRAG + V2 enhancements.
-// Benchmark results (vs legacy V1):
-// - +4.4 points composite quality score
-// - +27% more Greek text in answers
-// - 3/3 multi-hop queries used bridge mode
-// - Wins 5/6 query type categories
+// Simplified pipeline: KG traversal + passage_citations + semantic search.
+// ONE retrieval step, ONE synthesis call. No HyDE, CRAG, SELF-RAG, reranking.
+// Relies on Gemini's 1M token context to handle FULL passage text.
+//
+// Philosophy: With 17k passages, 10 LLM calls add noise. 1 good retrieval
+// step + 1 good synthesis call with complete context = better quality.
 // =============================================================================
 
 /**
- * GraphRAG /answer endpoint - HiRAG V2 (DEFAULT)
- *
- * HiRAG Features:
- * - Rule-based query classification (multi_hop, comparative, temporal, etc.)
- * - Hierarchical community-based retrieval
- * - Bridge mode for multi-hop reasoning (+5.8 points improvement)
- * - 250× token reduction on global questions
- *
- * V2 Features:
- * - HyDE (hypothetical document embeddings)
- * - Query expansion with Greek/Latin terms
- * - LLM reranking
- * - CRAG validation
- * - SELF-RAG evaluation
- * - Debate identification
- *
- * Quality: 80.6/100 composite score (vs 76.2 legacy V1)
+ * Helper to determine node type from payload (shared across endpoints)
  */
+function determineNodeType(payload: any): string {
+  if (payload?.type) return payload.type;
+  if (payload?.node_type) return payload.node_type;
+  if (payload?.node_id) {
+    const prefixes = ['concept', 'argument', 'person', 'work', 'reformulation', 'group', 'school', 'evidence'];
+    for (const prefix of prefixes) {
+      if (payload.node_id.startsWith(prefix + '_')) {
+        return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+      }
+    }
+  }
+  if (payload?.author || payload?.work_title || payload?.cts_urn) return 'Passage';
+  if (payload?.name || payload?.label) return 'Concept';
+  return 'Unknown';
+}
+
 graphragRoutes.post('/answer', async (c) => {
   const startTime = Date.now();
 
@@ -1178,90 +1181,39 @@ graphragRoutes.post('/answer', async (c) => {
     const body = await c.req.json();
     const {
       query,
-      semantic_k = 15,
+      semantic_k = 20,
       graph_depth = 2,
-      max_context = 15,
-      mode = 'auto',  // auto, local, global, bridge
+      max_context = 25,
       includeEvidence = true,
-      // V2 Enhancement options
-      use_hyde = true,
-      use_expansion = true,
-      use_reranking = true,
-      use_crag = true,
-      use_selfrag = true,
-      use_debates = true,
-      // HiRAG-specific options
-      use_hierarchy = true,  // Enable hierarchical retrieval
-      use_bridge = true,     // Enable bridge mode for multi-hop
     } = body;
 
-    // Inline validation
-    if (!query || typeof query !== 'string' || query.length === 0 || query.length > 1000) {
+    // Validation
+    if (!query || typeof query !== 'string' || query.length === 0 || query.length > 2000) {
       return c.json({
         error: 'Invalid input',
-        message: 'Query must be a non-empty string (max 1000 characters)',
+        message: 'Query must be a non-empty string (max 2000 characters)',
         success: false,
       }, 400);
     }
 
-    const db = new DatabaseService(c.env);
     const qdrant = new QdrantService(c.env);
     const llm = new LLMService(c.env);
-    const hierarchical = new HierarchicalRetrievalService(c.env);
 
-    logger.info(`HiRAG V2 starting: query="${query.slice(0, 50)}...", mode=${mode}, hierarchy=${use_hierarchy}`);
-
-    // =================================================================
-    // STEP 1: HiRAG Query Classification & Strategy Selection
-    // =================================================================
-    let classification: any = null;
-    let strategy: any = null;
-    let hierarchicalContext = '';
-    let bridgeContext: any = null;
-
-    if (use_hierarchy) {
-      try {
-        // Only pass mode to HiRAG if it's a valid query type mode (not speed modes like 'fast'/'comprehensive')
-        const validHiragModes = ['local', 'global', 'bridge', 'multi_hop', 'full'];
-        const hiragMode = validHiragModes.includes(mode) ? mode : undefined;
-        const hiragResult = await hierarchical.retrieve(query, hiragMode);
-        classification = hiragResult.classification;
-        strategy = hiragResult.strategy;
-
-        // Build hierarchical context from community summaries
-        if (hiragResult.communities.length > 0) {
-          hierarchicalContext = '\n=== HIERARCHICAL CONTEXT (COMMUNITY SUMMARIES) ===\n' +
-            hiragResult.communities.map(c => {
-              const header = `[${c.dominant_school || 'Mixed'} - ${c.dominant_period || 'Various periods'}]`;
-              return `${header}\n${c.summary}`;
-            }).join('\n\n---\n\n');
-        }
-
-        // If bridge mode was used, include bridge context
-        if (hiragResult.bridgeContext) {
-          bridgeContext = hiragResult.bridgeContext;
-          hierarchicalContext += '\n\n=== BRIDGE PATHS (MULTI-HOP REASONING) ===\n';
-          for (const path of bridgeContext.paths) {
-            const pathDesc = path.nodes.map((n: any) => n.label).join(' → ');
-            hierarchicalContext += `\nPath: ${pathDesc}\n${path.reasoning || ''}\n`;
-          }
-          if (bridgeContext.bridgingConcepts.length > 0) {
-            hierarchicalContext += `\nKey Bridging Concepts: ${bridgeContext.bridgingConcepts.join(', ')}\n`;
-          }
-        }
-
-        logger.info(`HiRAG classification: ${classification.type} (confidence: ${classification.confidence}), ` +
-          `strategy: L${strategy.startLevel}, communities: ${hiragResult.communities.length}`);
-      } catch (hiragErr) {
-        logger.warn('HiRAG retrieval failed, falling back to V2-only', hiragErr);
-      }
-    }
+    logger.info(`PageIndex V3: query="${query.slice(0, 80)}..."`);
 
     // =================================================================
-    // STEP 2: Priority Passage References (same as V2)
+    // STEP 1: PARALLEL — Embedding + Passage Reference Detection
     // =================================================================
     const passageRefs = detectPassageReferences(query);
-    const resolvedPassages = await resolvePassageReferences(passageRefs, c.env);
+
+    const [
+      geminiVector,
+      resolvedPassages,
+    ] = await Promise.all([
+      llm.embed(query),
+      resolvePassageReferences(passageRefs, c.env),
+    ]);
+
     const priorityContext = buildPassageContext(resolvedPassages);
 
     if (resolvedPassages.length > 0) {
@@ -1269,396 +1221,184 @@ graphragRoutes.post('/answer', async (c) => {
     }
 
     // =================================================================
-    // STEP 3: Parallel V2 Retrieval (HyDE, Expansion, etc.)
-    // Adjust strategy based on HiRAG classification
+    // STEP 2: PARALLEL — KG Node Search + Text Passage Search + Edge Search
+    // Single round of vector search — no HyDE, no expansion, no reranking
     // =================================================================
-    let adjustedSemanticK = semantic_k;
-
-    // For global/abstract queries, rely more on hierarchical context
-    if (classification?.type === 'global_abstract') {
-      adjustedSemanticK = Math.floor(semantic_k * 0.7); // Reduce passage search
-    }
-    // For specific entity queries, boost passage search
-    else if (classification?.type === 'specific_entity') {
-      adjustedSemanticK = Math.floor(semantic_k * 1.3); // More passages
-    }
-
-    // Batch 1: Embeddings + Expansion + HyDE hypothesis
     const [
-      geminiVector,
-      queryExpansionResult,
-      hypotheticalDocResult,
-    ] = await Promise.all([
-      llm.embed(query),
-      use_expansion
-        ? expandPhilologicalQuery(query, llm).catch(() => quickExpand(query))
-        : Promise.resolve(null),
-      use_hyde
-        ? generateHypotheticalDocument(query, llm).catch(() => '')
-        : Promise.resolve(''),
-    ]);
-
-    let queryExpansion = queryExpansionResult;
-    let hypotheticalDocument = hypotheticalDocResult;
-
-    // Batch 2: Parallel searches
-    const [
-      standardResults,
-      hydeSearchResults,
       nodeResults,
-      edgeSearchResults,
+      textResults,
+      edgeResults,
     ] = await Promise.all([
-      qdrant.searchTexts(geminiVector, adjustedSemanticK * 2, undefined, 0.5),
-      use_hyde && hypotheticalDocument
-        ? (async () => {
-            const hydeEmbedding = await llm.embed(hypotheticalDocument);
-            return await qdrant.searchTexts(hydeEmbedding, adjustedSemanticK, undefined, 0.5);
-          })().catch(() => [])
-        : Promise.resolve([]),
-      qdrant.searchNodes(geminiVector, adjustedSemanticK, 0.5),
-      qdrant.searchEdges(geminiVector, adjustedSemanticK, 0.7).catch(() => []),
+      qdrant.searchWithNamedVector('kg_nodes_dual', 'gemini', geminiVector, semantic_k, 0.4),
+      qdrant.searchTexts(geminiVector, semantic_k * 2, undefined, 0.45),
+      qdrant.searchEdges(geminiVector, Math.min(semantic_k, 15), 0.6).catch(() => []),
     ]);
 
-    let hydeResults = hydeSearchResults.map((r: any) => ({
-      id: r.id,
-      score: r.score,
-      passageId: r.payload?.passage_id,
-      author: r.payload?.author,
-      work: r.payload?.title,
-      text: r.payload?.text_preview || r.payload?.text_content,
-      language: r.payload?.language,
-      payload: r.payload,
-    }));
+    logger.info(`Search results: ${nodeResults.length} nodes, ${textResults.length} passages, ${edgeResults.length} edges`);
 
-    let edgeResults = edgeSearchResults;
+    // =================================================================
+    // STEP 3: PARALLEL — Linked Passages (passage_citations) + Neighbors
+    // This is the PageIndex core: use the KG structure to find passages
+    // =================================================================
+    const seedNodeIds = nodeResults
+      .slice(0, max_context)
+      .map(r => r.payload?.node_id)
+      .filter(Boolean) as string[];
 
-    // Expanded search
-    let expandedResults: any[] = [];
-    if (use_expansion && queryExpansion && queryExpansion.greekTerms?.length > 0) {
-      try {
-        const expandResult = await expandedSearch(query, queryExpansion, qdrant, llm, adjustedSemanticK);
-        expandedResults = expandResult.results;
-      } catch (err) {
-        logger.warn('Expanded search failed', err);
+    const [
+      linkedPassages,
+      neighbors,
+      textualGroundings,
+    ] = await Promise.all([
+      getLinkedPassages(seedNodeIds, c.env),
+      getNodeNeighbors(seedNodeIds, c.env),
+      getTextualGroundings(nodeResults, geminiVector, c.env).catch(err => {
+        logger.warn('Textual grounding failed', err);
+        return { groundings: [] as TextualGrounding[], formattedContext: '' };
+      }),
+    ]);
+
+    // Also get linked passages for neighbor nodes (1-hop expansion)
+    const neighborNodeIds = neighbors.map(n => n.nodeId);
+    let neighborLinkedPassages: Awaited<ReturnType<typeof getLinkedPassages>> = [];
+    if (neighborNodeIds.length > 0) {
+      neighborLinkedPassages = await getLinkedPassages(neighborNodeIds, c.env);
+    }
+
+    // Merge and deduplicate linked passages
+    const allLinkedPassages = [...linkedPassages];
+    const seenPassageIds = new Set(linkedPassages.map(p => p.passageId));
+    for (const p of neighborLinkedPassages) {
+      if (!seenPassageIds.has(p.passageId)) {
+        seenPassageIds.add(p.passageId);
+        allLinkedPassages.push(p);
       }
     }
 
-    // =================================================================
-    // STEP 4: RRF Fusion
-    // =================================================================
-    const k = 60;
-    const scores = new Map<string, number>();
-    const items = new Map<string, any>();
-
-    standardResults.forEach((item, rank) => {
-      const id = String(item.id);
-      scores.set(id, (scores.get(id) || 0) + 1 / (k + rank + 1));
-      if (!items.has(id)) items.set(id, item);
-    });
-
-    hydeResults.forEach((item, rank) => {
-      const id = String(item.id);
-      scores.set(id, (scores.get(id) || 0) + 1.1 / (k + rank + 1));
-      if (!items.has(id)) items.set(id, item);
-    });
-
-    expandedResults.forEach((item, rank) => {
-      const id = String(item.id);
-      scores.set(id, (scores.get(id) || 0) + 1 / (k + rank + 1));
-      if (!items.has(id)) items.set(id, item);
-    });
-
-    const fusedIds = Array.from(scores.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 50)
-      .map(([id]) => id);
-
-    const fusedResults = fusedIds.map(id => items.get(id)!);
+    logger.info(`PageIndex: ${allLinkedPassages.length} linked passages (${linkedPassages.length} direct + ${neighborLinkedPassages.length} via neighbors), ${neighbors.length} KG neighbors`);
 
     // =================================================================
-    // STEP 5: LLM Reranking (if not global_abstract - use hierarchy instead)
-    // =================================================================
-    let rerankedResults = fusedResults;
-    let rerankingApplied = false;
-
-    const shouldRerank = use_reranking &&
-      fusedResults.length > 5 &&
-      classification?.type !== 'global_abstract'; // Skip reranking for global queries
-
-    if (shouldRerank) {
-      try {
-        const candidates: RerankCandidate[] = fusedResults.slice(0, 30).map(r => ({
-          id: r.id,
-          score: r.score,
-          text: r.payload?.text_content || r.payload?.text_preview || r.payload?.description || '',
-          author: r.payload?.author,
-          work: r.payload?.title,
-          metadata: r.payload,
-        }));
-
-        const rerankResponse = await scholarlyRerank(query, candidates, llm, max_context);
-        rerankedResults = rerankResponse.results.map(r => items.get(String(r.id)) || r);
-        rerankingApplied = true;
-      } catch (err) {
-        logger.warn('Reranking failed', err);
-      }
-    }
-
-    // =================================================================
-    // STEP 6: Textual Grounding
-    // =================================================================
-    let textualGroundings: TextualGrounding[] = [];
-    let groundingContext = '';
-    try {
-      const grounding = await getTextualGroundings(nodeResults, geminiVector, c.env);
-      textualGroundings = grounding.groundings;
-      groundingContext = grounding.formattedContext;
-    } catch (err) {
-      logger.warn('Textual grounding failed', err);
-    }
-
-    // =================================================================
-    // STEP 7: Build Combined Context (HiRAG + V2)
+    // STEP 4: Build FULL Context — NO TRUNCATION
+    // Gemini has ~1M tokens. Our entire corpus is ~3.4M tokens.
+    // We can easily fit 100+ full passages in context.
     // =================================================================
     const contextParts: string[] = [];
 
-    // Priority context (explicit passage references)
+    // Priority: explicit passage references (user asked for specific text)
     if (priorityContext) {
       contextParts.push(priorityContext);
       contextParts.push('');
     }
 
-    // HIRAG ADDITION: Hierarchical context FIRST for global queries
-    if (hierarchicalContext && classification?.type !== 'specific_entity') {
-      contextParts.push(hierarchicalContext);
+    // Textual groundings (original Greek/Latin from PostgreSQL)
+    if (textualGroundings.formattedContext) {
+      contextParts.push(textualGroundings.formattedContext);
       contextParts.push('');
     }
 
-    // Textual groundings (original Greek/Latin)
-    if (groundingContext) {
-      contextParts.push(groundingContext);
-      contextParts.push('');
-    }
+    // PageIndex context (full passages, full descriptions, full relationships)
+    const pageIndexContext = buildPageIndexContext(
+      nodeResults.slice(0, max_context),
+      neighbors,
+      allLinkedPassages,
+      textResults.slice(0, max_context),
+      edgeResults.slice(0, graph_depth * 5),
+    );
+    contextParts.push(pageIndexContext);
 
-    contextParts.push('=== SCHOLARLY CONTEXT FROM KNOWLEDGE GRAPH ===');
+    const context = contextParts.join('\n');
 
-    // Add top text results (generous limits — Gemini has ~1M token context)
-    for (const result of rerankedResults.slice(0, max_context)) {
-      if (!result?.payload) continue;
-      const p = result.payload;
-      const author = p.author || 'Unknown';
-      const work = p.title || 'Unknown';
-      const text = p.text_content || p.text_preview || p.description || '';
-      const ref = p.canonical_ref || p.cts_urn || '';
-      const label = ref ? `[Passage] ${author}, ${work} (${ref})` : `[Passage] ${author}, ${work}`;
-      contextParts.push(`${label}: ${truncateText(text, 4000)}`);
-    }
-
-    // Add KG nodes
-    for (const nodeResult of nodeResults.slice(0, max_context)) {
-      if (!nodeResult?.payload) continue;
-      const node = nodeResult.payload;
-      const name = node.label || node.node_id || 'Unknown';
-      const desc = node.description || '';
-      contextParts.push(`[Entity] ${name}: ${truncateText(desc, 2000)}`);
-    }
-
-    // Add relationships from edges
-    for (const edge of edgeResults.slice(0, graph_depth * 5)) {
-      if (!edge?.payload) continue;
-      const { source_id, target_id, relation, description } = edge.payload;
-      contextParts.push(
-        `[Relationship] ${source_id || 'unknown'} --${relation || 'related'}--> ${target_id || 'unknown'}: ${description || ''}`
-      );
-    }
-
-    let context = contextParts.join('\n\n');
+    // Log context size for monitoring
+    logger.info(`Context size: ${context.length} chars (~${Math.round(context.length / 4)} tokens)`);
 
     // =================================================================
-    // STEP 8: CRAG Validation (skip in fast mode)
+    // STEP 5: ONE Synthesis Call — Strong scholarly prompt
+    // This is the only LLM generation call (besides embedding)
     // =================================================================
-    let cragValidation: any = null;
-    const shouldRunCRAG = use_crag && mode !== 'fast';
+    const synthesisPrompt = `You are a world-class scholar of ancient Greek and Roman philosophy, specializing in debates about fate, free will (αὐτεξούσιον / liberum arbitrium), and moral responsibility from the 6th century BCE to the 6th century CE.
 
-    if (shouldRunCRAG) {
-      try {
-        cragValidation = await validateRetrievalSufficiency(query, context, llm);
-        logger.info(`CRAG: confidence=${cragValidation.confidenceScore}`);
-      } catch (err) {
-        logger.warn('CRAG validation failed', err);
-      }
-    }
+You have access to a curated database of ${allLinkedPassages.length + textResults.length} passages from ancient sources and ${nodeResults.length + neighbors.length} knowledge graph entities about ancient philosophical debates on free will.
 
-    // =================================================================
-    // STEP 9: Debate Identification
-    // =================================================================
-    let debatesIdentified: any[] = [];
+=== CONTEXT FROM KNOWLEDGE GRAPH AND ANCIENT TEXT DATABASE ===
 
-    if (use_debates) {
-      try {
-        const debateNodes: DebateNode[] = nodeResults.map(r => ({
-          id: r.payload?.node_id || String(r.id),
-          label: r.payload?.label || r.payload?.name || 'Unknown',
-          type: r.payload?.type || 'concept',
-          school: r.payload?.school || r.payload?.metadata?.school,
-          period: r.payload?.period,
-        }));
-
-        const debateEdges: DebateEdge[] = edgeResults.map(r => ({
-          id: r.payload?.edge_id || String(r.id),
-          source: r.payload?.source_id || '',
-          target: r.payload?.target_id || '',
-          relation: r.payload?.relation || '',
-        }));
-
-        debatesIdentified = identifyDebates(debateNodes, debateEdges);
-      } catch (err) {
-        logger.warn('Debate identification failed', err);
-      }
-    }
-
-    let debateContext = '';
-    if (debatesIdentified.length > 0) {
-      debateContext = '\n\n=== PHILOSOPHICAL DEBATES IDENTIFIED ===\n' +
-        debatesIdentified.slice(0, 3).map(d => formatDebateForDisplay(d)).join('\n\n');
-    }
-
-    // =================================================================
-    // STEP 10: LLM Generation with HiRAG-aware prompt
-    // =================================================================
-    let promptAddition = '';
-    if (classification) {
-      if (classification.type === 'global_abstract') {
-        promptAddition = `\n\nThis is a GLOBAL question about a broad topic. Use the hierarchical community summaries to provide a comprehensive overview before diving into specific details.`;
-      } else if (classification.type === 'comparative') {
-        promptAddition = `\n\nThis is a COMPARATIVE question. Highlight the differences and similarities between the entities/schools being compared.`;
-      } else if (classification.type === 'multi_hop') {
-        promptAddition = `\n\nThis is a MULTI-HOP question requiring reasoning across multiple concepts. Use the bridge paths provided to trace the connections.`;
-      } else if (classification.type === 'temporal_evolution') {
-        promptAddition = `\n\nThis is a TEMPORAL question about how concepts evolved. Order your response chronologically and highlight changes over time.`;
-      }
-    }
-
-    const enhancedPrompt = `You are a scholarly expert on ancient philosophy and free will debates.
-
-Context from knowledge graph:
 ${context}
-${debateContext}
 
-Question: ${query}
-${promptAddition}
+=== END CONTEXT ===
 
-${TEXTUAL_GROUNDING_PROMPT}
+QUESTION: ${query}
 
-IMPORTANT: If the user asked about a SPECIFIC passage (like "De Fato 39"), your answer must focus primarily on the EXACT TEXT provided above.
+INSTRUCTIONS FOR YOUR SCHOLARLY ANSWER:
 
-Provide a comprehensive, scholarly answer that:
-1. Quotes original Greek/Latin texts when available (with translations)
-2. Cites specific passages using proper references (Author, Work Section)
-3. Preserves key philosophical terminology in the original language
-4. Grounds all claims in the textual evidence provided
-${debatesIdentified.length > 0 ? '5. Addresses the philosophical debates identified above' : ''}
+1. **Quote original Greek/Latin text** directly from the passages provided above. Do NOT fabricate or reconstruct ancient text from memory. Only quote text that appears verbatim in the context above.
 
-CRITICAL CITATION RULES:
-- When citing ancient sources, use ONLY chapter/section numbers that exist in the original works
-- NEVER confuse page numbers from modern publications with ancient text section numbers
-- For Justin Martyr: First Apology has ~68 chapters, Dialogue with Trypho has ~142 chapters`;
+2. **Provide translations** in parentheses after each Greek/Latin quotation.
 
-    let answer = await llm.generateWithRetry(enhancedPrompt, 'gemini-3-flash-preview');
+3. **Cite precisely** using the format: Author, Work Section (e.g., "Cicero, De Fato 39" or "Origen, De Principiis 3.1.2"). Use ONLY references that exist in the passages above.
+
+4. **Use proper philosophical terminology** in the original language: αὐτεξούσιον (self-determination), εἱμαρμένη (fate), liberum arbitrium (free choice), etc.
+
+5. **Ground every claim** in the textual evidence provided. If a claim is not supported by the passages above, say so explicitly.
+
+6. **Distinguish clearly** between:
+   - What the ancient sources actually say (quote them)
+   - How modern scholars interpret them (cite the scholar)
+   - Your own analytical synthesis
+
+7. **Structure your answer** with clear sections, markdown headers, and scholarly formatting.
+
+CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage exists in the context, say "No passage in the database directly addresses this" rather than inventing a quotation.`;
+
+    let answer = await llm.generateWithRetry(synthesisPrompt, 'gemini-3-flash-preview');
     if (typeof answer !== 'string') {
-      answer = answer?.text || answer?.content || String(answer || '');
+      answer = (answer as any)?.text || (answer as any)?.content || String(answer || '');
     }
 
     // =================================================================
-    // STEP 11: SELF-RAG Evaluation
-    // =================================================================
-    let selfEvaluation: any = null;
-
-    // Helper to determine node type from payload
-    const determineNodeType = (payload: any): string => {
-      // Explicit type field takes priority
-      if (payload?.type) return payload.type;
-      if (payload?.node_type) return payload.node_type;
-
-      // Extract from node_id prefix if available
-      if (payload?.node_id) {
-        const prefixes = ['concept', 'argument', 'person', 'work', 'reformulation', 'group', 'school', 'evidence'];
-        for (const prefix of prefixes) {
-          if (payload.node_id.startsWith(prefix + '_')) {
-            return prefix.charAt(0).toUpperCase() + prefix.slice(1);
-          }
-        }
-      }
-
-      // If has author/work info, it's a Passage from ancient text
-      if (payload?.author || payload?.work_title || payload?.cts_urn) {
-        return 'Passage';
-      }
-
-      // If has name field but no author, likely a KG Concept
-      if (payload?.name || payload?.label) {
-        return 'Concept';
-      }
-
-      return 'Unknown';
-    };
-
-    // Build properly structured sources for frontend display
-    const structuredSources = rerankedResults.slice(0, max_context).map((r, index) => ({
-      id: index + 1,
-      nodeId: r.id || r.payload?.node_id || `source_${index}`,
-      nodeLabel: r.payload?.label || r.payload?.author || r.payload?.title || 'Unknown',
-      nodeType: determineNodeType(r.payload),
-      content: r.payload?.description || r.payload?.content,
-      metadata: {
-        school: r.payload?.school,
-        period: r.payload?.period,
-        author: r.payload?.author,
-        confidence: r.score || undefined,
-      },
-    }));
-
-    // Keep string labels for SELF-RAG evaluation (expects string array)
-    const sourceLabels = structuredSources.map(s => s.nodeLabel);
-
-    const shouldRunSelfRAG = use_selfrag && mode !== 'fast';
-
-    if (shouldRunSelfRAG) {
-      try {
-        selfEvaluation = await selfEvaluateAnswer(query, answer, sourceLabels.length, sourceLabels, llm);
-      } catch (err) {
-        logger.warn('SELF-RAG failed', err);
-      }
-    } else if (use_selfrag) {
-      // Fast mode estimate
-      selfEvaluation = {
-        relevanceScore: 80,
-        groundingScore: Math.min(100, sourceLabels.length * 12),
-        completenessScore: 70,
-        confidenceScore: 75,
-        qualityBadge: sourceLabels.length >= 5 ? 'High' : sourceLabels.length >= 3 ? 'Medium' : 'Low',
-        shouldRefine: false,
-        caveats: [],
-        improvements: [],
-        evaluationTime: 0,
-      };
-    }
-
-    // =================================================================
-    // STEP 12: Build Response
+    // STEP 6: Build Response (frontend-compatible structure)
     // =================================================================
     const processingTime = Date.now() - startTime;
 
-    // Evidence package
+    // Build evidence package
     const allSourceNodes = [
       ...nodeResults,
-      ...rerankedResults.slice(0, max_context).map(r => ({ ...r, payload: r.payload || r })),
+      ...textResults.slice(0, max_context).map(r => ({ ...r, payload: r.payload || r })),
     ];
     const evidencePackage = includeEvidence
       ? buildEvidencePackage(answer, allSourceNodes, edgeResults)
       : null;
 
-    // Explicit citations
+    // Structured sources for frontend
+    const structuredSources = [
+      // KG nodes
+      ...nodeResults.slice(0, max_context).map((r, i) => ({
+        id: i + 1,
+        nodeId: r.payload?.node_id || `node_${i}`,
+        nodeLabel: r.payload?.label || r.payload?.node_id || 'Unknown',
+        nodeType: determineNodeType(r.payload),
+        content: r.payload?.description || '',
+        metadata: {
+          school: r.payload?.metadata?.school || r.payload?.school,
+          period: r.payload?.period,
+          author: r.payload?.metadata?.author,
+          confidence: r.score || undefined,
+        },
+      })),
+      // Linked passages as sources
+      ...allLinkedPassages.slice(0, 20).map((p, i) => ({
+        id: nodeResults.length + i + 1,
+        nodeId: p.passageId,
+        nodeLabel: `${p.author}, ${p.workTitle}`,
+        nodeType: 'Passage' as string,
+        content: p.textContent.slice(0, 500),
+        metadata: {
+          author: p.author,
+          ctsUrn: p.ctsUrn,
+          confidence: p.confidence,
+        },
+      })),
+    ];
+
+    // Explicit citations from passage references
     const explicitCitations = resolvedPassages.map(p => ({
       citationText: `${p.author}, ${p.workTitle} ${p.section}`,
       passageId: p.passageId,
@@ -1666,7 +1406,7 @@ CRITICAL CITATION RULES:
       ctsUrn: p.ctsUrn,
       title: p.workTitle,
       author: p.author,
-      originalText: truncateText(p.textContent, 2000),
+      originalText: p.textContent,
       language: p.ctsUrn?.includes('latinLit') ? 'latin' : 'greek',
       reference: p.section,
       confidence: 1.0,
@@ -1677,28 +1417,10 @@ CRITICAL CITATION RULES:
     const allCtsUrns = [
       ...resolvedPassages.map(p => p.ctsUrn).filter(Boolean),
       ...(evidencePackage?.ctsUrns || []),
-      ...textualGroundings.map(g => g.ctsUrn).filter(Boolean),
+      ...textualGroundings.groundings.map(g => g.ctsUrn).filter(Boolean),
+      ...allLinkedPassages.map(p => p.ctsUrn).filter(Boolean),
     ];
     const uniqueCtsUrns = [...new Set(allCtsUrns)];
-
-    // Build search score map for evidence tracing
-    const searchScores = new Map<string, number>();
-    rerankedResults.slice(0, max_context).forEach((r, i) => {
-      searchScores.set(String(r.id || r.payload?.node_id), r.score || (1 - i * 0.05));
-    });
-
-    // Evidence traces
-    const evidenceTraces = buildEvidenceTraces(
-      rerankedResults.slice(0, max_context).map(r => r.payload || {}),
-      searchScores,
-      new Map(),
-      new Map(),
-      use_hyde,
-      use_expansion,
-      rerankingApplied ? new Map(rerankedResults.slice(0, max_context).map((r, i) => [String(r.id), 100 - i * 5])) : undefined,
-      query
-    );
-    const evidenceQuality = calculateEvidenceQuality(evidenceTraces.traces);
 
     return c.json({
       answer,
@@ -1712,7 +1434,7 @@ CRITICAL CITATION RULES:
       ctsUrns: uniqueCtsUrns,
 
       // Textual groundings
-      textualGroundings: textualGroundings.map(g => ({
+      textualGroundings: textualGroundings.groundings.map(g => ({
         reference: `${g.author}, ${g.reference}`,
         originalText: g.originalText,
         language: g.language === 'grc' ? 'Greek' : 'Latin',
@@ -1720,129 +1442,45 @@ CRITICAL CITATION RULES:
         passageId: g.passageId,
       })),
 
-      // Quality scores
-      qualityScore: selfEvaluation?.confidenceScore || evidenceQuality.overallScore * 100,
-      qualityBadge: selfEvaluation?.qualityBadge || evidenceQuality.badge,
-      caveats: selfEvaluation?.caveats || [],
-      confidenceExplanation: selfEvaluation ? explainConfidence(selfEvaluation) : evidenceQuality.explanation,
+      // Quality (computed from source counts — no extra LLM call)
+      qualityScore: Math.min(100, 50 + allLinkedPassages.length * 5 + textualGroundings.groundings.length * 8),
+      qualityBadge: allLinkedPassages.length >= 5 ? 'High' : allLinkedPassages.length >= 2 ? 'Medium' : 'Low',
 
-      // Evidence explainability
-      evidenceTraces: evidenceTraces.traces,
-      evidenceQuality,
-
-      // Debates
-      debatesIdentified: debatesIdentified.map(d => ({
-        topic: d.topic,
-        description: d.description,
-        level: d.score.level,
-        schools: d.score.schools,
-        keyFigures: d.score.keyFigures,
-      })),
-
-      // ========================
-      // HiRAG-SPECIFIC FIELDS
-      // ========================
-      hiragInfo: {
-        queryClassification: classification ? {
-          type: classification.type,
-          confidence: classification.confidence,
-          entities: classification.entities,
-          concepts: classification.concepts,
-          schools: classification.schools,
-          suggestedLevel: classification.suggestedLevel,
-        } : null,
-        strategy: strategy ? {
-          startLevel: strategy.startLevel,
-          maxDepth: strategy.maxDepth,
-          expandMode: strategy.expandMode,
-          maxCommunities: strategy.maxCommunities,
-          useBridge: strategy.useBridge,
-        } : null,
-        bridgeMode: !!bridgeContext,
-        bridgePaths: bridgeContext?.paths?.length || 0,
-        bridgingConcepts: bridgeContext?.bridgingConcepts || [],
-        hierarchicalContextUsed: !!hierarchicalContext,
+      // PageIndex-specific info
+      pageIndexInfo: {
+        linkedPassages: allLinkedPassages.length,
+        directPassages: linkedPassages.length,
+        neighborPassages: neighborLinkedPassages.length,
+        kgNeighbors: neighbors.length,
+        seedNodes: seedNodeIds.length,
+        contextChars: context.length,
+        contextTokensEstimate: Math.round(context.length / 4),
       },
 
-      // Retrieval strategy details
-      retrievalStrategy: {
-        hydeUsed: use_hyde,
-        queryExpanded: use_expansion,
-        reranked: rerankingApplied,
-        cragValidated: use_crag,
-        selfEvaluated: use_selfrag,
-        hierarchicalUsed: use_hierarchy,
-        bridgeUsed: !!bridgeContext,
-      },
-
-      // Query expansion details
-      queryExpansion: queryExpansion ? {
-        greekTerms: queryExpansion.greekTerms,
-        latinTerms: queryExpansion.latinTerms,
-        philosophers: queryExpansion.philosophers,
-        concepts: queryExpansion.concepts,
-      } : undefined,
-
-      // CRAG validation
-      cragValidation: cragValidation ? {
-        confidenceScore: cragValidation.confidenceScore,
-        needsSecondaryRetrieval: cragValidation.needsSecondaryRetrieval,
-        missingAspects: cragValidation.missingAspects,
-      } : undefined,
-
-      // SELF-RAG evaluation
-      selfEvaluation: selfEvaluation ? {
-        relevanceScore: selfEvaluation.relevanceScore,
-        groundingScore: selfEvaluation.groundingScore,
-        completenessScore: selfEvaluation.completenessScore,
-        confidenceScore: selfEvaluation.confidenceScore,
-      } : undefined,
-
-      // HyDE details
-      hydeDetails: use_hyde && hypotheticalDocument ? {
-        hypotheticalDocumentPreview: hypotheticalDocument.slice(0, 300) + '...',
-        hydeResultsCount: hydeResults.length,
-      } : undefined,
-
-      // Stats
+      // Stats (frontend-compatible)
       retrievalStats: {
         totalNodes: nodeResults.length,
         totalEdges: edgeResults.length,
-        standardResults: standardResults.length,
-        hydeResults: hydeResults.length,
-        expandedResults: expandedResults.length,
-        fusedCandidates: fusedResults.length,
-        finalResults: rerankedResults.slice(0, max_context).length,
-        passageNodes: (evidencePackage?.passageCount || 0) + resolvedPassages.length,
+        standardResults: textResults.length,
+        passageNodes: allLinkedPassages.length + resolvedPassages.length,
         explicitPassages: resolvedPassages.length,
-        textualGroundings: textualGroundings.length,
-        debatesIdentified: debatesIdentified.length,
-        adjustedSemanticK,
+        textualGroundings: textualGroundings.groundings.length,
       },
 
       processingTime,
-      mode,
-      version: 'hirag-v2',
+      version: 'pageindex-v3',
       parameters: {
         semantic_k,
         graph_depth,
         max_context,
-        use_hyde,
-        use_expansion,
-        use_reranking,
-        use_crag,
-        use_selfrag,
-        use_debates,
-        use_hierarchy,
-        use_bridge,
       },
       success: true,
     });
   } catch (error) {
-    logger.error('HiRAG V2 answer error', error);
+    logger.error('PageIndex V3 answer error', error);
     return c.json({
       error: 'Query processing failed',
-      code: 'HIRAG_V2_ANSWER_ERROR',
+      code: 'PAGEINDEX_V3_ANSWER_ERROR',
       message: error instanceof Error ? error.message : 'Unknown error',
       success: false,
     }, 500);
@@ -1850,13 +1488,10 @@ CRITICAL CITATION RULES:
 });
 
 // =============================================================================
-// BACKWARD COMPATIBILITY ALIASES
+// BACKWARD COMPATIBILITY: /answer/v2 still available for A/B testing
 // =============================================================================
-// These routes redirect to the main /answer endpoint for existing integrations
-
-// Alias: /answer/hirag-v2 → /answer (for A/B testing scripts)
 graphragRoutes.post('/answer/hirag-v2', async (c) => {
-  // Forward to main /answer handler
+  // Forward to main /answer handler (now PageIndex V3)
   const response = await graphragRoutes.fetch(
     new Request(new URL('/answer', c.req.url).toString(), {
       method: 'POST',
@@ -1868,9 +1503,7 @@ graphragRoutes.post('/answer/hirag-v2', async (c) => {
   return response;
 });
 
-// Alias: /answer/v2 → /answer (for frontend compatibility)
 graphragRoutes.post('/answer/v2', async (c) => {
-  // Forward to main /answer handler
   const response = await graphragRoutes.fetch(
     new Request(new URL('/answer', c.req.url).toString(), {
       method: 'POST',
