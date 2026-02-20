@@ -2,6 +2,7 @@
 FastAPI routes for GraphRAG Q&A.
 """
 
+import json
 from collections.abc import AsyncIterator
 from typing import Annotated
 
@@ -76,10 +77,11 @@ async def query_stream(
                 graph_depth=graph_depth,
                 max_context_nodes=max_context_nodes,
             ):
-                yield f"data: {chunk}\n\n"
-            yield "data: [DONE]\n\n"
+                event = json.dumps({"type": "answer_chunk", "data": chunk})
+                yield f"data: {event}\n\n"
+            yield f'data: {json.dumps({"type": "complete", "data": None})}\n\n'
         except Exception as e:
-            yield f"data: [ERROR] {str(e)}\n\n"
+            yield f'data: {json.dumps({"type": "error", "message": str(e)})}\n\n'
 
     return StreamingResponse(
         generate(),

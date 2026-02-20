@@ -58,16 +58,23 @@ particularly debates about free will, fate, and moral responsibility \
 in Greco-Roman thought.
 
 Guidelines:
-- Ground your answers in the provided context from the knowledge graph
-- Cite specific ancient sources when available using [1], [2] notation
-- For passages, use [P1], [P2] notation
+- Ground your answers EXCLUSIVELY in the provided context from the knowledge graph
+- Cite specific ancient sources using [1], [2] notation for KG nodes
+- For passages, use [P1], [P2] notation and QUOTE the original Greek/Latin text verbatim
+- When a passage contains ancient Greek or Latin text, reproduce it EXACTLY as provided — \
+do NOT paraphrase, reconstruct, or generate any ancient language text yourself
+- NEVER fabricate, compose, or approximate Greek or Latin text — only quote what appears \
+in the provided passages. If no passage text is available, describe the content in English
+- Include CTS URNs where available in citations
 - Distinguish between ancient primary sources and modern scholarly interpretations
-- Use proper Greek/Latin terminology with transliteration when appropriate
+- Use proper transliteration for Greek/Latin terms when discussing concepts
 - Acknowledge scholarly debates and different interpretations
-- Be precise about historical periods and philosophical schools
+- Be precise about historical periods, dates, and philosophical schools
+- Ensure all dates, names, and titles are accurate based on the provided context
 
-Important: Only use information from the provided context. If the context \
-doesn't contain enough information to answer, say so clearly."""
+CRITICAL: This is an academic resource held to the highest scholarly standards. \
+If the context doesn't contain enough information, say so clearly. \
+Never fill gaps with generated content that looks like ancient source material."""
 
 CLASSIFY_PROMPT = """\
 Classify the following scholarly question about ancient philosophy \
@@ -120,10 +127,19 @@ answer this question: {question}
 
 {context}
 
-INSTRUCTION: Ground your answer in primary ancient sources first. \
+INSTRUCTIONS:
+1. Ground your answer in primary ancient sources first. \
 Secondary scholarship provides interpretive context but is not authoritative \
-for what the ancient authors actually said. Cite sources using [1], [2] for \
-knowledge graph nodes and [P1], [P2] for passages."""
+for what the ancient authors actually said.
+2. Cite sources using [1], [2] for knowledge graph nodes and [P1], [P2] for passages.
+3. When citing passages that contain Greek or Latin text, QUOTE the original text \
+exactly as provided — e.g. [P1]: "τῆς αὐτεξουσίου ἡμῶν κρίσεως". \
+NEVER generate or approximate Greek/Latin text not found in the passages above.
+4. Include CTS URNs from the passage metadata when available.
+5. Ensure all biographical dates, work titles, and historical details are accurate \
+based solely on the provided context.
+6. If insufficient ancient source material is available, state this explicitly \
+rather than generating plausible-sounding content."""
 
 
 # ---------------------------------------------------------------------------
@@ -830,8 +846,13 @@ answer this question: {question}
 ## Knowledge Graph Context
 {context}
 
-Provide a scholarly answer with citations to the sources above \
-using [1], [2] notation for nodes and [P1], [P2] for passages."""
+INSTRUCTIONS:
+1. Provide a scholarly answer grounded EXCLUSIVELY in the sources above.
+2. Cite sources using [1], [2] for nodes and [P1], [P2] for passages.
+3. When citing passages that contain Greek or Latin text, QUOTE the original text \
+exactly as provided. NEVER generate or approximate Greek/Latin text.
+4. Include CTS URNs from passage metadata when available.
+5. If insufficient source material is available, state this explicitly."""
 
         answer = await ctx.deps.llm.generate(prompt, system_prompt=SYSTEM_PROMPT)
         ctx.state.raw_answer = answer

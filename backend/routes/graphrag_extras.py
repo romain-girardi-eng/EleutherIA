@@ -163,6 +163,8 @@ async def graphrag_answer(
         },
         "nodes_used": node_count,
         "edges_traversed": 0,
+        "llm_model": result.get("llm_model", ""),
+        "llm_provider": result.get("llm_provider", ""),
         "quality_metrics": {
             "confidence_score": confidence_score,
             "completeness": round(completeness, 2),
