@@ -73,7 +73,7 @@ SEMATIVERSE_ACCESS_KEY=dev-key
 ## Architecture
 
 ```
-Internet → Cloudflare Edge → Worker (Hono) → Supabase + Qdrant Cloud + Gemini
+Internet → Cloudflare Edge → Worker (Hono) → Supabase + Qdrant Cloud + Gemini/Kimi K2
                                 ↓
                           KV (TEXT_CACHE) for response caching
 ```
@@ -81,6 +81,18 @@ Internet → Cloudflare Edge → Worker (Hono) → Supabase + Qdrant Cloud + Gem
 - **Routes** mirror the FastAPI endpoints, extended with Cloudflare-specific features
 - **Services** handle database queries, vector search, LLM calls, and RAG pipelines
 - **KV namespace** (`TEXT_CACHE`) caches expensive text/passage lookups
+
+### GraphRAG Pipeline (PageIndex V3)
+
+The `/api/graphrag/answer` endpoint uses the PageIndex V3 pipeline:
+
+1. **Embed + Detect** — Query embedding (Gemini) + CTS URN reference detection
+2. **Parallel Search** — 3 Qdrant queries (KG nodes, passages, edges) — no LLM calls
+3. **Parallel Enrichment** — passage_citations lookup + KG neighbor expansion via Supabase REST
+4. **Build FULL Context** — No truncation (Gemini 1M token context)
+5. **ONE Synthesis Call** — Kimi K2 (primary) / Gemini (fallback)
+
+Key service: `src/services/pageindex-retrieval.ts` — queries `passage_citations → passages → ancient_works`
 
 ## Useful Commands
 

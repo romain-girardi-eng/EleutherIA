@@ -75,16 +75,15 @@ EleutherIA is a FAIR-compliant knowledge graph system with three independent pac
 **Purpose:** Graph-based RAG for Q&A
 
 **Key Components:**
-- `GraphRAGService` - 5-stage RAG pipeline
-- `LLMService` - Multi-provider LLM interface
+- `PageIndex V3` - Direct retrieval pipeline (2 LLM calls)
+- `LLMService` - Multi-provider LLM interface (Kimi K2 / Gemini)
 - Streaming SSE responses
 
-**Pipeline:**
-1. Semantic search → seed nodes
-2. Graph traversal → expanded context
-3. Context building → prompt assembly
-4. LLM synthesis → answer generation
-5. Citation extraction → source grounding
+**Pipeline (PageIndex V3):**
+1. Embed query → Qdrant parallel search (KG nodes + passages + edges)
+2. Enrich → passage_citations lookup + KG neighbor expansion
+3. Build FULL context (no truncation — Gemini 1M token context)
+4. ONE synthesis call → scholarly answer with citations
 
 ## Data Flow
 
@@ -117,43 +116,44 @@ User Query
                Final Results
 ```
 
-### GraphRAG Query
+### GraphRAG Query (PageIndex V3)
 ```
 User Question
     │
     ▼
 ┌─────────────────────────────────────┐
-│ 1. Semantic Search                  │
-│    Question → Embedding → Qdrant    │
-│    → Top-K seed nodes               │
+│ 1. Embed + Detect References        │
+│    Query → Gemini embedding          │
+│    + CTS URN reference detection     │
 └──────────────────┬──────────────────┘
                    │
                    ▼
 ┌─────────────────────────────────────┐
-│ 2. Graph Traversal                  │
-│    BFS from seeds (depth 1-3)       │
-│    → Expanded node set              │
+│ 2. Parallel Search (no LLM)         │
+│    KG nodes + passages + edges       │
+│    via Qdrant vector similarity      │
 └──────────────────┬──────────────────┘
                    │
                    ▼
 ┌─────────────────────────────────────┐
-│ 3. Context Building                 │
-│    Node descriptions + passages     │
-│    → Structured prompt              │
+│ 3. Parallel Enrichment              │
+│    passage_citations → full text     │
+│    + KG neighbor expansion           │
+│    + textual grounding               │
 └──────────────────┬──────────────────┘
                    │
                    ▼
 ┌─────────────────────────────────────┐
-│ 4. LLM Synthesis                    │
-│    Gemini 3 / Kimi K2.5 Thinking    │
-│    → Scholarly answer               │
+│ 4. Build FULL Context               │
+│    No truncation (Gemini 1M tokens)  │
+│    Primary sources + KG entities     │
 └──────────────────┬──────────────────┘
                    │
                    ▼
 ┌─────────────────────────────────────┐
-│ 5. Citation Extraction              │
-│    Parse [1], [2], [P1] refs        │
-│    → Grounded citations             │
+│ 5. ONE Synthesis Call               │
+│    Kimi K2 / Gemini                  │
+│    → Scholarly answer + citations    │
 └──────────────────┬──────────────────┘
                    │
                    ▼
