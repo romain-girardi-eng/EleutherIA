@@ -298,7 +298,7 @@ export class QdrantService {
    */
   async searchWithNamedVector(
     collectionName: string,
-    vectorName: 'sphilberta' | 'gemini',
+    vectorName: 'gemini',
     queryVector: number[],
     limit: number = 10,
     scoreThreshold?: number
@@ -326,63 +326,6 @@ export class QdrantService {
       return response.result;
     } catch (error) {
       logger.error(`Error searching ${collectionName} with ${vectorName}`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Dual-embedding search with RRF
-   * Searches with both SPhilBERTa and Gemini vectors, then fuses results with RRF
-   */
-  async searchDualEmbedding(
-    collectionName: string,
-    sphilbertaVector: number[],
-    geminiVector: number[],
-    limit: number = 10,
-    scoreThreshold?: number,
-    rrfK: number = 60
-  ): Promise<any[]> {
-    try {
-      // Search with both vectors in parallel
-      const [sphilResults, geminiResults] = await Promise.all([
-        this.searchWithNamedVector(
-          collectionName,
-          'sphilberta',
-          sphilbertaVector,
-          limit * 2,  // Get more for better RRF
-          scoreThreshold
-        ),
-        this.searchWithNamedVector(
-          collectionName,
-          'gemini',
-          geminiVector,
-          limit * 2,
-          scoreThreshold
-        ),
-      ]);
-
-      // Import RRF function
-      const { dualEmbeddingRRF, calculateRRFStats } = await import('../utils/rrf');
-
-      // Apply RRF
-      const fusedResults = dualEmbeddingRRF(
-        sphilResults.map(r => ({ id: r.id, score: r.score, payload: r.payload })),
-        geminiResults.map(r => ({ id: r.id, score: r.score, payload: r.payload })),
-        rrfK
-      );
-
-      // Calculate stats
-      const stats = calculateRRFStats(fusedResults);
-
-      logger.info(
-        `Dual-embedding RRF: ${fusedResults.length} results, ` +
-        `${stats.both_models} from both models (${stats.overlap_percentage.toFixed(1)}% overlap)`
-      );
-
-      // Return top results
-      return fusedResults.slice(0, limit);
-    } catch (error) {
-      logger.error('Error in dual-embedding search', error);
       throw error;
     }
   }
