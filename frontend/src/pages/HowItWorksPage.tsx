@@ -628,9 +628,9 @@ export default function HowItWorksPage() {
               className="grid grid-cols-2 gap-4 content-start"
             >
               {/* Philological */}
-              <div className="rounded-2xl border-2 border-teal-200 bg-gradient-to-br from-teal-50 to-cyan-50 p-5">
-                <h4 className="font-body font-semibold text-sm text-teal-800 mb-3 uppercase tracking-wide">Corpus</h4>
-                <ul className="space-y-2 text-xs font-body text-teal-700">
+              <div className="rounded-2xl border-2 border-amber-200/60 bg-gradient-to-br from-parchment-50 to-amber-50 p-5">
+                <h4 className="font-body font-semibold text-sm text-stone-800 mb-3 uppercase tracking-wide">Corpus</h4>
+                <ul className="space-y-2 text-xs font-body text-stone-700">
                   {[
                     ['2,193', 'verified entities'],
                     ['8,616', 'cited relationships'],
@@ -639,7 +639,7 @@ export default function HowItWorksPage() {
                     ['1,413', 'bibliography entries'],
                   ].map(([n, l]) => (
                     <li key={l} className="flex items-baseline gap-1.5">
-                      <span className="font-mono font-bold text-sm text-teal-900">{n}</span>
+                      <span className="font-mono font-bold text-sm text-orange-600">{n}</span>
                       <span className="opacity-80">{l}</span>
                     </li>
                   ))}
@@ -647,9 +647,9 @@ export default function HowItWorksPage() {
               </div>
 
               {/* Tech stack */}
-              <div className="rounded-2xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-5">
-                <h4 className="font-body font-semibold text-sm text-blue-800 mb-3 uppercase tracking-wide">Stack</h4>
-                <ul className="space-y-2 text-xs font-body text-blue-700">
+              <div className="rounded-2xl border-2 border-amber-200/60 bg-gradient-to-br from-parchment-50 to-amber-50 p-5">
+                <h4 className="font-body font-semibold text-sm text-stone-800 mb-3 uppercase tracking-wide">Stack</h4>
+                <ul className="space-y-2 text-xs font-body text-stone-700">
                   {[
                     'HiRAG Architecture',
                     'Qdrant vector DB',
@@ -659,7 +659,7 @@ export default function HowItWorksPage() {
                     'SSE streaming',
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-orange-400 flex-shrink-0" />
                       {item}
                     </li>
                   ))}
@@ -670,7 +670,7 @@ export default function HowItWorksPage() {
               <div className="col-span-2">
                 <Link
                   to="/graphrag-showcase"
-                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-body font-medium text-sm hover:from-violet-700 hover:to-indigo-700 transition-all"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white font-body font-medium text-sm hover:from-orange-700 hover:to-amber-700 transition-all"
                 >
                   <Sparkles className="w-4 h-4" />
                   See HiRAG in Action
@@ -729,8 +729,8 @@ export default function HowItWorksPage() {
                 icon: <Search className="w-5 h-5" />,
                 title: 'Full-Text',
                 speed: '< 100 ms',
-                color: 'bg-blue-50 border-blue-200',
-                iconColor: 'bg-blue-100 text-blue-600',
+                color: 'bg-orange-50 border-orange-200',
+                iconColor: 'bg-orange-100 text-orange-600',
                 desc: 'PostgreSQL tsvector + ts_rank. Exact keyword matches in 17k passages.',
                 example: '"free will" → exact matches',
               },
@@ -738,8 +738,8 @@ export default function HowItWorksPage() {
                 icon: <Languages className="w-5 h-5" />,
                 title: 'Lemmatic',
                 speed: '< 500 ms',
-                color: 'bg-violet-50 border-violet-200',
-                iconColor: 'bg-violet-100 text-violet-600',
+                color: 'bg-rose-50 border-rose-200',
+                iconColor: 'bg-rose-100 text-rose-600',
                 desc: 'Pre-indexed Greek & Latin lemmas. Finds all morphological forms of a word.',
                 example: 'λόγος → λόγου λόγῳ λόγον …',
               },
