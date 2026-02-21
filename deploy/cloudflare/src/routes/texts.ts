@@ -127,6 +127,193 @@ textRoutes.get('/stats/overview', async (c) => {
   }
 });
 
+// Get passage with surrounding context for the passage reader panel.
+// Accepts EITHER a passage UUID or a KG node ID (resolved via passage_citations).
+textRoutes.get('/passage/:passageId/context', async (c) => {
+  try {
+    const db = new DatabaseService(c.env);
+    const rawId = c.req.param('passageId');
+    const window = parseInt(c.req.query('window') || '5');
+
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    let resolvedPassageId: string | null = null;
+
+    if (uuidPattern.test(rawId)) {
+      // Direct passage UUID
+      resolvedPassageId = rawId;
+    } else {
+      // KG node ID — resolve to best linked passage via passage_citations
+      resolvedPassageId = await resolveKgNodeToPassage(rawId, c.env);
+      if (!resolvedPassageId) {
+        return c.json({ error: 'No linked passage found for this KG node' }, 404);
+      }
+      logger.info(`Resolved KG node ${rawId} → passage ${resolvedPassageId}`);
+    }
+
+    // 1. Get the target passage via RPC
+    const target = await db.getPassage(resolvedPassageId);
+    if (!target) {
+      return c.json({ error: 'Passage not found' }, 404);
+    }
+
+    const workId = target.work_id;
+    const seqNum = target.sequence_number || 0;
+
+    // 2. Get work metadata
+    let workMeta: any = null;
+    try {
+      workMeta = await db.getText(workId);
+    } catch {
+      // Work metadata is optional
+    }
+    const author = workMeta?.author || target.author || 'Unknown';
+    const workTitle = workMeta?.title || target.title || 'Unknown Work';
+    const language = workMeta?.language || target.language || 'grc';
+
+    // 3. Fetch all passages for the work and find surrounding ones by sequence_number
+    const allPassages = await db.getPassages(workId, { limit: 1000 });
+    const allRows = allPassages.rows || [];
+
+    const sorted = allRows
+      .filter((p: any) => p.sequence_number != null)
+      .sort((a: any, b: any) => (a.sequence_number || 0) - (b.sequence_number || 0));
+
+    const minSeq = Math.max(0, seqNum - window);
+    const maxSeq = seqNum + window;
+    const contextRows = sorted.filter((p: any) =>
+      p.sequence_number >= minSeq && p.sequence_number <= maxSeq
+    );
+
+    // 4. Build response
+    const formatRef = (p: any) => {
+      if (p.canonical_ref) return p.canonical_ref;
+      const loc: string[] = [];
+      if (p.book) loc.push(p.book);
+      if (p.chapter) loc.push(p.chapter);
+      if (p.section) loc.push(p.section);
+      return loc.length > 0 ? loc.join('.') : '';
+    };
+
+    const passages = contextRows.map((p: any) => ({
+      passageId: p.passage_id,
+      textContent: p.text_content || '',
+      canonicalRef: formatRef(p),
+      author,
+      workTitle,
+      language: language === 'lat' ? 'lat' : 'grc',
+      ctsUrn: p.cts_urn || undefined,
+      book: p.book || undefined,
+      chapter: p.chapter || undefined,
+      section: p.section || undefined,
+      sequenceNumber: p.sequence_number || 0,
+      isTarget: p.passage_id === resolvedPassageId,
+    }));
+
+    const targetPassage = passages.find((p: any) => p.isTarget) || passages[0];
+
+    return c.json({
+      target: targetPassage,
+      passages,
+      workId,
+      totalPassagesInWork: sorted.length,
+    });
+  } catch (error) {
+    logger.error('Error fetching passage context', error);
+    return c.json({ error: 'Failed to fetch passage context' }, 500);
+  }
+});
+
+/**
+ * Resolve a KG node ID to the best linked passage UUID via passage_citations.
+ * Tries free_will schema first, then public schema fallback.
+ */
+async function resolveKgNodeToPassage(kgNodeId: string, env: Env): Promise<string | null> {
+  const supabaseUrl = env.SUPABASE_URL.replace(/\/+$/, '').replace(/\/rest\/v1$/i, '');
+  const supabaseKey = env.SUPABASE_KEY;
+  const encodedId = encodeURIComponent(kgNodeId);
+
+  // Strategy 1: Try passage_citations table (with free_will → public fallback)
+  const select = 'confidence,passage_id';
+  const url = `${supabaseUrl}/rest/v1/passage_citations?kg_node_id=eq.${encodedId}&select=${select}&order=confidence.desc.nullslast&limit=1`;
+
+  for (const headers of [
+    { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Accept-Profile': 'free_will' },
+    { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` },
+  ]) {
+    try {
+      const response = await fetch(url, { headers });
+      if (response.ok) {
+        const rows = await response.json() as any[];
+        if (Array.isArray(rows) && rows.length > 0 && rows[0].passage_id) {
+          return rows[0].passage_id;
+        }
+        logger.info(`passage_citations query OK but no rows for ${kgNodeId}`);
+        break; // Table accessible but no data — no point trying next schema
+      }
+      const errText = await response.text().catch(() => '');
+      logger.warn(`passage_citations query (${response.status}): ${errText.slice(0, 200)}`);
+    } catch (e) {
+      logger.warn(`passage_citations fetch error: ${e}`);
+    }
+  }
+
+  // Strategy 2: Parse KG node ID to find work + chapter/section
+  // Pattern: passage_{author}_{work_abbrev}_{chapter}_{section}
+  // e.g. "passage_tatian_orat_8_9" → author=tatian, work≈orat, chapter=8 or 9
+  try {
+    const db = new DatabaseService(env);
+    const stripped = kgNodeId.replace(/^passage_/, '');
+    // Extract trailing numbers (chapter/section candidates)
+    const parts = stripped.split('_');
+    const numbers: string[] = [];
+    const words: string[] = [];
+    for (const p of parts) {
+      if (/^\d+$/.test(p)) numbers.push(p);
+      else words.push(p);
+    }
+    const authorHint = words[0] || '';
+    // List all works, find one matching the author hint
+    if (authorHint) {
+      const worksResult = await db.listTexts({ limit: 200, offset: 0 });
+      const works = (worksResult as any)?.rows || [];
+      const matchedWork = works.find((w: any) =>
+        w.author?.toLowerCase().includes(authorHint.toLowerCase())
+      );
+      if (matchedWork) {
+        const workId = matchedWork.work_id || matchedWork.id;
+        // Try chapter/section combinations from the numbers
+        for (const chapter of numbers) {
+          // Try each remaining number as section, or section "1"
+          const sections = numbers.filter(n => n !== chapter);
+          if (sections.length === 0) sections.push('1');
+          for (const section of sections) {
+            const passagesResult = await db.getPassages(workId, { chapter, section, limit: 1 });
+            const rows = passagesResult?.rows || [];
+            if (rows.length > 0 && rows[0].passage_id) {
+              logger.info(`Resolved ${kgNodeId} → ${matchedWork.author} ch${chapter}.${section}: ${rows[0].passage_id}`);
+              return rows[0].passage_id;
+            }
+          }
+        }
+        // If no chapter/section match, just get the first passage of the last number as chapter
+        if (numbers.length > 0) {
+          const passagesResult = await db.getPassages(workId, { chapter: numbers[numbers.length - 1], limit: 1 });
+          const rows = passagesResult?.rows || [];
+          if (rows.length > 0 && rows[0].passage_id) {
+            logger.info(`Resolved ${kgNodeId} → ${matchedWork.author} ch${numbers[numbers.length - 1]}: ${rows[0].passage_id}`);
+            return rows[0].passage_id;
+          }
+        }
+      }
+    }
+  } catch (e) {
+    logger.warn(`Structured resolve failed for ${kgNodeId}: ${e}`);
+  }
+
+  logger.warn(`No passage found for KG node ${kgNodeId}`);
+  return null;
+}
+
 // Get a specific passage (must be before /:id route)
 textRoutes.get('/passage/:passageId', async (c) => {
   try {

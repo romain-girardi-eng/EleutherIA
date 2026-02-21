@@ -19,6 +19,7 @@ interface ChatPanelProps {
   onStop: () => void;
   onNodeClick: (nodeId: string) => void;
   onCitationClick: (citationIndex: number) => void;
+  onPassageCitationClick?: (passageId: string) => void;
 }
 
 export default function ChatPanel({
@@ -35,6 +36,7 @@ export default function ChatPanel({
   onStop,
   onNodeClick,
   onCitationClick,
+  onPassageCitationClick,
 }: ChatPanelProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const prevMessagesLengthRef = useRef(0);
@@ -62,6 +64,7 @@ export default function ChatPanel({
               message={message}
               onNodeClick={onNodeClick}
               onCitationClick={onCitationClick}
+              onPassageCitationClick={onPassageCitationClick}
             />
           ))}
         </AnimatePresence>

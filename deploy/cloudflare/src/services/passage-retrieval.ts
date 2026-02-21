@@ -71,7 +71,7 @@ export class PassageRetrievalService {
 
         passages.push({
           passageId: p.passage_id,
-          textContent: p.text_content.slice(0, 600), // Truncate to 600 chars matching Python
+          textContent: p.text_content,
           canonicalRef: ref,
           author: work.author || 'Unknown',
           workTitle: work.title || 'Unknown Work',
@@ -135,7 +135,7 @@ export class PassageRetrievalService {
         const work = p.ancient_works || {};
         return {
           passageId: p.passage_id,
-          textContent: p.text_content?.slice(0, 600) || '',
+          textContent: p.text_content || '',
           canonicalRef: this.formatReference(work.title, p.book, p.chapter, p.section),
           author: work.author || 'Unknown',
           workTitle: work.title || 'Unknown Work',

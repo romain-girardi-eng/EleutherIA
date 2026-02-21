@@ -10,9 +10,10 @@ interface MessageBubbleProps {
   message: GraphRAGChatMessage;
   onNodeClick: (nodeId: string) => void;
   onCitationClick: (citationIndex: number) => void;
+  onPassageCitationClick?: (passageId: string) => void;
 }
 
-export default function MessageBubble({ message, onNodeClick, onCitationClick }: MessageBubbleProps) {
+export default function MessageBubble({ message, onNodeClick, onCitationClick, onPassageCitationClick }: MessageBubbleProps) {
   const isUser = message.role === 'user';
   const navigate = useNavigate();
   const [showSources, setShowSources] = useState(false);
@@ -91,6 +92,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick }:
                       onNodeClick(nodeId);
                       if (idx !== -1) onCitationClick(idx);
                     }}
+                    onPassageCitationClick={onPassageCitationClick}
                   />
                 </div>
               ) : (

@@ -8,17 +8,16 @@ import AuthModal from '../../components/AuthModal';
 import { AuroraBackground } from '../../components/ui/aurora-background';
 import NodeDetailPanel from '../../components/NodeDetailPanel';
 import RightPanel from '../../components/graphrag/RightPanel';
+import type { RightPanelState } from '../../components/graphrag/RightPanel';
 import WelcomeHero from './WelcomeHero';
 import ChatPanel from './ChatPanel';
 import MobileGraphSheet from './MobileGraphSheet';
 import type { GraphRAGResponse, GraphRAGStreamEvent, GraphRAGChatMessage, KGNode } from '../../types';
-import type { ReasoningStep } from '../../types/graphrag';
+import type { ReasoningStep, PassageContext } from '../../types/graphrag';
 import {
   mockGraphRAGResponse,
   mockReasoningSteps,
 } from '../../data/mockGraphRAGData';
-
-type RightPanelState = 'idle' | 'loading' | 'graph' | 'source-detail';
 
 export default function GraphRAGPage() {
   const { t } = useTranslation();
@@ -54,8 +53,53 @@ export default function GraphRAGPage() {
   const [rightPanelResponse, setRightPanelResponse] = useState<GraphRAGResponse | null>(null);
   const [allResponses, setAllResponses] = useState<GraphRAGResponse[]>([]);
   const highlightNodeRef = useRef<((citationIndex: number) => void) | null>(null);
+  const [passageContext, setPassageContext] = useState<PassageContext | null>(null);
+  const [passageWindow, setPassageWindow] = useState(5);
+
+  const fetchPassageContext = useCallback(async (passageId: string, window: number = 5) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const resp = await fetch(`${apiUrl}/api/texts/passage/${passageId}/context?window=${window}`);
+      if (!resp.ok) return null;
+      return await resp.json() as PassageContext;
+    } catch (err) {
+      console.error('Failed to fetch passage context:', err);
+      return null;
+    }
+  }, []);
+
+  const handlePassageCitationClick = useCallback(async (passageOrNodeId: string) => {
+    setRightPanelState('loading');
+    const ctx = await fetchPassageContext(passageOrNodeId, passageWindow);
+    if (ctx) {
+      setPassageContext(ctx);
+      setRightPanelState('passage-reader');
+    } else {
+      // No linked passage found — fall back to source detail or graph
+      setRightPanelState(rightPanelResponse ? 'source-detail' : 'graph');
+    }
+  }, [fetchPassageContext, passageWindow, rightPanelResponse]);
+
+  const handleLoadMorePassages = useCallback(async (_direction: 'up' | 'down') => {
+    if (!passageContext) return;
+    const newWindow = passageWindow + 5;
+    setPassageWindow(newWindow);
+    const ctx = await fetchPassageContext(passageContext.target.passageId, newWindow);
+    if (ctx) {
+      setPassageContext(ctx);
+    }
+  }, [passageContext, passageWindow, fetchPassageContext]);
 
   const handleCitationClick = (citationIndex: number) => {
+    // Always try the passage reader first — the backend resolves both
+    // passage UUIDs and KG node IDs to actual ancient text passages.
+    const sources = rightPanelResponse?.sources ?? [];
+    const source = sources[citationIndex];
+    if (source?.nodeId) {
+      // Try passage reader for any citation — backend handles KG→passage resolution
+      handlePassageCitationClick(source.nodeId);
+      return;
+    }
     setActiveSourceIndex(citationIndex);
     setRightPanelState('source-detail');
     highlightNodeRef.current?.(citationIndex);
@@ -530,6 +574,7 @@ export default function GraphRAGPage() {
                 onStop={stopStreaming}
                 onNodeClick={handleNodeClick}
                 onCitationClick={handleCitationClick}
+                onPassageCitationClick={handlePassageCitationClick}
               />
 
               {/* RIGHT PANEL - 35% (desktop only) */}
@@ -543,10 +588,12 @@ export default function GraphRAGPage() {
                     response={rightPanelResponse}
                     allResponses={allResponses}
                     activeSourceIndex={activeSourceIndex}
+                    passageContext={passageContext}
                     onNodeClick={handleNodeClick}
-                    onCloseDetail={() => setRightPanelState('graph')}
+                    onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
                     onPrevSource={onPrevSource}
                     onNextSource={onNextSource}
+                    onLoadMorePassages={handleLoadMorePassages}
                     onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
                     className="h-full"
                   />

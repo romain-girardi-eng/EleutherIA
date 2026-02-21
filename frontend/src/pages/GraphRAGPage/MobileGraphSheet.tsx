@@ -3,9 +3,8 @@ import { motion } from 'framer-motion';
 import { BarChart3 } from 'lucide-react';
 import { BottomSheet } from '../../components/ui/BottomSheet';
 import RightPanel from '../../components/graphrag/RightPanel';
+import type { RightPanelState } from '../../components/graphrag/RightPanel';
 import type { GraphRAGResponse } from '../../types';
-
-type RightPanelState = 'idle' | 'loading' | 'graph' | 'source-detail';
 
 interface MobileGraphSheetProps {
   rightPanelState: RightPanelState;
