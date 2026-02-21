@@ -1431,7 +1431,11 @@ function determineNodeType(payload: any): string {
   return 'Unknown';
 }
 
-graphragRoutes.post('/answer', async (c) => {
+graphragRoutes.post('/answer',
+  authMiddleware,
+  rateLimitMiddleware(30, 15),
+  validateGraphRAGInput,
+  async (c) => {
   const startTime = Date.now();
 
   try {
@@ -1784,7 +1788,10 @@ CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage ex
 // =============================================================================
 // BACKWARD COMPATIBILITY: /answer/v2 still available for A/B testing
 // =============================================================================
-graphragRoutes.post('/answer/hirag-v2', async (c) => {
+graphragRoutes.post('/answer/hirag-v2',
+  authMiddleware,
+  rateLimitMiddleware(30, 15),
+  async (c) => {
   // Forward to main /answer handler (now PageIndex V3)
   const response = await graphragRoutes.fetch(
     new Request(new URL('/answer', c.req.url).toString(), {
@@ -1797,7 +1804,10 @@ graphragRoutes.post('/answer/hirag-v2', async (c) => {
   return response;
 });
 
-graphragRoutes.post('/answer/v2', async (c) => {
+graphragRoutes.post('/answer/v2',
+  authMiddleware,
+  rateLimitMiddleware(30, 15),
+  async (c) => {
   const response = await graphragRoutes.fetch(
     new Request(new URL('/answer', c.req.url).toString(), {
       method: 'POST',
