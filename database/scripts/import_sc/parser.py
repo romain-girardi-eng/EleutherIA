@@ -67,7 +67,9 @@ _FMT_B_RE = re.compile(
 )
 
 # Format C: [work_title, chap.: N]  — e.g. [première apologie, chap.: 68]
-_FMT_C_RE = re.compile(r"^.+,\s*chap\.\s*:\s*(\d+)$")
+# Captures (section_name, chapter_number) to distinguish multi-work volumes
+# like SC507 which contains both première and deuxième apologie.
+_FMT_C_RE = re.compile(r"^(.+?),\s*chap\.\s*:\s*(\d+)$")
 
 # Format D sub-patterns (tried in order):
 
@@ -379,10 +381,20 @@ def _parse_ref_format_b(ref: str) -> tuple[str | None, str | None]:
 
 
 def _parse_ref_format_c(ref: str) -> tuple[str | None, str | None]:
-    """Format C: [work_title, chap.: N]"""
+    """Format C: [work_title, chap.: N]
+
+    Extracts section name and chapter number. For multi-work volumes
+    (e.g., SC507 contains both première and deuxième apologie), the
+    second work's chapters are prefixed with "II." to avoid collisions.
+    """
     m = _FMT_C_RE.match(ref)
     if m:
-        return m.group(1), None
+        section = m.group(1).strip().lower()
+        chapter = m.group(2)
+        # Detect second apology or other non-primary sections
+        if "deuxième" in section or "seconde" in section:
+            return f"II.{chapter}", None
+        return chapter, None
     # Fallback for named sections
     return ref, None
 
@@ -525,8 +537,8 @@ def _group_into_chapters(
         ref_counts[ref] = count
         if count == 1:
             return ref
-        # _b, _c, _d, ...
-        return f"{ref}_{chr(95 + count)}"  # 2→'a'+1='b', 3→'c', etc.
+        # 2→'_a', 3→'_b', 4→'_c', ...
+        return f"{ref}_{chr(95 + count)}"  # chr(97)='a', chr(98)='b', etc.
 
     if format_type == "A":
         # Contre Celse: each paragraph is its own chapter
