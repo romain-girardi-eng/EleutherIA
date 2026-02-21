@@ -86,7 +86,7 @@ export function VerifiedPassageDisplay({
       );
     }
     return (
-      <span className="text-xs px-2 py-0.5 rounded-full bg-slate-50 text-slate-500 border border-slate-200">
+      <span className="text-xs px-2 py-0.5 rounded-full bg-stone-50 text-stone-500 border border-stone-200">
         Low Confidence
       </span>
     );
@@ -117,7 +117,7 @@ export function VerifiedPassageDisplay({
               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
             />
           </svg>
-          <span className="font-semibold text-slate-600">
+          <span className="font-semibold text-stone-600">
             Verified Ancient Passages
           </span>
           <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-500 border border-emerald-100">
@@ -156,17 +156,17 @@ export function VerifiedPassageDisplay({
                 <div className="flex-1">
                   {/* Author and Work */}
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-medium text-slate-700">
+                    <span className="font-medium text-stone-700">
                       {passage.author_original || passage.author}
                     </span>
-                    <span className="text-slate-400">•</span>
-                    <span className="text-slate-600 italic">
+                    <span className="text-stone-400">•</span>
+                    <span className="text-stone-600 italic">
                       {passage.work_title_original || passage.work_title}
                     </span>
                     {passage.reference && (
                       <>
-                        <span className="text-slate-400">•</span>
-                        <span className="text-slate-500 font-mono text-sm">
+                        <span className="text-stone-400">•</span>
+                        <span className="text-stone-500 font-mono text-sm">
                           {passage.reference}
                         </span>
                       </>
@@ -179,7 +179,7 @@ export function VerifiedPassageDisplay({
                       {getLanguageLabel(passage.language)}
                     </span>
                     {passage.cts_urn && (
-                      <span className="text-xs text-slate-400 font-mono">
+                      <span className="text-xs text-stone-400 font-mono">
                         {passage.cts_urn}
                       </span>
                     )}
@@ -207,9 +207,9 @@ export function VerifiedPassageDisplay({
               </div>
 
               {/* Original Text (Greek/Latin) */}
-              <div className="mt-2 p-3 rounded-lg bg-slate-50 border border-slate-100">
+              <div className="mt-2 p-3 rounded-lg bg-stone-50 border border-stone-100">
                 <p
-                  className={`text-slate-800 leading-relaxed ${
+                  className={`text-stone-800 leading-relaxed ${
                     passage.language === 'grc' || passage.language === 'greek'
                       ? 'font-serif text-lg'
                       : 'font-serif italic'
@@ -226,7 +226,7 @@ export function VerifiedPassageDisplay({
                   <div className="flex items-center gap-1 mb-1">
                     <span className="text-xs text-emerald-600 font-medium">Transliteration:</span>
                   </div>
-                  <p className="text-sm text-slate-600 italic">
+                  <p className="text-sm text-stone-600 italic">
                     {isPassageExpanded
                       ? passage.transliteration
                       : passage.transliteration.length > 200

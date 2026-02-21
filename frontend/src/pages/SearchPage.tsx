@@ -276,7 +276,7 @@ export default function SearchPage() {
     <>
       {/* Empty state with parchment background */}
       {!results && !loading && (
-        <div className="min-h-screen w-full pt-20 pb-12 bg-[#fffdf9] flex flex-col items-center justify-center">
+        <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50 flex flex-col items-center justify-center">
           <motion.div
             initial={{ opacity: 0.0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -562,7 +562,7 @@ export default function SearchPage() {
 
       {/* Loading state */}
       {loading && (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-[#fffdf9]">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-parchment-50">
           <div className="inline-block w-12 h-12 border-3 border-amber-200 border-t-orange-500 rounded-full animate-spin mb-4"></div>
           <p className="text-stone-600 text-lg">{t('search.loadingMessage')}</p>
         </div>
@@ -570,10 +570,10 @@ export default function SearchPage() {
 
       {/* Results view */}
       {results && !loading && (
-        <div className="min-h-screen bg-[#fffdf9] pb-32">
+        <div className="min-h-screen bg-parchment-50 pb-32">
           {/* Pagination header */}
           {getAllResults().length > 0 && (
-            <div className="sticky top-16 z-30 bg-[#fffdf9]/80 backdrop-blur-xl border-b border-amber-200/60">
+            <div className="sticky top-16 z-30 bg-parchment-50/80 backdrop-blur-xl border-b border-amber-200/60">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
                 <div className="flex items-center justify-between">
                   {/* Results info */}
@@ -679,7 +679,7 @@ export default function SearchPage() {
           </div>
 
           {/* Sticky search footer at bottom */}
-          <div className="fixed bottom-0 left-0 right-0 bg-[#fffdf9]/80 backdrop-blur-xl border-t border-amber-200/60 z-40">
+          <div className="fixed bottom-0 left-0 right-0 bg-parchment-50/80 backdrop-blur-xl border-t border-amber-200/60 z-40">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
               <div className="flex items-center gap-4">
                 {/* Compact search input */}
