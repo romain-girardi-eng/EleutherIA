@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import { apiClient } from '../api/client';
 import { cachedApiClient } from '../api/cachedClient';
 import { KGNodeSelectionModal } from '../components/KGNodeSelectionModal';
-import { AuroraBackground } from '../components/ui/aurora-background';
 import { AILoader } from '../components/ui/ai-loader';
 import type {
   WorkKGNodesResponse,
@@ -174,25 +174,25 @@ export default function TextExplorerPage() {
   };
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto !w-full pt-20 pb-12">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div className="min-h-screen bg-transparent relative z-10">
       {/* Clean unified header */}
-      <div className="bg-gradient-to-b from-gray-50 to-white border-b border-gray-200">
+      <div className="bg-gradient-to-b from-parchment-100 to-parchment-50 border-b border-amber-200/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">{t('ancientWorks.title')}</h1>
-              <p className="text-sm sm:text-base text-gray-600">{t('ancientWorks.subtitle', { count: stats?.total_works || 0 })}</p>
+              <h1 className="text-2xl sm:text-3xl font-display font-semibold text-stone-800 mb-2">{t('ancientWorks.title')}</h1>
+              <p className="text-sm sm:text-base text-stone-600">{t('ancientWorks.subtitle', { count: stats?.total_works || 0 })}</p>
             </div>
             {stats && (
               <div className="flex gap-4 sm:gap-6 text-sm">
                 <div className="text-center">
-                  <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.total_passages?.toLocaleString() || '0'}</div>
-                  <div className="text-xs sm:text-sm text-gray-500">{t('ancientWorks.stats.passages')}</div>
+                  <div className="text-xl sm:text-2xl font-bold text-stone-800">{stats.total_passages?.toLocaleString() || '0'}</div>
+                  <div className="text-xs sm:text-sm text-stone-600">{t('ancientWorks.stats.passages')}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.total_citations?.toLocaleString() || '0'}</div>
-                  <div className="text-xs sm:text-sm text-gray-500">{t('ancientWorks.stats.citations')}</div>
+                  <div className="text-xl sm:text-2xl font-bold text-stone-800">{stats.total_citations?.toLocaleString() || '0'}</div>
+                  <div className="text-xs sm:text-sm text-stone-600">{t('ancientWorks.stats.citations')}</div>
                 </div>
               </div>
             )}
@@ -208,7 +208,7 @@ export default function TextExplorerPage() {
                   setCategoryFilter(e.target.value);
                   setOffset(0);
                 }}
-                className="flex-1 sm:flex-none min-w-[120px] px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 bg-white min-h-[44px]"
+                className="flex-1 sm:flex-none min-w-[120px] px-3 py-2 text-sm border border-amber-200 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 bg-parchment-50 min-h-[44px]"
               >
                 <option value="">{t('ancientWorks.filters.allAuthors')}</option>
                 {stats?.top_authors?.map((author: AuthorStats) => (
@@ -226,7 +226,7 @@ export default function TextExplorerPage() {
                   setOffset(0);
                 }}
                 placeholder={t('ancientWorks.filters.searchAuthorPlaceholder')}
-                className="flex-1 sm:flex-none min-w-[120px] px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 min-h-[44px]"
+                className="flex-1 sm:flex-none min-w-[120px] px-3 py-2 text-sm border border-amber-200 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 min-h-[44px]"
               />
 
               <select
@@ -235,7 +235,7 @@ export default function TextExplorerPage() {
                   setLanguageFilter(e.target.value);
                   setOffset(0);
                 }}
-                className="flex-1 sm:flex-none min-w-[100px] px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 bg-white min-h-[44px]"
+                className="flex-1 sm:flex-none min-w-[100px] px-3 py-2 text-sm border border-amber-200 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 bg-parchment-50 min-h-[44px]"
               >
                 <option value="">{t('ancientWorks.filters.allLanguages')}</option>
                 <option value="Greek">{t('ancientWorks.filters.languages.greek')}</option>
@@ -250,8 +250,8 @@ export default function TextExplorerPage() {
                 }}
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors min-h-[44px] ${
                   featuredWorksFilter
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                    ? 'bg-orange-600 text-white'
+                    : 'bg-parchment-100/70 text-stone-600 border border-amber-200 hover:bg-parchment-100'
                 }`}
               >
                 {featuredWorksFilter ? '⭐ ' : ''}{t('ancientWorks.filters.featured')}
@@ -263,7 +263,7 @@ export default function TextExplorerPage() {
                   setSortBy(e.target.value);
                   setOffset(0);
                 }}
-                className="flex-1 sm:flex-none min-w-[120px] px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 bg-white min-h-[44px]"
+                className="flex-1 sm:flex-none min-w-[120px] px-3 py-2 text-sm border border-amber-200 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 bg-parchment-50 min-h-[44px]"
               >
                 <option value="most_cited">{t('ancientWorks.sort.mostCited')}</option>
                 <option value="author">{t('ancientWorks.sort.byAuthor')}</option>
@@ -273,15 +273,15 @@ export default function TextExplorerPage() {
 
               <button
                 onClick={resetFilters}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 font-medium min-h-[44px]"
+                className="px-4 py-2 text-sm text-stone-600 hover:text-stone-800 font-medium min-h-[44px]"
               >
                 {t('ancientWorks.filters.reset')}
               </button>
             </div>
 
             {/* Pagination - separate row on mobile */}
-            <div className="flex items-center justify-between sm:justify-end gap-3 text-sm border-t sm:border-t-0 pt-3 sm:pt-0">
-              <span className="text-gray-600 text-xs sm:text-sm">
+            <div className="flex items-center justify-between sm:justify-end gap-3 text-sm border-t sm:border-t-0 border-amber-200/60 pt-3 sm:pt-0">
+              <span className="text-stone-600 text-xs sm:text-sm">
                 {t('ancientWorks.pagination.showing', { from: showingFrom, to: showingTo, total: totalCount })}
               </span>
               {hasPagination && (
@@ -289,7 +289,7 @@ export default function TextExplorerPage() {
                   <button
                     onClick={prevPage}
                     disabled={offset === 0}
-                    className="p-2 min-w-[44px] min-h-[44px] text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+                    className="p-2 min-w-[44px] min-h-[44px] text-stone-600 hover:text-stone-800 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -298,7 +298,7 @@ export default function TextExplorerPage() {
                   <button
                     onClick={nextPage}
                     disabled={offset + numericPageSize >= totalCount}
-                    className="p-2 min-w-[44px] min-h-[44px] text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+                    className="p-2 min-w-[44px] min-h-[44px] text-stone-600 hover:text-stone-800 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -322,22 +322,29 @@ export default function TextExplorerPage() {
         {loading ? (
           <div className="text-center py-12">
             <AILoader text="Loading" size="md" />
-            <p className="text-gray-500 mt-6">{t('ancientWorks.loading')}</p>
+            <p className="text-stone-600 mt-6">{t('ancientWorks.loading')}</p>
           </div>
         ) : works.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">{t('ancientWorks.noResults')}</p>
+            <p className="text-stone-600">{t('ancientWorks.noResults')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {works.map((work) => (
-              <TextCard
+            {works.map((work, index) => (
+              <motion.div
                 key={work.work_id}
-                work={work}
-                onClick={() => navigate(`/texts/${work.work_id}`)}
-                onSeeInKG={handleSeeInKG}
-                onGoToCitation={handleGoToCitation}
-              />
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <TextCard
+                  work={work}
+                  onClick={() => navigate(`/texts/${work.work_id}`)}
+                  onSeeInKG={handleSeeInKG}
+                  onGoToCitation={handleGoToCitation}
+                />
+              </motion.div>
             ))}
           </div>
         )}
@@ -357,7 +364,7 @@ export default function TextExplorerPage() {
         />
       )}
       </div>
-    </AuroraBackground>
+    </div>
   );
 }
 
@@ -392,17 +399,17 @@ function TextCard({
   return (
     <div
       onClick={onClick}
-      className="bg-white border border-gray-200 rounded-lg p-5 hover:border-gray-400 hover:shadow-md transition-all cursor-pointer"
+      className="bg-parchment-100/60 border border-amber-200/40 rounded-lg p-5 hover:border-orange-400 hover:shadow-md transition-all duration-300 cursor-pointer"
     >
       <div className="flex items-start justify-between mb-3">
-        <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 flex-1">{work.title}</h3>
+        <h3 className="text-lg font-display font-semibold text-stone-800 line-clamp-2 flex-1">{work.title}</h3>
         <div className="flex items-center gap-2 ml-2 flex-shrink-0">
-          <span className="px-2 py-1 bg-gray-100 text-gray-900 rounded text-xs font-semibold">
+          <span className="px-2 py-1 bg-parchment-100/70 text-stone-800 rounded text-xs font-semibold">
             {getLanguageIcon()}
           </span>
           {(work.kg_citations ?? 0) > 0 && (
             <span
-              className="px-2 py-1 bg-gray-100 text-gray-900 rounded text-xs font-semibold"
+              className="px-2 py-1 bg-parchment-100/70 text-stone-800 rounded text-xs font-semibold"
               title={t('ancientWorks.card.citedInKG', { count: work.kg_citations })}
             >
               ⭐ {work.kg_citations}
@@ -411,23 +418,23 @@ function TextCard({
         </div>
       </div>
 
-      <div className="space-y-1 text-sm text-gray-600 mb-4">
-        <div><strong className="text-gray-900">{t('ancientWorks.card.author')}:</strong> {work.author}</div>
-        <div><strong className="text-gray-900">{t('ancientWorks.card.passages')}:</strong> {work.passage_count?.toLocaleString() ?? '—'}</div>
-        {work.period && <div><strong className="text-gray-900">{t('ancientWorks.card.period')}:</strong> {work.period}</div>}
+      <div className="space-y-1 text-sm text-stone-600 mb-4">
+        <div><strong className="text-stone-800">{t('ancientWorks.card.author')}:</strong> {work.author}</div>
+        <div><strong className="text-stone-800">{t('ancientWorks.card.passages')}:</strong> {work.passage_count?.toLocaleString() ?? '—'}</div>
+        {work.period && <div><strong className="text-stone-800">{t('ancientWorks.card.period')}:</strong> {work.period}</div>}
       </div>
 
       {(work.kg_citations ?? 0) > 0 && (
-        <div className="flex gap-2 pt-3 border-t border-gray-200">
+        <div className="flex gap-2 pt-3 border-t border-amber-200/60">
           <button
             onClick={(e) => onSeeInKG(work, e)}
-            className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded transition-colors"
+            className="flex-1 px-3 py-2 text-sm font-medium text-stone-600 bg-parchment-50 hover:bg-parchment-100 rounded transition-colors"
           >
             {t('ancientWorks.card.actions.seeInKG')}
           </button>
           <button
             onClick={(e) => onGoToCitation(work, e)}
-            className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded transition-colors"
+            className="flex-1 px-3 py-2 text-sm font-medium text-stone-600 bg-parchment-50 hover:bg-parchment-100 rounded transition-colors"
           >
             {t('ancientWorks.card.actions.goToCitation')}
           </button>
