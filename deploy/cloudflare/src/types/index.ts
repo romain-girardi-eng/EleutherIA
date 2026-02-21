@@ -32,6 +32,13 @@ export interface Env {
   // Authentication
   JWT_SECRET_KEY: string;
   SEMATIVERSE_ACCESS_KEY: string;
+
+  // Quality pipeline feature flags (safe defaults: disabled)
+  ENABLE_CITATION_GUARDRAIL?: string;
+  ENABLE_CLAIM_VERIFIER?: string;
+  ENABLE_SELF_RAG_REPAIR?: string;
+  ENABLE_PHILOLOGICAL_MODE?: string;
+  ENABLE_INSUFFICIENCY_FALLBACK?: string;
 }
 
 // Knowledge Graph Types
@@ -454,4 +461,89 @@ export interface EnhancedGraphRAGResponse {
   processingTime: number;
   /** Whether request succeeded */
   success: boolean;
+}
+
+// =============================================================================
+// CITATION QUALITY PIPELINE TYPES (2026)
+// =============================================================================
+
+/**
+ * Lightweight source reference for the quality pipeline.
+ * Matches the structuredSources shape built in graphrag.ts routes.
+ */
+export interface SourceCitationLike {
+  id: number;
+  nodeId: string;
+  nodeLabel: string;
+  nodeType: string;
+  content: string;
+  metadata: Record<string, any>;
+}
+
+/**
+ * A single atomic claim extracted from the answer.
+ */
+export interface ClaimUnit {
+  claimId: string;
+  text: string;
+  sourceNodeIds: string[];
+  citationMarkers: number[];
+  claimType: 'quote' | 'paraphrase' | 'interpretive' | 'historical';
+  status?: 'supported' | 'partial' | 'unsupported';
+  score?: number;
+}
+
+/**
+ * Result from the citation integrity check.
+ */
+export interface CitationIntegrityResult {
+  passed: boolean;
+  outOfRange: number[];
+  orphanSources: string[];
+  totalMarkers: number;
+  totalSources: number;
+}
+
+/**
+ * Summary of claim verification across the answer.
+ */
+export interface ClaimVerificationSummary {
+  total: number;
+  supported: number;
+  partial: number;
+  unsupported: number;
+}
+
+/**
+ * Result from quality gate evaluation.
+ */
+export interface QualityGatesResult {
+  insufficientEvidenceTriggered: boolean;
+  unsupportedRatio: number;
+  fabricatedQuoteDetected: boolean;
+  outOfRangeCitations: boolean;
+}
+
+/**
+ * Result of the full answer finalization pipeline.
+ */
+export interface FinalizationResult {
+  answer: string;
+  sources: SourceCitationLike[];
+  citationIntegrity?: CitationIntegrityResult;
+  claimVerificationSummary?: ClaimVerificationSummary;
+  qualityGates?: QualityGatesResult;
+  wasModified: boolean;
+  philologicalMode: boolean;
+}
+
+/**
+ * Result from claim repair.
+ */
+export interface ClaimRepairResult {
+  claimId: string;
+  action: 'rewrite' | 'remove' | 'keep';
+  originalText: string;
+  rewrittenText?: string;
+  mappedNodeIds: string[];
 }

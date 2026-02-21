@@ -26,6 +26,13 @@ LOG_LEVEL = "INFO"
 EMBEDDING_DIMENSIONS = "3072"
 ALLOWED_ORIGINS = "https://free-will.app,https://eleutheria.pages.dev,http://localhost:5173,http://localhost:3000,https://visual-pulpit.vercel.app"
 
+# Citation quality pipeline flags (all ON by default; set to "false" to disable)
+ENABLE_CITATION_GUARDRAIL = "true"
+ENABLE_CLAIM_VERIFIER = "true"
+ENABLE_SELF_RAG_REPAIR = "true"
+ENABLE_PHILOLOGICAL_MODE = "true"
+ENABLE_INSUFFICIENCY_FALLBACK = "true"
+
 # KV Namespaces for caching
 [[kv_namespaces]]
 binding = "TEXT_CACHE"
