@@ -2,161 +2,231 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "EleutherIA Knowledge Graph Edge Types",
   "description": "Edge (relationship) type definitions for the EleutherIA ancient philosophy knowledge graph",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "edge_types": {
     "argues_for": {
       "description": "Source argues in favor of target position/concept",
       "category": "argumentative",
       "inverse": "supported_by",
-      "source_types": ["Person", "Argument", "Work"],
-      "target_types": ["Concept", "Position", "Argument"]
+      "source_types": ["person", "argument", "work"],
+      "target_types": ["concept", "position", "argument"]
     },
     "argues_against": {
       "description": "Source argues against target position/concept",
       "category": "argumentative",
       "inverse": "opposed_by",
-      "source_types": ["Person", "Argument", "Work"],
-      "target_types": ["Concept", "Position", "Argument"]
+      "source_types": ["person", "argument", "work"],
+      "target_types": ["concept", "position", "argument"]
     },
     "refutes": {
       "description": "Source refutes target argument",
       "category": "argumentative",
       "inverse": "refuted_by",
-      "source_types": ["Person", "Argument"],
-      "target_types": ["Argument"]
+      "source_types": ["person", "argument"],
+      "target_types": ["argument"]
     },
     "responds_to": {
       "description": "Source is a response to target",
       "category": "argumentative",
       "inverse": "has_response",
-      "source_types": ["Argument", "Work"],
-      "target_types": ["Argument", "Work"]
+      "source_types": ["argument", "work", "person", "concept", "passage", "publication", "synthesis"],
+      "target_types": ["argument", "work", "concept", "debate", "person"]
     },
     "influences": {
       "description": "Source intellectually influences target",
       "category": "intellectual",
       "inverse": "influenced_by",
-      "source_types": ["Person", "School", "Work"],
-      "target_types": ["Person", "School", "Work"]
+      "source_types": ["person", "school", "work"],
+      "target_types": ["person", "school", "work"]
+    },
+    "influenced": {
+      "description": "Source influenced target (broad influence relationship)",
+      "category": "intellectual",
+      "inverse": "influenced_by",
+      "source_types": ["argument", "argument_framework", "concept", "controversy", "person", "work"],
+      "target_types": ["argument", "argument_framework", "concept", "controversy", "group", "person", "school", "work"]
     },
     "influenced_by": {
       "description": "Source is influenced by target",
       "category": "intellectual",
       "inverse": "influences",
-      "source_types": ["Person", "School", "Work"],
-      "target_types": ["Person", "School", "Work"]
+      "source_types": ["person", "school", "work", "event"],
+      "target_types": ["person", "school", "work"]
     },
     "taught_by": {
       "description": "Source was taught by target",
       "category": "intellectual",
       "inverse": "teaches",
-      "source_types": ["Person"],
-      "target_types": ["Person"]
+      "source_types": ["person"],
+      "target_types": ["person"]
     },
     "teaches": {
       "description": "Source teaches target",
       "category": "intellectual",
       "inverse": "taught_by",
-      "source_types": ["Person"],
-      "target_types": ["Person"]
+      "source_types": ["person"],
+      "target_types": ["person"]
+    },
+    "student_of": {
+      "description": "Source is a student of target",
+      "category": "intellectual",
+      "inverse": "teaches",
+      "source_types": ["person"],
+      "target_types": ["person"]
     },
     "belongs_to_school": {
       "description": "Source belongs to target school",
       "category": "affiliation",
       "inverse": "has_member",
-      "source_types": ["Person"],
-      "target_types": ["School"]
+      "source_types": ["person"],
+      "target_types": ["school"]
     },
     "has_member": {
       "description": "Source school has target as member",
       "category": "affiliation",
       "inverse": "belongs_to_school",
-      "source_types": ["School"],
-      "target_types": ["Person"]
+      "source_types": ["school"],
+      "target_types": ["person"]
+    },
+    "member_of": {
+      "description": "Source is a member of target group or school",
+      "category": "affiliation",
+      "inverse": "has_member",
+      "source_types": ["concept", "person", "work"],
+      "target_types": ["group", "school"]
     },
     "founded": {
       "description": "Source founded target school/institution",
       "category": "affiliation",
       "inverse": "founded_by",
-      "source_types": ["Person"],
-      "target_types": ["School", "Institution"]
+      "source_types": ["person"],
+      "target_types": ["school", "institution"]
     },
     "wrote": {
       "description": "Source wrote target work",
       "category": "authorship",
       "inverse": "authored_by",
-      "source_types": ["Person"],
-      "target_types": ["Work"]
+      "source_types": ["person"],
+      "target_types": ["work"]
     },
     "authored_by": {
-      "description": "Source was authored by target",
+      "description": "Source was authored by target person",
       "category": "authorship",
       "inverse": "wrote",
-      "source_types": ["Work"],
-      "target_types": ["Person"]
+      "source_types": ["argument", "passage", "publication", "synthesis", "work"],
+      "target_types": ["person"]
+    },
+    "created_by": {
+      "description": "Source was created/developed by target",
+      "category": "authorship",
+      "inverse": "creates",
+      "source_types": ["concept", "group", "person"],
+      "target_types": ["argument", "argument_framework", "concept", "publication", "work"]
+    },
+    "developed_by": {
+      "description": "Source concept/argument was developed by target",
+      "category": "authorship",
+      "inverse": "develops",
+      "source_types": ["argument", "concept", "person"],
+      "target_types": ["concept", "person", "school"]
     },
     "cites": {
       "description": "Source cites target",
       "category": "citation",
       "inverse": "cited_by",
-      "source_types": ["Work", "Passage"],
-      "target_types": ["Work", "Passage", "Person"]
+      "source_types": ["work", "passage"],
+      "target_types": ["work", "passage", "person"]
     },
     "cited_by": {
       "description": "Source is cited by target",
       "category": "citation",
       "inverse": "cites",
-      "source_types": ["Work", "Passage", "Person"],
-      "target_types": ["Work", "Passage"]
+      "source_types": ["work", "passage", "person"],
+      "target_types": ["work", "passage"]
+    },
+    "source_for": {
+      "description": "Source provides evidence for target",
+      "category": "citation",
+      "inverse": "evidenced_by",
+      "source_types": ["passage", "person", "publication"],
+      "target_types": ["argument", "argument_framework", "concept", "debate", "publication", "work"]
+    },
+    "evidenced_by": {
+      "description": "Source concept is evidenced by target passage",
+      "category": "citation",
+      "inverse": "source_for",
+      "source_types": ["concept"],
+      "target_types": ["passage"]
     },
     "preserves": {
       "description": "Source preserves target fragment",
       "category": "textual",
       "inverse": "preserved_in",
-      "source_types": ["Work", "Person"],
-      "target_types": ["Text_Fragment"]
+      "source_types": ["work", "person"],
+      "target_types": ["text_fragment"]
     },
     "preserved_in": {
       "description": "Source is preserved in target",
       "category": "textual",
       "inverse": "preserves",
-      "source_types": ["Text_Fragment"],
-      "target_types": ["Work"]
+      "source_types": ["text_fragment"],
+      "target_types": ["work"]
     },
     "contains": {
       "description": "Source contains target",
       "category": "structural",
       "inverse": "part_of",
-      "source_types": ["Work", "Source_Collection"],
-      "target_types": ["Passage", "Text_Fragment", "Work"]
+      "source_types": ["argument", "concept", "debate", "quote", "work", "source_collection"],
+      "target_types": ["argument", "argument_framework", "concept", "debate", "passage", "text_fragment", "work"]
     },
     "part_of": {
       "description": "Source is part of target",
       "category": "structural",
       "inverse": "contains",
-      "source_types": ["Passage", "Text_Fragment"],
-      "target_types": ["Work", "Source_Collection"]
+      "source_types": ["argument", "concept", "passage", "synthesis", "text_fragment"],
+      "target_types": ["concept", "passage", "work", "source_collection"]
+    },
+    "has_section": {
+      "description": "Source work has target passage as a section",
+      "category": "structural",
+      "inverse": "part_of",
+      "source_types": ["work"],
+      "target_types": ["passage"]
+    },
+    "has_chapter": {
+      "description": "Source work has target passage as a chapter",
+      "category": "structural",
+      "inverse": "part_of",
+      "source_types": ["work"],
+      "target_types": ["passage"]
+    },
+    "belongs_to_corpus": {
+      "description": "Source work belongs to target collection/corpus",
+      "category": "structural",
+      "inverse": "contains",
+      "source_types": ["work"],
+      "target_types": ["source_collection"]
     },
     "discusses": {
-      "description": "Source discusses target concept",
+      "description": "Source discusses target concept/topic",
       "category": "semantic",
       "inverse": "discussed_in",
-      "source_types": ["Work", "Passage", "Person"],
-      "target_types": ["Concept", "Argument", "Debate"]
+      "source_types": ["argument", "argument_framework", "concept", "conceptual_evolution", "debate", "passage", "person", "publication", "synthesis", "work"],
+      "target_types": ["argument", "concept", "debate", "group", "person", "school", "synthesis", "work"]
     },
     "discussed_in": {
       "description": "Source concept is discussed in target",
       "category": "semantic",
       "inverse": "discusses",
-      "source_types": ["Concept", "Argument"],
-      "target_types": ["Work", "Passage"]
+      "source_types": ["concept", "argument"],
+      "target_types": ["work", "passage"]
     },
     "defines": {
       "description": "Source defines target term/concept",
       "category": "semantic",
       "inverse": "defined_by",
-      "source_types": ["Person", "Work", "Passage"],
-      "target_types": ["Concept", "Term"]
+      "source_types": ["argument", "person", "publication", "work", "passage"],
+      "target_types": ["concept", "debate", "term"]
     },
     "related_to": {
       "description": "Source is related to target",
@@ -169,64 +239,148 @@
       "description": "Source concept contrasts with target",
       "category": "semantic",
       "inverse": "contrasts_with",
-      "source_types": ["Concept", "Position"],
-      "target_types": ["Concept", "Position"]
+      "source_types": ["concept", "position"],
+      "target_types": ["concept", "position"]
+    },
+    "parallel_to": {
+      "description": "Source has parallel content or ideas to target",
+      "category": "semantic",
+      "inverse": "parallel_to",
+      "source_types": ["concept", "passage", "person"],
+      "target_types": ["concept", "passage", "person"]
+    },
+    "employs": {
+      "description": "Source employs target concept or argument",
+      "category": "semantic",
+      "inverse": "employed_by",
+      "source_types": ["argument", "concept", "passage", "person", "work"],
+      "target_types": ["argument", "argument_framework", "concept"]
+    },
+    "presupposes": {
+      "description": "Source presupposes target concept or argument",
+      "category": "semantic",
+      "inverse": "presupposed_by",
+      "source_types": ["argument", "concept", "synthesis", "work"],
+      "target_types": ["argument", "concept"]
+    },
+    "grounded_in": {
+      "description": "Source is grounded in target evidence or debate",
+      "category": "semantic",
+      "inverse": "grounds",
+      "source_types": ["argument", "concept", "passage"],
+      "target_types": ["debate", "passage"]
     },
     "holds_position": {
       "description": "Source holds target philosophical position",
       "category": "doctrinal",
       "inverse": "held_by",
-      "source_types": ["Person", "School"],
-      "target_types": ["Position"]
+      "source_types": ["person", "school"],
+      "target_types": ["position"]
     },
     "endorses": {
       "description": "Source endorses target doctrine",
       "category": "doctrinal",
       "inverse": "endorsed_by",
-      "source_types": ["Person", "School"],
-      "target_types": ["Doctrine", "Position"]
+      "source_types": ["person", "school"],
+      "target_types": ["doctrine", "position"]
     },
     "rejects": {
       "description": "Source rejects target doctrine",
       "category": "doctrinal",
       "inverse": "rejected_by",
-      "source_types": ["Person", "School"],
-      "target_types": ["Doctrine", "Position"]
+      "source_types": ["person", "school"],
+      "target_types": ["doctrine", "position"]
+    },
+    "supports": {
+      "description": "Source supports target argument or concept",
+      "category": "argumentative",
+      "inverse": "supported_by",
+      "source_types": ["argument", "concept", "event", "group", "passage", "person", "synthesis", "work"],
+      "target_types": ["argument", "concept", "person"]
+    },
+    "critiques": {
+      "description": "Source critiques target",
+      "category": "argumentative",
+      "inverse": "critiqued_by",
+      "source_types": ["argument", "argument_framework", "concept", "event", "group", "passage", "person", "publication", "school", "synthesis", "work"],
+      "target_types": ["argument", "concept", "controversy", "person", "publication", "school", "synthesis", "work"]
+    },
+    "extends": {
+      "description": "Source extends or builds upon target",
+      "category": "intellectual",
+      "inverse": "extended_by",
+      "source_types": ["argument", "concept", "person", "publication", "synthesis", "work"],
+      "target_types": ["argument", "argument_framework", "concept", "person", "publication", "synthesis", "work"]
     },
     "participates_in": {
-      "description": "Source participates in target debate",
+      "description": "Source participates in target debate or event",
       "category": "debate",
       "inverse": "has_participant",
-      "source_types": ["Person", "School"],
-      "target_types": ["Debate"]
+      "source_types": ["person", "school"],
+      "target_types": ["controversy", "debate", "event"]
+    },
+    "contributes_to": {
+      "description": "Source contributes to target debate or concept",
+      "category": "debate",
+      "inverse": "contributed_to_by",
+      "source_types": ["person", "publication", "work"],
+      "target_types": ["concept", "debate"]
     },
     "interprets": {
       "description": "Source interprets target",
       "category": "hermeneutic",
       "inverse": "interpreted_by",
-      "source_types": ["Person", "Modern_Interpretation"],
-      "target_types": ["Person", "Concept", "Work", "Argument"]
+      "source_types": ["argument", "person", "publication", "modern_interpretation", "work"],
+      "target_types": ["argument", "argument_framework", "concept", "passage", "person", "school", "work"]
     },
     "interpreted_by": {
       "description": "Source is interpreted by target",
       "category": "hermeneutic",
       "inverse": "interprets",
-      "source_types": ["Person", "Concept", "Work"],
-      "target_types": ["Person", "Modern_Interpretation"]
+      "source_types": ["person", "concept", "work"],
+      "target_types": ["person", "modern_interpretation"]
+    },
+    "represents": {
+      "description": "Source represents or exemplifies target",
+      "category": "hermeneutic",
+      "inverse": "represented_by",
+      "source_types": ["passage", "publication"],
+      "target_types": ["debate", "school"]
+    },
+    "exemplifies": {
+      "description": "Source exemplifies target concept or pattern",
+      "category": "hermeneutic",
+      "inverse": "exemplified_by",
+      "source_types": ["argument", "concept", "group", "passage", "person", "publication", "quote", "work"],
+      "target_types": ["argument", "concept", "debate", "school", "work"]
+    },
+    "specializes_in": {
+      "description": "Source person specializes in target school or tradition",
+      "category": "hermeneutic",
+      "inverse": "specialist",
+      "source_types": ["person"],
+      "target_types": ["school"]
     },
     "contemporary_of": {
       "description": "Source is contemporary of target",
       "category": "temporal",
       "inverse": "contemporary_of",
-      "source_types": ["Person"],
-      "target_types": ["Person"]
+      "source_types": ["concept", "person", "event", "work"],
+      "target_types": ["concept", "person", "event", "work"]
     },
     "precedes": {
       "description": "Source chronologically precedes target",
       "category": "temporal",
       "inverse": "follows",
-      "source_types": ["Person", "Event", "Work"],
-      "target_types": ["Person", "Event", "Work"]
+      "source_types": ["person", "event", "publication", "work"],
+      "target_types": ["person", "event", "work"]
+    },
+    "follows": {
+      "description": "Source chronologically follows target",
+      "category": "temporal",
+      "inverse": "precedes",
+      "source_types": ["passage", "person", "event", "work"],
+      "target_types": ["passage", "person", "event", "work"]
     }
   },
   "categories": {

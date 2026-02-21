@@ -250,10 +250,14 @@ export default function AdvancedSearchPage() {
                   >
                     <option value="">{t('advancedSearch.filters.periodOptions.all')}</option>
                     <option value="Presocratic">{t('advancedSearch.filters.periodOptions.presocratic')}</option>
-                    <option value="Classical">{t('advancedSearch.filters.periodOptions.classical')}</option>
+                    <option value="Classical Greek">{t('advancedSearch.filters.periodOptions.classical')}</option>
                     <option value="Hellenistic">{t('advancedSearch.filters.periodOptions.hellenistic')}</option>
+                    <option value="Roman Republican">Roman Republican</option>
                     <option value="Roman Imperial">{t('advancedSearch.filters.periodOptions.romanImperial')}</option>
+                    <option value="Patristic">Patristic</option>
                     <option value="Late Antiquity">{t('advancedSearch.filters.periodOptions.lateAntiquity')}</option>
+                    <option value="Second Temple Judaism">Second Temple Judaism</option>
+                    <option value="Contemporary">Contemporary</option>
                   </select>
                 </div>
               </motion.div>
