@@ -1560,15 +1560,14 @@ export default function CosmographKGVisualizer({
     const simulationConfig = viewMode === 'clusters'
       ? {
           // CLUSTER VIEW - Shows author clusters with their works/passages
-          // Gentle center gravity like official Cosmos example (0.1)
-          simulationGravity: 0.08,          // Gentle center pull to prevent drift
+          simulationGravity: 0.0,            // No center pull — prevents orbital motion
           simulationCluster: 0.3,           // Light clustering
-          simulationRepulsion: 40,          // STRONG repulsion to spread clusters
-          simulationLinkSpring: 0.1,        // Light spring
-          simulationLinkDistance: 100,      // Medium-long links
-          simulationFriction: 0.95,         // Very high friction to preserve positions
-          simulationDecay: 8000,            // Very slow decay
-          disableSimulation: false,         // Enable for interactivity
+          simulationRepulsion: 0.5,         // Small repulsion to keep nodes apart
+          simulationLinkSpring: 0.3,        // Moderate spring to keep linked nodes close
+          simulationLinkDistance: 10,        // Short rest length
+          simulationFriction: 0.85,         // High friction — nodes settle quickly
+          simulationDecay: 1000,            // Fast cooldown — reaches equilibrium fast
+          disableSimulation: false,         // Physics ON for drag interactivity
           showClusterLabels: true,          // Show cluster labels (author names)
           scaleClusterLabels: true,         // Scale cluster labels with zoom
           showTopLabels: true,              // Enable labels to show when zoomed in
@@ -1577,14 +1576,13 @@ export default function CosmographKGVisualizer({
         }
       : {
           // LABELS VIEW - Shows hierarchical structure with readable labels
-          // Gentle center gravity like official Cosmos example (0.1)
-          simulationGravity: 0.08,          // Gentle center pull to prevent drift
-          simulationRepulsion: 35,          // Strong repulsion for spread
-          simulationLinkSpring: 0.08,       // Light spring
-          simulationLinkDistance: 80,       // Medium links
-          simulationFriction: 0.95,         // Very high friction to preserve positions
-          simulationDecay: 8000,            // Very slow decay
-          disableSimulation: false,         // Enable for drag interactivity
+          simulationGravity: 0.0,            // No center pull — prevents orbital motion
+          simulationRepulsion: 0.5,         // Small repulsion to keep nodes apart
+          simulationLinkSpring: 0.3,        // Moderate spring to keep linked nodes close
+          simulationLinkDistance: 10,        // Short rest length
+          simulationFriction: 0.85,         // High friction — nodes settle quickly
+          simulationDecay: 1000,            // Fast cooldown — reaches equilibrium fast
+          disableSimulation: false,         // Physics ON for drag interactivity
           showClusterLabels: false,         // Hide cluster labels in labels view
           scaleClusterLabels: false,
           showTopLabels: true,              // Show hierarchical labels
