@@ -7,7 +7,7 @@
  */
 
 import { Hono } from 'hono';
-import { Env } from '../types';
+import { Env, SourceCitationLike, FinalizationResult } from '../types';
 import { DatabaseService } from '../services/database';
 import { QdrantService } from '../services/qdrant';
 import { LLMService } from '../services/llm';
@@ -21,6 +21,15 @@ import { authMiddleware, optionalAuthMiddleware, rateLimitMiddleware, validateGr
 // PageIndex direct retrieval (v3 — simplified pipeline)
 import { getLinkedPassages, getNodeNeighbors, buildPageIndexContext } from '../services/pageindex-retrieval';
 import { PassageRetrievalService } from '../services/passage-retrieval';
+
+// Citation quality pipeline (2026)
+import { assertCitationIntegrity, renumberCitations, stripOutOfRangeMarkers } from '../services/citation-integrity';
+import { extractClaims, attachClaimSources, verifyClaimsWithLLM, summarizeVerification } from '../services/claim-verifier';
+import { normalizePartialClaims } from '../services/citation-normalizer';
+import { repairUnsupportedClaimsBatch, applyRepairs } from '../services/claim-repair';
+import { evaluateQualityGates, buildInsufficientEvidenceAnswer } from '../services/quality-gates';
+import { isPhilologicalQuery } from '../services/query-mode';
+import { PHILOLOGICAL_MODE_BLOCK, BASE_SYNTHESIS_ADDENDUM, INSUFFICIENCY_BLOCK } from '../prompts/graphrag';
 
 // 2025 Advanced RAG Services (kept for legacy endpoint)
 import { hydeSearch, hydeEnhancedSearch, generateHypotheticalDocument } from '../services/hyde';
@@ -57,6 +66,164 @@ function truncateText(text: string | undefined | null, maxChars: number): string
   const lastSpace = window.lastIndexOf(' ');
   if (lastSpace > 0) return text.slice(0, lastSpace).trimEnd() + suffix;
   return window + suffix;
+}
+
+/**
+ * Helper: check if a feature flag is enabled.
+ * Defaults to ON (true) when the env var is absent — set to 'false' or '0' to disable.
+ */
+function isFeatureEnabled(env: Env, flag: keyof Env): boolean {
+  const val = env[flag];
+  if (val === undefined || val === null || val === '') return true; // default ON
+  return val !== 'false' && val !== '0';
+}
+
+/**
+ * Shared answer finalization pipeline.
+ *
+ * Runs citation integrity + claim verification + normalization +
+ * targeted repair + quality gates on the answer and sources.
+ *
+ * Returns the cleaned answer, reindexed sources, and diagnostics.
+ * Feature-flagged: each stage can be independently disabled.
+ */
+async function finalizeAnswerWithQualityGuards(
+  answer: string,
+  sources: SourceCitationLike[],
+  query: string,
+  env: Env,
+  llm?: LLMService,
+): Promise<FinalizationResult> {
+  const philologicalMode = isFeatureEnabled(env, 'ENABLE_PHILOLOGICAL_MODE') && isPhilologicalQuery(query);
+  let currentAnswer = answer;
+  let currentSources = sources;
+  let wasModified = false;
+
+  // ── Stage A: Citation Integrity Pre-Check ──
+  if (isFeatureEnabled(env, 'ENABLE_CITATION_GUARDRAIL')) {
+    const preCheck = assertCitationIntegrity(currentAnswer, currentSources);
+
+    if (!preCheck.passed) {
+      logger.info(`Citation pre-check failed: ${preCheck.outOfRange.length} out-of-range markers`);
+
+      // If we have verifier + repair enabled, let the pipeline fix it
+      // Otherwise, do a hard strip as last resort
+      if (!isFeatureEnabled(env, 'ENABLE_CLAIM_VERIFIER')) {
+        currentAnswer = stripOutOfRangeMarkers(currentAnswer, currentSources.length);
+        wasModified = true;
+      }
+    }
+  }
+
+  // ── Stage B-F: Claim Verification + Normalization + Repair ──
+  let claimVerificationSummary;
+  if (isFeatureEnabled(env, 'ENABLE_CLAIM_VERIFIER') && llm) {
+    // B: Extract claims
+    let claims = extractClaims(currentAnswer);
+    claims = attachClaimSources(claims, currentSources);
+
+    // B: Verify claims
+    claims = await verifyClaimsWithLLM(claims, currentSources, llm);
+    let summary = summarizeVerification(claims);
+    logger.info(`Claim verification: ${summary.supported} supported, ${summary.partial} partial, ${summary.unsupported} unsupported / ${summary.total} total`);
+
+    // C: Normalize partial claims (deterministic, no LLM)
+    claims = normalizePartialClaims(claims, currentSources);
+
+    // D: Repair unsupported claims
+    if (isFeatureEnabled(env, 'ENABLE_SELF_RAG_REPAIR') && summary.unsupported > 0) {
+      const repairs = await repairUnsupportedClaimsBatch(claims, currentSources, llm);
+
+      if (repairs.size > 0) {
+        currentAnswer = applyRepairs(currentAnswer, claims, repairs);
+        wasModified = true;
+
+        // E: Re-verify repaired claims
+        claims = extractClaims(currentAnswer);
+        claims = attachClaimSources(claims, currentSources);
+        claims = await verifyClaimsWithLLM(claims, currentSources, llm);
+
+        // F: Remove still-unsupported claims
+        const stillUnsupported = claims.filter(c => c.status === 'unsupported');
+        if (stillUnsupported.length > 0) {
+          for (const claim of stillUnsupported) {
+            currentAnswer = currentAnswer.replace(claim.text, '');
+          }
+          currentAnswer = currentAnswer.replace(/\n{3,}/g, '\n\n').replace(/  +/g, ' ').trim();
+          wasModified = true;
+        }
+      }
+
+      // Recompute summary after repairs
+      claims = extractClaims(currentAnswer);
+      claims = attachClaimSources(claims, currentSources);
+      summary = summarizeVerification(
+        claims.map(c => {
+          // Quick re-check: claims with markers are at least partial
+          if (c.citationMarkers.length > 0 && !c.status) {
+            return { ...c, status: 'partial' as const };
+          }
+          return c;
+        })
+      );
+    }
+
+    claimVerificationSummary = summary;
+  }
+
+  // ── Stage G: Renumber citations and reindex sources ──
+  if (isFeatureEnabled(env, 'ENABLE_CITATION_GUARDRAIL')) {
+    const renumbered = renumberCitations(currentAnswer, currentSources);
+    if (renumbered.answer !== currentAnswer || renumbered.sources.length !== currentSources.length) {
+      wasModified = true;
+    }
+    currentAnswer = renumbered.answer;
+    currentSources = renumbered.sources;
+  }
+
+  // ── Stage H: Final hard integrity check ──
+  let citationIntegrity;
+  if (isFeatureEnabled(env, 'ENABLE_CITATION_GUARDRAIL')) {
+    citationIntegrity = assertCitationIntegrity(currentAnswer, currentSources);
+
+    // Last resort: if still failing, strip offending markers
+    if (!citationIntegrity.passed) {
+      logger.warn('Final integrity check FAILED after pipeline — stripping remaining out-of-range markers');
+      currentAnswer = stripOutOfRangeMarkers(currentAnswer, currentSources.length);
+      citationIntegrity = assertCitationIntegrity(currentAnswer, currentSources);
+      wasModified = true;
+    }
+  }
+
+  // ── Stage I: Quality gates + insufficiency fallback ──
+  let qualityGates;
+  if (isFeatureEnabled(env, 'ENABLE_INSUFFICIENCY_FALLBACK') && claimVerificationSummary) {
+    const sourceContents = currentSources.map(s => s.content || '');
+    qualityGates = evaluateQualityGates(
+      claimVerificationSummary,
+      currentAnswer,
+      sourceContents,
+      citationIntegrity ? !citationIntegrity.passed : false,
+    );
+
+    if (qualityGates.insufficientEvidenceTriggered) {
+      logger.warn('Insufficiency fallback triggered');
+      const supportedClaims = extractClaims(currentAnswer)
+        .filter(c => c.citationMarkers.length > 0);
+      currentAnswer = buildInsufficientEvidenceAnswer(query, supportedClaims, currentSources.length);
+      wasModified = true;
+    }
+  }
+
+  return {
+    answer: currentAnswer,
+    sources: currentSources,
+    citationIntegrity: citationIntegrity || undefined,
+    claimVerificationSummary: claimVerificationSummary || undefined,
+    qualityGates: qualityGates || undefined,
+    wasModified,
+    philologicalMode,
+  };
 }
 
 export const graphragRoutes = new Hono<{ Bindings: Env }>();
@@ -992,7 +1159,7 @@ graphragRoutes.get('/query/stream',
           // Step 5: Generate answer with REAL STREAMING
           sendEvent('status', { message: 'Generating answer...', step: 5, total_steps: 5 });
 
-          const prompt = `You are a world-class scholar of ancient Greek and Roman philosophy, specializing in debates about fate, free will, and moral responsibility.
+          let prompt = `You are a world-class scholar of ancient Greek and Roman philosophy, specializing in debates about fate, free will, and moral responsibility.
 
 === CONTEXT FROM KNOWLEDGE GRAPH AND ANCIENT TEXT DATABASE ===
 
@@ -1019,6 +1186,16 @@ INSTRUCTIONS FOR YOUR SCHOLARLY ANSWER:
 7. **IMPORTANT:** Every major claim or quotation MUST have a [N] citation marker referencing one of the numbered sources. This enables the reader to click through to the source.
 
 CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage exists in the context, say so rather than inventing a quotation.`;
+
+          // Philological mode and quality addendum for streaming route
+          const streamPhiloMode = isFeatureEnabled(c.env, 'ENABLE_PHILOLOGICAL_MODE') && isPhilologicalQuery(query);
+          if (streamPhiloMode) {
+            prompt += '\n\n' + PHILOLOGICAL_MODE_BLOCK;
+            sendEvent('status', { message: 'Philological mode activated', step: 5, total_steps: 6 });
+          }
+          if (isFeatureEnabled(c.env, 'ENABLE_CITATION_GUARDRAIL')) {
+            prompt += '\n\n' + BASE_SYNTHESIS_ADDENDUM;
+          }
 
           // 🚀 REAL STREAMING - With optional Kimi K2 thinking mode
           let fullAnswer = '';
@@ -1128,12 +1305,28 @@ CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage ex
           // Build evidence package with ancient citations, CTS URNs, and evidence chains
           const evidencePackage = buildEvidencePackage(fullAnswer, dualResults.nodes, dualResults.edges);
 
+          // Quality finalization pipeline (same as /answer route)
+          const streamFinalization = await finalizeAnswerWithQualityGuards(
+            fullAnswer,
+            formattedSources as SourceCitationLike[],
+            query,
+            c.env,
+            llm,
+          );
+
+          const finalStreamAnswer = streamFinalization.answer;
+          const finalStreamSources = streamFinalization.sources;
+
+          if (streamFinalization.wasModified) {
+            sendEvent('status', { message: 'Answer quality check applied corrections', step: 6, total_steps: 6 });
+          }
+
           // Send complete result
           sendEvent('complete', {
             query,
-            answer: fullAnswer,
+            answer: finalStreamAnswer,
             thinking_process: thinkingProcess,  // Include thinking process if available
-            sources: formattedSources,
+            sources: finalStreamSources,
             // Enhanced evidence fields
             evidence: evidencePackage.evidenceChains,
             evidenceChains: evidencePackage.evidenceChains,
@@ -1159,6 +1352,10 @@ CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage ex
               max_context,
               use_thinking
             },
+            // Quality pipeline diagnostics (optional)
+            ...(streamFinalization.citationIntegrity && { citationIntegrity: streamFinalization.citationIntegrity }),
+            ...(streamFinalization.claimVerificationSummary && { claimVerificationSummary: streamFinalization.claimVerificationSummary }),
+            ...(streamFinalization.qualityGates && { qualityGates: streamFinalization.qualityGates }),
             success: true
           });
 
@@ -1410,7 +1607,18 @@ INSTRUCTIONS FOR YOUR SCHOLARLY ANSWER:
 
 CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage exists in the context, say "No passage in the database directly addresses this" rather than inventing a quotation.`;
 
-    let answer = await llm.generateWithRetry(synthesisPrompt, 'gemini-3-flash-preview');
+    // Philological mode branching: append specialized prompt block
+    const philoMode = isFeatureEnabled(c.env, 'ENABLE_PHILOLOGICAL_MODE') && isPhilologicalQuery(query);
+    let finalPrompt = synthesisPrompt;
+    if (philoMode) {
+      finalPrompt += '\n\n' + PHILOLOGICAL_MODE_BLOCK;
+      logger.info('Philological mode activated for query');
+    }
+    if (isFeatureEnabled(c.env, 'ENABLE_CITATION_GUARDRAIL')) {
+      finalPrompt += '\n\n' + BASE_SYNTHESIS_ADDENDUM;
+    }
+
+    let answer = await llm.generateWithRetry(finalPrompt, 'gemini-3-flash-preview');
     if (typeof answer !== 'string') {
       answer = (answer as any)?.text || (answer as any)?.content || String(answer || '');
     }
@@ -1484,9 +1692,28 @@ CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage ex
     ];
     const uniqueCtsUrns = [...new Set(allCtsUrns)];
 
-    return c.json({
+    // =================================================================
+    // STEP 7: Quality Finalization Pipeline
+    // Runs citation integrity, claim verification, normalization, repair
+    // =================================================================
+    const finalization = await finalizeAnswerWithQualityGuards(
       answer,
-      sources: structuredSources,
+      structuredSources as SourceCitationLike[],
+      query,
+      c.env,
+      llm,
+    );
+
+    const finalAnswer = finalization.answer;
+    const finalSources = finalization.sources;
+
+    if (finalization.wasModified) {
+      logger.info('Answer was modified by quality pipeline');
+    }
+
+    return c.json({
+      answer: finalAnswer,
+      sources: finalSources,
 
       // Evidence chains
       evidence: evidencePackage?.evidenceChains || [],
@@ -1528,6 +1755,11 @@ CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage ex
         explicitPassages: resolvedPassages.length,
         textualGroundings: textualGroundings.groundings.length,
       },
+
+      // Quality pipeline diagnostics (optional, backward-compatible)
+      ...(finalization.citationIntegrity && { citationIntegrity: finalization.citationIntegrity }),
+      ...(finalization.claimVerificationSummary && { claimVerificationSummary: finalization.claimVerificationSummary }),
+      ...(finalization.qualityGates && { qualityGates: finalization.qualityGates }),
 
       processingTime,
       version: 'pageindex-v3',
