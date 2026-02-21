@@ -7,11 +7,15 @@ import { Hono } from 'hono';
 import { Env } from '../types';
 import { DatabaseService } from '../services/database';
 import { CitationNetworkAnalyzer } from '../services/citation-network';
+import { authMiddleware } from '../middleware/auth';
 import { getLogger } from '../utils/logger';
 
 const logger = getLogger('AdminRoutes');
 
 export const adminRoutes = new Hono<{ Bindings: Env }>();
+
+// All admin routes require authentication
+adminRoutes.use('*', authMiddleware);
 
 /**
  * GET /api/admin/qdrant/info
