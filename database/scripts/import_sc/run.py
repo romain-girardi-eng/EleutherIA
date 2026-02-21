@@ -227,13 +227,69 @@ def main() -> None:
         if not db_url:
             print("ERROR: DATABASE_URL required for confirmed import")
             sys.exit(1)
-        print(f"\n--- CONFIRMED IMPORT (run_id: will be generated) ---")
+
+        # Check for existing duplicates before import
+        print("\n--- CHECKING FOR EXISTING DUPLICATES ---")
+        importer = SCImporter(db_url, dry_run=False)
+        dupes = importer.find_duplicates(works)
+
+        existing_works = dupes["all_existing_works"]
+        existing_nodes = dupes["existing_kg_nodes"]
+        exact_matches = dupes["exact_canonical_matches"]
+
+        # Build a mapping of SC node_ids for quick lookup
+        sc_node_ids = {w.node_id for w in works}
+
+        # Find works to remove: exact canonical_id matches
+        to_remove = []
+        if exact_matches:
+            print(f"\nFound {len(exact_matches)} exact canonical_id match(es):")
+            for w in exact_matches:
+                print(f"  {w['canonical_id']} — {w['author']}, {w['title']} "
+                      f"(source={w['source']})")
+                to_remove.append(w)
+
+        # Also find works by overlapping kg_work_id
+        if existing_works:
+            # Check if any existing work's kg_work_id matches an SC node_id
+            for w in existing_works:
+                kg_id = w.get("kg_work_id", "")
+                if kg_id in sc_node_ids and w not in to_remove:
+                    print(f"  kg_work_id match: {kg_id} — {w['author']}, "
+                          f"{w['title']} (source={w['source']})")
+                    to_remove.append(w)
+
+        if existing_nodes:
+            print(f"\nFound {len(existing_nodes)} existing KG node(s) with "
+                  f"matching node_ids (will use ON CONFLICT DO NOTHING):")
+            for n in existing_nodes:
+                print(f"  {n['node_id']} ({n['type']})")
+
+        if to_remove:
+            print(f"\n{len(to_remove)} existing work(s) will be REMOVED "
+                  f"(replaced by SC editions):")
+            for w in to_remove:
+                print(f"  - {w['canonical_id']}: {w['author']}, {w['title']}")
+
+            confirm_rm = input("\nRemove these duplicates and proceed? "
+                             "Type 'yes': ")
+            if confirm_rm.strip().lower() != "yes":
+                print("Aborted.")
+                return
+
+            for w in to_remove:
+                print(f"  Removing {w['canonical_id']}...")
+                importer.remove_work(str(w["work_id"]), w["canonical_id"])
+            print(f"Removed {len(to_remove)} duplicate(s).")
+        else:
+            print("No duplicates found.")
+
+        print(f"\n--- CONFIRMED IMPORT (run_id: {importer.run_id}) ---")
         print("WARNING: This will write to the database!")
         confirm = input("Type 'yes' to proceed: ")
         if confirm.strip().lower() != "yes":
             print("Aborted.")
             return
-        importer = SCImporter(db_url, dry_run=False)
 
     print(f"\nRun ID: {importer.run_id}")
     print()

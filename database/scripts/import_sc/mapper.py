@@ -179,18 +179,45 @@ def to_passages(work: SCWork, work_uuid: uuid.UUID, run_id: str) -> list[dict]:
     """Map SCWork paragraphs → passages INSERT payloads.
 
     One row per SCParagraph. Each dict includes a pre-generated passage_id UUID.
+
+    Uses the chapter's uniquified chapter_ref (from ``_unique_ref``) rather
+    than the raw ``para.chapter`` to guarantee each ``canonical_ref`` is
+    unique within the work (required by DB UNIQUE constraint).
     """
     book = work.book or "1"
     passages: list[dict] = []
+    seen_refs: dict[str, int] = {}  # canonical_ref → count
 
     for chapter in work.chapters:
         for para in chapter.paragraphs:
             passage_id = uuid.uuid4()
-            chapter_ref = para.chapter
-            paragraph_ref = para.paragraph
+
+            # Use the chapter's unique ref (which has _a/_b suffixes for
+            # duplicates) rather than the raw para.chapter.
+            if work.reference_format == "A":
+                # Format A: paragraphs ARE chapters; chapter_ref is the
+                # paragraph number (uniquified).
+                chapter_ref = None
+                paragraph_ref = chapter.chapter_ref
+            else:
+                # All other formats: chapter.chapter_ref is uniquified.
+                chapter_ref = chapter.chapter_ref
+                paragraph_ref = para.paragraph
 
             canonical_ref = _build_canonical_ref(book, chapter_ref, paragraph_ref)
-            cts_urn = _build_cts_urn(work.sc_number, book, chapter_ref, paragraph_ref)
+
+            # Final safety: deduplicate any remaining collisions (e.g.,
+            # multiple paragraphs with the same number within one chapter).
+            count = seen_refs.get(canonical_ref, 0) + 1
+            seen_refs[canonical_ref] = count
+            if count > 1:
+                suffix = chr(95 + count)  # 2→'_a', 3→'_b', ...
+                canonical_ref = f"{canonical_ref}_{suffix}"
+                seen_refs[canonical_ref] = 1
+
+            cts_urn = _build_cts_urn(
+                work.sc_number, book, chapter_ref, paragraph_ref
+            )
 
             citation_hierarchy: dict = {"sc_number": work.sc_number, "book": book}
             if chapter_ref is not None:
