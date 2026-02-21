@@ -61,11 +61,20 @@ class ImportStats:
 class SCImporter:
     """Handles PostgreSQL insertion for the SC import pipeline."""
 
+    SCHEMA = "free_will"
+
     def __init__(self, db_url: str, dry_run: bool = True):
         self.db_url = db_url
         self.dry_run = dry_run
         self.run_id = str(uuid.uuid4())
         self.stats = ImportStats()
+
+    def _connect(self) -> psycopg2.extensions.connection:
+        """Open a connection and set search_path to the project schema."""
+        conn = psycopg2.connect(self.db_url)
+        with conn.cursor() as cur:
+            cur.execute("SET search_path TO %s", (self.SCHEMA,))
+        return conn
 
     def ensure_collection_node(self) -> None:
         """Create the SC collection KG node if it doesn't exist."""
@@ -73,7 +82,7 @@ class SCImporter:
             logger.info("[DRY RUN] Would create/verify SC collection node")
             return
 
-        conn = psycopg2.connect(self.db_url)
+        conn = self._connect()
         try:
             with conn.cursor() as cur:
                 cur.execute(
@@ -95,8 +104,223 @@ class SCImporter:
         finally:
             conn.close()
 
-    def import_work(self, work: SCWork) -> None:
-        """Import one work into all 5 tables within a transaction."""
+    def find_duplicates(self, works: list[SCWork]) -> list[dict]:
+        """Find existing works in the DB that overlap with SC works.
+
+        Searches by author+title substring match and returns a list of
+        dicts with work_id, canonical_id, title, author, and source.
+        """
+        conn = self._connect()
+        try:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                # Get all SC node_ids we plan to insert
+                sc_node_ids = [w.node_id for w in works]
+
+                # 1. Check for exact canonical_id matches
+                cur.execute(
+                    """
+                    SELECT work_id, canonical_id, title, author, source
+                    FROM ancient_works
+                    WHERE canonical_id = ANY(%s)
+                    """,
+                    (sc_node_ids,),
+                )
+                exact = list(cur.fetchall())
+
+                # 2. Check for existing works by same authors with similar titles
+                authors = list({w.author for w in works if w.author})
+                cur.execute(
+                    """
+                    SELECT work_id, canonical_id, title, author, source,
+                           kg_work_id
+                    FROM ancient_works
+                    WHERE source != 'sources_chretiennes'
+                    ORDER BY author, title
+                    """,
+                )
+                all_existing = list(cur.fetchall())
+
+                # 3. Check for existing KG nodes that would conflict
+                cur.execute(
+                    """
+                    SELECT node_id, label, type
+                    FROM kg_nodes
+                    WHERE node_id = ANY(%s)
+                    """,
+                    (sc_node_ids,),
+                )
+                existing_nodes = list(cur.fetchall())
+
+            return {
+                "exact_canonical_matches": exact,
+                "all_existing_works": all_existing,
+                "existing_kg_nodes": existing_nodes,
+            }
+        finally:
+            conn.close()
+
+    def remove_work(self, work_id: str, canonical_id: str) -> dict:
+        """Remove an existing work and all its associated data.
+
+        Deletes in order: passage_citations, kg_edges, kg_nodes (Passage),
+        passages, kg_nodes (Work), ancient_works.
+        Returns counts of deleted rows.
+        """
+        conn = self._connect()
+        counts = {}
+        try:
+            with conn.cursor() as cur:
+                # 1. Delete passage_citations for this work's passages
+                cur.execute(
+                    """
+                    DELETE FROM passage_citations
+                    WHERE passage_id IN (
+                        SELECT passage_id FROM passages WHERE work_id = %s
+                    )
+                    """,
+                    (work_id,),
+                )
+                counts["passage_citations"] = cur.rowcount
+
+                # 2. Delete kg_edges where source or target is the work node
+                #    or any of its chapter nodes
+                cur.execute(
+                    """
+                    DELETE FROM kg_edges
+                    WHERE source_id = %s
+                       OR target_id = %s
+                       OR source_id IN (
+                           SELECT node_id FROM kg_nodes
+                           WHERE metadata->>'work_node_id' = %s
+                       )
+                       OR target_id IN (
+                           SELECT node_id FROM kg_nodes
+                           WHERE metadata->>'work_node_id' = %s
+                       )
+                    """,
+                    (canonical_id, canonical_id, canonical_id, canonical_id),
+                )
+                counts["kg_edges"] = cur.rowcount
+
+                # 3. Delete chapter/paragraph KG nodes for this work
+                cur.execute(
+                    """
+                    DELETE FROM kg_nodes
+                    WHERE metadata->>'work_node_id' = %s
+                    """,
+                    (canonical_id,),
+                )
+                counts["chapter_kg_nodes"] = cur.rowcount
+
+                # 4. Delete passages
+                cur.execute(
+                    "DELETE FROM passages WHERE work_id = %s",
+                    (work_id,),
+                )
+                counts["passages"] = cur.rowcount
+
+                # 5. Delete the Work KG node
+                cur.execute(
+                    "DELETE FROM kg_nodes WHERE node_id = %s",
+                    (canonical_id,),
+                )
+                counts["work_kg_node"] = cur.rowcount
+
+                # 6. Delete ancient_works row
+                cur.execute(
+                    "DELETE FROM ancient_works WHERE work_id = %s",
+                    (work_id,),
+                )
+                counts["ancient_works"] = cur.rowcount
+
+            conn.commit()
+            logger.info(
+                "Removed existing work %s (%s): %s",
+                canonical_id,
+                work_id,
+                counts,
+            )
+        except Exception as exc:
+            conn.rollback()
+            logger.error("Error removing work %s: %s", canonical_id, exc)
+            raise
+        finally:
+            conn.close()
+        return counts
+
+    def _kg_node_row(self, node: dict) -> tuple:
+        """Build a kg_nodes INSERT tuple, folding school/role into metadata."""
+        meta = dict(node["metadata"])
+        if node.get("school"):
+            meta["school"] = node["school"]
+        if node.get("role"):
+            meta["role"] = node["role"]
+        return (
+            node["node_id"],
+            node["label"],
+            node["type"],
+            node["description"],
+            node.get("period"),
+            json.dumps(meta),
+        )
+
+    def _ensure_author_nodes(self, works: list[SCWork]) -> None:
+        """Create Person kg_nodes for authors referenced by 'wrote' edges."""
+        if self.dry_run:
+            return
+
+        author_ids: dict[str, SCWork] = {}
+        for w in works:
+            if w.author_kg_id and w.author_kg_id not in author_ids:
+                author_ids[w.author_kg_id] = w
+
+        if not author_ids:
+            return
+
+        conn = self._connect()
+        try:
+            with conn.cursor() as cur:
+                rows = [
+                    (
+                        aid,
+                        w.author,
+                        "Person",
+                        f"Author of ancient texts (auto-created by SC import)",
+                        w.period,
+                        json.dumps({
+                            "run_id": self.run_id,
+                            "phase": 1,
+                            "auto_created": True,
+                        }),
+                    )
+                    for aid, w in author_ids.items()
+                ]
+                psycopg2.extras.execute_values(
+                    cur,
+                    """
+                    INSERT INTO kg_nodes
+                        (node_id, label, type, description, period, metadata)
+                    VALUES %s
+                    ON CONFLICT (node_id) DO NOTHING
+                    """,
+                    rows,
+                )
+            conn.commit()
+            logger.info(
+                "Ensured %d author node(s): %s",
+                len(author_ids),
+                ", ".join(author_ids.keys()),
+            )
+        finally:
+            conn.close()
+
+    def import_work(self, work: SCWork) -> dict:
+        """Import one work into all tables within a transaction.
+
+        Returns the mapped payload (needed for deferred edge insertion).
+        Edges are NOT inserted here — they are deferred to import_corpus()
+        so that all kg_nodes exist before FK-constrained edges are created.
+        """
         payload = map_work(work, self.run_id)
 
         # Accumulate statistics
@@ -121,9 +345,9 @@ class SCImporter:
                 len(payload["kg_edges"]),
                 len(payload["passage_citations"]),
             )
-            return
+            return payload
 
-        conn = psycopg2.connect(self.db_url)
+        conn = self._connect()
         try:
             with conn.cursor() as cur:
                 # 1. INSERT ancient_works
@@ -159,7 +383,7 @@ class SCImporter:
                     ),
                 )
 
-                # 2. INSERT passages (batched with execute_values)
+                # 2. INSERT passages (batched)
                 passage_rows = [
                     (
                         str(p["passage_id"]),
@@ -192,47 +416,26 @@ class SCImporter:
                 )
 
                 # 3. INSERT kg_nodes (Work)
-                wn = payload["work_kg_node"]
                 cur.execute(
                     """
                     INSERT INTO kg_nodes
-                        (node_id, label, type, description, period, school,
-                         role, metadata)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        (node_id, label, type, description, period, metadata)
+                    VALUES (%s, %s, %s, %s, %s, %s)
                     ON CONFLICT (node_id) DO NOTHING
                     """,
-                    (
-                        wn["node_id"],
-                        wn["label"],
-                        wn["type"],
-                        wn["description"],
-                        wn["period"],
-                        wn["school"],
-                        wn["role"],
-                        json.dumps(wn["metadata"]),
-                    ),
+                    self._kg_node_row(payload["work_kg_node"]),
                 )
 
                 # 4. INSERT kg_nodes (Chapters/Paragraphs — batched)
                 chapter_rows = [
-                    (
-                        cn["node_id"],
-                        cn["label"],
-                        cn["type"],
-                        cn["description"],
-                        cn["period"],
-                        cn["school"],
-                        cn["role"],
-                        json.dumps(cn["metadata"]),
-                    )
+                    self._kg_node_row(cn)
                     for cn in payload["chapter_kg_nodes"]
                 ]
                 psycopg2.extras.execute_values(
                     cur,
                     """
                     INSERT INTO kg_nodes
-                        (node_id, label, type, description, period, school,
-                         role, metadata)
+                        (node_id, label, type, description, period, metadata)
                     VALUES %s
                     ON CONFLICT (node_id) DO NOTHING
                     """,
@@ -240,29 +443,7 @@ class SCImporter:
                     page_size=500,
                 )
 
-                # 5. INSERT kg_edges (batched)
-                edge_rows = [
-                    (
-                        str(e["edge_id"]),
-                        e["source_id"],
-                        e["target_id"],
-                        e["relation"],
-                        json.dumps(e["metadata"]),
-                    )
-                    for e in payload["kg_edges"]
-                ]
-                psycopg2.extras.execute_values(
-                    cur,
-                    """
-                    INSERT INTO kg_edges
-                        (edge_id, source_id, target_id, relation, metadata)
-                    VALUES %s
-                    """,
-                    edge_rows,
-                    page_size=500,
-                )
-
-                # 6. INSERT passage_citations (batched)
+                # 5. INSERT passage_citations (batched)
                 citation_rows = [
                     (
                         str(c["citation_id"]),
@@ -285,6 +466,9 @@ class SCImporter:
                     page_size=500,
                 )
 
+                # NOTE: kg_edges are inserted in a separate pass by
+                # import_corpus() after ALL nodes exist, to satisfy FKs.
+
             conn.commit()
             logger.info(
                 "[%d] Imported %s: %d passages, %d chapter nodes",
@@ -302,16 +486,72 @@ class SCImporter:
         finally:
             conn.close()
 
-    def import_corpus(self, works: list[SCWork]) -> ImportStats:
-        """Import all works. Returns statistics."""
-        self.ensure_collection_node()
+        return payload
 
+    def _insert_all_edges(self, all_edges: list[dict]) -> None:
+        """Insert all kg_edges in one batch after all nodes exist."""
+        if self.dry_run or not all_edges:
+            return
+
+        conn = self._connect()
+        try:
+            with conn.cursor() as cur:
+                edge_rows = [
+                    (
+                        str(e["edge_id"]),
+                        e["source_id"],
+                        e["target_id"],
+                        e["relation"],
+                        json.dumps(e["metadata"]),
+                    )
+                    for e in all_edges
+                ]
+                psycopg2.extras.execute_values(
+                    cur,
+                    """
+                    INSERT INTO kg_edges
+                        (edge_id, source_id, target_id, relation, metadata)
+                    VALUES %s
+                    """,
+                    edge_rows,
+                    page_size=500,
+                )
+            conn.commit()
+            logger.info("Inserted %d kg_edges", len(all_edges))
+        except Exception as exc:
+            conn.rollback()
+            msg = f"ERROR inserting edges: {exc}"
+            logger.error(msg)
+            self.stats.errors.append(msg)
+            raise
+        finally:
+            conn.close()
+
+    def import_corpus(self, works: list[SCWork]) -> ImportStats:
+        """Import all works in 3 phases to satisfy FK constraints.
+
+        Phase 1: Create prerequisite nodes (collection, authors).
+        Phase 2: Import each work (ancient_works, passages, kg_nodes, citations).
+        Phase 3: Insert all kg_edges (all node targets now exist).
+        """
+        # Phase 1: prerequisite nodes
+        self.ensure_collection_node()
+        self._ensure_author_nodes(works)
+
+        # Phase 2: per-work data
+        all_edges: list[dict] = []
         for work in works:
             try:
-                self.import_work(work)
+                payload = self.import_work(work)
+                all_edges.extend(payload["kg_edges"])
             except Exception:
                 # Error already logged and recorded in stats
                 continue
+
+        # Phase 3: edges (all source_id/target_id nodes now exist)
+        if all_edges:
+            logger.info("Phase 3: inserting %d edges...", len(all_edges))
+            self._insert_all_edges(all_edges)
 
         return self.stats
 
@@ -321,7 +561,7 @@ class SCImporter:
             logger.info("[DRY RUN] Would rollback run %s", run_id)
             return
 
-        conn = psycopg2.connect(self.db_url)
+        conn = self._connect()
         try:
             with conn.cursor() as cur:
                 # Delete passage_citations via passages via ancient_works
