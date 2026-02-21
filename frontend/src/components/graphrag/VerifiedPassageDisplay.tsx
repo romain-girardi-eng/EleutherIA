@@ -175,7 +175,7 @@ export function VerifiedPassageDisplay({
 
                   {/* Metadata badges */}
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-500 border border-indigo-100">
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-orange-500 border border-amber-200">
                       {getLanguageLabel(passage.language)}
                     </span>
                     {passage.cts_urn && (

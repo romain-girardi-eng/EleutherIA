@@ -57,7 +57,7 @@ export default function AdvancedOptions(props: AdvancedOptionsProps) {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+        className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-600 transition-colors"
       >
         <Settings2 className={`w-3.5 h-3.5 transition-transform duration-200 ${open ? 'rotate-90' : ''}`} />
         Advanced options

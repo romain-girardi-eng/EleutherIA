@@ -36,7 +36,7 @@ export default function MobileGraphSheet({
   return (
     <>
       <motion.button
-        className="fixed bottom-24 right-4 z-50 flex lg:hidden items-center justify-center w-12 h-12 rounded-xl bg-gray-900 text-white shadow-lg"
+        className="fixed bottom-24 right-4 z-50 flex lg:hidden items-center justify-center w-12 h-12 rounded-xl bg-orange-600 text-white shadow-lg"
         onClick={() => setIsOpen(true)}
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}

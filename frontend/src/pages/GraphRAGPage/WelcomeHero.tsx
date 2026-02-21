@@ -53,17 +53,17 @@ export default function WelcomeHero({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-5xl md:text-6xl font-semibold text-gray-900 mb-3 drop-shadow-sm">
+          <h1 className="text-5xl md:text-6xl font-semibold text-stone-800 mb-3 drop-shadow-sm">
             <Typewriter
               text={['HiRAG', 'Knowledge Graph', 'Ancient Philosophy', 'Scholarly Q&A']}
               speed={100}
               waitTime={3500}
               deleteSpeed={60}
-              className="text-gray-900"
+              className="text-stone-800"
               cursorChar="_"
             />
           </h1>
-          <p className="text-base text-gray-600 max-w-lg mx-auto">{t('graphrag.description')}</p>
+          <p className="text-base text-stone-600 max-w-lg mx-auto">{t('graphrag.description')}</p>
         </motion.div>
 
         <motion.div
@@ -76,7 +76,7 @@ export default function WelcomeHero({
             <ShineBorder
               className="!p-0 bg-white/95 backdrop-blur-sm"
               borderRadius={9999}
-              color={['#3B82F6', '#6366F1', '#06B6D4']}
+              color={['#fdba74', '#f97316', '#fbbf24']}
             >
               <div className="flex gap-3 p-2">
                 <input
@@ -92,7 +92,7 @@ export default function WelcomeHero({
                 <button
                   type="submit"
                   disabled={!query.trim() || loading || streaming}
-                  className="px-8 py-3 bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all text-base font-medium whitespace-nowrap"
+                  className="px-8 py-3 bg-gradient-to-br from-orange-600 to-orange-500 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all text-base font-medium whitespace-nowrap"
                 >
                   {loading ? 'Thinking...' : t('graphrag.ask')}
                 </button>
@@ -106,7 +106,7 @@ export default function WelcomeHero({
             <button
               type="button"
               onClick={onDemo}
-              className="text-sm text-gray-400 hover:text-gray-700 transition-colors"
+              className="text-sm text-stone-400 hover:text-stone-600 transition-colors"
             >
               Try Demo
             </button>
