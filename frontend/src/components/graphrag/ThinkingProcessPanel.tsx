@@ -10,8 +10,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { ShineBorder } from '../ui/shine-border';
 
-// Very pale aurora colors for shine border
-const PALE_AURORA_COLORS = ["#e0e7ff", "#dbeafe", "#ede9fe"]; // indigo-100, blue-100, violet-100
+// Warm parchment shine border colors
+const PALE_AURORA_COLORS = ["#fdba74", "#f97316", "#fbbf24"]; // orange-300, orange-500, amber-400
 
 interface ThinkingProcessPanelProps {
   thinking: string;
@@ -42,19 +42,19 @@ export function ThinkingProcessPanel({
       borderRadius={12}
       borderWidth={1}
       duration={isStreaming ? 6 : 14}
-      className="bg-white/80 backdrop-blur-xl shadow-lg shadow-slate-100/30 mb-4 overflow-hidden"
+      className="bg-white/80 backdrop-blur-xl shadow-lg shadow-amber-100/30 mb-4 overflow-hidden"
     >
       {/* Header */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between px-4 py-3 hover:bg-indigo-50/30 transition-colors"
+        className="w-full flex items-center justify-between px-4 py-3 hover:bg-amber-50/30 transition-colors"
       >
         <div className="flex items-center gap-2">
           {/* Brain/lightbulb icon with animation */}
           <div className={`relative ${isStreaming ? 'animate-pulse' : ''}`}>
-            <div className="absolute inset-0 rounded-full bg-indigo-100/30 animate-ping" style={{ animationDuration: '2s' }} />
+            <div className="absolute inset-0 rounded-full bg-amber-100/30 animate-ping" style={{ animationDuration: '2s' }} />
             <svg
-              className="w-5 h-5 text-indigo-300 relative z-10"
+              className="w-5 h-5 text-orange-400 relative z-10"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -68,11 +68,11 @@ export function ThinkingProcessPanel({
             </svg>
           </div>
 
-          <span className="font-semibold text-slate-600">
+          <span className="font-semibold text-stone-600">
             {isStreaming ? 'Reasoning...' : 'Thought Process'}
           </span>
 
-          <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-400 border border-indigo-100">
+          <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-orange-500 border border-amber-200">
             Kimi K2
           </span>
 
@@ -95,7 +95,7 @@ export function ThinkingProcessPanel({
 
         {/* Expand/collapse icon */}
         <svg
-          className={`w-5 h-5 text-indigo-200 transition-transform duration-200 ${
+          className={`w-5 h-5 text-amber-300 transition-transform duration-200 ${
             isExpanded ? 'rotate-180' : ''
           }`}
           fill="none"
@@ -117,11 +117,11 @@ export function ThinkingProcessPanel({
           ref={contentRef}
           className="px-4 pb-4 max-h-96 overflow-y-auto"
         >
-          <div className="pl-4 border-l-2 border-indigo-100">
-            <pre className="text-sm text-slate-600 whitespace-pre-wrap font-mono leading-relaxed">
+          <div className="pl-4 border-l-2 border-amber-200">
+            <pre className="text-sm text-stone-600 whitespace-pre-wrap font-mono leading-relaxed">
               {thinking}
               {isStreaming && (
-                <span className="inline-block w-0.5 h-4 bg-indigo-200 animate-pulse ml-0.5" />
+                <span className="inline-block w-0.5 h-4 bg-orange-300 animate-pulse ml-0.5" />
               )}
             </pre>
           </div>
@@ -130,9 +130,9 @@ export function ThinkingProcessPanel({
 
       {/* Progress bar at bottom while streaming */}
       {isStreaming && (
-        <div className="h-1 bg-indigo-50 overflow-hidden">
+        <div className="h-1 bg-amber-50 overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-blue-200 via-indigo-200 to-violet-200"
+            className="h-full bg-gradient-to-r from-amber-200 via-orange-300 to-amber-200"
             style={{
               width: '100%',
               backgroundSize: '200% 100%',
@@ -163,10 +163,10 @@ export function ThinkingProcessCompact({
     : thinking;
 
   return (
-    <div className="mt-3 pt-3 border-t border-indigo-100/50">
+    <div className="mt-3 pt-3 border-t border-amber-200/40">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="flex items-center gap-2 text-sm text-indigo-400 hover:text-indigo-500 transition-colors"
+        className="flex items-center gap-2 text-sm text-orange-400 hover:text-orange-500 transition-colors"
       >
         <svg
           className="w-4 h-4"
@@ -198,15 +198,15 @@ export function ThinkingProcessCompact({
       </button>
 
       {isExpanded && (
-        <div className="mt-2 pl-4 border-l-2 border-indigo-100/50">
-          <pre className="text-xs text-slate-500 whitespace-pre-wrap font-mono max-h-64 overflow-y-auto">
+        <div className="mt-2 pl-4 border-l-2 border-amber-200/40">
+          <pre className="text-xs text-stone-500 whitespace-pre-wrap font-mono max-h-64 overflow-y-auto">
             {thinking}
           </pre>
         </div>
       )}
 
       {!isExpanded && thinking.length > 200 && (
-        <p className="mt-1 text-xs text-slate-400 italic line-clamp-2">
+        <p className="mt-1 text-xs text-stone-400 italic line-clamp-2">
           {preview}
         </p>
       )}

@@ -49,10 +49,10 @@ export default function ChatPanel({
   }, [messages]);
 
   return (
-    <div className="flex flex-col w-full lg:w-[65%] h-full overflow-hidden border-r border-gray-200">
+    <div className="flex flex-col w-full lg:w-[65%] h-full overflow-hidden border-r border-amber-200/40">
       {/* Fixed header */}
-      <div className="shrink-0 flex items-center justify-between px-6 xl:px-10 py-3 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
-        <h1 className="text-sm xl:text-base font-semibold text-gray-500 uppercase tracking-wider">HiRAG Q&A</h1>
+      <div className="shrink-0 flex items-center justify-between px-6 xl:px-10 py-3 border-b border-amber-200/40 bg-parchment-50/80 backdrop-blur-sm">
+        <h1 className="text-sm xl:text-base font-semibold text-stone-400 uppercase tracking-wider">HiRAG Q&A</h1>
       </div>
 
       {/* Scrollable messages */}

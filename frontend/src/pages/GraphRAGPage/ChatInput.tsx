@@ -24,11 +24,11 @@ export default function ChatInput({
   const { t } = useTranslation();
 
   return (
-    <div className="shrink-0 px-4 xl:px-10 2xl:px-16 py-3 xl:py-4 border-t border-gray-200 bg-white/80 backdrop-blur-sm">
+    <div className="shrink-0 px-4 xl:px-10 2xl:px-16 py-3 xl:py-4 border-t border-amber-200/40 bg-parchment-50/80 backdrop-blur-sm">
       <ShineBorder
         className="!p-0 bg-white/95 backdrop-blur-sm shadow-sm"
         borderRadius={9999}
-        color={['#3B82F6', '#6366F1', '#06B6D4']}
+        color={['#fdba74', '#f97316', '#fbbf24']}
       >
         <form onSubmit={onSubmit} className="p-2">
           <div className="flex gap-2">
@@ -54,7 +54,7 @@ export default function ChatInput({
               <button
                 type="submit"
                 disabled={loading || !query.trim()}
-                className="px-6 py-3 xl:py-4 bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium text-sm xl:text-base"
+                className="px-6 py-3 xl:py-4 bg-gradient-to-br from-orange-600 to-orange-500 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium text-sm xl:text-base"
               >
                 {loading ? 'Thinking...' : 'Ask'}
               </button>

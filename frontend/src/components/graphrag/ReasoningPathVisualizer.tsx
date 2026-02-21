@@ -58,8 +58,8 @@ export const ReasoningPathVisualizer: React.FC<ReasoningPathVisualizerProps> = (
 
   return (
     <div className="flex flex-col items-center justify-center py-8 w-full">
-      {/* Dark glass card for the loader */}
-      <div className="bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/10 flex flex-col items-center">
+      {/* Parchment glass card for the loader */}
+      <div className="bg-gradient-to-br from-parchment-100/95 via-parchment-50/95 to-parchment-100/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-amber-200/40 flex flex-col items-center">
         {/* Animated loader with changing word */}
         <div className="relative flex items-center justify-center">
           <AnimatePresence mode="wait">
@@ -81,7 +81,7 @@ export const ReasoningPathVisualizer: React.FC<ReasoningPathVisualizerProps> = (
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-4 text-sm text-gray-400 text-center max-w-md"
+            className="mt-4 text-sm text-stone-400 text-center max-w-md"
           >
             {activeStep.description}
           </motion.p>
@@ -89,15 +89,15 @@ export const ReasoningPathVisualizer: React.FC<ReasoningPathVisualizerProps> = (
 
         {/* Minimal progress indicator */}
         <div className="mt-6 w-48 mx-auto">
-          <div className="h-1 bg-gray-700 rounded-full overflow-hidden">
+          <div className="h-1 bg-stone-200 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-blue-400 via-purple-400 to-green-400"
+              className="h-full bg-gradient-to-r from-orange-400 via-amber-400 to-orange-300"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
             />
           </div>
-          <p className="text-xs text-gray-500 text-center mt-2">
+          <p className="text-xs text-stone-500 text-center mt-2">
             {completedCount} of {steps.length} steps
           </p>
         </div>

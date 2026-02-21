@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
 import { useAuth } from '../../context/AuthContext';
 import AuthModal from '../../components/AuthModal';
-import { AuroraBackground } from '../../components/ui/aurora-background';
 import NodeDetailPanel from '../../components/NodeDetailPanel';
 import RightPanel from '../../components/graphrag/RightPanel';
 import type { RightPanelState } from '../../components/graphrag/RightPanel';
@@ -529,7 +528,7 @@ export default function GraphRAGPage() {
   };
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto">
+    <div className="min-h-screen w-full bg-parchment-50">
       <div className="relative w-full min-h-screen overflow-hidden">
         <div className="relative z-10 min-h-screen">
 
@@ -551,7 +550,7 @@ export default function GraphRAGPage() {
           {/* TWO-COLUMN LAYOUT */}
           {(messages.length > 0 || streaming) && (
             <div
-              className="flex bg-white"
+              className="flex bg-parchment-50"
               style={{
                 position: 'fixed',
                 top: navHeight,
@@ -580,9 +579,9 @@ export default function GraphRAGPage() {
               />
 
               {/* RIGHT PANEL - 35% (desktop only) */}
-              <div className="hidden lg:flex flex-col w-[35%] h-full bg-[#020617]">
-                <div className="shrink-0 px-4 py-3 border-b border-white/10">
-                  <h2 className="text-sm font-semibold text-white/40 uppercase tracking-wider">Knowledge Graph</h2>
+              <div className="hidden lg:flex flex-col w-[35%] h-full bg-parchment-50 border-l border-amber-200/40">
+                <div className="shrink-0 px-4 py-3 border-b border-amber-200/40">
+                  <h2 className="text-sm font-semibold text-stone-400 uppercase tracking-wider">Knowledge Graph</h2>
                 </div>
                 <div className="flex-1 min-h-0 overflow-hidden">
                   <RightPanel
@@ -631,6 +630,6 @@ export default function GraphRAGPage() {
           <NodeDetailPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
         )}
       </div>
-    </AuroraBackground>
+    </div>
   );
 }

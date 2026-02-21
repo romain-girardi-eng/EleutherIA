@@ -40,11 +40,11 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
       <div
         className={`rounded-2xl ${
           isUser
-            ? 'bg-gradient-to-br from-gray-900 to-gray-800 shadow-md'
-            : 'bg-white border border-gray-200 shadow-sm'
+            ? 'bg-gradient-to-br from-stone-100 to-stone-50 border border-amber-200/60 shadow-md'
+            : 'bg-white border border-amber-200/40 shadow-sm'
         }`}
       >
-        <div className={`p-5 xl:p-7 ${isUser ? 'text-white' : 'text-gray-900'}`}>
+        <div className={`p-5 xl:p-7 ${isUser ? 'text-stone-800' : 'text-stone-800'}`}>
           {isUser ? (
             <p className="text-[15px] xl:text-base 2xl:text-lg leading-relaxed">{message.content}</p>
           ) : (
@@ -52,30 +52,30 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
               {/* Service badge + metadata row */}
               <div className="flex flex-wrap items-center gap-2">
                 {resp?.service && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] xl:text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-100">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] xl:text-xs font-semibold bg-amber-50 text-orange-600 border border-amber-200">
                     <Zap className="w-3 h-3 xl:w-3.5 xl:h-3.5" />
                     {resp.service}
                   </span>
                 )}
                 {llmModel && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] xl:text-xs font-medium bg-gray-50 text-gray-500 border border-gray-100">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] xl:text-xs font-medium bg-parchment-50 text-stone-500 border border-amber-200/40">
                     <Cpu className="w-3 h-3" />
                     {llmModel}
                   </span>
                 )}
                 {processingTime && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] xl:text-xs font-medium bg-gray-50 text-gray-500 border border-gray-100">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] xl:text-xs font-medium bg-parchment-50 text-stone-500 border border-amber-200/40">
                     <Clock className="w-3 h-3" />
                     {(processingTime / 1000).toFixed(1)}s
                   </span>
                 )}
                 {nodesUsed !== undefined && (
-                  <span className="text-[10px] xl:text-xs text-gray-400">
+                  <span className="text-[10px] xl:text-xs text-stone-400">
                     {nodesUsed} nodes, {edgesTraversed ?? 0} edges
                   </span>
                 )}
                 {tokensUsed !== undefined && (
-                  <span className="text-[10px] xl:text-xs text-gray-400">
+                  <span className="text-[10px] xl:text-xs text-stone-400">
                     {tokensUsed.toLocaleString()} tokens
                   </span>
                 )}
@@ -83,7 +83,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
 
               {/* Main answer content */}
               {sources && sources.length > 0 ? (
-                <div className="prose prose-sm xl:prose-base max-w-none prose-gray">
+                <div className="prose prose-sm xl:prose-base max-w-none prose-stone">
                   <CitationRenderer
                     content={message.content}
                     sources={sources}
@@ -96,17 +96,17 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                   />
                 </div>
               ) : (
-                <div className="prose prose-sm xl:prose-base max-w-none prose-gray">
+                <div className="prose prose-sm xl:prose-base max-w-none prose-stone">
                   <ReactMarkdown>{message.content}</ReactMarkdown>
                 </div>
               )}
 
               {/* Verified Passages (clickable original texts) */}
               {verifiedPassages && verifiedPassages.length > 0 && (
-                <div className="border-t border-gray-100 pt-3">
+                <div className="border-t border-amber-200/40 pt-3">
                   <button
                     onClick={() => setShowPassages(!showPassages)}
-                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-gray-700 hover:text-gray-900 transition-colors w-full"
+                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
                   >
                     <BookOpen className="w-4 h-4" />
                     <span>Verified Passages ({verifiedPassages.length})</span>
@@ -126,25 +126,25 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                           {verifiedPassages.map((passage, idx) => (
                             <div
                               key={passage.passage_id}
-                              className="rounded-lg border border-gray-100 bg-gray-50/50 overflow-hidden"
+                              className="rounded-lg border border-amber-200/40 bg-parchment-50/50 overflow-hidden"
                             >
                               {/* Passage header - always visible, clickable */}
                               <button
                                 onClick={() => setExpandedPassage(expandedPassage === idx ? null : idx)}
-                                className="w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors"
+                                className="w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-parchment-100 transition-colors"
                               >
                                 <span className="shrink-0 mt-0.5 inline-flex items-center justify-center w-5 h-5 rounded text-[10px] font-bold bg-amber-100 text-amber-700">
                                   {idx + 1}
                                 </span>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="text-xs xl:text-sm font-semibold text-gray-800">
+                                    <span className="text-xs xl:text-sm font-semibold text-stone-800">
                                       {passage.author}
                                     </span>
-                                    <span className="text-xs text-gray-500">
+                                    <span className="text-xs text-stone-500">
                                       {passage.work_title}
                                     </span>
-                                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-200 text-gray-600 font-mono">
+                                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-stone-200 text-stone-600 font-mono">
                                       {passage.reference}
                                     </span>
                                     {passage.confidence >= 0.8 && (
@@ -155,9 +155,9 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                                   </div>
                                 </div>
                                 {expandedPassage === idx ? (
-                                  <ChevronUp className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
+                                  <ChevronUp className="w-4 h-4 text-stone-400 shrink-0 mt-0.5" />
                                 ) : (
-                                  <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
+                                  <ChevronDown className="w-4 h-4 text-stone-400 shrink-0 mt-0.5" />
                                 )}
                               </button>
 
@@ -173,22 +173,22 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                                   >
                                     <div className="px-4 pb-4 space-y-2">
                                       {/* Original text */}
-                                      <div className="p-3 rounded-lg bg-white border border-gray-200">
-                                        <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-1 font-semibold">
+                                      <div className="p-3 rounded-lg bg-white border border-amber-200/60">
+                                        <p className="text-[10px] uppercase tracking-wider text-stone-400 mb-1 font-semibold">
                                           {passage.language === 'greek' ? 'Greek' : passage.language === 'latin' ? 'Latin' : passage.language}
                                         </p>
-                                        <p className="text-sm xl:text-base leading-relaxed font-serif text-gray-800 italic">
+                                        <p className="text-sm xl:text-base leading-relaxed font-serif text-stone-800 italic">
                                           {passage.original_text}
                                         </p>
                                       </div>
 
                                       {/* Transliteration if available */}
                                       {passage.transliteration && passage.transliteration !== passage.original_text && (
-                                        <div className="p-3 rounded-lg bg-blue-50/50 border border-blue-100">
-                                          <p className="text-[10px] uppercase tracking-wider text-blue-400 mb-1 font-semibold">
+                                        <div className="p-3 rounded-lg bg-amber-50/50 border border-amber-200/40">
+                                          <p className="text-[10px] uppercase tracking-wider text-amber-500 mb-1 font-semibold">
                                             Transliteration
                                           </p>
-                                          <p className="text-sm xl:text-base leading-relaxed text-blue-800">
+                                          <p className="text-sm xl:text-base leading-relaxed text-amber-800">
                                             {passage.transliteration}
                                           </p>
                                         </div>
@@ -197,7 +197,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                                       {/* CTS URN + navigate link */}
                                       <div className="flex items-center gap-3 pt-1">
                                         {passage.cts_urn && (
-                                          <span className="text-[10px] font-mono text-gray-400">
+                                          <span className="text-[10px] font-mono text-stone-400">
                                             {passage.cts_urn}
                                           </span>
                                         )}
@@ -206,7 +206,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                                             e.stopPropagation();
                                             navigate(`/texts?passage=${passage.passage_id}`);
                                           }}
-                                          className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 font-medium"
+                                          className="inline-flex items-center gap-1 text-xs text-orange-600 hover:text-orange-700 font-medium"
                                         >
                                           <ExternalLink className="w-3 h-3" />
                                           View in text reader
@@ -227,10 +227,10 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
 
               {/* Inline citation texts from citationTexts map */}
               {message.citationTexts && Object.keys(message.citationTexts).length > 0 && !verifiedPassages?.length && (
-                <div className="border-t border-gray-100 pt-3">
+                <div className="border-t border-amber-200/40 pt-3">
                   <button
                     onClick={() => setShowPassages(!showPassages)}
-                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-gray-700 hover:text-gray-900 transition-colors w-full"
+                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
                   >
                     <FileText className="w-4 h-4" />
                     <span>Referenced Texts ({Object.keys(message.citationTexts).length})</span>
@@ -248,24 +248,24 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                       >
                         <div className="mt-3 space-y-2">
                           {Object.entries(message.citationTexts).map(([citation, text]) => (
-                            <div key={citation} className="p-3 rounded-lg border border-gray-100 bg-gray-50/50">
-                              <p className="text-xs xl:text-sm font-semibold text-gray-700 mb-2">{citation}</p>
+                            <div key={citation} className="p-3 rounded-lg border border-amber-200/40 bg-parchment-50/50">
+                              <p className="text-xs xl:text-sm font-semibold text-stone-700 mb-2">{citation}</p>
                               {text.original && (
                                 <div className="mb-2">
-                                  <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-0.5 font-semibold">
+                                  <p className="text-[10px] uppercase tracking-wider text-stone-400 mb-0.5 font-semibold">
                                     {text.originalLanguage || 'Original'}
                                   </p>
-                                  <p className="text-sm xl:text-base leading-relaxed font-serif text-gray-700 italic">
+                                  <p className="text-sm xl:text-base leading-relaxed font-serif text-stone-700 italic">
                                     {text.original}
                                   </p>
                                 </div>
                               )}
                               {text.translation && (
                                 <div>
-                                  <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-0.5 font-semibold">
+                                  <p className="text-[10px] uppercase tracking-wider text-stone-400 mb-0.5 font-semibold">
                                     Translation
                                   </p>
-                                  <p className="text-sm xl:text-base leading-relaxed text-gray-600">
+                                  <p className="text-sm xl:text-base leading-relaxed text-stone-600">
                                     {text.translation}
                                   </p>
                                 </div>
@@ -281,10 +281,10 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
 
               {/* Sources panel (collapsible) */}
               {sources && sources.length > 0 && (
-                <div className="border-t border-gray-100 pt-3">
+                <div className="border-t border-amber-200/40 pt-3">
                   <button
                     onClick={() => setShowSources(!showSources)}
-                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-gray-700 hover:text-gray-900 transition-colors w-full"
+                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
                   >
                     <FileText className="w-4 h-4" />
                     <span>Sources ({sources.length})</span>
@@ -318,7 +318,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
             </div>
           )}
 
-          <div className={`text-[10px] xl:text-xs mt-3 ${isUser ? 'text-white/50' : 'text-gray-400'}`}>
+          <div className={`text-[10px] xl:text-xs mt-3 ${isUser ? 'text-stone-400' : 'text-stone-400'}`}>
             {typeof message.timestamp === 'string'
               ? new Date(message.timestamp).toLocaleTimeString()
               : message.timestamp.toLocaleTimeString()}

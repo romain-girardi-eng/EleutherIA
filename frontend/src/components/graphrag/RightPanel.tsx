@@ -56,7 +56,7 @@ export default function RightPanel({
       : undefined;
 
   return (
-    <div className={cn('flex flex-col h-full relative overflow-hidden bg-[#020617] rounded-xl', className)}>
+    <div className={cn('flex flex-col h-full relative overflow-hidden bg-parchment-50 rounded-xl', className)}>
       <AnimatePresence mode="wait">
         {/* IDLE */}
         {state === 'idle' && (
@@ -69,12 +69,12 @@ export default function RightPanel({
             className="flex-1 flex flex-col items-center justify-center text-center px-8 h-full"
           >
             <div className="space-y-5">
-              <div className="mx-auto flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 border border-white/10">
-                <Network className="w-7 h-7 text-white/30" />
+              <div className="mx-auto flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200/40">
+                <Network className="w-7 h-7 text-stone-400" />
               </div>
               <div className="space-y-1.5">
-                <p className="text-sm font-medium text-white/50">Knowledge Graph</p>
-                <p className="text-xs text-white/30 max-w-[200px] mx-auto leading-relaxed">
+                <p className="text-sm font-medium text-stone-600">Knowledge Graph</p>
+                <p className="text-xs text-stone-400 max-w-[200px] mx-auto leading-relaxed">
                   Ask a question to see the knowledge graph and its connections
                 </p>
               </div>
@@ -97,7 +97,7 @@ export default function RightPanel({
               {[0, 1, 2].map((i) => (
                 <motion.div
                   key={i}
-                  className="absolute inset-0 rounded-full border-2 border-blue-400/40"
+                  className="absolute inset-0 rounded-full border-2 border-orange-400/40"
                   initial={{ scale: 0.3, opacity: 0.8 }}
                   animate={{ scale: 1.5, opacity: 0 }}
                   transition={{
@@ -109,13 +109,13 @@ export default function RightPanel({
                 />
               ))}
               <div className="absolute inset-0 flex items-center justify-center">
-                <Network className="w-6 h-6 text-blue-400" />
+                <Network className="w-6 h-6 text-orange-500" />
               </div>
             </div>
             <div className="text-center space-y-1">
-              <p className="text-sm font-medium text-white/60">Building knowledge graph</p>
+              <p className="text-sm font-medium text-stone-600">Building knowledge graph</p>
               <motion.p
-                className="text-xs text-white/30"
+                className="text-xs text-stone-400"
                 animate={{ opacity: [0.3, 0.8, 0.3] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               >
@@ -168,7 +168,7 @@ export default function RightPanel({
             </div>
 
             {/* Source detail card bottom 60% */}
-            <div className="flex-1 p-3 overflow-hidden bg-white rounded-t-xl">
+            <div className="flex-1 p-3 overflow-hidden bg-parchment-50 rounded-t-xl">
               <AnimatePresence mode="wait">
                 {activeSource ? (
                   <SourceDetailCard
@@ -187,7 +187,7 @@ export default function RightPanel({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex items-center justify-center h-full text-sm text-gray-400"
+                    className="flex items-center justify-center h-full text-sm text-stone-400"
                   >
                     No source selected
                   </motion.div>
