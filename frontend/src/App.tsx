@@ -185,10 +185,12 @@ function AppContent() {
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-50 m-0",
-          // Always white on desktop (lg+)
-          "lg:bg-academic-paper lg:border-b lg:border-academic-border lg:shadow-sm",
-          // Mobile: transparent overlay on homepage, normal otherwise
-          isHomePage ? "bg-transparent" : "bg-academic-paper border-b border-academic-border shadow-sm"
+          // Desktop (lg+): warm parchment on inner pages, white on homepage
+          isHomePage
+            ? "lg:bg-academic-paper lg:border-b lg:border-academic-border lg:shadow-sm"
+            : "lg:bg-parchment-50 lg:border-b lg:border-amber-200/40 lg:shadow-sm",
+          // Mobile: transparent overlay on homepage, warm parchment otherwise
+          isHomePage ? "bg-transparent" : "bg-parchment-50 border-b border-amber-200/40 shadow-sm"
         )}
         id="navigation"
         style={{ marginTop: 0, paddingTop: 0 }}
@@ -251,7 +253,7 @@ function AppContent() {
             <button
               className={cn(
                 "lg:hidden p-2 rounded-lg transition-colors",
-                isHomePage ? "text-white hover:bg-white/10 ml-auto" : "hover:bg-gray-100"
+                isHomePage ? "text-white hover:bg-white/10 ml-auto" : "text-stone-600 hover:bg-stone-100"
               )}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
@@ -297,7 +299,7 @@ function AppContent() {
                   "lg:hidden overflow-hidden",
                   isHomePage
                     ? "bg-zinc-900/95 backdrop-blur-md border-t border-white/10"
-                    : "border-t border-academic-border"
+                    : "bg-parchment-50 border-t border-amber-200/40"
                 )}
               >
                 <div className="py-2 space-y-1">
@@ -338,7 +340,7 @@ function AppContent() {
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: 0.45 }}
-                      className="flex items-center justify-between pt-2 border-t border-academic-border"
+                      className="flex items-center justify-between pt-2 border-t border-amber-200/40"
                     >
                       <div className="flex items-center space-x-2 text-sm text-academic-muted">
                         <User className="w-4 h-4" />
@@ -482,6 +484,9 @@ function AppContent() {
 
 // Navigation Link Component
 function NavLink({ to, children, inverted = false }: { to: string; children: React.ReactNode; inverted?: boolean }) {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+
   return (
     <Link
       to={to}
@@ -489,8 +494,11 @@ function NavLink({ to, children, inverted = false }: { to: string; children: Rea
         "font-medium text-sm transition-colors block lg:inline-block py-0.5 lg:py-0 rounded px-2 lg:px-0 lg:hover:bg-transparent",
         inverted
           ? "text-white/80 hover:text-orange-300 hover:bg-white/5"
-          : "text-academic-text hover:text-primary-600 hover:bg-gray-50"
+          : isActive
+            ? "text-orange-600"
+            : "text-stone-600 hover:text-orange-600 hover:bg-stone-50"
       )}
+      aria-current={isActive ? 'page' : undefined}
     >
       {children}
     </Link>
