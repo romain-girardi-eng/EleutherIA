@@ -238,23 +238,48 @@ export function buildPageIndexContext(
 ): string {
   const parts: string[] = [];
 
-  // Section 1: Primary ancient text passages (from passage_citations — highest quality)
+  // Source numbering: KG nodes get [1]..[N], passages get [N+1]..[M]
+  // This matches the structuredSources order in graphrag.ts
+  const nodeCount = seedNodes.length;
+  let passageIdx = nodeCount;
+
+  // Section 1: KG entities (seed nodes from vector search) — numbered first
+  if (seedNodes.length > 0) {
+    parts.push('=== KNOWLEDGE GRAPH ENTITIES ===');
+
+    seedNodes.forEach((nodeResult, i) => {
+      const node = nodeResult.payload;
+      if (!node) return;
+      const name = node.label || node.node_id || 'Unknown';
+      const type = node.type || 'concept';
+      const desc = node.description || '';
+      const school = node.metadata?.school || node.school || '';
+      const period = node.period || '';
+      const meta = [school, period].filter(Boolean).join(', ');
+      parts.push(`[Source ${i + 1}] [${type}] ${name}${meta ? ` (${meta})` : ''}`);
+      if (desc) parts.push(desc); // FULL description
+      parts.push('');
+    });
+  }
+
+  // Section 2: Primary ancient text passages (from passage_citations — highest quality)
   if (linkedPassages.length > 0) {
     parts.push('=== PRIMARY ANCIENT SOURCES (from passage_citations database) ===');
     parts.push('These passages are directly linked to the knowledge graph entities found.');
     parts.push('');
 
     for (const p of linkedPassages) {
+      passageIdx++;
       const ref = p.ctsUrn || p.canonicalRef || `${p.book || ''}${p.chapter ? '.' + p.chapter : ''}${p.section ? '.' + p.section : ''}`;
       const lang = p.language === 'lat' ? 'Latin' : 'Greek';
-      parts.push(`[${lang} Source] ${p.author}, ${p.workTitle} (${ref})`);
+      parts.push(`[Source ${passageIdx}] [${lang} Source] ${p.author}, ${p.workTitle} (${ref})`);
       parts.push(`Linked to KG entity: ${p.kgNodeId} | Confidence: ${p.confidence}`);
       parts.push(p.textContent); // FULL text — no truncation
       parts.push('');
     }
   }
 
-  // Section 2: Semantic search passages (supplementary)
+  // Section 3: Semantic search passages (supplementary, not numbered — used as extra context)
   if (semanticPassages.length > 0) {
     parts.push('=== SUPPLEMENTARY PASSAGES (from semantic search) ===');
 
@@ -269,25 +294,6 @@ export function buildPageIndexContext(
       const label = ref ? `${author}, ${work} (${ref})` : `${author}, ${work}`;
       parts.push(`[Passage] ${label}`);
       parts.push(text); // FULL text
-      parts.push('');
-    }
-  }
-
-  // Section 3: KG entities (seed nodes from vector search)
-  if (seedNodes.length > 0) {
-    parts.push('=== KNOWLEDGE GRAPH ENTITIES ===');
-
-    for (const nodeResult of seedNodes) {
-      const node = nodeResult.payload;
-      if (!node) continue;
-      const name = node.label || node.node_id || 'Unknown';
-      const type = node.type || 'concept';
-      const desc = node.description || '';
-      const school = node.metadata?.school || node.school || '';
-      const period = node.period || '';
-      const meta = [school, period].filter(Boolean).join(', ');
-      parts.push(`[${type}] ${name}${meta ? ` (${meta})` : ''}`);
-      if (desc) parts.push(desc); // FULL description
       parts.push('');
     }
   }

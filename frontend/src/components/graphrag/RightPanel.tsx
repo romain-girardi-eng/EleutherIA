@@ -2,20 +2,24 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Network } from 'lucide-react';
 import CosmographView from './CosmographView';
 import SourceDetailCard from './SourceDetailCard';
+import PassageReaderPanel from './PassageReaderPanel';
 import { cn } from '../../utils/cn';
 import type { GraphRAGResponse, SourceCitation } from '../../types';
+import type { PassageContext } from '../../types/graphrag';
 
-type RightPanelState = 'idle' | 'loading' | 'graph' | 'source-detail';
+export type RightPanelState = 'idle' | 'loading' | 'graph' | 'source-detail' | 'passage-reader';
 
 interface RightPanelProps {
   state: RightPanelState;
   response: GraphRAGResponse | null;
   allResponses?: GraphRAGResponse[];
   activeSourceIndex: number | null;
+  passageContext?: PassageContext | null;
   onNodeClick: (nodeId: string) => void;
   onCloseDetail: () => void;
   onPrevSource: () => void;
   onNextSource: () => void;
+  onLoadMorePassages?: (direction: 'up' | 'down') => void;
   onHighlightRef?: (fn: (citationIndex: number) => void) => void;
   className?: string;
 }
@@ -25,10 +29,12 @@ export default function RightPanel({
   response,
   allResponses,
   activeSourceIndex,
+  passageContext,
   onNodeClick,
   onCloseDetail,
   onPrevSource,
   onNextSource,
+  onLoadMorePassages,
   onHighlightRef,
   className = '',
 }: RightPanelProps) {
@@ -188,6 +194,24 @@ export default function RightPanel({
                 )}
               </AnimatePresence>
             </div>
+          </motion.div>
+        )}
+
+        {/* PASSAGE READER */}
+        {state === 'passage-reader' && passageContext && (
+          <motion.div
+            key="passage-reader"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="flex-1 h-full"
+          >
+            <PassageReaderPanel
+              passageContext={passageContext}
+              onClose={onCloseDetail}
+              onLoadMore={onLoadMorePassages || (() => {})}
+            />
           </motion.div>
         )}
       </AnimatePresence>

@@ -213,3 +213,25 @@ export interface QualityMetrics {
   completeness_score?: number;
   caveats?: string[];
 }
+
+export interface ContextPassage {
+  passageId: string;
+  textContent: string;
+  canonicalRef: string;
+  author: string;
+  workTitle: string;
+  language: 'grc' | 'lat' | string;
+  ctsUrn?: string;
+  book?: string;
+  chapter?: string;
+  section?: string;
+  sequenceNumber: number;
+  isTarget: boolean;
+}
+
+export interface PassageContext {
+  target: ContextPassage;
+  passages: ContextPassage[];
+  workId: string;
+  totalPassagesInWork: number;
+}

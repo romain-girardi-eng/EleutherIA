@@ -8,6 +8,7 @@ interface CitationRendererProps {
   content: string;
   sources?: SourceCitation[];
   onNodeClick?: (nodeId: string) => void;
+  onPassageCitationClick?: (passageId: string) => void;
   className?: string;
   academicMode?: boolean; // Show enhanced confidence badges
   ancientCitationsMetadata?: Array<{
@@ -21,6 +22,7 @@ export function CitationRenderer({
   content,
   sources = [],
   onNodeClick,
+  onPassageCitationClick,
   className = '',
   academicMode = false,
   ancientCitationsMetadata = []
@@ -30,10 +32,21 @@ export function CitationRenderer({
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const tooltipRef = useRef<HTMLDivElement>(null);
 
+  // Resolve passage ID from a [P1] citation number
+  const resolvePassageId = (pNum: number): string | null => {
+    // Look for passage-type sources (nodeType 'Passage' or UUID-format nodeId)
+    const passageSources = sources.filter(s =>
+      s.nodeType === 'Passage' ||
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s.nodeId)
+    );
+    const passageSource = passageSources[pNum - 1];
+    return passageSource?.nodeId || null;
+  };
+
   // Parse content and replace citations with interactive elements
   const parseCitations = (text: string) => {
-    // Regular expression to match [1], [2], [3] etc.
-    const citationPattern = /\[(\d+)\]/g;
+    // Match both [1], [2] (KG refs) and [P1], [P2] (passage refs)
+    const citationPattern = /\[(P?)(\d+)\]/g;
 
     const parts: (string | React.ReactElement)[] = [];
     let lastIndex = 0;
@@ -45,26 +58,45 @@ export function CitationRenderer({
         parts.push(text.substring(lastIndex, match.index));
       }
 
-      const citationNumber = parseInt(match[1]);
-      const source = sources.find(s => s.id === citationNumber);
+      const isPassageCitation = match[1] === 'P';
+      const citationNumber = parseInt(match[2]);
 
-      // Find confidence score if in academic mode
-      const metadata = ancientCitationsMetadata[citationNumber - 1];
-      const confidence = metadata?.confidence;
+      if (isPassageCitation) {
+        // Passage citation [P1], [P2]
+        const passageId = resolvePassageId(citationNumber);
+        parts.push(
+          <PassageCitationLink
+            key={`pcitation-${citationNumber}-${match.index}`}
+            citationNumber={citationNumber}
+            passageId={passageId}
+            onClick={() => {
+              if (passageId && onPassageCitationClick) {
+                onPassageCitationClick(passageId);
+              }
+            }}
+          />
+        );
+      } else {
+        // Standard KG citation [1], [2]
+        const source = sources.find(s => s.id === citationNumber);
 
-      // Create clickable citation element
-      parts.push(
-        <CitationLink
-          key={`citation-${citationNumber}-${match.index}`}
-          citationNumber={citationNumber}
-          source={source}
-          onHover={(e, num) => handleCitationHover(e, num)}
-          onLeave={() => setHoveredCitation(null)}
-          onClick={() => handleCitationClick(source)}
-          confidence={confidence}
-          academicMode={academicMode}
-        />
-      );
+        // Find confidence score if in academic mode
+        const metadata = ancientCitationsMetadata[citationNumber - 1];
+        const confidence = metadata?.confidence;
+
+        parts.push(
+          <CitationLink
+            key={`citation-${citationNumber}-${match.index}`}
+            citationNumber={citationNumber}
+            source={source}
+            onHover={(e, num) => handleCitationHover(e, num)}
+            onLeave={() => setHoveredCitation(null)}
+            onClick={() => handleCitationClick(source)}
+            confidence={confidence}
+            academicMode={academicMode}
+          />
+        );
+      }
 
       lastIndex = match.index + match[0].length;
     }
@@ -170,6 +202,34 @@ export function CitationRenderer({
   );
 }
 
+// Passage Citation Link Component (for [P1], [P2] etc.)
+interface PassageCitationLinkProps {
+  citationNumber: number;
+  passageId: string | null;
+  onClick: () => void;
+}
+
+function PassageCitationLink({ citationNumber, passageId, onClick }: PassageCitationLinkProps) {
+  return (
+    <span
+      className={`inline-flex items-center cursor-pointer group ${passageId ? '' : 'opacity-50'}`}
+      onClick={passageId ? onClick : undefined}
+      title={passageId ? 'Click to read passage in context' : 'Passage not available'}
+    >
+      <span className="text-amber-600 hover:text-amber-800 font-medium transition-colors">
+        [P{citationNumber}]
+      </span>
+      {passageId && (
+        <span className="ml-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+          <svg className="w-3 h-3 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </span>
+      )}
+    </span>
+  );
+}
+
 // Citation Link Component
 interface CitationLinkProps {
   citationNumber: number;
@@ -188,7 +248,7 @@ function CitationLink({
   onLeave,
   onClick,
   confidence,
-  academicMode
+  academicMode,
 }: CitationLinkProps) {
   const getConfidenceBadgeColor = (conf: number) => {
     if (conf >= 0.9) return 'bg-green-100 text-green-800 border-green-300';
@@ -217,7 +277,7 @@ function CitationLink({
       {source && (
         <span className="ml-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
           <svg className="w-3 h-3 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
           </svg>
         </span>
       )}

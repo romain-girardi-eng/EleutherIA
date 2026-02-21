@@ -20,6 +20,7 @@ import { authMiddleware, optionalAuthMiddleware, rateLimitMiddleware, validateGr
 
 // PageIndex direct retrieval (v3 — simplified pipeline)
 import { getLinkedPassages, getNodeNeighbors, buildPageIndexContext } from '../services/pageindex-retrieval';
+import { PassageRetrievalService } from '../services/passage-retrieval';
 
 // 2025 Advanced RAG Services (kept for legacy endpoint)
 import { hydeSearch, hydeEnhancedSearch, generateHypotheticalDocument } from '../services/hyde';
@@ -941,19 +942,49 @@ graphragRoutes.get('/query/stream',
             nodeIds.map(id => db.getNode(id))
           );
 
-          const contextParts = [];
-          for (const node of nodeDetails.filter(n => n)) {
+          // Fetch linked passages for these KG nodes
+          const passageService = new PassageRetrievalService(c.env);
+          const linkedPassages = await passageService.fetchPassagesForNodes(nodeIds, 20);
+
+          const validNodes = nodeDetails.filter(n => n);
+          const contextParts: string[] = [];
+
+          // KG entities with numbered source labels
+          contextParts.push('=== KNOWLEDGE GRAPH ENTITIES ===');
+          validNodes.forEach((node, i) => {
             const nodeName = node.label || node.name || 'Unknown';
             const nodeDesc = typeof node.description === 'string' ? node.description : '';
-            contextParts.push(`[Entity] ${nodeName}: ${nodeDesc}`);
+            const type = node.type || 'concept';
+            const school = node.metadata?.school || '';
+            const period = node.period || '';
+            const meta = [school, period].filter(Boolean).join(', ');
+            contextParts.push(`[Source ${i + 1}] [${type}] ${nodeName}${meta ? ` (${meta})` : ''}`);
+            if (nodeDesc) contextParts.push(nodeDesc);
+            contextParts.push('');
+          });
+
+          // Linked passages with numbered source labels (continuing from node count)
+          if (linkedPassages.length > 0) {
+            contextParts.push('=== PRIMARY ANCIENT SOURCES (from passage_citations database) ===');
+            linkedPassages.forEach((p, i) => {
+              const ref = p.ctsUrn || p.canonicalRef || '';
+              const lang = p.language === 'lat' ? 'Latin' : 'Greek';
+              contextParts.push(`[Source ${validNodes.length + i + 1}] [${lang} Source] ${p.author}, ${p.workTitle} (${ref})`);
+              contextParts.push(p.textContent);
+              contextParts.push('');
+            });
           }
 
-          for (const edge of dualResults.edges.slice(0, graph_depth * 5)) {
-            const { source_id, target_id, relation, description } = edge.payload;
-            const edgeDesc = typeof description === 'string' ? description : '';
-            contextParts.push(
-              `[Relationship] ${source_id} --${relation}--> ${target_id}: ${edgeDesc}`
-            );
+          // Edges (not numbered — supplementary context)
+          if (dualResults.edges.length > 0) {
+            contextParts.push('=== RELATIONSHIPS ===');
+            for (const edge of dualResults.edges.slice(0, graph_depth * 5)) {
+              const { source_id, target_id, relation, description } = edge.payload;
+              const edgeDesc = typeof description === 'string' ? description : '';
+              contextParts.push(
+                `[Relationship] ${source_id} --${relation}--> ${target_id}: ${edgeDesc}`
+              );
+            }
           }
 
           const context = contextParts.join('\n\n');
@@ -961,19 +992,33 @@ graphragRoutes.get('/query/stream',
           // Step 5: Generate answer with REAL STREAMING
           sendEvent('status', { message: 'Generating answer...', step: 5, total_steps: 5 });
 
-          const prompt = `You are a scholarly expert on ancient philosophy and free will debates.
+          const prompt = `You are a world-class scholar of ancient Greek and Roman philosophy, specializing in debates about fate, free will, and moral responsibility.
 
-Context from knowledge graph:
+=== CONTEXT FROM KNOWLEDGE GRAPH AND ANCIENT TEXT DATABASE ===
+
 ${context}
 
-Question: ${query}
+=== END CONTEXT ===
 
-Provide a comprehensive answer based on the context above. Be precise and cite specific philosophers or texts when relevant.
+QUESTION: ${query}
 
-CRITICAL CITATION RULES:
-- When citing ancient sources, use ONLY chapter/section numbers that exist in the original works
-- NEVER confuse page numbers from modern publications (like "pp. 183-188") with ancient text section numbers
-- For Justin Martyr: First Apology has ~68 chapters, Dialogue with Trypho has ~142 chapters`;
+INSTRUCTIONS FOR YOUR SCHOLARLY ANSWER:
+
+1. **Quote original Greek/Latin text** directly from the passages provided above. Do NOT fabricate or reconstruct ancient text from memory. Only quote text that appears verbatim in the context above.
+
+2. **Provide translations** in parentheses after each Greek/Latin quotation.
+
+3. **Cite using numbered source references** like [1], [2], [3] corresponding to the [Source N] labels in the context above. Place the citation marker immediately after the relevant claim or quotation. For example: "Chrysippus argues that fate is compatible with moral responsibility [3]."
+
+4. **Use proper philosophical terminology** in the original language when available.
+
+5. **Ground every claim** in the textual evidence provided. If a claim is not supported by the passages above, say so explicitly.
+
+6. **Structure your answer** with clear sections and scholarly formatting.
+
+7. **IMPORTANT:** Every major claim or quotation MUST have a [N] citation marker referencing one of the numbered sources. This enables the reader to click through to the source.
+
+CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage exists in the context, say so rather than inventing a quotation.`;
 
           // 🚀 REAL STREAMING - With optional Kimi K2 thinking mode
           let fullAnswer = '';
@@ -1037,7 +1082,6 @@ CRITICAL CITATION RULES:
           }
 
           // Build reasoning_path for frontend visualization
-          const validNodes = nodeDetails.filter(n => n);
           const startingNodes = validNodes.slice(0, 5).map((node, i) => ({
             id: node.node_id || node.id || `node_${i}`,
             type: node.type || 'Concept',
@@ -1052,18 +1096,34 @@ CRITICAL CITATION RULES:
           }));
 
           // Build properly formatted SourceCitation[] for frontend
-          const formattedSources = validNodes.map((node, i) => ({
-            id: i + 1,  // Citation number [1], [2], etc.
-            nodeId: node.node_id || node.id || `source_${i}`,
-            nodeLabel: node.label || node.name || 'Unknown',
-            nodeType: node.type || 'concept',
-            content: node.description || '',
-            metadata: {
-              school: node.metadata?.school,
-              period: node.period,
-              author: node.metadata?.author,
-            }
-          }));
+          const formattedSources = [
+            // KG nodes first (matching [Source 1]..[N] in context)
+            ...validNodes.map((node, i) => ({
+              id: i + 1,
+              nodeId: node.node_id || node.id || `source_${i}`,
+              nodeLabel: node.label || node.name || 'Unknown',
+              nodeType: node.type || 'concept',
+              content: node.description || '',
+              metadata: {
+                school: node.metadata?.school,
+                period: node.period,
+                author: node.metadata?.author,
+              }
+            })),
+            // Linked passages (matching [Source N+1]..[M] in context)
+            ...linkedPassages.map((p, i) => ({
+              id: validNodes.length + i + 1,
+              nodeId: p.passageId,
+              nodeLabel: `${p.author}, ${p.workTitle}`,
+              nodeType: 'Passage' as string,
+              content: p.textContent.slice(0, 500),
+              metadata: {
+                author: p.author,
+                ctsUrn: p.ctsUrn,
+                confidence: p.confidence,
+              }
+            })),
+          ];
 
           // Build evidence package with ancient citations, CTS URNs, and evidence chains
           const evidencePackage = buildEvidencePackage(fullAnswer, dualResults.nodes, dualResults.edges);
@@ -1333,7 +1393,7 @@ INSTRUCTIONS FOR YOUR SCHOLARLY ANSWER:
 
 2. **Provide translations** in parentheses after each Greek/Latin quotation.
 
-3. **Cite precisely** using the format: Author, Work Section (e.g., "Cicero, De Fato 39" or "Origen, De Principiis 3.1.2"). Use ONLY references that exist in the passages above.
+3. **Cite using numbered source references** like [1], [2], [3] corresponding to the [Source N] labels in the context above. Place the citation marker immediately after the relevant claim or quotation. For example: "Chrysippus argues that fate is compatible with moral responsibility [3]." Use ONLY source numbers that exist in the context above.
 
 4. **Use proper philosophical terminology** in the original language: αὐτεξούσιον (self-determination), εἱμαρμένη (fate), liberum arbitrium (free choice), etc.
 
@@ -1345,6 +1405,8 @@ INSTRUCTIONS FOR YOUR SCHOLARLY ANSWER:
    - Your own analytical synthesis
 
 7. **Structure your answer** with clear sections, markdown headers, and scholarly formatting.
+
+8. **IMPORTANT:** Every major claim or quotation MUST have a [N] citation marker referencing one of the numbered sources. This enables the reader to click through to the source.
 
 CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage exists in the context, say "No passage in the database directly addresses this" rather than inventing a quotation.`;
 
