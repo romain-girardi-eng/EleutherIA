@@ -493,6 +493,7 @@ export default function GraphRAGPage() {
       }
       setStreaming(false);
       setStreamStatus('');
+      setRightPanelState('idle');
     }
   };
 
@@ -529,7 +530,7 @@ export default function GraphRAGPage() {
 
   return (
     <AuroraBackground className="!min-h-screen !h-auto">
-      <div className="relative min-h-screen overflow-hidden">
+      <div className="relative w-full min-h-screen overflow-hidden">
         <div className="relative z-10 min-h-screen">
 
           {/* WELCOME STATE */}
@@ -557,6 +558,7 @@ export default function GraphRAGPage() {
                 left: 0,
                 right: 0,
                 bottom: 0,
+                height: `calc(100vh - ${navHeight}px)`,
                 zIndex: 20,
               }}
             >
@@ -582,7 +584,7 @@ export default function GraphRAGPage() {
                 <div className="shrink-0 px-4 py-3 border-b border-white/10">
                   <h2 className="text-sm font-semibold text-white/40 uppercase tracking-wider">Knowledge Graph</h2>
                 </div>
-                <div className="flex-1 overflow-hidden">
+                <div className="flex-1 min-h-0 overflow-hidden">
                   <RightPanel
                     state={rightPanelState}
                     response={rightPanelResponse}
