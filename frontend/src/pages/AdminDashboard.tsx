@@ -16,7 +16,6 @@ import {
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { AuroraBackground } from '../components/ui/aurora-background';
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../api/client';
 import { formatNumber, formatRelativeTime } from '../i18n/config';
@@ -115,7 +114,7 @@ const AdminDashboard: React.FC = () => {
       case 'disconnected':
         return <XCircle className="w-5 h-5 text-red-500" />;
       default:
-        return <Clock className="w-5 h-5 text-gray-500" />;
+        return <Clock className="w-5 h-5 text-stone-500" />;
     }
   };
 
@@ -130,42 +129,42 @@ const AdminDashboard: React.FC = () => {
       case 'error':
         return 'bg-red-100 text-red-700';
       default:
-        return 'bg-gray-100 text-gray-700';
+        return 'bg-parchment-50 text-stone-600';
     }
   };
 
   if (!isAuthenticated) {
     return (
-      <AuroraBackground className="!min-h-screen !h-auto py-12">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
         <div className="text-center py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <Shield className="w-16 h-16 text-academic-muted mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">{t('admin.authRequired')}</h2>
+          <h2 className="text-xl font-display font-semibold mb-2">{t('admin.authRequired')}</h2>
           <p className="text-academic-muted">{t('admin.authRequiredDesc')}</p>
         </div>
-      </AuroraBackground>
+      </div>
     );
   }
 
   if (loading) {
     return (
-      <AuroraBackground className="!min-h-screen !h-auto py-12">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
         <div className="flex items-center justify-center min-h-[60vh] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-4">
             <RefreshCw className="w-12 h-12 animate-spin text-primary-600 mx-auto" />
             <p className="text-academic-muted">{t('common.loading')}</p>
           </div>
         </div>
-      </AuroraBackground>
+      </div>
     );
   }
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto py-12">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-academic-text flex items-center gap-3">
+          <h1 className="text-3xl font-display font-bold text-academic-text flex items-center gap-3">
             <LayoutDashboard className="w-8 h-8 text-primary-600" />
             {t('admin.title')}
           </h1>
@@ -202,7 +201,7 @@ const AdminDashboard: React.FC = () => {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {Object.entries(health.services).map(([service, status]) => (
-                <div key={service} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                <div key={service} className="flex items-center gap-3 p-3 bg-parchment-50 rounded-lg">
                   {getStatusIcon(status)}
                   <div>
                     <p className="font-medium capitalize">{service.replace('_', ' ')}</p>
@@ -363,7 +362,7 @@ const AdminDashboard: React.FC = () => {
                         <span className="capitalize">{component.replace('_', ' ')}</span>
                         <span className="font-mono">{score}%</span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="w-full bg-amber-200/60 rounded-full h-2">
                         <div
                           className={`h-2 rounded-full ${score >= 75 ? 'bg-green-500' : score >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
                           style={{ width: `${score}%` }}
@@ -393,7 +392,7 @@ const AdminDashboard: React.FC = () => {
                       <span className="capitalize">{item.language}</span>
                       <span className="font-mono">{item.count}</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-amber-200/60 rounded-full h-2">
                       <div
                         className="h-2 rounded-full bg-primary-600"
                         style={{ width: `${(item.count / stats.ancient_works) * 100}%` }}
@@ -417,7 +416,7 @@ const AdminDashboard: React.FC = () => {
                       <span>{item.period}</span>
                       <span className="font-mono">{item.count}</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-amber-200/60 rounded-full h-2">
                       <div
                         className="h-2 rounded-full bg-green-600"
                         style={{ width: `${(item.count / stats.ancient_works) * 100}%` }}
@@ -431,7 +430,7 @@ const AdminDashboard: React.FC = () => {
         </div>
       )}
       </div>
-    </AuroraBackground>
+    </div>
   );
 };
 

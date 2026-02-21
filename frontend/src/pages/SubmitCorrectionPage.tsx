@@ -13,7 +13,6 @@ import {
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
 import { useAuth } from '../context/AuthContext';
-import { AuroraBackground } from '../components/ui/aurora-background';
 
 interface ContributionForm {
   targetType: 'kg_node' | 'passage' | 'work';
@@ -68,7 +67,7 @@ const SubmitCorrectionPage: React.FC = () => {
 
   if (submitted) {
     return (
-      <AuroraBackground className="!min-h-screen !h-auto py-12">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div className="max-w-2xl mx-auto py-12 relative z-10">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
@@ -91,16 +90,16 @@ const SubmitCorrectionPage: React.FC = () => {
           </Button>
         </motion.div>
       </div>
-      </AuroraBackground>
+      </div>
     );
   }
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto py-12">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
     <div className="max-w-4xl mx-auto space-y-6 relative z-10">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-academic-text flex items-center gap-3">
+        <h1 className="text-3xl font-display font-bold text-academic-text flex items-center gap-3">
           <Edit3 className="w-8 h-8 text-primary-600" />
           {t('community.submitCorrection')}
         </h1>
@@ -164,7 +163,7 @@ const SubmitCorrectionPage: React.FC = () => {
                     className={`p-4 border rounded-lg flex flex-col items-center gap-2 transition-colors ${
                       form.targetType === option.value
                         ? 'border-primary-600 bg-primary-50 text-primary-700'
-                        : 'border-gray-200 hover:border-gray-300'
+                        : 'border-amber-200/60 hover:border-amber-300/80'
                     }`}
                   >
                     <option.icon className="w-6 h-6" />
@@ -315,7 +314,7 @@ const SubmitCorrectionPage: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-    </AuroraBackground>
+    </div>
   );
 };
 

@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { AuroraBackground } from '../components/ui/aurora-background';
 import { useLazyPassages } from '../hooks/useLazyPassages';
 import { cachedApiClient } from '../api/cachedClient';
 
@@ -212,32 +211,32 @@ export default function CanonicalTextReader() {
 
   if (loading) {
     return (
-      <AuroraBackground className="!min-h-screen !h-auto py-12">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
         <div className="flex items-center justify-center min-h-screen max-w-7xl mx-auto relative z-10">
         <div className="text-center">
-          <div className="inline-block w-8 h-8 border-2 border-gray-300 border-t-gray-900 rounded-full animate-spin mb-3"></div>
-          <p className="text-sm text-gray-500">{t('textReader.loading')}</p>
+          <div className="inline-block w-8 h-8 border-2 border-amber-200/60 border-t-gray-900 rounded-full animate-spin mb-3"></div>
+          <p className="text-sm text-stone-500">{t('textReader.loading')}</p>
         </div>
         </div>
-      </AuroraBackground>
+      </div>
     );
   }
 
   if (error || !work) {
     return (
-      <AuroraBackground className="!min-h-screen !h-auto py-12">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
         <div className="flex items-center justify-center min-h-screen max-w-7xl mx-auto relative z-10">
         <div className="text-center max-w-md">
           <p className="text-red-600 mb-4">{error || t('textReader.error.workNotFound')}</p>
-          <Link to="/texts" className="text-sm text-blue-600 hover:underline">← {t('textReader.nav.backToLibrary')}</Link>
+          <Link to="/texts" className="text-sm text-orange-600 hover:underline">← {t('textReader.nav.backToLibrary')}</Link>
         </div>
         </div>
-      </AuroraBackground>
+      </div>
     );
   }
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto py-12">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div className="min-h-screen relative z-10">
       {/* Minimal notification */}
       {notification && (
@@ -250,10 +249,10 @@ export default function CanonicalTextReader() {
       <header className="sticky top-0 z-40 bg-amber-50 border-b border-amber-100">
         <div className="max-w-6xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between mb-3">
-            <Link to="/texts" className="text-sm text-gray-500 hover:text-gray-900">← {t('textReader.nav.library')}</Link>
+            <Link to="/texts" className="text-sm text-stone-500 hover:text-stone-800">← {t('textReader.nav.library')}</Link>
             <button
               onClick={() => setShowTOC(!showTOC)}
-              className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
+              className="text-sm text-stone-600 hover:text-stone-800 flex items-center gap-1"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -263,8 +262,8 @@ export default function CanonicalTextReader() {
           </div>
 
           <div className="mb-2">
-            <h1 className="text-xl font-semibold text-gray-900">{work.title}</h1>
-            <p className="text-sm text-gray-600">{work.author}</p>
+            <h1 className="text-xl font-display font-semibold text-stone-800">{work.title}</h1>
+            <p className="text-sm text-stone-600">{work.author}</p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
@@ -275,7 +274,7 @@ export default function CanonicalTextReader() {
                 value={referenceSearch}
                 onChange={(e) => setReferenceSearch(e.target.value)}
                 placeholder={t('textReader.search.placeholder')}
-                className="flex-1 min-w-0 px-3 py-2 sm:py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
+                className="flex-1 min-w-0 px-3 py-2 sm:py-1.5 text-sm border border-amber-200/60 rounded focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
               />
               <button
                 type="submit"
@@ -285,24 +284,24 @@ export default function CanonicalTextReader() {
               </button>
             </form>
 
-            <div className="flex items-center justify-between sm:justify-start gap-2 sm:border-l border-gray-300 sm:pl-3 pt-2 sm:pt-0 border-t sm:border-t-0">
+            <div className="flex items-center justify-between sm:justify-start gap-2 sm:border-l border-amber-200/60 sm:pl-3 pt-2 sm:pt-0 border-t sm:border-t-0">
               <button
                 onClick={() => navigatePassage('prev')}
                 disabled={currentPassageIndex === 0}
-                className="p-2 sm:p-1.5 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+                className="p-2 sm:p-1.5 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 text-stone-600 hover:text-stone-800 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
                 title={t('textReader.nav.previous')}
               >
                 <svg className="w-5 h-5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              <span className="text-xs text-gray-500 min-w-[60px] text-center">
+              <span className="text-xs text-stone-500 min-w-[60px] text-center">
                 {t('textReader.nav.pageCount', { current: currentPassageIndex + 1, total: totalCount || passages.length })}
               </span>
               <button
                 onClick={() => navigatePassage('next')}
                 disabled={currentPassageIndex === passages.length - 1}
-                className="p-2 sm:p-1.5 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+                className="p-2 sm:p-1.5 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 text-stone-600 hover:text-stone-800 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
                 title={t('textReader.nav.next')}
               >
                 <svg className="w-5 h-5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -321,13 +320,13 @@ export default function CanonicalTextReader() {
             className="fixed inset-0 bg-black bg-opacity-20 z-40"
             onClick={() => setShowTOC(false)}
           />
-          <aside className="fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-gray-200 z-50 overflow-y-auto">
+          <aside className="fixed left-0 top-0 bottom-0 w-64 bg-parchment-50 border-r border-amber-200/60 z-50 overflow-y-auto">
             <div className="p-4">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-semibold text-gray-900">{t('textReader.toc.title')}</h2>
+                <h2 className="text-sm font-semibold text-stone-800">{t('textReader.toc.title')}</h2>
                 <button
                   onClick={() => setShowTOC(false)}
-                  className="text-gray-500 hover:text-gray-900"
+                  className="text-stone-500 hover:text-stone-800"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -340,7 +339,7 @@ export default function CanonicalTextReader() {
                   {/* Books structure */}
                   {Object.keys(toc.books).length > 0 && Object.entries(toc.books).map(([bookNum, bookData]) => (
                     <div key={bookNum} className="mb-2">
-                      <div className="text-xs font-medium text-gray-900 mb-1">{t('textReader.toc.book')} {bookNum}</div>
+                      <div className="text-xs font-medium text-stone-800 mb-1">{t('textReader.toc.book')} {bookNum}</div>
                       {Object.entries(bookData.chapters).map(([chNum, chData]) => (
                         <div key={chNum} className="ml-2 mb-1">
                           <div className="text-xs text-gray-700">{t('textReader.toc.chapter')} {chNum}</div>
@@ -348,7 +347,7 @@ export default function CanonicalTextReader() {
                             <button
                               key={section.passage_id}
                               onClick={() => jumpToTOCEntry(section.passage_id)}
-                              className="block w-full text-left text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-50 px-2 py-0.5 rounded"
+                              className="block w-full text-left text-xs text-stone-600 hover:text-stone-800 hover:bg-parchment-50 px-2 py-0.5 rounded"
                             >
                               {section.canonical_ref}
                             </button>
@@ -362,12 +361,12 @@ export default function CanonicalTextReader() {
                   {Object.keys(toc.books).length === 0 && Object.keys(toc.chapters).length > 0 &&
                     Object.entries(toc.chapters).map(([chNum, chData]) => (
                       <div key={chNum} className="mb-2">
-                        <div className="text-xs font-medium text-gray-900 mb-1">{t('textReader.toc.chapterFull')} {chNum}</div>
+                        <div className="text-xs font-medium text-stone-800 mb-1">{t('textReader.toc.chapterFull')} {chNum}</div>
                         {chData.sections.slice(0, 8).map(section => (
                           <button
                             key={section.passage_id}
                             onClick={() => jumpToTOCEntry(section.passage_id)}
-                            className="block w-full text-left text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-50 px-2 py-0.5 rounded"
+                            className="block w-full text-left text-xs text-stone-600 hover:text-stone-800 hover:bg-parchment-50 px-2 py-0.5 rounded"
                           >
                             {section.canonical_ref}
                           </button>
@@ -383,7 +382,7 @@ export default function CanonicalTextReader() {
                         <button
                           key={entry.passage_id}
                           onClick={() => jumpToTOCEntry(entry.passage_id)}
-                          className="block w-full text-left text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-50 px-2 py-1 rounded"
+                          className="block w-full text-left text-xs text-stone-600 hover:text-stone-800 hover:bg-parchment-50 px-2 py-1 rounded"
                         >
                           {entry.canonical_ref}
                         </button>
@@ -411,14 +410,14 @@ export default function CanonicalTextReader() {
               } transition-opacity`}
             >
               <div className="flex items-start gap-3 mb-3">
-                <span className="inline-block px-2 py-0.5 text-xs font-medium text-gray-900 bg-gray-100 rounded">
+                <span className="inline-block px-2 py-0.5 text-xs font-medium text-stone-800 bg-parchment-50 rounded">
                   {passage.canonical_ref}
                 </span>
                 {highlightPassages.includes(passage.passage_id) && (
-                  <span className="text-xs text-blue-600">{t('textReader.referenced')}</span>
+                  <span className="text-xs text-orange-600">{t('textReader.referenced')}</span>
                 )}
               </div>
-              <div className="text-gray-800 leading-relaxed" style={{ fontSize: '17px', lineHeight: '1.7' }}>
+              <div className="text-stone-800 leading-relaxed" style={{ fontSize: '17px', lineHeight: '1.7' }}>
                 {passage.text_content}
               </div>
             </article>
@@ -431,14 +430,14 @@ export default function CanonicalTextReader() {
               className="py-8 text-center"
             >
               {loadingMore ? (
-                <div className="flex items-center justify-center gap-2 text-gray-500">
-                  <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                <div className="flex items-center justify-center gap-2 text-stone-500">
+                  <div className="w-4 h-4 border-2 border-amber-200/60 border-t-gray-600 rounded-full animate-spin" />
                   <span className="text-sm">{t('textReader.loadingMore', 'Loading more passages...')}</span>
                 </div>
               ) : (
                 <button
                   onClick={loadMore}
-                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+                  className="px-4 py-2 text-sm text-stone-600 hover:text-stone-800 hover:bg-parchment-50 rounded transition-colors"
                 >
                   {t('textReader.loadMore', 'Load more')} ({progress.loaded} / {progress.total})
                 </button>
@@ -448,15 +447,15 @@ export default function CanonicalTextReader() {
 
           {/* All passages loaded indicator */}
           {!hasMore && passages.length > 0 && (
-            <div className="py-4 text-center text-sm text-gray-400">
+            <div className="py-4 text-center text-sm text-stone-400">
               {t('textReader.allLoaded', 'All passages loaded')} ({passages.length})
             </div>
           )}
         </div>
 
         {/* Footer info */}
-        <footer className="mt-12 pt-6 border-t border-gray-200">
-          <div className="text-xs text-gray-500">
+        <footer className="mt-12 pt-6 border-t border-amber-200/60">
+          <div className="text-xs text-stone-500">
             <p className="mb-1">{work.source}</p>
             {work.language && <p>{t('textReader.footer.language')}: {work.language.toUpperCase()}</p>}
           </div>
@@ -464,10 +463,10 @@ export default function CanonicalTextReader() {
       </main>
 
       {/* Keyboard shortcuts help (bottom corner, very subtle) */}
-      <div className="fixed bottom-4 left-4 text-xs text-gray-400">
+      <div className="fixed bottom-4 left-4 text-xs text-stone-400">
         {t('textReader.shortcuts.help')}
       </div>
       </div>
-    </AuroraBackground>
+    </div>
   );
 }

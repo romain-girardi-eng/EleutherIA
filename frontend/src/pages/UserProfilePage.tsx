@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { AuroraBackground } from '../components/ui/aurora-background';
 import { useAuth } from '../context/AuthContext';
 import { formatDate } from '../i18n/config';
 
@@ -89,11 +88,11 @@ const UserProfilePage: React.FC = () => {
       case 'bronze':
         return { color: 'bg-orange-100 text-orange-700 border-orange-200', label: t('community.badges.bronze'), icon: '🥉' };
       case 'silver':
-        return { color: 'bg-gray-100 text-gray-700 border-gray-200', label: t('community.badges.silver'), icon: '🥈' };
+        return { color: 'bg-parchment-50 text-stone-600 border-amber-200/60', label: t('community.badges.silver'), icon: '🥈' };
       case 'gold':
         return { color: 'bg-yellow-100 text-yellow-700 border-yellow-200', label: t('community.badges.gold'), icon: '🥇' };
       default:
-        return { color: 'bg-gray-100 text-gray-700', label: badge, icon: '🏅' };
+        return { color: 'bg-parchment-50 text-stone-600', label: badge, icon: '🏅' };
     }
   };
 
@@ -118,21 +117,21 @@ const UserProfilePage: React.FC = () => {
 
   if (!isAuthenticated && isOwnProfile) {
     return (
-      <AuroraBackground className="!min-h-screen !h-auto py-12">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
         <div className="text-center py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <User className="w-16 h-16 text-academic-muted mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">{t('community.authRequired')}</h2>
+          <h2 className="text-xl font-display font-semibold mb-2">{t('community.authRequired')}</h2>
           <p className="text-academic-muted mb-4">{t('community.authRequiredDesc')}</p>
           <Link to="/login">
             <Button>{t('nav.login')}</Button>
           </Link>
         </div>
-      </AuroraBackground>
+      </div>
     );
   }
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto py-12">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Profile Header */}
       <Card>
@@ -151,7 +150,7 @@ const UserProfilePage: React.FC = () => {
                     className="text-2xl font-bold border-b border-primary-600 focus:outline-none"
                   />
                 ) : (
-                  <h1 className="text-2xl font-bold text-academic-text">{profile.username}</h1>
+                  <h1 className="text-2xl font-display font-bold text-academic-text">{profile.username}</h1>
                 )}
                 <div className="flex items-center gap-2 text-academic-muted mt-1">
                   <Mail className="w-4 h-4" />
@@ -284,7 +283,7 @@ const UserProfilePage: React.FC = () => {
                   key={contribution.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                  className="p-4 border rounded-lg hover:bg-parchment-50 transition-colors"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
@@ -336,7 +335,7 @@ const UserProfilePage: React.FC = () => {
         </CardContent>
       </Card>
       </div>
-    </AuroraBackground>
+    </div>
   );
 };
 
