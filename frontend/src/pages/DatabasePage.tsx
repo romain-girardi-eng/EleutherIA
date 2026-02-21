@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../api/client';
-import { AuroraBackground } from '../components/ui/aurora-background';
 import { motion } from 'framer-motion';
 import { Typewriter } from '../components/ui/typewriter';
 
@@ -76,7 +75,7 @@ export default function DatabasePage() {
   };
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto !w-full pt-20 pb-12">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Modern Header */}
@@ -85,17 +84,17 @@ export default function DatabasePage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
+          <h1 className="text-5xl md:text-6xl font-display font-bold text-stone-800 mb-4">
             <Typewriter
               text={["Database Overview", "Knowledge Architecture", "Data Structure"]}
               speed={100}
               waitTime={3000}
               deleteSpeed={60}
-              className="text-gray-900"
+              className="text-stone-800"
               cursorChar="_"
             />
           </h1>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+          <p className="text-lg text-stone-600 max-w-2xl mx-auto">
             {t('database.subtitle')}
           </p>
         </motion.div>
@@ -107,16 +106,16 @@ export default function DatabasePage() {
           transition={{ delay: 0.2 }}
           className="flex flex-wrap justify-center gap-3"
         >
-          <span className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 shadow-sm border border-gray-200">
+          <span className="px-4 py-2 bg-parchment-100/70 backdrop-blur-sm rounded-full text-sm font-medium text-stone-600 shadow-sm border border-amber-200/60">
             {kgStats.nodes.toLocaleString()} Knowledge Graph Nodes
           </span>
-          <span className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 shadow-sm border border-gray-200">
+          <span className="px-4 py-2 bg-parchment-100/70 backdrop-blur-sm rounded-full text-sm font-medium text-stone-600 shadow-sm border border-amber-200/60">
             {kgStats.edges.toLocaleString()} Relationships
           </span>
-          <span className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 shadow-sm border border-gray-200">
+          <span className="px-4 py-2 bg-parchment-100/70 backdrop-blur-sm rounded-full text-sm font-medium text-stone-600 shadow-sm border border-amber-200/60">
             376 Ancient Texts
           </span>
-          <span className="px-4 py-2 bg-blue-50 backdrop-blur-sm rounded-full text-sm font-medium text-blue-700 shadow-sm border border-blue-200">
+          <span className="px-4 py-2 bg-amber-50 backdrop-blur-sm rounded-full text-sm font-medium text-orange-700 shadow-sm border border-amber-200/60">
             FAIR Compliant
           </span>
         </motion.div>
@@ -126,73 +125,73 @@ export default function DatabasePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
+          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
         >
           <div className="flex items-start gap-4 mb-6">
-            <BookOpen className="w-8 h-8 text-blue-600 flex-shrink-0" />
+            <BookOpen className="w-8 h-8 text-orange-600 flex-shrink-0" />
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('nav.texts')}</h2>
-              <p className="text-gray-600 leading-relaxed">
+              <h2 className="text-3xl font-display font-bold text-stone-800 mb-2">{t('nav.texts')}</h2>
+              <p className="text-stone-600 leading-relaxed">
                 Complete collection of Greek and Latin philosophical texts from the 4th century BCE to the 6th century CE
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl text-center border border-blue-200">
-              <div className="text-4xl font-bold text-blue-600 mb-2">376</div>
-              <div className="text-sm font-medium text-gray-700">Ancient Texts</div>
+            <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-6 rounded-xl text-center border border-amber-200/60">
+              <div className="text-4xl font-bold text-orange-600 mb-2">376</div>
+              <div className="text-sm font-medium text-stone-600">Ancient Texts</div>
             </div>
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl text-center border border-purple-200">
-              <div className="text-4xl font-bold text-purple-600 mb-2">109</div>
-              <div className="text-sm font-medium text-gray-700">Lemmatized Texts</div>
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl text-center border border-orange-200/60">
+              <div className="text-4xl font-bold text-orange-600 mb-2">109</div>
+              <div className="text-sm font-medium text-stone-600">Lemmatized Texts</div>
             </div>
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl text-center border border-green-200">
-              <div className="text-4xl font-bold text-green-600 mb-2">2</div>
-              <div className="text-sm font-medium text-gray-700">Languages (Greek & Latin)</div>
+            <div className="bg-gradient-to-br from-orange-50 to-parchment-50 p-6 rounded-xl text-center border border-amber-200/60">
+              <div className="text-4xl font-bold text-orange-600 mb-2">2</div>
+              <div className="text-sm font-medium text-stone-600">Languages (Greek & Latin)</div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl p-6 border border-gray-200">
-            <h3 className="font-bold text-lg text-gray-900 mb-4">Features & Capabilities</h3>
+          <div className="bg-gradient-to-br from-parchment-50 to-amber-50 rounded-xl p-6 border border-amber-200/60">
+            <h3 className="font-display font-bold text-lg text-stone-800 mb-4">Features & Capabilities</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex gap-3">
-                <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-600 mt-2"></div>
+                <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange-600 mt-2"></div>
                 <div>
-                  <div className="font-semibold text-gray-900 mb-1">Full-Text Search</div>
-                  <div className="text-sm text-gray-600">PostgreSQL full-text search across all 376 texts</div>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-2 h-2 rounded-full bg-purple-600 mt-2"></div>
-                <div>
-                  <div className="font-semibold text-gray-900 mb-1">Lemmatic Search</div>
-                  <div className="text-sm text-gray-600">Morphological analysis on 109 texts</div>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-2 h-2 rounded-full bg-green-600 mt-2"></div>
-                <div>
-                  <div className="font-semibold text-gray-900 mb-1">Complete Texts</div>
-                  <div className="text-sm text-gray-600">Full texts with proper encoding</div>
+                  <div className="font-semibold text-stone-800 mb-1">Full-Text Search</div>
+                  <div className="text-sm text-stone-600">PostgreSQL full-text search across all 376 texts</div>
                 </div>
               </div>
               <div className="flex gap-3">
                 <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange-600 mt-2"></div>
                 <div>
-                  <div className="font-semibold text-gray-900 mb-1">Structured Metadata</div>
-                  <div className="text-sm text-gray-600">Author, title, date, language, citations</div>
+                  <div className="font-semibold text-stone-800 mb-1">Lemmatic Search</div>
+                  <div className="text-sm text-stone-600">Morphological analysis on 109 texts</div>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange-600 mt-2"></div>
+                <div>
+                  <div className="font-semibold text-stone-800 mb-1">Complete Texts</div>
+                  <div className="text-sm text-stone-600">Full texts with proper encoding</div>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange-600 mt-2"></div>
+                <div>
+                  <div className="font-semibold text-stone-800 mb-1">Structured Metadata</div>
+                  <div className="text-sm text-stone-600">Author, title, date, language, citations</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-            <p className="text-sm text-gray-800">
+          <div className="mt-6 p-4 bg-amber-50 border border-amber-200/60 rounded-xl">
+            <p className="text-sm text-stone-800">
               <span className="font-semibold">Access:</span> All ancient texts are available through the{' '}
-              <a href="/texts" className="text-blue-600 hover:underline font-medium">Ancient Texts</a> browser
+              <a href="/texts" className="text-orange-600 hover:underline font-medium">Ancient Texts</a> browser
               and searchable via the{' '}
-              <a href="/search" className="text-blue-600 hover:underline font-medium">Hybrid Search</a> interface.
+              <a href="/search" className="text-orange-600 hover:underline font-medium">Hybrid Search</a> interface.
             </p>
           </div>
         </motion.div>
@@ -202,36 +201,36 @@ export default function DatabasePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
+          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
         >
           <div className="flex items-start gap-4 mb-6">
-            <Network className="w-8 h-8 text-blue-600 flex-shrink-0" />
+            <Network className="w-8 h-8 text-orange-600 flex-shrink-0" />
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('nav.visualizer')}</h2>
-              <p className="text-gray-600 leading-relaxed">
+              <h2 className="text-3xl font-display font-bold text-stone-800 mb-2">{t('nav.visualizer')}</h2>
+              <p className="text-stone-600 leading-relaxed">
                 Structured semantic network documenting philosophical debates, arguments, and conceptual developments
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-6 rounded-xl text-center border border-indigo-200">
-              <div className="text-4xl font-bold text-indigo-600 mb-2">{kgStats.nodes.toLocaleString()}</div>
-              <div className="text-sm font-medium text-gray-700">{t('kg.nodes')}</div>
+            <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-6 rounded-xl text-center border border-amber-200/60">
+              <div className="text-4xl font-bold text-orange-600 mb-2">{kgStats.nodes.toLocaleString()}</div>
+              <div className="text-sm font-medium text-stone-600">{t('kg.nodes')}</div>
             </div>
-            <div className="bg-gradient-to-br from-violet-50 to-purple-50 p-6 rounded-xl text-center border border-violet-200">
-              <div className="text-4xl font-bold text-violet-600 mb-2">{kgStats.edges.toLocaleString()}</div>
-              <div className="text-sm font-medium text-gray-700">{t('kg.edges')}</div>
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl text-center border border-orange-200/60">
+              <div className="text-4xl font-bold text-orange-600 mb-2">{kgStats.edges.toLocaleString()}</div>
+              <div className="text-sm font-medium text-stone-600">{t('kg.edges')}</div>
             </div>
-            <div className="bg-gradient-to-br from-pink-50 to-rose-50 p-6 rounded-xl text-center border border-pink-200">
-              <div className="text-4xl font-bold text-pink-600 mb-2">13</div>
-              <div className="text-sm font-medium text-gray-700">Node Types</div>
+            <div className="bg-gradient-to-br from-orange-50 to-parchment-50 p-6 rounded-xl text-center border border-amber-200/60">
+              <div className="text-4xl font-bold text-orange-600 mb-2">13</div>
+              <div className="text-sm font-medium text-stone-600">Node Types</div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl p-6 border border-gray-200">
-            <h3 className="font-bold text-lg text-gray-900 mb-4">Node Types Distribution</h3>
-            <p className="text-sm text-gray-600 mb-4">Click on any node type to view all items in alphabetical order</p>
+          <div className="bg-gradient-to-br from-parchment-50 to-amber-50 rounded-xl p-6 border border-amber-200/60">
+            <h3 className="font-display font-bold text-lg text-stone-800 mb-4">Node Types Distribution</h3>
+            <p className="text-sm text-stone-500 mb-4">Click on any node type to view all items in alphabetical order</p>
             <div className="space-y-2">
               <NodeTypeItem type="Persons" typeKey="person" count={161} description="Philosophers, theologians, authors" items={nodeTypeData['person'] || []} expanded={expandedTypes.has('person')} onToggle={() => toggleType('person')} />
               <NodeTypeItem type="Arguments" typeKey="argument" count={117} description="Specific philosophical arguments" items={nodeTypeData['argument'] || []} expanded={expandedTypes.has('argument')} onToggle={() => toggleType('argument')} />
@@ -241,12 +240,12 @@ export default function DatabasePage() {
             </div>
           </div>
 
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-            <p className="text-sm text-gray-800">
+          <div className="mt-6 p-4 bg-amber-50 border border-amber-200/60 rounded-xl">
+            <p className="text-sm text-stone-800">
               <span className="font-semibold">Visualization:</span> Explore the knowledge graph interactively through the{' '}
-              <a href="/visualizer" className="text-blue-600 hover:underline font-medium">{t('nav.visualizer')}</a>
+              <a href="/visualizer" className="text-orange-600 hover:underline font-medium">{t('nav.visualizer')}</a>
               {' '}or query it semantically via{' '}
-              <a href="/graphrag" className="text-blue-600 hover:underline font-medium">{t('nav.graphrag')}</a>.
+              <a href="/graphrag" className="text-orange-600 hover:underline font-medium">{t('nav.graphrag')}</a>.
             </p>
           </div>
         </motion.div>
@@ -256,33 +255,33 @@ export default function DatabasePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
+          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
         >
           <div className="flex items-start gap-4 mb-6">
-            <GraduationCap className="w-8 h-8 text-blue-600 flex-shrink-0" />
+            <GraduationCap className="w-8 h-8 text-orange-600 flex-shrink-0" />
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('nav.bibliography')}</h2>
-              <p className="text-gray-600 leading-relaxed">
+              <h2 className="text-3xl font-display font-bold text-stone-800 mb-2">{t('nav.bibliography')}</h2>
+              <p className="text-stone-600 leading-relaxed">
                 Comprehensive bibliography of secondary literature supporting knowledge graph annotations
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl text-center border border-amber-200">
-              <div className="text-4xl font-bold text-amber-600 mb-2">1125+</div>
-              <div className="text-sm font-medium text-gray-700">Bibliography References</div>
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl text-center border border-amber-200/60">
+              <div className="text-4xl font-bold text-orange-600 mb-2">1125+</div>
+              <div className="text-sm font-medium text-stone-600">Bibliography References</div>
             </div>
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl text-center border border-green-200">
-              <div className="text-4xl font-bold text-green-600 mb-2">91.8%</div>
-              <div className="text-sm font-medium text-gray-700">Citation Coverage</div>
+            <div className="bg-gradient-to-br from-orange-50 to-parchment-50 p-6 rounded-xl text-center border border-amber-200/60">
+              <div className="text-4xl font-bold text-orange-600 mb-2">91.8%</div>
+              <div className="text-sm font-medium text-stone-600">Citation Coverage</div>
             </div>
           </div>
 
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-            <p className="text-sm text-gray-800">
+          <div className="mt-6 p-4 bg-amber-50 border border-amber-200/60 rounded-xl">
+            <p className="text-sm text-stone-800">
               <span className="font-semibold">Access:</span> View the complete bibliography at{' '}
-              <a href="/bibliography" className="text-blue-600 hover:underline font-medium">{t('nav.bibliography')}</a> page.
+              <a href="/bibliography" className="text-orange-600 hover:underline font-medium">{t('nav.bibliography')}</a> page.
             </p>
           </div>
         </motion.div>
@@ -292,64 +291,64 @@ export default function DatabasePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
+          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
         >
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">{t('database.schema')}</h2>
+          <h2 className="text-3xl font-display font-bold text-stone-800 mb-6">{t('database.schema')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
-              <h3 className="font-bold text-lg text-blue-800 mb-3">Findable</h3>
-              <ul className="space-y-2 text-sm text-gray-700">
+            <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-6 rounded-xl border border-amber-200/60">
+              <h3 className="font-display font-bold text-lg text-orange-800 mb-3">Findable</h3>
+              <ul className="space-y-2 text-sm text-stone-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-600">•</span>
+                  <span className="text-orange-600">•</span>
                   <span>Unique persistent identifiers for all nodes</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-600">•</span>
+                  <span className="text-orange-600">•</span>
                   <span>Rich metadata with controlled vocabularies</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-600">•</span>
-                  <span>DOI: <a href="https://doi.org/10.5281/zenodo.17379490" className="text-blue-600 hover:underline">10.5281/zenodo.17379490</a></span>
+                  <span className="text-orange-600">•</span>
+                  <span>DOI: <a href="https://doi.org/10.5281/zenodo.17379490" className="text-orange-600 hover:underline">10.5281/zenodo.17379490</a></span>
                 </li>
               </ul>
             </div>
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
-              <h3 className="font-bold text-lg text-green-800 mb-3">Accessible</h3>
-              <ul className="space-y-2 text-sm text-gray-700">
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl border border-orange-200/60">
+              <h3 className="font-display font-bold text-lg text-orange-800 mb-3">Accessible</h3>
+              <ul className="space-y-2 text-sm text-stone-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600">•</span>
+                  <span className="text-orange-600">•</span>
                   <span>Open JSON format (13 MB)</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600">•</span>
+                  <span className="text-orange-600">•</span>
                   <span>RESTful API with full documentation</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600">•</span>
+                  <span className="text-orange-600">•</span>
                   <span>CC BY 4.0 license</span>
                 </li>
               </ul>
             </div>
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-200">
-              <h3 className="font-bold text-lg text-purple-800 mb-3">Interoperable</h3>
-              <ul className="space-y-2 text-sm text-gray-700">
+            <div className="bg-gradient-to-br from-orange-50 to-parchment-50 p-6 rounded-xl border border-amber-200/60">
+              <h3 className="font-display font-bold text-lg text-orange-800 mb-3">Interoperable</h3>
+              <ul className="space-y-2 text-sm text-stone-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600">•</span>
+                  <span className="text-orange-600">•</span>
                   <span>JSON Schema validation (Draft 07)</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600">•</span>
+                  <span className="text-orange-600">•</span>
                   <span>Standard philosophical taxonomies</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600">•</span>
+                  <span className="text-orange-600">•</span>
                   <span>Compatible with Cytoscape, Gephi, Neo4j</span>
                 </li>
               </ul>
             </div>
-            <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-200">
-              <h3 className="font-bold text-lg text-orange-800 mb-3">Reusable</h3>
-              <ul className="space-y-2 text-sm text-gray-700">
+            <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-6 rounded-xl border border-amber-200/60">
+              <h3 className="font-display font-bold text-lg text-orange-800 mb-3">Reusable</h3>
+              <ul className="space-y-2 text-sm text-stone-600">
                 <li className="flex items-start gap-2">
                   <span className="text-orange-600">•</span>
                   <span>Complete provenance documentation</span>
@@ -372,26 +371,26 @@ export default function DatabasePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
+          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
         >
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Technical Infrastructure</h2>
+          <h2 className="text-3xl font-display font-bold text-stone-800 mb-6">Technical Infrastructure</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-200">
-              <h3 className="font-bold text-blue-800 mb-2">PostgreSQL</h3>
-              <p className="text-sm text-gray-700">Relational database with full-text search, lemmatic matching, and JSON support</p>
+            <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-6 rounded-xl border border-amber-200/60">
+              <h3 className="font-display font-bold text-orange-800 mb-2">PostgreSQL</h3>
+              <p className="text-sm text-stone-600">Relational database with full-text search, lemmatic matching, and JSON support</p>
             </div>
-            <div className="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-xl border border-purple-200">
-              <h3 className="font-bold text-purple-800 mb-2">Qdrant Cloud</h3>
-              <p className="text-sm text-gray-700">Vector database storing 3072-dimensional embeddings for semantic search</p>
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl border border-orange-200/60">
+              <h3 className="font-display font-bold text-orange-800 mb-2">Qdrant Cloud</h3>
+              <p className="text-sm text-stone-600">Vector database storing 3072-dimensional embeddings for semantic search</p>
             </div>
-            <div className="bg-gradient-to-br from-green-50 to-teal-50 p-6 rounded-xl border border-green-200">
-              <h3 className="font-bold text-green-800 mb-2">Gemini API</h3>
-              <p className="text-sm text-gray-700">Text embedding (text-embedding-004) and LLM synthesis (Gemini 2.0 Flash)</p>
+            <div className="bg-gradient-to-br from-orange-50 to-parchment-50 p-6 rounded-xl border border-amber-200/60">
+              <h3 className="font-display font-bold text-orange-800 mb-2">Gemini API</h3>
+              <p className="text-sm text-stone-600">Text embedding (text-embedding-004) and LLM synthesis (Gemini 2.0 Flash)</p>
             </div>
           </div>
         </motion.div>
       </div>
-    </AuroraBackground>
+    </div>
   );
 }
 
@@ -415,27 +414,27 @@ function NodeTypeItem({
   const navigate = useNavigate();
 
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white">
+    <div className="border border-amber-200/60 rounded-xl overflow-hidden bg-parchment-50">
       <button
         onClick={onToggle}
-        className="w-full flex justify-between items-start p-4 hover:bg-gray-50 transition-colors cursor-pointer text-left"
+        className="w-full flex justify-between items-start p-4 hover:bg-parchment-100/70 transition-colors cursor-pointer text-left"
       >
         <div className="flex items-start gap-2 flex-1">
           {expanded ? (
-            <ChevronDown className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <ChevronDown className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
           ) : (
-            <ChevronRight className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <ChevronRight className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
           )}
           <div>
-            <div className="font-semibold text-gray-900">{type}</div>
-            <div className="text-xs text-gray-600 mt-0.5">{description}</div>
+            <div className="font-semibold text-stone-800">{type}</div>
+            <div className="text-xs text-stone-500 mt-0.5">{description}</div>
           </div>
         </div>
-        <div className="text-lg font-bold text-blue-600 ml-4">{count}</div>
+        <div className="text-lg font-bold text-orange-600 ml-4">{count}</div>
       </button>
 
       {expanded && items.length > 0 && (
-        <div className="border-t border-gray-200 bg-gray-50 p-4">
+        <div className="border-t border-amber-200/60 bg-parchment-50 p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 max-h-96 overflow-y-auto">
             {items.map((item, index) => (
               <WorkItemWithLink
@@ -483,17 +482,17 @@ function WorkItemWithLink({
   }, [item.id, typeKey]);
 
   return (
-    <div className="text-sm text-gray-800 p-2 bg-white rounded border border-gray-200 hover:border-blue-300 transition-colors">
+    <div className="text-sm text-stone-800 p-2 bg-parchment-50 rounded border border-amber-200/60 hover:border-orange-300 transition-colors">
       <div className="flex items-start justify-between gap-2">
         <span className="flex-1">{item.label}</span>
         {typeKey === 'work' && (
           <>
             {checking ? (
-              <span className="text-xs text-gray-400 flex-shrink-0">...</span>
+              <span className="text-xs text-stone-400 flex-shrink-0">...</span>
             ) : textId ? (
               <button
                 onClick={() => navigate(`/texts/${textId}`)}
-                className="flex-shrink-0 text-blue-600 hover:text-blue-700 transition-colors"
+                className="flex-shrink-0 text-orange-600 hover:text-orange-700 transition-colors"
                 title={`Read ${item.label} in text viewer`}
               >
                 <ExternalLink className="w-4 h-4" />
