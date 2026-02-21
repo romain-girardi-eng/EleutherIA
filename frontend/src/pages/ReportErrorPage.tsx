@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GradientButton } from '../components/ui/gradient-button';
-import { AuroraBackground } from '../components/ui/aurora-background';
 import { useToast } from '../components/ui/Toast';
 
 type ErrorType =
@@ -76,11 +75,11 @@ ${contactName || contactEmail || contactOrcid ? `## Contact Information\n${conta
   };
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto py-12">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Header */}
       <section className="academic-card">
-        <h1 className="text-3xl font-serif font-bold mb-4">{t('reportError.title')}</h1>
+        <h1 className="text-3xl font-serif font-display font-bold mb-4">{t('reportError.title')}</h1>
         <div className="prose max-w-none text-academic-text space-y-3">
           <p>
             {t('reportError.intro')}
@@ -99,7 +98,7 @@ ${contactName || contactEmail || contactOrcid ? `## Contact Information\n${conta
 
       {/* Error Report Form */}
       <section className="academic-card">
-        <h2 className="text-2xl font-serif font-bold mb-6">{t('reportError.errorDetails')}</h2>
+        <h2 className="text-2xl font-serif font-display font-bold mb-6">{t('reportError.errorDetails')}</h2>
 
         <div className="space-y-6">
           {/* Error Type */}
@@ -263,7 +262,7 @@ ${contactName || contactEmail || contactOrcid ? `## Contact Information\n${conta
 
       {/* Submission Options */}
       <section className="academic-card">
-        <h2 className="text-2xl font-serif font-bold mb-4">{t('reportError.submitReport')}</h2>
+        <h2 className="text-2xl font-serif font-display font-bold mb-4">{t('reportError.submitReport')}</h2>
         <p className="text-sm text-academic-muted mb-6">
           Choose how you'd like to submit your error report:
         </p>
@@ -315,7 +314,7 @@ ${contactName || contactEmail || contactOrcid ? `## Contact Information\n${conta
 
       {/* Guidelines */}
       <section className="academic-card bg-academic-bg">
-        <h2 className="text-xl font-serif font-bold mb-4">{t('reportError.guidelines')}</h2>
+        <h2 className="text-xl font-serif font-display font-bold mb-4">{t('reportError.guidelines')}</h2>
         <div className="prose max-w-none text-sm space-y-3">
           <p><strong>{t('reportError.whatToReport')}</strong></p>
           <ul className="list-disc list-inside space-y-1 ml-4">
@@ -340,6 +339,6 @@ ${contactName || contactEmail || contactOrcid ? `## Contact Information\n${conta
         </div>
       </section>
       </div>
-    </AuroraBackground>
+    </div>
   );
 }

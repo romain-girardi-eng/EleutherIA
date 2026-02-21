@@ -15,7 +15,6 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { GradientButton } from '../components/ui/gradient-button';
-import { AuroraBackground } from '../components/ui/aurora-background';
 import { apiClient } from '../api/client';
 
 interface FeatureCardProps {
@@ -45,17 +44,17 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description, exa
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.5 }}
-      className="bg-white rounded-xl shadow-md p-6 border border-gray-200 hover:shadow-xl transition-all duration-300"
+      className="bg-parchment-100/70 rounded-xl shadow-md p-6 border border-amber-200/60 hover:shadow-xl transition-all duration-300"
     >
       <div className="flex items-start gap-4">
         <div className={`p-3 ${bgColorClass} rounded-lg`}>
           <div className={textColorClass}>{icon}</div>
         </div>
         <div className="flex-1">
-          <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
-          <p className="text-gray-600 mb-3">{description}</p>
+          <h3 className="text-xl font-bold text-stone-800 mb-2">{title}</h3>
+          <p className="text-stone-600 mb-3">{description}</p>
           <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
-            <p className="text-sm text-gray-700 italic">"{example}"</p>
+            <p className="text-sm text-stone-600 italic">"{example}"</p>
           </div>
         </div>
       </div>
@@ -83,13 +82,13 @@ const StatCard: React.FC<StatCardProps> = ({ label, value, icon, delay, color = 
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay, duration: 0.5 }}
-      className="bg-white rounded-xl shadow-md hover:shadow-xl p-6 border border-gray-200 transition-shadow duration-300"
+      className="bg-parchment-100/70 rounded-xl shadow-md hover:shadow-xl p-6 border border-amber-200/60 transition-shadow duration-300"
     >
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-gray-600">{label}</span>
+        <span className="text-sm font-medium text-stone-600">{label}</span>
         <div className={colorClasses}>{icon}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900">{value}</div>
+      <div className="text-3xl font-bold text-stone-800">{value}</div>
     </motion.div>
   );
 };
@@ -157,7 +156,7 @@ export default function GraphRAGShowcase() {
   }, []);
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto py-12">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div className="space-y-8 relative z-10">
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-12 lg:py-20">
@@ -174,7 +173,7 @@ export default function GraphRAGShowcase() {
             </span>
           </div>
 
-          <h1 className="text-4xl lg:text-6xl font-serif font-bold text-gray-900 mb-6 flex flex-wrap items-center justify-center gap-3">
+          <h1 className="text-4xl lg:text-6xl font-serif font-display font-bold text-stone-800 mb-6 flex flex-wrap items-center justify-center gap-3">
             GraphRAG Question Answering
             <a
               href="#hirag-technology"
@@ -199,7 +198,7 @@ export default function GraphRAGShowcase() {
             }
           `}</style>
 
-          <p className="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
+          <p className="text-xl lg:text-2xl text-stone-600 max-w-3xl mx-auto mb-8 leading-relaxed">
             The world's first <span className="font-bold text-primary-700">Graph-based Retrieval-Augmented Generation</span> system
             for ancient debates on free will. Get scholarly answers grounded in {kgStats.nodes.toLocaleString()} nodes, {kgStats.edges.toLocaleString()} relationships, and {kgStats.sources.toLocaleString()} sources.
           </p>
@@ -220,7 +219,7 @@ export default function GraphRAGShowcase() {
                 const element = document.getElementById('how-it-works');
                 element?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-primary-50 text-primary-700 font-semibold rounded-xl border-2 border-primary-400 hover:border-primary-600 shadow-md hover:shadow-lg transition-all duration-300"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-parchment-50 hover:bg-primary-50 text-primary-700 font-semibold rounded-xl border-2 border-primary-400 hover:border-primary-600 shadow-md hover:shadow-lg transition-all duration-300"
             >
               {t('graphrag.howItWorks')}
             </button>
@@ -264,13 +263,13 @@ export default function GraphRAGShowcase() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.7 }}
-          className="bg-white rounded-2xl shadow-2xl p-8 mb-16 border border-gray-200"
+          className="bg-parchment-100/70 rounded-2xl shadow-2xl p-8 mb-16 border border-amber-200/60"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 bg-[#769687]/10 rounded-lg">
               <Search className="w-6 h-6 text-[#769687]" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">{t('graphrag.suggestions')}</h2>
+            <h2 className="text-2xl font-display font-bold text-stone-800">{t('graphrag.suggestions')}</h2>
           </div>
 
           <div className="space-y-3">
@@ -291,12 +290,12 @@ export default function GraphRAGShowcase() {
                 <div className="flex items-start gap-3">
                   <CheckCircle
                     className={`w-5 h-5 mt-0.5 ${
-                      activeDemo === idx ? 'text-[#769687]' : 'text-gray-400'
+                      activeDemo === idx ? 'text-[#769687]' : 'text-stone-400'
                     }`}
                   />
                   <div className="flex-1">
-                    <p className="text-gray-900 font-medium italic mb-1">"{demo.query}"</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-stone-800 font-medium italic mb-1">"{demo.query}"</p>
+                    <p className="text-sm text-stone-600">
                       <span className="font-semibold text-[#769687]">Demonstrates:</span> {demo.highlight}
                     </p>
                   </div>
@@ -305,7 +304,7 @@ export default function GraphRAGShowcase() {
             ))}
           </div>
 
-          <div className="mt-6 pt-6 border-t border-gray-200 text-center">
+          <div className="mt-6 pt-6 border-t border-amber-200/60 text-center">
             <button
               onClick={() => navigate('/graphrag')}
               className="inline-flex items-center gap-2 text-[#769687] hover:text-[#5a7366] font-semibold"
@@ -325,10 +324,10 @@ export default function GraphRAGShowcase() {
             transition={{ duration: 0.7 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl lg:text-4xl font-serif font-display font-bold text-stone-800 mb-4">
               Why GraphRAG is Revolutionary
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-stone-600 max-w-2xl mx-auto">
               Traditional search finds keywords. GraphRAG understands relationships,
               traces intellectual genealogies, and synthesizes scholarly answers.
             </p>
@@ -431,7 +430,7 @@ export default function GraphRAGShowcase() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1, duration: 0.5 }}
-                className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-primary-200 shadow-md hover:shadow-lg transition-shadow"
+                className="bg-parchment-100/70 backdrop-blur-sm rounded-xl p-6 border border-primary-200 shadow-md hover:shadow-lg transition-shadow"
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 bg-primary-200 text-primary-800 rounded-full flex items-center justify-center font-bold text-xl">
@@ -439,7 +438,7 @@ export default function GraphRAGShowcase() {
                   </div>
                   <h3 className="text-xl font-bold text-primary-900">{item.title}</h3>
                 </div>
-                <p className="text-gray-700 leading-relaxed">{item.description}</p>
+                <p className="text-stone-600 leading-relaxed">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -452,7 +451,7 @@ export default function GraphRAGShowcase() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="bg-white rounded-2xl shadow-2xl p-8 lg:p-12 border border-gray-200 mb-16 scroll-mt-20"
+          className="bg-parchment-100/70 rounded-2xl shadow-2xl p-8 lg:p-12 border border-amber-200/60 mb-16 scroll-mt-20"
         >
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 bg-[#769687]/10 border border-[#769687]/30 rounded-full px-4 py-2 mb-4">
@@ -461,14 +460,14 @@ export default function GraphRAGShowcase() {
                 Powered by Cutting-Edge Research
               </span>
             </div>
-            <h2 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl lg:text-4xl font-serif font-bold text-stone-800 mb-4">
               Built on HiRAG Architecture
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-2">
+            <p className="text-lg text-stone-600 max-w-3xl mx-auto mb-2">
               Our system implements <span className="font-bold text-[#769687]">HiRAG (Hierarchical Retrieval-Augmented Generation)</span>,
               a state-of-the-art approach that organizes knowledge hierarchically to enhance semantic understanding and improve retrieval quality.
             </p>
-            <p className="text-sm text-gray-500 max-w-2xl mx-auto mb-4">
+            <p className="text-sm text-stone-500 max-w-2xl mx-auto mb-4">
               HiRAG outperforms traditional RAG by 87.6% vs 12.4% and surpasses standard GraphRAG by 64.1% vs 35.9% on comprehensive benchmarks.
             </p>
             <a
@@ -485,13 +484,13 @@ export default function GraphRAGShowcase() {
 
           {/* HiRAG Architecture Image */}
           <div className="mb-8">
-            <div className="bg-white rounded-xl p-8 border-2 border-gray-300 shadow-md">
+            <div className="bg-parchment-50 rounded-xl p-8 border-2 border-amber-200/60 shadow-md">
               <img
                 src="/hirag-architecture.png"
                 alt="HiRAG Architecture showing HiIndex indexing with hierarchical knowledge and HiRetrieval retrieval with hierarchical knowledge, including meta summary entities, summary entities, normal entities, GMM clustering, LLM summarization, community reports, reasoning paths, and key entity descriptions"
-                className="w-full h-auto rounded-lg bg-white"
+                className="w-full h-auto rounded-lg bg-parchment-50"
               />
-              <div className="mt-4 text-center text-sm text-gray-600">
+              <div className="mt-4 text-center text-sm text-stone-600">
                 <p className="font-medium mb-1">HiRAG Architecture: Hierarchical Knowledge Organization</p>
                 <p className="text-xs">
                   Source: Huang et al. (2025).{' '}
@@ -524,13 +523,13 @@ export default function GraphRAGShowcase() {
                 <div className="p-2 bg-[#769687]/20 rounded-lg">
                   <Network className="w-6 h-6 text-[#769687]" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">HiIndex: Hierarchical Indexing</h3>
+                <h3 className="text-xl font-bold text-stone-800">HiIndex: Hierarchical Indexing</h3>
               </div>
-              <p className="text-gray-700 leading-relaxed mb-3">
+              <p className="text-stone-600 leading-relaxed mb-3">
                 Constructs a multi-layer knowledge structure by organizing documents from detailed local information
                 (individual text chunks) to high-level global summaries (community reports), connected by bridge knowledge.
               </p>
-              <ul className="space-y-2 text-sm text-gray-600">
+              <ul className="space-y-2 text-sm text-stone-600">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-[#769687] mt-0.5 flex-shrink-0" />
                   <span><strong>Normal Entities:</strong> Base-level knowledge nodes from source documents</span>
@@ -551,13 +550,13 @@ export default function GraphRAGShowcase() {
                 <div className="p-2 bg-primary-200 rounded-lg">
                   <Search className="w-6 h-6 text-primary-700" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">HiRetrieval: Smart Retrieval</h3>
+                <h3 className="text-xl font-bold text-stone-800">HiRetrieval: Smart Retrieval</h3>
               </div>
-              <p className="text-gray-700 leading-relaxed mb-3">
+              <p className="text-stone-600 leading-relaxed mb-3">
                 Performs intelligent retrieval across the knowledge hierarchy using both local specificity and global context,
                 generating comprehensive responses with full reasoning transparency.
               </p>
-              <ul className="space-y-2 text-sm text-gray-600">
+              <ul className="space-y-2 text-sm text-stone-600">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
                   <span><strong>Global Search:</strong> Community reports for broad conceptual coverage</span>
@@ -575,11 +574,11 @@ export default function GraphRAGShowcase() {
           </div>
 
           <div className="mt-8 bg-slate-50 border border-slate-200 rounded-xl p-6">
-            <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <h4 className="font-bold text-stone-800 mb-3 flex items-center gap-2">
               <Zap className="w-5 h-5 text-[#769687]" />
               Why HiRAG Makes a Difference
             </h4>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-stone-600 leading-relaxed">
               Traditional flat RAG treats all information equally, missing the natural hierarchy in human knowledge.
               HiRAG mirrors how scholars actually organize information—from specific textual details to broader thematic
               summaries—enabling our system to simultaneously capture granular citations and comprehensive conceptual relationships.
@@ -597,10 +596,10 @@ export default function GraphRAGShowcase() {
           transition={{ duration: 0.7 }}
           className="text-center"
         >
-          <h2 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl lg:text-4xl font-serif font-bold text-stone-800 mb-6">
             Ready to Explore Ancient Free Will Debates?
           </h2>
-          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-stone-600 mb-8 max-w-2xl mx-auto">
             Experience the future of philosophical research. Ask questions about free will, fate, and moral responsibility,
             and get answers backed by {kgStats.sources.toLocaleString()} scholarly sources.
           </p>
@@ -617,6 +616,6 @@ export default function GraphRAGShowcase() {
         </motion.div>
       </div>
       </div>
-    </AuroraBackground>
+    </div>
   );
 }

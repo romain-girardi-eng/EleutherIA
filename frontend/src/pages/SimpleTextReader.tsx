@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { AuroraBackground } from '../components/ui/aurora-background';
+
 
 interface SimpleText {
   id: string;
@@ -75,18 +75,18 @@ export default function SimpleTextReader() {
 
   if (loading) {
     return (
-      <AuroraBackground className="!min-h-screen !h-auto py-12">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
         <div style={{ padding: '20px', fontFamily: 'sans-serif' }} className="max-w-7xl mx-auto relative z-10">
         <h1>{t('simpleTextReader.loading')}</h1>
         <p>{t('simpleTextReader.fetchingTextId', { textId })}</p>
         </div>
-      </AuroraBackground>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <AuroraBackground className="!min-h-screen !h-auto py-12">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
         <div style={{ padding: '20px', fontFamily: 'sans-serif' }} className="max-w-7xl mx-auto relative z-10">
         <h1 style={{ color: 'red' }}>{t('simpleTextReader.error')}</h1>
         <p>{error}</p>
@@ -95,13 +95,13 @@ export default function SimpleTextReader() {
           {t('simpleTextReader.backToTexts')}
         </Link>
         </div>
-      </AuroraBackground>
+      </div>
     );
   }
 
   if (!text) {
     return (
-      <AuroraBackground className="!min-h-screen !h-auto py-12">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
         <div style={{ padding: '20px', fontFamily: 'sans-serif' }} className="max-w-7xl mx-auto relative z-10">
         <h1>{t('simpleTextReader.noTextFound')}</h1>
         <p>{t('simpleTextReader.textId')}: {textId}</p>
@@ -109,12 +109,12 @@ export default function SimpleTextReader() {
           {t('simpleTextReader.backToTexts')}
         </Link>
         </div>
-      </AuroraBackground>
+      </div>
     );
   }
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto py-12">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div style={{ padding: '20px', fontFamily: 'serif', maxWidth: '800px', margin: '0 auto' }} className="relative z-10">
       <Link to="/texts" style={{ color: 'blue', textDecoration: 'underline', marginBottom: '20px', display: 'block' }}>
         ← {t('simpleTextReader.backToTexts')}
@@ -157,6 +157,6 @@ export default function SimpleTextReader() {
         )}
       </div>
       </div>
-    </AuroraBackground>
+    </div>
   );
 }

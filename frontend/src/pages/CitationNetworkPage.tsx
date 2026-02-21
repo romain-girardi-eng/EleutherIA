@@ -14,7 +14,6 @@ import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
 import apiClient from '../api/client';
 import { formatNumber } from '../i18n/config';
-import { AuroraBackground } from '../components/ui/aurora-background';
 import { AILoader } from '../components/ui/ai-loader';
 
 interface InfluentialNode {
@@ -109,21 +108,21 @@ const CitationNetworkPage: React.FC = () => {
 
   if (loading) {
     return (
-      <AuroraBackground className="!min-h-screen !h-auto !w-full pt-20 pb-12">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div className="flex items-center justify-center min-h-[60vh] relative z-10">
         <div className="text-center space-y-4">
           <AILoader text="Loading" size="lg" />
           <p className="text-academic-muted mt-6">{t('common.loading')}</p>
         </div>
       </div>
-      </AuroraBackground>
+      </div>
     );
   }
 
   if (error) {
     const isAuthError = error.includes('Authentication required');
     return (
-      <AuroraBackground className="!min-h-screen !h-auto !w-full pt-20 pb-12">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div className="text-center py-12 space-y-4 relative z-10">
         <p className="text-red-600">{error}</p>
         {isAuthError ? (
@@ -136,17 +135,17 @@ const CitationNetworkPage: React.FC = () => {
           </Button>
         )}
       </div>
-      </AuroraBackground>
+      </div>
     );
   }
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto !w-full pt-20 pb-12">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
     <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-academic-text flex items-center gap-3">
+          <h1 className="text-3xl font-display font-bold text-academic-text flex items-center gap-3">
             <Network className="w-8 h-8 text-primary-600" />
             {t('citationNetwork.title')}
           </h1>
@@ -265,11 +264,11 @@ const CitationNetworkPage: React.FC = () => {
                     </thead>
                     <tbody>
                       {analysis.top_influential.map((node, index) => (
-                        <tr key={node.id} className="border-b hover:bg-gray-50">
+                        <tr key={node.id} className="border-b hover:bg-parchment-50">
                           <td className="p-3 font-bold text-primary-600">#{index + 1}</td>
                           <td className="p-3 font-medium">{node.label}</td>
                           <td className="p-3">
-                            <span className="px-2 py-1 bg-gray-100 rounded text-xs">
+                            <span className="px-2 py-1 bg-parchment-50 rounded text-xs">
                               {node.type}
                             </span>
                           </td>
@@ -277,7 +276,7 @@ const CitationNetworkPage: React.FC = () => {
                           <td className="p-3 text-sm">{node.school}</td>
                           <td className="p-3 text-right">
                             <div className="flex items-center justify-end gap-2">
-                              <div className="w-20 bg-gray-200 rounded-full h-2">
+                              <div className="w-20 bg-amber-200/60 rounded-full h-2">
                                 <div
                                   className="bg-primary-600 h-2 rounded-full"
                                   style={{ width: `${node.influence_score}%` }}
@@ -417,7 +416,7 @@ const CitationNetworkPage: React.FC = () => {
                                   <div className="w-32 truncate text-sm">
                                     {node?.label || nodeId}
                                   </div>
-                                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                                  <div className="flex-1 bg-amber-200/60 rounded-full h-2">
                                     <div
                                       className="bg-primary-600 h-2 rounded-full"
                                       style={{ width: `${score}%` }}
@@ -439,7 +438,7 @@ const CitationNetworkPage: React.FC = () => {
         </motion.div>
       )}
     </div>
-    </AuroraBackground>
+    </div>
   );
 };
 

@@ -10,7 +10,7 @@ import { Button } from '../components/ui/button';
 import { ErrorState } from '../components/ui/ErrorState';
 import { EmptyState } from '../components/ui/EmptyState';
 import { staggerContainer, staggerItem } from '../utils/animations';
-import { AuroraBackground } from '../components/ui/aurora-background';
+
 
 interface SearchFilters {
   author?: string;
@@ -125,7 +125,7 @@ export default function AdvancedSearchPage() {
   const hasActiveFilters = Object.values(filters).some(v => v);
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto py-12">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Header */}
       <Card variant="default" padding="lg">
@@ -231,7 +231,7 @@ export default function AdvancedSearchPage() {
                   <select
                     value={filters.language || ''}
                     onChange={(e) => setFilters({ ...filters, language: e.target.value })}
-                    className="w-full px-3 py-2 border border-academic-border rounded focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
+                    className="w-full px-3 py-2 border border-academic-border rounded focus:outline-none focus:ring-2 focus:ring-primary-500 bg-parchment-50"
                   >
                     <option value="">{t('advancedSearch.filters.languageOptions.all')}</option>
                     <option value="grc">{t('advancedSearch.filters.languageOptions.greek')}</option>
@@ -246,7 +246,7 @@ export default function AdvancedSearchPage() {
                   <select
                     value={filters.period || ''}
                     onChange={(e) => setFilters({ ...filters, period: e.target.value })}
-                    className="w-full px-3 py-2 border border-academic-border rounded focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
+                    className="w-full px-3 py-2 border border-academic-border rounded focus:outline-none focus:ring-2 focus:ring-primary-500 bg-parchment-50"
                   >
                     <option value="">{t('advancedSearch.filters.periodOptions.all')}</option>
                     <option value="Presocratic">{t('advancedSearch.filters.periodOptions.presocratic')}</option>
@@ -370,7 +370,7 @@ export default function AdvancedSearchPage() {
                     </div>
 
                     {/* Text Content (truncated) */}
-                    <div className="text-sm text-academic-text bg-white border-l-4 border-primary-200 p-3 rounded">
+                    <div className="text-sm text-academic-text bg-parchment-50 border-l-4 border-primary-200 p-3 rounded">
                       <p className="line-clamp-3">
                         {result.text_content.substring(0, 300)}
                         {result.text_content.length > 300 && '...'}
@@ -407,6 +407,6 @@ export default function AdvancedSearchPage() {
         </div>
       )}
       </div>
-    </AuroraBackground>
+    </div>
   );
 }

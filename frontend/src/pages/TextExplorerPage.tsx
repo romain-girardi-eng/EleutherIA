@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../api/client';
-import { AuroraBackground } from '../components/ui/aurora-background';
 import { AILoader } from '../components/ui/ai-loader';
 import type { AncientWork, WorksStats, FeaturedWork, AuthorStats } from '../types/index';
 
@@ -143,7 +142,7 @@ export default function TextExplorerPage() {
   const showingTo = hasPagination ? Math.min(offset + numericPageSize, totalCount) : totalCount;
 
   return (
-    <AuroraBackground className="!min-h-screen !h-auto py-12">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
       <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* TEST: Confirm new code is loaded */}
       <div style={{ backgroundColor: 'red', color: 'white', padding: '20px', fontSize: '24px', fontWeight: 'bold', textAlign: 'center' }}>
@@ -154,7 +153,7 @@ export default function TextExplorerPage() {
       <div className="academic-card">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-serif font-bold mb-2">{t('texts.title')}</h1>
+              <h1 className="text-3xl font-serif font-display font-bold mb-2">{t('texts.title')}</h1>
               <p className="text-academic-muted">
                 {t('texts.subtitle', { count: stats?.total_works || 0 })}
               </p>
@@ -418,7 +417,7 @@ export default function TextExplorerPage() {
       )}
 
       </div>
-    </AuroraBackground>
+    </div>
   );
 }
 
