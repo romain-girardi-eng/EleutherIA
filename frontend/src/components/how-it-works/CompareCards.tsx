@@ -36,13 +36,13 @@ export function CompareCards({ before, after, className }: CompareCardsProps) {
             {before.label}
           </span>
 
-          <h3 className="font-display text-2xl text-red-800 mb-5 leading-snug">
+          <h3 className="font-display text-2xl text-stone-800 mb-5 leading-snug">
             {before.title}
           </h3>
 
           <ul className="space-y-3 flex-1">
             {before.items.map((item, i) => (
-              <li key={i} className="flex items-start gap-2.5 text-sm font-body text-red-700/80">
+              <li key={i} className="flex items-start gap-2.5 text-sm font-body text-stone-800">
                 <span className="mt-0.5 text-red-400 flex-shrink-0">✕</span>
                 {item.text}
               </li>
@@ -51,7 +51,7 @@ export function CompareCards({ before, after, className }: CompareCardsProps) {
 
           {before.metric && (
             <div className="mt-6 pt-5 border-t border-red-200/60">
-              <p className="text-xs text-red-500 font-body uppercase tracking-wider mb-1">
+              <p className="text-xs text-stone-500 font-body uppercase tracking-wider mb-1">
                 {before.metric.description}
               </p>
               <p className="font-display text-4xl text-red-700">
@@ -76,13 +76,13 @@ export function CompareCards({ before, after, className }: CompareCardsProps) {
             {after.label}
           </span>
 
-          <h3 className="font-display text-2xl text-emerald-800 mb-5 leading-snug">
+          <h3 className="font-display text-2xl text-stone-800 mb-5 leading-snug">
             {after.title}
           </h3>
 
           <ul className="space-y-3 flex-1">
             {after.items.map((item, i) => (
-              <li key={i} className="flex items-start gap-2.5 text-sm font-body text-emerald-800/80">
+              <li key={i} className="flex items-start gap-2.5 text-sm font-body text-stone-800">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
                 {item.text}
               </li>
@@ -91,7 +91,7 @@ export function CompareCards({ before, after, className }: CompareCardsProps) {
 
           {after.metric && (
             <div className="mt-6 pt-5 border-t border-emerald-200/60">
-              <p className="text-xs text-emerald-600 font-body uppercase tracking-wider mb-1">
+              <p className="text-xs text-stone-500 font-body uppercase tracking-wider mb-1">
                 {after.metric.description}
               </p>
               <p className="font-display text-4xl text-emerald-700">
