@@ -1,0 +1,113 @@
+======================================================================
+SOURCES CHRÉTIENNES CORPUS IMPORT — DRY RUN OUTPUT
+======================================================================
+
+Files parsed: 40
+Validation errors: 0
+Validation warnings: 3
+  WARN: SC123_Melito_Sardensis_Fragments_XIII_Sur_lâme_et_le_corps_livre_1_source.txt is tagged 'grc' but contains no Greek Unicode characters
+  WARN: SC268_Origenes_Traite_des_Principes_Extraits_grecs_livre_3_source.txt missing AUTEUR in header
+  WARN: SC268_Origenes_Traite_des_Principes_Extraits_grecs_livre_4_source.txt missing AUTEUR in header
+
+----------------------------------------------------------------------
+PER-WORK STATISTICS
+----------------------------------------------------------------------
+File                                                                    Para  ChKG Edges   Cit
+----------------------------------------------------------------------
+SC10bis_Anonyme_Martyre_de_Polycarpe_Inscription_livre_1_source.txt        1     1     2     1
+SC10bis_Anonyme_Martyre_de_Polycarpe_Martyre_de_Polycarpe_livre_1_so      27    21    22    27
+SC10bis_Ignatius_Antiochenus_Lettres_authentiques_Lettre_aux_Ephesie      23    22    23    23
+SC10bis_Ignatius_Antiochenus_Lettres_authentiques_Lettre_aux_Magnesi      17    16    17    17
+SC10bis_Ignatius_Antiochenus_Lettres_authentiques_Lettre_aux_Philade      14    12    13    14
+SC10bis_Ignatius_Antiochenus_Lettres_authentiques_Lettre_aux_Romains      12    11    12    12
+SC10bis_Ignatius_Antiochenus_Lettres_authentiques_Lettre_aux_Smyrnio      13    12    13    13
+SC10bis_Ignatius_Antiochenus_Lettres_authentiques_Lettre_aux_Trallie      16    14    15    16
+SC10bis_Ignatius_Antiochenus_Lettres_authentiques_Lettre_à_Polycarpe      10     9    10    10
+SC10bis_Pionius_Smyrnensis_Martyre_de_Polycarpe_Appendice_II_du_manu       2     2     3     2
+SC10bis_Pionius_Smyrnensis_Martyre_de_Polycarpe_Appendice_I_livre_1_       3     3     4     3
+SC123_Apollinaris_Hierapolitanus_Sur_la_Pâque_livre_1_source.txt           2     2     3     2
+SC123_Melito_Sardensis_Fragments_III_Apologie_à_Antonin_livre_1_sour       4     4     5     4
+SC123_Melito_Sardensis_Fragments_III_Eclogae_livre_1_source.txt            2     2     3     2
+SC123_Melito_Sardensis_Fragments_XIII_Sur_lâme_et_le_corps_livre_1_s       2     2     3     2
+SC123_Melito_Sardensis_Sur_la_Pâque_livre_1_source.txt                   109   109   110   109
+SC132_Origenes_Contre_Celse_Livre_II_livre_1_source.txt                  113   113   116   113
+SC132_Origenes_Contre_Celse_Livre_I_livre_1_source.txt                    88    88    91    88
+SC132_Origenes_Contre_Celse_Préface_livre_1_source.txt                     6     6     9     6
+SC136_Origenes_Contre_Celse_Livre_III_livre_1_source.txt                  95    95    98    95
+SC136_Origenes_Contre_Celse_Livre_IV_livre_1_source.txt                  147   147   150   147
+SC147_Origenes_Contre_Celse_Livre_VI_livre_1_source.txt                  154   154   157   154
+SC147_Origenes_Contre_Celse_Livre_V_livre_1_source.txt                    99    99   102    99
+SC150_Origenes_Contre_Celse_Livre_VIII_livre_1_source.txt                137   137   139   137
+SC150_Origenes_Contre_Celse_Livre_VII_livre_1_source.txt                 132   132   135   132
+SC167_Clemens_I_papa_Épître_aux_Corinthiens_livre_1_source.txt            83    83    84    83
+SC172_Anonyme_Épître_de_Barnabé_livre_1_source.txt                        87    87    88    87
+SC20_Theophilus_Antiochenus_Trois_livres_à_Autolycus_livre_1_source.      17    14    16    17
+SC20_Theophilus_Antiochenus_Trois_livres_à_Autolycus_livre_2_source.      63    39    41    63
+SC20_Theophilus_Antiochenus_Trois_livres_à_Autolycus_livre_3_source.      40    30    31    40
+SC268_Origenes_Traite_des_Principes_Extraits_grecs_livre_3_source.tx      35     1     4    35
+SC268_Origenes_Traite_des_Principes_Extraits_grecs_livre_4_source.tx      36     3     5    36
+SC31_Melito_Sardensis_Fragments_IV_Sur_la_Pâque_livre_1_source.txt         1     1     2     1
+SC379_Athenagoras_Atheniensis_Supplique_au_sujet_des_chrétiens_éd_Po     108    38    39   108
+SC464_Pamphilus_Caesariensis_Apologie_pour_Origène_Paragraphe_1Parag     265   265   266   265
+SC470_Aristides_Atheniensis_Apologie_Texte_grec_livre_1_source.txt        39    24    25    39
+SC507_Iustinus_martyr_Apologie_livre_1_source.txt                        108    83    85   108
+SC528_Pseudo-Justin_Discours_aux_Grecs_livre_1_source.txt                 18     5     6    18
+SC53bis_Hermas_Pasteur_dHermas_livre_1_source.txt                        114   114   115   114
+SC79_Iohannes_Chrysostomus_Sur_la_providence_de_Dieu_contre_ceux_qui     174    25    26   174
+----------------------------------------------------------------------
+TOTAL                                                                   2416  2025  2088  2416
+
+======================================================================
+AGGREGATE STATISTICS
+======================================================================
+Works:              40
+Passages:           2416
+Work KG nodes:      40
+Chapter KG nodes:   2025
+Total KG nodes:     2066 (+1 SC collection)
+KG edges:           2088
+Passage citations:  2416
+
+======================================================================
+ALL WORK NODE_IDS
+======================================================================
+  sc10bis_ignatius_ad_ephesios
+  sc10bis_ignatius_ad_magnesios
+  sc10bis_ignatius_ad_philadelphenos
+  sc10bis_ignatius_ad_polycarpum
+  sc10bis_ignatius_ad_romanos
+  sc10bis_ignatius_ad_smyrnaeos
+  sc10bis_ignatius_ad_trallianos
+  sc10bis_martyrium_polycarpi
+  sc10bis_martyrium_polycarpi_app1
+  sc10bis_martyrium_polycarpi_app2
+  sc10bis_martyrium_polycarpi_inscriptio
+  sc123_apollinaris_peri_pascha
+  sc123_melito_apologia_ad_antoninum
+  sc123_melito_de_anima_et_corpore
+  sc123_melito_eclogae
+  sc123_melito_peri_pascha
+  sc132_origenes_contra_celsum_i
+  sc132_origenes_contra_celsum_ii
+  sc132_origenes_contra_celsum_praef
+  sc136_origenes_contra_celsum_iii
+  sc136_origenes_contra_celsum_iv
+  sc147_origenes_contra_celsum_v
+  sc147_origenes_contra_celsum_vi
+  sc150_origenes_contra_celsum_vii
+  sc150_origenes_contra_celsum_viii
+  sc167_clemens_epistula_ad_corinthios
+  sc172_epistula_barnabae
+  sc20_theophilus_ad_autolycum_i
+  sc20_theophilus_ad_autolycum_ii
+  sc20_theophilus_ad_autolycum_iii
+  sc268_origenes_peri_archon_iii
+  sc268_origenes_peri_archon_iv
+  sc31_melito_peri_pascha_iv
+  sc379_athenagoras_legatio
+  sc464_pamphilus_apologia_pro_origene
+  sc470_aristides_apologia
+  sc507_iustinus_apologia_i
+  sc528_pseudo_iustinus_cohortatio
+  sc53bis_hermas_pastor
+  sc79_chrysostomus_de_providentia
