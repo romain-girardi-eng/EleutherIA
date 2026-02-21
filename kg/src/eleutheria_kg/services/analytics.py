@@ -27,21 +27,36 @@ KGData = dict[str, Any]
 PERIOD_METADATA: dict[str, dict[str, str | int | None]] = {
     "Presocratic": {"label": "Presocratic", "start": -600, "end": -450},
     "Classical Greek": {"label": "Classical Greek", "start": -450, "end": -323},
-    "Hellenistic Greek": {"label": "Hellenistic Greek", "start": -323, "end": -31},
+    "Hellenistic": {"label": "Hellenistic", "start": -323, "end": -31},
     "Roman Republican": {"label": "Roman Republican", "start": -146, "end": -27},
     "Roman Imperial": {"label": "Roman Imperial", "start": -27, "end": 300},
     "Patristic": {"label": "Patristic", "start": 150, "end": 450},
     "Late Antiquity": {"label": "Late Antiquity", "start": 300, "end": 600},
+    "Second Temple Judaism": {"label": "Second Temple Judaism", "start": -515, "end": 70},
+    "Rabbinic": {"label": "Rabbinic", "start": 70, "end": 600},
+    "Medieval": {"label": "Medieval", "start": 500, "end": 1500},
+    "Early Modern": {"label": "Early Modern", "start": 1500, "end": 1800},
+    "Modern": {"label": "Modern", "start": 1800, "end": 1950},
+    "Contemporary": {"label": "Contemporary", "start": 1950, "end": None},
 }
 
 ANCIENT_PERIODS: set[str] = {
     "Presocratic",
     "Classical Greek",
-    "Hellenistic Greek",
+    "Hellenistic",
     "Roman Republican",
     "Roman Imperial",
     "Patristic",
     "Late Antiquity",
+    "Second Temple Judaism",
+    "Rabbinic",
+}
+
+MODERN_PERIODS: set[str] = {
+    "Medieval",
+    "Early Modern",
+    "Modern",
+    "Contemporary",
 }
 
 # Community detection color palette

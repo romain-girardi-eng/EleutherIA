@@ -20,11 +20,10 @@ class KGNode(BaseModel):
 
     id: str = Field(..., description="Unique node identifier")
     label: str = Field(..., description="Display label")
-    type: str = Field(..., description="Node type (Person, Concept, Argument, etc.)")
+    type: str = Field(..., description="Node type (person, concept, argument, etc.)")
     description: str | None = Field(None, description="Full description")
     period: str | None = Field(None, description="Historical period")
-    school: str | None = Field(None, description="Philosophical school")
-    role: str | None = Field(None, description="Role in the knowledge graph")
+    alternative_names: list[str] | None = Field(None, description="Alternative labels")
     source: str | None = Field(None, description="Data source")
     metadata: dict[str, Any] | None = Field(None, description="Additional metadata")
 

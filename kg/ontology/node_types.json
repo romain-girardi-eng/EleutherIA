@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "EleutherIA Knowledge Graph Node Types",
   "description": "Node type definitions for the EleutherIA ancient philosophy knowledge graph",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "node_types": {
-    "Person": {
+    "person": {
       "description": "An individual philosopher, author, or scholar",
       "color": "#2563eb",
       "icon": "user",
@@ -12,74 +12,91 @@
         "birth_date": { "type": "string", "description": "Approximate birth date" },
         "death_date": { "type": "string", "description": "Approximate death date" },
         "floruit": { "type": "string", "description": "Period of activity" },
-        "role": { "type": "string", "enum": ["ancient_primary", "modern_scholar", "late_antique_theologian"] }
+        "wikidata_qid": { "type": "string", "description": "Wikidata entity identifier" },
+        "works": { "type": "array", "description": "List of works" },
+        "note": { "type": "string", "description": "Additional notes" }
       },
       "examples": ["Chrysippus", "Epictetus", "Susanne Bobzien"]
     },
-    "Concept": {
+    "concept": {
       "description": "A philosophical concept or technical term",
       "color": "#16a34a",
       "icon": "lightbulb",
       "properties": {
         "greek_term": { "type": "string", "description": "Original Greek term" },
         "latin_term": { "type": "string", "description": "Latin equivalent" },
-        "transliteration": { "type": "string", "description": "Romanized form" }
+        "definition": { "type": "string", "description": "Concept definition" }
       },
       "examples": ["to_eph_hemin", "fate", "moral_responsibility"]
     },
-    "Argument": {
+    "argument": {
       "description": "A philosophical argument or line of reasoning",
       "color": "#db2777",
       "icon": "message-square",
       "properties": {
         "argument_type": { "type": "string", "description": "Type of argument" },
         "premises": { "type": "array", "description": "Argument premises" },
-        "conclusion": { "type": "string", "description": "Argument conclusion" }
+        "conclusion": { "type": "string", "description": "Argument conclusion" },
+        "ancient_sources": { "type": "array", "description": "Ancient source references" },
+        "modern_scholarship": { "type": "array", "description": "Modern scholarly references" }
       },
       "examples": ["lazy_argument", "master_argument", "consequence_argument"]
     },
-    "Work": {
+    "work": {
       "description": "A philosophical text or scholarly work",
       "color": "#f97316",
       "icon": "book",
       "properties": {
         "cts_urn": { "type": "string", "description": "Canonical Text Services URN" },
-        "date_composed": { "type": "string", "description": "Date of composition" },
+        "date": { "type": "string", "description": "Date of composition" },
+        "author": { "type": "string", "description": "Author name" },
         "language": { "type": "string", "enum": ["grc", "lat", "eng"] }
       },
-      "examples": ["chrysippus_on_fate", "epictetus_discourses", "bobzien_determinism_freedom"]
+      "examples": ["chrysippus_on_fate", "epictetus_discourses"]
     },
-    "School": {
+    "school": {
       "description": "A philosophical school or tradition",
       "color": "#9333ea",
       "icon": "users",
       "properties": {
         "founded": { "type": "string", "description": "Founding date/period" },
         "founder": { "type": "string", "description": "School founder" },
-        "location": { "type": "string", "description": "Primary location" }
+        "location": { "type": "string", "description": "Primary location" },
+        "key_doctrines": { "type": "array", "description": "Core doctrines" },
+        "key_figures": { "type": "array", "description": "Key figures" },
+        "key_texts": { "type": "array", "description": "Key texts" },
+        "position_on_free_will": { "type": "string", "description": "School's stance on free will" }
       },
       "examples": ["stoicism", "epicureanism", "academic_skepticism"]
     },
-    "Passage": {
+    "passage": {
       "description": "A specific textual passage",
-      "color": "#0ea5e9",
+      "color": "#94a3b8",
       "icon": "file-text",
       "properties": {
         "cts_urn": { "type": "string", "description": "CTS URN reference" },
-        "canonical_ref": { "type": "string", "description": "Standard citation" }
+        "canonical_ref": { "type": "string", "description": "Standard citation" },
+        "author": { "type": "string", "description": "Passage author" },
+        "work": { "type": "string", "description": "Source work title" },
+        "work_id": { "type": "string", "description": "Reference to work node" },
+        "passage_id": { "type": "string", "description": "Database passage ID" },
+        "key_concepts": { "type": "array", "description": "Key philosophical concepts" },
+        "key_terms": { "type": "array", "description": "Key terms in the passage" }
       }
     },
-    "Debate": {
+    "debate": {
       "description": "A philosophical debate or controversy",
       "color": "#22c55e",
       "icon": "message-circle",
       "properties": {
         "participants": { "type": "array", "description": "Debate participants" },
-        "period": { "type": "string", "description": "When the debate occurred" }
+        "period": { "type": "string", "description": "When the debate occurred" },
+        "central_question": { "type": "string", "description": "Core question at stake" },
+        "positions": { "type": "object", "description": "Named positions in the debate" }
       },
       "examples": ["free_will_determinism_debate", "fate_providence_debate"]
     },
-    "Position": {
+    "position": {
       "description": "A philosophical position or stance",
       "color": "#facc15",
       "icon": "target",
@@ -88,7 +105,7 @@
       },
       "examples": ["compatibilism", "hard_determinism", "libertarianism"]
     },
-    "Event": {
+    "event": {
       "description": "A historical event relevant to philosophical development",
       "color": "#ef4444",
       "icon": "calendar",
@@ -97,7 +114,7 @@
         "location": { "type": "string", "description": "Event location" }
       }
     },
-    "Institution": {
+    "institution": {
       "description": "An educational or religious institution",
       "color": "#8b5cf6",
       "icon": "building",
@@ -107,7 +124,7 @@
       },
       "examples": ["platonic_academy", "lyceum", "stoa_poikile"]
     },
-    "Text_Fragment": {
+    "text_fragment": {
       "description": "A fragmentary text preserved in secondary sources",
       "color": "#14b8a6",
       "icon": "scissors",
@@ -116,7 +133,7 @@
         "svf_number": { "type": "string", "description": "SVF reference if applicable" }
       }
     },
-    "Modern_Interpretation": {
+    "modern_interpretation": {
       "description": "A modern scholarly interpretation or theory",
       "color": "#f59e0b",
       "icon": "eye",
@@ -125,7 +142,7 @@
         "publication_year": { "type": "integer", "description": "Year published" }
       }
     },
-    "Term": {
+    "term": {
       "description": "A technical philosophical term",
       "color": "#3b82f6",
       "icon": "type",
@@ -134,7 +151,7 @@
         "definition": { "type": "string", "description": "Technical definition" }
       }
     },
-    "Source_Collection": {
+    "source_collection": {
       "description": "A collection of ancient sources (e.g., SVF, LS)",
       "color": "#ec4899",
       "icon": "folder",
@@ -144,12 +161,82 @@
       },
       "examples": ["svf", "long_sedley"]
     },
-    "Doctrine": {
+    "doctrine": {
       "description": "A formal philosophical doctrine",
       "color": "#10b981",
       "icon": "bookmark",
       "properties": {
         "school": { "type": "string", "description": "Associated school" }
+      }
+    },
+    "publication": {
+      "description": "A modern scholarly publication (article, book, chapter)",
+      "color": "#06b6d4",
+      "icon": "newspaper",
+      "properties": {
+        "author": { "type": "string", "description": "Publication author" },
+        "year": { "type": "integer", "description": "Publication year" },
+        "journal": { "type": "string", "description": "Journal name" },
+        "publisher": { "type": "string", "description": "Publisher" },
+        "key_claim": { "type": "string", "description": "Central claim or thesis" },
+        "zotero_key": { "type": "string", "description": "Zotero reference key" }
+      },
+      "examples": ["bobzien_1998_determinism", "frede_2011_free_will"]
+    },
+    "quote": {
+      "description": "A notable philosophical quotation",
+      "color": "#facc15",
+      "icon": "quote",
+      "properties": {
+        "wikidata_qid": { "type": "string", "description": "Wikidata entity identifier" }
+      }
+    },
+    "synthesis": {
+      "description": "A scholarly synthesis or analysis combining multiple sources",
+      "color": "#10b981",
+      "icon": "layers",
+      "properties": {
+        "synthesis_type": { "type": "string", "description": "Type of synthesis" },
+        "author": { "type": "string", "description": "Author of the synthesis" },
+        "source_work": { "type": "string", "description": "Source work analyzed" },
+        "key_terms": { "type": "array", "description": "Key terms covered" },
+        "themes": { "type": "array", "description": "Thematic categories" }
+      }
+    },
+    "controversy": {
+      "description": "A specific scholarly or philosophical controversy",
+      "color": "#f43f5e",
+      "icon": "flame",
+      "properties": {
+        "participants": { "type": "array", "description": "Controversy participants" },
+        "period": { "type": "string", "description": "Historical period" }
+      }
+    },
+    "conceptual_evolution": {
+      "description": "The historical evolution of a philosophical concept",
+      "color": "#818cf8",
+      "icon": "git-branch",
+      "properties": {
+        "concept": { "type": "string", "description": "The concept that evolved" },
+        "stages": { "type": "array", "description": "Stages of evolution" }
+      }
+    },
+    "group": {
+      "description": "A group of philosophers or intellectual community",
+      "color": "#84cc16",
+      "icon": "users-2",
+      "properties": {
+        "members": { "type": "array", "description": "Group members" },
+        "period": { "type": "string", "description": "Active period" }
+      }
+    },
+    "argument_framework": {
+      "description": "A structured framework for analyzing philosophical arguments",
+      "color": "#e879f9",
+      "icon": "network",
+      "properties": {
+        "framework_type": { "type": "string", "description": "Type of framework" },
+        "components": { "type": "array", "description": "Framework components" }
       }
     }
   }

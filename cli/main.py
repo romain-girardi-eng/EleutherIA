@@ -18,6 +18,26 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import quote
 
+# Load .env files (project root, then deploy/production)
+def _load_env() -> None:
+    """Load environment variables from .env files if not already set."""
+    project_root = Path(__file__).parent.parent
+    for env_path in [
+        project_root / ".env",
+        project_root / "deploy" / "production" / ".env",
+    ]:
+        if env_path.exists():
+            with open(env_path) as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        key, _, value = line.partition("=")
+                        key, value = key.strip(), value.strip()
+                        if key and key not in os.environ:
+                            os.environ[key] = value
+
+_load_env()
+
 import typer
 from rich.console import Console
 from rich.markdown import Markdown
@@ -228,7 +248,7 @@ def search(
         progress.add_task("Searching knowledge graph...", total=None)
 
         # URL encode user input to prevent injection
-        params = f"?q={quote(query)}&limit={limit}"
+        params = f"?search={quote(query)}&limit={limit}"
         if node_type:
             params += f"&node_type={quote(node_type)}"
 
@@ -324,42 +344,91 @@ def passage(
 # =============================================================================
 
 
+def _query_supabase() -> dict[str, Any] | None:
+    """Query Supabase PostgreSQL directly for live statistics."""
+    database_url = os.getenv("DATABASE_URL")
+    if not database_url:
+        return None
+
+    try:
+        import psycopg2  # sync driver — no async needed for CLI
+
+        conn = psycopg2.connect(database_url, connect_timeout=10)
+        cur = conn.cursor()
+
+        queries = {
+            "nodes": "SELECT count(*) FROM free_will.kg_nodes",
+            "edges": "SELECT count(*) FROM free_will.kg_edges",
+            "works": "SELECT count(*) FROM free_will.ancient_works",
+            "passages": "SELECT count(*) FROM free_will.passages",
+            "node_types": "SELECT count(DISTINCT type) FROM free_will.kg_nodes",
+            "edge_types": "SELECT count(DISTINCT relation) FROM free_will.kg_edges",
+        }
+
+        result: dict[str, Any] = {}
+        for key, query in queries.items():
+            cur.execute(query)
+            row = cur.fetchone()
+            result[key] = row[0] if row else 0
+
+        cur.close()
+        conn.close()
+        return result
+
+    except ImportError:
+        console.print(
+            "[yellow]Install psycopg2 for direct DB access: "
+            "pip install psycopg2-binary[/yellow]"
+        )
+        return None
+    except Exception as e:
+        console.print(f"[dim]Supabase query failed: {e}[/dim]")
+        return None
+
+
 @app.command()
 def stats() -> None:
-    """Show live database statistics."""
+    """Show live database statistics from Supabase (primary) or local API (fallback)."""
+    result: dict[str, Any] | None = None
+    source = ""
+
     with Progress(
         SpinnerColumn(),
         TextColumn("[progress.description]{task.description}"),
         console=console,
     ) as progress:
-        progress.add_task("Fetching statistics...", total=None)
-        result = api_request("/kg/stats")
+        # 1. Primary: query Supabase directly
+        task = progress.add_task("Querying Supabase...", total=None)
+        result = _query_supabase()
+        if result:
+            source = "supabase"
+        else:
+            # 2. Fallback: local API
+            progress.update(task, description="Trying local API...")
+            result = api_request("/kg/stats")
+            if result:
+                source = "api"
 
-    if not result:
-        # Show default stats if API not available
-        result = {
-            "nodes": 2193,
-            "edges": 8616,
-            "works": 189,
-            "passages": 16968,
-            "node_types": 15,
-            "edge_types": 32,
-        }
-        console.print("[dim](Showing cached stats - start backend for live data)[/dim]\n")
+    if result and source:
+        label = "Supabase (live)" if source == "supabase" else "Local API"
+        console.print(f"[dim]Source: {label}[/dim]\n")
+    else:
+        console.print("[red]Could not reach Supabase or local API.[/red]")
+        console.print("[dim]Set DATABASE_URL in .env or start the backend.[/dim]\n")
+        return
 
     table = Table(title="EleutherIA Statistics")
     table.add_column("Metric", style="cyan")
     table.add_column("Count", style="green", justify="right")
 
-    # Handle both simple counts and detailed stats from API
-    nodes = result.get('total_nodes', result.get('nodes', 2193))
-    edges = result.get('total_edges', result.get('edges', 8616))
-    works = result.get('works', 189)
-    passages = result.get('passages', 16968)
-    node_types = result.get('node_types', 15)
-    edge_types = result.get('relation_types', result.get('edge_types', 32))
+    nodes = result.get('total_nodes', result.get('nodes', 0))
+    edges = result.get('total_edges', result.get('edges', 0))
+    works = result.get('works', 0)
+    passages = result.get('passages', 0)
+    node_types = result.get('node_types', 0)
+    edge_types = result.get('relation_types', result.get('edge_types', 0))
 
-    # If node_types/edge_types are dicts, get the count
+    # If node_types/edge_types are dicts (from API), get the count
     if isinstance(node_types, dict):
         node_types = len(node_types)
     if isinstance(edge_types, dict):
@@ -388,7 +457,7 @@ def philosophers(
     ) as progress:
         progress.add_task("Fetching philosophers...", total=None)
 
-        params = f"?node_type=philosopher&limit={limit}"
+        params = f"?node_type=person&limit={limit}"
         if school:
             params += f"&school={quote(school)}"
         result = api_request(f"/kg/nodes{params}")
@@ -405,7 +474,8 @@ def philosophers(
 
     for node in nodes[:limit]:
         name = node.get("name", node.get("label", "Unknown"))
-        school_name = node.get("school", "")
+        meta = node.get("metadata") or {}
+        school_name = meta.get("school", "")
         period = node.get("period", node.get("dates", ""))
         table.add_row(name, school_name, period)
 
@@ -437,7 +507,8 @@ def concepts(
 
     for node in nodes[:limit]:
         name = node.get("name", node.get("label", "Unknown"))
-        original = node.get("original_term", node.get("greek", ""))
+        meta = node.get("metadata") or {}
+        original = meta.get("greek_term", node.get("original_term", ""))
         desc = node.get("description", "")[:40] + "..." if len(node.get("description", "")) > 40 else node.get("description", "")
         table.add_row(name, original, desc)
 
@@ -927,10 +998,10 @@ def info() -> None:
     table.add_row("Repository", "github.com/romain-girardi-eng/EleutherIA")
     table.add_row("License", "CC BY 4.0")
     table.add_row("", "")
-    table.add_row("KG Nodes", "2,193")
-    table.add_row("KG Edges", "8,616")
-    table.add_row("Ancient Works", "189")
-    table.add_row("Passages", "16,968")
+    table.add_row("KG Nodes", "4,245")
+    table.add_row("KG Edges", "10,621")
+    table.add_row("Ancient Works", "175")
+    table.add_row("Passages", "17,036")
     table.add_row("", "")
     table.add_row("Backend", "FastAPI + Python 3.11+")
     table.add_row("Frontend", "React 19 + TypeScript")

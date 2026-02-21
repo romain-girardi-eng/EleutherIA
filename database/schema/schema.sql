@@ -207,31 +207,28 @@ CREATE INDEX IF NOT EXISTS idx_auth_audit_created_at ON auth_audit_log(created_a
 
 -- KG Nodes: Philosophers, concepts, arguments, texts, positions
 CREATE TABLE IF NOT EXISTS kg_nodes (
-    node_id TEXT PRIMARY KEY,
+    node_id TEXT PRIMARY KEY,          -- e.g., 'person_chrysippus_abc123'
     label TEXT NOT NULL,
-    type TEXT NOT NULL,        -- Person, Concept, Argument, Text, Position, School, etc.
+    type VARCHAR NOT NULL,             -- lowercase: person, concept, argument, work, passage, etc.
     description TEXT,
-    period TEXT,               -- Presocratic, Classical Greek, Hellenistic, etc.
-    school TEXT,               -- Stoic, Epicurean, Peripatetic, etc.
-    role TEXT,                 -- For Person nodes: philosopher, commentator, etc.
+    period VARCHAR,                    -- e.g., 'Roman Imperial', 'Classical Greek', 'Contemporary'
+    alternative_names JSONB,           -- Array of alternative labels/transliterations
     metadata JSONB DEFAULT '{}',
-    created_at TIMESTAMPTZ DEFAULT now()
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now()
 );
 
 -- Indexes for kg_nodes
 CREATE INDEX IF NOT EXISTS idx_kg_nodes_type ON kg_nodes(type);
 CREATE INDEX IF NOT EXISTS idx_kg_nodes_period ON kg_nodes(period);
-CREATE INDEX IF NOT EXISTS idx_kg_nodes_school ON kg_nodes(school);
 CREATE INDEX IF NOT EXISTS idx_kg_nodes_label ON kg_nodes USING GIN (to_tsvector('simple', label));
 
 -- KG Edges: Relationships between nodes
 CREATE TABLE IF NOT EXISTS kg_edges (
     edge_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    source_id TEXT NOT NULL REFERENCES kg_nodes(node_id) ON DELETE CASCADE,
-    target_id TEXT NOT NULL REFERENCES kg_nodes(node_id) ON DELETE CASCADE,
-    relation TEXT NOT NULL,    -- influences, argues_for, develops, criticizes, etc.
-    description TEXT,
-    weight DOUBLE PRECISION DEFAULT 1.0,
+    source_id VARCHAR NOT NULL REFERENCES kg_nodes(node_id) ON DELETE CASCADE,
+    target_id VARCHAR NOT NULL REFERENCES kg_nodes(node_id) ON DELETE CASCADE,
+    relation VARCHAR NOT NULL,    -- lowercase: discusses, authored_by, part_of, etc.
     metadata JSONB DEFAULT '{}',
     created_at TIMESTAMPTZ DEFAULT now()
 );
