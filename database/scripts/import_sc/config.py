@@ -8,13 +8,16 @@ Contains:
 
 from __future__ import annotations
 
+import os
+
 # ---------------------------------------------------------------------------
 # Corpus location
 # ---------------------------------------------------------------------------
 
-SC_CORPUS_DIR = (
+SC_CORPUS_DIR = os.environ.get(
+    "SC_CORPUS_DIR",
     "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/"
-    "02_Corpus/Sources chrétiennes txt"
+    "02_Corpus/Sources chrétiennes txt",
 )
 
 # Category subdirectories
@@ -425,7 +428,7 @@ WORK_REGISTRY: dict[str, dict] = {
         "date_composed": "c. 3rd century CE",
         "edition": "B. Pouderon et al., 2009",
         "sc_volume": "SC 528",
-        "reference_format": "D",
+        "reference_format": "D",  # Uses [chap.: N, par.: N], not Format C
         "description": (
             "Pseudo-Justin (3rd c. CE?), Cohortatio ad Graecos "
             "(Λόγος πρὸς Ἕλληνας). Exhortation to the Greeks to "
@@ -450,7 +453,7 @@ WORK_REGISTRY: dict[str, dict] = {
         "date_composed": "c. 177 CE",
         "edition": "B. Pouderon, 1992",
         "sc_volume": "SC 379",
-        "reference_format": "D",
+        "reference_format": "D",  # Uses [chap.: N, par.: N] + [dédication], not Format C
         "description": (
             "Athenagoras of Athens (fl. c. 177 CE), Legatio pro Christianis "
             "(Πρεσβεία περὶ Χριστιανῶν). Apology addressed to Marcus "
@@ -479,7 +482,7 @@ WORK_REGISTRY: dict[str, dict] = {
         "date_composed": "c. 125 CE",
         "edition": "B. Pouderon, M.-J. Pierre, B. Outtier, 2003",
         "sc_volume": "SC 470",
-        "reference_format": "D",
+        "reference_format": "D",  # Uses [section, cap.: N, par.: N], not Format C
         "description": (
             "Aristides of Athens (fl. c. 125 CE), Apologia. "
             "One of the earliest known Christian apologies, addressed to "

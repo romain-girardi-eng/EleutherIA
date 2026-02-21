@@ -159,32 +159,37 @@ class SCImporter:
                     ),
                 )
 
-                # 2. INSERT passages (batch)
-                for p in payload["passages"]:
-                    cur.execute(
-                        """
-                        INSERT INTO passages
-                            (passage_id, work_id, canonical_ref, cts_urn,
-                             book, chapter, section, sequence_number,
-                             text_content, char_length, word_count,
-                             citation_hierarchy)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                        """,
-                        (
-                            str(p["passage_id"]),
-                            str(p["work_id"]),
-                            p["canonical_ref"],
-                            p["cts_urn"],
-                            p["book"],
-                            p["chapter"],
-                            p["section"],
-                            p["sequence_number"],
-                            p["text_content"],
-                            p["char_length"],
-                            p["word_count"],
-                            json.dumps(p["citation_hierarchy"]),
-                        ),
+                # 2. INSERT passages (batched with execute_values)
+                passage_rows = [
+                    (
+                        str(p["passage_id"]),
+                        str(p["work_id"]),
+                        p["canonical_ref"],
+                        p["cts_urn"],
+                        p["book"],
+                        p["chapter"],
+                        p["section"],
+                        p["sequence_number"],
+                        p["text_content"],
+                        p["char_length"],
+                        p["word_count"],
+                        json.dumps(p["citation_hierarchy"]),
                     )
+                    for p in payload["passages"]
+                ]
+                psycopg2.extras.execute_values(
+                    cur,
+                    """
+                    INSERT INTO passages
+                        (passage_id, work_id, canonical_ref, cts_urn,
+                         book, chapter, section, sequence_number,
+                         text_content, char_length, word_count,
+                         citation_hierarchy)
+                    VALUES %s
+                    """,
+                    passage_rows,
+                    page_size=500,
+                )
 
                 # 3. INSERT kg_nodes (Work)
                 wn = payload["work_kg_node"]
@@ -208,62 +213,77 @@ class SCImporter:
                     ),
                 )
 
-                # 4. INSERT kg_nodes (Chapters/Paragraphs)
-                for cn in payload["chapter_kg_nodes"]:
-                    cur.execute(
-                        """
-                        INSERT INTO kg_nodes
-                            (node_id, label, type, description, period, school,
-                             role, metadata)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                        ON CONFLICT (node_id) DO NOTHING
-                        """,
-                        (
-                            cn["node_id"],
-                            cn["label"],
-                            cn["type"],
-                            cn["description"],
-                            cn["period"],
-                            cn["school"],
-                            cn["role"],
-                            json.dumps(cn["metadata"]),
-                        ),
+                # 4. INSERT kg_nodes (Chapters/Paragraphs — batched)
+                chapter_rows = [
+                    (
+                        cn["node_id"],
+                        cn["label"],
+                        cn["type"],
+                        cn["description"],
+                        cn["period"],
+                        cn["school"],
+                        cn["role"],
+                        json.dumps(cn["metadata"]),
                     )
+                    for cn in payload["chapter_kg_nodes"]
+                ]
+                psycopg2.extras.execute_values(
+                    cur,
+                    """
+                    INSERT INTO kg_nodes
+                        (node_id, label, type, description, period, school,
+                         role, metadata)
+                    VALUES %s
+                    ON CONFLICT (node_id) DO NOTHING
+                    """,
+                    chapter_rows,
+                    page_size=500,
+                )
 
-                # 5. INSERT kg_edges
-                for e in payload["kg_edges"]:
-                    cur.execute(
-                        """
-                        INSERT INTO kg_edges
-                            (edge_id, source_id, target_id, relation, metadata)
-                        VALUES (%s, %s, %s, %s, %s)
-                        """,
-                        (
-                            str(e["edge_id"]),
-                            e["source_id"],
-                            e["target_id"],
-                            e["relation"],
-                            json.dumps(e["metadata"]),
-                        ),
+                # 5. INSERT kg_edges (batched)
+                edge_rows = [
+                    (
+                        str(e["edge_id"]),
+                        e["source_id"],
+                        e["target_id"],
+                        e["relation"],
+                        json.dumps(e["metadata"]),
                     )
+                    for e in payload["kg_edges"]
+                ]
+                psycopg2.extras.execute_values(
+                    cur,
+                    """
+                    INSERT INTO kg_edges
+                        (edge_id, source_id, target_id, relation, metadata)
+                    VALUES %s
+                    """,
+                    edge_rows,
+                    page_size=500,
+                )
 
-                # 6. INSERT passage_citations
-                for c in payload["passage_citations"]:
-                    cur.execute(
-                        """
-                        INSERT INTO passage_citations
-                            (citation_id, passage_id, kg_node_id,
-                             citation_type, confidence)
-                        VALUES (%s, %s, %s, %s, %s)
-                        """,
-                        (
-                            str(c["citation_id"]),
-                            str(c["passage_id"]),
-                            c["kg_node_id"],
-                            c["citation_type"],
-                            c["confidence"],
-                        ),
+                # 6. INSERT passage_citations (batched)
+                citation_rows = [
+                    (
+                        str(c["citation_id"]),
+                        str(c["passage_id"]),
+                        c["kg_node_id"],
+                        c["citation_type"],
+                        c["confidence"],
                     )
+                    for c in payload["passage_citations"]
+                ]
+                psycopg2.extras.execute_values(
+                    cur,
+                    """
+                    INSERT INTO passage_citations
+                        (citation_id, passage_id, kg_node_id,
+                         citation_type, confidence)
+                    VALUES %s
+                    """,
+                    citation_rows,
+                    page_size=500,
+                )
 
             conn.commit()
             logger.info(

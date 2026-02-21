@@ -153,6 +153,16 @@ class TestParseReference:
         ch, par = _parse_reference("première apologie, chap.: 68", "C")
         assert ch == "68"
 
+    def test_format_c_deuxieme_apologie(self):
+        """Deuxième apologie chapters get II. prefix to avoid collisions."""
+        ch, par = _parse_reference("deuxième apologie, chap.: 1", "C")
+        assert ch == "II.1"
+        assert par is None
+
+    def test_format_c_deuxieme_high_chapter(self):
+        ch, par = _parse_reference("deuxième apologie, chap.: 15", "C")
+        assert ch == "II.15"
+
     # Format D variants
     def test_format_d_chap_par(self):
         assert _parse_reference("chap.: 4, par.: 2-3", "D") == ("4", "2-3")
