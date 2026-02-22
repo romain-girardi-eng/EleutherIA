@@ -187,8 +187,8 @@
     font-optical-sizing: auto;
     /* Layered parchment: subtle vertical warmth shift + soft vignette */
     background:
-      radial-gradient(ellipse 150% 80% at 50% 50%, transparent 35%, rgba(200,185,165,0.10) 100%),
-      linear-gradient(180deg, #fcf9f4 0%, #f5eee2 30%, #fcf9f4 60%, #f3eadb 100%);
+      radial-gradient(ellipse 150% 80% at 50% 50%, transparent 35%, rgba(200,185,165,0.07) 100%),
+      linear-gradient(180deg, #fdfbf7 0%, #f8f3ea 30%, #fdfbf7 60%, #f6efe4 100%);
     background-attachment: fixed;
   }
 

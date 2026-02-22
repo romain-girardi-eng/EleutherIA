@@ -19,14 +19,14 @@ export function RadixTooltip({ content, children, side = 'top', className, delay
             side={side}
             sideOffset={6}
             className={cn(
-              'z-50 rounded-lg bg-gray-900 px-3 py-2 text-xs text-white shadow-xl',
+              'z-50 rounded-lg bg-stone-800 px-3 py-2 text-xs text-white shadow-xl',
               'animate-in fade-in-0 zoom-in-95',
               'max-w-xs leading-relaxed',
               className,
             )}
           >
             {content}
-            <Tooltip.Arrow className="fill-gray-900" width={10} height={5} />
+            <Tooltip.Arrow className="fill-stone-800" width={10} height={5} />
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>

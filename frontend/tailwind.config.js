@@ -240,6 +240,7 @@ export default {
         'letter-drift': 'letterDrift 24s ease-in-out infinite',
         'grid-fade': 'gridFade 10s ease-in-out infinite',
         'dust-float': 'dustFloat 20s linear infinite',
+        'candle-flicker': 'candleFlicker 4s ease-in-out infinite',
       },
       keyframes: {
         shine: {
@@ -378,6 +379,15 @@ export default {
         gridFade: {
           '0%, 100%': { opacity: '0.4' },
           '50%': { opacity: '1' },
+        },
+        // Candlelight flicker — irregular oil-lamp breathing
+        candleFlicker: {
+          '0%, 100%': { opacity: '1' },
+          '15%': { opacity: '0.85' },
+          '30%': { opacity: '0.95' },
+          '50%': { opacity: '0.78' },
+          '65%': { opacity: '0.92' },
+          '80%': { opacity: '0.88' },
         },
         // Dust motes floating upward
         dustFloat: {

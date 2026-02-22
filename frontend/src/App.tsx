@@ -12,6 +12,7 @@ import { ToastProvider } from './components/ui/Toast';
 import ErrorBoundary from './components/ErrorBoundary';
 import { Glow } from './components/ui/glow';
 import { PremiumBackground } from './components/ui/premium-background';
+import { CandlelightCursor } from './components/ui/candlelight-cursor';
 // HomePage - lazy loaded below
 import LoginPage from './pages/LoginPage';
 import DatabasePage from './pages/DatabasePage';
@@ -182,6 +183,7 @@ function AppContent() {
       {!isDarkPage && (
         <>
           <PremiumBackground />
+          <CandlelightCursor />
           <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
             <Glow variant="top" className="opacity-25" />
           </div>
