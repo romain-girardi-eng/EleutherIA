@@ -316,12 +316,17 @@ const calculateAizawaAttractor = (count: number) => {
   }
   return points;
 };
-// Generate cache (enough for max particles)
-const aizawaCache = calculateAizawaAttractor(150000);
+// Lazily computed cache (avoids blocking module load on mobile)
+let aizawaCache: ReturnType<typeof calculateAizawaAttractor> | null = null;
+function getAizawaCache() {
+  if (!aizawaCache) aizawaCache = calculateAizawaAttractor(150000);
+  return aizawaCache;
+}
 
 const generateAttractorOfFate: ShapeGenerator = (index, _total) => {
+  const cache = getAizawaCache();
   // Use modulo to loop if we have more particles than cache
-  const data = aizawaCache[index % aizawaCache.length];
+  const data = cache[index % cache.length];
   return {
     pos: data.pos.clone(),
     normal: data.normal.clone()
