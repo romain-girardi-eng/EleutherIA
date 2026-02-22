@@ -147,12 +147,17 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
           className="md:hidden relative z-10 flex flex-col items-center justify-between min-h-full px-6 pt-14 pb-10 text-center"
           variants={containerVariants}
         >
+          {/* Logo pinned top-left on mobile */}
+          {logo && (
+            <motion.div variants={itemVariants} className="absolute top-4 left-4 z-20">
+              <img
+                src={logo.url}
+                alt={logo.alt}
+                className="h-12 sm:h-14 brightness-0 invert opacity-90"
+              />
+            </motion.div>
+          )}
           <div className="flex flex-col items-center flex-1 justify-center gap-5">
-            {logo && (
-              <motion.div variants={itemVariants}>
-                <img src={logo.url} alt={logo.alt} className="h-20 sm:h-24" />
-              </motion.div>
-            )}
             <motion.h1
               className="font-display text-3xl sm:text-4xl font-bold leading-tight text-white"
               variants={itemVariants}
