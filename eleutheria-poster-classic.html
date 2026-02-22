@@ -520,7 +520,7 @@
   <!-- Title -->
   <div class="title-section">
     <h1><span class="accent">GraphRAG</span> et graphe de connaissances<br>pour les sources anciennes</h1>
-    <div class="subtitle">Retour d'expérience sur EleutherIA, une infrastructure de recherche par IA générative augmentée par graphe pour les débats antiques sur le libre arbitre</div>
+    <div class="subtitle">Retour d'expérience sur EleutherIA, une infrastructure de recherche par IA agentique augmentée par graphe pour les débats antiques sur le libre arbitre</div>
     <div class="author-line">
       <strong>Romain Girardi</strong> <span class="orcid">⬡ 0009-0000-3608-1817</span>
     </div>
@@ -529,19 +529,19 @@
   <!-- Stats Banner -->
   <div class="stats-banner">
     <div class="stat-item">
-      <div class="stat-number">2,193</div>
+      <div class="stat-number">4,247</div>
       <div class="stat-label">Nœuds du graphe</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number">8,616</div>
+      <div class="stat-number">10,681</div>
       <div class="stat-label">Relations</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number">189</div>
+      <div class="stat-number">229</div>
       <div class="stat-label">Œuvres anciennes</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number">16,968</div>
+      <div class="stat-number">19,384</div>
       <div class="stat-label">Passages grecs &amp; latins</div>
     </div>
     <div class="stat-item">
@@ -594,41 +594,41 @@
 
       <!-- Pipeline GraphRAG -->
       <div class="section">
-        <div class="section-title">Pipeline GraphRAG</div>
+        <div class="section-title">Pipeline PageIndex V3</div>
         <div class="pipeline">
           <div class="pipeline-step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <div class="step-name">Recherche sémantique</div>
-              <div class="step-desc">Embedding de la requête → top-k nœuds dans Qdrant</div>
+              <div class="step-name">Embed + détection de références</div>
+              <div class="step-desc">Embedding Gemini + détection CTS URN</div>
             </div>
           </div>
           <div class="pipeline-step">
             <div class="step-number">2</div>
             <div class="step-content">
-              <div class="step-name">Traversée du graphe</div>
-              <div class="step-desc">BFS depuis les nœuds initiaux (profondeur 1–3)</div>
+              <div class="step-name">Recherche parallèle (sans LLM)</div>
+              <div class="step-desc">Nœuds KG + passages + arêtes via Qdrant</div>
             </div>
           </div>
           <div class="pipeline-step">
             <div class="step-number">3</div>
             <div class="step-content">
-              <div class="step-name">Construction du contexte</div>
-              <div class="step-desc">Agrégation des descriptions, citations et passages</div>
+              <div class="step-name">Enrichissement parallèle</div>
+              <div class="step-desc">passage_citations → texte intégral + expansion KG voisins</div>
             </div>
           </div>
           <div class="pipeline-step">
             <div class="step-number">4</div>
             <div class="step-content">
-              <div class="step-name">Synthèse par LLM</div>
-              <div class="step-desc">Gemini 3 (primaire) / Kimi K2.5 (raisonnement étendu)</div>
+              <div class="step-name">Construction du contexte COMPLET</div>
+              <div class="step-desc">Aucune troncation — fenêtre 1M tokens Gemini</div>
             </div>
           </div>
           <div class="pipeline-step">
             <div class="step-number">5</div>
             <div class="step-content">
-              <div class="step-name">Ancrage citationnel</div>
-              <div class="step-desc">Extraction et vérification des références aux sources</div>
+              <div class="step-name">UN SEUL appel de synthèse</div>
+              <div class="step-desc">Kimi K2 / Gemini → réponse savante + citations</div>
             </div>
           </div>
         </div>
@@ -722,7 +722,7 @@
           </div>
           <div class="tech-item">
             <div class="tech-cat">LLM primaire</div>
-            <div class="tech-name">Gemini 3</div>
+            <div class="tech-name">Kimi K2 / Gemini</div>
           </div>
           <div class="tech-item">
             <div class="tech-cat">Raisonnement</div>

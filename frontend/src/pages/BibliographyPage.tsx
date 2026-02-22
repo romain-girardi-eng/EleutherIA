@@ -1,11 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { GraduationCap, Search, BookOpen, ChevronDown, ChevronRight, ExternalLink, MoreVertical } from 'lucide-react';
+import { Search, ChevronDown, ChevronRight, ExternalLink, MoreVertical, BookOpen, RotateCcw, ChevronsUpDown, Library } from 'lucide-react';
+import { Typewriter } from '../components/ui/typewriter';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../api/client';
-import { AILoader } from '../components/ui/ai-loader';
-import { motion } from 'framer-motion';
-import { Typewriter } from '../components/ui/typewriter';
-import { ShineBorder } from '../components/ui/shine-border';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface AccessLink {
   type: string;
@@ -18,6 +16,28 @@ interface BibliographyEntry {
   citation: string;
   access_links?: AccessLink[];
   verified_links?: AccessLink[];
+}
+
+/* ─── Minimal skeleton loader ─── */
+function BibSkeleton() {
+  return (
+    <div className="space-y-6 animate-pulse">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-stone-200/60" />
+            <div className="h-3 w-24 rounded-full bg-stone-200/60" />
+          </div>
+          {Array.from({ length: 3 }).map((_, j) => (
+            <div key={j} className="ml-11 flex gap-3">
+              <div className="w-6 h-3 rounded bg-stone-100" />
+              <div className="flex-1 h-3 rounded-full bg-stone-100" style={{ width: `${60 + (j * 12)}%` }} />
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default function BibliographyPage() {
@@ -37,14 +57,13 @@ export default function BibliographyPage() {
 
   useEffect(() => {
     loadBibliography();
-
     return () => {
       if (retryTimeoutRef.current !== null) {
         clearTimeout(retryTimeoutRef.current);
         retryTimeoutRef.current = null;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentionally mount-only: loadBibliography handles its own retry logic internally
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadBibliography = async (isRetry = false) => {
@@ -55,14 +74,13 @@ export default function BibliographyPage() {
       if (!isRetry) {
         setLoadingMessage(t('common.loading'));
       } else {
-        setLoadingMessage(`Retrying (attempt ${retryCount + 1})... Backend may be starting up.`);
+        setLoadingMessage(`Retrying (attempt ${retryCount + 1})...`);
       }
 
       const nodesResponse = await apiClient.getNodes();
       const nodes = nodesResponse.nodes || [];
 
       const bibSet = new Set<string>();
-      // Define node type with both direct and metadata-nested modern_scholarship
       type NodeType = {
         modern_scholarship?: Array<string | { citation?: string; text?: string; title?: string }>;
         metadata?: {
@@ -71,18 +89,13 @@ export default function BibliographyPage() {
       };
 
       nodes.forEach((node: NodeType) => {
-        // Try direct property first, then metadata.modern_scholarship
         let modernScholarship = node.modern_scholarship;
-
-        // If not found directly, check in metadata (where it's stored in Supabase)
         if (!modernScholarship && node.metadata?.modern_scholarship) {
           const metadataMS = node.metadata.modern_scholarship;
-          // It might be a JSON string in metadata, so parse it
           if (typeof metadataMS === 'string') {
             try {
               modernScholarship = JSON.parse(metadataMS);
             } catch {
-              // If not valid JSON, treat as a single reference
               modernScholarship = [metadataMS];
             }
           } else if (Array.isArray(metadataMS)) {
@@ -126,14 +139,14 @@ export default function BibliographyPage() {
           setBibliographyData(dataMap);
         }
       } catch (_e) {
-        // Online access data not available - continue without it
+        // Online access data not available
       }
     } catch (error) {
       console.error('Error loading bibliography:', error);
 
       if (retryCount < 2) {
-        const delay = retryCount === 0 ? 15000 : 15000;
-        setLoadingMessage(`Backend is starting up. Retrying in ${delay / 1000} seconds...`);
+        const delay = 15000;
+        setLoadingMessage(`Backend is starting up. Retrying in ${delay / 1000}s...`);
 
         if (retryTimeoutRef.current !== null) {
           clearTimeout(retryTimeoutRef.current);
@@ -145,7 +158,7 @@ export default function BibliographyPage() {
           loadBibliography(true);
         }, delay);
       } else {
-        setError('Failed to load bibliography. The backend may still be starting up. Please try again in a moment.');
+        setError('Failed to load bibliography. The backend may still be starting up.');
         setLoading(false);
       }
     }
@@ -200,14 +213,8 @@ export default function BibliographyPage() {
   )).sort();
 
   const filteredBibliography = bibliography.filter(ref => {
-    if (searchQuery && !ref.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-
-    if (filterType !== 'all' && getReferenceType(ref) !== filterType) {
-      return false;
-    }
-
+    if (searchQuery && !ref.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    if (filterType !== 'all' && getReferenceType(ref) !== filterType) return false;
     if (filterYear !== 'all') {
       const refYear = extractYear(ref);
       if (filterYear === '2000+' && (!refYear || parseInt(refYear) < 2000)) return false;
@@ -215,11 +222,7 @@ export default function BibliographyPage() {
       if (filterYear === '1980-1989' && (!refYear || parseInt(refYear) < 1980 || parseInt(refYear) >= 1990)) return false;
       if (filterYear === 'pre-1980' && (!refYear || parseInt(refYear) >= 1980)) return false;
     }
-
-    if (filterPublisher !== 'all' && extractPublisher(ref) !== filterPublisher) {
-      return false;
-    }
-
+    if (filterPublisher !== 'all' && extractPublisher(ref) !== filterPublisher) return false;
     return true;
   });
 
@@ -233,276 +236,294 @@ export default function BibliographyPage() {
   });
 
   const letters = Object.keys(groupedBibliography).sort();
+  const isFiltered = searchQuery || filterType !== 'all' || filterYear !== 'all' || filterPublisher !== 'all';
 
   return (
-    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
-      <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Modern Header */}
+    <div className="min-h-screen w-full bg-transparent">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+        {/* ── Hero ── */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center"
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="pt-28 pb-8 text-center"
         >
-          <h1 className="text-5xl md:text-6xl font-display font-bold text-stone-800 mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-800/5 border border-stone-300/30 text-xs font-medium text-stone-500 tracking-wide uppercase mb-5">
+            <Library className="w-3.5 h-3.5" />
+            Modern Scholarship
+          </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-semibold text-stone-800 tracking-tight mb-3">
             <Typewriter
               text={["Bibliography", "Modern Scholarship", "Academic Sources"]}
-              speed={100}
+              speed={80}
               waitTime={3000}
-              deleteSpeed={60}
+              deleteSpeed={50}
               className="text-stone-800"
               cursorChar="_"
             />
           </h1>
-          <p className="text-lg text-stone-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-stone-500 max-w-xl mx-auto leading-relaxed">
             {t('bibliography.subtitle')}
           </p>
         </motion.div>
 
-        {/* Stats Badges */}
+        {/* ── Stats ── */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.15 }}
+          className="flex items-center justify-center gap-6 text-sm text-stone-400 mb-8"
         >
-          <span className="px-4 py-2 bg-parchment-100/70 backdrop-blur-sm rounded-full text-sm font-medium text-stone-600 shadow-sm border border-amber-200/40">
-            {bibliography.length} Total References
-          </span>
-          <span className="px-4 py-2 bg-parchment-100/70 backdrop-blur-sm rounded-full text-sm font-medium text-stone-600 shadow-sm border border-amber-200/40">
-            {filteredBibliography.length} Filtered
-          </span>
-          <span className="px-4 py-2 bg-orange-50 backdrop-blur-sm rounded-full text-sm font-medium text-orange-600 shadow-sm border border-orange-200">
-            100% Citation Coverage
-          </span>
+          <span><strong className="text-stone-700 font-semibold">{bibliography.length}</strong> references</span>
+          <span className="w-1 h-1 rounded-full bg-stone-300" />
+          <span><strong className="text-stone-700 font-semibold">100%</strong> citation coverage</span>
+          {isFiltered && (
+            <>
+              <span className="w-1 h-1 rounded-full bg-stone-300" />
+              <span><strong className="text-stone-700 font-semibold">{filteredBibliography.length}</strong> matching</span>
+            </>
+          )}
         </motion.div>
 
-        {/* Unified Search & Filter Section */}
+        {/* ── Search + filters ── */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
+          className="mb-10 space-y-3"
         >
-          <ShineBorder
-            className="!p-0 bg-parchment-100/70 backdrop-blur-sm"
-            borderRadius={24}
-            color={["#f97316", "#ea580c", "#fdba74"]}
-          >
-            <div className="p-6 space-y-4">
-              {/* Search Bar */}
-              <div className="relative w-full">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-stone-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Search by author, title, or keyword..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-parchment-50/60 backdrop-blur-md border border-amber-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
-                />
-              </div>
-
-              {/* Filters */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <select
-                  value={filterType}
-                  onChange={(e) => setFilterType(e.target.value)}
-                  className="px-4 py-2 bg-parchment-50/60 backdrop-blur-md border border-amber-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                >
-                  <option value="all">All Types</option>
-                  <option value="monograph">Monographs</option>
-                  <option value="edited-volume">Edited Volumes</option>
-                  <option value="journal">Journal Articles</option>
-                  <option value="translation">Translations</option>
-                  <option value="encyclopedia">Encyclopedia Entries</option>
-                </select>
-
-                <select
-                  value={filterYear}
-                  onChange={(e) => setFilterYear(e.target.value)}
-                  className="px-4 py-2 bg-parchment-50/60 backdrop-blur-md border border-amber-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                >
-                  <option value="all">All Years</option>
-                  <option value="2000+">2000+</option>
-                  <option value="1990-1999">1990-1999</option>
-                  <option value="1980-1989">1980-1989</option>
-                  <option value="pre-1980">Pre-1980</option>
-                </select>
-
-                <select
-                  value={filterPublisher}
-                  onChange={(e) => setFilterPublisher(e.target.value)}
-                  className="px-4 py-2 bg-parchment-50/60 backdrop-blur-md border border-amber-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                >
-                  <option value="all">All Publishers</option>
-                  {uniquePublishers.map(pub => (
-                    <option key={pub} value={pub}>{pub}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Filter Actions */}
-              {(searchQuery || filterType !== 'all' || filterYear !== 'all' || filterPublisher !== 'all') && (
-                <div className="flex items-center justify-between pt-2 border-t border-amber-200/40">
-                  <div className="text-sm text-stone-600">
-                    Showing {filteredBibliography.length} of {bibliography.length} references
-                  </div>
-                  <button
-                    onClick={() => {
-                      setSearchQuery('');
-                      setFilterType('all');
-                      setFilterYear('all');
-                      setFilterPublisher('all');
-                    }}
-                    className="text-sm text-orange-600 hover:text-orange-700 font-medium transition-colors"
-                  >
-                    Reset Filters
-                  </button>
-                </div>
-              )}
-            </div>
-          </ShineBorder>
-        </motion.div>
-
-        {/* Bibliography List */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-6 shadow-sm"
-        >
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <BookOpen className="w-6 h-6 text-orange-600" />
-              <h2 className="text-2xl font-display font-bold text-stone-800">References</h2>
-            </div>
-            {!loading && !error && filteredBibliography.length > 0 && (
-              <div className="flex gap-2">
-                <button
-                  onClick={expandAll}
-                  className="px-4 py-2 text-sm text-orange-600 hover:bg-orange-50 border border-orange-300 rounded-xl transition-colors"
-                >
-                  Expand All
-                </button>
-                <button
-                  onClick={collapseAll}
-                  className="px-4 py-2 text-sm text-orange-600 hover:bg-orange-50 border border-orange-300 rounded-xl transition-colors"
-                >
-                  Collapse All
-                </button>
-              </div>
-            )}
+          {/* Search */}
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+            <input
+              type="text"
+              placeholder="Search by author, title, or keyword..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-11 pr-4 py-3 text-sm bg-white/60 backdrop-blur-sm border border-stone-200/60 rounded-xl text-stone-700 placeholder:text-stone-400 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-all"
+            />
           </div>
 
-          {error ? (
-            <div className="text-center py-12">
-              <div className="bg-red-50 border border-red-200 rounded-2xl p-6 max-w-2xl mx-auto">
-                <p className="text-red-800 font-medium mb-3">{error}</p>
-                <button
-                  onClick={() => {
-                    setRetryCount(0);
-                    loadBibliography(false);
-                  }}
-                  className="px-6 py-3 bg-gradient-to-br from-stone-900 to-stone-800 text-white rounded-full hover:shadow-lg transition-all"
-                >
-                  Retry
-                </button>
-              </div>
-            </div>
-          ) : loading ? (
-            <div className="text-center py-12">
-              <AILoader text="Loading" size="md" />
-              <p className="mt-6 text-stone-600">{loadingMessage}</p>
-              {retryCount > 0 && (
-                <p className="mt-2 text-sm text-amber-600">
-                  This is normal on first request. The backend may take up to 30 seconds to start.
-                </p>
-              )}
-            </div>
-          ) : filteredBibliography.length === 0 ? (
-            <div className="text-center py-12">
-              <GraduationCap className="w-16 h-16 text-stone-400 mx-auto mb-4" />
-              <p className="text-stone-600">
-                {searchQuery || filterType !== 'all' || filterYear !== 'all' || filterPublisher !== 'all'
-                  ? 'No references found matching your filters.'
-                  : 'No references available.'}
+          {/* Filter row */}
+          <div className="flex flex-wrap gap-2 items-center">
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              className="px-3 py-2 text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors"
+            >
+              <option value="all">All Types</option>
+              <option value="monograph">Monographs</option>
+              <option value="edited-volume">Edited Volumes</option>
+              <option value="journal">Journal Articles</option>
+              <option value="translation">Translations</option>
+              <option value="encyclopedia">Encyclopedia</option>
+            </select>
+
+            <select
+              value={filterYear}
+              onChange={(e) => setFilterYear(e.target.value)}
+              className="px-3 py-2 text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors"
+            >
+              <option value="all">All Years</option>
+              <option value="2000+">2000+</option>
+              <option value="1990-1999">1990-1999</option>
+              <option value="1980-1989">1980-1989</option>
+              <option value="pre-1980">Pre-1980</option>
+            </select>
+
+            <select
+              value={filterPublisher}
+              onChange={(e) => setFilterPublisher(e.target.value)}
+              className="px-3 py-2 text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors"
+            >
+              <option value="all">All Publishers</option>
+              {uniquePublishers.map(pub => (
+                <option key={pub} value={pub}>{pub}</option>
+              ))}
+            </select>
+
+            {isFiltered && (
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setFilterType('all');
+                  setFilterYear('all');
+                  setFilterPublisher('all');
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-sm text-stone-500 hover:text-stone-700 transition-colors"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                Reset
+              </button>
+            )}
+
+            {/* Spacer */}
+            <div className="flex-1" />
+
+            {/* Expand/Collapse */}
+            {!loading && !error && filteredBibliography.length > 0 && (
+              <button
+                onClick={expandedLetters.size > 0 ? collapseAll : expandAll}
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-sm text-stone-500 hover:text-stone-700 transition-colors"
+              >
+                <ChevronsUpDown className="w-3.5 h-3.5" />
+                {expandedLetters.size > 0 ? 'Collapse' : 'Expand'} all
+              </button>
+            )}
+          </div>
+        </motion.div>
+
+        {/* ── Divider ── */}
+        <div className="border-t border-stone-200/50 mb-8" />
+
+        {/* ── Content ── */}
+        {error ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-20"
+          >
+            <p className="text-stone-600 mb-4">{error}</p>
+            <button
+              onClick={() => { setRetryCount(0); loadBibliography(false); }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-stone-800 text-white rounded-lg hover:bg-stone-700 transition-colors"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              Retry
+            </button>
+          </motion.div>
+        ) : loading ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="py-8"
+          >
+            <BibSkeleton />
+            <p className="text-center text-sm text-stone-400 mt-8">{loadingMessage}</p>
+            {retryCount > 0 && (
+              <p className="text-center text-xs text-stone-400 mt-2">
+                Backend may take up to 30 seconds to start.
               </p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {letters.map(letter => {
-                const isExpanded = expandedLetters.has(letter);
-                const refs = groupedBibliography[letter];
+            )}
+          </motion.div>
+        ) : filteredBibliography.length === 0 ? (
+          <div className="text-center py-20">
+            <BookOpen className="w-10 h-10 text-stone-300 mx-auto mb-4" />
+            <p className="text-stone-500">
+              {isFiltered ? 'No references match your filters.' : 'No references available.'}
+            </p>
+            {isFiltered && (
+              <button
+                onClick={() => { setSearchQuery(''); setFilterType('all'); setFilterYear('all'); setFilterPublisher('all'); }}
+                className="mt-3 text-sm text-stone-500 hover:text-stone-700 underline underline-offset-2 transition-colors"
+              >
+                Clear filters
+              </button>
+            )}
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="space-y-1 pb-16"
+          >
+            {letters.map((letter, letterIdx) => {
+              const isExpanded = expandedLetters.has(letter);
+              const refs = groupedBibliography[letter];
 
-                return (
-                  <div key={letter} className="border border-amber-200/40 rounded-xl overflow-hidden bg-parchment-50/40">
-                    <button
-                      onClick={() => toggleLetter(letter)}
-                      className="w-full flex items-center justify-between p-4 hover:bg-parchment-100/50 transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        {isExpanded ? (
-                          <ChevronDown className="w-5 h-5 text-orange-600" />
-                        ) : (
-                          <ChevronRight className="w-5 h-5 text-orange-600" />
-                        )}
-                        <span className="text-2xl font-bold text-orange-600">{letter}</span>
-                        <span className="text-sm text-stone-600">
-                          ({refs.length} {refs.length === 1 ? 'reference' : 'references'})
-                        </span>
-                      </div>
-                    </button>
+              return (
+                <motion.div
+                  key={letter}
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-20px' }}
+                  transition={{ duration: 0.35, delay: letterIdx * 0.02 }}
+                >
+                  {/* Letter header */}
+                  <button
+                    onClick={() => toggleLetter(letter)}
+                    className="w-full flex items-center gap-3 py-3 px-1 group hover:bg-stone-50/50 rounded-lg transition-colors"
+                  >
+                    <span className="w-8 h-8 rounded-lg bg-stone-100 group-hover:bg-stone-200/80 flex items-center justify-center text-sm font-display font-bold text-stone-600 transition-colors">
+                      {letter}
+                    </span>
+                    <span className="text-xs text-stone-400 font-medium">
+                      {refs.length} {refs.length === 1 ? 'reference' : 'references'}
+                    </span>
+                    <div className="flex-1" />
+                    {isExpanded ? (
+                      <ChevronDown className="w-4 h-4 text-stone-400" />
+                    ) : (
+                      <ChevronRight className="w-4 h-4 text-stone-400" />
+                    )}
+                  </button>
 
+                  {/* Expanded references */}
+                  <AnimatePresence>
                     {isExpanded && (
-                      <div className="border-t border-amber-200/40 bg-parchment-50/30">
-                        {refs.map((ref, index) => {
-                          const entry = bibliographyData.get(ref);
-                          const hasAccess = entry && entry.verified_links && entry.verified_links.length > 0;
-                          const multipleLinks = hasAccess && entry.verified_links!.length > 1;
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="ml-11 border-l border-stone-200/60 mb-4">
+                          {refs.map((ref, index) => {
+                            const entry = bibliographyData.get(ref);
+                            const hasAccess = entry && entry.verified_links && entry.verified_links.length > 0;
+                            const multipleLinks = hasAccess && entry.verified_links!.length > 1;
+                            const globalIndex = filteredBibliography.indexOf(ref) + 1;
 
-                          return (
-                            <div
-                              key={index}
-                              className="p-4 border-b border-amber-200/40 last:border-b-0 hover:bg-parchment-50/40 transition-colors"
-                            >
-                              <div className="flex items-start gap-3">
-                                <div className="flex-shrink-0 w-8 text-sm text-stone-400 font-mono">
-                                  [{filteredBibliography.indexOf(ref) + 1}]
-                                </div>
-                                <div className="flex-1 text-sm text-stone-700 leading-relaxed">
+                            return (
+                              <div
+                                key={index}
+                                className="group/ref flex items-start gap-3 py-2.5 pl-4 pr-2 hover:bg-stone-50/50 rounded-r-lg transition-colors -ml-px border-l-2 border-transparent hover:border-stone-300"
+                              >
+                                {/* Index number */}
+                                <span className="flex-shrink-0 text-[11px] text-stone-300 font-mono tabular-nums pt-0.5 w-6 text-right">
+                                  {globalIndex}
+                                </span>
+
+                                {/* Citation text */}
+                                <p className="flex-1 text-[13px] text-stone-600 leading-relaxed">
                                   {ref}
-                                </div>
+                                </p>
+
+                                {/* Access links */}
                                 {hasAccess && (
-                                  <div className="flex-shrink-0 flex gap-2">
+                                  <div className="flex-shrink-0 flex items-center gap-1 opacity-0 group-hover/ref:opacity-100 transition-opacity">
                                     <a
                                       href={entry.verified_links![0].url}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-600 hover:bg-orange-700 text-white text-xs font-medium rounded-lg transition-colors shadow-sm hover:shadow"
+                                      className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-stone-500 hover:text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-md transition-colors"
                                       title={entry.verified_links![0].label}
                                     >
-                                      <ExternalLink className="w-3.5 h-3.5" />
-                                      <span>Access</span>
+                                      <ExternalLink className="w-3 h-3" />
+                                      Open
                                     </a>
                                     {multipleLinks && (
-                                      <div className="relative group">
+                                      <div className="relative group/more">
                                         <button
-                                          className="inline-flex items-center px-2 py-1.5 bg-orange-100 hover:bg-orange-200 text-orange-700 text-xs font-medium rounded-lg transition-colors"
+                                          className="inline-flex items-center p-1 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded-md transition-colors"
                                           title="More access options"
                                         >
-                                          <MoreVertical className="w-3.5 h-3.5" />
+                                          <MoreVertical className="w-3 h-3" />
                                         </button>
-                                        <div className="absolute right-0 top-full mt-1 w-48 bg-parchment-50 border border-amber-200/40 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+                                        <div className="absolute right-0 top-full mt-1 w-52 bg-white border border-stone-200/80 rounded-lg shadow-lg opacity-0 invisible group-hover/more:opacity-100 group-hover/more:visible transition-all z-10">
                                           {entry.verified_links!.map((link, linkIdx) => (
                                             <a
                                               key={linkIdx}
                                               href={link.url}
                                               target="_blank"
                                               rel="noopener noreferrer"
-                                              className="block px-3 py-2 text-xs text-stone-600 hover:bg-orange-50 first:rounded-t-lg last:rounded-b-lg"
+                                              className="flex items-center gap-2 px-3 py-2 text-xs text-stone-600 hover:bg-stone-50 first:rounded-t-lg last:rounded-b-lg transition-colors"
                                             >
-                                              <div className="flex items-center gap-2">
-                                                <ExternalLink className="w-3 h-3 flex-shrink-0" />
-                                                <span className="truncate">{link.label}</span>
-                                              </div>
+                                              <ExternalLink className="w-3 h-3 flex-shrink-0 text-stone-400" />
+                                              <span className="truncate">{link.label}</span>
                                             </a>
                                           ))}
                                         </div>
@@ -511,60 +532,45 @@ export default function BibliographyPage() {
                                   </div>
                                 )}
                               </div>
-                            </div>
-                          );
-                        })}
-                      </div>
+                            );
+                          })}
+                        </div>
+                      </motion.div>
                     )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </motion.div>
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        )}
 
-        {/* Citation Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <ShineBorder
-            className="!p-0 bg-parchment-100/70 backdrop-blur-sm"
-            borderRadius={24}
-            color={["#f97316", "#ea580c", "#fdba74"]}
+        {/* ── How to cite ── */}
+        {!loading && bibliography.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="border-t border-stone-200/50 pt-10 pb-16"
           >
-            <div className="p-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg">
-                  <GraduationCap className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-2xl font-display font-bold text-stone-800">How to Cite EleutherIA</h3>
-              </div>
-
-              <div className="bg-parchment-50/60 p-6 rounded-xl border border-amber-200/40 mb-4">
-                <p className="font-mono text-sm leading-relaxed text-stone-700">
-                  Girardi, R. (2025). <span className="italic font-serif">EleutherIA: Ancient Free Will Database</span>. Zenodo.{" "}
-                  <a
-                    href="https://doi.org/10.5281/zenodo.17379490"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-orange-600 hover:text-orange-700 underline decoration-2 underline-offset-2 transition-colors"
-                  >
-                    https://doi.org/10.5281/zenodo.17379490
-                  </a>
-                </p>
-              </div>
-
-              <div className="flex items-start gap-3 text-sm text-stone-600 bg-orange-50 border border-orange-200 rounded-xl p-4">
-                <div className="flex-shrink-0 w-1 h-full bg-orange-500 rounded-full"></div>
-                <p className="leading-relaxed">
-                  All {bibliography.length} references in this bibliography are cited in the knowledge graph with full provenance tracking and academic rigor.
-                </p>
-              </div>
+            <h2 className="text-sm font-medium text-stone-400 uppercase tracking-wider mb-4">How to Cite</h2>
+            <div className="bg-stone-50/60 rounded-xl p-5 border border-stone-200/40">
+              <p className="font-mono text-[13px] leading-relaxed text-stone-600">
+                Girardi, R. (2025). <span className="italic font-serif text-stone-700">EleutherIA: Ancient Free Will Database</span>. Zenodo.{" "}
+                <a
+                  href="https://doi.org/10.5281/zenodo.17379490"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-stone-500 hover:text-stone-700 underline underline-offset-2 decoration-stone-300 hover:decoration-stone-500 transition-colors"
+                >
+                  https://doi.org/10.5281/zenodo.17379490
+                </a>
+              </p>
             </div>
-          </ShineBorder>
-        </motion.div>
+            <p className="text-xs text-stone-400 mt-3">
+              All {bibliography.length} references are cited in the knowledge graph with full provenance tracking.
+            </p>
+          </motion.div>
+        )}
       </div>
     </div>
   );

@@ -10,6 +10,8 @@ import { useKeepAlive } from './hooks/useKeepAlive';
 import { AriaLiveProvider, useAriaLive } from './components/AriaLive';
 import { ToastProvider } from './components/ui/Toast';
 import ErrorBoundary from './components/ErrorBoundary';
+import { Glow } from './components/ui/glow';
+import { PremiumBackground } from './components/ui/premium-background';
 // HomePage - lazy loaded below
 import LoginPage from './pages/LoginPage';
 import DatabasePage from './pages/DatabasePage';
@@ -163,15 +165,28 @@ function AppContent() {
 
   const isHomePage = location.pathname === '/';
 
-  // Check if current page should hide footer (full-screen pages)
-  const hideFooter = location.pathname === '/' || location.pathname === '/how-it-works' || ['/visualizer', '/graph'].some(path =>
+  // Dark-themed pages where the glow should be hidden
+  const isDarkPage = isHomePage || location.pathname === '/how-it-works' || ['/visualizer', '/graph'].some(path =>
     location.pathname === path || location.pathname.startsWith(`${path}/`)
   );
 
+  // Check if current page should hide footer (full-screen pages)
+  const hideFooter = isDarkPage;
+
   return (
-    <div className="min-h-screen bg-academic-bg m-0 p-0">
+    <div className="min-h-screen bg-transparent m-0 p-0">
       {/* Skip Links for Accessibility */}
       <SkipLinks />
+
+      {/* Premium animated background — warm drifting orbs + glow */}
+      {!isDarkPage && (
+        <>
+          <PremiumBackground />
+          <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+            <Glow variant="top" className="opacity-25" />
+          </div>
+        </>
+      )}
 
       {/* Keyboard Shortcuts Help - DISABLED */}
       {/*

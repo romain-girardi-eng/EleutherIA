@@ -6,7 +6,7 @@ export default function AboutPage() {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
       <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Modern Header */}

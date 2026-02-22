@@ -1,34 +1,27 @@
-import { BookOpen, Network, GraduationCap, ChevronDown, ChevronRight, ExternalLink } from 'lucide-react';
+import { ChevronDown, ChevronRight, ExternalLink, Database, BookOpen, Network, GraduationCap, ChevronsUpDown, ArrowRight, Shield, Globe, Layers, RefreshCw, Scroll, Languages, Cpu, Sparkles } from 'lucide-react';
+import { Typewriter } from '../components/ui/typewriter';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../api/client';
-import { motion } from 'framer-motion';
-import { Typewriter } from '../components/ui/typewriter';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function DatabasePage() {
   const { t } = useTranslation();
   const [nodeTypeData, setNodeTypeData] = useState<Record<string, Array<{ id: string; label: string }>>>({});
   const [expandedTypes, setExpandedTypes] = useState<Set<string>>(new Set());
 
-  // Dynamic KG stats state
-  const [kgStats, setKgStats] = useState({
-    nodes: 0,
-    edges: 0,
-    sources: 0
-  });
+  const [kgStats, setKgStats] = useState({ nodes: 0, edges: 0, sources: 0 });
 
-  // Fetch KG stats on mount
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const kgStatsResponse = await apiClient.getKGStats();
         const worksStatsResponse = await apiClient.getWorksStats();
-
         setKgStats({
           nodes: kgStatsResponse.totalNodes || 0,
           edges: kgStatsResponse.totalEdges || 0,
-          sources: worksStatsResponse.total_passages || 0
+          sources: worksStatsResponse.total_passages || 0,
         });
       } catch (err) {
         console.error('Failed to fetch KG stats:', err);
@@ -44,422 +37,437 @@ export default function DatabasePage() {
         const typeData: Record<string, Array<{ id: string; label: string }>> = {};
         nodes.forEach((node: { id: string; type?: string; label?: string }) => {
           const type = node.type || 'unknown';
-          if (!typeData[type]) {
-            typeData[type] = [];
-          }
-          typeData[type].push({
-            id: node.id,
-            label: node.label || 'Unnamed'
-          });
+          if (!typeData[type]) typeData[type] = [];
+          typeData[type].push({ id: node.id, label: node.label || 'Unnamed' });
         });
-
         Object.keys(typeData).forEach(type => {
           typeData[type].sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
         });
-
         setNodeTypeData(typeData);
       })
-      .catch(error => {
-        console.error('Error loading node type data:', error);
-      });
+      .catch(error => console.error('Error loading node type data:', error));
   }, []);
 
   const toggleType = (type: string) => {
-    const newExpanded = new Set(expandedTypes);
-    if (newExpanded.has(type)) {
-      newExpanded.delete(type);
-    } else {
-      newExpanded.add(type);
-    }
-    setExpandedTypes(newExpanded);
+    const next = new Set(expandedTypes);
+    if (next.has(type)) next.delete(type); else next.add(type);
+    setExpandedTypes(next);
   };
 
-  return (
-    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
-      <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+  const nodeTypes = [
+    { key: 'person', label: 'Persons', desc: 'Philosophers, theologians, authors', count: 161 },
+    { key: 'argument', label: 'Arguments', desc: 'Specific philosophical arguments', count: 117 },
+    { key: 'concept', label: 'Concepts', desc: 'Key philosophical terms', count: 105 },
+    { key: 'work', label: 'Works', desc: 'Treatises, dialogues, letters', count: 57 },
+    { key: 'reformulation', label: 'Reformulations', desc: 'Conceptual redefinitions', count: 53 },
+  ];
 
-        {/* Modern Header */}
+  const fairPrinciples = [
+    {
+      letter: 'F',
+      title: 'Findable',
+      icon: Shield,
+      items: ['Unique persistent identifiers for all nodes', 'Rich metadata with controlled vocabularies', 'DOI: 10.5281/zenodo.17379490'],
+    },
+    {
+      letter: 'A',
+      title: 'Accessible',
+      icon: Globe,
+      items: ['Open JSON format (13 MB)', 'RESTful API with full documentation', 'CC BY 4.0 license'],
+    },
+    {
+      letter: 'I',
+      title: 'Interoperable',
+      icon: Layers,
+      items: ['JSON Schema validation (Draft 07)', 'Standard philosophical taxonomies', 'Compatible with Cytoscape, Gephi, Neo4j'],
+    },
+    {
+      letter: 'R',
+      title: 'Reusable',
+      icon: RefreshCw,
+      items: ['Complete provenance documentation', 'Semantic versioning (v1.0.0)', 'Extensive examples and documentation'],
+    },
+  ];
+
+  return (
+    <div className="min-h-screen w-full bg-transparent">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+        {/* ── Hero ── */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center"
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="pt-28 pb-10 text-center"
         >
-          <h1 className="text-5xl md:text-6xl font-display font-bold text-stone-800 mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-800/5 border border-stone-300/30 text-xs font-medium text-stone-500 tracking-wide uppercase mb-5">
+            <Database className="w-3.5 h-3.5" />
+            Knowledge Architecture
+          </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-semibold text-stone-800 tracking-tight mb-3">
             <Typewriter
               text={["Database Overview", "Knowledge Architecture", "Data Structure"]}
-              speed={100}
+              speed={80}
               waitTime={3000}
-              deleteSpeed={60}
+              deleteSpeed={50}
               className="text-stone-800"
               cursorChar="_"
             />
           </h1>
-          <p className="text-lg text-stone-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-stone-500 max-w-xl mx-auto leading-relaxed">
             {t('database.subtitle')}
           </p>
         </motion.div>
 
-        {/* Stats Pills */}
+        {/* ── Key metrics ── */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-3"
+          transition={{ delay: 0.15 }}
+          className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-16"
         >
-          <span className="px-4 py-2 bg-parchment-100/70 backdrop-blur-sm rounded-full text-sm font-medium text-stone-600 shadow-sm border border-amber-200/60">
-            {kgStats.nodes.toLocaleString()} Knowledge Graph Nodes
-          </span>
-          <span className="px-4 py-2 bg-parchment-100/70 backdrop-blur-sm rounded-full text-sm font-medium text-stone-600 shadow-sm border border-amber-200/60">
-            {kgStats.edges.toLocaleString()} Relationships
-          </span>
-          <span className="px-4 py-2 bg-parchment-100/70 backdrop-blur-sm rounded-full text-sm font-medium text-stone-600 shadow-sm border border-amber-200/60">
-            376 Ancient Texts
-          </span>
-          <span className="px-4 py-2 bg-amber-50 backdrop-blur-sm rounded-full text-sm font-medium text-orange-700 shadow-sm border border-amber-200/60">
-            FAIR Compliant
-          </span>
+          {[
+            { value: kgStats.nodes.toLocaleString(), label: 'KG Nodes' },
+            { value: kgStats.edges.toLocaleString(), label: 'Relationships' },
+            { value: '376', label: 'Ancient Texts' },
+            { value: kgStats.sources.toLocaleString(), label: 'Passages' },
+          ].map((m, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + i * 0.06 }}
+                className="py-5 px-4 bg-white/50 backdrop-blur-sm border border-stone-200/50 rounded-xl text-center hover:border-stone-300/60 hover:shadow-sm transition-all duration-300"
+              >
+                <div className="text-2xl sm:text-3xl font-semibold text-stone-800 leading-tight">{m.value}</div>
+                <div className="text-xs text-stone-400 mt-1">{m.label}</div>
+              </motion.div>
+          ))}
         </motion.div>
 
-        {/* Ancient Texts Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
+        {/* ══════════════════════════════════════════════════
+            Section 1: Ancient Texts Corpus
+        ══════════════════════════════════════════════════ */}
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-16"
         >
-          <div className="flex items-start gap-4 mb-6">
-            <BookOpen className="w-8 h-8 text-orange-600 flex-shrink-0" />
-            <div>
-              <h2 className="text-3xl font-display font-bold text-stone-800 mb-2">{t('nav.texts')}</h2>
-              <p className="text-stone-600 leading-relaxed">
-                Complete collection of Greek and Latin philosophical texts from the 4th century BCE to the 6th century CE
-              </p>
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-9 h-9 rounded-xl bg-stone-100 border border-stone-200/50 flex items-center justify-center">
+              <BookOpen className="w-4.5 h-4.5 text-stone-500" />
             </div>
+            <h2 className="text-xl sm:text-2xl font-display font-semibold text-stone-800">Ancient Texts Corpus</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-6 rounded-xl text-center border border-amber-200/60">
-              <div className="text-4xl font-bold text-orange-600 mb-2">376</div>
-              <div className="text-sm font-medium text-stone-600">Ancient Texts</div>
-            </div>
-            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl text-center border border-orange-200/60">
-              <div className="text-4xl font-bold text-orange-600 mb-2">109</div>
-              <div className="text-sm font-medium text-stone-600">Lemmatized Texts</div>
-            </div>
-            <div className="bg-gradient-to-br from-orange-50 to-parchment-50 p-6 rounded-xl text-center border border-amber-200/60">
-              <div className="text-4xl font-bold text-orange-600 mb-2">2</div>
-              <div className="text-sm font-medium text-stone-600">Languages (Greek & Latin)</div>
-            </div>
-          </div>
+          <p className="text-sm sm:text-[15px] text-stone-500 leading-relaxed mb-6 max-w-2xl">
+            Complete collection of Greek and Latin philosophical texts from the 4th century BCE to the 6th century CE, with full-text and lemmatic search capabilities.
+          </p>
 
-          <div className="bg-gradient-to-br from-parchment-50 to-amber-50 rounded-xl p-6 border border-amber-200/60">
-            <h3 className="font-display font-bold text-lg text-stone-800 mb-4">Features & Capabilities</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange-600 mt-2"></div>
-                <div>
-                  <div className="font-semibold text-stone-800 mb-1">Full-Text Search</div>
-                  <div className="text-sm text-stone-600">PostgreSQL full-text search across all 376 texts</div>
+          {/* Inline stats */}
+          <div className="flex flex-wrap gap-3 mb-6">
+            {[
+              { val: '376', label: 'texts', icon: BookOpen },
+              { val: '109', label: 'lemmatized', icon: Languages },
+              { val: '2', label: 'languages', icon: Globe },
+            ].map((s) => {
+              const SIcon = s.icon;
+              return (
+                <div key={s.label} className="inline-flex items-center gap-2 px-3 py-1.5 bg-stone-100/60 border border-stone-200/40 rounded-lg">
+                  <SIcon className="w-3.5 h-3.5 text-stone-400" />
+                  <span className="text-sm"><strong className="text-stone-700 font-semibold">{s.val}</strong> <span className="text-stone-500">{s.label}</span></span>
                 </div>
-              </div>
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange-600 mt-2"></div>
-                <div>
-                  <div className="font-semibold text-stone-800 mb-1">Lemmatic Search</div>
-                  <div className="text-sm text-stone-600">Morphological analysis on 109 texts</div>
+              );
+            })}
+          </div>
+
+          {/* Features */}
+          <div className="bg-stone-50/50 rounded-xl border border-stone-200/40 p-5 mb-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                ['Full-Text Search', 'PostgreSQL across all 376 texts'],
+                ['Lemmatic Search', 'Morphological analysis on 109 texts'],
+                ['Complete Texts', 'Full texts with proper encoding'],
+                ['Structured Metadata', 'Author, title, date, language, citations'],
+              ].map(([title, desc]) => (
+                <div key={title} className="flex gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-stone-300 mt-1.5 flex-shrink-0" />
+                  <div>
+                    <div className="text-sm font-medium text-stone-700">{title}</div>
+                    <div className="text-xs text-stone-400">{desc}</div>
+                  </div>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <Link to="/texts" className="inline-flex items-center gap-1.5 text-sm font-medium text-stone-600 hover:text-stone-800 transition-colors">
+              Browse texts <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+            <Link to="/search" className="inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors">
+              Hybrid search <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </motion.section>
+
+        <div className="border-t border-stone-200/40 mb-16" />
+
+        {/* ══════════════════════════════════════════════════
+            Section 2: Knowledge Graph
+        ══════════════════════════════════════════════════ */}
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-8"
+        >
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-9 h-9 rounded-xl bg-stone-100 border border-stone-200/50 flex items-center justify-center">
+              <Network className="w-4.5 h-4.5 text-stone-500" />
+            </div>
+            <h2 className="text-xl sm:text-2xl font-display font-semibold text-stone-800">Knowledge Graph</h2>
+          </div>
+
+          <p className="text-sm sm:text-[15px] text-stone-500 leading-relaxed mb-6 max-w-2xl">
+            Structured semantic network documenting philosophical debates, arguments, and conceptual developments across 13 node types.
+          </p>
+
+          {/* Inline stats */}
+          <div className="flex flex-wrap gap-3 mb-6">
+            {[
+              { val: kgStats.nodes.toLocaleString(), label: 'nodes' },
+              { val: kgStats.edges.toLocaleString(), label: 'edges' },
+              { val: '13', label: 'node types' },
+            ].map((s) => (
+              <div key={s.label} className="inline-flex items-center gap-2 px-3 py-1.5 bg-stone-100/50 border border-stone-200/30 rounded-lg">
+                <span className="text-sm"><strong className="text-stone-700 font-semibold">{s.val}</strong> <span className="text-stone-500">{s.label}</span></span>
               </div>
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange-600 mt-2"></div>
-                <div>
-                  <div className="font-semibold text-stone-800 mb-1">Complete Texts</div>
-                  <div className="text-sm text-stone-600">Full texts with proper encoding</div>
+            ))}
+          </div>
+
+          {/* Node types — expandable list */}
+          <div className="bg-stone-50/50 rounded-xl border border-stone-200/40 p-4 sm:p-5 mb-5">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-medium text-stone-400 uppercase tracking-wider">Node Types</span>
+              <button
+                onClick={() => expandedTypes.size > 0 ? setExpandedTypes(new Set()) : setExpandedTypes(new Set(nodeTypes.map(n => n.key)))}
+                className="inline-flex items-center gap-1 text-xs text-stone-400 hover:text-stone-600 transition-colors"
+              >
+                <ChevronsUpDown className="w-3 h-3" />
+                {expandedTypes.size > 0 ? 'Collapse' : 'Expand'} all
+              </button>
+            </div>
+
+            <div className="space-y-0.5">
+              {nodeTypes.map((nt) => {
+                const isExpanded = expandedTypes.has(nt.key);
+                const items = nodeTypeData[nt.key] || [];
+                const actualCount = items.length || nt.count;
+                // Bar width proportional to max count
+                const barWidth = Math.round((actualCount / 161) * 100);
+
+                return (
+                  <div key={nt.key}>
+                    <button
+                      onClick={() => toggleType(nt.key)}
+                      className="w-full flex items-center gap-3 py-2.5 px-2 group hover:bg-white/60 rounded-lg transition-colors"
+                    >
+                      {isExpanded
+                        ? <ChevronDown className="w-3.5 h-3.5 text-stone-400 flex-shrink-0" />
+                        : <ChevronRight className="w-3.5 h-3.5 text-stone-400 flex-shrink-0" />
+                      }
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-baseline gap-2 mb-1">
+                          <span className="text-sm font-medium text-stone-700">{nt.label}</span>
+                          <span className="text-[11px] text-stone-400 hidden sm:inline">{nt.desc}</span>
+                        </div>
+                        {/* Mini bar chart */}
+                        <div className="h-1 rounded-full bg-stone-200/60 overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-stone-300/60 transition-all duration-500"
+                            style={{ width: `${barWidth}%` }}
+                          />
+                        </div>
+                      </div>
+                      <span className="text-sm font-semibold text-stone-500 tabular-nums ml-2">{actualCount}</span>
+                    </button>
+
+                    <AnimatePresence>
+                      {isExpanded && items.length > 0 && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="ml-7 border-l border-stone-200/60 mb-2 max-h-72 overflow-y-auto">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px">
+                              {items.map((item, idx) => (
+                                <WorkItemWithLink key={idx} item={item} typeKey={nt.key} />
+                              ))}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <Link to="/visualizer" className="inline-flex items-center gap-1.5 text-sm font-medium text-stone-600 hover:text-stone-800 transition-colors">
+              Explore graph <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+            <Link to="/graphrag" className="inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors">
+              Query with AI <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </motion.section>
+
+        <div className="border-t border-stone-200/40 mb-16" />
+
+        {/* ══════════════════════════════════════════════════
+            Section 3: Modern Scholarship
+        ══════════════════════════════════════════════════ */}
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-16"
+        >
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-9 h-9 rounded-xl bg-stone-100 border border-stone-200/50 flex items-center justify-center">
+              <GraduationCap className="w-4.5 h-4.5 text-stone-500" />
+            </div>
+            <h2 className="text-xl sm:text-2xl font-display font-semibold text-stone-800">Modern Scholarship</h2>
+          </div>
+
+          <p className="text-sm sm:text-[15px] text-stone-500 leading-relaxed mb-6 max-w-2xl">
+            Comprehensive bibliography of secondary literature supporting knowledge graph annotations with full provenance tracking.
+          </p>
+
+          <div className="flex flex-wrap gap-3 mb-5">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-stone-100/50 border border-stone-200/30 rounded-lg">
+              <span className="text-sm"><strong className="text-stone-700 font-semibold">1,125+</strong> <span className="text-stone-500">references</span></span>
+            </div>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-stone-100/50 border border-stone-200/30 rounded-lg">
+              <span className="text-sm"><strong className="text-stone-700 font-semibold">91.8%</strong> <span className="text-stone-500">citation coverage</span></span>
+            </div>
+          </div>
+
+          <Link to="/bibliography" className="inline-flex items-center gap-1.5 text-sm font-medium text-stone-600 hover:text-stone-800 transition-colors">
+            View bibliography <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </motion.section>
+
+        <div className="border-t border-stone-200/40 mb-16" />
+
+        {/* ══════════════════════════════════════════════════
+            Section 4: FAIR Principles
+        ══════════════════════════════════════════════════ */}
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-16"
+        >
+          <h2 className="text-sm font-medium text-stone-400 uppercase tracking-wider mb-6">FAIR Compliance</h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {fairPrinciples.map((fp) => {
+              const Icon = fp.icon;
+              return (
+                <div key={fp.letter} className="bg-stone-50/50 rounded-xl border border-stone-200/40 p-5 hover:border-stone-300/50 transition-colors">
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-stone-100 border border-stone-200/40 flex items-center justify-center">
+                      <Icon className="w-3.5 h-3.5 text-stone-400" />
+                    </div>
+                    <h3 className="text-sm font-semibold text-stone-700">{fp.title}</h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {fp.items.map((item, j) => (
+                      <li key={j} className="text-[13px] text-stone-500 leading-relaxed flex gap-2.5">
+                        <div className="w-1 h-1 rounded-full bg-stone-300 mt-1.5 flex-shrink-0" />
+                        {item.includes('10.5281') ? (
+                          <span>
+                            DOI:{' '}
+                            <a
+                              href="https://doi.org/10.5281/zenodo.17379490"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-stone-600 hover:text-stone-800 underline underline-offset-2 decoration-stone-300 hover:decoration-stone-500 transition-colors"
+                            >
+                              10.5281/zenodo.17379490
+                            </a>
+                          </span>
+                        ) : item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange-600 mt-2"></div>
-                <div>
-                  <div className="font-semibold text-stone-800 mb-1">Structured Metadata</div>
-                  <div className="text-sm text-stone-600">Author, title, date, language, citations</div>
+              );
+            })}
+          </div>
+        </motion.section>
+
+        <div className="border-t border-stone-200/40 mb-16" />
+
+        {/* ══════════════════════════════════════════════════
+            Section 5: Technical Stack
+        ══════════════════════════════════════════════════ */}
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="pb-20"
+        >
+          <h2 className="text-sm font-medium text-stone-400 uppercase tracking-wider mb-5">Technical Stack</h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { name: 'PostgreSQL', desc: 'Full-text search, lemmatic matching, JSON support', icon: Database },
+              { name: 'Qdrant Cloud', desc: '3072-dim embeddings for semantic search', icon: Cpu },
+              { name: 'Gemini API', desc: 'Embedding & LLM synthesis (Gemini 2.0 Flash)', icon: Sparkles },
+            ].map((tech) => {
+              const TIcon = tech.icon;
+              return (
+                <div key={tech.name} className="bg-stone-50/50 rounded-xl border border-stone-200/40 p-4 hover:border-stone-300/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <TIcon className="w-3.5 h-3.5 text-stone-400" />
+                    <span className="text-sm font-medium text-stone-700">{tech.name}</span>
+                  </div>
+                  <p className="text-xs text-stone-400 leading-relaxed">{tech.desc}</p>
                 </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
-
-          <div className="mt-6 p-4 bg-amber-50 border border-amber-200/60 rounded-xl">
-            <p className="text-sm text-stone-800">
-              <span className="font-semibold">Access:</span> All ancient texts are available through the{' '}
-              <a href="/texts" className="text-orange-600 hover:underline font-medium">Ancient Texts</a> browser
-              and searchable via the{' '}
-              <a href="/search" className="text-orange-600 hover:underline font-medium">Hybrid Search</a> interface.
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Knowledge Graph Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
-        >
-          <div className="flex items-start gap-4 mb-6">
-            <Network className="w-8 h-8 text-orange-600 flex-shrink-0" />
-            <div>
-              <h2 className="text-3xl font-display font-bold text-stone-800 mb-2">{t('nav.visualizer')}</h2>
-              <p className="text-stone-600 leading-relaxed">
-                Structured semantic network documenting philosophical debates, arguments, and conceptual developments
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-6 rounded-xl text-center border border-amber-200/60">
-              <div className="text-4xl font-bold text-orange-600 mb-2">{kgStats.nodes.toLocaleString()}</div>
-              <div className="text-sm font-medium text-stone-600">{t('kg.nodes')}</div>
-            </div>
-            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl text-center border border-orange-200/60">
-              <div className="text-4xl font-bold text-orange-600 mb-2">{kgStats.edges.toLocaleString()}</div>
-              <div className="text-sm font-medium text-stone-600">{t('kg.edges')}</div>
-            </div>
-            <div className="bg-gradient-to-br from-orange-50 to-parchment-50 p-6 rounded-xl text-center border border-amber-200/60">
-              <div className="text-4xl font-bold text-orange-600 mb-2">13</div>
-              <div className="text-sm font-medium text-stone-600">Node Types</div>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-parchment-50 to-amber-50 rounded-xl p-6 border border-amber-200/60">
-            <h3 className="font-display font-bold text-lg text-stone-800 mb-4">Node Types Distribution</h3>
-            <p className="text-sm text-stone-500 mb-4">Click on any node type to view all items in alphabetical order</p>
-            <div className="space-y-2">
-              <NodeTypeItem type="Persons" typeKey="person" count={161} description="Philosophers, theologians, authors" items={nodeTypeData['person'] || []} expanded={expandedTypes.has('person')} onToggle={() => toggleType('person')} />
-              <NodeTypeItem type="Arguments" typeKey="argument" count={117} description="Specific philosophical arguments" items={nodeTypeData['argument'] || []} expanded={expandedTypes.has('argument')} onToggle={() => toggleType('argument')} />
-              <NodeTypeItem type="Concepts" typeKey="concept" count={105} description="Key philosophical terms" items={nodeTypeData['concept'] || []} expanded={expandedTypes.has('concept')} onToggle={() => toggleType('concept')} />
-              <NodeTypeItem type="Works" typeKey="work" count={57} description="Treatises, dialogues, letters" items={nodeTypeData['work'] || []} expanded={expandedTypes.has('work')} onToggle={() => toggleType('work')} />
-              <NodeTypeItem type="Reformulations" typeKey="reformulation" count={53} description="Conceptual redefinitions" items={nodeTypeData['reformulation'] || []} expanded={expandedTypes.has('reformulation')} onToggle={() => toggleType('reformulation')} />
-            </div>
-          </div>
-
-          <div className="mt-6 p-4 bg-amber-50 border border-amber-200/60 rounded-xl">
-            <p className="text-sm text-stone-800">
-              <span className="font-semibold">Visualization:</span> Explore the knowledge graph interactively through the{' '}
-              <a href="/visualizer" className="text-orange-600 hover:underline font-medium">{t('nav.visualizer')}</a>
-              {' '}or query it semantically via{' '}
-              <a href="/graphrag" className="text-orange-600 hover:underline font-medium">{t('nav.graphrag')}</a>.
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Modern Scholarship */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
-        >
-          <div className="flex items-start gap-4 mb-6">
-            <GraduationCap className="w-8 h-8 text-orange-600 flex-shrink-0" />
-            <div>
-              <h2 className="text-3xl font-display font-bold text-stone-800 mb-2">{t('nav.bibliography')}</h2>
-              <p className="text-stone-600 leading-relaxed">
-                Comprehensive bibliography of secondary literature supporting knowledge graph annotations
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl text-center border border-amber-200/60">
-              <div className="text-4xl font-bold text-orange-600 mb-2">1125+</div>
-              <div className="text-sm font-medium text-stone-600">Bibliography References</div>
-            </div>
-            <div className="bg-gradient-to-br from-orange-50 to-parchment-50 p-6 rounded-xl text-center border border-amber-200/60">
-              <div className="text-4xl font-bold text-orange-600 mb-2">91.8%</div>
-              <div className="text-sm font-medium text-stone-600">Citation Coverage</div>
-            </div>
-          </div>
-
-          <div className="mt-6 p-4 bg-amber-50 border border-amber-200/60 rounded-xl">
-            <p className="text-sm text-stone-800">
-              <span className="font-semibold">Access:</span> View the complete bibliography at{' '}
-              <a href="/bibliography" className="text-orange-600 hover:underline font-medium">{t('nav.bibliography')}</a> page.
-            </p>
-          </div>
-        </motion.div>
-
-        {/* FAIR Principles */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
-        >
-          <h2 className="text-3xl font-display font-bold text-stone-800 mb-6">{t('database.schema')}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-6 rounded-xl border border-amber-200/60">
-              <h3 className="font-display font-bold text-lg text-orange-800 mb-3">Findable</h3>
-              <ul className="space-y-2 text-sm text-stone-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-600">•</span>
-                  <span>Unique persistent identifiers for all nodes</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-600">•</span>
-                  <span>Rich metadata with controlled vocabularies</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-600">•</span>
-                  <span>DOI: <a href="https://doi.org/10.5281/zenodo.17379490" className="text-orange-600 hover:underline">10.5281/zenodo.17379490</a></span>
-                </li>
-              </ul>
-            </div>
-            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl border border-orange-200/60">
-              <h3 className="font-display font-bold text-lg text-orange-800 mb-3">Accessible</h3>
-              <ul className="space-y-2 text-sm text-stone-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-600">•</span>
-                  <span>Open JSON format (13 MB)</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-600">•</span>
-                  <span>RESTful API with full documentation</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-600">•</span>
-                  <span>CC BY 4.0 license</span>
-                </li>
-              </ul>
-            </div>
-            <div className="bg-gradient-to-br from-orange-50 to-parchment-50 p-6 rounded-xl border border-amber-200/60">
-              <h3 className="font-display font-bold text-lg text-orange-800 mb-3">Interoperable</h3>
-              <ul className="space-y-2 text-sm text-stone-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-600">•</span>
-                  <span>JSON Schema validation (Draft 07)</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-600">•</span>
-                  <span>Standard philosophical taxonomies</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-600">•</span>
-                  <span>Compatible with Cytoscape, Gephi, Neo4j</span>
-                </li>
-              </ul>
-            </div>
-            <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-6 rounded-xl border border-amber-200/60">
-              <h3 className="font-display font-bold text-lg text-orange-800 mb-3">Reusable</h3>
-              <ul className="space-y-2 text-sm text-stone-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-600">•</span>
-                  <span>Complete provenance documentation</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-600">•</span>
-                  <span>Semantic versioning (v1.0.0)</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-600">•</span>
-                  <span>Extensive examples and documentation</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Technical Infrastructure */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
-        >
-          <h2 className="text-3xl font-display font-bold text-stone-800 mb-6">Technical Infrastructure</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-6 rounded-xl border border-amber-200/60">
-              <h3 className="font-display font-bold text-orange-800 mb-2">PostgreSQL</h3>
-              <p className="text-sm text-stone-600">Relational database with full-text search, lemmatic matching, and JSON support</p>
-            </div>
-            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl border border-orange-200/60">
-              <h3 className="font-display font-bold text-orange-800 mb-2">Qdrant Cloud</h3>
-              <p className="text-sm text-stone-600">Vector database storing 3072-dimensional embeddings for semantic search</p>
-            </div>
-            <div className="bg-gradient-to-br from-orange-50 to-parchment-50 p-6 rounded-xl border border-amber-200/60">
-              <h3 className="font-display font-bold text-orange-800 mb-2">Gemini API</h3>
-              <p className="text-sm text-stone-600">Text embedding (text-embedding-004) and LLM synthesis (Gemini 2.0 Flash)</p>
-            </div>
-          </div>
-        </motion.div>
+        </motion.section>
       </div>
     </div>
   );
 }
 
-function NodeTypeItem({
-  type,
-  typeKey,
-  count,
-  description,
-  items,
-  expanded,
-  onToggle,
-}: {
-  type: string;
-  typeKey: string;
-  count: number;
-  description: string;
-  items: Array<{ id: string; label: string }>;
-  expanded: boolean;
-  onToggle: () => void;
-}) {
-  const navigate = useNavigate();
 
-  return (
-    <div className="border border-amber-200/60 rounded-xl overflow-hidden bg-parchment-50">
-      <button
-        onClick={onToggle}
-        className="w-full flex justify-between items-start p-4 hover:bg-parchment-100/70 transition-colors cursor-pointer text-left"
-      >
-        <div className="flex items-start gap-2 flex-1">
-          {expanded ? (
-            <ChevronDown className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
-          ) : (
-            <ChevronRight className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
-          )}
-          <div>
-            <div className="font-semibold text-stone-800">{type}</div>
-            <div className="text-xs text-stone-500 mt-0.5">{description}</div>
-          </div>
-        </div>
-        <div className="text-lg font-bold text-orange-600 ml-4">{count}</div>
-      </button>
-
-      {expanded && items.length > 0 && (
-        <div className="border-t border-amber-200/60 bg-parchment-50 p-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 max-h-96 overflow-y-auto">
-            {items.map((item, index) => (
-              <WorkItemWithLink
-                key={`${typeKey}-${index}`}
-                item={item}
-                typeKey={typeKey}
-                navigate={navigate}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+/* ─── Expandable node item with optional link ─── */
 
 function WorkItemWithLink({
   item,
   typeKey,
-  navigate,
 }: {
   item: { id: string; label: string };
   typeKey: string;
-  navigate: (path: string) => void;
 }) {
+  const navigate = useNavigate();
   const [textId, setTextId] = useState<string | null>(null);
   const [checking, setChecking] = useState(false);
 
@@ -467,40 +475,24 @@ function WorkItemWithLink({
     if (typeKey === 'work') {
       setChecking(true);
       apiClient.getWork(item.id)
-        .then((work) => {
-          if (work) {
-            setTextId(work.work_id);
-          }
-        })
-        .catch((error) => {
-          console.error('Error checking for linked work:', error);
-        })
-        .finally(() => {
-          setChecking(false);
-        });
+        .then((work) => { if (work) setTextId(work.work_id); })
+        .catch(() => {})
+        .finally(() => setChecking(false));
     }
   }, [item.id, typeKey]);
 
   return (
-    <div className="text-sm text-stone-800 p-2 bg-parchment-50 rounded border border-amber-200/60 hover:border-orange-300 transition-colors">
-      <div className="flex items-start justify-between gap-2">
-        <span className="flex-1">{item.label}</span>
-        {typeKey === 'work' && (
-          <>
-            {checking ? (
-              <span className="text-xs text-stone-400 flex-shrink-0">...</span>
-            ) : textId ? (
-              <button
-                onClick={() => navigate(`/texts/${textId}`)}
-                className="flex-shrink-0 text-orange-600 hover:text-orange-700 transition-colors"
-                title={`Read ${item.label} in text viewer`}
-              >
-                <ExternalLink className="w-4 h-4" />
-              </button>
-            ) : null}
-          </>
-        )}
-      </div>
+    <div className="group/item flex items-center gap-2 py-1.5 pl-4 pr-2 hover:bg-white/60 rounded-r-lg transition-colors -ml-px border-l-2 border-transparent hover:border-stone-300">
+      <span className="text-[13px] text-stone-600 flex-1 truncate">{item.label}</span>
+      {typeKey === 'work' && !checking && textId && (
+        <button
+          onClick={() => navigate(`/texts/${textId}`)}
+          className="flex-shrink-0 opacity-0 group-hover/item:opacity-100 text-stone-400 hover:text-stone-600 transition-all"
+          title={`Read ${item.label}`}
+        >
+          <ExternalLink className="w-3 h-3" />
+        </button>
+      )}
     </div>
   );
 }

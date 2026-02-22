@@ -67,7 +67,7 @@ const SubmitCorrectionPage: React.FC = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
       <div className="max-w-2xl mx-auto py-12 relative z-10">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
@@ -95,7 +95,7 @@ const SubmitCorrectionPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
     <div className="max-w-4xl mx-auto space-y-6 relative z-10">
       {/* Header */}
       <div>

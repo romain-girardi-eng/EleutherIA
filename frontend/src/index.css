@@ -11,6 +11,10 @@
   }
 
   :root {
+    /* Brand glow colors (warm golden, low saturation) */
+    --brand: 38 60% 58%;
+    --brand-foreground: 40 55% 70%;
+
     /* Colors */
     --background: #ffffff;
     --foreground: #1c1917;
@@ -103,13 +107,30 @@
     --radius-2xl: 1rem;     /* 16px */
     --radius-full: 9999px;
 
-    /* Shadows */
-    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    /* Shadows — layered for realistic light diffusion */
+    --shadow-xs:
+      0 1px 2px 0 rgb(0 0 0 / 0.04),
+      0 0 1px 0 rgb(0 0 0 / 0.06);
+    --shadow-sm:
+      0 1px 2px 0 rgb(0 0 0 / 0.06),
+      0 2px 6px -1px rgb(0 0 0 / 0.06),
+      0 0 1px 0 rgb(0 0 0 / 0.04);
+    --shadow-md:
+      0 2px 4px -1px rgb(0 0 0 / 0.06),
+      0 6px 12px -2px rgb(0 0 0 / 0.06),
+      0 0 2px 0 rgb(0 0 0 / 0.03);
+    --shadow-lg:
+      0 4px 6px -2px rgb(0 0 0 / 0.06),
+      0 12px 24px -4px rgb(0 0 0 / 0.07),
+      0 0 3px 0 rgb(0 0 0 / 0.03);
+    --shadow-xl:
+      0 8px 10px -4px rgb(0 0 0 / 0.06),
+      0 20px 40px -8px rgb(0 0 0 / 0.08),
+      0 0 4px 0 rgb(0 0 0 / 0.03);
+    --shadow-2xl:
+      0 12px 16px -6px rgb(0 0 0 / 0.08),
+      0 32px 64px -12px rgb(0 0 0 / 0.14),
+      0 0 6px 0 rgb(0 0 0 / 0.03);
     --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
 
     /* Transitions */
@@ -162,7 +183,70 @@
   }
 
   body {
-    @apply bg-academic-bg text-academic-text antialiased font-serif;
+    @apply text-academic-text antialiased font-serif;
+    font-optical-sizing: auto;
+    /* Layered parchment: subtle vertical warmth shift + soft vignette */
+    background:
+      radial-gradient(ellipse 150% 80% at 50% 50%, transparent 35%, rgba(200,185,165,0.10) 100%),
+      linear-gradient(180deg, #fcf9f4 0%, #f5eee2 30%, #fcf9f4 60%, #f3eadb 100%);
+    background-attachment: fixed;
+  }
+
+  /* Layer 1: Papyrus fiber texture — aged manuscript surface */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9997;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image:
+      /* Horizontal papyrus fibers — irregular spacing */
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(130,110,80,0.12) 2px,
+        rgba(130,110,80,0.12) 3px,
+        transparent 3px,
+        transparent 7px,
+        rgba(130,110,80,0.06) 7px,
+        rgba(130,110,80,0.06) 8px
+      ),
+      /* Vertical cross-fibers — wider spacing */
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 11px,
+        rgba(130,110,80,0.05) 11px,
+        rgba(130,110,80,0.05) 12px,
+        transparent 12px,
+        transparent 23px,
+        rgba(130,110,80,0.08) 23px,
+        rgba(130,110,80,0.08) 24px
+      ),
+      /* Diagonal aged marks — time-worn surface / scan artifacts */
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(130,110,80,0.02) 40px,
+        rgba(130,110,80,0.02) 41px
+      );
+  }
+
+  /* Layer 2: Paper grain noise — fractal turbulence */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0.04;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 512px 512px;
   }
 
   /* Ensure no default margins anywhere */
@@ -172,6 +256,14 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif text-academic-text;
+    text-wrap: balance;
+  }
+
+  /* Display font tightening — editorial letter-spacing */
+  .font-display {
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+    font-optical-sizing: auto;
   }
 
   /* Code and Greek/Latin text */
@@ -278,6 +370,50 @@
   /* Search result highlight */
   .search-highlight {
     @apply bg-yellow-100 text-academic-text font-medium px-1;
+  }
+}
+
+@layer utilities {
+  .glow-effect {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glow-effect::before {
+    content: '';
+    z-index: -1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle,
+      hsl(var(--brand) / 0.3),
+      transparent 50%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .glow-effect:hover::before {
+    opacity: 1;
+  }
+}
+
+/* Respect reduced-motion preference — freeze all ambient animations */
+@media (prefers-reduced-motion: reduce) {
+  .animate-orb-drift-1,
+  .animate-orb-drift-2,
+  .animate-orb-drift-3,
+  .animate-vignette-breathe,
+  .animate-light-sweep,
+  .animate-grid-spotlight,
+  .animate-letter-drift,
+  .animate-grid-fade,
+  .animate-dust-float {
+    animation: none !important;
   }
 }
 

@@ -528,7 +528,7 @@ export default function GraphRAGPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-parchment-50">
+    <div className="min-h-screen w-full bg-transparent">
       <div className="relative w-full min-h-screen overflow-hidden">
         <div className="relative z-10 min-h-screen">
 
