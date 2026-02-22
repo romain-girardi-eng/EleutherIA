@@ -1374,8 +1374,9 @@ export default function CosmographKGVisualizer({
           .alphaDecay(0.015)
           .velocityDecay(0.35);
 
-        // Run simulation longer for better settling
-        const maxIterations = 500;
+        // Run simulation longer for better settling (reduced on mobile to avoid blocking main thread)
+        const isMobileDevice = window.matchMedia('(hover: none)').matches || window.innerWidth < 768;
+        const maxIterations = isMobileDevice ? 150 : 500;
         console.log(`🌌 Cosmograph: Running ${maxIterations} hierarchical simulation ticks...`);
 
         for (let i = 0; i < maxIterations; i++) {

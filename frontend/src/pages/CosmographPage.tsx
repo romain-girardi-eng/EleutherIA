@@ -4,18 +4,96 @@
  * Modern, ultra-fast graph visualization using Cosmograph
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useCallback, useMemo, useEffect, Component } from 'react';
+import type { ReactNode } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import CosmographKGVisualizer from '../components/CosmographKGVisualizer';
 import { CosmicNodePanel } from '../components/cosmos/CosmicNodePanel';
 import ModeSwitcher from '../components/canvas/ModeSwitcher';
 import BottomTabNav from '../components/mobile/BottomTabNav';
-import { HelpCircle } from 'lucide-react';
+import { HelpCircle, Monitor, Network } from 'lucide-react';
 import type { KGNode } from '../types';
 import { apiClient } from '../api/client';
+import { useDevice } from '../context/DeviceContext';
+
+/** Scoped error boundary — catches Cosmograph/WebGL crashes without reloading the page */
+class GraphErrorBoundary extends Component<
+  { children: ReactNode; onError?: () => void },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error) {
+    console.error('GraphErrorBoundary caught:', error);
+    this.props.onError?.();
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4 max-w-sm text-center p-6">
+            <div className="w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center border border-amber-500/30">
+              <Network className="w-8 h-8 text-amber-400" />
+            </div>
+            <p className="text-white/80 font-medium">Graph visualization failed to load</p>
+            <p className="text-white/40 text-sm">Your device may not have enough GPU resources for the interactive graph.</p>
+            <button
+              onClick={() => this.setState({ hasError: false })}
+              className="px-5 py-2.5 bg-white/10 text-white/80 rounded-xl hover:bg-white/15 transition-all border border-white/10 text-sm"
+            >
+              Try again
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+/** Mobile fallback — shown instead of the GPU graph on phones/tablets */
+function MobileGraphFallback({ nodeCount, edgeCount }: { nodeCount: number; edgeCount: number }) {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center px-6">
+      <div className="flex flex-col items-center gap-6 max-w-sm text-center">
+        <div className="w-20 h-20 rounded-2xl bg-violet-500/20 flex items-center justify-center border border-violet-500/30">
+          <Monitor className="w-10 h-10 text-violet-400" />
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-white mb-2">Desktop Recommended</h2>
+          <p className="text-white/50 text-sm leading-relaxed">
+            The interactive knowledge graph ({nodeCount.toLocaleString()} nodes, {edgeCount.toLocaleString()} edges)
+            requires GPU acceleration and works best on desktop browsers.
+          </p>
+        </div>
+        <div className="flex flex-col gap-3 w-full">
+          <Link
+            to="/search"
+            className="px-5 py-3 bg-violet-600/80 text-white rounded-xl hover:bg-violet-600 transition-all border border-violet-500/30 text-sm font-medium"
+          >
+            Search the Knowledge Graph
+          </Link>
+          <Link
+            to="/database"
+            className="px-5 py-3 bg-white/10 text-white/80 rounded-xl hover:bg-white/15 transition-all border border-white/10 text-sm"
+          >
+            Browse the Database
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function CosmographPage() {
   const { nodeId } = useParams<{ nodeId?: string }>();
+  const { isMobile, isTablet } = useDevice();
+  const isMobileOrTablet = isMobile || isTablet;
   const [selectedNode, setSelectedNode] = useState<KGNode | null>(null);
   const [showHelp, setShowHelp] = useState(false);
   const [allNodes, setAllNodes] = useState<KGNode[]>([]);
@@ -132,13 +210,22 @@ export default function CosmographPage() {
 
   return (
     <div className="fixed top-12 left-0 right-0 bottom-0 overflow-hidden bg-[#030712]">
-      {/* Main visualization */}
-      <div className="absolute inset-0">
-        <CosmographKGVisualizer
-          onNodeClick={handleNodeClick}
-          selectedNodeId={selectedNode?.id}
+      {/* Main visualization — mobile gets a fallback, desktop gets the GPU graph */}
+      {isMobileOrTablet ? (
+        <MobileGraphFallback
+          nodeCount={allNodes.length}
+          edgeCount={cyData?.elements?.edges?.length ?? 0}
         />
-      </div>
+      ) : (
+        <div className="absolute inset-0">
+          <GraphErrorBoundary>
+            <CosmographKGVisualizer
+              onNodeClick={handleNodeClick}
+              selectedNodeId={selectedNode?.id}
+            />
+          </GraphErrorBoundary>
+        </div>
+      )}
 
       {/* Mode Switcher - Top Right */}
       <div className="absolute top-4 right-4 z-30 flex items-center gap-2">
