@@ -13,6 +13,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { Glow } from './components/ui/glow';
 import { PremiumBackground } from './components/ui/premium-background';
 import { CandlelightCursor } from './components/ui/candlelight-cursor';
+import { ShaderBackground } from './components/ui/shader-background';
 // HomePage - lazy loaded below
 import LoginPage from './pages/LoginPage';
 import DatabasePage from './pages/DatabasePage';
@@ -182,6 +183,7 @@ function AppContent() {
       {/* Premium animated background — warm drifting orbs + glow */}
       {!isDarkPage && (
         <>
+          <ShaderBackground />
           <PremiumBackground />
           <CandlelightCursor />
           <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
