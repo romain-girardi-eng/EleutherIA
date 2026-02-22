@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight, ExternalLink, Database, BookOpen, Network, GraduationCap, ChevronsUpDown, ArrowRight, Shield, Globe, Layers, RefreshCw, Scroll, Languages, Cpu, Sparkles } from 'lucide-react';
+import { ChevronDown, ChevronRight, ExternalLink, Database, BookOpen, Network, GraduationCap, ChevronsUpDown, ArrowRight, Shield, Globe, Layers, RefreshCw, Languages, Cpu, Sparkles } from 'lucide-react';
 import { Typewriter } from '../components/ui/typewriter';
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
