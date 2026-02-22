@@ -31,35 +31,11 @@ export default function AboutPage() {
           </p>
         </motion.div>
 
-        {/* About the Project */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
-        >
-          <h2 className="text-3xl font-display font-bold text-stone-800 mb-6">{t('about.projectTitle')}</h2>
-
-          <div className="space-y-4 text-stone-600 leading-relaxed">
-            <p>
-              <strong className="text-stone-800">EleutherIA</strong> {t('about.projectIntro')}
-            </p>
-
-            <p>{t('about.projectContext')}</p>
-            <p>{t('about.projectDetails')}</p>
-            <p>{t('about.projectGoal')}</p>
-
-            <p className="text-sm text-stone-500 italic">
-              {t('about.projectNote')}
-            </p>
-          </div>
-        </motion.div>
-
         {/* About the Author */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.2 }}
           className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
         >
           <h2 className="text-3xl font-display font-bold text-stone-800 mb-6">{t('about.authorTitle')}</h2>
@@ -190,6 +166,30 @@ export default function AboutPage() {
                 romain.girardi@univ-cotedazur.fr
               </a>
             </div>
+          </div>
+        </motion.div>
+
+        {/* About the Project */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
+        >
+          <h2 className="text-3xl font-display font-bold text-stone-800 mb-6">{t('about.projectTitle')}</h2>
+
+          <div className="space-y-4 text-stone-600 leading-relaxed">
+            <p>
+              <strong className="text-stone-800">EleutherIA</strong> {t('about.projectIntro')}
+            </p>
+
+            <p>{t('about.projectContext')}</p>
+            <p>{t('about.projectDetails')}</p>
+            <p>{t('about.projectGoal')}</p>
+
+            <p className="text-sm text-stone-500 italic">
+              {t('about.projectNote')}
+            </p>
           </div>
         </motion.div>
 
