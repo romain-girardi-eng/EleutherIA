@@ -204,12 +204,37 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
           </motion.div>
         </motion.div>
 
-        {/* ── DESKTOP white panel — static diagonal, content always visible ── */}
+        {/* ── DESKTOP panel — diagonal clip, warm living surface ───────────── */}
         {/* 55% wide: 100%=55% screen at top, 90.91%=50% screen at bottom.    */}
         <div
-          className="hidden md:flex absolute inset-y-0 left-0 z-10 bg-white flex-col justify-center px-6 md:pt-16 md:pb-6 lg:px-8 lg:pt-16 lg:pb-6 xl:px-10"
-          style={{ width: '55%', clipPath: 'polygon(0% 0%, 100% 0%, 90.91% 100%, 0% 100%)' }}
+          className="hidden md:flex absolute inset-y-0 left-0 z-10 flex-col justify-center px-6 md:pt-16 md:pb-6 lg:px-8 lg:pt-16 lg:pb-6 xl:px-10 overflow-hidden"
+          style={{
+            width: '55%',
+            clipPath: 'polygon(0% 0%, 100% 0%, 90.91% 100%, 0% 100%)',
+            background: 'linear-gradient(135deg, #fdfbf7 0%, #ffffff 40%, #faf7f2 70%, #fdfbf7 100%)',
+          }}
         >
+          {/* ── Warm glow bleeding from the diagonal edge ── */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-y-0 -right-10 w-[35%] pointer-events-none"
+            style={{
+              background: 'linear-gradient(to left, rgba(251,191,36,0.08) 0%, rgba(249,115,22,0.04) 30%, transparent 100%)',
+            }}
+          />
+
+          {/* ── Faint dot grid — scholarly paper feel ── */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage: 'radial-gradient(circle, rgba(160,140,110,0.08) 1px, transparent 1px)',
+              backgroundSize: '40px 40px',
+              maskImage: 'radial-gradient(ellipse 80% 70% at 30% 50%, black 20%, transparent 70%)',
+              WebkitMaskImage: 'radial-gradient(ellipse 80% 70% at 30% 50%, black 20%, transparent 70%)',
+            }}
+          />
+
           <div className="max-w-2xl mx-auto w-full">
             {logo && (
               <motion.header variants={itemVariants}>
