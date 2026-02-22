@@ -211,7 +211,7 @@ export default function CanonicalTextReader() {
 
   if (loading) {
     return (
-      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
         <div className="flex items-center justify-center min-h-screen max-w-7xl mx-auto relative z-10">
         <div className="text-center">
           <div className="inline-block w-8 h-8 border-2 border-amber-200/60 border-t-gray-900 rounded-full animate-spin mb-3"></div>
@@ -224,7 +224,7 @@ export default function CanonicalTextReader() {
 
   if (error || !work) {
     return (
-      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
         <div className="flex items-center justify-center min-h-screen max-w-7xl mx-auto relative z-10">
         <div className="text-center max-w-md">
           <p className="text-red-600 mb-4">{error || t('textReader.error.workNotFound')}</p>
@@ -236,7 +236,7 @@ export default function CanonicalTextReader() {
   }
 
   return (
-    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
       <div className="min-h-screen relative z-10">
       {/* Minimal notification */}
       {notification && (

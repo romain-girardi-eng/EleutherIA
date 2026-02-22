@@ -117,7 +117,7 @@ const UserProfilePage: React.FC = () => {
 
   if (!isAuthenticated && isOwnProfile) {
     return (
-      <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
+      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
         <div className="text-center py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <User className="w-16 h-16 text-academic-muted mx-auto mb-4" />
           <h2 className="text-xl font-display font-semibold mb-2">{t('community.authRequired')}</h2>
@@ -131,7 +131,7 @@ const UserProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
       <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Profile Header */}
       <Card>

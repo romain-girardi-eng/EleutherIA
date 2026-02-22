@@ -98,9 +98,9 @@ export default {
         },
         // Parchment — warm cream for scholarly backgrounds
         parchment: {
-          50: '#fffdf9',
-          100: '#fef9f0',
-          200: '#fef3e2',
+          50: '#fcf9f4',
+          100: '#f8f3eb',
+          200: '#f3ece0',
           300: '#fde8c8',
           400: '#fbd9a6',
           500: '#f8c980',
@@ -126,6 +126,8 @@ export default {
         },
         ring: '#f97316',
         input: '#e7e5e4',
+        brand: 'hsl(var(--brand))',
+        'brand-foreground': 'hsl(var(--brand-foreground))',
       },
       fontFamily: {
         // Display headings — Instrument Serif (elegant academic serif)
@@ -226,6 +228,18 @@ export default {
         'bounce-slow': 'bounce 2s infinite',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'wiggle': 'wiggle 1s ease-in-out infinite',
+        'appear-zoom': 'appear-zoom 0.5s ease-out forwards',
+        // Premium background animations
+        'orb-drift-1': 'orbDrift1 30s ease-in-out infinite',
+        'orb-drift-2': 'orbDrift2 35s ease-in-out infinite',
+        'orb-drift-3': 'orbDrift3 40s ease-in-out infinite',
+        'vignette-breathe': 'vignetteBreathe 12s ease-in-out infinite',
+        'light-sweep': 'lightSweep 25s ease-in-out infinite',
+        'grid-spotlight': 'gridSpotlight 20s ease-in-out infinite',
+        'contour-pulse': 'contourPulse 16s ease-in-out infinite',
+        'letter-drift': 'letterDrift 24s ease-in-out infinite',
+        'grid-fade': 'gridFade 10s ease-in-out infinite',
+        'dust-float': 'dustFloat 20s linear infinite',
       },
       keyframes: {
         shine: {
@@ -305,8 +319,85 @@ export default {
           '0%, 100%': { transform: 'rotate(-3deg)' },
           '50%': { transform: 'rotate(3deg)' },
         },
+        'appear-zoom': {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        // Premium background: drifting orbs with visible travel
+        orbDrift1: {
+          '0%': { transform: 'translate(0, 0) scale(1)' },
+          '25%': { transform: 'translate(-25%, 30%) scale(1.15)' },
+          '50%': { transform: 'translate(-10%, 50%) scale(0.9)' },
+          '75%': { transform: 'translate(10%, 25%) scale(1.1)' },
+          '100%': { transform: 'translate(0, 0) scale(1)' },
+        },
+        orbDrift2: {
+          '0%': { transform: 'translate(0, 0) scale(1)' },
+          '30%': { transform: 'translate(30%, -35%) scale(1.2)' },
+          '60%': { transform: 'translate(15%, -15%) scale(0.85)' },
+          '100%': { transform: 'translate(0, 0) scale(1)' },
+        },
+        orbDrift3: {
+          '0%': { transform: 'translate(0, 0) scale(1)' },
+          '20%': { transform: 'translate(-20%, 15%) scale(1.1)' },
+          '50%': { transform: 'translate(15%, -25%) scale(0.9)' },
+          '75%': { transform: 'translate(-8%, 10%) scale(1.15)' },
+          '100%': { transform: 'translate(0, 0) scale(1)' },
+        },
+        vignetteBreathe: {
+          '0%, 100%': { opacity: '0.5' },
+          '50%': { opacity: '1' },
+        },
+        // Sweeping light beam — sunlight / scanner
+        lightSweep: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(200%)' },
+        },
+        // Spotlight wandering over dot grid
+        gridSpotlight: {
+          '0%': { top: '10%', left: '10%' },
+          '25%': { top: '60%', left: '70%' },
+          '50%': { top: '30%', left: '50%' },
+          '75%': { top: '70%', left: '20%' },
+          '100%': { top: '10%', left: '10%' },
+        },
+        // Concentric rings pulse — expand and fade
+        contourPulse: {
+          '0%, 100%': { transform: 'scale(1)', opacity: '0.5' },
+          '50%': { transform: 'scale(1.08)', opacity: '0.9' },
+        },
+        // Philosophical terms — gentle drift + breathe
+        letterDrift: {
+          '0%': { transform: 'translateY(0)', opacity: '0.15' },
+          '25%': { opacity: '1' },
+          '50%': { transform: 'translateY(-20px)', opacity: '1' },
+          '75%': { opacity: '1' },
+          '100%': { transform: 'translateY(0)', opacity: '0.15' },
+        },
+        // Annotation crosses fade in/out
+        gridFade: {
+          '0%, 100%': { opacity: '0.4' },
+          '50%': { opacity: '1' },
+        },
+        // Dust motes floating upward
+        dustFloat: {
+          '0%': { transform: 'translateY(0) translateX(0)', opacity: '0' },
+          '10%': { opacity: '0.6' },
+          '50%': { transform: 'translateY(-50vh) translateX(20px)', opacity: '0.4' },
+          '90%': { opacity: '0.2' },
+          '100%': { transform: 'translateY(-110vh) translateX(-10px)', opacity: '0' },
+        },
       },
       boxShadow: {
+        // Layered shadows — contact + depth + ambient for realistic diffusion
+        'xs': '0 1px 2px 0 rgb(0 0 0 / 0.04), 0 0 1px 0 rgb(0 0 0 / 0.06)',
+        'sm': '0 1px 2px 0 rgb(0 0 0 / 0.06), 0 2px 6px -1px rgb(0 0 0 / 0.06), 0 0 1px 0 rgb(0 0 0 / 0.04)',
+        DEFAULT: '0 2px 4px -1px rgb(0 0 0 / 0.06), 0 4px 10px -2px rgb(0 0 0 / 0.06), 0 0 2px 0 rgb(0 0 0 / 0.03)',
+        'md': '0 2px 4px -1px rgb(0 0 0 / 0.06), 0 6px 16px -3px rgb(0 0 0 / 0.08), 0 0 2px 0 rgb(0 0 0 / 0.03)',
+        'lg': '0 4px 6px -2px rgb(0 0 0 / 0.06), 0 12px 28px -4px rgb(0 0 0 / 0.09), 0 0 3px 0 rgb(0 0 0 / 0.03)',
+        'xl': '0 8px 10px -4px rgb(0 0 0 / 0.06), 0 20px 44px -8px rgb(0 0 0 / 0.10), 0 0 4px 0 rgb(0 0 0 / 0.03)',
+        '2xl': '0 12px 16px -6px rgb(0 0 0 / 0.08), 0 32px 64px -12px rgb(0 0 0 / 0.16), 0 0 6px 0 rgb(0 0 0 / 0.03)',
+        'inner': 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
         'inner-lg': 'inset 0 2px 4px 0 rgb(0 0 0 / 0.06)',
         'soft': '0 2px 8px 0 rgb(0 0 0 / 0.04)',
         'medium': '0 4px 12px 0 rgb(0 0 0 / 0.08)',

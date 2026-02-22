@@ -156,7 +156,7 @@ export default function GraphRAGShowcase() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full pt-20 pb-12 bg-parchment-50">
+    <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
       <div className="space-y-8 relative z-10">
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-12 lg:py-20">
