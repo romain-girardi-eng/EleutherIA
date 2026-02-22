@@ -26,8 +26,8 @@ export function Toggle({ checked, onCheckedChange, label, description, disabled,
         disabled={disabled}
         className={cn(
           'relative h-6 w-11 shrink-0 rounded-full border-2 border-transparent transition-colors',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
-          checked ? 'bg-blue-600' : 'bg-gray-200',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2',
+          checked ? 'bg-stone-700' : 'bg-stone-200',
         )}
       >
         <Switch.Thumb
@@ -37,7 +37,7 @@ export function Toggle({ checked, onCheckedChange, label, description, disabled,
           )}
         />
       </Switch.Root>
-      <span className="text-sm text-gray-700">{label}</span>
+      <span className="text-sm text-stone-600">{label}</span>
     </label>
   );
 }

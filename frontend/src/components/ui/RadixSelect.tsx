@@ -14,24 +14,24 @@ interface RadixSelectProps {
 export function RadixSelect({ value, onValueChange, options, label, placeholder, className }: RadixSelectProps) {
   return (
     <div className={cn('flex items-center gap-2', className)}>
-      {label && <span className="text-xs font-medium text-gray-500">{label}</span>}
+      {label && <span className="text-xs font-medium text-stone-500">{label}</span>}
       <Select.Root value={value} onValueChange={onValueChange}>
         <Select.Trigger
           className={cn(
-            'inline-flex items-center justify-between gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-800',
-            'hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1',
+            'inline-flex items-center justify-between gap-1.5 rounded-lg border border-stone-200 bg-white/80 px-3 py-1.5 text-xs text-stone-700',
+            'hover:border-stone-300 focus:outline-none focus:ring-2 focus:ring-stone-400 focus:ring-offset-1',
             'transition-colors min-w-[60px]',
           )}
         >
           <Select.Value placeholder={placeholder} />
           <Select.Icon>
-            <ChevronDown className="h-3 w-3 text-gray-400" />
+            <ChevronDown className="h-3 w-3 text-stone-400" />
           </Select.Icon>
         </Select.Trigger>
 
         <Select.Portal>
           <Select.Content
-            className="z-50 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg animate-in fade-in-0 zoom-in-95"
+            className="z-50 overflow-hidden rounded-lg border border-stone-200 bg-white shadow-lg animate-in fade-in-0 zoom-in-95"
             position="popper"
             sideOffset={4}
           >
@@ -41,8 +41,8 @@ export function RadixSelect({ value, onValueChange, options, label, placeholder,
                   key={opt.value}
                   value={opt.value}
                   className={cn(
-                    'relative flex items-center rounded-md px-3 py-1.5 text-xs text-gray-800 outline-none cursor-pointer',
-                    'hover:bg-blue-50 hover:text-blue-700 focus:bg-blue-50 focus:text-blue-700',
+                    'relative flex items-center rounded-md px-3 py-1.5 text-xs text-stone-700 outline-none cursor-pointer',
+                    'hover:bg-stone-100 hover:text-stone-800 focus:bg-stone-100 focus:text-stone-800',
                     'data-[state=checked]:font-medium',
                   )}
                 >
