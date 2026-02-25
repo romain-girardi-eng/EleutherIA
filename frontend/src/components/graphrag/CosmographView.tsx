@@ -28,32 +28,32 @@ const TYPE_COLORS: Record<string, string> = {
 
 // Size by type importance
 const TYPE_SIZES: Record<string, number> = {
-  person: 18,
-  school: 16,
-  concept: 14,
-  argument: 14,
-  debate: 13,
-  work: 12,
-  event: 11,
-  quote: 10,
-  passage: 8,
-  publication: 10,
-  default: 10,
+  person: 12,
+  school: 11,
+  concept: 10,
+  argument: 9,
+  debate: 9,
+  work: 8,
+  event: 8,
+  quote: 7,
+  passage: 5,
+  publication: 7,
+  default: 7,
 };
 
 // Label weight by type (higher = shown first)
 const LABEL_WEIGHTS: Record<string, number> = {
-  person: 10,
-  school: 9,
-  concept: 8,
-  argument: 7,
-  debate: 7,
-  work: 6,
-  event: 5,
-  publication: 4,
-  quote: 3,
-  passage: 2,
-  default: 1,
+  person: 1.0,
+  school: 0.95,
+  concept: 0.82,
+  argument: 0.74,
+  debate: 0.7,
+  work: 0.62,
+  event: 0.54,
+  publication: 0.45,
+  quote: 0.35,
+  passage: 0.2,
+  default: 0.25,
 };
 
 // --- Color blending for edges (matches main visualizer) ---
@@ -257,24 +257,6 @@ export default function CosmographView({
       }
     }
 
-    // Star topology fallback when no edges exist
-    if (links.length === 0 && points.length > 1) {
-      const firstId = points[0].id as string;
-      const firstColor = points[0].color as string;
-      for (let i = 1; i < Math.min(points.length, 8); i++) {
-        const tgtColor = points[i].color as string;
-        links.push({
-          source: firstId,
-          target: points[i].id as string,
-          sourceIndex: 0,
-          targetIndex: i,
-          sourceColor: firstColor,
-          targetColor: tgtColor,
-          color: blendColors(firstColor, tgtColor),
-        });
-      }
-    }
-
     return { points, links };
   }, [response, allResponses]);
 
@@ -309,21 +291,26 @@ export default function CosmographView({
           linkTargetIndexBy="targetIndex"
           // Link styling - blended colors
           linkColorBy="color"
-          linkDefaultWidth={0.5}
-          linkDefaultArrows
-          linkArrowsSizeScale={0.3}
+          linkDefaultWidth={0.24}
+          linkDefaultArrows={false}
           // Dark canvas matching main KG visualizer
           backgroundColor="#020617"
-          spaceSize={4096}
-          pointSizeRange={[4, 30]}
+          spaceSize={2048}
+          pointSizeRange={[3, 18]}
           pointSizeScale={1.0}
           scalePointsOnZoom
           scaleLinksOnZoom
           // Labels
           showLabels
           showDynamicLabels
+          showDynamicLabelsLimit={8}
           showTopLabels
-          showTopLabelsLimit={30}
+          showTopLabelsLimit={12}
+          showUnselectedPointLabels={false}
+          selectedPointLabelsLimit={18}
+          pointLabelFontSize={11}
+          labelPadding={[4, 2, 4, 2]}
+          labelMargin={4}
           showHoveredPointLabel
           pointLabelClassName="cosmograph-point-label"
           hoveredPointLabelClassName="cosmograph-hovered-label"
@@ -335,8 +322,15 @@ export default function CosmographView({
           // Interaction
           selectPointOnClick
           focusPointOnClick
-          // Disable physics for a static, clean layout
-          enableSimulation={false}
+          enableSimulation
+          simulationRepulsion={1.25}
+          simulationGravity={0.2}
+          simulationCenter={0.08}
+          simulationLinkSpring={0.9}
+          simulationLinkDistance={26}
+          simulationFriction={0.86}
+          simulationDecay={2500}
+          preservePointPositionsOnDataUpdate
           // Fit view on init
           fitViewOnInit
           fitViewDelay={200}

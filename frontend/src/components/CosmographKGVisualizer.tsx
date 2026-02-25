@@ -50,6 +50,8 @@ interface RawPoint {
   color: string;
   size: number;
   cluster: string;
+  clusterGroup: string;
+  clusterStrength: number;
   labelWeight: number;
 }
 
@@ -218,6 +220,19 @@ function blendColors(color1: string, color2: string): string {
 function getEdgeColor(sourceColor: string, targetColor: string): string {
   // Simple 50/50 blend of source and target colors
   return blendColors(sourceColor, targetColor);
+}
+
+/**
+ * Deterministic pseudo-random value in [0, 1) for stable layouts.
+ * Prevents layout flicker between reloads and filter toggles.
+ */
+function stableRandom(seed: string): number {
+  let hash = 2166136261;
+  for (let i = 0; i < seed.length; i++) {
+    hash ^= seed.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0) / 4294967296;
 }
 
 // ============================================================================
@@ -532,6 +547,21 @@ function convertCytoscapeData(data: CytoscapeData): {
       cluster = typeLower.charAt(0).toUpperCase() + typeLower.slice(1);
     }
 
+    // Coarser semantic grouping used for cluster labels in Cosmograph.
+    // Keep it stable and low-cardinality to avoid label noise.
+    const clusterGroup =
+      cleanSchool !== 'Unknown'
+        ? cleanSchool
+        : typeLower.charAt(0).toUpperCase() + typeLower.slice(1);
+    const clusterStrength =
+      typeLower === 'person' || typeLower === 'school'
+        ? 0.95
+        : typeLower === 'work'
+          ? 0.75
+          : typeLower === 'passage'
+            ? 0.35
+            : 0.55;
+
     rawPoints.push({
       index: nodeIndex,
       id,
@@ -543,6 +573,8 @@ function convertCytoscapeData(data: CytoscapeData): {
       color: getNodeColor({ school: cleanSchool, type }),
       size,
       cluster,
+      clusterGroup,
+      clusterStrength,
       labelWeight,
     });
 
@@ -1273,8 +1305,6 @@ export default function CosmographKGVisualizer({
         // ================================================================
         console.log('🌌 Cosmograph: Starting hierarchical d3-force simulation...');
 
-        const spaceSize = 8192; // Large space to avoid boundary issues
-
         // Group nodes by cluster (author name or type)
         const clusterCounts = new Map<string, number>();
         points.forEach(p => {
@@ -1284,7 +1314,7 @@ export default function CosmographKGVisualizer({
         // Position cluster centers (authors) in a large circle
         const clusterPositions = new Map<string, { x: number; y: number; count: number }>();
         const clusters = Array.from(clusterCounts.keys());
-        const clusterRadius = spaceSize * 0.4;
+        const clusterRadius = Math.min(2200, 500 + Math.sqrt(clusters.length) * 120);
         clusters.forEach((cluster, i) => {
           const angle = (i / clusters.length) * 2 * Math.PI;
           clusterPositions.set(cluster, {
@@ -1322,22 +1352,22 @@ export default function CosmographKGVisualizer({
             x = cluster.x;
             y = cluster.y;
           } else if (typeLower === 'work') {
-            // Works orbit author — wide initial spread
+            // Works orbit author
             const workAngle = cluster.count * 0.8;
-            const workRadius = 200 + Math.random() * 150;
+            const workRadius = 140 + stableRandom(`${p.id}:work`) * 90;
             x = cluster.x + Math.cos(workAngle) * workRadius;
             y = cluster.y + Math.sin(workAngle) * workRadius;
           } else if (typeLower === 'passage') {
             // Passages orbit works
             const passageAngle = cluster.count * 0.3;
-            const passageRadius = 80 + Math.random() * 60;
-            const workOffset = 250 + (cluster.count % 10) * 20;
+            const passageRadius = 40 + stableRandom(`${p.id}:passage`) * 40;
+            const workOffset = 130 + (cluster.count % 8) * 16;
             x = cluster.x + Math.cos(passageAngle) * workOffset + Math.cos(passageAngle * 3) * passageRadius;
             y = cluster.y + Math.sin(passageAngle) * workOffset + Math.sin(passageAngle * 3) * passageRadius;
           } else {
-            // Other nodes (concepts, arguments) — spread very wide
+            // Other nodes (concepts, arguments) — broader ring
             const otherAngle = cluster.count * 0.5;
-            const otherRadius = 400 + Math.sqrt(cluster.count) * 60;
+            const otherRadius = 180 + Math.sqrt(cluster.count + 1) * 28 + stableRandom(`${p.id}:other`) * 40;
             x = cluster.x + Math.cos(otherAngle) * otherRadius;
             y = cluster.y + Math.sin(otherAngle) * otherRadius;
           }
@@ -1346,7 +1376,7 @@ export default function CosmographKGVisualizer({
 
           // Collision radius: generous padding to prevent ANY overlap
           const baseRadius = (p.size || 5);
-          const collisionPadding = Math.max(baseRadius * 8, 50);
+          const collisionPadding = Math.max(baseRadius * 2.4, 8);
 
           return {
             index: i,
@@ -1367,19 +1397,18 @@ export default function CosmographKGVisualizer({
           const sourceType = nodeTypeById.get(l.sourceId) || '';
           const targetType = nodeTypeById.get(l.targetId) || '';
 
-          // Link distances — wide spacing so nodes never overlap
+          // Link distances tuned for readability without over-expanding outliers.
           let distance: number;
           if ((sourceType === 'work' && targetType === 'passage') ||
               (sourceType === 'passage' && targetType === 'work')) {
-            distance = 80;
+            distance = 55;
           } else if ((sourceType === 'person' && targetType === 'work') ||
                      (sourceType === 'work' && targetType === 'person')) {
-            distance = 200;
+            distance = 110;
           } else if (sourceType === 'passage' || targetType === 'passage') {
-            distance = 120;
+            distance = 75;
           } else {
-            // Concept-concept, person-concept, etc. — need most room
-            distance = 300;
+            distance = 150;
           }
 
           return {
@@ -1395,22 +1424,19 @@ export default function CosmographKGVisualizer({
         // Cosmograph fitView handles viewport centering after.
         const simulation = forceSimulation(d3Nodes)
           .force('charge', forceManyBody().strength((d: D3Node) => {
-            // Aggressive repulsion — the dense core needs strong push-apart
-            if (d.type === 'person') return -3000;
-            if (d.type === 'work') return -800;
-            if (d.type === 'passage') return -200;
-            return -600;
+            if (d.type === 'person') return -1200;
+            if (d.type === 'work') return -550;
+            if (d.type === 'passage') return -180;
+            return -320;
           }))
-          // Collision: large radii do the heavy lifting, so fewer iterations needed
-          .force('collide', forceCollide<D3Node>().radius(d => d.radius).strength(1.0).iterations(3))
-          .force('link', forceLink(d3Links).distance((d: { distance: number }) => d.distance).strength(0.3))
+          .force('collide', forceCollide<D3Node>().radius(d => d.radius).strength(0.9).iterations(2))
+          .force('link', forceLink(d3Links).distance((d: { distance: number }) => d.distance).strength(0.45))
           .force('center', forceCenter(0, 0))
-          // Faster convergence — large radii + strong repulsion settle quickly
-          .alphaDecay(0.02)
-          .velocityDecay(0.4);
+          .alphaDecay(0.03)
+          .velocityDecay(0.45);
 
         const isMobileDevice = window.matchMedia('(hover: none)').matches || window.innerWidth < 768;
-        const maxIterations = isMobileDevice ? 150 : 300;
+        const maxIterations = isMobileDevice ? 120 : 220;
         console.log(`🌌 Cosmograph: Running ${maxIterations} simulation ticks...`);
 
         for (let i = 0; i < maxIterations; i++) {
@@ -1432,7 +1458,9 @@ export default function CosmographKGVisualizer({
             x: node.x,
             y: node.y,
             labelWeight: originalPoint.labelWeight,  // For hierarchical labels
-            cluster: originalPoint.cluster,          // For cluster labels (school)
+            cluster: originalPoint.cluster,
+            clusterGroup: originalPoint.clusterGroup,
+            clusterStrength: originalPoint.clusterStrength,
           };
         });
 
@@ -1467,6 +1495,8 @@ export default function CosmographKGVisualizer({
           pointIdBy: 'id',
           pointColorBy: 'color',
           pointSizeBy: 'size',
+          pointXBy: 'x',
+          pointYBy: 'y',
 
           // Link identification (required - both ID and Index versions needed!)
           linkSourceBy: 'source',
@@ -1477,17 +1507,16 @@ export default function CosmographKGVisualizer({
           // Link styling - thin edges
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           linkColorByFn: (l: any) => getEdgeColor(l.sourceColor, l.targetColor),
-          linkDefaultWidth: 0.3,
-          linkDefaultArrows: true,
-          linkArrowsSizeScale: 0.3,
+          linkDefaultWidth: 0.22,
+          linkDefaultArrows: false,
 
           // Canvas settings - Large space for hierarchical layout
           backgroundColor: '#020617',
-          spaceSize: 8192,               // Large space to avoid boundary clipping
+          spaceSize: 6144,
           scalePointsOnZoom: true,       // Nodes shrink when zoomed out (prevents visual overlap)
           scaleLinksOnZoom: true,        // Edges also scale with zoom
-          pointSizeRange: [3, 40],       // Match our sizes (major figures up to 39px)
-          pointSizeScale: 1.0,           // No additional scaling
+          pointSizeRange: [2, 30],
+          pointSizeScale: 0.9,
           rescalePositions: false,       // Keep d3-force positions as-is
 
           // Labels - hierarchical display based on label weight
@@ -1495,17 +1524,27 @@ export default function CosmographKGVisualizer({
           pointLabelWeightBy: 'labelWeight',     // Use our hierarchy weights!
           showLabels: true,
           showDynamicLabels: true,
+          showDynamicLabelsLimit: 12,
           showTopLabels: true,                   // Show highest-weighted labels
-          showTopLabelsLimit: 50,                // Limit top labels for readability
+          showTopLabelsLimit: 22,
+          showUnselectedPointLabels: false,
+          selectedPointLabelsLimit: 24,
+          pointLabelFontSize: 11,
+          labelPadding: [4, 2, 4, 2],
+          labelMargin: 4,
           showHoveredPointLabel: true,
           pointLabelClassName: 'cosmograph-point-label',
           hoveredPointLabelClassName: 'cosmograph-hovered-label',
 
-          // Cluster labels for philosophical schools
-          pointClusterBy: 'cluster',
+          // Cluster labels use low-cardinality school/type groups.
+          pointClusterBy: 'clusterGroup',
+          pointClusterStrengthBy: 'clusterStrength',
+          clusterLabelFontSize: 14,
 
           // Interaction - enable dragging!
           enableDrag: true,
+          enableSimulation: true,
+          preservePointPositionsOnDataUpdate: true,
           selectPointOnClick: true,
           focusPointOnClick: true,
           renderHoveredPointRing: true,
@@ -1613,33 +1652,39 @@ export default function CosmographKGVisualizer({
     const simulationConfig = viewMode === 'clusters'
       ? {
           // CLUSTER VIEW
-          simulationGravity: 0.05,           // Very gentle — just prevent drift to infinity
-          simulationCluster: 0.3,           // Light clustering
-          simulationRepulsion: 2.0,         // Strong repulsion — maintains d3-force spacing
-          simulationLinkSpring: 0.5,        // Moderate spring — neighbors follow drag without collapsing layout
-          simulationLinkDistance: 50,        // MUST match d3-force scale — 10 was crushing the layout
-          simulationFriction: 0.85,         // Responsive
-          simulationDecay: 1000,            // Fast cooldown
-          disableSimulation: false,         // Physics ON for drag
+          simulationGravity: 0.15,
+          simulationCenter: 0.08,
+          simulationRepulsion: 1.2,
+          simulationLinkSpring: 0.8,
+          simulationLinkDistance: 42,
+          simulationFriction: 0.86,
+          simulationDecay: 2800,
+          enableSimulation: true,
           showClusterLabels: true,
           scaleClusterLabels: true,
-          showTopLabels: true,
-          showDynamicLabels: true,
-          showTopLabelsLimit: 100,
+          clusterLabelFontSize: 14,
+          showTopLabels: false,
+          showDynamicLabels: false,
+          showUnselectedPointLabels: false,
         }
       : {
           // LABELS VIEW
-          simulationGravity: 0.05,           // Very gentle — just prevent drift to infinity
-          simulationRepulsion: 2.0,         // Strong repulsion — maintains d3-force spacing
-          simulationLinkSpring: 0.5,        // Moderate spring — neighbors follow drag without collapsing
-          simulationLinkDistance: 50,        // MUST match d3-force scale — 10 was crushing the layout
-          simulationFriction: 0.85,         // Responsive
-          simulationDecay: 1000,            // Fast cooldown
-          disableSimulation: false,         // Physics ON for drag
+          simulationGravity: 0.12,
+          simulationCenter: 0.06,
+          simulationRepulsion: 1.35,
+          simulationLinkSpring: 0.85,
+          simulationLinkDistance: 40,
+          simulationFriction: 0.86,
+          simulationDecay: 3000,
+          enableSimulation: true,
           showClusterLabels: false,         // Hide cluster labels in labels view
           scaleClusterLabels: false,
           showTopLabels: true,              // Show hierarchical labels
-          showTopLabelsLimit: 50,           // Show many labels
+          showDynamicLabels: true,
+          showTopLabelsLimit: 22,
+          showDynamicLabelsLimit: 12,
+          showUnselectedPointLabels: false,
+          selectedPointLabelsLimit: 24,
         };
 
     console.log(`🌌 Cosmograph: Setting ${viewMode} view mode with ${filteredPoints.length} points, ${filteredLinks.length} links`);
@@ -1648,6 +1693,13 @@ export default function CosmographKGVisualizer({
     // Need to create properly formatted points/links for Cosmograph
     const pointColorMap = new Map<string, string>();
     filteredPoints.forEach(p => pointColorMap.set(p.id, p.color));
+    const basePointById = new Map<string, { x: number; y: number }>();
+    ((baseConfig.points as Array<{ id: string; x?: number; y?: number }>) ?? []).forEach((point) => {
+      basePointById.set(point.id, {
+        x: point.x ?? 0,
+        y: point.y ?? 0,
+      });
+    });
 
     const simplePoints = filteredPoints.map((p) => ({
       index: p.index,
@@ -1655,10 +1707,12 @@ export default function CosmographKGVisualizer({
       label: p.label,
       color: p.color,
       size: p.size,
-      x: (baseConfig.points as { x: number }[])?.[rawPoints.findIndex(rp => rp.id === p.id)]?.x ?? 0,
-      y: (baseConfig.points as { y: number }[])?.[rawPoints.findIndex(rp => rp.id === p.id)]?.y ?? 0,
+      x: basePointById.get(p.id)?.x ?? 0,
+      y: basePointById.get(p.id)?.y ?? 0,
       labelWeight: p.labelWeight,
       cluster: p.cluster,
+      clusterGroup: p.clusterGroup,
+      clusterStrength: p.clusterStrength,
     }));
 
     const simpleLinks = filteredLinks.map(l => ({
@@ -1676,7 +1730,7 @@ export default function CosmographKGVisualizer({
       links: simpleLinks,
       ...simulationConfig,
     });
-  }, [baseConfig, viewMode, filteredPoints, filteredLinks, rawPoints]);
+  }, [baseConfig, viewMode, filteredPoints, filteredLinks]);
 
   return (
     <div ref={containerRef} className={`relative w-full h-full bg-[#030712] ${className}`}>
