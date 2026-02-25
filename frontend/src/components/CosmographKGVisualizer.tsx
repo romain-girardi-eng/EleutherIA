@@ -1401,19 +1401,17 @@ export default function CosmographKGVisualizer({
             if (d.type === 'passage') return -200;
             return -600;
           }))
-          // STRICT collision: full radius, max strength, many iterations per tick
-          .force('collide', forceCollide<D3Node>().radius(d => d.radius).strength(1.0).iterations(10))
-          // Moderate spring — keeps clusters coherent while collision prevents overlap
+          // Collision: large radii do the heavy lifting, so fewer iterations needed
+          .force('collide', forceCollide<D3Node>().radius(d => d.radius).strength(1.0).iterations(3))
           .force('link', forceLink(d3Links).distance((d: { distance: number }) => d.distance).strength(0.3))
-          // ONLY center-of-mass centering — NO forceX/forceY (those compress the core)
           .force('center', forceCenter(0, 0))
-          .alphaDecay(0.008)
+          // Faster convergence — large radii + strong repulsion settle quickly
+          .alphaDecay(0.02)
           .velocityDecay(0.4);
 
-        // More iterations for thorough overlap resolution
         const isMobileDevice = window.matchMedia('(hover: none)').matches || window.innerWidth < 768;
-        const maxIterations = isMobileDevice ? 300 : 800;
-        console.log(`🌌 Cosmograph: Running ${maxIterations} no-overlap simulation ticks...`);
+        const maxIterations = isMobileDevice ? 150 : 300;
+        console.log(`🌌 Cosmograph: Running ${maxIterations} simulation ticks...`);
 
         for (let i = 0; i < maxIterations; i++) {
           simulation.tick();
