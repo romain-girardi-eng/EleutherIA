@@ -33,8 +33,6 @@ import {
   forceManyBody,
   forceLink,
   forceCenter,
-  forceX,
-  forceY,
 } from 'd3-force-webgpu';
 
 // ============================================================================
@@ -1286,7 +1284,7 @@ export default function CosmographKGVisualizer({
         // Position cluster centers (authors) in a large circle
         const clusterPositions = new Map<string, { x: number; y: number; count: number }>();
         const clusters = Array.from(clusterCounts.keys());
-        const clusterRadius = spaceSize * 0.35;
+        const clusterRadius = spaceSize * 0.4;
         clusters.forEach((cluster, i) => {
           const angle = (i / clusters.length) * 2 * Math.PI;
           clusterPositions.set(cluster, {
@@ -1324,32 +1322,31 @@ export default function CosmographKGVisualizer({
             x = cluster.x;
             y = cluster.y;
           } else if (typeLower === 'work') {
-            // Works orbit author with generous spacing
+            // Works orbit author — wide initial spread
             const workAngle = cluster.count * 0.8;
-            const workRadius = 120 + Math.random() * 80; // 120-200 from center
+            const workRadius = 200 + Math.random() * 150;
             x = cluster.x + Math.cos(workAngle) * workRadius;
             y = cluster.y + Math.sin(workAngle) * workRadius;
           } else if (typeLower === 'passage') {
-            // Passages orbit works with room to breathe
+            // Passages orbit works
             const passageAngle = cluster.count * 0.3;
-            const passageRadius = 40 + Math.random() * 40; // 40-80 from work
-            const workOffset = 150 + (cluster.count % 10) * 15;
+            const passageRadius = 80 + Math.random() * 60;
+            const workOffset = 250 + (cluster.count % 10) * 20;
             x = cluster.x + Math.cos(passageAngle) * workOffset + Math.cos(passageAngle * 3) * passageRadius;
             y = cluster.y + Math.sin(passageAngle) * workOffset + Math.sin(passageAngle * 3) * passageRadius;
           } else {
-            // Other nodes (concepts, arguments) - spread generously
+            // Other nodes (concepts, arguments) — spread very wide
             const otherAngle = cluster.count * 0.5;
-            const otherRadius = 250 + Math.sqrt(cluster.count) * 40;
+            const otherRadius = 400 + Math.sqrt(cluster.count) * 60;
             x = cluster.x + Math.cos(otherAngle) * otherRadius;
             y = cluster.y + Math.sin(otherAngle) * otherRadius;
           }
 
           cluster.count++;
 
-          // Collision radius includes generous padding to prevent ANY overlap
-          // Larger nodes need proportionally more padding
+          // Collision radius: generous padding to prevent ANY overlap
           const baseRadius = (p.size || 5);
-          const collisionPadding = Math.max(baseRadius * 4, 25);
+          const collisionPadding = Math.max(baseRadius * 8, 50);
 
           return {
             index: i,
@@ -1370,22 +1367,19 @@ export default function CosmographKGVisualizer({
           const sourceType = nodeTypeById.get(l.sourceId) || '';
           const targetType = nodeTypeById.get(l.targetId) || '';
 
-          // Determine link distance — generous spacing to prevent overlap
+          // Link distances — wide spacing so nodes never overlap
           let distance: number;
           if ((sourceType === 'work' && targetType === 'passage') ||
               (sourceType === 'passage' && targetType === 'work')) {
-            // Work ↔ Passage: moderate (orbit with room to breathe)
-            distance = 40;
+            distance = 80;
           } else if ((sourceType === 'person' && targetType === 'work') ||
                      (sourceType === 'work' && targetType === 'person')) {
-            // Person ↔ Work: works orbit authors with clear separation
-            distance = 100;
+            distance = 200;
           } else if (sourceType === 'passage' || targetType === 'passage') {
-            // Other passage links
-            distance = 60;
+            distance = 120;
           } else {
-            // Other links: generous spacing
-            distance = 180;
+            // Concept-concept, person-concept, etc. — need most room
+            distance = 300;
           }
 
           return {
@@ -1395,24 +1389,24 @@ export default function CosmographKGVisualizer({
           };
         }).filter(l => l.source !== l.target);
 
-        // Create simulation with STRICT NO-OVERLAP rule
-        // Priority: collision > repulsion > links (links must never cause overlap)
+        // STRICT NO-OVERLAP simulation
+        // Key: NO center-pulling forces (forceX/forceY) — they compress the core into a blob.
+        // Only forceCenter to keep center-of-mass at origin (uniform shift, no compression).
+        // Cosmograph fitView handles viewport centering after.
         const simulation = forceSimulation(d3Nodes)
           .force('charge', forceManyBody().strength((d: D3Node) => {
-            // Strong repulsion to spread clusters apart
-            if (d.type === 'person') return -1500;
-            if (d.type === 'work') return -400;
-            if (d.type === 'passage') return -100;
-            return -300;
+            // Aggressive repulsion — the dense core needs strong push-apart
+            if (d.type === 'person') return -3000;
+            if (d.type === 'work') return -800;
+            if (d.type === 'passage') return -200;
+            return -600;
           }))
           // STRICT collision: full radius, max strength, many iterations per tick
           .force('collide', forceCollide<D3Node>().radius(d => d.radius).strength(1.0).iterations(10))
           // Moderate spring — keeps clusters coherent while collision prevents overlap
           .force('link', forceLink(d3Links).distance((d: { distance: number }) => d.distance).strength(0.3))
+          // ONLY center-of-mass centering — NO forceX/forceY (those compress the core)
           .force('center', forceCenter(0, 0))
-          .force('x', forceX(0).strength(0.003))
-          .force('y', forceY(0).strength(0.003))
-          // Slow decay = more time to resolve all overlaps before settling
           .alphaDecay(0.008)
           .velocityDecay(0.4);
 
@@ -1620,30 +1614,30 @@ export default function CosmographKGVisualizer({
     // Reference: Cosmograph defaults (1.0/1.0/0.85/0.25) are best-practice.
     const simulationConfig = viewMode === 'clusters'
       ? {
-          // CLUSTER VIEW - Shows author clusters with their works/passages
-          simulationGravity: 0.1,            // Gentle center pull — keeps clusters from drifting
+          // CLUSTER VIEW
+          simulationGravity: 0.05,           // Very gentle — just prevent drift to infinity
           simulationCluster: 0.3,           // Light clustering
-          simulationRepulsion: 1.0,         // Balanced repulsion — maintains spacing
-          simulationLinkSpring: 1.0,        // Strong springs — neighbors follow during drag
-          simulationLinkDistance: 10,        // Short rest length — clusters stay tight
-          simulationFriction: 0.85,         // Responsive — quick settle after release
+          simulationRepulsion: 2.0,         // Strong repulsion — maintains d3-force spacing
+          simulationLinkSpring: 0.5,        // Moderate spring — neighbors follow drag without collapsing layout
+          simulationLinkDistance: 50,        // MUST match d3-force scale — 10 was crushing the layout
+          simulationFriction: 0.85,         // Responsive
           simulationDecay: 1000,            // Fast cooldown
-          disableSimulation: false,         // Physics ON for drag interactivity
-          showClusterLabels: true,          // Show cluster labels (author names)
-          scaleClusterLabels: true,         // Scale cluster labels with zoom
-          showTopLabels: true,              // Enable labels to show when zoomed in
-          showDynamicLabels: true,          // Dynamic labels appear on zoom
-          showTopLabelsLimit: 100,          // Show more labels when zoomed in
+          disableSimulation: false,         // Physics ON for drag
+          showClusterLabels: true,
+          scaleClusterLabels: true,
+          showTopLabels: true,
+          showDynamicLabels: true,
+          showTopLabelsLimit: 100,
         }
       : {
-          // LABELS VIEW - Shows hierarchical structure with readable labels
-          simulationGravity: 0.1,            // Gentle center pull — keeps graph cohesive
-          simulationRepulsion: 1.0,         // Balanced repulsion — maintains spacing
-          simulationLinkSpring: 1.0,        // Strong springs — drag propagates to neighbors
-          simulationLinkDistance: 10,        // Short rest length — connected nodes stay close
-          simulationFriction: 0.85,         // Responsive — quick settle after release
+          // LABELS VIEW
+          simulationGravity: 0.05,           // Very gentle — just prevent drift to infinity
+          simulationRepulsion: 2.0,         // Strong repulsion — maintains d3-force spacing
+          simulationLinkSpring: 0.5,        // Moderate spring — neighbors follow drag without collapsing
+          simulationLinkDistance: 50,        // MUST match d3-force scale — 10 was crushing the layout
+          simulationFriction: 0.85,         // Responsive
           simulationDecay: 1000,            // Fast cooldown
-          disableSimulation: false,         // Physics ON for drag interactivity
+          disableSimulation: false,         // Physics ON for drag
           showClusterLabels: false,         // Hide cluster labels in labels view
           scaleClusterLabels: false,
           showTopLabels: true,              // Show hierarchical labels
