@@ -1656,13 +1656,14 @@
 /* Node labels - clean, readable style */
 .cosmograph-point-label {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-  fill: rgba(255, 255, 255, 0.9);
-  background: rgba(0, 0, 0, 0.6);
-  padding: 2px 6px;
-  border-radius: 4px;
+  color: rgba(248, 250, 252, 0.88);
+  fill: rgba(248, 250, 252, 0.88);
+  background: rgba(15, 23, 42, 0.55);
+  padding: 1px 5px;
+  border-radius: 3px;
+  text-shadow: 0 1px 2px rgba(2, 6, 23, 0.6);
   white-space: nowrap;
   pointer-events: none;
 }
@@ -1670,14 +1671,14 @@
 /* Hovered node label - highlighted with glow */
 .cosmograph-hovered-label {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   color: #ffffff;
   fill: #ffffff;
-  background: rgba(139, 92, 246, 0.85);
-  padding: 4px 10px;
+  background: rgba(79, 70, 229, 0.88);
+  padding: 3px 8px;
   border-radius: 6px;
-  box-shadow: 0 0 12px rgba(139, 92, 246, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.45), 0 2px 6px rgba(0, 0, 0, 0.35);
   white-space: nowrap;
   pointer-events: none;
 }
