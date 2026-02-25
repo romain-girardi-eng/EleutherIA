@@ -112,6 +112,17 @@ Knowledge graph edges (relationships).
 | Source_Collection | Collection like SVF | SVF |
 | Doctrine | Formal doctrine | Stoic determinism |
 
+### Two-Node Passage Architecture
+
+Every passage has two KG nodes:
+
+1. **Source node** — Original Greek/Latin text in `description`. Node ID: `passage_alex_fat_1`. `metadata.language`: `grc` or `lat`.
+2. **Translation node** — English AI translation in `description`. Node ID: `passage_alex_fat_1_en`. `metadata.language`: `eng`, `metadata.source`: `ai_translation`.
+
+The translation node links to the source via a `translation_of` edge. This keeps authoritative text untouched while making passages discoverable via English semantic search (Qdrant).
+
+See [Passage Translation Architecture](../plans/2026-02-24-passage-translation-architecture.md) for full design.
+
 ## Edge Types (32)
 
 See [kg/ontology/edge_types.json](../../kg/ontology/edge_types.json) for complete list.
@@ -123,6 +134,7 @@ Categories:
 - **Authorship:** wrote, authored_by
 - **Citation:** cites, cited_by
 - **Semantic:** discusses, defines, related_to
+- **Translation:** translation_of (English node → source node)
 
 ## Views
 
