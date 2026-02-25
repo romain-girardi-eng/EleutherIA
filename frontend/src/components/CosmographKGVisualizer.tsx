@@ -251,7 +251,7 @@ function calculateNodeSize(
   degree: number,
   _maxDegree: number
 ): number {
-  // COMPACT SIZES for dense graph (2193 nodes, 8616 edges)
+  // COMPACT SIZES for dense graph (~3,600 source nodes after _en filtering)
   // Small nodes create readable layout - matches official Cosmos examples
   // Range: 3-30px (was 6-100px)
   const typeLower = type.toLowerCase();
@@ -365,8 +365,17 @@ function convertCytoscapeData(data: CytoscapeData): {
   const workOfPassage = new Map<string, string>(); // passage id → work id
 
   const degreeMap = new Map<string, number>();
-  const cyNodes = data.elements?.nodes ?? [];
-  const cyEdges = data.elements?.edges ?? [];
+
+  // Filter out _en translation nodes (exist for search/RAG, not visualization)
+  // and translation_of edges (structural links to translation nodes)
+  const cyNodes = (data.elements?.nodes ?? []).filter(n => {
+    const id = String(n.data.id ?? n.data.node_id ?? '');
+    return !id.endsWith('_en');
+  });
+  const cyEdges = (data.elements?.edges ?? []).filter(e => {
+    const rel = String(e.data.relation ?? e.data.label ?? '').toLowerCase();
+    return rel !== 'translation_of';
+  });
 
   // First pass: build degree map and identify hierarchical relationships
   cyEdges.forEach((edge) => {
@@ -601,6 +610,9 @@ function InnerGraphWithControls({
   setSelectedNodeTypes,
   selectedSchools,
   setSelectedSchools,
+  // Passage visibility toggle
+  showPassages,
+  setShowPassages,
 }: {
   rawPoints: RawPoint[];
   rawLinks: RawLink[];
@@ -618,6 +630,9 @@ function InnerGraphWithControls({
   setSelectedNodeTypes: React.Dispatch<React.SetStateAction<Set<string>>>;
   selectedSchools: Set<string>;
   setSelectedSchools: React.Dispatch<React.SetStateAction<Set<string>>>;
+  // Passage visibility
+  showPassages: boolean;
+  setShowPassages: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { cosmograph } = useCosmograph();
   const [isRectSelectMode, setIsRectSelectMode] = useState(false);
@@ -947,6 +962,23 @@ function InnerGraphWithControls({
             </span>
           )}
         </button>
+
+        {/* Passage Toggle - prominent because passages are 80% of nodes */}
+        <button
+          onClick={() => setShowPassages(!showPassages)}
+          className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 backdrop-blur-xl ${
+            showPassages
+              ? 'bg-slate-500/30 text-white border border-slate-400/40'
+              : 'bg-slate-900/80 text-white/60 hover:text-white hover:bg-slate-800/80 border border-white/10'
+          }`}
+          title={showPassages ? 'Hide passage nodes (80% of graph)' : 'Show passage nodes (ancient text excerpts)'}
+        >
+          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#94a3b8' }} />
+          <span>Passages</span>
+          <span className={`text-[10px] ${showPassages ? 'text-white/60' : 'text-white/40'}`}>
+            {showPassages ? 'ON' : 'OFF'}
+          </span>
+        </button>
       </div>
 
       {/* Filters Panel - Compact */}
@@ -1103,6 +1135,8 @@ export default function CosmographKGVisualizer({
   // Filter state (lifted from InnerGraphWithControls)
   const [selectedNodeTypes, setSelectedNodeTypes] = useState<Set<string>>(new Set());
   const [selectedSchools, setSelectedSchools] = useState<Set<string>>(new Set());
+  // Default: hide passage nodes for clean overview (~80% of nodes are passages)
+  const [showPassages, setShowPassages] = useState(false);
 
   const cosmographRef = useRef<CosmographRef>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1290,28 +1324,32 @@ export default function CosmographKGVisualizer({
             x = cluster.x;
             y = cluster.y;
           } else if (typeLower === 'work') {
-            // Works in INNER orbit around author (close)
+            // Works orbit author with generous spacing
             const workAngle = cluster.count * 0.8;
-            const workRadius = 60 + Math.random() * 40; // 60-100 from center
+            const workRadius = 120 + Math.random() * 80; // 120-200 from center
             x = cluster.x + Math.cos(workAngle) * workRadius;
             y = cluster.y + Math.sin(workAngle) * workRadius;
           } else if (typeLower === 'passage') {
-            // Passages in TIGHT orbit around works (very close)
+            // Passages orbit works with room to breathe
             const passageAngle = cluster.count * 0.3;
-            const passageRadius = 15 + Math.random() * 20; // 15-35 from work
-            // Offset from cluster center
-            const workOffset = 80 + (cluster.count % 10) * 10;
+            const passageRadius = 40 + Math.random() * 40; // 40-80 from work
+            const workOffset = 150 + (cluster.count % 10) * 15;
             x = cluster.x + Math.cos(passageAngle) * workOffset + Math.cos(passageAngle * 3) * passageRadius;
             y = cluster.y + Math.sin(passageAngle) * workOffset + Math.sin(passageAngle * 3) * passageRadius;
           } else {
-            // Other nodes (concepts, arguments) - spread in outer area
+            // Other nodes (concepts, arguments) - spread generously
             const otherAngle = cluster.count * 0.5;
-            const otherRadius = 150 + Math.sqrt(cluster.count) * 30;
+            const otherRadius = 250 + Math.sqrt(cluster.count) * 40;
             x = cluster.x + Math.cos(otherAngle) * otherRadius;
             y = cluster.y + Math.sin(otherAngle) * otherRadius;
           }
 
           cluster.count++;
+
+          // Collision radius includes generous padding to prevent ANY overlap
+          // Larger nodes need proportionally more padding
+          const baseRadius = (p.size || 5);
+          const collisionPadding = Math.max(baseRadius * 4, 25);
 
           return {
             index: i,
@@ -1320,7 +1358,7 @@ export default function CosmographKGVisualizer({
             type: typeLower,
             color: p.color,
             size: p.size,
-            radius: (p.size || 5) * 1.5,
+            radius: collisionPadding,
             x,
             y,
             cluster: p.cluster,
@@ -1332,22 +1370,22 @@ export default function CosmographKGVisualizer({
           const sourceType = nodeTypeById.get(l.sourceId) || '';
           const targetType = nodeTypeById.get(l.targetId) || '';
 
-          // Determine link distance based on node types
+          // Determine link distance — generous spacing to prevent overlap
           let distance: number;
           if ((sourceType === 'work' && targetType === 'passage') ||
               (sourceType === 'passage' && targetType === 'work')) {
-            // Work ↔ Passage: VERY short (tight orbits)
-            distance = 15;
+            // Work ↔ Passage: moderate (orbit with room to breathe)
+            distance = 40;
           } else if ((sourceType === 'person' && targetType === 'work') ||
                      (sourceType === 'work' && targetType === 'person')) {
-            // Person ↔ Work: Medium short (works orbit authors)
-            distance = 50;
-          } else if (sourceType === 'passage' || targetType === 'passage') {
-            // Other passage links: short
-            distance = 25;
-          } else {
-            // Other links: medium
+            // Person ↔ Work: works orbit authors with clear separation
             distance = 100;
+          } else if (sourceType === 'passage' || targetType === 'passage') {
+            // Other passage links
+            distance = 60;
+          } else {
+            // Other links: generous spacing
+            distance = 180;
           }
 
           return {
@@ -1357,27 +1395,31 @@ export default function CosmographKGVisualizer({
           };
         }).filter(l => l.source !== l.target);
 
-        // Create simulation with HIERARCHICAL forces - SPREAD OUT
+        // Create simulation with STRICT NO-OVERLAP rule
+        // Priority: collision > repulsion > links (links must never cause overlap)
         const simulation = forceSimulation(d3Nodes)
           .force('charge', forceManyBody().strength((d: D3Node) => {
-            // STRONG repulsion to spread clusters apart
-            if (d.type === 'person') return -800;  // Authors repel VERY strongly
-            if (d.type === 'work') return -200;
-            if (d.type === 'passage') return -50;
-            return -150;
+            // Strong repulsion to spread clusters apart
+            if (d.type === 'person') return -1500;
+            if (d.type === 'work') return -400;
+            if (d.type === 'passage') return -100;
+            return -300;
           }))
-          .force('collide', forceCollide<D3Node>().radius(d => d.radius * 2).strength(0.9).iterations(3))
-          .force('link', forceLink(d3Links).distance((d: { distance: number }) => d.distance).strength(0.4))
+          // STRICT collision: full radius, max strength, many iterations per tick
+          .force('collide', forceCollide<D3Node>().radius(d => d.radius).strength(1.0).iterations(10))
+          // Moderate spring — keeps clusters coherent while collision prevents overlap
+          .force('link', forceLink(d3Links).distance((d: { distance: number }) => d.distance).strength(0.3))
           .force('center', forceCenter(0, 0))
-          .force('x', forceX(0).strength(0.005))  // Very weak center pull
-          .force('y', forceY(0).strength(0.005))
-          .alphaDecay(0.015)
-          .velocityDecay(0.35);
+          .force('x', forceX(0).strength(0.003))
+          .force('y', forceY(0).strength(0.003))
+          // Slow decay = more time to resolve all overlaps before settling
+          .alphaDecay(0.008)
+          .velocityDecay(0.4);
 
-        // Run simulation longer for better settling (reduced on mobile to avoid blocking main thread)
+        // More iterations for thorough overlap resolution
         const isMobileDevice = window.matchMedia('(hover: none)').matches || window.innerWidth < 768;
-        const maxIterations = isMobileDevice ? 150 : 500;
-        console.log(`🌌 Cosmograph: Running ${maxIterations} hierarchical simulation ticks...`);
+        const maxIterations = isMobileDevice ? 300 : 800;
+        console.log(`🌌 Cosmograph: Running ${maxIterations} no-overlap simulation ticks...`);
 
         for (let i = 0; i < maxIterations; i++) {
           simulation.tick();
@@ -1498,10 +1540,14 @@ export default function CosmographKGVisualizer({
     loadData();
   }, []);
 
-  // Filter points and links based on selected filters
+  // Filter points and links based on selected filters + passage visibility
   const { filteredPoints, filteredLinks, filteredIdToIndex } = useMemo(() => {
-    // No filters active - return original data
-    if (selectedNodeTypes.size === 0 && selectedSchools.size === 0) {
+    const hasTypeFilters = selectedNodeTypes.size > 0;
+    const hasSchoolFilters = selectedSchools.size > 0;
+    const needsFiltering = hasTypeFilters || hasSchoolFilters || !showPassages;
+
+    // No filters active and passages visible - return original data
+    if (!needsFiltering) {
       return {
         filteredPoints: rawPoints,
         filteredLinks: rawLinks,
@@ -1509,12 +1555,22 @@ export default function CosmographKGVisualizer({
       };
     }
 
-    // Filter points based on selected types and schools
+    // Filter points
     const filtered = rawPoints.filter(point => {
       const typeLower = point.type.toLowerCase();
-      const matchesType = selectedNodeTypes.size === 0 || selectedNodeTypes.has(typeLower);
-      const matchesSchool = selectedSchools.size === 0 || selectedSchools.has(point.school);
-      return matchesType && matchesSchool;
+
+      // When type filters are active, they take full control
+      if (hasTypeFilters) {
+        if (!selectedNodeTypes.has(typeLower)) return false;
+      } else {
+        // No type filters: use passage toggle
+        if (!showPassages && typeLower === 'passage') return false;
+      }
+
+      // School filter
+      if (hasSchoolFilters && !selectedSchools.has(point.school)) return false;
+
+      return true;
     });
 
     // Create new index mapping for filtered points
@@ -1547,7 +1603,7 @@ export default function CosmographKGVisualizer({
       filteredLinks: newLinks,
       filteredIdToIndex: newIdToIndex,
     };
-  }, [rawPoints, rawLinks, idToIndex, selectedNodeTypes, selectedSchools]);
+  }, [rawPoints, rawLinks, idToIndex, selectedNodeTypes, selectedSchools, showPassages]);
 
   // Build final cosmographConfig based on viewMode and filtered data
   // This allows toggling between point labels and cluster views with different simulation settings
@@ -1558,16 +1614,20 @@ export default function CosmographKGVisualizer({
     // Simulation settings based on view mode
     // HIERARCHICAL LAYOUT: Authors → Works → Passages
     // d3-force already positioned nodes hierarchically - Cosmograph should PRESERVE not override
+    // Cosmograph live simulation: tuned for "drag a cluster" feel
+    // Key insight: strong springs propagate drag force to neighbors,
+    // balanced repulsion prevents overlap, gravity keeps graph cohesive.
+    // Reference: Cosmograph defaults (1.0/1.0/0.85/0.25) are best-practice.
     const simulationConfig = viewMode === 'clusters'
       ? {
           // CLUSTER VIEW - Shows author clusters with their works/passages
-          simulationGravity: 0.0,            // No center pull — prevents orbital motion
+          simulationGravity: 0.1,            // Gentle center pull — keeps clusters from drifting
           simulationCluster: 0.3,           // Light clustering
-          simulationRepulsion: 0.5,         // Small repulsion to keep nodes apart
-          simulationLinkSpring: 0.3,        // Moderate spring to keep linked nodes close
-          simulationLinkDistance: 10,        // Short rest length
-          simulationFriction: 0.85,         // High friction — nodes settle quickly
-          simulationDecay: 1000,            // Fast cooldown — reaches equilibrium fast
+          simulationRepulsion: 1.0,         // Balanced repulsion — maintains spacing
+          simulationLinkSpring: 1.0,        // Strong springs — neighbors follow during drag
+          simulationLinkDistance: 10,        // Short rest length — clusters stay tight
+          simulationFriction: 0.85,         // Responsive — quick settle after release
+          simulationDecay: 1000,            // Fast cooldown
           disableSimulation: false,         // Physics ON for drag interactivity
           showClusterLabels: true,          // Show cluster labels (author names)
           scaleClusterLabels: true,         // Scale cluster labels with zoom
@@ -1577,12 +1637,12 @@ export default function CosmographKGVisualizer({
         }
       : {
           // LABELS VIEW - Shows hierarchical structure with readable labels
-          simulationGravity: 0.0,            // No center pull — prevents orbital motion
-          simulationRepulsion: 0.5,         // Small repulsion to keep nodes apart
-          simulationLinkSpring: 0.3,        // Moderate spring to keep linked nodes close
-          simulationLinkDistance: 10,        // Short rest length
-          simulationFriction: 0.85,         // High friction — nodes settle quickly
-          simulationDecay: 1000,            // Fast cooldown — reaches equilibrium fast
+          simulationGravity: 0.1,            // Gentle center pull — keeps graph cohesive
+          simulationRepulsion: 1.0,         // Balanced repulsion — maintains spacing
+          simulationLinkSpring: 1.0,        // Strong springs — drag propagates to neighbors
+          simulationLinkDistance: 10,        // Short rest length — connected nodes stay close
+          simulationFriction: 0.85,         // Responsive — quick settle after release
+          simulationDecay: 1000,            // Fast cooldown
           disableSimulation: false,         // Physics ON for drag interactivity
           showClusterLabels: false,         // Hide cluster labels in labels view
           scaleClusterLabels: false,
@@ -1699,6 +1759,8 @@ export default function CosmographKGVisualizer({
             setSelectedNodeTypes={setSelectedNodeTypes}
             selectedSchools={selectedSchools}
             setSelectedSchools={setSelectedSchools}
+            showPassages={showPassages}
+            setShowPassages={setShowPassages}
           />
         </CosmographProvider>
       )}
