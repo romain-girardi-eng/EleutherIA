@@ -1305,16 +1305,16 @@ export default function CosmographKGVisualizer({
         // ================================================================
         console.log('🌌 Cosmograph: Starting hierarchical d3-force simulation...');
 
-        // Group nodes by cluster (author name or type)
+        // Group nodes by coarse semantic cluster for stable, compact initial spread.
         const clusterCounts = new Map<string, number>();
         points.forEach(p => {
-          clusterCounts.set(p.cluster, (clusterCounts.get(p.cluster) || 0) + 1);
+          clusterCounts.set(p.clusterGroup, (clusterCounts.get(p.clusterGroup) || 0) + 1);
         });
 
-        // Position cluster centers (authors) in a large circle
+        // Position cluster centers in a compact ring to avoid "tiny galaxy" initial view.
         const clusterPositions = new Map<string, { x: number; y: number; count: number }>();
         const clusters = Array.from(clusterCounts.keys());
-        const clusterRadius = Math.min(2200, 500 + Math.sqrt(clusters.length) * 120);
+        const clusterRadius = Math.min(900, 260 + Math.sqrt(clusters.length) * 70);
         clusters.forEach((cluster, i) => {
           const angle = (i / clusters.length) * 2 * Math.PI;
           clusterPositions.set(cluster, {
@@ -1341,7 +1341,7 @@ export default function CosmographKGVisualizer({
         }
 
         const d3Nodes: D3Node[] = points.map((p, i) => {
-          const cluster = clusterPositions.get(p.cluster) || { x: 0, y: 0, count: 0 };
+          const cluster = clusterPositions.get(p.clusterGroup) || { x: 0, y: 0, count: 0 };
           const typeLower = p.type.toLowerCase();
 
           // HIERARCHICAL positioning based on node type
@@ -1446,6 +1446,32 @@ export default function CosmographKGVisualizer({
 
         console.log('🌌 Cosmograph: Hierarchical simulation complete!');
 
+        // Normalize coordinates to a robust target radius.
+        // This keeps initial fit readable and prevents distant outliers from shrinking everything.
+        const centerX = d3Nodes.reduce((sum, n) => sum + n.x, 0) / Math.max(1, d3Nodes.length);
+        const centerY = d3Nodes.reduce((sum, n) => sum + n.y, 0) / Math.max(1, d3Nodes.length);
+        const distances = d3Nodes
+          .map((n) => Math.hypot(n.x - centerX, n.y - centerY))
+          .sort((a, b) => a - b);
+        const p95Idx = Math.max(0, Math.floor(distances.length * 0.95) - 1);
+        const p95 = Math.max(1, distances[p95Idx] ?? 1);
+        const targetRadius = isMobileDevice ? 420 : 620;
+        const scale = Math.max(0.35, Math.min(2.2, targetRadius / p95));
+        const hardMaxRadius = targetRadius * 1.8;
+
+        d3Nodes.forEach((node) => {
+          let nx = (node.x - centerX) * scale;
+          let ny = (node.y - centerY) * scale;
+          const r = Math.hypot(nx, ny);
+          if (r > hardMaxRadius) {
+            const k = hardMaxRadius / r;
+            nx *= k;
+            ny *= k;
+          }
+          node.x = nx;
+          node.y = ny;
+        });
+
         // Extract final positions from simulation with label weights for hierarchy
         const simplePoints = d3Nodes.map((node, i) => {
           const originalPoint = points[i];
@@ -1512,7 +1538,7 @@ export default function CosmographKGVisualizer({
 
           // Canvas settings - Large space for hierarchical layout
           backgroundColor: '#020617',
-          spaceSize: 6144,
+          spaceSize: 3072,
           scalePointsOnZoom: true,       // Nodes shrink when zoomed out (prevents visual overlap)
           scaleLinksOnZoom: true,        // Edges also scale with zoom
           pointSizeRange: [2, 30],
@@ -1535,11 +1561,6 @@ export default function CosmographKGVisualizer({
           showHoveredPointLabel: true,
           pointLabelClassName: 'cosmograph-point-label',
           hoveredPointLabelClassName: 'cosmograph-hovered-label',
-
-          // Cluster labels use low-cardinality school/type groups.
-          pointClusterBy: 'clusterGroup',
-          pointClusterStrengthBy: 'clusterStrength',
-          clusterLabelFontSize: 14,
 
           // Interaction - enable dragging!
           enableDrag: true,
@@ -1652,14 +1673,16 @@ export default function CosmographKGVisualizer({
     const simulationConfig = viewMode === 'clusters'
       ? {
           // CLUSTER VIEW
-          simulationGravity: 0.15,
-          simulationCenter: 0.08,
-          simulationRepulsion: 1.2,
-          simulationLinkSpring: 0.8,
-          simulationLinkDistance: 42,
-          simulationFriction: 0.86,
-          simulationDecay: 2800,
+          simulationGravity: 0.02,
+          simulationCenter: 0.0,
+          simulationRepulsion: 2.1,
+          simulationLinkSpring: 0.55,
+          simulationLinkDistance: 62,
+          simulationFriction: 0.9,
+          simulationDecay: 4200,
           enableSimulation: true,
+          pointClusterBy: 'clusterGroup',
+          pointClusterStrengthBy: 'clusterStrength',
           showClusterLabels: true,
           scaleClusterLabels: true,
           clusterLabelFontSize: 14,
@@ -1669,14 +1692,16 @@ export default function CosmographKGVisualizer({
         }
       : {
           // LABELS VIEW
-          simulationGravity: 0.12,
-          simulationCenter: 0.06,
-          simulationRepulsion: 1.35,
-          simulationLinkSpring: 0.85,
-          simulationLinkDistance: 40,
-          simulationFriction: 0.86,
-          simulationDecay: 3000,
+          simulationGravity: 0.015,
+          simulationCenter: 0.0,
+          simulationRepulsion: 2.35,
+          simulationLinkSpring: 0.5,
+          simulationLinkDistance: 68,
+          simulationFriction: 0.9,
+          simulationDecay: 4500,
           enableSimulation: true,
+          pointClusterBy: undefined,
+          pointClusterStrengthBy: undefined,
           showClusterLabels: false,         // Hide cluster labels in labels view
           scaleClusterLabels: false,
           showTopLabels: true,              // Show hierarchical labels
