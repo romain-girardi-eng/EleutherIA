@@ -56,6 +56,10 @@
     <meta name="language" content="English" />
   </head>
   <body style="margin: 0; padding: 0;">
+    <script>
+      // Safari detection — adds .safari class for CSS rendering fixes
+      (function(){var ua=navigator.userAgent;if(/Safari/.test(ua)&&!/Chrome/.test(ua)&&!/Chromium/.test(ua))document.documentElement.classList.add('safari');})();
+    </script>
     <div id="root" style="margin: 0; padding: 0;"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

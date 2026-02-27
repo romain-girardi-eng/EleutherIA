@@ -5,11 +5,19 @@
  * pulsing data grids, and breathing contours.
  */
 
+import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
 
 interface PremiumBackgroundProps {
   className?: string;
 }
+
+/** Safari renders filter:blur, 1px radial-gradients and SVG patterns with
+ *  visible banding / anti-aliasing artifacts. Detect once at module level. */
+const isSafari =
+  typeof navigator !== 'undefined' &&
+  /Safari/.test(navigator.userAgent) &&
+  !/Chrome/.test(navigator.userAgent);
 
 export function PremiumBackground({ className }: PremiumBackgroundProps) {
   return (
@@ -92,41 +100,49 @@ export function PremiumBackground({ className }: PremiumBackgroundProps) {
 
       {/* ═══ LAYER 3: Animated dot matrix grid ═══ */}
       {/* Dots with a wandering spotlight reveal — data nodes activating */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: 'radial-gradient(circle, rgba(160,140,110,0.14) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-          maskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 70%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 70%)',
-        }}
-      />
+      {/* Safari: 1px radial-gradient dots render with visible anti-aliasing artifacts */}
+      {!isSafari && (
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: 'radial-gradient(circle, rgba(160,140,110,0.14) 1px, transparent 1px)',
+            backgroundSize: '32px 32px',
+            maskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 70%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 70%)',
+          }}
+        />
+      )}
       {/* Spotlight moving over the dot grid — reveals dots more brightly as it passes */}
-      <div
-        className="absolute animate-grid-spotlight"
-        style={{
-          width: '50vw',
-          height: '50vw',
-          maxWidth: '700px',
-          maxHeight: '700px',
-          background: 'radial-gradient(circle at center, rgba(160,140,110,0.10) 0%, transparent 50%)',
-          filter: 'blur(20px)',
-        }}
-      />
+      {!isSafari && (
+        <div
+          className="absolute animate-grid-spotlight"
+          style={{
+            width: '50vw',
+            height: '50vw',
+            maxWidth: '700px',
+            maxHeight: '700px',
+            background: 'radial-gradient(circle at center, rgba(160,140,110,0.10) 0%, transparent 50%)',
+            filter: 'blur(20px)',
+          }}
+        />
+      )}
 
       {/* ═══ LAYER 4: Fine grid lines ═══ */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(90deg, rgba(160,140,110,0.04) 1px, transparent 1px),
-            linear-gradient(0deg, rgba(160,140,110,0.03) 1px, transparent 1px)
-          `,
-          backgroundSize: '64px 64px',
-          maskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, black 10%, transparent 65%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, black 10%, transparent 65%)',
-        }}
-      />
+      {/* Safari: sub-pixel grid lines render with different anti-aliasing */}
+      {!isSafari && (
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              linear-gradient(90deg, rgba(160,140,110,0.04) 1px, transparent 1px),
+              linear-gradient(0deg, rgba(160,140,110,0.03) 1px, transparent 1px)
+            `,
+            backgroundSize: '64px 64px',
+            maskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, black 10%, transparent 65%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, black 10%, transparent 65%)',
+          }}
+        />
+      )}
 
       {/* ═══ LAYER 5: Drifting philosophical terms ═══ */}
       {/* Ancient Greek & Latin terms on free will, fate, causation — scholarly watermark */}
@@ -193,15 +209,18 @@ export function PremiumBackground({ className }: PremiumBackgroundProps) {
       })()}
 
       {/* ═══ LAYER 6: Annotation crosses ═══ */}
-      <div
-        className="absolute inset-0 animate-grid-fade"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='rgba(160,140,110,0.08)' stroke-width='0.5'%3E%3Cline x1='57' y1='55' x2='63' y2='55'/%3E%3Cline x1='60' y1='52' x2='60' y2='58'/%3E%3C/g%3E%3C/svg%3E")`,
-          backgroundSize: '120px 120px',
-          maskImage: 'radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 70%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 70%)',
-        }}
-      />
+      {/* Safari: SVG data-URL patterns render with sub-pixel artifacts */}
+      {!isSafari && (
+        <div
+          className="absolute inset-0 animate-grid-fade"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='rgba(160,140,110,0.08)' stroke-width='0.5'%3E%3Cline x1='57' y1='55' x2='63' y2='55'/%3E%3Cline x1='60' y1='52' x2='60' y2='58'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '120px 120px',
+            maskImage: 'radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 70%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 70%)',
+          }}
+        />
+      )}
 
       {/* ═══ LAYER 7: Floating dust motes ═══ */}
       {/* Library dust / data particles — small bright dots that drift upward */}
