@@ -131,6 +131,14 @@ function compileShader(gl: WebGLRenderingContext, type: number, src: string) {
   return s;
 }
 
+/** Safari upscales the half-res WebGL canvas with different texture filtering
+ *  than Chrome, producing visible grain/noise instead of smooth gradients.
+ *  Detect once at module level. */
+const isSafari =
+  typeof navigator !== 'undefined' &&
+  /Safari/.test(navigator.userAgent) &&
+  !/Chrome/.test(navigator.userAgent);
+
 export function ShaderBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const raf = useRef(0);
@@ -189,6 +197,7 @@ export function ShaderBackground() {
   }, []);
 
   useEffect(() => {
+    if (isSafari) return; // Safari: half-res upscaling produces grain artifacts
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (!window.matchMedia('(hover: hover)').matches) return;
 
@@ -246,6 +255,8 @@ export function ShaderBackground() {
       window.removeEventListener('mousemove', onMove);
     };
   }, [init]);
+
+  if (isSafari) return null;
 
   return (
     <canvas

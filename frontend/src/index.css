@@ -249,6 +249,15 @@
     background-size: 512px 512px;
   }
 
+  /* Safari fix: SVG feTurbulence (::after) renders with visible banding,
+     and repeating-linear-gradient fibers (::before) anti-alias differently,
+     creating a coarse grain instead of a subtle texture.
+     .safari class is set by inline script in index.html via UA detection. */
+  .safari body::before,
+  .safari body::after {
+    display: none;
+  }
+
   /* Ensure no default margins anywhere */
   * {
     box-sizing: border-box;
