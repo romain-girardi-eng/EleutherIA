@@ -1664,45 +1664,48 @@
 
 /* Node labels - clean, readable style */
 .cosmograph-point-label {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'DM Sans', system-ui, sans-serif;
   font-size: 11px;
-  font-weight: 500;
-  color: rgba(248, 250, 252, 0.88);
-  fill: rgba(248, 250, 252, 0.88);
-  background: rgba(15, 23, 42, 0.55);
-  padding: 1px 5px;
-  border-radius: 3px;
-  text-shadow: 0 1px 2px rgba(2, 6, 23, 0.6);
+  font-weight: 600;
+  color: rgba(68, 64, 60, 0.92);
+  fill: rgba(68, 64, 60, 0.92);
+  background: rgba(255, 252, 247, 0.9);
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(231, 229, 228, 0.9);
+  box-shadow: 0 12px 28px rgba(120, 53, 15, 0.12);
   white-space: nowrap;
   pointer-events: none;
 }
 
 /* Hovered node label - highlighted with glow */
 .cosmograph-hovered-label {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'DM Sans', system-ui, sans-serif;
   font-size: 12px;
   font-weight: 600;
-  color: #ffffff;
-  fill: #ffffff;
-  background: rgba(79, 70, 229, 0.88);
-  padding: 3px 8px;
-  border-radius: 6px;
-  box-shadow: 0 0 10px rgba(99, 102, 241, 0.45), 0 2px 6px rgba(0, 0, 0, 0.35);
+  color: #1c1917;
+  fill: #1c1917;
+  background: rgba(255, 252, 247, 0.98);
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  box-shadow: 0 18px 38px rgba(120, 53, 15, 0.18);
   white-space: nowrap;
   pointer-events: none;
 }
 
 /* Selected node label */
 .cosmograph-selected-label {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'DM Sans', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 700;
-  color: #ffffff;
-  fill: #ffffff;
-  background: rgba(96, 165, 250, 0.85);
+  color: #1c1917;
+  fill: #1c1917;
+  background: rgba(255, 252, 247, 0.98);
   padding: 4px 10px;
-  border-radius: 6px;
-  box-shadow: 0 0 16px rgba(96, 165, 250, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
+  border-radius: 999px;
+  border: 1px solid rgba(245, 158, 11, 0.55);
+  box-shadow: 0 22px 42px rgba(120, 53, 15, 0.22);
   white-space: nowrap;
   pointer-events: none;
 }
