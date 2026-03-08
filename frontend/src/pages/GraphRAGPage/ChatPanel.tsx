@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
 import { TerminalLoader } from '../../components/ui/terminal-loader';
@@ -38,6 +39,7 @@ export default function ChatPanel({
   onCitationClick,
   onPassageCitationClick,
 }: ChatPanelProps) {
+  const { t } = useTranslation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const prevMessagesLengthRef = useRef(0);
 
@@ -52,7 +54,7 @@ export default function ChatPanel({
     <div className="flex flex-col w-full lg:w-[60%] h-full overflow-hidden border-r border-amber-200/40">
       {/* Fixed header */}
       <div className="shrink-0 flex items-center justify-between px-6 xl:px-10 py-3 border-b border-amber-200/40 bg-parchment-50/80 backdrop-blur-sm">
-        <h1 className="text-sm xl:text-base font-semibold text-stone-400 uppercase tracking-wider">HiRAG Q&A</h1>
+        <h1 className="text-sm xl:text-base font-semibold text-stone-400 uppercase tracking-wider">{t('graphRagUi.chatTitle')}</h1>
       </div>
 
       {/* Scrollable messages */}
@@ -86,13 +88,13 @@ export default function ChatPanel({
             animate={{ opacity: 1, y: 0 }}
             className="px-5 py-4 bg-red-50 border border-red-200 text-red-800 rounded-xl text-sm text-center"
           >
-            <div className="font-medium mb-1">Query failed</div>
+            <div className="font-medium mb-1">{t('graphRagUi.queryFailed')}</div>
             {error}
             <button
               onClick={() => setError(null)}
               className="mt-2 text-red-600 hover:text-red-800 underline text-xs block mx-auto"
             >
-              Dismiss
+              {t('graphRagUi.dismiss')}
             </button>
           </motion.div>
         )}

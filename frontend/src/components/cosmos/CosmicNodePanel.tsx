@@ -9,6 +9,7 @@
  * - Quick actions (copy, share, etc.)
  */
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   X,
   Link2,
@@ -63,6 +64,7 @@ export function CosmicNodePanel({
   relationships = [],
   className = '',
 }: CosmicNodePanelProps) {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -114,7 +116,7 @@ export function CosmicNodePanel({
         <button
           onClick={onClose}
           className="absolute top-3 right-3 p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 text-slate-400 hover:text-white transition-colors"
-          aria-label="Close panel"
+          aria-label={t('graphUi.cosmicPanel.close')}
         >
           <X className="w-4 h-4" />
         </button>
@@ -166,7 +168,7 @@ export function CosmicNodePanel({
         {node.description && (
           <div className="px-5 py-4 border-b border-slate-700/30">
             <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-2">
-              Description
+              {t('graphUi.cosmicPanel.description')}
             </h3>
             <p className="text-sm text-slate-300 leading-relaxed">
               {node.description}
@@ -178,14 +180,14 @@ export function CosmicNodePanel({
         {relationships.length > 0 && (
           <div className="px-5 py-4">
             <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">
-              Connections ({relationships.length})
+              {t('graphUi.cosmicPanel.connections', { count: relationships.length })}
             </h3>
 
             {/* Outgoing */}
             {outgoing.length > 0 && (
               <div className="mb-4">
                 <p className="text-xs text-slate-500 mb-2 flex items-center gap-1">
-                  <ChevronRight className="w-3 h-3" /> Outgoing
+                  <ChevronRight className="w-3 h-3" /> {t('graphUi.cosmicPanel.outgoing')}
                 </p>
                 <div className="space-y-1.5">
                   {outgoing.slice(0, 10).map((rel, i) => (
@@ -197,7 +199,7 @@ export function CosmicNodePanel({
                   ))}
                   {outgoing.length > 10 && (
                     <p className="text-xs text-slate-500 pl-3">
-                      + {outgoing.length - 10} more
+                      {t('graphUi.cosmicPanel.more', { count: outgoing.length - 10 })}
                     </p>
                   )}
                 </div>
@@ -208,7 +210,7 @@ export function CosmicNodePanel({
             {incoming.length > 0 && (
               <div>
                 <p className="text-xs text-slate-500 mb-2 flex items-center gap-1">
-                  <ChevronRight className="w-3 h-3 rotate-180" /> Incoming
+                  <ChevronRight className="w-3 h-3 rotate-180" /> {t('graphUi.cosmicPanel.incoming')}
                 </p>
                 <div className="space-y-1.5">
                   {incoming.slice(0, 10).map((rel, i) => (
@@ -220,7 +222,7 @@ export function CosmicNodePanel({
                   ))}
                   {incoming.length > 10 && (
                     <p className="text-xs text-slate-500 pl-3">
-                      + {incoming.length - 10} more
+                      {t('graphUi.cosmicPanel.more', { count: incoming.length - 10 })}
                     </p>
                   )}
                 </div>
@@ -233,20 +235,20 @@ export function CosmicNodePanel({
         {(node.ancient_sources || node.dates) && (
           <div className="px-5 py-4 border-t border-slate-700/30">
             <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-2">
-              Metadata
+              {t('graphUi.cosmicPanel.metadata')}
             </h3>
             <div className="space-y-2 text-sm">
               {node.dates && (
                 <div className="flex items-center gap-2 text-slate-400">
                   <Clock className="w-4 h-4 text-slate-500" />
-                  <span>Dates: {node.dates}</span>
+                  <span>{t('graphUi.cosmicPanel.dates', { value: node.dates })}</span>
                 </div>
               )}
               {node.ancient_sources && Array.isArray(node.ancient_sources) && node.ancient_sources.length > 0 && (
                 <div className="flex items-start gap-2 text-slate-400">
                   <BookOpen className="w-4 h-4 text-slate-500 mt-0.5" />
                   <div>
-                    <span className="block text-slate-500 text-xs mb-1">Ancient Sources:</span>
+                    <span className="block text-slate-500 text-xs mb-1">{t('graphUi.cosmicPanel.ancientSources')}</span>
                     {node.ancient_sources.slice(0, 3).map((source: string, i: number) => (
                       <span key={i} className="block text-xs">
                         {source}
@@ -268,7 +270,7 @@ export function CosmicNodePanel({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs transition-colors"
           >
             <Copy className="w-3.5 h-3.5" />
-            {copied ? 'Copied!' : 'Copy ID'}
+            {copied ? t('graphUi.cosmicPanel.copied') : t('graphUi.cosmicPanel.copyId')}
           </button>
         </div>
 
@@ -280,7 +282,7 @@ export function CosmicNodePanel({
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600/80 hover:bg-indigo-500 text-white text-xs transition-colors"
         >
           <ExternalLink className="w-3.5 h-3.5" />
-          Full View
+          {t('graphUi.cosmicPanel.fullView')}
         </button>
       </div>
     </div>

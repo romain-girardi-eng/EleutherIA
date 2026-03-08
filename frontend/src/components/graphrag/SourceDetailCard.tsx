@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUpRight, ChevronLeft, ChevronRight, Quote, X } from 'lucide-react';
 import { cn } from '../../utils/cn';
@@ -41,6 +42,7 @@ export default function SourceDetailCard({
   onPrev,
   onNext,
 }: SourceDetailCardProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const theme = getGraphTypeTheme(source.nodeType);
   const confidence = formatConfidence(source.metadata?.confidence);
@@ -78,7 +80,7 @@ export default function SourceDetailCard({
               </span>
               {confidence && (
                 <span className="inline-flex items-center rounded-full border border-amber-200/80 bg-amber-50/90 px-2.5 py-1 text-[11px] font-medium text-amber-800">
-                  Confidence {confidence}
+                  {t('graphRagUi.sourceDetail.confidence', { value: confidence })}
                 </span>
               )}
             </div>
@@ -104,7 +106,7 @@ export default function SourceDetailCard({
           <button
             onClick={onClose}
             className="shrink-0 rounded-2xl border border-white/70 bg-white/88 p-2 text-stone-500 shadow-sm transition-colors hover:text-stone-900"
-            aria-label="Close source detail"
+            aria-label={t('graphRagUi.sourceDetail.close')}
             type="button"
           >
             <X className="h-4 w-4" />
@@ -115,9 +117,9 @@ export default function SourceDetailCard({
       <div className="flex-1 overflow-y-auto px-5 py-4">
         <div className="space-y-4">
           <div className="rounded-[22px] border border-stone-200/70 bg-[linear-gradient(180deg,rgba(252,249,244,0.95),rgba(255,255,255,0.98))] p-4">
-            <SectionLabel>Why this source matters</SectionLabel>
+            <SectionLabel>{t('graphRagUi.sourceDetail.whyItMatters')}</SectionLabel>
             <p className="mt-2 text-sm leading-7 text-stone-600">
-              {source.content || 'This citation is part of the evidence set used to assemble the answer graph and ground the synthesis.'}
+              {source.content || t('graphRagUi.sourceDetail.fallback')}
             </p>
           </div>
 
@@ -125,10 +127,10 @@ export default function SourceDetailCard({
             <div className="rounded-[22px] border border-stone-200/70 bg-white/92 p-4 shadow-[0_16px_40px_-34px_rgba(120,53,15,0.3)]">
               <SectionLabel>
                 {citationText.originalLanguage === 'greek'
-                  ? 'Greek text'
+                  ? t('graphRagUi.sourceDetail.greekText')
                   : citationText.originalLanguage === 'latin'
-                    ? 'Latin text'
-                    : 'Original text'}
+                    ? t('graphRagUi.sourceDetail.latinText')
+                    : t('graphRagUi.sourceDetail.originalText')}
               </SectionLabel>
               <div className="mt-3 flex gap-3">
                 <div
@@ -144,7 +146,7 @@ export default function SourceDetailCard({
 
           {citationText?.translation && (
             <div className="rounded-[22px] border border-stone-200/70 bg-parchment-50/72 p-4">
-              <SectionLabel>Translation</SectionLabel>
+              <SectionLabel>{t('graphRagUi.sourceDetail.translation')}</SectionLabel>
               <div className="mt-3 flex gap-3">
                 <Quote className="mt-0.5 h-4 w-4 shrink-0 text-stone-400" />
                 <p className="text-sm leading-7 text-stone-700">
@@ -156,7 +158,7 @@ export default function SourceDetailCard({
 
           {!citationText?.original && !citationText?.translation && (
             <div className="rounded-[22px] border border-dashed border-stone-300 bg-stone-50/80 p-4 text-sm text-stone-500">
-              Passage text is not available for this citation yet, but the node remains part of the selected answer graph.
+              {t('graphRagUi.sourceDetail.missingPassage')}
             </div>
           )}
         </div>
@@ -168,19 +170,19 @@ export default function SourceDetailCard({
             onClick={onPrev}
             disabled={citationIndex <= 0}
             className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-stone-200/80 bg-white text-stone-500 transition-all hover:border-stone-300 hover:text-stone-900 disabled:opacity-35"
-            aria-label="Previous source"
+            aria-label={t('graphRagUi.sourceDetail.previous')}
             type="button"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <div className="rounded-full border border-stone-200/80 bg-white/85 px-3 py-1.5 text-xs font-medium text-stone-500">
-            Source {citationIndex + 1} of {totalCitations}
+            {t('graphRagUi.sourceDetail.sourcePosition', { index: citationIndex + 1, total: totalCitations })}
           </div>
           <button
             onClick={onNext}
             disabled={citationIndex >= totalCitations - 1}
             className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-stone-200/80 bg-white text-stone-500 transition-all hover:border-stone-300 hover:text-stone-900 disabled:opacity-35"
-            aria-label="Next source"
+            aria-label={t('graphRagUi.sourceDetail.next')}
             type="button"
           >
             <ChevronRight className="h-4 w-4" />
@@ -200,7 +202,7 @@ export default function SourceDetailCard({
             }}
             type="button"
           >
-            Open node
+            {t('graphRagUi.sourceDetail.openNode')}
             <ArrowUpRight className="h-3.5 w-3.5" />
           </button>
         )}

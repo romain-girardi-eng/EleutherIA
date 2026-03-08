@@ -6,8 +6,10 @@
 
 import { useState, useCallback, useMemo, useEffect, Component } from 'react';
 import type { ReactNode } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import CosmographKGVisualizer from '../components/CosmographKGVisualizer';
+import D3ForceKGVisualizer from '../components/D3ForceKGVisualizer';
 import { CosmicNodePanel } from '../components/cosmos/CosmicNodePanel';
 import ModeSwitcher from '../components/canvas/ModeSwitcher';
 import BottomTabNav from '../components/mobile/BottomTabNav';
@@ -18,7 +20,7 @@ import { useDevice } from '../context/DeviceContext';
 
 /** Scoped error boundary — catches Cosmograph/WebGL crashes without reloading the page */
 class GraphErrorBoundary extends Component<
-  { children: ReactNode; onError?: () => void },
+  { children: ReactNode; onError?: () => void; copy: { title: string; body: string; retry: string } },
   { hasError: boolean }
 > {
   state = { hasError: false };
@@ -40,13 +42,13 @@ class GraphErrorBoundary extends Component<
             <div className="w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center border border-amber-500/30">
               <Network className="w-8 h-8 text-amber-400" />
             </div>
-            <p className="text-white/80 font-medium">Graph visualization failed to load</p>
-            <p className="text-white/40 text-sm">Your device may not have enough GPU resources for the interactive graph.</p>
+            <p className="text-white/80 font-medium">{this.props.copy.title}</p>
+            <p className="text-white/40 text-sm">{this.props.copy.body}</p>
             <button
               onClick={() => this.setState({ hasError: false })}
               className="px-5 py-2.5 bg-white/10 text-white/80 rounded-xl hover:bg-white/15 transition-all border border-white/10 text-sm"
             >
-              Try again
+              {this.props.copy.retry}
             </button>
           </div>
         </div>
@@ -58,6 +60,8 @@ class GraphErrorBoundary extends Component<
 
 /** Mobile fallback — shown instead of the GPU graph on phones/tablets */
 function MobileGraphFallback({ nodeCount, edgeCount }: { nodeCount: number; edgeCount: number }) {
+  const { t } = useTranslation();
+
   return (
     <div className="absolute inset-0 flex items-center justify-center px-6">
       <div className="flex flex-col items-center gap-6 max-w-sm text-center">
@@ -65,10 +69,12 @@ function MobileGraphFallback({ nodeCount, edgeCount }: { nodeCount: number; edge
           <Monitor className="w-10 h-10 text-violet-400" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-white mb-2">Desktop Recommended</h2>
+          <h2 className="text-xl font-semibold text-white mb-2">{t('graphPage.desktopRecommended')}</h2>
           <p className="text-white/50 text-sm leading-relaxed">
-            The interactive knowledge graph ({nodeCount.toLocaleString()} nodes, {edgeCount.toLocaleString()} edges)
-            requires GPU acceleration and works best on desktop browsers.
+            {t('graphPage.mobileFallbackBody', {
+              nodes: nodeCount.toLocaleString(),
+              edges: edgeCount.toLocaleString(),
+            })}
           </p>
         </div>
         <div className="flex flex-col gap-3 w-full">
@@ -76,13 +82,13 @@ function MobileGraphFallback({ nodeCount, edgeCount }: { nodeCount: number; edge
             to="/search"
             className="px-5 py-3 bg-violet-600/80 text-white rounded-xl hover:bg-violet-600 transition-all border border-violet-500/30 text-sm font-medium"
           >
-            Search the Knowledge Graph
+            {t('graphPage.searchGraph')}
           </Link>
           <Link
             to="/database"
             className="px-5 py-3 bg-white/10 text-white/80 rounded-xl hover:bg-white/15 transition-all border border-white/10 text-sm"
           >
-            Browse the Database
+            {t('graphPage.browseDatabase')}
           </Link>
         </div>
       </div>
@@ -91,13 +97,17 @@ function MobileGraphFallback({ nodeCount, edgeCount }: { nodeCount: number; edge
 }
 
 export default function CosmographPage() {
+  const { t } = useTranslation();
   const { nodeId } = useParams<{ nodeId?: string }>();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { isMobile, isTablet } = useDevice();
   const isMobileOrTablet = isMobile || isTablet;
   const [selectedNode, setSelectedNode] = useState<KGNode | null>(null);
   const [showHelp, setShowHelp] = useState(false);
   const [allNodes, setAllNodes] = useState<KGNode[]>([]);
   const [cyData, setCyData] = useState<{ elements?: { edges?: Array<{ data: Record<string, unknown> }> } } | null>(null);
+
+  const graphEngine = searchParams.get('engine') === 'd3' ? 'd3' : 'cosmograph';
 
   // Load data for relationships
   useEffect(() => {
@@ -114,6 +124,16 @@ export default function CosmographPage() {
     };
     loadData();
   }, []);
+
+  const setGraphEngine = useCallback((engine: 'cosmograph' | 'd3') => {
+    const next = new URLSearchParams(searchParams);
+    if (engine === 'cosmograph') {
+      next.delete('engine');
+    } else {
+      next.set('engine', 'd3');
+    }
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   // Auto-select node from URL
   useEffect(() => {
@@ -218,21 +238,58 @@ export default function CosmographPage() {
         />
       ) : (
         <div className="absolute inset-0">
-          <GraphErrorBoundary>
-            <CosmographKGVisualizer
-              onNodeClick={handleNodeClick}
-              selectedNodeId={selectedNode?.id}
-            />
+          <GraphErrorBoundary
+            copy={{
+              title: t('graphPage.loadFailed'),
+              body: t('graphPage.loadFailedBody'),
+              retry: t('graphPage.tryAgain'),
+            }}
+          >
+            {graphEngine === 'd3' ? (
+              <D3ForceKGVisualizer
+                onNodeClick={handleNodeClick}
+                selectedNodeId={selectedNode?.id}
+              />
+            ) : (
+              <CosmographKGVisualizer
+                onNodeClick={handleNodeClick}
+                selectedNodeId={selectedNode?.id}
+              />
+            )}
           </GraphErrorBoundary>
         </div>
       )}
 
       {/* Mode Switcher - Top Right */}
       <div className="absolute top-4 right-4 z-30 flex items-center gap-2">
+        <div className="flex gap-1 p-1 bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-xl">
+          <button
+            onClick={() => setGraphEngine('cosmograph')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+              graphEngine === 'cosmograph'
+                ? 'bg-violet-500/40 text-white'
+                : 'text-white/50 hover:text-white hover:bg-white/10'
+            }`}
+            title={t('graphPage.engineTitles.cosmograph')}
+          >
+            {t('graphPage.engines.cosmograph')}
+          </button>
+          <button
+            onClick={() => setGraphEngine('d3')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+              graphEngine === 'd3'
+                ? 'bg-violet-500/40 text-white'
+                : 'text-white/50 hover:text-white hover:bg-white/10'
+            }`}
+            title={t('graphPage.engineTitles.d3')}
+          >
+            {t('graphPage.engines.d3')}
+          </button>
+        </div>
         <button
           onClick={() => setShowHelp(true)}
           className="p-2.5 bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-xl text-slate-400 hover:text-white hover:border-slate-600/50 transition-colors"
-          title="Help (?)"
+          title={t('graphPage.helpButton')}
         >
           <HelpCircle className="w-5 h-5" />
         </button>
@@ -258,7 +315,7 @@ export default function CosmographPage() {
             onClick={e => e.stopPropagation()}
           >
             <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-white">Keyboard Shortcuts</h2>
+              <h2 className="text-lg font-semibold text-white">{t('graphPage.help.title')}</h2>
               <button
                 onClick={() => setShowHelp(false)}
                 className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors text-xl leading-none"
@@ -270,35 +327,35 @@ export default function CosmographPage() {
               {/* Keyboard Shortcuts */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-white/60">Toggle help</span>
+                  <span className="text-sm text-white/60">{t('graphPage.help.toggleHelp')}</span>
                   <kbd className="px-2.5 py-1 text-xs font-medium text-white/80 bg-white/10 border border-white/10 rounded-lg">?</kbd>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-white/60">Reset view</span>
+                  <span className="text-sm text-white/60">{t('graphPage.help.resetView')}</span>
                   <kbd className="px-2.5 py-1 text-xs font-medium text-white/80 bg-white/10 border border-white/10 rounded-lg">R</kbd>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-white/60">Fit to view</span>
+                  <span className="text-sm text-white/60">{t('graphPage.help.fitToView')}</span>
                   <kbd className="px-2.5 py-1 text-xs font-medium text-white/80 bg-white/10 border border-white/10 rounded-lg">F</kbd>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-white/60">Deselect / Close</span>
+                  <span className="text-sm text-white/60">{t('graphPage.help.deselect')}</span>
                   <kbd className="px-2.5 py-1 text-xs font-medium text-white/80 bg-white/10 border border-white/10 rounded-lg">Esc</kbd>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-white/60">Focus on node</span>
+                  <span className="text-sm text-white/60">{t('graphPage.help.focusNode')}</span>
                   <kbd className="px-2.5 py-1 text-xs font-medium text-white/80 bg-white/10 border border-white/10 rounded-lg">2×click</kbd>
                 </div>
               </div>
 
               {/* Mouse Controls */}
               <div className="pt-4 border-t border-white/10">
-                <h3 className="text-xs font-medium uppercase tracking-wider text-white/40 mb-3">Mouse Controls</h3>
+                <h3 className="text-xs font-medium uppercase tracking-wider text-white/40 mb-3">{t('graphPage.help.mouseControls')}</h3>
                 <div className="space-y-2 text-sm text-white/50">
-                  <p><span className="text-white/70">Click node</span> — Select and zoom</p>
-                  <p><span className="text-white/70">Drag canvas</span> — Pan view</p>
-                  <p><span className="text-white/70">Scroll</span> — Zoom in/out</p>
-                  <p><span className="text-white/70">Drag node</span> — Move node</p>
+                  <p><span className="text-white/70">{t('graphPage.help.clickNodeLabel')}</span> — {t('graphPage.help.clickNode')}</p>
+                  <p><span className="text-white/70">{t('graphPage.help.dragCanvasLabel')}</span> — {t('graphPage.help.dragCanvas')}</p>
+                  <p><span className="text-white/70">{t('graphPage.help.scrollLabel')}</span> — {t('graphPage.help.scroll')}</p>
+                  <p><span className="text-white/70">{t('graphPage.help.dragNodeLabel')}</span> — {t('graphPage.help.dragNode')}</p>
                 </div>
               </div>
 
@@ -306,7 +363,11 @@ export default function CosmographPage() {
               <div className="pt-4 border-t border-white/10">
                 <div className="flex items-center gap-2 text-xs text-white/40">
                   <span className="inline-block w-2 h-2 rounded-full bg-violet-500 shadow-lg shadow-violet-500/50"></span>
-                  <span>GPU-accelerated • Cosmograph Engine</span>
+                  <span>
+                    {graphEngine === 'd3'
+                      ? t('graphPage.help.d3Engine')
+                      : t('graphPage.help.cosmographEngine')}
+                  </span>
                 </div>
               </div>
             </div>

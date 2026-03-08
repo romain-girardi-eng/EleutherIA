@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { X, ChevronUp, ChevronDown, BookOpen, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '../../utils/cn';
@@ -18,6 +19,7 @@ export default function PassageReaderPanel({
   onLoadMore,
   loading = false,
 }: PassageReaderPanelProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const targetRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -37,7 +39,7 @@ export default function PassageReaderPanel({
     ? 'bg-red-50 text-red-700 border-red-200'
     : 'bg-blue-50 text-blue-700 border-blue-200';
 
-  const langLabel = target.language === 'lat' ? 'Latin' : 'Greek';
+  const langLabel = target.language === 'lat' ? t('graphRagUi.passageReader.language.latin') : t('graphRagUi.passageReader.language.greek');
 
   // Reference range for the header
   const firstRef = passages[0]?.canonicalRef || '';
@@ -80,7 +82,7 @@ export default function PassageReaderPanel({
           <button
             onClick={onClose}
             className="shrink-0 p-1.5 rounded-lg hover:bg-stone-100 text-stone-400 hover:text-stone-600 transition-colors"
-            aria-label="Close passage reader"
+            aria-label={t('graphRagUi.passageReader.close')}
           >
             <X className="w-4 h-4" />
           </button>
@@ -94,13 +96,13 @@ export default function PassageReaderPanel({
           <div className="flex justify-center py-3">
             <button
               onClick={() => onLoadMore('up')}
-              disabled={loading}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-stone-400 hover:text-stone-600 bg-amber-50 hover:bg-amber-100/50 rounded-lg transition-colors disabled:opacity-30"
-            >
-              <ChevronUp className="w-3.5 h-3.5" />
-              Load earlier passages
-            </button>
-          </div>
+            disabled={loading}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-stone-400 hover:text-stone-600 bg-amber-50 hover:bg-amber-100/50 rounded-lg transition-colors disabled:opacity-30"
+          >
+            <ChevronUp className="w-3.5 h-3.5" />
+            {t('graphRagUi.passageReader.loadEarlier')}
+          </button>
+        </div>
         )}
 
         {/* Passages list */}
@@ -131,7 +133,7 @@ export default function PassageReaderPanel({
                   </span>
                   {isTarget && (
                     <span className="text-[10px] font-medium text-amber-600 uppercase tracking-wider">
-                      cited
+                      {t('graphRagUi.passageReader.cited')}
                     </span>
                   )}
                 </div>
@@ -154,26 +156,26 @@ export default function PassageReaderPanel({
           <div className="flex justify-center py-3">
             <button
               onClick={() => onLoadMore('down')}
-              disabled={loading}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-stone-400 hover:text-stone-600 bg-amber-50 hover:bg-amber-100/50 rounded-lg transition-colors disabled:opacity-30"
-            >
-              <ChevronDown className="w-3.5 h-3.5" />
-              Load later passages
-            </button>
-          </div>
+            disabled={loading}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-stone-400 hover:text-stone-600 bg-amber-50 hover:bg-amber-100/50 rounded-lg transition-colors disabled:opacity-30"
+          >
+            <ChevronDown className="w-3.5 h-3.5" />
+            {t('graphRagUi.passageReader.loadLater')}
+          </button>
+        </div>
         )}
       </div>
 
       {/* Sticky Footer */}
       <div className="shrink-0 px-4 py-2.5 border-t border-amber-200/40 bg-parchment-100 flex items-center justify-between">
         <span className="text-[10px] text-stone-400">
-          {passages.length} of {totalPassagesInWork} passages
+          {t('graphRagUi.passageReader.passageCount', { count: passages.length, total: totalPassagesInWork })}
         </span>
         <button
           onClick={() => navigate(`/texts?work=${workId}&passage=${target.passageId}`)}
           className="flex items-center gap-1 text-[11px] font-medium text-orange-600 hover:text-orange-700 transition-colors"
         >
-          View in text reader
+          {t('graphRagUi.passageReader.viewInTextReader')}
           <ExternalLink className="w-3 h-3" />
         </button>
       </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import type { PanInfo } from 'framer-motion';
 import {
   X,
@@ -44,6 +45,7 @@ export const NodeDetailSheet: React.FC<NodeDetailSheetProps> = ({
   onClose,
   onNodeClick,
 }) => {
+  const { t } = useTranslation();
   const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     // Close if dragged down significantly
     if (info.offset.y > 100 || info.velocity.y > 500) {
@@ -148,7 +150,7 @@ export const NodeDetailSheet: React.FC<NodeDetailSheetProps> = ({
                   <button
                     onClick={handleShare}
                     className="p-2 rounded-full hover:bg-slate-800 transition-colors"
-                    aria-label="Share this node"
+                    aria-label={t('graphUi.nodeSheet.share')}
                   >
                     <Share2 className="h-5 w-5 text-slate-400" />
                   </button>
@@ -156,7 +158,7 @@ export const NodeDetailSheet: React.FC<NodeDetailSheetProps> = ({
                 <button
                   onClick={onClose}
                   className="p-2 rounded-full hover:bg-slate-800 transition-colors"
-                  aria-label="Close details"
+                  aria-label={t('graphUi.nodeSheet.close')}
                 >
                   <X className="h-5 w-5 text-slate-400" />
                 </button>
@@ -186,7 +188,7 @@ export const NodeDetailSheet: React.FC<NodeDetailSheetProps> = ({
               {/* Description */}
               {node.description && (
                 <div className="mb-6">
-                  <h3 className="text-sm font-medium text-slate-400 mb-2">Description</h3>
+                  <h3 className="text-sm font-medium text-slate-400 mb-2">{t('graphUi.nodeSheet.description')}</h3>
                   <p className="text-slate-200 text-sm leading-relaxed">{node.description}</p>
                 </div>
               )}
@@ -195,7 +197,7 @@ export const NodeDetailSheet: React.FC<NodeDetailSheetProps> = ({
               {node.sources && node.sources.length > 0 && (
                 <div className="mb-6">
                   <h3 className="text-sm font-medium text-slate-400 mb-2">
-                    Sources ({node.sources.length})
+                    {t('graphUi.nodeSheet.sources', { count: node.sources.length })}
                   </h3>
                   <div className="space-y-2">
                     {node.sources.slice(0, 5).map((source, idx) => (
@@ -213,17 +215,17 @@ export const NodeDetailSheet: React.FC<NodeDetailSheetProps> = ({
                           <a
                             href={source.url}
                             target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-blue-400 text-xs mt-2 hover:underline"
-                          >
-                            View Source <ExternalLink className="h-3 w-3" />
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-blue-400 text-xs mt-2 hover:underline"
+                        >
+                            {t('graphUi.nodeSheet.viewSource')} <ExternalLink className="h-3 w-3" />
                           </a>
                         )}
                       </div>
                     ))}
                     {node.sources.length > 5 && (
                       <p className="text-xs text-slate-500">
-                        +{node.sources.length - 5} more sources
+                        {t('graphUi.nodeSheet.moreSources', { count: node.sources.length - 5 })}
                       </p>
                     )}
                   </div>
@@ -234,7 +236,7 @@ export const NodeDetailSheet: React.FC<NodeDetailSheetProps> = ({
               {node.edges && node.edges.length > 0 && (
                 <div>
                   <h3 className="text-sm font-medium text-slate-400 mb-2">
-                    Related Concepts ({node.edges.length})
+                    {t('graphUi.nodeSheet.relatedConcepts', { count: node.edges.length })}
                   </h3>
                   <div className="space-y-2">
                     {node.edges.slice(0, 8).map((edge, idx) => (
@@ -242,7 +244,7 @@ export const NodeDetailSheet: React.FC<NodeDetailSheetProps> = ({
                         key={idx}
                         onClick={() => onNodeClick?.(edge.target_id)}
                         className="w-full flex items-center justify-between bg-slate-800 rounded-lg p-3 hover:bg-slate-700 transition-colors text-left"
-                        aria-label={`Navigate to ${edge.target_label}`}
+                        aria-label={t('graphUi.nodeSheet.navigateTo', { label: edge.target_label })}
                       >
                         <div>
                           <p className="text-sm text-white font-medium">{edge.target_label}</p>
@@ -255,7 +257,7 @@ export const NodeDetailSheet: React.FC<NodeDetailSheetProps> = ({
                     ))}
                     {node.edges.length > 8 && (
                       <p className="text-xs text-slate-500">
-                        +{node.edges.length - 8} more connections
+                        {t('graphUi.nodeSheet.moreConnections', { count: node.edges.length - 8 })}
                       </p>
                     )}
                   </div>

@@ -45,7 +45,7 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
     // Announce to screen readers
     const lang = languages.find(l => l.code === langCode);
     if (lang) {
-      const announcement = `Language changed to ${lang.name}`;
+      const announcement = t('common.languageChangedTo', { language: lang.name });
       const liveRegion = document.getElementById('aria-live-announcer');
       if (liveRegion) {
         liveRegion.textContent = announcement;
@@ -69,7 +69,7 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
               }
             `}
             aria-pressed={i18n.language === lang.code}
-            aria-label={`Switch to ${lang.name}`}
+            aria-label={t('common.switchToLanguage', { language: lang.name })}
           >
             <span className="text-lg">{lang.flag}</span>
             <span>{lang.nativeName}</span>

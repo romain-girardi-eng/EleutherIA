@@ -1,5 +1,6 @@
 import { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   X,
   BookOpen,
@@ -50,6 +51,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
   onClose,
   onLemmaClick,
 }: LemmaIntelligencePanelProps) {
+  const { t } = useTranslation();
   // Data states
   const [dictionary, setDictionary] = useState<LemmaDictionaryResponse | null>(null);
   const [stats, setStats] = useState<LemmaStatsResponse | null>(null);
@@ -154,7 +156,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   <span className="text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-                    Lemma Intelligence
+                    {t('lemmaPanel.kicker')}
                   </span>
                 </div>
                 <h2 className="text-2xl font-bold text-black dark:text-white break-words">
@@ -167,7 +169,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                 )}
                 <div className="flex items-center gap-2 mt-2">
                   <span className="text-xs px-2.5 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 font-medium">
-                    {language === 'grc' ? 'Greek' : 'Latin'}
+                    {language === 'grc' ? t('lemmaPanel.languages.greek') : t('lemmaPanel.languages.latin')}
                   </span>
                   {dictionary?.dictionary && (
                     <span className="text-xs px-2.5 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-medium">
@@ -179,7 +181,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
               <button
                 onClick={onClose}
                 className="p-2 hover:bg-neutral-200/50 dark:hover:bg-neutral-700/50 rounded-xl transition-colors"
-                aria-label="Close panel"
+                aria-label={t('lemmaPanel.close')}
               >
                 <X className="w-5 h-5 text-neutral-500" />
               </button>
@@ -192,7 +194,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
               {/* Dictionary Definition */}
               <Section
                 icon={<BookOpen className="w-4 h-4" />}
-                title="Dictionary Definition"
+                title={t('lemmaPanel.sections.dictionary')}
                 loading={loadingDict}
               >
                 {dictionary?.found ? (
@@ -214,12 +216,12 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                           {expandedDef ? (
                             <>
                               <ChevronUp className="w-3.5 h-3.5" />
-                              Show less
+                              {t('lemmaPanel.showLess')}
                             </>
                           ) : (
                             <>
                               <ChevronDown className="w-3.5 h-3.5" />
-                              Show full definition
+                              {t('lemmaPanel.showFullDefinition')}
                             </>
                           )}
                         </button>
@@ -247,7 +249,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                     {dictionary.forms && dictionary.forms.length > 0 && (
                       <div className="pt-2">
                         <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-2">
-                          Forms
+                          {t('lemmaPanel.sections.forms')}
                         </p>
                         <div className="flex flex-wrap gap-1.5">
                           {dictionary.forms.slice(0, 8).map((form, i) => (
@@ -260,7 +262,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                           ))}
                           {dictionary.forms.length > 8 && (
                             <span className="text-xs text-neutral-400">
-                              +{dictionary.forms.length - 8} more
+                              {t('graphUi.cosmicPanel.more', { count: dictionary.forms.length - 8 })}
                             </span>
                           )}
                         </div>
@@ -269,7 +271,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                   </div>
                 ) : (
                   <p className="text-sm text-neutral-500 dark:text-neutral-400 italic">
-                    No dictionary entry found for "{lemma}"
+                    {t('lemmaPanel.empty.noDefinition')}
                   </p>
                 )}
               </Section>
@@ -277,7 +279,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
               {/* Corpus Statistics */}
               <Section
                 icon={<BarChart3 className="w-4 h-4" />}
-                title="Corpus Statistics"
+                title={t('lemmaPanel.sections.statistics')}
                 loading={loadingStats}
               >
                 {stats && (stats.total_occurrences > 0 || stats.passage_count > 0) ? (
@@ -286,12 +288,12 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                     <div className="grid grid-cols-2 gap-3">
                       <StatCard
                         icon={<Hash className="w-4 h-4" />}
-                        label="Occurrences"
+                        label={t('lemmaPanel.metrics.occurrences')}
                         value={stats.total_occurrences.toLocaleString()}
                       />
                       <StatCard
                         icon={<FileText className="w-4 h-4" />}
-                        label="Passages"
+                        label={t('lemmaPanel.metrics.passages')}
                         value={stats.passage_count.toLocaleString()}
                       />
                     </div>
@@ -301,7 +303,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                       <div>
                         <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-1.5">
                           <Users className="w-3.5 h-3.5" />
-                          By Author
+                          {t('lemmaPanel.sections.byAuthor')}
                         </p>
                         <div className="space-y-1.5">
                           {(showAllAuthors
@@ -323,8 +325,8 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                             className="mt-2 text-xs text-blue-600 dark:text-blue-400 hover:underline"
                           >
                             {showAllAuthors
-                              ? 'Show less'
-                              : `Show all ${stats.by_author.length} authors`}
+                              ? t('lemmaPanel.showLess')
+                              : t('lemmaPanel.actions.showAllAuthors')}
                           </button>
                         )}
                       </div>
@@ -335,7 +337,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                       <div>
                         <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-1.5">
                           <BookOpen className="w-3.5 h-3.5" />
-                          By Work
+                          {t('lemmaPanel.sections.byWork')}
                         </p>
                         <div className="space-y-1.5">
                           {(showAllWorks
@@ -358,8 +360,8 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                             className="mt-2 text-xs text-blue-600 dark:text-blue-400 hover:underline"
                           >
                             {showAllWorks
-                              ? 'Show less'
-                              : `Show all ${stats.by_work.length} works`}
+                              ? t('lemmaPanel.showLess')
+                              : t('lemmaPanel.actions.showAllWorks')}
                           </button>
                         )}
                       </div>
@@ -370,7 +372,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                       <div>
                         <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-1.5">
                           <Calendar className="w-3.5 h-3.5" />
-                          By Period
+                          {t('lemmaPanel.sections.byPeriod')}
                         </p>
                         <div className="flex flex-wrap gap-2">
                           {stats.by_period.map((item) => (
@@ -387,7 +389,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                   </div>
                 ) : (
                   <p className="text-sm text-neutral-500 dark:text-neutral-400 italic">
-                    No corpus statistics available
+                    {t('lemmaPanel.empty.noStats')}
                   </p>
                 )}
               </Section>
@@ -395,7 +397,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
               {/* Related Lemmas */}
               <Section
                 icon={<Link2 className="w-4 h-4" />}
-                title="Co-occurring Lemmas"
+                title={t('lemmaPanel.sections.related')}
                 loading={loadingRelated}
               >
                 {related?.related && related.related.length > 0 ? (
@@ -422,7 +424,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                   </div>
                 ) : (
                   <p className="text-sm text-neutral-500 dark:text-neutral-400 italic">
-                    No co-occurring lemmas found
+                    {t('lemmaPanel.empty.noRelated')}
                   </p>
                 )}
               </Section>
@@ -430,7 +432,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
               {/* Knowledge Graph Connections */}
               <Section
                 icon={<Network className="w-4 h-4" />}
-                title="Knowledge Graph Connections"
+                title={t('lemmaPanel.sections.knowledgeGraph')}
                 loading={loadingKG}
               >
                 {kgConnections?.kg_nodes && kgConnections.kg_nodes.length > 0 ? (
@@ -460,7 +462,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
                   </div>
                 ) : (
                   <p className="text-sm text-neutral-500 dark:text-neutral-400 italic">
-                    No knowledge graph connections found
+                    {t('lemmaPanel.empty.noKgConnections')}
                   </p>
                 )}
               </Section>
@@ -468,7 +470,7 @@ const LemmaIntelligencePanel = memo(function LemmaIntelligencePanel({
               {/* External Links */}
               <Section
                 icon={<ExternalLink className="w-4 h-4" />}
-                title="External Resources"
+                title={t('lemmaPanel.sections.externalResources')}
                 loading={false}
               >
                 <div className="grid grid-cols-2 gap-2">
@@ -522,6 +524,8 @@ function Section({
   loading: boolean;
   children: React.ReactNode;
 }) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
@@ -533,7 +537,7 @@ function Section({
       {loading ? (
         <div className="flex items-center gap-2 py-4">
           <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
-          <span className="text-sm text-neutral-500">Loading...</span>
+          <span className="text-sm text-neutral-500">{t('common.loading')}</span>
         </div>
       ) : (
         children

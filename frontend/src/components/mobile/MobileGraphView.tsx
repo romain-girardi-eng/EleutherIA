@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import * as d3 from 'd3';
 import { ZoomIn, ZoomOut, RotateCcw, Maximize2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useTouchGestures } from '@/hooks/useTouchGestures';
 import { NodeDetailSheet } from './NodeDetailSheet';
 import { motion } from 'framer-motion';
@@ -47,6 +48,7 @@ export const MobileGraphView: React.FC<MobileGraphViewProps> = ({
   maxNodes = 100,
   className = '',
 }) => {
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -249,7 +251,7 @@ export const MobileGraphView: React.FC<MobileGraphViewProps> = ({
         isFullscreen ? 'fixed inset-0 z-50' : ''
       }`}
       role="application"
-      aria-label="Interactive knowledge graph visualization"
+      aria-label={t('graphUi.mobileGraph.ariaLabel')}
     >
       {/* Graph Canvas */}
       <svg
@@ -268,28 +270,28 @@ export const MobileGraphView: React.FC<MobileGraphViewProps> = ({
         <button
           onClick={handleZoomIn}
           className="p-2 bg-slate-800/80 backdrop-blur-sm rounded-lg hover:bg-slate-700 transition-colors"
-          aria-label="Zoom in"
+          aria-label={t('graphUi.mobileGraph.zoomIn')}
         >
           <ZoomIn className="h-5 w-5 text-white" />
         </button>
         <button
           onClick={handleZoomOut}
           className="p-2 bg-slate-800/80 backdrop-blur-sm rounded-lg hover:bg-slate-700 transition-colors"
-          aria-label="Zoom out"
+          aria-label={t('graphUi.mobileGraph.zoomOut')}
         >
           <ZoomOut className="h-5 w-5 text-white" />
         </button>
         <button
           onClick={handleReset}
           className="p-2 bg-slate-800/80 backdrop-blur-sm rounded-lg hover:bg-slate-700 transition-colors"
-          aria-label="Reset zoom"
+          aria-label={t('graphUi.mobileGraph.resetZoom')}
         >
           <RotateCcw className="h-5 w-5 text-white" />
         </button>
         <button
           onClick={toggleFullscreen}
           className="p-2 bg-slate-800/80 backdrop-blur-sm rounded-lg hover:bg-slate-700 transition-colors"
-          aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+          aria-label={isFullscreen ? t('graphUi.mobileGraph.exitFullscreen') : t('graphUi.mobileGraph.enterFullscreen')}
         >
           <Maximize2 className="h-5 w-5 text-white" />
         </button>
@@ -298,10 +300,10 @@ export const MobileGraphView: React.FC<MobileGraphViewProps> = ({
       {/* Stats Overlay */}
       <div className="absolute bottom-4 left-4 bg-slate-800/80 backdrop-blur-sm rounded-lg px-3 py-2">
         <p className="text-xs text-slate-300">
-          {limitedNodes.length} nodes • {limitedEdges.length} edges
+          {t('graphUi.mobileGraph.stats', { nodes: limitedNodes.length, edges: limitedEdges.length })}
           {nodes.length > maxNodes && (
             <span className="text-yellow-400 ml-1">
-              (limited from {nodes.length})
+              {t('graphUi.mobileGraph.limitedFrom', { count: nodes.length })}
             </span>
           )}
         </p>
@@ -309,19 +311,19 @@ export const MobileGraphView: React.FC<MobileGraphViewProps> = ({
 
       {/* Legend */}
       <div className="absolute top-4 left-4 bg-slate-800/80 backdrop-blur-sm rounded-lg p-3">
-        <p className="text-xs font-medium text-slate-300 mb-2">Legend</p>
+        <p className="text-xs font-medium text-slate-300 mb-2">{t('graphUi.mobileGraph.legend')}</p>
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-blue-500" />
-            <span className="text-xs text-slate-300">Person</span>
+            <span className="text-xs text-slate-300">{t('graphUi.mobileGraph.person')}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-purple-500" />
-            <span className="text-xs text-slate-300">Concept</span>
+            <span className="text-xs text-slate-300">{t('graphUi.mobileGraph.concept')}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-green-500" />
-            <span className="text-xs text-slate-300">Text</span>
+            <span className="text-xs text-slate-300">{t('graphUi.mobileGraph.text')}</span>
           </div>
         </div>
       </div>
@@ -329,7 +331,7 @@ export const MobileGraphView: React.FC<MobileGraphViewProps> = ({
       {/* Instructions */}
       <div className="absolute bottom-4 right-4 bg-slate-800/80 backdrop-blur-sm rounded-lg px-3 py-2">
         <p className="text-xs text-slate-400">
-          Pinch to zoom • Tap node for details • Double-tap to reset
+          {t('graphUi.mobileGraph.instructions')}
         </p>
       </div>
 
