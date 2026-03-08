@@ -248,6 +248,7 @@ function ReasoningDeck({
   response: GraphRAGResponse | null;
   onNodeClick: (nodeId: string) => void;
 }) {
+  const { t } = useTranslation();
   const startingNodes = response?.reasoning_path?.starting_nodes ?? [];
   const expandedNodes = response?.reasoning_path?.expanded_nodes ?? [];
   const traversedEdges = response?.reasoning_path?.traversed_edges ?? [];
@@ -257,11 +258,11 @@ function ReasoningDeck({
       <div className="grid gap-3 xl:grid-cols-[1.05fr_0.95fr]">
         <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-            Starting nodes
+            {t('graphRagUi.rightPanel.startingNodes')}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {startingNodes.length === 0 && (
-              <p className="text-sm text-stone-500">No starting nodes were exposed for this answer.</p>
+              <p className="text-sm text-stone-500">{t('graphRagUi.rightPanel.noStartingNodes')}</p>
             )}
             {startingNodes.map((node) => {
               const theme = getGraphTypeTheme(node.type);
@@ -286,7 +287,7 @@ function ReasoningDeck({
 
         <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-            Traversal links
+            {t('graphRagUi.rightPanel.traversalLinks')}
           </p>
           <div className="mt-3 space-y-2">
             {traversedEdges.slice(0, 5).map((edge, index) => (
@@ -305,7 +306,7 @@ function ReasoningDeck({
               </div>
             ))}
             {traversedEdges.length === 0 && (
-              <p className="text-sm text-stone-500">No traversal links were returned.</p>
+              <p className="text-sm text-stone-500">{t('graphRagUi.rightPanel.noTraversalLinks')}</p>
             )}
           </div>
         </div>
@@ -313,11 +314,11 @@ function ReasoningDeck({
 
       <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
         <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-          Expanded nodes
+          {t('graphRagUi.rightPanel.expandedNodes')}
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           {expandedNodes.length === 0 && (
-            <p className="text-sm text-stone-500">No expanded nodes were exposed for this answer.</p>
+            <p className="text-sm text-stone-500">{t('graphRagUi.rightPanel.noExpandedNodes')}</p>
           )}
           {expandedNodes.map((node) => {
             const theme = getGraphTypeTheme(node.type);

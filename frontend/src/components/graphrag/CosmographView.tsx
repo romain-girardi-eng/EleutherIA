@@ -513,7 +513,7 @@ export default function CosmographView({
 
       <div className="pointer-events-none absolute left-4 top-4 z-20 flex max-w-[calc(100%-2rem)] flex-wrap items-center gap-2">
         <span className="rounded-full border border-amber-200/80 bg-amber-50/92 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-800">
-          Answer constellation
+          {t('graphRagUi.answerConstellation')}
         </span>
         <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1 text-[11px] font-medium text-stone-500">
           {stage.sourceNodes.length} sources
@@ -671,7 +671,7 @@ export default function CosmographView({
             fill="#78716c"
             fontSize={14}
           >
-            {stage.sourceNodes.length} sources guide the synthesis
+            {t('graphRagUi.sourceSummary', { count: stage.sourceNodes.length })}
           </text>
           <text
             x={stage.answerCard.x - stage.answerCard.width / 2 + 24}
@@ -679,7 +679,10 @@ export default function CosmographView({
             fill="#78716c"
             fontSize={14}
           >
-            {stage.anchorNodes.length} anchor nodes and {stage.expansionNodes.length} expansions
+            {t('graphRagUi.anchorSummary', {
+              anchors: stage.anchorNodes.length,
+              expansions: stage.expansionNodes.length,
+            })}
           </text>
           {highlightedNode && (
             <text
@@ -689,7 +692,7 @@ export default function CosmographView({
               fontSize={13}
               fontWeight={600}
             >
-              Focusing on: {truncateLabel(highlightedNode.label, 28)}
+              {t('graphRagUi.focusingOn', { label: truncateLabel(highlightedNode.label, 28) })}
             </text>
           )}
         </motion.g>
