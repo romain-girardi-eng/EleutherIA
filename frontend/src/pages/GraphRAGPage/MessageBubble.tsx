@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
+import { useTranslation } from 'react-i18next';
 import { Zap, BookOpen, ChevronDown, ChevronUp, Clock, Cpu, FileText, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { CitationRenderer, SourcesPanel } from '../../components/CitationRenderer';
@@ -14,6 +15,7 @@ interface MessageBubbleProps {
 }
 
 export default function MessageBubble({ message, onNodeClick, onCitationClick, onPassageCitationClick }: MessageBubbleProps) {
+  const { t } = useTranslation();
   const isUser = message.role === 'user';
   const navigate = useNavigate();
   const [showSources, setShowSources] = useState(false);
@@ -71,12 +73,12 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                 )}
                 {nodesUsed !== undefined && (
                   <span className="text-[10px] xl:text-xs text-stone-400">
-                    {nodesUsed} nodes, {edgesTraversed ?? 0} edges
+                    {t('graphRagUi.messageBubble.nodesEdges', { nodes: nodesUsed, edges: edgesTraversed ?? 0 })}
                   </span>
                 )}
                 {tokensUsed !== undefined && (
                   <span className="text-[10px] xl:text-xs text-stone-400">
-                    {tokensUsed.toLocaleString()} tokens
+                    {t('graphRagUi.messageBubble.tokens', { count: tokensUsed })}
                   </span>
                 )}
               </div>
@@ -109,7 +111,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                     className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
                   >
                     <BookOpen className="w-4 h-4" />
-                    <span>Verified Passages ({verifiedPassages.length})</span>
+                    <span>{t('graphRagUi.messageBubble.verifiedPassages', { count: verifiedPassages.length })}</span>
                     {showPassages ? <ChevronUp className="w-4 h-4 ml-auto" /> : <ChevronDown className="w-4 h-4 ml-auto" />}
                   </button>
 
@@ -209,7 +211,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                                           className="inline-flex items-center gap-1 text-xs text-orange-600 hover:text-orange-700 font-medium"
                                         >
                                           <ExternalLink className="w-3 h-3" />
-                                          View in text reader
+                                          {t('graphRagUi.messageBubble.viewInTextReader')}
                                         </button>
                                       </div>
                                     </div>
@@ -233,7 +235,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                     className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
                   >
                     <FileText className="w-4 h-4" />
-                    <span>Referenced Texts ({Object.keys(message.citationTexts).length})</span>
+                    <span>{t('graphRagUi.messageBubble.referencedTexts', { count: Object.keys(message.citationTexts).length })}</span>
                     {showPassages ? <ChevronUp className="w-4 h-4 ml-auto" /> : <ChevronDown className="w-4 h-4 ml-auto" />}
                   </button>
 
@@ -253,7 +255,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                               {text.original && (
                                 <div className="mb-2">
                                   <p className="text-[10px] uppercase tracking-wider text-stone-400 mb-0.5 font-semibold">
-                                    {text.originalLanguage || 'Original'}
+                                    {text.originalLanguage || t('graphRagUi.messageBubble.originalText')}
                                   </p>
                                   <p className="text-sm xl:text-base leading-relaxed font-serif text-stone-700 italic">
                                     {text.original}
@@ -263,7 +265,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                               {text.translation && (
                                 <div>
                                   <p className="text-[10px] uppercase tracking-wider text-stone-400 mb-0.5 font-semibold">
-                                    Translation
+                                    {t('graphRagUi.messageBubble.translation')}
                                   </p>
                                   <p className="text-sm xl:text-base leading-relaxed text-stone-600">
                                     {text.translation}
@@ -287,7 +289,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                     className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
                   >
                     <FileText className="w-4 h-4" />
-                    <span>Sources ({sources.length})</span>
+                    <span>{t('graphRagUi.messageBubble.sources', { count: sources.length })}</span>
                     {showSources ? <ChevronUp className="w-4 h-4 ml-auto" /> : <ChevronDown className="w-4 h-4 ml-auto" />}
                   </button>
 
