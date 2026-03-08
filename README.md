@@ -100,7 +100,7 @@ Full documentation is available in the [docs/](docs/INDEX.md) folder:
 ## Tech Stack
 
 - **Backend:** FastAPI + Python 3.11+ + PostgreSQL + Qdrant
-- **Frontend:** React 19 + TypeScript + Vite + Tailwind CSS + Cosmograph
+- **Frontend:** React 19 + TypeScript + Vite + Tailwind CSS + Cosmograph + i18n (react-i18next)
 - **LLM:** Gemini 3 (primary) + Kimi K2.5 Thinking (extended reasoning)
 - **Deployment:** Docker Compose
 
@@ -113,7 +113,7 @@ Full documentation is available in the [docs/](docs/INDEX.md) folder:
 | Ancient works | 189 |
 | Passages | 16,968 |
 | Node types | 15 |
-| Relation types | 32 |
+| Relation types | 56 |
 
 ## Citation
 
