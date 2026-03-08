@@ -104,15 +104,6 @@ function blendColors(colorA: string, colorB: string): string {
   );
 }
 
-function toPercent(value?: number): string {
-  if (value === undefined || Number.isNaN(value)) {
-    return '--';
-  }
-
-  const normalized = value <= 1 ? value * 100 : value;
-  return `${Math.round(normalized)}%`;
-}
-
 function ControlButton({
   icon: Icon,
   label,
@@ -443,7 +434,6 @@ export default function CosmographView({
 
   const currentSources = deferredResponse?.sources ?? [];
   const highlightedSource = highlightedSourceIndex !== null ? currentSources[highlightedSourceIndex] : null;
-  const confidence = deferredResponse?.quality_metrics?.confidence_score;
 
   const handleClick = useCallback(
     (clickedIndex: number | undefined) => {
@@ -488,28 +478,24 @@ export default function CosmographView({
       <div className="pointer-events-none absolute -left-16 top-0 h-52 w-52 rounded-full bg-amber-200/25 blur-3xl" />
       <div className="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full bg-blue-100/35 blur-3xl" />
 
-      <div className="pointer-events-none absolute left-4 top-4 z-20 max-w-[calc(100%-7rem)]">
-        <div className="rounded-[24px] border border-stone-200/80 bg-white/82 px-4 py-3 shadow-[0_18px_42px_-30px_rgba(120,53,15,0.32)] backdrop-blur-xl">
-          <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-stone-400">
-            <span className="rounded-full bg-amber-50 px-2.5 py-1 text-amber-700">Selected answer graph</span>
-            <span>{graph.points.length} nodes</span>
-            <span>{graph.links.length} links</span>
-            <span>{currentSources.length} sources</span>
-          </div>
-          <p className="mt-2 text-sm font-semibold leading-6 text-stone-900 line-clamp-2">
-            {deferredResponse?.query || 'The graph is built from the citations and traversal that support the current answer.'}
-          </p>
-          <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-stone-500">
-            <span className="rounded-full border border-stone-200/80 bg-stone-50/80 px-2.5 py-1">
-              Confidence {toPercent(confidence)}
-            </span>
-            {highlightedSource && (
-              <span className="rounded-full border border-amber-200/80 bg-amber-50/90 px-2.5 py-1 text-amber-800">
-                Focus {highlightedSource.id}. {highlightedSource.nodeLabel}
-              </span>
-            )}
-          </div>
-        </div>
+      <div className="pointer-events-none absolute left-4 top-4 z-20 flex max-w-[calc(100%-7rem)] flex-wrap items-center gap-2">
+        <span className="rounded-full border border-amber-200/80 bg-amber-50/92 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-800">
+          Answer map
+        </span>
+        <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1 text-[11px] font-medium text-stone-500">
+          {currentSources.length} sources
+        </span>
+        <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1 text-[11px] font-medium text-stone-500">
+          {graph.points.length} nodes
+        </span>
+        <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1 text-[11px] font-medium text-stone-500">
+          {graph.links.length} links
+        </span>
+        {highlightedSource && (
+          <span className="rounded-full border border-amber-200/80 bg-white/92 px-3 py-1 text-[11px] font-medium text-stone-700">
+            Focus {highlightedSource.id}
+          </span>
+        )}
       </div>
 
       <CosmographProvider>
@@ -581,15 +567,6 @@ export default function CosmographView({
 
       <div className="pointer-events-none absolute bottom-4 left-4 z-20">
         <GraphLegend types={graph.presentTypes} />
-      </div>
-
-      <div className="pointer-events-none absolute bottom-4 right-4 z-20 rounded-2xl border border-stone-200/80 bg-white/80 px-3.5 py-2.5 text-right shadow-[0_16px_36px_-28px_rgba(120,53,15,0.32)] backdrop-blur-xl">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400">
-          Smooth exploration
-        </p>
-        <p className="mt-1 text-xs text-stone-600">
-          Drag to recompose the map. Click a source node to open its evidence card.
-        </p>
       </div>
     </div>
   );

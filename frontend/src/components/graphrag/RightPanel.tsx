@@ -81,37 +81,27 @@ function PanelHeader({
 
   return (
     <div className="shrink-0 border-b border-stone-200/70 px-4 py-4">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-amber-50/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-800">
-              <Network className="h-3.5 w-3.5" />
-              {stateCopy[state]}
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-amber-50/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-800">
+            <Network className="h-3.5 w-3.5" />
+            {stateCopy[state]}
+          </span>
+          {response?.service && (
+            <span className="inline-flex rounded-full border border-stone-200/80 bg-white/80 px-2.5 py-1 text-[11px] font-medium text-stone-500">
+              {response.service}
             </span>
-            {response?.service && (
-              <span className="inline-flex rounded-full border border-stone-200/80 bg-white/80 px-2.5 py-1 text-[11px] font-medium text-stone-500">
-                {response.service}
-              </span>
-            )}
-          </div>
-          <h2 className="mt-3 font-display text-[1.65rem] leading-tight text-stone-900">
-            {response?.query || 'A curated knowledge graph will appear here for each answer.'}
-          </h2>
-          <p className="mt-2 max-w-xl text-sm leading-6 text-stone-500">
-            Built from the citations, anchor nodes, and traversal bridges used to synthesize the current GraphRAG answer.
-          </p>
+          )}
         </div>
-        <div className="hidden xl:block shrink-0 rounded-[24px] border border-stone-200/80 bg-white/80 px-4 py-3 shadow-[0_20px_40px_-34px_rgba(120,53,15,0.32)]">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-            Confidence
-          </p>
-          <p className="mt-1 text-lg font-semibold text-stone-900">
-            {formatConfidence(response?.quality_metrics?.confidence_score)}
-          </p>
-        </div>
+        <h2 className="mt-3 font-display text-[1.35rem] leading-tight text-stone-900 xl:text-[1.5rem]">
+          {response?.query || 'A curated knowledge graph will appear here for each answer.'}
+        </h2>
+        <p className="mt-2 max-w-xl text-sm leading-6 text-stone-500">
+          Citations, anchor nodes, and traversal bridges used for the current answer.
+        </p>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2 xl:grid-cols-4">
+      <div className="mt-4 grid grid-cols-2 gap-2 xl:grid-cols-5">
         <WorkspaceMetric
           label="Sources"
           value={formatMetricValue(sourcesCount)}
@@ -127,6 +117,10 @@ function PanelHeader({
         <WorkspaceMetric
           label="Conversation"
           value={formatMetricValue(conversationCount)}
+        />
+        <WorkspaceMetric
+          label="Confidence"
+          value={formatConfidence(response?.quality_metrics?.confidence_score)}
         />
       </div>
     </div>
@@ -166,7 +160,7 @@ function SourceRail({
         </div>
       </div>
 
-      <div className="flex snap-x gap-3 overflow-x-auto px-1 pb-1">
+      <div className="space-y-2 px-1 pb-1">
         {sources.map((source, index) => {
           const theme = getGraphTypeTheme(source.nodeType);
           const isActive = activeSourceIndex === index;
@@ -176,47 +170,48 @@ function SourceRail({
               key={`${source.nodeId}-${source.id}`}
               onClick={() => onSourceSelect?.(index)}
               className={cn(
-                'min-w-[230px] snap-start rounded-[22px] border p-4 text-left transition-all duration-200',
+                'w-full rounded-[20px] border p-4 text-left transition-all duration-200',
                 isActive
                   ? 'border-amber-300/90 bg-white shadow-[0_24px_48px_-32px_rgba(120,53,15,0.32)]'
                   : 'border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(252,249,244,0.96))] hover:-translate-y-0.5 hover:border-stone-300',
               )}
               type="button"
             >
-              <div className="flex items-center justify-between gap-2">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-stone-100 text-sm font-bold text-stone-700">
+              <div className="flex items-start justify-between gap-3">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-stone-100 text-sm font-bold text-stone-700">
                   {source.id}
                 </span>
-                <span
-                  className="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold"
-                  style={{
-                    borderColor: theme.border,
-                    backgroundColor: theme.tint,
-                    color: theme.text,
-                  }}
-                >
-                  {formatGraphNodeType(source.nodeType)}
-                </span>
-              </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span
+                      className="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold"
+                      style={{
+                        borderColor: theme.border,
+                        backgroundColor: theme.tint,
+                        color: theme.text,
+                      }}
+                    >
+                      {formatGraphNodeType(source.nodeType)}
+                    </span>
+                    {source.metadata?.period && (
+                      <span className="rounded-full border border-stone-200/80 bg-stone-50/80 px-2.5 py-1 text-[11px] text-stone-500">
+                        {source.metadata.period}
+                      </span>
+                    )}
+                    {source.metadata?.school && (
+                      <span className="rounded-full border border-stone-200/80 bg-stone-50/80 px-2.5 py-1 text-[11px] italic text-stone-500">
+                        {source.metadata.school as string}
+                      </span>
+                    )}
+                  </div>
 
-              <p className="mt-4 text-base font-semibold leading-6 text-stone-900 line-clamp-2">
-                {source.nodeLabel}
-              </p>
-              <p className="mt-2 text-sm leading-6 text-stone-500 line-clamp-3">
-                {source.content || 'Part of the selected knowledge graph used as evidence for the answer.'}
-              </p>
-
-              <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] text-stone-500">
-                {source.metadata?.period && (
-                  <span className="rounded-full border border-stone-200/80 bg-stone-50/80 px-2.5 py-1">
-                    {source.metadata.period}
-                  </span>
-                )}
-                {source.metadata?.school && (
-                  <span className="rounded-full border border-stone-200/80 bg-stone-50/80 px-2.5 py-1 italic">
-                    {source.metadata.school as string}
-                  </span>
-                )}
+                  <p className="mt-3 text-base font-semibold leading-6 text-stone-900 line-clamp-2">
+                    {source.nodeLabel}
+                  </p>
+                  <p className="mt-1 text-sm leading-6 text-stone-500 line-clamp-2">
+                    {source.content || 'Part of the selected knowledge graph used as evidence for the answer.'}
+                  </p>
+                </div>
               </div>
             </button>
           );
@@ -419,110 +414,110 @@ export default function RightPanel({
           conversationCount={workspaceConversationCount}
         />
 
-        <AnimatePresence mode="wait">
-          {state === 'idle' && <IdleState />}
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          <AnimatePresence mode="wait">
+            {state === 'idle' && <IdleState />}
 
-          {state === 'loading' && <LoadingState />}
+            {state === 'loading' && <LoadingState />}
 
-          {state === 'graph' && (
-            <motion.div
-              key="graph"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.28 }}
-              className="flex h-full min-h-0 flex-col gap-4 p-4"
-            >
-              <div className="min-h-[340px] flex-[1.25]">
-                <CosmographView
-                  response={response}
-                  allResponses={allResponses}
-                  highlightedSourceIndex={activeSourceIndex}
-                  onNodeClick={onNodeClick}
-                  onSourceSelect={onSourceSelect}
-                  onHighlightRef={onHighlightRef}
-                />
-              </div>
+            {state === 'graph' && (
+              <motion.div
+                key="graph"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.28 }}
+                className="space-y-4 p-4"
+              >
+                <div className="h-[380px] min-h-[380px] xl:h-[430px]">
+                  <CosmographView
+                    response={response}
+                    allResponses={allResponses}
+                    highlightedSourceIndex={activeSourceIndex}
+                    onNodeClick={onNodeClick}
+                    onSourceSelect={onSourceSelect}
+                    onHighlightRef={onHighlightRef}
+                  />
+                </div>
 
-              <div className="min-h-[210px]">
                 <SourceRail
                   sources={sources}
                   activeSourceIndex={activeSourceIndex}
                   onSourceSelect={onSourceSelect}
                 />
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
 
-          {state === 'source-detail' && (
-            <motion.div
-              key="source-detail"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.24 }}
-              className="flex h-full min-h-0 flex-col gap-4 p-4"
-            >
-              <div className="min-h-[250px] flex-[0.95]">
-                <CosmographView
-                  response={response}
-                  allResponses={allResponses}
-                  highlightedSourceIndex={activeSourceIndex}
-                  onNodeClick={onNodeClick}
-                  onSourceSelect={onSourceSelect}
-                  onHighlightRef={onHighlightRef}
-                  showControls={false}
-                />
-              </div>
+            {state === 'source-detail' && (
+              <motion.div
+                key="source-detail"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.24 }}
+                className="space-y-4 p-4"
+              >
+                <div className="h-[280px] min-h-[280px]">
+                  <CosmographView
+                    response={response}
+                    allResponses={allResponses}
+                    highlightedSourceIndex={activeSourceIndex}
+                    onNodeClick={onNodeClick}
+                    onSourceSelect={onSourceSelect}
+                    onHighlightRef={onHighlightRef}
+                    showControls={false}
+                  />
+                </div>
 
-              <div className="min-h-0 flex-[1.1]">
-                <AnimatePresence mode="wait">
-                  {activeSource ? (
-                    <SourceDetailCard
-                      key={activeSource.id}
-                      source={activeSource}
-                      citationText={activeCitationText}
-                      citationIndex={activeSourceIndex!}
-                      totalCitations={sources.length}
-                      onClose={onCloseDetail}
-                      onPrev={onPrevSource}
-                      onNext={onNextSource}
-                    />
-                  ) : (
-                    <motion.div
-                      key="no-source"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="flex h-full items-center justify-center rounded-[26px] border border-dashed border-stone-300 bg-white/70 text-sm text-stone-500"
-                    >
-                      No source selected.
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </motion.div>
-          )}
+                <div className="min-h-[420px]">
+                  <AnimatePresence mode="wait">
+                    {activeSource ? (
+                      <SourceDetailCard
+                        key={activeSource.id}
+                        source={activeSource}
+                        citationText={activeCitationText}
+                        citationIndex={activeSourceIndex!}
+                        totalCitations={sources.length}
+                        onClose={onCloseDetail}
+                        onPrev={onPrevSource}
+                        onNext={onNextSource}
+                      />
+                    ) : (
+                      <motion.div
+                        key="no-source"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex min-h-[320px] items-center justify-center rounded-[26px] border border-dashed border-stone-300 bg-white/70 text-sm text-stone-500"
+                      >
+                        No source selected.
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            )}
 
-          {state === 'passage-reader' && passageContext && (
-            <motion.div
-              key="passage-reader"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.24 }}
-              className="h-full min-h-0 p-4"
-            >
-              <div className="h-full overflow-hidden rounded-[26px] border border-stone-200/80 bg-white/82 shadow-[0_28px_70px_-42px_rgba(120,53,15,0.35)]">
-                <PassageReaderPanel
-                  passageContext={passageContext}
-                  onClose={onCloseDetail}
-                  onLoadMore={onLoadMorePassages || (() => {})}
-                />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            {state === 'passage-reader' && passageContext && (
+              <motion.div
+                key="passage-reader"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.24 }}
+                className="h-full min-h-0 p-4"
+              >
+                <div className="min-h-[520px] overflow-hidden rounded-[26px] border border-stone-200/80 bg-white/82 shadow-[0_28px_70px_-42px_rgba(120,53,15,0.35)]">
+                  <PassageReaderPanel
+                    passageContext={passageContext}
+                    onClose={onCloseDetail}
+                    onLoadMore={onLoadMorePassages || (() => {})}
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );
