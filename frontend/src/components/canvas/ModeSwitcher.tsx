@@ -1,33 +1,35 @@
+import { useMemo } from 'react';
 import { Network, Orbit, Box } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-
-const MODES = [
-  {
-    id: 'observatory' as const,
-    path: '/visualizer',
-    icon: Network,
-    label: '2D',
-    description: 'GPU graph network',
-  },
-  {
-    id: 'cosmos' as const,
-    path: '/cosmos',
-    icon: Orbit,
-    label: '3D',
-    description: 'Particle cosmos view',
-  },
-  {
-    id: 'semativerse' as const,
-    path: '/semativerse',
-    icon: Box,
-    label: 'Semativerse',
-    description: 'Embedding space',
-  },
-];
+import { useTranslation } from 'react-i18next';
 
 export default function ModeSwitcher() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
+  const modes = useMemo(() => [
+    {
+      id: 'observatory' as const,
+      path: '/visualizer',
+      icon: Network,
+      label: t('graphUi.modeSwitcher.observatory.label'),
+      description: t('graphUi.modeSwitcher.observatory.description'),
+    },
+    {
+      id: 'cosmos' as const,
+      path: '/cosmos',
+      icon: Orbit,
+      label: t('graphUi.modeSwitcher.cosmos.label'),
+      description: t('graphUi.modeSwitcher.cosmos.description'),
+    },
+    {
+      id: 'semativerse' as const,
+      path: '/semativerse',
+      icon: Box,
+      label: t('graphUi.modeSwitcher.semativerse.label'),
+      description: t('graphUi.modeSwitcher.semativerse.description'),
+    },
+  ], [t]);
 
   // Determine active mode from current pathname
   const currentPath = location.pathname;
@@ -38,8 +40,8 @@ export default function ModeSwitcher() {
       : 'observatory';
 
   return (
-    <div className="flex gap-1 p-1 bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-xl" role="radiogroup" aria-label="Visualization mode">
-      {MODES.map((m) => {
+    <div className="flex gap-1 p-1 bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-xl" role="radiogroup" aria-label={t('graphUi.modeSwitcher.ariaLabel')}>
+      {modes.map((m) => {
         const Icon = m.icon;
         const isActive = activeMode === m.id;
 
