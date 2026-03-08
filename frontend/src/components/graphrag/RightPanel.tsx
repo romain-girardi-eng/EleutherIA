@@ -101,7 +101,7 @@ function PanelHeader({
         </p>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2 xl:grid-cols-5">
+      <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-3 2xl:grid-cols-5">
         <WorkspaceMetric
           label="Sources"
           value={formatMetricValue(sourcesCount)}

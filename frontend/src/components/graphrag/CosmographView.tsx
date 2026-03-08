@@ -1,6 +1,4 @@
-import { useDeferredValue, useMemo, useCallback, useEffect, useState } from 'react';
-import { Cosmograph, CosmographProvider, useCosmograph } from '@cosmograph/react';
-import { Maximize2, Pause, Play } from 'lucide-react';
+import { useDeferredValue, useMemo, useCallback, useEffect } from 'react';
 import GraphLegend from './GraphLegend';
 import { cn } from '../../utils/cn';
 import type { GraphRAGResponse } from '../../types';
@@ -46,6 +44,9 @@ type GraphPoint = {
   labelWeight: number;
   citationIndex?: number;
   importance: number;
+  isSource: boolean;
+  isStarting: boolean;
+  isExpanded: boolean;
 };
 
 type GraphLink = {
@@ -66,6 +67,14 @@ type AccumulatedNode = {
   citationIndex?: number;
   occurrences: number;
   degree: number;
+};
+
+type PositionedNode = GraphPoint & {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  radius: number;
 };
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
@@ -104,105 +113,21 @@ function blendColors(colorA: string, colorB: string): string {
   );
 }
 
-function ControlButton({
-  icon: Icon,
-  label,
-  onClick,
-}: {
-  icon: typeof Maximize2;
-  label: string;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-stone-200/80 bg-white/88 text-stone-600 shadow-[0_16px_36px_-28px_rgba(120,53,15,0.4)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:border-amber-300/70 hover:text-stone-900"
-      aria-label={label}
-      title={label}
-      type="button"
-    >
-      <Icon className="h-4 w-4" />
-    </button>
-  );
-}
-
-function InnerControls({
-  points,
-  sourcePointIndexByCitation,
-  highlightedSourceIndex,
-  onHighlightRef,
-  showControls,
-}: {
-  points: GraphPoint[];
-  sourcePointIndexByCitation: Map<number, number>;
-  highlightedSourceIndex: number | null;
-  onHighlightRef?: (fn: (citationIndex: number) => void) => void;
-  showControls: boolean;
-}) {
-  const { cosmograph } = useCosmograph();
-  const [isPaused, setIsPaused] = useState(false);
-
-  const highlightNode = useCallback(
-    (citationIndex: number) => {
-      const pointIndex = sourcePointIndexByCitation.get(citationIndex);
-      if (pointIndex === undefined || !cosmograph) {
-        return;
-      }
-
-      const point = points[pointIndex];
-      if (!point) {
-        return;
-      }
-
-      try {
-        cosmograph.selectPoint(point.index, false, true);
-        cosmograph.zoomToPoint(point.index, 700, 1.45, true);
-      } catch {
-        cosmograph.fitView(450, 0.14);
-      }
-    },
-    [cosmograph, points, sourcePointIndexByCitation],
-  );
-
-  useEffect(() => {
-    onHighlightRef?.(highlightNode);
-  }, [highlightNode, onHighlightRef]);
-
-  useEffect(() => {
-    if (highlightedSourceIndex !== null) {
-      highlightNode(highlightedSourceIndex);
-    }
-  }, [highlightNode, highlightedSourceIndex]);
-
-  if (!showControls) {
-    return null;
+function truncateLabel(label: string, maxLength: number) {
+  if (label.length <= maxLength) {
+    return label;
   }
 
-  const handleFitView = () => cosmograph?.fitView(450, 0.14);
-  const handleTogglePause = () => {
-    if (!cosmograph) {
-      return;
-    }
+  return `${label.slice(0, maxLength - 1)}…`;
+}
 
-    if (isPaused) {
-      cosmograph.start();
-    } else {
-      cosmograph.pause();
-    }
+function nodeFrame(point: GraphPoint) {
+  const label = truncateLabel(point.label, point.isSource ? 26 : 22);
+  const width = Math.max(110, Math.min(220, label.length * 7.4 + 42));
+  const height = point.isSource ? 48 : 42;
+  const radius = point.isSource ? 16 : 14;
 
-    setIsPaused((current) => !current);
-  };
-
-  return (
-    <div className="pointer-events-none absolute right-4 top-4 z-20 flex items-center gap-2">
-      <ControlButton icon={Maximize2} label="Center graph" onClick={handleFitView} />
-      <ControlButton
-        icon={isPaused ? Play : Pause}
-        label={isPaused ? 'Resume simulation' : 'Pause simulation'}
-        onClick={handleTogglePause}
-      />
-    </div>
-  );
+  return { label, width, height, radius };
 }
 
 interface CosmographViewProps {
@@ -224,7 +149,6 @@ export default function CosmographView({
   onSourceSelect,
   onHighlightRef,
   className,
-  showControls = true,
 }: CosmographViewProps) {
   const deferredResponse = useDeferredValue(response);
   const deferredAllResponses = useDeferredValue(allResponses);
@@ -241,7 +165,6 @@ export default function CosmographView({
       return {
         points: [] as GraphPoint[],
         links: [] as GraphLink[],
-        sourcePointIndexByCitation: new Map<number, number>(),
         presentTypes: [] as string[],
       };
     }
@@ -363,7 +286,6 @@ export default function CosmographView({
 
     const idToIndex = new Map<string, number>();
     const idToColor = new Map<string, string>();
-    const sourcePointIndexByCitation = new Map<number, number>();
     const presentTypes = new Set<string>();
 
     const points = orderedNodes.map((node, index) => {
@@ -388,9 +310,6 @@ export default function CosmographView({
       idToIndex.set(node.id, index);
       idToColor.set(node.id, theme.color);
       presentTypes.add(key);
-      if (node.citationIndex !== undefined) {
-        sourcePointIndexByCitation.set(node.citationIndex, index);
-      }
 
       return {
         index,
@@ -402,6 +321,9 @@ export default function CosmographView({
         labelWeight,
         citationIndex: node.citationIndex,
         importance,
+        isSource: node.isSource,
+        isStarting: node.isStarting,
+        isExpanded: node.isExpanded,
       };
     });
 
@@ -427,25 +349,88 @@ export default function CosmographView({
     return {
       points,
       links,
-      sourcePointIndexByCitation,
       presentTypes: [...presentTypes],
     };
   }, [deferredAllResponses, deferredResponse]);
 
-  const currentSources = deferredResponse?.sources ?? [];
-  const highlightedSource = highlightedSourceIndex !== null ? currentSources[highlightedSourceIndex] : null;
+  const highlightedNode = useMemo(
+    () =>
+      highlightedSourceIndex !== null
+        ? graph.points.find((point) => point.citationIndex === highlightedSourceIndex) ?? null
+        : null,
+    [graph.points, highlightedSourceIndex],
+  );
 
-  const handleClick = useCallback(
-    (clickedIndex: number | undefined) => {
-      if (clickedIndex === undefined) {
-        return;
-      }
+  const emitHighlight = useCallback(
+    (citationIndex: number) => {
+      onSourceSelect?.(citationIndex);
+    },
+    [onSourceSelect],
+  );
 
-      const point = graph.points[clickedIndex];
-      if (!point) {
-        return;
-      }
+  useEffect(() => {
+    onHighlightRef?.(emitHighlight);
+  }, [emitHighlight, onHighlightRef]);
 
+  const layout = useMemo(() => {
+    const width = 920;
+    const height = 520;
+    const centerX = width / 2;
+    const centerY = height / 2 + 8;
+
+    const positioned = new Map<string, PositionedNode>();
+
+    if (graph.points.length === 0) {
+      return { width, height, positioned };
+    }
+
+    const core = graph.points.filter((point) => point.isSource || point.isStarting);
+    const outer = graph.points.filter((point) => !point.isSource && !point.isStarting);
+
+    const primary = core.length > 0 ? core : graph.points;
+    const focusNode = primary[0];
+    const restPrimary = primary.slice(1);
+
+    const placeNode = (point: GraphPoint, x: number, y: number) => {
+      const frame = nodeFrame(point);
+      positioned.set(point.id, {
+        ...point,
+        x,
+        y,
+        width: frame.width,
+        height: frame.height,
+        radius: frame.radius,
+      });
+    };
+
+    placeNode(focusNode, centerX, centerY);
+
+    restPrimary.forEach((point, index) => {
+      const angle = (-Math.PI / 2) + (index * (2 * Math.PI)) / Math.max(restPrimary.length, 1);
+      const radius = 155 + (index % 2) * 16;
+      placeNode(
+        point,
+        centerX + Math.cos(angle) * radius,
+        centerY + Math.sin(angle) * radius * 0.78,
+      );
+    });
+
+    outer.forEach((point, index) => {
+      const ring = Math.floor(index / 8);
+      const radius = 235 + ring * 72;
+      const angle = (-Math.PI / 2) + ((index % 8) * (2 * Math.PI)) / Math.min(8, Math.max(outer.length, 1));
+      placeNode(
+        point,
+        centerX + Math.cos(angle) * radius,
+        centerY + Math.sin(angle) * radius * 0.72,
+      );
+    });
+
+    return { width, height, positioned };
+  }, [graph.points]);
+
+  const handleNodeActivate = useCallback(
+    (point: GraphPoint) => {
       if (point.citationIndex !== undefined && onSourceSelect) {
         onSourceSelect(point.citationIndex);
         return;
@@ -453,7 +438,7 @@ export default function CosmographView({
 
       onNodeClick(point.id);
     },
-    [graph.points, onNodeClick, onSourceSelect],
+    [onNodeClick, onSourceSelect],
   );
 
   if (graph.points.length === 0) {
@@ -478,12 +463,9 @@ export default function CosmographView({
       <div className="pointer-events-none absolute -left-16 top-0 h-52 w-52 rounded-full bg-amber-200/25 blur-3xl" />
       <div className="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full bg-blue-100/35 blur-3xl" />
 
-      <div className="pointer-events-none absolute left-4 top-4 z-20 flex max-w-[calc(100%-7rem)] flex-wrap items-center gap-2">
+      <div className="pointer-events-none absolute left-4 top-4 z-20 flex max-w-[calc(100%-2rem)] flex-wrap items-center gap-2">
         <span className="rounded-full border border-amber-200/80 bg-amber-50/92 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-800">
           Answer map
-        </span>
-        <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1 text-[11px] font-medium text-stone-500">
-          {currentSources.length} sources
         </span>
         <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1 text-[11px] font-medium text-stone-500">
           {graph.points.length} nodes
@@ -491,79 +473,111 @@ export default function CosmographView({
         <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1 text-[11px] font-medium text-stone-500">
           {graph.links.length} links
         </span>
-        {highlightedSource && (
+        {highlightedNode && (
           <span className="rounded-full border border-amber-200/80 bg-white/92 px-3 py-1 text-[11px] font-medium text-stone-700">
-            Focus {highlightedSource.id}
+            Focus {highlightedNode.label}
           </span>
         )}
       </div>
 
-      <CosmographProvider>
-        <Cosmograph
-          points={graph.points}
-          links={graph.links}
-          pointIndexBy="index"
-          pointIdBy="id"
-          pointColorBy="color"
-          pointSizeBy="size"
-          pointLabelBy="label"
-          pointLabelWeightBy="labelWeight"
-          linkSourceBy="source"
-          linkSourceIndexBy="sourceIndex"
-          linkTargetBy="target"
-          linkTargetIndexBy="targetIndex"
-          linkColorBy="color"
-          linkDefaultWidth={0.38}
-          linkDefaultArrows={false}
-          backgroundColor="#faf7f0"
-          spaceSize={2048}
-          pointSizeRange={[4, 18]}
-          pointSizeScale={1}
-          scalePointsOnZoom
-          scaleLinksOnZoom
-          showLabels
-          showDynamicLabels
-          showDynamicLabelsLimit={12}
-          showTopLabels
-          showTopLabelsLimit={14}
-          showUnselectedPointLabels={false}
-          selectedPointLabelsLimit={18}
-          pointLabelFontSize={11}
-          labelPadding={[4, 2, 4, 2]}
-          labelMargin={5}
-          showHoveredPointLabel
-          pointLabelClassName="cosmograph-point-label"
-          hoveredPointLabelClassName="cosmograph-hovered-label"
-          enableDrag
-          selectPointOnClick
-          focusPointOnClick
-          renderHoveredPointRing
-          hoveredPointRingColor="#f59e0b"
-          pointGreyoutOpacity={0.1}
-          linkGreyoutOpacity={0.08}
-          enableSimulation
-          simulationRepulsion={1.18}
-          simulationGravity={0.17}
-          simulationCenter={0.09}
-          simulationLinkSpring={0.9}
-          simulationLinkDistance={28}
-          simulationFriction={0.88}
-          simulationDecay={2600}
-          preservePointPositionsOnDataUpdate
-          fitViewOnInit
-          fitViewDelay={200}
-          onClick={handleClick}
-          style={{ width: '100%', height: '100%' }}
-        />
+      <svg
+        viewBox={`0 0 ${layout.width} ${layout.height}`}
+        className="relative z-10 h-full w-full"
+        role="img"
+        aria-label="Selected answer knowledge graph"
+      >
+        {graph.links.map((link) => {
+          const source = layout.positioned.get(link.source);
+          const target = layout.positioned.get(link.target);
+          if (!source || !target) {
+            return null;
+          }
 
-        <InnerControls
-          points={graph.points}
-          sourcePointIndexByCitation={graph.sourcePointIndexByCitation}
-          highlightedSourceIndex={highlightedSourceIndex}
-          onHighlightRef={onHighlightRef}
-          showControls={showControls}
-        />
-      </CosmographProvider>
+          const isActive =
+            highlightedNode &&
+            (highlightedNode.id === link.source || highlightedNode.id === link.target);
+
+          return (
+            <line
+              key={`${link.source}-${link.target}`}
+              x1={source.x}
+              y1={source.y}
+              x2={target.x}
+              y2={target.y}
+              stroke={link.color}
+              strokeOpacity={isActive ? 0.75 : 0.28}
+              strokeWidth={isActive ? 2.2 : 1.35}
+            />
+          );
+        })}
+
+        {[...layout.positioned.values()].map((point) => {
+          const theme = getGraphTypeTheme(point.type);
+          const isSelected = highlightedNode?.id === point.id;
+          const textX = -point.width / 2 + 30;
+          const label = truncateLabel(point.label, point.isSource ? 26 : 22);
+
+          return (
+            <g
+              key={point.id}
+              transform={`translate(${point.x}, ${point.y})`}
+              onClick={() => handleNodeActivate(point)}
+              style={{ cursor: 'pointer' }}
+            >
+              {isSelected && (
+                <rect
+                  x={-point.width / 2 - 6}
+                  y={-point.height / 2 - 6}
+                  width={point.width + 12}
+                  height={point.height + 12}
+                  rx={point.radius + 6}
+                  fill={`${theme.color}14`}
+                  stroke={`${theme.color}55`}
+                  strokeWidth={1.6}
+                />
+              )}
+              <rect
+                x={-point.width / 2}
+                y={-point.height / 2}
+                width={point.width}
+                height={point.height}
+                rx={point.radius}
+                fill="rgba(255,255,255,0.95)"
+                stroke={isSelected ? theme.color : theme.border}
+                strokeWidth={isSelected ? 1.8 : 1.1}
+              />
+              <circle
+                cx={-point.width / 2 + 16}
+                cy={0}
+                r={point.isSource ? 6.5 : 5.5}
+                fill={theme.color}
+              />
+              <text
+                x={textX}
+                y={1}
+                fill="#292524"
+                fontSize={13}
+                fontWeight={point.isSource ? 700 : 600}
+                dominantBaseline="middle"
+              >
+                {label}
+              </text>
+              {point.citationIndex !== undefined && (
+                <text
+                  x={point.width / 2 - 12}
+                  y={-point.height / 2 + 14}
+                  fill={theme.text}
+                  fontSize={11}
+                  fontWeight={700}
+                  textAnchor="end"
+                >
+                  {point.citationIndex + 1}
+                </text>
+              )}
+            </g>
+          );
+        })}
+      </svg>
 
       <div className="pointer-events-none absolute bottom-4 left-4 z-20">
         <GraphLegend types={graph.presentTypes} />
