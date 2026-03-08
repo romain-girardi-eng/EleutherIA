@@ -20,7 +20,12 @@ import type {
 } from '../types';
 import type { User, LoginCredentials } from '../context/AuthContext';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const rawApiUrl = import.meta.env.VITE_API_URL;
+const API_URL = (
+  typeof rawApiUrl === 'string' && rawApiUrl.trim().length > 0
+    ? rawApiUrl.trim()
+    : 'http://localhost:8000'
+).replace(/\/+$/, '');
 
 class ApiClient {
   private client: AxiosInstance;
@@ -36,6 +41,13 @@ class ApiClient {
 
     // Add request interceptor to include auth token
     this.client.interceptors.request.use((config) => {
+      // Prevent accidental double "/api/api/..." when baseURL already includes "/api"
+      // and route paths are still written with an "/api" prefix.
+      const baseUrl = (config.baseURL ?? '').replace(/\/+$/, '');
+      if (typeof config.url === 'string' && baseUrl.endsWith('/api') && config.url.startsWith('/api/')) {
+        config.url = config.url.slice(4);
+      }
+
       const token = Cookies.get('auth_token');
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -310,7 +322,8 @@ class ApiClient {
         Object.entries(query).map(([key, value]) => [key, String(value)])
       )
     );
-    const url = `${API_URL}/api/graphrag/query/stream?${params}`;
+    const base = API_URL.endsWith('/api') ? API_URL : `${API_URL}/api`;
+    const url = `${base}/graphrag/query/stream?${params}`;
 
     return new EventSource(url, {
       withCredentials: false,

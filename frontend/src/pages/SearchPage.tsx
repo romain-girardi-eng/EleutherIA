@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { tArray } from '../i18n/utils';
 import {
   HelpCircle,
   Loader2,
@@ -433,7 +434,7 @@ export default function SearchPage() {
       {activeModesCount >= 2 && (
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full border border-orange-200 bg-orange-100 px-3 py-1 text-xs text-orange-700">
-            RRF enabled
+            {t('search.rrfEnabled')}
           </span>
         </div>
       )}
@@ -457,7 +458,7 @@ export default function SearchPage() {
                 onChange={(e) => handleQueryChange(e.target.value)}
                 onKeyDown={handleKeyDown}
                 onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
-                placeholder="Type Greek/Latin or transliteration (boul = βούλομαι)..."
+                placeholder={t('search.autocompletePlaceholder')}
                 className={cn(
                   'w-full border-0 bg-transparent text-stone-800 placeholder-stone-400 transition-all focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0',
                   compact ? 'px-4 py-3 text-sm sm:text-base' : 'px-6 py-3 text-base'
@@ -519,9 +520,11 @@ export default function SearchPage() {
                         <span className={cn('rounded-full px-2 py-0.5 text-xs font-medium', posColor.bg, posColor.text)}>
                           {suggestion.pos}
                         </span>
-                        <span className="ml-auto text-xs text-stone-400">{suggestion.count.toLocaleString()} occ.</span>
+                        <span className="ml-auto text-xs text-stone-400">
+                          {suggestion.count.toLocaleString()} {t('search.autocomplete.occurrencesAbbrev')}
+                        </span>
                         <span className="rounded-full bg-stone-100 px-2 py-0.5 text-xs text-stone-400">
-                          {suggestion.passage_count} passages
+                          {t('search.autocomplete.passages', { count: suggestion.passage_count })}
                         </span>
                       </button>
 
@@ -536,7 +539,7 @@ export default function SearchPage() {
                           setShowSuggestions(false);
                         }}
                         className="rounded-lg p-2 text-stone-400 transition-colors hover:bg-orange-100 hover:text-orange-600"
-                        title="Lemma Intelligence: Dictionary, Statistics, Related words"
+                        title={t('search.lemmaIntelligenceTitle')}
                       >
                         <Sparkles className="h-4 w-4" />
                       </button>
@@ -556,12 +559,12 @@ export default function SearchPage() {
                     {loadingMore ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        Loading...
+                        {t('search.loadingMore')}
                       </>
                     ) : (
                       <>
                         <ChevronDown className="h-4 w-4" />
-                        Show more results
+                        {t('search.showMoreResults')}
                       </>
                     )}
                   </button>
@@ -571,13 +574,13 @@ export default function SearchPage() {
               <div className="border-t border-amber-200/60 bg-stone-50 px-4 py-2">
                 <p className="flex items-center gap-4 text-xs text-stone-500">
                   <span>
-                    <kbd className="rounded border border-stone-300 bg-white px-1.5 py-0.5 text-[10px]">↑↓</kbd> navigate
+                    <kbd className="rounded border border-stone-300 bg-white px-1.5 py-0.5 text-[10px]">↑↓</kbd> {t('search.autocomplete.keyboard.navigate')}
                   </span>
                   <span>
-                    <kbd className="rounded border border-stone-300 bg-white px-1.5 py-0.5 text-[10px]">Enter</kbd> select
+                    <kbd className="rounded border border-stone-300 bg-white px-1.5 py-0.5 text-[10px]">Enter</kbd> {t('search.autocomplete.keyboard.select')}
                   </span>
                   <span>
-                    <kbd className="rounded border border-stone-300 bg-white px-1.5 py-0.5 text-[10px]">Esc</kbd> close
+                    <kbd className="rounded border border-stone-300 bg-white px-1.5 py-0.5 text-[10px]">Esc</kbd> {t('search.autocomplete.keyboard.close')}
                   </span>
                 </p>
               </div>
@@ -603,14 +606,14 @@ export default function SearchPage() {
             <div className="text-center">
               <h1 className="mb-4 text-5xl font-display font-bold text-stone-800 md:text-7xl">
                 <Typewriter
-                  text={['Hybrid', 'Textual', 'Lemmatic', 'Semantic']}
+                  text={tArray(t, 'search.titleWords')}
                   speed={120}
                   waitTime={3000}
                   deleteSpeed={70}
                   className="text-stone-800"
                   cursorChar="_"
                 />
-                {' Search'}
+                {` ${t('search.titleSuffix')}`}
               </h1>
               <p className="text-lg text-stone-600 md:text-xl">{t('search.subtitle')}</p>
             </div>
@@ -633,7 +636,7 @@ export default function SearchPage() {
             )}
 
             <div className="mt-4 text-center">
-              <p className="mb-3 text-sm text-stone-600">Try searching for:</p>
+              <p className="mb-3 text-sm text-stone-600">{t('search.trySearchingFor')}</p>
               <div className="flex flex-wrap justify-center gap-2">
                 <button
                   onClick={() => setQuery("ἐφ' ἡμῖν")}
@@ -975,6 +978,7 @@ function PaginationControls({
   totalPages: number;
   onPageChange: (page: number) => void;
 }) {
+  const { t } = useTranslation();
   if (totalPages <= 1) return null;
 
   const pageNumbers = getVisiblePageNumbers(currentPage, totalPages);
@@ -985,7 +989,7 @@ function PaginationControls({
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className="rounded-lg p-2 text-stone-600 transition-colors hover:bg-stone-100 disabled:cursor-not-allowed disabled:opacity-30"
-        title="Previous page"
+        title={t('search.pagination.previous')}
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
@@ -1010,7 +1014,7 @@ function PaginationControls({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
         className="rounded-lg p-2 text-stone-600 transition-colors hover:bg-stone-100 disabled:cursor-not-allowed disabled:opacity-30"
-        title="Next page"
+        title={t('search.pagination.next')}
       >
         <ChevronRight className="h-5 w-5" />
       </button>
@@ -1158,7 +1162,7 @@ function SearchResultCard({
                 )}
                 {result.canonical_ref && (
                   <span>
-                    <strong className="text-stone-800">Ref:</strong> {result.canonical_ref}
+                    <strong className="text-stone-800">{t('search.resultMeta.reference')}</strong> {result.canonical_ref}
                   </span>
                 )}
               </div>
@@ -1179,11 +1183,11 @@ function SearchResultCard({
             ) : null}
 
             <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-stone-500">
-              {result.rrf_score !== undefined && <span className="font-medium text-orange-600">RRF Score: {result.rrf_score.toFixed(4)}</span>}
+              {result.rrf_score !== undefined && <span className="font-medium text-orange-600">{t('search.resultMeta.rrfScore')} {result.rrf_score.toFixed(4)}</span>}
               {aiResult.reranker_score !== undefined && (
-                <span className="font-medium text-amber-600">AI Score: {aiResult.reranker_score.toFixed(4)}</span>
+                <span className="font-medium text-amber-600">{t('search.resultMeta.aiScore')} {aiResult.reranker_score.toFixed(4)}</span>
               )}
-              {result.rank !== undefined && <span>Rank: {result.rank.toFixed(4)}</span>}
+              {result.rank !== undefined && <span>{t('search.resultMeta.rank')} {result.rank.toFixed(4)}</span>}
             </div>
           </div>
 
