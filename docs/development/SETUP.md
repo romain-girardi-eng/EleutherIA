@@ -86,6 +86,11 @@ cd frontend
 npm run dev
 ```
 
+The frontend dev server proxies `/api` requests to `http://localhost:8000` by default. To proxy to a different backend:
+```bash
+VITE_API_PROXY_TARGET=https://staging.example.com npm run dev
+```
+
 ## Code Quality
 
 ### Linting

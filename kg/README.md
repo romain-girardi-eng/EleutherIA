@@ -53,7 +53,7 @@ results = await qdrant.search_nodes(query_embedding, limit=10)
 ## Features
 
 - **2,193 nodes** across 15 types (Person, Concept, Argument, Work, etc.)
-- **8,616 edges** across 32 relation types
+- **8,616 edges** across 56 relation types
 - **Community detection** via Leiden, Louvain, or greedy modularity
 - **Centrality metrics** (betweenness, PageRank, degree)
 - **Semantic search** via Qdrant vector similarity (3072-dim Gemini embeddings)
@@ -72,14 +72,16 @@ results = await qdrant.search_nodes(query_embedding, limit=10)
 | School | ~20 | Philosophical schools (Stoic, Epicurean, etc.) |
 | ... | ... | ... |
 
-### Relation Types (32)
+### Relation Types (56)
 
 - `argues_for`, `argues_against` - Argumentative relationships
 - `influences`, `influenced_by` - Intellectual lineage
 - `belongs_to_school` - School affiliation
 - `wrote`, `authored_by` - Authorship
 - `cites`, `cited_by` - Citation networks
-- ... and more
+- `translation_of`, `has_translation` - Passage translation alignments
+- `has_section`, `part_of` - Structural hierarchy
+- ... and more (see `ontology/edge_types.json` for full list with source/target constraints)
 
 ## Ontology
 

@@ -67,11 +67,11 @@ EleutherIA is a FAIR-compliant knowledge graph system with three independent pac
 
 **Data:**
 - 6,440 nodes (15 types) — including 2,815 passage translation pairs
-- 11,780 edges (33 relation types)
+- 11,780 edges (56 relation types)
 - 3072-dim Gemini embeddings
 
 **Two-Node Passage Architecture:**
-Every passage has a source node (Greek/Latin) and a translation node (English, `_en` suffix). The source node preserves authoritative text; the translation node makes it discoverable via English semantic search. Linked by `translation_of` edges. See [Passage Translation Architecture](../plans/2026-02-24-passage-translation-architecture.md).
+Every passage has a source node (Greek/Latin) and a translation node (English, `_en` suffix). The source node preserves authoritative text; the translation node makes it discoverable via English semantic search. Linked by `translation_of` / `has_translation` edges. See [Passage Translation Architecture](../plans/2026-02-24-passage-translation-architecture.md).
 
 ### 3. eleutheria-graphrag
 

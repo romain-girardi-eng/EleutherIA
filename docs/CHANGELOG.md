@@ -5,6 +5,26 @@ All notable changes to EleutherIA will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-03-08
+
+### Added
+- **Frontend i18n:** Multi-language support (EN, FR, DE, IT, EL) with browser detection and `extraResources.ts` extension pattern
+- **i18n utility:** `tArray()` for safe `returnObjects` retrieval with runtime `Array.isArray` guard
+- **Vite dev proxy:** `/api` requests proxied to backend, configurable via `VITE_API_PROXY_TARGET` (default: `localhost:8000`)
+- **API client:** URL normalization and double `/api` prefix guard in request interceptor
+- **Ontology:** `translation_of` / `has_translation` edge pair for passage translation alignment
+- **Ontology:** Expanded `source_types` for `authored_by` (quote), `source_for` (work), `contributes_to` (passage)
+- **D3 graph engine:** Optional D3 Force alternative to Cosmograph (toggled via `?engine=d3` query param)
+
+### Changed
+- **GraphRAG workspace:** Redesigned right panel with multi-deck layout (Sources, Reasoning, Overview)
+- **ModeSwitcher:** Memoized translated modes array with `useMemo`
+- **deepMerge:** Removed unsafe generic `as T` cast; returns honest `Record<string, unknown>`
+
+### Fixed
+- `graphragQueryStream` URL construction when `API_URL` includes `/api` suffix
+- Default fallback edge relation corrected from `relates_to` to `related_to`
+
 ## [5.0.0] - 2026-02-20
 
 ### Changed
