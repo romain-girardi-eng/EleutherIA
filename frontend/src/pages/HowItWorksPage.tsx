@@ -16,6 +16,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { tArray } from '../i18n/utils';
 import {
   Network, Search, BookOpen, Brain, Sparkles,
   ChevronRight, GitBranch, Globe, CheckCircle2, Languages,
@@ -43,24 +45,24 @@ import HiRAGImplementationDetails from '../components/HiRAGImplementationDetails
 
 // ─── Section definitions ────────────────────────────────────────────────────
 
-const NAV_SECTIONS: DotNavSection[] = [
-  { id: 'hero',          label: 'Home' },
-  { id: 'problem',       label: 'The Problem' },
-  { id: 'kg',            label: 'Knowledge Graph' },
-  { id: 'embeddings',    label: 'Vector Embeddings' },
-  { id: 'pipeline',      label: 'GraphRAG Pipeline' },
-  { id: 'tech',          label: 'Architecture' },
-  { id: 'search',        label: 'Hybrid Search' },
-  { id: 'fair',          label: 'FAIR Data' },
-  { id: 'cta',           label: 'Start Exploring' },
-];
-
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
 export default function HowItWorksPage() {
+  const { t } = useTranslation();
   const [activeId, setActiveId] = useState('hero');
   const containerRef = useRef<HTMLDivElement>(null);
   const [navHeight, setNavHeight] = useState(48);
+  const navSections: DotNavSection[] = [
+    { id: 'hero', label: t('howItWorksPage.nav.hero') },
+    { id: 'problem', label: t('howItWorksPage.nav.problem') },
+    { id: 'kg', label: t('howItWorksPage.nav.kg') },
+    { id: 'embeddings', label: t('howItWorksPage.nav.embeddings') },
+    { id: 'pipeline', label: t('howItWorksPage.nav.pipeline') },
+    { id: 'tech', label: t('howItWorksPage.nav.tech') },
+    { id: 'search', label: t('howItWorksPage.nav.search') },
+    { id: 'fair', label: t('howItWorksPage.nav.fair') },
+    { id: 'cta', label: t('howItWorksPage.nav.cta') },
+  ];
 
   // Measure the actual nav height so the scroll container sits flush below it
   useEffect(() => {
@@ -86,12 +88,12 @@ export default function HowItWorksPage() {
       }
     }, opts);
 
-    NAV_SECTIONS.forEach(({ id }) => {
+    navSections.forEach(({ id }) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
     return () => observer.disconnect();
-  }, []);
+  }, [navSections]);
 
   const scrollTo = useCallback((id: string) => {
     const el = document.getElementById(id);
@@ -114,7 +116,7 @@ export default function HowItWorksPage() {
     >
       {/* Dot navigation — fixed right side */}
       <DotNavigator
-        sections={NAV_SECTIONS}
+        sections={navSections}
         activeId={activeId}
         onNavigate={scrollTo}
       />
@@ -159,7 +161,7 @@ export default function HowItWorksPage() {
           >
             <span className="inline-flex items-center gap-2 text-xs font-body uppercase tracking-[0.2em] text-orange-400 border border-orange-500/30 bg-orange-500/10 rounded-full px-4 py-1.5">
               <Sparkles className="w-3.5 h-3.5" />
-              Open Scholarship · FAIR Data
+              {t('howItWorksPage.hero.badge')}
             </span>
           </motion.div>
 
@@ -170,12 +172,12 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
             className="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-white leading-[1.08] max-w-5xl mx-auto mb-6 drop-shadow-[0_2px_24px_rgba(0,0,0,0.9)]"
           >
-            How{' '}
+            {t('howItWorksPage.hero.titlePrefix')}{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
-              EleutherIA
+              {t('howItWorksPage.hero.titleHighlight')}
             </span>
             <br />
-            Works
+            {t('howItWorksPage.hero.titleSuffix')}
           </motion.h1>
 
           {/* Subtitle */}
@@ -185,8 +187,7 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.7, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="font-body text-lg sm:text-xl text-white/85 max-w-2xl mx-auto mb-12 leading-relaxed drop-shadow-[0_1px_12px_rgba(0,0,0,0.95)]"
           >
-            A Knowledge Graph, a hybrid search engine, and a 5-stage GraphRAG pipeline —
-            built to make 1,200 years of ancient philosophy searchable and citable.
+            {t('howItWorksPage.hero.subtitle')}
           </motion.p>
 
           {/* CTA row */}
@@ -201,9 +202,9 @@ export default function HowItWorksPage() {
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-500 hover:bg-orange-400 text-white font-body font-medium text-sm transition-colors"
             >
               <Sparkles className="w-4 h-4" />
-              Try GraphRAG Q&A
+              {t('howItWorksPage.hero.cta')}
             </Link>
-            <GitHubPill variant="dark" />
+            <GitHubPill variant="dark" label={t('learn.hero.openSource')} />
           </motion.div>
 
           {/* Scroll hint */}
@@ -213,7 +214,7 @@ export default function HowItWorksPage() {
             transition={{ delay: 1.2 }}
             className="absolute bottom-10"
           >
-            <ScrollHint theme="light" />
+            <ScrollHint theme="light" label={t('howItWorksPage.hero.scrollHint')} />
           </motion.div>
         </div>
 
@@ -230,7 +231,7 @@ export default function HowItWorksPage() {
 
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-20">
           {/* Section label */}
-          <SectionLabel icon={<BookOpen className="w-4 h-4" />} text="The Research Problem" />
+          <SectionLabel icon={<BookOpen className="w-4 h-4" />} text={t('howItWorksPage.problem.label')} />
 
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -239,8 +240,8 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="font-display text-4xl sm:text-5xl lg:text-6xl text-stone-800 mb-4 leading-tight"
           >
-            Ancient philosophy is{' '}
-            <em className="text-orange-600 not-italic">scattered</em>
+            {t('howItWorksPage.problem.titlePrefix')}{' '}
+            <em className="text-orange-600 not-italic">{t('howItWorksPage.problem.titleHighlight')}</em>
           </motion.h2>
 
           <motion.p
@@ -250,32 +251,21 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="font-body text-lg text-stone-500 mb-12 max-w-2xl"
           >
-            Across 189 works, 17,000+ passages, 2,193 philosophers, concepts, and arguments —
-            none of it previously connected in a machine-readable graph.
+            {t('howItWorksPage.problem.subtitle')}
           </motion.p>
 
           <CompareCards
             before={{
-              label: 'Before EleutherIA',
-              title: 'Months of manual research to answer a single question',
-              items: [
-                { text: 'No machine-readable connections between philosophers' },
-                { text: 'Keyword search misses Greek synonyms and related concepts' },
-                { text: 'Citations scattered across 189 separately-edited works' },
-                { text: 'No confidence scores or provenance tracking' },
-              ],
-              metric: { value: '6–12 weeks', description: 'Estimated research time per question' },
+              label: t('howItWorksPage.problem.before.label'),
+              title: t('howItWorksPage.problem.before.title'),
+              items: tArray(t, 'howItWorksPage.problem.before.items').map((text) => ({ text })),
+              metric: { value: t('howItWorksPage.problem.before.metricValue'), description: t('howItWorksPage.problem.before.metricDescription') },
             }}
             after={{
-              label: 'With EleutherIA',
-              title: 'Seconds — with cited, verifiable, scholarly answers',
-              items: [
-                { text: '2,193 nodes connected by 8,616 typed relationships' },
-                { text: 'Hybrid search: keyword + lemmatic + semantic (RRF merged)' },
-                { text: '17,000+ passages with CTS URN citations and confidence scores' },
-                { text: 'FAIR-compliant, CC BY 4.0, DOI-minted on Zenodo' },
-              ],
-              metric: { value: '< 5 seconds', description: 'End-to-end answer time' },
+              label: t('howItWorksPage.problem.after.label'),
+              title: t('howItWorksPage.problem.after.title'),
+              items: tArray(t, 'howItWorksPage.problem.after.items').map((text) => ({ text })),
+              metric: { value: t('howItWorksPage.problem.after.metricValue'), description: t('howItWorksPage.problem.after.metricDescription') },
             }}
           />
 
@@ -288,10 +278,10 @@ export default function HowItWorksPage() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12"
           >
             {[
-              { icon: <Network className="w-5 h-5" />, value: '2,193', label: 'KG Nodes' },
-              { icon: <GitBranch className="w-5 h-5" />, value: '8,616', label: 'Edges' },
-              { icon: <BookOpen className="w-5 h-5" />, value: '189', label: 'Ancient Works' },
-              { icon: <Quote className="w-5 h-5" />, value: '17k+', label: 'Passages' },
+              { icon: <Network className="w-5 h-5" />, value: '2,193', label: t('home.stats.nodes') },
+              { icon: <GitBranch className="w-5 h-5" />, value: '8,616', label: t('home.stats.edges') },
+              { icon: <BookOpen className="w-5 h-5" />, value: '189', label: t('home.stats.works') },
+              { icon: <Quote className="w-5 h-5" />, value: '17k+', label: t('home.stats.passages') },
             ].map((stat) => (
               <div
                 key={stat.label}
@@ -313,7 +303,7 @@ export default function HowItWorksPage() {
         <BackgroundMesh variant="dots" color="rgba(100,100,120,1)" opacity={0.05} />
 
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-20">
-          <SectionLabel icon={<Network className="w-4 h-4" />} text="Layer 1 — Knowledge Graph" />
+          <SectionLabel icon={<Network className="w-4 h-4" />} text={t('howItWorksPage.knowledgeGraph.label')} />
 
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
@@ -324,8 +314,8 @@ export default function HowItWorksPage() {
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 className="font-display text-4xl sm:text-5xl text-stone-800 mb-5 leading-tight"
               >
-                A network of{' '}
-                <span className="text-primary-700">1,200 years</span> of debate
+                {t('howItWorksPage.knowledgeGraph.titlePrefix')}{' '}
+                <span className="text-primary-700">{t('howItWorksPage.knowledgeGraph.titleHighlight')}</span> {t('howItWorksPage.knowledgeGraph.titleSuffix')}
               </motion.h2>
 
               <motion.p
@@ -335,20 +325,18 @@ export default function HowItWorksPage() {
                 transition={{ duration: 0.6, delay: 0.15 }}
                 className="font-body text-base text-stone-500 mb-8 leading-relaxed"
               >
-                From Heraclitus (6th c. BCE) to Boethius (6th c. CE) — every philosopher,
-                concept, argument, and work connected by typed relationships: "formulated",
-                "opposes", "influenced", "reformulated".
+                {t('howItWorksPage.knowledgeGraph.subtitle')}
               </motion.p>
 
               {/* Node type grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {[
-                  { icon: <Users className="w-4 h-4" />, type: 'Persons',        count: 179, color: 'blue'   },
-                  { icon: <Brain className="w-4 h-4" />, type: 'Concepts',        count: 121, color: 'violet' },
-                  { icon: <Target className="w-4 h-4" />, type: 'Arguments',      count: 116, color: 'primary'},
-                  { icon: <BookOpen className="w-4 h-4" />, type: 'Works',        count:  66, color: 'amber'  },
-                  { icon: <RotateCcw className="w-4 h-4" />, type: 'Reformulations', count: 53, color: 'rose'},
-                  { icon: <Quote className="w-4 h-4" />, type: 'Quotes',          count:  14, color: 'emerald'},
+                  { icon: <Users className="w-4 h-4" />, type: t('kg.nodeTypes.persons'), count: 179, color: 'blue' },
+                  { icon: <Brain className="w-4 h-4" />, type: t('kg.nodeTypes.concepts'), count: 121, color: 'violet' },
+                  { icon: <Target className="w-4 h-4" />, type: t('kg.nodeTypes.arguments'), count: 116, color: 'primary' },
+                  { icon: <BookOpen className="w-4 h-4" />, type: t('kg.nodeTypes.works'), count: 66, color: 'amber' },
+                  { icon: <RotateCcw className="w-4 h-4" />, type: t('howItWorksPage.knowledgeGraph.nodeTypeLabels.reformulations'), count: 53, color: 'rose' },
+                  { icon: <Quote className="w-4 h-4" />, type: t('howItWorksPage.knowledgeGraph.nodeTypeLabels.quotes'), count: 14, color: 'emerald' },
                 ].map((nt) => (
                   <NodeTypeChip key={nt.type} {...nt} />
                 ))}
@@ -376,19 +364,17 @@ export default function HowItWorksPage() {
             className="mt-12 grid sm:grid-cols-2 gap-5"
           >
             <GlassCard variant="parchment" padding="lg">
-              <p className="text-xs font-body uppercase tracking-widest text-orange-600 mb-2">Primary Layer</p>
-              <h4 className="font-display text-xl text-stone-800 mb-2">Ancient Sources</h4>
+              <p className="text-xs font-body uppercase tracking-widest text-orange-600 mb-2">{t('howItWorksPage.knowledgeGraph.primaryLayer')}</p>
+              <h4 className="font-display text-xl text-stone-800 mb-2">{t('howItWorksPage.knowledgeGraph.primaryTitle')}</h4>
               <p className="font-body text-sm text-stone-600">
-                Philosophers, concepts, arguments, and texts from 6th c. BCE – 6th c. CE,
-                linked to verifiable CTS URN passages.
+                {t('howItWorksPage.knowledgeGraph.primaryBody')}
               </p>
             </GlassCard>
             <GlassCard variant="parchment" padding="lg">
-              <p className="text-xs font-body uppercase tracking-widest text-primary-600 mb-2">Secondary Layer</p>
-              <h4 className="font-display text-xl text-stone-800 mb-2">Modern Reception</h4>
+              <p className="text-xs font-body uppercase tracking-widest text-primary-600 mb-2">{t('howItWorksPage.knowledgeGraph.secondaryLayer')}</p>
+              <h4 className="font-display text-xl text-stone-800 mb-2">{t('howItWorksPage.knowledgeGraph.secondaryTitle')}</h4>
               <p className="font-body text-sm text-stone-600">
-                Contemporary scholars — Bobzien, Frede, Kane — and their interpretative
-                frameworks mapped onto the primary layer.
+                {t('howItWorksPage.knowledgeGraph.secondaryBody')}
               </p>
             </GlassCard>
           </motion.div>
@@ -400,7 +386,7 @@ export default function HowItWorksPage() {
         <BackgroundMesh variant="dots" color="rgba(255,255,255,1)" opacity={0.025} />
 
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-20">
-          <SectionLabel icon={<Brain className="w-4 h-4" />} text="Semantic Layer" />
+          <SectionLabel icon={<Brain className="w-4 h-4" />} text={t('howItWorksPage.embeddings.label')} />
 
           <div className="grid lg:grid-cols-[2fr_3fr] gap-12 items-start mt-10">
 
@@ -413,7 +399,7 @@ export default function HowItWorksPage() {
                 transition={{ duration: 0.6 }}
                 className="font-display text-4xl lg:text-5xl text-white leading-tight"
               >
-                Ideas Have<br />Coordinates
+                {t('howItWorksPage.embeddings.titleLine1')}<br />{t('howItWorksPage.embeddings.titleLine2')}
               </motion.h2>
 
               <motion.p
@@ -423,10 +409,7 @@ export default function HowItWorksPage() {
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="font-body text-base text-white/65 leading-relaxed"
               >
-                Every philosophical concept is converted into a list of 3 072 numbers — a
-                <span className="text-white/90 font-medium"> vector embedding</span> — by Gemini.
-                Concepts with similar meanings land close together in this high-dimensional space,
-                regardless of the language they were written in.
+                {t('howItWorksPage.embeddings.subtitle')}
               </motion.p>
 
               {/* GPS analogy card */}
@@ -437,19 +420,19 @@ export default function HowItWorksPage() {
                 transition={{ duration: 0.6, delay: 0.15 }}
                 className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 space-y-3"
               >
-                <p className="text-xs font-body uppercase tracking-widest text-white/40">Analogy</p>
+                <p className="text-xs font-body uppercase tracking-widest text-white/40">{t('howItWorksPage.embeddings.analogy')}</p>
                 <div className="grid grid-cols-2 gap-3 text-sm font-body">
                   <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-3">
-                    <p className="text-blue-300 font-semibold mb-1">Physical space</p>
+                    <p className="text-blue-300 font-semibold mb-1">{t('howItWorksPage.embeddings.physicalSpace')}</p>
                     <p className="text-white/60 font-mono text-xs">Paris → (48.86°, 2.35°)</p>
                     <p className="text-white/60 font-mono text-xs">London → (51.51°, −0.13°)</p>
-                    <p className="text-white/40 text-xs mt-1">Close = same location</p>
+                    <p className="text-white/40 text-xs mt-1">{t('howItWorksPage.embeddings.physicalClose')}</p>
                   </div>
                   <div className="rounded-xl bg-orange-500/10 border border-orange-500/20 p-3">
-                    <p className="text-orange-300 font-semibold mb-1">Semantic space</p>
+                    <p className="text-orange-300 font-semibold mb-1">{t('howItWorksPage.embeddings.semanticSpace')}</p>
                     <p className="text-white/60 font-mono text-xs">"Fate" → [0.89, −0.23, …]</p>
                     <p className="text-white/60 font-mono text-xs">"Destiny" → [0.91, −0.21, …]</p>
-                    <p className="text-white/40 text-xs mt-1">Close = same meaning</p>
+                    <p className="text-white/40 text-xs mt-1">{t('howItWorksPage.embeddings.semanticClose')}</p>
                   </div>
                 </div>
               </motion.div>
@@ -464,8 +447,8 @@ export default function HowItWorksPage() {
               >
                 <span className="font-display text-5xl text-orange-400">3 072</span>
                 <span className="font-body text-sm text-white/50 leading-snug">
-                  dimensions per concept<br />
-                  <span className="text-white/30 text-xs">projected to 2D below via PCA</span>
+                  {t('howItWorksPage.embeddings.dimensions')}<br />
+                  <span className="text-white/30 text-xs">{t('howItWorksPage.embeddings.projected')}</span>
                 </span>
               </motion.div>
             </div>
@@ -491,7 +474,7 @@ export default function HowItWorksPage() {
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-20">
           <SectionLabel
             icon={<Sparkles className="w-4 h-4" />}
-            text="Layer 3 — GraphRAG Q&A"
+            text={t('howItWorksPage.pipeline.label')}
             theme="dark"
           />
 
@@ -502,9 +485,9 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="font-display text-4xl sm:text-5xl text-white mb-4 leading-tight"
           >
-            Five stages from{' '}
-            <span className="text-orange-400">question</span> to{' '}
-            <span className="text-orange-400">cited answer</span>
+            {t('howItWorksPage.pipeline.titlePrefix')}{' '}
+            <span className="text-orange-400">{t('howItWorksPage.pipeline.titleQuestion')}</span> {t('howItWorksPage.pipeline.titleMiddle')}{' '}
+            <span className="text-orange-400">{t('howItWorksPage.pipeline.titleAnswer')}</span>
           </motion.h2>
 
           <motion.p
@@ -514,8 +497,7 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="font-body text-base text-white/50 mb-12 max-w-2xl"
           >
-            No hallucinations, no fabricated Greek text. Every answer is grounded in the
-            knowledge graph and linked back to primary sources with confidence scores.
+            {t('howItWorksPage.pipeline.subtitle')}
           </motion.p>
 
           <PipelineSteps theme="dark" autoPlay={5000} />
@@ -527,7 +509,7 @@ export default function HowItWorksPage() {
         <BackgroundMesh variant="dots" color="rgba(100,100,120,1)" opacity={0.04} />
 
         <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 py-20">
-          <SectionLabel icon={<Layers className="w-4 h-4" />} text="Under the Hood" />
+          <SectionLabel icon={<Layers className="w-4 h-4" />} text={t('howItWorksPage.architecture.label')} />
 
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -536,8 +518,8 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="font-display text-4xl sm:text-5xl text-stone-800 mb-4 leading-tight"
           >
-            HiRAG — hierarchical retrieval,{' '}
-            <span className="text-violet-700">peer-reviewed</span>
+            {t('howItWorksPage.architecture.titlePrefix')}{' '}
+            <span className="text-violet-700">{t('howItWorksPage.architecture.titleHighlight')}</span>
           </motion.h2>
 
           <motion.p
@@ -547,9 +529,7 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="font-body text-base text-stone-500 mb-12 max-w-2xl"
           >
-            EleutherIA implements HiRAG (Hierarchical Retrieval-Augmented Generation),
-            organising knowledge in layers — from raw passage evidence to high-level conceptual
-            summaries — exactly as scholars naturally structure information.
+            {t('howItWorksPage.architecture.subtitle')}
           </motion.p>
 
           {/* Pipeline visualisation */}
@@ -571,9 +551,7 @@ export default function HowItWorksPage() {
               />
             </div>
             <p className="text-sm font-body text-stone-400 text-center mt-6 max-w-2xl leading-relaxed">
-              The API lets the AI model communicate with the Knowledge Graph. Your question
-              retrieves relevant context from ancient sources and modern scholarship, which
-              the model synthesises into a cited scholarly answer.
+              {t('howItWorksPage.architecture.pipelineCaption')}
             </p>
           </motion.div>
 
@@ -588,23 +566,21 @@ export default function HowItWorksPage() {
               className="rounded-2xl border-2 border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 p-7"
             >
               <div className="flex items-center gap-3 mb-4">
-                <h3 className="font-display text-2xl text-violet-900">Powered by HiRAG</h3>
+                <h3 className="font-display text-2xl text-violet-900">{t('howItWorksPage.architecture.hiragTitle')}</h3>
                 <span className="text-xs font-body font-semibold bg-violet-200 text-violet-800 rounded-full px-3 py-1">
-                  EMNLP 2025
+                  {t('howItWorksPage.architecture.paperBadge')}
                 </span>
               </div>
               <p className="font-body text-sm text-stone-700 mb-5 leading-relaxed">
-                Huang et al. (2025) showed HiRAG outperforms traditional RAG and standard
-                GraphRAG by organising retrieval in three levels: LOCAL (passage-level),
-                GLOBAL (community summaries), and BRIDGE (cross-concept paths).
+                {t('howItWorksPage.architecture.hiragBody')}
               </p>
               <div className="grid grid-cols-2 gap-3 mb-5 text-sm font-body">
                 <div className="bg-white/70 rounded-xl p-4">
-                  <p className="font-semibold text-violet-900 mb-1">vs Traditional RAG</p>
+                  <p className="font-semibold text-violet-900 mb-1">{t('howItWorksPage.architecture.vsTraditionalRag')}</p>
                   <p className="text-violet-700 font-mono font-bold text-lg">87.6% <span className="text-stone-400 font-normal text-xs">vs 12.4%</span></p>
                 </div>
                 <div className="bg-white/70 rounded-xl p-4">
-                  <p className="font-semibold text-violet-900 mb-1">vs Standard GraphRAG</p>
+                  <p className="font-semibold text-violet-900 mb-1">{t('howItWorksPage.architecture.vsStandardGraphRag')}</p>
                   <p className="text-violet-700 font-mono font-bold text-lg">64.1% <span className="text-stone-400 font-normal text-xs">vs 35.9%</span></p>
                 </div>
               </div>
@@ -614,7 +590,7 @@ export default function HowItWorksPage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-body text-violet-600 hover:text-violet-800 border border-violet-300 rounded-full px-4 py-1.5 hover:bg-violet-100 transition-colors"
               >
-                arXiv:2503.10150 — EMNLP 2025 Findings
+                {t('howItWorksPage.architecture.findingsLink')}
                 <ChevronRight className="w-3.5 h-3.5" />
               </a>
             </motion.div>
@@ -629,15 +605,9 @@ export default function HowItWorksPage() {
             >
               {/* Philological */}
               <div className="rounded-2xl border-2 border-amber-200/60 bg-gradient-to-br from-parchment-50 to-amber-50 p-5">
-                <h4 className="font-body font-semibold text-sm text-stone-800 mb-3 uppercase tracking-wide">Corpus</h4>
+                <h4 className="font-body font-semibold text-sm text-stone-800 mb-3 uppercase tracking-wide">{t('howItWorksPage.architecture.corpus')}</h4>
                 <ul className="space-y-2 text-xs font-body text-stone-700">
-                  {[
-                    ['2,193', 'verified entities'],
-                    ['8,616', 'cited relationships'],
-                    ['189', 'ancient works'],
-                    ['16,968', 'passages'],
-                    ['1,413', 'bibliography entries'],
-                  ].map(([n, l]) => (
+                  {tArray<string[]>(t, 'howItWorksPage.architecture.corpusStats').map(([n, l]) => (
                     <li key={l} className="flex items-baseline gap-1.5">
                       <span className="font-mono font-bold text-sm text-orange-600">{n}</span>
                       <span className="opacity-80">{l}</span>
@@ -648,16 +618,9 @@ export default function HowItWorksPage() {
 
               {/* Tech stack */}
               <div className="rounded-2xl border-2 border-amber-200/60 bg-gradient-to-br from-parchment-50 to-amber-50 p-5">
-                <h4 className="font-body font-semibold text-sm text-stone-800 mb-3 uppercase tracking-wide">Stack</h4>
+                <h4 className="font-body font-semibold text-sm text-stone-800 mb-3 uppercase tracking-wide">{t('howItWorksPage.architecture.stack')}</h4>
                 <ul className="space-y-2 text-xs font-body text-stone-700">
-                  {[
-                    'HiRAG Architecture',
-                    'Qdrant vector DB',
-                    'PostgreSQL + GIN',
-                    'FastAPI backend',
-                    'React 19 + TS',
-                    'SSE streaming',
-                  ].map((item) => (
+                  {tArray(t, 'howItWorksPage.architecture.stackItems').map((item) => (
                     <li key={item} className="flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-orange-400 flex-shrink-0" />
                       {item}
@@ -673,7 +636,7 @@ export default function HowItWorksPage() {
                   className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white font-body font-medium text-sm hover:from-orange-700 hover:to-amber-700 transition-all"
                 >
                   <Sparkles className="w-4 h-4" />
-                  See HiRAG in Action
+                  {t('howItWorksPage.architecture.seeInAction')}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -698,7 +661,7 @@ export default function HowItWorksPage() {
         <BackgroundMesh variant="crosses" color="rgba(160,100,30,1)" opacity={0.04} />
 
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-20">
-          <SectionLabel icon={<Search className="w-4 h-4" />} text="Layer 2 — Hybrid Search" />
+          <SectionLabel icon={<Search className="w-4 h-4" />} text={t('howItWorksPage.hybridSearch.label')} />
 
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -707,8 +670,8 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="font-display text-4xl sm:text-5xl text-stone-800 mb-4 leading-tight"
           >
-            Three search engines,{' '}
-            <span className="text-orange-600">one result</span>
+            {t('howItWorksPage.hybridSearch.titlePrefix')}{' '}
+            <span className="text-orange-600">{t('howItWorksPage.hybridSearch.titleHighlight')}</span>
           </motion.h2>
 
           <motion.p
@@ -718,8 +681,7 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="font-body text-base text-stone-500 mb-12 max-w-2xl"
           >
-            Full-text, lemmatic, and semantic searches run in parallel. Results are merged
-            by Reciprocal Rank Fusion — items appearing in multiple lists score highest.
+            {t('howItWorksPage.hybridSearch.subtitle')}
           </motion.p>
 
           {/* Method cards */}
@@ -727,30 +689,30 @@ export default function HowItWorksPage() {
             {[
               {
                 icon: <Search className="w-5 h-5" />,
-                title: 'Full-Text',
+                title: t('howItWorksPage.hybridSearch.methods.fullText.title'),
                 speed: '< 100 ms',
                 color: 'bg-orange-50 border-orange-200',
                 iconColor: 'bg-orange-100 text-orange-600',
-                desc: 'PostgreSQL tsvector + ts_rank. Exact keyword matches in 17k passages.',
-                example: '"free will" → exact matches',
+                desc: t('howItWorksPage.hybridSearch.methods.fullText.description'),
+                example: t('howItWorksPage.hybridSearch.methods.fullText.example'),
               },
               {
                 icon: <Languages className="w-5 h-5" />,
-                title: 'Lemmatic',
+                title: t('howItWorksPage.hybridSearch.methods.lemmatic.title'),
                 speed: '< 500 ms',
                 color: 'bg-rose-50 border-rose-200',
                 iconColor: 'bg-rose-100 text-rose-600',
-                desc: 'Pre-indexed Greek & Latin lemmas. Finds all morphological forms of a word.',
-                example: 'λόγος → λόγου λόγῳ λόγον …',
+                desc: t('howItWorksPage.hybridSearch.methods.lemmatic.description'),
+                example: t('howItWorksPage.hybridSearch.methods.lemmatic.example'),
               },
               {
                 icon: <Brain className="w-5 h-5" />,
-                title: 'Semantic',
+                title: t('howItWorksPage.hybridSearch.methods.semantic.title'),
                 speed: '< 2 s',
                 color: 'bg-amber-50 border-amber-200',
                 iconColor: 'bg-amber-100 text-amber-700',
-                desc: 'Gemini embeddings → Qdrant ANN search. Finds conceptual similarity across languages.',
-                example: '"free will" → ἐφ\' ἡμῖν · liberum arbitrium',
+                desc: t('howItWorksPage.hybridSearch.methods.semantic.description'),
+                example: t('howItWorksPage.hybridSearch.methods.semantic.example'),
               },
             ].map((m) => (
               <motion.div
@@ -790,11 +752,10 @@ export default function HowItWorksPage() {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <h4 className="font-display text-2xl text-stone-800 mb-2">
-                    Reciprocal Rank Fusion
+                    {t('howItWorksPage.hybridSearch.rrfTitle')}
                   </h4>
                   <p className="font-body text-sm text-stone-500 max-w-sm">
-                    Items found by all three engines rank highest. The formula penalises lower ranks
-                    while rewarding cross-list agreement.
+                    {t('howItWorksPage.hybridSearch.rrfBody')}
                   </p>
                 </div>
                 <div className="font-mono text-sm text-stone-700 bg-white/70 border border-parchment-300 rounded-xl px-6 py-4 whitespace-nowrap">
@@ -815,7 +776,7 @@ export default function HowItWorksPage() {
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-20">
           <SectionLabel
             icon={<CheckCircle2 className="w-4 h-4" />}
-            text="Open Scholarship"
+            text={t('howItWorksPage.fair.label')}
             variant="amber"
           />
 
@@ -826,8 +787,8 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="font-display text-4xl sm:text-5xl text-stone-800 mb-4 leading-tight"
           >
-            FAIR-compliant from the{' '}
-            <span className="text-amber-700">ground up</span>
+            {t('howItWorksPage.fair.titlePrefix')}{' '}
+            <span className="text-amber-700">{t('howItWorksPage.fair.titleHighlight')}</span>
           </motion.h2>
 
           <motion.p
@@ -837,8 +798,7 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="font-body text-base text-stone-500 mb-12 max-w-2xl"
           >
-            Findable, Accessible, Interoperable, Reusable — the international principles for
-            scientific data management — are baked into every layer of the architecture.
+            {t('howItWorksPage.fair.subtitle')}
           </motion.p>
 
           <FAIRBadges variant="light" />
@@ -860,7 +820,7 @@ export default function HowItWorksPage() {
               <Globe className="w-4 h-4" />
               DOI: 10.5281/zenodo.17379490
             </a>
-            <GitHubPill variant="light" />
+            <GitHubPill variant="light" label={t('learn.hero.openSource')} />
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-stone-300 bg-white/60 text-stone-600 text-sm font-body">
               CC BY 4.0
             </span>
@@ -881,20 +841,19 @@ export default function HowItWorksPage() {
           >
             <span className="inline-flex items-center gap-2 text-xs font-body uppercase tracking-[0.2em] text-orange-400 border border-orange-500/30 bg-orange-500/10 rounded-full px-4 py-1.5 mb-8">
               <Sparkles className="w-3.5 h-3.5" />
-              Start Exploring
+              {t('howItWorksPage.cta.badge')}
             </span>
 
             <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl text-white mb-6 leading-tight max-w-4xl">
-              1,200 years of thought,{' '}
+              {t('howItWorksPage.cta.titlePrefix')}{' '}
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
-                one search away
+                {t('howItWorksPage.cta.titleHighlight')}
               </span>
             </h2>
 
             <p className="font-body text-lg text-white/50 max-w-xl mx-auto mb-12">
-              Ask a question about free will, fate, or moral responsibility in ancient
-              philosophy — and receive a cited, scholarly answer in seconds.
+              {t('howItWorksPage.cta.subtitle')}
             </p>
 
             {/* CTA buttons */}
@@ -904,7 +863,7 @@ export default function HowItWorksPage() {
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-orange-500 hover:bg-orange-400 text-white font-body font-semibold transition-colors"
               >
                 <Sparkles className="w-4 h-4" />
-                Ask a question
+                {t('howItWorksPage.cta.askQuestion')}
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
@@ -912,41 +871,36 @@ export default function HowItWorksPage() {
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-white/20 bg-white/8 hover:bg-white/15 text-white font-body font-medium transition-colors"
               >
                 <Network className="w-4 h-4" />
-                Explore the graph
+                {t('howItWorksPage.cta.exploreGraph')}
               </Link>
               <Link
                 to="/search"
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-white/20 bg-white/8 hover:bg-white/15 text-white font-body font-medium transition-colors"
               >
                 <Search className="w-4 h-4" />
-                Search passages
+                {t('howItWorksPage.cta.searchPassages')}
               </Link>
             </div>
 
             {/* Feature row */}
             <div className="flex flex-wrap justify-center gap-6 text-sm font-body">
-              {[
-                { icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />, text: 'Free & open access' },
-                { icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />, text: 'No login required' },
-                { icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />, text: 'All citations verifiable' },
-                { icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />, text: 'CC BY 4.0' },
-              ].map((f) => (
-                <div key={f.text} className="flex items-center gap-2 text-white/50">
-                  {f.icon}
-                  <span>{f.text}</span>
+              {tArray(t, 'howItWorksPage.cta.bullets').map((text) => (
+                <div key={text} className="flex items-center gap-2 text-white/50">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <span>{text}</span>
                 </div>
               ))}
             </div>
 
             {/* Bottom links */}
             <div className="mt-10 flex flex-wrap justify-center gap-3">
-              <GitHubPill variant="dark" />
+              <GitHubPill variant="dark" label={t('learn.hero.openSource')} />
               <Link
                 to="/about"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 text-white/50 hover:text-white/80 text-sm font-body transition-colors"
               >
                 <Layers className="w-4 h-4" />
-                About the project
+                {t('howItWorksPage.cta.aboutProject')}
               </Link>
             </div>
           </motion.div>

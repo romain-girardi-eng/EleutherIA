@@ -113,7 +113,7 @@
       "description": "Source was authored by target person",
       "category": "authorship",
       "inverse": "wrote",
-      "source_types": ["argument", "passage", "publication", "synthesis", "work"],
+      "source_types": ["argument", "passage", "publication", "quote", "synthesis", "work"],
       "target_types": ["person"]
     },
     "created_by": {
@@ -148,7 +148,7 @@
       "description": "Source provides evidence for target",
       "category": "citation",
       "inverse": "evidenced_by",
-      "source_types": ["passage", "person", "publication"],
+      "source_types": ["passage", "person", "publication", "work"],
       "target_types": ["argument", "argument_framework", "concept", "debate", "publication", "work"]
     },
     "evidenced_by": {
@@ -185,6 +185,20 @@
       "inverse": "contains",
       "source_types": ["argument", "concept", "passage", "synthesis", "text_fragment"],
       "target_types": ["concept", "passage", "work", "source_collection"]
+    },
+    "translation_of": {
+      "description": "Source passage is an aligned translation of the target passage",
+      "category": "structural",
+      "inverse": "has_translation",
+      "source_types": ["passage"],
+      "target_types": ["passage"]
+    },
+    "has_translation": {
+      "description": "Source passage has target passage as an aligned translation",
+      "category": "structural",
+      "inverse": "translation_of",
+      "source_types": ["passage"],
+      "target_types": ["passage"]
     },
     "has_section": {
       "description": "Source work has target passage as a section",
@@ -323,7 +337,7 @@
       "description": "Source contributes to target debate or concept",
       "category": "debate",
       "inverse": "contributed_to_by",
-      "source_types": ["person", "publication", "work"],
+      "source_types": ["passage", "person", "publication", "work"],
       "target_types": ["concept", "debate"]
     },
     "interprets": {
