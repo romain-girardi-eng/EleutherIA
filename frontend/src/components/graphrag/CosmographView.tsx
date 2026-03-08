@@ -1,7 +1,7 @@
 import { useDeferredValue, useMemo, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { ArrowRight, Sparkles, Waypoints } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import GraphLegend from './GraphLegend';
 import { cn } from '../../utils/cn';
 import type { GraphRAGResponse } from '../../types';
 import { formatGraphNodeType, getGraphTypeTheme } from './graphTheme';
@@ -69,15 +69,6 @@ type AccumulatedNode = {
   degree: number;
 };
 
-type StageNode = GraphPoint & {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  radius: number;
-  subtitle?: string;
-};
-
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) {
@@ -119,33 +110,67 @@ function truncateLabel(label: string, maxLength: number) {
     return label;
   }
 
-  return `${label.slice(0, maxLength - 1)}…`;
+  return `${label.slice(0, maxLength - 1)}...`;
 }
 
-function frameFor(point: GraphPoint, kind: 'source' | 'anchor' | 'expansion' | 'micro') {
-  const maxLength =
-    kind === 'source' ? 26 : kind === 'anchor' ? 20 : kind === 'expansion' ? 18 : 14;
-  const label = truncateLabel(point.label, maxLength);
-  const width =
-    kind === 'source'
-      ? Math.max(184, Math.min(250, label.length * 7.4 + 84))
-      : kind === 'micro'
-        ? Math.max(102, Math.min(140, label.length * 6.2 + 42))
-        : Math.max(128, Math.min(180, label.length * 6.8 + 54));
-  const height = kind === 'source' ? 74 : kind === 'micro' ? 34 : 44;
-  const radius = kind === 'source' ? 22 : kind === 'micro' ? 14 : 16;
+function distribute(index: number, total: number, start: number, end: number) {
+  if (total <= 1) {
+    return (start + end) / 2;
+  }
 
-  return { label, width, height, radius };
+  return start + (index * (end - start)) / (total - 1);
 }
 
-function connectionPath(from: StageNode, toX: number, toY: number) {
-  const deltaX = toX - from.x;
-  const direction = deltaX >= 0 ? 1 : -1;
-  const startX = from.x + direction * (from.width / 2 - 12);
-  const controlA = startX + deltaX * 0.35;
-  const controlB = toX - deltaX * 0.3;
+function curvePath(fromX: number, fromY: number, toX: number, toY: number) {
+  const bend = Math.abs(toX - fromX) * 0.42;
+  const direction = toX > fromX ? 1 : -1;
+  const controlAX = fromX + bend * direction;
+  const controlBX = toX - bend * direction;
 
-  return `M ${startX} ${from.y} C ${controlA} ${from.y}, ${controlB} ${toY}, ${toX} ${toY}`;
+  return `M ${fromX} ${fromY} C ${controlAX} ${fromY}, ${controlBX} ${toY}, ${toX} ${toY}`;
+}
+
+function LaneLabel({
+  step,
+  title,
+  subtitle,
+}: {
+  step: string;
+  title: string;
+  subtitle: string;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-3">
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-full border border-stone-200/80 bg-white/90 px-2 text-[11px] font-semibold text-stone-500">
+            {step}
+          </span>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-400">
+            {title}
+          </p>
+        </div>
+        <p className="mt-2 text-sm text-stone-500">{subtitle}</p>
+      </div>
+    </div>
+  );
+}
+
+function MiniStat({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-stone-200/80 bg-stone-50/88 px-3 py-2.5">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-400">
+        {label}
+      </p>
+      <p className="mt-1 text-sm font-semibold text-stone-900">{value}</p>
+    </div>
+  );
 }
 
 interface CosmographViewProps {
@@ -231,7 +256,7 @@ export default function CosmographView({
     };
 
     const addLink = (source: string, target: string) => {
-      if (!source || !target) {
+      if (!source || !target || source === target) {
         return;
       }
 
@@ -365,6 +390,36 @@ export default function CosmographView({
     };
   }, [deferredAllResponses, deferredResponse]);
 
+  const sourceNodes = useMemo(
+    () =>
+      graph.points
+        .filter((point) => point.isSource)
+        .sort((a, b) => (a.citationIndex ?? 0) - (b.citationIndex ?? 0))
+        .slice(0, 6),
+    [graph.points],
+  );
+
+  const anchorNodes = useMemo(
+    () => graph.points.filter((point) => point.isStarting && !point.isSource).slice(0, 6),
+    [graph.points],
+  );
+
+  const expansionNodes = useMemo(
+    () =>
+      graph.points
+        .filter((point) => point.isExpanded && !point.isSource && !point.isStarting)
+        .slice(0, 8),
+    [graph.points],
+  );
+
+  const relatedNodes = useMemo(
+    () =>
+      graph.points
+        .filter((point) => !point.isSource && !point.isStarting && !point.isExpanded)
+        .slice(0, 4),
+    [graph.points],
+  );
+
   const highlightedNode = useMemo(
     () =>
       highlightedSourceIndex !== null
@@ -372,6 +427,16 @@ export default function CosmographView({
         : null,
     [graph.points, highlightedSourceIndex],
   );
+
+  const visibleLinks = useMemo(() => {
+    const visibleIds = new Set([
+      ...sourceNodes.map((node) => node.id),
+      ...anchorNodes.map((node) => node.id),
+      ...expansionNodes.map((node) => node.id),
+    ]);
+
+    return graph.links.filter((link) => visibleIds.has(link.source) && visibleIds.has(link.target));
+  }, [anchorNodes, expansionNodes, graph.links, sourceNodes]);
 
   const emitHighlight = useCallback(
     (citationIndex: number) => {
@@ -383,99 +448,6 @@ export default function CosmographView({
   useEffect(() => {
     onHighlightRef?.(emitHighlight);
   }, [emitHighlight, onHighlightRef]);
-
-  const stage = useMemo(() => {
-    const width = 980;
-    const height = 560;
-    const centerX = 470;
-    const centerY = 282;
-    const answerCard = { x: centerX, y: centerY, width: 320, height: 170, radius: 34 };
-
-    const sources = graph.points
-      .filter((point) => point.isSource)
-      .sort((a, b) => (a.citationIndex ?? 0) - (b.citationIndex ?? 0))
-      .slice(0, 6);
-    const anchors = graph.points
-      .filter((point) => point.isStarting && !point.isSource)
-      .slice(0, 4);
-    const expansions = graph.points
-      .filter((point) => point.isExpanded && !point.isSource && !point.isStarting)
-      .slice(0, 6);
-    const remainder = graph.points
-      .filter((point) => !point.isSource && !point.isStarting && !point.isExpanded)
-      .slice(0, 5);
-
-    const sourceNodes: StageNode[] = sources.map((point, index) => {
-      const frame = frameFor(point, 'source');
-      return {
-        ...point,
-        x: 158 + (index % 2) * 26,
-        y: 122 + index * 72,
-        width: frame.width,
-        height: frame.height,
-        radius: frame.radius,
-        subtitle: point.citationIndex !== undefined ? `Source ${point.citationIndex + 1}` : undefined,
-      };
-    });
-
-    const anchorNodes: StageNode[] = anchors.map((point, index) => {
-      const frame = frameFor(point, 'anchor');
-      return {
-        ...point,
-        x: 772 + (index % 2) * 84,
-        y: 142 + Math.floor(index / 2) * 78,
-        width: frame.width,
-        height: frame.height,
-        radius: frame.radius,
-      };
-    });
-
-    const expansionNodes: StageNode[] = expansions.map((point, index) => {
-      const frame = frameFor(point, 'expansion');
-      return {
-        ...point,
-        x: 752 + (index % 2) * 104 + (index >= 4 ? 34 : 0),
-        y: 334 + Math.floor(index / 2) * 58,
-        width: frame.width,
-        height: frame.height,
-        radius: frame.radius,
-      };
-    });
-
-    const microNodes: StageNode[] = remainder.map((point, index) => {
-      const frame = frameFor(point, 'micro');
-      return {
-        ...point,
-        x: 445 + (index - (remainder.length - 1) / 2) * 94,
-        y: 460 + (index % 2) * 24,
-        width: frame.width,
-        height: frame.height,
-        radius: frame.radius,
-      };
-    });
-
-    const stageNodes = [...sourceNodes, ...anchorNodes, ...expansionNodes, ...microNodes];
-    const stageMap = new Map(stageNodes.map((node) => [node.id, node]));
-
-    return {
-      width,
-      height,
-      centerX,
-      centerY,
-      answerCard,
-      sourceNodes,
-      anchorNodes,
-      expansionNodes,
-      microNodes,
-      stageNodes,
-      stageMap,
-    };
-  }, [graph.points]);
-
-  const visibleLinks = useMemo(() => {
-    const visibleIds = new Set(stage.stageNodes.map((node) => node.id));
-    return graph.links.filter((link) => visibleIds.has(link.source) && visibleIds.has(link.target));
-  }, [graph.links, stage.stageNodes]);
 
   const handleNodeActivate = useCallback(
     (point: GraphPoint) => {
@@ -490,336 +462,512 @@ export default function CosmographView({
   );
 
   if (graph.points.length === 0) {
-    return null;
+    return (
+      <div
+        className={cn(
+          'relative flex h-full w-full items-center justify-center overflow-hidden rounded-[30px] border border-stone-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(255,248,235,0.98),_rgba(255,255,255,0.97)_45%,_rgba(247,243,235,0.98)_100%)] px-6 text-center shadow-[0_34px_90px_-52px_rgba(120,53,15,0.24)]',
+          className,
+        )}
+      >
+        <div className="absolute inset-0 opacity-50" style={{ backgroundImage: 'linear-gradient(rgba(148,163,184,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.07) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+        <div className="relative max-w-sm rounded-[28px] border border-stone-200/80 bg-white/88 px-6 py-6 shadow-[0_24px_60px_-40px_rgba(120,53,15,0.26)]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400">
+            Answer Flow
+          </p>
+          <p className="mt-3 text-lg font-semibold text-stone-900">
+            No source graph is available for this answer yet.
+          </p>
+          <p className="mt-2 text-sm leading-6 text-stone-500">
+            Run a GraphRAG answer with citations to populate the evidence, synthesis, and traversal lanes.
+          </p>
+        </div>
+      </div>
+    );
   }
+
+  const focusLabel = highlightedNode
+    ? `Focused on ${truncateLabel(highlightedNode.label, 40)}`
+    : sourceNodes[0]
+      ? `Start from ${truncateLabel(sourceNodes[0].label, 40)}`
+      : 'Grounded answer flow';
+  const connectionLabel =
+    graph.links.length > 0 ? `${graph.links.length} traversal links` : 'Direct evidence path';
 
   return (
     <div
       className={cn(
-        'relative h-full w-full overflow-hidden rounded-[30px] border border-white/70 bg-[radial-gradient(circle_at_top_left,_rgba(255,244,223,0.95),_rgba(255,255,255,0.96)_34%,_rgba(247,243,235,0.98)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_34px_90px_-52px_rgba(120,53,15,0.36)]',
+        'relative h-full w-full overflow-hidden rounded-[30px] border border-stone-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(255,247,232,0.98),_rgba(255,255,255,0.97)_42%,_rgba(247,243,235,0.98)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.88),0_34px_90px_-52px_rgba(120,53,15,0.28)]',
         className,
       )}
     >
       <div
-        className="pointer-events-none absolute inset-0 opacity-50"
+        className="pointer-events-none absolute inset-0 opacity-55"
         style={{
           backgroundImage:
             'linear-gradient(rgba(148,163,184,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.07) 1px, transparent 1px)',
-          backgroundSize: '26px 26px',
+          backgroundSize: '24px 24px',
         }}
       />
-      <div className="pointer-events-none absolute -left-16 top-0 h-56 w-56 rounded-full bg-amber-200/25 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-60 w-60 rounded-full bg-sky-100/35 blur-3xl" />
+      <div className="pointer-events-none absolute -left-12 top-0 h-52 w-52 rounded-full bg-amber-200/25 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full bg-sky-100/40 blur-3xl" />
 
-      <div className="pointer-events-none absolute left-4 top-4 z-20 flex max-w-[calc(100%-2rem)] flex-wrap items-center gap-2">
-        <span className="rounded-full border border-amber-200/80 bg-amber-50/92 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-800">
-          {t('graphRagUi.answerConstellation')}
-        </span>
-        <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1 text-[11px] font-medium text-stone-500">
-          {stage.sourceNodes.length} sources
-        </span>
-        <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1 text-[11px] font-medium text-stone-500">
-          {graph.points.length} nodes
-        </span>
-        <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1 text-[11px] font-medium text-stone-500">
-          {graph.links.length} links
-        </span>
+      <div className="relative z-20 flex flex-wrap items-center justify-between gap-3 border-b border-stone-200/70 px-4 py-3">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-amber-50/88 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-800">
+            <Sparkles className="h-3.5 w-3.5" />
+            Answer Flow
+          </span>
+          <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1.5 text-xs font-medium text-stone-500">
+            {connectionLabel}
+          </span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1.5 text-xs font-medium text-stone-500">
+            {sourceNodes.length} sources
+          </span>
+          <span className="rounded-full border border-stone-200/80 bg-white/88 px-3 py-1.5 text-xs font-medium text-stone-500">
+            {graph.points.length} nodes
+          </span>
+        </div>
       </div>
 
-      <motion.svg
-        viewBox={`0 0 ${stage.width} ${stage.height}`}
-        className="relative z-10 h-full w-full"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.45 }}
+      <svg
+        viewBox="0 0 100 100"
+        className="pointer-events-none absolute inset-0 z-10 hidden h-full w-full lg:block"
         role="img"
         aria-label={t('graphRagUi.answerMapAria')}
+        preserveAspectRatio="none"
       >
         <defs>
-          <radialGradient id="answer-core" cx="50%" cy="50%" r="65%">
-            <stop offset="0%" stopColor="rgba(255,255,255,0.98)" />
-            <stop offset="100%" stopColor="rgba(255,248,235,0.94)" />
+          <radialGradient id="answer-flow-core" cx="50%" cy="50%" r="55%">
+            <stop offset="0%" stopColor="rgba(251,191,36,0.13)" />
+            <stop offset="100%" stopColor="rgba(251,191,36,0)" />
           </radialGradient>
         </defs>
 
-        <circle cx={stage.centerX} cy={stage.centerY} r={134} fill="rgba(251,191,36,0.07)" />
-        <circle cx={stage.centerX} cy={stage.centerY} r={188} fill="none" stroke="rgba(231,229,228,0.85)" strokeDasharray="5 11" />
-        <circle cx={stage.centerX} cy={stage.centerY} r={246} fill="none" stroke="rgba(231,229,228,0.55)" />
+        <circle cx="50" cy="55" r="18" fill="url(#answer-flow-core)" />
+        <circle cx="50" cy="55" r="24" fill="none" stroke="rgba(231,229,228,0.72)" strokeDasharray="1.2 2.6" />
+        <circle cx="50" cy="55" r="30" fill="none" stroke="rgba(231,229,228,0.45)" />
 
-        {stage.sourceNodes.map((node, index) => {
+        {sourceNodes.map((node, index) => {
           const isActive = highlightedNode?.id === node.id;
+          const y = distribute(index, sourceNodes.length, 28, 78);
+
           return (
             <motion.path
               key={`source-line-${node.id}`}
-              d={connectionPath(node, stage.answerCard.x - stage.answerCard.width / 2 + 18, stage.answerCard.y)}
+              d={curvePath(24, y, 43.5, 52 + (index - (sourceNodes.length - 1) / 2) * 1.8)}
               fill="none"
               stroke={node.color}
-              strokeWidth={isActive ? 2.5 : 1.65}
+              strokeWidth={isActive ? 0.42 : 0.26}
               strokeOpacity={isActive ? 0.7 : 0.24}
-              strokeDasharray={isActive ? '10 10' : '6 12'}
+              strokeDasharray={isActive ? '1.8 1.8' : '1.2 2.3'}
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{
                 pathLength: 1,
-                strokeDashoffset: isActive ? [-24, 0] : [0, -30],
-                opacity: isActive ? [0.35, 0.8, 0.35] : [0.14, 0.34, 0.14],
+                strokeDashoffset: isActive ? [-10, 0] : [0, -12],
+                opacity: isActive ? [0.38, 0.8, 0.38] : [0.14, 0.34, 0.14],
               }}
               transition={{
-                pathLength: { duration: 0.5, delay: index * 0.05 },
-                strokeDashoffset: { duration: isActive ? 1.4 : 3.8, repeat: Infinity, ease: 'linear' },
-                opacity: { duration: isActive ? 1.8 : 4.2, repeat: Infinity, ease: 'easeInOut' },
+                pathLength: { duration: 0.42, delay: index * 0.05 },
+                strokeDashoffset: { duration: isActive ? 1.6 : 4.2, repeat: Infinity, ease: 'linear' },
+                opacity: { duration: isActive ? 1.8 : 4.6, repeat: Infinity, ease: 'easeInOut' },
               }}
             />
           );
         })}
 
-        {[...stage.anchorNodes, ...stage.expansionNodes].map((node, index) => {
+        {anchorNodes.map((node, index) => {
           const isActive = highlightedNode?.id === node.id;
+          const y = distribute(index, anchorNodes.length, 31, 49);
+
           return (
             <motion.path
-              key={`answer-link-${node.id}`}
-              d={`M ${stage.answerCard.x + stage.answerCard.width / 2 - 18} ${stage.answerCard.y} C ${stage.answerCard.x + 116} ${stage.answerCard.y}, ${node.x - 94} ${node.y}, ${node.x - node.width / 2 + 12} ${node.y}`}
+              key={`anchor-line-${node.id}`}
+              d={curvePath(56.5, 50.5 + (index - (anchorNodes.length - 1) / 2) * 1.4, 76, y)}
               fill="none"
               stroke={node.color}
-              strokeWidth={isActive ? 2.2 : 1.3}
-              strokeOpacity={isActive ? 0.72 : 0.22}
-              strokeDasharray={isActive ? '9 9' : '5 11'}
+              strokeWidth={isActive ? 0.36 : 0.24}
+              strokeOpacity={isActive ? 0.68 : 0.22}
+              strokeDasharray={isActive ? '1.8 1.6' : '1.2 2.2'}
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{
                 pathLength: 1,
-                strokeDashoffset: isActive ? [-18, 0] : [0, -22],
-                opacity: isActive ? [0.4, 0.78, 0.4] : [0.12, 0.28, 0.12],
+                strokeDashoffset: isActive ? [-8, 0] : [0, -10],
+                opacity: isActive ? [0.36, 0.76, 0.36] : [0.12, 0.28, 0.12],
               }}
               transition={{
-                pathLength: { duration: 0.45, delay: 0.12 + index * 0.04 },
-                strokeDashoffset: { duration: isActive ? 1.5 : 4.4, repeat: Infinity, ease: 'linear' },
-                opacity: { duration: isActive ? 1.9 : 4.6, repeat: Infinity, ease: 'easeInOut' },
+                pathLength: { duration: 0.4, delay: 0.12 + index * 0.04 },
+                strokeDashoffset: { duration: isActive ? 1.7 : 4.3, repeat: Infinity, ease: 'linear' },
+                opacity: { duration: isActive ? 1.9 : 4.8, repeat: Infinity, ease: 'easeInOut' },
               }}
             />
           );
         })}
 
-        {visibleLinks.slice(0, 10).map((link, index) => {
-          const source = stage.stageMap.get(link.source);
-          const target = stage.stageMap.get(link.target);
-          if (!source || !target) {
+        {expansionNodes.map((node, index) => {
+          const isActive = highlightedNode?.id === node.id;
+          const y = distribute(index, expansionNodes.length, 59, 82);
+
+          return (
+            <motion.path
+              key={`expansion-line-${node.id}`}
+              d={curvePath(56.5, 59 + (index - (expansionNodes.length - 1) / 2) * 1.2, 76, y)}
+              fill="none"
+              stroke={node.color}
+              strokeWidth={isActive ? 0.34 : 0.22}
+              strokeOpacity={isActive ? 0.64 : 0.18}
+              strokeDasharray={isActive ? '1.7 1.5' : '1.1 2.1'}
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{
+                pathLength: 1,
+                strokeDashoffset: isActive ? [-7, 0] : [0, -9],
+                opacity: isActive ? [0.34, 0.72, 0.34] : [0.1, 0.22, 0.1],
+              }}
+              transition={{
+                pathLength: { duration: 0.4, delay: 0.18 + index * 0.04 },
+                strokeDashoffset: { duration: isActive ? 1.8 : 4.6, repeat: Infinity, ease: 'linear' },
+                opacity: { duration: isActive ? 2 : 5, repeat: Infinity, ease: 'easeInOut' },
+              }}
+            />
+          );
+        })}
+
+        {visibleLinks.slice(0, 8).map((link, index) => {
+          const sourceIndex = sourceNodes.findIndex((node) => node.id === link.source);
+          const targetAnchorIndex = anchorNodes.findIndex((node) => node.id === link.target);
+          const targetExpansionIndex = expansionNodes.findIndex((node) => node.id === link.target);
+
+          if (sourceIndex === -1 || (targetAnchorIndex === -1 && targetExpansionIndex === -1)) {
             return null;
           }
 
-          const sourceX = source.x + (target.x > source.x ? source.width / 2 - 8 : -source.width / 2 + 8);
-          const targetX = target.x + (source.x > target.x ? target.width / 2 - 8 : -target.width / 2 + 8);
+          const fromY = distribute(sourceIndex, sourceNodes.length, 28, 78);
+          const toY =
+            targetAnchorIndex >= 0
+              ? distribute(targetAnchorIndex, anchorNodes.length, 31, 49)
+              : distribute(targetExpansionIndex, expansionNodes.length, 59, 82);
 
           return (
             <motion.path
-              key={`cross-link-${link.source}-${link.target}-${index}`}
-              d={`M ${sourceX} ${source.y} Q ${(source.x + target.x) / 2} ${(source.y + target.y) / 2 - 26} ${targetX} ${target.y}`}
+              key={`bridge-${link.source}-${link.target}-${index}`}
+              d={curvePath(24, fromY, 76, toY)}
               fill="none"
               stroke={link.color}
-              strokeWidth={1.1}
-              strokeOpacity={0.12}
-              strokeDasharray="4 12"
-              animate={{ strokeDashoffset: [0, -22], opacity: [0.08, 0.18, 0.08] }}
-              transition={{ duration: 5.4 + index * 0.25, repeat: Infinity, ease: 'linear' }}
+              strokeWidth={0.16}
+              strokeOpacity={0.08}
+              strokeDasharray="0.8 2.2"
+              animate={{ strokeDashoffset: [0, -10], opacity: [0.05, 0.12, 0.05] }}
+              transition={{ duration: 5.4 + index * 0.3, repeat: Infinity, ease: 'linear' }}
             />
           );
         })}
+      </svg>
 
-        <motion.g
-          initial={{ opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.42 }}
+      <div className="relative z-20 grid h-[calc(100%-61px)] min-h-0 gap-4 px-4 py-4 lg:grid-cols-[minmax(0,0.92fr)_minmax(320px,1.08fr)_minmax(0,0.95fr)]">
+        <motion.section
+          initial={{ opacity: 0, x: -12 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.28 }}
+          className="flex min-h-0 flex-col rounded-[28px] border border-stone-200/80 bg-white/78 p-4 shadow-[0_24px_60px_-42px_rgba(120,53,15,0.2)] backdrop-blur-sm"
         >
-          <rect
-            x={stage.answerCard.x - stage.answerCard.width / 2}
-            y={stage.answerCard.y - stage.answerCard.height / 2}
-            width={stage.answerCard.width}
-            height={stage.answerCard.height}
-            rx={stage.answerCard.radius}
-            fill="url(#answer-core)"
-            stroke="rgba(231,229,228,0.95)"
-            strokeWidth={1.4}
+          <LaneLabel
+            step="01"
+            title="Evidence Sources"
+            subtitle={`${sourceNodes.length} citations grounding this answer`}
           />
-          <rect
-            x={stage.answerCard.x - stage.answerCard.width / 2 + 18}
-            y={stage.answerCard.y - stage.answerCard.height / 2 + 18}
-            width={112}
-            height={28}
-            rx={14}
-            fill="rgba(255,248,220,0.92)"
-          />
-          <text
-            x={stage.answerCard.x - stage.answerCard.width / 2 + 36}
-            y={stage.answerCard.y - stage.answerCard.height / 2 + 37}
-            fill="#b45309"
-            fontSize={11}
-            fontWeight={700}
-            letterSpacing="0.18em"
-          >
-            {t('graphRagUi.answerMap')}
-          </text>
-          <text
-            x={stage.answerCard.x - stage.answerCard.width / 2 + 24}
-            y={stage.answerCard.y - 8}
-            fill="#292524"
-            fontSize={26}
-            fontWeight={700}
-          >
-            {truncateLabel(deferredResponse?.query || t('graphRagUi.answerMap'), 26)}
-          </text>
-          <text
-            x={stage.answerCard.x - stage.answerCard.width / 2 + 24}
-            y={stage.answerCard.y + 26}
-            fill="#78716c"
-            fontSize={14}
-          >
-            {t('graphRagUi.sourceSummary', { count: stage.sourceNodes.length })}
-          </text>
-          <text
-            x={stage.answerCard.x - stage.answerCard.width / 2 + 24}
-            y={stage.answerCard.y + 50}
-            fill="#78716c"
-            fontSize={14}
-          >
-            {t('graphRagUi.anchorSummary', {
-              anchors: stage.anchorNodes.length,
-              expansions: stage.expansionNodes.length,
-            })}
-          </text>
-          {highlightedNode && (
-            <text
-              x={stage.answerCard.x - stage.answerCard.width / 2 + 24}
-              y={stage.answerCard.y + 74}
-              fill="#b45309"
-              fontSize={13}
-              fontWeight={600}
-            >
-              {t('graphRagUi.focusingOn', { label: truncateLabel(highlightedNode.label, 28) })}
-            </text>
-          )}
-        </motion.g>
 
-        {stage.sourceNodes.map((node, index) => {
-          const theme = getGraphTypeTheme(node.type);
-          const isActive = highlightedNode?.id === node.id;
-          const label = truncateLabel(node.label, 24);
+          <div className="mt-4 space-y-2 overflow-y-auto pr-1">
+            {sourceNodes.map((node, index) => {
+              const theme = getGraphTypeTheme(node.type);
+              const isActive = highlightedNode?.id === node.id;
+              const citationId = node.citationIndex !== undefined ? node.citationIndex + 1 : index + 1;
+              const sourceMeta = deferredResponse?.sources?.find((source) => source.nodeId === node.id);
 
-          return (
-            <motion.g
-              key={node.id}
-              transform={`translate(${node.x}, ${node.y})`}
-              onClick={() => handleNodeActivate(node)}
-              style={{ cursor: 'pointer' }}
-              initial={{ opacity: 0, x: -18 }}
-              animate={{
-                opacity: 1,
-                x: 0,
-                y: [0, -4 - (index % 2), 0],
-              }}
-              transition={{
-                opacity: { duration: 0.32, delay: index * 0.05 },
-                x: { duration: 0.32, delay: index * 0.05 },
-                y: { duration: 5.8 + index * 0.4, repeat: Infinity, ease: 'easeInOut' },
-              }}
-            >
-              <rect
-                x={-node.width / 2 - (isActive ? 5 : 0)}
-                y={-node.height / 2 - (isActive ? 5 : 0)}
-                width={node.width + (isActive ? 10 : 0)}
-                height={node.height + (isActive ? 10 : 0)}
-                rx={node.radius + (isActive ? 5 : 0)}
-                fill={`${theme.glow}${isActive ? '99' : '44'}`}
-              />
-              <rect
-                x={-node.width / 2}
-                y={-node.height / 2}
-                width={node.width}
-                height={node.height}
-                rx={node.radius}
-                fill="rgba(255,255,255,0.96)"
-                stroke={isActive ? theme.color : theme.border}
-                strokeWidth={isActive ? 1.8 : 1.2}
-              />
-              <circle cx={-node.width / 2 + 20} cy={0} r={7} fill={theme.color} />
-              <text x={-node.width / 2 + 36} y={-6} fill="#292524" fontSize={14} fontWeight={700}>
-                {label}
-              </text>
-              <text x={-node.width / 2 + 36} y={14} fill="#78716c" fontSize={11}>
-                {node.subtitle || formatGraphNodeType(node.type)}
-              </text>
-              {node.citationIndex !== undefined && (
-                <text
-                  x={node.width / 2 - 16}
-                  y={-node.height / 2 + 18}
-                  fill={theme.text}
-                  fontSize={12}
-                  fontWeight={700}
-                  textAnchor="end"
+              return (
+                <motion.button
+                  key={node.id}
+                  type="button"
+                  onClick={() => handleNodeActivate(node)}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.24, delay: index * 0.04 }}
+                  className={cn(
+                    'group w-full rounded-[22px] border p-3 text-left transition-all duration-200',
+                    isActive
+                      ? 'border-transparent bg-white shadow-[0_20px_54px_-34px_rgba(120,53,15,0.3)] ring-2 ring-amber-200/70'
+                      : 'border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(250,247,242,0.96))] hover:-translate-y-0.5 hover:border-stone-300 hover:bg-white',
+                  )}
+                  style={{
+                    boxShadow: isActive ? `0 22px 54px -38px ${theme.color}55` : undefined,
+                  }}
                 >
-                  {node.citationIndex + 1}
-                </text>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <span
+                        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border text-sm font-semibold"
+                        style={{
+                          borderColor: theme.border,
+                          backgroundColor: theme.tint,
+                          color: theme.text,
+                        }}
+                      >
+                        {citationId}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-stone-900">
+                          {truncateLabel(node.label, 42)}
+                        </p>
+                        <p className="mt-1 text-xs text-stone-500">
+                          {sourceMeta?.metadata?.period || formatGraphNodeType(node.type)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <span
+                      className="inline-flex items-center rounded-full border px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em]"
+                      style={{
+                        borderColor: theme.border,
+                        backgroundColor: theme.tint,
+                        color: theme.text,
+                      }}
+                    >
+                      {formatGraphNodeType(node.type)}
+                    </span>
+                  </div>
+
+                  {sourceMeta?.content && (
+                    <p className="mt-3 line-clamp-2 text-sm leading-6 text-stone-500">
+                      {sourceMeta.content}
+                    </p>
+                  )}
+                </motion.button>
+              );
+            })}
+          </div>
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.32 }}
+          className="relative flex min-h-0 items-center justify-center rounded-[34px] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(250,246,239,0.92))] px-5 py-6 shadow-[0_36px_80px_-50px_rgba(120,53,15,0.3)]"
+        >
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute left-1/2 top-1/2 h-52 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full border border-stone-200/70" />
+            <div className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-stone-200/70" />
+            <div className="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-100/35 blur-2xl" />
+          </div>
+
+          <motion.div
+            animate={{ y: [0, -5, 0] }}
+            transition={{ duration: 6.6, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative w-full max-w-[27rem] rounded-[30px] border border-stone-200/80 bg-white/92 p-5 shadow-[0_28px_72px_-42px_rgba(120,53,15,0.36)] backdrop-blur"
+          >
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-800">
+                <Sparkles className="h-3.5 w-3.5" />
+                Synthesis Core
+              </span>
+              <span className="rounded-full border border-stone-200/80 bg-stone-50/88 px-3 py-1 text-xs font-medium text-stone-500">
+                {focusLabel}
+              </span>
+            </div>
+
+            <h3 className="mt-4 text-[1.8rem] font-semibold leading-tight text-stone-900">
+              {truncateLabel(deferredResponse?.query || 'Answer map', 72)}
+            </h3>
+
+            <p className="mt-3 text-sm leading-6 text-stone-500">
+              Sources enter from the left, the answer is synthesized here, and reasoning nodes on the right show where the response anchors and expands.
+            </p>
+
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <MiniStat label="Grounding" value={`${sourceNodes.length} sources`} />
+              <MiniStat
+                label="Entry Nodes"
+                value={anchorNodes.length > 0 ? `${anchorNodes.length} anchors` : 'Direct answer'}
+              />
+              <MiniStat
+                label="Expansion"
+                value={expansionNodes.length > 0 ? `${expansionNodes.length} nodes` : 'None'}
+              />
+              <MiniStat label="Links" value={graph.links.length > 0 ? `${graph.links.length}` : 'Direct'} />
+            </div>
+
+            {relatedNodes.length > 0 && (
+              <div className="mt-4 rounded-[22px] border border-stone-200/80 bg-stone-50/78 p-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-400">
+                  Also in frame
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {relatedNodes.map((node) => {
+                    const theme = getGraphTypeTheme(node.type);
+
+                    return (
+                      <button
+                        key={node.id}
+                        type="button"
+                        onClick={() => handleNodeActivate(node)}
+                        className="inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-medium transition-transform hover:-translate-y-0.5"
+                        style={{
+                          borderColor: theme.border,
+                          backgroundColor: theme.tint,
+                          color: theme.text,
+                        }}
+                      >
+                        <span className="inline-flex h-2.5 w-2.5 rounded-full" style={{ backgroundColor: theme.color }} />
+                        {truncateLabel(node.label, 20)}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, x: 12 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.28 }}
+          className="flex min-h-0 flex-col gap-3 rounded-[28px] border border-stone-200/80 bg-white/78 p-4 shadow-[0_24px_60px_-42px_rgba(120,53,15,0.2)] backdrop-blur-sm"
+        >
+          <div className="rounded-[24px] border border-stone-200/80 bg-stone-50/82 p-3.5">
+            <LaneLabel
+              step="02"
+              title="Entry Nodes"
+              subtitle={
+                anchorNodes.length > 0
+                  ? `${anchorNodes.length} nodes directly anchoring the answer`
+                  : 'This answer is driven directly from the selected sources'
+              }
+            />
+            <div className="mt-3 flex flex-wrap gap-2">
+              {anchorNodes.length === 0 && (
+                <p className="text-sm leading-6 text-stone-500">
+                  No distinct anchor nodes were returned for this answer.
+                </p>
               )}
-            </motion.g>
-          );
-        })}
+              {anchorNodes.map((node, index) => {
+                const theme = getGraphTypeTheme(node.type);
+                const isActive = highlightedNode?.id === node.id;
 
-        {[...stage.anchorNodes, ...stage.expansionNodes, ...stage.microNodes].map((node, index) => {
-          const theme = getGraphTypeTheme(node.type);
-          const isActive = highlightedNode?.id === node.id;
-          const label = truncateLabel(node.label, node.height <= 34 ? 14 : 18);
+                return (
+                  <motion.button
+                    key={node.id}
+                    type="button"
+                    onClick={() => handleNodeActivate(node)}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.24, delay: 0.08 + index * 0.04 }}
+                    className={cn(
+                      'inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-medium transition-all',
+                      isActive ? 'bg-white shadow-sm ring-2 ring-amber-200/70' : 'hover:-translate-y-0.5',
+                    )}
+                    style={{
+                      borderColor: theme.border,
+                      backgroundColor: isActive ? '#ffffff' : theme.tint,
+                      color: theme.text,
+                    }}
+                  >
+                    <span className="inline-flex h-2.5 w-2.5 rounded-full" style={{ backgroundColor: theme.color }} />
+                    {truncateLabel(node.label, 26)}
+                  </motion.button>
+                );
+              })}
+            </div>
+          </div>
 
-          return (
-            <motion.g
-              key={node.id}
-              transform={`translate(${node.x}, ${node.y})`}
-              onClick={() => handleNodeActivate(node)}
-              style={{ cursor: 'pointer' }}
-              initial={{ opacity: 0, scale: 0.94 }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-                y: [0, -3 - ((index + 1) % 2), 0],
-              }}
-              transition={{
-                opacity: { duration: 0.28, delay: 0.14 + index * 0.03 },
-                scale: { duration: 0.28, delay: 0.14 + index * 0.03 },
-                y: { duration: 6.2 + index * 0.3, repeat: Infinity, ease: 'easeInOut' },
-              }}
-            >
-              <rect
-                x={-node.width / 2 - (isActive ? 4 : 0)}
-                y={-node.height / 2 - (isActive ? 4 : 0)}
-                width={node.width + (isActive ? 8 : 0)}
-                height={node.height + (isActive ? 8 : 0)}
-                rx={node.radius + (isActive ? 4 : 0)}
-                fill={`${theme.glow}${isActive ? '88' : '32'}`}
-              />
-              <rect
-                x={-node.width / 2}
-                y={-node.height / 2}
-                width={node.width}
-                height={node.height}
-                rx={node.radius}
-                fill="rgba(255,255,255,0.95)"
-                stroke={isActive ? theme.color : theme.border}
-                strokeWidth={isActive ? 1.6 : 1.1}
-              />
-              <circle cx={-node.width / 2 + 14} cy={0} r={4.5} fill={theme.color} />
-              <text
-                x={-node.width / 2 + 28}
-                y={1}
-                fill="#292524"
-                fontSize={node.height <= 34 ? 11 : 12}
-                fontWeight={600}
-                dominantBaseline="middle"
-              >
-                {label}
-              </text>
-            </motion.g>
-          );
-        })}
-      </motion.svg>
+          <div className="flex min-h-0 flex-1 flex-col rounded-[24px] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(248,244,236,0.92))] p-3.5">
+            <LaneLabel
+              step="03"
+              title="Expansion Nodes"
+              subtitle={
+                expansionNodes.length > 0
+                  ? `${expansionNodes.length} supporting nodes extending the reasoning`
+                  : 'No secondary expansion nodes were needed here'
+              }
+            />
 
-      <div className="pointer-events-none absolute bottom-4 left-4 z-20">
-        <GraphLegend types={graph.presentTypes} />
+            <div className="mt-3 grid min-h-0 gap-2 overflow-y-auto pr-1 2xl:grid-cols-2">
+              {expansionNodes.length === 0 && (
+                <div className="rounded-[20px] border border-dashed border-stone-300 bg-stone-50/70 px-4 py-4 text-sm leading-6 text-stone-500">
+                  The answer stays close to its cited evidence without extra branching.
+                </div>
+              )}
+
+              {expansionNodes.map((node, index) => {
+                const theme = getGraphTypeTheme(node.type);
+                const isActive = highlightedNode?.id === node.id;
+
+                return (
+                  <motion.button
+                    key={node.id}
+                    type="button"
+                    onClick={() => handleNodeActivate(node)}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.24, delay: 0.12 + index * 0.03 }}
+                    className={cn(
+                      'rounded-[20px] border px-3.5 py-3 text-left transition-all duration-200',
+                      isActive
+                        ? 'bg-white shadow-[0_18px_42px_-34px_rgba(120,53,15,0.26)] ring-2 ring-amber-200/70'
+                        : 'bg-white/90 hover:-translate-y-0.5',
+                    )}
+                    style={{
+                      borderColor: theme.border,
+                      color: theme.text,
+                    }}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-stone-900">
+                          {truncateLabel(node.label, 34)}
+                        </p>
+                        <p className="mt-1 text-xs text-stone-500">{formatGraphNodeType(node.type)}</p>
+                      </div>
+                      <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl" style={{ backgroundColor: theme.tint }}>
+                        <ArrowRight className="h-4 w-4" style={{ color: theme.text }} />
+                      </span>
+                    </div>
+                  </motion.button>
+                );
+              })}
+            </div>
+          </div>
+
+          {graph.presentTypes.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {graph.presentTypes.slice(0, 5).map((type) => {
+                const theme = getGraphTypeTheme(type);
+
+                return (
+                  <span
+                    key={type}
+                    className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium"
+                    style={{
+                      borderColor: theme.border,
+                      backgroundColor: theme.tint,
+                      color: theme.text,
+                    }}
+                  >
+                    <span className="inline-flex h-2.5 w-2.5 rounded-full" style={{ backgroundColor: theme.color }} />
+                    {formatGraphNodeType(type)}
+                  </span>
+                );
+              })}
+            </div>
+          )}
+        </motion.section>
+      </div>
+
+      <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 hidden -translate-x-1/2 lg:flex">
+        <div className="inline-flex items-center gap-2 rounded-full border border-stone-200/80 bg-white/88 px-4 py-2 text-xs text-stone-500 shadow-[0_16px_44px_-32px_rgba(120,53,15,0.22)]">
+          <Waypoints className="h-3.5 w-3.5 text-stone-400" />
+          Click any source or node to pivot the evidence view.
+        </div>
       </div>
     </div>
   );
