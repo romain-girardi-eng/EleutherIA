@@ -6,20 +6,50 @@ import fr from './locales/fr.json';
 import de from './locales/de.json';
 import it from './locales/it.json';
 import el from './locales/el.json';
+import { extraResources } from './extraResources';
 
 // Type definition for translations
 export type TranslationKey = keyof typeof en;
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+/** Recursively merge `extra` keys into `base`. Only adds or overrides — never removes. */
+function deepMerge(
+  base: Record<string, unknown>,
+  extra?: Record<string, unknown>,
+): Record<string, unknown> {
+  if (!extra) {
+    return base;
+  }
+
+  const merged: Record<string, unknown> = { ...base };
+
+  Object.entries(extra).forEach(([key, value]) => {
+    const current = merged[key];
+
+    if (isPlainObject(current) && isPlainObject(value)) {
+      merged[key] = deepMerge(current, value);
+      return;
+    }
+
+    merged[key] = value;
+  });
+
+  return merged;
+}
 
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
-      en: { translation: en },
-      fr: { translation: fr },
-      de: { translation: de },
-      it: { translation: it },
-      el: { translation: el }
+      en: { translation: deepMerge(en, extraResources.en) },
+      fr: { translation: deepMerge(fr, extraResources.fr) },
+      de: { translation: deepMerge(de, extraResources.de) },
+      it: { translation: deepMerge(it, extraResources.it) },
+      el: { translation: deepMerge(el, extraResources.el) }
     },
     fallbackLng: 'en',
     supportedLngs: ['en', 'fr', 'de', 'it', 'el'],
