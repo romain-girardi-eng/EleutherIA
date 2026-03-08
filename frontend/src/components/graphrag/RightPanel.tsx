@@ -1,5 +1,7 @@
+import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { BookOpen, Network, Quote, Sparkles, Waypoints } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { BookOpen, LayoutGrid, Network, Orbit, Quote, Sparkles, Waypoints } from 'lucide-react';
 import CosmographView from './CosmographView';
 import SourceDetailCard from './SourceDetailCard';
 import PassageReaderPanel from './PassageReaderPanel';
@@ -9,6 +11,8 @@ import type { PassageContext } from '../../types/graphrag';
 import { formatGraphNodeType, getGraphTypeTheme } from './graphTheme';
 
 export type RightPanelState = 'idle' | 'loading' | 'graph' | 'source-detail' | 'passage-reader';
+
+type WorkspaceDeck = 'sources' | 'path' | 'overview';
 
 interface RightPanelProps {
   state: RightPanelState;
@@ -51,7 +55,7 @@ function WorkspaceMetric({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border border-stone-200/80 bg-white/82 px-3 py-2 shadow-[0_14px_32px_-28px_rgba(120,53,15,0.25)] backdrop-blur-sm">
+    <div className="rounded-[20px] border border-stone-200/80 bg-white/86 px-3.5 py-2.5 shadow-[0_14px_32px_-28px_rgba(120,53,15,0.25)] backdrop-blur-sm">
       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-400">
         {label}
       </p>
@@ -71,12 +75,14 @@ function PanelHeader({
   sourcesCount: number;
   conversationCount: number;
 }) {
+  const { t } = useTranslation();
+
   const stateCopy: Record<RightPanelState, string> = {
-    idle: 'Awaiting question',
-    loading: 'Building answer graph',
-    graph: 'Selected answer graph',
-    'source-detail': 'Source focus',
-    'passage-reader': 'Text context',
+    idle: t('graphRagUi.rightPanel.states.idle'),
+    loading: t('graphRagUi.rightPanel.states.loading'),
+    graph: t('graphRagUi.rightPanel.states.graph'),
+    'source-detail': t('graphRagUi.rightPanel.states.sourceDetail'),
+    'passage-reader': t('graphRagUi.rightPanel.states.passageReader'),
   };
 
   return (
@@ -93,33 +99,27 @@ function PanelHeader({
             </span>
           )}
         </div>
-        <h2 className="mt-3 font-display text-[1.35rem] leading-tight text-stone-900 xl:text-[1.5rem]">
-          {response?.query || 'A curated knowledge graph will appear here for each answer.'}
+        <h2 className="mt-3 font-display text-[1.35rem] leading-tight text-stone-900 xl:text-[1.55rem]">
+          {response?.query || t('graphRagUi.rightPanel.fallbackQuery')}
         </h2>
-        <p className="mt-2 max-w-xl text-sm leading-6 text-stone-500">
-          Citations, anchor nodes, and traversal bridges used for the current answer.
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
+          {t('graphRagUi.rightPanel.subtitle')}
         </p>
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-3 2xl:grid-cols-5">
+        <WorkspaceMetric label={t('graphRagUi.rightPanel.metrics.sources')} value={formatMetricValue(sourcesCount)} />
         <WorkspaceMetric
-          label="Sources"
-          value={formatMetricValue(sourcesCount)}
-        />
-        <WorkspaceMetric
-          label="Nodes"
+          label={t('graphRagUi.rightPanel.metrics.nodes')}
           value={formatMetricValue(response?.reasoning_path?.total_nodes ?? response?.nodes_used)}
         />
         <WorkspaceMetric
-          label="Edges"
+          label={t('graphRagUi.rightPanel.metrics.edges')}
           value={formatMetricValue(response?.reasoning_path?.total_edges ?? response?.edges_traversed)}
         />
+        <WorkspaceMetric label={t('graphRagUi.rightPanel.metrics.conversation')} value={formatMetricValue(conversationCount)} />
         <WorkspaceMetric
-          label="Conversation"
-          value={formatMetricValue(conversationCount)}
-        />
-        <WorkspaceMetric
-          label="Confidence"
+          label={t('graphRagUi.rightPanel.metrics.confidence')}
           value={formatConfidence(response?.quality_metrics?.confidence_score)}
         />
       </div>
@@ -127,7 +127,35 @@ function PanelHeader({
   );
 }
 
-function SourceRail({
+function DeckButton({
+  active,
+  icon: Icon,
+  label,
+  onClick,
+}: {
+  active: boolean;
+  icon: typeof LayoutGrid;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      type="button"
+      className={cn(
+        'inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition-all',
+        active
+          ? 'bg-stone-900 text-white shadow-[0_20px_36px_-24px_rgba(28,25,23,0.55)]'
+          : 'bg-white/72 text-stone-500 hover:bg-white hover:text-stone-900',
+      )}
+    >
+      <Icon className="h-4 w-4" />
+      {label}
+    </button>
+  );
+}
+
+function SourcesDeck({
   sources,
   activeSourceIndex,
   onSourceSelect,
@@ -136,92 +164,397 @@ function SourceRail({
   activeSourceIndex: number | null;
   onSourceSelect?: (sourceIndex: number) => void;
 }) {
+  const { t } = useTranslation();
+
   if (sources.length === 0) {
     return (
-      <div className="rounded-[24px] border border-dashed border-stone-300 bg-white/70 px-4 py-5 text-sm text-stone-500">
-        This answer does not expose source nodes yet. The graph still preserves the traversal structure.
+      <div className="rounded-[24px] border border-dashed border-stone-300 bg-white/72 px-4 py-5 text-sm text-stone-500">
+        {t('graphRagUi.rightPanel.noSources')}
       </div>
     );
   }
 
   return (
-    <div className="rounded-[24px] border border-stone-200/80 bg-white/76 p-3 shadow-[0_24px_60px_-42px_rgba(120,53,15,0.3)] backdrop-blur-xl">
-      <div className="mb-3 flex items-center justify-between gap-3 px-1">
-        <div>
+    <div className="grid gap-3 lg:grid-cols-2">
+      {sources.map((source, index) => {
+        const theme = getGraphTypeTheme(source.nodeType);
+        const isActive = activeSourceIndex === index;
+
+        return (
+          <motion.button
+            key={`${source.nodeId}-${source.id}`}
+            layout
+            onClick={() => onSourceSelect?.(index)}
+            type="button"
+            className={cn(
+              'group relative overflow-hidden rounded-[24px] border p-4 text-left transition-all duration-200',
+              isActive
+                ? 'border-amber-300/90 bg-white shadow-[0_32px_70px_-44px_rgba(120,53,15,0.35)]'
+                : 'border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(252,249,244,0.96))] hover:-translate-y-0.5 hover:border-stone-300 hover:bg-white',
+            )}
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div
+              className="absolute inset-x-0 top-0 h-1"
+              style={{ backgroundColor: theme.color }}
+            />
+            <div className="flex items-start justify-between gap-3">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-stone-100 text-sm font-bold text-stone-700">
+                {source.id}
+              </span>
+              <span
+                className="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold"
+                style={{
+                  borderColor: theme.border,
+                  backgroundColor: theme.tint,
+                  color: theme.text,
+                }}
+              >
+                {formatGraphNodeType(source.nodeType)}
+              </span>
+            </div>
+
+            <p className="mt-4 text-base font-semibold leading-6 text-stone-900 line-clamp-2">
+              {source.nodeLabel}
+            </p>
+            <p className="mt-2 text-sm leading-6 text-stone-500 line-clamp-3">
+              {source.content || t('graphRagUi.rightPanel.sourceFallback')}
+            </p>
+
+            <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] text-stone-500">
+              {source.metadata?.period && (
+                <span className="rounded-full border border-stone-200/80 bg-stone-50/80 px-2.5 py-1">
+                  {source.metadata.period}
+                </span>
+              )}
+              {source.metadata?.school && (
+                <span className="rounded-full border border-stone-200/80 bg-stone-50/80 px-2.5 py-1 italic">
+                  {source.metadata.school as string}
+                </span>
+              )}
+            </div>
+          </motion.button>
+        );
+      })}
+    </div>
+  );
+}
+
+function ReasoningDeck({
+  response,
+  onNodeClick,
+}: {
+  response: GraphRAGResponse | null;
+  onNodeClick: (nodeId: string) => void;
+}) {
+  const startingNodes = response?.reasoning_path?.starting_nodes ?? [];
+  const expandedNodes = response?.reasoning_path?.expanded_nodes ?? [];
+  const traversedEdges = response?.reasoning_path?.traversed_edges ?? [];
+
+  return (
+    <div className="space-y-4">
+      <div className="grid gap-3 xl:grid-cols-[1.05fr_0.95fr]">
+        <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-            Evidence rail
+            Starting nodes
           </p>
-          <p className="mt-1 text-sm font-semibold text-stone-900">
-            Sources grounding this answer
-          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {startingNodes.length === 0 && (
+              <p className="text-sm text-stone-500">No starting nodes were exposed for this answer.</p>
+            )}
+            {startingNodes.map((node) => {
+              const theme = getGraphTypeTheme(node.type);
+              return (
+                <button
+                  key={node.id}
+                  type="button"
+                  onClick={() => onNodeClick(node.id)}
+                  className="rounded-full border px-3 py-2 text-left text-sm font-medium transition-colors hover:brightness-[0.98]"
+                  style={{
+                    borderColor: theme.border,
+                    backgroundColor: theme.tint,
+                    color: theme.text,
+                  }}
+                >
+                  {node.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
-        <div className="rounded-full border border-stone-200/80 bg-parchment-50/80 px-2.5 py-1 text-[11px] font-medium text-stone-500">
-          {sources.length} citations
+
+        <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
+            Traversal links
+          </p>
+          <div className="mt-3 space-y-2">
+            {traversedEdges.slice(0, 5).map((edge, index) => (
+              <div
+                key={`${edge.source}-${edge.target}-${index}`}
+                className="rounded-[18px] border border-stone-200/70 bg-stone-50/80 px-3 py-2.5 text-sm text-stone-600"
+              >
+                <span className="font-medium text-stone-900">{edge.source}</span>
+                <span className="mx-2 text-stone-400">→</span>
+                <span className="font-medium text-stone-900">{edge.target}</span>
+                {edge.relation && (
+                  <span className="ml-2 text-xs uppercase tracking-[0.16em] text-stone-400">
+                    {edge.relation}
+                  </span>
+                )}
+              </div>
+            ))}
+            {traversedEdges.length === 0 && (
+              <p className="text-sm text-stone-500">No traversal links were returned.</p>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="space-y-2 px-1 pb-1">
-        {sources.map((source, index) => {
-          const theme = getGraphTypeTheme(source.nodeType);
-          const isActive = activeSourceIndex === index;
-
-          return (
-            <button
-              key={`${source.nodeId}-${source.id}`}
-              onClick={() => onSourceSelect?.(index)}
-              className={cn(
-                'w-full rounded-[20px] border p-4 text-left transition-all duration-200',
-                isActive
-                  ? 'border-amber-300/90 bg-white shadow-[0_24px_48px_-32px_rgba(120,53,15,0.32)]'
-                  : 'border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(252,249,244,0.96))] hover:-translate-y-0.5 hover:border-stone-300',
-              )}
-              type="button"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-stone-100 text-sm font-bold text-stone-700">
-                  {source.id}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span
-                      className="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold"
-                      style={{
-                        borderColor: theme.border,
-                        backgroundColor: theme.tint,
-                        color: theme.text,
-                      }}
-                    >
-                      {formatGraphNodeType(source.nodeType)}
-                    </span>
-                    {source.metadata?.period && (
-                      <span className="rounded-full border border-stone-200/80 bg-stone-50/80 px-2.5 py-1 text-[11px] text-stone-500">
-                        {source.metadata.period}
-                      </span>
-                    )}
-                    {source.metadata?.school && (
-                      <span className="rounded-full border border-stone-200/80 bg-stone-50/80 px-2.5 py-1 text-[11px] italic text-stone-500">
-                        {source.metadata.school as string}
-                      </span>
-                    )}
-                  </div>
-
-                  <p className="mt-3 text-base font-semibold leading-6 text-stone-900 line-clamp-2">
-                    {source.nodeLabel}
-                  </p>
-                  <p className="mt-1 text-sm leading-6 text-stone-500 line-clamp-2">
-                    {source.content || 'Part of the selected knowledge graph used as evidence for the answer.'}
-                  </p>
-                </div>
-              </div>
-            </button>
-          );
-        })}
+      <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
+          Expanded nodes
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {expandedNodes.length === 0 && (
+            <p className="text-sm text-stone-500">No expanded nodes were exposed for this answer.</p>
+          )}
+          {expandedNodes.map((node) => {
+            const theme = getGraphTypeTheme(node.type);
+            return (
+              <button
+                key={node.id}
+                type="button"
+                onClick={() => onNodeClick(node.id)}
+                className="rounded-full border px-3 py-2 text-left text-sm font-medium transition-colors hover:brightness-[0.98]"
+                style={{
+                  borderColor: theme.border,
+                  backgroundColor: theme.tint,
+                  color: theme.text,
+                }}
+              >
+                {node.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
 
+function OverviewDeck({
+  response,
+  sources,
+  conversationCount,
+}: {
+  response: GraphRAGResponse | null;
+  sources: SourceCitation[];
+  conversationCount: number;
+}) {
+  const { t } = useTranslation();
+  const typeSummary = useMemo(() => {
+    const counts = new Map<string, number>();
+    sources.forEach((source) => {
+      const key = source.nodeType || 'default';
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    });
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 4);
+  }, [sources]);
+
+  return (
+    <div className="grid gap-3 xl:grid-cols-[1fr_1fr]">
+      <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
+          {t('graphRagUi.rightPanel.readingProfile')}
+        </p>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <div className="rounded-[18px] bg-stone-50/80 px-3 py-3">
+            <p className="text-[10px] uppercase tracking-[0.16em] text-stone-400">{t('graphrag.model')}</p>
+            <p className="mt-1 text-sm font-medium text-stone-900">{response?.llm_model || '--'}</p>
+          </div>
+          <div className="rounded-[18px] bg-stone-50/80 px-3 py-3">
+            <p className="text-[10px] uppercase tracking-[0.16em] text-stone-400">{t('graphRagUi.rightPanel.time')}</p>
+            <p className="mt-1 text-sm font-medium text-stone-900">
+              {response?.processing_time ? `${(response.processing_time / 1000).toFixed(1)}s` : '--'}
+            </p>
+          </div>
+          <div className="rounded-[18px] bg-stone-50/80 px-3 py-3">
+            <p className="text-[10px] uppercase tracking-[0.16em] text-stone-400">{t('graphRagUi.rightPanel.metrics.conversation')}</p>
+            <p className="mt-1 text-sm font-medium text-stone-900">{conversationCount}</p>
+          </div>
+          <div className="rounded-[18px] bg-stone-50/80 px-3 py-3">
+            <p className="text-[10px] uppercase tracking-[0.16em] text-stone-400">{t('graphRagUi.rightPanel.grounding')}</p>
+            <p className="mt-1 text-sm font-medium text-stone-900">
+              {formatConfidence(response?.quality_metrics?.grounding_score)}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
+          {t('graphRagUi.rightPanel.sourceComposition')}
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {typeSummary.length === 0 && (
+            <p className="text-sm text-stone-500">{t('graphRagUi.rightPanel.noSourceComposition')}</p>
+          )}
+          {typeSummary.map(([type, count]) => {
+            const theme = getGraphTypeTheme(type);
+            return (
+              <span
+                key={type}
+                className="inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-medium"
+                style={{
+                  borderColor: theme.border,
+                  backgroundColor: theme.tint,
+                  color: theme.text,
+                }}
+              >
+                {formatGraphNodeType(type)}
+                <span className="rounded-full bg-white/70 px-2 py-0.5 text-xs">{count}</span>
+              </span>
+            );
+          })}
+        </div>
+
+        {response?.quality_metrics?.caveats && response.quality_metrics.caveats.length > 0 && (
+          <div className="mt-4 rounded-[20px] border border-amber-200/80 bg-amber-50/75 p-3.5">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-700">
+              {t('graphRagUi.rightPanel.caveats')}
+            </p>
+            <p className="mt-2 text-sm leading-6 text-amber-900">
+              {response.quality_metrics.caveats[0]}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function GraphWorkspace({
+  response,
+  allResponses,
+  sources,
+  activeSourceIndex,
+  conversationCount,
+  onNodeClick,
+  onSourceSelect,
+  onHighlightRef,
+}: {
+  response: GraphRAGResponse | null;
+  allResponses?: GraphRAGResponse[];
+  sources: SourceCitation[];
+  activeSourceIndex: number | null;
+  conversationCount: number;
+  onNodeClick: (nodeId: string) => void;
+  onSourceSelect?: (sourceIndex: number) => void;
+  onHighlightRef?: (fn: (citationIndex: number) => void) => void;
+}) {
+  const { t } = useTranslation();
+  const [deck, setDeck] = useState<WorkspaceDeck>('sources');
+
+  const handleSourceSelect = (sourceIndex: number) => {
+    setDeck('sources');
+    onSourceSelect?.(sourceIndex);
+  };
+
+  return (
+    <motion.div
+      key="graph"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.28 }}
+      className="space-y-4 p-4"
+    >
+      <div className="h-[460px] min-h-[460px] xl:h-[520px]">
+        <CosmographView
+          response={response}
+          allResponses={allResponses}
+          highlightedSourceIndex={activeSourceIndex}
+          onNodeClick={onNodeClick}
+          onSourceSelect={handleSourceSelect}
+          onHighlightRef={onHighlightRef}
+        />
+      </div>
+
+      <div className="rounded-[28px] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(249,244,236,0.92))] p-3 shadow-[0_28px_70px_-44px_rgba(120,53,15,0.28)]">
+        <div className="flex flex-col gap-3 border-b border-stone-200/70 px-2 pb-3 pt-1 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
+              {t('graphRagUi.rightPanel.dynamicDeck')}
+            </p>
+            <p className="mt-1 text-sm font-semibold text-stone-900">
+              {t('graphRagUi.rightPanel.dynamicDeckSubtitle')}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <DeckButton active={deck === 'sources'} icon={Orbit} label={t('graphRagUi.rightPanel.sourcesDeck')} onClick={() => setDeck('sources')} />
+            <DeckButton active={deck === 'path'} icon={Waypoints} label={t('graphRagUi.rightPanel.reasoningDeck')} onClick={() => setDeck('path')} />
+            <DeckButton active={deck === 'overview'} icon={LayoutGrid} label={t('graphRagUi.rightPanel.overviewDeck')} onClick={() => setDeck('overview')} />
+          </div>
+        </div>
+
+        <div className="px-1 pt-3">
+          <AnimatePresence mode="wait">
+            {deck === 'sources' && (
+              <motion.div
+                key="sources"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.22 }}
+              >
+                <SourcesDeck
+                  sources={sources}
+                  activeSourceIndex={activeSourceIndex}
+                  onSourceSelect={handleSourceSelect}
+                />
+              </motion.div>
+            )}
+
+            {deck === 'path' && (
+              <motion.div
+                key="path"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.22 }}
+              >
+                <ReasoningDeck response={response} onNodeClick={onNodeClick} />
+              </motion.div>
+            )}
+
+            {deck === 'overview' && (
+              <motion.div
+                key="overview"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.22 }}
+              >
+                <OverviewDeck
+                  response={response}
+                  sources={sources}
+                  conversationCount={conversationCount}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 function IdleState() {
+  const { t } = useTranslation();
+
   return (
     <motion.div
       key="idle"
@@ -240,10 +573,10 @@ function IdleState() {
             <Network className="h-8 w-8 text-amber-700" />
           </div>
           <h3 className="mt-6 font-display text-3xl text-stone-900">
-            Answer-driven graph workspace
+            {t('graphRagUi.rightPanel.answerConstellation')}
           </h3>
           <p className="mt-3 text-sm leading-7 text-stone-500">
-            Ask a question and this panel will assemble the exact subgraph behind the answer: source nodes, reasoning anchors, and the bridges found during traversal.
+            {t('graphRagUi.rightPanel.answerConstellationBody')}
           </p>
         </div>
       </div>
@@ -252,18 +585,18 @@ function IdleState() {
         {[
           {
             icon: Quote,
-            title: 'Evidence-first',
-            copy: 'Citations used in the answer become the front row of the graph experience.',
+            title: t('graphRagUi.rightPanel.cards.evidenceFirst.title'),
+            copy: t('graphRagUi.rightPanel.cards.evidenceFirst.copy'),
           },
           {
             icon: Waypoints,
-            title: 'Reasoning path',
-            copy: 'Anchor nodes and expansion bridges stay visible without overwhelming the evidence.',
+            title: t('graphRagUi.rightPanel.cards.reasoningPath.title'),
+            copy: t('graphRagUi.rightPanel.cards.reasoningPath.copy'),
           },
           {
             icon: BookOpen,
-            title: 'Passage access',
-            copy: 'Move from node to source card to passage context without losing orientation.',
+            title: t('graphRagUi.rightPanel.cards.passageAccess.title'),
+            copy: t('graphRagUi.rightPanel.cards.passageAccess.copy'),
           },
         ].map(({ icon: Icon, title, copy }) => (
           <div
@@ -283,6 +616,8 @@ function IdleState() {
 }
 
 function LoadingState() {
+  const { t } = useTranslation();
+
   return (
     <motion.div
       key="loading"
@@ -293,10 +628,14 @@ function LoadingState() {
       className="flex h-full min-h-0 flex-col gap-4 p-4"
     >
       <div className="relative flex min-h-[360px] flex-1 overflow-hidden rounded-[30px] border border-stone-200/80 bg-[radial-gradient(circle_at_top_left,_rgba(255,244,227,0.96),_rgba(255,255,255,0.98)_44%,_rgba(247,242,232,0.98)_100%)] p-6">
-        <div className="absolute inset-0 opacity-50" style={{
-          backgroundImage: 'linear-gradient(rgba(148,163,184,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.08) 1px, transparent 1px)',
-          backgroundSize: '24px 24px',
-        }} />
+        <div
+          className="absolute inset-0 opacity-50"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(148,163,184,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.08) 1px, transparent 1px)',
+            backgroundSize: '24px 24px',
+          }}
+        />
 
         <div className="relative flex w-full flex-col justify-between">
           <div className="flex items-center gap-3">
@@ -314,10 +653,10 @@ function LoadingState() {
             </div>
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-                GraphRAG in motion
+                {t('graphRagUi.rightPanel.loadingBadge')}
               </p>
               <p className="mt-1 text-base font-semibold text-stone-900">
-                Building the answer graph
+                {t('graphRagUi.rightPanel.loadingTitle')}
               </p>
             </div>
           </div>
@@ -345,7 +684,7 @@ function LoadingState() {
           <div className="mt-8 rounded-[24px] border border-stone-200/80 bg-white/84 p-4 shadow-[0_20px_50px_-36px_rgba(120,53,15,0.28)]">
             <div className="flex items-center gap-2 text-sm font-medium text-stone-700">
               <Waypoints className="h-4 w-4 text-amber-700" />
-              Traversing source nodes, anchor entities, and citation bridges...
+              {t('graphRagUi.rightPanel.loadingBody')}
             </div>
           </div>
         </div>
@@ -369,6 +708,7 @@ export default function RightPanel({
   onHighlightRef,
   className = '',
 }: RightPanelProps) {
+  const { t } = useTranslation();
   const sources: SourceCitation[] = response?.sources ?? [];
   const activeSource =
     activeSourceIndex !== null && activeSourceIndex < sources.length
@@ -421,31 +761,16 @@ export default function RightPanel({
             {state === 'loading' && <LoadingState />}
 
             {state === 'graph' && (
-              <motion.div
-                key="graph"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.28 }}
-                className="space-y-4 p-4"
-              >
-                <div className="h-[380px] min-h-[380px] xl:h-[430px]">
-                  <CosmographView
-                    response={response}
-                    allResponses={allResponses}
-                    highlightedSourceIndex={activeSourceIndex}
-                    onNodeClick={onNodeClick}
-                    onSourceSelect={onSourceSelect}
-                    onHighlightRef={onHighlightRef}
-                  />
-                </div>
-
-                <SourceRail
-                  sources={sources}
-                  activeSourceIndex={activeSourceIndex}
-                  onSourceSelect={onSourceSelect}
-                />
-              </motion.div>
+              <GraphWorkspace
+                response={response}
+                allResponses={allResponses}
+                sources={sources}
+                activeSourceIndex={activeSourceIndex}
+                conversationCount={workspaceConversationCount}
+                onNodeClick={onNodeClick}
+                onSourceSelect={onSourceSelect}
+                onHighlightRef={onHighlightRef}
+              />
             )}
 
             {state === 'source-detail' && (
@@ -457,7 +782,7 @@ export default function RightPanel({
                 transition={{ duration: 0.24 }}
                 className="space-y-4 p-4"
               >
-                <div className="h-[280px] min-h-[280px]">
+                <div className="h-[320px] min-h-[320px]">
                   <CosmographView
                     response={response}
                     allResponses={allResponses}
@@ -490,7 +815,7 @@ export default function RightPanel({
                         exit={{ opacity: 0 }}
                         className="flex min-h-[320px] items-center justify-center rounded-[26px] border border-dashed border-stone-300 bg-white/70 text-sm text-stone-500"
                       >
-                        No source selected.
+                        {t('graphRagUi.rightPanel.noSourceSelected')}
                       </motion.div>
                     )}
                   </AnimatePresence>
