@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { X, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { ArrowUpRight, ChevronLeft, ChevronRight, Quote, X } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import type { SourceCitation } from '../../types';
+import { formatGraphNodeType, getGraphTypeTheme } from './graphTheme';
 
 interface SourceDetailCardProps {
   source: SourceCitation;
@@ -14,16 +15,21 @@ interface SourceDetailCardProps {
   onNext: () => void;
 }
 
-const NODE_TYPE_STYLES: Record<string, string> = {
-  person: 'bg-blue-50 text-blue-700 border-blue-200',
-  concept: 'bg-green-50 text-green-700 border-green-200',
-  argument: 'bg-purple-50 text-purple-700 border-purple-200',
-  work: 'bg-amber-50 text-amber-700 border-amber-200',
-  default: 'bg-stone-50 text-stone-700 border-stone-200',
-};
+function formatConfidence(confidence?: number) {
+  if (confidence === undefined || Number.isNaN(confidence)) {
+    return null;
+  }
 
-function getTypeStyle(type: string) {
-  return NODE_TYPE_STYLES[type.toLowerCase()] ?? NODE_TYPE_STYLES.default;
+  const normalized = confidence <= 1 ? confidence * 100 : confidence;
+  return `${Math.round(normalized)}%`;
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-400">
+      {children}
+    </p>
+  );
 }
 
 export default function SourceDetailCard({
@@ -36,113 +42,166 @@ export default function SourceDetailCard({
   onNext,
 }: SourceDetailCardProps) {
   const navigate = useNavigate();
+  const theme = getGraphTypeTheme(source.nodeType);
+  const confidence = formatConfidence(source.metadata?.confidence);
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      transition={{ duration: 0.2, ease: 'easeOut' }}
-      className="bg-white rounded-xl shadow-md border border-amber-200 overflow-hidden flex flex-col h-full"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -18 }}
+      transition={{ duration: 0.24, ease: 'easeOut' }}
+      className="flex h-full min-h-0 flex-col overflow-hidden rounded-[26px] border border-stone-200/80 bg-white/88 shadow-[0_30px_80px_-46px_rgba(120,53,15,0.4)] backdrop-blur-xl"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-amber-200/40 shrink-0">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="flex items-center justify-center w-6 h-6 rounded-md bg-stone-100 text-xs font-bold text-stone-600">
-            {source.id}
-          </span>
-          <span
-            className={cn(
-              'inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border',
-              getTypeStyle(source.nodeType),
+      <div
+        className="relative overflow-hidden border-b border-stone-200/70 px-5 py-4"
+        style={{
+          background: `linear-gradient(135deg, ${theme.tint}, rgba(255,255,255,0.96) 58%, rgba(252,249,244,0.92) 100%)`,
+        }}
+      >
+        <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full blur-2xl" style={{ backgroundColor: `${theme.color}22` }} />
+        <div className="relative flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-white/88 text-sm font-bold text-stone-700 shadow-sm">
+                {source.id}
+              </span>
+              <span
+                className="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold"
+                style={{
+                  borderColor: theme.border,
+                  backgroundColor: theme.tint,
+                  color: theme.text,
+                }}
+              >
+                {formatGraphNodeType(source.nodeType)}
+              </span>
+              {confidence && (
+                <span className="inline-flex items-center rounded-full border border-amber-200/80 bg-amber-50/90 px-2.5 py-1 text-[11px] font-medium text-amber-800">
+                  Confidence {confidence}
+                </span>
+              )}
+            </div>
+            <h3 className="mt-3 font-display text-[1.45rem] leading-tight text-stone-900">
+              {source.nodeLabel}
+            </h3>
+            {(source.metadata?.period || source.metadata?.school) && (
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-stone-500">
+                {source.metadata?.period && (
+                  <span className="rounded-full border border-stone-200/80 bg-white/70 px-2.5 py-1">
+                    {source.metadata.period}
+                  </span>
+                )}
+                {source.metadata?.school && (
+                  <span className="rounded-full border border-stone-200/80 bg-white/70 px-2.5 py-1 italic">
+                    {source.metadata.school as string}
+                  </span>
+                )}
+              </div>
             )}
+          </div>
+
+          <button
+            onClick={onClose}
+            className="shrink-0 rounded-2xl border border-white/70 bg-white/88 p-2 text-stone-500 shadow-sm transition-colors hover:text-stone-900"
+            aria-label="Close source detail"
+            type="button"
           >
-            {source.nodeType || 'Source'}
-          </span>
-          <span className="text-sm font-medium text-stone-800 truncate">{source.nodeLabel}</span>
+            <X className="h-4 w-4" />
+          </button>
         </div>
-        <button
-          onClick={onClose}
-          className="ml-2 shrink-0 p-1.5 rounded-lg hover:bg-stone-100 text-stone-400 hover:text-stone-600 transition-colors"
-          aria-label="Close source detail"
-        >
-          <X className="w-3.5 h-3.5" />
-        </button>
       </div>
 
-      {/* Body */}
-      <div className="flex-1 px-4 py-3 space-y-3 text-sm overflow-y-auto">
-        {citationText?.original && (
-          <div className="space-y-1">
-            <div className="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">
-              {citationText.originalLanguage === 'greek'
-                ? 'Greek'
-                : citationText.originalLanguage === 'latin'
-                  ? 'Latin'
-                  : 'Original'}
-            </div>
-            <p className="font-serif italic text-stone-700 leading-relaxed text-[13px]">
-              {citationText.original}
+      <div className="flex-1 overflow-y-auto px-5 py-4">
+        <div className="space-y-4">
+          <div className="rounded-[22px] border border-stone-200/70 bg-[linear-gradient(180deg,rgba(252,249,244,0.95),rgba(255,255,255,0.98))] p-4">
+            <SectionLabel>Why this source matters</SectionLabel>
+            <p className="mt-2 text-sm leading-7 text-stone-600">
+              {source.content || 'This citation is part of the evidence set used to assemble the answer graph and ground the synthesis.'}
             </p>
           </div>
-        )}
-        {citationText?.translation && (
-          <div className="space-y-1">
-            <div className="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">
-              Translation
+
+          {citationText?.original && (
+            <div className="rounded-[22px] border border-stone-200/70 bg-white/92 p-4 shadow-[0_16px_40px_-34px_rgba(120,53,15,0.3)]">
+              <SectionLabel>
+                {citationText.originalLanguage === 'greek'
+                  ? 'Greek text'
+                  : citationText.originalLanguage === 'latin'
+                    ? 'Latin text'
+                    : 'Original text'}
+              </SectionLabel>
+              <div className="mt-3 flex gap-3">
+                <div
+                  className="mt-0.5 h-10 w-1 rounded-full"
+                  style={{ backgroundColor: theme.color }}
+                />
+                <p className="font-ancient text-[1rem] italic leading-8 text-stone-800">
+                  {citationText.original}
+                </p>
+              </div>
             </div>
-            <p className="text-stone-600 leading-relaxed text-[13px]">{citationText.translation}</p>
-          </div>
-        )}
-        {!citationText?.original && !citationText?.translation && (
-          <p className="text-stone-400 italic text-xs">No passage text available for this source.</p>
-        )}
-        {(source.metadata?.period || source.metadata?.school) && (
-          <div className="flex items-center gap-3 pt-1">
-            {source.metadata?.period && (
-              <span className="text-[10px] text-stone-400 font-medium">
-                {source.metadata.period}
-              </span>
-            )}
-            {source.metadata?.school && (
-              <span className="text-[10px] text-stone-400 italic">
-                {source.metadata.school as string}
-              </span>
-            )}
-          </div>
-        )}
+          )}
+
+          {citationText?.translation && (
+            <div className="rounded-[22px] border border-stone-200/70 bg-parchment-50/72 p-4">
+              <SectionLabel>Translation</SectionLabel>
+              <div className="mt-3 flex gap-3">
+                <Quote className="mt-0.5 h-4 w-4 shrink-0 text-stone-400" />
+                <p className="text-sm leading-7 text-stone-700">
+                  {citationText.translation}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {!citationText?.original && !citationText?.translation && (
+            <div className="rounded-[22px] border border-dashed border-stone-300 bg-stone-50/80 p-4 text-sm text-stone-500">
+              Passage text is not available for this citation yet, but the node remains part of the selected answer graph.
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-t border-amber-200/40 bg-parchment-50/50 shrink-0">
-        <div className="flex items-center gap-1.5">
+      <div className="flex items-center justify-between border-t border-stone-200/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(252,249,244,0.92))] px-5 py-3">
+        <div className="flex items-center gap-2">
           <button
             onClick={onPrev}
             disabled={citationIndex <= 0}
-            className="p-1.5 rounded-lg hover:bg-stone-200 disabled:opacity-25 transition-colors text-stone-500"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-stone-200/80 bg-white text-stone-500 transition-all hover:border-stone-300 hover:text-stone-900 disabled:opacity-35"
             aria-label="Previous source"
+            type="button"
           >
-            <ChevronLeft className="w-3.5 h-3.5" />
+            <ChevronLeft className="h-4 w-4" />
           </button>
-          <span className="text-[10px] font-medium text-stone-400 tabular-nums min-w-[40px] text-center">
-            {citationIndex + 1} / {totalCitations}
-          </span>
+          <div className="rounded-full border border-stone-200/80 bg-white/85 px-3 py-1.5 text-xs font-medium text-stone-500">
+            Source {citationIndex + 1} of {totalCitations}
+          </div>
           <button
             onClick={onNext}
             disabled={citationIndex >= totalCitations - 1}
-            className="p-1.5 rounded-lg hover:bg-stone-200 disabled:opacity-25 transition-colors text-stone-500"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-stone-200/80 bg-white text-stone-500 transition-all hover:border-stone-300 hover:text-stone-900 disabled:opacity-35"
             aria-label="Next source"
+            type="button"
           >
-            <ChevronRight className="w-3.5 h-3.5" />
+            <ChevronRight className="h-4 w-4" />
           </button>
         </div>
+
         {source.nodeId && !source.nodeId.startsWith('source_') && (
           <button
             onClick={() => navigate(`/node/${source.nodeId}`)}
-            className="flex items-center gap-1 text-[10px] font-medium text-orange-600 hover:text-orange-700 transition-colors"
+            className={cn(
+              'inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold transition-colors',
+            )}
+            style={{
+              borderColor: theme.border,
+              backgroundColor: theme.tint,
+              color: theme.text,
+            }}
+            type="button"
           >
-            View in Visualizer
-            <ExternalLink className="w-3 h-3" />
+            Open node
+            <ArrowUpRight className="h-3.5 w-3.5" />
           </button>
         )}
       </div>

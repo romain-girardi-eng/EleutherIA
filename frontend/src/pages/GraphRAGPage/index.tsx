@@ -67,15 +67,19 @@ export default function GraphRAGPage() {
     }
   }, []);
 
-  const handlePassageCitationClick = useCallback(async (passageOrNodeId: string) => {
+  const handlePassageCitationClick = useCallback(async (passageOrNodeId: string, fallbackSourceIndex?: number) => {
     setRightPanelState('loading');
     const ctx = await fetchPassageContext(passageOrNodeId, passageWindow);
     if (ctx) {
       setPassageContext(ctx);
       setRightPanelState('passage-reader');
     } else {
-      // No linked passage found — fall back to source detail or graph
-      setRightPanelState(rightPanelResponse ? 'source-detail' : 'graph');
+      if (fallbackSourceIndex !== undefined) {
+        setActiveSourceIndex(fallbackSourceIndex);
+        setRightPanelState('source-detail');
+      } else {
+        setRightPanelState(rightPanelResponse ? 'graph' : 'idle');
+      }
     }
   }, [fetchPassageContext, passageWindow, rightPanelResponse]);
 
@@ -94,12 +98,12 @@ export default function GraphRAGPage() {
     // passage UUIDs and KG node IDs to actual ancient text passages.
     const sources = rightPanelResponse?.sources ?? [];
     const source = sources[citationIndex];
+    setActiveSourceIndex(citationIndex);
     if (source?.nodeId) {
       // Try passage reader for any citation — backend handles KG→passage resolution
-      handlePassageCitationClick(source.nodeId);
+      handlePassageCitationClick(source.nodeId, citationIndex);
       return;
     }
-    setActiveSourceIndex(citationIndex);
     setRightPanelState('source-detail');
     highlightNodeRef.current?.(citationIndex);
   };
@@ -112,6 +116,12 @@ export default function GraphRAGPage() {
     const sources = rightPanelResponse?.sources ?? [];
     setActiveSourceIndex(prev => (prev !== null && prev < sources.length - 1 ? prev + 1 : prev));
   };
+
+  const handleSourceSelect = useCallback((sourceIndex: number) => {
+    setActiveSourceIndex(sourceIndex);
+    setRightPanelState('source-detail');
+    highlightNodeRef.current?.(sourceIndex);
+  }, []);
 
   // Measure nav height so two-column layout sits flush below the fixed nav
   const [navHeight, setNavHeight] = useState(57);
@@ -578,12 +588,9 @@ export default function GraphRAGPage() {
                 onPassageCitationClick={handlePassageCitationClick}
               />
 
-              {/* RIGHT PANEL - 35% (desktop only) */}
-              <div className="hidden lg:flex flex-col w-[35%] h-full bg-parchment-50 border-l border-amber-200/40">
-                <div className="shrink-0 px-4 py-3 border-b border-amber-200/40">
-                  <h2 className="text-sm font-semibold text-stone-400 uppercase tracking-wider">Knowledge Graph</h2>
-                </div>
-                <div className="flex-1 min-h-0 overflow-hidden">
+              {/* RIGHT PANEL - desktop graph workspace */}
+              <div className="hidden lg:flex flex-col w-[40%] h-full bg-parchment-50 border-l border-amber-200/40">
+                <div className="flex-1 min-h-0 overflow-hidden p-3 xl:p-4">
                   <RightPanel
                     state={rightPanelState}
                     response={rightPanelResponse}
@@ -591,6 +598,7 @@ export default function GraphRAGPage() {
                     activeSourceIndex={activeSourceIndex}
                     passageContext={passageContext}
                     onNodeClick={handleNodeClick}
+                    onSourceSelect={handleSourceSelect}
                     onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
                     onPrevSource={onPrevSource}
                     onNextSource={onNextSource}
@@ -607,10 +615,13 @@ export default function GraphRAGPage() {
                 response={rightPanelResponse}
                 allResponses={allResponses}
                 activeSourceIndex={activeSourceIndex}
+                passageContext={passageContext}
                 onNodeClick={handleNodeClick}
-                onCloseDetail={() => setRightPanelState('graph')}
+                onSourceSelect={handleSourceSelect}
+                onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
                 onPrevSource={onPrevSource}
                 onNextSource={onNextSource}
+                onLoadMorePassages={handleLoadMorePassages}
                 onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
               />
             </div>
