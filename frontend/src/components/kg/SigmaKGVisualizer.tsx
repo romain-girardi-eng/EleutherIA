@@ -55,7 +55,7 @@ function buildCommunityColors(
     const typeCounts = new Map<string, number>();
     for (const nodeId of nodeIds) {
       try {
-        const t = graph.getNodeAttribute(nodeId, 'type') ?? 'default';
+        const t = graph.getNodeAttribute(nodeId, 'nodeType') ?? 'default';
         typeCounts.set(t, (typeCounts.get(t) ?? 0) + 1);
       } catch {
         // node may not exist
@@ -105,6 +105,7 @@ function buildCommunityLabels(
 // ---------------------------------------------------------------------------
 
 const SIGMA_SETTINGS = {
+  defaultNodeType: 'circle',
   renderLabels: true,
   labelRenderedSizeThreshold: 6,
   labelFont: 'Inter, system-ui, sans-serif',
@@ -214,7 +215,7 @@ function SigmaGraph({
         // Toggle passage expansion for aggregate work nodes
         try {
           const attrs = g.getNodeAttributes(nodeId);
-          if (attrs.isAggregate && attrs.type === 'work') {
+          if (attrs.isAggregate && attrs.nodeType === 'work') {
             if (attrs.passagesExpanded) {
               collapseWorkPassages(g, nodeId, hiddenRef.current);
               expandedWorksRef.current.delete(nodeId);
@@ -240,7 +241,7 @@ function SigmaGraph({
             onNodeSelect?.({
               id: attrs.originalId,
               label: attrs.label,
-              type: attrs.type,
+              type: attrs.nodeType,
               description: attrs.description,
               period: attrs.period,
               metadata: attrs.metadata as KGNode['metadata'],

@@ -6,7 +6,7 @@ import type { KGNodeAttributes, KGEdgeAttributes } from '@/types/sigma';
 
 function makeTwoClusterGraph(): Graph<KGNodeAttributes, KGEdgeAttributes> {
   const g = new Graph<KGNodeAttributes, KGEdgeAttributes>();
-  const attrs = (label: string) => ({ label, type: 'person' as const, x: 0, y: 0, size: 10, color: '#000', originalId: label });
+  const attrs = (label: string) => ({ label, nodeType: 'person' as const, x: 0, y: 0, size: 10, color: '#000', originalId: label });
   g.addNode('a', attrs('A'));
   g.addNode('b', attrs('B'));
   g.addNode('c', attrs('C'));
@@ -35,7 +35,7 @@ describe('detectCommunities', () => {
 
   it('falls back to type-based communities for degenerate results', () => {
     const g = new Graph<KGNodeAttributes, KGEdgeAttributes>();
-    g.addNode('a', { label: 'A', type: 'person', x: 0, y: 0, size: 10, color: '#000', originalId: 'a' });
+    g.addNode('a', { label: 'A', nodeType: 'person', x: 0, y: 0, size: 10, color: '#000', originalId: 'a' });
     const communities = detectCommunities(g);
     expect(communities.size).toBe(1);
   });

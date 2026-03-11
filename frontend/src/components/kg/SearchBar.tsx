@@ -30,7 +30,7 @@ export default function SearchBar() {
         matches.push({
           id: nodeId,
           label: a.label,
-          type: a.type,
+          type: a.nodeType,
           color: a.color,
         });
       }

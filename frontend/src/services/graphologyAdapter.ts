@@ -26,7 +26,7 @@ export function buildGraph(
 
     graph.addNode(id, {
       label: label ?? id,
-      type: nodeType,
+      nodeType,
       x: Math.random() * 1000,
       y: Math.random() * 1000,
       size: TYPE_SIZES[nodeType] ?? TYPE_SIZES.default,

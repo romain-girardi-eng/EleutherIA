@@ -9,12 +9,12 @@ export function aggregatePassages(
   const workPassageCounts = new Map<string, number>();
 
   graph.forEachNode((nodeId, attrs) => {
-    if (attrs.type !== 'passage') return;
+    if (attrs.nodeType !== 'passage') return;
     hidden.add(nodeId);
 
     // Find parent work via incoming 'contains' edge
     graph.forEachInEdge(nodeId, (_edgeId, edgeAttrs, sourceId, _targetId, sourceAttrs) => {
-      if (edgeAttrs.relation === 'contains' && sourceAttrs.type === 'work') {
+      if (edgeAttrs.relation === 'contains' && sourceAttrs.nodeType === 'work') {
         workPassageCounts.set(sourceId, (workPassageCounts.get(sourceId) ?? 0) + 1);
       }
     });
@@ -22,9 +22,9 @@ export function aggregatePassages(
 
   // Also check outgoing 'part_of' edges (inverse of contains)
   graph.forEachNode((nodeId, attrs) => {
-    if (attrs.type !== 'passage' || !hidden.has(nodeId)) return;
+    if (attrs.nodeType !== 'passage' || !hidden.has(nodeId)) return;
     graph.forEachOutEdge(nodeId, (_edgeId, edgeAttrs, _sourceId, targetId, _sourceAttrs, targetAttrs) => {
-      if (edgeAttrs.relation === 'part_of' && targetAttrs.type === 'work') {
+      if (edgeAttrs.relation === 'part_of' && targetAttrs.nodeType === 'work') {
         if (!workPassageCounts.has(targetId)) {
           workPassageCounts.set(targetId, 0);
         }
@@ -52,7 +52,7 @@ export function expandWorkPassages(
   const restored: string[] = [];
 
   graph.forEachOutEdge(workId, (_edgeId, edgeAttrs, _sourceId, targetId, _sourceAttrs, targetAttrs) => {
-    if (edgeAttrs.relation === 'contains' && targetAttrs.type === 'passage' && hidden.has(targetId)) {
+    if (edgeAttrs.relation === 'contains' && targetAttrs.nodeType === 'passage' && hidden.has(targetId)) {
       restored.push(targetId);
     }
   });
@@ -77,7 +77,7 @@ export function collapseWorkPassages(
   hidden: Set<string>,
 ): void {
   graph.forEachOutEdge(workId, (_edgeId, edgeAttrs, _sourceId, targetId, _sourceAttrs, targetAttrs) => {
-    if (edgeAttrs.relation === 'contains' && targetAttrs.type === 'passage') {
+    if (edgeAttrs.relation === 'contains' && targetAttrs.nodeType === 'passage') {
       hidden.add(targetId);
     }
   });

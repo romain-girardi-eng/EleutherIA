@@ -6,9 +6,9 @@ import type { KGNodeAttributes, KGEdgeAttributes } from '@/types/sigma';
 
 function makeTestGraph(): Graph<KGNodeAttributes, KGEdgeAttributes> {
   const g = new Graph<KGNodeAttributes, KGEdgeAttributes>();
-  g.addNode('a', { label: 'A', type: 'person', x: 0, y: 0, size: 10, color: '#000', originalId: 'a' });
-  g.addNode('b', { label: 'B', type: 'concept', x: 0, y: 0, size: 8, color: '#000', originalId: 'b' });
-  g.addNode('c', { label: 'C', type: 'school', x: 0, y: 0, size: 9, color: '#000', originalId: 'c' });
+  g.addNode('a', { label: 'A', nodeType: 'person', x: 0, y: 0, size: 10, color: '#000', originalId: 'a' });
+  g.addNode('b', { label: 'B', nodeType: 'concept', x: 0, y: 0, size: 8, color: '#000', originalId: 'b' });
+  g.addNode('c', { label: 'C', nodeType: 'school', x: 0, y: 0, size: 9, color: '#000', originalId: 'c' });
   g.addEdge('a', 'b', { relation: 'discusses', category: 'semantic', size: 1 });
   g.addEdge('a', 'c', { relation: 'member_of', category: 'affiliation', size: 1 });
   return g;

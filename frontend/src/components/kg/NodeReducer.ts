@@ -25,9 +25,9 @@ export function createNodeReducer(state: NodeReducerState) {
     }
 
     const degree = nodeDegrees.get(node) ?? 0;
-    const isExpanded = data.type === 'passage' && expandedWorks.size > 0;
+    const isExpanded = data.nodeType === 'passage' && expandedWorks.size > 0;
 
-    if (!shouldShowNode(data.type, zoomLevel, degree, isExpanded)) {
+    if (!shouldShowNode(data.nodeType, zoomLevel, degree, isExpanded)) {
       return { hidden: true };
     }
 

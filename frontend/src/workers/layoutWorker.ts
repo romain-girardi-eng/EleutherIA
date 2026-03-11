@@ -17,7 +17,7 @@ export interface LayoutOptions {
 }
 
 const DEFAULTS: Required<LayoutOptions> = {
-  iterations: 500,
+  iterations: 100,
   gravity: 1.0,
   scalingRatio: 2.0,
   linLogMode: true,
@@ -25,7 +25,7 @@ const DEFAULTS: Required<LayoutOptions> = {
   barnesHutTheta: 0.5,
   strongGravityMode: false,
   slowDown: 10,
-  noverlapIterations: 300,
+  noverlapIterations: 50,
 };
 
 /**

@@ -34,7 +34,7 @@ export default function NodeTooltip() {
 
   if (!tooltip) return null;
 
-  const theme = getGraphTypeTheme(tooltip.attrs.type);
+  const theme = getGraphTypeTheme(tooltip.attrs.nodeType);
 
   return (
     <div
@@ -57,7 +57,7 @@ export default function NodeTooltip() {
           className="text-xs px-1.5 py-0.5 rounded"
           style={{ backgroundColor: theme.tint, color: theme.text, border: `1px solid ${theme.border}` }}
         >
-          {formatGraphNodeType(tooltip.attrs.type)}
+          {formatGraphNodeType(tooltip.attrs.nodeType)}
         </span>
         {tooltip.attrs.period && (
           <p className="text-xs text-slate-400 mt-1">{tooltip.attrs.period}</p>
