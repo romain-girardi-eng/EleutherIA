@@ -291,7 +291,7 @@ export function extractReasoningPaths(
         id: e.edge_id || e.id || '',
         source: e.source_id || e.source,
         target: e.target_id || e.target,
-        relation: e.relation || e.type || 'relates_to',
+        relation: e.relation || e.type || 'related_to',
         description: e.description,
       }));
 
