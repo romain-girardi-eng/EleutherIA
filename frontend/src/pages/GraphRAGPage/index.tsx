@@ -76,7 +76,7 @@ export default function GraphRAGPage() {
     } else {
       if (fallbackSourceIndex !== undefined) {
         setActiveSourceIndex(fallbackSourceIndex);
-        setRightPanelState('source-detail');
+        setRightPanelState(rightPanelResponse ? 'graph' : 'idle');
       } else {
         setRightPanelState(rightPanelResponse ? 'graph' : 'idle');
       }
@@ -104,22 +104,12 @@ export default function GraphRAGPage() {
       handlePassageCitationClick(source.nodeId, citationIndex);
       return;
     }
-    setRightPanelState('source-detail');
     highlightNodeRef.current?.(citationIndex);
   };
 
-  const onPrevSource = () => {
-    setActiveSourceIndex(prev => (prev !== null && prev > 0 ? prev - 1 : prev));
-  };
-
-  const onNextSource = () => {
-    const sources = rightPanelResponse?.sources ?? [];
-    setActiveSourceIndex(prev => (prev !== null && prev < sources.length - 1 ? prev + 1 : prev));
-  };
 
   const handleSourceSelect = useCallback((sourceIndex: number) => {
     setActiveSourceIndex(sourceIndex);
-    setRightPanelState('source-detail');
     highlightNodeRef.current?.(sourceIndex);
   }, []);
 
@@ -600,8 +590,6 @@ export default function GraphRAGPage() {
                     onNodeClick={handleNodeClick}
                     onSourceSelect={handleSourceSelect}
                     onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
-                    onPrevSource={onPrevSource}
-                    onNextSource={onNextSource}
                     onLoadMorePassages={handleLoadMorePassages}
                     onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
                     className="h-full"
@@ -619,8 +607,6 @@ export default function GraphRAGPage() {
                 onNodeClick={handleNodeClick}
                 onSourceSelect={handleSourceSelect}
                 onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
-                onPrevSource={onPrevSource}
-                onNextSource={onNextSource}
                 onLoadMorePassages={handleLoadMorePassages}
                 onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
               />

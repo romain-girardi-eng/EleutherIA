@@ -1,18 +1,17 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { BookOpen, LayoutGrid, Network, Orbit, Quote, Sparkles, Waypoints } from 'lucide-react';
-import CosmographView from './CosmographView';
-import SourceDetailCard from './SourceDetailCard';
+import { useNavigate } from 'react-router-dom';
+import { BookOpen, Network, Quote, Sparkles, Waypoints } from 'lucide-react';
+import TraversalDAG from './TraversalDAG';
+import NodeDetailCard from './NodeDetailCard';
 import PassageReaderPanel from './PassageReaderPanel';
 import { cn } from '../../utils/cn';
 import type { GraphRAGResponse, SourceCitation } from '../../types';
 import type { PassageContext } from '../../types/graphrag';
 import { formatGraphNodeType, getGraphTypeTheme } from './graphTheme';
 
-export type RightPanelState = 'idle' | 'loading' | 'graph' | 'source-detail' | 'passage-reader';
-
-type WorkspaceDeck = 'sources' | 'path' | 'overview';
+export type RightPanelState = 'idle' | 'loading' | 'graph' | 'passage-reader';
 
 interface RightPanelProps {
   state: RightPanelState;
@@ -22,8 +21,6 @@ interface RightPanelProps {
   passageContext?: PassageContext | null;
   onNodeClick: (nodeId: string) => void;
   onCloseDetail: () => void;
-  onPrevSource: () => void;
-  onNextSource: () => void;
   onSourceSelect?: (sourceIndex: number) => void;
   onLoadMorePassages?: (direction: 'up' | 'down') => void;
   onHighlightRef?: (fn: (citationIndex: number) => void) => void;
@@ -81,7 +78,6 @@ function PanelHeader({
     idle: t('graphRagUi.rightPanel.states.idle'),
     loading: t('graphRagUi.rightPanel.states.loading'),
     graph: t('graphRagUi.rightPanel.states.graph'),
-    'source-detail': t('graphRagUi.rightPanel.states.sourceDetail'),
     'passage-reader': t('graphRagUi.rightPanel.states.passageReader'),
   };
 
@@ -124,34 +120,6 @@ function PanelHeader({
         />
       </div>
     </div>
-  );
-}
-
-function DeckButton({
-  active,
-  icon: Icon,
-  label,
-  onClick,
-}: {
-  active: boolean;
-  icon: typeof LayoutGrid;
-  label: string;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      type="button"
-      className={cn(
-        'inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition-all',
-        active
-          ? 'bg-stone-900 text-white shadow-[0_20px_36px_-24px_rgba(28,25,23,0.55)]'
-          : 'bg-white/72 text-stone-500 hover:bg-white hover:text-stone-900',
-      )}
-    >
-      <Icon className="h-4 w-4" />
-      {label}
-    </button>
   );
 }
 
@@ -238,318 +206,6 @@ function SourcesDeck({
         );
       })}
     </div>
-  );
-}
-
-function ReasoningDeck({
-  response,
-  onNodeClick,
-}: {
-  response: GraphRAGResponse | null;
-  onNodeClick: (nodeId: string) => void;
-}) {
-  const { t } = useTranslation();
-  const startingNodes = response?.reasoning_path?.starting_nodes ?? [];
-  const expandedNodes = response?.reasoning_path?.expanded_nodes ?? [];
-  const traversedEdges = response?.reasoning_path?.traversed_edges ?? [];
-
-  return (
-    <div className="space-y-4">
-      <div className="grid gap-3 xl:grid-cols-[1.05fr_0.95fr]">
-        <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-            {t('graphRagUi.rightPanel.startingNodes')}
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {startingNodes.length === 0 && (
-              <p className="text-sm text-stone-500">{t('graphRagUi.rightPanel.noStartingNodes')}</p>
-            )}
-            {startingNodes.map((node) => {
-              const theme = getGraphTypeTheme(node.type);
-              return (
-                <button
-                  key={node.id}
-                  type="button"
-                  onClick={() => onNodeClick(node.id)}
-                  className="rounded-full border px-3 py-2 text-left text-sm font-medium transition-colors hover:brightness-[0.98]"
-                  style={{
-                    borderColor: theme.border,
-                    backgroundColor: theme.tint,
-                    color: theme.text,
-                  }}
-                >
-                  {node.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-            {t('graphRagUi.rightPanel.traversalLinks')}
-          </p>
-          <div className="mt-3 space-y-2">
-            {traversedEdges.slice(0, 5).map((edge, index) => (
-              <div
-                key={`${edge.source}-${edge.target}-${index}`}
-                className="rounded-[18px] border border-stone-200/70 bg-stone-50/80 px-3 py-2.5 text-sm text-stone-600"
-              >
-                <span className="font-medium text-stone-900">{edge.source}</span>
-                <span className="mx-2 text-stone-400">→</span>
-                <span className="font-medium text-stone-900">{edge.target}</span>
-                {edge.relation && (
-                  <span className="ml-2 text-xs uppercase tracking-[0.16em] text-stone-400">
-                    {edge.relation}
-                  </span>
-                )}
-              </div>
-            ))}
-            {traversedEdges.length === 0 && (
-              <p className="text-sm text-stone-500">{t('graphRagUi.rightPanel.noTraversalLinks')}</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-          {t('graphRagUi.rightPanel.expandedNodes')}
-        </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {expandedNodes.length === 0 && (
-            <p className="text-sm text-stone-500">{t('graphRagUi.rightPanel.noExpandedNodes')}</p>
-          )}
-          {expandedNodes.map((node) => {
-            const theme = getGraphTypeTheme(node.type);
-            return (
-              <button
-                key={node.id}
-                type="button"
-                onClick={() => onNodeClick(node.id)}
-                className="rounded-full border px-3 py-2 text-left text-sm font-medium transition-colors hover:brightness-[0.98]"
-                style={{
-                  borderColor: theme.border,
-                  backgroundColor: theme.tint,
-                  color: theme.text,
-                }}
-              >
-                {node.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function OverviewDeck({
-  response,
-  sources,
-  conversationCount,
-}: {
-  response: GraphRAGResponse | null;
-  sources: SourceCitation[];
-  conversationCount: number;
-}) {
-  const { t } = useTranslation();
-  const typeSummary = useMemo(() => {
-    const counts = new Map<string, number>();
-    sources.forEach((source) => {
-      const key = source.nodeType || 'default';
-      counts.set(key, (counts.get(key) ?? 0) + 1);
-    });
-    return [...counts.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 4);
-  }, [sources]);
-
-  return (
-    <div className="grid gap-3 xl:grid-cols-[1fr_1fr]">
-      <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-          {t('graphRagUi.rightPanel.readingProfile')}
-        </p>
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <div className="rounded-[18px] bg-stone-50/80 px-3 py-3">
-            <p className="text-[10px] uppercase tracking-[0.16em] text-stone-400">{t('graphrag.model')}</p>
-            <p className="mt-1 text-sm font-medium text-stone-900">{response?.llm_model || '--'}</p>
-          </div>
-          <div className="rounded-[18px] bg-stone-50/80 px-3 py-3">
-            <p className="text-[10px] uppercase tracking-[0.16em] text-stone-400">{t('graphRagUi.rightPanel.time')}</p>
-            <p className="mt-1 text-sm font-medium text-stone-900">
-              {response?.processing_time ? `${(response.processing_time / 1000).toFixed(1)}s` : '--'}
-            </p>
-          </div>
-          <div className="rounded-[18px] bg-stone-50/80 px-3 py-3">
-            <p className="text-[10px] uppercase tracking-[0.16em] text-stone-400">{t('graphRagUi.rightPanel.metrics.conversation')}</p>
-            <p className="mt-1 text-sm font-medium text-stone-900">{conversationCount}</p>
-          </div>
-          <div className="rounded-[18px] bg-stone-50/80 px-3 py-3">
-            <p className="text-[10px] uppercase tracking-[0.16em] text-stone-400">{t('graphRagUi.rightPanel.grounding')}</p>
-            <p className="mt-1 text-sm font-medium text-stone-900">
-              {formatConfidence(response?.quality_metrics?.grounding_score)}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-[24px] border border-stone-200/80 bg-white/82 p-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-          {t('graphRagUi.rightPanel.sourceComposition')}
-        </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {typeSummary.length === 0 && (
-            <p className="text-sm text-stone-500">{t('graphRagUi.rightPanel.noSourceComposition')}</p>
-          )}
-          {typeSummary.map(([type, count]) => {
-            const theme = getGraphTypeTheme(type);
-            return (
-              <span
-                key={type}
-                className="inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-medium"
-                style={{
-                  borderColor: theme.border,
-                  backgroundColor: theme.tint,
-                  color: theme.text,
-                }}
-              >
-                {formatGraphNodeType(type)}
-                <span className="rounded-full bg-white/70 px-2 py-0.5 text-xs">{count}</span>
-              </span>
-            );
-          })}
-        </div>
-
-        {response?.quality_metrics?.caveats && response.quality_metrics.caveats.length > 0 && (
-          <div className="mt-4 rounded-[20px] border border-amber-200/80 bg-amber-50/75 p-3.5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-700">
-              {t('graphRagUi.rightPanel.caveats')}
-            </p>
-            <p className="mt-2 text-sm leading-6 text-amber-900">
-              {response.quality_metrics.caveats[0]}
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function GraphWorkspace({
-  response,
-  allResponses,
-  sources,
-  activeSourceIndex,
-  conversationCount,
-  onNodeClick,
-  onSourceSelect,
-  onHighlightRef,
-}: {
-  response: GraphRAGResponse | null;
-  allResponses?: GraphRAGResponse[];
-  sources: SourceCitation[];
-  activeSourceIndex: number | null;
-  conversationCount: number;
-  onNodeClick: (nodeId: string) => void;
-  onSourceSelect?: (sourceIndex: number) => void;
-  onHighlightRef?: (fn: (citationIndex: number) => void) => void;
-}) {
-  const { t } = useTranslation();
-  const [deck, setDeck] = useState<WorkspaceDeck>('sources');
-
-  const handleSourceSelect = (sourceIndex: number) => {
-    setDeck('sources');
-    onSourceSelect?.(sourceIndex);
-  };
-
-  return (
-    <motion.div
-      key="graph"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12 }}
-      transition={{ duration: 0.28 }}
-      className="space-y-4 p-4"
-    >
-      <div className="h-[460px] min-h-[460px] xl:h-[520px]">
-        <CosmographView
-          response={response}
-          allResponses={allResponses}
-          highlightedSourceIndex={activeSourceIndex}
-          onNodeClick={onNodeClick}
-          onSourceSelect={handleSourceSelect}
-          onHighlightRef={onHighlightRef}
-        />
-      </div>
-
-      <div className="rounded-[28px] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(249,244,236,0.92))] p-3 shadow-[0_28px_70px_-44px_rgba(120,53,15,0.28)]">
-        <div className="flex flex-col gap-3 border-b border-stone-200/70 px-2 pb-3 pt-1 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-              {t('graphRagUi.rightPanel.dynamicDeck')}
-            </p>
-            <p className="mt-1 text-sm font-semibold text-stone-900">
-              {t('graphRagUi.rightPanel.dynamicDeckSubtitle')}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <DeckButton active={deck === 'sources'} icon={Orbit} label={t('graphRagUi.rightPanel.sourcesDeck')} onClick={() => setDeck('sources')} />
-            <DeckButton active={deck === 'path'} icon={Waypoints} label={t('graphRagUi.rightPanel.reasoningDeck')} onClick={() => setDeck('path')} />
-            <DeckButton active={deck === 'overview'} icon={LayoutGrid} label={t('graphRagUi.rightPanel.overviewDeck')} onClick={() => setDeck('overview')} />
-          </div>
-        </div>
-
-        <div className="px-1 pt-3">
-          <AnimatePresence mode="wait">
-            {deck === 'sources' && (
-              <motion.div
-                key="sources"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.22 }}
-              >
-                <SourcesDeck
-                  sources={sources}
-                  activeSourceIndex={activeSourceIndex}
-                  onSourceSelect={handleSourceSelect}
-                />
-              </motion.div>
-            )}
-
-            {deck === 'path' && (
-              <motion.div
-                key="path"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.22 }}
-              >
-                <ReasoningDeck response={response} onNodeClick={onNodeClick} />
-              </motion.div>
-            )}
-
-            {deck === 'overview' && (
-              <motion.div
-                key="overview"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.22 }}
-              >
-                <OverviewDeck
-                  response={response}
-                  sources={sources}
-                  conversationCount={conversationCount}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-    </motion.div>
   );
 }
 
@@ -702,32 +358,73 @@ export default function RightPanel({
   passageContext,
   onNodeClick,
   onCloseDetail,
-  onPrevSource,
-  onNextSource,
   onSourceSelect,
   onLoadMorePassages,
   onHighlightRef,
   className = '',
 }: RightPanelProps) {
-  const { t } = useTranslation();
+  const navigate = useNavigate();
   const sources: SourceCitation[] = response?.sources ?? [];
-  const activeSource =
-    activeSourceIndex !== null && activeSourceIndex < sources.length
-      ? sources[activeSourceIndex]
-      : null;
 
+  // Local state for which node is selected in the DAG (shows detail card)
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+
+  // Resolve citation text for the selected node
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const citationTexts = (response as any)?.citationTexts as
     | Record<string, { original: string; originalLanguage: string; translation: string }>
     | undefined;
-  const activeCitationText =
-    activeSource && citationTexts
-      ? (citationTexts[activeSource.nodeLabel] ??
-        Object.values(citationTexts)[activeSourceIndex ?? 0] ??
-        undefined)
-      : undefined;
+
+  const selectedSource = useMemo(() => {
+    if (!selectedNodeId) return null;
+    return sources.find((s) => s.nodeId === selectedNodeId) ?? null;
+  }, [selectedNodeId, sources]);
+
+  const selectedCitationText = useMemo(() => {
+    if (!selectedSource || !citationTexts) return undefined;
+    return citationTexts[selectedSource.nodeLabel] ?? undefined;
+  }, [selectedSource, citationTexts]);
 
   const workspaceConversationCount = allResponses?.length ?? (response ? 1 : 0);
+
+  // Handle node click from the DAG
+  const handleDAGNodeSelect = useCallback(
+    (nodeId: string, citationIndex?: number) => {
+      if (nodeId === '__query__') return;
+      setSelectedNodeId(nodeId);
+      if (citationIndex !== undefined) {
+        onSourceSelect?.(citationIndex);
+      }
+    },
+    [onSourceSelect],
+  );
+
+  // Handle source card click from the SourcesDeck
+  const handleSourceCardSelect = useCallback(
+    (sourceIndex: number) => {
+      const source = sources[sourceIndex];
+      if (source) {
+        setSelectedNodeId(source.nodeId);
+        onSourceSelect?.(sourceIndex);
+      }
+    },
+    [sources, onSourceSelect],
+  );
+
+  // Register highlight ref so external citation clicks can highlight in DAG
+  const handleHighlightRef = useCallback(
+    (fn: (citationIndex: number) => void) => {
+      onHighlightRef?.((citationIndex: number) => {
+        fn(citationIndex);
+        // Also select the node when highlighted externally
+        const source = sources[citationIndex];
+        if (source) {
+          setSelectedNodeId(source.nodeId);
+        }
+      });
+    },
+    [onHighlightRef, sources],
+  );
 
   return (
     <div
@@ -755,68 +452,67 @@ export default function RightPanel({
           conversationCount={workspaceConversationCount}
         />
 
-        <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="flex-1 min-h-0 overflow-hidden">
           <AnimatePresence mode="wait">
             {state === 'idle' && <IdleState />}
 
             {state === 'loading' && <LoadingState />}
 
             {state === 'graph' && (
-              <GraphWorkspace
-                response={response}
-                allResponses={allResponses}
-                sources={sources}
-                activeSourceIndex={activeSourceIndex}
-                conversationCount={workspaceConversationCount}
-                onNodeClick={onNodeClick}
-                onSourceSelect={onSourceSelect}
-                onHighlightRef={onHighlightRef}
-              />
-            )}
-
-            {state === 'source-detail' && (
               <motion.div
-                key="source-detail"
+                key="graph"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.24 }}
-                className="space-y-4 p-4"
+                transition={{ duration: 0.28 }}
+                className="flex h-full min-h-0 flex-col gap-3 p-4"
               >
-                <div className="h-[320px] min-h-[320px]">
-                  <CosmographView
+                {/* TOP: Interactive DAG */}
+                <div className="h-[45%] min-h-[260px] shrink-0">
+                  <TraversalDAG
                     response={response}
                     allResponses={allResponses}
                     highlightedSourceIndex={activeSourceIndex}
-                    onNodeClick={onNodeClick}
-                    onSourceSelect={onSourceSelect}
-                    onHighlightRef={onHighlightRef}
-                    showControls={false}
+                    onNodeSelect={handleDAGNodeSelect}
+                    className="h-full"
                   />
                 </div>
 
-                <div className="min-h-[420px]">
+                {/* BOTTOM: Detail card or Sources deck */}
+                <div className="flex-1 min-h-0 overflow-y-auto">
                   <AnimatePresence mode="wait">
-                    {activeSource ? (
-                      <SourceDetailCard
-                        key={activeSource.id}
-                        source={activeSource}
-                        citationText={activeCitationText}
-                        citationIndex={activeSourceIndex!}
-                        totalCitations={sources.length}
-                        onClose={onCloseDetail}
-                        onPrev={onPrevSource}
-                        onNext={onNextSource}
-                      />
+                    {selectedSource ? (
+                      <motion.div
+                        key={`detail-${selectedSource.nodeId}`}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.22 }}
+                      >
+                        <NodeDetailCard
+                          source={selectedSource}
+                          citationText={selectedCitationText}
+                          onClose={() => setSelectedNodeId(null)}
+                          onOpenInDatabase={() => {
+                            if (selectedSource.nodeId && !selectedSource.nodeId.startsWith('source_')) {
+                              navigate(`/node/${selectedSource.nodeId}`);
+                            }
+                          }}
+                        />
+                      </motion.div>
                     ) : (
                       <motion.div
-                        key="no-source"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="flex min-h-[320px] items-center justify-center rounded-[26px] border border-dashed border-stone-300 bg-white/70 text-sm text-stone-500"
+                        key="sources-deck"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.22 }}
                       >
-                        {t('graphRagUi.rightPanel.noSourceSelected')}
+                        <SourcesDeck
+                          sources={sources}
+                          activeSourceIndex={activeSourceIndex}
+                          onSourceSelect={handleSourceCardSelect}
+                        />
                       </motion.div>
                     )}
                   </AnimatePresence>

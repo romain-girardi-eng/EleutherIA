@@ -16,8 +16,6 @@ interface MobileGraphSheetProps {
   onNodeClick: (nodeId: string) => void;
   onSourceSelect?: (sourceIndex: number) => void;
   onCloseDetail: () => void;
-  onPrevSource: () => void;
-  onNextSource: () => void;
   onLoadMorePassages?: (direction: 'up' | 'down') => void;
   onHighlightRef?: (fn: (citationIndex: number) => void) => void;
 }
@@ -31,8 +29,6 @@ export default function MobileGraphSheet({
   onNodeClick,
   onSourceSelect,
   onCloseDetail,
-  onPrevSource,
-  onNextSource,
   onLoadMorePassages,
   onHighlightRef,
 }: MobileGraphSheetProps) {
@@ -73,8 +69,6 @@ export default function MobileGraphSheet({
             onNodeClick={onNodeClick}
             onSourceSelect={onSourceSelect}
             onCloseDetail={onCloseDetail}
-            onPrevSource={onPrevSource}
-            onNextSource={onNextSource}
             onLoadMorePassages={onLoadMorePassages}
             onHighlightRef={onHighlightRef}
             className="h-full"
