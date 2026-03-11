@@ -5,7 +5,6 @@ import {
   SigmaContainer,
   useSigma,
   useRegisterEvents,
-  useLoadGraph,
 } from '@react-sigma/core';
 import '@react-sigma/core/lib/style.css';
 
@@ -16,6 +15,7 @@ import { ZoomLevel } from '@/types/sigma';
 import { buildGraph } from '@/services/graphologyAdapter';
 import { detectCommunities } from '@/services/communityDetection';
 import { aggregatePassages, expandWorkPassages, collapseWorkPassages } from './PassageAggregation';
+import { computeLayout } from '@/workers/layoutWorker';
 import { getZoomLevel } from './SemanticZoomController';
 import { createEdgeReducer } from './EdgeFilterReducer';
 import { createNodeReducer } from './NodeReducer';
@@ -35,10 +35,6 @@ interface SigmaKGVisualizerProps {
   cyData: CytoscapeData;
   onNodeSelect?: (node: KGNode | null) => void;
   className?: string;
-}
-
-interface LayoutPositions {
-  [nodeId: string]: { x: number; y: number };
 }
 
 // ---------------------------------------------------------------------------
@@ -151,7 +147,6 @@ function SigmaGraph({
   edgeCount,
 }: SigmaGraphProps) {
   const sigma = useSigma();
-  const loadGraph = useLoadGraph();
   const registerEvents = useRegisterEvents();
 
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
@@ -165,11 +160,6 @@ function SigmaGraph({
   useEffect(() => {
     hiddenRef.current = hiddenPassages;
   }, [hiddenPassages]);
-
-  // Load graph into Sigma
-  useEffect(() => {
-    loadGraph(graph);
-  }, [graph, loadGraph]);
 
   // Track camera zoom level
   useEffect(() => {
@@ -352,7 +342,6 @@ export default function SigmaKGVisualizer({
   const [hiddenPassages, setHiddenPassages] = useState<Set<string>>(new Set());
   const [passagesVisible, setPassagesVisible] = useState(false);
   const [selectedNodeData, setSelectedNodeData] = useState<KGNode | null>(null);
-  const workerRef = useRef<Worker | null>(null);
 
   const handleNodeSelect = useCallback((node: KGNode | null) => {
     setSelectedNodeData(node);
@@ -383,63 +372,18 @@ export default function SigmaKGVisualizer({
     const hidden = aggregatePassages(graph);
     setHiddenPassages(hidden);
 
-    // 4. Launch layout Web Worker
-    const nodes: [string, KGNodeAttributes][] = [];
-    graph.forEachNode((key, attrs) => {
-      nodes.push([key, { ...attrs }]);
-    });
-
-    const edges: [string, string, string, KGEdgeAttributes][] = [];
-    graph.forEachEdge((key, attrs, source, target) => {
-      edges.push([key, source, target, { ...attrs }]);
-    });
-
-    const worker = new Worker(
-      new URL('../../workers/layoutWorkerEntry.ts', import.meta.url),
-      { type: 'module' },
-    );
-    workerRef.current = worker;
-
-    worker.onmessage = (event: MessageEvent) => {
-      const { type, positions } = event.data as {
-        type: string;
-        positions: LayoutPositions;
-      };
-      if (type === 'layout-complete' && graphRef.current) {
-        for (const [nodeId, pos] of Object.entries(positions)) {
-          try {
-            graphRef.current.setNodeAttribute(nodeId, 'x', pos.x);
-            graphRef.current.setNodeAttribute(nodeId, 'y', pos.y);
-          } catch {
-            // node may have been removed
-          }
-        }
-        setLayoutReady(true);
+    // 4. Run layout (main thread — 100 iterations on ~1k nodes is fast enough)
+    const layoutId = setTimeout(() => {
+      try {
+        computeLayout(graph);
+      } catch (err) {
+        console.warn('Layout failed, using random positions:', err);
       }
-    };
-
-    worker.onerror = (err) => {
-      console.error('Layout worker failed:', err);
-      // Fall back: use random positions already set by buildGraph
       setLayoutReady(true);
-    };
-
-    worker.postMessage({
-      type: 'run-layout',
-      payload: { nodes, edges, options: {} },
-    });
-
-    // Safety timeout: if worker doesn't respond in 15s, show graph with random layout
-    const timeout = setTimeout(() => {
-      if (!graphRef.current) return;
-      console.warn('Layout worker timed out, using random positions');
-      setLayoutReady(true);
-    }, 15000);
+    }, 0);
 
     return () => {
-      clearTimeout(timeout);
-      worker.terminate();
-      workerRef.current = null;
+      clearTimeout(layoutId);
     };
   }, [cyData]);
 
@@ -462,6 +406,7 @@ export default function SigmaKGVisualizer({
   return (
     <div className={`relative h-full w-full bg-slate-950 ${className ?? ''}`}>
       <SigmaContainer
+        graph={graph}
         settings={SIGMA_SETTINGS}
         style={{ width: '100%', height: '100%', background: 'transparent' }}
       >
