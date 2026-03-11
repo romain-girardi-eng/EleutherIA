@@ -360,7 +360,7 @@ export default function RightPanel({
   onCloseDetail,
   onSourceSelect,
   onLoadMorePassages,
-  onHighlightRef,
+  onHighlightRef: _onHighlightRef,
   className = '',
 }: RightPanelProps) {
   const navigate = useNavigate();
