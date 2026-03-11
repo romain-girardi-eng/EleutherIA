@@ -605,6 +605,7 @@ export default function SearchPage() {
           >
             <div className="text-center">
               <h1 className="mb-4 text-5xl font-display font-bold text-stone-800 md:text-7xl">
+                {t('search.titlePrefix', '') ? `${t('search.titlePrefix')} ` : ''}
                 <Typewriter
                   text={tArray(t, 'search.titleWords')}
                   speed={120}
@@ -613,7 +614,7 @@ export default function SearchPage() {
                   className="text-stone-800"
                   cursorChar="_"
                 />
-                {` ${t('search.titleSuffix')}`}
+                {t('search.titleSuffix', '') ? ` ${t('search.titleSuffix')}` : ''}
               </h1>
               <p className="text-lg text-stone-600 md:text-xl">{t('search.subtitle')}</p>
             </div>
