@@ -208,7 +208,7 @@ function SigmaGraph({
       enterNode: (event) => setHoveredNode(event.node),
       leaveNode: () => setHoveredNode(null),
       clickNode: (event) => {
-        const g = sigma.getGraph();
+        const g = sigma.getGraph() as Graph<KGNodeAttributes, KGEdgeAttributes>;
         const nodeId = event.node;
 
         // Toggle passage expansion for aggregate work nodes
@@ -298,7 +298,7 @@ function SigmaGraph({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        const g = sigma.getGraph();
+        const g = sigma.getGraph() as Graph<KGNodeAttributes, KGEdgeAttributes>;
         const hidden = hiddenRef.current;
         for (const workId of expandedWorksRef.current) {
           collapseWorkPassages(g, workId, hidden);

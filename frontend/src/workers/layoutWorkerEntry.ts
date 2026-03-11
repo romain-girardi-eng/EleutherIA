@@ -3,7 +3,7 @@
 import Graph from 'graphology';
 import { computeLayout } from './layoutWorker';
 import type { LayoutOptions } from './layoutWorker';
-import type { KGNodeAttributes, KGEdgeAttributes } from '../../types/sigma';
+import type { KGNodeAttributes, KGEdgeAttributes } from '@/types/sigma';
 
 self.onmessage = (event: MessageEvent) => {
   const { type, payload } = event.data;

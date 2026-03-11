@@ -66,12 +66,13 @@ export const HOVER_ONLY_CATEGORIES: EdgeCategory[] = [
 ];
 
 /** Zoom levels driven by camera.ratio */
-export enum ZoomLevel {
-  Overview = 1,      // ratio > 1.2
-  Community = 2,     // 0.4 – 1.2
-  Neighborhood = 3,  // 0.08 – 0.4
-  Detail = 4,        // < 0.08
-}
+export const ZoomLevel = {
+  Overview: 1,      // ratio > 1.2
+  Community: 2,     // 0.4 – 1.2
+  Neighborhood: 3,  // 0.08 – 0.4
+  Detail: 4,        // < 0.08
+} as const;
+export type ZoomLevel = (typeof ZoomLevel)[keyof typeof ZoomLevel];
 
 /** Map relation type → edge category (from kg/ontology/edge_types.json) */
 export const RELATION_TO_CATEGORY: Record<string, EdgeCategory> = {

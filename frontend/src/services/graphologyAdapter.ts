@@ -18,7 +18,7 @@ export function buildGraph(
   const edges = cyData.elements?.edges ?? [];
 
   for (const node of nodes) {
-    const { id, label, type, description, period, metadata, ...rest } = node.data;
+    const { id, label, type, description, period, metadata } = node.data;
     if (!id) continue;
 
     const nodeType = type ?? 'default';
@@ -33,7 +33,7 @@ export function buildGraph(
       color: theme.color,
       period: period as string | undefined,
       description: description as string | undefined,
-      metadata: (metadata as Record<string, unknown>) ?? undefined,
+      metadata: (metadata as unknown as Record<string, unknown>) ?? undefined,
       originalId: id,
     });
   }
