@@ -62,4 +62,15 @@ export function computeLayout(
       },
     });
   }
+
+  // Sanitize: ForceAtlas2/noverlap can produce NaN for isolated nodes
+  // or degenerate configurations. Sigma requires finite x/y for all nodes.
+  graph.forEachNode((node) => {
+    const x = graph.getNodeAttribute(node, 'x');
+    const y = graph.getNodeAttribute(node, 'y');
+    if (!Number.isFinite(x) || !Number.isFinite(y)) {
+      graph.setNodeAttribute(node, 'x', Math.random() * 1000);
+      graph.setNodeAttribute(node, 'y', Math.random() * 1000);
+    }
+  });
 }
