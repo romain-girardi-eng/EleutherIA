@@ -164,11 +164,11 @@ function MiniStat({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border border-stone-200/80 bg-stone-50/88 px-3 py-2.5">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-400">
+    <div className="rounded-xl border border-stone-200/80 bg-stone-50/88 px-2.5 py-2">
+      <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-stone-400">
         {label}
       </p>
-      <p className="mt-1 text-sm font-semibold text-stone-900">{value}</p>
+      <p className="mt-0.5 text-xs font-semibold text-stone-900">{value}</p>
     </div>
   );
 }
@@ -665,20 +665,20 @@ export default function CosmographView({
         })}
       </svg>
 
-      <div className="relative z-20 grid h-[calc(100%-61px)] min-h-0 gap-4 px-4 py-4 lg:grid-cols-[minmax(0,0.92fr)_minmax(320px,1.08fr)_minmax(0,0.95fr)]">
+      <div className="relative z-20 grid h-[calc(100%-61px)] min-h-0 gap-3 px-3 py-3 lg:grid-cols-[minmax(0,1fr)_minmax(220px,1.2fr)_minmax(0,1fr)]">
         <motion.section
           initial={{ opacity: 0, x: -12 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.28 }}
-          className="flex min-h-0 flex-col rounded-[28px] border border-stone-200/80 bg-white/78 p-4 shadow-[0_24px_60px_-42px_rgba(120,53,15,0.2)] backdrop-blur-sm"
+          className="flex min-h-0 flex-col rounded-[22px] border border-stone-200/80 bg-white/78 p-3 shadow-[0_24px_60px_-42px_rgba(120,53,15,0.2)] backdrop-blur-sm"
         >
           <LaneLabel
             step="01"
             title="Evidence Sources"
-            subtitle={`${sourceNodes.length} citations grounding this answer`}
+            subtitle={`${sourceNodes.length} citations`}
           />
 
-          <div className="mt-4 space-y-2 overflow-y-auto pr-1">
+          <div className="mt-3 space-y-1.5 overflow-y-auto pr-1">
             {sourceNodes.map((node, index) => {
               const theme = getGraphTypeTheme(node.type);
               const isActive = highlightedNode?.id === node.id;
@@ -694,7 +694,7 @@ export default function CosmographView({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.24, delay: index * 0.04 }}
                   className={cn(
-                    'group w-full rounded-[22px] border p-3 text-left transition-all duration-200',
+                    'group w-full rounded-[18px] border p-2.5 text-left transition-all duration-200',
                     isActive
                       ? 'border-transparent bg-white shadow-[0_20px_54px_-34px_rgba(120,53,15,0.3)] ring-2 ring-amber-200/70'
                       : 'border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(250,247,242,0.96))] hover:-translate-y-0.5 hover:border-stone-300 hover:bg-white',
@@ -703,45 +703,26 @@ export default function CosmographView({
                     boxShadow: isActive ? `0 22px 54px -38px ${theme.color}55` : undefined,
                   }}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex min-w-0 items-center gap-3">
-                      <span
-                        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border text-sm font-semibold"
-                        style={{
-                          borderColor: theme.border,
-                          backgroundColor: theme.tint,
-                          color: theme.text,
-                        }}
-                      >
-                        {citationId}
-                      </span>
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-stone-900">
-                          {truncateLabel(node.label, 42)}
-                        </p>
-                        <p className="mt-1 text-xs text-stone-500">
-                          {sourceMeta?.metadata?.period || formatGraphNodeType(node.type)}
-                        </p>
-                      </div>
-                    </div>
-
+                  <div className="flex min-w-0 items-center gap-2">
                     <span
-                      className="inline-flex items-center rounded-full border px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em]"
+                      className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border text-xs font-semibold"
                       style={{
                         borderColor: theme.border,
                         backgroundColor: theme.tint,
                         color: theme.text,
                       }}
                     >
-                      {formatGraphNodeType(node.type)}
+                      {citationId}
                     </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-xs font-semibold text-stone-900">
+                        {truncateLabel(node.label, 28)}
+                      </p>
+                      <p className="truncate text-[10px] text-stone-500">
+                        {sourceMeta?.metadata?.period || formatGraphNodeType(node.type)}
+                      </p>
+                    </div>
                   </div>
-
-                  {sourceMeta?.content && (
-                    <p className="mt-3 line-clamp-2 text-sm leading-6 text-stone-500">
-                      {sourceMeta.content}
-                    </p>
-                  )}
                 </motion.button>
               );
             })}
@@ -752,18 +733,18 @@ export default function CosmographView({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.32 }}
-          className="relative flex min-h-0 items-center justify-center rounded-[34px] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(250,246,239,0.92))] px-5 py-6 shadow-[0_36px_80px_-50px_rgba(120,53,15,0.3)]"
+          className="relative flex min-h-0 items-center justify-center rounded-[24px] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(250,246,239,0.92))] px-3 py-4 shadow-[0_36px_80px_-50px_rgba(120,53,15,0.3)]"
         >
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute left-1/2 top-1/2 h-52 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full border border-stone-200/70" />
-            <div className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-stone-200/70" />
-            <div className="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-100/35 blur-2xl" />
+            <div className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-stone-200/70" />
+            <div className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-stone-200/70" />
+            <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-100/35 blur-2xl" />
           </div>
 
           <motion.div
             animate={{ y: [0, -5, 0] }}
             transition={{ duration: 6.6, repeat: Infinity, ease: 'easeInOut' }}
-            className="relative w-full max-w-[27rem] rounded-[30px] border border-stone-200/80 bg-white/92 p-5 shadow-[0_28px_72px_-42px_rgba(120,53,15,0.36)] backdrop-blur"
+            className="relative w-full max-w-[22rem] rounded-[24px] border border-stone-200/80 bg-white/92 p-4 shadow-[0_28px_72px_-42px_rgba(120,53,15,0.36)] backdrop-blur"
           >
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-800">
@@ -775,15 +756,11 @@ export default function CosmographView({
               </span>
             </div>
 
-            <h3 className="mt-4 text-[1.8rem] font-semibold leading-tight text-stone-900">
-              {truncateLabel(deferredResponse?.query || 'Answer map', 72)}
+            <h3 className="mt-3 text-base font-semibold leading-snug text-stone-900">
+              {truncateLabel(deferredResponse?.query || 'Answer map', 56)}
             </h3>
 
-            <p className="mt-3 text-sm leading-6 text-stone-500">
-              Sources enter from the left, the answer is synthesized here, and reasoning nodes on the right show where the response anchors and expands.
-            </p>
-
-            <div className="mt-4 grid grid-cols-2 gap-2">
+            <div className="mt-3 grid grid-cols-2 gap-2">
               <MiniStat label="Grounding" value={`${sourceNodes.length} sources`} />
               <MiniStat
                 label="Entry Nodes"
@@ -832,9 +809,9 @@ export default function CosmographView({
           initial={{ opacity: 0, x: 12 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.28 }}
-          className="flex min-h-0 flex-col gap-3 rounded-[28px] border border-stone-200/80 bg-white/78 p-4 shadow-[0_24px_60px_-42px_rgba(120,53,15,0.2)] backdrop-blur-sm"
+          className="flex min-h-0 flex-col gap-2 rounded-[22px] border border-stone-200/80 bg-white/78 p-3 shadow-[0_24px_60px_-42px_rgba(120,53,15,0.2)] backdrop-blur-sm"
         >
-          <div className="rounded-[24px] border border-stone-200/80 bg-stone-50/82 p-3.5">
+          <div className="rounded-[18px] border border-stone-200/80 bg-stone-50/82 p-3">
             <LaneLabel
               step="02"
               title="Entry Nodes"
@@ -863,7 +840,7 @@ export default function CosmographView({
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.24, delay: 0.08 + index * 0.04 }}
                     className={cn(
-                      'inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-medium transition-all',
+                      'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-xs font-medium transition-all',
                       isActive ? 'bg-white shadow-sm ring-2 ring-amber-200/70' : 'hover:-translate-y-0.5',
                     )}
                     style={{
@@ -872,15 +849,15 @@ export default function CosmographView({
                       color: theme.text,
                     }}
                   >
-                    <span className="inline-flex h-2.5 w-2.5 rounded-full" style={{ backgroundColor: theme.color }} />
-                    {truncateLabel(node.label, 26)}
+                    <span className="inline-flex h-2 w-2 rounded-full" style={{ backgroundColor: theme.color }} />
+                    {truncateLabel(node.label, 20)}
                   </motion.button>
                 );
               })}
             </div>
           </div>
 
-          <div className="flex min-h-0 flex-1 flex-col rounded-[24px] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(248,244,236,0.92))] p-3.5">
+          <div className="flex min-h-0 flex-1 flex-col rounded-[18px] border border-stone-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(248,244,236,0.92))] p-3">
             <LaneLabel
               step="03"
               title="Expansion Nodes"
@@ -911,7 +888,7 @@ export default function CosmographView({
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.24, delay: 0.12 + index * 0.03 }}
                     className={cn(
-                      'rounded-[20px] border px-3.5 py-3 text-left transition-all duration-200',
+                      'rounded-[14px] border px-2.5 py-2 text-left transition-all duration-200',
                       isActive
                         ? 'bg-white shadow-[0_18px_42px_-34px_rgba(120,53,15,0.26)] ring-2 ring-amber-200/70'
                         : 'bg-white/90 hover:-translate-y-0.5',
@@ -921,16 +898,11 @@ export default function CosmographView({
                       color: theme.text,
                     }}
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold text-stone-900">
-                          {truncateLabel(node.label, 34)}
-                        </p>
-                        <p className="mt-1 text-xs text-stone-500">{formatGraphNodeType(node.type)}</p>
-                      </div>
-                      <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl" style={{ backgroundColor: theme.tint }}>
-                        <ArrowRight className="h-4 w-4" style={{ color: theme.text }} />
-                      </span>
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: theme.color }} />
+                      <p className="min-w-0 truncate text-xs font-semibold text-stone-900">
+                        {truncateLabel(node.label, 22)}
+                      </p>
                     </div>
                   </motion.button>
                 );
@@ -939,21 +911,21 @@ export default function CosmographView({
           </div>
 
           {graph.presentTypes.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {graph.presentTypes.slice(0, 5).map((type) => {
                 const theme = getGraphTypeTheme(type);
 
                 return (
                   <span
                     key={type}
-                    className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium"
+                    className="inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[10px] font-medium"
                     style={{
                       borderColor: theme.border,
                       backgroundColor: theme.tint,
                       color: theme.text,
                     }}
                   >
-                    <span className="inline-flex h-2.5 w-2.5 rounded-full" style={{ backgroundColor: theme.color }} />
+                    <span className="inline-flex h-2 w-2 rounded-full" style={{ backgroundColor: theme.color }} />
                     {formatGraphNodeType(type)}
                   </span>
                 );
