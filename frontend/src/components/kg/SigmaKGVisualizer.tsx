@@ -20,6 +20,11 @@ import { getZoomLevel } from './SemanticZoomController';
 import { createEdgeReducer } from './EdgeFilterReducer';
 import { createNodeReducer } from './NodeReducer';
 import CommunityHullsLayer from './CommunityHullsLayer';
+import NodeTooltip from './NodeTooltip';
+import SearchBar from './SearchBar';
+import KGControls from './KGControls';
+import KGLegend from './KGLegend';
+import DetailPanel from './DetailPanel';
 import { getGraphTypeTheme } from '@/components/graphrag/graphTheme';
 
 // ---------------------------------------------------------------------------
@@ -126,6 +131,10 @@ interface SigmaGraphProps {
   communityLabels: Map<number, string>;
   hiddenPassages: Set<string>;
   onNodeSelect?: (node: KGNode | null) => void;
+  passagesVisible: boolean;
+  onTogglePassages: () => void;
+  nodeCount: number;
+  edgeCount: number;
 }
 
 function SigmaGraph({
@@ -135,6 +144,10 @@ function SigmaGraph({
   communityLabels,
   hiddenPassages,
   onNodeSelect,
+  passagesVisible,
+  onTogglePassages,
+  nodeCount,
+  edgeCount,
 }: SigmaGraphProps) {
   const sigma = useSigma();
   const loadGraph = useLoadGraph();
@@ -281,12 +294,43 @@ function SigmaGraph({
     sigma.setSetting('edgeReducer', edgeReducer as Parameters<typeof sigma.setSetting<'edgeReducer'>>[1]);
   }, [sigma, zoomLevel, hoveredNode, selectedNode, nodeDegrees, hoveredNeighbors]);
 
+  // Escape key: collapse passages + deselect
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        const g = sigma.getGraph();
+        const hidden = hiddenRef.current;
+        for (const workId of expandedWorksRef.current) {
+          collapseWorkPassages(g, workId, hidden);
+        }
+        expandedWorksRef.current.clear();
+        sigma.refresh();
+        setSelectedNode(null);
+        onNodeSelect?.(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [sigma, onNodeSelect]);
+
   return (
-    <CommunityHullsLayer
-      communities={communities}
-      communityColors={communityColors}
-      communityLabels={communityLabels}
-    />
+    <>
+      <CommunityHullsLayer
+        communities={communities}
+        communityColors={communityColors}
+        communityLabels={communityLabels}
+      />
+      <NodeTooltip />
+      <div className="absolute top-4 left-4 z-10">
+        <SearchBar />
+      </div>
+      <KGControls
+        passagesVisible={passagesVisible}
+        onTogglePassages={onTogglePassages}
+        nodeCount={nodeCount}
+        edgeCount={edgeCount}
+      />
+    </>
   );
 }
 
@@ -305,7 +349,18 @@ export default function SigmaKGVisualizer({
   const [communityColors, setCommunityColors] = useState<Map<number, string>>(new Map());
   const [communityLabels, setCommunityLabels] = useState<Map<number, string>>(new Map());
   const [hiddenPassages, setHiddenPassages] = useState<Set<string>>(new Set());
+  const [passagesVisible, setPassagesVisible] = useState(false);
+  const [selectedNodeData, setSelectedNodeData] = useState<KGNode | null>(null);
   const workerRef = useRef<Worker | null>(null);
+
+  const handleNodeSelect = useCallback((node: KGNode | null) => {
+    setSelectedNodeData(node);
+    onNodeSelect?.(node);
+  }, [onNodeSelect]);
+
+  const handleTogglePassages = useCallback(() => {
+    setPassagesVisible(prev => !prev);
+  }, []);
 
   // Build graph, detect communities, aggregate passages, launch layout worker
   useEffect(() => {
@@ -387,6 +442,9 @@ export default function SigmaKGVisualizer({
     );
   }
 
+  const nodeCount = graph.order;
+  const edgeCount = graph.size;
+
   return (
     <div className={`relative h-full w-full bg-slate-950 ${className ?? ''}`}>
       <SigmaContainer
@@ -400,9 +458,15 @@ export default function SigmaKGVisualizer({
           communityColors={communityColors}
           communityLabels={communityLabels}
           hiddenPassages={hiddenPassages}
-          onNodeSelect={onNodeSelect}
+          onNodeSelect={handleNodeSelect}
+          passagesVisible={passagesVisible}
+          onTogglePassages={handleTogglePassages}
+          nodeCount={nodeCount}
+          edgeCount={edgeCount}
         />
       </SigmaContainer>
+      <KGLegend />
+      <DetailPanel node={selectedNodeData} onClose={() => setSelectedNodeData(null)} />
     </div>
   );
 }
