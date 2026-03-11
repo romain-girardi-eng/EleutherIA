@@ -48,6 +48,7 @@ export const extraResources = {
       showMoreResults: 'Show more results',
       loadingMore: 'Loading...',
       trySearchingFor: 'Try searching for:',
+      titlePrefix: '',
       titleSuffix: 'Search',
       titleWords: ['Hybrid', 'Textual', 'Lemmatic', 'Semantic'],
       autocomplete: {
@@ -619,8 +620,9 @@ export const extraResources = {
       showMoreResults: 'Afficher plus de résultats',
       loadingMore: 'Chargement...',
       trySearchingFor: 'Essayez de rechercher :',
-      titleSuffix: 'Recherche',
-      titleWords: ['Hybride', 'Textuelle', 'Lemmatique', 'Sémantique'],
+      titlePrefix: 'Recherche',
+      titleSuffix: '',
+      titleWords: ['hybride', 'textuelle', 'lemmatique', 'sémantique'],
       autocomplete: {
         occurrencesAbbrev: 'occ.',
         passages: '{{count}} passages',
@@ -1194,8 +1196,9 @@ export const extraResources = {
       showMoreResults: 'Mehr Ergebnisse anzeigen',
       loadingMore: 'Lädt...',
       trySearchingFor: 'Versuchen Sie zu suchen nach:',
+      titlePrefix: '',
       titleSuffix: 'Suche',
-      titleWords: ['Hybrid', 'Textuell', 'Lemmatisch', 'Semantisch'],
+      titleWords: ['Hybride', 'Textuelle', 'Lemmatische', 'Semantische'],
       autocomplete: {
         occurrencesAbbrev: 'Vork.',
         passages: '{{count}} Passagen',
@@ -1769,8 +1772,9 @@ export const extraResources = {
       showMoreResults: 'Mostra più risultati',
       loadingMore: 'Caricamento...',
       trySearchingFor: 'Prova a cercare:',
-      titleSuffix: 'Ricerca',
-      titleWords: ['Ibrida', 'Testuale', 'Lemmatica', 'Semantica'],
+      titlePrefix: 'Ricerca',
+      titleSuffix: '',
+      titleWords: ['ibrida', 'testuale', 'lemmatica', 'semantica'],
       autocomplete: {
         occurrencesAbbrev: 'occ.',
         passages: '{{count}} passi',
@@ -2344,6 +2348,7 @@ export const extraResources = {
       showMoreResults: 'Εμφάνιση περισσότερων αποτελεσμάτων',
       loadingMore: 'Φόρτωση...',
       trySearchingFor: 'Δοκιμάστε να αναζητήσετε:',
+      titlePrefix: '',
       titleSuffix: 'Αναζήτηση',
       titleWords: ['Υβριδική', 'Κειμενική', 'Λημματική', 'Σημασιολογική'],
       autocomplete: {
