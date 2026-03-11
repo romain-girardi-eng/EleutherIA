@@ -12,7 +12,7 @@ export interface EdgeReducerState {
 
 export function createEdgeReducer(state: EdgeReducerState) {
   return (
-    edge: string,
+    _edge: string,
     data: KGEdgeAttributes & { source: string; target: string },
   ): Partial<KGEdgeAttributes> & { hidden?: boolean } => {
     const { zoomLevel, hoveredNode, selectedNode, hiddenNodes } = state;

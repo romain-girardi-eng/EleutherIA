@@ -2,7 +2,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useSigma } from '@react-sigma/core';
 import { Search } from 'lucide-react';
-import { getGraphTypeTheme, formatGraphNodeType } from '@/components/graphrag/graphTheme';
+import { formatGraphNodeType } from '@/components/graphrag/graphTheme';
 import type { KGNodeAttributes } from '@/types/sigma';
 
 interface SearchResult {
@@ -23,14 +23,15 @@ export default function SearchBar() {
     const q = query.toLowerCase();
     const matches: SearchResult[] = [];
 
-    graph.forEachNode((nodeId, attrs: KGNodeAttributes) => {
+    graph.forEachNode((nodeId: string, attrs: Record<string, unknown>) => {
       if (matches.length >= 20) return;
-      if (attrs.label.toLowerCase().includes(q)) {
+      const a = attrs as unknown as KGNodeAttributes;
+      if (a.label.toLowerCase().includes(q)) {
         matches.push({
           id: nodeId,
-          label: attrs.label,
-          type: attrs.type,
-          color: attrs.color,
+          label: a.label,
+          type: a.type,
+          color: a.color,
         });
       }
     });
@@ -73,7 +74,6 @@ export default function SearchBar() {
       {isOpen && results.length > 0 && (
         <div className="absolute top-full mt-1 left-0 w-72 bg-slate-900/95 border border-slate-700 rounded-lg shadow-xl max-h-64 overflow-y-auto z-50">
           {results.map((r) => {
-            const theme = getGraphTypeTheme(r.type);
             return (
               <button
                 key={r.id}
