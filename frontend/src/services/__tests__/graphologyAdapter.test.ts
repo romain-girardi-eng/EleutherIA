@@ -31,7 +31,7 @@ describe('buildGraph', () => {
     const graph = buildGraph(mockCyData);
     const attrs = graph.getNodeAttributes('person_chrysippus');
     expect(attrs.label).toBe('Chrysippus');
-    expect(attrs.type).toBe('person');
+    expect(attrs.nodeType).toBe('person');
     expect(attrs.size).toBe(11);
     expect(attrs.color).toBe('#6E85E9');
     expect(attrs.originalId).toBe('person_chrysippus');

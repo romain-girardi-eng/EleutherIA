@@ -6,11 +6,11 @@ import type { KGNodeAttributes, KGEdgeAttributes } from '@/types/sigma';
 
 function makeGraphWithPassages(): Graph<KGNodeAttributes, KGEdgeAttributes> {
   const g = new Graph<KGNodeAttributes, KGEdgeAttributes>();
-  g.addNode('work_1', { label: 'De Fato', type: 'work', x: 0, y: 0, size: 8, color: '#C79A31', originalId: 'work_1' });
-  g.addNode('p1', { label: 'De Fato 1.1', type: 'passage', x: 1, y: 1, size: 4, color: '#8992A6', originalId: 'p1' });
-  g.addNode('p2', { label: 'De Fato 1.2', type: 'passage', x: 2, y: 2, size: 4, color: '#8992A6', originalId: 'p2' });
-  g.addNode('p3', { label: 'De Fato 2.1', type: 'passage', x: 3, y: 3, size: 4, color: '#8992A6', originalId: 'p3' });
-  g.addNode('person_1', { label: 'Cicero', type: 'person', x: 5, y: 5, size: 11, color: '#6E85E9', originalId: 'person_1' });
+  g.addNode('work_1', { label: 'De Fato', nodeType: 'work', x: 0, y: 0, size: 8, color: '#C79A31', originalId: 'work_1' });
+  g.addNode('p1', { label: 'De Fato 1.1', nodeType: 'passage', x: 1, y: 1, size: 4, color: '#8992A6', originalId: 'p1' });
+  g.addNode('p2', { label: 'De Fato 1.2', nodeType: 'passage', x: 2, y: 2, size: 4, color: '#8992A6', originalId: 'p2' });
+  g.addNode('p3', { label: 'De Fato 2.1', nodeType: 'passage', x: 3, y: 3, size: 4, color: '#8992A6', originalId: 'p3' });
+  g.addNode('person_1', { label: 'Cicero', nodeType: 'person', x: 5, y: 5, size: 11, color: '#6E85E9', originalId: 'person_1' });
   g.addEdgeWithKey('e1', 'work_1', 'p1', { relation: 'contains', category: 'structural', size: 1 });
   g.addEdgeWithKey('e2', 'work_1', 'p2', { relation: 'contains', category: 'structural', size: 1 });
   g.addEdgeWithKey('e3', 'work_1', 'p3', { relation: 'contains', category: 'structural', size: 1 });

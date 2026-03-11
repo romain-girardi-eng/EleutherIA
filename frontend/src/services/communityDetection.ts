@@ -33,7 +33,7 @@ export function detectCommunities(
     const typeIndex = new Map<string, number>();
     let nextId = 0;
     graph.forEachNode((nodeId, attrs) => {
-      const t = attrs.type ?? 'default';
+      const t = attrs.nodeType ?? 'default';
       if (!typeIndex.has(t)) typeIndex.set(t, nextId++);
       graph.setNodeAttribute(nodeId, 'community', typeIndex.get(t)!);
     });

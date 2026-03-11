@@ -4,7 +4,8 @@ import type { Attributes } from 'graphology-types';
 /** Node attributes stored in the Graphology graph */
 export interface KGNodeAttributes extends Attributes {
   label: string;
-  type: string;
+  /** Semantic node type (person, work, etc.) — NOT Sigma's renderer type */
+  nodeType: string;
   x: number;
   y: number;
   size: number;
