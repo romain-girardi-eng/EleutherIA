@@ -1,6 +1,6 @@
 import { useDeferredValue, useMemo, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Waypoints } from 'lucide-react';
+import { Sparkles, Waypoints } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '../../utils/cn';
 import type { GraphRAGResponse } from '../../types';
