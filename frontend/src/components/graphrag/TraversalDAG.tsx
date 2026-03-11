@@ -451,7 +451,7 @@ export default function TraversalDAG({
 
         <g className="zoom-container">
           {/* ---- edges ---- */}
-          {edgePaths.map((ep, i) => {
+          {edgePaths.map((ep) => {
             if (!ep.d) return null;
             const edgeKey = `${ep.source}->${ep.target}`;
             const isHovered = hoveredEdge === edgeKey;
