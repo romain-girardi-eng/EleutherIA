@@ -49,12 +49,16 @@ export function buildGraph(
     const edgeKey = id ?? `${source}-${rel}-${target}`;
     if (graph.hasEdge(edgeKey)) continue;
 
-    graph.addEdgeWithKey(edgeKey, source, target, {
-      relation: rel,
-      category,
-      description: description as string | undefined,
-      size: 1,
-    });
+    try {
+      graph.addEdgeWithKey(edgeKey, source, target, {
+        relation: rel,
+        category,
+        description: description as string | undefined,
+        size: 1,
+      });
+    } catch {
+      // Skip duplicate source-target pairs (simple graph doesn't allow multi-edges)
+    }
   }
 
   return graph;
