@@ -24,8 +24,9 @@ describe('shouldShowNode', () => {
   it('hides passages at Overview', () => {
     expect(shouldShowNode('passage', ZoomLevel.Overview, 5, false)).toBe(false);
   });
-  it('shows high-degree nodes at Overview', () => {
+  it('shows all non-passage nodes at Overview', () => {
     expect(shouldShowNode('person', ZoomLevel.Overview, 10, false)).toBe(true);
+    expect(shouldShowNode('person', ZoomLevel.Overview, 1, false)).toBe(true);
   });
   it('shows all non-passage nodes at Community', () => {
     expect(shouldShowNode('concept', ZoomLevel.Community, 1, false)).toBe(true);

@@ -406,7 +406,6 @@ export default function SigmaKGVisualizer({
         positions: LayoutPositions;
       };
       if (type === 'layout-complete' && graphRef.current) {
-        // Apply computed positions back to the graph
         for (const [nodeId, pos] of Object.entries(positions)) {
           try {
             graphRef.current.setNodeAttribute(nodeId, 'x', pos.x);
@@ -419,12 +418,26 @@ export default function SigmaKGVisualizer({
       }
     };
 
+    worker.onerror = (err) => {
+      console.error('Layout worker failed:', err);
+      // Fall back: use random positions already set by buildGraph
+      setLayoutReady(true);
+    };
+
     worker.postMessage({
       type: 'run-layout',
       payload: { nodes, edges, options: {} },
     });
 
+    // Safety timeout: if worker doesn't respond in 15s, show graph with random layout
+    const timeout = setTimeout(() => {
+      if (!graphRef.current) return;
+      console.warn('Layout worker timed out, using random positions');
+      setLayoutReady(true);
+    }, 15000);
+
     return () => {
+      clearTimeout(timeout);
       worker.terminate();
       workerRef.current = null;
     };
@@ -449,7 +462,6 @@ export default function SigmaKGVisualizer({
   return (
     <div className={`relative h-full w-full bg-slate-950 ${className ?? ''}`}>
       <SigmaContainer
-        graph={graph}
         settings={SIGMA_SETTINGS}
         style={{ width: '100%', height: '100%', background: 'transparent' }}
       >
