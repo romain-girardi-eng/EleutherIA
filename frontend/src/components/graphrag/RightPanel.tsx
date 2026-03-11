@@ -44,23 +44,6 @@ function formatConfidence(value?: number) {
   return `${Math.round(normalized)}%`;
 }
 
-function WorkspaceMetric({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="rounded-[20px] border border-stone-200/80 bg-white/86 px-3.5 py-2.5 shadow-[0_14px_32px_-28px_rgba(120,53,15,0.25)] backdrop-blur-sm">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-400">
-        {label}
-      </p>
-      <p className="mt-1 text-sm font-semibold text-stone-900">{value}</p>
-    </div>
-  );
-}
-
 function PanelHeader({
   state,
   response,
@@ -81,43 +64,42 @@ function PanelHeader({
     'passage-reader': t('graphRagUi.rightPanel.states.passageReader'),
   };
 
-  return (
-    <div className="shrink-0 border-b border-stone-200/70 px-4 py-4">
-      <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-amber-50/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-800">
-            <Network className="h-3.5 w-3.5" />
-            {stateCopy[state]}
-          </span>
-          {response?.service && (
-            <span className="inline-flex rounded-full border border-stone-200/80 bg-white/80 px-2.5 py-1 text-[11px] font-medium text-stone-500">
-              {response.service}
-            </span>
-          )}
-        </div>
-        <h2 className="mt-3 font-display text-[1.35rem] leading-tight text-stone-900 xl:text-[1.55rem]">
-          {response?.query || t('graphRagUi.rightPanel.fallbackQuery')}
-        </h2>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
-          {t('graphRagUi.rightPanel.subtitle')}
-        </p>
-      </div>
+  const nodesVal = formatMetricValue(response?.reasoning_path?.total_nodes ?? response?.nodes_used);
+  const edgesVal = formatMetricValue(response?.reasoning_path?.total_edges ?? response?.edges_traversed);
+  const confVal = formatConfidence(response?.quality_metrics?.confidence_score);
 
-      <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-3 2xl:grid-cols-5">
-        <WorkspaceMetric label={t('graphRagUi.rightPanel.metrics.sources')} value={formatMetricValue(sourcesCount)} />
-        <WorkspaceMetric
-          label={t('graphRagUi.rightPanel.metrics.nodes')}
-          value={formatMetricValue(response?.reasoning_path?.total_nodes ?? response?.nodes_used)}
-        />
-        <WorkspaceMetric
-          label={t('graphRagUi.rightPanel.metrics.edges')}
-          value={formatMetricValue(response?.reasoning_path?.total_edges ?? response?.edges_traversed)}
-        />
-        <WorkspaceMetric label={t('graphRagUi.rightPanel.metrics.conversation')} value={formatMetricValue(conversationCount)} />
-        <WorkspaceMetric
-          label={t('graphRagUi.rightPanel.metrics.confidence')}
-          value={formatConfidence(response?.quality_metrics?.confidence_score)}
-        />
+  return (
+    <div className="shrink-0 border-b border-stone-200/70 px-4 py-2.5">
+      <div className="flex items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200/80 bg-amber-50/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-amber-800">
+          <Network className="h-3 w-3" />
+          {stateCopy[state]}
+        </span>
+        {response?.service && (
+          <span className="inline-flex rounded-full border border-stone-200/80 bg-white/80 px-2 py-0.5 text-[10px] font-medium text-stone-500">
+            {response.service}
+          </span>
+        )}
+      </div>
+      <h2 className="mt-1.5 text-sm font-semibold leading-snug text-stone-900 line-clamp-1">
+        {response?.query || t('graphRagUi.rightPanel.fallbackQuery')}
+      </h2>
+      {/* Compact inline stats */}
+      <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+        {[
+          { l: t('graphRagUi.rightPanel.metrics.sources'), v: formatMetricValue(sourcesCount) },
+          { l: t('graphRagUi.rightPanel.metrics.nodes'), v: nodesVal },
+          { l: t('graphRagUi.rightPanel.metrics.edges'), v: edgesVal },
+          ...(confVal !== '--' ? [{ l: t('graphRagUi.rightPanel.metrics.confidence'), v: confVal }] : []),
+        ].map(({ l, v }) => (
+          <span
+            key={l}
+            className="inline-flex items-center gap-1 rounded-full border border-stone-200/70 bg-white/70 px-2 py-0.5 text-[10px] text-stone-500"
+          >
+            <span className="font-semibold text-stone-700">{v}</span>
+            {l}
+          </span>
+        ))}
       </div>
     </div>
   );
