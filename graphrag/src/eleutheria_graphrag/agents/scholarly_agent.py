@@ -37,9 +37,6 @@ from typing import Any
 
 from pydantic_graph import Graph
 
-# Sentence boundary regex for paragraph-preserving streaming chunking
-_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;·?!])\s+")
-
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.graph_nodes import (
     ClassifyComplexity,
@@ -62,6 +59,9 @@ from eleutheria_graphrag.agents.graph_nodes import (
     VerifyCitations,
 )
 from eleutheria_graphrag.agents.state import RAGState, ScholarlyAnswer
+
+# Sentence boundary regex for paragraph-preserving streaming chunking
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;·?!])\s+")
 
 logger = logging.getLogger(__name__)
 

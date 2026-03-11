@@ -201,7 +201,7 @@ def main() -> None:
                     str(work_id),
                 ),
             )
-            print(f"  Updated ancient_works (canonical_id, cts_urn, etc.)")
+            print("  Updated ancient_works (canonical_id, cts_urn, etc.)")
 
             # Step 5: Insert clean passages
             passage_rows = []
@@ -255,7 +255,7 @@ def main() -> None:
                 (str(work_id),),
             )
             final_count = cur.fetchone()[0]
-            print(f"\nVerification:")
+            print("\nVerification:")
             print(f"  Passages in DB: {final_count}")
             assert final_count == len(sections), (
                 f"Expected {len(sections)}, got {final_count}"

@@ -22,7 +22,6 @@ from typing import Any, cast
 
 import psycopg2
 from psycopg2.extensions import connection
-
 from psycopg2.extras import RealDictCursor
 
 
@@ -114,7 +113,7 @@ def analyze_metadata_completeness(edges: list[dict[str, Any]]) -> tuple[dict[str
     for edge in edges:
         if edge['metadata'] and isinstance(edge['metadata'], dict) and edge['metadata']:
             with_metadata += 1
-            for key in edge['metadata'].keys():
+            for key in edge['metadata']:
                 metadata_fields[key] += 1
         else:
             without_metadata += 1
@@ -259,10 +258,6 @@ def suggest_missing_edges(nodes_by_id: dict[Any, dict[str, Any]]) -> list[dict[s
 
     suggestions: list[dict[str, Any]] = []
 
-    # Example: Check for Stoic school connections
-    stoic_nodes = [n for n in nodes_by_id.values()
-                   if n.get('metadata', {}).get('school') == 'Stoic']
-
     # Add more sophisticated logic as needed
 
     return suggestions
@@ -275,7 +270,7 @@ def calculate_quality_score(edges: list[dict[str, Any]], nodes_by_id: dict[Any, 
     scores = {
         'orphan_penalty': max(0, 100 - (len(orphaned) / total_edges * 100)) if total_edges > 0 else 0,
         'metadata_completeness': (1 - len(missing_metadata) / total_edges * 1) * 100 if total_edges > 0 else 0,
-        'node_coverage': len(set(e['source_id'] for e in edges) | set(e['target_id'] for e in edges)) / len(nodes_by_id) * 100 if nodes_by_id else 0
+        'node_coverage': len({e['source_id'] for e in edges} | {e['target_id'] for e in edges}) / len(nodes_by_id) * 100 if nodes_by_id else 0
     }
 
     overall_score = sum(scores.values()) / len(scores)

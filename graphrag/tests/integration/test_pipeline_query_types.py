@@ -27,7 +27,6 @@ from eleutheria_graphrag.agents.state import ScholarlyAnswer
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------

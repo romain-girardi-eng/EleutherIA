@@ -1,6 +1,5 @@
 """Tests for ClassifyQueryType FSM node."""
 
-from unittest.mock import patch
 
 import pytest
 

@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import textwrap
 
-import pytest
-
+from .models import SCParagraph
 from .parser import (
     _clean_text,
     _extract_section_title,
@@ -15,8 +14,6 @@ from .parser import (
     _split_blocks,
     _split_header_body,
 )
-from .models import SCParagraph
-
 
 # ---------------------------------------------------------------------------
 # Header parsing

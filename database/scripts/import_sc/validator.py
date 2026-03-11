@@ -12,7 +12,6 @@ import re
 from .config import WORK_REGISTRY
 from .models import SCWork
 
-
 # ---------------------------------------------------------------------------
 # Gate 1: Per-work validation
 # ---------------------------------------------------------------------------

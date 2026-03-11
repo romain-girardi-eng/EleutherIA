@@ -152,10 +152,10 @@
       "target_types": ["argument", "argument_framework", "concept", "conceptual_evolution", "controversy", "debate", "group", "publication", "quote", "school", "synthesis", "work"]
     },
     "evidenced_by": {
-      "description": "Source concept is evidenced by target passage",
+      "description": "Source claim-bearing node is evidenced by target passage",
       "category": "citation",
       "inverse": "source_for",
-      "source_types": ["concept"],
+      "source_types": ["argument", "concept", "group", "school"],
       "target_types": ["passage"]
     },
     "preserves": {
