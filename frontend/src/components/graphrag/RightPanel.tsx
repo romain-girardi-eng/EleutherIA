@@ -356,7 +356,7 @@ export default function RightPanel({
   allResponses,
   activeSourceIndex,
   passageContext,
-  onNodeClick,
+  onNodeClick: _onNodeClick,
   onCloseDetail,
   onSourceSelect,
   onLoadMorePassages,
@@ -411,20 +411,9 @@ export default function RightPanel({
     [sources, onSourceSelect],
   );
 
-  // Register highlight ref so external citation clicks can highlight in DAG
-  const handleHighlightRef = useCallback(
-    (fn: (citationIndex: number) => void) => {
-      onHighlightRef?.((citationIndex: number) => {
-        fn(citationIndex);
-        // Also select the node when highlighted externally
-        const source = sources[citationIndex];
-        if (source) {
-          setSelectedNodeId(source.nodeId);
-        }
-      });
-    },
-    [onHighlightRef, sources],
-  );
+  // When external citation clicks happen, also select the node in our local state
+  // (This is registered via onHighlightRef from the parent)
+  // Note: onHighlightRef is consumed directly below in the graph render
 
   return (
     <div
