@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import type { SourceCitation } from '../types';
+import { getGraphTypeTheme } from './graphrag/graphTheme';
 
 interface CitationRendererProps {
   content: string;
@@ -210,22 +211,27 @@ interface PassageCitationLinkProps {
 }
 
 function PassageCitationLink({ citationNumber, passageId, onClick }: PassageCitationLinkProps) {
+  const theme = getGraphTypeTheme('passage');
   return (
     <span
-      className={`inline-flex items-center cursor-pointer group ${passageId ? '' : 'opacity-50'}`}
+      className={`inline-flex items-center gap-0.5 cursor-pointer align-middle ${passageId ? '' : 'opacity-50'}`}
       onClick={passageId ? onClick : undefined}
       title={passageId ? 'Click to read passage in context' : 'Passage not available'}
     >
-      <span className="text-amber-600 hover:text-amber-800 font-medium transition-colors">
-        [P{citationNumber}]
+      <span
+        className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 rounded-md text-[11px] font-semibold leading-none select-none transition-all duration-150 hover:brightness-90 hover:scale-110"
+        style={{
+          backgroundColor: theme.tint,
+          color: theme.text,
+          border: `1px solid ${theme.border}`,
+          boxShadow: `0 1px 2px 0 ${theme.glow}`,
+        }}
+      >
+        <svg className="w-3 h-3 mr-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        P{citationNumber}
       </span>
-      {passageId && (
-        <span className="ml-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-          <svg className="w-3 h-3 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
-        </span>
-      )}
     </span>
   );
 }
@@ -250,6 +256,8 @@ function CitationLink({
   confidence,
   academicMode,
 }: CitationLinkProps) {
+  const theme = getGraphTypeTheme(source?.nodeType);
+
   const getConfidenceBadgeColor = (conf: number) => {
     if (conf >= 0.9) return 'bg-green-100 text-green-800 border-green-300';
     if (conf >= 0.7) return 'bg-blue-100 text-blue-800 border-blue-300';
@@ -266,24 +274,25 @@ function CitationLink({
 
   return (
     <span
-      className="inline-flex items-center cursor-pointer group"
+      className="inline-flex items-center gap-0.5 cursor-pointer align-middle"
       onMouseEnter={(e) => onHover(e, citationNumber)}
       onMouseLeave={onLeave}
       onClick={onClick}
     >
-      <span className="text-primary-600 hover:text-primary-800 font-medium transition-colors">
-        [{citationNumber}]
+      <span
+        className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 rounded-md text-[11px] font-semibold leading-none select-none transition-all duration-150 hover:brightness-90 hover:scale-110"
+        style={{
+          backgroundColor: theme.tint,
+          color: theme.text,
+          border: `1px solid ${theme.border}`,
+          boxShadow: `0 1px 2px 0 ${theme.glow}`,
+        }}
+      >
+        {citationNumber}
       </span>
-      {source && (
-        <span className="ml-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-          <svg className="w-3 h-3 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
-        </span>
-      )}
       {academicMode && confidence !== undefined && (
         <span
-          className={`ml-1 inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold border ${getConfidenceBadgeColor(confidence)}`}
+          className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold border ${getConfidenceBadgeColor(confidence)}`}
           title={`Confidence: ${(confidence * 100).toFixed(0)}%`}
         >
           {getConfidenceLabel(confidence)}
@@ -303,6 +312,8 @@ const CitationTooltip = React.forwardRef<HTMLDivElement, CitationTooltipProps>(
   ({ citation, position }, ref) => {
     if (!citation) return null;
 
+    const theme = getGraphTypeTheme(citation.nodeType);
+
     return (
       <div
         ref={ref}
@@ -313,29 +324,43 @@ const CitationTooltip = React.forwardRef<HTMLDivElement, CitationTooltipProps>(
           transform: 'translate(-50%, -100%)'
         }}
       >
-        <div className="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 max-w-xs shadow-xl mb-1">
-          <div className="font-semibold mb-1">
-            [{citation.id}] {citation.nodeLabel}
-          </div>
-          <div className="text-gray-300">
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-700 text-gray-200 mr-1">
-              {citation.nodeType || 'Unknown'}
-            </span>
-            {citation.metadata?.author && (
-              <span className="text-gray-400">by {citation.metadata.author}</span>
-            )}
-            {citation.metadata?.period && (
-              <span className="text-gray-400 ml-1">({citation.metadata.period})</span>
-            )}
-          </div>
-          {citation.metadata?.confidence && (
-            <div className="text-gray-400 mt-1">
-              Confidence: {(citation.metadata.confidence * 100).toFixed(0)}%
+        <div className="flex rounded-lg shadow-xl mb-2 max-w-xs overflow-hidden border border-stone-200">
+          {/* Type-colored accent strip */}
+          <div className="w-1 flex-shrink-0" style={{ backgroundColor: theme.color }} />
+          <div className="bg-stone-50 text-stone-800 text-xs px-3 py-2.5 flex-1">
+            <div className="flex items-center gap-1.5 mb-1">
+              <span
+                className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold"
+                style={{
+                  backgroundColor: theme.tint,
+                  color: theme.text,
+                  border: `1px solid ${theme.border}`,
+                }}
+              >
+                {theme.label}
+              </span>
+              <span className="font-semibold text-stone-900 truncate">
+                {citation.nodeLabel}
+              </span>
             </div>
-          )}
-          <div className="text-[10px] text-gray-500 mt-1">Click to view details</div>
+            <div className="flex items-center gap-2 text-stone-500">
+              {citation.metadata?.author && (
+                <span>{citation.metadata.author}</span>
+              )}
+              {citation.metadata?.period && (
+                <span>{citation.metadata.period}</span>
+              )}
+              {citation.metadata?.confidence && (
+                <span>{(citation.metadata.confidence * 100).toFixed(0)}%</span>
+              )}
+            </div>
+            <div className="text-[10px] text-stone-400 mt-1">Click to view</div>
+          </div>
         </div>
-        <div className="w-3 h-3 bg-gray-900 transform rotate-45 mx-auto -mt-1.5"></div>
+        {/* SVG caret */}
+        <svg className="mx-auto -mt-2" width="12" height="6" viewBox="0 0 12 6">
+          <path d="M0 0 L6 6 L12 0" fill="#FAFAF9" stroke="#D6D3D1" strokeWidth="1" />
+        </svg>
       </div>
     );
   }
@@ -387,16 +412,13 @@ export function SourcesPanel({
     }
   };
 
-  const getNodeTypeColor = (type: string | undefined) => {
-    if (!type) return 'bg-gray-100 text-gray-800 border-gray-200';
-    switch (type.toLowerCase()) {
-      case 'person': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'concept': return 'bg-green-100 text-green-800 border-green-200';
-      case 'argument': return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'work': return 'bg-amber-100 text-amber-800 border-amber-200';
-      case 'quote': return 'bg-rose-100 text-rose-800 border-rose-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
+  const getNodeTypeStyle = (type: string | undefined) => {
+    const theme = getGraphTypeTheme(type);
+    return {
+      backgroundColor: theme.tint,
+      color: theme.text,
+      border: `1px solid ${theme.border}`,
+    };
   };
 
   if (!sources || sources.length === 0) return null;
@@ -419,15 +441,21 @@ export function SourcesPanel({
           >
             <div className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-all">
               <div className="flex-shrink-0 mt-0.5">
-                <span className="inline-flex items-center justify-center w-6 h-6 text-xs font-bold bg-primary-100 text-primary-700 rounded">
+                <span
+                  className="inline-flex items-center justify-center w-6 h-6 text-xs font-bold rounded"
+                  style={getNodeTypeStyle(source.nodeType)}
+                >
                   {source.id}
                 </span>
               </div>
 
               <div className="flex-grow min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${getNodeTypeColor(source.nodeType)}`}>
-                    {source.nodeType || 'Unknown'}
+                  <span
+                    className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+                    style={getNodeTypeStyle(source.nodeType)}
+                  >
+                    {getGraphTypeTheme(source.nodeType).label}
                   </span>
                   <span className="font-medium text-gray-900 group-hover:text-primary-700 transition-colors">
                     {source.nodeLabel}
