@@ -29,7 +29,7 @@ from .config import SC_CATEGORIES, SC_CORPUS_DIR, WORK_REGISTRY
 from .importer import SCImporter
 from .models import SCWork
 from .parser import parse_file
-from .validator import validate_corpus, validate_work
+from .validator import validate_corpus
 
 logger = logging.getLogger(__name__)
 
@@ -44,14 +44,14 @@ def discover_files(
     """
     if single_file:
         # Find this file across all categories
-        for cat_name, cat_subdir in SC_CATEGORIES.items():
+        for _cat_name, cat_subdir in SC_CATEGORIES.items():
             path = Path(SC_CORPUS_DIR) / cat_subdir / single_file
             if path.exists():
                 return [(single_file, str(path))]
         # Not found — try the registry
         if single_file in WORK_REGISTRY:
             # Search all category dirs
-            for cat_name, cat_subdir in SC_CATEGORIES.items():
+            for _cat_name, cat_subdir in SC_CATEGORIES.items():
                 path = Path(SC_CORPUS_DIR) / cat_subdir / single_file
                 if path.exists():
                     return [(single_file, str(path))]
@@ -68,7 +68,7 @@ def discover_files(
         categories = {category: SC_CATEGORIES[category]}
 
     files: list[tuple[str, str]] = []
-    for cat_name, cat_subdir in categories.items():
+    for _cat_name, cat_subdir in categories.items():
         cat_dir = Path(SC_CORPUS_DIR) / cat_subdir
         if not cat_dir.exists():
             print(f"WARN: Category directory not found: {cat_dir}")

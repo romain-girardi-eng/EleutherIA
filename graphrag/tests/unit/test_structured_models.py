@@ -7,8 +7,8 @@ from pydantic import ValidationError
 
 from eleutheria_graphrag.agents.pipeline_config import QueryType
 from eleutheria_graphrag.agents.structured_models import (
-    CRAGValidation,
     ClassificationResult,
+    CRAGValidation,
     ExpansionTerms,
     GreekTerm,
     LatinTerm,

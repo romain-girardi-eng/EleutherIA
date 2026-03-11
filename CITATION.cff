@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: "EleutherIA: A FAIR-Compliant Knowledge Graph for Ancient Philosophy on Free Will"
+title: "EleutherIA: An AI-Powered Scholarly Research Platform for Ancient Philosophy on Free Will"
 message: "If you use this software or dataset, please cite it as below."
 type: software
 authors:
@@ -11,12 +11,13 @@ authors:
 repository-code: "https://github.com/romain-girardi-eng/EleutherIA"
 url: "https://eleutheria.dev"
 abstract: >-
-  EleutherIA is a FAIR-compliant knowledge graph documenting ancient
-  philosophical debates on free will, fate, and moral responsibility
-  from the Greco-Roman and Early Christian periods (6th c. BCE - 6th c. CE).
-  It combines 2,193 knowledge graph nodes with 8,616 edges, 189 ancient
-  Greek/Latin works with 16,968 passages, and features GraphRAG for
-  scholarly Q&A with citation grounding.
+  EleutherIA is an AI-powered scholarly research platform combining a
+  FAIR-compliant knowledge graph, an ancient texts corpus, and an agentic
+  GraphRAG engine to document ancient philosophical debates on free will,
+  fate, and moral responsibility from the Greco-Roman and Early Christian
+  periods (6th c. BCE - 6th c. CE). It features 17,700+ KG nodes, 42,900+
+  edges, 189 ancient Greek/Latin works with 17,000+ passages, agentic
+  multi-LLM reasoning, hybrid search, and citation-verified scholarly Q&A.
 keywords:
   - ancient philosophy
   - free will

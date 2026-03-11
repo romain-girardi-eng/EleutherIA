@@ -8,7 +8,7 @@ from eleutheria_graphrag.agents.graph_nodes import (
     Synthesize,
 )
 from eleutheria_graphrag.agents.pipeline_config import QueryType
-from eleutheria_graphrag.agents.state import Evidence, EvidenceLayer, RAGState
+from eleutheria_graphrag.agents.state import Evidence, RAGState
 
 from .conftest import make_ctx, make_deps
 

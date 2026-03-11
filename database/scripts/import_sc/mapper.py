@@ -19,7 +19,6 @@ import uuid
 
 from .models import SCChapter, SCWork
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -175,7 +174,7 @@ def to_ancient_work(work: SCWork, run_id: str) -> dict:
     }
 
 
-def to_passages(work: SCWork, work_uuid: uuid.UUID, run_id: str) -> list[dict]:
+def to_passages(work: SCWork, work_uuid: uuid.UUID, run_id: str) -> list[dict]:  # noqa: ARG001
     """Map SCWork paragraphs → passages INSERT payloads.
 
     One row per SCParagraph. Each dict includes a pre-generated passage_id UUID.
@@ -467,7 +466,7 @@ def to_passage_citations(
     passage_data: list[dict],
     chapter_nodes: list[dict],
     work: SCWork,
-    run_id: str,
+    run_id: str,  # noqa: ARG001
 ) -> list[dict]:
     """Link each passage row to its chapter/paragraph KG node.
 

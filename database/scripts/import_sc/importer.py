@@ -128,7 +128,6 @@ class SCImporter:
                 exact = list(cur.fetchall())
 
                 # 2. Check for existing works by same authors with similar titles
-                authors = list({w.author for w in works if w.author})
                 cur.execute(
                     """
                     SELECT work_id, canonical_id, title, author, source,
@@ -285,7 +284,7 @@ class SCImporter:
                         aid,
                         w.author,
                         "Person",
-                        f"Author of ancient texts (auto-created by SC import)",
+                        "Author of ancient texts (auto-created by SC import)",
                         w.period,
                         json.dumps({
                             "run_id": self.run_id,

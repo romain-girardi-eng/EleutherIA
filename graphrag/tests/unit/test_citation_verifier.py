@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from eleutheria_graphrag.agents.state import Citation, Evidence, EvidenceLayer
+from eleutheria_graphrag.agents.state import Citation, Evidence
 from eleutheria_graphrag.services.citation_verifier import CitationVerifier
 
 

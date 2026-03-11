@@ -13,10 +13,10 @@ import json
 import os
 import subprocess
 import webbrowser
-from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 from urllib.parse import quote
+
 
 # Load .env files (project root, then deploy/production)
 def _load_env() -> None:
@@ -38,12 +38,12 @@ def _load_env() -> None:
 
 _load_env()
 
-import typer
-from rich.console import Console
-from rich.markdown import Markdown
-from rich.panel import Panel
-from rich.progress import Progress, SpinnerColumn, TextColumn
-from rich.table import Table
+import typer  # noqa: E402
+from rich.console import Console  # noqa: E402
+from rich.markdown import Markdown  # noqa: E402
+from rich.panel import Panel  # noqa: E402
+from rich.progress import Progress, SpinnerColumn, TextColumn  # noqa: E402
+from rich.table import Table  # noqa: E402
 
 app = typer.Typer(
     name="eleutheria",

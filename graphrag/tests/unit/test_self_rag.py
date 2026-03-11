@@ -23,7 +23,6 @@ from eleutheria_graphrag.agents.state import (
 
 from .conftest import make_ctx, make_deps
 
-
 # SelfRAGEvaluation JSON with all required fields (relevance, grounding, completeness, confidence)
 _SELF_RAG_HIGH = '{"relevance": 90, "grounding": 92, "completeness": 88, "confidence": 90, "caveats": [], "improvements": []}'
 _SELF_RAG_MEDIUM = '{"relevance": 68, "grounding": 70, "completeness": 65, "confidence": 68, "caveats": [], "improvements": []}'

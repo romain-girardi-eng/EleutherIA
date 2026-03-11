@@ -471,7 +471,7 @@ def _extract_section_title(raw_text: str) -> str | None:
     return None
 
 
-def _clean_text(raw: str, format_type: str) -> str:
+def _clean_text(raw: str, format_type: str) -> str:  # noqa: ARG001
     """Apply the 6-step cleaning pipeline. ORDER MATTERS.
 
     1. Strip TRADUCTION sections (Format B only)

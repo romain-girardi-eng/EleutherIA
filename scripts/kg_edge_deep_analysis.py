@@ -236,7 +236,7 @@ def main() -> None:
         print("1. RELATION PATTERNS BY NODE TYPE")
         print("=" * 80)
         patterns = analyze_relation_patterns(conn)
-        print(f"Top 30 relation patterns:")
+        print("Top 30 relation patterns:")
         print(f"{'Source Type':<20} {'Relation':<25} {'Target Type':<20} {'Count':>10}")
         print("-" * 80)
         for p in patterns[:30]:
@@ -331,7 +331,7 @@ def main() -> None:
         print("=" * 80)
         scholars = identify_missing_scholarly_edges(conn)
         if scholars:
-            print(f"Scholars with fewest connections (potential missing edges):")
+            print("Scholars with fewest connections (potential missing edges):")
             print(f"{'Scholar':<60} {'Edges':>6}")
             print("-" * 80)
             for scholar in scholars:
@@ -370,7 +370,7 @@ def main() -> None:
             'high_degree_nodes': [dict(h) for h in hubs],
             'isolated_nodes': [dict(n) for n in isolated],
             'weakly_connected': [dict(n) for n in weak],
-            'self_loops': [dict(l) for l in loops],
+            'self_loops': [dict(loop) for loop in loops],
             'duplicates': [dict(d) for d in dupes],
             'multiple_relations': [dict(i) for i in inconsistencies],
             'scholar_connectivity': [dict(s) for s in scholars],

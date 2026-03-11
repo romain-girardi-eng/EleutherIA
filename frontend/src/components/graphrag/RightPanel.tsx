@@ -344,7 +344,10 @@ export default function RightPanel({
   className = '',
 }: RightPanelProps) {
   const navigate = useNavigate();
-  const sources: SourceCitation[] = response?.sources ?? [];
+  const sources: SourceCitation[] = useMemo(
+    () => response?.sources ?? [],
+    [response?.sources],
+  );
 
   // Local state for which node is selected in the DAG (shows detail card)
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);

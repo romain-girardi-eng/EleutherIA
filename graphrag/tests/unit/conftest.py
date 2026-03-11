@@ -4,11 +4,8 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock, MagicMock
 
-import pytest
-
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.state import RAGState
-
 
 # ---------------------------------------------------------------------------
 # Core shared fixtures

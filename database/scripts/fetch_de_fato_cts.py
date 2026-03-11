@@ -264,7 +264,7 @@ def main() -> None:
     total_words = sum(s["word_count"] for s in sections)
     total_chars = sum(s["char_length"] for s in sections)
     print(f"\n{'=' * 60}")
-    print(f"Summary")
+    print("Summary")
     print(f"{'=' * 60}")
     print(f"  Sections:     {len(sections)}")
     print(f"  Total words:  {total_words:,}")

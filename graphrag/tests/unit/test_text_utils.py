@@ -4,14 +4,11 @@ from __future__ import annotations
 
 import json
 
-import pytest
-
 from eleutheria_graphrag.agents.text_utils import (
     TRUNCATION_SUFFIX,
     truncate_json,
     truncate_text,
 )
-
 
 # ---------------------------------------------------------------------------
 # truncate_text

@@ -30,7 +30,6 @@ Edges created per _en node:
 import argparse
 import json
 import os
-import sys
 
 import psycopg2
 import psycopg2.extras
@@ -171,7 +170,7 @@ def insert_translations(translations, db_url, dry_run=True):
                 json.dumps({"auto_generated": True}),
             ))
 
-    print(f"\nSummary:")
+    print("\nSummary:")
     print(f"  Translations provided: {len(translations)}")
     print(f"  Already exist (skip):  {skipped}")
     print(f"  Nodes to insert:       {len(nodes_to_insert)}")

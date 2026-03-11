@@ -26,7 +26,7 @@ import logging
 import os
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -52,7 +52,7 @@ DEFAULT_KV_NAMESPACE_ID = "9506f86aab4845818bd7644508d504e6"
 
 async def get_connection(database_url: str) -> asyncpg.Connection:
     """Create an asyncpg connection with free_will search_path."""
-    from urllib.parse import urlparse, parse_qs, unquote
+    from urllib.parse import parse_qs, unquote, urlparse
 
     parsed = urlparse(database_url)
     ssl_mode = parse_qs(parsed.query).get("sslmode", [None])[0]
@@ -315,7 +315,7 @@ def build_pagerank_output(
     G: nx.DiGraph,
 ) -> dict[str, Any]:
     """Build the pagerank_scores.json payload."""
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
     entries = []
     for node_id, score in scores.items():
         attrs = G.nodes.get(node_id, {})
@@ -342,7 +342,7 @@ def build_nodes_index(
     community_hierarchy: dict[str, Any],
 ) -> dict[str, Any]:
     """Build the kg_nodes_index.json payload (enriched node data for KV)."""
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
     node_assignments = community_hierarchy.get("node_assignments", {})
     indexed_nodes = []
     for node in nodes:
@@ -371,7 +371,7 @@ def build_nodes_index(
 
 def build_edges_index(edges: list[dict[str, Any]]) -> dict[str, Any]:
     """Build the kg_edges_index.json payload."""
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
     # Build adjacency lists for fast lookup
     adjacency: dict[str, list[dict[str, Any]]] = {}
     for edge in edges:

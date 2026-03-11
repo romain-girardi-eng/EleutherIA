@@ -12,7 +12,6 @@ from eleutheria_graphrag.agents.graph_nodes import (
     EvaluateSufficiency,
     HybridRetrieve,
     SearchPrimarySources,
-    SearchSecondarySources,
     SelfRAGEvaluate,
     Synthesize,
     SynthesizeWithHierarchy,
@@ -27,13 +26,9 @@ from eleutheria_graphrag.agents.graph_nodes import (
 from eleutheria_graphrag.agents.state import (
     Citation,
     Evidence,
-    EvidenceLayer,
-    EvidenceSource,
     QueryComplexity,
     RAGState,
-    ScholarlyAnswer,
 )
-
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -95,7 +90,7 @@ class TestParseJson:
         assert result == [1, 2, 3]
 
     def test_invalid_json_raises(self):
-        with pytest.raises(Exception):
+        with pytest.raises(Exception):  # noqa: B017
             _parse_json("not json at all")
 
 

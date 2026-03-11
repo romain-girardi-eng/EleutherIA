@@ -6,7 +6,11 @@ import pytest
 
 from eleutheria_graphrag.agents.graph_nodes import CRAGValidate, TreeReasoningRetrieve
 from eleutheria_graphrag.agents.pipeline_config import PipelineConfig
-from eleutheria_graphrag.agents.state import Evidence, EvidenceLayer, EvidenceSource, RAGState
+from eleutheria_graphrag.agents.state import (
+    Evidence,
+    EvidenceSource,
+    RAGState,
+)
 
 from .conftest import make_ctx, make_deps
 

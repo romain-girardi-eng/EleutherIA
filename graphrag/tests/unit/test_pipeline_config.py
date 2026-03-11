@@ -5,7 +5,6 @@ from __future__ import annotations
 import pytest
 
 from eleutheria_graphrag.agents.pipeline_config import (
-    PIPELINE_CONFIGS,
     PipelineConfig,
     QueryType,
     get_pipeline_config,

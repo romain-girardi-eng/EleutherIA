@@ -36,7 +36,6 @@ from typing import Any
 from pydantic_graph import BaseNode, End, GraphRunContext
 
 from eleutheria_graphrag.agents.dependencies import Deps
-from eleutheria_graphrag.agents.text_utils import truncate_json, truncate_text
 from eleutheria_graphrag.agents.state import (
     Citation,
     Evidence,
@@ -46,6 +45,7 @@ from eleutheria_graphrag.agents.state import (
     RAGState,
     ScholarlyAnswer,
 )
+from eleutheria_graphrag.agents.text_utils import truncate_json, truncate_text
 
 logger = logging.getLogger(__name__)
 

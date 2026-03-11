@@ -13,7 +13,7 @@
  *   9. CTA              — dark, links to explore
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -52,7 +52,7 @@ export default function HowItWorksPage() {
   const [activeId, setActiveId] = useState('hero');
   const containerRef = useRef<HTMLDivElement>(null);
   const [navHeight, setNavHeight] = useState(48);
-  const navSections: DotNavSection[] = [
+  const navSections: DotNavSection[] = useMemo(() => [
     { id: 'hero', label: t('howItWorksPage.nav.hero') },
     { id: 'problem', label: t('howItWorksPage.nav.problem') },
     { id: 'kg', label: t('howItWorksPage.nav.kg') },
@@ -62,7 +62,7 @@ export default function HowItWorksPage() {
     { id: 'search', label: t('howItWorksPage.nav.search') },
     { id: 'fair', label: t('howItWorksPage.nav.fair') },
     { id: 'cta', label: t('howItWorksPage.nav.cta') },
-  ];
+  ], [t]);
 
   // Measure the actual nav height so the scroll container sits flush below it
   useEffect(() => {

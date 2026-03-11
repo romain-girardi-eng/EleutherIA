@@ -6,7 +6,6 @@ import pytest
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
-from eleutheria_graphrag.agents.state import QueryComplexity
 
 
 def _make_deps(llm_responses: list[str] | None = None) -> Deps:
@@ -41,7 +40,7 @@ def _make_deps(llm_responses: list[str] | None = None) -> Deps:
     # Use a cycling iterator so extra calls return the last response
     _iter = iter(responses)
 
-    async def _side_effect(*args, **kwargs):
+    async def _side_effect(*args, **kwargs):  # noqa: ARG001
         try:
             return next(_iter)
         except StopIteration:

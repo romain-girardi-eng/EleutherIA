@@ -4,7 +4,6 @@ import pytest
 from pydantic import ValidationError
 
 from eleutheria_graphrag.agents.pipeline_config import PipelineConfig, QueryType
-from eleutheria_graphrag.agents.structured_models import CRAGValidation, SelfRAGEvaluation
 from eleutheria_graphrag.agents.state import (
     Citation,
     Evidence,
@@ -13,6 +12,9 @@ from eleutheria_graphrag.agents.state import (
     QueryComplexity,
     RAGState,
     ScholarlyAnswer,
+)
+from eleutheria_graphrag.agents.structured_models import (
+    CRAGValidation,
 )
 
 

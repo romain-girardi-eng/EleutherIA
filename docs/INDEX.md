@@ -1,7 +1,5 @@
 # EleutherIA Documentation
 
-Welcome to the EleutherIA documentation.
-
 ## Quick Links
 
 | Guide | Description |
@@ -14,11 +12,18 @@ Welcome to the EleutherIA documentation.
 ## For Developers
 
 - [Development Setup](development/SETUP.md) - Environment setup, testing, code quality
-- [Contributing](../CONTRIBUTING.md) - How to contribute
+- [Browser Automation](development/agents.md) - Using browser-use for automation tasks
+- [Contributing](../.github/CONTRIBUTING.md) - How to contribute
 
 ## For Researchers
 
 - [Methodology](academic/METHODOLOGY.md) - Scholarly methodology, FAIR principles, citation standards
+
+## Architecture Deep Dives
+
+- [PageIndex V3](architecture/PAGEINDEX_V3.md) - GraphRAG pipeline specification
+- [GraphRAG Convergence](architecture/graphrag-convergence.md) - Pipeline convergence analysis
+- [D3 Graph Engine](architecture/d3-graph/) - Graph visualization design decisions
 
 ## The Three Packages
 
@@ -27,7 +32,7 @@ Each package can be installed independently:
 ```bash
 pip install eleutheria-database   # Ancient texts corpus
 pip install eleutheria-kg         # Knowledge graph framework
-pip install eleutheria-graphrag   # Graph-based RAG
+pip install eleutheria-graphrag   # Agentic RAG engine
 ```
 
 See the [Architecture Overview](architecture/OVERVIEW.md) for how they work together.
@@ -36,16 +41,24 @@ See the [Architecture Overview](architecture/OVERVIEW.md) for how they work toge
 
 ```
 docs/
-├── INDEX.md              # This file
+├── INDEX.md                   # This file
+├── CHANGELOG.md               # Version history
 ├── guides/
-│   └── QUICK_START.md    # Getting started
+│   └── QUICK_START.md         # Getting started
 ├── architecture/
-│   └── OVERVIEW.md       # System design
+│   ├── OVERVIEW.md            # System design
+│   ├── PAGEINDEX_V3.md        # GraphRAG pipeline spec
+│   ├── graphrag-convergence.md
+│   └── d3-graph/              # Graph visualization decisions
 ├── reference/
-│   ├── API.md            # REST API docs
-│   └── DATA_DICTIONARY.md # Database schema
+│   ├── API.md                 # REST API docs
+│   └── DATA_DICTIONARY.md     # Database schema
 ├── development/
-│   └── SETUP.md          # Dev environment
-└── academic/
-    └── METHODOLOGY.md    # Research methodology
+│   ├── SETUP.md               # Dev environment
+│   └── agents.md              # Browser automation
+├── academic/
+│   └── METHODOLOGY.md         # Research methodology
+├── plans/                     # Design documents (internal)
+├── reports/                   # Audit reports (internal)
+└── assets/                    # Images, posters
 ```
