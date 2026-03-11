@@ -13,6 +13,7 @@
 
 - [Development Setup](development/SETUP.md) - Environment setup, testing, code quality
 - [Browser Automation](development/agents.md) - Using browser-use for automation tasks
+- [API Examples](examples/) - cURL and Python usage examples
 - [Contributing](../.github/CONTRIBUTING.md) - How to contribute
 
 ## For Researchers
@@ -43,6 +44,7 @@ See the [Architecture Overview](architecture/OVERVIEW.md) for how they work toge
 docs/
 ├── INDEX.md                   # This file
 ├── CHANGELOG.md               # Version history
+├── codemeta.json              # CodeMeta scholarly metadata
 ├── guides/
 │   └── QUICK_START.md         # Getting started
 ├── architecture/
@@ -58,6 +60,9 @@ docs/
 │   └── agents.md              # Browser automation
 ├── academic/
 │   └── METHODOLOGY.md         # Research methodology
+├── examples/
+│   ├── curl/                  # cURL examples
+│   └── python/                # Python examples
 ├── plans/                     # Design documents (internal)
 ├── reports/                   # Audit reports (internal)
 └── assets/                    # Images, posters

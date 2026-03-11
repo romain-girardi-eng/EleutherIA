@@ -86,7 +86,7 @@ install-graphrag:
 # =============================================================================
 
 run local:
-	docker compose up -d --build
+	docker compose -f deploy/docker-compose.yml up -d --build
 	@echo ""
 	@echo "EleutherIA is running!"
 	@echo "  Frontend: http://localhost"
@@ -94,13 +94,13 @@ run local:
 	@echo "  Qdrant:   http://localhost:6333/dashboard"
 
 stop:
-	docker compose down
+	docker compose -f deploy/docker-compose.yml down
 
 local-clean:
-	docker compose down -v --remove-orphans
+	docker compose -f deploy/docker-compose.yml down -v --remove-orphans
 
 logs:
-	docker compose logs -f
+	docker compose -f deploy/docker-compose.yml logs -f
 
 # =============================================================================
 # Docker — Production (Supabase + Qdrant Cloud)

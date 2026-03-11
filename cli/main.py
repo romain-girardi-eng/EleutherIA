@@ -146,7 +146,7 @@ def run(
         )
     )
 
-    compose_file = PROJECT_ROOT / "deploy" / "docker" / "docker-compose.yml"
+    compose_file = PROJECT_ROOT / "deploy" / "docker-compose.yml"
 
     if profile == "admin":
         cmd = ["docker", "compose", "-f", str(compose_file), "--profile", "admin", "up"]
@@ -192,7 +192,7 @@ def stop() -> None:
         console.print("[red]Docker is not installed or not running.[/red]")
         raise typer.Exit(1)
 
-    compose_file = PROJECT_ROOT / "deploy" / "docker" / "docker-compose.yml"
+    compose_file = PROJECT_ROOT / "deploy" / "docker-compose.yml"
     cmd = ["docker", "compose", "-f", str(compose_file), "down"]
     raise typer.Exit(run_command(cmd))
 
@@ -208,7 +208,7 @@ def clean() -> None:
     if not confirm:
         raise typer.Exit(0)
 
-    compose_file = PROJECT_ROOT / "deploy" / "docker" / "docker-compose.yml"
+    compose_file = PROJECT_ROOT / "deploy" / "docker-compose.yml"
     cmd = ["docker", "compose", "-f", str(compose_file), "down", "-v", "--remove-orphans"]
     raise typer.Exit(run_command(cmd))
 
@@ -219,7 +219,7 @@ def logs(
     follow: bool = typer.Option(True, "--follow/--no-follow", "-f", help="Follow logs"),
 ) -> None:
     """View Docker service logs."""
-    compose_file = PROJECT_ROOT / "deploy" / "docker" / "docker-compose.yml"
+    compose_file = PROJECT_ROOT / "deploy" / "docker-compose.yml"
     cmd = ["docker", "compose", "-f", str(compose_file), "logs"]
     if follow:
         cmd.append("-f")
@@ -688,7 +688,7 @@ def status() -> None:
     if check_docker():
         try:
             result = subprocess.run(
-                ["docker", "compose", "-f", str(PROJECT_ROOT / "deploy" / "docker" / "docker-compose.yml"), "ps", "--format", "json"],
+                ["docker", "compose", "-f", str(PROJECT_ROOT / "deploy" / "docker-compose.yml"), "ps", "--format", "json"],
                 capture_output=True, text=True
             )
             if result.returncode == 0 and result.stdout.strip():
