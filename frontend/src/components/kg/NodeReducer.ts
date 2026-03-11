@@ -24,6 +24,12 @@ export function createNodeReducer(state: NodeReducerState) {
       return { hidden: true };
     }
 
+    // Safety net: Sigma crashes if any visible node has non-finite x/y.
+    // Catch any position corruption that slipped past layout sanitization.
+    if (!Number.isFinite(data.x) || !Number.isFinite(data.y)) {
+      return { hidden: true };
+    }
+
     const degree = nodeDegrees.get(node) ?? 0;
     const isExpanded = data.nodeType === 'passage' && expandedWorks.size > 0;
 

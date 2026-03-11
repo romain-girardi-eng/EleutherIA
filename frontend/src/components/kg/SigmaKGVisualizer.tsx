@@ -15,7 +15,7 @@ import { ZoomLevel } from '@/types/sigma';
 import { buildGraph } from '@/services/graphologyAdapter';
 import { detectCommunities } from '@/services/communityDetection';
 import { aggregatePassages, expandWorkPassages, collapseWorkPassages } from './PassageAggregation';
-import { computeLayout } from '@/workers/layoutWorker';
+import { computeLayout, sanitizePositions } from '@/workers/layoutWorker';
 import { getZoomLevel } from './SemanticZoomController';
 import { createEdgeReducer } from './EdgeFilterReducer';
 import { createNodeReducer } from './NodeReducer';
@@ -379,6 +379,10 @@ export default function SigmaKGVisualizer({
       } catch (err) {
         console.warn('Layout failed, using random positions:', err);
       }
+      // Belt-and-suspenders: ensure every node has finite x/y before Sigma
+      // renders, even if computeLayout partially failed or a library mutated
+      // positions after sanitization.
+      sanitizePositions(graph);
       setLayoutReady(true);
     }, 0);
 

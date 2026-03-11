@@ -16,6 +16,23 @@ export interface LayoutOptions {
   noverlapIterations?: number;
 }
 
+/**
+ * Replace any non-finite x/y with random positions.
+ * Exported so callers can re-sanitize after layout if needed.
+ */
+export function sanitizePositions(
+  graph: Graph<KGNodeAttributes, KGEdgeAttributes>,
+): void {
+  graph.forEachNode((node) => {
+    const x = graph.getNodeAttribute(node, 'x');
+    const y = graph.getNodeAttribute(node, 'y');
+    if (!Number.isFinite(x) || !Number.isFinite(y)) {
+      graph.setNodeAttribute(node, 'x', Math.random() * 1000);
+      graph.setNodeAttribute(node, 'y', Math.random() * 1000);
+    }
+  });
+}
+
 const DEFAULTS: Required<LayoutOptions> = {
   iterations: 100,
   gravity: 1.0,
@@ -40,37 +57,39 @@ export function computeLayout(
 
   const opts = { ...DEFAULTS, ...options };
 
-  forceAtlas2.assign(graph, {
-    iterations: opts.iterations,
-    settings: {
-      gravity: opts.gravity,
-      scalingRatio: opts.scalingRatio,
-      linLogMode: opts.linLogMode,
-      barnesHutOptimize: opts.barnesHutOptimize,
-      barnesHutTheta: opts.barnesHutTheta,
-      strongGravityMode: opts.strongGravityMode,
-      slowDown: opts.slowDown,
-    },
-  });
-
-  if (opts.noverlapIterations > 0) {
-    noverlap.assign(graph, {
-      maxIterations: opts.noverlapIterations,
+  try {
+    forceAtlas2.assign(graph, {
+      iterations: opts.iterations,
       settings: {
-        ratio: 2.0,
-        margin: 5,
+        gravity: opts.gravity,
+        scalingRatio: opts.scalingRatio,
+        linLogMode: opts.linLogMode,
+        barnesHutOptimize: opts.barnesHutOptimize,
+        barnesHutTheta: opts.barnesHutTheta,
+        strongGravityMode: opts.strongGravityMode,
+        slowDown: opts.slowDown,
       },
     });
+  } catch (err) {
+    console.warn('ForceAtlas2 failed, positions may be partial:', err);
+  }
+
+  try {
+    if (opts.noverlapIterations > 0) {
+      noverlap.assign(graph, {
+        maxIterations: opts.noverlapIterations,
+        settings: {
+          ratio: 2.0,
+          margin: 5,
+        },
+      });
+    }
+  } catch (err) {
+    console.warn('Noverlap failed:', err);
   }
 
   // Sanitize: ForceAtlas2/noverlap can produce NaN for isolated nodes
   // or degenerate configurations. Sigma requires finite x/y for all nodes.
-  graph.forEachNode((node) => {
-    const x = graph.getNodeAttribute(node, 'x');
-    const y = graph.getNodeAttribute(node, 'y');
-    if (!Number.isFinite(x) || !Number.isFinite(y)) {
-      graph.setNodeAttribute(node, 'x', Math.random() * 1000);
-      graph.setNodeAttribute(node, 'y', Math.random() * 1000);
-    }
-  });
+  // This MUST run even if layout algorithms threw above.
+  sanitizePositions(graph);
 }
