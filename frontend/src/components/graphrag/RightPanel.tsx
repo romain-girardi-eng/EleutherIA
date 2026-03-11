@@ -48,12 +48,10 @@ function PanelHeader({
   state,
   response,
   sourcesCount,
-  conversationCount,
 }: {
   state: RightPanelState;
   response: GraphRAGResponse | null;
   sourcesCount: number;
-  conversationCount: number;
 }) {
   const { t } = useTranslation();
 
@@ -367,7 +365,6 @@ export default function RightPanel({
     return citationTexts[selectedSource.nodeLabel] ?? undefined;
   }, [selectedSource, citationTexts]);
 
-  const workspaceConversationCount = allResponses?.length ?? (response ? 1 : 0);
 
   // Handle node click from the DAG
   const handleDAGNodeSelect = useCallback(
@@ -420,7 +417,6 @@ export default function RightPanel({
           state={state}
           response={response}
           sourcesCount={sources.length}
-          conversationCount={workspaceConversationCount}
         />
 
         <div className="flex-1 min-h-0 overflow-hidden">
