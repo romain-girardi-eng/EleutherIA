@@ -1,7 +1,6 @@
 // frontend/src/components/kg/SemanticZoomController.ts
 import { ZoomLevel, ALWAYS_VISIBLE_CATEGORIES, type EdgeCategory } from '@/types/sigma';
 
-const OVERVIEW_MIN_DEGREE = 5;
 
 export function getZoomLevel(cameraRatio: number): ZoomLevel {
   if (cameraRatio > 1.2) return ZoomLevel.Overview;
@@ -13,17 +12,15 @@ export function getZoomLevel(cameraRatio: number): ZoomLevel {
 export function shouldShowNode(
   nodeType: string,
   zoom: ZoomLevel,
-  degree: number,
+  _degree: number,
   isExpanded: boolean,
 ): boolean {
   if (zoom === ZoomLevel.Detail) return true;
+  // Always hide aggregated passages unless expanded
   if (nodeType === 'passage') {
-    if (zoom === ZoomLevel.Neighborhood) return isExpanded;
-    return false;
+    return isExpanded;
   }
-  if (zoom === ZoomLevel.Overview) {
-    return degree >= OVERVIEW_MIN_DEGREE;
-  }
+  // Show all non-passage nodes at every zoom level
   return true;
 }
 
