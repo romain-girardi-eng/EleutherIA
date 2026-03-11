@@ -1,20 +1,19 @@
 /**
- * CosmographPage - GPU-Powered Knowledge Graph Page
+ * CosmographPage - Knowledge Graph Page
  *
- * Modern, ultra-fast graph visualization using Cosmograph
+ * Graph visualization using Sigma.js + Graphology
  */
 
 import { useState, useCallback, useMemo, useEffect, Component } from 'react';
 import type { ReactNode } from 'react';
-import { useParams, Link, useSearchParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import CosmographKGVisualizer from '../components/CosmographKGVisualizer';
-import D3ForceKGVisualizer from '../components/D3ForceKGVisualizer';
+import SigmaKGVisualizer from '../components/kg/SigmaKGVisualizer';
 import { CosmicNodePanel } from '../components/cosmos/CosmicNodePanel';
 import ModeSwitcher from '../components/canvas/ModeSwitcher';
 import BottomTabNav from '../components/mobile/BottomTabNav';
 import { HelpCircle, Monitor, Network } from 'lucide-react';
-import type { KGNode } from '../types';
+import type { KGNode, CytoscapeData } from '../types';
 import { apiClient } from '../api/client';
 import { useDevice } from '../context/DeviceContext';
 
@@ -99,15 +98,12 @@ function MobileGraphFallback({ nodeCount, edgeCount }: { nodeCount: number; edge
 export default function CosmographPage() {
   const { t } = useTranslation();
   const { nodeId } = useParams<{ nodeId?: string }>();
-  const [searchParams, setSearchParams] = useSearchParams();
   const { isMobile, isTablet } = useDevice();
   const isMobileOrTablet = isMobile || isTablet;
   const [selectedNode, setSelectedNode] = useState<KGNode | null>(null);
   const [showHelp, setShowHelp] = useState(false);
   const [allNodes, setAllNodes] = useState<KGNode[]>([]);
-  const [cyData, setCyData] = useState<{ elements?: { edges?: Array<{ data: Record<string, unknown> }> } } | null>(null);
-
-  const graphEngine = searchParams.get('engine') === 'd3' ? 'd3' : 'cosmograph';
+  const [cyData, setCyData] = useState<CytoscapeData | null>(null);
 
   // Load data for relationships
   useEffect(() => {
@@ -124,16 +120,6 @@ export default function CosmographPage() {
     };
     loadData();
   }, []);
-
-  const setGraphEngine = useCallback((engine: 'cosmograph' | 'd3') => {
-    const next = new URLSearchParams(searchParams);
-    if (engine === 'cosmograph') {
-      next.delete('engine');
-    } else {
-      next.set('engine', 'd3');
-    }
-    setSearchParams(next, { replace: true });
-  }, [searchParams, setSearchParams]);
 
   // Auto-select node from URL
   useEffect(() => {
@@ -245,15 +231,10 @@ export default function CosmographPage() {
               retry: t('graphPage.tryAgain'),
             }}
           >
-            {graphEngine === 'd3' ? (
-              <D3ForceKGVisualizer
-                onNodeClick={handleNodeClick}
-                selectedNodeId={selectedNode?.id}
-              />
-            ) : (
-              <CosmographKGVisualizer
-                onNodeClick={handleNodeClick}
-                selectedNodeId={selectedNode?.id}
+            {cyData && (
+              <SigmaKGVisualizer
+                cyData={cyData}
+                onNodeSelect={handleNodeClick}
               />
             )}
           </GraphErrorBoundary>
@@ -262,30 +243,6 @@ export default function CosmographPage() {
 
       {/* Mode Switcher - Top Right */}
       <div className="absolute top-4 right-4 z-30 flex items-center gap-2">
-        <div className="flex gap-1 p-1 bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-xl">
-          <button
-            onClick={() => setGraphEngine('cosmograph')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              graphEngine === 'cosmograph'
-                ? 'bg-violet-500/40 text-white'
-                : 'text-white/50 hover:text-white hover:bg-white/10'
-            }`}
-            title={t('graphPage.engineTitles.cosmograph')}
-          >
-            {t('graphPage.engines.cosmograph')}
-          </button>
-          <button
-            onClick={() => setGraphEngine('d3')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              graphEngine === 'd3'
-                ? 'bg-violet-500/40 text-white'
-                : 'text-white/50 hover:text-white hover:bg-white/10'
-            }`}
-            title={t('graphPage.engineTitles.d3')}
-          >
-            {t('graphPage.engines.d3')}
-          </button>
-        </div>
         <button
           onClick={() => setShowHelp(true)}
           className="p-2.5 bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-xl text-slate-400 hover:text-white hover:border-slate-600/50 transition-colors"
@@ -363,11 +320,7 @@ export default function CosmographPage() {
               <div className="pt-4 border-t border-white/10">
                 <div className="flex items-center gap-2 text-xs text-white/40">
                   <span className="inline-block w-2 h-2 rounded-full bg-violet-500 shadow-lg shadow-violet-500/50"></span>
-                  <span>
-                    {graphEngine === 'd3'
-                      ? t('graphPage.help.d3Engine')
-                      : t('graphPage.help.cosmographEngine')}
-                  </span>
+                  <span>{t('graphPage.help.sigmaEngine', 'Powered by Sigma.js + Graphology')}</span>
                 </div>
               </div>
             </div>
