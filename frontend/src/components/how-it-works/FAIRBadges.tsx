@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Search, Globe, GitBranch, RotateCcw } from 'lucide-react';
 import { cn } from '../../utils/cn';
@@ -10,41 +12,6 @@ interface FAIRBadge {
   color: string;
   detail: string[];
 }
-
-const FAIR_BADGES: FAIRBadge[] = [
-  {
-    letter: 'F',
-    title: 'Findable',
-    description: 'Every entity has a unique, persistent identifier',
-    icon: <Search className="w-5 h-5" />,
-    color: 'orange',
-    detail: ['CTS URNs for ancient texts', 'UUIDs for all KG nodes', 'DOI 10.5281/zenodo.17379490'],
-  },
-  {
-    letter: 'A',
-    title: 'Accessible',
-    description: 'Open REST API, no auth required for reads',
-    icon: <Globe className="w-5 h-5" />,
-    color: 'amber',
-    detail: ['Public JSON API', 'Swagger/OpenAPI docs', 'HTTPS + CORS enabled'],
-  },
-  {
-    letter: 'I',
-    title: 'Interoperable',
-    description: 'Standard formats compatible with existing tools',
-    icon: <GitBranch className="w-5 h-5" />,
-    color: 'primary',
-    detail: ['JSON-LD & RDF formats', 'TEI XML preservation', 'Compatible with Perseus / TLG / PHI'],
-  },
-  {
-    letter: 'R',
-    title: 'Reusable',
-    description: 'Traceable provenance, open licence',
-    icon: <RotateCcw className="w-5 h-5" />,
-    color: 'emerald',
-    detail: ['CC BY 4.0 licence', 'Source attribution per passage', 'Confidence scores 0–1'],
-  },
-];
 
 const colorMap: Record<string, { badge: string; border: string; bg: string; icon: string }> = {
   orange:  { badge: 'bg-orange-500 text-white',   border: 'border-orange-200', bg: 'bg-orange-50/70',  icon: 'text-orange-600' },
@@ -60,9 +27,49 @@ interface FAIRBadgesProps {
 }
 
 export function FAIRBadges({ className, variant = 'light' }: FAIRBadgesProps) {
+  const { t } = useTranslation();
+
+  const fairBadges: FAIRBadge[] = useMemo(
+    () => [
+      {
+        letter: 'F',
+        title: t('howItWorksPage.fair.badges.F.title'),
+        description: t('howItWorksPage.fair.badges.F.description'),
+        icon: <Search className="w-5 h-5" />,
+        color: 'orange',
+        detail: t('howItWorksPage.fair.badges.F.detail', { returnObjects: true }) as string[],
+      },
+      {
+        letter: 'A',
+        title: t('howItWorksPage.fair.badges.A.title'),
+        description: t('howItWorksPage.fair.badges.A.description'),
+        icon: <Globe className="w-5 h-5" />,
+        color: 'amber',
+        detail: t('howItWorksPage.fair.badges.A.detail', { returnObjects: true }) as string[],
+      },
+      {
+        letter: 'I',
+        title: t('howItWorksPage.fair.badges.I.title'),
+        description: t('howItWorksPage.fair.badges.I.description'),
+        icon: <GitBranch className="w-5 h-5" />,
+        color: 'primary',
+        detail: t('howItWorksPage.fair.badges.I.detail', { returnObjects: true }) as string[],
+      },
+      {
+        letter: 'R',
+        title: t('howItWorksPage.fair.badges.R.title'),
+        description: t('howItWorksPage.fair.badges.R.description'),
+        icon: <RotateCcw className="w-5 h-5" />,
+        color: 'emerald',
+        detail: t('howItWorksPage.fair.badges.R.detail', { returnObjects: true }) as string[],
+      },
+    ],
+    [t],
+  );
+
   return (
     <div className={cn('grid grid-cols-2 lg:grid-cols-4 gap-5 w-full', className)}>
-      {FAIR_BADGES.map((badge, i) => {
+      {fairBadges.map((badge, i) => {
         const c = colorMap[badge.color];
         const cardStyle =
           variant === 'light'

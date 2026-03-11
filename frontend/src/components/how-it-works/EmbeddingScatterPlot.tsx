@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../../utils/cn';
 
@@ -134,6 +135,7 @@ interface EmbeddingScatterPlotProps {
 }
 
 export function EmbeddingScatterPlot({ className }: EmbeddingScatterPlotProps) {
+  const { t } = useTranslation();
   const [input, setInput] = useState('');
   const [userDot, setUserDot] = useState<UserDot | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -172,7 +174,7 @@ export function EmbeddingScatterPlot({ className }: EmbeddingScatterPlotProps) {
           viewBox="0 0 100 100"
           className="w-full"
           style={{ aspectRatio: '4/3' }}
-          aria-label="Semantic vector space"
+          aria-label={t('howItWorksPage.embeddings.scatter.ariaLabel')}
         >
           {/* Subtle grid */}
           <defs>
@@ -315,7 +317,7 @@ export function EmbeddingScatterPlot({ className }: EmbeddingScatterPlotProps) {
 
         {/* Axis labels */}
         <div className="absolute bottom-2 right-3 text-[10px] font-body text-white/25 select-none">
-          dim₁ / dim₂ (PCA projection of 3 072 dims)
+          {t('howItWorksPage.embeddings.scatter.axisLabel')}
         </div>
       </div>
 
@@ -331,7 +333,7 @@ export function EmbeddingScatterPlot({ className }: EmbeddingScatterPlotProps) {
             className="rounded-xl border border-white/10 bg-zinc-900/70 px-5 py-4"
           >
             <p className="text-xs font-body uppercase tracking-widest text-white/40 mb-3">
-              Nearest concepts to "{userDot.word}"
+              {t('howItWorksPage.embeddings.scatter.nearestTo', { word: userDot.word })}
             </p>
             <div className="space-y-2">
               {nearestConcepts.map((c, i) => {
@@ -375,7 +377,7 @@ export function EmbeddingScatterPlot({ className }: EmbeddingScatterPlotProps) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type a word and press Enter…"
+          placeholder={t('howItWorksPage.embeddings.scatter.placeholder')}
           className="flex-1 bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-sm font-body text-white placeholder-white/30
                      focus:outline-none focus:ring-1 focus:ring-orange-500/60 focus:border-orange-500/40 transition-colors"
         />
@@ -385,7 +387,7 @@ export function EmbeddingScatterPlot({ className }: EmbeddingScatterPlotProps) {
           className="px-4 py-2.5 rounded-xl bg-orange-500 text-white text-sm font-body font-medium
                      hover:bg-orange-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         >
-          Embed →
+          {t('howItWorksPage.embeddings.scatter.embed')}
         </button>
       </div>
 
