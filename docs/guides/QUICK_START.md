@@ -38,7 +38,7 @@ OPENROUTER_API_KEY=your-key-here
 
 ```bash
 make run
-# Or: docker compose -f deploy/docker/docker-compose.yml up -d
+# Or: docker compose -f deploy/docker-compose.yml up -d
 ```
 
 ### 4. Access the Application
@@ -107,7 +107,7 @@ works = await db.fetch("""
 
 ```bash
 make stop
-# Or: docker compose -f deploy/docker/docker-compose.yml down
+# Or: docker compose -f deploy/docker-compose.yml down
 ```
 
 ## Next Steps

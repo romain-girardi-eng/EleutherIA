@@ -8,7 +8,7 @@
 #   cp .env.example .env   # Fill in Supabase + Qdrant Cloud credentials
 #   docker compose up -d --build
 #
-# For local self-contained setup, use the root docker-compose.yml instead.
+# For local self-contained setup, use deploy/docker-compose.yml instead.
 # =============================================================================
 
 name: eleutheria-prod

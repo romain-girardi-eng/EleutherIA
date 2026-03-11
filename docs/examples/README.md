@@ -15,7 +15,7 @@ Usage examples for the EleutherIA API and Python packages.
 pip install eleutheria-database eleutheria-kg eleutheria-graphrag[llm]
 
 # Run example
-python examples/python/basic_query.py
+python docs/examples/python/basic_query.py
 ```
 
 ## curl Examples
@@ -32,4 +32,4 @@ curl -X POST "http://localhost:8000/api/graphrag/query" \
 
 ## Postman
 
-Import `examples/postman/eleutheria.postman_collection.json` into Postman.
+Import `docs/examples/postman/eleutheria.postman_collection.json` into Postman.

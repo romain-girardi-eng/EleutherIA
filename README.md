@@ -100,15 +100,15 @@ eleutheria shell            # Interactive mode
 
 ```
 EleutherIA/
-├── database/          Ancient texts corpus (189 works, 17k passages)
-├── kg/                Knowledge graph (17.7k nodes, 42.9k edges, 56 relation types)
-├── graphrag/          Agentic RAG engine (17-node FSM, multi-LLM)
-├── backend/           FastAPI gateway (auth, search, migrations)
-├── frontend/          React 19 app (graph viz, search, i18n)
-├── cli/               Command-line interface
-├── deploy/            Docker, Cloudflare Workers, production configs
-├── scripts/           Maintenance & data quality tools
-└── docs/              Architecture, API reference, academic methodology
+├── database/       Ancient texts corpus (189 works, 17k passages)
+├── kg/             Knowledge graph (17.7k nodes, 42.9k edges)
+├── graphrag/       Agentic RAG engine (17-node FSM, multi-LLM)
+├── backend/        FastAPI gateway (auth, search, migrations)
+├── frontend/       React 19 app (graph viz, search, i18n)
+├── cli/            Command-line interface
+├── deploy/         Docker Compose, Cloudflare Workers, Render, production configs
+├── scripts/        Maintenance & data quality tools
+└── docs/           Architecture, API reference, examples, methodology
 ```
 
 ### The Three Packages
