@@ -19,9 +19,6 @@ export default defineConfig({
       'react-dom',
       'react-router-dom',
       'three',
-      'sigma',
-      'graphology',
-      '@react-sigma/core',
     ],
   },
   server: {
@@ -48,8 +45,6 @@ export default defineConfig({
         manualChunks: {
           // Three.js - heavy 3D library (loaded on demand)
           'three-vendor': ['three'],
-          // Sigma.js + Graphology for KG visualization
-          'sigma-vendor': ['sigma', '@react-sigma/core', 'graphology'],
           // Separate charting/data visualization libraries
           'charts-vendor': ['d3', 'recharts'],
           // Separate animation libraries
