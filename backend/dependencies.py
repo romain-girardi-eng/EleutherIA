@@ -9,6 +9,7 @@ GraphRAGService, KGAnalytics, KGCache, RerankerService, and CitationVerifier
 from __future__ import annotations
 
 import logging
+import os
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -21,6 +22,13 @@ from eleutheria_kg.services.cache import KGCache
 from eleutheria_kg.services.qdrant import QdrantService
 
 logger = logging.getLogger(__name__)
+
+
+def _env_flag(name: str, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
 
 
 @dataclass
@@ -43,7 +51,13 @@ class Services:
         await self.db.connect()
 
         # 2. Qdrant
-        await self.qdrant.connect()
+        qdrant_required = _env_flag("QDRANT_REQUIRED", True)
+        try:
+            await self.qdrant.connect()
+        except Exception:
+            if qdrant_required:
+                raise
+            logger.warning("Qdrant unavailable - continuing with degraded startup")
 
         # 3. Hybrid search (wraps db)
         self.search = HybridSearchService(self.db)
@@ -74,14 +88,34 @@ class Services:
         """Load KG nodes and edges from the database."""
         nodes = await self.db.fetch("""
             SELECT
-                node_id as id, label, type, description,
-                period, school, role, metadata
+                node_id as id,
+                label,
+                type,
+                description,
+                period,
+                COALESCE(metadata->>'school', metadata->>'school_affiliation') as school,
+                COALESCE(metadata->>'role', metadata->>'scholarly_role') as role,
+                metadata,
+                metadata->>'date' as date,
+                metadata->>'birth' as birth,
+                metadata->>'death' as death,
+                metadata->>'floruit' as floruit,
+                metadata->>'approximate_dates' as approximate_dates,
+                metadata->>'scholarly_role' as scholarly_role
             FROM free_will.kg_nodes
         """)
         edges = await self.db.fetch("""
             SELECT
-                source_id as source, target_id as target,
-                relation, description, weight
+                source_id as source,
+                target_id as target,
+                relation,
+                metadata->>'description' as description,
+                CASE
+                    WHEN COALESCE(metadata->>'weight', '') ~ '^[0-9]+(\\.[0-9]+)?$'
+                        THEN (metadata->>'weight')::double precision
+                    ELSE 1.0
+                END as weight,
+                metadata
             FROM free_will.kg_edges
         """)
         return {"nodes": nodes, "edges": edges}

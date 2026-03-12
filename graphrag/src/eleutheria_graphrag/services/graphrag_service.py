@@ -73,15 +73,35 @@ class GraphRAGService:
 
         nodes = await self.db.fetch("""
             SELECT
-                node_id as id, label, type, description,
-                period, school, role, metadata
+                node_id as id,
+                label,
+                type,
+                description,
+                period,
+                COALESCE(metadata->>'school', metadata->>'school_affiliation') as school,
+                COALESCE(metadata->>'role', metadata->>'scholarly_role') as role,
+                metadata,
+                metadata->>'date' as date,
+                metadata->>'birth' as birth,
+                metadata->>'death' as death,
+                metadata->>'floruit' as floruit,
+                metadata->>'approximate_dates' as approximate_dates,
+                metadata->>'scholarly_role' as scholarly_role
             FROM free_will.kg_nodes
         """)
 
         edges = await self.db.fetch("""
             SELECT
-                source_id as source, target_id as target,
-                relation, description, weight
+                source_id as source,
+                target_id as target,
+                relation,
+                metadata->>'description' as description,
+                CASE
+                    WHEN COALESCE(metadata->>'weight', '') ~ '^[0-9]+(\\.[0-9]+)?$'
+                        THEN (metadata->>'weight')::double precision
+                    ELSE 1.0
+                END as weight,
+                metadata
             FROM free_will.kg_edges
         """)
 

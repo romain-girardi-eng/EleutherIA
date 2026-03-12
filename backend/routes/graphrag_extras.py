@@ -240,9 +240,12 @@ async def get_debates(
     limit: int = Query(10, ge=1, le=50),
 ) -> dict[str, Any]:
     """Get philosophical debate nodes from the KG."""
-    debate_types = {"Debate", "Argument", "Position", "Objection", "Response"}
+    debate_types = {"debate", "argument", "position", "objection", "response"}
     nodes = analytics.kg_data.get("nodes", [])
-    debates = [n for n in nodes if n.get("type") in debate_types]
+    debates = [
+        n for n in nodes
+        if str(n.get("type", "")).strip().lower() in debate_types
+    ]
 
     # Sort by number of connections (most connected first)
     edges = analytics.kg_data.get("edges", [])

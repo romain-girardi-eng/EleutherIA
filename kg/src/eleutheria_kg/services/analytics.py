@@ -90,6 +90,10 @@ def _algorithm_available(name: str) -> bool:
     return name in ("greedy", "semantic")
 
 
+def _normalized_node_type(node: KGNode) -> str:
+    return str(node.get("type", "")).strip().lower()
+
+
 class KGAnalytics:
     """
     Knowledge graph analytics service.
@@ -256,7 +260,7 @@ class KGAnalytics:
         person_nodes = {
             node["id"]
             for node in self.kg_data.get("nodes", [])
-            if node.get("type") == "Person"
+            if _normalized_node_type(node) == "person"
         }
 
         communities: dict[str, int] = {}
