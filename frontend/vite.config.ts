@@ -10,6 +10,10 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      '@/cosmograph/style.module.css': path.resolve(
+        __dirname,
+        './node_modules/@cosmograph/cosmograph/cosmograph/style.module.css.js',
+      ),
       '@': path.resolve(__dirname, './src'),
     },
   },
@@ -43,6 +47,16 @@ export default defineConfig({
       output: {
         // Manual chunks for better code splitting and caching
         manualChunks: {
+          // Cosmograph GPU graph stack
+          'cosmograph-vendor': [
+            '@cosmograph/react',
+            '@cosmograph/cosmograph',
+            '@cosmograph/ui',
+            '@cosmos.gl/graph',
+            '@uwdata/mosaic-core',
+            'apache-arrow',
+            '@supabase/supabase-js',
+          ],
           // Three.js - heavy 3D library (loaded on demand)
           'three-vendor': ['three'],
           // Separate charting/data visualization libraries

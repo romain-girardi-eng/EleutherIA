@@ -14,6 +14,7 @@ from qdrant_client.http import models
 logger = logging.getLogger(__name__)
 
 # Configuration from environment
+QDRANT_URL = os.getenv("QDRANT_URL")
 QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
 QDRANT_PORT = int(os.getenv("QDRANT_HTTP_PORT", "6333"))
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
@@ -29,6 +30,7 @@ class QdrantService:
 
     def __init__(self) -> None:
         self.client: QdrantClient | None = None
+        self._connected = False
 
     async def connect(self) -> None:
         """
@@ -37,7 +39,14 @@ class QdrantService:
         Uses QDRANT_API_KEY for cloud connections, otherwise connects locally.
         """
         try:
-            if QDRANT_API_KEY:
+            if QDRANT_URL:
+                logger.info(f"Connecting to Qdrant via QDRANT_URL at {QDRANT_URL}")
+                self.client = QdrantClient(
+                    url=QDRANT_URL,
+                    api_key=QDRANT_API_KEY or None,
+                    check_compatibility=False,
+                )
+            elif QDRANT_API_KEY:
                 # Cloud connection with API key and HTTPS
                 logger.info(f"Connecting to Qdrant Cloud at {QDRANT_HOST}")
                 self.client = QdrantClient(
@@ -58,11 +67,14 @@ class QdrantService:
 
             # Verify connection
             collections = self.client.get_collections()
+            self._connected = True
             logger.info(
                 f"Connected to Qdrant - {len(collections.collections)} collections"
             )
 
         except Exception as e:
+            self._connected = False
+            self.client = None
             logger.error(f"Failed to connect to Qdrant: {e}")
             raise
 
@@ -70,11 +82,13 @@ class QdrantService:
         """Close Qdrant connection."""
         if self.client:
             self.client.close()
-            logger.info("Qdrant connection closed")
+            self.client = None
+        self._connected = False
+        logger.info("Qdrant connection closed")
 
     def is_connected(self) -> bool:
         """Check if Qdrant is connected."""
-        return self.client is not None
+        return self._connected
 
     async def search_nodes(
         self,

@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@axe-core/react": "^4.8.0",
+    "@cosmograph/react": "^2.2.1",
     "@dagrejs/dagre": "^2.0.4",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",

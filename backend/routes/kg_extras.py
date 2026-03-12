@@ -202,7 +202,7 @@ async def get_influence_matrix(
     nodes = analytics.kg_data.get("nodes", [])
 
     # Collect person nodes
-    persons = [n for n in nodes if n.get("type") == "Person"]
+    persons = [n for n in nodes if str(n.get("type", "")).strip().lower() == "person"]
 
     # Build influence matrix
     matrix: dict[str, dict[str, int]] = {}
