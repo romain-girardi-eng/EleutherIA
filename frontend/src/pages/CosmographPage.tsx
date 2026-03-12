@@ -18,7 +18,7 @@ import {
   Spline,
   X,
 } from 'lucide-react';
-import { startTransition, useDeferredValue, useEffect, useRef, useState } from 'react';
+import { startTransition, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -27,10 +27,8 @@ import {
   CosmographPopup,
   CosmographProvider,
   CosmographRangeColorLegend,
-  CosmographSearch,
   CosmographSizeLegend,
   CosmographTimeline,
-  CosmographTypeColorLegend,
   prepareCosmographData,
   type CosmographConfig,
   type CosmographData,
@@ -136,6 +134,12 @@ interface SimulationControls {
   impulse: number;
 }
 
+interface LegendItem {
+  label: string;
+  color: string;
+  count: number;
+}
+
 const TYPE_META: Record<string, { label: string; color: string; bias: number }> = {
   person: { label: 'Thinker', color: '#4cc9f0', bias: 28 },
   work: { label: 'Work', color: '#f4d35e', bias: 18 },
@@ -204,15 +208,15 @@ const RELATION_META: Array<{ match: RegExp; category: string; weight: number; co
 
 const DEFAULT_SIMULATION_CONTROLS: SimulationControls = {
   decay: 4300,
-  gravity: 0.22,
-  center: 0,
-  repulsion: 1.18,
+  gravity: 0.18,
+  center: 0.02,
+  repulsion: 1.34,
   theta: 1.08,
-  linkSpring: 1.08,
-  linkDistance: 18,
+  linkSpring: 1,
+  linkDistance: 22,
   mouseRepulsion: 3.2,
-  friction: 0.88,
-  impulse: 0.48,
+  friction: 0.9,
+  impulse: 0.56,
 };
 
 const SIMULATION_PRESETS: Array<{
@@ -340,6 +344,70 @@ function buildPaletteMap(values: string[], palette = PALETTE, fallback = '#94a3b
   });
 
   return result;
+}
+
+function collectLegendItems(nodes: FlatGraphNode[], accessor: keyof FlatGraphNode, colorMap: Record<string, string>) {
+  const counts = new Map<string, number>();
+
+  nodes.forEach((node) => {
+    const key = String(node[accessor] ?? '');
+    if (!key) return;
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  });
+
+  return Array.from(counts.entries())
+    .map(([label, count]) => ({
+      label,
+      color: colorMap[label] ?? '#94a3b8',
+      count,
+    }))
+    .sort((left, right) => right.count - left.count || left.label.localeCompare(right.label));
+}
+
+function scoreSearchNode(node: FlatGraphNode, rawQuery: string) {
+  const query = rawQuery.trim().toLowerCase();
+  if (!query) {
+    return node.importance + node.degree * 2;
+  }
+
+  const label = node.label.toLowerCase();
+  const searchHint = node.searchHint.toLowerCase();
+  const community = node.communityLabel.toLowerCase();
+  const type = node.typeLabel.toLowerCase();
+  const period = node.periodLabel.toLowerCase();
+  const school = node.schoolGroup.toLowerCase();
+  const greek = node.greekTerm.toLowerCase();
+  const latin = node.latinTerm.toLowerCase();
+
+  let score = 0;
+
+  if (label === query) score += 150;
+  if (label.startsWith(query)) score += 110;
+  if (label.includes(query)) score += 90;
+  if (greek.startsWith(query) || latin.startsWith(query)) score += 80;
+  if (greek.includes(query) || latin.includes(query)) score += 55;
+  if (school.includes(query)) score += 44;
+  if (period.includes(query)) score += 38;
+  if (type.includes(query)) score += 34;
+  if (community.includes(query)) score += 26;
+  if (searchHint.includes(query)) score += 20;
+
+  if (score === 0) return -1;
+
+  return score + node.importance / 30 + node.degree / 5;
+}
+
+function getSearchResults(nodes: FlatGraphNode[], query: string, limit = 10) {
+  const ranked = nodes
+    .map((node) => ({
+      node,
+      score: scoreSearchNode(node, query),
+    }))
+    .filter((entry) => entry.score >= 0)
+    .sort((left, right) => right.score - left.score)
+    .slice(0, limit);
+
+  return ranked.map((entry) => entry.node);
 }
 
 function classifyRelation(relation?: string | null) {
@@ -885,6 +953,7 @@ export default function CosmographPage() {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [visibleNodeCount, setVisibleNodeCount] = useState(0);
   const [selectedPointIndices, setSelectedPointIndices] = useState<number[]>([]);
+  const [selectedLinkCount, setSelectedLinkCount] = useState(0);
   const [pinnedNodeIds, setPinnedNodeIds] = useState<string[]>([]);
   const [simulationRunning, setSimulationRunning] = useState(true);
   const [simulationControls, setSimulationControls] = useState<SimulationControls>(DEFAULT_SIMULATION_CONTROLS);
@@ -892,10 +961,17 @@ export default function CosmographPage() {
   const [tourCursor, setTourCursor] = useState(0);
   const [timelineSelectionLabel, setTimelineSelectionLabel] = useState<string | null>(null);
   const [timelineHoverLabel, setTimelineHoverLabel] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchCursor, setSearchCursor] = useState(0);
 
   const deferredHoveredNodeId = useDeferredValue(hoveredNodeId);
+  const deferredSearchQuery = useDeferredValue(searchQuery);
 
   const selectedNode = selectedNodeId && graphModel ? graphModel.nodesById.get(selectedNodeId) ?? null : null;
+  const selectedFlatNode =
+    selectedNodeId && graphModel
+      ? graphModel.flatNodesById.get(selectedNodeId) ?? null
+      : null;
   const selectedRelationships =
     selectedNodeId && graphModel
       ? graphModel.relationshipsByNodeId.get(selectedNodeId) ?? []
@@ -905,6 +981,63 @@ export default function CosmographPage() {
     deferredHoveredNodeId && graphModel
       ? graphModel.flatNodesById.get(deferredHoveredNodeId) ?? null
       : null;
+  const searchResults = useMemo(
+    () => (graphModel ? getSearchResults(graphModel.flatNodes, deferredSearchQuery, 10) : []),
+    [graphModel, deferredSearchQuery],
+  );
+  const selectedNeighborhoodSummary = useMemo(() => {
+    if (!graphModel || !selectedFlatNode) {
+      return null;
+    }
+
+    const relationCounts = new Map<string, number>();
+    const typeCounts = new Map<string, number>();
+    let incoming = 0;
+    let outgoing = 0;
+
+    selectedRelationships.forEach((relationship) => {
+      const relationLabel = formatRelationLabel(relationship.relation);
+      relationCounts.set(relationLabel, (relationCounts.get(relationLabel) ?? 0) + 1);
+
+      const relatedType = graphModel.flatNodesById.get(relationship.id)?.typeLabel ?? relationship.type;
+      typeCounts.set(relatedType, (typeCounts.get(relatedType) ?? 0) + 1);
+
+      if (relationship.direction === 'incoming') {
+        incoming += 1;
+      } else {
+        outgoing += 1;
+      }
+    });
+
+    const topRelations = Array.from(relationCounts.entries())
+      .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+      .slice(0, 4);
+    const topTypes = Array.from(typeCounts.entries())
+      .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+      .slice(0, 3);
+
+    return {
+      neighborCount: selectedFlatNode.degree,
+      linkCount: Math.max(selectedLinkCount, selectedFlatNode.degree),
+      incoming,
+      outgoing,
+      topRelations,
+      topTypes,
+    };
+  }, [graphModel, selectedFlatNode, selectedLinkCount, selectedRelationships]);
+
+  useEffect(() => {
+    setSearchCursor(0);
+  }, [deferredSearchQuery]);
+
+  useEffect(() => {
+    if (!searchResults.length) {
+      setSearchCursor(0);
+      return;
+    }
+
+    setSearchCursor((current) => clamp(current, 0, searchResults.length - 1));
+  }, [searchResults]);
 
   useEffect(() => {
     let cancelled = false;
@@ -980,7 +1113,7 @@ export default function CosmographPage() {
     const connected = graph.getConnectedPointIndices(pointIndex) ?? [];
     const frame = options?.fitNeighborhood ? [pointIndex, ...connected.slice(0, 28)] : [pointIndex];
 
-    graph.selectPoint(pointIndex, false, false);
+    graph.selectPoint(pointIndex, false, true);
     graph.setFocusedPoint(pointIndex);
 
     if (frame.length > 1 && options?.fitNeighborhood) {
@@ -1042,6 +1175,7 @@ export default function CosmographPage() {
 
     setSelectionMode(null);
     setSelectedPointIndices([]);
+    setSelectedLinkCount(0);
     setSelectedNodeId(null);
     setHoveredNodeId(null);
     navigate('/visualizer', { replace: true });
@@ -1176,6 +1310,38 @@ export default function CosmographPage() {
           : colorMode === 'period'
             ? graphModel?.periodColorMap
             : undefined;
+  const categoricalLegendItems = useMemo(() => {
+    if (!graphModel || colorMode === 'importance' || !activeColorMap) {
+      return [] as LegendItem[];
+    }
+
+    const accessor: keyof FlatGraphNode =
+      colorMode === 'community'
+        ? 'communityLabel'
+        : colorMode === 'type'
+          ? 'typeLabel'
+          : colorMode === 'school'
+            ? 'schoolGroup'
+            : 'periodLabel';
+
+    return collectLegendItems(graphModel.flatNodes, accessor, activeColorMap);
+  }, [activeColorMap, colorMode, graphModel]);
+  const colorLegendTitle =
+    colorMode === 'community'
+      ? 'Semantic clusters'
+      : colorMode === 'type'
+        ? 'Node types'
+        : colorMode === 'school'
+          ? 'Schools'
+          : colorMode === 'period'
+            ? 'Periods'
+            : 'Influence pulse';
+  const sizeLegendTitle =
+    sizeMode === 'importance'
+      ? 'Node importance'
+      : sizeMode === 'degree'
+        ? 'Connection degree'
+        : 'Source density';
 
   const dynamicGraphConfig: Partial<CosmographConfig> | undefined = graphModel
     ? {
@@ -1188,9 +1354,9 @@ export default function CosmographPage() {
         focusedPointRingColor: '#22d3ee',
         pointDefaultColor: '#7dd3fc',
         pointDefaultSize: 4,
-        pointGreyoutOpacity: 0.16,
+        pointGreyoutOpacity: 0.12,
         linkDefaultColor: 'rgba(148,163,184,0.22)',
-        linkGreyoutOpacity: 0.06,
+        linkGreyoutOpacity: 0.04,
         linkDefaultWidth: 1,
         hoveredLinkColor: '#f8fafc',
         hoveredLinkWidthIncrease: 1.5,
@@ -1207,7 +1373,8 @@ export default function CosmographPage() {
         fitViewDuration: 500,
         fitViewPadding: 0.14,
         randomSeed: 'eleutheria-cosmograph-v2',
-        pointSamplingDistance: 120,
+        spaceSize: 5400,
+        pointSamplingDistance: 152,
         pointColorBy: activeColorAccessor,
         pointColorByMap: activeColorMap,
         pointColorByFn:
@@ -1215,13 +1382,13 @@ export default function CosmographPage() {
             ? (value: unknown) => importanceColor(value, graphModel.minImportance, graphModel.maxImportance)
             : undefined,
         pointSizeBy: activeSizeAccessor,
-        pointSizeRange: [3, 16],
+        pointSizeRange: [2.6, 14],
         pointClusterBy: activeClusterAccessor,
         showLabels,
         showDynamicLabels: showLabels,
-        showDynamicLabelsLimit: 42,
+        showDynamicLabelsLimit: 36,
         showTopLabels: showLabels,
-        showTopLabelsLimit: 34,
+        showTopLabelsLimit: 30,
         showFocusedPointLabel: true,
         showHoveredPointLabel: true,
         showSelectedLabels: true,
@@ -1237,6 +1404,8 @@ export default function CosmographPage() {
         ],
         pointLabelFontSize: 13,
         clusterLabelFontSize: 18,
+        labelMargin: 8,
+        labelPadding: [8, 5.5, 8, 5.5],
         pointLabelClassName: (_text, _index, pointId) => {
           const isPinned = pointId ? pinnedSet.has(pointId) : false;
           const isFocused = pointId === selectedNodeId;
@@ -1272,9 +1441,9 @@ export default function CosmographPage() {
           'text-transform: uppercase',
           'box-shadow: 0 14px 38px rgba(2,6,23,0.32)',
         ].join('; '),
-        selectPointOnClick: 'single',
+        selectPointOnClick: true,
         focusPointOnClick: true,
-        selectPointOnLabelClick: 'single',
+        selectPointOnLabelClick: true,
         focusPointOnLabelClick: true,
         resetSelectionOnEmptyCanvasClick: true,
         simulationDecay: simulationControls.decay,
@@ -1284,7 +1453,8 @@ export default function CosmographPage() {
         simulationRepulsionTheta: simulationControls.theta,
         simulationLinkSpring: simulationControls.linkSpring,
         simulationLinkDistance: simulationControls.linkDistance,
-        simulationCluster: 0.24,
+        simulationLinkDistRandomVariationRange: [1.06, 1.18],
+        simulationCluster: clusterMode === 'none' ? 0 : 0.18,
         simulationRepulsionFromMouse: simulationControls.mouseRepulsion,
         simulationFriction: simulationControls.friction,
         simulationImpulse: simulationControls.impulse,
@@ -1356,6 +1526,9 @@ export default function CosmographPage() {
               if (!clickedNode) return;
               void focusNodeById(clickedNode.id, { fitNeighborhood: false });
             }}
+            onLabelClick={(_index, id) => {
+              void focusNodeById(id, { fitNeighborhood: false });
+            }}
             onBackgroundClick={() => {
               clearSelection();
             }}
@@ -1378,10 +1551,11 @@ export default function CosmographPage() {
             onPolygonSelected={() => {
               setSelectionMode(null);
             }}
-            onPointsFiltered={(filteredPoints, pointIndices) => {
+            onPointsFiltered={(filteredPoints, pointIndices, linkIndices) => {
               const rowCount = Number((filteredPoints as { numRows?: number }).numRows ?? graphModel.totalNodes);
               setVisibleNodeCount(rowCount);
               setSelectedPointIndices(pointIndices ?? []);
+              setSelectedLinkCount(linkIndices?.length ?? 0);
             }}
             style={{ width: '100%', height: '100%' }}
           />
@@ -1443,37 +1617,100 @@ export default function CosmographPage() {
                 <StatCard label="Pinned" value={pinnedNodeIds.length.toLocaleString()} accent="emerald" />
               </div>
 
-              <div className="mt-5 rounded-[22px] border border-white/8 bg-slate-950/70 p-4">
-                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  <Search className="h-3.5 w-3.5" />
-                  Search the graph
+              {selectedFlatNode && selectedNeighborhoodSummary && (
+                <div className="mt-5 rounded-[24px] border border-cyan-300/12 bg-[linear-gradient(180deg,rgba(6,16,32,0.95)_0%,rgba(2,6,23,0.92)_100%)] p-4 shadow-[0_18px_50px_rgba(14,165,233,0.12)]">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/80">
+                        <Focus className="h-3.5 w-3.5" />
+                        Neighborhood spotlight
+                      </div>
+                      <p className="mt-2 text-sm font-semibold text-white">
+                        {selectedFlatNode.label}
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-slate-400">
+                        Click now selects the node plus its first-degree neighborhood and the links tying that local structure together.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        void focusNeighborhood();
+                      }}
+                      className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-medium text-slate-100 transition-colors hover:border-cyan-300/30 hover:bg-cyan-300/[0.08]"
+                    >
+                      <Route className="h-3.5 w-3.5" />
+                      Fit neighborhood
+                    </button>
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <StatCard label="Neighbors" value={selectedNeighborhoodSummary.neighborCount.toLocaleString()} accent="cyan" />
+                    <StatCard label="Links lit" value={selectedNeighborhoodSummary.linkCount.toLocaleString()} accent="amber" />
+                    <StatCard label="Incoming" value={selectedNeighborhoodSummary.incoming.toLocaleString()} accent="rose" />
+                    <StatCard label="Outgoing" value={selectedNeighborhoodSummary.outgoing.toLocaleString()} accent="emerald" />
+                  </div>
+
+                  <div className="mt-4 grid gap-3 md:grid-cols-2">
+                    <div className="rounded-[18px] border border-white/8 bg-white/[0.03] p-3">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                        Dominant relations
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {selectedNeighborhoodSummary.topRelations.map(([label, count]) => (
+                          <span
+                            key={label}
+                            className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs text-slate-200"
+                          >
+                            {label} · {count}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="rounded-[18px] border border-white/8 bg-white/[0.03] p-3">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                        Connected node types
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {selectedNeighborhoodSummary.topTypes.map(([label, count]) => (
+                          <span
+                            key={label}
+                            className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs text-slate-200"
+                          >
+                            {label} · {count}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-3">
-                  <CosmographSearch
-                    accessor="label"
-                    showAccessorsMenu
-                    showFooter
-                    selectConnectedPoints
-                    focusPointOnSelect
-                    zoomToPointOnSelectScale={2.4}
-                    zoomToPointOnSelectDuration={500}
-                    placeholderText="Philosopher, concept, Greek term, school..."
-                    suggestionsLimit={18}
-                    maxVisibleItems={8}
-                    suggestionFields={{
-                      typeLabel: 'Type',
-                      periodLabel: 'Period',
-                      schoolGroup: 'School',
-                    }}
-                    suggestionTruncationLength={56}
-                    inputClassName="w-full rounded-2xl border border-white/10 bg-[#060b17] px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
-                    suggestionListClassName="rounded-2xl border border-white/10 bg-[#020617] text-white shadow-[0_24px_80px_rgba(2,6,23,0.65)]"
-                    onSelect={(suggestion) => {
-                      if (typeof suggestion.id !== 'string') return;
-                      void focusNodeById(suggestion.id, { fitNeighborhood: false });
-                    }}
-                  />
-                </div>
+              )}
+
+              <div className="mt-5 rounded-[24px] border border-white/8 bg-[linear-gradient(180deg,rgba(5,10,22,0.96)_0%,rgba(2,6,23,0.88)_100%)] p-4 shadow-[0_18px_50px_rgba(2,6,23,0.24)]">
+                <GraphSearchPanel
+                  query={searchQuery}
+                  activeIndex={searchCursor}
+                  results={searchResults}
+                  selectedNodeId={selectedNodeId}
+                  typeColorMap={graphModel.typeColorMap}
+                  onQueryChange={setSearchQuery}
+                  onMoveCursor={(direction) => {
+                    if (!searchResults.length) return;
+                    setSearchCursor((current) => {
+                      const next = current + direction;
+                      return clamp(next, 0, searchResults.length - 1);
+                    });
+                  }}
+                  onSelect={(node) => {
+                    setSearchQuery(node.label);
+                    void focusNodeById(node.id, { fitNeighborhood: false });
+                  }}
+                  onClear={() => {
+                    setSearchQuery('');
+                    setSearchCursor(0);
+                  }}
+                />
               </div>
 
               <div className="mt-5 space-y-5">
@@ -1763,6 +2000,8 @@ export default function CosmographPage() {
                       id="visualizer-type-bars"
                       expanded
                       maxDisplayedItems={8}
+                      selectOnClick
+                      highlightSelectedData
                       showSortingBlock={false}
                       showSearch={false}
                       moveFilteredToTop
@@ -1780,6 +2019,8 @@ export default function CosmographPage() {
                       id="visualizer-school-bars"
                       expanded
                       maxDisplayedItems={8}
+                      selectOnClick
+                      highlightSelectedData
                       showSortingBlock={false}
                       showSearch={false}
                       moveFilteredToTop
@@ -1829,8 +2070,8 @@ export default function CosmographPage() {
             </div>
           </div>
 
-          <div className="absolute bottom-4 right-4 z-30 hidden max-w-sm flex-col gap-3 lg:flex">
-            <div className="rounded-[24px] border border-white/10 bg-slate-950/72 p-4 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl">
+          <div className="absolute bottom-4 right-4 z-30 hidden w-[23rem] max-w-[calc(100vw-2rem)] flex-col gap-3 lg:flex">
+            <div className="rounded-[24px] border border-white/10 bg-slate-950/72 p-5 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl">
               <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                 <Palette className="h-3.5 w-3.5" />
                 Legend
@@ -1844,30 +2085,16 @@ export default function CosmographPage() {
                   labelResolver={() => 'Influence pulse'}
                 />
               ) : (
-                <CosmographTypeColorLegend
-                  showLabel
-                  maxDisplayedItems={8}
-                  labelResolver={() =>
-                    colorMode === 'community'
-                      ? 'Semantic clusters'
-                      : colorMode === 'type'
-                        ? 'Node types'
-                        : colorMode === 'school'
-                          ? 'Schools'
-                          : 'Periods'
-                  }
+                <DiscreteLegend
+                  label={colorLegendTitle}
+                  items={categoricalLegendItems}
+                  maxVisibleItems={7}
                 />
               )}
-              <div className="mt-4">
+              <div className="mt-5 border-t border-white/8 pt-4">
                 <CosmographSizeLegend
                   useQuantiles={sizeMode !== 'degree'}
-                  labelResolver={() =>
-                    sizeMode === 'importance'
-                      ? 'Node importance'
-                      : sizeMode === 'degree'
-                        ? 'Connection degree'
-                        : 'Source density'
-                  }
+                  labelResolver={() => sizeLegendTitle}
                 />
               </div>
             </div>
@@ -1896,6 +2123,7 @@ export default function CosmographPage() {
                 id="visualizer-year-timeline"
                 barCount={90}
                 stickySelection
+                highlightSelectedData
                 showAnimationControls
                 animationSpeed={45}
                 formatter={(value) => formatYear(typeof value === 'number' ? value : value.getFullYear())}
@@ -1964,6 +2192,236 @@ function StatCard({
       <p className="mt-1 text-xl font-semibold">
         {value}
       </p>
+    </div>
+  );
+}
+
+function GraphSearchPanel({
+  query,
+  activeIndex,
+  results,
+  selectedNodeId,
+  typeColorMap,
+  onQueryChange,
+  onMoveCursor,
+  onSelect,
+  onClear,
+}: {
+  query: string;
+  activeIndex: number;
+  results: FlatGraphNode[];
+  selectedNodeId: string | null;
+  typeColorMap: Record<string, string>;
+  onQueryChange: (nextQuery: string) => void;
+  onMoveCursor: (direction: -1 | 1) => void;
+  onSelect: (node: FlatGraphNode) => void;
+  onClear: () => void;
+}) {
+  const hasQuery = query.trim().length > 0;
+  const activeResult = results[activeIndex] ?? results[0] ?? null;
+
+  return (
+    <div>
+      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+        <Search className="h-3.5 w-3.5" />
+        Search the graph
+      </div>
+      <p className="mt-2 text-xs leading-5 text-slate-400">
+        Jump to a thinker, concept, Greek term, school, or semantic cluster. Use the arrow keys and press Enter to focus instantly.
+      </p>
+
+      <div className="mt-3 rounded-[20px] border border-white/10 bg-[#040916]/88 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+        <div className="flex items-center gap-3 rounded-[16px] border border-white/8 bg-[#020617] px-4 py-3">
+          <Search className="h-4 w-4 shrink-0 text-slate-500" />
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => onQueryChange(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                onMoveCursor(1);
+                return;
+              }
+
+              if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                onMoveCursor(-1);
+                return;
+              }
+
+              if (event.key === 'Enter' && activeResult) {
+                event.preventDefault();
+                onSelect(activeResult);
+                return;
+              }
+
+              if (event.key === 'Escape') {
+                event.preventDefault();
+                if (query) {
+                  onClear();
+                } else {
+                  event.currentTarget.blur();
+                }
+              }
+            }}
+            placeholder="Philosopher, concept, Greek term, school..."
+            className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-500"
+          />
+          <span className="hidden rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400 sm:inline-flex">
+            Enter
+          </span>
+          {query && (
+            <button
+              type="button"
+              onClick={onClear}
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-white/20 hover:text-white"
+              aria-label="Clear graph search"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-3 overflow-hidden rounded-[20px] border border-white/8 bg-[#020617]/92">
+        <div className="flex items-center justify-between gap-3 border-b border-white/8 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+          <span>{hasQuery ? 'Best matches' : 'Top launch nodes'}</span>
+          <span>{results.length ? `${results.length} shown` : '0 shown'}</span>
+        </div>
+
+        {results.length ? (
+          <div className="max-h-[22rem] space-y-2 overflow-y-auto p-2">
+            {results.map((node, index) => {
+              const isActive = index === activeIndex;
+              const isSelected = node.id === selectedNodeId;
+              const metaLine = [
+                node.typeLabel,
+                node.periodLabel !== 'Unspecified' ? node.periodLabel : null,
+                node.schoolGroup !== 'Unattached' ? node.schoolGroup : null,
+              ].filter(Boolean).join(' · ');
+
+              return (
+                <button
+                  key={node.id}
+                  type="button"
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={() => onSelect(node)}
+                  className={[
+                    'flex w-full items-start gap-3 rounded-[16px] border px-3 py-3 text-left transition-all',
+                    isSelected
+                      ? 'border-amber-300/30 bg-amber-300/[0.08] shadow-[0_12px_32px_rgba(251,191,36,0.08)]'
+                      : isActive
+                        ? 'border-cyan-300/25 bg-cyan-300/[0.08] shadow-[0_12px_32px_rgba(34,211,238,0.08)]'
+                        : 'border-white/6 bg-white/[0.03] hover:border-white/14 hover:bg-white/[0.05]',
+                  ].join(' ')}
+                >
+                  <span
+                    className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full border border-white/10"
+                    style={{ backgroundColor: typeColorMap[node.typeLabel] ?? '#7dd3fc' }}
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="truncate text-sm font-semibold text-white" title={node.label}>
+                        {node.label}
+                      </p>
+                      {isSelected && (
+                        <span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-amber-100">
+                          Open
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-1 truncate text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                      {metaLine || 'Graph node'}
+                    </p>
+                    <p className="mt-1 truncate text-xs text-slate-400" title={node.communityLabel}>
+                      {node.communityLabel}
+                    </p>
+                  </div>
+                  <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-slate-500" />
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="px-4 py-5 text-sm text-slate-400">
+            No nodes match that query.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function DiscreteLegend({
+  label,
+  items,
+  maxVisibleItems = 7,
+}: {
+  label: string;
+  items: LegendItem[];
+  maxVisibleItems?: number;
+}) {
+  const visibleItems = items.slice(0, maxVisibleItems);
+  const maxCount = visibleItems[0]?.count ?? 1;
+  const hiddenCount = Math.max(items.length - visibleItems.length, 0);
+
+  return (
+    <div>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-sm font-semibold text-white">
+            {label}
+          </p>
+          <p className="mt-1 text-[11px] leading-5 text-slate-400">
+            Top visible groups by node count.
+          </p>
+        </div>
+        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-medium text-slate-200">
+          {items.length.toLocaleString()} groups
+        </span>
+      </div>
+
+      <div className="mt-4 space-y-2.5">
+        {visibleItems.map((item) => {
+          const width = Math.max((item.count / maxCount) * 100, 8);
+
+          return (
+            <div
+              key={item.label}
+              className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-[18px] border border-white/8 bg-white/[0.03] px-3 py-3"
+            >
+              <span
+                className="h-3 w-3 rounded-full border border-white/10"
+                style={{ backgroundColor: item.color }}
+              />
+              <div className="min-w-0">
+                <p className="truncate text-sm text-slate-100" title={item.label}>
+                  {item.label}
+                </p>
+                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/6">
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: `${width}%`,
+                      backgroundColor: item.color,
+                    }}
+                  />
+                </div>
+              </div>
+              <span className="text-xs font-medium text-slate-400">
+                {item.count.toLocaleString()}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {hiddenCount > 0 && (
+        <p className="mt-3 text-xs leading-5 text-slate-400">
+          {hiddenCount.toLocaleString()} more groups hidden to keep the legend readable.
+        </p>
+      )}
     </div>
   );
 }
