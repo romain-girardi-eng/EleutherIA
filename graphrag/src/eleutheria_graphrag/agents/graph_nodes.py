@@ -3445,7 +3445,7 @@ def _is_section_header(line: str) -> bool:
     return len(stripped) <= 80 and stripped.endswith(":") and stripped.count(" ") <= 8
 
 
-def _verify_answer_programmatically(state: RAGState) -> tuple[str, list[Citation]]:
+def _verify_answer_programmatically(state: RAGState, _depth: int = 0) -> tuple[str, list[Citation]]:
     """Keep only grounded lines and emit citations for the surviving refs."""
     bundles_by_ref, nodes_by_ref = _reverse_ref_maps(state)
     valid_refs = set(bundles_by_ref) | set(nodes_by_ref)
@@ -3532,9 +3532,9 @@ def _verify_answer_programmatically(state: RAGState) -> tuple[str, list[Citation
     if not kept_lines:
         fallback = _render_answer_fallback(state)
         state.raw_answer = fallback
-        if not _extract_line_refs(fallback):
+        if _depth > 0 or not _extract_line_refs(fallback):
             return fallback, []
-        return _verify_answer_programmatically(state)
+        return _verify_answer_programmatically(state, _depth=_depth + 1)
 
     citations: list[Citation] = []
     for ref in sorted(
