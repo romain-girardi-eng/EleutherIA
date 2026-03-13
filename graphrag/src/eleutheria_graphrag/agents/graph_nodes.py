@@ -2708,17 +2708,17 @@ def _build_context_pack(state: RAGState) -> ContextPack:
 
 
 def _reverse_ref_maps(state: RAGState) -> tuple[dict[str, EvidenceBundle], dict[str, Evidence]]:
+    bundle_index = {b.bundle_id: b for b in state.context_pack.passage_bundles}
     bundles_by_ref = {
-        ref: bundle
-        for bundle in state.context_pack.passage_bundles
+        ref: bundle_index[bundle_id]
         for bundle_id, ref in state.context_pack.bundle_refs.items()
-        if bundle.bundle_id == bundle_id
+        if bundle_id in bundle_index
     }
+    node_index = {ev.id: ev for ev in state.all_evidence()}
     nodes_by_ref = {
-        ref: ev
-        for ev in state.all_evidence()
+        ref: node_index[node_id]
         for node_id, ref in state.context_pack.node_refs.items()
-        if ev.id == node_id
+        if node_id in node_index
     }
     return bundles_by_ref, nodes_by_ref
 
