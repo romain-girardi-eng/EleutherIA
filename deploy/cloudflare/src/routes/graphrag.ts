@@ -1215,6 +1215,7 @@ graphragRoutes.get('/query/stream',
 
           // Step 3: Search knowledge graph
           sendEvent('status', { message: 'Searching knowledge graph...', step: 3, total_steps: 5 });
+          console.log('[STREAM_DBG] sent event3, starting edge search, nodes found so far:', nodeResults.length);
 
           // Search edges using the dual-embedding collection (kg_edges_dual)
           let edgeResults: any[] = [];
@@ -1226,7 +1227,9 @@ graphragRoutes.get('/query/stream',
               semantic_k,
               0.7
             );
+            console.log('[STREAM_DBG] edge search done:', edgeResults.length);
           } catch (edgeError) {
+            console.log('[STREAM_DBG] edge search error:', edgeError);
             logger.warn('Edge search failed (collection may not exist), continuing without edges', edgeError);
           }
 
@@ -1240,6 +1243,7 @@ graphragRoutes.get('/query/stream',
             },
           };
 
+          console.log('[STREAM_DBG] sending nodes event');
           sendEvent('nodes', {
             nodes_found: dualResults.nodes.length,
             edges_found: dualResults.edges.length,

@@ -295,6 +295,7 @@ export default function GraphRAGPage() {
 
       clearTimeout(timeoutId);
 
+      console.log('[GR]', response.status, response.headers.get('content-type'));
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`HTTP ${response.status}: ${errorText}`);
@@ -308,11 +309,14 @@ export default function GraphRAGPage() {
       let fullAnswer = '';
       let finalResponse: GraphRAGResponse | null = null;
       let buffer = '';
+      let _dbgChunks = 0;
 
       try {
         while (true) {
           const { done, value } = await reader.read();
-          if (done) break;
+          if (done) { console.log('[GR] done after', _dbgChunks, 'reads. answer:', fullAnswer.length, 'complete:', finalResponse != null); break; }
+          _dbgChunks++;
+          if (_dbgChunks <= 2) console.log('[GR] read', _dbgChunks, value?.length, 'bytes');
 
           buffer += decoder.decode(value, { stream: true });
           const lines = buffer.split('\n');
@@ -467,7 +471,7 @@ export default function GraphRAGPage() {
           citationTexts: formattedCitationTexts,
           graphrag_response: finalResponse,
         };
-        setMessages((prev) => [...prev, assistantMessage]);
+          setMessages((prev) => [...prev, assistantMessage]);
         setRightPanelResponse(finalResponse);
         setAllResponses((prev) => [...prev, finalResponse]);
         setRightPanelState('graph');
