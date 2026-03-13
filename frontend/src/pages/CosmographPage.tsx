@@ -3,7 +3,6 @@ import {
   ChevronRight,
   Filter,
   Focus,
-  Info,
   Layers3,
   Map as MapIcon,
   Network,
@@ -112,7 +111,6 @@ interface GraphModel {
   periodColorMap: Record<string, string>;
   communityColorMap: Record<string, string>;
   communityOrder: string[];
-  topStops: string[];
   totalNodes: number;
   totalEdges: number;
   minImportance: number;
@@ -739,17 +737,6 @@ async function buildGraphModel(
 
   const minImportance = Math.min(...flatNodes.map((node) => node.importance));
   const maxImportance = Math.max(...flatNodes.map((node) => node.importance));
-  const leadersByCommunity = orderedCommunities
-    .map((communityKey) =>
-      [...(communityBuckets.get(communityKey) ?? [])].sort((left, right) => right.importance - left.importance)[0],
-    )
-    .filter(Boolean)
-    .map((leader) => leader.id);
-  const topStops = Array.from(new Set([
-    ...leadersByCommunity.slice(0, 8),
-    ...[...flatNodes].sort((left, right) => right.importance - left.importance).slice(0, 12).map((node) => node.id),
-  ]));
-
   const prepared = await prepareCosmographData(
     {
       points: {
@@ -790,7 +777,6 @@ async function buildGraphModel(
     periodColorMap,
     communityColorMap,
     communityOrder: orderedCommunities.map((communityKey) => communityLabelMap.get(communityKey) ?? communityKey),
-    topStops,
     totalNodes: flatNodes.length,
     totalEdges: flatLinks.length,
     minImportance,
@@ -817,7 +803,7 @@ function ControlButton({
       onClick={onClick}
       disabled={disabled}
       className={[
-        'inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-medium transition-all',
+        'inline-flex items-center gap-2 rounded-full border px-2.5 py-1.5 text-[11px] font-medium transition-all',
         disabled
           ? 'cursor-not-allowed border-white/5 bg-white/5 text-white/30'
           : active
@@ -843,8 +829,8 @@ function SegmentedGroup<T extends string>({
   onChange: (nextValue: T) => void;
 }) {
   return (
-    <div className="space-y-2">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+    <div className="space-y-1.5">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
         {title}
       </p>
       <div className="flex flex-wrap gap-2">
@@ -854,7 +840,7 @@ function SegmentedGroup<T extends string>({
             type="button"
             onClick={() => onChange(option.value)}
             className={[
-              'rounded-full border px-3 py-1.5 text-xs transition-colors',
+              'rounded-full border px-2.5 py-1 text-[11px] transition-colors',
               value === option.value
                 ? 'border-amber-300/45 bg-amber-200/12 text-amber-100'
                 : 'border-white/10 bg-slate-950/60 text-slate-300 hover:border-white/20',
@@ -865,6 +851,78 @@ function SegmentedGroup<T extends string>({
         ))}
       </div>
     </div>
+  );
+}
+
+function MetricPill({
+  label,
+  value,
+  accent = 'slate',
+}: {
+  label: string;
+  value: string;
+  accent?: 'cyan' | 'amber' | 'rose' | 'emerald' | 'slate';
+}) {
+  const accentClass =
+    accent === 'cyan'
+      ? 'border-cyan-300/16 bg-cyan-300/[0.08] text-cyan-100'
+      : accent === 'amber'
+        ? 'border-amber-300/16 bg-amber-300/[0.08] text-amber-100'
+        : accent === 'rose'
+          ? 'border-rose-300/16 bg-rose-300/[0.08] text-rose-100'
+          : accent === 'emerald'
+            ? 'border-emerald-300/16 bg-emerald-300/[0.08] text-emerald-100'
+            : 'border-white/8 bg-white/[0.03] text-slate-100';
+
+  return (
+    <div className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 ${accentClass}`}>
+      <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+        {label}
+      </span>
+      <span className="text-sm font-semibold">
+        {value}
+      </span>
+    </div>
+  );
+}
+
+function DisclosurePanel({
+  title,
+  subtitle,
+  icon,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  icon: import('react').ReactNode;
+  defaultOpen?: boolean;
+  children: import('react').ReactNode;
+}) {
+  return (
+    <details
+      open={defaultOpen}
+      className="group rounded-[22px] border border-white/8 bg-slate-950/70"
+    >
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden [&::-webkit-details-marker]:hidden">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+            {icon}
+            {title}
+          </div>
+          {subtitle && (
+            <p className="mt-1 truncate text-[11px] text-slate-500">
+              {subtitle}
+            </p>
+          )}
+        </div>
+        <ChevronRight className="h-4 w-4 shrink-0 text-slate-500 transition-transform group-open:rotate-90" />
+      </summary>
+
+      <div className="border-t border-white/8 px-4 py-4">
+        {children}
+      </div>
+    </details>
   );
 }
 
@@ -959,10 +1017,11 @@ export default function CosmographPage() {
   const [selectedPointIndices, setSelectedPointIndices] = useState<number[]>([]);
   const [selectedLinkCount, setSelectedLinkCount] = useState(0);
   const [pinnedNodeIds, setPinnedNodeIds] = useState<string[]>([]);
+  const [solarAnchorId, setSolarAnchorId] = useState<string | null>(null);
+  const [solarFocusNodeIds, setSolarFocusNodeIds] = useState<string[]>([]);
   const [simulationRunning, setSimulationRunning] = useState(true);
   const [simulationControls, setSimulationControls] = useState<SimulationControls>(DEFAULT_SIMULATION_CONTROLS);
   const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
-  const [tourCursor, setTourCursor] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchCursor, setSearchCursor] = useState(0);
 
@@ -986,8 +1045,9 @@ export default function CosmographPage() {
     deferredHoveredNodeId && graphModel
       ? graphModel.flatNodesById.get(deferredHoveredNodeId) ?? null
       : null;
+  const solarFocusSet = useMemo(() => new Set(solarFocusNodeIds), [solarFocusNodeIds]);
   const searchResults = useMemo(
-    () => (graphModel ? getSearchResults(graphModel.flatNodes, deferredSearchQuery, 10) : []),
+    () => (graphModel ? getSearchResults(graphModel.flatNodes, deferredSearchQuery, 6) : []),
     [graphModel, deferredSearchQuery],
   );
   const selectedNeighborhoodSummary = useMemo(() => {
@@ -1090,6 +1150,20 @@ export default function CosmographPage() {
     return indices?.[0];
   }, []);
 
+  const syncPinnedPoints = useCallback(async (basePinnedIds: string[], anchorId: string | null) => {
+    if (!graphRef.current) return;
+
+    const mergedIds = Array.from(new Set([
+      ...basePinnedIds,
+      ...(anchorId ? [anchorId] : []),
+    ]));
+    const nextIndices = (
+      await graphRef.current.getPointIndicesByIds(mergedIds)
+    )?.filter((value): value is number => typeof value === 'number') ?? [];
+
+    graphRef.current.setPinnedPoints(nextIndices);
+  }, []);
+
   const focusNodeById = useCallback(async (
     id: string,
     options?: {
@@ -1104,13 +1178,18 @@ export default function CosmographPage() {
 
     const graph = graphRef.current;
     const connected = graph.getConnectedPointIndices(pointIndex) ?? [];
-    const frame = options?.fitNeighborhood ? [pointIndex, ...connected.slice(0, 28)] : [pointIndex];
+    const useSolarFocus = options?.fitNeighborhood !== false;
+    const frame = useSolarFocus ? [pointIndex, ...connected.slice(0, 24)] : [pointIndex];
+    const solarIds = frame
+      .map((index) => graphModel.flatNodes[index]?.id)
+      .filter(Boolean) as string[];
 
-    graph.selectPoint(pointIndex, false, true);
+    graph.selectPoints(frame, false);
     graph.setFocusedPoint(pointIndex);
+    await syncPinnedPoints(pinnedNodeIds, id);
 
-    if (frame.length > 1 && options?.fitNeighborhood) {
-      graph.fitViewByIndices(frame, 650, 80);
+    if (frame.length > 1 && useSolarFocus) {
+      graph.fitViewByIndices(frame, 700, 88);
     } else {
       graph.zoomToPoint(pointIndex, 650, 2.5, true);
     }
@@ -1118,12 +1197,14 @@ export default function CosmographPage() {
     startTransition(() => {
       setSelectedNodeId(id);
       setHoveredNodeId(null);
+      setSolarAnchorId(id);
+      setSolarFocusNodeIds(solarIds);
     });
 
     if (options?.pushRoute !== false) {
       navigate(`/visualizer/${id}`, { replace: true });
     }
-  }, [getPointIndexById, graphModel, navigate]);
+  }, [getPointIndexById, graphModel, navigate, pinnedNodeIds, syncPinnedPoints]);
 
   useEffect(() => {
     if (!graphReady || !nodeId) {
@@ -1134,18 +1215,12 @@ export default function CosmographPage() {
       return;
     }
 
-    void focusNodeById(nodeId, { fitNeighborhood: false, pushRoute: false });
+    void focusNodeById(nodeId, { fitNeighborhood: true, pushRoute: false });
   }, [focusNodeById, graphReady, nodeId, selectedNodeId]);
 
   async function focusNeighborhood() {
-    if (!selectedNodeId || !graphRef.current) return;
-    const index = await getPointIndexById(selectedNodeId);
-    if (index === undefined) return;
-    const connected = graphRef.current.getConnectedPointIndices(index) ?? [];
-    const frame = [index, ...connected.slice(0, 36)];
-
-    graphRef.current.selectPoints(frame, false);
-    graphRef.current.fitViewByIndices(frame, 700, 96);
+    if (!selectedNodeId) return;
+    await focusNodeById(selectedNodeId, { fitNeighborhood: true, pushRoute: false });
   }
 
   async function togglePinnedSelection() {
@@ -1162,12 +1237,8 @@ export default function CosmographPage() {
       ? pinnedNodeIds.filter((id) => !selectedIds.includes(id))
       : Array.from(new Set([...pinnedNodeIds, ...selectedIds]));
 
-    const nextIndices = (
-      await graphRef.current.getPointIndicesByIds(nextPinnedIds)
-    )?.filter((value): value is number => typeof value === 'number') ?? [];
-
-    graphRef.current.setPinnedPoints(nextIndices);
     setPinnedNodeIds(nextPinnedIds);
+    await syncPinnedPoints(nextPinnedIds, solarAnchorId);
   }
 
   function clearSelection() {
@@ -1182,7 +1253,10 @@ export default function CosmographPage() {
     setSelectedPointIndices([]);
     setSelectedLinkCount(0);
     setSelectedNodeId(null);
+    setSolarAnchorId(null);
+    setSolarFocusNodeIds([]);
     setHoveredNodeId(null);
+    void syncPinnedPoints(pinnedNodeIds, null);
     navigate('/visualizer', { replace: true });
   }
 
@@ -1269,13 +1343,6 @@ export default function CosmographPage() {
 
   function exportScreenshot() {
     graphRef.current?.captureScreenshot('eleutheria-cosmograph', 2);
-  }
-
-  async function surpriseMe() {
-    if (!graphModel?.topStops.length) return;
-    const nextId = graphModel.topStops[tourCursor % graphModel.topStops.length];
-    setTourCursor((current) => current + 1);
-    await focusNodeById(nextId, { fitNeighborhood: true });
   }
 
   const pinnedSet = new Set(pinnedNodeIds);
@@ -1387,23 +1454,41 @@ export default function CosmographPage() {
             ? (value: unknown) => importanceColor(value, graphModel.minImportance, graphModel.maxImportance)
             : undefined,
         pointSizeBy: activeSizeAccessor,
-        pointSizeByFn: (value: unknown) => {
+        pointSizeByFn: (value: unknown, index?: number) => {
           const numeric = typeof value === 'number' ? value : Number(value);
           if (!Number.isFinite(numeric) || numeric <= 0) {
             return 1.2;
           }
 
-          if (sizeMode === 'degree') {
-            return clamp(1.1 + Math.log1p(numeric) * 0.72, 1.1, 4.8);
+          const pointId = typeof index === 'number' ? graphModel.flatNodes[index]?.id : undefined;
+          const isSolarAnchor = pointId === solarAnchorId;
+          const isSolarNeighbor = Boolean(pointId && solarFocusSet.has(pointId) && pointId !== solarAnchorId);
+          let baseSize = 1.2;
+
+          if (sizeMode === 'importance') {
+            const denominator = Math.max(graphModel.maxImportance - graphModel.minImportance, 1);
+            const normalized = clamp((numeric - graphModel.minImportance) / denominator, 0, 1);
+            const solarMass = Math.pow(normalized, 2.15);
+            baseSize = clamp(1.15 + solarMass * 11.25, 1.15, 12.4);
+          } else if (sizeMode === 'degree') {
+            baseSize = clamp(1.15 + Math.log1p(numeric) * 0.82, 1.15, 6.2);
+          } else if (sizeMode === 'sources') {
+            baseSize = clamp(1.1 + Math.sqrt(numeric) * 0.56, 1.1, 5.4);
+          } else {
+            baseSize = clamp(1.15 + Math.log1p(numeric) * 0.62, 1.15, 5.1);
           }
 
-          if (sizeMode === 'sources') {
-            return clamp(1.05 + Math.sqrt(numeric) * 0.48, 1.05, 4.2);
+          if (isSolarAnchor) {
+            return clamp(baseSize * 1.65 + 1.8, 3.4, 17.5);
           }
 
-          return clamp(1.15 + Math.log1p(numeric) * 0.62, 1.15, 5.1);
+          if (isSolarNeighbor) {
+            return clamp(baseSize * 1.16 + 0.25, 1.4, 8.8);
+          }
+
+          return baseSize;
         },
-        pointSizeRange: [1.1, 5.1],
+        pointSizeRange: [1.1, 12.4],
         pointClusterBy: activeClusterAccessor,
         pointClusterStrengthBy: activeClusterAccessor ? 'clusterStrength' : undefined,
         showLabels,
@@ -1555,10 +1640,10 @@ export default function CosmographPage() {
             onPointClick={(index) => {
               const clickedNode = graphModel.flatNodes[index];
               if (!clickedNode) return;
-              void focusNodeById(clickedNode.id, { fitNeighborhood: false });
+              void focusNodeById(clickedNode.id, { fitNeighborhood: true });
             }}
             onLabelClick={(_index, id) => {
-              void focusNodeById(id, { fitNeighborhood: false });
+              void focusNodeById(id, { fitNeighborhood: true });
             }}
             onBackgroundClick={() => {
               clearSelection();
@@ -1575,7 +1660,7 @@ export default function CosmographPage() {
               if (pointIndices?.length === 1) {
                 const onlyNode = graphModel.flatNodes[pointIndices[0]];
                 if (onlyNode) {
-                  void focusNodeById(onlyNode.id, { fitNeighborhood: false });
+                  void focusNodeById(onlyNode.id, { fitNeighborhood: true });
                 }
               }
             }}
@@ -1611,25 +1696,24 @@ export default function CosmographPage() {
 
           <div
             className={[
-              'absolute left-4 top-4 z-30 w-[min(26rem,calc(100%-2rem))] overflow-hidden rounded-[30px] border border-white/10 bg-slate-950/72 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl transition-transform duration-300',
+              'absolute left-4 top-4 z-30 w-[min(23rem,calc(100%-2rem))] overflow-hidden rounded-[28px] border border-white/10 bg-slate-950/72 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl transition-transform duration-300',
               mobilePanelOpen ? 'translate-x-0' : '-translate-x-[calc(100%+1rem)] md:translate-x-0',
             ].join(' ')}
           >
-            <div className="max-h-[calc(100vh-8rem)] overflow-y-auto px-5 pb-6 pt-5">
+            <div className="max-h-[calc(100vh-7.5rem)] overflow-y-auto px-4 pb-5 pt-4">
               <div className="flex items-start justify-between gap-4">
-                <div>
+                <div className="min-w-0">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-200/80">
                     {t('graphPage.badge', 'Cosmograph 2.x')}
                   </p>
-                  <h1 className="mt-2 text-2xl font-semibold text-white">
-                    {t('graphPage.title', 'EleutherIA Atlas')}
-                  </h1>
-                  <p className="mt-2 max-w-sm text-sm leading-6 text-slate-300">
-                    {t(
-                      'graphPage.subtitle',
-                      'Semantic communities, temporal filtering, search-driven focus, lasso selection, and publication-grade screenshots over the ancient free will knowledge graph.',
-                    )}
-                  </p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <h1 className="truncate text-[1.35rem] font-semibold text-white">
+                      {t('graphPage.title', 'EleutherIA Atlas')}
+                    </h1>
+                    <span className="hidden rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400 sm:inline-flex">
+                      Observatory
+                    </span>
+                  </div>
                 </div>
                 <button
                   type="button"
@@ -1641,26 +1725,23 @@ export default function CosmographPage() {
                 </button>
               </div>
 
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                <StatCard label="Visible" value={visibleNodeCount.toLocaleString()} accent="cyan" />
-                <StatCard label="Edges" value={graphModel.totalEdges.toLocaleString()} accent="amber" />
-                <StatCard label="Selected" value={selectedPointCount.toLocaleString()} accent="rose" />
-                <StatCard label="Pinned" value={pinnedNodeIds.length.toLocaleString()} accent="emerald" />
+              <div className="mt-4 flex flex-wrap gap-2">
+                <MetricPill label="Visible" value={visibleNodeCount.toLocaleString()} accent="cyan" />
+                <MetricPill label="Edges" value={graphModel.totalEdges.toLocaleString()} accent="amber" />
+                <MetricPill label="Selected" value={selectedPointCount.toLocaleString()} accent="rose" />
+                <MetricPill label="Pinned" value={pinnedNodeIds.length.toLocaleString()} accent="emerald" />
               </div>
 
               {selectedFlatNode && selectedNeighborhoodSummary && (
-                <div className="mt-5 rounded-[24px] border border-cyan-300/12 bg-[linear-gradient(180deg,rgba(6,16,32,0.95)_0%,rgba(2,6,23,0.92)_100%)] p-4 shadow-[0_18px_50px_rgba(14,165,233,0.12)]">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/80">
+                <div className="mt-4 rounded-[20px] border border-cyan-300/12 bg-[linear-gradient(180deg,rgba(6,16,32,0.92)_0%,rgba(2,6,23,0.9)_100%)] p-3.5 shadow-[0_16px_44px_rgba(14,165,233,0.1)]">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-cyan-100/80">
                         <Focus className="h-3.5 w-3.5" />
-                        Neighborhood spotlight
+                        Selected node
                       </div>
-                      <p className="mt-2 text-sm font-semibold text-white">
+                      <p className="mt-1.5 truncate text-sm font-semibold text-white">
                         {selectedFlatNode.label}
-                      </p>
-                      <p className="mt-1 text-xs leading-5 text-slate-400">
-                        Click now selects the node plus its first-degree neighborhood and the links tying that local structure together.
                       </p>
                     </div>
                     <button
@@ -1668,57 +1749,21 @@ export default function CosmographPage() {
                       onClick={() => {
                         void focusNeighborhood();
                       }}
-                      className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-medium text-slate-100 transition-colors hover:border-cyan-300/30 hover:bg-cyan-300/[0.08]"
+                      className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-slate-100 transition-colors hover:border-cyan-300/30 hover:bg-cyan-300/[0.08]"
                     >
                       <Route className="h-3.5 w-3.5" />
-                      Fit neighborhood
+                      Fit
                     </button>
                   </div>
 
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <StatCard label="Neighbors" value={selectedNeighborhoodSummary.neighborCount.toLocaleString()} accent="cyan" />
-                    <StatCard label="Links lit" value={selectedNeighborhoodSummary.linkCount.toLocaleString()} accent="amber" />
-                    <StatCard label="Incoming" value={selectedNeighborhoodSummary.incoming.toLocaleString()} accent="rose" />
-                    <StatCard label="Outgoing" value={selectedNeighborhoodSummary.outgoing.toLocaleString()} accent="emerald" />
-                  </div>
-
-                  <div className="mt-4 grid gap-3 md:grid-cols-2">
-                    <div className="rounded-[18px] border border-white/8 bg-white/[0.03] p-3">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-                        Dominant relations
-                      </p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {selectedNeighborhoodSummary.topRelations.map(([label, count]) => (
-                          <span
-                            key={label}
-                            className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs text-slate-200"
-                          >
-                            {label} · {count}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="rounded-[18px] border border-white/8 bg-white/[0.03] p-3">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-                        Connected node types
-                      </p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {selectedNeighborhoodSummary.topTypes.map(([label, count]) => (
-                          <span
-                            key={label}
-                            className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs text-slate-200"
-                          >
-                            {label} · {count}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <MetricPill label="Neighbors" value={selectedNeighborhoodSummary.neighborCount.toLocaleString()} accent="cyan" />
+                    <MetricPill label="Links" value={selectedNeighborhoodSummary.linkCount.toLocaleString()} accent="amber" />
                   </div>
                 </div>
               )}
 
-              <div className="mt-5 rounded-[24px] border border-white/8 bg-[linear-gradient(180deg,rgba(5,10,22,0.96)_0%,rgba(2,6,23,0.88)_100%)] p-4 shadow-[0_18px_50px_rgba(2,6,23,0.24)]">
+              <div className="mt-4 rounded-[22px] border border-white/8 bg-[linear-gradient(180deg,rgba(5,10,22,0.96)_0%,rgba(2,6,23,0.88)_100%)] p-3.5 shadow-[0_18px_50px_rgba(2,6,23,0.24)]">
                 <GraphSearchPanel
                   query={searchQuery}
                   activeIndex={searchCursor}
@@ -1735,7 +1780,7 @@ export default function CosmographPage() {
                   }}
                   onSelect={(node) => {
                     setSearchQuery(node.label);
-                    void focusNodeById(node.id, { fitNeighborhood: false });
+                    void focusNodeById(node.id, { fitNeighborhood: true });
                   }}
                   onClear={() => {
                     setSearchQuery('');
@@ -1744,334 +1789,335 @@ export default function CosmographPage() {
                 />
               </div>
 
-              <div className="mt-5 space-y-5">
-                <SegmentedGroup
-                  title="Color field"
-                  value={colorMode}
-                  onChange={setColorMode}
-                  options={[
-                    { value: 'community', label: 'Community' },
-                    { value: 'type', label: 'Type' },
-                    { value: 'school', label: 'School' },
-                    { value: 'period', label: 'Period' },
-                    { value: 'importance', label: 'Pulse' },
-                  ]}
-                />
-
-                <SegmentedGroup
-                  title="Size field"
-                  value={sizeMode}
-                  onChange={setSizeMode}
-                  options={[
-                    { value: 'importance', label: 'Importance' },
-                    { value: 'degree', label: 'Degree' },
-                    { value: 'sources', label: 'Sources' },
-                  ]}
-                />
-
-                <SegmentedGroup
-                  title="Cluster field"
-                  value={clusterMode}
-                  onChange={setClusterMode}
-                  options={[
-                    { value: 'community', label: 'Community' },
-                    { value: 'type', label: 'Type' },
-                    { value: 'school', label: 'School' },
-                    { value: 'period', label: 'Period' },
-                    { value: 'none', label: 'None' },
-                  ]}
-                />
-              </div>
-
-              <div className="mt-5 flex flex-wrap gap-2">
-                <ControlButton
-                  active={showLabels}
-                  icon={<Sparkles className="h-3.5 w-3.5" />}
-                  label="Labels"
-                  onClick={() => setShowLabels((value) => !value)}
-                />
-                <ControlButton
-                  active={showClusterLabels}
-                  icon={<Layers3 className="h-3.5 w-3.5" />}
-                  label="Cluster labels"
-                  onClick={() => setShowClusterLabels((value) => !value)}
-                  disabled={clusterMode === 'none'}
-                />
-                <ControlButton
-                  active={showCurvedLinks}
-                  icon={<Spline className="h-3.5 w-3.5" />}
-                  label="Curved links"
-                  onClick={() => setShowCurvedLinks((value) => !value)}
-                />
-                <ControlButton
-                  active={showArrows}
-                  icon={<Route className="h-3.5 w-3.5" />}
-                  label="Arrows"
-                  onClick={() => setShowArrows((value) => !value)}
-                />
-              </div>
-
-              <div className="mt-5 grid grid-cols-2 gap-2">
-                <ControlButton
-                  icon={<Focus className="h-3.5 w-3.5" />}
-                  label="Fit view"
-                  onClick={fitView}
-                />
-                <ControlButton
-                  icon={simulationRunning ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-                  label={simulationRunning ? 'Pause' : 'Resume'}
-                  onClick={toggleSimulation}
-                />
-                <ControlButton
-                  active={selectionMode === 'rect'}
-                  icon={<Filter className="h-3.5 w-3.5" />}
-                  label="Rect select"
-                  onClick={toggleRectSelection}
-                />
-                <ControlButton
-                  active={selectionMode === 'polygon'}
-                  icon={<MapIcon className="h-3.5 w-3.5" />}
-                  label="Lasso select"
-                  onClick={togglePolygonSelection}
-                />
-                <ControlButton
-                  icon={<Camera className="h-3.5 w-3.5" />}
-                  label="Screenshot"
-                  onClick={exportScreenshot}
-                />
-                <ControlButton
-                  icon={<Sparkles className="h-3.5 w-3.5" />}
-                  label="Atlas tour"
-                  onClick={() => {
-                    void surpriseMe();
-                  }}
-                />
-                <ControlButton
-                  icon={<Route className="h-3.5 w-3.5" />}
-                  label="Neighborhood"
-                  onClick={() => {
-                    void focusNeighborhood();
-                  }}
-                  disabled={!selectedNodeId}
-                />
-                <ControlButton
-                  icon={<Pin className="h-3.5 w-3.5" />}
-                  label="Pin selection"
-                  onClick={() => {
-                    void togglePinnedSelection();
-                  }}
-                  disabled={selectedPointCount === 0}
-                />
-              </div>
-
-              <div className="mt-5 rounded-[22px] border border-cyan-300/12 bg-[linear-gradient(180deg,rgba(8,15,30,0.94)_0%,rgba(2,6,23,0.94)_100%)] p-4 shadow-[0_18px_50px_rgba(8,47,73,0.18)]">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/80">
-                      <Network className="h-3.5 w-3.5" />
-                      Simulation lab
-                    </div>
-                    <p className="mt-2 text-xs leading-5 text-slate-300">
-                      Live layout sliders inspired by the official Cosmograph simulation controls example.
-                    </p>
-                  </div>
-                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-slate-200">
-                    {simulationRunning ? 'Live' : 'Paused'}
-                  </span>
+              <div className="mt-4 rounded-[22px] border border-white/8 bg-slate-950/70 p-4">
+                <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  View grammar
                 </div>
 
-                <div className="mt-4 grid gap-2 sm:grid-cols-3">
-                  {SIMULATION_PRESETS.map((preset) => (
-                    <button
-                      key={preset.id}
-                      type="button"
-                      onClick={() => applySimulationPreset(preset.id)}
-                      className="rounded-[18px] border border-white/10 bg-white/[0.04] px-3 py-3 text-left transition-colors hover:border-cyan-300/30 hover:bg-cyan-300/[0.08]"
-                    >
-                      <p className="text-sm font-semibold text-white">
-                        {preset.label}
-                      </p>
-                      <p className="mt-1 text-[11px] leading-5 text-slate-400">
-                        {preset.description}
-                      </p>
-                    </button>
-                  ))}
+                <div className="mt-3 space-y-4">
+                  <SegmentedGroup
+                    title="Color field"
+                    value={colorMode}
+                    onChange={setColorMode}
+                    options={[
+                      { value: 'community', label: 'Community' },
+                      { value: 'type', label: 'Type' },
+                      { value: 'school', label: 'School' },
+                      { value: 'period', label: 'Period' },
+                      { value: 'importance', label: 'Pulse' },
+                    ]}
+                  />
+
+                  <SegmentedGroup
+                    title="Size field"
+                    value={sizeMode}
+                    onChange={setSizeMode}
+                    options={[
+                      { value: 'importance', label: 'Importance' },
+                      { value: 'degree', label: 'Degree' },
+                      { value: 'sources', label: 'Sources' },
+                    ]}
+                  />
+
+                  <SegmentedGroup
+                    title="Cluster field"
+                    value={clusterMode}
+                    onChange={setClusterMode}
+                    options={[
+                      { value: 'community', label: 'Community' },
+                      { value: 'type', label: 'Type' },
+                      { value: 'school', label: 'School' },
+                      { value: 'period', label: 'Period' },
+                      { value: 'none', label: 'None' },
+                    ]}
+                  />
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-2">
                   <ControlButton
-                    icon={<Play className="h-3.5 w-3.5" />}
-                    label="Reheat"
-                    onClick={() => {
-                      pulseSimulation();
-                    }}
+                    active={showLabels}
+                    icon={<Sparkles className="h-3.5 w-3.5" />}
+                    label="Labels"
+                    onClick={() => setShowLabels((value) => !value)}
                   />
                   <ControlButton
-                    icon={<RefreshCw className="h-3.5 w-3.5" />}
-                    label="Reset sliders"
-                    onClick={resetSimulationControls}
+                    active={showClusterLabels}
+                    icon={<Layers3 className="h-3.5 w-3.5" />}
+                    label="Cluster labels"
+                    onClick={() => setShowClusterLabels((value) => !value)}
+                    disabled={clusterMode === 'none'}
                   />
-                </div>
-
-                <div className="mt-4 space-y-3">
-                  <SimulationSlider
-                    label="Repulsion"
-                    hint="How strongly nodes push each other apart."
-                    value={simulationControls.repulsion}
-                    min={0.3}
-                    max={2.2}
-                    step={0.02}
-                    onChange={(value) => setSimulationControl('repulsion', value)}
+                  <ControlButton
+                    active={showCurvedLinks}
+                    icon={<Spline className="h-3.5 w-3.5" />}
+                    label="Curved links"
+                    onClick={() => setShowCurvedLinks((value) => !value)}
                   />
-                  <SimulationSlider
-                    label="Link spring"
-                    hint="How tightly linked nodes pull together."
-                    value={simulationControls.linkSpring}
-                    min={0.3}
-                    max={1.8}
-                    step={0.02}
-                    onChange={(value) => setSimulationControl('linkSpring', value)}
-                  />
-                  <SimulationSlider
-                    label="Link distance"
-                    hint="Minimum spacing kept between connected nodes."
-                    value={simulationControls.linkDistance}
-                    min={8}
-                    max={32}
-                    step={1}
-                    onChange={(value) => setSimulationControl('linkDistance', value)}
-                    formatter={(value) => `${formatSliderValue(value)} px`}
-                  />
-                  <SimulationSlider
-                    label="Gravity"
-                    hint="Global pull that keeps the field cohesive."
-                    value={simulationControls.gravity}
-                    min={0}
-                    max={0.5}
-                    step={0.01}
-                    onChange={(value) => setSimulationControl('gravity', value)}
-                  />
-                  <SimulationSlider
-                    label="Friction"
-                    hint="How quickly motion settles after reheating."
-                    value={simulationControls.friction}
-                    min={0.7}
-                    max={0.98}
-                    step={0.01}
-                    onChange={(value) => setSimulationControl('friction', value)}
-                  />
-                  <SimulationSlider
-                    label="Decay"
-                    hint="How long the simulation keeps cooling."
-                    value={simulationControls.decay}
-                    min={1200}
-                    max={9000}
-                    step={100}
-                    onChange={(value) => setSimulationControl('decay', value)}
-                    formatter={(value) => formatSliderValue(value)}
-                  />
-                </div>
-
-                <div className="mt-3 grid gap-3 md:grid-cols-2">
-                  <SimulationSlider
-                    label="Center"
-                    value={simulationControls.center}
-                    min={0}
-                    max={0.2}
-                    step={0.01}
-                    onChange={(value) => setSimulationControl('center', value)}
-                    compact
-                  />
-                  <SimulationSlider
-                    label="Theta"
-                    value={simulationControls.theta}
-                    min={0.6}
-                    max={1.4}
-                    step={0.01}
-                    onChange={(value) => setSimulationControl('theta', value)}
-                    compact
-                  />
-                  <SimulationSlider
-                    label="Mouse force"
-                    value={simulationControls.mouseRepulsion}
-                    min={0}
-                    max={5}
-                    step={0.1}
-                    onChange={(value) => setSimulationControl('mouseRepulsion', value)}
-                    compact
-                  />
-                  <SimulationSlider
-                    label="Reheat impulse"
-                    value={simulationControls.impulse}
-                    min={0.1}
-                    max={1}
-                    step={0.02}
-                    onChange={(value) => setSimulationControl('impulse', value)}
-                    compact
+                  <ControlButton
+                    active={showArrows}
+                    icon={<Route className="h-3.5 w-3.5" />}
+                    label="Arrows"
+                    onClick={() => setShowArrows((value) => !value)}
                   />
                 </div>
               </div>
 
-              <div className="mt-5 rounded-[22px] border border-white/8 bg-slate-950/70 p-4">
-                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  <Filter className="h-3.5 w-3.5" />
-                  Filter bars
+              <div className="mt-4 rounded-[22px] border border-white/8 bg-slate-950/70 p-4">
+                <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                  <Focus className="h-3.5 w-3.5" />
+                  Quick actions
                 </div>
-                <p className="mt-2 text-xs leading-5 text-slate-400">
-                  Click bars to isolate schools or node kinds. These filters compose with search and selection.
-                </p>
 
-                <div className="mt-4 space-y-4">
-                  <div>
-                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-                      Node types
-                    </p>
-                    <CosmographBars
-                      accessor="typeLabel"
-                      id="visualizer-type-bars"
-                      expanded
-                      maxDisplayedItems={8}
-                      selectOnClick
-                      highlightSelectedData
-                      showSortingBlock={false}
-                      showSearch={false}
-                      moveFilteredToTop
-                      showTotalWhenFiltered
-                      style={{ height: 180 }}
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  <ControlButton
+                    icon={<Focus className="h-3.5 w-3.5" />}
+                    label="Fit view"
+                    onClick={fitView}
+                  />
+                  <ControlButton
+                    icon={simulationRunning ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                    label={simulationRunning ? 'Pause' : 'Resume'}
+                    onClick={toggleSimulation}
+                  />
+                  <ControlButton
+                    icon={<Camera className="h-3.5 w-3.5" />}
+                    label="Screenshot"
+                    onClick={exportScreenshot}
+                  />
+                    <ControlButton
+                      icon={<Route className="h-3.5 w-3.5" />}
+                      label="Solar focus"
+                      onClick={() => {
+                        void focusNeighborhood();
+                      }}
+                      disabled={!selectedNodeId}
                     />
-                  </div>
-
-                  <div className="hidden lg:block">
-                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-                      Schools
-                    </p>
-                    <CosmographBars
-                      accessor="schoolGroup"
-                      id="visualizer-school-bars"
-                      expanded
-                      maxDisplayedItems={8}
-                      selectOnClick
-                      highlightSelectedData
-                      showSortingBlock={false}
-                      showSearch={false}
-                      moveFilteredToTop
-                      showTotalWhenFiltered
-                      style={{ height: 220 }}
-                    />
-                  </div>
                 </div>
               </div>
 
-              <div className="mt-5 rounded-[22px] border border-white/8 bg-slate-950/70 p-4">
-                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  <Info className="h-3.5 w-3.5" />
-                  Field notes
-                </div>
-                <div className="mt-3 space-y-2 text-xs leading-5 text-slate-300">
-                  <p>Left click a node to open its dossier. Use Atlas Tour to jump between community leaders.</p>
-                  <p>Hold right click to repel the field and open hidden channels inside dense clusters.</p>
-                  <p>Rect select and lasso select persist across search and categorical filtering.</p>
-                </div>
+              <div className="mt-4 space-y-4">
+                <DisclosurePanel
+                  title="Advanced tools"
+                  subtitle="Selection, neighborhood, and pinning."
+                  icon={<MapIcon className="h-3.5 w-3.5" />}
+                >
+                  <div className="grid grid-cols-2 gap-2">
+                    <ControlButton
+                      active={selectionMode === 'rect'}
+                      icon={<Filter className="h-3.5 w-3.5" />}
+                      label="Rect select"
+                      onClick={toggleRectSelection}
+                    />
+                    <ControlButton
+                      active={selectionMode === 'polygon'}
+                      icon={<MapIcon className="h-3.5 w-3.5" />}
+                      label="Lasso select"
+                      onClick={togglePolygonSelection}
+                    />
+                    <ControlButton
+                      icon={<Route className="h-3.5 w-3.5" />}
+                      label="Solar focus"
+                      onClick={() => {
+                        void focusNeighborhood();
+                      }}
+                      disabled={!selectedNodeId}
+                    />
+                    <ControlButton
+                      icon={<Pin className="h-3.5 w-3.5" />}
+                      label="Pin selection"
+                      onClick={() => {
+                        void togglePinnedSelection();
+                      }}
+                      disabled={selectedPointCount === 0}
+                    />
+                  </div>
+                </DisclosurePanel>
+
+                <DisclosurePanel
+                  title="Filter bars"
+                  subtitle="Type and school filters."
+                  icon={<Filter className="h-3.5 w-3.5" />}
+                >
+                  <div className="space-y-4">
+                    <div>
+                      <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                        Node types
+                      </p>
+                      <CosmographBars
+                        accessor="typeLabel"
+                        id="visualizer-type-bars"
+                        expanded
+                        maxDisplayedItems={8}
+                        selectOnClick
+                        highlightSelectedData
+                        showSortingBlock={false}
+                        showSearch={false}
+                        moveFilteredToTop
+                        showTotalWhenFiltered
+                        style={{ height: 144 }}
+                      />
+                    </div>
+
+                    <div className="hidden lg:block">
+                      <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                        Schools
+                      </p>
+                      <CosmographBars
+                        accessor="schoolGroup"
+                        id="visualizer-school-bars"
+                        expanded
+                        maxDisplayedItems={8}
+                        selectOnClick
+                        highlightSelectedData
+                        showSortingBlock={false}
+                        showSearch={false}
+                        moveFilteredToTop
+                        showTotalWhenFiltered
+                        style={{ height: 168 }}
+                      />
+                    </div>
+                  </div>
+                </DisclosurePanel>
+
+                <DisclosurePanel
+                  title="Simulation lab"
+                  subtitle={simulationRunning ? 'Live layout tuning.' : 'Paused layout tuning.'}
+                  icon={<Network className="h-3.5 w-3.5" />}
+                >
+                  <div className="space-y-4">
+                    <div className="grid gap-2 sm:grid-cols-3">
+                      {SIMULATION_PRESETS.map((preset) => (
+                        <button
+                          key={preset.id}
+                          type="button"
+                          onClick={() => applySimulationPreset(preset.id)}
+                          className="rounded-[16px] border border-white/10 bg-white/[0.04] px-3 py-2.5 text-left transition-colors hover:border-cyan-300/30 hover:bg-cyan-300/[0.08]"
+                        >
+                          <p className="text-sm font-semibold text-white">
+                            {preset.label}
+                          </p>
+                          <p className="mt-1 text-[10px] leading-4 text-slate-400">
+                            {preset.description}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      <ControlButton
+                        icon={<Play className="h-3.5 w-3.5" />}
+                        label="Reheat"
+                        onClick={() => {
+                          pulseSimulation();
+                        }}
+                      />
+                      <ControlButton
+                        icon={<RefreshCw className="h-3.5 w-3.5" />}
+                        label="Reset sliders"
+                        onClick={resetSimulationControls}
+                      />
+                    </div>
+
+                    <div className="space-y-3">
+                      <SimulationSlider
+                        label="Repulsion"
+                        hint="How strongly nodes push each other apart."
+                        value={simulationControls.repulsion}
+                        min={0.3}
+                        max={2.2}
+                        step={0.02}
+                        onChange={(value) => setSimulationControl('repulsion', value)}
+                      />
+                      <SimulationSlider
+                        label="Link spring"
+                        hint="How tightly linked nodes pull together."
+                        value={simulationControls.linkSpring}
+                        min={0.3}
+                        max={1.8}
+                        step={0.02}
+                        onChange={(value) => setSimulationControl('linkSpring', value)}
+                      />
+                      <SimulationSlider
+                        label="Link distance"
+                        hint="Minimum spacing kept between connected nodes."
+                        value={simulationControls.linkDistance}
+                        min={8}
+                        max={44}
+                        step={1}
+                        onChange={(value) => setSimulationControl('linkDistance', value)}
+                        formatter={(value) => `${formatSliderValue(value)} px`}
+                      />
+                      <SimulationSlider
+                        label="Gravity"
+                        hint="Global pull that keeps the field cohesive."
+                        value={simulationControls.gravity}
+                        min={0}
+                        max={0.5}
+                        step={0.01}
+                        onChange={(value) => setSimulationControl('gravity', value)}
+                      />
+                      <SimulationSlider
+                        label="Friction"
+                        hint="How quickly motion settles after reheating."
+                        value={simulationControls.friction}
+                        min={0.7}
+                        max={0.98}
+                        step={0.01}
+                        onChange={(value) => setSimulationControl('friction', value)}
+                      />
+                      <SimulationSlider
+                        label="Decay"
+                        hint="How long the simulation keeps cooling."
+                        value={simulationControls.decay}
+                        min={1200}
+                        max={9000}
+                        step={100}
+                        onChange={(value) => setSimulationControl('decay', value)}
+                        formatter={(value) => formatSliderValue(value)}
+                      />
+                    </div>
+
+                    <div className="grid gap-3 md:grid-cols-2">
+                      <SimulationSlider
+                        label="Center"
+                        value={simulationControls.center}
+                        min={0}
+                        max={0.2}
+                        step={0.01}
+                        onChange={(value) => setSimulationControl('center', value)}
+                        compact
+                      />
+                      <SimulationSlider
+                        label="Theta"
+                        value={simulationControls.theta}
+                        min={0.6}
+                        max={1.4}
+                        step={0.01}
+                        onChange={(value) => setSimulationControl('theta', value)}
+                        compact
+                      />
+                      <SimulationSlider
+                        label="Mouse force"
+                        value={simulationControls.mouseRepulsion}
+                        min={0}
+                        max={5}
+                        step={0.1}
+                        onChange={(value) => setSimulationControl('mouseRepulsion', value)}
+                        compact
+                      />
+                      <SimulationSlider
+                        label="Reheat impulse"
+                        value={simulationControls.impulse}
+                        min={0.1}
+                        max={1}
+                        step={0.02}
+                        onChange={(value) => setSimulationControl('impulse', value)}
+                        compact
+                      />
+                    </div>
+                  </div>
+                </DisclosurePanel>
               </div>
             </div>
           </div>
@@ -2120,7 +2166,7 @@ export default function CosmographPage() {
             onClose={clearSelection}
             relationships={selectedRelationships}
             onNavigateToNode={(nextNodeId) => {
-              void focusNodeById(nextNodeId, { fitNeighborhood: false });
+              void focusNodeById(nextNodeId, { fitNeighborhood: true });
             }}
           />
         </CosmographProvider>
@@ -2129,36 +2175,6 @@ export default function CosmographPage() {
       <div className="md:hidden">
         <BottomTabNav />
       </div>
-    </div>
-  );
-}
-
-function StatCard({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: string;
-  accent: 'cyan' | 'amber' | 'rose' | 'emerald';
-}) {
-  const accentClass =
-    accent === 'cyan'
-      ? 'from-cyan-300/18 to-cyan-500/5 text-cyan-100'
-      : accent === 'amber'
-        ? 'from-amber-300/18 to-amber-500/5 text-amber-100'
-        : accent === 'rose'
-          ? 'from-rose-300/18 to-rose-500/5 text-rose-100'
-          : 'from-emerald-300/18 to-emerald-500/5 text-emerald-100';
-
-  return (
-    <div className={`rounded-[22px] border border-white/8 bg-gradient-to-br ${accentClass} px-4 py-3`}>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-        {label}
-      </p>
-      <p className="mt-1 text-xl font-semibold">
-        {value}
-      </p>
     </div>
   );
 }
@@ -2189,16 +2205,16 @@ function GraphSearchPanel({
 
   return (
     <div>
-      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
         <Search className="h-3.5 w-3.5" />
-        Search the graph
+        Graph search
       </div>
-      <p className="mt-2 text-xs leading-5 text-slate-400">
-        Jump to a thinker, concept, Greek term, school, or semantic cluster. Use the arrow keys and press Enter to focus instantly.
+      <p className="mt-1.5 text-[11px] leading-5 text-slate-500">
+        Jump to a thinker, concept, school, or cluster.
       </p>
 
-      <div className="mt-3 rounded-[20px] border border-white/10 bg-[#040916]/88 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-        <div className="flex items-center gap-3 rounded-[16px] border border-white/8 bg-[#020617] px-4 py-3">
+      <div className="mt-2.5 rounded-[18px] border border-white/10 bg-[#040916]/88 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+        <div className="flex items-center gap-3 rounded-[14px] border border-white/8 bg-[#020617] px-3.5 py-2.5">
           <Search className="h-4 w-4 shrink-0 text-slate-500" />
           <input
             type="search"
@@ -2251,14 +2267,14 @@ function GraphSearchPanel({
         </div>
       </div>
 
-      <div className="mt-3 overflow-hidden rounded-[20px] border border-white/8 bg-[#020617]/92">
-        <div className="flex items-center justify-between gap-3 border-b border-white/8 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+      <div className="mt-2.5 overflow-hidden rounded-[18px] border border-white/8 bg-[#020617]/92">
+        <div className="flex items-center justify-between gap-3 border-b border-white/8 px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
           <span>{hasQuery ? 'Best matches' : 'Top launch nodes'}</span>
           <span>{results.length ? `${results.length} shown` : '0 shown'}</span>
         </div>
 
         {results.length ? (
-          <div className="max-h-[22rem] space-y-2 overflow-y-auto p-2">
+          <div className="max-h-[15rem] space-y-2 overflow-y-auto p-2">
             {results.map((node, index) => {
               const isActive = index === activeIndex;
               const isSelected = node.id === selectedNodeId;
