@@ -290,8 +290,10 @@ async def _get_embedding(text: str) -> list[float]:
         raise RuntimeError("GEMINI_API_KEY required for semantic search")
 
     genai.configure(api_key=api_key)
+    model = os.getenv("GEMINI_EMBEDDING_MODEL", "models/gemini-embedding-001")
     result = genai.embed_content(
-        model="models/gemini-embedding-001",
+        model=model,
         content=text,
+        task_type="retrieval_query",
     )
     return result["embedding"]

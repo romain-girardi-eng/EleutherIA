@@ -31,6 +31,15 @@ def _env_flag(name: str, default: bool) -> bool:
     return raw.strip().lower() in {"1", "true", "yes", "on"}
 
 
+def _preferred_provider() -> ModelProvider:
+    raw = os.getenv("LLM_PREFERRED_PROVIDER", ModelProvider.GEMINI.value).strip().lower()
+    try:
+        return ModelProvider(raw)
+    except ValueError:
+        logger.warning("Unknown LLM_PREFERRED_PROVIDER=%s, falling back to gemini", raw)
+        return ModelProvider.GEMINI
+
+
 @dataclass
 class Services:
     """Container for all shared service instances."""
@@ -38,7 +47,7 @@ class Services:
     db: DatabaseService = field(default_factory=DatabaseService)
     qdrant: QdrantService = field(default_factory=QdrantService)
     llm: LLMService = field(
-        default_factory=lambda: LLMService(preferred_provider=ModelProvider.GEMINI)
+        default_factory=lambda: LLMService(preferred_provider=_preferred_provider())
     )
     analytics: KGAnalytics = field(default_factory=KGAnalytics)
     cache: KGCache = field(default_factory=lambda: KGCache(default_ttl=300))

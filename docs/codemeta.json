@@ -1,28 +1,28 @@
 {
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
-  "identifier": "https://doi.org/10.5281/zenodo.17379490",
+  "identifier": "https://doi.org/10.5281/zenodo.17379489",
   "name": "EleutherIA",
   "description": "A FAIR-compliant knowledge graph documenting ancient philosophical debates on free will, fate, and moral responsibility from the Greco-Roman and Early Christian periods (6th c. BCE - 6th c. CE), together with their history of reception in modern scholarship.",
-  "version": "2.0.0",
+  "version": "5.0.0",
   "dateCreated": "2024-06-01",
-  "dateModified": "2025-01-30",
-  "datePublished": "2025-01-30",
+  "dateModified": "2026-03-13",
+  "datePublished": "2026-03-13",
   "license": "https://creativecommons.org/licenses/by/4.0/",
   "codeRepository": "https://github.com/romain-girardi-eng/EleutherIA",
   "issueTracker": "https://github.com/romain-girardi-eng/EleutherIA/issues",
   "readme": "https://github.com/romain-girardi-eng/EleutherIA/blob/main/README.md",
-  "downloadUrl": "https://zenodo.org/records/17379490",
+  "downloadUrl": "https://zenodo.org/records/17379489",
   "author": [
     {
       "@type": "Person",
       "givenName": "Romain",
       "familyName": "Girardi",
       "email": "romain.girardi@univ-cotedazur.fr",
-      "@id": "https://orcid.org/0009-0000-3608-1817",
+      "@id": "https://orcid.org/0000-0002-5310-5346",
       "affiliation": {
         "@type": "Organization",
-        "name": "Universite Cote d'Azur"
+        "name": "Universite Cote d'Azur, CEPAM; Universite de Geneve, Faculte de Theologie Jean Calvin"
       }
     }
   ],
@@ -88,8 +88,8 @@
     "name": "Universite Cote d'Azur"
   },
   "relatedLink": [
-    "https://eleutheria.dev",
-    "https://doi.org/10.5281/zenodo.17379490"
+    "https://free-will.app",
+    "https://doi.org/10.5281/zenodo.17379489"
   ],
   "softwareHelp": "https://github.com/romain-girardi-eng/EleutherIA/tree/main/docs"
 }

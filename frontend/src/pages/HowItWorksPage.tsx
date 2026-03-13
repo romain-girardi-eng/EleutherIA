@@ -812,13 +812,13 @@ export default function HowItWorksPage() {
             className="flex flex-wrap gap-3 mt-10"
           >
             <a
-              href="https://doi.org/10.5281/zenodo.17379490"
+              href="https://doi.org/10.5281/zenodo.17379489"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-400/50 bg-amber-100/60 text-amber-800 text-sm font-body font-medium hover:bg-amber-200/60 transition-colors"
             >
               <Globe className="w-4 h-4" />
-              DOI: 10.5281/zenodo.17379490
+              DOI: 10.5281/zenodo.17379489
             </a>
             <GitHubPill variant="light" label={t('learn.hero.openSource')} />
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-stone-300 bg-white/60 text-stone-600 text-sm font-body">

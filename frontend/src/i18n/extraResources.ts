@@ -602,7 +602,7 @@ export const extraResources = {
         subtitle:
           'Findable, Accessible, Interoperable, Reusable principles are built into every layer of the architecture.',
         badges: {
-          F: { title: 'Findable', description: 'Every entity has a unique, persistent identifier', detail: ['CTS URNs for ancient texts', 'UUIDs for all KG nodes', 'DOI 10.5281/zenodo.17379490'] },
+          F: { title: 'Findable', description: 'Every entity has a unique, persistent identifier', detail: ['CTS URNs for ancient texts', 'UUIDs for all KG nodes', 'DOI 10.5281/zenodo.17379489'] },
           A: { title: 'Accessible', description: 'Open REST API, no auth required for reads', detail: ['Public JSON API', 'Swagger/OpenAPI docs', 'HTTPS + CORS enabled'] },
           I: { title: 'Interoperable', description: 'Standard formats compatible with existing tools', detail: ['JSON-LD & RDF formats', 'TEI XML preservation', 'Compatible with Perseus / TLG / PHI'] },
           R: { title: 'Reusable', description: 'Traceable provenance, open licence', detail: ['CC BY 4.0 licence', 'Source attribution per passage', 'Confidence scores 0\u20131'] },
@@ -1234,7 +1234,7 @@ export const extraResources = {
         subtitle:
           'Les principes Findable, Accessible, Interoperable et Reusable sont int\u00E9gr\u00E9s \u00E0 chaque couche de l\u2019architecture.',
         badges: {
-          F: { title: 'Trouvable', description: 'Chaque entit\u00E9 poss\u00E8de un identifiant unique et persistant', detail: ['URN CTS pour les textes antiques', 'UUID pour tous les n\u0153uds KG', 'DOI 10.5281/zenodo.17379490'] },
+          F: { title: 'Trouvable', description: 'Chaque entit\u00E9 poss\u00E8de un identifiant unique et persistant', detail: ['URN CTS pour les textes antiques', 'UUID pour tous les n\u0153uds KG', 'DOI 10.5281/zenodo.17379489'] },
           A: { title: 'Accessible', description: 'API REST ouverte, aucune authentification requise en lecture', detail: ['API JSON publique', 'Documentation Swagger/OpenAPI', 'HTTPS + CORS activ\u00E9'] },
           I: { title: 'Interop\u00E9rable', description: 'Formats standards compatibles avec les outils existants', detail: ['Formats JSON-LD et RDF', 'Pr\u00E9servation TEI XML', 'Compatible avec Perseus / TLG / PHI'] },
           R: { title: 'R\u00E9utilisable', description: 'Provenance tra\u00E7able, licence ouverte', detail: ['Licence CC BY 4.0', 'Attribution des sources par passage', 'Scores de confiance 0\u20131'] },
@@ -1836,7 +1836,7 @@ export const extraResources = {
         subtitle:
           'Die Prinzipien Findable, Accessible, Interoperable und Reusable sind in jede Schicht der Architektur eingebaut.',
         badges: {
-          F: { title: 'Auffindbar', description: 'Jede Entit\u00E4t hat einen eindeutigen, persistenten Identifikator', detail: ['CTS-URNs f\u00FCr antike Texte', 'UUIDs f\u00FCr alle KG-Knoten', 'DOI 10.5281/zenodo.17379490'] },
+          F: { title: 'Auffindbar', description: 'Jede Entit\u00E4t hat einen eindeutigen, persistenten Identifikator', detail: ['CTS-URNs f\u00FCr antike Texte', 'UUIDs f\u00FCr alle KG-Knoten', 'DOI 10.5281/zenodo.17379489'] },
           A: { title: 'Zug\u00E4nglich', description: 'Offene REST-API, keine Authentifizierung f\u00FCr Lesezugriffe', detail: ['\u00D6ffentliche JSON-API', 'Swagger/OpenAPI-Dokumentation', 'HTTPS + CORS aktiviert'] },
           I: { title: 'Interoperabel', description: 'Standardformate kompatibel mit bestehenden Werkzeugen', detail: ['JSON-LD- und RDF-Formate', 'TEI-XML-Erhaltung', 'Kompatibel mit Perseus / TLG / PHI'] },
           R: { title: 'Wiederverwendbar', description: 'Nachvollziehbare Provenienz, offene Lizenz', detail: ['CC BY 4.0-Lizenz', 'Quellenattribution pro Passage', 'Konfidenzwerte 0\u20131'] },
@@ -2468,7 +2468,7 @@ export const extraResources = {
         subtitle:
           'I principi Findable, Accessible, Interoperable e Reusable sono integrati in ogni livello dell\u2019architettura.',
         badges: {
-          F: { title: 'Findable', description: 'Ogni entit\u00E0 ha un identificatore unico e persistente', detail: ['CTS URN per i testi antichi', 'UUID per tutti i nodi KG', 'DOI 10.5281/zenodo.17379490'] },
+          F: { title: 'Findable', description: 'Ogni entit\u00E0 ha un identificatore unico e persistente', detail: ['CTS URN per i testi antichi', 'UUID per tutti i nodi KG', 'DOI 10.5281/zenodo.17379489'] },
           A: { title: 'Accessible', description: 'API REST aperta, nessuna autenticazione per la lettura', detail: ['API JSON pubblica', 'Documentazione Swagger/OpenAPI', 'HTTPS + CORS abilitato'] },
           I: { title: 'Interoperable', description: 'Formati standard compatibili con gli strumenti esistenti', detail: ['Formati JSON-LD e RDF', 'Preservazione TEI XML', 'Compatibile con Perseus / TLG / PHI'] },
           R: { title: 'Reusable', description: 'Provenienza tracciabile, licenza aperta', detail: ['Licenza CC BY 4.0', 'Attribuzione della fonte per passo', 'Punteggi di affidabilit\u00E0 0\u20131'] },
@@ -3100,7 +3100,7 @@ export const extraResources = {
         subtitle:
           '\u039F\u03B9 \u03B1\u03C1\u03C7\u03AD\u03C2 Findable, Accessible, Interoperable \u03BA\u03B1\u03B9 Reusable \u03B5\u03AF\u03BD\u03B1\u03B9 \u03B5\u03BD\u03C3\u03C9\u03BC\u03B1\u03C4\u03C9\u03BC\u03AD\u03BD\u03B5\u03C2 \u03C3\u03B5 \u03BA\u03AC\u03B8\u03B5 \u03B5\u03C0\u03AF\u03C0\u03B5\u03B4\u03BF \u03C4\u03B7\u03C2 \u03B1\u03C1\u03C7\u03B9\u03C4\u03B5\u03BA\u03C4\u03BF\u03BD\u03B9\u03BA\u03AE\u03C2.',
         badges: {
-          F: { title: 'Findable', description: '\u039A\u03AC\u03B8\u03B5 \u03BF\u03BD\u03C4\u03CC\u03C4\u03B7\u03C4\u03B1 \u03AD\u03C7\u03B5\u03B9 \u03BC\u03BF\u03BD\u03B1\u03B4\u03B9\u03BA\u03CC, \u03BC\u03CC\u03BD\u03B9\u03BC\u03BF \u03B1\u03BD\u03B1\u03B3\u03BD\u03C9\u03C1\u03B9\u03C3\u03C4\u03B9\u03BA\u03CC', detail: ['CTS URN \u03B3\u03B9\u03B1 \u03B1\u03C1\u03C7\u03B1\u03AF\u03B1 \u03BA\u03B5\u03AF\u03BC\u03B5\u03BD\u03B1', 'UUID \u03B3\u03B9\u03B1 \u03CC\u03BB\u03BF\u03C5\u03C2 \u03C4\u03BF\u03C5\u03C2 \u03BA\u03CC\u03BC\u03B2\u03BF\u03C5\u03C2 KG', 'DOI 10.5281/zenodo.17379490'] },
+          F: { title: 'Findable', description: '\u039A\u03AC\u03B8\u03B5 \u03BF\u03BD\u03C4\u03CC\u03C4\u03B7\u03C4\u03B1 \u03AD\u03C7\u03B5\u03B9 \u03BC\u03BF\u03BD\u03B1\u03B4\u03B9\u03BA\u03CC, \u03BC\u03CC\u03BD\u03B9\u03BC\u03BF \u03B1\u03BD\u03B1\u03B3\u03BD\u03C9\u03C1\u03B9\u03C3\u03C4\u03B9\u03BA\u03CC', detail: ['CTS URN \u03B3\u03B9\u03B1 \u03B1\u03C1\u03C7\u03B1\u03AF\u03B1 \u03BA\u03B5\u03AF\u03BC\u03B5\u03BD\u03B1', 'UUID \u03B3\u03B9\u03B1 \u03CC\u03BB\u03BF\u03C5\u03C2 \u03C4\u03BF\u03C5\u03C2 \u03BA\u03CC\u03BC\u03B2\u03BF\u03C5\u03C2 KG', 'DOI 10.5281/zenodo.17379489'] },
           A: { title: 'Accessible', description: '\u0391\u03BD\u03BF\u03B9\u03C7\u03C4\u03CC REST API, \u03C7\u03C9\u03C1\u03AF\u03C2 \u03B1\u03C5\u03B8\u03B5\u03BD\u03C4\u03B9\u03BA\u03BF\u03C0\u03BF\u03AF\u03B7\u03C3\u03B7 \u03B3\u03B9\u03B1 \u03B1\u03BD\u03AC\u03B3\u03BD\u03C9\u03C3\u03B7', detail: ['\u0394\u03B7\u03BC\u03CC\u03C3\u03B9\u03BF JSON API', '\u03A4\u03B5\u03BA\u03BC\u03B7\u03C1\u03AF\u03C9\u03C3\u03B7 Swagger/OpenAPI', 'HTTPS + CORS \u03B5\u03BD\u03B5\u03C1\u03B3\u03BF\u03C0\u03BF\u03B9\u03B7\u03BC\u03AD\u03BD\u03BF'] },
           I: { title: 'Interoperable', description: '\u03A4\u03C5\u03C0\u03BF\u03C0\u03BF\u03B9\u03B7\u03BC\u03AD\u03BD\u03B5\u03C2 \u03BC\u03BF\u03C1\u03C6\u03AD\u03C2 \u03C3\u03C5\u03BC\u03B2\u03B1\u03C4\u03AD\u03C2 \u03BC\u03B5 \u03C5\u03C0\u03AC\u03C1\u03C7\u03BF\u03BD\u03C4\u03B1 \u03B5\u03C1\u03B3\u03B1\u03BB\u03B5\u03AF\u03B1', detail: ['\u039C\u03BF\u03C1\u03C6\u03AD\u03C2 JSON-LD \u03BA\u03B1\u03B9 RDF', '\u0394\u03B9\u03B1\u03C4\u03AE\u03C1\u03B7\u03C3\u03B7 TEI XML', '\u03A3\u03C5\u03BC\u03B2\u03B1\u03C4\u03CC \u03BC\u03B5 Perseus / TLG / PHI'] },
           R: { title: 'Reusable', description: '\u0399\u03C7\u03BD\u03B7\u03BB\u03AC\u03C3\u03B9\u03BC\u03B7 \u03C0\u03C1\u03BF\u03AD\u03BB\u03B5\u03C5\u03C3\u03B7, \u03B1\u03BD\u03BF\u03B9\u03C7\u03C4\u03AE \u03AC\u03B4\u03B5\u03B9\u03B1', detail: ['\u0386\u03B4\u03B5\u03B9\u03B1 CC BY 4.0', '\u0391\u03C0\u03CC\u03B4\u03BF\u03C3\u03B7 \u03C0\u03B7\u03B3\u03AE\u03C2 \u03B1\u03BD\u03AC \u03B1\u03C0\u03CC\u03C3\u03C0\u03B1\u03C3\u03BC\u03B1', '\u0392\u03B1\u03B8\u03BC\u03BF\u03BB\u03BF\u03B3\u03AF\u03B5\u03C2 \u03B1\u03BE\u03B9\u03BF\u03C0\u03B9\u03C3\u03C4\u03AF\u03B1\u03C2 0\u20131'] },

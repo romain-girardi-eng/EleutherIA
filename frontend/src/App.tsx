@@ -446,8 +446,8 @@ function AppContent() {
                 <h3 className="font-semibold text-sm mb-2">{t('appShell.footer.citationTitle')}</h3>
                 <p className="text-xs text-academic-muted leading-relaxed break-words">
                   Girardi, R. (2025). <span className="italic">EleutherIA: Ancient Free Will Database</span>.
-                  Zenodo. <a href="https://doi.org/10.5281/zenodo.17379490" className="text-primary-600 hover:underline break-all">
-                    https://doi.org/10.5281/zenodo.17379490
+                  Zenodo. <a href="https://doi.org/10.5281/zenodo.17379489" className="text-primary-600 hover:underline break-all">
+                    https://doi.org/10.5281/zenodo.17379489
                   </a>
                 </p>
               </div>

@@ -3,7 +3,7 @@
  * Provides endpoints for citation network analysis and data quality monitoring
  */
 
-import { Hono } from 'hono';
+import { Context, Hono, Next } from 'hono';
 import { Env } from '../types';
 import { DatabaseService } from '../services/database';
 import { CitationNetworkAnalyzer } from '../services/citation-network';
@@ -14,8 +14,20 @@ const logger = getLogger('AdminRoutes');
 
 export const adminRoutes = new Hono<{ Bindings: Env }>();
 
-// All admin routes require authentication
-adminRoutes.use('*', authMiddleware);
+async function adminAuthOrIngestKey(c: Context<{ Bindings: Env }>, next: Next) {
+  const ingestKey = c.env.ADMIN_INGEST_KEY;
+  const presentedKey = c.req.header('X-Admin-Ingest-Key');
+
+  if (ingestKey && presentedKey && presentedKey === ingestKey) {
+    await next();
+    return;
+  }
+
+  return authMiddleware(c, next);
+}
+
+// All admin routes require either JWT auth or the private ingest key.
+adminRoutes.use('*', adminAuthOrIngestKey);
 
 /**
  * GET /api/admin/qdrant/info
@@ -132,6 +144,72 @@ adminRoutes.post('/qdrant/create-dual-collections', async (c) => {
       {
         error: error instanceof Error ? error.message : 'Unknown error',
         message: 'Failed to create dual-vector collections',
+      },
+      500
+    );
+  }
+});
+
+/**
+ * POST /api/admin/qdrant/recreate-collection
+ * Recreate a collection with either a single vector or a named vector.
+ * Body: { collection_name: string, dimensions?: number, vector_name?: string }
+ */
+adminRoutes.post('/qdrant/recreate-collection', async (c) => {
+  try {
+    const body = await c.req.json();
+    const collectionName = body.collection_name as string | undefined;
+    const dimensions = Number(body.dimensions || 3072);
+    const vectorName = typeof body.vector_name === 'string' ? body.vector_name.trim() : '';
+
+    if (!collectionName) {
+      return c.json({ error: 'collection_name is required' }, 400);
+    }
+
+    const qdrantHost = c.env.QDRANT_HOST;
+    const qdrantApiKey = c.env.QDRANT_API_KEY;
+
+    await fetch(`https://${qdrantHost}/collections/${collectionName}`, {
+      method: 'DELETE',
+      headers: {
+        'api-key': qdrantApiKey,
+        'Content-Type': 'application/json',
+      },
+    }).catch(() => null);
+
+    const vectors = vectorName
+      ? { [vectorName]: { size: dimensions, distance: 'Cosine' } }
+      : { size: dimensions, distance: 'Cosine' };
+
+    const createResponse = await fetch(`https://${qdrantHost}/collections/${collectionName}`, {
+      method: 'PUT',
+      headers: {
+        'api-key': qdrantApiKey,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ vectors }),
+    });
+
+    if (!createResponse.ok) {
+      const errorText = await createResponse.text();
+      throw new Error(`Failed to recreate collection: ${createResponse.statusText} - ${errorText}`);
+    }
+
+    const result = await createResponse.json();
+
+    return c.json({
+      success: true,
+      collection: collectionName,
+      dimensions,
+      ...(vectorName ? { vector_name: vectorName } : {}),
+      result,
+    });
+  } catch (error) {
+    logger.error('Error recreating collection', error);
+    return c.json(
+      {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        success: false,
       },
       500
     );

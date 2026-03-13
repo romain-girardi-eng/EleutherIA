@@ -183,7 +183,7 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
 
   const generateCitation = () => {
     const year = new Date().getFullYear();
-    return `Girardi, Romain. (${year}). "${node.label}". In *EleutherIA: Ancient Free Will Database* (Node ID: ${node.id}). https://free-will.app/node/${node.id}. DOI: 10.5281/zenodo.17379490`;
+    return `Girardi, Romain. (${year}). "${node.label}". In *EleutherIA: Ancient Free Will Database* (Node ID: ${node.id}). https://free-will.app/node/${node.id}. DOI: 10.5281/zenodo.17379489`;
   };
 
   const copyCitation = () => {
@@ -469,7 +469,7 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
 
                   <ActionButton
                     as="a"
-                    href="https://doi.org/10.5281/zenodo.17379490"
+                    href="https://doi.org/10.5281/zenodo.17379489"
                     target="_blank"
                     rel="noopener noreferrer"
                     icon={ExternalLink}

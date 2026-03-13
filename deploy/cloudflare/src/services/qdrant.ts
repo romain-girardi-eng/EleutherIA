@@ -120,6 +120,31 @@ export class QdrantService {
     }
   }
 
+  private async searchSingleVectorCollection(
+    collectionName: string,
+    queryVector: number[],
+    limit: number,
+    scoreThreshold?: number
+  ): Promise<QdrantSearchResult[]> {
+    const searchParams: any = {
+      vector: queryVector,
+      limit,
+      with_payload: true,
+    };
+
+    if (scoreThreshold) {
+      searchParams.score_threshold = scoreThreshold;
+    }
+
+    const response = await this.request<QdrantSearchResponse>(
+      `/collections/${collectionName}/points/search`,
+      'POST',
+      searchParams
+    );
+
+    return response.result;
+  }
+
   /**
    * Search text embeddings by vector similarity
    */
@@ -323,7 +348,53 @@ export class QdrantService {
         searchParams
       );
 
-      return response.result;
+      const results = response.result;
+      if (
+        collectionName !== 'kg_nodes_dual' ||
+        vectorName !== 'gemini' ||
+        results.length >= limit
+      ) {
+        return results;
+      }
+
+      logger.warn(
+        `Named-vector collection ${collectionName} returned only ${results.length}/${limit} results; applying fallback collections`
+      );
+
+      const deduped = new Map<string, QdrantSearchResult>();
+      const addResults = (items: QdrantSearchResult[]) => {
+        for (const item of items) {
+          const key = String(item.payload?.node_id || item.id);
+          if (!deduped.has(key)) {
+            deduped.set(key, item);
+          }
+        }
+      };
+
+      addResults(results);
+
+      try {
+        addResults(
+          await this.searchSingleVectorCollection(
+            'kg_nodes_gemini',
+            queryVector,
+            limit,
+            scoreThreshold
+          )
+        );
+      } catch (fallbackError) {
+        logger.warn('Fallback search on kg_nodes_gemini failed', fallbackError);
+      }
+
+      if (deduped.size < limit) {
+        try {
+          addResults(await this.searchNodes(queryVector, limit, scoreThreshold));
+        } catch (fallbackError) {
+          logger.warn('Fallback search on ancient_free_will_vectors failed', fallbackError);
+        }
+      }
+
+      return Array.from(deduped.values()).slice(0, limit);
     } catch (error) {
       logger.error(`Error searching ${collectionName} with ${vectorName}`, error);
       throw error;

@@ -173,6 +173,7 @@ async def graphrag_answer(
             "quality_badge": "High" if confidence_score >= 75 else "Medium" if confidence_score >= 50 else "Low",
             "caveats": [],
         },
+        "metadata": result.get("metadata", {}),
         "retrieval_stats": {
             "hyde_used": body.use_hyde,
             "rerank_used": body.use_reranking,

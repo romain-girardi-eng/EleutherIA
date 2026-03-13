@@ -1,18 +1,11 @@
-"""Pydantic AI structured output models for all JSON-returning LLM calls.
-
-Each model is used as the ``result_type`` for a ``pydantic_ai.Agent``,
-providing automatic validation and retry on malformed LLM output.
-"""
+"""Structured output models for JSON-returning LLM calls."""
 
 from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
 from eleutheria_graphrag.agents.pipeline_config import QueryType
-
-# ---------------------------------------------------------------------------
-# ClassifyQueryType
-# ---------------------------------------------------------------------------
+from eleutheria_graphrag.agents.state import ClaimStatus, ResearchFacet
 
 
 class ClassificationResult(BaseModel):
@@ -21,11 +14,7 @@ class ClassificationResult(BaseModel):
     query_type: QueryType
     confidence: float = Field(ge=0.0, le=1.0)
     reason: str
-
-
-# ---------------------------------------------------------------------------
-# ExpandQuery
-# ---------------------------------------------------------------------------
+    complexity: str | None = None
 
 
 class GreekTerm(BaseModel):
@@ -42,6 +31,7 @@ class LatinTerm(BaseModel):
 class ExpansionTerms(BaseModel):
     """Structured output for philological query expansion."""
 
+    expanded_query: str | None = None
     greek_terms: list[GreekTerm] = Field(default_factory=list)
     latin_terms: list[LatinTerm] = Field(default_factory=list)
     philosophers: list[str] = Field(default_factory=list)
@@ -50,9 +40,38 @@ class ExpansionTerms(BaseModel):
     periods: list[str] = Field(default_factory=list)
 
 
-# ---------------------------------------------------------------------------
-# EvaluateSufficiency
-# ---------------------------------------------------------------------------
+class ResearchFrame(BaseModel):
+    """Notebook framing for a research-style pipeline."""
+
+    question_frame: str
+    facets: list[ResearchFacet] = Field(default_factory=list)
+    sub_questions: list[str] = Field(default_factory=list)
+    competing_hypotheses: list[str] = Field(default_factory=list)
+    open_questions: list[str] = Field(default_factory=list)
+
+
+class SelectedNode(BaseModel):
+    work_id: str
+    node_id: str
+    title: str | None = None
+    path: str | None = None
+    reason: str
+    priority: int = Field(ge=1, le=3)
+
+
+class TreeNavigationResult(BaseModel):
+    """Structured output for recursive work-tree navigation."""
+
+    selected_nodes: list[SelectedNode]
+    reasoning: str
+
+
+class ReadingPlanResult(BaseModel):
+    """Structured output for the work/facet reading planner."""
+
+    work_titles: list[str] = Field(default_factory=list)
+    facet_ids: list[str] = Field(default_factory=list)
+    rationale: str = ""
 
 
 class SufficiencyAssessment(BaseModel):
@@ -64,43 +83,14 @@ class SufficiencyAssessment(BaseModel):
     refinement: str | None = None
 
 
-# ---------------------------------------------------------------------------
-# TreeReasoningRetrieve
-# ---------------------------------------------------------------------------
-
-
-class SelectedNode(BaseModel):
-    work_id: str
-    node_id: str
-    reason: str
-    priority: int = Field(ge=1, le=3)
-
-
-class TreeNavigationResult(BaseModel):
-    """Structured output for tree reasoning navigation."""
-
-    selected_nodes: list[SelectedNode]
-    reasoning: str
-
-
-# ---------------------------------------------------------------------------
-# CRAGValidate
-# ---------------------------------------------------------------------------
-
-
 class CRAGValidation(BaseModel):
-    """Structured output for CRAG retrieval validation."""
+    """Legacy validation payload kept for backwards-compatible metadata."""
 
     relevance: int = Field(ge=0, le=100)
     completeness: int = Field(ge=0, le=100)
     confidence: int = Field(ge=0, le=100)
     missing: list[str] = Field(default_factory=list)
     suggestions: list[str] = Field(default_factory=list)
-
-
-# ---------------------------------------------------------------------------
-# DualRerank (LLM stage)
-# ---------------------------------------------------------------------------
 
 
 class RerankItem(BaseModel):
@@ -110,18 +100,13 @@ class RerankItem(BaseModel):
 
 
 class LLMRerankResult(BaseModel):
-    """Structured output for LLM scholarly reranking."""
+    """Legacy reranker payload kept for optional compatibility."""
 
     rankings: list[RerankItem]
 
 
-# ---------------------------------------------------------------------------
-# SelfRAGEvaluate
-# ---------------------------------------------------------------------------
-
-
 class SelfRAGEvaluation(BaseModel):
-    """Structured output for post-generation quality evaluation."""
+    """Legacy post-generation evaluation payload kept for compatibility."""
 
     relevance: int = Field(ge=0, le=100)
     grounding: int = Field(ge=0, le=100)
@@ -129,3 +114,30 @@ class SelfRAGEvaluation(BaseModel):
     confidence: int = Field(ge=0, le=100)
     caveats: list[str] = Field(default_factory=list)
     improvements: list[str] = Field(default_factory=list)
+
+
+class CounterEvidenceResult(BaseModel):
+    """Structured output for bundle-level counter-evidence selection."""
+
+    bundle_ids: list[str] = Field(default_factory=list)
+    rationale: str = ""
+
+
+class ClaimLedgerDraftItem(BaseModel):
+    """Structured output for the pre-answer claim ledger."""
+
+    claim: str
+    evidence_ids: list[str] = Field(default_factory=list)
+    facet_id: str | None = None
+    evidence_class: str = "direct_text"
+    quote_original: str | None = None
+    quote_translation: str | None = None
+    support_type: str = "passage"
+    confidence: float = Field(ge=0.0, le=1.0)
+    status: ClaimStatus = ClaimStatus.SUPPORTED
+
+
+class ClaimLedgerDraft(BaseModel):
+    """Structured claim ledger used before answer rendering."""
+
+    claims: list[ClaimLedgerDraftItem] = Field(default_factory=list)

@@ -5,6 +5,147 @@
 
 export type ReasoningStepType = 'search' | 'traverse' | 'context' | 'synthesis' | 'complete';
 export type StepStatus = 'pending' | 'active' | 'complete' | 'error';
+export type ResearchStageStatus = 'complete' | 'skipped' | 'degraded';
+
+export interface ResearchGraphMetric {
+  label: string;
+  value: string | number | boolean | null | undefined;
+}
+
+export interface ResearchGraphStage {
+  id: string;
+  title: string;
+  status: ResearchStageStatus;
+  summary: string;
+  metrics?: ResearchGraphMetric[];
+  details?: Record<string, unknown> | null;
+}
+
+export interface ResearchGraphFacet {
+  facet_id: string;
+  title: string;
+  question: string;
+  summary?: string;
+  required_support?: string;
+  priority?: number;
+  primary_count: number;
+  testimony_count: number;
+  counter_count: number;
+  metadata_count: number;
+  note_count: number;
+  uncertainty_count: number;
+}
+
+export interface ResearchGraphWorkSection {
+  node_id?: string;
+  title?: string;
+  path?: string;
+}
+
+export interface ResearchGraphWork {
+  work_id: string;
+  title: string;
+  author?: string;
+  bundle_count: number;
+  section_count: number;
+  primary_count: number;
+  testimony_count: number;
+  counter_count: number;
+  has_translation: boolean;
+  languages: string[];
+  canonical_refs: string[];
+  sections: ResearchGraphWorkSection[];
+}
+
+export interface ResearchGraphClaim {
+  claim: string;
+  facet_id?: string | null;
+  evidence_class: string;
+  support_type: string;
+  confidence: number;
+  status: string;
+  evidence_ids: string[];
+  refs: string[];
+  quote_original?: string | null;
+  quote_translation?: string | null;
+}
+
+export interface ResearchGraphToolCall {
+  tool_call_id: string;
+  tool_name: string;
+  stage_id: string;
+  status: string;
+  query?: string | null;
+  rationale?: string | null;
+  work_id?: string | null;
+  work_title?: string | null;
+  section_path?: string | null;
+  selected_ids: string[];
+  detail_count: number;
+  details?: Record<string, unknown> | null;
+}
+
+export interface ResearchGraphDecision {
+  decision_id: string;
+  stage_id: string;
+  decision_type: string;
+  title: string;
+  rationale: string;
+  facet_id?: string | null;
+  selected_ids: string[];
+  rejected_ids: string[];
+  supporting_refs: string[];
+  metadata?: Record<string, unknown> | null;
+}
+
+export interface ResearchGraphOverview {
+  query_type?: string;
+  complexity?: string;
+  grounding_policy?: string;
+  quality_badge?: string;
+  pipeline_degraded?: boolean;
+  claim_ledger_mode?: string;
+  render_answer_mode?: string;
+  scholarly_polish_mode?: string;
+  seed_node_count?: number;
+  context_node_count?: number;
+  bundle_count?: number;
+  work_count?: number;
+  claim_count?: number;
+  citation_count?: number;
+  tool_call_count?: number;
+  decision_count?: number;
+}
+
+export interface ResearchGraphPayload {
+  overview: ResearchGraphOverview;
+  stages: ResearchGraphStage[];
+  facets: ResearchGraphFacet[];
+  works: ResearchGraphWork[];
+  claims: ResearchGraphClaim[];
+  hypotheses: string[];
+  open_questions: string[];
+  counter_evidence: string[];
+  uncertainties: string[];
+  tool_calls: ResearchGraphToolCall[];
+  reading_decisions: ResearchGraphDecision[];
+}
+
+export interface GraphRAGMetadata {
+  research_graph?: ResearchGraphPayload;
+  debug_trace?: Record<string, unknown>;
+  query_type?: string;
+  complexity?: string;
+  iterations?: number;
+  sub_queries?: string[];
+  quality_badge?: string;
+  grounding_policy?: string;
+  claim_ledger_mode?: string;
+  render_answer_mode?: string;
+  scholarly_polish_mode?: string;
+  pipeline_degraded?: boolean;
+  [key: string]: unknown;
+}
 
 export interface ReasoningStep {
   id: number;

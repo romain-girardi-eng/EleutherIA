@@ -555,14 +555,14 @@ export default function BibliographyPage() {
             <h2 className="text-sm font-medium text-stone-400 uppercase tracking-wider mb-4">How to Cite</h2>
             <div className="bg-stone-50/60 rounded-xl p-5 border border-stone-200/40">
               <p className="font-mono text-[13px] leading-relaxed text-stone-600">
-                Girardi, R. (2025). <span className="italic font-serif text-stone-700">EleutherIA: Ancient Free Will Database</span>. Zenodo.{" "}
+                Girardi, R. (2026). <span className="italic font-serif text-stone-700">EleutherIA: Ancient Free Will Database</span>. Zenodo.{" "}
                 <a
-                  href="https://doi.org/10.5281/zenodo.17379490"
+                  href="https://doi.org/10.5281/zenodo.17379489"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-stone-500 hover:text-stone-700 underline underline-offset-2 decoration-stone-300 hover:decoration-stone-500 transition-colors"
                 >
-                  https://doi.org/10.5281/zenodo.17379490
+                  https://doi.org/10.5281/zenodo.17379489
                 </a>
               </p>
             </div>

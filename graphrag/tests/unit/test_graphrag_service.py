@@ -134,3 +134,68 @@ class TestLoadKG:
             result = await svc.query("test")
             assert result["answer"] == "test"
             assert svc._kg_loaded is True
+
+    @pytest.mark.asyncio
+    async def test_load_kg_injects_tree_index_and_llm_reranker(self):
+        db = AsyncMock()
+        db.fetch = AsyncMock(return_value=[])
+        svc = GraphRAGService(
+            db_service=db,
+            qdrant_service=MagicMock(),
+        )
+
+        with patch(
+            "eleutheria_graphrag.services.graphrag_service.ScholarlyAgent"
+        ) as mock_agent_cls:
+            await svc.load_kg()
+
+        deps = mock_agent_cls.call_args.args[0]
+        assert deps.tree_index is not None
+        assert deps.llm_reranker is not None
+        assert deps.traversal is not None
+
+    @pytest.mark.asyncio
+    async def test_load_kg_normalizes_json_metadata_strings(self):
+        db = AsyncMock()
+        db.fetch = AsyncMock(
+            side_effect=[
+                [
+                    {
+                        "id": "n1",
+                        "label": "Stoicism",
+                        "type": "school",
+                        "description": "A school",
+                        "period": "Hellenistic",
+                        "school": None,
+                        "role": None,
+                        "metadata": '{"school": "Stoicism"}',
+                        "date": None,
+                        "birth": None,
+                        "death": None,
+                        "floruit": None,
+                        "approximate_dates": None,
+                        "scholarly_role": None,
+                    }
+                ],
+                [
+                    {
+                        "source": "n1",
+                        "target": "n2",
+                        "relation": "influenced",
+                        "description": None,
+                        "weight": 1.0,
+                        "metadata": '{"weight": 0.7}',
+                    }
+                ],
+            ]
+        )
+        svc = GraphRAGService(
+            db_service=db,
+            qdrant_service=MagicMock(),
+        )
+
+        with patch("eleutheria_graphrag.services.graphrag_service.ScholarlyAgent"):
+            await svc.load_kg()
+
+        assert svc.node_lookup["n1"]["metadata"] == {"school": "Stoicism"}
+        assert svc.outgoing_edges["n1"][0]["metadata"] == {"weight": 0.7}

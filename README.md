@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://doi.org/10.5281/zenodo.17379490"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.17379490.svg" alt="DOI"></a>
+  <a href="https://doi.org/10.5281/zenodo.17379489"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.17379489.svg" alt="DOI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg" alt="License: CC BY 4.0"></a>
 </p>
 
@@ -172,14 +172,14 @@ Full documentation is available in the [`docs/`](docs/INDEX.md) folder:
 ## Citation
 
 ```bibtex
-@software{girardi2025eleutheria,
+@software{girardi2026eleutheria,
   author       = {Girardi, Romain},
   title        = {EleutherIA: An AI-Powered Scholarly Research Platform
                    for Ancient Philosophy on Free Will},
-  year         = 2025,
+  year         = 2026,
   publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.17379490},
-  url          = {https://doi.org/10.5281/zenodo.17379490}
+  doi          = {10.5281/zenodo.17379489},
+  url          = {https://doi.org/10.5281/zenodo.17379489}
 }
 ```
 
@@ -191,5 +191,5 @@ CC BY 4.0 -- See [LICENSE](LICENSE)
 
 - [Production Site](https://free-will.app)
 - [Full Documentation](docs/INDEX.md)
-- [Dataset (Zenodo)](https://doi.org/10.5281/zenodo.17379490)
+- [Zenodo Archive](https://doi.org/10.5281/zenodo.17379489)
 - [Contributing](.github/CONTRIBUTING.md)

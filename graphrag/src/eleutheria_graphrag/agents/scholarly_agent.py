@@ -1,30 +1,5 @@
 """
-Scholarly Agent — high-level facade wrapping the pydantic-graph FSM.
-
-Provides ``query()`` and ``query_stream()`` entry points that are
-API-compatible with the old ``GraphRAGService`` interface, making it
-a drop-in replacement for the routes layer.
-
-Node graph (17 nodes):
-----------------------
-ClassifyQueryType
- ↓
-ExpandQuery
- ├─ specific_entity / global_abstract → DirectKGLookup
- ├─ multi_hop / comparative / temporal → HybridRetrieve
- └─ (complex)                          → DecomposeQuery
-         ↓
-DirectKGLookup / HybridRetrieve → TreeReasoningRetrieve
-DecomposeQuery → SearchPrimarySources → EvaluateSufficiency
-                                          ├─ insufficient → SearchPrimarySources (loop)
-                                          └─ sufficient   → TreeReasoningRetrieve
-SearchSecondarySources (reached from FetchPassagesAndLayer for comparative/global_abstract)
-         ↓
-TreeReasoningRetrieve → CRAGValidate → DualRerank → FetchPassagesAndLayer
-         ↓
-Synthesize / SynthesizeWithHierarchy → VerifyCitations → SelfRAGEvaluate
-         ├─ quality ≥ threshold → End
-         └─ quality <  threshold → RefineSynthesis → VerifyCitations (loop)
+Scholarly Agent facade wrapping the long-context pydantic-graph pipeline.
 """
 
 from __future__ import annotations
@@ -39,69 +14,44 @@ from pydantic_graph import Graph
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.graph_nodes import (
-    ClassifyComplexity,
+    BuildResearchNotebook,
     ClassifyQueryType,
-    CRAGValidate,
-    DecomposeQuery,
-    DirectKGLookup,
-    DualRerank,
-    EvaluateSufficiency,
+    DiscoverCorpus,
+    DraftClaimLedger,
+    EvidenceSufficiency,
+    ExpandEvidenceBundles,
     ExpandQuery,
-    FetchPassagesAndLayer,
-    HybridRetrieve,
-    RefineSynthesis,
-    SearchPrimarySources,
-    SearchSecondarySources,
-    SelfRAGEvaluate,
-    Synthesize,
-    SynthesizeWithHierarchy,
-    TreeReasoningRetrieve,
-    VerifyCitations,
+    PlanReading,
+    ProgrammaticVerify,
+    RenderGroundedAnswer,
+    SeekCounterEvidence,
+    TreeNavigateWorks,
 )
 from eleutheria_graphrag.agents.state import RAGState, ScholarlyAnswer
 
-# Sentence boundary regex for paragraph-preserving streaming chunking
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;·?!])\s+")
-
 logger = logging.getLogger(__name__)
 
-# Build the pydantic-graph with all 17 node types
 scholarly_graph = Graph(
     nodes=[
-        # New classification / expansion nodes
         ClassifyQueryType,
         ExpandQuery,
-        # Retrieval nodes
-        DirectKGLookup,
-        HybridRetrieve,
-        DecomposeQuery,
-        SearchPrimarySources,
-        EvaluateSufficiency,
-        SearchSecondarySources,
-        # Tree reasoning + CRAG + dual reranking
-        TreeReasoningRetrieve,
-        CRAGValidate,
-        DualRerank,
-        FetchPassagesAndLayer,
-        # Synthesis nodes
-        Synthesize,
-        SynthesizeWithHierarchy,
-        # Post-generation quality nodes
-        VerifyCitations,
-        SelfRAGEvaluate,
-        RefineSynthesis,
-        # Legacy complexity classifier (kept for backwards-compat)
-        ClassifyComplexity,
+        DiscoverCorpus,
+        BuildResearchNotebook,
+        PlanReading,
+        TreeNavigateWorks,
+        ExpandEvidenceBundles,
+        SeekCounterEvidence,
+        EvidenceSufficiency,
+        DraftClaimLedger,
+        RenderGroundedAnswer,
+        ProgrammaticVerify,
     ],
 )
 
 
 class ScholarlyAgent:
-    """High-level agent wrapping the pydantic-graph FSM.
-
-    Constructed with a ``Deps`` instance and provides both synchronous
-    (non-streaming) and streaming query interfaces.
-    """
+    """High-level facade over the structured long-context GraphRAG pipeline."""
 
     def __init__(self, deps: Deps) -> None:
         self.deps = deps
@@ -112,23 +62,12 @@ class ScholarlyAgent:
         *,
         max_iterations: int = 5,
     ) -> ScholarlyAnswer:
-        """Execute the full agentic RAG pipeline.
-
-        Args:
-            question: The scholarly question to answer.
-            max_iterations: Maximum retrieval loops for complex queries.
-
-        Returns:
-            A ``ScholarlyAnswer`` with the answer, citations, and metadata.
-        """
         state = RAGState(question=question, max_iterations=max_iterations)
-
         result = await scholarly_graph.run(
-            ClassifyQueryType(),  # New entry point (replaces ClassifyComplexity)
+            ClassifyQueryType(),
             state=state,
             deps=self.deps,
         )
-
         return result.output
 
     async def query_dict(
@@ -136,7 +75,6 @@ class ScholarlyAgent:
         question: str,
         **kwargs: Any,
     ) -> dict[str, Any]:
-        """Query returning a plain dict (backwards-compatible with old API)."""
         answer = await self.query(question, **kwargs)
         return {
             "answer": answer.answer,
@@ -152,8 +90,10 @@ class ScholarlyAgent:
                 "complexity": answer.complexity.value,
                 "iterations": answer.iterations,
                 "sub_queries": answer.sub_queries,
-                "query_type": answer.query_type,
+                "query_type": getattr(answer.query_type, "value", answer.query_type),
                 "quality_badge": answer.quality_badge,
+                "grounding_policy": answer.grounding_policy.value,
+                "claim_ledger_size": len(answer.claim_ledger),
             },
         }
 
@@ -163,16 +103,7 @@ class ScholarlyAgent:
         *,
         max_iterations: int = 5,
     ) -> AsyncIterator[str]:
-        """Execute the pipeline with streaming LLM output.
-
-        Stages 1-N (retrieval, traversal, etc.) run to completion,
-        then the synthesis stage streams tokens.
-
-        For now this runs the full pipeline then streams the answer.
-        Future: integrate true streaming into the synthesis nodes.
-        """
         answer = await self.query(question, max_iterations=max_iterations)
-        # Paragraph-preserving chunking (textwrap.wrap destroys markdown)
         text = answer.answer
         paragraphs = re.split(r"\n\n+", text)
         for i, para in enumerate(paragraphs):
@@ -181,21 +112,16 @@ class ScholarlyAgent:
             if len(para) <= 500:
                 yield para
             else:
-                # Split long paragraphs at sentence boundaries
                 sentences = _SENTENCE_SPLIT_RE.split(para)
-                buf = ""
+                buffer = ""
                 for sent in sentences:
-                    if buf and len(buf) + len(sent) + 1 > 500:
-                        yield buf
-                        buf = sent
+                    if buffer and len(buffer) + len(sent) + 1 > 500:
+                        yield buffer
+                        buffer = sent
                     else:
-                        buf = f"{buf} {sent}" if buf else sent
-                if buf:
-                    yield buf
-        # Yield a final complete event with full metadata (JSON-encoded)
-        def _safe_default(obj: Any) -> Any:
-            """Fallback serializer for non-JSON-serializable objects."""
-            return str(obj)
+                        buffer = f"{buffer} {sent}" if buffer else sent
+                if buffer:
+                    yield buffer
 
         complete_data = {
             "answer": answer.answer,
@@ -211,11 +137,9 @@ class ScholarlyAgent:
                 "complexity": answer.complexity.value,
                 "iterations": answer.iterations,
                 "sub_queries": answer.sub_queries,
-                "query_type": answer.query_type,
+                "query_type": getattr(answer.query_type, "value", answer.query_type),
                 "quality_badge": answer.quality_badge,
+                "grounding_policy": answer.grounding_policy.value,
             },
         }
-        yield json.dumps(
-            {"type": "complete", "data": complete_data},
-            default=_safe_default,
-        )
+        yield json.dumps({"type": "complete", "data": complete_data}, default=str)

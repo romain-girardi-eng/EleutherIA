@@ -98,6 +98,39 @@ class TestTreeIndexService:
         assert result[0].work_id == "de_fato"
 
     @pytest.mark.asyncio
+    async def test_load_indices_parses_json_string(self):
+        tree_data = WorkTreeIndex(
+            work_id="de_fato", title="De Fato", author="Alexander",
+            total_passages=10, nodes=[],
+        ).model_dump_json()
+        db = MagicMock()
+        db.fetch = AsyncMock(return_value=[
+            {"work_id": "de_fato", "title": "De Fato", "author": "Alexander",
+             "period": None, "total_passages": 10, "tree_json": tree_data}
+        ])
+        svc = TreeIndexService(db=db)
+
+        result = await svc.load_indices(["de_fato"])
+
+        assert len(result) == 1
+        assert isinstance(result[0], WorkTreeIndex)
+        assert result[0].work_id == "de_fato"
+
+    @pytest.mark.asyncio
+    async def test_resolve_work_ids_by_title(self):
+        db = MagicMock()
+        db.fetch = AsyncMock(return_value=[
+            {"work_id": "uuid-cicero-de-fato", "title": "De Fato"},
+            {"work_id": "uuid-chrysippus-svf", "title": "SVF"},
+        ])
+        svc = TreeIndexService(db=db)
+
+        result = await svc.resolve_work_ids(["De Fato", "SVF", "Unknown Work"])
+
+        assert result == ["uuid-cicero-de-fato", "uuid-chrysippus-svf"]
+        db.fetch.assert_called_once()
+
+    @pytest.mark.asyncio
     async def test_extract_passages(self):
         db = MagicMock()
         db.fetch = AsyncMock(return_value=[

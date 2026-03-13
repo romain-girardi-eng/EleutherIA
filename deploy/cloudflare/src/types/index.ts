@@ -14,10 +14,22 @@ export interface Env {
 
   // Gemini
   GEMINI_API_KEY: string;
+  GEMINI_EMBEDDING_MODEL?: string;
 
-  // Moonshot (Kimi K2 Thinking)
+  // Moonshot (Kimi Latest)
   MOONSHOT_API_KEY?: string;
   MOONSHOT_BASE_URL?: string;
+
+  // OpenRouter
+  OPENROUTER_API_KEY?: string;
+  OPENROUTER_BASE_URL?: string;
+  OPENROUTER_MODEL?: string;
+  OPENROUTER_THINKING_MODEL?: string;
+  OPENROUTER_PROVIDER_ONLY?: string;
+  OPENROUTER_PROVIDER_ORDER?: string;
+  OPENROUTER_REASONING_EFFORT?: string;
+  OPENROUTER_HTTP_REFERER?: string;
+  OPENROUTER_APP_NAME?: string;
 
   // Cloudflare bindings
   TEXT_CACHE: KVNamespace;
@@ -32,6 +44,7 @@ export interface Env {
   // Authentication
   JWT_SECRET_KEY: string;
   SEMATIVERSE_ACCESS_KEY: string;
+  ADMIN_INGEST_KEY?: string;
 
   // Quality pipeline feature flags (safe defaults: disabled)
   ENABLE_CITATION_GUARDRAIL?: string;

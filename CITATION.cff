@@ -6,10 +6,10 @@ authors:
   - family-names: Girardi
     given-names: Romain
     email: romain.girardi@univ-cotedazur.fr
-    orcid: "https://orcid.org/0009-0000-3608-1817"
-    affiliation: "Universite Cote d'Azur"
+    orcid: "https://orcid.org/0000-0002-5310-5346"
+    affiliation: "Universite Cote d'Azur, CEPAM; Universite de Geneve, Faculte de Theologie Jean Calvin"
 repository-code: "https://github.com/romain-girardi-eng/EleutherIA"
-url: "https://eleutheria.dev"
+url: "https://free-will.app"
 abstract: >-
   EleutherIA is an AI-powered scholarly research platform combining a
   FAIR-compliant knowledge graph, an ancient texts corpus, and an agentic
@@ -30,18 +30,18 @@ keywords:
   - Latin
   - moral responsibility
 license: CC-BY-4.0
-version: "2.0.0"
-date-released: "2025-01-30"
-doi: "10.5281/zenodo.17379490"
+version: "5.0.0"
+date-released: "2026-03-13"
+doi: "10.5281/zenodo.17379489"
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.17379490"
-    description: "Zenodo dataset DOI"
+    value: "10.5281/zenodo.17379489"
+    description: "Zenodo concept DOI"
 references:
   - type: dataset
-    title: "EleutherIA Ancient Philosophy Knowledge Graph"
+    title: "EleutherIA Zenodo archive"
     authors:
       - family-names: Girardi
         given-names: Romain
-    doi: "10.5281/zenodo.17379490"
-    repository: "https://zenodo.org/records/17379490"
+    doi: "10.5281/zenodo.17379489"
+    repository: "https://zenodo.org/records/17379489"

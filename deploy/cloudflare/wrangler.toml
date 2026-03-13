@@ -24,6 +24,13 @@ enabled = true
 ENVIRONMENT = "production"
 LOG_LEVEL = "INFO"
 EMBEDDING_DIMENSIONS = "3072"
+GEMINI_EMBEDDING_MODEL = "models/gemini-embedding-001"
+OPENROUTER_MODEL = "google/gemini-3-flash-preview"
+OPENROUTER_THINKING_MODEL = "openai/gpt-oss-120b:nitro"
+OPENROUTER_PROVIDER_ORDER = "cerebras"
+OPENROUTER_REASONING_EFFORT = "low"
+OPENROUTER_HTTP_REFERER = "https://free-will.app"
+OPENROUTER_APP_NAME = "EleutherIA"
 ALLOWED_ORIGINS = "https://free-will.app,https://eleutheria.pages.dev,http://localhost:5173,http://localhost:3000,https://visual-pulpit.vercel.app"
 
 # Citation quality pipeline flags

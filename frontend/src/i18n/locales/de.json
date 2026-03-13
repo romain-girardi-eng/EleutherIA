@@ -830,7 +830,7 @@
     "attribution": "Namensnennung",
     "attributionDesc": "Sie müssen angemessene Urheber- und Rechteangaben machen, einen Link zur Lizenz beifügen und angeben, ob Änderungen vorgenommen wurden",
     "suggestedCitation": "Vorgeschlagene Zitierweise:",
-    "citationText": "Girardi, R. (2025). EleutherIA: A FAIR-Compliant Knowledge Graph for Ancient Free Will Debates [Data set]. Zenodo. https://doi.org/10.5281/zenodo.17379490",
+    "citationText": "Girardi, R. (2026). EleutherIA: A FAIR-Compliant Knowledge Graph for Ancient Free Will Debates [Data set]. Zenodo. https://doi.org/10.5281/zenodo.17379489",
     "acknowledgments": "Danksagungen",
     "thanksIntro": "Besonderer Dank gilt der Open-Source-Community, den Betreuern der Perseus Digital Library und allen Wissenschaftlern, deren Arbeit in dieser Datenbank zitiert wird."
   },
@@ -1284,7 +1284,7 @@
       "titleHighlight": "trifft moderne KI",
       "subtitle": "Entdecken Sie, wie Wissensgraphen, semantische Embeddings und GraphRAG zusammenwirken, um 1.200 Jahre philosophisches Denken zu erhellen. 2.159 Knoten, 151 antike Werke und 14.600+ Passagen griffbereit.",
       "cta": "Jetzt lernen",
-      "doi": "DOI: 10.5281/zenodo.17379490",
+      "doi": "DOI: 10.5281/zenodo.17379489",
       "license": "CC BY 4.0 Lizenz",
       "openSource": "Open Source"
     },

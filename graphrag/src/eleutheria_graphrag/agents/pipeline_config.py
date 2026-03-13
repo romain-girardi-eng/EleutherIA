@@ -41,15 +41,15 @@ PIPELINE_CONFIGS: dict[QueryType, PipelineConfig] = {
         use_reranking=True,
         use_self_rag=True,
         use_expansion=True,
-        use_tree_reasoning=False,
+        use_tree_reasoning=True,
     ),
     QueryType.GLOBAL_ABSTRACT: PipelineConfig(
         use_hyde=True,
         use_crag=True,
         use_reranking=True,
         use_self_rag=True,
-        use_expansion=False,
-        use_tree_reasoning=False,
+        use_expansion=True,
+        use_tree_reasoning=True,
     ),
     QueryType.MULTI_HOP: PipelineConfig(
         use_hyde=False,
