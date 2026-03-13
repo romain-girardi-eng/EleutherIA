@@ -93,19 +93,13 @@ export default function GraphRAGPage() {
     }
   }, [passageContext, passageWindow, fetchPassageContext]);
 
-  const handleCitationClick = (citationIndex: number) => {
-    // Always try the passage reader first — the backend resolves both
-    // passage UUIDs and KG node IDs to actual ancient text passages.
-    const sources = rightPanelResponse?.sources ?? [];
-    const source = sources[citationIndex];
+  const handleCitationClick = useCallback((citationIndex: number) => {
     setActiveSourceIndex(citationIndex);
-    if (source?.nodeId) {
-      // Try passage reader for any citation — backend handles KG→passage resolution
-      handlePassageCitationClick(source.nodeId, citationIndex);
-      return;
-    }
+    setPassageContext(null);
+    setPassageWindow(5);
+    setRightPanelState(rightPanelResponse ? 'graph' : 'idle');
     highlightNodeRef.current?.(citationIndex);
-  };
+  }, [rightPanelResponse]);
 
 
   const handleSourceSelect = useCallback((sourceIndex: number) => {

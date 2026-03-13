@@ -9,6 +9,7 @@ interface CitationRendererProps {
   content: string;
   sources?: SourceCitation[];
   onNodeClick?: (nodeId: string) => void;
+  onSourceClick?: (sourceIndex: number, source?: SourceCitation) => void;
   onPassageCitationClick?: (passageId: string) => void;
   className?: string;
   academicMode?: boolean; // Show enhanced confidence badges
@@ -23,6 +24,7 @@ export function CitationRenderer({
   content,
   sources = [],
   onNodeClick,
+  onSourceClick,
   onPassageCitationClick,
   className = '',
   academicMode = false,
@@ -44,14 +46,106 @@ export function CitationRenderer({
     return passageSource?.nodeId || null;
   };
 
+  const findSourceByCitationNumber = (citationNumber: number): SourceCitation | undefined =>
+    sources.find((source) => source.id === citationNumber);
+
+  const findSourceIndex = (citationNumber: number): number => {
+    const sourceIndex = sources.findIndex((source) => source.id === citationNumber);
+    return sourceIndex >= 0 ? sourceIndex : citationNumber - 1;
+  };
+
+  type CitationToken =
+    | {
+        kind: 'source' | 'numeric';
+        citationNumber: number;
+        label: string;
+        source?: SourceCitation;
+        confidence?: number;
+      }
+    | {
+        kind: 'passage';
+        citationNumber: number;
+        label: string;
+        passageId: string | null;
+      };
+
+  const parseCitationGroup = (innerText: string): Array<string | CitationToken> | null => {
+    const tokenPattern = /Source\s+\d+|P\d+|\d+/g;
+    const parts: Array<string | CitationToken> = [];
+    let lastIndex = 0;
+    let matched = false;
+    let match: RegExpExecArray | null;
+
+    while ((match = tokenPattern.exec(innerText)) !== null) {
+      const separator = innerText.slice(lastIndex, match.index);
+      if (!/^[\s,;]*$/.test(separator)) {
+        return null;
+      }
+      if (separator) {
+        parts.push(separator);
+      }
+
+      const tokenText = match[0];
+      matched = true;
+
+      if (tokenText.startsWith('Source ')) {
+        const citationNumber = parseInt(tokenText.slice('Source '.length), 10);
+        const source = findSourceByCitationNumber(citationNumber);
+        const confidence = ancientCitationsMetadata[citationNumber - 1]?.confidence;
+        parts.push({
+          kind: 'source',
+          citationNumber,
+          label: tokenText,
+          source,
+          confidence,
+        });
+      } else if (tokenText.startsWith('P')) {
+        const citationNumber = parseInt(tokenText.slice(1), 10);
+        parts.push({
+          kind: 'passage',
+          citationNumber,
+          label: tokenText,
+          passageId: resolvePassageId(citationNumber),
+        });
+      } else {
+        const citationNumber = parseInt(tokenText, 10);
+        const source = findSourceByCitationNumber(citationNumber);
+        const confidence = ancientCitationsMetadata[citationNumber - 1]?.confidence;
+        parts.push({
+          kind: 'numeric',
+          citationNumber,
+          label: tokenText,
+          source,
+          confidence,
+        });
+      }
+
+      lastIndex = match.index + tokenText.length;
+    }
+
+    if (!matched) {
+      return null;
+    }
+
+    const trailing = innerText.slice(lastIndex);
+    if (!/^[\s,;]*$/.test(trailing)) {
+      return null;
+    }
+    if (trailing) {
+      parts.push(trailing);
+    }
+
+    return parts;
+  };
+
   // Parse content and replace citations with interactive elements
   const parseCitations = (text: string) => {
-    // Match both [1], [2] (KG refs) and [P1], [P2] (passage refs)
-    const citationPattern = /\[(P?)(\d+)\]/g;
+    // Match citation groups like [1], [P1], [Source 1], [Source 1, Source 2]
+    const citationPattern = /\[([^[\]]+)\]/g;
 
-    const parts: (string | React.ReactElement)[] = [];
+    const parts: React.ReactNode[] = [];
     let lastIndex = 0;
-    let match;
+    let match: RegExpExecArray | null;
 
     while ((match = citationPattern.exec(text)) !== null) {
       // Add text before citation
@@ -59,45 +153,64 @@ export function CitationRenderer({
         parts.push(text.substring(lastIndex, match.index));
       }
 
-      const isPassageCitation = match[1] === 'P';
-      const citationNumber = parseInt(match[2]);
-
-      if (isPassageCitation) {
-        // Passage citation [P1], [P2]
-        const passageId = resolvePassageId(citationNumber);
-        parts.push(
-          <PassageCitationLink
-            key={`pcitation-${citationNumber}-${match.index}`}
-            citationNumber={citationNumber}
-            passageId={passageId}
-            onClick={() => {
-              if (passageId && onPassageCitationClick) {
-                onPassageCitationClick(passageId);
-              }
-            }}
-          />
-        );
-      } else {
-        // Standard KG citation [1], [2]
-        const source = sources.find(s => s.id === citationNumber);
-
-        // Find confidence score if in academic mode
-        const metadata = ancientCitationsMetadata[citationNumber - 1];
-        const confidence = metadata?.confidence;
-
-        parts.push(
-          <CitationLink
-            key={`citation-${citationNumber}-${match.index}`}
-            citationNumber={citationNumber}
-            source={source}
-            onHover={(e, num) => handleCitationHover(e, num)}
-            onLeave={() => setHoveredCitation(null)}
-            onClick={() => handleCitationClick(source)}
-            confidence={confidence}
-            academicMode={academicMode}
-          />
-        );
+      const citationGroup = parseCitationGroup(match[1]);
+      if (!citationGroup) {
+        parts.push(match[0]);
+        lastIndex = match.index + match[0].length;
+        continue;
       }
+
+      parts.push(
+        <span
+          key={`citation-group-${match.index}`}
+          className="inline-flex flex-wrap items-center align-middle"
+        >
+          <span>[</span>
+          {citationGroup.map((part, groupIndex) => {
+            if (typeof part === 'string') {
+              return (
+                <span
+                  key={`citation-group-text-${match.index}-${groupIndex}`}
+                  className="whitespace-pre"
+                >
+                  {part}
+                </span>
+              );
+            }
+
+            if (part.kind === 'passage') {
+              return (
+                <PassageCitationLink
+                  key={`pcitation-${part.citationNumber}-${match.index}-${groupIndex}`}
+                  citationNumber={part.citationNumber}
+                  label={part.label}
+                  passageId={part.passageId}
+                  onClick={() => {
+                    if (part.passageId && onPassageCitationClick) {
+                      onPassageCitationClick(part.passageId);
+                    }
+                  }}
+                />
+              );
+            }
+
+            return (
+              <CitationLink
+                key={`citation-${part.citationNumber}-${match.index}-${groupIndex}`}
+                citationNumber={part.citationNumber}
+                label={part.label}
+                source={part.source}
+                onHover={(e, num) => handleCitationHover(e, num)}
+                onLeave={() => setHoveredCitation(null)}
+                onClick={() => handleCitationClick(part.citationNumber, part.source)}
+                confidence={part.confidence}
+                academicMode={academicMode}
+              />
+            );
+          })}
+          <span>]</span>
+        </span>
+      );
 
       lastIndex = match.index + match[0].length;
     }
@@ -111,7 +224,7 @@ export function CitationRenderer({
   };
 
   const handleCitationHover = (e: React.MouseEvent, citationNumber: number) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    const rect = e.currentTarget.getBoundingClientRect();
     setTooltipPosition({
       x: rect.left + rect.width / 2,
       y: rect.top - 5
@@ -119,13 +232,14 @@ export function CitationRenderer({
     setHoveredCitation(citationNumber);
   };
 
-  const handleCitationClick = (source?: SourceCitation) => {
+  const handleCitationClick = (citationNumber: number, source?: SourceCitation) => {
+    onSourceClick?.(findSourceIndex(citationNumber), source);
+
     if (!source) return;
 
     // Guard against invalid node IDs
     const nodeId = source.nodeId;
     if (!nodeId || nodeId === 'undefined' || nodeId.startsWith('source_')) {
-      console.warn('Invalid node ID in citation:', nodeId);
       return;
     }
 
@@ -206,20 +320,24 @@ export function CitationRenderer({
 // Passage Citation Link Component (for [P1], [P2] etc.)
 interface PassageCitationLinkProps {
   citationNumber: number;
+  label?: string;
   passageId: string | null;
   onClick: () => void;
 }
 
-function PassageCitationLink({ citationNumber, passageId, onClick }: PassageCitationLinkProps) {
+function PassageCitationLink({ citationNumber, label, passageId, onClick }: PassageCitationLinkProps) {
   const theme = getGraphTypeTheme('passage');
   return (
-    <span
-      className={`inline-flex items-center gap-0.5 cursor-pointer align-middle ${passageId ? '' : 'opacity-50'}`}
+    <button
+      type="button"
+      className={`inline-flex items-center gap-0.5 align-middle ${passageId ? '' : 'cursor-default opacity-50'}`}
       onClick={passageId ? onClick : undefined}
       title={passageId ? 'Click to read passage in context' : 'Passage not available'}
+      aria-label={label ?? `P${citationNumber}`}
+      disabled={!passageId}
     >
       <span
-        className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 rounded-md text-[11px] font-semibold leading-none select-none transition-all duration-150 hover:brightness-90 hover:scale-110"
+        className="inline-flex min-h-5 items-center justify-center rounded-md px-1.5 py-0.5 text-[11px] font-semibold leading-none select-none transition-all duration-150 hover:brightness-90 hover:scale-110"
         style={{
           backgroundColor: theme.tint,
           color: theme.text,
@@ -227,18 +345,19 @@ function PassageCitationLink({ citationNumber, passageId, onClick }: PassageCita
           boxShadow: `0 1px 2px 0 ${theme.glow}`,
         }}
       >
-        <svg className="w-3 h-3 mr-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="mr-0.5 h-3 w-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
-        P{citationNumber}
+        {label ?? `P${citationNumber}`}
       </span>
-    </span>
+    </button>
   );
 }
 
 // Citation Link Component
 interface CitationLinkProps {
   citationNumber: number;
+  label?: string;
   source?: SourceCitation;
   onHover: (e: React.MouseEvent, num: number) => void;
   onLeave: () => void;
@@ -249,6 +368,7 @@ interface CitationLinkProps {
 
 function CitationLink({
   citationNumber,
+  label,
   source,
   onHover,
   onLeave,
@@ -273,14 +393,17 @@ function CitationLink({
   };
 
   return (
-    <span
-      className="inline-flex items-center gap-0.5 cursor-pointer align-middle"
+    <button
+      type="button"
+      className={`inline-flex items-center gap-0.5 align-middle ${source ? 'cursor-pointer' : 'cursor-default opacity-50'}`}
       onMouseEnter={(e) => onHover(e, citationNumber)}
       onMouseLeave={onLeave}
       onClick={onClick}
+      aria-label={source ? `${label ?? citationNumber}: ${source.nodeLabel}` : label ?? `${citationNumber}`}
+      disabled={!source}
     >
       <span
-        className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 rounded-md text-[11px] font-semibold leading-none select-none transition-all duration-150 hover:brightness-90 hover:scale-110"
+        className="inline-flex min-h-5 items-center justify-center rounded-md px-1.5 py-0.5 text-[11px] font-semibold leading-none select-none transition-all duration-150 hover:brightness-90 hover:scale-110"
         style={{
           backgroundColor: theme.tint,
           color: theme.text,
@@ -288,7 +411,7 @@ function CitationLink({
           boxShadow: `0 1px 2px 0 ${theme.glow}`,
         }}
       >
-        {citationNumber}
+        {label ?? citationNumber}
       </span>
       {academicMode && confidence !== undefined && (
         <span
@@ -298,7 +421,7 @@ function CitationLink({
           {getConfidenceLabel(confidence)}
         </span>
       )}
-    </span>
+    </button>
   );
 }
 

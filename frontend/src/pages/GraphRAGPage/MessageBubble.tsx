@@ -89,10 +89,10 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                   <CitationRenderer
                     content={message.content}
                     sources={sources}
-                    onNodeClick={(nodeId) => {
-                      const idx = sources.findIndex((s) => s.nodeId === nodeId);
-                      onNodeClick(nodeId);
-                      if (idx !== -1) onCitationClick(idx);
+                    onSourceClick={(sourceIndex) => {
+                      if (sourceIndex !== -1) {
+                        onCitationClick(sourceIndex);
+                      }
                     }}
                     onPassageCitationClick={onPassageCitationClick}
                   />
