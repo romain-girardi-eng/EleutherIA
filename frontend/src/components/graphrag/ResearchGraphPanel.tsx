@@ -264,6 +264,7 @@ function FacetCard({ facet }: { facet: ResearchGraphFacet }) {
         <MetricPill label="counter" value={facet.counter_count} />
         <MetricPill label="metadata" value={facet.metadata_count} />
         <MetricPill label="notes" value={facet.note_count} />
+        <MetricPill label="uncertain" value={facet.uncertainty_count} />
       </div>
     </article>
   );
