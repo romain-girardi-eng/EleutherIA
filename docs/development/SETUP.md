@@ -97,7 +97,7 @@ VITE_API_PROXY_TARGET=https://staging.example.com npm run dev
 
 ```bash
 make lint
-# Or: ruff check database/src kg/src graphrag/src
+# Or: ruff check database/src "knowledge graph/src" graphrag/src
 ```
 
 ### Auto-fix
@@ -111,7 +111,7 @@ make fix
 
 ```bash
 make typecheck
-# Or: mypy database/src kg/src graphrag/src
+# Or: mypy database/src "knowledge graph/src" graphrag/src
 ```
 
 ### All Quality Checks
@@ -163,7 +163,7 @@ EleutherIA/
 │   ├── src/
 │   ├── schema/
 │   └── tests/
-├── kg/                 # Knowledge graph package
+├── knowledge graph/     # Knowledge graph package
 │   ├── src/
 │   ├── ontology/
 │   └── tests/
@@ -233,6 +233,6 @@ docker compose -f deploy/docker/docker-compose.dev.yml up -d
 ```bash
 # Reinstall packages in editable mode
 pip install -e database/
-pip install -e kg/
+pip install -e "knowledge graph/"
 pip install -e graphrag/
 ```

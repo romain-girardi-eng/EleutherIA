@@ -178,7 +178,7 @@ export enum ZoomLevel {
   Detail = 4,        // < 0.08
 }
 
-/** Map relation type → edge category (from kg/ontology/edge_types.json) */
+/** Map relation type → edge category (from knowledge graph/ontology/edge_types.json) */
 export const RELATION_TO_CATEGORY: Record<string, EdgeCategory> = {
   // argumentative
   argues_for: 'argumentative',

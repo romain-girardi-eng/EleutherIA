@@ -22,10 +22,10 @@ jobs:
         run: pip install ruff
 
       - name: Run Ruff linter
-        run: ruff check database/src kg/src graphrag/src
+        run: ruff check database/src "knowledge graph/src" graphrag/src
 
       - name: Run Ruff formatter check
-        run: ruff format --check database/src kg/src graphrag/src
+        run: ruff format --check database/src "knowledge graph/src" graphrag/src
 
   typecheck:
     name: Type Check
@@ -42,11 +42,11 @@ jobs:
         run: |
           pip install mypy
           pip install -e database/
-          pip install -e kg/
+          pip install -e "knowledge graph/"
           pip install -e graphrag/
 
       - name: Run mypy
-        run: mypy database/src kg/src graphrag/src
+        run: mypy database/src "knowledge graph/src" graphrag/src
 
   test-database:
     name: Test Database Package
@@ -79,10 +79,10 @@ jobs:
       - name: Install package
         run: |
           pip install -e database/
-          pip install -e "kg/[dev]"
+          pip install -e "knowledge graph/[dev]"
 
       - name: Run tests
-        run: cd kg && python -m pytest tests/ -v
+        run: cd "knowledge graph" && python -m pytest tests/ -v
 
   test-graphrag:
     name: Test GraphRAG Package
@@ -98,7 +98,7 @@ jobs:
       - name: Install package
         run: |
           pip install -e database/
-          pip install -e kg/
+          pip install -e "knowledge graph/"
           pip install -e "graphrag/[dev]"
 
       - name: Run tests

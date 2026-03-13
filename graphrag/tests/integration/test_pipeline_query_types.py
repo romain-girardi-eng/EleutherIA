@@ -70,7 +70,7 @@ async def graphrag() -> GraphRAGService:
     """Boot a real GraphRAGService backed by live DB, Qdrant, and LLM."""
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../../database/src"))
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../../kg/src"))
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../../knowledge graph/src"))
 
     from eleutheria_database.services.db import DatabaseService
     from eleutheria_kg.services.qdrant import QdrantService

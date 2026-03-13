@@ -877,7 +877,7 @@ def test_database() -> None:
 def test_kg() -> None:
     """Run knowledge graph package tests."""
     console.print("[blue]Running KG tests...[/blue]")
-    raise typer.Exit(run_command(["pytest", "kg/tests/", "-v"]))
+    raise typer.Exit(run_command(["pytest", "knowledge graph/tests/", "-v"]))
 
 
 @test_app.command("graphrag")
@@ -906,7 +906,7 @@ def lint(
     """Run linter (Ruff) on all Python code."""
     console.print("[blue]Running Ruff linter...[/blue]")
 
-    cmd = ["ruff", "check", "database/", "kg/", "graphrag/"]
+    cmd = ["ruff", "check", "database/", "knowledge graph/", "graphrag/"]
     if fix:
         cmd.append("--fix")
 
@@ -920,7 +920,7 @@ def format(
     """Format Python code with Ruff."""
     console.print("[blue]Formatting code...[/blue]")
 
-    cmd = ["ruff", "format", "database/", "kg/", "graphrag/"]
+    cmd = ["ruff", "format", "database/", "knowledge graph/", "graphrag/"]
     if check:
         cmd.append("--check")
 
@@ -931,7 +931,7 @@ def format(
 def typecheck() -> None:
     """Run type checker (mypy) on all Python code."""
     console.print("[blue]Running mypy type checker...[/blue]")
-    raise typer.Exit(run_command(["mypy", "database/", "kg/", "graphrag/"]))
+    raise typer.Exit(run_command(["mypy", "database/", "knowledge graph/", "graphrag/"]))
 
 
 @app.command()
@@ -941,11 +941,11 @@ def quality() -> None:
 
     # Lint
     console.print("[bold]1. Linting (Ruff)...[/bold]")
-    lint_result = run_command(["ruff", "check", "database/", "kg/", "graphrag/"])
+    lint_result = run_command(["ruff", "check", "database/", "knowledge graph/", "graphrag/"])
 
     # Type check
     console.print("\n[bold]2. Type checking (mypy)...[/bold]")
-    type_result = run_command(["mypy", "database/", "kg/", "graphrag/"])
+    type_result = run_command(["mypy", "database/", "knowledge graph/", "graphrag/"])
 
     if lint_result == 0 and type_result == 0:
         console.print("\n[green]All checks passed![/green]")

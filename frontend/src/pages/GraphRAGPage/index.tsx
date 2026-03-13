@@ -316,9 +316,10 @@ export default function GraphRAGPage() {
           const { done, value } = await reader.read();
           if (done) { console.log('[GR] done after', _dbgChunks, 'reads. answer:', fullAnswer.length, 'complete:', finalResponse != null); break; }
           _dbgChunks++;
-          if (_dbgChunks <= 2) console.log('[GR] read', _dbgChunks, value?.length, 'bytes');
 
-          buffer += decoder.decode(value, { stream: true });
+          const chunk = decoder.decode(value, { stream: true });
+          if (_dbgChunks <= 3) console.log('[GR] read', _dbgChunks, value?.length, 'bytes:', chunk.substring(0, 300));
+          buffer += chunk;
           const lines = buffer.split('\n');
           buffer = lines.pop() || '';
 
@@ -327,6 +328,7 @@ export default function GraphRAGPage() {
 
             try {
               const data: GraphRAGStreamEvent = JSON.parse(line.substring(6));
+              console.log('[GR] event:', data.type, JSON.stringify(data).substring(0, 150));
 
               switch (data.type) {
                 case 'status': {
@@ -461,7 +463,7 @@ export default function GraphRAGPage() {
 
         const assistantMessage: GraphRAGChatMessage = {
           role: 'assistant',
-          content: finalResponse.answer,
+          content: finalResponse.answer?.trim() || fullAnswer || '(No answer generated)',
           citations,
           reasoning_path: finalResponse.reasoning_path,
           tokens_used: finalResponse.tokens_used,

@@ -65,7 +65,7 @@ def parse_args() -> argparse.Namespace:
 
 def _prepare_imports() -> None:
     sys.path.insert(0, str(REPO_ROOT / "database" / "src"))
-    sys.path.insert(0, str(REPO_ROOT / "kg" / "src"))
+    sys.path.insert(0, str(REPO_ROOT / "knowledge graph" / "src"))
     sys.path.insert(0, str(REPO_ROOT / "graphrag" / "src"))
 
 

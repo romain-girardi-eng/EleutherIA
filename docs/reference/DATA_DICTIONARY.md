@@ -125,7 +125,7 @@ See [Passage Translation Architecture](../plans/2026-02-24-passage-translation-a
 
 ## Edge Types (56)
 
-See [kg/ontology/edge_types.json](../../kg/ontology/edge_types.json) for complete list with source/target type constraints.
+See [knowledge graph/ontology/edge_types.json](../../knowledge%20graph/ontology/edge_types.json) for complete list with source/target type constraints.
 
 Categories:
 - **Argumentative:** argues_for, argues_against, refutes

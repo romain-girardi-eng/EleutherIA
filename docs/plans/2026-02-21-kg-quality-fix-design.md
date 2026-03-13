@@ -24,11 +24,11 @@ The KG audit revealed systemic quality issues:
 
 ## Phase 1: Ontology Alignment (code-only)
 
-Update `kg/ontology/node_types.json`:
+Update `knowledge graph/ontology/node_types.json`:
 - Lowercase all 15 existing types (Person → person, Concept → concept, etc.)
 - Add 7 new types: publication, quote, synthesis, controversy, conceptual_evolution, group, argument_framework
 
-Update `kg/ontology/edge_types.json`:
+Update `knowledge graph/ontology/edge_types.json`:
 - Add ~20 new edge types: has_section, has_chapter, evidenced_by, created_by, grounded_in, source_for, critiques, supports, extends, employs, exemplifies, contributes_to, belongs_to_corpus, participated_in, presupposes, member_of, developed_by, represents, specializes_in, parallel_to, student_of
 
 ## Phase 2: DB Edge Normalization (SQL on Supabase)
