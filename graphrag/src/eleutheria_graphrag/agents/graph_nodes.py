@@ -1642,7 +1642,7 @@ def _build_research_graph_payload(state: RAGState) -> dict[str, Any]:
         work["title"] = work["title"] or bundle.work_title or "Unknown work"
         work["author"] = work["author"] or bundle.author
         work["bundle_count"] += 1
-        evidence_class = str(bundle.metadata.get("evidence_class") or bundle.evidence_role or "direct_text")
+        evidence_class = _bundle_academic_features(bundle, state)["evidence_class"]
         if evidence_class == "counter_evidence":
             work["counter_count"] += 1
         elif evidence_class == "ancient_testimony":
