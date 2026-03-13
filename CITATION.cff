@@ -11,13 +11,16 @@ authors:
 repository-code: "https://github.com/romain-girardi-eng/EleutherIA"
 url: "https://free-will.app"
 abstract: >-
-  EleutherIA is an AI-powered scholarly research platform combining a
-  FAIR-compliant knowledge graph, an ancient texts corpus, and an agentic
-  GraphRAG engine to document ancient philosophical debates on free will,
-  fate, and moral responsibility from the Greco-Roman and Early Christian
-  periods (6th c. BCE - 6th c. CE). It features 17,700+ KG nodes, 42,900+
-  edges, 189 ancient Greek/Latin works with 17,000+ passages, agentic
-  multi-LLM reasoning, hybrid search, and citation-verified scholarly Q&A.
+  EleutherIA is an open scholarly research platform and FAIR-aligned
+  knowledge graph for ancient debates on free will, fate, moral
+  responsibility, and agency across the Greco-Roman and early Christian
+  worlds. This release combines a curated knowledge graph, an ancient-text
+  corpus, and an agentic GraphRAG stack for citation-grounded question
+  answering, graph exploration, and data quality auditing. As of the
+  2026-03-10 audit bundled with this release, the live graph contains 17,396
+  nodes, 42,161 edges, and 13,293 passage citations; the broader platform
+  indexes 189 ancient works and more than 16,500 passages in Greek, Latin,
+  and English.
 keywords:
   - ancient philosophy
   - free will
@@ -30,7 +33,7 @@ keywords:
   - Latin
   - moral responsibility
 license: CC-BY-4.0
-version: "5.0.0"
+version: "5.0.1"
 date-released: "2026-03-13"
 doi: "10.5281/zenodo.17379489"
 identifiers:
