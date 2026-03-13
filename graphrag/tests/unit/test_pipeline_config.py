@@ -39,13 +39,13 @@ class TestPipelineConfig:
         config = get_pipeline_config(QueryType.SPECIFIC_ENTITY)
         assert config.use_hyde is False
         assert config.use_crag is True
-        assert config.use_tree_reasoning is False
+        assert config.use_tree_reasoning is True
 
     def test_global_abstract_config(self):
         config = get_pipeline_config(QueryType.GLOBAL_ABSTRACT)
         assert config.use_hyde is True
-        assert config.use_expansion is False
-        assert config.use_tree_reasoning is False
+        assert config.use_expansion is True
+        assert config.use_tree_reasoning is True
 
     def test_multi_hop_config(self):
         config = get_pipeline_config(QueryType.MULTI_HOP)

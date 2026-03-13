@@ -20,7 +20,8 @@ export const embeddingsRoutes = new Hono<{ Bindings: Env }>();
  * Body: {
  *   texts: string[],
  *   model?: string,
- *   output_dimensionality?: number
+ *   output_dimensionality?: number,
+ *   task_type?: "RETRIEVAL_QUERY" | "RETRIEVAL_DOCUMENT" | "SEMANTIC_SIMILARITY"
  * }
  *
  * Returns: {
@@ -33,7 +34,12 @@ export const embeddingsRoutes = new Hono<{ Bindings: Env }>();
 embeddingsRoutes.post('/batch', async (c) => {
   try {
     const body = await c.req.json();
-    const { texts, model = 'models/gemini-embedding-001', output_dimensionality = 3072 } = body;
+    const {
+      texts,
+      model = 'models/gemini-embedding-001',
+      output_dimensionality = 3072,
+      task_type = 'RETRIEVAL_QUERY',
+    } = body;
 
     // Validation
     if (!texts || !Array.isArray(texts)) {
@@ -57,7 +63,7 @@ embeddingsRoutes.post('/batch', async (c) => {
     logger.info(`Generating ${texts.length} embeddings with ${model} (${output_dimensionality}d)`);
 
     const llm = new LLMService(c.env);
-    const embeddings = await llm.batchEmbed(texts);
+    const embeddings = await llm.batchEmbed(texts, { taskType: task_type });
 
     logger.info(`✓ Successfully generated ${embeddings.length} embeddings`);
 
@@ -66,6 +72,7 @@ embeddingsRoutes.post('/batch', async (c) => {
       count: embeddings.length,
       model,
       dimensions: output_dimensionality,
+      task_type,
       worker_region: c.req.header('cf-ray')?.split('-')[1] || 'unknown',
     });
 
@@ -85,13 +92,20 @@ embeddingsRoutes.post('/batch', async (c) => {
  *
  * Body: {
  *   text: string,
- *   model?: string
+ *   model?: string,
+ *   task_type?: "RETRIEVAL_QUERY" | "RETRIEVAL_DOCUMENT" | "SEMANTIC_SIMILARITY",
+ *   title?: string
  * }
  */
 embeddingsRoutes.post('/single', async (c) => {
   try {
     const body = await c.req.json();
-    const { text, model = 'models/gemini-embedding-001' } = body;
+    const {
+      text,
+      model = 'models/gemini-embedding-001',
+      task_type = 'RETRIEVAL_QUERY',
+      title,
+    } = body;
 
     if (!text || typeof text !== 'string') {
       return c.json({ error: 'text string is required' }, 400);
@@ -108,12 +122,13 @@ embeddingsRoutes.post('/single', async (c) => {
     logger.info(`Generating single embedding with ${model}`);
 
     const llm = new LLMService(c.env);
-    const embedding = await llm.embed(text);
+    const embedding = await llm.embed(text, { taskType: task_type, title });
 
     return c.json({
       embedding,
       dimensions: embedding.length,
       model,
+      task_type,
       worker_region: c.req.header('cf-ray')?.split('-')[1] || 'unknown',
     });
 
@@ -137,7 +152,7 @@ embeddingsRoutes.get('/health', async (c) => {
 
     // Test embedding generation
     const startTime = Date.now();
-    const testEmbedding = await llm.embed('test');
+    const testEmbedding = await llm.embed('test', { taskType: 'RETRIEVAL_QUERY' });
     const latencyMs = Date.now() - startTime;
 
     return c.json({
@@ -190,7 +205,7 @@ embeddingsRoutes.post('/visualize', async (c) => {
 
     // Generate embedding
     const startTime = Date.now();
-    const embedding = await llm.embed(text);
+    const embedding = await llm.embed(text, { taskType: 'RETRIEVAL_QUERY' });
     const embedTime = Date.now() - startTime;
 
     // Search for similar KG nodes
@@ -324,6 +339,7 @@ embeddingsRoutes.get('/info', (c) => {
         description: 'Current Gemini embedding model with Matryoshka Representation Learning',
         recommended: true,
         recommended_dimensions: [768, 1536, 3072],
+        recommended_task_types: ['RETRIEVAL_QUERY', 'RETRIEVAL_DOCUMENT'],
       }
     ],
     batch_limits: {

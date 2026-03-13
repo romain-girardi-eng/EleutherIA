@@ -215,8 +215,8 @@ export default function AboutPage() {
               CC BY 4.0
             </a>
             , permanently archived at{' '}
-            <a href="https://doi.org/10.5281/zenodo.17379490" className="text-orange-600 hover:text-orange-800 hover:underline font-semibold">
-              DOI: 10.5281/zenodo.17379490
+            <a href="https://doi.org/10.5281/zenodo.17379489" className="text-orange-600 hover:text-orange-800 hover:underline font-semibold">
+              DOI: 10.5281/zenodo.17379489
             </a>.
           </p>
         </motion.div>

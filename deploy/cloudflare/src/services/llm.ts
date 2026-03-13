@@ -1,5 +1,5 @@
 /**
- * LLM Service - Supports Gemini and Kimi K2 (Moonshot)
+ * LLM Service - Supports Gemini and Moonshot Kimi
  */
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
@@ -15,26 +15,53 @@ export interface ThinkingResult {
   provider: string;
 }
 
+interface EmbedOptions {
+  taskType?: 'RETRIEVAL_QUERY' | 'RETRIEVAL_DOCUMENT' | 'SEMANTIC_SIMILARITY';
+  title?: string;
+}
+
 export class LLMService {
   private genAI: GoogleGenerativeAI;
   private embeddingModel: string;
   private moonshotApiKey?: string;
   private moonshotBaseUrl: string;
+  private openRouterApiKey?: string;
+  private openRouterBaseUrl: string;
+  private openRouterModel: string;
+  private openRouterThinkingModel: string;
+  private openRouterProviderOnly?: string;
+  private openRouterProviderOrder?: string;
+  private openRouterReasoningEffort: string;
+  private openRouterHttpReferer?: string;
+  private openRouterAppName?: string;
 
   constructor(env: Env) {
     this.genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
-    this.embeddingModel = 'models/gemini-embedding-001';  // Supports 128-3072 dimensions
+    this.embeddingModel = env.GEMINI_EMBEDDING_MODEL || 'models/gemini-embedding-001';
     this.moonshotApiKey = env.MOONSHOT_API_KEY;
     this.moonshotBaseUrl = env.MOONSHOT_BASE_URL || 'https://api.moonshot.ai/v1';
+    this.openRouterApiKey = env.OPENROUTER_API_KEY;
+    this.openRouterBaseUrl = env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
+    this.openRouterModel = env.OPENROUTER_MODEL || 'google/gemini-3-flash-preview';
+    this.openRouterThinkingModel = env.OPENROUTER_THINKING_MODEL || 'openai/gpt-oss-120b:nitro';
+    this.openRouterProviderOnly = env.OPENROUTER_PROVIDER_ONLY;
+    this.openRouterProviderOrder = env.OPENROUTER_PROVIDER_ORDER;
+    this.openRouterReasoningEffort = env.OPENROUTER_REASONING_EFFORT || 'low';
+    this.openRouterHttpReferer = env.OPENROUTER_HTTP_REFERER;
+    this.openRouterAppName = env.OPENROUTER_APP_NAME;
   }
 
   /**
    * Generate embeddings for text
    */
-  async embed(text: string): Promise<number[]> {
+  async embed(text: string, options: EmbedOptions = {}): Promise<number[]> {
     try {
       const model = this.genAI.getGenerativeModel({ model: this.embeddingModel });
-      const result = await model.embedContent(text);
+      const result = await model.embedContent({
+        content: { role: 'user', parts: [{ text }] },
+        taskType: options.taskType || 'RETRIEVAL_QUERY',
+        ...(options.title ? { title: options.title } : {}),
+      });
       return result.embedding.values;
     } catch (error) {
       logger.error('Embedding generation error', error);
@@ -45,13 +72,19 @@ export class LLMService {
   /**
    * Generate embeddings for multiple texts in batch
    */
-  async batchEmbed(texts: string[]): Promise<number[][]> {
+  async batchEmbed(
+    texts: string[],
+    options: EmbedOptions = {}
+  ): Promise<number[][]> {
     try {
       const model = this.genAI.getGenerativeModel({ model: this.embeddingModel });
-      const results = await Promise.all(
-        texts.map(text => model.embedContent(text))
-      );
-      return results.map(r => r.embedding.values);
+      const requests = texts.map(text => ({
+        content: { role: 'user', parts: [{ text }] },
+        taskType: options.taskType || 'RETRIEVAL_QUERY',
+        ...(options.title ? { title: options.title } : {}),
+      }));
+      const results = await model.batchEmbedContents({ requests });
+      return results.embeddings.map(r => r.values);
     } catch (error) {
       logger.error('Batch embedding generation error', error);
       throw error;
@@ -63,20 +96,10 @@ export class LLMService {
    */
   async generate(
     prompt: string,
-    modelName: string = 'gemini-3-flash-preview',
+    modelName: string = 'gemini-3.1-pro-preview',
     deterministic: boolean = true
   ): Promise<string> {
-    // Try Kimi K2 first if available (no rate limits on paid tier)
-    if (this.moonshotApiKey) {
-      try {
-        const result = await this.generateWithKimiSimple(prompt, deterministic);
-        return result;
-      } catch (error: any) {
-        logger.warn('Kimi K2 failed, falling back to Gemini:', error?.message || error);
-      }
-    }
-
-    // Fallback to Gemini
+    // Gemini is the primary generation model.
     try {
       const generationConfig = deterministic
         ? {
@@ -102,14 +125,33 @@ export class LLMService {
       const result = await model.generateContent(prompt);
       const response = await result.response;
       return response.text();
-    } catch (error) {
-      logger.error('Text generation error', error);
-      throw error;
+    } catch (error: any) {
+      logger.warn('Gemini failed, attempting provider fallback:', error?.message || error);
     }
+
+    if (this.openRouterApiKey) {
+      try {
+        const result = await this.generateWithOpenRouter(prompt, undefined, false, deterministic);
+        return result.response;
+      } catch (error: any) {
+        logger.warn('OpenRouter failed, falling back to Kimi:', error?.message || error);
+      }
+    }
+
+    if (this.moonshotApiKey) {
+      try {
+        return await this.generateWithKimiSimple(prompt, deterministic);
+      } catch (error) {
+        logger.error('Text generation error', error);
+        throw error;
+      }
+    }
+
+    throw new Error('No LLM provider available');
   }
 
   /**
-   * Simple Kimi K2 generation without thinking mode (for general text generation)
+   * Simple Kimi generation (for general text generation)
    */
   private async generateWithKimiSimple(
     prompt: string,
@@ -120,7 +162,7 @@ export class LLMService {
     }
 
     const modelName = 'kimi-latest';
-    logger.info(`Generating with Kimi K2 simple (model=${modelName})`);
+    logger.info(`Generating with Kimi simple (model=${modelName})`);
 
     const response = await fetch(`${this.moonshotBaseUrl}/chat/completions`, {
       method: 'POST',
@@ -146,10 +188,75 @@ export class LLMService {
     };
 
     if (!result.choices || result.choices.length === 0) {
-      throw new Error('No response from Kimi K2');
+      throw new Error('No response from Kimi');
     }
 
     return result.choices[0].message.content;
+  }
+
+  private async generateWithOpenRouter(
+    prompt: string,
+    systemPrompt?: string,
+    useThinking: boolean = false,
+    deterministic: boolean = true
+  ): Promise<ThinkingResult> {
+    if (!this.openRouterApiKey) {
+      throw new Error('OpenRouter API key not configured');
+    }
+
+    const messages: Array<{ role: string; content: string }> = [];
+    if (systemPrompt) {
+      messages.push({ role: 'system', content: systemPrompt });
+    }
+    messages.push({ role: 'user', content: prompt });
+
+    const provider: Record<string, string[]> = {};
+    if (this.openRouterProviderOnly) {
+      provider.only = this.openRouterProviderOnly.split(',').map(p => p.trim()).filter(Boolean);
+    } else if (this.openRouterProviderOrder) {
+      provider.order = this.openRouterProviderOrder.split(',').map(p => p.trim()).filter(Boolean);
+    }
+
+    const response = await fetch(`${this.openRouterBaseUrl}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.openRouterApiKey}`,
+        'Content-Type': 'application/json',
+        ...(this.openRouterHttpReferer ? { 'HTTP-Referer': this.openRouterHttpReferer } : {}),
+        ...(this.openRouterAppName ? { 'X-Title': this.openRouterAppName } : {}),
+      },
+      body: JSON.stringify({
+        model: useThinking ? this.openRouterThinkingModel : this.openRouterModel,
+        messages,
+        temperature: deterministic ? 0.0 : 0.3,
+        max_tokens: 4096,
+        ...(Object.keys(provider).length ? { provider } : {}),
+        ...(useThinking ? { reasoning: { effort: this.openRouterReasoningEffort } } : {}),
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`OpenRouter API error: ${response.status} - ${errorText}`);
+    }
+
+    const result = await response.json() as {
+      provider?: string;
+      choices: Array<{ message: { content?: string; reasoning?: string } }>;
+      model?: string;
+    };
+
+    if (!result.choices || result.choices.length === 0) {
+      throw new Error('No response from OpenRouter');
+    }
+
+    const message = result.choices[0].message;
+    return {
+      response: message.content || '',
+      thinkingProcess: message.reasoning,
+      model: result.model || (useThinking ? this.openRouterThinkingModel : this.openRouterModel),
+      provider: result.provider || 'openrouter',
+    };
   }
 
   /**
@@ -200,13 +307,28 @@ export class LLMService {
   }
 
   /**
-   * Generate streaming response - Uses Kimi K2 as primary, Gemini as fallback
+   * Generate streaming response - Uses Gemini as primary, Kimi as fallback.
    */
   async *generateStream(prompt: string, modelName: string = 'gemini-3-flash-preview') {
-    // Try Kimi K2 streaming first if available
+    // Gemini is the primary generation model for streaming.
+    try {
+      const model = this.genAI.getGenerativeModel({ model: modelName });
+      const result = await model.generateContentStream(prompt);
+
+      for await (const chunk of result.stream) {
+        const text = chunk.text();
+        if (text) {
+          yield text;
+        }
+      }
+      return;
+    } catch (error: any) {
+      logger.warn('Gemini streaming failed, falling back to Kimi:', error?.message || error);
+    }
+
     if (this.moonshotApiKey) {
       try {
-        logger.info('Starting Kimi K2 streaming generation');
+        logger.info('Starting Kimi fallback streaming generation');
         const response = await fetch(`${this.moonshotBaseUrl}/chat/completions`, {
           method: 'POST',
           headers: {
@@ -260,30 +382,14 @@ export class LLMService {
         }
         return; // Successfully completed with Kimi
       } catch (error: any) {
-        logger.warn('Kimi K2 streaming failed, falling back to Gemini:', error?.message || error);
+        logger.error('Streaming generation error', error);
+        throw error;
       }
-    }
-
-    // Fallback to Gemini streaming
-    try {
-      const model = this.genAI.getGenerativeModel({ model: modelName });
-      const result = await model.generateContentStream(prompt);
-
-      for await (const chunk of result.stream) {
-        const text = chunk.text();
-        if (text) {
-          yield text;
-        }
-      }
-    } catch (error) {
-      logger.error('Streaming generation error', error);
-      throw error;
     }
   }
 
   /**
-   * Generate text using Kimi K2 Thinking via Moonshot Platform
-   * Supports deep reasoning with <think>...</think> tags
+   * Generate text using Moonshot Kimi via Moonshot Platform
    */
   async generateWithKimi(
     prompt: string,
@@ -294,8 +400,8 @@ export class LLMService {
       throw new Error('Moonshot API key not configured');
     }
 
-    const modelName = useThinking ? 'kimi-k2-thinking' : 'kimi-latest';
-    logger.info(`Generating with Kimi K2 (model=${modelName}, thinking=${useThinking})`);
+    const modelName = 'kimi-latest';
+    logger.info(`Generating with Kimi (model=${modelName}, thinking=${useThinking})`);
 
     const messages: Array<{ role: string; content: string }> = [];
     if (systemPrompt) {
@@ -327,7 +433,7 @@ export class LLMService {
     };
 
     if (!result.choices || result.choices.length === 0) {
-      throw new Error('No response from Kimi K2');
+      throw new Error('No response from Kimi');
     }
 
     let responseText = result.choices[0].message.content;
@@ -357,19 +463,26 @@ export class LLMService {
   }
 
   /**
-   * Generate with thinking support - uses Kimi K2 if available, falls back to Gemini
+   * Generate with thinking support - uses OpenRouter first, then Kimi, then Gemini
    */
   async generateWithThinking(
     prompt: string,
     systemPrompt?: string,
     useThinking: boolean = false
   ): Promise<ThinkingResult> {
-    // If thinking mode requested and Moonshot is available, use Kimi K2
+    if (useThinking && this.openRouterApiKey) {
+      try {
+        return await this.generateWithOpenRouter(prompt, systemPrompt, true, true);
+      } catch (error: any) {
+        logger.warn('OpenRouter reasoning failed, falling back to Kimi:', error?.message || error);
+      }
+    }
+
     if (useThinking && this.moonshotApiKey) {
       try {
         return await this.generateWithKimi(prompt, systemPrompt, true);
-      } catch (error) {
-        logger.warn('Kimi K2 failed, falling back to Gemini:', error);
+      } catch (error: any) {
+        logger.warn('Kimi failed, falling back to Gemini:', error?.message || error);
       }
     }
 
@@ -384,33 +497,46 @@ export class LLMService {
   }
 
   /**
-   * Check if Kimi K2 thinking is available
+   * Check if Moonshot Kimi is available
    */
   hasThinkingSupport(): boolean {
-    return !!this.moonshotApiKey;
+    return !!this.openRouterApiKey || !!this.moonshotApiKey;
   }
 
   /**
    * Task-based model routing — auto-selects model for the task type.
    *
    * - classification, reranking, sufficiency → Gemini Flash (fast, cheap, structured JSON)
-   * - synthesis, reasoning → Kimi K2.5 Thinking (better reasoning) with Gemini fallback
+   * - reasoning → OpenRouter reasoning model with Gemini fallback
+   * - synthesis → Gemini Pro
    * - citation_verification, self_rag → Gemini Flash (structured JSON)
    */
   async generateForTask(
     prompt: string,
     taskType: 'classification' | 'reranking' | 'sufficiency' | 'synthesis' | 'reasoning' | 'citation_verification' | 'self_rag' | 'expansion'
   ): Promise<string> {
-    const needsReasoning = taskType === 'synthesis' || taskType === 'reasoning';
+    const needsReasoning = taskType === 'reasoning';
+
+    if (needsReasoning && this.openRouterApiKey) {
+      try {
+        const result = await this.generateWithOpenRouter(prompt, undefined, true, true);
+        return result.response;
+      } catch (error: any) {
+        logger.warn(`OpenRouter failed for ${taskType}, falling back to Kimi/Gemini:`, error?.message);
+      }
+    }
 
     if (needsReasoning && this.moonshotApiKey) {
-      // Use Kimi K2 for reasoning-heavy tasks, with Gemini fallback
       try {
         const result = await this.generateWithKimi(prompt, undefined, true);
         return result.response;
       } catch (error: any) {
-        logger.warn(`Kimi K2 failed for ${taskType}, falling back to Gemini:`, error?.message);
+        logger.warn(`Kimi failed for ${taskType}, falling back to Gemini:`, error?.message);
       }
+    }
+
+    if (taskType === 'synthesis') {
+      return this.generate(prompt, 'gemini-3.1-pro-preview', true);
     }
 
     // Gemini Flash for lightweight or structured tasks (and as fallback)

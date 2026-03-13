@@ -1,0 +1,2988 @@
+{
+  "generated_at": "2026-03-13T00:05:11Z",
+  "query": "What did Justin Martyr believe about free will and moral responsibility?",
+  "prod_url": "https://free-will.app/api/graphrag/answer",
+  "arm_a_prod": {
+    "http_status": 200,
+    "processing_time_seconds": 19.192,
+    "response_json": {
+      "answer": "Justin Martyr (c. 100–165 CE) represents a foundational moment in the history of Christian philosophy, being the first extant Christian writer to systematically employ the technical term **αὐτεξούσιον** (*autexousion*, self-determination) to describe the capacity of rational beings for free choice [Source 1, Source 15]. His thought is deeply rooted in the intersection of Middle Platonism and Christian revelation, specifically directed against Stoic fatalism and the emerging deterministic tendencies of Gnostic thought [Source 1, Source 12].\n\n### 1. The Antifatalist Argument and \"What is Up to Us\"\nJustin’s primary concern is to protect the coherence of moral responsibility. In his *First Apology*, he argues that if human actions were dictated by **εἱμαρμένη** (*heimarmene*, fate), the concepts of virtue and vice would be rendered meaningless [Source 2, Source 9].\n\nHe writes:\n> \"ἐπεὶ εἰ μὴ τοῦτό ἐστιν, ἀλλὰ καθ᾿ εἱμαρμένην πάντα γίνεται, οὔ τε τὸ ἐφ᾿ ἡμῖν ἐστιν ὅλως· εἰ γὰρ εἵμαρται τόνδε τινὰ ἀγαθὸν εἶναι καὶ τόνδε φαῦλον, οὔθ᾿ οὗτος ἀπόδεκτος οὐ δὲ ἐκεῖνος μεμπτέος.\" [Source 5, Source 14]\n> (For if this is not so, but all things happen by fate, there is nothing at all up to us; for if it is fated that this person be good and that one bad, neither is the former praiseworthy nor the latter blameworthy.)\n\nJustin utilizes the Stoic technical term **τὸ ἐφ᾿ ἡμῖν** (*to eph’ hēmin*, what is up to us) but turns it against the Stoic concept of fated necessity (**καθ᾿ εἱμαρμένης ἀνάγκην**) [Source 2, Source 5]. He argues that the reality of moral change—the fact that the same individual can transition from vice to virtue—proves that character is not fated [Source 9, Source 14].\n\n### 2. The Concept of *Autexousion* (Self-Determination)\nJustin extends the capacity for free choice to all rational beings, including both humans and angels [Source 13, Source 18]. He defines this capacity as **ἐλευθέρα προαίρεσις** (*eleuthera proairesis*, free choice) and **αὐτεξούσιον** [Source 4, Source 8].\n\nIn the *Dialogue with Trypho*, he explains:\n> \"Βουλόμενος γὰρ τούτους ἐν ἐλευθέρᾳ προαιρέσει καὶ αὐτεξουσίους γενομένους, τούς τε ἀγγέλους καὶ τοὺς ἀνθρώπους, ὁ θεὸς πράττειν ὅσα ἕκαστον ἐνεδυνάμωσε δύνασθαι ποιεῖν, ἐποίησεν...\" [Source 4, Source 8]\n> (For God, wishing them—both angels and humans—to act with free choice and self-determination, made them capable of doing what each was empowered to do...)\n\nFor Justin, this freedom is the prerequisite for divine judgment. If humans were like \"trees or quadrupeds\" (**δένδρα καὶ τετράποδα**), incapable of acting by choice, they would not be worthy of reward or punishment [Source 7, Source 9].\n\n### 3. Foreknowledge vs. Causal Necessity\nA significant challenge for Justin was reconciling divine foreknowledge (**πρόγνωσις**) and prophecy with human freedom. He argues that God’s ability to predict the future does not impose necessity on the events themselves [Source 3, Source 10].\n\nHe clarifies:\n> \"διότι προεγίνωσκεν αὐτοὺς ἀμεταβλήτως γενησομένους πονηρούς, προεῖπε ταῦτα, ἀλλ᾿ οὐχ, ὅτι αὐτοὺς ὁ θεὸς τοιούτους ἐποίησεν.\" [Source 16]\n> (Because He foreknew they would become unchangeably wicked, He foretold these things; but not because God made them such.)\n\nTo support this, Justin famously cites Plato’s *Republic* (617e): **\"αἰτία ἑλομένου· θεὸς ἀναίτιος\"** (The blame belongs to the one who chooses; God is blameless) [Source 3, Source 17]. Justin asserts that Plato \"borrowed\" this principle from Moses, thereby grounding the philosophical defense of free will in the oldest scriptural traditions [Source 11, Source 17].\n\n### 4. Moral Responsibility and the Origin of Evil\nJustin maintains a rigorous view of individual responsibility. While acknowledging the fall of humanity, he emphasizes that sin is the result of individual choice rather than an inherited, irresistible nature [Source 1, Source 4].\n\nHe states:\n> \"...παρὰ τὴν ἰδίαν αἰτίαν ἑκάστου αὐτῶν πονηρευσαμένου.\" [Source 4, Source 6]\n> (...each one having done evil through his own fault.)\n\nFurthermore, Justin introduces a demonological element to his theodicy: he believes fallen angels introduced the deceptions of fate and astrology to enslave humanity, meaning that \"fate\" itself is not a cosmic law but a demonic invention intended to obscure human freedom [Source 13].\n\n### 5. Scholarly Synthesis: Justin and Middle Platonism\nModern scholarship, notably Carl Andresen, has demonstrated that Justin’s doctrine of fate is structurally parallel to Middle Platonist handbooks, such as Alcinous' *Didaskalikos* [Source 1, Source 20]. \n\n* **Andresen's Thesis:** Justin adopts the Middle Platonist \"conditional fate\" model: while the soul is free in its initial decisions (**προαίρεσις**), the consequences of those decisions are subject to a fated order of justice [Source 20].\n* **Distinction from later Theology:** Unlike later Pauline or Augustinian developments, Justin’s theology does not emphasize the role of grace or the total corruption of the will; he maintains a \"libertarian\" view where the human capacity for virtue remains intact through the exercise of reason and choice [Source 1, Source 12].",
+      "sources": [],
+      "evidence": [
+        {
+          "claim": "100–165 CE) represents a foundational moment in the history of Christian philosophy, being the first extant Christian writer to systematically employ the technical term **αὐτεξούσιον** (*autexousion*, self-determination) to describe the capacity of rational beings for free choice [Source 1, Source 15].",
+          "kgNodes": [
+            "person_justin_martyr_2c_ce",
+            "argument_justin_angel_fall",
+            "work_justin_second_apology_sc507"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 0.75
+        },
+        {
+          "claim": "His thought is deeply rooted in the intersection of Middle Platonism and Christian revelation, specifically directed against Stoic fatalism and the emerging deterministic tendencies of Gnostic thought [Source 1, Source 12].",
+          "kgNodes": [
+            "person_justin_martyr_2c_ce",
+            "passage_justin_1apol_43_en",
+            "passage_justin_1apol_43",
+            "argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2",
+            "sc507_iustinus_apologia_i"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "In his *First Apology*, he argues that if human actions were dictated by **εἱμαρμένη** (*heimarmene*, fate), the concepts of virtue and vice would be rendered meaningless [Source 2, Source 9].",
+          "kgNodes": [
+            "person_justin_martyr_2c_ce",
+            "passage_justin_1apol_43_en",
+            "passage_justin_1apol_43",
+            "argument_justin_antifatalism",
+            "passage_justin_1apol_44_en"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "He writes:\n> \"ἐπεὶ εἰ μὴ τοῦτό ἐστιν, ἀλλὰ καθ᾿ εἱμαρμένην πάντα γίνεται, οὔ τε τὸ ἐφ᾿ ἡμῖν ἐστιν ὅλως· εἰ γὰρ εἵμαρται τόνδε τινὰ ἀγαθὸν εἶναι καὶ τόνδε φαῦλον, οὔθ᾿ οὗτος ἀπόδεκτος οὐ δὲ ἐκεῖνος μεμπτέος.\" [Source 5, Source 14]\n> (For if this is not so, but all things happen by fate, there is nothing at all up to us; for if it is fated that this person be good and that one bad, neither is the former praiseworthy nor the latter blameworthy.)\n\nJustin utilizes the Stoic technical term **τὸ ἐφ᾿ ἡμῖν** (*to eph’ hēmin*, what is up to us) but turns it against the Stoic concept of fated necessity (**καθ᾿ εἱμαρμένης ἀνάγκην**) [Source 2, Source 5].",
+          "kgNodes": [
+            "person_justin_martyr_2c_ce",
+            "passage_justin_1apol_43_en",
+            "passage_justin_1apol_43",
+            "argument_justin_antifatalism",
+            "passage_justin_dial_140_141_en"
+          ],
+          "ancientSources": [
+            {
+              "citationText": "Justin,  1",
+              "title": "",
+              "author": "Justin",
+              "originalText": "καθ᾿ εἱμαρμένης ἀνάγκην), because they are foreknown, we shall resolve this too",
+              "language": "greek",
+              "reference": "1",
+              "confidence": 0.79065734
+            },
+            {
+              "citationText": "Justin, Dialogue 88.4-5",
+              "title": "Dialogue",
+              "author": "Justin",
+              "originalText": "αὐτεξούσιοι) with free choice (ἐλευθέρα προαίρεσις)",
+              "language": "greek",
+              "reference": "88.4-5",
+              "confidence": 0.7891036
+            },
+            {
+              "citationText": "Justin,  1",
+              "title": "",
+              "author": "Justin",
+              "originalText": "Ὅπως δὲ μή τινες ἐκ τῶν προλελεγμένων ὑφ᾿ ἡμῶν δοξάσωσι καθ᾿ εἱμαρμένης ἀνάγκην φάσκειν ἡμᾶς τὰ γινόμενα γίνεσθαι, ἐκ τοῦ προειπεῖν προεγνωσμένα, καὶ τοῦτο διαλύσομεν",
+              "language": "greek",
+              "reference": "1",
+              "confidence": 0.78775245
+            }
+          ],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "He argues that the reality of moral change—the fact that the same individual can transition from vice to virtue—proves that character is not fated [Source 9, Source 14].",
+          "kgNodes": [
+            "person_justin_martyr_2c_ce",
+            "passage_justin_1apol_43_en",
+            "passage_justin_1apol_43",
+            "argument_justin_antifatalism",
+            "passage_justin_1apol_44_en"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        }
+      ],
+      "evidenceChains": [
+        {
+          "claim": "100–165 CE) represents a foundational moment in the history of Christian philosophy, being the first extant Christian writer to systematically employ the technical term **αὐτεξούσιον** (*autexousion*, self-determination) to describe the capacity of rational beings for free choice [Source 1, Source 15].",
+          "kgNodes": [
+            "person_justin_martyr_2c_ce",
+            "argument_justin_angel_fall",
+            "work_justin_second_apology_sc507"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 0.75
+        },
+        {
+          "claim": "His thought is deeply rooted in the intersection of Middle Platonism and Christian revelation, specifically directed against Stoic fatalism and the emerging deterministic tendencies of Gnostic thought [Source 1, Source 12].",
+          "kgNodes": [
+            "person_justin_martyr_2c_ce",
+            "passage_justin_1apol_43_en",
+            "passage_justin_1apol_43",
+            "argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2",
+            "sc507_iustinus_apologia_i"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "In his *First Apology*, he argues that if human actions were dictated by **εἱμαρμένη** (*heimarmene*, fate), the concepts of virtue and vice would be rendered meaningless [Source 2, Source 9].",
+          "kgNodes": [
+            "person_justin_martyr_2c_ce",
+            "passage_justin_1apol_43_en",
+            "passage_justin_1apol_43",
+            "argument_justin_antifatalism",
+            "passage_justin_1apol_44_en"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "He writes:\n> \"ἐπεὶ εἰ μὴ τοῦτό ἐστιν, ἀλλὰ καθ᾿ εἱμαρμένην πάντα γίνεται, οὔ τε τὸ ἐφ᾿ ἡμῖν ἐστιν ὅλως· εἰ γὰρ εἵμαρται τόνδε τινὰ ἀγαθὸν εἶναι καὶ τόνδε φαῦλον, οὔθ᾿ οὗτος ἀπόδεκτος οὐ δὲ ἐκεῖνος μεμπτέος.\" [Source 5, Source 14]\n> (For if this is not so, but all things happen by fate, there is nothing at all up to us; for if it is fated that this person be good and that one bad, neither is the former praiseworthy nor the latter blameworthy.)\n\nJustin utilizes the Stoic technical term **τὸ ἐφ᾿ ἡμῖν** (*to eph’ hēmin*, what is up to us) but turns it against the Stoic concept of fated necessity (**καθ᾿ εἱμαρμένης ἀνάγκην**) [Source 2, Source 5].",
+          "kgNodes": [
+            "person_justin_martyr_2c_ce",
+            "passage_justin_1apol_43_en",
+            "passage_justin_1apol_43",
+            "argument_justin_antifatalism",
+            "passage_justin_dial_140_141_en"
+          ],
+          "ancientSources": [
+            {
+              "citationText": "Justin,  1",
+              "title": "",
+              "author": "Justin",
+              "originalText": "καθ᾿ εἱμαρμένης ἀνάγκην), because they are foreknown, we shall resolve this too",
+              "language": "greek",
+              "reference": "1",
+              "confidence": 0.79065734
+            },
+            {
+              "citationText": "Justin, Dialogue 88.4-5",
+              "title": "Dialogue",
+              "author": "Justin",
+              "originalText": "αὐτεξούσιοι) with free choice (ἐλευθέρα προαίρεσις)",
+              "language": "greek",
+              "reference": "88.4-5",
+              "confidence": 0.7891036
+            },
+            {
+              "citationText": "Justin,  1",
+              "title": "",
+              "author": "Justin",
+              "originalText": "Ὅπως δὲ μή τινες ἐκ τῶν προλελεγμένων ὑφ᾿ ἡμῶν δοξάσωσι καθ᾿ εἱμαρμένης ἀνάγκην φάσκειν ἡμᾶς τὰ γινόμενα γίνεσθαι, ἐκ τοῦ προειπεῖν προεγνωσμένα, καὶ τοῦτο διαλύσομεν",
+              "language": "greek",
+              "reference": "1",
+              "confidence": 0.78775245
+            }
+          ],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "He argues that the reality of moral change—the fact that the same individual can transition from vice to virtue—proves that character is not fated [Source 9, Source 14].",
+          "kgNodes": [
+            "person_justin_martyr_2c_ce",
+            "passage_justin_1apol_43_en",
+            "passage_justin_1apol_43",
+            "argument_justin_antifatalism",
+            "passage_justin_1apol_44_en"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        }
+      ],
+      "ancientCitations": [
+        {
+          "citationText": "Justin,  1",
+          "title": "",
+          "author": "Justin",
+          "originalText": "καθ᾿ εἱμαρμένης ἀνάγκην), because they are foreknown, we shall resolve this too",
+          "language": "greek",
+          "reference": "1",
+          "confidence": 0.79065734
+        },
+        {
+          "citationText": "Justin, Dialogue 88.4-5",
+          "title": "Dialogue",
+          "author": "Justin",
+          "originalText": "αὐτεξούσιοι) with free choice (ἐλευθέρα προαίρεσις)",
+          "language": "greek",
+          "reference": "88.4-5",
+          "confidence": 0.7891036
+        },
+        {
+          "citationText": "Justin,  1",
+          "title": "",
+          "author": "Justin",
+          "originalText": "Ὅπως δὲ μή τινες ἐκ τῶν προλελεγμένων ὑφ᾿ ἡμῶν δοξάσωσι καθ᾿ εἱμαρμένης ἀνάγκην φάσκειν ἡμᾶς τὰ γινόμενα γίνεσθαι, ἐκ τοῦ προειπεῖν προεγνωσμένα, καὶ τοῦτο διαλύσομεν",
+          "language": "greek",
+          "reference": "1",
+          "confidence": 0.78775245
+        },
+        {
+          "citationText": "Justin, Dialogue 88.4-5",
+          "title": "Dialogue",
+          "author": "Justin",
+          "originalText": "αὐτεξούσιοι) with free choice (ἐλευθέρα προαίρεσις)",
+          "language": "greek",
+          "reference": "88.4-5",
+          "confidence": 0.78729665
+        },
+        {
+          "citationText": "Justin Martyr, Apologia Prima",
+          "title": "Apologia Prima",
+          "author": "Justin Martyr",
+          "originalText": "Ὅπως δὲ μή τινες ἐκ τῶν προλελεγμένων ὑφ᾿ ἡμῶν δοξάσωσι καθ᾿ εἱμαρμένης ἀνάγκην φάσκειν ἡμᾶς τὰ γινόμενα γίνεσθαι, ἐκ τοῦ προειπεῖν προεγνωσμένα, καὶ τοῦτο διαλύσομεν",
+          "language": "greek",
+          "confidence": 0.78280056
+        },
+        {
+          "citationText": "Justin Martyr, Dialogus cum Tryphone",
+          "title": "Dialogus cum Tryphone",
+          "author": "Justin Martyr",
+          "originalText": "Βουλόμενος [fol",
+          "language": "greek",
+          "confidence": 0.7780357
+        },
+        {
+          "citationText": "Justin, Dialogue 140.4-141.2",
+          "title": "Dialogue",
+          "author": "Justin",
+          "originalText": "αὐτεξουσίους) for righteous action, with reason to know by whom they were made",
+          "language": "greek",
+          "reference": "140.4-141.2",
+          "confidence": 0.77520365
+        },
+        {
+          "citationText": "Justin,  1",
+          "title": "",
+          "author": "Justin",
+          "originalText": "εἱμαρμένης ἀνάγκῃ), but rather because God foreknows (προγνώστου) what will be done by all men",
+          "language": "greek",
+          "reference": "1",
+          "confidence": 0.77491814
+        },
+        {
+          "citationText": "Just., Apol. I 43",
+          "title": "Apol. I",
+          "author": "Just.",
+          "originalText": "Ὅπως δὲ μή τινες ἐκ τῶν προλελεγμένων ὑφ' ἡμῶν δοξάσωσι καθ' εἱμαρμένης ἀνάγκην φάσκειν ἡμᾶς τὰ γινό-μενα γίνεσθαι, ἐκ τοῦ προειπεῖν προεγνωσμένα, καὶ τοῦτο διαλύ<σ>ομεν",
+          "language": "greek",
+          "reference": "43",
+          "confidence": 0.76954436
+        },
+        {
+          "citationText": "Justin, Dialogue 140.4-141.2",
+          "title": "Dialogue",
+          "author": "Justin",
+          "originalText": "Ἀλλὰ καὶ ὅτι οὐκ αἰτίᾳ τοῦ θεοῦ οἱ προγινωσκόμενοι ἀσεβεῖς",
+          "language": "greek",
+          "reference": "140.4-141.2",
+          "confidence": 0.7664455
+        },
+        {
+          "citationText": "Justin,  1",
+          "title": "",
+          "author": "Justin",
+          "originalText": "αἰτία ἑλομένου, θεὸς δ᾿ ἀναίτιος\" (Republic 617e) and claiming Plato borrowed from Moses",
+          "language": "greek",
+          "reference": "1",
+          "confidence": 0.7646558
+        },
+        {
+          "citationText": "Justin, Dialogue 102.4",
+          "title": "Dialogue",
+          "author": "Justin",
+          "originalText": "αὐτεξουσίους) for righteous action, and He set times until which He knew it was good for them to have self-determination (τὸ αὐτεξούσιον)",
+          "language": "greek",
+          "reference": "102.4",
+          "confidence": 0.76245624
+        },
+        {
+          "citationText": "Justin Martyr, Apologia",
+          "passageId": "41ff4a84-a400-4552-9268-a45dea236392",
+          "workId": "1dca3b3a-32d1-462a-ad3b-134ae12afc64",
+          "title": "Apologia",
+          "author": "Justin Martyr",
+          "confidence": 0.7659313
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "7634c4ba-d827-4cbb-8b10-70037ad795f2",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.7327472
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "a976974a-e05d-46d7-9742-617a3ba668fb",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.7059613
+        },
+        {
+          "citationText": "Justin Martyr, Apologia",
+          "passageId": "ad0bc91a-09c7-4602-996f-4ae5561b02c8",
+          "workId": "1dca3b3a-32d1-462a-ad3b-134ae12afc64",
+          "title": "Apologia",
+          "author": "Justin Martyr",
+          "confidence": 0.7052475
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "4000b33d-c531-4db1-85a6-4ae191ca7a15",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.6981553
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "058b7629-38df-49e3-b4f4-5b4709b08393",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.6970173
+        },
+        {
+          "citationText": "Justin Martyr, Apologia",
+          "passageId": "5d77cb35-66b0-4451-8a08-e64da052c193",
+          "workId": "1dca3b3a-32d1-462a-ad3b-134ae12afc64",
+          "title": "Apologia",
+          "author": "Justin Martyr",
+          "confidence": 0.6960572
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "f98a3807-97a5-4cc8-a989-99189394cd43",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.6955687
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "ee149f95-d422-4fcc-b24b-63cf23dcb9d3",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.6899263
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "40593d71-e6bf-4b9d-8263-1f230a69774c",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.686859
+        },
+        {
+          "citationText": "Justin Martyr, Apologia",
+          "passageId": "05235fe1-7bf2-4cf8-bb58-862456d7034e",
+          "workId": "1dca3b3a-32d1-462a-ad3b-134ae12afc64",
+          "title": "Apologia",
+          "author": "Justin Martyr",
+          "confidence": 0.68486756
+        },
+        {
+          "citationText": "Tatian_or_Ignatius, Tatian_or_Ignatius - Complete Works",
+          "passageId": "93e4ca93-8bf9-44f4-8920-60f510fd87ed",
+          "workId": "4e589f98-15c0-427c-9923-146dc4639050",
+          "title": "Tatian_or_Ignatius - Complete Works",
+          "author": "Tatian_or_Ignatius",
+          "confidence": 0.68477046
+        },
+        {
+          "citationText": "Eusebius, Ecclesiastical History and Apologetic Works",
+          "passageId": "a25763c3-d75b-4c74-8aa5-97f601e34d4e",
+          "workId": "c477adaf-c35a-4992-8383-def32d51ad76",
+          "title": "Ecclesiastical History and Apologetic Works",
+          "author": "Eusebius",
+          "confidence": 0.6847328
+        },
+        {
+          "citationText": "Justin Martyr, Apologia",
+          "passageId": "b39c2baa-8f1e-4c16-b46c-29d043bc4012",
+          "workId": "1dca3b3a-32d1-462a-ad3b-134ae12afc64",
+          "title": "Apologia",
+          "author": "Justin Martyr",
+          "confidence": 0.6838796
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "6199ae6c-c3c3-40b4-a7d2-742b7d123f99",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.68185014
+        },
+        {
+          "citationText": "Justin Martyr, Apologia",
+          "passageId": "2c65ea8b-103c-45e6-9fc7-5f744b6fa54e",
+          "workId": "1dca3b3a-32d1-462a-ad3b-134ae12afc64",
+          "title": "Apologia",
+          "author": "Justin Martyr",
+          "confidence": 0.6812606
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "e3c6c257-6138-4af0-9a85-b7df6d93ac77",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.680909
+        },
+        {
+          "citationText": "Justin Martyr, Apologia",
+          "passageId": "c075c922-17c7-497c-8d9d-ba14557caf6c",
+          "workId": "1dca3b3a-32d1-462a-ad3b-134ae12afc64",
+          "title": "Apologia",
+          "author": "Justin Martyr",
+          "confidence": 0.68014
+        },
+        {
+          "citationText": "Tatian_or_Ignatius, Tatian_or_Ignatius - Complete Works",
+          "passageId": "f588cb76-2f59-4255-be90-fc4aeab9a471",
+          "workId": "4e589f98-15c0-427c-9923-146dc4639050",
+          "title": "Tatian_or_Ignatius - Complete Works",
+          "author": "Tatian_or_Ignatius",
+          "confidence": 0.67985445
+        },
+        {
+          "citationText": "Eusebius, Praeperatio Evangelica",
+          "passageId": "90de103f-b290-4dcb-9eed-88d1747f5f90",
+          "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+          "title": "Praeperatio Evangelica",
+          "author": "Eusebius",
+          "confidence": 0.6798489
+        },
+        {
+          "citationText": "Eusebius, Ecclesiastical History and Apologetic Works",
+          "passageId": "a25763c3-d75b-4c74-8aa5-97f601e34d4e",
+          "workId": "c477adaf-c35a-4992-8383-def32d51ad76",
+          "title": "Ecclesiastical History and Apologetic Works",
+          "author": "Eusebius",
+          "confidence": 0.677668
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "441b229d-4a61-4731-b9bd-481f53e6899d",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.6761837
+        },
+        {
+          "citationText": "Eusebius, Praeperatio Evangelica",
+          "passageId": "cb8f8850-e2f6-4bee-9c1e-657c539a034e",
+          "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+          "title": "Praeperatio Evangelica",
+          "author": "Eusebius",
+          "confidence": 0.6759335
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "8df79f4d-c187-40bc-82b0-a4461ecc726a",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.675923
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "b3c490d8-df09-419a-b90a-752385f5aac8",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.67570364
+        }
+      ],
+      "modernBibliography": [],
+      "ctsUrns": [
+        "43",
+        "justin martyr:untitled:section_46",
+        "justin martyr:untitled:section_183",
+        "28",
+        "justin martyr:untitled:section_24",
+        "justin martyr:untitled:section_185",
+        "44",
+        "justin martyr:untitled:section_25"
+      ],
+      "textualGroundings": [
+        {
+          "reference": "Justin Martyr, Justin Martyr, Apologia 43",
+          "originalText": "Ὅπως δὲ μή τινες ἐκ τῶν προλελεγμένων ὑφ᾿ ἡμῶν δοξάσωσι καθ᾿\nεἱμαρμένης ἀνάγκην φάσκειν ἡμᾶς τὰ γινόμενα γίνεσθαι, ἐκ τοῦ προειπεῖν\nπροεγνωσμένα, καὶ τοῦτο διαλύσομεν. Τὰς τιμωρίας καὶ τὰς κολάσεις καὶ\nτὰς ἀγαθὰς ἀμοιβὰς κατ᾿ ἀξίαν τῶν πράξεων ἑκάστου ἀποδίδοσθαι διὰ τῶν\nπροφητῶν μαθόντες καὶ ἀληθὲς",
+          "language": "Greek",
+          "ctsUrn": "43",
+          "passageId": "41ff4a84-a400-4552-9268-a45dea236392"
+        },
+        {
+          "reference": "Justin Martyr, Justin Martyr, Apologies and Dialogue with Trypho section_46",
+          "originalText": "εἱμαρμένην πράττειν του\\ς ἀνθρώπους ἠ\\ πάσχειν τα\\ γινόμενα\n\nἀλλα\\ κατα\\ με\\ν τη\\ν προαίρεσιν ἕκαστον κατορθοῦν ἠ\\ ἁμαρτάνειν\n\nκαι\\ κατα\\ τη\\ν τῶν φαύλων δαιμόνων ἐνέργειαν του\\ς σπουδαίους\n\nοἷον Σωκράτην και\\ του\\ς ὁμοίους\n\nδιώκεσθαι και\\ ἐν δεσμοῖς\n\nΣαρδανάπαλον δε\\ και\\ *̓επίκουρον και\\ του\\ς ὁμο",
+          "language": "Greek",
+          "ctsUrn": "justin martyr:untitled:section_46",
+          "passageId": "7634c4ba-d827-4cbb-8b10-70037ad795f2"
+        },
+        {
+          "reference": "Justin Martyr, Justin Martyr, Apologies and Dialogue with Trypho section_183",
+          "originalText": "βασιλείας ἐκβληθήσονται εἰς το\\ σκότος το\\ ἐξώτερον\n\nὅτι οὐκ αἰτίᾳ τοῦ θεοῦ οἱ προγινωσκόμενοι και\\ γενησόμενοι\n\nεἴτε ἄγγελοι εἴτε ἄνθρωποι\n\nἑαυτῶν ἕκαστος αἰτίᾳ τοιοῦτοί εἰσιν ὁποῖος ἕκαστος φανήσεται\n\nἀπέδειξα και\\ ἐν τοῖς ἔμπροσθεν\n\nἽνα δε\\ μη\\ πρόφασιν ἔχητε λέγειν ὅτι ἔδει το\\ν\n\nΧριστο\\ν σταυρω",
+          "language": "Greek",
+          "ctsUrn": "justin martyr:untitled:section_183",
+          "passageId": "a976974a-e05d-46d7-9742-617a3ba668fb"
+        },
+        {
+          "reference": "Justin Martyr, Justin Martyr, Apologia 28",
+          "originalText": "Παρ᾿ ἡμῖν μὲν γὰρ ὁ ἀρχηγέτης τῶν κακῶν δαιμόνων\nὄφις καλεῖται καὶ σατανᾶς καὶ διάβολος, ὡς καὶ ἐκ τῶν ἡμετέρων\nσυγγραμμάτων ἐρευνήσαντες μαθεῖν δύνασθε· ὃν εἰς τὸ\nπῦρ πεμφθήσεσθαι μετὰ τῆς αὐτοῦ στρατιᾶς καὶ τῶν ἑπομένων\nἀνθρώπων κολασθησομένους τὸν ἀπέραντον αἰῶνα, προεμήνυσεν\nὁ Χριστός. Καὶ γὰρ ἡ",
+          "language": "Greek",
+          "ctsUrn": "28",
+          "passageId": "ad0bc91a-09c7-4602-996f-4ae5561b02c8"
+        },
+        {
+          "reference": "Justin Martyr, Justin Martyr, Apologies and Dialogue with Trypho section_24",
+          "originalText": "νήσατε ἐν αὐλαῖς ἁγίαις αὐτοῦ\n\nφοβηθήτω ἀπο\\ προσώπου αὐτοῦ\n\nπᾶσα ἡ γῆ και\\ κατορθωθήτω και\\ μη\\ σαλευθήτω\n\nθήτωσαν ἐν τοῖς ἔθνεσιν\n\nὁ κύριος ἐβασίλευσεν ἀπο\\ τοῦ ξύλου\n\nὍταν δε\\ το\\ προφητικο\\ν πνεῦμα τα\\ μέλλοντα γίνες\n\nθαι ὡς ἤδη γενόμενα λέγῃ\n\nὡς και\\ ἐν τοῖς προειρημένοις δοξάσαι\n\nὅπως ἀπολογία",
+          "language": "Greek",
+          "ctsUrn": "justin martyr:untitled:section_24",
+          "passageId": "4000b33d-c531-4db1-85a6-4ae191ca7a15"
+        },
+        {
+          "reference": "Justin Martyr, Justin Martyr, Apologies and Dialogue with Trypho section_185",
+          "originalText": "Πλάσας ὁ θεο\\ς κατ\n\nἀρχα\\ς το\\ν ἄνθρωπον τῆς γνώμης\n\nαὐτοῦ τα\\ τῆς φύσεως ἀπῃώρησεν\n\nἐντολῇ μιᾷ ποιησάμενος\n\nΦυλάξαντα με\\ν γα\\ρ ταύτην τῆς ἀθανάτου\n\nλήξεως πεποίηκεν ἔσεσθαι\n\nπαραβάντα δε\\ τῆς ἐναντίας\n\nγεγονω\\ς ὁ ἄνθρωπος και\\ προ\\ς τη\\ν παράβασιν εὐθυ\\ς ἐλθω\\ν\n\nτη\\ν φθορα\\ν φυσικῶς εἰσεδέξατο\n\nΦύ",
+          "language": "Greek",
+          "ctsUrn": "justin martyr:untitled:section_185",
+          "passageId": "058b7629-38df-49e3-b4f4-5b4709b08393"
+        },
+        {
+          "reference": "Justin Martyr, Justin Martyr, Apologia 44",
+          "originalText": "Ἐδίδαξε δὲ ἡμᾶς ταῦτα τὸ ἅγιον προφητικὸν πνεῦμα, διὰ Μωϋσέως\nφῆσαν τῷ πρώτῳ πλασθέντι ἀνθρώπῳ εἰρῆσθαι ὑπὸ τοῦ θεοῦ οὕτως· „Ἰδοὺ\nπρὸ προσώπου σου τὸ ἀγαθὸν καὶ τὸ κακόν, ἔκλεξαι τὸ ἀγαθόν“. Καὶ πάλιν\nδιὰ Ἡσαΐου, τοῦ ἑτέρου προφήτου, ὡς ἀπὸ προσώπου τοῦ πατρὸς τῶν ὅλων\nκαὶ δεσπότου θεοῦ εἰς τοῦτο λε",
+          "language": "Greek",
+          "ctsUrn": "44",
+          "passageId": "5d77cb35-66b0-4451-8a08-e64da052c193"
+        },
+        {
+          "reference": "Justin Martyr, Justin Martyr, Apologies and Dialogue with Trypho section_25",
+          "originalText": "οἷον δένδρα και\\ τετράποδα μηδε\\ν δυνάμενα προαι\n\nἐποίησεν ὁ θεο\\ς το\\ν ἄνθρωπον\n\nἄξιος ἀμοιβῆς ἠ\\ ἐπαίνου\n\nἑαυτοῦ ἑλόμενος το\\ ἀγαθόν\n\nἀλλα\\ τοῦτο γενόμενος οὐδ\n\nεἰ κακο\\ς ὑπῆρχε\n\nἑαυτοῦ τοιοῦτος ὤν\n\nνάμενος εἶναι ἕτερον παρ\n\nἘδίδαξε δε\\ ἡμᾶς ταῦτα το\\ ἅγιον προφητικο\\ν πνεῦμα\n\nδια\\ Μωυσέως φῆσαν τ",
+          "language": "Greek",
+          "ctsUrn": "justin martyr:untitled:section_25",
+          "passageId": "f98a3807-97a5-4cc8-a989-99189394cd43"
+        }
+      ],
+      "qualityScore": 100,
+      "qualityBadge": "Low",
+      "metadata": {
+        "research_graph": {
+          "overview": {
+            "query_type": "legacy_answer",
+            "complexity": "unknown",
+            "grounding_policy": "mixed",
+            "quality_badge": "Low",
+            "pipeline_degraded": false,
+            "claim_ledger_mode": "legacy_stream",
+            "render_answer_mode": "quality_guards",
+            "scholarly_polish_mode": "quality_guards",
+            "seed_node_count": 5,
+            "context_node_count": 5,
+            "bundle_count": 0,
+            "work_count": 0,
+            "claim_count": 0,
+            "citation_count": 37
+          },
+          "stages": [
+            {
+              "id": "legacy_embed",
+              "title": "Embed and search",
+              "status": "complete",
+              "summary": "5 seed nodes retrieved from vector search.",
+              "metrics": [
+                {
+                  "label": "Seeds",
+                  "value": 5
+                },
+                {
+                  "label": "Model",
+                  "value": "gemini-3.1-pro-preview"
+                }
+              ],
+              "details": {
+                "starting_nodes": [
+                  {
+                    "id": "person_justin_martyr_2c_ce",
+                    "label": "Justin Martyr",
+                    "type": "person",
+                    "reason": "Semantic similarity match (rank 1)"
+                  },
+                  {
+                    "id": "passage_justin_1apol_43_en",
+                    "label": "Justin, 1 Apology 43: The Antifatalist Argument (English)",
+                    "type": "passage",
+                    "reason": "Semantic similarity match (rank 2)"
+                  },
+                  {
+                    "id": "argument_justin_prophecy_freedom",
+                    "label": "Justin's Prophecy-Freedom Reconciliation (1 Apol. 44)",
+                    "type": "argument",
+                    "reason": "Semantic similarity match (rank 3)"
+                  },
+                  {
+                    "id": "passage_justin_dial_88",
+                    "label": "Justin, Dialogue 88.4-5: Free Will and Adamic Sin",
+                    "type": "passage",
+                    "reason": "Semantic similarity match (rank 4)"
+                  },
+                  {
+                    "id": "passage_justin_1apol_43",
+                    "label": "Justin, 1 Apology 43: The Antifatalist Argument",
+                    "type": "passage",
+                    "reason": "Semantic similarity match (rank 5)"
+                  }
+                ],
+                "provider": "gemini"
+              }
+            },
+            {
+              "id": "legacy_traversal",
+              "title": "Expand graph context",
+              "status": "complete",
+              "summary": "0 expanded nodes and 0 traversed edges.",
+              "metrics": [
+                {
+                  "label": "Expanded",
+                  "value": 0
+                },
+                {
+                  "label": "Edges",
+                  "value": 0
+                },
+                {
+                  "label": "Passages",
+                  "value": 0
+                }
+              ],
+              "details": {
+                "expanded_nodes": [],
+                "linked_passages": []
+              }
+            },
+            {
+              "id": "legacy_synthesis",
+              "title": "Synthesize and repair",
+              "status": "complete",
+              "summary": "Quality guards modified the answer before final delivery.",
+              "metrics": [
+                {
+                  "label": "Citations",
+                  "value": 37
+                },
+                {
+                  "label": "Quality",
+                  "value": "Low"
+                },
+                {
+                  "label": "Thinking",
+                  "value": "disabled"
+                }
+              ],
+              "details": {
+                "was_modified": true,
+                "use_thinking": false
+              }
+            }
+          ],
+          "facets": [],
+          "works": [],
+          "claims": [],
+          "hypotheses": [],
+          "open_questions": [],
+          "counter_evidence": [
+            "Quality guards identified answer segments that required correction or normalization."
+          ],
+          "uncertainties": []
+        },
+        "quality_badge": "Low",
+        "render_answer_mode": "quality_guards",
+        "scholarly_polish_mode": "quality_guards"
+      },
+      "pageIndexInfo": {
+        "linkedPassages": 0,
+        "directPassages": 0,
+        "neighborPassages": 0,
+        "kgNeighbors": 0,
+        "seedNodes": 0,
+        "contextChars": 35393,
+        "contextTokensEstimate": 8848
+      },
+      "retrievalStats": {
+        "totalNodes": 20,
+        "totalEdges": 0,
+        "standardResults": 40,
+        "passageNodes": 0,
+        "explicitPassages": 0,
+        "textualGroundings": 8
+      },
+      "citationIntegrity": {
+        "passed": true,
+        "outOfRange": [],
+        "orphanSources": [],
+        "totalMarkers": 0,
+        "totalSources": 0
+      },
+      "processingTime": 19133,
+      "version": "pageindex-v3",
+      "parameters": {
+        "semantic_k": 20,
+        "graph_depth": 2,
+        "max_context": 25
+      },
+      "success": true
+    }
+  },
+  "arm_b_new_system": {
+    "answer": "Justin Martyr (c. 100–165 CE) maintains that human and angelic beings possess an inherent power of self-determination (*autexousion*), which serves as the indispensable foundation for moral responsibility and the justice of divine judgment [P13], [3]. By rejecting fatalism and distinguishing divine foreknowledge from necessity, Justin aligns Christian anthropology with Middle Platonist structures to defend the integrity of virtue and vice [P14], [2]. He argues that without this capacity for free choice, the concepts of merit and punishment would be rendered incoherent, as agency would reside in fate rather than the individual [P13].\n\n### Core Doctrinal Thesis: Autexousion and Agency\nJustin’s anthropology is centered on the conviction that God created rational beings with the capacity for independent choice. He utilizes the term *autexousion* (αὐτεξούσιον), a concept that emphasizes the self-originating and self-determining character of human freedom [3]. This power is not merely a psychological observation but a theological necessity; for Justin, the very possibility of a relationship with God—and the subsequent judgment of one's life—depends on the reality of this freedom [P11], [P13]. As he argues in the *Dialogue with Trypho*:\n\n> For God in the beginning made the race of angels and of men self-determining (*autexousion*)... if they should choose the things well-pleasing to Him, He would keep them in incorruption and free from punishment; but if they should do evil, He would punish each as He sees fit. (*Dialogus cum Tryphone* 88.5) [P11]\n\nThis self-determination extends beyond the human realm to include the angelic host. Justin argues that the fall of certain angels was not the result of divine necessity or a flaw in their creation, but a consequence of their own free choice to turn toward evil [P1], [P12].\n\n### Agency and the Refutation of Fatalism\nA significant portion of Justin’s defense of free will is framed as an explicit refutation of Stoic fatalism (*heimarmene*) [P13]. He contends that if human actions were determined by an external chain of causes, the moral landscape of human existence would collapse [P13]. If it were fated for one person to be good and another to be evil, neither could be justly praised or blamed for their conduct [P13]. Justin writes:\n\n> For if it were fated that one should be good and another evil, neither would the one be acceptable nor the other blameworthy. (*Apologia Prima* 43) [P13]\n\nJustin insists that the observable reality of individuals changing their behavior—moving from vice to virtue or vice versa—demonstrates that what is up to us (*to eph' hêmin*) is a genuine power, rather than absolutely nothing as a fatalistic system would imply [P13].\n\n### Divine Foreknowledge and Moral Responsibility\nTo reconcile the existence of divine prophecy with human freedom, Justin distinguishes between God’s foreknowledge of future events and the necessity of those events [P14]. He argues that God predicts future actions through the prophets not because He has decreed them, but because He foresees how humans will freely choose to act [P14]. In his *First Apology*, Justin adopts a famous Platonic principle to safeguard the divine character from the origin of evil:\n\n> The blame is his who chooses, but God is blameless. (*Apologia Prima* 44; cf. Plato, *Rep.* 10.617e) [P14]\n\nBy citing this principle, Justin asserts that while God provides the capacity for choice, the responsibility for the exercise of that choice rests entirely with the creature [P14]. Modern scholarship suggests that Justin’s formulation of this relationship between fate and autonomy was deeply influenced by Middle Platonist handbooks, such as those of Alcinous, which sought to balance providence with human agency [2].\n\n### Counterpoints and Conceptual Limits\nWhile Justin is a vigorous defender of the free-will model of moral responsibility, his writings reflect an early stage of Patristic development. His emphasis remains largely on the external threat of fatalism and the defense of divine justice [P13], [P14]. Consequently, the surviving evidence is less explicit regarding the internal mechanisms of grace and how divine assistance interacts with the human will—questions that would only become central to the tradition in later centuries [P3]. Furthermore, while he utilizes philosophical terminology, his primary textual anchors remain the scriptures and the prophetic witness, which he views as the ultimate source of the doctrine of choice [P1], [P14].",
+    "citations": [
+      {
+        "ref": "P1",
+        "type": "passage",
+        "id": "2f964a9d-cbc8-45c5-8ed3-53468537382f",
+        "label": "Justin Martyr, Dialogus cum Tryphone 102_3",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from evidence bundle"
+      },
+      {
+        "ref": "P3",
+        "type": "passage",
+        "id": "5b527340-0080-4152-b57f-4cc118669a13",
+        "label": "Justin Martyr, Apologia Prima 2",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from evidence bundle"
+      },
+      {
+        "ref": "P11",
+        "type": "passage",
+        "id": "ad0049c4-8fa3-417c-9f02-42a98b0a862f",
+        "label": "Justin Martyr, Dialogus cum Tryphone 88_5",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from evidence bundle"
+      },
+      {
+        "ref": "P12",
+        "type": "passage",
+        "id": "7b029b3b-d680-4362-a0ea-8ef4b2aef215",
+        "label": "Justin Martyr, Dialogus cum Tryphone 102_4",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from evidence bundle"
+      },
+      {
+        "ref": "P13",
+        "type": "passage",
+        "id": "168ce62d-0416-48b4-80f7-c0a56a7584e1",
+        "label": "Justin Martyr, Apologia Prima 43",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from evidence bundle"
+      },
+      {
+        "ref": "P14",
+        "type": "passage",
+        "id": "980347a7-bcdc-4b36-afa0-6a57c1feb8eb",
+        "label": "Justin Martyr, Apologia Prima 44",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from evidence bundle"
+      },
+      {
+        "ref": "2",
+        "type": "node",
+        "id": "person_justin_martyr_2c_ce",
+        "label": "Justin Martyr",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      },
+      {
+        "ref": "3",
+        "type": "node",
+        "id": "concept_autexousion_christian_freedom_u1v2w3x4",
+        "label": "Autexousion (Αὐτεξούσιον) - Christian Free Will",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      }
+    ],
+    "metadata": {
+      "query_type": "global_abstract",
+      "classification_confidence": 0.45,
+      "classification_reason": "heuristic fallback",
+      "debug_trace": {
+        "classify_query": {
+          "mode": "heuristic",
+          "query_type": "global_abstract",
+          "confidence": 0.45,
+          "reason": "heuristic fallback",
+          "complexity": "medium"
+        },
+        "expand_query": {
+          "mode": "llm",
+          "expanded_query": "Investigate the beliefs of Justin Martyr regarding free will and moral responsibility within the context of ancient philosophy. Explore his philosophical arguments, scriptural interpretations, and how his views align with or diverge from other early Christian thinkers and classical philosophical traditions.",
+          "philosophers": [
+            "Justin Martyr",
+            "Plato",
+            "Aristotle",
+            "Stoics",
+            "Epicureans"
+          ],
+          "concepts": [
+            "free will",
+            "moral responsibility",
+            "predestination",
+            "divine providence",
+            "responsibility",
+            "assent",
+            "prohairesis"
+          ],
+          "schools": [
+            "Christianity",
+            "Platonism",
+            "Stoicism",
+            "Epicureanism"
+          ],
+          "periods": [
+            "Early Christian Philosophy",
+            "Hellenistic Philosophy"
+          ]
+        },
+        "discover_corpus": {
+          "queries": [
+            "Investigate the beliefs of Justin Martyr regarding free will and moral responsibility within the context of ancient philosophy. Explore his philosophical arguments, scriptural interpretations, and how his views align with or diverge from other early Christian thinkers and classical philosophical traditions.",
+            "To responsibly answer the question, a deeper analysis of the primary bundles is required, especially focusing on how Justin Martyr addresses free will and moral responsibility within his theological framework. Additionally, the counter-evidence notes should be thoroughly examined to understand any dissenting views or alternative interpretations. Further research into secondary sources that provide scholarly commentary on Justin Martyr's works could also be beneficial.",
+            "Justin Martyr",
+            "Plato",
+            "Aristotle",
+            "free will",
+            "moral responsibility",
+            "predestination",
+            "Christianity",
+            "Platonism",
+            "What did Justin Martyr believe about free will and moral responsibility?"
+          ],
+          "semantic_hits": [
+            {
+              "id": "person_justin_martyr_2c_ce",
+              "score": 0.7913,
+              "label": "Justin Martyr",
+              "type": "person"
+            },
+            {
+              "id": "passage_justin_1apol_43_en",
+              "score": 0.7907,
+              "label": "Justin, 1 Apology 43: The Antifatalist Argument (English)",
+              "type": "passage"
+            },
+            {
+              "id": "argument_justin_prophecy_freedom",
+              "score": 0.7897,
+              "label": "Justin's Prophecy-Freedom Reconciliation (1 Apol. 44)",
+              "type": "argument"
+            },
+            {
+              "id": "passage_justin_dial_88",
+              "score": 0.7891,
+              "label": "Justin, Dialogue 88.4-5: Free Will and Adamic Sin",
+              "type": "passage"
+            },
+            {
+              "id": "passage_justin_1apol_43",
+              "score": 0.7878,
+              "label": "Justin, 1 Apology 43: The Antifatalist Argument",
+              "type": "passage"
+            },
+            {
+              "id": "passage_justin_dial_88_en",
+              "score": 0.7873,
+              "label": "Justin, Dialogue 88.4-5: Free Will and Adamic Sin (English)",
+              "type": "passage"
+            },
+            {
+              "id": "passage_just_apol1_43",
+              "score": 0.7828,
+              "label": "Justin Martyr, Apologia Prima, 43",
+              "type": "passage"
+            },
+            {
+              "id": "passage_justin_1apol_44_en",
+              "score": 0.7783,
+              "label": "Justin, 1 Apology 44: Scriptural Proof of Free Choice (English)",
+              "type": "passage"
+            },
+            {
+              "id": "passage_just_tryph_88_5",
+              "score": 0.778,
+              "label": "Justin Martyr, Dialogus cum Tryphone, 88.5",
+              "type": "passage"
+            },
+            {
+              "id": "argument_justin_antifatalism",
+              "score": 0.7767,
+              "label": "Justin's Antifatalist Argument (1 Apol. 43)",
+              "type": "argument"
+            },
+            {
+              "id": "passage_justin_dial_140_141_en",
+              "score": 0.7752,
+              "label": "Justin, Dialogue 140.4-141.2: Prescience and Free Will (English)",
+              "type": "passage"
+            },
+            {
+              "id": "passage_justin_1apol_44",
+              "score": 0.7736,
+              "label": "Justin, 1 Apology 44: Scriptural Proof of Free Choice",
+              "type": "passage"
+            }
+          ],
+          "seed_node_ids": [
+            "person_justin_martyr_2c_ce",
+            "passage_justin_1apol_43_en",
+            "argument_justin_prophecy_freedom",
+            "passage_justin_dial_88",
+            "passage_justin_1apol_43",
+            "passage_justin_dial_88_en",
+            "passage_just_apol1_43",
+            "passage_justin_1apol_44_en",
+            "passage_just_tryph_88_5",
+            "argument_justin_antifatalism",
+            "passage_justin_dial_140_141_en",
+            "passage_justin_1apol_44",
+            "argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2",
+            "argument_justin_angel_fall",
+            "sc507_iustinus_apologia_i_chap43",
+            "work_justin_second_apology_sc507",
+            "passage_justin_dial_140_141",
+            "passage_justin_dial_102_en",
+            "sc507_iustinus_apologia_i",
+            "argument_justin_equals_alcinous_heimarmene"
+          ],
+          "passage_anchor_ids": [
+            "person_justin_martyr_2c_ce",
+            "passage_justin_1apol_43_en",
+            "argument_justin_prophecy_freedom",
+            "passage_justin_dial_88",
+            "passage_justin_1apol_43",
+            "passage_justin_dial_88_en",
+            "passage_just_apol1_43",
+            "passage_justin_1apol_44_en",
+            "passage_just_tryph_88_5",
+            "argument_justin_antifatalism",
+            "passage_justin_dial_140_141_en",
+            "passage_justin_1apol_44"
+          ],
+          "linked_passages": [
+            {
+              "passage_id": "168ce62d-0416-48b4-80f7-c0a56a7584e1",
+              "title": "Apologia Prima",
+              "author": "Justin Martyr",
+              "canonical_ref": "43",
+              "language": "grc",
+              "confidence": 1.0
+            },
+            {
+              "passage_id": "ad0049c4-8fa3-417c-9f02-42a98b0a862f",
+              "title": "Dialogus cum Tryphone",
+              "author": "Justin Martyr",
+              "canonical_ref": "88_5",
+              "language": "grc",
+              "confidence": 1.0
+            }
+          ]
+        },
+        "scholarly_dossier": {
+          "facet_count": 5,
+          "primary_bundle_ids": [
+            "1fcd8318-4077-42bc-bfd9-362227056356::2f964a9d-cbc8-45c5-8ed3-53468537382f",
+            "7a1b4c9b-489f-4907-801f-26a7f202b664::5b527340-0080-4152-b57f-4cc118669a13",
+            "ef12a8a5-fb41-4742-b476-16d50a48e1e1::9cd9c005-285e-4de0-b03b-3b963fdab2d4"
+          ],
+          "testimony_bundle_ids": [],
+          "counter_bundle_ids": [],
+          "metadata_ids": [
+            "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+            "person_plato_428_348bce_a1b2c3d4",
+            "concept_autexousion_christian_freedom_u1v2w3x4",
+            "person_justin_martyr_2c_ce"
+          ]
+        },
+        "research_notebook": {
+          "question_frame": "What did Justin Martyr believe about free will and moral responsibility?",
+          "facets": [
+            {
+              "facet_id": "core_doctrinal_thesis",
+              "title": "Core Doctrinal Thesis",
+              "priority": 1,
+              "required_support": "passage"
+            },
+            {
+              "facet_id": "textual_witnesses",
+              "title": "Textual Witnesses",
+              "priority": 2,
+              "required_support": "passage"
+            },
+            {
+              "facet_id": "agency_and_responsibility",
+              "title": "Agency and Responsibility",
+              "priority": 3,
+              "required_support": "passage"
+            },
+            {
+              "facet_id": "ancient_testimony_and_preservation",
+              "title": "Ancient Testimony and Preservation",
+              "priority": 4,
+              "required_support": "passage"
+            },
+            {
+              "facet_id": "counterpoints_and_limits",
+              "title": "Counterpoints and Limits",
+              "priority": 4,
+              "required_support": "passage"
+            }
+          ],
+          "sub_queries": [
+            "What did Justin Martyr believe about free will and moral responsibility?"
+          ],
+          "competing_hypotheses": [
+            "The main answer is textually well supported for: What did Justin Martyr believe about free will and moral responsibility?",
+            "The evidence is more fragmented or interpretive for: What did Justin Martyr believe about free will and moral responsibility?"
+          ],
+          "work_priorities": [
+            "De Principiis (Περὶ Ἀρχῶν) - Origen",
+            "Republic (Πολιτεία)",
+            "Second Apology (SC 507)",
+            "Origenes, Contra Celsum",
+            "First Apology (Ἀπολογία πρώτη)",
+            "Iustinus, Apologia I",
+            "New Testament (Novum Testamentum)",
+            "Augustine, De Civitate Dei (The City of God)",
+            "Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου)",
+            "De Libero Arbitrio Voluntatis (On Free Choice of the Will)",
+            "Laws (Νόμοι)",
+            "Plato, Timaeus"
+          ]
+        },
+        "tree_navigation": {
+          "candidate_work_titles": [
+            "De Principiis (Περὶ Ἀρχῶν) - Origen",
+            "Republic (Πολιτεία)",
+            "Second Apology (SC 507)",
+            "Origenes, Contra Celsum",
+            "First Apology (Ἀπολογία πρώτη)",
+            "Iustinus, Apologia I",
+            "New Testament (Novum Testamentum)",
+            "Augustine, De Civitate Dei (The City of God)",
+            "Laws (Νόμοι)",
+            "Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου)",
+            "Plato, Timaeus",
+            "De Praedestinatione Sanctorum (On the Predestination of the Saints)",
+            "De Libero Arbitrio Voluntatis (On Free Choice of the Will)",
+            "Nicomachean Ethics (Ἠθικὰ Νικομάχεια)",
+            "De Gratia et Libero Arbitrio (Augustine)",
+            "Oration to the Greeks (Λόγος πρὸς Ἕλληνας)",
+            "Plato, Phaedo",
+            "Alternate Possibilities and Moral Responsibility",
+            "Responsibility and Control",
+            "Dialogue with Trypho (Διάλογος πρὸς Τρύφωνα)",
+            "Freedom and Resentment",
+            "Metaphysics Book Theta (Potentiality and Actuality)",
+            "Apologia Prima",
+            "Dialogus cum Tryphone",
+            "Plato, Phaedrus",
+            "Against Marcion (Πρὸς Μαρκίωνα)",
+            "De Causa Dei contra Pelagium (On God's Cause Against Pelagius)",
+            "Ad Simplicianum (To Simplician)",
+            "Plotinus, Enneads IV.8 - On the Descent of the Soul into Bodies",
+            "Syntagma (Against All Heresies)",
+            "Aristides, Apologia",
+            "On Prayer (Περὶ εὐχῆς)",
+            "Basil the Great, Hexaemeron",
+            "Theophilus, Ad Autolycum Book 2"
+          ],
+          "selected_sections": [
+            {
+              "work_id": "7a1b4c9b-489f-4907-801f-26a7f202b664",
+              "node_id": "book_15",
+              "path": "Book 15",
+              "title": "Book 15"
+            },
+            {
+              "work_id": "7a1b4c9b-489f-4907-801f-26a7f202b664",
+              "node_id": "book_16",
+              "path": "Book 16",
+              "title": "Book 16"
+            },
+            {
+              "work_id": "7a1b4c9b-489f-4907-801f-26a7f202b664",
+              "node_id": "book_2",
+              "path": "Book 2",
+              "title": "Book 2"
+            },
+            {
+              "work_id": "1fcd8318-4077-42bc-bfd9-362227056356",
+              "node_id": "book_100_3",
+              "path": "Book 100_3",
+              "title": "Book 100_3"
+            },
+            {
+              "work_id": "1fcd8318-4077-42bc-bfd9-362227056356",
+              "node_id": "book_101_2",
+              "path": "Book 101_2",
+              "title": "Book 101_2"
+            },
+            {
+              "work_id": "1fcd8318-4077-42bc-bfd9-362227056356",
+              "node_id": "book_102_3",
+              "path": "Book 102_3",
+              "title": "Book 102_3"
+            },
+            {
+              "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+              "node_id": "book_Laws",
+              "path": "Book Laws",
+              "title": "Book Laws"
+            },
+            {
+              "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+              "node_id": "book_Laws_ch_1",
+              "path": "Book Laws, Chapter 1",
+              "title": "Book Laws, Chapter 1"
+            },
+            {
+              "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+              "node_id": "book_Laws_ch_10",
+              "path": "Book Laws, Chapter 10",
+              "title": "Book Laws, Chapter 10"
+            },
+            {
+              "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+              "node_id": "book_Laws_ch_11",
+              "path": "Book Laws, Chapter 11",
+              "title": "Book Laws, Chapter 11"
+            },
+            {
+              "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+              "node_id": "book_Laws_ch_12",
+              "path": "Book Laws, Chapter 12",
+              "title": "Book Laws, Chapter 12"
+            },
+            {
+              "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+              "node_id": "book_Laws_ch_2",
+              "path": "Book Laws, Chapter 2",
+              "title": "Book Laws, Chapter 2"
+            },
+            {
+              "work_id": "ef12a8a5-fb41-4742-b476-16d50a48e1e1",
+              "node_id": "book_Rep",
+              "path": "Book Rep",
+              "title": "Book Rep"
+            },
+            {
+              "work_id": "ef12a8a5-fb41-4742-b476-16d50a48e1e1",
+              "node_id": "book_Rep_ch_1",
+              "path": "Book Rep, Chapter 1",
+              "title": "Book Rep, Chapter 1"
+            },
+            {
+              "work_id": "ef12a8a5-fb41-4742-b476-16d50a48e1e1",
+              "node_id": "book_Rep_ch_6",
+              "path": "Book Rep, Chapter 6",
+              "title": "Book Rep, Chapter 6"
+            }
+          ]
+        },
+        "context_pack": {
+          "kg_metadata_count": 126,
+          "section_summary_count": 15,
+          "passage_bundle_count": 108,
+          "token_estimate": 48771,
+          "top_bundle_rankings": [
+            {
+              "ref": "P1",
+              "bundle_id": "1fcd8318-4077-42bc-bfd9-362227056356::2f964a9d-cbc8-45c5-8ed3-53468537382f",
+              "work_title": "Dialogus cum Tryphone",
+              "author": "Justin Martyr",
+              "source": "tree_reasoning",
+              "score": 96,
+              "canonical_ref": "102_3",
+              "section_path": "Book 102_3",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P2",
+              "bundle_id": "1fcd8318-4077-42bc-bfd9-362227056356::899dbe63-6ba2-48d1-985a-ec99bf2c0ef3",
+              "work_title": "Dialogus cum Tryphone",
+              "author": "Justin Martyr",
+              "source": "tree_reasoning",
+              "score": 96,
+              "canonical_ref": "101_2",
+              "section_path": "Book 101_2",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P3",
+              "bundle_id": "7a1b4c9b-489f-4907-801f-26a7f202b664::5b527340-0080-4152-b57f-4cc118669a13",
+              "work_title": "Apologia Prima",
+              "author": "Justin Martyr",
+              "source": "tree_reasoning",
+              "score": 96,
+              "canonical_ref": "2",
+              "section_path": "Book 2",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P4",
+              "bundle_id": "7a1b4c9b-489f-4907-801f-26a7f202b664::dbf65c54-0c74-4322-8086-b87fbb721529",
+              "work_title": "Apologia Prima",
+              "author": "Justin Martyr",
+              "source": "tree_reasoning",
+              "score": 96,
+              "canonical_ref": "16",
+              "section_path": "Book 16",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P5",
+              "bundle_id": "ef12a8a5-fb41-4742-b476-16d50a48e1e1::9cd9c005-285e-4de0-b03b-3b963fdab2d4",
+              "work_title": "Republic (Πολιτεία)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "score": 88,
+              "canonical_ref": "Rep. 1.327",
+              "section_path": "Book Rep",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P6",
+              "bundle_id": "ef12a8a5-fb41-4742-b476-16d50a48e1e1::003d6340-6af3-4a9d-8975-954714e8b110",
+              "work_title": "Republic (Πολιτεία)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "score": 88,
+              "canonical_ref": "Rep. 6.484",
+              "section_path": "Book Rep, Chapter 6",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P7",
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::232b5a28-1ef9-468d-8de7-ae9ca23370c8",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "score": 81,
+              "canonical_ref": "Laws 2.652",
+              "section_path": "Book Laws, Chapter 2",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P8",
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::78152481-30fa-4dd9-aa63-9649e02d3581",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "score": 81,
+              "canonical_ref": "Laws 1.624",
+              "section_path": "Book Laws",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            }
+          ]
+        },
+        "evidence_bundles": {
+          "bundle_count": 108,
+          "bundle_sample": [
+            {
+              "bundle_id": "7a1b4c9b-489f-4907-801f-26a7f202b664::c2f7b3bf-9efc-4c58-b387-4b3a29a1aee6",
+              "work_title": "Apologia Prima",
+              "author": "Justin Martyr",
+              "source": "tree_reasoning",
+              "canonical_ref": "15",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "7a1b4c9b-489f-4907-801f-26a7f202b664::5b527340-0080-4152-b57f-4cc118669a13",
+              "work_title": "Apologia Prima",
+              "author": "Justin Martyr",
+              "source": "tree_reasoning",
+              "canonical_ref": "2",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "1fcd8318-4077-42bc-bfd9-362227056356::8d1df41e-ed32-4f44-b1a3-c7e68af64f7a",
+              "work_title": "Dialogus cum Tryphone",
+              "author": "Justin Martyr",
+              "source": "tree_reasoning",
+              "canonical_ref": "100_3",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "1fcd8318-4077-42bc-bfd9-362227056356::899dbe63-6ba2-48d1-985a-ec99bf2c0ef3",
+              "work_title": "Dialogus cum Tryphone",
+              "author": "Justin Martyr",
+              "source": "tree_reasoning",
+              "canonical_ref": "101_2",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "1fcd8318-4077-42bc-bfd9-362227056356::2f964a9d-cbc8-45c5-8ed3-53468537382f",
+              "work_title": "Dialogus cum Tryphone",
+              "author": "Justin Martyr",
+              "source": "tree_reasoning",
+              "canonical_ref": "102_3",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::78152481-30fa-4dd9-aa63-9649e02d3581",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.624",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::1f1f28a9-67ed-4d48-870a-721c76e3faa4",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.625",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::20036c97-96a6-47f7-b116-7f1b278825af",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.626",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::42782a8d-4d7c-4fe0-927a-b7264d75f242",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.627",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::f949be15-0828-4b75-8266-521a30566644",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.628",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::05e7dd1a-2703-4096-b72f-387a6284c877",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.629",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::fa0209d3-3d49-4a43-9bb6-2b2b2f3829cd",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.630",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::b20b2977-612f-47bc-bf47-7ec639f4df4e",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.631",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::e3c282e8-6adb-4559-8595-c8b80b9e53f4",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.632",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::8759d667-6d43-48ed-b0d3-e0ecbdb697a7",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.633",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::0efb5c2a-51e6-4924-b696-b298bfb32839",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.634",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::c907154e-e2b8-438e-b01f-1eff49920b41",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.635",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::d999cdc4-c04d-47a9-bf37-14cd941a0f60",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.636",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::85fff47f-2187-4266-bbcb-dbfe4a6959f7",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 1.637",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::07e419d7-54b6-4312-9542-d280ba2b0e2f",
+              "work_title": "Laws (Νόμοι)",
+              "author": "Plato",
+              "source": "tree_reasoning",
+              "canonical_ref": "Laws 10.884",
+              "translation_source": null
+            }
+          ]
+        },
+        "counter_evidence": {
+          "mode": "llm",
+          "selected_count": 2,
+          "bundle_ids": [
+            "P11",
+            "P13"
+          ],
+          "rationale": "The notes include clear passages where Justin Martyr explicitly speaks of ‘free choice’ (ἐλευθέρᾳ προαιρέσει) and of human responsibility for choosing good or evil (P11). He also argues against a deterministic view that everything happens ‘by fate’ (κατὰ εἱμαρμένην) and affirms that punishments and rewards are apportioned according to each person’s deeds (P13). These texts directly support the claim that Justin believed in free will and moral responsibility, and no passage in the bundle contradicts this view."
+        },
+        "evidence_sufficiency": {
+          "bundle_count": 108,
+          "work_count": 4,
+          "counter_count": 2,
+          "covered_facets": 5,
+          "score": 1.0,
+          "sufficient": false,
+          "reason": "The current evidence bundle set includes 4 distinct works and 2 counter-evidence notes, which is a moderate amount of material. However, without knowing the specific content and context of these works, it is difficult to determine if they comprehensively cover Justin Martyr's beliefs on free will and moral responsibility. The notebook open questions indicate that this topic is still under investigation.",
+          "refinement": "To responsibly answer the question, a detailed examination of the primary bundles is needed to identify specific passages where Justin Martyr discusses free will and moral responsibility. Additionally, cross-referencing these passages with secondary sources and scholarly interpretations would strengthen the assessment."
+        },
+        "draft_claim_ledger": {
+          "mode": "llm",
+          "claim_count": 10,
+          "raw_excerpt": "{\n  \"claims\": [\n    {\n      \"claim\": \"Justin Martyr maintains that human beings possess the power of self-determination (autexousion), which is the necessary foundation for moral responsibility and divine judgment.\",\n      \"evidence_ids\": [\n        \"7a1b4c9b-489f-4907-801f-26a7f202b664::168ce62d-0416-48b4-80f7-c0a56a7584e1\",\n        \"concept_autexousion_christian_freedom_u1v2w3x4\"\n      ],\n      \"facet_id\": \"core_doctrinal_thesis\",\n      \"evidence_class\": \"direct_text\",\n      \"quote_original\": \"εἰ γὰρ εἱμαρμένον εἴη τὸ τὸν ἀγαθὸν εἶναι καὶ τὸ τὸν φαῦλον, οὔτε ὁ μὲν ἀποδεκτός ἐστιν οὐδὲ ὁ μεμπτός.\",\n      \"quote_translation\": \"For if it were fated that one should be good and another evil, neither would the one be acceptable nor the other blameworthy.\",\n      \"support_type\": \"passage\",\n      \"confidence\": 1.0,\n      \"status\": \"supported\"\n    },\n    {\n      \"claim\": \"Justin argues that if human actions were determined by fate (heimarmene), the concepts of virtue and vice would be meaningless, as no one would be the cause of their own conduct.\",\n      \"evidence_ids\": [\n        \"7a1b4c9b-489f-4907-801f-26a7f202b664::168ce62d-0416-48b4-80f7-c0a56a7584e1\"\n      ],\n      \"facet_id\": \"agency_and_responsibility\",\n      \"evidence_class\": \"direct_text\",\n      \"quote_original\": \"τὸ ἐφ' ἡμῖν οὐδὲν ἔστιν ὅλως.\",\n      \"quote_translation\": \"what is up to us is absolutely nothing.\",\n      \"support_type\": \"passage\",\n      \"confidence\": 1.0,\n      \"status\": \"supported\"\n    },\n    {\n      \"claim\": \"In his First Apology, Justin reconciles divine prophecy with human freedom by asserting that God foreknows future actions without necessitating them.\",\n      \"evidence_ids\": [\n        \"7a1b4c9b-489f-4907-801f-26a7f202b664::980347a7-bcdc-4b36-afa0-6a57c1feb8eb\"\n      ],\n      \"facet_id\": \"core_doctrinal_thesis\",\n      \"evidence_class\": \"direct_text\",\n      \"quote_original\": \"ὅπως τὰ μέλλοντα ὑπ' αὐτῶν πραχθήσεσθαι προεγνωσμένα φαίνηται.\",\n      \"quote_translation\": \"so that future [...]"
+        },
+        "scholarly_polish": {
+          "mode": "llm",
+          "raw_excerpt": "Justin Martyr (c. 100–165 CE) maintains that human and angelic beings possess an inherent power of self-determination (*autexousion*), which serves as the indispensable foundation for moral responsibility and the justice of divine judgment [P13], [3]. By rejecting fatalism and distinguishing divine foreknowledge from necessity, Justin aligns Christian anthropology with Middle Platonist structures to defend the integrity of virtue and vice [P14], [2]. He argues that without this capacity for free choice, the concepts of merit and punishment would be rendered incoherent, as agency would reside in fate rather than the individual [P13].\n\n### Core Doctrinal Thesis: Autexousion and Agency\nJustin’s anthropology is centered on the conviction that God created rational beings with the capacity for independent choice. He utilizes the term *autexousion* (αὐτεξούσιον), a concept that emphasizes the self-originating and self-determining character of human freedom [3]. This power is not merely a psychological observation but a theological necessity; for Justin, the very possibility of a relationship with God—and the subsequent judgment of one's life—depends on the reality of this freedom [P11], [P13]. As he argues in the *Dialogue with Trypho*:\n\n> \"For God in the beginning made the race of angels and of men self-determining (*autexousion*)... if they should choose the things well-pleasing to Him, He would keep them in incorruption and free from punishment; but if they should do evil, He would punish each as He sees fit.\" (*Dialogus cum Tryphone* 88.5) [P11]\n\nThis self-determination extends beyond the human realm to include the angelic host. Justin argues that the fall of certain angels was not the result of divine necessity or a flaw in their creation, but a consequence of their own free choice to turn toward evil [P1], [P12]. [...]"
+        },
+        "render_grounded_answer": {
+          "mode": "llm",
+          "raw_excerpt": "Justin Martyr (c. 100–165 CE) maintains that human and angelic beings possess an inherent power of self-determination (*autexousion*), which serves as the indispensable foundation for moral responsibility and the justice of divine judgment [P13], [3]. By rejecting fatalism and distinguishing divine foreknowledge from necessity, Justin aligns Christian anthropology with Middle Platonist structures to defend the integrity of virtue and vice [P14], [2]. He argues that without this capacity for free choice, the concepts of merit and punishment would be rendered incoherent, as agency would reside in fate rather than the individual [P13].\n\n### Core Doctrinal Thesis: Autexousion and Agency\nJustin’s anthropology is centered on the conviction that God created rational beings with the capacity for independent choice. He utilizes the term *autexousion* (αὐτεξούσιον), a concept that emphasizes the self-originating and self-determining character of human freedom [3]. This power is not merely a psychological observation but a theological necessity; for Justin, the very possibility of a relationship with God—and the subsequent judgment of one's life—depends on the reality of this freedom [P11], [P13]. As he argues in the *Dialogue with Trypho*:\n\n> \"For God in the beginning made the race of angels and of men self-determining (*autexousion*)... if they should choose the things well-pleasing to Him, He would keep them in incorruption and free from punishment; but if they should do evil, He would punish each as He sees fit.\" (*Dialogus cum Tryphone* 88.5) [P11]\n\nThis self-determination extends beyond the human realm to include the angelic host. Justin argues that the fall of certain angels was not the result of divine necessity or a flaw in their creation, but a consequence of their own free choice to turn toward evil [P1], [P12]. [...]",
+          "polish_mode": "llm",
+          "compression_repair_mode": "skipped",
+          "render_requirements": {
+            "required_sections": 4,
+            "required_quote_blocks": 2,
+            "min_chars": 1080
+          },
+          "shape_metrics": {
+            "chars": 4695,
+            "section_headers": 4,
+            "quote_blocks": 5
+          }
+        },
+        "programmatic_verify": {
+          "citation_count": 8,
+          "answer_excerpt": "Justin Martyr (c. 100–165 CE) maintains that human and angelic beings possess an inherent power of self-determination (*autexousion*), which serves as the indispensable foundation for moral responsibility and the justice of divine judgment [P13], [3]. By rejecting fatalism and distinguishing divine foreknowledge from necessity, Justin aligns Christian anthropology with Middle Platonist structures to defend the integrity of virtue and vice [P14], [2]. He argues that without this capacity for free choice, the concepts of merit and punishment would be rendered incoherent, as agency would reside in fate rather than the individual [P13].\n\n### Core Doctrinal Thesis: Autexousion and Agency\nJustin’s anthropology is centered on the conviction that God created rational beings with the capacity for independent choice. He utilizes the term *autexousion* (αὐτεξούσιον), a concept that emphasizes the self-originating and self-determining character of human freedom [3]. This power is not merely a psychological observation but a theological necessity; [...]"
+        }
+      },
+      "expanded_query": "Investigate the beliefs of Justin Martyr regarding free will and moral responsibility within the context of ancient philosophy. Explore his philosophical arguments, scriptural interpretations, and how his views align with or diverge from other early Christian thinkers and classical philosophical traditions.",
+      "passage_anchor_ids": [
+        "person_justin_martyr_2c_ce",
+        "passage_justin_1apol_43_en",
+        "argument_justin_prophecy_freedom",
+        "passage_justin_dial_88",
+        "passage_justin_1apol_43",
+        "passage_justin_dial_88_en",
+        "passage_just_apol1_43",
+        "passage_justin_1apol_44_en",
+        "passage_just_tryph_88_5",
+        "argument_justin_antifatalism",
+        "passage_justin_dial_140_141_en",
+        "passage_justin_1apol_44"
+      ],
+      "selected_sections": [
+        {
+          "work_id": "7a1b4c9b-489f-4907-801f-26a7f202b664",
+          "node_id": "book_15",
+          "title": "Book 15",
+          "path": "Book 15",
+          "summary": "1 passages across 1 subsection(s)",
+          "abstract": "Justin Martyr - Book 15. Key refs: 15. Sample: Περὶ μὲν οὖν σωφροσύνης τοσοῦτον εἶπεν·,, Ὅς ἂν ἐμβλέψῃ γυναικὶ πρὸς τὸ ἐπιθυμῆσαι αὐτῆς, ἤδη ἐμοίχευσε τῇ καρδίᾳ παρὰ τῷ θεῷ “. Καί·,, Εἰ ὁ ὀφθαλμός σου ὁ δεξιὸς σκανδαλίζει σε, ἔκκοψον αὐτόν· συμφέρει γάρ σοι μονόφθαλμ",
+          "canonical_refs": [
+            "15"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 733,
+          "start_passage": 15,
+          "end_passage": 15
+        },
+        {
+          "work_id": "7a1b4c9b-489f-4907-801f-26a7f202b664",
+          "node_id": "book_16",
+          "title": "Book 16",
+          "path": "Book 16",
+          "summary": "1 passages across 1 subsection(s)",
+          "abstract": "Justin Martyr - Book 16. Key refs: 16. Sample: Περὶ δὲ τοῦ ἀνεξικάκους εἶναι καὶ ὑπηρετικοὺς πᾶσι καὶ ἀοργήτους ἅ ἔφη ταῦτά ἐστι·,, Τῷ τύπτοντί σου τὴν σιαγόνα πάρεχε καὶ τὴν ἄλλην, καὶ τὸν αἴροντά σου τὸν χιτῶνα ἢ τὸ ἱμάτιον μὴ κωλύσῃς. Ὃς δ᾿ ἂν ὀργισθῇ, ἔνοχός ἐστι",
+          "canonical_refs": [
+            "16"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 604,
+          "start_passage": 16,
+          "end_passage": 16
+        },
+        {
+          "work_id": "7a1b4c9b-489f-4907-801f-26a7f202b664",
+          "node_id": "book_2",
+          "title": "Book 2",
+          "path": "Book 2",
+          "summary": "1 passages across 1 subsection(s)",
+          "abstract": "Justin Martyr - Book 2. Key refs: 2. Sample: Τοὺς κατὰ ἀλήθειαν εὐσεβεῖς καὶ φιλοσόφους μόνον τ ἀληθὲς τιμᾶν καὶ στέργειν ὁ λόγος ὑπαγορεύει, παραιτουμένους δόξαις παλαιῶν ἐξακολουθεῖν, ἂν φαῦλαι ὦσιν· οὐ γὰρ μόνον μὴ ἕπεσθαι τοῖς ἀδίκως τι πράξασιν ἤ δογματίσασιν",
+          "canonical_refs": [
+            "2"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 253,
+          "start_passage": 2,
+          "end_passage": 2
+        },
+        {
+          "work_id": "1fcd8318-4077-42bc-bfd9-362227056356",
+          "node_id": "book_100_3",
+          "title": "Book 100_3",
+          "path": "Book 100_3",
+          "summary": "1 passages across 1 subsection(s)",
+          "abstract": "Justin Martyr - Book 100_3. Key refs: 100_3. Sample: Ὅθεν καὶ ἐν τοῖς λόγοις αὐτοῦ ἔφη, ὅτε περὶ τοῦ πάσχειν αὐτὸν μέλλειν διελέγετο, ὅτι Δεῖ τὸν υἱὸν τοῦ ἀνθρώπου πολλὰ παθεῖν καὶ ἀποδοκιμασθῆναι ὑπὸ τῶν Φαρισαίων καὶ γραμματέων, καὶ σταυρωθῆναι καὶ τῇ τρίτῃ ἡμέρᾳ ἀναστῆν",
+          "canonical_refs": [
+            "100_3"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 155,
+          "start_passage": 544,
+          "end_passage": 544
+        },
+        {
+          "work_id": "1fcd8318-4077-42bc-bfd9-362227056356",
+          "node_id": "book_101_2",
+          "title": "Book 101_2",
+          "path": "Book 101_2",
+          "summary": "1 passages across 1 subsection(s)",
+          "abstract": "Justin Martyr - Book 101_2. Key refs: 101_2. Sample: Καὶ γὰρ ἐπὶ γῆς τὸ αὐτὸ ἔπραξε· λέγοντος αὐτῷ τινος· Διδάσκαλε ἀγαθέ, ἀπεκρίνατο· Τί με λέγεις ἀγαθόν; Εἶς ἐστιν ἀγαθός, ὁ πατήρ μου ὁ ἐν τοῖς οὐρανοῖς [cf. MT., XIX, 16 &#45; 17; MC., X, 17 &#45; 18; LUC, XVIII, 18 &#45",
+          "canonical_refs": [
+            "101_2"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 137,
+          "start_passage": 549,
+          "end_passage": 549
+        },
+        {
+          "work_id": "1fcd8318-4077-42bc-bfd9-362227056356",
+          "node_id": "book_102_3",
+          "title": "Book 102_3",
+          "path": "Book 102_3",
+          "summary": "1 passages across 1 subsection(s)",
+          "abstract": "Justin Martyr - Book 102_3. Key refs: 102_3. Sample: Ἐὰν δέ τις ἡμῖν λέγῃ· Μὴ γὰρ οὐκ ἠδύνατο ὁ θεὸς μᾶλλον τὸν Ἡρώδην ἀποκτεῖναι; προλαβὼν λέγω· Μὴ γὰρ οὐκ ἠδύνατο ὁ θεὸς τὴν ἀρχὴν καὶ τὸν ὄφιν ἐξᾶραι τοῦ μὴ εἶναι, καὶ μὴ εἰπεῖν ὅτι Καὶ ἔχθραν θήσω ἀνὰ μέσον αὐτοῦ καὶ τῆς",
+          "canonical_refs": [
+            "102_3"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 87,
+          "start_passage": 553,
+          "end_passage": 553
+        },
+        {
+          "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+          "node_id": "book_Laws",
+          "title": "Book Laws",
+          "path": "Book Laws",
+          "summary": "326 passages across 12 subsection(s)",
+          "abstract": "Plato - Book Laws. Key refs: Laws 1.624, Laws 1.625. Sample: ΑΘ. θεὸς ἤ τις ἀνθρώπων ὑμῖν, ὦ ξένοι, εἴληφε τὴν αἰτίαν τῆς τῶν νόμων διαθέσεως; ΚΛ. θεός, ὦ ξένε, θεός, ὥς γε τὸ δικαιότατον εἰπεῖν· παρὰ μὲν ἡμῖν Ζεύς, παρὰ δὲ Λακεδαιμονίοις, ὅθεν ὅδε ἐστίν, οἶμαι φάναι τούτους Ἀπόλλ",
+          "canonical_refs": [
+            "Laws 1.624",
+            "Laws 1.625",
+            "Laws 1.626"
+          ],
+          "translation_available": false,
+          "quote_density": 0.009,
+          "token_estimate": 614,
+          "start_passage": 0,
+          "end_passage": 325
+        },
+        {
+          "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+          "node_id": "book_Laws_ch_1",
+          "title": "Book Laws, Chapter 1",
+          "path": "Book Laws, Chapter 1",
+          "summary": "27 passages",
+          "abstract": "Plato - Book Laws, Chapter 1. Key refs: Laws 1.624, Laws 1.625. Sample: ΑΘ. θεὸς ἤ τις ἀνθρώπων ὑμῖν, ὦ ξένοι, εἴληφε τὴν αἰτίαν τῆς τῶν νόμων διαθέσεως; ΚΛ. θεός, ὦ ξένε, θεός, ὥς γε τὸ δικαιότατον εἰπεῖν· παρὰ μὲν ἡμῖν Ζεύς, παρὰ δὲ Λακεδαιμονίοις, ὅθεν ὅδε ἐστίν, οἶμαι φάναι τούτους Ἀπόλλ",
+          "canonical_refs": [
+            "Laws 1.624",
+            "Laws 1.625",
+            "Laws 1.626"
+          ],
+          "translation_available": false,
+          "quote_density": 0.111,
+          "token_estimate": 614,
+          "start_passage": 0,
+          "end_passage": 26
+        },
+        {
+          "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+          "node_id": "book_Laws_ch_10",
+          "title": "Book Laws, Chapter 10",
+          "path": "Book Laws, Chapter 10",
+          "summary": "27 passages",
+          "abstract": "Plato - Book Laws, Chapter 10. Key refs: Laws 10.884, Laws 10.885. Sample: ΑΘ. μετὰ δὲ τὰς αἰκίας περὶ παντὸς ἓν εἰρήσθω τοιόνδε τι νόμιμον βιαίων πέρι· τῶν ἀλλοτρίων μηδένα μηδὲν φέρειν μηδὲ ἄγειν, μηδʼ αὖ χρῆσθαι μηδενὶ τῶν τοῦ πέλας, ἐὰν μὴ πείσῃ τὸν κεκτημένον· ἐκ γὰρ δὴ τοῦ τοιούτου πάντα",
+          "canonical_refs": [
+            "Laws 10.884",
+            "Laws 10.885",
+            "Laws 10.886"
+          ],
+          "translation_available": false,
+          "quote_density": 0.111,
+          "token_estimate": 614,
+          "start_passage": 244,
+          "end_passage": 270
+        },
+        {
+          "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+          "node_id": "book_Laws_ch_11",
+          "title": "Book Laws, Chapter 11",
+          "path": "Book Laws, Chapter 11",
+          "summary": "26 passages",
+          "abstract": "Plato - Book Laws, Chapter 11. Key refs: Laws 11.913, Laws 11.914. Sample: ΑΘ. τὸ δὴ μετὰ ταῦτʼ εἴη συμβολαίων ἂν πρὸς ἀλλήλους ἡμῖν δεόμενα προσηκούσης τάξεως. ἁπλοῦν δέ γέ ἐστίν που τό γε τοιοῦτον· μήτε οὖν τις τῶν ἐμῶν χρημάτων ἅπτοιτο εἰς δύναμιν, μηδʼ αὖ κινήσειεν μηδὲ τὸ βραχύτατον ἐμὲ μη",
+          "canonical_refs": [
+            "Laws 11.913",
+            "Laws 11.914",
+            "Laws 11.915"
+          ],
+          "translation_available": false,
+          "quote_density": 0.115,
+          "token_estimate": 948,
+          "start_passage": 271,
+          "end_passage": 296
+        },
+        {
+          "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+          "node_id": "book_Laws_ch_12",
+          "title": "Book Laws, Chapter 12",
+          "path": "Book Laws, Chapter 12",
+          "summary": "29 passages",
+          "abstract": "Plato - Book Laws, Chapter 12. Key refs: Laws 12.941, Laws 12.942. Sample: ΑΘ. ἐὰν ὡς πρεσβευτής τις ἢ κῆρυξ καταψευδόμενος τῆς πόλεως παραπρεσβεύηται πρός τινα πόλιν, ἢ πεμπόμενος μὴ τὰς οὔσας πρεσβείας ἐφʼ αἷς πέμπεται ἀπαγγέλλῃ, ἢ πάλιν αὖ παρὰ τῶν πολεμίων ἢ καὶ φίλων μὴ τὰ παρʼ ἐκείνων ὀρθ",
+          "canonical_refs": [
+            "Laws 12.941",
+            "Laws 12.942",
+            "Laws 12.943"
+          ],
+          "translation_available": false,
+          "quote_density": 0.103,
+          "token_estimate": 810,
+          "start_passage": 297,
+          "end_passage": 325
+        },
+        {
+          "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+          "node_id": "book_Laws_ch_2",
+          "title": "Book Laws, Chapter 2",
+          "path": "Book Laws, Chapter 2",
+          "summary": "23 passages",
+          "abstract": "Plato - Book Laws, Chapter 2. Key refs: Laws 2.652, Laws 2.653. Sample: ΑΘ. τὸ δὴ μετὰ τοῦτο, ὡς ἔοικε, σκεπτέον ἐκεῖνο περὶ αὐτῶν, πότερα τοῦτο μόνον ἀγαθὸν ἔχει, τὸ κατιδεῖν πῶς ἔχομεν τὰς φύσεις, ἢ καί τι μέγεθος ὠφελίας ἄξιον πολλῆς σπουδῆς ἔνεστʼ ἐν τῇ κατʼ ὀρθὸν χρείᾳ τῆς ἐν οἴνῳ συνου",
+          "canonical_refs": [
+            "Laws 2.652",
+            "Laws 2.653",
+            "Laws 2.654"
+          ],
+          "translation_available": false,
+          "quote_density": 0.13,
+          "token_estimate": 559,
+          "start_passage": 27,
+          "end_passage": 49
+        },
+        {
+          "work_id": "ef12a8a5-fb41-4742-b476-16d50a48e1e1",
+          "node_id": "book_Rep",
+          "title": "Book Rep",
+          "path": "Book Rep",
+          "summary": "278 passages across 10 subsection(s)",
+          "abstract": "Plato - Book Rep. Key refs: Rep. 1.327, Rep. 1.328. Sample: κατέβην χθὲς εἰς Πειραιᾶ μετὰ Γλαύκωνος τοῦ Ἀρίστωνος προσευξόμενός τε τῇ θεῷ καὶ ἅμα τὴν ἑορτὴν βουλόμενος θεάσασθαι τίνα τρόπον ποιήσουσιν ἅτε νῦν πρῶτον ἄγοντες. καλὴ μὲν οὖν μοι καὶ ἡ τῶν ἐπιχωρίων πομπὴ ἔδοξεν εἶναι",
+          "canonical_refs": [
+            "Rep. 1.327",
+            "Rep. 1.328",
+            "Rep. 1.329"
+          ],
+          "translation_available": false,
+          "quote_density": 0.011,
+          "token_estimate": 806,
+          "start_passage": 0,
+          "end_passage": 277
+        },
+        {
+          "work_id": "ef12a8a5-fb41-4742-b476-16d50a48e1e1",
+          "node_id": "book_Rep_ch_1",
+          "title": "Book Rep, Chapter 1",
+          "path": "Book Rep, Chapter 1",
+          "summary": "28 passages",
+          "abstract": "Plato - Book Rep, Chapter 1. Key refs: Rep. 1.327, Rep. 1.328. Sample: κατέβην χθὲς εἰς Πειραιᾶ μετὰ Γλαύκωνος τοῦ Ἀρίστωνος προσευξόμενός τε τῇ θεῷ καὶ ἅμα τὴν ἑορτὴν βουλόμενος θεάσασθαι τίνα τρόπον ποιήσουσιν ἅτε νῦν πρῶτον ἄγοντες. καλὴ μὲν οὖν μοι καὶ ἡ τῶν ἐπιχωρίων πομπὴ ἔδοξεν εἶναι",
+          "canonical_refs": [
+            "Rep. 1.327",
+            "Rep. 1.328",
+            "Rep. 1.329"
+          ],
+          "translation_available": false,
+          "quote_density": 0.107,
+          "token_estimate": 806,
+          "start_passage": 0,
+          "end_passage": 27
+        },
+        {
+          "work_id": "ef12a8a5-fb41-4742-b476-16d50a48e1e1",
+          "node_id": "book_Rep_ch_6",
+          "title": "Book Rep, Chapter 6",
+          "path": "Book Rep, Chapter 6",
+          "summary": "28 passages",
+          "abstract": "Plato - Book Rep, Chapter 6. Key refs: Rep. 6.484, Rep. 6.485. Sample: οἱ μὲν δὴ φιλόσοφοι, ἦν δʼ ἐγώ, ὦ Γλαύκων, καὶ οἱ μὴ διὰ μακροῦ τινος διεξελθόντες λόγου μόγις πως ἀνεφάνησαν οἵ εἰσιν ἑκάτεροι. ἴσως γάρ, ἔφη, διὰ βραχέος οὐ ῥᾴδιον. οὐ φαίνεται, εἶπον· ἐμοὶ γοῦν ἔτι δοκεῖ ἂν βελτιόνως",
+          "canonical_refs": [
+            "Rep. 6.484",
+            "Rep. 6.485",
+            "Rep. 6.486"
+          ],
+          "translation_available": false,
+          "quote_density": 0.107,
+          "token_estimate": 869,
+          "start_passage": 146,
+          "end_passage": 173
+        }
+      ],
+      "claim_ledger_mode": "llm",
+      "insufficient_evidence": true,
+      "scholarly_polish_mode": "llm",
+      "compression_repair_mode": "skipped",
+      "render_answer_mode": "llm",
+      "research_graph": {
+        "overview": {
+          "query_type": "global_abstract",
+          "complexity": "medium",
+          "grounding_policy": "mixed_evidence",
+          "quality_badge": "High",
+          "pipeline_degraded": false,
+          "claim_ledger_mode": "llm",
+          "render_answer_mode": "llm",
+          "scholarly_polish_mode": "llm",
+          "seed_node_count": 168,
+          "context_node_count": 1282,
+          "bundle_count": 108,
+          "work_count": 4,
+          "claim_count": 10,
+          "citation_count": 8
+        },
+        "stages": [
+          {
+            "id": "classify_query",
+            "title": "Classify query",
+            "status": "complete",
+            "summary": "global_abstract selected with 45% confidence via heuristic",
+            "metrics": [
+              {
+                "label": "Type",
+                "value": "global_abstract"
+              },
+              {
+                "label": "Complexity",
+                "value": "medium"
+              },
+              {
+                "label": "Confidence",
+                "value": "45%"
+              },
+              {
+                "label": "Mode",
+                "value": "heuristic"
+              }
+            ],
+            "details": {
+              "mode": "heuristic",
+              "query_type": "global_abstract",
+              "confidence": 0.45,
+              "reason": "heuristic fallback",
+              "complexity": "medium"
+            }
+          },
+          {
+            "id": "expand_query",
+            "title": "Expand query",
+            "status": "complete",
+            "summary": "5 philosophers, 7 concepts, and 4 schools added around the query frame.",
+            "metrics": [
+              {
+                "label": "Philosophers",
+                "value": 5
+              },
+              {
+                "label": "Concepts",
+                "value": 7
+              },
+              {
+                "label": "Schools",
+                "value": 4
+              }
+            ],
+            "details": {
+              "mode": "llm",
+              "expanded_query": "Investigate the beliefs of Justin Martyr regarding free will and moral responsibility within the context of ancient philosophy. [...]",
+              "philosophers": [
+                "Justin Martyr",
+                "Plato",
+                "Aristotle",
+                "Stoics",
+                "Epicureans"
+              ],
+              "concepts": [
+                "free will",
+                "moral responsibility",
+                "predestination",
+                "divine providence",
+                "responsibility",
+                "assent"
+              ],
+              "schools": [
+                "Christianity",
+                "Platonism",
+                "Stoicism",
+                "Epicureanism"
+              ],
+              "periods": [
+                "Early Christian Philosophy",
+                "Hellenistic Philosophy"
+              ]
+            }
+          },
+          {
+            "id": "discover_corpus",
+            "title": "Discover corpus",
+            "status": "complete",
+            "summary": "20 seed nodes, 12 passage anchors, 2 linked passages.",
+            "metrics": [
+              {
+                "label": "Semantic hits",
+                "value": 12
+              },
+              {
+                "label": "Seeds",
+                "value": 20
+              },
+              {
+                "label": "Anchors",
+                "value": 12
+              },
+              {
+                "label": "Linked passages",
+                "value": 2
+              }
+            ],
+            "details": {
+              "queries": [
+                "Investigate the beliefs of Justin Martyr regarding free will and moral responsibility within the context of ancient philosophy. [...]",
+                "To responsibly answer the question, a deeper analysis of the primary bundles is required, especially focusing on how Justin Martyr addresses free will and moral responsibility within his theological framework. [...]",
+                "Justin Martyr",
+                "Plato",
+                "Aristotle",
+                "free will"
+              ],
+              "semantic_hits": [
+                {
+                  "id": "person_justin_martyr_2c_ce",
+                  "score": 0.7913,
+                  "label": "Justin Martyr",
+                  "type": "person"
+                },
+                {
+                  "id": "passage_justin_1apol_43_en",
+                  "score": 0.7907,
+                  "label": "Justin, 1 Apology 43: The Antifatalist Argument (English)",
+                  "type": "passage"
+                },
+                {
+                  "id": "argument_justin_prophecy_freedom",
+                  "score": 0.7897,
+                  "label": "Justin's Prophecy-Freedom Reconciliation (1 Apol. 44)",
+                  "type": "argument"
+                },
+                {
+                  "id": "passage_justin_dial_88",
+                  "score": 0.7891,
+                  "label": "Justin, Dialogue 88.4-5: Free Will and Adamic Sin",
+                  "type": "passage"
+                },
+                {
+                  "id": "passage_justin_1apol_43",
+                  "score": 0.7878,
+                  "label": "Justin, 1 Apology 43: The Antifatalist Argument",
+                  "type": "passage"
+                },
+                {
+                  "id": "passage_justin_dial_88_en",
+                  "score": 0.7873,
+                  "label": "Justin, Dialogue 88.4-5: Free Will and Adamic Sin (English)",
+                  "type": "passage"
+                }
+              ],
+              "seed_node_ids": [
+                "person_justin_martyr_2c_ce",
+                "passage_justin_1apol_43_en",
+                "argument_justin_prophecy_freedom",
+                "passage_justin_dial_88",
+                "passage_justin_1apol_43",
+                "passage_justin_dial_88_en"
+              ],
+              "passage_anchor_ids": [
+                "person_justin_martyr_2c_ce",
+                "passage_justin_1apol_43_en",
+                "argument_justin_prophecy_freedom",
+                "passage_justin_dial_88",
+                "passage_justin_1apol_43",
+                "passage_justin_dial_88_en"
+              ],
+              "linked_passages": [
+                {
+                  "passage_id": "168ce62d-0416-48b4-80f7-c0a56a7584e1",
+                  "title": "Apologia Prima",
+                  "author": "Justin Martyr",
+                  "canonical_ref": "43",
+                  "language": "grc",
+                  "confidence": 1.0
+                },
+                {
+                  "passage_id": "ad0049c4-8fa3-417c-9f02-42a98b0a862f",
+                  "title": "Dialogus cum Tryphone",
+                  "author": "Justin Martyr",
+                  "canonical_ref": "88_5",
+                  "language": "grc",
+                  "confidence": 1.0
+                }
+              ]
+            }
+          },
+          {
+            "id": "research_notebook",
+            "title": "Build research notebook",
+            "status": "complete",
+            "summary": "5 facets, 2 hypotheses, 12 priority works.",
+            "metrics": [
+              {
+                "label": "Facets",
+                "value": 5
+              },
+              {
+                "label": "Hypotheses",
+                "value": 2
+              },
+              {
+                "label": "Sub-queries",
+                "value": 1
+              },
+              {
+                "label": "Works",
+                "value": 12
+              }
+            ],
+            "details": {
+              "question_frame": "What did Justin Martyr believe about free will and moral responsibility?",
+              "facets": [
+                {
+                  "facet_id": "core_doctrinal_thesis",
+                  "title": "Core Doctrinal Thesis",
+                  "priority": 1,
+                  "required_support": "passage"
+                },
+                {
+                  "facet_id": "textual_witnesses",
+                  "title": "Textual Witnesses",
+                  "priority": 2,
+                  "required_support": "passage"
+                },
+                {
+                  "facet_id": "agency_and_responsibility",
+                  "title": "Agency and Responsibility",
+                  "priority": 3,
+                  "required_support": "passage"
+                },
+                {
+                  "facet_id": "ancient_testimony_and_preservation",
+                  "title": "Ancient Testimony and Preservation",
+                  "priority": 4,
+                  "required_support": "passage"
+                },
+                {
+                  "facet_id": "counterpoints_and_limits",
+                  "title": "Counterpoints and Limits",
+                  "priority": 4,
+                  "required_support": "passage"
+                }
+              ],
+              "sub_queries": [
+                "What did Justin Martyr believe about free will and moral responsibility?"
+              ],
+              "competing_hypotheses": [
+                "The main answer is textually well supported for: What did Justin Martyr believe about free will and moral responsibility?",
+                "The evidence is more fragmented or interpretive for: What did Justin Martyr believe about free will and moral responsibility?"
+              ],
+              "work_priorities": [
+                "De Principiis (Περὶ Ἀρχῶν) - Origen",
+                "Republic (Πολιτεία)",
+                "Second Apology (SC 507)",
+                "Origenes, Contra Celsum",
+                "First Apology (Ἀπολογία πρώτη)",
+                "Iustinus, Apologia I"
+              ]
+            }
+          },
+          {
+            "id": "scholarly_dossier",
+            "title": "Assemble scholarly dossier",
+            "status": "complete",
+            "summary": "5 dossier facets, 3 direct bundles, 0 testimonia.",
+            "metrics": [
+              {
+                "label": "Facets",
+                "value": 5
+              },
+              {
+                "label": "Direct",
+                "value": 3
+              },
+              {
+                "label": "Testimony",
+                "value": 0
+              },
+              {
+                "label": "Counter",
+                "value": 0
+              }
+            ],
+            "details": {
+              "facet_count": 5,
+              "primary_bundle_ids": [
+                "1fcd8318-4077-42bc-bfd9-362227056356::2f964a9d-cbc8-45c5-8ed3-53468537382f",
+                "7a1b4c9b-489f-4907-801f-26a7f202b664::5b527340-0080-4152-b57f-4cc118669a13",
+                "ef12a8a5-fb41-4742-b476-16d50a48e1e1::9cd9c005-285e-4de0-b03b-3b963fdab2d4"
+              ],
+              "testimony_bundle_ids": [],
+              "counter_bundle_ids": [],
+              "metadata_ids": [
+                "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+                "person_plato_428_348bce_a1b2c3d4",
+                "concept_autexousion_christian_freedom_u1v2w3x4",
+                "person_justin_martyr_2c_ce"
+              ]
+            }
+          },
+          {
+            "id": "tree_navigation",
+            "title": "Navigate works",
+            "status": "complete",
+            "summary": "34 candidate works, 15 selected sections.",
+            "metrics": [
+              {
+                "label": "Candidates",
+                "value": 34
+              },
+              {
+                "label": "Sections",
+                "value": 15
+              }
+            ],
+            "details": {
+              "candidate_work_titles": [
+                "De Principiis (Περὶ Ἀρχῶν) - Origen",
+                "Republic (Πολιτεία)",
+                "Second Apology (SC 507)",
+                "Origenes, Contra Celsum",
+                "First Apology (Ἀπολογία πρώτη)",
+                "Iustinus, Apologia I"
+              ],
+              "selected_sections": [
+                {
+                  "work_id": "7a1b4c9b-489f-4907-801f-26a7f202b664",
+                  "node_id": "book_15",
+                  "path": "Book 15",
+                  "title": "Book 15"
+                },
+                {
+                  "work_id": "7a1b4c9b-489f-4907-801f-26a7f202b664",
+                  "node_id": "book_16",
+                  "path": "Book 16",
+                  "title": "Book 16"
+                },
+                {
+                  "work_id": "7a1b4c9b-489f-4907-801f-26a7f202b664",
+                  "node_id": "book_2",
+                  "path": "Book 2",
+                  "title": "Book 2"
+                },
+                {
+                  "work_id": "1fcd8318-4077-42bc-bfd9-362227056356",
+                  "node_id": "book_100_3",
+                  "path": "Book 100_3",
+                  "title": "Book 100_3"
+                },
+                {
+                  "work_id": "1fcd8318-4077-42bc-bfd9-362227056356",
+                  "node_id": "book_101_2",
+                  "path": "Book 101_2",
+                  "title": "Book 101_2"
+                },
+                {
+                  "work_id": "1fcd8318-4077-42bc-bfd9-362227056356",
+                  "node_id": "book_102_3",
+                  "path": "Book 102_3",
+                  "title": "Book 102_3"
+                }
+              ]
+            }
+          },
+          {
+            "id": "evidence_bundles",
+            "title": "Expand evidence bundles",
+            "status": "complete",
+            "summary": "108 evidence bundles assembled for answering.",
+            "metrics": [
+              {
+                "label": "Bundles",
+                "value": 108
+              },
+              {
+                "label": "Translations",
+                "value": 0
+              }
+            ],
+            "details": {
+              "bundle_count": 108,
+              "bundle_sample": [
+                {
+                  "bundle_id": "7a1b4c9b-489f-4907-801f-26a7f202b664::c2f7b3bf-9efc-4c58-b387-4b3a29a1aee6",
+                  "work_title": "Apologia Prima",
+                  "author": "Justin Martyr",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "15",
+                  "translation_source": null
+                },
+                {
+                  "bundle_id": "7a1b4c9b-489f-4907-801f-26a7f202b664::5b527340-0080-4152-b57f-4cc118669a13",
+                  "work_title": "Apologia Prima",
+                  "author": "Justin Martyr",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "2",
+                  "translation_source": null
+                },
+                {
+                  "bundle_id": "1fcd8318-4077-42bc-bfd9-362227056356::8d1df41e-ed32-4f44-b1a3-c7e68af64f7a",
+                  "work_title": "Dialogus cum Tryphone",
+                  "author": "Justin Martyr",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "100_3",
+                  "translation_source": null
+                },
+                {
+                  "bundle_id": "1fcd8318-4077-42bc-bfd9-362227056356::899dbe63-6ba2-48d1-985a-ec99bf2c0ef3",
+                  "work_title": "Dialogus cum Tryphone",
+                  "author": "Justin Martyr",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "101_2",
+                  "translation_source": null
+                },
+                {
+                  "bundle_id": "1fcd8318-4077-42bc-bfd9-362227056356::2f964a9d-cbc8-45c5-8ed3-53468537382f",
+                  "work_title": "Dialogus cum Tryphone",
+                  "author": "Justin Martyr",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "102_3",
+                  "translation_source": null
+                },
+                {
+                  "bundle_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56::78152481-30fa-4dd9-aa63-9649e02d3581",
+                  "work_title": "Laws (Νόμοι)",
+                  "author": "Plato",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Laws 1.624",
+                  "translation_source": null
+                }
+              ]
+            }
+          },
+          {
+            "id": "counter_evidence",
+            "title": "Seek counter-evidence",
+            "status": "complete",
+            "summary": "2 counter-evidence bundles with rationale: The notes include clear passages where Justin Martyr explicitly speaks of ‘free choice’ (ἐλευθέρᾳ προαιρέσει) and of human responsibility for choosing good or evil (P11). He also argues against a deterministic view that everything happens ‘by fate’ (κατὰ εἱμαρμένην) and affirms that punishments and rewards are apportioned according to each person’s deeds (P13). These texts directly support the claim that Justin believed in free will and moral responsibility, and no passage in the bundle contradicts this view..",
+            "metrics": [
+              {
+                "label": "Selected",
+                "value": 2
+              },
+              {
+                "label": "Mode",
+                "value": "llm"
+              }
+            ],
+            "details": {
+              "mode": "llm",
+              "selected_count": 2,
+              "bundle_ids": [
+                "P11",
+                "P13"
+              ],
+              "rationale": "The notes include clear passages where Justin Martyr explicitly speaks of ‘free choice’ (ἐλευθέρᾳ προαιρέσει) and of human responsibility for choosing good or evil (P11). [...]"
+            }
+          },
+          {
+            "id": "context_pack",
+            "title": "Pack long context",
+            "status": "complete",
+            "summary": "108 bundles, 15 section summaries, ~48771 tokens.",
+            "metrics": [
+              {
+                "label": "KG metadata",
+                "value": 126
+              },
+              {
+                "label": "Sections",
+                "value": 15
+              },
+              {
+                "label": "Bundles",
+                "value": 108
+              },
+              {
+                "label": "Tokens",
+                "value": 48771
+              }
+            ],
+            "details": {
+              "kg_metadata_count": 126,
+              "section_summary_count": 15,
+              "passage_bundle_count": 108,
+              "token_estimate": 48771,
+              "top_bundle_rankings": [
+                {
+                  "ref": "P1",
+                  "bundle_id": "1fcd8318-4077-42bc-bfd9-362227056356::2f964a9d-cbc8-45c5-8ed3-53468537382f",
+                  "work_title": "Dialogus cum Tryphone",
+                  "author": "Justin Martyr",
+                  "source": "tree_reasoning",
+                  "score": 96,
+                  "canonical_ref": "102_3",
+                  "section_path": "Book 102_3"
+                },
+                {
+                  "ref": "P2",
+                  "bundle_id": "1fcd8318-4077-42bc-bfd9-362227056356::899dbe63-6ba2-48d1-985a-ec99bf2c0ef3",
+                  "work_title": "Dialogus cum Tryphone",
+                  "author": "Justin Martyr",
+                  "source": "tree_reasoning",
+                  "score": 96,
+                  "canonical_ref": "101_2",
+                  "section_path": "Book 101_2"
+                },
+                {
+                  "ref": "P3",
+                  "bundle_id": "7a1b4c9b-489f-4907-801f-26a7f202b664::5b527340-0080-4152-b57f-4cc118669a13",
+                  "work_title": "Apologia Prima",
+                  "author": "Justin Martyr",
+                  "source": "tree_reasoning",
+                  "score": 96,
+                  "canonical_ref": "2",
+                  "section_path": "Book 2"
+                },
+                {
+                  "ref": "P4",
+                  "bundle_id": "7a1b4c9b-489f-4907-801f-26a7f202b664::dbf65c54-0c74-4322-8086-b87fbb721529",
+                  "work_title": "Apologia Prima",
+                  "author": "Justin Martyr",
+                  "source": "tree_reasoning",
+                  "score": 96,
+                  "canonical_ref": "16",
+                  "section_path": "Book 16"
+                },
+                {
+                  "ref": "P5",
+                  "bundle_id": "ef12a8a5-fb41-4742-b476-16d50a48e1e1::9cd9c005-285e-4de0-b03b-3b963fdab2d4",
+                  "work_title": "Republic (Πολιτεία)",
+                  "author": "Plato",
+                  "source": "tree_reasoning",
+                  "score": 88,
+                  "canonical_ref": "Rep. 1.327",
+                  "section_path": "Book Rep"
+                },
+                {
+                  "ref": "P6",
+                  "bundle_id": "ef12a8a5-fb41-4742-b476-16d50a48e1e1::003d6340-6af3-4a9d-8975-954714e8b110",
+                  "work_title": "Republic (Πολιτεία)",
+                  "author": "Plato",
+                  "source": "tree_reasoning",
+                  "score": 88,
+                  "canonical_ref": "Rep. 6.484",
+                  "section_path": "Book Rep, Chapter 6"
+                }
+              ]
+            }
+          },
+          {
+            "id": "evidence_sufficiency",
+            "title": "Check evidence sufficiency",
+            "status": "complete",
+            "summary": "Sufficiency 100% (needs more evidence).",
+            "metrics": [
+              {
+                "label": "Bundles",
+                "value": 108
+              },
+              {
+                "label": "Works",
+                "value": 4
+              },
+              {
+                "label": "Facets",
+                "value": 5
+              },
+              {
+                "label": "Score",
+                "value": "100%"
+              }
+            ],
+            "details": {
+              "bundle_count": 108,
+              "work_count": 4,
+              "counter_count": 2,
+              "covered_facets": 5,
+              "score": 1.0,
+              "sufficient": false,
+              "reason": "The current evidence bundle set includes 4 distinct works and 2 counter-evidence notes, which is a moderate amount of material. [...]",
+              "refinement": "To responsibly answer the question, a detailed examination of the primary bundles is needed to identify specific passages where Justin Martyr discusses free will and moral responsibility. [...]"
+            }
+          },
+          {
+            "id": "draft_claim_ledger",
+            "title": "Draft claim ledger",
+            "status": "complete",
+            "summary": "10 claims drafted via llm mode.",
+            "metrics": [
+              {
+                "label": "Mode",
+                "value": "llm"
+              },
+              {
+                "label": "Claims",
+                "value": 10
+              }
+            ],
+            "details": {
+              "mode": "llm",
+              "claim_count": 10,
+              "raw_excerpt": "{\n  \"claims\": [\n    {\n      \"claim\": \"Justin Martyr maintains that human beings possess the power of self-determination (autexousion), which is the necessary foundation for moral responsibility and divine judgment.\", [...]"
+            }
+          },
+          {
+            "id": "render_grounded_answer",
+            "title": "Render grounded answer",
+            "status": "complete",
+            "summary": "Answer rendered via llm; polish mode: llm.",
+            "metrics": [
+              {
+                "label": "Mode",
+                "value": "llm"
+              },
+              {
+                "label": "Polish",
+                "value": "llm"
+              }
+            ],
+            "details": {
+              "mode": "llm",
+              "raw_excerpt": "Justin Martyr (c. [...]",
+              "polish_mode": "llm",
+              "compression_repair_mode": "skipped",
+              "render_requirements": {
+                "required_sections": 4,
+                "required_quote_blocks": 2,
+                "min_chars": 1080
+              },
+              "shape_metrics": {
+                "chars": 4695,
+                "section_headers": 4,
+                "quote_blocks": 5
+              }
+            }
+          },
+          {
+            "id": "scholarly_polish",
+            "title": "Scholarly polish",
+            "status": "complete",
+            "summary": "Scholarly polish finished via llm mode.",
+            "metrics": [
+              {
+                "label": "Mode",
+                "value": "llm"
+              }
+            ],
+            "details": {
+              "mode": "llm",
+              "raw_excerpt": "Justin Martyr (c. [...]"
+            }
+          },
+          {
+            "id": "programmatic_verify",
+            "title": "Programmatic verify",
+            "status": "complete",
+            "summary": "8 citations verified in the final answer.",
+            "metrics": [
+              {
+                "label": "Citations",
+                "value": 8
+              }
+            ],
+            "details": {
+              "citation_count": 8,
+              "answer_excerpt": "Justin Martyr (c. [...]"
+            }
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "core_doctrinal_thesis",
+            "title": "Core Doctrinal Thesis",
+            "question": "What core thesis do the relevant ancient sources attribute to What did Justin Martyr believe about free will and moral responsibility??",
+            "summary": "Direct textual evidence centers on Justin Martyr, Dialogus cum Tryphone 102_3, Justin Martyr, Apologia Prima 2.",
+            "required_support": "passage",
+            "priority": 1,
+            "primary_count": 3,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "metadata_count": 2,
+            "note_count": 3,
+            "uncertainty_count": 2
+          },
+          {
+            "facet_id": "textual_witnesses",
+            "title": "Textual Witnesses",
+            "question": "Which passages or testimonia best preserve the ancient evidence for What did Justin Martyr believe about free will and moral responsibility??",
+            "summary": "Direct textual evidence centers on Justin Martyr, Dialogus cum Tryphone 102_3, Justin Martyr, Apologia Prima 2.",
+            "required_support": "passage",
+            "priority": 2,
+            "primary_count": 3,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "metadata_count": 2,
+            "note_count": 3,
+            "uncertainty_count": 2
+          },
+          {
+            "facet_id": "agency_and_responsibility",
+            "title": "Agency and Responsibility",
+            "question": "How do the sources connect What did Justin Martyr believe about free will and moral responsibility? to agency, assent, responsibility, or freedom?",
+            "summary": "Direct textual evidence centers on Justin Martyr, Dialogus cum Tryphone 102_3, Justin Martyr, Apologia Prima 2.",
+            "required_support": "passage",
+            "priority": 3,
+            "primary_count": 3,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "metadata_count": 2,
+            "note_count": 3,
+            "uncertainty_count": 2
+          },
+          {
+            "facet_id": "ancient_testimony_and_preservation",
+            "title": "Ancient Testimony and Preservation",
+            "question": "Through which ancient witnesses, reports, or preserved fragments do we know the evidence for What did Justin Martyr believe about free will and moral responsibility??",
+            "summary": "Direct textual evidence centers on Justin Martyr, Dialogus cum Tryphone 102_3, Justin Martyr, Apologia Prima 2.",
+            "required_support": "passage",
+            "priority": 4,
+            "primary_count": 3,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "metadata_count": 2,
+            "note_count": 3,
+            "uncertainty_count": 2
+          },
+          {
+            "facet_id": "counterpoints_and_limits",
+            "title": "Counterpoints and Limits",
+            "question": "What counter-evidence, disagreement, or textual nuance complicates What did Justin Martyr believe about free will and moral responsibility??",
+            "summary": "Direct textual evidence centers on Justin Martyr, Dialogus cum Tryphone 102_3, Justin Martyr, Apologia Prima 2.",
+            "required_support": "passage",
+            "priority": 4,
+            "primary_count": 3,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "metadata_count": 2,
+            "note_count": 3,
+            "uncertainty_count": 2
+          }
+        ],
+        "works": [
+          {
+            "work_id": "9724e2e3-e0d7-46f9-b342-a4c378afef56",
+            "title": "Book Laws",
+            "author": "Plato",
+            "bundle_count": 70,
+            "section_count": 6,
+            "primary_count": 70,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "has_translation": false,
+            "languages": [
+              "grc"
+            ],
+            "canonical_refs": [
+              "Laws 1.624",
+              "Laws 1.625",
+              "Laws 1.626",
+              "Laws 1.627",
+              "Laws 1.628",
+              "Laws 1.629"
+            ],
+            "sections": [
+              {
+                "node_id": "book_Laws",
+                "title": "Book Laws",
+                "path": "Book Laws"
+              },
+              {
+                "node_id": "book_Laws_ch_1",
+                "title": "Book Laws, Chapter 1",
+                "path": "Book Laws, Chapter 1"
+              },
+              {
+                "node_id": "book_Laws_ch_10",
+                "title": "Book Laws, Chapter 10",
+                "path": "Book Laws, Chapter 10"
+              },
+              {
+                "node_id": "book_Laws_ch_11",
+                "title": "Book Laws, Chapter 11",
+                "path": "Book Laws, Chapter 11"
+              },
+              {
+                "node_id": "book_Laws_ch_12",
+                "title": "Book Laws, Chapter 12",
+                "path": "Book Laws, Chapter 12"
+              },
+              {
+                "node_id": "book_Laws_ch_2",
+                "title": "Book Laws, Chapter 2",
+                "path": "Book Laws, Chapter 2"
+              }
+            ]
+          },
+          {
+            "work_id": "ef12a8a5-fb41-4742-b476-16d50a48e1e1",
+            "title": "Book Rep",
+            "author": "Plato",
+            "bundle_count": 28,
+            "section_count": 3,
+            "primary_count": 28,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "has_translation": false,
+            "languages": [
+              "grc"
+            ],
+            "canonical_refs": [
+              "Rep. 1.327",
+              "Rep. 1.328",
+              "Rep. 1.329",
+              "Rep. 1.330",
+              "Rep. 1.331",
+              "Rep. 1.332"
+            ],
+            "sections": [
+              {
+                "node_id": "book_Rep",
+                "title": "Book Rep",
+                "path": "Book Rep"
+              },
+              {
+                "node_id": "book_Rep_ch_1",
+                "title": "Book Rep, Chapter 1",
+                "path": "Book Rep, Chapter 1"
+              },
+              {
+                "node_id": "book_Rep_ch_6",
+                "title": "Book Rep, Chapter 6",
+                "path": "Book Rep, Chapter 6"
+              }
+            ]
+          },
+          {
+            "work_id": "1fcd8318-4077-42bc-bfd9-362227056356",
+            "title": "Book 100_3",
+            "author": "Justin Martyr",
+            "bundle_count": 5,
+            "section_count": 3,
+            "primary_count": 5,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "has_translation": false,
+            "languages": [
+              "grc"
+            ],
+            "canonical_refs": [
+              "100_3",
+              "101_2",
+              "102_3",
+              "102_4",
+              "88_5"
+            ],
+            "sections": [
+              {
+                "node_id": "book_100_3",
+                "title": "Book 100_3",
+                "path": "Book 100_3"
+              },
+              {
+                "node_id": "book_101_2",
+                "title": "Book 101_2",
+                "path": "Book 101_2"
+              },
+              {
+                "node_id": "book_102_3",
+                "title": "Book 102_3",
+                "path": "Book 102_3"
+              }
+            ]
+          },
+          {
+            "work_id": "7a1b4c9b-489f-4907-801f-26a7f202b664",
+            "title": "Book 15",
+            "author": "Justin Martyr",
+            "bundle_count": 5,
+            "section_count": 3,
+            "primary_count": 5,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "has_translation": false,
+            "languages": [
+              "grc"
+            ],
+            "canonical_refs": [
+              "15",
+              "2",
+              "43",
+              "44",
+              "16"
+            ],
+            "sections": [
+              {
+                "node_id": "book_15",
+                "title": "Book 15",
+                "path": "Book 15"
+              },
+              {
+                "node_id": "book_16",
+                "title": "Book 16",
+                "path": "Book 16"
+              },
+              {
+                "node_id": "book_2",
+                "title": "Book 2",
+                "path": "Book 2"
+              }
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Justin Martyr maintains that human beings possess the power of self-determination (autexousion), which is the necessary foundation for moral responsibility and divine judgment.",
+            "facet_id": "core_doctrinal_thesis",
+            "evidence_class": "direct_text",
+            "support_type": "passage",
+            "confidence": 1.0,
+            "status": "supported",
+            "evidence_ids": [
+              "7a1b4c9b-489f-4907-801f-26a7f202b664::168ce62d-0416-48b4-80f7-c0a56a7584e1",
+              "concept_autexousion_christian_freedom_u1v2w3x4"
+            ],
+            "refs": [
+              "P13",
+              "3"
+            ],
+            "quote_original": "εἰ γὰρ εἱμαρμένον εἴη τὸ τὸν ἀγαθὸν εἶναι καὶ τὸ τὸν φαῦλον, οὔτε ὁ μὲν ἀποδεκτός ἐστιν οὐδὲ ὁ μεμπτός.",
+            "quote_translation": "For if it were fated that one should be good and another evil, neither would the one be acceptable nor the other blameworthy."
+          },
+          {
+            "claim": "Justin argues that if human actions were determined by fate (heimarmene), the concepts of virtue and vice would be meaningless, as no one would be the cause of their own conduct.",
+            "facet_id": "agency_and_responsibility",
+            "evidence_class": "direct_text",
+            "support_type": "passage",
+            "confidence": 1.0,
+            "status": "supported",
+            "evidence_ids": [
+              "7a1b4c9b-489f-4907-801f-26a7f202b664::168ce62d-0416-48b4-80f7-c0a56a7584e1"
+            ],
+            "refs": [
+              "P13"
+            ],
+            "quote_original": "τὸ ἐφ' ἡμῖν οὐδὲν ἔστιν ὅλως.",
+            "quote_translation": "what is up to us is absolutely nothing."
+          },
+          {
+            "claim": "In his First Apology, Justin reconciles divine prophecy with human freedom by asserting that God foreknows future actions without necessitating them.",
+            "facet_id": "core_doctrinal_thesis",
+            "evidence_class": "direct_text",
+            "support_type": "passage",
+            "confidence": 0.95,
+            "status": "supported",
+            "evidence_ids": [
+              "7a1b4c9b-489f-4907-801f-26a7f202b664::980347a7-bcdc-4b36-afa0-6a57c1feb8eb"
+            ],
+            "refs": [
+              "P14"
+            ],
+            "quote_original": "ὅπως τὰ μέλλοντα ὑπ' αὐτῶν πραχθήσεσθαι προεγνωσμένα φαίνηται.",
+            "quote_translation": "so that future things to be done by them might appear foreknown."
+          },
+          {
+            "claim": "Justin's defense of free will is explicitly framed as a refutation of Stoic fatalism, emphasizing that rational creatures are capable of choosing both good and evil.",
+            "facet_id": "ancient_testimony_and_preservation",
+            "evidence_class": "direct_text",
+            "support_type": "passage",
+            "confidence": 1.0,
+            "status": "supported",
+            "evidence_ids": [
+              "1fcd8318-4077-42bc-bfd9-362227056356::ad0049c4-8fa3-417c-9f02-42a98b0a862f",
+              "7a1b4c9b-489f-4907-801f-26a7f202b664::168ce62d-0416-48b4-80f7-c0a56a7584e1"
+            ],
+            "refs": [
+              "P11",
+              "P13"
+            ],
+            "quote_original": "αὐτεξούσιον γὰρ καὶ τῶν ἀγγέλων γένος καὶ τῶν ἀνθρώπων τὴν ἀρχὴν ἐποίησεν ὁ θεός.",
+            "quote_translation": "For God in the beginning made the race of angels and of men self-determining."
+          },
+          {
+            "claim": "The Dialogue with Trypho extends the doctrine of free will to include angels, arguing that their fall was a result of their own choice rather than divine necessity.",
+            "facet_id": "textual_witnesses",
+            "evidence_class": "direct_text",
+            "support_type": "passage",
+            "confidence": 0.9,
+            "status": "supported",
+            "evidence_ids": [
+              "1fcd8318-4077-42bc-bfd9-362227056356::2f964a9d-cbc8-45c5-8ed3-53468537382f",
+              "1fcd8318-4077-42bc-bfd9-362227056356::7b029b3b-d680-4362-a0ea-8ef4b2aef215"
+            ],
+            "refs": [
+              "P1",
+              "P12"
+            ],
+            "quote_original": "δι' ἑαυτοὺς φαῦλοι γεγόνασι.",
+            "quote_translation": "they became evil through their own fault."
+          },
+          {
+            "claim": "Modern scholarship, such as that of Carl Andresen, suggests that Justin's formulation of fate and autonomy was influenced by Middle Platonist structures, specifically mirroring Alcinous.",
+            "facet_id": "ancient_testimony_and_preservation",
+            "evidence_class": "metadata",
+            "support_type": "metadata",
+            "confidence": 0.85,
+            "status": "supported",
+            "evidence_ids": [
+              "person_justin_martyr_2c_ce"
+            ],
+            "refs": [
+              "2"
+            ],
+            "quote_original": null,
+            "quote_translation": null
+          },
+          {
+            "claim": "Justin utilizes the Platonic principle that 'the blame is his who chooses; God is blameless' to defend the justice of God in the face of human sin.",
+            "facet_id": "agency_and_responsibility",
+            "evidence_class": "direct_text",
+            "support_type": "passage",
+            "confidence": 1.0,
+            "status": "supported",
+            "evidence_ids": [
+              "7a1b4c9b-489f-4907-801f-26a7f202b664::980347a7-bcdc-4b36-afa0-6a57c1feb8eb"
+            ],
+            "refs": [
+              "P14"
+            ],
+            "quote_original": "αἰτία δὲ τοῦ αἱρουμένου, θεὸς δὲ ἀναίτιος.",
+            "quote_translation": "The blame is his who chooses, but God is blameless."
+          },
+          {
+            "claim": "While Justin strongly asserts free will, the surviving evidence is less explicit regarding the precise mechanism of grace's interaction with the human will, a topic that would become more central in later Patristic thought.",
+            "facet_id": "counterpoints_and_limits",
+            "evidence_class": "direct_text",
+            "support_type": "passage",
+            "confidence": 0.7,
+            "status": "supported",
+            "evidence_ids": [
+              "7a1b4c9b-489f-4907-801f-26a7f202b664::5b527340-0080-4152-b57f-4cc118669a13"
+            ],
+            "refs": [
+              "P3"
+            ],
+            "quote_original": null,
+            "quote_translation": null
+          },
+          {
+            "claim": "Core Doctrinal Thesis: direct textual evidence centers on Justin Martyr, Dialogus cum Tryphone 102_3, Justin Martyr, Apologia Prima 2.",
+            "facet_id": "core_doctrinal_thesis",
+            "evidence_class": "direct_text",
+            "support_type": "passage",
+            "confidence": 0.7,
+            "status": "supported",
+            "evidence_ids": [
+              "1fcd8318-4077-42bc-bfd9-362227056356::2f964a9d-cbc8-45c5-8ed3-53468537382f",
+              "7a1b4c9b-489f-4907-801f-26a7f202b664::5b527340-0080-4152-b57f-4cc118669a13",
+              "person_alexander_aphrodisias_fl200ce_n5o6p7q8"
+            ],
+            "refs": [
+              "P1",
+              "P3",
+              "6"
+            ],
+            "quote_original": "Ἐὰν δέ τις ἡμῖν λέγῃ· Μὴ γὰρ οὐκ ἠδύνατο ὁ θεὸς μᾶλλον τὸν Ἡρώδην ἀποκτεῖναι; προλαβὼν λέγω· [...]",
+            "quote_translation": null
+          },
+          {
+            "claim": "Core Doctrinal Thesis: Justin Martyr, Dialogus cum Tryphone 102_3 provides a textual anchor for this issue.",
+            "facet_id": "core_doctrinal_thesis",
+            "evidence_class": "direct_text",
+            "support_type": "passage",
+            "confidence": 0.68,
+            "status": "supported",
+            "evidence_ids": [
+              "1fcd8318-4077-42bc-bfd9-362227056356::2f964a9d-cbc8-45c5-8ed3-53468537382f"
+            ],
+            "refs": [
+              "P1"
+            ],
+            "quote_original": "Ἐὰν δέ τις ἡμῖν λέγῃ· Μὴ γὰρ οὐκ ἠδύνατο ὁ θεὸς μᾶλλον τὸν Ἡρώδην ἀποκτεῖναι; προλαβὼν λέγω· [...]",
+            "quote_translation": "Ἐὰν δέ τις ἡμῖν λέγῃ· Μὴ γὰρ οὐκ ἠδύνατο ὁ θεὸς μᾶλλον τὸν Ἡρώδην ἀποκτεῖναι; προλαβὼν λέγω· [...]"
+          }
+        ],
+        "hypotheses": [
+          "The main answer is textually well supported for: What did Justin Martyr believe about free will and moral responsibility?",
+          "The evidence is more fragmented or interpretive for: What did Justin Martyr believe about free will and moral responsibility?"
+        ],
+        "open_questions": [
+          "What did Justin Martyr believe about free will and moral responsibility?"
+        ],
+        "counter_evidence": [
+          "These passages show that Justin Martyr explicitly rejects a deterministic view of events ('not according to fate') and affirms human choice between good and evil (cf. P12 quoting Moses and Isaiah: 'choose the good'). This provides important nuance and counter‑evidence to any simplistic claim that Justin unconditionally endorses free will without qualification.",
+          "The notes include clear passages where Justin Martyr explicitly speaks of ‘free choice’ (ἐλευθέρᾳ προαιρέσει) and of human responsibility for choosing good or evil (P11). He also argues against a deterministic view that everything happens ‘by fate’ (κατὰ εἱμαρμένην) and affirms that punishments and rewards are apportioned according to each person’s deeds (P13). These texts directly support the claim that Justin believed in free will and moral responsibility, and no passage in the bundle contradicts this view."
+        ],
+        "uncertainties": [
+          "The evidence bundle set includes four distinct works by Justin Martyr, which is a good starting point. However, the counter-evidence notes indicate potential complexities or alternative interpretations that need to be carefully considered. The open questions suggest that there may be nuances or gaps in the current understanding of Justin Martyr's beliefs on free will and moral responsibility.",
+          "The current evidence bundle set includes 4 distinct works and 2 counter-evidence notes, which is a moderate amount of material. However, without knowing the specific content and context of these works, it is difficult to determine if they comprehensively cover Justin Martyr's beliefs on free will and moral responsibility. The notebook open questions indicate that this topic is still under investigation."
+        ]
+      },
+      "complexity": "medium",
+      "iterations": 2,
+      "sub_queries": [
+        "To responsibly answer the question, a deeper analysis of the primary bundles is required, especially focusing on how Justin Martyr addresses free will and moral responsibility within his theological framework. Additionally, the counter-evidence notes should be thoroughly examined to understand any dissenting views or alternative interpretations. Further research into secondary sources that provide scholarly commentary on Justin Martyr's works could also be beneficial."
+      ],
+      "quality_badge": "High",
+      "grounding_policy": "mixed_evidence",
+      "claim_ledger_size": 10
+    },
+    "llm_provider": "openrouter",
+    "llm_model": "google/gemini-3-flash-preview",
+    "processing_time_seconds": 156.494
+  },
+  "scorecards": {
+    "arm_a_prod": {
+      "chars": 5145,
+      "citations": 0,
+      "ref_markers": 19,
+      "quote_blocks": 11,
+      "section_headers": 5,
+      "paragraphs": 15,
+      "scholarly_cues": 0,
+      "pipeline_degraded": null,
+      "claim_ledger_mode": null,
+      "render_answer_mode": null,
+      "quality_badge": null
+    },
+    "arm_b_new_system": {
+      "chars": 4526,
+      "citations": 8,
+      "ref_markers": 8,
+      "quote_blocks": 0,
+      "section_headers": 4,
+      "paragraphs": 11,
+      "scholarly_cues": 0,
+      "pipeline_degraded": null,
+      "claim_ledger_mode": "llm",
+      "render_answer_mode": "llm",
+      "quality_badge": "High"
+    }
+  }
+}

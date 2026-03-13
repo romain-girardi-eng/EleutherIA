@@ -855,7 +855,7 @@
     "attribution": "Attribution",
     "attributionDesc": "Vous devez donner le crédit approprié, fournir un lien vers la licence et indiquer si des modifications ont été apportées",
     "suggestedCitation": "Citation suggérée :",
-    "citationText": "Girardi, R. (2025). EleutherIA : Un graphe de connaissances conforme aux principes FAIR pour les débats antiques sur le libre arbitre [Ensemble de données]. Zenodo. https://doi.org/10.5281/zenodo.17379490",
+    "citationText": "Girardi, R. (2026). EleutherIA : Un graphe de connaissances conforme aux principes FAIR pour les débats antiques sur le libre arbitre [Ensemble de données]. Zenodo. https://doi.org/10.5281/zenodo.17379489",
     "acknowledgments": "Remerciements",
     "thanksIntro": "Remerciements particuliers à la communauté open source, aux mainteneurs de la Perseus Digital Library et à tous les chercheurs dont les travaux sont cités dans cette base de données."
   },
@@ -1309,7 +1309,7 @@
       "titleHighlight": "rencontre l'IA moderne",
       "subtitle": "Découvrez comment les graphes de connaissances, les embeddings sémantiques et le GraphRAG s'unissent pour illuminer 1 200 ans de pensée philosophique. 2 159 nœuds, 151 œuvres antiques et plus de 14 600 passages à portée de main.",
       "cta": "Commencer l'apprentissage",
-      "doi": "DOI : 10.5281/zenodo.17379490",
+      "doi": "DOI : 10.5281/zenodo.17379489",
       "license": "Licence CC BY 4.0",
       "openSource": "Open Source"
     },

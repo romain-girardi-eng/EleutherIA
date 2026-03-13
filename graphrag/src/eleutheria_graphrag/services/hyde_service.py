@@ -37,6 +37,7 @@ Alexander of Aphrodisias, etc.)
 Write only the passage, no preamble."""
 
 CONFIDENCE_DISCOUNT = 0.9
+EMBEDDING_MODEL = os.getenv("GEMINI_EMBEDDING_MODEL", "models/gemini-embedding-001")
 
 
 async def _get_embedding(text: str) -> list[float]:
@@ -51,8 +52,9 @@ async def _get_embedding(text: str) -> list[float]:
 
     def _embed() -> list[float]:
         result = genai.embed_content(
-            model="models/gemini-embedding-001",
+            model=EMBEDDING_MODEL,
             content=text,
+            task_type="retrieval_query",
         )
         return result["embedding"]
 

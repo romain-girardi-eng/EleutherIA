@@ -127,3 +127,6 @@ agents.md
 
 # Git worktrees
 .worktrees/
+
+# Local Codex workspace artifacts
+.superpowers/

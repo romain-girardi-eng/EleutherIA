@@ -1,0 +1,2620 @@
+{
+  "generated_at": "2026-03-13T00:13:43Z",
+  "query": "What did Origen believe about free will, providence, and moral responsibility?",
+  "prod_url": "https://free-will.app/api/graphrag/answer",
+  "arm_a_prod": {
+    "http_status": 200,
+    "processing_time_seconds": 16.892,
+    "response_json": {
+      "answer": "Origen of Alexandria (c. 185–253 CE) is regarded as the most philosophically sophisticated Patristic defender of human freedom, developing the first systematic Christian \"metaphysics of freedom\" [Source 1], [Source 7]. His work, particularly *De Principiis* (Περὶ Ἀρχῶν) Book III, serves as a foundational defense of human agency against Stoic fate (εἱμαρμένη), Gnostic predestinarianism, and astrological determinism [Source 2], [Source 10].\n\n### 1. The Definition of *Autexousion* (Αὐτεξούσιον)\nOrigen’s technical term for free will is **αὐτεξούσιον** (*autexousion*), which denotes \"self-determining power\" or being \"master of oneself\" [Source 1], [Source 17]. He distinguishes between external circumstances and the internal rational response.\n\nIn *De Principiis* III.1.3 (preserved in the *Philocalia*), Origen writes:\n> \"Τὰ μὲν ἔξωθεν ἡμῖν συμβαίνοντα οὐκ ἔστιν ἐφ' ἡμῖν· τὸ δὲ ὁρίσαι καὶ δοκιμάσαι πῶς τούτοις χρηστέον... οὐδενὸς ἄλλου ἔργον ἐστὶν ἢ τοῦ ἐν ἡμῖν λόγου, τουτέστι τῆς αὐτεξουσίου ἡμῶν κρίσεως.\" \n> (What happens to us from outside is not in our power [οὐκ ἔστιν ἐφ' ἡμῖν]; but to determine and judge how we should use these things... is the work of nothing else than the reason within us, that is, of our self-determining judgment [τῆς αὐτεξουσίου ἡμῶν κρίσεως].) [Source 8]\n\nThis definition draws on the Epictetan distinction between things \"up to us\" and things \"not up to us,\" grounding freedom in the rational soul's capacity to judge and assent to impressions [Source 5], [Source 8].\n\n### 2. Moral Responsibility and Divine Justice\nFor Origen, the existence of *autexousion* is a necessary condition for moral responsibility and divine justice. He argues that if human actions were necessitated by fate or nature, praise and blame would be meaningless [Source 1].\n\nIn *Against Celsus*, Origen contends that virtue must be voluntary:\n> \"...ἐὰν γὰρ ἀνέλῃς τὸ ἑκούσιον τῆς ἀρετῆς, ἀνεῖλες αὐτῆς καὶ τὴν οὐσίαν.\"\n> (...for if you remove the voluntary character [τὸ ἑκούσιον] of virtue, you destroy its very essence [οὐσίαν].) [Source 4]\n\nHe further argues that God’s justice in rewarding or punishing individuals presupposes that they had the power to choose otherwise. Without this power, God would be the author of evil, a conclusion Origen rejects by asserting that evil results from the creaturely misuse of freedom [Source 6], [Source 10].\n\n### 3. Reconciling Providence and Foreknowledge\nA major challenge Origen addressed was how divine providence (πρόνοια) and foreknowledge (πρόγνωσις) could coexist with human freedom. He famously argued that **foreknowledge is not causality** [Source 9], [Source 19].\n\nIn *De Oratione* 6, he explains:\n> \"Ἡ πρόγνωσις τοῦ θεοῦ οὐκ ἔστιν αἰτία πάντων τῶν ἐσομένων καὶ τῶν ἀπ' αὐτεξουσίου κινήσεως ἡμῶν ἀποβησομένων.\"\n> (God's prescience is not the cause of all future events or of those resulting from our self-determining motion.) [Source 9], [Source 11]\n\nHe clarifies the logical priority of the event over the knowledge of it:\n> \"...οὐχ ὅτι γινώσκει ὁ θεὸς τὸ ἐσόμενον, διὰ τοῦτο καὶ ἔσται· ἀλλ' ὅτι ἐσόμενόν ἐστι, διὰ τοῦτο γινώσκεται ὑπὸ τοῦ θεοῦ πρὸ τοῦ γενέσθαι.\"\n> (...it is not because God knows that it will be, that it will be; but because it will be, that God knows it beforehand.) [Source 9], [Source 11]\n\nTo illustrate this, Origen uses the analogy of an astronomer: just as an astronomer predicts an eclipse without causing it, God foreknows free human choices without necessitating them [Source 9], [Source 14].\n\n### 4. Polemics Against Determinism\nOrigen’s defense of freedom was forged in opposition to three main deterministic systems:\n\n* **Stoic Fate (εἱμαρμένη):** Origen utilized Carneadean anti-fatalist arguments to show that if fate governs all, then admonition, laws, and piety are useless [Source 1], [Source 10]. He specifically refuted the *argos logos* (lazy argument), which suggests that if an outcome is fated, effort is pointless [Source 14].\n* **Gnostic Determinism:** He rejected the Valentinian doctrine that humans are \"saved by nature\" (the *pneumatikoi*) or \"damned by nature\" (the *hylikoi*). Origen insisted that all rational beings were created equal and that their current status (angelic, human, or demonic) is the result of prior free choices [Source 2], [Source 10].\n* **Astrological Determinism:** Origen argued that stars are \"signs\" (σημεῖα) rather than \"causes\" (αἰτίαι). He famously used the \"twin argument\" (Jacob and Esau) to demonstrate that individuals born under the same celestial configuration can have vastly different moral characters and fates [Source 16].\n\n### 5. Scholarly Synthesis\nModern scholarship, such as the work of C. Hengstermann, emphasizes that Origen created a \"metaphysics of freedom\" where reality is structured as a hierarchy of graded freedom [Source 7]. While Origen’s position is often described as \"libertarian\" because he insists on genuine alternatives and the soul as the true originator of choice, scholars like Frede and Bobzien note the complexity of applying modern labels to ancient voluntarism [Source 1], [Source 17]. Ultimately, Origen’s synthesis of Platonic philosophy and Christian scripture established the framework for the Greek Patristic consensus on *autexousion* and influenced the Latin development of *liberum arbitrium* [Source 1], [Source 17].",
+      "sources": [],
+      "evidence": [
+        {
+          "claim": "185–253 CE) is regarded as the most philosophically sophisticated Patristic defender of human freedom, developing the first systematic Christian \"metaphysics of freedom\" [Source 1], [Source 7].",
+          "kgNodes": [
+            "person_origen_alexandria_185_254ce_s9t0u1v2",
+            "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+            "argument_origen_free_will_theodicy_6f9d8a3c",
+            "pub_hengstermann_2016_freiheitsmetaphysik",
+            "passage_origen_de_orat_6"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "His work, particularly *De Principiis* (Περὶ Ἀρχῶν) Book III, serves as a foundational defense of human agency against Stoic fate (εἱμαρμένη), Gnostic predestinarianism, and astrological determinism [Source 2], [Source 10].",
+          "kgNodes": [
+            "person_origen_alexandria_185_254ce_s9t0u1v2",
+            "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+            "pub_hengstermann_2016_freiheitsmetaphysik",
+            "work_de_principiis_origen_230s_v2w3x4y5",
+            "sc268_origenes_peri_archon"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "The Definition of *Autexousion* (Αὐτεξούσιον)\nOrigen’s technical term for free will is **αὐτεξούσιον** (*autexousion*), which denotes \"self-determining power\" or being \"master of oneself\" [Source 1], [Source 17].",
+          "kgNodes": [
+            "person_origen_alexandria_185_254ce_s9t0u1v2",
+            "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+            "quote_origen_autexousion_abbb5a2e",
+            "passage_origen_pa_3_1_3_en",
+            "argument_origen_free_will_theodicy_6f9d8a3c"
+          ],
+          "ancientSources": [
+            {
+              "citationText": "Origen, De Principiis III. 1.3",
+              "title": "De Principiis III.",
+              "author": "Origen",
+              "reference": "1.3",
+              "confidence": 0.7597725
+            },
+            {
+              "citationText": "Origen, De Principiis III. 1.3",
+              "title": "De Principiis III.",
+              "author": "Origen",
+              "originalText": "Τὰ μὲν ἔξωθεν ἡμῖν συμβαίνοντα οὐκ ἔστιν ἐφ' ἡμῖν· τὸ δὲ ὁρίσαι καὶ δοκιμάσαι πῶς τούτοις χρηστέον",
+              "language": "greek",
+              "reference": "1.3",
+              "confidence": 0.7498243
+            },
+            {
+              "citationText": "Origen, De Oratione 6",
+              "title": "De Oratione",
+              "author": "Origen",
+              "originalText": "Ἡ πρόγνωσις τοῦ θεοῦ οὐκ ἔστιν αἰτία πάντων τῶν ἐσομένων καὶ τῶν ἀπ' αὐτεξουσίου κινήσεως ἡμῶν ἀποβησομένων",
+              "language": "greek",
+              "reference": "6",
+              "confidence": 0.7492748
+            }
+          ],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "In *De Principiis* III.1.3 (preserved in the *Philocalia*), Origen writes:\n> \"Τὰ μὲν ἔξωθεν ἡμῖν συμβαίνοντα οὐκ ἔστιν ἐφ' ἡμῖν· τὸ δὲ ὁρίσαι καὶ δοκιμάσαι πῶς τούτοις χρηστέον...",
+          "kgNodes": [],
+          "ancientSources": [
+            {
+              "citationText": "Origen, De Principiis III. 1.3",
+              "title": "De Principiis III.",
+              "author": "Origen",
+              "reference": "1.3",
+              "confidence": 0.7597725
+            },
+            {
+              "citationText": "Origen, De Principiis III. 1.3",
+              "title": "De Principiis III.",
+              "author": "Origen",
+              "originalText": "Τὰ μὲν ἔξωθεν ἡμῖν συμβαίνοντα οὐκ ἔστιν ἐφ' ἡμῖν· τὸ δὲ ὁρίσαι καὶ δοκιμάσαι πῶς τούτοις χρηστέον",
+              "language": "greek",
+              "reference": "1.3",
+              "confidence": 0.7498243
+            },
+            {
+              "citationText": "Origen, De Oratione 6",
+              "title": "De Oratione",
+              "author": "Origen",
+              "originalText": "Ἡ πρόγνωσις τοῦ θεοῦ οὐκ ἔστιν αἰτία πάντων τῶν ἐσομένων καὶ τῶν ἀπ' αὐτεξουσίου κινήσεως ἡμῶν ἀποβησομένων",
+              "language": "greek",
+              "reference": "6",
+              "confidence": 0.7492748
+            }
+          ],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "is the work of nothing else than the reason within us, that is, of our self-determining judgment [τῆς αὐτεξουσίου ἡμῶν κρίσεως].) [Source 8]\n\nThis definition draws on the Epictetan distinction between things \"up to us\" and things \"not up to us,\" grounding freedom in the rational soul's capacity to judge and assent to impressions [Source 5], [Source 8].",
+          "kgNodes": [
+            "person_origen_alexandria_185_254ce_s9t0u1v2",
+            "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+            "argument_origen_free_will_theodicy_6f9d8a3c",
+            "pub_hengstermann_2016_freiheitsmetaphysik",
+            "passage_origen_de_orat_6"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        }
+      ],
+      "evidenceChains": [
+        {
+          "claim": "185–253 CE) is regarded as the most philosophically sophisticated Patristic defender of human freedom, developing the first systematic Christian \"metaphysics of freedom\" [Source 1], [Source 7].",
+          "kgNodes": [
+            "person_origen_alexandria_185_254ce_s9t0u1v2",
+            "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+            "argument_origen_free_will_theodicy_6f9d8a3c",
+            "pub_hengstermann_2016_freiheitsmetaphysik",
+            "passage_origen_de_orat_6"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "His work, particularly *De Principiis* (Περὶ Ἀρχῶν) Book III, serves as a foundational defense of human agency against Stoic fate (εἱμαρμένη), Gnostic predestinarianism, and astrological determinism [Source 2], [Source 10].",
+          "kgNodes": [
+            "person_origen_alexandria_185_254ce_s9t0u1v2",
+            "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+            "pub_hengstermann_2016_freiheitsmetaphysik",
+            "work_de_principiis_origen_230s_v2w3x4y5",
+            "sc268_origenes_peri_archon"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "The Definition of *Autexousion* (Αὐτεξούσιον)\nOrigen’s technical term for free will is **αὐτεξούσιον** (*autexousion*), which denotes \"self-determining power\" or being \"master of oneself\" [Source 1], [Source 17].",
+          "kgNodes": [
+            "person_origen_alexandria_185_254ce_s9t0u1v2",
+            "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+            "quote_origen_autexousion_abbb5a2e",
+            "passage_origen_pa_3_1_3_en",
+            "argument_origen_free_will_theodicy_6f9d8a3c"
+          ],
+          "ancientSources": [
+            {
+              "citationText": "Origen, De Principiis III. 1.3",
+              "title": "De Principiis III.",
+              "author": "Origen",
+              "reference": "1.3",
+              "confidence": 0.7597725
+            },
+            {
+              "citationText": "Origen, De Principiis III. 1.3",
+              "title": "De Principiis III.",
+              "author": "Origen",
+              "originalText": "Τὰ μὲν ἔξωθεν ἡμῖν συμβαίνοντα οὐκ ἔστιν ἐφ' ἡμῖν· τὸ δὲ ὁρίσαι καὶ δοκιμάσαι πῶς τούτοις χρηστέον",
+              "language": "greek",
+              "reference": "1.3",
+              "confidence": 0.7498243
+            },
+            {
+              "citationText": "Origen, De Oratione 6",
+              "title": "De Oratione",
+              "author": "Origen",
+              "originalText": "Ἡ πρόγνωσις τοῦ θεοῦ οὐκ ἔστιν αἰτία πάντων τῶν ἐσομένων καὶ τῶν ἀπ' αὐτεξουσίου κινήσεως ἡμῶν ἀποβησομένων",
+              "language": "greek",
+              "reference": "6",
+              "confidence": 0.7492748
+            }
+          ],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "In *De Principiis* III.1.3 (preserved in the *Philocalia*), Origen writes:\n> \"Τὰ μὲν ἔξωθεν ἡμῖν συμβαίνοντα οὐκ ἔστιν ἐφ' ἡμῖν· τὸ δὲ ὁρίσαι καὶ δοκιμάσαι πῶς τούτοις χρηστέον...",
+          "kgNodes": [],
+          "ancientSources": [
+            {
+              "citationText": "Origen, De Principiis III. 1.3",
+              "title": "De Principiis III.",
+              "author": "Origen",
+              "reference": "1.3",
+              "confidence": 0.7597725
+            },
+            {
+              "citationText": "Origen, De Principiis III. 1.3",
+              "title": "De Principiis III.",
+              "author": "Origen",
+              "originalText": "Τὰ μὲν ἔξωθεν ἡμῖν συμβαίνοντα οὐκ ἔστιν ἐφ' ἡμῖν· τὸ δὲ ὁρίσαι καὶ δοκιμάσαι πῶς τούτοις χρηστέον",
+              "language": "greek",
+              "reference": "1.3",
+              "confidence": 0.7498243
+            },
+            {
+              "citationText": "Origen, De Oratione 6",
+              "title": "De Oratione",
+              "author": "Origen",
+              "originalText": "Ἡ πρόγνωσις τοῦ θεοῦ οὐκ ἔστιν αἰτία πάντων τῶν ἐσομένων καὶ τῶν ἀπ' αὐτεξουσίου κινήσεως ἡμῶν ἀποβησομένων",
+              "language": "greek",
+              "reference": "6",
+              "confidence": 0.7492748
+            }
+          ],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "is the work of nothing else than the reason within us, that is, of our self-determining judgment [τῆς αὐτεξουσίου ἡμῶν κρίσεως].) [Source 8]\n\nThis definition draws on the Epictetan distinction between things \"up to us\" and things \"not up to us,\" grounding freedom in the rational soul's capacity to judge and assent to impressions [Source 5], [Source 8].",
+          "kgNodes": [
+            "person_origen_alexandria_185_254ce_s9t0u1v2",
+            "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+            "argument_origen_free_will_theodicy_6f9d8a3c",
+            "pub_hengstermann_2016_freiheitsmetaphysik",
+            "passage_origen_de_orat_6"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        }
+      ],
+      "ancientCitations": [
+        {
+          "citationText": "Unknown, Origen on autexousion (self-determining power) (De Principiis III.1)",
+          "title": "Origen on autexousion (self-determining power) (De Principiis III.1)",
+          "author": "Unknown",
+          "confidence": 0.7644637
+        },
+        {
+          "citationText": "SC 136, § 3",
+          "title": "§",
+          "author": "SC 136",
+          "reference": "3",
+          "confidence": 0.75991
+        },
+        {
+          "citationText": "Origen, De Principiis III. 1.3",
+          "title": "De Principiis III.",
+          "author": "Origen",
+          "reference": "1.3",
+          "confidence": 0.7597725
+        },
+        {
+          "citationText": "Origen, De Principiis III. 1.3",
+          "title": "De Principiis III.",
+          "author": "Origen",
+          "originalText": "Τὰ μὲν ἔξωθεν ἡμῖν συμβαίνοντα οὐκ ἔστιν ἐφ' ἡμῖν· τὸ δὲ ὁρίσαι καὶ δοκιμάσαι πῶς τούτοις χρηστέον",
+          "language": "greek",
+          "reference": "1.3",
+          "confidence": 0.7498243
+        },
+        {
+          "citationText": "Origen, De Oratione 6",
+          "title": "De Oratione",
+          "author": "Origen",
+          "originalText": "Ἡ πρόγνωσις τοῦ θεοῦ οὐκ ἔστιν αἰτία πάντων τῶν ἐσομένων καὶ τῶν ἀπ' αὐτεξουσίου κινήσεως ἡμῶν ἀποβησομένων",
+          "language": "greek",
+          "reference": "6",
+          "confidence": 0.7492748
+        },
+        {
+          "citationText": "Origen, De Oratione 6",
+          "title": "De Oratione",
+          "author": "Origen",
+          "originalText": "GOD'S PRESCIENCE IS NOT THE CAUSE of all future events or of those resulting from our self-determining motion.",
+          "reference": "6",
+          "confidence": 0.7482145
+        },
+        {
+          "citationText": "Origen, Philocalia",
+          "passageId": "814cc8a1-0346-44a4-afa1-589dda8be0aa",
+          "workId": "42c3288c-f9d2-492f-9bce-56aa35381058",
+          "title": "Philocalia",
+          "author": "Origen",
+          "confidence": 0.72084194
+        },
+        {
+          "citationText": "Origen, Philocalia",
+          "passageId": "814cc8a1-0346-44a4-afa1-589dda8be0aa",
+          "workId": "42c3288c-f9d2-492f-9bce-56aa35381058",
+          "title": "Philocalia",
+          "author": "Origen",
+          "confidence": 0.7077859
+        },
+        {
+          "citationText": "Origen, Philocalia",
+          "passageId": "814cc8a1-0346-44a4-afa1-589dda8be0aa",
+          "workId": "42c3288c-f9d2-492f-9bce-56aa35381058",
+          "title": "Philocalia",
+          "author": "Origen",
+          "confidence": 0.7036004
+        },
+        {
+          "citationText": "Eusebius, Ecclesiastical History and Apologetic Works",
+          "passageId": "a25763c3-d75b-4c74-8aa5-97f601e34d4e",
+          "workId": "c477adaf-c35a-4992-8383-def32d51ad76",
+          "title": "Ecclesiastical History and Apologetic Works",
+          "author": "Eusebius",
+          "confidence": 0.6900562
+        },
+        {
+          "citationText": "Origen, Philocalia",
+          "passageId": "814cc8a1-0346-44a4-afa1-589dda8be0aa",
+          "workId": "42c3288c-f9d2-492f-9bce-56aa35381058",
+          "title": "Philocalia",
+          "author": "Origen",
+          "confidence": 0.68967974
+        },
+        {
+          "citationText": "Origen, Philocalia",
+          "passageId": "814cc8a1-0346-44a4-afa1-589dda8be0aa",
+          "workId": "42c3288c-f9d2-492f-9bce-56aa35381058",
+          "title": "Philocalia",
+          "author": "Origen",
+          "confidence": 0.68905723
+        },
+        {
+          "citationText": "Eusebius, Ecclesiastical History and Apologetic Works",
+          "passageId": "a25763c3-d75b-4c74-8aa5-97f601e34d4e",
+          "workId": "c477adaf-c35a-4992-8383-def32d51ad76",
+          "title": "Ecclesiastical History and Apologetic Works",
+          "author": "Eusebius",
+          "confidence": 0.6873898
+        },
+        {
+          "citationText": "Plotinus, Enneads (Complete)",
+          "passageId": "82920a1b-253e-40ac-9581-0052b097d8de",
+          "workId": "2e341c0f-9c75-4765-b1bc-090a6376f865",
+          "title": "Enneads (Complete)",
+          "author": "Plotinus",
+          "confidence": 0.68560314
+        },
+        {
+          "citationText": "Justin Martyr, Apologia",
+          "passageId": "41ff4a84-a400-4552-9268-a45dea236392",
+          "workId": "1dca3b3a-32d1-462a-ad3b-134ae12afc64",
+          "title": "Apologia",
+          "author": "Justin Martyr",
+          "confidence": 0.6828861
+        },
+        {
+          "citationText": "Eusebius, Praeperatio Evangelica",
+          "passageId": "f6ce9d0f-01e7-4495-861c-b8aeb2bfe20b",
+          "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+          "title": "Praeperatio Evangelica",
+          "author": "Eusebius",
+          "confidence": 0.68203294
+        },
+        {
+          "citationText": "Plotinus, Enneads (Complete)",
+          "passageId": "82920a1b-253e-40ac-9581-0052b097d8de",
+          "workId": "2e341c0f-9c75-4765-b1bc-090a6376f865",
+          "title": "Enneads (Complete)",
+          "author": "Plotinus",
+          "confidence": 0.6800494
+        },
+        {
+          "citationText": "Origen, Philocalia",
+          "passageId": "814cc8a1-0346-44a4-afa1-589dda8be0aa",
+          "workId": "42c3288c-f9d2-492f-9bce-56aa35381058",
+          "title": "Philocalia",
+          "author": "Origen",
+          "confidence": 0.6791112
+        },
+        {
+          "citationText": "Plotinus, Enneads (Complete)",
+          "passageId": "1e22a457-1b91-4bbe-8b6b-9e562de9e1f7",
+          "workId": "2e341c0f-9c75-4765-b1bc-090a6376f865",
+          "title": "Enneads (Complete)",
+          "author": "Plotinus",
+          "confidence": 0.6782594
+        },
+        {
+          "citationText": "Plotinus, Enneads (Complete)",
+          "passageId": "3abda23d-fb85-4982-8d44-66cdd7a20ad8",
+          "workId": "2e341c0f-9c75-4765-b1bc-090a6376f865",
+          "title": "Enneads (Complete)",
+          "author": "Plotinus",
+          "confidence": 0.6779108
+        },
+        {
+          "citationText": "Nemesius, De Natura Hominis (On the Nature of Man)",
+          "passageId": "0aaf0a16-880f-4c9b-b749-fe205be1c650",
+          "workId": "8955e3a1-23bd-4261-b37c-d9940de48b4b",
+          "title": "De Natura Hominis (On the Nature of Man)",
+          "author": "Nemesius",
+          "confidence": 0.67781115
+        },
+        {
+          "citationText": "Origen, Philocalia",
+          "passageId": "f4fb2517-1f94-4885-b71f-68507e1f3cc8",
+          "workId": "42c3288c-f9d2-492f-9bce-56aa35381058",
+          "title": "Philocalia",
+          "author": "Origen",
+          "confidence": 0.67777777
+        },
+        {
+          "citationText": "Origen, Philocalia",
+          "passageId": "814cc8a1-0346-44a4-afa1-589dda8be0aa",
+          "workId": "42c3288c-f9d2-492f-9bce-56aa35381058",
+          "title": "Philocalia",
+          "author": "Origen",
+          "confidence": 0.6777496
+        },
+        {
+          "citationText": "Tatian_or_Ignatius, Tatian_or_Ignatius - Complete Works",
+          "passageId": "93e4ca93-8bf9-44f4-8920-60f510fd87ed",
+          "workId": "4e589f98-15c0-427c-9923-146dc4639050",
+          "title": "Tatian_or_Ignatius - Complete Works",
+          "author": "Tatian_or_Ignatius",
+          "confidence": 0.6775781
+        },
+        {
+          "citationText": "Origen, Philocalia",
+          "passageId": "814cc8a1-0346-44a4-afa1-589dda8be0aa",
+          "workId": "42c3288c-f9d2-492f-9bce-56aa35381058",
+          "title": "Philocalia",
+          "author": "Origen",
+          "confidence": 0.6773122
+        },
+        {
+          "citationText": "Clement of Alexandria, Stromata. Books 7-8.",
+          "passageId": "c9fc9fff-7430-4d77-920f-c125bc9d7d49",
+          "workId": "26523607-192c-4a89-a56c-d83a3cc2a3bc",
+          "title": "Stromata. Books 7-8.",
+          "author": "Clement of Alexandria",
+          "confidence": 0.676875
+        },
+        {
+          "citationText": "Methodius, De Libero Arbitrio",
+          "passageId": "f5357af8-2b56-48a4-abc2-8a2e86720416",
+          "workId": "de9a7caa-72df-47e6-aeea-6271f2eca3c1",
+          "title": "De Libero Arbitrio",
+          "author": "Methodius",
+          "confidence": 0.6765207
+        },
+        {
+          "citationText": "Plotinus, Enneades",
+          "passageId": "13c2afb0-a1cc-4108-aaee-319c2e62d02e",
+          "workId": "89fc172a-06af-4fcd-b1c3-95f3879d4ef0",
+          "title": "Enneades",
+          "author": "Plotinus",
+          "confidence": 0.6760195
+        },
+        {
+          "citationText": "Origen, Philocalia",
+          "passageId": "814cc8a1-0346-44a4-afa1-589dda8be0aa",
+          "workId": "42c3288c-f9d2-492f-9bce-56aa35381058",
+          "title": "Philocalia",
+          "author": "Origen",
+          "confidence": 0.6758859
+        },
+        {
+          "citationText": "Plotinus, Enneads (Complete)",
+          "passageId": "3abda23d-fb85-4982-8d44-66cdd7a20ad8",
+          "workId": "2e341c0f-9c75-4765-b1bc-090a6376f865",
+          "title": "Enneads (Complete)",
+          "author": "Plotinus",
+          "confidence": 0.6754471
+        },
+        {
+          "citationText": "Eusebius, Ecclesiastical History and Apologetic Works",
+          "passageId": "6407d204-0416-46fa-b41d-18745c1a1543",
+          "workId": "c477adaf-c35a-4992-8383-def32d51ad76",
+          "title": "Ecclesiastical History and Apologetic Works",
+          "author": "Eusebius",
+          "confidence": 0.67502975
+        }
+      ],
+      "modernBibliography": [],
+      "ctsUrns": [
+        "urn:cts:greekLit:tlg2042.tlg019.1st1K-grc1",
+        "eusebius:chunk_1",
+        "plotinus:chunk_6"
+      ],
+      "textualGroundings": [
+        {
+          "reference": "Origen, Origen, Philocalia tlg2042.tlg019.1st1K-grc1",
+          "originalText": "δύναμις δὲ ἔστι τοῦ σωφρονῆσαι καὶ τοῦ ἀκολαστῆσαι. ὦν 12 ἀμφοτέρων δυνάμεων ὑπαρχουσῶν, ὁ μὴ προσέχων λόγοις ἐπιστρεπτικοῖς καὶ παιδευτικοῖς ἑαυτὸν ἐπιδίδωσι τῇ χείρονι· 7 καὶ τοῦτο] καὶ τὸ A; κατὰ τὸ Εu 19 ἐνδεχομένου] ἐνδεχο- μένων AB; γεγονότων Εu 20 ἐνὶ αὐτῶν]] ἐνὶ αὐτοῦ B; ἐν αὐτῶ A Εu 24 τάδε",
+          "language": "Greek",
+          "ctsUrn": "urn:cts:greekLit:tlg2042.tlg019.1st1K-grc1",
+          "passageId": "814cc8a1-0346-44a4-afa1-589dda8be0aa"
+        },
+        {
+          "reference": "Eusebius, Eusebius, Ecclesiastical History and Apologetic Works chunk_1",
+          "originalText": "οὕτως γα\\ρ ἐπει\\ ἐναργῶς ἑαυτῶν αἰσθανόμεθα μη\\ βιαζομένων ὑπ τινο\\ς αἰτίας ἐν τῷ παιδεύειν του\\ς υἱεῖς και\\ μαστίζειν του\\ς οἰκέτας ἁμαρτήσαν τας και\\ ἐν τῷ τόδε τι βούλεσθαι και\\ μη\\ βούλεσθαι αὐτοτελῶς ἐκ τῆς ἰδίας ἐξουσίας εἰς τα\\ς τοιαύτας κινήσεις ἀφικνουμένων ἁμαρτάνοι ἀ\\ν ὁ ταῦτα λέγων γίνεσ",
+          "language": "Greek",
+          "ctsUrn": "eusebius:chunk_1",
+          "passageId": "a25763c3-d75b-4c74-8aa5-97f601e34d4e"
+        },
+        {
+          "reference": "Plotinus, Plotinus, Enneads (Complete) chunk_6",
+          "originalText": "οὕτω χρησμο\\ν φέρε εἰπεῖν περί τινος διδου\\ς ἐρεῖ ὅτι οὐκ ἐνδέχεται τόνδε σωφρονῆσαι με\\ν γα\\ρ πάντη οὐκ ἔστι τοῦ πτῆναι οὐδαμῶς ἐν τῷ ἀνθρώπῳ δύναμις δε\\ ἔστι τοῦ σωφρονῆσαι και\\ τοῦ ἀκολαστῆσαι ἀμφοτέρων δυνάμεων ὑπαρχουσῶν ὁ μη\\ προσέχων λόγοις ἐπιστρεπτικοῖς και\\ παιδευτικοῖς ἑαυτο\\ν ἐπιδίδωσι τ",
+          "language": "Greek",
+          "ctsUrn": "plotinus:chunk_6",
+          "passageId": "82920a1b-253e-40ac-9581-0052b097d8de"
+        }
+      ],
+      "qualityScore": 74,
+      "qualityBadge": "Low",
+      "metadata": {
+        "research_graph": {
+          "overview": {
+            "query_type": "legacy_answer",
+            "complexity": "unknown",
+            "grounding_policy": "mixed",
+            "quality_badge": "Low",
+            "pipeline_degraded": false,
+            "claim_ledger_mode": "legacy_stream",
+            "render_answer_mode": "quality_guards",
+            "scholarly_polish_mode": "quality_guards",
+            "seed_node_count": 5,
+            "context_node_count": 5,
+            "bundle_count": 0,
+            "work_count": 0,
+            "claim_count": 0,
+            "citation_count": 31
+          },
+          "stages": [
+            {
+              "id": "legacy_embed",
+              "title": "Embed and search",
+              "status": "complete",
+              "summary": "5 seed nodes retrieved from vector search.",
+              "metrics": [
+                {
+                  "label": "Seeds",
+                  "value": 5
+                },
+                {
+                  "label": "Model",
+                  "value": "gemini-3.1-pro-preview"
+                }
+              ],
+              "details": {
+                "starting_nodes": [
+                  {
+                    "id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+                    "label": "Origen of Alexandria",
+                    "type": "person",
+                    "reason": "Semantic similarity match (rank 1)"
+                  },
+                  {
+                    "id": "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+                    "label": "Origen's De Principiis Argument for Free Will",
+                    "type": "argument",
+                    "reason": "Semantic similarity match (rank 2)"
+                  },
+                  {
+                    "id": "quote_origen_autexousion_abbb5a2e",
+                    "label": "Origen on autexousion (self-determining power) (De Principiis III.1)",
+                    "type": "quote",
+                    "reason": "Semantic similarity match (rank 3)"
+                  },
+                  {
+                    "id": "passage_origen_cc____136________3___5_en",
+                    "label": "SC 136, §3, §5 (Origen) (English)",
+                    "type": "passage",
+                    "reason": "Semantic similarity match (rank 4)"
+                  },
+                  {
+                    "id": "passage_origen_pa_3_1_3_en",
+                    "label": "Origen, De Principiis III.1.3: Self-Determining Judgment (English)",
+                    "type": "passage",
+                    "reason": "Semantic similarity match (rank 5)"
+                  }
+                ],
+                "provider": "gemini"
+              }
+            },
+            {
+              "id": "legacy_traversal",
+              "title": "Expand graph context",
+              "status": "complete",
+              "summary": "0 expanded nodes and 0 traversed edges.",
+              "metrics": [
+                {
+                  "label": "Expanded",
+                  "value": 0
+                },
+                {
+                  "label": "Edges",
+                  "value": 0
+                },
+                {
+                  "label": "Passages",
+                  "value": 0
+                }
+              ],
+              "details": {
+                "expanded_nodes": [],
+                "linked_passages": []
+              }
+            },
+            {
+              "id": "legacy_synthesis",
+              "title": "Synthesize and repair",
+              "status": "complete",
+              "summary": "Quality guards modified the answer before final delivery.",
+              "metrics": [
+                {
+                  "label": "Citations",
+                  "value": 31
+                },
+                {
+                  "label": "Quality",
+                  "value": "Low"
+                },
+                {
+                  "label": "Thinking",
+                  "value": "disabled"
+                }
+              ],
+              "details": {
+                "was_modified": true,
+                "use_thinking": false
+              }
+            }
+          ],
+          "facets": [],
+          "works": [],
+          "claims": [],
+          "hypotheses": [],
+          "open_questions": [],
+          "counter_evidence": [
+            "Quality guards identified answer segments that required correction or normalization."
+          ],
+          "uncertainties": []
+        },
+        "quality_badge": "Low",
+        "render_answer_mode": "quality_guards",
+        "scholarly_polish_mode": "quality_guards"
+      },
+      "pageIndexInfo": {
+        "linkedPassages": 0,
+        "directPassages": 0,
+        "neighborPassages": 0,
+        "kgNeighbors": 0,
+        "seedNodes": 0,
+        "contextChars": 30747,
+        "contextTokensEstimate": 7687
+      },
+      "retrievalStats": {
+        "totalNodes": 20,
+        "totalEdges": 0,
+        "standardResults": 40,
+        "passageNodes": 0,
+        "explicitPassages": 0,
+        "textualGroundings": 3
+      },
+      "citationIntegrity": {
+        "passed": true,
+        "outOfRange": [],
+        "orphanSources": [],
+        "totalMarkers": 0,
+        "totalSources": 0
+      },
+      "processingTime": 16819,
+      "version": "pageindex-v3",
+      "parameters": {
+        "semantic_k": 20,
+        "graph_depth": 2,
+        "max_context": 25
+      },
+      "success": true
+    }
+  },
+  "arm_b_new_system": {
+    "answer": "### Identity and Context\nOrigen of Alexandria was a Christian Platonist educated in Alexandria's philosophical milieu. His extensive corpus includes biblical commentaries, homilies, apologetics, and systematic theology. His work *De Principiis* is particularly significant for its sustained philosophical argument for free will, addressing scriptural passages that appear to negate it[2]. Origen defines free will using the Greek term *autexousion* (αὐτεξούσιον), meaning \"self-determining power\" or being \"in one's own power\"[1].\n\n### Works and Doctrine\nIn *De Principiis* Book III, Origen provides a detailed argument for free will, countering deterministic views. He argues that all rational creatures were created equal with free will, and present inequalities result from prior free choices[10]. Origen's defense of free will was specifically directed against Gnostic predestinarianism, which categorized humans into fixed spiritual types[21]. He emphasized that evil exists because free beings can misuse their freedom, not because of a flawed demiurge[21].\n\n### Textual Basis\n> \"Since the doctrine of God's just judgment is contained in the Church's proclamation — which, when believed to be true, calls those who hear it to live rightly and to flee sin by every means, with the evident assumption that what is worthy of praise and blame is within our power — let us, for our part, treat briefly and individually the question of free will, this being an absolutely indispensable problem\"[P2].\n\n### Providence and Moral Responsibility\nOrigen argued that divine prescience (foreknowledge) is not the cause of future events, thereby preserving human moral responsibility[29]. He used the analogy of an astronomer predicting an eclipse but not causing it to reconcile divine foreknowledge with human freedom[29]. Additionally, Origen utilized a \"permissive theodicy\" formula, suggesting that God's actions, such as hardening Pharaoh's heart, are the \"occasion\" rather than the \"cause\" of human sin[49].\n\n### Eschatology and Apocatastasis\nOrigen's eschatology included the concept of *apocatastasis*, the eventual restoration of all rational beings to their original state through the exercise of will[107]. This view, which suggests a cosmic restoration at Christ's return, was later condemned in 553 CE but remains a significant part of Origen's theological framework[107].",
+    "citations": [
+      {
+        "ref": "P2",
+        "type": "passage",
+        "id": "f85d1b5d-02dd-4f57-9a82-c42111ae5e63",
+        "label": "Origenes, Traité des Principes, Extraits grecs 3.1.1",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from evidence bundle"
+      },
+      {
+        "ref": "1",
+        "type": "node",
+        "id": "concept_autexousion_christian_freedom_u1v2w3x4",
+        "label": "Autexousion (Αὐτεξούσιον) - Christian Free Will",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      },
+      {
+        "ref": "2",
+        "type": "node",
+        "id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+        "label": "Origen of Alexandria",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      },
+      {
+        "ref": "10",
+        "type": "node",
+        "id": "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+        "label": "Origen's De Principiis Argument for Free Will",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      },
+      {
+        "ref": "21",
+        "type": "node",
+        "id": "argument_origen_free_will_theodicy_6f9d8a3c",
+        "label": "Origen's Free Will Theodicy Against Gnosticism",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      },
+      {
+        "ref": "29",
+        "type": "node",
+        "id": "argument_origen_prescience_causality",
+        "label": "Origen's Prescience ≠ Causality Argument (De Orat. 6)",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      },
+      {
+        "ref": "49",
+        "type": "node",
+        "id": "concept_non_causa_sed_occasio",
+        "label": "Non Causa Sed Occasio - Not Cause But Occasion",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      },
+      {
+        "ref": "107",
+        "type": "node",
+        "id": "concept_apocatastasis",
+        "label": "Apocatastasis (ἀποκατάστασις)",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      }
+    ],
+    "metadata": {
+      "query_type": "specific_entity",
+      "classification_confidence": 0.9,
+      "classification_reason": "The question is asking for specific beliefs held by a particular individual, Origen, regarding three distinct but related concepts: free will, providence, and moral responsibility.",
+      "debug_trace": {
+        "classify_query": {
+          "mode": "llm",
+          "query_type": "specific_entity",
+          "confidence": 0.9,
+          "reason": "The question is asking for specific beliefs held by a particular individual, Origen, regarding three distinct but related concepts: free will, providence, and moral responsibility.",
+          "complexity": "simple"
+        },
+        "expand_query": {
+          "mode": "heuristic",
+          "expanded_query": "What did Origen believe about free will, providence, and moral responsibility?",
+          "philosophers": [],
+          "concepts": [
+            "responsibility",
+            "assent",
+            "prohairesis"
+          ],
+          "schools": [],
+          "periods": []
+        },
+        "discover_corpus": {
+          "queries": [
+            "What did Origen believe about free will, providence, and moral responsibility?",
+            "responsibility",
+            "assent",
+            "prohairesis"
+          ],
+          "semantic_hits": [
+            {
+              "id": "concept_prohairesis_alex",
+              "score": 0.803,
+              "label": "Prohairesis (προαίρεσις) - Alexander",
+              "type": "concept"
+            },
+            {
+              "id": "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6",
+              "score": 0.7956,
+              "label": "Prohairesis (Προαίρεσις) - Deliberate Choice",
+              "type": "concept"
+            },
+            {
+              "id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+              "score": 0.7917,
+              "label": "Origen of Alexandria",
+              "type": "person"
+            },
+            {
+              "id": "passage_arist_ee_2_10",
+              "score": 0.7735,
+              "label": "Aristotle, Ἠθικὰ Εὐδήμεια, 2.10",
+              "type": "passage"
+            },
+            {
+              "id": "pub_gourinat_2005_prohairesis",
+              "score": 0.773,
+              "label": "La « prohairesis » chez Épictète : décision, volonté, ou « personne morale » ?",
+              "type": "publication"
+            },
+            {
+              "id": "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+              "score": 0.7693,
+              "label": "Origen's De Principiis Argument for Free Will",
+              "type": "argument"
+            },
+            {
+              "id": "passage_arist_ne_3_2",
+              "score": 0.7658,
+              "label": "Aristotle, Ἠθικὰ Νικομάχεια, 3.2",
+              "type": "passage"
+            },
+            {
+              "id": "debate_prohairesis_meaning",
+              "score": 0.7656,
+              "label": "The Meaning and Role of Prohairesis",
+              "type": "debate"
+            },
+            {
+              "id": "quote_origen_autexousion_abbb5a2e",
+              "score": 0.7645,
+              "label": "Origen on autexousion (self-determining power) (De Principiis III.1)",
+              "type": "quote"
+            },
+            {
+              "id": "passage_alex_fat_12",
+              "score": 0.7641,
+              "label": "Alexander of Aphrodisias, De Fato, 12",
+              "type": "passage"
+            },
+            {
+              "id": "passage_origen_cc____136________3___5_en",
+              "score": 0.7599,
+              "label": "SC 136, §3, §5 (Origen) (English)",
+              "type": "passage"
+            },
+            {
+              "id": "passage_origen_pa_3_1_3_en",
+              "score": 0.7598,
+              "label": "Origen, De Principiis III.1.3: Self-Determining Judgment (English)",
+              "type": "passage"
+            }
+          ],
+          "seed_node_ids": [
+            "concept_prohairesis_alex",
+            "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6",
+            "person_origen_alexandria_185_254ce_s9t0u1v2",
+            "passage_arist_ee_2_10",
+            "pub_gourinat_2005_prohairesis",
+            "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+            "passage_arist_ne_3_2",
+            "debate_prohairesis_meaning",
+            "quote_origen_autexousion_abbb5a2e",
+            "passage_alex_fat_12",
+            "passage_origen_cc____136________3___5_en",
+            "passage_origen_pa_3_1_3_en",
+            "argument_origen_free_will_theodicy_6f9d8a3c",
+            "pub_chamberlain_1984_prohairesis",
+            "pub_hengstermann_2016_freiheitsmetaphysik",
+            "passage_origen_pa_3_1_3",
+            "passage_origen_de_orat_6",
+            "work_de_principiis_origen_230s_v2w3x4y5",
+            "quote_epictetus_prohairesis_3fabff35",
+            "passage_origen_de_orat_6_en"
+          ],
+          "passage_anchor_ids": [
+            "concept_prohairesis_alex",
+            "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6",
+            "person_origen_alexandria_185_254ce_s9t0u1v2",
+            "pub_gourinat_2005_prohairesis",
+            "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+            "debate_prohairesis_meaning",
+            "quote_origen_autexousion_abbb5a2e",
+            "argument_origen_free_will_theodicy_6f9d8a3c",
+            "pub_chamberlain_1984_prohairesis",
+            "pub_hengstermann_2016_freiheitsmetaphysik",
+            "work_de_principiis_origen_230s_v2w3x4y5",
+            "quote_epictetus_prohairesis_3fabff35"
+          ],
+          "linked_passages": [
+            {
+              "passage_id": "1906f121-848d-416f-acc2-a271b77d0341",
+              "title": "Traité des Principes, Extraits grecs",
+              "author": "Origenes",
+              "canonical_ref": "3.1.1_a",
+              "language": "grc",
+              "confidence": 0.97
+            },
+            {
+              "passage_id": "f85d1b5d-02dd-4f57-9a82-c42111ae5e63",
+              "title": "Traité des Principes, Extraits grecs",
+              "author": "Origenes",
+              "canonical_ref": "3.1.1",
+              "language": "grc",
+              "confidence": 0.95
+            },
+            {
+              "passage_id": "9c42dec9-afbb-4a1c-b3da-4636fb3161fb",
+              "title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "canonical_ref": "Epict. 1",
+              "language": "grc",
+              "confidence": 0.95
+            }
+          ]
+        },
+        "scholarly_dossier": {
+          "facet_count": 3,
+          "primary_bundle_ids": [
+            "b9b327a4-05a4-4778-bf46-715697dc8d1b::1906f121-848d-416f-acc2-a271b77d0341",
+            "248fcb74-9a80-4f90-98c8-8ccf1e839c63::18067271-b238-448c-8937-5fe3d443eb39",
+            "b9b327a4-05a4-4778-bf46-715697dc8d1b::f85d1b5d-02dd-4f57-9a82-c42111ae5e63",
+            "248fcb74-9a80-4f90-98c8-8ccf1e839c63::f9f0a7e7-1ddf-4288-8a93-8f1d3e63d1ea"
+          ],
+          "testimony_bundle_ids": [],
+          "counter_bundle_ids": [],
+          "metadata_ids": [
+            "concept_autexousion_christian_freedom_u1v2w3x4",
+            "person_origen_alexandria_185_254ce_s9t0u1v2"
+          ]
+        },
+        "research_notebook": {
+          "question_frame": "What did Origen believe about free will, providence, and moral responsibility?",
+          "facets": [
+            {
+              "facet_id": "identity_and_context",
+              "title": "Identity and Context",
+              "priority": 1,
+              "required_support": "metadata"
+            },
+            {
+              "facet_id": "works_and_doctrine",
+              "title": "Works and Doctrine",
+              "priority": 2,
+              "required_support": "passage"
+            },
+            {
+              "facet_id": "textual_basis",
+              "title": "Textual Basis",
+              "priority": 3,
+              "required_support": "passage"
+            }
+          ],
+          "sub_queries": [
+            "What did Origen believe about free will, providence, and moral responsibility?"
+          ],
+          "competing_hypotheses": [
+            "The main answer is textually well supported for: What did Origen believe about free will, providence, and moral responsibility?",
+            "The evidence is more fragmented or interpretive for: What did Origen believe about free will, providence, and moral responsibility?"
+          ],
+          "work_priorities": [
+            "Origenes, Contra Celsum",
+            "De Principiis (Περὶ Ἀρχῶν) - Origen",
+            "Contra Celsum (SC 132, 136, 147, 150)",
+            "Philocalia (Φιλοκαλία Ὠριγένους)",
+            "Exhortation to Martyrdom (Εἰς μαρτύριον προτρεπτικός)",
+            "Origenes, De Principiis (Excerpta graeca)",
+            "Alternate Possibilities and Moral Responsibility",
+            "Responsibility and Control",
+            "Ezekiel (Yechezkel)",
+            "Traité des Principes, Extraits grecs",
+            "De Fato (Περὶ Εἱμαρμένης / On Fate)",
+            "Didaskalikos (Handbook of Platonism)"
+          ]
+        },
+        "tree_navigation": {
+          "candidate_work_titles": [
+            "Origenes, Contra Celsum",
+            "De Principiis (Περὶ Ἀρχῶν) - Origen",
+            "Contra Celsum (SC 132, 136, 147, 150)",
+            "Philocalia (Φιλοκαλία Ὠριγένους)",
+            "Exhortation to Martyrdom (Εἰς μαρτύριον προτρεπτικός)",
+            "Origenes, De Principiis (Excerpta graeca)",
+            "Alternate Possibilities and Moral Responsibility",
+            "Responsibility and Control",
+            "Ezekiel (Yechezkel)",
+            "Traité des Principes, Extraits grecs",
+            "De Fato (Περὶ Εἱμαρμένης / On Fate)",
+            "Didaskalikos (Handbook of Platonism)",
+            "Discourses (Διατριβαί) - Epictetus",
+            "Nicomachean Ethics (Ἠθικὰ Νικομάχεια)",
+            "Discourses and Enchiridion",
+            "A Free Will: Origins of the Notion in Ancient Thought",
+            "Determinism and Freedom in Stoic Philosophy"
+          ],
+          "selected_sections": [
+            {
+              "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+              "node_id": "book_Epict",
+              "path": "Book Epict",
+              "title": "Book Epict"
+            },
+            {
+              "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+              "node_id": "book_Epict_ch_1",
+              "path": "Book Epict, Chapter 1",
+              "title": "Book Epict, Chapter 1"
+            },
+            {
+              "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+              "node_id": "book_Epict_ch_10",
+              "path": "Book Epict, Chapter 10",
+              "title": "Book Epict, Chapter 10"
+            },
+            {
+              "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+              "node_id": "book_Epict_ch_100",
+              "path": "Book Epict, Chapter 100",
+              "title": "Book Epict, Chapter 100"
+            },
+            {
+              "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+              "node_id": "book_Epict_ch_101",
+              "path": "Book Epict, Chapter 101",
+              "title": "Book Epict, Chapter 101"
+            },
+            {
+              "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+              "node_id": "book_Epict_ch_102",
+              "path": "Book Epict, Chapter 102",
+              "title": "Book Epict, Chapter 102"
+            },
+            {
+              "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+              "node_id": "book_3",
+              "path": "Book 3",
+              "title": "Book 3"
+            },
+            {
+              "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+              "node_id": "book_3_ch_1",
+              "path": "Book 3, Chapter 1",
+              "title": "Book 3, Chapter 1"
+            },
+            {
+              "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+              "node_id": "book_4",
+              "path": "Book 4",
+              "title": "Book 4"
+            },
+            {
+              "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+              "node_id": "book_4_ch_1",
+              "path": "Book 4, Chapter 1",
+              "title": "Book 4, Chapter 1"
+            },
+            {
+              "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+              "node_id": "book_4_ch_2",
+              "path": "Book 4, Chapter 2",
+              "title": "Book 4, Chapter 2"
+            },
+            {
+              "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+              "node_id": "book_4_ch_3",
+              "path": "Book 4, Chapter 3",
+              "title": "Book 4, Chapter 3"
+            }
+          ]
+        },
+        "context_pack": {
+          "kg_metadata_count": 117,
+          "section_summary_count": 12,
+          "passage_bundle_count": 71,
+          "token_estimate": 45458,
+          "top_bundle_rankings": [
+            {
+              "ref": "P1",
+              "bundle_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b::1906f121-848d-416f-acc2-a271b77d0341",
+              "work_title": "Traité des Principes, Extraits grecs",
+              "author": "Origenes",
+              "source": "tree_reasoning",
+              "score": 166,
+              "canonical_ref": "3.1.1_a",
+              "section_path": "Book 3",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P2",
+              "bundle_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b::f85d1b5d-02dd-4f57-9a82-c42111ae5e63",
+              "work_title": "Traité des Principes, Extraits grecs",
+              "author": "Origenes",
+              "source": "tree_reasoning",
+              "score": 166,
+              "canonical_ref": "3.1.1",
+              "section_path": "Book 3",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P3",
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::18067271-b238-448c-8937-5fe3d443eb39",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "score": 98,
+              "canonical_ref": "Epict. 4",
+              "section_path": "Book Epict",
+              "evidence_class": "direct_text",
+              "author_match": false,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P4",
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::f9f0a7e7-1ddf-4288-8a93-8f1d3e63d1ea",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "score": 88,
+              "canonical_ref": "Epict. 16",
+              "section_path": "Book Epict",
+              "evidence_class": "direct_text",
+              "author_match": false,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P5",
+              "bundle_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b::6b80e3a0-5903-4b5e-bd28-1ef27451fcc4",
+              "work_title": "Traité des Principes, Extraits grecs",
+              "author": "Origenes",
+              "source": "tree_reasoning",
+              "score": 166,
+              "canonical_ref": "3.1.8_a",
+              "section_path": "Book 3",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P6",
+              "bundle_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b::2c2557fb-4402-453c-8093-eb2d0105471d",
+              "work_title": "Traité des Principes, Extraits grecs",
+              "author": "Origenes",
+              "source": "tree_reasoning",
+              "score": 166,
+              "canonical_ref": "3.1.11",
+              "section_path": "Book 3",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P7",
+              "bundle_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b::c13cbecc-73cc-4e41-bc6d-7f749fefb1c8",
+              "work_title": "Traité des Principes, Extraits grecs",
+              "author": "Origenes",
+              "source": "tree_reasoning",
+              "score": 166,
+              "canonical_ref": "3.1.6_a",
+              "section_path": "Book 3",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P8",
+              "bundle_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b::9f1b6aba-bbc1-4b83-b99e-07307f750487",
+              "work_title": "Traité des Principes, Extraits grecs",
+              "author": "Origenes",
+              "source": "tree_reasoning",
+              "score": 166,
+              "canonical_ref": "3.1.4",
+              "section_path": "Book 3",
+              "evidence_class": "direct_text",
+              "author_match": true,
+              "school_match": false,
+              "late_penalty": 0
+            }
+          ]
+        },
+        "evidence_bundles": {
+          "bundle_count": 71,
+          "bundle_sample": [
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::9c42dec9-afbb-4a1c-b3da-4636fb3161fb",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 1",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::f3d40311-3ee4-4937-9314-3b13d7020534",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 2",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::f09882ed-7bb6-4c93-af46-056b3555b840",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 3",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::18067271-b238-448c-8937-5fe3d443eb39",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 4",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::464f33dc-6828-410d-a6f5-b62891dedc80",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 5",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::79b76c50-3593-4683-8076-595776daa0d4",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 6",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::09cfdd12-eac8-4908-a61a-d4f2c33006a8",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 7",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::fbbb4ab9-467b-4ec2-a161-43ddf5e27a78",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 8",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::4174fb73-7db5-4c88-8756-f8b31a9c7ad8",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 9",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::75bece39-5c3c-4a74-8fc2-38e31292fff9",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 10",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::d850318c-10c9-4cb0-8d7b-ad15987631b3",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 11",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::9c68b677-7fe6-4cee-a3a9-39e6a9cd33f1",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 12",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::27d67c73-9728-4d1c-8922-7c570d62547b",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 13",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::d8ff81f2-d26d-419f-a238-88035b996ed8",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 14",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::1df2e976-1b92-4a02-8122-49b7bde22413",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 15",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::f9f0a7e7-1ddf-4288-8a93-8f1d3e63d1ea",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 16",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::62623a2d-1477-4c80-b221-1b7403554f94",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 100",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::0ea30c62-837b-4647-b3a7-0eece9b0f5f5",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 101",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::48c10f2b-e1ae-4655-9703-7b565b96cb9a",
+              "work_title": "Discourses and Enchiridion",
+              "author": "Epictetus",
+              "source": "tree_reasoning",
+              "canonical_ref": "Epict. 102",
+              "translation_source": "kg_node_description"
+            },
+            {
+              "bundle_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b::f85d1b5d-02dd-4f57-9a82-c42111ae5e63",
+              "work_title": "Traité des Principes, Extraits grecs",
+              "author": "Origenes",
+              "source": "tree_reasoning",
+              "canonical_ref": "3.1.1",
+              "translation_source": "kg_node_description"
+            }
+          ]
+        },
+        "counter_evidence": {
+          "mode": "skipped",
+          "selected_count": 0,
+          "rationale": "minimal-llm mode or insufficient bundles",
+          "bundle_ids": []
+        },
+        "evidence_sufficiency": {
+          "bundle_count": 71,
+          "work_count": 2,
+          "counter_count": 0,
+          "covered_facets": 3,
+          "score": 1.0,
+          "sufficient": true,
+          "reason": "heuristic sufficiency (minimal llm mode)",
+          "refinement": null
+        },
+        "draft_claim_ledger": {
+          "mode": "llm",
+          "claim_count": 7,
+          "raw_excerpt": "```json\n{\n  \"claims\": [\n    {\n      \"claim\": \"Origen of Alexandria (c. [...]"
+        },
+        "render_grounded_answer": {
+          "mode": "llm",
+          "raw_excerpt": "Origen of Alexandria (c. 185–254 CE) was a central figure in Patristic theology, known for his systematic defense of free will within his work *De Principiis*. His views on free will, providence, and moral responsibility are intricately connected, forming a coherent theological framework that addresses both philosophical and scriptural concerns.\n\n### Identity and Context\nOrigen of Alexandria was a Christian Platonist educated in Alexandria's philosophical milieu. His extensive corpus includes biblical commentaries, homilies, apologetics, and systematic theology. His work *De Principiis* is particularly significant for its sustained philosophical argument for free will, addressing scriptural passages that appear to negate it[^2^]. Origen defines free will using the Greek term *autexousion* (αὐτεξούσιον), meaning \"self-determining power\" or being \"in one's own power\"[^1^].\n\n### Works and Doctrine\nIn *De Principiis* Book III, Origen provides a detailed argument for free will, countering deterministic views. He argues that all rational creatures were created equal with free will, and present inequalities result from prior free choices[^10^]. Origen's defense of free will was specifically directed against Gnostic predestinarianism, which categorized humans into fixed spiritual types[^21^]. He emphasized that evil exists because free beings can misuse their freedom, not because of a flawed demiurge[^21^].\n\n### Textual Basis\nOrigen's argument for free will is rooted in his interpretation of scripture and philosophical reasoning. [...]",
+          "polish_mode": "skipped",
+          "compression_repair_mode": "skipped",
+          "render_requirements": {
+            "required_sections": 3,
+            "required_quote_blocks": 1,
+            "min_chars": 1080
+          },
+          "shape_metrics": {
+            "chars": 3690,
+            "section_headers": 5,
+            "quote_blocks": 3
+          }
+        },
+        "programmatic_verify": {
+          "citation_count": 8,
+          "answer_excerpt": "### Identity and Context\nOrigen of Alexandria was a Christian Platonist educated in Alexandria's philosophical milieu. His extensive corpus includes biblical commentaries, homilies, apologetics, and systematic theology. His work *De Principiis* is particularly significant for its sustained philosophical argument for free will, addressing scriptural passages that appear to negate it[2]. Origen defines free will using the Greek term *autexousion* (αὐτεξούσιον), meaning \"self-determining power\" or being \"in one's own power\"[1].\n\n### Works and Doctrine\nIn *De Principiis* Book III, Origen provides a detailed argument for free will, countering deterministic views. He argues that all rational creatures were created equal with free will, and present inequalities result from prior free choices[10]. Origen's defense of free will was specifically directed against Gnostic predestinarianism, which categorized humans into fixed spiritual types[21]. He emphasized that evil exists because free beings can misuse their freedom, not because of a flawed demiurge[21]. [...]"
+        }
+      },
+      "expanded_query": "What did Origen believe about free will, providence, and moral responsibility?",
+      "passage_anchor_ids": [
+        "concept_prohairesis_alex",
+        "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6",
+        "person_origen_alexandria_185_254ce_s9t0u1v2",
+        "pub_gourinat_2005_prohairesis",
+        "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+        "debate_prohairesis_meaning",
+        "quote_origen_autexousion_abbb5a2e",
+        "argument_origen_free_will_theodicy_6f9d8a3c",
+        "pub_chamberlain_1984_prohairesis",
+        "pub_hengstermann_2016_freiheitsmetaphysik",
+        "work_de_principiis_origen_230s_v2w3x4y5",
+        "quote_epictetus_prohairesis_3fabff35"
+      ],
+      "selected_sections": [
+        {
+          "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+          "node_id": "book_Epict",
+          "title": "Book Epict",
+          "path": "Book Epict",
+          "summary": "185 passages across 185 subsection(s)",
+          "abstract": "Epictetus - Book Epict. Key refs: Epict. 1, Epict. 2. Sample: ἡμῖν και οὐκ ἐφ Τῶν ἄλλων δυνάμεων οὐδεμίαν εὑρήσετε αὐτην αὑ οὐ τοίνυν οὐδε δοκιμαστικην ἠ ἀποδο ἡ γραμματικη μέχρι τίνος κέκτηται το θεω μέχρι τοῦ διαγνῶναι τα γράμματα μέχρι τοῦ διαγνῶναι το μέλος αὐτη οὖν αὑτην θεωρε",
+          "canonical_refs": [
+            "Epict. 1",
+            "Epict. 2",
+            "Epict. 3"
+          ],
+          "translation_available": false,
+          "quote_density": 0.016,
+          "token_estimate": 1058,
+          "start_passage": 1,
+          "end_passage": 185
+        },
+        {
+          "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+          "node_id": "book_Epict_ch_1",
+          "title": "Book Epict, Chapter 1",
+          "path": "Book Epict, Chapter 1",
+          "summary": "1 passages",
+          "abstract": "Epictetus - Book Epict, Chapter 1. Key refs: Epict. 1. Sample: ἡμῖν και οὐκ ἐφ Τῶν ἄλλων δυνάμεων οὐδεμίαν εὑρήσετε αὐτην αὑ οὐ τοίνυν οὐδε δοκιμαστικην ἠ ἀποδο ἡ γραμματικη μέχρι τίνος κέκτηται το θεω μέχρι τοῦ διαγνῶναι τα γράμματα μέχρι τοῦ διαγνῶναι το μέλος αὐτη οὖν αὑτην θεωρε",
+          "canonical_refs": [
+            "Epict. 1"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 522,
+          "start_passage": 1,
+          "end_passage": 1
+        },
+        {
+          "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+          "node_id": "book_Epict_ch_10",
+          "title": "Book Epict, Chapter 10",
+          "path": "Book Epict, Chapter 10",
+          "summary": "1 passages",
+          "abstract": "Epictetus - Book Epict, Chapter 10. Key refs: Epict. 10. Sample: Περι τῆς χρείας τῶν μεταπιπτόντων και ὑποθετικῶν και τῶν ὁμοίων Ἡ περι τους μεταπίπτοντας και ὑποθετικούς ἠρωτῆσθαι περαίνοντας και πάντας ἁπλῶς τους τοιού τους λόγους πραγματεία λανθάνει τους πολλους περι ζητοῦμεν γαρ ἐ",
+          "canonical_refs": [
+            "Epict. 10"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 523,
+          "start_passage": 10,
+          "end_passage": 10
+        },
+        {
+          "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+          "node_id": "book_Epict_ch_100",
+          "title": "Book Epict, Chapter 100",
+          "path": "Book Epict, Chapter 100",
+          "summary": "1 passages",
+          "abstract": "Epictetus - Book Epict, Chapter 100. Key refs: Epict. 100. Sample: μη προσδεῖσθαι ἄλλων ἐφιστάνειν τῇ θείᾳ διοικήσει τῇ αὑτῶν προς πῶς πρότερον εἴχομεν προς τα τίνα ἐστιν ἔτι τα θλίβοντα ἀν θεραπευθῇ και ταῦτα κατα τον αὐτῶν λόγον ἐξ ὅτι εἰρήνην μεγάλην ὁ Καῖσαρ ἡμῖν δοκεῖ ὅτι οὐκ εἰσιν",
+          "canonical_refs": [
+            "Epict. 100"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 535,
+          "start_passage": 100,
+          "end_passage": 100
+        },
+        {
+          "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+          "node_id": "book_Epict_ch_101",
+          "title": "Book Epict, Chapter 101",
+          "path": "Book Epict, Chapter 101",
+          "summary": "1 passages",
+          "abstract": "Epictetus - Book Epict, Chapter 101. Key refs: Epict. 101. Sample: οὕτως ἔνιοι μόνοι περιπατῆσαι οὐ δύναν και μόνος περιπάτησον και σαυ τῷ λάλησον και μη ἐν τῷ χορῷ κρύπτου Ὅταν τις ὕδωρ πίνῃ ἠ ποιῇ τι ἀσκητικόν ἀφορμῆς λέγει αὐτο προς πάντας γαρ τοῦτο ὕδωρ πίνεις δια γαρ το ὕδωρ πίνειν",
+          "canonical_refs": [
+            "Epict. 101"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 533,
+          "start_passage": 101,
+          "end_passage": 101
+        },
+        {
+          "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+          "node_id": "book_Epict_ch_102",
+          "title": "Book Epict, Chapter 102",
+          "path": "Book Epict, Chapter 102",
+          "summary": "1 passages",
+          "abstract": "Epictetus - Book Epict, Chapter 102. Key refs: Epict. 102. Sample: εἶτα και την σαυτοῦ φύσιν τί δύνασαι βαστάσαι ἰδού σου τους ὤμους ἄλλος γαρ προς ἄλλο τι πέφυκεν ταῦτα ποιῶν δύνασαι φιλοσοφεῖν δοκεῖς ὅτι δύνασαι ὁμοίως ὀργίζεσθαι ὁμοίως δυσαρεστεῖν ἀπελθεῖν ἀπο τῶν οἰκείων δαρίου κατα",
+          "canonical_refs": [
+            "Epict. 102"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 524,
+          "start_passage": 102,
+          "end_passage": 102
+        },
+        {
+          "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+          "node_id": "book_3",
+          "title": "Book 3",
+          "path": "Book 3",
+          "summary": "35 passages across 1 subsection(s)",
+          "abstract": "Origenes - Book 3. Key refs: 3.1.1, 3.1.1_a. Sample: <ΠΕΡΙ ΑΡΧΩΝ ΤΟΜΟΣ ΤΡΙΤΟΣ>αʹ. Περὶ αὐτεξουσίου, καὶ τῶν δοκούντων τοῦτο ἀναιρεῖνῥητῶν γραφικῶν λύσις καὶ ἑρμηνεία1. Ἐπεὶ δὲ ἐν τῷ κηρύγματι τῷ ἐκκλησιαστικῷ περιέχεταιὁ περὶ κρίσεως δικαίας θεοῦ λόγος, ὅστις καὶ τοὺς ἀκού",
+          "canonical_refs": [
+            "3.1.1",
+            "3.1.1_a",
+            "3.1.2"
+          ],
+          "translation_available": false,
+          "quote_density": 0.086,
+          "token_estimate": 153,
+          "start_passage": 0,
+          "end_passage": 34
+        },
+        {
+          "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+          "node_id": "book_3_ch_1",
+          "title": "Book 3, Chapter 1",
+          "path": "Book 3, Chapter 1",
+          "summary": "35 passages",
+          "abstract": "Origenes - Book 3, Chapter 1. Key refs: 3.1.1, 3.1.1_a. Sample: <ΠΕΡΙ ΑΡΧΩΝ ΤΟΜΟΣ ΤΡΙΤΟΣ>αʹ. Περὶ αὐτεξουσίου, καὶ τῶν δοκούντων τοῦτο ἀναιρεῖνῥητῶν γραφικῶν λύσις καὶ ἑρμηνεία1. Ἐπεὶ δὲ ἐν τῷ κηρύγματι τῷ ἐκκλησιαστικῷ περιέχεταιὁ περὶ κρίσεως δικαίας θεοῦ λόγος, ὅστις καὶ τοὺς ἀκού",
+          "canonical_refs": [
+            "3.1.1",
+            "3.1.1_a",
+            "3.1.2"
+          ],
+          "translation_available": false,
+          "quote_density": 0.086,
+          "token_estimate": 153,
+          "start_passage": 0,
+          "end_passage": 34
+        },
+        {
+          "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+          "node_id": "book_4",
+          "title": "Book 4",
+          "path": "Book 4",
+          "summary": "36 passages across 3 subsection(s)",
+          "abstract": "Origenes - Book 4. Key refs: 4.1.1, 4.1.1_a. Sample: <ΠΕΡΙ ΑΡΧΩΝ ΤΟΜΟΣ ΤΕΤΑΡΤΟΣ>αʹ. Ὅτι θεῖαι αἱ γραφαί · … ὅπως δεῖ ἀναγινώσκειν καὶνοεῖν τὰς γραφάς (Photius).Περὶ τοῦ θεοπνεύστου τῆς θείας γραφῆς, καὶ πῶς ταύτηνἀναγνωστέον καὶ νοητέον · τίς τε ὁ τῆς ἐν αὐτῇἀσαφείας λόγος",
+          "canonical_refs": [
+            "4.1.1",
+            "4.1.1_a",
+            "4.1.2"
+          ],
+          "translation_available": false,
+          "quote_density": 0.083,
+          "token_estimate": 588,
+          "start_passage": 35,
+          "end_passage": 70
+        },
+        {
+          "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+          "node_id": "book_4_ch_1",
+          "title": "Book 4, Chapter 1",
+          "path": "Book 4, Chapter 1",
+          "summary": "9 passages",
+          "abstract": "Origenes - Book 4, Chapter 1. Key refs: 4.1.1, 4.1.1_a. Sample: <ΠΕΡΙ ΑΡΧΩΝ ΤΟΜΟΣ ΤΕΤΑΡΤΟΣ>αʹ. Ὅτι θεῖαι αἱ γραφαί · … ὅπως δεῖ ἀναγινώσκειν καὶνοεῖν τὰς γραφάς (Photius).Περὶ τοῦ θεοπνεύστου τῆς θείας γραφῆς, καὶ πῶς ταύτηνἀναγνωστέον καὶ νοητέον · τίς τε ὁ τῆς ἐν αὐτῇἀσαφείας λόγος",
+          "canonical_refs": [
+            "4.1.1",
+            "4.1.1_a",
+            "4.1.2"
+          ],
+          "translation_available": false,
+          "quote_density": 0.333,
+          "token_estimate": 588,
+          "start_passage": 35,
+          "end_passage": 43
+        },
+        {
+          "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+          "node_id": "book_4_ch_2",
+          "title": "Book 4, Chapter 2",
+          "path": "Book 4, Chapter 2",
+          "summary": "12 passages",
+          "abstract": "Origenes - Book 4, Chapter 2. Key refs: 4.2.1, 4.2.2. Sample: βʹ. 1 (8). Μετὰ τὸ ὡς ἐν ἐπιδρομῇ εἰρηκέναι περὶ τοῦθεοπνεύστους εἶναι τὰς θείας γραφάς, ἀναγκαῖον ἐπεξελθεῖντῷ τρόπῳ τῆς ἀναγνώσεως καὶ νοήσεως αὐτῶν, πλείστωνἁμαρτημάτων γεγενημένων παρὰ τὸ τὴν ὁδὸν τοῦ πῶς δεῖἐφοδεύει",
+          "canonical_refs": [
+            "4.2.1",
+            "4.2.2",
+            "4.2.2_a"
+          ],
+          "translation_available": false,
+          "quote_density": 0.25,
+          "token_estimate": 733,
+          "start_passage": 44,
+          "end_passage": 55
+        },
+        {
+          "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+          "node_id": "book_4_ch_3",
+          "title": "Book 4, Chapter 3",
+          "path": "Book 4, Chapter 3",
+          "summary": "15 passages",
+          "abstract": "Origenes - Book 4, Chapter 3. Key refs: 4.3.1, 4.3.2. Sample: γʹ. 1 (17 [16]). Τίς γοῦν νοῦν ἔχων οἰήσεται πρώτην καὶδευτέραν καὶ τρίτην ἡμέραν ἑσπέραν τε καὶ πρωΐαν χωρὶςἡλίου γεγονέναι καὶ σελήνης καὶ ἀστέρων ; Τὴν δὲ οἱονεὶπρώτην καὶ χωρὶς οὐρανοῦ ; Τίς δ' οὕτως ἠλίθιος ὡςοἰηθῆν",
+          "canonical_refs": [
+            "4.3.1",
+            "4.3.2",
+            "4.3.3"
+          ],
+          "translation_available": false,
+          "quote_density": 0.2,
+          "token_estimate": 921,
+          "start_passage": 56,
+          "end_passage": 70
+        }
+      ],
+      "claim_ledger_mode": "llm",
+      "compression_repair_mode": "skipped",
+      "render_answer_mode": "llm",
+      "research_graph": {
+        "overview": {
+          "query_type": "specific_entity",
+          "complexity": "simple",
+          "grounding_policy": "mixed_evidence",
+          "quality_badge": "High",
+          "pipeline_degraded": false,
+          "claim_ledger_mode": "llm",
+          "render_answer_mode": "llm",
+          "scholarly_polish_mode": "skipped",
+          "seed_node_count": 197,
+          "context_node_count": 455,
+          "bundle_count": 71,
+          "work_count": 2,
+          "claim_count": 7,
+          "citation_count": 8
+        },
+        "stages": [
+          {
+            "id": "classify_query",
+            "title": "Classify query",
+            "status": "complete",
+            "summary": "specific_entity selected with 90% confidence via llm",
+            "metrics": [
+              {
+                "label": "Type",
+                "value": "specific_entity"
+              },
+              {
+                "label": "Complexity",
+                "value": "simple"
+              },
+              {
+                "label": "Confidence",
+                "value": "90%"
+              },
+              {
+                "label": "Mode",
+                "value": "llm"
+              }
+            ],
+            "details": {
+              "mode": "llm",
+              "query_type": "specific_entity",
+              "confidence": 0.9,
+              "reason": "The question is asking for specific beliefs held by a particular individual, Origen, regarding three distinct but related concepts: free will, providence, and moral responsibility.",
+              "complexity": "simple"
+            }
+          },
+          {
+            "id": "expand_query",
+            "title": "Expand query",
+            "status": "complete",
+            "summary": "0 philosophers, 3 concepts, and 0 schools added around the query frame.",
+            "metrics": [
+              {
+                "label": "Philosophers",
+                "value": 0
+              },
+              {
+                "label": "Concepts",
+                "value": 3
+              },
+              {
+                "label": "Schools",
+                "value": 0
+              }
+            ],
+            "details": {
+              "mode": "heuristic",
+              "expanded_query": "What did Origen believe about free will, providence, and moral responsibility?",
+              "philosophers": [],
+              "concepts": [
+                "responsibility",
+                "assent",
+                "prohairesis"
+              ],
+              "schools": [],
+              "periods": []
+            }
+          },
+          {
+            "id": "discover_corpus",
+            "title": "Discover corpus",
+            "status": "complete",
+            "summary": "20 seed nodes, 12 passage anchors, 3 linked passages.",
+            "metrics": [
+              {
+                "label": "Semantic hits",
+                "value": 12
+              },
+              {
+                "label": "Seeds",
+                "value": 20
+              },
+              {
+                "label": "Anchors",
+                "value": 12
+              },
+              {
+                "label": "Linked passages",
+                "value": 3
+              }
+            ],
+            "details": {
+              "queries": [
+                "What did Origen believe about free will, providence, and moral responsibility?",
+                "responsibility",
+                "assent",
+                "prohairesis"
+              ],
+              "semantic_hits": [
+                {
+                  "id": "concept_prohairesis_alex",
+                  "score": 0.803,
+                  "label": "Prohairesis (προαίρεσις) - Alexander",
+                  "type": "concept"
+                },
+                {
+                  "id": "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6",
+                  "score": 0.7956,
+                  "label": "Prohairesis (Προαίρεσις) - Deliberate Choice",
+                  "type": "concept"
+                },
+                {
+                  "id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+                  "score": 0.7917,
+                  "label": "Origen of Alexandria",
+                  "type": "person"
+                },
+                {
+                  "id": "passage_arist_ee_2_10",
+                  "score": 0.7735,
+                  "label": "Aristotle, Ἠθικὰ Εὐδήμεια, 2.10",
+                  "type": "passage"
+                },
+                {
+                  "id": "pub_gourinat_2005_prohairesis",
+                  "score": 0.773,
+                  "label": "La « prohairesis » chez Épictète : décision, volonté, ou « personne morale » ?",
+                  "type": "publication"
+                },
+                {
+                  "id": "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+                  "score": 0.7693,
+                  "label": "Origen's De Principiis Argument for Free Will",
+                  "type": "argument"
+                }
+              ],
+              "seed_node_ids": [
+                "concept_prohairesis_alex",
+                "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6",
+                "person_origen_alexandria_185_254ce_s9t0u1v2",
+                "passage_arist_ee_2_10",
+                "pub_gourinat_2005_prohairesis",
+                "argument_origens_de_principiis_argument_for_free_will_93d043fc"
+              ],
+              "passage_anchor_ids": [
+                "concept_prohairesis_alex",
+                "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6",
+                "person_origen_alexandria_185_254ce_s9t0u1v2",
+                "pub_gourinat_2005_prohairesis",
+                "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+                "debate_prohairesis_meaning"
+              ],
+              "linked_passages": [
+                {
+                  "passage_id": "1906f121-848d-416f-acc2-a271b77d0341",
+                  "title": "Traité des Principes, Extraits grecs",
+                  "author": "Origenes",
+                  "canonical_ref": "3.1.1_a",
+                  "language": "grc",
+                  "confidence": 0.97
+                },
+                {
+                  "passage_id": "f85d1b5d-02dd-4f57-9a82-c42111ae5e63",
+                  "title": "Traité des Principes, Extraits grecs",
+                  "author": "Origenes",
+                  "canonical_ref": "3.1.1",
+                  "language": "grc",
+                  "confidence": 0.95
+                },
+                {
+                  "passage_id": "9c42dec9-afbb-4a1c-b3da-4636fb3161fb",
+                  "title": "Discourses and Enchiridion",
+                  "author": "Epictetus",
+                  "canonical_ref": "Epict. 1",
+                  "language": "grc",
+                  "confidence": 0.95
+                }
+              ]
+            }
+          },
+          {
+            "id": "research_notebook",
+            "title": "Build research notebook",
+            "status": "complete",
+            "summary": "3 facets, 2 hypotheses, 12 priority works.",
+            "metrics": [
+              {
+                "label": "Facets",
+                "value": 3
+              },
+              {
+                "label": "Hypotheses",
+                "value": 2
+              },
+              {
+                "label": "Sub-queries",
+                "value": 1
+              },
+              {
+                "label": "Works",
+                "value": 12
+              }
+            ],
+            "details": {
+              "question_frame": "What did Origen believe about free will, providence, and moral responsibility?",
+              "facets": [
+                {
+                  "facet_id": "identity_and_context",
+                  "title": "Identity and Context",
+                  "priority": 1,
+                  "required_support": "metadata"
+                },
+                {
+                  "facet_id": "works_and_doctrine",
+                  "title": "Works and Doctrine",
+                  "priority": 2,
+                  "required_support": "passage"
+                },
+                {
+                  "facet_id": "textual_basis",
+                  "title": "Textual Basis",
+                  "priority": 3,
+                  "required_support": "passage"
+                }
+              ],
+              "sub_queries": [
+                "What did Origen believe about free will, providence, and moral responsibility?"
+              ],
+              "competing_hypotheses": [
+                "The main answer is textually well supported for: What did Origen believe about free will, providence, and moral responsibility?",
+                "The evidence is more fragmented or interpretive for: What did Origen believe about free will, providence, and moral responsibility?"
+              ],
+              "work_priorities": [
+                "Origenes, Contra Celsum",
+                "De Principiis (Περὶ Ἀρχῶν) - Origen",
+                "Contra Celsum (SC 132, 136, 147, 150)",
+                "Philocalia (Φιλοκαλία Ὠριγένους)",
+                "Exhortation to Martyrdom (Εἰς μαρτύριον προτρεπτικός)",
+                "Origenes, De Principiis (Excerpta graeca)"
+              ]
+            }
+          },
+          {
+            "id": "scholarly_dossier",
+            "title": "Assemble scholarly dossier",
+            "status": "complete",
+            "summary": "3 dossier facets, 4 direct bundles, 0 testimonia.",
+            "metrics": [
+              {
+                "label": "Facets",
+                "value": 3
+              },
+              {
+                "label": "Direct",
+                "value": 4
+              },
+              {
+                "label": "Testimony",
+                "value": 0
+              },
+              {
+                "label": "Counter",
+                "value": 0
+              }
+            ],
+            "details": {
+              "facet_count": 3,
+              "primary_bundle_ids": [
+                "b9b327a4-05a4-4778-bf46-715697dc8d1b::1906f121-848d-416f-acc2-a271b77d0341",
+                "248fcb74-9a80-4f90-98c8-8ccf1e839c63::18067271-b238-448c-8937-5fe3d443eb39",
+                "b9b327a4-05a4-4778-bf46-715697dc8d1b::f85d1b5d-02dd-4f57-9a82-c42111ae5e63",
+                "248fcb74-9a80-4f90-98c8-8ccf1e839c63::f9f0a7e7-1ddf-4288-8a93-8f1d3e63d1ea"
+              ],
+              "testimony_bundle_ids": [],
+              "counter_bundle_ids": [],
+              "metadata_ids": [
+                "concept_autexousion_christian_freedom_u1v2w3x4",
+                "person_origen_alexandria_185_254ce_s9t0u1v2"
+              ]
+            }
+          },
+          {
+            "id": "tree_navigation",
+            "title": "Navigate works",
+            "status": "complete",
+            "summary": "17 candidate works, 12 selected sections.",
+            "metrics": [
+              {
+                "label": "Candidates",
+                "value": 17
+              },
+              {
+                "label": "Sections",
+                "value": 12
+              }
+            ],
+            "details": {
+              "candidate_work_titles": [
+                "Origenes, Contra Celsum",
+                "De Principiis (Περὶ Ἀρχῶν) - Origen",
+                "Contra Celsum (SC 132, 136, 147, 150)",
+                "Philocalia (Φιλοκαλία Ὠριγένους)",
+                "Exhortation to Martyrdom (Εἰς μαρτύριον προτρεπτικός)",
+                "Origenes, De Principiis (Excerpta graeca)"
+              ],
+              "selected_sections": [
+                {
+                  "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+                  "node_id": "book_Epict",
+                  "path": "Book Epict",
+                  "title": "Book Epict"
+                },
+                {
+                  "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+                  "node_id": "book_Epict_ch_1",
+                  "path": "Book Epict, Chapter 1",
+                  "title": "Book Epict, Chapter 1"
+                },
+                {
+                  "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+                  "node_id": "book_Epict_ch_10",
+                  "path": "Book Epict, Chapter 10",
+                  "title": "Book Epict, Chapter 10"
+                },
+                {
+                  "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+                  "node_id": "book_Epict_ch_100",
+                  "path": "Book Epict, Chapter 100",
+                  "title": "Book Epict, Chapter 100"
+                },
+                {
+                  "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+                  "node_id": "book_Epict_ch_101",
+                  "path": "Book Epict, Chapter 101",
+                  "title": "Book Epict, Chapter 101"
+                },
+                {
+                  "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+                  "node_id": "book_Epict_ch_102",
+                  "path": "Book Epict, Chapter 102",
+                  "title": "Book Epict, Chapter 102"
+                }
+              ]
+            }
+          },
+          {
+            "id": "evidence_bundles",
+            "title": "Expand evidence bundles",
+            "status": "complete",
+            "summary": "71 evidence bundles assembled for answering.",
+            "metrics": [
+              {
+                "label": "Bundles",
+                "value": 71
+              },
+              {
+                "label": "Translations",
+                "value": 16
+              }
+            ],
+            "details": {
+              "bundle_count": 71,
+              "bundle_sample": [
+                {
+                  "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::9c42dec9-afbb-4a1c-b3da-4636fb3161fb",
+                  "work_title": "Discourses and Enchiridion",
+                  "author": "Epictetus",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Epict. 1",
+                  "translation_source": "kg_node_description"
+                },
+                {
+                  "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::f3d40311-3ee4-4937-9314-3b13d7020534",
+                  "work_title": "Discourses and Enchiridion",
+                  "author": "Epictetus",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Epict. 2",
+                  "translation_source": "kg_node_description"
+                },
+                {
+                  "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::f09882ed-7bb6-4c93-af46-056b3555b840",
+                  "work_title": "Discourses and Enchiridion",
+                  "author": "Epictetus",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Epict. 3",
+                  "translation_source": "kg_node_description"
+                },
+                {
+                  "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::18067271-b238-448c-8937-5fe3d443eb39",
+                  "work_title": "Discourses and Enchiridion",
+                  "author": "Epictetus",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Epict. 4",
+                  "translation_source": "kg_node_description"
+                },
+                {
+                  "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::464f33dc-6828-410d-a6f5-b62891dedc80",
+                  "work_title": "Discourses and Enchiridion",
+                  "author": "Epictetus",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Epict. 5",
+                  "translation_source": "kg_node_description"
+                },
+                {
+                  "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::79b76c50-3593-4683-8076-595776daa0d4",
+                  "work_title": "Discourses and Enchiridion",
+                  "author": "Epictetus",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Epict. 6",
+                  "translation_source": null
+                }
+              ]
+            }
+          },
+          {
+            "id": "counter_evidence",
+            "title": "Seek counter-evidence",
+            "status": "skipped",
+            "summary": "0 counter-evidence bundles with rationale: minimal-llm mode or insufficient bundles.",
+            "metrics": [
+              {
+                "label": "Selected",
+                "value": 0
+              },
+              {
+                "label": "Mode",
+                "value": "skipped"
+              }
+            ],
+            "details": {
+              "mode": "skipped",
+              "selected_count": 0,
+              "rationale": "minimal-llm mode or insufficient bundles",
+              "bundle_ids": []
+            }
+          },
+          {
+            "id": "context_pack",
+            "title": "Pack long context",
+            "status": "complete",
+            "summary": "71 bundles, 12 section summaries, ~45458 tokens.",
+            "metrics": [
+              {
+                "label": "KG metadata",
+                "value": 117
+              },
+              {
+                "label": "Sections",
+                "value": 12
+              },
+              {
+                "label": "Bundles",
+                "value": 71
+              },
+              {
+                "label": "Tokens",
+                "value": 45458
+              }
+            ],
+            "details": {
+              "kg_metadata_count": 117,
+              "section_summary_count": 12,
+              "passage_bundle_count": 71,
+              "token_estimate": 45458,
+              "top_bundle_rankings": [
+                {
+                  "ref": "P1",
+                  "bundle_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b::1906f121-848d-416f-acc2-a271b77d0341",
+                  "work_title": "Traité des Principes, Extraits grecs",
+                  "author": "Origenes",
+                  "source": "tree_reasoning",
+                  "score": 166,
+                  "canonical_ref": "3.1.1_a",
+                  "section_path": "Book 3"
+                },
+                {
+                  "ref": "P2",
+                  "bundle_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b::f85d1b5d-02dd-4f57-9a82-c42111ae5e63",
+                  "work_title": "Traité des Principes, Extraits grecs",
+                  "author": "Origenes",
+                  "source": "tree_reasoning",
+                  "score": 166,
+                  "canonical_ref": "3.1.1",
+                  "section_path": "Book 3"
+                },
+                {
+                  "ref": "P3",
+                  "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::18067271-b238-448c-8937-5fe3d443eb39",
+                  "work_title": "Discourses and Enchiridion",
+                  "author": "Epictetus",
+                  "source": "tree_reasoning",
+                  "score": 98,
+                  "canonical_ref": "Epict. 4",
+                  "section_path": "Book Epict"
+                },
+                {
+                  "ref": "P4",
+                  "bundle_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63::f9f0a7e7-1ddf-4288-8a93-8f1d3e63d1ea",
+                  "work_title": "Discourses and Enchiridion",
+                  "author": "Epictetus",
+                  "source": "tree_reasoning",
+                  "score": 88,
+                  "canonical_ref": "Epict. 16",
+                  "section_path": "Book Epict"
+                },
+                {
+                  "ref": "P5",
+                  "bundle_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b::6b80e3a0-5903-4b5e-bd28-1ef27451fcc4",
+                  "work_title": "Traité des Principes, Extraits grecs",
+                  "author": "Origenes",
+                  "source": "tree_reasoning",
+                  "score": 166,
+                  "canonical_ref": "3.1.8_a",
+                  "section_path": "Book 3"
+                },
+                {
+                  "ref": "P6",
+                  "bundle_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b::2c2557fb-4402-453c-8093-eb2d0105471d",
+                  "work_title": "Traité des Principes, Extraits grecs",
+                  "author": "Origenes",
+                  "source": "tree_reasoning",
+                  "score": 166,
+                  "canonical_ref": "3.1.11",
+                  "section_path": "Book 3"
+                }
+              ]
+            }
+          },
+          {
+            "id": "evidence_sufficiency",
+            "title": "Check evidence sufficiency",
+            "status": "complete",
+            "summary": "Sufficiency 100% (sufficient).",
+            "metrics": [
+              {
+                "label": "Bundles",
+                "value": 71
+              },
+              {
+                "label": "Works",
+                "value": 2
+              },
+              {
+                "label": "Facets",
+                "value": 3
+              },
+              {
+                "label": "Score",
+                "value": "100%"
+              }
+            ],
+            "details": {
+              "bundle_count": 71,
+              "work_count": 2,
+              "counter_count": 0,
+              "covered_facets": 3,
+              "score": 1.0,
+              "sufficient": true,
+              "reason": "heuristic sufficiency (minimal llm mode)",
+              "refinement": null
+            }
+          },
+          {
+            "id": "draft_claim_ledger",
+            "title": "Draft claim ledger",
+            "status": "complete",
+            "summary": "7 claims drafted via llm mode.",
+            "metrics": [
+              {
+                "label": "Mode",
+                "value": "llm"
+              },
+              {
+                "label": "Claims",
+                "value": 7
+              }
+            ],
+            "details": {
+              "mode": "llm",
+              "claim_count": 7,
+              "raw_excerpt": "```json\n{\n  \"claims\": [\n    {\n      \"claim\": \"Origen of Alexandria (c. [...]"
+            }
+          },
+          {
+            "id": "render_grounded_answer",
+            "title": "Render grounded answer",
+            "status": "complete",
+            "summary": "Answer rendered via llm; polish mode: skipped.",
+            "metrics": [
+              {
+                "label": "Mode",
+                "value": "llm"
+              },
+              {
+                "label": "Polish",
+                "value": "skipped"
+              }
+            ],
+            "details": {
+              "mode": "llm",
+              "raw_excerpt": "Origen of Alexandria (c. 185–254 CE) was a central figure in Patristic theology, known for his systematic defense of free will within his work *De Principiis*. [...]",
+              "polish_mode": "skipped",
+              "compression_repair_mode": "skipped",
+              "render_requirements": {
+                "required_sections": 3,
+                "required_quote_blocks": 1,
+                "min_chars": 1080
+              },
+              "shape_metrics": {
+                "chars": 3690,
+                "section_headers": 5,
+                "quote_blocks": 3
+              }
+            }
+          },
+          {
+            "id": "scholarly_polish",
+            "title": "Scholarly polish",
+            "status": "skipped",
+            "summary": "Stage skipped for this query.",
+            "metrics": [],
+            "details": null
+          },
+          {
+            "id": "programmatic_verify",
+            "title": "Programmatic verify",
+            "status": "complete",
+            "summary": "8 citations verified in the final answer.",
+            "metrics": [
+              {
+                "label": "Citations",
+                "value": 8
+              }
+            ],
+            "details": {
+              "citation_count": 8,
+              "answer_excerpt": "### Identity and Context\nOrigen of Alexandria was a Christian Platonist educated in Alexandria's philosophical milieu. His extensive corpus includes biblical commentaries, homilies, apologetics, and systematic theology. [...]"
+            }
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "identity_and_context",
+            "title": "Identity and Context",
+            "question": "Who is the figure at the center of What did Origen believe about free will, providence, and moral responsibility?, and in what context do the sources place them?",
+            "summary": "Direct textual evidence centers on Origenes, Traité des Principes, Extraits grecs 3.1.1_a, Epictetus, Discourses and Enchiridion Epict. 4.",
+            "required_support": "metadata",
+            "priority": 1,
+            "primary_count": 3,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "metadata_count": 2,
+            "note_count": 3,
+            "uncertainty_count": 0
+          },
+          {
+            "facet_id": "works_and_doctrine",
+            "title": "Works and Doctrine",
+            "question": "What works or doctrines are directly linked to What did Origen believe about free will, providence, and moral responsibility??",
+            "summary": "Direct textual evidence centers on Origenes, Traité des Principes, Extraits grecs 3.1.1_a, Epictetus, Discourses and Enchiridion Epict. 16.",
+            "required_support": "passage",
+            "priority": 2,
+            "primary_count": 3,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "metadata_count": 2,
+            "note_count": 3,
+            "uncertainty_count": 0
+          },
+          {
+            "facet_id": "textual_basis",
+            "title": "Textual Basis",
+            "question": "What direct textual evidence best anchors an answer to What did Origen believe about free will, providence, and moral responsibility??",
+            "summary": "Direct textual evidence centers on Origenes, Traité des Principes, Extraits grecs 3.1.1_a, Epictetus, Discourses and Enchiridion Epict. 16.",
+            "required_support": "passage",
+            "priority": 3,
+            "primary_count": 3,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "metadata_count": 2,
+            "note_count": 3,
+            "uncertainty_count": 0
+          }
+        ],
+        "works": [
+          {
+            "work_id": "b9b327a4-05a4-4778-bf46-715697dc8d1b",
+            "title": "Book 3",
+            "author": "Origenes",
+            "bundle_count": 52,
+            "section_count": 6,
+            "primary_count": 52,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "has_translation": true,
+            "languages": [
+              "grc"
+            ],
+            "canonical_refs": [
+              "3.1.1",
+              "3.1.1_a",
+              "3.1.2",
+              "3.1.3",
+              "3.1.4",
+              "3.1.5"
+            ],
+            "sections": [
+              {
+                "node_id": "book_3",
+                "title": "Book 3",
+                "path": "Book 3"
+              },
+              {
+                "node_id": "book_3_ch_1",
+                "title": "Book 3, Chapter 1",
+                "path": "Book 3, Chapter 1"
+              },
+              {
+                "node_id": "book_4",
+                "title": "Book 4",
+                "path": "Book 4"
+              },
+              {
+                "node_id": "book_4_ch_1",
+                "title": "Book 4, Chapter 1",
+                "path": "Book 4, Chapter 1"
+              },
+              {
+                "node_id": "book_4_ch_2",
+                "title": "Book 4, Chapter 2",
+                "path": "Book 4, Chapter 2"
+              },
+              {
+                "node_id": "book_4_ch_3",
+                "title": "Book 4, Chapter 3",
+                "path": "Book 4, Chapter 3"
+              }
+            ]
+          },
+          {
+            "work_id": "248fcb74-9a80-4f90-98c8-8ccf1e839c63",
+            "title": "Book Epict",
+            "author": "Epictetus",
+            "bundle_count": 19,
+            "section_count": 6,
+            "primary_count": 19,
+            "testimony_count": 0,
+            "counter_count": 0,
+            "has_translation": true,
+            "languages": [
+              "grc"
+            ],
+            "canonical_refs": [
+              "Epict. 1",
+              "Epict. 2",
+              "Epict. 3",
+              "Epict. 4",
+              "Epict. 5",
+              "Epict. 6"
+            ],
+            "sections": [
+              {
+                "node_id": "book_Epict",
+                "title": "Book Epict",
+                "path": "Book Epict"
+              },
+              {
+                "node_id": "book_Epict_ch_1",
+                "title": "Book Epict, Chapter 1",
+                "path": "Book Epict, Chapter 1"
+              },
+              {
+                "node_id": "book_Epict_ch_10",
+                "title": "Book Epict, Chapter 10",
+                "path": "Book Epict, Chapter 10"
+              },
+              {
+                "node_id": "book_Epict_ch_100",
+                "title": "Book Epict, Chapter 100",
+                "path": "Book Epict, Chapter 100"
+              },
+              {
+                "node_id": "book_Epict_ch_101",
+                "title": "Book Epict, Chapter 101",
+                "path": "Book Epict, Chapter 101"
+              },
+              {
+                "node_id": "book_Epict_ch_102",
+                "title": "Book Epict, Chapter 102",
+                "path": "Book Epict, Chapter 102"
+              }
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Origen of Alexandria (c. 185–254 CE) was a central Patristic theologian who developed a systematic defense of free will within his work De Principiis.",
+            "facet_id": "identity_and_context",
+            "evidence_class": "metadata",
+            "support_type": "metadata",
+            "confidence": 1.0,
+            "status": "supported",
+            "evidence_ids": [
+              "person_origen_alexandria_185_254ce_s9t0u1v2",
+              "b9b327a4-05a4-4778-bf46-715697dc8d1b::f85d1b5d-02dd-4f57-9a82-c42111ae5e63"
+            ],
+            "refs": [
+              "2",
+              "P2"
+            ],
+            "quote_original": null,
+            "quote_translation": null
+          },
+          {
+            "claim": "Origen defines free will using the Greek term autexousion (αὐτεξούσιον), meaning 'self-determining power' or being 'in one's own power.'",
+            "facet_id": "works_and_doctrine",
+            "evidence_class": "direct_text",
+            "support_type": "passage",
+            "confidence": 1.0,
+            "status": "supported",
+            "evidence_ids": [
+              "concept_autexousion_christian_freedom_u1v2w3x4",
+              "b9b327a4-05a4-4778-bf46-715697dc8d1b::1906f121-848d-416f-acc2-a271b77d0341"
+            ],
+            "refs": [
+              "1",
+              "P1"
+            ],
+            "quote_original": "Ἵνα δὲ νοήσωμεν τί τὸ αὐτεξούσιον, τὴν ἔννοιαν αὐτοῦἀναπτύξαι δεῖ...",
+            "quote_translation": "In order that we may understand what free will is, it is necessary to unfold the conception of it..."
+          },
+          {
+            "claim": "In De Principiis Book III, Origen provides a sustained philosophical argument for free will and addresses scriptural passages that appear to negate it.",
+            "facet_id": "textual_basis",
+            "evidence_class": "direct_text",
+            "support_type": "passage",
+            "confidence": 1.0,
+            "status": "supported",
+            "evidence_ids": [
+              "b9b327a4-05a4-4778-bf46-715697dc8d1b::f85d1b5d-02dd-4f57-9a82-c42111ae5e63",
+              "argument_origens_de_principiis_argument_for_free_will_93d043fc"
+            ],
+            "refs": [
+              "P2",
+              "10"
+            ],
+            "quote_original": "Περὶ αὐτεξουσίου, καὶ τῶν δοκούντων τοῦτο ἀναιρεῖνῥητῶν γραφικῶν λύσις καὶ ἑρμηνεία",
+            "quote_translation": "Concerning free will, and an exegetical resolution and interpretation of those scriptural passages which seem to abolish it."
+          },
+          {
+            "claim": "Origen's defense of free will was specifically directed against Gnostic predestinarianism, which categorized humans into fixed spiritual types.",
+            "facet_id": "works_and_doctrine",
+            "evidence_class": "metadata",
+            "support_type": "metadata",
+            "confidence": 0.9,
+            "status": "supported",
+            "evidence_ids": [
+              "argument_origen_free_will_theodicy_6f9d8a3c"
+            ],
+            "refs": [
+              "21"
+            ],
+            "quote_original": null,
+            "quote_translation": null
+          },
+          {
+            "claim": "He argued that divine prescience (foreknowledge) is not the cause of future events, thereby preserving human moral responsibility.",
+            "facet_id": "works_and_doctrine",
+            "evidence_class": "metadata",
+            "support_type": "metadata",
+            "confidence": 0.9,
+            "status": "supported",
+            "evidence_ids": [
+              "argument_origen_prescience_causality"
+            ],
+            "refs": [
+              "29"
+            ],
+            "quote_original": null,
+            "quote_translation": null
+          },
+          {
+            "claim": "Origen utilized a 'permissive theodicy' formula, suggesting God's actions (like hardening Pharaoh's heart) are the 'occasion' rather than the 'cause' of human sin.",
+            "facet_id": "works_and_doctrine",
+            "evidence_class": "metadata",
+            "support_type": "metadata",
+            "confidence": 0.9,
+            "status": "supported",
+            "evidence_ids": [
+              "concept_non_causa_sed_occasio"
+            ],
+            "refs": [
+              "49"
+            ],
+            "quote_original": null,
+            "quote_translation": null
+          },
+          {
+            "claim": "Origen's eschatology included the concept of apocatastasis, the eventual restoration of all rational beings to their original state through the exercise of will.",
+            "facet_id": "works_and_doctrine",
+            "evidence_class": "metadata",
+            "support_type": "metadata",
+            "confidence": 0.85,
+            "status": "supported",
+            "evidence_ids": [
+              "concept_apocatastasis"
+            ],
+            "refs": [
+              "107"
+            ],
+            "quote_original": null,
+            "quote_translation": null
+          }
+        ],
+        "hypotheses": [
+          "The main answer is textually well supported for: What did Origen believe about free will, providence, and moral responsibility?",
+          "The evidence is more fragmented or interpretive for: What did Origen believe about free will, providence, and moral responsibility?"
+        ],
+        "open_questions": [
+          "What did Origen believe about free will, providence, and moral responsibility?"
+        ],
+        "counter_evidence": [],
+        "uncertainties": []
+      },
+      "complexity": "simple",
+      "iterations": 1,
+      "sub_queries": [
+        "What did Origen believe about free will, providence, and moral responsibility?"
+      ],
+      "quality_badge": "High",
+      "grounding_policy": "mixed_evidence",
+      "claim_ledger_size": 7
+    },
+    "llm_provider": "kimi",
+    "llm_model": "kimi-latest",
+    "processing_time_seconds": 54.622
+  },
+  "scorecards": {
+    "arm_a_prod": {
+      "chars": 5315,
+      "citations": 0,
+      "ref_markers": 14,
+      "quote_blocks": 8,
+      "section_headers": 5,
+      "paragraphs": 14,
+      "scholarly_cues": 0,
+      "pipeline_degraded": null,
+      "claim_ledger_mode": null,
+      "render_answer_mode": null,
+      "quality_badge": null
+    },
+    "arm_b_new_system": {
+      "chars": 2377,
+      "citations": 8,
+      "ref_markers": 8,
+      "quote_blocks": 1,
+      "section_headers": 5,
+      "paragraphs": 5,
+      "scholarly_cues": 0,
+      "pipeline_degraded": null,
+      "claim_ledger_mode": "llm",
+      "render_answer_mode": "llm",
+      "quality_badge": "High"
+    }
+  }
+}

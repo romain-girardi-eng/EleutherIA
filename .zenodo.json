@@ -1,0 +1,27 @@
+{
+  "title": "EleutherIA: An AI-Powered Scholarly Research Platform for Ancient Philosophy on Free Will",
+  "description": "EleutherIA is an AI-powered scholarly research platform combining a FAIR-compliant knowledge graph, an ancient texts corpus, and an agentic GraphRAG engine to document ancient philosophical debates on free will, fate, and moral responsibility from the Greco-Roman and Early Christian periods. The main branch cites the stable Zenodo concept DOI; release-specific DOIs are minted automatically from tagged GitHub releases.",
+  "creators": [
+    {
+      "name": "Girardi, Romain",
+      "affiliation": "Universite Cote d'Azur, CEPAM; Universite de Geneve, Faculte de Theologie Jean Calvin",
+      "orcid": "0000-0002-5310-5346"
+    }
+  ],
+  "access_right": "open",
+  "license": "cc-by-4.0",
+  "upload_type": "software",
+  "keywords": [
+    "ancient philosophy",
+    "free will",
+    "knowledge graph",
+    "GraphRAG",
+    "digital humanities",
+    "FAIR data",
+    "Stoicism",
+    "ancient Greek",
+    "Latin",
+    "moral responsibility"
+  ],
+  "notes": "Use the concept DOI 10.5281/zenodo.17379489 to cite the rolling EleutherIA archive from the main branch."
+}

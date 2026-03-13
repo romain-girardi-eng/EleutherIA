@@ -1,0 +1,2879 @@
+{
+  "generated_at": "2026-03-10T08:40:34.936313+00:00",
+  "counts": {
+    "nodes": 6452,
+    "edges": 20006,
+    "passage_citations": 2521,
+    "claim_nodes": 408,
+    "node_types": {
+      "argument": 174,
+      "argument_framework": 1,
+      "concept": 168,
+      "synthesis": 13,
+      "controversy": 5,
+      "event": 2,
+      "debate": 18,
+      "conceptual_evolution": 3,
+      "group": 3,
+      "person": 206,
+      "passage": 5631,
+      "publication": 81,
+      "quote": 14,
+      "work": 123,
+      "school": 9,
+      "source_collection": 1
+    },
+    "edge_relations": {
+      "supports": 142,
+      "employs": 81,
+      "defines": 10,
+      "extends": 124,
+      "discusses": 1683,
+      "critiques": 178,
+      "authored_by": 5732,
+      "responds_to": 37,
+      "influenced": 88,
+      "contains": 79,
+      "exemplifies": 41,
+      "presupposes": 24,
+      "grounded_in": 47,
+      "developed_by": 15,
+      "interprets": 102,
+      "part_of": 5641,
+      "evidenced_by": 418,
+      "related_to": 11,
+      "parallel_to": 7,
+      "contrasts_with": 4,
+      "created_by": 206,
+      "member_of": 20,
+      "contemporary_of": 8,
+      "influenced_by": 4,
+      "wrote": 3,
+      "contributes_to": 117,
+      "translation_of": 2815,
+      "source_for": 263,
+      "represents": 11,
+      "follows": 1,
+      "participates_in": 28,
+      "specializes_in": 11,
+      "student_of": 4,
+      "precedes": 1,
+      "has_section": 1236,
+      "belongs_to_corpus": 26,
+      "has_chapter": 788
+    },
+    "periods": {
+      "Roman Imperial": 4353,
+      "Medieval": 54,
+      "Hellenistic": 59,
+      "Early Modern": 79,
+      "Classical Greek": 79,
+      "Late Antiquity": 1243,
+      "Patristic": 207,
+      "Contemporary": 196,
+      "Presocratic": 10,
+      "Second Temple Judaism": 28,
+      "Roman Republican": 103,
+      "Rabbinic": 2,
+      "<NULL>": 30,
+      "Modern": 9
+    }
+  },
+  "clean_checks": {
+    "orphan_edges": 0,
+    "orphan_passage_citations": 0,
+    "isolated_nodes": 0,
+    "duplicate_edge_groups": 0,
+    "self_loops": 0
+  },
+  "ontology_drift": {
+    "unknown_node_types": [],
+    "unknown_relations": [],
+    "invalid_relation_pairs": [],
+    "invalid_periods": []
+  },
+  "completeness": {
+    "nodes_without_description": {
+      "count": 0,
+      "examples": []
+    },
+    "empty_metadata": {
+      "count": 38,
+      "by_type": {
+        "concept": 22,
+        "synthesis": 1,
+        "debate": 12,
+        "person": 2,
+        "school": 1
+      },
+      "examples": [
+        {
+          "node_id": "concept_acting_final_cause",
+          "label": "Acting Final Cause (Providence)",
+          "type": "concept",
+          "period": "Patristic",
+          "description_snippet": "Clement's innovation (per Jourdan 2011): Providence fuses Stoic efficient causality + Aristotelian teleology + Platonic transcendence. God as both agent AND end/τέλος, actively tr…"
+        },
+        {
+          "node_id": "concept_ancient_free_will_debate_structure_z6a7b8c9",
+          "label": "Ancient Free Will Debate: Compatibilism vs. Incompatibilism",
+          "type": "concept",
+          "period": "Roman Imperial",
+          "description_snippet": "The ancient debate structure on fate and freedom established the conceptual framework that persists in contemporary philosophy. The core issue: **Is universal causal determinism (…"
+        },
+        {
+          "node_id": "concept_bypassing_1y2z3a4b",
+          "label": "Bypassing",
+          "type": "concept",
+          "period": "Contemporary",
+          "description_snippet": "Eddy Nahmias' explanation for why people sometimes have incompatibilist intuitions. Bypassing occurs when an agent's conscious reasoning processes (beliefs, desires, values, reaso…"
+        },
+        {
+          "node_id": "concept_ditte_hamartia_double_sin_plotinus",
+          "label": "διττὴ ἁμαρτία (Double Sin) - Plotinus's Synthesis of Embodiment Doctrines",
+          "type": "synthesis",
+          "period": "Late Antiquity",
+          "description_snippet": "Plotinus's doctrine of the soul's 'double fault' (ditte hamartia): the initial descent into body and the subsequent wrongful attachment to bodily pleasures. Represents his complex…"
+        },
+        {
+          "node_id": "concept_hierarchical_compatibilism_frankfurt",
+          "label": "Hierarchical Compatibilism",
+          "type": "concept",
+          "period": "Contemporary",
+          "description_snippet": "Harry Frankfurt's theory that freedom consists in harmony between first-order desires and higher-order volitions, paralleling Stoic assent"
+        },
+        {
+          "node_id": "concept_hierarchical_mesh_8v9w0x1y",
+          "label": "Hierarchical Mesh Theory",
+          "type": "concept",
+          "period": "Contemporary",
+          "description_snippet": "Harry Frankfurt's theory that free will consists in alignment between first-order desires (desires to act) and second-order desires (desires about which desires to have). A person…"
+        },
+        {
+          "node_id": "concept_luck_argument_4b5c6d7e",
+          "label": "Luck Argument",
+          "type": "concept",
+          "period": "Contemporary",
+          "description_snippet": "Family of arguments claiming that if an action is undetermined, it is random/lucky, and if it is determined, it is not up to the agent. Either way, agent lacks control necessary f…"
+        },
+        {
+          "node_id": "concept_olympic_paradigm_positive_embodiment",
+          "label": "Olympic Paradigm - Positive View of Embodiment",
+          "type": "concept",
+          "period": "Presocratic",
+          "description_snippet": "The view in ancient Greek religion that embodiment is natural and good, as the gods themselves have bodies. Contrasts with the Orphic-Pythagorean negative view of the body as a pr…"
+        },
+        {
+          "node_id": "concept_orphic_paradigm_embodiment_as_sin",
+          "label": "Orphic Paradigm - Embodiment as Sin/Fall from Divinity",
+          "type": "concept",
+          "period": "Presocratic",
+          "description_snippet": "The Orphic-Pythagorean doctrine that the soul's incarnation in a body is a punishment for primordial sin, leading to the body-as-prison metaphor and the need for purification thro…"
+        },
+        {
+          "node_id": "concept_orphic_zagreus_dionysus_myth",
+          "label": "Orphic Zagreus/Dionysus Myth - Anthropological Dualism",
+          "type": "concept",
+          "period": "Presocratic",
+          "description_snippet": "The Orphic myth of Dionysus-Zagreus, son of Zeus, torn apart by Titans and reborn. Humans are born from the ashes of the Titans who had consumed Zagreus, explaining why humans hav…"
+        },
+        {
+          "node_id": "concept_peccatum_originans",
+          "label": "Peccatum Originans (Originating Sin)",
+          "type": "concept",
+          "period": "Patristic",
+          "description_snippet": "Adam's sin as historical prototype/precedent transmitted through example and imitation (ἀρχή/μίμησις), NOT biological inheritance. Creates ἀρχή (initiative, principle) opening pat…"
+        },
+        {
+          "node_id": "concept_reactive_attitudes_7u8v9w0x",
+          "label": "Reactive Attitudes",
+          "type": "concept",
+          "period": "Contemporary",
+          "description_snippet": "P.F. Strawson's framework for understanding moral responsibility. Reactive attitudes are emotions and attitudes constitutive of interpersonal relationships: resentment, gratitude,…"
+        },
+        {
+          "node_id": "concept_readiness_potential_3a4b5c6d",
+          "label": "Readiness Potential (Bereitschaftspotential)",
+          "type": "concept",
+          "period": "Contemporary",
+          "description_snippet": "Neural signal (measured via EEG) consisting of gradual buildup of electrical activity in motor cortex and supplementary motor area, beginning ~350-400ms before conscious intention…"
+        },
+        {
+          "node_id": "concept_reasons_responsiveness_0x1y2z3a",
+          "label": "Reasons-Responsiveness",
+          "type": "concept",
+          "period": "Contemporary",
+          "description_snippet": "Fischer and Ravizza's account of moral responsibility. An agent is responsible for action when the action flows from a reasons-responsive mechanism. A mechanism is reasons-respons…"
+        },
+        {
+          "node_id": "concept_self_forming_actions_4r5s6t7u",
+          "label": "Self-Forming Actions (SFAs)",
+          "type": "concept",
+          "period": "Contemporary",
+          "description_snippet": "Robert Kane's account of free will based on indeterministic decision-making moments. SFAs are situations of inner conflict where agent faces genuine choice between competing motiv…"
+        },
+        {
+          "node_id": "concept_soma_sema_body_tomb_orphic",
+          "label": "σῶμα σῆμα (Body as Tomb) - Orphic Doctrine",
+          "type": "concept",
+          "period": "Presocratic",
+          "description_snippet": "The Orphic-Pythagorean doctrine that the body (soma) is a tomb or prison (sema) for the soul, reflecting the negative view of embodiment as punishment and the soul's desire for li…"
+        },
+        {
+          "node_id": "concept_source_incompatibilism",
+          "label": "Source Incompatibilism",
+          "type": "concept",
+          "period": "Contemporary",
+          "description_snippet": "The view that determinism is incompatible with being the ultimate source of one's actions, developed from Alexander of Aphrodisias"
+        },
+        {
+          "node_id": "concept_source_vs_leeway_5c6d7e8f",
+          "label": "Source vs. Leeway Freedom",
+          "type": "concept",
+          "period": "Contemporary",
+          "description_snippet": "Distinction between two conceptions of freedom and control. Leeway (alternative possibilities): agent could have done otherwise; multiple futures accessible to agent. Source (orig…"
+        },
+        {
+          "node_id": "concept_terminology_evolution_greek_latin_y5z6a7b8",
+          "label": "Terminology Evolution: Greek → Latin Free Will Vocabulary",
+          "type": "concept",
+          "period": "Late Antiquity",
+          "description_snippet": "The evolution of free will terminology from Greek to Latin is a crucial chapter in the history of philosophy, as Latin translations and neologisms shaped all later Western (Christ…"
+        },
+        {
+          "node_id": "concept_theurgical_soteriology_iamblichus",
+          "label": "Theurgical Soteriology - Iamblichean Ritual Practice for Soul's Immortalization",
+          "type": "concept",
+          "period": "Late Antiquity",
+          "description_snippet": "Iamblichus's doctrine that the soul's salvation requires theurgy (divine work) - ritual practices that invoke divine power to elevate the soul. Since the entire soul descends into…"
+        }
+      ]
+    },
+    "null_periods": {
+      "count": 30,
+      "by_type": {
+        "conceptual_evolution": 3,
+        "passage": 25,
+        "source_collection": 1,
+        "work": 1
+      },
+      "examples": [
+        {
+          "node_id": "evolution_eph_hemin_6284cf6d",
+          "label": "Evolution of τὸ ἐφ' ἡμῖν (to eph' hêmin)",
+          "type": "conceptual_evolution"
+        },
+        {
+          "node_id": "evolution_heimarmene_2b989ed0",
+          "label": "Evolution of εἱμαρμένη (heimarmenê)",
+          "type": "conceptual_evolution"
+        },
+        {
+          "node_id": "evolution_will_concept_c68f04bd",
+          "label": "Evolution of Will (various terms) - Scholarly Debate",
+          "type": "conceptual_evolution"
+        },
+        {
+          "node_id": "passage_aug_gla_1_1_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.1: Introduction - Grace and Free Will (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_10_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.10: Eternal Life as Gift for Gift (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_11_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.11: Law, Sin, and Concupiscence (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_12_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.12: God's Righteousness vs Human Righteousness (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_13_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.13: Against Prior Merit of Good Will (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_14_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.14: Ezekiel's New Heart Prophecy (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_15_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.15: Faith Obtains What Law Commands (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_16_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.16: Love Casts Out Fear (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_17_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.17: All Things in Love (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_18_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.18: Love Is from God (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_19_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.19: Love Poured Out by the Holy Spirit (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_2_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.2: Scriptural Evidence for Free Will (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_20_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.20: The Hardening of Pharaoh (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_21_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.21: Conversion from the Lord (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_22_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.22: God Sends Delusion to Unbelievers (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_23_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.23: Doing Good After Receiving Good from Our Evil (English)",
+          "type": "passage"
+        },
+        {
+          "node_id": "passage_aug_gla_1_24_en",
+          "label": "Augustine, De Gratia et Libero Arbitrio 1.24: Wisdom from Above is Pure and Peaceable (English)",
+          "type": "passage"
+        }
+      ]
+    },
+    "weak_nodes": {
+      "count": 318,
+      "by_type": {
+        "argument": 24,
+        "concept": 51,
+        "conceptual_evolution": 3,
+        "debate": 3,
+        "person": 97,
+        "publication": 61,
+        "quote": 4,
+        "synthesis": 3,
+        "work": 36,
+        "controversy": 2,
+        "passage": 31,
+        "school": 3
+      },
+      "examples": [
+        {
+          "node_id": "argument_chance_cosmos_middle_platonist",
+          "label": "Chance Cosmos Argument (Middle Platonist)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "degree": 1
+        },
+        {
+          "node_id": "argument_zeno_paradox_analogy_alex",
+          "label": "Zeno's Paradox Analogy (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_acting_final_cause",
+          "label": "Acting Final Cause (Providence)",
+          "type": "concept",
+          "period": "Patristic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_autexousion_methodian_doctrine_141258ec",
+          "label": "Autexousion (Free Will) - Methodian Doctrine",
+          "type": "concept",
+          "period": "Patristic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_concupiscence_epithumia_transmitted_bd8e2fc9",
+          "label": "Concupiscence (Epithumia) as Transmitted Consequence - Methodian Hamartiology",
+          "type": "concept",
+          "period": "Patristic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_sympathia_universalis_6u1v3x09",
+          "label": "Cosmic Sympathy (Sympathia Universalis)",
+          "type": "concept",
+          "period": "Hellenistic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_cyclical_return_great_year",
+          "label": "Cyclical Return (Great Year)",
+          "type": "concept",
+          "period": "Hellenistic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_death_therapeutic_remedy_methodius_5eaaf3a2",
+          "label": "Death as Therapeutic Remedy (Not Punishment) - Methodian Theodicy",
+          "type": "concept",
+          "period": "Patristic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_dynamic_anthropology_temporal",
+          "label": "Dynamic Anthropology - Temporal Development toward Perfection",
+          "type": "concept",
+          "period": "Patristic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_pathetike_holke_emotional_pull",
+          "label": "Emotional Pull (Pathētikē Holkē)",
+          "type": "concept",
+          "period": "Hellenistic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_evil_quality_accident_methodius_dae1b112",
+          "label": "Evil as Quality/Accident (Not Substance) - Methodian Theodicy",
+          "type": "concept",
+          "period": "Patristic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_yetzer_ha_tov_y7z8a9b0",
+          "label": "Good Inclination (Yetzer Ha-Tov)",
+          "type": "concept",
+          "period": "Rabbinic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_grace_freedom_synergy",
+          "label": "Grace-Freedom Synergy (συνεργία)",
+          "type": "concept",
+          "period": "Patristic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_hierarchical_compatibilism_frankfurt",
+          "label": "Hierarchical Compatibilism",
+          "type": "concept",
+          "period": "Contemporary",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_axioma_dignity_alex",
+          "label": "Human Dignity / ἀξίωμα (Alexander)",
+          "type": "concept",
+          "period": "Roman Imperial",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_kinesis_anaitios_uncaused_motion_a7b8c9d0",
+          "label": "Kinesis Anaitios (Κίνησις Ἀναίτιος) - Uncaused Motion",
+          "type": "concept",
+          "period": "Late Antiquity",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_matter_adaptability_pneumatic_receptivity",
+          "label": "Matter's Adaptability and Pneumatic Receptivity",
+          "type": "concept",
+          "period": "Patristic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_metriopatheia_moderation_passions",
+          "label": "Metriopatheia (Moderation of Passions)",
+          "type": "concept",
+          "period": "Hellenistic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_natural_character_e5f6g7h8",
+          "label": "Natural Character (Φύσις, Ingenium)",
+          "type": "concept",
+          "period": "Hellenistic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_orphic_zagreus_dionysus_myth",
+          "label": "Orphic Zagreus/Dionysus Myth - Anthropological Dualism",
+          "type": "concept",
+          "period": "Presocratic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_reservation_exceptio_m3n4o5p6",
+          "label": "Reservation Clause (Ὑπεξαίρεσις, Exceptio)",
+          "type": "concept",
+          "period": "Roman Imperial",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_self_happiness_alex",
+          "label": "Self-Achieved Happiness / δι᾽ αὑτῶν εὐδαιμονεῖν (Alexander)",
+          "type": "concept",
+          "period": "Roman Imperial",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_skeptical_agency_i9j0k1l2",
+          "label": "Skeptical Agency Without Belief",
+          "type": "concept",
+          "period": "Roman Imperial",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_source_incompatibilism",
+          "label": "Source Incompatibilism",
+          "type": "concept",
+          "period": "Contemporary",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_theurgical_soteriology_iamblichus",
+          "label": "Theurgical Soteriology - Iamblichean Ritual Practice for Soul's Immortalization",
+          "type": "concept",
+          "period": "Late Antiquity",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_two_source_metaphysics_platonist",
+          "label": "Two-Source Metaphysics (Platonist)",
+          "type": "concept",
+          "period": "Roman Imperial",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_ultimate_responsibility_kane",
+          "label": "Ultimate Responsibility (UR)",
+          "type": "concept",
+          "period": "Contemporary",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_undescended_soul_plotinus",
+          "label": "Undescended Soul Doctrine - Plotinus's Preservation of Soul's Divinity",
+          "type": "concept",
+          "period": "Late Antiquity",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_ratzon_g5h6i7j8",
+          "label": "Will/Desire (Ratzon)",
+          "type": "concept",
+          "period": "Second Temple Judaism",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_soma_sema_body_tomb_orphic",
+          "label": "σῶμα σῆμα (Body as Tomb) - Orphic Doctrine",
+          "type": "concept",
+          "period": "Presocratic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_agathos_vs_teleios_distinction",
+          "label": "Ἀγαθός vs. Τέλειος Distinction (Good vs. Perfect)",
+          "type": "concept",
+          "period": "Patristic",
+          "degree": 1
+        },
+        {
+          "node_id": "concept_anakephalaiosis_recapitulation",
+          "label": "Ἀνακεφαλαίωσις - Eschatological Recapitulation",
+          "type": "concept",
+          "period": "Patristic",
+          "degree": 1
+        },
+        {
+          "node_id": "evolution_will_concept_c68f04bd",
+          "label": "Evolution of Will (various terms) - Scholarly Debate",
+          "type": "conceptual_evolution",
+          "period": null,
+          "degree": 1
+        },
+        {
+          "node_id": "evolution_heimarmene_2b989ed0",
+          "label": "Evolution of εἱμαρμένη (heimarmenê)",
+          "type": "conceptual_evolution",
+          "period": null,
+          "degree": 1
+        },
+        {
+          "node_id": "evolution_eph_hemin_6284cf6d",
+          "label": "Evolution of τὸ ἐφ' ἡμῖν (to eph' hêmin)",
+          "type": "conceptual_evolution",
+          "period": null,
+          "degree": 1
+        },
+        {
+          "node_id": "debate_reason_vs_will_830c90c2",
+          "label": "Intellectualism vs Voluntarism",
+          "type": "debate",
+          "period": "Medieval",
+          "degree": 1
+        },
+        {
+          "node_id": "debate_randomness_objection_ae34a974",
+          "label": "The Randomness/Luck Objection to Libertarianism",
+          "type": "debate",
+          "period": "Contemporary",
+          "degree": 1
+        },
+        {
+          "node_id": "person_camus_albert_9i0j1k2l",
+          "label": "Albert Camus",
+          "type": "person",
+          "period": "Contemporary",
+          "degree": 1
+        },
+        {
+          "node_id": "scholar_furst_alfons",
+          "label": "Alfons Fürst",
+          "type": "person",
+          "period": "Contemporary",
+          "degree": 1
+        },
+        {
+          "node_id": "scholar_voelke_andre_jean",
+          "label": "André-Jean Voelke",
+          "type": "person",
+          "period": "Contemporary",
+          "degree": 1
+        }
+      ]
+    },
+    "exact_duplicate_labels": [],
+    "likely_near_duplicates": [
+      {
+        "type": "debate",
+        "label_a": "Intellectualism vs Voluntarism Debate",
+        "id_a": "debate_intellectualism_vs_voluntarism_w3x4y5z6",
+        "label_b": "Intellectualism vs Voluntarism",
+        "id_b": "debate_reason_vs_will_830c90c2",
+        "token_overlap": 1.0,
+        "label_similarity": 0.896
+      }
+    ],
+    "authorship_and_structure": {
+      "work_missing_authored_by": {
+        "count": 35,
+        "examples": [
+          {
+            "node_id": "sc_origenes_contra_celsum",
+            "label": "Origenes, Contra Celsum",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_ignatius_ad_ephesios",
+            "label": "Ignatius, Ad Ephesios",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_ignatius_ad_magnesios",
+            "label": "Ignatius, Ad Magnesios",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_ignatius_ad_philadelphenos",
+            "label": "Ignatius, Ad Philadelphenos",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_ignatius_ad_polycarpum",
+            "label": "Ignatius, Ad Polycarpum",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_ignatius_ad_romanos",
+            "label": "Ignatius, Ad Romanos",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_ignatius_ad_smyrnaeos",
+            "label": "Ignatius, Ad Smyrnaeos",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_ignatius_ad_trallianos",
+            "label": "Ignatius, Ad Trallianos",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi",
+            "label": "Martyrium Polycarpi",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc123_apollinaris_peri_pascha",
+            "label": "Apollinaris, Peri Pascha (fr.)",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc123_melito_apologia_ad_antoninum",
+            "label": "Melito, Apologia ad Antoninum (fr.)",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc123_melito_de_anima_et_corpore",
+            "label": "Melito, De Anima et Corpore (fr.)",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc123_melito_eclogae",
+            "label": "Melito, Eclogae (fr.)",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc123_melito_peri_pascha",
+            "label": "Melito, Peri Pascha",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc167_clemens_epistula_ad_corinthios",
+            "label": "Clemens Romanus, I Ad Corinthios",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc172_epistula_barnabae",
+            "label": "Epistula Barnabae",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc20_theophilus_ad_autolycum",
+            "label": "Theophilus, Ad Autolycum",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc268_origenes_peri_archon",
+            "label": "Origenes, De Principiis (Excerpta graeca)",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc31_melito_peri_pascha_iv",
+            "label": "Melito, Peri Pascha fr. IV",
+            "type": "work",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc379_athenagoras_legatio",
+            "label": "Athenagoras, Legatio pro Christianis",
+            "type": "work",
+            "period": "Roman Imperial"
+          }
+        ]
+      },
+      "publication_missing_authored_by": {
+        "count": 34,
+        "examples": [
+          {
+            "node_id": "pub_alberti_1999_aspasius",
+            "label": "Il volontario e la scelta in Aspasio",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_amand_1945_fatalisme",
+            "label": "Fatalisme et liberté dans l'antiquité grecque",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_astolfi_2015_alexander_fate",
+            "label": "Nature and Fate according to the Aristotelian Tradition: Alexander of Aphrodisia's Exegesis",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_boys_stones_2007_origen",
+            "label": "Human Autonomy and Divine Revelation in Origen",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_boysstones_2007_middle_platonists",
+            "label": "Middle Platonists on Fate and Human Autonomy",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_brass_2019_neuroscience_free_will",
+            "label": "Why neuroscience does not disprove free will",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_chamberlain_1984_prohairesis",
+            "label": "The Meaning of Prohairesis in Aristotle's Ethics",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_comerro_2013_libre_arbitre_islam",
+            "label": "La défense argumentée du libre arbitre dans la tradition musulmane",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_crouzel_1956_origine",
+            "label": "Théologie de l'image de Dieu chez Origène",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_deery_2007_compatibilism",
+            "label": "Extending Compatibilism: Control, Responsibility, And Blame",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_destree_2014_plato_er",
+            "label": "Comment être responsable de son destin? Platon et le mythe d'Er",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_dimuzio_2008_aristotle_determinism",
+            "label": "Aristotle's Alleged Moral Determinism in the Nicomachean Ethics",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_dobbin_1991_prohairesis_epictetus",
+            "label": "Prohairesis in Epictetus",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_donini_2010_aristotle_determinism",
+            "label": "Aristotle and Determinism",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_gauthier_1970_ethique_nicomaque",
+            "label": "Introduction to Aristote: L'éthique à Nicomaque",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_haggard_2008_human_volition",
+            "label": "Human volition: Towards a Neuroscience of Will",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_hardie_1968_aristotle_freewill",
+            "label": "Aristotle and the Freewill Problem",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_hengstermann_2016_freiheitsmetaphysik",
+            "label": "Origenes und der Ursprung der Freiheitsmetaphysik",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_horn_1996_augustinus_wille",
+            "label": "Augustinus und die Entstehung des philosophischen Willensbegriffs",
+            "type": "publication",
+            "period": "Contemporary"
+          },
+          {
+            "node_id": "pub_koch_1932_pronoia",
+            "label": "Pronoia und Paideusis: Studien über Origenes und sein Verhältnis zum Platonismus",
+            "type": "publication",
+            "period": "Contemporary"
+          }
+        ]
+      },
+      "quote_missing_authored_by": {
+        "count": 2,
+        "examples": [
+          {
+            "node_id": "quote_carneades_cafma_4483b50a",
+            "label": "Carneades' argument against fate (via Cicero, De Fato 31)",
+            "type": "quote",
+            "period": "Hellenistic"
+          },
+          {
+            "node_id": "quote_chrysippus_cylinder_1da2c55b",
+            "label": "Chrysippus' cylinder analogy (via Cicero, De Fato 42-43)",
+            "type": "quote",
+            "period": "Hellenistic"
+          }
+        ]
+      },
+      "passage_missing_authored_by": {
+        "count": 56,
+        "source_nodes": 28,
+        "translation_nodes": 28,
+        "examples": [
+          {
+            "node_id": "passage_sc_anonymous____172_________4__________9__14___15",
+            "label": "SC 172, chap.: 4, verset: 9b-14, §15 (Anonymous)",
+            "type": "passage",
+            "period": "Patristic"
+          },
+          {
+            "node_id": "passage_sc_anonymous____172_________4__________9__14___15_en",
+            "label": "SC 172, chap.: 4, verset: 9b-14, §15 (Anonymous) (English)",
+            "type": "passage",
+            "period": "Patristic"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_app1_chap1",
+            "label": "Mart. Pol. App. I 1",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_app1_chap1_en",
+            "label": "Mart. Pol. App. I 1 (English)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_app1_chap2",
+            "label": "Mart. Pol. App. I 2",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_app1_chap2_en",
+            "label": "Mart. Pol. App. I 2 (English)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_app1_chap3",
+            "label": "Mart. Pol. App. I 3",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_app1_chap3_en",
+            "label": "Mart. Pol. App. I 3 (English)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_app2_chap5",
+            "label": "Mart. Pol. App. II 5",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_app2_chap5_en",
+            "label": "Mart. Pol. App. II 5 (English)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_app2_par_1_4",
+            "label": "Mart. Pol. App. II 1-4",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_app2_par_1_4_en",
+            "label": "Mart. Pol. App. II 1-4 (English)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_chap1",
+            "label": "Mart. Pol. 1",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_chap1_en",
+            "label": "Mart. Pol. 1 (English)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_chap10",
+            "label": "Mart. Pol. 10",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_chap10_en",
+            "label": "Mart. Pol. 10 (English)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_chap11",
+            "label": "Mart. Pol. 11",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_chap11_en",
+            "label": "Mart. Pol. 11 (English)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_chap12",
+            "label": "Mart. Pol. 12",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "sc10bis_martyrium_polycarpi_chap12_en",
+            "label": "Mart. Pol. 12 (English)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          }
+        ]
+      },
+      "passage_missing_part_of": {
+        "count": 6,
+        "source_nodes": 3,
+        "translation_nodes": 3,
+        "examples": [
+          {
+            "node_id": "passage_alexander_de_fato_14",
+            "label": "De Fato 14 (ἐφ' ἡμῖν = αὐτεξούσιον)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "passage_alexander_de_fato_14_en",
+            "label": "De Fato 14 (ἐφ' ἡμῖν = αὐτεξούσιον) (English)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "passage_alexander_de_fato_15",
+            "label": "De Fato 15 (Man as ἀρχὴ καὶ αἰτία)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "passage_alexander_de_fato_15_en",
+            "label": "De Fato 15 (Man as ἀρχὴ καὶ αἰτία) (English)",
+            "type": "passage",
+            "period": "Roman Imperial"
+          },
+          {
+            "node_id": "passage_plotinus_enn_4_4_30",
+            "label": "Plotinus, Enneades IV.4.30: Self-Determining Principle",
+            "type": "passage",
+            "period": "Late Antiquity"
+          },
+          {
+            "node_id": "passage_plotinus_enn_4_4_30_en",
+            "label": "Plotinus, Enneades IV.4.30: Self-Determining Principle (English)",
+            "type": "passage",
+            "period": "Late Antiquity"
+          }
+        ]
+      },
+      "translation_integrity": {
+        "translation_nodes": 2815,
+        "translation_nodes_missing_translation_of": 0,
+        "source_nodes_with_translation_of": 0
+      }
+    }
+  },
+  "formatting": {
+    "descriptions_with_markdown": {
+      "count": 168,
+      "by_type": {
+        "argument": 56,
+        "concept": 26,
+        "synthesis": 11,
+        "debate": 6,
+        "person": 17,
+        "publication": 38,
+        "school": 1,
+        "work": 13
+      },
+      "examples": [
+        {
+          "node_id": "argument_anselms_necessity_of_the_past_f7947dab",
+          "label": "Anselm's Necessity of the Past",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Anselm's distinction between types of necessity to defend compatibility of divine foreknowledge with freedom (*De Concordia* I-II): **The Distinction:** - **Antecedent necessity**…"
+        },
+        {
+          "node_id": "argument_aquinass_intellectualism_f0058bf9",
+          "label": "Aquinas's Intellectualism",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas's intellectualist thesis holds that the will necessarily follows the intellect's presentation of the good, but this necessity is compatible with freedom because the will's…"
+        },
+        {
+          "node_id": "argument_aquinass_natural_inclination_to_happiness_7a145771",
+          "label": "Aquinas's Natural Inclination to Happiness",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas argues that the will has a natural and necessary inclination (inclinatio naturalis) toward happiness as the ultimate good, but this natural necessity is compatible with fr…"
+        },
+        {
+          "node_id": "argument_aquinass_primary_and_secondary_causation_12f1649a",
+          "label": "Aquinas's Primary and Secondary Causation",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas's compatibilist solution: God as primary cause acts through secondary causes (including free will) without destroying their causal nature (*Summa Theologiae* I, Q. 19, 105…"
+        },
+        {
+          "node_id": "argument_augustine_deficient_cause",
+          "label": "Augustine's Deficient Cause Argument: Evil Has No Efficient Cause",
+          "type": "argument",
+          "period": "Late Antiquity",
+          "description_snippet": "Augustine's argument in De Civitate Dei XII.6-9 that evil will has no efficient cause (causa efficiens), only a deficient cause (causa deficiens). Evil is privation, not positive…"
+        },
+        {
+          "node_id": "argument_augustine_foreknowledge_freewill",
+          "label": "Augustine's Foreknowledge-Free Will Compatibility Argument",
+          "type": "argument",
+          "period": "Late Antiquity",
+          "description_snippet": "Augustine's argument in De Civitate Dei V.9-10 that divine foreknowledge (praescientia) and human free will (liberum arbitrium) are compatible, contra Cicero who sacrificed forekn…"
+        },
+        {
+          "node_id": "argument_boethiuss_eternity_argument_cd3d71ad",
+          "label": "Boethius's Eternity Argument",
+          "type": "argument",
+          "period": "Late Antiquity",
+          "description_snippet": "Boethius's solution to the problem of divine foreknowledge and human freedom, presented in *Consolation of Philosophy* V. The core argument: **The Problem:** If God foreknows all…"
+        },
+        {
+          "node_id": "argument_bradwardines_de_causa_dei_2c360b77",
+          "label": "Bradwardine's De Causa Dei",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Thomas Bradwardine's *De Causa Dei contra Pelagium* (On God's Cause Against Pelagius, 1344) presents a radical Augustinian determinism that denies any efficacious free will indepe…"
+        },
+        {
+          "node_id": "argument_buridans_ass_73a98d20",
+          "label": "Buridan's Ass",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "The paradox of \"Buridan's Ass\" illustrates a challenge to intellectualist accounts of the will: if a perfectly rational donkey stands equidistant between two identical bales of ha…"
+        },
+        {
+          "node_id": "argument_cafma_carneades_m3n4o5p6",
+          "label": "CAFMA: Carneadean Anti-Fatalist Moral Argumentation",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "CAFMA (Carneadean Anti-Fatalist Moral Argumentation) is the most powerful ancient argument for incompatibilism - the thesis that universal determinism (Stoic heimarmenê) is incomp…"
+        },
+        {
+          "node_id": "argument_cartesian_dualism_and_agent_causation_b637cc75",
+          "label": "Cartesian Dualism and Agent Causation",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Cartesian substance dualism holds that mind and body are distinct substances: mind is unextended thinking substance (res cogitans), body is extended material substance (res extens…"
+        },
+        {
+          "node_id": "argument_causal_asymmetry_alex",
+          "label": "Causal Asymmetry Argument (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "Greek terminology: • ἀναγκαῖον ἐξ ὑποθέσεως (anankaion ex hypotheseōs) - hypothetically necessary • ἀναγκαῖον ἁπλῶς (anankaion haplōs) - absolutely necessary • ἐνδεχόμενον (endech…"
+        },
+        {
+          "node_id": "argument_chain_causation_critique_alex",
+          "label": "Critique of Chain Causation Model (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "Greek terminology: • αἰτία προηγουμένη (aitia proēgoumenē) - antecedent cause • ἁλυσιδωτὴ αἰτιότης (halusidōtē aitiotēs) - chain-like causation • συνεχὴς ἀκολουθία (synechēs akolo…"
+        },
+        {
+          "node_id": "argument_chance_cosmos_middle_platonist",
+          "label": "Chance Cosmos Argument (Middle Platonist)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "The Middle Platonist argument that individuals are not absolutely fated because the cosmos itself is a product of chance. **STRUCTURE (Boys-Stones 2007, pp. 440-441):** (P1) God a…"
+        },
+        {
+          "node_id": "argument_common_cause_alex",
+          "label": "Common Cause vs Chain Cause Model (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "Greek terminology: • κοινὴ αἰτία (koinē aitia) - common cause • ἡ προαίρεσις αἰτία κοινή (hē prohairesis aitia koinē) - choice as common cause • ὁ ἥλιος ἐπὶ τοῦ λοξοῦ κύκλου (ho h…"
+        },
+        {
+          "node_id": "argument_compatibilism_through_divine_concurrence_d6ce2a0f",
+          "label": "Compatibilism through Divine Concurrence",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "The doctrine of divine concurrence (concursus divinus) holds that God cooperates with (concurs with) every created cause to produce its effects. God is the universal primary cause…"
+        },
+        {
+          "node_id": "argument_conatus_doctrine_1588d13c",
+          "label": "Conatus Doctrine",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Spinoza's conatus doctrine holds that every thing strives (conatur) to persevere in its own being, and human actions are determined by this fundamental drive. Freedom does not con…"
+        },
+        {
+          "node_id": "argument_ensouled_soulless_alex",
+          "label": "Ensouled vs Soulless Distinction (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "PREMISE 1: Stones and fire act by NATURAL NECESSITY - given their nature + circumstances, only ONE outcome is possible. PREMISE 2: Animals (especially rational animals) have a DIF…"
+        },
+        {
+          "node_id": "argument_ezekiel_individual_responsibility_q1r2s3t4",
+          "label": "Ezekiel 18 - Individual Moral Responsibility",
+          "type": "argument",
+          "period": "Second Temple Judaism",
+          "description_snippet": "Ezekiel's polemic against inherited guilt: 'The soul who sins shall die. The son shall not suffer for the iniquity of the father, nor the father suffer for the iniquity of the son…"
+        },
+        {
+          "node_id": "argument_fire_reductio_alex",
+          "label": "Fire Reductio Against Stoics",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "ARGUMENT: FIRE REDUCTIO AD ABSURDUM Stoics say \"up to us\" means acting from our own nature/character, following impressions. 1. PREMISE: Stoics define \"up to us\" as acting from on…"
+        }
+      ]
+    },
+    "descriptions_with_bold": {
+      "count": 120,
+      "by_type": {
+        "argument": 36,
+        "concept": 11,
+        "debate": 6,
+        "person": 17,
+        "publication": 38,
+        "school": 1,
+        "work": 11
+      },
+      "examples": [
+        {
+          "node_id": "argument_anselms_necessity_of_the_past_f7947dab",
+          "label": "Anselm's Necessity of the Past",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Anselm's distinction between types of necessity to defend compatibility of divine foreknowledge with freedom (*De Concordia* I-II): **The Distinction:** - **Antecedent necessity**…"
+        },
+        {
+          "node_id": "argument_aquinass_intellectualism_f0058bf9",
+          "label": "Aquinas's Intellectualism",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas's intellectualist thesis holds that the will necessarily follows the intellect's presentation of the good, but this necessity is compatible with freedom because the will's…"
+        },
+        {
+          "node_id": "argument_aquinass_natural_inclination_to_happiness_7a145771",
+          "label": "Aquinas's Natural Inclination to Happiness",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas argues that the will has a natural and necessary inclination (inclinatio naturalis) toward happiness as the ultimate good, but this natural necessity is compatible with fr…"
+        },
+        {
+          "node_id": "argument_aquinass_primary_and_secondary_causation_12f1649a",
+          "label": "Aquinas's Primary and Secondary Causation",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas's compatibilist solution: God as primary cause acts through secondary causes (including free will) without destroying their causal nature (*Summa Theologiae* I, Q. 19, 105…"
+        },
+        {
+          "node_id": "argument_boethiuss_eternity_argument_cd3d71ad",
+          "label": "Boethius's Eternity Argument",
+          "type": "argument",
+          "period": "Late Antiquity",
+          "description_snippet": "Boethius's solution to the problem of divine foreknowledge and human freedom, presented in *Consolation of Philosophy* V. The core argument: **The Problem:** If God foreknows all…"
+        },
+        {
+          "node_id": "argument_bradwardines_de_causa_dei_2c360b77",
+          "label": "Bradwardine's De Causa Dei",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Thomas Bradwardine's *De Causa Dei contra Pelagium* (On God's Cause Against Pelagius, 1344) presents a radical Augustinian determinism that denies any efficacious free will indepe…"
+        },
+        {
+          "node_id": "argument_buridans_ass_73a98d20",
+          "label": "Buridan's Ass",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "The paradox of \"Buridan's Ass\" illustrates a challenge to intellectualist accounts of the will: if a perfectly rational donkey stands equidistant between two identical bales of ha…"
+        },
+        {
+          "node_id": "argument_cafma_carneades_m3n4o5p6",
+          "label": "CAFMA: Carneadean Anti-Fatalist Moral Argumentation",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "CAFMA (Carneadean Anti-Fatalist Moral Argumentation) is the most powerful ancient argument for incompatibilism - the thesis that universal determinism (Stoic heimarmenê) is incomp…"
+        },
+        {
+          "node_id": "argument_cartesian_dualism_and_agent_causation_b637cc75",
+          "label": "Cartesian Dualism and Agent Causation",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Cartesian substance dualism holds that mind and body are distinct substances: mind is unextended thinking substance (res cogitans), body is extended material substance (res extens…"
+        },
+        {
+          "node_id": "argument_chance_cosmos_middle_platonist",
+          "label": "Chance Cosmos Argument (Middle Platonist)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "The Middle Platonist argument that individuals are not absolutely fated because the cosmos itself is a product of chance. **STRUCTURE (Boys-Stones 2007, pp. 440-441):** (P1) God a…"
+        },
+        {
+          "node_id": "argument_compatibilism_through_divine_concurrence_d6ce2a0f",
+          "label": "Compatibilism through Divine Concurrence",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "The doctrine of divine concurrence (concursus divinus) holds that God cooperates with (concurs with) every created cause to produce its effects. God is the universal primary cause…"
+        },
+        {
+          "node_id": "argument_conatus_doctrine_1588d13c",
+          "label": "Conatus Doctrine",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Spinoza's conatus doctrine holds that every thing strives (conatur) to persevere in its own being, and human actions are determined by this fundamental drive. Freedom does not con…"
+        },
+        {
+          "node_id": "argument_freedom_of_indifference_dab82dcc",
+          "label": "Freedom of Indifference",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Freedom of indifference (libertas indifferentiae / liberté d'indifférence) is the libertarian thesis that genuine freedom requires the ability to choose otherwise when all interna…"
+        },
+        {
+          "node_id": "argument_hobbess_rejection_of_immaterial_soul_02b7bcda",
+          "label": "Hobbes's Rejection of Immaterial Soul",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Hobbes's materialist philosophy denies the existence of an immaterial soul, arguing that all mental phenomena (thought, will, perception) are physical processes in the brain. This…"
+        },
+        {
+          "node_id": "argument_human_will_lacks_efficacy_45522d03",
+          "label": "Human Will Lacks Efficacy",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Malebranche's radical occasionalism denies that the human will has any genuine causal efficacy. The will cannot cause bodily movements, mental states, or even its own volitions. O…"
+        },
+        {
+          "node_id": "argument_infinite_will_argument_f19a66ed",
+          "label": "Infinite Will Argument",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Descartes's doctrine of the infinite will holds that the human will is infinite in scope (can affirm or deny any proposition presented by the intellect) and is the image of God's…"
+        },
+        {
+          "node_id": "argument_jansenist_denial_of_liberty_of_indifference_73aa8ce2",
+          "label": "Jansenist Denial of Liberty of Indifference",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Jansenism, rooted in Cornelius Jansen's reading of Augustine, denies liberty of indifference and argues that the will is always determined—either by concupiscence (corrupt desire)…"
+        },
+        {
+          "node_id": "argument_justin_equals_alcinous_heimarmene",
+          "label": "Justin = Alcinous on Heimarmene (Andresen)",
+          "type": "argument",
+          "period": "Contemporary",
+          "description_snippet": "Andresen's central demonstration (in his 1953 article) that Justin's doctrine on fate (1 Apol. 43.7) structurally mirrors Alcinous Didask. 26. **ARGUMENT COMMUN (Andresen's articl…"
+        },
+        {
+          "node_id": "argument_liberty_as_absence_of_external_impediment_4587b29b",
+          "label": "Liberty as Absence of External Impediment",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "This definition of liberty, prominent in early modern philosophy (especially Hobbes), holds that freedom consists simply in the absence of external physical obstacles to doing wha…"
+        },
+        {
+          "node_id": "argument_liberty_of_spontaneity_7e1184bf",
+          "label": "Liberty of Spontaneity",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Liberty of spontaneity (liberté de spontanéité) is a compatibilist conception of freedom that holds an action is free if it proceeds from the agent's own internal desires, charact…"
+        }
+      ]
+    },
+    "descriptions_with_lists": {
+      "count": 147,
+      "by_type": {
+        "argument": 52,
+        "concept": 18,
+        "synthesis": 10,
+        "debate": 5,
+        "person": 15,
+        "publication": 38,
+        "school": 1,
+        "work": 8
+      },
+      "examples": [
+        {
+          "node_id": "argument_anselms_necessity_of_the_past_f7947dab",
+          "label": "Anselm's Necessity of the Past",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Anselm's distinction between types of necessity to defend compatibility of divine foreknowledge with freedom (*De Concordia* I-II): **The Distinction:** - **Antecedent necessity**…"
+        },
+        {
+          "node_id": "argument_aquinass_intellectualism_f0058bf9",
+          "label": "Aquinas's Intellectualism",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas's intellectualist thesis holds that the will necessarily follows the intellect's presentation of the good, but this necessity is compatible with freedom because the will's…"
+        },
+        {
+          "node_id": "argument_aquinass_natural_inclination_to_happiness_7a145771",
+          "label": "Aquinas's Natural Inclination to Happiness",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas argues that the will has a natural and necessary inclination (inclinatio naturalis) toward happiness as the ultimate good, but this natural necessity is compatible with fr…"
+        },
+        {
+          "node_id": "argument_aquinass_primary_and_secondary_causation_12f1649a",
+          "label": "Aquinas's Primary and Secondary Causation",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas's compatibilist solution: God as primary cause acts through secondary causes (including free will) without destroying their causal nature (*Summa Theologiae* I, Q. 19, 105…"
+        },
+        {
+          "node_id": "argument_augustine_deficient_cause",
+          "label": "Augustine's Deficient Cause Argument: Evil Has No Efficient Cause",
+          "type": "argument",
+          "period": "Late Antiquity",
+          "description_snippet": "Augustine's argument in De Civitate Dei XII.6-9 that evil will has no efficient cause (causa efficiens), only a deficient cause (causa deficiens). Evil is privation, not positive…"
+        },
+        {
+          "node_id": "argument_augustine_foreknowledge_freewill",
+          "label": "Augustine's Foreknowledge-Free Will Compatibility Argument",
+          "type": "argument",
+          "period": "Late Antiquity",
+          "description_snippet": "Augustine's argument in De Civitate Dei V.9-10 that divine foreknowledge (praescientia) and human free will (liberum arbitrium) are compatible, contra Cicero who sacrificed forekn…"
+        },
+        {
+          "node_id": "argument_boethiuss_eternity_argument_cd3d71ad",
+          "label": "Boethius's Eternity Argument",
+          "type": "argument",
+          "period": "Late Antiquity",
+          "description_snippet": "Boethius's solution to the problem of divine foreknowledge and human freedom, presented in *Consolation of Philosophy* V. The core argument: **The Problem:** If God foreknows all…"
+        },
+        {
+          "node_id": "argument_bradwardines_de_causa_dei_2c360b77",
+          "label": "Bradwardine's De Causa Dei",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Thomas Bradwardine's *De Causa Dei contra Pelagium* (On God's Cause Against Pelagius, 1344) presents a radical Augustinian determinism that denies any efficacious free will indepe…"
+        },
+        {
+          "node_id": "argument_buridans_ass_73a98d20",
+          "label": "Buridan's Ass",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "The paradox of \"Buridan's Ass\" illustrates a challenge to intellectualist accounts of the will: if a perfectly rational donkey stands equidistant between two identical bales of ha…"
+        },
+        {
+          "node_id": "argument_cartesian_dualism_and_agent_causation_b637cc75",
+          "label": "Cartesian Dualism and Agent Causation",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Cartesian substance dualism holds that mind and body are distinct substances: mind is unextended thinking substance (res cogitans), body is extended material substance (res extens…"
+        },
+        {
+          "node_id": "argument_causal_asymmetry_alex",
+          "label": "Causal Asymmetry Argument (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "Greek terminology: • ἀναγκαῖον ἐξ ὑποθέσεως (anankaion ex hypotheseōs) - hypothetically necessary • ἀναγκαῖον ἁπλῶς (anankaion haplōs) - absolutely necessary • ἐνδεχόμενον (endech…"
+        },
+        {
+          "node_id": "argument_chain_causation_critique_alex",
+          "label": "Critique of Chain Causation Model (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "Greek terminology: • αἰτία προηγουμένη (aitia proēgoumenē) - antecedent cause • ἁλυσιδωτὴ αἰτιότης (halusidōtē aitiotēs) - chain-like causation • συνεχὴς ἀκολουθία (synechēs akolo…"
+        },
+        {
+          "node_id": "argument_chance_cosmos_middle_platonist",
+          "label": "Chance Cosmos Argument (Middle Platonist)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "The Middle Platonist argument that individuals are not absolutely fated because the cosmos itself is a product of chance. **STRUCTURE (Boys-Stones 2007, pp. 440-441):** (P1) God a…"
+        },
+        {
+          "node_id": "argument_common_cause_alex",
+          "label": "Common Cause vs Chain Cause Model (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "Greek terminology: • κοινὴ αἰτία (koinē aitia) - common cause • ἡ προαίρεσις αἰτία κοινή (hē prohairesis aitia koinē) - choice as common cause • ὁ ἥλιος ἐπὶ τοῦ λοξοῦ κύκλου (ho h…"
+        },
+        {
+          "node_id": "argument_compatibilism_through_divine_concurrence_d6ce2a0f",
+          "label": "Compatibilism through Divine Concurrence",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "The doctrine of divine concurrence (concursus divinus) holds that God cooperates with (concurs with) every created cause to produce its effects. God is the universal primary cause…"
+        },
+        {
+          "node_id": "argument_conatus_doctrine_1588d13c",
+          "label": "Conatus Doctrine",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Spinoza's conatus doctrine holds that every thing strives (conatur) to persevere in its own being, and human actions are determined by this fundamental drive. Freedom does not con…"
+        },
+        {
+          "node_id": "argument_ensouled_soulless_alex",
+          "label": "Ensouled vs Soulless Distinction (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "PREMISE 1: Stones and fire act by NATURAL NECESSITY - given their nature + circumstances, only ONE outcome is possible. PREMISE 2: Animals (especially rational animals) have a DIF…"
+        },
+        {
+          "node_id": "argument_fire_reductio_alex",
+          "label": "Fire Reductio Against Stoics",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "ARGUMENT: FIRE REDUCTIO AD ABSURDUM Stoics say \"up to us\" means acting from our own nature/character, following impressions. 1. PREMISE: Stoics define \"up to us\" as acting from on…"
+        },
+        {
+          "node_id": "argument_freedom_of_indifference_dab82dcc",
+          "label": "Freedom of Indifference",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Freedom of indifference (libertas indifferentiae / liberté d'indifférence) is the libertarian thesis that genuine freedom requires the ability to choose otherwise when all interna…"
+        },
+        {
+          "node_id": "argument_hobbess_rejection_of_immaterial_soul_02b7bcda",
+          "label": "Hobbes's Rejection of Immaterial Soul",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Hobbes's materialist philosophy denies the existence of an immaterial soul, arguing that all mental phenomena (thought, will, perception) are physical processes in the brain. This…"
+        }
+      ]
+    },
+    "descriptions_with_newlines": {
+      "count": 209,
+      "by_type": {
+        "argument": 83,
+        "concept": 41,
+        "synthesis": 12,
+        "debate": 6,
+        "person": 16,
+        "publication": 38,
+        "school": 1,
+        "work": 12
+      },
+      "examples": [
+        {
+          "node_id": "argument_adversity_exercise_seneca_g8h9i0j1",
+          "label": "Adversity-as-Exercise Argument (Seneca)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "PREMISE 1: Virtue requires exercise to manifest and grow PREMISE 2: \"Marcet sine adversario virtus\" PREMISE 3: Adversity provides the necessary opposition CONCLUSION: Adversity is…"
+        },
+        {
+          "node_id": "argument_agent_causation_alex",
+          "label": "Agent Causation Argument (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "Greek terminology: • ἡμεῖς αἴτιοι (hēmeis aitioi) - we are causes • ἀφ᾽ ἡμῶν ὡς ἀρχῶν (aph' hēmōn hōs archōn) - from us as origins • αἴτιον οὐκ ἀναγκαστικόν (aition ouk anankastik…"
+        },
+        {
+          "node_id": "argument_anselms_necessity_of_the_past_f7947dab",
+          "label": "Anselm's Necessity of the Past",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Anselm's distinction between types of necessity to defend compatibility of divine foreknowledge with freedom (*De Concordia* I-II): **The Distinction:** - **Antecedent necessity**…"
+        },
+        {
+          "node_id": "argument_aquinass_intellectualism_f0058bf9",
+          "label": "Aquinas's Intellectualism",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas's intellectualist thesis holds that the will necessarily follows the intellect's presentation of the good, but this necessity is compatible with freedom because the will's…"
+        },
+        {
+          "node_id": "argument_aquinass_natural_inclination_to_happiness_7a145771",
+          "label": "Aquinas's Natural Inclination to Happiness",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas argues that the will has a natural and necessary inclination (inclinatio naturalis) toward happiness as the ultimate good, but this natural necessity is compatible with fr…"
+        },
+        {
+          "node_id": "argument_aquinass_primary_and_secondary_causation_12f1649a",
+          "label": "Aquinas's Primary and Secondary Causation",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas's compatibilist solution: God as primary cause acts through secondary causes (including free will) without destroying their causal nature (*Summa Theologiae* I, Q. 19, 105…"
+        },
+        {
+          "node_id": "argument_arts_efficacy_alex",
+          "label": "Arts Efficacy Argument (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "PREMISE 1: If everything is by necessity, all arts (technai) are superfluous PREMISE 2: For art contributes nothing if outcomes are predetermined PREMISE 3: But arts evidently do…"
+        },
+        {
+          "node_id": "argument_augustine_deficient_cause",
+          "label": "Augustine's Deficient Cause Argument: Evil Has No Efficient Cause",
+          "type": "argument",
+          "period": "Late Antiquity",
+          "description_snippet": "Augustine's argument in De Civitate Dei XII.6-9 that evil will has no efficient cause (causa efficiens), only a deficient cause (causa deficiens). Evil is privation, not positive…"
+        },
+        {
+          "node_id": "argument_augustine_foreknowledge_freewill",
+          "label": "Augustine's Foreknowledge-Free Will Compatibility Argument",
+          "type": "argument",
+          "period": "Late Antiquity",
+          "description_snippet": "Augustine's argument in De Civitate Dei V.9-10 that divine foreknowledge (praescientia) and human free will (liberum arbitrium) are compatible, contra Cicero who sacrificed forekn…"
+        },
+        {
+          "node_id": "argument_boethiuss_eternity_argument_cd3d71ad",
+          "label": "Boethius's Eternity Argument",
+          "type": "argument",
+          "period": "Late Antiquity",
+          "description_snippet": "Boethius's solution to the problem of divine foreknowledge and human freedom, presented in *Consolation of Philosophy* V. The core argument: **The Problem:** If God foreknows all…"
+        },
+        {
+          "node_id": "argument_bradwardines_de_causa_dei_2c360b77",
+          "label": "Bradwardine's De Causa Dei",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Thomas Bradwardine's *De Causa Dei contra Pelagium* (On God's Cause Against Pelagius, 1344) presents a radical Augustinian determinism that denies any efficacious free will indepe…"
+        },
+        {
+          "node_id": "argument_buridans_ass_73a98d20",
+          "label": "Buridan's Ass",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "The paradox of \"Buridan's Ass\" illustrates a challenge to intellectualist accounts of the will: if a perfectly rational donkey stands equidistant between two identical bales of ha…"
+        },
+        {
+          "node_id": "argument_cartesian_dualism_and_agent_causation_b637cc75",
+          "label": "Cartesian Dualism and Agent Causation",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Cartesian substance dualism holds that mind and body are distinct substances: mind is unextended thinking substance (res cogitans), body is extended material substance (res extens…"
+        },
+        {
+          "node_id": "argument_causal_asymmetry_alex",
+          "label": "Causal Asymmetry Argument (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "Greek terminology: • ἀναγκαῖον ἐξ ὑποθέσεως (anankaion ex hypotheseōs) - hypothetically necessary • ἀναγκαῖον ἁπλῶς (anankaion haplōs) - absolutely necessary • ἐνδεχόμενον (endech…"
+        },
+        {
+          "node_id": "argument_chain_causation_critique_alex",
+          "label": "Critique of Chain Causation Model (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "Greek terminology: • αἰτία προηγουμένη (aitia proēgoumenē) - antecedent cause • ἁλυσιδωτὴ αἰτιότης (halusidōtē aitiotēs) - chain-like causation • συνεχὴς ἀκολουθία (synechēs akolo…"
+        },
+        {
+          "node_id": "argument_chance_cosmos_middle_platonist",
+          "label": "Chance Cosmos Argument (Middle Platonist)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "The Middle Platonist argument that individuals are not absolutely fated because the cosmos itself is a product of chance. **STRUCTURE (Boys-Stones 2007, pp. 440-441):** (P1) God a…"
+        },
+        {
+          "node_id": "argument_character_change_alex",
+          "label": "Character Change Argument (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "PREMISE 1: If nature necessitated character, people could not change their characters PREMISE 2: People do change their characters (empirically observable) PREMISE 3: Education ma…"
+        },
+        {
+          "node_id": "argument_civilization_alex",
+          "label": "Civilization Argument (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "PREMISE 1: All human institutions (cities, laws, arts, sciences) presuppose choice (prohairesis) PREMISE 2: These institutions exist and function effectively CONCLUSION: Therefore…"
+        },
+        {
+          "node_id": "argument_common_cause_alex",
+          "label": "Common Cause vs Chain Cause Model (Alexander)",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "Greek terminology: • κοινὴ αἰτία (koinē aitia) - common cause • ἡ προαίρεσις αἰτία κοινή (hē prohairesis aitia koinē) - choice as common cause • ὁ ἥλιος ἐπὶ τοῦ λοξοῦ κύκλου (ho h…"
+        },
+        {
+          "node_id": "argument_compatibilism_through_divine_concurrence_d6ce2a0f",
+          "label": "Compatibilism through Divine Concurrence",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "The doctrine of divine concurrence (concursus divinus) holds that God cooperates with (concurs with) every created cause to produce its effects. God is the universal primary cause…"
+        }
+      ]
+    },
+    "metadata_style_passage_labels": {
+      "count": 56,
+      "examples": [
+        {
+          "node_id": "passage_athenagoras_leg____379_________10________1___26",
+          "label": "SC 379, chap.: 10, par.: 1, §26 (Athenagoras of Athens)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________10________1___26_en",
+          "label": "SC 379, chap.: 10, par.: 1, §26 (Athenagoras of Athens) (English)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________24________1_2___75",
+          "label": "SC 379, chap.: 24, par.: 1-2, §75 (Athenagoras of Athens)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________24________1_2___75_en",
+          "label": "SC 379, chap.: 24, par.: 1-2, §75 (Athenagoras of Athens) (English)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________24________3_6___76",
+          "label": "SC 379, chap.: 24, par.: 3-6, §76 (Athenagoras of Athens)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________24________3_6___76_en",
+          "label": "SC 379, chap.: 24, par.: 3-6, §76 (Athenagoras of Athens) (English)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________25________1___77",
+          "label": "SC 379, chap.: 25, par.: 1, §77 (Athenagoras of Athens)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________25________1___77_en",
+          "label": "SC 379, chap.: 25, par.: 1, §77 (Athenagoras of Athens) (English)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________25________2_4___78",
+          "label": "SC 379, chap.: 25, par.: 2-4, §78 (Athenagoras of Athens)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________25________2_4___78_en",
+          "label": "SC 379, chap.: 25, par.: 2-4, §78 (Athenagoras of Athens) (English)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________26________1_2___79",
+          "label": "SC 379, chap.: 26, par.: 1-2, §79 (Athenagoras of Athens)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________26________1_2___79_en",
+          "label": "SC 379, chap.: 26, par.: 1-2, §79 (Athenagoras of Athens) (English)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________26________3_5___80",
+          "label": "SC 379, chap.: 26, par.: 3-5, §80 (Athenagoras of Athens)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________26________3_5___80_en",
+          "label": "SC 379, chap.: 26, par.: 3-5, §80 (Athenagoras of Athens) (English)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________7________1___17",
+          "label": "SC 379, chap.: 7, par.: 1, §17 (Athenagoras of Athens)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________7________1___17_en",
+          "label": "SC 379, chap.: 7, par.: 1, §17 (Athenagoras of Athens) (English)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________9________2___24",
+          "label": "SC 379, chap.: 9, par.: 2, §24 (Athenagoras of Athens)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________9________2___24_en",
+          "label": "SC 379, chap.: 9, par.: 2, §24 (Athenagoras of Athens) (English)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________9________3___25",
+          "label": "SC 379, chap.: 9, par.: 3, §25 (Athenagoras of Athens)",
+          "period": "Patristic"
+        },
+        {
+          "node_id": "passage_athenagoras_leg____379_________9________3___25_en",
+          "label": "SC 379, chap.: 9, par.: 3, §25 (Athenagoras of Athens) (English)",
+          "period": "Patristic"
+        }
+      ]
+    },
+    "underscore_passage_labels": {
+      "count": 874,
+      "examples": [
+        {
+          "node_id": "sc123_apollinaris_peri_pascha_245_247",
+          "label": "Apollinaris, PP 245_247",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_apollinaris_peri_pascha_245_247_en",
+          "label": "Apollinaris, PP 245_247 (English)",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_apologia_ad_antoninum_fragm_2",
+          "label": "Melito, Apol. fragm_2",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_apologia_ad_antoninum_fragm_2_en",
+          "label": "Melito, Apol. fragm_2 (English)",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_de_anima_et_corpore_237_239",
+          "label": "Melito, De An. 237_239",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_de_anima_et_corpore_237_239_en",
+          "label": "Melito, De An. 237_239 (English)",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_eclogae_223_225",
+          "label": "Melito, Ecl. 223_225",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_eclogae_223_225_en",
+          "label": "Melito, Ecl. 223_225 (English)",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_peri_pascha_100_a",
+          "label": "Melito, PP 100_a",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_peri_pascha_100_a_en",
+          "label": "Melito, PP 100_a (English)",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_peri_pascha_11_a",
+          "label": "Melito, PP 11_a",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_peri_pascha_11_a_en",
+          "label": "Melito, PP 11_a (English)",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_peri_pascha_30_a",
+          "label": "Melito, PP 30_a",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_peri_pascha_30_a_en",
+          "label": "Melito, PP 30_a (English)",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_peri_pascha_47_a",
+          "label": "Melito, PP 47_a",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_peri_pascha_47_a_en",
+          "label": "Melito, PP 47_a (English)",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_peri_pascha_78_79",
+          "label": "Melito, PP 78_79",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_peri_pascha_78_79_en",
+          "label": "Melito, PP 78_79 (English)",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_peri_pascha_91_a",
+          "label": "Melito, PP 91_a",
+          "period": "Roman Imperial"
+        },
+        {
+          "node_id": "sc123_melito_peri_pascha_91_a_en",
+          "label": "Melito, PP 91_a (English)",
+          "period": "Roman Imperial"
+        }
+      ]
+    },
+    "suspicious_id_prefix_mismatches": {
+      "count": 5,
+      "examples": [
+        {
+          "node_id": "concept_cic_fat_synthesis",
+          "label": "Cicero De Fato: In Nostra Potestate - Complete Latin Doctrine Synthesis",
+          "type": "synthesis",
+          "prefix": "concept"
+        },
+        {
+          "node_id": "concept_cic_fat_index",
+          "label": "Cicero De Fato: Thematic Index for Cross-Reference",
+          "type": "synthesis",
+          "prefix": "concept"
+        },
+        {
+          "node_id": "concept_epict_thematic_index",
+          "label": "Epictetus ἐφ' ἡμῖν Doctrine: Thematic Index",
+          "type": "synthesis",
+          "prefix": "concept"
+        },
+        {
+          "node_id": "concept_epict_eph_hemin_synthesis",
+          "label": "Epictetus: τὸ ἐφ' ἡμῖν - Complete Doctrine Synthesis (185 Passages)",
+          "type": "synthesis",
+          "prefix": "concept"
+        },
+        {
+          "node_id": "concept_ditte_hamartia_double_sin_plotinus",
+          "label": "διττὴ ἁμαρτία (Double Sin) - Plotinus's Synthesis of Embodiment Doctrines",
+          "type": "synthesis",
+          "prefix": "concept"
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "claim_nodes_without_evidence_anchor": {
+      "count": 213,
+      "by_type": {
+        "argument": 89,
+        "concept": 90,
+        "conceptual_evolution": 3,
+        "controversy": 5,
+        "debate": 6,
+        "group": 3,
+        "school": 5,
+        "synthesis": 12
+      },
+      "by_period": {
+        "Classical Greek": 3,
+        "Contemporary": 15,
+        "Early Modern": 45,
+        "Hellenistic": 29,
+        "Late Antiquity": 18,
+        "Medieval": 25,
+        "Patristic": 34,
+        "Presocratic": 6,
+        "Roman Imperial": 18,
+        "Second Temple Judaism": 13,
+        "Rabbinic": 2,
+        "<NULL>": 3,
+        "Roman Republican": 2
+      },
+      "examples": [
+        {
+          "node_id": "argument_platos_timaeus_necessity_argument_526846fa",
+          "label": "Plato's Timaeus Necessity Argument",
+          "type": "argument",
+          "period": "Classical Greek",
+          "description_snippet": "Plato's solution to the problem of evil and imperfection in the cosmos. Explains why the world is not perfectly good—Necessity constrains what Reason can achieve. Establishes two…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_basic_argument_3q4r5s6t",
+          "label": "Basic Argument (Strawson)",
+          "type": "argument",
+          "period": "Contemporary",
+          "description_snippet": "Galen Strawson's argument that ultimate moral responsibility is impossible. To be truly responsible for action, you must be responsible for how you are (character, motives). To be…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_consequence_argument_0n1o2p3q",
+          "label": "Consequence Argument",
+          "type": "argument",
+          "period": "Contemporary",
+          "description_snippet": "Peter van Inwagen's influential argument that free will and determinism are incompatible. Basic structure: If determinism is true, our acts are consequences of laws of nature and…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_four_case_manipulation_2p3q4r5s",
+          "label": "Four-Case Manipulation Argument",
+          "type": "argument",
+          "period": "Contemporary",
+          "description_snippet": "Derk Pereboom's argument against compatibilism using gradual manipulation cases. Four cases gradually transition from clear manipulation to normal determination: (1) neuroscientis…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_cartesian_dualism_and_agent_causation_b637cc75",
+          "label": "Cartesian Dualism and Agent Causation",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Cartesian substance dualism holds that mind and body are distinct substances: mind is unextended thinking substance (res cogitans), body is extended material substance (res extens…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_compatibilism_through_divine_concurrence_d6ce2a0f",
+          "label": "Compatibilism through Divine Concurrence",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "The doctrine of divine concurrence (concursus divinus) holds that God cooperates with (concurs with) every created cause to produce its effects. God is the universal primary cause…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_conatus_doctrine_1588d13c",
+          "label": "Conatus Doctrine",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Spinoza's conatus doctrine holds that every thing strives (conatur) to persevere in its own being, and human actions are determined by this fundamental drive. Freedom does not con…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_edwardsian_compatibilism_5a9v0w68",
+          "label": "Edwards's Compatibilist Defense of Reformed Theology",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Jonathan Edwards's sophisticated compatibilist argument defending Calvinist theology. The will always follows the strongest motive/inclination necessarily, yet this is compatible…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_erasmian_free_will_7s1n2o80",
+          "label": "Erasmus's Defense of Free Will",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Erasmus's moderate defense of human free will against Luther. Argues Scripture contains ambiguous passages supporting both sides; Church Fathers diverse; moral exhortation presupp…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_freedom_of_indifference_dab82dcc",
+          "label": "Freedom of Indifference",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Freedom of indifference (libertas indifferentiae / liberté d'indifférence) is the libertarian thesis that genuine freedom requires the ability to choose otherwise when all interna…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_hobbesian_compatibilism_1w5r6s24",
+          "label": "Hobbes's Compatibilist Argument",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Hobbes's mechanistic compatibilist argument that liberty and necessity are compatible. Liberty = absence of external impediments to motion. Voluntary actions are caused necessaril…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_hobbess_rejection_of_immaterial_soul_02b7bcda",
+          "label": "Hobbes's Rejection of Immaterial Soul",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Hobbes's materialist philosophy denies the existence of an immaterial soul, arguing that all mental phenomena (thought, will, perception) are physical processes in the brain. This…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_human_will_lacks_efficacy_45522d03",
+          "label": "Human Will Lacks Efficacy",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Malebranche's radical occasionalism denies that the human will has any genuine causal efficacy. The will cannot cause bodily movements, mental states, or even its own volitions. O…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_humean_compatibilism_3y7t8u46",
+          "label": "Hume's Compatibilist Argument",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Hume's classic compatibilist argument that liberty and necessity are compatible and both essential to morality. Liberty = acting according to will without constraint. Necessity =…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_infinite_will_argument_f19a66ed",
+          "label": "Infinite Will Argument",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Descartes's doctrine of the infinite will holds that the human will is infinite in scope (can affirm or deny any proposition presented by the intellect) and is the image of God's…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_jansenist_denial_of_liberty_of_indifference_73aa8ce2",
+          "label": "Jansenist Denial of Liberty of Indifference",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Jansenism, rooted in Cornelius Jansen's reading of Augustine, denies liberty of indifference and argues that the will is always determined—either by concupiscence (corrupt desire)…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_kantian_third_antinomy_6b0w1x79",
+          "label": "Kant's Third Antinomy on Freedom",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Kant's argument that theoretical reason produces an antinomy (equally provable contradictory theses) regarding freedom and determinism. Thesis: freedom (causality from freedom) ex…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_leibnizian_compatibilism_0v4q5r13",
+          "label": "Leibniz's Compatibilist Argument",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Leibniz's sophisticated compatibilist argument reconciling determinism with freedom via modal distinctions. Actions are determined by sufficient reason (Principle of Sufficient Re…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_liberty_as_absence_of_external_impediment_4587b29b",
+          "label": "Liberty as Absence of External Impediment",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "This definition of liberty, prominent in early modern philosophy (especially Hobbes), holds that freedom consists simply in the absence of external physical obstacles to doing wha…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_liberty_of_spontaneity_7e1184bf",
+          "label": "Liberty of Spontaneity",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Liberty of spontaneity (liberté de spontanéité) is a compatibilist conception of freedom that holds an action is free if it proceeds from the agent's own internal desires, charact…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_lockean_analysis_2x6s7t35",
+          "label": "Locke's Analysis of Freedom",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Locke's influential analysis dissolving traditional free will problem. Argues freedom applies to persons (agents), not to wills. The will is a power to prefer; asking if the will…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_lockes_suspension_of_desire_e45dc337",
+          "label": "Locke's Suspension of Desire",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "John Locke's doctrine of the suspension of desire holds that human freedom and moral responsibility depend on the power to suspend the execution of any particular desire and to de…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_lutheran_bondage_argument_6r0m1n79",
+          "label": "Luther's Bondage of Will Argument",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Luther's theological argument that fallen human will is enslaved to sin and incapable of spiritual good. Based on radical interpretation of Augustine, Paul, and doctrine of total…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_molinism_and_middle_knowledge_3d718eca",
+          "label": "Molinism and Middle Knowledge",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Luis de Molina's doctrine of middle knowledge (scientia media) attempts to reconcile divine foreknowledge and providence with libertarian human free will. God knows what every pos…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_molinist_middle_knowledge_8t2o3p91",
+          "label": "Molinist Middle Knowledge Argument",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Molina's argument that God possesses middle knowledge of counterfactuals of creaturely freedom, enabling providence without predetermination. God knows what each possible free cre…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_pascals_wager_and_voluntarism_4519ad75",
+          "label": "Pascal's Wager and Voluntarism",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Pascal's Wager is a prudential argument for belief in God based on expected utility, but it also reveals Pascal's voluntarism: the will can choose to believe (or cultivate belief)…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_preestablished_harmony_957f794d",
+          "label": "Pre-established Harmony",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Leibniz's doctrine of pre-established harmony (harmonie préétablie) resolves the mind-body problem by denying causal interaction between mental and physical substances. Instead, G…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_principle_of_sufficient_reason_and_contingency_4fa546d9",
+          "label": "Principle of Sufficient Reason and Contingency",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Leibniz's Principle of Sufficient Reason (PSR) holds that nothing happens without a sufficient reason why it is so and not otherwise. This principle appears to threaten freedom by…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_reidian_agent_causation_4z8u9v57",
+          "label": "Reid's Agent Causation Argument",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Reid's libertarian argument that persons as agents possess active power to cause actions without being caused to cause them. Rejects Humean regularity theory and event causation.…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_skeptical_argument_from_divine_power_d217cdac",
+          "label": "Skeptical Argument from Divine Power",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Pierre Bayle's skeptical argument uses divine omnipotence to show that we cannot have certain knowledge of the external world or even our own mental states: if God is omnipotent,…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_spinozas_free_man_ethics_b0940e69",
+          "label": "Spinoza's Free Man Ethics",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Spinoza's \"free man\" (homo liber) is one who lives according to reason and adequate ideas, understanding the necessity of all things and acting from the necessity of one's own rat…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_spinozan_necessitarianism_9u3p4q02",
+          "label": "Spinoza's Necessitarian Argument",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Spinoza's argument that everything follows necessarily from God's nature; traditional free will is illusion. Freedom = self-determination through adequate knowledge, not arbitrary…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_spontaneity_within_determination_13fcd224",
+          "label": "Spontaneity within Determination",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "This compatibilist argument holds that freedom (spontaneity) and causal determination are not only compatible but that determination by one's own character and desires is a *condi…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_theodicy_skepticism_6c745d6f",
+          "label": "Theodicy Skepticism",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Theodicy skepticism, prominently defended by Pierre Bayle, argues that rational attempts to reconcile God's omnipotence, omniscience, and perfect goodness with the existence of ev…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_vision_in_god_and_freedom_2a29f35e",
+          "label": "Vision in God and Freedom",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Malebranche's occasionalism holds that we \"see all things in God\"—our perceptions are not caused by material objects but are ideas in God's mind that He reveals to us. This doctri…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_anti_astrology_impossibility_observation_3h8i0k76",
+          "label": "Anti-Astrological Argument I: Impossibility of Exact Observation",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "Genethlialogia (natal astrology) requires fixing the exact instant of birth to calculate the horoscope. However, this is practically impossible due to: (1) the extraordinary rapid…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_anti_astrology_twins_4i9j1l87",
+          "label": "Anti-Astrological Argument II: The Twins Argument",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "Individuals born at the same moment under identical astrological configurations have manifestly different destinies. Examples include multiple people named Homer or Socrates, or a…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_anti_astrology_collective_catastrophes_5j0k2m98",
+          "label": "Anti-Astrological Argument III: Collective Catastrophes (Identity of Death)",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "People of all ages and origins, born under vastly different planetary configurations, often perish simultaneously in collective catastrophes: shipwrecks, battles, earthquakes, pla…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_anti_astrology_nomima_barbarika_6k1l3n09",
+          "label": "Anti-Astrological Argument IV: Diversity of Customs (Nomima Barbarika)",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "The remarkable diversity of laws, customs, and cultural practices (nomima barbarika) among different peoples (Italians, Greeks, Scythians, Syrians, etc.) contradicts the claim of…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_cafma_futility_of_effort_8c3d5f21",
+          "label": "CAFMA Argument I: Futility of Effort and Labor",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "If fate is absolutely fixed, then all human effort, labor, and striving becomes pointless. Why undergo the fatigue of pursuing virtue, learning arts and trades (agriculture, navig…",
+          "empty_metadata": false
+        }
+      ]
+    },
+    "assertive_claim_candidates_without_evidence": {
+      "count": 85,
+      "by_type": {
+        "argument": 40,
+        "concept": 30,
+        "conceptual_evolution": 1,
+        "controversy": 2,
+        "debate": 2,
+        "group": 1,
+        "school": 3,
+        "synthesis": 6
+      },
+      "by_period": {
+        "Early Modern": 25,
+        "Hellenistic": 15,
+        "Medieval": 10,
+        "Patristic": 12,
+        "Presocratic": 1,
+        "Roman Imperial": 6,
+        "Second Temple Judaism": 6,
+        "Late Antiquity": 6,
+        "Rabbinic": 1,
+        "<NULL>": 1,
+        "Roman Republican": 2
+      },
+      "empty_metadata_count": 5,
+      "examples": [
+        {
+          "node_id": "argument_cartesian_dualism_and_agent_causation_b637cc75",
+          "label": "Cartesian Dualism and Agent Causation",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Cartesian substance dualism holds that mind and body are distinct substances: mind is unextended thinking substance (res cogitans), body is extended material substance (res extens…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_conatus_doctrine_1588d13c",
+          "label": "Conatus Doctrine",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Spinoza's conatus doctrine holds that every thing strives (conatur) to persevere in its own being, and human actions are determined by this fundamental drive. Freedom does not con…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_erasmian_free_will_7s1n2o80",
+          "label": "Erasmus's Defense of Free Will",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Erasmus's moderate defense of human free will against Luther. Argues Scripture contains ambiguous passages supporting both sides; Church Fathers diverse; moral exhortation presupp…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_hobbess_rejection_of_immaterial_soul_02b7bcda",
+          "label": "Hobbes's Rejection of Immaterial Soul",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Hobbes's materialist philosophy denies the existence of an immaterial soul, arguing that all mental phenomena (thought, will, perception) are physical processes in the brain. This…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_human_will_lacks_efficacy_45522d03",
+          "label": "Human Will Lacks Efficacy",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Malebranche's radical occasionalism denies that the human will has any genuine causal efficacy. The will cannot cause bodily movements, mental states, or even its own volitions. O…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_infinite_will_argument_f19a66ed",
+          "label": "Infinite Will Argument",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Descartes's doctrine of the infinite will holds that the human will is infinite in scope (can affirm or deny any proposition presented by the intellect) and is the image of God's…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_jansenist_denial_of_liberty_of_indifference_73aa8ce2",
+          "label": "Jansenist Denial of Liberty of Indifference",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Jansenism, rooted in Cornelius Jansen's reading of Augustine, denies liberty of indifference and argues that the will is always determined—either by concupiscence (corrupt desire)…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_liberty_as_absence_of_external_impediment_4587b29b",
+          "label": "Liberty as Absence of External Impediment",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "This definition of liberty, prominent in early modern philosophy (especially Hobbes), holds that freedom consists simply in the absence of external physical obstacles to doing wha…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_liberty_of_spontaneity_7e1184bf",
+          "label": "Liberty of Spontaneity",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Liberty of spontaneity (liberté de spontanéité) is a compatibilist conception of freedom that holds an action is free if it proceeds from the agent's own internal desires, charact…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_lockean_analysis_2x6s7t35",
+          "label": "Locke's Analysis of Freedom",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Locke's influential analysis dissolving traditional free will problem. Argues freedom applies to persons (agents), not to wills. The will is a power to prefer; asking if the will…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_lockes_suspension_of_desire_e45dc337",
+          "label": "Locke's Suspension of Desire",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "John Locke's doctrine of the suspension of desire holds that human freedom and moral responsibility depend on the power to suspend the execution of any particular desire and to de…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_molinism_and_middle_knowledge_3d718eca",
+          "label": "Molinism and Middle Knowledge",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Luis de Molina's doctrine of middle knowledge (scientia media) attempts to reconcile divine foreknowledge and providence with libertarian human free will. God knows what every pos…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_preestablished_harmony_957f794d",
+          "label": "Pre-established Harmony",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Leibniz's doctrine of pre-established harmony (harmonie préétablie) resolves the mind-body problem by denying causal interaction between mental and physical substances. Instead, G…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_reidian_agent_causation_4z8u9v57",
+          "label": "Reid's Agent Causation Argument",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Reid's libertarian argument that persons as agents possess active power to cause actions without being caused to cause them. Rejects Humean regularity theory and event causation.…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_skeptical_argument_from_divine_power_d217cdac",
+          "label": "Skeptical Argument from Divine Power",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Pierre Bayle's skeptical argument uses divine omnipotence to show that we cannot have certain knowledge of the external world or even our own mental states: if God is omnipotent,…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_spinozas_free_man_ethics_b0940e69",
+          "label": "Spinoza's Free Man Ethics",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Spinoza's \"free man\" (homo liber) is one who lives according to reason and adequate ideas, understanding the necessity of all things and acting from the necessity of one's own rat…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_spontaneity_within_determination_13fcd224",
+          "label": "Spontaneity within Determination",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "This compatibilist argument holds that freedom (spontaneity) and causal determination are not only compatible but that determination by one's own character and desires is a *condi…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_theodicy_skepticism_6c745d6f",
+          "label": "Theodicy Skepticism",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Theodicy skepticism, prominently defended by Pierre Bayle, argues that rational attempts to reconcile God's omnipotence, omniscience, and perfect goodness with the existence of ev…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_vision_in_god_and_freedom_2a29f35e",
+          "label": "Vision in God and Freedom",
+          "type": "argument",
+          "period": "Early Modern",
+          "description_snippet": "Malebranche's occasionalism holds that we \"see all things in God\"—our perceptions are not caused by material objects but are ideas in God's mind that He reveals to us. This doctri…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_anti_astrology_twins_4i9j1l87",
+          "label": "Anti-Astrological Argument II: The Twins Argument",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "Individuals born at the same moment under identical astrological configurations have manifestly different destinies. Examples include multiple people named Homer or Socrates, or a…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_anti_astrology_collective_catastrophes_5j0k2m98",
+          "label": "Anti-Astrological Argument III: Collective Catastrophes (Identity of Death)",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "People of all ages and origins, born under vastly different planetary configurations, often perish simultaneously in collective catastrophes: shipwrecks, battles, earthquakes, pla…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_anti_astrology_nomima_barbarika_6k1l3n09",
+          "label": "Anti-Astrological Argument IV: Diversity of Customs (Nomima Barbarika)",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "The remarkable diversity of laws, customs, and cultural practices (nomima barbarika) among different peoples (Italians, Greeks, Scythians, Syrians, etc.) contradicts the claim of…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_cafma_character_contradiction_1f6g8i54",
+          "label": "CAFMA Argument IV: Contradiction of Character Change",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "Human beings successively pass from opposites—from good to bad character, from virtue to vice. If character were fatally fixed at birth (as astrology claims via natal horoscope),…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_cafma_carneades_m3n4o5p6",
+          "label": "CAFMA: Carneadean Anti-Fatalist Moral Argumentation",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "CAFMA (Carneadean Anti-Fatalist Moral Argumentation) is the most powerful ancient argument for incompatibilism - the thesis that universal determinism (Stoic heimarmenê) is incomp…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_the_dog_and_cart_argument_9ba60714",
+          "label": "The Dog and Cart Argument",
+          "type": "argument",
+          "period": "Hellenistic",
+          "description_snippet": "Stoic analogy (attributed to Zeno and Chrysippus by Hippolytus, Refutatio 1.21) illustrating acceptance of fate. A dog tied to a moving cart will be pulled along whether it wants…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_aquinass_intellectualism_f0058bf9",
+          "label": "Aquinas's Intellectualism",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas's intellectualist thesis holds that the will necessarily follows the intellect's presentation of the good, but this necessity is compatible with freedom because the will's…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_aquinass_natural_inclination_to_happiness_7a145771",
+          "label": "Aquinas's Natural Inclination to Happiness",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Aquinas argues that the will has a natural and necessary inclination (inclinatio naturalis) toward happiness as the ultimate good, but this natural necessity is compatible with fr…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_bradwardines_de_causa_dei_2c360b77",
+          "label": "Bradwardine's De Causa Dei",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Thomas Bradwardine's *De Causa Dei contra Pelagium* (On God's Cause Against Pelagius, 1344) presents a radical Augustinian determinism that denies any efficacious free will indepe…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_buridans_ass_73a98d20",
+          "label": "Buridan's Ass",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "The paradox of \"Buridan's Ass\" illustrates a challenge to intellectualist accounts of the will: if a perfectly rational donkey stands equidistant between two identical bales of ha…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_ockhams_divine_power_argument_a0e19729",
+          "label": "Ockham's Divine Power Argument",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Ockham's use of God's absolute power (*potentia absoluta*) to demonstrate the contingency of moral and natural orders (*Quodlibetal Questions* VI, q. 1). **The Distinction:** - **…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_ockhams_rejection_of_necessitation_33c255bf",
+          "label": "Ockham's Rejection of Necessitation",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "William of Ockham's radical rejection of necessitation holds that the will cannot be necessitated by anything—neither by the intellect's judgment of the good, nor by natural incli…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_scotuss_synchronic_contingency_e39fc978",
+          "label": "Scotus's Synchronic Contingency",
+          "type": "argument",
+          "period": "Medieval",
+          "description_snippet": "Scotus's radical defense of libertarian freedom: at the very moment (in eodem instanti) of choosing, the will retains the power to choose otherwise (*Ordinatio* I, d. 39). **Key T…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_augustines_antipelagian_argument_grace_necessity_0b29401f",
+          "label": "Augustine's Anti-Pelagian Argument (Grace Necessity)",
+          "type": "argument",
+          "period": "Patristic",
+          "description_snippet": "Developed during Pelagian controversy (411-430 CE) against Pelagius, Caelestius, and Julian of Eclanum. Augustine's theology shifts dramatically from early optimistic libertariani…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_gregory_of_nyssas_image_of_god_argument_f80938fc",
+          "label": "Gregory of Nyssa's Image of God Argument",
+          "type": "argument",
+          "period": "Patristic",
+          "description_snippet": "Written during Cappadocian theological synthesis, post-Nicene Christological debates. Gregory integrates Platonic philosophy (especially Origen's influence), biblical anthropology…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_infant_baptism",
+          "label": "Infant Baptism Argument for Original Sin",
+          "type": "argument",
+          "period": "Patristic",
+          "description_snippet": "Augustine's argument that universal practice of infant baptism proves doctrine of original sin: infants are baptized for remission of sins; infants have no personal sins; therefor…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_irenaeuss_antignostic_argument_for_free_will_f54fe920",
+          "label": "Irenaeus's Anti-Gnostic Argument for Free Will",
+          "type": "argument",
+          "period": "Patristic",
+          "description_snippet": "Written against Valentinian and other Gnostic systems that divided humanity into predetermined spiritual types (pneumatikoi, psychikoi, hylikoi). Irenaeus argues that Gnostic dete…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_pelagiuss_argument_for_human_capacity_006c0a58",
+          "label": "Pelagius's Argument for Human Capacity",
+          "type": "argument",
+          "period": "Patristic",
+          "description_snippet": "Developed in Rome and North Africa against emerging Augustinian pessimism about human nature. Pelagius reacted against moral laxity justified by claims of human weakness. Emphasiz…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_parmenides_necessity_argument_4e8e0f34",
+          "label": "Parmenides' Necessity Argument",
+          "type": "argument",
+          "period": "Presocratic",
+          "description_snippet": "Foundational argument in pre-Socratic philosophy establishing radical monism and necessitarianism. All later Greek philosophy responded to Parmenides by either accepting or reject…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_sextus_equipollence_argument_7d4b9e2a",
+          "label": "Sextus Empiricus's Equipollence Argument for Suspension",
+          "type": "argument",
+          "period": "Roman Imperial",
+          "description_snippet": "Developed to show that on the question of fate and free will (as on all philosophical questions), equally strong arguments can be constructed on both sides, leading to suspension…",
+          "empty_metadata": false
+        },
+        {
+          "node_id": "argument_qumran_predestination_c3d4e5f6",
+          "label": "Qumran Predestinarian Argument (Two Spirits)",
+          "type": "argument",
+          "period": "Second Temple Judaism",
+          "description_snippet": "Qumran sectarian argument for predestination: 'From the God of Knowledge comes all that is and shall be. Before they existed He established their whole design... He created man to…",
+          "empty_metadata": false
+        }
+      ]
+    }
+  },
+  "scope_drift": {
+    "post_antique_nodes": {
+      "count": 338,
+      "by_period": {
+        "Medieval": 54,
+        "Early Modern": 79,
+        "Contemporary": 196,
+        "Modern": 9
+      },
+      "examples": [
+        {
+          "node_id": "argument_anselms_necessity_of_the_past_f7947dab",
+          "label": "Anselm's Necessity of the Past",
+          "type": "argument",
+          "period": "Medieval"
+        },
+        {
+          "node_id": "argument_aquinass_intellectualism_f0058bf9",
+          "label": "Aquinas's Intellectualism",
+          "type": "argument",
+          "period": "Medieval"
+        },
+        {
+          "node_id": "argument_aquinass_natural_inclination_to_happiness_7a145771",
+          "label": "Aquinas's Natural Inclination to Happiness",
+          "type": "argument",
+          "period": "Medieval"
+        },
+        {
+          "node_id": "argument_aquinass_primary_and_secondary_causation_12f1649a",
+          "label": "Aquinas's Primary and Secondary Causation",
+          "type": "argument",
+          "period": "Medieval"
+        },
+        {
+          "node_id": "argument_argument_from_animal_rationality_4629e983",
+          "label": "Bayle's Rorarius Challenge from Animal Rationality",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_basic_argument_3q4r5s6t",
+          "label": "Basic Argument (Strawson)",
+          "type": "argument",
+          "period": "Contemporary"
+        },
+        {
+          "node_id": "argument_best_of_all_possible_worlds_cb9e1741",
+          "label": "Leibniz's Best of All Possible Worlds Argument",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_bradwardines_de_causa_dei_2c360b77",
+          "label": "Bradwardine's De Causa Dei",
+          "type": "argument",
+          "period": "Medieval"
+        },
+        {
+          "node_id": "argument_buridans_ass_73a98d20",
+          "label": "Buridan's Ass",
+          "type": "argument",
+          "period": "Medieval"
+        },
+        {
+          "node_id": "argument_cambridge_platonist_defense_of_plastic_nature_d49aa761",
+          "label": "Cudworth's Plastic Nature Argument",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_cartesian_dualism_and_agent_causation_b637cc75",
+          "label": "Cartesian Dualism and Agent Causation",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_compatibilism_through_divine_concurrence_d6ce2a0f",
+          "label": "Compatibilism through Divine Concurrence",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_conatus_doctrine_1588d13c",
+          "label": "Conatus Doctrine",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_consequence_argument_0n1o2p3q",
+          "label": "Consequence Argument",
+          "type": "argument",
+          "period": "Contemporary"
+        },
+        {
+          "node_id": "argument_edwardsian_compatibilism_5a9v0w68",
+          "label": "Edwards's Compatibilist Defense of Reformed Theology",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_erasmian_free_will_7s1n2o80",
+          "label": "Erasmus's Defense of Free Will",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_four_case_manipulation_2p3q4r5s",
+          "label": "Four-Case Manipulation Argument",
+          "type": "argument",
+          "period": "Contemporary"
+        },
+        {
+          "node_id": "argument_frankfurt_cases_1o2p3q4r",
+          "label": "Frankfurt Cases",
+          "type": "argument",
+          "period": "Contemporary"
+        },
+        {
+          "node_id": "argument_freedom_of_indifference_dab82dcc",
+          "label": "Freedom of Indifference",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_gersonides_limited_omniscience_s9t0u1v2",
+          "label": "Gersonides' Argument: Limited Divine Omniscience",
+          "type": "argument",
+          "period": "Medieval"
+        },
+        {
+          "node_id": "argument_hobbesian_compatibilism_1w5r6s24",
+          "label": "Hobbes's Compatibilist Argument",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_hobbess_rejection_of_immaterial_soul_02b7bcda",
+          "label": "Hobbes's Rejection of Immaterial Soul",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_human_will_lacks_efficacy_45522d03",
+          "label": "Human Will Lacks Efficacy",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_humean_compatibilism_3y7t8u46",
+          "label": "Hume's Compatibilist Argument",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_infinite_will_argument_f19a66ed",
+          "label": "Infinite Will Argument",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_jansenist_denial_of_liberty_of_indifference_73aa8ce2",
+          "label": "Jansenist Denial of Liberty of Indifference",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_justin_equals_alcinous_heimarmene",
+          "label": "Justin = Alcinous on Heimarmene (Andresen)",
+          "type": "argument",
+          "period": "Contemporary"
+        },
+        {
+          "node_id": "argument_kantian_third_antinomy_6b0w1x79",
+          "label": "Kant's Third Antinomy on Freedom",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_leibnizian_compatibilism_0v4q5r13",
+          "label": "Leibniz's Compatibilist Argument",
+          "type": "argument",
+          "period": "Early Modern"
+        },
+        {
+          "node_id": "argument_liberty_as_absence_of_external_impediment_4587b29b",
+          "label": "Liberty as Absence of External Impediment",
+          "type": "argument",
+          "period": "Early Modern"
+        }
+      ]
+    }
+  }
+}

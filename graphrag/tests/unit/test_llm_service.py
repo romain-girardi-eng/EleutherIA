@@ -2,6 +2,7 @@
 
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import httpx
 import pytest
 
 from eleutheria_graphrag.services.llm_service import (
@@ -83,6 +84,31 @@ class TestLLMService:
             provider = llm._get_provider()
             assert provider == ModelProvider.GEMINI
 
+    def test_get_provider_thinking_override(self):
+        """Thinking mode should respect an explicit provider override."""
+        env = {
+            "MOONSHOT_API_KEY": "kimi-key",
+            "OPENROUTER_API_KEY": "or-key",
+            "LLM_THINKING_PROVIDER": "openrouter",
+        }
+        with patch.dict("os.environ", env, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.KIMI)
+            provider = llm._get_provider(thinking_mode=True)
+            assert provider == ModelProvider.OPENROUTER
+
+    def test_get_provider_skips_backoff_provider(self):
+        """Preferred providers in cooldown should be skipped."""
+        env = {
+            "GEMINI_API_KEY": "gemini-key",
+            "OPENROUTER_API_KEY": "or-key",
+            "LLM_THINKING_PROVIDER": "openrouter",
+        }
+        with patch.dict("os.environ", env, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.GEMINI)
+            llm._provider_backoff_until[ModelProvider.OPENROUTER] = 9999999999.0
+            provider = llm._get_provider(thinking_mode=True)
+            assert provider == ModelProvider.GEMINI
+
     def test_get_provider_none_available(self):
         """Test when no provider available."""
         with patch.dict("os.environ", {}, clear=True):
@@ -126,7 +152,7 @@ class TestLLMService:
             mock_client.post = AsyncMock(return_value=mock_response)
             llm._client = mock_client
 
-            result = await llm.generate("Test prompt")
+            result = await llm.generate("Test prompt", max_tokens=16)
             assert result == "Test response"
 
     @pytest.mark.asyncio
@@ -173,8 +199,281 @@ class TestLLMService:
             mock_client.post = AsyncMock(return_value=mock_response)
             llm._client = mock_client
 
-            result = await llm.generate("Test prompt")
+            result = await llm.generate("Test prompt", max_tokens=16)
             assert result == "Gemini response"
+
+    def test_retry_delay_seconds_reads_openrouter_retry_after_seconds(self):
+        """Provider-specific retry hints should drive cooldowns."""
+        request = httpx.Request("POST", "https://openrouter.ai/api/v1/chat/completions")
+        response = httpx.Response(
+            429,
+            request=request,
+            json={
+                "error": {
+                    "metadata": {
+                        "retry_after_seconds": 42,
+                    }
+                }
+            },
+        )
+        exc = httpx.HTTPStatusError("rate limited", request=request, response=response)
+
+        assert LLMService._retry_delay_seconds(exc) == 42
+
+    def test_should_not_retry_same_provider_on_rate_limit(self):
+        """429s should fall through to the next provider instead of sleeping inline."""
+        request = httpx.Request("POST", "https://openrouter.ai/api/v1/chat/completions")
+        response = httpx.Response(429, request=request, json={"error": {"message": "rate limit"}})
+        exc = httpx.HTTPStatusError("rate limited", request=request, response=response)
+
+        assert LLMService._should_retry_same_provider(exc, attempt=0) is False
+
+    @pytest.mark.asyncio
+    async def test_generate_gemini_passes_response_mime_type(self):
+        """Gemini JSON-mode requests should set responseMimeType."""
+        with patch.dict("os.environ", {"GEMINI_API_KEY": "test-key"}, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.GEMINI)
+
+            mock_response = MagicMock()
+            mock_response.json.return_value = {
+                "candidates": [{"content": {"parts": [{"text": "{\"ok\":true}"}]}}]
+            }
+            mock_response.raise_for_status = MagicMock()
+
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=mock_response)
+            llm._client = mock_client
+
+            await llm.generate(
+                "Return JSON",
+                max_tokens=16,
+                response_mime_type="application/json",
+                response_json_schema={"type": "object"},
+            )
+
+            call_kwargs = mock_client.post.call_args.kwargs
+            assert (
+                call_kwargs["json"]["generationConfig"]["responseMimeType"]
+                == "application/json"
+            )
+            assert (
+                call_kwargs["json"]["generationConfig"]["responseJsonSchema"]
+                == {"type": "object"}
+            )
+
+    def test_extract_gemini_text_prefers_visible_parts(self):
+        """Gemini extraction should prefer visible text parts over thought parts."""
+        data = {
+            "candidates": [
+                {
+                    "content": {
+                        "parts": [
+                            {"text": "internal", "thought": True},
+                            {"text": "visible answer"},
+                        ]
+                    }
+                }
+            ]
+        }
+        assert LLMService._extract_gemini_text(data) == "visible answer"
+
+    @pytest.mark.asyncio
+    async def test_generate_gemini_retries_without_thinking_when_first_reply_is_empty(self):
+        """Gemini should retry once with a larger output budget if the first reply has no visible parts."""
+        with patch.dict("os.environ", {"GEMINI_API_KEY": "test-key"}, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.GEMINI)
+
+            first_response = MagicMock()
+            first_response.json.return_value = {
+                "candidates": [{"content": {}, "finishReason": "MAX_TOKENS"}]
+            }
+            first_response.raise_for_status = MagicMock()
+
+            second_response = MagicMock()
+            second_response.json.return_value = {
+                "candidates": [{"content": {"parts": [{"text": "Recovered response"}]}}]
+            }
+            second_response.raise_for_status = MagicMock()
+
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(side_effect=[first_response, second_response])
+            llm._client = mock_client
+
+            result = await llm.generate("Test prompt", max_tokens=16)
+
+            assert result == "Recovered response"
+            assert mock_client.post.call_count == 2
+            retry_body = mock_client.post.call_args_list[1].kwargs["json"]
+            assert retry_body["generationConfig"]["maxOutputTokens"] == 128
+
+    @pytest.mark.asyncio
+    async def test_generate_gemini_uses_prompt_cache_when_requested(self):
+        """Gemini generation should create and reuse cached prompt prefixes."""
+        with patch.dict("os.environ", {"GEMINI_API_KEY": "test-key"}, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.GEMINI)
+            long_prefix = "stable prefix " * 1600
+
+            cache_response = MagicMock()
+            cache_response.json.return_value = {"name": "cachedContents/test-cache"}
+            cache_response.raise_for_status = MagicMock()
+
+            generate_response = MagicMock()
+            generate_response.json.return_value = {
+                "candidates": [{"content": {"parts": [{"text": "Gemini response"}]}}]
+            }
+            generate_response.raise_for_status = MagicMock()
+
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(
+                side_effect=[cache_response, generate_response, generate_response]
+            )
+            llm._client = mock_client
+
+            result = await llm.generate(
+                "User prompt",
+                system_prompt="Stable instructions",
+                cache_key="render",
+                cache_prefix=long_prefix,
+            )
+            assert result == "Gemini response"
+
+            # Second call should reuse the cachedContent handle.
+            await llm.generate(
+                "User prompt 2",
+                system_prompt="Stable instructions",
+                cache_key="render",
+                cache_prefix=long_prefix,
+            )
+
+            assert mock_client.post.call_count == 3
+            cache_call = mock_client.post.call_args_list[0]
+            assert "cachedContents" in cache_call.args[0]
+            generate_call = mock_client.post.call_args_list[1]
+            assert generate_call.kwargs["json"]["cachedContent"] == "cachedContents/test-cache"
+
+    @pytest.mark.asyncio
+    async def test_generate_gemini_skips_prompt_cache_when_prefix_too_short(self):
+        """Gemini cache creation should be skipped for clearly undersized prefixes."""
+        with patch.dict("os.environ", {"GEMINI_API_KEY": "test-key"}, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.GEMINI)
+
+            generate_response = MagicMock()
+            generate_response.json.return_value = {
+                "candidates": [{"content": {"parts": [{"text": "Gemini response"}]}}]
+            }
+            generate_response.raise_for_status = MagicMock()
+
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=generate_response)
+            llm._client = mock_client
+
+            result = await llm.generate(
+                "User prompt",
+                system_prompt="Stable instructions",
+                cache_key="render",
+                cache_prefix="short prefix",
+            )
+
+            assert result == "Gemini response"
+            assert mock_client.post.call_count == 1
+            call = mock_client.post.call_args
+            assert "cachedContents" not in call.args[0]
+            assert "cachedContent" not in call.kwargs["json"]
+
+    @pytest.mark.asyncio
+    async def test_generate_falls_back_to_next_provider_on_429(self):
+        """Retryable provider failures should fall through to the next provider."""
+        env = {
+            "GEMINI_API_KEY": "gem-key",
+            "MOONSHOT_API_KEY": "kimi-key",
+        }
+        with patch.dict("os.environ", env, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.GEMINI)
+
+            gemini_error = httpx.HTTPStatusError(
+                "rate limited",
+                request=httpx.Request("POST", "https://example.com"),
+                response=httpx.Response(429, request=httpx.Request("POST", "https://example.com")),
+            )
+            kimi_response = MagicMock()
+            kimi_response.json.return_value = {
+                "choices": [{"message": {"content": "Fallback response"}}]
+            }
+            kimi_response.raise_for_status = MagicMock()
+
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(side_effect=[gemini_error, kimi_response])
+            llm._client = mock_client
+
+            with patch("asyncio.sleep", new=AsyncMock()):
+                result = await llm.generate("Test prompt")
+
+            assert result == "Fallback response"
+            assert llm.last_provider_used == ModelProvider.KIMI.value
+            assert mock_client.post.call_count == 2
+
+    @pytest.mark.asyncio
+    async def test_generate_retries_same_provider_once_on_500(self):
+        """Transient server failures should retry the same provider once before falling over."""
+        with patch.dict("os.environ", {"GEMINI_API_KEY": "gem-key"}, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.GEMINI)
+
+            gemini_error = httpx.HTTPStatusError(
+                "server error",
+                request=httpx.Request("POST", "https://example.com"),
+                response=httpx.Response(500, request=httpx.Request("POST", "https://example.com")),
+            )
+            success_response = MagicMock()
+            success_response.json.return_value = {
+                "candidates": [{"content": {"parts": [{"text": "Recovered response"}]}}]
+            }
+            success_response.raise_for_status = MagicMock()
+
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(side_effect=[gemini_error, success_response])
+            llm._client = mock_client
+
+            with patch("asyncio.sleep", new=AsyncMock()) as sleep_mock:
+                result = await llm.generate("Test prompt")
+
+            assert result == "Recovered response"
+            assert llm.last_provider_used == ModelProvider.GEMINI.value
+            sleep_mock.assert_awaited()
+            assert mock_client.post.call_count == 2
+
+    @pytest.mark.asyncio
+    async def test_generate_disables_invalid_provider_and_uses_next_one(self):
+        """An unauthorized provider should be disabled and skipped for the rest of the session."""
+        env = {
+            "MOONSHOT_API_KEY": "kimi-key",
+            "OPENROUTER_API_KEY": "or-key",
+        }
+        with patch.dict("os.environ", env, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.KIMI)
+
+            kimi_error = httpx.HTTPStatusError(
+                "unauthorized",
+                request=httpx.Request("POST", "https://example.com"),
+                response=httpx.Response(401, request=httpx.Request("POST", "https://example.com")),
+            )
+            or_response = MagicMock()
+            or_response.json.return_value = {
+                "choices": [{"message": {"content": "OpenRouter response"}}]
+            }
+            or_response.raise_for_status = MagicMock()
+
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(side_effect=[kimi_error, or_response, or_response])
+            llm._client = mock_client
+
+            result = await llm.generate("Test prompt")
+            assert result == "OpenRouter response"
+            assert ModelProvider.KIMI in llm._disabled_providers
+
+            # Second call should not attempt Kimi again.
+            second = await llm.generate("Second prompt")
+            assert second == "OpenRouter response"
+            assert mock_client.post.call_count == 3
 
     @pytest.mark.asyncio
     async def test_stream_no_provider(self):
@@ -195,12 +494,126 @@ class TestLLMServiceConfiguration:
         config = PROVIDER_CONFIGS[ModelProvider.KIMI]
         assert "moonshot" in config["base_url"]
         assert config["env_key"] == "MOONSHOT_API_KEY"
+        assert config["base_url_env"] == "MOONSHOT_BASE_URL"
+        assert config["model"] == "kimi-latest"
+        assert config["thinking_model"] == "kimi-latest"
+
+    def test_resolve_config_uses_environment_base_url_override(self):
+        """Environment overrides should win over the provider default base URL."""
+        with patch.dict(
+            "os.environ",
+            {
+                "MOONSHOT_API_KEY": "test-key",
+                "MOONSHOT_BASE_URL": "https://api.moonshot.ai/v1/",
+            },
+            clear=True,
+        ):
+            llm = LLMService(preferred_provider=ModelProvider.KIMI)
+            config = llm._resolve_config(ModelProvider.KIMI)
+            assert config["base_url"] == "https://api.moonshot.ai/v1"
+
+    def test_model_for_request_uses_thinking_model_for_kimi(self):
+        """Kimi should switch models when thinking mode is requested."""
+        config = PROVIDER_CONFIGS[ModelProvider.KIMI]
+        assert (
+            LLMService._model_for_request(
+                ModelProvider.KIMI,
+                config,
+                thinking_mode=True,
+            )
+            == "kimi-latest"
+        )
+        assert (
+            LLMService._model_for_request(
+                ModelProvider.KIMI,
+                config,
+                thinking_mode=False,
+            )
+            == "kimi-latest"
+        )
 
     def test_provider_config_openrouter(self):
         """Test OpenRouter provider configuration."""
         config = PROVIDER_CONFIGS[ModelProvider.OPENROUTER]
         assert "openrouter" in config["base_url"]
         assert config["env_key"] == "OPENROUTER_API_KEY"
+        assert config["thinking_model"] == "openai/gpt-oss-120b:nitro"
+
+    def test_resolve_config_uses_openrouter_overrides(self):
+        """OpenRouter env overrides should be reflected in the resolved config."""
+        with patch.dict(
+            "os.environ",
+            {
+                "OPENROUTER_API_KEY": "test-key",
+                "OPENROUTER_THINKING_MODEL": "openai/gpt-oss-120b:nitro",
+                "OPENROUTER_PROVIDER_ONLY": "cerebras",
+                "OPENROUTER_REASONING_EFFORT": "low",
+                "OPENROUTER_HTTP_REFERER": "https://free-will.app",
+                "OPENROUTER_APP_NAME": "EleutherIA",
+            },
+            clear=True,
+        ):
+            llm = LLMService(preferred_provider=ModelProvider.OPENROUTER)
+            config = llm._resolve_config(ModelProvider.OPENROUTER)
+            assert config["thinking_model"] == "openai/gpt-oss-120b:nitro"
+            assert config["provider_only"] == ["cerebras"]
+            assert config["reasoning_effort"] == "low"
+            assert config["http_referer"] == "https://free-will.app"
+            assert config["app_name"] == "EleutherIA"
+
+    def test_model_for_request_uses_thinking_model_for_openrouter(self):
+        """OpenRouter should switch to its thinking model when requested."""
+        config = PROVIDER_CONFIGS[ModelProvider.OPENROUTER]
+        assert (
+            LLMService._model_for_request(
+                ModelProvider.OPENROUTER,
+                config,
+                thinking_mode=True,
+            )
+            == "openai/gpt-oss-120b:nitro"
+        )
+        assert (
+            LLMService._model_for_request(
+                ModelProvider.OPENROUTER,
+                config,
+                thinking_mode=False,
+            )
+            == "google/gemini-3-flash-preview"
+        )
+
+    @pytest.mark.asyncio
+    async def test_generate_openrouter_includes_provider_routing(self):
+        """OpenRouter requests should include provider routing and reasoning controls."""
+        env = {
+            "OPENROUTER_API_KEY": "or-key",
+            "OPENROUTER_THINKING_MODEL": "openai/gpt-oss-120b:nitro",
+            "OPENROUTER_PROVIDER_ONLY": "cerebras",
+            "OPENROUTER_REASONING_EFFORT": "low",
+            "OPENROUTER_HTTP_REFERER": "https://free-will.app",
+            "OPENROUTER_APP_NAME": "EleutherIA",
+        }
+        with patch.dict("os.environ", env, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.OPENROUTER)
+
+            mock_response = MagicMock()
+            mock_response.json.return_value = {
+                "choices": [{"message": {"content": "OpenRouter response"}}]
+            }
+            mock_response.raise_for_status = MagicMock()
+
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=mock_response)
+            llm._client = mock_client
+
+            result = await llm.generate("Test prompt", thinking_mode=True)
+
+            assert result == "OpenRouter response"
+            call = mock_client.post.call_args
+            assert call.kwargs["json"]["model"] == "openai/gpt-oss-120b:nitro"
+            assert call.kwargs["json"]["provider"] == {"only": ["cerebras"]}
+            assert call.kwargs["json"]["reasoning"] == {"effort": "low"}
+            assert call.kwargs["headers"]["HTTP-Referer"] == "https://free-will.app"
+            assert call.kwargs["headers"]["X-Title"] == "EleutherIA"
 
     def test_provider_config_gemini(self):
         """Test Gemini provider configuration."""

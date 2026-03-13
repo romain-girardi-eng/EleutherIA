@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, Network, Quote, Sparkles, Waypoints } from 'lucide-react';
 import TraversalDAG from './TraversalDAG';
+import ResearchGraphPanel from './ResearchGraphPanel';
 import NodeDetailCard from './NodeDetailCard';
 import PassageReaderPanel from './PassageReaderPanel';
 import { cn } from '../../utils/cn';
@@ -438,7 +439,7 @@ export default function RightPanel({
                 className="flex h-full min-h-0 flex-col gap-3 p-4"
               >
                 {/* TOP: Interactive DAG */}
-                <div className="h-[45%] min-h-[260px] shrink-0">
+                <div className="h-[34%] min-h-[220px] shrink-0">
                   <TraversalDAG
                     response={response}
                     allResponses={allResponses}
@@ -448,8 +449,16 @@ export default function RightPanel({
                   />
                 </div>
 
+                {/* MIDDLE: Explicit reasoning trace */}
+                <div className="h-[34%] min-h-[240px] shrink-0 overflow-hidden">
+                  <ResearchGraphPanel
+                    response={response}
+                    className="h-full"
+                  />
+                </div>
+
                 {/* BOTTOM: Detail card or Sources deck */}
-                <div className="flex-1 min-h-0 overflow-y-auto">
+                <div className="flex-1 min-h-[200px] overflow-y-auto">
                   <AnimatePresence mode="wait">
                     {selectedSource ? (
                       <motion.div

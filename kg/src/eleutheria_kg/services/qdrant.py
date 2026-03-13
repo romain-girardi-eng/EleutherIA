@@ -1,8 +1,4 @@
-"""
-Qdrant Service - Vector database for semantic search.
-
-Provides vector similarity search for knowledge graph nodes and text embeddings.
-"""
+"""Qdrant Service - Vector database for semantic search."""
 
 import logging
 import os
@@ -13,12 +9,53 @@ from qdrant_client.http import models
 
 logger = logging.getLogger(__name__)
 
-# Configuration from environment
-QDRANT_URL = os.getenv("QDRANT_URL")
-QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
-QDRANT_PORT = int(os.getenv("QDRANT_HTTP_PORT", "6333"))
-QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 EMBEDDING_DIMENSIONS = int(os.getenv("EMBEDDING_DIMENSIONS", "3072"))
+
+
+def _resolve_qdrant_connection() -> dict[str, Any]:
+    """Prefer cloud settings over a stale localhost QDRANT_URL."""
+    qdrant_url = os.getenv("QDRANT_URL", "").strip()
+    qdrant_host = os.getenv("QDRANT_HOST", "localhost").strip()
+    qdrant_port = int(os.getenv("QDRANT_HTTP_PORT", "6333"))
+    qdrant_api_key = os.getenv("QDRANT_API_KEY", "").strip() or None
+
+    localhost_url = qdrant_url.lower().startswith("http://localhost") or qdrant_url.lower().startswith(
+        "http://127.0.0.1"
+    )
+    if localhost_url and qdrant_host and qdrant_host != "localhost" and qdrant_api_key:
+        return {
+            "mode": "cloud",
+            "url": f"https://{qdrant_host}",
+            "api_key": qdrant_api_key,
+            "host": qdrant_host,
+            "port": qdrant_port,
+        }
+
+    if qdrant_url:
+        return {
+            "mode": "url",
+            "url": qdrant_url,
+            "api_key": qdrant_api_key,
+            "host": qdrant_host,
+            "port": qdrant_port,
+        }
+
+    if qdrant_api_key:
+        return {
+            "mode": "cloud",
+            "url": f"https://{qdrant_host}",
+            "api_key": qdrant_api_key,
+            "host": qdrant_host,
+            "port": qdrant_port,
+        }
+
+    return {
+        "mode": "local",
+        "url": None,
+        "api_key": None,
+        "host": qdrant_host,
+        "port": qdrant_port,
+    }
 
 
 class QdrantService:
@@ -39,29 +76,31 @@ class QdrantService:
         Uses QDRANT_API_KEY for cloud connections, otherwise connects locally.
         """
         try:
-            if QDRANT_URL:
-                logger.info(f"Connecting to Qdrant via QDRANT_URL at {QDRANT_URL}")
+            config = _resolve_qdrant_connection()
+
+            if config["mode"] == "url":
+                logger.info(f"Connecting to Qdrant via QDRANT_URL at {config['url']}")
                 self.client = QdrantClient(
-                    url=QDRANT_URL,
-                    api_key=QDRANT_API_KEY or None,
+                    url=config["url"],
+                    api_key=config["api_key"],
                     check_compatibility=False,
                 )
-            elif QDRANT_API_KEY:
+            elif config["mode"] == "cloud":
                 # Cloud connection with API key and HTTPS
-                logger.info(f"Connecting to Qdrant Cloud at {QDRANT_HOST}")
+                logger.info(f"Connecting to Qdrant Cloud at {config['host']}")
                 self.client = QdrantClient(
-                    url=f"https://{QDRANT_HOST}",
-                    api_key=QDRANT_API_KEY,
+                    url=config["url"],
+                    api_key=config["api_key"],
                     check_compatibility=False,
                 )
             else:
                 # Local connection with HTTP
                 logger.info(
-                    f"Connecting to local Qdrant at {QDRANT_HOST}:{QDRANT_PORT}"
+                    f"Connecting to local Qdrant at {config['host']}:{config['port']}"
                 )
                 self.client = QdrantClient(
-                    host=QDRANT_HOST,
-                    port=QDRANT_PORT,
+                    host=config["host"],
+                    port=config["port"],
                     check_compatibility=False,
                 )
 
@@ -111,28 +150,65 @@ class QdrantService:
             raise RuntimeError("Qdrant not connected")
 
         try:
-            search_result = self.client.search(
-                collection_name="kg_nodes_gemini",
-                query_vector=query_vector,
-                limit=limit,
-                score_threshold=score_threshold,
-            )
+            deduped: dict[str, dict[str, Any]] = {}
 
-            results = []
-            for hit in search_result:
-                payload = hit.payload or {}
-                results.append(
-                    {
+            def add_hits(search_result: Any) -> None:
+                for hit in search_result:
+                    payload = hit.payload or {}
+                    key = str(payload.get("id") or payload.get("node_id") or hit.id)
+                    if key in deduped:
+                        continue
+                    deduped[key] = {
                         "id": payload.get("id"),
                         "score": hit.score,
                         "payload": payload,
                     }
-                )
 
-            return results
+            # Prefer the production collection used by the Cloudflare worker.
+            try:
+                named_hits = self.client.search(
+                    collection_name="kg_nodes_dual",
+                    query_vector=models.NamedVector(name="gemini", vector=query_vector),
+                    limit=limit,
+                    score_threshold=score_threshold,
+                )
+                add_hits(named_hits)
+            except Exception as dual_exc:
+                logger.warning(f"Error searching kg_nodes_dual: {dual_exc}")
+
+            if len(deduped) < limit:
+                try:
+                    legacy_hits = self.client.search(
+                        collection_name="kg_nodes_gemini",
+                        query_vector=query_vector,
+                        limit=limit,
+                        score_threshold=score_threshold,
+                    )
+                    add_hits(legacy_hits)
+                except Exception as legacy_exc:
+                    logger.warning(f"Error searching kg_nodes_gemini: {legacy_exc}")
+
+            if len(deduped) < limit:
+                try:
+                    historical_hits = self.client.search(
+                        collection_name="ancient_free_will_vectors",
+                        query_vector=query_vector,
+                        limit=limit * 3,
+                        score_threshold=score_threshold,
+                    )
+                    filtered = [
+                        hit for hit in historical_hits if (hit.payload or {}).get("node_id")
+                    ]
+                    add_hits(filtered)
+                except Exception as historical_exc:
+                    logger.warning(
+                        f"Error searching ancient_free_will_vectors: {historical_exc}"
+                    )
+
+            return list(deduped.values())[:limit]
 
         except Exception as e:
-            logger.error(f"Error searching kg_nodes_gemini: {e}")
+            logger.error(f"Error searching KG node collections: {e}")
             raise
 
     async def search_texts(

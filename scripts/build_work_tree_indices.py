@@ -1,21 +1,10 @@
 #!/usr/bin/env python3
-"""Build and persist hierarchical tree indices for all ancient works.
+"""Build and persist hierarchical tree indices for ancient works.
 
-This script pre-computes the work tree indices used by the
-TreeReasoningRetrieve FSM node.  It queries the database for all ancient
-works and their passages, builds a hierarchical section tree for each work
-using the canonical reference structure (book.chapter.section), and stores
-the result in the ``work_tree_indices`` table.
-
-Usage
------
-    python scripts/build_work_tree_indices.py [--schema free_will] [--dry-run]
-
-Environment
------------
-    DATABASE_URL    PostgreSQL connection string (required)
-
-The script is idempotent: existing rows are updated via INSERT … ON CONFLICT.
+The generated JSON is intentionally richer than the original structural tree.
+Each node stores a compact abstract, canonical refs, languages, token estimates,
+and placeholders for concept/entity tags so the runtime can navigate works
+coarse-to-fine before loading many passages.
 """
 
 from __future__ import annotations
@@ -38,19 +27,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------------
-# Tree building helpers
-# ---------------------------------------------------------------------------
-
-
 def _parse_ref(canonical_ref: str) -> tuple[str, str, str]:
-    """Extract (book, chapter, section) from a canonical ref string.
-
-    Handles formats like:
-    - "1.2.3"  → book="1", chapter="2", section="3"
-    - "1.2"    → book="1", chapter="2", section=""
-    - "Frag. 3" → book="Frag", chapter="3", section=""
-    """
     parts = re.split(r"[.\s]+", canonical_ref.strip(), maxsplit=2)
     book = parts[0] if len(parts) > 0 else ""
     chapter = parts[1] if len(parts) > 1 else ""
@@ -58,101 +35,162 @@ def _parse_ref(canonical_ref: str) -> tuple[str, str, str]:
     return book, chapter, section
 
 
+def _estimate_tokens(text: str) -> int:
+    return max(1, (len(text) + 3) // 4)
+
+
+def _canonical_refs(passages: list[dict[str, Any]], limit: int = 3) -> list[str]:
+    refs: list[str] = []
+    seen: set[str] = set()
+    for passage in passages:
+        ref = str(passage.get("canonical_ref") or "").strip()
+        if not ref or ref in seen:
+            continue
+        refs.append(ref)
+        seen.add(ref)
+        if len(refs) >= limit:
+            break
+    return refs
+
+
+def _languages(passages: list[dict[str, Any]], work_language: str | None) -> list[str]:
+    values = {str(passage.get("language")).strip() for passage in passages if passage.get("language")}
+    if work_language:
+        values.add(str(work_language).strip())
+    return sorted(value for value in values if value)
+
+
+def _abstract_for_node(
+    work: dict[str, Any],
+    title: str,
+    passages: list[dict[str, Any]],
+) -> str:
+    refs = _canonical_refs(passages, limit=2)
+    sample = " ".join(
+        str(passage.get("text_content") or "").strip()
+        for passage in passages[:2]
+    )
+    sample = re.sub(r"\s+", " ", sample).strip()
+    sample = sample[:220].rstrip()
+    ref_part = f" Key refs: {', '.join(refs)}." if refs else ""
+    sample_part = f" Sample: {sample}" if sample else ""
+    return f"{work.get('author', 'Unknown')} - {title}.{ref_part}{sample_part}".strip()
+
+
+def _make_tree_node(
+    *,
+    node_id: str,
+    title: str,
+    path: str,
+    passages: list[dict[str, Any]],
+    work: dict[str, Any],
+    children: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    children = children or []
+    start_passage = passages[0]["sequence_number"] if passages else 0
+    end_passage = passages[-1]["sequence_number"] if passages else 0
+    refs = _canonical_refs(passages)
+    abstract = _abstract_for_node(work, title, passages)
+    languages = _languages(passages, work.get("language"))
+    summary = f"{len(passages)} passages"
+    if children:
+        summary += f" across {len(children)} subsection(s)"
+    text_sample = " ".join(str(p.get("text_content") or "") for p in passages[:2])
+    return {
+        "node_id": node_id,
+        "title": title,
+        "start_passage": start_passage,
+        "end_passage": end_passage,
+        "summary": summary,
+        "path": path,
+        "canonical_refs": refs,
+        "abstract": abstract,
+        "concept_tags": [],
+        "entity_tags": [],
+        "languages": languages,
+        "translation_available": "en" in languages,
+        "quote_density": round(len(refs) / max(1, len(passages)), 3),
+        "token_estimate": _estimate_tokens(text_sample or abstract),
+        "nodes": children,
+    }
+
+
 def build_tree_for_work(
     work: dict[str, Any],
     passages: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    """Build a hierarchical tree dict from work metadata and its passages.
-
-    Returns a dict matching the TreeNode schema:
-    {
-        "node_id": str,
-        "title": str,
-        "start_passage": int,
-        "end_passage": int,
-        "summary": str,
-        "nodes": [...]
-    }
-    """
     if not passages:
-        return {
-            "node_id": f"work_{work['work_id']}",
-            "title": work["title"],
-            "start_passage": 0,
-            "end_passage": 0,
-            "summary": f"{work.get('author', 'Unknown')}: {work['title']}",
-            "nodes": [],
-        }
+        return _make_tree_node(
+            node_id=f"work_{work['work_id']}",
+            title=work["title"],
+            path=work["title"],
+            passages=[],
+            work=work,
+        )
 
-    # Sort passages by sequence_number for consistent ordering
-    passages = sorted(passages, key=lambda p: p["sequence_number"])
-    first_seq = passages[0]["sequence_number"]
-    last_seq = passages[-1]["sequence_number"]
-
-    # Group by book
+    passages = sorted(passages, key=lambda item: item["sequence_number"])
     by_book: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    for p in passages:
-        book, _, _ = _parse_ref(p.get("canonical_ref", ""))
-        by_book[book if book else "main"].append(p)
+    for passage in passages:
+        book, _, _ = _parse_ref(str(passage.get("canonical_ref") or ""))
+        by_book[book or "main"].append(passage)
 
     book_nodes: list[dict[str, Any]] = []
     for book_label, book_passages in sorted(by_book.items()):
-        b_first = book_passages[0]["sequence_number"]
-        b_last = book_passages[-1]["sequence_number"]
-
-        # Group by chapter within book
         by_chapter: dict[str, list[dict[str, Any]]] = defaultdict(list)
-        for p in book_passages:
-            _, chapter, _ = _parse_ref(p.get("canonical_ref", ""))
-            by_chapter[chapter if chapter else "main"].append(p)
+        for passage in book_passages:
+            _, chapter, _ = _parse_ref(str(passage.get("canonical_ref") or ""))
+            by_chapter[chapter or "main"].append(passage)
 
         chapter_nodes: list[dict[str, Any]] = []
-        for ch_label, ch_passages in sorted(by_chapter.items()):
-            c_first = ch_passages[0]["sequence_number"]
-            c_last = ch_passages[-1]["sequence_number"]
-            chapter_nodes.append({
-                "node_id": f"book_{book_label}_ch_{ch_label}",
-                "title": f"Book {book_label}, Chapter {ch_label}" if ch_label != "main" else f"Book {book_label}",
-                "start_passage": c_first,
-                "end_passage": c_last,
-                "summary": f"{len(ch_passages)} passages",
-                "nodes": [],
-            })
+        book_title = f"Book {book_label}" if book_label != "main" else work["title"]
+        book_path = book_title
+        for chapter_label, chapter_passages in sorted(by_chapter.items()):
+            chapter_title = (
+                f"{book_title}, Chapter {chapter_label}"
+                if chapter_label != "main"
+                else book_title
+            )
+            chapter_path = chapter_title
+            chapter_nodes.append(
+                _make_tree_node(
+                    node_id=f"book_{book_label}_ch_{chapter_label}",
+                    title=chapter_title,
+                    path=chapter_path,
+                    passages=chapter_passages,
+                    work=work,
+                )
+            )
 
-        book_nodes.append({
-            "node_id": f"book_{book_label}",
-            "title": f"Book {book_label}" if book_label != "main" else work["title"],
-            "start_passage": b_first,
-            "end_passage": b_last,
-            "summary": f"{len(book_passages)} passages across {len(by_chapter)} chapters",
-            "nodes": chapter_nodes,
-        })
+        book_nodes.append(
+            _make_tree_node(
+                node_id=f"book_{book_label}",
+                title=book_title,
+                path=book_path,
+                passages=book_passages,
+                work=work,
+                children=chapter_nodes,
+            )
+        )
 
-    return {
-        "node_id": f"work_{work['work_id']}",
-        "title": work["title"],
-        "start_passage": first_seq,
-        "end_passage": last_seq,
-        "summary": (
-            f"{work.get('author', 'Unknown')}: {work['title']}. "
-            f"{len(passages)} passages, {len(by_book)} book(s)."
-        ),
-        "nodes": book_nodes,
-    }
-
-
-# ---------------------------------------------------------------------------
-# Database interaction
-# ---------------------------------------------------------------------------
+    return _make_tree_node(
+        node_id=f"work_{work['work_id']}",
+        title=work["title"],
+        path=work["title"],
+        passages=passages,
+        work=work,
+        children=book_nodes,
+    )
 
 
 async def _fetch_works(conn: Any, schema: str) -> list[dict[str, Any]]:
-    rows = await conn.fetch(f"""
-        SELECT work_id, title, author, period
+    rows = await conn.fetch(
+        f"""
+        SELECT work_id, title, author, period, language
         FROM {schema}.ancient_works
         ORDER BY author, title
-    """)
-    return [dict(r) for r in rows]
+        """
+    )
+    return [dict(row) for row in rows]
 
 
 async def _fetch_passages_for_work(
@@ -160,13 +198,16 @@ async def _fetch_passages_for_work(
     schema: str,
     work_id: Any,
 ) -> list[dict[str, Any]]:
-    rows = await conn.fetch(f"""
-        SELECT passage_id, canonical_ref, sequence_number
+    rows = await conn.fetch(
+        f"""
+        SELECT passage_id, canonical_ref, sequence_number, text_content
         FROM {schema}.passages
         WHERE work_id = $1
         ORDER BY sequence_number
-    """, work_id)
-    return [dict(r) for r in rows]
+        """,
+        work_id,
+    )
+    return [dict(row) for row in rows]
 
 
 async def _upsert_index(
@@ -179,23 +220,26 @@ async def _upsert_index(
 ) -> None:
     if dry_run:
         logger.info(
-            "[DRY RUN] Would upsert tree index for %s (%s) — %d passages",
-            work["title"], work.get("author", "?"), total_passages,
+            "[DRY RUN] Would upsert tree index for %s (%s) - %d passages",
+            work["title"],
+            work.get("author", "?"),
+            total_passages,
         )
         return
 
-    await conn.execute(f"""
+    await conn.execute(
+        f"""
         INSERT INTO {schema}.work_tree_indices
             (work_id, title, author, period, total_passages, tree_json)
         VALUES ($1, $2, $3, $4, $5, $6::jsonb)
         ON CONFLICT (work_id) DO UPDATE SET
-            title          = EXCLUDED.title,
-            author         = EXCLUDED.author,
-            period         = EXCLUDED.period,
+            title = EXCLUDED.title,
+            author = EXCLUDED.author,
+            period = EXCLUDED.period,
             total_passages = EXCLUDED.total_passages,
-            tree_json      = EXCLUDED.tree_json,
-            updated_at     = now()
-    """,
+            tree_json = EXCLUDED.tree_json,
+            updated_at = now()
+        """,
         str(work["work_id"]),
         work["title"],
         work.get("author", "Unknown"),
@@ -203,11 +247,6 @@ async def _upsert_index(
         total_passages,
         json.dumps(work_index, ensure_ascii=False),
     )
-
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 
 async def main(schema: str, dry_run: bool) -> None:
@@ -218,9 +257,7 @@ async def main(schema: str, dry_run: bool) -> None:
         logger.error("DATABASE_URL environment variable is required")
         sys.exit(1)
 
-    logger.info("Connecting to database…")
-    conn = await asyncpg.connect(database_url)
-
+    conn = await asyncpg.connect(database_url, statement_cache_size=0)
     try:
         works = await _fetch_works(conn, schema)
         logger.info("Found %d works to index", len(works))
@@ -230,12 +267,13 @@ async def main(schema: str, dry_run: bool) -> None:
         for work in works:
             passages = await _fetch_passages_for_work(conn, schema, work["work_id"])
             if not passages:
-                logger.debug("Skipping %s — no passages", work["title"])
                 skipped += 1
                 continue
 
+            for passage in passages:
+                passage["language"] = work.get("language")
+
             tree = build_tree_for_work(work, passages)
-            # Store WorkTreeIndex format for TreeIndexService compatibility
             work_index = {
                 "work_id": str(work["work_id"]),
                 "title": work["title"],
@@ -246,35 +284,32 @@ async def main(schema: str, dry_run: bool) -> None:
             }
             await _upsert_index(conn, schema, work, work_index, len(passages), dry_run)
             success += 1
-        logger.info(
-            "Indexed %s (%s) — %d passages, %d books",
-            work["title"],
-            work.get("author", "?"),
-            len(passages),
-            len(work_index.get("nodes", [])),
-        )
+            logger.info(
+                "Indexed %s (%s) - %d passages, %d top sections",
+                work["title"],
+                work.get("author", "?"),
+                len(passages),
+                len(work_index["nodes"]),
+            )
 
-        logger.info(
-            "Done. Indexed=%d skipped=%d dry_run=%s",
-            success, skipped, dry_run,
-        )
+        logger.info("Done. Indexed=%d skipped=%d dry_run=%s", success, skipped, dry_run)
     finally:
         await conn.close()
 
 
 def _parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument(
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
         "--schema",
         default="free_will",
         help="PostgreSQL schema name (default: free_will)",
     )
-    p.add_argument(
+    parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Print what would be done without writing to DB",
+        help="Print planned writes without persisting anything",
     )
-    return p.parse_args()
+    return parser.parse_args()
 
 
 if __name__ == "__main__":

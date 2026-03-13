@@ -1,0 +1,21 @@
+{
+  "generated_at": "2026-03-12T18:38:06Z",
+  "environment": {
+    "llm_preferred_provider": "gemini",
+    "llm_thinking_provider": "openrouter",
+    "gemini_prompt_cache_enabled": "1"
+  },
+  "reasoning_probe": {
+    "ok": true,
+    "provider": "openrouter",
+    "model": "openai/gpt-oss-120b:nitro",
+    "response_preview": "{\"ok\":true}"
+  },
+  "prompt_cache_probe": {
+    "ok": false,
+    "provider": "gemini",
+    "model": "gemini-3.1-pro-preview",
+    "error": "KeyError: 'parts'",
+    "cache_entries": 1
+  }
+}

@@ -1,6 +1,6 @@
-"""Integration tests for ScholarlyAgent (full FSM execution)."""
+"""Integration tests for the long-context ScholarlyAgent."""
 
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock
 
 import pytest
 
@@ -8,55 +8,50 @@ from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
 
 
-def _make_deps(llm_responses: list[str] | None = None) -> Deps:
-    """Create a mock Deps for integration testing.
+def _llm_side_effect():
+    async def _generate(prompt: str, **kwargs):  # noqa: ARG001
+        if "Classify the following question" in prompt:
+            return '{"query_type": "global_abstract", "confidence": 0.9, "reason": "broad doctrinal question", "complexity": "medium"}'
+        if "You are framing a scholarly search query" in prompt:
+            return '{"expanded_query": "Stoic fate heimarmene", "greek_terms": [], "latin_terms": [], "philosophers": ["Chrysippus"], "concepts": ["fate"], "schools": ["Stoicism"], "periods": ["Hellenistic"]}'
+        if "opening a research notebook" in prompt:
+            return '{"question_frame": "Stoic doctrine of fate", "sub_questions": ["What is heimarmene?"], "competing_hypotheses": [], "open_questions": []}'
+        if "Assess whether the current evidence bundle set is sufficient" in prompt:
+            return '{"score": 0.8, "sufficient": true, "reason": "enough coverage"}'
+        if "Build a claim ledger" in prompt:
+            return '{"claims": [{"claim": "Stoic fate is a chain of causes.", "evidence_ids": ["work-1::p1"], "quote_original": "Fate is a chain of causes.", "quote_translation": null, "support_type": "passage", "confidence": 0.9, "status": "supported"}]}'
+        if "Render a grounded scholarly answer" in prompt:
+            return "- Stoic fate is described as a chain of causes [P1]"
+        return "[]"
 
-    The new 17-node FSM needs more LLM responses than the old 10-node FSM.
-    Sequence per simple query:
-      1. ClassifyQueryType     → JSON classification + query_type
-      2. ExpandQuery           → JSON expansion terms (or fallback static)
-      3. TreeReasoningRetrieve → JSON tree navigation (or no tree_index → skip)
-      4. CRAGValidate          → JSON CRAG validation
-      5. Synthesize / SynthesizeWithHierarchy → plain text answer
-      6. SelfRAGEvaluate       → JSON self-RAG evaluation
+    return _generate
 
-    The mock uses a cycling side_effect so excess responses are silently
-    ignored and missing ones repeat the last value.
-    """
-    responses = llm_responses or [
-        # 1. ClassifyQueryType — returns query_type JSON
-        '{"query_type": "specific_entity", "complexity": "simple", "reason": "single entity lookup"}',
-        # 2. ExpandQuery — returns expansion JSON (may fall back to static if parse fails)
-        '{"expanded_query": "Chrysippus (Chrysippos)", "greek_terms": [{"greek": "Chrysippos", "transliteration": "Chrysippos", "meaning": "Chrysippus"}], "latin_terms": [], "related_philosophers": ["Chrysippus"], "related_concepts": []}',
-        # 3. CRAGValidate (TreeReasoningRetrieve is a passthrough with no tree_index)
-        '{"relevance": 80, "completeness": 70, "confidence": 75, "verdict": "proceed", "reasoning": "ok"}',
-        # 4. Synthesis (DualRerank passthrough, FetchPassagesAndLayer routes to Synthesize)
-        "Chrysippus was the third head of the Stoic school [1].",
-        # 5. SelfRAGEvaluate
-        '{"confidence": 80, "factual_accuracy": 85, "citation_quality": 75, "completeness": 70, "reasoning": "good", "should_refine": false}',
-    ]
 
+def _make_deps() -> Deps:
     llm = AsyncMock()
-    # Use a cycling iterator so extra calls return the last response
-    _iter = iter(responses)
-
-    async def _side_effect(*args, **kwargs):  # noqa: ARG001
-        try:
-            return next(_iter)
-        except StopIteration:
-            return responses[-1]
-
-    llm.generate = AsyncMock(side_effect=_side_effect)
+    llm.generate = AsyncMock(side_effect=_llm_side_effect())
+    llm.last_model_used = "gemini-test"
+    llm.last_provider_used = "gemini"
 
     qdrant = AsyncMock()
-    qdrant.search_nodes = AsyncMock(
-        return_value=[
-            {"id": "chrysippus", "score": 0.95},
-        ]
-    )
+    qdrant.search_nodes = AsyncMock(return_value=[{"id": "chrysippus", "score": 0.95}])
 
     db = AsyncMock()
-    db.fetch = AsyncMock(return_value=[])
+    db.fetch = AsyncMock(
+        return_value=[
+            {
+                "passage_id": "p1",
+                "work_id": "work-1",
+                "text_content": "Fate is a chain of causes.",
+                "canonical_ref": "1.1",
+                "sequence_number": 1,
+                "title": "De Fato",
+                "author": "Cicero",
+                "language": "lat",
+                "confidence": 0.9,
+            }
+        ]
+    )
 
     return Deps(
         db=db,
@@ -67,134 +62,63 @@ def _make_deps(llm_responses: list[str] | None = None) -> Deps:
                 "id": "chrysippus",
                 "label": "Chrysippus",
                 "type": "Person",
-                "description": "Third head of the Stoic school",
+                "description": "Stoic philosopher associated with fate.",
                 "period": "Hellenistic",
                 "school": "Stoicism",
                 "role": None,
-            },
+            }
         },
         outgoing_edges={},
         incoming_edges={},
     )
 
 
-class TestScholarlyAgentSimple:
-    """Test the simple query path through the 17-node FSM."""
-
+class TestScholarlyAgent:
     @pytest.mark.asyncio
-    async def test_simple_query(self):
+    async def test_query_returns_grounded_answer(self):
         deps = _make_deps()
         agent = ScholarlyAgent(deps)
 
-        with patch(
-            "eleutheria_graphrag.agents.graph_nodes._get_embedding",
-            new_callable=AsyncMock,
-            return_value=[0.1] * 768,
-        ):
-            answer = await agent.query("Who was Chrysippus?")
+        with pytest.MonkeyPatch.context() as mp:
+            mp.setattr(
+                "eleutheria_graphrag.agents.graph_nodes._get_embedding",
+                AsyncMock(return_value=[0.1] * 768),
+            )
+            answer = await agent.query("What did the Stoics believe about fate?")
 
-        assert answer.question == "Who was Chrysippus?"
-        assert "Chrysippus" in answer.answer
-        assert answer.iterations == 1
+        assert "fate" in answer.answer.lower()
+        assert answer.citations[0].ref == "P1"
+        assert answer.quality_badge in {"High", "Medium", "Low"}
 
     @pytest.mark.asyncio
-    async def test_query_dict_format(self):
+    async def test_query_dict_includes_new_metadata(self):
         deps = _make_deps()
         agent = ScholarlyAgent(deps)
 
-        with patch(
-            "eleutheria_graphrag.agents.graph_nodes._get_embedding",
-            new_callable=AsyncMock,
-            return_value=[0.1] * 768,
-        ):
-            result = await agent.query_dict("Who was Chrysippus?")
+        with pytest.MonkeyPatch.context() as mp:
+            mp.setattr(
+                "eleutheria_graphrag.agents.graph_nodes._get_embedding",
+                AsyncMock(return_value=[0.1] * 768),
+            )
+            result = await agent.query_dict("What did the Stoics believe about fate?")
 
-        assert "answer" in result
-        assert "question" in result
-        assert "citations" in result
-        assert "seed_nodes" in result
-        assert "context_nodes" in result
-        assert "metadata" in result
+        assert result["metadata"]["grounding_policy"] == "mixed_evidence"
+        assert result["metadata"]["claim_ledger_size"] >= 1
 
     @pytest.mark.asyncio
-    async def test_query_stream(self):
+    async def test_query_stream_emits_answer_and_complete_payload(self):
         deps = _make_deps()
         agent = ScholarlyAgent(deps)
-
         chunks: list[str] = []
-        with patch(
-            "eleutheria_graphrag.agents.graph_nodes._get_embedding",
-            new_callable=AsyncMock,
-            return_value=[0.1] * 768,
-        ):
-            async for chunk in agent.query_stream("Who was Chrysippus?"):
+
+        with pytest.MonkeyPatch.context() as mp:
+            mp.setattr(
+                "eleutheria_graphrag.agents.graph_nodes._get_embedding",
+                AsyncMock(return_value=[0.1] * 768),
+            )
+            async for chunk in agent.query_stream("What did the Stoics believe about fate?"):
                 chunks.append(chunk)
 
-        full_text = "".join(chunks)
-        assert "Chrysippus" in full_text
-
-
-class TestScholarlyAgentMedium:
-    """Test the medium query path."""
-
-    @pytest.mark.asyncio
-    async def test_medium_query(self):
-        deps = _make_deps(
-            llm_responses=[
-                # ClassifyQueryType
-                '{"query_type": "global_abstract", "complexity": "medium", "reason": "multi-source"}',
-                # ExpandQuery skips LLM for GLOBAL_ABSTRACT (use_expansion=False)
-                # CRAGValidate (TreeReasoningRetrieve passthrough — no tree_index)
-                '{"relevance": 75, "completeness": 65, "confidence": 70, "verdict": "proceed", "reasoning": "ok"}',
-                # Synthesis (FetchPassagesAndLayer routes GLOBAL_ABSTRACT to Synthesize)
-                "The Stoics believed fate was a chain of causes [1].",
-                # SelfRAGEvaluate
-                '{"confidence": 75, "factual_accuracy": 80, "citation_quality": 70, "completeness": 65, "reasoning": "acceptable", "should_refine": false}',
-            ]
-        )
-        agent = ScholarlyAgent(deps)
-
-        with patch(
-            "eleutheria_graphrag.agents.graph_nodes._get_embedding",
-            new_callable=AsyncMock,
-            return_value=[0.1] * 768,
-        ):
-            answer = await agent.query("What did Stoics believe about fate?")
-
-        assert "fate" in answer.answer.lower() or "Stoic" in answer.answer
-
-
-class TestScholarlyAgentComplex:
-    """Test the complex query path (decompose → search → evaluate → tree → synthesize → self-rag)."""
-
-    @pytest.mark.asyncio
-    async def test_complex_query(self):
-        deps = _make_deps(
-            llm_responses=[
-                # ClassifyQueryType
-                '{"query_type": "multi_hop", "complexity": "complex", "reason": "comparative multi-hop"}',
-                # ExpandQuery
-                '{"expanded_query": "Stoic fate evolution Chrysippus Epictetus", "greek_terms": [], "latin_terms": [], "related_philosophers": ["Chrysippus", "Epictetus"], "related_concepts": ["fate"]}',
-                # DecomposeQuery
-                '["What was Stoic fate?", "How did it evolve?"]',
-                # EvaluateSufficiency (LLM check since heuristic doesn't trigger with few nodes)
-                '{"score": 0.9, "sufficient": true, "reason": "enough"}',
-                # CRAGValidate (TreeReasoningRetrieve passthrough — no tree_index)
-                '{"relevance": 80, "completeness": 70, "confidence": 75, "verdict": "proceed", "reasoning": "ok"}',
-                # SynthesizeWithHierarchy (FetchPassagesAndLayer → SearchSecondarySources → SynthesizeWithHierarchy)
-                "The concept of fate evolved from Chrysippus [1] to Epictetus.",
-                # SelfRAGEvaluate
-                '{"confidence": 80, "factual_accuracy": 82, "citation_quality": 75, "completeness": 70, "reasoning": "good", "should_refine": false}',
-            ]
-        )
-        agent = ScholarlyAgent(deps)
-
-        with patch(
-            "eleutheria_graphrag.agents.graph_nodes._get_embedding",
-            new_callable=AsyncMock,
-            return_value=[0.1] * 768,
-        ):
-            answer = await agent.query("How did Stoic fate evolve?")
-
-        assert len(answer.sub_queries) >= 1
-        assert "Chrysippus" in answer.answer or "fate" in answer.answer.lower()
+        text = "".join(chunks)
+        assert "fate" in text.lower()
+        assert '"type": "complete"' in text

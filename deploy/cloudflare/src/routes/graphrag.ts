@@ -68,6 +68,151 @@ function truncateText(text: string | undefined | null, maxChars: number): string
   return window + suffix;
 }
 
+function buildLegacyResearchGraph(params: {
+  queryType?: string;
+  complexity?: string;
+  startingNodes: Array<{ id: string; label: string; type: string; reason?: string }>;
+  expandedNodes: Array<{ id: string; label: string; type: string; reason?: string }>;
+  edgeCount: number;
+  linkedPassages: Array<{
+    workTitle?: string;
+    author?: string;
+    ctsUrn?: string;
+    canonicalRef?: string;
+    language?: string;
+  }>;
+  citationCount: number;
+  qualityBadge: string;
+  wasModified: boolean;
+  useThinking: boolean;
+  llmModel?: string;
+  llmProvider?: string;
+}) {
+  const works = new Map<string, {
+    work_id: string;
+    title: string;
+    author?: string;
+    bundle_count: number;
+    section_count: number;
+    primary_count: number;
+    testimony_count: number;
+    counter_count: number;
+    has_translation: boolean;
+    languages: string[];
+    canonical_refs: string[];
+    sections: Array<{ node_id?: string; title?: string; path?: string }>;
+  }>();
+
+  params.linkedPassages.forEach((passage, index) => {
+    const workId = `${passage.author || 'unknown'}::${passage.workTitle || 'unknown'}`
+      .toLowerCase()
+      .replace(/[^a-z0-9:]+/g, '-');
+    const work = works.get(workId) ?? {
+      work_id: workId,
+      title: passage.workTitle || 'Unknown work',
+      author: passage.author,
+      bundle_count: 0,
+      section_count: 0,
+      primary_count: 0,
+      testimony_count: 0,
+      counter_count: 0,
+      has_translation: false,
+      languages: [],
+      canonical_refs: [],
+      sections: [],
+    };
+    work.bundle_count += 1;
+    work.primary_count += 1;
+    if (passage.language && !work.languages.includes(passage.language)) {
+      work.languages.push(passage.language);
+    }
+    const ref = passage.ctsUrn || passage.canonicalRef;
+    if (ref && !work.canonical_refs.includes(ref)) {
+      work.canonical_refs.push(ref);
+    }
+    work.sections.push({
+      node_id: `passage-${index + 1}`,
+      title: ref || 'Retrieved passage',
+      path: passage.author && passage.workTitle ? `${passage.author} > ${passage.workTitle}` : passage.workTitle || undefined,
+    });
+    works.set(workId, work);
+  });
+
+  return {
+    overview: {
+      query_type: params.queryType || 'legacy_stream',
+      complexity: params.complexity || 'unknown',
+      grounding_policy: 'mixed',
+      quality_badge: params.qualityBadge,
+      pipeline_degraded: false,
+      claim_ledger_mode: 'legacy_stream',
+      render_answer_mode: params.wasModified ? 'quality_guards' : 'legacy_stream',
+      scholarly_polish_mode: params.wasModified ? 'quality_guards' : 'legacy_stream',
+      seed_node_count: params.startingNodes.length,
+      context_node_count: params.startingNodes.length + params.expandedNodes.length,
+      bundle_count: params.linkedPassages.length,
+      work_count: works.size,
+      claim_count: 0,
+      citation_count: params.citationCount,
+    },
+    stages: [
+      {
+        id: 'legacy_embed',
+        title: 'Embed and search',
+        status: 'complete',
+        summary: `${params.startingNodes.length} seed nodes retrieved from vector search.`,
+        metrics: [
+          { label: 'Seeds', value: params.startingNodes.length },
+          { label: 'Model', value: params.llmModel || 'gemini' },
+        ],
+        details: {
+          starting_nodes: params.startingNodes.slice(0, 12),
+          provider: params.llmProvider || 'gemini',
+        },
+      },
+      {
+        id: 'legacy_traversal',
+        title: 'Expand graph context',
+        status: 'complete',
+        summary: `${params.expandedNodes.length} expanded nodes and ${params.edgeCount} traversed edges.`,
+        metrics: [
+          { label: 'Expanded', value: params.expandedNodes.length },
+          { label: 'Edges', value: params.edgeCount },
+          { label: 'Passages', value: params.linkedPassages.length },
+        ],
+        details: {
+          expanded_nodes: params.expandedNodes.slice(0, 12),
+          linked_passages: params.linkedPassages.slice(0, 12),
+        },
+      },
+      {
+        id: 'legacy_synthesis',
+        title: 'Synthesize and repair',
+        status: 'complete',
+        summary: params.wasModified
+          ? 'Quality guards modified the answer before final delivery.'
+          : 'The answer passed through the quality guard pipeline unchanged.',
+        metrics: [
+          { label: 'Citations', value: params.citationCount },
+          { label: 'Quality', value: params.qualityBadge },
+          { label: 'Thinking', value: params.useThinking ? 'enabled' : 'disabled' },
+        ],
+        details: {
+          was_modified: params.wasModified,
+          use_thinking: params.useThinking,
+        },
+      },
+    ],
+    facets: [],
+    works: Array.from(works.values()).slice(0, 12),
+    claims: [],
+    hypotheses: params.useThinking ? ['Thinking mode was enabled for this legacy stream run.'] : [],
+    open_questions: [],
+    counter_evidence: params.wasModified ? ['Quality guards identified answer segments that required correction or normalization.'] : [],
+    uncertainties: [],
+  };
+}
+
 /**
  * Helper: check if a feature flag is enabled.
  * Defaults to ON (true) when the env var is absent — set to 'false' or '0' to disable.
@@ -1197,19 +1342,23 @@ CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage ex
             prompt += '\n\n' + BASE_SYNTHESIS_ADDENDUM;
           }
 
-          // 🚀 REAL STREAMING - With optional Kimi K2 thinking mode
+          // Real streaming with optional external reasoning.
           let fullAnswer = '';
           let thinkingProcess: string | undefined;
+          let reasoningModel: string | undefined;
+          let reasoningProvider: string | undefined;
           let chunkCount = 0;
 
           try {
-            // If thinking mode is enabled and Kimi K2 is available, use it
+            // If thinking mode is enabled and a reasoning provider is available, use it.
             if (use_thinking && llm.hasThinkingSupport()) {
-              sendEvent('status', { message: 'Generating answer with Kimi K2 thinking...', step: 5, total_steps: 6 });
+              sendEvent('status', { message: 'Generating answer with reasoning model...', step: 5, total_steps: 6 });
 
               const thinkingResult = await llm.generateWithThinking(prompt, undefined, true);
               fullAnswer = thinkingResult.response;
               thinkingProcess = thinkingResult.thinkingProcess;
+              reasoningModel = thinkingResult.model;
+              reasoningProvider = thinkingResult.provider;
 
               // Stream thinking process first if available
               if (thinkingProcess) {
@@ -1316,6 +1465,22 @@ CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage ex
 
           const finalStreamAnswer = streamFinalization.answer;
           const finalStreamSources = streamFinalization.sources;
+          const researchGraph = buildLegacyResearchGraph({
+            queryType: 'legacy_stream',
+            complexity: 'unknown',
+            startingNodes,
+            expandedNodes,
+            edgeCount: dualResults.edges.length,
+            linkedPassages,
+            citationCount: evidencePackage.ancientCitations.length,
+            qualityBadge: finalStreamSources.length >= 5 ? 'High' : finalStreamSources.length >= 2 ? 'Medium' : 'Low',
+            wasModified: streamFinalization.wasModified,
+            useThinking: use_thinking,
+            llmModel: use_thinking && llm.hasThinkingSupport()
+              ? reasoningModel || 'reasoning-model'
+              : 'gemini-3.1-pro-preview',
+            llmProvider: reasoningProvider || 'gemini',
+          });
 
           if (streamFinalization.wasModified) {
             sendEvent('status', { message: 'Answer quality check applied corrections', step: 6, total_steps: 6 });
@@ -1327,6 +1492,12 @@ CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage ex
             answer: finalStreamAnswer,
             thinking_process: thinkingProcess,  // Include thinking process if available
             sources: finalStreamSources,
+            metadata: {
+              research_graph: researchGraph,
+              quality_badge: researchGraph.overview.quality_badge,
+              render_answer_mode: researchGraph.overview.render_answer_mode,
+              scholarly_polish_mode: researchGraph.overview.scholarly_polish_mode,
+            },
             // Enhanced evidence fields
             evidence: evidencePackage.evidenceChains,
             evidenceChains: evidencePackage.evidenceChains,
@@ -1344,8 +1515,9 @@ CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage ex
             retrievalMethod: 'gemini-only + dual-level (nodes + edges)',
             embeddingMode: 'gemini-only',
             models: use_thinking && llm.hasThinkingSupport()
-              ? ['kimi-k2-thinking']
-              : ['gemini'],
+              ? [reasoningModel || 'reasoning-model', 'gemini-3.1-pro-preview']
+              : ['gemini-3.1-pro-preview'],
+            ...(reasoningProvider ? { reasoningProvider } : {}),
             parameters: {
               semantic_k,
               graph_depth,
@@ -1710,6 +1882,36 @@ CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage ex
 
     const finalAnswer = finalization.answer;
     const finalSources = finalization.sources;
+    const legacyResearchGraph = buildLegacyResearchGraph({
+      queryType: 'legacy_answer',
+      complexity: 'unknown',
+      startingNodes: nodeResults.slice(0, 5).map((r, i) => ({
+        id: r.payload?.node_id || r.payload?.id || `node_${i}`,
+        label: r.payload?.label || r.payload?.name || 'Unknown',
+        type: r.payload?.type || 'concept',
+        reason: `Semantic similarity match (rank ${i + 1})`,
+      })),
+      expandedNodes: neighbors.slice(0, 12).map((r, i) => ({
+        id: r.node_id || `expanded_${i}`,
+        label: r.label || 'Unknown',
+        type: r.type || 'concept',
+        reason: 'Expanded through graph relationships',
+      })),
+      edgeCount: neighbors.length,
+      linkedPassages: allLinkedPassages.map((p) => ({
+        workTitle: p.workTitle,
+        author: p.author,
+        ctsUrn: p.ctsUrn,
+        canonicalRef: p.reference,
+        language: p.language,
+      })),
+      citationCount: allCitations.length,
+      qualityBadge: allLinkedPassages.length >= 5 ? 'High' : allLinkedPassages.length >= 2 ? 'Medium' : 'Low',
+      wasModified: finalization.wasModified,
+      useThinking: false,
+      llmModel: 'gemini-3.1-pro-preview',
+      llmProvider: 'gemini',
+    });
 
     if (finalization.wasModified) {
       logger.info('Answer was modified by quality pipeline');
@@ -1738,6 +1940,12 @@ CRITICAL: NEVER fabricate ancient Greek or Latin text. If no relevant passage ex
       // Quality (computed from source counts — no extra LLM call)
       qualityScore: Math.min(100, 50 + allLinkedPassages.length * 5 + textualGroundings.groundings.length * 8),
       qualityBadge: allLinkedPassages.length >= 5 ? 'High' : allLinkedPassages.length >= 2 ? 'Medium' : 'Low',
+      metadata: {
+        research_graph: legacyResearchGraph,
+        quality_badge: legacyResearchGraph.overview.quality_badge,
+        render_answer_mode: legacyResearchGraph.overview.render_answer_mode,
+        scholarly_polish_mode: legacyResearchGraph.overview.scholarly_polish_mode,
+      },
 
       // PageIndex-specific info
       pageIndexInfo: {

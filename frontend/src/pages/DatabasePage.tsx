@@ -67,7 +67,7 @@ export default function DatabasePage() {
       letter: 'F',
       title: 'Findable',
       icon: Shield,
-      items: ['Unique persistent identifiers for all nodes', 'Rich metadata with controlled vocabularies', 'DOI: 10.5281/zenodo.17379490'],
+      items: ['Unique persistent identifiers for all nodes', 'Rich metadata with controlled vocabularies', 'DOI: 10.5281/zenodo.17379489'],
     },
     {
       letter: 'A',
@@ -401,12 +401,12 @@ export default function DatabasePage() {
                           <span>
                             DOI:{' '}
                             <a
-                              href="https://doi.org/10.5281/zenodo.17379490"
+                              href="https://doi.org/10.5281/zenodo.17379489"
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-stone-600 hover:text-stone-800 underline underline-offset-2 decoration-stone-300 hover:decoration-stone-500 transition-colors"
                             >
-                              10.5281/zenodo.17379490
+                              10.5281/zenodo.17379489
                             </a>
                           </span>
                         ) : item}

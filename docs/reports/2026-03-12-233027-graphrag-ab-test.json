@@ -1,0 +1,2551 @@
+{
+  "generated_at": "2026-03-12T23:27:46Z",
+  "query": "What did the Stoics believe about fate and moral responsibility?",
+  "prod_url": "https://free-will.app/api/graphrag/answer",
+  "arm_a_prod": {
+    "http_status": 200,
+    "processing_time_seconds": 14.945,
+    "response_json": {
+      "answer": "The Stoic position on fate and moral responsibility, primarily developed by Chrysippus of Soli, represents the most influential ancient defense of **compatibilism**: the view that universal causal determinism is consistent with human agency and moral accountability [Source 1], [Source 3], [Source 17].\n\n### I. The Definition of Fate (εἱμαρμένη)\nFor the Stoics, fate (**εἱμαρμένη / heimarmenê**) is not a random or external force, but a rational, eternal, and unbreakable chain of causes governed by divine reason (**λόγος / logos**) [Source 1]. \n\nAulus Gellius preserves Chrysippus’s definition in Latin:\n> *\"Fatum est sempiterna quaedam et indeclinabilis series rerum et catena volvens semetipsa sese et inplicans per aeternos consequentiae ordines, ex quibus apta nexaque est.\"* \n> (\"Fate is a certain eternal and unchangeable series of things and a chain rolling and entangling itself through eternal orders of consequence, from which it is fit and woven together.\") [Source 12].\n\nIn Greek, as reported by Eusebius, Chrysippus describes this as a \"natural arrangement of the whole\" (**φυσικὴν τινὰ σύνταξιν τῶν ὅλων**):\n> \"εἱμαρμένην εἶναι φυσικὴν τινὰ σύνταξιν τῶν ὅλων ἐξ ἀϊδίου τῶν ἑτέρων τοῖς ἑτέροις ἐπακολουθούντων\" \n> (\"Fate is a certain natural arrangement of the whole from eternity, with some things following upon others.\") [Source 12].\n\n### II. The Mechanism of Responsibility: Assent (συγκατάθεσις)\nThe Stoics argue that while fate determines the external circumstances (impressions) we encounter, our response to those circumstances—our **assent (συγκατάθεσις / synkatathesis)**—is \"up to us\" (**ἐφ' ἡμῖν / eph' hēmin**) [Source 2], [Source 17].\n\nChrysippus used the **Cylinder Analogy** to illustrate this distinction between external and internal causes [Source 11]. Just as a person gives a cylinder a push (the external, auxiliary cause), but the cylinder rolls according to its own nature and shape (the internal, principal cause), so too does an external impression strike the mind, but the mind assents according to its own character [Source 11], [Source 12].\n\nGellius explains that for Chrysippus:\n> *\"ingenia tamen ipsa mentium nostrarum proinde sunt fato obnoxia, ut proprietas eorum est ipsa et qualitas.\"* \n> (\"nevertheless the dispositions of our minds are subject to fate in such a way that their own property and quality [determine the outcome].\") [Source 12].\n\n### III. Co-fated Events (συνειμαρμένα)\nTo counter the \"Lazy Argument\" (**ἀργὸς λόγος / argos logos**)—which claims that if everything is fated, one need not act—Chrysippus developed the doctrine of **co-fated events** [Source 1], [Source 5]. He argued that certain outcomes are fated *along with* the actions necessary to produce them [Source 17].\n\nEusebius records this distinction:\n> \"καθείμαρται γὰρ, φησὶ, σωθῆναι θοιμάτιον, εἰ φυλάττοις αὐτὸ, καὶ παῖδας ἔσεσθαι, εἰ καὶ σὺ βουληθείης\" \n> (\"For it is fated, he says, that the cloak be saved if you guard it, and that children will be born if you also should so will it.\") [Source 24].\n\n### IV. Ancient Critiques and Modern Interpretations\nAncient critics, most notably **Alexander of Aphrodisias**, rejected this compatibilism as a \"misleading\" substitution of terms [Source 10]. Alexander argued that if our character and our assent are themselves fated by prior causes, then we lack the \"power of choosing and acting with respect to opposites\" (**τῶν οὕτως γινομένων ἡμεῖς ἐσμεν κύριοι**) [Source 4], [Source 10].\n\nModern scholars like **R.W. Sharples** characterize the Stoic position as a form of **soft determinism** [Source 18]. This interpretation emphasizes that the Stoics did not see freedom as the absence of causes, but as the ability to act from one's own rational nature [Source 1]. \n\nIn contrast, Middle Platonists attempted to preserve a stronger sense of freedom by distinguishing between **Providence (πρόνοια)** and **Fate (εἱμαρμένη)**, suggesting that while the laws of the universe are fated, individual choices remain contingent [Source 16]. Plutarch summarizes this \"contrary account\" as one where all things are not only \"in fate\" but \"according to fate\" (**οὐ μόνον ἐν εἱμαρμένῃ ἀλλὰ καὶ καθ' εἱμαρμένην**), a view the Stoics held but their opponents found destructive to moral life [Source 5], [Source 6].",
+      "sources": [],
+      "evidence": [
+        {
+          "claim": "The Stoic position on fate and moral responsibility, primarily developed by Chrysippus of Soli, represents the most influential ancient defense of **compatibilism**: the view that universal causal determinism is consistent with human agency and moral accountability [Source 1], [Source 3], [Source 17].",
+          "kgNodes": [
+            "concept_heimarmene_fate_stoics_j0k1l2m3",
+            "concept_synkatathesis_stoic_assent",
+            "school_stoics",
+            "debate_stoic_compatibilism",
+            "passage_plut_fat_18_en"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "The Definition of Fate (εἱμαρμένη)\nFor the Stoics, fate (**εἱμαρμένη / heimarmenê**) is not a random or external force, but a rational, eternal, and unbreakable chain of causes governed by divine reason (**λόγος / logos**) [Source 1].",
+          "kgNodes": [
+            "concept_heimarmene_fate_stoics_j0k1l2m3",
+            "concept_synkatathesis_stoic_assent",
+            "school_stoics",
+            "debate_stoic_compatibilism",
+            "passage_plut_fat_18_en"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "Aulus Gellius preserves Chrysippus’s definition in Latin:\n> *\"Fatum est sempiterna quaedam et indeclinabilis series rerum et catena volvens semetipsa sese et inplicans per aeternos consequentiae ordines, ex quibus apta nexaque est.\"* \n> (\"Fate is a certain eternal and unchangeable series of things and a chain rolling and entangling itself through eternal orders of consequence, from which it is fit and woven together.\") [Source 12].",
+          "kgNodes": [
+            "concept_heimarmene_fate_stoics_j0k1l2m3",
+            "concept_synkatathesis_stoic_assent",
+            "school_stoics",
+            "debate_stoic_compatibilism",
+            "passage_plut_fat_18_en"
+          ],
+          "ancientSources": [
+            {
+              "citationText": "Aulus Gellius, Noctes Atticae",
+              "title": "Noctes Atticae",
+              "author": "Aulus Gellius",
+              "confidence": 0.732217
+            },
+            {
+              "citationText": "Aulus Gellius, Noctes Atticae",
+              "passageId": "a70db269-736c-4441-9c0e-8f7ca5b9cf26",
+              "workId": "a4a862a7-b051-4504-87b5-ccf8c2dd8db7",
+              "title": "Noctes Atticae",
+              "author": "Aulus Gellius",
+              "confidence": 0.714165
+            }
+          ],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "In Greek, as reported by Eusebius, Chrysippus describes this as a \"natural arrangement of the whole\" (**φυσικὴν τινὰ σύνταξιν τῶν ὅλων**):\n> \"εἱμαρμένην εἶναι φυσικὴν τινὰ σύνταξιν τῶν ὅλων ἐξ ἀϊδίου τῶν ἑτέρων τοῖς ἑτέροις ἐπακολουθούντων\" \n> (\"Fate is a certain natural arrangement of the whole from eternity, with some things following upon others.\") [Source 12].",
+          "kgNodes": [
+            "concept_heimarmene_fate_stoics_j0k1l2m3",
+            "concept_synkatathesis_stoic_assent",
+            "school_stoics",
+            "debate_stoic_compatibilism",
+            "passage_plut_fat_18_en"
+          ],
+          "ancientSources": [
+            {
+              "citationText": "Eusebius, Praeperatio Evangelica",
+              "passageId": "b83eceb3-7ccc-4386-ac16-bdc27ce642d3",
+              "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+              "title": "Praeperatio Evangelica",
+              "author": "Eusebius",
+              "confidence": 0.6811864
+            },
+            {
+              "citationText": "Eusebius, Praeperatio Evangelica",
+              "passageId": "c39c27bd-12ec-40c1-baf9-0fe10f009ba1",
+              "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+              "title": "Praeperatio Evangelica",
+              "author": "Eusebius",
+              "confidence": 0.6697716
+            },
+            {
+              "citationText": "Eusebius, Praeperatio Evangelica",
+              "passageId": "cb8f8850-e2f6-4bee-9c1e-657c539a034e",
+              "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+              "title": "Praeperatio Evangelica",
+              "author": "Eusebius",
+              "confidence": 0.66931665
+            }
+          ],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "The Mechanism of Responsibility: Assent (συγκατάθεσις)\nThe Stoics argue that while fate determines the external circumstances (impressions) we encounter, our response to those circumstances—our **assent (συγκατάθεσις / synkatathesis)**—is \"up to us\" (**ἐφ' ἡμῖν / eph' hēmin**) [Source 2], [Source 17].",
+          "kgNodes": [
+            "concept_heimarmene_fate_stoics_j0k1l2m3",
+            "concept_synkatathesis_stoic_assent",
+            "school_stoics",
+            "debate_stoic_compatibilism",
+            "passage_plut_fat_18_en"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        }
+      ],
+      "evidenceChains": [
+        {
+          "claim": "The Stoic position on fate and moral responsibility, primarily developed by Chrysippus of Soli, represents the most influential ancient defense of **compatibilism**: the view that universal causal determinism is consistent with human agency and moral accountability [Source 1], [Source 3], [Source 17].",
+          "kgNodes": [
+            "concept_heimarmene_fate_stoics_j0k1l2m3",
+            "concept_synkatathesis_stoic_assent",
+            "school_stoics",
+            "debate_stoic_compatibilism",
+            "passage_plut_fat_18_en"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "The Definition of Fate (εἱμαρμένη)\nFor the Stoics, fate (**εἱμαρμένη / heimarmenê**) is not a random or external force, but a rational, eternal, and unbreakable chain of causes governed by divine reason (**λόγος / logos**) [Source 1].",
+          "kgNodes": [
+            "concept_heimarmene_fate_stoics_j0k1l2m3",
+            "concept_synkatathesis_stoic_assent",
+            "school_stoics",
+            "debate_stoic_compatibilism",
+            "passage_plut_fat_18_en"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "Aulus Gellius preserves Chrysippus’s definition in Latin:\n> *\"Fatum est sempiterna quaedam et indeclinabilis series rerum et catena volvens semetipsa sese et inplicans per aeternos consequentiae ordines, ex quibus apta nexaque est.\"* \n> (\"Fate is a certain eternal and unchangeable series of things and a chain rolling and entangling itself through eternal orders of consequence, from which it is fit and woven together.\") [Source 12].",
+          "kgNodes": [
+            "concept_heimarmene_fate_stoics_j0k1l2m3",
+            "concept_synkatathesis_stoic_assent",
+            "school_stoics",
+            "debate_stoic_compatibilism",
+            "passage_plut_fat_18_en"
+          ],
+          "ancientSources": [
+            {
+              "citationText": "Aulus Gellius, Noctes Atticae",
+              "title": "Noctes Atticae",
+              "author": "Aulus Gellius",
+              "confidence": 0.732217
+            },
+            {
+              "citationText": "Aulus Gellius, Noctes Atticae",
+              "passageId": "a70db269-736c-4441-9c0e-8f7ca5b9cf26",
+              "workId": "a4a862a7-b051-4504-87b5-ccf8c2dd8db7",
+              "title": "Noctes Atticae",
+              "author": "Aulus Gellius",
+              "confidence": 0.714165
+            }
+          ],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "In Greek, as reported by Eusebius, Chrysippus describes this as a \"natural arrangement of the whole\" (**φυσικὴν τινὰ σύνταξιν τῶν ὅλων**):\n> \"εἱμαρμένην εἶναι φυσικὴν τινὰ σύνταξιν τῶν ὅλων ἐξ ἀϊδίου τῶν ἑτέρων τοῖς ἑτέροις ἐπακολουθούντων\" \n> (\"Fate is a certain natural arrangement of the whole from eternity, with some things following upon others.\") [Source 12].",
+          "kgNodes": [
+            "concept_heimarmene_fate_stoics_j0k1l2m3",
+            "concept_synkatathesis_stoic_assent",
+            "school_stoics",
+            "debate_stoic_compatibilism",
+            "passage_plut_fat_18_en"
+          ],
+          "ancientSources": [
+            {
+              "citationText": "Eusebius, Praeperatio Evangelica",
+              "passageId": "b83eceb3-7ccc-4386-ac16-bdc27ce642d3",
+              "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+              "title": "Praeperatio Evangelica",
+              "author": "Eusebius",
+              "confidence": 0.6811864
+            },
+            {
+              "citationText": "Eusebius, Praeperatio Evangelica",
+              "passageId": "c39c27bd-12ec-40c1-baf9-0fe10f009ba1",
+              "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+              "title": "Praeperatio Evangelica",
+              "author": "Eusebius",
+              "confidence": 0.6697716
+            },
+            {
+              "citationText": "Eusebius, Praeperatio Evangelica",
+              "passageId": "cb8f8850-e2f6-4bee-9c1e-657c539a034e",
+              "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+              "title": "Praeperatio Evangelica",
+              "author": "Eusebius",
+              "confidence": 0.66931665
+            }
+          ],
+          "modernSources": [],
+          "confidence": 1
+        },
+        {
+          "claim": "The Mechanism of Responsibility: Assent (συγκατάθεσις)\nThe Stoics argue that while fate determines the external circumstances (impressions) we encounter, our response to those circumstances—our **assent (συγκατάθεσις / synkatathesis)**—is \"up to us\" (**ἐφ' ἡμῖν / eph' hēmin**) [Source 2], [Source 17].",
+          "kgNodes": [
+            "concept_heimarmene_fate_stoics_j0k1l2m3",
+            "concept_synkatathesis_stoic_assent",
+            "school_stoics",
+            "debate_stoic_compatibilism",
+            "passage_plut_fat_18_en"
+          ],
+          "ancientSources": [],
+          "modernSources": [],
+          "confidence": 1
+        }
+      ],
+      "ancientCitations": [
+        {
+          "citationText": "Plutarch, De fato 18",
+          "title": "De fato",
+          "author": "Plutarch",
+          "originalText": "ὁ μὲν οὖν ἡμέτερος λόγος, ἐπὶ κεφαλαίων εἰπεῖν, τοιοῦτός τις ἂν εἴη: ὁ δὲ τούτων ἐναντίος οὐ μόνον ἐν εἱμαρμένῃ ἀλλὰ καὶ καθ' εἱμαρμένην πάντα τίθεται",
+          "language": "greek",
+          "reference": "18",
+          "confidence": 0.7430148
+        },
+        {
+          "citationText": "Plutarch, De fato 18",
+          "title": "De fato",
+          "author": "Plutarch",
+          "originalText": "ὁ μὲν οὖν ἡμέτερος λόγος, ἐπὶ κεφαλαίων εἰπεῖν, τοιοῦτός τις ἂν εἴη: ὁ δὲ τούτων ἐναντίος οὐ μόνον ἐν εἱμαρμένῃ ἀλλὰ καὶ καθ' εἱμαρμένην πάντα τίθεται",
+          "language": "greek",
+          "reference": "18",
+          "confidence": 0.7422255
+        },
+        {
+          "citationText": "Alexander of Aphrodisias, De Fato",
+          "title": "De Fato",
+          "author": "Alexander of Aphrodisias",
+          "confidence": 0.73951817
+        },
+        {
+          "citationText": "Alexander of Aphrodisias, De Fato",
+          "title": "De Fato",
+          "author": "Alexander of Aphrodisias",
+          "originalText": "τύχη) they substitute a different signification under the name of chance and try to mislead their listeners into thinking that they too preserve the view that some things come about by chance, so too they do in the case of what depends on us",
+          "language": "greek",
+          "confidence": 0.73506093
+        },
+        {
+          "citationText": "Aulus Gellius, Noctes Atticae",
+          "title": "Noctes Atticae",
+          "author": "Aulus Gellius",
+          "confidence": 0.732217
+        },
+        {
+          "citationText": "Alexander of Aphrodisias, De Fato",
+          "title": "De Fato",
+          "author": "Alexander of Aphrodisias",
+          "confidence": 0.7310771
+        },
+        {
+          "citationText": "Aulus Gellius, Noctes Atticae",
+          "passageId": "a70db269-736c-4441-9c0e-8f7ca5b9cf26",
+          "workId": "a4a862a7-b051-4504-87b5-ccf8c2dd8db7",
+          "title": "Noctes Atticae",
+          "author": "Aulus Gellius",
+          "confidence": 0.714165
+        },
+        {
+          "citationText": "Eusebius, Praeperatio Evangelica",
+          "passageId": "b83eceb3-7ccc-4386-ac16-bdc27ce642d3",
+          "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+          "title": "Praeperatio Evangelica",
+          "author": "Eusebius",
+          "confidence": 0.6811864
+        },
+        {
+          "citationText": "Plutarch, De fato",
+          "passageId": "1c429d14-3b7a-4cb6-a678-0a1751081e93",
+          "workId": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+          "title": "De fato",
+          "author": "Plutarch",
+          "confidence": 0.67752963
+        },
+        {
+          "citationText": "Alexander of Aphrodisias, De Fato (Περὶ εἱμαρμένης)",
+          "passageId": "ea7f547e-96e5-4bdd-82b3-8cf6995cc538",
+          "workId": "9f03bd9f-50b7-413f-a624-f419fac90868",
+          "title": "De Fato (Περὶ εἱμαρμένης)",
+          "author": "Alexander of Aphrodisias",
+          "confidence": 0.67402995
+        },
+        {
+          "citationText": "Plutarch, Moralia and Lives",
+          "passageId": "82aa1fcb-a2d6-4edb-a50b-504e98a4a471",
+          "workId": "2b260ab0-edb1-481f-818a-7fa7444f4aab",
+          "title": "Moralia and Lives",
+          "author": "Plutarch",
+          "confidence": 0.6738454
+        },
+        {
+          "citationText": "Plotinus, Enneades",
+          "passageId": "eda42668-ab23-40c0-ba76-f9f5988458bb",
+          "workId": "89fc172a-06af-4fcd-b1c3-95f3879d4ef0",
+          "title": "Enneades",
+          "author": "Plotinus",
+          "confidence": 0.67300767
+        },
+        {
+          "citationText": "Plutarch, De fato",
+          "passageId": "3175daa6-58f3-4769-9359-57f2b64eaca3",
+          "workId": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+          "title": "De fato",
+          "author": "Plutarch",
+          "confidence": 0.67238265
+        },
+        {
+          "citationText": "Eusebius, Praeperatio Evangelica",
+          "passageId": "c39c27bd-12ec-40c1-baf9-0fe10f009ba1",
+          "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+          "title": "Praeperatio Evangelica",
+          "author": "Eusebius",
+          "confidence": 0.6697716
+        },
+        {
+          "citationText": "Eusebius, Praeperatio Evangelica",
+          "passageId": "cb8f8850-e2f6-4bee-9c1e-657c539a034e",
+          "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+          "title": "Praeperatio Evangelica",
+          "author": "Eusebius",
+          "confidence": 0.66931665
+        },
+        {
+          "citationText": "Eusebius, Praeperatio Evangelica",
+          "passageId": "beda63b2-70e3-4a2a-94df-65418b3f258a",
+          "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+          "title": "Praeperatio Evangelica",
+          "author": "Eusebius",
+          "confidence": 0.66875815
+        },
+        {
+          "citationText": "Justin Martyr, Apologia",
+          "passageId": "41ff4a84-a400-4552-9268-a45dea236392",
+          "workId": "1dca3b3a-32d1-462a-ad3b-134ae12afc64",
+          "title": "Apologia",
+          "author": "Justin Martyr",
+          "confidence": 0.66773397
+        },
+        {
+          "citationText": "Plutarch, De fato",
+          "passageId": "ff08d7d7-cfe6-4c7a-b13d-d0388765304e",
+          "workId": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+          "title": "De fato",
+          "author": "Plutarch",
+          "confidence": 0.66725737
+        },
+        {
+          "citationText": "Plutarch, De fato",
+          "passageId": "7c204e37-cb4b-442f-a9e1-3fdf889c1cf4",
+          "workId": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+          "title": "De fato",
+          "author": "Plutarch",
+          "confidence": 0.66706264
+        },
+        {
+          "citationText": "Plutarch, De fato",
+          "passageId": "64becd32-0c17-4fb9-b17d-dae3ed7c9744",
+          "workId": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+          "title": "De fato",
+          "author": "Plutarch",
+          "confidence": 0.66685903
+        },
+        {
+          "citationText": "Plutarch, De fato",
+          "passageId": "8f2244db-fa5a-4a61-a9a2-586123cc62ec",
+          "workId": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+          "title": "De fato",
+          "author": "Plutarch",
+          "confidence": 0.6664875
+        },
+        {
+          "citationText": "Eusebius, Praeperatio Evangelica",
+          "passageId": "2bceb3d0-2bfa-4f16-afec-47694758eebe",
+          "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+          "title": "Praeperatio Evangelica",
+          "author": "Eusebius",
+          "confidence": 0.66615415
+        },
+        {
+          "citationText": "Plutarch, Moralia and Lives",
+          "passageId": "d85abdf3-6cf7-4b2e-af09-e623c830caf8",
+          "workId": "2b260ab0-edb1-481f-818a-7fa7444f4aab",
+          "title": "Moralia and Lives",
+          "author": "Plutarch",
+          "confidence": 0.66596305
+        },
+        {
+          "citationText": "Marcus Tullius Cicero, De Fato",
+          "passageId": "de281897-0be2-447d-af9a-0e1c1ec5009c",
+          "workId": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501",
+          "title": "De Fato",
+          "author": "Marcus Tullius Cicero",
+          "confidence": 0.6658532
+        },
+        {
+          "citationText": "Marcus Tullius Cicero, De Fato",
+          "passageId": "e39434eb-1107-4e3f-b541-e95d56da4fdb",
+          "workId": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501",
+          "title": "De Fato",
+          "author": "Marcus Tullius Cicero",
+          "confidence": 0.6653627
+        },
+        {
+          "citationText": "Plutarch, De fato",
+          "passageId": "5f76fa25-fcd0-4d92-b5c0-109e6a8dac2d",
+          "workId": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+          "title": "De fato",
+          "author": "Plutarch",
+          "confidence": 0.6651024
+        },
+        {
+          "citationText": "Eusebius, Praeperatio Evangelica",
+          "passageId": "4fba403e-c1fa-4d2e-bcba-252c28456ea8",
+          "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+          "title": "Praeperatio Evangelica",
+          "author": "Eusebius",
+          "confidence": 0.6648393
+        },
+        {
+          "citationText": "Justin Martyr, Apologies and Dialogue with Trypho",
+          "passageId": "7634c4ba-d827-4cbb-8b10-70037ad795f2",
+          "workId": "f43b8b69-4724-4dfe-b707-9d310baea63f",
+          "title": "Apologies and Dialogue with Trypho",
+          "author": "Justin Martyr",
+          "confidence": 0.6648357
+        },
+        {
+          "citationText": "Alexander of Aphrodisias, De Fato (Περὶ εἱμαρμένης)",
+          "passageId": "1cf0ba15-cc6c-4000-949c-362d53783e60",
+          "workId": "9f03bd9f-50b7-413f-a624-f419fac90868",
+          "title": "De Fato (Περὶ εἱμαρμένης)",
+          "author": "Alexander of Aphrodisias",
+          "confidence": 0.6647643
+        },
+        {
+          "citationText": "Eusebius, Praeperatio Evangelica",
+          "passageId": "90fd0b8f-43be-4948-aa82-3beadfcfd995",
+          "workId": "e5309279-4d66-4deb-835c-ee548ebf9141",
+          "title": "Praeperatio Evangelica",
+          "author": "Eusebius",
+          "confidence": 0.664486
+        },
+        {
+          "citationText": "Plutarch, De fato",
+          "passageId": "a3c4eb50-6cce-4386-a4b7-5c4a3ce188f4",
+          "workId": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+          "title": "De fato",
+          "author": "Plutarch",
+          "confidence": 0.6634787
+        }
+      ],
+      "modernBibliography": [],
+      "ctsUrns": [
+        "7.2",
+        "6.8.1",
+        "6",
+        "Chapter 245",
+        "plutarch:chunk_14",
+        "282",
+        "13",
+        "6.9.31"
+      ],
+      "textualGroundings": [
+        {
+          "reference": "Aulus Gellius, Aulus Gellius, Noctes Atticae 7.2",
+          "originalText": "II. Quo itidem modo et vim necessitatemque fati constituerit et esse tamen in nobis consilii iudiciique nostri arbitrium confirmaverit. 1 Fatum, quod heimarmenen Graeci vocant, ad hanc ferme sententiam Chrysippus, Stoicae princeps philosophiae, definit: \"Fatum est\" inquit \"sempiterna quaedam et inde",
+          "language": "Latin",
+          "ctsUrn": "7.2",
+          "passageId": "a70db269-736c-4441-9c0e-8f7ca5b9cf26"
+        },
+        {
+          "reference": "Eusebius, Eusebius, Praeperatio Evangelica 6.8.1",
+          "originalText": "‘‘Ἄξιον δὲ ἐπὶ τούτοις ἅπασι παραθέσθαι\nκαὶ τὰ δοκοῦντα Χρυσίππῳ τῷ στωικῷ περὶ τοῦ λό-\nγου τοῦδε. οὕτος γὰρ έν τῷ πρώτῳ Περὶ εἱμαρμένης\nβιβλίῳ βουλόμενος δεικνύναι τὸ δὴ πάνθ’ ὑπὸ τῆς\nἀνάγκης καὶ τῆς εἱμαρμένης κατειλῆφθαι, μαρτυρίοις \n\nἄλλοις τέ τισι χρῆται καὶ τοῖς οὑτωσὶ παρ’ Ὁμήρῳ\nτῷ ποιητῇ λε",
+          "language": "Greek",
+          "ctsUrn": "6.8.1",
+          "passageId": "b83eceb3-7ccc-4386-ac16-bdc27ce642d3"
+        },
+        {
+          "reference": "Plutarch, Plutarch, De fato 6",
+          "originalText": "θεσμός τε Ἀδραστείας ὅδε:\nἣτις ἂν ψυχὴ συνοπαδὸς γενομένη κατίδῃ τι τῶν ἀληθῶν, μέχρι τῆς ἑτέρας περιόδου εἶναι ἀπήμονα:\nκἂν ἀεὶ δύνηται τοῦτο ποιεῖν, ἀεὶ ἀβλαβῆ εἶναι.\"\nτοιοῦτον μὲν δὴ τὸ ἐξ ὑποθέσεως ἅμα καὶ καθόλου. ὅτι δὲ καὶ ἡ εἱμαρμένη το",
+          "language": "Greek",
+          "ctsUrn": "6",
+          "passageId": "1c429d14-3b7a-4cb6-a678-0a1751081e93"
+        },
+        {
+          "reference": "Alexander of Aphrodisias, Alexander of Aphrodisias, De Fato (Περὶ εἱμαρμένης) Chapter 245",
+          "originalText": "οὐ γα\\ρ πάντως ἀει\\ τα\\ γινόμενα κατα\\\n\nαἰτίαν ἔξωθεν ἔχει τοῦ γίνεσθαι τη\\ν αἰτίαν\n\nδια\\ γα\\ρ τη\\ν τοιαύτην ἐξου\n\nὅτι τῶν οὕτως γινομένων ἡμεῖς ἐσμεν κύριοι",
+          "language": "Greek",
+          "ctsUrn": "Chapter 245",
+          "passageId": "ea7f547e-96e5-4bdd-82b3-8cf6995cc538"
+        },
+        {
+          "reference": "Plutarch, Plutarch, Moralia and Lives chunk_14",
+          "originalText": "βλάψουσιν οἱ σοφοι\\ ψευ δεῖς φαντασίας ἐμποιοῦντες ἀ\\ν αἱ φαντασίαι ποιῶσιν αὐτο τελῶς τα\\ς συγκαταθέσεις πολλάκις γα\\ρ οἱ σοφοι\\ ψεύδει προ\\ς του\\ς φαύλους και\\ φαντασίαν παριστᾶσι οὐ μη\\ν αἰτίαν τῆς συγκαταθέσεως ὑπολήψεως αἰτία τῆς ψευδοῦς ἔσται και\\ τῆς ἀπάτης οὖν ἄν τις ἀπο\\ τοῦ σοφοῦ μεταφέρων",
+          "language": "Greek",
+          "ctsUrn": "plutarch:chunk_14",
+          "passageId": "82aa1fcb-a2d6-4edb-a50b-504e98a4a471"
+        },
+        {
+          "reference": "Plotinus, Plotinus, Enneades 282",
+          "originalText": "καὶ τρόποι δὴ καὶ ἤθη\n                                διάφορα καὶ τύχαι ἐπὶ τὰ πόρρω ἀξιοῦσιν ἰέναι: καὶ οὕτω δὴ ἀεὶ οὐχ\n                                ἱστάμενοι οἱ μὲν ἀρχὰς σωματικὰς θέμενοι, οἷον ἀτόμους, τῇ τούτων\n                                φορᾷ καὶ πληγαῖς καὶ συμπλοκαῖς πρὸς ἄλληλα ἕκαστ",
+          "language": "Greek",
+          "ctsUrn": "282",
+          "passageId": "eda42668-ab23-40c0-ba76-f9f5988458bb"
+        },
+        {
+          "reference": "Plutarch, Plutarch, De fato 13",
+          "originalText": "ἔστι δ' ἑκατέρου ἑκατέρου σύμπτωμα, τὸ μὲν αὐτόματον τοῦ ἐνδεχομένου:\nἡ δὲ τύχη τοῦ ἐφ' ἡμῖν, καὶ τούτου οὐχ ἅπαντος, ἀλλ' ὅπερ ἂν καὶ κατὰ προαίρεσιν ᾖ, ὡς προείρηται. διὸ καὶ τὸ μὲν αὐτόματον κοινὸν ἐμψύχων τε καὶ ἀψύχων:\nἡ δὲ τύχη ἀνθρώπου ι",
+          "language": "Greek",
+          "ctsUrn": "13",
+          "passageId": "3175daa6-58f3-4769-9359-57f2b64eaca3"
+        },
+        {
+          "reference": "Eusebius, Eusebius, Praeperatio Evangelica 6.9.31",
+          "originalText": "ὥστε καὶ κατ’ αὐτοὺς ἀναιρεῖσθαι\n\n τὴν ἐξ εἱμαρμένης ἀνάγκην, συνίστασθαι δὲ\nκατὰ φύσιν ἡμῖν ὑπάρχειν τὸ αὐτεξούσιον· μετὰ τοὐ\nπλεῖστα εἶναι καὶ τὰ μὴ ἐφ’ ἡμῖν, ὥσπερ τὰ κατὰ\nφύσιν, καὶ τὰ ἐκ τύχης, ἕτερα ὄντα καὶ αὐτὰ παρὰ\nτὸν τῆς εἱμαρμένης λόγον, καθὼς προδἐδεικται.’’",
+          "language": "Greek",
+          "ctsUrn": "6.9.31",
+          "passageId": "c39c27bd-12ec-40c1-baf9-0fe10f009ba1"
+        }
+      ],
+      "qualityScore": 100,
+      "qualityBadge": "Low",
+      "metadata": {
+        "research_graph": {
+          "overview": {
+            "query_type": "legacy_answer",
+            "complexity": "unknown",
+            "grounding_policy": "mixed",
+            "quality_badge": "Low",
+            "pipeline_degraded": false,
+            "claim_ledger_mode": "legacy_stream",
+            "render_answer_mode": "quality_guards",
+            "scholarly_polish_mode": "quality_guards",
+            "seed_node_count": 5,
+            "context_node_count": 5,
+            "bundle_count": 0,
+            "work_count": 0,
+            "claim_count": 0,
+            "citation_count": 31
+          },
+          "stages": [
+            {
+              "id": "legacy_embed",
+              "title": "Embed and search",
+              "status": "complete",
+              "summary": "5 seed nodes retrieved from vector search.",
+              "metrics": [
+                {
+                  "label": "Seeds",
+                  "value": 5
+                },
+                {
+                  "label": "Model",
+                  "value": "gemini-3.1-pro-preview"
+                }
+              ],
+              "details": {
+                "starting_nodes": [
+                  {
+                    "id": "concept_heimarmene_fate_stoics_j0k1l2m3",
+                    "label": "Heimarmenê (Εἱμαρμένη) - Stoic Fate",
+                    "type": "concept",
+                    "reason": "Semantic similarity match (rank 1)"
+                  },
+                  {
+                    "id": "concept_synkatathesis_stoic_assent",
+                    "label": "Synkatathesis (Stoic Assent, συγκατάθεσις)",
+                    "type": "concept",
+                    "reason": "Semantic similarity match (rank 2)"
+                  },
+                  {
+                    "id": "school_stoics",
+                    "label": "Stoic School (Στοά)",
+                    "type": "school",
+                    "reason": "Semantic similarity match (rank 3)"
+                  },
+                  {
+                    "id": "debate_stoic_compatibilism",
+                    "label": "Stoic Compatibilism and Moral Responsibility",
+                    "type": "debate",
+                    "reason": "Semantic similarity match (rank 4)"
+                  },
+                  {
+                    "id": "passage_plut_fat_18_en",
+                    "label": "Plutarch, De fato 18: Summary - Middle Platonist vs Stoic Position (English)",
+                    "type": "passage",
+                    "reason": "Semantic similarity match (rank 5)"
+                  }
+                ],
+                "provider": "gemini"
+              }
+            },
+            {
+              "id": "legacy_traversal",
+              "title": "Expand graph context",
+              "status": "complete",
+              "summary": "0 expanded nodes and 0 traversed edges.",
+              "metrics": [
+                {
+                  "label": "Expanded",
+                  "value": 0
+                },
+                {
+                  "label": "Edges",
+                  "value": 0
+                },
+                {
+                  "label": "Passages",
+                  "value": 0
+                }
+              ],
+              "details": {
+                "expanded_nodes": [],
+                "linked_passages": []
+              }
+            },
+            {
+              "id": "legacy_synthesis",
+              "title": "Synthesize and repair",
+              "status": "complete",
+              "summary": "Quality guards modified the answer before final delivery.",
+              "metrics": [
+                {
+                  "label": "Citations",
+                  "value": 31
+                },
+                {
+                  "label": "Quality",
+                  "value": "Low"
+                },
+                {
+                  "label": "Thinking",
+                  "value": "disabled"
+                }
+              ],
+              "details": {
+                "was_modified": true,
+                "use_thinking": false
+              }
+            }
+          ],
+          "facets": [],
+          "works": [],
+          "claims": [],
+          "hypotheses": [],
+          "open_questions": [],
+          "counter_evidence": [
+            "Quality guards identified answer segments that required correction or normalization."
+          ],
+          "uncertainties": []
+        },
+        "quality_badge": "Low",
+        "render_answer_mode": "quality_guards",
+        "scholarly_polish_mode": "quality_guards"
+      },
+      "pageIndexInfo": {
+        "linkedPassages": 0,
+        "directPassages": 0,
+        "neighborPassages": 0,
+        "kgNeighbors": 0,
+        "seedNodes": 0,
+        "contextChars": 40263,
+        "contextTokensEstimate": 10066
+      },
+      "retrievalStats": {
+        "totalNodes": 20,
+        "totalEdges": 0,
+        "standardResults": 40,
+        "passageNodes": 0,
+        "explicitPassages": 0,
+        "textualGroundings": 8
+      },
+      "citationIntegrity": {
+        "passed": true,
+        "outOfRange": [],
+        "orphanSources": [],
+        "totalMarkers": 0,
+        "totalSources": 0
+      },
+      "processingTime": 14872,
+      "version": "pageindex-v3",
+      "parameters": {
+        "semantic_k": 20,
+        "graph_depth": 2,
+        "max_context": 25
+      },
+      "success": true
+    }
+  },
+  "arm_b_new_system": {
+    "answer": "The Stoic theory of fate and moral responsibility represents one of antiquity's most sophisticated attempts to reconcile universal causal determinism with human agency. Modern scholars widely characterize the Stoic position—championed primarily by Chrysippus, the school's third head—as an early form of compatibilism [3, 5]. The Stoics maintained that while all events are determined by an unbroken chain of antecedent causes, human beings nevertheless retain moral responsibility for their actions through the mechanism of mental assent [1, 11, P14].",
+    "citations": [
+      {
+        "ref": "1",
+        "type": "node",
+        "id": "concept_synkatathesis_stoic_assent",
+        "label": "Synkatathesis (Stoic Assent, συγκατάθεσις)",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      },
+      {
+        "ref": "3",
+        "type": "node",
+        "id": "person_chrysippus_280_206bce_i9j0k1l2",
+        "label": "Chrysippus of Soli",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      },
+      {
+        "ref": "5",
+        "type": "node",
+        "id": "concept_ancient_free_will_debate_structure_z6a7b8c9",
+        "label": "Ancient Free Will Debate: Compatibilism vs. Incompatibilism",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      },
+      {
+        "ref": "11",
+        "type": "node",
+        "id": "concept_heimarmene_fate_stoics_j0k1l2m3",
+        "label": "Heimarmenê (Εἱμαρμένη) - Stoic Fate",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from packed metadata"
+      },
+      {
+        "ref": "P14",
+        "type": "passage",
+        "id": "ec75b8e9-ce68-4d6a-b92d-fd601490b38c",
+        "label": "Marcus Tullius Cicero, De Fato Fat. 21",
+        "layer": "primary",
+        "confidence": null,
+        "verified": true,
+        "verification_note": "Programmatically verified from evidence bundle"
+      }
+    ],
+    "metadata": {
+      "query_type": "global_abstract",
+      "classification_confidence": 0.45,
+      "classification_reason": "heuristic fallback",
+      "debug_trace": {
+        "classify_query": {
+          "mode": "heuristic",
+          "query_type": "global_abstract",
+          "confidence": 0.45,
+          "reason": "heuristic fallback",
+          "complexity": "medium"
+        },
+        "expand_query": {
+          "mode": "fallback",
+          "expanded_query": "What did the Stoics believe about fate and moral responsibility?",
+          "philosophers": [
+            "Chrysippus",
+            "Epictetus",
+            "Seneca",
+            "Marcus Aurelius",
+            "Cleanthes"
+          ],
+          "concepts": [
+            "fate",
+            "responsibility",
+            "assent",
+            "prohairesis"
+          ],
+          "schools": [
+            "Stoicism"
+          ],
+          "periods": []
+        },
+        "discover_corpus": {
+          "queries": [
+            "What did the Stoics believe about fate and moral responsibility?",
+            "Chrysippus",
+            "Epictetus",
+            "Seneca",
+            "fate",
+            "responsibility",
+            "assent",
+            "Stoicism"
+          ],
+          "semantic_hits": [
+            {
+              "id": "person_chrysippus_280_206bce_i9j0k1l2",
+              "score": 0.7629,
+              "label": "Chrysippus of Soli",
+              "type": "person"
+            },
+            {
+              "id": "concept_heimarmene_fate_stoics_j0k1l2m3",
+              "score": 0.7602,
+              "label": "Heimarmenê (Εἱμαρμένη) - Stoic Fate",
+              "type": "concept"
+            },
+            {
+              "id": "concept_synkatathesis_stoic_assent",
+              "score": 0.7524,
+              "label": "Synkatathesis (Stoic Assent, συγκατάθεσις)",
+              "type": "concept"
+            },
+            {
+              "id": "school_stoics",
+              "score": 0.7515,
+              "label": "Stoic School (Στοά)",
+              "type": "school"
+            },
+            {
+              "id": "passage_cicero_fat_39_en",
+              "score": 0.7493,
+              "label": "Cicero, De Fato 39: Chrysippus as Arbiter Between Schools (English)",
+              "type": "passage"
+            },
+            {
+              "id": "passage_cicero_fat_39",
+              "score": 0.7493,
+              "label": "Cicero, De Fato 39: Chrysippus as Arbiter Between Schools",
+              "type": "passage"
+            },
+            {
+              "id": "work_chrysippus_svf_ii",
+              "score": 0.7492,
+              "label": "Chrysippus, Fragments (SVF II)",
+              "type": "work"
+            },
+            {
+              "id": "debate_stoic_compatibilism",
+              "score": 0.7484,
+              "label": "Stoic Compatibilism and Moral Responsibility",
+              "type": "debate"
+            },
+            {
+              "id": "passage_plut_fat_18_en",
+              "score": 0.743,
+              "label": "Plutarch, De fato 18: Summary - Middle Platonist vs Stoic Position (English)",
+              "type": "passage"
+            },
+            {
+              "id": "passage_gellius_7_2",
+              "score": 0.7424,
+              "label": "Aulus Gellius, Noctes Atticae, 7.2",
+              "type": "passage"
+            },
+            {
+              "id": "passage_plut_fat_18",
+              "score": 0.7422,
+              "label": "Plutarch, De fato 18: Summary - Middle Platonist vs Stoic Position",
+              "type": "passage"
+            },
+            {
+              "id": "passage_epict_18_s18",
+              "score": 0.7398,
+              "label": "Epictetus, Discourses and Enchiridion, Epict. 18",
+              "type": "passage"
+            }
+          ],
+          "seed_node_ids": [
+            "person_chrysippus_280_206bce_i9j0k1l2",
+            "concept_heimarmene_fate_stoics_j0k1l2m3",
+            "concept_synkatathesis_stoic_assent",
+            "school_stoics",
+            "passage_cicero_fat_39_en",
+            "passage_cicero_fat_39",
+            "work_chrysippus_svf_ii",
+            "debate_stoic_compatibilism",
+            "passage_plut_fat_18_en",
+            "passage_gellius_7_2",
+            "passage_plut_fat_18",
+            "passage_epict_18_s18",
+            "passage_alex_fat_36_en",
+            "passage_epict_132_s132",
+            "person_epictetus_of_hierapolis_3c385bc2",
+            "passage_epict_26_s26",
+            "passage_epict_103_s103",
+            "quote_chrysippus_cylinder_1da2c55b",
+            "debate_stoic_academic_hellenistic",
+            "passage_epict_105_s105"
+          ],
+          "passage_anchor_ids": [
+            "person_chrysippus_280_206bce_i9j0k1l2",
+            "concept_heimarmene_fate_stoics_j0k1l2m3",
+            "concept_synkatathesis_stoic_assent",
+            "school_stoics",
+            "work_chrysippus_svf_ii",
+            "debate_stoic_compatibilism",
+            "person_epictetus_of_hierapolis_3c385bc2",
+            "quote_chrysippus_cylinder_1da2c55b",
+            "debate_stoic_academic_hellenistic",
+            "argument_theodicy_alex",
+            "person_seneca_4bce_65ce_a1b2c3d4",
+            "argument_chrysippus_causal_taxonomy"
+          ],
+          "linked_passages": [
+            {
+              "passage_id": "1812b556-ba17-4407-9998-f0383d158dd2",
+              "title": "De Fato",
+              "author": "Marcus Tullius Cicero",
+              "canonical_ref": "Fat. 43",
+              "language": "lat",
+              "confidence": 0.98
+            },
+            {
+              "passage_id": "92edb773-e01b-40db-9f7d-49f66fd46424",
+              "title": "De Fato",
+              "author": "Marcus Tullius Cicero",
+              "canonical_ref": "Fat. 12",
+              "language": "lat",
+              "confidence": 0.95
+            },
+            {
+              "passage_id": "80797f7a-0999-43df-b40c-abf3cf305fa5",
+              "title": "De Fato",
+              "author": "Marcus Tullius Cicero",
+              "canonical_ref": "Fat. 13",
+              "language": "lat",
+              "confidence": 0.95
+            },
+            {
+              "passage_id": "c3ad247c-14f7-4b5a-879a-354106bb6441",
+              "title": "De fato",
+              "author": "Pseudo-Plutarch",
+              "canonical_ref": "Mor. 10",
+              "language": "grc",
+              "confidence": 0.92
+            },
+            {
+              "passage_id": "0a1bf1ae-9888-4a9e-8da8-9ff3ae4c8f7e",
+              "title": "De Fato",
+              "author": "Marcus Tullius Cicero",
+              "canonical_ref": "Fat. 42",
+              "language": "lat",
+              "confidence": 0.92
+            },
+            {
+              "passage_id": "de281897-0be2-447d-af9a-0e1c1ec5009c",
+              "title": "De Fato",
+              "author": "Marcus Tullius Cicero",
+              "canonical_ref": "Fat. 39",
+              "language": "lat",
+              "confidence": 0.9
+            },
+            {
+              "passage_id": "d7bd6f23-63d3-452c-ac63-94c6bff30dfb",
+              "title": "De Fato",
+              "author": "Marcus Tullius Cicero",
+              "canonical_ref": "Fat. 40",
+              "language": "lat",
+              "confidence": 0.9
+            },
+            {
+              "passage_id": "fc50aff8-32e5-443b-950d-35ad89b15d96",
+              "title": "De Fato",
+              "author": "Marcus Tullius Cicero",
+              "canonical_ref": "Fat. 41",
+              "language": "lat",
+              "confidence": 0.85
+            },
+            {
+              "passage_id": "0a1bf1ae-9888-4a9e-8da8-9ff3ae4c8f7e",
+              "title": "De Fato",
+              "author": "Marcus Tullius Cicero",
+              "canonical_ref": "Fat. 42",
+              "language": "lat",
+              "confidence": 0.85
+            },
+            {
+              "passage_id": "1812b556-ba17-4407-9998-f0383d158dd2",
+              "title": "De Fato",
+              "author": "Marcus Tullius Cicero",
+              "canonical_ref": "Fat. 43",
+              "language": "lat",
+              "confidence": 0.85
+            }
+          ]
+        },
+        "scholarly_dossier": {
+          "facet_count": 6,
+          "primary_bundle_ids": [],
+          "testimony_bundle_ids": [
+            "unknown::passage_arist_en_3_1_en",
+            "unknown::passage_arist_en_3_1",
+            "unknown::passage_arist_en_3_5_en",
+            "unknown::passage_arist_en_3_5"
+          ],
+          "counter_bundle_ids": [
+            "unknown::passage_cicero_fat_43_en",
+            "unknown::passage_cicero_fat_43",
+            "unknown::passage_plut_fat_13",
+            "unknown::passage_alex_fat_16_en",
+            "unknown::passage_cicero_fat_40"
+          ],
+          "metadata_ids": [
+            "school_stoics",
+            "concept_ancient_free_will_debate_structure_z6a7b8c9",
+            "concept_synkatathesis_stoic_assent",
+            "person_chrysippus_280_206bce_i9j0k1l2"
+          ]
+        },
+        "research_notebook": {
+          "question_frame": "What did the Stoics believe about fate and moral responsibility?",
+          "facets": [
+            {
+              "facet_id": "core_doctrinal_thesis",
+              "title": "Core Doctrinal Thesis",
+              "priority": 1,
+              "required_support": "passage"
+            },
+            {
+              "facet_id": "causal_structure_of_fate",
+              "title": "Causal Structure of Fate",
+              "priority": 2,
+              "required_support": "passage"
+            },
+            {
+              "facet_id": "textual_witnesses",
+              "title": "Textual Witnesses",
+              "priority": 2,
+              "required_support": "passage"
+            },
+            {
+              "facet_id": "agency_and_responsibility",
+              "title": "Agency and Responsibility",
+              "priority": 3,
+              "required_support": "passage"
+            },
+            {
+              "facet_id": "ancient_testimony_and_preservation",
+              "title": "Ancient Testimony and Preservation",
+              "priority": 4,
+              "required_support": "passage"
+            },
+            {
+              "facet_id": "counterpoints_and_limits",
+              "title": "Counterpoints and Limits",
+              "priority": 4,
+              "required_support": "passage"
+            }
+          ],
+          "sub_queries": [
+            "What did the Stoics believe about fate and moral responsibility?"
+          ],
+          "competing_hypotheses": [
+            "The main answer is textually well supported for: What did the Stoics believe about fate and moral responsibility?",
+            "The evidence is more fragmented or interpretive for: What did the Stoics believe about fate and moral responsibility?"
+          ],
+          "work_priorities": [
+            "Chrysippus, Fragments (SVF II)",
+            "De Fato (Περὶ Εἱμαρμένης / On Fate)",
+            "Alternate Possibilities and Moral Responsibility",
+            "Responsibility and Control",
+            "The Stoics on Determinism and Compatibilism",
+            "Discourses (Διατριβαί) - Epictetus",
+            "De Fato",
+            "De Fato (On Fate)",
+            "De Principiis (Περὶ Ἀρχῶν) - Origen",
+            "Pseudo-Plutarch, De Fato (Moralia 568b-574f)",
+            "Consolation of Philosophy Book V - Boethius",
+            "Determinism and Freedom in Stoic Philosophy"
+          ]
+        },
+        "tree_navigation": {
+          "candidate_work_titles": [
+            "Chrysippus, Fragments (SVF II)",
+            "De Fato (Περὶ Εἱμαρμένης / On Fate)",
+            "Alternate Possibilities and Moral Responsibility",
+            "Responsibility and Control",
+            "The Stoics on Determinism and Compatibilism",
+            "Discourses (Διατριβαί) - Epictetus",
+            "De Fato",
+            "De Fato (On Fate)",
+            "De Principiis (Περὶ Ἀρχῶν) - Origen",
+            "Pseudo-Plutarch, De Fato (Moralia 568b-574f)",
+            "Consolation of Philosophy Book V - Boethius",
+            "Determinism and Freedom in Stoic Philosophy"
+          ],
+          "selected_sections": [
+            {
+              "work_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501",
+              "node_id": "book_Fat_ch_11",
+              "path": "Book Fat, Chapter 11",
+              "title": "Book Fat, Chapter 11"
+            },
+            {
+              "work_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501",
+              "node_id": "book_Fat_ch_13",
+              "path": "Book Fat, Chapter 13",
+              "title": "Book Fat, Chapter 13"
+            },
+            {
+              "work_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501",
+              "node_id": "book_Fat_ch_21",
+              "path": "Book Fat, Chapter 21",
+              "title": "Book Fat, Chapter 21"
+            },
+            {
+              "work_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+              "node_id": "book_Mor_ch_10",
+              "path": "Book Mor, Chapter 10",
+              "title": "Book Mor, Chapter 10"
+            },
+            {
+              "work_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+              "node_id": "book_Mor_ch_13",
+              "path": "Book Mor, Chapter 13",
+              "title": "Book Mor, Chapter 13"
+            },
+            {
+              "work_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+              "node_id": "book_Mor_ch_14",
+              "path": "Book Mor, Chapter 14",
+              "title": "Book Mor, Chapter 14"
+            }
+          ]
+        },
+        "context_pack": {
+          "kg_metadata_count": 111,
+          "section_summary_count": 6,
+          "passage_bundle_count": 22,
+          "token_estimate": 13918,
+          "top_bundle_rankings": [
+            {
+              "ref": "P1",
+              "bundle_id": "unknown::passage_cicero_fat_43_en",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "score": 97,
+              "canonical_ref": null,
+              "section_path": "retrieved passage",
+              "evidence_class": "counter_evidence",
+              "author_match": false,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P2",
+              "bundle_id": "unknown::passage_cicero_fat_43",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "score": 97,
+              "canonical_ref": null,
+              "section_path": "retrieved passage",
+              "evidence_class": "counter_evidence",
+              "author_match": false,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P3",
+              "bundle_id": "unknown::passage_cicero_fat_44_en",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "score": 97,
+              "canonical_ref": null,
+              "section_path": "retrieved passage",
+              "evidence_class": "counter_evidence",
+              "author_match": false,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P4",
+              "bundle_id": "unknown::passage_cicero_fat_44",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "score": 97,
+              "canonical_ref": null,
+              "section_path": "retrieved passage",
+              "evidence_class": "counter_evidence",
+              "author_match": false,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P5",
+              "bundle_id": "unknown::passage_plut_fat_13",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "graph_traversal",
+              "score": 94,
+              "canonical_ref": null,
+              "section_path": "retrieved passage",
+              "evidence_class": "counter_evidence",
+              "author_match": false,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P6",
+              "bundle_id": "unknown::passage_alex_fat_16_en",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "score": 93,
+              "canonical_ref": null,
+              "section_path": "retrieved passage",
+              "evidence_class": "counter_evidence",
+              "author_match": false,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P7",
+              "bundle_id": "unknown::passage_cicero_fat_40",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "score": 87,
+              "canonical_ref": null,
+              "section_path": "retrieved passage",
+              "evidence_class": "counter_evidence",
+              "author_match": false,
+              "school_match": false,
+              "late_penalty": 0
+            },
+            {
+              "ref": "P8",
+              "bundle_id": "unknown::passage_cicero_fat_41",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "score": 85,
+              "canonical_ref": null,
+              "section_path": "retrieved passage",
+              "evidence_class": "counter_evidence",
+              "author_match": false,
+              "school_match": false,
+              "late_penalty": 0
+            }
+          ]
+        },
+        "evidence_bundles": {
+          "bundle_count": 22,
+          "bundle_sample": [
+            {
+              "bundle_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501::55243d0d-3988-45c7-9aa4-762167af0827",
+              "work_title": "De Fato",
+              "author": "Marcus Tullius Cicero",
+              "source": "tree_reasoning",
+              "canonical_ref": "Fat. 11",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501::80797f7a-0999-43df-b40c-abf3cf305fa5",
+              "work_title": "De Fato",
+              "author": "Marcus Tullius Cicero",
+              "source": "tree_reasoning",
+              "canonical_ref": "Fat. 13",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501::ec75b8e9-ce68-4d6a-b92d-fd601490b38c",
+              "work_title": "De Fato",
+              "author": "Marcus Tullius Cicero",
+              "source": "tree_reasoning",
+              "canonical_ref": "Fat. 21",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e::c3ad247c-14f7-4b5a-879a-354106bb6441",
+              "work_title": "De fato",
+              "author": "Pseudo-Plutarch",
+              "source": "tree_reasoning",
+              "canonical_ref": "Mor. 10",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e::3175daa6-58f3-4769-9359-57f2b64eaca3",
+              "work_title": "De fato",
+              "author": "Pseudo-Plutarch",
+              "source": "tree_reasoning",
+              "canonical_ref": "Mor. 13",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e::0ef88518-bc36-4983-b1c0-987f21d4bc00",
+              "work_title": "De fato",
+              "author": "Pseudo-Plutarch",
+              "source": "tree_reasoning",
+              "canonical_ref": "Mor. 14",
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_cicero_fat_43_en",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_cicero_fat_43",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_cicero_fat_44_en",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_cicero_fat_44",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_plut_fat_13",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "graph_traversal",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_alex_fat_16_en",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_cicero_fat_40",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_cicero_fat_41",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_cicero_fat_41_en",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_ma_med_11_37",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_cicero_fat_39_en",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_cicero_fat_39",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_arist_en_3_1_en",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            },
+            {
+              "bundle_id": "unknown::passage_arist_en_3_5_en",
+              "work_title": "Unknown work",
+              "author": null,
+              "source": "semantic_search",
+              "canonical_ref": null,
+              "translation_source": null
+            }
+          ]
+        },
+        "counter_evidence": {
+          "mode": "llm",
+          "selected_count": 12,
+          "bundle_ids": [
+            "unknown::passage_alex_fat_16_en",
+            "unknown::passage_cicero_fat_39",
+            "unknown::passage_cicero_fat_39_en",
+            "unknown::passage_cicero_fat_40",
+            "unknown::passage_cicero_fat_41",
+            "unknown::passage_cicero_fat_41_en",
+            "unknown::passage_cicero_fat_43",
+            "unknown::passage_cicero_fat_43_en"
+          ],
+          "rationale": "The evidence provided is a mix of primary support texts that collectively address the Stoic view on fate and moral responsibility. The main answer is textually well supported by several passages, particularly those from Cicero and Plutarch, which discuss the Stoic compatibilist solution and the distinction between principal and auxiliary causes. However, there are also interpretive elements, such as the modern characterization of the Stoic position and the philosophical diagnosis of verbal disputes. The evidence is fragmented in the sense that it comes from multiple sources and authors, but it converges on the central themes of Stoic thought regarding fate and moral responsibility. The inclusion of Aristotle's foundational analysis of voluntary action provides additional context but is not directly from Stoic sources. Overall, the evidence is robust but requires careful interpretation to fully understand the Stoic position."
+        },
+        "evidence_sufficiency": {
+          "bundle_count": 22,
+          "work_count": 3,
+          "counter_count": 1,
+          "covered_facets": 6,
+          "score": 1.0,
+          "sufficient": true,
+          "reason": "heuristic sufficiency",
+          "refinement": null
+        },
+        "draft_claim_ledger": {
+          "mode": "llm_salvaged",
+          "error": "JSONDecodeError: Expecting value: line 26 column 27 (char 1215)",
+          "claim_count": 1,
+          "raw_excerpt": "{\n  \"claims\": [\n    {\n      \"claim\": \"The Stoics maintained that all events are determined by an unbroken chain of antecedent causes, a doctrine they identified with universal fate.\",\n      \"evidence_ids\": [\n        \"c0fe9a3c-05a3-4aad-b953-e0fbdcb28501::ec75b8e9-ce68-4d6a-b92d-fd601490b38c\",\n        \"concept_heimarmene_fate_stoics_j0k1l2m3\"\n      ],\n      \"facet_id\": \"core_doctrinal_thesis\",\n      \"evidence_class\": \"ancient_testimony\",\n      \"quote_original\": \"omnia, quae fiunt, causis fiunt antegressis; id si ita est, fato omnia fiunt\",\n      \"quote_translation\": \"all things that happen, happen by antecedent causes; if this is so, all things happen by fate\",\n      \"support_type\": \"passage\",\n      \"confidence\": 0.95,\n      \"status\": \"supported\"\n    },\n    {\n      \"claim\": \"To preserve moral responsibility within this deterministic framework, Chrysippus distinguished between external auxiliary causes and internal principal causes.\",\n      \"evidence_ids\": [\n        \"unknown::passage_cicero_fat_43\",\n        \"argument_chrysippus_causal_taxonomy\"\n      ],\n      \"facet_id\": \"causal_structure_of_fate\",\n      \"evidence_class\": \"ancient_testimony\",\n      \"quote_original\": null,\n      \"quote_translation\":"
+        },
+        "scholarly_polish": {
+          "mode": "llm",
+          "raw_excerpt": "The Stoic theory of fate and moral responsibility represents one of antiquity's most sophisticated attempts to reconcile universal causal determinism with human agency. Modern scholars widely characterize the Stoic position—championed primarily by Chrysippus, the school's third head—as an early form of compatibilism [3, 5]. The Stoics maintained that while all events are determined by an unbroken chain of antecedent causes, human beings nevertheless retain moral responsibility for their actions through the mechanism of mental assent [1, 11, P14].\n\n### The Core Doctrinal Thesis: Universal Fate\n\nThe Stoic"
+        },
+        "render_grounded_answer": {
+          "mode": "llm",
+          "raw_excerpt": "The Stoic theory of fate and moral responsibility represents one of antiquity's most sophisticated attempts to reconcile universal causal determinism with human agency. Modern scholars widely characterize the Stoic position—championed primarily by Chrysippus, the school's third head—as an early form of compatibilism [3, 5]. The Stoics maintained that while all events are determined by an unbroken chain of antecedent causes, human beings nevertheless retain moral responsibility for their actions through the mechanism of mental assent [1, 11, P14].\n\n### The Core Doctrinal Thesis: Universal Fate\n\nThe Stoic",
+          "polish_mode": "llm"
+        },
+        "programmatic_verify": {
+          "citation_count": 5,
+          "answer_excerpt": "The Stoic theory of fate and moral responsibility represents one of antiquity's most sophisticated attempts to reconcile universal causal determinism with human agency. Modern scholars widely characterize the Stoic position—championed primarily by Chrysippus, the school's third head—as an early form of compatibilism [3, 5]. The Stoics maintained that while all events are determined by an unbroken chain of antecedent causes, human beings nevertheless retain moral responsibility for their actions through the mechanism of mental assent [1, 11, P14]."
+        }
+      },
+      "expanded_query": "What did the Stoics believe about fate and moral responsibility?",
+      "passage_anchor_ids": [
+        "person_chrysippus_280_206bce_i9j0k1l2",
+        "concept_heimarmene_fate_stoics_j0k1l2m3",
+        "concept_synkatathesis_stoic_assent",
+        "school_stoics",
+        "work_chrysippus_svf_ii",
+        "debate_stoic_compatibilism",
+        "person_epictetus_of_hierapolis_3c385bc2",
+        "quote_chrysippus_cylinder_1da2c55b",
+        "debate_stoic_academic_hellenistic",
+        "argument_theodicy_alex",
+        "person_seneca_4bce_65ce_a1b2c3d4",
+        "argument_chrysippus_causal_taxonomy"
+      ],
+      "selected_sections": [
+        {
+          "work_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501",
+          "node_id": "book_Fat_ch_11",
+          "title": "Book Fat, Chapter 11",
+          "path": "Book Fat, Chapter 11",
+          "summary": "1 passages",
+          "abstract": "Marcus Tullius Cicero - Book Fat, Chapter 11. Key refs: Fat. 11. Sample: Sed haec ex naturalibus causis vitia nasci possunt, extirpari autem et funditus tolli, ut is ipse, qui ad ea propensus fuerit, a tantis vitiis avocetur, non est id positum in naturalibus causis, sed in voluntate, studio,",
+          "canonical_refs": [
+            "Fat. 11"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 142,
+          "start_passage": 11,
+          "end_passage": 11
+        },
+        {
+          "work_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501",
+          "node_id": "book_Fat_ch_13",
+          "title": "Book Fat, Chapter 13",
+          "path": "Book Fat, Chapter 13",
+          "summary": "1 passages",
+          "abstract": "Marcus Tullius Cicero - Book Fat, Chapter 13. Key refs: Fat. 13. Sample: At hoc, Chrysippe, minime vis, maximeque tibi de hoc ipso cum Diodoro certamen est. Ille enim id solum fieri posse dicit, quod aut sit verum aut futurum sit verum, et, quicquid futurum sit, id dicit fieri necesse esse et",
+          "canonical_refs": [
+            "Fat. 13"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 197,
+          "start_passage": 13,
+          "end_passage": 13
+        },
+        {
+          "work_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501",
+          "node_id": "book_Fat_ch_21",
+          "title": "Book Fat, Chapter 21",
+          "path": "Book Fat, Chapter 21",
+          "summary": "1 passages",
+          "abstract": "Marcus Tullius Cicero - Book Fat, Chapter 21. Key refs: Fat. 21. Sample: Quod si ita est, omnia, quae fiunt, causis fiunt antegressis; id si ita est, fato omnia fiunt; efficitur igitur fato fieri, quaecumque fiant.' Hic primum si mihi libeat adsentiri Epicuro et negare omnem enuntiationem aut",
+          "canonical_refs": [
+            "Fat. 21"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 222,
+          "start_passage": 21,
+          "end_passage": 21
+        },
+        {
+          "work_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+          "node_id": "book_Mor_ch_10",
+          "title": "Book Mor, Chapter 10",
+          "path": "Book Mor, Chapter 10",
+          "summary": "1 passages",
+          "abstract": "Pseudo-Plutarch - Book Mor, Chapter 10. Key refs: Mor. 10. Sample: κατὰ μὲν γὰρ τὸ μᾶλλον δυνατόν τε καὶ ἐνδεχόμενον, κατὰ δὲ τὸ παρὸν ἐφ' ἡμῖν τε καὶ καθ' ὁρμήν. ἀφορίζοιτο δ' ἂν ὧδε: τὸ μὲν ἐνδεχόμενον ὅπερ αὐτό τε καὶ τὸ ἀντικείμενον, τὸ δ' ἐφ'",
+          "canonical_refs": [
+            "Mor. 10"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 314,
+          "start_passage": 10,
+          "end_passage": 10
+        },
+        {
+          "work_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+          "node_id": "book_Mor_ch_13",
+          "title": "Book Mor, Chapter 13",
+          "path": "Book Mor, Chapter 13",
+          "summary": "1 passages",
+          "abstract": "Pseudo-Plutarch - Book Mor, Chapter 13. Key refs: Mor. 13. Sample: ἔστι δ' ἑκατέρου ἑκατέρου σύμπτωμα, τὸ μὲν αὐτόματον τοῦ ἐνδεχομένου: ἡ δὲ τύχη τοῦ ἐφ' ἡμῖν, καὶ τούτου οὐχ ἅπαντος, ἀλλ' ὅπερ ἂν καὶ κατὰ προαίρεσιν ᾖ, ὡς προείρηται. διὸ καὶ το",
+          "canonical_refs": [
+            "Mor. 13"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 375,
+          "start_passage": 13,
+          "end_passage": 13
+        },
+        {
+          "work_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+          "node_id": "book_Mor_ch_14",
+          "title": "Book Mor, Chapter 14",
+          "path": "Book Mor, Chapter 14",
+          "summary": "1 passages",
+          "abstract": "Pseudo-Plutarch - Book Mor, Chapter 14. Key refs: Mor. 14. Sample: τριττῆς τοίνυν τῆς προνοίας θεωρουμένης, κυριώτατα δὲ καὶ μάλιστα τῆς πρώτης λεγομένης, οὐκ ἂν ὀκνήσαιμεν εἰπεῖν, εἰ καὶ φιλοσόφοις ἀνδράσι τἀναντία λέγειν δόξαιμεν, ὡς πάντα μὲν καθ' εἱμα",
+          "canonical_refs": [
+            "Mor. 14"
+          ],
+          "translation_available": false,
+          "quote_density": 1.0,
+          "token_estimate": 348,
+          "start_passage": 14,
+          "end_passage": 14
+        }
+      ],
+      "claim_ledger_mode": "llm_salvaged",
+      "scholarly_polish_mode": "llm",
+      "render_answer_mode": "llm",
+      "research_graph": {
+        "overview": {
+          "query_type": "global_abstract",
+          "complexity": "medium",
+          "grounding_policy": "mixed_evidence",
+          "quality_badge": "High",
+          "pipeline_degraded": false,
+          "claim_ledger_mode": "llm_salvaged",
+          "render_answer_mode": "llm",
+          "scholarly_polish_mode": "llm",
+          "seed_node_count": 190,
+          "context_node_count": 350,
+          "bundle_count": 22,
+          "work_count": 3,
+          "claim_count": 1,
+          "citation_count": 5
+        },
+        "stages": [
+          {
+            "id": "classify_query",
+            "title": "Classify query",
+            "status": "complete",
+            "summary": "global_abstract selected with 45% confidence via heuristic",
+            "metrics": [
+              {
+                "label": "Type",
+                "value": "global_abstract"
+              },
+              {
+                "label": "Complexity",
+                "value": "medium"
+              },
+              {
+                "label": "Confidence",
+                "value": "45%"
+              },
+              {
+                "label": "Mode",
+                "value": "heuristic"
+              }
+            ],
+            "details": {
+              "mode": "heuristic",
+              "query_type": "global_abstract",
+              "confidence": 0.45,
+              "reason": "heuristic fallback",
+              "complexity": "medium"
+            }
+          },
+          {
+            "id": "expand_query",
+            "title": "Expand query",
+            "status": "degraded",
+            "summary": "5 philosophers, 4 concepts, and 1 schools added around the query frame.",
+            "metrics": [
+              {
+                "label": "Philosophers",
+                "value": 5
+              },
+              {
+                "label": "Concepts",
+                "value": 4
+              },
+              {
+                "label": "Schools",
+                "value": 1
+              }
+            ],
+            "details": {
+              "mode": "fallback",
+              "expanded_query": "What did the Stoics believe about fate and moral responsibility?",
+              "philosophers": [
+                "Chrysippus",
+                "Epictetus",
+                "Seneca",
+                "Marcus Aurelius",
+                "Cleanthes"
+              ],
+              "concepts": [
+                "fate",
+                "responsibility",
+                "assent",
+                "prohairesis"
+              ],
+              "schools": [
+                "Stoicism"
+              ],
+              "periods": []
+            }
+          },
+          {
+            "id": "discover_corpus",
+            "title": "Discover corpus",
+            "status": "complete",
+            "summary": "20 seed nodes, 12 passage anchors, 10 linked passages.",
+            "metrics": [
+              {
+                "label": "Semantic hits",
+                "value": 12
+              },
+              {
+                "label": "Seeds",
+                "value": 20
+              },
+              {
+                "label": "Anchors",
+                "value": 12
+              },
+              {
+                "label": "Linked passages",
+                "value": 10
+              }
+            ],
+            "details": {
+              "queries": [
+                "What did the Stoics believe about fate and moral responsibility?",
+                "Chrysippus",
+                "Epictetus",
+                "Seneca",
+                "fate",
+                "responsibility"
+              ],
+              "semantic_hits": [
+                {
+                  "id": "person_chrysippus_280_206bce_i9j0k1l2",
+                  "score": 0.7629,
+                  "label": "Chrysippus of Soli",
+                  "type": "person"
+                },
+                {
+                  "id": "concept_heimarmene_fate_stoics_j0k1l2m3",
+                  "score": 0.7602,
+                  "label": "Heimarmenê (Εἱμαρμένη) - Stoic Fate",
+                  "type": "concept"
+                },
+                {
+                  "id": "concept_synkatathesis_stoic_assent",
+                  "score": 0.7524,
+                  "label": "Synkatathesis (Stoic Assent, συγκατάθεσις)",
+                  "type": "concept"
+                },
+                {
+                  "id": "school_stoics",
+                  "score": 0.7515,
+                  "label": "Stoic School (Στοά)",
+                  "type": "school"
+                },
+                {
+                  "id": "passage_cicero_fat_39_en",
+                  "score": 0.7493,
+                  "label": "Cicero, De Fato 39: Chrysippus as Arbiter Between Schools (English)",
+                  "type": "passage"
+                },
+                {
+                  "id": "passage_cicero_fat_39",
+                  "score": 0.7493,
+                  "label": "Cicero, De Fato 39: Chrysippus as Arbiter Between Schools",
+                  "type": "passage"
+                }
+              ],
+              "seed_node_ids": [
+                "person_chrysippus_280_206bce_i9j0k1l2",
+                "concept_heimarmene_fate_stoics_j0k1l2m3",
+                "concept_synkatathesis_stoic_assent",
+                "school_stoics",
+                "passage_cicero_fat_39_en",
+                "passage_cicero_fat_39"
+              ],
+              "passage_anchor_ids": [
+                "person_chrysippus_280_206bce_i9j0k1l2",
+                "concept_heimarmene_fate_stoics_j0k1l2m3",
+                "concept_synkatathesis_stoic_assent",
+                "school_stoics",
+                "work_chrysippus_svf_ii",
+                "debate_stoic_compatibilism"
+              ],
+              "linked_passages": [
+                {
+                  "passage_id": "1812b556-ba17-4407-9998-f0383d158dd2",
+                  "title": "De Fato",
+                  "author": "Marcus Tullius Cicero",
+                  "canonical_ref": "Fat. 43",
+                  "language": "lat",
+                  "confidence": 0.98
+                },
+                {
+                  "passage_id": "92edb773-e01b-40db-9f7d-49f66fd46424",
+                  "title": "De Fato",
+                  "author": "Marcus Tullius Cicero",
+                  "canonical_ref": "Fat. 12",
+                  "language": "lat",
+                  "confidence": 0.95
+                },
+                {
+                  "passage_id": "80797f7a-0999-43df-b40c-abf3cf305fa5",
+                  "title": "De Fato",
+                  "author": "Marcus Tullius Cicero",
+                  "canonical_ref": "Fat. 13",
+                  "language": "lat",
+                  "confidence": 0.95
+                },
+                {
+                  "passage_id": "c3ad247c-14f7-4b5a-879a-354106bb6441",
+                  "title": "De fato",
+                  "author": "Pseudo-Plutarch",
+                  "canonical_ref": "Mor. 10",
+                  "language": "grc",
+                  "confidence": 0.92
+                },
+                {
+                  "passage_id": "0a1bf1ae-9888-4a9e-8da8-9ff3ae4c8f7e",
+                  "title": "De Fato",
+                  "author": "Marcus Tullius Cicero",
+                  "canonical_ref": "Fat. 42",
+                  "language": "lat",
+                  "confidence": 0.92
+                },
+                {
+                  "passage_id": "de281897-0be2-447d-af9a-0e1c1ec5009c",
+                  "title": "De Fato",
+                  "author": "Marcus Tullius Cicero",
+                  "canonical_ref": "Fat. 39",
+                  "language": "lat",
+                  "confidence": 0.9
+                }
+              ]
+            }
+          },
+          {
+            "id": "research_notebook",
+            "title": "Build research notebook",
+            "status": "complete",
+            "summary": "6 facets, 2 hypotheses, 12 priority works.",
+            "metrics": [
+              {
+                "label": "Facets",
+                "value": 6
+              },
+              {
+                "label": "Hypotheses",
+                "value": 2
+              },
+              {
+                "label": "Sub-queries",
+                "value": 1
+              },
+              {
+                "label": "Works",
+                "value": 12
+              }
+            ],
+            "details": {
+              "question_frame": "What did the Stoics believe about fate and moral responsibility?",
+              "facets": [
+                {
+                  "facet_id": "core_doctrinal_thesis",
+                  "title": "Core Doctrinal Thesis",
+                  "priority": 1,
+                  "required_support": "passage"
+                },
+                {
+                  "facet_id": "causal_structure_of_fate",
+                  "title": "Causal Structure of Fate",
+                  "priority": 2,
+                  "required_support": "passage"
+                },
+                {
+                  "facet_id": "textual_witnesses",
+                  "title": "Textual Witnesses",
+                  "priority": 2,
+                  "required_support": "passage"
+                },
+                {
+                  "facet_id": "agency_and_responsibility",
+                  "title": "Agency and Responsibility",
+                  "priority": 3,
+                  "required_support": "passage"
+                },
+                {
+                  "facet_id": "ancient_testimony_and_preservation",
+                  "title": "Ancient Testimony and Preservation",
+                  "priority": 4,
+                  "required_support": "passage"
+                },
+                {
+                  "facet_id": "counterpoints_and_limits",
+                  "title": "Counterpoints and Limits",
+                  "priority": 4,
+                  "required_support": "passage"
+                }
+              ],
+              "sub_queries": [
+                "What did the Stoics believe about fate and moral responsibility?"
+              ],
+              "competing_hypotheses": [
+                "The main answer is textually well supported for: What did the Stoics believe about fate and moral responsibility?",
+                "The evidence is more fragmented or interpretive for: What did the Stoics believe about fate and moral responsibility?"
+              ],
+              "work_priorities": [
+                "Chrysippus, Fragments (SVF II)",
+                "De Fato (Περὶ Εἱμαρμένης / On Fate)",
+                "Alternate Possibilities and Moral Responsibility",
+                "Responsibility and Control",
+                "The Stoics on Determinism and Compatibilism",
+                "Discourses (Διατριβαί) - Epictetus"
+              ]
+            }
+          },
+          {
+            "id": "scholarly_dossier",
+            "title": "Assemble scholarly dossier",
+            "status": "complete",
+            "summary": "6 dossier facets, 0 direct bundles, 4 testimonia.",
+            "metrics": [
+              {
+                "label": "Facets",
+                "value": 6
+              },
+              {
+                "label": "Direct",
+                "value": 0
+              },
+              {
+                "label": "Testimony",
+                "value": 4
+              },
+              {
+                "label": "Counter",
+                "value": 5
+              }
+            ],
+            "details": {
+              "facet_count": 6,
+              "primary_bundle_ids": [],
+              "testimony_bundle_ids": [
+                "unknown::passage_arist_en_3_1_en",
+                "unknown::passage_arist_en_3_1",
+                "unknown::passage_arist_en_3_5_en",
+                "unknown::passage_arist_en_3_5"
+              ],
+              "counter_bundle_ids": [
+                "unknown::passage_cicero_fat_43_en",
+                "unknown::passage_cicero_fat_43",
+                "unknown::passage_plut_fat_13",
+                "unknown::passage_alex_fat_16_en",
+                "unknown::passage_cicero_fat_40"
+              ],
+              "metadata_ids": [
+                "school_stoics",
+                "concept_ancient_free_will_debate_structure_z6a7b8c9",
+                "concept_synkatathesis_stoic_assent",
+                "person_chrysippus_280_206bce_i9j0k1l2"
+              ]
+            }
+          },
+          {
+            "id": "tree_navigation",
+            "title": "Navigate works",
+            "status": "complete",
+            "summary": "12 candidate works, 6 selected sections.",
+            "metrics": [
+              {
+                "label": "Candidates",
+                "value": 12
+              },
+              {
+                "label": "Sections",
+                "value": 6
+              }
+            ],
+            "details": {
+              "candidate_work_titles": [
+                "Chrysippus, Fragments (SVF II)",
+                "De Fato (Περὶ Εἱμαρμένης / On Fate)",
+                "Alternate Possibilities and Moral Responsibility",
+                "Responsibility and Control",
+                "The Stoics on Determinism and Compatibilism",
+                "Discourses (Διατριβαί) - Epictetus"
+              ],
+              "selected_sections": [
+                {
+                  "work_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501",
+                  "node_id": "book_Fat_ch_11",
+                  "path": "Book Fat, Chapter 11",
+                  "title": "Book Fat, Chapter 11"
+                },
+                {
+                  "work_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501",
+                  "node_id": "book_Fat_ch_13",
+                  "path": "Book Fat, Chapter 13",
+                  "title": "Book Fat, Chapter 13"
+                },
+                {
+                  "work_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501",
+                  "node_id": "book_Fat_ch_21",
+                  "path": "Book Fat, Chapter 21",
+                  "title": "Book Fat, Chapter 21"
+                },
+                {
+                  "work_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+                  "node_id": "book_Mor_ch_10",
+                  "path": "Book Mor, Chapter 10",
+                  "title": "Book Mor, Chapter 10"
+                },
+                {
+                  "work_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+                  "node_id": "book_Mor_ch_13",
+                  "path": "Book Mor, Chapter 13",
+                  "title": "Book Mor, Chapter 13"
+                },
+                {
+                  "work_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+                  "node_id": "book_Mor_ch_14",
+                  "path": "Book Mor, Chapter 14",
+                  "title": "Book Mor, Chapter 14"
+                }
+              ]
+            }
+          },
+          {
+            "id": "evidence_bundles",
+            "title": "Expand evidence bundles",
+            "status": "complete",
+            "summary": "22 evidence bundles assembled for answering.",
+            "metrics": [
+              {
+                "label": "Bundles",
+                "value": 22
+              },
+              {
+                "label": "Translations",
+                "value": 0
+              }
+            ],
+            "details": {
+              "bundle_count": 22,
+              "bundle_sample": [
+                {
+                  "bundle_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501::55243d0d-3988-45c7-9aa4-762167af0827",
+                  "work_title": "De Fato",
+                  "author": "Marcus Tullius Cicero",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Fat. 11",
+                  "translation_source": null
+                },
+                {
+                  "bundle_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501::80797f7a-0999-43df-b40c-abf3cf305fa5",
+                  "work_title": "De Fato",
+                  "author": "Marcus Tullius Cicero",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Fat. 13",
+                  "translation_source": null
+                },
+                {
+                  "bundle_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501::ec75b8e9-ce68-4d6a-b92d-fd601490b38c",
+                  "work_title": "De Fato",
+                  "author": "Marcus Tullius Cicero",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Fat. 21",
+                  "translation_source": null
+                },
+                {
+                  "bundle_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e::c3ad247c-14f7-4b5a-879a-354106bb6441",
+                  "work_title": "De fato",
+                  "author": "Pseudo-Plutarch",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Mor. 10",
+                  "translation_source": null
+                },
+                {
+                  "bundle_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e::3175daa6-58f3-4769-9359-57f2b64eaca3",
+                  "work_title": "De fato",
+                  "author": "Pseudo-Plutarch",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Mor. 13",
+                  "translation_source": null
+                },
+                {
+                  "bundle_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e::0ef88518-bc36-4983-b1c0-987f21d4bc00",
+                  "work_title": "De fato",
+                  "author": "Pseudo-Plutarch",
+                  "source": "tree_reasoning",
+                  "canonical_ref": "Mor. 14",
+                  "translation_source": null
+                }
+              ]
+            }
+          },
+          {
+            "id": "counter_evidence",
+            "title": "Seek counter-evidence",
+            "status": "complete",
+            "summary": "12 counter-evidence bundles with rationale: The evidence provided is a mix of primary support texts that collectively address the Stoic view on fate and moral responsibility. The main answer is textually well supported by several passages, particularly those from Cicero and Plutarch, which discuss the Stoic compatibilist solution and the distinction between principal and auxiliary causes. However, there are also interpretive elements, such as the modern characterization of the Stoic position and the philosophical diagnosis of verbal disputes. The evidence is fragmented in the sense that it comes from multiple sources and authors, but it converges on the central themes of Stoic thought regarding fate and moral responsibility. The inclusion of Aristotle's foundational analysis of voluntary action provides additional context but is not directly from Stoic sources. Overall, the evidence is robust but requires careful interpretation to fully understand the Stoic position..",
+            "metrics": [
+              {
+                "label": "Selected",
+                "value": 12
+              },
+              {
+                "label": "Mode",
+                "value": "llm"
+              }
+            ],
+            "details": {
+              "mode": "llm",
+              "selected_count": 12,
+              "bundle_ids": [
+                "unknown::passage_alex_fat_16_en",
+                "unknown::passage_cicero_fat_39",
+                "unknown::passage_cicero_fat_39_en",
+                "unknown::passage_cicero_fat_40",
+                "unknown::passage_cicero_fat_41",
+                "unknown::passage_cicero_fat_41_en"
+              ],
+              "rationale": "The evidence provided is a mix of primary support texts that collectively address the Stoic view on fate and moral responsibility. [...]"
+            }
+          },
+          {
+            "id": "context_pack",
+            "title": "Pack long context",
+            "status": "complete",
+            "summary": "22 bundles, 6 section summaries, ~13918 tokens.",
+            "metrics": [
+              {
+                "label": "KG metadata",
+                "value": 111
+              },
+              {
+                "label": "Sections",
+                "value": 6
+              },
+              {
+                "label": "Bundles",
+                "value": 22
+              },
+              {
+                "label": "Tokens",
+                "value": 13918
+              }
+            ],
+            "details": {
+              "kg_metadata_count": 111,
+              "section_summary_count": 6,
+              "passage_bundle_count": 22,
+              "token_estimate": 13918,
+              "top_bundle_rankings": [
+                {
+                  "ref": "P1",
+                  "bundle_id": "unknown::passage_cicero_fat_43_en",
+                  "work_title": "Unknown work",
+                  "author": null,
+                  "source": "semantic_search",
+                  "score": 97,
+                  "canonical_ref": null,
+                  "section_path": "retrieved passage"
+                },
+                {
+                  "ref": "P2",
+                  "bundle_id": "unknown::passage_cicero_fat_43",
+                  "work_title": "Unknown work",
+                  "author": null,
+                  "source": "semantic_search",
+                  "score": 97,
+                  "canonical_ref": null,
+                  "section_path": "retrieved passage"
+                },
+                {
+                  "ref": "P3",
+                  "bundle_id": "unknown::passage_cicero_fat_44_en",
+                  "work_title": "Unknown work",
+                  "author": null,
+                  "source": "semantic_search",
+                  "score": 97,
+                  "canonical_ref": null,
+                  "section_path": "retrieved passage"
+                },
+                {
+                  "ref": "P4",
+                  "bundle_id": "unknown::passage_cicero_fat_44",
+                  "work_title": "Unknown work",
+                  "author": null,
+                  "source": "semantic_search",
+                  "score": 97,
+                  "canonical_ref": null,
+                  "section_path": "retrieved passage"
+                },
+                {
+                  "ref": "P5",
+                  "bundle_id": "unknown::passage_plut_fat_13",
+                  "work_title": "Unknown work",
+                  "author": null,
+                  "source": "graph_traversal",
+                  "score": 94,
+                  "canonical_ref": null,
+                  "section_path": "retrieved passage"
+                },
+                {
+                  "ref": "P6",
+                  "bundle_id": "unknown::passage_alex_fat_16_en",
+                  "work_title": "Unknown work",
+                  "author": null,
+                  "source": "semantic_search",
+                  "score": 93,
+                  "canonical_ref": null,
+                  "section_path": "retrieved passage"
+                }
+              ]
+            }
+          },
+          {
+            "id": "evidence_sufficiency",
+            "title": "Check evidence sufficiency",
+            "status": "complete",
+            "summary": "Sufficiency 100% (sufficient).",
+            "metrics": [
+              {
+                "label": "Bundles",
+                "value": 22
+              },
+              {
+                "label": "Works",
+                "value": 3
+              },
+              {
+                "label": "Facets",
+                "value": 6
+              },
+              {
+                "label": "Score",
+                "value": "100%"
+              }
+            ],
+            "details": {
+              "bundle_count": 22,
+              "work_count": 3,
+              "counter_count": 1,
+              "covered_facets": 6,
+              "score": 1.0,
+              "sufficient": true,
+              "reason": "heuristic sufficiency",
+              "refinement": null
+            }
+          },
+          {
+            "id": "draft_claim_ledger",
+            "title": "Draft claim ledger",
+            "status": "degraded",
+            "summary": "1 claims drafted via llm_salvaged mode.",
+            "metrics": [
+              {
+                "label": "Mode",
+                "value": "llm_salvaged"
+              },
+              {
+                "label": "Claims",
+                "value": 1
+              }
+            ],
+            "details": {
+              "mode": "llm_salvaged",
+              "error": "JSONDecodeError: Expecting value: line 26 column 27 (char 1215)",
+              "claim_count": 1,
+              "raw_excerpt": "{\n  \"claims\": [\n    {\n      \"claim\": \"The Stoics maintained that all events are determined by an unbroken chain of antecedent causes, a doctrine they identified with universal fate.\",\n      \"evidence_ids\": [ [...]"
+            }
+          },
+          {
+            "id": "render_grounded_answer",
+            "title": "Render grounded answer",
+            "status": "complete",
+            "summary": "Answer rendered via llm; polish mode: llm.",
+            "metrics": [
+              {
+                "label": "Mode",
+                "value": "llm"
+              },
+              {
+                "label": "Polish",
+                "value": "llm"
+              }
+            ],
+            "details": {
+              "mode": "llm",
+              "raw_excerpt": "The Stoic theory of fate and moral responsibility represents one of antiquity's most sophisticated attempts to reconcile universal causal determinism with human agency. [...]",
+              "polish_mode": "llm"
+            }
+          },
+          {
+            "id": "scholarly_polish",
+            "title": "Scholarly polish",
+            "status": "complete",
+            "summary": "Scholarly polish finished via llm mode.",
+            "metrics": [
+              {
+                "label": "Mode",
+                "value": "llm"
+              }
+            ],
+            "details": {
+              "mode": "llm",
+              "raw_excerpt": "The Stoic theory of fate and moral responsibility represents one of antiquity's most sophisticated attempts to reconcile universal causal determinism with human agency. [...]"
+            }
+          },
+          {
+            "id": "programmatic_verify",
+            "title": "Programmatic verify",
+            "status": "complete",
+            "summary": "5 citations verified in the final answer.",
+            "metrics": [
+              {
+                "label": "Citations",
+                "value": 5
+              }
+            ],
+            "details": {
+              "citation_count": 5,
+              "answer_excerpt": "The Stoic theory of fate and moral responsibility represents one of antiquity's most sophisticated attempts to reconcile universal causal determinism with human agency. [...]"
+            }
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "core_doctrinal_thesis",
+            "title": "Core Doctrinal Thesis",
+            "question": "What core thesis do the relevant ancient sources attribute to What did the Stoics believe about fate and moral responsibility??",
+            "summary": "Surviving evidence is chiefly indirect, preserved by Unknown, Unknown work, Unknown, Unknown work. A significant counterpoint appears in Unknown, Unknown work.",
+            "required_support": "passage",
+            "priority": 1,
+            "primary_count": 0,
+            "testimony_count": 2,
+            "counter_count": 2,
+            "metadata_count": 2,
+            "note_count": 4,
+            "uncertainty_count": 0
+          },
+          {
+            "facet_id": "causal_structure_of_fate",
+            "title": "Causal Structure of Fate",
+            "question": "What causal mechanism or explanatory structure do the sources give for What did the Stoics believe about fate and moral responsibility??",
+            "summary": "Surviving evidence is chiefly indirect, preserved by Unknown, Unknown work, Unknown, Unknown work. A significant counterpoint appears in Unknown, Unknown work.",
+            "required_support": "passage",
+            "priority": 2,
+            "primary_count": 0,
+            "testimony_count": 2,
+            "counter_count": 2,
+            "metadata_count": 2,
+            "note_count": 4,
+            "uncertainty_count": 0
+          },
+          {
+            "facet_id": "textual_witnesses",
+            "title": "Textual Witnesses",
+            "question": "Which passages or testimonia best preserve the ancient evidence for What did the Stoics believe about fate and moral responsibility??",
+            "summary": "Surviving evidence is chiefly indirect, preserved by Unknown, Unknown work, Unknown, Unknown work. A significant counterpoint appears in Unknown, Unknown work.",
+            "required_support": "passage",
+            "priority": 2,
+            "primary_count": 0,
+            "testimony_count": 2,
+            "counter_count": 2,
+            "metadata_count": 2,
+            "note_count": 4,
+            "uncertainty_count": 0
+          },
+          {
+            "facet_id": "agency_and_responsibility",
+            "title": "Agency and Responsibility",
+            "question": "How do the sources connect What did the Stoics believe about fate and moral responsibility? to agency, assent, responsibility, or freedom?",
+            "summary": "Surviving evidence is chiefly indirect, preserved by Unknown, Unknown work, Unknown, Unknown work. A significant counterpoint appears in Unknown, Unknown work.",
+            "required_support": "passage",
+            "priority": 3,
+            "primary_count": 0,
+            "testimony_count": 2,
+            "counter_count": 2,
+            "metadata_count": 2,
+            "note_count": 4,
+            "uncertainty_count": 0
+          },
+          {
+            "facet_id": "ancient_testimony_and_preservation",
+            "title": "Ancient Testimony and Preservation",
+            "question": "Through which ancient witnesses, reports, or preserved fragments do we know the evidence for What did the Stoics believe about fate and moral responsibility??",
+            "summary": "Surviving evidence is chiefly indirect, preserved by Unknown, Unknown work, Unknown, Unknown work. A significant counterpoint appears in Unknown, Unknown work.",
+            "required_support": "passage",
+            "priority": 4,
+            "primary_count": 0,
+            "testimony_count": 2,
+            "counter_count": 2,
+            "metadata_count": 2,
+            "note_count": 4,
+            "uncertainty_count": 0
+          },
+          {
+            "facet_id": "counterpoints_and_limits",
+            "title": "Counterpoints and Limits",
+            "question": "What counter-evidence, disagreement, or textual nuance complicates What did the Stoics believe about fate and moral responsibility??",
+            "summary": "Surviving evidence is chiefly indirect, preserved by Unknown, Unknown work, Unknown, Unknown work. A significant counterpoint appears in Unknown, Unknown work.",
+            "required_support": "passage",
+            "priority": 4,
+            "primary_count": 0,
+            "testimony_count": 2,
+            "counter_count": 2,
+            "metadata_count": 2,
+            "note_count": 4,
+            "uncertainty_count": 0
+          }
+        ],
+        "works": [
+          {
+            "work_id": "unknown",
+            "title": "Unknown work",
+            "author": null,
+            "bundle_count": 16,
+            "section_count": 0,
+            "primary_count": 0,
+            "testimony_count": 4,
+            "counter_count": 12,
+            "has_translation": false,
+            "languages": [],
+            "canonical_refs": [],
+            "sections": []
+          },
+          {
+            "work_id": "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501",
+            "title": "Book Fat, Chapter 11",
+            "author": "Marcus Tullius Cicero",
+            "bundle_count": 3,
+            "section_count": 3,
+            "primary_count": 0,
+            "testimony_count": 3,
+            "counter_count": 0,
+            "has_translation": false,
+            "languages": [
+              "lat"
+            ],
+            "canonical_refs": [
+              "Fat. 11",
+              "Fat. 13",
+              "Fat. 21"
+            ],
+            "sections": [
+              {
+                "node_id": "book_Fat_ch_11",
+                "title": "Book Fat, Chapter 11",
+                "path": "Book Fat, Chapter 11"
+              },
+              {
+                "node_id": "book_Fat_ch_13",
+                "title": "Book Fat, Chapter 13",
+                "path": "Book Fat, Chapter 13"
+              },
+              {
+                "node_id": "book_Fat_ch_21",
+                "title": "Book Fat, Chapter 21",
+                "path": "Book Fat, Chapter 21"
+              }
+            ]
+          },
+          {
+            "work_id": "2281c205-6806-4ae7-8f1d-d3a1cfb7bd6e",
+            "title": "Book Mor, Chapter 10",
+            "author": "Pseudo-Plutarch",
+            "bundle_count": 3,
+            "section_count": 3,
+            "primary_count": 0,
+            "testimony_count": 3,
+            "counter_count": 0,
+            "has_translation": false,
+            "languages": [
+              "grc"
+            ],
+            "canonical_refs": [
+              "Mor. 10",
+              "Mor. 13",
+              "Mor. 14"
+            ],
+            "sections": [
+              {
+                "node_id": "book_Mor_ch_10",
+                "title": "Book Mor, Chapter 10",
+                "path": "Book Mor, Chapter 10"
+              },
+              {
+                "node_id": "book_Mor_ch_13",
+                "title": "Book Mor, Chapter 13",
+                "path": "Book Mor, Chapter 13"
+              },
+              {
+                "node_id": "book_Mor_ch_14",
+                "title": "Book Mor, Chapter 14",
+                "path": "Book Mor, Chapter 14"
+              }
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The Stoics maintained that all events are determined by an unbroken chain of antecedent causes, a doctrine they identified with universal fate.",
+            "facet_id": "core_doctrinal_thesis",
+            "evidence_class": "ancient_testimony",
+            "support_type": "passage",
+            "confidence": 0.95,
+            "status": "supported",
+            "evidence_ids": [
+              "c0fe9a3c-05a3-4aad-b953-e0fbdcb28501::ec75b8e9-ce68-4d6a-b92d-fd601490b38c",
+              "concept_heimarmene_fate_stoics_j0k1l2m3"
+            ],
+            "refs": [
+              "P14",
+              "11"
+            ],
+            "quote_original": "omnia, quae fiunt, causis fiunt antegressis; id si ita est, fato omnia fiunt",
+            "quote_translation": "all things that happen, happen by antecedent causes; if this is so, all things happen by fate"
+          }
+        ],
+        "hypotheses": [
+          "The main answer is textually well supported for: What did the Stoics believe about fate and moral responsibility?",
+          "The evidence is more fragmented or interpretive for: What did the Stoics believe about fate and moral responsibility?"
+        ],
+        "open_questions": [
+          "What did the Stoics believe about fate and moral responsibility?"
+        ],
+        "counter_evidence": [
+          "The evidence provided is a mix of primary support texts that collectively address the Stoic view on fate and moral responsibility. The main answer is textually well supported by several passages, particularly those from Cicero and Plutarch, which discuss the Stoic compatibilist solution and the distinction between principal and auxiliary causes. However, there are also interpretive elements, such as the modern characterization of the Stoic position and the philosophical diagnosis of verbal disputes. The evidence is fragmented in the sense that it comes from multiple sources and authors, but it converges on the central themes of Stoic thought regarding fate and moral responsibility. The inclusion of Aristotle's foundational analysis of voluntary action provides additional context but is not directly from Stoic sources. Overall, the evidence is robust but requires careful interpretation to fully understand the Stoic position."
+        ],
+        "uncertainties": []
+      },
+      "complexity": "medium",
+      "iterations": 1,
+      "sub_queries": [
+        "What did the Stoics believe about fate and moral responsibility?"
+      ],
+      "quality_badge": "High",
+      "grounding_policy": "mixed_evidence",
+      "claim_ledger_size": 1
+    },
+    "llm_provider": "gemini",
+    "llm_model": "gemini-3.1-pro-preview",
+    "processing_time_seconds": 140.934
+  },
+  "scorecards": {
+    "arm_a_prod": {
+      "chars": 4282,
+      "citations": 0,
+      "ref_markers": 13,
+      "quote_blocks": 16,
+      "section_headers": 4,
+      "paragraphs": 12,
+      "scholarly_cues": 0,
+      "pipeline_degraded": null,
+      "claim_ledger_mode": null,
+      "render_answer_mode": null,
+      "quality_badge": null
+    },
+    "arm_b_new_system": {
+      "chars": 552,
+      "citations": 5,
+      "ref_markers": 5,
+      "quote_blocks": 0,
+      "section_headers": 0,
+      "paragraphs": 1,
+      "scholarly_cues": 0,
+      "pipeline_degraded": null,
+      "claim_ledger_mode": "llm_salvaged",
+      "render_answer_mode": "llm",
+      "quality_badge": "High"
+    }
+  }
+}

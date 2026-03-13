@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-03-12T18:45:25Z",
+  "environment": {
+    "llm_preferred_provider": "gemini",
+    "llm_thinking_provider": "openrouter",
+    "gemini_prompt_cache_enabled": "1"
+  },
+  "reasoning_probe": {
+    "ok": true,
+    "provider": "openrouter",
+    "model": "openai/gpt-oss-120b:nitro",
+    "response_preview": "{\"ok\":true}"
+  },
+  "prompt_cache_probe": {
+    "ok": true,
+    "provider": "gemini",
+    "model": "gemini-3.1-pro-preview",
+    "cache_entries_after_first": 1,
+    "cache_entries_after_second": 1,
+    "cached_content_created": true,
+    "cached_content_name": "cachedContents/igvk90c921b4cr8gzqcj1n0gfalr06sbom5zqx9v",
+    "first_response_preview": "OK.",
+    "second_response_preview": "OK."
+  }
+}

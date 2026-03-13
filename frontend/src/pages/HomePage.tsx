@@ -169,7 +169,7 @@ export default function HomePage() {
             </div>
           }
           contactInfo={[
-            { type: 'doi', label: t('learn.hero.doi'), href: 'https://doi.org/10.5281/zenodo.17379490' },
+            { type: 'doi', label: t('learn.hero.doi'), href: 'https://doi.org/10.5281/zenodo.17379489' },
             { type: 'website', label: t('learn.hero.license') },
             { type: 'github', label: t('learn.hero.openSource'), href: 'https://github.com' },
           ]}

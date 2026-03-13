@@ -8,16 +8,45 @@ so that routes and external callers need no changes.
 
 from __future__ import annotations
 
+import json
 import logging
+import os
 import warnings
 from collections.abc import AsyncIterator
 from typing import Any
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
+from eleutheria_graphrag.services.llm_reranker import LLMRerankerService
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
+from eleutheria_graphrag.services.tree_index import TreeIndexService
+from eleutheria_graphrag.services.weighted_traversal import WeightedTraversal
 
 logger = logging.getLogger(__name__)
+
+
+def _normalize_json_mapping(value: Any) -> dict[str, Any]:
+    """Return a dict for JSON/JSONB fields regardless of driver behaviour."""
+    if isinstance(value, dict):
+        return value
+    if not value:
+        return {}
+    if isinstance(value, str):
+        try:
+            parsed = json.loads(value)
+        except json.JSONDecodeError:
+            return {}
+        return parsed if isinstance(parsed, dict) else {}
+    return {}
+
+
+def _preferred_provider() -> ModelProvider:
+    raw = os.getenv("LLM_PREFERRED_PROVIDER", ModelProvider.GEMINI.value).strip().lower()
+    try:
+        return ModelProvider(raw)
+    except ValueError:
+        logger.warning("Unknown LLM_PREFERRED_PROVIDER=%s, falling back to gemini", raw)
+        return ModelProvider.GEMINI
 
 
 class GraphRAGService:
@@ -44,7 +73,7 @@ class GraphRAGService:
     ) -> None:
         self.db = db_service
         self.qdrant = qdrant_service
-        self.llm = llm_service or LLMService(preferred_provider=ModelProvider.KIMI)
+        self.llm = llm_service or LLMService(preferred_provider=_preferred_provider())
         self._analytics = analytics
         self._search = search_service
         self._reranker = reranker
@@ -105,6 +134,21 @@ class GraphRAGService:
             FROM free_will.kg_edges
         """)
 
+        nodes = [
+            {
+                **node,
+                "metadata": _normalize_json_mapping(node.get("metadata")),
+            }
+            for node in nodes
+        ]
+        edges = [
+            {
+                **edge,
+                "metadata": _normalize_json_mapping(edge.get("metadata")),
+            }
+            for edge in edges
+        ]
+
         self.kg_data = {"nodes": nodes, "edges": edges}
 
         # Build lookup indices
@@ -133,19 +177,14 @@ class GraphRAGService:
             except Exception:
                 logger.warning("PageRank computation failed, continuing without")
 
-        # Build weighted traversal service if analytics available
-        traversal = None
-        if pagerank_scores:
-            from eleutheria_graphrag.services.weighted_traversal import (
-                WeightedTraversal,
-            )
-
-            traversal = WeightedTraversal(
-                node_lookup=self.node_lookup,
-                outgoing_edges=self.outgoing_edges,
-                incoming_edges=self.incoming_edges,
-                pagerank_scores=pagerank_scores,
-            )
+        traversal = WeightedTraversal(
+            node_lookup=self.node_lookup,
+            outgoing_edges=self.outgoing_edges,
+            incoming_edges=self.incoming_edges,
+            pagerank_scores=pagerank_scores,
+        )
+        tree_index = TreeIndexService(db=self.db)
+        llm_reranker = LLMRerankerService(llm=self.llm)
 
         # Construct dependency container
         deps = Deps(
@@ -157,6 +196,8 @@ class GraphRAGService:
             traversal=traversal,
             reranker=self._reranker,
             verifier=self._verifier,
+            llm_reranker=llm_reranker,
+            tree_index=tree_index,
             kg_data=self.kg_data,
             node_lookup=self.node_lookup,
             outgoing_edges=self.outgoing_edges,

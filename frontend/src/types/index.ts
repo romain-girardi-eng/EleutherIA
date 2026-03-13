@@ -1,3 +1,5 @@
+import type { GraphRAGMetadata } from './graphrag';
+
 // Knowledge Graph Types
 export interface KGNode {
   id: string;
@@ -219,6 +221,7 @@ export interface EvidenceChain {
 export interface GraphRAGResponse {
   query: string;
   answer: string;
+  metadata?: GraphRAGMetadata;
   citations: {
     ancient_sources: string[];
     modern_scholarship: string[];

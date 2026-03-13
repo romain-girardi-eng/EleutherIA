@@ -1,0 +1,395 @@
+# KG Manual Review Batch 05 — Provenance Edges
+
+Generated: 2026-03-10T10:02:25.226096+00:00
+Run tag: `kg_manual_review_batch_05_2026_03_10`
+Applied: True
+
+## Summary
+
+- source_for edges added: 82
+- Edges skipped (already exist): 0
+- Flagged for manual review: 66
+
+## Edges Added
+
+- **Anti-Astrological Argument I: Impossibility of Exact Observation** (`argument_anti_astrology_impossibility_observation_3h8i0k76`)
+  - source: `De Fato (On Fate)` (`work_de_fato_cicero_44bce_b9c4e5d2`)
+  - reason: Ancient sources: Cicero De Fato 28-33 / De Divinatione II.87-99. De Fato is the best available KG work preserving Carneadean anti-astrological argumentation.
+- **Anti-Astrological Argument II: The Twins Argument** (`argument_anti_astrology_twins_4i9j1l87`)
+  - source: `De Fato (On Fate)` (`work_de_fato_cicero_44bce_b9c4e5d2`)
+  - reason: Ancient sources: Cicero De Divinatione II.90-93, Augustine De Civitate Dei V.1-7. De Fato is the primary KG proxy for Academic anti-fatalist arguments.
+- **Anti-Astrological Argument III: Collective Catastrophes** (`argument_anti_astrology_collective_catastrophes_5j0k2m98`)
+  - source: `De Fato (On Fate)` (`work_de_fato_cicero_44bce_b9c4e5d2`)
+  - reason: Ancient sources: Cicero De Divinatione II.97-99. De Fato is the KG proxy for Carneadean anti-astrological arguments.
+- **Anti-Astrological Argument IV: Diversity of Customs** (`argument_anti_astrology_nomima_barbarika_6k1l3n09`)
+  - source: `De Fato (On Fate)` (`work_de_fato_cicero_44bce_b9c4e5d2`)
+  - reason: Ancient sources: Aulus Gellius reporting Favorinus, Bardesanes in Eusebius. De Fato is the best KG proxy for Academic anti-astrological argumentation.
+- **CAFMA Argument I: Futility of Effort and Labor** (`argument_cafma_futility_of_effort_8c3d5f21`)
+  - source: `De Fato (On Fate)` (`work_de_fato_cicero_44bce_b9c4e5d2`)
+  - reason: Primary source: Cicero De Fato 28-33. Direct literary source preserving Carneades' CAFMA argumentation.
+- **CAFMA Argument II: Futility of Legislation and Justice** (`argument_cafma_futility_of_legislation_9d4e6g32`)
+  - source: `De Fato (On Fate)` (`work_de_fato_cicero_44bce_b9c4e5d2`)
+  - reason: Primary source: Cicero De Fato 28-33.
+- **CAFMA Argument III: Futility of Praise, Blame, and Sanctions** (`argument_cafma_futility_of_sanctions_0e5f7h43`)
+  - source: `De Fato (On Fate)` (`work_de_fato_cicero_44bce_b9c4e5d2`)
+  - reason: Primary source: Cicero De Fato 28-33.
+- **CAFMA Argument IV: Contradiction of Character Change** (`argument_cafma_character_contradiction_1f6g8i54`)
+  - source: `De Fato (On Fate)` (`work_de_fato_cicero_44bce_b9c4e5d2`)
+  - reason: Primary source: Cicero De Fato 28-33.
+- **CAFMA Argument V: Futility of Piety and Prayer** (`argument_cafma_futility_of_piety_2g7h9j65`)
+  - source: `De Fato (On Fate)` (`work_de_fato_cicero_44bce_b9c4e5d2`)
+  - reason: Primary source: Cicero De Fato 28-33.
+- **Augustine's Two Wills Argument (Confessions VIII)** (`argument_augustines_two_wills_argument_confessions_viii_81f95028`)
+  - source: `Confessiones (Confessions)` (`work_confessions`)
+  - reason: Primary source: Augustine Confessiones VIII.8-10. Direct textual source.
+- **Boethian Solution: Divine Timeless Eternity** (`argument_boethian_solution_divine_eternity_k1l2m3n4`)
+  - source: `De consolatione philosophiae (Consolation of Philosophy)` (`work_consolatio_philosophiae_boethius_524ce_f1g2h3i4`)
+  - reason: Primary source: Boethius, Consolation of Philosophy V, Prosa 6.
+- **Cleanthes' Hymn to Zeus Argument** (`argument_cleanthes_hymn_to_zeus_argument_f71f5b37`)
+  - source: `Enchiridion (Ἐγχειρίδιον) - Epictetus` (`work_epictetus_enchiridion`)
+  - reason: Cleanthes' works survive only in fragments. Epictetus Enchiridion 53 quotes the key formula. Best available KG source.
+- **Consequence Argument** (`argument_consequence_argument_0n1o2p3q`)
+  - source: `An Essay on Free Will` (`work_essay_on_free_will_van_inwagen_8f9g0h1i`)
+  - reason: Formulator: Peter van Inwagen. Primary source: An Essay on Free Will (1983). Direct match.
+- **Democritean Atomistic Determinism** (`argument_democritean_atomistic_determinism_c52067ec`)
+  - source: `Diogenes Laertius, Lives of Eminent Philosophers` (`work_diogenes_laertius_lives`)
+  - reason: Ancient source: Diogenes Laertius IX.30-49. Primary doxographic source for Democritean determinism.
+- **Epictetus' Prohairesis Argument** (`argument_epictetus_prohairesis_argument_aa13b932`)
+  - source: `Discourses (Διατριβαί) - Epictetus` (`work_epictetus_discourses`)
+  - reason: Primary source: Epictetus Discourses I.1, I.17, II.1-2. Direct textual source for prohairesis doctrine.
+- **Four-Case Manipulation Argument** (`argument_four_case_manipulation_2p3q4r5s`)
+  - source: `Living Without Free Will` (`work_living_without_free_will_pereboom_0h1i2j3k`)
+  - reason: Formulator: Derk Pereboom. Primary source: Living Without Free Will (2001). Direct match.
+- **Infant Baptism Argument for Original Sin** (`argument_infant_baptism`)
+  - source: `De Libero Arbitrio Voluntatis (On Free Choice of the Will)` (`work_de_libero_arbitrio`)
+  - reason: Augustine DLA III.23 discusses infant suffering and original sin. Best available KG proxy for the infant baptism argument.
+- **Irenaeus's Anti-Gnostic Argument for Free Will** (`argument_irenaeuss_antignostic_argument_for_free_will_f54fe920`)
+  - source: `Irenaeus, Adversus Haereses Book 4` (`work_irenaeus_adversus_haereses_book4`)
+  - reason: Primary source: AH IV.37-39. Irenaeus's central free will argument against Gnostic determinism.
+- **Jansenist Denial of Liberty of Indifference** (`argument_jansenist_denial_of_liberty_of_indifference_73aa8ce2`)
+  - source: `De Gratia et Libero Arbitrio (Augustine)` (`work_augustine_de_gratia_la`)
+  - reason: Jansenism derives its denial of liberty of indifference from Augustine's De Gratia et Libero Arbitrio. Best KG proxy for the Augustinian foundation of Jansenist theology.
+- **John Chrysostom's Homiletic Argument for Free Will** (`argument_john_chrysostoms_homiletic_argument_for_free_will_ea97cb61`)
+  - source: `Chrysostomus, De Providentia` (`sc79_chrysostomus_de_providentia`)
+  - reason: Primary source: Chrysostom De Providentia. Direct textual source for his argument that providence presupposes human free will.
+- **Liberty of Spontaneity** (`argument_liberty_of_spontaneity_7e1184bf`)
+  - source: `Essais de Théodicée` (`work_leibniz_theodicee_1710`)
+  - reason: Primary source: Leibniz Theodicée §§288-310. Leibniz's canonical articulation of liberty as spontaneity.
+- **Origen's De Principiis Argument for Free Will** (`argument_origens_de_principiis_argument_for_free_will_93d043fc`)
+  - source: `De Principiis (Περὶ Ἀρχῶν) - Origen` (`work_de_principiis_origen_230s_v2w3x4y5`)
+  - reason: Primary source: Origen De Principiis III.1. Direct textual source.
+- **Origen's Free Will Theodicy Against Gnosticism** (`argument_origen_free_will_theodicy_6f9d8a3c`)
+  - source: `De Principiis (Περὶ Ἀρχῶν) - Origen` (`work_de_principiis_origen_230s_v2w3x4y5`)
+  - reason: Primary source: Origen De Principiis II.9, III.1. Anti-Gnostic theodicy grounded in free will.
+- **Parmenides' Necessity Argument** (`argument_parmenides_necessity_argument_4e8e0f34`)
+  - source: `Diogenes Laertius, Lives of Eminent Philosophers` (`work_diogenes_laertius_lives`)
+  - reason: Doxographic source: DL IX.21-23. Primary KG proxy preserving Parmenidean metaphysics of necessity.
+- **Plato's Timaeus Necessity Argument** (`argument_platos_timaeus_necessity_argument_526846fa`)
+  - source: `Plato, Timaeus` (`work_plato_timaeus`)
+  - reason: Primary source: Plato Timaeus 47e-48a, 56c-57c. Direct textual source for necessity (ananke) in cosmology.
+- **The Dog and Cart Argument** (`argument_the_dog_and_cart_argument_9ba60714`)
+  - source: `Enchiridion (Ἐγχειρίδιον) - Epictetus` (`work_epictetus_enchiridion`)
+  - reason: Ancient source: Hippolytus Refutatio I.21 (original); Epictetus Enchiridion 8 preserves the Stoic compatibilist logic. Best available KG source.
+- **The Master Argument (Kurieuon Logos)** (`argument_the_master_argument_kurieuon_logos_355f4d3f`)
+  - source: `De Fato (On Fate)` (`work_de_fato_cicero_44bce_b9c4e5d2`)
+  - reason: Ancient sources: Cicero De Fato 12-17, Epictetus Discourses II.19. Cicero's De Fato is the best KG proxy for the logical structure of Diodorus' argument.
+- **Zeno's Paradox Analogy (Alexander)** (`argument_zeno_paradox_analogy_alex`)
+  - source: `De Fato (Περὶ Εἱμαρμένης / On Fate)` (`work_de_fato_alexander_c200ce_o6p7q8r9`)
+  - reason: Primary source: Alexander of Aphrodisias De Fato ch. 25. Direct textual source.
+- **Acting Final Cause (Providence)** (`concept_acting_final_cause`)
+  - source: `Tria Opuscula (Three Essays) - Proclus` (`work_proclus_tria_opuscula_c9a8e4b3`)
+  - reason: Proclus Tria Opuscula (De Providentia, De Fato) treats providential final causation directly.
+- **Levels of Providence (Proclean)** (`concept_pronoia_levels_proclus_a6d8c9b4`)
+  - source: `Tria Opuscula (Three Essays) - Proclus` (`work_proclus_tria_opuscula_c9a8e4b3`)
+  - reason: Primary source: Proclus De Providentia. Hierarchical providence levels are the central topic.
+- **Ancient Incompatibilism** (`concept_incompatibilism_ancient_o5p6q7r8`)
+  - source: `De Fato (Περὶ Εἱμαρμένης / On Fate)` (`work_de_fato_alexander_c200ce_o6p7q8r9`)
+  - reason: Alexander De Fato is the canonical ancient incompatibilist text, arguing fate is incompatible with moral responsibility.
+- **Human Dignity / ἀξίωμα (Alexander)** (`concept_axioma_dignity_alex`)
+  - source: `De Fato (Περὶ Εἱμαρμένης / On Fate)` (`work_de_fato_alexander_c200ce_o6p7q8r9`)
+  - reason: Primary source: Alexander De Fato ch. 15-16. Human dignity requires genuine choice.
+- **Self-Achieved Happiness / δι᾽ αὑτῶν εὐδαιμονεῖν (Alexander)** (`concept_self_happiness_alex`)
+  - source: `De Fato (Περὶ Εἱμαρμένης / On Fate)` (`work_de_fato_alexander_c200ce_o6p7q8r9`)
+  - reason: Primary source: Alexander De Fato ch. 20. Self-achieved happiness as argument against fatalism.
+- **Natural Character (Φύσις, Ingenium)** (`concept_natural_character_e5f6g7h8`)
+  - source: `De Fato (Περὶ Εἱμαρμένης / On Fate)` (`work_de_fato_alexander_c200ce_o6p7q8r9`)
+  - reason: Alexander De Fato ch. 6-8 discusses natural character (physis) and its role in action without necessitation.
+- **Apotelesmatic Astrology** (`concept_apotelesmatic_0y5z7b43`)
+  - source: `De Fato (On Fate) - Pseudo-Plutarch` (`work_de_fato_pseudo_plutarch_a8c6d4e2`)
+  - reason: Pseudo-Plutarch De Fato ch. 2-3 discusses astrological fate and apotelesmatic influence.
+- **Natal Astrology (Genethlialogia)** (`concept_genethlialogia_9x4y6a32`)
+  - source: `De Fato (On Fate) - Pseudo-Plutarch` (`work_de_fato_pseudo_plutarch_a8c6d4e2`)
+  - reason: Pseudo-Plutarch De Fato discusses genethlialogical (natal-chart) astrology in the context of fate.
+- **Probability/Plausibility (Pithanotēs)** (`concept_pithanotes_7v2w4y10`)
+  - source: `De Fato (On Fate)` (`work_de_fato_cicero_44bce_b9c4e5d2`)
+  - reason: Cicero De Fato preserves Carneades' probabilism (pithanon). Also Academica II.
+- **Christian Theodicy** (`concept_theodicy_christian`)
+  - source: `De Principiis (Περὶ Ἀρχῶν) - Origen` (`work_de_principiis_origen_230s_v2w3x4y5`)
+  - reason: Origen De Principiis II.9, III.1 develops the first systematic Christian theodicy grounded in free will.
+- **Grace-Freedom Synergy (συνεργία)** (`concept_grace_freedom_synergy`)
+  - source: `De Principiis (Περὶ Ἀρχῶν) - Origen` (`work_de_principiis_origen_230s_v2w3x4y5`)
+  - reason: Origen De Principiis III.1 articulates synergy between divine grace and human free will.
+- **Synergism (Synergy)** (`concept_synergism`)
+  - source: `De Principiis (Περὶ Ἀρχῶν) - Origen` (`work_de_principiis_origen_230s_v2w3x4y5`)
+  - reason: Origen De Principiis III.1.18-24. Synergism as cooperation of divine and human agency.
+- **Pedagogical Theodicy (ἀφορμὴ προκοπῆς)** (`concept_pedagogical_theodicy`)
+  - source: `De Principiis (Περὶ Ἀρχῶν) - Origen` (`work_de_principiis_origen_230s_v2w3x4y5`)
+  - reason: Origen De Principiis II.9-11, III.1. Evil as occasion for moral progress in Origen's pedagogical theodicy.
+- **Concupiscence (Epithumia) as Transmitted Consequence - Methodian Hamartiology** (`concept_concupiscence_epithumia_transmitted_bd8e2fc9`)
+  - source: `De autexusio (On Free Will)` (`work_methodius_de_autexusio_4c37c892`)
+  - reason: Primary source: Methodius De Autexusio. Discusses concupiscence as transmitted consequence without destroying free will.
+- **Death as Therapeutic Remedy (Not Punishment) - Methodian Theodicy** (`concept_death_therapeutic_remedy_methodius_5eaaf3a2`)
+  - source: `De autexusio (On Free Will)` (`work_methodius_de_autexusio_4c37c892`)
+  - reason: Primary source: Methodius De Autexusio. Death reinterpreted as divine therapeutic remedy.
+- **Evil as Quality/Accident (Not Substance) - Methodian Theodicy** (`concept_evil_quality_accident_methodius_dae1b112`)
+  - source: `De autexusio (On Free Will)` (`work_methodius_de_autexusio_4c37c892`)
+  - reason: Primary source: Methodius De Autexusio. Evil as quality (poiotes) not substance, preserving free will.
+- **Dynamic Anthropology - Temporal Development toward Perfection** (`concept_dynamic_anthropology_temporal`)
+  - source: `Irenaeus, Adversus Haereses Book 4` (`work_irenaeus_adversus_haereses_book4`)
+  - reason: Primary source: Irenaeus AH IV.38. Humans created imperfect but progressing toward perfection.
+- **Ἀγαθός vs. Τέλειος Distinction (Good vs. Perfect)** (`concept_agathos_vs_teleios_distinction`)
+  - source: `Irenaeus, Adversus Haereses Book 4` (`work_irenaeus_adversus_haereses_book4`)
+  - reason: Primary source: Irenaeus AH IV.38.3. Distinction between being good (agathos) and being perfect (teleios).
+- **Νήπιος Doctrine - Adam as Infant** (`concept_nepios_adam_infant_doctrine`)
+  - source: `Irenaeus, Adversus Haereses Book 4` (`work_irenaeus_adversus_haereses_book4`)
+  - reason: Primary source: Irenaeus AH IV.38.1-2. Adam as nepios (infant) needing growth.
+- **Ἀνακεφαλαίωσις - Eschatological Recapitulation** (`concept_anakephalaiosis_recapitulation`)
+  - source: `Irenaeus, Adversus Haereses Book 3` (`work_irenaeus_adversus_haereses_book3`)
+  - reason: Primary source: Irenaeus AH III.18.1, III.21.10-22.4. Foundational recapitulation passages.
+- **Theosis (Deification)** (`concept_theosis`)
+  - source: `Irenaeus, Adversus Haereses Book 5` (`work_irenaeus_adversus_haereses_book5`)
+  - reason: Primary source: Irenaeus AH V.Praef, V.6.1. 'God became man so that man might become God.'
+- **Original Sin (Peccatum Originale)** (`concept_original_sin`)
+  - source: `De Libero Arbitrio Voluntatis (On Free Choice of the Will)` (`work_de_libero_arbitrio`)
+  - reason: Augustine DLA III.19-22 develops the doctrine of original sin. Earliest systematic treatment in KG.
+- **Peccatum Originans (Originating Sin)** (`concept_peccatum_originans`)
+  - source: `De Libero Arbitrio Voluntatis (On Free Choice of the Will)` (`work_de_libero_arbitrio`)
+  - reason: Augustine DLA III discusses the originating act of sin (peccatum originans) distinct from inherited guilt.
+- **Predestination (Augustinian Double Predestination)** (`concept_predestination_augustinian`)
+  - source: `Ad Simplicianum (To Simplician)` (`work_ad_simplicianum`)
+  - reason: Primary source: Augustine Ad Simplicianum I.2 (396 CE). First articulation of unconditional predestination.
+- **Gratia Cooperans (Cooperating Grace)** (`concept_gratia_cooperans`)
+  - source: `De Gratia et Libero Arbitrio (Augustine)` (`work_augustine_de_gratia_la`)
+  - reason: Primary source: Augustine De Gratia et Libero Arbitrio XVII.33. Defines cooperating grace.
+- **Gratia Operans (Operating Grace)** (`concept_gratia_operans`)
+  - source: `De Gratia et Libero Arbitrio (Augustine)` (`work_augustine_de_gratia_la`)
+  - reason: Primary source: Augustine De Gratia et Libero Arbitrio XVII.33. Defines operating grace.
+- **Cosmic Sympathy (Sympathia Universalis)** (`concept_sympathia_universalis_6u1v3x09`)
+  - source: `Determinism and Freedom in Stoic Philosophy` (`work_bobzien_determinism_freedom_1998`)
+  - reason: Bobzien 1998 ch. 1-3 analyses Stoic cosmic sympathy in the context of determinism. Primary scholarly authority in KG.
+- **Cyclical Return (Great Year)** (`concept_cyclical_return_great_year`)
+  - source: `Diogenes Laertius, Lives of Eminent Philosophers` (`work_diogenes_laertius_lives`)
+  - reason: DL VII.156 preserves the Stoic doctrine of cyclical return (ekpyrosis and palingenesis).
+- **Reservation Clause (Ὑπεξαίρεσις, Exceptio)** (`concept_reservation_exceptio_m3n4o5p6`)
+  - source: `Discourses (Διατριβαί) - Epictetus` (`work_epictetus_discourses`)
+  - reason: Primary source: Epictetus Discourses II.6.9-10. Stoic reservation clause (hupexairesis).
+- **isostheneia (ἰσοσθένεια)** (`concept_isostheneia_4b7e9c3a`)
+  - source: `Outlines of Pyrrhonism (Πυρρώνειοι Ὑποτυπώσεις)` (`work_sextus_outlines_pyrrhonism_f9a7c8e4`)
+  - reason: Primary source: Sextus PH I.8-10. Equipollence (isostheneia) as foundation of Pyrrhonist suspension.
+- **Ἐπὶ ἴσον (Epi Ison) - In Equal Parts** (`concept_epi_ison_in_equal_parts_9e1e47f1`)
+  - source: `Outlines of Pyrrhonism (Πυρρώνειοι Ὑποτυπώσεις)` (`work_sextus_outlines_pyrrhonism_f9a7c8e4`)
+  - reason: Primary source: Sextus PH I.190-191. Equal balance (epi ison) of opposing arguments.
+- **Kinesis Anaitios (Κίνησις Ἀναίτιος) - Uncaused Motion** (`concept_kinesis_anaitios_uncaused_motion_a7b8c9d0`)
+  - source: `De Rerum Natura (On the Nature of Things)` (`work_de_rerum_natura_lucretius_50sbce_l2m3n4o5`)
+  - reason: Primary source: Lucretius DRN II.216-293. The clinamen as uncaused atomic swerve.
+- **Divine Providence (Hashgachah)** (`concept_hashgachah_o3p4q5r6`)
+  - source: `Guide for the Perplexed (Moreh Nevukhim)` (`work_guide_for_perplexed_maimonides_u5v6w7x8`)
+  - reason: Primary source: Maimonides Guide III.17-18. Systematic treatment of divine providence (hashgachah pratit).
+- **Good Inclination (Yetzer Ha-Tov)** (`concept_yetzer_ha_tov_y7z8a9b0`)
+  - source: `Wisdom of Sirach (Ecclesiasticus)` (`work_sirach_a3b4c5d6`)
+  - reason: Sirach 15:14-17 is the key early text on the yetzer and free choice. Best biblical proxy in KG.
+- **Metriopatheia (Moderation of Passions)** (`concept_metriopatheia_moderation_passions`)
+  - source: `Aspasius - In Ethica Nicomachea` (`text_aspasius_in_en`)
+  - reason: Aspasius' commentary on EN II-III develops the Peripatetic doctrine of moderation of passions (metriopatheia).
+- **Emotional Pull (Pathētikē Holkē)** (`concept_pathetike_holke_emotional_pull`)
+  - source: `Stoicism and Emotion` (`pub_graver_2007_stoicism_emotion`)
+  - reason: Graver 2007 analyses the Stoic concept of emotional pull (pathētikē holkē) as discussed in Chrysippus. Best scholarly authority in KG.
+- **Orphic Zagreus/Dionysus Myth - Anthropological Dualism** (`concept_orphic_zagreus_dionysus_myth`)
+  - source: `Plato, Phaedo` (`work_plato_phaedo`)
+  - reason: Plato Phaedo 62b, 69c-d alludes to Orphic doctrines on the soul's divine origin. Best available KG proxy.
+- **σῶμα σῆμα (Body as Tomb) - Orphic Doctrine** (`concept_soma_sema_body_tomb_orphic`)
+  - source: `Plato, Phaedo` (`work_plato_phaedo`)
+  - reason: Plato Phaedo 62b and Cratylus 400c transmit the soma-sema doctrine. Phaedo is the best KG proxy.
+- **Two-Source Metaphysics (Platonist)** (`concept_two_source_metaphysics_platonist`)
+  - source: `Plato, Timaeus` (`work_plato_timaeus`)
+  - reason: Plato Timaeus 47e-48a: two-source metaphysics of Intellect (nous) and Necessity (ananke).
+- **Undescended Soul Doctrine - Plotinus's Preservation of Soul's Divinity** (`concept_undescended_soul_plotinus`)
+  - source: `Plotinus, Enneads IV.8 - On the Descent of the Soul into Bodies` (`work_plotinus_enneads_iv_8`)
+  - reason: Primary source: Plotinus Enneads IV.8.8. The undescended part of the soul.
+- **School Handbooks (Hypomnemata)** (`concept_hypomnema_school_handbooks_1z6a8c54`)
+  - source: `Didaskalikos (Handbook of Platonism)` (`work_didaskalikos_alcinous_2nd_ce_q7r8s9t0`)
+  - reason: Alcinous' Didaskalikos is itself a school handbook (hypomnema). Exemplifies the genre directly.
+- **Self-Forming Actions (SFAs)** (`concept_self_forming_actions_4r5s6t7u`)
+  - source: `The Significance of Free Will` (`work_significance_of_free_will_kane_1i2j3k4l`)
+  - reason: Formulator: Robert Kane. Primary source: The Significance of Free Will (1996). Direct match.
+- **Ultimate Responsibility (UR)** (`concept_ultimate_responsibility_kane`)
+  - source: `The Significance of Free Will` (`work_significance_of_free_will_kane_1i2j3k4l`)
+  - reason: Formulator: Robert Kane. Primary source: The Significance of Free Will (1996). Direct match.
+- **Terminology Evolution: Greek → Latin Free Will Vocabulary** (`concept_terminology_evolution_greek_latin_y5z6a7b8`)
+  - source: `The Theory of Will in Classical Antiquity` (`pub_dihle_1982_theory_will`)
+  - reason: Dihle 1982 is the seminal study of Greek-to-Latin terminological evolution of will/freedom concepts.
+- **Θέλησις (Thelēsis) - Willing/Volition** (`concept_thelesis_willing_87d2b3cf`)
+  - source: `The Theory of Will in Classical Antiquity` (`pub_dihle_1982_theory_will`)
+  - reason: Dihle 1982 traces the development of thelesis/voluntas from Greek to Latin philosophy.
+- **Platonic Embodiment-as-Sin vs. Christian Original Sin - Comparative Framework** (`concept_platonic_vs_christian_original_sin`)
+  - source: `A Free Will: Origins of the Notion in Ancient Thought` (`work_frede_free_will_2011`)
+  - reason: Frede 2011 compares Platonic and Christian conceptions of embodiment and sin. Best scholarly framework in KG.
+- **Evolution of Will (various terms) - Scholarly Debate** (`evolution_will_concept_c68f04bd`)
+  - source: `The Theory of Will in Classical Antiquity` (`pub_dihle_1982_theory_will`)
+  - reason: Dihle 1982 is the foundational study of the evolution of the will concept from Homer to Augustine.
+- **Evolution of Will (various terms) - Scholarly Debate** (`evolution_will_concept_c68f04bd`)
+  - source: `A Free Will: Origins of the Notion in Ancient Thought` (`work_frede_free_will_2011`)
+  - reason: Frede 2011 is the major counter-thesis to Dihle, arguing the notion of free will emerged in Stoicism.
+- **Evolution of εἱμαρμένη (heimarmenê)** (`evolution_heimarmene_2b989ed0`)
+  - source: `Determinism and Freedom in Stoic Philosophy` (`work_bobzien_determinism_freedom_1998`)
+  - reason: Bobzien 1998 ch. 2 traces the evolution of heimarmene from Homer through Stoic physics.
+- **Evolution of τὸ ἐφ' ἡμῖν (to eph' hêmin)** (`evolution_eph_hemin_6284cf6d`)
+  - source: `De « ce qui dépend de nous »` (`pub_labarriere_2009_eph_hemin`)
+  - reason: Labarrière 2009 is a dedicated study of the evolution of to eph' hêmin. Direct match.
+- **Christian-Gnostic Debate on Freedom** (`debate_christian_gnostic_freedom`)
+  - source: `De Principiis (Περὶ Ἀρχῶν) - Origen` (`work_de_principiis_origen_230s_v2w3x4y5`)
+  - reason: Origen De Principiis III.1 is the central anti-Gnostic defense of free will. Also Irenaeus AH, but Origen is more systematic.
+- **Academic School (Ἀκαδημία) - New Academy** (`school_academics`)
+  - source: `De Fato (On Fate)` (`work_de_fato_cicero_44bce_b9c4e5d2`)
+  - reason: Cicero De Fato is the primary source preserving New Academic arguments on fate and free will (Carneades).
+- **Stoicism (Στοά)** (`school_stoicism`)
+  - source: `Determinism and Freedom in Stoic Philosophy` (`work_bobzien_determinism_freedom_1998`)
+  - reason: Bobzien 1998 is the authoritative scholarly treatment of Stoic determinism and compatibilism. Primary KG authority.
+- **διττὴ ἁμαρτία (Double Sin) - Plotinus's Synthesis of Embodiment Doctrines** (`concept_ditte_hamartia_double_sin_plotinus`)
+  - source: `Plotinus, Enneads IV.8 - On the Descent of the Soul into Bodies` (`work_plotinus_enneads_iv_8`)
+  - reason: Primary source: Plotinus Enneads IV.8.5. The 'double sin' (tolma + embodiment) as synthesis of Platonic doctrines.
+
+## Flagged for Manual Review
+
+- **Anselm's Necessity of the Past** (`argument_anselms_necessity_of_the_past_f7947dab`)
+  - reason: Primary source: Anselm's De Concordia. No works by Anselm in KG.
+- **Aquinas's Intellectualism** (`argument_aquinass_intellectualism_f0058bf9`)
+  - reason: Primary source: Aquinas Summa Theologiae I-II. No Aquinas works in KG.
+- **Aquinas's Natural Inclination to Happiness** (`argument_aquinass_natural_inclination_to_happiness_7a145771`)
+  - reason: Primary source: Aquinas Summa Theologiae I-II. No Aquinas works in KG.
+- **Aquinas's Primary and Secondary Causation** (`argument_aquinass_primary_and_secondary_causation_12f1649a`)
+  - reason: Primary source: Aquinas Summa Theologiae I, SCG III. No Aquinas works in KG.
+- **Basic Argument (Strawson)** (`argument_basic_argument_3q4r5s6t`)
+  - reason: Formulator: Galen Strawson. Primary source: 'The Impossibility of Moral Responsibility' (1994). No Galen Strawson works in KG.
+- **Buridan's Ass** (`argument_buridans_ass_73a98d20`)
+  - reason: Attributed to Jean Buridan. No Buridan works in KG.
+- **Cartesian Dualism and Agent Causation** (`argument_cartesian_dualism_and_agent_causation_b637cc75`)
+  - reason: Primary source: Descartes Meditations on First Philosophy. No Descartes works in KG.
+- **Compatibilism through Divine Concurrence** (`argument_compatibilism_through_divine_concurrence_d6ce2a0f`)
+  - reason: Formulator: Francisco Suárez. No Suárez works in KG.
+- **Conatus Doctrine** (`argument_conatus_doctrine_1588d13c`)
+  - reason: Formulator: Baruch Spinoza. Primary source: Ethics (1677). No Spinoza works in KG.
+- **Edwards's Compatibilist Defense of Reformed Theology** (`argument_edwardsian_compatibilism_5a9v0w68`)
+  - reason: Formulator: Jonathan Edwards. No Edwards works in KG.
+- **Erasmus's Defense of Free Will** (`argument_erasmian_free_will_7s1n2o80`)
+  - reason: Primary source: Erasmus De Libero Arbitrio (1524). No Erasmus works in KG.
+- **Freedom of Indifference** (`argument_freedom_of_indifference_dab82dcc`)
+  - reason: Primary source: Descartes Meditations, Principles of Philosophy. No Descartes works in KG.
+- **Gersonides' Argument: Limited Divine Omniscience** (`argument_gersonides_limited_omniscience_s9t0u1v2`)
+  - reason: Primary source: Wars of the Lord III.4-6. No Gersonides works in KG.
+- **Gregory of Nyssa's Image of God Argument** (`argument_gregory_of_nyssas_image_of_god_argument_f80938fc`)
+  - reason: Primary source: Gregory De Hominis Opificio. No Gregory of Nyssa works in KG.
+- **Hobbes's Compatibilist Argument** (`argument_hobbesian_compatibilism_1w5r6s24`)
+  - reason: Primary source: Leviathan ch. 21. No Hobbes works in KG.
+- **Hobbes's Rejection of Immaterial Soul** (`argument_hobbess_rejection_of_immaterial_soul_02b7bcda`)
+  - reason: Primary source: Hobbes Leviathan ch. 34, 46. No Hobbes works in KG.
+- **Human Will Lacks Efficacy** (`argument_human_will_lacks_efficacy_45522d03`)
+  - reason: Likely Reformation-era argument (Luther/Calvin). Primary source unidentifiable from metadata alone. Requires editorial review.
+- **Hume's Compatibilist Argument** (`argument_humean_compatibilism_3y7t8u46`)
+  - reason: Primary source: Hume Enquiry VIII, Treatise II.iii. No Hume works in KG.
+- **Infinite Will Argument** (`argument_infinite_will_argument_f19a66ed`)
+  - reason: Primary source: Descartes Meditations IV. No Descartes works in KG.
+- **Kant's Third Antinomy on Freedom** (`argument_kantian_third_antinomy_6b0w1x79`)
+  - reason: Primary source: Kant Critique of Pure Reason A444/B472. No Kant works in KG.
+- **Liberty as Absence of External Impediment** (`argument_liberty_as_absence_of_external_impediment_4587b29b`)
+  - reason: Primary source: Hobbes Leviathan ch. 21. No Hobbes works in KG.
+- **Locke's Analysis of Freedom** (`argument_lockean_analysis_2x6s7t35`)
+  - reason: Primary source: Locke Essay II.xxi. No Locke works in KG.
+- **Locke's Suspension of Desire** (`argument_lockes_suspension_of_desire_e45dc337`)
+  - reason: Primary source: Locke Essay II.xxi.47-52. No Locke works in KG.
+- **Luther's Bondage of Will Argument** (`argument_lutheran_bondage_argument_6r0m1n79`)
+  - reason: Primary source: Luther De Servo Arbitrio (1525). No Luther works in KG.
+- **Molinism and Middle Knowledge** (`argument_molinism_and_middle_knowledge_3d718eca`)
+  - reason: Primary source: Molina Concordia (1588). No Molina works in KG.
+- **Molinist Middle Knowledge Argument** (`argument_molinist_middle_knowledge_8t2o3p91`)
+  - reason: Primary source: Molina Concordia (1588). No Molina works in KG. Possible near-duplicate with argument_molinism_and_middle_knowledge.
+- **Ockham's Divine Power Argument** (`argument_ockhams_divine_power_argument_a0e19729`)
+  - reason: Primary source: Ockham Quodlibeta Septem. No Ockham works in KG.
+- **Ockham's Rejection of Necessitation** (`argument_ockhams_rejection_of_necessitation_33c255bf`)
+  - reason: Primary source: Ockham Ordinatio I d.38. No Ockham works in KG.
+- **Pascal's Wager and Voluntarism** (`argument_pascals_wager_and_voluntarism_4519ad75`)
+  - reason: Primary source: Pascal Pensées §233. No Pascal works in KG.
+- **Pelagius's Argument for Human Capacity** (`argument_pelagiuss_argument_for_human_capacity_006c0a58`)
+  - reason: Primary source: Pelagius Ad Demetriadem. No Pelagius works in KG.
+- **Pseudo-Dionysius's Hierarchical Causation Argument** (`argument_pseudodionysiuss_hierarchical_causation_argument_e0d73eb9`)
+  - reason: Primary source: Pseudo-Dionysius De Divinis Nominibus IV. No Pseudo-Dionysius works in KG.
+- **Reid's Agent Causation Argument** (`argument_reidian_agent_causation_4z8u9v57`)
+  - reason: Primary source: Thomas Reid Essays on Active Powers (1788). No Reid works in KG.
+- **Scotus's Synchronic Contingency** (`argument_scotuss_synchronic_contingency_e39fc978`)
+  - reason: Primary source: Duns Scotus Lectura I d.39. No Scotus works in KG.
+- **Scotus's Two Affections of the Will** (`argument_scotuss_two_affections_of_the_will_bb060e3d`)
+  - reason: Primary source: Duns Scotus Ordinatio II d.6, drawing on Anselm De Casu Diaboli. No Scotus works in KG.
+- **Scotus's Voluntarism** (`argument_scotuss_voluntarism_501f1bf6`)
+  - reason: Primary source: Duns Scotus Ordinatio IV d.49. No Scotus works in KG.
+- **Spinoza's Free Man Ethics** (`argument_spinozas_free_man_ethics_b0940e69`)
+  - reason: Primary source: Spinoza Ethics IV P67-73. No Spinoza works in KG.
+- **Spinoza's Necessitarian Argument** (`argument_spinozan_necessitarianism_9u3p4q02`)
+  - reason: Primary source: Spinoza Ethics I P29, P33. No Spinoza works in KG.
+- **Tertullian's Anti-Marcionite Argument for Free Will** (`argument_tertullians_antimarcionite_argument_for_free_will_f49cad73`)
+  - reason: Primary source: Tertullian Adversus Marcionem II.5-7. No Tertullian works in KG.
+- **Vision in God and Freedom** (`argument_vision_in_god_and_freedom_2a29f35e`)
+  - reason: Primary source: Malebranche Recherche de la vérité. No Malebranche works in KG.
+- **Absolute and Ordained Power (Potentia Absoluta et Ordinata)** (`concept_potentia_absoluta_ordinata_k9l0m1n2`)
+  - reason: Medieval concept (Ockham/Scotus). No Ockham or Scotus works in KG.
+- **Acquisition (Kasb/Iktisab)** (`concept_kasb_acquisition_e9f0g1h2`)
+  - reason: Islamic theology concept (Al-Ash'ari). No Islamic theological works in KG.
+- **Autonomy** (`concept_autonomy_8j2e3f91`)
+  - reason: Modern concept formalized by Kant (Groundwork III). No Kant works in KG.
+- **Bondage of the Will (Servum Arbitrium)** (`concept_bondage_of_will_1c5x6y24`)
+  - reason: Primary source: Luther De Servo Arbitrio (1525). No Luther works in KG.
+- **Bypassing** (`concept_bypassing_1y2z3a4b`)
+  - reason: Contemporary philosophy of action concept. No relevant contemporary works in KG.
+- **Categorical Imperative** (`concept_categorical_imperative_9k3f4g02`)
+  - reason: Primary source: Kant Groundwork of the Metaphysics of Morals. No Kant works in KG.
+- **Diachronic Contingency** (`concept_diachronic_contingency_w1x2y3z4`)
+  - reason: Medieval concept (Aquinas/Scotus distinction). No Aquinas or Scotus works in KG.
+- **Intellect (Intellectus)** (`concept_intellectus_c1d2e3f4`)
+  - reason: Medieval faculty psychology (Aquinas ST I q.79). No Aquinas works in KG.
+- **Intellectualism (Medieval)** (`concept_intellectualism_medieval_i3j4k5l6`)
+  - reason: Medieval doctrine (Aquinas). No Aquinas works in KG.
+- **Middle Knowledge (Scientia Media)** (`concept_scientia_media_2d6y7z35`)
+  - reason: Primary source: Molina Concordia (1588). No Molina works in KG.
+- **Matter's Adaptability and Pneumatic Receptivity** (`concept_matter_adaptability_pneumatic_receptivity`)
+  - reason: Stoic/Irenaeus concept. Primary textual source unclear from metadata. Requires editorial review.
+- **Physical Premotion (Praemotio Physica)** (`concept_praemotio_physica_3e7z8a46`)
+  - reason: Dominican/Thomist doctrine (Bañez). No Bañez or Thomist works in KG.
+- **Readiness Potential (Bereitschaftspotential)** (`concept_readiness_potential_3a4b5c6d`)
+  - reason: Neuroscience concept (Libet 1983). No Libet works in KG.
+- **Synchronic Contingency** (`concept_synchronic_contingency_s7t8u9v0`)
+  - reason: Primary source: Duns Scotus Lectura I d.39. No Scotus works in KG.
+- **Synderesis** (`concept_synderesis_g5h6i7j8`)
+  - reason: Medieval concept (Jerome/Aquinas). No relevant Medieval works in KG.
+- **Transcendental Freedom** (`concept_transcendental_freedom_7i1d2e80`)
+  - reason: Primary source: Kant CPR A533/B561. No Kant works in KG.
+- **Voluntarism (Medieval)** (`concept_voluntarism_medieval_m7n8o9p0`)
+  - reason: Medieval doctrine (Scotus). No Scotus works in KG.
+- **Theurgical Soteriology - Iamblichean Ritual Practice** (`concept_theurgical_soteriology_iamblichus`)
+  - reason: Primary source: Iamblichus De Mysteriis. Only De Anima in KG, which does not directly address theurgy.
+- **De Auxiliis Controversy** (`controversy_de_auxiliis_2n6i7j35`)
+  - reason: 16th-century Jesuit-Dominican debate. No Molina, Bañez, or relevant works in KG.
+- **Hobbes vs. Bramhall Debate on Liberty and Necessity** (`controversy_hobbes_bramhall_3o7j8k46`)
+  - reason: Primary sources: Hobbes Of Liberty and Necessity, Bramhall Vindication. No Hobbes/Bramhall works in KG.
+- **Hume vs. Reid on Causation and Free Will** (`controversy_hume_reid_4p8k9l57`)
+  - reason: Primary sources: Hume Enquiry VIII, Reid Essays on Active Powers. No Hume/Reid works in KG.
+- **Luther vs. Erasmus Debate on Free Will** (`controversy_luther_erasmus_1m5h6i24`)
+  - reason: Primary sources: Erasmus De Libero Arbitrio, Luther De Servo Arbitrio. No Luther/Erasmus works in KG.
+- **Synod of Dort** (`controversy_synod_of_dort_5q9l0m68`)
+  - reason: 1618-19 Reformed synod. No Canons of Dort or related works in KG.
+- **Intellectualism vs Voluntarism** (`debate_reason_vs_will_830c90c2`)
+  - reason: Medieval debate (Aquinas vs Scotus). No Aquinas or Scotus works in KG. Possible near-duplicate with 'Intellectualism vs Voluntarism Debate'.
+- **The Randomness/Luck Objection to Libertarianism** (`debate_randomness_objection_ae34a974`)
+  - reason: Contemporary analytic debate. No dedicated contemporary works in KG addressing this specific objection.
+- **Pharisees** (`group_pharisees_w1x2y3z4`)
+  - reason: Primary sources: Josephus Antiquities XIII, XVIII; Acts 23:8. No Josephus or NT works in KG. Deuteronomy is foundational to Pharisaic interpretation but does not document the Pharisees as a group.
+- **Sadducees** (`group_sadducees_a5b6c7d8`)
+  - reason: Primary sources: Josephus Antiquities XIII, XVIII; Acts 23:8. No Josephus or NT works in KG.
