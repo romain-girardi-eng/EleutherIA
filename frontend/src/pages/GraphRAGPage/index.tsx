@@ -247,8 +247,8 @@ export default function GraphRAGPage() {
   };
 
   const handleAgenticQuery = async (queryText: string) => {
-    const agenticUrl = import.meta.env.VITE_AGENTIC_API_URL || 'http://localhost:8000';
-    await handleStreamingQuery(queryText, agenticUrl, 'question');
+    const agenticUrl = import.meta.env.VITE_AGENTIC_API_URL || import.meta.env.VITE_API_URL || 'http://localhost:8000';
+    await handleStreamingQuery(queryText, agenticUrl, 'query');
   };
 
   const handleStreamingQuery = async (queryText: string, apiUrlOverride?: string, queryParamName: string = 'query') => {

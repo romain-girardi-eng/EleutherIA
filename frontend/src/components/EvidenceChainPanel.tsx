@@ -17,9 +17,12 @@ interface BibliographyEntry {
 
 interface EvidenceChain {
   claim: string;
-  kg_nodes: string[];
-  ancient_sources: AncientCitation[];
-  modern_sources: BibliographyEntry[];
+  kgNodes?: string[];
+  kg_nodes?: string[];
+  ancientSources?: AncientCitation[];
+  ancient_sources?: AncientCitation[];
+  modernSources?: BibliographyEntry[];
+  modern_sources?: BibliographyEntry[];
   confidence: number;
 }
 
@@ -82,7 +85,7 @@ const EvidenceChainPanel: React.FC<EvidenceChainPanelProps> = ({ evidenceChains 
                     {(chain.confidence * 100).toFixed(0)}% {t('evidenceChain.confidence')}
                   </span>
                   <span className="text-xs text-gray-500">
-                    {chain.ancient_sources.length} {t('evidenceChain.ancientSourcesCount', { count: chain.ancient_sources.length })} · {chain.modern_sources.length} {t('evidenceChain.modernSourcesCount', { count: chain.modern_sources.length })}
+                    {(chain.ancientSources ?? chain.ancient_sources ?? []).length} {t('evidenceChain.ancientSourcesCount', { count: (chain.ancientSources ?? chain.ancient_sources ?? []).length })} · {(chain.modernSources ?? chain.modern_sources ?? []).length} {t('evidenceChain.modernSourcesCount', { count: (chain.modernSources ?? chain.modern_sources ?? []).length })}
                   </span>
                 </div>
 
@@ -107,7 +110,7 @@ const EvidenceChainPanel: React.FC<EvidenceChainPanelProps> = ({ evidenceChains 
             {expandedChain === index && (
               <div className="mt-4 ml-11 space-y-4">
                 {/* KG Nodes */}
-                {chain.kg_nodes && chain.kg_nodes.length > 0 && (
+                {(chain.kgNodes ?? chain.kg_nodes ?? []).length > 0 && (
                   <div>
                     <h4 className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,7 +119,7 @@ const EvidenceChainPanel: React.FC<EvidenceChainPanelProps> = ({ evidenceChains 
                       {t('evidenceChain.kgNodesLabel')}
                     </h4>
                     <div className="flex flex-wrap gap-1">
-                      {chain.kg_nodes.map((nodeId, idx) => (
+                      {(chain.kgNodes ?? chain.kg_nodes ?? []).map((nodeId, idx) => (
                         <span
                           key={idx}
                           className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded border border-gray-200"
@@ -129,7 +132,7 @@ const EvidenceChainPanel: React.FC<EvidenceChainPanelProps> = ({ evidenceChains 
                 )}
 
                 {/* Ancient Sources */}
-                {chain.ancient_sources && chain.ancient_sources.length > 0 && (
+                {(chain.ancientSources ?? chain.ancient_sources ?? []).length > 0 && (
                   <div>
                     <h4 className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,7 +141,7 @@ const EvidenceChainPanel: React.FC<EvidenceChainPanelProps> = ({ evidenceChains 
                       {t('evidenceChain.ancientSourcesLabel')}
                     </h4>
                     <div className="space-y-2">
-                      {chain.ancient_sources.map((source, idx) => (
+                      {(chain.ancientSources ?? chain.ancient_sources ?? []).map((source, idx) => (
                         <div key={idx} className="text-xs bg-blue-50 p-2 rounded border border-blue-100">
                           <div className="flex items-center justify-between">
                             <span className="font-medium text-blue-900">{source.citation_text}</span>
@@ -158,7 +161,7 @@ const EvidenceChainPanel: React.FC<EvidenceChainPanelProps> = ({ evidenceChains 
                 )}
 
                 {/* Modern Sources */}
-                {chain.modern_sources && chain.modern_sources.length > 0 && (
+                {(chain.modernSources ?? chain.modern_sources ?? []).length > 0 && (
                   <div>
                     <h4 className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,7 +170,7 @@ const EvidenceChainPanel: React.FC<EvidenceChainPanelProps> = ({ evidenceChains 
                       {t('evidenceChain.modernScholarshipLabel')}
                     </h4>
                     <div className="space-y-1">
-                      {chain.modern_sources.map((source, idx) => (
+                      {(chain.modernSources ?? chain.modern_sources ?? []).map((source, idx) => (
                         <div key={idx} className="text-xs text-gray-700 bg-green-50 p-2 rounded border border-green-100">
                           <span className="font-medium text-green-900">
                             {source.author} ({source.year})
