@@ -120,10 +120,10 @@ class Dataset:
 
 
 def load_ontology() -> tuple[dict[str, Any], dict[str, Any]]:
-    node_ontology = json.loads((ROOT / "kg/ontology/node_types.json").read_text())[
+    node_ontology = json.loads((ROOT / "knowledge graph/ontology/node_types.json").read_text())[
         "node_types"
     ]
-    edge_ontology = json.loads((ROOT / "kg/ontology/edge_types.json").read_text())[
+    edge_ontology = json.loads((ROOT / "knowledge graph/ontology/edge_types.json").read_text())[
         "edge_types"
     ]
     return node_ontology, edge_ontology
@@ -889,7 +889,7 @@ def render_markdown(report: dict[str, Any]) -> str:
         "",
         "## Ontology Drift",
         "",
-        "- Live relations missing from `kg/ontology/edge_types.json`:",
+        "- Live relations missing from `knowledge graph/ontology/edge_types.json`:",
     ]
 
     if ontology["unknown_relations"]:

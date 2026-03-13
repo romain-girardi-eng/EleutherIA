@@ -1,5 +1,5 @@
 # EleutherIA - Root configuration
-# Individual packages have their own pyproject.toml in database/, kg/, graphrag/
+# Individual packages have their own pyproject.toml in database/, knowledge graph/, graphrag/
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
@@ -53,7 +53,7 @@ where = ["."]
 include = ["cli*", "backend*"]
 
 [tool.pytest.ini_options]
-testpaths = ["database/tests", "kg/tests", "graphrag/tests"]
+testpaths = ["database/tests", "knowledge graph/tests", "graphrag/tests"]
 python_files = "test_*.py"
 python_classes = "Test*"
 python_functions = "test_*"

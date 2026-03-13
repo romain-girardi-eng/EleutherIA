@@ -24,8 +24,9 @@ WORKDIR /build
 COPY database/pyproject.toml database/README.md ./database/
 COPY database/src ./database/src/
 
-COPY kg/pyproject.toml kg/README.md ./kg/
-COPY kg/src ./kg/src/
+# Use JSON form for paths with spaces (knowledge graph/)
+COPY ["knowledge graph/pyproject.toml", "knowledge graph/README.md", "./kg/"]
+COPY ["knowledge graph/src", "./kg/src/"]
 
 COPY graphrag/pyproject.toml graphrag/README.md ./graphrag/
 COPY graphrag/src ./graphrag/src/

@@ -76,7 +76,7 @@ install-database:
 	cd database && pip install -e ".[dev]"
 
 install-kg:
-	cd kg && pip install -e ".[dev]"
+	cd "knowledge graph" && pip install -e ".[dev]"
 
 install-graphrag:
 	cd graphrag && pip install -e ".[dev]"
@@ -140,14 +140,14 @@ test-database:
 	cd database && python -m pytest tests/ -v
 
 test-kg:
-	cd kg && python -m pytest tests/ -v
+	cd "knowledge graph" && python -m pytest tests/ -v
 
 test-graphrag:
 	cd graphrag && python -m pytest tests/ -v
 
 test-coverage:
 	cd database && python -m pytest tests/ --cov=src --cov-report=html
-	cd kg && python -m pytest tests/ --cov=src --cov-report=html
+	cd "knowledge graph" && python -m pytest tests/ --cov=src --cov-report=html
 	cd graphrag && python -m pytest tests/ --cov=src --cov-report=html
 	@echo "Coverage reports generated in */htmlcov/"
 
@@ -156,20 +156,20 @@ test-coverage:
 # =============================================================================
 
 lint:
-	ruff check database/src kg/src graphrag/src
+	ruff check database/src "knowledge graph/src" graphrag/src
 
 format:
-	ruff format database/src kg/src graphrag/src
+	ruff format database/src "knowledge graph/src" graphrag/src
 
 typecheck:
-	mypy database/src kg/src graphrag/src
+	mypy database/src "knowledge graph/src" graphrag/src
 
 quality: lint typecheck
 	@echo "Code quality checks passed!"
 
 fix:
-	ruff check --fix database/src kg/src graphrag/src
-	ruff format database/src kg/src graphrag/src
+	ruff check --fix database/src "knowledge graph/src" graphrag/src
+	ruff format database/src "knowledge graph/src" graphrag/src
 	@echo "Auto-fix and formatting complete!"
 
 # =============================================================================

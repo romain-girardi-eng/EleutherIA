@@ -101,7 +101,7 @@ eleutheria shell            # Interactive mode
 ```
 EleutherIA/
 ├── database/       Ancient texts corpus (189 works, 17k passages)
-├── kg/             Knowledge graph (17.7k nodes, 42.9k edges)
+├── knowledge graph/  Knowledge graph (17.7k nodes, 42.9k edges)
 ├── graphrag/       Agentic RAG engine (17-node FSM, multi-LLM)
 ├── backend/        FastAPI gateway (auth, search, migrations)
 ├── frontend/       React 19 app (graph viz, search, i18n)
@@ -116,7 +116,7 @@ EleutherIA/
 | Package | Purpose |
 |---------|---------|
 | [`database/`](database/) | Ancient Greek/Latin texts corpus with PostgreSQL, lemmatization, and hybrid search (full-text + lemmatic + semantic, merged via RRF) |
-| [`kg/`](kg/) | FAIR-compliant knowledge graph with Qdrant vector embeddings, community detection, centrality analytics, and a formal ontology (15 node types, 56 edge types) |
+| [`knowledge graph/`](knowledge%20graph/) | FAIR-compliant knowledge graph with Qdrant vector embeddings, community detection, centrality analytics, and a formal ontology (15 node types, 56 edge types) |
 | [`graphrag/`](graphrag/) | Agentic query engine: 17-node pydantic-graph FSM with query decomposition, multi-hop retrieval, CRAG validation, dual reranking, citation verification, and self-RAG refinement |
 
 Each package can be installed and used independently.

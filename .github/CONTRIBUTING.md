@@ -68,7 +68,7 @@ The project has three independent packages:
 | Package | Purpose | Maintainer Focus |
 |---------|---------|------------------|
 | `database/` | Ancient texts corpus | Data accuracy, schema |
-| `kg/` | Knowledge graph | Ontology, relationships |
+| `knowledge graph/` | Knowledge graph | Ontology, relationships |
 | `graphrag/` | RAG pipeline | Search quality, citations |
 
 Contributions should target the appropriate package.
