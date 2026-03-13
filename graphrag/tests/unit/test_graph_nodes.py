@@ -51,6 +51,7 @@ from eleutheria_graphrag.agents.state import (
     ResearchFacet,
     ReadingDecision,
     ResearchToolCall,
+    ScholarlyDossier,
 )
 from eleutheria_graphrag.services.tree_index import TreeNode, WorkTreeIndex
 
@@ -506,6 +507,41 @@ class TestHelpers:
         assert translation["passage_id"] is None
         assert translation["kg_node_id"] == "passage_grc_1_en"
         assert translation["language"] == "eng"
+
+    def test_build_research_graph_work_card_classifies_testimony_bundles_correctly(self):
+        """Work cards must count testimony bundles under testimony_count, not primary_count."""
+        state = RAGState(question="What did the Stoics believe about fate?")
+        testimony_bundle = EvidenceBundle(
+            bundle_id="bundle-dl",
+            work_id="work_diogenes_laertius",
+            work_title="Lives of Eminent Philosophers",
+            author="Diogenes Laertius",
+            original_passage_id="p1",
+            canonical_ref="7.1",
+            original_text="Zeno of Citium was the founder of Stoicism.",
+            token_estimate=20,
+        )
+        state.context_pack = ContextPack(
+            bundle_refs={"bundle-dl": "P1"},
+            passage_bundles=[testimony_bundle],
+        )
+        state.evidence_bundles = [testimony_bundle]
+        state.scholarly_dossier = ScholarlyDossier(
+            facets=[
+                DossierFacet(
+                    facet_id="f1",
+                    title="Main thesis",
+                    question="Q",
+                    primary_bundle_ids=["bundle-dl"],
+                )
+            ]
+        )
+        payload = _build_research_graph_payload(state)
+        works = payload["works"]
+        assert len(works) == 1
+        work = works[0]
+        assert work["testimony_count"] == 1
+        assert work["primary_count"] == 0
 
 
 class TestBuildResearchNotebook:
