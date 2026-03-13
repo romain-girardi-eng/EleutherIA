@@ -1253,16 +1253,24 @@ graphragRoutes.get('/query/stream',
           // Step 4: Build context
           sendEvent('status', { message: 'Building context...', step: 4, total_steps: 5 });
 
-          const nodeIds = dualResults.nodes.slice(0, max_context).map(r => r.payload.node_id);
-          const nodeDetails = await Promise.all(
-            nodeIds.map(id => db.getNode(id))
-          );
+          // Build validNodes directly from Qdrant payloads (avoids expensive getNode() RPC calls).
+          // The Qdrant payload already contains all the node data we need for context building.
+          const validNodes = dualResults.nodes.slice(0, max_context).map((r: any) => ({
+            node_id: r.payload.node_id,
+            id: r.payload.node_id,
+            label: r.payload.label || r.payload.name || 'Unknown',
+            type: r.payload.type || r.payload.node_type || 'concept',
+            description: r.payload.description || '',
+            period: r.payload.period || '',
+            metadata: r.payload.metadata || {},
+            name: r.payload.name,
+          }));
+
+          const nodeIds = validNodes.map((n: any) => n.node_id).filter(Boolean);
 
           // Fetch linked passages for these KG nodes
           const passageService = new PassageRetrievalService(c.env);
           const linkedPassages = await passageService.fetchPassagesForNodes(nodeIds, 20);
-
-          const validNodes = nodeDetails.filter(n => n);
           const contextParts: string[] = [];
 
           // KG entities with numbered source labels

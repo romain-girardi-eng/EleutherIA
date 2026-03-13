@@ -512,40 +512,40 @@ export default function ResearchGraphPanel({
           </Section>
         )}
 
-        {graph.works.length > 0 && (
+        {(graph.works ?? []).length > 0 && (
           <Section title="Selected Works" icon={LibraryBig}>
             <div className="grid gap-3">
-              {graph.works.map((work) => (
+              {(graph.works ?? []).map((work) => (
                 <WorkCard key={work.work_id} work={work} />
               ))}
             </div>
           </Section>
         )}
 
-        {graph.claims.length > 0 && (
+        {(graph.claims ?? []).length > 0 && (
           <Section title="Grounded Claims" icon={Quote}>
             <div className="grid gap-3">
-              {graph.claims.map((claim, index) => (
+              {(graph.claims ?? []).map((claim, index) => (
                 <ClaimCard key={`${claim.claim}-${index}`} claim={claim} />
               ))}
             </div>
           </Section>
         )}
 
-        {graph.tool_calls.length > 0 && (
+        {(graph.tool_calls ?? []).length > 0 && (
           <Section title="Reading Tools" icon={Sparkles}>
             <div className="grid gap-3">
-              {graph.tool_calls.map((toolCall) => (
+              {(graph.tool_calls ?? []).map((toolCall) => (
                 <ToolCallCard key={toolCall.tool_call_id} toolCall={toolCall} />
               ))}
             </div>
           </Section>
         )}
 
-        {graph.reading_decisions.length > 0 && (
+        {(graph.reading_decisions ?? []).length > 0 && (
           <Section title="Reading Decisions" icon={ShieldCheck}>
             <div className="grid gap-3">
-              {graph.reading_decisions.map((decision) => (
+              {(graph.reading_decisions ?? []).map((decision) => (
                 <DecisionCard key={decision.decision_id} decision={decision} />
               ))}
             </div>
