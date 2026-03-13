@@ -39,6 +39,7 @@ from eleutheria_graphrag.agents.graph_nodes import (
 )
 from eleutheria_graphrag.agents.pipeline_config import PipelineConfig, QueryType
 from eleutheria_graphrag.agents.state import (
+    Citation,
     ClaimLedgerItem,
     ClaimStatus,
     ContextPack,
@@ -119,6 +120,24 @@ class TestHelpers:
         state.sufficiency_score = 0.95
         state.citations = []
         state.metadata["pipeline_degraded"] = True
+        assert _quality_badge_from_state(state) == "Low"
+
+    def test_quality_badge_high_when_score_80_and_citations(self):
+        state = RAGState()
+        state.sufficiency_score = 0.85
+        state.citations = [Citation(ref="P1", type="passage", id="p1", label="De Fato 1.1")]
+        assert _quality_badge_from_state(state) == "High"
+
+    def test_quality_badge_medium_when_score_60_no_citations(self):
+        state = RAGState()
+        state.sufficiency_score = 0.65
+        state.citations = []
+        assert _quality_badge_from_state(state) == "Medium"
+
+    def test_quality_badge_low_when_score_below_60(self):
+        state = RAGState()
+        state.sufficiency_score = 0.5
+        state.citations = []
         assert _quality_badge_from_state(state) == "Low"
 
     def test_candidate_work_titles_prioritize_query_match_over_passage_noise(self):
