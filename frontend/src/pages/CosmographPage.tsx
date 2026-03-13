@@ -18,7 +18,7 @@ import {
   Spline,
   X,
 } from 'lucide-react';
-import { startTransition, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+import { startTransition, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -26,9 +26,6 @@ import {
   CosmographBars,
   CosmographPopup,
   CosmographProvider,
-  CosmographRangeColorLegend,
-  CosmographSizeLegend,
-  CosmographTimeline,
   prepareCosmographData,
   type CosmographConfig,
   type CosmographData,
@@ -73,6 +70,7 @@ interface FlatGraphNode {
   modernSourceCount: number;
   importance: number;
   labelWeight: number;
+  clusterStrength: number;
   communityKey: string;
   communityLabel: string;
   descriptionPreview: string;
@@ -139,6 +137,8 @@ interface LegendItem {
   color: string;
   count: number;
 }
+
+const EMPTY_RELATED_NODES: RelatedNode[] = [];
 
 const TYPE_META: Record<string, { label: string; color: string; bias: number }> = {
   person: { label: 'Thinker', color: '#4cc9f0', bias: 28 },
@@ -208,12 +208,12 @@ const RELATION_META: Array<{ match: RegExp; category: string; weight: number; co
 
 const DEFAULT_SIMULATION_CONTROLS: SimulationControls = {
   decay: 4300,
-  gravity: 0.18,
-  center: 0.02,
-  repulsion: 1.34,
+  gravity: 0.08,
+  center: 0.008,
+  repulsion: 2.2,
   theta: 1.08,
-  linkSpring: 1,
-  linkDistance: 22,
+  linkSpring: 0.74,
+  linkDistance: 36,
   mouseRepulsion: 3.2,
   friction: 0.9,
   impulse: 0.56,
@@ -326,13 +326,6 @@ function inferNodeYear(node: RawKGNode) {
 
   const periodRange = node.period ? PERIOD_RANGES[node.period] : undefined;
   return periodRange?.[0] ?? 0;
-}
-
-function formatYear(year?: number | null) {
-  if (year === null || year === undefined || Number.isNaN(year)) return 'Unplaced';
-  if (year < 0) return `${Math.abs(year)} BCE`;
-  if (year === 0) return '0';
-  return `${year} CE`;
 }
 
 function buildPaletteMap(values: string[], palette = PALETTE, fallback = '#94a3b8') {
@@ -608,7 +601,17 @@ async function buildGraphModel(
       modernSourceCount,
       sourceCount,
       importance,
-      labelWeight: Math.max(importance, degree * 8, sourceCount * 10, 12),
+      labelWeight: clamp(
+        Math.round(
+          importance * 0.16 +
+          Math.sqrt(degree + 1) * 2.8 +
+          sourceCount * 1.8 +
+          diversity * 1.4,
+        ),
+        8,
+        42,
+      ),
+      clusterStrength: 0.018,
       communityKey,
       communityLabel: communityKey,
       descriptionPreview: trimPreview(node.description),
@@ -755,9 +758,10 @@ async function buildGraphModel(
         pointLabelWeightBy: 'labelWeight',
         pointSizeBy: 'importance',
         pointClusterBy: 'communityLabel',
+        pointClusterStrengthBy: 'clusterStrength',
         pointIncludeColumns: ['*'],
         pointDefaultColor: '#7dd3fc',
-        pointDefaultSize: 4,
+        pointDefaultSize: 2,
       },
       links: {
         linkSourceBy: 'source',
@@ -943,9 +947,9 @@ export default function CosmographPage() {
 
   const [colorMode, setColorMode] = useState<ColorMode>('community');
   const [sizeMode, setSizeMode] = useState<SizeMode>('importance');
-  const [clusterMode, setClusterMode] = useState<ClusterMode>('community');
-  const [showLabels, setShowLabels] = useState(true);
-  const [showClusterLabels, setShowClusterLabels] = useState(true);
+  const [clusterMode, setClusterMode] = useState<ClusterMode>('none');
+  const [showLabels, setShowLabels] = useState(false);
+  const [showClusterLabels, setShowClusterLabels] = useState(false);
   const [showCurvedLinks, setShowCurvedLinks] = useState(true);
   const [showArrows, setShowArrows] = useState(false);
   const [selectionMode, setSelectionMode] = useState<SelectionMode>(null);
@@ -959,8 +963,6 @@ export default function CosmographPage() {
   const [simulationControls, setSimulationControls] = useState<SimulationControls>(DEFAULT_SIMULATION_CONTROLS);
   const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
   const [tourCursor, setTourCursor] = useState(0);
-  const [timelineSelectionLabel, setTimelineSelectionLabel] = useState<string | null>(null);
-  const [timelineHoverLabel, setTimelineHoverLabel] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchCursor, setSearchCursor] = useState(0);
 
@@ -972,10 +974,13 @@ export default function CosmographPage() {
     selectedNodeId && graphModel
       ? graphModel.flatNodesById.get(selectedNodeId) ?? null
       : null;
-  const selectedRelationships =
-    selectedNodeId && graphModel
-      ? graphModel.relationshipsByNodeId.get(selectedNodeId) ?? []
-      : [];
+  const selectedRelationships = useMemo(
+    () =>
+      selectedNodeId && graphModel
+        ? graphModel.relationshipsByNodeId.get(selectedNodeId) ?? EMPTY_RELATED_NODES
+        : EMPTY_RELATED_NODES,
+    [graphModel, selectedNodeId],
+  );
 
   const popupNode =
     deferredHoveredNodeId && graphModel
@@ -1079,31 +1084,19 @@ export default function CosmographPage() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!graphModel || !graphReady || !nodeId) {
-      return;
-    }
-
-    if (selectedNodeId === nodeId) {
-      return;
-    }
-
-    void focusNodeById(nodeId, { fitNeighborhood: false, pushRoute: false });
-  }, [graphModel, graphReady, nodeId, selectedNodeId]);
-
-  async function getPointIndexById(id: string) {
+  const getPointIndexById = useCallback(async (id: string) => {
     if (!graphRef.current) return undefined;
     const indices = await graphRef.current.getPointIndicesByIds([id]);
     return indices?.[0];
-  }
+  }, []);
 
-  async function focusNodeById(
+  const focusNodeById = useCallback(async (
     id: string,
     options?: {
       fitNeighborhood?: boolean;
       pushRoute?: boolean;
     },
-  ) {
+  ) => {
     if (!graphModel || !graphRef.current) return;
 
     const pointIndex = await getPointIndexById(id);
@@ -1130,7 +1123,19 @@ export default function CosmographPage() {
     if (options?.pushRoute !== false) {
       navigate(`/visualizer/${id}`, { replace: true });
     }
-  }
+  }, [getPointIndexById, graphModel, navigate]);
+
+  useEffect(() => {
+    if (!graphReady || !nodeId) {
+      return;
+    }
+
+    if (selectedNodeId === nodeId) {
+      return;
+    }
+
+    void focusNodeById(nodeId, { fitNeighborhood: false, pushRoute: false });
+  }, [focusNodeById, graphReady, nodeId, selectedNodeId]);
 
   async function focusNeighborhood() {
     if (!selectedNodeId || !graphRef.current) return;
@@ -1353,7 +1358,7 @@ export default function CosmographPage() {
         hoveredPointRingColor: '#fde68a',
         focusedPointRingColor: '#22d3ee',
         pointDefaultColor: '#7dd3fc',
-        pointDefaultSize: 4,
+        pointDefaultSize: 1.4,
         pointGreyoutOpacity: 0.12,
         linkDefaultColor: 'rgba(148,163,184,0.22)',
         linkGreyoutOpacity: 0.04,
@@ -1371,10 +1376,10 @@ export default function CosmographPage() {
         fitViewOnInit: true,
         fitViewDelay: 360,
         fitViewDuration: 500,
-        fitViewPadding: 0.14,
+        fitViewPadding: 0.2,
         randomSeed: 'eleutheria-cosmograph-v2',
-        spaceSize: 5400,
-        pointSamplingDistance: 152,
+        spaceSize: 7200,
+        pointSamplingDistance: 260,
         pointColorBy: activeColorAccessor,
         pointColorByMap: activeColorMap,
         pointColorByFn:
@@ -1382,17 +1387,34 @@ export default function CosmographPage() {
             ? (value: unknown) => importanceColor(value, graphModel.minImportance, graphModel.maxImportance)
             : undefined,
         pointSizeBy: activeSizeAccessor,
-        pointSizeRange: [2.6, 14],
+        pointSizeByFn: (value: unknown) => {
+          const numeric = typeof value === 'number' ? value : Number(value);
+          if (!Number.isFinite(numeric) || numeric <= 0) {
+            return 1.2;
+          }
+
+          if (sizeMode === 'degree') {
+            return clamp(1.1 + Math.log1p(numeric) * 0.72, 1.1, 4.8);
+          }
+
+          if (sizeMode === 'sources') {
+            return clamp(1.05 + Math.sqrt(numeric) * 0.48, 1.05, 4.2);
+          }
+
+          return clamp(1.15 + Math.log1p(numeric) * 0.62, 1.15, 5.1);
+        },
+        pointSizeRange: [1.1, 5.1],
         pointClusterBy: activeClusterAccessor,
+        pointClusterStrengthBy: activeClusterAccessor ? 'clusterStrength' : undefined,
         showLabels,
         showDynamicLabels: showLabels,
-        showDynamicLabelsLimit: 36,
+        showDynamicLabelsLimit: 10,
         showTopLabels: showLabels,
-        showTopLabelsLimit: 30,
+        showTopLabelsLimit: 6,
         showFocusedPointLabel: true,
         showHoveredPointLabel: true,
         showSelectedLabels: true,
-        selectedPointLabelsLimit: 120,
+        selectedPointLabelsLimit: 24,
         showUnselectedPointLabels: !selectedNodeId,
         showClusterLabels: showLabels && showClusterLabels && Boolean(activeClusterAccessor),
         usePointColorStrategyForClusterLabels: Boolean(activeClusterAccessor) && activeColorAccessor === activeClusterAccessor,
@@ -1402,44 +1424,53 @@ export default function CosmographPage() {
           ...(selectedNodeId ? [selectedNodeId] : []),
           ...pinnedNodeIds,
         ],
-        pointLabelFontSize: 13,
-        clusterLabelFontSize: 18,
-        labelMargin: 8,
-        labelPadding: [8, 5.5, 8, 5.5],
+        pointLabelFontSize: 10,
+        clusterLabelFontSize: 12,
+        labelMargin: 5,
+        labelPadding: [5.5, 3.5, 5.5, 3.5],
         pointLabelClassName: (_text, _index, pointId) => {
           const isPinned = pointId ? pinnedSet.has(pointId) : false;
           const isFocused = pointId === selectedNodeId;
 
           return [
-            `background: ${isFocused ? 'rgba(251,191,36,0.18)' : 'rgba(7,14,28,0.76)'}`,
-            `border: 1px solid ${isFocused ? 'rgba(251,191,36,0.4)' : isPinned ? 'rgba(34,211,238,0.28)' : 'rgba(148,163,184,0.16)'}`,
+            `background: ${isFocused ? 'rgba(251,191,36,0.14)' : 'rgba(7,14,28,0.68)'}`,
+            `border: 1px solid ${isFocused ? 'rgba(251,191,36,0.32)' : isPinned ? 'rgba(34,211,238,0.24)' : 'rgba(148,163,184,0.14)'}`,
             `color: ${isFocused ? '#fef3c7' : isPinned ? '#cffafe' : '#f8fafc'}`,
-            `box-shadow: ${isFocused ? '0 14px 36px rgba(251,191,36,0.16)' : '0 10px 30px rgba(2,6,23,0.38)'}`,
-            'backdrop-filter: blur(12px)',
+            `box-shadow: ${isFocused ? '0 10px 24px rgba(251,191,36,0.12)' : '0 8px 20px rgba(2,6,23,0.28)'}`,
+            'backdrop-filter: blur(8px)',
             'border-radius: 999px',
-            `font-weight: ${isFocused || isPinned ? 700 : 520}`,
-            'letter-spacing: 0.02em',
+            `font-weight: ${isFocused || isPinned ? 650 : 560}`,
+            'letter-spacing: 0.01em',
+            'max-width: 220px',
+            'overflow: hidden',
+            'text-overflow: ellipsis',
           ].join('; ');
         },
         hoveredPointLabelClassName: () => [
           'background: rgba(8,15,28,0.96)',
-          'border: 1px solid rgba(34,211,238,0.3)',
+          'border: 1px solid rgba(34,211,238,0.26)',
           'color: #f8fafc',
-          'box-shadow: 0 18px 48px rgba(15,23,42,0.45)',
-          'backdrop-filter: blur(14px)',
+          'box-shadow: 0 12px 28px rgba(15,23,42,0.34)',
+          'backdrop-filter: blur(10px)',
           'border-radius: 14px',
           'font-weight: 600',
+          'max-width: 260px',
+          'overflow: hidden',
+          'text-overflow: ellipsis',
         ].join('; '),
         clusterLabelClassName: () => [
-          'background: rgba(15,23,42,0.88)',
-          'border: 1px solid rgba(148,163,184,0.14)',
-          'color: #e2e8f0',
-          'backdrop-filter: blur(14px)',
+          'background: rgba(15,23,42,0.72)',
+          'border: 1px solid rgba(148,163,184,0.1)',
+          'color: #cbd5e1',
+          'backdrop-filter: blur(10px)',
           'border-radius: 999px',
-          'font-weight: 600',
-          'letter-spacing: 0.04em',
+          'font-weight: 560',
+          'letter-spacing: 0.02em',
+          'max-width: 260px',
+          'overflow: hidden',
+          'text-overflow: ellipsis',
           'text-transform: uppercase',
-          'box-shadow: 0 14px 38px rgba(2,6,23,0.32)',
+          'box-shadow: 0 10px 28px rgba(2,6,23,0.24)',
         ].join('; '),
         selectPointOnClick: true,
         focusPointOnClick: true,
@@ -1453,8 +1484,8 @@ export default function CosmographPage() {
         simulationRepulsionTheta: simulationControls.theta,
         simulationLinkSpring: simulationControls.linkSpring,
         simulationLinkDistance: simulationControls.linkDistance,
-        simulationLinkDistRandomVariationRange: [1.06, 1.18],
-        simulationCluster: clusterMode === 'none' ? 0 : 0.18,
+        simulationLinkDistRandomVariationRange: [1.12, 1.28],
+        simulationCluster: clusterMode === 'none' ? 0 : 0.03,
         simulationRepulsionFromMouse: simulationControls.mouseRepulsion,
         simulationFriction: simulationControls.friction,
         simulationImpulse: simulationControls.impulse,
@@ -1987,7 +2018,7 @@ export default function CosmographPage() {
                   Filter bars
                 </div>
                 <p className="mt-2 text-xs leading-5 text-slate-400">
-                  Click bars to isolate schools or node kinds. These filters compose with the timeline and search.
+                  Click bars to isolate schools or node kinds. These filters compose with search and selection.
                 </p>
 
                 <div className="mt-4 space-y-4">
@@ -2039,7 +2070,7 @@ export default function CosmographPage() {
                 <div className="mt-3 space-y-2 text-xs leading-5 text-slate-300">
                   <p>Left click a node to open its dossier. Use Atlas Tour to jump between community leaders.</p>
                   <p>Hold right click to repel the field and open hidden channels inside dense clusters.</p>
-                  <p>Rect select and lasso select persist across search, bars, and time filtering.</p>
+                  <p>Rect select and lasso select persist across search and categorical filtering.</p>
                 </div>
               </div>
             </div>
@@ -2062,89 +2093,25 @@ export default function CosmographPage() {
                   {selectedPointCount} selected
                 </span>
               </div>
-              {(timelineSelectionLabel || timelineHoverLabel) && (
-                <p className="mt-2 text-xs text-slate-300">
-                  {timelineSelectionLabel || timelineHoverLabel}
-                </p>
-              )}
             </div>
           </div>
 
-          <div className="absolute bottom-4 right-4 z-30 hidden w-[23rem] max-w-[calc(100vw-2rem)] flex-col gap-3 lg:flex">
-            <div className="rounded-[24px] border border-white/10 bg-slate-950/72 p-5 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl">
-              <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+          <div className="absolute bottom-4 right-4 z-30 hidden w-[18rem] max-w-[calc(100vw-2rem)] flex-col gap-2 lg:flex xl:w-[19rem]">
+            <div className="rounded-[22px] border border-white/10 bg-slate-950/72 p-4 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl">
+              <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                 <Palette className="h-3.5 w-3.5" />
                 Legend
               </div>
               {colorMode === 'importance' ? (
-                <CosmographRangeColorLegend
-                  steps={9}
-                  showSublabels
-                  minSubLabel="quiet"
-                  maxSubLabel="central"
-                  labelResolver={() => 'Influence pulse'}
-                />
+                <CompactRangeLegend label="Influence pulse" />
               ) : (
                 <DiscreteLegend
                   label={colorLegendTitle}
                   items={categoricalLegendItems}
-                  maxVisibleItems={7}
+                  maxVisibleItems={5}
                 />
               )}
-              <div className="mt-5 border-t border-white/8 pt-4">
-                <CosmographSizeLegend
-                  useQuantiles={sizeMode !== 'degree'}
-                  labelResolver={() => sizeLegendTitle}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="absolute bottom-4 left-1/2 z-30 hidden w-[min(58rem,calc(100%-2rem))] -translate-x-1/2 md:block">
-            <div className="rounded-[28px] border border-white/10 bg-slate-950/72 px-4 pb-3 pt-4 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl">
-              <div className="mb-3 flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-                    Chronology scrubber
-                  </p>
-                  <p className="mt-1 text-xs text-slate-300">
-                    Brush across centuries to isolate debates, or press play to animate the graph through time.
-                  </p>
-                </div>
-                {(timelineSelectionLabel || timelineHoverLabel) && (
-                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
-                    {timelineSelectionLabel || timelineHoverLabel}
-                  </span>
-                )}
-              </div>
-
-              <CosmographTimeline
-                accessor="year"
-                id="visualizer-year-timeline"
-                barCount={90}
-                stickySelection
-                highlightSelectedData
-                showAnimationControls
-                animationSpeed={45}
-                formatter={(value) => formatYear(typeof value === 'number' ? value : value.getFullYear())}
-                onSelection={(selection) => {
-                  if (!selection) {
-                    setTimelineSelectionLabel(null);
-                    return;
-                  }
-
-                  const [from, to] = selection;
-                  const fromYear = typeof from === 'number' ? from : from.getFullYear();
-                  const toYear = typeof to === 'number' ? to : to.getFullYear();
-                  setTimelineSelectionLabel(`${formatYear(fromYear)} → ${formatYear(toYear)}`);
-                }}
-                onBarHover={(bar) => {
-                  const start = typeof bar.rangeStart === 'number' ? bar.rangeStart : bar.rangeStart.getFullYear();
-                  const end = typeof bar.rangeEnd === 'number' ? bar.rangeEnd : bar.rangeEnd.getFullYear();
-                  setTimelineHoverLabel(`${formatYear(start)} → ${formatYear(end)} · ${bar.count.toLocaleString()} nodes`);
-                }}
-                style={{ height: 128 }}
-              />
+              <CompactSizeLegend label={sizeLegendTitle} />
             </div>
           </div>
 
@@ -2370,36 +2337,36 @@ function DiscreteLegend({
     <div>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-semibold text-white">
+          <p className="text-[13px] font-semibold text-white">
             {label}
           </p>
-          <p className="mt-1 text-[11px] leading-5 text-slate-400">
+          <p className="mt-1 text-[10px] leading-4 text-slate-400">
             Top visible groups by node count.
           </p>
         </div>
-        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-medium text-slate-200">
+        <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium text-slate-200">
           {items.length.toLocaleString()} groups
         </span>
       </div>
 
-      <div className="mt-4 space-y-2.5">
+      <div className="mt-3 space-y-2">
         {visibleItems.map((item) => {
           const width = Math.max((item.count / maxCount) * 100, 8);
 
           return (
             <div
               key={item.label}
-              className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-[18px] border border-white/8 bg-white/[0.03] px-3 py-3"
+              className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5 rounded-[16px] border border-white/8 bg-white/[0.03] px-2.5 py-2.5"
             >
               <span
-                className="h-3 w-3 rounded-full border border-white/10"
+                className="h-2.5 w-2.5 rounded-full border border-white/10"
                 style={{ backgroundColor: item.color }}
               />
               <div className="min-w-0">
-                <p className="truncate text-sm text-slate-100" title={item.label}>
+                <p className="truncate text-[13px] text-slate-100" title={item.label}>
                   {item.label}
                 </p>
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/6">
+                <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-white/6">
                   <div
                     className="h-full rounded-full"
                     style={{
@@ -2409,7 +2376,7 @@ function DiscreteLegend({
                   />
                 </div>
               </div>
-              <span className="text-xs font-medium text-slate-400">
+              <span className="text-[11px] font-medium text-slate-400">
                 {item.count.toLocaleString()}
               </span>
             </div>
@@ -2418,10 +2385,64 @@ function DiscreteLegend({
       </div>
 
       {hiddenCount > 0 && (
-        <p className="mt-3 text-xs leading-5 text-slate-400">
+        <p className="mt-2.5 text-[11px] leading-4 text-slate-400">
           {hiddenCount.toLocaleString()} more groups hidden to keep the legend readable.
         </p>
       )}
+    </div>
+  );
+}
+
+function CompactRangeLegend({ label }: { label: string }) {
+  return (
+    <div>
+      <p className="text-[13px] font-semibold text-white">
+        {label}
+      </p>
+      <p className="mt-1 text-[10px] leading-4 text-slate-400">
+        Cooler nodes are quieter; warmer nodes are more central.
+      </p>
+
+      <div className="mt-3 rounded-full border border-white/8 bg-white/[0.03] p-2">
+        <div className="h-2 rounded-full bg-[linear-gradient(90deg,#7dd3fc_0%,#5eead4_28%,#fde68a_58%,#fb7185_100%)]" />
+        <div className="mt-2 flex items-center justify-between text-[10px] uppercase tracking-[0.12em] text-slate-400">
+          <span>Quiet</span>
+          <span>Central</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CompactSizeLegend({ label }: { label: string }) {
+  const steps = [
+    { size: 7, label: 'Low' },
+    { size: 11, label: 'Mid' },
+    { size: 15, label: 'High' },
+  ];
+
+  return (
+    <div className="mt-4 border-t border-white/8 pt-3">
+      <p className="text-[13px] font-semibold text-white">
+        {label}
+      </p>
+      <p className="mt-1 text-[10px] leading-4 text-slate-400">
+        Relative marker scale used in the current view.
+      </p>
+
+      <div className="mt-3 flex items-end justify-between gap-3 rounded-[16px] border border-white/8 bg-white/[0.03] px-3 py-3">
+        {steps.map((step) => (
+          <div key={step.label} className="flex flex-1 flex-col items-center gap-2">
+            <span
+              className="rounded-full border border-white/12 bg-cyan-300/30 shadow-[0_0_20px_rgba(34,211,238,0.12)]"
+              style={{ width: step.size, height: step.size }}
+            />
+            <span className="text-[10px] uppercase tracking-[0.12em] text-slate-400">
+              {step.label}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
