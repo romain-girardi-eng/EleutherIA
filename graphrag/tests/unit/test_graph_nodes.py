@@ -1328,6 +1328,39 @@ class TestRenderAndVerify:
         assert "## Definition" in answer.answer
         assert "Stoic fate is universal causal order [1]." in answer.answer
 
+    def test_verify_does_not_recurse_infinitely_when_fallback_has_no_valid_refs(self):
+        """If fallback produces refs that aren't in valid_refs, must not recurse.
+
+        The bug: bundle_refs has "bundle-1"→"P1", but passage_bundles is empty,
+        so _reverse_ref_maps produces no bundles_by_ref entry for "P1".
+        valid_refs is therefore empty.  raw_answer lines have no valid ref →
+        kept_lines is empty → fallback is triggered.  _render_answer_fallback
+        reads bundle_refs directly via _claim_reference_refs and emits "[P1]",
+        so _extract_line_refs(fallback) returns ["P1"] (non-empty) → the old
+        guard does not fire → infinite recursion.
+        """
+        state = RAGState(question="What is Stoic fate?")
+        # bundle_refs present so _claim_reference_refs can emit a ref in the
+        # fallback, but passage_bundles is empty so _reverse_ref_maps won't
+        # include "P1" in valid_refs → any ref the fallback produces is invalid.
+        state.context_pack = ContextPack(
+            bundle_refs={"bundle-1": "P1"},
+            passage_bundles=[],  # ← makes valid_refs empty for "P1"
+        )
+        state.raw_answer = "A line with no ref."
+        state.claim_ledger = [
+            ClaimLedgerItem(
+                claim="Stoic fate is a chain of causes.",
+                evidence_ids=["bundle-1"],
+                support_type="passage",
+                confidence=0.9,
+                status=ClaimStatus.SUPPORTED,
+            )
+        ]
+        # Must return without hanging
+        answer, citations = _verify_answer_programmatically(state)
+        assert citations == []
+
     @pytest.mark.asyncio
     async def test_draft_claim_ledger_marks_fallback_in_metadata(self):
         deps = make_deps(llm_response="not json")
