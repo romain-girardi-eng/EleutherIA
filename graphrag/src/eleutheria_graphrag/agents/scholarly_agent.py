@@ -140,6 +140,7 @@ class ScholarlyAgent:
                 "query_type": getattr(answer.query_type, "value", answer.query_type),
                 "quality_badge": answer.quality_badge,
                 "grounding_policy": answer.grounding_policy.value,
+                "claim_ledger_size": len(answer.claim_ledger),
             },
         }
         yield json.dumps({"type": "complete", "data": complete_data}, default=str)
