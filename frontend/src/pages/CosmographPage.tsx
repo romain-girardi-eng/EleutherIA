@@ -1017,7 +1017,6 @@ export default function CosmographPage() {
   const [selectedPointIndices, setSelectedPointIndices] = useState<number[]>([]);
   const [selectedLinkCount, setSelectedLinkCount] = useState(0);
   const [pinnedNodeIds, setPinnedNodeIds] = useState<string[]>([]);
-  const [solarAnchorId, setSolarAnchorId] = useState<string | null>(null);
   const [solarFocusNodeIds, setSolarFocusNodeIds] = useState<string[]>([]);
   const [simulationRunning, setSimulationRunning] = useState(true);
   const [simulationControls, setSimulationControls] = useState<SimulationControls>(DEFAULT_SIMULATION_CONTROLS);
@@ -1150,25 +1149,11 @@ export default function CosmographPage() {
     return indices?.[0];
   }, []);
 
-  const syncPinnedPoints = useCallback(async (basePinnedIds: string[], anchorId: string | null) => {
-    if (!graphRef.current) return;
-
-    const mergedIds = Array.from(new Set([
-      ...basePinnedIds,
-      ...(anchorId ? [anchorId] : []),
-    ]));
-    const nextIndices = (
-      await graphRef.current.getPointIndicesByIds(mergedIds)
-    )?.filter((value): value is number => typeof value === 'number') ?? [];
-
-    graphRef.current.setPinnedPoints(nextIndices);
-  }, []);
-
   const focusNodeById = useCallback(async (
     id: string,
     options?: {
-      fitNeighborhood?: boolean;
       pushRoute?: boolean;
+      zoomScale?: number;
     },
   ) => {
     if (!graphModel || !graphRef.current) return;
@@ -1177,34 +1162,27 @@ export default function CosmographPage() {
     if (pointIndex === undefined) return;
 
     const graph = graphRef.current;
-    const connected = graph.getConnectedPointIndices(pointIndex) ?? [];
-    const useSolarFocus = options?.fitNeighborhood !== false;
-    const frame = useSolarFocus ? [pointIndex, ...connected.slice(0, 24)] : [pointIndex];
-    const solarIds = frame
-      .map((index) => graphModel.flatNodes[index]?.id)
-      .filter(Boolean) as string[];
+    const solarIds = Array.from(new Set([
+      id,
+      ...(graphModel.relationshipsByNodeId.get(id) ?? EMPTY_RELATED_NODES)
+        .slice(0, 18)
+        .map((relationship) => relationship.id),
+    ]));
 
-    graph.selectPoints(frame, false);
+    graph.selectPoints([pointIndex], false);
     graph.setFocusedPoint(pointIndex);
-    await syncPinnedPoints(pinnedNodeIds, id);
-
-    if (frame.length > 1 && useSolarFocus) {
-      graph.fitViewByIndices(frame, 700, 88);
-    } else {
-      graph.zoomToPoint(pointIndex, 650, 2.5, true);
-    }
+    graph.zoomToPoint(pointIndex, 520, options?.zoomScale ?? 1.85, true);
 
     startTransition(() => {
       setSelectedNodeId(id);
       setHoveredNodeId(null);
-      setSolarAnchorId(id);
       setSolarFocusNodeIds(solarIds);
     });
 
     if (options?.pushRoute !== false) {
       navigate(`/visualizer/${id}`, { replace: true });
     }
-  }, [getPointIndexById, graphModel, navigate, pinnedNodeIds, syncPinnedPoints]);
+  }, [getPointIndexById, graphModel, navigate]);
 
   useEffect(() => {
     if (!graphReady || !nodeId) {
@@ -1215,12 +1193,12 @@ export default function CosmographPage() {
       return;
     }
 
-    void focusNodeById(nodeId, { fitNeighborhood: true, pushRoute: false });
+    void focusNodeById(nodeId, { pushRoute: false });
   }, [focusNodeById, graphReady, nodeId, selectedNodeId]);
 
   async function focusNeighborhood() {
     if (!selectedNodeId) return;
-    await focusNodeById(selectedNodeId, { fitNeighborhood: true, pushRoute: false });
+    await focusNodeById(selectedNodeId, { pushRoute: false, zoomScale: 1.7 });
   }
 
   async function togglePinnedSelection() {
@@ -1237,8 +1215,12 @@ export default function CosmographPage() {
       ? pinnedNodeIds.filter((id) => !selectedIds.includes(id))
       : Array.from(new Set([...pinnedNodeIds, ...selectedIds]));
 
+    const nextIndices = (
+      await graphRef.current.getPointIndicesByIds(nextPinnedIds)
+    )?.filter((value): value is number => typeof value === 'number') ?? [];
+
+    graphRef.current.setPinnedPoints(nextIndices);
     setPinnedNodeIds(nextPinnedIds);
-    await syncPinnedPoints(nextPinnedIds, solarAnchorId);
   }
 
   function clearSelection() {
@@ -1253,15 +1235,13 @@ export default function CosmographPage() {
     setSelectedPointIndices([]);
     setSelectedLinkCount(0);
     setSelectedNodeId(null);
-    setSolarAnchorId(null);
     setSolarFocusNodeIds([]);
     setHoveredNodeId(null);
-    void syncPinnedPoints(pinnedNodeIds, null);
     navigate('/visualizer', { replace: true });
   }
 
   function fitView() {
-    graphRef.current?.fitView(550, 72);
+    graphRef.current?.fitView(550, 0.14);
   }
 
   function toggleSimulation() {
@@ -1461,8 +1441,8 @@ export default function CosmographPage() {
           }
 
           const pointId = typeof index === 'number' ? graphModel.flatNodes[index]?.id : undefined;
-          const isSolarAnchor = pointId === solarAnchorId;
-          const isSolarNeighbor = Boolean(pointId && solarFocusSet.has(pointId) && pointId !== solarAnchorId);
+          const isSolarAnchor = pointId === selectedNodeId;
+          const isSolarNeighbor = Boolean(pointId && solarFocusSet.has(pointId) && pointId !== selectedNodeId);
           let baseSize = 1.2;
 
           if (sizeMode === 'importance') {
@@ -1640,10 +1620,10 @@ export default function CosmographPage() {
             onPointClick={(index) => {
               const clickedNode = graphModel.flatNodes[index];
               if (!clickedNode) return;
-              void focusNodeById(clickedNode.id, { fitNeighborhood: true });
+              void focusNodeById(clickedNode.id);
             }}
             onLabelClick={(_index, id) => {
-              void focusNodeById(id, { fitNeighborhood: true });
+              void focusNodeById(id);
             }}
             onBackgroundClick={() => {
               clearSelection();
@@ -1660,7 +1640,7 @@ export default function CosmographPage() {
               if (pointIndices?.length === 1) {
                 const onlyNode = graphModel.flatNodes[pointIndices[0]];
                 if (onlyNode) {
-                  void focusNodeById(onlyNode.id, { fitNeighborhood: true });
+                  void focusNodeById(onlyNode.id);
                 }
               }
             }}
@@ -1696,11 +1676,11 @@ export default function CosmographPage() {
 
           <div
             className={[
-              'absolute left-4 top-4 z-30 w-[min(23rem,calc(100%-2rem))] overflow-hidden rounded-[28px] border border-white/10 bg-slate-950/72 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl transition-transform duration-300',
+              'absolute left-4 top-4 z-30 w-[min(20rem,calc(100%-2rem))] overflow-hidden rounded-[24px] border border-white/10 bg-slate-950/72 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl transition-transform duration-300',
               mobilePanelOpen ? 'translate-x-0' : '-translate-x-[calc(100%+1rem)] md:translate-x-0',
             ].join(' ')}
           >
-            <div className="max-h-[calc(100vh-7.5rem)] overflow-y-auto px-4 pb-5 pt-4">
+            <div className="max-h-[calc(100vh-7.5rem)] overflow-y-auto px-3.5 pb-4 pt-3.5">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-200/80">
@@ -1752,7 +1732,7 @@ export default function CosmographPage() {
                       className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-slate-100 transition-colors hover:border-cyan-300/30 hover:bg-cyan-300/[0.08]"
                     >
                       <Route className="h-3.5 w-3.5" />
-                      Fit
+                      Zoom
                     </button>
                   </div>
 
@@ -1780,7 +1760,7 @@ export default function CosmographPage() {
                   }}
                   onSelect={(node) => {
                     setSearchQuery(node.label);
-                    void focusNodeById(node.id, { fitNeighborhood: true });
+                    void focusNodeById(node.id);
                   }}
                   onClear={() => {
                     setSearchQuery('');
@@ -2142,9 +2122,9 @@ export default function CosmographPage() {
             </div>
           </div>
 
-          <div className="absolute bottom-4 right-4 z-30 hidden w-[18rem] max-w-[calc(100vw-2rem)] flex-col gap-2 lg:flex xl:w-[19rem]">
-            <div className="rounded-[22px] border border-white/10 bg-slate-950/72 p-4 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl">
-              <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+          <div className="absolute bottom-4 right-4 z-30 hidden w-[13.5rem] max-w-[calc(100vw-2rem)] flex-col gap-2 lg:flex xl:w-[14rem]">
+            <div className="rounded-[18px] border border-white/10 bg-slate-950/72 p-3 shadow-[0_24px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl">
+              <div className="mb-2 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">
                 <Palette className="h-3.5 w-3.5" />
                 Legend
               </div>
@@ -2154,7 +2134,7 @@ export default function CosmographPage() {
                 <DiscreteLegend
                   label={colorLegendTitle}
                   items={categoricalLegendItems}
-                  maxVisibleItems={5}
+                  maxVisibleItems={3}
                 />
               )}
               <CompactSizeLegend label={sizeLegendTitle} />
@@ -2166,7 +2146,7 @@ export default function CosmographPage() {
             onClose={clearSelection}
             relationships={selectedRelationships}
             onNavigateToNode={(nextNodeId) => {
-              void focusNodeById(nextNodeId, { fitNeighborhood: true });
+              void focusNodeById(nextNodeId);
             }}
           />
         </CosmographProvider>
@@ -2351,38 +2331,35 @@ function DiscreteLegend({
 
   return (
     <div>
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-2">
         <div>
-          <p className="text-[13px] font-semibold text-white">
+          <p className="text-[12px] font-semibold text-white">
             {label}
           </p>
-          <p className="mt-1 text-[10px] leading-4 text-slate-400">
-            Top visible groups by node count.
-          </p>
         </div>
-        <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium text-slate-200">
+        <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[9px] font-medium text-slate-200">
           {items.length.toLocaleString()} groups
         </span>
       </div>
 
-      <div className="mt-3 space-y-2">
+      <div className="mt-2 space-y-1.5">
         {visibleItems.map((item) => {
           const width = Math.max((item.count / maxCount) * 100, 8);
 
           return (
             <div
               key={item.label}
-              className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5 rounded-[16px] border border-white/8 bg-white/[0.03] px-2.5 py-2.5"
+              className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-[14px] border border-white/8 bg-white/[0.03] px-2 py-1.5"
             >
               <span
-                className="h-2.5 w-2.5 rounded-full border border-white/10"
+                className="h-2 w-2 rounded-full border border-white/10"
                 style={{ backgroundColor: item.color }}
               />
               <div className="min-w-0">
-                <p className="truncate text-[13px] text-slate-100" title={item.label}>
+                <p className="truncate text-[11px] text-slate-100" title={item.label}>
                   {item.label}
                 </p>
-                <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-white/6">
+                <div className="mt-1 h-1 overflow-hidden rounded-full bg-white/6">
                   <div
                     className="h-full rounded-full"
                     style={{
@@ -2392,7 +2369,7 @@ function DiscreteLegend({
                   />
                 </div>
               </div>
-              <span className="text-[11px] font-medium text-slate-400">
+              <span className="text-[10px] font-medium text-slate-400">
                 {item.count.toLocaleString()}
               </span>
             </div>
@@ -2401,8 +2378,8 @@ function DiscreteLegend({
       </div>
 
       {hiddenCount > 0 && (
-        <p className="mt-2.5 text-[11px] leading-4 text-slate-400">
-          {hiddenCount.toLocaleString()} more groups hidden to keep the legend readable.
+        <p className="mt-2 text-[10px] leading-4 text-slate-400">
+          +{hiddenCount.toLocaleString()} more
         </p>
       )}
     </div>
@@ -2412,16 +2389,12 @@ function DiscreteLegend({
 function CompactRangeLegend({ label }: { label: string }) {
   return (
     <div>
-      <p className="text-[13px] font-semibold text-white">
+      <p className="text-[12px] font-semibold text-white">
         {label}
       </p>
-      <p className="mt-1 text-[10px] leading-4 text-slate-400">
-        Cooler nodes are quieter; warmer nodes are more central.
-      </p>
-
-      <div className="mt-3 rounded-full border border-white/8 bg-white/[0.03] p-2">
-        <div className="h-2 rounded-full bg-[linear-gradient(90deg,#7dd3fc_0%,#5eead4_28%,#fde68a_58%,#fb7185_100%)]" />
-        <div className="mt-2 flex items-center justify-between text-[10px] uppercase tracking-[0.12em] text-slate-400">
+      <div className="mt-2 rounded-full border border-white/8 bg-white/[0.03] p-1.5">
+        <div className="h-1.5 rounded-full bg-[linear-gradient(90deg,#7dd3fc_0%,#5eead4_28%,#fde68a_58%,#fb7185_100%)]" />
+        <div className="mt-1.5 flex items-center justify-between text-[9px] uppercase tracking-[0.12em] text-slate-400">
           <span>Quiet</span>
           <span>Central</span>
         </div>
@@ -2432,28 +2405,24 @@ function CompactRangeLegend({ label }: { label: string }) {
 
 function CompactSizeLegend({ label }: { label: string }) {
   const steps = [
-    { size: 7, label: 'Low' },
-    { size: 11, label: 'Mid' },
-    { size: 15, label: 'High' },
+    { size: 5, label: 'Low' },
+    { size: 8, label: 'Mid' },
+    { size: 11, label: 'High' },
   ];
 
   return (
-    <div className="mt-4 border-t border-white/8 pt-3">
-      <p className="text-[13px] font-semibold text-white">
+    <div className="mt-3 border-t border-white/8 pt-2.5">
+      <p className="text-[12px] font-semibold text-white">
         {label}
       </p>
-      <p className="mt-1 text-[10px] leading-4 text-slate-400">
-        Relative marker scale used in the current view.
-      </p>
-
-      <div className="mt-3 flex items-end justify-between gap-3 rounded-[16px] border border-white/8 bg-white/[0.03] px-3 py-3">
+      <div className="mt-2 flex items-end justify-between gap-2 rounded-[14px] border border-white/8 bg-white/[0.03] px-2.5 py-2">
         {steps.map((step) => (
-          <div key={step.label} className="flex flex-1 flex-col items-center gap-2">
+          <div key={step.label} className="flex flex-1 flex-col items-center gap-1.5">
             <span
               className="rounded-full border border-white/12 bg-cyan-300/30 shadow-[0_0_20px_rgba(34,211,238,0.12)]"
               style={{ width: step.size, height: step.size }}
             />
-            <span className="text-[10px] uppercase tracking-[0.12em] text-slate-400">
+            <span className="text-[9px] uppercase tracking-[0.12em] text-slate-400">
               {step.label}
             </span>
           </div>
