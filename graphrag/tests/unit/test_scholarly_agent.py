@@ -1,11 +1,17 @@
 """Integration tests for the long-context ScholarlyAgent."""
 
-from unittest.mock import AsyncMock
+import json
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
+from eleutheria_graphrag.agents.state import (
+    ClaimLedgerItem,
+    ClaimStatus,
+    ScholarlyAnswer,
+)
 
 
 def _llm_side_effect():
@@ -122,3 +128,38 @@ class TestScholarlyAgent:
         text = "".join(chunks)
         assert "fate" in text.lower()
         assert '"type": "complete"' in text
+
+
+def _make_simple_deps():
+    deps = MagicMock()
+    deps.llm.last_model_used = "gemini-2.5-flash"
+    deps.llm.last_provider_used = "google"
+    return deps
+
+
+@pytest.mark.asyncio
+async def test_query_stream_includes_claim_ledger_size():
+    """query_stream complete payload must include claim_ledger_size."""
+    deps = _make_simple_deps()
+    agent = ScholarlyAgent(deps)
+
+    answer = ScholarlyAnswer(
+        answer="Stoic fate [P1].",
+        question="What is fate?",
+        claim_ledger=[
+            ClaimLedgerItem(
+                claim="Stoic fate is determinism.",
+                evidence_ids=["P1"],
+                support_type="passage",
+                confidence=0.9,
+                status=ClaimStatus.SUPPORTED,
+            )
+        ],
+    )
+    with patch.object(agent, "query", new=AsyncMock(return_value=answer)):
+        chunks = [chunk async for chunk in agent.query_stream("What is fate?")]
+
+    complete_chunk = next(c for c in chunks if c.startswith("{"))
+    data = json.loads(complete_chunk)
+    assert data["type"] == "complete"
+    assert data["data"]["metadata"]["claim_ledger_size"] == 1
