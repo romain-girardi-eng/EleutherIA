@@ -96,7 +96,7 @@ export async function fetchPassageTexts(
   const results = new Map<string, TextualGrounding>();
 
   try {
-    const supabaseUrl = env.SUPABASE_URL;
+    const supabaseUrl = env.SUPABASE_URL.replace(/\/+$/, '').replace(/\/rest\/v1$/i, '');
     const supabaseKey = env.SUPABASE_KEY;
 
     // Batch fetch passages
@@ -280,7 +280,7 @@ async function fetchSinglePassageText(passageId: string, env: Env): Promise<stri
   if (!passageId) return null;
 
   try {
-    const supabaseUrl = env.SUPABASE_URL;
+    const supabaseUrl = env.SUPABASE_URL.replace(/\/+$/, '').replace(/\/rest\/v1$/i, '');
     const supabaseKey = env.SUPABASE_KEY;
 
     const url = `${supabaseUrl}/rest/v1/passages?passage_id=eq.${passageId}&select=text_content`;
@@ -313,7 +313,7 @@ async function searchPassagesViaSupabase(
   const results: TextualGrounding[] = [];
 
   try {
-    const supabaseUrl = env.SUPABASE_URL;
+    const supabaseUrl = env.SUPABASE_URL.replace(/\/+$/, '').replace(/\/rest\/v1$/i, '');
     const supabaseKey = env.SUPABASE_KEY;
 
     const url = `${supabaseUrl}/rest/v1/rpc/search_passages_by_embedding`;
@@ -324,6 +324,8 @@ async function searchPassagesViaSupabase(
         'apikey': supabaseKey,
         'Authorization': `Bearer ${supabaseKey}`,
         'Content-Type': 'application/json',
+        'Accept-Profile': 'public',
+        'Content-Profile': 'public',
       },
       body: JSON.stringify({
         query_embedding: embedding,

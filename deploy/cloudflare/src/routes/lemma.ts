@@ -42,7 +42,7 @@ async function supabaseQuery(
     order?: string;
   }
 ): Promise<any[]> {
-  const baseUrl = `${env.SUPABASE_URL}/rest/v1`;
+  const baseUrl = `${env.SUPABASE_URL.replace(/\/+$/, '').replace(/\/rest\/v1$/i, '')}/rest/v1`;
   const urlParams = new URLSearchParams();
 
   if (params.select) {
@@ -86,14 +86,18 @@ async function supabaseQuery(
 async function supabaseRpc(
   env: Env,
   functionName: string,
-  params: Record<string, any>
+  params: Record<string, any>,
+  schema: string = 'public',
 ): Promise<any[]> {
-  const url = `${env.SUPABASE_URL}/rest/v1/rpc/${functionName}`;
+  const baseUrl = env.SUPABASE_URL.replace(/\/+$/, '').replace(/\/rest\/v1$/i, '');
+  const url = `${baseUrl}/rest/v1/rpc/${functionName}`;
 
   const headers: Record<string, string> = {
     'apikey': env.SUPABASE_KEY,
     'Authorization': `Bearer ${env.SUPABASE_KEY}`,
     'Content-Type': 'application/json',
+    'Accept-Profile': schema,
+    'Content-Profile': schema,
   };
 
   const response = await fetch(url, {

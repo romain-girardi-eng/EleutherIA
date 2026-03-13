@@ -170,19 +170,12 @@ textRoutes.get('/passage/:passageId/context', async (c) => {
     const workTitle = workMeta?.title || target.title || 'Unknown Work';
     const language = workMeta?.language || target.language || 'grc';
 
-    // 3. Fetch all passages for the work and find surrounding ones by sequence_number
-    const allPassages = await db.getPassages(workId, { limit: 1000 });
-    const allRows = allPassages.rows || [];
-
-    const sorted = allRows
-      .filter((p: any) => p.sequence_number != null)
-      .sort((a: any, b: any) => (a.sequence_number || 0) - (b.sequence_number || 0));
-
-    const minSeq = Math.max(0, seqNum - window);
-    const maxSeq = seqNum + window;
-    const contextRows = sorted.filter((p: any) =>
-      p.sequence_number >= minSeq && p.sequence_number <= maxSeq
-    );
+    // 3. Fetch only the local sequence window instead of loading the whole work
+    const [contextPassages, totalPassagesInWork] = await Promise.all([
+      db.getPassagesWindow(workId, seqNum, window),
+      db.countPassagesForWork(workId).catch(() => 0),
+    ]);
+    const contextRows = contextPassages.rows || [];
 
     // 4. Build response
     const formatRef = (p: any) => {
@@ -215,7 +208,7 @@ textRoutes.get('/passage/:passageId/context', async (c) => {
       target: targetPassage,
       passages,
       workId,
-      totalPassagesInWork: sorted.length,
+      totalPassagesInWork,
     });
   } catch (error) {
     logger.error('Error fetching passage context', error);
@@ -223,45 +216,22 @@ textRoutes.get('/passage/:passageId/context', async (c) => {
   }
 });
 
-/**
- * Resolve a KG node ID to the best linked passage UUID via passage_citations.
- * Tries free_will schema first, then public schema fallback.
- */
 async function resolveKgNodeToPassage(kgNodeId: string, env: Env): Promise<string | null> {
-  const supabaseUrl = env.SUPABASE_URL.replace(/\/+$/, '').replace(/\/rest\/v1$/i, '');
-  const supabaseKey = env.SUPABASE_KEY;
-  const encodedId = encodeURIComponent(kgNodeId);
+  const db = new DatabaseService(env);
 
-  // Strategy 1: Try passage_citations table (with free_will → public fallback)
-  const select = 'confidence,passage_id';
-  const url = `${supabaseUrl}/rest/v1/passage_citations?kg_node_id=eq.${encodedId}&select=${select}&order=confidence.desc.nullslast&limit=1`;
-
-  for (const headers of [
-    { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Accept-Profile': 'free_will' },
-    { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` },
-  ]) {
-    try {
-      const response = await fetch(url, { headers });
-      if (response.ok) {
-        const rows = await response.json() as any[];
-        if (Array.isArray(rows) && rows.length > 0 && rows[0].passage_id) {
-          return rows[0].passage_id;
-        }
-        logger.info(`passage_citations query OK but no rows for ${kgNodeId}`);
-        break; // Table accessible but no data — no point trying next schema
-      }
-      const errText = await response.text().catch(() => '');
-      logger.warn(`passage_citations query (${response.status}): ${errText.slice(0, 200)}`);
-    } catch (e) {
-      logger.warn(`passage_citations fetch error: ${e}`);
+  try {
+    const passageId = await db.getBestPassageForKgNode(kgNodeId);
+    if (passageId) {
+      return passageId;
     }
+  } catch (error) {
+    logger.warn(`get_best_passage_for_kg_node failed for ${kgNodeId}: ${error}`);
   }
 
-  // Strategy 2: Parse KG node ID to find work + chapter/section
+  // Fallback: parse KG node ID to find work + chapter/section
   // Pattern: passage_{author}_{work_abbrev}_{chapter}_{section}
   // e.g. "passage_tatian_orat_8_9" → author=tatian, work≈orat, chapter=8 or 9
   try {
-    const db = new DatabaseService(env);
     const stripped = kgNodeId.replace(/^passage_/, '');
     // Extract trailing numbers (chapter/section candidates)
     const parts = stripped.split('_');
