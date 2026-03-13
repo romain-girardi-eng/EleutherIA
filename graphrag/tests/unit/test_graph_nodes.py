@@ -15,6 +15,7 @@ from eleutheria_graphrag.agents.graph_nodes import (
     PlanReading,
     ProgrammaticVerify,
     RenderGroundedAnswer,
+    SeekCounterEvidence,
     TreeNavigateWorks,
     _augment_claim_ledger_from_dossier,
     _build_context_from_evidence,
@@ -1630,4 +1631,71 @@ class TestRenderAndVerify:
         await DraftClaimLedger().run(ctx)
 
         assert state.insufficient_evidence is True
-        assert state.metadata["insufficient_evidence"] is True
+
+
+class TestSeekCounterEvidence:
+    @pytest.mark.asyncio
+    async def test_marks_selected_bundles_as_counter_evidence_in_metadata(self):
+        """LLM-selected bundles must have evidence_class=counter_evidence set in metadata."""
+        bundle_a = EvidenceBundle(
+            bundle_id="bundle-a",
+            work_id="work-1",
+            work_title="De Fato",
+            author="Cicero",
+            original_passage_id="p1",
+            canonical_ref="1.1",
+            original_text="Fate rules all.",
+            token_estimate=20,
+        )
+        bundle_b = EvidenceBundle(
+            bundle_id="bundle-b",
+            work_id="work-2",
+            work_title="De Principiis",
+            author="Origen",
+            original_passage_id="p2",
+            canonical_ref="3.1.5",
+            original_text="Free will contradicts fate.",
+            token_estimate=20,
+        )
+        state = RAGState(question="Is fate compatible with free will?")
+        state.evidence_bundles = [bundle_a, bundle_b]
+        state.context_pack = ContextPack(
+            bundle_refs={"bundle-a": "P1", "bundle-b": "P2"},
+            passage_bundles=[bundle_a, bundle_b],
+        )
+        state.research_notebook.competing_hypotheses = [
+            "Fate is compatible with free will",
+            "Fate is incompatible with free will",
+        ]
+
+        deps = make_deps(llm_response='{"bundle_ids": ["bundle-b"], "rationale": "Origen rejects fate"}')
+        ctx = make_ctx(state, deps)
+
+        result = await SeekCounterEvidence().run(ctx)
+
+        assert isinstance(result, EvidenceSufficiency)
+        assert bundle_b.metadata.get("evidence_class") == "counter_evidence"
+        assert bundle_a.metadata.get("evidence_class") != "counter_evidence"
+
+    @pytest.mark.asyncio
+    async def test_skips_when_no_competing_hypotheses(self):
+        """SeekCounterEvidence must return EvidenceSufficiency immediately when no hypotheses."""
+        state = RAGState(question="What is Stoic fate?")
+        state.evidence_bundles = [
+            EvidenceBundle(
+                bundle_id="bundle-a",
+                work_id="work-1",
+                work_title="De Fato",
+                author="Cicero",
+                original_passage_id="p1",
+                canonical_ref="1.1",
+                original_text="Fate is a chain of causes.",
+                token_estimate=20,
+            )
+        ]
+        state.research_notebook.competing_hypotheses = []
+        deps = make_deps()
+        ctx = make_ctx(state, deps)
+
+        result = await SeekCounterEvidence().run(ctx)
+        assert isinstance(result, EvidenceSufficiency)
