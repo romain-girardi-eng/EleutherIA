@@ -11,6 +11,7 @@ export class DatabaseService {
   private supabaseUrl: string;
   private supabaseKey: string;
   private baseUrl: string;
+  private readonly rpcSchema = 'public';
 
   constructor(env: Env) {
     // Accept either:
@@ -22,6 +23,83 @@ export class DatabaseService {
       .replace(/\/rest\/v1$/i, '');
     this.supabaseKey = env.SUPABASE_KEY;
     this.baseUrl = `${this.supabaseUrl}/rest/v1`;
+  }
+
+  private buildHeaders(schema?: string, prefer?: string): Record<string, string> {
+    const headers: Record<string, string> = {
+      'apikey': this.supabaseKey,
+      'Authorization': `Bearer ${this.supabaseKey}`,
+      'Content-Type': 'application/json',
+    };
+
+    if (schema) {
+      headers['Accept-Profile'] = schema;
+      headers['Content-Profile'] = schema;
+    }
+    if (prefer) {
+      headers['Prefer'] = prefer;
+    }
+    return headers;
+  }
+
+  private isStatementTimeout(error: unknown): boolean {
+    const message = error instanceof Error ? error.message : String(error);
+    return message.includes('57014') || message.toLowerCase().includes('statement timeout');
+  }
+
+  private encodeFilterValue(value: any): string {
+    if (typeof value === 'string' && /^(eq|neq|gt|gte|lt|lte|like|ilike|match|imatch|is|in|cs|cd|ov|sl|sr|nxr|nxl|adj|not)\./.test(value)) {
+      return value;
+    }
+    return `eq.${value}`;
+  }
+
+  private flattenPassageResult(row: any) {
+    const work = row?.ancient_works || row?.ancient_work || {};
+    return {
+      ...row,
+      title: row?.title || work?.title,
+      work_title: row?.work_title || work?.title,
+      author: row?.author || work?.author,
+      language: row?.language || work?.language,
+      period: row?.period || work?.period,
+    };
+  }
+
+  private normalizeSearchResults(rows: any[]): any[] {
+    return rows.map((row: any) => ({
+      ...row,
+      work_title: row?.work_title || row?.title,
+    }));
+  }
+
+  private async countRows(
+    table: string,
+    filters?: Record<string, any>,
+    schema: string = 'free_will',
+  ): Promise<number> {
+    const url = new URL(`${this.baseUrl}/${table}`);
+    url.searchParams.set('select', 'work_id');
+    url.searchParams.set('limit', '1');
+    Object.entries(filters || {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        url.searchParams.set(key, this.encodeFilterValue(value));
+      }
+    });
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: this.buildHeaders(schema, 'count=exact'),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => '');
+      throw new Error(`Count query failed: ${response.status} ${response.statusText}${errorText ? ` - ${errorText}` : ''}`);
+    }
+
+    const contentRange = response.headers.get('content-range') || '';
+    const total = contentRange.split('/')[1];
+    return total ? parseInt(total, 10) || 0 : 0;
   }
 
   /**
@@ -51,7 +129,7 @@ export class DatabaseService {
       if (params?.filters) {
         Object.entries(params.filters).forEach(([key, value]) => {
           if (value !== undefined && value !== null) {
-            urlParams.append(key, `eq.${value}`);
+            urlParams.append(key, this.encodeFilterValue(value));
           }
         });
       }
@@ -71,15 +149,8 @@ export class DatabaseService {
       url += `?${urlParams.toString()}`;
 
       const headers: Record<string, string> = {
-        'apikey': this.supabaseKey,
-        'Authorization': `Bearer ${this.supabaseKey}`,
-        'Content-Type': 'application/json',
+        ...this.buildHeaders(params?.schema),
       };
-
-      // Add schema header for non-public schemas
-      if (params?.schema) {
-        headers['Accept-Profile'] = params.schema;
-      }
 
       const response = await fetch(url, { headers });
 
@@ -122,17 +193,11 @@ export class DatabaseService {
   async rpc<T = any>(functionName: string, params?: Record<string, any>, schema?: string): Promise<T> {
     try {
       const url = `${this.baseUrl}/rpc/${functionName}`;
+      const rpcSchema = schema ?? this.rpcSchema;
 
       const headers: Record<string, string> = {
-        'apikey': this.supabaseKey,
-        'Authorization': `Bearer ${this.supabaseKey}`,
-        'Content-Type': 'application/json',
+        ...this.buildHeaders(rpcSchema),
       };
-
-      // Add Content-Profile header for non-public schemas
-      if (schema) {
-        headers['Content-Profile'] = schema;
-      }
 
       const response = await fetch(url, {
         method: 'POST',
@@ -317,7 +382,7 @@ export class DatabaseService {
     return result;
   }
 
-  // Text Queries (using RPC functions to access free_will schema)
+  // Text queries go through public RPC wrappers over free_will tables.
   async listTexts(filters?: {
     category?: string;
     author?: string;
@@ -326,18 +391,39 @@ export class DatabaseService {
     offset?: number;
     limit?: number;
   }) {
-    const rows = await this.rpc('list_ancient_works', {
-      p_author: filters?.author || null,
-      p_language: filters?.language || null,
-      p_sort_by: filters?.sort_by || 'author',
-      p_limit: filters?.limit || 50,
-      p_offset: filters?.offset || 0,
-    });
+    try {
+      const rows = await this.rpc('list_ancient_works', {
+        p_author: filters?.author || null,
+        p_language: filters?.language || null,
+        p_sort_by: filters?.sort_by || 'author',
+        p_limit: filters?.limit || 50,
+        p_offset: filters?.offset || 0,
+      });
 
-    return {
-      rows: Array.isArray(rows) ? rows : [],
-      rowCount: Array.isArray(rows) ? rows.length : 0,
-    };
+      return {
+        rows: Array.isArray(rows) ? rows : [],
+        rowCount: Array.isArray(rows) ? rows.length : 0,
+      };
+    } catch (error) {
+      if (!this.isStatementTimeout(error)) {
+        throw error;
+      }
+      logger.warn('list_ancient_works timed out, falling back to direct REST query');
+      const author = filters?.author ? `ilike.*${filters.author.replace(/\*/g, '')}*` : undefined;
+      const rows = await this.query<any>('ancient_works', {
+        select: 'work_id,kg_work_id,canonical_id,title,title_original,author,author_original,language,period,date_composed,school,source,cts_urn,total_divisions,total_words,total_chars,metadata',
+        filters: {
+          ...(author ? { author } : {}),
+          ...(filters?.language ? { language: filters.language } : {}),
+        },
+        order: `${filters?.sort_by || 'author'}.asc`,
+        limit: filters?.limit || 50,
+        offset: filters?.offset || 0,
+        schema: 'free_will',
+      });
+
+      return rows;
+    }
   }
 
   async countTexts(filters?: {
@@ -352,19 +438,54 @@ export class DatabaseService {
       return typeof count === 'number' ? count : 0;
     } catch (error) {
       logger.error('Error counting texts', error);
-      // Fallback to known total if RPC fails
+      if (this.isStatementTimeout(error)) {
+        try {
+          return await this.countRows('ancient_works', {
+            ...(filters?.author ? { author: `ilike.*${filters.author.replace(/\*/g, '')}*` } : {}),
+            ...(filters?.language ? { language: filters.language } : {}),
+          });
+        } catch (countError) {
+          logger.error('Fallback count on ancient_works failed', countError);
+        }
+      }
       return 487;
     }
   }
 
   async getText(id: string) {
-    const rows = await this.rpc('get_ancient_work', { p_work_id: id });
-    return Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
+    try {
+      const rows = await this.rpc('get_ancient_work', { p_work_id: id });
+      return Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
+    } catch (error) {
+      if (!this.isStatementTimeout(error)) {
+        throw error;
+      }
+      logger.warn(`get_ancient_work timed out for ${id}, falling back to REST`);
+      const rows = await this.query<any>('ancient_works', {
+        filters: { work_id: id },
+        limit: 1,
+        schema: 'free_will',
+      });
+      return rows.rows[0] || null;
+    }
   }
 
   async getTextByKgWorkId(kgWorkId: string) {
-    const rows = await this.rpc('get_ancient_work_by_kg_id', { p_kg_work_id: kgWorkId });
-    return Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
+    try {
+      const rows = await this.rpc('get_ancient_work_by_kg_id', { p_kg_work_id: kgWorkId });
+      return Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
+    } catch (error) {
+      if (!this.isStatementTimeout(error)) {
+        throw error;
+      }
+      logger.warn(`get_ancient_work_by_kg_id timed out for ${kgWorkId}, falling back to REST`);
+      const rows = await this.query<any>('ancient_works', {
+        filters: { kg_work_id: kgWorkId },
+        limit: 1,
+        schema: 'free_will',
+      });
+      return rows.rows[0] || null;
+    }
   }
 
   async getPassages(workId: string, filters?: {
@@ -374,13 +495,102 @@ export class DatabaseService {
     offset?: number;
     limit?: number;
   }) {
-    const rows = await this.rpc('list_passages', {
+    try {
+      const rows = await this.rpc('list_passages', {
+        p_work_id: workId,
+        p_book: filters?.book || null,
+        p_chapter: filters?.chapter || null,
+        p_section: filters?.section || null,
+        p_limit: filters?.limit || 100,
+        p_offset: filters?.offset || 0,
+      });
+
+      return {
+        rows: Array.isArray(rows) ? rows : [],
+        rowCount: Array.isArray(rows) ? rows.length : 0,
+      };
+    } catch (error) {
+      if (!this.isStatementTimeout(error)) {
+        throw error;
+      }
+      logger.warn(`list_passages timed out for work ${workId}, falling back to REST`);
+      return await this.query<any>('passages', {
+        select: 'passage_id,work_id,canonical_ref,cts_urn,book,chapter,section,subsection,line_start,line_end,sequence_number,text_content,char_length,word_count,previous_passage_id,next_passage_id,notes,citation_hierarchy,morphology',
+        filters: {
+          work_id: workId,
+          ...(filters?.book ? { book: filters.book } : {}),
+          ...(filters?.chapter ? { chapter: filters.chapter } : {}),
+          ...(filters?.section ? { section: filters.section } : {}),
+        },
+        order: 'sequence_number.asc',
+        limit: filters?.limit || 100,
+        offset: filters?.offset || 0,
+        schema: 'free_will',
+      });
+    }
+  }
+
+  async getPassage(passageId: string) {
+    try {
+      const rows = await this.rpc('get_passage', { p_passage_id: passageId });
+      return Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
+    } catch (error) {
+      if (!this.isStatementTimeout(error)) {
+        throw error;
+      }
+      logger.warn(`get_passage timed out for ${passageId}, falling back to REST`);
+      const rows = await this.query<any>('passages', {
+        filters: { passage_id: passageId },
+        limit: 1,
+        schema: 'free_will',
+      });
+      return rows.rows[0] || null;
+    }
+  }
+
+  async searchPassages(
+    query: string,
+    limit: number = 20,
+    filters?: {
+      author?: string;
+      period?: string;
+      language?: string;
+    },
+  ) {
+    return this.fulltextSearch(query, limit, filters);
+  }
+
+  async getPassageRefs(workId: string) {
+    const allRows: any[] = [];
+    let offset = 0;
+    const pageSize = 1000;
+
+    while (true) {
+      const rows = await this.rpc<any[]>('list_passage_refs', {
+        p_work_id: workId,
+        p_limit: pageSize,
+        p_offset: offset,
+      });
+      const page = Array.isArray(rows) ? rows : [];
+      allRows.push(...page);
+
+      if (page.length < pageSize) {
+        break;
+      }
+      offset += pageSize;
+    }
+
+    return {
+      rows: allRows,
+      rowCount: allRows.length,
+    };
+  }
+
+  async getPassagesWindow(workId: string, centerSequence: number, window: number = 5) {
+    const rows = await this.rpc<any[]>('list_passages_window', {
       p_work_id: workId,
-      p_book: filters?.book || null,
-      p_chapter: filters?.chapter || null,
-      p_section: filters?.section || null,
-      p_limit: filters?.limit || 100,
-      p_offset: filters?.offset || 0,
+      p_center_sequence: centerSequence,
+      p_window: window,
     });
 
     return {
@@ -389,32 +599,91 @@ export class DatabaseService {
     };
   }
 
-  async getPassage(passageId: string) {
-    const rows = await this.rpc('get_passage', { p_passage_id: passageId });
-    return Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
+  async countPassagesForWork(workId: string) {
+    const count = await this.rpc<number>('count_passages_for_work', {
+      p_work_id: workId,
+    });
+    return typeof count === 'number' ? count : 0;
   }
 
-  async searchPassages(query: string, limit: number = 20) {
-    const rows = await this.rpc('search_passages', {
-      p_search_query: query,
-      p_limit: limit,
+  async getBestPassageForKgNode(kgNodeId: string): Promise<string | null> {
+    const rows = await this.rpc<any[]>('get_best_passage_for_kg_node', {
+      p_kg_node_id: kgNodeId,
     });
-    return Array.isArray(rows) ? rows : [];
+    const row = Array.isArray(rows) ? rows[0] : rows;
+    return row?.passage_id || null;
+  }
+
+  async getWorkKGNodes(workId: string) {
+    const allRows: any[] = [];
+    let offset = 0;
+    const pageSize = 1000;
+
+    while (true) {
+      const rows = await this.rpc<any[]>('list_work_kg_nodes', {
+        p_work_id: workId,
+        p_limit: pageSize,
+        p_offset: offset,
+      });
+      const page = Array.isArray(rows) ? rows : [];
+      allRows.push(...page);
+
+      if (page.length < pageSize) {
+        break;
+      }
+      offset += pageSize;
+    }
+
+    return allRows.map((row: any) => ({
+      ...row,
+      passage_ids: Array.isArray(row?.passage_ids) ? row.passage_ids : [],
+      canonical_refs: Array.isArray(row?.canonical_refs) ? row.canonical_refs : [],
+    }));
   }
 
   // Search Queries
-  async fulltextSearch(query: string, limit: number = 10) {
+  async fulltextSearch(
+    query: string,
+    limit: number = 10,
+    filters?: {
+      author?: string;
+      period?: string;
+      language?: string;
+    },
+  ) {
+    const hasFilters = Boolean(filters?.author || filters?.period || filters?.language);
+    const rpcLimit = hasFilters ? Math.min(Math.max(limit * 3, limit), 100) : limit;
+    const applyFilters = (rows: any[]) => rows.filter((row: any) => {
+      if (filters?.author && !String(row?.author || '').toLowerCase().includes(filters.author.toLowerCase())) {
+        return false;
+      }
+      if (filters?.period && row?.period !== filters.period) {
+        return false;
+      }
+      if (filters?.language && row?.language !== filters.language) {
+        return false;
+      }
+      return true;
+    });
+    const finalize = (rows: any[]) => this.normalizeSearchResults(applyFilters(rows)).slice(0, limit);
+
     try {
       // Strategy 1: Try optimized RPC function with full-text search + ranking
       try {
-        const results = await this.rpc('search_passages', {
+        const results = await this.rpc(hasFilters ? 'search_passages_filtered' : 'search_passages', hasFilters ? {
+          p_query_text: query,
+          p_max_results: rpcLimit,
+          p_filter_author: filters?.author || null,
+          p_filter_period: filters?.period || null,
+          p_filter_language: filters?.language || null,
+        } : {
           query_text: query,
-          max_results: limit,
+          max_results: rpcLimit,
         });
 
         if (results && Array.isArray(results) && results.length > 0) {
           logger.info(`Fulltext search via RPC returned ${results.length} results`);
-          return results;
+          return finalize(results);
         }
       } catch (rpcError) {
         logger.warn('RPC search_passages failed, trying fallback', rpcError);
@@ -422,34 +691,44 @@ export class DatabaseService {
 
       // Strategy 2: Try simple RPC function (ILIKE-based, slower but works)
       try {
-        const results = await this.rpc('search_passages_simple', {
+        const results = await this.rpc(hasFilters ? 'search_passages_simple_filtered' : 'search_passages_simple', hasFilters ? {
+          p_query_text: query,
+          p_max_results: rpcLimit,
+          p_filter_author: filters?.author || null,
+          p_filter_period: filters?.period || null,
+          p_filter_language: filters?.language || null,
+        } : {
           query_text: query,
-          max_results: limit,
+          max_results: rpcLimit,
         });
 
         if (results && Array.isArray(results) && results.length > 0) {
           logger.info(`Fulltext search via simple RPC returned ${results.length} results`);
-          return results;
+          return finalize(results);
         }
       } catch (simpleError) {
         logger.warn('RPC search_passages_simple failed, trying direct query', simpleError);
       }
 
       // Strategy 3: Direct REST API query (works without RPC functions)
-      const url = `${this.baseUrl}/passages?select=passage_id,work_id,canonical_ref,text_content&text_content=ilike.*${encodeURIComponent(query)}*&limit=${limit}`;
+      const url = new URL(`${this.baseUrl}/passages`);
+      url.searchParams.set(
+        'select',
+        'passage_id,work_id,canonical_ref,text_content,book,chapter,section,cts_urn,sequence_number,ancient_works!inner(title,author,language,period)',
+      );
+      url.searchParams.set('or', `(text_content.ilike.*${query.replace(/\*/g, '')}*,canonical_ref.ilike.*${query.replace(/\*/g, '')}*)`);
+      url.searchParams.set('order', 'sequence_number.asc');
+      url.searchParams.set('limit', limit.toString());
 
-      const response = await fetch(url, {
-        headers: {
-          'apikey': this.supabaseKey,
-          'Authorization': `Bearer ${this.supabaseKey}`,
-        },
+      const response = await fetch(url.toString(), {
+        headers: this.buildHeaders('free_will'),
       });
 
       if (response.ok) {
-        const results = await response.json();
+        const results = (await response.json()).map((row: any) => this.flattenPassageResult(row));
         if (results && results.length > 0) {
           logger.info(`Fulltext search via REST API returned ${results.length} results`);
-          return results;
+          return finalize(results);
         }
       }
 

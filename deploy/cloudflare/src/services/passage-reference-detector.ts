@@ -292,7 +292,7 @@ export async function resolvePassageReferences(
   if (references.length === 0) return [];
 
   const resolved: ResolvedPassage[] = [];
-  const supabaseUrl = env.SUPABASE_URL;
+  const supabaseUrl = env.SUPABASE_URL.replace(/\/+$/, '').replace(/\/rest\/v1$/i, '');
   const supabaseKey = env.SUPABASE_KEY;
 
   for (const ref of references) {
@@ -308,6 +308,8 @@ export async function resolvePassageReferences(
           'apikey': supabaseKey,
           'Authorization': `Bearer ${supabaseKey}`,
           'Content-Type': 'application/json',
+          'Accept-Profile': 'public',
+          'Content-Profile': 'public',
         },
         body: JSON.stringify({
           p_author_pattern: `%${ref.author}%`,

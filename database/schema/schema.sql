@@ -12,7 +12,10 @@
 -- ============================================
 
 CREATE SCHEMA IF NOT EXISTS free_will;
+CREATE SCHEMA IF NOT EXISTS extensions;
 SET search_path = free_will;
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA extensions;
 
 -- ============================================
 -- Core Tables: Ancient Works System
@@ -81,7 +84,10 @@ CREATE TABLE IF NOT EXISTS passages (
     notes TEXT,
     created_at TIMESTAMPTZ DEFAULT now(),
     citation_hierarchy JSONB,  -- Structured citation path
-    morphology JSONB  -- Lemmatization data if available
+    morphology JSONB,  -- Lemmatization data if available
+    search_vector TSVECTOR GENERATED ALWAYS AS (
+        to_tsvector('english', COALESCE(text_content, ''))
+    ) STORED
 );
 
 -- Indexes for passages
@@ -91,7 +97,9 @@ CREATE INDEX IF NOT EXISTS idx_passages_cts_urn ON passages(cts_urn);
 CREATE INDEX IF NOT EXISTS idx_passages_sequence ON passages(work_id, sequence_number);
 CREATE INDEX IF NOT EXISTS idx_passages_book ON passages(book);
 CREATE INDEX IF NOT EXISTS idx_passages_chapter ON passages(chapter);
-CREATE INDEX IF NOT EXISTS idx_passages_fulltext ON passages USING GIN (to_tsvector('simple', text_content));
+CREATE INDEX IF NOT EXISTS idx_passages_search_vector_gin ON passages USING GIN (search_vector);
+CREATE INDEX IF NOT EXISTS idx_passages_text_content_trgm ON passages USING GIN (text_content extensions.gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_passages_canonical_ref_trgm ON passages USING GIN (canonical_ref extensions.gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS idx_passages_citation_hierarchy ON passages USING GIN (citation_hierarchy);
 
 -- Passage Citations: Links passages to knowledge graph nodes
@@ -129,7 +137,7 @@ CREATE INDEX IF NOT EXISTS idx_passage_relationships_type ON passage_relationshi
 -- Views for Search Optimization
 -- ============================================
 
--- passage_search: Lightweight view for search (no storage overhead)
+-- passage_search: Lightweight view for search metadata around the stored vector
 CREATE OR REPLACE VIEW passage_search AS
 SELECT
     p.passage_id,
@@ -146,7 +154,7 @@ SELECT
     w.period,
     w.school,
     w.canonical_id AS work_canonical_id,
-    to_tsvector('simple', p.text_content) AS search_vector
+    p.search_vector
 FROM passages p
 JOIN ancient_works w ON p.work_id = w.work_id;
 
