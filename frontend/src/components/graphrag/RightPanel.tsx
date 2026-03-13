@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -83,6 +83,14 @@ function PanelHeader({
       <h2 className="mt-1.5 text-sm font-semibold leading-snug text-stone-900 line-clamp-1">
         {response?.query || t('graphRagUi.rightPanel.fallbackQuery')}
       </h2>
+      <div className="mt-1.5 flex flex-wrap items-center gap-2">
+        <span className="inline-flex items-center rounded-full border border-blue-200/80 bg-blue-50/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-blue-800">
+          {t('graphRagUi.rightPanel.previewBadge')}
+        </span>
+        <span className="text-[11px] leading-5 text-stone-500">
+          {t('graphRagUi.rightPanel.previewCopy')}
+        </span>
+      </div>
       {/* Compact inline stats */}
       <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
         {[
@@ -368,6 +376,31 @@ export default function RightPanel({
     if (!selectedSource || !citationTexts) return undefined;
     return citationTexts[selectedSource.nodeLabel] ?? undefined;
   }, [selectedSource, citationTexts]);
+
+  useEffect(() => {
+    if (activeSourceIndex === null) return;
+    const source = sources[activeSourceIndex];
+    if (source) {
+      setSelectedNodeId(source.nodeId);
+    }
+  }, [activeSourceIndex, sources]);
+
+  useEffect(() => {
+    if (!_onHighlightRef) return;
+
+    const highlightSource = (citationIndex: number) => {
+      const source = sources[citationIndex];
+      if (source) {
+        setSelectedNodeId(source.nodeId);
+      }
+    };
+
+    _onHighlightRef(highlightSource);
+
+    return () => {
+      _onHighlightRef(() => {});
+    };
+  }, [_onHighlightRef, sources]);
 
 
   // Handle node click from the DAG

@@ -296,6 +296,8 @@ export const extraResources = {
         },
         noSources:
           'This answer does not expose source nodes yet. The graph still preserves the traversal structure.',
+        previewBadge: 'Preview',
+        previewCopy: 'This right-panel workspace is still in active development.',
         sourceFallback:
           'Part of the selected knowledge graph used as evidence for the answer.',
         cards: {
@@ -924,6 +926,8 @@ export const extraResources = {
         },
         noSources:
           'Cette réponse n’expose pas encore de nœuds sources. Le graphe conserve néanmoins la structure du parcours.',
+        previewBadge: 'Aperçu',
+        previewCopy: 'Ce panneau de droite est encore en cours de développement.',
         evidenceRail: 'Rail de preuves',
         evidenceSubtitle: 'Sources qui fondent cette réponse',
         citationsCount: '{{count}} citations',
@@ -1556,6 +1560,8 @@ export const extraResources = {
         },
         noSources:
           'Diese Antwort zeigt noch keine Quellenknoten. Der Graph bewahrt dennoch die Traversierungsstruktur.',
+        previewBadge: 'Vorschau',
+        previewCopy: 'Dieses rechte Panel befindet sich noch in aktiver Entwicklung.',
         evidenceRail: 'Evidenzleiste',
         evidenceSubtitle: 'Quellen, die diese Antwort tragen',
         citationsCount: '{{count}} Zitate',
@@ -2158,6 +2164,8 @@ export const extraResources = {
         },
         noSources:
           'Questa risposta non espone ancora nodi sorgente. Il grafo conserva comunque la struttura del percorso.',
+        previewBadge: 'Anteprima',
+        previewCopy: 'Questo pannello destro è ancora in fase di sviluppo.',
         evidenceRail: 'Corsia delle prove',
         evidenceSubtitle: 'Fonti che fondano questa risposta',
         citationsCount: '{{count}} citazioni',
@@ -2790,6 +2798,8 @@ export const extraResources = {
         },
         noSources:
           'Αυτή η απάντηση δεν εκθέτει ακόμη κόμβους πηγών. Ο γράφος διατηρεί πάντως τη δομή της διάσχισης.',
+        previewBadge: 'Προεπισκόπηση',
+        previewCopy: 'Αυτό το δεξί πάνελ βρίσκεται ακόμη υπό ενεργή ανάπτυξη.',
         evidenceRail: 'Λωρίδα τεκμηρίων',
         evidenceSubtitle: 'Πηγές που θεμελιώνουν αυτή την απάντηση',
         citationsCount: '{{count}} παραπομπές',
