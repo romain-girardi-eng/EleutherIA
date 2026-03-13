@@ -99,22 +99,22 @@ export interface ResearchGraphDecision {
 }
 
 export interface ResearchGraphOverview {
-  query_type?: string;
-  complexity?: string;
-  grounding_policy?: string;
-  quality_badge?: string;
-  pipeline_degraded?: boolean;
-  claim_ledger_mode?: string;
-  render_answer_mode?: string;
-  scholarly_polish_mode?: string;
-  seed_node_count?: number;
-  context_node_count?: number;
-  bundle_count?: number;
-  work_count?: number;
-  claim_count?: number;
-  citation_count?: number;
-  tool_call_count?: number;
-  decision_count?: number;
+  query_type: string;
+  complexity: string;
+  grounding_policy: string;
+  quality_badge: string;
+  pipeline_degraded: boolean;
+  claim_ledger_mode: string;
+  render_answer_mode: string;
+  scholarly_polish_mode: string;
+  seed_node_count: number;
+  context_node_count: number;
+  bundle_count: number;
+  work_count: number;
+  claim_count: number;
+  citation_count: number;
+  tool_call_count: number;
+  decision_count: number;
 }
 
 export interface ResearchGraphPayload {
