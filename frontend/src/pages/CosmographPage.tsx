@@ -1433,42 +1433,43 @@ export default function CosmographPage() {
           colorMode === 'importance'
             ? (value: unknown) => importanceColor(value, graphModel.minImportance, graphModel.maxImportance)
             : undefined,
+        linkWidthRange: [0.18, 0.72],
         pointSizeBy: activeSizeAccessor,
         pointSizeByFn: (value: unknown, index?: number) => {
           const numeric = typeof value === 'number' ? value : Number(value);
           if (!Number.isFinite(numeric) || numeric <= 0) {
-            return 1.2;
+            return 1.8;
           }
 
           const pointId = typeof index === 'number' ? graphModel.flatNodes[index]?.id : undefined;
           const isSolarAnchor = pointId === selectedNodeId;
           const isSolarNeighbor = Boolean(pointId && solarFocusSet.has(pointId) && pointId !== selectedNodeId);
-          let baseSize = 1.2;
+          let baseSize = 1.8;
 
           if (sizeMode === 'importance') {
             const denominator = Math.max(graphModel.maxImportance - graphModel.minImportance, 1);
             const normalized = clamp((numeric - graphModel.minImportance) / denominator, 0, 1);
             const solarMass = Math.pow(normalized, 2.15);
-            baseSize = clamp(1.15 + solarMass * 11.25, 1.15, 12.4);
+            baseSize = clamp(1.8 + solarMass * 14.2, 1.8, 16.5);
           } else if (sizeMode === 'degree') {
-            baseSize = clamp(1.15 + Math.log1p(numeric) * 0.82, 1.15, 6.2);
+            baseSize = clamp(1.75 + Math.log1p(numeric) * 1.02, 1.75, 8.4);
           } else if (sizeMode === 'sources') {
-            baseSize = clamp(1.1 + Math.sqrt(numeric) * 0.56, 1.1, 5.4);
+            baseSize = clamp(1.7 + Math.sqrt(numeric) * 0.74, 1.7, 7.6);
           } else {
-            baseSize = clamp(1.15 + Math.log1p(numeric) * 0.62, 1.15, 5.1);
+            baseSize = clamp(1.75 + Math.log1p(numeric) * 0.82, 1.75, 7.1);
           }
 
           if (isSolarAnchor) {
-            return clamp(baseSize * 1.65 + 1.8, 3.4, 17.5);
+            return clamp(baseSize * 1.42 + 1.4, 4.2, 21);
           }
 
           if (isSolarNeighbor) {
-            return clamp(baseSize * 1.16 + 0.25, 1.4, 8.8);
+            return clamp(baseSize * 1.12 + 0.3, 2.1, 10.2);
           }
 
           return baseSize;
         },
-        pointSizeRange: [1.1, 12.4],
+        pointSizeRange: [1.8, 16.5],
         pointClusterBy: activeClusterAccessor,
         pointClusterStrengthBy: activeClusterAccessor ? 'clusterStrength' : undefined,
         showLabels,
