@@ -148,21 +148,25 @@ export function CitationRenderer({
     let match: RegExpExecArray | null;
 
     while ((match = citationPattern.exec(text)) !== null) {
+      const matchIndex = match.index;
+      const matchFull = match[0];
+      const matchInner = match[1];
+
       // Add text before citation
-      if (match.index > lastIndex) {
-        parts.push(text.substring(lastIndex, match.index));
+      if (matchIndex > lastIndex) {
+        parts.push(text.substring(lastIndex, matchIndex));
       }
 
-      const citationGroup = parseCitationGroup(match[1]);
+      const citationGroup = parseCitationGroup(matchInner);
       if (!citationGroup) {
-        parts.push(match[0]);
-        lastIndex = match.index + match[0].length;
+        parts.push(matchFull);
+        lastIndex = matchIndex + matchFull.length;
         continue;
       }
 
       parts.push(
         <span
-          key={`citation-group-${match.index}`}
+          key={`citation-group-${matchIndex}`}
           className="inline-flex flex-wrap items-center align-middle"
         >
           <span>[</span>
@@ -170,7 +174,7 @@ export function CitationRenderer({
             if (typeof part === 'string') {
               return (
                 <span
-                  key={`citation-group-text-${match.index}-${groupIndex}`}
+                  key={`citation-group-text-${matchIndex}-${groupIndex}`}
                   className="whitespace-pre"
                 >
                   {part}
@@ -181,7 +185,7 @@ export function CitationRenderer({
             if (part.kind === 'passage') {
               return (
                 <PassageCitationLink
-                  key={`pcitation-${part.citationNumber}-${match.index}-${groupIndex}`}
+                  key={`pcitation-${part.citationNumber}-${matchIndex}-${groupIndex}`}
                   citationNumber={part.citationNumber}
                   label={part.label}
                   passageId={part.passageId}
@@ -196,7 +200,7 @@ export function CitationRenderer({
 
             return (
               <CitationLink
-                key={`citation-${part.citationNumber}-${match.index}-${groupIndex}`}
+                key={`citation-${part.citationNumber}-${matchIndex}-${groupIndex}`}
                 citationNumber={part.citationNumber}
                 label={part.label}
                 source={part.source}
@@ -212,7 +216,7 @@ export function CitationRenderer({
         </span>
       );
 
-      lastIndex = match.index + match[0].length;
+      lastIndex = matchIndex + matchFull.length;
     }
 
     // Add remaining text
