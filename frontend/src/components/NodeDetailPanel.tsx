@@ -194,9 +194,9 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
 
   return (
     <>
-      <div className="fixed inset-x-0 bottom-0 top-12 z-40 bg-slate-950/46 backdrop-blur-[2px] pointer-events-none" />
+      <div className="fixed inset-x-0 bottom-0 top-12 z-40 bg-[linear-gradient(90deg,rgba(2,6,23,0.02)_0%,rgba(2,6,23,0.08)_52%,rgba(2,6,23,0.18)_100%)] pointer-events-none" />
 
-      <aside className="fixed inset-y-12 right-0 z-50 w-full overflow-hidden border-l border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(2,6,23,0.94)_100%)] text-slate-100 shadow-[-24px_0_90px_rgba(2,6,23,0.55)] sm:w-[31rem] xl:w-[34rem]">
+      <aside className="fixed inset-y-12 right-0 z-50 w-full overflow-hidden border-l border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(2,6,23,0.94)_100%)] text-slate-100 shadow-[-24px_0_90px_rgba(2,6,23,0.55)] sm:w-[28rem] xl:w-[30rem]">
         <div className="pointer-events-none absolute inset-0">
           <div
             className="absolute inset-x-0 top-0 h-64 opacity-90"
@@ -208,7 +208,7 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
         </div>
 
         <div className="relative flex h-full flex-col">
-          <div className="sticky top-0 z-10 border-b border-white/8 bg-[linear-gradient(180deg,rgba(3,7,18,0.94)_0%,rgba(3,7,18,0.86)_100%)] px-5 pb-5 pt-5 backdrop-blur-2xl sm:px-6">
+          <div className="sticky top-0 z-10 border-b border-white/8 bg-[linear-gradient(180deg,rgba(3,7,18,0.94)_0%,rgba(3,7,18,0.86)_100%)] px-4 pb-4 pt-4 backdrop-blur-2xl sm:px-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
@@ -233,7 +233,7 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
                   )}
                 </div>
 
-                <h2 className="mt-4 text-2xl font-semibold leading-tight text-white sm:text-[2rem]">
+                <h2 className="mt-3 text-[1.8rem] font-semibold leading-tight text-white sm:text-[1.95rem]">
                   {node.label}
                 </h2>
 
