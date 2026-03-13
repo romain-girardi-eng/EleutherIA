@@ -70,6 +70,9 @@ frontend/dist/
 .env.*.local
 !.env.example
 
+# Report files may contain API keys in error URLs
+docs/reports/
+
 # Logs
 *.log
 logs/
