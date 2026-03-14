@@ -323,7 +323,7 @@ p,.body{font-size:1.7rem;line-height:1.55;}
         <span class="badge bk">React + TypeScript</span>
         <span class="badge bk">GraphRAG agentique</span>
         <span class="badge bk">Docker + CI/CD</span>
-        <span class="badge bk">254 tests GraphRAG</span>
+        <span class="badge bk">262 tests GraphRAG</span>
         <span class="badge bk">812 commits Git</span>
       </div>
     </div>
@@ -641,7 +641,7 @@ p,.body{font-size:1.7rem;line-height:1.55;}
       <div class="parr">&#8595;</div>
       <div class="pstep"><div class="pnum">2</div><div><strong style="font-size:1.08rem;">Carnet de recherche</strong><br><span class="sm mut">Facettes, hypothèses, priorités de lecture et budget de contexte</span></div><div class="badge bo" style="margin-left:auto;font-size:.82rem;">raisonnement</div></div>
       <div class="parr">&#8595;</div>
-      <div class="pstep"><div class="pnum">3</div><div><strong style="font-size:1.08rem;">Plan de lecture et navigation</strong><br><span class="sm mut">Sélection des œuvres, navigation hiérarchique et ouverture des sections utiles</span></div><div class="badge bo" style="margin-left:auto;font-size:.82rem;">gpt-oss + Gemini</div></div>
+      <div class="pstep"><div class="pnum">3</div><div><strong style="font-size:1.08rem;">Plan de lecture et navigation</strong><br><span class="sm mut">Sélection des œuvres, navigation hiérarchique et ouverture des sections utiles</span></div><div class="badge bo" style="margin-left:auto;font-size:.82rem;">Kimi + Gemini</div></div>
     </div>
     <p class="xs mut" style="font-size:.98rem;max-width:56rem;">Ces trois premières étapes servent à cadrer la recherche avant d'ouvrir les passages exacts. Le modèle agit alors comme un lecteur qui prépare son dossier, pas comme un générateur lâché trop tôt.</p>
   </div>
@@ -689,9 +689,9 @@ p,.body{font-size:1.7rem;line-height:1.55;}
     <p style="font-size:1.12rem;line-height:1.5;max-width:58rem;">Un système agentique n'est pas un LLM laissé seul face au corpus. C'est une <strong>chaîne de travail organisée</strong>, où chaque couche joue un rôle précis dans l'enquête, la lecture et le contrôle.</p>
     <div class="gr3 mt1">
       <div class="gc" style="padding:1.35rem;">
-        <div class="badge bo" style="margin-bottom:.7rem;font-size:.9rem;">Python FSM / graphe d'exécution</div>
+        <div class="badge bo" style="margin-bottom:.7rem;font-size:.9rem;">Python · pydantic-graph FSM</div>
         <h3 style="margin:.1rem 0 .45rem;font-size:1.75rem;">Le chef d'orchestre</h3>
-        <p style="font-size:1rem;line-height:1.48;">Il ordonne les étapes, garde l'état de la recherche, appelle les bons outils et empêche une réponse improvisée.</p>
+        <p style="font-size:1rem;line-height:1.48;">Classe les passages, construit le dossier, budget les tokens, vérifie phrase par phrase. Le LLM rédige ; Python décide quoi lui donner et valide ce qu'il produit.</p>
       </div>
       <div class="gc" style="padding:1.35rem;">
         <div class="badge bo" style="margin-bottom:.7rem;font-size:.9rem;">Modèle de langage</div>
@@ -848,11 +848,11 @@ p,.body{font-size:1.7rem;line-height:1.55;}
     <p class="ts lg">Pour les curieux — les briques principales, sans entrer dans le code.</p>
     <div class="gr2 mt2" style="gap:1.1rem;">
       <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Interface</strong><span class="sm" style="color:var(--stone-600);">React 19 · TypeScript · Tailwind CSS · Cosmograph (graphe GPU)</span></div>
-      <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Orchestration Python</strong><span class="sm" style="color:var(--stone-600);">FastAPI · Python 3.11+ · orchestration agentique et vérification</span></div>
+      <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Orchestration Python</strong><span class="sm" style="color:var(--stone-600);">FastAPI · Python 3.11+ · pydantic-graph FSM · scoring, budget tokens, grounding programmatique</span></div>
       <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Bases de données</strong><span class="sm" style="color:var(--stone-600);">PostgreSQL + Qdrant Cloud (17 746 vecteurs nommés, 3072 dimensions)</span></div>
-      <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Modèles</strong><span class="sm" style="color:var(--stone-600);">Gemini 3.1 Pro (synthèse + cache de prompt) · gpt-oss-120b:nitro via Cerebras (raisonnement) · kimi-latest en secours</span></div>
+      <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Modèles</strong><span class="sm" style="color:var(--stone-600);">Gemini (synthèse + cache de prompt) · Kimi K2.5 (raisonnement étendu, 4 nœuds) · OpenRouter/gpt-oss en secours</span></div>
       <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Déploiement</strong><span class="sm" style="color:var(--stone-600);">Docker Compose · Cloudflare · Vercel</span></div>
-      <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Qualité</strong><span class="sm" style="color:var(--stone-600);">254 tests GraphRAG passés · banc d'essai en direct 4/4 · Ruff · mypy · ESLint</span></div>
+      <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Qualité</strong><span class="sm" style="color:var(--stone-600);">262 tests GraphRAG passés · banc d'essai en direct 4/4 · Ruff · mypy · ESLint</span></div>
     </div>
   </div>
 </div>
@@ -867,7 +867,7 @@ p,.body{font-size:1.7rem;line-height:1.55;}
       <div class="gc f fc ac g2"><div class="sn ctr" data-t="812">0</div><div class="sl">commits Git</div></div>
       <div class="gc f fc ac g2"><div class="sn">~320</div><div class="sl">heures de dev.</div></div>
       <div class="gc f fc ac g2"><div class="sn ctr" data-t="743">0</div><div class="sl">fichiers</div></div>
-      <div class="gc f fc ac g2"><div class="sn ctr" data-t="254">0</div><div class="sl">tests GraphRAG</div></div>
+      <div class="gc f fc ac g2"><div class="sn ctr" data-t="262">0</div><div class="sl">tests GraphRAG</div></div>
       <div class="gc f fc ac g2"><div class="sn">4/4</div><div class="sl">banc d'essai en direct</div></div>
     </div>
     <div class="gr3 mt2" style="max-width:52rem;">

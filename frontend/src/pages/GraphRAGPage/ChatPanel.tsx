@@ -14,7 +14,6 @@ interface ChatPanelProps {
   streaming: boolean;
   error: string | null;
   setError: (e: string | null) => void;
-  agenticMode: boolean;
   inputRef: React.RefObject<HTMLInputElement | null>;
   onSubmit: (e: React.FormEvent) => void;
   onStop: () => void;
@@ -31,7 +30,6 @@ export default function ChatPanel({
   streaming,
   error,
   setError,
-  agenticMode,
   inputRef,
   onSubmit,
   onStop,
@@ -78,7 +76,7 @@ export default function ChatPanel({
             exit={{ opacity: 0 }}
             className="flex justify-center items-center min-h-[40vh]"
           >
-            <TerminalLoader size="large" title={agenticMode ? 'Pydantic-AI Engine' : undefined} />
+            <TerminalLoader size="large" />
           </motion.div>
         )}
 
