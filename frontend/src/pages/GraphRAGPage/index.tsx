@@ -36,13 +36,7 @@ export default function GraphRAGPage() {
   const { isAuthenticated } = useAuth();
 
   // Advanced settings
-  const [semanticK, setSemanticK] = useState(10);
-  const [graphDepth, setGraphDepth] = useState(2);
-  const [maxContext, setMaxContext] = useState(15);
-  const [academicMode, setAcademicMode] = useState(true);
-  const [useThinking, setUseThinking] = useState(false);
   const [ancientOnly, setAncientOnly] = useState(false);
-  const [agenticMode, setAgenticMode] = useState(false);
   const [_reasoningSteps, setReasoningSteps] = useState<ReasoningStep[]>([]);
   const [_currentQuery, setCurrentQuery] = useState<string>('');
 
@@ -192,13 +186,9 @@ export default function GraphRAGPage() {
     setQuery('');
     setError(null);
 
-    if (agenticMode) {
-      await handleAgenticQuery(queryText);
-    } else {
-      await handleStreamingQuery(queryText);
-    }
+    await handleStreamingQuery(queryText);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [useThinking, agenticMode]);
+  }, []);
 
   useEffect(() => {
     const state = location.state as { initialQuery?: string } | null;
@@ -246,12 +236,7 @@ export default function GraphRAGPage() {
     );
   };
 
-  const handleAgenticQuery = async (queryText: string) => {
-    const agenticUrl = import.meta.env.VITE_AGENTIC_API_URL || import.meta.env.VITE_API_URL || 'http://localhost:8000';
-    await handleStreamingQuery(queryText, agenticUrl, 'query');
-  };
-
-  const handleStreamingQuery = async (queryText: string, apiUrlOverride?: string, queryParamName: string = 'query') => {
+  const handleStreamingQuery = async (queryText: string) => {
     setStreaming(true);
     setRightPanelState('loading');
     setRightPanelResponse(null);
@@ -261,7 +246,7 @@ export default function GraphRAGPage() {
 
     try {
       const token = Cookies.get('auth_token');
-      const apiUrl = apiUrlOverride ?? (import.meta.env.VITE_API_URL || 'http://localhost:8000');
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
       const abortController = new AbortController();
       abortControllerRef.current = abortController;
@@ -271,12 +256,8 @@ export default function GraphRAGPage() {
       }, 120000);
 
       const params = new URLSearchParams({
-        [queryParamName]: queryText,
-        semantic_k: semanticK.toString(),
-        graph_depth: graphDepth.toString(),
-        max_context: maxContext.toString(),
+        query: queryText,
         ancient_only: ancientOnly.toString(),
-        use_thinking: useThinking.toString(),
       });
 
       const response = await fetch(`${apiUrl}/api/graphrag/query/stream?${params.toString()}`, {
@@ -518,13 +499,7 @@ export default function GraphRAGPage() {
   };
 
   const advancedProps = {
-    academicMode, setAcademicMode,
-    useThinking, setUseThinking,
     ancientOnly, setAncientOnly,
-    agenticMode, setAgenticMode,
-    semanticK, setSemanticK,
-    graphDepth, setGraphDepth,
-    maxContext, setMaxContext,
   };
 
   return (
@@ -569,7 +544,6 @@ export default function GraphRAGPage() {
                 streaming={streaming}
                 error={error}
                 setError={setError}
-                agenticMode={agenticMode}
                 inputRef={inputRef}
                 onSubmit={handleSubmit}
                 onStop={stopStreaming}

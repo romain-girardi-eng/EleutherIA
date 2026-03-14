@@ -14,20 +14,8 @@ interface WelcomeHeroProps {
   onSubmit: (e: React.FormEvent) => void;
   onDemo: () => void;
   advancedProps: {
-    academicMode: boolean;
-    setAcademicMode: (v: boolean) => void;
-    useThinking: boolean;
-    setUseThinking: (v: boolean) => void;
     ancientOnly: boolean;
     setAncientOnly: (v: boolean) => void;
-    agenticMode: boolean;
-    setAgenticMode: (v: boolean) => void;
-    semanticK: number;
-    setSemanticK: (v: number) => void;
-    graphDepth: number;
-    setGraphDepth: (v: number) => void;
-    maxContext: number;
-    setMaxContext: (v: number) => void;
   };
 }
 
