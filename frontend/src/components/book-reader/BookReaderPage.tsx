@@ -298,67 +298,61 @@ export default function BookReaderPage() {
   // ---- Loading ----
   if (workLoading || passagesLoading || !work) {
     return (
-      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-center">
-            <div className="w-8 h-8 border-2 border-amber-200/60 border-t-gray-900 rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-stone-500 text-sm">Chargement de l&apos;ouvrage…</p>
-          </div>
+      <div className="h-svh w-full flex items-center justify-center bg-transparent">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-amber-200/60 border-t-gray-900 rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-stone-500 text-sm">Chargement de l&apos;ouvrage…</p>
         </div>
       </div>
     );
   }
 
-  // ---- Render ----
+  // ---- Render — h-svh, no scroll ----
   return (
-    <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
-      <div className="min-h-screen relative z-10">
-        {/* Hidden calibration div */}
-        <div ref={hiddenRef} aria-hidden="true" style={{ position: 'absolute', visibility: 'hidden' }} />
+    <div className="h-svh w-full flex flex-col overflow-hidden bg-transparent">
+      {/* Hidden calibration div */}
+      <div ref={hiddenRef} aria-hidden="true" style={{ position: 'absolute', visibility: 'hidden' }} />
 
-        {/* Header */}
-        <header className="sticky top-0 z-40 bg-amber-50 border-b border-amber-100">
-          <div className="max-w-6xl mx-auto px-4 py-3">
-            <div className="flex items-center justify-between mb-2">
-              <Link to="/texts" className="text-sm text-stone-500 hover:text-stone-800">← Bibliothèque</Link>
-              <button
-                onClick={() => { if (textId) navigate(`/texts/${textId}`); }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-stone-600 hover:text-stone-800 hover:bg-amber-100/40 transition"
-                title="Mode scroll"
-              >
-                <AlignJustify size={14} />
-                <span className="hidden sm:inline">Mode scroll</span>
-              </button>
-            </div>
+      {/* Header — compact, fixed height */}
+      <header className="shrink-0 bg-amber-50 border-b border-amber-100 z-40">
+        <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link to="/texts" className="text-sm text-stone-500 hover:text-stone-800">←</Link>
             <div>
-              <h1 className="text-xl font-display font-semibold text-stone-800">{work.title}</h1>
-              <p className="text-sm text-stone-600">{work.author}</p>
+              <h1 className="text-base font-display font-semibold text-stone-800 leading-tight">{work.title}</h1>
+              <p className="text-xs text-stone-500">{work.author}</p>
             </div>
           </div>
-        </header>
+          <button
+            onClick={() => { if (textId) navigate(`/texts/${textId}`); }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-stone-600 hover:text-stone-800 hover:bg-amber-100/40 transition"
+            title="Mode scroll"
+          >
+            <AlignJustify size={14} />
+            <span className="hidden sm:inline">Mode scroll</span>
+          </button>
+        </div>
+      </header>
 
-        {/* Book content — full width, responsive */}
-        <main className="w-full px-4 sm:px-6 lg:px-8 py-6">
-          <div className="max-w-[1200px] mx-auto">
-            {/* Progress */}
-            <BookProgress currentPage={currentPage} totalPages={totalPages} currentRef={currentRef} />
-
-            {/* Book pages — fill available width */}
-            <div ref={containerRef} className="w-full mb-4">
-              {isMobile ? (
-                <MobileBookReader
-                  originalPages={originalPages}
-                  translationPages={translationPagesList}
-                  currentPage={currentPage}
-                  onPageChange={goToPage}
-                  title={work.title}
-                  author={work.author}
-                  originalLanguage={work.language ?? 'grc'}
-                  fontSize={fontSize}
-                  hasBilingual={hasBilingualContent}
-                  pageHeight={pageHeight}
-                />
-              ) : currentSpread ? (
+      {/* Book — takes ALL remaining vertical space */}
+      <main ref={containerRef} className="flex-1 min-h-0 flex flex-col px-4 sm:px-6 lg:px-8">
+        <div className="flex-1 min-h-0 max-w-[1200px] w-full mx-auto flex flex-col py-3">
+          {/* Book pages — fills all available space */}
+          <div className="flex-1 min-h-0">
+            {isMobile ? (
+              <MobileBookReader
+                originalPages={originalPages}
+                translationPages={translationPagesList}
+                currentPage={currentPage}
+                onPageChange={goToPage}
+                title={work.title}
+                author={work.author}
+                originalLanguage={work.language ?? 'grc'}
+                fontSize={fontSize}
+                hasBilingual={hasBilingualContent}
+              />
+            ) : currentSpread ? (
+              <div className="h-full">
                 <BookSpread
                   spread={currentSpread}
                   title={work.title}
@@ -366,30 +360,33 @@ export default function BookReaderPage() {
                   originalLanguage={work.language ?? 'grc'}
                   translationLanguage={translationLanguage}
                   fontSize={fontSize}
-                  pageHeight={pageHeight}
-                />
-              ) : originalPages[currentPage - 1] ? (
-                <div className="max-w-[640px] mx-auto">
-                  <div className="bg-white/70 rounded-lg shadow-sm border border-amber-200/30">
-                    <BookPage
-                      page={originalPages[currentPage - 1]}
-                      headerLeft={work.title}
-                      headerRight={work.author}
-                      isGreek={work.language === 'grc'}
-                      fontSize={fontSize}
-                      side="single"
-                      pageHeight={pageHeight}
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center text-stone-400 py-20 font-garamond">
-                  Aucune page à afficher.
-                </div>
-              )}
-            </div>
 
-            {/* Controls */}
+                />
+              </div>
+            ) : originalPages[currentPage - 1] ? (
+              <div className="h-full max-w-[640px] mx-auto">
+                <div className="h-full bg-white/70 rounded-lg shadow-sm border border-amber-200/30">
+                  <BookPage
+                    page={originalPages[currentPage - 1]}
+                    headerLeft={work.title}
+                    headerRight={work.author}
+                    isGreek={work.language === 'grc'}
+                    fontSize={fontSize}
+                    side="single"
+  
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="h-full flex items-center justify-center text-stone-400 font-garamond">
+                Aucune page à afficher.
+              </div>
+            )}
+          </div>
+
+          {/* Progress + Controls — compact, pinned to bottom */}
+          <div className="shrink-0 pt-2">
+            <BookProgress currentPage={currentPage} totalPages={totalPages} currentRef={currentRef} />
             <BookControls
               currentPage={currentPage}
               totalPages={totalPages}
@@ -404,8 +401,8 @@ export default function BookReaderPage() {
               onToggleMode={() => { if (textId) navigate(`/texts/${textId}`); }}
             />
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

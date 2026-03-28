@@ -8,7 +8,6 @@ interface BookSpreadProps {
   originalLanguage: string;
   translationLanguage: string;
   fontSize: number;
-  pageHeight?: number;
 }
 
 const LANG_LABELS: Record<string, string> = {
@@ -25,12 +24,11 @@ export function BookSpread({
   originalLanguage,
   translationLanguage,
   fontSize,
-  pageHeight,
 }: BookSpreadProps) {
   const isGreek = originalLanguage === 'grc';
 
   return (
-    <div className="flex bg-white/70 rounded-lg shadow-sm border border-amber-200/30 overflow-hidden relative">
+    <div className="flex h-full bg-white/70 rounded-lg shadow-sm border border-amber-200/30 overflow-hidden relative">
       <div className="absolute left-1/2 top-0 bottom-0 w-6 -translate-x-1/2 bg-gradient-to-r from-transparent via-black/[0.04] to-transparent pointer-events-none z-10" />
 
       <BookPage
@@ -41,7 +39,6 @@ export function BookSpread({
         langLabel={LANG_LABELS[originalLanguage] ?? originalLanguage}
         fontSize={fontSize}
         side="left"
-        pageHeight={pageHeight}
       />
       <BookPage
         page={spread.right}
@@ -51,7 +48,6 @@ export function BookSpread({
         langLabel={LANG_LABELS[translationLanguage] ?? translationLanguage}
         fontSize={fontSize}
         side="right"
-        pageHeight={pageHeight}
       />
     </div>
   );
