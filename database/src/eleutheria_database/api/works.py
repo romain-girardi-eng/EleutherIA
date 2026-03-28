@@ -100,12 +100,13 @@ async def get_work(
     return result
 
 
-@router.get("/works/{work_id}/passages", response_model=list[Passage])
+@router.get("/works/{work_id}/passages")
 async def list_passages(
     work_id: UUID,
     db: Annotated[DatabaseService, Depends(get_db)],
     book: str | None = Query(None, description="Filter by book"),
     chapter: str | None = Query(None, description="Filter by chapter"),
+    include_translations: bool = Query(False, description="Include KG translation nodes"),
     limit: int = Query(100, ge=1, le=1000),
     offset: int = Query(0, ge=0),
 ) -> list[dict]:
@@ -113,19 +114,21 @@ async def list_passages(
     List passages for a specific work.
 
     Returns paginated passages in sequence order.
+    When include_translations=true, joins KG translation nodes via
+    passage_citation → kg_node translation_of edges.
     """
-    conditions = ["work_id = $1"]
+    conditions = ["p.work_id = $1"]
     params: list = [work_id]
     param_count = 1
 
     if book:
         param_count += 1
-        conditions.append(f"book = ${param_count}")
+        conditions.append(f"p.book = ${param_count}")
         params.append(book)
 
     if chapter:
         param_count += 1
-        conditions.append(f"chapter = ${param_count}")
+        conditions.append(f"p.chapter = ${param_count}")
         params.append(chapter)
 
     where_clause = " AND ".join(conditions)
@@ -136,13 +139,45 @@ async def list_passages(
     offset_param = param_count
     params.extend([limit, offset])
 
-    sql = f"""
-    SELECT *
-    FROM free_will.passages
-    WHERE {where_clause}
-    ORDER BY sequence_number
-    LIMIT ${limit_param} OFFSET ${offset_param}
-    """
+    if include_translations:
+        sql = f"""
+        SELECT
+            p.*,
+            tn.description AS translation_text,
+            CASE
+                WHEN tn.node_id IS NOT NULL THEN 'en'
+                ELSE NULL
+            END AS translation_language,
+            CASE
+                WHEN tn.node_id LIKE '%_ai_%' THEN 'ai_generated'
+                WHEN tn.node_id IS NOT NULL THEN 'scholarly'
+                ELSE NULL
+            END AS translation_source,
+            COALESCE(kg_count.cnt, 0) AS kg_node_count
+        FROM free_will.passages p
+        LEFT JOIN free_will.passage_citations pc ON p.passage_id = pc.passage_id
+        LEFT JOIN free_will.kg_edges te
+            ON te.source_id = pc.kg_node_id || '_en'
+            AND te.relation = 'translation_of'
+        LEFT JOIN free_will.kg_nodes tn
+            ON tn.node_id = te.source_id
+        LEFT JOIN LATERAL (
+            SELECT COUNT(DISTINCT pc2.kg_node_id) AS cnt
+            FROM free_will.passage_citations pc2
+            WHERE pc2.passage_id = p.passage_id
+        ) kg_count ON true
+        WHERE {where_clause}
+        ORDER BY p.sequence_number
+        LIMIT ${limit_param} OFFSET ${offset_param}
+        """
+    else:
+        sql = f"""
+        SELECT p.*
+        FROM free_will.passages p
+        WHERE {where_clause}
+        ORDER BY p.sequence_number
+        LIMIT ${limit_param} OFFSET ${offset_param}
+        """
 
     return await db.fetch(sql, *params)
 
