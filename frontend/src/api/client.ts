@@ -635,6 +635,7 @@ class ApiClient {
   async getWorkPassages(workId: string, filters?: {
     offset?: number;
     limit?: number;
+    include_translations?: boolean;
   }) {
     const response = await this.client.get(`/api/works/${workId}/passages`, { params: filters });
     return response.data;

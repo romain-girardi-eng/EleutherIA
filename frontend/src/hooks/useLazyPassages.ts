@@ -22,6 +22,10 @@ interface Passage {
   text_content: string;
   char_length: number;
   citation_hierarchy?: Record<string, unknown>;
+  translation_text?: string | null;
+  translation_language?: string | null;
+  translation_source?: 'scholarly' | 'ai_generated' | null;
+  kg_node_count?: number;
 }
 
 interface UseLazyPassagesOptions {

@@ -131,6 +131,7 @@ class CachedApiClient {
       offset?: number;
       limit?: number;
       forceRefresh?: boolean;
+      includeTranslations?: boolean;
     }
   ): Promise<PassagesResponse> {
     const offset = options?.offset ?? 0;
@@ -146,7 +147,11 @@ class CachedApiClient {
     }
 
     console.debug(`[Cache] MISS: passages ${workId.slice(0, 8)} [${offset}-${offset + limit}], fetching from API`);
-    const response = await apiClient.getWorkPassages(workId, { offset, limit });
+    const response = await apiClient.getWorkPassages(workId, {
+      offset,
+      limit,
+      ...(options?.includeTranslations ? { include_translations: true } : {}),
+    });
 
     // Cache the response
     await cacheService.setPassages(workId, response, offset, limit);
