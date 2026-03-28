@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { BookOpen } from 'lucide-react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLazyPassages } from '../hooks/useLazyPassages';
@@ -250,15 +251,25 @@ export default function CanonicalTextReader() {
         <div className="max-w-6xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between mb-3">
             <Link to="/texts" className="text-sm text-stone-500 hover:text-stone-800">← {t('textReader.nav.library')}</Link>
-            <button
-              onClick={() => setShowTOC(!showTOC)}
-              className="text-sm text-stone-600 hover:text-stone-800 flex items-center gap-1"
-            >
+            <div className="flex items-center gap-2">
+              <Link
+                to={`/texts/${textId}/book`}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-stone-600 hover:text-stone-800 hover:bg-amber-100/40 transition"
+                title="Mode livre"
+              >
+                <BookOpen size={14} />
+                <span className="hidden sm:inline">Mode livre</span>
+              </Link>
+              <button
+                onClick={() => setShowTOC(!showTOC)}
+                className="text-sm text-stone-600 hover:text-stone-800 flex items-center gap-1"
+              >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
               {showTOC ? t('textReader.nav.hide') : t('textReader.nav.contents')}
             </button>
+            </div>
           </div>
 
           <div className="mb-2">

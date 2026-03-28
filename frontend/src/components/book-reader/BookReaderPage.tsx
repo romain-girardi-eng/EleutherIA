@@ -46,7 +46,6 @@ interface Passage {
 // Constants
 // ---------------------------------------------------------------------------
 
-const FONT_PRESETS: FontSizePreset[] = ['small', 'normal', 'large'];
 const LS_FONT_KEY = 'book-reader-font-size';
 const DEFAULT_LINE_HEIGHT = 1.75;
 const DEFAULT_FONT_FAMILY = 'EB Garamond, serif';
@@ -248,16 +247,6 @@ export default function BookReaderPage() {
   const goPrev = useCallback(() => {
     goToPage(currentPage - (isBilingual ? 2 : 1));
   }, [currentPage, isBilingual, goToPage]);
-
-  // ---- Font size cycling ----
-  const cycleFontSize = useCallback(() => {
-    setFontSizePreset((prev) => {
-      const idx = FONT_PRESETS.indexOf(prev);
-      const next = FONT_PRESETS[(idx + 1) % FONT_PRESETS.length];
-      localStorage.setItem(LS_FONT_KEY, next);
-      return next;
-    });
-  }, []);
 
   // ---- Keyboard shortcuts ----
   useEffect(() => {
