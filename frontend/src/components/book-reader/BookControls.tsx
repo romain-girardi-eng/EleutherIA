@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Type, Columns2, AlignJustify } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Minus, Plus, Columns2, AlignJustify } from 'lucide-react';
 import type { FontSizePreset } from './types';
 import { FONT_SIZE_MAP } from './types';
 
@@ -17,7 +17,7 @@ interface BookControlsProps {
   onToggleMode: () => void;
 }
 
-const FONT_PRESETS: FontSizePreset[] = ['small', 'normal', 'large'];
+const FONT_ORDER: FontSizePreset[] = ['small', 'normal', 'large'];
 
 export function BookControls({
   currentPage,
@@ -31,48 +31,67 @@ export function BookControls({
   onToggleBilingual,
   onToggleMode,
 }: BookControlsProps) {
-  const nextFontSize = () => {
-    const idx = FONT_PRESETS.indexOf(fontSize);
-    onFontSizeChange(FONT_PRESETS[(idx + 1) % FONT_PRESETS.length]);
+  const fontIdx = FONT_ORDER.indexOf(fontSize);
+
+  const increaseFontSize = () => {
+    if (fontIdx < FONT_ORDER.length - 1) onFontSizeChange(FONT_ORDER[fontIdx + 1]);
+  };
+
+  const decreaseFontSize = () => {
+    if (fontIdx > 0) onFontSizeChange(FONT_ORDER[fontIdx - 1]);
   };
 
   return (
-    <div className="flex items-center justify-center gap-8 mb-12">
+    <div className="flex items-center justify-center gap-6 py-4">
       <button
         onClick={onPrevious}
         disabled={currentPage <= 1}
-        className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:border-amber-600/40 hover:text-amber-600 transition disabled:opacity-20 disabled:cursor-not-allowed"
+        className="w-9 h-9 rounded-full border border-amber-200/40 flex items-center justify-center text-stone-600 hover:border-amber-600/60 hover:text-stone-800 transition disabled:opacity-20 disabled:cursor-not-allowed"
       >
-        <ChevronLeft size={18} />
+        <ChevronLeft size={16} />
       </button>
 
-      <span className="font-garamond text-sm opacity-50 tracking-[1px] tabular-nums">
+      <span className="font-garamond text-sm text-stone-500 tracking-[1px] tabular-nums">
         {currentPage}–{Math.min(currentPage + 1, totalPages)} sur {totalPages}
       </span>
 
       <button
         onClick={onNext}
         disabled={currentPage >= totalPages}
-        className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:border-amber-600/40 hover:text-amber-600 transition disabled:opacity-20 disabled:cursor-not-allowed"
+        className="w-9 h-9 rounded-full border border-amber-200/40 flex items-center justify-center text-stone-600 hover:border-amber-600/60 hover:text-stone-800 transition disabled:opacity-20 disabled:cursor-not-allowed"
       >
-        <ChevronRight size={18} />
+        <ChevronRight size={16} />
       </button>
 
-      <div className="w-px h-6 bg-white/10" />
+      <div className="w-px h-5 bg-amber-200/40" />
 
-      <button
-        onClick={nextFontSize}
-        className="flex items-center gap-1.5 text-xs opacity-50 hover:opacity-80 transition"
-        title={`Taille : ${FONT_SIZE_MAP[fontSize]}px`}
-      >
-        <Type size={14} />
-        <span className="uppercase tracking-wider">{fontSize === 'small' ? 'P' : fontSize === 'normal' ? 'M' : 'G'}</span>
-      </button>
+      {/* Font size +/- */}
+      <div className="flex items-center gap-1">
+        <button
+          onClick={decreaseFontSize}
+          disabled={fontIdx <= 0}
+          className="w-7 h-7 rounded flex items-center justify-center text-stone-500 hover:text-stone-800 hover:bg-amber-100/40 transition disabled:opacity-20 disabled:cursor-not-allowed"
+          title={`Réduire (${FONT_SIZE_MAP[fontSize]}px)`}
+        >
+          <Minus size={13} />
+        </button>
+        <span className="text-[10px] text-stone-400 min-w-[28px] text-center tabular-nums">
+          {FONT_SIZE_MAP[fontSize]}
+        </span>
+        <button
+          onClick={increaseFontSize}
+          disabled={fontIdx >= FONT_ORDER.length - 1}
+          className="w-7 h-7 rounded flex items-center justify-center text-stone-500 hover:text-stone-800 hover:bg-amber-100/40 transition disabled:opacity-20 disabled:cursor-not-allowed"
+          title={`Agrandir (${FONT_SIZE_MAP[fontSize]}px)`}
+        >
+          <Plus size={13} />
+        </button>
+      </div>
 
       {hasBilingual && (
         <button
           onClick={onToggleBilingual}
-          className={`flex items-center gap-1.5 text-xs transition ${isBilingual ? 'text-amber-600 opacity-80' : 'opacity-50 hover:opacity-80'}`}
+          className={`flex items-center gap-1.5 text-xs transition ${isBilingual ? 'text-amber-700' : 'text-stone-500 hover:text-stone-800'}`}
           title={isBilingual ? 'Mode monolingue' : 'Mode bilingue'}
         >
           <Columns2 size={14} />
@@ -81,7 +100,7 @@ export function BookControls({
 
       <button
         onClick={onToggleMode}
-        className="flex items-center gap-1.5 text-xs opacity-50 hover:opacity-80 transition"
+        className="flex items-center gap-1.5 text-xs text-stone-500 hover:text-stone-800 transition"
         title="Mode scroll"
       >
         <AlignJustify size={14} />

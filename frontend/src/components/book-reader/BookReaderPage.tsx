@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { AlignJustify } from 'lucide-react';
 import { cachedApiClient } from '../../api/cachedClient';
 import { useLazyPassages } from '../../hooks/useLazyPassages';
 import { useCalibration } from './useCalibration';
@@ -337,12 +338,14 @@ export default function BookReaderPage() {
   // ---- Loading state ----
   if (workLoading || passagesLoading || !work) {
     return (
-      <div className="min-h-screen bg-[#1a1a1e] flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-amber-600/30 border-t-amber-600 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-white/40 text-sm font-garamond">
-            Chargement de l&apos;ouvrage…
-          </p>
+      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <div className="w-8 h-8 border-2 border-amber-200/60 border-t-gray-900 rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-stone-500 text-sm">
+              Chargement de l&apos;ouvrage…
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -350,75 +353,93 @@ export default function BookReaderPage() {
 
   // ---- Render ----
   return (
-    <div className="min-h-screen bg-[#1a1a1e] text-white/80 flex flex-col items-center py-8 px-4">
-      {/* Hidden calibration div */}
-      <div ref={hiddenRef} aria-hidden="true" />
+    <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+      <div className="min-h-screen relative z-10">
+        {/* Hidden calibration div */}
+        <div ref={hiddenRef} aria-hidden="true" style={{ position: 'absolute', visibility: 'hidden' }} />
 
-      {/* Title */}
-      <div className="text-center mb-8">
-        <h1 className="font-garamond text-xl text-white/90 tracking-wide">
-          {work.title}
-        </h1>
-        <p className="text-sm text-white/40 mt-1">{work.author}</p>
-      </div>
-
-      {/* Progress bar */}
-      <BookProgress
-        currentPage={currentPage}
-        totalPages={totalPages}
-        currentRef={currentRef}
-      />
-
-      {/* Book content */}
-      <div ref={containerRef} className="w-full max-w-[920px] mx-auto mb-8">
-        {isMobile ? (
-          <MobileBookReader
-            originalPages={originalPages}
-            translationPages={translationPagesList}
-            currentPage={currentPage}
-            onPageChange={goToPage}
-            title={work.title}
-            author={work.author}
-            originalLanguage={work.language ?? 'grc'}
-            fontSize={fontSize}
-            hasBilingual={hasBilingualContent}
-          />
-        ) : currentSpread ? (
-          <BookSpread
-            spread={currentSpread}
-            title={work.title}
-            author={work.author}
-            originalLanguage={work.language ?? 'grc'}
-            translationLanguage={translationLanguage}
-            fontSize={fontSize}
-          />
-        ) : (
-          <div className="text-center text-white/30 py-20 font-garamond">
-            Aucune page à afficher.
+        {/* Header — matches CanonicalTextReader style */}
+        <header className="sticky top-0 z-40 bg-amber-50 border-b border-amber-100">
+          <div className="max-w-6xl mx-auto px-4 py-3">
+            <div className="flex items-center justify-between mb-2">
+              <Link to="/texts" className="text-sm text-stone-500 hover:text-stone-800">← Bibliothèque</Link>
+              <button
+                onClick={() => { if (textId) navigate(`/texts/${textId}`); }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-stone-600 hover:text-stone-800 hover:bg-amber-100/40 transition"
+                title="Mode scroll"
+              >
+                <AlignJustify size={14} />
+                <span className="hidden sm:inline">Mode scroll</span>
+              </button>
+            </div>
+            <div className="mb-2">
+              <h1 className="text-xl font-display font-semibold text-stone-800">{work.title}</h1>
+              <p className="text-sm text-stone-600">{work.author}</p>
+            </div>
           </div>
-        )}
-      </div>
+        </header>
 
-      {/* Controls */}
-      <BookControls
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPrevious={goPrev}
-        onNext={goNext}
-        onGoToPage={goToPage}
-        fontSize={fontSizePreset}
-        onFontSizeChange={(size) => {
-          setFontSizePreset(size);
-          localStorage.setItem(LS_FONT_KEY, size);
-        }}
-        isBilingual={isBilingual}
-        hasBilingual={hasBilingualContent}
-        onToggleBilingual={() => setIsBilingual((b) => !b)}
-        isPaginated={true}
-        onToggleMode={() => {
-          if (textId) navigate(`/texts/${textId}`);
-        }}
-      />
+        {/* Book content area */}
+        <main className="max-w-[960px] mx-auto px-4 py-8">
+          {/* Progress bar */}
+          <BookProgress
+            currentPage={currentPage}
+            totalPages={totalPages}
+            currentRef={currentRef}
+          />
+
+          {/* Book pages */}
+          <div ref={containerRef} className="w-full mb-6">
+            {isMobile ? (
+              <MobileBookReader
+                originalPages={originalPages}
+                translationPages={translationPagesList}
+                currentPage={currentPage}
+                onPageChange={goToPage}
+                title={work.title}
+                author={work.author}
+                originalLanguage={work.language ?? 'grc'}
+                fontSize={fontSize}
+                hasBilingual={hasBilingualContent}
+              />
+            ) : currentSpread ? (
+              <BookSpread
+                spread={currentSpread}
+                title={work.title}
+                author={work.author}
+                originalLanguage={work.language ?? 'grc'}
+                translationLanguage={translationLanguage}
+                fontSize={fontSize}
+              />
+            ) : (
+              <div className="text-center text-stone-400 py-20 font-garamond">
+                Aucune page à afficher.
+              </div>
+            )}
+          </div>
+
+          {/* Controls */}
+          <BookControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPrevious={goPrev}
+            onNext={goNext}
+            onGoToPage={goToPage}
+            fontSize={fontSizePreset}
+            onFontSizeChange={(size) => {
+              setFontSizePreset(size);
+              localStorage.setItem(LS_FONT_KEY, size);
+            }}
+            isBilingual={isBilingual}
+            hasBilingual={hasBilingualContent}
+            onToggleBilingual={() => setIsBilingual((b) => !b)}
+            isPaginated={true}
+            onToggleMode={() => {
+              if (textId) navigate(`/texts/${textId}`);
+            }}
+          />
+        </main>
+      </div>
     </div>
   );
 }

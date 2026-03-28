@@ -50,8 +50,8 @@ export function MobileBookReader({
             onClick={() => setActiveTab('original')}
             className={`px-4 py-1.5 rounded-full text-xs transition ${
               activeTab === 'original'
-                ? 'bg-amber-600/20 text-amber-500'
-                : 'text-white/40 hover:text-white/60'
+                ? 'bg-amber-600/15 text-amber-700'
+                : 'text-stone-400 hover:text-stone-600'
             }`}
           >
             Original
@@ -60,8 +60,8 @@ export function MobileBookReader({
             onClick={() => setActiveTab('translation')}
             className={`px-4 py-1.5 rounded-full text-xs transition ${
               activeTab === 'translation'
-                ? 'bg-amber-600/20 text-amber-500'
-                : 'text-white/40 hover:text-white/60'
+                ? 'bg-amber-600/15 text-amber-700'
+                : 'text-stone-400 hover:text-stone-600'
             }`}
           >
             Traduction
@@ -70,7 +70,7 @@ export function MobileBookReader({
       )}
 
       <div className="max-w-[560px] mx-auto">
-        <div className="bg-[#fdfbf7] rounded-sm shadow-[0_1px_3px_rgba(0,0,0,0.3),0_8px_24px_rgba(0,0,0,0.25)]">
+        <div className="bg-white/70 rounded-lg shadow-sm border border-amber-200/30">
           <BookPage
             page={page}
             headerLeft={title}
