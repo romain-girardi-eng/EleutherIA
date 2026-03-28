@@ -37,6 +37,7 @@ const AncientWorksListingPage = lazy(() => import('./pages/AncientWorksListingPa
 const SimpleTextReader = lazy(() => import('./pages/SimpleTextReader'));
 const CanonicalTextReader = lazy(() => import('./pages/CanonicalTextReader'));
 const BibliographyPage = lazy(() => import('./pages/BibliographyPage'));
+const BookReaderPage = lazy(() => import('./components/book-reader/BookReaderPage'));
 
 // Phase 6: New pages for analytics, admin, and community features
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
@@ -402,6 +403,7 @@ function AppContent() {
               <Route path="/graphrag" element={<GraphRAGPage />} />
               <Route path="/graphrag-showcase" element={<GraphRAGShowcase />} />
               <Route path="/texts" element={<AncientWorksListingPage />} />
+              <Route path="/texts/:textId/book" element={<BookReaderPage />} />
               <Route path="/texts/:textId" element={<CanonicalTextReader />} />
               <Route path="/simple/:textId" element={<SimpleTextReader />} />
               <Route path="/bibliography" element={<BibliographyPage />} />
