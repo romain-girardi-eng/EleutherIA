@@ -1,6 +1,5 @@
 import { ChevronLeft, ChevronRight, Minus, Plus, Columns2, AlignJustify } from 'lucide-react';
-import type { FontSizePreset } from './types';
-import { FONT_SIZE_MAP } from './types';
+import { FONT_SIZE_MIN, FONT_SIZE_MAX, FONT_SIZE_STEP } from './types';
 
 interface BookControlsProps {
   currentPage: number;
@@ -8,16 +7,13 @@ interface BookControlsProps {
   onPrevious: () => void;
   onNext: () => void;
   onGoToPage: (page: number) => void;
-  fontSize: FontSizePreset;
-  onFontSizeChange: (size: FontSizePreset) => void;
+  fontSize: number;
+  onFontSizeChange: (size: number) => void;
   isBilingual: boolean;
   hasBilingual: boolean;
   onToggleBilingual: () => void;
-  isPaginated: boolean;
   onToggleMode: () => void;
 }
-
-const FONT_ORDER: FontSizePreset[] = ['small', 'normal', 'large'];
 
 export function BookControls({
   currentPage,
@@ -31,16 +27,6 @@ export function BookControls({
   onToggleBilingual,
   onToggleMode,
 }: BookControlsProps) {
-  const fontIdx = FONT_ORDER.indexOf(fontSize);
-
-  const increaseFontSize = () => {
-    if (fontIdx < FONT_ORDER.length - 1) onFontSizeChange(FONT_ORDER[fontIdx + 1]);
-  };
-
-  const decreaseFontSize = () => {
-    if (fontIdx > 0) onFontSizeChange(FONT_ORDER[fontIdx - 1]);
-  };
-
   return (
     <div className="flex items-center justify-center gap-6 py-4">
       <button
@@ -65,24 +51,24 @@ export function BookControls({
 
       <div className="w-px h-5 bg-amber-200/40" />
 
-      {/* Font size +/- */}
+      {/* Font size — continuous +/- */}
       <div className="flex items-center gap-1">
         <button
-          onClick={decreaseFontSize}
-          disabled={fontIdx <= 0}
+          onClick={() => onFontSizeChange(Math.max(FONT_SIZE_MIN, fontSize - FONT_SIZE_STEP))}
+          disabled={fontSize <= FONT_SIZE_MIN}
           className="w-7 h-7 rounded flex items-center justify-center text-stone-500 hover:text-stone-800 hover:bg-amber-100/40 transition disabled:opacity-20 disabled:cursor-not-allowed"
-          title={`Réduire (${FONT_SIZE_MAP[fontSize]}px)`}
+          title="Réduire la police"
         >
           <Minus size={13} />
         </button>
         <span className="text-[10px] text-stone-400 min-w-[28px] text-center tabular-nums">
-          {FONT_SIZE_MAP[fontSize]}
+          {fontSize}
         </span>
         <button
-          onClick={increaseFontSize}
-          disabled={fontIdx >= FONT_ORDER.length - 1}
+          onClick={() => onFontSizeChange(Math.min(FONT_SIZE_MAX, fontSize + FONT_SIZE_STEP))}
+          disabled={fontSize >= FONT_SIZE_MAX}
           className="w-7 h-7 rounded flex items-center justify-center text-stone-500 hover:text-stone-800 hover:bg-amber-100/40 transition disabled:opacity-20 disabled:cursor-not-allowed"
-          title={`Agrandir (${FONT_SIZE_MAP[fontSize]}px)`}
+          title="Agrandir la police"
         >
           <Plus size={13} />
         </button>

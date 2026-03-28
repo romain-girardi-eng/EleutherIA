@@ -10,6 +10,8 @@ interface BookPageProps {
   langLabel?: string;
   fontSize: number;
   side?: 'left' | 'right' | 'single';
+  /** Actual page height from viewport calculation */
+  pageHeight?: number;
 }
 
 export function BookPage({
@@ -20,33 +22,45 @@ export function BookPage({
   langLabel,
   fontSize,
   side = 'single',
+  pageHeight,
 }: BookPageProps) {
   const sideClasses =
     side === 'left'
-      ? 'pr-8 border-r border-stone-900/[0.04]'
+      ? 'pr-[5%] border-r border-stone-900/[0.04]'
       : side === 'right'
-        ? 'pl-8'
+        ? 'pl-[5%]'
         : '';
 
+  // Responsive padding: smaller on narrow pages
+  const paddingClass = side === 'single'
+    ? 'px-[8%] py-[5%]'
+    : 'px-[6%] py-[5%]';
+
   return (
-    <div className={`flex-1 p-10 min-h-[560px] flex flex-col text-stone-800 ${sideClasses}`}>
+    <div
+      className={`flex-1 ${paddingClass} flex flex-col text-stone-800 ${sideClasses}`}
+      style={pageHeight ? { minHeight: `${pageHeight}px` } : undefined}
+    >
       <BookHeader leftText={headerLeft} rightText={headerRight} />
 
       {langLabel && (
-        <div className="font-sans text-[9px] tracking-[1.5px] uppercase text-stone-400 mb-5">
+        <div className="font-sans text-[9px] tracking-[1.5px] uppercase text-stone-400 mb-4">
           {langLabel}
         </div>
       )}
 
       <div className="flex-1">
         {page.passages.map((passage) => (
-          <div key={passage.passageId} className="group relative flex gap-4 mb-6">
-            <div className="font-garamond text-[11px] text-stone-400 min-w-[28px] text-right pt-[3px] shrink-0">
+          <div key={passage.passageId} className="group relative flex gap-3 mb-5">
+            <div
+              className="font-garamond text-stone-400 text-right shrink-0"
+              style={{ fontSize: `${Math.max(10, fontSize * 0.6)}px`, minWidth: `${Math.max(20, fontSize * 1.5)}px`, paddingTop: '2px' }}
+            >
               {passage.canonicalRef}
             </div>
             <div
-              className={`font-garamond leading-[1.75] text-stone-700 flex-1 ${isGreek ? 'italic text-stone-800' : ''}`}
-              style={{ fontSize: `${fontSize}px` }}
+              className={`font-garamond text-stone-700 flex-1 ${isGreek ? 'italic text-stone-800' : ''}`}
+              style={{ fontSize: `${fontSize}px`, lineHeight: 1.75 }}
             >
               {passage.text}
             </div>
@@ -55,7 +69,10 @@ export function BookPage({
         ))}
       </div>
 
-      <div className="mt-auto text-center font-garamond text-xs text-stone-400 pt-5 tracking-[1px]">
+      <div
+        className="mt-auto text-center font-garamond text-stone-400 pt-4 tracking-[1px]"
+        style={{ fontSize: `${Math.max(10, fontSize * 0.65)}px` }}
+      >
         {page.pageNumber}
       </div>
     </div>

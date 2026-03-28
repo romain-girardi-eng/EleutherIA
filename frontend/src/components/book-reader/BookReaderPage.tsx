@@ -9,13 +9,15 @@ import { useCalibration } from './useCalibration';
 import { useBookPagination } from './useBookPagination';
 import { usePageSync } from './usePageSync';
 import { BookSpread } from './BookSpread';
+import { BookPage } from './BookPage';
 import { BookControls } from './BookControls';
 import { BookProgress } from './BookProgress';
 import { MobileBookReader } from './MobileBookReader';
 import {
-  FONT_SIZE_MAP,
+  FONT_SIZE_DEFAULT,
+  FONT_SIZE_MIN,
+  FONT_SIZE_MAX,
   MOBILE_BREAKPOINT,
-  type FontSizePreset,
   type PageConfig,
 } from './types';
 
@@ -33,7 +35,6 @@ interface Work {
   metadata?: Record<string, unknown>;
 }
 
-// Passage shape coming from useLazyPassages
 interface Passage {
   passage_id: string;
   canonical_ref: string;
@@ -52,19 +53,25 @@ const DEFAULT_LINE_HEIGHT = 1.75;
 const DEFAULT_FONT_FAMILY = 'EB Garamond, serif';
 const RESIZE_DEBOUNCE_MS = 150;
 
-// Page dimensions (px) — matches BookPage internal layout
-const PAGE_PADDING = 80; // p-10 = 40px each side
-const HEADER_HEIGHT = 60;
-const FOOTER_HEIGHT = 40;
-const MARGIN_REF_WIDTH = 44; // ~28px min-w + 16px gap
+// Layout chrome heights (px) — header row + running header + page number + padding
+const HEADER_CHROME = 50;   // BookHeader + lang label
+const FOOTER_CHROME = 30;   // page number
+const PAGE_VERTICAL_PAD = 40; // top + bottom padding (~5% estimated)
+const REF_COLUMN_RATIO = 0.08; // ref column takes ~8% of page width
 
-function readFontSize(): FontSizePreset {
-  if (typeof window === 'undefined') return 'normal';
+// Sticky header height (approx)
+const SITE_HEADER_HEIGHT = 120;
+// Controls + progress below the book
+const CONTROLS_HEIGHT = 100;
+
+function readFontSize(): number {
+  if (typeof window === 'undefined') return FONT_SIZE_DEFAULT;
   const stored = localStorage.getItem(LS_FONT_KEY);
-  if (stored && (stored === 'small' || stored === 'normal' || stored === 'large')) {
-    return stored as FontSizePreset;
+  if (stored) {
+    const n = Number(stored);
+    if (n >= FONT_SIZE_MIN && n <= FONT_SIZE_MAX) return n;
   }
-  return 'normal';
+  return FONT_SIZE_DEFAULT;
 }
 
 // ---------------------------------------------------------------------------
@@ -79,26 +86,65 @@ export default function BookReaderPage() {
   // ---- State ----
   const [work, setWork] = useState<Work | null>(null);
   const [workLoading, setWorkLoading] = useState(true);
-  const [fontSizePreset, setFontSizePreset] = useState<FontSizePreset>(readFontSize);
+  const [fontSize, setFontSize] = useState(readFontSize);
   const [isBilingual, setIsBilingual] = useState(true);
-  const [windowWidth, setWindowWidth] = useState(
-    typeof window !== 'undefined' ? window.innerWidth : 1200,
-  );
-  const [containerWidth, setContainerWidth] = useState(920);
+  const [dimensions, setDimensions] = useState({
+    windowWidth: typeof window !== 'undefined' ? window.innerWidth : 1200,
+    windowHeight: typeof window !== 'undefined' ? window.innerHeight : 800,
+  });
   const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
 
-  const isMobile = windowWidth < MOBILE_BREAKPOINT;
-  const fontSize = FONT_SIZE_MAP[fontSizePreset];
+  const isMobile = dimensions.windowWidth < MOBILE_BREAKPOINT;
 
-  // Deep-link page from ?page=N
   const initialPage = Number(searchParams.get('page')) || 1;
   const [currentPage, setCurrentPage] = useState(initialPage);
+
+  // ---- Measure container ----
+  useEffect(() => {
+    const measure = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    };
+    measure();
+    // Re-measure after fonts load
+    if (document.fonts) {
+      document.fonts.ready.then(measure);
+    }
+  }, [isMobile, dimensions.windowWidth]);
+
+  // ---- Responsive page dimensions derived from viewport ----
+  const availableHeight = dimensions.windowHeight - SITE_HEADER_HEIGHT - CONTROLS_HEIGHT;
+  const pageHeight = Math.max(400, availableHeight);
+
+  const pageConfig: PageConfig = useMemo(() => {
+    const effectiveContainerWidth = containerWidth || dimensions.windowWidth * 0.92;
+    // In bilingual mode each page gets half; in single mode full width
+    const singlePageWidth = isMobile
+      ? effectiveContainerWidth
+      : isBilingual
+        ? effectiveContainerWidth / 2
+        : Math.min(effectiveContainerWidth, 640); // single column capped for readability
+    const refWidth = Math.max(24, singlePageWidth * REF_COLUMN_RATIO);
+    const horizontalPad = singlePageWidth * 0.12; // ~6% each side
+    const textWidth = singlePageWidth - refWidth - horizontalPad;
+    const textHeight = pageHeight - HEADER_CHROME - FOOTER_CHROME - PAGE_VERTICAL_PAD;
+
+    return {
+      width: Math.max(textWidth, 100),
+      height: Math.max(textHeight, 200),
+      marginRef: refWidth,
+      fontSize,
+      lineHeight: DEFAULT_LINE_HEIGHT,
+      fontFamily: DEFAULT_FONT_FAMILY,
+    };
+  }, [containerWidth, dimensions.windowWidth, fontSize, isMobile, isBilingual, pageHeight]);
 
   // ---- Load work metadata ----
   useEffect(() => {
     if (!textId) return;
     let cancelled = false;
-
     const load = async () => {
       setWorkLoading(true);
       try {
@@ -110,61 +156,44 @@ export default function BookReaderPage() {
         if (!cancelled) setWorkLoading(false);
       }
     };
-
     load();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [textId]);
 
-  // ---- Load ALL passages (paginated view needs them upfront) ----
+  // ---- Load ALL passages ----
   const {
     passages: rawPassages,
     loading: passagesLoading,
     hasMore,
     loadMore,
-  } = useLazyPassages(textId, {
-    initialLimit: 200,
-    batchSize: 200,
-    autoLoad: false,
-  });
+  } = useLazyPassages(textId, { initialLimit: 200, batchSize: 200, autoLoad: false });
 
-  // Eagerly load remaining batches
   useEffect(() => {
-    if (hasMore && !passagesLoading) {
-      loadMore();
-    }
+    if (hasMore && !passagesLoading) loadMore();
   }, [hasMore, passagesLoading, loadMore]);
 
   const passages = rawPassages as Passage[];
 
-  // ---- Separate original / translation passages ----
-  const hasBilingualContent = useMemo(
-    () => passages.some((p) => p.translation_text),
-    [passages],
-  );
+  // ---- Separate original / translation ----
+  const hasBilingualContent = useMemo(() => passages.some((p) => p.translation_text), [passages]);
 
   const originalPassages = useMemo(
-    () =>
-      passages.map((p) => ({
-        passage_id: p.passage_id,
-        canonical_ref: p.canonical_ref,
-        text_content: p.text_content,
-        kg_node_count: p.kg_node_count,
-      })),
+    () => passages.map((p) => ({
+      passage_id: p.passage_id,
+      canonical_ref: p.canonical_ref,
+      text_content: p.text_content,
+      kg_node_count: p.kg_node_count,
+    })),
     [passages],
   );
 
   const translationPassages = useMemo(
-    () =>
-      passages
-        .filter((p) => p.translation_text)
-        .map((p) => ({
-          passage_id: `${p.passage_id}-trans`,
-          canonical_ref: p.canonical_ref,
-          text_content: p.translation_text!,
-          kg_node_count: 0,
-        })),
+    () => passages.filter((p) => p.translation_text).map((p) => ({
+      passage_id: `${p.passage_id}-trans`,
+      canonical_ref: p.canonical_ref,
+      text_content: p.translation_text!,
+      kg_node_count: 0,
+    })),
     [passages],
   );
 
@@ -173,42 +202,19 @@ export default function BookReaderPage() {
     return first?.translation_language ?? 'en';
   }, [passages]);
 
-  // ---- Page config (depends on container size and font) ----
-  const pageConfig: PageConfig = useMemo(() => {
-    const singlePageWidth = isMobile
-      ? containerWidth - PAGE_PADDING
-      : (containerWidth - PAGE_PADDING * 2) / 2; // two pages side by side
-    const textWidth = singlePageWidth - MARGIN_REF_WIDTH;
-    const textHeight = 560 - HEADER_HEIGHT - FOOTER_HEIGHT; // min-h-[560px] from BookPage
-
-    return {
-      width: Math.max(textWidth, 100),
-      height: Math.max(textHeight, 200),
-      marginRef: MARGIN_REF_WIDTH,
-      fontSize,
-      lineHeight: DEFAULT_LINE_HEIGHT,
-      fontFamily: DEFAULT_FONT_FAMILY,
-    };
-  }, [containerWidth, fontSize, isMobile]);
-
   // ---- Calibration ----
-  const { correctionRatio, calibrated, calibrate, hiddenRef } =
-    useCalibration(pageConfig);
+  const { correctionRatio, calibrated, calibrate, hiddenRef } = useCalibration(pageConfig);
 
-  // Trigger calibration once first passage is available
   useEffect(() => {
-    if (passages.length > 0 && !calibrated) {
-      calibrate(passages[0].text_content);
-    }
+    if (passages.length > 0 && !calibrated) calibrate(passages[0].text_content);
   }, [passages, calibrated, calibrate]);
 
   // ---- Pagination ----
-  const { pages: originalPages, totalPages: originalTotalPages } =
-    useBookPagination({
-      passages: originalPassages,
-      config: pageConfig,
-      correctionRatio: calibrated ? correctionRatio : 1,
-    });
+  const { pages: originalPages, totalPages: originalTotalPages } = useBookPagination({
+    passages: originalPassages,
+    config: pageConfig,
+    correctionRatio: calibrated ? correctionRatio : 1,
+  });
 
   const { pages: translationPagesList } = useBookPagination({
     passages: translationPassages,
@@ -216,17 +222,15 @@ export default function BookReaderPage() {
     correctionRatio: calibrated ? correctionRatio : 1,
   });
 
-  // ---- Page sync (bilingual spreads) ----
+  // ---- Page sync ----
   const spreads = usePageSync({
     originalPages,
     translationPages: isBilingual ? translationPagesList : [],
   });
 
-  const totalPages = isBilingual
-    ? spreads.length * 2
-    : originalTotalPages;
+  const totalPages = isBilingual ? spreads.length * 2 : originalTotalPages;
 
-  // ---- Navigation helpers ----
+  // ---- Navigation ----
   const clampPage = useCallback(
     (p: number) => Math.max(1, Math.min(p, totalPages || 1)),
     [totalPages],
@@ -241,110 +245,64 @@ export default function BookReaderPage() {
     [clampPage, setSearchParams],
   );
 
-  const goNext = useCallback(() => {
-    goToPage(currentPage + (isBilingual ? 2 : 1));
-  }, [currentPage, isBilingual, goToPage]);
+  const goNext = useCallback(() => goToPage(currentPage + (isBilingual ? 2 : 1)), [currentPage, isBilingual, goToPage]);
+  const goPrev = useCallback(() => goToPage(currentPage - (isBilingual ? 2 : 1)), [currentPage, isBilingual, goToPage]);
 
-  const goPrev = useCallback(() => {
-    goToPage(currentPage - (isBilingual ? 2 : 1));
-  }, [currentPage, isBilingual, goToPage]);
-
-  // ---- Keyboard shortcuts ----
+  // ---- Keyboard ----
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      // Ignore if user is typing in an input
-      if (
-        e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement
-      )
-        return;
-
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       switch (e.key) {
-        case 'ArrowRight':
-          e.preventDefault();
-          goNext();
-          break;
-        case 'ArrowLeft':
-          e.preventDefault();
-          goPrev();
-          break;
-        case 'Home':
-          e.preventDefault();
-          goToPage(1);
-          break;
-        case 'End':
-          e.preventDefault();
-          goToPage(totalPages);
-          break;
-        case 't':
-          if (hasBilingualContent) setIsBilingual((b) => !b);
-          break;
-        case 'v':
-        case 'Escape':
-          // Navigate back to scroll reader
-          if (textId) navigate(`/texts/${textId}`);
-          break;
+        case 'ArrowRight': e.preventDefault(); goNext(); break;
+        case 'ArrowLeft': e.preventDefault(); goPrev(); break;
+        case 'Home': e.preventDefault(); goToPage(1); break;
+        case 'End': e.preventDefault(); goToPage(totalPages); break;
+        case 't': if (hasBilingualContent) setIsBilingual((b) => !b); break;
+        case 'v': case 'Escape': if (textId) navigate(`/texts/${textId}`); break;
       }
     };
-
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [goNext, goPrev, goToPage, totalPages, hasBilingualContent, textId, navigate]);
 
-  // ---- Debounced resize ----
+  // ---- Resize ----
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
-
     const handleResize = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        setWindowWidth(window.innerWidth);
-        if (containerRef.current) {
-          setContainerWidth(containerRef.current.offsetWidth);
-        }
+        setDimensions({ windowWidth: window.innerWidth, windowHeight: window.innerHeight });
+        if (containerRef.current) setContainerWidth(containerRef.current.offsetWidth);
       }, RESIZE_DEBOUNCE_MS);
     };
-
     window.addEventListener('resize', handleResize);
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener('resize', handleResize);
-    };
+    return () => { clearTimeout(timeoutId); window.removeEventListener('resize', handleResize); };
   }, []);
 
-  // Measure container on mount and when ref changes
-  useEffect(() => {
-    if (containerRef.current) {
-      setContainerWidth(containerRef.current.offsetWidth);
-    }
-  }, [isMobile]);
+  // ---- Font size persistence ----
+  const handleFontSizeChange = useCallback((size: number) => {
+    const clamped = Math.max(FONT_SIZE_MIN, Math.min(FONT_SIZE_MAX, size));
+    setFontSize(clamped);
+    localStorage.setItem(LS_FONT_KEY, String(clamped));
+  }, []);
 
-  // ---- Current spread (for desktop) ----
-  const currentSpreadIndex = Math.max(
-    0,
-    Math.floor((currentPage - 1) / 2),
-  );
+  // ---- Current spread ----
+  const currentSpreadIndex = Math.max(0, Math.floor((currentPage - 1) / 2));
   const currentSpread = spreads[currentSpreadIndex] ?? null;
 
-  // Current ref for progress bar
   const currentRef = useMemo(() => {
-    if (isBilingual && currentSpread) {
-      return currentSpread.left.passages[0]?.canonicalRef;
-    }
-    const page = originalPages[currentPage - 1];
-    return page?.passages[0]?.canonicalRef;
+    if (isBilingual && currentSpread) return currentSpread.left.passages[0]?.canonicalRef;
+    return originalPages[currentPage - 1]?.passages[0]?.canonicalRef;
   }, [isBilingual, currentSpread, originalPages, currentPage]);
 
-  // ---- Loading state ----
+  // ---- Loading ----
   if (workLoading || passagesLoading || !work) {
     return (
       <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <div className="w-8 h-8 border-2 border-amber-200/60 border-t-gray-900 rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-stone-500 text-sm">
-              Chargement de l&apos;ouvrage…
-            </p>
+            <p className="text-stone-500 text-sm">Chargement de l&apos;ouvrage…</p>
           </div>
         </div>
       </div>
@@ -358,7 +316,7 @@ export default function BookReaderPage() {
         {/* Hidden calibration div */}
         <div ref={hiddenRef} aria-hidden="true" style={{ position: 'absolute', visibility: 'hidden' }} />
 
-        {/* Header — matches CanonicalTextReader style */}
+        {/* Header */}
         <header className="sticky top-0 z-40 bg-amber-50 border-b border-amber-100">
           <div className="max-w-6xl mx-auto px-4 py-3">
             <div className="flex items-center justify-between mb-2">
@@ -372,72 +330,80 @@ export default function BookReaderPage() {
                 <span className="hidden sm:inline">Mode scroll</span>
               </button>
             </div>
-            <div className="mb-2">
+            <div>
               <h1 className="text-xl font-display font-semibold text-stone-800">{work.title}</h1>
               <p className="text-sm text-stone-600">{work.author}</p>
             </div>
           </div>
         </header>
 
-        {/* Book content area */}
-        <main className="max-w-[960px] mx-auto px-4 py-8">
-          {/* Progress bar */}
-          <BookProgress
-            currentPage={currentPage}
-            totalPages={totalPages}
-            currentRef={currentRef}
-          />
+        {/* Book content — full width, responsive */}
+        <main className="w-full px-4 sm:px-6 lg:px-8 py-6">
+          <div className="max-w-[1200px] mx-auto">
+            {/* Progress */}
+            <BookProgress currentPage={currentPage} totalPages={totalPages} currentRef={currentRef} />
 
-          {/* Book pages */}
-          <div ref={containerRef} className="w-full mb-6">
-            {isMobile ? (
-              <MobileBookReader
-                originalPages={originalPages}
-                translationPages={translationPagesList}
-                currentPage={currentPage}
-                onPageChange={goToPage}
-                title={work.title}
-                author={work.author}
-                originalLanguage={work.language ?? 'grc'}
-                fontSize={fontSize}
-                hasBilingual={hasBilingualContent}
-              />
-            ) : currentSpread ? (
-              <BookSpread
-                spread={currentSpread}
-                title={work.title}
-                author={work.author}
-                originalLanguage={work.language ?? 'grc'}
-                translationLanguage={translationLanguage}
-                fontSize={fontSize}
-              />
-            ) : (
-              <div className="text-center text-stone-400 py-20 font-garamond">
-                Aucune page à afficher.
-              </div>
-            )}
+            {/* Book pages — fill available width */}
+            <div ref={containerRef} className="w-full mb-4">
+              {isMobile ? (
+                <MobileBookReader
+                  originalPages={originalPages}
+                  translationPages={translationPagesList}
+                  currentPage={currentPage}
+                  onPageChange={goToPage}
+                  title={work.title}
+                  author={work.author}
+                  originalLanguage={work.language ?? 'grc'}
+                  fontSize={fontSize}
+                  hasBilingual={hasBilingualContent}
+                  pageHeight={pageHeight}
+                />
+              ) : currentSpread ? (
+                <BookSpread
+                  spread={currentSpread}
+                  title={work.title}
+                  author={work.author}
+                  originalLanguage={work.language ?? 'grc'}
+                  translationLanguage={translationLanguage}
+                  fontSize={fontSize}
+                  pageHeight={pageHeight}
+                />
+              ) : originalPages[currentPage - 1] ? (
+                <div className="max-w-[640px] mx-auto">
+                  <div className="bg-white/70 rounded-lg shadow-sm border border-amber-200/30">
+                    <BookPage
+                      page={originalPages[currentPage - 1]}
+                      headerLeft={work.title}
+                      headerRight={work.author}
+                      isGreek={work.language === 'grc'}
+                      fontSize={fontSize}
+                      side="single"
+                      pageHeight={pageHeight}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center text-stone-400 py-20 font-garamond">
+                  Aucune page à afficher.
+                </div>
+              )}
+            </div>
+
+            {/* Controls */}
+            <BookControls
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPrevious={goPrev}
+              onNext={goNext}
+              onGoToPage={goToPage}
+              fontSize={fontSize}
+              onFontSizeChange={handleFontSizeChange}
+              isBilingual={isBilingual}
+              hasBilingual={hasBilingualContent}
+              onToggleBilingual={() => setIsBilingual((b) => !b)}
+              onToggleMode={() => { if (textId) navigate(`/texts/${textId}`); }}
+            />
           </div>
-
-          {/* Controls */}
-          <BookControls
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPrevious={goPrev}
-            onNext={goNext}
-            onGoToPage={goToPage}
-            fontSize={fontSizePreset}
-            onFontSizeChange={(size) => {
-              setFontSizePreset(size);
-              localStorage.setItem(LS_FONT_KEY, size);
-            }}
-            isBilingual={isBilingual}
-            hasBilingual={hasBilingualContent}
-            onToggleBilingual={() => setIsBilingual((b) => !b)}
-            isPaginated={true}
-            onToggleMode={() => {
-              if (textId) navigate(`/texts/${textId}`);
-            }}
-          />
         </main>
       </div>
     </div>

@@ -38,12 +38,10 @@ export interface BookSpreadData {
   right: BookPage;
 }
 
-export type FontSizePreset = 'small' | 'normal' | 'large';
-
-export const FONT_SIZE_MAP: Record<FontSizePreset, number> = {
-  small: 14,
-  normal: 17,
-  large: 20,
-};
+/** Font size bounds — no arbitrary presets, continuous 1px steps */
+export const FONT_SIZE_MIN = 12;
+export const FONT_SIZE_MAX = 28;
+export const FONT_SIZE_DEFAULT = 18;
+export const FONT_SIZE_STEP = 1;
 
 export const MOBILE_BREAKPOINT = 900;
