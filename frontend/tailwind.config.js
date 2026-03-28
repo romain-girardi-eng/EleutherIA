@@ -171,6 +171,15 @@ export default {
           'Georgia',
           'serif',
         ],
+        // Reader UI - EB Garamond for Loeb-style paginated reader
+        garamond: [
+          '"EB Garamond"',
+          '"Palatino Linotype"',
+          '"Book Antiqua"',
+          'Palatino',
+          'Georgia',
+          'serif',
+        ],
         // Monospace for code/data
         mono: [
           'ui-monospace',
