@@ -10,8 +10,6 @@ interface BookPageProps {
   langLabel?: string;
   fontSize: number;
   side?: 'left' | 'right' | 'single';
-  /** Actual page height from viewport calculation */
-  pageHeight?: number;
 }
 
 export function BookPage({
@@ -22,7 +20,6 @@ export function BookPage({
   langLabel,
   fontSize,
   side = 'single',
-  pageHeight,
 }: BookPageProps) {
   const sideClasses =
     side === 'left'
@@ -38,8 +35,7 @@ export function BookPage({
 
   return (
     <div
-      className={`flex-1 ${paddingClass} flex flex-col text-stone-800 ${sideClasses}`}
-      style={pageHeight ? { minHeight: `${pageHeight}px` } : undefined}
+      className={`flex-1 ${paddingClass} flex flex-col text-stone-800 overflow-hidden ${sideClasses}`}
     >
       <BookHeader leftText={headerLeft} rightText={headerRight} />
 

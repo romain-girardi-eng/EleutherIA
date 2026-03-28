@@ -13,7 +13,6 @@ interface MobileBookReaderProps {
   originalLanguage: string;
   fontSize: number;
   hasBilingual: boolean;
-  pageHeight?: number;
 }
 
 export function MobileBookReader({
@@ -26,7 +25,6 @@ export function MobileBookReader({
   originalLanguage,
   fontSize,
   hasBilingual,
-  pageHeight,
 }: MobileBookReaderProps) {
   const [activeTab, setActiveTab] = useState<'original' | 'translation'>('original');
   const pages = activeTab === 'original' ? originalPages : translationPages;
@@ -45,7 +43,7 @@ export function MobileBookReader({
   if (!page) return null;
 
   return (
-    <div {...swipeHandlers} className="w-full">
+    <div {...swipeHandlers} className="w-full h-full flex flex-col">
       {hasBilingual && translationPages.length > 0 && (
         <div className="flex justify-center gap-1 mb-4">
           <button
@@ -71,7 +69,7 @@ export function MobileBookReader({
         </div>
       )}
 
-      <div className="bg-white/70 rounded-lg shadow-sm border border-amber-200/30">
+      <div className="flex-1 min-h-0 bg-white/70 rounded-lg shadow-sm border border-amber-200/30 overflow-hidden">
         <BookPage
           page={page}
           headerLeft={title}
@@ -79,7 +77,6 @@ export function MobileBookReader({
           isGreek={isGreek}
           fontSize={fontSize}
           side="single"
-          pageHeight={pageHeight}
         />
       </div>
     </div>
