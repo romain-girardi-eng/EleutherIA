@@ -8,14 +8,14 @@ export function BookProgress({ currentPage, totalPages, currentRef }: BookProgre
   const percentage = totalPages > 0 ? Math.round((currentPage / totalPages) * 100) : 0;
 
   return (
-    <div className="w-full max-w-[920px] mx-auto mb-10">
-      <div className="h-0.5 bg-white/[0.06] rounded-sm overflow-hidden mb-1.5">
+    <div className="w-full max-w-[920px] mx-auto mb-4">
+      <div className="h-0.5 bg-amber-200/30 rounded-sm overflow-hidden mb-1.5">
         <div
           className="h-full bg-gradient-to-r from-amber-600 to-amber-700 rounded-sm transition-[width] duration-300"
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <div className="flex justify-between text-[10px] opacity-35">
+      <div className="flex justify-between text-[10px] text-stone-400">
         <span>{currentRef ?? ''}</span>
         <span>
           Pages {currentPage}–{Math.min(currentPage + 1, totalPages)} / {totalPages}

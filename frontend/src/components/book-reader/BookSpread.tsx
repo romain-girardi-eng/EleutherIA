@@ -28,8 +28,8 @@ export function BookSpread({
   const isGreek = originalLanguage === 'grc';
 
   return (
-    <div className="flex bg-[#fdfbf7] rounded-sm shadow-[0_1px_3px_rgba(0,0,0,0.3),0_8px_24px_rgba(0,0,0,0.25)] overflow-hidden relative">
-      <div className="absolute left-1/2 top-0 bottom-0 w-6 -translate-x-1/2 bg-gradient-to-r from-transparent via-black/[0.07] to-transparent pointer-events-none z-10" />
+    <div className="flex bg-white/70 rounded-lg shadow-sm border border-amber-200/30 overflow-hidden relative">
+      <div className="absolute left-1/2 top-0 bottom-0 w-6 -translate-x-1/2 bg-gradient-to-r from-transparent via-black/[0.04] to-transparent pointer-events-none z-10" />
 
       <BookPage
         page={spread.left}
