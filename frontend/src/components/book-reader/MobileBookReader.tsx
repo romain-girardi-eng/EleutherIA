@@ -13,6 +13,7 @@ interface MobileBookReaderProps {
   originalLanguage: string;
   fontSize: number;
   hasBilingual: boolean;
+  pageHeight?: number;
 }
 
 export function MobileBookReader({
@@ -25,6 +26,7 @@ export function MobileBookReader({
   originalLanguage,
   fontSize,
   hasBilingual,
+  pageHeight,
 }: MobileBookReaderProps) {
   const [activeTab, setActiveTab] = useState<'original' | 'translation'>('original');
   const pages = activeTab === 'original' ? originalPages : translationPages;
@@ -69,17 +71,16 @@ export function MobileBookReader({
         </div>
       )}
 
-      <div className="max-w-[560px] mx-auto">
-        <div className="bg-white/70 rounded-lg shadow-sm border border-amber-200/30">
-          <BookPage
-            page={page}
-            headerLeft={title}
-            headerRight={author}
-            isGreek={isGreek}
-            fontSize={Math.min(fontSize, 15)}
-            side="single"
-          />
-        </div>
+      <div className="bg-white/70 rounded-lg shadow-sm border border-amber-200/30">
+        <BookPage
+          page={page}
+          headerLeft={title}
+          headerRight={author}
+          isGreek={isGreek}
+          fontSize={fontSize}
+          side="single"
+          pageHeight={pageHeight}
+        />
       </div>
     </div>
   );

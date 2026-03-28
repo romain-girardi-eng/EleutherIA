@@ -8,6 +8,7 @@ interface BookSpreadProps {
   originalLanguage: string;
   translationLanguage: string;
   fontSize: number;
+  pageHeight?: number;
 }
 
 const LANG_LABELS: Record<string, string> = {
@@ -24,6 +25,7 @@ export function BookSpread({
   originalLanguage,
   translationLanguage,
   fontSize,
+  pageHeight,
 }: BookSpreadProps) {
   const isGreek = originalLanguage === 'grc';
 
@@ -39,6 +41,7 @@ export function BookSpread({
         langLabel={LANG_LABELS[originalLanguage] ?? originalLanguage}
         fontSize={fontSize}
         side="left"
+        pageHeight={pageHeight}
       />
       <BookPage
         page={spread.right}
@@ -48,6 +51,7 @@ export function BookSpread({
         langLabel={LANG_LABELS[translationLanguage] ?? translationLanguage}
         fontSize={fontSize}
         side="right"
+        pageHeight={pageHeight}
       />
     </div>
   );
