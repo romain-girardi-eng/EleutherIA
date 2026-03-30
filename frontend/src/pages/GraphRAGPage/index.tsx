@@ -35,6 +35,10 @@ export default function GraphRAGPage() {
 
   const { isAuthenticated } = useAuth();
 
+  // Model & mode selection
+  const [selectedModel, setSelectedModel] = useState('gemini-3.1-pro');
+  const [selectedMode, setSelectedMode] = useState('auto');
+
   // Advanced settings
   const [ancientOnly, setAncientOnly] = useState(false);
   const [_reasoningSteps, setReasoningSteps] = useState<ReasoningStep[]>([]);
@@ -258,6 +262,8 @@ export default function GraphRAGPage() {
       const params = new URLSearchParams({
         query: queryText,
         ancient_only: ancientOnly.toString(),
+        model: selectedModel,
+        retrieval_mode: selectedMode,
       });
 
       const response = await fetch(`${apiUrl}/api/graphrag/query/stream?${params.toString()}`, {
@@ -444,6 +450,7 @@ export default function GraphRAGPage() {
           tokens_used: finalResponse.tokens_used,
           llm_provider: finalResponse.llm_provider || 'gemini',
           llm_model: finalResponse.llm_model || 'gemini-3.1-pro-preview',
+          retrieval_mode: selectedMode,
           timestamp: new Date(),
           citationTexts: formattedCitationTexts,
           graphrag_response: finalResponse,
@@ -550,6 +557,10 @@ export default function GraphRAGPage() {
                 onNodeClick={handleNodeClick}
                 onCitationClick={handleCitationClick}
                 onPassageCitationClick={handlePassageCitationClick}
+                selectedModel={selectedModel}
+                selectedMode={selectedMode}
+                onModelChange={setSelectedModel}
+                onModeChange={setSelectedMode}
               />
 
               {/* RIGHT PANEL - desktop graph workspace */}

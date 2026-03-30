@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
 import { TerminalLoader } from '../../components/ui/terminal-loader';
+import { ModelSelector } from '@/components/ModelSelector';
 import type { GraphRAGChatMessage } from '../../types';
 
 interface ChatPanelProps {
@@ -20,6 +21,10 @@ interface ChatPanelProps {
   onNodeClick: (nodeId: string) => void;
   onCitationClick: (citationIndex: number) => void;
   onPassageCitationClick?: (passageId: string) => void;
+  selectedModel: string;
+  selectedMode: string;
+  onModelChange: (model: string) => void;
+  onModeChange: (mode: string) => void;
 }
 
 export default function ChatPanel({
@@ -36,6 +41,10 @@ export default function ChatPanel({
   onNodeClick,
   onCitationClick,
   onPassageCitationClick,
+  selectedModel,
+  selectedMode,
+  onModelChange,
+  onModeChange,
 }: ChatPanelProps) {
   const { t } = useTranslation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -53,6 +62,12 @@ export default function ChatPanel({
       {/* Fixed header */}
       <div className="shrink-0 flex items-center justify-between px-6 xl:px-10 py-3 border-b border-amber-200/40 bg-parchment-50/80 backdrop-blur-sm">
         <h1 className="text-sm xl:text-base font-semibold text-stone-400 uppercase tracking-wider">{t('graphRagUi.chatTitle')}</h1>
+        <ModelSelector
+          selectedModel={selectedModel}
+          selectedMode={selectedMode}
+          onModelChange={onModelChange}
+          onModeChange={onModeChange}
+        />
       </div>
 
       {/* Scrollable messages */}

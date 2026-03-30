@@ -473,6 +473,7 @@ export interface GraphRAGChatMessage {
   tokens_used?: number;
   llm_provider?: string;
   llm_model?: string;
+  retrieval_mode?: string;
   timestamp: Date;
   citationTexts?: Record<string, { original: string; originalLanguage: string; translation: string }>;
   graphrag_response?: GraphRAGResponse;
