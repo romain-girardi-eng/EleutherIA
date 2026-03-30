@@ -57,7 +57,7 @@ POST /auth/login
 
 ## Works API
 
-Browse the ancient texts corpus (189 works, 17k passages).
+Browse the ancient texts corpus (487 works, 69k passages).
 
 ### List Works
 
@@ -242,13 +242,16 @@ Returns aggregate statistics for the entire corpus.
 ```json
 {
   "works": {
-    "total_works": 189,
-    "greek_works": 172,
-    "latin_works": 17,
-    "total_words": 2847291
+    "total_works": 487,
+    "greek_works": 310,
+    "latin_works": 28,
+    "english_works": 131,
+    "hebrew_works": 13,
+    "arabic_works": 5,
+    "total_words": 8500000
   },
   "passages": {
-    "total_passages": 16968,
+    "total_passages": 69277,
     "with_morphology": 12450,
     "avg_passage_length": 168
   }
@@ -259,7 +262,7 @@ Returns aggregate statistics for the entire corpus.
 
 ## Knowledge Graph API
 
-Browse and analyze the knowledge graph (2,193 nodes, 8,616 edges).
+Browse and analyze the knowledge graph (17,746 nodes, 42,925 edges).
 
 ### List Nodes
 
@@ -273,7 +276,7 @@ Returns knowledge graph nodes with optional filtering.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `node_type` | string | - | Filter by type: `Person`, `Concept`, `Argument`, `Work`, `School`, `Debate`, `Position`, `Event`, `Institution`, `Text_Fragment`, `Modern_Interpretation`, `Term`, `Source_Collection`, `Doctrine`, `Passage` |
+| `node_type` | string | - | Filter by type: `Person`, `Concept`, `Argument`, `Work`, `School`, `Debate`, `Position`, `Event`, `Institution`, `Text_Fragment`, `Modern_Interpretation`, `Term`, `Source_Collection`, `Doctrine`, `Passage`, `Publication`, `Quote`, `Synthesis`, `Controversy`, `Conceptual_Evolution`, `Group`, `Argument_Framework` |
 | `period` | string | - | Filter by period: `Presocratic`, `Classical Greek`, `Hellenistic Greek`, `Roman Republican`, `Roman Imperial`, `Late Antiquity` |
 | `school` | string | - | Filter by school: `Stoic`, `Epicurean`, `Academic`, `Peripatetic`, `Pyrrhonist`, `Platonist` |
 | `search` | string | - | Text search in label and description |
@@ -378,13 +381,19 @@ Returns knowledge graph edges with optional filtering.
 | `limit` | integer | 100 | Results per page (1-1000) |
 | `offset` | integer | 0 | Pagination offset |
 
-**Relation Types:**
-- Argumentative: `argues_for`, `argues_against`, `refutes`, `supports`
-- Intellectual: `influences`, `influenced_by`, `taught_by`, `student_of`
-- Affiliation: `belongs_to_school`, `founded`, `member_of`
-- Authorship: `wrote`, `authored_by`, `attributed_to`
-- Citation: `cites`, `cited_by`, `references`, `quoted_in`
-- Semantic: `discusses`, `defines`, `related_to`, `synonym_of`
+**Relation Types (56 across 12 categories):**
+- Argumentative: `argues_for`, `argues_against`, `refutes`, `responds_to`, `supports`, `critiques`
+- Intellectual: `influences`, `influenced`, `influenced_by`, `taught_by`, `teaches`, `student_of`, `extends`
+- Affiliation: `belongs_to_school`, `has_member`, `member_of`, `founded`
+- Authorship: `wrote`, `authored_by`, `created_by`, `developed_by`
+- Citation: `cites`, `cited_by`, `source_for`, `evidenced_by`
+- Textual: `preserves`, `preserved_in`
+- Structural: `contains`, `part_of`, `translation_of`, `has_translation`, `has_section`, `has_chapter`, `belongs_to_corpus`
+- Semantic: `discusses`, `discussed_in`, `defines`, `related_to`, `contrasts_with`, `parallel_to`, `employs`, `presupposes`, `grounded_in`
+- Doctrinal: `holds_position`, `endorses`, `rejects`
+- Debate: `participates_in`, `contributes_to`
+- Hermeneutic: `interprets`, `interpreted_by`, `represents`, `exemplifies`, `specializes_in`
+- Temporal: `contemporary_of`, `precedes`, `follows`
 
 **Response:**
 ```json
@@ -412,24 +421,31 @@ Returns knowledge graph statistics.
 **Response:**
 ```json
 {
-  "total_nodes": 2193,
-  "total_edges": 8616,
-  "density": 0.0036,
+  "total_nodes": 17746,
+  "total_edges": 42925,
+  "density": 0.00027,
   "connected_components": 1,
-  "avg_degree": 7.86,
+  "avg_degree": 4.84,
   "node_types": {
-    "Person": 245,
-    "Concept": 412,
-    "Argument": 189,
-    "Work": 156,
-    "School": 12,
-    "Debate": 34
+    "Person": 280,
+    "Concept": 520,
+    "Argument": 350,
+    "Work": 500,
+    "School": 22,
+    "Debate": 40,
+    "Passage": 14800,
+    "Publication": 85,
+    "Quote": 45,
+    "Term": 180,
+    "..."
   },
   "edge_types": {
-    "argues_for": 1245,
-    "influences": 892,
-    "wrote": 567,
-    "discusses": 1123
+    "part_of": 15200,
+    "authored_by": 8500,
+    "discusses": 2100,
+    "argues_for": 1400,
+    "influences": 950,
+    "..."
   }
 }
 ```
@@ -651,8 +667,8 @@ curl -X POST "https://free-will.app/api/graphrag/answer" \
   ],
   "sources": [...],
   "metadata": {
-    "llm_provider": "kimi",
-    "model": "kimi-latest",
+    "llm_provider": "gemini",
+    "model": "gemini-3.1-pro-preview",
     "pipeline": "pageindex-v3",
     "quality_score": 0.85,
     "quality_badge": "High"
@@ -739,7 +755,7 @@ Returns GraphRAG service health status.
 {
   "status": "healthy",
   "kg_loaded": true,
-  "nodes_count": 2193
+  "nodes_count": 17746
 }
 ```
 
@@ -814,25 +830,32 @@ X-RateLimit-Reset: 1706644800
 
 ---
 
-## Appendix: Node Types
+## Appendix: Node Types (22)
 
-| Type | Count | Description |
-|------|-------|-------------|
-| `Person` | 245 | Philosophers and scholars |
-| `Concept` | 412 | Philosophical concepts |
-| `Argument` | 189 | Named arguments |
-| `Work` | 156 | Ancient texts |
-| `School` | 12 | Philosophical schools |
-| `Debate` | 34 | Philosophical debates |
-| `Position` | 67 | Philosophical stances |
-| `Event` | 23 | Historical events |
-| `Institution` | 8 | Academies, schools |
-| `Text_Fragment` | 89 | Fragmentary texts |
-| `Modern_Interpretation` | 45 | Scholarly interpretations |
-| `Term` | 156 | Technical terms |
-| `Source_Collection` | 12 | Collections like SVF |
-| `Doctrine` | 78 | Formal doctrines |
-| `Passage` | 617 | Key passages |
+| Type | Description |
+|------|-------------|
+| `Person` | Philosophers and scholars |
+| `Concept` | Philosophical concepts |
+| `Argument` | Named arguments |
+| `Work` | Ancient texts and modern scholarship |
+| `School` | Philosophical schools |
+| `Debate` | Philosophical debates |
+| `Position` | Philosophical stances |
+| `Event` | Historical events |
+| `Institution` | Academies, schools |
+| `Text_Fragment` | Fragmentary texts preserved in secondary sources |
+| `Modern_Interpretation` | Scholarly interpretations |
+| `Term` | Technical philosophical terms |
+| `Source_Collection` | Collections (SVF, LS, etc.) |
+| `Doctrine` | Formal doctrines |
+| `Passage` | Key textual passages (source + translation pairs) |
+| `Publication` | Modern scholarly publications |
+| `Quote` | Notable philosophical quotations |
+| `Synthesis` | Scholarly syntheses combining multiple sources |
+| `Controversy` | Scholarly or philosophical controversies |
+| `Conceptual_Evolution` | Historical evolution of a concept |
+| `Group` | Groups of philosophers or intellectual communities |
+| `Argument_Framework` | Structured frameworks for analyzing arguments |
 
 ## Appendix: Historical Periods
 
