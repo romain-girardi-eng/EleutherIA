@@ -107,38 +107,53 @@ class SQLStrategy:
 
     async def _step1_label_match(self, queries: list[str], deps: Any) -> list[str]:
         """Find kg_nodes whose label or description matches query terms."""
+        seen: set[str] = set()
         patterns: list[str] = []
         for q in queries:
             for term in q.split():
-                if len(term) >= 3:
+                low = term.lower()
+                if len(term) >= 3 and low not in seen:
+                    seen.add(low)
                     patterns.append(f"%{term}%")
         if not patterns:
             return []
+        # Cap to avoid SQL with too many placeholders
+        patterns = patterns[:30]
 
+        # Build individual $1, $2, ... placeholders instead of ANY($1::text[])
+        # to avoid asyncpg array-parameter issues with pgbouncer / connection poolers.
+        placeholders = ", ".join(f"${i + 1}" for i in range(len(patterns)))
         sql = f"""
             SELECT DISTINCT node_id
             FROM {DB_SCHEMA}.kg_nodes
-            WHERE label ILIKE ANY($1::text[]) OR description ILIKE ANY($1::text[])
+            WHERE label ILIKE ANY(ARRAY[{placeholders}])
+               OR description ILIKE ANY(ARRAY[{placeholders}])
             LIMIT 200
         """
         try:
-            rows = await deps.db.fetch(sql, patterns)
+            rows = await deps.db.fetch(sql, *patterns)
+            logger.info("SQLStrategy step1: %d patterns → %d nodes", len(patterns), len(rows))
             return [r["node_id"] for r in rows]
         except Exception:
-            logger.warning("SQLStrategy step1 label match failed", exc_info=True)
+            logger.warning("SQLStrategy step1 label match failed (patterns=%r)", patterns[:5], exc_info=True)
             return []
 
     async def _fetch_citations(self, node_ids: list[str], deps: Any) -> list[dict[str, Any]]:
         """Fetch passage_citations for given node IDs, ordered by confidence."""
+        if not node_ids:
+            return []
+
+        # Use individual $1, $2, ... placeholders for pgbouncer compatibility.
+        placeholders = ", ".join(f"${i + 1}" for i in range(len(node_ids)))
         sql = f"""
             SELECT passage_id, kg_node_id, confidence
             FROM {DB_SCHEMA}.passage_citations
-            WHERE kg_node_id = ANY($1::text[])
+            WHERE kg_node_id = ANY(ARRAY[{placeholders}])
             ORDER BY confidence DESC
             LIMIT 100
         """
         try:
-            return await deps.db.fetch(sql, node_ids)
+            return await deps.db.fetch(sql, *node_ids)
         except Exception:
             logger.warning("SQLStrategy fetch_citations failed", exc_info=True)
             return []
