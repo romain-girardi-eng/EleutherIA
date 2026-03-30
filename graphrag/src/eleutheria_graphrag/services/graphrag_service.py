@@ -11,8 +11,11 @@ from __future__ import annotations
 import json
 import logging
 import os
+import time
+import uuid
 import warnings
 from collections.abc import AsyncIterator
+from dataclasses import dataclass, field
 from typing import Any
 
 from eleutheria_graphrag.agents.dependencies import Deps
@@ -48,6 +51,64 @@ def _preferred_provider() -> ModelProvider:
     except ValueError:
         logger.warning("Unknown LLM_PREFERRED_PROVIDER=%s, falling back to gemini", raw)
         return ModelProvider.GEMINI
+
+
+@dataclass
+class Turn:
+    question: str
+    answer: str
+    citations: list[dict[str, Any]]
+    reasoning_trace: list[Any]
+    evidence_node_ids: list[str]
+
+
+@dataclass
+class ConversationThread:
+    thread_id: str
+    model: str
+    retrieval_mode: str
+    turns: list[Turn] = field(default_factory=list)
+    created_at: float = field(default_factory=time.time)
+    last_accessed: float = field(default_factory=time.time)
+
+
+class ThreadManager:
+    def __init__(self, ttl_seconds: int = 1800) -> None:
+        self._threads: dict[str, ConversationThread] = {}
+        self._ttl = ttl_seconds
+
+    def create_thread(self, model: str, retrieval_mode: str) -> ConversationThread:
+        self.cleanup_expired()
+        thread = ConversationThread(
+            thread_id=str(uuid.uuid4()),
+            model=model,
+            retrieval_mode=retrieval_mode,
+        )
+        self._threads[thread.thread_id] = thread
+        return thread
+
+    def get_thread(self, thread_id: str) -> ConversationThread | None:
+        thread = self._threads.get(thread_id)
+        if thread is None:
+            return None
+        if time.time() - thread.last_accessed > self._ttl:
+            del self._threads[thread_id]
+            return None
+        return thread
+
+    def touch(self, thread_id: str) -> None:
+        thread = self._threads.get(thread_id)
+        if thread:
+            thread.last_accessed = time.time()
+
+    def cleanup_expired(self) -> None:
+        now = time.time()
+        expired = [
+            tid for tid, t in self._threads.items()
+            if now - t.last_accessed > self._ttl
+        ]
+        for tid in expired:
+            del self._threads[tid]
 
 
 class GraphRAGService:
