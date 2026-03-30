@@ -1,9 +1,10 @@
 """Tests for auto-fallback: VectorStrategy -> SQLStrategy when vector returns empty."""
 
-import pytest
 from unittest.mock import AsyncMock, MagicMock
 
-from eleutheria_graphrag.services.retrieval_strategy import VectorStrategy, SQLStrategy
+import pytest
+
+from eleutheria_graphrag.services.retrieval_strategy import SQLStrategy, VectorStrategy
 
 
 @pytest.mark.asyncio
@@ -11,7 +12,7 @@ async def test_vector_strategy_returns_empty_on_embed_failure():
     """VectorStrategy gracefully returns empty when embed_fn raises."""
     mock_deps = MagicMock()
 
-    async def failing_embed(deps: MagicMock, query: str) -> list[float]:
+    async def failing_embed(_deps: MagicMock, _query: str) -> list[float]:
         raise Exception("429 spending cap exceeded")
 
     vector = VectorStrategy(embed_fn=failing_embed)
@@ -52,7 +53,7 @@ async def test_auto_fallback_sequence():
     mock_deps = MagicMock()
 
     # Vector strategy with failing embed
-    async def failing_embed(deps: MagicMock, query: str) -> list[float]:
+    async def failing_embed(_deps: MagicMock, _query: str) -> list[float]:
         raise Exception("429 spending cap exceeded")
 
     vector = VectorStrategy(embed_fn=failing_embed)
