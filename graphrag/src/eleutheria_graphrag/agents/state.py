@@ -328,6 +328,23 @@ class ScholarlyAnswer(BaseModel):
 
 
 @dataclass
+class ReasoningStep:
+    """One step of the FSM reasoning trace."""
+
+    node_name: str
+    timestamp_ms: int
+    duration_ms: int
+    model: str | None
+    prompt_summary: str
+    full_prompt_tokens: int
+    raw_output: str
+    thinking: str | None
+    parsed_result: dict[str, Any] | None
+    skipped: bool
+    skip_reason: str | None
+
+
+@dataclass
 class RAGState:
     """Mutable state accumulating through the pydantic-graph FSM."""
 
@@ -374,6 +391,9 @@ class RAGState:
     claim_ledger: list[ClaimLedgerItem] = field(default_factory=list)
 
     metadata: dict[str, Any] = field(default_factory=dict)
+    reasoning_trace: list[ReasoningStep] = field(default_factory=list)
+    retrieval_mode: str = "auto"  # "auto" | "vector" | "sql"
+    selected_model: str = "gemini-3.1-pro"
 
     def __post_init__(self) -> None:
         if self.query_type is None:
