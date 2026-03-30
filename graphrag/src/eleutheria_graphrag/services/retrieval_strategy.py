@@ -118,7 +118,7 @@ class SQLStrategy:
         sql = f"""
             SELECT DISTINCT node_id
             FROM {DB_SCHEMA}.kg_nodes
-            WHERE label ILIKE ANY($1) OR description ILIKE ANY($1)
+            WHERE label ILIKE ANY($1::text[]) OR description ILIKE ANY($1::text[])
             LIMIT 200
         """
         try:
@@ -133,7 +133,7 @@ class SQLStrategy:
         sql = f"""
             SELECT passage_id, kg_node_id, confidence
             FROM {DB_SCHEMA}.passage_citations
-            WHERE kg_node_id = ANY($1)
+            WHERE kg_node_id = ANY($1::text[])
             ORDER BY confidence DESC
             LIMIT 100
         """
