@@ -52,8 +52,8 @@ from eleutheria_graphrag.agents.state import (
     EvidenceSource,
     QueryComplexity,
     RAGState,
-    ReadingNote,
     ReadingDecision,
+    ReadingNote,
     ReasoningStep,
     ResearchFacet,
     ResearchNotebook,
@@ -69,15 +69,15 @@ from eleutheria_graphrag.agents.structured_models import (
     CounterEvidenceResult,
     CRAGValidation,
     ExpansionTerms,
-    ResearchFrame,
     ReadingPlanResult,
+    ResearchFrame,
     SelfRAGEvaluation,
     SufficiencyAssessment,
     TreeNavigationResult,
 )
 from eleutheria_graphrag.agents.text_utils import truncate_json, truncate_text
 from eleutheria_graphrag.services.model_registry import get_model
-from eleutheria_graphrag.services.retrieval_strategy import VectorStrategy, SQLStrategy
+from eleutheria_graphrag.services.retrieval_strategy import SQLStrategy, VectorStrategy
 
 logger = logging.getLogger(__name__)
 
