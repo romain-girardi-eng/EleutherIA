@@ -1,6 +1,5 @@
 # graphrag/tests/test_model_registry.py
 from eleutheria_graphrag.services.model_registry import (
-    ModelInfo,
     get_model,
     list_models,
 )

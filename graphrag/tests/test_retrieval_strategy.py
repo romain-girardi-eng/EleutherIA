@@ -1,10 +1,11 @@
 # graphrag/tests/test_retrieval_strategy.py
-import pytest
 from unittest.mock import AsyncMock, MagicMock
+
+import pytest
+
 from eleutheria_graphrag.services.retrieval_strategy import (
-    VectorStrategy,
     SQLStrategy,
-    RetrievalStrategy,
+    VectorStrategy,
 )
 
 
@@ -17,7 +18,7 @@ async def test_vector_strategy_calls_qdrant():
         MagicMock(id="node_2", score=0.8, payload={"type": "person"}),
     ])
 
-    async def mock_embed(deps, query):
+    async def mock_embed(_deps, _query):
         return [0.1] * 3072
 
     strategy = VectorStrategy(embed_fn=mock_embed)
@@ -37,7 +38,7 @@ async def test_vector_strategy_handles_qdrant_failure():
     mock_deps = MagicMock()
     mock_deps.qdrant.search_nodes = AsyncMock(side_effect=ConnectionError("Qdrant down"))
 
-    async def mock_embed(deps, query):
+    async def mock_embed(_deps, _query):
         return [0.1] * 3072
 
     strategy = VectorStrategy(embed_fn=mock_embed)
@@ -55,7 +56,7 @@ async def test_vector_strategy_handles_embedding_failure():
     """VectorStrategy returns empty when embedding fails (e.g., Gemini 429)."""
     mock_deps = MagicMock()
 
-    async def mock_embed_fail(deps, query):
+    async def mock_embed_fail(_deps, _query):
         raise Exception("429 Too Many Requests")
 
     strategy = VectorStrategy(embed_fn=mock_embed_fail)

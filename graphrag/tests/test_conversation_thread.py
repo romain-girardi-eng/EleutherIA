@@ -1,6 +1,8 @@
 import time
-import pytest
-from eleutheria_graphrag.services.graphrag_service import ConversationThread, ThreadManager
+
+from eleutheria_graphrag.services.graphrag_service import (
+    ThreadManager,
+)
 
 
 def test_create_thread():
