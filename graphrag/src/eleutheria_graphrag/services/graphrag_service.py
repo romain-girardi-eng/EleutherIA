@@ -20,6 +20,7 @@ from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
 from eleutheria_graphrag.services.llm_reranker import LLMRerankerService
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
 from eleutheria_graphrag.services.tree_index import TreeIndexService
+from eleutheria_graphrag.services.retrieval_strategy import VectorStrategy
 from eleutheria_graphrag.services.weighted_traversal import WeightedTraversal
 
 logger = logging.getLogger(__name__)
@@ -186,6 +187,11 @@ class GraphRAGService:
         tree_index = TreeIndexService(db=self.db)
         llm_reranker = LLMRerankerService(llm=self.llm)
 
+        # Build retrieval strategy (lazy import to avoid circular deps)
+        from eleutheria_graphrag.agents.graph_nodes import _get_embedding
+
+        vector_strategy = VectorStrategy(embed_fn=_get_embedding)
+
         # Construct dependency container
         deps = Deps(
             db=self.db,
@@ -198,6 +204,7 @@ class GraphRAGService:
             verifier=self._verifier,
             llm_reranker=llm_reranker,
             tree_index=tree_index,
+            retrieval_strategy=vector_strategy,
             kg_data=self.kg_data,
             node_lookup=self.node_lookup,
             outgoing_edges=self.outgoing_edges,

@@ -74,6 +74,7 @@ from eleutheria_graphrag.agents.structured_models import (
     TreeNavigationResult,
 )
 from eleutheria_graphrag.agents.text_utils import truncate_json, truncate_text
+from eleutheria_graphrag.services.retrieval_strategy import VectorStrategy, SQLStrategy
 
 logger = logging.getLogger(__name__)
 
@@ -3624,83 +3625,165 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
         _trace_stage(state, "discover_corpus", trace_payload)
         return
 
-    limit_per_query = max(8, budget.node_search_limit() // max(1, len(queries)))
-    hit_map: dict[str, dict[str, Any]] = {}
-    for query in queries:
-        try:
-            embedding = await _get_embedding(ctx.deps, query)
-            hits = await ctx.deps.qdrant.search_nodes(embedding, limit=limit_per_query)
-        except Exception:
-            logger.warning("Corpus discovery failed for query %s", query)
-            continue
-
-        for hit in hits:
-            node_id = hit.get("id")
-            if not node_id or node_id not in ctx.deps.node_lookup:
-                continue
-            best = hit_map.get(node_id)
-            if best is None or hit.get("score", 0.0) > best.get("score", 0.0):
-                hit_map[node_id] = hit
-
-    ordered_hits = sorted(hit_map.values(), key=lambda item: item.get("score", 0.0), reverse=True)
-    trace_payload["semantic_hits"] = [
-        {
-            "id": str(hit.get("id")),
-            "score": round(float(hit.get("score", 0.0)), 4),
-            "label": ctx.deps.node_lookup.get(str(hit.get("id")), {}).get("label"),
-            "type": ctx.deps.node_lookup.get(str(hit.get("id")), {}).get("type"),
-        }
-        for hit in ordered_hits[:12]
-    ]
-    _record_tool_call(
-        state,
-        tool_name="search_entities",
-        stage_id="discover_corpus",
-        query=" | ".join(queries[:4]),
-        rationale="semantic discovery over KG nodes",
-        selected_ids=[str(hit.get("id")) for hit in ordered_hits[:12] if hit.get("id")],
-        details={
-            "queries": queries[:8],
-            "hit_count": len(ordered_hits),
-        },
-    )
-    seed_ids: list[str] = []
-    passage_anchor_ids: list[str] = []
-    existing = state.all_node_ids()
-    for hit in ordered_hits:
-        node_id = str(hit["id"])
-        if node_id in existing:
-            continue
-        evidence = _make_evidence_from_node(
-            node_id,
-            ctx.deps.node_lookup[node_id],
-            score=hit.get("score", 0.0),
-            source=EvidenceSource.SEMANTIC_SEARCH,
+    # --- Strategy-based corpus discovery ---
+    strategy = ctx.deps.retrieval_strategy
+    if strategy is not None:
+        limit = budget.node_search_limit()
+        seed_ids, passage_anchor_ids = await strategy.discover_seeds(
+            queries=queries,
+            deps=ctx.deps,
+            node_limit=limit,
         )
-        if evidence.layer == EvidenceLayer.PRIMARY:
-            state.primary_evidence.append(evidence)
-        else:
-            state.secondary_evidence.append(evidence)
-        existing.add(node_id)
-        seed_ids.append(node_id)
+
+        # Auto-fallback: if vector returned nothing and mode is "auto", try SQL
         if (
-            evidence.layer == EvidenceLayer.PRIMARY
-            and evidence.type.lower() != "passage"
-            and len(passage_anchor_ids) < 12
+            not seed_ids
+            and state.retrieval_mode == "auto"
+            and isinstance(strategy, VectorStrategy)
         ):
-            passage_anchor_ids.append(node_id)
+            logger.info("VectorStrategy returned no seeds, falling back to SQLStrategy")
+            fallback = SQLStrategy(min_bundles=4)
+            seed_ids, passage_anchor_ids = await fallback.discover_seeds(
+                queries=queries,
+                deps=ctx.deps,
+                node_limit=limit,
+            )
+            state.metadata["retrieval_mode_used"] = "sql"
+        else:
+            state.metadata["retrieval_mode_used"] = state.retrieval_mode
 
-    state.seed_node_ids = list(dict.fromkeys(state.seed_node_ids + seed_ids))
-    trace_payload["seed_node_ids"] = state.seed_node_ids[:20]
-    if seed_ids:
-        _record_reading_decision(
+        # Filter seeds to those in node_lookup and build evidence
+        existing = state.all_node_ids()
+        valid_seeds: list[str] = []
+        valid_anchors: list[str] = []
+        for node_id in seed_ids:
+            if node_id in existing or node_id not in ctx.deps.node_lookup:
+                continue
+            evidence = _make_evidence_from_node(
+                node_id,
+                ctx.deps.node_lookup[node_id],
+                source=EvidenceSource.SEMANTIC_SEARCH,
+            )
+            if evidence.layer == EvidenceLayer.PRIMARY:
+                state.primary_evidence.append(evidence)
+            else:
+                state.secondary_evidence.append(evidence)
+            existing.add(node_id)
+            valid_seeds.append(node_id)
+            if (
+                evidence.layer == EvidenceLayer.PRIMARY
+                and evidence.type.lower() != "passage"
+                and len(valid_anchors) < 12
+            ):
+                valid_anchors.append(node_id)
+
+        seed_ids = valid_seeds
+        passage_anchor_ids = valid_anchors or [a for a in passage_anchor_ids if a in ctx.deps.node_lookup][:12]
+
+        state.seed_node_ids = list(dict.fromkeys(state.seed_node_ids + seed_ids))
+        state.metadata["passage_anchor_ids"] = passage_anchor_ids
+        trace_payload["seed_node_ids"] = state.seed_node_ids[:20]
+
+        _record_tool_call(
             state,
+            tool_name="search_entities",
             stage_id="discover_corpus",
-            decision_type="seed_selection",
-            title="Select high-value seed nodes",
-            rationale="Highest scoring semantic hits become the starting corpus map.",
+            query=" | ".join(queries[:4]),
+            rationale=f"strategy-based discovery ({state.metadata.get('retrieval_mode_used', 'auto')})",
             selected_ids=seed_ids[:20],
+            details={
+                "queries": queries[:8],
+                "hit_count": len(seed_ids),
+            },
         )
+        if seed_ids:
+            _record_reading_decision(
+                state,
+                stage_id="discover_corpus",
+                decision_type="seed_selection",
+                title="Select high-value seed nodes",
+                rationale="Strategy-selected seeds become the starting corpus map.",
+                selected_ids=seed_ids[:20],
+            )
+    else:
+        # Fallback: original Qdrant search path (no strategy configured)
+        limit_per_query = max(8, budget.node_search_limit() // max(1, len(queries)))
+        hit_map: dict[str, dict[str, Any]] = {}
+        for query in queries:
+            try:
+                embedding = await _get_embedding(ctx.deps, query)
+                hits = await ctx.deps.qdrant.search_nodes(embedding, limit=limit_per_query)
+            except Exception:
+                logger.warning("Corpus discovery failed for query %s", query)
+                continue
+
+            for hit in hits:
+                node_id = hit.get("id")
+                if not node_id or node_id not in ctx.deps.node_lookup:
+                    continue
+                best = hit_map.get(node_id)
+                if best is None or hit.get("score", 0.0) > best.get("score", 0.0):
+                    hit_map[node_id] = hit
+
+        ordered_hits = sorted(hit_map.values(), key=lambda item: item.get("score", 0.0), reverse=True)
+        trace_payload["semantic_hits"] = [
+            {
+                "id": str(hit.get("id")),
+                "score": round(float(hit.get("score", 0.0)), 4),
+                "label": ctx.deps.node_lookup.get(str(hit.get("id")), {}).get("label"),
+                "type": ctx.deps.node_lookup.get(str(hit.get("id")), {}).get("type"),
+            }
+            for hit in ordered_hits[:12]
+        ]
+        _record_tool_call(
+            state,
+            tool_name="search_entities",
+            stage_id="discover_corpus",
+            query=" | ".join(queries[:4]),
+            rationale="semantic discovery over KG nodes",
+            selected_ids=[str(hit.get("id")) for hit in ordered_hits[:12] if hit.get("id")],
+            details={
+                "queries": queries[:8],
+                "hit_count": len(ordered_hits),
+            },
+        )
+        seed_ids = []
+        passage_anchor_ids = []
+        existing = state.all_node_ids()
+        for hit in ordered_hits:
+            node_id = str(hit["id"])
+            if node_id in existing:
+                continue
+            evidence = _make_evidence_from_node(
+                node_id,
+                ctx.deps.node_lookup[node_id],
+                score=hit.get("score", 0.0),
+                source=EvidenceSource.SEMANTIC_SEARCH,
+            )
+            if evidence.layer == EvidenceLayer.PRIMARY:
+                state.primary_evidence.append(evidence)
+            else:
+                state.secondary_evidence.append(evidence)
+            existing.add(node_id)
+            seed_ids.append(node_id)
+            if (
+                evidence.layer == EvidenceLayer.PRIMARY
+                and evidence.type.lower() != "passage"
+                and len(passage_anchor_ids) < 12
+            ):
+                passage_anchor_ids.append(node_id)
+
+        state.seed_node_ids = list(dict.fromkeys(state.seed_node_ids + seed_ids))
+        trace_payload["seed_node_ids"] = state.seed_node_ids[:20]
+        if seed_ids:
+            _record_reading_decision(
+                state,
+                stage_id="discover_corpus",
+                decision_type="seed_selection",
+                title="Select high-value seed nodes",
+                rationale="Highest scoring semantic hits become the starting corpus map.",
+                selected_ids=seed_ids[:20],
+            )
 
     traversal_limit = state.retrieval_budget.traversal_node_limit()
     try:
