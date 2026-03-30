@@ -58,6 +58,9 @@ class Deps:
     # NEW: Tree index service (PageIndex-inspired)
     tree_index: Any | None = None  # TreeIndexService
 
+    # Retrieval strategy (vector or SQL)
+    retrieval_strategy: Any | None = None  # RetrievalStrategy
+
     # Pre-loaded KG data (nodes, edges, lookup indices)
     kg_data: dict[str, Any] = field(default_factory=dict)
     node_lookup: dict[str, dict[str, Any]] = field(default_factory=dict)
