@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1.7
 # =============================================================================
 # EleutherIA Backend — Multi-Stage Production Build
 # =============================================================================
@@ -32,8 +31,7 @@ COPY graphrag/pyproject.toml graphrag/README.md ./graphrag/
 COPY graphrag/src ./graphrag/src/
 
 # Install all three packages + auth dependencies
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --no-compile \
+RUN pip install --no-cache-dir --no-compile \
     ./database \
     ./kg \
     "./graphrag[api,llm]" \
