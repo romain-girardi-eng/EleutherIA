@@ -28,6 +28,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
   const processingTime = resp?.processing_time;
   const tokensUsed = message.tokens_used;
   const llmModel = message.llm_model;
+  const retrievalMode = message.retrieval_mode;
   const nodesUsed = resp?.nodes_used;
   const edgesTraversed = resp?.edges_traversed;
 
@@ -63,6 +64,11 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] xl:text-xs font-medium bg-parchment-50 text-stone-500 border border-amber-200/40">
                     <Cpu className="w-3 h-3" />
                     {llmModel}
+                  </span>
+                )}
+                {retrievalMode && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] xl:text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200/40">
+                    {retrievalMode}
                   </span>
                 )}
                 {processingTime && (
