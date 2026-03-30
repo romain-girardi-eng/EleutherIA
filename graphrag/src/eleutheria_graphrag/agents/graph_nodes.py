@@ -27,6 +27,7 @@ import json
 import logging
 import os
 import re
+import time as _time
 from collections import deque
 from dataclasses import dataclass
 from typing import Any
@@ -53,6 +54,7 @@ from eleutheria_graphrag.agents.state import (
     RAGState,
     ReadingNote,
     ReadingDecision,
+    ReasoningStep,
     ResearchFacet,
     ResearchNotebook,
     ResearchToolCall,
@@ -74,9 +76,48 @@ from eleutheria_graphrag.agents.structured_models import (
     TreeNavigationResult,
 )
 from eleutheria_graphrag.agents.text_utils import truncate_json, truncate_text
+from eleutheria_graphrag.services.model_registry import get_model
 from eleutheria_graphrag.services.retrieval_strategy import VectorStrategy, SQLStrategy
 
 logger = logging.getLogger(__name__)
+
+
+def _append_reasoning_step(
+    state: RAGState,
+    node_name: str,
+    model: str | None,
+    prompt_summary: str,
+    full_prompt_tokens: int,
+    raw_output: str,
+    thinking: str | None = None,
+    parsed_result: dict[str, Any] | None = None,
+    skipped: bool = False,
+    skip_reason: str | None = None,
+    duration_ms: int = 0,
+) -> None:
+    """Append a ReasoningStep to the state's reasoning trace."""
+    state.reasoning_trace.append(ReasoningStep(
+        node_name=node_name,
+        timestamp_ms=int(_time.time() * 1000),
+        duration_ms=duration_ms,
+        model=model,
+        prompt_summary=prompt_summary[:200],
+        full_prompt_tokens=full_prompt_tokens,
+        raw_output=raw_output,
+        thinking=thinking,
+        parsed_result=parsed_result,
+        skipped=skipped,
+        skip_reason=skip_reason,
+    ))
+
+
+def _resolve_model_api_id(state: RAGState) -> str | None:
+    """Return model_override for non-default (non-Gemini) models."""
+    try:
+        model_info = get_model(state.selected_model)
+        return model_info.api_id if model_info.provider == "openrouter" else None
+    except KeyError:
+        return None
 
 DB_SCHEMA = os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
 LINE_SPLIT_RE = re.compile(r"\n+")
@@ -4054,7 +4095,10 @@ async def _navigate_sections_with_llm(
         author=author,
         sections_json=truncate_json(payload, 12000),
     )
+    state = ctx.state
+    model_api_id = _resolve_model_api_id(state)
     try:
+        _t0 = _time.time()
         raw = await ctx.deps.llm.generate(
             prompt,
             system_prompt=SYSTEM_PROMPT,
@@ -4063,17 +4107,31 @@ async def _navigate_sections_with_llm(
             thinking_mode=True,
             cache_key=f"tree-nav::{work_id}",
             cache_prefix="tree_navigation_v1",
+            model_override=model_api_id,
         )
+        _dur = int((_time.time() - _t0) * 1000)
         parsed = TreeNavigationResult.model_validate(_parse_json(raw))
         selected_ids = {item.node_id for item in parsed.selected_nodes}
         selected = [section for section in sections if section["node_id"] in selected_ids]
+        _append_reasoning_step(
+            state, "TreeNavigateWorks",
+            ctx.deps.llm.last_model_used or state.selected_model,
+            prompt[:200], len(prompt) // 4, raw,
+            duration_ms=_dur,
+            parsed_result={"work_id": work_id, "selected_count": len(selected)},
+        )
         return selected or _heuristic_select_sections(question, sections)
     except Exception:
+        _append_reasoning_step(
+            state, "TreeNavigateWorks", None, prompt[:200], len(prompt) // 4, "",
+            skipped=True, skip_reason=f"LLM call failed for work {work_id}, heuristic fallback",
+        )
         return _heuristic_select_sections(question, sections)
 
 
 async def _build_research_frame(ctx: GraphRunContext[RAGState, Deps]) -> None:
     state = ctx.state
+    model_api_id = _resolve_model_api_id(state)
     notebook = _ensure_notebook(state)
     if notebook.question_frame:
         notebook.facets = _normalize_notebook_facets(state, notebook.facets)
@@ -4091,20 +4149,28 @@ async def _build_research_frame(ctx: GraphRunContext[RAGState, Deps]) -> None:
                 f"The evidence is more fragmented or interpretive for: {state.question}",
             ]
         notebook.open_questions = state.sub_queries[:3]
+        _append_reasoning_step(
+            state, "BuildResearchNotebook", None, "", 0, "",
+            skipped=True, skip_reason="minimal-llm mode",
+        )
     else:
+        _frame_prompt = FRAME_RESEARCH_PROMPT.format(
+            question=state.question,
+            corpus_scope=corpus_scope or "(none)",
+        )
         try:
+            _t0 = _time.time()
             raw = await ctx.deps.llm.generate(
-                FRAME_RESEARCH_PROMPT.format(
-                    question=state.question,
-                    corpus_scope=corpus_scope or "(none)",
-                ),
+                _frame_prompt,
                 system_prompt=SYSTEM_PROMPT,
                 temperature=0.0,
                 max_tokens=800,
                 thinking_mode=True,
                 cache_key="research-frame",
                 cache_prefix="research_frame_v1",
+                model_override=model_api_id,
             )
+            _dur = int((_time.time() - _t0) * 1000)
             framed = ResearchFrame.model_validate(_parse_json(raw))
             notebook.question_frame = framed.question_frame
             notebook.facets = _normalize_notebook_facets(state, framed.facets)
@@ -4112,6 +4178,13 @@ async def _build_research_frame(ctx: GraphRunContext[RAGState, Deps]) -> None:
             notebook.competing_hypotheses = framed.competing_hypotheses[:4]
             if framed.sub_questions:
                 state.sub_queries = framed.sub_questions[:4]
+            _append_reasoning_step(
+                state, "BuildResearchNotebook",
+                ctx.deps.llm.last_model_used or state.selected_model,
+                _frame_prompt[:200], len(_frame_prompt) // 4, raw,
+                duration_ms=_dur,
+                parsed_result={"question_frame": framed.question_frame, "facet_count": len(framed.facets)},
+            )
         except Exception:
             notebook.question_frame = state.question
             notebook.facets = _default_research_facets(state)
@@ -4123,6 +4196,10 @@ async def _build_research_frame(ctx: GraphRunContext[RAGState, Deps]) -> None:
                     f"The evidence is more fragmented or interpretive for: {state.question}",
                 ]
             notebook.open_questions = state.sub_queries[:3]
+            _append_reasoning_step(
+                state, "BuildResearchNotebook", None, _frame_prompt[:200], len(_frame_prompt) // 4, "",
+                skipped=True, skip_reason="LLM call failed, heuristic fallback",
+            )
 
     if not notebook.facets:
         notebook.facets = _default_research_facets(state)
@@ -4164,6 +4241,7 @@ async def _build_research_frame(ctx: GraphRunContext[RAGState, Deps]) -> None:
 
 async def _plan_reading(ctx: GraphRunContext[RAGState, Deps]) -> None:
     state = ctx.state
+    model_api_id = _resolve_model_api_id(state)
     notebook = _ensure_notebook(state)
     candidate_titles = notebook.work_priorities[: state.retrieval_budget.candidate_work_limit()]
     planned_work_titles = candidate_titles
@@ -4172,31 +4250,35 @@ async def _plan_reading(ctx: GraphRunContext[RAGState, Deps]) -> None:
     mode = "heuristic"
 
     if candidate_titles and not _should_minimize_llm_calls(state):
+        _plan_prompt = READING_PLAN_PROMPT.format(
+            question_frame=notebook.question_frame or state.question,
+            work_titles="\n".join(f"- {title}" for title in candidate_titles[:12]),
+            facets_json=truncate_json(
+                [
+                    {
+                        "facet_id": facet.facet_id,
+                        "title": facet.title,
+                        "question": facet.question,
+                        "priority": facet.priority,
+                    }
+                    for facet in notebook.facets[:8]
+                ],
+                6000,
+            ),
+        )
         try:
+            _t0 = _time.time()
             raw = await ctx.deps.llm.generate(
-                READING_PLAN_PROMPT.format(
-                    question_frame=notebook.question_frame or state.question,
-                    work_titles="\n".join(f"- {title}" for title in candidate_titles[:12]),
-                    facets_json=truncate_json(
-                        [
-                            {
-                                "facet_id": facet.facet_id,
-                                "title": facet.title,
-                                "question": facet.question,
-                                "priority": facet.priority,
-                            }
-                            for facet in notebook.facets[:8]
-                        ],
-                        6000,
-                    ),
-                ),
+                _plan_prompt,
                 system_prompt=SYSTEM_PROMPT,
                 temperature=0.0,
                 max_tokens=700,
                 thinking_mode=True,
                 cache_key="reading-plan",
                 cache_prefix="reading_plan_v1",
+                model_override=model_api_id,
             )
+            _dur = int((_time.time() - _t0) * 1000)
             parsed = ReadingPlanResult.model_validate(_parse_json(raw))
             normalized_titles = [title for title in parsed.work_titles if title in candidate_titles]
             if normalized_titles:
@@ -4212,8 +4294,24 @@ async def _plan_reading(ctx: GraphRunContext[RAGState, Deps]) -> None:
                 planned_facet_ids = normalized_facets
             rationale = parsed.rationale or rationale
             mode = "llm"
+            _append_reasoning_step(
+                state, "PlanReading",
+                ctx.deps.llm.last_model_used or state.selected_model,
+                _plan_prompt[:200], len(_plan_prompt) // 4, raw,
+                duration_ms=_dur,
+                parsed_result={"work_count": len(normalized_titles), "facet_count": len(normalized_facets)},
+            )
         except Exception:
             mode = "heuristic"
+            _append_reasoning_step(
+                state, "PlanReading", None, "", 0, "",
+                skipped=True, skip_reason="LLM call failed, heuristic fallback",
+            )
+    else:
+        _append_reasoning_step(
+            state, "PlanReading", None, "", 0, "",
+            skipped=True, skip_reason="no candidates or minimal-llm mode",
+        )
 
     planned_work_titles = planned_work_titles[: state.retrieval_budget.candidate_work_limit()]
     planned_facet_ids = planned_facet_ids[: min(6, len(planned_facet_ids))]
@@ -4282,29 +4380,49 @@ class ClassifyQueryType(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         ctx: GraphRunContext[RAGState, Deps],
     ) -> ExpandQuery:
         state = ctx.state
+        model_api_id = _resolve_model_api_id(state)
         heuristic_query_type = _default_query_type(state.question)
         if heuristic_query_type == QueryType.SPECIFIC_ENTITY:
             query_type = heuristic_query_type
             confidence = 0.75
             reason = "deterministic heuristic"
+            _append_reasoning_step(
+                state, "ClassifyQueryType", None, "", 0, "",
+                skipped=True, skip_reason="deterministic heuristic (SPECIFIC_ENTITY)",
+            )
         else:
+            _classify_prompt = CLASSIFY_QUERY_TYPE_PROMPT.format(question=state.question)
             try:
+                _t0 = _time.time()
                 raw = await ctx.deps.llm.generate(
-                    CLASSIFY_QUERY_TYPE_PROMPT.format(question=state.question),
+                    _classify_prompt,
                     system_prompt=SYSTEM_PROMPT,
                     temperature=0.0,
                     max_tokens=256,
                     cache_key="query-classifier",
                     cache_prefix="query_classifier_v1",
+                    model_override=model_api_id,
                 )
+                _dur = int((_time.time() - _t0) * 1000)
                 parsed = ClassificationResult.model_validate(_parse_json(raw))
                 query_type = parsed.query_type
                 confidence = parsed.confidence
                 reason = parsed.reason
+                _append_reasoning_step(
+                    state, "ClassifyQueryType",
+                    ctx.deps.llm.last_model_used or state.selected_model,
+                    _classify_prompt[:200], len(_classify_prompt) // 4, raw,
+                    duration_ms=_dur,
+                    parsed_result={"query_type": query_type.value, "confidence": confidence, "reason": reason},
+                )
             except Exception:
                 query_type = heuristic_query_type
                 confidence = 0.45
                 reason = "heuristic fallback"
+                _append_reasoning_step(
+                    state, "ClassifyQueryType", None, _classify_prompt[:200], len(_classify_prompt) // 4, "",
+                    skipped=True, skip_reason="LLM call failed, heuristic fallback",
+                )
 
         state.query_type = query_type
         state.pipeline_config = get_pipeline_config(query_type)
@@ -4335,11 +4453,16 @@ class ExpandQuery(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         ctx: GraphRunContext[RAGState, Deps],
     ) -> DiscoverCorpus:
         state = ctx.state
+        model_api_id = _resolve_model_api_id(state)
         fallback_expansion = _default_expansion(state.question)
         if not state.pipeline_config.use_expansion or _should_minimize_llm_calls(state):
             state.expanded_query = state.question
             state.expansion_terms = fallback_expansion
             state.metadata["expanded_query"] = state.expanded_query
+            _append_reasoning_step(
+                state, "ExpandQuery", None, "", 0, "",
+                skipped=True, skip_reason="expansion disabled or minimal-llm mode",
+            )
             _trace_stage(
                 state,
                 "expand_query",
@@ -4354,23 +4477,38 @@ class ExpandQuery(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             )
             return DiscoverCorpus()
 
+        _expand_prompt = EXPAND_QUERY_PROMPT.format(question=state.question)
         mode = "llm"
         try:
+            _t0 = _time.time()
             raw = await ctx.deps.llm.generate(
-                EXPAND_QUERY_PROMPT.format(question=state.question),
+                _expand_prompt,
                 system_prompt=SYSTEM_PROMPT,
                 temperature=0.0,
                 max_tokens=800,
                 cache_key="query-expansion",
                 cache_prefix="query_expansion_v1",
+                model_override=model_api_id,
             )
+            _dur = int((_time.time() - _t0) * 1000)
             expansion = _merge_expansion_terms(
                 ExpansionTerms.model_validate(_parse_json(raw)),
                 fallback_expansion,
             )
+            _append_reasoning_step(
+                state, "ExpandQuery",
+                ctx.deps.llm.last_model_used or state.selected_model,
+                _expand_prompt[:200], len(_expand_prompt) // 4, raw,
+                duration_ms=_dur,
+                parsed_result={"expanded_query": expansion.expanded_query or ""},
+            )
         except Exception:
             expansion = fallback_expansion
             mode = "fallback"
+            _append_reasoning_step(
+                state, "ExpandQuery", None, _expand_prompt[:200], len(_expand_prompt) // 4, "",
+                skipped=True, skip_reason="LLM call failed, fallback expansion",
+            )
 
         state.expansion_terms = expansion
         state.expanded_query = expansion.expanded_query or state.question
@@ -4398,7 +4536,14 @@ class DiscoverCorpus(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         self,
         ctx: GraphRunContext[RAGState, Deps],
     ) -> BuildResearchNotebook:
+        _t0 = _time.time()
         await _discover_corpus(ctx)
+        _dur = int((_time.time() - _t0) * 1000)
+        _append_reasoning_step(
+            ctx.state, "DiscoverCorpus", None, "", 0, "",
+            skipped=True, skip_reason="no LLM call (strategy-based retrieval)",
+            duration_ms=_dur,
+        )
         return BuildResearchNotebook()
 
 
@@ -4438,14 +4583,21 @@ class TreeNavigateWorks(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         state.metadata["selected_sections"] = []
 
         if not ctx.deps.tree_index or not state.pipeline_config.use_tree_reasoning:
+            _skip_reason = (
+                "tree reasoning unavailable"
+                if not ctx.deps.tree_index
+                else "tree reasoning disabled by config"
+            )
+            _append_reasoning_step(
+                state, "TreeNavigateWorks", None, "", 0, "",
+                skipped=True, skip_reason=_skip_reason,
+            )
             _trace_stage(
                 state,
                 "tree_navigation",
                 {
                     "mode": "skipped",
-                    "reason": "tree reasoning unavailable"
-                    if not ctx.deps.tree_index
-                    else "tree reasoning disabled by config",
+                    "reason": _skip_reason,
                     "candidate_work_titles": state.research_notebook.work_priorities[
                         : state.retrieval_budget.candidate_work_limit()
                     ],
@@ -4576,6 +4728,7 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         self,
         ctx: GraphRunContext[RAGState, Deps],
     ) -> SeekCounterEvidence:
+        _t0 = _time.time()
         state = ctx.state
         bundles: list[EvidenceBundle] = []
         seen_bundle_ids = state.bundle_ids()
@@ -4756,6 +4909,12 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 ],
             },
         )
+        _append_reasoning_step(
+            state, "ExpandEvidenceBundles", None, "", 0, "",
+            skipped=True, skip_reason="no LLM call (passage expansion)",
+            duration_ms=int((_time.time() - _t0) * 1000),
+            parsed_result={"bundle_count": len(state.evidence_bundles)},
+        )
         return SeekCounterEvidence()
 
 
@@ -4768,8 +4927,13 @@ class SeekCounterEvidence(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         ctx: GraphRunContext[RAGState, Deps],
     ) -> EvidenceSufficiency:
         state = ctx.state
+        model_api_id = _resolve_model_api_id(state)
         notebook = _ensure_notebook(state)
         if _should_minimize_llm_calls(state) or not state.evidence_bundles or not notebook.competing_hypotheses:
+            _append_reasoning_step(
+                state, "SeekCounterEvidence", None, "", 0, "",
+                skipped=True, skip_reason="minimal-llm mode or insufficient bundles",
+            )
             _trace_stage(
                 state,
                 "counter_evidence",
@@ -4789,24 +4953,35 @@ class SeekCounterEvidence(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             )
             for bundle in state.context_pack.passage_bundles[:20]
         ]
+        _counter_prompt = COUNTER_EVIDENCE_PROMPT.format(
+            question_frame=notebook.question_frame or state.question,
+            hypotheses="\n".join(f"- {item}" for item in notebook.competing_hypotheses[:4]),
+            bundles_json=truncate_json(payload, 9000),
+        )
         try:
+            _t0 = _time.time()
             raw = await ctx.deps.llm.generate(
-                COUNTER_EVIDENCE_PROMPT.format(
-                    question_frame=notebook.question_frame or state.question,
-                    hypotheses="\n".join(f"- {item}" for item in notebook.competing_hypotheses[:4]),
-                    bundles_json=truncate_json(payload, 9000),
-                ),
+                _counter_prompt,
                 system_prompt=SYSTEM_PROMPT,
                 temperature=0.0,
                 max_tokens=600,
                 thinking_mode=True,
                 cache_key="counter-evidence",
                 cache_prefix="counter_evidence_v1",
+                model_override=model_api_id,
             )
+            _dur = int((_time.time() - _t0) * 1000)
             parsed = CounterEvidenceResult.model_validate(_parse_json(raw))
             selected = set(parsed.bundle_ids)
             rationale = parsed.rationale
             mode = "llm"
+            _append_reasoning_step(
+                state, "SeekCounterEvidence",
+                ctx.deps.llm.last_model_used or state.selected_model,
+                _counter_prompt[:200], len(_counter_prompt) // 4, raw,
+                duration_ms=_dur,
+                parsed_result={"selected_count": len(selected), "rationale": rationale},
+            )
         except Exception:
             selected = {
                 bundle.bundle_id
@@ -4815,6 +4990,10 @@ class SeekCounterEvidence(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             }
             rationale = "heuristic author divergence"
             mode = "heuristic"
+            _append_reasoning_step(
+                state, "SeekCounterEvidence", None, _counter_prompt[:200], len(_counter_prompt) // 4, "",
+                skipped=True, skip_reason="LLM call failed, heuristic fallback",
+            )
 
         if selected:
             for bundle in state.evidence_bundles:
@@ -4874,37 +5053,58 @@ class EvidenceSufficiency(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             1.0,
             0.12 * bundle_count + 0.08 * work_count + 0.1 * counter_count + 0.08 * covered_facets,
         )
+        model_api_id = _resolve_model_api_id(state)
         if _should_minimize_llm_calls(state):
             score = heuristic_score
             sufficient = score >= 0.45
             reason = "heuristic sufficiency (minimal llm mode)"
             refinement = None
+            _append_reasoning_step(
+                state, "EvidenceSufficiency", None, "", 0, "",
+                skipped=True, skip_reason="minimal-llm mode, heuristic only",
+                parsed_result={"score": round(heuristic_score, 4), "sufficient": sufficient},
+            )
         else:
+            _suff_prompt = SUFFICIENCY_PROMPT.format(
+                question=state.question,
+                bundle_count=bundle_count,
+                work_count=work_count,
+                counter_count=counter_count,
+                open_questions=", ".join(notebook.open_questions[:5]) or "(none)",
+            )
             try:
+                _t0 = _time.time()
                 raw = await ctx.deps.llm.generate(
-                    SUFFICIENCY_PROMPT.format(
-                        question=state.question,
-                        bundle_count=bundle_count,
-                        work_count=work_count,
-                        counter_count=counter_count,
-                        open_questions=", ".join(notebook.open_questions[:5]) or "(none)",
-                    ),
+                    _suff_prompt,
                     system_prompt=SYSTEM_PROMPT,
                     temperature=0.0,
                     max_tokens=256,
                     cache_key="evidence-sufficiency",
                     cache_prefix="evidence_sufficiency_v1",
+                    model_override=model_api_id,
                 )
+                _dur = int((_time.time() - _t0) * 1000)
                 assessment = SufficiencyAssessment.model_validate(_parse_json(raw))
                 score = max(heuristic_score, assessment.score)
                 sufficient = assessment.sufficient
                 reason = assessment.reason
                 refinement = assessment.refinement
+                _append_reasoning_step(
+                    state, "EvidenceSufficiency",
+                    ctx.deps.llm.last_model_used or state.selected_model,
+                    _suff_prompt[:200], len(_suff_prompt) // 4, raw,
+                    duration_ms=_dur,
+                    parsed_result={"score": round(score, 4), "sufficient": sufficient, "reason": reason},
+                )
             except Exception:
                 score = heuristic_score
                 sufficient = score >= 0.45
                 reason = "heuristic sufficiency"
                 refinement = None
+                _append_reasoning_step(
+                    state, "EvidenceSufficiency", None, _suff_prompt[:200], len(_suff_prompt) // 4, "",
+                    skipped=True, skip_reason="LLM call failed, heuristic fallback",
+                )
 
         state.sufficiency_score = score
         state.insufficient_evidence = not sufficient
@@ -4964,6 +5164,7 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         ctx: GraphRunContext[RAGState, Deps],
     ) -> RenderGroundedAnswer:
         state = ctx.state
+        model_api_id = _resolve_model_api_id(state)
         notebook = _ensure_notebook(state)
         if not state.context_pack.prompt_context:
             state.context_pack = _build_context_pack(state)
@@ -4997,6 +5198,11 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             ]
             notebook.claim_ledger = state.claim_ledger
             state.metadata["claim_ledger_mode"] = "deterministic_quote"
+            _append_reasoning_step(
+                state, "DraftClaimLedger", None, "", 0, "",
+                skipped=True, skip_reason="deterministic quote bundle",
+                parsed_result={"mode": "deterministic_quote", "bundle_id": direct_quote_bundle.bundle_id},
+            )
             _trace_stage(
                 state,
                 "draft_claim_ledger",
@@ -5012,15 +5218,17 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         raw = ""
         try:
             evidence_catalog = _claim_ledger_catalog(state)
+            _ledger_prompt = CLAIM_LEDGER_PROMPT.format(
+                question=state.question,
+                grounding_policy=state.grounding_policy.value,
+                notebook_json=truncate_json(notebook.model_dump(), 12000),
+                dossier_json=truncate_json(_scholarly_dossier_payload(state), 16000),
+                evidence_catalog_json=truncate_json(evidence_catalog, 12000),
+                context=truncate_text(state.context_pack.prompt_context, 30000),
+            )
+            _t0 = _time.time()
             raw = await ctx.deps.llm.generate(
-                CLAIM_LEDGER_PROMPT.format(
-                    question=state.question,
-                    grounding_policy=state.grounding_policy.value,
-                    notebook_json=truncate_json(notebook.model_dump(), 12000),
-                    dossier_json=truncate_json(_scholarly_dossier_payload(state), 16000),
-                    evidence_catalog_json=truncate_json(evidence_catalog, 12000),
-                    context=truncate_text(state.context_pack.prompt_context, 30000),
-                ),
+                _ledger_prompt,
                 system_prompt=SYSTEM_PROMPT,
                 temperature=0.0,
                 max_tokens=3800,
@@ -5028,7 +5236,9 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 response_json_schema=CLAIM_LEDGER_RESPONSE_SCHEMA,
                 cache_key="claim-ledger",
                 cache_prefix="claim_ledger_v2",
+                model_override=model_api_id,
             )
+            _dur = int((_time.time() - _t0) * 1000)
             parsed = _coerce_claim_ledger_payload(_parse_json(raw))
             valid_ids = set(state.context_pack.bundle_refs) | set(state.context_pack.node_refs)
             claims = [
@@ -5052,6 +5262,13 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             ]
             claims = [item for item in claims if any(eid in valid_ids for eid in item.evidence_ids)]
             claims = _augment_claim_ledger_from_dossier(state, claims)
+            _append_reasoning_step(
+                state, "DraftClaimLedger",
+                ctx.deps.llm.last_model_used or state.selected_model,
+                _ledger_prompt[:200], len(_ledger_prompt) // 4, raw,
+                duration_ms=_dur,
+                parsed_result={"claim_count": len(claims)},
+            )
             _trace_stage(
                 state,
                 "draft_claim_ledger",
@@ -5062,6 +5279,10 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 },
             )
         except Exception as exc:
+            _append_reasoning_step(
+                state, "DraftClaimLedger", None, _ledger_prompt[:200], len(_ledger_prompt) // 4, raw or "",
+                skipped=True, skip_reason=f"LLM call failed: {type(exc).__name__}",
+            )
             claims = []
             salvaged = _salvage_claim_ledger(raw) if raw else None
             if salvaged is not None:
@@ -5139,6 +5360,7 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         ctx: GraphRunContext[RAGState, Deps],
     ) -> ProgrammaticVerify:
         state = ctx.state
+        model_api_id = _resolve_model_api_id(state)
         if not state.claim_ledger:
             state.claim_ledger = _derive_claim_ledger_fallback(state)
         dossier_payload = _scholarly_dossier_payload(state)
@@ -5160,6 +5382,10 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 lines.append(f'English translation: "{quote_item.quote_translation}" [{ref}]')
             state.raw_answer = "\n".join(lines).strip()
             state.metadata["render_answer_mode"] = "deterministic_quote"
+            _append_reasoning_step(
+                state, "RenderGroundedAnswer", None, "", 0, "",
+                skipped=True, skip_reason="deterministic quote rendering",
+            )
             _trace_stage(
                 state,
                 "render_grounded_answer",
@@ -5177,28 +5403,33 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         evidence_packet = _render_evidence_packet(state)
         requirements = _render_requirements(state)
 
+        _render_prompt = RENDER_ANSWER_PROMPT.format(
+            question=state.question,
+            ledger_json=truncate_json(
+                [item.model_dump() for item in state.claim_ledger],
+                12000,
+            ),
+            dossier_json=truncate_json(dossier_payload, 16000),
+            reference_json=truncate_json(reference_map, 6000),
+            evidence_packet_json=truncate_json(evidence_packet, 14000),
+            required_sections=requirements["required_sections"],
+            required_quote_blocks=requirements["required_quote_blocks"],
+        )
         raw_answer = ""
         try:
+            _t0 = _time.time()
             raw_answer = await ctx.deps.llm.generate(
-                RENDER_ANSWER_PROMPT.format(
-                    question=state.question,
-                    ledger_json=truncate_json(
-                        [item.model_dump() for item in state.claim_ledger],
-                        12000,
-                    ),
-                    dossier_json=truncate_json(dossier_payload, 16000),
-                    reference_json=truncate_json(reference_map, 6000),
-                    evidence_packet_json=truncate_json(evidence_packet, 14000),
-                    required_sections=requirements["required_sections"],
-                    required_quote_blocks=requirements["required_quote_blocks"],
-                ),
+                _render_prompt,
                 system_prompt=SYSTEM_PROMPT,
                 temperature=0.2,
                 max_tokens=3200,
                 cache_key="render-grounded-answer",
                 cache_prefix="render_grounded_answer_v2",
+                model_override=model_api_id,
             )
+            _render_dur = int((_time.time() - _t0) * 1000)
             rendered_answer = raw_answer.strip()
+            _polish_mode = "skipped"
             if rendered_answer and not _should_minimize_llm_calls(state):
                 try:
                     polished_answer = await ctx.deps.llm.generate(
@@ -5212,11 +5443,13 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         max_tokens=3200,
                         cache_key="scholarly-polish",
                         cache_prefix="scholarly_polish_v2",
+                        model_override=model_api_id,
                     )
                     polished_answer = polished_answer.strip()
                     if polished_answer:
                         rendered_answer = polished_answer
                         state.metadata["scholarly_polish_mode"] = "llm"
+                        _polish_mode = "llm"
                         _trace_stage(
                             state,
                             "scholarly_polish",
@@ -5227,6 +5460,7 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         )
                 except Exception as exc:
                     state.metadata["scholarly_polish_mode"] = "fallback"
+                    _polish_mode = "fallback"
                     _trace_stage(
                         state,
                         "scholarly_polish",
@@ -5258,6 +5492,7 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         max_tokens=3600,
                         cache_key="compression-repair",
                         cache_prefix="compression_repair_v1",
+                        model_override=model_api_id,
                     )
                     repaired_answer = repaired_answer.strip()
                     if repaired_answer:
@@ -5267,6 +5502,18 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     compression_repair_mode = "fallback"
                     logger.warning("Compression repair failed", exc_info=True)
             state.metadata["compression_repair_mode"] = compression_repair_mode
+            _total_dur = int((_time.time() - _t0) * 1000)
+            _append_reasoning_step(
+                state, "RenderGroundedAnswer",
+                ctx.deps.llm.last_model_used or state.selected_model,
+                _render_prompt[:200], len(_render_prompt) // 4, raw_answer,
+                duration_ms=_total_dur,
+                parsed_result={
+                    "synthesis_ms": _render_dur,
+                    "polish_mode": _polish_mode,
+                    "compression_mode": compression_repair_mode,
+                },
+            )
 
             fallback_answer = _render_answer_fallback(state)
             if not rendered_answer or _answer_is_too_compressed(state, rendered_answer):
@@ -5289,6 +5536,11 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 },
             )
         except Exception as exc:
+            _append_reasoning_step(
+                state, "RenderGroundedAnswer", None,
+                _render_prompt[:200], len(_render_prompt) // 4, raw_answer or "",
+                skipped=True, skip_reason=f"LLM call failed: {type(exc).__name__}",
+            )
             state.raw_answer = _render_answer_fallback(state)
             state.metadata["render_answer_mode"] = "fallback"
             state.metadata["pipeline_degraded"] = True
@@ -5314,9 +5566,17 @@ class ProgrammaticVerify(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         ctx: GraphRunContext[RAGState, Deps],
     ) -> End[ScholarlyAnswer]:
         state = ctx.state
+        _t0 = _time.time()
         answer, citations = _verify_answer_programmatically(state)
+        _dur = int((_time.time() - _t0) * 1000)
         state.raw_answer = answer
         state.citations = citations
+        _append_reasoning_step(
+            state, "ProgrammaticVerify", None, "", 0, "",
+            skipped=True, skip_reason="no LLM call (programmatic verification)",
+            duration_ms=_dur,
+            parsed_result={"citation_count": len(citations)},
+        )
         _trace_stage(
             state,
             "programmatic_verify",
