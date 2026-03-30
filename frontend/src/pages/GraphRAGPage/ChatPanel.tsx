@@ -5,6 +5,8 @@ import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
 import { TerminalLoader } from '../../components/ui/terminal-loader';
 import { ModelSelector } from '@/components/ModelSelector';
+import { ResponseTabs } from '@/components/ResponseTabs';
+import type { ResponseTab } from '@/components/ResponseTabs';
 import type { GraphRAGChatMessage } from '../../types';
 
 interface ChatPanelProps {
@@ -25,6 +27,10 @@ interface ChatPanelProps {
   selectedMode: string;
   onModelChange: (model: string) => void;
   onModeChange: (mode: string) => void;
+  responseTabs: ResponseTab[];
+  activeTabId: string;
+  onTabChange: (tabId: string) => void;
+  onRetry: () => void;
 }
 
 export default function ChatPanel({
@@ -45,6 +51,10 @@ export default function ChatPanel({
   selectedMode,
   onModelChange,
   onModeChange,
+  responseTabs,
+  activeTabId,
+  onTabChange,
+  onRetry,
 }: ChatPanelProps) {
   const { t } = useTranslation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -69,6 +79,14 @@ export default function ChatPanel({
           onModeChange={onModeChange}
         />
       </div>
+
+      {/* Response tabs (only visible with 2+ tabs) */}
+      <ResponseTabs
+        tabs={responseTabs}
+        activeTabId={activeTabId}
+        onTabChange={onTabChange}
+        onRetry={onRetry}
+      />
 
       {/* Scrollable messages */}
       <div className="flex-1 overflow-y-auto px-6 xl:px-10 2xl:px-16 py-5 xl:py-8 space-y-4 xl:space-y-6">
