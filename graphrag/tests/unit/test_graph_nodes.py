@@ -50,8 +50,8 @@ from eleutheria_graphrag.agents.state import (
     EvidenceSource,
     QueryComplexity,
     RAGState,
-    ResearchFacet,
     ReadingDecision,
+    ResearchFacet,
     ResearchToolCall,
     ScholarlyDossier,
 )

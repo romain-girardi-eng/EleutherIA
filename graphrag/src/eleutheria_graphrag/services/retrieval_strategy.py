@@ -74,7 +74,7 @@ class SQLStrategy:
         self,
         queries: list[str],
         deps: Any,
-        node_limit: int = 100,
+        node_limit: int = 100,  # noqa: ARG002 — protocol compliance
     ) -> tuple[list[str], list[str]]:
         seed_ids: list[str] = []
         passage_anchor_ids: list[str] = []

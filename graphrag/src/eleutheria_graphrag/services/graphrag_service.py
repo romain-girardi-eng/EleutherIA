@@ -22,8 +22,8 @@ from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
 from eleutheria_graphrag.services.llm_reranker import LLMRerankerService
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
-from eleutheria_graphrag.services.tree_index import TreeIndexService
 from eleutheria_graphrag.services.retrieval_strategy import VectorStrategy
+from eleutheria_graphrag.services.tree_index import TreeIndexService
 from eleutheria_graphrag.services.weighted_traversal import WeightedTraversal
 
 logger = logging.getLogger(__name__)
