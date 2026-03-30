@@ -48,6 +48,9 @@ class AnswerRequest(BaseModel):
     rigor_level: str = "standard"
     citation_style: str = "inline"
     temperature: float = 0.7
+    retrieval_mode: str = "auto"  # "auto" | "vector" | "sql"
+    model: str = "gemini-3.1-pro"
+    thread_id: str | None = None
 
 
 @router.post("/answer")
@@ -183,7 +186,30 @@ async def graphrag_answer(
         "processing_time": round(elapsed, 2),
         "service": "GraphRAG Pipeline",
         "success": True,
+        "retrieval_config": {
+            "retrieval_mode": body.retrieval_mode,
+            "model": body.model,
+            "thread_id": body.thread_id,
+        },
     }
+
+
+@router.get("/models")
+async def list_available_models() -> list[dict[str, Any]]:
+    """Return available models for the frontend selector."""
+    from eleutheria_graphrag.services.model_registry import list_models
+
+    return [
+        {
+            "key": m.key,
+            "label": m.label,
+            "provider": m.provider,
+            "context": m.context,
+            "tier": m.tier,
+            "pricing": {"input": m.pricing_input, "output": m.pricing_output},
+        }
+        for m in list_models()
+    ]
 
 
 # ---------- Status / Stats ----------
