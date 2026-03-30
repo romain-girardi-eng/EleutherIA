@@ -1,0 +1,148 @@
+# Railway Deployment — EleutherIA Backend
+
+## Architecture
+
+```
+                    free-will.app (Cloudflare DNS)
+                         |
+            +------------+------------+
+            |                         |
+    Cloudflare Pages            Railway (EU-West)
+    (frontend React)         (Python FastAPI)
+     Static assets              |        |
+                          Supabase    Qdrant Cloud
+                         (Postgres)   (Vectors)
+```
+
+The Python FastAPI backend runs on Railway. The frontend (Vite React) remains on Cloudflare Pages. The Cloudflare Workers TypeScript backend is retired.
+
+## Quick Start
+
+### 1. Install Railway CLI
+
+```bash
+npm install -g @railway/cli
+railway login
+```
+
+### 2. Create project and link
+
+```bash
+cd /path/to/EleutherIA
+railway init          # Create a new Railway project
+railway link          # Link this repo
+```
+
+### 3. Set environment variables
+
+```bash
+# Database (Supabase)
+railway variables set DATABASE_URL="postgresql://postgres.xxx:password@aws-0-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require"
+
+# Vector DB (Qdrant Cloud)
+railway variables set QDRANT_URL="https://xxx.eu-west-1-0.aws.cloud.qdrant.io:6333"
+railway variables set QDRANT_API_KEY="your-key"
+
+# LLM providers
+railway variables set GEMINI_API_KEY="your-key"
+railway variables set OPENROUTER_API_KEY="your-key"
+railway variables set MOONSHOT_API_KEY="your-key"
+
+# Security
+railway variables set JWT_SECRET_KEY="your-production-secret"
+railway variables set ALLOWED_ORIGINS="https://free-will.app"
+
+# Config
+railway variables set LLM_PREFERRED_PROVIDER="gemini"
+railway variables set GEMINI_EMBEDDING_MODEL="models/gemini-embedding-001"
+railway variables set OPENROUTER_HTTP_REFERER="https://free-will.app"
+railway variables set OPENROUTER_APP_NAME="EleutherIA"
+railway variables set QDRANT_REQUIRED="false"
+```
+
+### 4. Deploy
+
+```bash
+railway up            # Deploy from local (for testing)
+# Or push to GitHub — Railway auto-deploys on push
+```
+
+### 5. Get your URL
+
+```bash
+railway domain        # Generate a Railway public URL
+# e.g. eleutheria-backend-production.up.railway.app
+```
+
+### 6. Update frontend
+
+Set the `VITE_API_URL` environment variable in Cloudflare Pages:
+```
+VITE_API_URL=https://eleutheria-backend-production.up.railway.app
+```
+
+Or if using a custom domain, point `api.free-will.app` to Railway and set:
+```
+VITE_API_URL=https://api.free-will.app
+```
+
+## Custom Domain (optional)
+
+```bash
+railway domain add api.free-will.app
+```
+
+Then add a CNAME record in Cloudflare DNS:
+```
+api.free-will.app → eleutheria-backend-production.up.railway.app
+```
+
+This keeps `free-will.app` for the frontend and `api.free-will.app` for the backend.
+
+## Configuration
+
+### railway.json
+
+The `railway.json` at the repo root configures:
+- **Build**: uses `backend/Dockerfile` (multi-stage, Python 3.11)
+- **Deploy**: uvicorn with 2 workers, uvloop, health check on `/api/health`
+- **Restart**: auto-restart on failure (max 3 retries)
+
+### Environment Variables Reference
+
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | yes | Supabase Postgres connection string (pooler port 6543) |
+| `QDRANT_URL` | no | Qdrant Cloud endpoint |
+| `QDRANT_API_KEY` | no | Qdrant Cloud API key |
+| `GEMINI_API_KEY` | yes | Google AI API key (primary LLM + embeddings) |
+| `OPENROUTER_API_KEY` | yes | OpenRouter API key (multi-model routing) |
+| `MOONSHOT_API_KEY` | no | Kimi/Moonshot API key (thinking mode) |
+| `JWT_SECRET_KEY` | yes | JWT signing secret |
+| `ALLOWED_ORIGINS` | yes | Comma-separated allowed CORS origins |
+| `LLM_PREFERRED_PROVIDER` | no | Default: `gemini` |
+| `RETRIEVAL_MODE` | no | Default: `auto`. Set to `sql` to force vectorless mode |
+| `QDRANT_REQUIRED` | no | Default: `false`. Set to `true` to fail-fast if Qdrant is down |
+
+## Monitoring
+
+```bash
+railway logs          # Tail logs
+railway status        # Service status
+```
+
+## Cost
+
+- Hobby plan: $5/month with $5 compute credits included
+- Typical usage (~100 req/day, 2 workers): well within hobby credits
+- No hidden IPv4 or volume costs
+
+## Migration from Cloudflare Workers
+
+1. Deploy backend on Railway (this guide)
+2. Update `VITE_API_URL` in Cloudflare Pages env vars
+3. Verify frontend connects to Railway backend
+4. Remove Cloudflare Workers deployment (optional — can keep as backup)
+5. Update DNS if using custom domain
+
+The `deploy/cloudflare/` directory is kept for reference but is no longer the active production backend.

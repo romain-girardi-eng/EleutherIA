@@ -142,7 +142,7 @@ Each package can be installed and used independently.
 | **Frontend** | React 19, TypeScript, Vite, Tailwind CSS, Cosmograph, D3.js, Three.js, Framer Motion, react-i18next |
 | **LLM** | Gemini (gemini-3.1-pro-preview, primary), Kimi K2.5 Thinking (extended reasoning), OpenRouter (fallback) |
 | **Search** | PostgreSQL GIN indexes, Qdrant vector DB, Reciprocal Rank Fusion |
-| **Deployment** | Docker Compose (local), Cloudflare Workers (production), Vercel (frontend) |
+| **Deployment** | Docker Compose (local), Railway (production backend), Cloudflare Pages (production frontend) |
 | **Quality** | Ruff, mypy, ESLint, Vitest, pytest (330+ tests), pre-commit hooks |
 
 ## Statistics
