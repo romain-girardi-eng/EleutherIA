@@ -529,6 +529,16 @@ class LLMService:
             return 1024
         return 4096
 
+    def _resolve_model_override(self, model_override: str) -> tuple[ModelProvider, str]:
+        """Resolve a model override string to a provider and model ID.
+
+        If the string contains '/' (e.g. 'anthropic/claude-sonnet-4.6'), it is
+        routed through OpenRouter.  Otherwise it is treated as a Gemini model.
+        """
+        if "/" in model_override:
+            return ModelProvider.OPENROUTER, model_override
+        return ModelProvider.GEMINI, model_override
+
     async def generate(
         self,
         prompt: str,
@@ -541,6 +551,7 @@ class LLMService:
         cache_key: str | None = None,
         cache_prefix: str | None = None,
         cache_ttl_seconds: int = 900,
+        model_override: str | None = None,
     ) -> str:
         """
         Generate a response (non-streaming).
@@ -555,6 +566,49 @@ class LLMService:
         Returns:
             Generated text
         """
+        # --- Model override: bypass the normal provider loop ---
+        if model_override:
+            override_provider, override_model = self._resolve_model_override(model_override)
+            override_config = self._resolve_config(override_provider)
+            override_env_key = cast(str, override_config["env_key"])
+            override_api_key = os.getenv(override_env_key) or ""
+            if override_api_key:
+                try:
+                    override_config["model"] = override_model
+                    self.last_provider_used = override_provider.value
+                    self.last_model_used = override_model
+
+                    if override_provider == ModelProvider.GEMINI:
+                        return await self._generate_gemini(
+                            prompt,
+                            system_prompt,
+                            temperature,
+                            max_tokens,
+                            override_api_key,
+                            override_config,
+                            response_mime_type=response_mime_type,
+                            response_json_schema=response_json_schema,
+                            cache_key=cache_key,
+                            cache_prefix=cache_prefix,
+                            cache_ttl_seconds=cache_ttl_seconds,
+                        )
+                    return await self._generate_openai_compatible(
+                        override_provider,
+                        prompt,
+                        system_prompt,
+                        temperature,
+                        max_tokens,
+                        override_api_key,
+                        override_config,
+                    )
+                except Exception as exc:
+                    logger.warning(
+                        "Model override %s/%s failed (%s); falling back to provider loop",
+                        override_provider.value,
+                        override_model,
+                        exc,
+                    )
+
         providers = self._provider_attempt_order(thinking_mode=thinking_mode)
         if not providers:
             raise RuntimeError("No LLM provider available")
