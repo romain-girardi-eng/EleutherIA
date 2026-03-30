@@ -61,8 +61,15 @@ class ScholarlyAgent:
         question: str,
         *,
         max_iterations: int = 5,
+        selected_model: str = "gemini-3.1-pro",
+        retrieval_mode: str = "auto",
     ) -> ScholarlyAnswer:
-        state = RAGState(question=question, max_iterations=max_iterations)
+        state = RAGState(
+            question=question,
+            max_iterations=max_iterations,
+            selected_model=selected_model,
+            retrieval_mode=retrieval_mode,
+        )
         result = await scholarly_graph.run(
             ClassifyQueryType(),
             state=state,

@@ -294,6 +294,8 @@ class GraphRAGService:
         graph_depth: int = 2,
         max_context_nodes: int = 30,
         include_passages: bool = True,
+        selected_model: str = "gemini-3.1-pro",
+        retrieval_mode: str = "auto",
     ) -> dict[str, Any]:
         """Execute agentic GraphRAG query pipeline.
 
@@ -303,6 +305,8 @@ class GraphRAGService:
             graph_depth: Deprecated — ignored by agentic pipeline.
             max_context_nodes: Deprecated — ignored by agentic pipeline.
             include_passages: Deprecated — ignored by agentic pipeline.
+            selected_model: Model key from model_registry (e.g. "claude-sonnet-4.6").
+            retrieval_mode: "auto", "vector", or "sql".
 
         Returns:
             Dictionary with answer, citations, and metadata.
@@ -320,7 +324,11 @@ class GraphRAGService:
             )
 
         agent = self._ensure_agent()
-        return await agent.query_dict(question)
+        return await agent.query_dict(
+            question,
+            selected_model=selected_model,
+            retrieval_mode=retrieval_mode,
+        )
 
     # ------------------------------------------------------------------
     # Query (streaming)

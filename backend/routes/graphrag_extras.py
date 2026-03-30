@@ -74,6 +74,8 @@ async def graphrag_answer(
             graph_depth=body.graph_depth,
             max_context_nodes=body.max_context,
             include_passages=True,
+            selected_model=body.model,
+            retrieval_mode=body.retrieval_mode,
         )
     except Exception as e:
         logger.exception("GraphRAG query failed")
