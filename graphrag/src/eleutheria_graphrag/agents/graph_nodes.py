@@ -3667,16 +3667,33 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
         return
 
     # --- Strategy-based corpus discovery ---
-    strategy = ctx.deps.retrieval_strategy
+    limit = budget.node_search_limit()
+
+    # Select strategy based on user-requested retrieval_mode
+    if state.retrieval_mode == "sql":
+        # Explicit SQL mode — skip vector entirely
+        strategy = SQLStrategy(min_bundles=4)
+        logger.info("Using SQLStrategy (explicit sql mode)")
+    elif state.retrieval_mode == "vector":
+        # Explicit vector mode — use vector only, no fallback
+        strategy = ctx.deps.retrieval_strategy
+        logger.info("Using VectorStrategy (explicit vector mode)")
+    else:
+        # Auto mode — try vector first, fallback to SQL
+        strategy = ctx.deps.retrieval_strategy
+        logger.info("Using VectorStrategy with SQL fallback (auto mode)")
+
+    seed_ids: list[str] = []
+    passage_anchor_ids: list[str] = []
+
     if strategy is not None:
-        limit = budget.node_search_limit()
         seed_ids, passage_anchor_ids = await strategy.discover_seeds(
             queries=queries,
             deps=ctx.deps,
             node_limit=limit,
         )
 
-        # Auto-fallback: if vector returned nothing and mode is "auto", try SQL
+        # Auto-fallback: if vector returned nothing in auto mode, try SQL
         if (
             not seed_ids
             and state.retrieval_mode == "auto"
@@ -3691,7 +3708,9 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
             )
             state.metadata["retrieval_mode_used"] = "sql"
         else:
-            state.metadata["retrieval_mode_used"] = state.retrieval_mode
+            state.metadata["retrieval_mode_used"] = (
+                "sql" if isinstance(strategy, SQLStrategy) else state.retrieval_mode
+            )
 
         # Filter seeds to those in node_lookup and build evidence
         existing = state.all_node_ids()
