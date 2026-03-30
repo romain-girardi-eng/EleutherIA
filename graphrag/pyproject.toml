@@ -38,7 +38,6 @@ dependencies = [
     "pydantic>=2.0.0",
     "httpx>=0.27.0",
     "pydantic-ai[graph]>=1.0.0",
-    "sentence-transformers>=3.0.0",
 ]
 
 [project.optional-dependencies]
@@ -59,8 +58,12 @@ llm = [
     "google-generativeai>=0.5.0",
     "openai>=1.30.0",
 ]
+reranker = [
+    # Local cross-encoder reranking (requires PyTorch — large dependency)
+    "sentence-transformers>=3.0.0",
+]
 full = [
-    "eleutheria-graphrag[dev,api,llm]",
+    "eleutheria-graphrag[dev,api,llm,reranker]",
 ]
 
 [project.urls]
