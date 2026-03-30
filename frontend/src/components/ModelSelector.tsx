@@ -31,7 +31,8 @@ export function ModelSelector({
   const [models, setModels] = useState<ModelInfo[]>([]);
 
   useEffect(() => {
-    fetch('/api/graphrag/models')
+    const apiUrl = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') ?? '';
+    fetch(`${apiUrl}/api/graphrag/models`)
       .then((r) => r.json())
       .then(setModels)
       .catch(console.error);

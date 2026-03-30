@@ -83,7 +83,7 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=allowed_origins,
-        allow_origin_regex=r"https://.*\.eleutheria\.pages\.dev|https://visual-pulpit.*\.vercel\.app|https://free-will\.app",
+        allow_origin_regex=r"https://.*\.eleutheria\.pages\.dev|https://visual-pulpit.*\.vercel\.app|https://free-will\.app|https://.*\.up\.railway\.app",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
