@@ -52,8 +52,8 @@ results = await qdrant.search_nodes(query_embedding, limit=10)
 
 ## Features
 
-- **2,193 nodes** across 15 types (Person, Concept, Argument, Work, etc.)
-- **8,616 edges** across 56 relation types
+- **17,746 nodes** across 22 types (Person, Concept, Argument, Work, etc.)
+- **42,925 edges** across 56 relation types
 - **Community detection** via Leiden, Louvain, or greedy modularity
 - **Centrality metrics** (betweenness, PageRank, degree)
 - **Semantic search** via Qdrant vector similarity (3072-dim Gemini embeddings)
@@ -61,7 +61,7 @@ results = await qdrant.search_nodes(query_embedding, limit=10)
 
 ## Knowledge Graph Schema
 
-### Node Types (15)
+### Node Types (22)
 
 | Type | Count | Description |
 |------|-------|-------------|
