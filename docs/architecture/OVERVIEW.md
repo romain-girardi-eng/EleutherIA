@@ -51,8 +51,8 @@ EleutherIA is a FAIR-compliant knowledge graph system with three independent pac
 - Works/Passages API routes
 
 **Data:**
-- 189 ancient works
-- 16,968 passages
+- 487 ancient works
+- 69,277 passages
 - CTS URN support
 - Lemmatization data
 
@@ -66,8 +66,8 @@ EleutherIA is a FAIR-compliant knowledge graph system with three independent pac
 - `KGCache` - TTL-based caching
 
 **Data:**
-- 6,440 nodes (15 types) — including 2,815 passage translation pairs
-- 11,780 edges (56 relation types)
+- 17,746 nodes (22 types) — including passage translation pairs
+- 42,925 edges (56 relation types)
 - 3072-dim Gemini embeddings
 
 **Two-Node Passage Architecture:**
@@ -169,11 +169,11 @@ User Question
 
 | Table | Description |
 |-------|-------------|
-| `ancient_works` | 189 canonical texts with CTS URNs |
-| `passages` | 16,968 hierarchical text units |
+| `ancient_works` | 487 canonical texts with CTS URNs |
+| `passages` | 69,277 hierarchical text units |
 | `passage_citations` | Links passages to KG nodes |
-| `kg_nodes` | 2,193 knowledge graph nodes |
-| `kg_edges` | 8,616 relationships |
+| `kg_nodes` | 17,746 knowledge graph nodes |
+| `kg_edges` | 42,925 relationships |
 | `text_embeddings` | 3072-dim vectors in Qdrant |
 
 ### Key Indexes
@@ -191,7 +191,7 @@ User Question
 | API | FastAPI (Python 3.11+) |
 | Database | PostgreSQL 16 |
 | Vector DB | Qdrant |
-| LLM | Gemini 3 (primary), Kimi K2.5 Thinking (extended reasoning) |
+| LLM | Gemini (gemini-3.1-pro-preview, primary), Kimi K2.5 Thinking (extended reasoning) |
 | Deployment | Docker Compose |
 
 ## FAIR Compliance

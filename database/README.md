@@ -49,8 +49,8 @@ await db.close()
 
 ## Features
 
-- **189 ancient works** with CTS URN support
-- **16,968 passages** with hierarchical structure (book/chapter/section)
+- **487 ancient works** with CTS URN support
+- **69,277 passages** with hierarchical structure (book/chapter/section)
 - **Full-text search** via PostgreSQL GIN indexes
 - **Lemmatization data** for Greek and Latin texts
 - **Passage citations** linking to knowledge graph nodes
