@@ -329,6 +329,16 @@ export interface GraphRAGResponse {
   llm_model?: string;
   thinking_process?: string;  // Kimi K2 thinking process
   conversation_id?: string;  // Conversation ID for memory
+  reasoning_trace?: Array<{
+    node: string;
+    duration_ms: number;
+    model: string | null;
+    skipped: boolean;
+    skip_reason: string | null;
+    raw_output: string;
+    thinking: string | null;
+    parsed_result: Record<string, unknown> | null;
+  }>;
   success: boolean;
   // Academic mode evidence and bibliography
   evidence_chains?: EvidenceChain[];

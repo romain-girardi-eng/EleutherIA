@@ -8,6 +8,9 @@ import AuthModal from '../../components/AuthModal';
 import NodeDetailPanel from '../../components/NodeDetailPanel';
 import RightPanel from '../../components/graphrag/RightPanel';
 import type { RightPanelState } from '../../components/graphrag/RightPanel';
+import { ReasoningPanel } from '../../components/ReasoningPanel';
+import type { ReasoningTraceStep } from '../../components/ReasoningPanel';
+import type { ResponseTab } from '../../components/ResponseTabs';
 import WelcomeHero from './WelcomeHero';
 import ChatPanel from './ChatPanel';
 import MobileGraphSheet from './MobileGraphSheet';
@@ -52,6 +55,17 @@ export default function GraphRAGPage() {
   const highlightNodeRef = useRef<((citationIndex: number) => void) | null>(null);
   const [passageContext, setPassageContext] = useState<PassageContext | null>(null);
   const [passageWindow, setPassageWindow] = useState(5);
+
+  // Response tabs (for retry-with-different-model)
+  const [responseTabs, setResponseTabs] = useState<ResponseTab[]>([]);
+  const [activeTabId, setActiveTabId] = useState<string>('');
+  const [tabMessages, setTabMessages] = useState<Record<string, GraphRAGChatMessage[]>>({});
+  const [tabResponses, setTabResponses] = useState<Record<string, GraphRAGResponse | null>>({});
+  const [reasoningTraces, setReasoningTraces] = useState<Record<string, ReasoningTraceStep[]>>({});
+  const [initialQuestion, setInitialQuestion] = useState<string>('');
+
+  // Right panel reasoning trace toggle
+  const [showReasoningTrace, setShowReasoningTrace] = useState(false);
 
   const fetchPassageContext = useCallback(async (passageId: string, window: number = 5) => {
     try {
@@ -179,20 +193,50 @@ export default function GraphRAGPage() {
     await processQuery(query.trim());
   };
 
-  const processQuery = useCallback(async (queryText: string) => {
-    const userMessage: GraphRAGChatMessage = {
-      role: 'user',
-      content: queryText,
-      timestamp: new Date(),
-    };
+  const processQuery = useCallback(async (queryText: string, retryModel?: string, retryMode?: string) => {
+    const isRetry = retryModel !== undefined;
+    const model = retryModel ?? selectedModel;
+    const mode = retryMode ?? selectedMode;
 
-    setMessages((prev) => [...prev, userMessage]);
-    setQuery('');
-    setError(null);
+    if (!isRetry) {
+      // First query: create initial tab
+      const tabId = `tab_${Date.now()}`;
+      const userMessage: GraphRAGChatMessage = {
+        role: 'user',
+        content: queryText,
+        timestamp: new Date(),
+      };
 
-    await handleStreamingQuery(queryText);
+      setMessages([userMessage]);
+      setInitialQuestion(queryText);
+      setResponseTabs([{ id: tabId, label: model.split('-').slice(0, 2).join('-'), model, mode }]);
+      setActiveTabId(tabId);
+      setTabMessages((prev) => ({ ...prev, [tabId]: [userMessage] }));
+      setTabResponses((prev) => ({ ...prev, [tabId]: null }));
+      setQuery('');
+      setError(null);
+
+      await handleStreamingQuery(queryText, tabId, model, mode);
+    } else {
+      // Retry: create new tab, re-send the same question
+      const tabId = `tab_${Date.now()}`;
+      const userMessage: GraphRAGChatMessage = {
+        role: 'user',
+        content: queryText,
+        timestamp: new Date(),
+      };
+
+      setResponseTabs((prev) => [...prev, { id: tabId, label: model.split('-').slice(0, 2).join('-'), model, mode }]);
+      setActiveTabId(tabId);
+      setMessages([userMessage]);
+      setTabMessages((prev) => ({ ...prev, [tabId]: [userMessage] }));
+      setTabResponses((prev) => ({ ...prev, [tabId]: null }));
+      setError(null);
+
+      await handleStreamingQuery(queryText, tabId, model, mode);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [selectedModel, selectedMode]);
 
   useEffect(() => {
     const state = location.state as { initialQuery?: string } | null;
@@ -240,7 +284,10 @@ export default function GraphRAGPage() {
     );
   };
 
-  const handleStreamingQuery = async (queryText: string) => {
+  const handleStreamingQuery = async (queryText: string, tabId?: string, model?: string, mode?: string) => {
+    const effectiveModel = model ?? selectedModel;
+    const effectiveMode = mode ?? selectedMode;
+
     setStreaming(true);
     setRightPanelState('loading');
     setRightPanelResponse(null);
@@ -262,8 +309,8 @@ export default function GraphRAGPage() {
       const params = new URLSearchParams({
         query: queryText,
         ancient_only: ancientOnly.toString(),
-        model: selectedModel,
-        retrieval_mode: selectedMode,
+        model: effectiveModel,
+        retrieval_mode: effectiveMode,
       });
 
       const response = await fetch(`${apiUrl}/api/graphrag/query/stream?${params.toString()}`, {
@@ -450,7 +497,7 @@ export default function GraphRAGPage() {
           tokens_used: finalResponse.tokens_used,
           llm_provider: finalResponse.llm_provider || 'gemini',
           llm_model: finalResponse.llm_model || 'gemini-3.1-pro-preview',
-          retrieval_mode: selectedMode,
+          retrieval_mode: effectiveMode,
           timestamp: new Date(),
           citationTexts: formattedCitationTexts,
           graphrag_response: finalResponse,
@@ -459,6 +506,21 @@ export default function GraphRAGPage() {
         setRightPanelResponse(finalResponse);
         setAllResponses((prev) => [...prev, finalResponse]);
         setRightPanelState('graph');
+
+        // Store tab-specific data
+        if (tabId) {
+          setTabMessages((prev) => ({
+            ...prev,
+            [tabId]: [...(prev[tabId] ?? []).filter(m => m.role === 'user'), assistantMessage],
+          }));
+          setTabResponses((prev) => ({ ...prev, [tabId]: finalResponse }));
+          if (finalResponse.reasoning_trace) {
+            setReasoningTraces((prev) => ({
+              ...prev,
+              [tabId]: finalResponse.reasoning_trace as ReasoningTraceStep[],
+            }));
+          }
+        }
       } else if (fullAnswer) {
         const assistantMessage: GraphRAGChatMessage = {
           role: 'assistant',
@@ -504,6 +566,27 @@ export default function GraphRAGPage() {
       console.error('Failed to fetch node:', err);
     }
   };
+
+  // Tab switching: restore messages + right panel for the selected tab
+  const handleTabChange = useCallback((tabId: string) => {
+    setActiveTabId(tabId);
+    const savedMessages = tabMessages[tabId];
+    if (savedMessages) {
+      setMessages(savedMessages);
+    }
+    const savedResponse = tabResponses[tabId] ?? null;
+    setRightPanelResponse(savedResponse);
+    setRightPanelState(savedResponse ? 'graph' : 'idle');
+    setActiveSourceIndex(null);
+  }, [tabMessages, tabResponses]);
+
+  // Retry with a different model: prompt user via simple inline select
+  const handleRetry = useCallback(() => {
+    if (!initialQuestion) return;
+    const newModel = window.prompt('Enter model key to retry with (e.g. gemini-3.1-pro, kimi-k2.5-thinking):', selectedModel);
+    if (!newModel || newModel === selectedModel) return;
+    processQuery(initialQuestion, newModel, selectedMode);
+  }, [initialQuestion, selectedModel, selectedMode, processQuery]);
 
   const advancedProps = {
     ancientOnly, setAncientOnly,
@@ -561,24 +644,49 @@ export default function GraphRAGPage() {
                 selectedMode={selectedMode}
                 onModelChange={setSelectedModel}
                 onModeChange={setSelectedMode}
+                responseTabs={responseTabs}
+                activeTabId={activeTabId}
+                onTabChange={handleTabChange}
+                onRetry={handleRetry}
               />
 
               {/* RIGHT PANEL - desktop graph workspace */}
               <div className="hidden lg:flex flex-col w-[40%] h-full bg-parchment-50 border-l border-amber-200/40">
-                <div className="flex-1 min-h-0 overflow-hidden p-3 xl:p-4">
-                  <RightPanel
-                    state={rightPanelState}
-                    response={rightPanelResponse}
-                    allResponses={allResponses}
-                    activeSourceIndex={activeSourceIndex}
-                    passageContext={passageContext}
-                    onNodeClick={handleNodeClick}
-                    onSourceSelect={handleSourceSelect}
-                    onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
-                    onLoadMorePassages={handleLoadMorePassages}
-                    onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
-                    className="h-full"
-                  />
+                <div className="flex-1 min-h-0 overflow-hidden p-3 xl:p-4 flex flex-col">
+                  {/* Main graph panel */}
+                  <div className={`${showReasoningTrace && (reasoningTraces[activeTabId]?.length ?? 0) > 0 ? 'h-[60%]' : 'flex-1'} min-h-0`}>
+                    <RightPanel
+                      state={rightPanelState}
+                      response={rightPanelResponse}
+                      allResponses={allResponses}
+                      activeSourceIndex={activeSourceIndex}
+                      passageContext={passageContext}
+                      onNodeClick={handleNodeClick}
+                      onSourceSelect={handleSourceSelect}
+                      onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
+                      onLoadMorePassages={handleLoadMorePassages}
+                      onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
+                      className="h-full"
+                    />
+                  </div>
+
+                  {/* Reasoning Trace toggle + panel */}
+                  {(reasoningTraces[activeTabId]?.length ?? 0) > 0 && (
+                    <div className="shrink-0 mt-2">
+                      <button
+                        onClick={() => setShowReasoningTrace(!showReasoningTrace)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-stone-500 hover:text-stone-700 transition-colors w-full border-t border-amber-200/40 pt-2"
+                      >
+                        <span className="inline-block w-2 h-2 rounded-full bg-amber-400" />
+                        {showReasoningTrace ? 'Hide' : 'Show'} FSM Reasoning Trace ({reasoningTraces[activeTabId]?.length ?? 0} steps)
+                      </button>
+                    </div>
+                  )}
+                  {showReasoningTrace && (reasoningTraces[activeTabId]?.length ?? 0) > 0 && (
+                    <div className="h-[38%] min-h-[180px] overflow-y-auto border-t border-amber-200/40 mt-1 rounded-lg bg-white/60">
+                      <ReasoningPanel steps={reasoningTraces[activeTabId] ?? []} />
+                    </div>
+                  )}
                 </div>
               </div>
 
