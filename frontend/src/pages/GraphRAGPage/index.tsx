@@ -67,6 +67,11 @@ export default function GraphRAGPage() {
   // Right panel reasoning trace toggle
   const [showReasoningTrace, setShowReasoningTrace] = useState(false);
 
+  // Agent activity tracking (ReAct loop)
+  const [agentSteps, setAgentSteps] = useState<import('../../components/graphrag/AgentActivityPanel').AgentStep[]>([]);
+  const [agentActive, setAgentActive] = useState(false);
+  const agentStepCounterRef = useRef(0);
+
   // Token budget / cost metrics from last response
   interface LastMetrics {
     modelLabel: string;
@@ -312,10 +317,13 @@ export default function GraphRAGPage() {
     const effectiveMode = mode ?? selectedMode;
 
     setStreaming(true);
-    setRightPanelState('loading');
+    setRightPanelState('reasoning');
     setRightPanelResponse(null);
     setActiveSourceIndex(null);
     setStreamStatus('Connecting...');
+    setAgentSteps([]);
+    setAgentActive(true);
+    agentStepCounterRef.current = 0;
     initializeReasoningSteps(queryText);
 
     try {
@@ -438,6 +446,53 @@ export default function GraphRAGPage() {
                   updateReasoningStep(5, 'complete');
                   break;
 
+                case 'agent_thinking': {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const thinkPayload = data.data as any;
+                  agentStepCounterRef.current += 1;
+                  setAgentSteps((prev) => [...prev, {
+                    id: `step-${agentStepCounterRef.current}`,
+                    type: 'thinking',
+                    thinking: thinkPayload?.thinking || '',
+                    summary: thinkPayload?.summary || '',
+                    remaining: thinkPayload?.remaining,
+                    timestamp: Date.now(),
+                  }]);
+                  break;
+                }
+
+                case 'tool_start': {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const startPayload = data.data as any;
+                  agentStepCounterRef.current += 1;
+                  setAgentSteps((prev) => [...prev, {
+                    id: `step-${agentStepCounterRef.current}`,
+                    type: 'tool_start',
+                    tool: startPayload?.tool,
+                    args: startPayload?.args,
+                    reason: startPayload?.reason,
+                    timestamp: Date.now(),
+                  }]);
+                  break;
+                }
+
+                case 'tool_result': {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const resultPayload = data.data as any;
+                  agentStepCounterRef.current += 1;
+                  setAgentSteps((prev) => [...prev, {
+                    id: `step-${agentStepCounterRef.current}`,
+                    type: 'tool_result',
+                    tool: resultPayload?.tool,
+                    summary: resultPayload?.summary,
+                    durationMs: resultPayload?.duration_ms,
+                    nodeCount: resultPayload?.node_count,
+                    passageCount: resultPayload?.passage_count,
+                    timestamp: Date.now(),
+                  }]);
+                  break;
+                }
+
                 case 'error':
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   setError((data as any).data?.message || data.message || 'Stream error');
@@ -548,6 +603,7 @@ export default function GraphRAGPage() {
           setMessages((prev) => [...prev, assistantMessage]);
         setRightPanelResponse(finalResponse);
         setAllResponses((prev) => [...prev, finalResponse]);
+        setAgentActive(false);
         setRightPanelState('graph');
 
         // Update token budget display
@@ -717,6 +773,8 @@ export default function GraphRAGPage() {
                       allResponses={allResponses}
                       activeSourceIndex={activeSourceIndex}
                       passageContext={passageContext}
+                      agentSteps={agentSteps}
+                      agentActive={agentActive}
                       onNodeClick={handleNodeClick}
                       onSourceSelect={handleSourceSelect}
                       onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
