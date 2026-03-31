@@ -266,10 +266,12 @@ export default function GraphRAGPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedModel, selectedMode]);
 
+  const initialQueryProcessedRef = useRef(false);
   useEffect(() => {
     const state = location.state as { initialQuery?: string } | null;
-    if (state?.initialQuery) {
+    if (state?.initialQuery && !initialQueryProcessedRef.current) {
       if (isAuthenticated) {
+        initialQueryProcessedRef.current = true;
         processQuery(state.initialQuery);
         window.history.replaceState({}, document.title);
       } else {
