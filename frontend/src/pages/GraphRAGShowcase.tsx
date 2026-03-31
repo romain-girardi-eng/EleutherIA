@@ -461,86 +461,41 @@ export default function GraphRAGShowcase() {
               </span>
             </div>
             <h2 className="text-3xl lg:text-4xl font-serif font-bold text-stone-800 mb-4">
-              Built on HiRAG Architecture
+              Agentic GraphRAG Architecture
             </h2>
             <p className="text-lg text-stone-600 max-w-3xl mx-auto mb-2">
-              Our system implements <span className="font-bold text-[#769687]">HiRAG (Hierarchical Retrieval-Augmented Generation)</span>,
-              a state-of-the-art approach that organizes knowledge hierarchically to enhance semantic understanding and improve retrieval quality.
+              Our system implements an <span className="font-bold text-[#769687]">Agentic Graph Retrieval-Augmented Generation</span> pipeline
+              with a 12-node FSM, multi-model support (Gemini/Kimi), and vectorless SQL fallback for maximum retrieval quality.
             </p>
-            <p className="text-sm text-stone-500 max-w-2xl mx-auto mb-4">
-              HiRAG outperforms traditional RAG by 87.6% vs 12.4% and surpasses standard GraphRAG by 64.1% vs 35.9% on comprehensive benchmarks.
-            </p>
-            <a
-              href="https://arxiv.org/abs/2503.10150"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-purple-100 hover:bg-purple-200 text-purple-700 font-semibold rounded-lg border-2 border-purple-300 hover:border-purple-400 transition-all duration-300 hover:shadow-lg"
-            >
-              <BookOpen className="w-5 h-5" />
-              Read the Full Paper on arXiv
-              <ArrowRight className="w-4 h-4" />
-            </a>
           </div>
 
-          {/* HiRAG Architecture Image */}
-          <div className="mb-8">
-            <div className="bg-parchment-50 rounded-xl p-8 border-2 border-amber-200/60 shadow-md">
-              <img
-                src="/hirag-architecture.png"
-                alt="HiRAG Architecture showing HiIndex indexing with hierarchical knowledge and HiRetrieval retrieval with hierarchical knowledge, including meta summary entities, summary entities, normal entities, GMM clustering, LLM summarization, community reports, reasoning paths, and key entity descriptions"
-                className="w-full h-auto rounded-lg bg-parchment-50"
-              />
-              <div className="mt-4 text-center text-sm text-stone-600">
-                <p className="font-medium mb-1">HiRAG Architecture: Hierarchical Knowledge Organization</p>
-                <p className="text-xs">
-                  Source: Huang et al. (2025).{' '}
-                  <a
-                    href="https://arxiv.org/abs/2503.10150"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#769687] hover:text-[#5a7366] underline"
-                  >
-                    "HiRAG: Retrieval-Augmented Generation with Hierarchical Knowledge"
-                  </a>
-                  {' '}(EMNLP 2025 Findings).{' '}
-                  <a
-                    href="https://github.com/hhy-huang/HiRAG"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#769687] hover:text-[#5a7366] underline"
-                  >
-                    GitHub
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
+          {/* GraphRAG Architecture Description */}
 
-          {/* HiRAG Key Components */}
+          {/* Agentic GraphRAG Key Components */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gradient-to-br from-[#769687]/5 to-[#769687]/10 rounded-xl p-6 border border-[#769687]/20">
               <div className="flex items-center gap-3 mb-3">
                 <div className="p-2 bg-[#769687]/20 rounded-lg">
                   <Network className="w-6 h-6 text-[#769687]" />
                 </div>
-                <h3 className="text-xl font-bold text-stone-800">HiIndex: Hierarchical Indexing</h3>
+                <h3 className="text-xl font-bold text-stone-800">Parallel Retrieval</h3>
               </div>
               <p className="text-stone-600 leading-relaxed mb-3">
-                Constructs a multi-layer knowledge structure by organizing documents from detailed local information
-                (individual text chunks) to high-level global summaries (community reports), connected by bridge knowledge.
+                Embeds the query once, then executes three parallel Qdrant searches across KG nodes, text passages,
+                and edges for maximum recall with minimal latency.
               </p>
               <ul className="space-y-2 text-sm text-stone-600">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-[#769687] mt-0.5 flex-shrink-0" />
-                  <span><strong>Normal Entities:</strong> Base-level knowledge nodes from source documents</span>
+                  <span><strong>KG Nodes:</strong> 2,193 nodes across persons, concepts, arguments, works</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-[#769687] mt-0.5 flex-shrink-0" />
-                  <span><strong>Summary Entities:</strong> GMM clustering groups related entities</span>
+                  <span><strong>Passages:</strong> 17,000+ ancient text passages with CTS URNs</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-[#769687] mt-0.5 flex-shrink-0" />
-                  <span><strong>Meta Summary Entities:</strong> LLM-generated high-level community reports</span>
+                  <span><strong>SQL Fallback:</strong> Vectorless retrieval via passage_citations when needed</span>
                 </li>
               </ul>
             </div>
@@ -550,24 +505,24 @@ export default function GraphRAGShowcase() {
                 <div className="p-2 bg-primary-200 rounded-lg">
                   <Search className="w-6 h-6 text-primary-700" />
                 </div>
-                <h3 className="text-xl font-bold text-stone-800">HiRetrieval: Smart Retrieval</h3>
+                <h3 className="text-xl font-bold text-stone-800">Agentic Synthesis</h3>
               </div>
               <p className="text-stone-600 leading-relaxed mb-3">
-                Performs intelligent retrieval across the knowledge hierarchy using both local specificity and global context,
-                generating comprehensive responses with full reasoning transparency.
+                A 12-node pydantic-graph FSM orchestrates enrichment, context building, and synthesis with
+                multi-model support and full reasoning transparency.
               </p>
               <ul className="space-y-2 text-sm text-stone-600">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
-                  <span><strong>Global Search:</strong> Community reports for broad conceptual coverage</span>
+                  <span><strong>Multi-Model:</strong> Gemini 3 (primary) + Kimi K2.5 Thinking (extended reasoning)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
-                  <span><strong>Bridge Search:</strong> Key entity reasoning paths connecting layers</span>
+                  <span><strong>No Truncation:</strong> Full context via Gemini 1M token window</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
-                  <span><strong>Local Search:</strong> Detailed entity descriptions from flattened KG</span>
+                  <span><strong>Reasoning Trace:</strong> Full visibility into which nodes and paths were used</span>
                 </li>
               </ul>
             </div>
@@ -576,12 +531,13 @@ export default function GraphRAGShowcase() {
           <div className="mt-8 bg-slate-50 border border-slate-200 rounded-xl p-6">
             <h4 className="font-bold text-stone-800 mb-3 flex items-center gap-2">
               <Zap className="w-5 h-5 text-[#769687]" />
-              Why HiRAG Makes a Difference
+              Why Agentic GraphRAG Makes a Difference
             </h4>
             <p className="text-stone-600 leading-relaxed">
-              Traditional flat RAG treats all information equally, missing the natural hierarchy in human knowledge.
-              HiRAG mirrors how scholars actually organize information—from specific textual details to broader thematic
-              summaries—enabling our system to simultaneously capture granular citations and comprehensive conceptual relationships.
+              Traditional flat RAG treats all information equally and relies on a single retrieval step.
+              Agentic GraphRAG combines graph-structured knowledge with an autonomous pipeline that retrieves, enriches,
+              and synthesizes in parallel -- leveraging curated passage_citations and KG neighbor expansion to simultaneously
+              capture granular ancient source citations and comprehensive conceptual relationships.
               This is crucial for ancient philosophy where understanding both precise textual evidence and school-wide
               doctrinal patterns is essential.
             </p>
