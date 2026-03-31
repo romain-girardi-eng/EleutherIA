@@ -63,7 +63,12 @@ class ExploreSubgraphTool:
                     "minItems": 1,
                     "maxItems": 5,
                 },
-                "top_k": {"type": "integer", "default": 20, "minimum": 5, "maximum": 50},
+                "top_k": {
+                    "type": "integer",
+                    "default": 20,
+                    "minimum": 5,
+                    "maximum": 50,
+                },
             },
             "required": ["seed_node_ids"],
         }
@@ -100,16 +105,18 @@ class ExploreSubgraphTool:
             if (node.get("type") or "").lower() == "passage":
                 continue
 
-            scored_nodes.append((
-                SubgraphNode(
-                    node_id=node_id,
-                    label=node.get("label", ""),
-                    type=node.get("type", ""),
-                    ppr_score=round(ppr_score, 6),
-                    distance_from_seed=distances.get(node_id, 99),
-                ),
-                ppr_score,
-            ))
+            scored_nodes.append(
+                (
+                    SubgraphNode(
+                        node_id=node_id,
+                        label=node.get("label", ""),
+                        type=node.get("type", ""),
+                        ppr_score=round(ppr_score, 6),
+                        distance_from_seed=distances.get(node_id, 99),
+                    ),
+                    ppr_score,
+                )
+            )
 
         # Sort by PPR score descending
         scored_nodes.sort(key=lambda x: x[1], reverse=True)
@@ -156,7 +163,7 @@ class ExploreSubgraphTool:
 
         # Personalization vector
         n_seeds = len(seeds)
-        personalization: dict[str, float] = {s: 1.0 / n_seeds for s in seeds}
+        personalization: dict[str, float] = dict.fromkeys(seeds, 1.0 / n_seeds)
 
         # Initialize scores
         scores: dict[str, float] = {n: personalization.get(n, 0.0) for n in all_nodes}
@@ -171,7 +178,7 @@ class ExploreSubgraphTool:
                 rank = alpha * personalization.get(node, 0.0)
 
                 # Walk component: sum of (neighbor_score × edge_weight / out_degree)
-                for neighbor, weight in adjacency.get(node, []):
+                for neighbor, _weight in adjacency.get(node, []):
                     out_degree = len(adjacency.get(neighbor, []))
                     if out_degree > 0:
                         # Reverse direction: score flows FROM neighbor TO node
@@ -191,13 +198,14 @@ class ExploreSubgraphTool:
                     total_weight = sum(w for _, w in neighbors)
                     if total_weight > 0:
                         for tgt, w in neighbors:
-                            share = (1.0 - alpha) * scores.get(node, 0.0) * w / total_weight
+                            share = (
+                                (1.0 - alpha) * scores.get(node, 0.0) * w / total_weight
+                            )
                             new_scores[tgt] = new_scores.get(tgt, 0.0) + share
 
             # Convergence check
             max_diff = max(
-                abs(new_scores.get(n, 0.0) - scores.get(n, 0.0))
-                for n in all_nodes
+                abs(new_scores.get(n, 0.0) - scores.get(n, 0.0)) for n in all_nodes
             )
             scores = new_scores
 
@@ -208,7 +216,7 @@ class ExploreSubgraphTool:
 
     def _bfs_distances(self, seeds: list[str], max_depth: int = 4) -> dict[str, int]:
         """BFS from seeds to compute shortest distance."""
-        distances: dict[str, int] = {s: 0 for s in seeds}
+        distances: dict[str, int] = dict.fromkeys(seeds, 0)
         queue: deque[tuple[str, int]] = deque((s, 0) for s in seeds)
 
         while queue:

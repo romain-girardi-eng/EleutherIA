@@ -19,9 +19,9 @@ def _resolve_qdrant_connection() -> dict[str, Any]:
     qdrant_port = int(os.getenv("QDRANT_HTTP_PORT", "6333"))
     qdrant_api_key = os.getenv("QDRANT_API_KEY", "").strip() or None
 
-    localhost_url = qdrant_url.lower().startswith("http://localhost") or qdrant_url.lower().startswith(
-        "http://127.0.0.1"
-    )
+    localhost_url = qdrant_url.lower().startswith(
+        "http://localhost"
+    ) or qdrant_url.lower().startswith("http://127.0.0.1")
     if localhost_url and qdrant_host and qdrant_host != "localhost" and qdrant_api_key:
         return {
             "mode": "cloud",
@@ -197,7 +197,9 @@ class QdrantService:
                         score_threshold=score_threshold,
                     )
                     filtered = [
-                        hit for hit in historical_hits if (hit.payload or {}).get("node_id")
+                        hit
+                        for hit in historical_hits
+                        if (hit.payload or {}).get("node_id")
                     ]
                     add_hits(filtered)
                 except Exception as historical_exc:

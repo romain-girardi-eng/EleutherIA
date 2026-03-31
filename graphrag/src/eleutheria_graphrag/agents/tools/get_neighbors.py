@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from eleutheria_graphrag.agents.dependencies import Deps
 
@@ -55,7 +55,10 @@ class GetNeighborsTool:
         return {
             "type": "object",
             "properties": {
-                "node_id": {"type": "string", "description": "The node ID to explore from"},
+                "node_id": {
+                    "type": "string",
+                    "description": "The node ID to explore from",
+                },
                 "relation_filter": {
                     "type": "string",
                     "description": "Filter by edge relation type (e.g. influenced_by, discusses, authored_by)",
@@ -66,7 +69,12 @@ class GetNeighborsTool:
                     "default": "both",
                     "description": "Edge direction: outgoing, incoming, or both",
                 },
-                "limit": {"type": "integer", "default": 15, "minimum": 1, "maximum": 30},
+                "limit": {
+                    "type": "integer",
+                    "default": 15,
+                    "minimum": 1,
+                    "maximum": 30,
+                },
             },
             "required": ["node_id"],
         }
@@ -94,17 +102,19 @@ class GetNeighborsTool:
                 pr = self._deps.pagerank_scores.get(target_id, 0.0)
                 sort_score = weight + pr * 10
 
-                edges.append((
-                    EdgeSummary(
-                        edge_node_id=target_id,
-                        label=target.get("label", target_id),
-                        type=target.get("type", ""),
-                        relation=rel,
-                        direction="outgoing",
-                        weight=weight,
-                    ),
-                    sort_score,
-                ))
+                edges.append(
+                    (
+                        EdgeSummary(
+                            edge_node_id=target_id,
+                            label=target.get("label", target_id),
+                            type=target.get("type", ""),
+                            relation=rel,
+                            direction="outgoing",
+                            weight=weight,
+                        ),
+                        sort_score,
+                    )
+                )
 
         # Incoming edges
         if direction in ("in", "both"):
@@ -118,17 +128,19 @@ class GetNeighborsTool:
                 pr = self._deps.pagerank_scores.get(source_id, 0.0)
                 sort_score = weight + pr * 10
 
-                edges.append((
-                    EdgeSummary(
-                        edge_node_id=source_id,
-                        label=source.get("label", source_id),
-                        type=source.get("type", ""),
-                        relation=rel,
-                        direction="incoming",
-                        weight=weight,
-                    ),
-                    sort_score,
-                ))
+                edges.append(
+                    (
+                        EdgeSummary(
+                            edge_node_id=source_id,
+                            label=source.get("label", source_id),
+                            type=source.get("type", ""),
+                            relation=rel,
+                            direction="incoming",
+                            weight=weight,
+                        ),
+                        sort_score,
+                    )
+                )
 
         # Sort by combined score (weight × pagerank), take top limit
         edges.sort(key=lambda x: x[1], reverse=True)

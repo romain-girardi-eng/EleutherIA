@@ -22,7 +22,9 @@ class PassageSummary(BaseModel):
     canonical_ref: str | None = None
     language: str | None = None
     text_content: str = Field(default="", description="Original text up to 800 chars")
-    translation: str | None = Field(default=None, description="English translation if available")
+    translation: str | None = Field(
+        default=None, description="English translation if available"
+    )
     confidence: float = 0.0
 
 
@@ -55,7 +57,10 @@ class ReadPassagesTool:
         return {
             "type": "object",
             "properties": {
-                "node_id": {"type": "string", "description": "The KG node ID to read passages for"},
+                "node_id": {
+                    "type": "string",
+                    "description": "The KG node ID to read passages for",
+                },
                 "limit": {"type": "integer", "default": 5, "minimum": 1, "maximum": 10},
             },
             "required": ["node_id"],
@@ -73,7 +78,8 @@ class ReadPassagesTool:
 
         # Strategy 1: passage_citations (works for argument, concept, some person nodes)
         try:
-            rows = await self._deps.db.fetch(f"""
+            rows = await self._deps.db.fetch(
+                f"""
                 SELECT
                     p.passage_id::text,
                     w.title,
@@ -88,14 +94,20 @@ class ReadPassagesTool:
                 WHERE pc.kg_node_id = $1
                 ORDER BY pc.confidence DESC, p.sequence_number
                 LIMIT $2
-            """, node_id, limit)
+            """,
+                node_id,
+                limit,
+            )
         except Exception:
-            logger.warning("passage_citations query failed for %s", node_id, exc_info=True)
+            logger.warning(
+                "passage_citations query failed for %s", node_id, exc_info=True
+            )
 
         # Strategy 2: if node is a work, load passages directly via kg_work_id
         if not rows and node_type == "work":
             try:
-                rows = await self._deps.db.fetch(f"""
+                rows = await self._deps.db.fetch(
+                    f"""
                     SELECT
                         p.passage_id::text,
                         w.title,
@@ -109,16 +121,22 @@ class ReadPassagesTool:
                     WHERE w.kg_work_id = $1
                     ORDER BY p.sequence_number
                     LIMIT $2
-                """, node_id, limit)
+                """,
+                    node_id,
+                    limit,
+                )
             except Exception:
-                logger.warning("work passages query failed for %s", node_id, exc_info=True)
+                logger.warning(
+                    "work passages query failed for %s", node_id, exc_info=True
+                )
 
         # Strategy 2b: work node not linked — search by title in ancient_works
         if not rows and node_type == "work":
             work_label = node_label.split(" (")[0].split(" - ")[0].strip()
             if work_label and len(work_label) > 3:
                 try:
-                    rows = await self._deps.db.fetch(f"""
+                    rows = await self._deps.db.fetch(
+                        f"""
                         SELECT
                             p.passage_id::text,
                             w.title,
@@ -132,9 +150,16 @@ class ReadPassagesTool:
                         WHERE w.title ILIKE '%' || $1 || '%'
                         ORDER BY p.sequence_number
                         LIMIT $2
-                    """, work_label, limit)
+                    """,
+                        work_label,
+                        limit,
+                    )
                 except Exception:
-                    logger.warning("work title passages query failed for %s", work_label, exc_info=True)
+                    logger.warning(
+                        "work title passages query failed for %s",
+                        work_label,
+                        exc_info=True,
+                    )
 
         # Strategy 3: if node is a person, find their works and load passages
         if not rows and node_type == "person":
@@ -144,21 +169,28 @@ class ReadPassagesTool:
             for edge in self._deps.outgoing_edges.get(node_id, []):
                 if edge.get("relation") in ("wrote", "created_by", "authored"):
                     tgt = edge.get("target", "")
-                    if self._deps.node_lookup.get(tgt, {}).get("type", "").lower() == "work":
+                    if (
+                        self._deps.node_lookup.get(tgt, {}).get("type", "").lower()
+                        == "work"
+                    ):
                         work_ids.append(tgt)
 
             # Incoming: work --authored_by--> person
             for edge in self._deps.incoming_edges.get(node_id, []):
                 if edge.get("relation") == "authored_by":
                     src = edge.get("source", "")
-                    if self._deps.node_lookup.get(src, {}).get("type", "").lower() == "work":
+                    if (
+                        self._deps.node_lookup.get(src, {}).get("type", "").lower()
+                        == "work"
+                    ):
                         work_ids.append(src)
 
             work_ids = list(dict.fromkeys(work_ids))  # Deduplicate
 
             if work_ids:
                 try:
-                    rows = await self._deps.db.fetch(f"""
+                    rows = await self._deps.db.fetch(
+                        f"""
                         SELECT
                             p.passage_id::text,
                             w.title,
@@ -172,16 +204,24 @@ class ReadPassagesTool:
                         WHERE w.kg_work_id = ANY($1)
                         ORDER BY p.sequence_number
                         LIMIT $2
-                    """, work_ids, limit)
+                    """,
+                        work_ids,
+                        limit,
+                    )
                 except Exception:
-                    logger.warning("person→work passages query failed for %s", node_id, exc_info=True)
+                    logger.warning(
+                        "person→work passages query failed for %s",
+                        node_id,
+                        exc_info=True,
+                    )
 
         # Strategy 4: if still nothing and node is a person, search by author name
         if not rows and node_type == "person":
             author_name = node_label.split(" of ")[0].split(" (")[0].strip()
             if author_name:
                 try:
-                    rows = await self._deps.db.fetch(f"""
+                    rows = await self._deps.db.fetch(
+                        f"""
                         SELECT
                             p.passage_id::text,
                             w.title,
@@ -195,23 +235,34 @@ class ReadPassagesTool:
                         WHERE w.author ILIKE $1
                         ORDER BY p.sequence_number
                         LIMIT $2
-                    """, author_name, limit)
+                    """,
+                        author_name,
+                        limit,
+                    )
                 except Exception:
-                    logger.warning("author name passages query failed for %s", author_name, exc_info=True)
+                    logger.warning(
+                        "author name passages query failed for %s",
+                        author_name,
+                        exc_info=True,
+                    )
 
         passages: list[PassageSummary] = []
         for row in rows:
-            translation = await self._fetch_translation(row.get("passage_id", ""), node_id)
-            passages.append(PassageSummary(
-                passage_id=row["passage_id"],
-                work_title=row.get("title") or "",
-                author=row.get("author"),
-                canonical_ref=row.get("canonical_ref"),
-                language=row.get("language"),
-                text_content=(row.get("text_content") or "")[:800],
-                translation=translation,
-                confidence=row.get("confidence", 0.0),
-            ))
+            translation = await self._fetch_translation(
+                row.get("passage_id", ""), node_id
+            )
+            passages.append(
+                PassageSummary(
+                    passage_id=row["passage_id"],
+                    work_title=row.get("title") or "",
+                    author=row.get("author"),
+                    canonical_ref=row.get("canonical_ref"),
+                    language=row.get("language"),
+                    text_content=(row.get("text_content") or "")[:800],
+                    translation=translation,
+                    confidence=row.get("confidence", 0.0),
+                )
+            )
 
         return ReadPassagesResult(
             node_id=node_id,
@@ -219,7 +270,7 @@ class ReadPassagesTool:
             passages=passages,
         )
 
-    async def _fetch_translation(self, passage_id: str, kg_node_id: str) -> str | None:
+    async def _fetch_translation(self, _passage_id: str, kg_node_id: str) -> str | None:
         """Look up English translation via KG _en nodes linked by translation_of.
 
         The translation is stored as the description of the _en suffixed KG node.

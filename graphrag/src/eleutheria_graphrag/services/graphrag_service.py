@@ -46,7 +46,11 @@ def _normalize_json_mapping(value: Any) -> dict[str, Any]:
 
 
 def _preferred_provider() -> ModelProvider:
-    raw = os.getenv("LLM_PREFERRED_PROVIDER", ModelProvider.OPENROUTER.value).strip().lower()
+    raw = (
+        os.getenv("LLM_PREFERRED_PROVIDER", ModelProvider.OPENROUTER.value)
+        .strip()
+        .lower()
+    )
     try:
         return ModelProvider(raw)
     except ValueError:
@@ -105,8 +109,7 @@ class ThreadManager:
     def cleanup_expired(self) -> None:
         now = time.time()
         expired = [
-            tid for tid, t in self._threads.items()
-            if now - t.last_accessed > self._ttl
+            tid for tid, t in self._threads.items() if now - t.last_accessed > self._ttl
         ]
         for tid in expired:
             del self._threads[tid]
