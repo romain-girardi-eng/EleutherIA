@@ -468,154 +468,109 @@
     "textContent": "Text Content",
     "noTextContentAvailable": "No text content available"
   },
-  "hirag": {
-    "pageTitle": "HiRAG Implementation Details",
-    "pageDescription": "A transparent explanation of our hierarchical retrieval architecture, based on cutting-edge research with domain-specific adaptations for ancient philosophy scholarship.",
+  "agenticGraphrag": {
+    "pageTitle": "Agentic GraphRAG Architecture",
+    "pageDescription": "A transparent explanation of our agentic retrieval pipeline: 12-node FSM, multi-model support, vectorless SQL fallback, and full reasoning trace.",
     "overview": {
-      "title": "Overview & Paper Citation",
-      "originalResearch": "Original Research",
-      "basedOn": "Our implementation is based on the HiRAG (Hierarchical Retrieval-Augmented Generation) architecture described in:",
-      "readPaper": "Read the original paper",
+      "title": "Architecture Overview",
+      "architectureLabel": "Agentic Pipeline",
+      "description": "EleutherIA uses an Agentic GraphRAG pipeline that combines a curated knowledge graph (2,193 nodes, 8,616 edges) with an autonomous retrieval and synthesis engine. The system evolved from the former HiRAG V2 pipeline into a streamlined 5-step, 2-LLM-call architecture.",
       "coreInnovation": "Core Innovation",
-      "innovationDescription": "HiRAG extends standard GraphRAG by introducing a three-level hierarchical knowledge structure:",
-      "localKnowledge": "Local Knowledge: Specific entities retrieved via semantic search",
-      "globalKnowledge": "Global Knowledge: Community-level summaries providing thematic context",
-      "bridgeKnowledge": "Bridge Knowledge: Shortest paths between entities across communities",
-      "paperResults": "Paper results show HiRAG achieves 54-64% win rate vs. GraphRAG and 52-66% vs. LightRAG across benchmark datasets."
+      "innovationDescription": "Instead of 10+ LLM calls per query, the agentic pipeline uses parallel retrieval, curated passage_citations, and Gemini's 1M token context window:",
+      "fsmOrchestration": "12-node pydantic-graph FSM for autonomous orchestration",
+      "multiModel": "Multi-model: Gemini 3 (primary) + Kimi K2.5 Thinking (extended reasoning)",
+      "vectorlessFallback": "Vectorless SQL fallback via passage_citations for robust retrieval"
     },
-    "implemented": {
-      "title": "What We Implemented from the Paper",
-      "hierarchical": {
-        "title": "1. Hierarchical Structure",
-        "level0": "14 global summaries covering major philosophical themes (determinism, moral responsibility, divine providence)",
-        "level1": "11 community summaries organized by philosophical schools (Stoic, Epicurean, Peripatetic, Patristic)",
-        "level2": "503 individual entity nodes (philosophers, concepts, arguments, works)"
+    "pipeline": {
+      "title": "Pipeline Stages",
+      "embedding": {
+        "title": "1. Embed + Detect References",
+        "description": "Query embedded via Gemini, plus regex CTS URN detection for direct passage lookup."
       },
-      "bridge": {
-        "title": "2. Shortest-Path Bridge Detection",
-        "algorithm": "Algorithm 2 from paper: For each retrieved community, we select top-m key entities (m=2), then compute shortest paths between entities from different communities.",
-        "impact": "Impact: Provides 38-83% recall coverage of both local and global knowledge, creating semantic chains that bridge philosophical schools."
+      "parallelSearch": {
+        "title": "2. Parallel Search",
+        "description": "Three Qdrant queries in parallel: KG nodes, text passages, and edges. Pure vector similarity, no LLM call."
       },
-      "perCommunity": {
-        "title": "3. Per-Community Key Entity Selection",
-        "description": "Instead of selecting top-k entities overall, we select top-m entities per community (m=2 as recommended in paper). This ensures diverse coverage across philosophical schools rather than over-representation of dominant communities."
+      "enrichment": {
+        "title": "3. Parallel Enrichment",
+        "description": "passage_citations lookup, KG neighbor expansion, and textual grounding -- all via SQL, no LLM."
       },
-      "threeLevel": {
-        "title": "4. Three-Level Retrieval",
-        "description": "Each query retrieves knowledge at all three levels simultaneously, then blends them for comprehensive context that spans from specific textual details to broad historical patterns."
+      "synthesis": {
+        "title": "4. Context Build + Synthesis",
+        "description": "Full untruncated context (primary sources, supplementary passages, KG entities, relationships) fed to one LLM synthesis call."
       }
     },
-    "adaptations": {
-      "title": "Our Adaptations & Improvements",
-      "keyDifference": "Key Difference: Pre-Computed High-Quality Summaries",
-      "summariesIntro": "While the paper generates summaries dynamically using DeepSeek-V3, we use pre-computed summaries created with:",
-      "opus": "State-of-the-art reasoning and nuance",
-      "gpt5": "Maximum quality language generation",
-      "humanReview": "Human review",
-      "humanReviewDesc": "All summaries validated by domain expert (Romain Girardi)",
-      "whyTitle": "Why This Adaptation?",
-      "quality": {
-        "title": "Superior Quality",
-        "description": "Opus & GPT-5 > DeepSeek-V3 in reasoning depth and scholarly accuracy"
+    "capabilities": {
+      "title": "Key Capabilities",
+      "multiModelTitle": "Multi-Model Support",
+      "multiModelDesc": "The pipeline routes to different models based on task complexity:",
+      "gemini": "Primary synthesis and embedding (1M token context)",
+      "kimi": "Extended reasoning for complex multi-hop queries",
+      "keyStrengths": "Key Strengths",
+      "noTruncation": {
+        "title": "No Truncation",
+        "description": "Full passage text with CTS URNs preserved -- no 500-char fragments"
       },
-      "consistency": {
-        "title": "Consistency",
-        "description": "Same high-quality summaries for every query vs. variable dynamic generation"
+      "passageCitations": {
+        "title": "Curated passage_citations",
+        "description": "Primary retrieval signal: KG-to-passage links with confidence scores"
       },
-      "performance": {
-        "title": "Performance",
-        "description": "No generation overhead; summaries loaded instantly from pre-computed store"
+      "reasoningTrace": {
+        "title": "Reasoning Trace",
+        "description": "Full transparency: see which nodes, edges, and passages were used"
       },
-      "rigor": {
-        "title": "Scholarly Rigor",
-        "description": "Human-reviewed summaries ensure accuracy for academic research"
+      "sqlFallback": {
+        "title": "Vectorless SQL Fallback",
+        "description": "When Qdrant is unavailable, retrieval falls back to SQL passage_citations"
       },
-      "notImplemented": "What We Didn't Implement (& Why)",
-      "gmm": {
-        "title": "❌ GMM Clustering",
-        "description": "Paper's Gaussian Mixture Models → We use Leiden algorithm (better for graph-structured data)"
+      "evolutionTitle": "Evolution from HiRAG",
+      "evolution": {
+        "fromHirag": "Former HiRAG V2 pipeline",
+        "fromHiragDesc": "13-stage pipeline with 10+ LLM calls, aggressive truncation, and compounding errors",
+        "pageindexV3": "PageIndex V3 (Feb 2026)",
+        "pageindexV3Desc": "Reduced to 5 steps, 2 LLM calls by leveraging passage_citations and Gemini 1M context",
+        "current": "Current Agentic GraphRAG",
+        "currentDesc": "12-node FSM with multi-model routing, vectorless fallback, and streaming support"
       },
-      "sparsity": {
-        "title": "❌ Cluster Sparsity Stopping",
-        "description": "Paper's iterative convergence → We have fixed 3-level pre-computed hierarchy (more practical)"
-      },
-      "metaAttributes": {
-        "title": "❌ Meta-Attributes",
-        "description": "Paper's explicit meta-summaries → Already implicit in our node type system (person, concept, argument, work)"
-      },
-      "netResult": "🎯 Net Result",
-      "netResultDescription": "We implement the core algorithmic innovations from the paper (shortest-path bridges, per-community selection, hierarchical retrieval) while improving on the summary quality baseline through pre-computed expert-validated content. This gives us the paper's structural benefits with higher-quality knowledge representation."
+      "netResult": "Result",
+      "netResultDescription": "2 LLM calls instead of 10+, full untruncated context, and multi-model routing deliver faster, more accurate scholarly answers with complete source attribution."
     },
     "technical": {
       "title": "Technical Implementation",
       "architectureTitle": "Architecture Overview",
-      "backendService": "Backend Service",
-      "backendServiceDesc": "Implements HiRAGService with hierarchical indexing, shortest-path bridge detection, and three-level retrieval",
-      "summaryLoader": "Summary Loader",
-      "summaryLoaderDesc": "Loads pre-computed Opus/GPT-5 summaries from hierarchical_communities_opus.json",
+      "agentFSM": "Agent FSM",
+      "agentFSMDesc": "12-node pydantic-graph finite state machine orchestrating retrieval, enrichment, and synthesis",
+      "llmService": "LLM Service",
+      "llmServiceDesc": "Multi-provider support with automatic fallback chain, rate limiting, and streaming via SSE",
       "apiEndpoints": "API Endpoints",
-      "apiEndpointsDesc": "Provides 6 RESTful endpoints including /query, /query/stream, /communities, /bridges",
-      "queryModes": "Query Modes",
-      "modes": {
-        "hi": "Full hierarchical retrieval (all 3 levels + bridges)",
-        "hiBridge": "Focus on bridge connections only",
-        "hiLocal": "Community-local context only",
-        "hiGlobal": "Global summaries only",
-        "hiNoBridge": "Hierarchical without bridge nodes"
+      "apiEndpointsDesc": "GraphRAG routes: /query, /query/stream with SSE, hybrid search endpoints",
+      "pipelineSteps": "Pipeline Steps",
+      "steps": {
+        "embed": "Embed query + detect CTS URN references",
+        "search": "Parallel Qdrant search (nodes + passages + edges)",
+        "enrich": "Parallel enrichment (passage_citations + KG neighbors)",
+        "context": "Build full untruncated context",
+        "synthesize": "One LLM synthesis call with anti-hallucination prompt"
       },
       "performanceMetrics": "Performance Metrics",
       "metrics": {
-        "globalSummaries": "Global summaries",
-        "communitySummaries": "Community summaries",
-        "entityNodes": "Entity nodes",
-        "bridgeCoverage": "Bridge recall coverage",
+        "llmCalls": "LLM calls per query",
+        "kgNodes": "Knowledge graph nodes",
+        "passages": "Ancient text passages",
+        "contextWindow": "Context window",
         "responseTime": "Response time (avg)"
       },
-      "reproducibility": "🔬 Reproducibility",
-      "reproducibilityDesc": "All implementation details, including summary generation prompts and bridge detection algorithms, are available in our open-source repository. The pre-computed summaries (generated October 27, 2025) are versioned and can be regenerated with the same process.",
-      "reproducibilityMetadata": "Summary metadata includes: model used (gpt-5-high), authors (GPT 5-high & Romain Girardi), final reviewer (Romain Girardi), and generation timestamp for full transparency."
-    },
-    "comparison": {
-      "title": "Quality Comparison & Expected Performance",
-      "table": {
-        "feature": "Feature",
-        "paperHiRAG": "Paper's HiRAG",
-        "ourImplementation": "Our Implementation",
-        "impact": "Impact",
-        "hierarchicalStructure": "Hierarchical Structure",
-        "multiLayer": "✅ Multi-layer (GMM)",
-        "threeLevels": "✅ 3 levels (Leiden)",
-        "equivalent": "Equivalent",
-        "shortestPath": "Shortest-Path Bridges",
-        "algorithm2": "✅ Algorithm 2",
-        "implemented": "✅ Implemented",
-        "perCommunity": "Per-Community Selection",
-        "summaryQuality": "Summary Quality",
-        "higher": "Higher",
-        "humanReview": "Human Review",
-        "none": "❌ None",
-        "expertValidated": "✅ Expert validated",
-        "stability": "Production Stability",
-        "dynamic": "⚠️ Dynamic",
-        "preComputed": "✅ Pre-computed"
-      },
-      "expectedPerformance": "📊 Expected Performance",
-      "performanceIntro": "Based on the paper's ablation study (Table 3), our implementation should achieve:",
-      "winRate": "54-64% win rate vs. standard GraphRAG (full HiRAG benefits)",
-      "recallCoverage": "38-83% recall coverage from bridge knowledge (paper's Table 2)",
-      "higherQuality": "Potentially higher than paper due to superior summary quality (Opus > DeepSeek)",
-      "consistency": "More consistent answers due to pre-computed vs. dynamic generation",
-      "academicNote": "🎓 Academic Integrity Note",
-      "academicNoteText": "This implementation faithfully reproduces the core algorithmic contributions of Huang et al.'s HiRAG architecture while adapting the summary generation component for production quality and scholarly rigor. All adaptations are clearly documented here and in our codebase. We acknowledge the original paper's innovations and recommend citing both the original work and our implementation when referencing this system."
+      "reproducibility": "Reproducibility",
+      "reproducibilityDesc": "All implementation details are available in the open-source repository. The knowledge graph, passage_citations, and pipeline configuration are fully versioned and reproducible."
     },
     "summary": {
       "title": "Summary",
-      "tookFromPaper": "What we took from the paper",
-      "tookFromPaperText": "Hierarchical knowledge structure, shortest-path bridge detection (Algorithm 2), per-community key entity selection, and three-level retrieval architecture.",
-      "adapted": "What we adapted",
-      "adaptedText": "Pre-computed expert-validated summaries (Opus + GPT-5 + human review) instead of dynamic DeepSeek generation, ensuring higher quality and consistency.",
-      "why": "Why",
-      "whyText": "This gives us the paper's structural innovations with superior knowledge representation, combining cutting-edge retrieval algorithms with domain-expert scholarly rigor."
+      "architecture": "Architecture",
+      "architectureText": "12-node pydantic-graph FSM with 5-step pipeline and 2 LLM calls per query.",
+      "models": "Models",
+      "modelsText": "Gemini 3 (primary, 1M context) + Kimi K2.5 Thinking (extended reasoning) with automatic fallback.",
+      "result": "Result",
+      "resultText": "Scholarly answers grounded in 2,193 KG nodes and 17,000+ passages with full citation tracking and reasoning transparency."
     }
   },
   "kg": {
@@ -1300,8 +1255,8 @@
       "ancientTexts": "Ancient Texts",
       "fair": "FAIR Principles",
       "glossary": "Glossary",
-      "hirag": "HiRAG Technology",
-      "hiragDetails": "Implementation"
+      "agenticGraphrag": "Agentic GraphRAG",
+      "agenticGraphragDetails": "Implementation"
     },
     "hero": {
       "slogan": "How It Works",
