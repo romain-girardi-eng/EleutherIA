@@ -6,6 +6,7 @@ import RightPanel from '../../components/graphrag/RightPanel';
 import type { RightPanelState } from '../../components/graphrag/RightPanel';
 import type { GraphRAGResponse } from '../../types';
 import type { PassageContext } from '../../types/graphrag';
+import type { AgentStep } from '../../components/graphrag/AgentActivityPanel';
 
 interface MobileGraphSheetProps {
   rightPanelState: RightPanelState;
@@ -13,6 +14,8 @@ interface MobileGraphSheetProps {
   allResponses?: GraphRAGResponse[];
   activeSourceIndex: number | null;
   passageContext?: PassageContext | null;
+  agentSteps?: AgentStep[];
+  agentActive?: boolean;
   onNodeClick: (nodeId: string) => void;
   onSourceSelect?: (sourceIndex: number) => void;
   onCloseDetail: () => void;
@@ -26,6 +29,8 @@ export default function MobileGraphSheet({
   allResponses,
   activeSourceIndex,
   passageContext,
+  agentSteps,
+  agentActive,
   onNodeClick,
   onSourceSelect,
   onCloseDetail,
@@ -66,6 +71,8 @@ export default function MobileGraphSheet({
             allResponses={allResponses}
             activeSourceIndex={activeSourceIndex}
             passageContext={passageContext}
+            agentSteps={agentSteps}
+            agentActive={agentActive}
             onNodeClick={onNodeClick}
             onSourceSelect={onSourceSelect}
             onCloseDetail={onCloseDetail}

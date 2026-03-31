@@ -398,6 +398,15 @@ export default function GraphRAGPage() {
                   const msg = (payload?.message || data.message || '').toLowerCase();
                   setStreamStatus(msg);
 
+                  // Also surface status events in the agent activity panel
+                  agentStepCounterRef.current += 1;
+                  setAgentSteps((prev) => [...prev, {
+                    id: `step-${agentStepCounterRef.current}`,
+                    type: 'status' as const,
+                    summary: payload?.message || data.message || 'Processing...',
+                    timestamp: Date.now(),
+                  }]);
+
                   if (msg.includes('embedding') || msg.includes('searching') || msg.includes('initializ')) {
                     updateReasoningStep(1, 'active');
                   } else if (msg.includes('retrieving') || msg.includes('found') || msg.includes('knowledge graph')) {
@@ -813,6 +822,8 @@ export default function GraphRAGPage() {
                 allResponses={allResponses}
                 activeSourceIndex={activeSourceIndex}
                 passageContext={passageContext}
+                agentSteps={agentSteps}
+                agentActive={agentActive}
                 onNodeClick={handleNodeClick}
                 onSourceSelect={handleSourceSelect}
                 onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
