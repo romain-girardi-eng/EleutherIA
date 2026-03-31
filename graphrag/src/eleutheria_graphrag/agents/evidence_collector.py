@@ -184,6 +184,7 @@ class EvidenceCollector:
             if pid and pid not in self.seen_passage_ids:
                 self.seen_passage_ids.add(pid)
                 text = p.get("text_content", "")
+                translation = p.get("translation") or None
                 self.evidence_bundles.append(EvidenceBundle(
                     bundle_id=f"b_{uuid.uuid4().hex[:8]}",
                     work_id=p.get("work_id", ""),
@@ -192,6 +193,7 @@ class EvidenceCollector:
                     canonical_ref=p.get("canonical_ref"),
                     original_passage_id=pid,
                     original_text=text,
+                    translation_text=translation,
                     language=p.get("language"),
                     token_estimate=RetrievalBudget.estimate_tokens(text),
                     source=(
