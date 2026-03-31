@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Brain, Network, Quote, Sparkles, Waypoints } from 'lucide-react';
+import { BookOpen, Brain, FileText, Network, Quote, ScrollText, Sparkles, Waypoints } from 'lucide-react';
 import TraversalDAG from './TraversalDAG';
 import ResearchGraphPanel from './ResearchGraphPanel';
 import NodeDetailCard from './NodeDetailCard';
@@ -365,14 +365,14 @@ export default function RightPanel({
     [response?.sources],
   );
 
-  // Tab for switching between reasoning trace and graph
-  type PanelTab = 'reasoning' | 'graph';
-  const [activeTab, setActiveTab] = useState<PanelTab>('reasoning');
+  // Tab system for the graph state
+  type PanelTab = 'graph' | 'sources' | 'research' | 'reasoning';
+  const [activeTab, setActiveTab] = useState<PanelTab>('sources');
 
-  // Auto-switch to graph tab when response arrives
+  // Auto-switch to sources tab when response arrives
   useEffect(() => {
     if (state === 'graph' && response) {
-      setActiveTab('graph');
+      setActiveTab('sources');
     }
   }, [state, response]);
 
@@ -511,106 +511,126 @@ export default function RightPanel({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.28 }}
-                className="flex h-full min-h-0 flex-col gap-3 p-4"
+                className="flex h-full min-h-0 flex-col p-4"
               >
-                {/* Tab bar: Graph / Reasoning */}
-                {agentSteps.length > 0 && (
-                  <div className="flex shrink-0 gap-1 rounded-2xl border border-stone-200/60 bg-stone-50/80 p-1">
+                {/* Tab bar */}
+                <div className="flex shrink-0 gap-0.5 rounded-2xl border border-stone-200/60 bg-stone-50/80 p-1 mb-3">
+                  {([
+                    { id: 'sources' as PanelTab, icon: FileText, label: 'Sources', count: sources.length },
+                    { id: 'graph' as PanelTab, icon: Network, label: 'Graph' },
+                    { id: 'research' as PanelTab, icon: Waypoints, label: 'Research' },
+                    ...(agentSteps.length > 0 ? [{ id: 'reasoning' as PanelTab, icon: Brain, label: 'Reasoning', count: agentSteps.filter(s => s.type === 'tool_result').length }] : []),
+                  ]).map(({ id, icon: TabIcon, label, count }) => (
                     <button
+                      key={id}
                       type="button"
-                      onClick={() => setActiveTab('graph')}
+                      onClick={() => setActiveTab(id)}
                       className={cn(
-                        'flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-colors',
-                        activeTab === 'graph'
+                        'flex flex-1 items-center justify-center gap-1.5 rounded-xl px-2 py-1.5 text-[11px] font-medium transition-all',
+                        activeTab === id
                           ? 'bg-white text-stone-900 shadow-sm'
-                          : 'text-stone-500 hover:text-stone-700',
+                          : 'text-stone-400 hover:text-stone-600',
                       )}
                     >
-                      <Network className="h-3.5 w-3.5" />
-                      Graph
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab('reasoning')}
-                      className={cn(
-                        'flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-colors',
-                        activeTab === 'reasoning'
-                          ? 'bg-white text-stone-900 shadow-sm'
-                          : 'text-stone-500 hover:text-stone-700',
+                      <TabIcon className="h-3.5 w-3.5" />
+                      <span className="hidden sm:inline">{label}</span>
+                      {count !== undefined && count > 0 && (
+                        <span className={cn(
+                          'ml-0.5 rounded-full px-1.5 py-0 text-[9px] font-bold',
+                          activeTab === id ? 'bg-amber-100 text-amber-700' : 'bg-stone-100 text-stone-400',
+                        )}>
+                          {count}
+                        </span>
                       )}
-                    >
-                      <Brain className="h-3.5 w-3.5" />
-                      Reasoning ({agentSteps.length})
                     </button>
-                  </div>
-                )}
+                  ))}
+                </div>
 
                 {/* Tab content */}
-                {activeTab === 'reasoning' && agentSteps.length > 0 ? (
-                  <div className="flex-1 min-h-0 overflow-hidden rounded-2xl border border-stone-200/60 bg-white/60">
-                    <AgentActivityPanel
-                      steps={agentSteps}
-                      isActive={false}
-                      className="h-full"
-                    />
-                  </div>
-                ) : (
-                  <>
-                    {/* TOP: Interactive DAG */}
-                    <div className="h-[34%] min-h-[220px] shrink-0">
-                      <TraversalDAG
-                        response={response}
-                        allResponses={allResponses}
-                        highlightedSourceIndex={activeSourceIndex}
-                        onNodeSelect={handleDAGNodeSelect}
-                        className="h-full"
-                      />
-                    </div>
-
-                    {/* MIDDLE: Explicit reasoning trace */}
-                    <div className="h-[34%] min-h-[240px] shrink-0 overflow-hidden">
-                      <ResearchGraphPanel
-                        response={response}
-                        className="h-full"
-                      />
-                    </div>
-                  </>
-                )}
-
-                {/* BOTTOM: Detail card or Sources deck */}
-                <div className="flex-1 min-h-[200px] overflow-y-auto">
+                <div className="flex-1 min-h-0 overflow-hidden">
                   <AnimatePresence mode="wait">
-                    {selectedSource ? (
+                    {/* Sources tab — node cards with text */}
+                    {activeTab === 'sources' && (
                       <motion.div
-                        key={`detail-${selectedSource.nodeId}`}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.22 }}
+                        key="tab-sources"
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 8 }}
+                        transition={{ duration: 0.2 }}
+                        className="h-full overflow-y-auto"
                       >
-                        <NodeDetailCard
-                          source={selectedSource}
-                          citationText={selectedCitationText}
-                          onClose={() => setSelectedNodeId(null)}
-                          onOpenInDatabase={() => {
-                            if (selectedSource.nodeId && !selectedSource.nodeId.startsWith('source_')) {
-                              navigate(`/node/${selectedSource.nodeId}`);
-                            }
-                          }}
+                        {selectedSource ? (
+                          <NodeDetailCard
+                            source={selectedSource}
+                            citationText={selectedCitationText}
+                            onClose={() => setSelectedNodeId(null)}
+                            onOpenInDatabase={() => {
+                              if (selectedSource.nodeId && !selectedSource.nodeId.startsWith('source_')) {
+                                navigate(`/node/${selectedSource.nodeId}`);
+                              }
+                            }}
+                          />
+                        ) : (
+                          <SourcesDeck
+                            sources={sources}
+                            activeSourceIndex={activeSourceIndex}
+                            onSourceSelect={handleSourceCardSelect}
+                          />
+                        )}
+                      </motion.div>
+                    )}
+
+                    {/* Graph tab — interactive DAG */}
+                    {activeTab === 'graph' && (
+                      <motion.div
+                        key="tab-graph"
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 8 }}
+                        transition={{ duration: 0.2 }}
+                        className="h-full"
+                      >
+                        <TraversalDAG
+                          response={response}
+                          allResponses={allResponses}
+                          highlightedSourceIndex={activeSourceIndex}
+                          onNodeSelect={handleDAGNodeSelect}
+                          className="h-full"
                         />
                       </motion.div>
-                    ) : (
+                    )}
+
+                    {/* Research tab — research overview panel */}
+                    {activeTab === 'research' && (
                       <motion.div
-                        key="sources-deck"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.22 }}
+                        key="tab-research"
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 8 }}
+                        transition={{ duration: 0.2 }}
+                        className="h-full overflow-hidden"
                       >
-                        <SourcesDeck
-                          sources={sources}
-                          activeSourceIndex={activeSourceIndex}
-                          onSourceSelect={handleSourceCardSelect}
+                        <ResearchGraphPanel
+                          response={response}
+                          className="h-full"
+                        />
+                      </motion.div>
+                    )}
+
+                    {/* Reasoning tab — agent activity journal */}
+                    {activeTab === 'reasoning' && agentSteps.length > 0 && (
+                      <motion.div
+                        key="tab-reasoning"
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 8 }}
+                        transition={{ duration: 0.2 }}
+                        className="h-full overflow-hidden rounded-2xl border border-stone-200/40 bg-white/60"
+                      >
+                        <AgentActivityPanel
+                          steps={agentSteps}
+                          isActive={false}
+                          className="h-full"
                         />
                       </motion.div>
                     )}
