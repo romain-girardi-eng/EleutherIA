@@ -213,11 +213,12 @@ export default function CanonicalTextReader() {
   if (loading) {
     return (
       <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
-        <div className="flex items-center justify-center min-h-screen max-w-7xl mx-auto relative z-10">
-        <div className="text-center">
-          <div className="inline-block w-8 h-8 border-2 border-amber-200/60 border-t-gray-900 rounded-full animate-spin mb-3"></div>
-          <p className="text-sm text-stone-500">{t('textReader.loading')}</p>
-        </div>
+        <div className="flex flex-col items-center justify-center py-20 gap-4 max-w-7xl mx-auto relative z-10">
+          <div className="relative w-12 h-12">
+            <div className="absolute inset-0 rounded-full border-2 border-amber-200/40" />
+            <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-amber-600/70 animate-spin" />
+          </div>
+          <p className="text-sm text-stone-500 font-serif italic">{t('textReader.loading')}</p>
         </div>
       </div>
     );
