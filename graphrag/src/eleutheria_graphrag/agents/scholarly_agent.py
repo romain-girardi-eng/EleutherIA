@@ -166,8 +166,9 @@ class ScholarlyAgent:
         # If the LLM failed to include quotation blocks, inject them deterministically
         answer = self._inject_passage_quotations(answer, state)
 
-        # Phase 4: Deterministic Greek/Latin text verification
-        answer = await self._verify_ancient_text(answer)
+        # Phase 4: Text verification DISABLED — too many false positives
+        # removing legitimate Greek text retrieved from evidence bundles.
+        # TODO: rework to whitelist evidence bundle text before DB search.
         return answer
 
     @staticmethod
@@ -498,8 +499,7 @@ class ScholarlyAgent:
         # Phase 3.5: Programmatic passage injection
         answer = self._inject_passage_quotations(answer, state)
 
-        # Phase 4: Deterministic Greek/Latin text verification
-        answer = await self._verify_ancient_text(answer)
+        # Phase 4: Text verification DISABLED (false positives)
 
         # Stream the answer in chunks
         async for chunk in self._chunk_answer(answer):

@@ -611,14 +611,12 @@ export default function GraphRAGPage() {
           citationTexts: formattedCitationTexts,
           graphrag_response: finalResponse,
         };
-        // Replace the streaming message (already in messages) with the final one
-        setMessages((prev) => {
-          const last = prev[prev.length - 1];
-          if (last?.role === 'assistant') {
-            return [...prev.slice(0, -1), assistantMessage];
-          }
-          return [...prev, assistantMessage];
-        });
+        // Replace ALL assistant messages with the final enriched one
+        // (streaming may have created one or more partial assistant messages)
+        setMessages((prev) => [
+          ...prev.filter(m => m.role !== 'assistant'),
+          assistantMessage,
+        ]);
         setRightPanelResponse(finalResponse);
         setAllResponses((prev) => [...prev, finalResponse]);
         setAgentActive(false);
