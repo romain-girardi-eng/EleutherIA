@@ -391,7 +391,9 @@ Return only JSON:
 """
 
 RENDER_ANSWER_PROMPT = """\
-Render a polished, grounded scholarly answer from this claim ledger, dossier, and evidence packet.
+You are writing a scholarly article section on ancient philosophy. Your answer must \
+read like a Cambridge Companion chapter — deeply grounded in the primary texts, with \
+philological precision and philosophical argumentation.
 
 Question: {question}
 Claim ledger:
@@ -403,52 +405,55 @@ Dossier:
 Reference map:
 {reference_json}
 
-Evidence packet:
+Evidence packet (FULL PASSAGE TEXTS — use these for exegesis):
 {evidence_packet_json}
 
-Requirements:
+## MANDATORY STRUCTURE
 
-FORMAT — Write at the level of a Cambridge Companion chapter or a detailed encyclopedia article:
-- Begin with a thesis paragraph (3-5 sentences) framing the scholarly question and your main argument.
-- Use 4-8 markdown section headers (##) drawn from the dossier facets.
-- Cover at least {required_sections} dossier-driven sections, MORE if evidence permits.
-- Each section should be 2-4 substantial paragraphs, not 1-2 thin ones.
-- Include at least {required_quote_blocks} quotation blocks, ideally MORE (one per major claim).
-- Target 1500-3000 words. Depth and detail are valued — do not compress.
+### 1. Thesis (1 paragraph, 4-6 sentences)
+Frame the scholarly question, state your main argument, and preview the key \
+textual evidence you will analyze.
 
-QUOTATION FORMAT — This is mandatory for EVERY primary source citation:
-- Present ancient text as markdown blockquotes with this exact structure:
-  > Original Greek/Latin text (Author, *Work* canonical_ref)
-  > "English translation"
-- Example:
-  > ἔνεστι δ' ὁρᾶν, εἰ ταῦτα λέγοντες σώζουσιν τὰς κοινὰς (Alexander, *De Fato* 14)
-  > "It is possible to see whether, in saying these things, they preserve the common [notions]"
-- If only a translation is available (no surviving original), mark it: (trans. Rufinus)
-- Use the canonical_ref from the evidence packet, not invented references.
+### 2. For EACH major passage in the evidence packet, write a full exegesis section:
 
-CITATION STYLE:
-- Use the reference markers from the reference map (e.g., [P1], [N3], [25]).
-- In addition to markers, include the scholarly reference in prose: "as Origen writes in *De Principiis* III.1.5 [P2]..."
-- Every substantive sentence must carry at least one reference marker.
+**This is the heart of the answer. For each important passage, you MUST follow \
+this exact pattern:**
 
-SCHOLARLY STANDARDS:
-- Distinguish clearly between: direct textual evidence / ancient testimony (doxography) / modern scholarly framing / your own synthesis.
-- When evidence is fragmentary or transmitted through intermediaries, state the transmission chain.
-- Note textual problems: if a work survives only in Latin translation (e.g., Rufinus's De Principiis), say so.
-- Engage with competing interpretations when the dossier mentions them.
-- If the ledger contains insufficient evidence, state the limit explicitly — never smooth over gaps.
+a) **Quote the passage** in the mandatory dual-language format:
+   > Original Greek/Latin text (Author, *Work* canonical_ref) [reference_marker]
+   > "English translation"
 
-PROHIBITIONS:
-- Never invent Greek, Latin, or translations.
-- Do not collapse the answer into 1-2 paragraphs. Expand and develop.
-- Do not sound like notes pasted from a notebook — write flowing scholarly prose.
-- Do not introduce any uncited sentence.
-- Do not use bullet lists for the main argument (bullets are OK only for lists of works or editions).
+b) **Philological analysis** (1-2 sentences): Analyze the key terms in the passage. \
+   What does this specific word/phrase mean in context? (e.g., "The term αὐτεξούσιον, \
+   literally 'self-empowered', is Origen's preferred translation of the Stoic τὸ ἐφ' ἡμῖν...")
+
+c) **Argumentative analysis** (2-4 sentences): What is the logical structure of the \
+   argument? How does the author reason? What premises lead to what conclusion?
+
+d) **Connection to the question** (1-3 sentences): Explicitly state how this passage \
+   answers or illuminates the question asked. Be specific — do not just say "this is relevant."
+
+### 3. Synthesis and comparison (1-2 paragraphs)
+After analyzing the individual passages, synthesize: What do the texts reveal when \
+read together? Where do the thinkers agree, diverge, or develop each other's ideas?
+
+### 4. Caveats and limitations (1 short paragraph)
+Note gaps in the evidence, textual transmission problems, or scholarly debates.
+
+## REQUIREMENTS
+- Cover at least {required_sections} dossier-driven exegesis sections.
+- Include at least {required_quote_blocks} quotation blocks with original + translation.
+- Target 2000-4000 words. DEPTH is paramount.
+- EVERY passage in the evidence packet with Greek/Latin text SHOULD be quoted and analyzed.
+- Use the reference markers from the reference map (e.g., [P1], [N3]).
+- Also include scholarly references in prose: "as Origen writes in *De Principiis* III.1.5 [P2]..."
+- Never invent Greek, Latin, or translations. Quote ONLY from the evidence packet.
+- Distinguish between direct text, ancient testimony, and your own synthesis.
 """
 
 SCHOLARLY_POLISH_PROMPT = """\
 You are performing a final scholarly prose pass on an already grounded answer. \
-The goal is to make this read like a published academic article.
+The goal is to make this read like a published academic article with deep textual exegesis.
 
 Question: {question}
 Dossier:
@@ -460,18 +465,19 @@ Draft answer:
 Rules:
 - Preserve every existing citation marker and reference EXACTLY.
 - Do not introduce any new fact not already in the draft or dossier.
+- For each passage quotation, ensure there is EXEGESIS after it:
+  (a) philological analysis of key terms
+  (b) explanation of the argument structure
+  (c) explicit connection to the question asked
+  If the draft just quotes a passage and moves on, ADD the analysis.
 - EXPAND compressed sections: if a section is only 1-2 sentences, develop the \
-  argument into 2-3 paragraphs using the evidence already cited.
+  argument into 2-3 paragraphs analyzing the evidence already cited.
 - Ensure every quotation block uses the dual-language format:
   > Original text (Author, *Work* ref)
   > "English translation"
-- Improve prose quality: scholarly transitions, argumentative flow, signposting.
-- Preserve the distinction between direct textual evidence, testimony, and synthesis.
-- Keep Greek/Latin quotes verbatim.
-- Ensure the answer has: thesis paragraph, 4+ section headers, 3+ quotation blocks.
-- The final answer should be 1500-3000 words. If the draft is shorter, expand \
-  the analysis of existing evidence — do not add new facts.
-- If the draft is note-like, convert it into flowing scholarly prose.
+- The final answer should be 2000-4000 words. If the draft is shorter, expand \
+  the exegesis of existing passages — do not add new facts.
+- Keep Greek/Latin quotes verbatim. Keep all reference markers.
 """
 
 COMPRESSION_REPAIR_PROMPT = """\
@@ -3128,8 +3134,8 @@ def _render_evidence_packet(state: RAGState) -> list[dict[str, Any]]:
                     "label": _bundle_label(bundle),
                     "canonical_ref": bundle.canonical_ref,
                     "section_path": bundle.section_path,
-                    "original_text": truncate_text(bundle.original_text, 900),
-                    "translation_text": truncate_text(bundle.translation_text, 900)
+                    "original_text": truncate_text(bundle.original_text, 2000),
+                    "translation_text": truncate_text(bundle.translation_text, 2000)
                     if bundle.translation_text
                     else None,
                 }
