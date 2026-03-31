@@ -160,9 +160,99 @@ class ScholarlyAgent:
             from eleutheria_graphrag.agents.graph_nodes import _make_answer
             answer = _make_answer(state)
 
+        # Phase 3.5: Programmatic passage injection
+        # If the LLM failed to include quotation blocks, inject them deterministically
+        answer = self._inject_passage_quotations(answer, state)
+
         # Phase 4: Deterministic Greek/Latin text verification
         answer = await self._verify_ancient_text(answer)
         return answer
+
+    @staticmethod
+    def _inject_passage_quotations(answer: ScholarlyAnswer, state: Any) -> ScholarlyAnswer:
+        """Programmatic injection of passage quotations when the LLM omits them.
+
+        If the rendered answer has fewer than 2 blockquote sections with Greek/Latin
+        text, we append a "Primary Textual Evidence" section with the best evidence
+        bundles — original text + translation, properly attributed.
+
+        This is 100% deterministic — no LLM calls.
+        """
+        import re as _re
+
+        text = answer.answer
+        # Count existing Greek blockquotes (lines starting with > containing Greek chars)
+        greek_quote_count = len(_re.findall(
+            r'^>\s*.*[\u0370-\u03FF\u1F00-\u1FFF]',
+            text,
+            _re.MULTILINE,
+        ))
+
+        if greek_quote_count >= 2:
+            return answer  # LLM already included quotations
+
+        bundles = state.evidence_bundles
+        if not bundles:
+            return answer
+
+        # Build quotation blocks from the best evidence bundles
+        sections: list[str] = []
+        seen_works: set[str] = set()
+
+        for bundle in bundles:
+            if not bundle.original_text or len(bundle.original_text.strip()) < 20:
+                continue
+            work_key = bundle.work_title or bundle.work_id
+            if work_key in seen_works:
+                continue
+            seen_works.add(work_key)
+
+            # Build the quotation block
+            author = bundle.author or "Unknown"
+            ref = bundle.canonical_ref or ""
+            title = bundle.work_title or "Unknown work"
+            original = bundle.original_text.strip()
+            # Truncate very long passages
+            if len(original) > 600:
+                original = original[:600] + "..."
+
+            block = f"> {original} ({author}, *{title}* {ref})"
+
+            if bundle.translation_text:
+                trans = bundle.translation_text.strip()
+                if len(trans) > 600:
+                    trans = trans[:600] + "..."
+                block += f'\n> "{trans}"'
+
+            ref_marker = ""
+            if bundle.bundle_id and state.context_pack and state.context_pack.bundle_refs:
+                ref_marker = state.context_pack.bundle_refs.get(bundle.bundle_id, "")
+                if ref_marker:
+                    ref_marker = f" [{ref_marker}]"
+
+            block += ref_marker
+            sections.append(block)
+
+            if len(sections) >= 5:
+                break
+
+        if not sections:
+            return answer
+
+        # Append the primary sources section
+        injection = "\n\n## Primary Textual Evidence\n\n" + "\n\n".join(sections)
+        new_text = text.rstrip() + injection
+
+        return answer.model_copy(update={
+            "answer": new_text,
+            "metadata": {
+                **answer.metadata,
+                "passage_injection": {
+                    "injected": len(sections),
+                    "reason": f"LLM produced only {greek_quote_count} Greek quotation(s), minimum is 2",
+                },
+            },
+        })
 
     async def _verify_ancient_text(self, answer: ScholarlyAnswer) -> ScholarlyAnswer:
         """Deterministic verification: Greek/Latin text must be in the DB.
@@ -371,6 +461,9 @@ class ScholarlyAgent:
         else:
             from eleutheria_graphrag.agents.graph_nodes import _make_answer
             answer = _make_answer(state)
+
+        # Phase 3.5: Programmatic passage injection
+        answer = self._inject_passage_quotations(answer, state)
 
         # Phase 4: Deterministic Greek/Latin text verification
         answer = await self._verify_ancient_text(answer)
