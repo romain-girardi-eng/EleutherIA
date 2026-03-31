@@ -8,6 +8,8 @@ from eleutheria_graphrag.agents.text_verifier import (
     is_known_term,
     verify_greek_text,
     sanitize_answer,
+    _extract_claimed_work,
+    _titles_match,
 )
 
 
@@ -84,6 +86,50 @@ class TestVerifyGreekText:
         result = await verify_greek_text(answer, db)
         assert not result.all_verified
         assert len(result.unverified_extracts) >= 1
+
+
+class TestAttributionMatching:
+    def test_extract_phaedo(self):
+        context = "Plato's Phaedo 43a provides textual anchors"
+        assert _extract_claimed_work(context) is not None
+        assert "phaedo" in _extract_claimed_work(context).lower()
+
+    def test_extract_de_principiis(self):
+        context = "in his De Principiis Book III, Origen argues"
+        assert _extract_claimed_work(context) is not None
+
+    def test_no_work_found(self):
+        context = "The philosopher argues that"
+        assert _extract_claimed_work(context) is None
+
+    def test_titles_match_exact(self):
+        assert _titles_match("Crito", "Crito (Κρίτων)")
+
+    def test_titles_match_partial(self):
+        assert _titles_match("Phaedo", "Phaedo (Φαίδων) - Plato")
+
+    def test_titles_dont_match(self):
+        assert not _titles_match("Phaedo", "Crito (Κρίτων)")
+
+    @pytest.mark.asyncio
+    async def test_misattribution_detected(self):
+        """The classic Phaedo/Crito mixup: text from Crito claimed as Phaedo."""
+        db = AsyncMock()
+        db.fetchrow.return_value = {
+            "passage_id": "p_crito_43a",
+            "title": "Crito (Κρίτων)",
+            "canonical_ref": "43a",
+        }
+        # LLM claims this is from Phaedo but it's actually Crito
+        answer = (
+            'Plato\'s Phaedo 43a provides: '
+            '"ΣΩ. τί τηνικάδε ἀφῖξαι, ὦ Κρίτων; ἢ οὐ πρῲ ἔτι ἐστίν;"'
+        )
+        result = await verify_greek_text(answer, db)
+        assert not result.all_verified
+        assert len(result.misattributed_extracts) >= 1
+        assert "crito" in result.misattributed_extracts[0].actual_work.lower()
+        assert "phaedo" in result.misattributed_extracts[0].claimed_work.lower()
 
 
 class TestSanitizeAnswer:

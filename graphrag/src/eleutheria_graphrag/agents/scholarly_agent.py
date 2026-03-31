@@ -190,9 +190,20 @@ class ScholarlyAgent:
                         "text_verification": {
                             "verified": len(verification.verified_extracts),
                             "unverified": len(verification.unverified_extracts),
+                            "misattributed": len(verification.misattributed_extracts),
                             "unverified_texts": [
                                 {"text": e.text[:100], "words": e.word_count, "action": e.action}
                                 for e in verification.unverified_extracts
+                            ],
+                            "misattributed_texts": [
+                                {
+                                    "text": e.text[:80],
+                                    "claimed": e.claimed_work,
+                                    "actual": e.actual_work,
+                                    "actual_ref": e.actual_ref,
+                                    "action": e.action,
+                                }
+                                for e in verification.misattributed_extracts
                             ],
                         },
                     },

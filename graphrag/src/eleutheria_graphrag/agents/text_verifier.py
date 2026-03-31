@@ -83,6 +83,7 @@ class VerificationResult:
 
     verified_extracts: list[VerifiedExtract] = field(default_factory=list)
     unverified_extracts: list[UnverifiedExtract] = field(default_factory=list)
+    misattributed_extracts: list[MisattributedExtract] = field(default_factory=list)
     total_greek_chars: int = 0
     total_extracts_found: int = 0
     all_verified: bool = True
@@ -106,6 +107,28 @@ class UnverifiedExtract:
     word_count: int
     position: int  # char position in answer
     action: str  # "flagged" or "removed"
+
+
+@dataclass
+class MisattributedExtract:
+    """A Greek/Latin extract found in the DB but attributed to the wrong work."""
+
+    text: str
+    claimed_work: str  # What the LLM said
+    actual_work: str   # What the DB says
+    actual_ref: str | None
+    position: int
+    action: str = "corrected"
+
+
+# Pattern to detect work attribution near a Greek passage
+# Matches: "Phaedo 43a", "De Principiis III.1", "Republic X.617e", etc.
+_WORK_ATTR_RE = re.compile(
+    r"(?:(?:in|from|of|in his|Plato'?s?|Origen'?s?)\s+)?"
+    r"([A-Z][a-zA-Z\s]+?)"  # Work title
+    r"(?:\s+(?:[IVXLC]+\.?|\d+)[.\s]*(?:\d+[a-z]?)?)?",  # Optional ref number
+    re.UNICODE,
+)
 
 
 def extract_greek_runs(text: str) -> list[tuple[str, int]]:
@@ -159,12 +182,34 @@ async def verify_greek_text(
         found = await _search_passage_for_text(greek_text, db, schema)
 
         if found:
-            result.verified_extracts.append(VerifiedExtract(
-                text=greek_text,
-                passage_id=found["passage_id"],
-                work_title=found.get("title", ""),
-                canonical_ref=found.get("canonical_ref"),
-            ))
+            actual_title = found.get("title", "")
+            actual_ref = found.get("canonical_ref")
+
+            # Check attribution: look for work titles near the Greek text
+            # (in the 200 chars before the Greek passage)
+            context_before = answer[max(0, position - 200):position]
+            claimed_work = _extract_claimed_work(context_before)
+
+            if claimed_work and actual_title and not _titles_match(claimed_work, actual_title):
+                result.misattributed_extracts.append(MisattributedExtract(
+                    text=greek_text[:100],
+                    claimed_work=claimed_work,
+                    actual_work=actual_title,
+                    actual_ref=actual_ref,
+                    position=position,
+                ))
+                result.all_verified = False
+                logger.warning(
+                    "MISATTRIBUTED: LLM claims '%s' but DB says '%s' for: %s",
+                    claimed_work, actual_title, greek_text[:60],
+                )
+            else:
+                result.verified_extracts.append(VerifiedExtract(
+                    text=greek_text,
+                    passage_id=found["passage_id"],
+                    work_title=actual_title,
+                    canonical_ref=actual_ref,
+                ))
         else:
             result.unverified_extracts.append(UnverifiedExtract(
                 text=greek_text,
@@ -182,42 +227,77 @@ async def verify_greek_text(
         for uv in result.unverified_extracts:
             logger.warning("  UNVERIFIED (%d words): %s", uv.word_count, uv.text[:100])
 
+    if result.misattributed_extracts:
+        logger.warning(
+            "Found %d misattributed Greek/Latin extracts",
+            len(result.misattributed_extracts),
+        )
+
     return result
 
 
 def sanitize_answer(answer: str, verification: VerificationResult) -> str:
-    """Remove or flag unverified Greek/Latin text in an answer.
+    """Remove or flag unverified/misattributed Greek/Latin text.
 
-    For each unverified extract:
-    - If > 8 words: remove and replace with [text removed: unverified]
-    - If 5-8 words: add [unverified] marker
+    Unverified extracts:
+    - > 8 words: remove and replace with [text removed: unverified]
+    - 5-8 words: add [unverified] marker
+
+    Misattributed extracts:
+    - Add correction note: [correction: this passage is from X, not Y]
     """
     if verification.all_verified:
         return answer
 
     sanitized = answer
-    # Process from end to start to preserve positions
-    for extract in sorted(
-        verification.unverified_extracts,
-        key=lambda e: e.position,
-        reverse=True,
-    ):
+
+    # Collect all actions with positions
+    actions: list[tuple[int, str, str]] = []  # (position, type, replacement)
+
+    for extract in verification.unverified_extracts:
         if extract.word_count > 8:
-            sanitized = (
-                sanitized[:extract.position]
-                + "[text removed: unverified ancient text]"
-                + sanitized[extract.position + len(extract.text):]
-            )
+            actions.append((
+                extract.position,
+                "replace",
+                "[text removed: unverified ancient text]",
+            ))
             extract.action = "removed"
         elif extract.word_count > _MAX_TERM_WORDS:
-            # Insert warning after the text
             end_pos = extract.position + len(extract.text)
-            sanitized = (
-                sanitized[:end_pos]
-                + " [unverified]"
-                + sanitized[end_pos:]
-            )
+            actions.append((
+                end_pos,
+                "insert",
+                " [unverified]",
+            ))
             extract.action = "flagged"
+
+    for extract in verification.misattributed_extracts:
+        end_pos = extract.position + len(extract.text)
+        correction = f" [correction: this passage is from {extract.actual_work}"
+        if extract.actual_ref:
+            correction += f" {extract.actual_ref}"
+        correction += f", not {extract.claimed_work}]"
+        actions.append((
+            end_pos,
+            "insert",
+            correction,
+        ))
+        extract.action = "corrected"
+
+    # Apply from end to start to preserve positions
+    for pos, action_type, text in sorted(actions, key=lambda a: a[0], reverse=True):
+        if action_type == "replace":
+            # Find the original text at this position
+            for uv in verification.unverified_extracts:
+                if uv.position == pos:
+                    sanitized = (
+                        sanitized[:pos]
+                        + text
+                        + sanitized[pos + len(uv.text):]
+                    )
+                    break
+        elif action_type == "insert":
+            sanitized = sanitized[:pos] + text + sanitized[pos:]
 
     return sanitized
 
@@ -298,3 +378,60 @@ def _count_greek_chars(text: str) -> int:
         if cp in _GREEK_BASIC or cp in _GREEK_EXTENDED:
             count += 1
     return count
+
+
+# Common ancient work titles for attribution detection
+_WORK_TITLES = {
+    "phaedo", "phaedrus", "republic", "laws", "timaeus", "crito",
+    "symposium", "apology", "meno", "gorgias", "protagoras", "theaetetus",
+    "de principiis", "contra celsum", "de oratione", "commentary on romans",
+    "philocalia", "exhortation to martyrdom",
+    "de fato", "academica", "de natura deorum", "de divinatione",
+    "de rerum natura",
+    "nicomachean ethics", "de anima", "metaphysics", "physics",
+    "discourses", "enchiridion", "meditations",
+    "letters to lucilius", "de providentia", "de ira",
+    "consolation of philosophy",
+    "stromata", "protrepticus",
+    "de libero arbitrio", "confessions", "city of god",
+    "against heresies", "adversus haereses",
+}
+
+
+def _extract_claimed_work(context: str) -> str | None:
+    """Extract the work title the LLM claims a passage is from.
+
+    Looks for patterns like "Phaedo 43a", "in his De Principiis", etc.
+    """
+    context_lower = context.lower()
+    for title in _WORK_TITLES:
+        if title in context_lower:
+            # Find the original case version
+            idx = context_lower.rfind(title)
+            return context[idx:idx + len(title)]
+    return None
+
+
+def _titles_match(claimed: str, actual: str) -> bool:
+    """Check if a claimed work title matches the actual title from the DB.
+
+    Handles partial matches: "Phaedo" matches "Phaedo (Φαίδων)",
+    "De Principiis" matches "De Principiis (Περὶ Ἀρχῶν) - Origen".
+    """
+    claimed_lower = claimed.lower().strip()
+    actual_lower = actual.lower().strip()
+
+    # Direct containment
+    if claimed_lower in actual_lower or actual_lower in claimed_lower:
+        return True
+
+    # First word match (e.g., "Crito" matches "Crito (Κρίτων)")
+    claimed_first = claimed_lower.split()[0] if claimed_lower else ""
+    actual_first = actual_lower.split()[0] if actual_lower else ""
+    if claimed_first and actual_first and (
+        claimed_first == actual_first
+        or claimed_first in actual_lower
+    ):
+        return True
+
+    return False
