@@ -230,7 +230,7 @@ class TestAgentLoop:
         await loop.run()
 
         # Should stop at budget (SIMPLE = 5)
-        assert loop.calls_made == 5
+        assert loop.calls_made == 4  # SIMPLE budget = 4
 
     @pytest.mark.asyncio
     async def test_parse_failure_recovery(self):

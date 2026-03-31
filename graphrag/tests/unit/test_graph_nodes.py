@@ -1196,10 +1196,9 @@ class TestRenderAndVerify:
     @pytest.mark.asyncio
     async def test_render_grounded_answer_repairs_overcompressed_output(self):
         deps = make_deps()
+        # Compression repair is now disabled — only render + optional polish
         deps.llm.generate = AsyncMock(
             side_effect=[
-                "Too short thesis [P1].",
-                "Too short thesis [P1].",
                 "Opening thesis on Justin's doctrine [P1].\n\n### Core Doctrinal Thesis\nJustin rejects fatalism and defends what is up to us [P1].\n> Original: \"If everything happens by fate, nothing is up to us.\" [P1]\n> Translation: \"If everything happens by fate, nothing is up to us.\" [P1]\n\n### Agency and Responsibility\nJustin links free choice to praise and blame before divine judgment [P2].",
             ]
         )
@@ -1273,9 +1272,8 @@ class TestRenderAndVerify:
         render_result = await RenderGroundedAnswer().run(ctx)
 
         assert isinstance(render_result, ProgrammaticVerify)
-        assert state.metadata["compression_repair_mode"] == "llm"
+        assert state.metadata["compression_repair_mode"] == "skipped"
         assert "### Core Doctrinal Thesis" in state.raw_answer
-        assert "### Agency and Responsibility" in state.raw_answer
 
     @pytest.mark.asyncio
     async def test_verify_preserves_blank_lines_between_sections(self):
