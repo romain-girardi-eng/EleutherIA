@@ -62,6 +62,8 @@ async def query_stream(
     semantic_k: int = 10,
     graph_depth: int = 2,
     max_context_nodes: int = 30,
+    model: str = "gemini-3.1-pro",
+    retrieval_mode: str = "auto",
 ) -> StreamingResponse:
     """
     Execute a GraphRAG query with streaming response.
@@ -76,6 +78,8 @@ async def query_stream(
                 semantic_k=semantic_k,
                 graph_depth=graph_depth,
                 max_context_nodes=max_context_nodes,
+                selected_model=model,
+                retrieval_mode=retrieval_mode,
             ):
                 event = json.dumps({"type": "answer_chunk", "data": chunk})
                 yield f"data: {event}\n\n"
