@@ -537,7 +537,7 @@ class TestLLMServiceConfiguration:
         config = PROVIDER_CONFIGS[ModelProvider.OPENROUTER]
         assert "openrouter" in config["base_url"]
         assert config["env_key"] == "OPENROUTER_API_KEY"
-        assert config["thinking_model"] == "openai/gpt-oss-120b:nitro"
+        assert config["thinking_model"] == "qwen/qwen3.6-plus-preview:free"
 
     def test_resolve_config_uses_openrouter_overrides(self):
         """OpenRouter env overrides should be reflected in the resolved config."""
@@ -570,7 +570,7 @@ class TestLLMServiceConfiguration:
                 config,
                 thinking_mode=True,
             )
-            == "openai/gpt-oss-120b:nitro"
+            == "qwen/qwen3.6-plus-preview:free"
         )
         assert (
             LLMService._model_for_request(
@@ -578,7 +578,7 @@ class TestLLMServiceConfiguration:
                 config,
                 thinking_mode=False,
             )
-            == "google/gemini-3-flash-preview"
+            == "qwen/qwen3.6-plus-preview:free"
         )
 
     @pytest.mark.asyncio

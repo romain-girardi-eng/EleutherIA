@@ -46,7 +46,7 @@ def _normalize_json_mapping(value: Any) -> dict[str, Any]:
 
 
 def _preferred_provider() -> ModelProvider:
-    raw = os.getenv("LLM_PREFERRED_PROVIDER", ModelProvider.GEMINI.value).strip().lower()
+    raw = os.getenv("LLM_PREFERRED_PROVIDER", ModelProvider.OPENROUTER.value).strip().lower()
     try:
         return ModelProvider(raw)
     except ValueError:
