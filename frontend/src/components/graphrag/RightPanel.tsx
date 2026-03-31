@@ -360,7 +360,6 @@ export default function RightPanel({
   className = '',
 }: RightPanelProps) {
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const sources: SourceCitation[] = useMemo(
     () => response?.sources ?? [],
     [response?.sources],
