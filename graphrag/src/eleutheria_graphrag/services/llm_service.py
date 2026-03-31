@@ -74,8 +74,8 @@ PROVIDER_CONFIGS = {
     },
     ModelProvider.OPENROUTER: {
         "base_url": "https://openrouter.ai/api/v1",
-        "model": "google/gemini-3-flash-preview",  # Fallback: fast model
-        "thinking_model": "openai/gpt-oss-120b:nitro",
+        "model": "qwen/qwen3.6-plus-preview:free",  # Free tier: strong instruction-following
+        "thinking_model": "qwen/qwen3.6-plus-preview:free",
         "env_key": "OPENROUTER_API_KEY",
         "base_url_env": "OPENROUTER_BASE_URL",
         "model_env": "OPENROUTER_MODEL",
