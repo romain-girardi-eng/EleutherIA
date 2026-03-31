@@ -90,7 +90,14 @@ async def query_stream(
                 if chunk.startswith('{"type":'):
                     try:
                         parsed = json.loads(chunk)
-                        if parsed.get("type") == "complete":
+                        event_type = parsed.get("type", "")
+
+                        # Forward agent events (thinking, tool calls) directly
+                        if event_type in ("agent_thinking", "tool_start", "tool_result", "status", "error"):
+                            yield f"data: {chunk}\n\n"
+                            continue
+
+                        if event_type == "complete":
                             # Transform agent data to match the frontend
                             # GraphRAGResponse shape (same as /answer).
                             raw = parsed.get("data") or {}
@@ -112,7 +119,7 @@ async def query_stream(
                                     "id": nid,
                                     "label": lookup.get(nid, {}).get("label", nid),
                                     "type": lookup.get(nid, {}).get("type", "concept"),
-                                    "reason": "Retrieved via semantic search",
+                                    "reason": "Retrieved via agent search",
                                 }
                                 for nid in seed_ids
                             ]
@@ -121,7 +128,7 @@ async def query_stream(
                                     "id": nid,
                                     "label": lookup.get(nid, {}).get("label", nid),
                                     "type": lookup.get(nid, {}).get("type", "concept"),
-                                    "reason": "Expanded via graph traversal",
+                                    "reason": "Explored via agent traversal",
                                 }
                                 for nid in ctx_ids
                                 if nid not in seed_ids
