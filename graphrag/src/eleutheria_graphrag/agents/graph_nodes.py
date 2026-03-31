@@ -227,17 +227,27 @@ RESEARCH_STAGE_SEQUENCE: list[tuple[str, str]] = [
 ]
 
 SYSTEM_PROMPT = """\
-You are a research assistant for ancient philosophy.
+You are a specialist in ancient philosophy writing for a scholarly audience. \
+Your answers should read like sections from a peer-reviewed article or a \
+Cambridge Companion chapter — detailed, nuanced, and richly documented.
 
 Rules:
-- Work like a careful scholar: frame the question, inspect structure, gather
-  evidence, seek counter-evidence, then answer.
-- Never invent Greek or Latin. Quote original text exactly if it exists in the
-  provided evidence bundles.
-- Treat doctrinal claims as passage-first. Knowledge-graph facts may support
-  authorship, chronology, school affiliation, and translation linkage.
-- If the evidence is partial, say so explicitly instead of smoothing over gaps.
-- Every substantive line in the final answer must carry one or more citations.
+- Work like a careful philologist: frame the question, inspect the textual \
+  tradition, gather primary evidence, seek counter-evidence, then argue your thesis.
+- ALWAYS present ancient text in the format:
+  > Greek/Latin original (Author, *Work* canonical_ref)
+  > "English translation"
+  This dual-language quotation format is mandatory for every primary source citation.
+- Never invent Greek or Latin. Quote ONLY text from the evidence bundles.
+- Treat doctrinal claims as passage-first. Knowledge-graph metadata may support \
+  authorship, chronology, school affiliation, and edition details.
+- If the evidence is partial or the textual tradition fragmentary, say so explicitly. \
+  Distinguish clearly between direct quotation, paraphrase of lost works (via \
+  doxographers), and modern scholarly reconstruction.
+- Every substantive claim must carry one or more reference markers.
+- Aim for DEPTH over breadth: it is better to analyze 3 passages in detail than \
+  to mention 10 superficially.
+- Give the full scholarly reference: Author, *Work* Book.Chapter.Section (Edition).
 """
 
 CLASSIFY_QUERY_TYPE_PROMPT = """\
@@ -369,10 +379,12 @@ Rules:
 - Use passage evidence_ids for doctrinal or textual claims whenever possible.
 - Use metadata evidence_ids only for bibliographic/context claims.
 - Set evidence_class to one of: direct_text, ancient_testimony, metadata, counter_evidence.
-- Return 6-10 claims when evidence permits, and never more than 12.
-- Keep each claim to 1 sentence.
-- Keep quote_original and quote_translation short (<= 180 characters each) and omit them when not needed.
-- Keep the ledger concise, high-signal, and organized around facets rather than retrieval order.
+- Return 8-15 claims when evidence permits, and never more than 18. More claims = richer answer.
+- Keep each claim to 1-2 sentences.
+- Include quote_original and quote_translation for EVERY claim that has direct textual evidence. \
+  Quotes may be up to 400 characters each — longer quotations produce better scholarly answers.
+- Always include canonical_ref (e.g. "III.1.5", "617e", "II.20") in the claim text when available.
+- Keep the ledger organized around facets rather than retrieval order.
 
 Return only JSON:
 {{"claims": [{{"claim": "...", "evidence_ids": ["..."], "facet_id": "...", "evidence_class": "direct_text|ancient_testimony|metadata|counter_evidence", "quote_original": "...", "quote_translation": "...", "support_type": "passage|metadata", "confidence": 0.0-1.0, "status": "supported|insufficient"}}]}}
@@ -395,31 +407,48 @@ Evidence packet:
 {evidence_packet_json}
 
 Requirements:
-- Use only the provided references and evidence packet.
-- Every substantial paragraph or quotation block must end with at least one reference marker.
-- Write like a first-rate historian of ancient philosophy, not like a retrieval log.
-- Begin with a short thesis paragraph, then use 2-5 markdown section headers drawn from the dossier facets.
-- Cover at least {required_sections} dossier-driven sections if the dossier contains that many supported facets.
-- Include at least {required_quote_blocks} quotation blocks when the dossier/ledger already contains quoted evidence.
-- Separate major sections with blank lines.
-- Prefer coherent prose with short section headers over bullet lists unless bullets genuinely improve readability.
-- Structure the answer around the dossier facets rather than around retrieval order.
-- Distinguish clearly between:
-  - direct textual evidence from ancient sources
-  - ancient testimony or doxography
-  - modern scholarly framing or metadata
-  - your own synthesis
-- For the strongest facets, include short quotation blocks with the original Greek/Latin and the paired translation immediately after it when available.
-- If the best evidence is only indirect, say so plainly rather than presenting it as a direct Stoic text.
+
+FORMAT — Write at the level of a Cambridge Companion chapter or a detailed encyclopedia article:
+- Begin with a thesis paragraph (3-5 sentences) framing the scholarly question and your main argument.
+- Use 4-8 markdown section headers (##) drawn from the dossier facets.
+- Cover at least {required_sections} dossier-driven sections, MORE if evidence permits.
+- Each section should be 2-4 substantial paragraphs, not 1-2 thin ones.
+- Include at least {required_quote_blocks} quotation blocks, ideally MORE (one per major claim).
+- Target 1500-3000 words. Depth and detail are valued — do not compress.
+
+QUOTATION FORMAT — This is mandatory for EVERY primary source citation:
+- Present ancient text as markdown blockquotes with this exact structure:
+  > Original Greek/Latin text (Author, *Work* canonical_ref)
+  > "English translation"
+- Example:
+  > ἔνεστι δ' ὁρᾶν, εἰ ταῦτα λέγοντες σώζουσιν τὰς κοινὰς (Alexander, *De Fato* 14)
+  > "It is possible to see whether, in saying these things, they preserve the common [notions]"
+- If only a translation is available (no surviving original), mark it: (trans. Rufinus)
+- Use the canonical_ref from the evidence packet, not invented references.
+
+CITATION STYLE:
+- Use the reference markers from the reference map (e.g., [P1], [N3], [25]).
+- In addition to markers, include the scholarly reference in prose: "as Origen writes in *De Principiis* III.1.5 [P2]..."
+- Every substantive sentence must carry at least one reference marker.
+
+SCHOLARLY STANDARDS:
+- Distinguish clearly between: direct textual evidence / ancient testimony (doxography) / modern scholarly framing / your own synthesis.
+- When evidence is fragmentary or transmitted through intermediaries, state the transmission chain.
+- Note textual problems: if a work survives only in Latin translation (e.g., Rufinus's De Principiis), say so.
+- Engage with competing interpretations when the dossier mentions them.
+- If the ledger contains insufficient evidence, state the limit explicitly — never smooth over gaps.
+
+PROHIBITIONS:
 - Never invent Greek, Latin, or translations.
-- If the ledger contains insufficient items, state that cautiously and explain the limit of the evidence.
-- Keep the answer elegant and continuous; do not sound like notes pasted from a notebook.
-- Do not collapse the whole answer into a single paragraph.
+- Do not collapse the answer into 1-2 paragraphs. Expand and develop.
+- Do not sound like notes pasted from a notebook — write flowing scholarly prose.
 - Do not introduce any uncited sentence.
+- Do not use bullet lists for the main argument (bullets are OK only for lists of works or editions).
 """
 
 SCHOLARLY_POLISH_PROMPT = """\
-You are performing a final scholarly prose pass on an already grounded answer.
+You are performing a final scholarly prose pass on an already grounded answer. \
+The goal is to make this read like a published academic article.
 
 Question: {question}
 Dossier:
@@ -429,14 +458,20 @@ Draft answer:
 {draft_answer}
 
 Rules:
-- Preserve every existing citation marker exactly.
-- Do not introduce any new fact not already present in the draft answer or dossier.
-- Improve prose, transitions, and section structure so the answer reads like a finished scholarly response.
-- Preserve the distinction between direct textual evidence, ancient testimony, and synthesis.
-- Keep Greek/Latin quotes verbatim if they already appear.
-- Ensure the answer retains a thesis paragraph, meaningful section headers, and at least one quotation block when the draft already contains quoted evidence.
-- Keep blank-line paragraph breaks between major sections.
-- If the draft is note-like, convert it into polished prose without dropping citations.
+- Preserve every existing citation marker and reference EXACTLY.
+- Do not introduce any new fact not already in the draft or dossier.
+- EXPAND compressed sections: if a section is only 1-2 sentences, develop the \
+  argument into 2-3 paragraphs using the evidence already cited.
+- Ensure every quotation block uses the dual-language format:
+  > Original text (Author, *Work* ref)
+  > "English translation"
+- Improve prose quality: scholarly transitions, argumentative flow, signposting.
+- Preserve the distinction between direct textual evidence, testimony, and synthesis.
+- Keep Greek/Latin quotes verbatim.
+- Ensure the answer has: thesis paragraph, 4+ section headers, 3+ quotation blocks.
+- The final answer should be 1500-3000 words. If the draft is shorter, expand \
+  the analysis of existing evidence — do not add new facts.
+- If the draft is note-like, convert it into flowing scholarly prose.
 """
 
 COMPRESSION_REPAIR_PROMPT = """\
@@ -1740,8 +1775,8 @@ def _build_research_graph_payload(state: RAGState) -> dict[str, Any]:
                 "status": item.status.value if hasattr(item.status, "value") else str(item.status),
                 "evidence_ids": item.evidence_ids,
                 "refs": refs,
-                "quote_original": truncate_text(item.quote_original, 240) if item.quote_original else None,
-                "quote_translation": truncate_text(item.quote_translation, 240) if item.quote_translation else None,
+                "quote_original": truncate_text(item.quote_original, 500) if item.quote_original else None,
+                "quote_translation": truncate_text(item.quote_translation, 500) if item.quote_translation else None,
             }
         )
 
@@ -3204,7 +3239,7 @@ def _heuristic_claim_ledger_acceptable(state: RAGState, claims: list[ClaimLedger
     return has_passage and (has_metadata or len(covered_facets) >= 2 or len(claims) >= 6)
 
 
-def _dedupe_claims(claims: list[ClaimLedgerItem], *, limit: int = 12) -> list[ClaimLedgerItem]:
+def _dedupe_claims(claims: list[ClaimLedgerItem], *, limit: int = 18) -> list[ClaimLedgerItem]:
     deduped: list[ClaimLedgerItem] = []
     seen_signatures: set[tuple[str, tuple[str, ...]]] = set()
     for item in claims:
@@ -3234,25 +3269,26 @@ def _render_requirements(state: RAGState) -> dict[str, int]:
         for item in state.claim_ledger
         if item.quote_original or item.quote_translation
     )
+    # Require MORE sections for article-level depth
     required_sections = 0
     if len(supported_facets) >= 2:
-        required_sections = min(4, len(supported_facets))
+        required_sections = min(8, len(supported_facets))
     elif supported_facets:
-        required_sections = 1
+        required_sections = 2
 
+    # Require MORE quotation blocks — one per major claim
     required_quote_blocks = 0
     if quoted_claims:
-        required_quote_blocks = 1
-        if quoted_claims >= 4 and len(supported_facets) >= 3:
-            required_quote_blocks = 2
+        required_quote_blocks = min(6, max(3, quoted_claims))
 
-    min_chars = 300
+    # Higher minimum char count for article-level answers
+    min_chars = 1200
     if supported_facets:
-        min_chars += 180 * min(4, len(supported_facets))
+        min_chars += 400 * min(6, len(supported_facets))
     if quoted_claims:
-        min_chars += 120 * min(2, quoted_claims)
+        min_chars += 300 * min(4, quoted_claims)
     if state.insufficient_evidence:
-        min_chars = max(300, min_chars - 180)
+        min_chars = max(800, min_chars - 400)
 
     return {
         "required_sections": required_sections,
