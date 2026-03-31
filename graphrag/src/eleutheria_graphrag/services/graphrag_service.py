@@ -8,6 +8,7 @@ so that routes and external callers need no changes.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import os
@@ -111,6 +112,37 @@ class ThreadManager:
             del self._threads[tid]
 
 
+class ResponseCache:
+    """Simple TTL cache for GraphRAG responses."""
+
+    def __init__(self, ttl_seconds: int = 600, max_entries: int = 100) -> None:
+        self._cache: dict[str, tuple[float, dict[str, Any]]] = {}
+        self._ttl = ttl_seconds
+        self._max = max_entries
+
+    def _key(self, question: str, model: str, mode: str) -> str:
+        raw = f"{question.strip().lower()}::{model}::{mode}"
+        return hashlib.sha256(raw.encode()).hexdigest()[:16]
+
+    def get(self, question: str, model: str, mode: str) -> dict[str, Any] | None:
+        key = self._key(question, model, mode)
+        entry = self._cache.get(key)
+        if entry is None:
+            return None
+        ts, result = entry
+        if time.time() - ts > self._ttl:
+            del self._cache[key]
+            return None
+        return result
+
+    def put(self, question: str, model: str, mode: str, result: dict[str, Any]) -> None:
+        if len(self._cache) >= self._max:
+            oldest_key = min(self._cache, key=lambda k: self._cache[k][0])
+            del self._cache[oldest_key]
+        key = self._key(question, model, mode)
+        self._cache[key] = (time.time(), result)
+
+
 class GraphRAGService:
     """
     GraphRAG service — API-compatible wrapper around the agentic pipeline.
@@ -140,6 +172,9 @@ class GraphRAGService:
         self._search = search_service
         self._reranker = reranker
         self._verifier = verifier
+
+        # Response cache
+        self._response_cache = ResponseCache()
 
         # KG data (populated by load_kg)
         self.kg_data: dict[str, Any] | None = None
@@ -323,12 +358,18 @@ class GraphRAGService:
                 stacklevel=2,
             )
 
+        cached = self._response_cache.get(question, selected_model, retrieval_mode)
+        if cached is not None:
+            return {**cached, "cached": True}
+
         agent = self._ensure_agent()
-        return await agent.query_dict(
+        result = await agent.query_dict(
             question,
             selected_model=selected_model,
             retrieval_mode=retrieval_mode,
         )
+        self._response_cache.put(question, selected_model, retrieval_mode, result)
+        return result
 
     # ------------------------------------------------------------------
     # Query (streaming)
