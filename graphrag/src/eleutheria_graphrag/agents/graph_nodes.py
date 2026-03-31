@@ -4955,6 +4955,9 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             indices = await ctx.deps.tree_index.load_indices(list(work_ids))
             indices_by_id = {index.work_id: index for index in indices}
 
+            # --- Phase 1: batch extract passages (one DB call per section) ---
+            per_limit = max(4, min(40, state.retrieval_budget.passage_bundle_limit() // max(1, len(selected_sections))))
+            section_rows: list[tuple[dict[str, Any], list[dict[str, Any]]]] = []
             for section in selected_sections:
                 index = indices_by_id.get(section["work_id"])
                 if not index:
@@ -4963,7 +4966,7 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     rows = await ctx.deps.tree_index.extract_passages(
                         index,
                         [section["node_id"]],
-                        limit=max(4, min(40, state.retrieval_budget.passage_bundle_limit() // max(1, len(selected_sections)))),
+                        limit=per_limit,
                     )
                 except Exception:
                     continue
@@ -4981,16 +4984,30 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         "selected_count": len(rows),
                     },
                 )
+                section_rows.append((section, rows))
 
+            # --- Phase 2: collect all unique passage IDs, batch-fetch translations ---
+            all_passage_ids: list[str] = []
+            for section, rows in section_rows:
+                for row in rows:
+                    bundle_id = f"{row['work_id']}::{row['passage_id']}"
+                    if bundle_id not in seen_bundle_ids:
+                        all_passage_ids.append(str(row["passage_id"]))
+
+            translations_map = await _batch_fetch_translations(ctx.deps, all_passage_ids) if all_passage_ids else {}
+
+            # --- Phase 3: build bundles using pre-fetched translations ---
+            for section, rows in section_rows:
                 for row in rows:
                     bundle_id = f"{row['work_id']}::{row['passage_id']}"
                     if bundle_id in seen_bundle_ids:
                         continue
-                    translation = await _fetch_translation_for_passage(ctx.deps, str(row["passage_id"]))
+                    pid = str(row["passage_id"])
+                    translation = translations_map.get(pid)
                     if translation:
                         translation_pairs.append(
                             {
-                                "original_passage_id": str(row["passage_id"]),
+                                "original_passage_id": pid,
                                 "translation_passage_id": str(translation.get("passage_id"))
                                 if translation.get("passage_id")
                                 else None,
@@ -5007,7 +5024,7 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         author=row.get("author"),
                         section_path=section.get("path", ""),
                         canonical_ref=row.get("canonical_ref"),
-                        original_passage_id=str(row["passage_id"]),
+                        original_passage_id=pid,
                         translation_passage_id=(
                             str(translation["passage_id"])
                             if translation and translation.get("passage_id")
