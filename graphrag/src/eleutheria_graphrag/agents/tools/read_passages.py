@@ -113,6 +113,29 @@ class ReadPassagesTool:
             except Exception:
                 logger.warning("work passages query failed for %s", node_id, exc_info=True)
 
+        # Strategy 2b: work node not linked — search by title in ancient_works
+        if not rows and node_type == "work":
+            work_label = node_label.split(" (")[0].split(" - ")[0].strip()
+            if work_label and len(work_label) > 3:
+                try:
+                    rows = await self._deps.db.fetch(f"""
+                        SELECT
+                            p.passage_id::text,
+                            w.title,
+                            w.author,
+                            p.canonical_ref,
+                            w.language,
+                            p.text_content,
+                            0.9 AS confidence
+                        FROM {DB_SCHEMA}.passages p
+                        JOIN {DB_SCHEMA}.ancient_works w ON w.work_id = p.work_id
+                        WHERE w.title ILIKE '%' || $1 || '%'
+                        ORDER BY p.sequence_number
+                        LIMIT $2
+                    """, work_label, limit)
+                except Exception:
+                    logger.warning("work title passages query failed for %s", work_label, exc_info=True)
+
         # Strategy 3: if node is a person, find their works and load passages
         if not rows and node_type == "person":
             work_ids: list[str] = []
