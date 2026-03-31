@@ -31,11 +31,11 @@ from eleutheria_graphrag.agents.tools import ToolRegistry
 
 logger = logging.getLogger(__name__)
 
-# Budget per complexity tier
+# Budget per complexity tier (optimized for speed — fewer but smarter calls)
 _BUDGETS: dict[QueryComplexity, int] = {
-    QueryComplexity.SIMPLE: 5,
-    QueryComplexity.MEDIUM: 10,
-    QueryComplexity.COMPLEX: 15,
+    QueryComplexity.SIMPLE: 4,
+    QueryComplexity.MEDIUM: 7,
+    QueryComplexity.COMPLEX: 10,
 }
 
 # Max parse failures before aborting

@@ -5702,7 +5702,7 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 _render_prompt,
                 system_prompt=SYSTEM_PROMPT,
                 temperature=0.2,
-                max_tokens=3200,
+                max_tokens=6000,
                 cache_key="render-grounded-answer",
                 cache_prefix="render_grounded_answer_v2",
                 model_override=model_api_id,
@@ -5710,7 +5710,7 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             _render_dur = int((_time.time() - _t0) * 1000)
             rendered_answer = raw_answer.strip()
             _polish_mode = "skipped"
-            if rendered_answer and len(rendered_answer) < 500 and not _should_minimize_llm_calls(state):
+            if rendered_answer and len(rendered_answer) < 300 and not _should_minimize_llm_calls(state):
                 try:
                     polished_answer = await ctx.deps.llm.generate(
                         SCHOLARLY_POLISH_PROMPT.format(
@@ -5750,7 +5750,9 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         },
                     )
             compression_repair_mode = "skipped"
-            if rendered_answer and not _should_minimize_llm_calls(state) and _answer_is_too_compressed(state, rendered_answer):
+            # Compression repair disabled — programmatic passage injection
+            # in scholarly_agent._inject_passage_quotations handles this instead
+            if False and rendered_answer and not _should_minimize_llm_calls(state) and _answer_is_too_compressed(state, rendered_answer):
                 try:
                     repaired_answer = await ctx.deps.llm.generate(
                         COMPRESSION_REPAIR_PROMPT.format(

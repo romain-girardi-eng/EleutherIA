@@ -55,13 +55,11 @@ Contra Celsum).
 You have **{remaining}** tool calls remaining (of {budget} total).
 
 STRICT BUDGET ALLOCATION:
-- Calls 1-4: SEARCH & EXPLORE — find the key entities, explore connections
-- Calls 5 onwards: READ PASSAGES — spend ALL remaining calls on read_passages
-  and search_passages. The answer quality depends on HOW MANY actual passages
-  you read, not how many nodes you explored.
-- MINIMUM: you must call read_passages at least 4 times before SYNTHESIZE.
-
-Do NOT keep searching after call 4 unless you found nothing. Switch to reading.
+- Calls 1-3: SEARCH & EXPLORE — find key entities, explore connections
+- Calls 4+: READ PASSAGES — spend ALL remaining calls on read_passages
+  and search_passages. Answer quality depends on actual passages read.
+- MINIMUM: call read_passages at least 3 times before SYNTHESIZE.
+- Be EFFICIENT: don't retry failed read_passages on the same node. Try a different node or search_passages with Greek terms instead.
 
 ## Available Tools
 {tool_descriptions}
