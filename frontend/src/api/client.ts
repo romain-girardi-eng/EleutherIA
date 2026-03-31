@@ -80,14 +80,21 @@ class ApiClient {
   }
 
   // Knowledge Graph Endpoints
-  async getNodes(filters?: { type?: string; period?: string; school?: string }): Promise<{ nodes: KGData['nodes'] }> {
+  async getNodes(filters?: { type?: string; period?: string; school?: string; limit?: number; offset?: number }): Promise<{ nodes: KGData['nodes'] }> {
     const response = await this.client.get('/api/kg/nodes', { params: filters });
-    return response.data;
+    const data = response.data;
+    // Backend returns a raw array; normalize to { nodes: [...] }
+    if (Array.isArray(data)) {
+      return { nodes: data };
+    }
+    return data;
   }
 
-  async getEdges(filters?: { relation?: string }): Promise<KGData['edges']> {
+  async getEdges(filters?: { relation?: string; limit?: number; offset?: number }): Promise<KGData['edges']> {
     const response = await this.client.get('/api/kg/edges', { params: filters });
-    return response.data;
+    const data = response.data;
+    // Backend returns a raw array; normalize
+    return Array.isArray(data) ? data : (data?.edges ?? []);
   }
 
   async getNode(id: string) {

@@ -47,7 +47,7 @@ async def list_nodes(
     period: str | None = Query(None, description="Filter by period"),
     school: str | None = Query(None, description="Filter by school"),
     search: str | None = Query(None, description="Search in label/description"),
-    limit: int = Query(100, ge=1, le=1000),
+    limit: int = Query(100, ge=1, le=50000),
     offset: int = Query(0, ge=0),
 ) -> list[dict[str, Any]]:
     """
@@ -113,7 +113,7 @@ async def list_edges(
     relation: str | None = Query(None, description="Filter by relation type"),
     source: str | None = Query(None, description="Filter by source node"),
     target: str | None = Query(None, description="Filter by target node"),
-    limit: int = Query(100, ge=1, le=1000),
+    limit: int = Query(100, ge=1, le=50000),
     offset: int = Query(0, ge=0),
 ) -> list[dict[str, Any]]:
     """
