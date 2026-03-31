@@ -226,12 +226,12 @@ class SpanNames:
     GRAPHRAG_RETRIEVE = "graphrag.retrieve"
     GRAPHRAG_GENERATE = "graphrag.generate"
 
-    # HiRAG
-    HIRAG_QUERY = "hirag.query"
-    HIRAG_PLANNING = "hirag.planning"
-    HIRAG_RETRIEVAL = "hirag.retrieval"
-    HIRAG_REASONING = "hirag.reasoning"
-    HIRAG_VERIFICATION = "hirag.verification"
+    # Agentic GraphRAG
+    GRAPHRAG_QUERY_AGENTIC = "graphrag.query.agentic"
+    GRAPHRAG_PLANNING = "graphrag.planning"
+    GRAPHRAG_RETRIEVAL = "graphrag.retrieval"
+    GRAPHRAG_REASONING = "graphrag.reasoning"
+    GRAPHRAG_VERIFICATION = "graphrag.verification"
 
     # Search
     SEARCH_HYBRID = "search.hybrid"

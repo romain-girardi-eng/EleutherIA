@@ -73,6 +73,7 @@ async def query_stream(
 
     async def generate() -> AsyncIterator[str]:
         try:
+            complete_sent = False
             async for chunk in graphrag.query_stream(
                 question=question,
                 semantic_k=semantic_k,
@@ -81,9 +82,23 @@ async def query_stream(
                 selected_model=model,
                 retrieval_mode=retrieval_mode,
             ):
+                # The agent yields plain text for answer chunks, but the
+                # final yield is a JSON string with {"type": "complete", ...}
+                # containing the full response (citations, metadata, etc.).
+                # Detect it and forward as a proper SSE complete event.
+                if chunk.startswith('{"type":'):
+                    try:
+                        parsed = json.loads(chunk)
+                        if parsed.get("type") == "complete":
+                            yield f"data: {chunk}\n\n"
+                            complete_sent = True
+                            continue
+                    except json.JSONDecodeError:
+                        pass
                 event = json.dumps({"type": "answer_chunk", "data": chunk})
                 yield f"data: {event}\n\n"
-            yield f'data: {json.dumps({"type": "complete", "data": None})}\n\n'
+            if not complete_sent:
+                yield f'data: {json.dumps({"type": "complete", "data": None})}\n\n'
         except Exception as e:
             yield f'data: {json.dumps({"type": "error", "message": str(e)})}\n\n'
 

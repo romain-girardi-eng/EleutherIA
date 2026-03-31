@@ -106,7 +106,7 @@ class SQLStrategy:
         return _dedup(seed_ids), _dedup(passage_anchor_ids[:12])
 
     async def _step1_label_match(self, queries: list[str], deps: Any) -> list[str]:
-        """Find kg_nodes whose label or description matches query terms."""
+        """Find kg_nodes matching query terms. Prioritizes label matches over description."""
         seen: set[str] = set()
         patterns: list[str] = []
         for q in queries:
@@ -117,26 +117,50 @@ class SQLStrategy:
                     patterns.append(f"%{term}%")
         if not patterns:
             return []
-        # Cap to avoid SQL with too many placeholders
         patterns = patterns[:30]
 
-        # Build individual $1, $2, ... placeholders instead of ANY($1::text[])
-        # to avoid asyncpg array-parameter issues with pgbouncer / connection poolers.
         placeholders = ", ".join(f"${i + 1}" for i in range(len(patterns)))
+
+        # Tier 1: Label matches — prioritize person/work nodes, then others.
+        # Use a scoring approach: label match on person/work = highest priority.
         sql = f"""
-            SELECT DISTINCT node_id
+            SELECT node_id, type,
+                   CASE WHEN type IN ('person', 'work') THEN 2 ELSE 1 END AS priority
             FROM {DB_SCHEMA}.kg_nodes
             WHERE label ILIKE ANY(ARRAY[{placeholders}])
-               OR description ILIKE ANY(ARRAY[{placeholders}])
-            LIMIT 200
+            ORDER BY priority DESC, length(label) ASC
+            LIMIT 50
         """
         try:
-            rows = await deps.db.fetch(sql, *patterns)
-            logger.info("SQLStrategy step1: %d patterns → %d nodes", len(patterns), len(rows))
-            return [r["node_id"] for r in rows]
+            label_rows = await deps.db.fetch(sql, *patterns)
         except Exception:
-            logger.warning("SQLStrategy step1 label match failed (patterns=%r)", patterns[:5], exc_info=True)
-            return []
+            logger.warning("SQLStrategy step1 label match failed", exc_info=True)
+            label_rows = []
+
+        result_ids = [r["node_id"] for r in label_rows]
+
+        # Tier 2: Only search descriptions if label matches are insufficient.
+        # Skip short generic terms to avoid matching everything.
+        if len(result_ids) < self._min_bundles:
+            long_patterns = [p for p in patterns if len(p) > 7]  # %term% where term > 5 chars
+            if long_patterns:
+                desc_ph = ", ".join(f"${i + 1}" for i in range(len(long_patterns)))
+                desc_sql = f"""
+                    SELECT DISTINCT node_id
+                    FROM {DB_SCHEMA}.kg_nodes
+                    WHERE description ILIKE ANY(ARRAY[{desc_ph}])
+                      AND type IN ('person', 'work', 'concept', 'argument', 'school')
+                    LIMIT 30
+                """
+                try:
+                    desc_rows = await deps.db.fetch(desc_sql, *long_patterns)
+                    for r in desc_rows:
+                        if r["node_id"] not in result_ids:
+                            result_ids.append(r["node_id"])
+                except Exception:
+                    logger.warning("SQLStrategy step1 description match failed", exc_info=True)
+
+        return result_ids
 
     async def _fetch_citations(self, node_ids: list[str], deps: Any) -> list[dict[str, Any]]:
         """Fetch passage_citations for given node IDs, ordered by confidence."""

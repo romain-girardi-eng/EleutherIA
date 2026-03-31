@@ -760,7 +760,7 @@ export default function GraphRAGPage() {
           onClose={() => { setShowAuthModal(false); setPendingQuery(null); }}
           onSuccess={handleAuthSuccess}
           title="Authentication Required"
-          message="Please log in to use HiRAG Q&A"
+          message="Please log in to use GraphRAG Q&A"
         />
 
         {selectedNode && (

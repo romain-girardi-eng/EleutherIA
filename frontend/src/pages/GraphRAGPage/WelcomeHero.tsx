@@ -43,7 +43,7 @@ export default function WelcomeHero({
         >
           <h1 className="text-5xl md:text-6xl font-semibold text-stone-800 mb-3 drop-shadow-sm">
             <Typewriter
-              text={['HiRAG', 'Knowledge Graph', 'Ancient Philosophy', 'Scholarly Q&A']}
+              text={['Agentic GraphRAG', 'Knowledge Graph', 'Ancient Philosophy', 'Scholarly Q&A']}
               speed={100}
               waitTime={3500}
               deleteSpeed={60}

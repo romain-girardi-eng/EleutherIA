@@ -7,7 +7,7 @@
  *   3. Knowledge Graph  — white, KG diagram, node types
  *   4. Embeddings       — dark, interactive scatter plot
  *   5. GraphRAG Pipeline — dark, 5-stage interactive pipeline
- *   6. Architecture     — white, HiRAG + corpus stats
+ *   6. Architecture     — white, Agentic GraphRAG + corpus stats
  *   7. Hybrid Search    — parchment, 3 methods + RRF
  *   8. FAIR Data        — warm orange, FAIR badges
  *   9. CTA              — dark, links to explore
@@ -41,7 +41,7 @@ import type { DotNavSection } from '../components/how-it-works';
 
 import { MorphingParticles } from '../components/MorphingParticles';
 import DatabaseWithRestApi from '../components/ui/database-with-rest-api';
-import HiRAGImplementationDetails from '../components/HiRAGImplementationDetails';
+import AgenticGraphRAGDetails from '../components/AgenticGraphRAGDetails';
 
 // ─── Section definitions ────────────────────────────────────────────────────
 
@@ -555,9 +555,9 @@ export default function HowItWorksPage() {
             </p>
           </motion.div>
 
-          {/* HiRAG highlight + stats */}
+          {/* Agentic GraphRAG highlight + stats */}
           <div className="grid lg:grid-cols-2 gap-6 mb-10">
-            {/* HiRAG card */}
+            {/* Agentic GraphRAG card */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -566,13 +566,13 @@ export default function HowItWorksPage() {
               className="rounded-2xl border-2 border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 p-7"
             >
               <div className="flex items-center gap-3 mb-4">
-                <h3 className="font-display text-2xl text-violet-900">{t('howItWorksPage.architecture.hiragTitle')}</h3>
+                <h3 className="font-display text-2xl text-violet-900">{t('howItWorksPage.architecture.agenticGraphragTitle')}</h3>
                 <span className="text-xs font-body font-semibold bg-violet-200 text-violet-800 rounded-full px-3 py-1">
                   {t('howItWorksPage.architecture.paperBadge')}
                 </span>
               </div>
               <p className="font-body text-sm text-stone-700 mb-5 leading-relaxed">
-                {t('howItWorksPage.architecture.hiragBody')}
+                {t('howItWorksPage.architecture.agenticGraphragBody')}
               </p>
               <div className="grid grid-cols-2 gap-3 mb-5 text-sm font-body">
                 <div className="bg-white/70 rounded-xl p-4">
@@ -651,7 +651,7 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="rounded-2xl border border-stone-200 bg-stone-50/60 overflow-hidden"
           >
-            <HiRAGImplementationDetails />
+            <AgenticGraphRAGDetails />
           </motion.div>
         </div>
       </ScrollSection>
