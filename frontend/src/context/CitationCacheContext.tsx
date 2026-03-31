@@ -57,7 +57,8 @@ export function CitationCacheProvider({
     const newIds = missingIds.filter((id) => !pendingFetches.current.has(id));
 
     if (newIds.length > 0) {
-      const fetchPromise = fetch('/api/citations/batch', {
+      const apiUrl = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') ?? '';
+      const fetchPromise = fetch(`${apiUrl}/api/citations/batch`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids: newIds }),
