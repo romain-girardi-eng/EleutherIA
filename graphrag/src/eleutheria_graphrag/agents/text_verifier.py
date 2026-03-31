@@ -304,12 +304,12 @@ def sanitize_answer(answer: str, verification: VerificationResult) -> str:
             )
             extract.action = "flagged"
 
-    for extract in verification.misattributed_extracts:
-        end_pos = extract.position + len(extract.text)
-        correction = f" [correction: this passage is from {extract.actual_work}"
-        if extract.actual_ref:
-            correction += f" {extract.actual_ref}"
-        correction += f", not {extract.claimed_work}]"
+    for misattr in verification.misattributed_extracts:
+        end_pos = misattr.position + len(misattr.text)
+        correction = f" [correction: this passage is from {misattr.actual_work}"
+        if misattr.actual_ref:
+            correction += f" {misattr.actual_ref}"
+        correction += f", not {misattr.claimed_work}]"
         actions.append(
             (
                 end_pos,
@@ -317,7 +317,7 @@ def sanitize_answer(answer: str, verification: VerificationResult) -> str:
                 correction,
             )
         )
-        extract.action = "corrected"
+        misattr.action = "corrected"
 
     # Apply from end to start to preserve positions
     for pos, action_type, text in sorted(actions, key=lambda a: a[0], reverse=True):
