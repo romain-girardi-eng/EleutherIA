@@ -59,13 +59,27 @@ class SearchNodesTool:
                 "type_filter": {
                     "type": "string",
                     "description": "Node type filter: person, concept, argument, work, school, passage",
-                    "enum": ["person", "concept", "argument", "work", "school", "passage", "debate", "group"],
+                    "enum": [
+                        "person",
+                        "concept",
+                        "argument",
+                        "work",
+                        "school",
+                        "passage",
+                        "debate",
+                        "group",
+                    ],
                 },
                 "period_filter": {
                     "type": "string",
                     "description": "Historical period filter",
                 },
-                "limit": {"type": "integer", "default": 10, "minimum": 1, "maximum": 30},
+                "limit": {
+                    "type": "integer",
+                    "default": 10,
+                    "minimum": 1,
+                    "maximum": 30,
+                },
             },
             "required": ["query"],
         }
@@ -86,7 +100,10 @@ class SearchNodesTool:
             node_type = (node.get("type") or "").lower()
             if type_filter and node_type != type_filter.lower():
                 continue
-            if period_filter and (node.get("period") or "").lower() != period_filter.lower():
+            if (
+                period_filter
+                and (node.get("period") or "").lower() != period_filter.lower()
+            ):
                 continue
 
             label = (node.get("label") or "").lower()
@@ -102,7 +119,9 @@ class SearchNodesTool:
             else:
                 # Term overlap scoring
                 label_terms = {t.lower() for t in _TERM_RE.findall(label) if len(t) > 2}
-                desc_terms = {t.lower() for t in _TERM_RE.findall(desc[:300]) if len(t) > 2}
+                desc_terms = {
+                    t.lower() for t in _TERM_RE.findall(desc[:300]) if len(t) > 2
+                }
                 label_overlap = len(query_terms & label_terms)
                 desc_overlap = len(query_terms & desc_terms)
                 if label_overlap == 0 and desc_overlap == 0:
@@ -143,7 +162,9 @@ class SearchNodesTool:
                                 continue
                         if period_filter:
                             node = self._deps.node_lookup.get(nid, {})
-                            if (node.get("period") or "").lower() != period_filter.lower():
+                            if (
+                                node.get("period") or ""
+                            ).lower() != period_filter.lower():
                                 continue
 
                         semantic_score = hit.get("score", 0.0)
@@ -152,7 +173,9 @@ class SearchNodesTool:
                             existing_summary, existing_score = results[nid]
                             merged = existing_score * 0.6 + semantic_score * 0.4
                             results[nid] = (
-                                existing_summary.model_copy(update={"score": round(merged, 3)}),
+                                existing_summary.model_copy(
+                                    update={"score": round(merged, 3)}
+                                ),
                                 merged,
                             )
                         else:
@@ -170,7 +193,10 @@ class SearchNodesTool:
                                 semantic_score * 0.8,
                             )
         except Exception:
-            logger.warning("Qdrant search failed in search_nodes, using label match only", exc_info=True)
+            logger.warning(
+                "Qdrant search failed in search_nodes, using label match only",
+                exc_info=True,
+            )
 
         # Sort by score descending, take top limit
         sorted_results = sorted(results.values(), key=lambda x: x[1], reverse=True)
@@ -191,10 +217,13 @@ class SearchNodesTool:
 
         try:
             async with httpx.AsyncClient(timeout=10) as client:
-                resp = await client.post(url, json={
-                    "model": model,
-                    "content": {"parts": [{"text": text}]},
-                })
+                resp = await client.post(
+                    url,
+                    json={
+                        "model": model,
+                        "content": {"parts": [{"text": text}]},
+                    },
+                )
                 resp.raise_for_status()
                 data = resp.json()
                 return data.get("embedding", {}).get("values")

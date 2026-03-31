@@ -74,7 +74,7 @@ async def query_stream(
     async def generate() -> AsyncIterator[str]:
         try:
             complete_sent = False
-            yield f'data: {json.dumps({"type": "status", "data": {"message": "Initializing scholarly agent...", "step": 1}})}\n\n'
+            yield f"data: {json.dumps({'type': 'status', 'data': {'message': 'Initializing scholarly agent...', 'step': 1}})}\n\n"
             async for chunk in graphrag.query_stream(
                 question=question,
                 semantic_k=semantic_k,
@@ -93,7 +93,13 @@ async def query_stream(
                         event_type = parsed.get("type", "")
 
                         # Forward agent events (thinking, tool calls) directly
-                        if event_type in ("agent_thinking", "tool_start", "tool_result", "status", "error"):
+                        if event_type in (
+                            "agent_thinking",
+                            "tool_start",
+                            "tool_result",
+                            "status",
+                            "error",
+                        ):
                             yield f"data: {chunk}\n\n"
                             continue
 
@@ -135,22 +141,28 @@ async def query_stream(
                             ]
                             sources = []
                             # Include both seed nodes and top context nodes
-                            all_source_ids = list(dict.fromkeys(seed_ids + ctx_ids))[:15]
+                            all_source_ids = list(dict.fromkeys(seed_ids + ctx_ids))[
+                                :15
+                            ]
                             for i, nid in enumerate(all_source_ids):
                                 node = lookup.get(nid, {})
                                 if not node:
                                     continue
-                                sources.append({
-                                    "id": i + 1,
-                                    "nodeId": nid,
-                                    "nodeLabel": node.get("label", nid),
-                                    "nodeType": node.get("type", "concept"),
-                                    "content": (node.get("description") or "")[:300],
-                                    "metadata": {
-                                        "school": node.get("school"),
-                                        "period": node.get("period"),
-                                    },
-                                })
+                                sources.append(
+                                    {
+                                        "id": i + 1,
+                                        "nodeId": nid,
+                                        "nodeLabel": node.get("label", nid),
+                                        "nodeType": node.get("type", "concept"),
+                                        "content": (node.get("description") or "")[
+                                            :300
+                                        ],
+                                        "metadata": {
+                                            "school": node.get("school"),
+                                            "period": node.get("period"),
+                                        },
+                                    }
+                                )
                             complete_payload = {
                                 "type": "complete",
                                 "data": {
@@ -182,9 +194,9 @@ async def query_stream(
                 event = json.dumps({"type": "answer_chunk", "data": chunk})
                 yield f"data: {event}\n\n"
             if not complete_sent:
-                yield f'data: {json.dumps({"type": "complete", "data": None})}\n\n'
+                yield f"data: {json.dumps({'type': 'complete', 'data': None})}\n\n"
         except Exception as e:
-            yield f'data: {json.dumps({"type": "error", "message": str(e)})}\n\n'
+            yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
 
     return StreamingResponse(
         generate(),

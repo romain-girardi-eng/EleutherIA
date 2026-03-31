@@ -218,7 +218,9 @@ class LLMService:
                 try:
                     config["thinking_budget"] = int(thinking_budget)
                 except ValueError:
-                    logger.warning("Invalid %s=%s", thinking_budget_env, thinking_budget)
+                    logger.warning(
+                        "Invalid %s=%s", thinking_budget_env, thinking_budget
+                    )
         include_thoughts_env = cast(str | None, config.get("include_thoughts_env"))
         if include_thoughts_env:
             include_thoughts = os.getenv(include_thoughts_env)
@@ -245,7 +247,9 @@ class LLMService:
             thinking_mode: If True, prefer the provider configured for heavier reasoning
         """
         if thinking_mode:
-            thinking_provider_name = os.getenv("LLM_THINKING_PROVIDER", "").strip().lower()
+            thinking_provider_name = (
+                os.getenv("LLM_THINKING_PROVIDER", "").strip().lower()
+            )
             if thinking_provider_name:
                 try:
                     thinking_provider = ModelProvider(thinking_provider_name)
@@ -277,13 +281,17 @@ class LLMService:
             ModelProvider.OPENROUTER,
             ModelProvider.KIMI,
         ]:
-            if provider in self.available_providers and not self._provider_in_backoff(provider):
+            if provider in self.available_providers and not self._provider_in_backoff(
+                provider
+            ):
                 logger.info(f"Using fallback provider: {provider.value}")
                 return provider
 
         return None
 
-    def _provider_attempt_order(self, thinking_mode: bool = False) -> list[ModelProvider]:
+    def _provider_attempt_order(
+        self, thinking_mode: bool = False
+    ) -> list[ModelProvider]:
         """Return providers in the order they should be attempted."""
         preferred = self._get_provider(thinking_mode=thinking_mode)
         if preferred is None:
@@ -395,7 +403,10 @@ class LLMService:
         """Whether a failure should fall through to the next provider."""
         if isinstance(
             exc,
-            httpx.ConnectError | httpx.ReadTimeout | httpx.WriteError | httpx.RemoteProtocolError,
+            httpx.ConnectError
+            | httpx.ReadTimeout
+            | httpx.WriteError
+            | httpx.RemoteProtocolError,
         ):
             return True
         if isinstance(exc, httpx.HTTPStatusError):
@@ -409,7 +420,10 @@ class LLMService:
             return False
         if isinstance(
             exc,
-            httpx.ConnectError | httpx.ReadTimeout | httpx.WriteError | httpx.RemoteProtocolError,
+            httpx.ConnectError
+            | httpx.ReadTimeout
+            | httpx.WriteError
+            | httpx.RemoteProtocolError,
         ):
             return True
         if isinstance(exc, httpx.HTTPStatusError):
@@ -422,9 +436,7 @@ class LLMService:
             try:
                 data = exc.response.json()
                 retry_after_seconds = (
-                    data.get("error", {})
-                    .get("metadata", {})
-                    .get("retry_after_seconds")
+                    data.get("error", {}).get("metadata", {}).get("retry_after_seconds")
                 )
                 if retry_after_seconds is not None:
                     return max(1.0, float(retry_after_seconds))
@@ -437,7 +449,9 @@ class LLMService:
                 except ValueError:
                     pass
             text = exc.response.text or ""
-            match = re.search(r"retry in ([0-9]+(?:\\.[0-9]+)?)s", text, flags=re.IGNORECASE)
+            match = re.search(
+                r"retry in ([0-9]+(?:\\.[0-9]+)?)s", text, flags=re.IGNORECASE
+            )
             if match:
                 try:
                     return max(1.0, float(match.group(1)))
@@ -453,11 +467,18 @@ class LLMService:
             body = re.sub(r"\s+", " ", body)
             if len(body) > 320:
                 body = body[:317] + "..."
-            return f"{exc.response.status_code} {exc.__class__.__name__}: {body}" if body else f"{exc.response.status_code} {exc.__class__.__name__}"
+            return (
+                f"{exc.response.status_code} {exc.__class__.__name__}: {body}"
+                if body
+                else f"{exc.response.status_code} {exc.__class__.__name__}"
+            )
         return exc.__class__.__name__
 
     def _mark_provider_invalid(self, provider: ModelProvider, exc: Exception) -> None:
-        if isinstance(exc, httpx.HTTPStatusError) and exc.response.status_code in {401, 403}:
+        if isinstance(exc, httpx.HTTPStatusError) and exc.response.status_code in {
+            401,
+            403,
+        }:
             self._disabled_providers.add(provider)
             logger.warning(
                 "Disabling LLM provider %s for this session after authentication failure",
@@ -568,7 +589,9 @@ class LLMService:
         """
         # --- Model override: bypass the normal provider loop ---
         if model_override:
-            override_provider, override_model = self._resolve_model_override(model_override)
+            override_provider, override_model = self._resolve_model_override(
+                model_override
+            )
             override_config = self._resolve_config(override_provider)
             override_env_key = cast(str, override_config["env_key"])
             override_api_key = os.getenv(override_env_key) or ""
@@ -671,7 +694,9 @@ class LLMService:
                         )
                         await asyncio.sleep(delay)
                         continue
-                    if idx == len(providers) - 1 or not self._should_retry_next_provider(exc):
+                    if idx == len(
+                        providers
+                    ) - 1 or not self._should_retry_next_provider(exc):
                         raise
                     logger.warning(
                         "LLM provider %s failed (%s); falling back to %s",
@@ -748,7 +773,10 @@ class LLMService:
             self._prompt_cache_expiry[stable_key] = time.time() + ttl_seconds
             return name
         except Exception as exc:
-            if isinstance(exc, httpx.HTTPStatusError) and exc.response.status_code == 429:
+            if (
+                isinstance(exc, httpx.HTTPStatusError)
+                and exc.response.status_code == 429
+            ):
                 self._prompt_cache_backoff_until = time.time() + 300
             logger.warning("Gemini prompt cache creation failed", exc_info=True)
             return None
@@ -837,9 +865,7 @@ class LLMService:
         # internal thought tokens and return no visible text parts. Retry once
         # with thinking disabled before surfacing an error.
         retry_prompt = (
-            f"{cache_prefix}\n\n{prompt}"
-            if cached_content and cache_prefix
-            else prompt
+            f"{cache_prefix}\n\n{prompt}" if cached_content and cache_prefix else prompt
         )
         retry_body = self._build_gemini_request_body(
             prompt=retry_prompt,
@@ -1014,7 +1040,9 @@ class LLMService:
                         )
                         await asyncio.sleep(delay)
                         continue
-                    if idx == len(providers) - 1 or not self._should_retry_next_provider(exc):
+                    if idx == len(
+                        providers
+                    ) - 1 or not self._should_retry_next_provider(exc):
                         raise
                     logger.warning(
                         "Streaming provider %s failed (%s); falling back to %s",

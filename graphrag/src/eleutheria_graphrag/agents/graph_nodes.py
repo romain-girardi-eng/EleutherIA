@@ -75,12 +75,6 @@ from eleutheria_graphrag.agents.structured_models import (
     SufficiencyAssessment,
     TreeNavigationResult,
 )
-from eleutheria_graphrag.agents.graph_helpers import (
-    DB_SCHEMA as _SHARED_DB_SCHEMA,
-    append_reasoning_step as _shared_append_reasoning_step,
-    parse_json as _shared_parse_json,
-    resolve_model_api_id as _shared_resolve_model_api_id,
-)
 from eleutheria_graphrag.agents.text_utils import truncate_json, truncate_text
 from eleutheria_graphrag.services.model_registry import get_model
 from eleutheria_graphrag.services.retrieval_strategy import SQLStrategy, VectorStrategy
@@ -102,19 +96,21 @@ def _append_reasoning_step(
     duration_ms: int = 0,
 ) -> None:
     """Append a ReasoningStep to the state's reasoning trace."""
-    state.reasoning_trace.append(ReasoningStep(
-        node_name=node_name,
-        timestamp_ms=int(_time.time() * 1000),
-        duration_ms=duration_ms,
-        model=model,
-        prompt_summary=prompt_summary[:200],
-        full_prompt_tokens=full_prompt_tokens,
-        raw_output=raw_output,
-        thinking=thinking,
-        parsed_result=parsed_result,
-        skipped=skipped,
-        skip_reason=skip_reason,
-    ))
+    state.reasoning_trace.append(
+        ReasoningStep(
+            node_name=node_name,
+            timestamp_ms=int(_time.time() * 1000),
+            duration_ms=duration_ms,
+            model=model,
+            prompt_summary=prompt_summary[:200],
+            full_prompt_tokens=full_prompt_tokens,
+            raw_output=raw_output,
+            thinking=thinking,
+            parsed_result=parsed_result,
+            skipped=skipped,
+            skip_reason=skip_reason,
+        )
+    )
 
 
 def _resolve_model_api_id(state: RAGState) -> str | None:
@@ -124,6 +120,7 @@ def _resolve_model_api_id(state: RAGState) -> str | None:
         return model_info.api_id if model_info.provider == "openrouter" else None
     except KeyError:
         return None
+
 
 DB_SCHEMA = os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
 LINE_SPLIT_RE = re.compile(r"\n+")
@@ -597,6 +594,7 @@ _STATIC_GREEK_TERMS = {
 
 def _parse_json(text: str) -> Any:
     """Extract JSON from LLM output, stripping markdown code fences."""
+
     def _repair_json(candidate: str) -> str:
         candidate = (
             candidate.replace("“", '"')
@@ -754,14 +752,21 @@ def _question_requests_original(state: RAGState) -> bool:
 
 def _question_requests_quote(state: RAGState) -> bool:
     haystack = " ".join(
-        part for part in (state.question, state.expanded_query or "", *state.sub_queries) if part
+        part
+        for part in (state.question, state.expanded_query or "", *state.sub_queries)
+        if part
     ).lower()
-    return any(token in haystack for token in ("quote", "quotation", "cite", "citation", "citer"))
+    return any(
+        token in haystack
+        for token in ("quote", "quotation", "cite", "citation", "citer")
+    )
 
 
 def _question_reference_numbers(state: RAGState) -> tuple[str, ...]:
     haystack = " ".join(
-        part for part in (state.question, state.expanded_query or "", *state.sub_queries) if part
+        part
+        for part in (state.question, state.expanded_query or "", *state.sub_queries)
+        if part
     )
     return tuple(dict.fromkeys(REF_NUMBER_RE.findall(haystack)))
 
@@ -774,7 +779,9 @@ def _slugify(text: str) -> str:
 def _question_school_hints(state: RAGState) -> set[str]:
     hints: set[str] = set()
     haystack = " ".join(
-        part for part in (state.question, state.expanded_query or "", *state.sub_queries) if part
+        part
+        for part in (state.question, state.expanded_query or "", *state.sub_queries)
+        if part
     ).lower()
     school_aliases = {
         "stoic": "stoicism",
@@ -888,7 +895,12 @@ def _default_research_facets(state: RAGState) -> list[ResearchFacet]:
                 _make_research_facet(
                     title="Points of Divergence",
                     question=f"Where do the relevant sources diverge on {question}?",
-                    keywords=["difference", "divergence", "contrast", *sorted(terms)[:4]],
+                    keywords=[
+                        "difference",
+                        "divergence",
+                        "contrast",
+                        *sorted(terms)[:4],
+                    ],
                     priority=2,
                 ),
             ]
@@ -923,7 +935,13 @@ def _default_research_facets(state: RAGState) -> list[ResearchFacet]:
                     _make_research_facet(
                         title="Textual Witnesses",
                         question=f"Which passages or testimonia best preserve the ancient evidence for {question}?",
-                        keywords=["text", "passage", "testimony", "evidence", *sorted(terms)[:5]],
+                        keywords=[
+                            "text",
+                            "passage",
+                            "testimony",
+                            "evidence",
+                            *sorted(terms)[:5],
+                        ],
                         priority=2,
                     ),
                 ]
@@ -949,18 +967,34 @@ def _default_research_facets(state: RAGState) -> list[ResearchFacet]:
     if terms & {"fate", "heimarmene", "determinism", "causes", "cause", "necessity"}:
         facets.append(
             _make_research_facet(
-                title="Causal Mechanism" if not doctrinal_query else "Causal Structure of Fate",
+                title="Causal Mechanism"
+                if not doctrinal_query
+                else "Causal Structure of Fate",
                 question=f"What causal mechanism or explanatory structure do the sources give for {question}?",
                 keywords=["cause", "causal", "determinism", "fate", "necessity"],
                 priority=2,
             )
         )
-    if terms & {"responsibility", "assent", "freedom", "choice", "prohairesis", "moral"}:
+    if terms & {
+        "responsibility",
+        "assent",
+        "freedom",
+        "choice",
+        "prohairesis",
+        "moral",
+    }:
         facets.append(
             _make_research_facet(
                 title="Agency and Responsibility",
                 question=f"How do the sources connect {question} to agency, assent, responsibility, or freedom?",
-                keywords=["agency", "assent", "responsibility", "freedom", "choice", "prohairesis"],
+                keywords=[
+                    "agency",
+                    "assent",
+                    "responsibility",
+                    "freedom",
+                    "choice",
+                    "prohairesis",
+                ],
                 priority=3,
             )
         )
@@ -969,16 +1003,34 @@ def _default_research_facets(state: RAGState) -> list[ResearchFacet]:
             _make_research_facet(
                 title="Ancient Testimony and Preservation",
                 question=f"Through which ancient witnesses, reports, or preserved fragments do we know the evidence for {question}?",
-                keywords=["testimony", "preservation", "report", "fragment", *sorted(school_hints)],
+                keywords=[
+                    "testimony",
+                    "preservation",
+                    "report",
+                    "fragment",
+                    *sorted(school_hints),
+                ],
                 priority=4,
             )
         )
-    if school_hints or state.query_type in {QueryType.GLOBAL_ABSTRACT, QueryType.MULTI_HOP, QueryType.COMPARATIVE}:
+    if school_hints or state.query_type in {
+        QueryType.GLOBAL_ABSTRACT,
+        QueryType.MULTI_HOP,
+        QueryType.COMPARATIVE,
+    }:
         facets.append(
             _make_research_facet(
-                title="Counterpoint and Nuance" if not doctrinal_query else "Counterpoints and Limits",
+                title="Counterpoint and Nuance"
+                if not doctrinal_query
+                else "Counterpoints and Limits",
                 question=f"What counter-evidence, disagreement, or textual nuance complicates {question}?",
-                keywords=["counterpoint", "nuance", "disagreement", "objection", *sorted(school_hints)],
+                keywords=[
+                    "counterpoint",
+                    "nuance",
+                    "disagreement",
+                    "objection",
+                    *sorted(school_hints),
+                ],
                 priority=4,
             )
         )
@@ -993,14 +1045,18 @@ def _default_research_facets(state: RAGState) -> list[ResearchFacet]:
     return deduped[:6]
 
 
-def _normalize_notebook_facets(state: RAGState, facets: list[ResearchFacet]) -> list[ResearchFacet]:
+def _normalize_notebook_facets(
+    state: RAGState, facets: list[ResearchFacet]
+) -> list[ResearchFacet]:
     if not facets:
         return _default_research_facets(state)
 
     normalized: list[ResearchFacet] = []
     seen: set[str] = set()
     for index, facet in enumerate(facets, start=1):
-        facet_id = facet.facet_id or _slugify(facet.title or facet.question or f"facet-{index}")
+        facet_id = facet.facet_id or _slugify(
+            facet.title or facet.question or f"facet-{index}"
+        )
         priority = max(1, min(5, facet.priority or index))
         item = facet.model_copy(
             update={
@@ -1053,18 +1109,30 @@ def _author_profile_for_name(state: RAGState, author: str | None) -> dict[str, A
     return best[1] if best else {}
 
 
-def _bundle_academic_features(bundle: EvidenceBundle, state: RAGState) -> dict[str, Any]:
+def _bundle_academic_features(
+    bundle: EvidenceBundle, state: RAGState
+) -> dict[str, Any]:
     profile = _author_profile_for_name(state, bundle.author)
     author_hints = _question_author_hints(state)
     school_hints = _question_school_hints(state)
-    label_haystack = " ".join(part for part in (bundle.author, bundle.work_title, bundle.section_path) if part).lower()
+    label_haystack = " ".join(
+        part for part in (bundle.author, bundle.work_title, bundle.section_path) if part
+    ).lower()
     author_match = any(hint in label_haystack for hint in author_hints)
-    school_value = str(profile.get("school") or bundle.metadata.get("author_school") or "").lower()
-    school_match = bool(school_hints and school_value and any(hint in school_value for hint in school_hints))
+    school_value = str(
+        profile.get("school") or bundle.metadata.get("author_school") or ""
+    ).lower()
+    school_match = bool(
+        school_hints
+        and school_value
+        and any(hint in school_value for hint in school_hints)
+    )
     work_priority_rank = next(
         (
             index
-            for index, title in enumerate(state.research_notebook.work_priorities[:20], start=1)
+            for index, title in enumerate(
+                state.research_notebook.work_priorities[:20], start=1
+            )
             if title.lower() == bundle.work_title.lower()
         ),
         None,
@@ -1075,16 +1143,21 @@ def _bundle_academic_features(bundle: EvidenceBundle, state: RAGState) -> dict[s
     elif school_hints and not school_match and not author_match:
         evidence_class = "ancient_testimony"
 
-    period = str(profile.get("period") or bundle.metadata.get("author_period") or "").lower()
+    period = str(
+        profile.get("period") or bundle.metadata.get("author_period") or ""
+    ).lower()
     late_penalty = 0
     if evidence_class == "ancient_testimony" and any(
-        hint in period for hint in ("late", "imperial", "medieval", "byzantine", "christian")
+        hint in period
+        for hint in ("late", "imperial", "medieval", "byzantine", "christian")
     ):
         late_penalty = 8
 
     facet_overlap = 0
     for facet in state.research_notebook.facets:
-        facet_terms = _tokenize_terms(" ".join([facet.title, facet.question, *facet.keywords]))
+        facet_terms = _tokenize_terms(
+            " ".join([facet.title, facet.question, *facet.keywords])
+        )
         if not facet_terms:
             continue
         haystack = " ".join(
@@ -1099,7 +1172,9 @@ def _bundle_academic_features(bundle: EvidenceBundle, state: RAGState) -> dict[s
             )
             if part
         ).lower()
-        facet_overlap = max(facet_overlap, sum(1 for term in facet_terms if term in haystack))
+        facet_overlap = max(
+            facet_overlap, sum(1 for term in facet_terms if term in haystack)
+        )
 
     return {
         "author_match": author_match,
@@ -1115,8 +1190,12 @@ def _bundle_academic_features(bundle: EvidenceBundle, state: RAGState) -> dict[s
     }
 
 
-def _facet_bundle_score(bundle: EvidenceBundle, facet: ResearchFacet, state: RAGState) -> int:
-    facet_terms = _tokenize_terms(" ".join([facet.title, facet.question, *facet.keywords]))
+def _facet_bundle_score(
+    bundle: EvidenceBundle, facet: ResearchFacet, state: RAGState
+) -> int:
+    facet_terms = _tokenize_terms(
+        " ".join([facet.title, facet.question, *facet.keywords])
+    )
     if not facet_terms:
         return _bundle_query_score(bundle, state)
     haystack = " ".join(
@@ -1127,7 +1206,9 @@ def _facet_bundle_score(bundle: EvidenceBundle, facet: ResearchFacet, state: RAG
             bundle.section_path,
             bundle.canonical_ref,
             truncate_text(bundle.original_text, 1600),
-            truncate_text(bundle.translation_text, 1600) if bundle.translation_text else "",
+            truncate_text(bundle.translation_text, 1600)
+            if bundle.translation_text
+            else "",
         )
         if part
     ).lower()
@@ -1138,19 +1219,30 @@ def _facet_bundle_score(bundle: EvidenceBundle, facet: ResearchFacet, state: RAG
         "ancient_testimony": 10,
         "counter_evidence": 6,
     }.get(features["evidence_class"], 4)
-    if facet.title.lower().startswith("counterpoint") or "nuance" in facet.title.lower():
-        evidence_bonus = 16 if features["evidence_class"] == "counter_evidence" else evidence_bonus
+    if (
+        facet.title.lower().startswith("counterpoint")
+        or "nuance" in facet.title.lower()
+    ):
+        evidence_bonus = (
+            16 if features["evidence_class"] == "counter_evidence" else evidence_bonus
+        )
     return overlap * 18 + evidence_bonus + _bundle_query_score(bundle, state)
 
 
 def _facet_node_score(ev: Evidence, facet: ResearchFacet, state: RAGState) -> int:
-    facet_terms = _tokenize_terms(" ".join([facet.title, facet.question, *facet.keywords]))
+    facet_terms = _tokenize_terms(
+        " ".join([facet.title, facet.question, *facet.keywords])
+    )
     if not facet_terms:
         return _node_query_score(ev, state)
     haystack = " ".join(
-        part for part in (ev.label, ev.type, ev.description, ev.period, ev.school, ev.role) if part
+        part
+        for part in (ev.label, ev.type, ev.description, ev.period, ev.school, ev.role)
+        if part
     ).lower()
-    return sum(1 for term in facet_terms if term in haystack) * 14 + _node_query_score(ev, state)
+    return sum(1 for term in facet_terms if term in haystack) * 14 + _node_query_score(
+        ev, state
+    )
 
 
 def _bundle_label_from_id(state: RAGState, bundle_id: str) -> str:
@@ -1160,7 +1252,9 @@ def _bundle_label_from_id(state: RAGState, bundle_id: str) -> str:
     return bundle_id
 
 
-def _bundle_quote_excerpt(bundle: EvidenceBundle, *, prefer_translation: bool = False, limit: int = 220) -> str | None:
+def _bundle_quote_excerpt(
+    bundle: EvidenceBundle, *, prefer_translation: bool = False, limit: int = 220
+) -> str | None:
     text = (
         bundle.translation_text
         if prefer_translation and bundle.translation_text
@@ -1171,7 +1265,9 @@ def _bundle_quote_excerpt(bundle: EvidenceBundle, *, prefer_translation: bool = 
     return truncate_text(text, limit)
 
 
-def _diversify_bundles(bundles: list[EvidenceBundle], *, max_per_work: int) -> list[EvidenceBundle]:
+def _diversify_bundles(
+    bundles: list[EvidenceBundle], *, max_per_work: int
+) -> list[EvidenceBundle]:
     """Front-load breadth across works before allowing one work to dominate."""
     prioritized: list[EvidenceBundle] = []
     overflow: list[EvidenceBundle] = []
@@ -1241,9 +1337,7 @@ def _build_scholarly_dossier(state: RAGState) -> ScholarlyDossier:
             reverse=True,
         )
         metadata_ids_for_facet = [
-            ev.id
-            for ev in ranked_nodes[:3]
-            if _facet_node_score(ev, facet, state) > 0
+            ev.id for ev in ranked_nodes[:3] if _facet_node_score(ev, facet, state) > 0
         ][:2]
 
         primary_bundle_ids.extend(primary_ids_for_facet)
@@ -1269,7 +1363,9 @@ def _build_scholarly_dossier(state: RAGState) -> ScholarlyDossier:
         ]
         summary = ""
         if primary_labels:
-            summary = f"Direct textual evidence centers on {', '.join(primary_labels[:2])}."
+            summary = (
+                f"Direct textual evidence centers on {', '.join(primary_labels[:2])}."
+            )
             if testimony_labels:
                 summary += f" Ancient testimony is preserved by {', '.join(testimony_labels[:2])}."
         elif testimony_labels:
@@ -1292,7 +1388,11 @@ def _build_scholarly_dossier(state: RAGState) -> ScholarlyDossier:
                     note.note_id
                     for note in notebook.reading_notes
                     if set(note.evidence_ids)
-                    & set(primary_ids_for_facet + testimony_ids_for_facet + counter_ids_for_facet)
+                    & set(
+                        primary_ids_for_facet
+                        + testimony_ids_for_facet
+                        + counter_ids_for_facet
+                    )
                 ][:4],
                 uncertainties=notebook.uncertainties[:2],
             )
@@ -1324,7 +1424,11 @@ def _build_scholarly_dossier(state: RAGState) -> ScholarlyDossier:
 
 
 def _scholarly_dossier_payload(state: RAGState) -> dict[str, Any]:
-    dossier = state.scholarly_dossier if state.scholarly_dossier.facets else _build_scholarly_dossier(state)
+    dossier = (
+        state.scholarly_dossier
+        if state.scholarly_dossier.facets
+        else _build_scholarly_dossier(state)
+    )
     notebook = _ensure_notebook(state)
     bundle_lookup = {bundle.bundle_id: bundle for bundle in state.evidence_bundles}
     node_lookup = {ev.id: ev for ev in state.all_evidence() if ev.type != "passage"}
@@ -1341,9 +1445,13 @@ def _scholarly_dossier_payload(state: RAGState) -> dict[str, Any]:
             "canonical_ref": bundle.canonical_ref,
             "section_path": bundle.section_path,
             "language": bundle.language,
-            "evidence_class": _bundle_academic_features(bundle, state)["evidence_class"],
+            "evidence_class": _bundle_academic_features(bundle, state)[
+                "evidence_class"
+            ],
             "quote_original_excerpt": _bundle_quote_excerpt(bundle),
-            "quote_translation_excerpt": _bundle_quote_excerpt(bundle, prefer_translation=True),
+            "quote_translation_excerpt": _bundle_quote_excerpt(
+                bundle, prefer_translation=True
+            ),
             "translation_available": bool(bundle.translation_text),
         }
 
@@ -1437,9 +1545,13 @@ def _stage_status(payload: dict[str, Any] | None) -> str:
     return "complete"
 
 
-def _stage_summary(stage_id: str, payload: dict[str, Any] | None, state: RAGState) -> str:
+def _stage_summary(
+    stage_id: str, payload: dict[str, Any] | None, state: RAGState
+) -> str:
     if stage_id == "classify_query":
-        query_type = state.metadata.get("query_type") or getattr(state.query_type, "value", state.query_type)
+        query_type = state.metadata.get("query_type") or getattr(
+            state.query_type, "value", state.query_type
+        )
         confidence = state.metadata.get("classification_confidence")
         mode = payload.get("mode") if payload else None
         conf_text = (
@@ -1448,7 +1560,9 @@ def _stage_summary(stage_id: str, payload: dict[str, Any] | None, state: RAGStat
             else "heuristic confidence"
         )
         if query_type:
-            return f"{query_type} selected with {conf_text}" + (f" via {mode}" if mode else "")
+            return f"{query_type} selected with {conf_text}" + (
+                f" via {mode}" if mode else ""
+            )
         return "Query classification unavailable."
 
     if stage_id == "expand_query":
@@ -1526,15 +1640,23 @@ def _stage_summary(stage_id: str, payload: dict[str, Any] | None, state: RAGStat
     return "Stage completed."
 
 
-def _stage_metrics(stage_id: str, payload: dict[str, Any] | None, state: RAGState) -> list[dict[str, Any]]:
+def _stage_metrics(
+    stage_id: str, payload: dict[str, Any] | None, state: RAGState
+) -> list[dict[str, Any]]:
     if stage_id == "classify_query":
         metrics = [
-            {"label": "Type", "value": state.metadata.get("query_type") or getattr(state.query_type, "value", state.query_type)},
+            {
+                "label": "Type",
+                "value": state.metadata.get("query_type")
+                or getattr(state.query_type, "value", state.query_type),
+            },
             {"label": "Complexity", "value": state.complexity.value},
         ]
         confidence = state.metadata.get("classification_confidence")
         if isinstance(confidence, float | int):
-            metrics.append({"label": "Confidence", "value": f"{round(float(confidence) * 100)}%"})
+            metrics.append(
+                {"label": "Confidence", "value": f"{round(float(confidence) * 100)}%"}
+            )
         if payload and payload.get("mode"):
             metrics.append({"label": "Mode", "value": payload["mode"]})
         return metrics
@@ -1542,7 +1664,10 @@ def _stage_metrics(stage_id: str, payload: dict[str, Any] | None, state: RAGStat
     if stage_id == "expand_query":
         terms = state.expansion_terms
         return [
-            {"label": "Philosophers", "value": len(getattr(terms, "philosophers", []) or [])},
+            {
+                "label": "Philosophers",
+                "value": len(getattr(terms, "philosophers", []) or []),
+            },
             {"label": "Concepts", "value": len(getattr(terms, "concepts", []) or [])},
             {"label": "Schools", "value": len(getattr(terms, "schools", []) or [])},
         ]
@@ -1586,7 +1711,14 @@ def _stage_metrics(stage_id: str, payload: dict[str, Any] | None, state: RAGStat
     elif stage_id == "evidence_bundles":
         metric_pairs = [
             ("Bundles", payload.get("bundle_count", 0)),
-            ("Translations", sum(1 for item in payload.get("bundle_sample", []) if item.get("translation_source"))),
+            (
+                "Translations",
+                sum(
+                    1
+                    for item in payload.get("bundle_sample", [])
+                    if item.get("translation_source")
+                ),
+            ),
         ]
     elif stage_id == "counter_evidence":
         metric_pairs = [
@@ -1606,7 +1738,12 @@ def _stage_metrics(stage_id: str, payload: dict[str, Any] | None, state: RAGStat
             ("Bundles", payload.get("bundle_count", 0)),
             ("Works", payload.get("work_count", 0)),
             ("Facets", payload.get("covered_facets", 0)),
-            ("Score", f"{round(float(score) * 100)}%" if isinstance(score, float | int) else score),
+            (
+                "Score",
+                f"{round(float(score) * 100)}%"
+                if isinstance(score, float | int)
+                else score,
+            ),
         ]
     elif stage_id == "draft_claim_ledger":
         metric_pairs = [
@@ -1623,8 +1760,14 @@ def _stage_metrics(stage_id: str, payload: dict[str, Any] | None, state: RAGStat
     elif stage_id == "programmatic_verify":
         metric_pairs = [("Citations", payload.get("citation_count", 0))]
 
-    tool_count = sum(1 for item in state.research_notebook.tool_calls if item.stage_id == stage_id)
-    decision_count = sum(1 for item in state.research_notebook.reading_decisions if item.stage_id == stage_id)
+    tool_count = sum(
+        1 for item in state.research_notebook.tool_calls if item.stage_id == stage_id
+    )
+    decision_count = sum(
+        1
+        for item in state.research_notebook.reading_decisions
+        if item.stage_id == stage_id
+    )
     if tool_count:
         metric_pairs.append(("Tools", tool_count))
     if decision_count:
@@ -1640,7 +1783,11 @@ def _stage_metrics(stage_id: str, payload: dict[str, Any] | None, state: RAGStat
 def _build_research_graph_payload(state: RAGState) -> dict[str, Any]:
     trace = _trace_bucket(state)
     notebook = state.research_notebook
-    dossier = state.scholarly_dossier if state.scholarly_dossier.facets else _build_scholarly_dossier(state)
+    dossier = (
+        state.scholarly_dossier
+        if state.scholarly_dossier.facets
+        else _build_scholarly_dossier(state)
+    )
     bundle_refs = state.context_pack.bundle_refs
     node_refs = state.context_pack.node_refs
     dossier_by_id = {facet.facet_id: facet for facet in dossier.facets}
@@ -1672,12 +1819,22 @@ def _build_research_graph_payload(state: RAGState) -> dict[str, Any]:
                 "summary": dossier_facet.summary if dossier_facet else "",
                 "required_support": facet.required_support,
                 "priority": facet.priority,
-                "primary_count": len(dossier_facet.primary_bundle_ids) if dossier_facet else 0,
-                "testimony_count": len(dossier_facet.testimony_bundle_ids) if dossier_facet else 0,
-                "counter_count": len(dossier_facet.counter_bundle_ids) if dossier_facet else 0,
-                "metadata_count": len(dossier_facet.metadata_ids) if dossier_facet else 0,
+                "primary_count": len(dossier_facet.primary_bundle_ids)
+                if dossier_facet
+                else 0,
+                "testimony_count": len(dossier_facet.testimony_bundle_ids)
+                if dossier_facet
+                else 0,
+                "counter_count": len(dossier_facet.counter_bundle_ids)
+                if dossier_facet
+                else 0,
+                "metadata_count": len(dossier_facet.metadata_ids)
+                if dossier_facet
+                else 0,
                 "note_count": len(dossier_facet.note_ids) if dossier_facet else 0,
-                "uncertainty_count": len(dossier_facet.uncertainties) if dossier_facet else 0,
+                "uncertainty_count": len(dossier_facet.uncertainties)
+                if dossier_facet
+                else 0,
             }
         )
 
@@ -1688,7 +1845,9 @@ def _build_research_graph_payload(state: RAGState) -> dict[str, Any]:
             work_id,
             {
                 "work_id": work_id,
-                "title": section.get("work_title") or section.get("title") or "Unknown work",
+                "title": section.get("work_title")
+                or section.get("title")
+                or "Unknown work",
                 "author": section.get("author"),
                 "bundle_count": 0,
                 "section_count": 0,
@@ -1765,9 +1924,7 @@ def _build_research_graph_payload(state: RAGState) -> dict[str, Any]:
     claims: list[dict[str, Any]] = []
     for item in state.claim_ledger:
         refs = [
-            bundle_refs[eid]
-            if eid in bundle_refs
-            else node_refs[eid]
+            bundle_refs[eid] if eid in bundle_refs else node_refs[eid]
             for eid in item.evidence_ids
             if eid in bundle_refs or eid in node_refs
         ]
@@ -1778,24 +1935,33 @@ def _build_research_graph_payload(state: RAGState) -> dict[str, Any]:
                 "evidence_class": item.evidence_class,
                 "support_type": item.support_type,
                 "confidence": round(float(item.confidence), 4),
-                "status": item.status.value if hasattr(item.status, "value") else str(item.status),
+                "status": item.status.value
+                if hasattr(item.status, "value")
+                else str(item.status),
                 "evidence_ids": item.evidence_ids,
                 "refs": refs,
-                "quote_original": truncate_text(item.quote_original, 500) if item.quote_original else None,
-                "quote_translation": truncate_text(item.quote_translation, 500) if item.quote_translation else None,
+                "quote_original": truncate_text(item.quote_original, 500)
+                if item.quote_original
+                else None,
+                "quote_translation": truncate_text(item.quote_translation, 500)
+                if item.quote_translation
+                else None,
             }
         )
 
     return {
         "overview": {
-            "query_type": state.metadata.get("query_type") or getattr(state.query_type, "value", state.query_type),
+            "query_type": state.metadata.get("query_type")
+            or getattr(state.query_type, "value", state.query_type),
             "complexity": state.complexity.value,
             "grounding_policy": state.grounding_policy.value,
             "quality_badge": state.quality_badge,
             "pipeline_degraded": bool(state.metadata.get("pipeline_degraded")),
             "claim_ledger_mode": state.metadata.get("claim_ledger_mode", "unknown"),
             "render_answer_mode": state.metadata.get("render_answer_mode", "unknown"),
-            "scholarly_polish_mode": state.metadata.get("scholarly_polish_mode", "skipped"),
+            "scholarly_polish_mode": state.metadata.get(
+                "scholarly_polish_mode", "skipped"
+            ),
             "seed_node_count": len(state.seed_node_ids),
             "context_node_count": len(state.context_node_ids),
             "bundle_count": len(state.evidence_bundles),
@@ -1898,7 +2064,9 @@ def _bundle_query_score(bundle: EvidenceBundle, state: RAGState) -> int:
             bundle.section_path,
             bundle.canonical_ref,
             truncate_text(bundle.original_text, 1200),
-            truncate_text(bundle.translation_text, 1200) if bundle.translation_text else "",
+            truncate_text(bundle.translation_text, 1200)
+            if bundle.translation_text
+            else "",
         )
         if part
     ).lower()
@@ -1925,9 +2093,13 @@ def _bundle_query_score(bundle: EvidenceBundle, state: RAGState) -> int:
 
     ref_bonus = 0
     for ref_number in _question_reference_numbers(state):
-        if bundle.canonical_ref and re.search(rf"\b{re.escape(ref_number)}\b", bundle.canonical_ref):
+        if bundle.canonical_ref and re.search(
+            rf"\b{re.escape(ref_number)}\b", bundle.canonical_ref
+        ):
             ref_bonus += 50 if _question_requests_quote(state) else 25
-        elif bundle.section_path and re.search(rf"\b{re.escape(ref_number)}\b", bundle.section_path):
+        elif bundle.section_path and re.search(
+            rf"\b{re.escape(ref_number)}\b", bundle.section_path
+        ):
             ref_bonus += 20
 
     features = _bundle_academic_features(bundle, state)
@@ -2073,7 +2245,9 @@ def _default_expansion(question: str) -> ExpansionTerms:
     )
 
 
-def _merge_expansion_terms(primary: ExpansionTerms, fallback: ExpansionTerms) -> ExpansionTerms:
+def _merge_expansion_terms(
+    primary: ExpansionTerms, fallback: ExpansionTerms
+) -> ExpansionTerms:
     def _merge_str_lists(*values: list[str]) -> list[str]:
         merged: list[str] = []
         seen: set[str] = set()
@@ -2092,9 +2266,13 @@ def _merge_expansion_terms(primary: ExpansionTerms, fallback: ExpansionTerms) ->
         for value_list in values:
             for item in value_list:
                 if isinstance(item, dict):
-                    key = tuple(str(item.get(part, "")).strip().lower() for part in keys)
+                    key = tuple(
+                        str(item.get(part, "")).strip().lower() for part in keys
+                    )
                 else:
-                    key = tuple(str(getattr(item, part, "")).strip().lower() for part in keys)
+                    key = tuple(
+                        str(getattr(item, part, "")).strip().lower() for part in keys
+                    )
                 if not any(key):
                     continue
                 if key in seen:
@@ -2105,8 +2283,12 @@ def _merge_expansion_terms(primary: ExpansionTerms, fallback: ExpansionTerms) ->
 
     return ExpansionTerms(
         expanded_query=primary.expanded_query or fallback.expanded_query,
-        greek_terms=_merge_model_lists(primary.greek_terms, fallback.greek_terms, keys=("greek", "transliteration"))[:8],
-        latin_terms=_merge_model_lists(primary.latin_terms, fallback.latin_terms, keys=("latin",))[:8],
+        greek_terms=_merge_model_lists(
+            primary.greek_terms, fallback.greek_terms, keys=("greek", "transliteration")
+        )[:8],
+        latin_terms=_merge_model_lists(
+            primary.latin_terms, fallback.latin_terms, keys=("latin",)
+        )[:8],
         philosophers=_merge_str_lists(primary.philosophers, fallback.philosophers)[:8],
         concepts=_merge_str_lists(primary.concepts, fallback.concepts)[:8],
         schools=_merge_str_lists(primary.schools, fallback.schools)[:5],
@@ -2138,7 +2320,10 @@ def _search_queries(state: RAGState) -> list[str]:
 
 
 def _should_minimize_llm_calls(state: RAGState) -> bool:
-    return state.query_type == QueryType.SPECIFIC_ENTITY or state.complexity == QueryComplexity.SIMPLE
+    return (
+        state.query_type == QueryType.SPECIFIC_ENTITY
+        or state.complexity == QueryComplexity.SIMPLE
+    )
 
 
 async def _get_embedding(_deps: Deps, text: str) -> list[float]:
@@ -2248,10 +2433,16 @@ def _candidate_work_titles(state: RAGState) -> list[str]:
             score += 18
 
         if title:
-            score += _overlap_score(title, ev.author, ev.description, ev.text_content) * 12
+            score += (
+                _overlap_score(title, ev.author, ev.description, ev.text_content) * 12
+            )
             if ev.author and any(hint in ev.author.lower() for hint in author_hints):
                 score += 18
-            if ev.school and school_hints and any(hint in ev.school.lower() for hint in school_hints):
+            if (
+                ev.school
+                and school_hints
+                and any(hint in ev.school.lower() for hint in school_hints)
+            ):
                 score += 14
             elif school_hints and ev.author and ev.type == "passage":
                 score -= 6
@@ -2268,7 +2459,9 @@ def _candidate_work_titles(state: RAGState) -> list[str]:
         score = 6 + _overlap_score(title) * 8
         _ingest(title, score)
 
-    ordered = sorted(scored_titles.values(), key=lambda item: (-item[1], item[0].lower()))
+    ordered = sorted(
+        scored_titles.values(), key=lambda item: (-item[1], item[0].lower())
+    )
     return [title for title, _ in ordered]
 
 
@@ -2347,7 +2540,9 @@ async def _fetch_translation_for_passage(
 
     def _translation_priority(node_id: str) -> tuple[int, str]:
         node = deps.node_lookup.get(node_id, {})
-        metadata = node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
+        metadata = (
+            node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
+        )
         language = str(metadata.get("language") or node.get("language") or "").lower()
         label = str(node.get("label") or "").lower()
         score = 0
@@ -2396,7 +2591,9 @@ async def _fetch_translation_for_passage(
         text = node.get("description")
         if not text:
             continue
-        metadata = node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
+        metadata = (
+            node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
+        )
         return {
             "passage_id": None,
             "kg_node_id": node_id,
@@ -2423,7 +2620,7 @@ async def _batch_fetch_translations(
     ``_fetch_translation_for_passage`` output) or ``None``.
     """
     if not passage_ids or (not deps.outgoing_edges and not deps.incoming_edges):
-        return {pid: None for pid in passage_ids}
+        return dict.fromkeys(passage_ids)
 
     # --- Step 1: one query to get KG node IDs for ALL passages ---
     placeholders = ", ".join(f"${i + 1}" for i in range(len(passage_ids)))
@@ -2445,7 +2642,9 @@ async def _batch_fetch_translations(
     # --- Step 2: in-memory edge traversal (no DB needed) ---
     def _translation_priority(node_id: str) -> tuple[int, str]:
         node = deps.node_lookup.get(node_id, {})
-        metadata = node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
+        metadata = (
+            node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
+        )
         language = str(metadata.get("language") or node.get("language") or "").lower()
         label = str(node.get("label") or "").lower()
         score = 0
@@ -2544,7 +2743,9 @@ async def _batch_fetch_translations(
             text = node.get("description")
             if not text:
                 continue
-            metadata = node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
+            metadata = (
+                node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
+            )
             fallback = {
                 "passage_id": None,
                 "kg_node_id": t_node_id,
@@ -2579,7 +2780,9 @@ def _bundle_from_passage_evidence(ev: Evidence) -> EvidenceBundle:
         evidence_role="primary_support",
         source=ev.source,
         metadata={
-            "sequence_number": ev.metadata.get("sequence_number") if isinstance(ev.metadata, dict) else None,
+            "sequence_number": ev.metadata.get("sequence_number")
+            if isinstance(ev.metadata, dict)
+            else None,
             "retrieval_confidence": ev.confidence,
         },
     )
@@ -2606,7 +2809,9 @@ async def _supplemental_passage_bundles(
             and (ev.text_content or ev.description)
         )
     ]
-    candidates = [bundle for bundle in candidates if bundle.bundle_id not in seen_bundle_ids]
+    candidates = [
+        bundle for bundle in candidates if bundle.bundle_id not in seen_bundle_ids
+    ]
     if not candidates:
         return []
 
@@ -2615,7 +2820,9 @@ async def _supplemental_passage_bundles(
     selected = candidates[:target]
     for bundle in selected:
         if bundle.language in {"grc", "lat"}:
-            translation = await _fetch_translation_for_passage(ctx.deps, bundle.original_passage_id)
+            translation = await _fetch_translation_for_passage(
+                ctx.deps, bundle.original_passage_id
+            )
             if translation and translation.get("text_content"):
                 bundle.translation_text = translation.get("text_content")
                 bundle.translation_passage_id = (
@@ -2624,7 +2831,11 @@ async def _supplemental_passage_bundles(
                     else None
                 )
                 bundle.token_estimate = RetrievalBudget.estimate_tokens(
-                    "\n".join(part for part in (bundle.original_text, bundle.translation_text) if part)
+                    "\n".join(
+                        part
+                        for part in (bundle.original_text, bundle.translation_text)
+                        if part
+                    )
                 )
                 bundle.metadata["translation_available"] = True
                 bundle.metadata["translation_source"] = translation.get("source")
@@ -2662,7 +2873,9 @@ def _bundle_prompt_dict(bundle: EvidenceBundle, ref: str) -> dict[str, Any]:
 def _claim_ledger_catalog(state: RAGState) -> dict[str, Any]:
     """Compact evidence catalog used to keep claim-ledger IDs stable."""
     pack = state.context_pack
-    non_passage = {item.id: item for item in state.all_evidence() if item.type != "passage"}
+    non_passage = {
+        item.id: item for item in state.all_evidence() if item.type != "passage"
+    }
     bundle_entries = [
         {
             "ref": pack.bundle_refs.get(bundle.bundle_id, bundle.bundle_id),
@@ -2819,7 +3032,9 @@ def _resolve_claim_evidence_ids(
         if token in node_aliases:
             resolved.append(node_aliases[token])
             continue
-        fuzzy_candidates = node_aliases if preferred_support == "metadata" else bundle_aliases
+        fuzzy_candidates = (
+            node_aliases if preferred_support == "metadata" else bundle_aliases
+        )
         fuzzy_match = _fuzzy_resolve_evidence_id(token, candidates=fuzzy_candidates)
         if not fuzzy_match and preferred_support == "passage":
             fuzzy_match = _fuzzy_resolve_evidence_id(token, candidates=node_aliases)
@@ -2862,7 +3077,10 @@ def _build_context_pack(state: RAGState) -> ContextPack:
     ):
         line = f"[{node_idx}] {_compact_node_line(ev)}"
         line_tokens = budget.estimate_tokens(line)
-        if sum(budget.estimate_tokens(item) for item in pack.kg_metadata) + line_tokens > kg_budget:
+        if (
+            sum(budget.estimate_tokens(item) for item in pack.kg_metadata) + line_tokens
+            > kg_budget
+        ):
             continue
         pack.kg_metadata.append(line)
         pack.node_refs[ev.id] = str(node_idx)
@@ -2873,7 +3091,11 @@ def _build_context_pack(state: RAGState) -> ContextPack:
     for section in selected_sections:
         line = _section_line(section)
         line_tokens = budget.estimate_tokens(line)
-        if sum(budget.estimate_tokens(item) for item in pack.section_summaries) + line_tokens > section_budget:
+        if (
+            sum(budget.estimate_tokens(item) for item in pack.section_summaries)
+            + line_tokens
+            > section_budget
+        ):
             continue
         pack.section_summaries.append(line)
 
@@ -2886,9 +3108,7 @@ def _build_context_pack(state: RAGState) -> ContextPack:
         reverse=True,
     )
     if any(score_tuple[0] > 0 for score_tuple, _ in scored_bundles):
-        scored_bundles = [
-            item for item in scored_bundles if item[0][0] > 0
-        ]
+        scored_bundles = [item for item in scored_bundles if item[0][0] > 0]
     prioritized_pairs: list[tuple[tuple[int, int, int], EvidenceBundle]] = []
     overflow_pairs: list[tuple[tuple[int, int, int], EvidenceBundle]] = []
     work_counts: dict[str, int] = {}
@@ -2926,7 +3146,9 @@ def _build_context_pack(state: RAGState) -> ContextPack:
                 f'Original: "{truncate_text(bundle.original_text, 1600)}"',
             ]
             if bundle.translation_text:
-                lines.append(f'Translation: "{truncate_text(bundle.translation_text, 1600)}"')
+                lines.append(
+                    f'Translation: "{truncate_text(bundle.translation_text, 1600)}"'
+                )
             bundle_lines.append("\n".join(lines))
         parts.append("## Evidence Bundles\n" + "\n\n".join(bundle_lines))
 
@@ -2940,13 +3162,17 @@ def _build_context_pack(state: RAGState) -> ContextPack:
             "section_summary_count": len(pack.section_summaries),
             "passage_bundle_count": len(pack.passage_bundles),
             "token_estimate": pack.token_estimate,
-            "top_bundle_rankings": _top_bundle_debug_entries(scored_bundles, pack.bundle_refs, state),
+            "top_bundle_rankings": _top_bundle_debug_entries(
+                scored_bundles, pack.bundle_refs, state
+            ),
         },
     )
     return pack
 
 
-def _reverse_ref_maps(state: RAGState) -> tuple[dict[str, EvidenceBundle], dict[str, Evidence]]:
+def _reverse_ref_maps(
+    state: RAGState,
+) -> tuple[dict[str, EvidenceBundle], dict[str, Evidence]]:
     bundle_index = {b.bundle_id: b for b in state.context_pack.passage_bundles}
     bundles_by_ref = {
         ref: bundle_index[bundle_id]
@@ -3005,7 +3231,8 @@ def _render_answer_fallback(state: RAGState) -> str:
     supported_claims = [
         item
         for item in state.claim_ledger
-        if item.status == ClaimStatus.SUPPORTED and _claim_reference_markers(state, item)
+        if item.status == ClaimStatus.SUPPORTED
+        and _claim_reference_markers(state, item)
     ]
     if supported_claims:
         intro_item = supported_claims[0]
@@ -3045,11 +3272,19 @@ def _render_answer_fallback(state: RAGState) -> str:
                 refs = _claim_reference_markers(state, quote_item)
                 if refs:
                     if quote_item.quote_original:
-                        lines.append(f'> Original: "{quote_item.quote_original}" {" ".join(refs)}')
+                        lines.append(
+                            f'> Original: "{quote_item.quote_original}" {" ".join(refs)}'
+                        )
                     if quote_item.quote_translation:
-                        lines.append(f'> Translation: "{quote_item.quote_translation}" {" ".join(refs)}')
+                        lines.append(
+                            f'> Translation: "{quote_item.quote_translation}" {" ".join(refs)}'
+                        )
         if state.scholarly_dossier.insufficiency_notes:
-            note_refs = _claim_reference_markers(state, supported_claims[0]) if supported_claims else []
+            note_refs = (
+                _claim_reference_markers(state, supported_claims[0])
+                if supported_claims
+                else []
+            )
             if note_refs:
                 if lines and lines[-1] != "":
                     lines.append("")
@@ -3063,9 +3298,7 @@ def _render_answer_fallback(state: RAGState) -> str:
                 continue
             lines.append(f"{item.claim.rstrip('.')} {' '.join(refs)}")
             if item.quote_original:
-                lines.append(
-                    f'> Original: "{item.quote_original}" {" ".join(refs)}'
-                )
+                lines.append(f'> Original: "{item.quote_original}" {" ".join(refs)}')
             if item.quote_translation:
                 lines.append(
                     f'> Translation: "{item.quote_translation}" {" ".join(refs)}'
@@ -3097,8 +3330,16 @@ def _update_insufficiency_flags_from_claims(state: RAGState) -> None:
         and item.evidence_ids
         for item in claims
     )
-    quote_request = _question_requests_quote(state) or _question_requests_original(state) or _question_requests_translation(state)
-    insufficient = state.insufficient_evidence or all_insufficient or (quote_request and not supported_passage_claim)
+    quote_request = (
+        _question_requests_quote(state)
+        or _question_requests_original(state)
+        or _question_requests_translation(state)
+    )
+    insufficient = (
+        state.insufficient_evidence
+        or all_insufficient
+        or (quote_request and not supported_passage_claim)
+    )
     state.insufficient_evidence = insufficient
     if insufficient:
         state.metadata["insufficient_evidence"] = True
@@ -3108,10 +3349,10 @@ def _render_evidence_packet(state: RAGState) -> list[dict[str, Any]]:
     """Compact selected evidence for the final prose pass."""
     packet: list[dict[str, Any]] = []
     seen: set[str] = set()
-    evidence_by_id = {
-        ev.id: ev for ev in state.all_evidence() if ev.type != "passage"
+    evidence_by_id = {ev.id: ev for ev in state.all_evidence() if ev.type != "passage"}
+    bundles_by_id = {
+        bundle.bundle_id: bundle for bundle in state.context_pack.passage_bundles
     }
-    bundles_by_id = {bundle.bundle_id: bundle for bundle in state.context_pack.passage_bundles}
 
     dossier_order = [
         *state.scholarly_dossier.primary_bundle_ids,
@@ -3130,7 +3371,9 @@ def _render_evidence_packet(state: RAGState) -> list[dict[str, Any]]:
                     "evidence_id": evidence_id,
                     "ref": state.context_pack.bundle_refs.get(evidence_id),
                     "type": "passage",
-                    "evidence_class": _bundle_academic_features(bundle, state)["evidence_class"],
+                    "evidence_class": _bundle_academic_features(bundle, state)[
+                        "evidence_class"
+                    ],
                     "label": _bundle_label(bundle),
                     "canonical_ref": bundle.canonical_ref,
                     "section_path": bundle.section_path,
@@ -3148,7 +3391,9 @@ def _render_evidence_packet(state: RAGState) -> list[dict[str, Any]]:
                     "ref": state.context_pack.node_refs.get(evidence_id),
                     "type": "metadata",
                     "label": ev.label,
-                    "description": truncate_text(ev.description or ev.text_content or "", 420),
+                    "description": truncate_text(
+                        ev.description or ev.text_content or "", 420
+                    ),
                     "period": ev.period,
                     "school": ev.school,
                 }
@@ -3184,7 +3429,9 @@ def _render_evidence_packet(state: RAGState) -> list[dict[str, Any]]:
                         "ref": state.context_pack.node_refs.get(evidence_id),
                         "type": "metadata",
                         "label": ev.label,
-                        "description": truncate_text(ev.description or ev.text_content or "", 420),
+                        "description": truncate_text(
+                            ev.description or ev.text_content or "", 420
+                        ),
                         "period": ev.period,
                         "school": ev.school,
                     }
@@ -3194,7 +3441,11 @@ def _render_evidence_packet(state: RAGState) -> list[dict[str, Any]]:
 
 def _select_direct_quote_bundle(state: RAGState) -> EvidenceBundle | None:
     """Pick the best exact bundle for philological quote requests."""
-    if not (_question_requests_quote(state) or _question_requests_original(state) or _question_requests_translation(state)):
+    if not (
+        _question_requests_quote(state)
+        or _question_requests_original(state)
+        or _question_requests_translation(state)
+    ):
         return None
 
     ref_numbers = _question_reference_numbers(state)
@@ -3207,7 +3458,11 @@ def _select_direct_quote_bundle(state: RAGState) -> EvidenceBundle | None:
             for number in ref_numbers
         ):
             score += 100
-        label_haystack = " ".join(part for part in (bundle.author, bundle.work_title, bundle.canonical_ref) if part).lower()
+        label_haystack = " ".join(
+            part
+            for part in (bundle.author, bundle.work_title, bundle.canonical_ref)
+            if part
+        ).lower()
         score += sum(10 for term in terms if term in label_haystack)
         if _question_requests_original(state) and bundle.original_text:
             score += 20
@@ -3227,7 +3482,9 @@ def _select_direct_quote_bundle(state: RAGState) -> EvidenceBundle | None:
     return best
 
 
-def _heuristic_claim_ledger_acceptable(state: RAGState, claims: list[ClaimLedgerItem]) -> bool:
+def _heuristic_claim_ledger_acceptable(
+    state: RAGState, claims: list[ClaimLedgerItem]
+) -> bool:
     """Treat the deterministic ledger as first-class when it covers the question well."""
     if _question_requests_quote(state):
         return False
@@ -3238,14 +3495,22 @@ def _heuristic_claim_ledger_acceptable(state: RAGState, claims: list[ClaimLedger
         for item in claims
         if item.facet_id and item.status == ClaimStatus.SUPPORTED and item.evidence_ids
     }
-    has_metadata = any(item.support_type == "metadata" and item.evidence_ids for item in claims)
-    has_passage = any(item.support_type == "passage" and item.evidence_ids for item in claims)
+    has_metadata = any(
+        item.support_type == "metadata" and item.evidence_ids for item in claims
+    )
+    has_passage = any(
+        item.support_type == "passage" and item.evidence_ids for item in claims
+    )
     if state.query_type == QueryType.SPECIFIC_ENTITY:
         return has_metadata and has_passage
-    return has_passage and (has_metadata or len(covered_facets) >= 2 or len(claims) >= 6)
+    return has_passage and (
+        has_metadata or len(covered_facets) >= 2 or len(claims) >= 6
+    )
 
 
-def _dedupe_claims(claims: list[ClaimLedgerItem], *, limit: int = 18) -> list[ClaimLedgerItem]:
+def _dedupe_claims(
+    claims: list[ClaimLedgerItem], *, limit: int = 18
+) -> list[ClaimLedgerItem]:
     deduped: list[ClaimLedgerItem] = []
     seen_signatures: set[tuple[str, tuple[str, ...]]] = set()
     for item in claims:
@@ -3260,7 +3525,11 @@ def _dedupe_claims(claims: list[ClaimLedgerItem], *, limit: int = 18) -> list[Cl
 
 
 def _supported_dossier_facets(state: RAGState) -> list[DossierFacet]:
-    dossier = state.scholarly_dossier if state.scholarly_dossier.facets else _build_scholarly_dossier(state)
+    dossier = (
+        state.scholarly_dossier
+        if state.scholarly_dossier.facets
+        else _build_scholarly_dossier(state)
+    )
     return [
         facet
         for facet in dossier.facets
@@ -3318,7 +3587,10 @@ def _answer_is_too_compressed(state: RAGState, answer: str) -> bool:
     metrics = _answer_shape_metrics(answer)
     if metrics["chars"] < requirements["min_chars"]:
         return True
-    if requirements["required_sections"] and metrics["section_headers"] < requirements["required_sections"]:
+    if (
+        requirements["required_sections"]
+        and metrics["section_headers"] < requirements["required_sections"]
+    ):
         return True
     return bool(
         requirements["required_quote_blocks"]
@@ -3342,19 +3614,24 @@ def _augment_claim_ledger_from_dossier(
     }
     required_facets = [facet.facet_id for facet in _supported_dossier_facets(state)]
     quote_claims = sum(
-        1
-        for item in augmented
-        if item.quote_original or item.quote_translation
+        1 for item in augmented if item.quote_original or item.quote_translation
     )
     required_quotes = _render_requirements(state)["required_quote_blocks"]
     target_claim_count = min(10, max(4, len(required_facets) * 2))
 
     for item in fallback_claims:
-        needs_facet = bool(item.facet_id and item.facet_id in required_facets and item.facet_id not in supported_facets)
-        needs_quote = bool(
-            quote_claims < required_quotes and (item.quote_original or item.quote_translation)
+        needs_facet = bool(
+            item.facet_id
+            and item.facet_id in required_facets
+            and item.facet_id not in supported_facets
         )
-        needs_density = len(augmented) < target_claim_count and item.support_type == "passage"
+        needs_quote = bool(
+            quote_claims < required_quotes
+            and (item.quote_original or item.quote_translation)
+        )
+        needs_density = (
+            len(augmented) < target_claim_count and item.support_type == "passage"
+        )
         if not (needs_facet or needs_quote or needs_density):
             continue
         augmented.append(item)
@@ -3374,7 +3651,11 @@ def _augment_claim_ledger_from_dossier(
 
 def _derive_claim_ledger_fallback(state: RAGState) -> list[ClaimLedgerItem]:
     """Create a conservative ledger when structured drafting fails."""
-    dossier = state.scholarly_dossier if state.scholarly_dossier.facets else _build_scholarly_dossier(state)
+    dossier = (
+        state.scholarly_dossier
+        if state.scholarly_dossier.facets
+        else _build_scholarly_dossier(state)
+    )
     claims: list[ClaimLedgerItem] = []
     ranked_nodes = sorted(
         [item for item in state.all_evidence() if item.type != "passage"],
@@ -3400,7 +3681,9 @@ def _derive_claim_ledger_fallback(state: RAGState) -> list[ClaimLedgerItem]:
                     evidence_class="metadata",
                     support_type="metadata",
                     confidence=0.6,
-                    status=ClaimStatus.SUPPORTED if summary else ClaimStatus.INSUFFICIENT,
+                    status=ClaimStatus.SUPPORTED
+                    if summary
+                    else ClaimStatus.INSUFFICIENT,
                 )
             )
 
@@ -3428,28 +3711,56 @@ def _derive_claim_ledger_fallback(state: RAGState) -> list[ClaimLedgerItem]:
         node_lookup = {ev.id: ev for ev in ranked_nodes}
         for facet in dossier.facets:
             primary_bundle = next(
-                (bundle_lookup[bundle_id] for bundle_id in facet.primary_bundle_ids if bundle_id in bundle_lookup),
+                (
+                    bundle_lookup[bundle_id]
+                    for bundle_id in facet.primary_bundle_ids
+                    if bundle_id in bundle_lookup
+                ),
                 None,
             )
             testimony_bundle = next(
-                (bundle_lookup[bundle_id] for bundle_id in facet.testimony_bundle_ids if bundle_id in bundle_lookup),
+                (
+                    bundle_lookup[bundle_id]
+                    for bundle_id in facet.testimony_bundle_ids
+                    if bundle_id in bundle_lookup
+                ),
                 None,
             )
             counter_bundle = next(
-                (bundle_lookup[bundle_id] for bundle_id in facet.counter_bundle_ids if bundle_id in bundle_lookup),
+                (
+                    bundle_lookup[bundle_id]
+                    for bundle_id in facet.counter_bundle_ids
+                    if bundle_id in bundle_lookup
+                ),
                 None,
             )
             metadata_node = next(
-                (node_lookup[node_id] for node_id in facet.metadata_ids if node_id in node_lookup),
+                (
+                    node_lookup[node_id]
+                    for node_id in facet.metadata_ids
+                    if node_id in node_lookup
+                ),
                 None,
             )
             lead_bundle = primary_bundle or testimony_bundle or counter_bundle
             evidence_ids = list(
                 dict.fromkeys(
                     [
-                        *(facet.primary_bundle_ids[:2] if facet.primary_bundle_ids else []),
-                        *(facet.testimony_bundle_ids[:2] if facet.testimony_bundle_ids else []),
-                        *(facet.counter_bundle_ids[:1] if facet.counter_bundle_ids else []),
+                        *(
+                            facet.primary_bundle_ids[:2]
+                            if facet.primary_bundle_ids
+                            else []
+                        ),
+                        *(
+                            facet.testimony_bundle_ids[:2]
+                            if facet.testimony_bundle_ids
+                            else []
+                        ),
+                        *(
+                            facet.counter_bundle_ids[:1]
+                            if facet.counter_bundle_ids
+                            else []
+                        ),
                         *(facet.metadata_ids[:1] if facet.metadata_ids else []),
                     ]
                 )
@@ -3474,7 +3785,9 @@ def _derive_claim_ledger_fallback(state: RAGState) -> list[ClaimLedgerItem]:
                     f"{_bundle_label(testimony_bundle)}."
                 )
             elif metadata_node is not None:
-                summary = truncate_text(metadata_node.description or _compact_node_line(metadata_node), 220)
+                summary = truncate_text(
+                    metadata_node.description or _compact_node_line(metadata_node), 220
+                )
                 claim_text = f"{facet.title}: {metadata_node.label} frames the issue as {summary}."
             else:
                 continue
@@ -3514,7 +3827,9 @@ def _derive_claim_ledger_fallback(state: RAGState) -> list[ClaimLedgerItem]:
                             ),
                             evidence_ids=[lead_bundle.bundle_id],
                             facet_id=facet.facet_id,
-                            evidence_class=_bundle_academic_features(lead_bundle, state)["evidence_class"],
+                            evidence_class=_bundle_academic_features(
+                                lead_bundle, state
+                            )["evidence_class"],
                             quote_original=quote_original,
                             quote_translation=quote_translation,
                             support_type="passage",
@@ -3551,7 +3866,9 @@ def _derive_claim_ledger_fallback(state: RAGState) -> list[ClaimLedgerItem]:
                 ClaimLedgerItem(
                     claim=claim,
                     evidence_ids=[bundle.bundle_id],
-                    evidence_class=_bundle_academic_features(bundle, state)["evidence_class"],
+                    evidence_class=_bundle_academic_features(bundle, state)[
+                        "evidence_class"
+                    ],
                     quote_original=truncate_text(bundle.original_text, 240),
                     quote_translation=truncate_text(bundle.translation_text, 240)
                     if bundle.translation_text
@@ -3573,14 +3890,16 @@ def _derive_claim_ledger_fallback(state: RAGState) -> list[ClaimLedgerItem]:
                     evidence_class="metadata",
                     support_type="metadata",
                     confidence=0.45,
-                    status=ClaimStatus.INSUFFICIENT if state.insufficient_evidence else ClaimStatus.SUPPORTED,
+                    status=ClaimStatus.INSUFFICIENT
+                    if state.insufficient_evidence
+                    else ClaimStatus.SUPPORTED,
                 )
             )
     return _dedupe_claims(claims, limit=12)
 
 
 def _normalize_quote_text(text: str) -> str:
-    return re.sub(r"\s+", " ", text.strip().strip("\"“”")).lower()
+    return re.sub(r"\s+", " ", text.strip().strip('"“”')).lower()
 
 
 def _extract_line_refs(line: str) -> list[str]:
@@ -3670,7 +3989,13 @@ def _sanitize_line_quotes(
 
     sanitized = re.sub(r"\s{2,}", " ", sanitized).strip()
     if unsupported_found and sanitized.lower().startswith(
-        ("original:", "translation:", "greek original:", "english translation:", "latin original:")
+        (
+            "original:",
+            "translation:",
+            "greek original:",
+            "english translation:",
+            "latin original:",
+        )
     ):
         return None
     return sanitized or None
@@ -3685,7 +4010,9 @@ def _is_section_header(line: str) -> bool:
     return len(stripped) <= 80 and stripped.endswith(":") and stripped.count(" ") <= 8
 
 
-def _verify_answer_programmatically(state: RAGState, _depth: int = 0) -> tuple[str, list[Citation]]:
+def _verify_answer_programmatically(
+    state: RAGState, _depth: int = 0
+) -> tuple[str, list[Citation]]:
     """Keep only grounded lines and emit citations for the surviving refs."""
     bundles_by_ref, nodes_by_ref = _reverse_ref_maps(state)
     valid_refs = set(bundles_by_ref) | set(nodes_by_ref)
@@ -3761,7 +4088,9 @@ def _verify_answer_programmatically(state: RAGState, _depth: int = 0) -> tuple[s
         valid_line_refs = [ref for ref in refs if ref in valid_refs]
         if not valid_line_refs:
             continue
-        line = _sanitize_line_quotes(line, valid_line_refs, bundles_by_ref, nodes_by_ref)
+        line = _sanitize_line_quotes(
+            line, valid_line_refs, bundles_by_ref, nodes_by_ref
+        )
         if not line:
             continue
         line = _normalize_reference_markers(line, valid_line_refs)
@@ -3936,7 +4265,10 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
                 valid_anchors.append(node_id)
 
         seed_ids = valid_seeds
-        passage_anchor_ids = valid_anchors or [a for a in passage_anchor_ids if a in ctx.deps.node_lookup][:12]
+        passage_anchor_ids = (
+            valid_anchors
+            or [a for a in passage_anchor_ids if a in ctx.deps.node_lookup][:12]
+        )
 
         state.seed_node_ids = list(dict.fromkeys(state.seed_node_ids + seed_ids))
         state.metadata["passage_anchor_ids"] = passage_anchor_ids
@@ -3970,7 +4302,9 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
         for query in queries:
             try:
                 embedding = await _get_embedding(ctx.deps, query)
-                hits = await ctx.deps.qdrant.search_nodes(embedding, limit=limit_per_query)
+                hits = await ctx.deps.qdrant.search_nodes(
+                    embedding, limit=limit_per_query
+                )
             except Exception:
                 logger.warning("Corpus discovery failed for query %s", query)
                 continue
@@ -3983,7 +4317,9 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
                 if best is None or hit.get("score", 0.0) > best.get("score", 0.0):
                     hit_map[node_id] = hit
 
-        ordered_hits = sorted(hit_map.values(), key=lambda item: item.get("score", 0.0), reverse=True)
+        ordered_hits = sorted(
+            hit_map.values(), key=lambda item: item.get("score", 0.0), reverse=True
+        )
         trace_payload["semantic_hits"] = [
             {
                 "id": str(hit.get("id")),
@@ -3999,7 +4335,9 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
             stage_id="discover_corpus",
             query=" | ".join(queries[:4]),
             rationale="semantic discovery over KG nodes",
-            selected_ids=[str(hit.get("id")) for hit in ordered_hits[:12] if hit.get("id")],
+            selected_ids=[
+                str(hit.get("id")) for hit in ordered_hits[:12] if hit.get("id")
+            ],
             details={
                 "queries": queries[:8],
                 "hit_count": len(ordered_hits),
@@ -4125,7 +4463,11 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
         tool_name="read_linked_passages",
         stage_id="discover_corpus",
         rationale="fetch passages linked to the strongest anchor nodes",
-        selected_ids=[str(row.get("passage_id")) for row in linked_passages[:16] if row.get("passage_id")],
+        selected_ids=[
+            str(row.get("passage_id"))
+            for row in linked_passages[:16]
+            if row.get("passage_id")
+        ],
         details={
             "anchor_ids": passage_anchor_ids[:12],
             "linked_count": len(linked_passages),
@@ -4156,7 +4498,9 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
         )
         existing.add(pid)
 
-    state.passages_used = len([ev for ev in state.primary_evidence if ev.type == "passage"])
+    state.passages_used = len(
+        [ev for ev in state.primary_evidence if ev.type == "passage"]
+    )
     state.accumulated_context = _build_context_from_evidence(state.all_evidence())
     trace_payload["linked_passages"] = [
         {
@@ -4242,29 +4586,35 @@ def _record_reading_decision(
     )
 
 
-def _selected_section_summary(node: Any, work_id: str, parent_path: str = "") -> list[dict[str, Any]]:
+def _selected_section_summary(
+    node: Any, work_id: str, parent_path: str = ""
+) -> list[dict[str, Any]]:
     """Flatten a tree node recursively into section summary dicts."""
     current_path = f"{parent_path} > {node.title}" if parent_path else node.title
-    result = [{
-        "work_id": work_id,
-        "node_id": node.node_id,
-        "title": node.title,
-        "path": getattr(node, "path", None) or current_path,
-        "summary": node.summary,
-        "abstract": getattr(node, "abstract", None) or node.summary,
-        "canonical_refs": getattr(node, "canonical_refs", []) or [],
-        "translation_available": getattr(node, "translation_available", False),
-        "quote_density": getattr(node, "quote_density", 0.0),
-        "token_estimate": getattr(node, "token_estimate", 0),
-        "start_passage": node.start_passage,
-        "end_passage": node.end_passage,
-    }]
+    result = [
+        {
+            "work_id": work_id,
+            "node_id": node.node_id,
+            "title": node.title,
+            "path": getattr(node, "path", None) or current_path,
+            "summary": node.summary,
+            "abstract": getattr(node, "abstract", None) or node.summary,
+            "canonical_refs": getattr(node, "canonical_refs", []) or [],
+            "translation_available": getattr(node, "translation_available", False),
+            "quote_density": getattr(node, "quote_density", 0.0),
+            "token_estimate": getattr(node, "token_estimate", 0),
+            "start_passage": node.start_passage,
+            "end_passage": node.end_passage,
+        }
+    ]
     for child in node.nodes:
         result.extend(_selected_section_summary(child, work_id, current_path))
     return result
 
 
-def _heuristic_select_sections(question: str, sections: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _heuristic_select_sections(
+    question: str, sections: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
     query_terms = {
         token
         for token in re.findall(r"[A-Za-zÀ-ÿἀ-῾]+", question.lower())
@@ -4329,19 +4679,30 @@ async def _navigate_sections_with_llm(
         _dur = int((_time.time() - _t0) * 1000)
         parsed = TreeNavigationResult.model_validate(_parse_json(raw))
         selected_ids = {item.node_id for item in parsed.selected_nodes}
-        selected = [section for section in sections if section["node_id"] in selected_ids]
+        selected = [
+            section for section in sections if section["node_id"] in selected_ids
+        ]
         _append_reasoning_step(
-            state, "TreeNavigateWorks",
+            state,
+            "TreeNavigateWorks",
             ctx.deps.llm.last_model_used or state.selected_model,
-            prompt[:200], len(prompt) // 4, raw,
+            prompt[:200],
+            len(prompt) // 4,
+            raw,
             duration_ms=_dur,
             parsed_result={"work_id": work_id, "selected_count": len(selected)},
         )
         return selected or _heuristic_select_sections(question, sections)
     except Exception:
         _append_reasoning_step(
-            state, "TreeNavigateWorks", None, prompt[:200], len(prompt) // 4, "",
-            skipped=True, skip_reason=f"LLM call failed for work {work_id}, heuristic fallback",
+            state,
+            "TreeNavigateWorks",
+            None,
+            prompt[:200],
+            len(prompt) // 4,
+            "",
+            skipped=True,
+            skip_reason=f"LLM call failed for work {work_id}, heuristic fallback",
         )
         return _heuristic_select_sections(question, sections)
 
@@ -4354,7 +4715,9 @@ async def _build_research_frame(ctx: GraphRunContext[RAGState, Deps]) -> None:
         notebook.facets = _normalize_notebook_facets(state, notebook.facets)
         return
 
-    corpus_scope = "\n".join(sorted({ev.label for ev in state.all_evidence() if ev.label})[:20])
+    corpus_scope = "\n".join(
+        sorted({ev.label for ev in state.all_evidence() if ev.label})[:20]
+    )
     if _should_minimize_llm_calls(state):
         notebook.question_frame = state.question
         notebook.facets = _default_research_facets(state)
@@ -4367,8 +4730,14 @@ async def _build_research_frame(ctx: GraphRunContext[RAGState, Deps]) -> None:
             ]
         notebook.open_questions = state.sub_queries[:3]
         _append_reasoning_step(
-            state, "BuildResearchNotebook", None, "", 0, "",
-            skipped=True, skip_reason="minimal-llm mode",
+            state,
+            "BuildResearchNotebook",
+            None,
+            "",
+            0,
+            "",
+            skipped=True,
+            skip_reason="minimal-llm mode",
         )
     else:
         _frame_prompt = FRAME_RESEARCH_PROMPT.format(
@@ -4396,11 +4765,17 @@ async def _build_research_frame(ctx: GraphRunContext[RAGState, Deps]) -> None:
             if framed.sub_questions:
                 state.sub_queries = framed.sub_questions[:4]
             _append_reasoning_step(
-                state, "BuildResearchNotebook",
+                state,
+                "BuildResearchNotebook",
                 ctx.deps.llm.last_model_used or state.selected_model,
-                _frame_prompt[:200], len(_frame_prompt) // 4, raw,
+                _frame_prompt[:200],
+                len(_frame_prompt) // 4,
+                raw,
                 duration_ms=_dur,
-                parsed_result={"question_frame": framed.question_frame, "facet_count": len(framed.facets)},
+                parsed_result={
+                    "question_frame": framed.question_frame,
+                    "facet_count": len(framed.facets),
+                },
             )
         except Exception:
             notebook.question_frame = state.question
@@ -4414,14 +4789,24 @@ async def _build_research_frame(ctx: GraphRunContext[RAGState, Deps]) -> None:
                 ]
             notebook.open_questions = state.sub_queries[:3]
             _append_reasoning_step(
-                state, "BuildResearchNotebook", None, _frame_prompt[:200], len(_frame_prompt) // 4, "",
-                skipped=True, skip_reason="LLM call failed, heuristic fallback",
+                state,
+                "BuildResearchNotebook",
+                None,
+                _frame_prompt[:200],
+                len(_frame_prompt) // 4,
+                "",
+                skipped=True,
+                skip_reason="LLM call failed, heuristic fallback",
             )
 
     if not notebook.facets:
         notebook.facets = _default_research_facets(state)
-    notebook.corpus_scope = sorted({ev.label for ev in state.all_evidence() if ev.label})[:40]
-    notebook.work_priorities = _candidate_work_titles(state)[: state.retrieval_budget.candidate_work_limit()]
+    notebook.corpus_scope = sorted(
+        {ev.label for ev in state.all_evidence() if ev.label}
+    )[:40]
+    notebook.work_priorities = _candidate_work_titles(state)[
+        : state.retrieval_budget.candidate_work_limit()
+    ]
     _record_reading_decision(
         state,
         stage_id="research_notebook",
@@ -4460,7 +4845,9 @@ async def _plan_reading(ctx: GraphRunContext[RAGState, Deps]) -> None:
     state = ctx.state
     model_api_id = _resolve_model_api_id(state)
     notebook = _ensure_notebook(state)
-    candidate_titles = notebook.work_priorities[: state.retrieval_budget.candidate_work_limit()]
+    candidate_titles = notebook.work_priorities[
+        : state.retrieval_budget.candidate_work_limit()
+    ]
     planned_work_titles = candidate_titles
     planned_facet_ids = [facet.facet_id for facet in notebook.facets[:4]]
     rationale = "heuristic reading plan"
@@ -4497,10 +4884,14 @@ async def _plan_reading(ctx: GraphRunContext[RAGState, Deps]) -> None:
             )
             _dur = int((_time.time() - _t0) * 1000)
             parsed = ReadingPlanResult.model_validate(_parse_json(raw))
-            normalized_titles = [title for title in parsed.work_titles if title in candidate_titles]
+            normalized_titles = [
+                title for title in parsed.work_titles if title in candidate_titles
+            ]
             if normalized_titles:
                 planned_work_titles = normalized_titles + [
-                    title for title in candidate_titles if title not in normalized_titles
+                    title
+                    for title in candidate_titles
+                    if title not in normalized_titles
                 ]
             normalized_facets = [
                 facet_id
@@ -4512,25 +4903,45 @@ async def _plan_reading(ctx: GraphRunContext[RAGState, Deps]) -> None:
             rationale = parsed.rationale or rationale
             mode = "llm"
             _append_reasoning_step(
-                state, "PlanReading",
+                state,
+                "PlanReading",
                 ctx.deps.llm.last_model_used or state.selected_model,
-                _plan_prompt[:200], len(_plan_prompt) // 4, raw,
+                _plan_prompt[:200],
+                len(_plan_prompt) // 4,
+                raw,
                 duration_ms=_dur,
-                parsed_result={"work_count": len(normalized_titles), "facet_count": len(normalized_facets)},
+                parsed_result={
+                    "work_count": len(normalized_titles),
+                    "facet_count": len(normalized_facets),
+                },
             )
         except Exception:
             mode = "heuristic"
             _append_reasoning_step(
-                state, "PlanReading", None, "", 0, "",
-                skipped=True, skip_reason="LLM call failed, heuristic fallback",
+                state,
+                "PlanReading",
+                None,
+                "",
+                0,
+                "",
+                skipped=True,
+                skip_reason="LLM call failed, heuristic fallback",
             )
     else:
         _append_reasoning_step(
-            state, "PlanReading", None, "", 0, "",
-            skipped=True, skip_reason="no candidates or minimal-llm mode",
+            state,
+            "PlanReading",
+            None,
+            "",
+            0,
+            "",
+            skipped=True,
+            skip_reason="no candidates or minimal-llm mode",
         )
 
-    planned_work_titles = planned_work_titles[: state.retrieval_budget.candidate_work_limit()]
+    planned_work_titles = planned_work_titles[
+        : state.retrieval_budget.candidate_work_limit()
+    ]
     planned_facet_ids = planned_facet_ids[: min(6, len(planned_facet_ids))]
     state.metadata["planned_work_titles"] = planned_work_titles
     state.metadata["planned_facet_ids"] = planned_facet_ids
@@ -4604,11 +5015,19 @@ class ClassifyQueryType(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             confidence = 0.75
             reason = "deterministic heuristic"
             _append_reasoning_step(
-                state, "ClassifyQueryType", None, "", 0, "",
-                skipped=True, skip_reason="deterministic heuristic (SPECIFIC_ENTITY)",
+                state,
+                "ClassifyQueryType",
+                None,
+                "",
+                0,
+                "",
+                skipped=True,
+                skip_reason="deterministic heuristic (SPECIFIC_ENTITY)",
             )
         else:
-            _classify_prompt = CLASSIFY_QUERY_TYPE_PROMPT.format(question=state.question)
+            _classify_prompt = CLASSIFY_QUERY_TYPE_PROMPT.format(
+                question=state.question
+            )
             try:
                 _t0 = _time.time()
                 raw = await ctx.deps.llm.generate(
@@ -4626,19 +5045,32 @@ class ClassifyQueryType(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 confidence = parsed.confidence
                 reason = parsed.reason
                 _append_reasoning_step(
-                    state, "ClassifyQueryType",
+                    state,
+                    "ClassifyQueryType",
                     ctx.deps.llm.last_model_used or state.selected_model,
-                    _classify_prompt[:200], len(_classify_prompt) // 4, raw,
+                    _classify_prompt[:200],
+                    len(_classify_prompt) // 4,
+                    raw,
                     duration_ms=_dur,
-                    parsed_result={"query_type": query_type.value, "confidence": confidence, "reason": reason},
+                    parsed_result={
+                        "query_type": query_type.value,
+                        "confidence": confidence,
+                        "reason": reason,
+                    },
                 )
             except Exception:
                 query_type = heuristic_query_type
                 confidence = 0.45
                 reason = "heuristic fallback"
                 _append_reasoning_step(
-                    state, "ClassifyQueryType", None, _classify_prompt[:200], len(_classify_prompt) // 4, "",
-                    skipped=True, skip_reason="LLM call failed, heuristic fallback",
+                    state,
+                    "ClassifyQueryType",
+                    None,
+                    _classify_prompt[:200],
+                    len(_classify_prompt) // 4,
+                    "",
+                    skipped=True,
+                    skip_reason="LLM call failed, heuristic fallback",
                 )
 
         state.query_type = query_type
@@ -4677,8 +5109,14 @@ class ExpandQuery(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             state.expansion_terms = fallback_expansion
             state.metadata["expanded_query"] = state.expanded_query
             _append_reasoning_step(
-                state, "ExpandQuery", None, "", 0, "",
-                skipped=True, skip_reason="expansion disabled or minimal-llm mode",
+                state,
+                "ExpandQuery",
+                None,
+                "",
+                0,
+                "",
+                skipped=True,
+                skip_reason="expansion disabled or minimal-llm mode",
             )
             _trace_stage(
                 state,
@@ -4713,9 +5151,12 @@ class ExpandQuery(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 fallback_expansion,
             )
             _append_reasoning_step(
-                state, "ExpandQuery",
+                state,
+                "ExpandQuery",
                 ctx.deps.llm.last_model_used or state.selected_model,
-                _expand_prompt[:200], len(_expand_prompt) // 4, raw,
+                _expand_prompt[:200],
+                len(_expand_prompt) // 4,
+                raw,
                 duration_ms=_dur,
                 parsed_result={"expanded_query": expansion.expanded_query or ""},
             )
@@ -4723,8 +5164,14 @@ class ExpandQuery(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             expansion = fallback_expansion
             mode = "fallback"
             _append_reasoning_step(
-                state, "ExpandQuery", None, _expand_prompt[:200], len(_expand_prompt) // 4, "",
-                skipped=True, skip_reason="LLM call failed, fallback expansion",
+                state,
+                "ExpandQuery",
+                None,
+                _expand_prompt[:200],
+                len(_expand_prompt) // 4,
+                "",
+                skipped=True,
+                skip_reason="LLM call failed, fallback expansion",
             )
 
         state.expansion_terms = expansion
@@ -4757,8 +5204,14 @@ class DiscoverCorpus(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         await _discover_corpus(ctx)
         _dur = int((_time.time() - _t0) * 1000)
         _append_reasoning_step(
-            ctx.state, "DiscoverCorpus", None, "", 0, "",
-            skipped=True, skip_reason="no LLM call (strategy-based retrieval)",
+            ctx.state,
+            "DiscoverCorpus",
+            None,
+            "",
+            0,
+            "",
+            skipped=True,
+            skip_reason="no LLM call (strategy-based retrieval)",
             duration_ms=_dur,
         )
         return BuildResearchNotebook()
@@ -4806,8 +5259,14 @@ class TreeNavigateWorks(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 else "tree reasoning disabled by config"
             )
             _append_reasoning_step(
-                state, "TreeNavigateWorks", None, "", 0, "",
-                skipped=True, skip_reason=_skip_reason,
+                state,
+                "TreeNavigateWorks",
+                None,
+                "",
+                0,
+                "",
+                skipped=True,
+                skip_reason=_skip_reason,
             )
             _trace_stage(
                 state,
@@ -4837,8 +5296,12 @@ class TreeNavigateWorks(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         )
 
         try:
-            work_ids = await ctx.deps.tree_index.resolve_work_ids(work_titles[: state.retrieval_budget.candidate_work_limit()])
-            indices = await ctx.deps.tree_index.load_indices(work_ids[: state.retrieval_budget.candidate_work_limit()])
+            work_ids = await ctx.deps.tree_index.resolve_work_ids(
+                work_titles[: state.retrieval_budget.candidate_work_limit()]
+            )
+            indices = await ctx.deps.tree_index.load_indices(
+                work_ids[: state.retrieval_budget.candidate_work_limit()]
+            )
         except Exception:
             logger.warning("Tree navigation unavailable")
             return ExpandEvidenceBundles()
@@ -4848,8 +5311,9 @@ class TreeNavigateWorks(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         question = state.research_notebook.question_frame or state.question
 
         # Pre-process each index: record tool call, build sections, collect LLM tasks
-        per_index_data: list[tuple[Any, list[dict[str, Any]], list[dict[str, Any]]]] = []
-        llm_tasks: list[tuple[int, asyncio.Task[list[dict[str, Any]]]]] = []
+        per_index_data: list[
+            tuple[Any, list[dict[str, Any]], list[dict[str, Any]]]
+        ] = []
         for index in indices:
             _record_tool_call(
                 state,
@@ -4867,7 +5331,9 @@ class TreeNavigateWorks(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             flat_sections: list[dict[str, Any]] = []
             for node in index.nodes:
                 flat_sections.extend(_selected_section_summary(node, index.work_id))
-            top_sections = flat_sections[: state.retrieval_budget.section_summary_limit()]
+            top_sections = flat_sections[
+                : state.retrieval_budget.section_summary_limit()
+            ]
             per_index_data.append((index, flat_sections, top_sections))
 
         # Launch LLM navigation calls in parallel (skip indices with no sections)
@@ -4878,7 +5344,9 @@ class TreeNavigateWorks(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 return idx, await coro
 
         nav_coros: list[Any] = []
-        nav_index_map: dict[int, int] = {}  # maps coro position -> per_index_data position
+        nav_index_map: dict[
+            int, int
+        ] = {}  # maps coro position -> per_index_data position
         for i, (index, flat_sections, top_sections) in enumerate(per_index_data):
             if not flat_sections:
                 continue
@@ -4953,7 +5421,8 @@ class TreeNavigateWorks(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     rejected_ids=[
                         section["node_id"]
                         for section in top_sections
-                        if section["node_id"] not in {item["node_id"] for item in chosen}
+                        if section["node_id"]
+                        not in {item["node_id"] for item in chosen}
                     ][:12],
                     metadata={
                         "work_id": index.work_id,
@@ -4963,12 +5432,16 @@ class TreeNavigateWorks(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 )
 
         state.metadata["selected_sections"] = selected_sections
-        state.research_notebook.work_priorities = work_titles[: state.retrieval_budget.candidate_work_limit()]
+        state.research_notebook.work_priorities = work_titles[
+            : state.retrieval_budget.candidate_work_limit()
+        ]
         _trace_stage(
             state,
             "tree_navigation",
             {
-                "candidate_work_titles": work_titles[: state.retrieval_budget.candidate_work_limit()],
+                "candidate_work_titles": work_titles[
+                    : state.retrieval_budget.candidate_work_limit()
+                ],
                 "selected_sections": [
                     {
                         "work_id": section["work_id"],
@@ -5004,7 +5477,14 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             indices_by_id = {index.work_id: index for index in indices}
 
             # --- Phase 1: batch extract passages (one DB call per section) ---
-            per_limit = max(4, min(40, state.retrieval_budget.passage_bundle_limit() // max(1, len(selected_sections))))
+            per_limit = max(
+                4,
+                min(
+                    40,
+                    state.retrieval_budget.passage_bundle_limit()
+                    // max(1, len(selected_sections)),
+                ),
+            )
             section_rows: list[tuple[dict[str, Any], list[dict[str, Any]]]] = []
             for section in selected_sections:
                 index = indices_by_id.get(section["work_id"])
@@ -5026,7 +5506,11 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     work_id=index.work_id,
                     work_title=index.title,
                     section_path=section.get("path"),
-                    selected_ids=[str(row.get("passage_id")) for row in rows[:16] if row.get("passage_id")],
+                    selected_ids=[
+                        str(row.get("passage_id"))
+                        for row in rows[:16]
+                        if row.get("passage_id")
+                    ],
                     details={
                         "node_id": section["node_id"],
                         "selected_count": len(rows),
@@ -5036,16 +5520,20 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
 
             # --- Phase 2: collect all unique passage IDs, batch-fetch translations ---
             all_passage_ids: list[str] = []
-            for section, rows in section_rows:
+            for _section, rows in section_rows:
                 for row in rows:
                     bundle_id = f"{row['work_id']}::{row['passage_id']}"
                     if bundle_id not in seen_bundle_ids:
                         all_passage_ids.append(str(row["passage_id"]))
 
-            translations_map = await _batch_fetch_translations(ctx.deps, all_passage_ids) if all_passage_ids else {}
+            translations_map = (
+                await _batch_fetch_translations(ctx.deps, all_passage_ids)
+                if all_passage_ids
+                else {}
+            )
 
             # --- Phase 3: build bundles using pre-fetched translations ---
-            for section, rows in section_rows:
+            for _section, rows in section_rows:
                 for row in rows:
                     bundle_id = f"{row['work_id']}::{row['passage_id']}"
                     if bundle_id in seen_bundle_ids:
@@ -5056,7 +5544,9 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         translation_pairs.append(
                             {
                                 "original_passage_id": pid,
-                                "translation_passage_id": str(translation.get("passage_id"))
+                                "translation_passage_id": str(
+                                    translation.get("passage_id")
+                                )
                                 if translation.get("passage_id")
                                 else None,
                                 "translation_node_id": translation.get("kg_node_id"),
@@ -5064,7 +5554,9 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                             }
                         )
                     original_text = row.get("text_content") or ""
-                    translation_text = translation.get("text_content") if translation else None
+                    translation_text = (
+                        translation.get("text_content") if translation else None
+                    )
                     bundle = EvidenceBundle(
                         bundle_id=bundle_id,
                         work_id=str(row["work_id"]),
@@ -5093,8 +5585,12 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         metadata={
                             "sequence_number": row.get("sequence_number"),
                             "translation_available": bool(translation_text),
-                            "translation_source": translation.get("source") if translation else None,
-                            "translation_node_id": translation.get("kg_node_id") if translation else None,
+                            "translation_source": translation.get("source")
+                            if translation
+                            else None,
+                            "translation_node_id": translation.get("kg_node_id")
+                            if translation
+                            else None,
                         },
                     )
                     bundles.append(bundle)
@@ -5117,7 +5613,9 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 },
             )
 
-        supplemental = await _supplemental_passage_bundles(ctx, bundles, seen_bundle_ids)
+        supplemental = await _supplemental_passage_bundles(
+            ctx, bundles, seen_bundle_ids
+        )
         if supplemental:
             _record_tool_call(
                 state,
@@ -5162,13 +5660,17 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 rationale="Bundles are retained when they add direct text, testimony, or counter-evidence for the active facets.",
                 selected_ids=[bundle.bundle_id for bundle in bundles[:20]],
                 supporting_refs=[
-                    state.context_pack.bundle_refs.get(bundle.bundle_id, bundle.bundle_id)
+                    state.context_pack.bundle_refs.get(
+                        bundle.bundle_id, bundle.bundle_id
+                    )
                     for bundle in bundles[:12]
                     if state.context_pack.bundle_refs.get(bundle.bundle_id)
                 ],
                 metadata={
                     "bundle_count": len(bundles),
-                    "work_titles": list(dict.fromkeys(bundle.work_title for bundle in bundles[:12])),
+                    "work_titles": list(
+                        dict.fromkeys(bundle.work_title for bundle in bundles[:12])
+                    ),
                 },
             )
         _trace_stage(
@@ -5190,8 +5692,14 @@ class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             },
         )
         _append_reasoning_step(
-            state, "ExpandEvidenceBundles", None, "", 0, "",
-            skipped=True, skip_reason="no LLM call (passage expansion)",
+            state,
+            "ExpandEvidenceBundles",
+            None,
+            "",
+            0,
+            "",
+            skipped=True,
+            skip_reason="no LLM call (passage expansion)",
             duration_ms=int((_time.time() - _t0) * 1000),
             parsed_result={"bundle_count": len(state.evidence_bundles)},
         )
@@ -5209,10 +5717,20 @@ class SeekCounterEvidence(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         state = ctx.state
         model_api_id = _resolve_model_api_id(state)
         notebook = _ensure_notebook(state)
-        if _should_minimize_llm_calls(state) or not state.evidence_bundles or not notebook.competing_hypotheses:
+        if (
+            _should_minimize_llm_calls(state)
+            or not state.evidence_bundles
+            or not notebook.competing_hypotheses
+        ):
             _append_reasoning_step(
-                state, "SeekCounterEvidence", None, "", 0, "",
-                skipped=True, skip_reason="minimal-llm mode or insufficient bundles",
+                state,
+                "SeekCounterEvidence",
+                None,
+                "",
+                0,
+                "",
+                skipped=True,
+                skip_reason="minimal-llm mode or insufficient bundles",
             )
             _trace_stage(
                 state,
@@ -5235,7 +5753,9 @@ class SeekCounterEvidence(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         ]
         _counter_prompt = COUNTER_EVIDENCE_PROMPT.format(
             question_frame=notebook.question_frame or state.question,
-            hypotheses="\n".join(f"- {item}" for item in notebook.competing_hypotheses[:4]),
+            hypotheses="\n".join(
+                f"- {item}" for item in notebook.competing_hypotheses[:4]
+            ),
             bundles_json=truncate_json(payload, 9000),
         )
         try:
@@ -5256,9 +5776,12 @@ class SeekCounterEvidence(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             rationale = parsed.rationale
             mode = "llm"
             _append_reasoning_step(
-                state, "SeekCounterEvidence",
+                state,
+                "SeekCounterEvidence",
                 ctx.deps.llm.last_model_used or state.selected_model,
-                _counter_prompt[:200], len(_counter_prompt) // 4, raw,
+                _counter_prompt[:200],
+                len(_counter_prompt) // 4,
+                raw,
                 duration_ms=_dur,
                 parsed_result={"selected_count": len(selected), "rationale": rationale},
             )
@@ -5271,8 +5794,14 @@ class SeekCounterEvidence(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             rationale = "heuristic author divergence"
             mode = "heuristic"
             _append_reasoning_step(
-                state, "SeekCounterEvidence", None, _counter_prompt[:200], len(_counter_prompt) // 4, "",
-                skipped=True, skip_reason="LLM call failed, heuristic fallback",
+                state,
+                "SeekCounterEvidence",
+                None,
+                _counter_prompt[:200],
+                len(_counter_prompt) // 4,
+                "",
+                skipped=True,
+                skip_reason="LLM call failed, heuristic fallback",
             )
 
         if selected:
@@ -5321,17 +5850,28 @@ class EvidenceSufficiency(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         state = ctx.state
         notebook = _ensure_notebook(state)
         bundle_count = len(state.context_pack.passage_bundles)
-        work_count = len({bundle.work_id for bundle in state.context_pack.passage_bundles})
+        work_count = len(
+            {bundle.work_id for bundle in state.context_pack.passage_bundles}
+        )
         counter_count = len(notebook.counter_evidence)
-        dossier = state.scholarly_dossier if state.scholarly_dossier.facets else _build_scholarly_dossier(state)
+        dossier = (
+            state.scholarly_dossier
+            if state.scholarly_dossier.facets
+            else _build_scholarly_dossier(state)
+        )
         covered_facets = sum(
             1
             for facet in dossier.facets
-            if facet.primary_bundle_ids or facet.testimony_bundle_ids or facet.metadata_ids
+            if facet.primary_bundle_ids
+            or facet.testimony_bundle_ids
+            or facet.metadata_ids
         )
         heuristic_score = min(
             1.0,
-            0.12 * bundle_count + 0.08 * work_count + 0.1 * counter_count + 0.08 * covered_facets,
+            0.12 * bundle_count
+            + 0.08 * work_count
+            + 0.1 * counter_count
+            + 0.08 * covered_facets,
         )
         model_api_id = _resolve_model_api_id(state)
         if _should_minimize_llm_calls(state):
@@ -5340,9 +5880,18 @@ class EvidenceSufficiency(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             reason = "heuristic sufficiency (minimal llm mode)"
             refinement = None
             _append_reasoning_step(
-                state, "EvidenceSufficiency", None, "", 0, "",
-                skipped=True, skip_reason="minimal-llm mode, heuristic only",
-                parsed_result={"score": round(heuristic_score, 4), "sufficient": sufficient},
+                state,
+                "EvidenceSufficiency",
+                None,
+                "",
+                0,
+                "",
+                skipped=True,
+                skip_reason="minimal-llm mode, heuristic only",
+                parsed_result={
+                    "score": round(heuristic_score, 4),
+                    "sufficient": sufficient,
+                },
             )
         else:
             _suff_prompt = SUFFICIENCY_PROMPT.format(
@@ -5370,11 +5919,18 @@ class EvidenceSufficiency(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 reason = assessment.reason
                 refinement = assessment.refinement
                 _append_reasoning_step(
-                    state, "EvidenceSufficiency",
+                    state,
+                    "EvidenceSufficiency",
                     ctx.deps.llm.last_model_used or state.selected_model,
-                    _suff_prompt[:200], len(_suff_prompt) // 4, raw,
+                    _suff_prompt[:200],
+                    len(_suff_prompt) // 4,
+                    raw,
                     duration_ms=_dur,
-                    parsed_result={"score": round(score, 4), "sufficient": sufficient, "reason": reason},
+                    parsed_result={
+                        "score": round(score, 4),
+                        "sufficient": sufficient,
+                        "reason": reason,
+                    },
                 )
             except Exception:
                 score = heuristic_score
@@ -5382,8 +5938,14 @@ class EvidenceSufficiency(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 reason = "heuristic sufficiency"
                 refinement = None
                 _append_reasoning_step(
-                    state, "EvidenceSufficiency", None, _suff_prompt[:200], len(_suff_prompt) // 4, "",
-                    skipped=True, skip_reason="LLM call failed, heuristic fallback",
+                    state,
+                    "EvidenceSufficiency",
+                    None,
+                    _suff_prompt[:200],
+                    len(_suff_prompt) // 4,
+                    "",
+                    skipped=True,
+                    skip_reason="LLM call failed, heuristic fallback",
                 )
 
         state.sufficiency_score = score
@@ -5454,7 +6016,8 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             (
                 facet.facet_id
                 for facet in dossier.facets
-                if "textual" in facet.title.lower() or "definition" in facet.title.lower()
+                if "textual" in facet.title.lower()
+                or "definition" in facet.title.lower()
             ),
             dossier.facets[0].facet_id if dossier.facets else None,
         )
@@ -5466,9 +6029,15 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     claim=f"{direct_quote_bundle.author or 'Unknown author'}, {direct_quote_bundle.work_title} {direct_quote_bundle.canonical_ref or ''}".strip(),
                     evidence_ids=[direct_quote_bundle.bundle_id],
                     facet_id=default_facet_id,
-                    evidence_class=_bundle_academic_features(direct_quote_bundle, state)["evidence_class"],
-                    quote_original=truncate_text(direct_quote_bundle.original_text, 1400),
-                    quote_translation=truncate_text(direct_quote_bundle.translation_text, 1400)
+                    evidence_class=_bundle_academic_features(
+                        direct_quote_bundle, state
+                    )["evidence_class"],
+                    quote_original=truncate_text(
+                        direct_quote_bundle.original_text, 1400
+                    ),
+                    quote_translation=truncate_text(
+                        direct_quote_bundle.translation_text, 1400
+                    )
                     if direct_quote_bundle.translation_text
                     else None,
                     support_type="passage",
@@ -5479,9 +6048,18 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             notebook.claim_ledger = state.claim_ledger
             state.metadata["claim_ledger_mode"] = "deterministic_quote"
             _append_reasoning_step(
-                state, "DraftClaimLedger", None, "", 0, "",
-                skipped=True, skip_reason="deterministic quote bundle",
-                parsed_result={"mode": "deterministic_quote", "bundle_id": direct_quote_bundle.bundle_id},
+                state,
+                "DraftClaimLedger",
+                None,
+                "",
+                0,
+                "",
+                skipped=True,
+                skip_reason="deterministic quote bundle",
+                parsed_result={
+                    "mode": "deterministic_quote",
+                    "bundle_id": direct_quote_bundle.bundle_id,
+                },
             )
             _trace_stage(
                 state,
@@ -5520,7 +6098,9 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             )
             _dur = int((_time.time() - _t0) * 1000)
             parsed = _coerce_claim_ledger_payload(_parse_json(raw))
-            valid_ids = set(state.context_pack.bundle_refs) | set(state.context_pack.node_refs)
+            valid_ids = set(state.context_pack.bundle_refs) | set(
+                state.context_pack.node_refs
+            )
             claims = [
                 ClaimLedgerItem(
                     claim=item.claim,
@@ -5530,7 +6110,10 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         state,
                     ),
                     facet_id=item.facet_id or default_facet_id,
-                    evidence_class=item.evidence_class or ("metadata" if item.support_type == "metadata" else "direct_text"),
+                    evidence_class=item.evidence_class
+                    or (
+                        "metadata" if item.support_type == "metadata" else "direct_text"
+                    ),
                     quote_original=item.quote_original,
                     quote_translation=item.quote_translation,
                     support_type=_normalize_claim_support_type(item.support_type),
@@ -5540,12 +6123,19 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 for item in parsed.claims
                 if item.claim
             ]
-            claims = [item for item in claims if any(eid in valid_ids for eid in item.evidence_ids)]
+            claims = [
+                item
+                for item in claims
+                if any(eid in valid_ids for eid in item.evidence_ids)
+            ]
             claims = _augment_claim_ledger_from_dossier(state, claims)
             _append_reasoning_step(
-                state, "DraftClaimLedger",
+                state,
+                "DraftClaimLedger",
                 ctx.deps.llm.last_model_used or state.selected_model,
-                _ledger_prompt[:200], len(_ledger_prompt) // 4, raw,
+                _ledger_prompt[:200],
+                len(_ledger_prompt) // 4,
+                raw,
                 duration_ms=_dur,
                 parsed_result={"claim_count": len(claims)},
             )
@@ -5560,13 +6150,21 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             )
         except Exception as exc:
             _append_reasoning_step(
-                state, "DraftClaimLedger", None, _ledger_prompt[:200], len(_ledger_prompt) // 4, raw or "",
-                skipped=True, skip_reason=f"LLM call failed: {type(exc).__name__}",
+                state,
+                "DraftClaimLedger",
+                None,
+                _ledger_prompt[:200],
+                len(_ledger_prompt) // 4,
+                raw or "",
+                skipped=True,
+                skip_reason=f"LLM call failed: {type(exc).__name__}",
             )
             claims = []
             salvaged = _salvage_claim_ledger(raw) if raw else None
             if salvaged is not None:
-                valid_ids = set(state.context_pack.bundle_refs) | set(state.context_pack.node_refs)
+                valid_ids = set(state.context_pack.bundle_refs) | set(
+                    state.context_pack.node_refs
+                )
                 claims = [
                     ClaimLedgerItem(
                         claim=item.claim,
@@ -5576,7 +6174,12 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                             state,
                         ),
                         facet_id=item.facet_id or default_facet_id,
-                        evidence_class=item.evidence_class or ("metadata" if item.support_type == "metadata" else "direct_text"),
+                        evidence_class=item.evidence_class
+                        or (
+                            "metadata"
+                            if item.support_type == "metadata"
+                            else "direct_text"
+                        ),
                         quote_original=item.quote_original,
                         quote_translation=item.quote_translation,
                         support_type=_normalize_claim_support_type(item.support_type),
@@ -5586,7 +6189,11 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     for item in salvaged.claims
                     if item.claim
                 ]
-                claims = [item for item in claims if any(eid in valid_ids for eid in item.evidence_ids)]
+                claims = [
+                    item
+                    for item in claims
+                    if any(eid in valid_ids for eid in item.evidence_ids)
+                ]
                 if claims:
                     claims = _augment_claim_ledger_from_dossier(state, claims)
                     _trace_stage(
@@ -5659,12 +6266,20 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             if quote_item.quote_original and ref:
                 lines.append(f'Greek original: "{quote_item.quote_original}" [{ref}]')
             if quote_item.quote_translation and ref:
-                lines.append(f'English translation: "{quote_item.quote_translation}" [{ref}]')
+                lines.append(
+                    f'English translation: "{quote_item.quote_translation}" [{ref}]'
+                )
             state.raw_answer = "\n".join(lines).strip()
             state.metadata["render_answer_mode"] = "deterministic_quote"
             _append_reasoning_step(
-                state, "RenderGroundedAnswer", None, "", 0, "",
-                skipped=True, skip_reason="deterministic quote rendering",
+                state,
+                "RenderGroundedAnswer",
+                None,
+                "",
+                0,
+                "",
+                skipped=True,
+                skip_reason="deterministic quote rendering",
             )
             _trace_stage(
                 state,
@@ -5710,7 +6325,11 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             _render_dur = int((_time.time() - _t0) * 1000)
             rendered_answer = raw_answer.strip()
             _polish_mode = "skipped"
-            if rendered_answer and len(rendered_answer) < 300 and not _should_minimize_llm_calls(state):
+            if (
+                rendered_answer
+                and len(rendered_answer) < 300
+                and not _should_minimize_llm_calls(state)
+            ):
                 try:
                     polished_answer = await ctx.deps.llm.generate(
                         SCHOLARLY_POLISH_PROMPT.format(
@@ -5752,7 +6371,7 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             compression_repair_mode = "skipped"
             # Compression repair disabled — programmatic passage injection
             # in scholarly_agent._inject_passage_quotations handles this instead
-            if False and rendered_answer and not _should_minimize_llm_calls(state) and _answer_is_too_compressed(state, rendered_answer):
+            if False:
                 try:
                     repaired_answer = await ctx.deps.llm.generate(
                         COMPRESSION_REPAIR_PROMPT.format(
@@ -5760,8 +6379,10 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                             required_sections=requirements["required_sections"],
                             required_quote_blocks=requirements["required_quote_blocks"],
                             facet_titles="\n".join(
-                                f"- {facet.title}" for facet in _supported_dossier_facets(state)
-                            ) or "- General answer",
+                                f"- {facet.title}"
+                                for facet in _supported_dossier_facets(state)
+                            )
+                            or "- General answer",
                             dossier_json=truncate_json(dossier_payload, 16000),
                             ledger_json=truncate_json(
                                 [item.model_dump() for item in state.claim_ledger],
@@ -5786,9 +6407,12 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             state.metadata["compression_repair_mode"] = compression_repair_mode
             _total_dur = int((_time.time() - _t0) * 1000)
             _append_reasoning_step(
-                state, "RenderGroundedAnswer",
+                state,
+                "RenderGroundedAnswer",
                 ctx.deps.llm.last_model_used or state.selected_model,
-                _render_prompt[:200], len(_render_prompt) // 4, raw_answer,
+                _render_prompt[:200],
+                len(_render_prompt) // 4,
+                raw_answer,
                 duration_ms=_total_dur,
                 parsed_result={
                     "synthesis_ms": _render_dur,
@@ -5802,7 +6426,9 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 rendered_answer = fallback_answer
             state.raw_answer = rendered_answer
             fallback_used = state.raw_answer == fallback_answer
-            state.metadata["render_answer_mode"] = "fallback" if fallback_used else "llm"
+            state.metadata["render_answer_mode"] = (
+                "fallback" if fallback_used else "llm"
+            )
             if fallback_used:
                 state.metadata["pipeline_degraded"] = True
             _trace_stage(
@@ -5811,7 +6437,9 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 {
                     "mode": state.metadata["render_answer_mode"],
                     "raw_excerpt": truncate_text(state.raw_answer, 2000),
-                    "polish_mode": state.metadata.get("scholarly_polish_mode", "skipped"),
+                    "polish_mode": state.metadata.get(
+                        "scholarly_polish_mode", "skipped"
+                    ),
                     "compression_repair_mode": compression_repair_mode,
                     "render_requirements": requirements,
                     "shape_metrics": _answer_shape_metrics(state.raw_answer),
@@ -5819,9 +6447,14 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             )
         except Exception as exc:
             _append_reasoning_step(
-                state, "RenderGroundedAnswer", None,
-                _render_prompt[:200], len(_render_prompt) // 4, raw_answer or "",
-                skipped=True, skip_reason=f"LLM call failed: {type(exc).__name__}",
+                state,
+                "RenderGroundedAnswer",
+                None,
+                _render_prompt[:200],
+                len(_render_prompt) // 4,
+                raw_answer or "",
+                skipped=True,
+                skip_reason=f"LLM call failed: {type(exc).__name__}",
             )
             state.raw_answer = _render_answer_fallback(state)
             state.metadata["render_answer_mode"] = "fallback"
@@ -5832,7 +6465,9 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 {
                     "mode": "fallback",
                     "error": f"{type(exc).__name__}: {exc}",
-                    "raw_excerpt": truncate_text(raw_answer, 2000) if raw_answer else "",
+                    "raw_excerpt": truncate_text(raw_answer, 2000)
+                    if raw_answer
+                    else "",
                 },
             )
 
@@ -5854,8 +6489,14 @@ class ProgrammaticVerify(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         state.raw_answer = answer
         state.citations = citations
         _append_reasoning_step(
-            state, "ProgrammaticVerify", None, "", 0, "",
-            skipped=True, skip_reason="no LLM call (programmatic verification)",
+            state,
+            "ProgrammaticVerify",
+            None,
+            "",
+            0,
+            "",
+            skipped=True,
+            skip_reason="no LLM call (programmatic verification)",
             duration_ms=_dur,
             parsed_result={"citation_count": len(citations)},
         )

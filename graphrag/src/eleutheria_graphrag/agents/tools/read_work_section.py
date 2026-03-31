@@ -53,7 +53,10 @@ class ReadWorkSectionTool:
         return {
             "type": "object",
             "properties": {
-                "work_id": {"type": "string", "description": "The work ID (UUID or canonical_id)"},
+                "work_id": {
+                    "type": "string",
+                    "description": "The work ID (UUID or canonical_id)",
+                },
                 "section_path": {
                     "type": "string",
                     "description": "Hierarchical path to navigate to (e.g. 'Book III/Chapter 1'). Omit for top-level.",
@@ -113,7 +116,8 @@ class ReadWorkSectionTool:
                 path=node.path or "",
                 summary=(node.summary or "")[:300],
                 passage_count=max(0, node.end_passage - node.start_passage + 1)
-                if node.end_passage >= node.start_passage else 0,
+                if node.end_passage >= node.start_passage
+                else 0,
                 has_subsections=len(node.nodes) > 0,
                 concept_tags=node.concept_tags[:5] if node.concept_tags else [],
             )

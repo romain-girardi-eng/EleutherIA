@@ -25,8 +25,8 @@ _GREEK_COMBINING = range(0x0300, 0x0370)  # Combining diacriticals (used with Gr
 
 # Pattern to find Greek text runs (3+ Greek chars in a row, possibly with spaces/punctuation)
 _GREEK_RUN_RE = re.compile(
-    r'[\u0370-\u03FF\u1F00-\u1FFF][\u0370-\u03FF\u1F00-\u1FFF\u0300-\u036F\s\-,;·.()\'\"]*'
-    r'[\u0370-\u03FF\u1F00-\u1FFF]',
+    r"[\u0370-\u03FF\u1F00-\u1FFF][\u0370-\u03FF\u1F00-\u1FFF\u0300-\u036F\s\-,;·.()\'\"]*"
+    r"[\u0370-\u03FF\u1F00-\u1FFF]",
     re.UNICODE,
 )
 
@@ -34,25 +34,41 @@ _GREEK_RUN_RE = re.compile(
 # These are vocabulary items, not text passages
 _KNOWN_TERMS: set[str] = {
     # Greek terms
-    "αὐτεξούσιον", "αὐτεξουσίου", "αὐτεξούσιος",
-    "εἱμαρμένη", "εἱμαρμένης",
-    "πρόνοια", "προνοίας",
-    "ἐφ' ἡμῖν", "τὸ ἐφ' ἡμῖν",
-    "προαίρεσις", "προαιρέσεως",
-    "συγκατάθεσις", "συγκαταθέσεως",
-    "ἀκρασία", "ἀκρασίας",
+    "αὐτεξούσιον",
+    "αὐτεξουσίου",
+    "αὐτεξούσιος",
+    "εἱμαρμένη",
+    "εἱμαρμένης",
+    "πρόνοια",
+    "προνοίας",
+    "ἐφ' ἡμῖν",
+    "τὸ ἐφ' ἡμῖν",
+    "προαίρεσις",
+    "προαιρέσεως",
+    "συγκατάθεσις",
+    "συγκαταθέσεως",
+    "ἀκρασία",
+    "ἀκρασίας",
     "ἀποκατάστασις",
-    "κλίσις", "παρέγκλισις",
-    "λεκτόν", "λεκτά",
+    "κλίσις",
+    "παρέγκλισις",
+    "λεκτόν",
+    "λεκτά",
     "ἡγεμονικόν",
-    "φαντασία", "φαντασίαι",
-    "ὁρμή", "ὁρμαί",
+    "φαντασία",
+    "φαντασίαι",
+    "ὁρμή",
+    "ὁρμαί",
     "ἐκπύρωσις",
-    "λόγος", "λόγοι",
-    "ψυχή", "ψυχῆς",
+    "λόγος",
+    "λόγοι",
+    "ψυχή",
+    "ψυχῆς",
     "νοῦς",
-    "ἐνέργεια", "δύναμις",
-    "ἀρετή", "ἀρεταί",
+    "ἐνέργεια",
+    "δύναμις",
+    "ἀρετή",
+    "ἀρεταί",
     "εὐδαιμονία",
     "ἐλευθερία",
     "ἀνάγκη",
@@ -61,7 +77,8 @@ _KNOWN_TERMS: set[str] = {
     "Περὶ εἱμαρμένης",
     # Latin terms
     "liberum arbitrium",
-    "fatum", "fata",
+    "fatum",
+    "fata",
     "necessitas",
     "voluntas",
     "nunc stans",
@@ -115,7 +132,7 @@ class MisattributedExtract:
 
     text: str
     claimed_work: str  # What the LLM said
-    actual_work: str   # What the DB says
+    actual_work: str  # What the DB says
     actual_ref: str | None
     position: int
     action: str = "corrected"
@@ -187,36 +204,48 @@ async def verify_greek_text(
 
             # Check attribution: look for work titles near the Greek text
             # (in the 200 chars before the Greek passage)
-            context_before = answer[max(0, position - 200):position]
+            context_before = answer[max(0, position - 200) : position]
             claimed_work = _extract_claimed_work(context_before)
 
-            if claimed_work and actual_title and not _titles_match(claimed_work, actual_title):
-                result.misattributed_extracts.append(MisattributedExtract(
-                    text=greek_text[:100],
-                    claimed_work=claimed_work,
-                    actual_work=actual_title,
-                    actual_ref=actual_ref,
-                    position=position,
-                ))
+            if (
+                claimed_work
+                and actual_title
+                and not _titles_match(claimed_work, actual_title)
+            ):
+                result.misattributed_extracts.append(
+                    MisattributedExtract(
+                        text=greek_text[:100],
+                        claimed_work=claimed_work,
+                        actual_work=actual_title,
+                        actual_ref=actual_ref,
+                        position=position,
+                    )
+                )
                 result.all_verified = False
                 logger.warning(
                     "MISATTRIBUTED: LLM claims '%s' but DB says '%s' for: %s",
-                    claimed_work, actual_title, greek_text[:60],
+                    claimed_work,
+                    actual_title,
+                    greek_text[:60],
                 )
             else:
-                result.verified_extracts.append(VerifiedExtract(
-                    text=greek_text,
-                    passage_id=found["passage_id"],
-                    work_title=actual_title,
-                    canonical_ref=actual_ref,
-                ))
+                result.verified_extracts.append(
+                    VerifiedExtract(
+                        text=greek_text,
+                        passage_id=found["passage_id"],
+                        work_title=actual_title,
+                        canonical_ref=actual_ref,
+                    )
+                )
         else:
-            result.unverified_extracts.append(UnverifiedExtract(
-                text=greek_text,
-                word_count=word_count,
-                position=position,
-                action="flagged",
-            ))
+            result.unverified_extracts.append(
+                UnverifiedExtract(
+                    text=greek_text,
+                    word_count=word_count,
+                    position=position,
+                    action="flagged",
+                )
+            )
             result.all_verified = False
 
     if result.unverified_extracts:
@@ -256,19 +285,23 @@ def sanitize_answer(answer: str, verification: VerificationResult) -> str:
 
     for extract in verification.unverified_extracts:
         if extract.word_count > 8:
-            actions.append((
-                extract.position,
-                "replace",
-                "[text removed: unverified ancient text]",
-            ))
+            actions.append(
+                (
+                    extract.position,
+                    "replace",
+                    "[text removed: unverified ancient text]",
+                )
+            )
             extract.action = "removed"
         elif extract.word_count > _MAX_TERM_WORDS:
             end_pos = extract.position + len(extract.text)
-            actions.append((
-                end_pos,
-                "insert",
-                " [unverified]",
-            ))
+            actions.append(
+                (
+                    end_pos,
+                    "insert",
+                    " [unverified]",
+                )
+            )
             extract.action = "flagged"
 
     for extract in verification.misattributed_extracts:
@@ -277,11 +310,13 @@ def sanitize_answer(answer: str, verification: VerificationResult) -> str:
         if extract.actual_ref:
             correction += f" {extract.actual_ref}"
         correction += f", not {extract.claimed_work}]"
-        actions.append((
-            end_pos,
-            "insert",
-            correction,
-        ))
+        actions.append(
+            (
+                end_pos,
+                "insert",
+                correction,
+            )
+        )
         extract.action = "corrected"
 
     # Apply from end to start to preserve positions
@@ -290,11 +325,7 @@ def sanitize_answer(answer: str, verification: VerificationResult) -> str:
             # Find the original text at this position
             for uv in verification.unverified_extracts:
                 if uv.position == pos:
-                    sanitized = (
-                        sanitized[:pos]
-                        + text
-                        + sanitized[pos + len(uv.text):]
-                    )
+                    sanitized = sanitized[:pos] + text + sanitized[pos + len(uv.text) :]
                     break
         elif action_type == "insert":
             sanitized = sanitized[:pos] + text + sanitized[pos:]
@@ -316,7 +347,7 @@ async def _search_passage_for_text(
     Uses substring matching (LIKE) on text_content / description.
     Normalizes Unicode to handle diacritical variations.
     """
-    search_text = greek_text.strip().strip(".,;:·()\"'""")
+    search_text = greek_text.strip().strip(".,;:·()\"'")
     if len(search_text) < 4:
         return None
 
@@ -336,7 +367,9 @@ async def _search_passage_for_text(
             if row:
                 return dict(row)
         except Exception:
-            logger.debug("Passage search failed for: %s", text_variant[:50], exc_info=True)
+            logger.debug(
+                "Passage search failed for: %s", text_variant[:50], exc_info=True
+            )
 
         # Check KG node descriptions (many passage nodes store text here)
         try:
@@ -353,7 +386,9 @@ async def _search_passage_for_text(
             if row:
                 return dict(row)
         except Exception:
-            logger.debug("KG node search failed for: %s", text_variant[:50], exc_info=True)
+            logger.debug(
+                "KG node search failed for: %s", text_variant[:50], exc_info=True
+            )
 
     return None
 
@@ -382,19 +417,47 @@ def _count_greek_chars(text: str) -> int:
 
 # Common ancient work titles for attribution detection
 _WORK_TITLES = {
-    "phaedo", "phaedrus", "republic", "laws", "timaeus", "crito",
-    "symposium", "apology", "meno", "gorgias", "protagoras", "theaetetus",
-    "de principiis", "contra celsum", "de oratione", "commentary on romans",
-    "philocalia", "exhortation to martyrdom",
-    "de fato", "academica", "de natura deorum", "de divinatione",
+    "phaedo",
+    "phaedrus",
+    "republic",
+    "laws",
+    "timaeus",
+    "crito",
+    "symposium",
+    "apology",
+    "meno",
+    "gorgias",
+    "protagoras",
+    "theaetetus",
+    "de principiis",
+    "contra celsum",
+    "de oratione",
+    "commentary on romans",
+    "philocalia",
+    "exhortation to martyrdom",
+    "de fato",
+    "academica",
+    "de natura deorum",
+    "de divinatione",
     "de rerum natura",
-    "nicomachean ethics", "de anima", "metaphysics", "physics",
-    "discourses", "enchiridion", "meditations",
-    "letters to lucilius", "de providentia", "de ira",
+    "nicomachean ethics",
+    "de anima",
+    "metaphysics",
+    "physics",
+    "discourses",
+    "enchiridion",
+    "meditations",
+    "letters to lucilius",
+    "de providentia",
+    "de ira",
     "consolation of philosophy",
-    "stromata", "protrepticus",
-    "de libero arbitrio", "confessions", "city of god",
-    "against heresies", "adversus haereses",
+    "stromata",
+    "protrepticus",
+    "de libero arbitrio",
+    "confessions",
+    "city of god",
+    "against heresies",
+    "adversus haereses",
 }
 
 
@@ -408,7 +471,7 @@ def _extract_claimed_work(context: str) -> str | None:
         if title in context_lower:
             # Find the original case version
             idx = context_lower.rfind(title)
-            return context[idx:idx + len(title)]
+            return context[idx : idx + len(title)]
     return None
 
 
@@ -428,10 +491,8 @@ def _titles_match(claimed: str, actual: str) -> bool:
     # First word match (e.g., "Crito" matches "Crito (Κρίτων)")
     claimed_first = claimed_lower.split()[0] if claimed_lower else ""
     actual_first = actual_lower.split()[0] if actual_lower else ""
-    if claimed_first and actual_first and (
-        claimed_first == actual_first
-        or claimed_first in actual_lower
-    ):
-        return True
-
-    return False
+    return bool(
+        claimed_first
+        and actual_first
+        and (claimed_first == actual_first or claimed_first in actual_lower)
+    )

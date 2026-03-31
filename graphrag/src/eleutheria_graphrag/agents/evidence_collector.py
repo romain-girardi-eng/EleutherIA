@@ -18,7 +18,6 @@ from eleutheria_graphrag.agents.state import (
     ContextPack,
     Evidence,
     EvidenceBundle,
-    EvidenceLayer,
     EvidenceSource,
     RAGState,
     ResearchNotebook,
@@ -56,7 +55,7 @@ class EvidenceCollector:
         self.context_node_ids: list[str] = []
         self.tool_calls: list[ToolCallRecord] = []
 
-    def ingest(self, tool_name: str, args: dict[str, Any], result: BaseModel) -> None:
+    def ingest(self, tool_name: str, _args: dict[str, Any], result: BaseModel) -> None:
         """Route tool results to appropriate evidence lists."""
         result_dict = result.model_dump()
 
@@ -83,16 +82,18 @@ class EvidenceCollector:
         duration_ms: int = 0,
     ) -> None:
         """Record a tool call for the audit trail."""
-        self.tool_calls.append(ToolCallRecord(
-            call_id=f"tc_{len(self.tool_calls) + 1}",
-            tool_name=tool_name,
-            args=args,
-            reason=reason,
-            result_summary=result_summary,
-            node_count=node_count,
-            passage_count=passage_count,
-            duration_ms=duration_ms,
-        ))
+        self.tool_calls.append(
+            ToolCallRecord(
+                call_id=f"tc_{len(self.tool_calls) + 1}",
+                tool_name=tool_name,
+                args=args,
+                reason=reason,
+                result_summary=result_summary,
+                node_count=node_count,
+                passage_count=passage_count,
+                duration_ms=duration_ms,
+            )
+        )
 
     def populate_state(self, state: RAGState) -> None:
         """Write accumulated evidence into RAGState for synthesis phase."""
@@ -136,16 +137,18 @@ class EvidenceCollector:
             if nid and nid not in self.seen_node_ids:
                 self.seen_node_ids.add(nid)
                 self.seed_node_ids.append(nid)
-                self.primary_evidence.append(Evidence(
-                    id=nid,
-                    label=node.get("label", ""),
-                    type=node.get("type", ""),
-                    description=node.get("description", ""),
-                    score=node.get("score", 0.0),
-                    source=EvidenceSource.SEMANTIC_SEARCH,
-                    period=node.get("period"),
-                    school=node.get("school"),
-                ))
+                self.primary_evidence.append(
+                    Evidence(
+                        id=nid,
+                        label=node.get("label", ""),
+                        type=node.get("type", ""),
+                        description=node.get("description", ""),
+                        score=node.get("score", 0.0),
+                        source=EvidenceSource.SEMANTIC_SEARCH,
+                        period=node.get("period"),
+                        school=node.get("school"),
+                    )
+                )
 
     def _ingest_explore_subgraph(self, result: dict[str, Any]) -> None:
         """Ingest results from explore_subgraph tool."""
@@ -154,13 +157,15 @@ class EvidenceCollector:
             if nid and nid not in self.seen_node_ids:
                 self.seen_node_ids.add(nid)
                 self.context_node_ids.append(nid)
-                self.secondary_evidence.append(Evidence(
-                    id=nid,
-                    label=node.get("label", ""),
-                    type=node.get("type", ""),
-                    score=node.get("ppr_score", 0.0),
-                    source=EvidenceSource.GRAPH_TRAVERSAL,
-                ))
+                self.secondary_evidence.append(
+                    Evidence(
+                        id=nid,
+                        label=node.get("label", ""),
+                        type=node.get("type", ""),
+                        score=node.get("ppr_score", 0.0),
+                        source=EvidenceSource.GRAPH_TRAVERSAL,
+                    )
+                )
 
     def _ingest_get_neighbors(self, result: dict[str, Any]) -> None:
         """Ingest results from get_neighbors tool."""
@@ -169,12 +174,14 @@ class EvidenceCollector:
             if nid and nid not in self.seen_node_ids:
                 self.seen_node_ids.add(nid)
                 self.context_node_ids.append(nid)
-                self.secondary_evidence.append(Evidence(
-                    id=nid,
-                    label=edge.get("label", ""),
-                    type=edge.get("type", ""),
-                    source=EvidenceSource.GRAPH_TRAVERSAL,
-                ))
+                self.secondary_evidence.append(
+                    Evidence(
+                        id=nid,
+                        label=edge.get("label", ""),
+                        type=edge.get("type", ""),
+                        source=EvidenceSource.GRAPH_TRAVERSAL,
+                    )
+                )
 
     def _ingest_passages(self, result: dict[str, Any], tool_name: str) -> None:
         """Ingest results from read_passages or search_passages tools."""
@@ -185,23 +192,25 @@ class EvidenceCollector:
                 self.seen_passage_ids.add(pid)
                 text = p.get("text_content", "")
                 translation = p.get("translation") or None
-                self.evidence_bundles.append(EvidenceBundle(
-                    bundle_id=f"b_{uuid.uuid4().hex[:8]}",
-                    work_id=p.get("work_id", ""),
-                    work_title=p.get("work_title", ""),
-                    author=p.get("author"),
-                    canonical_ref=p.get("canonical_ref"),
-                    original_passage_id=pid,
-                    original_text=text,
-                    translation_text=translation,
-                    language=p.get("language"),
-                    token_estimate=RetrievalBudget.estimate_tokens(text),
-                    source=(
-                        EvidenceSource.PASSAGE_CITATION
-                        if tool_name == "read_passages"
-                        else EvidenceSource.HYBRID_SEARCH
-                    ),
-                ))
+                self.evidence_bundles.append(
+                    EvidenceBundle(
+                        bundle_id=f"b_{uuid.uuid4().hex[:8]}",
+                        work_id=p.get("work_id", ""),
+                        work_title=p.get("work_title", ""),
+                        author=p.get("author"),
+                        canonical_ref=p.get("canonical_ref"),
+                        original_passage_id=pid,
+                        original_text=text,
+                        translation_text=translation,
+                        language=p.get("language"),
+                        token_estimate=RetrievalBudget.estimate_tokens(text),
+                        source=(
+                            EvidenceSource.PASSAGE_CITATION
+                            if tool_name == "read_passages"
+                            else EvidenceSource.HYBRID_SEARCH
+                        ),
+                    )
+                )
 
     def _ingest_node_detail(self, result: dict[str, Any]) -> None:
         """Ingest results from get_node_detail tool."""
@@ -209,13 +218,14 @@ class EvidenceCollector:
         if nid and nid not in self.seen_node_ids:
             self.seen_node_ids.add(nid)
             self.context_node_ids.append(nid)
-            self.primary_evidence.append(Evidence(
-                id=nid,
-                label=result.get("label", ""),
-                type=result.get("type", ""),
-                description=result.get("description", ""),
-                source=EvidenceSource.DIRECT_LOOKUP,
-                period=result.get("period"),
-                school=result.get("school"),
-            ))
-
+            self.primary_evidence.append(
+                Evidence(
+                    id=nid,
+                    label=result.get("label", ""),
+                    type=result.get("type", ""),
+                    description=result.get("description", ""),
+                    source=EvidenceSource.DIRECT_LOOKUP,
+                    period=result.get("period"),
+                    school=result.get("school"),
+                )
+            )

@@ -276,14 +276,14 @@ export default function AgentActivityPanel({ steps, isActive, className }: Agent
 
   // Track tool call index (only for tool_start/tool_result)
   const toolCallIndices = useMemo(() => {
-    const indices: Map<string, number> = new Map();
+    const indices: Record<string, number> = {};
     let idx = 0;
     for (const step of steps) {
       if (step.type === 'tool_start') {
-        indices.set(step.id, idx);
+        indices[step.id] = idx;
         idx++;
       } else if (step.type === 'tool_result') {
-        indices.set(step.id, idx - 1);
+        indices[step.id] = idx - 1;
       }
     }
     return indices;
@@ -340,7 +340,7 @@ export default function AgentActivityPanel({ steps, isActive, className }: Agent
                 <ToolCallCard
                   key={step.id}
                   step={step}
-                  index={toolCallIndices.get(step.id) ?? 0}
+                  index={toolCallIndices[step.id] ?? 0}
                 />
               );
             }

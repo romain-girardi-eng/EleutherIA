@@ -115,7 +115,7 @@ class ScholarlyAgent:
         # Phase 1: Classify query type
         classify_node = ClassifyQueryType()
         ctx = GraphRunContext(state=state, deps=self.deps)
-        next_node = await classify_node.run(ctx)
+        await classify_node.run(ctx)
         logger.info(
             "Query classified: type=%s, complexity=%s",
             state.query_type,
@@ -135,7 +135,8 @@ class ScholarlyAgent:
         logger.info(
             "Agent loop completed: %d calls, %d evidence, %d bundles",
             agent.calls_made,
-            len(agent.evidence.primary_evidence) + len(agent.evidence.secondary_evidence),
+            len(agent.evidence.primary_evidence)
+            + len(agent.evidence.secondary_evidence),
             len(agent.evidence.evidence_bundles),
         )
 
@@ -143,11 +144,11 @@ class ScholarlyAgent:
         # Run DraftClaimLedger → RenderGroundedAnswer → ProgrammaticVerify
         draft_node = DraftClaimLedger()
         ctx = GraphRunContext(state=state, deps=self.deps)
-        next_node = await draft_node.run(ctx)
+        await draft_node.run(ctx)
 
         render_node = RenderGroundedAnswer()
         ctx = GraphRunContext(state=state, deps=self.deps)
-        next_node = await render_node.run(ctx)
+        await render_node.run(ctx)
 
         verify_node = ProgrammaticVerify()
         ctx = GraphRunContext(state=state, deps=self.deps)
@@ -158,6 +159,7 @@ class ScholarlyAgent:
             answer = result.data
         else:
             from eleutheria_graphrag.agents.graph_nodes import _make_answer
+
             answer = _make_answer(state)
 
         # Phase 3.5: Programmatic passage injection
@@ -169,7 +171,9 @@ class ScholarlyAgent:
         return answer
 
     @staticmethod
-    def _inject_passage_quotations(answer: ScholarlyAnswer, state: Any) -> ScholarlyAnswer:
+    def _inject_passage_quotations(
+        answer: ScholarlyAnswer, state: Any
+    ) -> ScholarlyAnswer:
         """Programmatic injection of passage quotations when the LLM omits them.
 
         If the rendered answer has fewer than 2 blockquote sections with Greek/Latin
@@ -182,11 +186,13 @@ class ScholarlyAgent:
 
         text = answer.answer
         # Count existing Greek blockquotes (lines starting with > containing Greek chars)
-        greek_quote_count = len(_re.findall(
-            r'^>\s*.*[\u0370-\u03FF\u1F00-\u1FFF]',
-            text,
-            _re.MULTILINE,
-        ))
+        greek_quote_count = len(
+            _re.findall(
+                r"^>\s*.*[\u0370-\u03FF\u1F00-\u1FFF]",
+                text,
+                _re.MULTILINE,
+            )
+        )
 
         if greek_quote_count >= 2:
             return answer  # LLM already included quotations
@@ -225,7 +231,11 @@ class ScholarlyAgent:
                 block += f'\n> "{trans}"'
 
             ref_marker = ""
-            if bundle.bundle_id and state.context_pack and state.context_pack.bundle_refs:
+            if (
+                bundle.bundle_id
+                and state.context_pack
+                and state.context_pack.bundle_refs
+            ):
                 ref_marker = state.context_pack.bundle_refs.get(bundle.bundle_id, "")
                 if ref_marker:
                     ref_marker = f" [{ref_marker}]"
@@ -243,16 +253,18 @@ class ScholarlyAgent:
         injection = "\n\n## Primary Textual Evidence\n\n" + "\n\n".join(sections)
         new_text = text.rstrip() + injection
 
-        return answer.model_copy(update={
-            "answer": new_text,
-            "metadata": {
-                **answer.metadata,
-                "passage_injection": {
-                    "injected": len(sections),
-                    "reason": f"LLM produced only {greek_quote_count} Greek quotation(s), minimum is 2",
+        return answer.model_copy(
+            update={
+                "answer": new_text,
+                "metadata": {
+                    **answer.metadata,
+                    "passage_injection": {
+                        "injected": len(sections),
+                        "reason": f"LLM produced only {greek_quote_count} Greek quotation(s), minimum is 2",
+                    },
                 },
-            },
-        })
+            }
+        )
 
     async def _verify_ancient_text(self, answer: ScholarlyAnswer) -> ScholarlyAnswer:
         """Deterministic verification: Greek/Latin text must be in the DB.
@@ -273,47 +285,57 @@ class ScholarlyAgent:
             )
             if not verification.all_verified:
                 sanitized = sanitize_answer(answer.answer, verification)
-                answer = answer.model_copy(update={
-                    "answer": sanitized,
-                    "metadata": {
-                        **answer.metadata,
-                        "text_verification": {
-                            "verified": len(verification.verified_extracts),
-                            "unverified": len(verification.unverified_extracts),
-                            "misattributed": len(verification.misattributed_extracts),
-                            "unverified_texts": [
-                                {"text": e.text[:100], "words": e.word_count, "action": e.action}
-                                for e in verification.unverified_extracts
-                            ],
-                            "misattributed_texts": [
-                                {
-                                    "text": e.text[:80],
-                                    "claimed": e.claimed_work,
-                                    "actual": e.actual_work,
-                                    "actual_ref": e.actual_ref,
-                                    "action": e.action,
-                                }
-                                for e in verification.misattributed_extracts
-                            ],
+                answer = answer.model_copy(
+                    update={
+                        "answer": sanitized,
+                        "metadata": {
+                            **answer.metadata,
+                            "text_verification": {
+                                "verified": len(verification.verified_extracts),
+                                "unverified": len(verification.unverified_extracts),
+                                "misattributed": len(
+                                    verification.misattributed_extracts
+                                ),
+                                "unverified_texts": [
+                                    {
+                                        "text": e.text[:100],
+                                        "words": e.word_count,
+                                        "action": e.action,
+                                    }
+                                    for e in verification.unverified_extracts
+                                ],
+                                "misattributed_texts": [
+                                    {
+                                        "text": e.text[:80],
+                                        "claimed": e.claimed_work,
+                                        "actual": e.actual_work,
+                                        "actual_ref": e.actual_ref,
+                                        "action": e.action,
+                                    }
+                                    for e in verification.misattributed_extracts
+                                ],
+                            },
                         },
-                    },
-                })
+                    }
+                )
                 logger.warning(
                     "Text verification: %d verified, %d unverified",
                     len(verification.verified_extracts),
                     len(verification.unverified_extracts),
                 )
             else:
-                answer = answer.model_copy(update={
-                    "metadata": {
-                        **answer.metadata,
-                        "text_verification": {
-                            "verified": len(verification.verified_extracts),
-                            "unverified": 0,
-                            "status": "all_verified",
+                answer = answer.model_copy(
+                    update={
+                        "metadata": {
+                            **answer.metadata,
+                            "text_verification": {
+                                "verified": len(verification.verified_extracts),
+                                "unverified": 0,
+                                "status": "all_verified",
+                            },
                         },
-                    },
-                })
+                    }
+                )
         except Exception:
             logger.warning("Text verification failed", exc_info=True)
 
@@ -407,15 +429,19 @@ class ScholarlyAgent:
         )
 
         # Phase 1: Classify
-        yield json.dumps({"type": "status", "message": "Classifying query...", "data": {"step": 0}})
+        yield json.dumps(
+            {"type": "status", "message": "Classifying query...", "data": {"step": 0}}
+        )
         classify_node = ClassifyQueryType()
         ctx = GraphRunContext(state=state, deps=self.deps)
         await classify_node.run(ctx)
-        yield json.dumps({
-            "type": "status",
-            "message": f"Query classified: {state.complexity.value}",
-            "data": {"step": 1},
-        })
+        yield json.dumps(
+            {
+                "type": "status",
+                "message": f"Query classified: {state.complexity.value}",
+                "data": {"step": 1},
+            }
+        )
 
         # Phase 2: Agent loop with real-time SSE
         queue: asyncio.Queue[dict[str, Any] | None] = asyncio.Queue()
@@ -442,7 +468,13 @@ class ScholarlyAgent:
         await agent_task
 
         # Phase 3: Synthesis
-        yield json.dumps({"type": "status", "message": "Synthesizing answer...", "data": {"step": 99}})
+        yield json.dumps(
+            {
+                "type": "status",
+                "message": "Synthesizing answer...",
+                "data": {"step": 99},
+            }
+        )
 
         draft_node = DraftClaimLedger()
         ctx = GraphRunContext(state=state, deps=self.deps)
@@ -460,6 +492,7 @@ class ScholarlyAgent:
             answer = result.data
         else:
             from eleutheria_graphrag.agents.graph_nodes import _make_answer
+
             answer = _make_answer(state)
 
         # Phase 3.5: Programmatic passage injection

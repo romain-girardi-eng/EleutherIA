@@ -86,7 +86,9 @@ class TreeIndexService:
                         author=row["author"],
                         period=row.get("period"),
                         total_passages=row["total_passages"],
-                        nodes=[TreeNode.model_validate(node) for node in tree_data["nodes"]],
+                        nodes=[
+                            TreeNode.model_validate(node) for node in tree_data["nodes"]
+                        ],
                     )
                 else:
                     idx = WorkTreeIndex.model_validate(tree_data)

@@ -45,7 +45,9 @@ class VectorStrategy:
                 embedding = await self._embed(deps, query)
                 hits = await deps.qdrant.search_nodes(embedding, limit=limit_per_query)
             except Exception:
-                logger.warning("VectorStrategy failed for query %r", query, exc_info=True)
+                logger.warning(
+                    "VectorStrategy failed for query %r", query, exc_info=True
+                )
                 continue
 
             for hit in hits:
@@ -97,7 +99,9 @@ class SQLStrategy:
         if deps.search is not None:
             hybrid_ids = await self._step2_hybrid_search(queries, deps)
             seed_ids.extend(nid for nid in hybrid_ids if nid not in seed_ids)
-            passage_anchor_ids.extend(nid for nid in hybrid_ids if nid not in passage_anchor_ids)
+            passage_anchor_ids.extend(
+                nid for nid in hybrid_ids if nid not in passage_anchor_ids
+            )
 
         if len(passage_anchor_ids) >= self._min_bundles:
             return _dedup(seed_ids), _dedup(passage_anchor_ids[:12])
@@ -142,7 +146,9 @@ class SQLStrategy:
         # Tier 2: Only search descriptions if label matches are insufficient.
         # Skip short generic terms to avoid matching everything.
         if len(result_ids) < self._min_bundles:
-            long_patterns = [p for p in patterns if len(p) > 7]  # %term% where term > 5 chars
+            long_patterns = [
+                p for p in patterns if len(p) > 7
+            ]  # %term% where term > 5 chars
             if long_patterns:
                 desc_ph = ", ".join(f"${i + 1}" for i in range(len(long_patterns)))
                 desc_sql = f"""
@@ -158,11 +164,15 @@ class SQLStrategy:
                         if r["node_id"] not in result_ids:
                             result_ids.append(r["node_id"])
                 except Exception:
-                    logger.warning("SQLStrategy step1 description match failed", exc_info=True)
+                    logger.warning(
+                        "SQLStrategy step1 description match failed", exc_info=True
+                    )
 
         return result_ids
 
-    async def _fetch_citations(self, node_ids: list[str], deps: Any) -> list[dict[str, Any]]:
+    async def _fetch_citations(
+        self, node_ids: list[str], deps: Any
+    ) -> list[dict[str, Any]]:
         """Fetch passage_citations for given node IDs, ordered by confidence."""
         if not node_ids:
             return []
@@ -209,5 +219,9 @@ class SQLStrategy:
                     if pid and pid not in all_ids:
                         all_ids.append(pid)
             except Exception:
-                logger.warning("SQLStrategy step2 hybrid_search failed for %r", query, exc_info=True)
+                logger.warning(
+                    "SQLStrategy step2 hybrid_search failed for %r",
+                    query,
+                    exc_info=True,
+                )
         return all_ids

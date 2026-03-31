@@ -106,7 +106,9 @@ async def list_passages(
     db: Annotated[DatabaseService, Depends(get_db)],
     book: str | None = Query(None, description="Filter by book"),
     chapter: str | None = Query(None, description="Filter by chapter"),
-    include_translations: bool = Query(False, description="Include KG translation nodes"),
+    include_translations: bool = Query(
+        False, description="Include KG translation nodes"
+    ),
     limit: int = Query(100, ge=1, le=1000),
     offset: int = Query(0, ge=0),
 ) -> list[dict]:

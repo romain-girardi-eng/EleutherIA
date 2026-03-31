@@ -32,19 +32,21 @@ def append_reasoning_step(
     duration_ms: int = 0,
 ) -> None:
     """Append a ReasoningStep to the state's reasoning trace."""
-    state.reasoning_trace.append(ReasoningStep(
-        node_name=node_name,
-        timestamp_ms=int(_time.time() * 1000),
-        duration_ms=duration_ms,
-        model=model,
-        prompt_summary=prompt_summary[:200],
-        full_prompt_tokens=full_prompt_tokens,
-        raw_output=raw_output,
-        thinking=thinking,
-        parsed_result=parsed_result,
-        skipped=skipped,
-        skip_reason=skip_reason,
-    ))
+    state.reasoning_trace.append(
+        ReasoningStep(
+            node_name=node_name,
+            timestamp_ms=int(_time.time() * 1000),
+            duration_ms=duration_ms,
+            model=model,
+            prompt_summary=prompt_summary[:200],
+            full_prompt_tokens=full_prompt_tokens,
+            raw_output=raw_output,
+            thinking=thinking,
+            parsed_result=parsed_result,
+            skipped=skipped,
+            skip_reason=skip_reason,
+        )
+    )
 
 
 def resolve_model_api_id(state: RAGState) -> str | None:
@@ -62,6 +64,7 @@ def parse_json(text: str) -> Any:
     Handles common LLM output quirks: smart quotes, trailing commas,
     NaN values, embedded code fences, and partial JSON extraction.
     """
+
     def _repair_json(candidate: str) -> str:
         candidate = (
             candidate.replace("\u201c", '"')

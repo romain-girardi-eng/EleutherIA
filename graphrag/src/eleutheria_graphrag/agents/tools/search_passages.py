@@ -54,7 +54,10 @@ class SearchPassagesTool:
         return {
             "type": "object",
             "properties": {
-                "query": {"type": "string", "description": "Search text (supports Greek/Latin)"},
+                "query": {
+                    "type": "string",
+                    "description": "Search text (supports Greek/Latin)",
+                },
                 "work_filter": {
                     "type": "string",
                     "description": "Filter by work_id to search within a specific work",
@@ -79,18 +82,19 @@ class SearchPassagesTool:
                     limit=limit * 3,  # Fetch extra for post-filtering
                 )
                 for row in results:
-                    if work_filter:
-                        if row.get("work_id") != work_filter:
-                            continue
-                    passages.append(PassageHit(
-                        passage_id=str(row.get("passage_id") or row.get("id", "")),
-                        work_title=row.get("title", ""),
-                        author=row.get("author"),
-                        canonical_ref=row.get("canonical_ref"),
-                        language=row.get("language"),
-                        text_content=(row.get("text_content") or "")[:800],
-                        score=row.get("rank", 0.0),
-                    ))
+                    if work_filter and row.get("work_id") != work_filter:
+                        continue
+                    passages.append(
+                        PassageHit(
+                            passage_id=str(row.get("passage_id") or row.get("id", "")),
+                            work_title=row.get("title", ""),
+                            author=row.get("author"),
+                            canonical_ref=row.get("canonical_ref"),
+                            language=row.get("language"),
+                            text_content=(row.get("text_content") or "")[:800],
+                            score=row.get("rank", 0.0),
+                        )
+                    )
                     if len(passages) >= limit:
                         break
 
@@ -99,7 +103,9 @@ class SearchPassagesTool:
                     total_found=len(results),
                 )
             except Exception:
-                logger.warning("HybridSearch failed, falling back to SQL", exc_info=True)
+                logger.warning(
+                    "HybridSearch failed, falling back to SQL", exc_info=True
+                )
 
         # Fallback: ILIKE search (works across Greek/Latin/English)
         work_clause = ""

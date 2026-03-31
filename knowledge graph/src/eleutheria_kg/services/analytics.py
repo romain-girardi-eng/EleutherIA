@@ -32,7 +32,11 @@ PERIOD_METADATA: dict[str, dict[str, str | int | None]] = {
     "Roman Imperial": {"label": "Roman Imperial", "start": -27, "end": 300},
     "Patristic": {"label": "Patristic", "start": 150, "end": 450},
     "Late Antiquity": {"label": "Late Antiquity", "start": 300, "end": 600},
-    "Second Temple Judaism": {"label": "Second Temple Judaism", "start": -515, "end": 70},
+    "Second Temple Judaism": {
+        "label": "Second Temple Judaism",
+        "start": -515,
+        "end": 70,
+    },
     "Rabbinic": {"label": "Rabbinic", "start": 70, "end": 600},
     "Medieval": {"label": "Medieval", "start": 500, "end": 1500},
     "Early Modern": {"label": "Early Modern", "start": 1500, "end": 1800},

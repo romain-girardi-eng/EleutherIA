@@ -92,15 +92,19 @@ class AgentLoop:
         """Execute the ReAct loop."""
         # Initialize conversation
         self.messages = [
-            _system_msg(format_system_prompt(
-                budget=self.budget,
-                remaining=self.budget,
-                tool_descriptions=self.tools.tool_descriptions(),
-            )),
-            _user_msg(format_user_prompt(
-                question=self.state.question,
-                context=self._build_query_context(),
-            )),
+            _system_msg(
+                format_system_prompt(
+                    budget=self.budget,
+                    remaining=self.budget,
+                    tool_descriptions=self.tools.tool_descriptions(),
+                )
+            ),
+            _user_msg(
+                format_user_prompt(
+                    question=self.state.question,
+                    context=self._build_query_context(),
+                )
+            ),
         ]
 
         self.emitter.set_budget(self.budget)
@@ -111,9 +115,9 @@ class AgentLoop:
 
             # Budget warning at N-2
             if remaining == 2:
-                self.messages.append(_system_msg(
-                    BUDGET_WARNING.format(remaining=remaining)
-                ))
+                self.messages.append(
+                    _system_msg(BUDGET_WARNING.format(remaining=remaining))
+                )
 
             # Call LLM
             t0 = time.monotonic()
@@ -128,7 +132,7 @@ class AgentLoop:
                 logger.error("LLM call failed in agent loop: %s", e, exc_info=True)
                 await self.emitter.emit_error(f"LLM error: {e}")
                 break
-            llm_ms = int((time.monotonic() - t0) * 1000)
+            int((time.monotonic() - t0) * 1000)
 
             # Parse action
             action = _parse_action(raw, self.tools)
@@ -163,9 +167,7 @@ class AgentLoop:
                 break
 
             # Execute tool
-            await self.emitter.emit_tool_start(
-                action.tool, action.args, action.reason
-            )
+            await self.emitter.emit_tool_start(action.tool, action.args, action.reason)
 
             t0 = time.monotonic()
             try:
@@ -174,9 +176,7 @@ class AgentLoop:
                 self.evidence.ingest(action.tool, action.args, result)
                 error = False
             except Exception as e:
-                logger.warning(
-                    "Tool %s failed: %s", action.tool, e, exc_info=True
-                )
+                logger.warning("Tool %s failed: %s", action.tool, e, exc_info=True)
                 result_dict = {"error": str(e)}
                 error = True
             tool_ms = int((time.monotonic() - t0) * 1000)
@@ -341,7 +341,9 @@ def _summarize_for_context(tool: str, result: dict[str, Any]) -> str:
             + (f" — {n.get('description', '')[:100]}" if n.get("description") else "")
             for n in nodes
         ]
-        return f"Found {result.get('total_found', len(nodes))} nodes:\n" + "\n".join(lines)
+        return f"Found {result.get('total_found', len(nodes))} nodes:\n" + "\n".join(
+            lines
+        )
 
     if tool == "get_neighbors":
         edges = result.get("edges", [])
