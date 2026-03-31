@@ -21,7 +21,8 @@ class PassageSummary(BaseModel):
     author: str | None = None
     canonical_ref: str | None = None
     language: str | None = None
-    text_content: str = Field(default="", description="Up to 800 chars")
+    text_content: str = Field(default="", description="Original text up to 800 chars")
+    translation: str | None = Field(default=None, description="English translation if available")
     confidence: float = 0.0
 
 
@@ -112,21 +113,43 @@ class ReadPassagesTool:
             except Exception:
                 logger.warning("work passages query failed for %s", node_id, exc_info=True)
 
-        passages = [
-            PassageSummary(
+        passages: list[PassageSummary] = []
+        for row in rows:
+            translation = await self._fetch_translation(row.get("passage_id", ""), node_id)
+            passages.append(PassageSummary(
                 passage_id=row["passage_id"],
                 work_title=row.get("title") or "",
                 author=row.get("author"),
                 canonical_ref=row.get("canonical_ref"),
                 language=row.get("language"),
                 text_content=(row.get("text_content") or "")[:800],
+                translation=translation,
                 confidence=row.get("confidence", 0.0),
-            )
-            for row in rows
-        ]
+            ))
 
         return ReadPassagesResult(
             node_id=node_id,
             node_label=node_label,
             passages=passages,
         )
+
+    async def _fetch_translation(self, passage_id: str, kg_node_id: str) -> str | None:
+        """Look up English translation via KG _en nodes linked by translation_of.
+
+        The translation is stored as the description of the _en suffixed KG node.
+        """
+        # Try: find _en node that translates the passage's KG node
+        en_node_id = f"{kg_node_id}_en"
+        en_node = self._deps.node_lookup.get(en_node_id)
+        if en_node and en_node.get("description"):
+            return (en_node["description"] or "")[:800]
+
+        # Try: find translation_of edge from any _en node to this passage's KG node
+        for edge in self._deps.incoming_edges.get(kg_node_id, []):
+            if edge.get("relation") == "translation_of":
+                src_id = edge.get("source", "")
+                src_node = self._deps.node_lookup.get(src_id, {})
+                if src_node.get("description"):
+                    return (src_node["description"] or "")[:800]
+
+        return None

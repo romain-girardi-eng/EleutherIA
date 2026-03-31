@@ -134,8 +134,12 @@ async def query_stream(
                                 if nid not in seed_ids
                             ]
                             sources = []
-                            for i, nid in enumerate(seed_ids[:10]):
+                            # Include both seed nodes and top context nodes
+                            all_source_ids = list(dict.fromkeys(seed_ids + ctx_ids))[:15]
+                            for i, nid in enumerate(all_source_ids):
                                 node = lookup.get(nid, {})
+                                if not node:
+                                    continue
                                 sources.append({
                                     "id": i + 1,
                                     "nodeId": nid,
