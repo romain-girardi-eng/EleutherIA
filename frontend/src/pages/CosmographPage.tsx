@@ -1112,8 +1112,8 @@ export default function CosmographPage() {
 
       try {
         const [nodesResponse, edgesResponse, communityData] = await Promise.all([
-          apiClient.getNodes(),
-          apiClient.getEdges() as Promise<EdgeApiResponse>,
+          apiClient.getNodes({ limit: 50000 }),
+          apiClient.getEdges({ limit: 50000 }) as Promise<EdgeApiResponse>,
           apiClient.getCytoscapeData({ algorithm: 'semantic' }).catch(() => null),
         ]);
 
