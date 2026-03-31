@@ -419,7 +419,16 @@ export default function GraphRAGPage() {
                     chunk = String(chunkData.data || chunkData.chunk || chunkData.text || '');
                   }
                   fullAnswer += chunk;
-                  if (!fullAnswer) updateReasoningStep(4, 'active');
+                  if (fullAnswer.length === chunk.length) updateReasoningStep(4, 'active');
+                  // Update message in real-time so the user sees streaming text
+                  const streamingContent = fullAnswer;
+                  setMessages((prev) => {
+                    const last = prev[prev.length - 1];
+                    if (last?.role === 'assistant') {
+                      return [...prev.slice(0, -1), { ...last, content: streamingContent }];
+                    }
+                    return [...prev, { role: 'assistant', content: streamingContent, timestamp: new Date() }];
+                  });
                   break;
                 }
 

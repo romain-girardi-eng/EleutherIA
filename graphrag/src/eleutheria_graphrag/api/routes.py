@@ -74,6 +74,7 @@ async def query_stream(
     async def generate() -> AsyncIterator[str]:
         try:
             complete_sent = False
+            yield f'data: {json.dumps({"type": "status", "data": {"message": "Initializing scholarly agent...", "step": 1}})}\n\n'
             async for chunk in graphrag.query_stream(
                 question=question,
                 semantic_k=semantic_k,
@@ -90,7 +91,79 @@ async def query_stream(
                     try:
                         parsed = json.loads(chunk)
                         if parsed.get("type") == "complete":
-                            yield f"data: {chunk}\n\n"
+                            # Transform agent data to match the frontend
+                            # GraphRAGResponse shape (same as /answer).
+                            raw = parsed.get("data") or {}
+                            raw_citations = raw.get("citations", [])
+                            ancient = [
+                                (c.get("label") or c.get("citationText") or "")
+                                for c in raw_citations
+                                if isinstance(c, dict) and c.get("type") == "passage"
+                            ] or [
+                                (c.get("label") or c.get("citationText") or "")
+                                for c in raw_citations
+                                if isinstance(c, dict)
+                            ]
+                            seed_ids = raw.get("seed_nodes", [])
+                            ctx_ids = raw.get("context_nodes", [])
+                            lookup = graphrag.node_lookup
+                            starting = [
+                                {
+                                    "id": nid,
+                                    "label": lookup.get(nid, {}).get("label", nid),
+                                    "type": lookup.get(nid, {}).get("type", "concept"),
+                                    "reason": "Retrieved via semantic search",
+                                }
+                                for nid in seed_ids
+                            ]
+                            expanded = [
+                                {
+                                    "id": nid,
+                                    "label": lookup.get(nid, {}).get("label", nid),
+                                    "type": lookup.get(nid, {}).get("type", "concept"),
+                                    "reason": "Expanded via graph traversal",
+                                }
+                                for nid in ctx_ids
+                                if nid not in seed_ids
+                            ]
+                            sources = []
+                            for i, nid in enumerate(seed_ids[:10]):
+                                node = lookup.get(nid, {})
+                                sources.append({
+                                    "id": i + 1,
+                                    "nodeId": nid,
+                                    "nodeLabel": node.get("label", nid),
+                                    "nodeType": node.get("type", "concept"),
+                                    "content": (node.get("description") or "")[:300],
+                                    "metadata": {
+                                        "school": node.get("school"),
+                                        "period": node.get("period"),
+                                    },
+                                })
+                            complete_payload = {
+                                "type": "complete",
+                                "data": {
+                                    "query": raw.get("question", question),
+                                    "answer": raw.get("answer", ""),
+                                    "citations": {
+                                        "ancient_sources": [a for a in ancient if a],
+                                        "modern_scholarship": [],
+                                    },
+                                    "sources": sources,
+                                    "reasoning_path": {
+                                        "starting_nodes": starting,
+                                        "expanded_nodes": expanded[:20],
+                                        "traversed_edges": [],
+                                        "total_nodes": len(ctx_ids),
+                                        "total_edges": 0,
+                                    },
+                                    "llm_model": raw.get("llm_model", ""),
+                                    "llm_provider": raw.get("llm_provider", ""),
+                                    "metadata": raw.get("metadata", {}),
+                                    "nodes_used": len(ctx_ids),
+                                },
+                            }
+                            yield f"data: {json.dumps(complete_payload, default=str)}\n\n"
                             complete_sent = True
                             continue
                     except json.JSONDecodeError:
