@@ -857,7 +857,7 @@ class TestExpandEvidenceBundles:
         )
         deps.db.fetch = AsyncMock(
             side_effect=[
-                [{"kg_node_id": "passage_grc_1"}],
+                [{"passage_id": "p1", "kg_node_id": "passage_grc_1"}],
                 [],
             ]
         )
