@@ -9,7 +9,7 @@ import Cookies from 'js-cookie';
 export type StreamStatus = 'idle' | 'connecting' | 'streaming' | 'error' | 'complete';
 
 export interface SSEStreamEvent<T = unknown> {
-  type: 'status' | 'nodes' | 'citations' | 'answer_chunk' | 'complete' | 'error';
+  type: 'status' | 'nodes' | 'citations' | 'answer_chunk' | 'complete' | 'error' | 'agent_thinking' | 'tool_start' | 'tool_result';
   message?: string;
   data?: T;
 }

@@ -90,7 +90,7 @@ class TestScholarlyAgent:
                 "eleutheria_graphrag.agents.graph_nodes._get_embedding",
                 AsyncMock(return_value=[0.1] * 768),
             )
-            answer = await agent.query("What did the Stoics believe about fate?")
+            answer = await agent.query("What did the Stoics believe about fate?", agent_mode="fsm")
 
         assert "fate" in answer.answer.lower()
         assert answer.citations[0].ref == "P1"
@@ -106,7 +106,7 @@ class TestScholarlyAgent:
                 "eleutheria_graphrag.agents.graph_nodes._get_embedding",
                 AsyncMock(return_value=[0.1] * 768),
             )
-            result = await agent.query_dict("What did the Stoics believe about fate?")
+            result = await agent.query_dict("What did the Stoics believe about fate?", agent_mode="fsm")
 
         assert result["metadata"]["grounding_policy"] == "mixed_evidence"
         assert result["metadata"]["claim_ledger_size"] >= 1
@@ -122,7 +122,7 @@ class TestScholarlyAgent:
                 "eleutheria_graphrag.agents.graph_nodes._get_embedding",
                 AsyncMock(return_value=[0.1] * 768),
             )
-            async for chunk in agent.query_stream("What did the Stoics believe about fate?"):
+            async for chunk in agent.query_stream("What did the Stoics believe about fate?", agent_mode="fsm"):
                 chunks.append(chunk)
 
         text = "".join(chunks)
@@ -157,7 +157,7 @@ async def test_query_stream_includes_claim_ledger_size():
         ],
     )
     with patch.object(agent, "query", new=AsyncMock(return_value=answer)):
-        chunks = [chunk async for chunk in agent.query_stream("What is fate?")]
+        chunks = [chunk async for chunk in agent.query_stream("What is fate?", agent_mode="fsm")]
 
     complete_chunk = next(c for c in chunks if c.startswith("{"))
     data = json.loads(complete_chunk)

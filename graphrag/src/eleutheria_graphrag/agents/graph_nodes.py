@@ -75,6 +75,12 @@ from eleutheria_graphrag.agents.structured_models import (
     SufficiencyAssessment,
     TreeNavigationResult,
 )
+from eleutheria_graphrag.agents.graph_helpers import (
+    DB_SCHEMA as _SHARED_DB_SCHEMA,
+    append_reasoning_step as _shared_append_reasoning_step,
+    parse_json as _shared_parse_json,
+    resolve_model_api_id as _shared_resolve_model_api_id,
+)
 from eleutheria_graphrag.agents.text_utils import truncate_json, truncate_text
 from eleutheria_graphrag.services.model_registry import get_model
 from eleutheria_graphrag.services.retrieval_strategy import SQLStrategy, VectorStrategy

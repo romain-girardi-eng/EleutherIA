@@ -391,12 +391,26 @@ export interface GraphRAGResponse {
 
 // GraphRAG SSE Event Types
 export interface GraphRAGStreamEvent {
-  type: 'status' | 'nodes' | 'citations' | 'thinking_chunk' | 'thinking_complete' | 'answer_chunk' | 'complete' | 'error';
+  type: 'status' | 'nodes' | 'citations' | 'thinking_chunk' | 'thinking_complete' | 'answer_chunk' | 'complete' | 'error' | 'agent_thinking' | 'tool_start' | 'tool_result';
   message?: string;
   step?: number;
   total_steps?: number;
-  data?: GraphRAGResponse | string | Record<string, unknown>;
+  data?: GraphRAGResponse | string | AgentToolEvent | Record<string, unknown>;
   progress?: number;
+}
+
+// Agent tool call events (ReAct loop)
+export interface AgentToolEvent {
+  tool?: string;
+  args?: Record<string, unknown>;
+  reason?: string;
+  thinking?: string;
+  summary?: string;
+  duration_ms?: number;
+  node_count?: number;
+  passage_count?: number;
+  step?: number;
+  remaining?: number;
 }
 
 // Text Types

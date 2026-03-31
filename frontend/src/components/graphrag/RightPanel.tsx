@@ -2,17 +2,19 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Network, Quote, Sparkles, Waypoints } from 'lucide-react';
+import { BookOpen, Brain, Network, Quote, Sparkles, Waypoints } from 'lucide-react';
 import TraversalDAG from './TraversalDAG';
 import ResearchGraphPanel from './ResearchGraphPanel';
 import NodeDetailCard from './NodeDetailCard';
 import PassageReaderPanel from './PassageReaderPanel';
+import AgentActivityPanel from './AgentActivityPanel';
+import type { AgentStep } from './AgentActivityPanel';
 import { cn } from '../../utils/cn';
 import type { GraphRAGResponse, SourceCitation } from '../../types';
 import type { PassageContext } from '../../types/graphrag';
 import { formatGraphNodeType, getGraphTypeTheme } from './graphTheme';
 
-export type RightPanelState = 'idle' | 'loading' | 'graph' | 'passage-reader';
+export type RightPanelState = 'idle' | 'loading' | 'reasoning' | 'graph' | 'passage-reader';
 
 interface RightPanelProps {
   state: RightPanelState;
@@ -20,6 +22,8 @@ interface RightPanelProps {
   allResponses?: GraphRAGResponse[];
   activeSourceIndex: number | null;
   passageContext?: PassageContext | null;
+  agentSteps?: AgentStep[];
+  agentActive?: boolean;
   onNodeClick: (nodeId: string) => void;
   onCloseDetail: () => void;
   onSourceSelect?: (sourceIndex: number) => void;
@@ -59,6 +63,7 @@ function PanelHeader({
   const stateCopy: Record<RightPanelState, string> = {
     idle: t('graphRagUi.rightPanel.states.idle'),
     loading: t('graphRagUi.rightPanel.states.loading'),
+    reasoning: 'Agent Reasoning',
     graph: t('graphRagUi.rightPanel.states.graph'),
     'passage-reader': t('graphRagUi.rightPanel.states.passageReader'),
   };
@@ -345,6 +350,8 @@ export default function RightPanel({
   allResponses,
   activeSourceIndex,
   passageContext,
+  agentSteps = [],
+  agentActive = false,
   onNodeClick: _onNodeClick,
   onCloseDetail,
   onSourceSelect,
@@ -353,10 +360,29 @@ export default function RightPanel({
   className = '',
 }: RightPanelProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const sources: SourceCitation[] = useMemo(
     () => response?.sources ?? [],
     [response?.sources],
   );
+
+  // Tab for switching between reasoning trace and graph
+  type PanelTab = 'reasoning' | 'graph';
+  const [activeTab, setActiveTab] = useState<PanelTab>('reasoning');
+
+  // Auto-switch to graph tab when response arrives
+  useEffect(() => {
+    if (state === 'graph' && response) {
+      setActiveTab('graph');
+    }
+  }, [state, response]);
+
+  // Reset to reasoning when a new query starts
+  useEffect(() => {
+    if (state === 'reasoning') {
+      setActiveTab('reasoning');
+    }
+  }, [state]);
 
   // Local state for which node is selected in the DAG (shows detail card)
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -462,6 +488,23 @@ export default function RightPanel({
 
             {state === 'loading' && <LoadingState />}
 
+            {state === 'reasoning' && (
+              <motion.div
+                key="reasoning"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.28 }}
+                className="h-full min-h-0"
+              >
+                <AgentActivityPanel
+                  steps={agentSteps}
+                  isActive={agentActive}
+                  className="h-full"
+                />
+              </motion.div>
+            )}
+
             {state === 'graph' && (
               <motion.div
                 key="graph"
@@ -471,24 +514,69 @@ export default function RightPanel({
                 transition={{ duration: 0.28 }}
                 className="flex h-full min-h-0 flex-col gap-3 p-4"
               >
-                {/* TOP: Interactive DAG */}
-                <div className="h-[34%] min-h-[220px] shrink-0">
-                  <TraversalDAG
-                    response={response}
-                    allResponses={allResponses}
-                    highlightedSourceIndex={activeSourceIndex}
-                    onNodeSelect={handleDAGNodeSelect}
-                    className="h-full"
-                  />
-                </div>
+                {/* Tab bar: Graph / Reasoning */}
+                {agentSteps.length > 0 && (
+                  <div className="flex shrink-0 gap-1 rounded-2xl border border-stone-200/60 bg-stone-50/80 p-1">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('graph')}
+                      className={cn(
+                        'flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-colors',
+                        activeTab === 'graph'
+                          ? 'bg-white text-stone-900 shadow-sm'
+                          : 'text-stone-500 hover:text-stone-700',
+                      )}
+                    >
+                      <Network className="h-3.5 w-3.5" />
+                      Graph
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('reasoning')}
+                      className={cn(
+                        'flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-colors',
+                        activeTab === 'reasoning'
+                          ? 'bg-white text-stone-900 shadow-sm'
+                          : 'text-stone-500 hover:text-stone-700',
+                      )}
+                    >
+                      <Brain className="h-3.5 w-3.5" />
+                      Reasoning ({agentSteps.length})
+                    </button>
+                  </div>
+                )}
 
-                {/* MIDDLE: Explicit reasoning trace */}
-                <div className="h-[34%] min-h-[240px] shrink-0 overflow-hidden">
-                  <ResearchGraphPanel
-                    response={response}
-                    className="h-full"
-                  />
-                </div>
+                {/* Tab content */}
+                {activeTab === 'reasoning' && agentSteps.length > 0 ? (
+                  <div className="flex-1 min-h-0 overflow-hidden rounded-2xl border border-stone-200/60 bg-white/60">
+                    <AgentActivityPanel
+                      steps={agentSteps}
+                      isActive={false}
+                      className="h-full"
+                    />
+                  </div>
+                ) : (
+                  <>
+                    {/* TOP: Interactive DAG */}
+                    <div className="h-[34%] min-h-[220px] shrink-0">
+                      <TraversalDAG
+                        response={response}
+                        allResponses={allResponses}
+                        highlightedSourceIndex={activeSourceIndex}
+                        onNodeSelect={handleDAGNodeSelect}
+                        className="h-full"
+                      />
+                    </div>
+
+                    {/* MIDDLE: Explicit reasoning trace */}
+                    <div className="h-[34%] min-h-[240px] shrink-0 overflow-hidden">
+                      <ResearchGraphPanel
+                        response={response}
+                        className="h-full"
+                      />
+                    </div>
+                  </>
+                )}
 
                 {/* BOTTOM: Detail card or Sources deck */}
                 <div className="flex-1 min-h-[200px] overflow-y-auto">

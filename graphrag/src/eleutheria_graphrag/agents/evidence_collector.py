@@ -1,0 +1,219 @@
+"""
+EvidenceCollector — accumulates tool results into RAGState-compatible structures.
+
+Bridges the gap between the agent's tool calls and the synthesis phase
+(DraftClaimLedger, RenderGroundedAnswer, ProgrammaticVerify) which expects
+populated Evidence, EvidenceBundle, and ContextPack fields in RAGState.
+"""
+
+from __future__ import annotations
+
+import logging
+import uuid
+from typing import Any
+
+from pydantic import BaseModel
+
+from eleutheria_graphrag.agents.state import (
+    ContextPack,
+    Evidence,
+    EvidenceBundle,
+    EvidenceLayer,
+    EvidenceSource,
+    RAGState,
+    ResearchNotebook,
+    ResearchToolCall,
+    RetrievalBudget,
+    ScholarlyDossier,
+)
+
+logger = logging.getLogger(__name__)
+
+
+class ToolCallRecord(BaseModel):
+    """Audit trail entry for a single tool call."""
+
+    call_id: str
+    tool_name: str
+    args: dict[str, Any]
+    reason: str = ""
+    result_summary: str = ""
+    node_count: int = 0
+    passage_count: int = 0
+    duration_ms: int = 0
+
+
+class EvidenceCollector:
+    """Accumulates evidence from agent tool calls."""
+
+    def __init__(self) -> None:
+        self.seen_node_ids: set[str] = set()
+        self.seen_passage_ids: set[str] = set()
+        self.primary_evidence: list[Evidence] = []
+        self.secondary_evidence: list[Evidence] = []
+        self.evidence_bundles: list[EvidenceBundle] = []
+        self.seed_node_ids: list[str] = []
+        self.context_node_ids: list[str] = []
+        self.tool_calls: list[ToolCallRecord] = []
+
+    def ingest(self, tool_name: str, args: dict[str, Any], result: BaseModel) -> None:
+        """Route tool results to appropriate evidence lists."""
+        result_dict = result.model_dump()
+
+        if tool_name == "search_nodes":
+            self._ingest_search_nodes(result_dict)
+        elif tool_name == "explore_subgraph":
+            self._ingest_explore_subgraph(result_dict)
+        elif tool_name == "get_neighbors":
+            self._ingest_get_neighbors(result_dict)
+        elif tool_name in ("read_passages", "search_passages"):
+            self._ingest_passages(result_dict, tool_name)
+        elif tool_name == "get_node_detail":
+            self._ingest_node_detail(result_dict)
+        # read_work_section doesn't directly produce evidence
+
+    def record_call(
+        self,
+        tool_name: str,
+        args: dict[str, Any],
+        reason: str,
+        result_summary: str,
+        node_count: int = 0,
+        passage_count: int = 0,
+        duration_ms: int = 0,
+    ) -> None:
+        """Record a tool call for the audit trail."""
+        self.tool_calls.append(ToolCallRecord(
+            call_id=f"tc_{len(self.tool_calls) + 1}",
+            tool_name=tool_name,
+            args=args,
+            reason=reason,
+            result_summary=result_summary,
+            node_count=node_count,
+            passage_count=passage_count,
+            duration_ms=duration_ms,
+        ))
+
+    def populate_state(self, state: RAGState) -> None:
+        """Write accumulated evidence into RAGState for synthesis phase."""
+        state.primary_evidence = self.primary_evidence
+        state.secondary_evidence = self.secondary_evidence
+        state.evidence_bundles = self.evidence_bundles
+        state.seed_node_ids = self.seed_node_ids
+        state.context_node_ids = self.context_node_ids
+        state.passages_used = len(self.evidence_bundles)
+
+        # Leave context_pack.prompt_context empty — DraftClaimLedger will
+        # call _build_context_pack(state) which builds the proper prompt
+        # with P1/N1 reference markers from the evidence we populated.
+        state.context_pack = ContextPack()
+
+        # Build research notebook with tool call trail
+        if not state.research_notebook:
+            state.research_notebook = ResearchNotebook()
+        state.research_notebook.tool_calls = [
+            ResearchToolCall(
+                tool_call_id=tc.call_id,
+                tool_name=tc.tool_name,
+                stage_id="agent_loop",
+                query=tc.args.get("query") or tc.args.get("node_id", ""),
+                rationale=tc.reason,
+                detail_count=tc.node_count + tc.passage_count,
+            )
+            for tc in self.tool_calls
+        ]
+
+        # Build scholarly dossier (minimal — the synthesis nodes will enrich it)
+        state.scholarly_dossier = ScholarlyDossier(
+            question_frame=state.question,
+            primary_bundle_ids=[b.bundle_id for b in self.evidence_bundles],
+        )
+
+    def _ingest_search_nodes(self, result: dict[str, Any]) -> None:
+        """Ingest results from search_nodes tool."""
+        for node in result.get("nodes", []):
+            nid = node.get("node_id", "")
+            if nid and nid not in self.seen_node_ids:
+                self.seen_node_ids.add(nid)
+                self.seed_node_ids.append(nid)
+                self.primary_evidence.append(Evidence(
+                    id=nid,
+                    label=node.get("label", ""),
+                    type=node.get("type", ""),
+                    description=node.get("description", ""),
+                    score=node.get("score", 0.0),
+                    source=EvidenceSource.SEMANTIC_SEARCH,
+                    period=node.get("period"),
+                    school=node.get("school"),
+                ))
+
+    def _ingest_explore_subgraph(self, result: dict[str, Any]) -> None:
+        """Ingest results from explore_subgraph tool."""
+        for node in result.get("nodes", []):
+            nid = node.get("node_id", "")
+            if nid and nid not in self.seen_node_ids:
+                self.seen_node_ids.add(nid)
+                self.context_node_ids.append(nid)
+                self.secondary_evidence.append(Evidence(
+                    id=nid,
+                    label=node.get("label", ""),
+                    type=node.get("type", ""),
+                    score=node.get("ppr_score", 0.0),
+                    source=EvidenceSource.GRAPH_TRAVERSAL,
+                ))
+
+    def _ingest_get_neighbors(self, result: dict[str, Any]) -> None:
+        """Ingest results from get_neighbors tool."""
+        for edge in result.get("edges", []):
+            nid = edge.get("edge_node_id", "")
+            if nid and nid not in self.seen_node_ids:
+                self.seen_node_ids.add(nid)
+                self.context_node_ids.append(nid)
+                self.secondary_evidence.append(Evidence(
+                    id=nid,
+                    label=edge.get("label", ""),
+                    type=edge.get("type", ""),
+                    source=EvidenceSource.GRAPH_TRAVERSAL,
+                ))
+
+    def _ingest_passages(self, result: dict[str, Any], tool_name: str) -> None:
+        """Ingest results from read_passages or search_passages tools."""
+        passages_key = "passages"
+        for p in result.get(passages_key, []):
+            pid = p.get("passage_id", "")
+            if pid and pid not in self.seen_passage_ids:
+                self.seen_passage_ids.add(pid)
+                text = p.get("text_content", "")
+                self.evidence_bundles.append(EvidenceBundle(
+                    bundle_id=f"b_{uuid.uuid4().hex[:8]}",
+                    work_id=p.get("work_id", ""),
+                    work_title=p.get("work_title", ""),
+                    author=p.get("author"),
+                    canonical_ref=p.get("canonical_ref"),
+                    original_passage_id=pid,
+                    original_text=text,
+                    language=p.get("language"),
+                    token_estimate=RetrievalBudget.estimate_tokens(text),
+                    source=(
+                        EvidenceSource.PASSAGE_CITATION
+                        if tool_name == "read_passages"
+                        else EvidenceSource.HYBRID_SEARCH
+                    ),
+                ))
+
+    def _ingest_node_detail(self, result: dict[str, Any]) -> None:
+        """Ingest results from get_node_detail tool."""
+        nid = result.get("node_id", "")
+        if nid and nid not in self.seen_node_ids:
+            self.seen_node_ids.add(nid)
+            self.context_node_ids.append(nid)
+            self.primary_evidence.append(Evidence(
+                id=nid,
+                label=result.get("label", ""),
+                type=result.get("type", ""),
+                description=result.get("description", ""),
+                source=EvidenceSource.DIRECT_LOOKUP,
+                period=result.get("period"),
+                school=result.get("school"),
+            ))
+
