@@ -11,7 +11,6 @@ from typing import Any
 
 import jwt
 from eleutheria_database.services.db import DatabaseService
-from passlib.context import CryptContext
 
 logger = logging.getLogger(__name__)
 
@@ -20,8 +19,8 @@ JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "change-me-in-production")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_HOURS = int(os.getenv("JWT_EXPIRATION_HOURS", "168"))  # 7 days
 
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Password hashing — use bcrypt directly (passlib has compatibility issues with bcrypt >= 4.1)
+import bcrypt as _bcrypt
 
 # Rate limiting (in-memory sliding window)
 _rate_windows: dict[str, list[float]] = defaultdict(list)
@@ -30,11 +29,14 @@ RATE_LIMIT_MAX = int(os.getenv("RATE_LIMIT_MAX", "30"))
 
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    return _bcrypt.hashpw(password.encode("utf-8"), _bcrypt.gensalt()).decode("utf-8")
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+    try:
+        return _bcrypt.checkpw(plain.encode("utf-8"), hashed.encode("utf-8"))
+    except Exception:
+        return False
 
 
 def create_access_token(data: dict[str, Any], expires_hours: int | None = None) -> str:
