@@ -1,0 +1,23 @@
+#!/bin/sh
+# Pre-push hook: verify frontend build passes before pushing
+# This catches the same errors as Cloudflare Pages (tsc -b)
+
+# Check if any frontend files are being pushed
+FRONTEND_CHANGED=$(git diff --name-only HEAD@{1}..HEAD 2>/dev/null | grep "^frontend/" || true)
+
+if [ -z "$FRONTEND_CHANGED" ]; then
+  exit 0  # No frontend changes, skip
+fi
+
+echo "🔍 Frontend changes detected — running typecheck..."
+cd frontend && npx tsc -b 2>&1
+TSC_EXIT=$?
+
+if [ $TSC_EXIT -ne 0 ]; then
+  echo ""
+  echo "❌ Frontend typecheck failed (tsc -b). Fix errors before pushing."
+  exit 1
+fi
+
+echo "✅ Frontend typecheck passed."
+exit 0
