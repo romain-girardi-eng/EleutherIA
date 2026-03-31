@@ -1,0 +1,29 @@
+# =============================================================================
+# Railway — EleutherIA Backend (FastAPI + Python 3.11)
+# =============================================================================
+# Auto-deploys on push to main when watched paths change.
+# Build context is the repo root (required by backend/Dockerfile multi-stage).
+#
+# Docs: https://docs.railway.com/reference/config-as-code
+
+[build]
+dockerfilePath = "backend/Dockerfile"
+
+[deploy]
+healthcheckPath = "/api/health"
+healthcheckTimeout = 60
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+# Only redeploy when backend or library code changes (not frontend/docs/scripts)
+watchPatterns = [
+  "backend/**",
+  "database/src/**",
+  "database/pyproject.toml",
+  "knowledge graph/src/**",
+  "knowledge graph/pyproject.toml",
+  "graphrag/src/**",
+  "graphrag/pyproject.toml",
+  "railway.toml",
+  "railway.json",
+]
