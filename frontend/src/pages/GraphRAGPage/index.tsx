@@ -446,11 +446,21 @@ export default function GraphRAGPage() {
       if (finalResponse) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const serverResp = finalResponse as any;
-        const citations = finalResponse.citations || {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ancient_sources: (serverResp.ancientCitations || []).map((c: any) => typeof c === 'string' ? c : (c?.citationText || '')).filter(Boolean),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          modern_scholarship: (serverResp.modernBibliography || []).map((c: any) => typeof c === 'string' ? c : (c?.citation || c?.citationText || '')).filter(Boolean),
+        const rawCitations = finalResponse.citations || {};
+        const ancientRaw = Array.isArray(rawCitations.ancient_sources)
+          ? rawCitations.ancient_sources
+          : Array.isArray(serverResp.ancientCitations)
+            ? serverResp.ancientCitations
+            : [];
+        const modernRaw = Array.isArray(rawCitations.modern_scholarship)
+          ? rawCitations.modern_scholarship
+          : Array.isArray(serverResp.modernBibliography)
+            ? serverResp.modernBibliography
+            : [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const citations = {
+          ancient_sources: ancientRaw.map((c: any) => typeof c === 'string' ? c : (c?.citationText || c?.label || '')).filter(Boolean),
+          modern_scholarship: modernRaw.map((c: any) => typeof c === 'string' ? c : (c?.citation || c?.citationText || '')).filter(Boolean),
         };
 
         if (finalResponse.sources && Array.isArray(finalResponse.sources)) {
@@ -486,8 +496,9 @@ export default function GraphRAGPage() {
           }
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const serverAncientCitations: any[] = (finalResponse as any).ancientCitations || [];
+        const serverAncientCitations = Array.isArray((finalResponse as unknown as Record<string, unknown>).ancientCitations)
+          ? (finalResponse as unknown as Record<string, unknown>).ancientCitations as unknown[]
+          : [];
         const allCitations = serverAncientCitations
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .map((c: any) => (typeof c === 'string' ? c : c?.citationText))
