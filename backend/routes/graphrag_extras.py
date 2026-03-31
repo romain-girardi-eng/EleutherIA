@@ -83,6 +83,16 @@ async def graphrag_answer(
 
     elapsed = time.time() - start
 
+    # Calculate cost/token metrics
+    try:
+        from eleutheria_graphrag.services.model_registry import get_model
+        model_info = get_model(body.model)
+        answer_tokens = len(result.get("answer", "")) // 4
+        estimated_cost = (model_info.pricing_input * 50000 / 1_000_000) + (model_info.pricing_output * answer_tokens / 1_000_000)
+    except (KeyError, ImportError):
+        model_info = None
+        estimated_cost = None
+
     # Build sources list (for frontend CitationRenderer)
     sources = []
     for i, node_id in enumerate(result.get("seed_nodes", [])[:10]):
@@ -184,6 +194,15 @@ async def graphrag_answer(
             "rerank_used": body.use_reranking,
             "crag_used": body.use_crag,
             "selfrag_used": body.use_selfrag,
+        },
+        "metrics": {
+            "processing_time_s": elapsed,
+            "model_key": body.model,
+            "model_label": model_info.label if model_info else body.model,
+            "retrieval_mode_requested": body.retrieval_mode,
+            "retrieval_mode_used": result.get("metadata", {}).get("retrieval_mode_used", "unknown"),
+            "estimated_cost_usd": round(estimated_cost, 4) if estimated_cost is not None else None,
+            "answer_length_chars": len(result.get("answer", "")),
         },
         "processing_time": round(elapsed, 2),
         "service": "GraphRAG Pipeline",
