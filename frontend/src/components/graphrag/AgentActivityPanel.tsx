@@ -276,7 +276,7 @@ export default function AgentActivityPanel({ steps, isActive, className }: Agent
 
   // Track tool call index (only for tool_start/tool_result)
   const toolCallIndices = useMemo(() => {
-    const indices = new Map<string, number>();
+    const indices: Map<string, number> = new Map();
     let idx = 0;
     for (const step of steps) {
       if (step.type === 'tool_start') {
