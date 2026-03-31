@@ -80,9 +80,7 @@ class SQLStrategy:
         passage_anchor_ids: list[str] = []
 
         # Step 1: Direct passage_citations via kg_nodes label/description match
-        logger.info("SQLStrategy.discover_seeds called with %d queries: %r", len(queries), queries[:3])
         matched_node_ids = await self._step1_label_match(queries, deps)
-        logger.info("SQLStrategy step1 result: %d matched nodes", len(matched_node_ids))
         if matched_node_ids:
             citations = await self._fetch_citations(matched_node_ids, deps)
             seed_ids.extend(matched_node_ids)
