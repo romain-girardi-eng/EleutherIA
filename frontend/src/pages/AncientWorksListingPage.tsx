@@ -7,7 +7,6 @@ import { Typewriter } from '../components/ui/typewriter';
 import { apiClient } from '../api/client';
 import { cachedApiClient } from '../api/cachedClient';
 import { KGNodeSelectionModal } from '../components/KGNodeSelectionModal';
-import { AILoader } from '../components/ui/ai-loader';
 import { EmptyState } from '../components/ui/EmptyState';
 import type {
   WorkKGNodesResponse,
@@ -365,9 +364,12 @@ export default function TextExplorerPage() {
           )}
 
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-24">
-              <AILoader text="Loading" size="md" />
-              <p className="text-stone-400 mt-6 text-sm">{t('ancientWorks.loading')}</p>
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <div className="relative w-12 h-12">
+                <div className="absolute inset-0 rounded-full border-2 border-amber-200/40" />
+                <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-amber-600/70 animate-spin" />
+              </div>
+              <p className="text-sm text-stone-500 font-serif italic">{t('ancientWorks.loading')}</p>
             </div>
           ) : works.length === 0 ? (
             <EmptyState
