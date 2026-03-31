@@ -6,11 +6,11 @@
 
 ## Summary
 
-PageIndex V3 replaces the 13-stage HiRAG V2 pipeline with a direct retrieval architecture that leverages the curated `passage_citations` database and modern LLM context windows (~1M tokens). Instead of 10+ LLM calls per query (HyDE, CRAG, Self-RAG, LLM reranking, query expansion, sufficiency checks), PageIndex V3 uses **2 LLM calls**: one embedding and one synthesis.
+PageIndex V3 replaces the former HiRAG V2 pipeline (13 stages) with a direct retrieval architecture that leverages the curated `passage_citations` database and modern LLM context windows (~1M tokens). Instead of 10+ LLM calls per query (HyDE, CRAG, Self-RAG, LLM reranking, query expansion, sufficiency checks), PageIndex V3 uses **2 LLM calls**: one embedding and one synthesis.
 
 ## Motivation
 
-The HiRAG V2 pipeline (deployed Feb 13, 2026) suffered from:
+The former HiRAG V2 pipeline (deployed Feb 13, 2026) suffered from:
 
 1. **Over-engineering:** 13 pipeline stages with 10+ LLM calls per query added latency and compounding error
 2. **Aggressive truncation:** Context was sliced at 500-800 characters, destroying Greek diacritics and corrupting passage text before it reached the synthesis LLM
@@ -158,17 +158,17 @@ The `/answer` endpoint response now includes a `pageIndexInfo` field:
 }
 ```
 
-Removed fields from HiRAG V2: `hiragInfo`, `queryExpansion`, `cragValidation`, `selfEvaluation`, `hydeDetails`.
+Removed fields from the former HiRAG V2 pipeline: `hiragInfo`, `queryExpansion`, `cragValidation`, `selfEvaluation`, `hydeDetails`.
 
 ## Results
 
-- **Bundle size:** 628 KiB (HiRAG V2) → 606 KiB (PageIndex V3)
+- **Bundle size:** 628 KiB (former HiRAG V2) → 606 KiB (PageIndex V3)
 - **LLM calls per query:** 10+ → 2
 - **Context quality:** Full passage text with CTS URNs instead of 500-char truncated fragments
 - **Latency:** Significantly reduced (fewer LLM round-trips)
 
 ## Backward Compatibility
 
-- `/answer/hirag-v2` and `/answer/v2` aliases forward to the new PageIndex V3 endpoint
+- `/answer/hirag-v2` and `/answer/v2` legacy aliases forward to the new PageIndex V3 endpoint
 - Frontend receives the same response shape (answer, citations, sources, metadata)
 - The `pageIndexInfo` field is additive; old clients ignore it

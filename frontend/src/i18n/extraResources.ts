@@ -274,7 +274,7 @@ export const extraResources = {
       },
     },
     graphRagUi: {
-      chatTitle: 'HiRAG Q&A',
+      chatTitle: 'GraphRAG Q&A',
       queryFailed: 'Query failed',
       dismiss: 'Dismiss',
       rightPanel: {
@@ -538,19 +538,19 @@ export const extraResources = {
       },
       architecture: {
         label: 'Under the Hood',
-        titlePrefix: 'HiRAG - hierarchical retrieval,',
+        titlePrefix: 'Agentic GraphRAG,',
         titleHighlight: 'peer-reviewed',
         subtitle:
-          'EleutherIA implements HiRAG, organizing knowledge in layers from raw passage evidence to high-level conceptual summaries.',
+          'EleutherIA uses Agentic GraphRAG, combining a knowledge graph with an autonomous pipeline for parallel retrieval, enrichment, and synthesis.',
         pipelineCaption:
           'The API lets the AI model communicate with the knowledge graph. Your question retrieves relevant context from ancient sources and modern scholarship, which the model synthesizes into a cited scholarly answer.',
-        hiragTitle: 'Powered by HiRAG',
-        paperBadge: 'EMNLP 2025',
-        hiragBody:
-          'Huang et al. (2025) show that HiRAG outperforms traditional RAG and standard GraphRAG by organizing retrieval in local, global, and bridge levels.',
+        agenticGraphragTitle: 'Powered by Agentic GraphRAG',
+        paperBadge: '12-node FSM',
+        agenticGraphragBody:
+          'An agentic pipeline with multi-model support (Gemini/Kimi), vectorless SQL fallback, and full reasoning trace for scholarly Q&A.',
         vsTraditionalRag: 'vs Traditional RAG',
         vsStandardGraphRag: 'vs Standard GraphRAG',
-        findingsLink: 'arXiv:2503.10150 - EMNLP 2025 Findings',
+        findingsLink: 'Learn more about the architecture',
         corpus: 'Corpus',
         stack: 'Stack',
         corpusStats: [
@@ -561,14 +561,14 @@ export const extraResources = {
           ['1,413', 'bibliography entries'],
         ],
         stackItems: [
-          'HiRAG architecture',
+          'Agentic GraphRAG',
           'Qdrant vector DB',
           'PostgreSQL + GIN',
           'FastAPI backend',
           'React 19 + TypeScript',
           'SSE streaming',
         ],
-        seeInAction: 'See HiRAG in Action',
+        seeInAction: 'See Agentic GraphRAG in Action',
       },
       hybridSearch: {
         label: 'Layer 2 - Hybrid Search',
@@ -904,7 +904,7 @@ export const extraResources = {
       },
     },
     graphRagUi: {
-      chatTitle: 'Q&R HiRAG',
+      chatTitle: 'Q&R GraphRAG',
       queryFailed: 'La requête a échoué',
       dismiss: 'Ignorer',
       rightPanel: {
@@ -1172,19 +1172,19 @@ export const extraResources = {
       },
       architecture: {
         label: 'Sous le capot',
-        titlePrefix: 'HiRAG - récupération hiérarchique,',
+        titlePrefix: 'GraphRAG Agentique,',
         titleHighlight: 'évaluée par les pairs',
         subtitle:
-          'EleutherIA met en œuvre HiRAG, en organisant le savoir par couches, depuis les preuves textuelles brutes jusqu’aux synthèses conceptuelles de haut niveau.',
+          "EleutherIA utilise le GraphRAG Agentique, combinant un graphe de connaissances avec un pipeline autonome de récupération, d’enrichissement et de synthèse en parallèle.",
         pipelineCaption:
           'L’API permet au modèle d’IA de communiquer avec le graphe de connaissances. Votre question récupère le contexte pertinent dans les sources antiques et la recherche moderne, puis le modèle en produit une réponse savante citée.',
-        hiragTitle: 'Propulsé par HiRAG',
-        paperBadge: 'EMNLP 2025',
-        hiragBody:
-          'Huang et al. (2025) montrent que HiRAG surpasse le RAG traditionnel et le GraphRAG standard en organisant la récupération selon des niveaux local, global et pont.',
+        agenticGraphragTitle: 'Propulsé par le GraphRAG Agentique',
+        paperBadge: 'FSM 12 nœuds',
+        agenticGraphragBody:
+          'Un pipeline agentique avec support multi-modèles (Gemini/Kimi), repli SQL sans vecteurs et trace de raisonnement complète pour les Q&R savantes.',
         vsTraditionalRag: 'vs RAG traditionnel',
         vsStandardGraphRag: 'vs GraphRAG standard',
-        findingsLink: 'arXiv:2503.10150 - résultats EMNLP 2025',
+        findingsLink: "En savoir plus sur l'architecture",
         corpus: 'Corpus',
         stack: 'Pile technique',
         corpusStats: [
@@ -1195,14 +1195,14 @@ export const extraResources = {
           ['1,413', 'entrées bibliographiques'],
         ],
         stackItems: [
-          'Architecture HiRAG',
+          'GraphRAG Agentique',
           'Base vectorielle Qdrant',
           'PostgreSQL + GIN',
           'Backend FastAPI',
           'React 19 + TypeScript',
           'Streaming SSE',
         ],
-        seeInAction: 'Voir HiRAG en action',
+        seeInAction: 'Voir le GraphRAG Agentique en action',
       },
       hybridSearch: {
         label: 'Couche 2 - Recherche hybride',
@@ -1538,7 +1538,7 @@ export const extraResources = {
       },
     },
     graphRagUi: {
-      chatTitle: 'HiRAG Q&A',
+      chatTitle: 'GraphRAG Q&A',
       queryFailed: 'Anfrage fehlgeschlagen',
       dismiss: 'Schließen',
       rightPanel: {
@@ -1776,19 +1776,19 @@ export const extraResources = {
       },
       architecture: {
         label: 'Unter der Haube',
-        titlePrefix: 'HiRAG - hierarchische Retrieval-Architektur,',
+        titlePrefix: 'Agentisches GraphRAG,',
         titleHighlight: 'peer-reviewed',
         subtitle:
-          'EleutherIA implementiert HiRAG und organisiert Wissen in Ebenen, von rohen Passagenbelegen bis zu hochrangigen konzeptuellen Zusammenfassungen.',
+          'EleutherIA nutzt Agentisches GraphRAG und kombiniert einen Wissensgraphen mit einer autonomen Pipeline für paralleles Retrieval, Anreicherung und Synthese.',
         pipelineCaption:
           'Die API ermöglicht der KI den Zugriff auf den Wissensgraphen. Ihre Frage ruft relevanten Kontext aus antiken Quellen und moderner Forschung ab, den das Modell zu einer zitierten wissenschaftlichen Antwort synthetisiert.',
-        hiragTitle: 'Angetrieben von HiRAG',
-        paperBadge: 'EMNLP 2025',
-        hiragBody:
-          'Huang et al. (2025) zeigen, dass HiRAG traditionelles RAG und Standard-GraphRAG übertrifft, indem Retrieval auf lokaler, globaler und Brückenebene organisiert wird.',
+        agenticGraphragTitle: 'Agentisches GraphRAG',
+        paperBadge: '12-Knoten-FSM',
+        agenticGraphragBody:
+          'Eine agentische Pipeline mit Multi-Modell-Unterstützung (Gemini/Kimi), vektorlosem SQL-Fallback und vollständiger Argumentationsspur für wissenschaftliche Q&A.',
         vsTraditionalRag: 'vs traditionelles RAG',
         vsStandardGraphRag: 'vs Standard-GraphRAG',
-        findingsLink: 'arXiv:2503.10150 - EMNLP-2025-Ergebnisse',
+        findingsLink: 'Mehr über die Architektur erfahren',
         corpus: 'Korpus',
         stack: 'Stack',
         corpusStats: [
@@ -1799,14 +1799,14 @@ export const extraResources = {
           ['1,413', 'Bibliographie-Einträge'],
         ],
         stackItems: [
-          'HiRAG-Architektur',
+          'Agentisches GraphRAG',
           'Qdrant-Vektordatenbank',
           'PostgreSQL + GIN',
           'FastAPI-Backend',
           'React 19 + TypeScript',
           'SSE-Streaming',
         ],
-        seeInAction: 'HiRAG in Aktion sehen',
+        seeInAction: 'Agentisches GraphRAG in Aktion sehen',
       },
       hybridSearch: {
         label: 'Ebene 2 - Hybride Suche',
@@ -2142,7 +2142,7 @@ export const extraResources = {
       },
     },
     graphRagUi: {
-      chatTitle: 'HiRAG Q&A',
+      chatTitle: 'GraphRAG Q&A',
       queryFailed: 'Query non riuscita',
       dismiss: 'Chiudi',
       rightPanel: {
@@ -2410,19 +2410,19 @@ export const extraResources = {
       },
       architecture: {
         label: 'Sotto il cofano',
-        titlePrefix: 'HiRAG - recupero gerarchico,',
+        titlePrefix: 'GraphRAG Agentico,',
         titleHighlight: 'valutato da pari',
         subtitle:
-          'EleutherIA implementa HiRAG e organizza la conoscenza per livelli, dalle prove testuali grezze fino alle sintesi concettuali di alto livello.',
+          'EleutherIA utilizza il GraphRAG Agentico, combinando un grafo della conoscenza con una pipeline autonoma di recupero, arricchimento e sintesi in parallelo.',
         pipelineCaption:
           'L’API consente al modello di IA di comunicare con il grafo della conoscenza. La tua domanda recupera il contesto rilevante da fonti antiche e studi moderni, che il modello sintetizza in una risposta accademica citata.',
-        hiragTitle: 'Basato su HiRAG',
-        paperBadge: 'EMNLP 2025',
-        hiragBody:
-          'Huang et al. (2025) mostrano che HiRAG supera il RAG tradizionale e il GraphRAG standard organizzando il recupero su livelli locale, globale e ponte.',
+        agenticGraphragTitle: 'GraphRAG Agentico',
+        paperBadge: 'FSM a 12 nodi',
+        agenticGraphragBody:
+          'Una pipeline agentiva con supporto multi-modello (Gemini/Kimi), fallback SQL senza vettori e traccia di ragionamento completa per Q&A accademiche.',
         vsTraditionalRag: 'vs RAG tradizionale',
         vsStandardGraphRag: 'vs GraphRAG standard',
-        findingsLink: 'arXiv:2503.10150 - risultati EMNLP 2025',
+        findingsLink: "Scopri di più sull’architettura",
         corpus: 'Corpus',
         stack: 'Stack',
         corpusStats: [
@@ -2433,14 +2433,14 @@ export const extraResources = {
           ['1,413', 'voci bibliografiche'],
         ],
         stackItems: [
-          'Architettura HiRAG',
+          'GraphRAG Agentico',
           'Database vettoriale Qdrant',
           'PostgreSQL + GIN',
           'Backend FastAPI',
           'React 19 + TypeScript',
           'Streaming SSE',
         ],
-        seeInAction: 'Vedi HiRAG in azione',
+        seeInAction: 'Vedi il GraphRAG Agentico in azione',
       },
       hybridSearch: {
         label: 'Livello 2 - Ricerca ibrida',
@@ -2776,7 +2776,7 @@ export const extraResources = {
       },
     },
     graphRagUi: {
-      chatTitle: 'HiRAG Ερωτήσεις & Απαντήσεις',
+      chatTitle: 'GraphRAG Ερωτήσεις & Απαντήσεις',
       queryFailed: 'Η αναζήτηση απέτυχε',
       dismiss: 'Κλείσιμο',
       rightPanel: {
@@ -3044,19 +3044,19 @@ export const extraResources = {
       },
       architecture: {
         label: 'Κάτω από το καπό',
-        titlePrefix: 'HiRAG - ιεραρχική ανάκτηση,',
+        titlePrefix: 'Agentic GraphRAG,',
         titleHighlight: 'με αξιολόγηση από ομοτίμους',
         subtitle:
-          'Το EleutherIA υλοποιεί το HiRAG και οργανώνει τη γνώση σε επίπεδα, από ακατέργαστα τεκμήρια αποσπασμάτων έως υψηλού επιπέδου εννοιολογικές συνθέσεις.',
+          'Το EleutherIA χρησιμοποιεί Agentic GraphRAG, συνδυάζοντας έναν γράφο γνώσης με μια αυτόνομη pipeline παράλληλης ανάκτησης, εμπλουτισμού και σύνθεσης.',
         pipelineCaption:
           'Το API επιτρέπει στο μοντέλο ΤΝ να επικοινωνεί με τον γράφο γνώσης. Η ερώτησή σας ανακτά σχετικό πλαίσιο από αρχαίες πηγές και νεότερη έρευνα, το οποίο το μοντέλο συνθέτει σε τεκμηριωμένη ακαδημαϊκή απάντηση.',
-        hiragTitle: 'Με τεχνολογία HiRAG',
-        paperBadge: 'EMNLP 2025',
-        hiragBody:
-          'Οι Huang et al. (2025) δείχνουν ότι το HiRAG ξεπερνά το παραδοσιακό RAG και το τυπικό GraphRAG οργανώνοντας την ανάκτηση σε τοπικό, καθολικό και γεφυρωτικό επίπεδο.',
+        agenticGraphragTitle: 'Agentic GraphRAG',
+        paperBadge: 'FSM 12 κόμβων',
+        agenticGraphragBody:
+          'Μια agentική pipeline με υποστήριξη πολλαπλών μοντέλων (Gemini/Kimi), SQL fallback χωρίς διανύσματα και πλήρη ίχνος συλλογισμού για ακαδημαϊκές ερωταπαντήσεις.',
         vsTraditionalRag: 'έναντι παραδοσιακού RAG',
         vsStandardGraphRag: 'έναντι τυπικού GraphRAG',
-        findingsLink: 'arXiv:2503.10150 - ευρήματα EMNLP 2025',
+        findingsLink: 'Μάθετε περισσότερα για την αρχιτεκτονική',
         corpus: 'Σώμα κειμένων',
         stack: 'Τεχνολογική στοίβα',
         corpusStats: [
@@ -3067,14 +3067,14 @@ export const extraResources = {
           ['1,413', 'βιβλιογραφικές εγγραφές'],
         ],
         stackItems: [
-          'Αρχιτεκτονική HiRAG',
+          'Agentic GraphRAG',
           'Διανυσματική βάση Qdrant',
           'PostgreSQL + GIN',
           'Backend FastAPI',
           'React 19 + TypeScript',
           'Ροή SSE',
         ],
-        seeInAction: 'Δείτε το HiRAG σε δράση',
+        seeInAction: 'Δείτε το Agentic GraphRAG σε δράση',
       },
       hybridSearch: {
         label: 'Επίπεδο 2 - Υβριδική αναζήτηση',

@@ -263,6 +263,6 @@ npx wrangler deploy
 
 ## Superseded by PageIndex V3 (2026-02-20)
 
-The 13-stage HiRAG V2 pipeline documented above has been replaced by **PageIndex V3**, a direct retrieval architecture that reduces the pipeline to 5 steps and 2 LLM calls. The key insight: with Gemini's ~1M token context window and the curated `passage_citations` database, most of the meta-reasoning stages (HyDE, CRAG, Self-RAG, LLM reranking, query expansion) were adding latency and compounding errors without improving answer quality.
+The former 13-stage HiRAG V2 pipeline documented above has been replaced by **PageIndex V3**, a direct retrieval architecture that reduces the pipeline to 5 steps and 2 LLM calls. The key insight: with Gemini's ~1M token context window and the curated `passage_citations` database, most of the meta-reasoning stages (HyDE, CRAG, Self-RAG, LLM reranking, query expansion) were adding latency and compounding errors without improving answer quality.
 
 See [PageIndex V3 documentation](PAGEINDEX_V3.md) for the current architecture.

@@ -576,18 +576,16 @@ export default function HowItWorksPage() {
               </p>
               <div className="grid grid-cols-2 gap-3 mb-5 text-sm font-body">
                 <div className="bg-white/70 rounded-xl p-4">
-                  <p className="font-semibold text-violet-900 mb-1">{t('howItWorksPage.architecture.vsTraditionalRag')}</p>
-                  <p className="text-violet-700 font-mono font-bold text-lg">87.6% <span className="text-stone-400 font-normal text-xs">vs 12.4%</span></p>
+                  <p className="font-semibold text-violet-900 mb-1">LLM calls per query</p>
+                  <p className="text-violet-700 font-mono font-bold text-lg">2 <span className="text-stone-400 font-normal text-xs">down from 10+</span></p>
                 </div>
                 <div className="bg-white/70 rounded-xl p-4">
-                  <p className="font-semibold text-violet-900 mb-1">{t('howItWorksPage.architecture.vsStandardGraphRag')}</p>
-                  <p className="text-violet-700 font-mono font-bold text-lg">64.1% <span className="text-stone-400 font-normal text-xs">vs 35.9%</span></p>
+                  <p className="font-semibold text-violet-900 mb-1">Context window</p>
+                  <p className="text-violet-700 font-mono font-bold text-lg">~1M <span className="text-stone-400 font-normal text-xs">tokens (no truncation)</span></p>
                 </div>
               </div>
               <a
-                href="https://arxiv.org/abs/2503.10150"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/how-it-works"
                 className="inline-flex items-center gap-2 text-xs font-body text-violet-600 hover:text-violet-800 border border-violet-300 rounded-full px-4 py-1.5 hover:bg-violet-100 transition-colors"
               >
                 {t('howItWorksPage.architecture.findingsLink')}

@@ -181,9 +181,9 @@
     }
   },
   "graphrag": {
-    "title": "HiRAG Q&A",
-    "subtitle": "Hierarchische Retrieval-Augmented Generation",
-    "description": "Hierarchische Retrieval-Augmented Generation erweitert GraphRAG durch Organisation von Wissen über Abstraktionsebenen hinweg (Autoren, Werke, Konzepte, Debatten) für nuancierte wissenschaftliche Antworten.",
+    "title": "GraphRAG Q&A",
+    "subtitle": "Agentisches GraphRAG",
+    "description": "Agentisches GraphRAG kombiniert einen Wissensgraphen mit einer autonomen Pipeline zur Organisation von Wissen über Abstraktionsebenen hinweg (Autoren, Werke, Konzepte, Debatten) für nuancierte wissenschaftliche Antworten.",
     "askQuestion": "Fragen Sie zur antiken Philosophie...",
     "askEleutherai": "Fragen Sie EleutherIA",
     "placeholder": "Stellen Sie Fragen zu antiken Debatten über Willensfreiheit...",
@@ -199,7 +199,7 @@
     "tryDemo": "Demo ausprobieren",
     "hide": "Verbergen",
     "done": "Fertig",
-    "snapshot": "HiRAG-Momentaufnahme",
+    "snapshot": "GraphRAG-Momentaufnahme",
     "realTimeUpdates": "Echtzeit-Updates",
     "showProgress": "Fortschritt während der Antwortgenerierung anzeigen",
     "settings": "Einstellungen",
@@ -221,13 +221,13 @@
     "tokensUsed": "Verwendete Tokens",
     "model": "Modell",
     "authRequired": "Authentifizierung erforderlich",
-    "authRequiredDesc": "Bitte melden Sie sich an, um HiRAG Q&A zu nutzen. Diese Funktion verwendet KI-Dienste und erfordert Authentifizierung.",
-    "howItWorks": "Wie HiRAG funktioniert",
+    "authRequiredDesc": "Bitte melden Sie sich an, um GraphRAG Q&A zu nutzen. Diese Funktion verwendet KI-Dienste und erfordert Authentifizierung.",
+    "howItWorks": "Wie GraphRAG funktioniert",
     "whyBrilliant": "Warum es brillant ist",
-    "basedOn": "Basierend auf Huang et al., \"Hierarchical Retrieval-Augmented Generation,\" arXiv preprint (2025).",
-    "poweredBy": "Betrieben durch HiRAG-Technologie",
+    "basedOn": "Agentische GraphRAG-Pipeline mit 12-Knoten-FSM, Multi-Modell-Unterstützung und vektorlosem SQL-Fallback.",
+    "poweredBy": "Agentisches GraphRAG",
     "benefits": {
-      "hierarchical": "Im Gegensatz zu flachem GraphRAG respektiert HiRAG die natürliche Hierarchie des Wissens",
+      "hierarchical": "Graph-strukturiertes Wissen mit autonomer Retrieval- und Synthese-Pipeline",
       "multiLevel": "Mehrstufiges Argumentieren über Autoren, Werke, Konzepte und Debatten hinweg",
       "scholarlyAnswers": "Wissenschaftliche Antworten mit korrekter Zuschreibung und Konfidenzbewertungen",
       "citationTracking": "Vollständige Zitatverfolgung von antiken Quellen bis zur modernen Forschung",
@@ -443,154 +443,85 @@
     "textContent": "Textinhalt",
     "noTextContentAvailable": "Kein Textinhalt verfügbar"
   },
-  "hirag": {
-    "pageTitle": "HiRAG-Implementierungsdetails",
-    "pageDescription": "Eine transparente Erklärung unserer hierarchischen Retrieval-Architektur, basierend auf modernster Forschung mit domänenspezifischen Anpassungen für die antike Philosophiewissenschaft.",
+  "agenticGraphrag": {
+    "pageTitle": "Agentische GraphRAG-Architektur",
+    "pageDescription": "Eine transparente Erklärung unserer agentischen Retrieval-Pipeline: 12-Knoten-FSM, Multi-Modell-Unterstützung, vektorloser SQL-Fallback und vollständige Argumentationsspur.",
     "overview": {
-      "title": "Überblick & Papierzitat",
-      "originalResearch": "Originalforschung",
-      "basedOn": "Unsere Implementierung basiert auf der HiRAG-Architektur (Hierarchical Retrieval-Augmented Generation), beschrieben in:",
-      "readPaper": "Originalpapier lesen",
+      "title": "Architekturüberblick",
+      "architectureLabel": "Agentische Pipeline",
+      "description": "EleutherIA nutzt eine agentische GraphRAG-Pipeline, die einen kurierten Wissensgraphen (2.193 Knoten, 8.616 Kanten) mit einem autonomen Retrieval- und Synthesemotor kombiniert. Das System hat sich von der früheren HiRAG-V2-Pipeline zu einer gestrafften 5-Schritte-, 2-LLM-Aufruf-Architektur entwickelt.",
       "coreInnovation": "Kerninnovation",
-      "innovationDescription": "HiRAG erweitert Standard-GraphRAG durch Einführung einer dreistufigen hierarchischen Wissensstruktur:",
-      "localKnowledge": "Lokales Wissen: Spezifische Entitäten, abgerufen via semantischer Suche",
-      "globalKnowledge": "Globales Wissen: Community-Zusammenfassungen, die thematischen Kontext bieten",
-      "bridgeKnowledge": "Brückenwissen: Kürzeste Pfade zwischen Entitäten über Communities hinweg",
-      "paperResults": "Papierergebnisse zeigen, dass HiRAG eine 54-64% Gewinnrate vs. GraphRAG und 52-66% vs. LightRAG über Benchmark-Datensätze erreicht."
+      "innovationDescription": "Statt 10+ LLM-Aufrufe pro Abfrage nutzt die agentische Pipeline paralleles Retrieval, kurierte passage_citations und Geminis 1M-Token-Kontextfenster:",
+      "fsmOrchestration": "12-Knoten pydantic-graph FSM für autonome Orchestrierung",
+      "multiModel": "Multi-Modell: Gemini 3 (primär) + Kimi K2.5 Thinking (erweitertes Argumentieren)",
+      "vectorlessFallback": "Vektorloser SQL-Fallback über passage_citations für robustes Retrieval"
     },
-    "implemented": {
-      "title": "Was wir aus dem Papier implementiert haben",
-      "hierarchical": {
-        "title": "1. Hierarchische Struktur",
-        "level0": "14 globale Zusammenfassungen, die wichtige philosophische Themen abdecken (Determinismus, moralische Verantwortung, göttliche Vorsehung)",
-        "level1": "11 Community-Zusammenfassungen, organisiert nach philosophischen Schulen (Stoisch, Epikureisch, Peripatetisch, Patristisch)",
-        "level2": "503 individuelle Entitätsknoten (Philosophen, Konzepte, Argumente, Werke)"
-      },
-      "bridge": {
-        "title": "2. Kürzester-Pfad-Brückenerkennung",
-        "algorithm": "Algorithmus 2 aus Papier: Für jede abgerufene Community wählen wir die Top-m-Schlüsselentitäten (m=2), dann berechnen wir kürzeste Pfade zwischen Entitäten aus verschiedenen Communities.",
-        "impact": "Auswirkung: Bietet 38-83% Recall-Abdeckung von lokalem und globalem Wissen und schafft semantische Ketten, die philosophische Schulen verbinden."
-      },
-      "perCommunity": {
-        "title": "3. Pro-Community-Schlüsselentitätsauswahl",
-        "description": "Anstatt Top-k-Entitäten insgesamt auszuwählen, wählen wir Top-m-Entitäten pro Community (m=2, wie im Papier empfohlen). Dies gewährleistet eine vielfältige Abdeckung über philosophische Schulen hinweg, anstatt einer Überrepräsentation dominanter Communities."
-      },
-      "threeLevel": {
-        "title": "4. Dreistufiges Retrieval",
-        "description": "Jede Abfrage ruft Wissen auf allen drei Ebenen gleichzeitig ab und kombiniert sie dann für umfassenden Kontext, der von spezifischen Textdetails bis zu breiten historischen Mustern reicht."
-      }
+    "pipeline": {
+      "title": "Pipeline-Stufen",
+      "embedding": { "title": "1. Embedding + Referenzerkennung", "description": "Abfrage via Gemini eingebettet, plus Regex-CTS-URN-Erkennung für direkte Passagensuche." },
+      "parallelSearch": { "title": "2. Parallele Suche", "description": "Drei Qdrant-Abfragen parallel: KG-Knoten, Textpassagen und Kanten. Reine Vektorähnlichkeit, kein LLM-Aufruf." },
+      "enrichment": { "title": "3. Parallele Anreicherung", "description": "passage_citations-Suche, KG-Nachbarerweiterung und textuelle Verankerung -- alles via SQL, kein LLM." },
+      "synthesis": { "title": "4. Kontextaufbau + Synthese", "description": "Vollständiger ungekürzter Kontext (Primärquellen, ergänzende Passagen, KG-Entitäten, Beziehungen) an einen einzigen LLM-Syntheseaufruf." }
     },
-    "adaptations": {
-      "title": "Unsere Anpassungen & Verbesserungen",
-      "keyDifference": "Hauptunterschied: Vorberechnete hochwertige Zusammenfassungen",
-      "summariesIntro": "Während das Papier Zusammenfassungen dynamisch mit DeepSeek-V3 generiert, verwenden wir vorberechnete Zusammenfassungen, erstellt mit:",
-      "opus": "Modernste Argumentation und Nuancierung",
-      "gpt5": "Maximale Qualität der Sprachgenerierung",
-      "humanReview": "Menschliche Überprüfung",
-      "humanReviewDesc": "Alle Zusammenfassungen validiert durch Domänenexperten (Romain Girardi)",
-      "whyTitle": "Warum diese Anpassung?",
-      "quality": {
-        "title": "Überlegene Qualität",
-        "description": "Opus & GPT-5 > DeepSeek-V3 in Argumentationstiefe und wissenschaftlicher Genauigkeit"
+    "capabilities": {
+      "title": "Schlüsselfähigkeiten",
+      "multiModelTitle": "Multi-Modell-Unterstützung",
+      "multiModelDesc": "Die Pipeline leitet basierend auf Aufgabenkomplexität an verschiedene Modelle weiter:",
+      "gemini": "Primäre Synthese und Embedding (1M Token Kontext)",
+      "kimi": "Erweitertes Argumentieren für komplexe Multi-Hop-Abfragen",
+      "keyStrengths": "Stärken",
+      "noTruncation": { "title": "Keine Kürzung", "description": "Vollständiger Passagentext mit CTS-URNs erhalten -- keine 500-Zeichen-Fragmente" },
+      "passageCitations": { "title": "Kurierte passage_citations", "description": "Primäres Retrieval-Signal: KG-zu-Passage-Links mit Konfidenzbewertungen" },
+      "reasoningTrace": { "title": "Argumentationsspur", "description": "Volle Transparenz: sehen, welche Knoten, Kanten und Passagen verwendet wurden" },
+      "sqlFallback": { "title": "Vektorloser SQL-Fallback", "description": "Bei Qdrant-Ausfall fällt Retrieval auf SQL passage_citations zurück" },
+      "evolutionTitle": "Entwicklung von HiRAG",
+      "evolution": {
+        "fromHirag": "Frühere HiRAG-V2-Pipeline",
+        "fromHiragDesc": "13-Stufen-Pipeline mit 10+ LLM-Aufrufen, aggressiver Kürzung und kumulierenden Fehlern",
+        "pageindexV3": "PageIndex V3 (Feb. 2026)",
+        "pageindexV3Desc": "Auf 5 Schritte, 2 LLM-Aufrufe reduziert durch Nutzung von passage_citations und Gemini-1M-Kontext",
+        "current": "Aktuelles Agentisches GraphRAG",
+        "currentDesc": "12-Knoten-FSM mit Multi-Modell-Routing, vektorlosem Fallback und Streaming-Unterstützung"
       },
-      "consistency": {
-        "title": "Konsistenz",
-        "description": "Dieselben hochwertigen Zusammenfassungen für jede Abfrage vs. variable dynamische Generierung"
-      },
-      "performance": {
-        "title": "Leistung",
-        "description": "Kein Generierungs-Overhead; Zusammenfassungen werden sofort aus vorberechnetem Speicher geladen"
-      },
-      "rigor": {
-        "title": "Wissenschaftliche Strenge",
-        "description": "Menschlich überprüfte Zusammenfassungen gewährleisten Genauigkeit für akademische Forschung"
-      },
-      "notImplemented": "Was wir nicht implementiert haben (& Warum)",
-      "gmm": {
-        "title": "❌ GMM-Clustering",
-        "description": "Gaussian Mixture Models des Papiers → Wir verwenden Leiden-Algorithmus (besser für graphstrukturierte Daten)"
-      },
-      "sparsity": {
-        "title": "❌ Cluster-Sparsity-Stopping",
-        "description": "Iterative Konvergenz des Papiers → Wir haben eine feste 3-stufige vorberechnete Hierarchie (praktischer)"
-      },
-      "metaAttributes": {
-        "title": "❌ Meta-Attribute",
-        "description": "Explizite Meta-Zusammenfassungen des Papiers → Bereits implizit in unserem Knotentypensystem (Person, Konzept, Argument, Werk)"
-      },
-      "netResult": "🎯 Nettoresultat",
-      "netResultDescription": "Wir implementieren die algorithmischen Kerninnovationen des Papiers (Kürzester-Pfad-Brücken, Pro-Community-Auswahl, hierarchisches Retrieval), während wir die Zusammenfassungsqualitätsbasislinie durch vorberechnete expertenvalidierte Inhalte verbessern. Dies gibt uns die strukturellen Vorteile des Papiers mit höherwertiger Wissensdarstellung."
+      "netResult": "Ergebnis",
+      "netResultDescription": "2 LLM-Aufrufe statt 10+, vollständiger ungekürzter Kontext und Multi-Modell-Routing für schnellere, genauere wissenschaftliche Antworten mit vollständiger Quellenattribution."
     },
     "technical": {
       "title": "Technische Implementierung",
       "architectureTitle": "Architekturüberblick",
-      "backendService": "Backend-Dienst",
-      "backendServiceDesc": "Implementiert HiRAGService mit hierarchischer Indexierung, Kürzester-Pfad-Brückenerkennung und dreistufigem Retrieval",
-      "summaryLoader": "Zusammenfassungslader",
-      "summaryLoaderDesc": "Lädt vorberechnete Opus/GPT-5-Zusammenfassungen aus hierarchical_communities_opus.json",
+      "agentFSM": "Agent-FSM",
+      "agentFSMDesc": "12-Knoten pydantic-graph Zustandsmaschine für Retrieval, Anreicherung und Synthese",
+      "llmService": "LLM-Dienst",
+      "llmServiceDesc": "Multi-Anbieter-Unterstützung mit automatischer Fallback-Kette, Ratenbegrenzung und Streaming via SSE",
       "apiEndpoints": "API-Endpunkte",
-      "apiEndpointsDesc": "Bietet 6 RESTful-Endpunkte einschließlich /query, /query/stream, /communities, /bridges",
-      "queryModes": "Abfragemodi",
-      "modes": {
-        "hi": "Vollständiges hierarchisches Retrieval (alle 3 Ebenen + Brücken)",
-        "hiBridge": "Fokus nur auf Brückenverbindungen",
-        "hiLocal": "Nur Community-lokaler Kontext",
-        "hiGlobal": "Nur globale Zusammenfassungen",
-        "hiNoBridge": "Hierarchisch ohne Brückenknoten"
+      "apiEndpointsDesc": "GraphRAG-Routen: /query, /query/stream mit SSE, hybride Suchendpunkte",
+      "pipelineSteps": "Pipeline-Schritte",
+      "steps": {
+        "embed": "Abfrage einbetten + CTS-URN-Referenzen erkennen",
+        "search": "Parallele Qdrant-Suche (Knoten + Passagen + Kanten)",
+        "enrich": "Parallele Anreicherung (passage_citations + KG-Nachbarn)",
+        "context": "Vollständigen ungekürzten Kontext aufbauen",
+        "synthesize": "Ein LLM-Syntheseaufruf mit Anti-Halluzinations-Prompt"
       },
       "performanceMetrics": "Leistungsmetriken",
       "metrics": {
-        "globalSummaries": "Globale Zusammenfassungen",
-        "communitySummaries": "Community-Zusammenfassungen",
-        "entityNodes": "Entitätsknoten",
-        "bridgeCoverage": "Brücken-Recall-Abdeckung",
+        "llmCalls": "LLM-Aufrufe pro Abfrage",
+        "kgNodes": "Wissensgraph-Knoten",
+        "passages": "Antike Textpassagen",
+        "contextWindow": "Kontextfenster",
         "responseTime": "Antwortzeit (Durchschn.)"
       },
-      "reproducibility": "🔬 Reproduzierbarkeit",
-      "reproducibilityDesc": "Alle Implementierungsdetails, einschließlich Zusammenfassungsgenerierungs-Prompts und Brückenerkennungsalgorithmen, sind in unserem Open-Source-Repository verfügbar. Die vorberechneten Zusammenfassungen (generiert am 27. Oktober 2025) sind versioniert und können mit demselben Prozess regeneriert werden.",
-      "reproducibilityMetadata": "Zusammenfassungsmetadaten umfassen: verwendetes Modell (gpt-5-high), Autoren (GPT 5-high & Romain Girardi), finaler Prüfer (Romain Girardi) und Generierungszeitstempel für vollständige Transparenz."
-    },
-    "comparison": {
-      "title": "Qualitätsvergleich & Erwartete Leistung",
-      "table": {
-        "feature": "Merkmal",
-        "paperHiRAG": "Papiers HiRAG",
-        "ourImplementation": "Unsere Implementierung",
-        "impact": "Auswirkung",
-        "hierarchicalStructure": "Hierarchische Struktur",
-        "multiLayer": "✅ Mehrschichtig (GMM)",
-        "threeLevels": "✅ 3 Ebenen (Leiden)",
-        "equivalent": "Äquivalent",
-        "shortestPath": "Kürzester-Pfad-Brücken",
-        "algorithm2": "✅ Algorithmus 2",
-        "implemented": "✅ Implementiert",
-        "perCommunity": "Pro-Community-Auswahl",
-        "summaryQuality": "Zusammenfassungsqualität",
-        "higher": "Höher",
-        "humanReview": "Menschliche Überprüfung",
-        "none": "❌ Keine",
-        "expertValidated": "✅ Expertenvalidiert",
-        "stability": "Produktionsstabilität",
-        "dynamic": "⚠️ Dynamisch",
-        "preComputed": "✅ Vorberechnet"
-      },
-      "expectedPerformance": "📊 Erwartete Leistung",
-      "performanceIntro": "Basierend auf der Ablationsstudie des Papiers (Tabelle 3) sollte unsere Implementierung erreichen:",
-      "winRate": "54-64% Gewinnrate vs. Standard-GraphRAG (volle HiRAG-Vorteile)",
-      "recallCoverage": "38-83% Recall-Abdeckung aus Brückenwissen (Tabelle 2 des Papiers)",
-      "higherQuality": "Potenziell höher als Papier aufgrund überlegener Zusammenfassungsqualität (Opus > DeepSeek)",
-      "consistency": "Konsistentere Antworten aufgrund vorberechneter vs. dynamischer Generierung",
-      "academicNote": "🎓 Hinweis zur akademischen Integrität",
-      "academicNoteText": "Diese Implementierung reproduziert getreu die algorithmischen Kernbeiträge der HiRAG-Architektur von Huang et al., während die Zusammenfassungsgenerierungskomponente für Produktionsqualität und wissenschaftliche Strenge angepasst wird. Alle Anpassungen sind hier und in unserer Codebasis klar dokumentiert. Wir würdigen die Innovationen des Originalpapers und empfehlen, sowohl das Originalwerk als auch unsere Implementierung zu zitieren, wenn auf dieses System verwiesen wird."
+      "reproducibility": "Reproduzierbarkeit",
+      "reproducibilityDesc": "Alle Implementierungsdetails sind im Open-Source-Repository verfügbar. Wissensgraph, passage_citations und Pipeline-Konfiguration sind vollständig versioniert und reproduzierbar."
     },
     "summary": {
       "title": "Zusammenfassung",
-      "tookFromPaper": "Was wir aus dem Papier übernommen haben",
-      "tookFromPaperText": "Hierarchische Wissensstruktur, Kürzester-Pfad-Brückenerkennung (Algorithmus 2), Pro-Community-Schlüsselentitätsauswahl und dreistufige Retrieval-Architektur.",
-      "adapted": "Was wir angepasst haben",
-      "adaptedText": "Vorberechnete expertenvalidierte Zusammenfassungen (Opus + GPT-5 + menschliche Überprüfung) anstelle dynamischer DeepSeek-Generierung, die höhere Qualität und Konsistenz gewährleistet.",
-      "why": "Warum",
-      "whyText": "Dies gibt uns die strukturellen Innovationen des Papiers mit überlegener Wissensdarstellung und kombiniert modernste Retrieval-Algorithmen mit domänenexpertischer wissenschaftlicher Strenge."
+      "architecture": "Architektur",
+      "architectureText": "12-Knoten pydantic-graph FSM mit 5-Schritte-Pipeline und 2 LLM-Aufrufen pro Abfrage.",
+      "models": "Modelle",
+      "modelsText": "Gemini 3 (primär, 1M Kontext) + Kimi K2.5 Thinking (erweitertes Argumentieren) mit automatischem Fallback.",
+      "result": "Ergebnis",
+      "resultText": "Wissenschaftliche Antworten basierend auf 2.193 KG-Knoten und 17.000+ Passagen mit vollständiger Zitatverfolgung und Argumentationstransparenz."
     }
   },
   "kg": {
@@ -732,8 +663,8 @@
     "degree3": "Master in Klassischer Philologie, mit Auszeichnung (2019)",
     "degree4": "Bachelor in Klassischer Philologie, mit Auszeichnung (2017)",
     "implementationTitle": "Umsetzung & Technische Infrastruktur",
-    "poweredByHiRAG": "Betrieben durch HiRAG-Technologie",
-    "hiragDesc": "Diese Datenbank implementiert HiRAG (Hierarchical Retrieval-Augmented Generation), das GraphRAG erweitert, indem es Wissen über Abstraktionsebenen organisiert. Anstatt alle Knoten gleich zu behandeln, respektiert HiRAG die natürliche Hierarchie: Autoren schreiben Werke, Werke diskutieren Konzepte, Konzepte erscheinen in Debatten. Dieses mehrstufige Argumentieren produziert nuanciertere wissenschaftliche Antworten mit korrekter Zuschreibung.",
+    "poweredByGraphRAG": "Agentisches GraphRAG",
+    "graphragDesc": "Diese Datenbank nutzt Agentisches GraphRAG und kombiniert einen Wissensgraphen mit einer autonomen Retrieval-Pipeline. Eine 12-Knoten-FSM orchestriert parallele Suche, Anreicherung und Synthese über 2.193 Knoten und mehr als 17.000 Passagen. Multi-Modell-Unterstützung (Gemini/Kimi) und vektorloser SQL-Fallback gewährleisten robuste wissenschaftliche Antworten mit korrekter Zuschreibung.",
     "philologicalWork": "Philologische Arbeit",
     "philoDesc": "Alle griechischen und lateinischen Texte durchlaufen manuelle Überprüfung. Die Lemmatisierung nutzt LAULA (Lateinisch) und PAULA (Griechisch) morphologische Analysatoren, um lemmabasierte Suche zu ermöglichen. Jeder Wissensgraph-Knoten ist in Primärquellen (antike Texte) oder Sekundärliteratur (moderne Forschung) mit vollständiger bibliographischer Provenienz verankert.",
     "technicalInfra": "Technische Infrastruktur",
@@ -1274,8 +1205,8 @@
       "ancientTexts": "Antike Texte",
       "fair": "FAIR-Prinzipien",
       "glossary": "Glossar",
-      "hirag": "HiRAG-Technologie",
-      "hiragDetails": "Implementierung",
+      "agenticGraphrag": "Agentisches GraphRAG",
+      "agenticGraphragDetails": "Implementierung",
       "tryGraphRAG": "GraphRAG ausprobieren"
     },
     "hero": {
