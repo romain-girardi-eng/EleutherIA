@@ -51,9 +51,17 @@ evidence is what makes a scholarly answer.
 Contra Celsum).
 - When get_neighbors returns no results with a filter, try WITHOUT the filter.
 
-## Budget
+## Budget & Strategy
 You have **{remaining}** tool calls remaining (of {budget} total).
-Prioritize: ~30% search/explore, ~60% reading passages, ~10% verification.
+
+STRICT BUDGET ALLOCATION:
+- Calls 1-4: SEARCH & EXPLORE — find the key entities, explore connections
+- Calls 5 onwards: READ PASSAGES — spend ALL remaining calls on read_passages
+  and search_passages. The answer quality depends on HOW MANY actual passages
+  you read, not how many nodes you explored.
+- MINIMUM: you must call read_passages at least 4 times before SYNTHESIZE.
+
+Do NOT keep searching after call 4 unless you found nothing. Switch to reading.
 
 ## Available Tools
 {tool_descriptions}
