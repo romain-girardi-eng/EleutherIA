@@ -227,35 +227,21 @@ async def _search_passage_for_text(
     db: Any,
     schema: str,
 ) -> dict[str, Any] | None:
-    """Search for a Greek text snippet in the passages table.
+    """Search for a Greek text snippet in the database.
 
-    Uses substring matching (LIKE) on text_content.
+    Checks both the passages table AND kg_nodes descriptions,
+    since some ancient text is stored in KG node descriptions
+    (e.g., from Scaife ingestions).
+
+    Uses substring matching (LIKE) on text_content / description.
     Normalizes Unicode to handle diacritical variations.
     """
-    # Normalize: strip outer punctuation, keep inner diacritics
     search_text = greek_text.strip().strip(".,;:·()\"'""")
     if len(search_text) < 4:
-        return None  # Too short to search meaningfully
+        return None
 
-    try:
-        row = await db.fetchrow(
-            f"""
-            SELECT p.passage_id::text, w.title, p.canonical_ref
-            FROM {schema}.passages p
-            JOIN {schema}.ancient_works w ON w.work_id = p.work_id
-            WHERE p.text_content LIKE '%' || $1 || '%'
-            LIMIT 1
-            """,
-            search_text,
-        )
-        if row:
-            return dict(row)
-    except Exception:
-        logger.debug("Passage search failed for: %s", search_text[:50], exc_info=True)
-
-    # Try with normalized Unicode (NFD → NFC variations)
-    normalized = unicodedata.normalize("NFC", search_text)
-    if normalized != search_text:
+    for text_variant in _unicode_variants(search_text):
+        # Check passages table
         try:
             row = await db.fetchrow(
                 f"""
@@ -265,14 +251,43 @@ async def _search_passage_for_text(
                 WHERE p.text_content LIKE '%' || $1 || '%'
                 LIMIT 1
                 """,
-                normalized,
+                text_variant,
             )
             if row:
                 return dict(row)
         except Exception:
-            pass
+            logger.debug("Passage search failed for: %s", text_variant[:50], exc_info=True)
+
+        # Check KG node descriptions (many passage nodes store text here)
+        try:
+            row = await db.fetchrow(
+                f"""
+                SELECT node_id AS passage_id, label AS title, NULL AS canonical_ref
+                FROM {schema}.kg_nodes
+                WHERE description LIKE '%' || $1 || '%'
+                  AND type IN ('passage', 'quote')
+                LIMIT 1
+                """,
+                text_variant,
+            )
+            if row:
+                return dict(row)
+        except Exception:
+            logger.debug("KG node search failed for: %s", text_variant[:50], exc_info=True)
 
     return None
+
+
+def _unicode_variants(text: str) -> list[str]:
+    """Return Unicode normalization variants of a string."""
+    variants = [text]
+    nfc = unicodedata.normalize("NFC", text)
+    if nfc != text:
+        variants.append(nfc)
+    nfd = unicodedata.normalize("NFD", text)
+    if nfd != text and nfd != nfc:
+        variants.append(nfd)
+    return variants
 
 
 def _count_greek_chars(text: str) -> int:
