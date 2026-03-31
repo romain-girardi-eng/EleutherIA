@@ -2366,6 +2366,156 @@ async def _fetch_translation_for_passage(
     return None
 
 
+async def _batch_fetch_translations(
+    deps: Deps,
+    passage_ids: list[str],
+) -> dict[str, dict[str, Any] | None]:
+    """Batch-fetch translations for multiple passage IDs in minimal DB round-trips.
+
+    Returns a mapping of passage_id -> translation dict (same shape as
+    ``_fetch_translation_for_passage`` output) or ``None``.
+    """
+    if not passage_ids or (not deps.outgoing_edges and not deps.incoming_edges):
+        return {pid: None for pid in passage_ids}
+
+    # --- Step 1: one query to get KG node IDs for ALL passages ---
+    placeholders = ", ".join(f"${i + 1}" for i in range(len(passage_ids)))
+    rows = await deps.db.fetch(
+        f"""
+        SELECT passage_id::text, kg_node_id
+        FROM {DB_SCHEMA}.passage_citations
+        WHERE passage_id IN ({placeholders})
+        """,
+        *passage_ids,
+    )
+
+    # Build passage_id -> list[kg_node_id]
+    passage_to_kg: dict[str, list[str]] = {}
+    for row in rows:
+        pid = str(row["passage_id"])
+        passage_to_kg.setdefault(pid, []).append(str(row["kg_node_id"]))
+
+    # --- Step 2: in-memory edge traversal (no DB needed) ---
+    def _translation_priority(node_id: str) -> tuple[int, str]:
+        node = deps.node_lookup.get(node_id, {})
+        metadata = node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
+        language = str(metadata.get("language") or node.get("language") or "").lower()
+        label = str(node.get("label") or "").lower()
+        score = 0
+        if language in {"eng", "en"}:
+            score += 3
+        if node_id.endswith("_en"):
+            score += 2
+        if "english" in label:
+            score += 1
+        return (-score, node_id)
+
+    # passage_id -> sorted list of translation node IDs
+    passage_translation_nodes: dict[str, list[str]] = {}
+    all_translation_node_ids: set[str] = set()
+    for pid in passage_ids:
+        source_nodes = passage_to_kg.get(pid, [])
+        if not source_nodes:
+            continue
+        seen: set[str] = set()
+        trans_ids: list[str] = []
+        for node_id in source_nodes:
+            for edge in deps.incoming_edges.get(node_id, []):
+                if edge.get("relation") == "translation_of":
+                    source = str(edge["source"])
+                    if source not in seen:
+                        trans_ids.append(source)
+                        seen.add(source)
+            for edge in deps.outgoing_edges.get(node_id, []):
+                if edge.get("relation") == "translation_of":
+                    target = str(edge["target"])
+                    if target not in seen:
+                        trans_ids.append(target)
+                        seen.add(target)
+        if trans_ids:
+            trans_ids = sorted(trans_ids, key=_translation_priority)
+            passage_translation_nodes[pid] = trans_ids
+            all_translation_node_ids.update(trans_ids)
+
+    # --- Step 3: one query for ALL translation passages ---
+    translation_passages: dict[str, list[dict[str, Any]]] = {}
+    if all_translation_node_ids:
+        t_placeholders = ", ".join(
+            f"${i + 1}" for i in range(len(all_translation_node_ids))
+        )
+        t_node_list = list(all_translation_node_ids)
+        t_rows = await deps.db.fetch(
+            f"""
+            SELECT DISTINCT
+                pc.kg_node_id::text AS kg_node_id,
+                p.passage_id,
+                p.work_id::text AS work_id,
+                p.text_content,
+                p.canonical_ref,
+                p.sequence_number,
+                w.title,
+                w.author,
+                w.language,
+                pc.confidence
+            FROM {DB_SCHEMA}.passage_citations pc
+            JOIN {DB_SCHEMA}.passages p ON pc.passage_id = p.passage_id
+            JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
+            WHERE pc.kg_node_id IN ({t_placeholders})
+            ORDER BY pc.confidence DESC, p.sequence_number
+            """,
+            *t_node_list,
+        )
+        for t_row in t_rows:
+            nid = str(t_row["kg_node_id"])
+            translation_passages.setdefault(nid, []).append(t_row)
+
+    # --- Step 4: assemble results per passage_id ---
+    results: dict[str, dict[str, Any] | None] = {}
+    for pid in passage_ids:
+        trans_ids = passage_translation_nodes.get(pid)
+        if not trans_ids:
+            results[pid] = None
+            continue
+
+        # Try DB-backed translation first (pick best by priority order)
+        found = False
+        for t_node_id in trans_ids:
+            t_rows_for_node = translation_passages.get(t_node_id)
+            if t_rows_for_node:
+                results[pid] = t_rows_for_node[0]
+                found = True
+                break
+        if found:
+            continue
+
+        # Fallback: KG node description
+        fallback = None
+        for t_node_id in trans_ids:
+            node = deps.node_lookup.get(t_node_id)
+            if not node:
+                continue
+            text = node.get("description")
+            if not text:
+                continue
+            metadata = node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
+            fallback = {
+                "passage_id": None,
+                "kg_node_id": t_node_id,
+                "text_content": text,
+                "canonical_ref": metadata.get("canonical_ref"),
+                "sequence_number": None,
+                "title": metadata.get("work_title") or node.get("label"),
+                "author": metadata.get("author"),
+                "language": metadata.get("language") or node.get("language"),
+                "confidence": None,
+                "source": "kg_node_description",
+            }
+            break
+        results[pid] = fallback
+
+    return results
+
+
 def _bundle_from_passage_evidence(ev: Evidence) -> EvidenceBundle:
     original_text = ev.text_content or ev.description or ""
     return EvidenceBundle(
@@ -5495,7 +5645,7 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             _render_dur = int((_time.time() - _t0) * 1000)
             rendered_answer = raw_answer.strip()
             _polish_mode = "skipped"
-            if rendered_answer and not _should_minimize_llm_calls(state):
+            if rendered_answer and len(rendered_answer) < 500 and not _should_minimize_llm_calls(state):
                 try:
                     polished_answer = await ctx.deps.llm.generate(
                         SCHOLARLY_POLISH_PROMPT.format(
