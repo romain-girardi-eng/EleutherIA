@@ -176,7 +176,7 @@ export default function GraphRAGShowcase() {
           <h1 className="text-4xl lg:text-6xl font-serif font-display font-bold text-stone-800 mb-6 flex flex-wrap items-center justify-center gap-3">
             GraphRAG Question Answering
             <a
-              href="#hirag-technology"
+              href="#graphrag-technology"
               className="inline-flex items-center gap-1.5 bg-purple-100 hover:bg-purple-200 text-purple-700 text-sm lg:text-base font-semibold px-4 py-2 rounded-full border border-purple-300 transition-all duration-300 hover:scale-105"
               style={{
                 boxShadow: '0 0 20px rgba(168, 85, 247, 0.4), 0 0 40px rgba(168, 85, 247, 0.2), 0 4px 8px rgba(0, 0, 0, 0.1)',
@@ -184,7 +184,7 @@ export default function GraphRAGShowcase() {
               }}
             >
               <Sparkles className="w-4 h-4" />
-              Enhanced with HiRAG
+              Agentic GraphRAG
             </a>
           </h1>
           <style>{`
@@ -444,9 +444,9 @@ export default function GraphRAGShowcase() {
           </div>
         </motion.div>
 
-        {/* HiRAG Technology Section */}
+        {/* GraphRAG Technology Section */}
         <motion.div
-          id="hirag-technology"
+          id="graphrag-technology"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}

@@ -312,7 +312,7 @@ export interface GraphRAGResponse {
   };
   nodes_used: number;
   edges_traversed: number;
-  service?: string;  // e.g., "HiRAG (Opus summaries)" or "GraphRAG (fallback)"
+  service?: string;  // e.g., "Agentic GraphRAG" or "GraphRAG (fallback)"
   hierarchy_stats?: {
     level_0_used: number;
     level_1_used: number;
