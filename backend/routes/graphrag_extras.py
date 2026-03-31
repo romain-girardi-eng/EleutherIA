@@ -422,3 +422,33 @@ async def compare_modes(
         },
         "processing_time": round(elapsed, 2),
     }
+
+
+# ---------- Workflow Stubs (Cloudflare Workflows not available on Railway) ----------
+
+
+class WorkflowStartRequest(BaseModel):
+    query: str = Field(..., min_length=1)
+    mode: str = "thorough"
+    options: dict[str, Any] = Field(default_factory=dict)
+
+
+@router.post("/workflow/start", status_code=501)
+async def workflow_start(body: WorkflowStartRequest) -> dict[str, Any]:
+    """Stub: Cloudflare Workflows not available on Railway. Use /answer instead."""
+    return {
+        "error": "Workflow execution not available on Railway deployment. Use /api/graphrag/answer instead.",
+        "status": "unsupported",
+        "instanceId": None,
+    }
+
+
+@router.get("/workflow/status/{instance_id}", status_code=501)
+async def workflow_status(instance_id: str) -> dict[str, Any]:
+    """Stub: Cloudflare Workflows not available on Railway."""
+    return {
+        "error": "Workflow execution not available on Railway deployment.",
+        "status": "unsupported",
+        "instanceId": instance_id,
+        "result": None,
+    }

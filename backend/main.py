@@ -31,7 +31,13 @@ from backend.routes.graphrag_extras import router as graphrag_extras_router
 from backend.routes.kg_extras import router as kg_extras_router
 from backend.routes.lemma import router as lemma_router
 from backend.routes.search import router as search_router
-from backend.routes.works_extras import router as works_extras_router
+from backend.routes.works_extras import (
+    citations_router,
+    embeddings_router,
+    router as works_extras_router,
+    text_router,
+    texts_router,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -106,6 +112,12 @@ def create_app() -> FastAPI:
     app.include_router(lemma_router, prefix="/api/lemma")
     app.include_router(graphrag_extras_router, prefix="/api/graphrag")
     app.include_router(kg_extras_router, prefix="/api/kg")
+
+    # Migration compatibility routers (endpoints called by frontend)
+    app.include_router(texts_router, prefix="/api/texts")
+    app.include_router(text_router, prefix="/api/text")
+    app.include_router(citations_router, prefix="/api/citations")
+    app.include_router(embeddings_router, prefix="/api/embeddings")
 
     # ---------- Health endpoint ----------
 
