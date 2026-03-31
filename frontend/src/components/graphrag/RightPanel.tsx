@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Brain, FileText, Network, Quote, ScrollText, Sparkles, Waypoints } from 'lucide-react';
+import { BookOpen, Brain, FileText, Network, Quote, Sparkles, Waypoints } from 'lucide-react';
 import TraversalDAG from './TraversalDAG';
 import ResearchGraphPanel from './ResearchGraphPanel';
 import NodeDetailCard from './NodeDetailCard';
