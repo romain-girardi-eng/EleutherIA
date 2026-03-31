@@ -330,7 +330,7 @@ export default function GraphRAGPage() {
       }, 120000);
 
       const params = new URLSearchParams({
-        query: queryText,
+        question: queryText,
         ancient_only: ancientOnly.toString(),
         model: effectiveModel,
         retrieval_mode: effectiveMode,
