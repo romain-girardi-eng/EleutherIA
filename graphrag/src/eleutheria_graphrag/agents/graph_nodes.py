@@ -4646,6 +4646,12 @@ class TreeNavigateWorks(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             return ExpandEvidenceBundles()
 
         selected_sections: list[dict[str, Any]] = []
+        minimize_llm = _should_minimize_llm_calls(state)
+        question = state.research_notebook.question_frame or state.question
+
+        # Pre-process each index: record tool call, build sections, collect LLM tasks
+        per_index_data: list[tuple[Any, list[dict[str, Any]], list[dict[str, Any]]]] = []
+        llm_tasks: list[tuple[int, asyncio.Task[list[dict[str, Any]]]]] = []
         for index in indices:
             _record_tool_call(
                 state,
@@ -4663,26 +4669,66 @@ class TreeNavigateWorks(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             flat_sections: list[dict[str, Any]] = []
             for node in index.nodes:
                 flat_sections.extend(_selected_section_summary(node, index.work_id))
+            top_sections = flat_sections[: state.retrieval_budget.section_summary_limit()]
+            per_index_data.append((index, flat_sections, top_sections))
+
+        # Launch LLM navigation calls in parallel (skip indices with no sections)
+        _nav_semaphore = asyncio.Semaphore(10)
+
+        async def _limited_nav(idx: int, coro: Any) -> tuple[int, list[dict[str, Any]]]:
+            async with _nav_semaphore:
+                return idx, await coro
+
+        nav_coros: list[Any] = []
+        nav_index_map: dict[int, int] = {}  # maps coro position -> per_index_data position
+        for i, (index, flat_sections, top_sections) in enumerate(per_index_data):
+            if not flat_sections:
+                continue
+            if minimize_llm:
+                continue  # handled synchronously below
+            coro_pos = len(nav_coros)
+            nav_index_map[coro_pos] = i
+            nav_coros.append(
+                _limited_nav(
+                    i,
+                    _navigate_sections_with_llm(
+                        ctx,
+                        question=question,
+                        work_title=index.title,
+                        author=index.author,
+                        work_id=index.work_id,
+                        sections=top_sections,
+                    ),
+                )
+            )
+
+        # Gather parallel LLM results
+        llm_results: dict[int, list[dict[str, Any]]] = {}
+        if nav_coros:
+            raw_results = await asyncio.gather(*nav_coros, return_exceptions=True)
+            for result in raw_results:
+                if isinstance(result, Exception):
+                    logger.warning("Tree navigation failed for a work: %s", result)
+                    continue
+                idx, chosen = result
+                llm_results[idx] = chosen
+
+        # Post-process all indices
+        for i, (index, flat_sections, top_sections) in enumerate(per_index_data):
             if not flat_sections:
                 continue
 
-            top_sections = flat_sections[: state.retrieval_budget.section_summary_limit()]
-            if _should_minimize_llm_calls(state):
-                chosen = _heuristic_select_sections(
-                    state.research_notebook.question_frame or state.question,
-                    top_sections,
-                )
+            if minimize_llm:
+                chosen = _heuristic_select_sections(question, top_sections)
                 section_mode = "heuristic"
-            else:
-                chosen = await _navigate_sections_with_llm(
-                    ctx,
-                    question=state.research_notebook.question_frame or state.question,
-                    work_title=index.title,
-                    author=index.author,
-                    work_id=index.work_id,
-                    sections=top_sections,
-                )
+            elif i in llm_results:
+                chosen = llm_results[i]
                 section_mode = "llm"
+            else:
+                # LLM call failed for this index, fall back to heuristic
+                chosen = _heuristic_select_sections(question, top_sections)
+                section_mode = "heuristic"
+
             selected_sections.extend(chosen)
             _record_tool_call(
                 state,
