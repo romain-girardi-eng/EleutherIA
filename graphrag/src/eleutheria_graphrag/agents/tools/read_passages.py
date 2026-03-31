@@ -71,7 +71,7 @@ class ReadPassagesTool:
 
         rows: list[dict[str, Any]] = []
 
-        # Strategy 1: passage_citations (works for person, concept, argument nodes)
+        # Strategy 1: passage_citations (works for argument, concept, some person nodes)
         try:
             rows = await self._deps.db.fetch(f"""
                 SELECT
@@ -112,6 +112,69 @@ class ReadPassagesTool:
                 """, node_id, limit)
             except Exception:
                 logger.warning("work passages query failed for %s", node_id, exc_info=True)
+
+        # Strategy 3: if node is a person, find their works and load passages
+        if not rows and node_type == "person":
+            work_ids: list[str] = []
+
+            # Outgoing: person --wrote/created_by--> work
+            for edge in self._deps.outgoing_edges.get(node_id, []):
+                if edge.get("relation") in ("wrote", "created_by", "authored"):
+                    tgt = edge.get("target", "")
+                    if self._deps.node_lookup.get(tgt, {}).get("type", "").lower() == "work":
+                        work_ids.append(tgt)
+
+            # Incoming: work --authored_by--> person
+            for edge in self._deps.incoming_edges.get(node_id, []):
+                if edge.get("relation") == "authored_by":
+                    src = edge.get("source", "")
+                    if self._deps.node_lookup.get(src, {}).get("type", "").lower() == "work":
+                        work_ids.append(src)
+
+            work_ids = list(dict.fromkeys(work_ids))  # Deduplicate
+
+            if work_ids:
+                try:
+                    rows = await self._deps.db.fetch(f"""
+                        SELECT
+                            p.passage_id::text,
+                            w.title,
+                            w.author,
+                            p.canonical_ref,
+                            w.language,
+                            p.text_content,
+                            0.8 AS confidence
+                        FROM {DB_SCHEMA}.passages p
+                        JOIN {DB_SCHEMA}.ancient_works w ON w.work_id = p.work_id
+                        WHERE w.kg_work_id = ANY($1)
+                        ORDER BY p.sequence_number
+                        LIMIT $2
+                    """, work_ids, limit)
+                except Exception:
+                    logger.warning("person→work passages query failed for %s", node_id, exc_info=True)
+
+        # Strategy 4: if still nothing and node is a person, search by author name
+        if not rows and node_type == "person":
+            author_name = node_label.split(" of ")[0].split(" (")[0].strip()
+            if author_name:
+                try:
+                    rows = await self._deps.db.fetch(f"""
+                        SELECT
+                            p.passage_id::text,
+                            w.title,
+                            w.author,
+                            p.canonical_ref,
+                            w.language,
+                            p.text_content,
+                            0.7 AS confidence
+                        FROM {DB_SCHEMA}.passages p
+                        JOIN {DB_SCHEMA}.ancient_works w ON w.work_id = p.work_id
+                        WHERE w.author ILIKE $1
+                        ORDER BY p.sequence_number
+                        LIMIT $2
+                    """, author_name, limit)
+                except Exception:
+                    logger.warning("author name passages query failed for %s", author_name, exc_info=True)
 
         passages: list[PassageSummary] = []
         for row in rows:
