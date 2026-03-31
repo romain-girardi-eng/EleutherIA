@@ -124,8 +124,9 @@ export default function ChatPanel({
           ))}
         </AnimatePresence>
 
-        {streaming && (
+        {streaming && !messages.some(m => m.role === 'assistant') && (
           <motion.div
+            key="terminal-loader"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
