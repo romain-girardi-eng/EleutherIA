@@ -109,8 +109,15 @@ class ScholarlyAgent:
         question: str,
         *,
         max_iterations: int = 5,
+        selected_model: str = "gemini-3.1-pro",
+        retrieval_mode: str = "auto",
     ) -> AsyncIterator[str]:
-        answer = await self.query(question, max_iterations=max_iterations)
+        answer = await self.query(
+            question,
+            max_iterations=max_iterations,
+            selected_model=selected_model,
+            retrieval_mode=retrieval_mode,
+        )
         text = answer.answer
         paragraphs = re.split(r"\n\n+", text)
         for i, para in enumerate(paragraphs):

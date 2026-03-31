@@ -381,13 +381,19 @@ class GraphRAGService:
         semantic_k: int = 10,
         graph_depth: int = 2,
         max_context_nodes: int = 30,
+        selected_model: str = "gemini-3.1-pro",
+        retrieval_mode: str = "auto",
     ) -> AsyncIterator[str]:
         """Execute GraphRAG query with streaming response."""
         if not self._kg_loaded:
             await self.load_kg()
 
         agent = self._ensure_agent()
-        async for chunk in agent.query_stream(question):
+        async for chunk in agent.query_stream(
+            question,
+            selected_model=selected_model,
+            retrieval_mode=retrieval_mode,
+        ):
             yield chunk
 
     # ------------------------------------------------------------------
