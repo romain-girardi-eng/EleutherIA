@@ -366,6 +366,16 @@ export interface GraphRAGResponse {
     confidence: number;
   }>;
 
+  // Response metrics (cost, model, context usage)
+  metrics?: {
+    processing_time_s?: number;
+    model_key?: string;
+    model_label?: string;
+    retrieval_mode_used?: string;
+    estimated_cost_usd?: number;
+    answer_length_chars?: number;
+  };
+
   // Enhanced GraphRAG fields
   enhanced?: boolean;
   relationship_types_used?: number;

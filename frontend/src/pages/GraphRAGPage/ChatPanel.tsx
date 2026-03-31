@@ -7,7 +7,16 @@ import { TerminalLoader } from '../../components/ui/terminal-loader';
 import { ModelSelector } from '@/components/ModelSelector';
 import { ResponseTabs } from '@/components/ResponseTabs';
 import type { ResponseTab } from '@/components/ResponseTabs';
+import { TokenBudget } from '@/components/TokenBudget';
 import type { GraphRAGChatMessage } from '../../types';
+
+interface LastMetrics {
+  modelLabel: string;
+  retrievalMode: string;
+  estimatedCost: number | null;
+  answerLengthChars: number;
+  modelContext: number;
+}
 
 interface ChatPanelProps {
   messages: GraphRAGChatMessage[];
@@ -31,6 +40,7 @@ interface ChatPanelProps {
   activeTabId: string;
   onTabChange: (tabId: string) => void;
   onRetry: () => void;
+  lastMetrics?: LastMetrics | null;
 }
 
 export default function ChatPanel({
@@ -55,6 +65,7 @@ export default function ChatPanel({
   activeTabId,
   onTabChange,
   onRetry,
+  lastMetrics,
 }: ChatPanelProps) {
   const { t } = useTranslation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -72,12 +83,23 @@ export default function ChatPanel({
       {/* Fixed header */}
       <div className="shrink-0 flex items-center justify-between px-6 xl:px-10 py-3 border-b border-amber-200/40 bg-parchment-50/80 backdrop-blur-sm">
         <h1 className="text-sm xl:text-base font-semibold text-stone-400 uppercase tracking-wider">{t('graphRagUi.chatTitle')}</h1>
-        <ModelSelector
-          selectedModel={selectedModel}
-          selectedMode={selectedMode}
-          onModelChange={onModelChange}
-          onModeChange={onModeChange}
-        />
+        <div className="flex items-center gap-2">
+          {lastMetrics && (
+            <TokenBudget
+              modelLabel={lastMetrics.modelLabel}
+              retrievalMode={lastMetrics.retrievalMode}
+              estimatedCost={lastMetrics.estimatedCost}
+              answerLengthChars={lastMetrics.answerLengthChars}
+              modelContext={lastMetrics.modelContext}
+            />
+          )}
+          <ModelSelector
+            selectedModel={selectedModel}
+            selectedMode={selectedMode}
+            onModelChange={onModelChange}
+            onModeChange={onModeChange}
+          />
+        </div>
       </div>
 
       {/* Response tabs (only visible with 2+ tabs) */}

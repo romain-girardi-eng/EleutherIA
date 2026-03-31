@@ -67,6 +67,29 @@ export default function GraphRAGPage() {
   // Right panel reasoning trace toggle
   const [showReasoningTrace, setShowReasoningTrace] = useState(false);
 
+  // Token budget / cost metrics from last response
+  interface LastMetrics {
+    modelLabel: string;
+    retrievalMode: string;
+    estimatedCost: number | null;
+    answerLengthChars: number;
+    modelContext: number;
+  }
+  const [lastMetrics, setLastMetrics] = useState<LastMetrics | null>(null);
+  const [modelContextMap, setModelContextMap] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const apiUrl = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') ?? '';
+    fetch(`${apiUrl}/api/graphrag/models`)
+      .then((r) => r.json())
+      .then((models: Array<{ key: string; context: number }>) => {
+        const map: Record<string, number> = {};
+        models.forEach((m) => { map[m.key] = m.context; });
+        setModelContextMap(map);
+      })
+      .catch(console.error);
+  }, []);
+
   const fetchPassageContext = useCallback(async (passageId: string, window: number = 5) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -507,6 +530,18 @@ export default function GraphRAGPage() {
         setAllResponses((prev) => [...prev, finalResponse]);
         setRightPanelState('graph');
 
+        // Update token budget display
+        if (finalResponse.metrics) {
+          const m = finalResponse.metrics;
+          setLastMetrics({
+            modelLabel: m.model_label ?? effectiveModel,
+            retrievalMode: m.retrieval_mode_used ?? effectiveMode,
+            estimatedCost: m.estimated_cost_usd ?? null,
+            answerLengthChars: m.answer_length_chars ?? assistantMessage.content.length,
+            modelContext: modelContextMap[m.model_key ?? effectiveModel] ?? 1_000_000,
+          });
+        }
+
         // Store tab-specific data
         if (tabId) {
           setTabMessages((prev) => ({
@@ -648,6 +683,7 @@ export default function GraphRAGPage() {
                 activeTabId={activeTabId}
                 onTabChange={handleTabChange}
                 onRetry={handleRetry}
+                lastMetrics={lastMetrics}
               />
 
               {/* RIGHT PANEL - desktop graph workspace */}
