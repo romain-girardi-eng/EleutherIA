@@ -1,0 +1,58 @@
+name: KG Snapshot
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Backend base URL (defaults to Railway production)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kg-snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Export KG snapshot
+        env:
+          KG_API_BASE: ${{ github.event.inputs.base_url || 'https://eleutheria-backend-production.up.railway.app' }}
+        run: |
+          python scripts/export_kg_snapshot.py
+
+      - name: Show diff summary
+        run: |
+          git add data/kg/
+          if git diff --cached --quiet; then
+            echo "No changes."
+            echo "HAS_CHANGES=false" >> "$GITHUB_ENV"
+          else
+            echo "HAS_CHANGES=true" >> "$GITHUB_ENV"
+            echo "---"
+            git diff --cached --stat data/kg/
+          fi
+
+      - name: Commit and push
+        if: env.HAS_CHANGES == 'true'
+        run: |
+          git config user.name "kg-snapshot-bot"
+          git config user.email "kg-snapshot-bot@users.noreply.github.com"
+          TS=$(date -u +"%Y-%m-%d %H:%M UTC")
+          git commit -m "chore(kg): snapshot ${TS}"
+          git push
