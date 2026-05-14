@@ -11,7 +11,8 @@ from typing import Annotated, Any
 
 from eleutheria_kg.services.analytics import ANCIENT_PERIODS, KGAnalytics
 from eleutheria_kg.services.cache import KGCache
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
 from backend.dependencies import get_analytics, get_cache
@@ -22,6 +23,7 @@ router = APIRouter(tags=["kg-extras"])
 
 
 # ---------- Path aliases ----------
+
 
 @router.get("/node/{node_id}")
 async def get_node_alias(
@@ -35,17 +37,22 @@ async def get_node_alias(
     raise HTTPException(status_code=404, detail="Node not found")
 
 
-@router.get("/node/{node_id}/connections")
+@router.get("/node/{node_id}/connections", deprecated=True)
 async def get_node_connections(
     node_id: str,
-    analytics: Annotated[KGAnalytics, Depends(get_analytics)],
-    depth: int = Query(1, ge=1, le=3),
-) -> dict[str, Any]:
-    """Get node connections (alias for /nodes/{node_id}/neighbors)."""
-    result = analytics.get_node_neighbors(node_id, depth)
-    if not result["nodes"]:
-        raise HTTPException(status_code=404, detail="Node not found")
-    return result
+    request: Request,
+) -> RedirectResponse:
+    """Deprecated: use ``/api/kg/nodes/{node_id}/neighbors``.
+
+    Kept as a 301 redirect for six months (until 2026-11-15) so any
+    bookmarked or hard-coded client URLs continue to resolve. The new
+    canonical returns 1-hop neighbors grouped by edge type + direction.
+    """
+    query = str(request.url.query) if request.url.query else ""
+    target = f"/api/kg/nodes/{node_id}/neighbors"
+    if query:
+        target = f"{target}?{query}"
+    return RedirectResponse(url=target, status_code=301)
 
 
 @router.get("/stats")
@@ -64,11 +71,14 @@ async def get_kg_stats(
 
 # ---------- Viz endpoint ----------
 
+
 @router.get("/viz/cytoscape")
 async def get_cytoscape_data(
     analytics: Annotated[KGAnalytics, Depends(get_analytics)],
     cache: Annotated[KGCache, Depends(get_cache)],
-    communityAlgorithm: str = Query("greedy", description="Community detection algorithm"),
+    communityAlgorithm: str = Query(
+        "greedy", description="Community detection algorithm"
+    ),
     ancientOnly: bool = Query(False, description="Filter to ancient-period nodes only"),
 ) -> dict[str, Any]:
     """
@@ -89,7 +99,11 @@ async def get_cytoscape_data(
     if ancientOnly:
         ancient_ids = {n["id"] for n in nodes if n.get("period") in ANCIENT_PERIODS}
         nodes = [n for n in nodes if n["id"] in ancient_ids]
-        edges = [e for e in edges if e["source"] in ancient_ids and e["target"] in ancient_ids]
+        edges = [
+            e
+            for e in edges
+            if e["source"] in ancient_ids and e["target"] in ancient_ids
+        ]
 
     # Detect communities
     communities = analytics.detect_communities(communityAlgorithm)
@@ -100,30 +114,34 @@ async def get_cytoscape_data(
     for node in nodes:
         nid = node["id"]
         comm_id = communities.get(nid, 0)
-        elements.append({
-            "data": {
-                "id": nid,
-                "label": node.get("label", nid),
-                "type": node.get("type", "concept"),
-                "period": node.get("period"),
-                "school": node.get("school"),
-                "community": comm_id,
-                "color": colors.get(comm_id, "#888888"),
-                "description": (node.get("description") or "")[:200],
-            },
-            "group": "nodes",
-        })
+        elements.append(
+            {
+                "data": {
+                    "id": nid,
+                    "label": node.get("label", nid),
+                    "type": node.get("type", "concept"),
+                    "period": node.get("period"),
+                    "school": node.get("school"),
+                    "community": comm_id,
+                    "color": colors.get(comm_id, "#888888"),
+                    "description": (node.get("description") or "")[:200],
+                },
+                "group": "nodes",
+            }
+        )
 
     for edge in edges:
-        elements.append({
-            "data": {
-                "source": edge["source"],
-                "target": edge["target"],
-                "relation": edge.get("relation", ""),
-                "label": edge.get("relation", ""),
-            },
-            "group": "edges",
-        })
+        elements.append(
+            {
+                "data": {
+                    "source": edge["source"],
+                    "target": edge["target"],
+                    "relation": edge.get("relation", ""),
+                    "label": edge.get("relation", ""),
+                },
+                "group": "edges",
+            }
+        )
 
     # Build community metadata
     community_groups: dict[int, list[str]] = {}
@@ -132,7 +150,9 @@ async def get_cytoscape_data(
             community_groups[cid] = []
         community_groups[cid].append(nid)
 
-    community_list = sorted(community_groups.items(), key=lambda x: len(x[1]), reverse=True)
+    community_list = sorted(
+        community_groups.items(), key=lambda x: len(x[1]), reverse=True
+    )
 
     result = {
         "elements": elements,
@@ -154,10 +174,26 @@ async def get_cytoscape_data(
                     for idx, (cid, members) in enumerate(community_list)
                 ],
                 "availableAlgorithms": [
-                    {"name": "greedy", "available": True, "description": "Greedy modularity optimization"},
-                    {"name": "leiden", "available": analytics._graph is not None, "description": "Leiden algorithm"},
-                    {"name": "louvain", "available": analytics._graph is not None, "description": "Louvain algorithm"},
-                    {"name": "semantic", "available": True, "description": "Semantic person-centric clustering"},
+                    {
+                        "name": "greedy",
+                        "available": True,
+                        "description": "Greedy modularity optimization",
+                    },
+                    {
+                        "name": "leiden",
+                        "available": analytics._graph is not None,
+                        "description": "Leiden algorithm",
+                    },
+                    {
+                        "name": "louvain",
+                        "available": analytics._graph is not None,
+                        "description": "Louvain algorithm",
+                    },
+                    {
+                        "name": "semantic",
+                        "available": True,
+                        "description": "Semantic person-centric clustering",
+                    },
                 ],
             },
         },
@@ -168,6 +204,7 @@ async def get_cytoscape_data(
 
 
 # ---------- Analytics endpoints ----------
+
 
 @router.get("/analytics/timeline")
 async def get_timeline_analytics(
@@ -209,7 +246,13 @@ async def get_influence_matrix(
     for p in persons:
         matrix[p["id"]] = {}
 
-    influence_rels = {"influences", "influenced_by", "develops", "criticizes", "responds_to"}
+    influence_rels = {
+        "influences",
+        "influenced_by",
+        "develops",
+        "criticizes",
+        "responds_to",
+    }
     for e in edges:
         if e.get("relation") in influence_rels:
             src = e["source"]
@@ -220,7 +263,10 @@ async def get_influence_matrix(
                 matrix[tgt][src] = matrix[tgt].get(src, 0) + 1
 
     result = {
-        "persons": [{"id": p["id"], "label": p.get("label", p["id"]), "school": p.get("school")} for p in persons],
+        "persons": [
+            {"id": p["id"], "label": p.get("label", p["id"]), "school": p.get("school")}
+            for p in persons
+        ],
         "matrix": matrix,
     }
     cache.set("influence_matrix", result, ttl=600)

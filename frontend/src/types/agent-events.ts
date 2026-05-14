@@ -161,6 +161,10 @@ export interface MethodologyFlaggedEvent {
   severity: 'blocker' | 'major' | 'minor';
   issue: string;
   suggested_revision: string;
+  /** Identifier of the offending claim, or — when no claim_id is available —
+   *  a short verbatim excerpt of the flagged sentence. Lets the UI anchor
+   *  the flag to a specific location in the draft. */
+  claim_id_or_excerpt: string;
 }
 
 /** Emitted once the Methodology agent has cleared all blockers — gates the
@@ -177,6 +181,29 @@ export interface PolishingPassCompleteEvent {
   sections_modified: number;
 }
 
+/** Emitted when an agent (orchestrator or sub-agent) begins executing.
+ *  ``parent_agent_id`` lets the UI reconstruct the agent tree for the
+ *  AgentTrace view. ``subagent_index`` is the zero-based child slot when
+ *  multiple siblings exist (so order is preserved across reconnects). */
+export interface AgentInvocationEvent {
+  type: 'agent_invocation';
+  agent_id: string;
+  parent_agent_id: string | null;
+  started_at: string;
+  subagent_index: number;
+}
+
+/** Emitted when a sub-agent finishes. Pairs with the matching
+ *  ``agent_invocation`` via ``agent_id``. */
+export interface SubagentCompleteEvent {
+  type: 'subagent_complete';
+  agent_id: string;
+  completed_at: string;
+  success: boolean;
+  tools_called: number;
+  tokens_used: number | null;
+}
+
 export type AgentEvent =
   | AgentStartEvent
   | AgentStepEvent
@@ -191,6 +218,8 @@ export type AgentEvent =
   | MethodologyFlaggedEvent
   | MethodologyApprovedEvent
   | PolishingPassCompleteEvent
+  | AgentInvocationEvent
+  | SubagentCompleteEvent
   | FinalAnswerEvent
   | ErrorEvent;
 
@@ -214,6 +243,8 @@ export function isAgentEvent(value: unknown): value is AgentEvent {
     'methodology_flagged',
     'methodology_approved',
     'polishing_pass_complete',
+    'agent_invocation',
+    'subagent_complete',
     'final_answer',
     'error',
   ].includes(candidate.type);

@@ -25,12 +25,14 @@ import backend.dependencies as deps
 from backend.dependencies import Services
 
 # Backend-specific routers
+from backend.routes.audit import router as audit_router
 from backend.routes.auth import router as auth_router
 from backend.routes.conversations import router as conversations_router
 from backend.routes.graphrag_extras import router as graphrag_extras_router
 from backend.routes.kg_extras import router as kg_extras_router
 from backend.routes.lemma import router as lemma_router
 from backend.routes.opencode_proxy import router as opencode_router
+from backend.routes.passages import router as passages_router
 from backend.routes.search import router as search_router
 from backend.routes.works_extras import (
     citations_router,
@@ -66,8 +68,8 @@ def _assert_jwt_secret_configured() -> None:
     if secret in _PLACEHOLDER_JWT_SECRETS:
         raise RuntimeError(
             "JWT_SECRET_KEY is unset or set to a placeholder. "
-            "Generate a strong key with `python -c \"import secrets; "
-            "print(secrets.token_hex(64))\"` and set it in the environment "
+            'Generate a strong key with `python -c "import secrets; '
+            'print(secrets.token_hex(64))"` and set it in the environment '
             "before starting the API."
         )
 
@@ -131,6 +133,11 @@ def create_app() -> FastAPI:
     # Works extras (must be before works_router so /search and /stats match before /{work_id})
     app.include_router(works_extras_router, prefix="/api/works")
 
+    # Passages detail endpoint — must be mounted BEFORE the database package's
+    # works router which exposes a competing /passages/{passage_id} route that
+    # only accepts UUIDs. Our version accepts UUIDs *and* KG node_ids.
+    app.include_router(passages_router, prefix="/api/passages")
+
     # Package routers (from the 3 installable packages)
     app.include_router(works_router, prefix="/api")
     app.include_router(kg_router, prefix="/api/kg")
@@ -142,6 +149,7 @@ def create_app() -> FastAPI:
     app.include_router(conversations_router, prefix="/api/graphrag/conversations")
     app.include_router(lemma_router, prefix="/api/lemma")
     app.include_router(graphrag_extras_router, prefix="/api/graphrag")
+    app.include_router(audit_router, prefix="/api/graphrag")
     app.include_router(kg_extras_router, prefix="/api/kg")
     app.include_router(opencode_router, prefix="/api/opencode")
 
@@ -158,14 +166,21 @@ def create_app() -> FastAPI:
         """Composite health check across all services."""
         svc = deps.services
         if svc is None:
-            return {"status": "starting", "database": "unknown", "graphrag": "not_ready", "kg_nodes": 0}
+            return {
+                "status": "starting",
+                "database": "unknown",
+                "graphrag": "not_ready",
+                "kg_nodes": 0,
+            }
 
         try:
             db_ok = svc.db.is_connected()
         except Exception:
             db_ok = False
 
-        graphrag_ok = getattr(svc.graphrag, "_kg_loaded", False) if svc.graphrag else False
+        graphrag_ok = (
+            getattr(svc.graphrag, "_kg_loaded", False) if svc.graphrag else False
+        )
         kg_nodes = len(svc.analytics.kg_data.get("nodes", [])) if svc.analytics else 0
         core_ready = graphrag_ok and kg_nodes > 0
 
