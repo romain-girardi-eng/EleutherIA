@@ -106,7 +106,7 @@ EleutherIA/
 ├── backend/        FastAPI gateway (auth, search, migrations)
 ├── frontend/       React 19 app (graph viz, search, i18n)
 ├── cli/            Command-line interface
-├── deploy/         Docker Compose, Cloudflare Workers, production configs
+├── deploy/         Docker Compose and production configs
 ├── scripts/        Maintenance & data quality tools
 └── docs/           Architecture, API reference, examples, methodology
 ```

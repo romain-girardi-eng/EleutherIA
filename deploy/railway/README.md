@@ -139,10 +139,9 @@ railway status        # Service status
 
 ## Migration from Cloudflare Workers
 
+The Cloudflare Workers TS edge pipeline was retired on 2026-05-14 (see `deploy/cloudflare/README.md`). Historic migration steps (kept for reference):
+
 1. Deploy backend on Railway (this guide)
 2. Update `VITE_API_URL` in Cloudflare Pages env vars
 3. Verify frontend connects to Railway backend
-4. Remove Cloudflare Workers deployment (optional — can keep as backup)
-5. Update DNS if using custom domain
-
-The `deploy/cloudflare/` directory is kept for reference but is no longer the active production backend.
+4. Update DNS if using custom domain

@@ -1,6 +1,6 @@
 # EleutherIA Deployment
 
-Three deployment options: **local** (self-contained Docker), **production Docker** (managed services), and **Cloudflare Workers** (edge, current free-will.app).
+Two deployment options: **local** (self-contained Docker) and **production Docker** (managed services). The legacy Cloudflare Workers edge pipeline was retired on 2026-05-14 — see [`cloudflare/README.md`](cloudflare/README.md).
 
 ## Local — Self-Contained
 
@@ -46,27 +46,14 @@ See [`production/README.md`](production/README.md) for full setup instructions.
 cd deploy/production
 cp .env.example .env
 # Fill in Supabase URL, Qdrant host, API keys
+# Rebuild Supabase first from repo root if needed:
+# uv run --with asyncpg python database/scripts/bootstrap_supabase.py --replace-data
 
 make prod
 # Or: docker compose -f deploy/production/docker-compose.yml up -d --build
-```
-
-## Production (Cloudflare Workers) — Edge Backend
-
-The current [free-will.app](https://free-will.app) backend runs on Cloudflare Workers using Hono (TypeScript). No containers needed.
-
-See [`cloudflare/README.md`](cloudflare/README.md) for full setup instructions.
-
-```bash
-cd deploy/cloudflare
-npm install
-npx wrangler login
-# Set secrets (see README)
-npx wrangler deploy
 ```
 
 ## Environment Variables
 
 - **Local:** See `.env.example` in repo root
 - **Production (Docker):** See `deploy/production/.env.example`
-- **Cloudflare Workers:** Secrets via `wrangler secret put`, vars in `wrangler.toml`
