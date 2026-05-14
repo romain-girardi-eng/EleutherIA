@@ -17,6 +17,7 @@ class TestModelProvider:
 
     def test_provider_values(self):
         """Test provider enum values."""
+        assert ModelProvider.FIREWORKS.value == "fireworks"
         assert ModelProvider.KIMI.value == "kimi"
         assert ModelProvider.OPENROUTER.value == "openrouter"
         assert ModelProvider.GEMINI.value == "gemini"
@@ -38,7 +39,7 @@ class TestLLMService:
         """Test default initialization."""
         with patch.dict("os.environ", {}, clear=True):
             llm = LLMService()
-            assert llm.preferred_provider == ModelProvider.GEMINI
+            assert llm.preferred_provider == ModelProvider.FIREWORKS
             assert llm.timeout == 120.0
             assert llm._client is None
 
@@ -620,3 +621,187 @@ class TestLLMServiceConfiguration:
         config = PROVIDER_CONFIGS[ModelProvider.GEMINI]
         assert "generativelanguage.googleapis.com" in config["base_url"]
         assert config["env_key"] == "GEMINI_API_KEY"
+
+
+class TestFireworksProvider:
+    """Tests for the Fireworks (Kimi K2.6) provider."""
+
+    def test_provider_config_fireworks(self):
+        """Fireworks provider config exposes Kimi K2.6 + OpenAI-compatible base URL."""
+        config = PROVIDER_CONFIGS[ModelProvider.FIREWORKS]
+        assert config["base_url"] == "https://api.fireworks.ai/inference/v1"
+        assert config["model"] == "accounts/fireworks/models/kimi-k2p6"
+        assert config["thinking_model"] == "accounts/fireworks/models/kimi-k2p6"
+        assert config["env_key"] == "FIREWORKS_API_KEY"
+        assert config["base_url_env"] == "FIREWORKS_BASE_URL"
+        assert config["model_env"] == "FIREWORKS_MODEL"
+
+    def test_detect_available_providers_fireworks(self):
+        """Fireworks should be detected when FIREWORKS_API_KEY is set."""
+        with patch.dict("os.environ", {"FIREWORKS_API_KEY": "fw_test"}, clear=True):
+            llm = LLMService()
+            assert ModelProvider.FIREWORKS in llm.available_providers
+
+    def test_init_with_fireworks_key_kwarg(self):
+        """Explicit fireworks_api_key kwarg should enable the provider without env."""
+        with patch.dict("os.environ", {}, clear=True):
+            llm = LLMService(fireworks_api_key="fw_explicit")
+            assert ModelProvider.FIREWORKS in llm.available_providers
+            assert llm._api_key_for(ModelProvider.FIREWORKS) == "fw_explicit"
+
+    def test_get_provider_prefers_fireworks_by_default(self):
+        """When all keys are present, the default preferred provider is Fireworks."""
+        env = {
+            "FIREWORKS_API_KEY": "fw_test",
+            "GEMINI_API_KEY": "gem_test",
+            "MOONSHOT_API_KEY": "kimi_test",
+            "OPENROUTER_API_KEY": "or_test",
+        }
+        with patch.dict("os.environ", env, clear=True):
+            llm = LLMService()
+            assert llm._get_provider() == ModelProvider.FIREWORKS
+
+    def test_resolve_config_uses_fireworks_overrides(self):
+        """FIREWORKS_BASE_URL and FIREWORKS_MODEL env vars should override defaults."""
+        with patch.dict(
+            "os.environ",
+            {
+                "FIREWORKS_API_KEY": "fw_test",
+                "FIREWORKS_BASE_URL": "https://fireworks.example/inference/v1/",
+                "FIREWORKS_MODEL": "accounts/fireworks/models/test-model",
+            },
+            clear=True,
+        ):
+            llm = LLMService(preferred_provider=ModelProvider.FIREWORKS)
+            config = llm._resolve_config(ModelProvider.FIREWORKS)
+            assert config["base_url"] == "https://fireworks.example/inference/v1"
+            assert config["model"] == "accounts/fireworks/models/test-model"
+
+    def test_model_override_routes_fireworks_models_to_fireworks(self):
+        """Model overrides starting with accounts/fireworks/ should route to Fireworks."""
+        llm = LLMService()
+        provider, model = llm._resolve_model_override(
+            "accounts/fireworks/models/kimi-k2p6"
+        )
+        assert provider == ModelProvider.FIREWORKS
+        assert model == "accounts/fireworks/models/kimi-k2p6"
+
+    @pytest.mark.asyncio
+    async def test_generate_fireworks_chat_completions(self):
+        """Fireworks generate() should POST to /chat/completions with Kimi K2.6."""
+        with patch.dict(
+            "os.environ", {"FIREWORKS_API_KEY": "fw_test"}, clear=True
+        ):
+            llm = LLMService(preferred_provider=ModelProvider.FIREWORKS)
+
+            mock_response = MagicMock()
+            mock_response.json.return_value = {
+                "choices": [{"message": {"content": "Kimi response"}}]
+            }
+            mock_response.raise_for_status = MagicMock()
+
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=mock_response)
+            llm._client = mock_client
+
+            result = await llm.generate("Test prompt", max_tokens=16)
+
+            assert result == "Kimi response"
+            assert llm.last_provider_used == ModelProvider.FIREWORKS.value
+            assert llm.last_model_used == "accounts/fireworks/models/kimi-k2p6"
+            call = mock_client.post.call_args
+            assert (
+                call.args[0]
+                == "https://api.fireworks.ai/inference/v1/chat/completions"
+            )
+            assert (
+                call.kwargs["headers"]["Authorization"] == "Bearer fw_test"
+            )
+            assert (
+                call.kwargs["json"]["model"]
+                == "accounts/fireworks/models/kimi-k2p6"
+            )
+
+    @pytest.mark.asyncio
+    async def test_stream_fireworks_yields_sse_chunks(self):
+        """Fireworks stream() should parse OpenAI-style SSE chunks."""
+        with patch.dict(
+            "os.environ", {"FIREWORKS_API_KEY": "fw_test"}, clear=True
+        ):
+            llm = LLMService(preferred_provider=ModelProvider.FIREWORKS)
+
+            sse_lines = [
+                'data: {"choices":[{"delta":{"content":"Hel"}}]}',
+                'data: {"choices":[{"delta":{"content":"lo"}}]}',
+                "data: [DONE]",
+            ]
+
+            class _FakeStream:
+                async def __aenter__(self_inner):
+                    return self_inner
+
+                async def __aexit__(self_inner, exc_type, exc, tb):
+                    return None
+
+                def raise_for_status(self_inner):
+                    return None
+
+                async def aiter_lines(self_inner):
+                    for line in sse_lines:
+                        yield line
+
+            mock_client = MagicMock()
+            mock_client.stream = MagicMock(return_value=_FakeStream())
+            llm._client = mock_client
+
+            chunks: list[str] = []
+            async for chunk in llm.stream("Hi", max_tokens=16):
+                chunks.append(chunk)
+
+            assert chunks == ["Hel", "lo"]
+            call = mock_client.stream.call_args
+            assert call.args[0] == "POST"
+            assert (
+                call.args[1]
+                == "https://api.fireworks.ai/inference/v1/chat/completions"
+            )
+            assert call.kwargs["json"]["stream"] is True
+
+    @pytest.mark.asyncio
+    async def test_generate_falls_back_when_fireworks_fails(self):
+        """A failing Fireworks call should fall through to the next provider."""
+        env = {
+            "FIREWORKS_API_KEY": "fw_test",
+            "GEMINI_API_KEY": "gem_test",
+        }
+        with patch.dict("os.environ", env, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.FIREWORKS)
+
+            fireworks_error = httpx.HTTPStatusError(
+                "rate limited",
+                request=httpx.Request("POST", "https://api.fireworks.ai"),
+                response=httpx.Response(
+                    429,
+                    request=httpx.Request("POST", "https://api.fireworks.ai"),
+                ),
+            )
+            gemini_response = MagicMock()
+            gemini_response.json.return_value = {
+                "candidates": [
+                    {"content": {"parts": [{"text": "Gemini fallback"}]}}
+                ]
+            }
+            gemini_response.raise_for_status = MagicMock()
+
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(
+                side_effect=[fireworks_error, gemini_response]
+            )
+            llm._client = mock_client
+
+            with patch("asyncio.sleep", new=AsyncMock()):
+                result = await llm.generate("Test prompt")
+
+            assert result == "Gemini fallback"
+            assert llm.last_provider_used == ModelProvider.GEMINI.value
+            assert mock_client.post.call_count == 2

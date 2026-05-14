@@ -34,12 +34,18 @@ def _env_flag(name: str, default: bool) -> bool:
 
 
 def _preferred_provider() -> ModelProvider:
-    raw = os.getenv("LLM_PREFERRED_PROVIDER", ModelProvider.GEMINI.value).strip().lower()
+    raw = (
+        os.getenv("LLM_PREFERRED_PROVIDER", ModelProvider.FIREWORKS.value)
+        .strip()
+        .lower()
+    )
     try:
         return ModelProvider(raw)
     except ValueError:
-        logger.warning("Unknown LLM_PREFERRED_PROVIDER=%s, falling back to gemini", raw)
-        return ModelProvider.GEMINI
+        logger.warning(
+            "Unknown LLM_PREFERRED_PROVIDER=%s, falling back to fireworks", raw
+        )
+        return ModelProvider.FIREWORKS
 
 
 @dataclass
@@ -63,11 +69,13 @@ class Services:
         # EXTERNAL_INTEGRATION is off (default for local dev), the bridge
         # transparently falls back to environment variables — so behaviour
         # is unchanged unless the platform is wired up.
+        fireworks_key = await self.credentials.get_llm_key("fireworks")
         gemini_key = await self.credentials.get_llm_key("gemini")
         moonshot_key = await self.credentials.get_llm_key("moonshot")
         openrouter_key = await self.credentials.get_llm_key("openrouter")
         self.llm = LLMService(
             preferred_provider=_preferred_provider(),
+            fireworks_api_key=fireworks_key,
             gemini_api_key=gemini_key,
             moonshot_api_key=moonshot_key,
             openrouter_api_key=openrouter_key,

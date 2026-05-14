@@ -1,8 +1,8 @@
 """CredentialsBridge — fetch LLM API keys from the platform's CredentialsService.
 
 When EXTERNAL_INTEGRATION=true and the platform Supabase settings are present,
-provider keys (Gemini / Moonshot / OpenRouter) are loaded from the
-`provider_credentials` table via the platform's CredentialsService.
+provider keys (Fireworks / Gemini / Moonshot / OpenRouter) are loaded
+from the `provider_credentials` table via the platform's CredentialsService.
 
 When EXTERNAL_INTEGRATION is false or the bridge is misconfigured, the
 bridge falls back to plain environment variables, preserving local-dev
@@ -14,7 +14,7 @@ LLM keys do not rotate often enough to need short-TTL caching.
 Lookup convention (the platform side):
     user_id  = "eleutheria-system"
     app_name = "eleutheria"
-    source   = "gemini" | "moonshot" | "openrouter"
+    source   = "fireworks" | "gemini" | "moonshot" | "openrouter"
 """
 
 from __future__ import annotations
@@ -27,12 +27,13 @@ from backend.integrations.pragma import the platformSettings, get_pragma_setting
 
 logger = logging.getLogger(__name__)
 
-LLMProvider = Literal["gemini", "moonshot", "openrouter"]
+LLMProvider = Literal["fireworks", "gemini", "moonshot", "openrouter"]
 
 ELEUTHERIA_USER_ID = "eleutheria-system"
 ELEUTHERIA_APP_NAME = "eleutheria"
 
 _PROVIDER_ENV_KEYS: dict[str, str] = {
+    "fireworks": "FIREWORKS_API_KEY",
     "gemini": "GEMINI_API_KEY",
     "moonshot": "MOONSHOT_API_KEY",
     "openrouter": "OPENROUTER_API_KEY",
