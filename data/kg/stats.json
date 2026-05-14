@@ -1,14 +1,15 @@
 {
   "edge_relations": {
     "agrees_with": 3,
-    "authored_by": 16905,
+    "authored_by": 16953,
     "belongs_to_corpus": 26,
     "belongs_to_school": 1,
     "contains": 80,
     "contemporary_of": 8,
     "contrasts_with": 4,
     "contributes_to": 119,
-    "created_by": 250,
+    "created_by": 1,
+    "creates": 201,
     "critiques": 184,
     "defines": 10,
     "developed_by": 17,
