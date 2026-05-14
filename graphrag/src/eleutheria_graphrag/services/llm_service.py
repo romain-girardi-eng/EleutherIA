@@ -760,6 +760,122 @@ class LLMService:
             raise last_exc
         raise RuntimeError("No LLM provider available")
 
+    async def generate_with_tools(
+        self,
+        messages: list[dict[str, Any]],
+        tools: list[dict[str, Any]],
+        *,
+        tool_choice: str | dict[str, Any] = "auto",
+        temperature: float = 0.1,
+        max_tokens: int = 1024,
+        model_override: str | None = None,
+    ) -> dict[str, Any]:
+        """OpenAI-style chat-completion with native tool-calling.
+
+        Currently routes through the OpenAI-compatible providers (Fireworks /
+        OpenRouter / Moonshot). Gemini is NOT supported on this path — Fireworks
+        is the primary backend for tool-calling per the K2.6 spike.
+
+        Args:
+            messages: Full chat history in OpenAI format. Each message is one of
+                ``{"role": "system"|"user"|"assistant"|"tool", ...}``.
+                Assistant messages may carry ``tool_calls``; tool messages must
+                carry ``tool_call_id`` and ``content``.
+            tools: OpenAI ``[{"type": "function", "function": {...}}, ...]``.
+            tool_choice: ``"auto"``, ``"none"``, ``"required"``, or
+                ``{"type": "function", "function": {"name": ...}}``.
+            temperature, max_tokens: standard sampling params.
+            model_override: optional explicit model id.
+
+        Returns:
+            The first choice's ``message`` dict, e.g.::
+
+                {"role": "assistant", "content": null,
+                 "tool_calls": [{"id": "...", "type": "function",
+                                 "function": {"name": "...",
+                                              "arguments": "{...}"}}]}
+
+            or ``{"role": "assistant", "content": "final answer text"}``.
+
+        Raises:
+            RuntimeError: when no compatible provider is available.
+            httpx.HTTPStatusError: on non-2xx responses.
+        """
+        provider: ModelProvider
+        model_name: str
+        config: dict[str, Any]
+        api_key: str
+
+        if model_override:
+            provider, model_name = self._resolve_model_override(model_override)
+            if provider == ModelProvider.GEMINI:
+                raise RuntimeError(
+                    "generate_with_tools does not yet support Gemini — "
+                    "pass a Fireworks or OpenRouter model_override."
+                )
+            config = dict(self._resolve_config(provider))
+            api_key = self._api_key_for(provider)
+            if not api_key:
+                raise RuntimeError(f"No API key configured for {provider.value}")
+            config["model"] = model_name
+        else:
+            # Pick the first available non-Gemini provider.
+            candidates = [
+                p for p in self._provider_attempt_order() if p != ModelProvider.GEMINI
+            ]
+            if not candidates:
+                raise RuntimeError(
+                    "No OpenAI-compatible provider available for tool-calling"
+                )
+            provider = candidates[0]
+            config = dict(self._resolve_config(provider))
+            api_key = self._api_key_for(provider)
+            model_name = self._model_for_request(
+                provider, config, thinking_mode=False
+            )
+            config["model"] = model_name
+
+        self.last_provider_used = provider.value
+        self.last_model_used = model_name
+
+        if provider in self._rate_limiters:
+            await self._rate_limiters[provider].wait_if_needed()
+
+        client = await self._get_client()
+        payload: dict[str, Any] = {
+            "model": config["model"],
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+            "tools": tools,
+            "tool_choice": tool_choice,
+        }
+        if provider == ModelProvider.OPENROUTER:
+            provider_block: dict[str, Any] = {}
+            provider_only = cast(list[str] | None, config.get("provider_only"))
+            provider_order = cast(list[str] | None, config.get("provider_order"))
+            if provider_only:
+                provider_block["only"] = provider_only
+            elif provider_order:
+                provider_block["order"] = provider_order
+            if provider_block:
+                payload["provider"] = provider_block
+
+        response = await client.post(
+            f"{config['base_url']}/chat/completions",
+            headers=self._openai_compatible_headers(provider, api_key, config),
+            json=payload,
+        )
+        response.raise_for_status()
+        data = response.json()
+        try:
+            message = data["choices"][0]["message"]
+        except (KeyError, IndexError) as exc:  # pragma: no cover — defensive
+            raise RuntimeError(
+                f"Malformed response from {provider.value}: {data}"
+            ) from exc
+        return cast(dict[str, Any], message)
+
     async def _ensure_gemini_cached_content(
         self,
         *,
