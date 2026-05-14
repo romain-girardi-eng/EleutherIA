@@ -26,6 +26,7 @@ from eleutheria_graphrag.models.counter_evidence import (
     CounterEvidenceReport,
     SynthesizedDraft,
 )
+from eleutheria_graphrag.models.methodology import MethodologyFlag
 from eleutheria_graphrag.services.counter_evidence_hunter import (
     CounterEvidenceHunter,
     MCPToolset,
@@ -34,6 +35,12 @@ from eleutheria_graphrag.services.counter_evidence_hunter import (
 from eleutheria_graphrag.services.lemma_expansion import LemmaExpander
 from eleutheria_graphrag.services.llm_reranker import LLMRerankerService
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
+from eleutheria_graphrag.services.methodology_agent import (
+    MethodologyAgent,
+    format_blockers_for_synthesizer,
+    format_non_blockers_as_editorial_markers,
+)
+from eleutheria_graphrag.services.polishing_agent import PolishingAgent
 from eleutheria_graphrag.services.retrieval_strategy import (
     SnapshotStrategy,
     SQLStrategy,
@@ -455,6 +462,24 @@ class GraphRAGService:
                 logger.warning("Counter-evidence hunt failed: %s", exc, exc_info=True)
                 result.setdefault("metadata", {})["counter_evidence_error"] = str(exc)
 
+            # Methodology + Polishing — thesis-grade pass.
+            # Runs only in deep mode (gated on hunt_counter_evidence).
+            try:
+                result = await self._run_methodology_and_polishing(
+                    agent=agent,
+                    question=question,
+                    result=result,
+                    selected_model=selected_model,
+                    retrieval_mode=retrieval_mode,
+                )
+            except Exception as exc:
+                logger.warning(
+                    "Methodology + Polishing pass failed: %s", exc, exc_info=True
+                )
+                result.setdefault("metadata", {})[
+                    "methodology_polishing_error"
+                ] = str(exc)
+
         self._response_cache.put(question, selected_model, retrieval_mode, result)
         return result
 
@@ -576,6 +601,74 @@ class GraphRAGService:
             selected_model=selected_model,
             retrieval_mode=retrieval_mode,
         )
+
+    # ------------------------------------------------------------------
+    # Methodology + Polishing (deep-mode thesis-grade pass)
+    # ------------------------------------------------------------------
+
+    async def _run_methodology_and_polishing(
+        self,
+        *,
+        agent: ScholarlyAgent,
+        question: str,
+        result: dict[str, Any],
+        selected_model: str,
+        retrieval_mode: str,
+    ) -> dict[str, Any]:
+        """Audit + polish a citation-verified draft.
+
+        Methodology agent runs first. Any ``blocker`` flags drive a synthesizer
+        v3 re-pass (loop capped inside ``MethodologyAgent``). Non-blocker
+        flags are forwarded inline to the polishing agent as
+        ``[ED: …]`` markers. The polished Markdown lands in
+        ``result["polished_markdown"]`` and the methodology report in
+        ``result["metadata"]["methodology"]``.
+        """
+        methodology = MethodologyAgent(self.llm)
+        polisher = PolishingAgent(self.llm)
+
+        async def _resynth(
+            current_draft: dict[str, Any],
+            blockers: list[MethodologyFlag],
+        ) -> dict[str, Any]:
+            block = format_blockers_for_synthesizer(blockers)
+            current_answer = (current_draft.get("answer") or "")[:6000]
+            v3_query = (
+                f"{question}\n\n"
+                f"PREVIOUS DRAFT (revise to resolve the methodology blockers below):\n"
+                f"{current_answer}\n\n"
+                f"{block}"
+            )
+            return await agent.query_dict(
+                v3_query,
+                selected_model=selected_model,
+                retrieval_mode=retrieval_mode,
+            )
+
+        revised_draft, report = await methodology.run_with_resynth_loop(
+            initial_draft=result,
+            resynthesize=_resynth,
+        )
+        # Merge revised draft over result (preserve metadata + counter-evidence)
+        merged: dict[str, Any] = {**result, **revised_draft}
+        merged.setdefault("metadata", {})["methodology"] = report.model_dump()
+
+        # Carry non-blocker flags into polishing as inline editorial markers
+        non_blockers = report.non_blockers
+        draft_md = str(merged.get("answer") or "")
+        if non_blockers:
+            draft_md = draft_md + format_non_blockers_as_editorial_markers(
+                non_blockers
+            )
+
+        polished = await polisher.polish(
+            draft_md, carry_over_flags=non_blockers
+        )
+        merged["polished_markdown"] = polished.markdown
+        merged["metadata"]["polishing"] = polished.model_dump(
+            exclude={"markdown"}
+        )
+        return merged
 
     # ------------------------------------------------------------------
     # Query (streaming)
