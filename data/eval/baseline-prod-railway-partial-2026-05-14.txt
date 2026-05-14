@@ -1,0 +1,40 @@
+     -> recall=1.00 precision=0.04 kw=1.00 cites=6 176296ms
+[ 5/30] q005 (concept-author/easy): Augustine on free choice of the will
+     -> ERROR: ReadTimeout: The read operation timed out
+[ 6/30] q006 (concept-author/medium): Origen's defence of autexousion against astrological determinism
+     -> recall=0.50 precision=0.05 kw=0.67 cites=6 126730ms
+[ 7/30] q007 (concept-author/medium): Seneca on providence and the role of adversity
+     -> recall=0.25 precision=0.11 kw=1.00 cites=6 169384ms
+[ 8/30] q008 (concept-author/hard): Alexander of Aphrodisias on agent causation
+     -> ERROR: ReadTimeout: The read operation timed out
+[ 9/30] q009 (concept-author/medium): Boethius on divine foreknowledge and human freedom
+     -> ERROR: ReadTimeout: The read operation timed out
+[10/30] q010 (concept-author/medium): Epicurus and the atomic swerve as the basis of freedom
+     -> recall=1.00 precision=0.20 kw=1.00 cites=6 178910ms
+[11/30] q011 (school-debate/medium): Stoic compatibilism versus Aristotelian voluntariness
+     -> ERROR: ReadTimeout: The read operation timed out
+[12/30] q012 (school-debate/medium): How did the Academics attack Stoic fate?
+     -> recall=0.20 precision=0.10 kw=1.00 cites=6 172978ms
+[13/30] q013 (school-debate/hard): Lazy Argument and the Stoic response
+     -> recall=0.25 precision=0.20 kw=1.00 cites=4 137346ms
+[14/30] q014 (school-debate/medium): Intellectualism versus voluntarism in ancient ethics
+     -> ERROR: ReadTimeout: The read operation timed out
+[15/30] q015 (school-debate/medium): Augustine-Pelagius controversy on grace and free will
+     -> recall=0.50 precision=0.05 kw=1.00 cites=4 172320ms
+[16/30] q016 (school-debate/hard): Christian apologists against Gnostic fatalism
+     -> recall=0.00 precision=0.00 kw=1.00 cites=8 162167ms
+[17/30] q017 (fact/easy): When was Origen born and when did he die?
+Traceback (most recent call last):
+  File "/Users/romaingirardi/Projects/EleutherIA/tests/eval/run_eval.py", line 618, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/romaingirardi/Projects/EleutherIA/tests/eval/run_eval.py", line 594, in main
+    doc = run(args.base_url, cases, verbose=not args.quiet)
+  File "/Users/romaingirardi/Projects/EleutherIA/tests/eval/run_eval.py", line 377, in run
+    metrics = compute_query_metrics(case, returned, returned_works, answer)
+  File "/Users/romaingirardi/Projects/EleutherIA/tests/eval/run_eval.py", line 233, in compute_query_metrics
+    hits = sum(1 for kw in keywords if kw.lower() in haystack)
+  File "/Users/romaingirardi/Projects/EleutherIA/tests/eval/run_eval.py", line 233, in <genexpr>
+    hits = sum(1 for kw in keywords if kw.lower() in haystack)
+                                       ^^^^^^^^
+AttributeError: 'int' object has no attribute 'lower'
