@@ -53,12 +53,22 @@ LABEL org.opencontainers.image.title="EleutherIA opencode runtime" \
       org.opencontainers.image.source="https://github.com/romain-girardi-eng/EleutherIA" \
       org.opencontainers.image.licenses="CC-BY-4.0"
 
-# System deps: Python 3.14 (from python.org via deadsnakes-style PPA is not
-# trivially available on Debian — we copy the prebuilt venv from py-builder
-# and install only the runtime shared libs we need.
+# System deps for the runtime: libpq5 for asyncpg/psycopg, curl for the
+# opencode installer + healthcheck, ca-certificates for HTTPS, tini for
+# proper signal handling. Python 3.14 itself is not in Debian bookworm
+# repos — we copy the full Python install from the python:3.14 image
+# below (same minor version as py-builder so the venv is binary-compatible).
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3.14 \
     libpq5 \
+    libffi8 \
+    libssl3 \
+    libsqlite3-0 \
+    libbz2-1.0 \
+    zlib1g \
+    libreadline8 \
+    libncursesw6 \
+    libgdbm6 \
+    liblzma5 \
     curl \
     ca-certificates \
     bash \
@@ -67,6 +77,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
+# Copy the Python 3.14 interpreter and stdlib from the official image.
+# /usr/local contains the python binary plus its standard library.
+COPY --from=python:3.14-slim-bookworm /usr/local /usr/local
+
 # Install the opencode CLI. The upstream installer drops the binary under
 # /root/.opencode/bin/opencode by default. We run it explicitly as root in
 # the build stage and then symlink it into /usr/local/bin.
@@ -74,7 +88,9 @@ RUN curl -fsSL https://opencode.ai/install | bash \
     && ln -s /root/.opencode/bin/opencode /usr/local/bin/opencode \
     && opencode --version
 
-# Bring in the Python venv built above.
+# Bring in the Python venv built above. Path-stable because /opt/venv was
+# the build path and stage 2 copies python's /usr/local from the same
+# python:3.14-slim-bookworm image.
 COPY --from=py-builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
