@@ -36,10 +36,10 @@ import psycopg2.extras
 
 
 def get_db_url():
-    return os.environ.get(
-        "DATABASE_URL",
-        "postgresql://postgres.yngxlwbduhthkergfkif:Rororo%40122112@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require",
-    )
+    db_url = os.environ.get("DATABASE_URL")
+    if not db_url:
+        raise RuntimeError("DATABASE_URL is required")
+    return db_url
 
 
 def insert_translations(translations, db_url, dry_run=True):
