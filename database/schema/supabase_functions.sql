@@ -144,7 +144,7 @@ RETURNS TABLE (
 )
 LANGUAGE sql
 STABLE
-SECURITY DEFINER
+SECURITY INVOKER
 SET search_path TO pg_catalog, free_will
 AS $$
     SELECT
@@ -170,7 +170,7 @@ RETURNS TABLE (
 )
 LANGUAGE sql
 STABLE
-SECURITY DEFINER
+SECURITY INVOKER
 SET search_path TO pg_catalog, free_will
 AS $$
     SELECT
@@ -227,7 +227,7 @@ RETURNS TABLE (
 )
 LANGUAGE sql
 STABLE
-SECURITY DEFINER
+SECURITY INVOKER
 SET search_path TO pg_catalog, free_will
 AS $$
     SELECT
@@ -251,7 +251,7 @@ RETURNS TABLE (
 )
 LANGUAGE sql
 STABLE
-SECURITY DEFINER
+SECURITY INVOKER
 SET search_path TO pg_catalog, free_will
 AS $$
     SELECT
@@ -323,7 +323,7 @@ RETURNS TABLE (
 )
 LANGUAGE sql
 STABLE
-SECURITY DEFINER
+SECURITY INVOKER
 SET search_path TO pg_catalog, free_will
 AS $$
     SELECT *
@@ -355,7 +355,7 @@ RETURNS TABLE (
 )
 LANGUAGE sql
 STABLE
-SECURITY DEFINER
+SECURITY INVOKER
 SET search_path TO pg_catalog, free_will
 AS $$
     SELECT *
@@ -383,7 +383,7 @@ RETURNS TABLE (
 )
 LANGUAGE sql
 STABLE
-SECURITY DEFINER
+SECURITY INVOKER
 SET search_path TO pg_catalog, free_will
 AS $$
     SELECT
@@ -408,7 +408,7 @@ CREATE OR REPLACE FUNCTION public.list_passages_window(
 RETURNS SETOF free_will.passages
 LANGUAGE sql
 STABLE
-SECURITY DEFINER
+SECURITY INVOKER
 SET search_path TO pg_catalog, free_will
 AS $$
     SELECT *
@@ -428,7 +428,7 @@ CREATE OR REPLACE FUNCTION public.count_passages_for_work(
 RETURNS BIGINT
 LANGUAGE sql
 STABLE
-SECURITY DEFINER
+SECURITY INVOKER
 SET search_path TO pg_catalog, free_will
 AS $$
     SELECT COUNT(*)::BIGINT
@@ -444,7 +444,7 @@ RETURNS TABLE (
 )
 LANGUAGE sql
 STABLE
-SECURITY DEFINER
+SECURITY INVOKER
 SET search_path TO pg_catalog, free_will
 AS $$
     SELECT pc.passage_id
@@ -468,7 +468,7 @@ RETURNS TABLE (
 )
 LANGUAGE sql
 STABLE
-SECURITY DEFINER
+SECURITY INVOKER
 SET search_path TO pg_catalog, free_will
 AS $$
     WITH ranked AS (
@@ -540,7 +540,7 @@ RETURNS TABLE (
 )
 LANGUAGE sql
 STABLE
-SECURITY DEFINER
+SECURITY INVOKER
 SET search_path TO pg_catalog, free_will
 AS $$
     WITH ranked AS (

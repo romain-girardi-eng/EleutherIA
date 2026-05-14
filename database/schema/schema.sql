@@ -216,12 +216,19 @@ CREATE INDEX IF NOT EXISTS idx_auth_audit_created_at ON auth_audit_log(created_a
 -- KG Nodes: Philosophers, concepts, arguments, texts, positions
 CREATE TABLE IF NOT EXISTS kg_nodes (
     node_id TEXT PRIMARY KEY,          -- e.g., 'person_chrysippus_abc123'
+    id TEXT GENERATED ALWAYS AS (node_id) STORED,  -- REST compatibility alias
     label TEXT NOT NULL,
     type VARCHAR NOT NULL,             -- lowercase: person, concept, argument, work, passage, etc.
     description TEXT,
     period VARCHAR,                    -- e.g., 'Roman Imperial', 'Classical Greek', 'Contemporary'
     alternative_names JSONB,           -- Array of alternative labels/transliterations
     metadata JSONB DEFAULT '{}',
+    school TEXT GENERATED ALWAYS AS (
+        COALESCE(metadata ->> 'school', metadata ->> 'school_affiliation')
+    ) STORED,
+    role TEXT GENERATED ALWAYS AS (
+        COALESCE(metadata ->> 'role', metadata ->> 'scholarly_role')
+    ) STORED,
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
 );
@@ -229,6 +236,8 @@ CREATE TABLE IF NOT EXISTS kg_nodes (
 -- Indexes for kg_nodes
 CREATE INDEX IF NOT EXISTS idx_kg_nodes_type ON kg_nodes(type);
 CREATE INDEX IF NOT EXISTS idx_kg_nodes_period ON kg_nodes(period);
+CREATE INDEX IF NOT EXISTS idx_kg_nodes_rest_id ON kg_nodes(id);
+CREATE INDEX IF NOT EXISTS idx_kg_nodes_school ON kg_nodes(school);
 CREATE INDEX IF NOT EXISTS idx_kg_nodes_label ON kg_nodes USING GIN (to_tsvector('simple', label));
 
 -- KG Edges: Relationships between nodes
@@ -236,7 +245,10 @@ CREATE TABLE IF NOT EXISTS kg_edges (
     edge_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     source_id VARCHAR NOT NULL REFERENCES kg_nodes(node_id) ON DELETE CASCADE,
     target_id VARCHAR NOT NULL REFERENCES kg_nodes(node_id) ON DELETE CASCADE,
+    source TEXT GENERATED ALWAYS AS (source_id) STORED,  -- REST compatibility alias
+    target TEXT GENERATED ALWAYS AS (target_id) STORED,  -- REST compatibility alias
     relation VARCHAR NOT NULL,    -- lowercase: discusses, authored_by, part_of, etc.
+    weight DOUBLE PRECISION DEFAULT 1.0,
     metadata JSONB DEFAULT '{}',
     created_at TIMESTAMPTZ DEFAULT now()
 );
@@ -244,6 +256,8 @@ CREATE TABLE IF NOT EXISTS kg_edges (
 -- Indexes for kg_edges
 CREATE INDEX IF NOT EXISTS idx_kg_edges_source ON kg_edges(source_id);
 CREATE INDEX IF NOT EXISTS idx_kg_edges_target ON kg_edges(target_id);
+CREATE INDEX IF NOT EXISTS idx_kg_edges_rest_source ON kg_edges(source);
+CREATE INDEX IF NOT EXISTS idx_kg_edges_rest_target ON kg_edges(target);
 CREATE INDEX IF NOT EXISTS idx_kg_edges_relation ON kg_edges(relation);
 
 -- ============================================

@@ -65,6 +65,35 @@ Core tables:
 
 See [schema/](schema/) for the full PostgreSQL schema.
 
+## Supabase Rebuild From KG Snapshot
+
+If the managed Supabase project has to be recreated, use the bootstrap script
+from the repository root:
+
+```bash
+export SUPABASE_DATABASE_URL='postgresql://postgres:YOUR_PASSWORD@db.YOUR_PROJECT_REF.supabase.co:5432/postgres?sslmode=require'
+
+uv run --with asyncpg \
+  python database/scripts/bootstrap_supabase.py \
+  --replace-data
+```
+
+The script applies the canonical schema, public RPC wrappers, REST compatibility
+columns for Cloudflare, and imports `data/kg/nodes.jsonl` + `data/kg/edges.jsonl`
+into `kg_nodes`, `kg_edges`, derived `ancient_works`, `passages`, and
+`passage_citations`.
+
+Use `--dry-run` first to inspect the recovered row counts without connecting to
+PostgreSQL.
+
+Security constraints:
+
+- keep `SUPABASE_DATABASE_URL` local or in CI secrets only;
+- prefer a direct/session-pooler DSN for bootstrap, not the transaction pooler;
+- never use a Supabase service-role API key for this script;
+- runtime services should use their own `DATABASE_URL` and Cloudflare should use
+  the anon API key unless a server-only admin route explicitly needs RLS bypass.
+
 ## API Routes (Optional)
 
 If installed with `[api]`:
