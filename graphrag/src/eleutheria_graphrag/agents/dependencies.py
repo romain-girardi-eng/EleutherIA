@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from eleutheria_database.services.db import DatabaseService
     from eleutheria_database.services.hybrid_search import HybridSearchService
     from eleutheria_graphrag.services.citation_verifier import CitationVerifier
+    from eleutheria_graphrag.services.citation_verifier_v2 import CitationVerifierV2
     from eleutheria_graphrag.services.llm_service import LLMService
     from eleutheria_graphrag.services.reranker import RerankerService
     from eleutheria_graphrag.services.weighted_traversal import WeightedTraversal
@@ -44,8 +45,13 @@ class Deps:
     # Cross-encoder reranker
     reranker: RerankerService | None = None
 
-    # Citation verification
+    # Citation verification — v1 (disabled by default, kept for compatibility).
     verifier: CitationVerifier | None = None
+
+    # Adversarial post-synthesis citation auditor — see
+    # ``services/citation_verifier_v2.py``. Optional; when set, the scholarly
+    # agent runs it after the synthesizer produces a draft.
+    verifier_v2: CitationVerifierV2 | None = None
 
     # LLM-based scholarly reranker
     llm_reranker: Any | None = None  # LLMRerankerService
@@ -64,3 +70,9 @@ class Deps:
 
     # Pre-computed centrality scores (PageRank)
     pagerank_scores: dict[str, float] = field(default_factory=dict)
+
+    # Optional pointer to the live RAGState, attached by graph nodes
+    # before invoking retrieval so the strategy layer can record
+    # ontology-aware inferred edges into ``state.inferred_edges``.
+    # Phase D activation — not part of the dependency contract.
+    state: Any | None = None

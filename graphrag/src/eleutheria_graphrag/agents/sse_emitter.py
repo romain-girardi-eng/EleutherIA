@@ -216,6 +216,66 @@ class SSEEmitter:
             payload["period"] = period
         await self._queue.put(payload)
 
+    async def emit_citation_verified(
+        self,
+        *,
+        passage_id: str,
+        verified: bool,
+        status: str | None = None,
+        reason: str | None = None,
+    ) -> None:
+        """Frontend-protocol ``citation_verified`` event.
+
+        ``status`` carries the four-way verdict (VERIFIED/WEAK/REJECTED/MISSING)
+        from the adversarial v2 verifier; ``verified`` is the boolean projection
+        kept for backwards compatibility with the original event shape.
+        """
+        payload: dict[str, Any] = {
+            "type": "citation_verified",
+            "passage_id": passage_id,
+            "verified": verified,
+        }
+        if status:
+            payload["status"] = status
+        if reason:
+            payload["reason"] = reason
+        await self._queue.put(payload)
+
+    async def emit_verification_warning(
+        self,
+        *,
+        message: str,
+        rejection_rate: float,
+        aborted: bool,
+    ) -> None:
+        """Emitted when the v2 verifier flags a high rejection rate.
+
+        Not part of the original SSE protocol — projects as an ``error`` event
+        when ``aborted`` is True (downstream UI already handles it), and as a
+        ``status`` event otherwise.
+        """
+        if aborted:
+            await self._queue.put(
+                {
+                    "type": "error",
+                    "agent": "citation-verifier",
+                    "message": message,
+                    "rejection_rate": rejection_rate,
+                    "aborted": True,
+                }
+            )
+        else:
+            await self._queue.put(
+                {
+                    "type": "status",
+                    "message": message,
+                    "data": {
+                        "agent": "citation-verifier",
+                        "rejection_rate": rejection_rate,
+                    },
+                }
+            )
+
     async def emit_final_answer(
         self,
         answer: str,
@@ -305,6 +365,25 @@ class NullEmitter(SSEEmitter):
         label: str,
         node_type: str,
         period: str | None = None,
+    ) -> None:
+        pass
+
+    async def emit_citation_verified(
+        self,
+        *,
+        passage_id: str,
+        verified: bool,
+        status: str | None = None,
+        reason: str | None = None,
+    ) -> None:
+        pass
+
+    async def emit_verification_warning(
+        self,
+        *,
+        message: str,
+        rejection_rate: float,
+        aborted: bool,
     ) -> None:
         pass
 
