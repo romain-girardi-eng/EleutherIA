@@ -861,11 +861,52 @@ class LLMService:
             if provider_block:
                 payload["provider"] = provider_block
 
-        response = await client.post(
-            f"{config['base_url']}/chat/completions",
-            headers=self._openai_compatible_headers(provider, api_key, config),
-            json=payload,
-        )
+        # Respect existing rate-limit backoff so we don't pile on after a 429.
+        if self._provider_in_backoff(provider):
+            wait = max(
+                0.0, self._provider_backoff_until.get(provider, 0.0) - time.time()
+            )
+            logger.info(
+                "generate_with_tools: %s in backoff for %.1fs; sleeping",
+                provider.value,
+                wait,
+            )
+            await asyncio.sleep(min(wait, 30.0))
+
+        url = f"{config['base_url']}/chat/completions"
+        headers = self._openai_compatible_headers(provider, api_key, config)
+        response = await client.post(url, headers=headers, json=payload)
+
+        # One graceful retry on 429 / 5xx to ride out short rate-limit bursts
+        # (Fireworks free tier in particular). Honors Retry-After when present.
+        if response.status_code in {408, 425, 429, 500, 502, 503, 504}:
+            try:
+                delay = self._retry_delay_seconds(
+                    httpx.HTTPStatusError(
+                        "transient", request=response.request, response=response
+                    )
+                )
+            except Exception:  # pragma: no cover — defensive
+                delay = 1.0
+            logger.warning(
+                "generate_with_tools: %s on %s, retrying once in %.1fs",
+                response.status_code,
+                provider.value,
+                delay,
+            )
+            await asyncio.sleep(min(delay, 30.0))
+            response = await client.post(url, headers=headers, json=payload)
+
+        if response.status_code == 429:
+            # Mark provider as in backoff so subsequent calls back off too.
+            try:
+                exc = httpx.HTTPStatusError(
+                    "rate-limited", request=response.request, response=response
+                )
+                self._mark_provider_invalid(provider, exc)
+            except Exception:  # pragma: no cover — defensive
+                pass
+
         response.raise_for_status()
         data = response.json()
         try:
