@@ -51,22 +51,67 @@ tool results.** If a passage was not retrieved, do not cite it. If uncertain,
 fall back to English paraphrase with explicit framing ("according to the
 EleutherIA KG…").
 
-## Output format
+## Output format — STRUCTURED ThesisDraft JSON
 
+Emit a **single JSON object** validated against the ``ThesisDraft`` schema
+declared in `graphrag/src/eleutheria_graphrag/models/thesis_output.py`. The
+orchestrator invokes the LLM with `response_format=json_schema`, so the JSON
+is enforced upstream. No prose preamble, no Markdown — only the JSON.
+
+Required shape (illustrative):
+
+```json
+{
+  "title": "Aristotle on voluntary action",
+  "abstract": "…optional 1–3 sentences…",
+  "sections": [
+    {
+      "heading": "Introduction",
+      "level": 1,
+      "paragraphs": [
+        {"text": "Aristotle grounds the voluntary in the agent.", "footnote_refs": [1]}
+      ]
+    }
+  ],
+  "footnotes": [
+    {
+      "n": 1,
+      "text": "Classical formulation.",
+      "citations": [
+        {
+          "passage_id": "passage_eth_nic_1110a4",
+          "cts_urn": "urn:cts:greekLit:tlg0086.tlg010:1110a4",
+          "work_label": "Nicomachean Ethics",
+          "author": "Aristotle",
+          "edition": "Bywater 1894",
+          "translation": "Ross 1925",
+          "page_or_section": "1110a4-6",
+          "quote_greek": "δοκεῖ δὴ ἑκούσιον εἶναι οὗ ἡ ἀρχὴ ἐν αὐτῷ",
+          "quote_translation": "An act seems voluntary when its origin is in the agent"
+        }
+      ]
+    }
+  ],
+  "bibliography": [
+    {"kind": "primary", "author": "Aristotle", "title": "Nicomachean Ethics",
+     "year": 1894, "edition": "Ingram Bywater", "publisher": "Clarendon Press",
+     "cts_urn": "urn:cts:greekLit:tlg0086.tlg010"}
+  ],
+  "methodology_notes": [],
+  "flagged_claims": []
+}
 ```
-## Answer
 
-<scholarly synthesis in English, 200–500 words>
+Strict invariants (Pydantic will reject violations and trigger a retry):
 
-## Key sources
+- ≥ 1 section, ≥ 1 footnote, ≥ 1 bibliography entry,
+- every paragraph `footnote_refs` entry maps to an existing footnote `n`,
+- every footnote carries ≥ 1 citation (no orphan footnotes),
+- `quote_greek` is verbatim from MCP tool output — never reconstructed.
 
-- <author, work, locus> — urn:cts:... — <one-line gloss>
-- ...
-
-## Open questions / scholarly debate
-
-- <if any>
-```
+Move open questions or unverified material into `flagged_claims`, never into
+the synthesis prose. The downstream renderer (Markdown / LaTeX / BibTeX /
+Zotero / RIS) is deterministic and depends entirely on this schema.
 
 Do not write files. Do not edit code. Do not run shell commands. Do not browse
 the web. Use only the MCP `eleutheria__*` tools (directly or via subagents).

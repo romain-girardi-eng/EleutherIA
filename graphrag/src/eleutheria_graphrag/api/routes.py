@@ -3,19 +3,58 @@ FastAPI routes for GraphRAG Q&A.
 """
 
 import json
+import time
 from collections.abc import AsyncIterator
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import PlainTextResponse, Response, StreamingResponse
+from pydantic import ValidationError
 
 from eleutheria_graphrag.models.query import QueryRequest, QueryResponse
+from eleutheria_graphrag.models.thesis_output import ThesisDraft
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
+from eleutheria_graphrag.services.thesis_renderer import (
+    CitationStyle,
+    ExportFormat,
+    export_draft,
+)
 
 router = APIRouter(tags=["graphrag"])
 
 # Service instance (to be injected by main app)
 _graphrag: GraphRAGService | None = None
+
+# In-memory store for ThesisDraft results, keyed by trace_id. Bounded to keep
+# memory under control; the FE downloads the export shortly after streaming.
+_DRAFT_TTL_SECONDS = 60 * 60
+_DRAFT_STORE_MAX = 256
+_draft_store: dict[str, tuple[float, ThesisDraft]] = {}
+
+
+def store_draft(trace_id: str, draft: ThesisDraft) -> None:
+    """Cache a synthesizer draft for later export.
+
+    Drops the oldest entry once the store crosses ``_DRAFT_STORE_MAX``.
+    """
+
+    now = time.time()
+    expired = [
+        k for k, (ts, _) in _draft_store.items() if now - ts > _DRAFT_TTL_SECONDS
+    ]
+    for k in expired:
+        _draft_store.pop(k, None)
+    if len(_draft_store) >= _DRAFT_STORE_MAX:
+        oldest = min(_draft_store.items(), key=lambda kv: kv[1][0])[0]
+        _draft_store.pop(oldest, None)
+    _draft_store[trace_id] = (now, draft)
+
+
+def _load_draft(trace_id: str) -> ThesisDraft:
+    entry = _draft_store.get(trace_id)
+    if entry is None:
+        raise HTTPException(status_code=404, detail=f"no draft for trace_id={trace_id}")
+    return entry[1]
 
 
 def set_service(graphrag: GraphRAGService) -> None:
@@ -206,6 +245,63 @@ async def query_stream(
             "Connection": "keep-alive",
         },
     )
+
+
+_FORMAT_EXTENSIONS = {
+    "markdown": "md",
+    "latex": "tex",
+    "bibtex": "bib",
+    "ris": "ris",
+    "zotero": "json",
+    "json": "json",
+}
+
+
+@router.post("/query/draft", response_model=dict)
+async def submit_draft(payload: dict) -> dict:
+    """Validate + cache a ThesisDraft payload.
+
+    Used by the orchestrator after a streaming run completes so the FE can
+    request renderings without re-synthesising. Returns the trace_id under
+    which the draft is stored.
+    """
+
+    trace_id = payload.get("trace_id")
+    if not trace_id or not isinstance(trace_id, str):
+        raise HTTPException(status_code=400, detail="trace_id is required")
+    raw = payload.get("draft")
+    if not isinstance(raw, dict):
+        raise HTTPException(status_code=400, detail="draft (object) is required")
+    try:
+        draft = ThesisDraft.model_validate(raw)
+    except ValidationError as exc:
+        raise HTTPException(status_code=422, detail=exc.errors()) from exc
+    store_draft(trace_id, draft)
+    return {"trace_id": trace_id, "footnotes": len(draft.footnotes)}
+
+
+@router.get("/query/{trace_id}/export")
+async def export_trace(
+    trace_id: str,
+    format: Annotated[ExportFormat, Query(description="Export format")] = "markdown",
+    citation_style: Annotated[
+        CitationStyle, Query(description="Citation style for Markdown")
+    ] = "chicago",
+    download: Annotated[bool, Query(description="Force file download")] = False,
+) -> Response:
+    """Render a cached ``ThesisDraft`` as Markdown / LaTeX / BibTeX / Zotero / RIS / JSON."""
+
+    draft = _load_draft(trace_id)
+    body, media_type = export_draft(draft, format, citation_style=citation_style)
+    headers: dict[str, str] = {}
+    if download:
+        ext = _FORMAT_EXTENSIONS.get(format, "txt")
+        headers["Content-Disposition"] = (
+            f'attachment; filename="thesis-{trace_id}.{ext}"'
+        )
+    if format == "markdown":
+        return PlainTextResponse(body, media_type=media_type, headers=headers)
+    return Response(content=body, media_type=media_type, headers=headers)
 
 
 @router.get("/health")
