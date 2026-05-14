@@ -1,6 +1,7 @@
 {
   "edge_relations": {
-    "authored_by": 16904,
+    "agrees_with": 3,
+    "authored_by": 16905,
     "belongs_to_corpus": 26,
     "belongs_to_school": 1,
     "contains": 80,
@@ -8,12 +9,14 @@
     "contrasts_with": 4,
     "contributes_to": 119,
     "created_by": 250,
-    "critiques": 179,
+    "critiques": 184,
     "defines": 10,
     "developed_by": 17,
     "discussed_in": 6,
     "discusses": 1908,
+    "edited_by": 1,
     "employs": 84,
+    "engages_with": 5,
     "evidenced_by": 426,
     "exemplifies": 41,
     "extends": 124,
@@ -27,6 +30,7 @@
     "influences": 2,
     "interprets": 102,
     "member_of": 55,
+    "opposes": 2,
     "parallel_to": 7,
     "part_of": 16873,
     "participates_in": 28,
@@ -41,10 +45,11 @@
     "supports": 146,
     "teacher_of": 4,
     "translation_of": 2952,
+    "uses_methodology_of": 1,
     "wrote": 9
   },
   "node_types": {
-    "argument": 184,
+    "argument": 220,
     "argument_framework": 1,
     "concept": 175,
     "conceptual_evolution": 3,
@@ -53,15 +58,15 @@
     "event": 2,
     "group": 3,
     "passage": 16858,
-    "person": 219,
+    "person": 227,
     "position": 8,
-    "publication": 81,
+    "publication": 112,
     "quote": 14,
     "school": 11,
     "source_collection": 2,
     "synthesis": 13,
     "work": 161
   },
-  "total_edges": 43063,
-  "total_nodes": 17757
+  "total_edges": 43081,
+  "total_nodes": 17832
 }
