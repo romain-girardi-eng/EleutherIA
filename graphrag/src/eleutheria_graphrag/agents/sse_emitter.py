@@ -121,6 +121,117 @@ class SSEEmitter:
             }
         )
 
+    async def emit_agent_start(self, agent: str, query: str, trace_id: str) -> None:
+        """Frontend-protocol: signal that an agent has started a query."""
+        await self._queue.put(
+            {
+                "type": "agent_start",
+                "agent": agent,
+                "query": query,
+                "trace_id": trace_id,
+            }
+        )
+
+    async def emit_tool_call(
+        self,
+        agent: str,
+        tool: str,
+        args: dict[str, Any],
+        call_id: str,
+    ) -> None:
+        """Frontend-protocol ``tool_call`` event (paired later with tool_result)."""
+        await self._queue.put(
+            {
+                "type": "tool_call",
+                "agent": agent,
+                "tool": tool,
+                "args": _sanitize_args(args),
+                "id": call_id,
+            }
+        )
+
+    async def emit_tool_call_result(
+        self,
+        tool_call_id: str,
+        result_summary: str,
+        *,
+        nodes_touched: list[str] | None = None,
+        passages_touched: list[str] | None = None,
+        duration_ms: int | None = None,
+    ) -> None:
+        """Frontend-protocol ``tool_result`` (matches the ``tool_call`` id)."""
+        payload: dict[str, Any] = {
+            "type": "tool_result",
+            "tool_call_id": tool_call_id,
+            "result_summary": result_summary,
+        }
+        if nodes_touched:
+            payload["nodes_touched"] = nodes_touched
+        if passages_touched:
+            payload["passages_touched"] = passages_touched
+        if duration_ms is not None:
+            payload["duration_ms"] = duration_ms
+        await self._queue.put(payload)
+
+    async def emit_citation_found(
+        self,
+        *,
+        passage_id: str,
+        excerpt: str,
+        node_ids: list[str],
+        confidence: float,
+        cts_urn: str | None = None,
+        work_label: str | None = None,
+    ) -> None:
+        """Frontend-protocol ``citation_found`` event."""
+        payload: dict[str, Any] = {
+            "type": "citation_found",
+            "passage_id": passage_id,
+            "excerpt": excerpt,
+            "node_ids": node_ids,
+            "confidence": confidence,
+        }
+        if cts_urn:
+            payload["cts_urn"] = cts_urn
+        if work_label:
+            payload["work_label"] = work_label
+        await self._queue.put(payload)
+
+    async def emit_kg_node_activated(
+        self,
+        *,
+        node_id: str,
+        label: str,
+        node_type: str,
+        period: str | None = None,
+    ) -> None:
+        """Frontend-protocol ``kg_node_activated`` event."""
+        payload: dict[str, Any] = {
+            "type": "kg_node_activated",
+            "node_id": node_id,
+            "label": label,
+            "node_type": node_type,
+        }
+        if period:
+            payload["period"] = period
+        await self._queue.put(payload)
+
+    async def emit_final_answer(
+        self,
+        answer: str,
+        citations: list[dict[str, Any]],
+        trace_id: str,
+    ) -> None:
+        """Frontend-protocol ``final_answer`` event."""
+        await self._queue.put(
+            {
+                "type": "final_answer",
+                "answer": answer,
+                "citations": citations,
+                "trace_id": trace_id,
+            }
+        )
+
     async def close(self) -> None:
         """Signal end of stream."""
         await self._queue.put(None)
@@ -154,6 +265,52 @@ class NullEmitter(SSEEmitter):
         pass
 
     async def emit_error(self, message: str) -> None:
+        pass
+
+    async def emit_agent_start(self, agent: str, query: str, trace_id: str) -> None:
+        pass
+
+    async def emit_tool_call(
+        self, agent: str, tool: str, args: dict[str, Any], call_id: str
+    ) -> None:
+        pass
+
+    async def emit_tool_call_result(
+        self,
+        tool_call_id: str,
+        result_summary: str,
+        *,
+        nodes_touched: list[str] | None = None,
+        passages_touched: list[str] | None = None,
+        duration_ms: int | None = None,
+    ) -> None:
+        pass
+
+    async def emit_citation_found(
+        self,
+        *,
+        passage_id: str,
+        excerpt: str,
+        node_ids: list[str],
+        confidence: float,
+        cts_urn: str | None = None,
+        work_label: str | None = None,
+    ) -> None:
+        pass
+
+    async def emit_kg_node_activated(
+        self,
+        *,
+        node_id: str,
+        label: str,
+        node_type: str,
+        period: str | None = None,
+    ) -> None:
+        pass
+
+    async def emit_final_answer(
+        self, answer: str, citations: list[dict[str, Any]], trace_id: str
+    ) -> None:
         pass
 
     async def close(self) -> None:

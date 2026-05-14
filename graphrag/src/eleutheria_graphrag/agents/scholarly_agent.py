@@ -108,7 +108,7 @@ class ScholarlyAgent:
         """
         from pydantic_graph import End, GraphRunContext
 
-        from eleutheria_graphrag.agents.react_loop import AgentLoop
+        from eleutheria_graphrag.agents.react_loop import build_agent_loop
         from eleutheria_graphrag.agents.sse_emitter import NullEmitter
         from eleutheria_graphrag.agents.tools import build_tool_registry
 
@@ -122,10 +122,10 @@ class ScholarlyAgent:
             state.complexity,
         )
 
-        # Phase 2: Agent loop
+        # Phase 2: Agent loop (native tool-calling or legacy text mode)
         tools = build_tool_registry(self.deps)
         emitter = NullEmitter()
-        agent = AgentLoop(
+        agent = build_agent_loop(
             deps=self.deps,
             state=state,
             tools=tools,
@@ -355,6 +355,7 @@ class ScholarlyAgent:
             "seed_nodes": answer.seed_nodes,
             "context_nodes": answer.context_nodes,
             "passages_used": answer.passages_used,
+            "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
             "llm_model": self.deps.llm.last_model_used,
             "llm_provider": self.deps.llm.last_provider_used,
             "metadata": {
@@ -418,7 +419,7 @@ class ScholarlyAgent:
 
         from pydantic_graph import End, GraphRunContext
 
-        from eleutheria_graphrag.agents.react_loop import AgentLoop
+        from eleutheria_graphrag.agents.react_loop import build_agent_loop
         from eleutheria_graphrag.agents.sse_emitter import SSEEmitter
         from eleutheria_graphrag.agents.tools import build_tool_registry
 
@@ -449,7 +450,7 @@ class ScholarlyAgent:
         emitter = SSEEmitter(queue)
         tools = build_tool_registry(self.deps)
 
-        agent = AgentLoop(
+        agent = build_agent_loop(
             deps=self.deps,
             state=state,
             tools=tools,
