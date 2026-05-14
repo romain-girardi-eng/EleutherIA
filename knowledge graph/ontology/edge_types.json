@@ -402,6 +402,62 @@
       "inverse": "precedes",
       "source_types": ["passage", "person", "event", "work"],
       "target_types": ["passage", "person", "event", "work"]
+    },
+    "wrote_about": {
+      "description": "Modern scholar (source) wrote scholarly work about target ancient/modern subject",
+      "category": "hermeneutic",
+      "inverse": "written_about_by",
+      "source_types": ["person", "publication"],
+      "target_types": ["argument", "concept", "debate", "person", "school", "work"]
+    },
+    "engages_with": {
+      "description": "Modern scholar or scholarly position engages with another scholar/position (stance carried in metadata: agrees|critiques|qualifies|opposes)",
+      "category": "hermeneutic",
+      "inverse": "engages_with",
+      "source_types": ["argument", "person", "publication"],
+      "target_types": ["argument", "person", "publication"]
+    },
+    "cites_primary_source": {
+      "description": "Modern scholarly argument cites an ancient primary source (passage or work) as evidence",
+      "category": "citation",
+      "inverse": "primary_source_cited_by",
+      "source_types": ["argument", "publication", "person"],
+      "target_types": ["passage", "work"]
+    },
+    "published": {
+      "description": "Scholar published a scholarly work (analogous to `wrote` but for modern publications)",
+      "category": "authorship",
+      "inverse": "published_by",
+      "source_types": ["person"],
+      "target_types": ["publication"]
+    },
+    "agrees_with": {
+      "description": "Source position/scholar agrees with target position/scholar",
+      "category": "argumentative",
+      "inverse": "agreed_with_by",
+      "source_types": ["argument", "person", "publication"],
+      "target_types": ["argument", "person", "publication"]
+    },
+    "opposes": {
+      "description": "Source position/scholar opposes target position/scholar (stronger than `critiques`)",
+      "category": "argumentative",
+      "inverse": "opposed_by",
+      "source_types": ["argument", "person", "publication"],
+      "target_types": ["argument", "person", "publication"]
+    },
+    "uses_methodology_of": {
+      "description": "Source scholar/work uses methodology developed by target scholar/work",
+      "category": "intellectual",
+      "inverse": "methodology_used_by",
+      "source_types": ["argument", "person", "publication"],
+      "target_types": ["person", "publication"]
+    },
+    "edited_by": {
+      "description": "Source publication/work was edited by target person",
+      "category": "authorship",
+      "inverse": "edited",
+      "source_types": ["publication", "work", "source_collection"],
+      "target_types": ["person"]
     }
   },
   "categories": {
