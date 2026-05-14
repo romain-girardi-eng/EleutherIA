@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eleutheria-mcp-server"
+version = "0.1.0"
+description = "MCP server exposing EleutherIA's GraphRAG tools to external agents"
+authors = [{name = "Romain Girardi"}]
+requires-python = ">=3.14"
+license = {text = "CC-BY-4.0"}
+readme = "README.md"
+dependencies = [
+    "mcp>=1.0",
+    "pydantic>=2.10.0",
+    "starlette>=0.40.0",
+    "uvicorn[standard]>=0.40.0",
+    "eleutheria-database",
+    "eleutheria-kg",
+    "eleutheria-graphrag",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0.0",
+    "pytest-asyncio>=1.0.0",
+    "ruff>=0.15.0",
+    "mypy>=1.14.0",
+    "httpx>=0.28.0",
+]
+
+[project.scripts]
+eleutheria-mcp-stdio = "mcp_server.transports.stdio:main"
+eleutheria-mcp-http = "mcp_server.transports.http:main"
+
+[tool.setuptools.packages.find]
+where = [".."]
+include = ["mcp_server*"]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = false
+ignore_missing_imports = true
