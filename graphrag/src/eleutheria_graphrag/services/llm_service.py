@@ -1,8 +1,8 @@
 """
 LLM Service - Unified interface for multiple LLM providers.
 
-Supports Gemini 3, Moonshot Kimi, and OpenRouter with automatic fallback
-and rate limiting.
+Supports Fireworks (Kimi K2.6, primary), Gemini 3, Moonshot Kimi, and
+OpenRouter with automatic fallback and rate limiting.
 """
 
 import asyncio
@@ -57,6 +57,7 @@ class RateLimiter:
 class ModelProvider(Enum):
     """Supported LLM providers."""
 
+    FIREWORKS = "fireworks"
     KIMI = "kimi"
     OPENROUTER = "openrouter"
     GEMINI = "gemini"
@@ -64,6 +65,16 @@ class ModelProvider(Enum):
 
 # Provider configurations
 PROVIDER_CONFIGS = {
+    ModelProvider.FIREWORKS: {
+        "base_url": "https://api.fireworks.ai/inference/v1",
+        "model": "accounts/fireworks/models/kimi-k2p6",
+        "thinking_model": "accounts/fireworks/models/kimi-k2p6",
+        "env_key": "FIREWORKS_API_KEY",
+        "base_url_env": "FIREWORKS_BASE_URL",
+        "model_env": "FIREWORKS_MODEL",
+        "thinking_model_env": "FIREWORKS_THINKING_MODEL",
+        "rate_limit": 60,
+    },
     ModelProvider.GEMINI: {
         "base_url": "https://generativelanguage.googleapis.com/v1beta",
         "model": "gemini-3.1-pro-preview",  # Upgraded: most capable model
@@ -118,23 +129,25 @@ class LLMService:
 
     def __init__(
         self,
-        preferred_provider: ModelProvider = ModelProvider.GEMINI,
+        preferred_provider: ModelProvider = ModelProvider.FIREWORKS,
         timeout: float = 120.0,
         enable_rate_limiting: bool = True,
         gemini_api_key: str | None = None,
         moonshot_api_key: str | None = None,
         openrouter_api_key: str | None = None,
+        fireworks_api_key: str | None = None,
     ) -> None:
         """
         Initialize LLM service.
 
         Args:
-            preferred_provider: Primary provider to use (default: Gemini 3)
+            preferred_provider: Primary provider to use (default: Fireworks / Kimi K2.6)
             timeout: Request timeout in seconds
             enable_rate_limiting: Whether to enforce rate limits
             gemini_api_key: Optional Gemini key (else read from GEMINI_API_KEY)
             moonshot_api_key: Optional Moonshot/Kimi key (else MOONSHOT_API_KEY)
             openrouter_api_key: Optional OpenRouter key (else OPENROUTER_API_KEY)
+            fireworks_api_key: Optional Fireworks key (else FIREWORKS_API_KEY)
         """
         self.preferred_provider = preferred_provider
         self.timeout = timeout
@@ -156,6 +169,8 @@ class LLMService:
             self._provider_keys[ModelProvider.KIMI] = moonshot_api_key
         if openrouter_api_key:
             self._provider_keys[ModelProvider.OPENROUTER] = openrouter_api_key
+        if fireworks_api_key:
+            self._provider_keys[ModelProvider.FIREWORKS] = fireworks_api_key
 
         # Initialize rate limiters
         if enable_rate_limiting:
@@ -297,8 +312,9 @@ class LLMService:
         ):
             return self.preferred_provider
 
-        # Fallback chain: gemini -> openrouter -> kimi
+        # Fallback chain: fireworks -> gemini -> openrouter -> kimi
         for provider in [
+            ModelProvider.FIREWORKS,
             ModelProvider.GEMINI,
             ModelProvider.OPENROUTER,
             ModelProvider.KIMI,
@@ -322,6 +338,7 @@ class LLMService:
         if thinking_mode:
             base_order = [
                 preferred,
+                ModelProvider.FIREWORKS,
                 ModelProvider.GEMINI,
                 ModelProvider.OPENROUTER,
                 ModelProvider.KIMI,
@@ -329,6 +346,7 @@ class LLMService:
         else:
             base_order = [
                 preferred,
+                ModelProvider.FIREWORKS,
                 ModelProvider.GEMINI,
                 ModelProvider.KIMI,
                 ModelProvider.OPENROUTER,
@@ -357,7 +375,15 @@ class LLMService:
         thinking_mode: bool,
     ) -> str:
         """Return the concrete model id to use for this request."""
-        if provider in {ModelProvider.KIMI, ModelProvider.OPENROUTER} and thinking_mode:
+        if (
+            provider
+            in {
+                ModelProvider.KIMI,
+                ModelProvider.OPENROUTER,
+                ModelProvider.FIREWORKS,
+            }
+            and thinking_mode
+        ):
             thinking_model = cast(str | None, config.get("thinking_model"))
             if thinking_model:
                 return thinking_model
@@ -575,9 +601,13 @@ class LLMService:
     def _resolve_model_override(self, model_override: str) -> tuple[ModelProvider, str]:
         """Resolve a model override string to a provider and model ID.
 
-        If the string contains '/' (e.g. 'anthropic/claude-sonnet-4.6'), it is
-        routed through OpenRouter.  Otherwise it is treated as a Gemini model.
+        - ``accounts/fireworks/...`` is routed through Fireworks.
+        - Other slash-containing IDs (e.g. ``anthropic/claude-sonnet-4.6``)
+          go through OpenRouter.
+        - Otherwise treated as a Gemini model.
         """
+        if model_override.startswith("accounts/fireworks/"):
+            return ModelProvider.FIREWORKS, model_override
         if "/" in model_override:
             return ModelProvider.OPENROUTER, model_override
         return ModelProvider.GEMINI, model_override
