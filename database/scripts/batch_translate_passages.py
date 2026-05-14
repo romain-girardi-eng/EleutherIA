@@ -40,51 +40,33 @@ from pathlib import Path
 
 import psycopg2
 
+from eleutheria_database.services.translation import (
+    DEFAULT_BATCH_SIZE,
+    DEFAULT_MAX_CHARS_PER_BATCH,
+    DEFAULT_MODEL,
+    PRIORITY_TIERS,
+    PassageToTranslate,
+)
+from eleutheria_database.services.translation import (
+    batch_passages as _batch_passages,
+)
+from eleutheria_database.services.translation import (
+    build_translation_prompt as _build_translation_prompt,
+)
+from eleutheria_database.services.translation import (
+    call_gemini as _call_gemini,
+)
+from eleutheria_database.services.translation import (
+    parse_translation_response as _parse_translation_response,
+)
+
 SCHEMA = "free_will"
 
-# Gemini Flash 2.5 — cheapest, 1M context
-GEMINI_MODEL = "gemini-2.5-flash"
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-
-# Batch sizes tuned for Gemini Flash context limits
-# ~50 passages per batch, ~200k chars max per batch
-BATCH_SIZE = 10
-MAX_CHARS_PER_BATCH = 40_000
-
-# Priority tiers (work canonical_id patterns)
-PRIORITY_TIERS = {
-    "P0": [
-        # Core free will texts — highest GraphRAG query frequency
-        "urn:cts:latinLit:phi0474.phi049",  # Cicero De Fato
-        "urn:cts:greekLit:tlg0557",          # Epictetus
-        "urn:cts:greekLit:tlg0732",          # Alexander of Aphrodisias
-    ],
-    "P1": [
-        # Major philosophical sources
-        "oga:tlg0086.tlg010",                # Aristotle NE
-        "oga:tlg0086.tlg025",                # Aristotle Met
-        "urn:cts:greekLit:tlg0086.tlg007",   # Aristotle DI
-        "urn:cts:greekLit:tlg0059.tlg031",   # Plato Timaeus
-        "urn:cts:greekLit:tlg0059.tlg004",   # Plato Phaedo
-        "urn:cts:greekLit:tlg0059.tlg012",   # Plato Phaedrus
-        "urn:cts:greekLit:tlg0007.tlg142",   # Plutarch De Fato
-        "urn:cts:greekLit:tlg0007",          # Plutarch (all)
-    ],
-    "P2": [
-        # Patristic/Late Antique core
-        "urn:cts:latinLit:stoa0040.stoa003", # Augustine DLA
-        "urn:cts:latinLit:stoa0040.stoa001", # Augustine CivDei
-        "urn:cts:latinLit:phi2089.phi002",   # Boethius
-        "urn:cts:greekLit:tlg2959.tlg001",   # Methodius
-    ],
-    "P3": [
-        # Large corpora, high value
-        "urn:cts:greekLit:tlg0562.tlg001",   # Marcus Aurelius
-        "urn:cts:latinLit:phi0550.phi001",   # Lucretius
-        "urn:cts:greekLit:tlg0544",          # Sextus Empiricus
-        "urn:cts:latinLit:phi1017.phi015",   # Seneca Ep.
-    ],
-}
+# Re-exported for CLI compatibility — single source of truth lives in
+# eleutheria_database.services.translation.
+GEMINI_MODEL = DEFAULT_MODEL
+BATCH_SIZE = DEFAULT_BATCH_SIZE
+MAX_CHARS_PER_BATCH = DEFAULT_MAX_CHARS_PER_BATCH
 
 
 def get_db_url() -> str:
@@ -156,139 +138,63 @@ def fetch_passages_needing_translation(
     return passages
 
 
+def _to_dataclass(p: dict) -> PassageToTranslate:
+    """Coerce the script's dict-shaped passage into the service dataclass."""
+    return PassageToTranslate(
+        node_id=p["node_id"],
+        text=p.get("text", ""),
+        language=p.get("language", "unknown"),
+        author=p.get("author", ""),
+        title=p.get("title", ""),
+        ref=p.get("ref", ""),
+    )
+
+
 def build_translation_prompt(batch: list[dict]) -> str:
     """Build a prompt for translating a batch of passages."""
-    lang = batch[0]["language"]
-    lang_name = {"grc": "Ancient Greek", "lat": "Latin", "heb": "Hebrew"}.get(lang, lang)
-
-    prompt = f"""You are a classical philologist translating {lang_name} passages into English.
-
-INSTRUCTIONS:
-- Translate each passage faithfully into scholarly English
-- Preserve technical philosophical terms in transliteration where standard (e.g. heimarmene, pronoia, to eph' hêmin, autexousion)
-- Do NOT paraphrase, summarize, or add commentary
-- Do NOT add information not present in the original
-- For fragmentary or unclear text, translate what is there and mark lacunae with [...]
-- Keep the scholarly register appropriate for an academic philosophy reference work
-
-OUTPUT FORMAT:
-Return a JSON array. For each passage, output:
-{{"id": "<node_id>", "en": "<English translation>"}}
-
-PASSAGES TO TRANSLATE:
-"""
-    for p in batch:
-        ref_label = f" ({p['ref']})" if p['ref'] else ""
-        prompt += f"\n--- {p['node_id']}{ref_label} ---\n{p['text']}\n"
-
-    return prompt
+    return _build_translation_prompt([_to_dataclass(p) for p in batch])
 
 
 def call_gemini(prompt: str, api_key: str) -> str:
     """Call Gemini Flash API and return the text response."""
-    import urllib.error
-    import urllib.request
-
-    url = GEMINI_API_URL.format(model=GEMINI_MODEL) + f"?key={api_key}"
-
-    payload = json.dumps({
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "temperature": 0.1,
-            "maxOutputTokens": 65536,
-            "responseMimeType": "application/json",
-            "thinkingConfig": {"thinkingBudget": 0},
-        },
-    }).encode()
-
-    req = urllib.request.Request(
-        url,
-        data=payload,
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
-
     try:
-        with urllib.request.urlopen(req, timeout=300) as resp:
-            data = json.loads(resp.read().decode())
-    except urllib.error.HTTPError as e:
-        body = e.read().decode() if e.fp else ""
-        print(f"  HTTP {e.code}: {body[:500]}")
+        return _call_gemini(prompt, api_key, model=GEMINI_MODEL)
+    except RuntimeError as e:
+        print(f"  {e}")
         raise
-
-    # Extract text from Gemini response
-    try:
-        text = data["candidates"][0]["content"]["parts"][0]["text"]
-    except (KeyError, IndexError):
-        print(f"  Unexpected response structure: {json.dumps(data)[:500]}")
-        raise
-    return text
 
 
 def parse_translation_response(text: str) -> list[dict]:
     """Parse Gemini's JSON response into translation dicts."""
-    import re as _re
-
-    # Strip markdown code fences if present
-    text = text.strip()
-    if text.startswith("```"):
-        text = text.split("\n", 1)[1] if "\n" in text else text[3:]
-    if text.endswith("```"):
-        text = text.rsplit("```", 1)[0]
-    text = text.strip()
-
-    try:
-        items = json.loads(text)
-    except json.JSONDecodeError:
-        # Try to find JSON array in the response
-        start = text.find("[")
-        end = text.rfind("]") + 1
-        if start >= 0 and end > start:
-            try:
-                items = json.loads(text[start:end])
-            except json.JSONDecodeError:
-                # Last resort: extract individual objects with regex
-                items = []
-                for m in _re.finditer(r'\{\s*"id"\s*:\s*"([^"]+)"\s*,\s*"en"\s*:\s*"((?:[^"\\]|\\.)*)"\s*\}', text):
-                    items.append({"id": m.group(1), "en": m.group(2).replace('\\"', '"').replace('\\n', '\n')})
-                if not items:
-                    print(f"  ERROR: Could not parse response as JSON: {text[:200]}...")
-                    return []
-        else:
-            print(f"  ERROR: Could not parse response as JSON: {text[:200]}...")
-            return []
-
-    results = []
-    for item in items:
-        node_id = item.get("id", "")
-        translation = item.get("en", "")
-        if node_id and translation:
-            results.append({"node_id": node_id, "translation": translation})
-    return results
+    items = _parse_translation_response(text)
+    if not items:
+        print(f"  ERROR: Could not parse response as JSON: {text[:200]}...")
+    return [{"node_id": t.node_id, "translation": t.translation} for t in items]
 
 
 def batch_passages(passages: list[dict]) -> list[list[dict]]:
     """Split passages into batches respecting size limits."""
-    batches = []
-    current_batch: list[dict] = []
-    current_chars = 0
-
-    for p in passages:
-        text_len = len(p["text"])
-        if current_batch and (
-            len(current_batch) >= BATCH_SIZE
-            or current_chars + text_len > MAX_CHARS_PER_BATCH
-        ):
-            batches.append(current_batch)
-            current_batch = []
-            current_chars = 0
-        current_batch.append(p)
-        current_chars += text_len
-
-    if current_batch:
-        batches.append(current_batch)
-
-    return batches
+    typed_batches = _batch_passages(
+        [_to_dataclass(p) for p in passages],
+        batch_size=BATCH_SIZE,
+        max_chars_per_batch=MAX_CHARS_PER_BATCH,
+    )
+    # Round-trip back to dicts so existing CLI logic (sum(len(p["text"])),
+    # batch[0]["language"], etc.) keeps working.
+    return [
+        [
+            {
+                "node_id": p.node_id,
+                "text": p.text,
+                "language": p.language,
+                "author": p.author,
+                "title": p.title,
+                "ref": p.ref,
+            }
+            for p in batch
+        ]
+        for batch in typed_batches
+    ]
 
 
 def main() -> None:

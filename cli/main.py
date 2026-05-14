@@ -130,7 +130,7 @@ def run(
     Start all services with Docker Compose.
 
     Profiles:
-    - default: Core services (PostgreSQL, Qdrant, Backend, Frontend)
+    - default: Core services (PostgreSQL, Backend, Frontend)
     - admin: + PgAdmin database admin
     - full: + Prometheus + Grafana monitoring
     """
@@ -845,6 +845,73 @@ def shell() -> None:
 
 
 # =============================================================================
+# Temporal / Ingestion Commands
+# =============================================================================
+
+
+@app.command()
+def translate(
+    priority: str = typer.Option("P0", "--priority", "-p", help="Priority tier: P0, P1, P2, P3"),
+    batch_size: int = typer.Option(5, "--batch-size", "-b", help="Passages per activity batch"),
+    local: bool = typer.Option(
+        False,
+        "--local",
+        help="Bypass Temporal and run the legacy inline script (offline dev).",
+    ),
+) -> None:
+    """Translate KG passages in a priority tier to English.
+
+    By default this dispatches BatchTranslateWorkflow onto the platform's Temporal
+    cluster. Pass --local to run the legacy `batch_translate_passages` script
+    inline (offline dev, no Temporal required).
+    """
+    import asyncio
+    import time
+
+    if local:
+        try:
+            from database.scripts import batch_translate_passages
+        except ImportError as exc:
+            console.print(f"[red]Local translate script unavailable: {exc}[/red]")
+            raise typer.Exit(1) from exc
+        console.print("[blue]Running translation locally (no Temporal)...[/blue]")
+        batch_translate_passages.main()
+        return
+
+    async def _dispatch() -> str:
+        from backend.services.temporal import get_temporal_client
+        from eleutheria_worker.workflows import (
+            BatchTranslateInput,
+            BatchTranslateWorkflow,
+        )
+
+        client = await get_temporal_client()
+        workflow_id = f"translate-{priority}-{int(time.time())}"
+        task_queue = os.getenv("TEMPORAL_TASK_QUEUE", "eleutheria-ingestion")
+        handle = await client.start_workflow(
+            BatchTranslateWorkflow.run,
+            BatchTranslateInput(priority=priority, batch_size=batch_size),
+            id=workflow_id,
+            task_queue=task_queue,
+        )
+        console.print(f"[dim]Workflow: {handle.id}  (task queue: {task_queue})[/dim]")
+        result = await handle.result()
+        return (
+            f"{len(result.translations)} translated, "
+            f"{len(result.failed_node_ids)} failed, "
+            f"{result.batches_completed} batches"
+        )
+
+    try:
+        outcome = asyncio.run(_dispatch())
+    except Exception as exc:
+        console.print(f"[red]Temporal dispatch failed: {exc}[/red]")
+        raise typer.Exit(1) from exc
+
+    console.print(f"[green]{outcome}[/green]")
+
+
+# =============================================================================
 # Test Commands
 # =============================================================================
 
@@ -1003,9 +1070,9 @@ def info() -> None:
     table.add_row("Ancient Works", "175")
     table.add_row("Passages", "17,036")
     table.add_row("", "")
-    table.add_row("Backend", "FastAPI + Python 3.11+")
+    table.add_row("Backend", "FastAPI + Python 3.14+")
     table.add_row("Frontend", "React 19 + TypeScript")
-    table.add_row("Database", "PostgreSQL + Qdrant")
+    table.add_row("Database", "Supabase (PostgreSQL)")
     table.add_row("LLM", "Gemini 3 + Kimi K2.5")
 
     console.print(table)
