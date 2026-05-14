@@ -7,7 +7,7 @@
 # -----------------------------------------------------------------------------
 # Stage 1: Build dependencies + install packages
 # -----------------------------------------------------------------------------
-FROM python:3.11-slim-bookworm AS builder
+FROM python:3.14-slim-bookworm AS builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
@@ -41,7 +41,7 @@ RUN pip install --no-cache-dir --no-compile \
 # -----------------------------------------------------------------------------
 # Stage 2: Production runtime
 # -----------------------------------------------------------------------------
-FROM python:3.11-slim-bookworm
+FROM python:3.14-slim-bookworm
 
 LABEL org.opencontainers.image.title="EleutherIA Backend" \
       org.opencontainers.image.description="FastAPI backend for ancient philosophy knowledge graph" \
@@ -68,6 +68,7 @@ WORKDIR /app
 
 # Copy backend orchestrator (main.py, routes/, dependencies.py, etc.)
 COPY --chown=eleutherai:eleutherai backend/ ./backend/
+COPY --chown=eleutherai:eleutherai data/kg/ ./data/kg/
 
 USER eleutherai
 

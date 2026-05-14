@@ -8,7 +8,7 @@ version = "2.0.0"
 description = "Knowledge graph framework for EleutherIA ancient philosophy database"
 readme = "README.md"
 license = "CC-BY-4.0"
-requires-python = ">=3.11"
+requires-python = ">=3.14"
 authors = [
     { name = "Romain Girardi", email = "romain.girardi@univ-cotedazur.fr" }
 ]
@@ -25,31 +25,29 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Database :: Database Engines/Servers",
     "Typing :: Typed",
 ]
 dependencies = [
     "eleutheria-database>=2.0.0",
-    "networkx>=3.0",
-    "numpy>=1.26.0",
-    "qdrant-client>=1.7.0",
-    "pydantic>=2.0.0",
+    "networkx>=3.4",
+    "numpy>=2.1.0",
+    "pydantic>=2.10.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8.0.0",
-    "pytest-asyncio>=0.23.0",
-    "pytest-cov>=4.0.0",
-    "ruff>=0.4.0",
-    "mypy>=1.10.0",
+    "pytest>=9.0.0",
+    "pytest-asyncio>=1.0.0",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.15.0",
+    "mypy>=1.14.0",
 ]
 api = [
-    "fastapi>=0.111.0",
-    "uvicorn[standard]>=0.30.0",
+    "fastapi>=0.130.0",
+    "uvicorn[standard]>=0.40.0",
 ]
 community = [
     # Optional community detection algorithms
@@ -71,7 +69,7 @@ Issues = "https://github.com/romain-girardi-eng/EleutherIA/issues"
 packages = ["src/eleutheria_kg"]
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py314"
 line-length = 88
 src = ["src"]
 
@@ -83,7 +81,7 @@ ignore = ["E501", "B008"]
 known-first-party = ["eleutheria_kg", "eleutheria_database"]
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.14"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
