@@ -1,0 +1,458 @@
+# EleutherIA GraphRAG evaluation set.
+#
+# Curated questions with expected KG node IDs. Used by run_eval.py to capture
+# baseline retrieval quality before and after pipeline changes.
+#
+# Fields:
+#   id                          stable identifier (qNNN)
+#   query                       natural-language question sent to the API
+#   expected_entities           KG node IDs we expect the pipeline to surface
+#                               (citations / sources / context_nodes / seed_nodes)
+#   expected_entity_keywords    fallback substring match on returned node labels
+#                               + the answer text, for cases where the exact
+#                               node id is unstable or several variants are
+#                               acceptable
+#   expected_works              KG work-node IDs we expect to be cited
+#   query_type                  concept-author | school-debate | fact |
+#                               comparison | fragment
+#   difficulty                  easy | medium | hard
+#
+# All IDs were sampled from data/kg/nodes.jsonl. If an id ever changes, the
+# keyword fallback keeps the query usable.
+
+queries:
+  # ---------------------------------------------------------------------------
+  # concept-author (10)
+  # ---------------------------------------------------------------------------
+  - id: q001
+    query: "What does Aristotle say about voluntary action?"
+    expected_entities:
+      - person_aristotle_384_322bce_c2d4f6a8
+      - concept_hekousion_voluntary_aristotle_a1b2c3d4
+      - concept_akousion_involuntary_aristotle_b2c3d4e5
+      - concept_eph_hemin_in_our_power_aristotle_d4e5f6g7
+    expected_entity_keywords:
+      - aristotle
+      - hekousion
+      - voluntary
+    expected_works:
+      - work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9
+    query_type: concept-author
+    difficulty: easy
+
+  - id: q002
+    query: "How does Chrysippus explain fate and human responsibility?"
+    expected_entities:
+      - person_chrysippus_280_206bce_i9j0k1l2
+      - concept_heimarmene_fate_stoics_j0k1l2m3
+      - concept_synkatathesis_stoic_assent
+      - concept_confatalia_chrysippus
+    expected_entity_keywords:
+      - chrysippus
+      - heimarmene
+      - synkatathesis
+      - assent
+    query_type: concept-author
+    difficulty: medium
+
+  - id: q003
+    query: "Epictetus on prohairesis and what is up to us"
+    expected_entities:
+      - person_epictetus_of_hierapolis_3c385bc2
+      - concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6
+      - concept_eph_hemin_in_our_power_aristotle_d4e5f6g7
+    expected_entity_keywords:
+      - epictetus
+      - prohairesis
+      - eph' hemin
+      - in our power
+    expected_works:
+      - work_epictetus_discourses
+      - work_epictetus_enchiridion
+    query_type: concept-author
+    difficulty: easy
+
+  - id: q004
+    query: "Plotinus on the freedom of the soul"
+    expected_entities:
+      - person_plotinus_d270
+    expected_entity_keywords:
+      - plotinus
+      - enneads
+      - soul
+      - freedom
+    expected_works:
+      - work_plotinus_enneads_iv_8
+    query_type: concept-author
+    difficulty: medium
+
+  - id: q005
+    query: "Augustine on free choice of the will"
+    expected_entities:
+      - person_augustine_hippo_d430
+      - concept_liberum_arbitrium_u3v4w5x6
+    expected_entity_keywords:
+      - augustine
+      - liberum arbitrium
+      - free choice
+    expected_works:
+      - work_de_libero_arbitrio
+    query_type: concept-author
+    difficulty: easy
+
+  - id: q006
+    query: "Origen's defence of autexousion against astrological determinism"
+    expected_entities:
+      - person_origen_alexandria_185_254ce_s9t0u1v2
+      - concept_autexousion_christian
+    expected_entity_keywords:
+      - origen
+      - autexousion
+      - self-determination
+    expected_works:
+      - work_de_principiis_origen_230s_v2w3x4y5
+      - work_origen_contra_celsum_sc132
+    query_type: concept-author
+    difficulty: medium
+
+  - id: q007
+    query: "Seneca on providence and the role of adversity"
+    expected_entities:
+      - person_seneca_4bce_65ce_a1b2c3d4
+      - concept_providentia_stoic_seneca_b3c4d5e6
+      - concept_exercitatio_adversity_seneca_c4d5e6f7
+      - argument_adversity_exercise_seneca_g8h9i0j1
+    expected_entity_keywords:
+      - seneca
+      - providentia
+      - adversity
+    expected_works:
+      - work_de_providentia_seneca_a2b3c4d5
+    query_type: concept-author
+    difficulty: medium
+
+  - id: q008
+    query: "Alexander of Aphrodisias on agent causation"
+    expected_entities:
+      - person_alexander_aphrodisias_fl200ce_n5o6p7q8
+      - argument_agent_causation_alex
+      - argument_agent_causation_two_way_powers_alexander_q8r9s0t1
+      - concept_autexousion_alex
+    expected_entity_keywords:
+      - alexander
+      - agent causation
+      - two-way powers
+    expected_works:
+      - work_de_fato_alexander_c200ce_o6p7q8r9
+    query_type: concept-author
+    difficulty: hard
+
+  - id: q009
+    query: "Boethius on divine foreknowledge and human freedom"
+    expected_entities:
+      - person_boethius_480_524ce_w3x4y5z6
+      - concept_providentia_fatum_boethius_h3i4j5k6
+    expected_entity_keywords:
+      - boethius
+      - foreknowledge
+      - providentia
+      - fatum
+    query_type: concept-author
+    difficulty: medium
+
+  - id: q010
+    query: "Epicurus and the atomic swerve as the basis of freedom"
+    expected_entities:
+      - person_epicurus_341_270bce_j0k1l2m3
+      - concept_clinamen_atomic_swerve_epicurus_m3n4o5p6
+    expected_entity_keywords:
+      - epicurus
+      - clinamen
+      - swerve
+      - parenklisis
+    expected_works:
+      - work_epicurus_letter_menoeceus
+      - work_de_rerum_natura_lucretius_50sbce_l2m3n4o5
+    query_type: concept-author
+    difficulty: medium
+
+  # ---------------------------------------------------------------------------
+  # school-debate (6)
+  # ---------------------------------------------------------------------------
+  - id: q011
+    query: "Stoic compatibilism versus Aristotelian voluntariness"
+    expected_entities:
+      - school_stoics
+      - school_peripatetics
+      - person_aristotle_384_322bce_c2d4f6a8
+      - person_chrysippus_280_206bce_i9j0k1l2
+      - debate_stoic_compatibilism
+    expected_entity_keywords:
+      - stoic
+      - peripatetic
+      - aristotle
+      - compatibilism
+      - voluntary
+    query_type: school-debate
+    difficulty: medium
+
+  - id: q012
+    query: "How did the Academics attack Stoic fate?"
+    expected_entities:
+      - school_academics
+      - school_stoics
+      - person_carneades_214_129bce_l2m3n4o5
+      - person_arcesilaus_316_241bce
+      - debate_stoic_academic_hellenistic
+    expected_entity_keywords:
+      - academic
+      - carneades
+      - stoic
+      - fate
+    query_type: school-debate
+    difficulty: medium
+
+  - id: q013
+    query: "Lazy Argument and the Stoic response"
+    expected_entities:
+      - debate_lazy_argument
+      - school_stoics
+      - person_chrysippus_280_206bce_i9j0k1l2
+      - concept_confatalia_chrysippus
+    expected_entity_keywords:
+      - lazy argument
+      - argos logos
+      - ignava ratio
+      - chrysippus
+    query_type: school-debate
+    difficulty: hard
+
+  - id: q014
+    query: "Intellectualism versus voluntarism in ancient ethics"
+    expected_entities:
+      - debate_intellectualism_vs_voluntarism_w3x4y5z6
+      - concept_socratic_intellectualism_f6g7h8i9
+    expected_entity_keywords:
+      - intellectualism
+      - voluntarism
+      - socratic
+    query_type: school-debate
+    difficulty: medium
+
+  - id: q015
+    query: "Augustine-Pelagius controversy on grace and free will"
+    expected_entities:
+      - debate_augustine_pelagius_grace
+      - person_augustine_hippo_d430
+    expected_entity_keywords:
+      - augustine
+      - pelagius
+      - grace
+      - free will
+    query_type: school-debate
+    difficulty: medium
+
+  - id: q016
+    query: "Christian apologists against Gnostic fatalism"
+    expected_entities:
+      - school_christian_apologists
+      - debate_christian_gnostic_freedom
+      - person_justin_martyr_2c_ce
+    expected_entity_keywords:
+      - apologist
+      - gnostic
+      - justin
+      - free will
+    query_type: school-debate
+    difficulty: hard
+
+  # ---------------------------------------------------------------------------
+  # fact (6)
+  # ---------------------------------------------------------------------------
+  - id: q017
+    query: "When was Origen born and when did he die?"
+    expected_entities:
+      - person_origen_alexandria_185_254ce_s9t0u1v2
+    expected_entity_keywords:
+      - origen
+      - 185
+      - 253
+      - 254
+    query_type: fact
+    difficulty: easy
+
+  - id: q018
+    query: "Who taught Epictetus?"
+    expected_entities:
+      - person_epictetus_of_hierapolis_3c385bc2
+      - person_musonius_rufus_30_101ce
+    expected_entity_keywords:
+      - epictetus
+      - musonius rufus
+    query_type: fact
+    difficulty: easy
+
+  - id: q019
+    query: "Who was the founder of the Stoic school?"
+    expected_entities:
+      - school_stoics
+      - person_zeno_citium_334_262bce
+    expected_entity_keywords:
+      - zeno
+      - citium
+      - stoa
+    query_type: fact
+    difficulty: easy
+
+  - id: q020
+    query: "What is the work De Fato by Cicero about?"
+    expected_entities:
+      - person_cicero_marcus_tullius_106_43bce_a8f3d2c1
+      - work_de_fato_cicero_44bce_b9c4e5d2
+    expected_entity_keywords:
+      - cicero
+      - de fato
+      - fate
+    query_type: fact
+    difficulty: easy
+
+  - id: q021
+    query: "Where did Plotinus teach, and who was his most important student?"
+    expected_entities:
+      - person_plotinus_d270
+    expected_entity_keywords:
+      - plotinus
+      - rome
+      - porphyry
+    query_type: fact
+    difficulty: medium
+
+  - id: q022
+    query: "Which schools did Plato and Aristotle each found?"
+    expected_entities:
+      - person_plato_428_348bce_a1b2c3d4
+      - person_aristotle_384_322bce_c2d4f6a8
+      - school_peripatetics
+    expected_entity_keywords:
+      - plato
+      - academy
+      - aristotle
+      - peripatetic
+      - lyceum
+    query_type: fact
+    difficulty: easy
+
+  # ---------------------------------------------------------------------------
+  # comparison (4)
+  # ---------------------------------------------------------------------------
+  - id: q023
+    query: "Compare Plotinus and Augustine on the freedom of the will"
+    expected_entities:
+      - person_plotinus_d270
+      - person_augustine_hippo_d430
+      - concept_liberum_arbitrium_u3v4w5x6
+    expected_entity_keywords:
+      - plotinus
+      - augustine
+      - free will
+      - liberum arbitrium
+    query_type: comparison
+    difficulty: hard
+
+  - id: q024
+    query: "How does Alexander of Aphrodisias differ from Chrysippus on causation?"
+    expected_entities:
+      - person_alexander_aphrodisias_fl200ce_n5o6p7q8
+      - person_chrysippus_280_206bce_i9j0k1l2
+      - debate_alexander_stoics_determinism
+    expected_entity_keywords:
+      - alexander
+      - chrysippus
+      - causation
+      - determinism
+    query_type: comparison
+    difficulty: hard
+
+  - id: q025
+    query: "Compare Aristotle and the Stoics on what is in our power"
+    expected_entities:
+      - person_aristotle_384_322bce_c2d4f6a8
+      - school_stoics
+      - concept_eph_hemin_in_our_power_aristotle_d4e5f6g7
+    expected_entity_keywords:
+      - aristotle
+      - stoic
+      - eph' hemin
+      - in our power
+    query_type: comparison
+    difficulty: medium
+
+  - id: q026
+    query: "Origen and Justin Martyr on autexousion: continuity and divergence"
+    expected_entities:
+      - person_origen_alexandria_185_254ce_s9t0u1v2
+      - person_justin_martyr_2c_ce
+      - concept_autexousion_christian
+    expected_entity_keywords:
+      - origen
+      - justin
+      - autexousion
+    query_type: comparison
+    difficulty: hard
+
+  # ---------------------------------------------------------------------------
+  # fragment (4)
+  # ---------------------------------------------------------------------------
+  - id: q027
+    query: "What does Cleanthes' Hymn to Zeus say about fate?"
+    expected_entities:
+      - person_cleanthes_assos_330_230bce
+    expected_entity_keywords:
+      - cleanthes
+      - hymn to zeus
+      - fate
+    query_type: fragment
+    difficulty: hard
+
+  - id: q028
+    query: "What survives of Chrysippus' On Fate in Gellius and Cicero?"
+    expected_entities:
+      - person_chrysippus_280_206bce_i9j0k1l2
+      - person_cicero_marcus_tullius_106_43bce_a8f3d2c1
+      - work_gellius_na_vii_2
+      - work_de_fato_cicero_44bce_b9c4e5d2
+    expected_entity_keywords:
+      - chrysippus
+      - cylinder
+      - cone
+      - gellius
+      - cicero
+    query_type: fragment
+    difficulty: hard
+
+  - id: q029
+    query: "Lucretius on the swerve in De Rerum Natura Book II"
+    expected_entities:
+      - person_lucretius_99_55bce_k1l2m3n4
+      - concept_clinamen_atomic_swerve_epicurus_m3n4o5p6
+      - work_de_rerum_natura_lucretius_50sbce_l2m3n4o5
+    expected_entity_keywords:
+      - lucretius
+      - clinamen
+      - swerve
+      - de rerum natura
+    query_type: fragment
+    difficulty: medium
+
+  - id: q030
+    query: "Aristotle's sea battle argument on future contingents"
+    expected_entities:
+      - person_aristotle_384_322bce_c2d4f6a8
+      - concept_sea_battle_future_contingents
+      - debate_divine_foreknowledge_future_contingents_a7b8c9d0
+    expected_entity_keywords:
+      - sea battle
+      - future contingent
+      - de interpretatione
+    query_type: fragment
+    difficulty: medium
