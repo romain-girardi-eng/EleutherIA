@@ -21,7 +21,9 @@ REPORT_DIR = REPO_ROOT / "docs" / "reports"
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Validate the GraphRAG LLM runtime stack")
+    parser = argparse.ArgumentParser(
+        description="Validate the GraphRAG LLM runtime stack"
+    )
     parser.add_argument(
         "--output-prefix",
         default="",
@@ -185,7 +187,9 @@ def main() -> None:
 
     json_path = output_base.with_suffix(".json")
     md_path = output_base.with_suffix(".md")
-    json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    json_path.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     md_path.write_text(_markdown_report(report), encoding="utf-8")
 
     print(f"Wrote validation JSON report to {json_path}")

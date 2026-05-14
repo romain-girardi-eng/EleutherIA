@@ -36,6 +36,7 @@ def _load_env() -> None:
                         if key and key not in os.environ:
                             os.environ[key] = value
 
+
 _load_env()
 
 import typer  # noqa: E402
@@ -89,14 +90,17 @@ def check_docker() -> bool:
     try:
         subprocess.run(["docker", "--version"], capture_output=True, check=True)
         return True
-    except (subprocess.CalledProcessError, FileNotFoundError):
+    except subprocess.CalledProcessError, FileNotFoundError:
         return False
 
 
-def api_request(endpoint: str, method: str = "GET", data: dict[str, Any] | None = None) -> dict[str, Any] | None:
+def api_request(
+    endpoint: str, method: str = "GET", data: dict[str, Any] | None = None
+) -> dict[str, Any] | None:
     """Make an API request to the backend."""
     try:
         import httpx
+
         url = f"{API_BASE_URL}/api{endpoint}"
         with httpx.Client(timeout=30.0) as client:
             if method == "GET":
@@ -107,7 +111,9 @@ def api_request(endpoint: str, method: str = "GET", data: dict[str, Any] | None 
             result: dict[str, Any] = response.json()
             return result
     except ImportError:
-        console.print("[yellow]Install httpx for API features: pip install httpx[/yellow]")
+        console.print(
+            "[yellow]Install httpx for API features: pip install httpx[/yellow]"
+        )
         return None
     except Exception as e:
         console.print(f"[red]API error: {e}[/red]")
@@ -152,8 +158,15 @@ def run(
         cmd = ["docker", "compose", "-f", str(compose_file), "--profile", "admin", "up"]
     elif profile == "full":
         cmd = [
-            "docker", "compose", "-f", str(compose_file),
-            "--profile", "admin", "--profile", "monitoring", "up"
+            "docker",
+            "compose",
+            "-f",
+            str(compose_file),
+            "--profile",
+            "admin",
+            "--profile",
+            "monitoring",
+            "up",
         ]
     else:
         cmd = ["docker", "compose", "-f", str(compose_file), "up"]
@@ -170,7 +183,15 @@ def dev(
     """Start development servers (without Docker)."""
     if service == "backend":
         console.print("[blue]Starting backend on http://localhost:8000[/blue]")
-        cmd = ["uvicorn", "api.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+        cmd = [
+            "uvicorn",
+            "api.main:app",
+            "--reload",
+            "--host",
+            "0.0.0.0",
+            "--port",
+            "8000",
+        ]
         raise typer.Exit(run_command(cmd, cwd=PROJECT_ROOT / "backend"))
 
     elif service == "frontend":
@@ -209,7 +230,15 @@ def clean() -> None:
         raise typer.Exit(0)
 
     compose_file = PROJECT_ROOT / "deploy" / "docker-compose.yml"
-    cmd = ["docker", "compose", "-f", str(compose_file), "down", "-v", "--remove-orphans"]
+    cmd = [
+        "docker",
+        "compose",
+        "-f",
+        str(compose_file),
+        "down",
+        "-v",
+        "--remove-orphans",
+    ]
     raise typer.Exit(run_command(cmd))
 
 
@@ -236,7 +265,9 @@ def logs(
 @app.command()
 def search(
     query: str = typer.Argument(..., help="Search query"),
-    node_type: str | None = typer.Option(None, "--type", "-t", help="Filter by node type"),
+    node_type: str | None = typer.Option(
+        None, "--type", "-t", help="Filter by node type"
+    ),
     limit: int = typer.Option(10, "--limit", "-n", help="Number of results"),
 ) -> None:
     """Search the knowledge graph for nodes."""
@@ -271,7 +302,11 @@ def search(
     for node in nodes[:limit]:
         name = node.get("name", node.get("label", "Unknown"))
         ntype = node.get("node_type", node.get("type", ""))
-        desc = node.get("description", "")[:50] + "..." if len(node.get("description", "")) > 50 else node.get("description", "")
+        desc = (
+            node.get("description", "")[:50] + "..."
+            if len(node.get("description", "")) > 50
+            else node.get("description", "")
+        )
         table.add_row(name, ntype, desc)
 
     console.print(table)
@@ -280,7 +315,9 @@ def search(
 @app.command()
 def ask(
     question: str = typer.Argument(..., help="Question to ask"),
-    thinking: bool = typer.Option(False, "--thinking", "-t", help="Use extended reasoning mode"),
+    thinking: bool = typer.Option(
+        False, "--thinking", "-t", help="Use extended reasoning mode"
+    ),
 ) -> None:
     """Ask a question using GraphRAG."""
     console.print(Panel(f"[bold]{question}[/bold]", title="Question"))
@@ -292,10 +329,14 @@ def ask(
     ) as progress:
         progress.add_task("Thinking...", total=None)
 
-        result = api_request("/graphrag/query", method="POST", data={
-            "question": question,
-            "thinking_mode": thinking,
-        })
+        result = api_request(
+            "/graphrag/query",
+            method="POST",
+            data={
+                "question": question,
+                "thinking_mode": thinking,
+            },
+        )
 
     if not result:
         return
@@ -331,12 +372,14 @@ def passage(
     work = result.get("work_title", result.get("work", "Unknown work"))
     author = result.get("author", "")
 
-    console.print(Panel(
-        f"[italic]{content}[/italic]",
-        title=f"{author} - {work}",
-        subtitle=urn,
-        border_style="blue"
-    ))
+    console.print(
+        Panel(
+            f"[italic]{content}[/italic]",
+            title=f"{author} - {work}",
+            subtitle=urn,
+            border_style="blue",
+        )
+    )
 
 
 # =============================================================================
@@ -421,12 +464,12 @@ def stats() -> None:
     table.add_column("Metric", style="cyan")
     table.add_column("Count", style="green", justify="right")
 
-    nodes = result.get('total_nodes', result.get('nodes', 0))
-    edges = result.get('total_edges', result.get('edges', 0))
-    works = result.get('works', 0)
-    passages = result.get('passages', 0)
-    node_types = result.get('node_types', 0)
-    edge_types = result.get('relation_types', result.get('edge_types', 0))
+    nodes = result.get("total_nodes", result.get("nodes", 0))
+    edges = result.get("total_edges", result.get("edges", 0))
+    works = result.get("works", 0)
+    passages = result.get("passages", 0)
+    node_types = result.get("node_types", 0)
+    edge_types = result.get("relation_types", result.get("edge_types", 0))
 
     # If node_types/edge_types are dicts (from API), get the count
     if isinstance(node_types, dict):
@@ -446,7 +489,9 @@ def stats() -> None:
 
 @app.command()
 def philosophers(
-    school: str | None = typer.Option(None, "--school", "-s", help="Filter by school (stoic, epicurean, etc.)"),
+    school: str | None = typer.Option(
+        None, "--school", "-s", help="Filter by school (stoic, epicurean, etc.)"
+    ),
     limit: int = typer.Option(20, "--limit", "-n", help="Number of results"),
 ) -> None:
     """List philosophers in the knowledge graph."""
@@ -509,7 +554,11 @@ def concepts(
         name = node.get("name", node.get("label", "Unknown"))
         meta = node.get("metadata") or {}
         original = meta.get("greek_term", node.get("original_term", ""))
-        desc = node.get("description", "")[:40] + "..." if len(node.get("description", "")) > 40 else node.get("description", "")
+        desc = (
+            node.get("description", "")[:40] + "..."
+            if len(node.get("description", "")) > 40
+            else node.get("description", "")
+        )
         table.add_row(name, original, desc)
 
     console.print(table)
@@ -517,7 +566,9 @@ def concepts(
 
 @app.command()
 def works(
-    language: str | None = typer.Option(None, "--language", "-l", help="Filter by language (grc, lat)"),
+    language: str | None = typer.Option(
+        None, "--language", "-l", help="Filter by language (grc, lat)"
+    ),
     author: str | None = typer.Option(None, "--author", "-a", help="Filter by author"),
     limit: int = typer.Option(20, "--limit", "-n", help="Number of results"),
 ) -> None:
@@ -565,7 +616,9 @@ def works(
 @export_app.command("kg")
 def export_kg(
     format: str = typer.Option("json", "--format", "-f", help="Format: json, csv, rdf"),
-    output: str = typer.Option("eleutheria_kg", "--output", "-o", help="Output filename"),
+    output: str = typer.Option(
+        "eleutheria_kg", "--output", "-o", help="Output filename"
+    ),
 ) -> None:
     """Export knowledge graph data."""
     if format == "rdf":
@@ -581,7 +634,9 @@ def export_kg(
         result = api_request("/kg/export")
 
     if not result:
-        console.print("[yellow]Could not fetch from API. Try exporting manually.[/yellow]")
+        console.print(
+            "[yellow]Could not fetch from API. Try exporting manually.[/yellow]"
+        )
         return
 
     filename = f"{output}.{format}"
@@ -609,6 +664,7 @@ def _export_kg_rdf(output: str) -> None:
 
     try:
         import sys
+
         sys.path.insert(0, str(PROJECT_ROOT / "knowledge graph" / "src"))
         from eleutheria_kg.semantic import build_graph, export_graph
     except ImportError as exc:
@@ -627,9 +683,7 @@ def _export_kg_rdf(output: str) -> None:
         graph = build_graph(nodes_path, edges_path)
         paths = export_graph(graph, output)
 
-    console.print(
-        f"[green]Exported {len(graph):,} triples to:[/green]"
-    )
+    console.print(f"[green]Exported {len(graph):,} triples to:[/green]")
     for fmt, path in paths.items():
         size_mb = path.stat().st_size / (1024 * 1024)
         console.print(f"  • {fmt}: [cyan]{path}[/cyan] ({size_mb:.1f} MB)")
@@ -672,7 +726,9 @@ def export_passages(
 @import_app.command("passages")
 def import_passages(
     file: str = typer.Argument(..., help="JSON file to import"),
-    dry_run: bool = typer.Option(True, "--dry-run/--apply", help="Preview without applying"),
+    dry_run: bool = typer.Option(
+        True, "--dry-run/--apply", help="Preview without applying"
+    ),
 ) -> None:
     """Import passages from JSON file."""
     filepath = Path(file)
@@ -715,12 +771,15 @@ def status() -> None:
     # Check backend
     try:
         import httpx
+
         with httpx.Client(timeout=5.0) as client:
             response = client.get(f"{API_BASE_URL}/api/health")
             if response.status_code == 200:
                 table.add_row("Backend API", "[green]Running[/green]", API_BASE_URL)
             else:
-                table.add_row("Backend API", "[red]Error[/red]", f"Status {response.status_code}")
+                table.add_row(
+                    "Backend API", "[red]Error[/red]", f"Status {response.status_code}"
+                )
     except Exception:
         table.add_row("Backend API", "[red]Not running[/red]", API_BASE_URL)
 
@@ -728,8 +787,17 @@ def status() -> None:
     if check_docker():
         try:
             result = subprocess.run(
-                ["docker", "compose", "-f", str(PROJECT_ROOT / "deploy" / "docker-compose.yml"), "ps", "--format", "json"],
-                capture_output=True, text=True
+                [
+                    "docker",
+                    "compose",
+                    "-f",
+                    str(PROJECT_ROOT / "deploy" / "docker-compose.yml"),
+                    "ps",
+                    "--format",
+                    "json",
+                ],
+                capture_output=True,
+                text=True,
             )
             if result.returncode == 0 and result.stdout.strip():
                 for line in result.stdout.strip().split("\n"):
@@ -737,9 +805,13 @@ def status() -> None:
                         svc = json.loads(line)
                         name = svc.get("Service", svc.get("Name", "unknown"))
                         state = svc.get("State", "unknown")
-                        status_style = "[green]Running[/green]" if state == "running" else f"[yellow]{state}[/yellow]"
+                        status_style = (
+                            "[green]Running[/green]"
+                            if state == "running"
+                            else f"[yellow]{state}[/yellow]"
+                        )
                         table.add_row(f"Docker: {name}", status_style, "")
-                    except (json.JSONDecodeError, KeyError):
+                    except json.JSONDecodeError, KeyError:
                         pass
         except Exception:
             table.add_row("Docker", "[yellow]Unable to check[/yellow]", "")
@@ -752,7 +824,9 @@ def status() -> None:
 @app.command()
 def doctor() -> None:
     """Diagnose common issues and suggest fixes."""
-    console.print(Panel("[bold]Running diagnostics...[/bold]", title="EleutherIA Doctor"))
+    console.print(
+        Panel("[bold]Running diagnostics...[/bold]", title="EleutherIA Doctor")
+    )
 
     issues = []
 
@@ -763,7 +837,9 @@ def doctor() -> None:
     if check_docker():
         console.print("[green]✓[/green] Docker installed")
     else:
-        issues.append(("Docker", "Not installed or not running. Install from docker.com"))
+        issues.append(
+            ("Docker", "Not installed or not running. Install from docker.com")
+        )
 
     # Check .env file
     env_file = PROJECT_ROOT / ".env"
@@ -776,13 +852,21 @@ def doctor() -> None:
             if "GEMINI_API_KEY" in env_content or "MOONSHOT_API_KEY" in env_content:
                 console.print("[green]✓[/green] API keys configured")
             else:
-                issues.append(("API Keys", "No LLM API keys found in .env. Add GEMINI_API_KEY or MOONSHOT_API_KEY"))
+                issues.append(
+                    (
+                        "API Keys",
+                        "No LLM API keys found in .env. Add GEMINI_API_KEY or MOONSHOT_API_KEY",
+                    )
+                )
     else:
-        issues.append((".env", "File not found. Copy from .env.example: cp .env.example .env"))
+        issues.append(
+            (".env", "File not found. Copy from .env.example: cp .env.example .env")
+        )
 
     # Check httpx for API features
     try:
         import httpx  # noqa: F401
+
         console.print("[green]✓[/green] httpx installed (API features available)")
     except ImportError:
         issues.append(("httpx", "Not installed. Run: pip install httpx"))
@@ -833,19 +917,21 @@ def api() -> None:
 @app.command()
 def shell() -> None:
     """Start interactive exploration shell."""
-    console.print(Panel(
-        "[bold]EleutherIA Interactive Shell[/bold]\n\n"
-        "Commands:\n"
-        "  search <query>     - Search knowledge graph\n"
-        "  ask <question>     - Ask a question\n"
-        "  stats              - Show statistics\n"
-        "  philosophers       - List philosophers\n"
-        "  concepts           - List concepts\n"
-        "  help               - Show this help\n"
-        "  exit               - Exit shell",
-        title="Interactive Mode",
-        border_style="blue"
-    ))
+    console.print(
+        Panel(
+            "[bold]EleutherIA Interactive Shell[/bold]\n\n"
+            "Commands:\n"
+            "  search <query>     - Search knowledge graph\n"
+            "  ask <question>     - Ask a question\n"
+            "  stats              - Show statistics\n"
+            "  philosophers       - List philosophers\n"
+            "  concepts           - List concepts\n"
+            "  help               - Show this help\n"
+            "  exit               - Exit shell",
+            title="Interactive Mode",
+            border_style="blue",
+        )
+    )
 
     while True:
         try:
@@ -857,7 +943,9 @@ def shell() -> None:
                 console.print("[dim]Goodbye![/dim]")
                 break
             elif cmd == "help":
-                console.print("Commands: search, ask, stats, philosophers, concepts, works, exit")
+                console.print(
+                    "Commands: search, ask, stats, philosophers, concepts, works, exit"
+                )
             elif cmd == "stats":
                 stats()
             elif cmd == "philosophers":
@@ -891,8 +979,12 @@ def shell() -> None:
 
 @app.command()
 def translate(
-    priority: str = typer.Option("P0", "--priority", "-p", help="Priority tier: P0, P1, P2, P3"),
-    batch_size: int = typer.Option(5, "--batch-size", "-b", help="Passages per activity batch"),
+    priority: str = typer.Option(
+        "P0", "--priority", "-p", help="Priority tier: P0, P1, P2, P3"
+    ),
+    batch_size: int = typer.Option(
+        5, "--batch-size", "-b", help="Passages per activity batch"
+    ),
     local: bool = typer.Option(
         False,
         "--local",
@@ -958,7 +1050,9 @@ def translate(
 
 @test_app.command("all")
 def test_all(
-    coverage: bool = typer.Option(False, "--coverage", "-c", help="Generate coverage report"),
+    coverage: bool = typer.Option(
+        False, "--coverage", "-c", help="Generate coverage report"
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
 ) -> None:
     """Run all tests across all packages."""
@@ -1038,7 +1132,9 @@ def format(
 def typecheck() -> None:
     """Run type checker (mypy) on all Python code."""
     console.print("[blue]Running mypy type checker...[/blue]")
-    raise typer.Exit(run_command(["mypy", "database/", "knowledge graph/", "graphrag/"]))
+    raise typer.Exit(
+        run_command(["mypy", "database/", "knowledge graph/", "graphrag/"])
+    )
 
 
 @app.command()
@@ -1048,7 +1144,9 @@ def quality() -> None:
 
     # Lint
     console.print("[bold]1. Linting (Ruff)...[/bold]")
-    lint_result = run_command(["ruff", "check", "database/", "knowledge graph/", "graphrag/"])
+    lint_result = run_command(
+        ["ruff", "check", "database/", "knowledge graph/", "graphrag/"]
+    )
 
     # Type check
     console.print("\n[bold]2. Type checking (mypy)...[/bold]")
@@ -1122,6 +1220,7 @@ def info() -> None:
 def version() -> None:
     """Show CLI version."""
     from cli import __version__
+
     console.print(f"eleutheria CLI v{__version__}")
 
 

@@ -87,9 +87,7 @@ class TestLoadKG:
         db.fetch = AsyncMock(return_value=[])
         svc = GraphRAGService(db_service=db)
 
-        with patch(
-            "eleutheria_graphrag.services.graphrag_service.ScholarlyAgent"
-        ):
+        with patch("eleutheria_graphrag.services.graphrag_service.ScholarlyAgent"):
             await svc.load_kg()
             call_count = db.fetch.call_count
             await svc.load_kg()

@@ -29,13 +29,17 @@ def _make_evidence(n: int) -> list[Evidence]:
 @pytest.fixture
 def llm():
     mock = MagicMock()
-    mock.generate = AsyncMock(return_value=json.dumps({
-        "rankings": [
-            {"id": 1, "score": 90, "reason": "Directly relevant"},
-            {"id": 2, "score": 70, "reason": "Partially relevant"},
-            {"id": 3, "score": 40, "reason": "Tangential"},
-        ]
-    }))
+    mock.generate = AsyncMock(
+        return_value=json.dumps(
+            {
+                "rankings": [
+                    {"id": 1, "score": 90, "reason": "Directly relevant"},
+                    {"id": 2, "score": 70, "reason": "Partially relevant"},
+                    {"id": 3, "score": 40, "reason": "Tangential"},
+                ]
+            }
+        )
+    )
     return mock
 
 
@@ -70,7 +74,9 @@ class TestLLMReranker:
         """Candidates capped at 30 per LLM call."""
         evidence = _make_evidence(35)
         # LLM returns rankings for first 30 only
-        rankings = [{"id": i + 1, "score": 90 - i, "reason": f"r{i}"} for i in range(30)]
+        rankings = [
+            {"id": i + 1, "score": 90 - i, "reason": f"r{i}"} for i in range(30)
+        ]
         llm.generate = AsyncMock(return_value=json.dumps({"rankings": rankings}))
         result = await service.rerank("Stoic fate", evidence, top_k=15)
         assert len(result) == 15

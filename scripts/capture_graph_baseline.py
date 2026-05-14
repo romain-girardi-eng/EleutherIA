@@ -44,7 +44,9 @@ async def run_capture(base_url: str, engine: str, out_dir: Path) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Capture graph baseline artifacts with browser-use")
+    parser = argparse.ArgumentParser(
+        description="Capture graph baseline artifacts with browser-use"
+    )
     parser.add_argument("--base-url", default="http://localhost:5173")
     parser.add_argument("--engine", default="cosmograph", choices=["cosmograph", "d3"])
     parser.add_argument(

@@ -10,16 +10,42 @@ def sample_kg_data():
     """Sample knowledge graph data for testing."""
     return {
         "nodes": [
-            {"id": "chrysippus", "label": "Chrysippus", "type": "Person", "period": "Hellenistic Greek", "school": "Stoic"},
-            {"id": "epictetus", "label": "Epictetus", "type": "Person", "period": "Roman Imperial", "school": "Stoic"},
-            {"id": "zeno", "label": "Zeno of Citium", "type": "Person", "period": "Hellenistic Greek", "school": "Stoic"},
+            {
+                "id": "chrysippus",
+                "label": "Chrysippus",
+                "type": "Person",
+                "period": "Hellenistic Greek",
+                "school": "Stoic",
+            },
+            {
+                "id": "epictetus",
+                "label": "Epictetus",
+                "type": "Person",
+                "period": "Roman Imperial",
+                "school": "Stoic",
+            },
+            {
+                "id": "zeno",
+                "label": "Zeno of Citium",
+                "type": "Person",
+                "period": "Hellenistic Greek",
+                "school": "Stoic",
+            },
             {"id": "fate", "label": "Fate (heimarmene)", "type": "Concept"},
             {"id": "to_eph_hemin", "label": "To eph' hemin", "type": "Concept"},
             {"id": "stoicism", "label": "Stoicism", "type": "School"},
         ],
         "edges": [
-            {"source": "chrysippus", "target": "stoicism", "relation": "belongs_to_school"},
-            {"source": "epictetus", "target": "stoicism", "relation": "belongs_to_school"},
+            {
+                "source": "chrysippus",
+                "target": "stoicism",
+                "relation": "belongs_to_school",
+            },
+            {
+                "source": "epictetus",
+                "target": "stoicism",
+                "relation": "belongs_to_school",
+            },
             {"source": "zeno", "target": "stoicism", "relation": "founded"},
             {"source": "chrysippus", "target": "fate", "relation": "discusses"},
             {"source": "chrysippus", "target": "to_eph_hemin", "relation": "defines"},
@@ -86,8 +112,10 @@ class TestKGAnalytics:
         communities = analytics.detect_communities(algorithm="semantic")
 
         # Person nodes should each be in their own community
-        assert communities["chrysippus"] != communities["epictetus"] or \
-               communities["chrysippus"] != communities["zeno"]
+        assert (
+            communities["chrysippus"] != communities["epictetus"]
+            or communities["chrysippus"] != communities["zeno"]
+        )
 
     def test_get_shortest_path(self, sample_kg_data):
         """Test shortest path finding."""
@@ -101,7 +129,9 @@ class TestKGAnalytics:
     def test_get_shortest_path_no_path(self, sample_kg_data):
         """Test shortest path when no path exists."""
         # Add isolated node
-        sample_kg_data["nodes"].append({"id": "isolated", "label": "Isolated", "type": "Person"})
+        sample_kg_data["nodes"].append(
+            {"id": "isolated", "label": "Isolated", "type": "Person"}
+        )
         analytics = KGAnalytics(sample_kg_data)
 
         path = analytics.get_shortest_path("zeno", "isolated")

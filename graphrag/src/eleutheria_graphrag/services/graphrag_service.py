@@ -354,7 +354,7 @@ class GraphRAGService:
             weight = edge.get("weight", metadata.get("weight", 1.0))
             try:
                 normalized_weight = float(weight)
-            except (TypeError, ValueError):
+            except TypeError, ValueError:
                 normalized_weight = 1.0
             source = str(edge.get("source") or edge.get("source_id") or "")
             target = str(edge.get("target") or edge.get("target_id") or "")

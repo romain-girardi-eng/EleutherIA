@@ -830,9 +830,7 @@ class LLMService:
             provider = candidates[0]
             config = dict(self._resolve_config(provider))
             api_key = self._api_key_for(provider)
-            model_name = self._model_for_request(
-                provider, config, thinking_mode=False
-            )
+            model_name = self._model_for_request(provider, config, thinking_mode=False)
             config["model"] = model_name
 
         self.last_provider_used = provider.value

@@ -86,7 +86,9 @@ class GetNodeDetailTool:
                 )
                 passage_count = count or 0
             except Exception:
-                logger.debug("Passage count query failed for %s", node_id, exc_info=True)
+                logger.debug(
+                    "Passage count query failed for %s", node_id, exc_info=True
+                )
                 passage_count = len(linked_passage_rows(self._deps, [node_id]))
         else:
             passage_count = len(linked_passage_rows(self._deps, [node_id]))

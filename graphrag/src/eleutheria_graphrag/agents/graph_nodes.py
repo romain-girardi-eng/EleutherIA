@@ -161,7 +161,9 @@ def _proof_chain_for_inferred(
             mint_node_iri,
         )
     except Exception:  # noqa: BLE001 — semantic layer optional in some tests
-        logger.warning("semantic layer unavailable; skipping proof chain", exc_info=True)
+        logger.warning(
+            "semantic layer unavailable; skipping proof chain", exc_info=True
+        )
         return []
 
     inverse_index: dict[str, str] = {}
@@ -193,9 +195,7 @@ def _proof_chain_for_inferred(
             continue
         premise_subject_iri = mint_node_iri(o_id)
         premise_object_iri = mint_node_iri(s_id)
-        graph.add(
-            (premise_subject_iri, edge_property(premise_rel), premise_object_iri)
-        )
+        graph.add((premise_subject_iri, edge_property(premise_rel), premise_object_iri))
         steps = build_proof_chain(
             graph,
             (subj_iri, edge_property(derived_rel), obj_iri),
@@ -4395,7 +4395,9 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
         # remaining surface (snapshot when DB is unavailable, SQL otherwise).
         if not seed_ids:
             if db_is_connected(ctx.deps.db) and not isinstance(strategy, SQLStrategy):
-                logger.info("Primary strategy returned no seeds, retrying via SQLStrategy")
+                logger.info(
+                    "Primary strategy returned no seeds, retrying via SQLStrategy"
+                )
                 fallback: SQLStrategy | SnapshotStrategy = SQLStrategy(min_bundles=4)
                 fallback_mode = "sql"
             elif not db_is_connected(ctx.deps.db) and not isinstance(

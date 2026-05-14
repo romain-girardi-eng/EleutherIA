@@ -33,7 +33,12 @@ _VALID_PAYLOAD: dict[str, Any] = {
         }
     ],
     "bibliography": [
-        {"kind": "primary", "author": "Aristotle", "title": "Nicomachean Ethics", "year": 1894}
+        {
+            "kind": "primary",
+            "author": "Aristotle",
+            "title": "Nicomachean Ethics",
+            "year": 1894,
+        }
     ],
 }
 
@@ -85,4 +90,6 @@ async def test_synthesizer_gives_up_after_max_retries() -> None:
     invalid = json.dumps({"title": "x"})
     llm = _StubLLM([invalid, invalid, invalid])
     with pytest.raises(SchemaValidationError):
-        await ThesisSynthesizer(llm, max_retries=2).synthesize(question="Q", context="C")
+        await ThesisSynthesizer(llm, max_retries=2).synthesize(
+            question="Q", context="C"
+        )

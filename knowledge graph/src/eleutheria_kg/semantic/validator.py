@@ -79,9 +79,7 @@ class ValidationReport:
 
         lines.extend(["", "## Examples", ""])
         for v in self.violations[:max_examples]:
-            lines.append(
-                f"- `{v.focus_node}` ({v.severity}) — {v.message}"
-            )
+            lines.append(f"- `{v.focus_node}` ({v.severity}) — {v.message}")
         return "\n".join(lines) + "\n"
 
 

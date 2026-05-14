@@ -14,6 +14,7 @@ def test_get_known_model():
 
 def test_get_unknown_model_raises():
     import pytest
+
     with pytest.raises(KeyError, match="unknown-model"):
         get_model("unknown-model")
 

@@ -156,7 +156,10 @@ async def test_query_stream_includes_claim_ledger_size():
         ],
     )
     with patch.object(agent, "query", new=AsyncMock(return_value=answer)):
-        chunks = [chunk async for chunk in agent.query_stream("What is fate?", agent_mode="fsm")]
+        chunks = [
+            chunk
+            async for chunk in agent.query_stream("What is fate?", agent_mode="fsm")
+        ]
 
     complete_chunk = next(c for c in chunks if c.startswith("{"))
     data = json.loads(complete_chunk)

@@ -159,9 +159,7 @@ class TestRerankerServiceRerank:
         mock_model.predict.return_value = np.array([0.9, 0.8, 0.7, 0.6, 0.5])
         svc._model = mock_model
 
-        result = await svc.rerank(
-            "query", evidence, top_k=2, score_threshold=0.7
-        )
+        result = await svc.rerank("query", evidence, top_k=2, score_threshold=0.7)
         assert len(result) == 2
 
 

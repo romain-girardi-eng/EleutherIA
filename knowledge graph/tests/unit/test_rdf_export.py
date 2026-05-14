@@ -18,7 +18,6 @@ from eleutheria_kg.semantic.vocab import (  # noqa: E402
     node_classes,
 )
 
-
 SAMPLE_NODES = [
     {
         "id": "person_chrysippus_280bce_t9u0v1w2",

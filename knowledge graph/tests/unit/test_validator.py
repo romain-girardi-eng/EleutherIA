@@ -18,7 +18,9 @@ from eleutheria_kg.semantic.validator import (  # noqa: E402
 )
 
 
-def _write_jsonl(tmp_path: Path, nodes: list[dict], edges: list[dict]) -> tuple[Path, Path]:
+def _write_jsonl(
+    tmp_path: Path, nodes: list[dict], edges: list[dict]
+) -> tuple[Path, Path]:
     nodes_path = tmp_path / "nodes.jsonl"
     edges_path = tmp_path / "edges.jsonl"
     nodes_path.write_text("\n".join(json.dumps(n) for n in nodes), encoding="utf-8")
@@ -31,10 +33,12 @@ def shapes_graph() -> rdflib.Graph:
     return load_shapes()
 
 
-def _violations_for_shape(
-    report: ValidationReport, shape_suffix: str
-) -> list:
-    return [v for v in report.violations if v.source_shape and v.source_shape.endswith(shape_suffix)]
+def _violations_for_shape(report: ValidationReport, shape_suffix: str) -> list:
+    return [
+        v
+        for v in report.violations
+        if v.source_shape and v.source_shape.endswith(shape_suffix)
+    ]
 
 
 def test_unanchored_claim_node_triggers_violation(
@@ -56,7 +60,7 @@ def test_unanchored_claim_node_triggers_violation(
 
     matching = _violations_for_shape(report, "Argument_NeedsEvidence")
     assert len(matching) == 1, f"expected 1 evidence violation, got {matching}"
-    assert "https://free-will.app/kg/argument_unanchored_test" == matching[0].focus_node
+    assert matching[0].focus_node == "https://free-will.app/kg/argument_unanchored_test"
 
 
 def test_anchored_claim_node_passes_evidence_check(
@@ -153,9 +157,7 @@ def test_prefix_mismatch_triggers_warning(
     assert matching[0].severity == "warning"
 
 
-def test_clean_small_graph_conforms(
-    tmp_path: Path, shapes_graph: rdflib.Graph
-) -> None:
+def test_clean_small_graph_conforms(tmp_path: Path, shapes_graph: rdflib.Graph) -> None:
     nodes = [
         {
             "id": "person_zeno_citium_test",

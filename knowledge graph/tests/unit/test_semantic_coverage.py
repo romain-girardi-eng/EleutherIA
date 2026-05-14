@@ -8,6 +8,7 @@ focused, behavior-oriented assertion rather than a line-coverage trick.
 
 from __future__ import annotations
 
+import dataclasses
 import json
 from pathlib import Path
 from typing import Final
@@ -293,7 +294,9 @@ def test_inverse_neighbors_no_match_returns_empty_set() -> None:
 # --- validator.py edge cases ------------------------------------------------
 
 
-def _write_jsonl(tmp_path: Path, nodes: list[dict], edges: list[dict]) -> tuple[Path, Path]:
+def _write_jsonl(
+    tmp_path: Path, nodes: list[dict], edges: list[dict]
+) -> tuple[Path, Path]:
     nodes_path = tmp_path / "nodes.jsonl"
     edges_path = tmp_path / "edges.jsonl"
     nodes_path.write_text("\n".join(json.dumps(n) for n in nodes), encoding="utf-8")
@@ -421,9 +424,7 @@ def test_load_invariant_shapes_returns_graph_with_edge_shapes() -> None:
 def test_load_quality_shapes_returns_graph_with_id_prefix_shapes() -> None:
     g = load_quality_shapes()
     assert isinstance(g, Graph)
-    person_prefix = URIRef(
-        "https://free-will.app/ontology/Shape_Person_IdPrefix"
-    )
+    person_prefix = URIRef("https://free-will.app/ontology/Shape_Person_IdPrefix")
     sh_namespace = rdflib.Namespace("http://www.w3.org/ns/shacl#")
     assert (person_prefix, rdflib.RDF.type, sh_namespace.NodeShape) in g
 
@@ -475,7 +476,7 @@ def test_violation_dataclass_is_frozen() -> None:
         result_path="p",
         value="v",
     )
-    with pytest.raises(Exception):
+    with pytest.raises(dataclasses.FrozenInstanceError):
         v.focus_node = "z"  # type: ignore[misc]
 
 

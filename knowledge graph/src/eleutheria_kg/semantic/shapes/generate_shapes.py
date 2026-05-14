@@ -231,7 +231,7 @@ def _node_prefix_shape(node_type: str) -> str:
         return ""
     # SPARQL ``||`` chain checking each foreign prefix.
     foreign_filters = " || ".join(
-        f"STRSTARTS( ?localName, \"{p}_\" )" for p in other_prefixes
+        f'STRSTARTS( ?localName, "{p}_" )' for p in other_prefixes
     )
     msg = _ttl_string(
         f"Node ID for type `{node_type}` uses a different canonical "
@@ -360,9 +360,7 @@ kg:Shape_{pascal}_PeriodProp a sh:PropertyShape ;
         )
         not_blocks: list[str] = []
         for _variant, pat in hygiene_patterns:
-            not_blocks.append(
-                f"        sh:not [ sh:pattern \"{pat}\" ; sh:flags \"s\" ] ;"
-            )
+            not_blocks.append(f'        sh:not [ sh:pattern "{pat}" ; sh:flags "s" ] ;')
         not_joined = "\n".join(not_blocks)
         chunks.append(
             f"""kg:Shape_{pascal}_DescriptionHygiene a sh:NodeShape ;
@@ -397,16 +395,26 @@ def main() -> int:
     written: list[Path] = []
 
     # Invariants — must produce zero violations on the prod KG.
-    written.append(_write(INVARIANTS_DIR / "edges.ttl", generate_edges_ttl(edges_ontology)))
+    written.append(
+        _write(INVARIANTS_DIR / "edges.ttl", generate_edges_ttl(edges_ontology))
+    )
 
     # Quality goals — drive the triage backlog. Severity Warning.
-    written.append(_write(QUALITY_DIR / "id_prefix.ttl", generate_id_prefix_ttl(nodes_ontology)))
+    written.append(
+        _write(QUALITY_DIR / "id_prefix.ttl", generate_id_prefix_ttl(nodes_ontology))
+    )
     written.append(_write(QUALITY_DIR / "claims.ttl", generate_claims_ttl()))
-    written.append(_write(QUALITY_DIR / "formatting.ttl", generate_formatting_ttl(nodes_ontology)))
+    written.append(
+        _write(QUALITY_DIR / "formatting.ttl", generate_formatting_ttl(nodes_ontology))
+    )
 
     # Remove the legacy flat-file shapes if they linger, so the loader
     # never picks up a stale union by accident.
-    for legacy in (SHAPES_DIR / "core.ttl", SHAPES_DIR / "claims.ttl", SHAPES_DIR / "formatting.ttl"):
+    for legacy in (
+        SHAPES_DIR / "core.ttl",
+        SHAPES_DIR / "claims.ttl",
+        SHAPES_DIR / "formatting.ttl",
+    ):
         if legacy.exists():
             legacy.unlink()
 

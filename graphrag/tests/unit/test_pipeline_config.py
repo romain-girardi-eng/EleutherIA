@@ -67,16 +67,24 @@ class TestPipelineConfig:
 
 class TestQueryTypeToComplexity:
     def test_specific_entity_is_simple(self):
-        assert query_type_to_complexity(QueryType.SPECIFIC_ENTITY) == QueryComplexity.SIMPLE
+        assert (
+            query_type_to_complexity(QueryType.SPECIFIC_ENTITY)
+            == QueryComplexity.SIMPLE
+        )
 
     def test_global_abstract_is_medium(self):
-        assert query_type_to_complexity(QueryType.GLOBAL_ABSTRACT) == QueryComplexity.MEDIUM
+        assert (
+            query_type_to_complexity(QueryType.GLOBAL_ABSTRACT)
+            == QueryComplexity.MEDIUM
+        )
 
     def test_multi_hop_is_complex(self):
         assert query_type_to_complexity(QueryType.MULTI_HOP) == QueryComplexity.COMPLEX
 
     def test_comparative_is_complex(self):
-        assert query_type_to_complexity(QueryType.COMPARATIVE) == QueryComplexity.COMPLEX
+        assert (
+            query_type_to_complexity(QueryType.COMPARATIVE) == QueryComplexity.COMPLEX
+        )
 
     def test_temporal_is_complex(self):
         assert query_type_to_complexity(QueryType.TEMPORAL) == QueryComplexity.COMPLEX

@@ -152,7 +152,9 @@ class TestExtractClaimContext:
 
     def test_finds_citation_in_sentence(self):
         verifier = CitationVerifier(llm=AsyncMock())
-        answer = "First sentence. Chrysippus argued for determinism [1]. Third sentence."
+        answer = (
+            "First sentence. Chrysippus argued for determinism [1]. Third sentence."
+        )
         claim = verifier._extract_claim_context(answer, "1")
         assert claim is not None
         assert "[1]" in claim

@@ -41,7 +41,7 @@ import json
 import os
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -94,7 +94,7 @@ async def run_smoke(
         ClaimStatus,
         RAGState,
     )
-    from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
+    from eleutheria_graphrag.services.llm_service import LLMService
     from eleutheria_graphrag.services.retrieval_strategy import SQLStrategy
     from eleutheria_kg.services.snapshot import load_kg_snapshot
 
@@ -137,14 +137,8 @@ async def run_smoke(
     # Pick the inferred triple whose object node has the richest description
     # — that gives the LLM the most material to ground a real prose claim.
     inferred_sorted = sorted(
-        (
-            t
-            for t in state.inferred_edges
-            if t[0] == seed_node_id and t[1] == "wrote"
-        ),
-        key=lambda t: -(
-            len(str(node_lookup.get(t[2], {}).get("description") or ""))
-        ),
+        (t for t in state.inferred_edges if t[0] == seed_node_id and t[1] == "wrote"),
+        key=lambda t: -(len(str(node_lookup.get(t[2], {}).get("description") or ""))),
     )
     if not inferred_sorted:
         raise RuntimeError(
@@ -232,7 +226,7 @@ async def run_smoke(
     # 6) Build a portable JSON-safe report.
     elapsed = time.perf_counter() - started
     report: dict[str, Any] = {
-        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "timestamp_utc": datetime.now(UTC).isoformat(),
         "elapsed_seconds": round(elapsed, 3),
         "question": question,
         "snapshot": {
@@ -324,11 +318,7 @@ def main() -> int:
     print(json.dumps(report, indent=2, ensure_ascii=False))
     # Assert at least one claim has a non-empty proof_chain — that's the
     # whole point of the smoke test.
-    populated = [
-        entry
-        for entry in report["claim_ledger"]
-        if entry.get("proof_chain")
-    ]
+    populated = [entry for entry in report["claim_ledger"] if entry.get("proof_chain")]
     if not populated:
         print("\nFAIL: no claim received a populated proof_chain", file=sys.stderr)
         return 1

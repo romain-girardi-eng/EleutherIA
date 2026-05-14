@@ -123,7 +123,7 @@ class TestAttributionMatching:
         }
         # LLM claims this is from Phaedo but it's actually Crito
         answer = (
-            'Plato\'s Phaedo 43a provides: '
+            "Plato's Phaedo 43a provides: "
             '"ΣΩ. τί τηνικάδε ἀφῖξαι, ὦ Κρίτων; ἢ οὐ πρῲ ἔτι ἐστίν;"'
         )
         result = await verify_greek_text(answer, db)
@@ -139,7 +139,9 @@ class TestSanitizeAnswer:
         db = AsyncMock()
         db.fetchrow.return_value = None
         # 10+ Greek words — should be removed
-        long_greek = "ψυχὴ αὐτεξούσιος ἐστιν καὶ ἐλευθέρα πάντων τῶν δεσμῶν τῆς εἱμαρμένης"
+        long_greek = (
+            "ψυχὴ αὐτεξούσιος ἐστιν καὶ ἐλευθέρα πάντων τῶν δεσμῶν τῆς εἱμαρμένης"
+        )
         answer = f'He wrote: "{long_greek}" which proves his point.'
         verification = await verify_greek_text(answer, db)
         sanitized = sanitize_answer(answer, verification)
@@ -149,7 +151,11 @@ class TestSanitizeAnswer:
     @pytest.mark.asyncio
     async def test_verified_text_kept(self):
         db = AsyncMock()
-        db.fetchrow.return_value = {"passage_id": "p1", "title": "De Fato", "canonical_ref": "14"}
+        db.fetchrow.return_value = {
+            "passage_id": "p1",
+            "title": "De Fato",
+            "canonical_ref": "14",
+        }
         greek = "ἔνεστι δ' ὁρᾶν εἰ ταῦτα λέγοντες σώζουσιν τὰς κοινὰς"
         answer = f'Alexander writes: "{greek}"'
         verification = await verify_greek_text(answer, db)

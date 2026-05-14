@@ -38,11 +38,13 @@ async def test_incoming_only(mock_deps):
 @pytest.mark.asyncio
 async def test_relation_filter(mock_deps):
     tool = GetNeighborsTool(mock_deps)
-    result = await tool.execute({
-        "node_id": "person_origen",
-        "relation_filter": "discusses",
-        "direction": "out",
-    })
+    result = await tool.execute(
+        {
+            "node_id": "person_origen",
+            "relation_filter": "discusses",
+            "direction": "out",
+        }
+    )
     for edge in result.edges:
         assert edge.relation == "discusses"
     assert len(result.edges) == 1

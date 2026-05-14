@@ -62,7 +62,7 @@ from .conftest import make_ctx, make_deps
 
 class TestHelpers:
     def test_parse_json_supports_fences(self):
-        assert _parse_json("```json\n{\"ok\": true}\n```") == {"ok": True}
+        assert _parse_json('```json\n{"ok": true}\n```') == {"ok": True}
 
     def test_parse_json_supports_json_surrounded_by_prose(self):
         raw = 'Here is the result:\n```json\n{"claims": [{"claim": "x"}]}\n```\nUse it carefully.'
@@ -108,7 +108,12 @@ class TestHelpers:
         state = RAGState()
         state.primary_evidence = [
             Evidence(id="n1", label="Chrysippus", type="Person", period="Hellenistic"),
-            Evidence(id="p1", label="SVF 2.912", type="passage", text_content="Fate is a chain of causes."),
+            Evidence(
+                id="p1",
+                label="SVF 2.912",
+                type="passage",
+                text_content="Fate is a chain of causes.",
+            ),
         ]
         flat = _build_context_from_evidence(state.primary_evidence)
         packed = _build_hierarchical_context(state)
@@ -126,7 +131,9 @@ class TestHelpers:
     def test_quality_badge_high_when_score_80_and_citations(self):
         state = RAGState()
         state.sufficiency_score = 0.85
-        state.citations = [Citation(ref="P1", type="passage", id="p1", label="De Fato 1.1")]
+        state.citations = [
+            Citation(ref="P1", type="passage", id="p1", label="De Fato 1.1")
+        ]
         assert _quality_badge_from_state(state) == "High"
 
     def test_quality_badge_medium_when_score_60_no_citations(self):
@@ -168,7 +175,9 @@ class TestHelpers:
         assert titles[0] == "Chrysippus, Fragments (SVF II)"
 
     def test_bundle_query_score_prioritizes_exact_reference_for_quote_queries(self):
-        state = RAGState(question="Quote Alexander of Aphrodisias, De Fato 1 in Greek and English.")
+        state = RAGState(
+            question="Quote Alexander of Aphrodisias, De Fato 1 in Greek and English."
+        )
         target = EvidenceBundle(
             bundle_id="b1",
             work_id="w1",
@@ -182,12 +191,20 @@ class TestHelpers:
             language="grc",
             token_estimate=20,
         )
-        distractor = target.model_copy(update={"bundle_id": "b2", "canonical_ref": "De Fato 38"})
+        distractor = target.model_copy(
+            update={"bundle_id": "b2", "canonical_ref": "De Fato 38"}
+        )
 
-        assert _bundle_query_score(target, state) > _bundle_query_score(distractor, state)
+        assert _bundle_query_score(target, state) > _bundle_query_score(
+            distractor, state
+        )
 
-    def test_default_research_facets_prioritize_doctrinal_structure_for_school_query(self):
-        state = RAGState(question="What did the Stoics believe about fate and moral responsibility?")
+    def test_default_research_facets_prioritize_doctrinal_structure_for_school_query(
+        self,
+    ):
+        state = RAGState(
+            question="What did the Stoics believe about fate and moral responsibility?"
+        )
         state.query_type = QueryType.GLOBAL_ABSTRACT
 
         titles = [facet.title for facet in _default_research_facets(state)]
@@ -199,7 +216,12 @@ class TestHelpers:
     def test_render_evidence_packet_includes_bundle_and_metadata_entries(self):
         state = RAGState(question="What did the Stoics believe about fate?")
         state.primary_evidence = [
-            Evidence(id="node-1", label="Heimarmenê", type="concept", description="Stoic fate"),
+            Evidence(
+                id="node-1",
+                label="Heimarmenê",
+                type="concept",
+                description="Stoic fate",
+            ),
         ]
         state.context_pack = ContextPack(
             bundle_refs={"bundle-1": "P1"},
@@ -219,7 +241,11 @@ class TestHelpers:
             ],
         )
         state.claim_ledger = [
-            ClaimLedgerItem(claim="Claim", evidence_ids=["node-1", "bundle-1"], support_type="passage"),
+            ClaimLedgerItem(
+                claim="Claim",
+                evidence_ids=["node-1", "bundle-1"],
+                support_type="passage",
+            ),
         ]
 
         packet = _render_evidence_packet(state)
@@ -246,7 +272,10 @@ class TestHelpers:
     def test_normalize_reference_markers_repairs_nested_ref_blocks(self):
         line = "Origen reconciles providence and freedom [P14, [3]]."
 
-        assert _normalize_reference_markers(line, ["P14", "3"]) == "Origen reconciles providence and freedom [P14, 3]."
+        assert (
+            _normalize_reference_markers(line, ["P14", "3"])
+            == "Origen reconciles providence and freedom [P14, 3]."
+        )
 
     def test_verify_preserves_bilingual_quote_block_when_only_one_line_has_ref(self):
         state = RAGState(question="Quote Justin on fate.")
@@ -281,7 +310,9 @@ class TestHelpers:
         assert citations[0].ref == "P1"
 
     def test_augment_claim_ledger_from_dossier_adds_missing_facets_and_quotes(self):
-        state = RAGState(question="What did Justin Martyr believe about free will and moral responsibility?")
+        state = RAGState(
+            question="What did Justin Martyr believe about free will and moral responsibility?"
+        )
         state.query_type = QueryType.GLOBAL_ABSTRACT
         state.research_notebook.facets = [
             ResearchFacet(
@@ -364,12 +395,18 @@ class TestHelpers:
             }
         )
         state.primary_evidence = [
-            Evidence(id="node-1", label="Stoicism", type="school", description="Stoic school"),
+            Evidence(
+                id="node-1", label="Stoicism", type="school", description="Stoic school"
+            ),
         ]
-        state.research_notebook.question_frame = "Stoic doctrine of fate and responsibility"
-        state.research_notebook.facets = [
-            state.research_notebook.facets[0]
-        ] if state.research_notebook.facets else []
+        state.research_notebook.question_frame = (
+            "Stoic doctrine of fate and responsibility"
+        )
+        state.research_notebook.facets = (
+            [state.research_notebook.facets[0]]
+            if state.research_notebook.facets
+            else []
+        )
         if not state.research_notebook.facets:
             from eleutheria_graphrag.agents.state import ResearchFacet
 
@@ -383,8 +420,12 @@ class TestHelpers:
                     priority=1,
                 )
             ]
-        state.research_notebook.competing_hypotheses = ["Stoic fate is providential determinism."]
-        state.research_notebook.open_questions = ["How does assent preserve responsibility?"]
+        state.research_notebook.competing_hypotheses = [
+            "Stoic fate is providential determinism."
+        ]
+        state.research_notebook.open_questions = [
+            "How does assent preserve responsibility?"
+        ]
         state.evidence_bundles = [
             EvidenceBundle(
                 bundle_id="bundle-1",
@@ -528,7 +569,9 @@ class TestHelpers:
         assert translation["kg_node_id"] == "passage_grc_1_en"
         assert translation["language"] == "eng"
 
-    def test_build_research_graph_work_card_classifies_testimony_bundles_correctly(self):
+    def test_build_research_graph_work_card_classifies_testimony_bundles_correctly(
+        self,
+    ):
         """Work cards must count testimony bundles under testimony_count, not primary_count."""
         state = RAGState(question="What did the Stoics believe about fate?")
         testimony_bundle = EvidenceBundle(
@@ -647,7 +690,9 @@ class TestDiscoverCorpus:
             ],
         )
         deps.node_lookup["chrysippus"]["type"] = "Person"
-        deps.retrieval_strategy = _FakeStrategy(seeds=["chrysippus"], anchors=["chrysippus"])
+        deps.retrieval_strategy = _FakeStrategy(
+            seeds=["chrysippus"], anchors=["chrysippus"]
+        )
         state = RAGState(question="Who was Chrysippus?")
         state.expanded_query = "Chrysippus"
         ctx = make_ctx(state, deps)
@@ -657,8 +702,14 @@ class TestDiscoverCorpus:
         assert result.__class__.__name__ == "BuildResearchNotebook"
         assert any(ev.id == "chrysippus" for ev in state.primary_evidence)
         assert any(ev.type == "passage" for ev in state.primary_evidence)
-        assert any(call.tool_name == "search_entities" for call in state.research_notebook.tool_calls)
-        assert any(decision.decision_type == "seed_selection" for decision in state.research_notebook.reading_decisions)
+        assert any(
+            call.tool_name == "search_entities"
+            for call in state.research_notebook.tool_calls
+        )
+        assert any(
+            decision.decision_type == "seed_selection"
+            for decision in state.research_notebook.reading_decisions
+        )
 
     @pytest.mark.asyncio
     async def test_fetches_linked_passages_from_seed_anchors_not_full_context(self):
@@ -685,7 +736,9 @@ class TestDiscoverCorpus:
             },
             db_fetch_results=[],
         )
-        deps.retrieval_strategy = _FakeStrategy(seeds=["chrysippus"], anchors=["chrysippus"])
+        deps.retrieval_strategy = _FakeStrategy(
+            seeds=["chrysippus"], anchors=["chrysippus"]
+        )
         state = RAGState(question="Who was Chrysippus?")
         state.expanded_query = "Chrysippus"
         ctx = make_ctx(state, deps)
@@ -914,7 +967,9 @@ class TestExpandEvidenceBundles:
         )
         deps.db.fetch = AsyncMock(return_value=[])
 
-        state = RAGState(question="What did the Stoics believe about fate and moral responsibility?")
+        state = RAGState(
+            question="What did the Stoics believe about fate and moral responsibility?"
+        )
         state.metadata["selected_sections"] = [
             {
                 "work_id": "work-1",
@@ -944,7 +999,10 @@ class TestExpandEvidenceBundles:
         result = await ExpandEvidenceBundles().run(ctx)
 
         assert result.__class__.__name__ == "SeekCounterEvidence"
-        assert {bundle.work_title for bundle in state.evidence_bundles} == {"De Fato", "Enchiridion"}
+        assert {bundle.work_title for bundle in state.evidence_bundles} == {
+            "De Fato",
+            "Enchiridion",
+        }
         assert len(state.context_pack.passage_bundles) == 2
 
     def test_context_pack_prioritizes_query_relevant_bundles(self):
@@ -978,10 +1036,17 @@ class TestExpandEvidenceBundles:
             "bundle-chrysippus",
             "bundle-justin",
         ]
-        assert state.metadata["debug_trace"]["context_pack"]["top_bundle_rankings"][0]["bundle_id"] == "bundle-chrysippus"
+        assert (
+            state.metadata["debug_trace"]["context_pack"]["top_bundle_rankings"][0][
+                "bundle_id"
+            ]
+            == "bundle-chrysippus"
+        )
 
     def test_context_pack_diversifies_across_works_before_repeating_same_work(self):
-        state = RAGState(question="What did the Stoics believe about fate and moral responsibility?")
+        state = RAGState(
+            question="What did the Stoics believe about fate and moral responsibility?"
+        )
         state.evidence_bundles = [
             EvidenceBundle(
                 bundle_id="bundle-cicero-1",
@@ -1034,7 +1099,9 @@ class TestExpandEvidenceBundles:
         ]
 
     def test_scholarly_dossier_distinguishes_direct_text_from_testimony(self):
-        state = RAGState(question="What did the Stoics believe about fate and moral responsibility?")
+        state = RAGState(
+            question="What did the Stoics believe about fate and moral responsibility?"
+        )
         state.research_notebook.work_priorities = ["Discourses", "De Fato"]
         state.research_notebook.facets = state.research_notebook.facets or []
         state.primary_evidence = [
@@ -1156,7 +1223,9 @@ class TestRenderAndVerify:
 
     @pytest.mark.asyncio
     async def test_render_then_verify_keeps_grounded_lines(self):
-        deps = make_deps(llm_response="- Stoic fate is described as a chain of causes [P1]")
+        deps = make_deps(
+            llm_response="- Stoic fate is described as a chain of causes [P1]"
+        )
         state = RAGState(question="What is Stoic fate?")
         state.context_pack = ContextPack(
             bundle_refs={"bundle-1": "P1"},
@@ -1200,10 +1269,12 @@ class TestRenderAndVerify:
         # Compression repair is now disabled — only render + optional polish
         deps.llm.generate = AsyncMock(
             side_effect=[
-                "Opening thesis on Justin's doctrine [P1].\n\n### Core Doctrinal Thesis\nJustin rejects fatalism and defends what is up to us [P1].\n> Original: \"If everything happens by fate, nothing is up to us.\" [P1]\n> Translation: \"If everything happens by fate, nothing is up to us.\" [P1]\n\n### Agency and Responsibility\nJustin links free choice to praise and blame before divine judgment [P2].",
+                'Opening thesis on Justin\'s doctrine [P1].\n\n### Core Doctrinal Thesis\nJustin rejects fatalism and defends what is up to us [P1].\n> Original: "If everything happens by fate, nothing is up to us." [P1]\n> Translation: "If everything happens by fate, nothing is up to us." [P1]\n\n### Agency and Responsibility\nJustin links free choice to praise and blame before divine judgment [P2].',
             ]
         )
-        state = RAGState(question="What did Justin Martyr believe about free will and moral responsibility?")
+        state = RAGState(
+            question="What did Justin Martyr believe about free will and moral responsibility?"
+        )
         state.query_type = QueryType.GLOBAL_ABSTRACT
         state.research_notebook.facets = [
             ResearchFacet(
@@ -1282,7 +1353,12 @@ class TestRenderAndVerify:
         state = RAGState(question="What is Stoic fate?")
         state.raw_answer = "Opening thesis [1].\n\n### Definition\nStoic fate is universal causal order [1].\n\n### Agency\nAssent remains in our power [1]."
         state.primary_evidence = [
-            Evidence(id="node-1", label="Heimarmenê", type="concept", description="Stoic fate"),
+            Evidence(
+                id="node-1",
+                label="Heimarmenê",
+                type="concept",
+                description="Stoic fate",
+            ),
         ]
         state.context_pack = ContextPack(node_refs={"node-1": "1"})
         ctx = make_ctx(state, deps)
@@ -1304,14 +1380,19 @@ class TestRenderAndVerify:
 
         assert isinstance(verify_result, End)
         answer = verify_result.data
-        assert answer.answer == "Available evidence in the current corpus is insufficient to answer confidently."
+        assert (
+            answer.answer
+            == "Available evidence in the current corpus is insufficient to answer confidently."
+        )
         assert answer.citations == []
 
     @pytest.mark.asyncio
     async def test_verify_drops_unsupported_exact_quote_lines(self):
         deps = make_deps()
         state = RAGState(question="What is Stoic fate?")
-        state.raw_answer = 'Original: "Invented Greek text" [P1]\nStoic fate is a chain of causes [P1]'
+        state.raw_answer = (
+            'Original: "Invented Greek text" [P1]\nStoic fate is a chain of causes [P1]'
+        )
         state.context_pack = ContextPack(
             bundle_refs={"bundle-1": "P1"},
             passage_bundles=[
@@ -1341,7 +1422,12 @@ class TestRenderAndVerify:
         state = RAGState(question="What is Stoic fate?")
         state.raw_answer = "Stoic fate is universal causal order [1, P1]."
         state.primary_evidence = [
-            Evidence(id="node-1", label="Heimarmenê", type="concept", description="Stoic fate"),
+            Evidence(
+                id="node-1",
+                label="Heimarmenê",
+                type="concept",
+                description="Stoic fate",
+            ),
         ]
         state.context_pack = ContextPack(
             bundle_refs={"bundle-1": "P1"},
@@ -1372,7 +1458,12 @@ class TestRenderAndVerify:
         state = RAGState(question="What is Stoic fate?")
         state.raw_answer = "## Definition\nStoic fate is universal causal order [1]."
         state.primary_evidence = [
-            Evidence(id="node-1", label="Heimarmenê", type="concept", description="Stoic fate"),
+            Evidence(
+                id="node-1",
+                label="Heimarmenê",
+                type="concept",
+                description="Stoic fate",
+            ),
         ]
         state.context_pack = ContextPack(node_refs={"node-1": "1"})
         ctx = make_ctx(state, deps)
@@ -1447,7 +1538,9 @@ class TestRenderAndVerify:
     @pytest.mark.asyncio
     async def test_draft_claim_ledger_uses_deterministic_quote_bundle(self):
         deps = make_deps(llm_response="should not be used")
-        state = RAGState(question="Quote Alexander of Aphrodisias, De Fato 1 in Greek and English.")
+        state = RAGState(
+            question="Quote Alexander of Aphrodisias, De Fato 1 in Greek and English."
+        )
         state.context_pack = ContextPack(
             prompt_context="ctx",
             bundle_refs={"bundle-1": "P1"},
@@ -1585,7 +1678,9 @@ class TestRenderAndVerify:
         await DraftClaimLedger().run(ctx)
 
         assert state.metadata["claim_ledger_mode"] == "llm"
-        assert state.claim_ledger[0].evidence_ids == ["concept_heimarmene_fate_stoics_j0k1l2m3"]
+        assert state.claim_ledger[0].evidence_ids == [
+            "concept_heimarmene_fate_stoics_j0k1l2m3"
+        ]
 
     @pytest.mark.asyncio
     async def test_draft_claim_ledger_salvages_truncated_json(self):
@@ -1616,11 +1711,15 @@ class TestRenderAndVerify:
         assert state.claim_ledger[0].evidence_ids == ["bundle-1"]
 
     @pytest.mark.asyncio
-    async def test_draft_claim_ledger_marks_quote_queries_insufficient_without_passage_support(self):
+    async def test_draft_claim_ledger_marks_quote_queries_insufficient_without_passage_support(
+        self,
+    ):
         deps = make_deps(
             llm_response="""{"claims":[{"claim":"Parmenides could not have used liberum arbitrium.","evidence_ids":["node-1"],"quote_original":null,"quote_translation":null,"support_type":"metadata","confidence":0.95,"status":"supported"}]}"""
         )
-        state = RAGState(question="Quote a passage where Parmenides uses the phrase liberum arbitrium.")
+        state = RAGState(
+            question="Quote a passage where Parmenides uses the phrase liberum arbitrium."
+        )
         state.context_pack = ContextPack(
             prompt_context="## KG Metadata\n[1] liberum arbitrium",
             node_refs={"node-1": "1"},
@@ -1667,7 +1766,9 @@ class TestSeekCounterEvidence:
             "Fate is incompatible with free will",
         ]
 
-        deps = make_deps(llm_response='{"bundle_ids": ["bundle-b"], "rationale": "Origen rejects fate"}')
+        deps = make_deps(
+            llm_response='{"bundle_ids": ["bundle-b"], "rationale": "Origen rejects fate"}'
+        )
         ctx = make_ctx(state, deps)
 
         result = await SeekCounterEvidence().run(ctx)

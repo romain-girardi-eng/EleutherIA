@@ -138,15 +138,15 @@ def test_draft_rejects_duplicate_footnote_numbers(sample_citation: Citation) -> 
         ThesisDraft(
             title="t",
             sections=[
-                Section(heading="s", paragraphs=[Paragraph(text="p", footnote_refs=[1])])
+                Section(
+                    heading="s", paragraphs=[Paragraph(text="p", footnote_refs=[1])]
+                )
             ],
             footnotes=[
                 Footnote(n=1, text="a", citations=[sample_citation]),
                 Footnote(n=1, text="b", citations=[sample_citation]),
             ],
-            bibliography=[
-                BibliographyEntry(kind="primary", author="x", title="y")
-            ],
+            bibliography=[BibliographyEntry(kind="primary", author="x", title="y")],
         )
 
 
@@ -213,8 +213,12 @@ def test_bibtex_keys_disambiguate_on_collision(sample_citation: Citation) -> Non
         ],
         footnotes=[Footnote(n=1, text="a", citations=[sample_citation])],
         bibliography=[
-            BibliographyEntry(kind="primary", author="Aristotle", title="Ethics", year=1894),
-            BibliographyEntry(kind="primary", author="Aristotle", title="Ethics", year=1894),
+            BibliographyEntry(
+                kind="primary", author="Aristotle", title="Ethics", year=1894
+            ),
+            BibliographyEntry(
+                kind="primary", author="Aristotle", title="Ethics", year=1894
+            ),
         ],
     )
     keys = [e.bibtex_key for e in draft.bibliography]
@@ -308,9 +312,13 @@ def test_latex_escapes_specials() -> None:
 def test_bibtex_has_ascii_keys(sample_draft: ThesisDraft) -> None:
     bib = ThesisRenderer().to_bibtex(sample_draft)
     assert "@book{aristotle-nicomachean-ethics-1894" in bib
-    assert "@article{susanne-bobzien-determinism-and-freedom-in-stoic-1998" in bib  # truncated title slug
+    assert (
+        "@article{susanne-bobzien-determinism-and-freedom-in-stoic-1998" in bib
+    )  # truncated title slug
     # ASCII-only keys
-    assert all(ord(c) < 128 for line in bib.splitlines() if line.startswith("@") for c in line)
+    assert all(
+        ord(c) < 128 for line in bib.splitlines() if line.startswith("@") for c in line
+    )
 
 
 def test_bibtex_roundtrip_preserves_metadata(sample_draft: ThesisDraft) -> None:
