@@ -33,6 +33,7 @@ const CosmographPage = lazy(() => import('./pages/CosmographPage'));
 const SearchPage = lazy(() => import('./pages/SearchPage'));
 const GraphRAGPage = lazy(() => import('./pages/GraphRAGPage'));
 const GraphRAGShowcase = lazy(() => import('./pages/GraphRAGShowcase'));
+const ResearchPage = lazy(() => import('./pages/Research'));
 const AncientWorksListingPage = lazy(() => import('./pages/AncientWorksListingPage'));
 const SimpleTextReader = lazy(() => import('./pages/SimpleTextReader'));
 const CanonicalTextReader = lazy(() => import('./pages/CanonicalTextReader'));
@@ -59,6 +60,7 @@ function getPageTitle(pathname: string, t: TFunction): string {
     '/search': t('appShell.pageTitles.search'),
     '/graphrag': t('appShell.pageTitles.graphrag'),
     '/graphrag-showcase': t('appShell.pageTitles.graphragShowcase'),
+    '/research': t('appShell.pageTitles.research'),
     '/texts': t('appShell.pageTitles.texts'),
     '/bibliography': t('appShell.pageTitles.bibliography'),
     '/about': t('appShell.pageTitles.about'),
@@ -244,6 +246,7 @@ function AppContent() {
               <NavLink to="/visualizer">{t('nav.visualizer')}</NavLink>
               <NavLink to="/search">{t('nav.search')}</NavLink>
               <NavLink to="/graphrag">{t('nav.graphrag')}</NavLink>
+              <NavLink to="/research">{t('nav.research')}</NavLink>
               <NavLink to="/texts">{t('nav.texts')}</NavLink>
               <NavLink to="/bibliography">{t('nav.bibliography')}</NavLink>
               <NavLink to="/about">{t('nav.about')}</NavLink>
@@ -332,6 +335,7 @@ function AppContent() {
                     { to: '/visualizer', label: t('nav.visualizer') },
                     { to: '/search', label: t('nav.search') },
                     { to: '/graphrag', label: t('nav.graphrag') },
+                    { to: '/research', label: t('nav.research') },
                     { to: '/texts', label: t('nav.texts') },
                     { to: '/bibliography', label: t('nav.bibliography') },
                     { to: '/about', label: t('nav.about') },
@@ -402,6 +406,7 @@ function AppContent() {
               <Route path="/search" element={<SearchPage />} />
               <Route path="/graphrag" element={<GraphRAGPage />} />
               <Route path="/graphrag-showcase" element={<GraphRAGShowcase />} />
+              <Route path="/research" element={<ResearchPage />} />
               <Route path="/texts" element={<AncientWorksListingPage />} />
               <Route path="/texts/:textId/book" element={<BookReaderPage />} />
               <Route path="/texts/:textId" element={<CanonicalTextReader />} />

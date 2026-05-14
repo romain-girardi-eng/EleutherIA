@@ -12,6 +12,7 @@ export const extraResources = {
         search: 'Search',
         graphrag: 'GraphRAG Q&A',
         graphragShowcase: 'GraphRAG Showcase',
+        research: 'Live Research',
         texts: 'Ancient Texts',
         bibliography: 'Bibliography',
         about: 'About',
@@ -628,6 +629,83 @@ export const extraResources = {
         aboutProject: 'About the project',
       },
     },
+    research: {
+      live: 'Live',
+      page: {
+        title: 'Live Research',
+        intro:
+          'Watch the agentic research process unfold in real time: sub-agents reason aloud, sources stream in as they are found, and the knowledge graph lights up around the answer.',
+        queryLabel: 'Research question',
+        queryPlaceholder: 'Ask a scholarly question about ancient free will…',
+        send: 'Send',
+        cancel: 'Stop',
+        newSession: 'New session',
+        suggestionsLabel: 'Try:',
+      },
+      suggestions: {
+        chrysippusCompatibilism:
+          'How does Chrysippus reconcile fate and moral responsibility?',
+        augustinePelagius:
+          "What is at stake in Augustine's controversy with Pelagius?",
+        stoicFate:
+          'Which arguments did the Academics raise against Stoic fate?',
+      },
+      status: {
+        idle: 'Ready',
+        connecting: 'Connecting',
+        streaming: 'Researching',
+        synthesizing: 'Writing answer',
+        complete: 'Answer ready',
+        cancelled: 'Cancelled',
+        error: 'Error',
+      },
+      timeline: {
+        title: 'Research timeline',
+        idleTitle: 'No session yet',
+        idleSubtitle: 'The agent\'s steps will appear here as it works.',
+        thinking: 'Agent thinking…',
+        queryStarted: 'Query started',
+        answerReady: 'Final answer',
+        citationsCount: 'verified citations',
+      },
+      citations: {
+        title: 'Sources found',
+        empty: 'Citations will appear here as the agent finds them.',
+        sourcePrefix: 'Source',
+        verified: 'Verified citation',
+        refuted: 'Refuted citation',
+        pending: 'Verification pending',
+        expand: 'Read more',
+        collapse: 'Collapse',
+        confidence: {
+          high: 'high confidence',
+          medium: 'medium confidence',
+          low: 'low confidence',
+        },
+      },
+      kgViz: {
+        title: 'Live knowledge graph',
+        nodesLabel: 'nodes touched',
+        ariaLabel: 'Knowledge graph nodes activated during the research session',
+        idle: 'No nodes activated yet',
+      },
+      answer: {
+        idle: 'No answer yet',
+        idleSubtitle: 'Submit a question to begin a research session.',
+        preparing: 'Preparing the answer…',
+        citationMissing: 'Citation not yet received',
+      },
+      subagents: {
+        ConceptMapper: 'Concept Mapper',
+        SourceFinder: 'Source Finder',
+        TextVerifier: 'Text Verifier',
+        Synthesizer: 'Synthesizer',
+      },
+      errors: {
+        streamFailed: 'Stream failed',
+        retrying: 'Retrying… (attempt {{count}})',
+      },
+    },
   },
   fr: {
     common: {
@@ -642,6 +720,7 @@ export const extraResources = {
         search: 'Recherche',
         graphrag: 'Q&R GraphRAG',
         graphragShowcase: 'Démonstration GraphRAG',
+        research: 'Recherche en direct',
         texts: 'Textes anciens',
         bibliography: 'Bibliographie',
         about: 'À propos',
@@ -1262,6 +1341,86 @@ export const extraResources = {
         aboutProject: 'À propos du projet',
       },
     },
+    research: {
+      live: 'En direct',
+      page: {
+        title: 'Recherche en direct',
+        intro:
+          "Suivez en temps réel le processus de recherche agentique : les sous-agents raisonnent à voix haute, les sources apparaissent au fil de leur découverte, et le graphe de connaissances s'illumine autour de la réponse.",
+        queryLabel: 'Question de recherche',
+        queryPlaceholder:
+          'Posez une question savante sur le libre arbitre antique…',
+        send: 'Envoyer',
+        cancel: 'Arrêter',
+        newSession: 'Nouvelle session',
+        suggestionsLabel: 'Essayez :',
+      },
+      suggestions: {
+        chrysippusCompatibilism:
+          'Comment Chrysippe concilie-t-il le destin et la responsabilité morale ?',
+        augustinePelagius:
+          'Quels sont les enjeux de la controverse entre Augustin et Pélage ?',
+        stoicFate:
+          'Quels arguments les Académiciens ont-ils opposés au destin stoïcien ?',
+      },
+      status: {
+        idle: 'Prêt',
+        connecting: 'Connexion',
+        streaming: 'Recherche en cours',
+        synthesizing: 'Rédaction de la réponse',
+        complete: 'Réponse prête',
+        cancelled: 'Annulé',
+        error: 'Erreur',
+      },
+      timeline: {
+        title: 'Journal de recherche',
+        idleTitle: 'Aucune session pour le moment',
+        idleSubtitle:
+          "Les étapes de l'agent apparaîtront ici au fil de son travail.",
+        thinking: 'Agent en réflexion…',
+        queryStarted: 'Question lancée',
+        answerReady: 'Réponse finale',
+        citationsCount: 'citations vérifiées',
+      },
+      citations: {
+        title: 'Sources trouvées',
+        empty: "Les citations apparaîtront ici dès que l'agent les trouvera.",
+        sourcePrefix: 'Source',
+        verified: 'Citation vérifiée',
+        refuted: 'Citation réfutée',
+        pending: 'Vérification en cours',
+        expand: 'Lire la suite',
+        collapse: 'Replier',
+        confidence: {
+          high: 'haute confiance',
+          medium: 'confiance moyenne',
+          low: 'faible confiance',
+        },
+      },
+      kgViz: {
+        title: 'Graphe en direct',
+        nodesLabel: 'nœuds activés',
+        ariaLabel:
+          'Nœuds du graphe de connaissances activés pendant la session de recherche',
+        idle: 'Aucun nœud activé pour le moment',
+      },
+      answer: {
+        idle: 'Aucune réponse pour le moment',
+        idleSubtitle: 'Soumettez une question pour démarrer une session.',
+        preparing: 'Préparation de la réponse…',
+        citationMissing: 'Citation non encore reçue',
+      },
+      subagents: {
+        ConceptMapper: 'Cartographe de concepts',
+        SourceFinder: 'Chercheur de sources',
+        TextVerifier: 'Vérificateur de textes',
+        Synthesizer: 'Synthétiseur',
+      },
+      errors: {
+        streamFailed: 'Échec du flux',
+        retrying: 'Nouvelle tentative… (essai {{count}})',
+      },
+    },
   },
   de: {
     common: {
@@ -1276,6 +1435,7 @@ export const extraResources = {
         search: 'Suche',
         graphrag: 'GraphRAG Q&A',
         graphragShowcase: 'GraphRAG-Demo',
+        research: 'Live-Recherche',
         texts: 'Antike Texte',
         bibliography: 'Bibliographie',
         about: 'Über',
@@ -1866,6 +2026,85 @@ export const extraResources = {
         aboutProject: 'Über das Projekt',
       },
     },
+    research: {
+      live: 'Live',
+      page: {
+        title: 'Live-Recherche',
+        intro:
+          'Verfolgen Sie den agentischen Rechercheprozess in Echtzeit: Sub-Agenten denken laut, Quellen erscheinen, sobald sie gefunden werden, und der Wissensgraph leuchtet rund um die Antwort auf.',
+        queryLabel: 'Forschungsfrage',
+        queryPlaceholder:
+          'Stellen Sie eine wissenschaftliche Frage zum antiken freien Willen…',
+        send: 'Senden',
+        cancel: 'Stoppen',
+        newSession: 'Neue Sitzung',
+        suggestionsLabel: 'Versuchen Sie:',
+      },
+      suggestions: {
+        chrysippusCompatibilism:
+          'Wie versöhnt Chrysipp Schicksal und moralische Verantwortung?',
+        augustinePelagius:
+          'Worum geht es in Augustins Auseinandersetzung mit Pelagius?',
+        stoicFate:
+          'Welche Argumente brachten die Akademiker gegen das stoische Schicksal vor?',
+      },
+      status: {
+        idle: 'Bereit',
+        connecting: 'Verbindung',
+        streaming: 'Recherchiert',
+        synthesizing: 'Antwort wird verfasst',
+        complete: 'Antwort fertig',
+        cancelled: 'Abgebrochen',
+        error: 'Fehler',
+      },
+      timeline: {
+        title: 'Recherche-Journal',
+        idleTitle: 'Noch keine Sitzung',
+        idleSubtitle: 'Die Schritte des Agenten erscheinen hier während der Arbeit.',
+        thinking: 'Agent denkt nach…',
+        queryStarted: 'Anfrage gestartet',
+        answerReady: 'Endgültige Antwort',
+        citationsCount: 'überprüfte Zitate',
+      },
+      citations: {
+        title: 'Gefundene Quellen',
+        empty: 'Zitate erscheinen hier, sobald der Agent sie findet.',
+        sourcePrefix: 'Quelle',
+        verified: 'Zitat überprüft',
+        refuted: 'Zitat widerlegt',
+        pending: 'Überprüfung läuft',
+        expand: 'Mehr lesen',
+        collapse: 'Einklappen',
+        confidence: {
+          high: 'hohe Zuverlässigkeit',
+          medium: 'mittlere Zuverlässigkeit',
+          low: 'geringe Zuverlässigkeit',
+        },
+      },
+      kgViz: {
+        title: 'Live-Wissensgraph',
+        nodesLabel: 'aktivierte Knoten',
+        ariaLabel:
+          'Wissensgraph-Knoten, die während der Recherche aktiviert wurden',
+        idle: 'Noch keine Knoten aktiviert',
+      },
+      answer: {
+        idle: 'Noch keine Antwort',
+        idleSubtitle: 'Stellen Sie eine Frage, um eine Sitzung zu starten.',
+        preparing: 'Antwort wird vorbereitet…',
+        citationMissing: 'Zitat noch nicht eingegangen',
+      },
+      subagents: {
+        ConceptMapper: 'Konzept-Kartograph',
+        SourceFinder: 'Quellensucher',
+        TextVerifier: 'Textverifizierer',
+        Synthesizer: 'Synthesizer',
+      },
+      errors: {
+        streamFailed: 'Stream fehlgeschlagen',
+        retrying: 'Erneuter Versuch… ({{count}})',
+      },
+    },
   },
   it: {
     common: {
@@ -1880,6 +2119,7 @@ export const extraResources = {
         search: 'Ricerca',
         graphrag: 'GraphRAG Q&A',
         graphragShowcase: 'Vetrina GraphRAG',
+        research: 'Ricerca dal vivo',
         texts: 'Testi antichi',
         bibliography: 'Bibliografia',
         about: 'Informazioni',
@@ -2500,6 +2740,85 @@ export const extraResources = {
         aboutProject: 'Informazioni sul progetto',
       },
     },
+    research: {
+      live: 'Dal vivo',
+      page: {
+        title: 'Ricerca dal vivo',
+        intro:
+          'Osserva il processo di ricerca agentica in tempo reale: i sub-agenti ragionano ad alta voce, le fonti compaiono man mano che vengono trovate, e il grafo della conoscenza si illumina intorno alla risposta.',
+        queryLabel: 'Domanda di ricerca',
+        queryPlaceholder:
+          'Poni una domanda accademica sul libero arbitrio antico…',
+        send: 'Invia',
+        cancel: 'Ferma',
+        newSession: 'Nuova sessione',
+        suggestionsLabel: 'Prova:',
+      },
+      suggestions: {
+        chrysippusCompatibilism:
+          'Come Crisippo concilia il fato e la responsabilità morale?',
+        augustinePelagius:
+          'Quali sono le poste in gioco nella controversia tra Agostino e Pelagio?',
+        stoicFate:
+          'Quali argomenti gli Accademici hanno opposto al fato stoico?',
+      },
+      status: {
+        idle: 'Pronto',
+        connecting: 'Connessione',
+        streaming: 'Ricerca in corso',
+        synthesizing: 'Stesura della risposta',
+        complete: 'Risposta pronta',
+        cancelled: 'Annullato',
+        error: 'Errore',
+      },
+      timeline: {
+        title: 'Diario di ricerca',
+        idleTitle: 'Nessuna sessione',
+        idleSubtitle: 'I passi dell\'agente appariranno qui durante il lavoro.',
+        thinking: 'Agente sta pensando…',
+        queryStarted: 'Domanda avviata',
+        answerReady: 'Risposta finale',
+        citationsCount: 'citazioni verificate',
+      },
+      citations: {
+        title: 'Fonti trovate',
+        empty: 'Le citazioni appariranno qui mentre l\'agente le trova.',
+        sourcePrefix: 'Fonte',
+        verified: 'Citazione verificata',
+        refuted: 'Citazione confutata',
+        pending: 'Verifica in corso',
+        expand: 'Leggi tutto',
+        collapse: 'Comprimi',
+        confidence: {
+          high: 'alta affidabilità',
+          medium: 'media affidabilità',
+          low: 'bassa affidabilità',
+        },
+      },
+      kgViz: {
+        title: 'Grafo dal vivo',
+        nodesLabel: 'nodi toccati',
+        ariaLabel:
+          'Nodi del grafo della conoscenza attivati durante la sessione di ricerca',
+        idle: 'Nessun nodo attivato per ora',
+      },
+      answer: {
+        idle: 'Nessuna risposta',
+        idleSubtitle: 'Invia una domanda per avviare una sessione di ricerca.',
+        preparing: 'Preparazione della risposta…',
+        citationMissing: 'Citazione non ancora ricevuta',
+      },
+      subagents: {
+        ConceptMapper: 'Cartografo di concetti',
+        SourceFinder: 'Cercatore di fonti',
+        TextVerifier: 'Verificatore di testi',
+        Synthesizer: 'Sintetizzatore',
+      },
+      errors: {
+        streamFailed: 'Flusso fallito',
+        retrying: 'Nuovo tentativo… ({{count}})',
+      },
+    },
   },
   el: {
     common: {
@@ -2514,6 +2833,7 @@ export const extraResources = {
         search: 'Αναζήτηση',
         graphrag: 'GraphRAG Ερωτήσεις & Απαντήσεις',
         graphragShowcase: 'Παρουσίαση GraphRAG',
+        research: 'Ζωντανή Έρευνα',
         texts: 'Αρχαία κείμενα',
         bibliography: 'Βιβλιογραφία',
         about: 'Σχετικά',
@@ -3132,6 +3452,85 @@ export const extraResources = {
           'CC BY 4.0',
         ],
         aboutProject: 'Σχετικά με το έργο',
+      },
+    },
+    research: {
+      live: 'Ζωντανά',
+      page: {
+        title: 'Ζωντανή Έρευνα',
+        intro:
+          'Παρακολουθήστε σε πραγματικό χρόνο τη διαδικασία πρακτορικής έρευνας: οι υπο-πράκτορες σκέφτονται φωνητικά, οι πηγές εμφανίζονται καθώς εντοπίζονται και το γράφημα γνώσης φωτίζεται γύρω από την απάντηση.',
+        queryLabel: 'Ερευνητική ερώτηση',
+        queryPlaceholder:
+          'Υποβάλετε μια ακαδημαϊκή ερώτηση για την αρχαία ελεύθερη βούληση…',
+        send: 'Αποστολή',
+        cancel: 'Διακοπή',
+        newSession: 'Νέα συνεδρία',
+        suggestionsLabel: 'Δοκιμάστε:',
+      },
+      suggestions: {
+        chrysippusCompatibilism:
+          'Πώς συνδυάζει ο Χρύσιππος τη μοίρα με την ηθική ευθύνη;',
+        augustinePelagius:
+          'Ποια είναι τα διακυβεύματα της διαμάχης του Αυγουστίνου με τον Πελάγιο;',
+        stoicFate:
+          'Ποια επιχειρήματα προέβαλαν οι Ακαδημαϊκοί κατά της στωικής μοίρας;',
+      },
+      status: {
+        idle: 'Έτοιμο',
+        connecting: 'Σύνδεση',
+        streaming: 'Έρευνα σε εξέλιξη',
+        synthesizing: 'Σύνταξη απάντησης',
+        complete: 'Η απάντηση είναι έτοιμη',
+        cancelled: 'Ακυρώθηκε',
+        error: 'Σφάλμα',
+      },
+      timeline: {
+        title: 'Ημερολόγιο έρευνας',
+        idleTitle: 'Καμία συνεδρία ακόμη',
+        idleSubtitle: 'Τα βήματα του πράκτορα θα εμφανιστούν εδώ καθώς εργάζεται.',
+        thinking: 'Ο πράκτορας σκέφτεται…',
+        queryStarted: 'Η ερώτηση ξεκίνησε',
+        answerReady: 'Τελική απάντηση',
+        citationsCount: 'επαληθευμένες παραπομπές',
+      },
+      citations: {
+        title: 'Βρέθηκαν πηγές',
+        empty: 'Οι παραπομπές θα εμφανιστούν εδώ μόλις ο πράκτορας τις βρει.',
+        sourcePrefix: 'Πηγή',
+        verified: 'Επαληθευμένη παραπομπή',
+        refuted: 'Διαψευσμένη παραπομπή',
+        pending: 'Επαλήθευση σε εξέλιξη',
+        expand: 'Διαβάστε περισσότερα',
+        collapse: 'Σύμπτυξη',
+        confidence: {
+          high: 'υψηλή αξιοπιστία',
+          medium: 'μέτρια αξιοπιστία',
+          low: 'χαμηλή αξιοπιστία',
+        },
+      },
+      kgViz: {
+        title: 'Ζωντανό γράφημα γνώσης',
+        nodesLabel: 'ενεργοί κόμβοι',
+        ariaLabel:
+          'Κόμβοι του γραφήματος γνώσης που ενεργοποιήθηκαν κατά τη συνεδρία έρευνας',
+        idle: 'Δεν έχουν ενεργοποιηθεί κόμβοι ακόμη',
+      },
+      answer: {
+        idle: 'Καμία απάντηση ακόμη',
+        idleSubtitle: 'Υποβάλετε μια ερώτηση για να ξεκινήσει η συνεδρία.',
+        preparing: 'Προετοιμασία απάντησης…',
+        citationMissing: 'Η παραπομπή δεν έχει ληφθεί ακόμη',
+      },
+      subagents: {
+        ConceptMapper: 'Χαρτογράφος εννοιών',
+        SourceFinder: 'Αναζητητής πηγών',
+        TextVerifier: 'Επαληθευτής κειμένων',
+        Synthesizer: 'Συνθέτης',
+      },
+      errors: {
+        streamFailed: 'Η ροή απέτυχε',
+        retrying: 'Νέα προσπάθεια… ({{count}})',
       },
     },
   },
