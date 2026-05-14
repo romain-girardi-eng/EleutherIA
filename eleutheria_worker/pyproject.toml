@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eleutheria-worker"
+version = "0.1.0"
+description = "Temporal worker for EleutherIA ingestion workflows"
+readme = "README.md"
+license = "CC-BY-4.0"
+requires-python = ">=3.14"
+authors = [
+    { name = "Romain Girardi", email = "romain.girardi@univ-cotedazur.fr" }
+]
+keywords = ["temporal", "workflow", "eleutheria", "ingestion"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Typing :: Typed",
+]
+dependencies = [
+    "temporalio>=1.7.0",
+    "eleutheria-database",
+    "psycopg2-binary>=2.9.10",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0.0",
+    "pytest-asyncio>=1.0.0",
+    "ruff>=0.15.0",
+    "mypy>=1.14.0",
+]
+
+[project.scripts]
+eleutheria-worker = "eleutheria_worker.main:main"
+
+[tool.setuptools]
+# Flat layout — the package source is the parent directory itself, mapped
+# to the `eleutheria_worker` import name via `package-dir`.
+packages = ["eleutheria_worker", "eleutheria_worker.workflows", "eleutheria_worker.activities"]
+
+[tool.setuptools.package-dir]
+"eleutheria_worker" = "."
+"eleutheria_worker.workflows" = "workflows"
+"eleutheria_worker.activities" = "activities"
+
+[tool.ruff]
+target-version = "py314"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.14"
+warn_return_any = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
