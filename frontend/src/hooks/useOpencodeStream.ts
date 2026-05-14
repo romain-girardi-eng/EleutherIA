@@ -1,22 +1,17 @@
 /**
- * useOpencodeStream — companion to `useResearchStream` that drives the UI from
- * opencode's global `/event` SSE channel instead of EleutherIA's own backend.
+ * useOpencodeStream — drives the UI from opencode's global `/event` SSE
+ * channel via the EleutherIA backend proxy at `/api/opencode/*`.
  *
- * The opencode `/event` channel is GLOBAL: events from every active session are
- * multiplexed onto a single stream. Clients de-multiplex client-side by
- * `properties.sessionID`. This hook owns a `Map<sessionID, OpencodeEventAdapter>`
- * so the global stream can route deltas to the right adapter once the user
- * starts a session.
+ * All traffic flows through the backend so the upstream
+ * `OPENCODE_SERVER_PASSWORD` never transits the browser. The session-create
+ * call returns a short-lived `sse_token` JWT bound to the new `session_id`;
+ * the hook passes it as `?token=...` on the SSE long-poll because browser
+ * `fetch` based EventSource shims cannot append `Authorization` headers.
  *
- * Return shape mirrors `useResearchStream` so the Research page can swap hooks
- * via a runtime toggle without rewriting downstream components.
+ * Return shape mirrors `useResearchStream` so the Research page can swap
+ * hooks via a runtime toggle without rewriting downstream components.
  *
  * Wire format reference: docs/plans/2026-05-14-opencode-event-protocol.md
- *
- * SECURITY: when `VITE_OPENCODE_EVENT_URL` is set, the browser connects directly
- * and Basic Auth is read from `VITE_OPENCODE_SERVER_PASSWORD` — only acceptable
- * for dev / staging. In production prefer the default proxied path
- * `/api/opencode/event` so the backend injects credentials server-side.
  */
 
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
@@ -44,88 +39,91 @@ export interface UseOpencodeStreamOptions {
   maxRetries?: number;
   /** Default: include the EleutherIA `auth_token` cookie as a Bearer header. */
   includeAuth?: boolean;
-  /** Override the SSE URL. Defaults to `VITE_OPENCODE_EVENT_URL` or `/api/opencode/event`. */
+  /** Override the SSE URL. Defaults to `/api/opencode/event`. */
   eventUrl?: string;
   /** Override the session-creation URL. Defaults to `/api/opencode/session`. */
   sessionCreateUrl?: string;
+  /** Override the opencode agent slug. Defaults to `scholar-orchestrator`. */
+  agent?: string;
 }
 
 const DEFAULT_OPTIONS: Required<Pick<
   UseOpencodeStreamOptions,
-  'retryDelayMs' | 'maxRetries' | 'includeAuth'
+  'retryDelayMs' | 'maxRetries' | 'includeAuth' | 'agent'
 >> = {
   retryDelayMs: 5_000,
   maxRetries: 3,
   includeAuth: true,
+  agent: 'scholar-orchestrator',
 };
 
-interface ImportMetaEnv {
-  readonly VITE_OPENCODE_EVENT_URL?: string;
-  readonly VITE_OPENCODE_SERVER_PASSWORD?: string;
-  readonly VITE_OPENCODE_SESSION_URL?: string;
-}
-
-function readEnv(): ImportMetaEnv {
-  // import.meta.env is replaced statically by Vite; cast for non-Vite test envs.
-  const meta = (
-    import.meta as unknown as { env?: ImportMetaEnv }
-  ).env;
-  return meta ?? {};
-}
-
-function defaultEventUrl(): string {
-  return readEnv().VITE_OPENCODE_EVENT_URL ?? '/api/opencode/event';
-}
-
-function defaultSessionUrl(): string {
-  return readEnv().VITE_OPENCODE_SESSION_URL ?? '/api/opencode/session';
-}
-
-function basicAuthHeader(): string | null {
-  const password = readEnv().VITE_OPENCODE_SERVER_PASSWORD;
-  if (!password) return null;
-  // opencode docs: Basic Auth with empty username + server password.
-  const encoded =
-    typeof btoa === 'function'
-      ? btoa(`:${password}`)
-      : Buffer.from(`:${password}`).toString('base64');
-  return `Basic ${encoded}`;
-}
+const DEFAULT_EVENT_URL = '/api/opencode/event';
+const DEFAULT_SESSION_URL = '/api/opencode/session';
 
 const initialState = reduce(undefined as never, { type: 'reset' });
 
-export interface CreateSessionFn {
-  (query: string, signal: AbortSignal): Promise<string>;
+interface CreateSessionResult {
+  sessionId: string;
+  sseToken: string | null;
 }
 
-/** Default session creator — POSTs to a backend route that proxies opencode. */
+function authHeader(includeAuth: boolean): string | null {
+  if (!includeAuth) return null;
+  const token = Cookies.get('auth_token');
+  return token ? `Bearer ${token}` : null;
+}
+
+/** POST to the backend proxy to create an opencode session. */
 async function defaultCreateSession(
   query: string,
   signal: AbortSignal,
   url: string,
+  agent: string,
   includeAuth: boolean,
-): Promise<string> {
+): Promise<CreateSessionResult> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
-  if (includeAuth) {
-    const token = Cookies.get('auth_token');
-    if (token) headers.Authorization = `Bearer ${token}`;
-  }
-  const basic = basicAuthHeader();
-  if (basic && !headers.Authorization) headers.Authorization = basic;
+  const auth = authHeader(includeAuth);
+  if (auth) headers.Authorization = auth;
 
   const response = await fetch(url, {
     method: 'POST',
     headers,
-    body: JSON.stringify({ query }),
+    body: JSON.stringify({ agent, title: query.slice(0, 80) }),
     signal,
   });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  const body = (await response.json()) as { session_id?: string; sessionID?: string };
+  const body = (await response.json()) as {
+    session_id?: string;
+    sessionID?: string;
+    sse_token?: string;
+  };
   const id = body.session_id ?? body.sessionID;
   if (!id) throw new Error('no_session_id_in_response');
-  return id;
+  return { sessionId: id, sseToken: body.sse_token ?? null };
+}
+
+async function defaultSubmitPrompt(
+  sessionId: string,
+  prompt: string,
+  baseUrl: string,
+  includeAuth: boolean,
+  signal: AbortSignal,
+): Promise<void> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  const auth = authHeader(includeAuth);
+  if (auth) headers.Authorization = auth;
+  const response = await fetch(
+    `${baseUrl}/${encodeURIComponent(sessionId)}/prompt`,
+    {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ prompt }),
+      signal,
+    },
+  );
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
 }
 
 async function defaultCancelSession(
@@ -134,12 +132,8 @@ async function defaultCancelSession(
   includeAuth: boolean,
 ): Promise<void> {
   const headers: Record<string, string> = {};
-  if (includeAuth) {
-    const token = Cookies.get('auth_token');
-    if (token) headers.Authorization = `Bearer ${token}`;
-  }
-  const basic = basicAuthHeader();
-  if (basic && !headers.Authorization) headers.Authorization = basic;
+  const auth = authHeader(includeAuth);
+  if (auth) headers.Authorization = auth;
 
   await fetch(`${baseUrl}/${encodeURIComponent(sessionId)}/abort`, {
     method: 'POST',
@@ -176,7 +170,7 @@ export function useOpencodeStream(
     if (sessionId) {
       void defaultCancelSession(
         sessionId,
-        options?.sessionCreateUrl ?? defaultSessionUrl(),
+        options?.sessionCreateUrl ?? DEFAULT_SESSION_URL,
         opts.includeAuth,
       );
     }
@@ -198,27 +192,41 @@ export function useOpencodeStream(
         abortRef.current = controller;
 
         try {
-          const sessionId = await defaultCreateSession(
+          const sessionUrl = options?.sessionCreateUrl ?? DEFAULT_SESSION_URL;
+          const { sessionId, sseToken } = await defaultCreateSession(
             query,
             controller.signal,
-            options?.sessionCreateUrl ?? defaultSessionUrl(),
+            sessionUrl,
+            opts.agent,
             opts.includeAuth,
           );
           activeSessionIdRef.current = sessionId;
           const adapter = new OpencodeEventAdapter({ sessionId });
           adaptersRef.current.set(sessionId, adapter);
 
+          // Queue the user prompt on the freshly-created session. We do not
+          // await — the SSE channel surfaces ack/progress.
+          void defaultSubmitPrompt(
+            sessionId,
+            query,
+            sessionUrl,
+            opts.includeAuth,
+            controller.signal,
+          ).catch(() => {
+            // Errors surface via the SSE error event.
+          });
+
           const headers: Record<string, string> = {
             Accept: 'text/event-stream',
           };
-          if (opts.includeAuth) {
-            const token = Cookies.get('auth_token');
-            if (token) headers.Authorization = `Bearer ${token}`;
-          }
-          const basic = basicAuthHeader();
-          if (basic && !headers.Authorization) headers.Authorization = basic;
+          const auth = authHeader(opts.includeAuth);
+          if (auth) headers.Authorization = auth;
 
-          const eventUrl = options?.eventUrl ?? defaultEventUrl();
+          const baseEventUrl = options?.eventUrl ?? DEFAULT_EVENT_URL;
+          const params = new URLSearchParams({ session_id: sessionId });
+          if (sseToken) params.set('token', sseToken);
+          const separator = baseEventUrl.includes('?') ? '&' : '?';
+          const eventUrl = `${baseEventUrl}${separator}${params.toString()}`;
           const response = await fetch(eventUrl, {
             method: 'GET',
             headers,
@@ -291,6 +299,7 @@ export function useOpencodeStream(
       await attempt(0);
     },
     [
+      opts.agent,
       opts.includeAuth,
       opts.maxRetries,
       opts.retryDelayMs,
