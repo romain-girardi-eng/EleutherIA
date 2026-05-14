@@ -1,15 +1,16 @@
 """Tests for the Greek/Latin text verification step."""
 
-import pytest
 from unittest.mock import AsyncMock
 
+import pytest
+
 from eleutheria_graphrag.agents.text_verifier import (
-    extract_greek_runs,
-    is_known_term,
-    verify_greek_text,
-    sanitize_answer,
     _extract_claimed_work,
     _titles_match,
+    extract_greek_runs,
+    is_known_term,
+    sanitize_answer,
+    verify_greek_text,
 )
 
 

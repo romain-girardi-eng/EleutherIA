@@ -7,7 +7,6 @@ Prerequisites:
 
     Set environment variables:
     - POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
-    - QDRANT_HOST
     - MOONSHOT_API_KEY or GEMINI_API_KEY
 """
 
@@ -21,20 +20,13 @@ async def main() -> None:
     os.environ.setdefault("POSTGRES_USER", "eleutheria")
     os.environ.setdefault("POSTGRES_PASSWORD", "eleutheria")
     os.environ.setdefault("POSTGRES_DB", "eleutheria")
-    os.environ.setdefault("QDRANT_HOST", "localhost")
 
     from eleutheria_database import DatabaseService
-    from eleutheria_kg import QdrantService
 
     # Connect to database
     db = DatabaseService()
     await db.connect()
     print("Connected to PostgreSQL")
-
-    # Connect to Qdrant
-    qdrant = QdrantService()
-    await qdrant.connect()
-    print("Connected to Qdrant")
 
     # Example 1: Query ancient works
     print("\n=== Ancient Works ===")
@@ -79,7 +71,6 @@ async def main() -> None:
 
     # Clean up
     await db.close()
-    await qdrant.close()
     print("\nDone!")
 
 

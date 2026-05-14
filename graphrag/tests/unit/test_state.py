@@ -39,7 +39,7 @@ class TestEvidenceSource:
     """Tests for EvidenceSource enum."""
 
     def test_all_sources(self):
-        assert len(EvidenceSource) == 8  # 5 original + 3 new (hyde, crag_secondary, tree_reasoning)
+        assert len(EvidenceSource) == 7  # 5 original + 2 new (crag_secondary, tree_reasoning)
         assert EvidenceSource.SEMANTIC_SEARCH.value == "semantic_search"
         assert EvidenceSource.GRAPH_TRAVERSAL.value == "graph_traversal"
         assert EvidenceSource.PASSAGE_CITATION.value == "passage_citation"
@@ -202,9 +202,6 @@ class TestQueryTypeInState:
 
 
 class TestEvidenceSourceNew:
-    def test_hyde_search(self):
-        assert EvidenceSource.HYDE_SEARCH == "hyde_search"
-
     def test_crag_secondary(self):
         assert EvidenceSource.CRAG_SECONDARY == "crag_secondary"
 
@@ -212,7 +209,7 @@ class TestEvidenceSourceNew:
         assert EvidenceSource.TREE_REASONING == "tree_reasoning"
 
     def test_total_sources(self):
-        assert len(EvidenceSource) == 8
+        assert len(EvidenceSource) == 7
 
 
 class TestRAGStateNewFields:
@@ -223,7 +220,7 @@ class TestRAGStateNewFields:
     def test_pipeline_config_default(self):
         s = RAGState()
         assert isinstance(s.pipeline_config, PipelineConfig)
-        assert s.pipeline_config.use_hyde is True
+        assert s.pipeline_config.use_crag is True
 
     def test_expanded_query(self):
         s = RAGState(expanded_query="fate (heimarmenē, Chrysippus)")

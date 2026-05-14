@@ -92,7 +92,7 @@ class SearchNodesTool:
 
         results: dict[str, tuple[NodeSummary, float]] = {}
 
-        # Source 1: In-memory label/description match
+        # In-memory label/description match (vectorless).
         query_lower = query.lower()
         query_terms = {t.lower() for t in _TERM_RE.findall(query) if len(t) > 2}
 
@@ -145,88 +145,8 @@ class SearchNodesTool:
                 score,
             )
 
-        # Source 2: Qdrant semantic search (if available)
-        try:
-            if self._deps.qdrant and query_terms:
-                embedding = await self._get_embedding(query)
-                if embedding:
-                    qdrant_hits = await self._deps.qdrant.search_nodes(
-                        query_vector=embedding,
-                        limit=limit * 2,
-                    )
-                    for hit in qdrant_hits:
-                        nid = hit.get("id", "")
-                        if type_filter:
-                            node = self._deps.node_lookup.get(nid, {})
-                            if (node.get("type") or "").lower() != type_filter.lower():
-                                continue
-                        if period_filter:
-                            node = self._deps.node_lookup.get(nid, {})
-                            if (
-                                node.get("period") or ""
-                            ).lower() != period_filter.lower():
-                                continue
-
-                        semantic_score = hit.get("score", 0.0)
-                        if nid in results:
-                            # RRF merge: combine label match and semantic scores
-                            existing_summary, existing_score = results[nid]
-                            merged = existing_score * 0.6 + semantic_score * 0.4
-                            results[nid] = (
-                                existing_summary.model_copy(
-                                    update={"score": round(merged, 3)}
-                                ),
-                                merged,
-                            )
-                        else:
-                            node = self._deps.node_lookup.get(nid, {})
-                            results[nid] = (
-                                NodeSummary(
-                                    node_id=nid,
-                                    label=node.get("label", nid),
-                                    type=node.get("type", ""),
-                                    description=(node.get("description") or "")[:200],
-                                    period=node.get("period"),
-                                    school=node.get("school"),
-                                    score=round(semantic_score * 0.8, 3),
-                                ),
-                                semantic_score * 0.8,
-                            )
-        except Exception:
-            logger.warning(
-                "Qdrant search failed in search_nodes, using label match only",
-                exc_info=True,
-            )
-
         # Sort by score descending, take top limit
         sorted_results = sorted(results.values(), key=lambda x: x[1], reverse=True)
         nodes = [r[0] for r in sorted_results[:limit]]
 
         return SearchNodesResult(nodes=nodes, total_found=len(results))
-
-    async def _get_embedding(self, text: str) -> list[float] | None:
-        """Get embedding via Gemini API."""
-        import httpx
-
-        api_key = os.getenv("GEMINI_API_KEY")
-        if not api_key:
-            return None
-
-        model = os.getenv("GEMINI_EMBEDDING_MODEL", "models/gemini-embedding-001")
-        url = f"https://generativelanguage.googleapis.com/v1beta/{model}:embedContent?key={api_key}"
-
-        try:
-            async with httpx.AsyncClient(timeout=10) as client:
-                resp = await client.post(
-                    url,
-                    json={
-                        "model": model,
-                        "content": {"parts": [{"text": text}]},
-                    },
-                )
-                resp.raise_for_status()
-                data = resp.json()
-                return data.get("embedding", {}).get("values")
-        except Exception:
-            logger.debug("Embedding request failed", exc_info=True)
-            return None

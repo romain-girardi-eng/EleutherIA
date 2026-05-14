@@ -1,9 +1,9 @@
 """
 Shared dependency injection for all backend services.
 
-Holds singleton instances of DatabaseService, QdrantService, LLMService,
-GraphRAGService, KGAnalytics, KGCache, RerankerService, and CitationVerifier
-— initialized once at startup and shared across all routes.
+Holds singleton instances of DatabaseService, LLMService, GraphRAGService,
+KGAnalytics, KGCache, RerankerService, and CitationVerifier — initialized
+once at startup and shared across all routes.
 """
 
 from __future__ import annotations
@@ -19,7 +19,9 @@ from eleutheria_graphrag.services.graphrag_service import GraphRAGService
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
 from eleutheria_kg.services.analytics import KGAnalytics
 from eleutheria_kg.services.cache import KGCache
-from eleutheria_kg.services.qdrant import QdrantService
+from eleutheria_kg.services.snapshot import load_kg_snapshot, snapshot_available
+
+from backend.services.credentials import CredentialsBridge, get_credentials_bridge
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +47,7 @@ class Services:
     """Container for all shared service instances."""
 
     db: DatabaseService = field(default_factory=DatabaseService)
-    qdrant: QdrantService = field(default_factory=QdrantService)
+    credentials: CredentialsBridge = field(default_factory=get_credentials_bridge)
     llm: LLMService = field(
         default_factory=lambda: LLMService(preferred_provider=_preferred_provider())
     )
@@ -53,81 +55,105 @@ class Services:
     cache: KGCache = field(default_factory=lambda: KGCache(default_ttl=300))
     search: HybridSearchService | None = None
     graphrag: GraphRAGService | None = None
+    kg_source: str = "unknown"
 
     async def initialize(self) -> None:
         """Connect to all external services and build derived services."""
-        # 1. Database
-        await self.db.connect()
+        # 0. Resolve LLM provider keys via the credentials bridge. When
+        # EXTERNAL_INTEGRATION is off (default for local dev), the bridge
+        # transparently falls back to environment variables — so behaviour
+        # is unchanged unless the platform is wired up.
+        gemini_key = await self.credentials.get_llm_key("gemini")
+        moonshot_key = await self.credentials.get_llm_key("moonshot")
+        openrouter_key = await self.credentials.get_llm_key("openrouter")
+        self.llm = LLMService(
+            preferred_provider=_preferred_provider(),
+            gemini_api_key=gemini_key,
+            moonshot_api_key=moonshot_key,
+            openrouter_api_key=openrouter_key,
+        )
 
-        # 2. Qdrant
-        qdrant_required = _env_flag("QDRANT_REQUIRED", True)
+        # 1. Database. If a KG snapshot is available, the backend can still
+        # serve KG/GraphRAG routes while PostgreSQL is being restored.
+        database_required = _env_flag("DATABASE_REQUIRED", not snapshot_available())
         try:
-            await self.qdrant.connect()
+            await self.db.connect()
         except Exception:
-            if qdrant_required:
+            if database_required:
                 raise
-            logger.warning("Qdrant unavailable - continuing with degraded startup")
+            logger.warning("PostgreSQL unavailable - continuing with KG snapshot only")
 
-        # 3. Hybrid search (wraps db)
-        self.search = HybridSearchService(self.db)
+        # 2. Hybrid search (wraps db)
+        self.search = HybridSearchService(self.db) if self.db.is_connected() else None
 
-        # 4. Load KG data into analytics
+        # 3. Load KG data into analytics
         kg_data = await self._load_kg_data()
         self.analytics.set_data(kg_data)
 
-        # 5. Optional: Cross-encoder reranker
+        # 4. Optional: Cross-encoder reranker
         reranker = self._init_reranker()
 
-        # 6. Citation verifier
+        # 5. Citation verifier
         verifier = self._init_verifier()
 
-        # 7. GraphRAG (wraps db + qdrant + llm + new services)
+        # 6. GraphRAG (wraps db + llm + new services)
         self.graphrag = GraphRAGService(
             db_service=self.db,
-            qdrant_service=self.qdrant,
             llm_service=self.llm,
             analytics=self.analytics,
             search_service=self.search,
             reranker=reranker,
             verifier=verifier,
+            kg_data=kg_data,
         )
         await self.graphrag.load_kg()
 
     async def _load_kg_data(self) -> dict[str, Any]:
-        """Load KG nodes and edges from the database."""
-        nodes = await self.db.fetch("""
-            SELECT
-                node_id as id,
-                label,
-                type,
-                description,
-                period,
-                COALESCE(metadata->>'school', metadata->>'school_affiliation') as school,
-                COALESCE(metadata->>'role', metadata->>'scholarly_role') as role,
-                metadata,
-                metadata->>'date' as date,
-                metadata->>'birth' as birth,
-                metadata->>'death' as death,
-                metadata->>'floruit' as floruit,
-                metadata->>'approximate_dates' as approximate_dates,
-                metadata->>'scholarly_role' as scholarly_role
-            FROM free_will.kg_nodes
-        """)
-        edges = await self.db.fetch("""
-            SELECT
-                source_id as source,
-                target_id as target,
-                relation,
-                metadata->>'description' as description,
-                CASE
-                    WHEN COALESCE(metadata->>'weight', '') ~ '^[0-9]+(\\.[0-9]+)?$'
-                        THEN (metadata->>'weight')::double precision
-                    ELSE 1.0
-                END as weight,
-                metadata
-            FROM free_will.kg_edges
-        """)
-        return {"nodes": nodes, "edges": edges}
+        """Load KG nodes and edges from DB, falling back to local snapshot."""
+        if self.db.is_connected():
+            try:
+                nodes = await self.db.fetch("""
+                    SELECT
+                        node_id as id,
+                        label,
+                        type,
+                        description,
+                        period,
+                        COALESCE(metadata->>'school', metadata->>'school_affiliation') as school,
+                        COALESCE(metadata->>'role', metadata->>'scholarly_role') as role,
+                        metadata,
+                        metadata->>'date' as date,
+                        metadata->>'birth' as birth,
+                        metadata->>'death' as death,
+                        metadata->>'floruit' as floruit,
+                        metadata->>'approximate_dates' as approximate_dates,
+                        metadata->>'scholarly_role' as scholarly_role
+                    FROM free_will.kg_nodes
+                """)
+                edges = await self.db.fetch("""
+                    SELECT
+                        source_id as source,
+                        target_id as target,
+                        relation,
+                        metadata->>'description' as description,
+                        CASE
+                            WHEN COALESCE(metadata->>'weight', '') ~ '^[0-9]+(\\.[0-9]+)?$'
+                                THEN (metadata->>'weight')::double precision
+                            ELSE 1.0
+                        END as weight,
+                        metadata
+                    FROM free_will.kg_edges
+                """)
+                self.kg_source = "database"
+                return {"nodes": nodes, "edges": edges}
+            except Exception:
+                logger.exception("Failed to load KG from PostgreSQL")
+                if not snapshot_available():
+                    raise
+
+        kg_data = load_kg_snapshot()
+        self.kg_source = "snapshot"
+        return kg_data
 
     def _init_reranker(self) -> Any:
         """Initialize the cross-encoder reranker (optional, CPU-based)."""
@@ -159,7 +185,6 @@ class Services:
         """Gracefully close all connections."""
         if self.graphrag:
             await self.graphrag.close()
-        await self.qdrant.close()
         await self.db.close()
 
 
@@ -176,10 +201,6 @@ def get_services() -> Services:
 
 def get_db() -> DatabaseService:
     return get_services().db
-
-
-def get_qdrant() -> QdrantService:
-    return get_services().qdrant
 
 
 def get_search() -> HybridSearchService:

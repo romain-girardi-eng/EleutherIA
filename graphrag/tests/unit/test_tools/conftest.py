@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from typing import Any
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock
 
 import pytest
 
@@ -142,12 +141,10 @@ def _build_mock_deps() -> Deps:
 
     # Mock services
     db = AsyncMock()
-    qdrant = AsyncMock()
     llm = AsyncMock()
 
     deps = Deps(
         db=db,
-        qdrant=qdrant,
         llm=llm,
         node_lookup=node_lookup,
         outgoing_edges=outgoing_edges,

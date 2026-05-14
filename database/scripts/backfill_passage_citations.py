@@ -359,14 +359,14 @@ async def main() -> None:
     print(f"  Found {strategy_stats['work_scoped']} citations via work-scoped search")
 
     # ── Deduplicate and summarize ──
-    print(f"\n=== SUMMARY ===")
+    print("\n=== SUMMARY ===")
     print(f"Total citations to create: {len(all_citations)}")
     print(f"Nodes with new citations: {len(nodes_with_citations)}/{len(ne_nodes)}")
     print(f"Nodes still without citations: {len(ne_nodes) - len(nodes_with_citations)}")
     print(f"By strategy: {dict(strategy_stats)}")
 
     # ── Log all citations ──
-    print(f"\n--- Citation log ---")
+    print("\n--- Citation log ---")
     for c in all_citations:
         print(f"  [{c.strategy}] node={c.kg_node_id} -> passage={c.passage_id}")
 

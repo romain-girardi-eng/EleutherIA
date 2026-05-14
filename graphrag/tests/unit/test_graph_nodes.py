@@ -1,6 +1,6 @@
 """Tests for the long-context graph nodes and helpers."""
 
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock
 
 import pytest
 from pydantic_graph import End
@@ -617,11 +617,21 @@ class TestClassifyQueryType:
         assert state.metadata["classification_reason"] == "deterministic heuristic"
 
 
+class _FakeStrategy:
+    """Minimal retrieval strategy double for DiscoverCorpus tests."""
+
+    def __init__(self, seeds: list[str], anchors: list[str]) -> None:
+        self._seeds = seeds
+        self._anchors = anchors
+
+    async def discover_seeds(self, queries, deps, node_limit=100):  # noqa: ARG002
+        return list(self._seeds), list(self._anchors)
+
+
 class TestDiscoverCorpus:
     @pytest.mark.asyncio
     async def test_discovers_nodes_and_passages(self):
         deps = make_deps(
-            search_results=[{"id": "chrysippus", "score": 0.95}],
             db_fetch_results=[
                 {
                     "passage_id": "p1",
@@ -637,16 +647,12 @@ class TestDiscoverCorpus:
             ],
         )
         deps.node_lookup["chrysippus"]["type"] = "Person"
+        deps.retrieval_strategy = _FakeStrategy(seeds=["chrysippus"], anchors=["chrysippus"])
         state = RAGState(question="Who was Chrysippus?")
         state.expanded_query = "Chrysippus"
         ctx = make_ctx(state, deps)
 
-        with patch(
-            "eleutheria_graphrag.agents.graph_nodes._get_embedding",
-            new_callable=AsyncMock,
-            return_value=[0.1] * 768,
-        ):
-            result = await DiscoverCorpus().run(ctx)
+        result = await DiscoverCorpus().run(ctx)
 
         assert result.__class__.__name__ == "BuildResearchNotebook"
         assert any(ev.id == "chrysippus" for ev in state.primary_evidence)
@@ -657,7 +663,6 @@ class TestDiscoverCorpus:
     @pytest.mark.asyncio
     async def test_fetches_linked_passages_from_seed_anchors_not_full_context(self):
         deps = make_deps(
-            search_results=[{"id": "chrysippus", "score": 0.95}],
             node_lookup={
                 "chrysippus": {
                     "id": "chrysippus",
@@ -680,16 +685,12 @@ class TestDiscoverCorpus:
             },
             db_fetch_results=[],
         )
+        deps.retrieval_strategy = _FakeStrategy(seeds=["chrysippus"], anchors=["chrysippus"])
         state = RAGState(question="Who was Chrysippus?")
         state.expanded_query = "Chrysippus"
         ctx = make_ctx(state, deps)
 
-        with patch(
-            "eleutheria_graphrag.agents.graph_nodes._get_embedding",
-            new_callable=AsyncMock,
-            return_value=[0.1] * 768,
-        ):
-            await DiscoverCorpus().run(ctx)
+        await DiscoverCorpus().run(ctx)
 
         fetch_args = deps.db.fetch.await_args.args
         assert fetch_args[1:] == ("chrysippus",)

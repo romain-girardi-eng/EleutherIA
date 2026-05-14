@@ -2,37 +2,32 @@
 
 from __future__ import annotations
 
-import asyncio
 import json
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.react_loop import (
     AgentLoop,
+    _compress_old_results,
     _parse_action,
     _summarize_result,
-    _summarize_for_context,
-    _compress_old_results,
 )
 from eleutheria_graphrag.agents.sse_emitter import NullEmitter
 from eleutheria_graphrag.agents.state import QueryComplexity, RAGState
 from eleutheria_graphrag.agents.tools import ToolRegistry
-
 
 # ── Fixtures ──────────────────────────────────────────────────────────────
 
 def _make_deps() -> Deps:
     """Minimal mock deps for agent loop tests."""
     db = AsyncMock()
-    qdrant = AsyncMock()
     llm = AsyncMock()
     llm.last_model_used = "gemini-3.1-pro"
     llm.last_provider_used = "gemini"
     return Deps(
         db=db,
-        qdrant=qdrant,
         llm=llm,
         node_lookup={
             "person_origen": {

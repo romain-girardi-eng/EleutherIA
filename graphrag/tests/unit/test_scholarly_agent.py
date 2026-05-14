@@ -33,14 +33,22 @@ def _llm_side_effect():
     return _generate
 
 
+class _FakeStrategy:
+    """Strategy double — yields fixed seeds without touching the DB."""
+
+    def __init__(self, seeds: list[str], anchors: list[str]) -> None:
+        self._seeds = seeds
+        self._anchors = anchors
+
+    async def discover_seeds(self, queries, deps, node_limit=100):  # noqa: ARG002
+        return list(self._seeds), list(self._anchors)
+
+
 def _make_deps() -> Deps:
     llm = AsyncMock()
     llm.generate = AsyncMock(side_effect=_llm_side_effect())
     llm.last_model_used = "gemini-test"
     llm.last_provider_used = "gemini"
-
-    qdrant = AsyncMock()
-    qdrant.search_nodes = AsyncMock(return_value=[{"id": "chrysippus", "score": 0.95}])
 
     db = AsyncMock()
     db.fetch = AsyncMock(
@@ -61,7 +69,6 @@ def _make_deps() -> Deps:
 
     return Deps(
         db=db,
-        qdrant=qdrant,
         llm=llm,
         node_lookup={
             "chrysippus": {
@@ -76,6 +83,7 @@ def _make_deps() -> Deps:
         },
         outgoing_edges={},
         incoming_edges={},
+        retrieval_strategy=_FakeStrategy(seeds=["chrysippus"], anchors=["chrysippus"]),
     )
 
 
@@ -85,12 +93,9 @@ class TestScholarlyAgent:
         deps = _make_deps()
         agent = ScholarlyAgent(deps)
 
-        with pytest.MonkeyPatch.context() as mp:
-            mp.setattr(
-                "eleutheria_graphrag.agents.graph_nodes._get_embedding",
-                AsyncMock(return_value=[0.1] * 768),
-            )
-            answer = await agent.query("What did the Stoics believe about fate?", agent_mode="fsm")
+        answer = await agent.query(
+            "What did the Stoics believe about fate?", agent_mode="fsm"
+        )
 
         assert "fate" in answer.answer.lower()
         assert answer.citations[0].ref == "P1"
@@ -101,12 +106,9 @@ class TestScholarlyAgent:
         deps = _make_deps()
         agent = ScholarlyAgent(deps)
 
-        with pytest.MonkeyPatch.context() as mp:
-            mp.setattr(
-                "eleutheria_graphrag.agents.graph_nodes._get_embedding",
-                AsyncMock(return_value=[0.1] * 768),
-            )
-            result = await agent.query_dict("What did the Stoics believe about fate?", agent_mode="fsm")
+        result = await agent.query_dict(
+            "What did the Stoics believe about fate?", agent_mode="fsm"
+        )
 
         assert result["metadata"]["grounding_policy"] == "mixed_evidence"
         assert result["metadata"]["claim_ledger_size"] >= 1
@@ -117,13 +119,10 @@ class TestScholarlyAgent:
         agent = ScholarlyAgent(deps)
         chunks: list[str] = []
 
-        with pytest.MonkeyPatch.context() as mp:
-            mp.setattr(
-                "eleutheria_graphrag.agents.graph_nodes._get_embedding",
-                AsyncMock(return_value=[0.1] * 768),
-            )
-            async for chunk in agent.query_stream("What did the Stoics believe about fate?", agent_mode="fsm"):
-                chunks.append(chunk)
+        async for chunk in agent.query_stream(
+            "What did the Stoics believe about fate?", agent_mode="fsm"
+        ):
+            chunks.append(chunk)
 
         text = "".join(chunks)
         assert "fate" in text.lower()

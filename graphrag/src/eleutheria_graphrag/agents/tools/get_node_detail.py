@@ -9,6 +9,10 @@ from typing import Any
 from pydantic import BaseModel
 
 from eleutheria_graphrag.agents.dependencies import Deps
+from eleutheria_graphrag.services.snapshot_retrieval import (
+    db_is_connected,
+    linked_passage_rows,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -74,14 +78,18 @@ class GetNodeDetailTool:
 
         # Count passages via DB
         passage_count = 0
-        try:
-            count = await self._deps.db.fetchval(
-                f"SELECT COUNT(*) FROM {DB_SCHEMA}.passage_citations WHERE kg_node_id = $1",
-                node_id,
-            )
-            passage_count = count or 0
-        except Exception:
-            logger.debug("Passage count query failed for %s", node_id, exc_info=True)
+        if db_is_connected(self._deps.db):
+            try:
+                count = await self._deps.db.fetchval(
+                    f"SELECT COUNT(*) FROM {DB_SCHEMA}.passage_citations WHERE kg_node_id = $1",
+                    node_id,
+                )
+                passage_count = count or 0
+            except Exception:
+                logger.debug("Passage count query failed for %s", node_id, exc_info=True)
+                passage_count = len(linked_passage_rows(self._deps, [node_id]))
+        else:
+            passage_count = len(linked_passage_rows(self._deps, [node_id]))
 
         # Build clean metadata dict (exclude huge fields)
         raw_meta = node.get("metadata") or {}

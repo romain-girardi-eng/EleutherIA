@@ -9,6 +9,11 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from eleutheria_graphrag.agents.dependencies import Deps
+from eleutheria_graphrag.services.snapshot_retrieval import (
+    db_is_connected,
+    linked_passage_rows,
+    translation_for_passage,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -77,34 +82,40 @@ class ReadPassagesTool:
         rows: list[dict[str, Any]] = []
 
         # Strategy 1: passage_citations (works for argument, concept, some person nodes)
-        try:
-            rows = await self._deps.db.fetch(
-                f"""
-                SELECT
-                    p.passage_id::text,
-                    w.title,
-                    w.author,
-                    p.canonical_ref,
-                    w.language,
-                    p.text_content,
-                    pc.confidence
-                FROM {DB_SCHEMA}.passage_citations pc
-                JOIN {DB_SCHEMA}.passages p ON p.passage_id = pc.passage_id
-                JOIN {DB_SCHEMA}.ancient_works w ON w.work_id = p.work_id
-                WHERE pc.kg_node_id = $1
-                ORDER BY pc.confidence DESC, p.sequence_number
-                LIMIT $2
-            """,
-                node_id,
-                limit,
-            )
-        except Exception:
-            logger.warning(
-                "passage_citations query failed for %s", node_id, exc_info=True
-            )
+        if not db_is_connected(self._deps.db):
+            rows = linked_passage_rows(self._deps, [node_id], limit=limit)
+        else:
+            try:
+                rows = await self._deps.db.fetch(
+                    f"""
+                    SELECT
+                        p.passage_id::text,
+                        w.title,
+                        w.author,
+                        p.canonical_ref,
+                        w.language,
+                        p.text_content,
+                        pc.confidence
+                    FROM {DB_SCHEMA}.passage_citations pc
+                    JOIN {DB_SCHEMA}.passages p ON p.passage_id = pc.passage_id
+                    JOIN {DB_SCHEMA}.ancient_works w ON w.work_id = p.work_id
+                    WHERE pc.kg_node_id = $1
+                    ORDER BY pc.confidence DESC, p.sequence_number
+                    LIMIT $2
+                """,
+                    node_id,
+                    limit,
+                )
+            except Exception:
+                logger.warning(
+                    "passage_citations query failed for %s", node_id, exc_info=True
+                )
+                rows = linked_passage_rows(self._deps, [node_id], limit=limit)
 
         # Strategy 2: if node is a work, load passages directly via kg_work_id
-        if not rows and node_type == "work":
+        db_available = db_is_connected(self._deps.db)
+
+        if not rows and node_type == "work" and db_available:
             try:
                 rows = await self._deps.db.fetch(
                     f"""
@@ -131,7 +142,7 @@ class ReadPassagesTool:
                 )
 
         # Strategy 2b: work node not linked — search by title in ancient_works
-        if not rows and node_type == "work":
+        if not rows and node_type == "work" and db_available:
             work_label = node_label.split(" (")[0].split(" - ")[0].strip()
             if work_label and len(work_label) > 3:
                 try:
@@ -162,7 +173,7 @@ class ReadPassagesTool:
                     )
 
         # Strategy 3: if node is a person, find their works and load passages
-        if not rows and node_type == "person":
+        if not rows and node_type == "person" and db_available:
             work_ids: list[str] = []
 
             # Outgoing: person --wrote/created_by--> work
@@ -216,7 +227,7 @@ class ReadPassagesTool:
                     )
 
         # Strategy 4: if still nothing and node is a person, search by author name
-        if not rows and node_type == "person":
+        if not rows and node_type == "person" and db_available:
             author_name = node_label.split(" of ")[0].split(" (")[0].strip()
             if author_name:
                 try:
@@ -275,6 +286,10 @@ class ReadPassagesTool:
 
         The translation is stored as the description of the _en suffixed KG node.
         """
+        snapshot_translation = translation_for_passage(self._deps, _passage_id)
+        if snapshot_translation and snapshot_translation.get("text_content"):
+            return (snapshot_translation["text_content"] or "")[:800]
+
         # Try: find _en node that translates the passage's KG node
         en_node_id = f"{kg_node_id}_en"
         en_node = self._deps.node_lookup.get(en_node_id)

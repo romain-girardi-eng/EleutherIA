@@ -77,7 +77,15 @@ from eleutheria_graphrag.agents.structured_models import (
 )
 from eleutheria_graphrag.agents.text_utils import truncate_json, truncate_text
 from eleutheria_graphrag.services.model_registry import get_model
-from eleutheria_graphrag.services.retrieval_strategy import SQLStrategy, VectorStrategy
+from eleutheria_graphrag.services.retrieval_strategy import (
+    SnapshotStrategy,
+    SQLStrategy,
+)
+from eleutheria_graphrag.services.snapshot_retrieval import (
+    db_is_connected,
+    linked_passage_rows,
+    translation_for_passage,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -204,7 +212,6 @@ ORIGINAL_LANGUAGE_HINTS = {
     "latine",
     "original",
 }
-EMBEDDING_MODEL = os.getenv("GEMINI_EMBEDDING_MODEL", "models/gemini-embedding-001")
 RESEARCH_STAGE_SEQUENCE: list[tuple[str, str]] = [
     ("classify_query", "Classify query"),
     ("expand_query", "Expand query"),
@@ -2326,27 +2333,6 @@ def _should_minimize_llm_calls(state: RAGState) -> bool:
     )
 
 
-async def _get_embedding(_deps: Deps, text: str) -> list[float]:
-    """Get embedding via Gemini embedding API."""
-    import google.generativeai as genai
-
-    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        raise RuntimeError("GEMINI_API_KEY required for embeddings")
-
-    genai.configure(api_key=api_key)
-
-    def _embed() -> list[float]:
-        result = genai.embed_content(
-            model=EMBEDDING_MODEL,
-            content=text,
-            task_type="retrieval_query",
-        )
-        return result["embedding"]
-
-    return await asyncio.to_thread(_embed)
-
-
 def _expand_graph(
     deps: Deps,
     seed_ids: list[str],
@@ -2384,10 +2370,13 @@ def _make_evidence_from_node(
     source: EvidenceSource = EvidenceSource.SEMANTIC_SEARCH,
 ) -> Evidence:
     layer = EvidenceLayer.PRIMARY if _is_primary_node(node) else EvidenceLayer.SECONDARY
+    metadata = node.get("metadata", {}) or {}
+    node_type = str(node.get("type", ""))
+    is_passage = node_type.lower() in {"passage", "quote"}
     return Evidence(
         id=node_id,
         label=node.get("label", node_id),
-        type=node.get("type", ""),
+        type=node_type,
         layer=layer,
         source=source,
         description=node.get("description", ""),
@@ -2395,7 +2384,25 @@ def _make_evidence_from_node(
         period=node.get("period"),
         school=node.get("school"),
         role=node.get("role"),
-        metadata=node.get("metadata", {}) or {},
+        metadata=metadata,
+        passage_id=node_id if is_passage else None,
+        canonical_ref=metadata.get("canonical_ref") if is_passage else None,
+        author=metadata.get("author") if is_passage else None,
+        work_id=(
+            metadata.get("work_id")
+            or metadata.get("work_canonical_id")
+            or metadata.get("source_work")
+            or "snapshot"
+            if is_passage
+            else None
+        ),
+        work_title=(
+            metadata.get("work_title") or metadata.get("source_work")
+            if is_passage
+            else None
+        ),
+        text_content=node.get("description") if is_passage else None,
+        language=metadata.get("language") if is_passage else None,
     )
 
 
@@ -2473,30 +2480,37 @@ async def _fetch_passages_for_nodes(
     """Fetch passages linked to nodes via passage_citations."""
     if not node_ids:
         return []
+    if not db_is_connected(deps.db):
+        return linked_passage_rows(deps, node_ids, limit=limit)
+
     placeholders = ", ".join(f"${i + 1}" for i in range(len(node_ids)))
     limit_clause = f"LIMIT {limit}" if limit is not None else ""
-    rows: list[dict[str, Any]] = await deps.db.fetch(
-        f"""
-        SELECT DISTINCT
-            p.passage_id,
-            p.work_id::text AS work_id,
-            p.text_content,
-            p.canonical_ref,
-            p.sequence_number,
-            w.title,
-            w.author,
-            w.language,
-            pc.confidence
-        FROM {DB_SCHEMA}.passage_citations pc
-        JOIN {DB_SCHEMA}.passages p ON pc.passage_id = p.passage_id
-        JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
-        WHERE pc.kg_node_id IN ({placeholders})
-        ORDER BY pc.confidence DESC, p.sequence_number
-        {limit_clause}
-        """,
-        *node_ids,
-    )
-    return rows
+    try:
+        rows: list[dict[str, Any]] = await deps.db.fetch(
+            f"""
+            SELECT DISTINCT
+                p.passage_id,
+                p.work_id::text AS work_id,
+                p.text_content,
+                p.canonical_ref,
+                p.sequence_number,
+                w.title,
+                w.author,
+                w.language,
+                pc.confidence
+            FROM {DB_SCHEMA}.passage_citations pc
+            JOIN {DB_SCHEMA}.passages p ON pc.passage_id = p.passage_id
+            JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
+            WHERE pc.kg_node_id IN ({placeholders})
+            ORDER BY pc.confidence DESC, p.sequence_number
+            {limit_clause}
+            """,
+            *node_ids,
+        )
+        return rows
+    except Exception:
+        logger.warning("DB passage lookup failed; using KG snapshot passages")
+        return linked_passage_rows(deps, node_ids, limit=limit)
 
 
 async def _fetch_translation_for_passage(
@@ -2506,15 +2520,20 @@ async def _fetch_translation_for_passage(
     """Find an English translation passage linked through translation_of edges."""
     if not deps.outgoing_edges and not deps.incoming_edges:
         return None
+    if not db_is_connected(deps.db):
+        return translation_for_passage(deps, passage_id)
 
-    rows = await deps.db.fetch(
-        f"""
-        SELECT kg_node_id
-        FROM {DB_SCHEMA}.passage_citations
-        WHERE passage_id = $1
-        """,
-        passage_id,
-    )
+    try:
+        rows = await deps.db.fetch(
+            f"""
+            SELECT kg_node_id
+            FROM {DB_SCHEMA}.passage_citations
+            WHERE passage_id = $1
+            """,
+            passage_id,
+        )
+    except Exception:
+        return translation_for_passage(deps, passage_id)
     source_nodes = [str(row["kg_node_id"]) for row in rows]
     if not source_nodes:
         return None
@@ -2557,27 +2576,30 @@ async def _fetch_translation_for_passage(
     translation_node_ids = sorted(translation_node_ids, key=_translation_priority)
 
     placeholders = ", ".join(f"${i + 1}" for i in range(len(translation_node_ids)))
-    target_rows = await deps.db.fetch(
-        f"""
-        SELECT DISTINCT
-            p.passage_id,
-            p.work_id::text AS work_id,
-            p.text_content,
-            p.canonical_ref,
-            p.sequence_number,
-            w.title,
-            w.author,
-            w.language,
-            pc.confidence
-        FROM {DB_SCHEMA}.passage_citations pc
-        JOIN {DB_SCHEMA}.passages p ON pc.passage_id = p.passage_id
-        JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
-        WHERE pc.kg_node_id IN ({placeholders})
-        ORDER BY pc.confidence DESC, p.sequence_number
-        LIMIT 1
-        """,
-        *translation_node_ids,
-    )
+    try:
+        target_rows = await deps.db.fetch(
+            f"""
+            SELECT DISTINCT
+                p.passage_id,
+                p.work_id::text AS work_id,
+                p.text_content,
+                p.canonical_ref,
+                p.sequence_number,
+                w.title,
+                w.author,
+                w.language,
+                pc.confidence
+            FROM {DB_SCHEMA}.passage_citations pc
+            JOIN {DB_SCHEMA}.passages p ON pc.passage_id = p.passage_id
+            JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
+            WHERE pc.kg_node_id IN ({placeholders})
+            ORDER BY pc.confidence DESC, p.sequence_number
+            LIMIT 1
+            """,
+            *translation_node_ids,
+        )
+    except Exception:
+        return translation_for_passage(deps, passage_id)
     if target_rows:
         return target_rows[0]
 
@@ -2621,17 +2643,22 @@ async def _batch_fetch_translations(
     """
     if not passage_ids or (not deps.outgoing_edges and not deps.incoming_edges):
         return dict.fromkeys(passage_ids)
+    if not db_is_connected(deps.db):
+        return {pid: translation_for_passage(deps, pid) for pid in passage_ids}
 
     # --- Step 1: one query to get KG node IDs for ALL passages ---
     placeholders = ", ".join(f"${i + 1}" for i in range(len(passage_ids)))
-    rows = await deps.db.fetch(
-        f"""
-        SELECT passage_id::text, kg_node_id
-        FROM {DB_SCHEMA}.passage_citations
-        WHERE passage_id IN ({placeholders})
-        """,
-        *passage_ids,
-    )
+    try:
+        rows = await deps.db.fetch(
+            f"""
+            SELECT passage_id::text, kg_node_id
+            FROM {DB_SCHEMA}.passage_citations
+            WHERE passage_id IN ({placeholders})
+            """,
+            *passage_ids,
+        )
+    except Exception:
+        return {pid: translation_for_passage(deps, pid) for pid in passage_ids}
 
     # Build passage_id -> list[kg_node_id]
     passage_to_kg: dict[str, list[str]] = {}
@@ -2690,27 +2717,30 @@ async def _batch_fetch_translations(
             f"${i + 1}" for i in range(len(all_translation_node_ids))
         )
         t_node_list = list(all_translation_node_ids)
-        t_rows = await deps.db.fetch(
-            f"""
-            SELECT DISTINCT
-                pc.kg_node_id::text AS kg_node_id,
-                p.passage_id,
-                p.work_id::text AS work_id,
-                p.text_content,
-                p.canonical_ref,
-                p.sequence_number,
-                w.title,
-                w.author,
-                w.language,
-                pc.confidence
-            FROM {DB_SCHEMA}.passage_citations pc
-            JOIN {DB_SCHEMA}.passages p ON pc.passage_id = p.passage_id
-            JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
-            WHERE pc.kg_node_id IN ({t_placeholders})
-            ORDER BY pc.confidence DESC, p.sequence_number
-            """,
-            *t_node_list,
-        )
+        try:
+            t_rows = await deps.db.fetch(
+                f"""
+                SELECT DISTINCT
+                    pc.kg_node_id::text AS kg_node_id,
+                    p.passage_id,
+                    p.work_id::text AS work_id,
+                    p.text_content,
+                    p.canonical_ref,
+                    p.sequence_number,
+                    w.title,
+                    w.author,
+                    w.language,
+                    pc.confidence
+                FROM {DB_SCHEMA}.passage_citations pc
+                JOIN {DB_SCHEMA}.passages p ON pc.passage_id = p.passage_id
+                JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
+                WHERE pc.kg_node_id IN ({t_placeholders})
+                ORDER BY pc.confidence DESC, p.sequence_number
+                """,
+                *t_node_list,
+            )
+        except Exception:
+            return {pid: translation_for_passage(deps, pid) for pid in passage_ids}
         for t_row in t_rows:
             nid = str(t_row["kg_node_id"])
             translation_passages.setdefault(nid, []).append(t_row)
@@ -4196,19 +4226,17 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
     # --- Strategy-based corpus discovery ---
     limit = budget.node_search_limit()
 
-    # Select strategy based on user-requested retrieval_mode
-    if state.retrieval_mode == "sql":
-        # Explicit SQL mode — skip vector entirely
-        strategy = SQLStrategy(min_bundles=4)
-        logger.info("Using SQLStrategy (explicit sql mode)")
-    elif state.retrieval_mode == "vector":
-        # Explicit vector mode — use vector only, no fallback
-        strategy = ctx.deps.retrieval_strategy
-        logger.info("Using VectorStrategy (explicit vector mode)")
-    else:
-        # Auto mode — try vector first, fallback to SQL
-        strategy = ctx.deps.retrieval_strategy
-        logger.info("Using VectorStrategy with SQL fallback (auto mode)")
+    # Vectorless pipeline: SQL when database is connected, snapshot otherwise.
+    # The legacy "vector" mode is silently treated as "auto" for backward
+    # compatibility with stored request payloads.
+    strategy = ctx.deps.retrieval_strategy
+    if strategy is None:
+        if db_is_connected(ctx.deps.db):
+            strategy = SQLStrategy(min_bundles=4)
+            logger.info("Using SQLStrategy (database-backed retrieval)")
+        else:
+            strategy = SnapshotStrategy(min_passages=4)
+            logger.info("Using SnapshotStrategy (snapshot fallback)")
 
     seed_ids: list[str] = []
     passage_anchor_ids: list[str] = []
@@ -4220,23 +4248,43 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
             node_limit=limit,
         )
 
-        # Auto-fallback: if vector returned nothing in auto mode, try SQL
-        if (
-            not seed_ids
-            and state.retrieval_mode == "auto"
-            and isinstance(strategy, VectorStrategy)
-        ):
-            logger.info("VectorStrategy returned no seeds, falling back to SQLStrategy")
-            fallback = SQLStrategy(min_bundles=4)
-            seed_ids, passage_anchor_ids = await fallback.discover_seeds(
-                queries=queries,
-                deps=ctx.deps,
-                node_limit=limit,
-            )
-            state.metadata["retrieval_mode_used"] = "sql"
+        # If the configured strategy returned nothing, fall back to the
+        # remaining surface (snapshot when DB is unavailable, SQL otherwise).
+        if not seed_ids:
+            if db_is_connected(ctx.deps.db) and not isinstance(strategy, SQLStrategy):
+                logger.info("Primary strategy returned no seeds, retrying via SQLStrategy")
+                fallback: SQLStrategy | SnapshotStrategy = SQLStrategy(min_bundles=4)
+                fallback_mode = "sql"
+            elif not db_is_connected(ctx.deps.db) and not isinstance(
+                strategy, SnapshotStrategy
+            ):
+                logger.info(
+                    "Primary strategy returned no seeds, retrying via SnapshotStrategy"
+                )
+                fallback = SnapshotStrategy(min_passages=4)
+                fallback_mode = "snapshot"
+            else:
+                fallback = None  # type: ignore[assignment]
+                fallback_mode = ""
+
+            if fallback is not None:
+                seed_ids, passage_anchor_ids = await fallback.discover_seeds(
+                    queries=queries,
+                    deps=ctx.deps,
+                    node_limit=limit,
+                )
+                state.metadata["retrieval_mode_used"] = fallback_mode
+            else:
+                state.metadata["retrieval_mode_used"] = (
+                    "sql" if isinstance(strategy, SQLStrategy) else "snapshot"
+                )
         else:
             state.metadata["retrieval_mode_used"] = (
-                "sql" if isinstance(strategy, SQLStrategy) else state.retrieval_mode
+                "sql"
+                if isinstance(strategy, SQLStrategy)
+                else "snapshot"
+                if isinstance(strategy, SnapshotStrategy)
+                else state.retrieval_mode
             )
 
         # Filter seeds to those in node_lookup and build evidence
@@ -4293,91 +4341,6 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
                 decision_type="seed_selection",
                 title="Select high-value seed nodes",
                 rationale="Strategy-selected seeds become the starting corpus map.",
-                selected_ids=seed_ids[:20],
-            )
-    else:
-        # Fallback: original Qdrant search path (no strategy configured)
-        limit_per_query = max(8, budget.node_search_limit() // max(1, len(queries)))
-        hit_map: dict[str, dict[str, Any]] = {}
-        for query in queries:
-            try:
-                embedding = await _get_embedding(ctx.deps, query)
-                hits = await ctx.deps.qdrant.search_nodes(
-                    embedding, limit=limit_per_query
-                )
-            except Exception:
-                logger.warning("Corpus discovery failed for query %s", query)
-                continue
-
-            for hit in hits:
-                node_id = hit.get("id")
-                if not node_id or node_id not in ctx.deps.node_lookup:
-                    continue
-                best = hit_map.get(node_id)
-                if best is None or hit.get("score", 0.0) > best.get("score", 0.0):
-                    hit_map[node_id] = hit
-
-        ordered_hits = sorted(
-            hit_map.values(), key=lambda item: item.get("score", 0.0), reverse=True
-        )
-        trace_payload["semantic_hits"] = [
-            {
-                "id": str(hit.get("id")),
-                "score": round(float(hit.get("score", 0.0)), 4),
-                "label": ctx.deps.node_lookup.get(str(hit.get("id")), {}).get("label"),
-                "type": ctx.deps.node_lookup.get(str(hit.get("id")), {}).get("type"),
-            }
-            for hit in ordered_hits[:12]
-        ]
-        _record_tool_call(
-            state,
-            tool_name="search_entities",
-            stage_id="discover_corpus",
-            query=" | ".join(queries[:4]),
-            rationale="semantic discovery over KG nodes",
-            selected_ids=[
-                str(hit.get("id")) for hit in ordered_hits[:12] if hit.get("id")
-            ],
-            details={
-                "queries": queries[:8],
-                "hit_count": len(ordered_hits),
-            },
-        )
-        seed_ids = []
-        passage_anchor_ids = []
-        existing = state.all_node_ids()
-        for hit in ordered_hits:
-            node_id = str(hit["id"])
-            if node_id in existing:
-                continue
-            evidence = _make_evidence_from_node(
-                node_id,
-                ctx.deps.node_lookup[node_id],
-                score=hit.get("score", 0.0),
-                source=EvidenceSource.SEMANTIC_SEARCH,
-            )
-            if evidence.layer == EvidenceLayer.PRIMARY:
-                state.primary_evidence.append(evidence)
-            else:
-                state.secondary_evidence.append(evidence)
-            existing.add(node_id)
-            seed_ids.append(node_id)
-            if (
-                evidence.layer == EvidenceLayer.PRIMARY
-                and evidence.type.lower() != "passage"
-                and len(passage_anchor_ids) < 12
-            ):
-                passage_anchor_ids.append(node_id)
-
-        state.seed_node_ids = list(dict.fromkeys(state.seed_node_ids + seed_ids))
-        trace_payload["seed_node_ids"] = state.seed_node_ids[:20]
-        if seed_ids:
-            _record_reading_decision(
-                state,
-                stage_id="discover_corpus",
-                decision_type="seed_selection",
-                title="Select high-value seed nodes",
-                rationale="Highest scoring semantic hits become the starting corpus map.",
                 selected_ids=seed_ids[:20],
             )
 

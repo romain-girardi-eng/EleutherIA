@@ -1,16 +1,15 @@
 """Production-grade integration tests: full pipeline per query type.
 
-These tests hit real services — PostgreSQL, Qdrant, and a live LLM.
+These tests hit real services — PostgreSQL and a live LLM.
 They are skipped automatically when the required environment variables
 are not set, so they never break CI without infrastructure.
 
 Run locally:
-    DATABASE_URL='...' QDRANT_URL='...' MOONSHOT_API_KEY='...' \
+    DATABASE_URL='...' MOONSHOT_API_KEY='...' \
     pytest tests/integration/ -v -m integration
 
 Required env vars (at least one LLM key must be present):
     DATABASE_URL     — asyncpg-compatible PostgreSQL connection string
-    QDRANT_URL       — Qdrant server URL (default: http://localhost:6333)
     MOONSHOT_API_KEY — Kimi K2 (preferred)
     GEMINI_API_KEY   — Gemini (fallback)
     OPENROUTER_API_KEY — OpenRouter (fallback)
@@ -67,27 +66,19 @@ def _build_llm() -> LLMService:
 
 @pytest.fixture(scope="session")
 async def graphrag() -> GraphRAGService:
-    """Boot a real GraphRAGService backed by live DB, Qdrant, and LLM."""
+    """Boot a real GraphRAGService backed by live DB + LLM (vectorless)."""
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../../database/src"))
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../../knowledge graph/src"))
 
     from eleutheria_database.services.db import DatabaseService
-    from eleutheria_kg.services.qdrant import QdrantService
 
     db = DatabaseService()
     await db.connect()
 
-    qdrant = QdrantService()
-    await qdrant.connect()
-
     llm = _build_llm()
 
-    svc = GraphRAGService(
-        db_service=db,
-        qdrant_service=qdrant,
-        llm_service=llm,
-    )
+    svc = GraphRAGService(db_service=db, llm_service=llm)
     await svc.load_kg()
 
     yield svc
@@ -120,7 +111,7 @@ class TestSpecificEntityPipeline:
 
 @pytest.mark.integration
 class TestGlobalAbstractPipeline:
-    """Broad doctrinal question: hybrid retrieval + HyDE path."""
+    """Broad doctrinal question: hybrid retrieval path."""
 
     async def test_stoic_fate_query(self, graphrag: GraphRAGService) -> None:
         agent = graphrag._ensure_agent()

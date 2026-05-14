@@ -96,8 +96,8 @@ class TestClassifyQueryType:
         await node.run(ctx)
 
         assert state.pipeline_config is not None
-        # specific_entity has use_hyde=False
-        assert state.pipeline_config.use_hyde is False
+        # specific_entity disables reranking-free defaults — sanity check a field
+        assert state.pipeline_config.use_tree_reasoning is True
 
     @pytest.mark.asyncio
     async def test_metadata_populated(self):

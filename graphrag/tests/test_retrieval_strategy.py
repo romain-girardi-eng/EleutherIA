@@ -4,69 +4,9 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from eleutheria_graphrag.services.retrieval_strategy import (
+    SnapshotStrategy,
     SQLStrategy,
-    VectorStrategy,
 )
-
-
-@pytest.mark.asyncio
-async def test_vector_strategy_calls_qdrant():
-    """VectorStrategy embeds queries and searches Qdrant."""
-    mock_deps = MagicMock()
-    mock_deps.qdrant.search_nodes = AsyncMock(return_value=[
-        MagicMock(id="node_1", score=0.9, payload={"type": "concept"}),
-        MagicMock(id="node_2", score=0.8, payload={"type": "person"}),
-    ])
-
-    async def mock_embed(_deps, _query):
-        return [0.1] * 3072
-
-    strategy = VectorStrategy(embed_fn=mock_embed)
-    seeds, anchors = await strategy.discover_seeds(
-        queries=["Stoic fate"],
-        deps=mock_deps,
-        node_limit=20,
-    )
-    assert "node_1" in seeds
-    assert "node_2" in seeds
-    mock_deps.qdrant.search_nodes.assert_called_once()
-
-
-@pytest.mark.asyncio
-async def test_vector_strategy_handles_qdrant_failure():
-    """VectorStrategy returns empty on Qdrant failure."""
-    mock_deps = MagicMock()
-    mock_deps.qdrant.search_nodes = AsyncMock(side_effect=ConnectionError("Qdrant down"))
-
-    async def mock_embed(_deps, _query):
-        return [0.1] * 3072
-
-    strategy = VectorStrategy(embed_fn=mock_embed)
-    seeds, anchors = await strategy.discover_seeds(
-        queries=["Stoic fate"],
-        deps=mock_deps,
-        node_limit=20,
-    )
-    assert seeds == []
-    assert anchors == []
-
-
-@pytest.mark.asyncio
-async def test_vector_strategy_handles_embedding_failure():
-    """VectorStrategy returns empty when embedding fails (e.g., Gemini 429)."""
-    mock_deps = MagicMock()
-
-    async def mock_embed_fail(_deps, _query):
-        raise Exception("429 Too Many Requests")
-
-    strategy = VectorStrategy(embed_fn=mock_embed_fail)
-    seeds, anchors = await strategy.discover_seeds(
-        queries=["Stoic fate"],
-        deps=mock_deps,
-        node_limit=20,
-    )
-    assert seeds == []
-    assert anchors == []
 
 
 @pytest.mark.asyncio
@@ -74,18 +14,34 @@ async def test_sql_strategy_step1_passage_citations():
     """Step 1: finds seeds via kg_nodes label match + passage_citations."""
     mock_deps = MagicMock()
     mock_deps.db = AsyncMock()
-    mock_deps.db.fetch = AsyncMock(side_effect=[
-        [{"node_id": "concept_fate"}, {"node_id": "person_chrysippus"}],
-        [
-            {"passage_id": "p1", "kg_node_id": "concept_fate", "confidence": 0.9},
-            {"passage_id": "p2", "kg_node_id": "concept_fate", "confidence": 0.8},
-            {"passage_id": "p3", "kg_node_id": "person_chrysippus", "confidence": 0.85},
-            {"passage_id": "p4", "kg_node_id": "person_chrysippus", "confidence": 0.7},
-        ],
-    ])
-    mock_deps.outgoing_edges = {"concept_fate": [{"target": "concept_determinism", "relation": "related_to"}]}
+    mock_deps.db.fetch = AsyncMock(
+        side_effect=[
+            # Tree-routed passage fetch (no work titles in plain "Stoic fate" query)
+            # First call: label match
+            [{"node_id": "concept_fate"}, {"node_id": "person_chrysippus"}],
+            # Second call: passage_citations
+            [
+                {"passage_id": "p1", "kg_node_id": "concept_fate", "confidence": 0.9},
+                {"passage_id": "p2", "kg_node_id": "concept_fate", "confidence": 0.8},
+                {
+                    "passage_id": "p3",
+                    "kg_node_id": "person_chrysippus",
+                    "confidence": 0.85,
+                },
+                {
+                    "passage_id": "p4",
+                    "kg_node_id": "person_chrysippus",
+                    "confidence": 0.7,
+                },
+            ],
+        ]
+    )
+    mock_deps.outgoing_edges = {
+        "concept_fate": [{"target": "concept_determinism", "relation": "related_to"}]
+    }
     mock_deps.incoming_edges = {}
     mock_deps.search = None
+    mock_deps.tree_index = None  # No tree routing for this test
 
     strategy = SQLStrategy(min_bundles=4)
     seeds, anchors = await strategy.discover_seeds(
@@ -100,22 +56,35 @@ async def test_sql_strategy_step1_passage_citations():
 
 
 @pytest.mark.asyncio
-async def test_sql_strategy_escalates_to_step2():
-    """When step 1 finds < min_bundles, escalates to HybridSearch."""
+async def test_sql_strategy_escalates_to_hybrid_search():
+    """When earlier steps find < min_bundles, escalates to HybridSearch."""
     mock_deps = MagicMock()
     mock_deps.db = AsyncMock()
-    mock_deps.db.fetch = AsyncMock(side_effect=[
-        [{"node_id": "concept_fate"}],
-        [{"passage_id": "p1", "kg_node_id": "concept_fate", "confidence": 0.9}],
-    ])
+    mock_deps.db.fetch = AsyncMock(
+        side_effect=[
+            # Step: label match
+            [{"node_id": "concept_fate"}],
+            # Step: passage citations
+            [{"passage_id": "p1", "kg_node_id": "concept_fate", "confidence": 0.9}],
+            # Step: lemma lookup (no terms expanded → empty)
+            [],
+        ]
+    )
     mock_deps.outgoing_edges = {}
     mock_deps.incoming_edges = {}
+    mock_deps.tree_index = None
     mock_search = AsyncMock()
-    mock_search.hybrid_search = AsyncMock(return_value=[
-        {"passage_id": "p2", "work_id": "w1", "text_content": "about fate..."},
-        {"passage_id": "p3", "work_id": "w1", "text_content": "heimarmene..."},
-        {"passage_id": "p4", "work_id": "w2", "text_content": "Chrysippus argues..."},
-    ])
+    mock_search.hybrid_search = AsyncMock(
+        return_value=[
+            {"passage_id": "p2", "work_id": "w1", "text_content": "about fate..."},
+            {"passage_id": "p3", "work_id": "w1", "text_content": "heimarmene..."},
+            {
+                "passage_id": "p4",
+                "work_id": "w2",
+                "text_content": "Chrysippus argues...",
+            },
+        ]
+    )
     mock_deps.search = mock_search
 
     strategy = SQLStrategy(min_bundles=4)
@@ -137,6 +106,7 @@ async def test_sql_strategy_returns_empty_gracefully():
     mock_deps.outgoing_edges = {}
     mock_deps.incoming_edges = {}
     mock_deps.search = None
+    mock_deps.tree_index = None
 
     strategy = SQLStrategy(min_bundles=4)
     seeds, anchors = await strategy.discover_seeds(
@@ -146,3 +116,125 @@ async def test_sql_strategy_returns_empty_gracefully():
     )
     assert seeds == []
     assert anchors == []
+
+
+@pytest.mark.asyncio
+async def test_sql_strategy_uses_lemma_expander_when_available():
+    """When a LemmaExpander is wired, SQLStrategy queries oga_tokens.lemma."""
+    mock_deps = MagicMock()
+    mock_deps.db = AsyncMock()
+    # Step order:
+    #   1. label tier-1 match → empty
+    #   2. description tier-2 match → empty
+    #   3. lemma lookup → 2 hits
+    mock_deps.db.fetch = AsyncMock(
+        side_effect=[
+            [],  # label match
+            [],  # description match
+            [{"passage_id": "p_lemma_1"}, {"passage_id": "p_lemma_2"}],  # lemma lookup
+        ]
+    )
+    mock_deps.outgoing_edges = {}
+    mock_deps.incoming_edges = {}
+    mock_deps.search = None
+    mock_deps.tree_index = None
+
+    expander = MagicMock()
+    expander.expand = AsyncMock(return_value=["hekousi", "prohaires", "voluntary"])
+
+    strategy = SQLStrategy(min_bundles=2, lemma_expander=expander)
+    seeds, anchors = await strategy.discover_seeds(
+        queries=["voluntary action"],
+        deps=mock_deps,
+        node_limit=100,
+    )
+    expander.expand.assert_awaited_once()
+    assert "p_lemma_1" in anchors
+
+
+@pytest.mark.asyncio
+async def test_sql_strategy_tree_routing_picks_up_work_title():
+    """When the query mentions a known author/work, tree routing resolves it."""
+    mock_deps = MagicMock()
+    mock_deps.db = AsyncMock()
+    # Order of fetch calls when tree resolves a work:
+    #   1) tree-routed passage fetch (returned passage IDs)
+    #   2) label match
+    #   3) citations
+    mock_deps.db.fetch = AsyncMock(
+        side_effect=[
+            [{"passage_id": "tree_p_1"}, {"passage_id": "tree_p_2"}],
+            [{"node_id": "person_aristotle"}],
+            [
+                {
+                    "passage_id": "tree_p_3",
+                    "kg_node_id": "person_aristotle",
+                    "confidence": 0.9,
+                }
+            ],
+        ]
+    )
+    mock_deps.outgoing_edges = {}
+    mock_deps.incoming_edges = {}
+    mock_deps.search = None
+
+    tree = MagicMock()
+    tree.resolve_work_ids = AsyncMock(return_value=["w-nicomachean-ethics"])
+    mock_deps.tree_index = tree
+
+    strategy = SQLStrategy(min_bundles=2)
+    seeds, anchors = await strategy.discover_seeds(
+        queries=["voluntary action in Aristotle Nicomachean Ethics"],
+        deps=mock_deps,
+        node_limit=100,
+    )
+    tree.resolve_work_ids.assert_awaited()
+    assert "tree_p_1" in anchors
+
+
+@pytest.mark.asyncio
+async def test_snapshot_strategy_finds_seed_and_passage_anchor():
+    mock_deps = MagicMock()
+    mock_deps.node_lookup = {
+        "concept_fate": {
+            "id": "concept_fate",
+            "label": "Fate",
+            "type": "concept",
+            "description": "Stoic heimarmene and providence",
+            "metadata": {},
+        },
+        "passage_plut_fat_1": {
+            "id": "passage_plut_fat_1",
+            "label": "Plutarch, De fato 1",
+            "type": "passage",
+            "description": "Greek and translation about fate as energeia and ousia",
+            "metadata": {
+                "author": "Plutarch",
+                "work_title": "De fato",
+                "canonical_ref": "Plut. Fat. 1",
+                "language": "grc",
+            },
+        },
+    }
+    mock_deps.outgoing_edges = {
+        "concept_fate": [
+            {
+                "source": "concept_fate",
+                "target": "passage_plut_fat_1",
+                "relation": "evidenced_by",
+                "weight": 0.9,
+                "metadata": {"confidence": 0.9},
+            }
+        ]
+    }
+    mock_deps.incoming_edges = {}
+
+    strategy = SnapshotStrategy(min_passages=1)
+    seeds, anchors = await strategy.discover_seeds(
+        queries=["Stoic fate"],
+        deps=mock_deps,
+        node_limit=10,
+    )
+
+    assert "concept_fate" in seeds
+    assert "passage_plut_fat_1" in anchors

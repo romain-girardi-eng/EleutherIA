@@ -1,7 +1,7 @@
 # =============================================================================
 # EleutherIA — Local Development (self-contained)
 # =============================================================================
-# All services run locally: PostgreSQL + Qdrant + Backend + Frontend.
+# All services run locally: PostgreSQL + Backend + Frontend.
 # No external dependencies required.
 #
 # Usage:
@@ -10,7 +10,7 @@
 #   docker compose --profile monitoring up -d # + Prometheus/Grafana
 #   docker compose --profile full up -d       # Everything
 #
-# For production (Supabase + Qdrant Cloud), see deploy/production/
+# For production (Supabase), see deploy/production/
 # =============================================================================
 
 name: eleutheria
@@ -31,7 +31,7 @@ services:
       POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=en_US.UTF-8"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/schema:/docker-entrypoint-initdb.d:ro
+      - ../database/schema:/docker-entrypoint-initdb.d:ro
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     command:
@@ -62,43 +62,11 @@ services:
           memory: 1G
 
   # ---------------------------------------------------------------------------
-  # Qdrant — Vector Database
-  # ---------------------------------------------------------------------------
-  qdrant:
-    image: qdrant/qdrant:v1.13.3
-    container_name: eleutheria-qdrant
-    restart: unless-stopped
-    init: true
-    environment:
-      QDRANT__SERVICE__GRPC_PORT: 6334
-      QDRANT__SERVICE__HTTP_PORT: 6333
-      QDRANT__STORAGE__STORAGE_PATH: /qdrant/storage
-      QDRANT__LOG_LEVEL: INFO
-    volumes:
-      - qdrant_data:/qdrant/storage
-    ports:
-      - "${QDRANT_HTTP_PORT:-6333}:6333"
-      - "${QDRANT_GRPC_PORT:-6334}:6334"
-    healthcheck:
-      test:
-        ["CMD-SHELL", "timeout 2 bash -c '</dev/tcp/localhost/6333' || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    networks:
-      - internal
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-
-  # ---------------------------------------------------------------------------
   # Backend — FastAPI Application
   # ---------------------------------------------------------------------------
   backend:
     build:
-      context: .
+      context: ..
       dockerfile: backend/Dockerfile
     image: eleutheria/backend:${TAG:-latest}
     container_name: eleutheria-backend
@@ -117,9 +85,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-eleutheria} # pragma: allowlist secret
       DB_POOL_MIN_SIZE: ${DB_POOL_MIN_SIZE:-5}
       DB_POOL_MAX_SIZE: ${DB_POOL_MAX_SIZE:-20}
-      QDRANT_HOST: qdrant
-      QDRANT_HTTP_PORT: 6333
-      QDRANT_API_KEY: ${QDRANT_API_KEY:-}
+      DATABASE_REQUIRED: ${DATABASE_REQUIRED:-false}
+      ELEUTHERIA_KG_SNAPSHOT_DIR: ${ELEUTHERIA_KG_SNAPSHOT_DIR:-/app/data/kg}
       LLM_PREFERRED_PROVIDER: ${LLM_PREFERRED_PROVIDER:-gemini}
       LLM_THINKING_PROVIDER: ${LLM_THINKING_PROVIDER:-openrouter}
       MOONSHOT_API_KEY: ${MOONSHOT_API_KEY:-}
@@ -133,11 +100,6 @@ services:
       OPENROUTER_HTTP_REFERER: ${OPENROUTER_HTTP_REFERER:-https://free-will.app}
       OPENROUTER_APP_NAME: ${OPENROUTER_APP_NAME:-EleutherIA}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
-      GEMINI_EMBEDDING_MODEL: ${GEMINI_EMBEDDING_MODEL:-models/gemini-embedding-001}
-      GEMINI_EMBEDDING_TPM_LIMIT: ${GEMINI_EMBEDDING_TPM_LIMIT:-30000}
-      GEMINI_EMBEDDING_RPM_LIMIT: ${GEMINI_EMBEDDING_RPM_LIMIT:-100}
-      GEMINI_EMBEDDING_RPD_LIMIT: ${GEMINI_EMBEDDING_RPD_LIMIT:-1000}
-      EMBEDDING_BATCH_SIZE: ${EMBEDDING_BATCH_SIZE:-50}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-this-in-production} # pragma: allowlist secret
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost,http://localhost:80,http://localhost:5173}
       PROMETHEUS_ENABLED: "true"
@@ -146,8 +108,6 @@ services:
       - "${BACKEND_PORT:-8000}:8000"
     depends_on:
       postgres:
-        condition: service_healthy
-      qdrant:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
@@ -169,7 +129,7 @@ services:
   # ---------------------------------------------------------------------------
   frontend:
     build:
-      context: ./frontend
+      context: ../frontend
       dockerfile: Dockerfile
       args:
         VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
@@ -282,7 +242,6 @@ networks:
 
 volumes:
   postgres_data:
-  qdrant_data:
   pgadmin_data:
   prometheus_data:
   grafana_data:
