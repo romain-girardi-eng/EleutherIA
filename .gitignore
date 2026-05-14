@@ -96,6 +96,7 @@ credentials/
 *.json.backup*
 *.backup*.json
 data/exports/
+data/spike/
 *.parquet
 *.arrow
 
