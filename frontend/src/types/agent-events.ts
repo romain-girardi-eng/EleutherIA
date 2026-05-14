@@ -125,6 +125,29 @@ export interface ErrorEvent {
   message: string;
 }
 
+/** Emitted by the Counter-Evidence Hunter as each opposing testimony is
+ *  discovered. The synthesizer's v2 pass uses these findings to steel-man
+ *  the answer; the UI streams them live so users see the adversarial loop. */
+export interface CounterEvidenceFoundEvent {
+  type: 'counter_evidence_found';
+  claim_id: string;
+  /** contradiction = source denies the claim;
+   *  qualification = source adds a limit the synthesizer missed;
+   *  alternative   = rival school / scholar position */
+  testimony_type: 'contradiction' | 'qualification' | 'alternative';
+  source: string;
+  excerpt: string;
+  force: 'strong' | 'moderate' | 'weak';
+}
+
+/** Emitted once after the Counter-Evidence Hunter finishes — lets the UI
+ *  close out the adversarial-loop indicator and surface the aggregate. */
+export interface CounterEvidenceCompleteEvent {
+  type: 'counter_evidence_complete';
+  total_testimonia: number;
+  aggregate_summary: string;
+}
+
 export type AgentEvent =
   | AgentStartEvent
   | AgentStepEvent
@@ -134,6 +157,8 @@ export type AgentEvent =
   | KGNodeActivatedEvent
   | TokenEvent
   | CitationVerifiedEvent
+  | CounterEvidenceFoundEvent
+  | CounterEvidenceCompleteEvent
   | FinalAnswerEvent
   | ErrorEvent;
 
@@ -152,6 +177,8 @@ export function isAgentEvent(value: unknown): value is AgentEvent {
     'kg_node_activated',
     'token',
     'citation_verified',
+    'counter_evidence_found',
+    'counter_evidence_complete',
     'final_answer',
     'error',
   ].includes(candidate.type);
