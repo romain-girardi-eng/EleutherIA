@@ -165,6 +165,20 @@
       "source_types": ["argument", "concept", "group", "school"],
       "target_types": ["passage"]
     },
+    "attested_by": {
+      "description": "Source fragmentary passage (lost original) is doxographically attested by the target transmitting passage (extant Cicero, Gellius, Plutarch, etc.).",
+      "category": "citation",
+      "inverse": "attests",
+      "source_types": ["passage", "quote", "argument"],
+      "target_types": ["passage"]
+    },
+    "attests": {
+      "description": "Source transmitting passage attests / reports a fragmentary passage of a lost work.",
+      "category": "citation",
+      "inverse": "attested_by",
+      "source_types": ["passage"],
+      "target_types": ["passage", "quote", "argument"]
+    },
     "preserves": {
       "description": "Source preserves target fragment",
       "category": "textual",
