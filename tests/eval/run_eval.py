@@ -230,7 +230,7 @@ def compute_query_metrics(
     haystack = " ".join(returned_entities + [answer_text]).lower()
     keywords = case.expected_entity_keywords
     if keywords:
-        hits = sum(1 for kw in keywords if kw.lower() in haystack)
+        hits = sum(1 for kw in keywords if str(kw).lower() in haystack)
         kw_rate = hits / len(keywords)
     else:
         kw_rate = 0.0
