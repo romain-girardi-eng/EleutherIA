@@ -21,6 +21,16 @@ from typing import Any
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
+from eleutheria_graphrag.models.counter_evidence import (
+    ClaimUnit,
+    CounterEvidenceReport,
+    SynthesizedDraft,
+)
+from eleutheria_graphrag.services.counter_evidence_hunter import (
+    CounterEvidenceHunter,
+    MCPToolset,
+    format_report_for_synthesizer,
+)
 from eleutheria_graphrag.services.lemma_expansion import LemmaExpander
 from eleutheria_graphrag.services.llm_reranker import LLMRerankerService
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
@@ -356,7 +366,8 @@ class GraphRAGService:
                     "source": source,
                     "target": target,
                     "relation": edge.get("relation") or "",
-                    "description": edge.get("description") or metadata.get("description"),
+                    "description": edge.get("description")
+                    or metadata.get("description"),
                     "weight": normalized_weight,
                     "metadata": metadata,
                 }
@@ -383,6 +394,7 @@ class GraphRAGService:
         include_passages: bool = True,
         selected_model: str = "gemini-3.1-pro",
         retrieval_mode: str = "auto",
+        hunt_counter_evidence: bool = False,
     ) -> dict[str, Any]:
         """Execute agentic GraphRAG query pipeline.
 
@@ -420,8 +432,150 @@ class GraphRAGService:
             selected_model=selected_model,
             retrieval_mode=retrieval_mode,
         )
+
+        # Two-pass adversarial loop (mode=deep / thesis-grade queries).
+        # Off by default to keep fast queries fast.
+        if hunt_counter_evidence:
+            try:
+                report = await self._run_counter_evidence_hunt(result, question)
+                if report.total_testimonia > 0:
+                    revised = await self._resynthesize_with_counter_evidence(
+                        agent=agent,
+                        question=question,
+                        v1_result=result,
+                        report=report,
+                        selected_model=selected_model,
+                        retrieval_mode=retrieval_mode,
+                    )
+                    result = revised
+                result.setdefault("metadata", {})["counter_evidence"] = (
+                    report.model_dump()
+                )
+            except Exception as exc:
+                logger.warning("Counter-evidence hunt failed: %s", exc, exc_info=True)
+                result.setdefault("metadata", {})["counter_evidence_error"] = str(exc)
+
         self._response_cache.put(question, selected_model, retrieval_mode, result)
         return result
+
+    # ------------------------------------------------------------------
+    # Counter-evidence two-pass loop
+    # ------------------------------------------------------------------
+
+    def _build_counter_evidence_hunter(
+        self,
+        on_finding: Any | None = None,
+    ) -> CounterEvidenceHunter | None:
+        """Construct a CounterEvidenceHunter wired to the agent's tools."""
+        agent = self._agent
+        if agent is None:
+            return None
+        tools_by_name = getattr(agent, "_tools_by_name", None) or {}
+        search_tool = tools_by_name.get("search_passages")
+        subgraph_tool = tools_by_name.get("explore_subgraph")
+        if search_tool is None or subgraph_tool is None:
+            return None
+        toolset = MCPToolset(
+            search_passages=search_tool,
+            explore_subgraph=subgraph_tool,
+            get_neighbors=tools_by_name.get("get_neighbors"),
+            get_node_detail=tools_by_name.get("get_node_detail"),
+        )
+        return CounterEvidenceHunter(
+            llm=self.llm,
+            tools=toolset,
+            on_finding=on_finding,
+        )
+
+    @staticmethod
+    def _extract_claims_from_result(
+        result: dict[str, Any],
+    ) -> list[ClaimUnit]:
+        """Build ClaimUnits from the synthesizer's claim_ledger (or fallback)."""
+        ledger = result.get("claim_ledger") or []
+        claims: list[ClaimUnit] = []
+        for idx, entry in enumerate(ledger):
+            if isinstance(entry, dict):
+                claim_text = entry.get("claim", "")
+                evidence_ids = list(entry.get("evidence_ids") or [])
+            else:
+                claim_text = getattr(entry, "claim", "")
+                evidence_ids = list(getattr(entry, "evidence_ids", []) or [])
+            if not claim_text:
+                continue
+            claims.append(
+                ClaimUnit(
+                    claim_id=f"c{idx + 1}",
+                    claim_text=claim_text,
+                    seed_node_ids=evidence_ids[:5],
+                    keywords=[],
+                )
+            )
+        # Fallback: synthesize one coarse claim from the answer if no ledger.
+        if not claims:
+            answer = (result.get("answer") or "").strip()
+            if answer:
+                claims.append(
+                    ClaimUnit(
+                        claim_id="c1",
+                        claim_text=answer[:400],
+                        seed_node_ids=list(result.get("seed_nodes") or [])[:5],
+                    )
+                )
+        return claims
+
+    async def _run_counter_evidence_hunt(
+        self,
+        v1_result: dict[str, Any],
+        question: str,
+    ) -> CounterEvidenceReport:
+        hunter = self._build_counter_evidence_hunter()
+        if hunter is None:
+            return CounterEvidenceReport(
+                per_claim_findings=[],
+                aggregate_summary="Hunter unavailable: agent tools not initialized.",
+            )
+        claims = self._extract_claims_from_result(v1_result)
+        draft = SynthesizedDraft(
+            answer=v1_result.get("answer", ""),
+            claims=claims,
+        )
+        return await hunter.hunt(draft)
+
+    async def _resynthesize_with_counter_evidence(
+        self,
+        *,
+        agent: ScholarlyAgent,
+        question: str,
+        v1_result: dict[str, Any],
+        report: CounterEvidenceReport,
+        selected_model: str,
+        retrieval_mode: str,
+    ) -> dict[str, Any]:
+        """Feed the counter-evidence report back to the synthesizer for v2."""
+        counter_block = format_report_for_synthesizer(report)
+        v2_query = (
+            f"{question}\n\n"
+            f"FIRST DRAFT (engage with the counter-evidence below):\n"
+            f"{(v1_result.get('answer') or '')[:4000]}\n\n"
+            f"{counter_block}"
+        )
+        # If the agent exposes an explicit re-synthesis hook, use it. Otherwise
+        # fall back to a fresh query — the prompt itself carries the brief.
+        resynth = getattr(type(agent), "resynthesize", None)
+        if resynth is not None and callable(resynth):
+            return await agent.resynthesize(  # type: ignore[no-any-return]
+                question=question,
+                v1_result=v1_result,
+                counter_evidence=counter_block,
+                selected_model=selected_model,
+                retrieval_mode=retrieval_mode,
+            )
+        return await agent.query_dict(
+            v2_query,
+            selected_model=selected_model,
+            retrieval_mode=retrieval_mode,
+        )
 
     # ------------------------------------------------------------------
     # Query (streaming)
