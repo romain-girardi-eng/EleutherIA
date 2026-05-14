@@ -37,6 +37,24 @@ from eleutheria_graphrag.agents.state import RAGState, ScholarlyAnswer
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;·?!])\s+")
 logger = logging.getLogger(__name__)
 
+
+def _claim_from_answer(answer_text: str, ref: str) -> str | None:
+    """Extract the sentence containing citation ``[ref]`` from the answer.
+
+    Returns ``None`` if the marker is absent. Used by the v2 verifier hook to
+    pair each citation with the prose it is supposed to support.
+    """
+    if not answer_text or not ref:
+        return None
+    marker = f"[{ref}]"
+    if marker not in answer_text:
+        return None
+    for sentence in _SENTENCE_SPLIT_RE.split(answer_text):
+        if marker in sentence:
+            return sentence.strip()
+    return None
+
+
 AGENT_MODE = os.getenv("ELEUTHERIA_AGENT_MODE", "react")
 
 # FSM graph (kept for fsm mode and as fallback)
@@ -169,7 +187,98 @@ class ScholarlyAgent:
         # Phase 4: Text verification DISABLED — too many false positives
         # removing legitimate Greek text retrieved from evidence bundles.
         # TODO: rework to whitelist evidence bundle text before DB search.
+
+        # Phase 5: Adversarial citation verifier (v2). Optional — only runs
+        # when ``deps.verifier_v2`` is wired. Degrades gracefully: any error
+        # is logged and the unflagged draft is returned (the verifier never
+        # crashes the pipeline).
+        if self.deps.verifier_v2 is not None:
+            try:
+                answer = await self._run_citation_verifier_v2(answer)
+            except Exception:
+                logger.warning(
+                    "CitationVerifierV2 failed — returning unflagged draft",
+                    exc_info=True,
+                )
         return answer
+
+    async def _run_citation_verifier_v2(
+        self, answer: ScholarlyAnswer
+    ) -> ScholarlyAnswer:
+        """Run the v2 adversarial verifier and attach its report to the answer."""
+        from eleutheria_graphrag.models.verification import (
+            DraftClaim,
+            SynthesizedDraft,
+        )
+
+        verifier = self.deps.verifier_v2
+        if verifier is None or not answer.citations:
+            return answer
+
+        # Map each Citation → DraftClaim. The ``claim`` is the surrounding
+        # sentence in the rendered answer (best-effort) so the verifier has
+        # something to audit even when the synthesizer didn't expose a
+        # structured claim ledger.
+        claims: list[DraftClaim] = []
+        for citation in answer.citations:
+            claim_text = (
+                _claim_from_answer(answer.answer, citation.ref) or citation.label
+            )
+            claims.append(
+                DraftClaim(
+                    claim=claim_text,
+                    citation_id=citation.id,
+                    citation_kind="passage" if citation.type == "passage" else "node",
+                )
+            )
+
+        draft = SynthesizedDraft(
+            question=answer.question,
+            answer_text=answer.answer,
+            claims=claims,
+        )
+        report = await verifier.verify_draft(draft)
+
+        # Merge per-citation verdicts back into Citation.verified for the
+        # frontend. WEAK is reported as verified=False but kept; REJECTED and
+        # MISSING are flagged for removal.
+        verdicts = {c.citation_id: c for c in report.checks}
+        updated_citations = []
+        for citation in answer.citations:
+            verdict = verdicts.get(citation.id)
+            if verdict is None:
+                updated_citations.append(citation)
+                continue
+            updated_citations.append(
+                citation.model_copy(
+                    update={
+                        "verified": verdict.is_passing,
+                        "verification_note": (
+                            f"[{verdict.status.value}] {verdict.reasoning}"
+                        ),
+                    }
+                )
+            )
+
+        return answer.model_copy(
+            update={
+                "citations": updated_citations,
+                "metadata": {
+                    **answer.metadata,
+                    "citation_verifier_v2": {
+                        "total": report.total,
+                        "verified": report.verified,
+                        "weak": report.weak,
+                        "rejected": report.rejected,
+                        "missing": report.missing,
+                        "rejection_rate": report.rejection_rate,
+                        "flagged_for_rewrite": report.flagged_for_rewrite,
+                        "warning": report.warning,
+                        "aborted": report.aborted,
+                    },
+                },
+            }
+        )
 
     @staticmethod
     def _inject_passage_quotations(
