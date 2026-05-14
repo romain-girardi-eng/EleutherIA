@@ -7,10 +7,12 @@ or DATABASE_URL env vars.
 
 Usage:
     .venv-py314/bin/python database/scripts/apply_schema.py
+    .venv-py314/bin/python database/scripts/apply_schema.py --migration database/migrations/X.sql
 """
 
 from __future__ import annotations
 
+import argparse
 import asyncio
 import os
 import sys
@@ -30,7 +32,7 @@ SCHEMA_FILES = [
 ]
 
 
-async def run() -> int:
+async def _apply(files: list[str]) -> int:
     dsn = os.environ.get("SUPABASE_DATABASE_URL") or os.environ.get("DATABASE_URL")
     if not dsn:
         print("ERROR: SUPABASE_DATABASE_URL or DATABASE_URL must be set", file=sys.stderr)
@@ -38,8 +40,8 @@ async def run() -> int:
 
     conn = await asyncpg.connect(dsn, statement_cache_size=0)
     try:
-        for rel in SCHEMA_FILES:
-            path = REPO_ROOT / rel
+        for rel in files:
+            path = (REPO_ROOT / rel) if not Path(rel).is_absolute() else Path(rel)
             if not path.exists():
                 print(f"MISSING {rel}", file=sys.stderr)
                 return 3
@@ -55,6 +57,20 @@ async def run() -> int:
     finally:
         await conn.close()
     return 0
+
+
+async def run() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--migration",
+        action="append",
+        default=None,
+        help="Apply only the given migration file(s) instead of the full schema set.",
+    )
+    args = parser.parse_args()
+
+    files = args.migration if args.migration else SCHEMA_FILES
+    return await _apply(files)
 
 
 if __name__ == "__main__":

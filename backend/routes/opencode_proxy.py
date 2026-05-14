@@ -52,6 +52,7 @@ from backend.integrations.opencode import (
     verify_session_token,
 )
 from backend.routes.auth import get_current_user
+from backend.services.trace_writer import TraceWriter
 
 logger = logging.getLogger(__name__)
 
@@ -105,6 +106,32 @@ def _evict_session_agent(session_id: str) -> None:
 def _reset_session_agent_cache() -> None:
     """Test helper — clear the cache between cases."""
     _session_agent_cache.clear()
+
+
+# ---------- Session → TraceWriter map ----------
+#
+# Populated by ``submit_prompt`` once the query is known. The SSE pump reads
+# the writer here and dispatches events into it as they stream by. Lifetime
+# matches the session JWT (10 min) so abandoned writers cannot leak.
+
+_trace_writers: dict[str, TraceWriter] = {}
+
+
+def _register_trace_writer(session_id: str, writer: TraceWriter) -> None:
+    _trace_writers[session_id] = writer
+
+
+def _pop_trace_writer(session_id: str) -> TraceWriter | None:
+    return _trace_writers.pop(session_id, None)
+
+
+def _peek_trace_writer(session_id: str) -> TraceWriter | None:
+    return _trace_writers.get(session_id)
+
+
+def _reset_trace_writers() -> None:
+    """Test helper."""
+    _trace_writers.clear()
 
 
 # ---------- Request / response models ----------
@@ -245,7 +272,7 @@ async def submit_prompt(
     The agent slug is recovered from the session→agent cache populated at
     ``create_session`` time so the client does not have to re-send it.
     """
-    await get_current_user(request, db)
+    user = await get_current_user(request, db)
     if body.mode is not None and body.mode not in ALLOWED_MODES:
         raise HTTPException(status_code=400, detail=f"unknown mode: {body.mode}")
     settings = _ensure_configured()
@@ -289,6 +316,25 @@ async def submit_prompt(
             detail=f"opencode_upstream_status_{upstream.status_code}",
         )
 
+    # Persist an initial trace row so partial-view audit calls can already
+    # see the query/user/started_at. The SSE pump enriches it as events arrive.
+    try:
+        writer = TraceWriter(
+            db=db,
+            trace_id=session_id,
+            query=body.prompt,
+            user_id=user.get("user_id"),
+            mode=body.mode or "fast",
+            metadata={"agent": agent},
+        )
+        await writer.record_agent_invocation(
+            agent_id=agent, parent_agent_id=None, subagent_index=0
+        )
+        await writer.start()
+        _register_trace_writer(session_id, writer)
+    except Exception:
+        logger.exception("trace_writer init failed for session %s", session_id)
+
     return PromptResponse(trace_id=session_id, started_at=_now_iso())
 
 
@@ -316,6 +362,12 @@ async def abort_session(
             detail=f"opencode_upstream_status_{upstream.status_code}",
         )
     _evict_session_agent(session_id)
+    writer = _pop_trace_writer(session_id)
+    if writer is not None:
+        try:
+            await writer.finalize(final_answer="", citations=[], success=False)
+        except Exception:
+            logger.exception("trace_writer abort-finalize failed for %s", session_id)
     return AbortResponse(aborted=True)
 
 
@@ -328,6 +380,100 @@ def _session_id_of(envelope: dict[str, Any]) -> str | None:
         return None
     sid = props.get("sessionID") or props.get("sessionId") or props.get("session_id")
     return sid if isinstance(sid, str) else None
+
+
+async def _dispatch_to_trace_writer(session_id: str, event: dict[str, Any]) -> None:
+    """Forward a single SSE envelope into the session's :class:`TraceWriter`.
+
+    Maps the streaming event vocabulary onto the persistent trace shape:
+
+    - ``agent_invocation`` → ``record_agent_invocation`` (root or sub-agent).
+    - ``tool_call`` / ``tool_result`` → ``record_tool_call`` (paired via
+      ``properties.id`` when present).
+    - ``subagent_complete`` → ``record_subagent_complete``.
+    - Report events (citation_verifier / counter_evidence_complete /
+      methodology_approved / polishing_pass_complete) → ``set_report``.
+    - ``final_answer`` → ``finalize`` and evict the writer.
+
+    Unknown event types are ignored.
+    """
+    writer = _peek_trace_writer(session_id)
+    if writer is None:
+        return
+
+    props = event.get("properties") or {}
+    if not isinstance(props, dict):
+        return
+    evt_type = event.get("type") or ""
+
+    try:
+        if evt_type == "agent_invocation":
+            await writer.record_agent_invocation(
+                agent_id=str(props.get("agent_id") or props.get("agent") or "unknown"),
+                parent_agent_id=props.get("parent_agent_id"),
+                subagent_index=props.get("subagent_index"),
+            )
+        elif evt_type == "tool_call":
+            await writer.record_tool_call(
+                agent_id=str(props.get("agent") or "unknown"),
+                tool=str(props.get("tool") or "unknown"),
+                args=props.get("args") or {},
+                result_summary="(pending result)",
+            )
+        elif evt_type == "tool_result":
+            agent_id = str(props.get("agent") or "unknown")
+            await writer.record_tool_call(
+                agent_id=agent_id,
+                tool=str(props.get("tool") or "unknown"),
+                args={},
+                result_summary=str(
+                    props.get("result_summary") or props.get("summary") or ""
+                ),
+                duration_ms=props.get("duration_ms"),
+            )
+        elif evt_type == "subagent_complete":
+            await writer.record_subagent_complete(
+                agent_id=str(props.get("agent_id") or "unknown"),
+                success=bool(props.get("success", True)),
+                tokens_used=props.get("tokens_used"),
+            )
+        elif evt_type == "citation_verified":
+            # Aggregate the rolling verifier report.
+            current = writer._reports.get("citation_verifier_report") or {
+                "verifications": []
+            }
+            if isinstance(current, dict):
+                verifs = current.setdefault("verifications", [])
+                verifs.append(props)
+                await writer.set_report("citation_verifier_report", current)
+        elif evt_type == "counter_evidence_complete":
+            await writer.set_report("counter_evidence_report", props)
+        elif evt_type == "methodology_approved":
+            await writer.set_report("methodology_report", {"approved": True, **props})
+        elif evt_type == "methodology_flagged":
+            current = writer._reports.get("methodology_report") or {"flags": []}
+            if isinstance(current, dict):
+                flags = current.setdefault("flags", [])
+                flags.append(props)
+                await writer.set_report("methodology_report", current)
+        elif evt_type == "polishing_pass_complete":
+            await writer.set_report("polishing_report", props)
+        elif evt_type == "final_answer":
+            await writer.finalize(
+                final_answer=str(props.get("answer") or ""),
+                citations=props.get("citations") or [],
+                success=True,
+            )
+            _pop_trace_writer(session_id)
+        elif evt_type == "error":
+            await writer.finalize(
+                final_answer="",
+                citations=[],
+                success=False,
+            )
+            _pop_trace_writer(session_id)
+    except Exception:
+        logger.exception("trace_writer dispatch failed for session %s", session_id)
 
 
 async def _proxy_event_stream(
@@ -419,6 +565,10 @@ async def _proxy_event_stream(
                                                 emit = evt_type.startswith("server.")
                                             else:
                                                 emit = envelope_sid == session_id
+                                            if emit and envelope_sid == session_id:
+                                                await _dispatch_to_trace_writer(
+                                                    session_id, parsed
+                                                )
                                     if emit:
                                         payload = event_text + "\n\n"
                                         if current_id:

@@ -92,19 +92,58 @@ async def get_node(
 async def get_node_neighbors(
     node_id: str,
     analytics: Annotated[KGAnalytics, Depends(get_analytics)],
-    depth: int = Query(1, ge=1, le=3, description="Traversal depth"),
+    depth: int = Query(1, ge=1, le=3, description="Traversal depth (1 = direct neighbors)"),
+    grouped: bool = Query(True, description="Return 1-hop neighbors grouped by edge type + direction"),
 ) -> dict[str, Any]:
     """
-    Get neighbors of a node up to specified depth.
+    Get the direct neighbors of a knowledge-graph node.
 
-    Returns nodes and edges in the neighborhood.
+    The default (``grouped=True``, ``depth=1``) shape is the doctoral-UI
+    canonical: ``{node_id, node, neighbors: {outgoing: {<relation>: [...]},
+    incoming: {<relation>: [...]}}, total_count}``. Pass ``grouped=false`` to
+    fall back to the legacy ``{nodes, edges}`` neighborhood payload (used by
+    Cosmograph subgraph rendering).
     """
-    result = analytics.get_node_neighbors(node_id, depth)
-
-    if not result["nodes"]:
+    nodes_by_id = {n["id"]: n for n in analytics.kg_data.get("nodes", [])}
+    if node_id not in nodes_by_id:
         raise HTTPException(status_code=404, detail="Node not found")
 
-    return result
+    if not grouped:
+        result = analytics.get_node_neighbors(node_id, depth)
+        if not result["nodes"]:
+            raise HTTPException(status_code=404, detail="Node not found")
+        return result
+
+    outgoing: dict[str, list[dict[str, Any]]] = {}
+    incoming: dict[str, list[dict[str, Any]]] = {}
+    total = 0
+
+    def _summary(other_id: str) -> dict[str, Any]:
+        other = nodes_by_id.get(other_id, {"id": other_id})
+        return {
+            "node_id": other_id,
+            "label": other.get("label", other_id),
+            "node_type": other.get("type"),
+            "period": other.get("period"),
+        }
+
+    for edge in analytics.kg_data.get("edges", []):
+        relation = edge.get("relation") or "related"
+        src = edge.get("source")
+        tgt = edge.get("target")
+        if src == node_id:
+            outgoing.setdefault(relation, []).append(_summary(tgt))
+            total += 1
+        elif tgt == node_id:
+            incoming.setdefault(relation, []).append(_summary(src))
+            total += 1
+
+    return {
+        "node_id": node_id,
+        "node": nodes_by_id[node_id],
+        "neighbors": {"outgoing": outgoing, "incoming": incoming},
+        "total_count": total,
+    }
 
 
 @router.get("/edges")

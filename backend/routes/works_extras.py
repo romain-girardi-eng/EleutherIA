@@ -15,7 +15,7 @@ from typing import Annotated, Any
 from uuid import UUID
 
 from eleutheria_database.services.db import DatabaseService
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 
 from backend.dependencies import get_db
@@ -90,6 +90,134 @@ async def get_works_stats(
     return {
         "works": dict(works_stats) if works_stats else {},
         "passages": dict(passages_stats) if passages_stats else {},
+    }
+
+
+@router.get("/{work_id}/section")
+async def get_work_section(
+    work_id: str,
+    db: Annotated[DatabaseService, Depends(get_db)],
+    around: str = Query(
+        ..., description="Anchor passage_id (UUID) or passage KG node_id"
+    ),
+    before: int = Query(1, ge=0, le=20),
+    after: int = Query(1, ge=0, le=20),
+) -> dict[str, Any]:
+    """Return N passages before + the anchor + N passages after.
+
+    ``around`` may be a passages.passage_id UUID or a passage KG node_id;
+    the latter is resolved through ``passage_citations``. Passages are
+    ordered by ``sequence_number`` within the work.
+    """
+    # Resolve work_id (UUID or canonical_id)
+    work: dict[str, Any] | None = None
+    if len(work_id) == 36 and work_id.count("-") == 4:
+        work = await db.fetchrow(
+            "SELECT work_id, title, canonical_id FROM free_will.ancient_works WHERE work_id = $1::uuid",
+            work_id,
+        )
+    if work is None:
+        work = await db.fetchrow(
+            "SELECT work_id, title, canonical_id FROM free_will.ancient_works WHERE canonical_id = $1 OR kg_work_id = $1",
+            work_id,
+        )
+    if work is None:
+        raise HTTPException(status_code=404, detail="Work not found")
+
+    # Resolve target passage
+    is_uuid = len(around) == 36 and around.count("-") == 4
+    target = None
+    if is_uuid:
+        target = await db.fetchrow(
+            "SELECT passage_id, sequence_number, canonical_ref, text_content, cts_urn "
+            "FROM free_will.passages WHERE passage_id = $1::uuid AND work_id = $2",
+            around,
+            work["work_id"],
+        )
+    if target is None:
+        target = await db.fetchrow(
+            """
+            SELECT p.passage_id, p.sequence_number, p.canonical_ref, p.text_content, p.cts_urn
+            FROM free_will.passage_citations pc
+            JOIN free_will.passages p ON pc.passage_id = p.passage_id
+            WHERE pc.kg_node_id = $1 AND p.work_id = $2
+            LIMIT 1
+            """,
+            around,
+            work["work_id"],
+        )
+    if target is None:
+        raise HTTPException(status_code=404, detail="Anchor passage not found in work")
+
+    seq = target["sequence_number"]
+    rows = await db.fetch(
+        """
+        SELECT passage_id, sequence_number, canonical_ref, text_content, cts_urn
+        FROM free_will.passages
+        WHERE work_id = $1 AND sequence_number BETWEEN $2 AND $3
+        ORDER BY sequence_number
+        """,
+        work["work_id"],
+        seq - before,
+        seq + after,
+    )
+
+    # Try to load English translations via passage_citations + _en KG nodes.
+    en_lookup: dict[str, str] = {}
+    if rows:
+        ids = [str(r["passage_id"]) for r in rows]
+        en_rows = await db.fetch(
+            """
+            SELECT pc.passage_id, n.description
+            FROM free_will.passage_citations pc
+            JOIN free_will.kg_nodes n ON n.node_id = pc.kg_node_id || '_en'
+            WHERE pc.passage_id = ANY($1::uuid[])
+            """,
+            ids,
+        )
+        for r in en_rows:
+            en_lookup[str(r["passage_id"])] = r["description"]
+
+    def _shape(row: dict[str, Any]) -> dict[str, Any]:
+        pid = str(row["passage_id"])
+        return {
+            "passage_id": pid,
+            "label": row.get("canonical_ref"),
+            "cts_urn": row.get("cts_urn"),
+            "sequence_number": row.get("sequence_number"),
+            "text_content_original": row.get("text_content"),
+            "text_content_english": en_lookup.get(pid),
+        }
+
+    before_items: list[dict[str, Any]] = []
+    after_items: list[dict[str, Any]] = []
+    target_shape: dict[str, Any] | None = None
+    for r in rows:
+        shaped = _shape(r)
+        if r["sequence_number"] < seq:
+            before_items.append(shaped)
+        elif r["sequence_number"] > seq:
+            after_items.append(shaped)
+        else:
+            target_shape = shaped
+
+    if target_shape is None:
+        target_shape = _shape(target)
+
+    section_label = target.get("canonical_ref")
+    # Strip the most-specific component for the section label (e.g.
+    # "EN III.1, 1110a4-6" → "EN III.1") so the UI can show a clean header.
+    if section_label and "," in section_label:
+        section_label = section_label.split(",", 1)[0].strip()
+
+    return {
+        "target_passage_id": str(target["passage_id"]),
+        "before": before_items,
+        "target": target_shape,
+        "after": after_items,
+        "section_label": section_label,
+        "work_title": work.get("title"),
+        "work_canonical_id": work.get("canonical_id"),
     }
 
 
@@ -211,8 +339,7 @@ async def get_passage_context(
         }
 
     passages = [
-        format_passage(r, is_target=(r["sequence_number"] == seq))
-        for r in context_rows
+        format_passage(r, is_target=(r["sequence_number"] == seq)) for r in context_rows
     ]
 
     target_formatted = format_passage(target, is_target=True)
@@ -348,14 +475,18 @@ async def batch_fetch_citations(
         if rows:
             # Use the highest-confidence passage
             best = rows[0]
-            results.append({
-                "id": node_id,
-                "text": best["text_content"],
-                "author": best["author"] or "",
-                "work": best["work"] or "",
-                "passage_ref": best["canonical_ref"],
-                "confidence": float(best["confidence"]) if best["confidence"] else None,
-            })
+            results.append(
+                {
+                    "id": node_id,
+                    "text": best["text_content"],
+                    "author": best["author"] or "",
+                    "work": best["work"] or "",
+                    "passage_ref": best["canonical_ref"],
+                    "confidence": float(best["confidence"])
+                    if best["confidence"]
+                    else None,
+                }
+            )
         else:
             # Try to find the node label from kg_nodes
             node = await db.fetchrow(
@@ -367,14 +498,16 @@ async def batch_fetch_citations(
                 node_id,
             )
             if node:
-                results.append({
-                    "id": node_id,
-                    "text": (node["description"] or "")[:500],
-                    "author": "",
-                    "work": "",
-                    "passage_ref": node["label"],
-                    "confidence": None,
-                })
+                results.append(
+                    {
+                        "id": node_id,
+                        "text": (node["description"] or "")[:500],
+                        "author": "",
+                        "work": "",
+                        "passage_ref": node["label"],
+                        "confidence": None,
+                    }
+                )
 
     return results
 
