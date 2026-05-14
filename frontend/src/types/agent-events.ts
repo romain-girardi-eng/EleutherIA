@@ -148,6 +148,35 @@ export interface CounterEvidenceCompleteEvent {
   aggregate_summary: string;
 }
 
+/** Emitted by the Methodology agent as each issue is detected on the
+ *  citation-verified draft (anachronism, source criticism, scholarly
+ *  consensus drift, period/school misattribution). */
+export interface MethodologyFlaggedEvent {
+  type: 'methodology_flagged';
+  flag_type:
+    | 'anachronism'
+    | 'source_criticism'
+    | 'scholarly_consensus'
+    | 'period_appropriateness';
+  severity: 'blocker' | 'major' | 'minor';
+  issue: string;
+  suggested_revision: string;
+}
+
+/** Emitted once the Methodology agent has cleared all blockers — gates the
+ *  handoff to the Polishing agent. */
+export interface MethodologyApprovedEvent {
+  type: 'methodology_approved';
+}
+
+/** Emitted after the Polishing agent has rewritten the draft into doctoral
+ *  chapter form. `sections_modified` counts the structural changes the
+ *  polisher made (added or restructured sections). */
+export interface PolishingPassCompleteEvent {
+  type: 'polishing_pass_complete';
+  sections_modified: number;
+}
+
 export type AgentEvent =
   | AgentStartEvent
   | AgentStepEvent
@@ -159,6 +188,9 @@ export type AgentEvent =
   | CitationVerifiedEvent
   | CounterEvidenceFoundEvent
   | CounterEvidenceCompleteEvent
+  | MethodologyFlaggedEvent
+  | MethodologyApprovedEvent
+  | PolishingPassCompleteEvent
   | FinalAnswerEvent
   | ErrorEvent;
 
@@ -179,6 +211,9 @@ export function isAgentEvent(value: unknown): value is AgentEvent {
     'citation_verified',
     'counter_evidence_found',
     'counter_evidence_complete',
+    'methodology_flagged',
+    'methodology_approved',
+    'polishing_pass_complete',
     'final_answer',
     'error',
   ].includes(candidate.type);
