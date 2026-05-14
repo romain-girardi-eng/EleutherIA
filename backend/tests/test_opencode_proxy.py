@@ -46,9 +46,11 @@ def _configure_opencode_env(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("OPENCODE_SESSION_SECRET", SECRET)
     monkeypatch.setenv("JWT_SECRET_KEY", SECRET)
     opencode_integration.reset_opencode_settings_cache()
+    opencode_proxy._reset_session_agent_cache()
     yield
     opencode_integration.reset_opencode_settings_cache()
     opencode_proxy.reset_client_factory()
+    opencode_proxy._reset_session_agent_cache()
 
 
 @pytest.fixture
@@ -146,16 +148,69 @@ def test_create_session_returns_sse_token(
     assert sent.headers["authorization"].startswith("Basic ")
 
 
-def test_prompt_returns_trace_id(client: TestClient, mock_upstream: None) -> None:
+def test_prompt_returns_trace_id(
+    client: TestClient, mock_upstream: None, upstream_calls: list[httpx.Request]
+) -> None:
+    # The proxy needs to know which agent owns this session. In production
+    # the cache is populated by `POST /session`; here we prime it directly.
+    opencode_proxy._cache_session_agent("ses_abc123", "scholar-orchestrator")
+
     response = client.post(
         "/api/opencode/session/ses_abc123/prompt",
         json={"prompt": "What did Origen say about autexousion?", "mode": "deep"},
         headers=_auth(),
     )
-    assert response.status_code == 200
+    assert response.status_code == 200, response.text
     body = response.json()
     assert body["trace_id"] == "ses_abc123"
     assert body["started_at"].endswith("Z")
+
+    # The upstream payload must match opencode's current schema:
+    # {"agent": "...", "parts": [{"type":"text","text":"..."}], "mode": "..."}
+    sent = next(c for c in upstream_calls if c.url.path.endswith("/prompt_async"))
+    payload = json.loads(sent.content)
+    assert payload["agent"] == "scholar-orchestrator"
+    assert payload["parts"] == [
+        {"type": "text", "text": "What did Origen say about autexousion?"}
+    ]
+    assert payload["mode"] == "deep"
+    # Crucially the old flat `prompt` field must NOT be sent.
+    assert "prompt" not in payload
+
+
+def test_prompt_without_cached_agent_returns_410(
+    client: TestClient, mock_upstream: None
+) -> None:
+    """If the api process restarted (or the TTL elapsed) the session→agent
+    mapping is gone and we can't safely forward the prompt — surface 410 so
+    the client recreates the session rather than guessing an agent."""
+    response = client.post(
+        "/api/opencode/session/ses_missing/prompt",
+        json={"prompt": "hi"},
+        headers=_auth(),
+    )
+    assert response.status_code == 410
+    assert response.json()["detail"] == "session_agent_unknown_recreate_session"
+
+
+def test_create_session_populates_agent_cache(
+    client: TestClient, mock_upstream: None
+) -> None:
+    """`POST /session` must seed the cache so the very first `/prompt` works."""
+    response = client.post(
+        "/api/opencode/session",
+        json={"agent": "scholar-orchestrator"},
+        headers=_auth(),
+    )
+    assert response.status_code == 200
+    assert opencode_proxy._lookup_session_agent("ses_abc123") == "scholar-orchestrator"
+
+
+def test_abort_evicts_agent_cache(client: TestClient, mock_upstream: None) -> None:
+    opencode_proxy._cache_session_agent("ses_abc123", "scholar-orchestrator")
+    response = client.post("/api/opencode/session/ses_abc123/abort", headers=_auth())
+    assert response.status_code == 200
+    assert opencode_proxy._lookup_session_agent("ses_abc123") is None
 
 
 def test_abort_returns_aborted_true(client: TestClient, mock_upstream: None) -> None:

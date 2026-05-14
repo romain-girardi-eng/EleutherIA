@@ -44,6 +44,33 @@ from backend.routes.works_extras import (
 
 logger = logging.getLogger(__name__)
 
+# Placeholder JWT secrets that must never reach production — accepting one of
+# these would let anyone with the repo forge JWTs and sign in as any user.
+_PLACEHOLDER_JWT_SECRETS = frozenset(
+    {
+        "change-this-to-a-secure-random-string",
+        "change-me-in-production",
+        "",
+    }
+)
+
+
+def _assert_jwt_secret_configured() -> None:
+    """Refuse to boot when JWT_SECRET_KEY is unset or matches a known placeholder.
+
+    Runs at import time (before uvicorn binds a port) so misconfiguration
+    surfaces as a hard, loud failure during deploy rather than silently
+    accepting forgeable tokens.
+    """
+    secret = os.getenv("JWT_SECRET_KEY", "").strip()
+    if secret in _PLACEHOLDER_JWT_SECRETS:
+        raise RuntimeError(
+            "JWT_SECRET_KEY is unset or set to a placeholder. "
+            "Generate a strong key with `python -c \"import secrets; "
+            "print(secrets.token_hex(64))\"` and set it in the environment "
+            "before starting the API."
+        )
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
@@ -77,6 +104,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""
+    _assert_jwt_secret_configured()
     app = FastAPI(
         title="EleutherIA",
         description="FAIR-compliant knowledge graph for ancient philosophical debates on free will",

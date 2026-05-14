@@ -30,13 +30,24 @@ COPY ["knowledge graph/src", "./kg/src/"]
 COPY graphrag/pyproject.toml graphrag/README.md ./graphrag/
 COPY graphrag/src ./graphrag/src/
 
-# Install all three packages + auth dependencies
+# eleutheria_worker is a flat-layout package — the package root IS the
+# directory, so we copy the whole thing (pyproject + main.py + workflows/
+# + activities/) into a sibling folder.
+COPY eleutheria_worker ./eleutheria_worker/
+
+# Install all four packages + auth dependencies.
+# graphrag pulls api/llm extras; worker pulls temporalio.
 RUN pip install --no-cache-dir --no-compile \
     ./database \
     ./kg \
     "./graphrag[api,llm]" \
+    ./eleutheria_worker \
     "passlib[bcrypt]" \
     PyJWT
+
+# Smoke check: the worker entrypoint must import cleanly. Catches missing
+# deps or moved modules at build time instead of at `docker run`.
+RUN python -c "import eleutheria_worker.main; print('eleutheria_worker.main OK')"
 
 # -----------------------------------------------------------------------------
 # Stage 2: Production runtime
