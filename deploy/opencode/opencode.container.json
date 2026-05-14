@@ -1,0 +1,42 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "fireworks/accounts/fireworks/models/kimi-k2p6",
+  "small_model": "fireworks/accounts/fireworks/models/kimi-k2p6",
+  "provider": {
+    "fireworks": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Fireworks AI",
+      "options": {
+        "baseURL": "https://api.fireworks.ai/inference/v1",
+        "apiKey": "{env:FIREWORKS_API_KEY}"
+      },
+      "models": {
+        "accounts/fireworks/models/kimi-k2p6": {
+          "name": "Kimi K2.6",
+          "limit": {
+            "context": 256000,
+            "output": 65536
+          }
+        }
+      }
+    }
+  },
+  "mcp": {
+    "eleutheria": {
+      "type": "local",
+      "command": [
+        "/opt/venv/bin/python",
+        "-m",
+        "mcp_server.transports.stdio"
+      ],
+      "environment": {
+        "DATABASE_URL": "{env:DATABASE_URL}",
+        "MCP_API_TOKEN": "{env:MCP_API_TOKEN}",
+        "PYTHONPATH": "/app",
+        "ELEUTHERIA_KG_SNAPSHOT_DIR": "/app/data/kg"
+      },
+      "enabled": true,
+      "timeout": 30000
+    }
+  }
+}
