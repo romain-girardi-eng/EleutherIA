@@ -32,6 +32,7 @@ import asyncio
 import contextlib
 import json
 import logging
+import time
 from datetime import UTC, datetime
 from typing import Annotated, Any
 
@@ -62,6 +63,48 @@ router = APIRouter(tags=["opencode"])
 ALLOWED_AGENTS = frozenset({"scholar-orchestrator", "concept-mapper", "source-finder"})
 ALLOWED_MODES = frozenset({"fast", "deep"})
 HEARTBEAT_INTERVAL_SECONDS = 15.0
+# Session → agent cache TTL matches the SSE token TTL (10 min). Sessions
+# typically outlive this on the upstream side, but the cache only needs to
+# be valid for the prompt-submission window of an active interactive chat.
+SESSION_AGENT_TTL_SECONDS = 600
+
+
+# ---------- Session → agent cache ----------
+#
+# `submit_prompt` needs to know which agent the session was created with so
+# it can forward the correct `agent` field in the upstream payload. We cache
+# the mapping in-process at session creation. Entries expire after
+# `SESSION_AGENT_TTL_SECONDS` and are explicitly evicted on abort.
+#
+# `(agent, expires_at_epoch_seconds)`
+_session_agent_cache: dict[str, tuple[str, float]] = {}
+
+
+def _cache_session_agent(session_id: str, agent: str) -> None:
+    _session_agent_cache[session_id] = (
+        agent,
+        time.monotonic() + SESSION_AGENT_TTL_SECONDS,
+    )
+
+
+def _lookup_session_agent(session_id: str) -> str | None:
+    entry = _session_agent_cache.get(session_id)
+    if entry is None:
+        return None
+    agent, expires_at = entry
+    if time.monotonic() >= expires_at:
+        _session_agent_cache.pop(session_id, None)
+        return None
+    return agent
+
+
+def _evict_session_agent(session_id: str) -> None:
+    _session_agent_cache.pop(session_id, None)
+
+
+def _reset_session_agent_cache() -> None:
+    """Test helper — clear the cache between cases."""
+    _session_agent_cache.clear()
 
 
 # ---------- Request / response models ----------
@@ -182,6 +225,7 @@ async def create_session(
         raise HTTPException(status_code=502, detail="opencode returned no session id")
 
     sse_token = make_session_token(user_id=user["user_id"], session_id=session_id)
+    _cache_session_agent(session_id, body.agent)
     return CreateSessionResponse(
         session_id=session_id, agent=body.agent, sse_token=sse_token
     )
@@ -194,13 +238,32 @@ async def submit_prompt(
     request: Request,
     db: Annotated[DatabaseService, Depends(get_db)],
 ) -> PromptResponse:
-    """Queue a prompt against an existing opencode session (async / fire-and-forget)."""
+    """Queue a prompt against an existing opencode session (async / fire-and-forget).
+
+    Upstream opencode (since 2026-05-15) requires the payload shape
+    ``{"parts": [{"type":"text","text":"..."}], "agent": "<agent_slug>"}``.
+    The agent slug is recovered from the session→agent cache populated at
+    ``create_session`` time so the client does not have to re-send it.
+    """
     await get_current_user(request, db)
     if body.mode is not None and body.mode not in ALLOWED_MODES:
         raise HTTPException(status_code=400, detail=f"unknown mode: {body.mode}")
     settings = _ensure_configured()
 
-    upstream_payload: dict[str, Any] = {"prompt": body.prompt}
+    agent = _lookup_session_agent(session_id)
+    if agent is None:
+        # The cache TTL expired or the api process restarted between the
+        # session-create call and the first prompt. 410 (Gone) tells the
+        # client to recreate the session — a 401/404 would be misleading.
+        raise HTTPException(
+            status_code=410,
+            detail="session_agent_unknown_recreate_session",
+        )
+
+    upstream_payload: dict[str, Any] = {
+        "agent": agent,
+        "parts": [{"type": "text", "text": body.prompt}],
+    }
     if body.mode:
         upstream_payload["mode"] = body.mode
 
@@ -215,6 +278,12 @@ async def submit_prompt(
             raise HTTPException(status_code=502, detail="opencode_unreachable") from exc
 
     if upstream.status_code >= 400:
+        logger.warning(
+            "opencode prompt upstream %s for %s: %s",
+            upstream.status_code,
+            session_id,
+            upstream.text[:200],
+        )
         raise HTTPException(
             status_code=502,
             detail=f"opencode_upstream_status_{upstream.status_code}",
@@ -246,6 +315,7 @@ async def abort_session(
             status_code=502,
             detail=f"opencode_upstream_status_{upstream.status_code}",
         )
+    _evict_session_agent(session_id)
     return AbortResponse(aborted=True)
 
 
