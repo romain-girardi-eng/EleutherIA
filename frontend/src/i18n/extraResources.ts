@@ -701,6 +701,26 @@ export const extraResources = {
         TextVerifier: 'Text Verifier',
         Synthesizer: 'Synthesizer',
       },
+      modes: {
+        legend: 'Runtime',
+        latencyLabel: 'Estimated latency',
+        quick: {
+          label: 'Quick answer',
+          description: 'Python ReAct agent. Fast scholarly synthesis.',
+          latency: '~2 min',
+        },
+        deep: {
+          label: 'Deep analysis',
+          description:
+            'opencode multi-agent. Doctoral-grade reasoning with sub-agents, verification, and counter-evidence.',
+          latency: '~10–15 min',
+        },
+      },
+      events: {
+        counterEvidenceFound: 'Counter-evidence found',
+        citationVerified: 'Citation verified',
+        citationRefuted: 'Citation refuted',
+      },
       errors: {
         streamFailed: 'Stream failed',
         retrying: 'Retrying… (attempt {{count}})',
@@ -1416,6 +1436,26 @@ export const extraResources = {
         TextVerifier: 'Vérificateur de textes',
         Synthesizer: 'Synthétiseur',
       },
+      modes: {
+        legend: 'Mode d’exécution',
+        latencyLabel: 'Latence estimée',
+        quick: {
+          label: 'Réponse rapide',
+          description: 'Agent Python ReAct. Synthèse savante rapide.',
+          latency: '~2 min',
+        },
+        deep: {
+          label: 'Analyse approfondie',
+          description:
+            'Multi-agent opencode. Raisonnement doctoral avec sous-agents, vérification et contre-preuves.',
+          latency: '~10–15 min',
+        },
+      },
+      events: {
+        counterEvidenceFound: 'Contre-preuve identifiée',
+        citationVerified: 'Citation vérifiée',
+        citationRefuted: 'Citation réfutée',
+      },
       errors: {
         streamFailed: 'Échec du flux',
         retrying: 'Nouvelle tentative… (essai {{count}})',
@@ -2099,6 +2139,26 @@ export const extraResources = {
         SourceFinder: 'Quellensucher',
         TextVerifier: 'Textverifizierer',
         Synthesizer: 'Synthesizer',
+      },
+      modes: {
+        legend: 'Laufzeit',
+        latencyLabel: 'Geschätzte Latenz',
+        quick: {
+          label: 'Schnelle Antwort',
+          description: 'Python-ReAct-Agent. Schnelle wissenschaftliche Synthese.',
+          latency: '~2 Min',
+        },
+        deep: {
+          label: 'Tiefenanalyse',
+          description:
+            'opencode Multi-Agent. Doktorgradige Argumentation mit Subagenten, Verifizierung und Gegenbelegen.',
+          latency: '~10–15 Min',
+        },
+      },
+      events: {
+        counterEvidenceFound: 'Gegenbeleg gefunden',
+        citationVerified: 'Zitat verifiziert',
+        citationRefuted: 'Zitat widerlegt',
       },
       errors: {
         streamFailed: 'Stream fehlgeschlagen',
@@ -2814,6 +2874,26 @@ export const extraResources = {
         TextVerifier: 'Verificatore di testi',
         Synthesizer: 'Sintetizzatore',
       },
+      modes: {
+        legend: 'Modalità di esecuzione',
+        latencyLabel: 'Latenza stimata',
+        quick: {
+          label: 'Risposta rapida',
+          description: 'Agente Python ReAct. Sintesi accademica rapida.',
+          latency: '~2 min',
+        },
+        deep: {
+          label: 'Analisi approfondita',
+          description:
+            'Multi-agente opencode. Ragionamento dottorale con sotto-agenti, verifica e contro-prove.',
+          latency: '~10–15 min',
+        },
+      },
+      events: {
+        counterEvidenceFound: 'Contro-prova trovata',
+        citationVerified: 'Citazione verificata',
+        citationRefuted: 'Citazione confutata',
+      },
       errors: {
         streamFailed: 'Flusso fallito',
         retrying: 'Nuovo tentativo… ({{count}})',
@@ -3527,6 +3607,26 @@ export const extraResources = {
         SourceFinder: 'Αναζητητής πηγών',
         TextVerifier: 'Επαληθευτής κειμένων',
         Synthesizer: 'Συνθέτης',
+      },
+      modes: {
+        legend: 'Χρόνος εκτέλεσης',
+        latencyLabel: 'Εκτιμώμενη καθυστέρηση',
+        quick: {
+          label: 'Γρήγορη απάντηση',
+          description: 'Πράκτορας Python ReAct. Γρήγορη ακαδημαϊκή σύνθεση.',
+          latency: '~2 λεπτά',
+        },
+        deep: {
+          label: 'Βαθιά ανάλυση',
+          description:
+            'Πολυπρακτορικό opencode. Διδακτορική συλλογιστική με υποπράκτορες, επαλήθευση και αντενδείξεις.',
+          latency: '~10–15 λεπτά',
+        },
+      },
+      events: {
+        counterEvidenceFound: 'Βρέθηκαν αντενδείξεις',
+        citationVerified: 'Επαληθευμένη παραπομπή',
+        citationRefuted: 'Διαψευσμένη παραπομπή',
       },
       errors: {
         streamFailed: 'Η ροή απέτυχε',
