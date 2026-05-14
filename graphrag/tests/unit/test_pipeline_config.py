@@ -28,7 +28,6 @@ class TestQueryType:
 class TestPipelineConfig:
     def test_defaults(self):
         config = PipelineConfig()
-        assert config.use_hyde is True
         assert config.use_crag is True
         assert config.use_reranking is True
         assert config.use_self_rag is True
@@ -37,32 +36,27 @@ class TestPipelineConfig:
 
     def test_specific_entity_config(self):
         config = get_pipeline_config(QueryType.SPECIFIC_ENTITY)
-        assert config.use_hyde is False
         assert config.use_crag is True
         assert config.use_tree_reasoning is True
 
     def test_global_abstract_config(self):
         config = get_pipeline_config(QueryType.GLOBAL_ABSTRACT)
-        assert config.use_hyde is True
         assert config.use_expansion is True
         assert config.use_tree_reasoning is True
 
     def test_multi_hop_config(self):
         config = get_pipeline_config(QueryType.MULTI_HOP)
-        assert config.use_hyde is False
         assert config.use_reranking is False
         assert config.use_tree_reasoning is True
 
     def test_comparative_config(self):
         config = get_pipeline_config(QueryType.COMPARATIVE)
-        assert config.use_hyde is True
         assert config.use_tree_reasoning is True
         assert config.use_expansion is True
 
     def test_temporal_config(self):
         config = get_pipeline_config(QueryType.TEMPORAL)
         # Default — all on
-        assert config.use_hyde is True
         assert config.use_tree_reasoning is True
 
     def test_all_query_types_have_config(self):

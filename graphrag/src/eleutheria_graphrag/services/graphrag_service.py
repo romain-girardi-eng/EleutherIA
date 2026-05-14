@@ -21,11 +21,17 @@ from typing import Any
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
+from eleutheria_graphrag.services.lemma_expansion import LemmaExpander
 from eleutheria_graphrag.services.llm_reranker import LLMRerankerService
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
-from eleutheria_graphrag.services.retrieval_strategy import VectorStrategy
+from eleutheria_graphrag.services.retrieval_strategy import (
+    SnapshotStrategy,
+    SQLStrategy,
+)
+from eleutheria_graphrag.services.snapshot_retrieval import db_is_connected
 from eleutheria_graphrag.services.tree_index import TreeIndexService
 from eleutheria_graphrag.services.weighted_traversal import WeightedTraversal
+from eleutheria_kg.services.snapshot import load_kg_snapshot
 
 logger = logging.getLogger(__name__)
 
@@ -152,7 +158,7 @@ class GraphRAGService:
 
     Usage::
 
-        graphrag = GraphRAGService(db_service, qdrant_service)
+        graphrag = GraphRAGService(db_service)
         await graphrag.load_kg()
         result = await graphrag.query("What did Stoics believe about fate?")
         print(result["answer"])
@@ -161,15 +167,14 @@ class GraphRAGService:
     def __init__(
         self,
         db_service: Any,
-        qdrant_service: Any,
         llm_service: LLMService | None = None,
         analytics: Any | None = None,
         search_service: Any | None = None,
         reranker: Any | None = None,
         verifier: Any | None = None,
+        kg_data: dict[str, Any] | None = None,
     ) -> None:
         self.db = db_service
-        self.qdrant = qdrant_service
         self.llm = llm_service or LLMService(preferred_provider=_preferred_provider())
         self._analytics = analytics
         self._search = search_service
@@ -180,7 +185,7 @@ class GraphRAGService:
         self._response_cache = ResponseCache()
 
         # KG data (populated by load_kg)
-        self.kg_data: dict[str, Any] | None = None
+        self.kg_data: dict[str, Any] | None = kg_data
         self.node_lookup: dict[str, dict[str, Any]] = {}
         self.outgoing_edges: dict[str, list[dict[str, Any]]] = {}
         self.incoming_edges: dict[str, list[dict[str, Any]]] = {}
@@ -194,12 +199,96 @@ class GraphRAGService:
     # ------------------------------------------------------------------
 
     async def load_kg(self) -> None:
-        """Load knowledge graph from database and build agent."""
+        """Load knowledge graph from database or snapshot and build agent."""
         if self._kg_loaded:
             return
 
-        logger.info("Loading knowledge graph from database...")
+        if self.kg_data and self.kg_data.get("nodes") is not None:
+            logger.info("Loading knowledge graph from provided data...")
+            raw_kg = self.kg_data
+        elif db_is_connected(self.db):
+            logger.info("Loading knowledge graph from database...")
+            raw_kg = await self._load_kg_from_db()
+        else:
+            logger.warning("Database unavailable; loading knowledge graph snapshot")
+            raw_kg = load_kg_snapshot()
 
+        nodes, edges = self._normalize_kg_data(raw_kg)
+
+        self.kg_data = {"nodes": nodes, "edges": edges}
+
+        # Build lookup indices
+        self.node_lookup = {node["id"]: node for node in nodes}
+        self.outgoing_edges = {}
+        self.incoming_edges = {}
+
+        for edge in edges:
+            source = edge["source"]
+            target = edge["target"]
+
+            if source not in self.outgoing_edges:
+                self.outgoing_edges[source] = []
+            self.outgoing_edges[source].append(edge)
+
+            if target not in self.incoming_edges:
+                self.incoming_edges[target] = []
+            self.incoming_edges[target].append(edge)
+
+        # Pre-compute PageRank if analytics is available
+        pagerank_scores: dict[str, float] = {}
+        if self._analytics:
+            try:
+                self._analytics.set_data(self.kg_data)
+                pagerank_scores = self._analytics.calculate_centrality(
+                    metric="pagerank",
+                )
+            except Exception:
+                logger.warning("PageRank computation failed, continuing without")
+
+        traversal = WeightedTraversal(
+            node_lookup=self.node_lookup,
+            outgoing_edges=self.outgoing_edges,
+            incoming_edges=self.incoming_edges,
+            pagerank_scores=pagerank_scores,
+        )
+        tree_index = TreeIndexService(db=self.db) if db_is_connected(self.db) else None
+        llm_reranker = LLMRerankerService(llm=self.llm)
+
+        # Vectorless retrieval: SQL strategy with LLM lemma expansion when the
+        # database is reachable; snapshot strategy as the offline fallback.
+        lemma_expander = LemmaExpander(llm=self.llm)
+        retrieval_strategy: Any
+        if db_is_connected(self.db):
+            retrieval_strategy = SQLStrategy(
+                min_bundles=4, lemma_expander=lemma_expander
+            )
+        else:
+            retrieval_strategy = SnapshotStrategy(min_passages=4)
+
+        # Construct dependency container
+        deps = Deps(
+            db=self.db,
+            llm=self.llm,
+            analytics=self._analytics,
+            search=self._search,
+            traversal=traversal,
+            reranker=self._reranker,
+            verifier=self._verifier,
+            llm_reranker=llm_reranker,
+            tree_index=tree_index,
+            retrieval_strategy=retrieval_strategy,
+            kg_data=self.kg_data,
+            node_lookup=self.node_lookup,
+            outgoing_edges=self.outgoing_edges,
+            incoming_edges=self.incoming_edges,
+            pagerank_scores=pagerank_scores,
+        )
+
+        self._agent = ScholarlyAgent(deps)
+        self._kg_loaded = True
+        logger.info(f"Loaded {len(nodes)} nodes and {len(edges)} edges")
+
+    async def _load_kg_from_db(self) -> dict[str, list[dict[str, Any]]]:
         nodes = await self.db.fetch("""
             SELECT
                 node_id as id,
@@ -233,87 +322,47 @@ class GraphRAGService:
                 metadata
             FROM free_will.kg_edges
         """)
+        return {"nodes": nodes, "edges": edges}
 
+    def _normalize_kg_data(
+        self,
+        kg_data: dict[str, Any],
+    ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         nodes = [
             {
                 **node,
+                "id": str(node.get("id") or node.get("node_id") or ""),
                 "metadata": _normalize_json_mapping(node.get("metadata")),
             }
-            for node in nodes
-        ]
-        edges = [
-            {
-                **edge,
-                "metadata": _normalize_json_mapping(edge.get("metadata")),
-            }
-            for edge in edges
+            for node in kg_data.get("nodes", [])
+            if node.get("id") or node.get("node_id")
         ]
 
-        self.kg_data = {"nodes": nodes, "edges": edges}
-
-        # Build lookup indices
-        self.node_lookup = {node["id"]: node for node in nodes}
-
-        for edge in edges:
-            source = edge["source"]
-            target = edge["target"]
-
-            if source not in self.outgoing_edges:
-                self.outgoing_edges[source] = []
-            self.outgoing_edges[source].append(edge)
-
-            if target not in self.incoming_edges:
-                self.incoming_edges[target] = []
-            self.incoming_edges[target].append(edge)
-
-        # Pre-compute PageRank if analytics is available
-        pagerank_scores: dict[str, float] = {}
-        if self._analytics:
+        edges: list[dict[str, Any]] = []
+        for edge in kg_data.get("edges", []):
+            metadata = _normalize_json_mapping(edge.get("metadata"))
+            weight = edge.get("weight", metadata.get("weight", 1.0))
             try:
-                self._analytics.set_data(self.kg_data)
-                pagerank_scores = self._analytics.calculate_centrality(
-                    metric="pagerank",
-                )
-            except Exception:
-                logger.warning("PageRank computation failed, continuing without")
+                normalized_weight = float(weight)
+            except (TypeError, ValueError):
+                normalized_weight = 1.0
+            source = str(edge.get("source") or edge.get("source_id") or "")
+            target = str(edge.get("target") or edge.get("target_id") or "")
+            if not source or not target:
+                continue
+            edges.append(
+                {
+                    **edge,
+                    "source": source,
+                    "target": target,
+                    "relation": edge.get("relation") or "",
+                    "description": edge.get("description") or metadata.get("description"),
+                    "weight": normalized_weight,
+                    "metadata": metadata,
+                }
+            )
 
-        traversal = WeightedTraversal(
-            node_lookup=self.node_lookup,
-            outgoing_edges=self.outgoing_edges,
-            incoming_edges=self.incoming_edges,
-            pagerank_scores=pagerank_scores,
-        )
-        tree_index = TreeIndexService(db=self.db)
-        llm_reranker = LLMRerankerService(llm=self.llm)
-
-        # Build retrieval strategy (lazy import to avoid circular deps)
-        from eleutheria_graphrag.agents.graph_nodes import _get_embedding
-
-        vector_strategy = VectorStrategy(embed_fn=_get_embedding)
-
-        # Construct dependency container
-        deps = Deps(
-            db=self.db,
-            qdrant=self.qdrant,
-            llm=self.llm,
-            analytics=self._analytics,
-            search=self._search,
-            traversal=traversal,
-            reranker=self._reranker,
-            verifier=self._verifier,
-            llm_reranker=llm_reranker,
-            tree_index=tree_index,
-            retrieval_strategy=vector_strategy,
-            kg_data=self.kg_data,
-            node_lookup=self.node_lookup,
-            outgoing_edges=self.outgoing_edges,
-            incoming_edges=self.incoming_edges,
-            pagerank_scores=pagerank_scores,
-        )
-
-        self._agent = ScholarlyAgent(deps)
-        self._kg_loaded = True
-        logger.info(f"Loaded {len(nodes)} nodes and {len(edges)} edges")
+        return nodes, edges
 
     def _ensure_agent(self) -> ScholarlyAgent:
         """Return the agent or raise a clear error."""

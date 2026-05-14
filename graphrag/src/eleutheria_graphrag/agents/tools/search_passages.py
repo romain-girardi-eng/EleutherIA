@@ -9,6 +9,10 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from eleutheria_graphrag.agents.dependencies import Deps
+from eleutheria_graphrag.services.snapshot_retrieval import (
+    db_is_connected,
+    search_passage_rows,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -108,6 +112,18 @@ class SearchPassagesTool:
                 )
 
         # Fallback: ILIKE search (works across Greek/Latin/English)
+        if not db_is_connected(self._deps.db):
+            rows = search_passage_rows(
+                self._deps,
+                query,
+                limit=limit,
+                work_filter=work_filter,
+            )
+            return SearchPassagesResult(
+                passages=[_passage_hit_from_row(row) for row in rows],
+                total_found=len(rows),
+            )
+
         work_clause = ""
         params: list[Any] = [f"%{query}%", limit]
         if work_filter:
@@ -136,22 +152,28 @@ class SearchPassagesTool:
             rows = await self._deps.db.fetch(sql, *params)
         except Exception:
             logger.warning("SQL fallback failed in search_passages", exc_info=True)
-            rows = []
-
-        passages = [
-            PassageHit(
-                passage_id=row["passage_id"],
-                work_title=row.get("title", ""),
-                author=row.get("author"),
-                canonical_ref=row.get("canonical_ref"),
-                language=row.get("language"),
-                text_content=(row.get("text_content") or "")[:800],
-                score=row.get("rank", 0.0),
+            rows = search_passage_rows(
+                self._deps,
+                query,
+                limit=limit,
+                work_filter=work_filter,
             )
-            for row in rows
-        ]
+
+        passages = [_passage_hit_from_row(row) for row in rows]
 
         return SearchPassagesResult(
             passages=passages,
             total_found=len(passages),
         )
+
+
+def _passage_hit_from_row(row: dict[str, Any]) -> PassageHit:
+    return PassageHit(
+        passage_id=str(row.get("passage_id", "")),
+        work_title=row.get("title", ""),
+        author=row.get("author"),
+        canonical_ref=row.get("canonical_ref"),
+        language=row.get("language"),
+        text_content=(row.get("text_content") or "")[:800],
+        score=row.get("rank", row.get("confidence", 0.0)),
+    )

@@ -15,7 +15,7 @@ from eleutheria_graphrag.agents.state import RAGState
 def make_deps(
     *,
     llm_response: str = "test answer",
-    search_results: list | None = None,
+    search_results: list | None = None,  # noqa: ARG001 — kept for API compat
     node_lookup: dict | None = None,
     outgoing_edges: dict | None = None,
     incoming_edges: dict | None = None,
@@ -24,13 +24,6 @@ def make_deps(
     """Create a mock Deps for testing."""
     llm = AsyncMock()
     llm.generate = AsyncMock(return_value=llm_response)
-
-    qdrant = AsyncMock()
-    qdrant.search_nodes = AsyncMock(
-        return_value=search_results
-        if search_results is not None
-        else [{"id": "chrysippus", "score": 0.9}]
-    )
 
     db = AsyncMock()
     db.fetch = AsyncMock(
@@ -60,7 +53,6 @@ def make_deps(
 
     return Deps(
         db=db,
-        qdrant=qdrant,
         llm=llm,
         node_lookup=_node_lookup,
         outgoing_edges=outgoing_edges or {},

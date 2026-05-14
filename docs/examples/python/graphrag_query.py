@@ -6,7 +6,7 @@ Prerequisites:
     pip install eleutheria-graphrag[llm]
 
     Set environment variables:
-    - Database and Qdrant connection vars
+    - PostgreSQL connection vars
     - MOONSHOT_API_KEY or GEMINI_API_KEY
 """
 
@@ -20,20 +20,16 @@ async def main() -> None:
     os.environ.setdefault("POSTGRES_USER", "eleutheria")
     os.environ.setdefault("POSTGRES_PASSWORD", "eleutheria")
     os.environ.setdefault("POSTGRES_DB", "eleutheria")
-    os.environ.setdefault("QDRANT_HOST", "localhost")
 
     from eleutheria_database import DatabaseService
     from eleutheria_graphrag import GraphRAGService
-    from eleutheria_kg import QdrantService
 
     # Connect services
     db = DatabaseService()
-    qdrant = QdrantService()
     await db.connect()
-    await qdrant.connect()
 
-    # Initialize GraphRAG
-    graphrag = GraphRAGService(db, qdrant)
+    # Initialize GraphRAG (vectorless — SQL + tree + lemma expansion)
+    graphrag = GraphRAGService(db_service=db)
     await graphrag.load_kg()
 
     print("GraphRAG initialized")
@@ -65,7 +61,6 @@ async def main() -> None:
     # Clean up
     await graphrag.close()
     await db.close()
-    await qdrant.close()
 
 
 if __name__ == "__main__":

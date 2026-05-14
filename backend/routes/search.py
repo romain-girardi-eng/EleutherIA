@@ -1,8 +1,10 @@
 """
-Search routes — hybrid, fulltext, lemmatic, semantic, autocomplete, KG search.
+Search routes — hybrid, fulltext, lemmatic, autocomplete, KG search.
 
-Wraps the existing HybridSearchService from the database package and adds
-semantic search via Qdrant and lemma autocomplete.
+Wraps the existing HybridSearchService from the database package. The
+legacy vector-search leg (Qdrant) was removed in the Phase B vectorless
+migration; the ``enable_semantic`` flag on the hybrid endpoint is now a
+no-op kept for client backward compatibility.
 """
 
 import logging
@@ -10,11 +12,10 @@ from typing import Annotated, Any
 
 from eleutheria_database.services.db import DatabaseService
 from eleutheria_database.services.hybrid_search import HybridSearchService
-from eleutheria_kg.services.qdrant import QdrantService
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel, Field
 
-from backend.dependencies import get_db, get_qdrant, get_search
+from backend.dependencies import get_db, get_search
 
 logger = logging.getLogger(__name__)
 
@@ -33,14 +34,10 @@ class HybridSearchBody(BaseModel):
     limit: int = Field(50, ge=1, le=200)
     enable_fulltext: bool = True
     enable_lemmatic: bool = True
-    enable_semantic: bool = True
+    # ``enable_semantic`` is retained for client compatibility but ignored
+    # since the vector leg has been removed.
+    enable_semantic: bool = False
     enable_ai_enhancements: bool = False
-
-
-class SemanticSearchBody(BaseModel):
-    query: str = Field(..., min_length=1)
-    limit: int = Field(10, ge=1, le=100)
-    collection: str = "text_embeddings"
 
 
 # ---------- Routes ----------
@@ -49,11 +46,10 @@ class SemanticSearchBody(BaseModel):
 async def hybrid_search(
     body: HybridSearchBody,
     search: Annotated[HybridSearchService, Depends(get_search)],
-    qdrant: Annotated[QdrantService, Depends(get_qdrant)],
 ) -> dict[str, Any]:
     """
-    Multi-mode hybrid search combining fulltext, lemmatic, and semantic results
-    via Reciprocal Rank Fusion (RRF).
+    Multi-mode hybrid search combining fulltext and lemmatic results via
+    Reciprocal Rank Fusion (RRF). The semantic leg has been removed.
     """
     results_lists: list[list[dict[str, Any]]] = []
     modes_used: list[str] = []
@@ -72,34 +68,6 @@ async def hybrid_search(
             results_lists.append(lm)
             modes_used.append("lemmatic")
 
-    # Semantic search
-    used_semantic = False
-    if body.enable_semantic:
-        try:
-            embedding = await _get_embedding(body.query)
-            sem_results = await qdrant.search_texts(embedding, limit=body.limit)
-            if sem_results:
-                # Normalize keys to match fulltext output
-                normalized = []
-                for r in sem_results:
-                    normalized.append({
-                        "id": r.get("passage_id") or r.get("id"),
-                        "passage_id": r.get("passage_id"),
-                        "work_id": r.get("work_id"),
-                        "title": r.get("title", ""),
-                        "author": r.get("author", ""),
-                        "text_content": r.get("text_content", ""),
-                        "canonical_ref": r.get("canonical_ref", ""),
-                        "language": r.get("language", ""),
-                        "source": "semantic",
-                        "score": r.get("score", 0),
-                    })
-                results_lists.append(normalized)
-                modes_used.append("semantic")
-                used_semantic = True
-        except Exception:
-            logger.debug("Semantic search unavailable, falling back to text-based modes", exc_info=True)
-
     if not results_lists:
         return {
             "combined_results": [],
@@ -109,13 +77,13 @@ async def hybrid_search(
             "modes_used": [],
         }
 
-    combined = search.reciprocal_rank_fusion(results_lists)[:body.limit]
+    combined = search.reciprocal_rank_fusion(results_lists)[: body.limit]
 
     return {
         "combined_results": combined,
         "query": body.query,
         "totalResults": len(combined),
-        "usedSemantic": used_semantic,
+        "usedSemantic": False,
         "used_rrf": len(results_lists) > 1,
         "modes_used": modes_used,
     }
@@ -138,17 +106,6 @@ async def lemmatic_search(
 ) -> dict[str, Any]:
     """Lemmatic search on pre-indexed morphology data."""
     results = await search.lemmatic_search(body.query, body.limit)
-    return {"results": results, "query": body.query, "count": len(results)}
-
-
-@router.post("/semantic")
-async def semantic_search(
-    body: SemanticSearchBody,
-    qdrant: Annotated[QdrantService, Depends(get_qdrant)],
-) -> dict[str, Any]:
-    """Semantic (vector) search via Qdrant."""
-    embedding = await _get_embedding(body.query)
-    results = await qdrant.search_texts(embedding, limit=body.limit)
     return {"results": results, "query": body.query, "count": len(results)}
 
 
@@ -244,26 +201,15 @@ async def autocomplete_lemmas(
     }
 
 
-@router.post("/kg")
-async def search_kg(
-    body: SearchBody,
-    qdrant: Annotated[QdrantService, Depends(get_qdrant)],
-) -> dict[str, Any]:
-    """Search KG nodes by vector similarity."""
-    embedding = await _get_embedding(body.query)
-    results = await qdrant.search_nodes(embedding, limit=body.limit)
-    return {"results": results, "query": body.query, "count": len(results)}
-
-
 # ---------- Helpers ----------
 
 _LATIN_TO_GREEK_MAP = str.maketrans({
-    "a": "\u03b1", "b": "\u03b2", "g": "\u03b3", "d": "\u03b4",
-    "e": "\u03b5", "z": "\u03b6", "h": "\u03b7", "q": "\u03b8",
-    "i": "\u03b9", "k": "\u03ba", "l": "\u03bb", "m": "\u03bc",
-    "n": "\u03bd", "x": "\u03be", "o": "\u03bf", "p": "\u03c0",
-    "r": "\u03c1", "s": "\u03c3", "t": "\u03c4", "u": "\u03c5",
-    "f": "\u03c6", "c": "\u03c7", "y": "\u03c8", "w": "\u03c9",
+    "a": "α", "b": "β", "g": "γ", "d": "δ",
+    "e": "ε", "z": "ζ", "h": "η", "q": "θ",
+    "i": "ι", "k": "κ", "l": "λ", "m": "μ",
+    "n": "ν", "x": "ξ", "o": "ο", "p": "π",
+    "r": "ρ", "s": "σ", "t": "τ", "u": "υ",
+    "f": "φ", "c": "χ", "y": "ψ", "w": "ω",
 })
 
 _GREEK_TO_LATIN_MAP = {v: k for k, v in _LATIN_TO_GREEK_MAP.items() if isinstance(v, str)}
@@ -277,23 +223,3 @@ def _latin_to_greek(text: str) -> str:
 def _greek_to_latin(text: str) -> str:
     """Basic Greek-to-Latin transliteration."""
     return "".join(_GREEK_TO_LATIN_MAP.get(c, c) for c in text.lower())
-
-
-async def _get_embedding(text: str) -> list[float]:
-    """Get embedding for text using Gemini."""
-    import os
-
-    import google.generativeai as genai
-
-    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        raise RuntimeError("GEMINI_API_KEY required for semantic search")
-
-    genai.configure(api_key=api_key)
-    model = os.getenv("GEMINI_EMBEDDING_MODEL", "models/gemini-embedding-001")
-    result = genai.embed_content(
-        model=model,
-        content=text,
-        task_type="retrieval_query",
-    )
-    return result["embedding"]

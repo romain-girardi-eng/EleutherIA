@@ -1,7 +1,7 @@
 """Query type taxonomy and adaptive pipeline configuration.
 
 Each query type maps to a PipelineConfig that selectively enables/disables
-augmentation stages (HyDE, CRAG, reranking, Self-RAG, expansion, tree reasoning).
+augmentation stages (CRAG, reranking, Self-RAG, expansion, tree reasoning).
 """
 
 from __future__ import annotations
@@ -26,7 +26,6 @@ class QueryType(str, Enum):
 class PipelineConfig(BaseModel):
     """Feature flags controlling which augmentation stages are active."""
 
-    use_hyde: bool = True
     use_crag: bool = True
     use_reranking: bool = True
     use_self_rag: bool = True
@@ -36,7 +35,6 @@ class PipelineConfig(BaseModel):
 
 PIPELINE_CONFIGS: dict[QueryType, PipelineConfig] = {
     QueryType.SPECIFIC_ENTITY: PipelineConfig(
-        use_hyde=False,
         use_crag=True,
         use_reranking=True,
         use_self_rag=True,
@@ -44,7 +42,6 @@ PIPELINE_CONFIGS: dict[QueryType, PipelineConfig] = {
         use_tree_reasoning=True,
     ),
     QueryType.GLOBAL_ABSTRACT: PipelineConfig(
-        use_hyde=True,
         use_crag=True,
         use_reranking=True,
         use_self_rag=True,
@@ -52,7 +49,6 @@ PIPELINE_CONFIGS: dict[QueryType, PipelineConfig] = {
         use_tree_reasoning=True,
     ),
     QueryType.MULTI_HOP: PipelineConfig(
-        use_hyde=False,
         use_crag=True,
         use_reranking=False,
         use_self_rag=True,
@@ -60,7 +56,6 @@ PIPELINE_CONFIGS: dict[QueryType, PipelineConfig] = {
         use_tree_reasoning=True,
     ),
     QueryType.COMPARATIVE: PipelineConfig(
-        use_hyde=True,
         use_crag=True,
         use_reranking=True,
         use_self_rag=True,
@@ -68,7 +63,6 @@ PIPELINE_CONFIGS: dict[QueryType, PipelineConfig] = {
         use_tree_reasoning=True,
     ),
     QueryType.TEMPORAL: PipelineConfig(
-        use_hyde=True,
         use_crag=True,
         use_reranking=True,
         use_self_rag=True,

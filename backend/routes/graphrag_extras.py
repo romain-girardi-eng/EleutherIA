@@ -35,7 +35,6 @@ class AnswerRequest(BaseModel):
     semantic_k: int = Field(5, ge=1, le=50)
     graph_depth: int = Field(1, ge=1, le=4)
     max_context: int = Field(30, ge=5, le=100)
-    use_hyde: bool = False
     use_expansion: bool = False
     use_crag: bool = False
     use_selfrag: bool = False
@@ -190,7 +189,6 @@ async def graphrag_answer(
         },
         "metadata": result.get("metadata", {}),
         "retrieval_stats": {
-            "hyde_used": body.use_hyde,
             "rerank_used": body.use_reranking,
             "crag_used": body.use_crag,
             "selfrag_used": body.use_selfrag,

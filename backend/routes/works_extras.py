@@ -380,16 +380,17 @@ async def batch_fetch_citations(
 
 
 # =============================================================================
-# /api/embeddings — Stubs (Qdrant-dependent, not available on Railway)
+# /api/embeddings — Retired stubs (vectorless architecture as of 2026-05-14)
 # =============================================================================
+# Kept for frontend backwards-compat; returns empty payload + retirement notice.
 
 
 @embeddings_router.get("/semantic-space")
 async def get_semantic_space() -> dict[str, Any]:
-    """Stub: Embedding visualization not available in Railway deployment."""
+    """Retired: vector embedding visualization removed in the vectorless rewrite."""
     return {
         "nodes": [],
-        "error": "Embedding visualization not available in Railway deployment",
+        "error": "Embedding visualization retired in the vectorless architecture",
     }
 
 

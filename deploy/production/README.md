@@ -14,9 +14,52 @@ Production setup for [free-will.app](https://free-will.app) using Supabase (Post
 ### 1. Supabase Database
 
 1. Create a project at [supabase.com/dashboard](https://supabase.com/dashboard)
-2. Open **SQL Editor** and run `database/schema/schema.sql` from this repo
-3. Optionally run `database/schema/supabase_functions.sql` for optimized RPC search functions
-4. Copy the **Transaction** connection string from **Settings > Database > Connection string** (port 6543, pgbouncer mode)
+2. Copy a direct or session-pooler PostgreSQL URL for maintenance imports. Do
+   not commit this URL or put it in Cloudflare secrets; it is an admin database
+   credential for local/CI bootstrap only.
+3. From the repo root, bootstrap schema + recovered KG data:
+
+```bash
+export SUPABASE_DATABASE_URL='postgresql://postgres:YOUR_PASSWORD@db.YOUR_PROJECT_REF.supabase.co:5432/postgres?sslmode=require'
+
+uv run --with asyncpg \
+  python database/scripts/bootstrap_supabase.py \
+  --replace-data
+```
+
+This applies:
+
+- `database/schema/schema.sql`
+- `database/schema/work_tree_indices.sql`
+- `database/schema/supabase_public_api.sql`
+- `database/schema/supabase_functions.sql`
+- `database/migrations/20260514_01_supabase_rebuild_support.sql`
+
+It then imports the recovered `data/kg` snapshot into:
+
+- `free_will.kg_nodes`
+- `free_will.kg_edges`
+- derived `free_will.ancient_works`
+- derived `free_will.passages`
+- derived `free_will.passage_citations`
+
+Expected snapshot import volume is currently about `17,757` KG nodes, `43,063` KG edges, `166` works, `16,872` passages, and `19,124` passage citations.
+
+4. Copy the **Transaction** connection string from **Settings > Database > Connection string** (port 6543, pgbouncer mode) into `DATABASE_URL` for the running backend
+5. Set `DATABASE_REQUIRED=true` in production so startup fails if the restored Supabase database is unavailable
+
+### Supabase Security Notes
+
+- Keep `SUPABASE_DATABASE_URL` out of Git, Cloudflare, and frontend builds.
+- Prefer the Supabase anon key for Cloudflare `SUPABASE_KEY`; the public read
+  paths are protected with explicit `SELECT` grants and RLS policies.
+- Do not use `service_role` unless a server-only admin route needs RLS bypass.
+- Rotate the old Supabase password/key material if it appeared in source,
+  terminal output, logs, screenshots, or pasted chat context.
+- In Supabase API settings, expose only `public` and `free_will` if both are
+  required by the Worker. Do not expose private schemas.
+- If your Supabase plan supports it, restrict direct Postgres access to trusted
+  IP ranges after the bootstrap is complete.
 
 ### 2. Qdrant Cloud
 
@@ -37,7 +80,29 @@ docker compose up -d --build
 
 ```bash
 curl http://localhost:8000/api/health
-# Should return: {"status":"healthy","database":"connected",...}
+# Should include: "database":"connected", "kg_source":"database"
+```
+
+Optional DB-level verification:
+
+```bash
+uv run --with asyncpg python - <<'PY'
+import asyncio, os, asyncpg
+
+async def main():
+    conn = await asyncpg.connect(os.environ["SUPABASE_DATABASE_URL"], statement_cache_size=0)
+    row = await conn.fetchrow("""
+        SELECT
+            (SELECT COUNT(*) FROM free_will.kg_nodes) AS kg_nodes,
+            (SELECT COUNT(*) FROM free_will.kg_edges) AS kg_edges,
+            (SELECT COUNT(*) FROM free_will.passages) AS passages,
+            public.get_kg_stats() AS kg_stats
+    """)
+    print(dict(row))
+    await conn.close()
+
+asyncio.run(main())
+PY
 ```
 
 ## Architecture

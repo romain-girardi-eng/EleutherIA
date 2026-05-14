@@ -121,6 +121,9 @@ class LLMService:
         preferred_provider: ModelProvider = ModelProvider.GEMINI,
         timeout: float = 120.0,
         enable_rate_limiting: bool = True,
+        gemini_api_key: str | None = None,
+        moonshot_api_key: str | None = None,
+        openrouter_api_key: str | None = None,
     ) -> None:
         """
         Initialize LLM service.
@@ -129,6 +132,9 @@ class LLMService:
             preferred_provider: Primary provider to use (default: Gemini 3)
             timeout: Request timeout in seconds
             enable_rate_limiting: Whether to enforce rate limits
+            gemini_api_key: Optional Gemini key (else read from GEMINI_API_KEY)
+            moonshot_api_key: Optional Moonshot/Kimi key (else MOONSHOT_API_KEY)
+            openrouter_api_key: Optional OpenRouter key (else OPENROUTER_API_KEY)
         """
         self.preferred_provider = preferred_provider
         self.timeout = timeout
@@ -141,6 +147,15 @@ class LLMService:
         self._prompt_cache_backoff_until: float = 0.0
         self._disabled_providers: set[ModelProvider] = set()
         self._provider_backoff_until: dict[ModelProvider, float] = {}
+
+        # Explicit per-provider keys take precedence over environment vars.
+        self._provider_keys: dict[ModelProvider, str] = {}
+        if gemini_api_key:
+            self._provider_keys[ModelProvider.GEMINI] = gemini_api_key
+        if moonshot_api_key:
+            self._provider_keys[ModelProvider.KIMI] = moonshot_api_key
+        if openrouter_api_key:
+            self._provider_keys[ModelProvider.OPENROUTER] = openrouter_api_key
 
         # Initialize rate limiters
         if enable_rate_limiting:
@@ -156,13 +171,20 @@ class LLMService:
         if not self.available_providers:
             logger.warning("No LLM providers configured - set API keys in environment")
 
+    def _api_key_for(self, provider: ModelProvider) -> str:
+        """Return the API key for ``provider``: explicit override first, env fallback."""
+        explicit = self._provider_keys.get(provider)
+        if explicit:
+            return explicit
+        config = PROVIDER_CONFIGS[provider]
+        env_key = cast(str, config["env_key"])
+        return os.getenv(env_key) or ""
+
     def _detect_available_providers(self) -> list[ModelProvider]:
         """Detect which providers have API keys configured."""
         available = []
         for provider in ModelProvider:
-            config = PROVIDER_CONFIGS[provider]
-            env_key = cast(str, config["env_key"])
-            if os.getenv(env_key):
+            if self._api_key_for(provider):
                 available.append(provider)
                 logger.info(f"LLM provider available: {provider.value}")
         return available
@@ -593,8 +615,7 @@ class LLMService:
                 model_override
             )
             override_config = self._resolve_config(override_provider)
-            override_env_key = cast(str, override_config["env_key"])
-            override_api_key = os.getenv(override_env_key) or ""
+            override_api_key = self._api_key_for(override_provider)
             if override_api_key:
                 try:
                     override_config["model"] = override_model
@@ -644,8 +665,7 @@ class LLMService:
                         await self._rate_limiters[provider].wait_if_needed()
 
                     config = self._resolve_config(provider)
-                    env_key = cast(str, config["env_key"])
-                    api_key = os.getenv(env_key) or ""
+                    api_key = self._api_key_for(provider)
 
                     model_name = self._model_for_request(
                         provider,
@@ -987,8 +1007,7 @@ class LLMService:
                         await self._rate_limiters[provider].wait_if_needed()
 
                     config = self._resolve_config(provider)
-                    env_key = cast(str, config["env_key"])
-                    api_key = os.getenv(env_key) or ""
+                    api_key = self._api_key_for(provider)
 
                     model_name = self._model_for_request(
                         provider,

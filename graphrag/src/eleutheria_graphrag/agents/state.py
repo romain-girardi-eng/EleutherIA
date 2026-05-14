@@ -31,7 +31,6 @@ class EvidenceSource(str, Enum):
     HYBRID_SEARCH = "hybrid_search"
     PASSAGE_CITATION = "passage_citation"
     DIRECT_LOOKUP = "direct_lookup"
-    HYDE_SEARCH = "hyde_search"
     CRAG_SECONDARY = "crag_secondary"
     TREE_REASONING = "tree_reasoning"
 

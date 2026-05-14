@@ -1,12 +1,17 @@
 """Tests for EvidenceCollector."""
 
-import pytest
 
 from eleutheria_graphrag.agents.evidence_collector import EvidenceCollector
 from eleutheria_graphrag.agents.state import RAGState
-from eleutheria_graphrag.agents.tools.get_neighbors import GetNeighborsResult, EdgeSummary
-from eleutheria_graphrag.agents.tools.search_nodes import SearchNodesResult, NodeSummary
-from eleutheria_graphrag.agents.tools.read_passages import ReadPassagesResult, PassageSummary
+from eleutheria_graphrag.agents.tools.get_neighbors import (
+    EdgeSummary,
+    GetNeighborsResult,
+)
+from eleutheria_graphrag.agents.tools.read_passages import (
+    PassageSummary,
+    ReadPassagesResult,
+)
+from eleutheria_graphrag.agents.tools.search_nodes import NodeSummary, SearchNodesResult
 
 
 def test_ingest_search_nodes():

@@ -34,9 +34,11 @@ from backend.routes.search import router as search_router
 from backend.routes.works_extras import (
     citations_router,
     embeddings_router,
-    router as works_extras_router,
     text_router,
     texts_router,
+)
+from backend.routes.works_extras import (
+    router as works_extras_router,
 )
 
 logger = logging.getLogger(__name__)
@@ -126,27 +128,23 @@ def create_app() -> FastAPI:
         """Composite health check across all services."""
         svc = deps.services
         if svc is None:
-            return {"status": "starting", "database": "unknown", "qdrant": "unknown", "graphrag": "not_ready", "kg_nodes": 0}
+            return {"status": "starting", "database": "unknown", "graphrag": "not_ready", "kg_nodes": 0}
 
         try:
             db_ok = svc.db.is_connected()
         except Exception:
             db_ok = False
 
-        try:
-            qdrant_ok = svc.qdrant.is_connected()
-        except Exception:
-            qdrant_ok = False
-
         graphrag_ok = getattr(svc.graphrag, "_kg_loaded", False) if svc.graphrag else False
         kg_nodes = len(svc.analytics.kg_data.get("nodes", [])) if svc.analytics else 0
+        core_ready = graphrag_ok and kg_nodes > 0
 
         return {
-            "status": "healthy" if (db_ok and qdrant_ok) else "degraded",
+            "status": "healthy" if db_ok else "degraded" if core_ready else "unhealthy",
             "database": "connected" if db_ok else "disconnected",
-            "qdrant": "connected" if qdrant_ok else "disconnected",
             "graphrag": "ready" if graphrag_ok else "not_ready",
             "kg_nodes": kg_nodes,
+            "kg_source": getattr(svc, "kg_source", "unknown"),
         }
 
     return app

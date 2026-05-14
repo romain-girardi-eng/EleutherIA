@@ -12,10 +12,7 @@ class TestGraphRAGServiceInit:
     """Tests for service initialization."""
 
     def test_init_defaults(self):
-        svc = GraphRAGService(
-            db_service=MagicMock(),
-            qdrant_service=MagicMock(),
-        )
+        svc = GraphRAGService(db_service=MagicMock())
         assert svc._kg_loaded is False
         assert svc._agent is None
         assert svc.kg_data is None
@@ -23,7 +20,6 @@ class TestGraphRAGServiceInit:
     def test_init_with_optional_services(self):
         svc = GraphRAGService(
             db_service=MagicMock(),
-            qdrant_service=MagicMock(),
             reranker=MagicMock(),
             verifier=MagicMock(),
             analytics=MagicMock(),
@@ -36,18 +32,12 @@ class TestEnsureAgent:
     """Tests for _ensure_agent method."""
 
     def test_raises_when_not_initialized(self):
-        svc = GraphRAGService(
-            db_service=MagicMock(),
-            qdrant_service=MagicMock(),
-        )
+        svc = GraphRAGService(db_service=MagicMock())
         with pytest.raises(RuntimeError, match="ScholarlyAgent not initialized"):
             svc._ensure_agent()
 
     def test_returns_agent_when_initialized(self):
-        svc = GraphRAGService(
-            db_service=MagicMock(),
-            qdrant_service=MagicMock(),
-        )
+        svc = GraphRAGService(db_service=MagicMock())
         mock_agent = MagicMock()
         svc._agent = mock_agent
         assert svc._ensure_agent() is mock_agent
@@ -58,10 +48,7 @@ class TestDeprecationWarnings:
 
     @pytest.mark.asyncio
     async def test_warns_on_non_default_params(self):
-        svc = GraphRAGService(
-            db_service=MagicMock(),
-            qdrant_service=MagicMock(),
-        )
+        svc = GraphRAGService(db_service=MagicMock())
         mock_agent = AsyncMock()
         mock_agent.query_dict = AsyncMock(return_value={"answer": "test"})
         svc._agent = mock_agent
@@ -76,10 +63,7 @@ class TestDeprecationWarnings:
 
     @pytest.mark.asyncio
     async def test_no_warning_on_defaults(self):
-        svc = GraphRAGService(
-            db_service=MagicMock(),
-            qdrant_service=MagicMock(),
-        )
+        svc = GraphRAGService(db_service=MagicMock())
         mock_agent = AsyncMock()
         mock_agent.query_dict = AsyncMock(return_value={"answer": "test"})
         svc._agent = mock_agent
@@ -101,10 +85,7 @@ class TestLoadKG:
     async def test_load_kg_idempotent(self):
         db = AsyncMock()
         db.fetch = AsyncMock(return_value=[])
-        svc = GraphRAGService(
-            db_service=db,
-            qdrant_service=MagicMock(),
-        )
+        svc = GraphRAGService(db_service=db)
 
         with patch(
             "eleutheria_graphrag.services.graphrag_service.ScholarlyAgent"
@@ -119,10 +100,7 @@ class TestLoadKG:
     async def test_auto_loads_on_query(self):
         db = AsyncMock()
         db.fetch = AsyncMock(return_value=[])
-        svc = GraphRAGService(
-            db_service=db,
-            qdrant_service=MagicMock(),
-        )
+        svc = GraphRAGService(db_service=db)
 
         mock_agent = AsyncMock()
         mock_agent.query_dict = AsyncMock(return_value={"answer": "test"})
@@ -139,10 +117,7 @@ class TestLoadKG:
     async def test_load_kg_injects_tree_index_and_llm_reranker(self):
         db = AsyncMock()
         db.fetch = AsyncMock(return_value=[])
-        svc = GraphRAGService(
-            db_service=db,
-            qdrant_service=MagicMock(),
-        )
+        svc = GraphRAGService(db_service=db)
 
         with patch(
             "eleutheria_graphrag.services.graphrag_service.ScholarlyAgent"
@@ -153,6 +128,54 @@ class TestLoadKG:
         assert deps.tree_index is not None
         assert deps.llm_reranker is not None
         assert deps.traversal is not None
+        # Vectorless: an SQL strategy is wired when DB is connected.
+        assert deps.retrieval_strategy is not None
+
+    @pytest.mark.asyncio
+    async def test_load_kg_uses_provided_snapshot_data_without_db(self):
+        db = MagicMock()
+        db.is_connected.return_value = False
+        db.fetch = AsyncMock()
+        kg_data = {
+            "nodes": [
+                {
+                    "id": "concept_fate",
+                    "label": "Fate",
+                    "type": "concept",
+                    "description": "Stoic fate",
+                    "metadata": {},
+                },
+                {
+                    "id": "passage_plut_fat_1",
+                    "label": "Plutarch, De fato 1",
+                    "type": "passage",
+                    "description": "Passage text",
+                    "metadata": {"author": "Plutarch", "work_title": "De fato"},
+                },
+            ],
+            "edges": [
+                {
+                    "source": "concept_fate",
+                    "target": "passage_plut_fat_1",
+                    "relation": "evidenced_by",
+                    "weight": "0.9",
+                    "metadata": {},
+                }
+            ],
+        }
+        svc = GraphRAGService(db_service=db, kg_data=kg_data)
+
+        with patch(
+            "eleutheria_graphrag.services.graphrag_service.ScholarlyAgent"
+        ) as mock_agent_cls:
+            await svc.load_kg()
+
+        db.fetch.assert_not_called()
+        assert svc._kg_loaded is True
+        assert svc.node_lookup["concept_fate"]["label"] == "Fate"
+        assert svc.outgoing_edges["concept_fate"][0]["target"] == "passage_plut_fat_1"
+        deps = mock_agent_cls.call_args.args[0]
+        assert deps.tree_index is None
 
     @pytest.mark.asyncio
     async def test_load_kg_normalizes_json_metadata_strings(self):
@@ -189,10 +212,7 @@ class TestLoadKG:
                 ],
             ]
         )
-        svc = GraphRAGService(
-            db_service=db,
-            qdrant_service=MagicMock(),
-        )
+        svc = GraphRAGService(db_service=db)
 
         with patch("eleutheria_graphrag.services.graphrag_service.ScholarlyAgent"):
             await svc.load_kg()
