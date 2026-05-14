@@ -16,8 +16,10 @@ from eleutheria_graphrag.services.tree_index import (
 class TestTreeNode:
     def test_leaf_node(self):
         n = TreeNode(
-            node_id="df_001", title="Introduction",
-            start_passage=1, end_passage=5,
+            node_id="df_001",
+            title="Introduction",
+            start_passage=1,
+            end_passage=5,
             summary="Alexander introduces the debate...",
         )
         assert n.nodes == []
@@ -25,13 +27,17 @@ class TestTreeNode:
 
     def test_nested_node(self):
         child = TreeNode(
-            node_id="df_002", title="The Stoic Position",
-            start_passage=1, end_passage=3,
+            node_id="df_002",
+            title="The Stoic Position",
+            start_passage=1,
+            end_passage=3,
             summary="Chrysippus's argument...",
         )
         parent = TreeNode(
-            node_id="df_001", title="Book I",
-            start_passage=1, end_passage=10,
+            node_id="df_001",
+            title="Book I",
+            start_passage=1,
+            end_passage=10,
             summary="Overview...",
             nodes=[child],
         )
@@ -60,8 +66,10 @@ class TestWorkTreeIndex:
             total_passages=10,
             nodes=[
                 TreeNode(
-                    node_id="001", title="Intro",
-                    start_passage=1, end_passage=5,
+                    node_id="001",
+                    title="Intro",
+                    start_passage=1,
+                    end_passage=5,
                     summary="Introduction...",
                 )
             ],
@@ -83,14 +91,25 @@ class TestTreeIndexService:
     @pytest.mark.asyncio
     async def test_load_indices_returns_parsed(self):
         tree_data = WorkTreeIndex(
-            work_id="de_fato", title="De Fato", author="Alexander",
-            total_passages=10, nodes=[],
+            work_id="de_fato",
+            title="De Fato",
+            author="Alexander",
+            total_passages=10,
+            nodes=[],
         ).model_dump()
         db = MagicMock()
-        db.fetch = AsyncMock(return_value=[
-            {"work_id": "de_fato", "title": "De Fato", "author": "Alexander",
-             "period": None, "total_passages": 10, "tree_json": tree_data}
-        ])
+        db.fetch = AsyncMock(
+            return_value=[
+                {
+                    "work_id": "de_fato",
+                    "title": "De Fato",
+                    "author": "Alexander",
+                    "period": None,
+                    "total_passages": 10,
+                    "tree_json": tree_data,
+                }
+            ]
+        )
         svc = TreeIndexService(db=db)
         result = await svc.load_indices(["de_fato"])
         assert len(result) == 1
@@ -100,14 +119,25 @@ class TestTreeIndexService:
     @pytest.mark.asyncio
     async def test_load_indices_parses_json_string(self):
         tree_data = WorkTreeIndex(
-            work_id="de_fato", title="De Fato", author="Alexander",
-            total_passages=10, nodes=[],
+            work_id="de_fato",
+            title="De Fato",
+            author="Alexander",
+            total_passages=10,
+            nodes=[],
         ).model_dump_json()
         db = MagicMock()
-        db.fetch = AsyncMock(return_value=[
-            {"work_id": "de_fato", "title": "De Fato", "author": "Alexander",
-             "period": None, "total_passages": 10, "tree_json": tree_data}
-        ])
+        db.fetch = AsyncMock(
+            return_value=[
+                {
+                    "work_id": "de_fato",
+                    "title": "De Fato",
+                    "author": "Alexander",
+                    "period": None,
+                    "total_passages": 10,
+                    "tree_json": tree_data,
+                }
+            ]
+        )
         svc = TreeIndexService(db=db)
 
         result = await svc.load_indices(["de_fato"])
@@ -119,10 +149,12 @@ class TestTreeIndexService:
     @pytest.mark.asyncio
     async def test_resolve_work_ids_by_title(self):
         db = MagicMock()
-        db.fetch = AsyncMock(return_value=[
-            {"work_id": "uuid-cicero-de-fato", "title": "De Fato"},
-            {"work_id": "uuid-chrysippus-svf", "title": "SVF"},
-        ])
+        db.fetch = AsyncMock(
+            return_value=[
+                {"work_id": "uuid-cicero-de-fato", "title": "De Fato"},
+                {"work_id": "uuid-chrysippus-svf", "title": "SVF"},
+            ]
+        )
         svc = TreeIndexService(db=db)
 
         result = await svc.resolve_work_ids(["De Fato", "SVF", "Unknown Work"])
@@ -133,19 +165,32 @@ class TestTreeIndexService:
     @pytest.mark.asyncio
     async def test_extract_passages(self):
         db = MagicMock()
-        db.fetch = AsyncMock(return_value=[
-            {"passage_id": "p1", "text_content": "Chrysippus argues...",
-             "canonical_ref": "1.1", "title": "De Fato", "author": "Alexander"},
-        ])
+        db.fetch = AsyncMock(
+            return_value=[
+                {
+                    "passage_id": "p1",
+                    "text_content": "Chrysippus argues...",
+                    "canonical_ref": "1.1",
+                    "title": "De Fato",
+                    "author": "Alexander",
+                },
+            ]
+        )
         svc = TreeIndexService(db=db)
         idx = WorkTreeIndex(
-            work_id="de_fato", title="De Fato", author="Alexander",
+            work_id="de_fato",
+            title="De Fato",
+            author="Alexander",
             total_passages=10,
-            nodes=[TreeNode(
-                node_id="001", title="Intro",
-                start_passage=1, end_passage=5,
-                summary="Introduction...",
-            )],
+            nodes=[
+                TreeNode(
+                    node_id="001",
+                    title="Intro",
+                    start_passage=1,
+                    end_passage=5,
+                    summary="Introduction...",
+                )
+            ],
         )
         result = await svc.extract_passages(idx, ["001"])
         assert len(result) >= 1

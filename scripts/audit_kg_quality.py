@@ -121,12 +121,12 @@ class Dataset:
 
 
 def load_ontology() -> tuple[dict[str, Any], dict[str, Any]]:
-    node_ontology = json.loads((ROOT / "knowledge graph/ontology/node_types.json").read_text())[
-        "node_types"
-    ]
-    edge_ontology = json.loads((ROOT / "knowledge graph/ontology/edge_types.json").read_text())[
-        "edge_types"
-    ]
+    node_ontology = json.loads(
+        (ROOT / "knowledge graph/ontology/node_types.json").read_text()
+    )["node_types"]
+    edge_ontology = json.loads(
+        (ROOT / "knowledge graph/ontology/edge_types.json").read_text()
+    )["edge_types"]
     return node_ontology, edge_ontology
 
 
@@ -312,8 +312,8 @@ def analyze(dataset: Dataset) -> dict[str, Any]:
     unknown_relations.sort(key=lambda item: (-item["count"], item["relation"]))
 
     invalid_relation_pairs = Counter()
-    invalid_relation_examples: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(
-        list
+    invalid_relation_examples: dict[tuple[str, str, str], list[dict[str, Any]]] = (
+        defaultdict(list)
     )
     for edge in edges:
         relation_def = dataset.edge_ontology.get(edge["relation"])
@@ -321,12 +321,14 @@ def analyze(dataset: Dataset) -> dict[str, Any]:
             continue
         source_type = node_by_id[edge["source_id"]]["type"]
         target_type = node_by_id[edge["target_id"]]["type"]
-        source_ok = "*" in relation_def["source_types"] or source_type in relation_def[
-            "source_types"
-        ]
-        target_ok = "*" in relation_def["target_types"] or target_type in relation_def[
-            "target_types"
-        ]
+        source_ok = (
+            "*" in relation_def["source_types"]
+            or source_type in relation_def["source_types"]
+        )
+        target_ok = (
+            "*" in relation_def["target_types"]
+            or target_type in relation_def["target_types"]
+        )
         if source_ok and target_ok:
             continue
         key = (edge["relation"], source_type, target_type)
@@ -349,7 +351,11 @@ def analyze(dataset: Dataset) -> dict[str, Any]:
             "count": count,
             "examples": invalid_relation_examples[(relation, source_type, target_type)],
         }
-        for (relation, source_type, target_type), count in invalid_relation_pairs.most_common()
+        for (
+            relation,
+            source_type,
+            target_type,
+        ), count in invalid_relation_pairs.most_common()
     ]
 
     invalid_period_nodes = defaultdict(list)
@@ -611,8 +617,12 @@ def analyze(dataset: Dataset) -> dict[str, Any]:
         if CLAIM_PATTERN.search(node.get("description") or ""):
             assertive_claim_candidates.append(row)
 
-    claim_nodes_without_anchor.sort(key=lambda item: (item["type"], item["period"] or "", item["label"]))
-    assertive_claim_candidates.sort(key=lambda item: (item["type"], item["period"] or "", item["label"]))
+    claim_nodes_without_anchor.sort(
+        key=lambda item: (item["type"], item["period"] or "", item["label"])
+    )
+    assertive_claim_candidates.sort(
+        key=lambda item: (item["type"], item["period"] or "", item["label"])
+    )
 
     post_antique_nodes = [
         {
@@ -753,7 +763,9 @@ def analyze(dataset: Dataset) -> dict[str, Any]:
             "claim_nodes_without_evidence_anchor": {
                 "count": len(claim_nodes_without_anchor),
                 "by_type": Counter(item["type"] for item in claim_nodes_without_anchor),
-                "by_period": Counter(item["period"] or "<NULL>" for item in claim_nodes_without_anchor),
+                "by_period": Counter(
+                    item["period"] or "<NULL>" for item in claim_nodes_without_anchor
+                ),
                 "examples": example_rows(claim_nodes_without_anchor, 40),
             },
             "assertive_claim_candidates_without_evidence": {
@@ -785,7 +797,9 @@ def counter_lines(counter: Counter[str], limit: int = 8) -> list[str]:
     return lines
 
 
-def row_lines(items: list[dict[str, Any]], fields: list[str], limit: int = 10) -> list[str]:
+def row_lines(
+    items: list[dict[str, Any]], fields: list[str], limit: int = 10
+) -> list[str]:
     lines = []
     for item in items[:limit]:
         parts = []
@@ -879,7 +893,9 @@ def render_markdown(report: dict[str, Any]) -> str:
         *counter_lines(provenance["claim_nodes_without_evidence_anchor"]["by_type"]),
         "",
         f"- Assertive claim candidates without evidence: {assertive_count}",
-        *counter_lines(provenance["assertive_claim_candidates_without_evidence"]["by_type"]),
+        *counter_lines(
+            provenance["assertive_claim_candidates_without_evidence"]["by_type"]
+        ),
         "",
         "- Representative assertive examples:",
         *row_lines(
@@ -980,9 +996,9 @@ def render_markdown(report: dict[str, Any]) -> str:
             "",
             "- Representative missing authorship examples:",
             *row_lines(
-                completeness["authorship_and_structure"]["publication_missing_authored_by"][
-                    "examples"
-                ],
+                completeness["authorship_and_structure"][
+                    "publication_missing_authored_by"
+                ]["examples"],
                 ["label", "node_id"],
                 10,
             ),

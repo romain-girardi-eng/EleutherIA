@@ -54,7 +54,11 @@ def _canonical_refs(passages: list[dict[str, Any]], limit: int = 3) -> list[str]
 
 
 def _languages(passages: list[dict[str, Any]], work_language: str | None) -> list[str]:
-    values = {str(passage.get("language")).strip() for passage in passages if passage.get("language")}
+    values = {
+        str(passage.get("language")).strip()
+        for passage in passages
+        if passage.get("language")
+    }
     if work_language:
         values.add(str(work_language).strip())
     return sorted(value for value in values if value)
@@ -67,8 +71,7 @@ def _abstract_for_node(
 ) -> str:
     refs = _canonical_refs(passages, limit=2)
     sample = " ".join(
-        str(passage.get("text_content") or "").strip()
-        for passage in passages[:2]
+        str(passage.get("text_content") or "").strip() for passage in passages[:2]
     )
     sample = re.sub(r"\s+", " ", sample).strip()
     sample = sample[:220].rstrip()

@@ -1,6 +1,5 @@
 """Tests for EvidenceCollector."""
 
-
 from eleutheria_graphrag.agents.evidence_collector import EvidenceCollector
 from eleutheria_graphrag.agents.state import RAGState
 from eleutheria_graphrag.agents.tools.get_neighbors import (
@@ -90,13 +89,29 @@ def test_deduplication():
 
     # Ingest same node twice
     result1 = SearchNodesResult(
-        nodes=[NodeSummary(node_id="n1", label="Node 1", type="concept", description="A concept", score=0.9)],
+        nodes=[
+            NodeSummary(
+                node_id="n1",
+                label="Node 1",
+                type="concept",
+                description="A concept",
+                score=0.9,
+            )
+        ],
         total_found=1,
     )
     result2 = GetNeighborsResult(
         center_node="x",
         center_label="X",
-        edges=[EdgeSummary(edge_node_id="n1", label="Node 1", type="concept", relation="discusses", direction="outgoing")],
+        edges=[
+            EdgeSummary(
+                edge_node_id="n1",
+                label="Node 1",
+                type="concept",
+                relation="discusses",
+                direction="outgoing",
+            )
+        ],
     )
 
     collector.ingest("search_nodes", {}, result1)
@@ -111,16 +126,41 @@ def test_populate_state():
     collector = EvidenceCollector()
 
     # Add some evidence
-    collector.ingest("search_nodes", {}, SearchNodesResult(
-        nodes=[NodeSummary(node_id="n1", label="Node", type="person", description="A person", score=0.9)],
-        total_found=1,
-    ))
-    collector.ingest("read_passages", {}, ReadPassagesResult(
-        node_id="n1",
-        node_label="Node",
-        passages=[PassageSummary(passage_id="p1", work_title="Work", text_content="Text", confidence=0.9)],
-    ))
-    collector.record_call("search_nodes", {"query": "test"}, "testing", "1 node found", node_count=1)
+    collector.ingest(
+        "search_nodes",
+        {},
+        SearchNodesResult(
+            nodes=[
+                NodeSummary(
+                    node_id="n1",
+                    label="Node",
+                    type="person",
+                    description="A person",
+                    score=0.9,
+                )
+            ],
+            total_found=1,
+        ),
+    )
+    collector.ingest(
+        "read_passages",
+        {},
+        ReadPassagesResult(
+            node_id="n1",
+            node_label="Node",
+            passages=[
+                PassageSummary(
+                    passage_id="p1",
+                    work_title="Work",
+                    text_content="Text",
+                    confidence=0.9,
+                )
+            ],
+        ),
+    )
+    collector.record_call(
+        "search_nodes", {"query": "test"}, "testing", "1 node found", node_count=1
+    )
 
     state = RAGState(question="Test question")
     collector.populate_state(state)

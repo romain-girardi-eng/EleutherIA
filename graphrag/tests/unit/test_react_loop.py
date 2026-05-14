@@ -20,6 +20,7 @@ from eleutheria_graphrag.agents.tools import ToolRegistry
 
 # ── Fixtures ──────────────────────────────────────────────────────────────
 
+
 def _make_deps() -> Deps:
     """Minimal mock deps for agent loop tests."""
     db = AsyncMock()
@@ -42,7 +43,14 @@ def _make_deps() -> Deps:
         },
         outgoing_edges={
             "person_origen": [
-                {"source": "person_origen", "target": "concept_fw", "relation": "discusses", "weight": 1.0, "metadata": {}, "description": ""},
+                {
+                    "source": "person_origen",
+                    "target": "concept_fw",
+                    "relation": "discusses",
+                    "weight": 1.0,
+                    "metadata": {},
+                    "description": "",
+                },
             ],
         },
         incoming_edges={},
@@ -53,10 +61,12 @@ def _make_deps() -> Deps:
 def _make_tool_registry(deps: Deps) -> ToolRegistry:
     """Build a real tool registry from deps."""
     from eleutheria_graphrag.agents.tools import build_tool_registry
+
     return build_tool_registry(deps)
 
 
 # ── _parse_action tests ──────────────────────────────────────────────────
+
 
 class TestParseAction:
     def test_parse_tool_call(self):
@@ -66,11 +76,13 @@ class TestParseAction:
         tool.name = "search_nodes"
         registry.register(tool)
 
-        raw = json.dumps({
-            "tool": "search_nodes",
-            "args": {"query": "Origen"},
-            "reason": "Find the philosopher",
-        })
+        raw = json.dumps(
+            {
+                "tool": "search_nodes",
+                "args": {"query": "Origen"},
+                "reason": "Find the philosopher",
+            }
+        )
         action = _parse_action(raw, registry)
         assert action is not None
         assert action.type == "tool_call"
@@ -80,10 +92,12 @@ class TestParseAction:
 
     def test_parse_synthesize(self):
         registry = ToolRegistry()
-        raw = json.dumps({
-            "action": "SYNTHESIZE",
-            "summary": "Found Origen and his works",
-        })
+        raw = json.dumps(
+            {
+                "action": "SYNTHESIZE",
+                "summary": "Found Origen and his works",
+            }
+        )
         action = _parse_action(raw, registry)
         assert action is not None
         assert action.type == "synthesize"
@@ -124,6 +138,7 @@ class TestParseAction:
 
 # ── _summarize_result tests ──────────────────────────────────────────────
 
+
 class TestSummarizeResult:
     def test_search_nodes(self):
         result = {
@@ -148,6 +163,7 @@ class TestSummarizeResult:
 
 
 # ── _compress_old_results tests ──────────────────────────────────────────
+
 
 class TestCompressOldResults:
     def test_compresses_old_tool_results(self):
@@ -187,15 +203,24 @@ class TestCompressOldResults:
 
 # ── AgentLoop integration tests ──────────────────────────────────────────
 
+
 class TestAgentLoop:
     @pytest.mark.asyncio
     async def test_synthesize_after_one_call(self):
         deps = _make_deps()
         # Script: first call returns a search, second returns SYNTHESIZE
-        deps.llm.generate = AsyncMock(side_effect=[
-            json.dumps({"tool": "search_nodes", "args": {"query": "Origen"}, "reason": "Find philosopher"}),
-            json.dumps({"action": "SYNTHESIZE", "summary": "Found Origen"}),
-        ])
+        deps.llm.generate = AsyncMock(
+            side_effect=[
+                json.dumps(
+                    {
+                        "tool": "search_nodes",
+                        "args": {"query": "Origen"},
+                        "reason": "Find philosopher",
+                    }
+                ),
+                json.dumps({"action": "SYNTHESIZE", "summary": "Found Origen"}),
+            ]
+        )
 
         state = RAGState(question="Who is Origen?", complexity=QueryComplexity.SIMPLE)
         tools = _make_tool_registry(deps)
@@ -213,9 +238,15 @@ class TestAgentLoop:
     async def test_budget_exhaustion(self):
         deps = _make_deps()
         # Always return tool calls, never SYNTHESIZE
-        deps.llm.generate = AsyncMock(return_value=json.dumps(
-            {"tool": "search_nodes", "args": {"query": "test"}, "reason": "keep going"}
-        ))
+        deps.llm.generate = AsyncMock(
+            return_value=json.dumps(
+                {
+                    "tool": "search_nodes",
+                    "args": {"query": "test"},
+                    "reason": "keep going",
+                }
+            )
+        )
 
         state = RAGState(question="Test", complexity=QueryComplexity.SIMPLE)
         tools = _make_tool_registry(deps)
@@ -230,11 +261,13 @@ class TestAgentLoop:
     @pytest.mark.asyncio
     async def test_parse_failure_recovery(self):
         deps = _make_deps()
-        deps.llm.generate = AsyncMock(side_effect=[
-            "This is not JSON",  # Parse failure 1
-            "Still not JSON",     # Parse failure 2
-            json.dumps({"action": "SYNTHESIZE", "summary": "recovered"}),  # OK
-        ])
+        deps.llm.generate = AsyncMock(
+            side_effect=[
+                "This is not JSON",  # Parse failure 1
+                "Still not JSON",  # Parse failure 2
+                json.dumps({"action": "SYNTHESIZE", "summary": "recovered"}),  # OK
+            ]
+        )
 
         state = RAGState(question="Test", complexity=QueryComplexity.SIMPLE)
         tools = _make_tool_registry(deps)
@@ -279,11 +312,25 @@ class TestAgentLoop:
     @pytest.mark.asyncio
     async def test_evidence_collector_populated(self):
         deps = _make_deps()
-        deps.llm.generate = AsyncMock(side_effect=[
-            json.dumps({"tool": "search_nodes", "args": {"query": "Origen"}, "reason": "find"}),
-            json.dumps({"tool": "get_neighbors", "args": {"node_id": "person_origen"}, "reason": "explore"}),
-            json.dumps({"action": "SYNTHESIZE", "summary": "done"}),
-        ])
+        deps.llm.generate = AsyncMock(
+            side_effect=[
+                json.dumps(
+                    {
+                        "tool": "search_nodes",
+                        "args": {"query": "Origen"},
+                        "reason": "find",
+                    }
+                ),
+                json.dumps(
+                    {
+                        "tool": "get_neighbors",
+                        "args": {"node_id": "person_origen"},
+                        "reason": "explore",
+                    }
+                ),
+                json.dumps({"action": "SYNTHESIZE", "summary": "done"}),
+            ]
+        )
 
         state = RAGState(question="Test", complexity=QueryComplexity.MEDIUM)
         tools = _make_tool_registry(deps)

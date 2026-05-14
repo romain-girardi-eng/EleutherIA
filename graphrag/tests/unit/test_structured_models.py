@@ -80,20 +80,27 @@ class TestCRAGValidation:
     def test_score_bounds(self):
         with pytest.raises(ValidationError):
             CRAGValidation(
-                relevance=101, completeness=50, confidence=50,
+                relevance=101,
+                completeness=50,
+                confidence=50,
             )
 
     def test_score_negative(self):
         with pytest.raises(ValidationError):
             CRAGValidation(
-                relevance=-1, completeness=50, confidence=50,
+                relevance=-1,
+                completeness=50,
+                confidence=50,
             )
 
 
 class TestSelfRAGEvaluation:
     def test_valid(self):
         s = SelfRAGEvaluation(
-            relevance=85, grounding=90, completeness=75, confidence=83,
+            relevance=85,
+            grounding=90,
+            completeness=75,
+            confidence=83,
             caveats=["Limited Epicurean sources"],
             improvements=["Add Lucretius references"],
         )
@@ -101,7 +108,10 @@ class TestSelfRAGEvaluation:
 
     def test_default_lists(self):
         s = SelfRAGEvaluation(
-            relevance=80, grounding=80, completeness=80, confidence=80,
+            relevance=80,
+            grounding=80,
+            completeness=80,
+            confidence=80,
         )
         assert s.caveats == []
         assert s.improvements == []
@@ -110,14 +120,17 @@ class TestSelfRAGEvaluation:
 class TestSufficiencyAssessment:
     def test_sufficient(self):
         s = SufficiencyAssessment(
-            score=0.8, sufficient=True, reason="Enough primary sources",
+            score=0.8,
+            sufficient=True,
+            reason="Enough primary sources",
         )
         assert s.sufficient is True
         assert s.refinement is None
 
     def test_insufficient_with_refinement(self):
         s = SufficiencyAssessment(
-            score=0.3, sufficient=False,
+            score=0.3,
+            sufficient=False,
             reason="Missing Chrysippus",
             refinement="Chrysippus fate argument De Fato",
         )
@@ -130,10 +143,12 @@ class TestSufficiencyAssessment:
 
 class TestLLMRerankResult:
     def test_valid(self):
-        r = LLMRerankResult(rankings=[
-            RerankItem(id=1, score=85, reason="Direct argument about fate"),
-            RerankItem(id=2, score=60, reason="Tangentially relevant"),
-        ])
+        r = LLMRerankResult(
+            rankings=[
+                RerankItem(id=1, score=85, reason="Direct argument about fate"),
+                RerankItem(id=2, score=60, reason="Tangentially relevant"),
+            ]
+        )
         assert len(r.rankings) == 2
         assert r.rankings[0].score == 85
 
@@ -160,5 +175,8 @@ class TestTreeNavigationResult:
     def test_priority_bounds(self):
         with pytest.raises(ValidationError):
             SelectedNode(
-                work_id="x", node_id="y", reason="z", priority=4,
+                work_id="x",
+                node_id="y",
+                reason="z",
+                priority=4,
             )

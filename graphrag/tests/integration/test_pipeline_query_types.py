@@ -30,6 +30,7 @@ from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _require_env() -> None:
     """Skip the entire module if infrastructure is not available."""
     missing = []
@@ -64,12 +65,18 @@ def _build_llm() -> LLMService:
 # Session-scoped fixture — real services, KG loaded once
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture(scope="session")
 async def graphrag() -> GraphRAGService:
     """Boot a real GraphRAGService backed by live DB + LLM (vectorless)."""
     import sys
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../../database/src"))
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../../knowledge graph/src"))
+
+    sys.path.insert(
+        0, os.path.join(os.path.dirname(__file__), "../../../../database/src")
+    )
+    sys.path.insert(
+        0, os.path.join(os.path.dirname(__file__), "../../../../knowledge graph/src")
+    )
 
     from eleutheria_database.services.db import DatabaseService
 
@@ -90,6 +97,7 @@ async def graphrag() -> GraphRAGService:
 # Test 1 — specific_entity
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.integration
 class TestSpecificEntityPipeline:
     """Single philosopher or concept: direct KG lookup path."""
@@ -108,6 +116,7 @@ class TestSpecificEntityPipeline:
 # ---------------------------------------------------------------------------
 # Test 2 — global_abstract
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.integration
 class TestGlobalAbstractPipeline:
@@ -130,6 +139,7 @@ class TestGlobalAbstractPipeline:
 # ---------------------------------------------------------------------------
 # Test 3 — multi_hop
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.integration
 class TestMultiHopPipeline:
@@ -155,6 +165,7 @@ class TestMultiHopPipeline:
 # Test 4 — comparative
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.integration
 class TestComparativePipeline:
     """Comparing two schools: dual retrieval + synthesis path."""
@@ -176,6 +187,7 @@ class TestComparativePipeline:
 # ---------------------------------------------------------------------------
 # Test 5 — temporal
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.integration
 class TestTemporalPipeline:
@@ -199,6 +211,7 @@ class TestTemporalPipeline:
 # Test 6 — answer quality invariants (run on any query type)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.integration
 class TestAnswerQualityInvariants:
     """Cross-cutting quality checks that hold regardless of query type."""
@@ -211,20 +224,16 @@ class TestAnswerQualityInvariants:
         assert answer.answer.strip(), "Answer must never be empty"
         assert answer.question == "What is the Stoic concept of heimarmenē?"
 
-    async def test_self_rag_badge_always_set(
-        self, graphrag: GraphRAGService
-    ) -> None:
+    async def test_self_rag_badge_always_set(self, graphrag: GraphRAGService) -> None:
         agent = graphrag._ensure_agent()
         answer: ScholarlyAnswer = await agent.query(
             "What is moral responsibility in Aristotle?"
         )
-        assert answer.quality_badge in (
-            "High", "Medium", "Low"
-        ), f"Unexpected badge: {answer.quality_badge!r}"
+        assert answer.quality_badge in ("High", "Medium", "Low"), (
+            f"Unexpected badge: {answer.quality_badge!r}"
+        )
 
-    async def test_kg_loaded_with_real_data(
-        self, graphrag: GraphRAGService
-    ) -> None:
+    async def test_kg_loaded_with_real_data(self, graphrag: GraphRAGService) -> None:
         """The KG must have been loaded with production data."""
         assert len(graphrag.node_lookup) >= 100, (
             f"Expected ≥100 KG nodes, got {len(graphrag.node_lookup)}"

@@ -90,41 +90,139 @@ def _build_mock_deps() -> Deps:
 
     outgoing_edges: dict[str, list[dict[str, Any]]] = {
         "person_origen": [
-            {"source": "person_origen", "target": "concept_autexousion", "relation": "discusses", "weight": 1.0, "metadata": {}, "description": ""},
-            {"source": "person_origen", "target": "work_de_principiis", "relation": "authored", "weight": 1.0, "metadata": {}, "description": ""},
-            {"source": "person_origen", "target": "school_middle_platonism", "relation": "influenced_by", "weight": 0.8, "metadata": {}, "description": ""},
+            {
+                "source": "person_origen",
+                "target": "concept_autexousion",
+                "relation": "discusses",
+                "weight": 1.0,
+                "metadata": {},
+                "description": "",
+            },
+            {
+                "source": "person_origen",
+                "target": "work_de_principiis",
+                "relation": "authored",
+                "weight": 1.0,
+                "metadata": {},
+                "description": "",
+            },
+            {
+                "source": "person_origen",
+                "target": "school_middle_platonism",
+                "relation": "influenced_by",
+                "weight": 0.8,
+                "metadata": {},
+                "description": "",
+            },
         ],
         "person_plato": [
-            {"source": "person_plato", "target": "concept_fate", "relation": "discusses", "weight": 0.5, "metadata": {}, "description": ""},
+            {
+                "source": "person_plato",
+                "target": "concept_fate",
+                "relation": "discusses",
+                "weight": 0.5,
+                "metadata": {},
+                "description": "",
+            },
         ],
         "person_chrysippus": [
-            {"source": "person_chrysippus", "target": "concept_fate", "relation": "discusses", "weight": 1.0, "metadata": {}, "description": ""},
-            {"source": "person_chrysippus", "target": "argument_cylinder", "relation": "created", "weight": 1.0, "metadata": {}, "description": ""},
+            {
+                "source": "person_chrysippus",
+                "target": "concept_fate",
+                "relation": "discusses",
+                "weight": 1.0,
+                "metadata": {},
+                "description": "",
+            },
+            {
+                "source": "person_chrysippus",
+                "target": "argument_cylinder",
+                "relation": "created",
+                "weight": 1.0,
+                "metadata": {},
+                "description": "",
+            },
         ],
         "school_middle_platonism": [
-            {"source": "school_middle_platonism", "target": "person_plato", "relation": "founded_by", "weight": 0.3, "metadata": {}, "description": ""},
+            {
+                "source": "school_middle_platonism",
+                "target": "person_plato",
+                "relation": "founded_by",
+                "weight": 0.3,
+                "metadata": {},
+                "description": "",
+            },
         ],
     }
 
     incoming_edges: dict[str, list[dict[str, Any]]] = {
         "concept_autexousion": [
-            {"source": "person_origen", "target": "concept_autexousion", "relation": "discusses", "weight": 1.0, "metadata": {}, "description": ""},
+            {
+                "source": "person_origen",
+                "target": "concept_autexousion",
+                "relation": "discusses",
+                "weight": 1.0,
+                "metadata": {},
+                "description": "",
+            },
         ],
         "concept_fate": [
-            {"source": "person_plato", "target": "concept_fate", "relation": "discusses", "weight": 0.5, "metadata": {}, "description": ""},
-            {"source": "person_chrysippus", "target": "concept_fate", "relation": "discusses", "weight": 1.0, "metadata": {}, "description": ""},
+            {
+                "source": "person_plato",
+                "target": "concept_fate",
+                "relation": "discusses",
+                "weight": 0.5,
+                "metadata": {},
+                "description": "",
+            },
+            {
+                "source": "person_chrysippus",
+                "target": "concept_fate",
+                "relation": "discusses",
+                "weight": 1.0,
+                "metadata": {},
+                "description": "",
+            },
         ],
         "work_de_principiis": [
-            {"source": "person_origen", "target": "work_de_principiis", "relation": "authored", "weight": 1.0, "metadata": {}, "description": ""},
+            {
+                "source": "person_origen",
+                "target": "work_de_principiis",
+                "relation": "authored",
+                "weight": 1.0,
+                "metadata": {},
+                "description": "",
+            },
         ],
         "school_middle_platonism": [
-            {"source": "person_origen", "target": "school_middle_platonism", "relation": "influenced_by", "weight": 0.8, "metadata": {}, "description": ""},
+            {
+                "source": "person_origen",
+                "target": "school_middle_platonism",
+                "relation": "influenced_by",
+                "weight": 0.8,
+                "metadata": {},
+                "description": "",
+            },
         ],
         "argument_cylinder": [
-            {"source": "person_chrysippus", "target": "argument_cylinder", "relation": "created", "weight": 1.0, "metadata": {}, "description": ""},
+            {
+                "source": "person_chrysippus",
+                "target": "argument_cylinder",
+                "relation": "created",
+                "weight": 1.0,
+                "metadata": {},
+                "description": "",
+            },
         ],
         "person_plato": [
-            {"source": "school_middle_platonism", "target": "person_plato", "relation": "founded_by", "weight": 0.3, "metadata": {}, "description": ""},
+            {
+                "source": "school_middle_platonism",
+                "target": "person_plato",
+                "relation": "founded_by",
+                "weight": 0.3,
+                "metadata": {},
+                "description": "",
+            },
         ],
     }
 

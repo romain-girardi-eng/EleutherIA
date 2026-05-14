@@ -198,9 +198,7 @@ def transitive_closure(
     return visited
 
 
-def inverse_neighbors(
-    graph: Graph, node: URIRef, property_iri: URIRef
-) -> set[URIRef]:
+def inverse_neighbors(graph: Graph, node: URIRef, property_iri: URIRef) -> set[URIRef]:
     """Return subjects ``s`` such that ``s property_iri node``.
 
     Useful when the inverse property isn't materialized yet — gives the

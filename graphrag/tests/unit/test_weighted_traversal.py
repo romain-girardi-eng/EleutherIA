@@ -148,14 +148,10 @@ class TestEdgeMappings:
 
     def test_argumentative_highest(self):
         assert EDGE_CATEGORY_MULTIPLIERS["argumentative"] >= max(
-            v
-            for k, v in EDGE_CATEGORY_MULTIPLIERS.items()
-            if k != "argumentative"
+            v for k, v in EDGE_CATEGORY_MULTIPLIERS.items() if k != "argumentative"
         )
 
     def test_temporal_lowest(self):
         assert EDGE_CATEGORY_MULTIPLIERS["temporal"] <= min(
-            v
-            for k, v in EDGE_CATEGORY_MULTIPLIERS.items()
-            if k != "temporal"
+            v for k, v in EDGE_CATEGORY_MULTIPLIERS.items() if k != "temporal"
         )

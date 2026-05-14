@@ -38,10 +38,28 @@ EDGES_PATH = Path("data/kg/edges.jsonl")
 
 # Roman numeral conversion (limited to common manuscript ranges I..XL).
 _ROMAN = [
-    ("XL", 40), ("XXX", 30), ("XX", 20), ("XIX", 19), ("XVIII", 18), ("XVII", 17),
-    ("XVI", 16), ("XV", 15), ("XIV", 14), ("XIII", 13), ("XII", 12), ("XI", 11),
-    ("X", 10), ("IX", 9), ("VIII", 8), ("VII", 7), ("VI", 6), ("V", 5),
-    ("IV", 4), ("III", 3), ("II", 2), ("I", 1),
+    ("XL", 40),
+    ("XXX", 30),
+    ("XX", 20),
+    ("XIX", 19),
+    ("XVIII", 18),
+    ("XVII", 17),
+    ("XVI", 16),
+    ("XV", 15),
+    ("XIV", 14),
+    ("XIII", 13),
+    ("XII", 12),
+    ("XI", 11),
+    ("X", 10),
+    ("IX", 9),
+    ("VIII", 8),
+    ("VII", 7),
+    ("VI", 6),
+    ("V", 5),
+    ("IV", 4),
+    ("III", 3),
+    ("II", 2),
+    ("I", 1),
 ]
 
 
@@ -83,7 +101,12 @@ def normalize_segment(seg: str) -> str:
 def parse_locus(locus: str) -> list[str]:
     """Split 'XII.6-9' or 'Rep. 10.595' or 'V.IX.2' into normalized segments."""
     # Strip well-known prefixes
-    locus = re.sub(r"^(Epict\.\s*Disc\.|Epict\.|Disc\.|Ench\.|Rep\.|Enn\.|SVF|Phys\.|Mag\.\s*Mor\.|EN|NE)\s*", "", locus, flags=re.IGNORECASE).strip()
+    locus = re.sub(
+        r"^(Epict\.\s*Disc\.|Epict\.|Disc\.|Ench\.|Rep\.|Enn\.|SVF|Phys\.|Mag\.\s*Mor\.|EN|NE)\s*",
+        "",
+        locus,
+        flags=re.IGNORECASE,
+    ).strip()
     # Drop leading work-name tokens (heuristic — caller already aligned on work)
     parts = re.split(r"[.,\s]+", locus)
     out: list[str] = []
@@ -92,7 +115,11 @@ def parse_locus(locus: str) -> list[str]:
         if not p:
             continue
         # keep tokens that look like Roman or arabic (possibly with range)
-        if re.fullmatch(r"[IVXLivxl]+", p) or re.fullmatch(r"\d+(?:-\d+)?", p) or re.fullmatch(r"[IVXLivxl]+-[IVXLivxl]+", p):
+        if (
+            re.fullmatch(r"[IVXLivxl]+", p)
+            or re.fullmatch(r"\d+(?:-\d+)?", p)
+            or re.fullmatch(r"[IVXLivxl]+-[IVXLivxl]+", p)
+        ):
             out.append(normalize_segment(p))
         else:
             # Mixed letters/numbers — skip (e.g. "q", "ad", section letters)
@@ -150,18 +177,21 @@ def locus_overlap_score(claim_segs: list[str], passage_segs: list[str]) -> float
 _CITE_RE = re.compile(
     r"\b("
     r"(?:[A-Z][a-zA-ZéÉàèùçôîâ]+\.?\s+){0,3}"  # leading "De ", "Ad ", "Pseudo ", etc.
-    r"[A-Z][a-zA-Zéàèùçôîâï]+"                  # main capitalized work word
-    r"(?:\s+[A-Z][a-zA-Zéàèùçôîâï]+){0,5}"       # multi-word titles
+    r"[A-Z][a-zA-Zéàèùçôîâï]+"  # main capitalized work word
+    r"(?:\s+[A-Z][a-zA-Zéàèùçôîâï]+){0,5}"  # multi-word titles
     r")\s+"
     r"([IVXLivxl]+(?:\.[IVXLivxl\d]+(?:-[IVXLivxl\d]+)?){0,3}"  # Roman ladder
-    r"|\d+(?:\.\d+(?:-\d+)?){0,3}"                              # Arabic ladder
+    r"|\d+(?:\.\d+(?:-\d+)?){0,3}"  # Arabic ladder
     r")"
 )
 
 
 # Map common abbreviations / variant spellings to canonical work_title in our DB.
 WORK_ALIAS = {
-    "de civitate dei": ["De Civitate Dei (Books V, XII, XIV - Fate and Free Will)", "De Civitate Dei"],
+    "de civitate dei": [
+        "De Civitate Dei (Books V, XII, XIV - Fate and Free Will)",
+        "De Civitate Dei",
+    ],
     "civ dei": ["De Civitate Dei (Books V, XII, XIV - Fate and Free Will)"],
     "city of god": ["De Civitate Dei (Books V, XII, XIV - Fate and Free Will)"],
     "de fato": ["De Fato", "De fato"],
@@ -182,7 +212,9 @@ WORK_ALIAS = {
     "ep mor": ["Epistulae Morales ad Lucilium"],
     "vitae philosophorum": ["Vitae Philosophorum (Lives of Eminent Philosophers)"],
     "diog laert": ["Vitae Philosophorum (Lives of Eminent Philosophers)"],
-    "lives of eminent philosophers": ["Vitae Philosophorum (Lives of Eminent Philosophers)"],
+    "lives of eminent philosophers": [
+        "Vitae Philosophorum (Lives of Eminent Philosophers)"
+    ],
     "dialogus cum tryphone": ["Dialogus cum Tryphone"],
     "dial tryph": ["Dialogus cum Tryphone"],
     "de libero arbitrio": ["De Libero Arbitrio"],
@@ -191,7 +223,10 @@ WORK_ALIAS = {
     "meditations": ["Meditations (Ta eis heauton)"],
     "ta eis heauton": ["Meditations (Ta eis heauton)"],
     "magna moralia": ["Magna Moralia"],
-    "de consolatione philosophiae": ["De consolatione philosophiae", "De Consolatione Philosophiae"],
+    "de consolatione philosophiae": [
+        "De consolatione philosophiae",
+        "De Consolatione Philosophiae",
+    ],
     "consolatio": ["De consolatione philosophiae", "De Consolatione Philosophiae"],
     "metaphysics": ["τὰ Μετὰ τὰ Φυσικά"],
     "metaph": ["τὰ Μετὰ τὰ Φυσικά"],
@@ -235,19 +270,48 @@ class Citation:
 # Ambiguous work titles whose alias resolves to an ancient text but is shared with
 # a modern-era work (e.g. Descartes' Meditationes, Malebranche's Dialogues on Metaphysics).
 # When matched, the immediately preceding 60 chars must not contain a modern-context marker.
-_AMBIGUOUS_TITLES = {"meditations", "metaphysics", "ethics", "dialogues", "principles", "treatise"}
+_AMBIGUOUS_TITLES = {
+    "meditations",
+    "metaphysics",
+    "ethics",
+    "dialogues",
+    "principles",
+    "treatise",
+}
 
 # Markers that imply the citation belongs to a modern philosopher's homonymous work,
 # NOT the ancient one. If any of these appears within ~60 chars before the citation,
 # the citation is rejected. (Also: appears anywhere in the same sentence as the citation.)
 _MODERN_MARKERS = [
-    "Descartes", "Cartesian", "Cartesian Meditation", "Malebranche",
-    "Bayle", "Spinoza", "Hume", "Leibniz", "Kant", "Hegel",
-    "Reid", "Locke", "Berkeley", "Suárez", "Suarez", "Ockham",
-    "Scotus", "Aquinas", "Anselm", "Abelard", "Ghazali",
-    "Maimonides", "Crescas", "Bonaventure", "Eckhart",
-    "Dialogues on Metaphysics", "Meditationes de Prima Philosophia",
-    "Discourse on Metaphysics", "Discourse on Method",
+    "Descartes",
+    "Cartesian",
+    "Cartesian Meditation",
+    "Malebranche",
+    "Bayle",
+    "Spinoza",
+    "Hume",
+    "Leibniz",
+    "Kant",
+    "Hegel",
+    "Reid",
+    "Locke",
+    "Berkeley",
+    "Suárez",
+    "Suarez",
+    "Ockham",
+    "Scotus",
+    "Aquinas",
+    "Anselm",
+    "Abelard",
+    "Ghazali",
+    "Maimonides",
+    "Crescas",
+    "Bonaventure",
+    "Eckhart",
+    "Dialogues on Metaphysics",
+    "Meditationes de Prima Philosophia",
+    "Discourse on Metaphysics",
+    "Discourse on Method",
     "Cratylus" if False else "",  # placeholder so list stays mutable
 ]
 _MODERN_MARKERS = [m for m in _MODERN_MARKERS if m]
@@ -256,7 +320,7 @@ _MODERN_MARKERS = [m for m in _MODERN_MARKERS if m]
 def _has_modern_context(text: str, span_start: int) -> bool:
     """True if the citation at `span_start` is preceded by a modern-philosopher marker
     within ~80 chars (one sentence or compound noun phrase)."""
-    window = text[max(0, span_start - 80):span_start]
+    window = text[max(0, span_start - 80) : span_start]
     return any(marker in window for marker in _MODERN_MARKERS)
 
 
@@ -268,14 +332,23 @@ def extract_citations(node: dict) -> list[Citation]:
         work_raw = m.group(1).strip()
         locus_raw = m.group(2).strip()
         # Reject if work_raw is a common stopword phrase (e.g. "The Argument")
-        if work_raw.lower() in {"the argument", "the claim", "argument structure", "the conclusion"}:
+        if work_raw.lower() in {
+            "the argument",
+            "the claim",
+            "argument structure",
+            "the conclusion",
+        }:
             continue
         # Modern-context guard for ambiguous titles: skip if a modern marker is nearby.
-        if work_raw.lower() in _AMBIGUOUS_TITLES and _has_modern_context(text, m.start()):
+        if work_raw.lower() in _AMBIGUOUS_TITLES and _has_modern_context(
+            text, m.start()
+        ):
             continue
         # Strong guard: if the full node text contains a modern marker AND no ancient
         # author is named, reject any ambiguous citation outright (Descartes-Meditations etc.).
-        if work_raw.lower() in _AMBIGUOUS_TITLES and any(mk in text for mk in _MODERN_MARKERS):
+        if work_raw.lower() in _AMBIGUOUS_TITLES and any(
+            mk in text for mk in _MODERN_MARKERS
+        ):
             continue
         # The work_raw might still embed a leading clause word ("Ench."). Keep last 1-4 tokens.
         key = (work_raw.lower(), locus_raw)
@@ -285,7 +358,11 @@ def extract_citations(node: dict) -> list[Citation]:
         segs = parse_locus(locus_raw)
         if not segs:
             continue
-        citations.append(Citation(raw=f"{work_raw} {locus_raw}", work_query=work_raw, locus_segments=segs))
+        citations.append(
+            Citation(
+                raw=f"{work_raw} {locus_raw}", work_query=work_raw, locus_segments=segs
+            )
+        )
     return citations
 
 
@@ -313,7 +390,7 @@ class PassageIndex:
     by_work: dict[str, list[dict]] = field(default_factory=lambda: defaultdict(list))
 
     @classmethod
-    def build(cls, nodes_path: Path) -> "PassageIndex":
+    def build(cls, nodes_path: Path) -> PassageIndex:
         idx = cls()
         with nodes_path.open() as f:
             for line in f:
@@ -324,15 +401,19 @@ class PassageIndex:
                 wt = m.get("work_title") or ""
                 if not wt:
                     continue
-                idx.by_work[wt].append({
-                    "id": n["id"],
-                    "canonical_ref": m.get("canonical_ref") or "",
-                    "label": n.get("label") or "",
-                })
+                idx.by_work[wt].append(
+                    {
+                        "id": n["id"],
+                        "canonical_ref": m.get("canonical_ref") or "",
+                        "label": n.get("label") or "",
+                    }
+                )
         return idx
 
 
-def best_passage_for_citation(cit: Citation, idx: PassageIndex) -> tuple[dict | None, float, str]:
+def best_passage_for_citation(
+    cit: Citation, idx: PassageIndex
+) -> tuple[dict | None, float, str]:
     """Return (passage_dict, score, work_title) for best match, or (None, 0, '')."""
     aliases = title_aliases_for(cit.work_query)
     if not aliases:
@@ -370,9 +451,18 @@ def existing_edges(edges_path: Path) -> set[tuple[str, str, str]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--apply", action="store_true", help="Append new edges to edges.jsonl")
-    parser.add_argument("--threshold", type=float, default=1.0, help="Min locus overlap score (default 1.0: full prefix containment)")
-    parser.add_argument("--report-json", type=Path, default=Path("/tmp/auto_link_report.json"))
+    parser.add_argument(
+        "--apply", action="store_true", help="Append new edges to edges.jsonl"
+    )
+    parser.add_argument(
+        "--threshold",
+        type=float,
+        default=1.0,
+        help="Min locus overlap score (default 1.0: full prefix containment)",
+    )
+    parser.add_argument(
+        "--report-json", type=Path, default=Path("/tmp/auto_link_report.json")
+    )
     args = parser.parse_args()
 
     # 1. Collect flagged nodes
@@ -407,7 +497,9 @@ def main() -> int:
         citations = extract_citations(node)
         if not citations:
             no_citation += 1
-            results.append({"node_id": nid, "label": node.get("label"), "status": "no_citation"})
+            results.append(
+                {"node_id": nid, "label": node.get("label"), "status": "no_citation"}
+            )
             continue
 
         # Among all citations, keep the single best passage hit.
@@ -418,17 +510,34 @@ def main() -> int:
             if aliases:
                 any_alias_resolved = True
             p, score, wt = best_passage_for_citation(cit, idx)
-            if p and score >= args.threshold:
-                if best_overall is None or score > best_overall[0]:
-                    best_overall = (score, p, wt, cit)
+            if (
+                p
+                and score >= args.threshold
+                and (best_overall is None or score > best_overall[0])
+            ):
+                best_overall = (score, p, wt, cit)
 
         if not any_alias_resolved:
             no_alias += 1
-            results.append({"node_id": nid, "label": node.get("label"), "status": "no_alias", "citations": [c.raw for c in citations]})
+            results.append(
+                {
+                    "node_id": nid,
+                    "label": node.get("label"),
+                    "status": "no_alias",
+                    "citations": [c.raw for c in citations],
+                }
+            )
             continue
         if not best_overall:
             no_passage_overlap += 1
-            results.append({"node_id": nid, "label": node.get("label"), "status": "no_overlap", "citations": [c.raw for c in citations]})
+            results.append(
+                {
+                    "node_id": nid,
+                    "label": node.get("label"),
+                    "status": "no_overlap",
+                    "citations": [c.raw for c in citations],
+                }
+            )
             continue
 
         score, passage, wt, cit = best_overall
@@ -452,7 +561,14 @@ def main() -> int:
         edge_key2 = (edge_source, edge_relation, edge_target)
         if edge_key2 in existing:
             duplicate_skipped += 1
-            results.append({"node_id": nid, "label": node.get("label"), "status": "duplicate_edge", "passage_id": passage["id"]})
+            results.append(
+                {
+                    "node_id": nid,
+                    "label": node.get("label"),
+                    "status": "duplicate_edge",
+                    "passage_id": passage["id"],
+                }
+            )
             continue
 
         edge = {
@@ -473,16 +589,18 @@ def main() -> int:
             },
         }
         new_edges.append(edge)
-        results.append({
-            "node_id": nid,
-            "label": node.get("label"),
-            "status": "linked",
-            "passage_id": passage["id"],
-            "passage_ref": passage["canonical_ref"],
-            "work_title": wt,
-            "match_score": score,
-            "citation": cit.raw,
-        })
+        results.append(
+            {
+                "node_id": nid,
+                "label": node.get("label"),
+                "status": "linked",
+                "passage_id": passage["id"],
+                "passage_ref": passage["canonical_ref"],
+                "work_title": wt,
+                "match_score": score,
+                "citation": cit.raw,
+            }
+        )
 
     print(f"[info] citations parsed → linked: {len(new_edges)}", file=sys.stderr)
     print(f"[info] no_citation: {no_citation}", file=sys.stderr)
@@ -510,7 +628,9 @@ def main() -> int:
         with EDGES_PATH.open("a") as f:
             for e in new_edges:
                 f.write(json.dumps(e, ensure_ascii=False) + "\n")
-        print(f"[info] appended {len(new_edges)} edges to {EDGES_PATH}", file=sys.stderr)
+        print(
+            f"[info] appended {len(new_edges)} edges to {EDGES_PATH}", file=sys.stderr
+        )
     elif args.apply:
         print("[info] --apply set but 0 edges to write", file=sys.stderr)
     else:

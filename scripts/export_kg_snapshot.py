@@ -11,6 +11,7 @@ The output is deterministic: JSONL sorted by a stable key, with stable
 key ordering inside each object. That makes `git diff` and delta packing
 work well.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -51,7 +52,9 @@ def fetch_edges(base: str) -> list[dict]:
         url = f"{base}{EDGES_PATH}?limit={EDGES_PAGE_SIZE}&offset={offset}"
         page = fetch_json(url)
         if not isinstance(page, list):
-            raise RuntimeError(f"Unexpected /api/kg/edges response: {type(page).__name__}")
+            raise RuntimeError(
+                f"Unexpected /api/kg/edges response: {type(page).__name__}"
+            )
         if not page:
             break
         out.extend(page)

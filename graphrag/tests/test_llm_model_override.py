@@ -4,6 +4,7 @@ from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
 def test_llm_service_accepts_model_override_param():
     """generate() signature accepts model_override."""
     import inspect
+
     sig = inspect.signature(LLMService.generate)
     assert "model_override" in sig.parameters
 

@@ -133,9 +133,7 @@ async def test_max_depth_caps_breadth(deps: Deps) -> None:
 @pytest.mark.asyncio
 async def test_unknown_node_returns_empty(deps: Deps) -> None:
     tool = InferTransitiveFactsTool(deps)
-    result = await tool.execute(
-        {"node_id": "nonexistent_node", "relation": "contains"}
-    )
+    result = await tool.execute({"node_id": "nonexistent_node", "relation": "contains"})
     assert result.derived_nodes == []
     assert result.start_node_id == "nonexistent_node"
 

@@ -35,7 +35,9 @@ async def test_type_filter(mock_deps):
 @pytest.mark.asyncio
 async def test_period_filter(mock_deps):
     tool = SearchNodesTool(mock_deps)
-    result = await tool.execute({"query": "philosopher", "period_filter": "Hellenistic"})
+    result = await tool.execute(
+        {"query": "philosopher", "period_filter": "Hellenistic"}
+    )
     for node in result.nodes:
         assert node.period == "Hellenistic"
 

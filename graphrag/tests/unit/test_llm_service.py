@@ -63,10 +63,14 @@ class TestLLMService:
 
     def test_detect_available_providers_multiple(self):
         """Test detection with multiple API keys."""
-        with patch.dict("os.environ", {
-            "MOONSHOT_API_KEY": "test-key",
-            "GEMINI_API_KEY": "test-key-2",
-        }, clear=True):
+        with patch.dict(
+            "os.environ",
+            {
+                "MOONSHOT_API_KEY": "test-key",
+                "GEMINI_API_KEY": "test-key-2",
+            },
+            clear=True,
+        ):
             llm = LLMService()
             assert ModelProvider.KIMI in llm.available_providers
             assert ModelProvider.GEMINI in llm.available_providers
@@ -173,8 +177,7 @@ class TestLLMService:
             llm._client = mock_client
 
             await llm.generate(
-                "User prompt",
-                system_prompt="You are a helpful assistant."
+                "User prompt", system_prompt="You are a helpful assistant."
             )
 
             # Verify system prompt was included in messages
@@ -224,7 +227,9 @@ class TestLLMService:
     def test_should_not_retry_same_provider_on_rate_limit(self):
         """429s should fall through to the next provider instead of sleeping inline."""
         request = httpx.Request("POST", "https://openrouter.ai/api/v1/chat/completions")
-        response = httpx.Response(429, request=request, json={"error": {"message": "rate limit"}})
+        response = httpx.Response(
+            429, request=request, json={"error": {"message": "rate limit"}}
+        )
         exc = httpx.HTTPStatusError("rate limited", request=request, response=response)
 
         assert LLMService._should_retry_same_provider(exc, attempt=0) is False
@@ -237,7 +242,7 @@ class TestLLMService:
 
             mock_response = MagicMock()
             mock_response.json.return_value = {
-                "candidates": [{"content": {"parts": [{"text": "{\"ok\":true}"}]}}]
+                "candidates": [{"content": {"parts": [{"text": '{"ok":true}'}]}}]
             }
             mock_response.raise_for_status = MagicMock()
 
@@ -257,10 +262,9 @@ class TestLLMService:
                 call_kwargs["json"]["generationConfig"]["responseMimeType"]
                 == "application/json"
             )
-            assert (
-                call_kwargs["json"]["generationConfig"]["responseJsonSchema"]
-                == {"type": "object"}
-            )
+            assert call_kwargs["json"]["generationConfig"]["responseJsonSchema"] == {
+                "type": "object"
+            }
 
     def test_extract_gemini_text_prefers_visible_parts(self):
         """Gemini extraction should prefer visible text parts over thought parts."""
@@ -279,7 +283,9 @@ class TestLLMService:
         assert LLMService._extract_gemini_text(data) == "visible answer"
 
     @pytest.mark.asyncio
-    async def test_generate_gemini_retries_without_thinking_when_first_reply_is_empty(self):
+    async def test_generate_gemini_retries_without_thinking_when_first_reply_is_empty(
+        self,
+    ):
         """Gemini should retry once with a larger output budget if the first reply has no visible parts."""
         with patch.dict("os.environ", {"GEMINI_API_KEY": "test-key"}, clear=True):
             llm = LLMService(preferred_provider=ModelProvider.GEMINI)
@@ -350,7 +356,10 @@ class TestLLMService:
             cache_call = mock_client.post.call_args_list[0]
             assert "cachedContents" in cache_call.args[0]
             generate_call = mock_client.post.call_args_list[1]
-            assert generate_call.kwargs["json"]["cachedContent"] == "cachedContents/test-cache"
+            assert (
+                generate_call.kwargs["json"]["cachedContent"]
+                == "cachedContents/test-cache"
+            )
 
     @pytest.mark.asyncio
     async def test_generate_gemini_skips_prompt_cache_when_prefix_too_short(self):
@@ -394,7 +403,9 @@ class TestLLMService:
             gemini_error = httpx.HTTPStatusError(
                 "rate limited",
                 request=httpx.Request("POST", "https://example.com"),
-                response=httpx.Response(429, request=httpx.Request("POST", "https://example.com")),
+                response=httpx.Response(
+                    429, request=httpx.Request("POST", "https://example.com")
+                ),
             )
             kimi_response = MagicMock()
             kimi_response.json.return_value = {
@@ -422,7 +433,9 @@ class TestLLMService:
             gemini_error = httpx.HTTPStatusError(
                 "server error",
                 request=httpx.Request("POST", "https://example.com"),
-                response=httpx.Response(500, request=httpx.Request("POST", "https://example.com")),
+                response=httpx.Response(
+                    500, request=httpx.Request("POST", "https://example.com")
+                ),
             )
             success_response = MagicMock()
             success_response.json.return_value = {
@@ -455,7 +468,9 @@ class TestLLMService:
             kimi_error = httpx.HTTPStatusError(
                 "unauthorized",
                 request=httpx.Request("POST", "https://example.com"),
-                response=httpx.Response(401, request=httpx.Request("POST", "https://example.com")),
+                response=httpx.Response(
+                    401, request=httpx.Request("POST", "https://example.com")
+                ),
             )
             or_response = MagicMock()
             or_response.json.return_value = {
@@ -464,7 +479,9 @@ class TestLLMService:
             or_response.raise_for_status = MagicMock()
 
             mock_client = AsyncMock()
-            mock_client.post = AsyncMock(side_effect=[kimi_error, or_response, or_response])
+            mock_client.post = AsyncMock(
+                side_effect=[kimi_error, or_response, or_response]
+            )
             llm._client = mock_client
 
             result = await llm.generate("Test prompt")
@@ -689,9 +706,7 @@ class TestFireworksProvider:
     @pytest.mark.asyncio
     async def test_generate_fireworks_chat_completions(self):
         """Fireworks generate() should POST to /chat/completions with Kimi K2.6."""
-        with patch.dict(
-            "os.environ", {"FIREWORKS_API_KEY": "fw_test"}, clear=True
-        ):
+        with patch.dict("os.environ", {"FIREWORKS_API_KEY": "fw_test"}, clear=True):
             llm = LLMService(preferred_provider=ModelProvider.FIREWORKS)
 
             mock_response = MagicMock()
@@ -711,23 +726,15 @@ class TestFireworksProvider:
             assert llm.last_model_used == "accounts/fireworks/models/kimi-k2p6"
             call = mock_client.post.call_args
             assert (
-                call.args[0]
-                == "https://api.fireworks.ai/inference/v1/chat/completions"
+                call.args[0] == "https://api.fireworks.ai/inference/v1/chat/completions"
             )
-            assert (
-                call.kwargs["headers"]["Authorization"] == "Bearer fw_test"
-            )
-            assert (
-                call.kwargs["json"]["model"]
-                == "accounts/fireworks/models/kimi-k2p6"
-            )
+            assert call.kwargs["headers"]["Authorization"] == "Bearer fw_test"
+            assert call.kwargs["json"]["model"] == "accounts/fireworks/models/kimi-k2p6"
 
     @pytest.mark.asyncio
     async def test_stream_fireworks_yields_sse_chunks(self):
         """Fireworks stream() should parse OpenAI-style SSE chunks."""
-        with patch.dict(
-            "os.environ", {"FIREWORKS_API_KEY": "fw_test"}, clear=True
-        ):
+        with patch.dict("os.environ", {"FIREWORKS_API_KEY": "fw_test"}, clear=True):
             llm = LLMService(preferred_provider=ModelProvider.FIREWORKS)
 
             sse_lines = [
@@ -762,8 +769,7 @@ class TestFireworksProvider:
             call = mock_client.stream.call_args
             assert call.args[0] == "POST"
             assert (
-                call.args[1]
-                == "https://api.fireworks.ai/inference/v1/chat/completions"
+                call.args[1] == "https://api.fireworks.ai/inference/v1/chat/completions"
             )
             assert call.kwargs["json"]["stream"] is True
 
@@ -787,16 +793,12 @@ class TestFireworksProvider:
             )
             gemini_response = MagicMock()
             gemini_response.json.return_value = {
-                "candidates": [
-                    {"content": {"parts": [{"text": "Gemini fallback"}]}}
-                ]
+                "candidates": [{"content": {"parts": [{"text": "Gemini fallback"}]}}]
             }
             gemini_response.raise_for_status = MagicMock()
 
             mock_client = AsyncMock()
-            mock_client.post = AsyncMock(
-                side_effect=[fireworks_error, gemini_response]
-            )
+            mock_client.post = AsyncMock(side_effect=[fireworks_error, gemini_response])
             llm._client = mock_client
 
             with patch("asyncio.sleep", new=AsyncMock()):

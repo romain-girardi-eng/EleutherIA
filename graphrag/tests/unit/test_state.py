@@ -39,7 +39,9 @@ class TestEvidenceSource:
     """Tests for EvidenceSource enum."""
 
     def test_all_sources(self):
-        assert len(EvidenceSource) == 7  # 5 original + 2 new (crag_secondary, tree_reasoning)
+        assert (
+            len(EvidenceSource) == 7
+        )  # 5 original + 2 new (crag_secondary, tree_reasoning)
         assert EvidenceSource.SEMANTIC_SEARCH.value == "semantic_search"
         assert EvidenceSource.GRAPH_TRAVERSAL.value == "graph_traversal"
         assert EvidenceSource.PASSAGE_CITATION.value == "passage_citation"
@@ -129,9 +131,7 @@ class TestScholarlyAnswer:
             answer="The Stoics believed...",
             question="What about fate?",
             complexity=QueryComplexity.COMPLEX,
-            citations=[
-                Citation(ref="1", type="node", id="n1", label="Chrysippus")
-            ],
+            citations=[Citation(ref="1", type="node", id="n1", label="Chrysippus")],
             seed_nodes=["n1", "n2"],
             context_nodes=["n1", "n2", "n3"],
             passages_used=3,
@@ -230,7 +230,9 @@ class TestRAGStateNewFields:
         s = RAGState()
         assert s.crag_validation is None
         s.crag_validation = CRAGValidation(
-            relevance=80, completeness=70, confidence=75,
+            relevance=80,
+            completeness=70,
+            confidence=75,
         )
         assert s.crag_validation.confidence == 75
 
@@ -253,19 +255,24 @@ class TestScholarlyAnswerNewFields:
 
     def test_quality_badge(self):
         a = ScholarlyAnswer(
-            answer="test", question="test", quality_badge="High",
+            answer="test",
+            question="test",
+            quality_badge="High",
         )
         assert a.quality_badge == "High"
 
     def test_insufficient_evidence(self):
         a = ScholarlyAnswer(
-            answer="test", question="test", insufficient_evidence=True,
+            answer="test",
+            question="test",
+            insufficient_evidence=True,
         )
         assert a.insufficient_evidence is True
 
     def test_serialization_new_fields(self):
         a = ScholarlyAnswer(
-            answer="test", question="test",
+            answer="test",
+            question="test",
             query_type=QueryType.COMPARATIVE,
             quality_badge="Medium",
         )

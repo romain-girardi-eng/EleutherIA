@@ -32,6 +32,7 @@ def get_db_connection() -> connection:
         )
     return psycopg2.connect(database_url)
 
+
 def analyze_relation_patterns(conn: connection) -> list[dict[str, Any]]:
     """Analyze which node types connect to which via which relations"""
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -48,6 +49,7 @@ def analyze_relation_patterns(conn: connection) -> list[dict[str, Any]]:
             ORDER BY count DESC
         """)
         return cast(list[dict[str, Any]], cur.fetchall())
+
 
 def find_high_degree_nodes(conn: connection) -> list[dict[str, Any]]:
     """Find nodes with unusually high in-degree or out-degree"""
@@ -79,6 +81,7 @@ def find_high_degree_nodes(conn: connection) -> list[dict[str, Any]]:
         """)
         return cast(list[dict[str, Any]], cur.fetchall())
 
+
 def find_isolated_nodes(conn: connection) -> list[dict[str, Any]]:
     """Find nodes with no edges at all"""
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -96,6 +99,7 @@ def find_isolated_nodes(conn: connection) -> list[dict[str, Any]]:
             ORDER BY n.type, n.label
         """)
         return cast(list[dict[str, Any]], cur.fetchall())
+
 
 def find_weakly_connected_nodes(conn: connection) -> list[dict[str, Any]]:
     """Find nodes with only 1 or 2 connections"""
@@ -119,6 +123,7 @@ def find_weakly_connected_nodes(conn: connection) -> list[dict[str, Any]]:
         """)
         return cast(list[dict[str, Any]], cur.fetchall())
 
+
 def analyze_self_loops(conn: connection) -> list[dict[str, Any]]:
     """Find edges where source equals target (self-loops)"""
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -134,6 +139,7 @@ def analyze_self_loops(conn: connection) -> list[dict[str, Any]]:
             WHERE e.source_id = e.target_id
         """)
         return cast(list[dict[str, Any]], cur.fetchall())
+
 
 def analyze_duplicate_edges(conn: connection) -> list[dict[str, Any]]:
     """Find duplicate edges (same source, target, relation)"""
@@ -151,6 +157,7 @@ def analyze_duplicate_edges(conn: connection) -> list[dict[str, Any]]:
         """)
         return cast(list[dict[str, Any]], cur.fetchall())
 
+
 def analyze_relation_inconsistencies(conn: connection) -> list[dict[str, Any]]:
     """Find potentially inconsistent relation uses"""
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -166,6 +173,7 @@ def analyze_relation_inconsistencies(conn: connection) -> list[dict[str, Any]]:
             HAVING COUNT(DISTINCT relation) > 1
         """)
         return cast(list[dict[str, Any]], cur.fetchall())
+
 
 def identify_missing_scholarly_edges(conn: connection) -> list[dict[str, Any]]:
     """Identify scholars who should be connected to concepts but aren't"""
@@ -183,6 +191,7 @@ def identify_missing_scholarly_edges(conn: connection) -> list[dict[str, Any]]:
             LIMIT 20
         """)
         return cast(list[dict[str, Any]], cur.fetchall())
+
 
 def analyze_period_distribution(conn: connection) -> list[dict[str, Any]]:
     """Analyze how edges distribute across periods"""
@@ -202,6 +211,7 @@ def analyze_period_distribution(conn: connection) -> list[dict[str, Any]]:
             LIMIT 50
         """)
         return cast(list[dict[str, Any]], cur.fetchall())
+
 
 def check_concept_to_argument_coverage(conn: connection) -> list[dict[str, Any]]:
     """Check if key concepts are properly linked to arguments"""
@@ -223,6 +233,7 @@ def check_concept_to_argument_coverage(conn: connection) -> list[dict[str, Any]]
         """)
         return cast(list[dict[str, Any]], cur.fetchall())
 
+
 def main() -> None:
     print("=" * 80)
     print("DEEP KNOWLEDGE GRAPH EDGE ANALYSIS")
@@ -240,7 +251,9 @@ def main() -> None:
         print(f"{'Source Type':<20} {'Relation':<25} {'Target Type':<20} {'Count':>10}")
         print("-" * 80)
         for p in patterns[:30]:
-            print(f"{p['source_type']:<20} {p['relation']:<25} {p['target_type']:<20} {p['count']:>10}")
+            print(
+                f"{p['source_type']:<20} {p['relation']:<25} {p['target_type']:<20} {p['count']:>10}"
+            )
         print()
 
         # 2. High-degree nodes (hubs)
@@ -250,8 +263,10 @@ def main() -> None:
         print(f"{'Node':<50} {'Type':<15} {'Out':>5} {'In':>5} {'Total':>6}")
         print("-" * 80)
         for hub in hubs:
-            label = hub['label'][:48]
-            print(f"{label:<50} {hub['type']:<15} {hub['outgoing']:>5} {hub['incoming']:>5} {hub['total']:>6}")
+            label = hub["label"][:48]
+            print(
+                f"{label:<50} {hub['type']:<15} {hub['outgoing']:>5} {hub['incoming']:>5} {hub['total']:>6}"
+            )
         print()
 
         # 3. Isolated nodes
@@ -263,8 +278,8 @@ def main() -> None:
             print(f"\n{'Node':<60} {'Type':<15} {'Period':<20}")
             print("-" * 80)
             for node in isolated[:20]:
-                label = node['label'][:58]
-                period = node['period'] or 'N/A'
+                label = node["label"][:58]
+                period = node["period"] or "N/A"
                 print(f"{label:<60} {node['type']:<15} {period:<20}")
             if len(isolated) > 20:
                 print(f"\n... and {len(isolated) - 20} more")
@@ -281,7 +296,7 @@ def main() -> None:
             print(f"\n{'Node':<60} {'Type':<15} {'Edges':>6}")
             print("-" * 80)
             for node in weak[:20]:
-                label = node['label'][:58]
+                label = node["label"][:58]
                 print(f"{label:<60} {node['type']:<15} {node['edge_count']:>6}")
         print()
 
@@ -304,7 +319,9 @@ def main() -> None:
         if dupes:
             print(f"⚠️  Found {len(dupes)} sets of duplicate edges")
             for i, dupe in enumerate(dupes[:10], 1):
-                print(f"{i}. {dupe['source_id']} --[{dupe['relation']}]--> {dupe['target_id']}")
+                print(
+                    f"{i}. {dupe['source_id']} --[{dupe['relation']}]--> {dupe['target_id']}"
+                )
                 print(f"   Count: {dupe['count']}, IDs: {dupe['edge_ids']}")
             if len(dupes) > 10:
                 print(f"... and {len(dupes) - 10} more")
@@ -317,8 +334,12 @@ def main() -> None:
         print("=" * 80)
         inconsistencies = analyze_relation_inconsistencies(conn)
         if inconsistencies:
-            print(f"Found {len(inconsistencies)} node pairs with multiple relation types")
-            print("(This may be intentional - nodes can have multiple types of relationships)")
+            print(
+                f"Found {len(inconsistencies)} node pairs with multiple relation types"
+            )
+            print(
+                "(This may be intentional - nodes can have multiple types of relationships)"
+            )
             for i, inc in enumerate(inconsistencies[:10], 1):
                 print(f"{i}. {inc['source_id']} <--> {inc['target_id']}")
                 print(f"   Relations: {inc['relations']}")
@@ -335,7 +356,7 @@ def main() -> None:
             print(f"{'Scholar':<60} {'Edges':>6}")
             print("-" * 80)
             for scholar in scholars:
-                label = scholar['label'][:58]
+                label = scholar["label"][:58]
                 print(f"{label:<60} {scholar['edge_count']:>6}")
         print()
 
@@ -343,10 +364,14 @@ def main() -> None:
         print("9. CROSS-PERIOD EDGE PATTERNS (Top 30)")
         print("=" * 80)
         period_dist = analyze_period_distribution(conn)
-        print(f"{'Source Period':<20} {'Relation':<25} {'Target Period':<20} {'Count':>6}")
+        print(
+            f"{'Source Period':<20} {'Relation':<25} {'Target Period':<20} {'Count':>6}"
+        )
         print("-" * 80)
         for p in period_dist[:30]:
-            print(f"{p['source_period']:<20} {p['relation']:<25} {p['target_period']:<20} {p['count']:>6}")
+            print(
+                f"{p['source_period']:<20} {p['relation']:<25} {p['target_period']:<20} {p['count']:>6}"
+            )
         print()
 
         # 10. Orphaned concepts
@@ -355,7 +380,9 @@ def main() -> None:
         orphaned_concepts = check_concept_to_argument_coverage(conn)
         if orphaned_concepts:
             print(f"⚠️  Found {len(orphaned_concepts)} concepts with no argument links")
-            print("\nThese concepts may need connections to arguments that employ/presuppose them:")
+            print(
+                "\nThese concepts may need connections to arguments that employ/presuppose them:"
+            )
             for i, concept in enumerate(orphaned_concepts[:20], 1):
                 print(f"{i}. {concept['label']}")
             if len(orphaned_concepts) > 20:
@@ -366,26 +393,27 @@ def main() -> None:
 
         # Export detailed results
         results = {
-            'relation_patterns': [dict(p) for p in patterns],
-            'high_degree_nodes': [dict(h) for h in hubs],
-            'isolated_nodes': [dict(n) for n in isolated],
-            'weakly_connected': [dict(n) for n in weak],
-            'self_loops': [dict(loop) for loop in loops],
-            'duplicates': [dict(d) for d in dupes],
-            'multiple_relations': [dict(i) for i in inconsistencies],
-            'scholar_connectivity': [dict(s) for s in scholars],
-            'period_distribution': [dict(p) for p in period_dist],
-            'orphaned_concepts': [dict(c) for c in orphaned_concepts]
+            "relation_patterns": [dict(p) for p in patterns],
+            "high_degree_nodes": [dict(h) for h in hubs],
+            "isolated_nodes": [dict(n) for n in isolated],
+            "weakly_connected": [dict(n) for n in weak],
+            "self_loops": [dict(loop) for loop in loops],
+            "duplicates": [dict(d) for d in dupes],
+            "multiple_relations": [dict(i) for i in inconsistencies],
+            "scholar_connectivity": [dict(s) for s in scholars],
+            "period_distribution": [dict(p) for p in period_dist],
+            "orphaned_concepts": [dict(c) for c in orphaned_concepts],
         }
 
-        output_file = '/Users/romaingirardi/Documents/Ancient Free Will Database/kg_edge_deep_analysis_results.json'
-        with open(output_file, 'w') as f:
+        output_file = "/Users/romaingirardi/Documents/Ancient Free Will Database/kg_edge_deep_analysis_results.json"
+        with open(output_file, "w") as f:
             json.dump(results, f, indent=2, default=str)
 
         print(f"✓ Detailed results exported to: {output_file}")
 
     finally:
         conn.close()
+
 
 if __name__ == "__main__":
     main()

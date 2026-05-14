@@ -50,6 +50,7 @@ DEFAULT_KV_NAMESPACE_ID = "9506f86aab4845818bd7644508d504e6"
 # Database helpers
 # ------------------------------------------------------------------
 
+
 async def get_connection(database_url: str) -> asyncpg.Connection:
     """Create an asyncpg connection with free_will search_path."""
     from urllib.parse import parse_qs, unquote, urlparse
@@ -130,6 +131,7 @@ async def load_edges(conn: asyncpg.Connection) -> list[dict[str, Any]]:
 # NetworkX graph construction
 # ------------------------------------------------------------------
 
+
 def build_networkx_graph(
     nodes: list[dict[str, Any]],
     edges: list[dict[str, Any]],
@@ -163,14 +165,13 @@ def build_networkx_graph(
 # PageRank computation
 # ------------------------------------------------------------------
 
+
 def compute_pagerank(G: nx.DiGraph, alpha: float = 0.85) -> dict[str, float]:
     """Compute PageRank scores for all nodes."""
     logger.info("Computing PageRank (alpha=%.2f) ...", alpha)
     scores = nx.pagerank(G, alpha=alpha, weight="weight")
     # Sort descending by score
-    sorted_scores = dict(
-        sorted(scores.items(), key=lambda item: item[1], reverse=True)
-    )
+    sorted_scores = dict(sorted(scores.items(), key=lambda item: item[1], reverse=True))
     top_5 = list(sorted_scores.items())[:5]
     logger.info(
         "PageRank computed. Top 5: %s",
@@ -182,6 +183,7 @@ def compute_pagerank(G: nx.DiGraph, alpha: float = 0.85) -> dict[str, float]:
 # ------------------------------------------------------------------
 # Leiden community detection (3-level hierarchy)
 # ------------------------------------------------------------------
+
 
 def _nx_to_igraph(G: nx.DiGraph) -> tuple[ig.Graph, list[str]]:
     """Convert NetworkX directed graph to igraph (undirected for community detection)."""
@@ -233,9 +235,7 @@ def compute_leiden_communities(
         hierarchy["node_assignments"][nid] = [None, None, None]
 
     for level, resolution in enumerate(resolutions):
-        logger.info(
-            "Running Leiden (level %d, resolution=%.2f) ...", level, resolution
-        )
+        logger.info("Running Leiden (level %d, resolution=%.2f) ...", level, resolution)
         partition = leidenalg.find_partition(
             ig_graph,
             leidenalg.RBConfigurationVertexPartition,
@@ -257,8 +257,12 @@ def compute_leiden_communities(
                 if period:
                     period_counts[period] = period_counts.get(period, 0) + 1
 
-            dominant_type = max(type_counts, key=type_counts.get) if type_counts else "Unknown"
-            dominant_period = max(period_counts, key=period_counts.get) if period_counts else None
+            dominant_type = (
+                max(type_counts, key=type_counts.get) if type_counts else "Unknown"
+            )
+            dominant_period = (
+                max(period_counts, key=period_counts.get) if period_counts else None
+            )
 
             # Placeholder community summary (no LLM call)
             summary = (
@@ -309,6 +313,7 @@ def compute_leiden_communities(
 # ------------------------------------------------------------------
 # Build output JSON payloads
 # ------------------------------------------------------------------
+
 
 def build_pagerank_output(
     scores: dict[str, float],
@@ -395,6 +400,7 @@ def build_edges_index(edges: list[dict[str, Any]]) -> dict[str, Any]:
 # File I/O
 # ------------------------------------------------------------------
 
+
 def write_json(data: dict[str, Any], path: Path) -> None:
     """Write a JSON file with compact but readable formatting."""
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -408,12 +414,15 @@ def write_json(data: dict[str, Any], path: Path) -> None:
 # Wrangler KV upload
 # ------------------------------------------------------------------
 
+
 def upload_to_kv(
     json_files: dict[str, Path],
     namespace_id: str,
 ) -> None:
     """Upload JSON files to Cloudflare KV using wrangler CLI."""
-    logger.info("Uploading %d files to KV namespace %s ...", len(json_files), namespace_id)
+    logger.info(
+        "Uploading %d files to KV namespace %s ...", len(json_files), namespace_id
+    )
 
     for key_name, file_path in json_files.items():
         if not file_path.exists():
@@ -458,6 +467,7 @@ def upload_to_kv(
 # ------------------------------------------------------------------
 # Main pipeline
 # ------------------------------------------------------------------
+
 
 async def run(args: argparse.Namespace) -> None:
     """Execute the full precomputation pipeline."""
@@ -553,6 +563,7 @@ async def run(args: argparse.Namespace) -> None:
 # ------------------------------------------------------------------
 # CLI
 # ------------------------------------------------------------------
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(

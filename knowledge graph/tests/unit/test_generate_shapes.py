@@ -146,9 +146,7 @@ def test_generate_id_prefix_ttl_parses_and_uses_warning(
     g = Graph()
     g.parse(data=ttl, format="turtle")
 
-    person_shape = URIRef(
-        "https://free-will.app/ontology/Shape_Person_IdPrefix"
-    )
+    person_shape = URIRef("https://free-will.app/ontology/Shape_Person_IdPrefix")
     assert (person_shape, RDF.type, SH.NodeShape) in g
     severities = set(g.objects(person_shape, SH.severity))
     assert SH.Warning in severities
@@ -160,9 +158,7 @@ def test_generate_claims_ttl_parses_and_emits_evidence_shapes() -> None:
     g.parse(data=ttl, format="turtle")
 
     expected = {
-        URIRef(
-            f"https://free-will.app/ontology/Shape_{name}_NeedsEvidence"
-        )
+        URIRef(f"https://free-will.app/ontology/Shape_{name}_NeedsEvidence")
         for name in (
             "Argument",
             "ArgumentFramework",
@@ -193,9 +189,7 @@ def test_generate_formatting_ttl_contains_period_and_hygiene(
     g = Graph()
     g.parse(data=ttl, format="turtle")
 
-    person_period = URIRef(
-        "https://free-will.app/ontology/Shape_Person_Period"
-    )
+    person_period = URIRef("https://free-will.app/ontology/Shape_Person_Period")
     person_desc = URIRef(
         "https://free-will.app/ontology/Shape_Person_DescriptionHygiene"
     )
@@ -203,9 +197,7 @@ def test_generate_formatting_ttl_contains_period_and_hygiene(
     assert (person_desc, RDF.type, SH.NodeShape) in g
 
     # Passage is intentionally excluded.
-    passage_period = URIRef(
-        "https://free-will.app/ontology/Shape_Passage_Period"
-    )
+    passage_period = URIRef("https://free-will.app/ontology/Shape_Passage_Period")
     assert (passage_period, RDF.type, SH.NodeShape) not in g
 
 
@@ -297,10 +289,9 @@ def test_invariants_shapes_align_with_ontology(
         from eleutheria_kg.semantic.vocab import _camel_case
 
         camel = _camel_case(relation)
-        assert (
-            f"kg:Shape_{camel}_Range" in ttl
-            or f"kg:Shape_{camel}_Domain" in ttl
-        ), f"missing shape for {relation}"
+        assert f"kg:Shape_{camel}_Range" in ttl or f"kg:Shape_{camel}_Domain" in ttl, (
+            f"missing shape for {relation}"
+        )
 
 
 def test_write_helper_creates_parent_dirs(tmp_path: Path) -> None:

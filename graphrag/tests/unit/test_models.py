@@ -102,9 +102,7 @@ class TestQueryResponse:
         response = QueryResponse(
             answer="The Stoics believed... [1]",
             question="What is Stoic fate?",
-            citations=[
-                Citation(ref="1", type="node", id="fate", label="Fate")
-            ],
+            citations=[Citation(ref="1", type="node", id="fate", label="Fate")],
             seed_nodes=["fate", "stoicism"],
             context_nodes=["fate", "stoicism", "chrysippus"],
             passages_used=5,

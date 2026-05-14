@@ -81,7 +81,9 @@ def main() -> int:
 
     n = _attach_proof_chains(state, deps, [claim, direct_claim])
     print(f"\nproof chains attached: {n}")
-    print(f"\nclaim_with_proof.proof_chain =\n{json.dumps(claim.proof_chain, indent=2)}")
+    print(
+        f"\nclaim_with_proof.proof_chain =\n{json.dumps(claim.proof_chain, indent=2)}"
+    )
     print(f"\ndirect_claim.proof_chain = {direct_claim.proof_chain!r}")
 
     print(f"\nreasoning trace tail: {state.reasoning_trace[-1].node_name}")

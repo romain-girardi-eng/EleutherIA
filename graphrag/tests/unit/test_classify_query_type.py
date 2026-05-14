@@ -1,6 +1,5 @@
 """Tests for ClassifyQueryType FSM node."""
 
-
 import pytest
 
 from eleutheria_graphrag.agents.graph_nodes import ClassifyQueryType, ExpandQuery
@@ -46,7 +45,9 @@ class TestClassifyQueryType:
         deps = make_deps(
             llm_response='{"query_type": "multi_hop", "complexity": "complex", "reason": "multi-hop"}'
         )
-        state = RAGState(question="How did Stoic fate evolve from Chrysippus to Epictetus?")
+        state = RAGState(
+            question="How did Stoic fate evolve from Chrysippus to Epictetus?"
+        )
         ctx = make_ctx(state, deps)
 
         node = ClassifyQueryType()

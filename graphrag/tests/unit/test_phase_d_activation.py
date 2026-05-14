@@ -32,7 +32,6 @@ from eleutheria_graphrag.agents.state import (
 from eleutheria_graphrag.models.query import ClaimLedgerEntry, QueryResponse
 from eleutheria_graphrag.services.retrieval_strategy import SQLStrategy
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -108,9 +107,7 @@ def test_expand_1hop_strict_mode_skips_inverses() -> None:
     state = RAGState(question="test")
 
     strategy = SQLStrategy()
-    expanded = strategy._expand_1hop(
-        ["work_republic"], deps, ontology_aware=False, state=state
-    )
+    strategy._expand_1hop(["work_republic"], deps, ontology_aware=False, state=state)
 
     # Plato still surfaces because there's a literal asserted incoming
     # edge — plain 1-hop covers it. But no inferred triple is recorded.
@@ -173,9 +170,7 @@ def test_proof_chain_helper_returns_empty_when_no_inferred() -> None:
     state = RAGState(question="anything")
     # state.inferred_edges is empty by default.
 
-    chain = _proof_chain_for_inferred(
-        state, deps, "person_plato", "work_republic"
-    )
+    chain = _proof_chain_for_inferred(state, deps, "person_plato", "work_republic")
     assert chain == []
 
 

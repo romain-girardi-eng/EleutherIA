@@ -38,14 +38,19 @@ class TestDatabaseService:
         mock_pool._closed = False
 
         with (
-            patch("asyncpg.create_pool", new_callable=AsyncMock, return_value=mock_pool),
-            patch.dict("os.environ", {
-                "POSTGRES_HOST": "localhost",
-                "POSTGRES_PORT": "5432",
-                "POSTGRES_DB": "test",
-                "POSTGRES_USER": "test",
-                "POSTGRES_PASSWORD": "test",
-            }),
+            patch(
+                "asyncpg.create_pool", new_callable=AsyncMock, return_value=mock_pool
+            ),
+            patch.dict(
+                "os.environ",
+                {
+                    "POSTGRES_HOST": "localhost",
+                    "POSTGRES_PORT": "5432",
+                    "POSTGRES_DB": "test",
+                    "POSTGRES_USER": "test",
+                    "POSTGRES_PASSWORD": "test",
+                },
+            ),
         ):
             await db.connect()
 
@@ -72,7 +77,9 @@ class TestDatabaseService:
         mock_conn.fetch = AsyncMock(return_value=[MagicMock(**mock_row)])
 
         mock_pool = MagicMock()
-        mock_pool.acquire = MagicMock(return_value=AsyncMock(__aenter__=AsyncMock(return_value=mock_conn)))
+        mock_pool.acquire = MagicMock(
+            return_value=AsyncMock(__aenter__=AsyncMock(return_value=mock_conn))
+        )
         db.pool = mock_pool
         db._acquire_timeout = 10
 
@@ -168,10 +175,13 @@ class TestDatabaseServiceEnvironment:
         with patch("asyncpg.create_pool", new_callable=AsyncMock) as mock_create_pool:
             mock_create_pool.return_value = MagicMock(_closed=False)
 
-            with patch.dict("os.environ", {
-                "POSTGRES_HOST": "cloud.example.com",
-                "POSTGRES_SSLMODE": "require",
-            }):
+            with patch.dict(
+                "os.environ",
+                {
+                    "POSTGRES_HOST": "cloud.example.com",
+                    "POSTGRES_SSLMODE": "require",
+                },
+            ):
                 await db.connect()
 
             # Verify SSL was passed to create_pool
@@ -186,10 +196,13 @@ class TestDatabaseServiceEnvironment:
         with patch("asyncpg.create_pool", new_callable=AsyncMock) as mock_create_pool:
             mock_create_pool.return_value = MagicMock(_closed=False)
 
-            with patch.dict("os.environ", {
-                "DB_POOL_MIN_SIZE": "10",
-                "DB_POOL_MAX_SIZE": "50",
-            }):
+            with patch.dict(
+                "os.environ",
+                {
+                    "DB_POOL_MIN_SIZE": "10",
+                    "DB_POOL_MAX_SIZE": "50",
+                },
+            ):
                 await db.connect()
 
             call_kwargs = mock_create_pool.call_args.kwargs

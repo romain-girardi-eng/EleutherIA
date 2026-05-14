@@ -34,18 +34,10 @@ RENAMES: Final[dict[str, str]] = {
     "concept_ditte_hamartia_double_sin_plotinus": (
         "synthesis_ditte_hamartia_double_sin_plotinus"
     ),
-    "concept_epict_eph_hemin_synthesis": (
-        "synthesis_epict_eph_hemin_doctrine"
-    ),
-    "concept_cic_fat_synthesis": (
-        "synthesis_cic_fat_in_nostra_potestate"
-    ),
-    "concept_epict_thematic_index": (
-        "synthesis_epict_thematic_index"
-    ),
-    "concept_cic_fat_index": (
-        "synthesis_cic_fat_index"
-    ),
+    "concept_epict_eph_hemin_synthesis": ("synthesis_epict_eph_hemin_doctrine"),
+    "concept_cic_fat_synthesis": ("synthesis_cic_fat_in_nostra_potestate"),
+    "concept_epict_thematic_index": ("synthesis_epict_thematic_index"),
+    "concept_cic_fat_index": ("synthesis_cic_fat_index"),
 }
 
 
