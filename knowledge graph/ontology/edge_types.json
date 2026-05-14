@@ -117,9 +117,16 @@
       "target_types": ["person"]
     },
     "created_by": {
-      "description": "Source was created/developed by target",
+      "description": "Source (created thing) was created/developed by target (creator)",
       "category": "authorship",
       "inverse": "creates",
+      "source_types": ["argument", "argument_framework", "concept", "publication", "work"],
+      "target_types": ["concept", "group", "person"]
+    },
+    "creates": {
+      "description": "Source (creator) created/developed target (created thing). Inverse of `created_by`.",
+      "category": "authorship",
+      "inverse": "created_by",
       "source_types": ["concept", "group", "person"],
       "target_types": ["argument", "argument_framework", "concept", "publication", "work"]
     },
@@ -183,7 +190,7 @@
       "description": "Source is part of target",
       "category": "structural",
       "inverse": "contains",
-      "source_types": ["argument", "concept", "passage", "synthesis", "text_fragment"],
+      "source_types": ["argument", "concept", "passage", "synthesis", "text_fragment", "work"],
       "target_types": ["concept", "passage", "work", "source_collection"]
     },
     "translation_of": {
@@ -337,7 +344,7 @@
       "description": "Source contributes to target debate or concept",
       "category": "debate",
       "inverse": "contributed_to_by",
-      "source_types": ["passage", "person", "publication", "work"],
+      "source_types": ["argument", "passage", "person", "publication", "work"],
       "target_types": ["concept", "debate"]
     },
     "interprets": {
@@ -386,8 +393,8 @@
       "description": "Source chronologically precedes target",
       "category": "temporal",
       "inverse": "follows",
-      "source_types": ["person", "event", "publication", "work"],
-      "target_types": ["person", "event", "work"]
+      "source_types": ["argument", "person", "event", "publication", "work"],
+      "target_types": ["argument", "person", "event", "work"]
     },
     "follows": {
       "description": "Source chronologically follows target",

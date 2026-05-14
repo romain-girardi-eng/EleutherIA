@@ -109,8 +109,11 @@ class SQLStrategy:
             seed_ids.extend(matched_node_ids)
             passage_anchor_ids.extend(c["kg_node_id"] for c in citations)
 
-            # 1-hop graph expansion from in-memory edges
-            expanded = self._expand_1hop(matched_node_ids, deps)
+            # 1-hop graph expansion from in-memory edges, ontology-aware
+            # by default — records inferred (inverseOf) triples in
+            # ``deps.state`` when the caller attaches one.
+            state = getattr(deps, "state", None)
+            expanded = self._expand_1hop(matched_node_ids, deps, state=state)
             seed_ids.extend(nid for nid in expanded if nid not in seed_ids)
 
         if len(passage_anchor_ids) >= self._min_bundles:
@@ -271,11 +274,52 @@ class SQLStrategy:
             logger.warning("SQLStrategy fetch_citations failed", exc_info=True)
             return []
 
-    def _expand_1hop(self, node_ids: list[str], deps: Any) -> list[str]:
-        """Expand seed nodes by 1 hop using in-memory edge dicts."""
+    def _expand_1hop(
+        self,
+        node_ids: list[str],
+        deps: Any,
+        *,
+        ontology_aware: bool = True,
+        state: Any | None = None,
+    ) -> list[str]:
+        """Expand seed nodes by 1 hop using in-memory edge dicts.
+
+        When ``ontology_aware`` is True (default, Phase D activation),
+        also include neighbors reachable via the declared inverse of
+        each outgoing relation (e.g. for an edge ``A wrote B``, also
+        surface targets that A is connected to by ``authored_by``).
+        This costs one extra dict lookup per edge — no rdflib graph
+        load required at query time, so the perf hit is negligible.
+
+        When ``state`` is supplied and an inferred neighbour is
+        materialised by inverseOf, the derived triple is recorded in
+        ``state.inferred_edges`` so :class:`DraftClaimLedger` can
+        attach a proof chain later. Records the *derived* triple
+        ``(node, inverse_relation, neighbour)`` keyed by the inverse
+        relation that surfaced it.
+        """
         expanded: list[str] = []
         outgoing = getattr(deps, "outgoing_edges", {})
         incoming = getattr(deps, "incoming_edges", {})
+
+        inverse_index: dict[str, str] = {}
+        if ontology_aware:
+            try:
+                from eleutheria_kg.semantic.vocab import CLEAN_INVERSE_PAIRS
+
+                for a, b in CLEAN_INVERSE_PAIRS:
+                    inverse_index.setdefault(a, b)
+                    inverse_index.setdefault(b, a)
+            except Exception:  # noqa: BLE001
+                # Semantic layer unavailable — fall back to plain 1-hop.
+                inverse_index = {}
+
+        inferred_sink: set[tuple[str, str, str]] | None = None
+        if state is not None:
+            sink = getattr(state, "inferred_edges", None)
+            if isinstance(sink, set):
+                inferred_sink = sink
+
         for nid in node_ids:
             for edge in outgoing.get(nid, []):
                 target = edge.get("target") or edge.get("target_id", "")
@@ -285,6 +329,36 @@ class SQLStrategy:
                 source = edge.get("source") or edge.get("source_id", "")
                 if source and source not in expanded:
                     expanded.append(source)
+
+            # Ontology-aware extension: for every asserted edge with a
+            # declared inverse, record the inferred reverse triple.
+            # Two directions matter:
+            #   (a) incoming  (s, rel, nid) ⇒ derived (nid, inv(rel), s)
+            #   (b) outgoing  (nid, rel, t) ⇒ derived (t, inv(rel), nid)
+            # Plain 1-hop already returns the *neighbours* either way;
+            # the ontology-aware layer's job is to surface that the
+            # reverse triple exists in the OWL-RL closure so the proof
+            # chain consumer can reconstruct it later.
+            if inverse_index:
+                for edge in incoming.get(nid, []):
+                    rel = edge.get("relation", "")
+                    derived_rel = inverse_index.get(rel)
+                    if not derived_rel:
+                        continue
+                    source = edge.get("source") or edge.get("source_id", "")
+                    if source and source not in expanded:
+                        expanded.append(source)
+                    if inferred_sink is not None and source:
+                        inferred_sink.add((nid, derived_rel, source))
+                for edge in outgoing.get(nid, []):
+                    rel = edge.get("relation", "")
+                    derived_rel = inverse_index.get(rel)
+                    if not derived_rel:
+                        continue
+                    target = edge.get("target") or edge.get("target_id", "")
+                    if inferred_sink is not None and target:
+                        inferred_sink.add((target, derived_rel, nid))
+
         return expanded[:50]
 
     async def _step_lemma_lookup(

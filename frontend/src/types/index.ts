@@ -1,4 +1,4 @@
-import type { GraphRAGMetadata } from './graphrag';
+import type { ClaimLedgerEntry, GraphRAGMetadata } from './graphrag';
 
 // Knowledge Graph Types
 export interface KGNode {
@@ -222,6 +222,8 @@ export interface GraphRAGResponse {
   query: string;
   answer: string;
   metadata?: GraphRAGMetadata;
+  /** Atomic, evidence-linked claims; inferred edges carry a proof_chain. */
+  claim_ledger?: ClaimLedgerEntry[];
   citations: {
     ancient_sources: string[];
     modern_scholarship: string[];

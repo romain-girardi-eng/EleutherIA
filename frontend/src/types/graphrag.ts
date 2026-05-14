@@ -57,6 +57,17 @@ export interface ResearchGraphWork {
   sections: ResearchGraphWorkSection[];
 }
 
+export type ProofTriple = readonly [string, string, string];
+
+export type ProofRule = 'inverseOf' | 'transitivity' | 'subPropertyOf' | string;
+
+export interface ProofChainStep {
+  rule: ProofRule;
+  premises: readonly ProofTriple[];
+  conclusion: ProofTriple;
+  confidence: number;
+}
+
 export interface ResearchGraphClaim {
   claim: string;
   facet_id?: string | null;
@@ -68,6 +79,20 @@ export interface ResearchGraphClaim {
   refs: string[];
   quote_original?: string | null;
   quote_translation?: string | null;
+  proof_chain?: readonly ProofChainStep[] | null;
+}
+
+export interface ClaimLedgerEntry {
+  claim: string;
+  evidence_ids: readonly string[];
+  facet_id?: string | null;
+  evidence_class?: string;
+  quote_original?: string | null;
+  quote_translation?: string | null;
+  support_type: string;
+  confidence: number;
+  status: string;
+  proof_chain: readonly ProofChainStep[] | null;
 }
 
 export interface ResearchGraphToolCall {

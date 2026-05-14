@@ -722,6 +722,18 @@
     "howToRead": "Wie zu lesen:",
     "howToReadDesc": "Evidenzketten zeigen, wie spezifische Behauptungen in der Antwort durch Wissensgraph-Knoten, antike Texte und moderne Forschung unterstützt werden. Konfidenzbewertungen spiegeln die Stärke der Verbindung zwischen Behauptung und Quellen wider."
   },
+  "claimLedger": {
+    "derivation": "Ableitung",
+    "derivationCount": "Ableitung ({{count}})",
+    "premises": "Prämissen",
+    "conclusion": "Schlussfolgerung",
+    "confidence": "Konfidenz",
+    "rule": {
+      "inverseOf": "Inverse",
+      "transitivity": "Transitivität",
+      "subPropertyOf": "Untereigenschaft"
+    }
+  },
   "comparisonTool": {
     "title": "Intelligentes Vergleichswerkzeug",
     "subtitle": "Vergleichen Sie Philosophen, Argumente und Konzepte nebeneinander",

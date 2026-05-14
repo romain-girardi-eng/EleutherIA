@@ -116,7 +116,7 @@ EleutherIA/
 | Package | Purpose |
 |---------|---------|
 | [`database/`](database/) | Ancient Greek/Latin texts corpus with PostgreSQL, lemmatization, and hybrid search (full-text + lemmatic + semantic, merged via RRF) |
-| [`knowledge graph/`](knowledge%20graph/) | FAIR-compliant knowledge graph with Qdrant vector embeddings, community detection, centrality analytics, and a formal ontology (22 node types, 56 edge types) |
+| [`knowledge graph/`](knowledge%20graph/) | FAIR-compliant knowledge graph with Qdrant vector embeddings, community detection, centrality analytics, a formal ontology (22 node types, 58 edge types), and a neurosymbolic layer (RDF/OWL/SHACL exports aligned on CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, BIBO, Wikidata) |
 | [`graphrag/`](graphrag/) | Agentic query engine: 12-node pydantic-graph FSM with query decomposition, multi-hop retrieval, CRAG validation, dual reranking, citation verification, and self-RAG refinement |
 
 Each package can be installed and used independently.
@@ -129,6 +129,8 @@ Each package can be installed and used independently.
 | **Multi-LLM orchestration** | Gemini (gemini-3.1-pro-preview, 1M token context) + Kimi K2.5 Thinking (extended reasoning) + OpenRouter fallback with automatic failover |
 | **Hybrid search** | Full-text (PostgreSQL ts_rank) + lemmatic (Greek/Latin morphology) + semantic (Qdrant vectors), merged via Reciprocal Rank Fusion |
 | **Citation verification** | Post-generation check that every citation maps to an actual passage in the database; zero tolerance for fabricated ancient text |
+| **Neurosymbolic reasoning** | OWL2-RL forward-chaining (inverse + transitive closure on `part_of`/`contains`/`belongs_to_corpus`) materialises ~40k inferred facts in &lt;1 s; SHACL validation gate catches data invariants on every snapshot; claim ledger carries proof chains showing how each inferred fact was derived |
+| **FAIR / Linked Data export** | One-command Turtle, JSON-LD, and N-Triples export of the full KG (~158k triples) aligned on CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, BIBO; persistent dereferenceable IRIs under `https://free-will.app/kg/` |
 | **Interactive visualization** | Cosmograph GPU-accelerated graph (17k+ nodes), D3.js timelines, Three.js 3D embeddings, community detection overlays |
 | **Dual-layer KG** | Primary layer (ancient sources) separated from secondary layer (modern scholarship), enabling source-vs-interpretation distinction |
 | **Internationalization** | Full UI in English, French, German, Italian, and Modern Greek |

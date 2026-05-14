@@ -96,6 +96,34 @@ class QualityMetrics(BaseModel):
     clarity: float = Field(0.0, ge=0.0, le=1.0, description="Answer clarity score")
 
 
+class ClaimLedgerEntry(BaseModel):
+    """Public-facing claim with optional OWL-RL proof chain.
+
+    The ``proof_chain`` field carries the derivation when the claim
+    depends on an inferred (non-asserted) triple, surfaced by the
+    ontology-aware retrieval layer. ``None`` for directly-asserted
+    claims (Phase D activation).
+    """
+
+    model_config = ConfigDict(from_attributes=True)
+
+    claim: str = Field(..., description="The claim text")
+    evidence_ids: list[str] = Field(
+        default_factory=list, description="Evidence node / bundle IDs"
+    )
+    support_type: str = Field("passage", description="passage | metadata | derived")
+    confidence: float = Field(0.0, ge=0.0, le=1.0)
+    status: str = Field("supported", description="supported | insufficient")
+    proof_chain: list[dict[str, Any]] | None = Field(
+        None,
+        description=(
+            "OWL-RL derivation steps when the claim relies on an inferred "
+            "triple. Each step: rule, premises ([[s,p,o], ...]), conclusion "
+            "([s,p,o]), confidence. None when directly asserted."
+        ),
+    )
+
+
 class QueryResponse(BaseModel):
     """Response model for GraphRAG query, aligned with the TS AgenticAnswer interface."""
 
@@ -125,6 +153,13 @@ class QueryResponse(BaseModel):
         default_factory=list, description="All context nodes"
     )
     passages_used: int = Field(0, ge=0, description="Number of passages in context")
+    claim_ledger: list[ClaimLedgerEntry] = Field(
+        default_factory=list,
+        description=(
+            "Atomic, evidence-linked claims. Entries derived from inferred "
+            "(inverseOf / transitivity) edges carry a ``proof_chain``."
+        ),
+    )
     metadata: dict[str, Any] = Field(
         default_factory=dict, description="Additional metadata"
     )

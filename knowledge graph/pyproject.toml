@@ -55,8 +55,14 @@ community = [
     "leidenalg>=0.10.0",
     "python-louvain>=0.16",
 ]
+semantic = [
+    # RDF / OWL / SHACL stack for the neurosymbolic layer
+    "rdflib>=7.6.0",
+    "owlrl>=7.1.0",
+    "pyshacl>=0.31.0",
+]
 full = [
-    "eleutheria-kg[dev,api,community]",
+    "eleutheria-kg[dev,api,community,semantic]",
 ]
 
 [project.urls]

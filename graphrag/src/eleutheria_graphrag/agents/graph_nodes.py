@@ -121,6 +121,142 @@ def _append_reasoning_step(
     )
 
 
+def _proof_chain_for_inferred(
+    state: RAGState,
+    deps: Deps,
+    subject_id: str,
+    object_id: str,
+) -> list[dict[str, Any]]:
+    """Return a JSON-safe proof chain for any inferred edge ``subject -> object``.
+
+    Looks up entries previously recorded by the ontology-aware retrieval
+    layer in ``state.inferred_edges``. For each match, constructs a minimal
+    rdflib graph containing only the asserted reverse triple (the premise
+    we already know exists, since the inferred edge is its inverseOf
+    derivative) and runs :func:`build_proof_chain`. Multiple inferred
+    relations between the same pair yield multiple steps in the returned
+    list.
+
+    Returns an empty list when no inferred edge links the pair, keeping
+    ``ClaimLedgerItem.proof_chain`` ``None`` for directly-asserted claims.
+    """
+    inferred = getattr(state, "inferred_edges", None)
+    if not inferred:
+        return []
+
+    matches = [t for t in inferred if t[0] == subject_id and t[2] == object_id]
+    if not matches:
+        return []
+
+    try:
+        from rdflib import Graph
+
+        from eleutheria_kg.semantic.proof import (
+            build_proof_chain,
+            serialize_proof_chain,
+        )
+        from eleutheria_kg.semantic.vocab import (
+            CLEAN_INVERSE_PAIRS,
+            edge_property,
+            mint_node_iri,
+        )
+    except Exception:  # noqa: BLE001 — semantic layer optional in some tests
+        logger.warning("semantic layer unavailable; skipping proof chain", exc_info=True)
+        return []
+
+    inverse_index: dict[str, str] = {}
+    for a, b in CLEAN_INVERSE_PAIRS:
+        inverse_index.setdefault(a, b)
+        inverse_index.setdefault(b, a)
+
+    # Build a focused subgraph: just the asserted premises (the reverse
+    # of the inferred edge, looked up in deps.outgoing_edges). Cheap —
+    # one premise per inferred edge, no full-KG rdflib load.
+    graph = Graph()
+    subj_iri = mint_node_iri(subject_id)
+    obj_iri = mint_node_iri(object_id)
+    outgoing = getattr(deps, "outgoing_edges", {}) or {}
+
+    chain_steps: list[dict[str, Any]] = []
+    for s_id, derived_rel, o_id in matches:
+        premise_rel = inverse_index.get(derived_rel)
+        if not premise_rel:
+            continue
+        # The asserted premise is ``(o_id, premise_rel, s_id)`` — verify
+        # it really is in the edge dicts before claiming a proof.
+        premise_asserted = any(
+            edge.get("relation") == premise_rel
+            and (edge.get("target") or edge.get("target_id", "")) == s_id
+            for edge in outgoing.get(o_id, [])
+        )
+        if not premise_asserted:
+            continue
+        premise_subject_iri = mint_node_iri(o_id)
+        premise_object_iri = mint_node_iri(s_id)
+        graph.add(
+            (premise_subject_iri, edge_property(premise_rel), premise_object_iri)
+        )
+        steps = build_proof_chain(
+            graph,
+            (subj_iri, edge_property(derived_rel), obj_iri),
+        )
+        chain_steps.extend(serialize_proof_chain(steps))
+
+    return chain_steps
+
+
+def _attach_proof_chains(
+    state: RAGState,
+    deps: Deps,
+    claims: list[ClaimLedgerItem],
+) -> int:
+    """Mutate ``claims`` in place, attaching ``proof_chain`` where applicable.
+
+    A claim qualifies when any inferred edge in ``state.inferred_edges``
+    connects two of its supporting evidence node IDs. The proof chain is
+    serialized via :func:`serialize_proof_chain`. Also appends a
+    ``ReasoningStep`` for each newly-attached chain so the trace surfaces
+    the derivation. Returns the number of claims that received a chain.
+    """
+    inferred = getattr(state, "inferred_edges", None)
+    if not inferred:
+        return 0
+
+    attached = 0
+    for claim in claims:
+        if not claim.evidence_ids:
+            continue
+        evidence_set = set(claim.evidence_ids)
+        chain_parts: list[dict[str, Any]] = []
+        seen: set[tuple[str, str, str]] = set()
+        for s_id, rel, o_id in inferred:
+            if s_id == o_id:
+                continue
+            if s_id not in evidence_set or o_id not in evidence_set:
+                continue
+            key = (s_id, rel, o_id)
+            if key in seen:
+                continue
+            seen.add(key)
+            chain_parts.extend(_proof_chain_for_inferred(state, deps, s_id, o_id))
+        if chain_parts:
+            claim.proof_chain = chain_parts
+            attached += 1
+            _append_reasoning_step(
+                state,
+                "DraftClaimLedger:proof_chain",
+                None,
+                f"derived via inverseOf for claim: {claim.claim[:120]}",
+                0,
+                "",
+                parsed_result={
+                    "steps": chain_parts,
+                    "evidence_ids": list(claim.evidence_ids),
+                },
+            )
+    return attached
+
+
 def _resolve_model_api_id(state: RAGState) -> str | None:
     """Return model_override for non-default (non-Gemini) models."""
     try:
@@ -1953,6 +2089,7 @@ def _build_research_graph_payload(state: RAGState) -> dict[str, Any]:
                 "quote_translation": truncate_text(item.quote_translation, 500)
                 if item.quote_translation
                 else None,
+                "proof_chain": getattr(item, "proof_chain", None),
             }
         )
 
@@ -4242,6 +4379,12 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
     passage_anchor_ids: list[str] = []
 
     if strategy is not None:
+        # Expose the live RAGState on Deps so the retrieval strategy can
+        # record ontology-aware inferred edges for proof-chain emission.
+        # Reset on each discovery pass — stale inferences would be wrong.
+        ctx.deps.state = state
+        if not isinstance(getattr(state, "inferred_edges", None), set):
+            state.inferred_edges = set()
         seed_ids, passage_anchor_ids = await strategy.discover_seeds(
             queries=queries,
             deps=ctx.deps,
@@ -6008,6 +6151,7 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     status=ClaimStatus.SUPPORTED,
                 )
             ]
+            _attach_proof_chains(state, ctx.deps, state.claim_ledger)
             notebook.claim_ledger = state.claim_ledger
             state.metadata["claim_ledger_mode"] = "deterministic_quote"
             _append_reasoning_step(
@@ -6170,6 +6314,7 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         },
                     )
                     state.metadata["claim_ledger_mode"] = "llm_salvaged"
+                    _attach_proof_chains(state, ctx.deps, claims)
                     state.claim_ledger = claims
                     notebook.claim_ledger = claims
                     _update_insufficiency_flags_from_claims(state)
@@ -6195,6 +6340,7 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             state.metadata["claim_ledger_mode"] = "llm"
 
         claims = _augment_claim_ledger_from_dossier(state, claims)
+        _attach_proof_chains(state, ctx.deps, claims)
         state.claim_ledger = claims
         notebook.claim_ledger = claims
         _update_insufficiency_flags_from_claims(state)

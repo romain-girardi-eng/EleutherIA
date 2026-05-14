@@ -13,6 +13,7 @@ import type {
   ResearchGraphWork,
   ResearchStageStatus,
 } from '../../types/graphrag';
+import ProofChainBadge from '../proof-chain/ProofChainBadge';
 
 interface ResearchGraphPanelProps {
   response: GraphRAGResponse | null;
@@ -345,6 +346,9 @@ function ClaimCard({ claim }: { claim: ResearchGraphClaim }) {
         <blockquote className="mt-2 rounded-2xl border border-blue-200/70 bg-blue-50/70 px-3 py-2 text-xs leading-5 text-blue-900">
           {claim.quote_translation}
         </blockquote>
+      )}
+      {claim.proof_chain && claim.proof_chain.length > 0 && (
+        <ProofChainBadge className="mt-3" steps={claim.proof_chain} />
       )}
     </article>
   );

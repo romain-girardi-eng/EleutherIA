@@ -54,6 +54,7 @@ CANONICAL_PERIODS = {
     "Early Modern",
     "Modern",
     "Contemporary",
+    "Cross-period",
 }
 
 POST_ANTIQUE_PERIODS = {"Medieval", "Early Modern", "Modern", "Contemporary"}
@@ -1075,7 +1076,89 @@ def parse_args() -> argparse.Namespace:
         default=f"{datetime.now().date().isoformat()}-kg-quality-audit",
         help="Output file basename without extension.",
     )
+    parser.add_argument(
+        "--shacl",
+        action="store_true",
+        help=(
+            "Also run the SHACL validation gate over the JSONL artifacts in "
+            "data/kg/ and append a summary section to the Markdown report."
+        ),
+    )
+    parser.add_argument(
+        "--shacl-nodes",
+        type=Path,
+        default=ROOT / "data" / "kg" / "nodes.jsonl",
+        help="Path to nodes.jsonl for SHACL validation.",
+    )
+    parser.add_argument(
+        "--shacl-edges",
+        type=Path,
+        default=ROOT / "data" / "kg" / "edges.jsonl",
+        help="Path to edges.jsonl for SHACL validation.",
+    )
     return parser.parse_args()
+
+
+def run_shacl_audit(nodes_path: Path, edges_path: Path) -> dict[str, Any]:
+    """Build the RDF graph and run SHACL validation; return a summary dict."""
+    from eleutheria_kg.semantic import build_graph
+    from eleutheria_kg.semantic.shapes import load_shapes
+    from eleutheria_kg.semantic.validator import validate_kg
+
+    graph = build_graph(nodes_path, edges_path)
+    shapes = load_shapes()
+    report = validate_kg(graph, shapes)
+
+    buckets = {"claims": 0, "formatting": 0, "core": 0, "other": 0}
+    for v in report.violations:
+        shape = v.source_shape or ""
+        if "NeedsEvidence" in shape:
+            buckets["claims"] += 1
+        elif "DescriptionHygiene" in shape or "Period" in shape:
+            buckets["formatting"] += 1
+        elif "IdPrefix" in shape or "_Range" in shape or "_Domain" in shape:
+            buckets["core"] += 1
+        else:
+            buckets["other"] += 1
+
+    return {
+        "conforms": report.conforms,
+        "violation_count": report.violation_count,
+        "duration_seconds": report.duration_seconds,
+        "by_severity": dict(report.by_severity()),
+        "by_bucket": buckets,
+        "by_shape": dict(report.by_shape().most_common(20)),
+    }
+
+
+def render_shacl_section(summary: dict[str, Any]) -> str:
+    lines = [
+        "",
+        "## SHACL Validation (Phase B Quality Gate)",
+        "",
+        f"- Conforms: {summary['conforms']}",
+        f"- Total violations: {summary['violation_count']}",
+        f"- Validation duration: {summary['duration_seconds']:.2f}s",
+        "",
+        "### By severity",
+        "",
+    ]
+    for severity, count in sorted(
+        summary["by_severity"].items(), key=lambda kv: (-kv[1], kv[0])
+    ):
+        lines.append(f"- `{severity}`: {count}")
+
+    lines.extend(["", "### By shape bucket", ""])
+    for bucket, count in summary["by_bucket"].items():
+        lines.append(f"- `{bucket}.ttl`: {count}")
+
+    lines.extend(["", "### Top shapes", ""])
+    for shape, count in sorted(
+        summary["by_shape"].items(), key=lambda kv: (-kv[1], kv[0])
+    )[:15]:
+        short = shape.rsplit("/", 1)[-1] if shape else "<bnode>"
+        lines.append(f"- `{short}`: {count}")
+    return "\n".join(lines) + "\n"
 
 
 async def async_main() -> None:
@@ -1088,7 +1171,14 @@ async def async_main() -> None:
     markdown_path = args.output_dir / f"{args.basename}.md"
     json_path = args.output_dir / f"{args.basename}.json"
 
-    markdown_path.write_text(render_markdown(report))
+    markdown_body = render_markdown(report)
+
+    if args.shacl:
+        shacl_summary = run_shacl_audit(args.shacl_nodes, args.shacl_edges)
+        report["shacl"] = shacl_summary
+        markdown_body += render_shacl_section(shacl_summary)
+
+    markdown_path.write_text(markdown_body)
     json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2, default=str))
 
     print(f"Wrote {markdown_path}")

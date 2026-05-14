@@ -722,6 +722,18 @@
     "howToRead": "Come leggere:",
     "howToReadDesc": "Le catene di evidenza mostrano come affermazioni specifiche nella risposta sono supportate dai nodi del grafo di conoscenza, testi antichi e studi moderni. I punteggi di confidenza riflettono la forza della connessione tra affermazione e fonti."
   },
+  "claimLedger": {
+    "derivation": "Derivazione",
+    "derivationCount": "Derivazione ({{count}})",
+    "premises": "Premesse",
+    "conclusion": "Conclusione",
+    "confidence": "Confidenza",
+    "rule": {
+      "inverseOf": "Inversa",
+      "transitivity": "Transitività",
+      "subPropertyOf": "Sotto-proprietà"
+    }
+  },
   "comparisonTool": {
     "title": "Strumento di Confronto Intelligente",
     "subtitle": "Confronta filosofi, argomenti e concetti fianco a fianco",
