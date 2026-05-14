@@ -1,0 +1,27 @@
+{
+  "dispatched_at": "2026-05-15T00:48:36Z",
+  "task_queue": "eleutheria-ingestion",
+  "outcome": "all_terminated",
+  "blocker": "scaife-cts.perseus.org TLS SNI rejection (TLSV1_UNRECOGNIZED_NAME) — upstream Perseus CTS API misconfigured 2026-05-15",
+  "verified_with": [
+    "curl https://scaife-cts.perseus.org/api/cts/?request=GetCapabilities -> SSL error",
+    "curl https://scaife.perseus.org/library/urn:cts:greekLit:tlg0086.tlg010/ -> HTTP 200 (browser path works)"
+  ],
+  "workflows": [
+    {"work_node_id": "work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9", "cts_urn": "urn:cts:greekLit:tlg0086.tlg010.perseus-grc2", "workflow_id": "scaife-work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9-1778798916", "result": "terminated"},
+    {"work_node_id": "work_aristotle_eudemian_ethics", "cts_urn": "urn:cts:greekLit:tlg0086.tlg009.perseus-grc1", "workflow_id": "scaife-work_aristotle_eudemian_ethics-1778798916", "result": "terminated"},
+    {"work_node_id": "work_de_interpretatione_aristotle_c350bce_e4f6g8h0", "cts_urn": "urn:cts:greekLit:tlg0086.tlg002.perseus-grc1", "workflow_id": "scaife-work_de_interpretatione_aristotle_c350bce_e4f6g8h0-1778798916", "result": "terminated"},
+    {"work_node_id": "work_de_fato_cicero_44bce_b9c4e5d2", "cts_urn": "urn:cts:latinLit:phi0474.phi049.perseus-lat1", "workflow_id": "scaife-work_de_fato_cicero_44bce_b9c4e5d2-1778798916", "result": "terminated"},
+    {"work_node_id": "work_de_divinatione_cicero", "cts_urn": "urn:cts:latinLit:phi0474.phi053.perseus-lat1", "workflow_id": "scaife-work_de_divinatione_cicero-1778798916", "result": "terminated"},
+    {"work_node_id": "work_de_natura_deorum_cicero", "cts_urn": "urn:cts:latinLit:phi0474.phi050.perseus-lat1", "workflow_id": "scaife-work_de_natura_deorum_cicero-1778798916", "result": "terminated"},
+    {"work_node_id": "work_diogenes_laertius_vitae", "cts_urn": "urn:cts:greekLit:tlg0004.tlg001.perseus-grc1", "workflow_id": "scaife-work_diogenes_laertius_vitae-1778798916", "result": "terminated"},
+    {"work_node_id": "work_plutarch_de_stoicorum_repugnantiis", "cts_urn": "urn:cts:greekLit:tlg0007.tlg104.perseus-grc1", "workflow_id": "scaife-work_plutarch_de_stoicorum_repugnantiis-1778798916", "result": "terminated"},
+    {"work_node_id": "work_sextus_adv_math", "cts_urn": "urn:cts:greekLit:tlg0544.tlg002.perseus-grc1", "workflow_id": "scaife-work_sextus_adv_math-1778798917", "result": "terminated"},
+    {"work_node_id": "work_consolatio_philosophiae_boethius_524c", "cts_urn": "urn:cts:latinLit:stoa0058.stoa001.perseus-lat1", "workflow_id": "scaife-work_consolatio_philosophiae_boethius_524c-1778798917", "result": "terminated"}
+  ],
+  "follow_up": [
+    "Retry once Perseus CTS API SNI is fixed (monitor scaife-cts.perseus.org)",
+    "Build dedicated eleutheria-worker Docker image (current backend image does not install eleutheria_worker package)",
+    "Add eleutheria-worker block to deploy/deploy-compose.override.yml so it can be started via docker compose --profile worker"
+  ]
+}
