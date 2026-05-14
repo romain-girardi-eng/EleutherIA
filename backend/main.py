@@ -30,6 +30,7 @@ from backend.routes.conversations import router as conversations_router
 from backend.routes.graphrag_extras import router as graphrag_extras_router
 from backend.routes.kg_extras import router as kg_extras_router
 from backend.routes.lemma import router as lemma_router
+from backend.routes.opencode_proxy import router as opencode_router
 from backend.routes.search import router as search_router
 from backend.routes.works_extras import (
     citations_router,
@@ -114,6 +115,7 @@ def create_app() -> FastAPI:
     app.include_router(lemma_router, prefix="/api/lemma")
     app.include_router(graphrag_extras_router, prefix="/api/graphrag")
     app.include_router(kg_extras_router, prefix="/api/kg")
+    app.include_router(opencode_router, prefix="/api/opencode")
 
     # Migration compatibility routers (endpoints called by frontend)
     app.include_router(texts_router, prefix="/api/texts")
