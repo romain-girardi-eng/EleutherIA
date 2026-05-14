@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS passages (
     subsection TEXT,
     line_start TEXT,
     line_end TEXT,
-    sequence_number INTEGER NOT NULL CHECK (sequence_number >= 0),
+    sequence_number BIGINT NOT NULL CHECK (sequence_number >= 0),
     text_content TEXT NOT NULL,
     char_length INTEGER CHECK (char_length IS NULL OR char_length >= 0),
     word_count INTEGER CHECK (word_count IS NULL OR word_count >= 0),

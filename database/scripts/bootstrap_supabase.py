@@ -268,13 +268,13 @@ async def import_payload(
         INSERT INTO free_will.kg_edges (
             source_id, target_id, relation, weight, metadata
         )
-        SELECT $1, $2, $3, $4, $5::jsonb
+        SELECT $1::varchar, $2::varchar, $3::varchar, $4::double precision, $5::jsonb
         WHERE NOT EXISTS (
             SELECT 1
             FROM free_will.kg_edges e
-            WHERE e.source_id = $1
-              AND e.target_id = $2
-              AND e.relation = $3
+            WHERE e.source_id = $1::varchar
+              AND e.target_id = $2::varchar
+              AND e.relation = $3::varchar
               AND e.metadata = $5::jsonb
         )
         """,
