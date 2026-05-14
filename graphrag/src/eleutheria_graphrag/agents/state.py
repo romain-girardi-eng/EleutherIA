@@ -221,7 +221,15 @@ class ReadingDecision(BaseModel):
 
 
 class ClaimLedgerItem(BaseModel):
-    """Atomic, evidence-linked claim produced before prose rendering."""
+    """Atomic, evidence-linked claim produced before prose rendering.
+
+    The optional ``proof_chain`` field carries the OWL-RL derivation when
+    the claim depends on an inferred (non-asserted) fact. Each chain
+    entry is shaped like
+    ``{"rule", "premises": [[s, p, o], ...], "conclusion": [s, p, o], "confidence"}``,
+    matching :func:`eleutheria_kg.semantic.proof.serialize_proof_chain`.
+    Absent for directly-asserted claims (backward-compatible default).
+    """
 
     claim: str
     evidence_ids: list[str] = Field(default_factory=list)
@@ -232,6 +240,14 @@ class ClaimLedgerItem(BaseModel):
     support_type: str = "passage"
     confidence: float = Field(0.0, ge=0.0, le=1.0)
     status: ClaimStatus = ClaimStatus.SUPPORTED
+    proof_chain: list[dict[str, Any]] | None = Field(
+        default=None,
+        description=(
+            "Optional OWL-RL derivation when the claim relies on an inferred "
+            "triple. Each step: rule, premises (list of [s, p, o]), "
+            "conclusion ([s, p, o]), confidence. None for asserted claims."
+        ),
+    )
 
 
 class ContextPack(BaseModel):
@@ -393,6 +409,15 @@ class RAGState:
     reasoning_trace: list[ReasoningStep] = field(default_factory=list)
     retrieval_mode: str = "auto"  # "auto" | "vector" | "sql"
     selected_model: str = "gemini-3.1-pro"
+
+    # Triples derived via the ontology-aware retrieval layer (Phase D).
+    # Each entry is (subject_node_id, relation, object_node_id) — the
+    # *conclusion* of a single-step inverseOf inference whose premise is
+    # the asserted reverse edge in ``deps.outgoing_edges`` /
+    # ``deps.incoming_edges``. Consumed by ``DraftClaimLedger`` to attach
+    # a proof chain when a supporting edge is inferred rather than
+    # directly asserted.
+    inferred_edges: set[tuple[str, str, str]] = field(default_factory=set)
 
     def __post_init__(self) -> None:
         if self.query_type is None:

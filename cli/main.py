@@ -568,6 +568,10 @@ def export_kg(
     output: str = typer.Option("eleutheria_kg", "--output", "-o", help="Output filename"),
 ) -> None:
     """Export knowledge graph data."""
+    if format == "rdf":
+        _export_kg_rdf(output)
+        return
+
     with Progress(
         SpinnerColumn(),
         TextColumn("[progress.description]{task.description}"),
@@ -588,11 +592,47 @@ def export_kg(
     elif format == "csv":
         console.print("[yellow]CSV export not yet implemented[/yellow]")
         return
-    elif format == "rdf":
-        console.print("[yellow]RDF export not yet implemented[/yellow]")
-        return
 
     console.print(f"[green]Exported to {filename}[/green]")
+
+
+def _export_kg_rdf(output: str) -> None:
+    """Build the RDF graph from the JSONL snapshot and emit Turtle, JSON-LD, N-Triples."""
+    nodes_path = PROJECT_ROOT / "data" / "kg" / "nodes.jsonl"
+    edges_path = PROJECT_ROOT / "data" / "kg" / "edges.jsonl"
+    if not nodes_path.exists() or not edges_path.exists():
+        console.print(
+            f"[red]Missing JSONL snapshot at {nodes_path.parent}. "
+            f"Run the KG export snapshot first.[/red]"
+        )
+        raise typer.Exit(code=1)
+
+    try:
+        import sys
+        sys.path.insert(0, str(PROJECT_ROOT / "knowledge graph" / "src"))
+        from eleutheria_kg.semantic import build_graph, export_graph
+    except ImportError as exc:
+        console.print(
+            f"[red]RDF export requires the semantic extras. Install with: "
+            f"uv pip install -e 'knowledge graph[semantic]'\n{exc}[/red]"
+        )
+        raise typer.Exit(code=1) from exc
+
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        console=console,
+    ) as progress:
+        progress.add_task("Building RDF graph...", total=None)
+        graph = build_graph(nodes_path, edges_path)
+        paths = export_graph(graph, output)
+
+    console.print(
+        f"[green]Exported {len(graph):,} triples to:[/green]"
+    )
+    for fmt, path in paths.items():
+        size_mb = path.stat().st_size / (1024 * 1024)
+        console.print(f"  • {fmt}: [cyan]{path}[/cyan] ({size_mb:.1f} MB)")
 
 
 @export_app.command("passages")

@@ -771,6 +771,18 @@
     "howToRead": "How to read:",
     "howToReadDesc": "Evidence chains show how specific claims in the answer are supported by knowledge graph nodes, ancient texts, and modern scholarship. Confidence scores reflect the strength of the connection between claim and sources."
   },
+  "claimLedger": {
+    "derivation": "Derivation",
+    "derivationCount": "Derivation ({{count}})",
+    "premises": "Premises",
+    "conclusion": "Conclusion",
+    "confidence": "Confidence",
+    "rule": {
+      "inverseOf": "Inverse",
+      "transitivity": "Transitivity",
+      "subPropertyOf": "Sub-property"
+    }
+  },
   "comparisonTool": {
     "title": "Smart Comparison Tool",
     "subtitle": "Compare philosophers, arguments, and concepts side-by-side",

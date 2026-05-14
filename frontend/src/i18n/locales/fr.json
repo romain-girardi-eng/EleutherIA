@@ -771,6 +771,18 @@
     "howToRead": "Comment lire :",
     "howToReadDesc": "Les chaînes de preuves montrent comment des affirmations spécifiques dans la réponse sont soutenues par les nœuds du graphe de connaissances, les textes antiques et les études modernes. Les scores de confiance reflètent la force de la connexion entre l'affirmation et les sources."
   },
+  "claimLedger": {
+    "derivation": "Dérivation",
+    "derivationCount": "Dérivation ({{count}})",
+    "premises": "Prémisses",
+    "conclusion": "Conclusion",
+    "confidence": "Confiance",
+    "rule": {
+      "inverseOf": "Inverse",
+      "transitivity": "Transitivité",
+      "subPropertyOf": "Sous-propriété"
+    }
+  },
   "comparisonTool": {
     "title": "Outil de comparaison intelligent",
     "subtitle": "Comparez philosophes, arguments et concepts côte à côte",

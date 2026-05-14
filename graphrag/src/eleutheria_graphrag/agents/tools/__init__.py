@@ -68,6 +68,9 @@ def build_tool_registry(deps: Deps) -> ToolRegistry:
     from eleutheria_graphrag.agents.tools.explore_subgraph import ExploreSubgraphTool
     from eleutheria_graphrag.agents.tools.get_neighbors import GetNeighborsTool
     from eleutheria_graphrag.agents.tools.get_node_detail import GetNodeDetailTool
+    from eleutheria_graphrag.agents.tools.infer_transitive import (
+        InferTransitiveFactsTool,
+    )
     from eleutheria_graphrag.agents.tools.read_passages import ReadPassagesTool
     from eleutheria_graphrag.agents.tools.read_work_section import ReadWorkSectionTool
     from eleutheria_graphrag.agents.tools.search_nodes import SearchNodesTool
@@ -81,4 +84,5 @@ def build_tool_registry(deps: Deps) -> ToolRegistry:
     registry.register(GetNodeDetailTool(deps))
     registry.register(ReadWorkSectionTool(deps))
     registry.register(ExploreSubgraphTool(deps))
+    registry.register(InferTransitiveFactsTool(deps))
     return registry
