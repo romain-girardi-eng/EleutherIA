@@ -18,6 +18,7 @@ events concurrently must hold the writer's lock when mutating the tree;
 
 from __future__ import annotations
 
+import contextvars
 import json
 import logging
 import time
@@ -33,6 +34,14 @@ from eleutheria_graphrag.services.llm_pricing import (
 )
 
 logger = logging.getLogger(__name__)
+
+# Per-task active writer. Any code running inside an asyncio task that was
+# started under an SSE handler reads this to find the right TraceWriter
+# (LLMService dispatches token usage observations here). ContextVar isolates
+# concurrent queries cleanly: each top-level task gets its own copy.
+active_trace_writer: contextvars.ContextVar["TraceWriter | None"] = (
+    contextvars.ContextVar("active_trace_writer", default=None)
+)
 
 
 def _now_iso() -> str:

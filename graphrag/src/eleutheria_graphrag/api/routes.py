@@ -2,8 +2,11 @@
 FastAPI routes for GraphRAG Q&A.
 """
 
+import contextlib
 import json
+import logging
 import time
+import uuid
 from collections.abc import AsyncIterator
 from typing import Annotated
 
@@ -19,6 +22,8 @@ from eleutheria_graphrag.services.thesis_renderer import (
     ExportFormat,
     export_draft,
 )
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["graphrag"])
 
@@ -107,13 +112,68 @@ async def query_stream(
     """
     Execute a GraphRAG query with streaming response.
 
-    Returns Server-Sent Events (SSE) with answer chunks.
+    Returns Server-Sent Events (SSE) with answer chunks. Token + USD cost
+    are captured by a :class:`TraceWriter` for the duration of the request
+    (via the ``active_trace_writer`` ContextVar) and surfaced to the UI
+    through periodic ``tokens_used_rollup`` events plus a terminal
+    ``cost_summary``.
     """
 
+    trace_id = uuid.uuid4().hex
+    # Lazy imports: backend depends on graphrag, not the other way around —
+    # keep these inside the request handler so the package remains usable
+    # standalone (CLI, notebooks) even when backend isn't installed.
+    writer = None
+    ctx_token = None
+    try:
+        from backend.dependencies import get_db
+        from backend.services.trace_writer import (
+            TraceWriter,
+            active_trace_writer,
+        )
+
+        try:
+            writer = TraceWriter(
+                get_db(),
+                trace_id,
+                query=question,
+                mode="react",
+                metadata={"endpoint": "graphrag.query_stream"},
+            )
+            await writer.start()
+            ctx_token = active_trace_writer.set(writer)
+        except RuntimeError:
+            # Services not initialized (tests, CLI) — degrade silently.
+            writer = None
+            ctx_token = None
+    except ImportError:
+        writer = None
+        ctx_token = None
+
     async def generate() -> AsyncIterator[str]:
+        nonlocal writer, ctx_token
+        last_emit_t = 0.0
+        last_emitted_tokens = -1
+        emit_interval_s = 0.8
+
+        def _running_payload() -> dict | None:
+            if writer is None:
+                return None
+            try:
+                totals = writer.get_running_totals()
+            except Exception:  # noqa: BLE001
+                return None
+            return {
+                "trace_id": trace_id,
+                "total_tokens": totals.get("total_tokens", 0),
+                "total_cost_usd": totals.get("total_cost_usd", 0.0),
+                "by_model": totals.get("by_model", {}),
+                "by_agent": totals.get("by_agent", {}),
+            }
+
         try:
             complete_sent = False
-            yield f"data: {json.dumps({'type': 'status', 'data': {'message': 'Initializing scholarly agent...', 'step': 1}})}\n\n"
+            yield f"data: {json.dumps({'type': 'status', 'data': {'message': 'Initializing scholarly agent...', 'step': 1, 'trace_id': trace_id}})}\n\n"
             async for chunk in graphrag.query_stream(
                 question=question,
                 semantic_k=semantic_k,
@@ -122,6 +182,16 @@ async def query_stream(
                 selected_model=model,
                 retrieval_mode=retrieval_mode,
             ):
+                now = time.monotonic()
+                rollup = _running_payload()
+                if (
+                    rollup is not None
+                    and rollup["total_tokens"] > last_emitted_tokens
+                    and (now - last_emit_t) >= emit_interval_s
+                ):
+                    yield f"data: {json.dumps({'type': 'tokens_used_rollup', 'data': rollup})}\n\n"
+                    last_emit_t = now
+                    last_emitted_tokens = rollup["total_tokens"]
                 # The agent yields plain text for answer chunks, but the
                 # final yield is a JSON string with {"type": "complete", ...}
                 # containing the full response (citations, metadata, etc.).
@@ -202,11 +272,32 @@ async def query_stream(
                                         },
                                     }
                                 )
+                            final_answer = raw.get("answer", "")
+                            final_citations = [
+                                c for c in raw_citations if isinstance(c, dict)
+                            ]
+                            merged_metadata = dict(raw.get("metadata") or {})
+                            cost_payload = _running_payload()
+                            if cost_payload is not None:
+                                merged_metadata["total_tokens"] = cost_payload[
+                                    "total_tokens"
+                                ]
+                                merged_metadata["total_cost_usd"] = cost_payload[
+                                    "total_cost_usd"
+                                ]
+                                merged_metadata["token_breakdown"] = {
+                                    "by_agent": cost_payload["by_agent"],
+                                    "by_model": cost_payload["by_model"],
+                                }
+                                # Surface trace_id so the FE can deep-link to
+                                # the audit / export endpoints.
+                                merged_metadata["trace_id"] = trace_id
+                                yield f"data: {json.dumps({'type': 'cost_summary', 'data': cost_payload})}\n\n"
                             complete_payload = {
                                 "type": "complete",
                                 "data": {
                                     "query": raw.get("question", question),
-                                    "answer": raw.get("answer", ""),
+                                    "answer": final_answer,
                                     "citations": {
                                         "ancient_sources": [a for a in ancient if a],
                                         "modern_scholarship": [],
@@ -221,21 +312,55 @@ async def query_stream(
                                     },
                                     "llm_model": raw.get("llm_model", ""),
                                     "llm_provider": raw.get("llm_provider", ""),
-                                    "metadata": raw.get("metadata", {}),
+                                    "metadata": merged_metadata,
                                     "nodes_used": len(ctx_ids),
+                                    "trace_id": trace_id,
                                 },
                             }
                             yield f"data: {json.dumps(complete_payload, default=str)}\n\n"
                             complete_sent = True
+                            if writer is not None:
+                                try:
+                                    await writer.finalize(
+                                        final_answer=final_answer,
+                                        citations=final_citations,
+                                    )
+                                except Exception:  # noqa: BLE001
+                                    logger.exception(
+                                        "TraceWriter.finalize failed for %s",
+                                        trace_id,
+                                    )
                             continue
                     except json.JSONDecodeError:
                         pass
                 event = json.dumps({"type": "answer_chunk", "data": chunk})
                 yield f"data: {event}\n\n"
             if not complete_sent:
-                yield f"data: {json.dumps({'type': 'complete', 'data': None})}\n\n"
+                yield f"data: {json.dumps({'type': 'complete', 'data': {'trace_id': trace_id}})}\n\n"
+                if writer is not None:
+                    try:
+                        await writer.finalize(final_answer="", citations=[])
+                    except Exception:  # noqa: BLE001
+                        logger.exception(
+                            "TraceWriter.finalize (no-answer) failed for %s",
+                            trace_id,
+                        )
         except Exception as e:
-            yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+            yield f"data: {json.dumps({'type': 'error', 'message': str(e), 'trace_id': trace_id})}\n\n"
+            if writer is not None:
+                try:
+                    await writer.finalize(
+                        final_answer=f"[error] {e}", citations=[], success=False
+                    )
+                except Exception:  # noqa: BLE001
+                    logger.exception(
+                        "TraceWriter.finalize (error path) failed for %s",
+                        trace_id,
+                    )
+        finally:
+            if ctx_token is not None:
+                with contextlib.suppress(Exception):
+                    active_trace_writer.reset(ctx_token)
 
     return StreamingResponse(
         generate(),
