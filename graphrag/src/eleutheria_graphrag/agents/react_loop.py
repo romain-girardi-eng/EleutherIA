@@ -50,11 +50,20 @@ def _tool_calling_mode() -> str:
 
 
 def _max_iterations() -> int:
-    """Hard cap on iterations for the native tool-calling loop."""
+    """Safety belt on the native tool-calling loop.
+
+    The cap exists only to defend against pathological LLM behavior (a model
+    that keeps requesting tool calls forever). Well-behaved agents emit a
+    SYNTHESIZE signal and exit on their own well before this number.
+
+    Default raised to 30 — the previous value (12) was forcing premature
+    synthesis on doctoral-grade queries that legitimately need 15+ tool
+    calls (cross-period KG traversal + multi-source close reading).
+    """
     try:
-        return int(os.getenv("MAX_ITERATIONS", "12"))
+        return int(os.getenv("MAX_ITERATIONS", "30"))
     except ValueError:
-        return 12
+        return 30
 
 
 # Budget per complexity tier (optimized for speed — fewer but smarter calls)
