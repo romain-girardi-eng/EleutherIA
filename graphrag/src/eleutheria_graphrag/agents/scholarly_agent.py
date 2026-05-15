@@ -8,10 +8,12 @@ Supports two modes via ELEUTHERIA_AGENT_MODE env var:
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import os
 import re
+import time as _time_mod
 from collections.abc import AsyncIterator
 from typing import Any
 
@@ -608,7 +610,13 @@ class ScholarlyAgent:
             }
         )
 
-        # Phase 3: Synthesis
+        # Phase 3: Synthesis (two LLM calls — draft claim ledger then render
+        # answer). Each one can run for 30-90 s on a doctoral-grade query;
+        # without intermediate SSE traffic the Cloudflare tunnel drops the
+        # connection at ~100 s of silence and the client never sees a
+        # `complete` event. We wrap every long await with a heartbeat that
+        # emits a status SSE every 10 s, both to keep the wire warm and to
+        # show real progress in the UI.
         stage_started = _time.perf_counter()
         yield json.dumps(
             {
@@ -618,13 +626,21 @@ class ScholarlyAgent:
             }
         )
 
-        draft_node = DraftClaimLedger()
         ctx = GraphRunContext(state=state, deps=self.deps)
-        await draft_node.run(ctx)
+        async for hb in self._await_with_heartbeat(
+            DraftClaimLedger().run(ctx),
+            label="Drafting claim ledger",
+            stage_id="draft_claim_ledger",
+        ):
+            yield hb
 
-        render_node = RenderGroundedAnswer()
         ctx = GraphRunContext(state=state, deps=self.deps)
-        await render_node.run(ctx)
+        async for hb in self._await_with_heartbeat(
+            RenderGroundedAnswer().run(ctx),
+            label="Rendering grounded answer",
+            stage_id="render_grounded_answer",
+        ):
+            yield hb
 
         synthesis_ms = int((_time.perf_counter() - stage_started) * 1000)
         yield json.dumps(
@@ -638,7 +654,16 @@ class ScholarlyAgent:
         stage_started = _time.perf_counter()
         verify_node = ProgrammaticVerify()
         ctx = GraphRunContext(state=state, deps=self.deps)
-        result = await verify_node.run(ctx)
+        verify_result_holder: dict[str, Any] = {}
+        async for hb in self._await_with_heartbeat(
+            verify_node.run(ctx),
+            label="Verifying citations",
+            stage_id="verify",
+            interval=8.0,
+            result_into=verify_result_holder,
+        ):
+            yield hb
+        result = verify_result_holder.get("value")
         verify_ms = int((_time.perf_counter() - stage_started) * 1000)
         yield json.dumps(
             {
@@ -663,6 +688,66 @@ class ScholarlyAgent:
         # Stream the answer in chunks
         async for chunk in self._chunk_answer(answer):
             yield chunk
+
+    async def _await_with_heartbeat(
+        self,
+        coro: Any,
+        *,
+        label: str,
+        stage_id: str,
+        interval: float = 10.0,
+        result_into: dict[str, Any] | None = None,
+    ) -> AsyncIterator[str]:
+        """Run ``coro`` while yielding ``status`` SSE strings every ``interval`` s.
+
+        Cloudflare tunnel idles out an SSE connection after ~100 s of
+        silence, which used to drop doctoral-grade queries mid-synthesis.
+        Wrapping the long awaits here keeps a steady drip of frames on the
+        wire and surfaces real progress (elapsed seconds) to the UI.
+
+        The coroutine's return value, if any, is stashed in
+        ``result_into['value']`` for the caller (avoids re-running the
+        coroutine just to get its result).
+        """
+        task = asyncio.create_task(coro)
+        started = _time_mod.monotonic()
+        # First-frame ping: clients see we entered this stage immediately.
+        yield json.dumps(
+            {
+                "type": "status",
+                "message": f"{label}…",
+                "data": {"step": 99, "stage": stage_id, "elapsed_s": 0},
+            }
+        )
+        try:
+            while not task.done():
+                try:
+                    await asyncio.wait_for(asyncio.shield(task), timeout=interval)
+                except TimeoutError:
+                    elapsed = int(_time_mod.monotonic() - started)
+                    yield json.dumps(
+                        {
+                            "type": "status",
+                            "message": f"{label}… ({elapsed}s)",
+                            "data": {
+                                "step": 99,
+                                "stage": stage_id,
+                                "elapsed_s": elapsed,
+                            },
+                        }
+                    )
+        except Exception:
+            # Cancel only if still running; let exception surface below.
+            if not task.done():
+                task.cancel()
+            raise
+        try:
+            value = task.result()
+        except Exception:
+            logger.exception("Heartbeat-wrapped task %s failed", stage_id)
+            raise
+        if result_into is not None:
+            result_into["value"] = value
 
     @staticmethod
     async def _run_agent_and_close(agent: Any, emitter: Any) -> None:
