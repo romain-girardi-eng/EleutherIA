@@ -175,6 +175,8 @@ export function StreamingAnswer({
               <HoverCard.Trigger asChild>
                 <button
                   type="button"
+                  data-citation-id={`c${(seg.index ?? 0) + 1}`}
+                  data-passage-anchor={citation?.passage_id}
                   className="mx-0.5 inline-flex items-center gap-0.5 rounded-md bg-amber-50 px-1 py-0 font-mono text-[11px] font-semibold text-amber-800 hover:bg-amber-100"
                   aria-label={`source ${(seg.index ?? 0) + 1}`}
                 >

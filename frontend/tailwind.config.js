@@ -214,6 +214,7 @@ export default {
       },
       animation: {
         // Existing animations
+        'amber-pulse': 'amberPulse 1.5s ease-out forwards',
         shine: "shine var(--duration) infinite linear",
         shimmer: "shimmer 2s infinite linear",
         // Aurora animation
@@ -252,6 +253,11 @@ export default {
         'candle-flicker': 'candleFlicker 4s ease-in-out infinite',
       },
       keyframes: {
+        amberPulse: {
+          '0%': { backgroundColor: 'rgb(251 191 36 / 0)' },
+          '20%': { backgroundColor: 'rgb(251 191 36 / 0.35)' },
+          '100%': { backgroundColor: 'rgb(251 191 36 / 0)' },
+        },
         shine: {
           "0%": {
             "background-position": "0% 0%",
