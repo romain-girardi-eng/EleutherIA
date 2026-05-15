@@ -119,6 +119,8 @@ def insert_translations(translations, db_url, dry_run=True):
             "source_model": "claude-opus-4-6",
             "source_language": orig_meta.get("language", "unknown"),
             "original_node_id": orig_id,
+            "source_passage_id": orig_meta.get("db_passage_id") or orig_id,
+            "passage_role": "translation",
             "work_title": orig_meta.get("work_title", ""),
             "author": orig_meta.get("author", ""),
             "auto_generated": True,

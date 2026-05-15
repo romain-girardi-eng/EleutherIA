@@ -472,6 +472,48 @@
       "inverse": "edited",
       "source_types": ["publication", "work", "source_collection"],
       "target_types": ["person"]
+    },
+    "variant_of": {
+      "description": "Source textual-variant node records an apparatus variant for the target passage, quote, or fragment",
+      "category": "textual",
+      "inverse": "has_variant",
+      "source_types": ["textual_variant"],
+      "target_types": ["passage", "quote", "text_fragment"]
+    },
+    "has_variant": {
+      "description": "Source passage, quote, or fragment has the target textual-variant apparatus entry",
+      "category": "textual",
+      "inverse": "variant_of",
+      "source_types": ["passage", "quote", "text_fragment"],
+      "target_types": ["textual_variant"]
+    },
+    "reconstructs": {
+      "description": "Source argument-reconstruction node reconstructs the target ancient or reported argument",
+      "category": "hermeneutic",
+      "inverse": "reconstructed_by",
+      "source_types": ["argument_reconstruction"],
+      "target_types": ["argument"]
+    },
+    "reconstructed_by": {
+      "description": "Source argument is reconstructed by the target argument-reconstruction node",
+      "category": "hermeneutic",
+      "inverse": "reconstructs",
+      "source_types": ["argument"],
+      "target_types": ["argument_reconstruction"]
+    },
+    "reconstructed_from": {
+      "description": "Source argument reconstruction is derived from the target source passage, work, or publication",
+      "category": "hermeneutic",
+      "inverse": "source_for_reconstruction",
+      "source_types": ["argument_reconstruction"],
+      "target_types": ["passage", "publication", "work"]
+    },
+    "source_for_reconstruction": {
+      "description": "Source passage, work, or publication supplies evidence for the target argument reconstruction",
+      "category": "hermeneutic",
+      "inverse": "reconstructed_from",
+      "source_types": ["passage", "publication", "work"],
+      "target_types": ["argument_reconstruction"]
     }
   },
   "categories": {

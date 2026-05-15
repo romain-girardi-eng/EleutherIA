@@ -1,0 +1,359 @@
+# Scholarly Backlog
+
+## Corpus Counts
+
+- `argument`: 1119
+- `argument_framework`: 1
+- `concept`: 176
+- `conceptual_evolution`: 3
+- `controversy`: 5
+- `debate`: 17
+- `event`: 2
+- `group`: 3
+- `passage`: 16858
+- `person`: 362
+- `position`: 8
+- `publication`: 310
+- `quote`: 14
+- `school`: 11
+- `source_collection`: 2
+- `synthesis`: 13
+- `work`: 177
+
+## Evidence Anchoring
+
+- `academic_antifatalism`: 7
+- `aristotle_voluntary_akrasia`: 48
+- `augustine_grace_will`: 478
+- `epicurean_swerve`: 11
+- `late_antique_providence`: 46
+- `stoic_fate_assent`: 202
+- `unclassified`: 327
+
+## Edition Metadata
+
+Total: 155
+
+- `sc10bis_ignatius_ad_ephesios`
+- `sc10bis_ignatius_ad_magnesios`
+- `sc10bis_ignatius_ad_philadelphenos`
+- `sc10bis_ignatius_ad_polycarpum`
+- `sc10bis_ignatius_ad_romanos`
+- `sc10bis_ignatius_ad_smyrnaeos`
+- `sc10bis_ignatius_ad_trallianos`
+- `sc10bis_martyrium_polycarpi`
+- `sc123_apollinaris_peri_pascha`
+- `sc123_melito_apologia_ad_antoninum`
+- `sc123_melito_de_anima_et_corpore`
+- `sc123_melito_eclogae`
+- `sc123_melito_peri_pascha`
+- `sc167_clemens_epistula_ad_corinthios`
+- `sc172_epistula_barnabae`
+- `sc20_theophilus_ad_autolycum`
+- `sc31_melito_peri_pascha_iv`
+- `sc379_athenagoras_legatio`
+- `sc464_pamphilus_apologia_pro_origene`
+- `sc470_aristides_apologia`
+- `sc507_iustinus_apologia_i`
+- `sc528_pseudo_iustinus_cohortatio`
+- `sc53bis_hermas_pastor`
+- `sc79_chrysostomus_de_providentia`
+- `text_anonymous_in_en`
+- `text_aspasius_in_en`
+- `work_ad_simplicianum`
+- `work_aristides_apology_sc470`
+- `work_aristotle_de_motu`
+- `work_athenagoras_legatio_sc379`
+- `work_augustine_confessiones_viii`
+- `work_augustine_de_correptione`
+- `work_augustine_de_dono_pers`
+- `work_augustine_de_libero_arbitrio`
+- `work_augustine_de_praed_sanct`
+- `work_augustine_de_spiritu_littera`
+- `work_bardaisan_book_of_laws`
+- `work_bayle_rorarius_1702`
+- `work_bernath_stoicism_frankfurt_2018`
+- `work_bobzien_determinism_freedom_1998`
+- `work_call_all_nations`
+- `work_chrysippus_svf_ii`
+- `work_chrysostom_hom_romans`
+- `work_clement_paedagogus`
+- `work_clement_protrepticus`
+- `work_clement_stromateis`
+- `work_confessions`
+- `work_cudworth_true_intellectual_system_1678`
+- `work_damascus_document_q9r0s1t2`
+- `work_de_causa_dei_bradwardine_g7h8i9j0`
+- `work_de_gen_corr_aristotle`
+- `work_de_libero_arbitrio`
+- `work_de_principiis_origen_230s_v2w3x4y5`
+- `work_de_providentia_seneca_a2b3c4d5`
+- `work_deuteronomy_y5z6a7b8`
+- `work_didaskalikos_alcinous_2nd_ce_q7r8s9t0`
+- `work_diogenes_laertius_lives`
+- `work_dss_4qmmt_m5n6o7p8`
+- `work_dss_community_rule_e7f8g9h0`
+- `work_dss_hodayot_i1j2k3l4`
+- `work_ecclesiastes_w9x0y1z2`
+- `work_elbow_room_dennett_9g0h1i2j`
+- `work_epictetus_discourses`
+- `work_epictetus_enchiridion`
+- `work_epictetus_fragments`
+- `work_epicurus_kuriai_doxai`
+- `work_epicurus_letter_herodotus`
+- `work_epicurus_letter_menoeceus`
+- `work_epicurus_on_nature_xxv`
+- `work_essay_on_free_will_van_inwagen_8f9g0h1i`
+- `work_eusebius_praeparatio_evangelica`
+- `work_exodus_c9d0e1f2`
+- `work_ezekiel_g3h4i5j6`
+- `work_frankfurt_alternate_possibilities_1969`
+- `work_frede_free_will_2011`
+- `work_free_mele_5m6n7o8p`
+- `work_freedom_and_resentment_strawson_3k4l5m6n`
+- `work_galen_de_placitis`
+- `work_gellius_na_vii_2`
+- `work_genesis_u1v2w3x4`
+- `work_gregory_contra_eunomium`
+- `work_gregory_contra_fatum`
+- `work_gregory_de_anima_resurrectione`
+- `work_gregory_de_hom_opif`
+- `work_gregory_oratio_catechetica`
+- `work_guide_for_perplexed_maimonides_u5v6w7x8`
+- `work_iamblichus_de_anima`
+- `work_irenaeus_adversus_haereses_book2`
+- `work_irenaeus_adversus_haereses_book3`
+- `work_irenaeus_adversus_haereses_book4`
+- `work_irenaeus_adversus_haereses_book5`
+- `work_irenaeus_epideixis`
+- `work_jeremiah_k7l8m9n0`
+- `work_job_o1p2q3r4`
+- `work_john_damascus_de_fide`
+- `work_josephus_antiquitates`
+- `work_josephus_bellum_jud`
+- `work_justin_against_marcion`
+- `work_justin_dialogue_trypho`
+- `work_justin_first_apology`
+- ... 55 more
+
+## Publication BibTeX Metadata
+
+Total: 227
+
+- `scholarly_work_acosta_l_pez_de_mesa_2012_plotinus_aristotle_and_the_origin_of_the`
+- `scholarly_work_amand_de_mendieta_1973_fatalisme_et_libert_dans_l_antiquit_grec`
+- `scholarly_work_andresen_1952_justin_und_der_mittlere_platonismus`
+- `scholarly_work_andresen_1955_logos_nomos`
+- `scholarly_work_barclay_1987_mirror_reading_a_polemical_letter_galati`
+- `scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_`
+- `scholarly_work_barclay_2007_introduction`
+- `scholarly_work_bardy_1943_ath_nagore_supplique_au_sujet_des_chr_ti`
+- `scholarly_work_behr_2001_way_to_nicaea`
+- `scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let`
+- `scholarly_work_bird_2012_four_views_on_the_apostle_paul`
+- `scholarly_work_blackson_2025_epictetus_the_early_stoics_and_frede_s_a`
+- `scholarly_work_blackwell_2011_christosis_pauline_soteriology_in_light_`
+- `scholarly_work_bobichon_2003_justin_martyr_dialogue_avec_le_tryphon_d`
+- `scholarly_work_bobichon_2003_justin_martyr_dialogue_avec_tryphon_diti`
+- `scholarly_work_bobichon_2003_uvres_de_justin_martyr_le_manuscrit_loan`
+- `scholarly_work_bobzien_1998_determinism`
+- `scholarly_work_bobzien_1998_determinism_and_freedom_in_stoic_philoso`
+- `scholarly_work_bobzien_1998_the_inadvertent_conception_and_late_birt`
+- `scholarly_work_bobzien_2000_inadvertent`
+- `scholarly_work_bobzien_2001_determinism_and_freedom_in_stoic_philoso`
+- `scholarly_work_bonaiuti_1924_the_genesis_of_st_augustine_s_idea_of_or`
+- `scholarly_work_boulnois_2000_libert_origine_du_mal_et_prescience_divi`
+- `scholarly_work_boys_stones_0_middle_platonists_on_fate_and_human_auto`
+- `scholarly_work_boys_stones_2007_middle_platonists_on_fate_and_human_auto`
+- `scholarly_work_brennan_2005_stoic_life`
+- `scholarly_work_breytenbach_2023_early_christianity_in_athens_attica_and_`
+- `scholarly_work_brouwer_2020_fate_providence_and_free_will_philosophy`
+- `scholarly_work_butticaz_2015_vers_une_anthropologie_universelle_la_cr`
+- `scholarly_work_byerly_2017_free_will_theodicies_for_theological_det`
+- `scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w`
+- `scholarly_work_chamberlain_1984_the_meaning_of_prohairesis_in_aristotle_`
+- `scholarly_work_coppins_2009_the_interpretation_of_freedom_in_the_let`
+- `scholarly_work_craig_1991_divine_foreknowledge_and_human_freedom_t`
+- `scholarly_work_cross_1956_the_view_of_man_in_the_qumran_hodayot`
+- `scholarly_work_crouzel_1956_th_ologie_de_l_image_de_dieu_chez_orig_n`
+- `scholarly_work_crouzel_1962_orig_ne_et_la_philosophie`
+- `scholarly_work_crouzel_1962_origene_et_la_philosophie`
+- `scholarly_work_crouzel_1984_orig_ne_trait_des_principes_tome_v_compl`
+- `scholarly_work_crouzel_1985_origene`
+- `scholarly_work_crubellier_2020_les_d_finitions_de_la_dans_les_thiques`
+- `scholarly_work_currado_0_early_church_fathers_on_the_freedom_of_t`
+- `scholarly_work_de_monneron_2011_le_d_terminisme_et_la_responsabilit_mora`
+- `scholarly_work_denzey_lewis_2013_cosmology_and_fate_in_gnosticism_and_gra`
+- `scholarly_work_destr_e_2014_what_is_up_to_us_studies_on_agency_and_r`
+- `scholarly_work_dettwiler_0_une_th_ologie_en_construction`
+- `scholarly_work_dettwiler_1990_le_prologue_johannique_jean`
+- `scholarly_work_dettwiler_1995_l_p_tre_aux_colossiens_un_exemple_de_r_c`
+- `scholarly_work_dettwiler_1998_la_conception_matth_enne_de_la_foi_mt`
+- `scholarly_work_dettwiler_2001_la_r_surrection_des_croyants_selon_l_p_t`
+- `scholarly_work_dettwiler_2004_l_cole_paulinienne_valuation_d_une_hypot`
+- `scholarly_work_dettwiler_2007_une_exhortation_de_paul_aux_thessalonici`
+- `scholarly_work_dettwiler_2008_l_p_tre_aux_colossiens`
+- `scholarly_work_dettwiler_2008_l_p_tre_aux_eph_siens`
+- `scholarly_work_dettwiler_2008_la_deuxi_me_p_tre_aux_thessaloniciens`
+- `scholarly_work_dettwiler_2009_d_mystification_c_leste_la_fonction_argu`
+- `scholarly_work_dettwiler_2009_enthousiasme_religieux_dans_rm`
+- `scholarly_work_dettwiler_2012_ep_tre_aux_colossiens`
+- `scholarly_work_dettwiler_2012_ep_tre_aux_eph_siens`
+- `scholarly_work_dettwiler_2020_les_principaux_termes_anthropologiques_c`
+- `scholarly_work_dihle_1982_the_theory_of_will_in_classical_antiquit`
+- `scholarly_work_dihle_1982_theory_will`
+- `scholarly_work_dodson_2017_paul_and_seneca_in_dialogue`
+- `scholarly_work_dodson_2017_paul_and_the_greco_roman_philosophical_t`
+- `scholarly_work_donini_1989_ethos_aristotele_e_il_determinismo`
+- `scholarly_work_donini_2010_aristotle_and_determinism`
+- `scholarly_work_double_1994_how_to_frame_the_free_will_problem`
+- `scholarly_work_dunn_1998_the_theology_of_paul_the_apostle`
+- `scholarly_work_eche_ique_2012_aristotle_s_ethics_and_moral_responsibil`
+- `scholarly_work_edwards_2002_origen_against_plato`
+- `scholarly_work_eliasson_2008_the_notion_of_that_which_depends_on_us_i`
+- `scholarly_work_eliasson_2009_sur_la_conception_plotinienne_du_destin_`
+- `scholarly_work_engberg_pedersen_2000_paul_and_the_stoics`
+- `scholarly_work_engberg_pedersen_2010_cosmology_and_self_in_the_apostle_paul_t`
+- `scholarly_work_eskola_1998_theodicy_and_predestination_in_pauline_s`
+- `scholarly_work_everson_1998_ethics`
+- `scholarly_work_f_rst_2022_wege_zur_freiheit_menschliche_selbstbest`
+- `scholarly_work_fantino_1998_le_passage_du_premier_adam_au_second_ada`
+- `scholarly_work_faure_2022_conceptions_of_time_in_greek_and_roman_a`
+- `scholarly_work_fee_1994_god_s_empowering_presence_the_holy_spiri`
+- `scholarly_work_fischer_2007_four_views_on_free_will`
+- `scholarly_work_fitzmyer_1993_romans_a_new_translation_with_introducti`
+- `scholarly_work_frankfurt_1969_alternate_possibilities`
+- `scholarly_work_frankfurt_1971_freedom_of_the_will_and_the_concept_of_a`
+- `scholarly_work_frede_1982_the_dramatization_of_determinism_alexand`
+- `scholarly_work_frede_1987_essays_in_ancient_philosophy`
+- `scholarly_work_frede_2011_a_free_will_origins_of_the_notion_in_anc`
+- `scholarly_work_frick_1997_the_concept_of_divine_providence_in_the_`
+- `scholarly_work_furley_1967_greek_atomists`
+- `scholarly_work_gaventa_0_romans`
+- `scholarly_work_gaventa_0_romans_all_israel`
+- `scholarly_work_gaventa_0_romans_christ_cosmos_and_consequences`
+- `scholarly_work_gerson_1996_the_cambridge_companion_to_plotinus`
+- `scholarly_work_gibbons_2016_human_autonomy_and_its_limits_in_the_tho`
+- `scholarly_work_gill_2006_structured_self`
+- `scholarly_work_gill_2010_naturalistic_psychology`
+- `scholarly_work_gill_2014_a_free_will_origins_of_the_notion_in_anc`
+- `scholarly_work_gooch_1987_sovereignty_and_freedom_some_pauline_com`
+- `scholarly_work_goodrich_2013_sold_under_sin_echoes_of_exile_in_romans`
+- `scholarly_work_gorday_1983_principles_of_patristic_exegesis_romans_`
+- ... 127 more
+
+## Passage Role
+
+Total: 0
+
+
+## Translation Source Links
+
+Total: 0
+
+
+## Date Uncertainty
+
+Total: 539
+
+- `person_al_ashari_m3n4o5p6`
+- `person_al_ghazali_u1v2w3x4`
+- `person_alcinous_2c_ce`
+- `person_alexander_aphrodisias_fl200ce_n5o6p7q8`
+- `person_annas_julia_contemporary`
+- `person_anonymous_en_commentator_2c_ce`
+- `person_anselm_of_canterbury_4e07b080`
+- `person_anthony_collins_5w9r0s68`
+- `person_antoine_arnauld_7o1j2k80`
+- `person_apollinaris_hierapolis_2c`
+- `person_arcesilaus_316_241bce`
+- `person_aristides_athens_2c_ce`
+- `person_aristotle_384_322bce_c2d4f6a8`
+- `person_aspasius_2c_ce`
+- `person_athenagoras`
+- `person_augustine_hippo_d430`
+- `person_aulus_gellius_125_180ce`
+- `person_austin_john_langshaw_1k2l3m4n`
+- `person_averroes_c9d0e1f2`
+- `person_avicenna_y5z6a7b8`
+- `person_ayer_alfred_jules_7g8h9i0j`
+- `person_bardesanes_the_syrian_3r8s0u76`
+- `person_baruch_spinoza_8p2k3l91`
+- `person_basil_great_d379`
+- `person_ben_sira_i9j0k1l2`
+- `person_bergson_henri_5e6f7g8h`
+- `person_bernath_laszlo_contemporary`
+- `person_blaise_pascal_6n0i1j79`
+- `person_bobzien_susanne_contemporary`
+- `person_boethius_480_524ce_w3x4y5z6`
+- `person_bonaventure_e7f8g9h0`
+- `person_broad_charlie_dunbar_0j1k2l3m`
+- `person_caesarius_arles_d542`
+- `person_calcidius_4c_ce`
+- `person_camus_albert_9i0j1k2l`
+- `person_carneades_214_129bce_l2m3n4o5`
+- `person_caruso_gregg_0d1e2f3g`
+- `person_celestius_d430s`
+- `person_chisholm_roderick_5o6p7q8r`
+- `person_christian_wolff_1s5n6o24`
+- `person_chrysippus_280_206bce_i9j0k1l2`
+- `person_cicero_marcus_tullius_106_43bce_a8f3d2c1`
+- `person_cleanthes_assos_330_230bce`
+- `person_clement_alexandria`
+- `person_clement_rome_d99`
+- `person_clitomachus_of_carthage_7l2m4o10`
+- `person_cornelius_jansen_5m9h0i68`
+- `person_crescens_cynic_2c_ce`
+- `person_cyril_alexandria`
+- `person_david_hume_7y1t2u80`
+- `person_davidson_donald_3m4n5o6p`
+- `person_democritus_460_370bce_g7h8i9j0`
+- `person_dennett_daniel_2v3w4x5y`
+- `person_diodorus_cronus_48ef6200`
+- `person_diogenes_laertius_3c_ce`
+- `person_diogenes_oenoanda_2c_ce`
+- `person_diogenianos_8m3n5p21`
+- `person_domingo_banez_4l8g9h57`
+- `person_ekstrom_laura_1u2v3w4x`
+- `person_epictetus_of_hierapolis_3c385bc2`
+- `person_epicurus_341_270bce_j0k1l2m3`
+- `person_erasmus_of_rotterdam_9g3b4c02`
+- `person_eusebius_caesarea_d339`
+- `person_faustus_riez_d495`
+- `person_favorinus_of_arles_9n4o6q32`
+- `person_firmicus_maternus_2q7r9t65`
+- `person_fischer_john_martin_3w4x5y6z`
+- `person_fm_cornford_cambridge`
+- `person_francisco_suarez_late_16th_c_scholastic_tradition_continued_into_17th_c_d5e0d92c`
+- `person_franciscus_gomarus_2j6e7f35`
+- `person_frankfurt_harry_1929_2023`
+- `person_frede_michael_1940_2007`
+- `person_galen_pergamon_129_216ce`
+- `person_gersonides_o1p2q3r4`
+- `person_ginet_carl_0t1u2v3w`
+- `person_gottfried_leibniz_0r4m5n13`
+- `person_gottschalk_of_orbais_e5f6g7h8`
+- `person_gregory_nyssa_d395`
+- `person_gregory_of_rimini_i1j2k3l4`
+- `person_hasdai_crescas_s5t6u7v8`
+- `person_haynes_john_dylan_2f3g4h5i`
+- `person_heraclitus_fl500bce_a1b2c3d4`
+- `person_hermas_2c_ce`
+- `person_hierocles_of_alexandria_1p6q8s54`
+- `person_hillel_elder_m3n4o5p6`
+- `person_hincmar_of_reims_i9j0k1l2`
+- `person_iamblichus_d325`
+- `person_ignatius_antioch_d110`
+- `person_immanuel_kant_0b4w5x13`
+- `person_inwood_brad_contemporary`
+- `person_irenaeus_d202`
+- `person_jacobus_arminius_1i5d6e24`
+- `person_james_william_4d5e6f7g`
+- `person_jean_buridan_attributed_e5990f67`
+- `person_john_bramhall_3u7p8q46`
+- `person_john_calvin_0h4c5d13`
+- `person_john_cassian_d435`
+- `person_john_chrysostom_d407`
+- `person_john_damascene_d749`
+- `person_john_duns_scotus_48daa9ee`
+- ... 439 more

@@ -157,7 +157,7 @@ def already_mapped(path: Path) -> set[str]:
             try:
                 row = json.loads(line)
                 seen.add(row["passage_id"])
-            except json.JSONDecodeError, KeyError:
+            except (json.JSONDecodeError, KeyError):
                 continue
     return seen
 

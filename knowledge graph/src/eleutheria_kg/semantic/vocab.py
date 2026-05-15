@@ -84,6 +84,8 @@ NODE_TYPE_TO_CLASSES: Final[dict[str, tuple[URIRef, ...]]] = {
     "conceptual_evolution": (PROV.Entity,),
     "group": (FOAF.Group, CRM.E74_Group),
     "argument_framework": (PROV.Entity,),
+    "textual_variant": (CRM.E33_Linguistic_Object, PROV.Entity),
+    "argument_reconstruction": (PROV.Entity,),
 }
 
 
@@ -115,6 +117,11 @@ EDGE_TYPE_TO_PROPERTY: Final[dict[str, URIRef]] = {
     "interprets": PROV.wasInformedBy,
     "discusses": PROV.wasInformedBy,
     "defines": SKOS.definition,
+    "variant_of": DCTERMS.isVersionOf,
+    "has_variant": DCTERMS.hasVersion,
+    "reconstructs": PROV.wasInformedBy,
+    "reconstructed_from": PROV.wasDerivedFrom,
+    "source_for_reconstruction": PROV.wasUsedBy,
 }
 
 
@@ -152,6 +159,9 @@ CLEAN_INVERSE_PAIRS: Final[tuple[tuple[str, str], ...]] = (
     ("exemplifies", "exemplified_by"),
     ("specializes_in", "specialist"),
     ("precedes", "follows"),
+    ("variant_of", "has_variant"),
+    ("reconstructs", "reconstructed_by"),
+    ("reconstructed_from", "source_for_reconstruction"),
 )
 
 

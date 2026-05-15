@@ -52,6 +52,7 @@ class ScaifeSection:
     char_length: int
     char_ratio: float
     language: str
+    source_name: str = "scaife_cts"
 
 
 @dataclass(frozen=True)
@@ -64,6 +65,8 @@ class ScaifePayload:
     level: int
     sections: list[ScaifeSection] = field(default_factory=list)
     errors: int = 0
+    source_name: str = "scaife_cts"
+    source_url: str | None = None
 
 
 @dataclass(frozen=True)
@@ -79,6 +82,9 @@ class IngestMetadata:
     work_node_id: str = ""
     author_node_id: str | None = None
     overwrite: bool = False
+    source: str | None = None
+    source_url: str | None = None
+    license: str | None = None
 
 
 @dataclass(frozen=True)
@@ -276,6 +282,7 @@ def fetch_work(
             char_length=len(text),
             char_ratio=round(char_ratio(text, language), 3),
             language=language,
+            source_name="scaife_cts",
         )
         sections.append(section)
 
@@ -292,6 +299,83 @@ def fetch_work(
         level=level,
         sections=sections,
         errors=errors,
+        source_name="scaife_cts",
+        source_url=CTS_BASE,
+    )
+
+
+def fetch_work_with_fallbacks(
+    work_urn: str,
+    language: str = "grc",
+    ref_prefix: str = "",
+    level: int = 1,
+    source_policy: str = "scaife",
+    fallback_sources: list[str] | None = None,
+    source_options: dict[str, Any] | None = None,
+    progress_callback: Any = None,
+) -> ScaifePayload:
+    """Fetch a work from Scaife or a configured fallback source.
+
+    ``source_policy``:
+    - ``scaife``: Scaife only (legacy behavior)
+    - ``auto``: Scaife, then the listed ``fallback_sources``
+    - any source name: that source only (``phi`` or ``json_mirror``)
+
+    Fallback source options are passed as ``source_options[source_name]``.
+    For PHI: ``{"author_num": 474, "work_num": 54}``.
+    For JSON mirrors: ``{"uri": "/path/to/export.json"}``.
+    """
+    from eleutheria_database.services import corpus_sources
+
+    options = source_options or {}
+    if source_policy == "auto":
+        source_order = ["scaife", *(fallback_sources or [])]
+    elif source_policy == "scaife":
+        source_order = ["scaife"]
+    else:
+        source_order = [source_policy]
+
+    failures: list[str] = []
+    for source_name in source_order:
+        try:
+            if source_name == "scaife":
+                payload = fetch_work(
+                    work_urn=work_urn,
+                    language=language,
+                    ref_prefix=ref_prefix,
+                    level=level,
+                    progress_callback=progress_callback,
+                )
+            elif source_name == "phi":
+                phi_options = options.get("phi", options)
+                payload = corpus_sources.fetch_phi_latin_work(
+                    work_urn=work_urn,
+                    author_num=phi_options["author_num"],
+                    work_num=phi_options["work_num"],
+                    ref_prefix=ref_prefix,
+                    base_url=phi_options.get("base_url", corpus_sources.PHI_BASE),
+                )
+            elif source_name in {"json_mirror", "local_json"}:
+                mirror_options = options.get(source_name, options)
+                payload = corpus_sources.fetch_json_mirror_work(
+                    work_urn=work_urn,
+                    uri=mirror_options["uri"],
+                    language=mirror_options.get("language", language),
+                    ref_prefix=ref_prefix,
+                    source_name=mirror_options.get("source_name", source_name),
+                )
+            else:
+                raise ValueError(f"Unknown corpus source: {source_name}")
+
+            if payload.sections:
+                return payload
+            failures.append(f"{source_name}: no sections returned")
+        except Exception as exc:
+            failures.append(f"{source_name}: {exc}")
+
+    raise RuntimeError(
+        "All corpus sources failed for "
+        f"{work_urn}: " + "; ".join(failures)
     )
 
 
@@ -303,6 +387,8 @@ def payload_to_dict(payload: ScaifePayload) -> dict[str, Any]:
         "ref_prefix": payload.ref_prefix,
         "level": payload.level,
         "errors": payload.errors,
+        "source_name": payload.source_name,
+        "source_url": payload.source_url,
         "sections": [
             {
                 "section_n": s.section_n,
@@ -313,6 +399,7 @@ def payload_to_dict(payload: ScaifePayload) -> dict[str, Any]:
                 "char_length": s.char_length,
                 "char_ratio": s.char_ratio,
                 "language": s.language,
+                "source_name": s.source_name,
             }
             for s in payload.sections
         ],
@@ -326,6 +413,8 @@ def payload_from_dict(data: dict[str, Any]) -> ScaifePayload:
         ref_prefix=data.get("ref_prefix", ""),
         level=int(data.get("level", 1)),
         errors=int(data.get("errors", 0)),
+        source_name=data.get("source_name", "scaife_cts"),
+        source_url=data.get("source_url"),
         sections=[
             ScaifeSection(
                 section_n=int(s["section_n"]),
@@ -336,6 +425,7 @@ def payload_from_dict(data: dict[str, Any]) -> ScaifePayload:
                 char_length=int(s["char_length"]),
                 char_ratio=float(s["char_ratio"]),
                 language=s["language"],
+                source_name=s.get("source_name", data.get("source_name", "scaife_cts")),
             )
             for s in data.get("sections", [])
         ],
@@ -418,8 +508,11 @@ def parse_and_insert(
         cur.execute(
             """
             INSERT INTO ancient_works
-                (work_id, canonical_id, title, author, language, period, school, cts_urn)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                (
+                    work_id, canonical_id, title, author, language, period, school,
+                    cts_urn, source, source_url, license, metadata
+                )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb)
             """,
             (
                 work_id,
@@ -430,6 +523,15 @@ def parse_and_insert(
                 meta.period,
                 meta.school,
                 cts_root,
+                meta.source or payload.source_name,
+                meta.source_url or payload.source_url,
+                meta.license,
+                json.dumps(
+                    {
+                        "corpus_source": payload.source_name,
+                        "corpus_source_url": payload.source_url,
+                    }
+                ),
             ),
         )
 
@@ -522,6 +624,8 @@ def link_to_kg(
                         "canonical_id": meta.canonical_id,
                         "language": meta.language,
                         "author": meta.author,
+                        "source": meta.source,
+                        "source_url": meta.source_url,
                         "auto_generated": True,
                     }
                 ),
@@ -575,6 +679,7 @@ __all__ = [
     "get_valid_reff",
     "get_passage",
     "fetch_work",
+    "fetch_work_with_fallbacks",
     "payload_to_dict",
     "payload_from_dict",
     "lookup_existing_work",

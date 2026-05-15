@@ -64,6 +64,7 @@ async def audit(conn: asyncpg.Connection) -> list[dict[str, Any]]:
                     "set_metadata": {
                         "translation_source": provenance,
                         "translation_type": "machine",
+                        "passage_role": "translation",
                     }
                 },
                 "confidence": 1.0,
@@ -87,7 +88,10 @@ async def audit(conn: asyncpg.Connection) -> list[dict[str, Any]]:
                 "issue": "english_passage_missing_provenance",
                 "current": None,
                 "suggested_fix": {
-                    "set_metadata": {"needs_translation_provenance": True}
+                    "set_metadata": {
+                        "needs_translation_provenance": True,
+                        "passage_role": "translation",
+                    }
                 },
                 "confidence": 1.0,
                 "auto_apply": True,

@@ -77,12 +77,16 @@ CREATE TABLE IF NOT EXISTS passages (
     line_end TEXT,
     sequence_number BIGINT NOT NULL CHECK (sequence_number >= 0),
     text_content TEXT NOT NULL,
+    passage_role TEXT NOT NULL DEFAULT 'original'
+        CHECK (passage_role IN ('original', 'translation', 'paraphrase')),
+    source_passage_id UUID REFERENCES passages(passage_id),
     char_length INTEGER CHECK (char_length IS NULL OR char_length >= 0),
     word_count INTEGER CHECK (word_count IS NULL OR word_count >= 0),
     previous_passage_id UUID REFERENCES passages(passage_id),
     next_passage_id UUID REFERENCES passages(passage_id),
     notes TEXT,
     created_at TIMESTAMPTZ DEFAULT now(),
+    source_metadata JSONB DEFAULT '{}'::jsonb,
     citation_hierarchy JSONB,  -- Structured citation path
     morphology JSONB,  -- Lemmatization data if available
     search_vector TSVECTOR GENERATED ALWAYS AS (
@@ -95,6 +99,8 @@ CREATE INDEX IF NOT EXISTS idx_passages_work_id ON passages(work_id);
 CREATE INDEX IF NOT EXISTS idx_passages_canonical_ref ON passages(canonical_ref);
 CREATE INDEX IF NOT EXISTS idx_passages_cts_urn ON passages(cts_urn);
 CREATE INDEX IF NOT EXISTS idx_passages_sequence ON passages(work_id, sequence_number);
+CREATE INDEX IF NOT EXISTS idx_passages_passage_role ON passages(passage_role);
+CREATE INDEX IF NOT EXISTS idx_passages_source_passage_id ON passages(source_passage_id);
 CREATE INDEX IF NOT EXISTS idx_passages_book ON passages(book);
 CREATE INDEX IF NOT EXISTS idx_passages_chapter ON passages(chapter);
 CREATE INDEX IF NOT EXISTS idx_passages_search_vector_gin ON passages USING GIN (search_vector);
@@ -144,6 +150,8 @@ SELECT
     p.work_id,
     p.canonical_ref,
     p.text_content,
+    p.passage_role,
+    p.source_passage_id,
     p.sequence_number,
     p.char_length,
     p.word_count,
@@ -259,6 +267,27 @@ CREATE INDEX IF NOT EXISTS idx_kg_edges_target ON kg_edges(target_id);
 CREATE INDEX IF NOT EXISTS idx_kg_edges_rest_source ON kg_edges(source);
 CREATE INDEX IF NOT EXISTS idx_kg_edges_rest_target ON kg_edges(target);
 CREATE INDEX IF NOT EXISTS idx_kg_edges_relation ON kg_edges(relation);
+
+-- Textual Variants: Apparatus criticus records linked to passage nodes
+CREATE TABLE IF NOT EXISTS textual_variants (
+    variant_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    passage_id UUID NOT NULL REFERENCES passages(passage_id) ON DELETE CASCADE,
+    kg_node_id TEXT REFERENCES kg_nodes(node_id) ON DELETE SET NULL,
+    lemma TEXT NOT NULL,
+    lection_principale TEXT NOT NULL,
+    lections_alternatives JSONB NOT NULL DEFAULT '[]'::jsonb,
+    source_critique TEXT,
+    confidence DOUBLE PRECISION CHECK (
+        confidence IS NULL OR (confidence >= 0.0 AND confidence <= 1.0)
+    ),
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_textual_variants_passage_id ON textual_variants(passage_id);
+CREATE INDEX IF NOT EXISTS idx_textual_variants_kg_node_id ON textual_variants(kg_node_id);
+CREATE INDEX IF NOT EXISTS idx_textual_variants_alternatives ON textual_variants USING GIN (lections_alternatives);
 
 -- ============================================
 -- Conversations

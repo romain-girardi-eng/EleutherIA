@@ -237,6 +237,7 @@ def create_kg_nodes(
             "canonical_ref": canonical_ref,
             "work_canonical_id": canonical_id,
             "db_passage_id": str(passage_id),
+            "passage_role": "original",
             "auto_generated": True,
         }
         if school:

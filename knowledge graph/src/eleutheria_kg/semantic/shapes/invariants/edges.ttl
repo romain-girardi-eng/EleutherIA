@@ -11,6 +11,22 @@
 
 # --- Edge type constraints (source/target class) ---
 
+kg:Shape_agreesWith_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:agreesWith ;
+    sh:property kg:Shape_agreesWith_RangeProp .
+
+kg:Shape_agreesWith_RangeProp a sh:PropertyShape ;
+    sh:path kg:agreesWith ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Person ] [ sh:class kg:Publication ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `agrees_with` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_agreesWith_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:agreesWith ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Person ] [ sh:class kg:Publication ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `agrees_with` violates source/target type constraints from edge_types.json" .
+
 kg:Shape_arguesAgainst_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:arguesAgainst ;
     sh:property kg:Shape_arguesAgainst_RangeProp .
@@ -42,6 +58,38 @@ kg:Shape_arguesFor_Domain a sh:NodeShape ;
     sh:or ( [ sh:class kg:Person ] [ sh:class kg:Argument ] [ sh:class kg:Work ] ) ;
     sh:severity sh:Violation ;
     sh:message "Edge `argues_for` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_attestedBy_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:attestedBy ;
+    sh:property kg:Shape_attestedBy_RangeProp .
+
+kg:Shape_attestedBy_RangeProp a sh:PropertyShape ;
+    sh:path kg:attestedBy ;
+    sh:class kg:Passage ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `attested_by` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_attestedBy_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:attestedBy ;
+    sh:or ( [ sh:class kg:Passage ] [ sh:class kg:Quote ] [ sh:class kg:Argument ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `attested_by` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_attests_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:attests ;
+    sh:property kg:Shape_attests_RangeProp .
+
+kg:Shape_attests_RangeProp a sh:PropertyShape ;
+    sh:path kg:attests ;
+    sh:or ( [ sh:class kg:Passage ] [ sh:class kg:Quote ] [ sh:class kg:Argument ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `attests` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_attests_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:attests ;
+    sh:class kg:Passage ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `attests` violates source/target type constraints from edge_types.json" .
 
 kg:Shape_authoredBy_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:authoredBy ;
@@ -122,6 +170,22 @@ kg:Shape_cites_Domain a sh:NodeShape ;
     sh:or ( [ sh:class kg:Work ] [ sh:class kg:Passage ] ) ;
     sh:severity sh:Violation ;
     sh:message "Edge `cites` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_citesPrimarySource_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:citesPrimarySource ;
+    sh:property kg:Shape_citesPrimarySource_RangeProp .
+
+kg:Shape_citesPrimarySource_RangeProp a sh:PropertyShape ;
+    sh:path kg:citesPrimarySource ;
+    sh:or ( [ sh:class kg:Passage ] [ sh:class kg:Work ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `cites_primary_source` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_citesPrimarySource_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:citesPrimarySource ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Publication ] [ sh:class kg:Person ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `cites_primary_source` violates source/target type constraints from edge_types.json" .
 
 kg:Shape_contains_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:contains ;
@@ -299,6 +363,22 @@ kg:Shape_discusses_Domain a sh:NodeShape ;
     sh:severity sh:Violation ;
     sh:message "Edge `discusses` violates source/target type constraints from edge_types.json" .
 
+kg:Shape_editedBy_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:editedBy ;
+    sh:property kg:Shape_editedBy_RangeProp .
+
+kg:Shape_editedBy_RangeProp a sh:PropertyShape ;
+    sh:path kg:editedBy ;
+    sh:class kg:Person ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `edited_by` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_editedBy_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:editedBy ;
+    sh:or ( [ sh:class kg:Publication ] [ sh:class kg:Work ] [ sh:class kg:SourceCollection ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `edited_by` violates source/target type constraints from edge_types.json" .
+
 kg:Shape_employs_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:employs ;
     sh:property kg:Shape_employs_RangeProp .
@@ -330,6 +410,22 @@ kg:Shape_endorses_Domain a sh:NodeShape ;
     sh:or ( [ sh:class kg:Person ] [ sh:class kg:School ] ) ;
     sh:severity sh:Violation ;
     sh:message "Edge `endorses` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_engagesWith_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:engagesWith ;
+    sh:property kg:Shape_engagesWith_RangeProp .
+
+kg:Shape_engagesWith_RangeProp a sh:PropertyShape ;
+    sh:path kg:engagesWith ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Person ] [ sh:class kg:Publication ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `engages_with` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_engagesWith_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:engagesWith ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Person ] [ sh:class kg:Publication ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `engages_with` violates source/target type constraints from edge_types.json" .
 
 kg:Shape_evidencedBy_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:evidencedBy ;
@@ -491,6 +587,22 @@ kg:Shape_hasTranslation_Domain a sh:NodeShape ;
     sh:severity sh:Violation ;
     sh:message "Edge `has_translation` violates source/target type constraints from edge_types.json" .
 
+kg:Shape_hasVariant_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:hasVariant ;
+    sh:property kg:Shape_hasVariant_RangeProp .
+
+kg:Shape_hasVariant_RangeProp a sh:PropertyShape ;
+    sh:path kg:hasVariant ;
+    sh:class kg:TextualVariant ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `has_variant` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_hasVariant_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:hasVariant ;
+    sh:or ( [ sh:class kg:Passage ] [ sh:class kg:Quote ] [ sh:class kg:TextFragment ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `has_variant` violates source/target type constraints from edge_types.json" .
+
 kg:Shape_holdsPosition_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:holdsPosition ;
     sh:property kg:Shape_holdsPosition_RangeProp .
@@ -602,6 +714,22 @@ kg:Shape_memberOf_Domain a sh:NodeShape ;
     sh:or ( [ sh:class kg:Concept ] [ sh:class kg:Person ] [ sh:class kg:Work ] ) ;
     sh:severity sh:Violation ;
     sh:message "Edge `member_of` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_opposes_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:opposes ;
+    sh:property kg:Shape_opposes_RangeProp .
+
+kg:Shape_opposes_RangeProp a sh:PropertyShape ;
+    sh:path kg:opposes ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Person ] [ sh:class kg:Publication ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `opposes` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_opposes_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:opposes ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Person ] [ sh:class kg:Publication ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `opposes` violates source/target type constraints from edge_types.json" .
 
 kg:Shape_parallelTo_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:parallelTo ;
@@ -715,6 +843,70 @@ kg:Shape_presupposes_Domain a sh:NodeShape ;
     sh:severity sh:Violation ;
     sh:message "Edge `presupposes` violates source/target type constraints from edge_types.json" .
 
+kg:Shape_published_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:published ;
+    sh:property kg:Shape_published_RangeProp .
+
+kg:Shape_published_RangeProp a sh:PropertyShape ;
+    sh:path kg:published ;
+    sh:class kg:Publication ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `published` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_published_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:published ;
+    sh:class kg:Person ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `published` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_reconstructedBy_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:reconstructedBy ;
+    sh:property kg:Shape_reconstructedBy_RangeProp .
+
+kg:Shape_reconstructedBy_RangeProp a sh:PropertyShape ;
+    sh:path kg:reconstructedBy ;
+    sh:class kg:ArgumentReconstruction ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `reconstructed_by` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_reconstructedBy_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:reconstructedBy ;
+    sh:class kg:Argument ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `reconstructed_by` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_reconstructedFrom_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:reconstructedFrom ;
+    sh:property kg:Shape_reconstructedFrom_RangeProp .
+
+kg:Shape_reconstructedFrom_RangeProp a sh:PropertyShape ;
+    sh:path kg:reconstructedFrom ;
+    sh:or ( [ sh:class kg:Passage ] [ sh:class kg:Publication ] [ sh:class kg:Work ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `reconstructed_from` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_reconstructedFrom_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:reconstructedFrom ;
+    sh:class kg:ArgumentReconstruction ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `reconstructed_from` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_reconstructs_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:reconstructs ;
+    sh:property kg:Shape_reconstructs_RangeProp .
+
+kg:Shape_reconstructs_RangeProp a sh:PropertyShape ;
+    sh:path kg:reconstructs ;
+    sh:class kg:Argument ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `reconstructs` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_reconstructs_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:reconstructs ;
+    sh:class kg:ArgumentReconstruction ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `reconstructs` violates source/target type constraints from edge_types.json" .
+
 kg:Shape_refutes_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:refutes ;
     sh:property kg:Shape_refutes_RangeProp .
@@ -794,6 +986,22 @@ kg:Shape_sourceFor_Domain a sh:NodeShape ;
     sh:or ( [ sh:class kg:Passage ] [ sh:class kg:Person ] [ sh:class kg:Publication ] [ sh:class kg:Work ] ) ;
     sh:severity sh:Violation ;
     sh:message "Edge `source_for` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_sourceForReconstruction_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:sourceForReconstruction ;
+    sh:property kg:Shape_sourceForReconstruction_RangeProp .
+
+kg:Shape_sourceForReconstruction_RangeProp a sh:PropertyShape ;
+    sh:path kg:sourceForReconstruction ;
+    sh:class kg:ArgumentReconstruction ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `source_for_reconstruction` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_sourceForReconstruction_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:sourceForReconstruction ;
+    sh:or ( [ sh:class kg:Passage ] [ sh:class kg:Publication ] [ sh:class kg:Work ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `source_for_reconstruction` violates source/target type constraints from edge_types.json" .
 
 kg:Shape_specializesIn_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:specializesIn ;
@@ -891,6 +1099,38 @@ kg:Shape_translationOf_Domain a sh:NodeShape ;
     sh:severity sh:Violation ;
     sh:message "Edge `translation_of` violates source/target type constraints from edge_types.json" .
 
+kg:Shape_usesMethodologyOf_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:usesMethodologyOf ;
+    sh:property kg:Shape_usesMethodologyOf_RangeProp .
+
+kg:Shape_usesMethodologyOf_RangeProp a sh:PropertyShape ;
+    sh:path kg:usesMethodologyOf ;
+    sh:or ( [ sh:class kg:Person ] [ sh:class kg:Publication ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `uses_methodology_of` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_usesMethodologyOf_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:usesMethodologyOf ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Person ] [ sh:class kg:Publication ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `uses_methodology_of` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_variantOf_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:variantOf ;
+    sh:property kg:Shape_variantOf_RangeProp .
+
+kg:Shape_variantOf_RangeProp a sh:PropertyShape ;
+    sh:path kg:variantOf ;
+    sh:or ( [ sh:class kg:Passage ] [ sh:class kg:Quote ] [ sh:class kg:TextFragment ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `variant_of` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_variantOf_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:variantOf ;
+    sh:class kg:TextualVariant ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `variant_of` violates source/target type constraints from edge_types.json" .
+
 kg:Shape_wrote_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:wrote ;
     sh:property kg:Shape_wrote_RangeProp .
@@ -906,3 +1146,19 @@ kg:Shape_wrote_Domain a sh:NodeShape ;
     sh:class kg:Person ;
     sh:severity sh:Violation ;
     sh:message "Edge `wrote` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_wroteAbout_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:wroteAbout ;
+    sh:property kg:Shape_wroteAbout_RangeProp .
+
+kg:Shape_wroteAbout_RangeProp a sh:PropertyShape ;
+    sh:path kg:wroteAbout ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Concept ] [ sh:class kg:Debate ] [ sh:class kg:Person ] [ sh:class kg:School ] [ sh:class kg:Work ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `wrote_about` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_wroteAbout_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:wroteAbout ;
+    sh:or ( [ sh:class kg:Person ] [ sh:class kg:Publication ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `wrote_about` violates source/target type constraints from edge_types.json" .

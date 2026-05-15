@@ -69,6 +69,50 @@ def canonical_dumps(obj: Any) -> str:
     return json.dumps(obj, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
 
 
+def normalize_mapping(value: Any) -> dict[str, Any]:
+    if isinstance(value, dict):
+        return value
+    if isinstance(value, str) and value.strip():
+        try:
+            parsed = json.loads(value)
+        except json.JSONDecodeError:
+            return {}
+        return parsed if isinstance(parsed, dict) else {}
+    return {}
+
+
+def normalize_node(row: dict[str, Any]) -> dict[str, Any]:
+    node_id = str(row.get("id") or row.get("node_id") or "")
+    metadata = normalize_mapping(row.get("metadata"))
+    return {
+        **row,
+        "id": node_id,
+        "node_id": node_id,
+        "metadata": metadata,
+    }
+
+
+def normalize_edge(row: dict[str, Any]) -> dict[str, Any]:
+    source = str(row.get("source") or row.get("source_id") or "")
+    target = str(row.get("target") or row.get("target_id") or "")
+    metadata = normalize_mapping(row.get("metadata"))
+    weight = row.get("weight", metadata.get("weight", 1.0))
+    try:
+        normalized_weight = float(weight)
+    except (TypeError, ValueError):
+        normalized_weight = 1.0
+    return {
+        **row,
+        "source": source,
+        "source_id": source,
+        "target": target,
+        "target_id": target,
+        "relation": row.get("relation") or row.get("edge_type") or "",
+        "weight": normalized_weight,
+        "metadata": metadata,
+    }
+
+
 def write_jsonl(path: Path, rows: list[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
@@ -89,7 +133,7 @@ def write_json(path: Path, obj: Any) -> None:
 
 
 def node_sort_key(n: dict) -> tuple[str, str]:
-    return (str(n.get("type") or ""), str(n.get("id") or ""))
+    return (str(n.get("type") or ""), str(n.get("id") or n.get("node_id") or ""))
 
 
 def edge_sort_key(e: dict) -> tuple[str, str, str]:
@@ -144,11 +188,11 @@ def main() -> int:
 
     try:
         print("[snapshot] fetching nodes...", file=sys.stderr)
-        nodes = fetch_nodes(base)
+        nodes = [normalize_node(row) for row in fetch_nodes(base)]
         print(f"[snapshot]   {len(nodes)} nodes", file=sys.stderr)
 
         print("[snapshot] fetching edges (paginated)...", file=sys.stderr)
-        edges = fetch_edges(base)
+        edges = [normalize_edge(row) for row in fetch_edges(base)]
         print(f"[snapshot]   {len(edges)} edges", file=sys.stderr)
     except urllib.error.HTTPError as e:
         print(f"[snapshot] ERROR HTTP {e.code}: {e.reason}", file=sys.stderr)

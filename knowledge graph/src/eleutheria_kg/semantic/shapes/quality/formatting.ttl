@@ -31,6 +31,16 @@ kg:Shape_ArgumentFramework_PeriodProp a sh:PropertyShape ;
     sh:severity sh:Warning ;
     sh:message "Node period for `argument_framework` must be one of the canonical periods" .
 
+kg:Shape_ArgumentReconstruction_Period a sh:NodeShape ;
+    sh:targetClass kg:ArgumentReconstruction ;
+    sh:property kg:Shape_ArgumentReconstruction_PeriodProp .
+
+kg:Shape_ArgumentReconstruction_PeriodProp a sh:PropertyShape ;
+    sh:path kg:period ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node period for `argument_reconstruction` must be one of the canonical periods" .
+
 kg:Shape_Concept_Period a sh:NodeShape ;
     sh:targetClass kg:Concept ;
     sh:property kg:Shape_Concept_PeriodProp .
@@ -211,6 +221,16 @@ kg:Shape_TextFragment_PeriodProp a sh:PropertyShape ;
     sh:severity sh:Warning ;
     sh:message "Node period for `text_fragment` must be one of the canonical periods" .
 
+kg:Shape_TextualVariant_Period a sh:NodeShape ;
+    sh:targetClass kg:TextualVariant ;
+    sh:property kg:Shape_TextualVariant_PeriodProp .
+
+kg:Shape_TextualVariant_PeriodProp a sh:PropertyShape ;
+    sh:path kg:period ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node period for `textual_variant` must be one of the canonical periods" .
+
 kg:Shape_Work_Period a sh:NodeShape ;
     sh:targetClass kg:Work ;
     sh:property kg:Shape_Work_PeriodProp .
@@ -250,6 +270,20 @@ kg:Shape_ArgumentFramework_DescriptionHygieneProp a sh:PropertyShape ;
         sh:not [ sh:pattern "(^|\\n)\\s*#+\\s" ; sh:flags "s" ] ;
         sh:severity sh:Warning ;
         sh:message "Description on `argument_framework` contains markdown formatting (bold, list bullets, headings, or [text](url))" .
+
+kg:Shape_ArgumentReconstruction_DescriptionHygiene a sh:NodeShape ;
+    sh:targetClass kg:ArgumentReconstruction ;
+    sh:property kg:Shape_ArgumentReconstruction_DescriptionHygieneProp .
+
+kg:Shape_ArgumentReconstruction_DescriptionHygieneProp a sh:PropertyShape ;
+    sh:path dcterms:description ;
+        sh:not [ sh:pattern "\\*\\*" ; sh:flags "s" ] ;
+        sh:not [ sh:pattern "__" ; sh:flags "s" ] ;
+        sh:not [ sh:pattern "\\[[^\\]]+\\]\\([^)]+\\)" ; sh:flags "s" ] ;
+        sh:not [ sh:pattern "(^|\\n)\\s*[-*]\\s" ; sh:flags "s" ] ;
+        sh:not [ sh:pattern "(^|\\n)\\s*#+\\s" ; sh:flags "s" ] ;
+        sh:severity sh:Warning ;
+        sh:message "Description on `argument_reconstruction` contains markdown formatting (bold, list bullets, headings, or [text](url))" .
 
 kg:Shape_Concept_DescriptionHygiene a sh:NodeShape ;
     sh:targetClass kg:Concept ;
@@ -502,6 +536,20 @@ kg:Shape_TextFragment_DescriptionHygieneProp a sh:PropertyShape ;
         sh:not [ sh:pattern "(^|\\n)\\s*#+\\s" ; sh:flags "s" ] ;
         sh:severity sh:Warning ;
         sh:message "Description on `text_fragment` contains markdown formatting (bold, list bullets, headings, or [text](url))" .
+
+kg:Shape_TextualVariant_DescriptionHygiene a sh:NodeShape ;
+    sh:targetClass kg:TextualVariant ;
+    sh:property kg:Shape_TextualVariant_DescriptionHygieneProp .
+
+kg:Shape_TextualVariant_DescriptionHygieneProp a sh:PropertyShape ;
+    sh:path dcterms:description ;
+        sh:not [ sh:pattern "\\*\\*" ; sh:flags "s" ] ;
+        sh:not [ sh:pattern "__" ; sh:flags "s" ] ;
+        sh:not [ sh:pattern "\\[[^\\]]+\\]\\([^)]+\\)" ; sh:flags "s" ] ;
+        sh:not [ sh:pattern "(^|\\n)\\s*[-*]\\s" ; sh:flags "s" ] ;
+        sh:not [ sh:pattern "(^|\\n)\\s*#+\\s" ; sh:flags "s" ] ;
+        sh:severity sh:Warning ;
+        sh:message "Description on `textual_variant` contains markdown formatting (bold, list bullets, headings, or [text](url))" .
 
 kg:Shape_Work_DescriptionHygiene a sh:NodeShape ;
     sh:targetClass kg:Work ;

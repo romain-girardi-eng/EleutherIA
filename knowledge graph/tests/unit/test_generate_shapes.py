@@ -201,6 +201,22 @@ def test_generate_formatting_ttl_contains_period_and_hygiene(
     assert (passage_period, RDF.type, SH.NodeShape) not in g
 
 
+def test_generate_philology_ttl_parses_and_contains_expected_shapes() -> None:
+    ttl = gs.generate_philology_ttl()
+    g = Graph()
+    g.parse(data=ttl, format="turtle")
+
+    expected = {
+        URIRef("https://free-will.app/ontology/Shape_Passage_PassageRole"),
+        URIRef("https://free-will.app/ontology/Shape_TextualVariant_RequiredFields"),
+        URIRef("https://free-will.app/ontology/Shape_ArgumentReconstruction_Fidelity"),
+        URIRef("https://free-will.app/ontology/Shape_Publication_BibtexMinimum"),
+    }
+    actual = {s for s, _, _ in g.triples((None, RDF.type, SH.NodeShape))}
+    assert expected <= actual
+    assert SH.Warning in set(g.objects(None, SH.severity))
+
+
 # --- end-to-end main() ------------------------------------------------------
 
 
@@ -223,6 +239,7 @@ def test_main_writes_invariants_and_quality(
     assert (quality_dir / "id_prefix.ttl").is_file()
     assert (quality_dir / "claims.ttl").is_file()
     assert (quality_dir / "formatting.ttl").is_file()
+    assert (quality_dir / "philology.ttl").is_file()
 
     # The output should be parseable Turtle and contain at least one shape.
     edges_g = Graph()

@@ -30,8 +30,6 @@ import sys
 from pathlib import Path
 from typing import Final
 
-from eleutheria_kg.semantic.vocab import _camel_case, _pascal_case
-
 # Hard-coded re-statements of the audit's constants. We intentionally do
 # not import from ``scripts.audit_kg_quality`` to keep the semantic
 # package import-graph clean (the audit script depends on asyncpg).
@@ -77,6 +75,8 @@ CANONICAL_PERIODS: Final[frozenset[str]] = frozenset(
     }
 )
 
+PASSAGE_ROLES: Final[tuple[str, ...]] = ("original", "translation", "paraphrase")
+
 # Suspicious node-id prefixes whose first segment must match the node type.
 PREFIX_TO_TYPE_PREFIX: Final[dict[str, str]] = {
     "argument": "argument",
@@ -91,6 +91,7 @@ PREFIX_TO_TYPE_PREFIX: Final[dict[str, str]] = {
     "school": "school",
     "synthesis": "synthesis",
     "term": "term",
+    "textual_variant": "textual_variant",
     "work": "work",
 }
 
@@ -112,6 +113,15 @@ HEADER = """\
 @prefix kg:    <https://free-will.app/ontology/> .
 @prefix res:   <https://free-will.app/kg/> .
 """
+
+
+def _camel_case(snake: str) -> str:
+    parts = snake.split("_")
+    return parts[0] + "".join(p.title() for p in parts[1:])
+
+
+def _pascal_case(snake: str) -> str:
+    return "".join(p.title() for p in snake.split("_"))
 
 
 def _load_ontology() -> tuple[dict, dict]:
@@ -378,6 +388,86 @@ kg:Shape_{pascal}_DescriptionHygieneProp a sh:PropertyShape ;
     return "\n".join(chunks)
 
 
+# ---------- quality/philology.ttl ------------------------------------------
+
+
+def generate_philology_ttl() -> str:
+    chunks: list[str] = [HEADER]
+    chunks.append("# --- Philological publication metadata (warning severity) ---\n")
+
+    role_options = " ".join(_ttl_string(role) for role in PASSAGE_ROLES)
+    chunks.append(
+        f"""kg:Shape_Passage_PassageRole a sh:NodeShape ;
+    sh:targetClass kg:Passage ;
+    sh:property kg:Shape_Passage_PassageRoleProp .
+
+kg:Shape_Passage_PassageRoleProp a sh:PropertyShape ;
+    sh:path kg:passageRole ;
+    sh:minCount 1 ;
+    sh:in ( {role_options} ) ;
+    sh:severity sh:Warning ;
+    sh:message "Passage nodes should declare metadata.passage_role as original, translation, or paraphrase" ."""
+    )
+    chunks.append("")
+
+    chunks.append(
+        """kg:Shape_TextualVariant_RequiredFields a sh:NodeShape ;
+    sh:targetClass kg:TextualVariant ;
+    sh:property kg:Shape_TextualVariant_LemmaProp ;
+    sh:property kg:Shape_TextualVariant_PrincipalReadingProp ;
+    sh:property kg:Shape_TextualVariant_AlternativesProp .
+
+kg:Shape_TextualVariant_LemmaProp a sh:PropertyShape ;
+    sh:path kg:lemma ;
+    sh:minCount 1 ;
+    sh:severity sh:Warning ;
+    sh:message "Textual-variant nodes should carry metadata.lemma" .
+
+kg:Shape_TextualVariant_PrincipalReadingProp a sh:PropertyShape ;
+    sh:path kg:lectionPrincipale ;
+    sh:minCount 1 ;
+    sh:severity sh:Warning ;
+    sh:message "Textual-variant nodes should carry metadata.lection_principale" .
+
+kg:Shape_TextualVariant_AlternativesProp a sh:PropertyShape ;
+    sh:path kg:lectionsAlternatives ;
+    sh:minCount 1 ;
+    sh:severity sh:Warning ;
+    sh:message "Textual-variant nodes should carry metadata.lections_alternatives" ."""
+    )
+    chunks.append("")
+
+    chunks.append(
+        """kg:Shape_ArgumentReconstruction_Fidelity a sh:NodeShape ;
+    sh:targetClass kg:ArgumentReconstruction ;
+    sh:property kg:Shape_ArgumentReconstruction_FidelityProp .
+
+kg:Shape_ArgumentReconstruction_FidelityProp a sh:PropertyShape ;
+    sh:path kg:fidelityScore ;
+    sh:minCount 1 ;
+    sh:minInclusive 0 ;
+    sh:maxInclusive 1 ;
+    sh:severity sh:Warning ;
+    sh:message "Argument-reconstruction nodes should carry metadata.fidelity_score in [0, 1]" ."""
+    )
+    chunks.append("")
+
+    chunks.append(
+        """kg:Shape_Publication_BibtexMinimum a sh:NodeShape ;
+    sh:targetClass kg:Publication ;
+    sh:property kg:Shape_Publication_BibtexKeyProp .
+
+kg:Shape_Publication_BibtexKeyProp a sh:PropertyShape ;
+    sh:path kg:bibtexKey ;
+    sh:minCount 1 ;
+    sh:severity sh:Warning ;
+    sh:message "Publication nodes should carry metadata.bibtex_key or metadata.zotero_key for stable BibTeX export" ."""
+    )
+    chunks.append("")
+
+    return "\n".join(chunks)
+
+
 # ---------- entrypoint ------------------------------------------------------
 
 
@@ -407,6 +497,7 @@ def main() -> int:
     written.append(
         _write(QUALITY_DIR / "formatting.ttl", generate_formatting_ttl(nodes_ontology))
     )
+    written.append(_write(QUALITY_DIR / "philology.ttl", generate_philology_ttl()))
 
     # Remove the legacy flat-file shapes if they linger, so the loader
     # never picks up a stale union by accident.

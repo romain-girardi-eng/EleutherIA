@@ -24,7 +24,7 @@ kg:Shape_Argument_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "argument_" ) )
-              FILTER ( STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "work_" ) )
+              FILTER ( STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "textual_variant_" ) || STRSTARTS( ?localName, "work_" ) )
             }
         """ ;
     ] .
@@ -42,7 +42,7 @@ kg:Shape_Concept_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "concept_" ) )
-              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "work_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "textual_variant_" ) || STRSTARTS( ?localName, "work_" ) )
             }
         """ ;
     ] .
@@ -60,7 +60,7 @@ kg:Shape_Controversy_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "controversy_" ) )
-              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "work_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "textual_variant_" ) || STRSTARTS( ?localName, "work_" ) )
             }
         """ ;
     ] .
@@ -78,7 +78,7 @@ kg:Shape_Debate_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "debate_" ) )
-              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "work_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "textual_variant_" ) || STRSTARTS( ?localName, "work_" ) )
             }
         """ ;
     ] .
@@ -96,7 +96,7 @@ kg:Shape_Event_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "event_" ) )
-              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "work_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "textual_variant_" ) || STRSTARTS( ?localName, "work_" ) )
             }
         """ ;
     ] .
@@ -114,7 +114,7 @@ kg:Shape_Group_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "group_" ) )
-              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "work_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "textual_variant_" ) || STRSTARTS( ?localName, "work_" ) )
             }
         """ ;
     ] .
@@ -132,7 +132,7 @@ kg:Shape_Person_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "person_" ) )
-              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "work_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "textual_variant_" ) || STRSTARTS( ?localName, "work_" ) )
             }
         """ ;
     ] .
@@ -150,7 +150,7 @@ kg:Shape_Publication_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "publication_" ) )
-              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "work_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "textual_variant_" ) || STRSTARTS( ?localName, "work_" ) )
             }
         """ ;
     ] .
@@ -168,7 +168,7 @@ kg:Shape_Quote_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "quote_" ) )
-              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "work_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "textual_variant_" ) || STRSTARTS( ?localName, "work_" ) )
             }
         """ ;
     ] .
@@ -186,7 +186,7 @@ kg:Shape_School_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "school_" ) )
-              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "work_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "textual_variant_" ) || STRSTARTS( ?localName, "work_" ) )
             }
         """ ;
     ] .
@@ -204,7 +204,7 @@ kg:Shape_Synthesis_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "synthesis_" ) )
-              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "work_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "textual_variant_" ) || STRSTARTS( ?localName, "work_" ) )
             }
         """ ;
     ] .
@@ -222,7 +222,25 @@ kg:Shape_Term_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "term_" ) )
-              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "work_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "textual_variant_" ) || STRSTARTS( ?localName, "work_" ) )
+            }
+        """ ;
+    ] .
+
+kg:Shape_TextualVariant_IdPrefix a sh:NodeShape ;
+    sh:targetClass kg:TextualVariant ;
+    sh:severity sh:Warning ;
+    sh:sparql [
+        sh:message "Node ID for type `textual_variant` uses a different canonical type prefix (expected `textual_variant_` or a project convention)" ;
+        sh:select """
+            PREFIX kg: <https://free-will.app/ontology/>
+            PREFIX res: <https://free-will.app/kg/>
+            SELECT $this WHERE {
+              $this a kg:TextualVariant .
+              BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
+              FILTER ( STRSTARTS( STR($this), STR(res:) ) )
+              FILTER ( ! STRSTARTS( ?localName, "textual_variant_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "work_" ) )
             }
         """ ;
     ] .
@@ -240,7 +258,7 @@ kg:Shape_Work_IdPrefix a sh:NodeShape ;
               BIND( STRAFTER(STR($this), STR(res:)) AS ?localName )
               FILTER ( STRSTARTS( STR($this), STR(res:) ) )
               FILTER ( ! STRSTARTS( ?localName, "work_" ) )
-              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) )
+              FILTER ( STRSTARTS( ?localName, "argument_" ) || STRSTARTS( ?localName, "concept_" ) || STRSTARTS( ?localName, "controversy_" ) || STRSTARTS( ?localName, "debate_" ) || STRSTARTS( ?localName, "event_" ) || STRSTARTS( ?localName, "group_" ) || STRSTARTS( ?localName, "person_" ) || STRSTARTS( ?localName, "publication_" ) || STRSTARTS( ?localName, "quote_" ) || STRSTARTS( ?localName, "school_" ) || STRSTARTS( ?localName, "synthesis_" ) || STRSTARTS( ?localName, "term_" ) || STRSTARTS( ?localName, "textual_variant_" ) )
             }
         """ ;
     ] .

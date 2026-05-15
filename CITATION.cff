@@ -33,13 +33,16 @@ keywords:
   - Latin
   - moral responsibility
 license: CC-BY-4.0
-version: "5.0.1"
-date-released: "2026-03-13"
+version: "5.1.0"
+date-released: "2026-06-30"
 doi: "10.5281/zenodo.17379489"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.17379489"
     description: "Zenodo concept DOI"
+  - type: url
+    value: "https://github.com/romain-girardi-eng/EleutherIA/releases"
+    description: "Release-specific Zenodo version DOI and Git commit hash are recorded per frozen release."
 references:
   - type: dataset
     title: "EleutherIA Zenodo archive"

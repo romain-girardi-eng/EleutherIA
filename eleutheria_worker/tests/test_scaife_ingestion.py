@@ -70,6 +70,8 @@ async def stub_scaife_fetch(params: ScaifeFetchActivityInput) -> dict[str, Any]:
         "ref_prefix": params.ref_prefix,
         "level": params.level,
         "errors": 0,
+        "source_name": params.source_policy if params.source_policy != "auto" else "scaife_cts",
+        "source_url": "https://example.test/source",
         "sections": [
             {
                 "section_n": 1,
@@ -80,6 +82,7 @@ async def stub_scaife_fetch(params: ScaifeFetchActivityInput) -> dict[str, Any]:
                 "char_length": 20,
                 "char_ratio": 1.0,
                 "language": params.language,
+                "source_name": "scaife_cts",
             }
         ],
     }
@@ -172,6 +175,7 @@ async def test_workflow_happy_path() -> None:
     assert result.passage_count == COUNTERS.inserted_passages
     assert result.kg_edges_added == 1
     assert result.skipped_existing is False
+    assert result.source_name == "scaife"
 
 
 @pytest.mark.asyncio
@@ -205,6 +209,7 @@ async def test_workflow_skips_kg_link_when_existing() -> None:
     assert result.skipped_existing is True
     assert result.passage_count == 0
     assert result.kg_edges_added == 0
+    assert result.source_name == "scaife"
 
 
 @pytest.mark.asyncio
@@ -236,6 +241,52 @@ async def test_workflow_retries_failed_fetch() -> None:
     assert COUNTERS.parse_calls == 1
     assert COUNTERS.link_calls == 1
     assert result.passage_count == COUNTERS.inserted_passages
+
+
+@pytest.mark.asyncio
+async def test_workflow_passes_fallback_source_options() -> None:
+    _reset_counters()
+    captured: dict[str, Any] = {}
+
+    @activity.defn(name="scaife_fetch")
+    async def capturing_fetch(params: ScaifeFetchActivityInput) -> dict[str, Any]:
+        captured["source_policy"] = params.source_policy
+        captured["fallback_sources"] = params.fallback_sources
+        captured["source_options"] = params.source_options
+        return await stub_scaife_fetch(params)
+
+    async with await WorkflowEnvironment.start_time_skipping() as env:
+        task_queue = "eleutheria-test"
+        async with Worker(
+            env.client,
+            task_queue=task_queue,
+            workflows=[ScaifeIngestionWorkflow],
+            activities=[
+                capturing_fetch,
+                stub_scaife_parse_and_insert,
+                stub_scaife_link_to_kg,
+            ],
+        ):
+            result = await _run(
+                env.client,
+                task_queue,
+                ScaifeIngestionInput(
+                    cts_urn="urn:cts:latinLit:phi0474.phi049.perseus-lat1",
+                    title="De Fato",
+                    author="Cicero",
+                    language="lat",
+                    period="Roman Republican",
+                    work_node_id="work_de_fato_cicero_44bce_b9c4e5d2",
+                    source_policy="auto",
+                    fallback_sources=["phi"],
+                    source_options={"phi": {"author_num": 474, "work_num": 54}},
+                ),
+            )
+
+    assert captured["source_policy"] == "auto"
+    assert captured["fallback_sources"] == ["phi"]
+    assert captured["source_options"]["phi"]["work_num"] == 54
+    assert result.source_name == "scaife_cts"
 
 
 @pytest.mark.asyncio

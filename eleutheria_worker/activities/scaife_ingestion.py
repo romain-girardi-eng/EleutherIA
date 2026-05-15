@@ -48,11 +48,14 @@ def _do_fetch(params: ScaifeFetchActivityInput) -> dict[str, Any]:
         # large works (thousands of sections × 0.5s rate-limit each).
         activity.heartbeat({"fetched": idx, "total": total})
 
-    payload = scaife.fetch_work(
+    payload = scaife.fetch_work_with_fallbacks(
         work_urn=params.cts_urn,
         language=params.language,
         ref_prefix=params.ref_prefix,
         level=params.level,
+        source_policy=params.source_policy,
+        fallback_sources=params.fallback_sources,
+        source_options=params.source_options,
         progress_callback=progress,
     )
     return scaife.payload_to_dict(payload)
@@ -115,6 +118,8 @@ def _do_link_to_kg(
         period=params.period,
         work_node_id=params.work_node_id,
         author_node_id=params.author_node_id,
+        source=params.source,
+        source_url=params.source_url,
     )
 
     conn = psycopg2.connect(_get_db_url())

@@ -58,6 +58,9 @@ class ScaifeIngestionInput:
     work_node_id: str = ""
     author_node_id: str | None = None
     overwrite: bool = False
+    source_policy: str = "scaife"
+    fallback_sources: list[str] = field(default_factory=list)
+    source_options: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -66,6 +69,9 @@ class ScaifeFetchActivityInput:
     language: str
     ref_prefix: str
     level: int
+    source_policy: str = "scaife"
+    fallback_sources: list[str] = field(default_factory=list)
+    source_options: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -99,6 +105,8 @@ class ScaifeLinkToKGActivityInput:
     language: str
     period: str
     author_node_id: str | None
+    source: str | None = None
+    source_url: str | None = None
 
 
 @dataclass
@@ -118,6 +126,7 @@ class ScaifeIngestionResult:
     kg_edges_added: int
     skipped_existing: bool = False
     errors_during_fetch: int = 0
+    source_name: str = "scaife_cts"
 
 
 def _derive_canonical_id(cts_urn: str) -> str:
@@ -154,6 +163,9 @@ class ScaifeIngestionWorkflow:
             language=params.language,
             ref_prefix=params.ref_prefix,
             level=params.level,
+            source_policy=params.source_policy,
+            fallback_sources=params.fallback_sources,
+            source_options=params.source_options,
         )
         payload: dict[str, Any] = await workflow.execute_activity(
             SCAIFE_FETCH_ACTIVITY,
@@ -169,6 +181,7 @@ class ScaifeIngestionWorkflow:
         )
 
         errors_during_fetch = int(payload.get("errors", 0))
+        source_name = str(payload.get("source_name") or "scaife_cts")
 
         ingest_input = ScaifeParseAndInsertActivityInput(
             payload=payload,
@@ -210,6 +223,7 @@ class ScaifeIngestionWorkflow:
                 kg_edges_added=0,
                 skipped_existing=True,
                 errors_during_fetch=errors_during_fetch,
+                source_name=source_name,
             )
 
         link_input = ScaifeLinkToKGActivityInput(
@@ -221,6 +235,8 @@ class ScaifeIngestionWorkflow:
             language=params.language,
             period=params.period,
             author_node_id=params.author_node_id,
+            source=source_name,
+            source_url=payload.get("source_url"),
         )
         link: ScaifeLinkToKGActivityResult = await workflow.execute_activity(
             SCAIFE_LINK_TO_KG_ACTIVITY,
@@ -241,6 +257,7 @@ class ScaifeIngestionWorkflow:
             kg_edges_added=link.edges_added,
             skipped_existing=False,
             errors_during_fetch=errors_during_fetch,
+            source_name=source_name,
         )
 
 
