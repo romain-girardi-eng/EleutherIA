@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, Share2 } from 'lucide-react';
 import { cn } from '../../../lib/utils';
 import { doctoralApi } from '../../../services/doctoralApi';
+import { useToast } from '../../ui/Toast';
 
 type ExportFormat = 'markdown' | 'latex' | 'bibtex' | 'zotero' | 'ris' | 'docx';
 
@@ -36,7 +37,9 @@ interface Props {
 
 export function ExportToolbar({ traceId, shareUrl, className }: Props) {
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [copied, setCopied] = useState(false);
+  const [sharing, setSharing] = useState(false);
 
   const onCopyShare = useCallback(async () => {
     if (!shareUrl) return;
@@ -48,6 +51,20 @@ export function ExportToolbar({ traceId, shareUrl, className }: Props) {
       // ignore — clipboard unavailable
     }
   }, [shareUrl]);
+
+  const onCreateShare = useCallback(async () => {
+    if (sharing) return;
+    setSharing(true);
+    try {
+      const { share_url } = await doctoralApi.createShareLink(traceId);
+      await navigator.clipboard.writeText(share_url);
+      showToast(t('research.doctoral.export.shareLinkCopied', 'URL copiée'), 'success');
+    } catch {
+      showToast(t('research.doctoral.export.shareError', 'Erreur lors du partage'), 'error');
+    } finally {
+      setSharing(false);
+    }
+  }, [traceId, sharing, showToast, t]);
 
   return (
     <div
@@ -75,7 +92,7 @@ export function ExportToolbar({ traceId, shareUrl, className }: Props) {
           <span>{t(labelKey)}</span>
         </a>
       ))}
-      {shareUrl && (
+      {shareUrl ? (
         <button
           type="button"
           onClick={onCopyShare}
@@ -92,6 +109,18 @@ export function ExportToolbar({ traceId, shareUrl, className }: Props) {
               {t('research.doctoral.export.share')}
             </>
           )}
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={onCreateShare}
+          disabled={sharing}
+          className="inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-50 px-2 py-1 text-[11px] font-medium text-amber-800 hover:bg-amber-100 disabled:opacity-50"
+        >
+          <Share2 className="h-3 w-3" aria-hidden="true" />
+          {sharing
+            ? t('research.doctoral.export.shareCreating', '…')
+            : t('research.doctoral.export.shareCreate', 'Partager')}
         </button>
       )}
     </div>

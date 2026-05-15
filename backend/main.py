@@ -34,6 +34,8 @@ from backend.routes.lemma import router as lemma_router
 from backend.routes.opencode_proxy import router as opencode_router
 from backend.routes.passages import router as passages_router
 from backend.routes.search import router as search_router
+from backend.routes.share import public_router as share_public_router
+from backend.routes.share import router as share_router
 from backend.routes.works_extras import (
     citations_router,
     embeddings_router,
@@ -152,6 +154,8 @@ def create_app() -> FastAPI:
     app.include_router(audit_router, prefix="/api/graphrag")
     app.include_router(kg_extras_router, prefix="/api/kg")
     app.include_router(opencode_router, prefix="/api/opencode")
+    app.include_router(share_router, prefix="/api/graphrag")
+    app.include_router(share_public_router)
 
     # Migration compatibility routers (endpoints called by frontend)
     app.include_router(texts_router, prefix="/api/texts")

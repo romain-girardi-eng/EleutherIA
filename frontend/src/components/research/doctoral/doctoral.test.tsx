@@ -13,9 +13,14 @@ import { useBibliography } from '../../../hooks/useBibliography';
 import type { AgentEvent } from '../../../types/agent-events';
 import { doctoralApi } from '../../../services/doctoralApi';
 import { apiClient } from '../../../api/client';
+import { ToastProvider } from '../../../components/ui/Toast';
 
 const renderWithI18n = (ui: React.ReactElement) =>
-  render(<I18nextProvider i18n={i18n}>{ui}</I18nextProvider>);
+  render(
+    <ToastProvider>
+      <I18nextProvider i18n={i18n}>{ui}</I18nextProvider>
+    </ToastProvider>,
+  );
 
 // ---------- BibliographyPane ----------
 
@@ -116,14 +121,18 @@ describe('ExportToolbar', () => {
     expect(screen.getByText(/Word/i)).toBeInTheDocument();
   });
 
-  it('shows share button only when shareUrl provided', () => {
+  it('shows share button — create mode without shareUrl, copy mode with shareUrl', () => {
     const { rerender } = renderWithI18n(<ExportToolbar traceId="t1" />);
-    expect(screen.queryByText(/Share|Partager/i)).not.toBeInTheDocument();
+    // Without shareUrl: shows "Partager" create button
+    expect(screen.getByText(/Partager/i)).toBeInTheDocument();
     rerender(
-      <I18nextProvider i18n={i18n}>
-        <ExportToolbar traceId="t1" shareUrl="https://x.test/s" />
-      </I18nextProvider>,
+      <ToastProvider>
+        <I18nextProvider i18n={i18n}>
+          <ExportToolbar traceId="t1" shareUrl="https://x.test/s" />
+        </I18nextProvider>
+      </ToastProvider>,
     );
+    // With shareUrl: still shows a Share/Partager button (copy mode)
     expect(screen.getByText(/Share|Partager/i)).toBeInTheDocument();
   });
 
