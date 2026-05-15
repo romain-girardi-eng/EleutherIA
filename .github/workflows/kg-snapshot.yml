@@ -37,7 +37,7 @@ jobs:
 
       - name: Export KG snapshot
         env:
-          KG_API_BASE: ${{ github.event.inputs.base_url || 'https://api.free-will.app' }}
+          KG_API_BASE: ${{ github.event.inputs.base_url || 'https://free-will.app' }}
         run: |
           python scripts/export_kg_snapshot.py
 

@@ -2,7 +2,7 @@
 
 Railway is no longer the production host. Production now runs as
 `eleutheria-api` / `eleutheria-worker` in the platform's Docker Compose, exposed
-through the Cloudflare tunnel at `https://api.free-will.app`.
+through the Cloudflare tunnel at `https://free-will.app`.
 
 This document is retained only as historical rollback context.
 
