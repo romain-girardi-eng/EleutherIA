@@ -25,8 +25,24 @@ import type {
   AgentEvent,
   CitationVerifiedEvent,
   CounterEvidenceFoundEvent,
+  CounterEvidenceTestimonyType,
   MethodologyFlaggedEvent,
 } from '../../../types/agent-events';
+
+/** Glyph + accent class per v2 testimony dimension. Plain emoji glyphs keep
+ *  the row scannable in the dense Methodology pane. */
+const TESTIMONY_DIMENSION_META: Record<
+  CounterEvidenceTestimonyType,
+  { glyph: string; tone: string }
+> = {
+  contradiction: { glyph: '⚔️', tone: 'text-rose-700' },
+  qualification: { glyph: '◐', tone: 'text-amber-700' },
+  alternative: { glyph: '↔', tone: 'text-sky-700' },
+  scholar_critique: { glyph: '🎓', tone: 'text-violet-700' },
+  period_shift: { glyph: '⏳', tone: 'text-orange-700' },
+  doxographical_alternative: { glyph: '📜', tone: 'text-teal-700' },
+  consensus_dispute: { glyph: '⚖️', tone: 'text-indigo-700' },
+};
 
 interface Props {
   events: AgentEvent[];
@@ -217,18 +233,35 @@ export function MethodologyNotesPane({
               {t('research.doctoral.methodology.countersHeader')}
             </h3>
             <ul className="space-y-1">
-              {counters.map((c, idx) => (
-                <li
-                  key={`counter-${idx}`}
-                  className="rounded-md border border-stone-200/70 bg-white/80 px-2 py-1.5 text-[11.5px] text-stone-700"
-                >
-                  <div className="mb-0.5 flex items-center gap-1 text-[10px] uppercase tracking-wider text-stone-500">
-                    <Scale className="h-3 w-3" aria-hidden="true" />
-                    {c.testimony_type} · {c.force} · {c.source}
-                  </div>
-                  <p className="italic">{c.excerpt}</p>
-                </li>
-              ))}
+              {counters.map((c, idx) => {
+                const meta =
+                  TESTIMONY_DIMENSION_META[c.testimony_type] ?? {
+                    glyph: '·',
+                    tone: 'text-stone-500',
+                  };
+                return (
+                  <li
+                    key={`counter-${idx}`}
+                    className="rounded-md border border-stone-200/70 bg-white/80 px-2 py-1.5 text-[11.5px] text-stone-700"
+                  >
+                    <div className="mb-0.5 flex items-center gap-1 text-[10px] uppercase tracking-wider text-stone-500">
+                      <Scale className="h-3 w-3" aria-hidden="true" />
+                      <span
+                        aria-label={c.testimony_type}
+                        className={cn('text-[12px] leading-none', meta.tone)}
+                      >
+                        {meta.glyph}
+                      </span>
+                      <span className={meta.tone}>{c.testimony_type}</span>
+                      <span>·</span>
+                      <span>{c.force}</span>
+                      <span>·</span>
+                      <span className="truncate">{c.source}</span>
+                    </div>
+                    <p className="italic">{c.excerpt}</p>
+                  </li>
+                );
+              })}
             </ul>
           </section>
         )}

@@ -128,13 +128,27 @@ export interface ErrorEvent {
 /** Emitted by the Counter-Evidence Hunter as each opposing testimony is
  *  discovered. The synthesizer's v2 pass uses these findings to steel-man
  *  the answer; the UI streams them live so users see the adversarial loop. */
+/** v2 dimensions of disagreement surfaced by the Counter-Evidence Hunter.
+ *
+ *  - contradiction / qualification / alternative — passage-level opposition (v1)
+ *  - scholar_critique           — modern scholar engages_with(critiques|opposes)
+ *  - period_shift               — later school reacts to an ancient claim
+ *  - doxographical_alternative  — rival modern reconstruction of one fragment
+ *  - consensus_dispute          — unresolved scholarly methodological dispute
+ */
+export type CounterEvidenceTestimonyType =
+  | 'contradiction'
+  | 'qualification'
+  | 'alternative'
+  | 'scholar_critique'
+  | 'period_shift'
+  | 'doxographical_alternative'
+  | 'consensus_dispute';
+
 export interface CounterEvidenceFoundEvent {
   type: 'counter_evidence_found';
   claim_id: string;
-  /** contradiction = source denies the claim;
-   *  qualification = source adds a limit the synthesizer missed;
-   *  alternative   = rival school / scholar position */
-  testimony_type: 'contradiction' | 'qualification' | 'alternative';
+  testimony_type: CounterEvidenceTestimonyType;
   source: string;
   excerpt: string;
   force: 'strong' | 'moderate' | 'weak';
@@ -204,6 +218,23 @@ export interface SubagentCompleteEvent {
   tokens_used: number | null;
 }
 
+/** Emitted at the end of each pipeline stage (classify / retrieve /
+ *  agent_loop / synthesis / verify / polish). Carries per-stage latency
+ *  so the AgentTrace pane can render a stacked latency bar. Added in
+ *  Wave 7 (2026-05-15) to make the ~14min deep-mode cost visible. */
+export interface StageCompleteEvent {
+  type: 'stage_complete';
+  stage:
+    | 'classify'
+    | 'retrieve'
+    | 'agent_loop'
+    | 'synthesis'
+    | 'verify'
+    | 'polish';
+  duration_ms: number;
+  metadata?: Record<string, unknown>;
+}
+
 export type AgentEvent =
   | AgentStartEvent
   | AgentStepEvent
@@ -220,6 +251,7 @@ export type AgentEvent =
   | PolishingPassCompleteEvent
   | AgentInvocationEvent
   | SubagentCompleteEvent
+  | StageCompleteEvent
   | FinalAnswerEvent
   | ErrorEvent;
 
@@ -245,6 +277,7 @@ export function isAgentEvent(value: unknown): value is AgentEvent {
     'polishing_pass_complete',
     'agent_invocation',
     'subagent_complete',
+    'stage_complete',
     'final_answer',
     'error',
   ].includes(candidate.type);

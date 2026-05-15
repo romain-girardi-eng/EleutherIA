@@ -7,11 +7,19 @@ GraphRAGService two-pass synthesizer loop.
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-TestimonyType = Literal["contradiction", "qualification", "alternative"]
+TestimonyType = Literal[
+    "contradiction",
+    "qualification",
+    "alternative",
+    "scholar_critique",
+    "period_shift",
+    "doxographical_alternative",
+    "consensus_dispute",
+]
 TestimonyForce = Literal["strong", "moderate", "weak"]
 
 
@@ -64,6 +72,78 @@ class OpposingTestimony(BaseModel):
     brief_reasoning: str = Field(
         "",
         description="One sentence explaining how this opposes the claim",
+    )
+
+    # ------------------------------------------------------------------
+    # v2 dimension-specific fields (optional, populated per testimony_type)
+    # ------------------------------------------------------------------
+
+    # scholar_critique
+    scholar: str | None = Field(
+        None,
+        description="KG node id for the scholar (person) issuing the critique",
+    )
+    scholarly_work: str | None = Field(
+        None,
+        description="Label / citation of the scholarly publication",
+    )
+    stance: str | None = Field(
+        None,
+        description="engages_with stance: critiques | opposes | qualifies | agrees",
+    )
+    summary: str | None = Field(
+        None,
+        description="Short paraphrase of the scholar's critique",
+    )
+    page_ref: str | None = Field(
+        None,
+        description="Page or locus reference inside the scholarly work",
+    )
+
+    # period_shift
+    from_period: str | None = Field(
+        None, description="Originating period of the ancient claim"
+    )
+    to_period: str | None = Field(
+        None, description="Period in which the later reaction emerges"
+    )
+    school: str | None = Field(
+        None, description="KG node id for the reacting school"
+    )
+    response_summary: str | None = Field(
+        None, description="Summary of how the later period reacted"
+    )
+    evidence_passage_ids: list[str] = Field(
+        default_factory=list,
+        description="Passage ids that anchor the period-shift response",
+    )
+
+    # doxographical_alternative
+    fragment: str | None = Field(
+        None,
+        description="Fragment locus (e.g. 'SVF II.974', 'DK 22 B1')",
+    )
+    alternative_interpretation: str | None = Field(
+        None,
+        description="Rival scholarly reconstruction of the fragment",
+    )
+    scholarly_source: str | None = Field(
+        None,
+        description="Modern scholar / publication advancing the alternative",
+    )
+
+    # consensus_dispute
+    topic_slug: str | None = Field(
+        None,
+        description="Slug of the row in scholarly_consensus_topics",
+    )
+    methodological_warning: str | None = Field(
+        None,
+        description="One-line warning describing the unresolved dispute",
+    )
+    positions: list[dict[str, Any]] = Field(
+        default_factory=list,
+        description="Rival scholarly positions (label + proponents + summary)",
     )
 
 
