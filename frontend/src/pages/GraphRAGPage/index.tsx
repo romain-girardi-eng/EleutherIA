@@ -430,12 +430,14 @@ export default function GraphRAGPage() {
                 }
 
                 case 'answer_chunk': {
-                  // We *only* accumulate `fullAnswer` as a fallback in case the
-                  // terminal `complete` event arrives without an `answer`
-                  // field. The agent-reasoning panel on the right is what the
-                  // user watches in real time — we deliberately keep the chat
-                  // pane silent until the final answer is ready (raw event
-                  // JSON in the chat is ugly and confusing).
+                  // Backend wraps any non-typed SSE payload from the agent in
+                  // an `answer_chunk` envelope — including inner JSON events
+                  // (citation_found, kg_node_activated, stage_complete, …)
+                  // that are NOT answer text. Concatenating those blindly is
+                  // what produced the wall of Unicode-escaped JSON in the
+                  // chat pane. We extract the raw chunk string, skip any
+                  // payload that looks like a serialized inner event, and
+                  // accumulate the rest as a `complete`-event fallback only.
                   let chunk = '';
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const chunkData = data.data as any;
@@ -448,8 +450,15 @@ export default function GraphRAGPage() {
                   } else if (chunkData && typeof chunkData === 'object') {
                     chunk = String(chunkData.data || chunkData.chunk || chunkData.text || '');
                   }
-                  fullAnswer += chunk;
-                  if (fullAnswer.length === chunk.length) updateReasoningStep(4, 'active');
+                  const trimmed = chunk.trim();
+                  const looksLikeInnerEvent =
+                    trimmed.startsWith('{"type"') ||
+                    trimmed.startsWith('{ "type"');
+                  if (chunk && !looksLikeInnerEvent) {
+                    fullAnswer += chunk;
+                    if (fullAnswer.length === chunk.length)
+                      updateReasoningStep(4, 'active');
+                  }
                   break;
                 }
 
@@ -683,14 +692,22 @@ export default function GraphRAGPage() {
             }));
           }
         }
-      } else if (fullAnswer) {
-        const assistantMessage: GraphRAGChatMessage = {
+      } else {
+        // The agent loop finished without a `complete` event (synthesis cut
+        // mid-stream, CF tunnel idle-timeout, etc.). Render a clean error
+        // bubble instead of dumping raw chunks, and keep the reasoning
+        // timeline visible so the user can see how far the agent got.
+        const errorMessage: GraphRAGChatMessage = {
           role: 'assistant',
-          content: fullAnswer,
+          content:
+            fullAnswer.trim().length > 200
+              ? fullAnswer.trim()
+              : (t('errors.synthesisIncomplete') ??
+                 'Le pipeline s’est arrêté avant la synthèse finale. La trace d’agent reste visible à droite — réessaie la même question.'),
           timestamp: new Date(),
         };
-        setMessages((prev) => [...prev, assistantMessage]);
-        setRightPanelState('idle');
+        setMessages((prev) => [...prev, errorMessage]);
+        // Stay on the reasoning timeline so the user retains context.
       }
 
       setStreaming(false);
