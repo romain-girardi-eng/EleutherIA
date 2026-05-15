@@ -2,18 +2,18 @@
 
 - Library root: `[local-path] SHAL/04_Littérature_secondaire`
 - Files inventoried: 497
-- Files attempted this run: 259
-  - ok: 242
-  - skip: 17
+- Files attempted this run: 17
+  - ok: 2
+  - skip: 15
 
 ## Patches in `from_local_library.jsonl` (cumulative)
 
-- scholar: 150
-- scholarly_work: 199
-- scholarly_argument: 900
-- edge: 4757
+- scholar: 151
+- scholarly_work: 201
+- scholarly_argument: 908
+- edge: 4799
 
-## Scholars (150)
+## Scholars (151)
 
 - `scholar_hayman_a` — A. P. Hayman
 - `scholar_rousseau_a` — Adelin Rousseau
@@ -53,6 +53,7 @@
 - `scholar_jourdan_f` — Fabienne Jourdan
 - `scholar_pironet_f` — Fabienne Pironet
 - `scholar_grgi_f` — Filip Grgić
+- `scholar_cross_f` — Frank Moore Cross
 - `scholar_de_monneron_f` — François DE MONNERON
 - `scholar_sagnard_f` — François Sagnard
 - `scholar_boys_stones_g` — George Boys-Stones
