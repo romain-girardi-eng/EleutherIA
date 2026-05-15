@@ -13,13 +13,18 @@ import {
   ScrollText,
   ArrowRight,
   BookOpenText,
+  ShieldCheck,
 } from 'lucide-react';
 import {
   getCommunityQuery,
+  getReproducibility,
   type CommunityDetail,
+  type ReproducibilityStatus,
 } from '../../api/community';
 import { CitationRenderer, SourcesPanel } from '../../components/CitationRenderer';
 import { cn } from '../../lib/utils';
+import ReproducibilityBadge from './ReproducibilityBadge';
+import ReverifyPanel from './ReverifyPanel';
 
 function formatDate(iso: string, locale: string): string {
   const date = new Date(iso);
@@ -94,6 +99,9 @@ export default function CommunityDetailPage() {
   const [detail, setDetail] = useState<CommunityDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [reproStatus, setReproStatus] = useState<ReproducibilityStatus | null>(null);
+  const [reproLoading, setReproLoading] = useState(false);
+  const [reverifyOpen, setReverifyOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -123,6 +131,30 @@ export default function CommunityDetailPage() {
       cancelled = true;
     };
   }, [slug, t]);
+
+  useEffect(() => {
+    if (!slug) return;
+    let cancelled = false;
+    setReproLoading(true);
+    setReproStatus(null);
+    getReproducibility(slug)
+      .then((data) => {
+        if (cancelled) return;
+        setReproStatus(data);
+      })
+      .catch(() => {
+        // Reproducibility is best-effort — failures are non-fatal.
+        if (cancelled) return;
+        setReproStatus(null);
+      })
+      .finally(() => {
+        if (cancelled) return;
+        setReproLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [slug]);
 
   const handleReproduce = () => {
     if (!detail) return;
@@ -218,6 +250,7 @@ export default function CommunityDetailPage() {
                   <ScrollText className="h-3.5 w-3.5 text-stone-400" aria-hidden="true" />
                   {t('recherches.detail.citations', { count: detail.citation_count })}
                 </span>
+                <ReproducibilityBadge status={reproStatus} loading={reproLoading} />
               </div>
 
               {/* Answer */}
@@ -227,6 +260,26 @@ export default function CommunityDetailPage() {
                   sources={detail.sources ?? []}
                   passageCitations={detail.passage_citations ?? []}
                 />
+              </div>
+
+              {/* Reverify CTA */}
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setReverifyOpen(true)}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/70 bg-white/70 px-4 py-2 text-xs font-semibold text-amber-900 transition-colors hover:bg-amber-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment-50"
+                  aria-label={t('reproducibility.verifyButton')}
+                >
+                  <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                  {t('reproducibility.verifyButton')}
+                </button>
+                {reproStatus && reproStatus.status === 'kg_advanced' && (
+                  <span className="text-[11px] text-amber-800">
+                    {t('reproducibility.verifyHint', {
+                      count: reproStatus.kg_advanced_by,
+                    })}
+                  </span>
+                )}
               </div>
 
               {/* Passage citation badges (static reference list) */}
@@ -292,6 +345,18 @@ export default function CommunityDetailPage() {
           </div>
         )}
       </div>
+
+      {slug && detail && (
+        <ReverifyPanel
+          open={reverifyOpen}
+          slug={slug}
+          onClose={() => setReverifyOpen(false)}
+          cachedAnswerExcerpt={(detail.answer ?? '').slice(0, 400)}
+          cachedCitations={(detail.passage_citations ?? []).map(
+            (entry, idx) => entry.ref ?? `P${idx + 1}`
+          )}
+        />
+      )}
     </div>
   );
 }

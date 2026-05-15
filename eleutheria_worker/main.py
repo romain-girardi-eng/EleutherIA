@@ -24,8 +24,14 @@ from temporalio.client import Client
 from temporalio.worker import Worker
 
 from eleutheria_worker.activities import (
+    classify_relevance_activity,
+    extract_kg_proposals_activity,
+    extract_pdf_text_activity,
     list_passages_for_priority,
     list_works_to_reindex,
+    mark_failed_activity,
+    persist_low_relevance_activity,
+    persist_proposals_activity,
     reindex_work_tree,
     scaife_fetch,
     scaife_link_to_kg,
@@ -35,6 +41,7 @@ from eleutheria_worker.activities import (
 from eleutheria_worker.workflows import (
     BatchTranslateWorkflow,
     KGReindexWorkflow,
+    ProcessContributionWorkflow,
     ScaifeIngestionWorkflow,
 )
 
@@ -74,6 +81,7 @@ def create_worker(client: Client, task_queue: str) -> Worker:
             BatchTranslateWorkflow,
             ScaifeIngestionWorkflow,
             KGReindexWorkflow,
+            ProcessContributionWorkflow,
         ],
         activities=[
             list_passages_for_priority,
@@ -83,6 +91,12 @@ def create_worker(client: Client, task_queue: str) -> Worker:
             scaife_link_to_kg,
             list_works_to_reindex,
             reindex_work_tree,
+            extract_pdf_text_activity,
+            classify_relevance_activity,
+            extract_kg_proposals_activity,
+            persist_low_relevance_activity,
+            persist_proposals_activity,
+            mark_failed_activity,
         ],
         graceful_shutdown_timeout=timedelta(seconds=10),
     )

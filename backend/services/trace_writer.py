@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 # started under an SSE handler reads this to find the right TraceWriter
 # (LLMService dispatches token usage observations here). ContextVar isolates
 # concurrent queries cleanly: each top-level task gets its own copy.
-active_trace_writer: contextvars.ContextVar["TraceWriter | None"] = (
+active_trace_writer: contextvars.ContextVar[TraceWriter | None] = (
     contextvars.ContextVar("active_trace_writer", default=None)
 )
 
@@ -65,7 +65,7 @@ def _iso_to_dt(iso: str | None) -> datetime | None:
 def _coerce_uuid(value: str) -> uuid.UUID | None:
     try:
         return uuid.UUID(value)
-    except (TypeError, ValueError, AttributeError):
+    except TypeError, ValueError, AttributeError:
         return None
 
 
@@ -342,6 +342,15 @@ class TraceWriter:
             total_latency_ms=total_latency_ms,
         )
 
+        # Best-effort: derive topic_tags so the galerie filter chips work.
+        # Never fail a query because the tagger choked.
+        try:
+            from backend.services.topic_tagger import TopicTagger
+
+            await TopicTagger(self._db).tag_and_persist(self.trace_id)
+        except Exception:  # noqa: BLE001
+            logger.exception("topic tagging failed for %s — non-fatal", self.trace_id)
+
     # ---------- persistence ----------
 
     async def _upsert(
@@ -383,6 +392,27 @@ class TraceWriter:
         }
         provider_usage = totals["by_provider"]
 
+        # Stamp the trace with the KG version it was produced against — but
+        # only on finalize. The initial INSERT happens before the agent has
+        # touched the KG, so the version we'd read could already be stale by
+        # the time the synthesis runs; deferring to finalize keeps the
+        # `cached_at_kg_version` honest for the reproducibility certificate.
+        current_kg_version: int | None = None
+        if not initial:
+            try:
+                current_kg_version = (
+                    await self._db.fetchval(
+                        "SELECT version FROM free_will.kg_version WHERE id = 1"
+                    )
+                ) or 0
+            except Exception:  # noqa: BLE001
+                logger.debug(
+                    "TraceWriter: kg_version lookup failed; leaving column"
+                    " untouched on UPSERT",
+                    exc_info=True,
+                )
+                current_kg_version = None
+
         try:
             await self._db.execute(
                 """
@@ -401,13 +431,15 @@ class TraceWriter:
                     total_tokens,
                     total_cost_usd,
                     token_breakdown,
-                    provider_usage
+                    provider_usage,
+                    kg_version_at_creation
                 )
                 VALUES (
                     $1, $2, $3, $4::timestamptz, $5::timestamptz, $6,
                     $7::jsonb, $8::jsonb, $9::jsonb, $10::jsonb, $11::jsonb,
                     $12, $13::jsonb, $14, $15, $16::jsonb,
-                    $17, $18, $19::jsonb, $20::jsonb
+                    $17, $18, $19::jsonb, $20::jsonb,
+                    COALESCE($21::bigint, 0)
                 )
                 ON CONFLICT (trace_id) DO UPDATE SET
                     completed_at = COALESCE(EXCLUDED.completed_at, query_traces.completed_at),
@@ -424,7 +456,11 @@ class TraceWriter:
                     total_tokens = EXCLUDED.total_tokens,
                     total_cost_usd = EXCLUDED.total_cost_usd,
                     token_breakdown = EXCLUDED.token_breakdown,
-                    provider_usage = EXCLUDED.provider_usage
+                    provider_usage = EXCLUDED.provider_usage,
+                    kg_version_at_creation = CASE
+                        WHEN $21::bigint IS NOT NULL THEN EXCLUDED.kg_version_at_creation
+                        ELSE query_traces.kg_version_at_creation
+                    END
                 """,
                 trace_uuid,
                 user_uuid,
@@ -456,6 +492,7 @@ class TraceWriter:
                 float(totals["total_cost_usd"]),
                 json.dumps(token_breakdown, default=str),
                 json.dumps(provider_usage, default=str),
+                current_kg_version,
             )
         except Exception:  # noqa: BLE001 — never fail the query because of audit
             logger.exception("TraceWriter: failed to persist trace %s", self.trace_id)

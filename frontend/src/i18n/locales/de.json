@@ -11,6 +11,8 @@
     "search": "Suche",
     "graphrag": "GraphRAG Q&A",
     "recherches": "Recherchen",
+    "contributions": "Beiträge",
+    "canonicalPassages": "Kanonische Passagen",
     "research": "Live-Recherche",
     "texts": "Antike Texte",
     "bibliography": "Bibliographie",
@@ -20,6 +22,7 @@
     "admin": "Admin-Dashboard",
     "citationNetwork": "Zitatnetzwerk",
     "community": "Community",
+    "contribute": "Beitragen",
     "profile": "Profil",
     "login": "Anmelden",
     "logout": "Abmelden",
@@ -1603,7 +1606,9 @@
   },
   "appShell": {
     "pageTitles": {
-      "recherches": "Veröffentlichte Recherchen"
+      "recherches": "Veröffentlichte Recherchen",
+      "canonicalPassages": "Kanonische Passagen",
+      "contributions": "Community-Beiträge"
     }
   },
   "recherches": {
@@ -1662,6 +1667,314 @@
         "title": "Diese Recherche reproduzieren",
         "body": "Stellen Sie diese Frage an EleutherIA mit dem Modell Ihrer Wahl.",
         "button": "In GraphRAG öffnen"
+      }
+    }
+  },
+  "canonicalPassages": {
+    "eyebrow": "Rezeptionskarte",
+    "title": "Kanonische Passagen",
+    "subtitle": "Die loci classici, die von der Forschungsgemeinschaft am häufigsten mobilisiert werden. Eine Passage, die von vielen unterschiedlichen wissenschaftlichen Antworten zitiert wird, wird per Definition zu einem locus classicus des Korpus.",
+    "loading": "Lädt…",
+    "totalCount_one": "{{count}} kanonische Passage",
+    "totalCount_other": "{{count}} kanonische Passagen",
+    "filters": {
+      "period": "Epoche",
+      "author": "Autor"
+    },
+    "tags": {
+      "period": {
+        "presocratic": "Vorsokratisch",
+        "classical": "Klassisch",
+        "hellenistic": "Hellenistisch",
+        "imperial": "Kaiserzeitlich",
+        "lateAntique": "Spätantik"
+      }
+    },
+    "card": {
+      "citedIn_one": "Zitiert in {{count}} Antwort",
+      "citedIn_other": "Zitiert in {{count}} Antworten"
+    },
+    "empty": {
+      "title": "Keine kanonischen Passagen für diese Filter",
+      "body": "Bitte ändern Sie die Filter oder schauen Sie später wieder vorbei."
+    },
+    "errors": {
+      "title": "Passagen konnten nicht geladen werden",
+      "loadFailed": "Beim Laden ist ein Fehler aufgetreten. Bitte erneut versuchen.",
+      "notFound": "Diese Passage wurde nicht gefunden."
+    },
+    "detail": {
+      "backToList": "Zurück zu den kanonischen Passagen",
+      "fullText": "Volltext",
+      "citedIn_one": "Zitiert in {{count}} Antwort",
+      "citedIn_other": "Zitiert in {{count}} Antworten",
+      "citingAnswersTitle_one": "Zitiert in dieser Antwort",
+      "citingAnswersTitle_other": "Zitiert in diesen {{count}} Antworten",
+      "occurrences_one": "{{count}} Vorkommen",
+      "occurrences_other": "{{count}} Vorkommen",
+      "metadata": "Metadaten",
+      "author": "Autor",
+      "work": "Werk",
+      "period": "Epoche",
+      "totalCitations": "Zitate insgesamt",
+      "distinctAnswers": "Unterschiedliche Antworten",
+      "ctaTitle": "Alle kanonischen Passagen anzeigen",
+      "ctaBody": "Durchsuchen Sie das gesamte Korpus der loci classici, die von der Gemeinschaft mobilisiert werden.",
+      "ctaButton": "Zurück zur Übersicht"
+    }
+  },
+  "reproducibility": {
+    "badge": {
+      "loading": "Reproduzierbarkeit wird geprüft…",
+      "unchanged": "Reproduzierbar · KG #{{version}}",
+      "kgAdvanced_one": "KG hat sich seitdem um +{{count}} Version weiterentwickelt",
+      "kgAdvanced_other": "KG hat sich seitdem um +{{count}} Versionen weiterentwickelt",
+      "staleUnknown": "Ursprüngliche Version unbekannt",
+      "tooltip": "Zwischengespeichert bei KG-Version #{{cachedVersion}} ({{cachedAt}}). Aktuelle KG-Version #{{currentVersion}} ({{currentAt}})."
+    },
+    "verifyButton": "Gegen aktuelle KG prüfen",
+    "verifyHint_one": "KG hat sich um +{{count}} Version weiterentwickelt — die Antwort könnte sich geändert haben.",
+    "verifyHint_other": "KG hat sich um +{{count}} Versionen weiterentwickelt — die Antwort könnte sich geändert haben.",
+    "card": {
+      "stale": "KG +{{count}}",
+      "staleTooltip_one": "Die KG hat sich seit dem Caching um {{count}} Version weiterentwickelt.",
+      "staleTooltip_other": "Die KG hat sich seit dem Caching um {{count}} Versionen weiterentwickelt."
+    },
+    "gallery": {
+      "checkKG": "KG prüfen",
+      "checking": "Prüfung läuft…"
+    },
+    "reverify": {
+      "title": "Gegen aktuelle KG prüfen",
+      "subtitle": "Eine neue Abfrage wird ausgeführt und mit der zwischengespeicherten Antwort verglichen.",
+      "progress": "Fortschritt",
+      "stages": {
+        "classify": "Klassifizieren",
+        "search": "Suchen",
+        "reading": "Lesen",
+        "synthesis": "Synthese",
+        "verify": "Verifizieren"
+      },
+      "similarity": "Ähnlichkeitswert",
+      "compare": "Direkter Vergleich",
+      "cached": "Zwischengespeicherte Antwort",
+      "fresh": "Neue Antwort",
+      "charDiff": "Δ Zeichen: {{diff}}",
+      "citationsAdded_one": "{{count}} Zitat hinzugefügt",
+      "citationsAdded_other": "{{count}} Zitate hinzugefügt",
+      "citationsRemoved_one": "{{count}} Zitat entfernt",
+      "citationsRemoved_other": "{{count}} Zitate entfernt",
+      "kgAdvancedBy_one": "KG +{{count}} Version",
+      "kgAdvancedBy_other": "KG +{{count}} Versionen",
+      "applyUpdate": "Diese Antwort aktualisieren",
+      "applyComingSoon": "Bald verfügbar: Die Aktualisierung der zwischengespeicherten Antwort wird in einer zukünftigen Version implementiert.",
+      "cancel": "Abbrechen",
+      "cancelled": "Verifizierung abgebrochen. Sie können sie jederzeit neu starten.",
+      "close": "Schließen",
+      "retry": "Erneut versuchen",
+      "errorTitle": "Verifizierung fehlgeschlagen"
+    }
+  },
+  "contribute": {
+    "empty": {
+      "title": "Zu EleutherIA beitragen",
+      "subtitle": "Laden Sie einen wissenschaftlichen Artikel hoch und wir extrahieren automatisch die für die Willensfreiheitsdebatte relevanten Elemente.",
+      "howItWorks": "Wie funktioniert es?",
+      "step": "Schritt {{index}}",
+      "steps": {
+        "upload": "Sie laden ein wissenschaftliches PDF zu Willensfreiheit, Schicksal oder moralischer Verantwortung hoch.",
+        "analyze": "Unsere KI-Pipeline bewertet die Relevanz und extrahiert Entitäten, Zitate und Konzepte.",
+        "validate": "Sie validieren die Vorschläge, bevor sie in den Wissensgraphen aufgenommen werden."
+      }
+    },
+    "upload": {
+      "dropPrompt": "PDF hier ablegen",
+      "orClick": "oder klicken Sie, um Dateien auszuwählen",
+      "pdfOnly": "Nur PDF",
+      "maxSize": "Bis zu 25 MB",
+      "dropzoneAria": "Ablagebereich für eine PDF-Datei",
+      "errors": {
+        "notPdf": "Nur PDF-Dateien werden akzeptiert.",
+        "tooLarge": "Die Datei überschreitet das Limit von 25 MB."
+      }
+    },
+    "metadata": {
+      "title": "Artikel-Metadaten",
+      "subtitle": "Geben Sie bibliografische Informationen an, um Extraktion und Moderation zu erleichtern. Alle Felder sind optional.",
+      "fileSize": "Größe: {{size}} MB",
+      "fields": {
+        "title": "Titel",
+        "authors": "Autoren",
+        "doi": "DOI",
+        "year": "Erscheinungsjahr"
+      },
+      "placeholders": {
+        "title": "z.B. Determinism, Freedom, and Moral Responsibility",
+        "authors": "z.B. Bobzien, Susanne",
+        "doi": "10.xxxx/xxxxxx",
+        "year": "2023"
+      },
+      "submit": "Zur Analyse senden",
+      "chooseAnother": "Andere Datei wählen"
+    },
+    "processing": {
+      "title": "Analyse läuft",
+      "subtitle": "Sie können diese Seite verlassen: Die Verarbeitung läuft serverseitig weiter.",
+      "cancel": "Abbrechen",
+      "remaining": "≈ {{seconds}}s verbleibend",
+      "untitled": "Unbenanntes Dokument",
+      "phases": {
+        "upload": "Hochladen",
+        "extract": "Extraktion",
+        "relevance": "Relevanz",
+        "proposals": "Vorschläge"
+      }
+    },
+    "review": {
+      "untitled": "Unbenanntes Dokument",
+      "unknownAuthors": "Unbekannte Autoren",
+      "conceptsIdentified": "Identifizierte Konzepte",
+      "relevanceSummary": "Relevanzzusammenfassung",
+      "tabsAria": "Vorschläge nach Typ filtern",
+      "tabs": {
+        "all": "Alle",
+        "scholars": "Forscher",
+        "passages": "Antike Zitate",
+        "edges": "Kanten",
+        "concepts": "Konzepte"
+      },
+      "proposalKinds": {
+        "node": "Knoten",
+        "edge": "Beziehung",
+        "passage_citation": "Antikes Zitat",
+        "scholar_ref": "Moderne Referenz",
+        "concept_attestation": "Konzeptbeleg"
+      },
+      "relevance": {
+        "high": "Sehr relevant",
+        "medium": "Relevant",
+        "low": "Geringe Relevanz — Zusammenführung unwahrscheinlich"
+      },
+      "page": "S. {{page}}",
+      "alreadyInKg": "Bereits im KG",
+      "keep": "Behalten",
+      "kept": "Behalten",
+      "emptyTab": "Keine Vorschläge in dieser Kategorie.",
+      "selectionCount": "{{selected}} von {{total}} Vorschlägen ausgewählt",
+      "submit": "Zur Moderation einreichen",
+      "abandon": "Verwerfen"
+    },
+    "failed": {
+      "title": "Verarbeitung fehlgeschlagen",
+      "body": "Bei der Analyse Ihres Dokuments ist ein Fehler aufgetreten. Sie können es erneut versuchen oder zur Startseite zurückkehren.",
+      "backHome": "Zurück zur Startseite",
+      "retry": "Erneut versuchen"
+    },
+    "errors": {
+      "processingFailed": "Die serverseitige Analyse ist fehlgeschlagen. Bitte versuchen Sie es mit einer anderen Datei."
+    }
+  },
+  "contributions": {
+    "eyebrow": "Community-Moderation",
+    "title": "Beiträge der Community",
+    "subtitle": "Wissenschaftliche Artikel, die von Forschenden zur Bereicherung des KG eingereicht wurden.",
+    "loadingMore": "Weitere Ergebnisse werden geladen…",
+    "endOfList": "Ende der Ergebnisse",
+    "filters": {
+      "status": "Status",
+      "statusGroup": "Nach Status filtern",
+      "searchAuthorPlaceholder": "Nach Autor:in suchen…",
+      "searchAuthorAria": "Beitrag nach Autor:in suchen"
+    },
+    "status": {
+      "all": "Alle",
+      "uploaded": "Hochgeladen",
+      "processing": "In Bearbeitung",
+      "ready": "Bereit zur Moderation",
+      "approved": "Genehmigt",
+      "merged": "Eingespielt",
+      "rejected": "Abgelehnt",
+      "failed": "Fehlgeschlagen"
+    },
+    "card": {
+      "relevance": "{{value}} %",
+      "proposals_one": "Vorschlag",
+      "proposals_other": "Vorschläge",
+      "proposals": "Vorschläge",
+      "proposalsTooltip": "Automatisch extrahierte Vorschläge"
+    },
+    "empty": {
+      "title": "Keine Beiträge für diesen Filter",
+      "body": "Kein Beitrag entspricht den gewählten Kriterien. Versuchen Sie einen anderen Status.",
+      "bodySearch": "Keine Autor:in entspricht dieser Suche."
+    },
+    "errors": {
+      "title": "Beiträge konnten nicht geladen werden",
+      "loadFailed": "Beim Laden ist ein Fehler aufgetreten. Bitte erneut versuchen.",
+      "actionFailed": "Die Aktion ist fehlgeschlagen. Bitte erneut versuchen.",
+      "applyFailed": "Das Einspielen in den KG ist fehlgeschlagen.",
+      "rejectFailed": "Ablehnung fehlgeschlagen."
+    },
+    "toasts": {
+      "merged_one": "Beitrag eingespielt. Der KG wurde um {{count}} Element erweitert.",
+      "merged_other": "Beitrag eingespielt. Der KG wurde um {{count}} Elemente erweitert.",
+      "merged": "Beitrag eingespielt. Der KG wurde um {{count}} Elemente erweitert.",
+      "rejected": "Beitrag abgelehnt."
+    },
+    "detail": {
+      "back": "Zurück zu den Beiträgen",
+      "reviewerNotes": "Notiz der Moderation",
+      "readOnlyHint": "Melden Sie sich mit einem Admin-Konto an, um diesen Beitrag zu moderieren.",
+      "pdfPreview": {
+        "aria": "Vorschau des eingereichten PDF",
+        "iframeTitle": "Vorschau des eingereichten Dokuments",
+        "unavailable": "PDF-Vorschau nicht verfügbar.",
+        "untitled": "Unbenanntes Dokument",
+        "jumpedTo": "Seite {{page}}"
+      },
+      "relevance": {
+        "title": "Relevanz und Konzepte"
+      },
+      "proposals": {
+        "empty": "Für diesen Beitrag wurde kein Vorschlag extrahiert.",
+        "confidence": "Konfidenz",
+        "confidenceValue": "{{value}} %",
+        "page": "S. {{page}}",
+        "reviewerNoted": "Notiz hinzugefügt",
+        "actions": {
+          "accept": "Behalten",
+          "reject": "Ablehnen"
+        },
+        "kinds": {
+          "node": "Vorgeschlagene Knoten",
+          "edge": "Vorgeschlagene Relationen",
+          "passage_citation": "Passagenzitate",
+          "scholar_ref": "Forschungsreferenzen",
+          "concept_attestation": "Begriffsbelege"
+        }
+      },
+      "adminBar": {
+        "counts": "{{accepted}} angenommen · {{rejected}} abgelehnt · {{pending}} offen von {{total}} Vorschlägen",
+        "apply": "{{count}} Vorschläge in den KG einspielen",
+        "applyDisabledHint": "Mindestens ein Vorschlag muss angenommen sein und keiner darf offen bleiben.",
+        "rejectAll": "Gesamten Beitrag ablehnen"
+      },
+      "applyModal": {
+        "title": "Einspielen in den KG bestätigen",
+        "body": "Diese Aktion fügt {{nodes}} Knoten, {{edges}} Relationen und {{citations}} Zitate zum KG hinzu.",
+        "note": "Dieser Vorgang erhöht kg_version und entwertet den Antwort-Cache.",
+        "notesLabel": "Notiz der Moderation (optional)",
+        "notesPlaceholder": "Kontext, Ausnahmen, Referenzen…",
+        "confirm": "Fortfahren",
+        "cancel": "Abbrechen"
+      },
+      "rejectModal": {
+        "title": "Gesamten Beitrag ablehnen",
+        "body": "Alle Vorschläge werden als abgelehnt markiert. Ein anderer Administrator kann diese Aktion rückgängig machen.",
+        "notesLabel": "Begründung (empfohlen)",
+        "notesPlaceholder": "Duplikat, themenfremd, unzureichende Qualität…",
+        "confirm": "Ablehnen",
+        "cancel": "Abbrechen"
       }
     }
   }

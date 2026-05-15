@@ -11,6 +11,8 @@
     "search": "Search",
     "graphrag": "GraphRAG Q&A",
     "recherches": "Researches",
+    "contributions": "Contributions",
+    "canonicalPassages": "Canonical passages",
     "research": "Live Research",
     "texts": "Ancient Texts",
     "bibliography": "Bibliography",
@@ -20,6 +22,7 @@
     "admin": "Admin Dashboard",
     "citationNetwork": "Citation Network",
     "community": "Community",
+    "contribute": "Contribute",
     "profile": "Profile",
     "login": "Login",
     "logout": "Logout",
@@ -1652,7 +1655,9 @@
   },
   "appShell": {
     "pageTitles": {
-      "recherches": "Published researches"
+      "recherches": "Published researches",
+      "canonicalPassages": "Canonical passages",
+      "contributions": "Community contributions"
     }
   },
   "recherches": {
@@ -1711,6 +1716,314 @@
         "title": "Reproduce this research",
         "body": "Ask this question to EleutherIA using the model of your choice.",
         "button": "Open in GraphRAG"
+      }
+    }
+  },
+  "canonicalPassages": {
+    "eyebrow": "Reception map",
+    "title": "Canonical passages",
+    "subtitle": "The loci classici most mobilised by the research community. A passage cited by many distinct scholarly answers becomes, by definition, a locus classicus of the corpus.",
+    "loading": "Loading…",
+    "totalCount_one": "{{count}} canonical passage",
+    "totalCount_other": "{{count}} canonical passages",
+    "filters": {
+      "period": "Period",
+      "author": "Author"
+    },
+    "tags": {
+      "period": {
+        "presocratic": "Presocratic",
+        "classical": "Classical",
+        "hellenistic": "Hellenistic",
+        "imperial": "Imperial",
+        "lateAntique": "Late Antique"
+      }
+    },
+    "card": {
+      "citedIn_one": "Cited in {{count}} answer",
+      "citedIn_other": "Cited in {{count}} answers"
+    },
+    "empty": {
+      "title": "No canonical passages match these filters",
+      "body": "Try changing filters or check back later."
+    },
+    "errors": {
+      "title": "Could not load passages",
+      "loadFailed": "Something went wrong while loading. Please try again.",
+      "notFound": "This passage could not be found."
+    },
+    "detail": {
+      "backToList": "Back to canonical passages",
+      "fullText": "Full text",
+      "citedIn_one": "Cited in {{count}} answer",
+      "citedIn_other": "Cited in {{count}} answers",
+      "citingAnswersTitle_one": "Cited in this answer",
+      "citingAnswersTitle_other": "Cited in these {{count}} answers",
+      "occurrences_one": "{{count}} occurrence",
+      "occurrences_other": "{{count}} occurrences",
+      "metadata": "Metadata",
+      "author": "Author",
+      "work": "Work",
+      "period": "Period",
+      "totalCitations": "Total citations",
+      "distinctAnswers": "Distinct answers",
+      "ctaTitle": "See all canonical passages",
+      "ctaBody": "Browse every locus classicus mobilised by the community.",
+      "ctaButton": "Back to index"
+    }
+  },
+  "reproducibility": {
+    "badge": {
+      "loading": "Checking reproducibility…",
+      "unchanged": "Reproducible · KG #{{version}}",
+      "kgAdvanced_one": "KG advanced by +{{count}} version since",
+      "kgAdvanced_other": "KG advanced by +{{count}} versions since",
+      "staleUnknown": "Origin version unknown",
+      "tooltip": "Cached at KG version #{{cachedVersion}} ({{cachedAt}}). Current KG version #{{currentVersion}} ({{currentAt}})."
+    },
+    "verifyButton": "Verify against current KG",
+    "verifyHint_one": "KG advanced by +{{count}} version — the answer may have changed.",
+    "verifyHint_other": "KG advanced by +{{count}} versions — the answer may have changed.",
+    "card": {
+      "stale": "KG +{{count}}",
+      "staleTooltip_one": "The KG has advanced by {{count}} version since this was cached.",
+      "staleTooltip_other": "The KG has advanced by {{count}} versions since this was cached."
+    },
+    "gallery": {
+      "checkKG": "Check KG",
+      "checking": "Checking…"
+    },
+    "reverify": {
+      "title": "Verify against current KG",
+      "subtitle": "Running a fresh query and comparing it against the cached answer.",
+      "progress": "Progress",
+      "stages": {
+        "classify": "Classifying",
+        "search": "Searching",
+        "reading": "Reading",
+        "synthesis": "Synthesizing",
+        "verify": "Verifying"
+      },
+      "similarity": "Similarity score",
+      "compare": "Side-by-side comparison",
+      "cached": "Cached answer",
+      "fresh": "New answer",
+      "charDiff": "Δ chars: {{diff}}",
+      "citationsAdded_one": "{{count}} citation added",
+      "citationsAdded_other": "{{count}} citations added",
+      "citationsRemoved_one": "{{count}} citation removed",
+      "citationsRemoved_other": "{{count}} citations removed",
+      "kgAdvancedBy_one": "KG +{{count}} version",
+      "kgAdvancedBy_other": "KG +{{count}} versions",
+      "applyUpdate": "Update this answer",
+      "applyComingSoon": "Coming soon: updating the cached answer will be implemented in a future release.",
+      "cancel": "Cancel",
+      "cancelled": "Verification cancelled. You can restart it at any time.",
+      "close": "Close",
+      "retry": "Retry",
+      "errorTitle": "Verification failed"
+    }
+  },
+  "contribute": {
+    "empty": {
+      "title": "Contribute to EleutherIA",
+      "subtitle": "Drop a scholarly article and we will automatically extract elements relevant to the free will debate.",
+      "howItWorks": "How does it work?",
+      "step": "Step {{index}}",
+      "steps": {
+        "upload": "You drop a scholarly PDF on free will, fate, or moral responsibility.",
+        "analyze": "Our AI pipeline scores relevance and extracts entities, citations, and concepts.",
+        "validate": "You validate the proposals before they are merged into the knowledge graph."
+      }
+    },
+    "upload": {
+      "dropPrompt": "Drop your PDF here",
+      "orClick": "or click to browse your files",
+      "pdfOnly": "PDF only",
+      "maxSize": "Up to 25 MB",
+      "dropzoneAria": "Drop zone for a PDF file",
+      "errors": {
+        "notPdf": "Only PDF files are accepted.",
+        "tooLarge": "The file exceeds the 25 MB limit."
+      }
+    },
+    "metadata": {
+      "title": "Article metadata",
+      "subtitle": "Provide bibliographic information to help extraction and moderation. All fields are optional.",
+      "fileSize": "Size: {{size}} MB",
+      "fields": {
+        "title": "Title",
+        "authors": "Authors",
+        "doi": "DOI",
+        "year": "Publication year"
+      },
+      "placeholders": {
+        "title": "e.g. Determinism, Freedom, and Moral Responsibility",
+        "authors": "e.g. Bobzien, Susanne",
+        "doi": "10.xxxx/xxxxxx",
+        "year": "2023"
+      },
+      "submit": "Send for analysis",
+      "chooseAnother": "Choose another file"
+    },
+    "processing": {
+      "title": "Analysis in progress",
+      "subtitle": "You can leave this page: processing will continue on the server.",
+      "cancel": "Cancel",
+      "remaining": "≈ {{seconds}}s remaining",
+      "untitled": "Untitled document",
+      "phases": {
+        "upload": "Uploading",
+        "extract": "Extraction",
+        "relevance": "Relevance",
+        "proposals": "Proposals"
+      }
+    },
+    "review": {
+      "untitled": "Untitled document",
+      "unknownAuthors": "Unknown authors",
+      "conceptsIdentified": "Identified concepts",
+      "relevanceSummary": "Relevance summary",
+      "tabsAria": "Filter proposals by type",
+      "tabs": {
+        "all": "All",
+        "scholars": "Scholars",
+        "passages": "Ancient citations",
+        "edges": "Edges",
+        "concepts": "Concepts"
+      },
+      "proposalKinds": {
+        "node": "Node",
+        "edge": "Relation",
+        "passage_citation": "Ancient citation",
+        "scholar_ref": "Modern reference",
+        "concept_attestation": "Concept attestation"
+      },
+      "relevance": {
+        "high": "Highly relevant",
+        "medium": "Relevant",
+        "low": "Low relevance — merge unlikely"
+      },
+      "page": "p. {{page}}",
+      "alreadyInKg": "Already in the KG",
+      "keep": "Keep",
+      "kept": "Kept",
+      "emptyTab": "No proposals in this category.",
+      "selectionCount": "{{selected}} of {{total}} proposals selected",
+      "submit": "Submit for moderation",
+      "abandon": "Discard"
+    },
+    "failed": {
+      "title": "Processing failed",
+      "body": "An error occurred while analyzing your document. You can try again or return home.",
+      "backHome": "Back home",
+      "retry": "Try again"
+    },
+    "errors": {
+      "processingFailed": "Server-side analysis failed. Please try again with another file."
+    }
+  },
+  "contributions": {
+    "eyebrow": "Community moderation",
+    "title": "Community contributions",
+    "subtitle": "Scholarly articles submitted by researchers to enrich the KG.",
+    "loadingMore": "Loading more results…",
+    "endOfList": "End of results",
+    "filters": {
+      "status": "Status",
+      "statusGroup": "Filter by status",
+      "searchAuthorPlaceholder": "Search by author…",
+      "searchAuthorAria": "Search a contribution by author"
+    },
+    "status": {
+      "all": "All",
+      "uploaded": "Uploaded",
+      "processing": "Processing",
+      "ready": "Ready to moderate",
+      "approved": "Approved",
+      "merged": "Merged",
+      "rejected": "Rejected",
+      "failed": "Failed"
+    },
+    "card": {
+      "relevance": "{{value}}%",
+      "proposals_one": "proposal",
+      "proposals_other": "proposals",
+      "proposals": "proposals",
+      "proposalsTooltip": "Auto-extracted proposals"
+    },
+    "empty": {
+      "title": "No contributions for this filter",
+      "body": "No contribution matches the selected criteria. Try another status.",
+      "bodySearch": "No author matches this search."
+    },
+    "errors": {
+      "title": "Failed to load contributions",
+      "loadFailed": "An error occurred while loading. Please try again.",
+      "actionFailed": "The action failed. Please try again.",
+      "applyFailed": "Merging into the KG failed.",
+      "rejectFailed": "Rejection failed."
+    },
+    "toasts": {
+      "merged_one": "Contribution merged. The KG was enriched by {{count}} element.",
+      "merged_other": "Contribution merged. The KG was enriched by {{count}} elements.",
+      "merged": "Contribution merged. The KG was enriched by {{count}} elements.",
+      "rejected": "Contribution rejected."
+    },
+    "detail": {
+      "back": "Back to contributions",
+      "reviewerNotes": "Reviewer note",
+      "readOnlyHint": "Sign in with an admin account to moderate this contribution.",
+      "pdfPreview": {
+        "aria": "Preview of the submitted PDF",
+        "iframeTitle": "Submitted document preview",
+        "unavailable": "PDF preview unavailable.",
+        "untitled": "Untitled document",
+        "jumpedTo": "Page {{page}}"
+      },
+      "relevance": {
+        "title": "Relevance and concepts"
+      },
+      "proposals": {
+        "empty": "No proposal was extracted for this contribution.",
+        "confidence": "Confidence",
+        "confidenceValue": "{{value}}%",
+        "page": "p. {{page}}",
+        "reviewerNoted": "note added",
+        "actions": {
+          "accept": "Keep",
+          "reject": "Reject"
+        },
+        "kinds": {
+          "node": "Proposed nodes",
+          "edge": "Proposed relations",
+          "passage_citation": "Passage citations",
+          "scholar_ref": "Scholar references",
+          "concept_attestation": "Concept attestations"
+        }
+      },
+      "adminBar": {
+        "counts": "{{accepted}} accepted · {{rejected}} rejected · {{pending}} pending out of {{total}} proposals",
+        "apply": "Merge {{count}} proposals into the KG",
+        "applyDisabledHint": "At least one proposal must be accepted and none can remain pending.",
+        "rejectAll": "Reject the entire contribution"
+      },
+      "applyModal": {
+        "title": "Confirm merge into the KG",
+        "body": "This action will add {{nodes}} nodes, {{edges}} relations and {{citations}} citations to the KG.",
+        "note": "This operation bumps kg_version and invalidates the answer cache.",
+        "notesLabel": "Reviewer note (optional)",
+        "notesPlaceholder": "Context, exceptions, references…",
+        "confirm": "Continue",
+        "cancel": "Cancel"
+      },
+      "rejectModal": {
+        "title": "Reject the entire contribution",
+        "body": "All proposals will be marked as rejected. Another administrator can undo this action.",
+        "notesLabel": "Reason (recommended)",
+        "notesPlaceholder": "Duplicate, off-topic, insufficient quality…",
+        "confirm": "Reject",
+        "cancel": "Cancel"
       }
     }
   }
