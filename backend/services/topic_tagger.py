@@ -156,9 +156,9 @@ class TopicTagger:
                     w.period AS period,
                     w.kg_work_id AS kg_work_id,
                     auth_edge.target_id AS person_id
-                FROM passages p
-                JOIN ancient_works w ON p.work_id = w.work_id
-                LEFT JOIN kg_edges auth_edge
+                FROM free_will.passages p
+                JOIN free_will.ancient_works w ON p.work_id = w.work_id
+                LEFT JOIN free_will.kg_edges auth_edge
                        ON auth_edge.source_id = w.kg_work_id
                       AND auth_edge.relation = 'authored_by'
                 WHERE p.passage_id = ANY($1::uuid[])

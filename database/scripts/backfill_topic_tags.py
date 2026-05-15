@@ -36,7 +36,7 @@ async def _run() -> int:
         print("DATABASE_URL is not set", file=sys.stderr)
         return 2
 
-    db = DatabaseService(database_url)
+    db = DatabaseService()
     await db.connect()
     try:
         rows = await db.fetch(
