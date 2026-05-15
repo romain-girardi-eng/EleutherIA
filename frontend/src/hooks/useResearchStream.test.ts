@@ -120,6 +120,106 @@ describe('useResearchStream reducer', () => {
     expect(state.streamedAnswer).toBe('Hello world');
   });
 
+  it('accumulates tokens_used events into running totals', () => {
+    let state = reduce(initial, {
+      type: 'event',
+      at: 1,
+      event: {
+        type: 'tokens_used',
+        agent_id: 'scholar-orchestrator',
+        model: 'kimi-k2p6',
+        provider: 'fireworks',
+        prompt_tokens: 4_000,
+        completion_tokens: 500,
+        total_tokens: 4_500,
+        estimated_cost_usd: 0.0051,
+      },
+    });
+    state = reduce(state, {
+      type: 'event',
+      at: 2,
+      event: {
+        type: 'tokens_used',
+        agent_id: 'concept-mapper',
+        model: 'kimi-k2p6',
+        provider: 'fireworks',
+        prompt_tokens: 2_000,
+        completion_tokens: 200,
+        total_tokens: 2_200,
+        estimated_cost_usd: 0.00238,
+      },
+    });
+    expect(state.tokenUsage.total_tokens).toBe(6_700);
+    expect(state.tokenUsage.total_cost_usd).toBeCloseTo(0.00748, 6);
+    expect(state.tokenUsage.by_agent['scholar-orchestrator'].tokens).toBe(
+      4_500,
+    );
+    expect(state.tokenUsage.by_agent['concept-mapper'].tokens).toBe(2_200);
+    expect(state.tokenUsage.by_model['kimi-k2p6'].calls).toBe(2);
+    expect(state.tokenUsage.by_provider['fireworks'].prompt_tokens).toBe(6_000);
+  });
+
+  it('replaces totals on cost_summary without losing breakdown', () => {
+    let state = reduce(initial, {
+      type: 'event',
+      at: 1,
+      event: {
+        type: 'tokens_used',
+        agent_id: 'scholar-orchestrator',
+        model: 'kimi-k2p6',
+        provider: 'fireworks',
+        prompt_tokens: 10,
+        completion_tokens: 2,
+        total_tokens: 12,
+        estimated_cost_usd: 0.000017,
+      },
+    });
+    state = reduce(state, {
+      type: 'event',
+      at: 2,
+      event: {
+        type: 'cost_summary',
+        total_tokens: 12_348,
+        total_cost_usd: 0.0212,
+        by_model: { 'kimi-k2p6': { tokens: 12_348, cost_usd: 0.0212, calls: 7 } },
+        by_agent: {
+          'scholar-orchestrator': { tokens: 12_348, cost_usd: 0.0212, calls: 7 },
+        },
+      },
+    });
+    expect(state.tokenUsage.total_tokens).toBe(12_348);
+    expect(state.tokenUsage.total_cost_usd).toBeCloseTo(0.0212, 6);
+    expect(state.tokenUsage.by_model['kimi-k2p6'].calls).toBe(7);
+  });
+
+  it('raises the floor on tokens_used_rollup but keeps higher totals', () => {
+    let state = reduce(initial, {
+      type: 'event',
+      at: 1,
+      event: {
+        type: 'tokens_used',
+        agent_id: 'scholar-orchestrator',
+        model: 'kimi-k2p6',
+        provider: 'fireworks',
+        prompt_tokens: 1_000,
+        completion_tokens: 200,
+        total_tokens: 1_200,
+        estimated_cost_usd: 0.00153,
+      },
+    });
+    state = reduce(state, {
+      type: 'event',
+      at: 2,
+      event: {
+        type: 'tokens_used_rollup',
+        total_tokens: 800,
+        total_cost_usd: 0.001,
+      },
+    });
+    // Should not lose the 1,200 already accumulated.
+    expect(state.tokenUsage.total_tokens).toBe(1_200);
+  });
+
   it('reconciles citation verification flags on final_answer', () => {
     const cit: CitationFoundEvent = {
       type: 'citation_found',

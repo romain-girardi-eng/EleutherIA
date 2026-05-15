@@ -25,6 +25,7 @@ import type {
   CitationEntry,
   KGActivation,
   PairedToolCall,
+  TokenUsageState,
 } from '../../hooks/useResearchStream';
 import { useBibliography } from '../../hooks/useBibliography';
 import type { AgentEvent, FinalAnswerEvent, SessionStatus } from '../../types/agent-events';
@@ -32,6 +33,7 @@ import type { Conversation } from '../../types';
 import { AgentTimeline } from './AgentTimeline';
 import { CitationFeed } from './CitationFeed';
 import { LiveKGViz } from './LiveKGViz';
+import { CostCounter } from './CostCounter';
 import { StreamingAnswer } from './StreamingAnswer';
 import { SubagentStatusCard } from './SubagentStatusCard';
 import {
@@ -54,6 +56,8 @@ interface Props {
   kgActivations: KGActivation[];
   streamedAnswer: string;
   finalAnswer: FinalAnswerEvent | null;
+  /** Live token + USD cost accumulator from ``useResearchStream``. */
+  tokenUsage?: TokenUsageState;
   /** Session identifier used to scope localStorage (bibliography, history). */
   sessionId?: string;
   /** Trace id used to build export URLs / fetch audit. */
@@ -77,6 +81,7 @@ export function ResearchSession({
   kgActivations,
   streamedAnswer,
   finalAnswer,
+  tokenUsage,
   sessionId = 'default',
   traceId,
   shareUrl,
@@ -146,6 +151,9 @@ export function ResearchSession({
           {t('research.doctoral.history.openButton')}
         </button>
         <div className="flex items-center gap-2">
+          {tokenUsage && (tokenUsage.total_tokens > 0 || isLive) && (
+            <CostCounter usage={tokenUsage} />
+          )}
           {effectiveTraceId && (
             <button
               type="button"

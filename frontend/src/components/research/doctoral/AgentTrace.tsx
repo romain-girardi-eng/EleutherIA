@@ -33,6 +33,7 @@ import type {
   AuditResponse,
 } from '../../../types/doctoral';
 import { useFocusTrap } from '../../../hooks/useFocusTrap';
+import { formatTokens, formatUsd } from '../CostCounter';
 
 interface Props {
   traceId: string;
@@ -178,6 +179,12 @@ export function AgentTrace({ traceId, open, onClose }: Props) {
                 {audit.total_tokens.toLocaleString()} {t('research.doctoral.audit.tokens')}
               </span>
             )}
+            {audit?.total_cost_usd !== undefined &&
+              audit.total_cost_usd > 0 && (
+                <span className="inline-flex items-center gap-1 font-mono text-amber-700">
+                  {formatUsd(audit.total_cost_usd)}
+                </span>
+              )}
             <div className="relative ml-auto">
               <Filter
                 className="pointer-events-none absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-stone-400"
@@ -293,9 +300,19 @@ function AgentTreeNode({ node, filter, depth }: NodeProps) {
                 {(node.duration_ms / 1000).toFixed(2)}s
               </span>
             )}
-            {node.tokens_used !== undefined && (
+            {node.tokens_used !== undefined && node.tokens_used > 0 && (
               <span className="text-[10px] text-stone-500">
-                {node.tokens_used.toLocaleString()}t
+                {formatTokens(node.tokens_used)}t
+              </span>
+            )}
+            {node.cost_usd !== undefined && node.cost_usd > 0 && (
+              <span className="font-mono text-[10px] text-amber-700">
+                {formatUsd(node.cost_usd)}
+              </span>
+            )}
+            {node.model && (
+              <span className="font-mono text-[9px] uppercase tracking-wider text-stone-400">
+                {node.model}
               </span>
             )}
           </div>

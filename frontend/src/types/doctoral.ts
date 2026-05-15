@@ -78,6 +78,11 @@ export interface AgentInvocation {
   completed_at?: string;
   duration_ms?: number;
   tokens_used?: number;
+  prompt_tokens?: number;
+  completion_tokens?: number;
+  cost_usd?: number;
+  model?: string;
+  provider?: string;
   tool_calls: AgentInvocationToolCall[];
   status: 'started' | 'complete' | 'failed';
   error?: string;
@@ -98,5 +103,20 @@ export interface AuditResponse {
   completed_at?: string;
   total_duration_ms?: number;
   total_tokens?: number;
+  total_cost_usd?: number;
+  token_breakdown?: {
+    by_agent?: Record<string, { tokens: number; cost_usd: number; calls: number }>;
+    by_model?: Record<string, { tokens: number; cost_usd: number; calls: number }>;
+  };
+  provider_usage?: Record<
+    string,
+    {
+      prompt_tokens: number;
+      completion_tokens: number;
+      total_tokens: number;
+      cost_usd: number;
+      calls: number;
+    }
+  >;
   invocations: AgentInvocation[];
 }
