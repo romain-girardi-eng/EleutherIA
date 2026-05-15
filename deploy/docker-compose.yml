@@ -243,7 +243,7 @@ services:
     profiles:
       - sparql
       - full
-    command: ["--file=/staging/eleutheria.ttl", "/eleutheria"]
+    command: ["/jena-fuseki/fuseki-server", "--file=/staging/eleutheria.ttl", "/eleutheria"]
     environment:
       ADMIN_PASSWORD: ${FUSEKI_ADMIN_PASSWORD:-eleutheria} # pragma: allowlist secret
       JVM_ARGS: ${FUSEKI_JVM_ARGS:--Xmx2g}

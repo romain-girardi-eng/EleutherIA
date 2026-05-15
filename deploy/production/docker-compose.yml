@@ -99,7 +99,7 @@ services:
     environment:
       ADMIN_PASSWORD: ${FUSEKI_ADMIN_PASSWORD:-eleutheria}
       JVM_ARGS: ${FUSEKI_JVM_ARGS:--Xmx1g}
-    command: ["--file=/staging/eleutheria.ttl", "/eleutheria"]
+    command: ["/jena-fuseki/fuseki-server", "--file=/staging/eleutheria.ttl", "/eleutheria"]
     volumes:
       - ../../data/rdf:/staging:ro
     ports:
