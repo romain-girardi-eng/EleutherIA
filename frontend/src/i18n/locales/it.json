@@ -10,6 +10,7 @@
     "visualizer": "Grafo di Conoscenza",
     "search": "Cerca",
     "graphrag": "GraphRAG Q&A",
+    "recherches": "Ricerche",
     "research": "Ricerca dal vivo",
     "texts": "Testi Antichi",
     "bibliography": "Bibliografia",
@@ -1601,6 +1602,70 @@
     "footer": {
       "description": "Un grafo di conoscenza conforme FAIR della filosofia antica del libero arbitrio",
       "license": "CC BY 4.0"
+    }
+  },
+  "appShell": {
+    "pageTitles": {
+      "recherches": "Ricerche pubblicate"
+    }
+  },
+  "recherches": {
+    "eyebrow": "Biblioteca pubblica",
+    "title": "Ricerche pubblicate",
+    "subtitle": "Sfoglia le domande esplorate da altri studiosi. Ogni risposta è ancorata al corpus antico con citazioni verificabili e totale trasparenza su costo e modello utilizzato.",
+    "loading": "Caricamento…",
+    "loadingMore": "Caricamento risultati…",
+    "endOfList": "Fine dei risultati",
+    "filters": {
+      "sort": "Ordina",
+      "recent": "Recenti",
+      "popular": "Popolari",
+      "period": "Periodo",
+      "philosopher": "Scuola"
+    },
+    "tags": {
+      "period": {
+        "presocratic": "Presocratico",
+        "classical": "Classico",
+        "hellenistic": "Ellenistico",
+        "imperial": "Imperiale",
+        "lateAntique": "Tardo-antico"
+      },
+      "school": {
+        "stoic": "Stoica",
+        "epicurean": "Epicurea",
+        "peripatetic": "Peripatetica",
+        "academic": "Accademica",
+        "platonist": "Platonica",
+        "patristic": "Patristica"
+      }
+    },
+    "card": {
+      "citations": "Citazioni",
+      "sections": "Sezioni",
+      "quotes": "Citazioni testuali"
+    },
+    "empty": {
+      "title": "Nessuna ricerca per questi filtri",
+      "body": "Prova a modificare i filtri o torna più tardi."
+    },
+    "errors": {
+      "title": "Impossibile caricare le ricerche",
+      "loadFailed": "Si è verificato un errore durante il caricamento. Riprova.",
+      "notFound": "Questa ricerca non è stata trovata."
+    },
+    "detail": {
+      "backToList": "Torna alle ricerche",
+      "passageCitations": "Passaggi citati",
+      "sources": "Fonti",
+      "noSources": "Nessuna fonte strutturata per questa ricerca.",
+      "tokens": "{{formatted}} token",
+      "citations": "{{count}} citazioni",
+      "cta": {
+        "title": "Riproduci questa ricerca",
+        "body": "Poni questa domanda a EleutherIA usando il modello che preferisci.",
+        "button": "Apri in GraphRAG"
+      }
     }
   }
 }

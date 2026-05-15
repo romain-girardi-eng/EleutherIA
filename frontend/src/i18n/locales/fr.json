@@ -10,6 +10,7 @@
     "visualizer": "Graphe de connaissances",
     "search": "Recherche",
     "graphrag": "GraphRAG Q&R",
+    "recherches": "Recherches",
     "research": "Recherche en direct",
     "texts": "Textes antiques",
     "bibliography": "Bibliographie",
@@ -1656,6 +1657,70 @@
     "footer": {
       "description": "Un graphe de connaissances conforme FAIR de la philosophie antique du libre arbitre",
       "license": "CC BY 4.0"
+    }
+  },
+  "appShell": {
+    "pageTitles": {
+      "recherches": "Recherches publiées"
+    }
+  },
+  "recherches": {
+    "eyebrow": "Bibliothèque publique",
+    "title": "Recherches publiées",
+    "subtitle": "Parcourez les questions explorées par d'autres chercheurs. Chaque réponse est ancrée dans le corpus antique avec des citations vérifiables et une transparence complète sur le coût et le modèle utilisé.",
+    "loading": "Chargement…",
+    "loadingMore": "Chargement des résultats suivants…",
+    "endOfList": "Fin des résultats",
+    "filters": {
+      "sort": "Trier",
+      "recent": "Récent",
+      "popular": "Populaire",
+      "period": "Période",
+      "philosopher": "École"
+    },
+    "tags": {
+      "period": {
+        "presocratic": "Présocratique",
+        "classical": "Classique",
+        "hellenistic": "Hellénistique",
+        "imperial": "Impérial",
+        "lateAntique": "Tardo-antique"
+      },
+      "school": {
+        "stoic": "Stoïcienne",
+        "epicurean": "Épicurienne",
+        "peripatetic": "Péripatéticienne",
+        "academic": "Académicienne",
+        "platonist": "Platonicienne",
+        "patristic": "Patristique"
+      }
+    },
+    "card": {
+      "citations": "Citations",
+      "sections": "Sections",
+      "quotes": "Citations textuelles"
+    },
+    "empty": {
+      "title": "Aucune recherche pour ces filtres",
+      "body": "Essayez de modifier les filtres ou revenez plus tard."
+    },
+    "errors": {
+      "title": "Impossible de charger les recherches",
+      "loadFailed": "Une erreur est survenue lors du chargement. Veuillez réessayer.",
+      "notFound": "Cette recherche est introuvable."
+    },
+    "detail": {
+      "backToList": "Retour aux recherches",
+      "passageCitations": "Passages cités",
+      "sources": "Sources",
+      "noSources": "Aucune source structurée pour cette recherche.",
+      "tokens": "{{formatted}} tokens",
+      "citations": "{{count}} citations",
+      "cta": {
+        "title": "Reproduire cette recherche",
+        "body": "Posez cette question à EleutherIA en utilisant le modèle de votre choix.",
+        "button": "Ouvrir dans GraphRAG"
+      }
     }
   }
 }

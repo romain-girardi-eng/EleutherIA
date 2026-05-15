@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { RotateCw } from 'lucide-react';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
 import { TerminalLoader } from '../../components/ui/terminal-loader';
@@ -8,6 +9,7 @@ import { ResponseTabs } from '@/components/ResponseTabs';
 import type { ResponseTab } from '@/components/ResponseTabs';
 import { TokenBudget } from '@/components/TokenBudget';
 import type { GraphRAGChatMessage } from '../../types';
+import type { CacheBadgeInfo } from '../../components/research/CostCounter';
 
 interface LastMetrics {
   modelLabel: string;
@@ -36,6 +38,10 @@ interface ChatPanelProps {
   onTabChange: (tabId: string) => void;
   onRetry: () => void;
   lastMetrics?: LastMetrics | null;
+  /** When non-null, the current assistant answer was served from cache. */
+  cacheInfo?: CacheBadgeInfo | null;
+  /** Force a fresh (non-cached) re-run of the last user question. */
+  onRegenerate?: () => void;
 }
 
 export default function ChatPanel({
@@ -57,6 +63,8 @@ export default function ChatPanel({
   onTabChange,
   onRetry,
   lastMetrics,
+  cacheInfo = null,
+  onRegenerate,
 }: ChatPanelProps) {
   const { t } = useTranslation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -75,6 +83,23 @@ export default function ChatPanel({
       <div className="shrink-0 flex items-center justify-between px-6 xl:px-10 py-3 border-b border-amber-200/40 bg-parchment-50/80 backdrop-blur-sm">
         <h1 className="text-sm xl:text-base font-semibold text-stone-400 uppercase tracking-wider">{t('graphRagUi.chatTitle')}</h1>
         <div className="flex items-center gap-2">
+          {cacheInfo &&
+            messages.some((m) => m.role === 'assistant') &&
+            onRegenerate && (
+              <button
+                type="button"
+                onClick={onRegenerate}
+                disabled={streaming || loading}
+                aria-label={t('graphRagUi.regenerate.button')}
+                title={t('graphRagUi.regenerate.tooltip')}
+                className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-white/80 px-2 py-1 text-[11px] font-medium text-amber-800 hover:bg-amber-50 hover:border-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <RotateCw className="h-3 w-3" aria-hidden="true" />
+                <span className="hidden sm:inline">
+                  {t('graphRagUi.regenerate.label')}
+                </span>
+              </button>
+            )}
           {lastMetrics && (
             <TokenBudget
               modelLabel={lastMetrics.modelLabel}

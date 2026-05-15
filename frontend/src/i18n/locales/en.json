@@ -10,6 +10,7 @@
     "visualizer": "Knowledge Graph",
     "search": "Search",
     "graphrag": "GraphRAG Q&A",
+    "recherches": "Researches",
     "research": "Live Research",
     "texts": "Ancient Texts",
     "bibliography": "Bibliography",
@@ -1647,6 +1648,70 @@
     "footer": {
       "description": "A FAIR-compliant knowledge graph of ancient free will philosophy",
       "license": "CC BY 4.0"
+    }
+  },
+  "appShell": {
+    "pageTitles": {
+      "recherches": "Published researches"
+    }
+  },
+  "recherches": {
+    "eyebrow": "Public library",
+    "title": "Published researches",
+    "subtitle": "Browse questions explored by other scholars. Every answer is grounded in the ancient corpus with verifiable citations and full transparency on cost and model used.",
+    "loading": "Loading…",
+    "loadingMore": "Loading more…",
+    "endOfList": "End of results",
+    "filters": {
+      "sort": "Sort",
+      "recent": "Recent",
+      "popular": "Popular",
+      "period": "Period",
+      "philosopher": "School"
+    },
+    "tags": {
+      "period": {
+        "presocratic": "Presocratic",
+        "classical": "Classical",
+        "hellenistic": "Hellenistic",
+        "imperial": "Imperial",
+        "lateAntique": "Late Antique"
+      },
+      "school": {
+        "stoic": "Stoic",
+        "epicurean": "Epicurean",
+        "peripatetic": "Peripatetic",
+        "academic": "Academic",
+        "platonist": "Platonist",
+        "patristic": "Patristic"
+      }
+    },
+    "card": {
+      "citations": "Citations",
+      "sections": "Sections",
+      "quotes": "Quotes"
+    },
+    "empty": {
+      "title": "No researches match these filters",
+      "body": "Try changing filters or check back later."
+    },
+    "errors": {
+      "title": "Could not load researches",
+      "loadFailed": "Something went wrong while loading. Please try again.",
+      "notFound": "This research could not be found."
+    },
+    "detail": {
+      "backToList": "Back to researches",
+      "passageCitations": "Cited passages",
+      "sources": "Sources",
+      "noSources": "No structured sources for this research.",
+      "tokens": "{{formatted}} tokens",
+      "citations": "{{count}} citations",
+      "cta": {
+        "title": "Reproduce this research",
+        "body": "Ask this question to EleutherIA using the model of your choice.",
+        "button": "Open in GraphRAG"
+      }
     }
   }
 }

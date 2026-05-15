@@ -16,6 +16,7 @@ import ChatPanel from './ChatPanel';
 import MobileGraphSheet from './MobileGraphSheet';
 import type { GraphRAGResponse, GraphRAGStreamEvent, GraphRAGChatMessage, KGNode } from '../../types';
 import type { ReasoningStep, PassageContext } from '../../types/graphrag';
+import type { CacheBadgeInfo } from '../../components/research/CostCounter';
 import {
   mockGraphRAGResponse,
   mockReasoningSteps,
@@ -75,6 +76,15 @@ export default function GraphRAGPage() {
   const [agentActive, setAgentActive] = useState(false);
   const [streamCost, setStreamCost] = useState<{ total_tokens: number; total_cost_usd: number } | null>(null);
   const agentStepCounterRef = useRef(0);
+
+  // Cache replay state: populated when backend emits a `cache_hit` SSE event
+  // before the `complete` event. Reset to null at the start of every query so
+  // a fresh run never displays a stale cache badge.
+  const [cacheInfo, setCacheInfo] = useState<CacheBadgeInfo | null>(null);
+  // When true, the next streaming query appends `force_refresh=true` to the
+  // SSE URL, bypassing the backend answer cache. Auto-resets to false after
+  // the URL is built so subsequent natural queries don't auto-bypass.
+  const [forceRefresh, setForceRefresh] = useState(false);
 
   // Token budget / cost metrics from last response
   interface LastMetrics {
@@ -330,6 +340,7 @@ export default function GraphRAGPage() {
     setAgentSteps([]);
     setAgentActive(true);
     setStreamCost(null);
+    setCacheInfo(null);
     agentStepCounterRef.current = 0;
     initializeReasoningSteps(queryText);
 
@@ -350,6 +361,12 @@ export default function GraphRAGPage() {
         model: effectiveModel,
         retrieval_mode: effectiveMode,
       });
+      if (forceRefresh) {
+        params.set('force_refresh', 'true');
+        // Reset immediately so the next *natural* query doesn't auto-bypass
+        // the cache.
+        setForceRefresh(false);
+      }
 
       const response = await fetch(`${apiUrl}/api/graphrag/query/stream?${params.toString()}`, {
         method: 'GET',
@@ -478,6 +495,23 @@ export default function GraphRAGPage() {
                   setStreamCost({
                     total_tokens: Number(p.total_tokens ?? 0),
                     total_cost_usd: Number(p.total_cost_usd ?? 0),
+                  });
+                  break;
+                }
+
+                case 'cache_hit': {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const p = (data.data ?? data) as any;
+                  setCacheInfo({
+                    cacheKeyShort: String(p.cache_key_short ?? ''),
+                    originalTraceId:
+                      p.original_trace_id != null && p.original_trace_id !== ''
+                        ? String(p.original_trace_id)
+                        : null,
+                    originalCostUsd: Number(p.original_cost_usd ?? 0),
+                    originalTokens: Number(p.original_tokens ?? 0),
+                    cachedAt: String(p.cached_at ?? ''),
+                    hitCount: Number(p.hit_count ?? 0),
                   });
                   break;
                 }
@@ -767,6 +801,15 @@ export default function GraphRAGPage() {
     processQuery(initialQuestion, newModel, selectedMode);
   }, [initialQuestion, selectedModel, selectedMode, processQuery]);
 
+  // Force a fresh (non-cached) run of the last user question. Re-uses the
+  // same processQuery code path as a normal submission; ``setForceRefresh``
+  // primes the next handleStreamingQuery call to append force_refresh=true.
+  const handleRegenerate = useCallback(() => {
+    if (!initialQuestion || streaming) return;
+    setForceRefresh(true);
+    processQuery(initialQuestion);
+  }, [initialQuestion, streaming, processQuery]);
+
   const advancedProps = {
     ancientOnly, setAncientOnly,
   };
@@ -824,6 +867,8 @@ export default function GraphRAGPage() {
                 onTabChange={handleTabChange}
                 onRetry={handleRetry}
                 lastMetrics={lastMetrics}
+                cacheInfo={cacheInfo}
+                onRegenerate={handleRegenerate}
               />
 
               {/* RIGHT PANEL - desktop graph workspace */}
