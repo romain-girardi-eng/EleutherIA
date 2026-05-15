@@ -9,6 +9,7 @@ import NodeDetailCard from './NodeDetailCard';
 import PassageReaderPanel from './PassageReaderPanel';
 import AgentActivityPanel from './AgentActivityPanel';
 import type { AgentStep } from './AgentActivityPanel';
+import ResearchTimelinePanel, { type TokenCost } from './ResearchTimelinePanel';
 import { cn } from '../../utils/cn';
 import type { GraphRAGResponse, SourceCitation } from '../../types';
 import type { PassageContext } from '../../types/graphrag';
@@ -24,11 +25,13 @@ interface RightPanelProps {
   passageContext?: PassageContext | null;
   agentSteps?: AgentStep[];
   agentActive?: boolean;
+  cost?: TokenCost | null;
   onNodeClick: (nodeId: string) => void;
   onCloseDetail: () => void;
   onSourceSelect?: (sourceIndex: number) => void;
   onLoadMorePassages?: (direction: 'up' | 'down') => void;
   onHighlightRef?: (fn: (citationIndex: number) => void) => void;
+  onOpenGraphView?: () => void;
   className?: string;
 }
 
@@ -352,11 +355,13 @@ export default function RightPanel({
   passageContext,
   agentSteps = [],
   agentActive = false,
+  cost = null,
   onNodeClick: _onNodeClick,
   onCloseDetail,
   onSourceSelect,
   onLoadMorePassages,
   onHighlightRef: _onHighlightRef,
+  onOpenGraphView,
   className = '',
 }: RightPanelProps) {
   const navigate = useNavigate();
@@ -496,9 +501,12 @@ export default function RightPanel({
                 transition={{ duration: 0.28 }}
                 className="h-full min-h-0"
               >
-                <AgentActivityPanel
+                <ResearchTimelinePanel
                   steps={agentSteps}
                   isActive={agentActive}
+                  response={response}
+                  cost={cost ?? undefined}
+                  onOpenSources={onOpenGraphView}
                   className="h-full"
                 />
               </motion.div>
