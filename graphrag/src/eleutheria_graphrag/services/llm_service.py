@@ -419,6 +419,9 @@ class LLMService:
         config: dict[str, Any],
         *,
         prompt_cache_id: str | None = None,
+        response_json_schema: dict[str, Any] | None = None,
+        response_mime_type: str | None = None,
+        schema_name: str = "structured_output",
     ) -> dict[str, Any]:
         """Build JSON payload for OpenAI-compatible providers.
 
@@ -428,6 +431,12 @@ class LLMService:
         so the ~3-5k-token system prompt is paid for once per session, not
         once per call. See Fireworks docs: prompt caching reduces TTFT and
         per-call cost on repeated prefixes.
+
+        When ``response_json_schema`` is provided we attach an OpenAI-style
+        ``response_format={"type": "json_schema", ...}`` directive — Fireworks
+        and Moonshot both honour this and constrain the model to valid JSON
+        server-side. OpenRouter only guarantees ``{"type": "json_object"}``
+        so we degrade gracefully there.
         """
         messages = []
         if system_prompt:
@@ -456,6 +465,21 @@ class LLMService:
             reasoning_effort = cast(str | None, config.get("reasoning_effort"))
             if reasoning_effort:
                 payload["reasoning"] = {"effort": reasoning_effort}
+
+        if response_json_schema is not None:
+            if provider in (ModelProvider.FIREWORKS, ModelProvider.KIMI):
+                payload["response_format"] = {
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": schema_name,
+                        "schema": response_json_schema,
+                        "strict": True,
+                    },
+                }
+            else:
+                payload["response_format"] = {"type": "json_object"}
+        elif response_mime_type == "application/json":
+            payload["response_format"] = {"type": "json_object"}
         return payload
 
     @staticmethod
@@ -688,6 +712,8 @@ class LLMService:
                         override_api_key,
                         override_config,
                         agent_id=agent_id,
+                        response_json_schema=response_json_schema,
+                        response_mime_type=response_mime_type,
                     )
                 except Exception as exc:
                     logger.warning(
@@ -745,6 +771,8 @@ class LLMService:
                         api_key,
                         request_config,
                         agent_id=agent_id,
+                        response_json_schema=response_json_schema,
+                        response_mime_type=response_mime_type,
                     )
                 except Exception as exc:
                     last_exc = exc
@@ -1025,6 +1053,9 @@ class LLMService:
         config: dict[str, Any],
         *,
         agent_id: str | None = None,
+        response_json_schema: dict[str, Any] | None = None,
+        response_mime_type: str | None = None,
+        schema_name: str = "structured_output",
     ) -> str:
         """Generate using OpenAI-compatible API (Fireworks, Kimi, OpenRouter)."""
         client = await self._get_client()
@@ -1040,6 +1071,9 @@ class LLMService:
                 max_tokens,
                 config,
                 prompt_cache_id=self._fireworks_cache_id(agent_id),
+                response_json_schema=response_json_schema,
+                response_mime_type=response_mime_type,
+                schema_name=schema_name,
             ),
         )
         response.raise_for_status()

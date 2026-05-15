@@ -1219,7 +1219,101 @@ class TestRenderAndVerify:
 
         assert "### Core Doctrinal Thesis" in rendered
         assert '> Original: "fatum est series causarum" [P1]' in rendered
-        assert "Stoic fate is an ordered chain of causes. [P1]" in rendered
+        # The faceted section carries the claim directly (no separate intro
+        # line that would duplicate it verbatim).
+        assert "Stoic fate is an ordered chain of causes [P1]" in rendered
+        # The intro recap is now suppressed when sections will carry the
+        # claim — preventing the duplication that produced the production
+        # "repetitive" rendering.
+        assert rendered.count("Stoic fate is an ordered chain of causes") == 1
+
+    def test_render_answer_fallback_assigns_distinct_claims_to_each_section(self):
+        """Regression: when claims have no facet_id, the fallback used to
+        emit one section with content + several empty sections (looked
+        repetitive in production). Each section now gets a *distinct*
+        claim where possible, and empty sections receive a neutral note."""
+        state = RAGState(question="Compare Bobzien and Frede on Stoic compatibilism.")
+        state.scholarly_dossier.facets = [
+            DossierFacet(
+                facet_id="core_doctrinal_thesis",
+                title="Core Doctrinal Thesis",
+                question="Q1",
+            ),
+            DossierFacet(
+                facet_id="textual_witnesses",
+                title="Textual Witnesses",
+                question="Q2",
+            ),
+            DossierFacet(
+                facet_id="counterpoints",
+                title="Counterpoints and Limits",
+                question="Q3",
+            ),
+        ]
+        state.context_pack = ContextPack(
+            bundle_refs={"bundle-1": "P1", "bundle-2": "P2"}
+        )
+        # Two unfaceted claims — should land in the first two facets.
+        state.claim_ledger = [
+            ClaimLedgerItem(
+                claim="Bobzien reads Stoic doctrine as compatibilist about responsibility.",
+                evidence_ids=["bundle-1"],
+                facet_id=None,
+                support_type="passage",
+                confidence=0.9,
+                status=ClaimStatus.SUPPORTED,
+            ),
+            ClaimLedgerItem(
+                claim="Frede stresses the moralised conception of freedom in later Stoicism.",
+                evidence_ids=["bundle-2"],
+                facet_id=None,
+                support_type="passage",
+                confidence=0.9,
+                status=ClaimStatus.SUPPORTED,
+            ),
+        ]
+
+        rendered = _render_answer_fallback(state)
+
+        # Both distinct claims appear, in the two filled sections.
+        assert "Bobzien reads Stoic doctrine" in rendered
+        assert "Frede stresses the moralised conception" in rendered
+        # The third (empty) facet must still appear, with a neutral note —
+        # NOT a recycled copy of the first claim.
+        assert "### Counterpoints and Limits" in rendered
+        assert "No direct evidence catalogued" in rendered
+        # Neither claim should appear more than once.
+        assert rendered.count("Bobzien reads Stoic doctrine") == 1
+        assert rendered.count("Frede stresses the moralised conception") == 1
+        # The "Section: claim" anti-pattern must not appear.
+        assert "Textual Witnesses: " not in rendered
+        assert "Counterpoints and Limits: " not in rendered
+
+    def test_render_answer_fallback_strips_section_title_prefix(self):
+        """When the LLM prefixes a claim with the facet title, strip it."""
+        state = RAGState(question="What did Justin argue?")
+        state.scholarly_dossier.facets = [
+            DossierFacet(
+                facet_id="textual_witnesses",
+                title="Textual Witnesses",
+                question="Q",
+            )
+        ]
+        state.context_pack = ContextPack(bundle_refs={"bundle-1": "P1"})
+        state.claim_ledger = [
+            ClaimLedgerItem(
+                claim="Textual Witnesses: Justin defends what is up to us.",
+                evidence_ids=["bundle-1"],
+                facet_id="textual_witnesses",
+                support_type="passage",
+                confidence=0.9,
+                status=ClaimStatus.SUPPORTED,
+            )
+        ]
+        rendered = _render_answer_fallback(state)
+        assert "### Textual Witnesses" in rendered
+        assert "Textual Witnesses: Justin defends" not in rendered
+        assert "Justin defends what is up to us" in rendered
 
     @pytest.mark.asyncio
     async def test_render_then_verify_keeps_grounded_lines(self):
