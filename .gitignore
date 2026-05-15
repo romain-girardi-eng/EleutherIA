@@ -76,6 +76,8 @@ frontend/dist/
 
 # Report files may contain API keys in error URLs
 docs/reports/
+kg-invariants-shacl.md
+kg-quality-shacl.md
 
 # Logs
 *.log
@@ -103,6 +105,10 @@ credentials/
 *.backup*.json
 data/exports/
 data/spike/
+data/rdf/*.ttl
+data/rdf/*.jsonld
+data/rdf/*.nt
+!data/rdf/.gitkeep
 *.parquet
 *.arrow
 

@@ -100,6 +100,36 @@ def _emit_ontology(g: Graph) -> None:
 # ---------- node emission ----------------------------------------------------
 
 
+def _normalize_mapping(value: Any) -> dict[str, Any]:
+    """Return a JSON-object mapping from API/JSONL metadata variants.
+
+    The live REST export currently serializes JSONB metadata as strings for
+    some snapshots. RDF/SHACL must be resilient to both forms because these
+    artifacts are the publication gate, not an optional visualization cache.
+    """
+    if isinstance(value, dict):
+        return value
+    if isinstance(value, str) and value.strip():
+        try:
+            parsed = json.loads(value)
+        except json.JSONDecodeError:
+            return {}
+        return parsed if isinstance(parsed, dict) else {}
+    return {}
+
+
+def _emit_json_literal(g: Graph, iri: URIRef, prop: URIRef, value: Any) -> None:
+    if value in (None, "", [], {}):
+        return
+    g.add(
+        (
+            iri,
+            prop,
+            Literal(json.dumps(value, ensure_ascii=False, sort_keys=True)),
+        )
+    )
+
+
 def _emit_node(g: Graph, node: dict[str, Any]) -> None:
     node_id = node.get("id")
     node_type = node.get("type")
@@ -118,7 +148,7 @@ def _emit_node(g: Graph, node: dict[str, Any]) -> None:
     if period := node.get("period"):
         g.add((iri, KG.period, Literal(period)))
 
-    metadata = node.get("metadata") or {}
+    metadata = _normalize_mapping(node.get("metadata"))
 
     # Surface `metadata.needs_evidence` as the dedicated kg:needsEvidence
     # property so SHACL quality shapes can exempt nodes flagged as
@@ -146,12 +176,56 @@ def _emit_node(g: Graph, node: dict[str, Any]) -> None:
             g.add((iri, DCTERMS.identifier, Literal(cts)))
             g.add((iri, KG.ctsURN, Literal(cts)))
 
+    # Passage role/provenance: distinguishes original critical text from
+    # translation/paraphrase, which is essential for strict linguistic queries.
+    if node_type == "passage":
+        role = metadata.get("passage_role")
+        if role:
+            g.add((iri, KG.passageRole, Literal(str(role))))
+        if source_passage_id := metadata.get("source_passage_id"):
+            g.add((iri, KG.sourcePassageId, Literal(str(source_passage_id))))
+
     # Concept and term: emit greek/latin terms when present.
     if node_type in {"concept", "term"}:
         if grc := metadata.get("greek_term"):
             g.add((iri, KG.greekTerm, Literal(grc, lang="grc")))
         if lat := metadata.get("latin_term"):
             g.add((iri, KG.latinTerm, Literal(lat, lang="lat")))
+
+    # Edition and uncertainty metadata are nested structured records. Keep a
+    # JSON literal in RDF so downstream SPARQL can filter for presence while
+    # preserving the editorial object for clients that parse it.
+    editions = metadata.get("editions") or metadata.get("edition")
+    _emit_json_literal(g, iri, KG.editionMetadata, editions)
+    _emit_json_literal(g, iri, KG.dateUncertainty, metadata.get("date_uncertainty"))
+
+    if node_type == "publication":
+        for key in ("doi", "DOI"):
+            if doi := metadata.get(key):
+                g.add((iri, KG.doi, Literal(str(doi))))
+                break
+        if isbn := metadata.get("isbn") or metadata.get("ISBN"):
+            g.add((iri, KG.isbn, Literal(str(isbn))))
+        if bibtex_key := metadata.get("bibtex_key") or metadata.get("zotero_key"):
+            g.add((iri, KG.bibtexKey, Literal(str(bibtex_key))))
+
+    if node_type == "textual_variant":
+        for key, prop in (
+            ("lemma", KG.lemma),
+            ("lection_principale", KG.lectionPrincipale),
+            ("source_critique", KG.sourceCritique),
+        ):
+            if value := metadata.get(key):
+                g.add((iri, prop, Literal(str(value))))
+        _emit_json_literal(
+            g, iri, KG.lectionsAlternatives, metadata.get("lections_alternatives")
+        )
+
+    if node_type == "argument_reconstruction":
+        if fidelity := metadata.get("fidelity_score"):
+            g.add((iri, KG.fidelityScore, Literal(fidelity)))
+        if note := metadata.get("reconstruction_note"):
+            g.add((iri, KG.reconstructionNote, Literal(str(note))))
 
 
 # ---------- edge emission ----------------------------------------------------

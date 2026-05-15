@@ -58,10 +58,44 @@ jobs:
       - name: Install package
         run: |
           pip install -e database/
-          pip install -e "knowledge graph/[dev]"
+          pip install -e "knowledge graph/[dev,semantic]"
 
       - name: Run tests
         run: cd "knowledge graph" && python -m pytest tests/ -v
+
+  kg-invariants:
+    name: KG RDF/SHACL Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install semantic tooling
+        run: |
+          pip install -e database/
+          pip install -e "knowledge graph/[semantic]"
+
+      - name: Regenerate SHACL shapes
+        run: python "knowledge graph/src/eleutheria_kg/semantic/shapes/generate_shapes.py"
+
+      - name: Ensure generated shapes are committed
+        run: git diff --exit-code -- "knowledge graph/src/eleutheria_kg/semantic/shapes"
+
+      - name: Validate KG invariants and write quality report
+        run: python scripts/validate_kg_shacl.py --max-examples 100
+
+      - name: Upload SHACL reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kg-shacl-reports
+          path: |
+            kg-invariants-shacl.md
+            kg-quality-shacl.md
 
   test-graphrag:
     name: Test GraphRAG Package

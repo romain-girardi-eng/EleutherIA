@@ -45,6 +45,61 @@ SAMPLE_NODES = [
         "period": "Hellenistic",
         "metadata": {"greek_term": "συγκατάθεσις", "latin_term": "adsensio"},
     },
+    {
+        "id": "passage_cic_fat_1_test",
+        "label": "Cicero, De Fato 1",
+        "type": "passage",
+        "description": "Latin passage.",
+        "period": "Roman Republican",
+        "metadata": json.dumps(
+            {
+                "cts_urn": "urn:cts:latinLit:phi0474.phi049:1",
+                "passage_role": "original",
+                "edition": {
+                    "editor": "Sharples",
+                    "series": "Aris & Phillips",
+                    "year": "1991",
+                },
+            }
+        ),
+    },
+    {
+        "id": "publication_bobzien_test",
+        "label": "Bobzien 1998",
+        "type": "publication",
+        "description": "Modern publication.",
+        "period": "Contemporary",
+        "metadata": {
+            "doi": "10.2307/4182566",
+            "isbn": "9780199247677",
+            "bibtex_key": "bobzien1998inadvertent",
+        },
+    },
+    {
+        "id": "variant_cic_fat_1_test",
+        "label": "Cicero De Fato 1 variant",
+        "type": "textual_variant",
+        "description": "Variant record.",
+        "period": "Roman Republican",
+        "metadata": {
+            "lemma": "fatum",
+            "lection_principale": "fatum",
+            "lections_alternatives": [
+                {"manuscrit": "A", "lecture": "factum", "source_critique": "Sharples"}
+            ],
+        },
+    },
+    {
+        "id": "argument_reconstruction_cicero_test",
+        "label": "Cicero reconstruction",
+        "type": "argument_reconstruction",
+        "description": "A reported argument reconstruction.",
+        "period": "Roman Republican",
+        "metadata": {
+            "fidelity_score": 0.72,
+            "reconstruction_note": "Cicero reports a Stoic target polemically.",
+        },
+    },
 ]
 
 SAMPLE_EDGES = [
@@ -145,6 +200,28 @@ def test_concept_carries_greek_and_latin_terms(
     latin_terms = list(g.objects(concept, KG.latinTerm))
     assert any("συγκατάθεσις" in str(t) for t in greek_terms)
     assert any("adsensio" in str(t) for t in latin_terms)
+
+
+def test_build_graph_normalizes_string_metadata_and_emits_philology_fields(
+    jsonl_snapshot: tuple[Path, Path],
+) -> None:
+    nodes_path, edges_path = jsonl_snapshot
+    g = build_graph(nodes_path, edges_path)
+
+    passage = mint_node_iri("passage_cic_fat_1_test")
+    assert (passage, KG.passageRole, rdflib.Literal("original")) in g
+    assert list(g.objects(passage, KG.editionMetadata))
+
+    publication = mint_node_iri("publication_bobzien_test")
+    assert (publication, KG.doi, rdflib.Literal("10.2307/4182566")) in g
+    assert (publication, KG.bibtexKey, rdflib.Literal("bobzien1998inadvertent")) in g
+
+    variant = mint_node_iri("variant_cic_fat_1_test")
+    assert (variant, KG.lemma, rdflib.Literal("fatum")) in g
+    assert list(g.objects(variant, KG.lectionsAlternatives))
+
+    reconstruction = mint_node_iri("argument_reconstruction_cicero_test")
+    assert (reconstruction, KG.fidelityScore, rdflib.Literal(0.72)) in g
 
 
 def test_round_trip_through_turtle_preserves_count(

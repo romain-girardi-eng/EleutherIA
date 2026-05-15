@@ -27,7 +27,7 @@ router = APIRouter(tags=["graphrag-audit"])
 def _coerce_uuid(value: str) -> uuid.UUID:
     try:
         return uuid.UUID(value)
-    except TypeError, ValueError:
+    except (TypeError, ValueError):
         return uuid.uuid5(uuid.NAMESPACE_URL, f"eleutheria:trace:{value}")
 
 

@@ -87,7 +87,7 @@ def harvest(docroot: Path = DOCROOT) -> dict[str, list[dict[str, str]]]:
     for fp in files:
         try:
             text = fp.read_text(encoding="utf-8", errors="ignore")
-        except OSError, UnicodeDecodeError:
+        except (OSError, UnicodeDecodeError):
             continue
         if not text:
             continue

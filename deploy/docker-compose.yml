@@ -104,6 +104,7 @@ services:
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost,http://localhost:80,http://localhost:5173}
       PROMETHEUS_ENABLED: "true"
       PYTHONUNBUFFERED: "1"
+      SPARQL_ENDPOINT: ${SPARQL_ENDPOINT:-http://fuseki:3030/eleutheria/sparql}
     ports:
       - "${BACKEND_PORT:-8000}:8000"
     depends_on:
@@ -229,6 +230,33 @@ services:
       - prometheus
     networks:
       - monitoring
+
+  # ---------------------------------------------------------------------------
+  # Fuseki SPARQL Endpoint (profile: sparql)
+  # ---------------------------------------------------------------------------
+  # Generate the Turtle dump first:
+  #   python -m cli.main export kg --format rdf --output data/rdf/eleutheria
+  fuseki:
+    image: stain/jena-fuseki:latest
+    container_name: eleutheria-fuseki
+    restart: unless-stopped
+    profiles:
+      - sparql
+      - full
+    command: ["--file=/staging/eleutheria.ttl", "/eleutheria"]
+    environment:
+      ADMIN_PASSWORD: ${FUSEKI_ADMIN_PASSWORD:-eleutheria} # pragma: allowlist secret
+      JVM_ARGS: ${FUSEKI_JVM_ARGS:--Xmx2g}
+    volumes:
+      - ../data/rdf:/staging:ro
+    ports:
+      - "${FUSEKI_PORT:-3030}:3030"
+    networks:
+      - internal
+    deploy:
+      resources:
+        limits:
+          memory: 2G
 
 networks:
   internal:

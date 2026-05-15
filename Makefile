@@ -6,6 +6,7 @@
         cf-deploy cf-dev cf-logs \
         test test-database test-kg test-graphrag test-coverage \
         lint format typecheck quality fix \
+        kg-rdf kg-shacl kg-bibtex scholarly-backlog sparql sparql-stop \
         frontend-install frontend-dev frontend-build frontend-test \
         logs docs docs-serve clean
 
@@ -36,6 +37,11 @@ help:
 	@echo "  make typecheck        Run mypy type checker"
 	@echo "  make quality          Run lint + typecheck"
 	@echo "  make fix              Auto-fix + format"
+	@echo "  make kg-shacl         Validate KG invariant SHACL and write quality report"
+	@echo "  make kg-rdf           Export KG RDF into data/rdf/eleutheria.{ttl,jsonld,nt}"
+	@echo "  make kg-bibtex        Export publication nodes to data/kg/publications.bib"
+	@echo "  make scholarly-backlog Export evidence/edition/date backlog reports"
+	@echo "  make sparql           Start local Fuseki sidecar from data/rdf/eleutheria.ttl"
 	@echo ""
 	@echo "Frontend:"
 	@echo "  make frontend-install Install frontend dependencies"
@@ -76,7 +82,7 @@ install-database:
 	cd database && pip install -e ".[dev]"
 
 install-kg:
-	cd "knowledge graph" && pip install -e ".[dev]"
+	cd "knowledge graph" && pip install -e ".[dev,semantic]"
 
 install-graphrag:
 	cd graphrag && pip install -e ".[dev]"
@@ -101,6 +107,13 @@ local-clean:
 
 logs:
 	docker compose -f deploy/docker-compose.yml logs -f
+
+sparql: kg-rdf
+	docker compose -f deploy/docker-compose.yml --profile sparql up -d fuseki
+	@echo "SPARQL endpoint: http://localhost:$${FUSEKI_PORT:-3030}/eleutheria/sparql"
+
+sparql-stop:
+	docker compose -f deploy/docker-compose.yml --profile sparql stop fuseki
 
 # =============================================================================
 # Docker — Production (Supabase + Qdrant Cloud)
@@ -166,6 +179,19 @@ typecheck:
 
 quality: lint typecheck
 	@echo "Code quality checks passed!"
+
+kg-rdf:
+	python -m cli.main export kg --format rdf --output data/rdf/eleutheria
+
+kg-shacl:
+	python "knowledge graph/src/eleutheria_kg/semantic/shapes/generate_shapes.py"
+	python scripts/validate_kg_shacl.py
+
+kg-bibtex:
+	python scripts/export_publications_bibtex.py
+
+scholarly-backlog:
+	python scripts/audit_scholarly_backlog.py
 
 fix:
 	ruff check --fix database/src "knowledge graph/src" graphrag/src

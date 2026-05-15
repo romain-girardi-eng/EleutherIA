@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       base_url:
-        description: 'Backend base URL (defaults to Railway production)'
+        description: 'Backend base URL (defaults to the platform production)'
         required: false
         default: ''
 
@@ -30,11 +30,19 @@ jobs:
         with:
           python-version: '3.14'
 
+      - name: Install semantic tooling
+        run: |
+          pip install -e database/
+          pip install -e "knowledge graph/[semantic]"
+
       - name: Export KG snapshot
         env:
-          KG_API_BASE: ${{ github.event.inputs.base_url || 'https://eleutheria-backend-production.up.railway.app' }}
+          KG_API_BASE: ${{ github.event.inputs.base_url || 'https://api.free-will.app' }}
         run: |
           python scripts/export_kg_snapshot.py
+
+      - name: Validate snapshot invariants
+        run: python scripts/validate_kg_shacl.py --skip-quality --max-examples 50
 
       - name: Show diff summary
         run: |

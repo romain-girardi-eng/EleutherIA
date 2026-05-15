@@ -90,7 +90,7 @@ def check_docker() -> bool:
     try:
         subprocess.run(["docker", "--version"], capture_output=True, check=True)
         return True
-    except subprocess.CalledProcessError, FileNotFoundError:
+    except (subprocess.CalledProcessError, FileNotFoundError):
         return False
 
 
@@ -811,7 +811,7 @@ def status() -> None:
                             else f"[yellow]{state}[/yellow]"
                         )
                         table.add_row(f"Docker: {name}", status_style, "")
-                    except json.JSONDecodeError, KeyError:
+                    except (json.JSONDecodeError, KeyError):
                         pass
         except Exception:
             table.add_row("Docker", "[yellow]Unable to check[/yellow]", "")

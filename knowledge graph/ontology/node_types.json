@@ -49,8 +49,16 @@
       "properties": {
         "cts_urn": { "type": "string", "description": "Canonical Text Services URN" },
         "date": { "type": "string", "description": "Date of composition" },
+        "date_uncertainty": {
+          "type": "object",
+          "description": "Formal date uncertainty record with best, range_lower, range_upper, confidence, and source"
+        },
         "author": { "type": "string", "description": "Author name" },
-        "language": { "type": "string", "enum": ["grc", "lat", "eng"] }
+        "language": { "type": "string", "enum": ["grc", "lat", "eng"] },
+        "editions": {
+          "type": "array",
+          "description": "Critical editions with editor, series, year, identifier, and note"
+        }
       },
       "examples": ["chrysippus_on_fate", "epictetus_discourses"]
     },
@@ -80,6 +88,19 @@
         "work": { "type": "string", "description": "Source work title" },
         "work_id": { "type": "string", "description": "Reference to work node" },
         "passage_id": { "type": "string", "description": "Database passage ID" },
+        "passage_role": {
+          "type": "string",
+          "enum": ["original", "translation", "paraphrase"],
+          "description": "Role of the passage text for philological filtering"
+        },
+        "source_passage_id": {
+          "type": "string",
+          "description": "Original passage node or database passage id for translations/paraphrases"
+        },
+        "edition": {
+          "type": "object",
+          "description": "Critical edition metadata for the passage when finer than the work-level edition"
+        },
         "key_concepts": { "type": "array", "description": "Key philosophical concepts" },
         "key_terms": { "type": "array", "description": "Key terms in the passage" }
       }
@@ -178,6 +199,9 @@
         "year": { "type": "integer", "description": "Publication year" },
         "journal": { "type": "string", "description": "Journal name" },
         "publisher": { "type": "string", "description": "Publisher" },
+        "doi": { "type": "string", "description": "Digital Object Identifier" },
+        "isbn": { "type": "string", "description": "ISBN for books or edited volumes" },
+        "bibtex_key": { "type": "string", "description": "Stable BibTeX key for export" },
         "key_claim": { "type": "string", "description": "Central claim or thesis" },
         "zotero_key": { "type": "string", "description": "Zotero reference key" }
       },
@@ -238,6 +262,34 @@
         "framework_type": { "type": "string", "description": "Type of framework" },
         "components": { "type": "array", "description": "Framework components" }
       }
+    },
+    "textual_variant": {
+      "description": "A philological apparatus entry recording a disputed reading for a passage or fragment",
+      "color": "#64748b",
+      "icon": "git-compare",
+      "properties": {
+        "lemma": { "type": "string", "description": "Lemma or text span under discussion" },
+        "lection_principale": { "type": "string", "description": "Adopted reading" },
+        "lections_alternatives": {
+          "type": "array",
+          "description": "Alternative readings, each with manuscript/witness, reading, and critical source"
+        },
+        "source_critique": { "type": "string", "description": "Critical edition or apparatus from which the variant is drawn" },
+        "confidence": { "type": "number", "description": "Editorial confidence in the encoded variant record" }
+      },
+      "examples": ["variant_svf_2_974_lemma_hormes", "variant_cicero_de_fato_12"]
+    },
+    "argument_reconstruction": {
+      "description": "A historically explicit reconstruction of an argument as reported by a polemical or doxographical source",
+      "color": "#c026d3",
+      "icon": "workflow",
+      "properties": {
+        "target_argument": { "type": "string", "description": "Argument being reconstructed" },
+        "source_text": { "type": "string", "description": "Passage or work that supplies the reconstruction" },
+        "fidelity_score": { "type": "number", "description": "0-1 estimate of fidelity to the original argument" },
+        "reconstruction_note": { "type": "string", "description": "Methodological note distinguishing source report from original argument" }
+      },
+      "examples": ["argument_reconstruction_cicero_carneades_stoic_fate"]
     }
   }
 }

@@ -1,0 +1,15 @@
+{
+  "default": {
+    "json_mirror": {
+      "uri": "data/corpus_mirrors/{work_node_id}.json",
+      "source_name": "institutional_json_mirror"
+    }
+  },
+  "work_de_fato_cicero_44bce_b9c4e5d2": {
+    "phi": {
+      "author_num": 474,
+      "work_num": 54,
+      "base_url": "https://latin.packhum.org"
+    }
+  }
+}

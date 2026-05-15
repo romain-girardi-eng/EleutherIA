@@ -65,7 +65,7 @@ def _iso_to_dt(iso: str | None) -> datetime | None:
 def _coerce_uuid(value: str) -> uuid.UUID | None:
     try:
         return uuid.UUID(value)
-    except TypeError, ValueError, AttributeError:
+    except (TypeError, ValueError, AttributeError):
         return None
 
 

@@ -34,6 +34,7 @@ services:
       - .env
     environment:
       PYTHONUNBUFFERED: "1"
+      SPARQL_ENDPOINT: ${SPARQL_ENDPOINT:-http://fuseki:3030/eleutheria/sparql}
     ports:
       - "${BACKEND_PORT:-8000}:8000"
     healthcheck:
@@ -86,6 +87,30 @@ services:
         limits:
           cpus: "1"
           memory: 256M
+
+  # ---------------------------------------------------------------------------
+  # SPARQL — Read-only public query sidecar over the exported Turtle dump
+  # ---------------------------------------------------------------------------
+  fuseki:
+    image: stain/jena-fuseki:latest
+    container_name: eleutheria-fuseki
+    restart: unless-stopped
+    profiles: ["sparql"]
+    environment:
+      ADMIN_PASSWORD: ${FUSEKI_ADMIN_PASSWORD:-eleutheria}
+      JVM_ARGS: ${FUSEKI_JVM_ARGS:--Xmx1g}
+    command: ["--file=/staging/eleutheria.ttl", "/eleutheria"]
+    volumes:
+      - ../../data/rdf:/staging:ro
+    ports:
+      - "${FUSEKI_PORT:-3030}:3030"
+    networks:
+      - frontend
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1G
 
 networks:
   frontend:

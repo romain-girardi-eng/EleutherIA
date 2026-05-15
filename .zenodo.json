@@ -11,6 +11,8 @@
   "access_right": "open",
   "license": "cc-by-4.0",
   "upload_type": "software",
+  "version": "5.1.0",
+  "publication_date": "2026-06-30",
   "keywords": [
     "ancient philosophy",
     "free will",
@@ -23,5 +25,5 @@
     "Latin",
     "moral responsibility"
   ],
-  "notes": "Use the concept DOI 10.5281/zenodo.17379489 to cite the rolling EleutherIA archive from the main branch."
+  "notes": "Use the concept DOI 10.5281/zenodo.17379489 for the rolling EleutherIA archive. Thesis and publication references should cite the version DOI of the frozen release actually used, together with the Git commit hash and the data/kg snapshot date. Planned cadence: semi-annual frozen releases (v5.1.0 June 2026, v5.2.0 December 2026) under the same Zenodo concept record."
 }
