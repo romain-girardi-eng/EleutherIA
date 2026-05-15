@@ -193,9 +193,7 @@ class LLMService:
         if not self.available_providers:
             logger.warning("No LLM providers configured - set API keys in environment")
 
-    def set_token_usage_callback(
-        self, callback: TokenUsageCallback | None
-    ) -> None:
+    def set_token_usage_callback(self, callback: TokenUsageCallback | None) -> None:
         """Register an async callback fired after every successful LLM call.
 
         Called with a :class:`TokenUsage` carrying prompt / completion token
@@ -206,17 +204,41 @@ class LLMService:
         self._token_usage_callback = callback
 
     async def _emit_token_usage(self, usage: TokenUsage | None) -> None:
-        """Record + forward a single TokenUsage observation, swallowing errors."""
+        """Record + forward a single TokenUsage observation, swallowing errors.
+
+        Dispatches to two sinks (independent; both are best-effort):
+
+        1. The per-instance callback set via ``set_token_usage_callback`` —
+           used by the opencode proxy path which owns the writer directly.
+        2. The active :class:`TraceWriter` exposed through the
+           ``active_trace_writer`` ContextVar — used by the SSE
+           ``/query/stream`` path where the writer lives in the request task
+           tree rather than on the LLM service singleton.
+        """
         if usage is None:
             return
         self.last_token_usage = usage
+
         callback = self._token_usage_callback
-        if callback is None:
+        if callback is not None:
+            try:
+                await callback(usage)
+            except Exception:  # noqa: BLE001 — never fail a query because of telemetry
+                logger.exception("token usage callback failed")
+
+        # Late import keeps graphrag importable without backend on the path
+        # (e.g. notebook/CLI use).
+        try:
+            from backend.services.trace_writer import active_trace_writer
+        except Exception:  # noqa: BLE001
+            return
+        writer = active_trace_writer.get()
+        if writer is None:
             return
         try:
-            await callback(usage)
-        except Exception:  # noqa: BLE001 — never fail a query because of telemetry
-            logger.exception("token usage callback failed")
+            await writer.record_token_usage(agent_id=usage.agent_id, usage=usage)
+        except Exception:  # noqa: BLE001
+            logger.exception("active TraceWriter.record_token_usage failed")
 
     def _api_key_for(self, provider: ModelProvider) -> str:
         """Return the API key for ``provider``: explicit override first, env fallback."""
