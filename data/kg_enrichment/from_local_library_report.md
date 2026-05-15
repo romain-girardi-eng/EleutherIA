@@ -2,26 +2,182 @@
 
 - Library root: `/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire`
 - Files inventoried: 497
-- Files processed (first pass): 5
-- Files deferred (Phase 2): 492
+- Files attempted this run: 259
+  - ok: 242
+  - skip: 17
 
-## Patches proposed
+## Patches in `from_local_library.jsonl` (cumulative)
 
-- scholar: 3
-- scholarly_work: 3
-- scholarly_argument: 14
-- edge: 97
+- scholar: 150
+- scholarly_work: 199
+- scholarly_argument: 900
+- edge: 4757
 
-## Scholars
+## Scholars (150)
 
+- `scholar_hayman_a` — A. P. Hayman
+- `scholar_rousseau_a` — Adelin Rousseau
+- `scholar_hogeterp_a` — Albert L. A. Hogeterp
 - `scholar_dihle_albrecht` — Albrecht Dihle
+- `scholar_furst_alfons` — Alfons Fürst
+- `scholar_dettwiler_a` — Andreas DETTWILER
+- `scholar_graeser_a` — Andreas Graeser
+- `scholar_lindemann_a` — Andreas Lindemann
+- `scholar_voelke_andre_jean` — André-Jean Voelke
+- `scholar_jaubert_a` — Annie Jaubert
+- `scholar_laato_a` — Antti Laato
+- `scholar_oropeza_b` — B. J. Oropeza
+- `scholar_blackwell_b` — Ben C. Blackwell
+- `scholar_nickodemus_b` — Benjamin J. Nickodemus
+- `scholar_pouderon_b` — Bernard Pouderon
+- `scholar_gaventa_b` — Beverly Roberts Gaventa
+- `scholar_andresen_carl` — Carl Andresen
+- `scholar_natali_c` — Carlo Natali
+- `scholar_chamberlain_c` — Charles Chamberlain
+- `scholar_munier_c` — Charles Munier
+- `scholar_gill_christopher` — Christopher Gill
+- `scholar_breytenbach_c` — Cilliers Breytenbach
+- `scholar_hall_c` — Claire Hall
+- `scholar_richardson_c` — Cyril C. Richardson
+- `scholar_michon_c` — Cyrille Michon
+- `scholar_tolan_d` — Daniel Jonathan Tolan
+- `scholar_uster_d` — Danilo Šuster
+- `scholar_nystr_m_d` — David E. Nyström
+- `scholar_runia_d` — David T. Runia
+- `scholar_minns_d` — Denis Minns
+- `scholar_jowers_d` — Dennis W. Jowers
+- `person_frede_michael_1940_2007` — Dorothea Frede
+- `scholar_amand_de_mendieta_e` — Emmanuel Amand de Mendieta
+- `scholar_eliasson_e` — Erik Eliasson
+- `scholar_bonaiuti_e` — Ernesto Bonaiuti
+- `scholar_jourdan_f` — Fabienne Jourdan
+- `scholar_pironet_f` — Fabienne Pironet
+- `scholar_grgi_f` — Filip Grgić
+- `scholar_de_monneron_f` — François DE MONNERON
+- `scholar_sagnard_f` — François Sagnard
+- `scholar_boys_stones_g` — George Boys-Stones
+- `scholar_karamanolis_george` — George E. Karamanolis
+- `scholar_moore_g` — George Foot Moore
+- `scholar_van_kooten_g` — George H. van Kooten
+- `scholar_l_demann_g` — Gerd Lüdemann
+- `scholar_fee_g` — Gordon D. Fee
+- `scholar_bardy_g` — Gustave Bardy
+- `scholar_guyomarc_h_g` — Gweltaz Guyomarc'h
+- `scholar_wolfson_h` — Harry Austryn Wolfson
+- `person_frankfurt_harry_1929_2023` — Harry G. Frankfurt
+- `scholar_crouzel_henri` — Henri Crouzel
+- `scholar_ramelli_ilaria` — Ilaria Ramelli
+- `scholar_koch_i` — Isabelle Koch
+- `scholar_jurasz_i` — Izabela Jurasz
+- `scholar_mansfeld_j` — Jaap Mansfeld
+- `scholar_fantino_j` — Jacques Fantino
+- `scholar_dunn_j` — James D. G. Dunn
+- `scholar_tomberlin_j` — James E. Tomberlin
+- `scholar_secord_j` — Jared Secord
+- `scholar_maston_j` — Jason Maston
+- `scholar_eche_ique_j` — Javier Echeñique
+- `scholar_pr_aux_j` — Jean G. Préaux
+- `scholar_gourinat_jean_baptiste` — Jean-Baptiste Gourinat
+- `scholar_guillon_j` — Jean-Baptiste Guillon
+- `scholar_labarri_re_j` — Jean-Louis Labarrière
+- `scholar_narbonne_j` — Jean-Marc Narbonne
+- `scholar_schneider_j` — Jean-Pierre Schneider
+- `scholar_schr_ter_j` — Jens Schröter
+- `scholar_hick_j` — John Hick
+- `scholar_goodrich_j` — John K. Goodrich
+- `scholar_barclay_j` — John M. G. Barclay
+- `person_fischer_john_martin_3w4x5y6z` — John Martin Fischer
+- `scholar_moon_j` — John Moon
+- `scholar_fitzmyer_j` — Joseph A. Fitzmyer
+- `scholar_dodson_j` — Joseph R. Dodson
+- `scholar_acosta_l_pez_de_mesa_j` — Juliana Acosta López de Mesa
+- `scholar_olive_j` — Julien Olive
+- `scholar_nielsen_k` — Karen Margrethe Nielsen
+- `scholar_gibbons_k` — Kathleen Gibbons
+- `scholar_haacker_k` — Klaus Haacker
+- `scholar_vibe_k` — Klaus Vibe
+- `scholar_wells_k` — Kyle B. Wells
+- `scholar_schiffman_l` — Lawrence H. Schiffman
+- `scholar_velardo_l` — Leandro Velardo
+- `scholar_vicens_l` — Leigh Vicens
+- `scholar_gerson_l` — Lloyd P. Gerson
+- `scholar_oviedo_l` — Lluis Oviedo
+- `scholar_martin_l` — Luther H. Martin
+- `scholar_zetterholm_m` — Magnus Zetterholm
+- `scholar_nagasawa_m` — Mako A. Nagasawa
+- `scholar_kowalski_m` — Marcin Kowalski
+- `scholar_hausmann_m` — Marco Hausmann
+- `scholar_boulnois_m` — Marie-Odile Boulnois
+- `scholar_pawlak_m` — Matthew C. Pawlak
+- `scholar_havrda_m` — Matyáš Havrda
+- `scholar_belcastro_m` — Mauro Belcastro
+- `scholar_currado_m` — Micah Currado
+- `scholar_bird_m` — Michael F. Bird
+- `scholar_wolter_m` — Michael Wolter
+- `scholar_crubellier_m` — Michel Crubellier
+- `scholar_list_n` — Nicholas List
+- `scholar_denzey_lewis_n` — Nicola Denzey Lewis
+- `scholar_skarsaune_o` — Oskar Skarsaune
+- `scholar_gooch_p` — P. W. Gooch
+- `scholar_wang_p` — Paul Chua Wang
+- `scholar_helm_p` — Paul Helm
+- `scholar_linjamaa_p` — Paul Linjamaa
+- `scholar_frick_p` — Peter Frick
+- `scholar_gorday_p` — Peter Gorday
+- `scholar_king_p` — Peter King
+- `scholar_bobichon_p` — Philippe Bobichon
+- `scholar_cary_p` — Phillip Cary
 - `scholar_donini_p` — Pier Luigi Donini
+- `scholar_destr_e_p` — Pierre Destrée
+- `scholar_prigent_p` — Pierre Prigent
+- `scholar_brouwer_r` — René Brouwer
+- `scholar_koch_piettre_r` — Renée Koch Piettre
+- `person_salles_ricardo_contemporary` — Ricardo Salles
+- `scholar_double_r` — Richard Double
 - `scholar_faure_r` — Richard Faure
+- `person_sorabji_richard_contemporary` — Richard Sorabji
+- `scholar_jewett_r` — Robert Jewett
+- `scholar_grant_r` — Robert M. Grant
+- `scholar_sapolsky_r` — Robert M. Sapolsky
+- `scholar_sharples_robert` — Robert W. Sharples
+- `scholar_werline_r` — Rodney Werline
+- `scholar_matteoli_s` — Sara Matteoli
+- `scholar_butticaz_s` — Simon Butticaz
+- `scholar_xie_s` — Simon Shengjian Xie
+- `scholar_maso_s` — Stefano Maso
+- `scholar_everson_s` — Stephen Everson
+- `scholar_vicchio_s` — Stephen J. Vicchio
+- `scholar_young_s` — Stephen L. Young
+- `scholar_meyer_s` — Susan Sauvé Meyer
+- `person_bobzien_susanne_contemporary` — Susanne Bobzien
+- `scholar_irwin_terence` — T. H. Irwin
+- `scholar_byerly_t` — T. Ryan Byerly
+- `scholar_sommers_t` — Tamler Sommers
+- `scholar_honderich_t` — Ted Honderich
+- `scholar_blackson_t` — Thomas A. Blackson
+- `scholar_nadelhoffer_t` — Thomas Nadelhoffer
+- `scholar_o_keefe_t` — Tim O'Keefe
+- `scholar_eskola_t` — Timo Eskola
+- `scholar_still_t` — Todd D. Still
+- `scholar_engberg_pedersen_t` — Troels Engberg-Pedersen
+- `scholar_telfer_w` — W. Telfer
+- `scholar_coppins_w` — Wayne Coppins
+- `scholar_hendriksen_w` — William Hendriksen
+- `scholar_craig_w` — William Lane Craig
+- `scholar_l_hr_w` — Winrich Alfried Löhr
 
-## Per-file results
+## Top 10 most-cited primary sources
 
-- [ok] ` Pier Luigi Donini - Aristotle and Determinism (2010, Peeters) - libgen.li.md` — 
-- [ok] `(Sather Classical Lectures_ 48) Albrecht Dihle - The Theory of Will in Classical Antiquity-University of California Press (2020).md` — 
-- [ok] `10.1515_9783110736076.md` — 
-- [ok] `Albrecht Dihle - The Theory of Will in Classical Antiquity (Sather Classical Lectures) (1982, University of California Press).md` — 
-- [ok] `Alexandre_dAphrodise_et_la_kinesis_anait.md` — 
+- 11× `Alexander of Aphrodisias, De fato`
+- 9× `Epictetus, Discourses`
+- 8× `Alexander of Aphrodisias, De Fato`
+- 7× `Irenaeus, Adversus haereses`
+- 6× `Origen, Commentary on Romans`
+- 6× `Origen, Peri Archon`
+- 5× `Chrysippus (via Cicero De Fato, Gellius, Plutarch)`
+- 5× `Augustine, Confessions`
+- 5× `Origen, Contra Celsum`
+- 5× `Origen, CRm`
+
+## Failures / low-confidence this run (0)
+
