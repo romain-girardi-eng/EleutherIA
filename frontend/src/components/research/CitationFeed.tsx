@@ -8,9 +8,11 @@ interface Props {
   citations: CitationEntry[];
   /** When true, a small "live" badge appears next to the header count. */
   isLive: boolean;
+  /** Called when the user clicks a citation card to open PassageViewer. */
+  onOpenPassage?: (passageId: string) => void;
 }
 
-export function CitationFeed({ citations, isLive }: Props) {
+export function CitationFeed({ citations, isLive, onOpenPassage }: Props) {
   const { t } = useTranslation();
 
   return (
@@ -50,7 +52,12 @@ export function CitationFeed({ citations, isLive }: Props) {
           <div className="space-y-2.5">
             <AnimatePresence initial={false}>
               {citations.map((c, idx) => (
-                <CitationCard key={c.passage_id} citation={c} index={idx} />
+                <CitationCard
+                  key={c.passage_id}
+                  citation={c}
+                  index={idx}
+                  onOpenPassage={onOpenPassage}
+                />
               ))}
             </AnimatePresence>
           </div>
