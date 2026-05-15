@@ -39,8 +39,11 @@ export default function GraphRAGPage() {
   const { isAuthenticated } = useAuth();
 
   // Model & mode selection
-  const [selectedModel, setSelectedModel] = useState('gemini-3.1-pro');
-  const [selectedMode, setSelectedMode] = useState('auto');
+  // Model + retrieval mode are no longer user-facing — backend is Kimi K2.6
+  // on Fireworks via vectorless agentic RAG. Kept as locals (not state) so
+  // any legacy code path that still references them compiles.
+  const selectedModel = 'kimi-k2.6';
+  const selectedMode = 'auto';
 
   // Advanced settings
   const [ancientOnly, setAncientOnly] = useState(false);
@@ -70,6 +73,7 @@ export default function GraphRAGPage() {
   // Agent activity tracking (ReAct loop)
   const [agentSteps, setAgentSteps] = useState<import('../../components/graphrag/AgentActivityPanel').AgentStep[]>([]);
   const [agentActive, setAgentActive] = useState(false);
+  const [streamCost, setStreamCost] = useState<{ total_tokens: number; total_cost_usd: number } | null>(null);
   const agentStepCounterRef = useRef(0);
 
   // Token budget / cost metrics from last response
@@ -325,6 +329,7 @@ export default function GraphRAGPage() {
     setStreamStatus('Connecting...');
     setAgentSteps([]);
     setAgentActive(true);
+    setStreamCost(null);
     agentStepCounterRef.current = 0;
     initializeReasoningSteps(queryText);
 
@@ -425,6 +430,12 @@ export default function GraphRAGPage() {
                 }
 
                 case 'answer_chunk': {
+                  // We *only* accumulate `fullAnswer` as a fallback in case the
+                  // terminal `complete` event arrives without an `answer`
+                  // field. The agent-reasoning panel on the right is what the
+                  // user watches in real time — we deliberately keep the chat
+                  // pane silent until the final answer is ready (raw event
+                  // JSON in the chat is ugly and confusing).
                   let chunk = '';
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const chunkData = data.data as any;
@@ -439,14 +450,25 @@ export default function GraphRAGPage() {
                   }
                   fullAnswer += chunk;
                   if (fullAnswer.length === chunk.length) updateReasoningStep(4, 'active');
-                  // Update message in real-time so the user sees streaming text
-                  const streamingContent = fullAnswer;
-                  setMessages((prev) => {
-                    const last = prev[prev.length - 1];
-                    if (last?.role === 'assistant') {
-                      return [...prev.slice(0, -1), { ...last, content: streamingContent }];
-                    }
-                    return [...prev, { role: 'assistant', content: streamingContent, timestamp: new Date() }];
+                  break;
+                }
+
+                case 'tokens_used_rollup': {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const p = (data.data ?? data) as any;
+                  setStreamCost({
+                    total_tokens: Number(p.total_tokens ?? 0),
+                    total_cost_usd: Number(p.total_cost_usd ?? 0),
+                  });
+                  break;
+                }
+
+                case 'cost_summary': {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const p = (data.data ?? data) as any;
+                  setStreamCost({
+                    total_tokens: Number(p.total_tokens ?? 0),
+                    total_cost_usd: Number(p.total_cost_usd ?? 0),
                   });
                   break;
                 }
@@ -532,10 +554,21 @@ export default function GraphRAGPage() {
           : Array.isArray(serverResp.modernBibliography)
             ? serverResp.modernBibliography
             : [];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const citations = {
-          ancient_sources: ancientRaw.map((c: any) => typeof c === 'string' ? c : (c?.citationText || c?.label || '')).filter(Boolean),
-          modern_scholarship: modernRaw.map((c: any) => typeof c === 'string' ? c : (c?.citation || c?.citationText || '')).filter(Boolean),
+          ancient_sources: ancientRaw.map((c: unknown) =>
+            typeof c === 'string'
+              ? c
+              : ((c as { citationText?: string; label?: string })?.citationText
+                  || (c as { citationText?: string; label?: string })?.label
+                  || '')
+          ).filter(Boolean),
+          modern_scholarship: modernRaw.map((c: unknown) =>
+            typeof c === 'string'
+              ? c
+              : ((c as { citation?: string; citationText?: string })?.citation
+                  || (c as { citation?: string; citationText?: string })?.citationText
+                  || '')
+          ).filter(Boolean),
         };
 
         if (finalResponse.sources && Array.isArray(finalResponse.sources)) {
@@ -620,7 +653,9 @@ export default function GraphRAGPage() {
         setRightPanelResponse(finalResponse);
         setAllResponses((prev) => [...prev, finalResponse]);
         setAgentActive(false);
-        setRightPanelState('graph');
+        // Keep the right panel on the reasoning timeline after completion —
+        // the timeline auto-collapses phases and grows a Sources/KG/Cost
+        // footer. The user can drill into the graph view via the footer.
 
         // Update token budget display
         if (finalResponse.metrics) {
@@ -767,10 +802,6 @@ export default function GraphRAGPage() {
                 onNodeClick={handleNodeClick}
                 onCitationClick={handleCitationClick}
                 onPassageCitationClick={handlePassageCitationClick}
-                selectedModel={selectedModel}
-                selectedMode={selectedMode}
-                onModelChange={setSelectedModel}
-                onModeChange={setSelectedMode}
                 responseTabs={responseTabs}
                 activeTabId={activeTabId}
                 onTabChange={handleTabChange}
@@ -791,11 +822,13 @@ export default function GraphRAGPage() {
                       passageContext={passageContext}
                       agentSteps={agentSteps}
                       agentActive={agentActive}
+                      cost={streamCost}
                       onNodeClick={handleNodeClick}
                       onSourceSelect={handleSourceSelect}
                       onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
                       onLoadMorePassages={handleLoadMorePassages}
                       onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
+                      onOpenGraphView={() => setRightPanelState('graph')}
                       className="h-full"
                     />
                   </div>

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
 import { TerminalLoader } from '../../components/ui/terminal-loader';
-import { ModelSelector } from '@/components/ModelSelector';
 import { ResponseTabs } from '@/components/ResponseTabs';
 import type { ResponseTab } from '@/components/ResponseTabs';
 import { TokenBudget } from '@/components/TokenBudget';
@@ -32,10 +31,6 @@ interface ChatPanelProps {
   onNodeClick: (nodeId: string) => void;
   onCitationClick: (citationIndex: number) => void;
   onPassageCitationClick?: (passageId: string) => void;
-  selectedModel: string;
-  selectedMode: string;
-  onModelChange: (model: string) => void;
-  onModeChange: (mode: string) => void;
   responseTabs: ResponseTab[];
   activeTabId: string;
   onTabChange: (tabId: string) => void;
@@ -57,10 +52,6 @@ export default function ChatPanel({
   onNodeClick,
   onCitationClick,
   onPassageCitationClick,
-  selectedModel,
-  selectedMode,
-  onModelChange,
-  onModeChange,
   responseTabs,
   activeTabId,
   onTabChange,
@@ -93,12 +84,6 @@ export default function ChatPanel({
               modelContext={lastMetrics.modelContext}
             />
           )}
-          <ModelSelector
-            selectedModel={selectedModel}
-            selectedMode={selectedMode}
-            onModelChange={onModelChange}
-            onModeChange={onModeChange}
-          />
         </div>
       </div>
 
