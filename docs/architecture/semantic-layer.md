@@ -169,7 +169,7 @@ Détails opérationnels dans `~/.claude/projects/-Users-romaingirardi-Projects-E
 - Sidecar GraphDB / RDFox / Stardog — pas justifié à 17k nœuds ; pile Python suffit.
 - OWL-DL (Pellet / HermiT) — overkill ; OWL2-RL couvre nos cas.
 - Conformité CIDOC-CRM complète — mapping partiel suffisant pour la découvrabilité.
-- Endpoint SPARQL externe — Apache Jena Fuseki en sidecar the platform, à déclencher uniquement sur demande externe.
+- Endpoint SPARQL public — Apache Jena Fuseki en sidecar the platform, exposé à `https://free-will.app/eleutheria/sparql`.
 
 ## Références
 

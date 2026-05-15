@@ -20,7 +20,7 @@ This document is retained only as historical rollback context.
                          (Postgres)   (Vectors)
 ```
 
-The Python FastAPI backend runs on Railway. The frontend (Vite React) remains on Cloudflare Pages. The Cloudflare Workers TypeScript backend is retired.
+This was the former Railway topology. It is not the production deployment path anymore; use the the platform compose fragment and Cloudflare tunnel instead.
 
 ## Quick Start
 

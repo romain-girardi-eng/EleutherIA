@@ -192,7 +192,7 @@ User Question
 | Database | PostgreSQL 16 |
 | Vector DB | Qdrant |
 | LLM | Gemini (gemini-3.1-pro-preview, primary), Kimi K2.5 Thinking (extended reasoning) |
-| Deployment | Docker Compose (local), Railway (production backend), Cloudflare Pages (production frontend) |
+| Deployment | Docker Compose (local), the platform compose + Cloudflare tunnel (production API, worker, public SPARQL), Cloudflare Pages (production frontend) |
 
 ## FAIR Compliance
 

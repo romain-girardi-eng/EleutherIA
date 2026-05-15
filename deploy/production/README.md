@@ -1,6 +1,6 @@
 # Production Deployment
 
-Production setup for [free-will.app](https://free-will.app) using Supabase (PostgreSQL) and Qdrant Cloud as managed services. Only the backend and frontend run as Docker containers.
+Production setup for [free-will.app](https://free-will.app). The canonical production host is now the platform Docker Compose behind the platform's Cloudflare tunnel; the API worker and public SPARQL sidecar run there. Supabase remains the PostgreSQL store.
 
 ## Prerequisites
 
