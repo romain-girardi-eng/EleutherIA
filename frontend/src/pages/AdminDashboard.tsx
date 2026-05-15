@@ -135,7 +135,7 @@ const AdminDashboard: React.FC = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+      <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
         <div className="text-center py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <Shield className="w-16 h-16 text-academic-muted mx-auto mb-4" />
           <h2 className="text-xl font-display font-semibold mb-2">{t('admin.authRequired')}</h2>
@@ -147,7 +147,7 @@ const AdminDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+      <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
         <div className="flex items-center justify-center min-h-[60vh] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-4">
             <RefreshCw className="w-12 h-12 animate-spin text-primary-600 mx-auto" />
@@ -159,7 +159,7 @@ const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+    <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
       <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Header */}
       <div className="flex items-center justify-between">

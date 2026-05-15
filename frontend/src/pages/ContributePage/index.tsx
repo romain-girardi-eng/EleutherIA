@@ -669,7 +669,7 @@ export default function ContributePage() {
   );
 
   return (
-    <div className="min-h-screen w-full pt-20 pb-16">
+    <div className="min-h-screen w-full pt-28 pb-16">
       <div className="academic-container relative z-10">
         <AnimatePresence mode="wait">
           {state.kind === 'empty' && (

@@ -108,7 +108,7 @@ const CitationNetworkPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+      <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
       <div className="flex items-center justify-center min-h-[60vh] relative z-10">
         <div className="text-center space-y-4">
           <AILoader text="Loading" size="lg" />
@@ -122,7 +122,7 @@ const CitationNetworkPage: React.FC = () => {
   if (error) {
     const isAuthError = error.includes('Authentication required');
     return (
-      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+      <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
       <div className="text-center py-12 space-y-4 relative z-10">
         <p className="text-red-600">{error}</p>
         {isAuthError ? (
@@ -140,7 +140,7 @@ const CitationNetworkPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+    <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
     <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Header */}
       <div className="flex items-center justify-between">

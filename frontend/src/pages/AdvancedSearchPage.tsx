@@ -125,7 +125,7 @@ export default function AdvancedSearchPage() {
   const hasActiveFilters = Object.values(filters).some(v => v);
 
   return (
-    <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+    <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
       <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Header */}
       <Card variant="default" padding="lg">
