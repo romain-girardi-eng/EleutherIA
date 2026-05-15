@@ -255,6 +255,7 @@ export default function Research() {
         kgActivations={stream.kgActivations}
         streamedAnswer={stream.streamedAnswer}
         finalAnswer={stream.finalAnswer}
+        tokenUsage={stream.tokenUsage}
         className="min-h-[640px]"
       />
     </div>

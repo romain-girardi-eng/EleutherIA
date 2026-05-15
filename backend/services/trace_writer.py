@@ -27,6 +27,10 @@ from datetime import UTC, datetime
 from typing import Any
 
 from eleutheria_database.services.db import DatabaseService
+from eleutheria_graphrag.services.llm_pricing import (
+    TokenUsage,
+    estimate_cost_usd,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -94,6 +98,16 @@ class TraceWriter:
             "methodology_report": None,
             "polishing_report": None,
         }
+
+        # Token / cost ledger. Maintained alongside the agent tree so the
+        # frontend can show a live "$0.034 · 12,348 tok" badge as the deep
+        # pipeline runs. ``by_agent`` and ``by_model`` are rolled up on every
+        # call; ``provider_usage`` keeps a per-provider split for finance.
+        self._total_tokens: int = 0
+        self._total_cost_usd: float = 0.0
+        self._usage_by_agent: dict[str, dict[str, float]] = {}
+        self._usage_by_model: dict[str, dict[str, float]] = {}
+        self._usage_by_provider: dict[str, dict[str, float]] = {}
 
     # ---------- public API ----------
 
@@ -183,6 +197,93 @@ class TraceWriter:
             node["success"] = success
             node["tokens_used"] = tokens_used
 
+    async def record_token_usage(
+        self,
+        agent_id: str | None,
+        usage: TokenUsage,
+    ) -> None:
+        """Aggregate a single :class:`TokenUsage` observation.
+
+        Updates running totals (overall + per-agent + per-model + per-provider)
+        and bubbles ``tokens_used`` / ``cost_usd`` onto the owning agent's
+        tree node so the AgentTrace view can render per-sub-agent rows
+        without a second join.
+        """
+        async with self._lock:
+            agent_key = agent_id or usage.agent_id or "_unknown"
+            self._total_tokens += usage.total_tokens
+            self._total_cost_usd = round(
+                self._total_cost_usd + usage.estimated_cost_usd, 6
+            )
+
+            agent_row = self._usage_by_agent.setdefault(
+                agent_key,
+                {"tokens": 0.0, "cost_usd": 0.0, "calls": 0.0},
+            )
+            agent_row["tokens"] += usage.total_tokens
+            agent_row["cost_usd"] = round(
+                agent_row["cost_usd"] + usage.estimated_cost_usd, 6
+            )
+            agent_row["calls"] += 1
+
+            model_row = self._usage_by_model.setdefault(
+                usage.model or "unknown",
+                {"tokens": 0.0, "cost_usd": 0.0, "calls": 0.0},
+            )
+            model_row["tokens"] += usage.total_tokens
+            model_row["cost_usd"] = round(
+                model_row["cost_usd"] + usage.estimated_cost_usd, 6
+            )
+            model_row["calls"] += 1
+
+            provider_row = self._usage_by_provider.setdefault(
+                usage.provider or "unknown",
+                {
+                    "prompt_tokens": 0.0,
+                    "completion_tokens": 0.0,
+                    "total_tokens": 0.0,
+                    "cost_usd": 0.0,
+                    "calls": 0.0,
+                },
+            )
+            provider_row["prompt_tokens"] += usage.prompt_tokens
+            provider_row["completion_tokens"] += usage.completion_tokens
+            provider_row["total_tokens"] += usage.total_tokens
+            provider_row["cost_usd"] = round(
+                provider_row["cost_usd"] + usage.estimated_cost_usd, 6
+            )
+            provider_row["calls"] += 1
+
+            node = self._tree_index.get(agent_key)
+            if node is not None:
+                node_tokens = node.get("tokens_used") or 0
+                node["tokens_used"] = int(node_tokens) + usage.total_tokens
+                node_cost = float(node.get("cost_usd") or 0.0)
+                node["cost_usd"] = round(node_cost + usage.estimated_cost_usd, 6)
+                node["model"] = usage.model
+                node["provider"] = usage.provider
+
+    def get_running_totals(self) -> dict[str, Any]:
+        """Snapshot of the running ledger — safe to call without the lock."""
+        return {
+            "total_tokens": int(self._total_tokens),
+            "total_cost_usd": round(self._total_cost_usd, 6),
+            "by_agent": {k: dict(v) for k, v in self._usage_by_agent.items()},
+            "by_model": {k: dict(v) for k, v in self._usage_by_model.items()},
+            "by_provider": {k: dict(v) for k, v in self._usage_by_provider.items()},
+        }
+
+    @staticmethod
+    def estimate_cost(
+        *, provider: str, prompt_tokens: int, completion_tokens: int
+    ) -> float:
+        """Convenience proxy for the pricing helper."""
+        return estimate_cost_usd(
+            provider=provider,
+            prompt_tokens=prompt_tokens,
+            completion_tokens=completion_tokens,
+        )
+
     async def set_report(self, key: str, value: Any) -> None:
         """Set one of the four post-synthesis report fields."""
         if key not in self._reports:
@@ -252,6 +353,13 @@ class TraceWriter:
             "root_agents": self._root_agents,
         }
 
+        totals = self.get_running_totals()
+        token_breakdown = {
+            "by_agent": totals["by_agent"],
+            "by_model": totals["by_model"],
+        }
+        provider_usage = totals["by_provider"]
+
         try:
             await self._db.execute(
                 """
@@ -266,12 +374,17 @@ class TraceWriter:
                     final_answer_citations,
                     total_latency_ms,
                     total_tool_calls,
-                    metadata
+                    metadata,
+                    total_tokens,
+                    total_cost_usd,
+                    token_breakdown,
+                    provider_usage
                 )
                 VALUES (
                     $1, $2, $3, $4::timestamptz, $5::timestamptz, $6,
                     $7::jsonb, $8::jsonb, $9::jsonb, $10::jsonb, $11::jsonb,
-                    $12, $13::jsonb, $14, $15, $16::jsonb
+                    $12, $13::jsonb, $14, $15, $16::jsonb,
+                    $17, $18, $19::jsonb, $20::jsonb
                 )
                 ON CONFLICT (trace_id) DO UPDATE SET
                     completed_at = COALESCE(EXCLUDED.completed_at, query_traces.completed_at),
@@ -284,7 +397,11 @@ class TraceWriter:
                     final_answer_citations = COALESCE(EXCLUDED.final_answer_citations, query_traces.final_answer_citations),
                     total_latency_ms = COALESCE(EXCLUDED.total_latency_ms, query_traces.total_latency_ms),
                     total_tool_calls = EXCLUDED.total_tool_calls,
-                    metadata = EXCLUDED.metadata
+                    metadata = EXCLUDED.metadata,
+                    total_tokens = EXCLUDED.total_tokens,
+                    total_cost_usd = EXCLUDED.total_cost_usd,
+                    token_breakdown = EXCLUDED.token_breakdown,
+                    provider_usage = EXCLUDED.provider_usage
                 """,
                 trace_uuid,
                 user_uuid,
@@ -312,6 +429,10 @@ class TraceWriter:
                 total_latency_ms,
                 self._tool_call_count,
                 json.dumps(self.metadata, default=str),
+                int(totals["total_tokens"]),
+                float(totals["total_cost_usd"]),
+                json.dumps(token_breakdown, default=str),
+                json.dumps(provider_usage, default=str),
             )
         except Exception:  # noqa: BLE001 — never fail the query because of audit
             logger.exception("TraceWriter: failed to persist trace %s", self.trace_id)

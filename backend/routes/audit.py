@@ -54,7 +54,11 @@ async def get_query_audit(
             final_answer_citations,
             total_latency_ms,
             total_tool_calls,
-            metadata
+            metadata,
+            total_tokens,
+            total_cost_usd,
+            token_breakdown,
+            provider_usage
         FROM free_will.query_traces
         WHERE trace_id = $1
         """,
@@ -71,6 +75,8 @@ async def get_query_audit(
 
     final_text = row.get("final_answer_text") or ""
 
+    total_cost_raw = row.get("total_cost_usd")
+    total_cost_usd = float(total_cost_raw) if total_cost_raw is not None else 0.0
     return {
         "trace_id": trace_id,
         "query": row.get("query"),
@@ -91,4 +97,8 @@ async def get_query_audit(
         "total_latency_ms": row.get("total_latency_ms"),
         "total_tool_calls": row.get("total_tool_calls"),
         "metadata": row.get("metadata") or {},
+        "total_tokens": int(row.get("total_tokens") or 0),
+        "total_cost_usd": total_cost_usd,
+        "token_breakdown": row.get("token_breakdown") or {},
+        "provider_usage": row.get("provider_usage") or {},
     }

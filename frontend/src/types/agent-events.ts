@@ -218,6 +218,51 @@ export interface SubagentCompleteEvent {
   tokens_used: number | null;
 }
 
+/** Emitted after every successful LLM call inside the deep-mode pipeline.
+ *  Carries the prompt + completion token counts and the USD cost estimate
+ *  derived from the active provider's pricing table. Lets the UI show a
+ *  live "$0.034 · 12,348 tok" badge as the query runs. */
+export interface TokensUsedEvent {
+  type: 'tokens_used';
+  agent_id: string;
+  model: string;
+  provider: string;
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
+  estimated_cost_usd: number;
+}
+
+/** Synthetic rollup envelope emitted by the backend proxy at safe breakpoints
+ *  (after each ``subagent_complete`` / ``tool_result``). Carries the writer's
+ *  running totals so the UI can update its badge even when the upstream
+ *  agent runtime does not natively emit per-call ``tokens_used`` events. */
+export interface TokensUsedRollupEvent {
+  type: 'tokens_used_rollup';
+  total_tokens: number;
+  total_cost_usd: number;
+}
+
+/** Final per-query cost breakdown emitted alongside ``final_answer``.
+ *  Drives the per-sub-agent and per-model rows in the AgentTrace pane. */
+export interface CostSummaryEvent {
+  type: 'cost_summary';
+  total_tokens: number;
+  total_cost_usd: number;
+  by_model: Record<string, { tokens: number; cost_usd: number; calls: number }>;
+  by_agent: Record<string, { tokens: number; cost_usd: number; calls: number }>;
+  by_provider?: Record<
+    string,
+    {
+      prompt_tokens: number;
+      completion_tokens: number;
+      total_tokens: number;
+      cost_usd: number;
+      calls: number;
+    }
+  >;
+}
+
 /** Emitted at the end of each pipeline stage (classify / retrieve /
  *  agent_loop / synthesis / verify / polish). Carries per-stage latency
  *  so the AgentTrace pane can render a stacked latency bar. Added in
@@ -252,6 +297,9 @@ export type AgentEvent =
   | AgentInvocationEvent
   | SubagentCompleteEvent
   | StageCompleteEvent
+  | TokensUsedEvent
+  | TokensUsedRollupEvent
+  | CostSummaryEvent
   | FinalAnswerEvent
   | ErrorEvent;
 
@@ -278,6 +326,9 @@ export function isAgentEvent(value: unknown): value is AgentEvent {
     'agent_invocation',
     'subagent_complete',
     'stage_complete',
+    'tokens_used',
+    'tokens_used_rollup',
+    'cost_summary',
     'final_answer',
     'error',
   ].includes(candidate.type);

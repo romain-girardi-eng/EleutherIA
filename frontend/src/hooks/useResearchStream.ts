@@ -12,15 +12,49 @@ import {
   type AgentEvent,
   type CitationFoundEvent,
   type CitationVerifiedEvent,
+  type CostSummaryEvent,
   type FinalAnswerCitation,
   type FinalAnswerEvent,
   type KGNodeActivatedEvent,
   type SessionStatus,
   type SubagentStatus,
+  type TokensUsedEvent,
+  type TokensUsedRollupEvent,
   type ToolCallEvent,
   type ToolResultEvent,
   isAgentEvent,
 } from '../types/agent-events';
+
+export interface TokenUsageAgentRow {
+  tokens: number;
+  cost_usd: number;
+  calls: number;
+}
+
+export interface TokenUsageState {
+  total_tokens: number;
+  total_cost_usd: number;
+  by_agent: Record<string, TokenUsageAgentRow>;
+  by_model: Record<string, TokenUsageAgentRow>;
+  by_provider: Record<
+    string,
+    {
+      prompt_tokens: number;
+      completion_tokens: number;
+      total_tokens: number;
+      cost_usd: number;
+      calls: number;
+    }
+  >;
+}
+
+const emptyTokenUsage: TokenUsageState = {
+  total_tokens: 0,
+  total_cost_usd: 0,
+  by_agent: {},
+  by_model: {},
+  by_provider: {},
+};
 
 export interface CitationEntry {
   passage_id: string;
@@ -83,6 +117,7 @@ export interface UseResearchStreamReturn {
   toolCalls: PairedToolCall[];
   kgActivations: KGActivation[];
   stageTimings: StageTiming[];
+  tokenUsage: TokenUsageState;
   streamedAnswer: string;
   finalAnswer: FinalAnswerEvent | null;
   traceId: string | null;
@@ -106,6 +141,7 @@ interface State {
   toolCallOrder: string[];
   kgActivationsById: Record<string, KGActivation>;
   stageTimings: StageTiming[];
+  tokenUsage: TokenUsageState;
   streamedAnswer: string;
   finalAnswer: FinalAnswerEvent | null;
   traceId: string | null;
@@ -123,12 +159,99 @@ const initialState: State = {
   toolCallOrder: [],
   kgActivationsById: {},
   stageTimings: [],
+  tokenUsage: emptyTokenUsage,
   streamedAnswer: '',
   finalAnswer: null,
   traceId: null,
   error: null,
   retryCount: 0,
 };
+
+function accumulateTokenUsage(
+  state: TokenUsageState,
+  event: TokensUsedEvent,
+): TokenUsageState {
+  const agentKey = event.agent_id || 'unknown';
+  const modelKey = event.model || 'unknown';
+  const providerKey = event.provider || 'unknown';
+  const cost = event.estimated_cost_usd ?? 0;
+  const tokens = event.total_tokens ?? 0;
+  const agentPrev = state.by_agent[agentKey] ?? {
+    tokens: 0,
+    cost_usd: 0,
+    calls: 0,
+  };
+  const modelPrev = state.by_model[modelKey] ?? {
+    tokens: 0,
+    cost_usd: 0,
+    calls: 0,
+  };
+  const providerPrev = state.by_provider[providerKey] ?? {
+    prompt_tokens: 0,
+    completion_tokens: 0,
+    total_tokens: 0,
+    cost_usd: 0,
+    calls: 0,
+  };
+  return {
+    total_tokens: state.total_tokens + tokens,
+    total_cost_usd: Number((state.total_cost_usd + cost).toFixed(6)),
+    by_agent: {
+      ...state.by_agent,
+      [agentKey]: {
+        tokens: agentPrev.tokens + tokens,
+        cost_usd: Number((agentPrev.cost_usd + cost).toFixed(6)),
+        calls: agentPrev.calls + 1,
+      },
+    },
+    by_model: {
+      ...state.by_model,
+      [modelKey]: {
+        tokens: modelPrev.tokens + tokens,
+        cost_usd: Number((modelPrev.cost_usd + cost).toFixed(6)),
+        calls: modelPrev.calls + 1,
+      },
+    },
+    by_provider: {
+      ...state.by_provider,
+      [providerKey]: {
+        prompt_tokens: providerPrev.prompt_tokens + (event.prompt_tokens ?? 0),
+        completion_tokens:
+          providerPrev.completion_tokens + (event.completion_tokens ?? 0),
+        total_tokens: providerPrev.total_tokens + tokens,
+        cost_usd: Number((providerPrev.cost_usd + cost).toFixed(6)),
+        calls: providerPrev.calls + 1,
+      },
+    },
+  };
+}
+
+function applyCostSummary(
+  state: TokenUsageState,
+  event: CostSummaryEvent,
+): TokenUsageState {
+  return {
+    ...state,
+    total_tokens: event.total_tokens,
+    total_cost_usd: event.total_cost_usd,
+    by_agent: event.by_agent ?? state.by_agent,
+    by_model: event.by_model ?? state.by_model,
+    by_provider: event.by_provider ?? state.by_provider,
+  };
+}
+
+function applyRollup(
+  state: TokenUsageState,
+  event: TokensUsedRollupEvent,
+): TokenUsageState {
+  // Rollups carry only the running totals — don't clobber per-agent /
+  // per-model maps that ``tokens_used`` events have built up.
+  return {
+    ...state,
+    total_tokens: Math.max(state.total_tokens, event.total_tokens),
+    total_cost_usd: Math.max(state.total_cost_usd, event.total_cost_usd),
+  };
+}
 
 type Action =
   | { type: 'reset' }
@@ -306,6 +429,30 @@ export function reduce(state: State, action: Action): State {
                 metadata: event.metadata,
               },
             ],
+          };
+        }
+
+        case 'tokens_used': {
+          return {
+            ...state,
+            events,
+            tokenUsage: accumulateTokenUsage(state.tokenUsage, event),
+          };
+        }
+
+        case 'tokens_used_rollup': {
+          return {
+            ...state,
+            events,
+            tokenUsage: applyRollup(state.tokenUsage, event),
+          };
+        }
+
+        case 'cost_summary': {
+          return {
+            ...state,
+            events,
+            tokenUsage: applyCostSummary(state.tokenUsage, event),
           };
         }
 
@@ -517,6 +664,7 @@ export function useResearchStream(
     toolCalls,
     kgActivations,
     stageTimings: state.stageTimings,
+    tokenUsage: state.tokenUsage,
     streamedAnswer: state.streamedAnswer,
     finalAnswer: state.finalAnswer,
     traceId: state.traceId,

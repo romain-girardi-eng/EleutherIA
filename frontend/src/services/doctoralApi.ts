@@ -269,6 +269,9 @@ interface RawAgentNode {
   completed_at?: string;
   duration_ms?: number;
   tokens_used?: number;
+  cost_usd?: number;
+  model?: string;
+  provider?: string;
   status?: 'started' | 'complete' | 'failed';
   error?: string;
   tool_calls?: Array<{
@@ -279,7 +282,16 @@ interface RawAgentNode {
     result_summary?: string;
     duration_ms?: number;
   }>;
+  tools_called?: Array<{
+    tool_call_id?: string;
+    id?: string;
+    tool?: string;
+    args?: Record<string, unknown>;
+    result_summary?: string;
+    duration_ms?: number;
+  }>;
   sub_agents?: RawAgentNode[];
+  subagents?: RawAgentNode[];
 }
 
 interface RawAuditResponse {
@@ -291,6 +303,10 @@ interface RawAuditResponse {
   agent_tree?: RawAgentNode | { root_agents?: RawAgentNode[] };
   total_latency_ms?: number;
   total_tool_calls?: number;
+  total_tokens?: number;
+  total_cost_usd?: number;
+  token_breakdown?: AuditResponse['token_breakdown'];
+  provider_usage?: AuditResponse['provider_usage'];
 }
 
 const normaliseAudit = (raw: RawAuditResponse): AuditResponse => {
@@ -298,17 +314,21 @@ const normaliseAudit = (raw: RawAuditResponse): AuditResponse => {
   const visit = (node: RawAgentNode, parentId: string | null): void => {
     const id =
       node.agent_id ?? `${node.agent_name ?? node.name ?? 'agent'}-${invocations.length}`;
+    const rawToolCalls = node.tool_calls ?? node.tools_called ?? [];
     invocations.push({
       agent_id: id,
       parent_agent_id: parentId,
-      agent_name: node.agent_name ?? node.name ?? 'agent',
+      agent_name: node.agent_name ?? node.name ?? id,
       started_at: node.started_at ?? raw.started_at ?? new Date().toISOString(),
       completed_at: node.completed_at,
       duration_ms: node.duration_ms,
       tokens_used: node.tokens_used,
+      cost_usd: node.cost_usd,
+      model: node.model,
+      provider: node.provider,
       status: node.status ?? 'complete',
       error: node.error,
-      tool_calls: (node.tool_calls ?? []).map((tc, i) => ({
+      tool_calls: rawToolCalls.map((tc, i) => ({
         tool_call_id: tc.tool_call_id ?? tc.id ?? `${id}:${i}`,
         tool: tc.tool ?? 'tool',
         args: tc.args ?? {},
@@ -316,7 +336,8 @@ const normaliseAudit = (raw: RawAuditResponse): AuditResponse => {
         duration_ms: tc.duration_ms,
       })),
     });
-    for (const sub of node.sub_agents ?? []) visit(sub, id);
+    const children = node.sub_agents ?? node.subagents ?? [];
+    for (const sub of children) visit(sub, id);
   };
 
   const tree = raw.agent_tree;
@@ -334,6 +355,10 @@ const normaliseAudit = (raw: RawAuditResponse): AuditResponse => {
     started_at: raw.started_at ?? new Date().toISOString(),
     completed_at: raw.completed_at,
     total_duration_ms: raw.total_latency_ms,
+    total_tokens: raw.total_tokens,
+    total_cost_usd: raw.total_cost_usd,
+    token_breakdown: raw.token_breakdown,
+    provider_usage: raw.provider_usage,
     invocations,
   };
 };

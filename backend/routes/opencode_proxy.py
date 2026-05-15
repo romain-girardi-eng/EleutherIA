@@ -382,6 +382,52 @@ def _session_id_of(envelope: dict[str, Any]) -> str | None:
     return sid if isinstance(sid, str) else None
 
 
+def _synthesise_cost_events(
+    session_id: str, event: dict[str, Any]
+) -> list[dict[str, Any]]:
+    """Derive synthetic SSE envelopes (``tokens_used`` rollups +
+    ``cost_summary`` on completion) from the writer's running totals.
+
+    Lets the frontend show a live "$0.034 · 12,348 tok" badge even when the
+    upstream agent runtime (opencode) does not natively emit per-call
+    ``tokens_used`` events — we synthesise them from whatever the writer
+    has aggregated so far. Always returns a list (possibly empty).
+    """
+    writer = _peek_trace_writer(session_id)
+    if writer is None:
+        return []
+    evt_type = event.get("type") or ""
+    out: list[dict[str, Any]] = []
+    try:
+        totals = writer.get_running_totals()
+    except Exception:
+        return []
+
+    if evt_type in {"subagent_complete", "tokens_used", "tool_result"} and (
+        totals.get("total_tokens", 0) or totals.get("total_cost_usd", 0)
+    ):
+        out.append(
+            {
+                "type": "tokens_used_rollup",
+                "total_tokens": totals.get("total_tokens", 0),
+                "total_cost_usd": totals.get("total_cost_usd", 0.0),
+            }
+        )
+
+    if evt_type == "final_answer":
+        out.append(
+            {
+                "type": "cost_summary",
+                "total_tokens": totals.get("total_tokens", 0),
+                "total_cost_usd": totals.get("total_cost_usd", 0.0),
+                "by_model": totals.get("by_model", {}),
+                "by_agent": totals.get("by_agent", {}),
+                "by_provider": totals.get("by_provider", {}),
+            }
+        )
+    return out
+
+
 async def _dispatch_to_trace_writer(session_id: str, event: dict[str, Any]) -> None:
     """Forward a single SSE envelope into the session's :class:`TraceWriter`.
 
@@ -437,6 +483,44 @@ async def _dispatch_to_trace_writer(session_id: str, event: dict[str, Any]) -> N
                 success=bool(props.get("success", True)),
                 tokens_used=props.get("tokens_used"),
             )
+        elif evt_type == "tokens_used":
+            # Forward token-usage observations into the writer so totals get
+            # persisted alongside the agent tree. Opencode emits one event per
+            # underlying LLM call; the writer dedupes by (agent_id, model).
+            try:
+                from eleutheria_graphrag.services.llm_pricing import (
+                    TokenUsage,
+                    estimate_cost_usd,
+                )
+
+                provider = str(props.get("provider") or "unknown")
+                prompt_tokens = int(props.get("prompt_tokens") or 0)
+                completion_tokens = int(props.get("completion_tokens") or 0)
+                total_tokens = int(
+                    props.get("total_tokens") or (prompt_tokens + completion_tokens)
+                )
+                cost = props.get("estimated_cost_usd")
+                cost_usd = (
+                    float(cost)
+                    if isinstance(cost, (int, float, str)) and str(cost).strip() != ""
+                    else estimate_cost_usd(
+                        provider=provider,
+                        prompt_tokens=prompt_tokens,
+                        completion_tokens=completion_tokens,
+                    )
+                )
+                usage = TokenUsage(
+                    prompt_tokens=prompt_tokens,
+                    completion_tokens=completion_tokens,
+                    total_tokens=total_tokens,
+                    model=str(props.get("model") or ""),
+                    provider=provider,
+                    estimated_cost_usd=cost_usd,
+                    agent_id=str(props.get("agent_id") or "") or None,
+                )
+                await writer.record_token_usage(agent_id=usage.agent_id, usage=usage)
+            except Exception:
+                logger.exception("token usage dispatch failed for %s", session_id)
         elif evt_type == "citation_verified":
             # Aggregate the rolling verifier report.
             current = writer._reports.get("citation_verifier_report") or {
@@ -574,6 +658,23 @@ async def _proxy_event_stream(
                                         if current_id:
                                             payload = f"id: {current_id}\n" + payload
                                         yield payload.encode()
+
+                                    # After each forwarded event, derive any
+                                    # synthetic envelopes the client should
+                                    # see (cost_summary on final_answer,
+                                    # rolling tokens_used on subagent
+                                    # completion). These piggyback on the
+                                    # TraceWriter's running totals so the UI
+                                    # gets a live cost figure even when the
+                                    # upstream doesn't natively emit it.
+                                    if emit and isinstance(parsed, dict):
+                                        for extra in _synthesise_cost_events(
+                                            session_id, parsed
+                                        ):
+                                            extra_payload = (
+                                                f"data: {json.dumps(extra)}\n\n"
+                                            )
+                                            yield extra_payload.encode()
                                 event_buffer = []
                                 current_id = None
                                 continue

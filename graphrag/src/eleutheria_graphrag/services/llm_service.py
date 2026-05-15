@@ -12,13 +12,18 @@ import os
 import re
 import time
 from collections import defaultdict
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Awaitable, Callable
 from enum import Enum
 from typing import Any, cast
 
 import httpx
 
+from eleutheria_graphrag.services.llm_pricing import TokenUsage
+
 logger = logging.getLogger(__name__)
+
+
+TokenUsageCallback = Callable[[TokenUsage], Awaitable[None]]
 
 
 class RateLimiter:
@@ -155,6 +160,8 @@ class LLMService:
         self._rate_limiters: dict[ModelProvider, RateLimiter] = {}
         self.last_model_used: str = ""
         self.last_provider_used: str = ""
+        self.last_token_usage: TokenUsage | None = None
+        self._token_usage_callback: TokenUsageCallback | None = None
         self._prompt_cache_names: dict[str, str] = {}
         self._prompt_cache_expiry: dict[str, float] = {}
         self._prompt_cache_backoff_until: float = 0.0
@@ -185,6 +192,31 @@ class LLMService:
         self.available_providers = self._detect_available_providers()
         if not self.available_providers:
             logger.warning("No LLM providers configured - set API keys in environment")
+
+    def set_token_usage_callback(
+        self, callback: TokenUsageCallback | None
+    ) -> None:
+        """Register an async callback fired after every successful LLM call.
+
+        Called with a :class:`TokenUsage` carrying prompt / completion token
+        counts, provider, model, and USD cost estimate. Used by the
+        :class:`TraceWriter` to aggregate running totals and stream
+        ``tokens_used`` SSE events to the UI.
+        """
+        self._token_usage_callback = callback
+
+    async def _emit_token_usage(self, usage: TokenUsage | None) -> None:
+        """Record + forward a single TokenUsage observation, swallowing errors."""
+        if usage is None:
+            return
+        self.last_token_usage = usage
+        callback = self._token_usage_callback
+        if callback is None:
+            return
+        try:
+            await callback(usage)
+        except Exception:  # noqa: BLE001 — never fail a query because of telemetry
+            logger.exception("token usage callback failed")
 
     def _api_key_for(self, provider: ModelProvider) -> str:
         """Return the API key for ``provider``: explicit override first, env fallback."""
@@ -956,6 +988,12 @@ class LLMService:
             raise RuntimeError(
                 f"Malformed response from {provider.value}: {data}"
             ) from exc
+        usage = TokenUsage.from_openai_usage(
+            data.get("usage") if isinstance(data, dict) else None,
+            model=cast(str, config.get("model") or model_name),
+            provider=provider.value,
+        )
+        await self._emit_token_usage(usage)
         return cast(dict[str, Any], message)
 
     async def _ensure_gemini_cached_content(
@@ -1079,6 +1117,13 @@ class LLMService:
         response.raise_for_status()
         data = response.json()
         result: str = data["choices"][0]["message"]["content"]
+        usage = TokenUsage.from_openai_usage(
+            data.get("usage") if isinstance(data, dict) else None,
+            model=cast(str, config.get("model") or ""),
+            provider=provider.value,
+            agent_id=agent_id,
+        )
+        await self._emit_token_usage(usage)
         return result
 
     async def _generate_gemini(
@@ -1129,6 +1174,11 @@ class LLMService:
         data = response.json()
         result = self._extract_gemini_text(data)
         if result:
+            usage = TokenUsage.from_gemini_metadata(
+                data.get("usageMetadata") if isinstance(data, dict) else None,
+                model=cast(str, config.get("model") or ""),
+            )
+            await self._emit_token_usage(usage)
             return result
 
         # Gemini thinking models may occasionally spend the full budget on
@@ -1156,6 +1206,13 @@ class LLMService:
         retry_data = retry_response.json()
         retry_result = self._extract_gemini_text(retry_data)
         if retry_result:
+            usage = TokenUsage.from_gemini_metadata(
+                retry_data.get("usageMetadata")
+                if isinstance(retry_data, dict)
+                else None,
+                model=cast(str, config.get("model") or ""),
+            )
+            await self._emit_token_usage(usage)
             return retry_result
 
         raise RuntimeError("Gemini returned no text content parts.")
@@ -1351,9 +1408,13 @@ class LLMService:
                     config,
                 ),
                 "stream": True,
+                # Ask the upstream to include a final ``usage`` chunk so we
+                # can emit a tokens_used event even for streamed completions.
+                "stream_options": {"include_usage": True},
             },
         ) as response:
             response.raise_for_status()
+            stream_usage: dict[str, Any] | None = None
             async for line in response.aiter_lines():
                 if line.startswith("data: "):
                     data = line[6:]
@@ -1363,6 +1424,10 @@ class LLMService:
                         import json
 
                         chunk = json.loads(data)
+                        if isinstance(chunk, dict):
+                            chunk_usage = chunk.get("usage")
+                            if isinstance(chunk_usage, dict):
+                                stream_usage = chunk_usage
                         content = (
                             chunk.get("choices", [{}])[0]
                             .get("delta", {})
@@ -1372,6 +1437,12 @@ class LLMService:
                             yield content
                     except json.JSONDecodeError:
                         continue
+            usage = TokenUsage.from_openai_usage(
+                stream_usage,
+                model=cast(str, config.get("model") or ""),
+                provider=provider.value,
+            )
+            await self._emit_token_usage(usage)
 
     async def _stream_gemini(
         self,

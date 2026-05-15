@@ -631,6 +631,16 @@ export const extraResources = {
     },
     research: {
       live: 'Live',
+      cost: {
+        total: 'Cost',
+        tokens: 'tokens',
+        input: 'input',
+        output: 'output',
+        breakdown: 'Cost breakdown',
+        byModel: 'By model',
+        byAgent: 'By sub-agent',
+        ariaLabel: 'Estimated query cost: {{cost}} for {{tokens}} tokens',
+      },
       page: {
         title: 'Live Research',
         intro:
@@ -1464,6 +1474,16 @@ export const extraResources = {
     },
     research: {
       live: 'En direct',
+      cost: {
+        total: 'Coût',
+        tokens: 'jetons',
+        input: 'entrée',
+        output: 'sortie',
+        breakdown: 'Détail du coût',
+        byModel: 'Par modèle',
+        byAgent: 'Par sous-agent',
+        ariaLabel: 'Coût estimé de la requête : {{cost}} pour {{tokens}} jetons',
+      },
       page: {
         title: 'Recherche en direct',
         intro:
@@ -2270,6 +2290,16 @@ export const extraResources = {
     },
     research: {
       live: 'Live',
+      cost: {
+        total: 'Kosten',
+        tokens: 'Tokens',
+        input: 'Eingabe',
+        output: 'Ausgabe',
+        breakdown: 'Kostenaufschlüsselung',
+        byModel: 'Nach Modell',
+        byAgent: 'Nach Sub-Agent',
+        ariaLabel: 'Geschätzte Anfragekosten: {{cost}} für {{tokens}} Tokens',
+      },
       page: {
         title: 'Live-Recherche',
         intro:
@@ -3105,6 +3135,16 @@ export const extraResources = {
     },
     research: {
       live: 'Dal vivo',
+      cost: {
+        total: 'Costo',
+        tokens: 'token',
+        input: 'input',
+        output: 'output',
+        breakdown: 'Dettaglio del costo',
+        byModel: 'Per modello',
+        byAgent: 'Per sotto-agente',
+        ariaLabel: 'Costo stimato della query: {{cost}} per {{tokens}} token',
+      },
       page: {
         title: 'Ricerca dal vivo',
         intro:
@@ -3940,6 +3980,16 @@ export const extraResources = {
     },
     research: {
       live: 'Ζωντανά',
+      cost: {
+        total: 'Κόστος',
+        tokens: 'διακριτικά',
+        input: 'είσοδος',
+        output: 'έξοδος',
+        breakdown: 'Ανάλυση κόστους',
+        byModel: 'Ανά μοντέλο',
+        byAgent: 'Ανά υπο-πράκτορα',
+        ariaLabel: 'Εκτιμώμενο κόστος ερωτήματος: {{cost}} για {{tokens}} διακριτικά',
+      },
       page: {
         title: 'Ζωντανή Έρευνα',
         intro:
