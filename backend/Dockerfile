@@ -35,15 +35,20 @@ COPY graphrag/src ./graphrag/src/
 # + activities/) into a sibling folder.
 COPY eleutheria_worker ./eleutheria_worker/
 
-# Install all four packages + auth dependencies.
-# graphrag pulls api/llm extras; worker pulls temporalio.
+# Install all four packages + auth dependencies + semantic layer.
+# graphrag pulls api/llm extras; worker pulls temporalio; rdflib/pyshacl/owlrl
+# are required by knowledge graph's semantic neurosymbolic layer
+# (kg/src/eleutheria_kg/semantic/) and by graphrag/.../agents/graph_nodes.py.
 RUN pip install --no-cache-dir --no-compile \
     ./database \
     ./kg \
     "./graphrag[api,llm]" \
     ./eleutheria_worker \
     "passlib[bcrypt]" \
-    PyJWT
+    PyJWT \
+    "rdflib>=7.6.0" \
+    "pyshacl>=0.31.0" \
+    "owlrl>=7.1.4"
 
 # Smoke check: the worker entrypoint must import cleanly. Catches missing
 # deps or moved modules at build time instead of at `docker run`.
