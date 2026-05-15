@@ -48,6 +48,20 @@ def _now_iso() -> str:
     return datetime.now(UTC).isoformat().replace("+00:00", "Z")
 
 
+def _now_dt() -> datetime:
+    """UTC-aware datetime — what asyncpg needs for ``timestamptz`` columns."""
+    return datetime.now(UTC)
+
+
+def _iso_to_dt(iso: str | None) -> datetime | None:
+    if not iso:
+        return None
+    try:
+        return datetime.fromisoformat(iso.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
 def _coerce_uuid(value: str) -> uuid.UUID | None:
     try:
         return uuid.UUID(value)
@@ -415,8 +429,8 @@ class TraceWriter:
                 trace_uuid,
                 user_uuid,
                 self.query,
-                self._started_at,
-                self._completed_at,
+                _iso_to_dt(self._started_at),
+                _iso_to_dt(self._completed_at),
                 self.mode,
                 json.dumps(agent_tree, default=str),
                 json.dumps(self._reports["citation_verifier_report"], default=str)
