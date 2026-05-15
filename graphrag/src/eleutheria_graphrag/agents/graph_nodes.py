@@ -587,12 +587,47 @@ Note gaps in the evidence, textual transmission problems, or scholarly debates.
 ## REQUIREMENTS
 - Cover at least {required_sections} dossier-driven exegesis sections.
 - Include at least {required_quote_blocks} quotation blocks with original + translation.
-- Target 2000-4000 words. DEPTH is paramount.
+- Target 800-1200 words **per exegesis section** (~5,000-7,000 chars total when 4 sections \
+  are required). A doctoral chapter section is not 500 words — it is 1,500-2,500 words. \
+  Do not write a summary; write a chapter section.
+- Embed at least **3 inline citation markers per section** (e.g. `[P1]`, `[N3]`), placed \
+  immediately after the specific claim they ground, never bunched at the end.
+- For each substantive section, include **at least 2 primary-source block quotes** in the \
+  mandatory dual-language format (original + translation), each followed by 2-4 sentences \
+  of philological and argumentative analysis.
 - EVERY passage in the evidence packet with Greek/Latin text SHOULD be quoted and analyzed.
 - Use the reference markers from the reference map (e.g., [P1], [N3]).
 - Also include scholarly references in prose: "as Origen writes in *De Principiis* III.1.5 [P2]..."
 - Never invent Greek, Latin, or translations. Quote ONLY from the evidence packet.
 - Distinguish between direct text, ancient testimony, and your own synthesis.
+
+## EXAMPLE OF THE EXPECTED REGISTER AND DEPTH (excerpt of a single section)
+
+### 2. Chrysippus on perfect and auxiliary causes
+
+Chrysippus's response to the Lazy Argument turns on a taxonomy of causes that \
+distinguishes the *perfect and principal* (αἴτιον αὐτοτελὲς καὶ προηγούμενον) from \
+*auxiliary and proximate* causes (αἴτια συνεργὰ καὶ προσεχῆ) [P3]. Cicero preserves \
+the technical vocabulary in *De Fato* 41:
+
+  > "causarum enim aliae sunt perfectae et principales, aliae adiuvantes et proximae" \
+  > (Cicero, *De Fato* 41) [P3]
+  > "for some causes are perfect and principal, others auxiliary and proximate"
+
+The Latin pair *perfectae et principales* renders, on Sharples's reading, the Stoic \
+τέλειον καὶ προηγούμενον [P3]; the contrast term *adiuvantes* (auxiliary) tracks \
+συνεργόν. Chrysippus's point is that fate operates through the perfect causes — the \
+agent's own assent (συγκατάθεσις) — and not as a brute external compulsion mediated \
+by auxiliary stimuli [P4]. This taxonomy is the philosophical engine of the cylinder \
+analogy: the push is auxiliary, the cylinder's shape is principal [P4].
+
+Bobzien argues that this distinction does not collapse into a modern compatibilism \
+[N1]: what is "up to us" (τὸ ἐφ' ἡμῖν) is not the libertarian power to do otherwise, \
+but the fact that the principal cause of assent is internal to the agent's rational \
+nature [N1]. Frede, by contrast, reads the same passages as preparing the ground for \
+a notion of *moral* freedom that will be developed by Epictetus [N2]...
+
+(Each section continues at this density for 800-1200 words.)
 """
 
 SCHOLARLY_POLISH_PROMPT = """\
@@ -622,6 +657,44 @@ Rules:
 - The final answer should be 2000-4000 words. If the draft is shorter, expand \
   the exegesis of existing passages — do not add new facts.
 - Keep Greek/Latin quotes verbatim. Keep all reference markers.
+"""
+
+EXPAND_RETRY_PROMPT = """\
+Your previous scholarly draft was only {current_chars} characters across \
+{current_sections} sections. Expand it to at least {target_chars} characters by \
+deepening the exegesis you already have. Do NOT add new claims or new evidence — \
+work only from the dossier and evidence packet below.
+
+Question: {question}
+
+Dossier:
+{dossier_json}
+
+Evidence packet (FULL passage texts — quote these verbatim):
+{evidence_packet_json}
+
+Reference map:
+{reference_json}
+
+Previous draft:
+{draft_answer}
+
+Expansion strategy (apply to EACH section):
+1. Add a paragraph of philological + textual analysis per claim — unpack key Greek \
+   or Latin terms, explain the argument structure, connect to the question.
+2. Quote at least 2 primary passages verbatim per section in the mandatory \
+   dual-language block-quote format (original + translation), each followed by \
+   2-4 sentences of exegesis.
+3. Engage with at least 1 scholar's counter-position per section — name them, \
+   summarise their reading in 2-3 sentences, then accept or rebut.
+4. Target {target_chars}+ chars total, ~800-1200 words per section.
+
+Hard rules:
+- Preserve every existing citation marker and reference EXACTLY.
+- Do not introduce any new fact, citation marker, or quotation that is not \
+  already present in the dossier, evidence packet, or previous draft.
+- Keep all original Greek/Latin verbatim. Never paraphrase ancient text.
+- Output the rewritten Markdown only.
 """
 
 COMPRESSION_REPAIR_PROMPT = """\
@@ -3803,29 +3876,86 @@ def _render_requirements(state: RAGState) -> dict[str, int]:
 
 
 def _answer_shape_metrics(answer: str) -> dict[str, int]:
+    text = answer.strip()
+    # Inline citation markers like [P1], [N3], [12]. These are inline (not
+    # block-quote) markers used to ground individual claims in the prose.
+    inline_citations = len(re.findall(r"\[[A-Z]?\d+\]", text))
     return {
-        "chars": len(answer.strip()),
-        "section_headers": len(re.findall(r"^#{1,3}\s+", answer, flags=re.MULTILINE)),
-        "quote_blocks": len(re.findall(r"^>\s", answer, flags=re.MULTILINE)),
+        "chars": len(text),
+        "section_headers": len(re.findall(r"^#{1,3}\s+", text, flags=re.MULTILINE)),
+        "quote_blocks": len(re.findall(r"^>\s", text, flags=re.MULTILINE)),
+        "inline_citations": inline_citations,
     }
 
 
-def _answer_is_too_compressed(state: RAGState, answer: str) -> bool:
-    if not answer.strip():
-        return True
+# ---------------------------------------------------------------------------
+# Progressive render-quality classifier.
+#
+# Three bands:
+#   - "strict":   ≥ min_chars (typically 2,800), ≥ required_sections, and
+#                 ≥ 3 inline citations per required section → polish fully.
+#   - "llm_short": ≥ 1,800 chars, ≥ max(3, required_sections - 1) sections,
+#                 and ≥ 2 inline citations per section → light polish, no
+#                 fail. Use Kimi's prose when it is *good but short*.
+#   - "inadequate": anything below → fall back to the mechanical renderer.
+# ---------------------------------------------------------------------------
+
+LLM_SHORT_MIN_CHARS = 1800
+LLM_SHORT_MIN_CITATIONS_PER_SECTION = 2
+STRICT_MIN_CITATIONS_PER_SECTION = 3
+
+
+def _classify_render_quality(
+    state: RAGState, answer: str
+) -> tuple[str, dict[str, int]]:
+    """Return ('strict' | 'llm_short' | 'inadequate', metrics).
+
+    Pure function — no side effects. The caller decides what to do per band.
+    """
+    if not answer or not answer.strip():
+        return "inadequate", _answer_shape_metrics("")
+
     requirements = _render_requirements(state)
     metrics = _answer_shape_metrics(answer)
-    if metrics["chars"] < requirements["min_chars"]:
-        return True
-    if (
-        requirements["required_sections"]
-        and metrics["section_headers"] < requirements["required_sections"]
-    ):
-        return True
-    return bool(
-        requirements["required_quote_blocks"]
-        and metrics["quote_blocks"] < requirements["required_quote_blocks"]
+    chars = metrics["chars"]
+    sections = metrics["section_headers"]
+    citations = metrics["inline_citations"]
+    quote_blocks = metrics["quote_blocks"]
+    required_sections = requirements["required_sections"]
+    required_quotes = requirements["required_quote_blocks"]
+    min_chars = requirements["min_chars"]
+
+    strict_section_target = required_sections or 1
+    strict_citations_target = strict_section_target * STRICT_MIN_CITATIONS_PER_SECTION
+    strict_ok = (
+        chars >= min_chars
+        and (not required_sections or sections >= required_sections)
+        and (not required_quotes or quote_blocks >= required_quotes)
+        and citations >= strict_citations_target
     )
+    if strict_ok:
+        return "strict", metrics
+
+    short_section_target = max(3, required_sections - 1) if required_sections else 3
+    short_citations_target = short_section_target * LLM_SHORT_MIN_CITATIONS_PER_SECTION
+    short_ok = (
+        chars >= LLM_SHORT_MIN_CHARS
+        and sections >= short_section_target
+        and citations >= short_citations_target
+    )
+    if short_ok:
+        return "llm_short", metrics
+
+    return "inadequate", metrics
+
+
+def _answer_is_too_compressed(state: RAGState, answer: str) -> bool:
+    """Legacy strict check — kept for callers that need a single boolean.
+
+    The new pipeline should prefer ``_classify_render_quality``.
+    """
+    band, _metrics = _classify_render_quality(state, answer)
+    return band == "inadequate"
 
 
 def _augment_claim_ledger_from_dossier(
@@ -6498,12 +6628,86 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             )
             _render_dur = int((_time.time() - _t0) * 1000)
             rendered_answer = raw_answer.strip()
-            _polish_mode = "skipped"
+
+            # ----- Progressive render-quality classification -----------------
+            band, _shape = _classify_render_quality(state, rendered_answer)
+            expand_retry_count = 0
+            minimize_calls = _should_minimize_llm_calls(state)
+
+            # One-shot expand retry when the first draft lands in the
+            # llm_short band (or below): ask Kimi to deepen the existing
+            # exegesis without adding new claims. Skip if we're in a
+            # minimal-call regime (cheap eval runs).
             if (
-                rendered_answer
-                and len(rendered_answer) < 300
-                and not _should_minimize_llm_calls(state)
+                band in ("llm_short", "inadequate")
+                and rendered_answer
+                and not minimize_calls
             ):
+                try:
+                    expand_prompt = EXPAND_RETRY_PROMPT.format(
+                        question=state.question,
+                        current_chars=_shape["chars"],
+                        current_sections=_shape["section_headers"],
+                        target_chars=max(requirements["min_chars"], 3200),
+                        dossier_json=truncate_json(dossier_payload, 14000),
+                        evidence_packet_json=truncate_json(evidence_packet, 12000),
+                        reference_json=truncate_json(reference_map, 6000),
+                        draft_answer=truncate_text(rendered_answer, 18000),
+                    )
+                    expanded_answer = await ctx.deps.llm.generate(
+                        expand_prompt,
+                        system_prompt=SYSTEM_PROMPT,
+                        temperature=0.15,
+                        max_tokens=6000,
+                        cache_key="render-expand-retry",
+                        cache_prefix="render_expand_retry_v1",
+                        model_override=model_api_id,
+                    )
+                    expanded_answer = expanded_answer.strip()
+                    expand_retry_count = 1
+                    if expanded_answer:
+                        new_band, _new_shape = _classify_render_quality(
+                            state, expanded_answer
+                        )
+                        # Accept the expansion if it strictly improved the
+                        # band or stayed in the same usable band but got
+                        # longer. Reject if it regressed.
+                        band_rank = {"strict": 2, "llm_short": 1, "inadequate": 0}
+                        if band_rank[new_band] > band_rank[band] or (
+                            band_rank[new_band] == band_rank[band]
+                            and _new_shape["chars"] > _shape["chars"]
+                        ):
+                            rendered_answer = expanded_answer
+                            band = new_band
+                            _shape = _new_shape
+                    _trace_stage(
+                        state,
+                        "render_expand_retry",
+                        {
+                            "attempted": True,
+                            "from_band": band,
+                            "shape_metrics": _shape,
+                        },
+                    )
+                except Exception as exc:
+                    _trace_stage(
+                        state,
+                        "render_expand_retry",
+                        {
+                            "attempted": True,
+                            "error": f"{type(exc).__name__}: {exc}",
+                        },
+                    )
+
+            state.metadata["expand_retry_count"] = expand_retry_count
+
+            # ----- Polishing pass --------------------------------------------
+            # Polish prose-quality drafts (strict + llm_short). Skip for
+            # inadequate drafts (no point polishing a fallback) and for
+            # minimal-call regimes.
+            _polish_mode = "skipped"
+            if band in ("strict", "llm_short") and not minimize_calls:
+                polish_max_tokens = 4800 if band == "strict" else 3200
                 try:
                     polished_answer = await ctx.deps.llm.generate(
                         SCHOLARLY_POLISH_PROMPT.format(
@@ -6513,21 +6717,22 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         ),
                         system_prompt=SYSTEM_PROMPT,
                         temperature=0.1,
-                        max_tokens=3200,
-                        cache_key="scholarly-polish",
+                        max_tokens=polish_max_tokens,
+                        cache_key=f"scholarly-polish-{band}",
                         cache_prefix="scholarly_polish_v2",
                         model_override=model_api_id,
                     )
                     polished_answer = polished_answer.strip()
                     if polished_answer:
                         rendered_answer = polished_answer
-                        state.metadata["scholarly_polish_mode"] = "llm"
-                        _polish_mode = "llm"
+                        polish_label = "llm" if band == "strict" else "llm_short"
+                        state.metadata["scholarly_polish_mode"] = polish_label
+                        _polish_mode = polish_label
                         _trace_stage(
                             state,
                             "scholarly_polish",
                             {
-                                "mode": "llm",
+                                "mode": polish_label,
                                 "raw_excerpt": truncate_text(polished_answer, 2000),
                             },
                         )
@@ -6595,16 +6800,26 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 },
             )
 
+            # Re-classify after polish: polish can shrink or expand prose,
+            # so the final band may differ from the post-expand band.
+            final_band, _final_shape = _classify_render_quality(
+                state, rendered_answer
+            )
             fallback_answer = _render_answer_fallback(state)
-            if not rendered_answer or _answer_is_too_compressed(state, rendered_answer):
+            if not rendered_answer or final_band == "inadequate":
                 rendered_answer = fallback_answer
+                final_band = "inadequate"
             state.raw_answer = rendered_answer
             fallback_used = state.raw_answer == fallback_answer
-            state.metadata["render_answer_mode"] = (
-                "fallback" if fallback_used else "llm"
-            )
             if fallback_used:
+                state.metadata["render_answer_mode"] = "fallback"
                 state.metadata["pipeline_degraded"] = True
+            elif final_band == "strict":
+                state.metadata["render_answer_mode"] = "llm"
+            else:
+                # llm_short: prose-quality answer below strict threshold but
+                # above llm_short floor — NOT a fallback.
+                state.metadata["render_answer_mode"] = "llm_short"
             _trace_stage(
                 state,
                 "render_grounded_answer",
@@ -6617,6 +6832,8 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     "compression_repair_mode": compression_repair_mode,
                     "render_requirements": requirements,
                     "shape_metrics": _answer_shape_metrics(state.raw_answer),
+                    "expand_retry_count": expand_retry_count,
+                    "render_band": final_band,
                 },
             )
         except Exception as exc:
