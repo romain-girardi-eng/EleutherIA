@@ -586,7 +586,8 @@ Note gaps in the evidence, textual transmission problems, or scholarly debates.
 
 ## REQUIREMENTS — doctoral chapter, not a journal summary
 - Cover at least {required_sections} dossier-driven exegesis sections, including an \
-  opening orientation and a closing scholarly assessment.
+  opening orientation and a closing scholarly assessment. **Use `### Section Title` \
+  markdown headings (H3) — not bold lines, not plain prose** so the reader can navigate.
 - Include at least {required_quote_blocks} quotation blocks with original + translation, \
   drawn from the dossier — never invent.
 - Target **1500-2500 words per exegesis section** (~10,000-15,000 chars total for a \
@@ -3896,9 +3897,18 @@ def _answer_shape_metrics(answer: str) -> dict[str, int]:
     # Inline citation markers like [P1], [N3], [12]. These are inline (not
     # block-quote) markers used to ground individual claims in the prose.
     inline_citations = len(re.findall(r"\[[A-Z]?\d+\]", text))
+    # Recognize markdown headings (#, ##, ###) AND the bold-as-heading
+    # convention Kimi often produces ("**Section Title**\n"). Both are
+    # valid section markers in our pipeline; previously the classifier only
+    # counted `###` headings and rejected perfectly good 50 k-char drafts
+    # because Kimi had used `**Title**` instead.
+    md_headings = re.findall(r"^#{1,3}\s+\S", text, flags=re.MULTILINE)
+    bold_headings = re.findall(
+        r"^\*\*[^*\n]{2,80}\*\*\s*$", text, flags=re.MULTILINE
+    )
     return {
         "chars": len(text),
-        "section_headers": len(re.findall(r"^#{1,3}\s+", text, flags=re.MULTILINE)),
+        "section_headers": len(md_headings) + len(bold_headings),
         "quote_blocks": len(re.findall(r"^>\s", text, flags=re.MULTILINE)),
         "inline_citations": inline_citations,
     }
@@ -3956,6 +3966,20 @@ def _classify_render_quality(
     if strict_ok:
         return "strict", metrics
 
+    # "Massive prose" escape hatch: if the draft is well over 2× the floor
+    # with plenty of citations and quote blocks, accept it as ``strict``
+    # even when the section header count is short. Previously a 51 k-char
+    # draft with 43 inline cites + 20 quote blocks but zero `###` markers
+    # (Kimi had used a different heading style) was rejected as
+    # "inadequate" and the pipeline fell back to the mechanical renderer.
+    massive_ok = (
+        chars >= max(min_chars * 2, 12000)
+        and citations >= max(strict_citations_target, 12)
+        and (not required_quotes or quote_blocks >= max(3, required_quotes - 1))
+    )
+    if massive_ok:
+        return "strict", metrics
+
     short_section_target = max(3, required_sections - 1) if required_sections else 3
     short_citations_target = short_section_target * LLM_SHORT_MIN_CITATIONS_PER_SECTION
     short_ok = (
@@ -3964,6 +3988,15 @@ def _classify_render_quality(
         and citations >= short_citations_target
     )
     if short_ok:
+        return "llm_short", metrics
+
+    # Length-driven fallback: even with few sections, a long draft with
+    # decent citation density is better than a 2 k-char mechanical render.
+    long_enough_ok = (
+        chars >= max(LLM_SHORT_MIN_CHARS, 8000)
+        and citations >= short_citations_target
+    )
+    if long_enough_ok:
         return "llm_short", metrics
 
     return "inadequate", metrics
