@@ -254,6 +254,7 @@ _FORMAT_EXTENSIONS = {
     "ris": "ris",
     "zotero": "json",
     "json": "json",
+    "docx": "docx",
 }
 
 
