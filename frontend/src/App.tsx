@@ -40,6 +40,9 @@ const CanonicalTextReader = lazy(() => import('./pages/CanonicalTextReader'));
 const BibliographyPage = lazy(() => import('./pages/BibliographyPage'));
 const BookReaderPage = lazy(() => import('./components/book-reader/BookReaderPage'));
 
+// Shared trace read-only page
+const SharedTracePage = lazy(() => import('./pages/SharedTracePage'));
+
 // Phase 6: New pages for analytics, admin, and community features
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const SubmitCorrectionPage = lazy(() => import('./pages/SubmitCorrectionPage'));
@@ -415,6 +418,8 @@ function AppContent() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/credits" element={<CreditsPage />} />
               <Route path="/report-error" element={<ReportErrorPage />} />
+              {/* Public shared trace */}
+              <Route path="/share/:token" element={<SharedTracePage />} />
               {/* Admin and Community Features */}
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/community/contribute" element={<SubmitCorrectionPage />} />

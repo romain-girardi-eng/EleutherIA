@@ -246,6 +246,13 @@ export const doctoralApi = {
   ): string {
     return `${API_URL}/api/graphrag/query/${encodeURIComponent(traceId)}/export?format=${format}`;
   },
+
+  async createShareLink(traceId: string): Promise<{ share_url: string; expires_at: string }> {
+    const res = await client.post<{ share_url: string; expires_at: string }>(
+      `/api/graphrag/query/${encodeURIComponent(traceId)}/share`,
+    );
+    return res.data;
+  },
 };
 
 // --- Audit shape adapter ---------------------------------------------------
