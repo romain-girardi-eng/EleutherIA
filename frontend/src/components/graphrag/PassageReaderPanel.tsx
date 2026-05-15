@@ -24,15 +24,45 @@ export default function PassageReaderPanel({
   const targetRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const { target, passages, workId, totalPassagesInWork } = passageContext;
+  const target = passageContext?.target ?? null;
+  const passages = passageContext?.passages ?? [];
+  const workId = passageContext?.workId ?? '';
+  const totalPassagesInWork = passageContext?.totalPassagesInWork ?? 0;
 
-  // Auto-scroll to target passage on mount
+  // Auto-scroll to target passage on mount. Guard against ``target`` being
+  // null — a backend response with HTTP 200 but malformed body (or a
+  // not-yet-loaded passage_id) used to crash the panel with
+  // "Cannot read properties of null (reading 'passageId')".
   useEffect(() => {
+    if (!target?.passageId) return;
     const timer = setTimeout(() => {
       targetRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
     return () => clearTimeout(timer);
-  }, [target.passageId]);
+  }, [target?.passageId]);
+
+  // Early exit when the API didn't return a target passage. Render an
+  // explicit "not found" state instead of letting downstream code deref
+  // null fields. Pre-compute the rest of the derived values only when we
+  // have a target.
+  if (!target) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
+        <BookOpen className="h-8 w-8 text-stone-300" />
+        <p className="text-sm font-medium text-stone-600">
+          {t('graphRagUi.passageReader.notFound') ??
+            'Passage non trouvé dans la base.'}
+        </p>
+        <button
+          type="button"
+          onClick={onClose}
+          className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-600 hover:border-amber-300 hover:bg-amber-50"
+        >
+          {t('graphRagUi.passageReader.close') ?? 'Fermer'}
+        </button>
+      </div>
+    );
+  }
 
   // Language badge color
   const langBadge = target.language === 'lat'
