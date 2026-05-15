@@ -51,6 +51,7 @@ api = [
     "fastapi>=0.130.0",
     "uvicorn[standard]>=0.40.0",
     "sse-starlette>=3.0.0",
+    "pypandoc>=1.13",
 ]
 llm = [
     # LLM providers

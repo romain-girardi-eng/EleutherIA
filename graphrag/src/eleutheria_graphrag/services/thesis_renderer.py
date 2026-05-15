@@ -21,7 +21,7 @@ from eleutheria_graphrag.models.thesis_output import (
 )
 
 CitationStyle = Literal["chicago", "mla", "harvard"]
-ExportFormat = Literal["markdown", "latex", "bibtex", "zotero", "ris", "json"]
+ExportFormat = Literal["markdown", "latex", "bibtex", "zotero", "ris", "json", "docx"]
 
 
 # --- helpers ----------------------------------------------------------------
@@ -416,6 +416,18 @@ class ThesisRenderer:
                 )
         return creators
 
+    # ----- DOCX ------------------------------------------------------------
+
+    def to_docx(self, draft: ThesisDraft) -> bytes:
+        """Convert the draft to a .docx file via pypandoc."""
+        import pypandoc  # type: ignore[import-untyped]
+
+        md = self.to_markdown(draft)
+        result = pypandoc.convert_text(md, "docx", format="md", outputfile=None)
+        if isinstance(result, str):
+            return result.encode("latin-1")
+        return result
+
     # ----- RIS -------------------------------------------------------------
 
     def to_ris(self, draft: ThesisDraft) -> str:
@@ -449,11 +461,12 @@ def export_draft(
     fmt: ExportFormat,
     *,
     citation_style: CitationStyle = "chicago",
-) -> tuple[str, str]:
+) -> tuple[str | bytes, str]:
     """Render ``draft`` in ``fmt`` and return ``(body, media_type)``.
 
     The helper is what FastAPI routes call so the format/mime mapping stays in
-    one place.
+    one place.  For ``docx`` the body is ``bytes``; for all other formats it is
+    a ``str``.
     """
 
     renderer = ThesisRenderer()
@@ -473,6 +486,11 @@ def export_draft(
         ), "application/json"
     if fmt == "json":
         return draft.model_dump_json(indent=2), "application/json"
+    if fmt == "docx":
+        return (
+            renderer.to_docx(draft),
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        )
     raise ValueError(f"unknown export format: {fmt}")
 
 
