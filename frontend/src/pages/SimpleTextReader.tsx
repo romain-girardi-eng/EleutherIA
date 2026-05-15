@@ -75,7 +75,7 @@ export default function SimpleTextReader() {
 
   if (loading) {
     return (
-      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+      <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
         <div className="flex flex-col items-center justify-center py-20 gap-4 max-w-7xl mx-auto relative z-10">
           <div className="relative w-12 h-12">
             <div className="absolute inset-0 rounded-full border-2 border-amber-200/40" />
@@ -89,7 +89,7 @@ export default function SimpleTextReader() {
 
   if (error) {
     return (
-      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+      <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
         <div style={{ padding: '20px', fontFamily: 'sans-serif' }} className="max-w-7xl mx-auto relative z-10">
         <h1 style={{ color: 'red' }}>{t('simpleTextReader.error')}</h1>
         <p>{error}</p>
@@ -104,7 +104,7 @@ export default function SimpleTextReader() {
 
   if (!text) {
     return (
-      <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+      <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
         <div style={{ padding: '20px', fontFamily: 'sans-serif' }} className="max-w-7xl mx-auto relative z-10">
         <h1>{t('simpleTextReader.noTextFound')}</h1>
         <p>{t('simpleTextReader.textId')}: {textId}</p>
@@ -117,7 +117,7 @@ export default function SimpleTextReader() {
   }
 
   return (
-    <div className="min-h-screen w-full pt-20 pb-12 bg-transparent">
+    <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
       <div style={{ padding: '20px', fontFamily: 'serif', maxWidth: '800px', margin: '0 auto' }} className="relative z-10">
       <Link to="/texts" style={{ color: 'blue', textDecoration: 'underline', marginBottom: '20px', display: 'block' }}>
         ← {t('simpleTextReader.backToTexts')}

@@ -596,7 +596,7 @@ export default function SearchPage() {
   return (
     <>
       {!results && !loading && (
-        <div className="flex min-h-screen w-full flex-col items-center justify-center bg-transparent px-4 pb-12 pt-20">
+        <div className="flex min-h-screen w-full flex-col items-center justify-center bg-transparent px-4 pb-12 pt-28">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
