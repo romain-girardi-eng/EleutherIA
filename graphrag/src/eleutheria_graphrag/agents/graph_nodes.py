@@ -76,6 +76,10 @@ from eleutheria_graphrag.agents.structured_models import (
     TreeNavigationResult,
 )
 from eleutheria_graphrag.agents.text_utils import truncate_json, truncate_text
+from eleutheria_graphrag.services.json_extractor import (
+    JSONExtractionError,
+    extract_json,
+)
 from eleutheria_graphrag.services.model_registry import get_model
 from eleutheria_graphrag.services.retrieval_strategy import (
     SnapshotStrategy,
@@ -736,61 +740,18 @@ _STATIC_GREEK_TERMS = {
 
 
 def _parse_json(text: str) -> Any:
-    """Extract JSON from LLM output, stripping markdown code fences."""
+    """Extract JSON from LLM output, stripping markdown code fences.
 
-    def _repair_json(candidate: str) -> str:
-        candidate = (
-            candidate.replace("“", '"')
-            .replace("”", '"')
-            .replace("’", "'")
-            .replace("‘", "'")
-        )
-        candidate = re.sub(r",(\s*[}\]])", r"\1", candidate)
-        candidate = re.sub(r":\s*NaN\b", ": null", candidate)
-        candidate = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", candidate)
-        return candidate
-
-    text = text.strip()
-    if text.lower().startswith("json"):
-        text = text[4:].lstrip(": \n\t")
-    match = re.search(r"```(?:json)?\s*([\s\S]*?)```", text)
-    if match:
-        text = match.group(1).strip()
-    elif text.startswith("```"):
-        text = re.sub(r"^```(?:json)?", "", text, count=1).strip()
-        if text.endswith("```"):
-            text = text[:-3].strip()
+    Delegates to :func:`eleutheria_graphrag.services.json_extractor.extract_json`
+    so Kimi K2.6 outputs that wrap JSON in code fences, prefix it with
+    natural-language reasoning, or trail prose after the closing brace are
+    all recovered. Raises ``json.JSONDecodeError`` for backward-compat with
+    the prior contract.
+    """
     try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        repaired = _repair_json(text)
-        if repaired != text:
-            try:
-                return json.loads(repaired)
-            except json.JSONDecodeError:
-                pass
-        candidates: list[str] = []
-        start_obj = text.find("{")
-        start_arr = text.find("[")
-        if start_obj != -1:
-            end_obj = text.rfind("}")
-            if end_obj != -1 and end_obj > start_obj:
-                candidates.append(text[start_obj : end_obj + 1])
-        if start_arr != -1:
-            end_arr = text.rfind("]")
-            if end_arr != -1 and end_arr > start_arr:
-                candidates.append(text[start_arr : end_arr + 1])
-        for candidate in candidates:
-            try:
-                return json.loads(candidate)
-            except json.JSONDecodeError:
-                repaired = _repair_json(candidate)
-                if repaired != candidate:
-                    try:
-                        return json.loads(repaired)
-                    except json.JSONDecodeError:
-                        pass
-        raise
+        return extract_json(text)
+    except JSONExtractionError as exc:
+        raise json.JSONDecodeError(str(exc), text or "", 0) from exc
 
 
 def _coerce_claim_ledger_payload(payload: Any) -> ClaimLedgerDraft:
@@ -3388,12 +3349,89 @@ def _claim_reference_markers(state: RAGState, item: ClaimLedgerItem) -> list[str
     return [f"[{ref}]" for ref in _claim_reference_refs(state, item)]
 
 
+def _strip_section_prefix(claim: str, facet_title: str | None) -> str:
+    """Remove a leading "Section Title: " prefix from a claim string.
+
+    The structured-output claim ledger sometimes echoes the facet title at
+    the start of each claim (``"Textual Witnesses: Bobzien argues..."``).
+    When we then render the claim inside a section that already carries
+    that title, the duplication produces ``"### Textual Witnesses\nTextual
+    Witnesses: Bobzien argues..."``. This helper strips the prefix when
+    it matches the facet title or any other obvious section label, so each
+    section reads naturally.
+    """
+    if not claim:
+        return claim
+    text = claim.lstrip()
+    candidates: list[str] = []
+    if facet_title:
+        candidates.append(facet_title)
+    candidates.extend(
+        [
+            "Core Doctrinal Thesis",
+            "Textual Witnesses",
+            "Ancient Testimony",
+            "Modern Reception",
+            "Counterpoints and Limits",
+            "Counter-Evidence",
+            "Limits of the Evidence",
+        ]
+    )
+    for candidate in candidates:
+        if not candidate:
+            continue
+        prefix = f"{candidate}:"
+        if text.lower().startswith(prefix.lower()):
+            return text[len(prefix) :].lstrip()
+    return claim
+
+
 def _render_answer_fallback(state: RAGState) -> str:
-    """Deterministic fallback answer that is guaranteed to stay grounded."""
+    """Deterministic fallback answer that is guaranteed to stay grounded.
+
+    The renderer distributes claims across the dossier's facets so each
+    required section receives a *distinct* claim where possible, rather
+    than recycling the same lead claim under every header. When a facet
+    has no claim of its own we emit a neutral note pointing readers to
+    the limits section, instead of repeating earlier content.
+    """
     lines: list[str] = []
+    facets = (
+        state.scholarly_dossier.facets[:4] if state.scholarly_dossier.facets else []
+    )
+    facet_titles = {facet.facet_id: facet.title for facet in facets}
     claims_by_facet: dict[str, list[ClaimLedgerItem]] = {}
     for item in state.claim_ledger:
         claims_by_facet.setdefault(item.facet_id or "_general", []).append(item)
+
+    # Distribute "_general" claims across empty facets so each section is
+    # filled with a *distinct* claim where possible. This prevents the
+    # "every section restates claim 1" anti-pattern we saw in production
+    # when the LLM emitted unfaceted claims.
+    if facets:
+        general_pool = list(claims_by_facet.get("_general", []))
+        if general_pool:
+            for facet in facets:
+                if claims_by_facet.get(facet.facet_id):
+                    continue
+                if not general_pool:
+                    break
+                claims_by_facet.setdefault(facet.facet_id, []).append(
+                    general_pool.pop(0)
+                )
+            # Leftover unfaceted claims roll into the first facet's overflow.
+            if general_pool and facets:
+                claims_by_facet.setdefault(facets[0].facet_id, []).extend(general_pool)
+            claims_by_facet.pop("_general", None)
+
+    used_claim_ids: set[int] = set()
+
+    def _consume(facet_id: str) -> list[ClaimLedgerItem]:
+        bucket = claims_by_facet.get(facet_id, [])
+        fresh = [item for item in bucket if id(item) not in used_claim_ids]
+        for item in fresh:
+            used_claim_ids.add(id(item))
+        return fresh
 
     supported_claims = [
         item
@@ -3401,18 +3439,34 @@ def _render_answer_fallback(state: RAGState) -> str:
         if item.status == ClaimStatus.SUPPORTED
         and _claim_reference_markers(state, item)
     ]
-    if supported_claims:
+    # Emit the intro summary only when (a) there are no facets that would
+    # carry the claim into a section, or (b) we are signalling insufficient
+    # evidence. Otherwise the sections themselves carry the content and an
+    # intro line would just duplicate the lead claim verbatim.
+    intro_item: ClaimLedgerItem | None = None
+    if supported_claims and (not facets or state.insufficient_evidence):
         intro_item = supported_claims[0]
         intro_refs = " ".join(_claim_reference_markers(state, intro_item))
-        intro_line = intro_item.claim.rstrip(".")
+        intro_line = _strip_section_prefix(intro_item.claim, None).rstrip(".")
         if state.insufficient_evidence:
             intro_line = f"Available evidence is partial, but the best-supported result is this: {intro_line}"
         lines.append(f"{intro_line}. {intro_refs}".replace("..", "."))
 
-    if state.scholarly_dossier.facets:
-        for facet in state.scholarly_dossier.facets[:4]:
-            facet_claims = claims_by_facet.get(facet.facet_id, [])
+    empty_section_note = (
+        "No direct evidence catalogued for this facet — see *Limits of the "
+        "Evidence* for related material."
+    )
+
+    if facets:
+        for facet in facets:
+            facet_claims = _consume(facet.facet_id)
+            # Fall back to the bucket if every claim was already consumed by
+            # the intro — but ONLY if no other section has used it yet.
             if not facet_claims:
+                if lines and lines[-1] != "":
+                    lines.append("")
+                lines.append(f"### {facet.title}")
+                lines.append(empty_section_note)
                 continue
             if lines and lines[-1] != "":
                 lines.append("")
@@ -3424,7 +3478,8 @@ def _render_answer_fallback(state: RAGState) -> str:
                     refs = _claim_reference_markers(state, item)
                     if not refs:
                         continue
-                    body_parts.append(f"{item.claim.rstrip('.')} {' '.join(refs)}")
+                    claim_text = _strip_section_prefix(item.claim, facet.title)
+                    body_parts.append(f"{claim_text.rstrip('.')} {' '.join(refs)}")
                 if body_parts:
                     lines.append(" ".join(body_parts))
             quote_item = next(
@@ -3463,7 +3518,11 @@ def _render_answer_fallback(state: RAGState) -> str:
             refs = _claim_reference_markers(state, item)
             if not refs:
                 continue
-            lines.append(f"{item.claim.rstrip('.')} {' '.join(refs)}")
+            claim_text = _strip_section_prefix(
+                item.claim,
+                facet_titles.get(item.facet_id or ""),
+            )
+            lines.append(f"{claim_text.rstrip('.')} {' '.join(refs)}")
             if item.quote_original:
                 lines.append(f'> Original: "{item.quote_original}" {" ".join(refs)}')
             if item.quote_translation:
@@ -3478,7 +3537,11 @@ def _render_answer_fallback(state: RAGState) -> str:
             refs = _claim_reference_markers(state, item)
             if not refs:
                 continue
-            lines.append(f"{item.claim.rstrip('.')} {' '.join(refs)}")
+            claim_text = _strip_section_prefix(
+                item.claim,
+                facet_titles.get(item.facet_id or ""),
+            )
+            lines.append(f"{claim_text.rstrip('.')} {' '.join(refs)}")
     if not lines:
         return "Available evidence in the current corpus is insufficient to answer confidently."
     return "\n".join(lines)

@@ -867,6 +867,68 @@ class TestFireworksPromptCache:
         )
         assert "prompt_cache_id" not in payload
 
+    def test_payload_attaches_strict_json_schema_for_fireworks(self):
+        schema = {
+            "type": "object",
+            "required": ["claims"],
+            "properties": {"claims": {"type": "array"}},
+        }
+        config = {"model": "accounts/fireworks/models/kimi-k2p6"}
+        payload = LLMService._openai_compatible_payload(
+            ModelProvider.FIREWORKS,
+            prompt="user prompt",
+            system_prompt=None,
+            temperature=0.0,
+            max_tokens=512,
+            config=config,
+            response_json_schema=schema,
+            schema_name="ClaimLedger",
+        )
+        assert payload["response_format"] == {
+            "type": "json_schema",
+            "json_schema": {
+                "name": "ClaimLedger",
+                "schema": schema,
+                "strict": True,
+            },
+        }
+
+    def test_payload_attaches_strict_json_schema_for_kimi_native(self):
+        schema = {"type": "object", "properties": {}}
+        payload = LLMService._openai_compatible_payload(
+            ModelProvider.KIMI,
+            prompt="x",
+            system_prompt=None,
+            temperature=0.0,
+            max_tokens=64,
+            config={"model": "kimi-latest"},
+            response_json_schema=schema,
+        )
+        assert payload["response_format"]["type"] == "json_schema"
+
+    def test_payload_falls_back_to_json_object_for_openrouter(self):
+        payload = LLMService._openai_compatible_payload(
+            ModelProvider.OPENROUTER,
+            prompt="x",
+            system_prompt=None,
+            temperature=0.0,
+            max_tokens=64,
+            config={"model": "anthropic/claude-sonnet-4.6"},
+            response_json_schema={"type": "object"},
+        )
+        assert payload["response_format"] == {"type": "json_object"}
+
+    def test_payload_response_format_absent_by_default(self):
+        payload = LLMService._openai_compatible_payload(
+            ModelProvider.FIREWORKS,
+            prompt="x",
+            system_prompt=None,
+            temperature=0.0,
+            max_tokens=64,
+            config={"model": "accounts/fireworks/models/kimi-k2p6"},
+        )
+        assert "response_format" not in payload
+
     def test_payload_omits_prompt_cache_id_when_unset(self):
         config = {"model": "accounts/fireworks/models/kimi-k2p6"}
         payload = LLMService._openai_compatible_payload(
