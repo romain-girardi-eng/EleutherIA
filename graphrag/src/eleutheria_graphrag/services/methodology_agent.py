@@ -18,10 +18,15 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING, Any
 
+from eleutheria_graphrag.models.bibliography import (
+    ConsensusPosition,
+    ConsensusTopic,
+)
 from eleutheria_graphrag.models.methodology import (
     MethodologyFlag,
     MethodologyReport,
@@ -36,12 +41,20 @@ logger = logging.getLogger(__name__)
 MAX_RESYNTH_ITERATIONS = 2
 """Hard cap on synthesizer re-passes triggered by methodology blockers."""
 
+DB_SCHEMA = os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
+
 
 METHODOLOGY_PROMPT = """\
 You are the methodology auditor for the EleutherIA scholarly pipeline on \
 ancient philosophy (free will, fate, moral responsibility, 6th c. BCE - \
 6th c. CE plus modern reception). The citation verifier has already passed \
 this draft. Your job is to catch CONCEPTUAL errors before polishing.
+
+The orchestrator has pre-fetched the relevant entries from the \
+scholarly_consensus_topics table (well-known disputes with real published \
+citations). Anchor your scholarly_consensus flags in those entries when they \
+apply; do not invent your own scholarly references unless you can name a \
+real published work.
 
 Run all four checks every time:
 
@@ -84,6 +97,9 @@ approved_for_polishing is false whenever any flag is a blocker. Otherwise true.
 
 ----- CLAIM LEDGER (for claim_id anchors) -----
 {claim_ledger}
+
+----- APPLICABLE CONSENSUS TOPICS (use for scholarly_basis citations) -----
+{consensus_topics}
 -----------------------------
 
 Respond with ONLY a JSON object, no markdown fence, no prose:
@@ -133,10 +149,13 @@ class MethodologyAgent:
         *,
         on_event: MethodologyCallback = None,
         max_iterations: int = MAX_RESYNTH_ITERATIONS,
+        db: Any | None = None,
     ) -> None:
         self._llm = llm
         self._on_event = on_event
         self._max_iterations = max(1, max_iterations)
+        self._db = db
+        self._applicable_topics: list[ConsensusTopic] = []
 
     # ------------------------------------------------------------------ API
 
@@ -145,9 +164,15 @@ class MethodologyAgent:
         draft_text = self._coerce_draft_text(draft)
         ledger_text = self._coerce_ledger_text(draft)
 
+        # Query the consensus DB for topics that overlap with the draft.
+        topics = await self.lookup_consensus_topics(draft)
+        self._applicable_topics = topics
+        topics_text = self._render_consensus_topics(topics)
+
         prompt = METHODOLOGY_PROMPT.format(
             draft=draft_text[:12_000],
             claim_ledger=ledger_text[:4_000],
+            consensus_topics=topics_text[:6_000],
         )
 
         try:
@@ -161,11 +186,16 @@ class MethodologyAgent:
                 "Methodology LLM call failed — returning empty report",
                 exc_info=True,
             )
-            return MethodologyReport(
-                methodology_flags=[], approved_for_polishing=True
-            )
+            return MethodologyReport(methodology_flags=[], approved_for_polishing=True)
 
         report = self._parse_report(raw)
+        # Attach the consensus topic slugs that fed this audit so downstream
+        # callers (frontend, polishing, audit logs) can show provenance.
+        report = report.model_copy(
+            update={
+                "applicable_topic_slugs": [t.topic_slug for t in topics],
+            }
+        )
 
         # Emit one event per flag for live UI streaming.
         for flag in report.methodology_flags:
@@ -195,10 +225,7 @@ class MethodologyAgent:
         draft = initial_draft
         report = await self.audit(draft)
         iterations = 1
-        while (
-            report.blockers
-            and iterations < self._max_iterations
-        ):
+        while report.blockers and iterations < self._max_iterations:
             try:
                 draft = await resynthesize(draft, report.blockers)
             except Exception:
@@ -250,9 +277,7 @@ class MethodologyAgent:
     def _parse_report(raw: str) -> MethodologyReport:
         """Parse the LLM JSON output. Fail closed (empty, approved)."""
         if not raw:
-            return MethodologyReport(
-                methodology_flags=[], approved_for_polishing=True
-            )
+            return MethodologyReport(methodology_flags=[], approved_for_polishing=True)
         text = raw.strip()
         # Strip optional ```json fences.
         text = re.sub(r"^```(?:json)?\s*", "", text)
@@ -261,20 +286,14 @@ class MethodologyAgent:
         match = re.search(r"\{[\s\S]*\}", text)
         if not match:
             logger.warning("Methodology output not parseable; defaulting to empty")
-            return MethodologyReport(
-                methodology_flags=[], approved_for_polishing=True
-            )
+            return MethodologyReport(methodology_flags=[], approved_for_polishing=True)
         try:
             payload = json.loads(match.group())
         except json.JSONDecodeError:
             logger.warning("Methodology JSON decode failed; defaulting to empty")
-            return MethodologyReport(
-                methodology_flags=[], approved_for_polishing=True
-            )
+            return MethodologyReport(methodology_flags=[], approved_for_polishing=True)
         if not isinstance(payload, dict):
-            return MethodologyReport(
-                methodology_flags=[], approved_for_polishing=True
-            )
+            return MethodologyReport(methodology_flags=[], approved_for_polishing=True)
 
         raw_flags = payload.get("methodology_flags") or []
         flags: list[MethodologyFlag] = []
@@ -316,6 +335,162 @@ class MethodologyAgent:
             approved_for_polishing=not has_blocker,
         )
 
+    # ------------------------------------------------------------------
+    # Consensus DB lookups
+    # ------------------------------------------------------------------
+
+    async def lookup_consensus_topics(self, draft: DraftInput) -> list[ConsensusTopic]:
+        """Pull topics from scholarly_consensus_topics that overlap the draft.
+
+        Overlap is decided by intersection of either ``relevant_concepts`` or
+        ``relevant_persons`` with the ids cited in the claim ledger. Falls back
+        to a substring scan of the draft text against topic slugs / questions
+        when no claim ledger ids are available.
+        """
+        if self._db is None or not hasattr(self._db, "fetch"):
+            return []
+
+        concept_ids, person_ids = self._extract_topic_ids(draft)
+        draft_text = self._coerce_draft_text(draft).lower()
+
+        try:
+            rows = await self._db.fetch(
+                f"""
+                SELECT topic_id::text, topic_slug, question,
+                       relevant_concepts, relevant_persons, relevant_period,
+                       positions, consensus_status, methodological_warning
+                FROM {DB_SCHEMA}.scholarly_consensus_topics
+                WHERE (
+                    cardinality($1::text[]) > 0
+                    AND relevant_concepts && $1::text[]
+                ) OR (
+                    cardinality($2::text[]) > 0
+                    AND relevant_persons && $2::text[]
+                )
+                """,
+                concept_ids or [],
+                person_ids or [],
+            )
+        except Exception:
+            logger.warning("scholarly_consensus_topics lookup failed", exc_info=True)
+            return []
+
+        topics = [self._row_to_topic(row) for row in rows]
+
+        # Fallback: keyword scan when the cited-id intersection is empty
+        if not topics:
+            try:
+                all_rows = await self._db.fetch(
+                    f"""
+                    SELECT topic_id::text, topic_slug, question,
+                           relevant_concepts, relevant_persons,
+                           relevant_period, positions, consensus_status,
+                           methodological_warning
+                    FROM {DB_SCHEMA}.scholarly_consensus_topics
+                    """
+                )
+            except Exception:
+                logger.debug(
+                    "scholarly_consensus_topics fallback fetch failed",
+                    exc_info=True,
+                )
+                return []
+
+            for row in all_rows:
+                slug = row["topic_slug"]
+                # Build a small keyword bag from slug + question + concepts.
+                kw = [
+                    slug.replace("_", " "),
+                    *(row["relevant_concepts"] or []),
+                    *(row["relevant_persons"] or []),
+                ]
+                if any(self._keyword_in_text(k, draft_text) for k in kw):
+                    topics.append(self._row_to_topic(row))
+
+        return topics[:8]  # cap to keep prompt small
+
+    @staticmethod
+    def _extract_topic_ids(
+        draft: DraftInput,
+    ) -> tuple[list[str], list[str]]:
+        """Pull concept_* and person_* ids cited in the ledger or seed_nodes."""
+        ledger = draft.get("claim_ledger") or [] if isinstance(draft, dict) else []
+        ids: list[str] = []
+        for entry in ledger:
+            if isinstance(entry, dict):
+                evid = entry.get("evidence_ids") or []
+            else:
+                evid = getattr(entry, "evidence_ids", []) or []
+            ids.extend(str(x) for x in evid if x)
+        if isinstance(draft, dict):
+            ids.extend(str(x) for x in (draft.get("seed_nodes") or []) if x)
+            ids.extend(str(x) for x in (draft.get("context_nodes") or []) if x)
+        concepts = [
+            i for i in ids if i.startswith("concept_") or i.startswith("debate_")
+        ]
+        persons = [i for i in ids if i.startswith("person_")]
+        # De-dup while preserving order
+        return list(dict.fromkeys(concepts)), list(dict.fromkeys(persons))
+
+    @staticmethod
+    def _keyword_in_text(keyword: str, text: str) -> bool:
+        if not keyword:
+            return False
+        kw = keyword.lower().strip()
+        if len(kw) < 4:
+            return False
+        return kw in text
+
+    @staticmethod
+    def _row_to_topic(row: Any) -> ConsensusTopic:
+        positions_raw = row["positions"]
+        if isinstance(positions_raw, str):
+            try:
+                positions_raw = json.loads(positions_raw)
+            except json.JSONDecodeError:
+                positions_raw = []
+        positions = [
+            ConsensusPosition(
+                label=str(p.get("label", "")),
+                scholars=list(p.get("scholars") or []),
+                citation=str(p.get("citation", "")),
+                summary=str(p.get("summary", "")),
+            )
+            for p in (positions_raw or [])
+            if isinstance(p, dict)
+        ]
+        return ConsensusTopic(
+            topic_id=str(row["topic_id"]),
+            topic_slug=row["topic_slug"],
+            question=row["question"],
+            relevant_concepts=list(row["relevant_concepts"] or []),
+            relevant_persons=list(row["relevant_persons"] or []),
+            relevant_period=row["relevant_period"],
+            positions=positions,
+            consensus_status=row["consensus_status"],
+            methodological_warning=row["methodological_warning"] or "",
+        )
+
+    @staticmethod
+    def _render_consensus_topics(topics: list[ConsensusTopic]) -> str:
+        if not topics:
+            return "  (no applicable consensus topics found)"
+        lines: list[str] = []
+        for t in topics:
+            lines.append(f"- [{t.topic_slug}] ({t.consensus_status}) {t.question}")
+            if t.methodological_warning:
+                lines.append(f"    warning: {t.methodological_warning}")
+            for pos in t.positions[:3]:
+                lines.append(f"    * {pos.label}: {pos.summary[:160]}")
+                if pos.citation:
+                    lines.append(f"      cite: {pos.citation[:200]}")
+        return "\n".join(lines)
+
+    @property
+    def applicable_topics(self) -> list[ConsensusTopic]:
+        """The consensus topics most recently fetched by ``audit``."""
+        return list(self._applicable_topics)
+
     async def _emit_flag(self, flag: MethodologyFlag) -> None:
         if self._on_event is None:
             return
@@ -330,9 +505,7 @@ class MethodologyAgent:
                 }
             )
         except Exception:
-            logger.warning(
-                "methodology on_event callback failed", exc_info=True
-            )
+            logger.warning("methodology on_event callback failed", exc_info=True)
 
     async def _emit_approved(self) -> None:
         if self._on_event is None:
@@ -340,9 +513,7 @@ class MethodologyAgent:
         try:
             await self._on_event({"type": "methodology_approved"})
         except Exception:
-            logger.warning(
-                "methodology on_event callback failed", exc_info=True
-            )
+            logger.warning("methodology on_event callback failed", exc_info=True)
 
 
 # ---------------------------------------------------------------------------
