@@ -11,6 +11,8 @@
     "search": "Cerca",
     "graphrag": "GraphRAG Q&A",
     "recherches": "Ricerche",
+    "contributions": "Contributi",
+    "canonicalPassages": "Passi canonici",
     "research": "Ricerca dal vivo",
     "texts": "Testi Antichi",
     "bibliography": "Bibliografia",
@@ -20,6 +22,7 @@
     "admin": "Dashboard Admin",
     "citationNetwork": "Rete di Citazioni",
     "community": "Comunità",
+    "contribute": "Contribuisci",
     "profile": "Profilo",
     "login": "Accedi",
     "logout": "Esci",
@@ -1606,7 +1609,9 @@
   },
   "appShell": {
     "pageTitles": {
-      "recherches": "Ricerche pubblicate"
+      "recherches": "Ricerche pubblicate",
+      "canonicalPassages": "Passi canonici",
+      "contributions": "Contributi della comunità"
     }
   },
   "recherches": {
@@ -1665,6 +1670,314 @@
         "title": "Riproduci questa ricerca",
         "body": "Poni questa domanda a EleutherIA usando il modello che preferisci.",
         "button": "Apri in GraphRAG"
+      }
+    }
+  },
+  "canonicalPassages": {
+    "eyebrow": "Mappa della ricezione",
+    "title": "Passi canonici",
+    "subtitle": "I loci classici più mobilitati dalla comunità di ricerca. Un passo citato da molte risposte accademiche distinte diventa, per definizione, un locus classicus del corpus.",
+    "loading": "Caricamento…",
+    "totalCount_one": "{{count}} passo canonico",
+    "totalCount_other": "{{count}} passi canonici",
+    "filters": {
+      "period": "Periodo",
+      "author": "Autore"
+    },
+    "tags": {
+      "period": {
+        "presocratic": "Presocratico",
+        "classical": "Classico",
+        "hellenistic": "Ellenistico",
+        "imperial": "Imperiale",
+        "lateAntique": "Tardoantico"
+      }
+    },
+    "card": {
+      "citedIn_one": "Citato in {{count}} risposta",
+      "citedIn_other": "Citato in {{count}} risposte"
+    },
+    "empty": {
+      "title": "Nessun passo canonico per questi filtri",
+      "body": "Prova a modificare i filtri o torna più tardi."
+    },
+    "errors": {
+      "title": "Impossibile caricare i passi",
+      "loadFailed": "Si è verificato un errore durante il caricamento. Riprova.",
+      "notFound": "Questo passo non è stato trovato."
+    },
+    "detail": {
+      "backToList": "Torna ai passi canonici",
+      "fullText": "Testo integrale",
+      "citedIn_one": "Citato in {{count}} risposta",
+      "citedIn_other": "Citato in {{count}} risposte",
+      "citingAnswersTitle_one": "Citato in questa risposta",
+      "citingAnswersTitle_other": "Citato in queste {{count}} risposte",
+      "occurrences_one": "{{count}} occorrenza",
+      "occurrences_other": "{{count}} occorrenze",
+      "metadata": "Metadati",
+      "author": "Autore",
+      "work": "Opera",
+      "period": "Periodo",
+      "totalCitations": "Citazioni totali",
+      "distinctAnswers": "Risposte distinte",
+      "ctaTitle": "Vedi tutti i passi canonici",
+      "ctaBody": "Sfoglia l'intero corpus dei loci classici mobilitati dalla comunità.",
+      "ctaButton": "Torna all'indice"
+    }
+  },
+  "reproducibility": {
+    "badge": {
+      "loading": "Verifica della riproducibilità…",
+      "unchanged": "Riproducibile · KG #{{version}}",
+      "kgAdvanced_one": "La KG è avanzata di +{{count}} versione da allora",
+      "kgAdvanced_other": "La KG è avanzata di +{{count}} versioni da allora",
+      "staleUnknown": "Versione originale sconosciuta",
+      "tooltip": "Memorizzata alla versione KG #{{cachedVersion}} ({{cachedAt}}). Versione KG attuale #{{currentVersion}} ({{currentAt}})."
+    },
+    "verifyButton": "Verifica rispetto alla KG attuale",
+    "verifyHint_one": "La KG è avanzata di +{{count}} versione — la risposta potrebbe essere cambiata.",
+    "verifyHint_other": "La KG è avanzata di +{{count}} versioni — la risposta potrebbe essere cambiata.",
+    "card": {
+      "stale": "KG +{{count}}",
+      "staleTooltip_one": "La KG è avanzata di {{count}} versione dal caching.",
+      "staleTooltip_other": "La KG è avanzata di {{count}} versioni dal caching."
+    },
+    "gallery": {
+      "checkKG": "Verifica KG",
+      "checking": "Verifica in corso…"
+    },
+    "reverify": {
+      "title": "Verifica rispetto alla KG attuale",
+      "subtitle": "Esecuzione di una nuova query e confronto con la risposta memorizzata.",
+      "progress": "Avanzamento",
+      "stages": {
+        "classify": "Classificazione",
+        "search": "Ricerca",
+        "reading": "Lettura",
+        "synthesis": "Sintesi",
+        "verify": "Verifica"
+      },
+      "similarity": "Punteggio di similarità",
+      "compare": "Confronto affiancato",
+      "cached": "Risposta memorizzata",
+      "fresh": "Nuova risposta",
+      "charDiff": "Δ caratteri: {{diff}}",
+      "citationsAdded_one": "{{count}} citazione aggiunta",
+      "citationsAdded_other": "{{count}} citazioni aggiunte",
+      "citationsRemoved_one": "{{count}} citazione rimossa",
+      "citationsRemoved_other": "{{count}} citazioni rimosse",
+      "kgAdvancedBy_one": "KG +{{count}} versione",
+      "kgAdvancedBy_other": "KG +{{count}} versioni",
+      "applyUpdate": "Aggiorna questa risposta",
+      "applyComingSoon": "Prossimamente: l'aggiornamento della risposta memorizzata sarà implementato in una release futura.",
+      "cancel": "Annulla",
+      "cancelled": "Verifica annullata. Puoi riavviarla in qualsiasi momento.",
+      "close": "Chiudi",
+      "retry": "Riprova",
+      "errorTitle": "Verifica fallita"
+    }
+  },
+  "contribute": {
+    "empty": {
+      "title": "Contribuisci a EleutherIA",
+      "subtitle": "Carica un articolo accademico e ne estrarremo automaticamente gli elementi rilevanti per il dibattito sul libero arbitrio.",
+      "howItWorks": "Come funziona?",
+      "step": "Passo {{index}}",
+      "steps": {
+        "upload": "Carichi un PDF accademico su libero arbitrio, fato o responsabilità morale.",
+        "analyze": "La nostra pipeline IA valuta la pertinenza ed estrae entità, citazioni e concetti.",
+        "validate": "Validi le proposte prima della loro integrazione nel grafo di conoscenza."
+      }
+    },
+    "upload": {
+      "dropPrompt": "Trascina qui il tuo PDF",
+      "orClick": "oppure clicca per selezionare i file",
+      "pdfOnly": "Solo PDF",
+      "maxSize": "Fino a 25 MB",
+      "dropzoneAria": "Area di caricamento per un file PDF",
+      "errors": {
+        "notPdf": "Sono accettati solo file PDF.",
+        "tooLarge": "Il file supera il limite di 25 MB."
+      }
+    },
+    "metadata": {
+      "title": "Metadati dell'articolo",
+      "subtitle": "Inserisci le informazioni bibliografiche per facilitare l'estrazione e la moderazione. Tutti i campi sono facoltativi.",
+      "fileSize": "Dimensione: {{size}} MB",
+      "fields": {
+        "title": "Titolo",
+        "authors": "Autori",
+        "doi": "DOI",
+        "year": "Anno di pubblicazione"
+      },
+      "placeholders": {
+        "title": "es. Determinism, Freedom, and Moral Responsibility",
+        "authors": "es. Bobzien, Susanne",
+        "doi": "10.xxxx/xxxxxx",
+        "year": "2023"
+      },
+      "submit": "Invia per l'analisi",
+      "chooseAnother": "Scegli un altro file"
+    },
+    "processing": {
+      "title": "Analisi in corso",
+      "subtitle": "Puoi lasciare questa pagina: l'elaborazione continuerà sul server.",
+      "cancel": "Annulla",
+      "remaining": "≈ {{seconds}}s rimanenti",
+      "untitled": "Documento senza titolo",
+      "phases": {
+        "upload": "Caricamento",
+        "extract": "Estrazione",
+        "relevance": "Pertinenza",
+        "proposals": "Proposte"
+      }
+    },
+    "review": {
+      "untitled": "Documento senza titolo",
+      "unknownAuthors": "Autori sconosciuti",
+      "conceptsIdentified": "Concetti identificati",
+      "relevanceSummary": "Sintesi di pertinenza",
+      "tabsAria": "Filtra le proposte per tipo",
+      "tabs": {
+        "all": "Tutte",
+        "scholars": "Studiosi",
+        "passages": "Citazioni antiche",
+        "edges": "Relazioni",
+        "concepts": "Concetti"
+      },
+      "proposalKinds": {
+        "node": "Nodo",
+        "edge": "Relazione",
+        "passage_citation": "Citazione antica",
+        "scholar_ref": "Riferimento moderno",
+        "concept_attestation": "Attestazione di concetto"
+      },
+      "relevance": {
+        "high": "Molto pertinente",
+        "medium": "Pertinente",
+        "low": "Poco pertinente — fusione improbabile"
+      },
+      "page": "p. {{page}}",
+      "alreadyInKg": "Già nel KG",
+      "keep": "Mantieni",
+      "kept": "Mantenuta",
+      "emptyTab": "Nessuna proposta in questa categoria.",
+      "selectionCount": "{{selected}} proposte selezionate su {{total}}",
+      "submit": "Invia per moderazione",
+      "abandon": "Annulla"
+    },
+    "failed": {
+      "title": "Elaborazione fallita",
+      "body": "Si è verificato un errore durante l'analisi del documento. Puoi riprovare o tornare alla home.",
+      "backHome": "Torna alla home",
+      "retry": "Riprova"
+    },
+    "errors": {
+      "processingFailed": "L'analisi sul server è fallita. Riprova con un altro file."
+    }
+  },
+  "contributions": {
+    "eyebrow": "Moderazione della comunità",
+    "title": "Contributi della comunità",
+    "subtitle": "Articoli accademici inviati dai ricercatori per arricchire il KG.",
+    "loadingMore": "Caricamento dei risultati successivi…",
+    "endOfList": "Fine dei risultati",
+    "filters": {
+      "status": "Stato",
+      "statusGroup": "Filtra per stato",
+      "searchAuthorPlaceholder": "Cerca per autore…",
+      "searchAuthorAria": "Cerca un contributo per autore"
+    },
+    "status": {
+      "all": "Tutti",
+      "uploaded": "Caricato",
+      "processing": "In elaborazione",
+      "ready": "Pronti per la moderazione",
+      "approved": "Approvati",
+      "merged": "Integrati",
+      "rejected": "Rifiutati",
+      "failed": "Falliti"
+    },
+    "card": {
+      "relevance": "{{value}}%",
+      "proposals_one": "proposta",
+      "proposals_other": "proposte",
+      "proposals": "proposte",
+      "proposalsTooltip": "Proposte estratte automaticamente"
+    },
+    "empty": {
+      "title": "Nessun contributo per questo filtro",
+      "body": "Nessun contributo corrisponde ai criteri selezionati. Prova un altro stato.",
+      "bodySearch": "Nessun autore corrisponde a questa ricerca."
+    },
+    "errors": {
+      "title": "Impossibile caricare i contributi",
+      "loadFailed": "Si è verificato un errore durante il caricamento. Riprova.",
+      "actionFailed": "L'azione è fallita. Riprova.",
+      "applyFailed": "L'integrazione nel KG è fallita.",
+      "rejectFailed": "Il rifiuto è fallito."
+    },
+    "toasts": {
+      "merged_one": "Contributo integrato. Il KG è stato arricchito di {{count}} elemento.",
+      "merged_other": "Contributo integrato. Il KG è stato arricchito di {{count}} elementi.",
+      "merged": "Contributo integrato. Il KG è stato arricchito di {{count}} elementi.",
+      "rejected": "Contributo rifiutato."
+    },
+    "detail": {
+      "back": "Torna ai contributi",
+      "reviewerNotes": "Nota del moderatore",
+      "readOnlyHint": "Accedi con un account amministratore per moderare questo contributo.",
+      "pdfPreview": {
+        "aria": "Anteprima del PDF inviato",
+        "iframeTitle": "Anteprima del documento inviato",
+        "unavailable": "Anteprima PDF non disponibile.",
+        "untitled": "Documento senza titolo",
+        "jumpedTo": "Pagina {{page}}"
+      },
+      "relevance": {
+        "title": "Rilevanza e concetti"
+      },
+      "proposals": {
+        "empty": "Nessuna proposta è stata estratta per questo contributo.",
+        "confidence": "Confidenza",
+        "confidenceValue": "{{value}}%",
+        "page": "p. {{page}}",
+        "reviewerNoted": "nota aggiunta",
+        "actions": {
+          "accept": "Mantieni",
+          "reject": "Rifiuta"
+        },
+        "kinds": {
+          "node": "Nodi proposti",
+          "edge": "Relazioni proposte",
+          "passage_citation": "Citazioni di passi",
+          "scholar_ref": "Riferimenti accademici",
+          "concept_attestation": "Attestazioni di concetti"
+        }
+      },
+      "adminBar": {
+        "counts": "{{accepted}} accettate · {{rejected}} rifiutate · {{pending}} in attesa su {{total}} proposte",
+        "apply": "Integra {{count}} proposte nel KG",
+        "applyDisabledHint": "Almeno una proposta deve essere accettata e nessuna deve restare in attesa.",
+        "rejectAll": "Rifiuta l'intero contributo"
+      },
+      "applyModal": {
+        "title": "Conferma l'integrazione nel KG",
+        "body": "Questa azione aggiungerà {{nodes}} nodi, {{edges}} relazioni e {{citations}} citazioni al KG.",
+        "note": "L'operazione incrementa kg_version e invalida la cache delle risposte.",
+        "notesLabel": "Nota del moderatore (facoltativa)",
+        "notesPlaceholder": "Contesto, eccezioni, riferimenti…",
+        "confirm": "Continua",
+        "cancel": "Annulla"
+      },
+      "rejectModal": {
+        "title": "Rifiuta l'intero contributo",
+        "body": "Tutte le proposte verranno contrassegnate come rifiutate. Un altro amministratore può annullare l'azione.",
+        "notesLabel": "Motivo (consigliato)",
+        "notesPlaceholder": "Duplicato, fuori tema, qualità insufficiente…",
+        "confirm": "Rifiuta",
+        "cancel": "Annulla"
       }
     }
   }

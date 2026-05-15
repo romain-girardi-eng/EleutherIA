@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { ScrollText, Sparkles, MessageSquareQuote } from 'lucide-react';
+import { ScrollText, Sparkles, MessageSquareQuote, AlertTriangle } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import type { CommunityListItem } from '../../api/community';
 
 interface QueryCardProps {
   item: CommunityListItem;
   index: number;
+  /** When defined, indicates how many KG versions advanced since this trace was cached. */
+  kgAdvancedBy?: number;
 }
 
 function formatDate(iso: string, locale: string): string {
@@ -20,11 +22,12 @@ function formatDate(iso: string, locale: string): string {
   }).format(date);
 }
 
-export default function QueryCard({ item, index }: QueryCardProps) {
+export default function QueryCard({ item, index, kgAdvancedBy }: QueryCardProps) {
   const { t, i18n } = useTranslation();
   const date = formatDate(item.created_at, i18n.language);
   const visibleTags = item.topic_tags.slice(0, 3);
   const hiddenTagCount = Math.max(0, item.topic_tags.length - visibleTags.length);
+  const showStaleChip = typeof kgAdvancedBy === 'number' && kgAdvancedBy > 0;
 
   return (
     <motion.div
@@ -87,14 +90,25 @@ export default function QueryCard({ item, index }: QueryCardProps) {
               <strong className="font-semibold text-stone-700">{item.quote_count}</strong>
             </span>
           </div>
-          {date && (
-            <time
-              dateTime={item.created_at}
-              className="text-[11px] font-medium text-stone-400"
-            >
-              {date}
-            </time>
-          )}
+          <div className="flex items-center gap-2">
+            {showStaleChip && (
+              <span
+                className="inline-flex items-center gap-1 rounded-full border border-amber-200/70 bg-amber-50/70 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800"
+                title={t('reproducibility.card.staleTooltip', { count: kgAdvancedBy })}
+              >
+                <AlertTriangle className="h-2.5 w-2.5" aria-hidden="true" />
+                {t('reproducibility.card.stale', { count: kgAdvancedBy })}
+              </span>
+            )}
+            {date && (
+              <time
+                dateTime={item.created_at}
+                className="text-[11px] font-medium text-stone-400"
+              >
+                {date}
+              </time>
+            )}
+          </div>
         </div>
       </Link>
     </motion.div>

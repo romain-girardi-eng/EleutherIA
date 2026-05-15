@@ -1,12 +1,31 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { BookOpenText, Loader2, AlertCircle } from 'lucide-react';
-import { listCommunityQueries, type CommunityListItem } from '../../api/community';
+import { BookOpenText, Loader2, AlertCircle, ShieldCheck } from 'lucide-react';
+import {
+  getReproducibility,
+  listCommunityQueries,
+  type CommunityListItem,
+} from '../../api/community';
 import QueryCard from './QueryCard';
 import FilterBar, { type CommunitySort } from './FilterBar';
 
 const PAGE_LIMIT = 20;
+const REPRO_CONCURRENCY = 20;
+
+async function fetchInBatches<T, R>(
+  items: T[],
+  worker: (item: T) => Promise<R>,
+  batchSize: number
+): Promise<R[]> {
+  const out: R[] = [];
+  for (let i = 0; i < items.length; i += batchSize) {
+    const slice = items.slice(i, i + batchSize);
+    const results = await Promise.all(slice.map(worker));
+    out.push(...results);
+  }
+  return out;
+}
 
 function CardSkeleton() {
   return (
@@ -44,31 +63,40 @@ export default function CommunityPage() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [checkKG, setCheckKG] = useState(false);
+  const [reproChecking, setReproChecking] = useState(false);
+  const [kgAdvancedBySlug, setKgAdvancedBySlug] = useState<Record<string, number>>(
+    {}
+  );
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   // Track the latest fetch so stale responses don't overwrite newer ones
   // when filters change quickly.
   const fetchIdRef = useRef(0);
 
+  // Tag keys mirror the canonical slugs emitted by backend's TopicTagger
+  // (period:imperial, school:school_stoics, …). The backend community list
+  // filter `?period=X&philosopher=Y` matches against topic_tags @> ARRAY[...]
+  // so these keys must include the namespace prefix.
   const periods = useMemo(
     () => [
-      { key: 'Présocratique', label: t('recherches.tags.period.presocratic') },
-      { key: 'Classique', label: t('recherches.tags.period.classical') },
-      { key: 'Hellénistique', label: t('recherches.tags.period.hellenistic') },
-      { key: 'Impérial', label: t('recherches.tags.period.imperial') },
-      { key: 'Tardo-antique', label: t('recherches.tags.period.lateAntique') },
+      { key: 'period:presocratic', label: t('recherches.tags.period.presocratic') },
+      { key: 'period:classical', label: t('recherches.tags.period.classical') },
+      { key: 'period:hellenistic', label: t('recherches.tags.period.hellenistic') },
+      { key: 'period:imperial', label: t('recherches.tags.period.imperial') },
+      { key: 'period:late_antiquity', label: t('recherches.tags.period.lateAntique') },
     ],
     [t]
   );
 
   const philosophers = useMemo(
     () => [
-      { key: 'Stoic', label: t('recherches.tags.school.stoic') },
-      { key: 'Epicurean', label: t('recherches.tags.school.epicurean') },
-      { key: 'Peripatetic', label: t('recherches.tags.school.peripatetic') },
-      { key: 'Academic', label: t('recherches.tags.school.academic') },
-      { key: 'Platonist', label: t('recherches.tags.school.platonist') },
-      { key: 'Patristic', label: t('recherches.tags.school.patristic') },
+      { key: 'school:school_stoics', label: t('recherches.tags.school.stoic') },
+      { key: 'school:school_epicureans', label: t('recherches.tags.school.epicurean') },
+      { key: 'school:school_peripatetics', label: t('recherches.tags.school.peripatetic') },
+      { key: 'school:school_academics', label: t('recherches.tags.school.academic') },
+      { key: 'school:school_middle_platonism', label: t('recherches.tags.school.platonist') },
+      { key: 'school:school_patristics', label: t('recherches.tags.school.patristic') },
     ],
     [t]
   );
@@ -141,6 +169,53 @@ export default function CommunityPage() {
   // explicit "Load more" button or analytics.
   void cursor;
 
+  // Reset reproducibility annotations whenever the underlying list changes
+  // (filter/sort change) so we don't leak stale chips into a new dataset.
+  useEffect(() => {
+    setKgAdvancedBySlug({});
+  }, [sort, selectedPeriod, selectedPhilosopher]);
+
+  // Batched reproducibility probe for the gallery — only runs when the user
+  // explicitly opts in via the "Vérifier KG" toggle. Probes only slugs that
+  // are not already annotated, with a cap on concurrency.
+  useEffect(() => {
+    if (!checkKG) return;
+    if (items.length === 0) return;
+    const slugsToProbe = items
+      .map((item) => item.slug)
+      .filter((slug) => !(slug in kgAdvancedBySlug));
+    if (slugsToProbe.length === 0) return;
+    let cancelled = false;
+    setReproChecking(true);
+    void fetchInBatches(
+      slugsToProbe,
+      async (slug) => {
+        try {
+          const data = await getReproducibility(slug);
+          return { slug, kg_advanced_by: data.kg_advanced_by };
+        } catch {
+          return { slug, kg_advanced_by: 0 };
+        }
+      },
+      REPRO_CONCURRENCY
+    )
+      .then((results) => {
+        if (cancelled) return;
+        setKgAdvancedBySlug((prev) => {
+          const next = { ...prev };
+          for (const r of results) next[r.slug] = r.kg_advanced_by;
+          return next;
+        });
+      })
+      .finally(() => {
+        if (cancelled) return;
+        setReproChecking(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [checkKG, items, kgAdvancedBySlug]);
+
   const isEmpty = !loading && !error && items.length === 0;
 
   return (
@@ -166,7 +241,7 @@ export default function CommunityPage() {
         </motion.div>
 
         {/* ── Filter bar ── */}
-        <div className="mb-8">
+        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <FilterBar
             sort={sort}
             onSortChange={setSort}
@@ -177,6 +252,25 @@ export default function CommunityPage() {
             onPeriodChange={setSelectedPeriod}
             onPhilosopherChange={setSelectedPhilosopher}
           />
+          <button
+            type="button"
+            onClick={() => setCheckKG((v) => !v)}
+            aria-pressed={checkKG}
+            className={
+              checkKG
+                ? 'inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-300 bg-amber-700 px-3 py-1.5 text-[11px] font-semibold text-amber-50 hover:bg-amber-800'
+                : 'inline-flex shrink-0 items-center gap-1.5 rounded-full border border-stone-300 bg-white/60 px-3 py-1.5 text-[11px] font-semibold text-stone-700 hover:bg-white'
+            }
+          >
+            {reproChecking ? (
+              <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" />
+            ) : (
+              <ShieldCheck className="h-3 w-3" aria-hidden="true" />
+            )}
+            {checkKG
+              ? t('reproducibility.gallery.checking')
+              : t('reproducibility.gallery.checkKG')}
+          </button>
         </div>
 
         {/* ── Content ── */}
@@ -211,7 +305,14 @@ export default function CommunityPage() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
               {items.map((item, index) => (
-                <QueryCard key={item.slug} item={item} index={index} />
+                <QueryCard
+                  key={item.slug}
+                  item={item}
+                  index={index}
+                  kgAdvancedBy={
+                    checkKG ? kgAdvancedBySlug[item.slug] : undefined
+                  }
+                />
               ))}
             </div>
 

@@ -10,6 +10,10 @@ from eleutheria_worker.workflows.kg_reindex import (
     KGReindexResult,
     KGReindexWorkflow,
 )
+from eleutheria_worker.workflows.process_contribution import (
+    ProcessContributionResult,
+    ProcessContributionWorkflow,
+)
 from eleutheria_worker.workflows.scaife_ingestion import (
     ScaifeIngestionInput,
     ScaifeIngestionResult,
@@ -23,6 +27,8 @@ __all__ = [
     "KGReindexInput",
     "KGReindexResult",
     "KGReindexWorkflow",
+    "ProcessContributionResult",
+    "ProcessContributionWorkflow",
     "ScaifeIngestionInput",
     "ScaifeIngestionResult",
     "ScaifeIngestionWorkflow",

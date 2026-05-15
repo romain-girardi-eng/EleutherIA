@@ -11,6 +11,7 @@ import { useKeepAlive } from './hooks/useKeepAlive';
 import { AriaLiveProvider, useAriaLive } from './components/AriaLive';
 import { ToastProvider } from './components/ui/Toast';
 import ErrorBoundary from './components/ErrorBoundary';
+import ProtectedRoute from './components/ProtectedRoute';
 import { Glow } from './components/ui/glow';
 import { PremiumBackground } from './components/ui/premium-background';
 import { CandlelightCursor } from './components/ui/candlelight-cursor';
@@ -52,8 +53,19 @@ const UserProfilePage = lazy(() => import('./pages/UserProfilePage'));
 const CommunityPage = lazy(() => import('./pages/CommunityPage'));
 const CommunityDetailPage = lazy(() => import('./pages/CommunityDetailPage'));
 
+// Canonical passages — reception map of the corpus
+const CanonicalPassagesPage = lazy(() => import('./pages/CanonicalPassagesPage'));
+const CanonicalPassageDetailPage = lazy(() => import('./pages/CanonicalPassageDetailPage'));
+
 // HowItWorksPage - Scroll-snap redesigned landing
 const HowItWorksPage = lazy(() => import('./pages/HowItWorksPage'));
+
+// Contribute Page - PDF upload + extraction review for community contributions
+const ContributePage = lazy(() => import('./pages/ContributePage'));
+
+// Community contributions gallery + moderation dashboard
+const ContributionsListPage = lazy(() => import('./pages/ContributionsListPage'));
+const ContributionDetailPage = lazy(() => import('./pages/ContributionDetailPage'));
 
 // HomePage - Main landing page with educational content and features overview
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -68,6 +80,8 @@ function getPageTitle(pathname: string, t: TFunction): string {
     '/graphrag': t('appShell.pageTitles.graphrag'),
     '/graphrag-showcase': t('appShell.pageTitles.graphragShowcase'),
     '/recherches': t('appShell.pageTitles.recherches'),
+    '/contributions': t('appShell.pageTitles.contributions'),
+    '/passages-canoniques': t('appShell.pageTitles.canonicalPassages'),
     '/research': t('appShell.pageTitles.research'),
     '/texts': t('appShell.pageTitles.texts'),
     '/bibliography': t('appShell.pageTitles.bibliography'),
@@ -255,10 +269,15 @@ function AppContent() {
               <NavLink to="/search">{t('nav.search')}</NavLink>
               <NavLink to="/graphrag">{t('nav.graphrag')}</NavLink>
               <NavLink to="/recherches">{t('nav.recherches')}</NavLink>
+              <NavLink to="/contributions">{t('nav.contributions')}</NavLink>
+              <NavLink to="/passages-canoniques">{t('nav.canonicalPassages')}</NavLink>
               <NavLink to="/research">{t('nav.research')}</NavLink>
               <NavLink to="/texts">{t('nav.texts')}</NavLink>
               <NavLink to="/bibliography">{t('nav.bibliography')}</NavLink>
               <NavLink to="/about">{t('nav.about')}</NavLink>
+              {isAuthenticated && (
+                <NavLink to="/contribuer">{t('nav.contribute')}</NavLink>
+              )}
 
               {/* Language Switcher */}
               <LanguageSwitcher variant="dropdown" />
@@ -345,11 +364,16 @@ function AppContent() {
                     { to: '/search', label: t('nav.search') },
                     { to: '/graphrag', label: t('nav.graphrag') },
                     { to: '/recherches', label: t('nav.recherches') },
+                    { to: '/contributions', label: t('nav.contributions') },
+                    { to: '/passages-canoniques', label: t('nav.canonicalPassages') },
                     { to: '/research', label: t('nav.research') },
                     { to: '/texts', label: t('nav.texts') },
                     { to: '/bibliography', label: t('nav.bibliography') },
                     { to: '/about', label: t('nav.about') },
                     { to: '/credits', label: t('nav.credits') },
+                    ...(isAuthenticated
+                      ? [{ to: '/contribuer', label: t('nav.contribute') }]
+                      : []),
                   ].map((item, index) => (
                     <motion.div
                       key={item.to}
@@ -430,6 +454,24 @@ function AppContent() {
               {/* Public community researches gallery */}
               <Route path="/recherches" element={<CommunityPage />} />
               <Route path="/recherches/:slug" element={<CommunityDetailPage />} />
+              {/* Community contributions gallery + moderation dashboard */}
+              <Route path="/contributions" element={<ContributionsListPage />} />
+              <Route path="/contributions/:id" element={<ContributionDetailPage />} />
+              {/* Canonical passages — reception map */}
+              <Route path="/passages-canoniques" element={<CanonicalPassagesPage />} />
+              <Route
+                path="/passages-canoniques/:passage_id"
+                element={<CanonicalPassageDetailPage />}
+              />
+              {/* Community PDF contribution (authenticated) */}
+              <Route
+                path="/contribuer"
+                element={
+                  <ProtectedRoute>
+                    <ContributePage />
+                  </ProtectedRoute>
+                }
+              />
               {/* Admin and Community Features */}
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/community/contribute" element={<SubmitCorrectionPage />} />

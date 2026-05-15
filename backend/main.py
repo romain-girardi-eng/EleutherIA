@@ -28,6 +28,7 @@ from backend.dependencies import Services
 from backend.routes.audit import router as audit_router
 from backend.routes.auth import router as auth_router
 from backend.routes.community import router as community_router
+from backend.routes.contributions import router as contributions_router
 from backend.routes.conversations import router as conversations_router
 from backend.routes.graphrag_extras import router as graphrag_extras_router
 from backend.routes.kg_extras import router as kg_extras_router
@@ -158,6 +159,7 @@ def create_app() -> FastAPI:
     app.include_router(share_router, prefix="/api/graphrag")
     app.include_router(share_public_router)
     app.include_router(community_router)
+    app.include_router(contributions_router)
 
     # Migration compatibility routers (endpoints called by frontend)
     app.include_router(texts_router, prefix="/api/texts")
