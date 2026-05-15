@@ -807,3 +807,101 @@ class TestFireworksProvider:
             assert result == "Gemini fallback"
             assert llm.last_provider_used == ModelProvider.GEMINI.value
             assert mock_client.post.call_count == 2
+
+
+class TestFireworksPromptCache:
+    """Fireworks prompt-caching directive (Wave 7 perf opt)."""
+
+    def test_cache_id_composed_from_agent_id(self):
+        with patch.dict(
+            "os.environ",
+            {"ELEUTHERIA_PROMPT_CACHE_VERSION": "v1"},
+            clear=False,
+        ):
+            assert (
+                LLMService._fireworks_cache_id("scholar-orchestrator")
+                == "eleutheria-scholar-orchestrator-v1"
+            )
+
+    def test_cache_id_none_when_agent_id_missing(self):
+        assert LLMService._fireworks_cache_id(None) is None
+        assert LLMService._fireworks_cache_id("") is None
+
+    def test_cache_id_respects_version_env(self):
+        with patch.dict(
+            "os.environ",
+            {"ELEUTHERIA_PROMPT_CACHE_VERSION": "v7-2026-05-15"},
+            clear=False,
+        ):
+            assert (
+                LLMService._fireworks_cache_id("concept-mapper")
+                == "eleutheria-concept-mapper-v7-2026-05-15"
+            )
+
+    def test_payload_includes_prompt_cache_id_for_fireworks(self):
+        config = {"model": "accounts/fireworks/models/kimi-k2p6"}
+        payload = LLMService._openai_compatible_payload(
+            ModelProvider.FIREWORKS,
+            prompt="user prompt",
+            system_prompt="big system prompt",
+            temperature=0.2,
+            max_tokens=512,
+            config=config,
+            prompt_cache_id="eleutheria-scholar-orchestrator-v1",
+        )
+        assert payload["prompt_cache_id"] == "eleutheria-scholar-orchestrator-v1"
+        # Sanity: system + user message preserved.
+        assert payload["messages"][0]["role"] == "system"
+        assert payload["messages"][1]["role"] == "user"
+
+    def test_payload_omits_prompt_cache_id_for_non_fireworks(self):
+        config = {"model": "kimi-latest"}
+        payload = LLMService._openai_compatible_payload(
+            ModelProvider.KIMI,
+            prompt="x",
+            system_prompt=None,
+            temperature=0.7,
+            max_tokens=64,
+            config=config,
+            prompt_cache_id="eleutheria-scholar-orchestrator-v1",
+        )
+        assert "prompt_cache_id" not in payload
+
+    def test_payload_omits_prompt_cache_id_when_unset(self):
+        config = {"model": "accounts/fireworks/models/kimi-k2p6"}
+        payload = LLMService._openai_compatible_payload(
+            ModelProvider.FIREWORKS,
+            prompt="x",
+            system_prompt=None,
+            temperature=0.2,
+            max_tokens=64,
+            config=config,
+        )
+        assert "prompt_cache_id" not in payload
+
+    @pytest.mark.asyncio
+    async def test_generate_propagates_agent_id_to_fireworks_payload(self):
+        """When generate() is given agent_id, the Fireworks payload carries cache id."""
+        with patch.dict("os.environ", {"FIREWORKS_API_KEY": "fw_test"}, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.FIREWORKS)
+
+            mock_response = MagicMock()
+            mock_response.json.return_value = {
+                "choices": [{"message": {"content": "ok"}}]
+            }
+            mock_response.raise_for_status = MagicMock()
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=mock_response)
+            llm._client = mock_client
+
+            await llm.generate(
+                "user prompt",
+                system_prompt="system prompt",
+                agent_id="scholar-orchestrator",
+                max_tokens=16,
+            )
+
+            sent = mock_client.post.call_args.kwargs["json"]
+            assert sent["prompt_cache_id"].startswith(
+                "eleutheria-scholar-orchestrator-"
+            )

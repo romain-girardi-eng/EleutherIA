@@ -347,6 +347,7 @@ export function useOpencodeStream(
     activeSubagents,
     toolCalls,
     kgActivations,
+    stageTimings: state.stageTimings,
     streamedAnswer: state.streamedAnswer,
     finalAnswer: state.finalAnswer as FinalAnswerEvent | null,
     traceId: state.traceId,

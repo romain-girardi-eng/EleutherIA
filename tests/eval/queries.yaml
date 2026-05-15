@@ -456,3 +456,223 @@ queries:
       - de interpretatione
     query_type: fragment
     difficulty: medium
+
+  # ---------------------------------------------------------------------------
+  # romain_thesis_queries (15)
+  #
+  # Doctoral-grade questions on the actual research focus of Romain's CEPAM
+  # thesis: the emergence of libertarian free will in Early Christianity, with
+  # particular attention to Justin Martyr, Origen, the Stoic-Patristic
+  # interface, and the role of Hellenistic Judaism. These probe deep links
+  # the corpus must support to be useful for the thesis chapters themselves.
+  # ---------------------------------------------------------------------------
+  - id: r001
+    query: "Justin's autexousion in 1 Apol. 43 and 2 Apol. 7: continuity or discontinuity with Middle Platonism (Karamanolis vs Andresen)?"
+    expected_entities:
+      - person_justin_martyr_2c_ce
+      - concept_autexousion_christian
+    expected_entity_keywords:
+      - justin
+      - autexousion
+      - middle platonism
+      - karamanolis
+      - andresen
+    expected_works:
+      - work_justin_1apol
+      - work_justin_2apol
+    query_type: romain_thesis_queries
+    difficulty: hard
+
+  - id: r002
+    query: "Origen's anti-astrological argument in De Princ. III.1.5-6: compare Latin (Rufinus) and Greek catenae witnesses"
+    expected_entities:
+      - person_origen_alexandria_185_254ce_s9t0u1v2
+      - argument_origen_anti_astrology_de_princ
+    expected_entity_keywords:
+      - origen
+      - astrology
+      - de principiis
+      - rufinus
+      - catenae
+    expected_works:
+      - work_de_principiis_origen_230s_v2w3x4y5
+    query_type: romain_thesis_queries
+    difficulty: hard
+
+  - id: r003
+    query: "Ben Sira 15:11-20 as locus classicus for free choice in Hellenistic Judaism"
+    expected_entities:
+      - work_ben_sira_sirach
+    expected_entity_keywords:
+      - ben sira
+      - sirach
+      - 15:11
+      - hellenistic judaism
+      - free choice
+    query_type: romain_thesis_queries
+    difficulty: medium
+
+  - id: r004
+    query: "Tertullian De Anima 21 against Stoic determinism (Waszink commentary)"
+    expected_entities:
+      - person_tertullian
+      - work_tertullian_de_anima
+    expected_entity_keywords:
+      - tertullian
+      - de anima
+      - stoic determinism
+      - waszink
+    query_type: romain_thesis_queries
+    difficulty: hard
+
+  - id: r005
+    query: "Methodius's anti-Origenist De Libero Arbitrio: genuine controversy or rhetorical exercise?"
+    expected_entities:
+      - person_methodius_olympus
+      - work_methodius_de_libero_arbitrio
+    expected_entity_keywords:
+      - methodius
+      - de libero arbitrio
+      - origen
+      - anti-origenist
+    query_type: romain_thesis_queries
+    difficulty: hard
+
+  - id: r006
+    query: "Pseudo-Clementine Recognitions Book III: the anti-astrological dialogue and its sources"
+    expected_entities:
+      - work_pseudo_clementine_recognitions
+    expected_entity_keywords:
+      - pseudo-clementine
+      - recognitions
+      - astrology
+      - bardaisan
+    query_type: romain_thesis_queries
+    difficulty: hard
+
+  - id: r007
+    query: "Clement of Alexandria Stromateis II.6-15: Stoic vs Christian conceptions of moral responsibility"
+    expected_entities:
+      - person_clement_alexandria
+      - work_clement_stromateis
+    expected_entity_keywords:
+      - clement
+      - stromateis
+      - stoic
+      - moral responsibility
+    query_type: romain_thesis_queries
+    difficulty: medium
+
+  - id: r008
+    query: "Plotinus Ennead VI.8 on the freedom of the One and its Patristic appropriation"
+    expected_entities:
+      - person_plotinus_d270
+      - work_plotinus_enneads_vi_8
+    expected_entity_keywords:
+      - plotinus
+      - vi.8
+      - ennead
+      - freedom
+      - the one
+    query_type: romain_thesis_queries
+    difficulty: hard
+
+  - id: r009
+    query: "Stoic-Patristic synthesis: is autexousion a Christian innovation or a Stoic carryover?"
+    expected_entities:
+      - concept_autexousion_christian
+      - school_stoics
+      - school_christian_apologists
+    expected_entity_keywords:
+      - autexousion
+      - stoic
+      - patristic
+      - synthesis
+    query_type: romain_thesis_queries
+    difficulty: hard
+
+  - id: r010
+    query: "Qumran 1QS Treatise of the Two Spirits and the Patristic predestination debate"
+    expected_entities:
+      - work_1qs_community_rule
+    expected_entity_keywords:
+      - qumran
+      - 1qs
+      - two spirits
+      - predestination
+    query_type: romain_thesis_queries
+    difficulty: hard
+
+  - id: r011
+    query: "Boethius Consolatio V: does the eternity solution actually answer the prescience problem?"
+    expected_entities:
+      - person_boethius_480_524ce_w3x4y5z6
+      - concept_eternity_boethius
+      - argument_eternity_solution_boethius
+    expected_entity_keywords:
+      - boethius
+      - consolatio
+      - eternity
+      - nunc stans
+      - prescience
+    expected_works:
+      - work_boethius_consolatio_philosophiae
+    query_type: romain_thesis_queries
+    difficulty: hard
+
+  - id: r012
+    query: "Augustine's pre-Pelagian De Lib. Arb. III.18-21 vs his post-Pelagian position: a real shift or a clarification?"
+    expected_entities:
+      - person_augustine_hippo_d430
+      - work_de_libero_arbitrio
+      - debate_augustine_pelagius_grace
+    expected_entity_keywords:
+      - augustine
+      - de libero arbitrio
+      - pelagian
+      - grace
+    query_type: romain_thesis_queries
+    difficulty: hard
+
+  - id: r013
+    query: "Irenaeus Adversus Haereses IV.37-39 on free will: continuity with Justin Martyr?"
+    expected_entities:
+      - person_irenaeus_lyons
+      - person_justin_martyr_2c_ce
+      - work_irenaeus_adversus_haereses
+    expected_entity_keywords:
+      - irenaeus
+      - adversus haereses
+      - free will
+      - justin
+    query_type: romain_thesis_queries
+    difficulty: medium
+
+  - id: r014
+    query: "Pauline Romans 9 on predestination vs synergism: Barclay 2015 vs Käsemann"
+    expected_entities:
+      - work_pauline_epistle_romans
+    expected_entity_keywords:
+      - paul
+      - romans 9
+      - predestination
+      - synergism
+      - barclay
+      - käsemann
+    query_type: romain_thesis_queries
+    difficulty: hard
+
+  - id: r015
+    query: "Maximus Confessor Disputatio cum Pyrrho: natural will vs gnomic will (Bathrellos 2004)"
+    expected_entities:
+      - person_maximus_confessor
+      - work_maximus_disputatio_cum_pyrrho
+    expected_entity_keywords:
+      - maximus
+      - confessor
+      - pyrrho
+      - natural will
+      - gnomic will
+      - bathrellos
+    query_type: romain_thesis_queries
+    difficulty: hard

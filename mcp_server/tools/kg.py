@@ -9,6 +9,7 @@ from eleutheria_graphrag.agents.tools.get_neighbors import GetNeighborsTool
 from eleutheria_graphrag.agents.tools.get_node_detail import GetNodeDetailTool
 from mcp.server.fastmcp import FastMCP
 
+from mcp_server.cache import get_cache, session_id_from_context
 from mcp_server.deps import get_deps
 
 Direction = Literal["out", "in", "both"]
@@ -16,6 +17,7 @@ Direction = Literal["out", "in", "both"]
 
 def register(mcp: FastMCP) -> None:
     """Register KG tools on the given FastMCP server."""
+    cache = get_cache()
 
     @mcp.tool()
     async def get_node_detail(node_id: str) -> dict[str, Any]:
@@ -33,10 +35,17 @@ def register(mcp: FastMCP) -> None:
             "period": ..., "school": ..., "metadata": {...},
             "neighbor_count": int, "passage_count": int}``.
         """
+        args = {"node_id": node_id}
+        sid = session_id_from_context(getattr(mcp, "request_context", None))
+        cached = cache.get(sid, "get_node_detail", args)
+        if cached is not None:
+            return cached
         deps = await get_deps()
         tool = GetNodeDetailTool(deps)
-        result = await tool.execute({"node_id": node_id})
-        return dict(result.model_dump())
+        result = await tool.execute(args)
+        result_dict = dict(result.model_dump())
+        cache.put(sid, "get_node_detail", args, result_dict)
+        return result_dict
 
     @mcp.tool()
     async def get_neighbors(
@@ -65,17 +74,22 @@ def register(mcp: FastMCP) -> None:
         Returns:
             ``{"center_node": ..., "center_label": ..., "edges": [...]}``.
         """
+        args = {
+            "node_id": node_id,
+            "relation_filter": relation_filter,
+            "direction": direction,
+            "limit": limit,
+        }
+        sid = session_id_from_context(getattr(mcp, "request_context", None))
+        cached = cache.get(sid, "get_neighbors", args)
+        if cached is not None:
+            return cached
         deps = await get_deps()
         tool = GetNeighborsTool(deps)
-        result = await tool.execute(
-            {
-                "node_id": node_id,
-                "relation_filter": relation_filter,
-                "direction": direction,
-                "limit": limit,
-            }
-        )
-        return dict(result.model_dump())
+        result = await tool.execute(args)
+        result_dict = dict(result.model_dump())
+        cache.put(sid, "get_neighbors", args, result_dict)
+        return result_dict
 
     @mcp.tool()
     async def explore_subgraph(seed_node_ids: list[str], top_k: int = 20) -> dict[str, Any]:
@@ -94,7 +108,14 @@ def register(mcp: FastMCP) -> None:
             ``node_id``, ``label``, ``type``, ``ppr_score``,
             ``distance_from_seed``.
         """
+        args = {"seed_node_ids": list(seed_node_ids), "top_k": top_k}
+        sid = session_id_from_context(getattr(mcp, "request_context", None))
+        cached = cache.get(sid, "explore_subgraph", args)
+        if cached is not None:
+            return cached
         deps = await get_deps()
         tool = ExploreSubgraphTool(deps)
-        result = await tool.execute({"seed_node_ids": seed_node_ids, "top_k": top_k})
-        return dict(result.model_dump())
+        result = await tool.execute(args)
+        result_dict = dict(result.model_dump())
+        cache.put(sid, "explore_subgraph", args, result_dict)
+        return result_dict

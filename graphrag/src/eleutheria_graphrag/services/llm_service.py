@@ -417,8 +417,18 @@ class LLMService:
         temperature: float,
         max_tokens: int,
         config: dict[str, Any],
+        *,
+        prompt_cache_id: str | None = None,
     ) -> dict[str, Any]:
-        """Build JSON payload for OpenAI-compatible providers."""
+        """Build JSON payload for OpenAI-compatible providers.
+
+        Fireworks supports a ``prompt_cache_id`` directive that caches the
+        prompt prefix (system prompt + leading messages) across calls. We key
+        the id on agent identity (scholar-orchestrator / concept-mapper / …)
+        so the ~3-5k-token system prompt is paid for once per session, not
+        once per call. See Fireworks docs: prompt caching reduces TTFT and
+        per-call cost on repeated prefixes.
+        """
         messages = []
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
@@ -430,6 +440,8 @@ class LLMService:
             "temperature": temperature,
             "max_tokens": max_tokens,
         }
+        if provider == ModelProvider.FIREWORKS and prompt_cache_id:
+            payload["prompt_cache_id"] = prompt_cache_id
         if provider == ModelProvider.OPENROUTER:
             provider_block: dict[str, Any] = {}
             provider_only = cast(list[str] | None, config.get("provider_only"))
@@ -625,6 +637,7 @@ class LLMService:
         cache_prefix: str | None = None,
         cache_ttl_seconds: int = 900,
         model_override: str | None = None,
+        agent_id: str | None = None,
     ) -> str:
         """
         Generate a response (non-streaming).
@@ -674,6 +687,7 @@ class LLMService:
                         max_tokens,
                         override_api_key,
                         override_config,
+                        agent_id=agent_id,
                     )
                 except Exception as exc:
                     logger.warning(
@@ -730,6 +744,7 @@ class LLMService:
                         max_tokens,
                         api_key,
                         request_config,
+                        agent_id=agent_id,
                     )
                 except Exception as exc:
                     last_exc = exc
@@ -986,6 +1001,19 @@ class LLMService:
             logger.warning("Gemini prompt cache creation failed", exc_info=True)
             return None
 
+    @staticmethod
+    def _fireworks_cache_id(agent_id: str | None) -> str | None:
+        """Compose the Fireworks prompt_cache_id from agent identity.
+
+        Stable across calls so the cached prefix is reused. Includes a short
+        version suffix so we can invalidate after a system-prompt rewrite by
+        bumping ``ELEUTHERIA_PROMPT_CACHE_VERSION``.
+        """
+        if not agent_id:
+            return None
+        version = os.getenv("ELEUTHERIA_PROMPT_CACHE_VERSION", "v1")
+        return f"eleutheria-{agent_id}-{version}"
+
     async def _generate_openai_compatible(
         self,
         provider: ModelProvider,
@@ -995,8 +1023,10 @@ class LLMService:
         max_tokens: int,
         api_key: str,
         config: dict[str, Any],
+        *,
+        agent_id: str | None = None,
     ) -> str:
-        """Generate using OpenAI-compatible API (Kimi, OpenRouter)."""
+        """Generate using OpenAI-compatible API (Fireworks, Kimi, OpenRouter)."""
         client = await self._get_client()
 
         response = await client.post(
@@ -1009,6 +1039,7 @@ class LLMService:
                 temperature,
                 max_tokens,
                 config,
+                prompt_cache_id=self._fireworks_cache_id(agent_id),
             ),
         )
         response.raise_for_status()

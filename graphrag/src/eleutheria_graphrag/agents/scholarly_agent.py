@@ -522,9 +522,12 @@ class ScholarlyAgent:
         """Stream ReAct agent events as JSON strings.
 
         Emits agent_thinking, tool_start, tool_result events in real time,
-        then the final answer as answer_chunk + complete events.
+        then the final answer as answer_chunk + complete events. Per-stage
+        ``stage_complete`` events are emitted at each phase boundary so the
+        frontend AgentTrace pane can render a latency stack.
         """
         import asyncio
+        import time as _time
 
         from pydantic_graph import End, GraphRunContext
 
@@ -540,12 +543,14 @@ class ScholarlyAgent:
         )
 
         # Phase 1: Classify
+        stage_started = _time.perf_counter()
         yield json.dumps(
             {"type": "status", "message": "Classifying query...", "data": {"step": 0}}
         )
         classify_node = ClassifyQueryType()
         ctx = GraphRunContext(state=state, deps=self.deps)
         await classify_node.run(ctx)
+        classify_ms = int((_time.perf_counter() - stage_started) * 1000)
         yield json.dumps(
             {
                 "type": "status",
@@ -553,8 +558,17 @@ class ScholarlyAgent:
                 "data": {"step": 1},
             }
         )
+        yield json.dumps(
+            {
+                "type": "stage_complete",
+                "stage": "classify",
+                "duration_ms": classify_ms,
+                "metadata": {"complexity": state.complexity.value},
+            }
+        )
 
         # Phase 2: Agent loop with real-time SSE
+        stage_started = _time.perf_counter()
         queue: asyncio.Queue[dict[str, Any] | None] = asyncio.Queue()
         emitter = SSEEmitter(queue)
         tools = build_tool_registry(self.deps)
@@ -569,16 +583,33 @@ class ScholarlyAgent:
         # Run agent in background task, yield events as they arrive
         agent_task = asyncio.create_task(self._run_agent_and_close(agent, emitter))
 
+        tool_calls_observed = 0
         while True:
             event = await queue.get()
             if event is None:
                 break  # Agent finished
+            if isinstance(event, dict) and event.get("type") in {
+                "tool_start",
+                "tool_call",
+            }:
+                tool_calls_observed += 1
             yield json.dumps(event, default=str)
 
         # Wait for agent task to complete (should already be done)
         await agent_task
 
+        agent_loop_ms = int((_time.perf_counter() - stage_started) * 1000)
+        yield json.dumps(
+            {
+                "type": "stage_complete",
+                "stage": "agent_loop",
+                "duration_ms": agent_loop_ms,
+                "metadata": {"tool_calls": tool_calls_observed},
+            }
+        )
+
         # Phase 3: Synthesis
+        stage_started = _time.perf_counter()
         yield json.dumps(
             {
                 "type": "status",
@@ -595,9 +626,27 @@ class ScholarlyAgent:
         ctx = GraphRunContext(state=state, deps=self.deps)
         await render_node.run(ctx)
 
+        synthesis_ms = int((_time.perf_counter() - stage_started) * 1000)
+        yield json.dumps(
+            {
+                "type": "stage_complete",
+                "stage": "synthesis",
+                "duration_ms": synthesis_ms,
+            }
+        )
+
+        stage_started = _time.perf_counter()
         verify_node = ProgrammaticVerify()
         ctx = GraphRunContext(state=state, deps=self.deps)
         result = await verify_node.run(ctx)
+        verify_ms = int((_time.perf_counter() - stage_started) * 1000)
+        yield json.dumps(
+            {
+                "type": "stage_complete",
+                "stage": "verify",
+                "duration_ms": verify_ms,
+            }
+        )
 
         if isinstance(result, End):
             answer = result.data
