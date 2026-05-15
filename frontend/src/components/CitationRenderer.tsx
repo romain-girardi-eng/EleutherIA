@@ -5,9 +5,23 @@ import ReactMarkdown from 'react-markdown';
 import type { SourceCitation } from '../types';
 import { getGraphTypeTheme } from './graphrag/graphTheme';
 
+export interface PassageCitationEntry {
+  id?: string | null;
+  ref?: string | null;
+  type?: string | null;
+  label?: string | null;
+  layer?: string | null;
+  verified?: boolean;
+  confidence?: number | null;
+}
+
 interface CitationRendererProps {
   content: string;
   sources?: SourceCitation[];
+  /** Structured claim-ledger entries with {ref:"P3", id:"<uuid>"} so the
+   *  renderer can resolve [P3] badges to passage UUIDs. Falls back to the
+   *  ``sources`` heuristic if not provided. */
+  passageCitations?: PassageCitationEntry[];
   onNodeClick?: (nodeId: string) => void;
   onSourceClick?: (sourceIndex: number, source?: SourceCitation) => void;
   onPassageCitationClick?: (passageId: string) => void;
@@ -23,6 +37,7 @@ interface CitationRendererProps {
 export function CitationRenderer({
   content,
   sources = [],
+  passageCitations = [],
   onNodeClick,
   onSourceClick,
   onPassageCitationClick,
@@ -35,9 +50,29 @@ export function CitationRenderer({
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const tooltipRef = useRef<HTMLDivElement>(null);
 
+  // Map "P3" → passage UUID built from the structured ledger sent by the
+  // backend. The ledger is the source of truth; the sources array doesn't
+  // always include the passage-typed entries that [P\d] badges refer to.
+  const passageRefMap = React.useMemo(() => {
+    const map = new Map<string, string>();
+    for (const entry of passageCitations) {
+      if (!entry?.id || !entry?.ref) continue;
+      // Normalize "P3" / "p3" / "3" all to "P3".
+      const raw = String(entry.ref).trim();
+      const norm = /^[Pp]?\d+$/.test(raw)
+        ? `P${raw.replace(/^[Pp]/, '')}`
+        : raw.toUpperCase();
+      map.set(norm, entry.id);
+    }
+    return map;
+  }, [passageCitations]);
+
   // Resolve passage ID from a [P1] citation number
   const resolvePassageId = (pNum: number): string | null => {
-    // Look for passage-type sources (nodeType 'Passage' or UUID-format nodeId)
+    // 1. Prefer the structured backend ledger.
+    const fromLedger = passageRefMap.get(`P${pNum}`);
+    if (fromLedger) return fromLedger;
+    // 2. Legacy heuristic — only used if the backend didn't send the ledger.
     const passageSources = sources.filter(s =>
       s.nodeType === 'Passage' ||
       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s.nodeId)

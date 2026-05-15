@@ -83,12 +83,38 @@ function classifyStep(step: AgentStep): PhaseKey {
   return 'read';
 }
 
+/** A single tool call as the user perceives it (start+result merged). */
+interface ToolCallRow {
+  key: string; // stable React key
+  tool?: string;
+  args?: Record<string, unknown>;
+  reason?: string;
+  // Latest known status info pulled from tool_result when it arrives.
+  done: boolean;
+  summary?: string;
+  durationMs?: number;
+  nodeCount?: number;
+  passageCount?: number;
+}
+
+/** Anything that isn't a tool call (status, thinking). */
+interface NonToolRow {
+  key: string;
+  kind: 'thinking' | 'status';
+  text: string;
+  remaining?: number;
+}
+
+type RenderRow =
+  | ({ rowType: 'tool' } & ToolCallRow)
+  | ({ rowType: 'misc' } & NonToolRow);
+
 interface PhaseBucket {
   key: PhaseKey;
   label: string;
   Icon: typeof Compass;
-  steps: AgentStep[];
-  toolCalls: number; // pairs of start/result counted once
+  rows: RenderRow[];
+  toolCalls: number; // total tool_result count
   uniqueTools: number;
   nodeCount: number;
   passageCount: number;
@@ -104,7 +130,7 @@ function bucketize(steps: AgentStep[]): PhaseBucket[] {
         key: p.key,
         label: p.label,
         Icon: p.Icon,
-        steps: [],
+        rows: [],
         toolCalls: 0,
         uniqueTools: 0,
         nodeCount: 0,
@@ -115,10 +141,28 @@ function bucketize(steps: AgentStep[]): PhaseBucket[] {
     ]),
   ) as Record<PhaseKey, PhaseBucket>;
 
+  // Per-phase queue of pending tool_start rows keyed by tool name. When a
+  // matching tool_result arrives we update that row in place (flipping
+  // the spinner to a checkmark) instead of appending a second row — that
+  // was the "search row stuck on loader" the user reported.
+  const pendingByPhaseTool = new Map<string, ToolCallRow>();
+
   for (const step of steps) {
     const phase = classifyStep(step);
     const bucket = map[phase];
-    bucket.steps.push(step);
+
+    if (step.type === 'tool_start') {
+      const row: ToolCallRow = {
+        key: step.id,
+        tool: step.tool,
+        args: step.args,
+        reason: step.reason,
+        done: false,
+      };
+      bucket.rows.push({ rowType: 'tool', ...row });
+      pendingByPhaseTool.set(`${phase}::${step.tool ?? ''}`, row);
+      continue;
+    }
 
     if (step.type === 'tool_result') {
       bucket.toolCalls += 1;
@@ -126,13 +170,71 @@ function bucketize(steps: AgentStep[]): PhaseBucket[] {
       bucket.passageCount += step.passageCount ?? 0;
       bucket.durationMs += step.durationMs ?? 0;
       if (step.summary) bucket.latestSummary = step.summary;
+
+      const pendingKey = `${phase}::${step.tool ?? ''}`;
+      const pending = pendingByPhaseTool.get(pendingKey);
+      if (pending) {
+        // Mutate the existing pushed row (RenderRow is a struct, the array
+        // holds a reference — find and replace).
+        const idx = bucket.rows.findIndex(
+          (r) => r.rowType === 'tool' && r.key === pending.key,
+        );
+        if (idx >= 0) {
+          bucket.rows[idx] = {
+            rowType: 'tool',
+            ...pending,
+            done: true,
+            summary: step.summary,
+            durationMs: step.durationMs,
+            nodeCount: step.nodeCount,
+            passageCount: step.passageCount,
+          };
+        }
+        pendingByPhaseTool.delete(pendingKey);
+      } else {
+        // Result without a matching start — render it directly as a done row.
+        bucket.rows.push({
+          rowType: 'tool',
+          key: step.id,
+          tool: step.tool,
+          done: true,
+          summary: step.summary,
+          durationMs: step.durationMs,
+          nodeCount: step.nodeCount,
+          passageCount: step.passageCount,
+        });
+      }
+      continue;
     }
-    if (step.type === 'status' && step.summary) bucket.latestSummary = step.summary;
+
+    if (step.type === 'thinking') {
+      bucket.rows.push({
+        rowType: 'misc',
+        key: step.id,
+        kind: 'thinking',
+        text: step.thinking || step.summary || '',
+        remaining: step.remaining,
+      });
+      continue;
+    }
+
+    if (step.type === 'status') {
+      const text = step.summary || '';
+      if (text) bucket.latestSummary = text;
+      bucket.rows.push({
+        rowType: 'misc',
+        key: step.id,
+        kind: 'status',
+        text,
+      });
+    }
   }
 
   for (const k of Object.keys(map) as PhaseKey[]) {
     const toolNames = new Set<string>();
-    for (const s of map[k].steps) if (s.tool) toolNames.add(s.tool);
+    for (const r of map[k].rows) {
+      if (r.rowType === 'tool' && r.tool) toolNames.add(r.tool);
+    }
     map[k].uniqueTools = toolNames.size;
   }
 
@@ -261,7 +363,7 @@ function PhaseRow({
       </button>
 
       <AnimatePresence initial={false}>
-        {expanded && bucket.steps.length > 0 && (
+        {expanded && bucket.rows.length > 0 && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
@@ -270,8 +372,8 @@ function PhaseRow({
             className="overflow-hidden"
           >
             <div className="space-y-1.5 px-3 pb-3 pl-12">
-              {bucket.steps.map((step) => (
-                <SubStep key={step.id} step={step} />
+              {bucket.rows.map((row) => (
+                <SubRow key={row.key} row={row} />
               ))}
             </div>
           </motion.div>
@@ -281,48 +383,43 @@ function PhaseRow({
   );
 }
 
-function SubStep({ step }: { step: AgentStep }) {
-  if (step.type === 'thinking') {
+function SubRow({ row }: { row: RenderRow }) {
+  if (row.rowType === 'misc') {
+    if (row.kind === 'thinking') {
+      return (
+        <div className="flex items-start gap-2">
+          <Brain className="mt-0.5 h-3 w-3 shrink-0 text-violet-500" />
+          <p className="text-[11.5px] italic leading-4 text-stone-600">
+            {row.text}
+          </p>
+        </div>
+      );
+    }
     return (
-      <div className="flex items-start gap-2">
-        <Brain className="mt-0.5 h-3 w-3 shrink-0 text-violet-500" />
-        <p className="text-[11.5px] italic leading-4 text-stone-600">
-          {step.thinking || step.summary}
-        </p>
-      </div>
+      <p className="text-[11.5px] leading-4 text-stone-400">{row.text}</p>
     );
   }
 
-  if (step.type === 'status') {
-    return (
-      <p className="text-[11.5px] leading-4 text-stone-400">
-        {step.summary}
-      </p>
-    );
-  }
-
-  // tool_start / tool_result
-  const isStart = step.type === 'tool_start';
   const query =
-    (step.args?.query as string) ||
-    (step.args?.node_id as string) ||
-    (Array.isArray(step.args?.seed_node_ids)
-      ? (step.args?.seed_node_ids as string[]).slice(0, 2).join(', ')
+    (row.args?.query as string) ||
+    (row.args?.node_id as string) ||
+    (Array.isArray(row.args?.seed_node_ids)
+      ? (row.args?.seed_node_ids as string[]).slice(0, 2).join(', ')
       : '') ||
-    (step.args?.work_id as string) ||
+    (row.args?.work_id as string) ||
     '';
 
   return (
     <div className="flex items-start gap-2">
-      {isStart ? (
-        <Loader2 className="mt-0.5 h-3 w-3 shrink-0 animate-spin text-amber-600" />
-      ) : (
+      {row.done ? (
         <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-emerald-500" />
+      ) : (
+        <Loader2 className="mt-0.5 h-3 w-3 shrink-0 animate-spin text-amber-600" />
       )}
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline gap-1.5">
           <span className="font-mono text-[11px] text-stone-500">
-            {step.tool}
+            {row.tool}
           </span>
           {query && (
             <span className="truncate font-mono text-[11px] text-stone-700">
@@ -330,27 +427,27 @@ function SubStep({ step }: { step: AgentStep }) {
             </span>
           )}
         </div>
-        {!isStart && step.summary && (
+        {row.done && row.summary && (
           <p className="mt-0.5 truncate text-[11px] text-stone-500">
-            {step.summary}
+            {row.summary}
           </p>
         )}
         <div className="mt-0.5 flex items-center gap-1.5">
-          {step.nodeCount !== undefined && step.nodeCount > 0 && (
+          {row.nodeCount !== undefined && row.nodeCount > 0 && (
             <span className="inline-flex items-center gap-0.5 text-[10px] text-blue-700">
               <GitBranch className="h-2.5 w-2.5" />
-              {step.nodeCount}
+              {row.nodeCount}
             </span>
           )}
-          {step.passageCount !== undefined && step.passageCount > 0 && (
+          {row.passageCount !== undefined && row.passageCount > 0 && (
             <span className="inline-flex items-center gap-0.5 text-[10px] text-emerald-700">
               <FileText className="h-2.5 w-2.5" />
-              {step.passageCount}
+              {row.passageCount}
             </span>
           )}
-          {step.durationMs !== undefined && step.durationMs > 0 && (
+          {row.durationMs !== undefined && row.durationMs > 0 && (
             <span className="text-[10px] text-stone-400">
-              {formatMs(step.durationMs)}
+              {formatMs(row.durationMs)}
             </span>
           )}
         </div>
@@ -384,14 +481,14 @@ export default function ResearchTimelinePanel({
   const buckets = useMemo(() => bucketize(steps), [steps]);
   const lastWithSteps = useMemo(() => {
     for (let i = buckets.length - 1; i >= 0; i--) {
-      if (buckets[i].steps.length > 0) return i;
+      if (buckets[i].rows.length > 0) return i;
     }
     return -1;
   }, [buckets]);
 
   const phaseStatus = (i: number): 'pending' | 'active' | 'done' => {
     const b = buckets[i];
-    if (b.steps.length === 0) return 'pending';
+    if (b.rows.length === 0) return 'pending';
     if (!isActive) return 'done';
     if (i === lastWithSteps) return 'active';
     return 'done';
