@@ -16,6 +16,8 @@ interface Props {
   citation: CitationEntry;
   /** Index within the live citation feed; used for the [Source N] badge. */
   index: number;
+  /** Called when the user clicks the card to inspect the full passage. */
+  onOpenPassage?: (passageId: string) => void;
 }
 
 function confidenceTone(confidence: number): {
@@ -32,7 +34,7 @@ function confidenceTone(confidence: number): {
   return { bar: 'bg-stone-400', badge: 'bg-stone-100 text-stone-600', label: 'low' };
 }
 
-export function CitationCard({ citation, index }: Props) {
+export function CitationCard({ citation, index, onOpenPassage }: Props) {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const tone = confidenceTone(citation.confidence);
@@ -56,7 +58,21 @@ export function CitationCard({ citation, index }: Props) {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="rounded-2xl border border-stone-200/70 bg-white/80 px-3 py-2 shadow-sm hover:border-amber-200"
+      role={onOpenPassage ? 'button' : undefined}
+      tabIndex={onOpenPassage ? 0 : undefined}
+      onClick={() => onOpenPassage?.(citation.passage_id)}
+      onKeyDown={(e) => {
+        if (onOpenPassage && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          onOpenPassage(citation.passage_id);
+        }
+      }}
+      className={cn(
+        'rounded-2xl border border-stone-200/70 bg-white/80 px-3 py-2 shadow-sm',
+        onOpenPassage
+          ? 'cursor-pointer hover:border-amber-300 hover:bg-amber-50/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400'
+          : 'hover:border-amber-200',
+      )}
     >
       <header className="flex items-center gap-2">
         <span className="rounded-full bg-amber-50 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-amber-700">

@@ -221,7 +221,7 @@ export function ResearchSession({
             className="flex-1"
           />
           <div className="max-h-72 rounded-2xl border border-stone-200/70 bg-white/70 backdrop-blur-sm">
-            <CitationFeed citations={citations} isLive={isLive} />
+            <CitationFeed citations={citations} isLive={isLive} onOpenPassage={setActivePassage} />
           </div>
         </aside>
       </div>
