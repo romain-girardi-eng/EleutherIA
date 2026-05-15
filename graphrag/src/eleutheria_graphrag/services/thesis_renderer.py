@@ -420,13 +420,19 @@ class ThesisRenderer:
 
     def to_docx(self, draft: ThesisDraft) -> bytes:
         """Convert the draft to a .docx file via pypandoc."""
+        import tempfile
+        from pathlib import Path
+
         import pypandoc  # type: ignore[import-untyped]
 
         md = self.to_markdown(draft)
-        result = pypandoc.convert_text(md, "docx", format="md", outputfile=None)
-        if isinstance(result, str):
-            return result.encode("latin-1")
-        return result
+        with tempfile.NamedTemporaryFile(suffix=".docx", delete=False) as tmp:
+            tmp_path = tmp.name
+        try:
+            pypandoc.convert_text(md, "docx", format="md", outputfile=tmp_path)
+            return Path(tmp_path).read_bytes()
+        finally:
+            Path(tmp_path).unlink(missing_ok=True)
 
     # ----- RIS -------------------------------------------------------------
 
