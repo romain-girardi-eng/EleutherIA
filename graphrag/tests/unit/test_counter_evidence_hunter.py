@@ -63,6 +63,46 @@ def _make_neighbors_tool(edges: list[dict[str, Any]]) -> MagicMock:
     return tool
 
 
+def _make_neighbors_tool_by_filter(
+    by_filter: dict[str | None, list[dict[str, Any]]],
+) -> MagicMock:
+    """Mock get_neighbors that returns different edges per relation_filter."""
+    tool = MagicMock()
+
+    async def _exec(args: dict[str, Any]) -> dict[str, Any]:
+        return {"edges": by_filter.get(args.get("relation_filter"), [])}
+
+    tool.execute = AsyncMock(side_effect=_exec)
+    return tool
+
+
+def _make_node_detail_tool(by_id: dict[str, dict[str, Any]]) -> MagicMock:
+    tool = MagicMock()
+
+    async def _exec(args: dict[str, Any]) -> dict[str, Any]:
+        return by_id.get(args.get("node_id", ""), {})
+
+    tool.execute = AsyncMock(side_effect=_exec)
+    return tool
+
+
+def _make_consensus_tool(
+    topics: list[dict[str, Any]] | None = None,
+    *,
+    table_available: bool = True,
+    raises: Exception | None = None,
+) -> MagicMock:
+    tool = MagicMock()
+
+    async def _exec(_args: dict[str, Any]) -> dict[str, Any]:
+        if raises is not None:
+            raise raises
+        return {"topics": topics or [], "table_available": table_available}
+
+    tool.execute = AsyncMock(side_effect=_exec)
+    return tool
+
+
 def _make_llm(payload: str | list[str]) -> MagicMock:
     llm = MagicMock()
     if isinstance(payload, list):
@@ -546,3 +586,463 @@ class TestTwoPassIntegration:
         assert result["answer"] == "v1 only"
         assert agent.query_dict.call_count == 1
         assert "counter_evidence" not in result.get("metadata", {})
+
+
+# ---------------------------------------------------------------------------
+# v2 — Five-dimension coverage
+# ---------------------------------------------------------------------------
+
+
+class TestScholarCritiqueDimension:
+    """Dimension 2 — engages_with(critiques|opposes) edges produce findings."""
+
+    @pytest.mark.asyncio
+    async def test_engages_with_critiques_surfaced(self):
+        edges = [
+            {
+                "source": "concept_fate",
+                "target": "person_frede",
+                "relation": "engages_with",
+                "label": "Michael Frede",
+                "metadata": {
+                    "stance": "critiques",
+                    "scholarly_work": "Frede 2011, A Free Will",
+                    "summary": "Frede denies the Stoics had a doctrine of will.",
+                    "page_ref": "pp. 31-48",
+                },
+            }
+        ]
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                get_neighbors=_make_neighbors_tool_by_filter(
+                    {"engages_with": edges}
+                ),
+            ),
+        )
+        # Single-seed claim so the mock fires once.
+        claim = ClaimUnit(
+            claim_id="c1",
+            claim_text="The Stoics held a doctrine of will.",
+            seed_node_ids=["concept_fate"],
+            keywords=["will"],
+        )
+        out = await hunter.hunt_scholar_critiques(claim)
+        assert len(out) == 1
+        t = out[0]
+        assert t.type == "scholar_critique"
+        assert t.scholar == "person_frede"
+        assert t.stance == "critiques"
+        assert t.scholarly_work == "Frede 2011, A Free Will"
+        assert t.page_ref == "pp. 31-48"
+        assert t.force == "moderate"
+
+    @pytest.mark.asyncio
+    async def test_engages_with_opposes_is_strong(self):
+        edges = [
+            {
+                "source": "concept_fate",
+                "target": "person_kane",
+                "relation": "engages_with",
+                "metadata": {"stance": "opposes", "summary": "Total rejection."},
+            }
+        ]
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                get_neighbors=_make_neighbors_tool_by_filter(
+                    {"engages_with": edges}
+                ),
+            ),
+        )
+        out = await hunter.hunt_scholar_critiques(_claim())
+        assert len(out) == 1
+        assert out[0].force == "strong"
+        assert out[0].stance == "opposes"
+
+    @pytest.mark.asyncio
+    async def test_engages_with_agrees_filtered_out(self):
+        edges = [
+            {
+                "source": "concept_fate",
+                "target": "person_long",
+                "relation": "engages_with",
+                "metadata": {"stance": "agrees", "summary": "Concurs."},
+            }
+        ]
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                get_neighbors=_make_neighbors_tool_by_filter(
+                    {"engages_with": edges}
+                ),
+            ),
+        )
+        out = await hunter.hunt_scholar_critiques(_claim())
+        assert out == []
+
+
+class TestPeriodShiftDimension:
+    """Dimension 3 — later-period reactions surface as period_shift."""
+
+    @pytest.mark.asyncio
+    async def test_classical_to_hellenistic_shift_surfaces(self):
+        seed = "concept_prohairesis"
+        target = "school_stoics"
+        edges = [
+            {
+                "source": seed,
+                "target": target,
+                "relation": "revises",
+                "metadata": {
+                    "school": "school_stoics",
+                    "summary": "Stoics reframe prohairesis as synkatathesis.",
+                },
+            }
+        ]
+        details = {
+            seed: {
+                "node_id": seed,
+                "label": "prohairesis",
+                "period": "Classical",
+                "metadata": {},
+            },
+            target: {
+                "node_id": target,
+                "label": "Stoics",
+                "period": "Hellenistic",
+                "metadata": {},
+            },
+        }
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                get_neighbors=_make_neighbors_tool_by_filter({None: edges}),
+                get_node_detail=_make_node_detail_tool(details),
+            ),
+        )
+        claim = ClaimUnit(
+            claim_id="c1",
+            claim_text="Aristotle's prohairesis grounds choice.",
+            seed_node_ids=[seed],
+        )
+        out = await hunter.hunt_period_shifts(claim)
+        assert len(out) == 1
+        t = out[0]
+        assert t.type == "period_shift"
+        assert t.from_period == "Classical"
+        assert t.to_period == "Hellenistic"
+        assert t.school == "school_stoics"
+
+    @pytest.mark.asyncio
+    async def test_same_period_not_a_shift(self):
+        seed = "concept_x"
+        edges = [
+            {
+                "source": seed,
+                "target": "concept_y",
+                "relation": "responds_to",
+                "metadata": {},
+            }
+        ]
+        details = {
+            seed: {"node_id": seed, "period": "Hellenistic"},
+            "concept_y": {"node_id": "concept_y", "period": "Hellenistic"},
+        }
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                get_neighbors=_make_neighbors_tool_by_filter({None: edges}),
+                get_node_detail=_make_node_detail_tool(details),
+            ),
+        )
+        claim = ClaimUnit(claim_id="c1", claim_text="x", seed_node_ids=[seed])
+        assert await hunter.hunt_period_shifts(claim) == []
+
+
+class TestDoxographicalAlternativeDimension:
+    """Dimension 4 — rival modern reconstructions of one fragment."""
+
+    @pytest.mark.asyncio
+    async def test_alternative_interpretations_surfaced(self):
+        seed = "argument_chrysippus_cylinder"
+        details = {
+            seed: {
+                "node_id": seed,
+                "label": "Chrysippus cylinder",
+                "metadata": {
+                    "fragment": "SVF II.974",
+                    "interpretations": [
+                        {
+                            "interpretation": "Compatibilist reading: external push, internal nature.",
+                            "scholar": "Bobzien 1998, ch. 6",
+                        },
+                        {
+                            "interpretation": "Causal-essentialist reading.",
+                            "scholar": "Salles 2005",
+                        },
+                    ],
+                },
+            }
+        }
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                get_node_detail=_make_node_detail_tool(details),
+            ),
+        )
+        claim = ClaimUnit(
+            claim_id="c1",
+            claim_text="Chrysippus' cylinder shows soft determinism.",
+            seed_node_ids=[seed],
+        )
+        out = await hunter.hunt_doxographical_alternatives(claim)
+        assert len(out) == 2
+        assert {t.scholarly_source for t in out} == {
+            "Bobzien 1998, ch. 6",
+            "Salles 2005",
+        }
+        assert all(t.fragment == "SVF II.974" for t in out)
+        assert all(t.type == "doxographical_alternative" for t in out)
+
+    @pytest.mark.asyncio
+    async def test_missing_fragment_skipped(self):
+        seed = "concept_x"
+        details = {
+            seed: {
+                "node_id": seed,
+                "metadata": {"interpretations": [{"interpretation": "x", "scholar": "y"}]},
+            }
+        }
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                get_node_detail=_make_node_detail_tool(details),
+            ),
+        )
+        claim = ClaimUnit(claim_id="c1", claim_text="x", seed_node_ids=[seed])
+        assert await hunter.hunt_doxographical_alternatives(claim) == []
+
+
+class TestConsensusDisputeDimension:
+    """Dimension 5 — graceful degradation when consensus DB is missing."""
+
+    @pytest.mark.asyncio
+    async def test_consensus_topic_surfaced(self):
+        topics = [
+            {
+                "topic_slug": "aristotle_concept_of_will",
+                "label": "Aristotle's concept of will (debated)",
+                "methodological_warning": "Whether Aristotle has a 'will' is contested.",
+                "positions": [
+                    {
+                        "label": "no will doctrine",
+                        "proponents": ["Dihle 1982"],
+                        "summary": "...",
+                    }
+                ],
+            }
+        ]
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                query_scholarly_consensus=_make_consensus_tool(topics),
+            ),
+        )
+        claim = ClaimUnit(
+            claim_id="c1",
+            claim_text="Aristotle had a doctrine of will.",
+            seed_node_ids=["person_aristotle", "concept_will"],
+        )
+        out = await hunter.hunt_consensus_disputes(claim)
+        assert len(out) == 1
+        t = out[0]
+        assert t.type == "consensus_dispute"
+        assert t.topic_slug == "aristotle_concept_of_will"
+        assert t.methodological_warning.startswith("Whether Aristotle")
+        assert len(t.positions) == 1
+
+    @pytest.mark.asyncio
+    async def test_table_unavailable_returns_empty(self):
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                query_scholarly_consensus=_make_consensus_tool(
+                    [], table_available=False
+                ),
+            ),
+        )
+        claim = ClaimUnit(
+            claim_id="c1",
+            claim_text="x",
+            seed_node_ids=["concept_x"],
+        )
+        assert await hunter.hunt_consensus_disputes(claim) == []
+
+    @pytest.mark.asyncio
+    async def test_consensus_tool_raise_is_swallowed(self):
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                query_scholarly_consensus=_make_consensus_tool(
+                    raises=RuntimeError("relation scholarly_consensus_topics does not exist"),
+                ),
+            ),
+        )
+        claim = ClaimUnit(
+            claim_id="c1",
+            claim_text="x",
+            seed_node_ids=["concept_x"],
+        )
+        # Must NOT raise — single dimension fails, others continue.
+        assert await hunter.hunt_consensus_disputes(claim) == []
+
+    @pytest.mark.asyncio
+    async def test_consensus_tool_absent_returns_empty(self):
+        """No tool wired at all → empty list, no exceptions."""
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                query_scholarly_consensus=None,
+            ),
+        )
+        claim = ClaimUnit(
+            claim_id="c1", claim_text="x", seed_node_ids=["concept_x"]
+        )
+        assert await hunter.hunt_consensus_disputes(claim) == []
+
+
+class TestParallelDimensionExecution:
+    """All five dimensions must run via asyncio.gather and tolerate failures."""
+
+    @pytest.mark.asyncio
+    async def test_all_five_dimensions_invoked(self):
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+            ),
+        )
+        called: dict[str, int] = {}
+
+        def _wrap(name: str, original):
+            async def _inner(claim):
+                called[name] = called.get(name, 0) + 1
+                return await original(claim)
+
+            return _inner
+
+        hunter.hunt_passage_contradiction = _wrap(  # type: ignore[assignment]
+            "passage", hunter.hunt_passage_contradiction
+        )
+        hunter.hunt_scholar_critiques = _wrap(  # type: ignore[assignment]
+            "scholar", hunter.hunt_scholar_critiques
+        )
+        hunter.hunt_period_shifts = _wrap(  # type: ignore[assignment]
+            "period", hunter.hunt_period_shifts
+        )
+        hunter.hunt_doxographical_alternatives = _wrap(  # type: ignore[assignment]
+            "doxo", hunter.hunt_doxographical_alternatives
+        )
+        hunter.hunt_consensus_disputes = _wrap(  # type: ignore[assignment]
+            "consensus", hunter.hunt_consensus_disputes
+        )
+
+        await hunter.hunt_one(_claim())
+        assert called == {
+            "passage": 1,
+            "scholar": 1,
+            "period": 1,
+            "doxo": 1,
+            "consensus": 1,
+        }
+
+    @pytest.mark.asyncio
+    async def test_one_dimension_failure_does_not_abort_others(self):
+        """A raising dimension is logged but the hunt continues."""
+
+        async def _boom(_claim):
+            raise RuntimeError("boom")
+
+        edges = [
+            {
+                "source": "concept_fate",
+                "target": "person_frede",
+                "relation": "engages_with",
+                "metadata": {"stance": "critiques", "summary": "denial"},
+            }
+        ]
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                get_neighbors=_make_neighbors_tool_by_filter(
+                    {"engages_with": edges, None: []}
+                ),
+            ),
+        )
+        hunter.hunt_passage_contradiction = _boom  # type: ignore[assignment]
+        finding = await hunter.hunt_one(_claim())
+        # scholar_critique survives even though dim 1 raised.
+        assert any(t.type == "scholar_critique" for t in finding.opposing_testimonia)
+
+
+class TestV2EventTypesInCallback:
+    """SSE callback must emit the new testimony_type values."""
+
+    @pytest.mark.asyncio
+    async def test_scholar_critique_event_emitted(self):
+        events: list[dict[str, Any]] = []
+
+        async def cb(evt: dict[str, Any]) -> None:
+            events.append(evt)
+
+        edges = [
+            {
+                "source": "concept_fate",
+                "target": "person_frede",
+                "relation": "engages_with",
+                "metadata": {
+                    "stance": "critiques",
+                    "summary": "Frede denies the Stoics had a doctrine of will.",
+                },
+            }
+        ]
+        hunter = CounterEvidenceHunter(
+            llm=_make_llm("{}"),
+            tools=MCPToolset(
+                search_passages=_make_search_tool([]),
+                explore_subgraph=_make_subgraph_tool([]),
+                get_neighbors=_make_neighbors_tool_by_filter(
+                    {"engages_with": edges, None: []}
+                ),
+            ),
+            on_finding=cb,
+        )
+        await hunter.hunt_one(_claim())
+        types = {e.get("testimony_type") for e in events}
+        assert "scholar_critique" in types

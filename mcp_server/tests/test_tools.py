@@ -30,6 +30,7 @@ EXPECTED_TOOLS = {
     "get_node_detail",
     "get_neighbors",
     "explore_subgraph",
+    "query_scholarly_consensus",
 }
 
 
@@ -196,6 +197,30 @@ async def test_read_passages_handles_missing_node() -> None:
     payload = _extract_payload(await mcp.call_tool("read_passages", {"node_id": "nonexistent"}))
     assert payload["node_id"] == "nonexistent"
     assert payload["passages"] == []
+
+
+@pytest.mark.asyncio
+async def test_query_scholarly_consensus_degrades_when_db_offline() -> None:
+    """Without a live DB, the tool must report table_available=False."""
+    mcp = build_server()
+    payload = _extract_payload(
+        await mcp.call_tool(
+            "query_scholarly_consensus",
+            {"concepts": ["concept_fate"], "persons": []},
+        )
+    )
+    assert payload["topics"] == []
+    assert payload["table_available"] is False
+
+
+@pytest.mark.asyncio
+async def test_query_scholarly_consensus_empty_args_returns_empty() -> None:
+    mcp = build_server()
+    payload = _extract_payload(
+        await mcp.call_tool("query_scholarly_consensus", {})
+    )
+    assert payload["topics"] == []
+    assert payload["table_available"] is True
 
 
 @pytest.mark.asyncio

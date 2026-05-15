@@ -505,6 +505,9 @@ class GraphRAGService:
             explore_subgraph=subgraph_tool,
             get_neighbors=tools_by_name.get("get_neighbors"),
             get_node_detail=tools_by_name.get("get_node_detail"),
+            query_scholarly_consensus=tools_by_name.get(
+                "query_scholarly_consensus"
+            ),
         )
         return CounterEvidenceHunter(
             llm=self.llm,

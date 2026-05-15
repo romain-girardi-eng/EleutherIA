@@ -6,7 +6,12 @@ import logging
 
 from mcp.server.fastmcp import FastMCP
 
-from mcp_server.tools import register_kg, register_read, register_search
+from mcp_server.tools import (
+    register_consensus,
+    register_kg,
+    register_read,
+    register_search,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +39,7 @@ def build_server(name: str = "eleutheria-graphrag") -> FastMCP:
     register_search(mcp)
     register_read(mcp)
     register_kg(mcp)
+    register_consensus(mcp)
     return mcp
 
 
