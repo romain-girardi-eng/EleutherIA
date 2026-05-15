@@ -8,6 +8,7 @@ from eleutheria_graphrag.agents.tools.search_nodes import SearchNodesTool
 from eleutheria_graphrag.agents.tools.search_passages import SearchPassagesTool
 from mcp.server.fastmcp import FastMCP
 
+from mcp_server.cache import get_cache, session_id_from_context
 from mcp_server.deps import get_deps
 
 NodeTypeFilter = Literal[
@@ -17,6 +18,7 @@ NodeTypeFilter = Literal[
 
 def register(mcp: FastMCP) -> None:
     """Register search tools on the given FastMCP server."""
+    cache = get_cache()
 
     @mcp.tool()
     async def search_passages(
@@ -41,10 +43,17 @@ def register(mcp: FastMCP) -> None:
             ``passage_id``, ``work_title``, ``author``, ``canonical_ref``,
             ``language``, ``text_content`` (up to 800 chars), and ``score``.
         """
+        args = {"query": query, "work_filter": work_filter, "limit": limit}
+        sid = session_id_from_context(getattr(mcp, "request_context", None))
+        cached = cache.get(sid, "search_passages", args)
+        if cached is not None:
+            return cached
         deps = await get_deps()
         tool = SearchPassagesTool(deps)
-        result = await tool.execute({"query": query, "work_filter": work_filter, "limit": limit})
-        return dict(result.model_dump())
+        result = await tool.execute(args)
+        result_dict = dict(result.model_dump())
+        cache.put(sid, "search_passages", args, result_dict)
+        return result_dict
 
     @mcp.tool()
     async def search_nodes(
@@ -69,14 +78,19 @@ def register(mcp: FastMCP) -> None:
             ``node_id``, ``label``, ``type``, truncated ``description``,
             ``period``, ``school``, and ``score``.
         """
+        args = {
+            "query": query,
+            "type_filter": type_filter,
+            "period_filter": period_filter,
+            "limit": limit,
+        }
+        sid = session_id_from_context(getattr(mcp, "request_context", None))
+        cached = cache.get(sid, "search_nodes", args)
+        if cached is not None:
+            return cached
         deps = await get_deps()
         tool = SearchNodesTool(deps)
-        result = await tool.execute(
-            {
-                "query": query,
-                "type_filter": type_filter,
-                "period_filter": period_filter,
-                "limit": limit,
-            }
-        )
-        return dict(result.model_dump())
+        result = await tool.execute(args)
+        result_dict = dict(result.model_dump())
+        cache.put(sid, "search_nodes", args, result_dict)
+        return result_dict

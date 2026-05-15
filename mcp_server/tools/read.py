@@ -8,11 +8,13 @@ from eleutheria_graphrag.agents.tools.read_passages import ReadPassagesTool
 from eleutheria_graphrag.agents.tools.read_work_section import ReadWorkSectionTool
 from mcp.server.fastmcp import FastMCP
 
+from mcp_server.cache import get_cache, session_id_from_context
 from mcp_server.deps import get_deps
 
 
 def register(mcp: FastMCP) -> None:
     """Register read tools on the given FastMCP server."""
+    cache = get_cache()
 
     @mcp.tool()
     async def read_passages(node_id: str, limit: int = 5) -> dict[str, Any]:
@@ -33,10 +35,17 @@ def register(mcp: FastMCP) -> None:
             ``canonical_ref``, ``language``, ``text_content``, optional
             ``translation``, and ``confidence``.
         """
+        args = {"node_id": node_id, "limit": limit}
+        sid = session_id_from_context(getattr(mcp, "request_context", None))
+        cached = cache.get(sid, "read_passages", args)
+        if cached is not None:
+            return cached
         deps = await get_deps()
         tool = ReadPassagesTool(deps)
-        result = await tool.execute({"node_id": node_id, "limit": limit})
-        return dict(result.model_dump())
+        result = await tool.execute(args)
+        result_dict = dict(result.model_dump())
+        cache.put(sid, "read_passages", args, result_dict)
+        return result_dict
 
     @mcp.tool()
     async def read_work_section(work_id: str, section_path: str | None = None) -> dict[str, Any]:
@@ -55,7 +64,14 @@ def register(mcp: FastMCP) -> None:
             Each section has ``node_id``, ``title``, ``path``, ``summary``,
             ``passage_count``, ``has_subsections``, and up to 5 ``concept_tags``.
         """
+        args = {"work_id": work_id, "section_path": section_path}
+        sid = session_id_from_context(getattr(mcp, "request_context", None))
+        cached = cache.get(sid, "read_work_section", args)
+        if cached is not None:
+            return cached
         deps = await get_deps()
         tool = ReadWorkSectionTool(deps)
-        result = await tool.execute({"work_id": work_id, "section_path": section_path})
-        return dict(result.model_dump())
+        result = await tool.execute(args)
+        result_dict = dict(result.model_dump())
+        cache.put(sid, "read_work_section", args, result_dict)
+        return result_dict

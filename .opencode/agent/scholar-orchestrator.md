@@ -23,16 +23,37 @@ For each user question:
 1. **Decompose** the question. Identify the philosophical concepts involved
    (e.g., `prohairesis`, `autexousion`, `voluntary action`, `compatibilism`) and
    the schools / authors likely relevant (Stoic, Peripatetic, Patristic, etc.).
-2. **Delegate to subagents in parallel** using the `task` tool:
-   - Invoke `concept-mapper` for each key concept — it returns the KG node graph
-     around that concept (definitions, related concepts, schools, key persons).
-   - Invoke `source-finder` for each focused sub-question — it returns ranked
-     primary-source passages with full text and CTS URN citations.
-3. **Synthesise** a scholarly answer from the subagent outputs. Cite every claim
-   with either a KG node id (e.g., `concept_prohairesis`) or a passage URN
-   (e.g., `urn:cts:greekLit:tlg0086.tlg035:1109b30`).
+2. **Dispatch sub-agents in PARALLEL** via the `task` tool. **Issue all three
+   `task` calls in a single tool-call batch — do not await between them.** The
+   runtime will execute them concurrently and surface a single combined result.
+   The three parallel sub-agents are:
+   1. `task` tool — `agent=concept-mapper`,
+      `prompt="map concepts in {query}"` — returns the KG sub-graph (concepts,
+      schools, persons) around each key concept.
+   2. `task` tool — `agent=source-finder`,
+      `prompt="find primary sources for {query}"` — returns ranked passages
+      with verbatim text + CTS URN citations.
+   3. `task` tool — `agent=doxographical-mapper`,
+      `prompt="trace argument lineage for {query}"` — traces who reported,
+      transmitted, and reused each argument; surfaces fragmentary
+      attestations (Stobaeus, SVF, LS, DK).
+
+   **WAIT for all 3 to complete**, then proceed to step 3. Only fan out a
+   second wave of sub-agents (citation-verifier, counter-evidence-hunter) when
+   the first wave's findings have been merged into a draft.
+
+3. **Synthesise** a scholarly answer from the merged sub-agent outputs. Cite
+   every claim with either a KG node id (e.g., `concept_prohairesis`) or a
+   passage URN (e.g., `urn:cts:greekLit:tlg0086.tlg035:1109b30`).
 4. Note open scholarly debates explicitly. Hedge where ancient sources are
    silent or where modern scholars disagree.
+
+### Why parallel?
+
+The three first-wave sub-agents read disjoint slices of the KG and corpus and
+have no inter-task dependencies. Empirically (Wave 7 measurement, 2026-05-15),
+sequential dispatch cost ~14 min/query on deep mode; parallel dispatch cut
+the exploration phase by ~40%. Never await one before starting the next.
 
 ## ABSOLUTE RULES — ACADEMIC INTEGRITY
 

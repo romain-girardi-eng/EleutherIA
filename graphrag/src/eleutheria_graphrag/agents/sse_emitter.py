@@ -292,6 +292,28 @@ class SSEEmitter:
             }
         )
 
+    async def emit_stage_complete(
+        self,
+        stage: str,
+        duration_ms: int,
+        *,
+        metadata: dict[str, Any] | None = None,
+    ) -> None:
+        """Emit a ``stage_complete`` event with per-stage latency (Wave 7).
+
+        Stages: ``classify``, ``retrieve``, ``agent_loop``, ``synthesis``,
+        ``verify``, ``polish``. The frontend AgentTrace pane stacks these
+        into a latency bar so the user sees where time is spent.
+        """
+        payload: dict[str, Any] = {
+            "type": "stage_complete",
+            "stage": stage,
+            "duration_ms": duration_ms,
+        }
+        if metadata:
+            payload["metadata"] = metadata
+        await self._queue.put(payload)
+
     async def close(self) -> None:
         """Signal end of stream."""
         await self._queue.put(None)
@@ -389,6 +411,15 @@ class NullEmitter(SSEEmitter):
 
     async def emit_final_answer(
         self, answer: str, citations: list[dict[str, Any]], trace_id: str
+    ) -> None:
+        pass
+
+    async def emit_stage_complete(
+        self,
+        stage: str,
+        duration_ms: int,
+        *,
+        metadata: dict[str, Any] | None = None,
     ) -> None:
         pass
 

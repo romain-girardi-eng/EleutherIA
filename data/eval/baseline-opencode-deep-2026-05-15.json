@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-05-15T05:45:10Z",
+  "base_url": "https://free-will.app",
+  "n_queries": 10,
+  "aggregate": {
+    "total_queries": 10,
+    "successes": 0,
+    "failures": 10,
+    "error_rate": 1.0,
+    "entity_recall_mean": 0.0,
+    "entity_precision_mean": 0.0,
+    "keyword_hit_rate_mean": 0.0,
+    "work_recall_mean": 0.0,
+    "citation_count_mean": 0.0,
+    "latency_p50_ms": 0.0,
+    "latency_p95_ms": 0.0,
+    "latency_mean_ms": 0.0,
+    "by_query_type": {}
+  },
+  "results": [
+    {
+      "id": "q001",
+      "query": "What does Aristotle say about voluntary action?",
+      "query_type": "concept-author",
+      "difficulty": "easy",
+      "expected_entities": [
+        "person_aristotle_384_322bce_c2d4f6a8",
+        "concept_hekousion_voluntary_aristotle_a1b2c3d4",
+        "concept_akousion_involuntary_aristotle_b2c3d4e5",
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7"
+      ],
+      "expected_works": [
+        "work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9"
+      ],
+      "returned_entities": [],
+      "returned_works": [],
+      "citation_count": 0,
+      "answer_chars": 0,
+      "latency_ms": 0.0,
+      "entity_recall": 0.0,
+      "entity_precision": 0.0,
+      "keyword_hit_rate": 0.0,
+      "work_recall": 0.0,
+      "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'https://free-will.app/api/graphrag/query'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+    },
+    {
+      "id": "q002",
+      "query": "How does Chrysippus explain fate and human responsibility?",
+      "query_type": "concept-author",
+      "difficulty": "medium",
+      "expected_entities": [
+        "person_chrysippus_280_206bce_i9j0k1l2",
+        "concept_heimarmene_fate_stoics_j0k1l2m3",
+        "concept_synkatathesis_stoic_assent",
+        "concept_confatalia_chrysippus"
+      ],
+      "expected_works": [],
+      "returned_entities": [],
+      "returned_works": [],
+      "citation_count": 0,
+      "answer_chars": 0,
+      "latency_ms": 0.0,
+      "entity_recall": 0.0,
+      "entity_precision": 0.0,
+      "keyword_hit_rate": 0.0,
+      "work_recall": 0.0,
+      "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'https://free-will.app/api/graphrag/query'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+    },
+    {
+      "id": "q003",
+      "query": "Epictetus on prohairesis and what is up to us",
+      "query_type": "concept-author",
+      "difficulty": "easy",
+      "expected_entities": [
+        "person_epictetus_of_hierapolis_3c385bc2",
+        "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6",
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7"
+      ],
+      "expected_works": [
+        "work_epictetus_discourses",
+        "work_epictetus_enchiridion"
+      ],
+      "returned_entities": [],
+      "returned_works": [],
+      "citation_count": 0,
+      "answer_chars": 0,
+      "latency_ms": 0.0,
+      "entity_recall": 0.0,
+      "entity_precision": 0.0,
+      "keyword_hit_rate": 0.0,
+      "work_recall": 0.0,
+      "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'https://free-will.app/api/graphrag/query'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+    },
+    {
+      "id": "q004",
+      "query": "Plotinus on the freedom of the soul",
+      "query_type": "concept-author",
+      "difficulty": "medium",
+      "expected_entities": [
+        "person_plotinus_d270"
+      ],
+      "expected_works": [
+        "work_plotinus_enneads_iv_8"
+      ],
+      "returned_entities": [],
+      "returned_works": [],
+      "citation_count": 0,
+      "answer_chars": 0,
+      "latency_ms": 0.0,
+      "entity_recall": 0.0,
+      "entity_precision": 0.0,
+      "keyword_hit_rate": 0.0,
+      "work_recall": 0.0,
+      "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'https://free-will.app/api/graphrag/query'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+    },
+    {
+      "id": "q005",
+      "query": "Augustine on free choice of the will",
+      "query_type": "concept-author",
+      "difficulty": "easy",
+      "expected_entities": [
+        "person_augustine_hippo_d430",
+        "concept_liberum_arbitrium_u3v4w5x6"
+      ],
+      "expected_works": [
+        "work_de_libero_arbitrio"
+      ],
+      "returned_entities": [],
+      "returned_works": [],
+      "citation_count": 0,
+      "answer_chars": 0,
+      "latency_ms": 0.0,
+      "entity_recall": 0.0,
+      "entity_precision": 0.0,
+      "keyword_hit_rate": 0.0,
+      "work_recall": 0.0,
+      "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'https://free-will.app/api/graphrag/query'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+    },
+    {
+      "id": "q006",
+      "query": "Origen's defence of autexousion against astrological determinism",
+      "query_type": "concept-author",
+      "difficulty": "medium",
+      "expected_entities": [
+        "person_origen_alexandria_185_254ce_s9t0u1v2",
+        "concept_autexousion_christian"
+      ],
+      "expected_works": [
+        "work_de_principiis_origen_230s_v2w3x4y5",
+        "work_origen_contra_celsum_sc132"
+      ],
+      "returned_entities": [],
+      "returned_works": [],
+      "citation_count": 0,
+      "answer_chars": 0,
+      "latency_ms": 0.0,
+      "entity_recall": 0.0,
+      "entity_precision": 0.0,
+      "keyword_hit_rate": 0.0,
+      "work_recall": 0.0,
+      "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'https://free-will.app/api/graphrag/query'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+    },
+    {
+      "id": "q007",
+      "query": "Seneca on providence and the role of adversity",
+      "query_type": "concept-author",
+      "difficulty": "medium",
+      "expected_entities": [
+        "person_seneca_4bce_65ce_a1b2c3d4",
+        "concept_providentia_stoic_seneca_b3c4d5e6",
+        "concept_exercitatio_adversity_seneca_c4d5e6f7",
+        "argument_adversity_exercise_seneca_g8h9i0j1"
+      ],
+      "expected_works": [
+        "work_de_providentia_seneca_a2b3c4d5"
+      ],
+      "returned_entities": [],
+      "returned_works": [],
+      "citation_count": 0,
+      "answer_chars": 0,
+      "latency_ms": 0.0,
+      "entity_recall": 0.0,
+      "entity_precision": 0.0,
+      "keyword_hit_rate": 0.0,
+      "work_recall": 0.0,
+      "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'https://free-will.app/api/graphrag/query'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+    },
+    {
+      "id": "q008",
+      "query": "Alexander of Aphrodisias on agent causation",
+      "query_type": "concept-author",
+      "difficulty": "hard",
+      "expected_entities": [
+        "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+        "argument_agent_causation_alex",
+        "argument_agent_causation_two_way_powers_alexander_q8r9s0t1",
+        "concept_autexousion_alex"
+      ],
+      "expected_works": [
+        "work_de_fato_alexander_c200ce_o6p7q8r9"
+      ],
+      "returned_entities": [],
+      "returned_works": [],
+      "citation_count": 0,
+      "answer_chars": 0,
+      "latency_ms": 0.0,
+      "entity_recall": 0.0,
+      "entity_precision": 0.0,
+      "keyword_hit_rate": 0.0,
+      "work_recall": 0.0,
+      "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'https://free-will.app/api/graphrag/query'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+    },
+    {
+      "id": "q009",
+      "query": "Boethius on divine foreknowledge and human freedom",
+      "query_type": "concept-author",
+      "difficulty": "medium",
+      "expected_entities": [
+        "person_boethius_480_524ce_w3x4y5z6",
+        "concept_providentia_fatum_boethius_h3i4j5k6"
+      ],
+      "expected_works": [],
+      "returned_entities": [],
+      "returned_works": [],
+      "citation_count": 0,
+      "answer_chars": 0,
+      "latency_ms": 0.0,
+      "entity_recall": 0.0,
+      "entity_precision": 0.0,
+      "keyword_hit_rate": 0.0,
+      "work_recall": 0.0,
+      "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'https://free-will.app/api/graphrag/query'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+    },
+    {
+      "id": "q010",
+      "query": "Epicurus and the atomic swerve as the basis of freedom",
+      "query_type": "concept-author",
+      "difficulty": "medium",
+      "expected_entities": [
+        "person_epicurus_341_270bce_j0k1l2m3",
+        "concept_clinamen_atomic_swerve_epicurus_m3n4o5p6"
+      ],
+      "expected_works": [
+        "work_epicurus_letter_menoeceus",
+        "work_de_rerum_natura_lucretius_50sbce_l2m3n4o5"
+      ],
+      "returned_entities": [],
+      "returned_works": [],
+      "citation_count": 0,
+      "answer_chars": 0,
+      "latency_ms": 0.0,
+      "entity_recall": 0.0,
+      "entity_precision": 0.0,
+      "keyword_hit_rate": 0.0,
+      "work_recall": 0.0,
+      "error": "HTTPStatusError: Server error '500 Internal Server Error' for url 'https://free-will.app/api/graphrag/query'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+    }
+  ]
+}

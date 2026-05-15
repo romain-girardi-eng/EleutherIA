@@ -60,6 +60,12 @@ export interface KGActivation {
   last_seen: number;
 }
 
+export interface StageTiming {
+  stage: string;
+  duration_ms: number;
+  metadata?: Record<string, unknown>;
+}
+
 export interface UseResearchStreamOptions {
   /** Default: 5_000ms backoff between retry attempts. */
   retryDelayMs?: number;
@@ -76,6 +82,7 @@ export interface UseResearchStreamReturn {
   activeSubagents: ActiveSubagent[];
   toolCalls: PairedToolCall[];
   kgActivations: KGActivation[];
+  stageTimings: StageTiming[];
   streamedAnswer: string;
   finalAnswer: FinalAnswerEvent | null;
   traceId: string | null;
@@ -98,6 +105,7 @@ interface State {
   toolCallsById: Record<string, PairedToolCall>;
   toolCallOrder: string[];
   kgActivationsById: Record<string, KGActivation>;
+  stageTimings: StageTiming[];
   streamedAnswer: string;
   finalAnswer: FinalAnswerEvent | null;
   traceId: string | null;
@@ -114,6 +122,7 @@ const initialState: State = {
   toolCallsById: {},
   toolCallOrder: [],
   kgActivationsById: {},
+  stageTimings: [],
   streamedAnswer: '',
   finalAnswer: null,
   traceId: null,
@@ -282,6 +291,21 @@ export function reduce(state: State, action: Action): State {
                 last_seen: at,
               },
             },
+          };
+        }
+
+        case 'stage_complete': {
+          return {
+            ...state,
+            events,
+            stageTimings: [
+              ...state.stageTimings,
+              {
+                stage: event.stage,
+                duration_ms: event.duration_ms,
+                metadata: event.metadata,
+              },
+            ],
           };
         }
 
@@ -492,6 +516,7 @@ export function useResearchStream(
     activeSubagents,
     toolCalls,
     kgActivations,
+    stageTimings: state.stageTimings,
     streamedAnswer: state.streamedAnswer,
     finalAnswer: state.finalAnswer,
     traceId: state.traceId,
