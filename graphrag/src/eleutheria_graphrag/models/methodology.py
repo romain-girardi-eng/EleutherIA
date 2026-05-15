@@ -74,6 +74,10 @@ class MethodologyReport(BaseModel):
         True,
         description="False whenever any flag has severity=blocker.",
     )
+    applicable_topic_slugs: list[str] = Field(
+        default_factory=list,
+        description="Slugs of scholarly_consensus_topics rows used in the audit",
+    )
 
     @property
     def blockers(self) -> list[MethodologyFlag]:

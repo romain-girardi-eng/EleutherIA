@@ -435,3 +435,177 @@ class TestMethodologyReportModel:
         )
         assert len(report.blockers) == 1
         assert len(report.non_blockers) == 2
+
+
+# ---------------------------------------------------------------------------
+# Tests — scholarly_consensus_topics DB integration
+# ---------------------------------------------------------------------------
+
+
+def _make_db(rows: list[dict[str, Any]]) -> MagicMock:
+    """Build a fake asyncpg-shaped DB whose .fetch() returns scripted rows."""
+    db = MagicMock()
+    db.fetch = AsyncMock(return_value=rows)
+    return db
+
+
+def _topic_row(
+    *,
+    slug: str,
+    question: str,
+    concepts: list[str] | None = None,
+    persons: list[str] | None = None,
+    positions: list[dict[str, Any]] | None = None,
+    status: str = "contested",
+    warning: str = "",
+) -> dict[str, Any]:
+    return {
+        "topic_id": "00000000-0000-0000-0000-000000000001",
+        "topic_slug": slug,
+        "question": question,
+        "relevant_concepts": concepts or [],
+        "relevant_persons": persons or [],
+        "relevant_period": "Classical",
+        "positions": positions or [],
+        "consensus_status": status,
+        "methodological_warning": warning,
+    }
+
+
+class TestMethodologyConsensusDB:
+    @pytest.mark.asyncio
+    async def test_audit_queries_consensus_db_when_db_wired(self) -> None:
+        """When db is wired, audit() must fetch consensus topics."""
+        row = _topic_row(
+            slug="aristotle_concept_of_will",
+            question="Does Aristotle have a concept of will?",
+            concepts=["concept_will", "concept_prohairesis"],
+            persons=["person_aristotle"],
+            positions=[
+                {
+                    "label": "Bobzien — no",
+                    "scholars": ["Susanne Bobzien"],
+                    "citation": "Bobzien 1998",
+                    "summary": "No concept of will.",
+                }
+            ],
+            status="contested",
+            warning="Always name all three positions.",
+        )
+        db = _make_db([row])
+        llm_payload = json.dumps(
+            {"methodology_flags": [], "approved_for_polishing": True}
+        )
+        agent = MethodologyAgent(_make_llm(llm_payload), db=db)
+        draft = {
+            "answer": "Aristotle on free will...",
+            "claim_ledger": [
+                {
+                    "claim_id": "c1",
+                    "claim": "Aristotle had free will",
+                    "evidence_ids": ["concept_will", "person_aristotle"],
+                }
+            ],
+        }
+        report = await agent.audit(draft)
+        db.fetch.assert_called()
+        assert "aristotle_concept_of_will" in report.applicable_topic_slugs
+
+    @pytest.mark.asyncio
+    async def test_topic_lookup_intersects_concept_ids(self) -> None:
+        """The intersection query must pass concept_ and person_ id arrays."""
+        row = _topic_row(
+            slug="stoic_compatibilism_modern_label",
+            question="Is Stoic compatibilism a defensible label?",
+            concepts=["concept_compatibilism"],
+            persons=["person_chrysippus"],
+        )
+        db = _make_db([row])
+        agent = MethodologyAgent(_make_llm("{}"), db=db)
+        topics = await agent.lookup_consensus_topics(
+            {
+                "answer": "Stoic compatibilism...",
+                "claim_ledger": [
+                    {
+                        "claim_id": "c1",
+                        "claim": "x",
+                        "evidence_ids": [
+                            "concept_compatibilism",
+                            "person_chrysippus",
+                        ],
+                    }
+                ],
+            }
+        )
+        assert len(topics) == 1
+        assert topics[0].topic_slug == "stoic_compatibilism_modern_label"
+        # Verify the SQL got the right id arrays
+        call = db.fetch.await_args
+        positional = call.args
+        assert "concept_compatibilism" in positional[1]
+        assert "person_chrysippus" in positional[2]
+
+    @pytest.mark.asyncio
+    async def test_no_db_returns_empty_topics(self) -> None:
+        agent = MethodologyAgent(_make_llm("{}"), db=None)
+        topics = await agent.lookup_consensus_topics(
+            {"answer": "x", "claim_ledger": []}
+        )
+        assert topics == []
+
+    @pytest.mark.asyncio
+    async def test_consensus_topics_rendered_into_prompt(self) -> None:
+        """The applicable topics must surface in the LLM prompt."""
+        row = _topic_row(
+            slug="aristotle_concept_of_will",
+            question="Free will in Aristotle?",
+            concepts=["concept_will"],
+            positions=[
+                {
+                    "label": "Bobzien",
+                    "scholars": ["Bobzien"],
+                    "citation": "Bobzien 1998",
+                    "summary": "No.",
+                }
+            ],
+            warning="Name all three positions.",
+        )
+        db = _make_db([row])
+        captured: dict[str, str] = {}
+
+        async def _generate(prompt: str, *_args: Any, **_kwargs: Any) -> str:
+            captured["prompt"] = prompt
+            return json.dumps({"methodology_flags": [], "approved_for_polishing": True})
+
+        llm = MagicMock()
+        llm.generate = AsyncMock(side_effect=_generate)
+        agent = MethodologyAgent(llm, db=db)
+        await agent.audit(
+            {
+                "answer": "Aristotle on free will.",
+                "claim_ledger": [
+                    {
+                        "claim_id": "c1",
+                        "claim": "Free will",
+                        "evidence_ids": ["concept_will"],
+                    }
+                ],
+            }
+        )
+        assert "aristotle_concept_of_will" in captured["prompt"]
+        assert "Bobzien 1998" in captured["prompt"]
+        assert "Name all three positions." in captured["prompt"]
+
+    @pytest.mark.asyncio
+    async def test_db_failure_does_not_crash_audit(self) -> None:
+        """A DB error must degrade gracefully — empty topics, audit continues."""
+        db = MagicMock()
+        db.fetch = AsyncMock(side_effect=RuntimeError("db down"))
+        llm_payload = json.dumps(
+            {"methodology_flags": [], "approved_for_polishing": True}
+        )
+        agent = MethodologyAgent(_make_llm(llm_payload), db=db)
+        report = await agent.audit({"answer": "x", "claim_ledger": []})
+        # Audit still returned a valid report
+        assert report.approved_for_polishing is True
+        assert report.applicable_topic_slugs == []

@@ -27,6 +27,11 @@ from eleutheria_graphrag.models.counter_evidence import (
     SynthesizedDraft,
 )
 from eleutheria_graphrag.models.methodology import MethodologyFlag
+from eleutheria_graphrag.services.bibliography_builder import (
+    BibliographyBuilder,
+    BibliographyToolset,
+    render_bibliography_markdown,
+)
 from eleutheria_graphrag.services.counter_evidence_hunter import (
     CounterEvidenceHunter,
     MCPToolset,
@@ -476,9 +481,9 @@ class GraphRAGService:
                 logger.warning(
                     "Methodology + Polishing pass failed: %s", exc, exc_info=True
                 )
-                result.setdefault("metadata", {})[
-                    "methodology_polishing_error"
-                ] = str(exc)
+                result.setdefault("metadata", {})["methodology_polishing_error"] = str(
+                    exc
+                )
 
         self._response_cache.put(question, selected_model, retrieval_mode, result)
         return result
@@ -505,9 +510,7 @@ class GraphRAGService:
             explore_subgraph=subgraph_tool,
             get_neighbors=tools_by_name.get("get_neighbors"),
             get_node_detail=tools_by_name.get("get_node_detail"),
-            query_scholarly_consensus=tools_by_name.get(
-                "query_scholarly_consensus"
-            ),
+            query_scholarly_consensus=tools_by_name.get("query_scholarly_consensus"),
         )
         return CounterEvidenceHunter(
             llm=self.llm,
@@ -627,7 +630,7 @@ class GraphRAGService:
         ``result["polished_markdown"]`` and the methodology report in
         ``result["metadata"]["methodology"]``.
         """
-        methodology = MethodologyAgent(self.llm)
+        methodology = MethodologyAgent(self.llm, db=self.db)
         polisher = PolishingAgent(self.llm)
 
         async def _resynth(
@@ -656,22 +659,57 @@ class GraphRAGService:
         merged: dict[str, Any] = {**result, **revised_draft}
         merged.setdefault("metadata", {})["methodology"] = report.model_dump()
 
+        # Bibliography pass — runs AFTER Synthesizer v2 (already done) and
+        # BEFORE Polishing. Walks the KG from the citation-verified draft's
+        # cited nodes and emits a 3-tier annotated bibliography.
+        try:
+            bibliography = await self._build_bibliography(merged, question)
+        except Exception:
+            logger.warning(
+                "BibliographyBuilder failed — continuing without",
+                exc_info=True,
+            )
+            bibliography = None
+        if bibliography is not None:
+            merged["bibliography"] = bibliography.model_dump()
+
         # Carry non-blocker flags into polishing as inline editorial markers
         non_blockers = report.non_blockers
         draft_md = str(merged.get("answer") or "")
         if non_blockers:
-            draft_md = draft_md + format_non_blockers_as_editorial_markers(
-                non_blockers
-            )
+            draft_md = draft_md + format_non_blockers_as_editorial_markers(non_blockers)
+        # Append the bibliography to the draft before polishing so the
+        # polisher can fold it into the final Markdown.
+        if bibliography is not None and bibliography.total_entries > 0:
+            draft_md = draft_md + render_bibliography_markdown(bibliography)
 
-        polished = await polisher.polish(
-            draft_md, carry_over_flags=non_blockers
-        )
+        polished = await polisher.polish(draft_md, carry_over_flags=non_blockers)
         merged["polished_markdown"] = polished.markdown
-        merged["metadata"]["polishing"] = polished.model_dump(
-            exclude={"markdown"}
-        )
+        merged["metadata"]["polishing"] = polished.model_dump(exclude={"markdown"})
         return merged
+
+    async def _build_bibliography(self, draft: dict[str, Any], question: str) -> Any:
+        """Run the BibliographyBuilder on a citation-verified draft."""
+        agent = self._agent
+        if agent is None:
+            return None
+        tools_by_name = getattr(agent, "_tools_by_name", None) or {}
+        get_node_detail = tools_by_name.get("get_node_detail")
+        get_neighbors = tools_by_name.get("get_neighbors")
+        if get_node_detail is None or get_neighbors is None:
+            return None
+        toolset = BibliographyToolset(
+            get_node_detail=get_node_detail,
+            get_neighbors=get_neighbors,
+            explore_subgraph=tools_by_name.get("explore_subgraph"),
+        )
+        builder = BibliographyBuilder(llm=self.llm, tools=toolset)
+        claims = self._extract_claims_from_result(draft)
+        synthesized = SynthesizedDraft(
+            answer=draft.get("answer", ""),
+            claims=claims,
+        )
+        return await builder.build(synthesized)
 
     # ------------------------------------------------------------------
     # Query (streaming)
