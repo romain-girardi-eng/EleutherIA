@@ -3903,9 +3903,7 @@ def _answer_shape_metrics(answer: str) -> dict[str, int]:
     # counted `###` headings and rejected perfectly good 50 k-char drafts
     # because Kimi had used `**Title**` instead.
     md_headings = re.findall(r"^#{1,3}\s+\S", text, flags=re.MULTILINE)
-    bold_headings = re.findall(
-        r"^\*\*[^*\n]{2,80}\*\*\s*$", text, flags=re.MULTILINE
-    )
+    bold_headings = re.findall(r"^\*\*[^*\n]{2,80}\*\*\s*$", text, flags=re.MULTILINE)
     return {
         "chars": len(text),
         "section_headers": len(md_headings) + len(bold_headings),
@@ -3993,8 +3991,7 @@ def _classify_render_quality(
     # Length-driven fallback: even with few sections, a long draft with
     # decent citation density is better than a 2 k-char mechanical render.
     long_enough_ok = (
-        chars >= max(LLM_SHORT_MIN_CHARS, 8000)
-        and citations >= short_citations_target
+        chars >= max(LLM_SHORT_MIN_CHARS, 8000) and citations >= short_citations_target
     )
     if long_enough_ok:
         return "llm_short", metrics
@@ -6763,8 +6760,30 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             # Polish prose-quality drafts (strict + llm_short). Skip for
             # inadequate drafts (no point polishing a fallback) and for
             # minimal-call regimes.
+            #
+            # Also disabled by default for Kimi K2.6 (env-gated) — the model
+            # frequently leaks its planning prose into the polish output
+            # ("Looking at the draft, I need to…", "Wait, the required
+            # format is…"), corrupting otherwise excellent renders.
             _polish_mode = "skipped"
-            if band in ("strict", "llm_short") and not minimize_calls:
+            _enable_polish = (
+                os.getenv(
+                    "ELEUTHERIA_RENDER_POLISH",
+                    "auto",
+                )
+                .strip()
+                .lower()
+            )
+            _polish_allowed = _enable_polish in {"1", "true", "yes", "on"} or (
+                _enable_polish == "auto"
+                and "kimi" not in (state.selected_model or "").lower()
+                and "fireworks" not in (model_api_id or "").lower()
+            )
+            if (
+                band in ("strict", "llm_short")
+                and not minimize_calls
+                and _polish_allowed
+            ):
                 polish_max_tokens = 4800 if band == "strict" else 3200
                 try:
                     polished_answer = await ctx.deps.llm.generate(
@@ -6860,9 +6879,7 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
 
             # Re-classify after polish: polish can shrink or expand prose,
             # so the final band may differ from the post-expand band.
-            final_band, _final_shape = _classify_render_quality(
-                state, rendered_answer
-            )
+            final_band, _final_shape = _classify_render_quality(state, rendered_answer)
             fallback_answer = _render_answer_fallback(state)
             if not rendered_answer or final_band == "inadequate":
                 rendered_answer = fallback_answer
