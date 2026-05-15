@@ -48,6 +48,10 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const SubmitCorrectionPage = lazy(() => import('./pages/SubmitCorrectionPage'));
 const UserProfilePage = lazy(() => import('./pages/UserProfilePage'));
 
+// Community Q&A gallery — public researches
+const CommunityPage = lazy(() => import('./pages/CommunityPage'));
+const CommunityDetailPage = lazy(() => import('./pages/CommunityDetailPage'));
+
 // HowItWorksPage - Scroll-snap redesigned landing
 const HowItWorksPage = lazy(() => import('./pages/HowItWorksPage'));
 
@@ -63,6 +67,7 @@ function getPageTitle(pathname: string, t: TFunction): string {
     '/search': t('appShell.pageTitles.search'),
     '/graphrag': t('appShell.pageTitles.graphrag'),
     '/graphrag-showcase': t('appShell.pageTitles.graphragShowcase'),
+    '/recherches': t('appShell.pageTitles.recherches'),
     '/research': t('appShell.pageTitles.research'),
     '/texts': t('appShell.pageTitles.texts'),
     '/bibliography': t('appShell.pageTitles.bibliography'),
@@ -249,6 +254,7 @@ function AppContent() {
               <NavLink to="/visualizer">{t('nav.visualizer')}</NavLink>
               <NavLink to="/search">{t('nav.search')}</NavLink>
               <NavLink to="/graphrag">{t('nav.graphrag')}</NavLink>
+              <NavLink to="/recherches">{t('nav.recherches')}</NavLink>
               <NavLink to="/research">{t('nav.research')}</NavLink>
               <NavLink to="/texts">{t('nav.texts')}</NavLink>
               <NavLink to="/bibliography">{t('nav.bibliography')}</NavLink>
@@ -338,6 +344,7 @@ function AppContent() {
                     { to: '/visualizer', label: t('nav.visualizer') },
                     { to: '/search', label: t('nav.search') },
                     { to: '/graphrag', label: t('nav.graphrag') },
+                    { to: '/recherches', label: t('nav.recherches') },
                     { to: '/research', label: t('nav.research') },
                     { to: '/texts', label: t('nav.texts') },
                     { to: '/bibliography', label: t('nav.bibliography') },
@@ -420,6 +427,9 @@ function AppContent() {
               <Route path="/report-error" element={<ReportErrorPage />} />
               {/* Public shared trace */}
               <Route path="/share/:token" element={<SharedTracePage />} />
+              {/* Public community researches gallery */}
+              <Route path="/recherches" element={<CommunityPage />} />
+              <Route path="/recherches/:slug" element={<CommunityDetailPage />} />
               {/* Admin and Community Features */}
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/community/contribute" element={<SubmitCorrectionPage />} />

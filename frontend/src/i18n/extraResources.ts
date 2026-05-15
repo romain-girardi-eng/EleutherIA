@@ -384,6 +384,15 @@ export const extraResources = {
       sourceSummary: '{{count}} sources guide the synthesis',
       anchorSummary: '{{anchors}} anchor nodes and {{expansions}} expansions',
       focusingOn: 'Focusing on: {{label}}',
+      regenerate: {
+        button: 'Regenerate fresh answer',
+        label: 'Regenerate',
+        tooltip: 'Bypass cache and run a fresh agent loop on this question',
+      },
+      cache: {
+        badge: 'Cached answer',
+        replayed: 'This answer was replayed from cache',
+      },
     },
     howItWorksPage: {
       nav: {
@@ -640,6 +649,21 @@ export const extraResources = {
         byModel: 'By model',
         byAgent: 'By sub-agent',
         ariaLabel: 'Estimated query cost: {{cost}} for {{tokens}} tokens',
+        cache: {
+          badge: 'Cache',
+          saved: 'saved',
+          ariaLabel:
+            'Cached answer · saved {{saved}} and {{tokens}} tokens · served {{hits}} times',
+          tooltipTitle: 'Cached answer',
+          tooltipFooter:
+            'Served instantly · {{cost}} and {{tokens}} tokens not re-spent',
+          cachedAt: 'Cached at',
+          originalTrace: 'Original trace',
+          served: 'Served',
+          servedCount_one: '{{count}} time',
+          servedCount_other: '{{count}} times',
+          cacheKey: 'Cache key',
+        },
       },
       page: {
         title: 'Live Research',
@@ -1227,6 +1251,15 @@ export const extraResources = {
       sourceSummary: '{{count}} sources guident la synthèse',
       anchorSummary: '{{anchors}} nœuds d’ancrage et {{expansions}} expansions',
       focusingOn: 'Focus sur : {{label}}',
+      regenerate: {
+        button: 'Régénérer la réponse fraîche',
+        label: 'Régénérer',
+        tooltip: 'Ignorer le cache et relancer l’agent sur cette question',
+      },
+      cache: {
+        badge: 'Réponse en cache',
+        replayed: 'Cette réponse a été rejouée depuis le cache',
+      },
     },
     howItWorksPage: {
       nav: {
@@ -1483,6 +1516,21 @@ export const extraResources = {
         byModel: 'Par modèle',
         byAgent: 'Par sous-agent',
         ariaLabel: 'Coût estimé de la requête : {{cost}} pour {{tokens}} jetons',
+        cache: {
+          badge: 'Cache',
+          saved: 'économisé',
+          ariaLabel:
+            'Réponse en cache · {{saved}} et {{tokens}} jetons économisés · servie {{hits}} fois',
+          tooltipTitle: 'Réponse en cache',
+          tooltipFooter:
+            'Servie instantanément · {{cost}} et {{tokens}} jetons non re-dépensés',
+          cachedAt: 'Mis en cache le',
+          originalTrace: 'Trace originale',
+          served: 'Servie',
+          servedCount_one: '{{count}} fois',
+          servedCount_other: '{{count}} fois',
+          cacheKey: 'Clé de cache',
+        },
       },
       page: {
         title: 'Recherche en direct',
@@ -2073,6 +2121,15 @@ export const extraResources = {
       sourceSummary: '{{count}} Quellen leiten die Synthese',
       anchorSummary: '{{anchors}} Ankerknoten und {{expansions}} Erweiterungen',
       focusingOn: 'Fokus auf: {{label}}',
+      regenerate: {
+        button: 'Regenerate fresh answer',
+        label: 'Regenerate',
+        tooltip: 'Bypass cache and run a fresh agent loop on this question',
+      },
+      cache: {
+        badge: 'Cached answer',
+        replayed: 'This answer was replayed from cache',
+      },
     },
     howItWorksPage: {
       nav: {
@@ -2299,6 +2356,21 @@ export const extraResources = {
         byModel: 'Nach Modell',
         byAgent: 'Nach Sub-Agent',
         ariaLabel: 'Geschätzte Anfragekosten: {{cost}} für {{tokens}} Tokens',
+        cache: {
+          badge: 'Cache',
+          saved: 'saved',
+          ariaLabel:
+            'Cached answer · saved {{saved}} and {{tokens}} tokens · served {{hits}} times',
+          tooltipTitle: 'Cached answer',
+          tooltipFooter:
+            'Served instantly · {{cost}} and {{tokens}} tokens not re-spent',
+          cachedAt: 'Cached at',
+          originalTrace: 'Original trace',
+          served: 'Served',
+          servedCount_one: '{{count}} time',
+          servedCount_other: '{{count}} times',
+          cacheKey: 'Cache key',
+        },
       },
       page: {
         title: 'Live-Recherche',
@@ -2888,6 +2960,15 @@ export const extraResources = {
       sourceSummary: '{{count}} fonti guidano la sintesi',
       anchorSummary: '{{anchors}} nodi di ancoraggio e {{expansions}} espansioni',
       focusingOn: 'Focus su: {{label}}',
+      regenerate: {
+        button: 'Regenerate fresh answer',
+        label: 'Regenerate',
+        tooltip: 'Bypass cache and run a fresh agent loop on this question',
+      },
+      cache: {
+        badge: 'Cached answer',
+        replayed: 'This answer was replayed from cache',
+      },
     },
     howItWorksPage: {
       nav: {
@@ -3144,6 +3225,21 @@ export const extraResources = {
         byModel: 'Per modello',
         byAgent: 'Per sotto-agente',
         ariaLabel: 'Costo stimato della query: {{cost}} per {{tokens}} token',
+        cache: {
+          badge: 'Cache',
+          saved: 'saved',
+          ariaLabel:
+            'Cached answer · saved {{saved}} and {{tokens}} tokens · served {{hits}} times',
+          tooltipTitle: 'Cached answer',
+          tooltipFooter:
+            'Served instantly · {{cost}} and {{tokens}} tokens not re-spent',
+          cachedAt: 'Cached at',
+          originalTrace: 'Original trace',
+          served: 'Served',
+          servedCount_one: '{{count}} time',
+          servedCount_other: '{{count}} times',
+          cacheKey: 'Cache key',
+        },
       },
       page: {
         title: 'Ricerca dal vivo',
@@ -3733,6 +3829,15 @@ export const extraResources = {
       sourceSummary: '{{count}} πηγές καθοδηγούν τη σύνθεση',
       anchorSummary: '{{anchors}} κόμβοι αγκύρωσης και {{expansions}} επεκτάσεις',
       focusingOn: 'Εστίαση σε: {{label}}',
+      regenerate: {
+        button: 'Regenerate fresh answer',
+        label: 'Regenerate',
+        tooltip: 'Bypass cache and run a fresh agent loop on this question',
+      },
+      cache: {
+        badge: 'Cached answer',
+        replayed: 'This answer was replayed from cache',
+      },
     },
     howItWorksPage: {
       nav: {
@@ -3989,6 +4094,21 @@ export const extraResources = {
         byModel: 'Ανά μοντέλο',
         byAgent: 'Ανά υπο-πράκτορα',
         ariaLabel: 'Εκτιμώμενο κόστος ερωτήματος: {{cost}} για {{tokens}} διακριτικά',
+        cache: {
+          badge: 'Cache',
+          saved: 'saved',
+          ariaLabel:
+            'Cached answer · saved {{saved}} and {{tokens}} tokens · served {{hits}} times',
+          tooltipTitle: 'Cached answer',
+          tooltipFooter:
+            'Served instantly · {{cost}} and {{tokens}} tokens not re-spent',
+          cachedAt: 'Cached at',
+          originalTrace: 'Original trace',
+          served: 'Served',
+          servedCount_one: '{{count}} time',
+          servedCount_other: '{{count}} times',
+          cacheKey: 'Cache key',
+        },
       },
       page: {
         title: 'Ζωντανή Έρευνα',

@@ -10,6 +10,7 @@
     "visualizer": "Wissensgraph",
     "search": "Suche",
     "graphrag": "GraphRAG Q&A",
+    "recherches": "Recherchen",
     "research": "Live-Recherche",
     "texts": "Antike Texte",
     "bibliography": "Bibliographie",
@@ -1598,6 +1599,70 @@
     "footer": {
       "description": "EleutherIA - Ein FAIR-konformer Wissensgraph antiker Philosophie der Willensfreiheit",
       "license": "CC BY 4.0"
+    }
+  },
+  "appShell": {
+    "pageTitles": {
+      "recherches": "Veröffentlichte Recherchen"
+    }
+  },
+  "recherches": {
+    "eyebrow": "Öffentliche Bibliothek",
+    "title": "Veröffentlichte Recherchen",
+    "subtitle": "Durchstöbern Sie Fragen, die andere Forschende erkundet haben. Jede Antwort ist im antiken Korpus verankert, mit überprüfbaren Zitaten und vollständiger Transparenz zu Kosten und verwendetem Modell.",
+    "loading": "Laden…",
+    "loadingMore": "Weitere werden geladen…",
+    "endOfList": "Ende der Ergebnisse",
+    "filters": {
+      "sort": "Sortieren",
+      "recent": "Neueste",
+      "popular": "Beliebt",
+      "period": "Epoche",
+      "philosopher": "Schule"
+    },
+    "tags": {
+      "period": {
+        "presocratic": "Vorsokratisch",
+        "classical": "Klassisch",
+        "hellenistic": "Hellenistisch",
+        "imperial": "Kaiserzeit",
+        "lateAntique": "Spätantike"
+      },
+      "school": {
+        "stoic": "Stoisch",
+        "epicurean": "Epikureisch",
+        "peripatetic": "Peripatetisch",
+        "academic": "Akademisch",
+        "platonist": "Platonisch",
+        "patristic": "Patristisch"
+      }
+    },
+    "card": {
+      "citations": "Zitate",
+      "sections": "Abschnitte",
+      "quotes": "Wörtliche Zitate"
+    },
+    "empty": {
+      "title": "Keine Recherchen für diese Filter",
+      "body": "Versuchen Sie, die Filter zu ändern, oder schauen Sie später wieder vorbei."
+    },
+    "errors": {
+      "title": "Recherchen konnten nicht geladen werden",
+      "loadFailed": "Beim Laden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+      "notFound": "Diese Recherche wurde nicht gefunden."
+    },
+    "detail": {
+      "backToList": "Zurück zu den Recherchen",
+      "passageCitations": "Zitierte Passagen",
+      "sources": "Quellen",
+      "noSources": "Keine strukturierten Quellen für diese Recherche.",
+      "tokens": "{{formatted}} Tokens",
+      "citations": "{{count}} Zitate",
+      "cta": {
+        "title": "Diese Recherche reproduzieren",
+        "body": "Stellen Sie diese Frage an EleutherIA mit dem Modell Ihrer Wahl.",
+        "button": "In GraphRAG öffnen"
+      }
     }
   }
 }

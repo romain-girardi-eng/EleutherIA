@@ -8,7 +8,8 @@ import logging
 import time
 import uuid
 from collections.abc import AsyncIterator
-from typing import Annotated
+from datetime import datetime
+from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import PlainTextResponse, Response, StreamingResponse
@@ -108,6 +109,7 @@ async def query_stream(
     max_context_nodes: int = 30,
     model: str = "gemini-3.1-pro",
     retrieval_mode: str = "auto",
+    force_refresh: bool = False,
 ) -> StreamingResponse:
     """
     Execute a GraphRAG query with streaming response.
@@ -117,6 +119,11 @@ async def query_stream(
     (via the ``active_trace_writer`` ContextVar) and surfaced to the UI
     through periodic ``tokens_used_rollup`` events plus a terminal
     ``cost_summary``.
+
+    A pre-flight lookup against ``free_will.answer_cache`` short-circuits the
+    pipeline when an unexpired entry exists for the
+    ``(normalized_question, model, retrieval_mode)`` triple. Pass
+    ``force_refresh=true`` to bypass the cache and re-synthesise.
     """
 
     trace_id = uuid.uuid4().hex
@@ -125,20 +132,42 @@ async def query_stream(
     # standalone (CLI, notebooks) even when backend isn't installed.
     writer = None
     ctx_token = None
+    cache_hit: dict | None = None
+    answer_cache = None
     try:
         from backend.dependencies import get_db
+        from backend.services.answer_cache import AnswerCache
         from backend.services.trace_writer import (
             TraceWriter,
             active_trace_writer,
         )
 
+        # Cache lookup BEFORE TraceWriter init so a hit doesn't pollute the
+        # query_traces table with a fake pipeline run — we still create a
+        # writer below to record the cache_hit in the audit log.
+        if not force_refresh:
+            try:
+                answer_cache = AnswerCache(get_db())
+                cache_hit = await answer_cache.lookup(
+                    question=question,
+                    model=model,
+                    retrieval_mode=retrieval_mode,
+                )
+            except Exception:  # noqa: BLE001
+                logger.exception("answer cache lookup failed")
+                cache_hit = None
+
         try:
+            writer_metadata: dict = {"endpoint": "graphrag.query_stream"}
+            if cache_hit is not None:
+                writer_metadata["cache_hit"] = True
+                writer_metadata["cached_from_trace_id"] = cache_hit.get("trace_id")
             writer = TraceWriter(
                 get_db(),
                 trace_id,
                 query=question,
                 mode="react",
-                metadata={"endpoint": "graphrag.query_stream"},
+                metadata=writer_metadata,
             )
             await writer.start()
             ctx_token = active_trace_writer.set(writer)
@@ -149,6 +178,7 @@ async def query_stream(
     except ImportError:
         writer = None
         ctx_token = None
+        answer_cache = None
 
     async def generate() -> AsyncIterator[str]:
         nonlocal writer, ctx_token
@@ -173,6 +203,107 @@ async def query_stream(
 
         try:
             complete_sent = False
+
+            # ---- Cache replay path -------------------------------------
+            # If the pre-flight lookup found a fresh entry, emit a
+            # synthesized `cache_hit` + `cost_summary` + `complete` and
+            # bail out before touching the agent pipeline.
+            if cache_hit is not None:
+                cached_payload = cache_hit
+                cached_at = cached_payload.get("created_at")
+                cached_at_iso = (
+                    cached_at.isoformat()
+                    if isinstance(cached_at, datetime)
+                    else str(cached_at)
+                )
+                yield (
+                    "data: "
+                    + json.dumps(
+                        {
+                            "type": "cache_hit",
+                            "data": {
+                                "cache_key_short": str(
+                                    cached_payload.get("cache_key", "")
+                                )[:12],
+                                "original_trace_id": cached_payload.get("trace_id"),
+                                "original_cost_usd": float(
+                                    cached_payload.get("total_cost_usd") or 0
+                                ),
+                                "original_tokens": int(
+                                    cached_payload.get("total_tokens") or 0
+                                ),
+                                "cached_at": cached_at_iso,
+                                "hit_count": int(cached_payload.get("hit_count") or 0),
+                            },
+                        }
+                    )
+                    + "\n\n"
+                )
+
+                cache_hit_cost_summary: dict[str, Any] = {
+                    "trace_id": trace_id,
+                    "total_tokens": 0,
+                    "total_cost_usd": 0.0,
+                    "by_model": {},
+                    "by_agent": {},
+                }
+                yield f"data: {json.dumps({'type': 'cost_summary', 'data': cache_hit_cost_summary})}\n\n"
+
+                cached_passage_citations = cached_payload.get("passage_citations") or []
+                cached_sources = cached_payload.get("sources") or []
+                cached_reasoning = cached_payload.get("reasoning_path") or {
+                    "starting_nodes": [],
+                    "expanded_nodes": [],
+                    "traversed_edges": [],
+                    "total_nodes": 0,
+                    "total_edges": 0,
+                }
+                cached_ancient = cached_payload.get("citations") or []
+                cached_metadata = {
+                    "cached": True,
+                    "cached_from_trace_id": cached_payload.get("trace_id"),
+                    "cached_at": cached_at_iso,
+                    "cache_key_short": str(cached_payload.get("cache_key", ""))[:12],
+                    "total_tokens": 0,
+                    "total_cost_usd": 0.0,
+                    "trace_id": trace_id,
+                }
+                complete_payload = {
+                    "type": "complete",
+                    "data": {
+                        "query": question,
+                        "answer": cached_payload.get("answer", ""),
+                        "citations": {
+                            "ancient_sources": [a for a in cached_ancient if a],
+                            "modern_scholarship": [],
+                        },
+                        "passage_citations": cached_passage_citations,
+                        "sources": cached_sources,
+                        "reasoning_path": cached_reasoning,
+                        "llm_model": model,
+                        "llm_provider": "",
+                        "metadata": cached_metadata,
+                        "nodes_used": cached_reasoning.get("total_nodes", 0)
+                        if isinstance(cached_reasoning, dict)
+                        else 0,
+                        "trace_id": trace_id,
+                    },
+                }
+                yield f"data: {json.dumps(complete_payload, default=str)}\n\n"
+                complete_sent = True
+                if writer is not None:
+                    try:
+                        await writer.finalize(
+                            final_answer=cached_payload.get("answer", ""),
+                            citations=cached_passage_citations,
+                        )
+                    except Exception:  # noqa: BLE001
+                        logger.exception(
+                            "TraceWriter.finalize (cache hit) failed for %s",
+                            trace_id,
+                        )
+                return
+
             yield f"data: {json.dumps({'type': 'status', 'data': {'message': 'Initializing scholarly agent...', 'step': 1, 'trace_id': trace_id}})}\n\n"
             async for chunk in graphrag.query_stream(
                 question=question,
@@ -293,6 +424,13 @@ async def query_stream(
                                 # the audit / export endpoints.
                                 merged_metadata["trace_id"] = trace_id
                                 yield f"data: {json.dumps({'type': 'cost_summary', 'data': cost_payload})}\n\n"
+                            reasoning_path_payload: dict[str, Any] = {
+                                "starting_nodes": starting,
+                                "expanded_nodes": expanded[:20],
+                                "traversed_edges": [],
+                                "total_nodes": len(ctx_ids),
+                                "total_edges": 0,
+                            }
                             complete_payload = {
                                 "type": "complete",
                                 "data": {
@@ -309,13 +447,7 @@ async def query_stream(
                                     # the right passage UUID.
                                     "passage_citations": final_citations,
                                     "sources": sources,
-                                    "reasoning_path": {
-                                        "starting_nodes": starting,
-                                        "expanded_nodes": expanded[:20],
-                                        "traversed_edges": [],
-                                        "total_nodes": len(ctx_ids),
-                                        "total_edges": 0,
-                                    },
+                                    "reasoning_path": reasoning_path_payload,
                                     "llm_model": raw.get("llm_model", ""),
                                     "llm_provider": raw.get("llm_provider", ""),
                                     "metadata": merged_metadata,
@@ -325,6 +457,43 @@ async def query_stream(
                             }
                             yield f"data: {json.dumps(complete_payload, default=str)}\n\n"
                             complete_sent = True
+
+                            # Persist this answer for future cache hits. Skip
+                            # short/error stubs (<1000 chars) so we don't
+                            # pollute the cache with incomplete responses.
+                            if (
+                                answer_cache is not None
+                                and isinstance(final_answer, str)
+                                and len(final_answer) >= 1000
+                            ):
+                                cached_tokens = int(
+                                    cost_payload["total_tokens"] if cost_payload else 0
+                                )
+                                cached_cost = float(
+                                    cost_payload["total_cost_usd"]
+                                    if cost_payload
+                                    else 0
+                                )
+                                try:
+                                    await answer_cache.store(
+                                        question=question,
+                                        model=model,
+                                        retrieval_mode=retrieval_mode,
+                                        answer=final_answer,
+                                        citations=[a for a in ancient if a],
+                                        passage_citations=final_citations,
+                                        sources=sources,
+                                        reasoning_path=reasoning_path_payload,
+                                        total_tokens=cached_tokens,
+                                        total_cost_usd=cached_cost,
+                                        trace_id=trace_id,
+                                    )
+                                except Exception:  # noqa: BLE001
+                                    logger.exception(
+                                        "answer_cache.store failed for %s",
+                                        trace_id,
+                                    )
+
                             if writer is not None:
                                 try:
                                     await writer.finalize(

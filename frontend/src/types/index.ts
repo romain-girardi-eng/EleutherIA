@@ -393,7 +393,21 @@ export interface GraphRAGResponse {
 
 // GraphRAG SSE Event Types
 export interface GraphRAGStreamEvent {
-  type: 'status' | 'nodes' | 'citations' | 'thinking_chunk' | 'thinking_complete' | 'answer_chunk' | 'complete' | 'error' | 'agent_thinking' | 'tool_start' | 'tool_result' | 'tokens_used_rollup' | 'cost_summary';
+  type:
+    | 'status'
+    | 'nodes'
+    | 'citations'
+    | 'thinking_chunk'
+    | 'thinking_complete'
+    | 'answer_chunk'
+    | 'complete'
+    | 'error'
+    | 'agent_thinking'
+    | 'tool_start'
+    | 'tool_result'
+    | 'tokens_used_rollup'
+    | 'cost_summary'
+    | 'cache_hit';
   message?: string;
   step?: number;
   total_steps?: number;
