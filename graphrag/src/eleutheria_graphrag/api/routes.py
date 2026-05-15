@@ -302,6 +302,12 @@ async def query_stream(
                                         "ancient_sources": [a for a in ancient if a],
                                         "modern_scholarship": [],
                                     },
+                                    # Structured claim-ledger entries — the
+                                    # frontend needs the {ref, id, type, label}
+                                    # tuples (not just label strings) to make
+                                    # [P3] badges clickable and route them to
+                                    # the right passage UUID.
+                                    "passage_citations": final_citations,
                                     "sources": sources,
                                     "reasoning_path": {
                                         "starting_nodes": starting,

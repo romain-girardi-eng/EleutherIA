@@ -90,11 +90,23 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
               </div>
 
               {/* Main answer content */}
-              {sources && sources.length > 0 ? (
+              {(sources && sources.length > 0) ||
+              ((resp as unknown as { passage_citations?: unknown[] } | undefined)
+                ?.passage_citations?.length ?? 0) > 0 ? (
                 <div className="prose prose-sm xl:prose-base max-w-none prose-stone">
                   <CitationRenderer
                     content={message.content}
-                    sources={sources}
+                    sources={sources ?? []}
+                    passageCitations={
+                      ((resp as unknown as {
+                        passage_citations?: Array<{
+                          id?: string | null;
+                          ref?: string | null;
+                          type?: string | null;
+                          label?: string | null;
+                        }>;
+                      } | undefined)?.passage_citations) ?? []
+                    }
                     onSourceClick={(sourceIndex) => {
                       if (sourceIndex !== -1) {
                         onCitationClick(sourceIndex);

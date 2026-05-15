@@ -584,17 +584,22 @@ read together? Where do the thinkers agree, diverge, or develop each other's ide
 ### 4. Caveats and limitations (1 short paragraph)
 Note gaps in the evidence, textual transmission problems, or scholarly debates.
 
-## REQUIREMENTS
-- Cover at least {required_sections} dossier-driven exegesis sections.
-- Include at least {required_quote_blocks} quotation blocks with original + translation.
-- Target 800-1200 words **per exegesis section** (~5,000-7,000 chars total when 4 sections \
-  are required). A doctoral chapter section is not 500 words — it is 1,500-2,500 words. \
-  Do not write a summary; write a chapter section.
-- Embed at least **3 inline citation markers per section** (e.g. `[P1]`, `[N3]`), placed \
+## REQUIREMENTS — doctoral chapter, not a journal summary
+- Cover at least {required_sections} dossier-driven exegesis sections, including an \
+  opening orientation and a closing scholarly assessment.
+- Include at least {required_quote_blocks} quotation blocks with original + translation, \
+  drawn from the dossier — never invent.
+- Target **1500-2500 words per exegesis section** (~10,000-15,000 chars total for a \
+  6-section answer; ~18,000-25,000 chars for an 8-10 section answer). A thesis \
+  chapter section is dense, layered prose; if you find yourself writing in summaries, \
+  add a paragraph of philological analysis, a paragraph of doxographical context, and \
+  a paragraph of scholarly debate.
+- Embed at least **4 inline citation markers per section** (e.g. `[P1]`, `[N3]`), placed \
   immediately after the specific claim they ground, never bunched at the end.
-- For each substantive section, include **at least 2 primary-source block quotes** in the \
-  mandatory dual-language format (original + translation), each followed by 2-4 sentences \
-  of philological and argumentative analysis.
+- For each substantive section, include **at least 3 primary-source block quotes** in the \
+  mandatory dual-language format (original + translation), each followed by 4-8 sentences \
+  of philological and argumentative analysis (key terms, syntactic structure, \
+  argument shape, doxographical parallels, scholarly debate).
 - EVERY passage in the evidence packet with Greek/Latin text SHOULD be quoted and analyzed.
 - Use the reference markers from the reference map (e.g., [P1], [N3]).
 - Also include scholarly references in prose: "as Origen writes in *De Principiis* III.1.5 [P2]..."
@@ -3841,32 +3846,43 @@ def _supported_dossier_facets(state: RAGState) -> list[DossierFacet]:
 
 
 def _render_requirements(state: RAGState) -> dict[str, int]:
+    """Compute the doctoral-grade rendering targets for ``state``.
+
+    Targets calibrated for a published-thesis register: a 4-facet, 4-quote
+    dossier should produce a ~10 k-char answer in 6+ sections; an 8-facet,
+    6-quote dossier should produce ~15 k+ chars in 10 sections. The
+    previous calibration (3 k–7 k chars, 4 sections) was producing
+    journal-blog-length answers, not chapter sections.
+    """
     supported_facets = _supported_dossier_facets(state)
     quoted_claims = sum(
         1
         for item in state.claim_ledger
         if item.quote_original or item.quote_translation
     )
-    # Require MORE sections for article-level depth
+
+    # Require enough sections for a chapter-style structure.
     required_sections = 0
     if len(supported_facets) >= 2:
-        required_sections = min(8, len(supported_facets))
+        # Always add 2 framing sections (introduction + conclusion) on top
+        # of the facet-driven body sections.
+        required_sections = min(10, len(supported_facets) + 2)
     elif supported_facets:
-        required_sections = 2
+        required_sections = 3
 
-    # Require MORE quotation blocks — one per major claim
+    # One quote block per substantive section, with a higher ceiling.
     required_quote_blocks = 0
     if quoted_claims:
-        required_quote_blocks = min(6, max(3, quoted_claims))
+        required_quote_blocks = min(8, max(4, quoted_claims))
 
-    # Higher minimum char count for article-level answers
-    min_chars = 1200
+    # Chapter-section-length floor.
+    min_chars = 3000
     if supported_facets:
-        min_chars += 400 * min(6, len(supported_facets))
+        min_chars += 1200 * min(8, len(supported_facets))
     if quoted_claims:
-        min_chars += 300 * min(4, quoted_claims)
+        min_chars += 600 * min(6, quoted_claims)
     if state.insufficient_evidence:
-        min_chars = max(800, min_chars - 400)
+        min_chars = max(1800, min_chars - 1000)
 
     return {
         "required_sections": required_sections,
@@ -3900,9 +3916,13 @@ def _answer_shape_metrics(answer: str) -> dict[str, int]:
 #   - "inadequate": anything below → fall back to the mechanical renderer.
 # ---------------------------------------------------------------------------
 
-LLM_SHORT_MIN_CHARS = 1800
-LLM_SHORT_MIN_CITATIONS_PER_SECTION = 2
-STRICT_MIN_CITATIONS_PER_SECTION = 3
+# Calibrated for thesis-chapter register. The previous "short" floor of
+# 1.8 k chars accepted journal-blog-length answers as "good enough"; doctoral
+# work needs at least ~5 k characters of grounded prose with 3-4 citation
+# markers per section to be useful.
+LLM_SHORT_MIN_CHARS = 5000
+LLM_SHORT_MIN_CITATIONS_PER_SECTION = 3
+STRICT_MIN_CITATIONS_PER_SECTION = 4
 
 
 def _classify_render_quality(
@@ -6621,9 +6641,12 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 _render_prompt,
                 system_prompt=SYSTEM_PROMPT,
                 temperature=0.2,
-                max_tokens=6000,
+                # Doctoral-length renders need headroom — chapter sections
+                # at 1500-2500 words apiece quickly cross 6 k completion
+                # tokens. 16 k leaves room for 8-10 sections.
+                max_tokens=16000,
                 cache_key="render-grounded-answer",
-                cache_prefix="render_grounded_answer_v2",
+                cache_prefix="render_grounded_answer_v3",
                 model_override=model_api_id,
             )
             _render_dur = int((_time.time() - _t0) * 1000)
@@ -6648,19 +6671,21 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         question=state.question,
                         current_chars=_shape["chars"],
                         current_sections=_shape["section_headers"],
-                        target_chars=max(requirements["min_chars"], 3200),
+                        # Aim for the doctoral floor (10 k chars) at minimum
+                        # on retry, going higher if the dossier supports it.
+                        target_chars=max(requirements["min_chars"], 10000),
                         dossier_json=truncate_json(dossier_payload, 14000),
                         evidence_packet_json=truncate_json(evidence_packet, 12000),
                         reference_json=truncate_json(reference_map, 6000),
-                        draft_answer=truncate_text(rendered_answer, 18000),
+                        draft_answer=truncate_text(rendered_answer, 24000),
                     )
                     expanded_answer = await ctx.deps.llm.generate(
                         expand_prompt,
                         system_prompt=SYSTEM_PROMPT,
                         temperature=0.15,
-                        max_tokens=6000,
+                        max_tokens=16000,
                         cache_key="render-expand-retry",
-                        cache_prefix="render_expand_retry_v1",
+                        cache_prefix="render_expand_retry_v2",
                         model_override=model_api_id,
                     )
                     expanded_answer = expanded_answer.strip()
