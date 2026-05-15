@@ -97,14 +97,16 @@ export function ResearchSession({
   const [activePassage, setActivePassage] = useState<string | null>(null);
   const [mobileTab, setMobileTab] = useState<MobileTab>('answer');
 
-  const scrollToCitation = useCallback((passageId: string) => {
-    const el = document.querySelector(`[data-passage-anchor="${passageId}"]`);
+  const scrollToCitation = useCallback((id: string) => {
+    const el =
+      document.querySelector(`[data-citation-id="${id}"]`) ??
+      document.querySelector(`[data-passage-anchor="${id}"]`);
     if (el instanceof HTMLElement) {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      el.classList.add('ring-2', 'ring-amber-400');
+      el.classList.add('animate-amber-pulse');
       window.setTimeout(() => {
-        el.classList.remove('ring-2', 'ring-amber-400');
-      }, 1600);
+        el.classList.remove('animate-amber-pulse');
+      }, 1500);
     }
   }, []);
 
