@@ -96,7 +96,10 @@ export default function CanonicalPassageDetailPage() {
   return (
     <div className="min-h-screen w-full bg-transparent">
       {/* Sticky breadcrumb */}
-      <div className="sticky top-12 z-30 border-b border-amber-200/40 bg-parchment-50/85 backdrop-blur-md">
+      {/* Sticks 80px from viewport top — matches the desktop fixed
+          navbar height (h-20) so it sits flush *below* it instead of
+          getting clipped behind. */}
+      <div className="sticky top-20 z-30 border-b border-amber-200/40 bg-parchment-50/85 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <Link
             to="/passages-canoniques"
