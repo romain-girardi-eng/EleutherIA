@@ -100,7 +100,7 @@ export default function Research() {
   );
 
   return (
-    <div className="academic-container pt-20 pb-10">
+    <div className="academic-container pt-28 pb-10">
       <header className="mb-6">
         <div className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-amber-600" aria-hidden="true" />
