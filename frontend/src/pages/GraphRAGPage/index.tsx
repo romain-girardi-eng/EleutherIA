@@ -22,10 +22,42 @@ import {
   mockReasoningSteps,
 } from '../../data/mockGraphRAGData';
 
+// Survive navigation away/back: if the user clicks a citation badge that
+// routes to /texts (or anywhere else) and then comes back via the browser
+// back button, we want their Q&A to still be on screen. We snapshot the
+// last successful messages + right-panel response into sessionStorage and
+// rehydrate on mount. Keys are scoped to the page so other consumers
+// don't get blasted.
+const SESSION_KEY_MESSAGES = 'eleutheria.graphrag.messages.v1';
+const SESSION_KEY_RESPONSE = 'eleutheria.graphrag.response.v1';
+
+function _restoreMessages(): GraphRAGChatMessage[] {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY_MESSAGES);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as GraphRAGChatMessage[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function _restoreResponse(): GraphRAGResponse | null {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY_RESPONSE);
+    if (!raw) return null;
+    return JSON.parse(raw) as GraphRAGResponse;
+  } catch {
+    return null;
+  }
+}
+
 export default function GraphRAGPage() {
   const { t } = useTranslation();
   const location = useLocation();
-  const [messages, setMessages] = useState<GraphRAGChatMessage[]>([]);
+  const [messages, setMessages] = useState<GraphRAGChatMessage[]>(() =>
+    _restoreMessages(),
+  );
   const [query, setQuery] = useState('');
   const [loading, _setLoading] = useState(false);
   const [streaming, setStreaming] = useState(false);
@@ -54,7 +86,9 @@ export default function GraphRAGPage() {
   // Right panel
   const [rightPanelState, setRightPanelState] = useState<RightPanelState>('idle');
   const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(null);
-  const [rightPanelResponse, setRightPanelResponse] = useState<GraphRAGResponse | null>(null);
+  const [rightPanelResponse, setRightPanelResponse] = useState<GraphRAGResponse | null>(
+    () => _restoreResponse(),
+  );
   const [allResponses, setAllResponses] = useState<GraphRAGResponse[]>([]);
   const highlightNodeRef = useRef<((citationIndex: number) => void) | null>(null);
   const [passageContext, setPassageContext] = useState<PassageContext | null>(null);
@@ -699,6 +733,25 @@ export default function GraphRAGPage() {
         // Keep the right panel on the reasoning timeline after completion —
         // the timeline auto-collapses phases and grows a Sources/KG/Cost
         // footer. The user can drill into the graph view via the footer.
+
+        // Survive navigation: snapshot the answer + response so a click on
+        // a citation badge that opens /texts (or any other route) followed
+        // by a browser back returns the user to their Q&A intact.
+        try {
+          sessionStorage.setItem(
+            SESSION_KEY_MESSAGES,
+            JSON.stringify([
+              ...messages.filter((m) => m.role !== 'assistant'),
+              assistantMessage,
+            ]),
+          );
+          sessionStorage.setItem(
+            SESSION_KEY_RESPONSE,
+            JSON.stringify(finalResponse),
+          );
+        } catch {
+          // Quota exceeded or storage disabled — degrade silently.
+        }
 
         // Update token budget display
         if (finalResponse.metrics) {

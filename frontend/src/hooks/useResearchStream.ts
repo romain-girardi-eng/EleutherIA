@@ -530,9 +530,16 @@ export function useResearchStream(
     abortRef.current = null;
     if (traceId) {
       // Fire-and-forget; the server is expected to honor or no-op.
-      fetch(`/api/graphrag/query/${encodeURIComponent(traceId)}/cancel`, {
-        method: 'POST',
-      }).catch(() => {
+      // Use the same absolute VITE_API_URL base the rest of the app uses —
+      // a relative URL resolves against free-will.app where no /api route
+      // exists (the FE is a static nginx, the API lives elsewhere).
+      const apiBase = (
+        import.meta.env.VITE_API_URL || 'http://localhost:8000'
+      ).replace(/\/+$/, '');
+      fetch(
+        `${apiBase}/api/graphrag/query/${encodeURIComponent(traceId)}/cancel`,
+        { method: 'POST' },
+      ).catch(() => {
         // Cancellation is best-effort; the client side already aborted the stream.
       });
     }
@@ -552,7 +559,6 @@ export function useResearchStream(
         abortRef.current = controller;
 
         const headers: Record<string, string> = {
-          'Content-Type': 'application/json',
           Accept: 'text/event-stream',
         };
         if (opts.includeAuth) {
@@ -561,10 +567,19 @@ export function useResearchStream(
         }
 
         try {
-          const response = await fetch('/api/graphrag/query/stream', {
-            method: 'POST',
+          // Backend exposes /api/graphrag/query/stream as a GET endpoint
+          // taking `question` as a query-string parameter (not POST + JSON
+          // body). The relative URL also has to be resolved against the
+          // VITE_API_URL base — the FE is served from free-will.app where
+          // no /api/* route is proxied.
+          const apiBase = (
+            import.meta.env.VITE_API_URL || 'http://localhost:8000'
+          ).replace(/\/+$/, '');
+          const url =
+            `${apiBase}/api/graphrag/query/stream?question=${encodeURIComponent(query)}`;
+          const response = await fetch(url, {
+            method: 'GET',
             headers,
-            body: JSON.stringify({ query }),
             signal: controller.signal,
           });
 
