@@ -112,6 +112,10 @@ data/rdf/*.nt
 *.parquet
 *.arrow
 
+# Scholarly sources archive — raw OCR text under copyright, tracked
+# only through data/scholarly_sources/manifest.jsonl (md5 + metadata)
+data/scholarly_sources/ocr/
+
 # Jupyter
 .ipynb_checkpoints/
 *.ipynb
