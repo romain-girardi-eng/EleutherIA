@@ -196,11 +196,15 @@ function AppContent() {
 
   const isHomePage = location.pathname === '/';
 
-  // Scroll-lock the homepage at the App shell level — applies during
-  // the Suspense fallback BEFORE the lazy HomePage chunk mounts (the
-  // previous in-HomePage useLayoutEffect ran too late, the user could
-  // already scroll while React was loading the chunk). useLayoutEffect
-  // here fires before paint on every route change.
+  // Scroll-lock the homepage at the App shell level.
+  //
+  // Mid-2025+ iOS Safari (iPhone 16 + iOS 18) ignores body{position:fixed;
+  // overflow:hidden} *alone* — the user reported being able to scroll
+  // even in private-tab mode after every CSS-only attempt. The only
+  // bulletproof recipe is the CSS belt-and-braces PLUS a non-passive
+  // `touchmove` listener at the document level that calls
+  // preventDefault() while we're on the homepage. Together they kill
+  // the rubber-band gesture AND the document scroll itself.
   useLayoutEffect(() => {
     if (!isHomePage) return;
     const html = document.documentElement;
@@ -232,7 +236,29 @@ function AppContent() {
     body.style.width = '100%';
     body.style.overscrollBehavior = 'none';
     body.style.touchAction = 'none';
+
+    // iOS 18 Safari hard lock: swallow touchmove at the document level.
+    // `passive: false` is required for preventDefault to take effect.
+    // We let interactive elements (buttons, links, inputs) keep their
+    // own scroll/tap behavior by only preventing the default when the
+    // target isn't inside one of them and isn't inside an explicitly
+    // scrollable container.
+    const swallow = (event: TouchEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target) {
+        event.preventDefault();
+        return;
+      }
+      const interactive = target.closest(
+        'button, a, input, textarea, select, [contenteditable="true"], [data-allow-touch="true"]',
+      );
+      if (interactive) return;
+      event.preventDefault();
+    };
+    document.addEventListener('touchmove', swallow, { passive: false });
+
     return () => {
+      document.removeEventListener('touchmove', swallow);
       html.style.height = prev.htmlHeight;
       html.style.overflow = prev.htmlOverflow;
       html.style.overscrollBehavior = prev.htmlOverscroll;
