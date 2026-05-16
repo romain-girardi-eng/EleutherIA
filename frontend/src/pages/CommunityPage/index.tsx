@@ -77,7 +77,8 @@ export default function CommunityPage() {
   // Tag keys mirror the canonical slugs emitted by backend's TopicTagger
   // (period:imperial, school:school_stoics, …). The backend community list
   // filter `?period=X&philosopher=Y` matches against topic_tags @> ARRAY[...]
-  // so these keys must include the namespace prefix.
+  // so these keys must include the namespace prefix and the EXACT live KG
+  // node id for schools (verified against free_will.kg_nodes).
   const periods = useMemo(
     () => [
       { key: 'period:presocratic', label: t('recherches.tags.period.presocratic') },
@@ -96,7 +97,9 @@ export default function CommunityPage() {
       { key: 'school:school_peripatetics', label: t('recherches.tags.school.peripatetic') },
       { key: 'school:school_academics', label: t('recherches.tags.school.academic') },
       { key: 'school:school_middle_platonism', label: t('recherches.tags.school.platonist') },
-      { key: 'school:school_patristics', label: t('recherches.tags.school.patristic') },
+      // KG canonical id is `school_christian_patristic` (singular, prefixed);
+      // earlier `school_patristics` was a guess that did not exist.
+      { key: 'school:school_christian_patristic', label: t('recherches.tags.school.patristic') },
     ],
     [t]
   );

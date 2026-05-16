@@ -38,6 +38,7 @@ from eleutheria_worker.activities import (
     scaife_parse_and_insert,
     translate_passage_batch,
 )
+from eleutheria_worker.activities import contribution_activities as _ca
 from eleutheria_worker.workflows import (
     BatchTranslateWorkflow,
     KGReindexWorkflow,
@@ -113,6 +114,65 @@ async def main() -> None:
 
     temporal_address = os.getenv("TEMPORAL_HOST", "temporal:7233")
     task_queue = os.getenv("TEMPORAL_TASK_QUEUE", "eleutheria-ingestion")
+
+    # Optional override for the proposal-extraction model. The default in
+    # ``contribution_activities.PROPOSAL_MODEL`` points at a slug that
+    # doesn't exist on Fireworks, so prod sets ELEUTHERIA_PROPOSAL_MODEL
+    # to a known-good slug (e.g. ``accounts/fireworks/models/kimi-k2p6``).
+    proposal_model = os.getenv("ELEUTHERIA_PROPOSAL_MODEL")
+    if proposal_model:
+        logger.info(f"Overriding PROPOSAL_MODEL -> {proposal_model}")
+        _ca.PROPOSAL_MODEL = proposal_model
+
+    # Kimi K2P6 needs more headroom for its reasoning_content before it
+    # emits the tool_call — the activity's hard-coded 2048 leaves the model
+    # stuck mid-thought and it falls back to plain content. Monkey-patch
+    # ``_call_tool`` to bump max_tokens. Default 8192; opt-out via env=0.
+    extractor_max_tokens = int(os.getenv("ELEUTHERIA_EXTRACTOR_MAX_TOKENS", "8192"))
+    if extractor_max_tokens > 0:
+        logger.info(
+            f"Bumping extractor max_tokens -> {extractor_max_tokens} (default 2048)"
+        )
+        from typing import Any
+
+        async def _call_tool_patched(
+            llm: Any,
+            messages: list[dict[str, Any]],
+            tool: dict[str, Any],
+            *,
+            model_override: str | None,
+        ) -> list[dict[str, Any]]:
+            import json as _json
+
+            tool_name = tool["function"]["name"]
+            msg = await llm.generate_with_tools(
+                messages=messages,
+                tools=[tool],
+                tool_choice={"type": "function", "function": {"name": tool_name}},
+                temperature=0.1,
+                max_tokens=extractor_max_tokens,
+                model_override=model_override,
+            )
+            calls = msg.get("tool_calls") or []
+            if not calls:
+                _ca.logger.warning(
+                    "Extractor returned no tool_calls for %s", tool_name
+                )
+                return []
+            raw_args = calls[0].get("function", {}).get("arguments", "{}")
+            try:
+                args = (
+                    _json.loads(raw_args) if isinstance(raw_args, str) else raw_args
+                )
+            except _json.JSONDecodeError:
+                _ca.logger.exception(
+                    "Bad JSON in tool_call for %s: %r", tool_name, raw_args
+                )
+                return []
+            proposals = args.get("proposals") or []
+            return [p for p in proposals if isinstance(p, dict)]
+
+        _ca._call_tool = _call_tool_patched  # type: ignore[attr-defined]
 
     logger.info(f"Connecting to Temporal at {temporal_address}")
     client = await connect_with_retry(temporal_address)

@@ -173,7 +173,7 @@ async def main(min_passages: int, dry_run: bool) -> None:
         # Sort by passage count descending for display
         sorted_pairs = sorted(new_pairs.items(), key=lambda x: len(x[1]["passage_ids"]), reverse=True)
 
-        for (work_id, concept_id), info in sorted_pairs:
+        for (_work_id, _concept_id), info in sorted_pairs:
             n = len(info["passage_ids"])
             print(
                 f"  {info['work_label']}"
