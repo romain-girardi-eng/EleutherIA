@@ -246,7 +246,7 @@ export function ResearchSession({
               onClick={() => setMobileTab(id)}
               aria-selected={mobileTab === id}
               className={cn(
-                'flex flex-col items-center gap-0.5 rounded-lg px-1 py-1.5 text-[10px] font-medium',
+                'flex flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 min-h-[52px] text-[11px] font-medium',
                 mobileTab === id
                   ? 'bg-amber-50 text-amber-800'
                   : 'text-stone-500 hover:text-stone-700',

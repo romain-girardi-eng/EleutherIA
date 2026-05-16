@@ -463,10 +463,22 @@
     },
     "pipeline": {
       "title": "Fasi della Pipeline",
-      "embedding": { "title": "1. Embedding + Rilevamento Riferimenti", "description": "Query vettorizzata via Gemini, più rilevamento regex CTS URN per ricerca diretta di passi." },
-      "parallelSearch": { "title": "2. Ricerca Parallela", "description": "Tre query Qdrant in parallelo: nodi KG, passi testuali e archi. Pura similarità vettoriale, nessuna chiamata LLM." },
-      "enrichment": { "title": "3. Arricchimento Parallelo", "description": "Ricerca passage_citations, espansione vicini KG e ancoraggio testuale -- tutto via SQL, senza LLM." },
-      "synthesis": { "title": "4. Costruzione Contesto + Sintesi", "description": "Contesto completo non troncato (fonti primarie, passi supplementari, entità KG, relazioni) inviato a una singola chiamata LLM di sintesi." }
+      "embedding": {
+        "title": "1. Embedding + Rilevamento Riferimenti",
+        "description": "Query vettorizzata via Gemini, più rilevamento regex CTS URN per ricerca diretta di passi."
+      },
+      "parallelSearch": {
+        "title": "2. Ricerca Parallela",
+        "description": "Tre query Qdrant in parallelo: nodi KG, passi testuali e archi. Pura similarità vettoriale, nessuna chiamata LLM."
+      },
+      "enrichment": {
+        "title": "3. Arricchimento Parallelo",
+        "description": "Ricerca passage_citations, espansione vicini KG e ancoraggio testuale -- tutto via SQL, senza LLM."
+      },
+      "synthesis": {
+        "title": "4. Costruzione Contesto + Sintesi",
+        "description": "Contesto completo non troncato (fonti primarie, passi supplementari, entità KG, relazioni) inviato a una singola chiamata LLM di sintesi."
+      }
     },
     "capabilities": {
       "title": "Capacità Chiave",
@@ -475,10 +487,22 @@
       "gemini": "Sintesi e embedding principali (contesto da 1M token)",
       "kimi": "Ragionamento esteso per query multi-hop complesse",
       "keyStrengths": "Punti di Forza",
-      "noTruncation": { "title": "Senza Troncamento", "description": "Testo completo dei passi con CTS URN preservati -- nessun frammento da 500 caratteri" },
-      "passageCitations": { "title": "passage_citations curate", "description": "Segnale di recupero primario: link KG-verso-passo con punteggi di confidenza" },
-      "reasoningTrace": { "title": "Traccia di Ragionamento", "description": "Piena trasparenza: vedere quali nodi, archi e passi sono stati utilizzati" },
-      "sqlFallback": { "title": "Fallback SQL Senza Vettori", "description": "Quando Qdrant non è disponibile, il recupero ricade sulle passage_citations SQL" },
+      "noTruncation": {
+        "title": "Senza Troncamento",
+        "description": "Testo completo dei passi con CTS URN preservati -- nessun frammento da 500 caratteri"
+      },
+      "passageCitations": {
+        "title": "passage_citations curate",
+        "description": "Segnale di recupero primario: link KG-verso-passo con punteggi di confidenza"
+      },
+      "reasoningTrace": {
+        "title": "Traccia di Ragionamento",
+        "description": "Piena trasparenza: vedere quali nodi, archi e passi sono stati utilizzati"
+      },
+      "sqlFallback": {
+        "title": "Fallback SQL Senza Vettori",
+        "description": "Quando Qdrant non è disponibile, il recupero ricade sulle passage_citations SQL"
+      },
       "evolutionTitle": "Evoluzione da HiRAG",
       "evolution": {
         "fromHirag": "Precedente pipeline HiRAG V2",
@@ -673,7 +697,7 @@
     "philologicalWork": "Lavoro Filologico",
     "philoDesc": "Tutti i testi greci e latini sono sottoposti a verifica manuale. La lemmatizzazione utilizza gli analizzatori morfologici LAULA (latino) e PAULA (greco) per consentire la ricerca basata sui lemmi. Ogni nodo del grafo di conoscenza è fondato su fonti primarie (testi antichi) o letteratura secondaria (studi moderni) con completa provenienza bibliografica.",
     "technicalInfra": "Infrastruttura Tecnica",
-    "techStack": "Frontend React 19 + TypeScript + Vite + Tailwind CSS, backend FastAPI + Python, PostgreSQL (dati strutturati) + Qdrant (embedding vettoriali), Cytoscape.js per la visualizzazione di rete, pipeline GraphRAG con Gemini API, Cloudflare Workers (deployment in produzione)"
+    "techStack": "Frontend React 19 + TypeScript + Vite + Tailwind CSS, backend FastAPI + Python, PostgreSQL (dati strutturati) + Qdrant (embedding vettoriali), Cytoscape.js per la visualizzazione di rete, pipeline GraphRAG con Gemini API, Docker Compose + tunnel Cloudflare (deployment in produzione)"
   },
   "login": {
     "title": "Accedi al tuo account",
@@ -1332,10 +1356,22 @@
       "timeline": {
         "title": "1.200 anni di dibattito filosofico",
         "periods": {
-          "presocratic": { "era": "Presocratico", "years": "VI-V sec. a.C." },
-          "classical": { "era": "Classico", "years": "V-IV sec. a.C." },
-          "hellenistic": { "era": "Ellenistico", "years": "IV-I sec. a.C." },
-          "imperial": { "era": "Imperiale", "years": "I-III sec. d.C." },
+          "presocratic": {
+            "era": "Presocratico",
+            "years": "VI-V sec. a.C."
+          },
+          "classical": {
+            "era": "Classico",
+            "years": "V-IV sec. a.C."
+          },
+          "hellenistic": {
+            "era": "Ellenistico",
+            "years": "IV-I sec. a.C."
+          },
+          "imperial": {
+            "era": "Imperiale",
+            "years": "I-III sec. d.C."
+          },
           "lateAntiquity": {
             "era": "Tarda antichità",
             "years": "III-VI sec. d.C."
@@ -1979,6 +2015,78 @@
         "confirm": "Rifiuta",
         "cancel": "Annulla"
       }
+    }
+  },
+  "cosmograph": {
+    "back": "Indietro",
+    "searchPlaceholder": "Cerca un concetto, un pensatore, un'opera o uno studioso — αὐτεξούσιον, Crisippo, Bobzien…",
+    "searchAria": "Cerca nel grafo della conoscenza",
+    "searchEmpty": "Nessun risultato. Prova un termine greco/latino, un cognome, o uno di: αὐτεξούσιον, prohairesis, heimarmene, Bobzien.",
+    "searchResults": "Risultati della ricerca",
+    "tabs": {
+      "atlas": "Atlante",
+      "full": "Grafo completo",
+      "path": "Trova un percorso",
+      "filter": "Filtra"
+    },
+    "filters": {
+      "period": "Periodo",
+      "type": "Tipo",
+      "school": "Scuola",
+      "clear": "Cancella filtri"
+    },
+    "path": {
+      "title": "Trova un percorso tra due nodi",
+      "description": "Seleziona una sorgente e una destinazione. Il percorso semantico più breve sarà evidenziato sul grafo.",
+      "source": "Sorgente — es. Crisippo",
+      "target": "Destinazione — es. Agostino",
+      "searchAria": "Cerca un nodo",
+      "computing": "Calcolo del percorso più breve…",
+      "noPath": "Nessun percorso entro 6 passi. Usa l'Atlante per scegliere ancore più centrali.",
+      "error": "Impossibile calcolare il percorso",
+      "length_one": "{{count}} passo",
+      "length_other": "{{count}} passi",
+      "length": "{{count}} passi",
+      "clear": "Cancella",
+      "swap": "Inverti sorgente e destinazione"
+    },
+    "controls": {
+      "fit": "Adatta vista",
+      "pause": "Sospendi layout",
+      "resume": "Riprendi layout",
+      "screenshot": "Screenshot",
+      "settings": "Avanzato"
+    },
+    "legend": {
+      "title": "Legenda",
+      "types": "Tipi di nodo",
+      "period": "Periodo (opacità)",
+      "relations": "Peso degli archi",
+      "presocratic": "Presocratico",
+      "lateAntiquity": "Tarda antichità",
+      "modern": "Moderno",
+      "structural": "autore / membro_di",
+      "doctrinal": "interpreta / critica",
+      "citation": "cita / menziona"
+    },
+    "atlas": {
+      "hintLabel": "Atlante del libero arbitrio",
+      "hintBody": "Una vista curata dei concetti, scuole, pensatori e studiosi moderni centrali sul libero arbitrio. Cerca per approfondire, passa al grafo completo per la mappa di 17,7k nodi, o apri Trova un percorso per tracciare una connessione."
+    },
+    "loading": {
+      "eyebrow": "Grafo della conoscenza",
+      "title": "Costruzione dell'Atlante…",
+      "body": "Caricamento di 17,7k nodi e 42,9k relazioni tra fonti antiche e ricezione moderna."
+    },
+    "error": {
+      "eyebrow": "Grafo della conoscenza",
+      "title": "Impossibile caricare il grafo",
+      "retry": "Riprova",
+      "openDatabase": "Apri invece il database"
+    },
+    "advanced": {
+      "title": "Avanzato",
+      "body": "La fisica del layout, la selezione a lazo e l'epinglatura sono state spostate in modalità sviluppatore. Torneranno dietro questo pannello in una prossima iterazione — per ora usa Atlante / Grafo completo / Filtra / Trova un percorso per il lavoro accademico quotidiano."
     }
   }
 }

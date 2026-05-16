@@ -163,12 +163,12 @@ export default function CommunityDetailPage() {
 
   return (
     <div className="min-h-screen w-full bg-transparent">
-      {/* Sticky breadcrumb — 80px = desktop navbar height (h-20). */}
-      <div className="sticky top-20 z-30 border-b border-amber-200/40 bg-parchment-50/85 backdrop-blur-md">
+      {/* Sticky breadcrumb — sits below the fixed navbar (mobile ~56px, desktop 80px). */}
+      <div className="sticky top-14 sm:top-20 z-30 border-b border-amber-200/40 bg-parchment-50/85 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <Link
             to="/recherches"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-amber-800 transition-colors"
+            className="inline-flex items-center gap-1.5 min-h-[44px] text-xs font-medium text-stone-500 hover:text-amber-800 transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
             {t('recherches.detail.backToList')}
@@ -284,6 +284,25 @@ export default function CommunityDetailPage() {
 
               {/* Passage citation badges (static reference list) */}
               <PassageCitationBadges entries={detail.passage_citations ?? []} />
+
+              {/* Sources panel (mobile + tablet — desktop shows in side rail). */}
+              <div className="mt-8 lg:hidden">
+                <div className="rounded-2xl border border-stone-200/60 bg-white/50 p-4">
+                  <div className="flex items-center gap-2">
+                    <BookOpenText className="h-4 w-4 text-amber-700" aria-hidden="true" />
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-stone-700">
+                      {t('recherches.detail.sources')}
+                    </h3>
+                  </div>
+                  {detail.sources && detail.sources.length > 0 ? (
+                    <SourcesPanel sources={detail.sources} className="!border-t-0 !mt-2 !pt-2" />
+                  ) : (
+                    <p className="mt-3 text-xs text-stone-400">
+                      {t('recherches.detail.noSources')}
+                    </p>
+                  )}
+                </div>
+              </div>
 
               {/* CTA */}
               <div className="mt-10 rounded-2xl border border-amber-200/60 bg-amber-50/40 p-5 sm:p-6">

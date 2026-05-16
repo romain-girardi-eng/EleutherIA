@@ -39,13 +39,14 @@ export default function ChatInput({
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t('graphrag.placeholder')}
               disabled={loading || streaming}
-              className="flex-1 px-6 py-3 xl:py-4 text-[15px] xl:text-base 2xl:text-lg bg-transparent focus:outline-none focus:ring-0 border-0"
+              className="flex-1 min-w-0 px-4 sm:px-6 py-3 xl:py-4 text-base xl:text-base 2xl:text-lg bg-transparent focus:outline-none focus:ring-0 border-0"
             />
             {streaming ? (
               <button
                 type="button"
                 onClick={onStop}
-                className="flex items-center gap-1.5 px-5 py-3 xl:py-4 bg-red-600 text-white rounded-full hover:bg-red-700 font-medium transition-all text-sm xl:text-base"
+                aria-label="Stop streaming"
+                className="flex items-center gap-1.5 px-4 sm:px-5 py-3 xl:py-4 min-h-[44px] bg-red-600 text-white rounded-full hover:bg-red-700 font-medium transition-all text-sm xl:text-base"
               >
                 <Square className="w-3 h-3 xl:w-4 xl:h-4 fill-current" />
                 Stop
@@ -54,7 +55,8 @@ export default function ChatInput({
               <button
                 type="submit"
                 disabled={loading || !query.trim()}
-                className="px-6 py-3 xl:py-4 bg-gradient-to-br from-orange-600 to-orange-500 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium text-sm xl:text-base"
+                aria-label={loading ? 'Thinking' : 'Ask'}
+                className="px-4 sm:px-6 py-3 xl:py-4 min-h-[44px] bg-gradient-to-br from-orange-600 to-orange-500 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium text-sm xl:text-base"
               >
                 {loading ? 'Thinking...' : 'Ask'}
               </button>

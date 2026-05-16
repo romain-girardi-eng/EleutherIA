@@ -177,7 +177,7 @@ export default function ContributionsListPage() {
               value={submitterQuery}
               onChange={(event) => setSubmitterQuery(event.target.value)}
               placeholder={t('contributions.filters.searchAuthorPlaceholder')}
-              className="w-full rounded-full border border-stone-200/70 bg-white/60 py-1.5 pl-9 pr-3 text-sm text-stone-700 placeholder:text-stone-400 backdrop-blur-sm transition-colors focus:border-amber-400/70 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+              className="w-full rounded-full border border-stone-200/70 bg-white/60 py-2 sm:py-1.5 pl-9 pr-3 text-base sm:text-sm text-stone-700 placeholder:text-stone-400 backdrop-blur-sm transition-colors focus:border-amber-400/70 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
               aria-label={t('contributions.filters.searchAuthorAria')}
             />
           </div>

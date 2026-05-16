@@ -150,7 +150,7 @@ const SubmitCorrectionPage: React.FC = () => {
               <label className="block text-sm font-medium mb-2">
                 {t('community.whatCorrecting')}
               </label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
                   { value: 'kg_node', label: t('community.kgNode'), icon: FileText },
                   { value: 'passage', label: t('community.ancientPassage'), icon: Book },
@@ -160,14 +160,14 @@ const SubmitCorrectionPage: React.FC = () => {
                     key={option.value}
                     type="button"
                     onClick={() => handleInputChange('targetType', option.value)}
-                    className={`p-4 border rounded-lg flex flex-col items-center gap-2 transition-colors ${
+                    className={`p-3 sm:p-4 border rounded-lg flex flex-row sm:flex-col items-center gap-3 sm:gap-2 transition-colors min-h-[44px] ${
                       form.targetType === option.value
                         ? 'border-primary-600 bg-primary-50 text-primary-700'
                         : 'border-amber-200/60 hover:border-amber-300/80'
                     }`}
                   >
-                    <option.icon className="w-6 h-6" />
-                    <span className="text-sm font-medium">{option.label}</span>
+                    <option.icon className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
+                    <span className="text-sm font-medium text-left sm:text-center">{option.label}</span>
                   </button>
                 ))}
               </div>

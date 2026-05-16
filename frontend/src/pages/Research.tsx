@@ -171,7 +171,7 @@ export default function Research() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder={t('research.page.queryPlaceholder')}
           disabled={isRunning}
-          className="flex-1 rounded-xl border border-stone-200 bg-white/60 px-3 py-2 text-[14px] text-stone-800 placeholder:text-stone-400 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-100 disabled:opacity-60"
+          className="flex-1 min-w-0 rounded-xl border border-stone-200 bg-white/60 px-3 py-2 text-base sm:text-[14px] text-stone-800 placeholder:text-stone-400 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-100 disabled:opacity-60"
         />
         <div className="flex gap-2">
           {isRunning ? (

@@ -80,8 +80,8 @@ export default function ChatPanel({
   return (
     <div className="flex flex-col w-full lg:w-[60%] h-full overflow-hidden border-r border-amber-200/40">
       {/* Fixed header */}
-      <div className="shrink-0 flex items-center justify-between px-6 xl:px-10 py-3 border-b border-amber-200/40 bg-parchment-50/80 backdrop-blur-sm">
-        <h1 className="text-sm xl:text-base font-semibold text-stone-400 uppercase tracking-wider">{t('graphRagUi.chatTitle')}</h1>
+      <div className="shrink-0 flex items-center justify-between px-4 sm:px-6 xl:px-10 py-3 border-b border-amber-200/40 bg-parchment-50/80 backdrop-blur-sm">
+        <h1 className="text-xs sm:text-sm xl:text-base font-semibold text-stone-400 uppercase tracking-wider">{t('graphRagUi.chatTitle')}</h1>
         <div className="flex items-center gap-2">
           {cacheInfo &&
             messages.some((m) => m.role === 'assistant') &&
@@ -121,7 +121,7 @@ export default function ChatPanel({
       />
 
       {/* Scrollable messages */}
-      <div className="flex-1 overflow-y-auto px-6 xl:px-10 2xl:px-16 py-5 xl:py-8 space-y-4 xl:space-y-6">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-10 2xl:px-16 py-4 sm:py-5 xl:py-8 space-y-4 xl:space-y-6">
         <AnimatePresence>
           {messages.map((message, index) => (
             <MessageBubble

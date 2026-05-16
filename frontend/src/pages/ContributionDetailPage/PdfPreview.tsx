@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ExternalLink, FileWarning } from 'lucide-react';
+import { Download, ExternalLink, FileText, FileWarning } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 interface PdfPreviewProps {
@@ -72,7 +72,40 @@ export default function PdfPreview({
         )}
       </div>
 
-      <div className="relative flex-1 min-h-[420px] bg-stone-50">
+      {/* Mobile: card-style download link (iframes render poorly on phones). */}
+      <div className="md:hidden p-4">
+        {embedSrc ? (
+          <a
+            href={embedSrc}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 rounded-xl border border-amber-200/70 bg-amber-50/40 p-4 transition-colors hover:border-amber-300/80 hover:bg-amber-50/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+          >
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-700">
+              <FileText className="h-5 w-5" aria-hidden="true" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold text-stone-800">
+                {t('contributions.detail.pdfPreview.openPdf', 'Ouvrir le PDF')}
+              </p>
+              <p className="mt-0.5 text-xs text-stone-500">
+                {t('contributions.detail.pdfPreview.openPdfHint', 'Lecture optimisée pour ordinateur')}
+              </p>
+            </div>
+            <Download className="h-4 w-4 flex-shrink-0 text-amber-700" aria-hidden="true" />
+          </a>
+        ) : (
+          <div className="flex items-center gap-3 rounded-xl border border-stone-200 bg-stone-50/60 p-4">
+            <FileWarning className="h-5 w-5 flex-shrink-0 text-stone-400" aria-hidden="true" />
+            <p className="text-xs text-stone-500">
+              {t('contributions.detail.pdfPreview.unavailable')}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop: embedded iframe preview. */}
+      <div className="relative hidden md:block flex-1 min-h-[420px] bg-stone-50">
         {embedSrc ? (
           <iframe
             key={embedSrc}

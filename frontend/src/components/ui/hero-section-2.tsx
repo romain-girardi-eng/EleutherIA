@@ -41,7 +41,7 @@ const InfoIcon = ({ type }: { type: 'website' | 'phone' | 'address' | 'doi' | 'g
             </svg>
         ),
     };
-    return <div className="mr-2 flex-shrink-0">{icons[type]}</div>;
+    return <div className="mr-1.5 flex-shrink-0 [&_svg]:h-3.5 [&_svg]:w-3.5 sm:[&_svg]:h-4 sm:[&_svg]:w-4">{icons[type]}</div>;
 };
 
 
@@ -169,7 +169,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                 {slogan}
               </motion.p>
             )}
-            <motion.p className="text-xs sm:text-sm text-white/55 leading-relaxed max-w-xs" variants={itemVariants}>
+            <motion.p className="text-sm sm:text-sm text-white/65 leading-relaxed max-w-xs" variants={itemVariants}>
               {subtitle}
             </motion.p>
             {ctaArea ? (

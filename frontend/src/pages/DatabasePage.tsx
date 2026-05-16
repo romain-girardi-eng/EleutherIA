@@ -487,10 +487,11 @@ function WorkItemWithLink({
       {typeKey === 'work' && !checking && textId && (
         <button
           onClick={() => navigate(`/texts/${textId}`)}
-          className="flex-shrink-0 opacity-0 group-hover/item:opacity-100 text-stone-400 hover:text-stone-600 transition-all"
+          className="flex-shrink-0 opacity-60 md:opacity-0 md:group-hover/item:opacity-100 text-stone-500 hover:text-stone-700 transition-all p-2 md:p-0 -m-2 md:m-0"
           title={`Read ${item.label}`}
+          aria-label={`Read ${item.label}`}
         >
-          <ExternalLink className="w-3 h-3" />
+          <ExternalLink className="w-4 h-4 md:w-3 md:h-3" />
         </button>
       )}
     </div>

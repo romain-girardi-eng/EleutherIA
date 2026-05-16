@@ -301,7 +301,7 @@ export default function BibliographyPage() {
               placeholder="Search by author, title, or keyword..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 text-sm bg-white/60 backdrop-blur-sm border border-stone-200/60 rounded-xl text-stone-700 placeholder:text-stone-400 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-all"
+              className="w-full pl-11 pr-4 py-3 text-base sm:text-sm bg-white/60 backdrop-blur-sm border border-stone-200/60 rounded-xl text-stone-700 placeholder:text-stone-400 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-all"
             />
           </div>
 
@@ -310,7 +310,7 @@ export default function BibliographyPage() {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="px-3 py-2 text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors"
+              className="px-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors min-h-[40px]"
             >
               <option value="all">All Types</option>
               <option value="monograph">Monographs</option>
@@ -323,7 +323,7 @@ export default function BibliographyPage() {
             <select
               value={filterYear}
               onChange={(e) => setFilterYear(e.target.value)}
-              className="px-3 py-2 text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors"
+              className="px-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors min-h-[40px]"
             >
               <option value="all">All Years</option>
               <option value="2000+">2000+</option>
@@ -335,7 +335,7 @@ export default function BibliographyPage() {
             <select
               value={filterPublisher}
               onChange={(e) => setFilterPublisher(e.target.value)}
-              className="px-3 py-2 text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors"
+              className="px-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors min-h-[40px]"
             >
               <option value="all">All Publishers</option>
               {uniquePublishers.map(pub => (

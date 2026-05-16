@@ -289,7 +289,7 @@ function FormField({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="rounded-md border border-stone-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+        className="rounded-md border border-stone-300 bg-white px-3 py-2 text-base sm:text-sm shadow-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
       />
     </div>
   );

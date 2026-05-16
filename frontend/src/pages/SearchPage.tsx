@@ -460,8 +460,8 @@ export default function SearchPage() {
                 onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
                 placeholder={t('search.autocompletePlaceholder')}
                 className={cn(
-                  'w-full border-0 bg-transparent text-stone-800 placeholder-stone-400 transition-all focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0',
-                  compact ? 'px-4 py-3 text-sm sm:text-base' : 'px-6 py-3 text-base'
+                  'w-full min-w-0 border-0 bg-transparent text-stone-800 placeholder-stone-400 transition-all focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0',
+                  compact ? 'px-4 py-3 text-base' : 'px-4 sm:px-6 py-3 text-base'
                 )}
                 data-no-ring="true"
                 autoComplete="off"
@@ -513,14 +513,14 @@ export default function SearchPage() {
                       <button
                         type="button"
                         onClick={() => selectSuggestion(suggestion)}
-                        className="flex flex-1 items-center gap-3 rounded-lg px-2 py-2 text-left"
+                        className="flex flex-1 min-w-0 flex-wrap items-center gap-2 sm:gap-3 rounded-lg px-2 py-2 text-left"
                       >
-                        <span className="min-w-[120px] text-lg font-medium text-stone-800">{suggestion.lemma}</span>
-                        <span className="min-w-[100px] font-mono text-sm text-stone-500">{suggestion.lemma_latin}</span>
+                        <span className="text-base sm:text-lg font-medium text-stone-800 truncate max-w-full sm:min-w-[120px]">{suggestion.lemma}</span>
+                        <span className="hidden sm:inline font-mono text-sm text-stone-500 sm:min-w-[100px]">{suggestion.lemma_latin}</span>
                         <span className={cn('rounded-full px-2 py-0.5 text-xs font-medium', posColor.bg, posColor.text)}>
                           {suggestion.pos}
                         </span>
-                        <span className="ml-auto text-xs text-stone-400">
+                        <span className="ml-auto text-xs text-stone-400 hidden sm:inline">
                           {suggestion.count.toLocaleString()} {t('search.autocomplete.occurrencesAbbrev')}
                         </span>
                         <span className="rounded-full bg-stone-100 px-2 py-0.5 text-xs text-stone-400">
@@ -571,7 +571,7 @@ export default function SearchPage() {
                 </div>
               )}
 
-              <div className="border-t border-amber-200/60 bg-stone-50 px-4 py-2">
+              <div className="hidden sm:block border-t border-amber-200/60 bg-stone-50 px-4 py-2">
                 <p className="flex items-center gap-4 text-xs text-stone-500">
                   <span>
                     <kbd className="rounded border border-stone-300 bg-white px-1.5 py-0.5 text-[10px]">↑↓</kbd> {t('search.autocomplete.keyboard.navigate')}
@@ -604,7 +604,7 @@ export default function SearchPage() {
             className="relative z-10 flex w-full max-w-4xl flex-col items-center justify-center gap-8"
           >
             <div className="text-center">
-              <h1 className="mb-4 text-5xl font-display font-bold text-stone-800 md:text-7xl">
+              <h1 className="mb-4 text-3xl sm:text-5xl font-display font-bold text-stone-800 md:text-7xl">
                 {t('search.titlePrefix', '') ? `${t('search.titlePrefix')} ` : ''}
                 <Typewriter
                   text={tArray(t, 'search.titleWords')}
@@ -616,7 +616,7 @@ export default function SearchPage() {
                 />
                 {t('search.titleSuffix', '') ? ` ${t('search.titleSuffix')}` : ''}
               </h1>
-              <p className="text-lg text-stone-600 md:text-xl">{t('search.subtitle')}</p>
+              <p className="text-base sm:text-lg text-stone-600 md:text-xl">{t('search.subtitle')}</p>
             </div>
 
             <button
