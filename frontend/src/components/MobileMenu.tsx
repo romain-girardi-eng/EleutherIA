@@ -290,7 +290,10 @@ export function MobileMenu({
                 <div className="px-1 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-800/80">
                   {t('common.selectLanguage')}
                 </div>
-                <LanguageChips size="large" />
+                {/* Compact chips inside the drawer — the `large` variant
+                    stretched each chip with native names and overflowed
+                    on phones (Français/Italiano/Ελληνικά too wide). */}
+                <LanguageChips size="compact" className="flex-wrap gap-1.5" />
               </div>
 
               {isAuthenticated && (
