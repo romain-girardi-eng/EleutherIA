@@ -874,13 +874,6 @@ export default function HowItWorksPage() {
                 <Network className="w-4 h-4" />
                 {t('howItWorksPage.cta.exploreGraph')}
               </Link>
-              <Link
-                to="/search"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-white/20 bg-white/8 hover:bg-white/15 text-white font-body font-medium transition-colors"
-              >
-                <Search className="w-4 h-4" />
-                {t('howItWorksPage.cta.searchPassages')}
-              </Link>
             </div>
 
             {/* Feature row */}
