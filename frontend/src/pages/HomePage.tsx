@@ -111,70 +111,70 @@ export default function HomePage() {
   // Codex Index — Roman numerals + hairline rules, like an ancient manuscript's table of contents
   const ctaButtons = (
     <div className="flex flex-col w-full">
-      <div className="h-px bg-white/10 md:bg-zinc-200" />
+      <div className="h-px bg-stone-200/70" />
 
       {/* I — How It Works */}
       <a
         href="/how-it-works"
-        className="group flex items-center gap-3 py-3 px-1 hover:bg-white/[0.04] md:hover:bg-amber-50/60 transition-colors duration-150"
+        className="group flex items-center gap-3 py-3 px-1 hover:bg-amber-50/60 transition-colors duration-150"
       >
-        <span className="font-mono text-[10px] w-6 text-white/25 md:text-zinc-300 group-hover:text-amber-500 tracking-widest flex-shrink-0 transition-colors duration-150 select-none">
+        <span className="font-mono text-[10px] w-6 text-zinc-400 group-hover:text-amber-500 tracking-widest flex-shrink-0 transition-colors duration-150 select-none">
           I
         </span>
         <div className="flex-1 min-w-0">
-          <div className="text-xs font-semibold tracking-wide text-white md:text-zinc-800 group-hover:text-amber-500 md:group-hover:text-amber-700 transition-colors duration-150 leading-tight">
+          <div className="text-xs font-semibold tracking-wide text-zinc-800 group-hover:text-amber-700 transition-colors duration-150 leading-tight">
             {t('nav.howItWorks')}
           </div>
-          <div className="text-[9px] text-white/30 md:text-zinc-400 mt-0.5 leading-tight">
+          <div className="text-[9px] text-zinc-500 mt-0.5 leading-tight">
             Architecture · embeddings · pipeline
           </div>
         </div>
-        <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-amber-400 md:text-amber-600 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
+        <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-amber-600 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
       </a>
 
-      <div className="h-px bg-white/10 md:bg-zinc-200" />
+      <div className="h-px bg-stone-200/70" />
 
       {/* II — Knowledge Graph */}
       <a
         href="/visualizer"
-        className="group flex items-center gap-3 py-3 px-1 hover:bg-white/[0.04] md:hover:bg-orange-50/60 transition-colors duration-150"
+        className="group flex items-center gap-3 py-3 px-1 hover:bg-orange-50/60 transition-colors duration-150"
       >
-        <span className="font-mono text-[10px] w-6 text-white/25 md:text-zinc-300 group-hover:text-orange-400 tracking-widest flex-shrink-0 transition-colors duration-150 select-none">
+        <span className="font-mono text-[10px] w-6 text-zinc-400 group-hover:text-orange-600 tracking-widest flex-shrink-0 transition-colors duration-150 select-none">
           II
         </span>
         <div className="flex-1 min-w-0">
-          <div className="text-xs font-semibold tracking-wide text-white md:text-zinc-800 group-hover:text-orange-500 md:group-hover:text-orange-700 transition-colors duration-150 leading-tight">
+          <div className="text-xs font-semibold tracking-wide text-zinc-800 group-hover:text-orange-700 transition-colors duration-150 leading-tight">
             {t('nav.visualizer')}
           </div>
-          <div className="text-[9px] text-white/30 md:text-zinc-400 mt-0.5 leading-tight">
+          <div className="text-[9px] text-zinc-500 mt-0.5 leading-tight">
             2,193 nodes · 8,616 edges
           </div>
         </div>
-        <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-orange-400 md:text-orange-600 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
+        <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-orange-600 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
       </a>
 
-      <div className="h-px bg-white/10 md:bg-zinc-200" />
+      <div className="h-px bg-stone-200/70" />
 
       {/* III — GraphRAG Q&A */}
       <a
         href="/graphrag"
-        className="group flex items-center gap-3 py-3 px-1 hover:bg-white/[0.04] md:hover:bg-violet-50/40 transition-colors duration-150"
+        className="group flex items-center gap-3 py-3 px-1 hover:bg-violet-50/40 transition-colors duration-150"
       >
-        <span className="font-mono text-[10px] w-6 text-white/25 md:text-zinc-300 group-hover:text-violet-400 tracking-widest flex-shrink-0 transition-colors duration-150 select-none">
+        <span className="font-mono text-[10px] w-6 text-zinc-400 group-hover:text-violet-600 tracking-widest flex-shrink-0 transition-colors duration-150 select-none">
           III
         </span>
         <div className="flex-1 min-w-0">
-          <div className="text-xs font-semibold tracking-wide text-white md:text-zinc-800 group-hover:text-violet-500 md:group-hover:text-violet-700 transition-colors duration-150 leading-tight">
+          <div className="text-xs font-semibold tracking-wide text-zinc-800 group-hover:text-violet-700 transition-colors duration-150 leading-tight">
             {t('nav.graphrag')}
           </div>
-          <div className="text-[9px] text-white/30 md:text-zinc-400 mt-0.5 leading-tight">
+          <div className="text-[9px] text-zinc-500 mt-0.5 leading-tight">
             5-stage RAG · AI-powered Q&A
           </div>
         </div>
-        <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-violet-400 md:text-violet-600 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
+        <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-violet-600 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
       </a>
 
-      <div className="h-px bg-white/10 md:bg-zinc-200" />
+      <div className="h-px bg-stone-200/70" />
     </div>
   );
 

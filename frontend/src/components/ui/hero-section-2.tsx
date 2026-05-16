@@ -130,84 +130,141 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
           <div className="absolute inset-0 bg-zinc-950" />
         )}
 
-        {/* ── MOBILE scrims (< md) ─────────────────────────────────────────── */}
-        <div
-          aria-hidden="true"
-          className="md:hidden absolute inset-0 z-[2] pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 90% 70% at 50% 55%, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.2) 100%)' }}
-        />
-        <div
-          aria-hidden="true"
-          className="md:hidden absolute bottom-0 left-0 right-0 h-40 z-[2] pointer-events-none"
-          style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%)' }}
-        />
+        {/* ── MOBILE layout — two stacked bands, matches desktop's
+             parchment/cosmic dichotomy without smothering the particle
+             canvas in a dark scrim ───────────────────────────────────────── */}
+        <div className="md:hidden absolute inset-0 z-[5] flex flex-col overflow-hidden">
 
-        {/* ── MOBILE content overlay (< md) ────────────────────────────────── */}
-        <motion.div
-          className="md:hidden relative z-10 flex flex-col items-center justify-between min-h-full px-6 pt-14 pb-10 text-center"
-          variants={containerVariants}
-        >
-          {/* Logo pinned top-left on mobile */}
-          {logo && (
-            <motion.div variants={itemVariants} className="absolute top-4 left-4 z-20">
-              <img
-                src={logo.url}
-                alt={logo.alt}
-                className="h-12 sm:h-14 brightness-0 invert opacity-90"
-              />
-            </motion.div>
-          )}
-          <div className="flex flex-col items-center flex-1 justify-center gap-5">
-            <motion.h1
-              className="font-display text-3xl sm:text-4xl font-bold leading-tight text-white"
-              variants={itemVariants}
-            >
-              {title}
-            </motion.h1>
-            {slogan && (
-              <motion.p className="text-sm sm:text-base text-white/70 leading-snug" variants={itemVariants}>
-                {slogan}
-              </motion.p>
-            )}
-            <motion.p className="text-sm sm:text-sm text-white/65 leading-relaxed max-w-xs" variants={itemVariants}>
-              {subtitle}
-            </motion.p>
-            {ctaArea ? (
-              <motion.div variants={itemVariants} className="w-full max-w-sm flex flex-col gap-2.5">
-                {ctaArea}
-              </motion.div>
-            ) : (
-              <motion.a
-                href={callToAction.href}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-500 hover:bg-orange-400 text-white font-semibold text-sm transition-colors"
+          {/* TOP — cosmic constellation panel (~38%) */}
+          <div className="relative flex-shrink-0" style={{ height: '38%' }}>
+            {/* Tiny scrim at the very top so the logo reads cleanly without
+                fighting the particles. */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-x-0 top-0 h-24 pointer-events-none"
+              style={{ background: 'linear-gradient(to bottom, rgba(2,6,23,0.55) 0%, transparent 100%)' }}
+            />
+            {logo && (
+              <motion.div
                 variants={itemVariants}
+                className="absolute top-4 left-5 z-20 flex items-center gap-2"
               >
-                {callToAction.text}
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-              </motion.a>
+                <img
+                  src={logo.url}
+                  alt={logo.alt}
+                  className="h-9 brightness-0 invert opacity-90"
+                />
+                <span className="font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
+                  EleutherIA
+                </span>
+              </motion.div>
             )}
+            {/* Soft fade at the bottom of the cosmic band so it meets the
+                parchment without a hard seam. */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-x-0 bottom-0 h-16 pointer-events-none"
+              style={{ background: 'linear-gradient(to bottom, transparent 0%, #fdfbf7 100%)' }}
+            />
           </div>
+
+          {/* BOTTOM — parchment scholarly panel (~62%) */}
           <motion.div
-            className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[10px] text-white/40 border-t border-white/10 pt-4 w-full"
-            variants={itemVariants}
+            variants={containerVariants}
+            className="relative flex-1 min-h-0 overflow-hidden"
+            style={{
+              background:
+                'linear-gradient(180deg, #fdfbf7 0%, #faf7f2 55%, #f5efe2 100%)',
+            }}
           >
-            {contactInfo.map((info, index) => (
-              <div key={index} className="flex items-center gap-1">
-                <InfoIcon type={info.type} />
-                {info.href ? (
-                  <a href={info.href} target="_blank" rel="noopener noreferrer" className="hover:text-white/70 transition-colors">
-                    {info.label}
-                  </a>
-                ) : (
-                  <span>{info.label}</span>
-                )}
-              </div>
-            ))}
+            {/* Faint paper dot grid, scholarly cue (same as desktop) */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage:
+                  'radial-gradient(circle, rgba(160,140,110,0.10) 1px, transparent 1px)',
+                backgroundSize: '28px 28px',
+                maskImage:
+                  'radial-gradient(ellipse 95% 70% at 50% 30%, black 30%, transparent 75%)',
+                WebkitMaskImage:
+                  'radial-gradient(ellipse 95% 70% at 50% 30%, black 30%, transparent 75%)',
+              }}
+            />
+
+            <div className="relative h-full flex flex-col px-6 pt-6 pb-5 overflow-y-auto">
+              <motion.h1
+                variants={itemVariants}
+                className="font-display text-[26px] leading-[1.1] font-semibold tracking-tight text-stone-900"
+              >
+                {title}
+              </motion.h1>
+              {slogan && (
+                <motion.p
+                  variants={itemVariants}
+                  className="mt-2 text-[13px] leading-snug text-stone-600"
+                >
+                  {slogan}
+                </motion.p>
+              )}
+              <motion.p
+                variants={itemVariants}
+                className="mt-1.5 text-[12.5px] leading-relaxed text-stone-500/90"
+              >
+                {subtitle}
+              </motion.p>
+
+              {/* CTA codex — reuses the warm hover palette from desktop */}
+              {ctaArea ? (
+                <motion.div
+                  variants={itemVariants}
+                  className="mt-4 -mx-2"
+                  data-mobile-cta-area
+                >
+                  {ctaArea}
+                </motion.div>
+              ) : (
+                <motion.a
+                  variants={itemVariants}
+                  href={callToAction.href}
+                  className="mt-4 inline-flex items-center gap-1.5 self-start text-[11px] font-bold tracking-[0.18em] uppercase text-amber-700 hover:text-amber-800 transition-colors"
+                >
+                  {callToAction.text}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </motion.a>
+              )}
+
+              <div className="flex-1" />
+
+              {/* Footer info — restrained, same metadata strip as desktop */}
+              <motion.div
+                variants={itemVariants}
+                className="mt-4 pt-3 border-t border-stone-200/70 flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-stone-500"
+              >
+                {contactInfo.map((info, index) => (
+                  <div key={index} className="inline-flex items-center gap-1">
+                    <InfoIcon type={info.type} />
+                    {info.href ? (
+                      <a
+                        href={info.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-amber-700 transition-colors"
+                      >
+                        {info.label}
+                      </a>
+                    ) : (
+                      <span>{info.label}</span>
+                    )}
+                  </div>
+                ))}
+              </motion.div>
+            </div>
           </motion.div>
-        </motion.div>
+        </div>
 
         {/* ── DESKTOP panel — diagonal clip, warm living surface ───────────── */}
         {/* 55% wide: 100%=55% screen at top, 90.91%=50% screen at bottom.    */}
