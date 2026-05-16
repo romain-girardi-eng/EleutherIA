@@ -122,9 +122,15 @@ export default function HomePage() {
   );
 
   return (
-    <div className="min-h-screen relative">
+    // Lock the homepage to exactly the dynamic viewport height. `min-h-screen`
+    // resolves to `min-height: 100vh`, which on mobile Safari/Chrome includes
+    // the URL bar — the document was a few pixels taller than the visible
+    // viewport, so the user could scroll up/down by a hair. `100dvh` tracks
+    // the visible viewport, and `overflow-hidden` clips anything else. Both
+    // wrappers get it so neither one re-introduces overflow.
+    <div className="h-[100dvh] overflow-hidden relative">
       {/* Main Content */}
-      <main className="min-h-screen relative">
+      <main className="h-[100dvh] overflow-hidden relative">
         <HeroSection
           logo={{ url: "/logo.svg", alt: "EleutherIA" }}
           title={
