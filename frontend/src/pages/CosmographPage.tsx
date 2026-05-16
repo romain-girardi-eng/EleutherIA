@@ -505,18 +505,16 @@ export default function CosmographPage() {
         fitViewPadding: 0.2,
         randomSeed: 'eleutheria-atlas-v3',
         spaceSize: isMobile
-          ? mobileTiers.tier === 'atlas'
-            ? 1800
-            : mobileTiers.tier === 'schools'
-              ? 3600
-              : 5400
+          ? mobileTiers.tier === 'overview'
+            ? 3600
+            : mobileTiers.tier === 'mid'
+              ? 5400
+              : 7200
           : tab === 'atlas'
             ? 2200
             : 7200,
         pointSamplingDistance: isMobile
-          ? mobileTiers.tier === 'atlas'
-            ? 80
-            : 160
+          ? 160
           : tab === 'atlas'
             ? 60
             : 260,

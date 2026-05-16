@@ -2096,7 +2096,10 @@
       "tier": {
         "atlas": "Άτλας",
         "schools": "Σχολές",
-        "detail": "Λεπτομέρεια"
+        "detail": "Λεπτομέρεια",
+        "overview": "Επισκόπηση",
+        "mid": "Επιχειρήματα",
+        "full": "Πλήρης λεπτομέρεια"
       },
       "nodeCount_one": "{{count}} κόμβος",
       "nodeCount_other": "{{count}} κόμβοι",

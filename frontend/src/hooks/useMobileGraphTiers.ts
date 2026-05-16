@@ -1,37 +1,58 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+/**
+ * useMobileGraphTiers — hierarchical-by-type disclosure of the KG on mobile.
+ *
+ * Replaces the earlier viewport-sampled tier engine (which flickered between
+ * Atlas/Schools/Detail because every onZoom callback re-sampled the camera
+ * frustum and shifted the visible node set). The new model is dead simple:
+ *
+ *   - Default zoom (≤ 1.5)  → hide DETAIL_TYPES (passages, evidence bundles,
+ *                              etc.) and SUPER_DETAIL_TYPES. Show everything
+ *                              else: schools, persons, concepts, works,
+ *                              debates, scholars, arguments-with-degree.
+ *   - Zoom 1.5 – 3.0        → also reveal DETAIL_TYPES.
+ *   - Zoom > 3.0            → reveal everything including passages.
+ *
+ * The slice is a *pure* function of (meta, zoom). No raycasting, no
+ * neighbour expansion, no per-frame state. The cosmograph re-renders only
+ * when the user crosses a tier boundary.
+ */
+
+import { useCallback, useMemo, useRef, useState } from 'react';
 import type { CosmographRef } from '@cosmograph/react';
 
 import type {
   AtlasEdgeMeta,
   AtlasNodeMeta,
 } from '../components/cosmograph/AtlasHelpers';
-import { pickAtlasNodeIds } from '../components/cosmograph/FreeWillAtlas';
 
-export type MobileTier = 'atlas' | 'schools' | 'detail';
+export type MobileTier = 'overview' | 'mid' | 'full';
 
 export interface MobileTierConfig {
   /** Zoom thresholds (right-inclusive on the lower bound). */
-  readonly atlasMax: number;
-  readonly schoolsMax: number;
-  /** Max nodes allowed in each tier. */
-  readonly atlasNodes: number;
-  readonly schoolsNodes: number;
-  readonly detailNodes: number;
+  readonly midZoom: number;
+  readonly fullZoom: number;
   /** Debounce window for zoom-driven recomputes. */
   readonly debounceMs: number;
-  /** Fraction of viewport radius used for in-frustum label visibility. */
-  readonly labelVisibilityRadius: number;
 }
 
 const DEFAULT_CONFIG: MobileTierConfig = {
-  atlasMax: 0.8,
-  schoolsMax: 2.0,
-  atlasNodes: 12,
-  schoolsNodes: 200,
-  detailNodes: 1500,
-  debounceMs: 150,
-  labelVisibilityRadius: 0.25,
+  midZoom: 1.5,
+  fullZoom: 3.0,
+  debounceMs: 200,
 };
+
+// Types hidden at the OVERVIEW zoom level — these are the "fine detail"
+// of the corpus. Specific arguments and individual scholarly publications
+// only become relevant when the user is exploring a sub-region.
+const DETAIL_TYPES = new Set<string>(['argument', 'publication', 'synthesis']);
+
+// Hidden until the user is fully zoomed in. Passages dwarf the rest of the
+// graph (17k vs 2k) and they're only meaningful in close-up.
+const SUPER_DETAIL_TYPES = new Set<string>([
+  'passage',
+  'evidence_bundle',
+  'quote',
+]);
 
 export interface MobileTierSlice {
   readonly tier: MobileTier;
@@ -55,347 +76,130 @@ interface UseMobileGraphTiersResult {
   readonly slice: MobileTierSlice | null;
   readonly tier: MobileTier;
   readonly zoom: number;
-  /** Stable callback to pass to Cosmograph's `onZoom`. */
   readonly handleZoom: (_e: unknown, _userDriven: boolean) => void;
-  /** Force recompute (call when initial layout settles). */
+  /** No-op; kept for API compat with the old hook. */
   readonly invalidate: () => void;
 }
 
-/**
- * Build an adjacency map keyed by node id.
- * Only structural / 1-hop neighbour lookups; cheap O(E).
- */
-function buildAdjacency(
-  edges: ReadonlyArray<AtlasEdgeMeta>,
-): Map<string, ReadonlyArray<string>> {
-  const adj = new Map<string, string[]>();
-  for (const edge of edges) {
-    if (!adj.has(edge.source)) adj.set(edge.source, []);
-    if (!adj.has(edge.target)) adj.set(edge.target, []);
-    adj.get(edge.source)!.push(edge.target);
-    adj.get(edge.target)!.push(edge.source);
-  }
-  return adj;
+function classifyZoom(zoom: number, cfg: MobileTierConfig): MobileTier {
+  if (zoom >= cfg.fullZoom) return 'full';
+  if (zoom >= cfg.midZoom) return 'mid';
+  return 'overview';
 }
 
-/**
- * Pick the top-N curated Atlas anchors by degree centrality.
- * Falls back to globally most-connected nodes if fewer than N anchors exist.
- */
-function pickAtlasAnchors(
-  meta: ReadonlyArray<AtlasNodeMeta>,
-  cap: number,
-): ReadonlyArray<AtlasNodeMeta> {
-  const atlasIds = pickAtlasNodeIds(meta.map((m) => ({ id: m.id, type: m.typeKey })));
-  const atlasMembers = meta
-    .filter((m) => atlasIds.has(m.id))
-    .slice()
-    .sort((a, b) => b.degree - a.degree);
-
-  if (atlasMembers.length >= cap) {
-    return atlasMembers.slice(0, cap);
-  }
-
-  const seen = new Set(atlasMembers.map((m) => m.id));
-  const filler = meta
-    .filter((m) => !seen.has(m.id))
-    .slice()
-    .sort((a, b) => b.degree - a.degree)
-    .slice(0, cap - atlasMembers.length);
-
-  return [...atlasMembers, ...filler];
+function nodeAllowedAtTier(node: AtlasNodeMeta, tier: MobileTier): boolean {
+  const t = node.typeKey;
+  if (tier === 'full') return true;
+  if (SUPER_DETAIL_TYPES.has(t)) return false;
+  if (tier === 'mid') return true;
+  // overview: also hide DETAIL_TYPES
+  if (DETAIL_TYPES.has(t)) return false;
+  return true;
 }
 
-/**
- * Hook that gives a mobile-friendly slice of the KG based on the cosmograph
- * zoom level. Three tiers (Atlas / Schools / Detail) with hard caps on node
- * count to keep the WebGL renderer comfortable on mid-tier phones.
- */
 export function useMobileGraphTiers({
   enabled,
   meta,
   edges,
-  graphRef,
-  graphReady,
   config,
 }: UseMobileGraphTiersOptions): UseMobileGraphTiersResult {
-  const cfg = useMemo<MobileTierConfig>(() => ({ ...DEFAULT_CONFIG, ...config }), [config]);
-
-  const [zoom, setZoom] = useState<number>(() => 0.5);
-  const [recomputeKey, setRecomputeKey] = useState(0);
-  // Stay on Atlas tier until the user has actually zoomed. Cosmograph's
-  // `fitViewOnInit` fires synthetic onZoom callbacks immediately after mount,
-  // which would otherwise jump the user past the curated 12-node landing.
-  const [userZoomed, setUserZoomed] = useState(false);
-
-  const debounceRef = useRef<number | null>(null);
-  const adjacency = useMemo(() => buildAdjacency(edges), [edges]);
-  const metaById = useMemo(() => new Map(meta.map((m) => [m.id, m])), [meta]);
-  const edgesBySource = useMemo(() => {
-    const map = new Map<string, AtlasEdgeMeta[]>();
-    for (const edge of edges) {
-      const key = `${edge.source}__${edge.target}`;
-      if (!map.has(key)) map.set(key, []);
-      map.get(key)!.push(edge);
-    }
-    return map;
-  }, [edges]);
-
-  const atlasAnchors = useMemo(
-    () => (enabled ? pickAtlasAnchors(meta, cfg.atlasNodes) : []),
-    [enabled, meta, cfg.atlasNodes],
+  const cfg = useMemo<MobileTierConfig>(
+    () => ({ ...DEFAULT_CONFIG, ...config }),
+    [config],
   );
 
-  const tier = useMemo<MobileTier>(() => {
-    // Dev-only escape hatch: ?forceTier=atlas|schools|detail
-    if (import.meta.env.DEV && typeof window !== 'undefined') {
-      const match = window.location.search.match(/[?&]forceTier=(atlas|schools|detail)/);
-      if (match) return match[1] as MobileTier;
-    }
-    if (!userZoomed) return 'atlas';
-    if (zoom <= cfg.atlasMax) return 'atlas';
-    if (zoom <= cfg.schoolsMax) return 'schools';
-    return 'detail';
-  }, [zoom, userZoomed, cfg.atlasMax, cfg.schoolsMax]);
+  const [zoom, setZoom] = useState<number>(0.5);
+  const debounceRef = useRef<number | null>(null);
 
+  const tier = useMemo<MobileTier>(() => classifyZoom(zoom, cfg), [zoom, cfg]);
+
+  // onZoom callback wired to Cosmograph. Debounced so a continuous pinch
+  // doesn't fire one re-render per frame — only when the user lands on a
+  // tier boundary do we actually flip the slice.
   const handleZoom = useCallback(
-    (_e: unknown, userDriven: boolean) => {
-      if (!enabled) return;
-      if (userDriven) {
-        setUserZoomed(true);
-      }
-      if (debounceRef.current !== null) {
-        window.clearTimeout(debounceRef.current);
-      }
-      debounceRef.current = window.setTimeout(() => {
-        const next = graphRef.current?.getZoomLevel?.();
-        if (typeof next === 'number' && Number.isFinite(next)) {
-          setZoom((prev) => (Math.abs(prev - next) < 0.01 ? prev : next));
+    (...args: unknown[]) => {
+      // Cosmograph's onZoom signature is loosely typed across versions.
+      // The numeric zoom value can live in args[0], args[1], or on a
+      // detail-shaped object. Probe for a plain number.
+      let next = NaN;
+      for (const arg of args) {
+        if (typeof arg === 'number' && Number.isFinite(arg)) {
+          next = arg;
+          break;
         }
+        if (arg && typeof arg === 'object' && 'k' in arg && typeof (arg as { k: unknown }).k === 'number') {
+          next = (arg as { k: number }).k;
+          break;
+        }
+        if (arg && typeof arg === 'object' && 'transform' in arg) {
+          const tf = (arg as { transform?: { k?: number } }).transform;
+          if (tf && typeof tf.k === 'number') {
+            next = tf.k;
+            break;
+          }
+        }
+      }
+      if (!Number.isFinite(next)) return;
+
+      if (debounceRef.current !== null) window.clearTimeout(debounceRef.current);
+      debounceRef.current = window.setTimeout(() => {
+        setZoom(next);
       }, cfg.debounceMs);
     },
-    [enabled, graphRef, cfg.debounceMs],
+    [cfg.debounceMs],
   );
 
   const invalidate = useCallback(() => {
-    setRecomputeKey((k) => k + 1);
+    // intentionally empty — kept for caller compatibility
   }, []);
 
-  // Re-sample on tier change OR explicit invalidation. We sample the
-  // cosmograph's sampled position map so we know which atlas/cluster nodes are
-  // currently in the camera frustum without needing a full projection pass.
-  const [viewportSample, setViewportSample] = useState(0);
-  useEffect(() => {
-    if (!enabled || !graphReady) return;
-    setViewportSample((v) => v + 1);
-  }, [enabled, graphReady, tier, recomputeKey]);
-
   const slice = useMemo<MobileTierSlice | null>(() => {
-    try {
-      return computeSlice();
-    } catch (err) {
-      // Cosmograph's sampling APIs sometimes throw mid-zoom (the user
-      // reported a white-screen crash on pinch). Fall back to the
-      // atlas anchors so the canvas stays usable.
-      console.warn('useMobileGraphTiers slice failed, falling back to atlas:', err);
-      const anchorIds = new Set(atlasAnchors.map((m) => m.id));
-      const visibleEdgeIds = new Set<string>();
-      const edgeSlice: AtlasEdgeMeta[] = [];
-      for (const edge of edges) {
-        if (anchorIds.has(edge.source) && anchorIds.has(edge.target)) {
-          visibleEdgeIds.add(edge.id);
-          edgeSlice.push(edge);
-        }
-      }
-      return {
-        tier: 'atlas',
-        visibleNodeIds: anchorIds,
-        visibleEdgeIds,
-        labelNodeIds: anchorIds,
-        metaSlice: atlasAnchors,
-        edgeSlice,
-      };
-    }
-
-    function computeSlice(): MobileTierSlice | null {
     if (!enabled || meta.length === 0) return null;
 
-    const anchorIds = new Set(atlasAnchors.map((m) => m.id));
+    try {
+      const visibleNodeIds = new Set<string>();
+      const metaSlice: AtlasNodeMeta[] = [];
+      for (const node of meta) {
+        if (nodeAllowedAtTier(node, tier)) {
+          visibleNodeIds.add(node.id);
+          metaSlice.push(node);
+        }
+      }
 
-    if (tier === 'atlas') {
-      const idSet = anchorIds;
       const visibleEdgeIds = new Set<string>();
       const edgeSlice: AtlasEdgeMeta[] = [];
       for (const edge of edges) {
-        if (idSet.has(edge.source) && idSet.has(edge.target)) {
+        if (visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)) {
           visibleEdgeIds.add(edge.id);
           edgeSlice.push(edge);
         }
       }
-      return {
-        tier,
-        visibleNodeIds: idSet,
-        visibleEdgeIds,
-        labelNodeIds: idSet,
-        metaSlice: atlasAnchors,
-        edgeSlice,
-      };
-    }
 
-    // For Schools + Detail we expand 1 hop from "seeds". The seeds are the
-    // sampled in-viewport nodes from cosmograph; if those aren't available
-    // (first frame, cosmograph not ready) we fall back to atlas anchors.
-    let seeds: ReadonlySet<string> = anchorIds;
-    const sampled = graphRef.current?.getSampledPointPositionsMap?.();
-    if (sampled && sampled.size > 0) {
-      const onScreen = new Set<string>();
-      sampled.forEach((space, index) => {
-        const id = meta[index]?.id;
-        if (!id) return;
-        const screen = graphRef.current?.spaceToScreenPosition?.(space);
-        if (!screen) return;
-        const [sx, sy] = screen;
-        if (
-          sx >= 0 &&
-          sy >= 0 &&
-          sx <= window.innerWidth &&
-          sy <= window.innerHeight
-        ) {
-          onScreen.add(id);
-        }
-      });
-      if (onScreen.size > 0) seeds = onScreen;
-    }
-
-    // Always keep atlas anchors in the seed set so the user never loses the
-    // skeleton when panning into empty space.
-    const seedSet = new Set<string>(seeds);
-    anchorIds.forEach((id) => seedSet.add(id));
-
-    const visibleNodeIds = new Set<string>(seedSet);
-    const cap = tier === 'schools' ? cfg.schoolsNodes : cfg.detailNodes;
-
-    // Sort seeds by degree desc so high-degree nodes get their full neighbour
-    // set before we hit the cap.
-    const orderedSeeds = Array.from(seedSet)
-      .map((id) => metaById.get(id))
-      .filter((m): m is AtlasNodeMeta => m !== undefined)
-      .sort((a, b) => b.degree - a.degree);
-
-    outer: for (const seed of orderedSeeds) {
-      const neighbours = adjacency.get(seed.id);
-      if (!neighbours) continue;
-      for (const nb of neighbours) {
-        if (visibleNodeIds.has(nb)) continue;
-        visibleNodeIds.add(nb);
-        if (visibleNodeIds.size >= cap) break outer;
-      }
-    }
-
-    const metaSlice: AtlasNodeMeta[] = [];
-    visibleNodeIds.forEach((id) => {
-      const node = metaById.get(id);
-      if (node) metaSlice.push(node);
-    });
-
-    const visibleEdgeIds = new Set<string>();
-    const edgeSlice: AtlasEdgeMeta[] = [];
-    for (const edge of edges) {
-      if (visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)) {
-        visibleEdgeIds.add(edge.id);
-        edgeSlice.push(edge);
-      }
-    }
-
-    // Label visibility: top-30 by degree for Schools tier, top-30 *within
-    // viewport-radius* for Detail. We re-use the screen sample to compute
-    // distance from canvas centre.
-    let labelNodeIds: Set<string>;
-    if (tier === 'schools') {
-      labelNodeIds = new Set(
+      // Labels: only on the most-connected ~40 visible nodes so the canvas
+      // doesn't get carpeted with text. Sort by degree.
+      const LABEL_CAP = 40;
+      const labelNodeIds = new Set<string>(
         metaSlice
           .slice()
           .sort((a, b) => b.degree - a.degree)
-          .slice(0, 30)
+          .slice(0, LABEL_CAP)
           .map((m) => m.id),
       );
-    } else {
-      labelNodeIds = new Set();
-      if (sampled && sampled.size > 0) {
-        const cx = window.innerWidth / 2;
-        const cy = window.innerHeight / 2;
-        const radius =
-          Math.min(window.innerWidth, window.innerHeight) * cfg.labelVisibilityRadius;
-        const scored: Array<{ id: string; distance: number; degree: number }> = [];
-        sampled.forEach((space, index) => {
-          const id = meta[index]?.id;
-          if (!id || !visibleNodeIds.has(id)) return;
-          const screen = graphRef.current?.spaceToScreenPosition?.(space);
-          if (!screen) return;
-          const [sx, sy] = screen;
-          const dx = sx - cx;
-          const dy = sy - cy;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance > radius) return;
-          scored.push({
-            id,
-            distance,
-            degree: metaById.get(id)?.degree ?? 0,
-          });
-        });
-        scored.sort((a, b) => b.degree - a.degree);
-        scored.slice(0, 30).forEach((item) => labelNodeIds.add(item.id));
-      }
-      if (labelNodeIds.size === 0) {
-        // Fallback: top 12 anchors so the canvas never feels label-less.
-        atlasAnchors.slice(0, 12).forEach((m) => labelNodeIds.add(m.id));
-      }
+
+      return {
+        tier,
+        visibleNodeIds,
+        visibleEdgeIds,
+        labelNodeIds,
+        metaSlice,
+        edgeSlice,
+      };
+    } catch (err) {
+      // Defensive: a corrupted node entry shouldn't kill the page.
+      console.warn('useMobileGraphTiers slice failed:', err);
+      return null;
     }
+  }, [enabled, meta, edges, tier]);
 
-    return {
-      tier,
-      visibleNodeIds,
-      visibleEdgeIds,
-      labelNodeIds,
-      metaSlice,
-      edgeSlice,
-    };
-    } // end computeSlice
-    // viewportSample intentionally listed: re-samples the camera frustum.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    enabled,
-    meta,
-    edges,
-    metaById,
-    adjacency,
-    atlasAnchors,
-    tier,
-    cfg.schoolsNodes,
-    cfg.detailNodes,
-    cfg.labelVisibilityRadius,
-    graphRef,
-    viewportSample,
-  ]);
-
-  // edgesBySource currently unused but kept for future per-edge filters.
-  void edgesBySource;
-
-  // Cleanup any pending debounce on unmount.
-  useEffect(
-    () => () => {
-      if (debounceRef.current !== null) {
-        window.clearTimeout(debounceRef.current);
-      }
-    },
-    [],
-  );
-
-  return {
-    slice,
-    tier,
-    zoom,
-    handleZoom,
-    invalidate,
-  };
+  return { slice, tier, zoom, handleZoom, invalidate };
 }
