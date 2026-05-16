@@ -1,5 +1,5 @@
 {
-  "entries_written": 310,
+  "entries_written": 324,
   "missing": [
     {
       "label": "Acosta López de Mesa 2012 — Plotinus, Aristotle and the Origin of the Free Will / Plotino, Aristóteles y el ",
@@ -7,13 +7,6 @@
         "author"
       ],
       "node_id": "scholarly_work_acosta_l_pez_de_mesa_2012_plotinus_aristotle_and_the_origin_of_the"
-    },
-    {
-      "label": "Amand de Mendieta 1973 — Fatalisme et liberté dans l'antiquité grecque: recherches sur la survivance de l",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_amand_de_mendieta_1973_fatalisme_et_libert_dans_l_antiquit_grec"
     },
     {
       "label": "Andresen 1952 — Justin und der mittlere Platonismus",
@@ -141,13 +134,6 @@
         "author"
       ],
       "node_id": "scholarly_work_bobzien_2000_inadvertent"
-    },
-    {
-      "label": "Bobzien 2001 — Determinism and Freedom in Stoic Philosophy",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_bobzien_2001_determinism_and_freedom_in_stoic_philoso"
     },
     {
       "label": "Bonaiuti 1924 — The Genesis of St. Augustine's Idea of Original Sin",
@@ -426,21 +412,6 @@
       "node_id": "scholarly_work_dettwiler_2020_les_principaux_termes_anthropologiques_c"
     },
     {
-      "label": "Dihle 1982 — The Theory of Will in Classical Antiquity",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_dihle_1982_the_theory_of_will_in_classical_antiquit"
-    },
-    {
-      "label": "The Theory of Will in Classical Antiquity",
-      "missing": [
-        "author",
-        "unique_bibtex_key"
-      ],
-      "node_id": "scholarly_work_dihle_1982_theory_will"
-    },
-    {
       "label": "Dodson 2017 — Paul and Seneca in Dialogue",
       "missing": [
         "author"
@@ -607,21 +578,6 @@
         "author"
       ],
       "node_id": "scholarly_work_frede_1987_essays_in_ancient_philosophy"
-    },
-    {
-      "label": "Frede 2011 — A Free Will: Origins of the Notion in Ancient Thought",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_frede_2011_a_free_will_origins_of_the_notion_in_anc"
-    },
-    {
-      "label": "A Free Will: Origins of the Notion in Ancient Thought",
-      "missing": [
-        "author",
-        "unique_bibtex_key"
-      ],
-      "node_id": "scholarly_work_frede_2011_free_will"
     },
     {
       "label": "Frick 1997 — The Concept of Divine Providence in the Thought of Philo of Alexandria",
@@ -1618,8 +1574,15 @@
         "author"
       ],
       "node_id": "scholarly_work_zetterholm_2004_a_feminist_paul_a_hermeneutical_experime"
+    },
+    {
+      "label": "Destrée, Salles & Zingano (eds.), What is Up to Us? Studies on Agency and Responsibility in Ancient Philosophy (2014)",
+      "missing": [
+        "author"
+      ],
+      "node_id": "pub_destree_salles_zingano_2014_what_is_up_to_us"
     }
   ],
-  "nodes_with_missing_fields": 229,
-  "publication_count": 310
+  "nodes_with_missing_fields": 224,
+  "publication_count": 324
 }
