@@ -44255,3 +44255,104 @@
 {"source": "argument_gregory_contrafatum_nomima_barbarika_amand1945", "target": "argument_gregory_contrafatum_pagan_philosopher_thesis_amand1945", "relation": "responds_to", "confidence": 0.85, "metadata": "{\"claimed_by\": \"scholar_amand_de_mendieta_e\", \"publication\": \"pub_amand_1945_fatalisme\", \"bibtex_key\": \"amand-1945-fatalisme-et-liberte-dans-l-antiquite-grecque\", \"amand_evidence\": \"Amand 1945 p. 428-429 — nomima barbarika refutes astrological fatalism\"}"}
 {"source": "argument_gregory_disccat31_carneadean_moral_amand1945", "target": "concept_autexousion_christian", "relation": "supports", "confidence": 0.85, "metadata": "{\"claimed_by\": \"scholar_amand_de_mendieta_e\", \"publication\": \"pub_amand_1945_fatalisme\", \"bibtex_key\": \"amand-1945-fatalisme-et-liberte-dans-l-antiquite-grecque\", \"amand_evidence\": \"Amand 1945 p. 432-435 — Disc. cat. 31 supports autexousion\"}"}
 {"source": "argument_chrysostom_libre_arbitre_pastoral_amand1945", "target": "concept_autexousion_christian", "relation": "supports", "confidence": 0.85, "metadata": "{\"claimed_by\": \"scholar_amand_de_mendieta_e\", \"publication\": \"pub_amand_1945_fatalisme\", \"bibtex_key\": \"amand-1945-fatalisme-et-liberte-dans-l-antiquite-grecque\", \"amand_evidence\": \"Amand 1945 p. 491-501 — Chrysostom's libre arbitre is autexousion\"}"}
+{"source": "person_lucian_samosata_c125_180", "target": "work_lucian_apologia", "relation": "wrote", "confidence": 0.85}
+{"source": "person_lucian_samosata_c125_180", "target": "work_lucian_dialogues_mortuorum", "relation": "wrote", "confidence": 0.85}
+{"source": "person_lucian_samosata_c125_180", "target": "work_lucian_iuppiter_confutatus", "relation": "wrote", "confidence": 0.85}
+{"source": "person_lucian_samosata_c125_180", "target": "work_lucian_vita_demonactis", "relation": "wrote", "confidence": 0.85}
+{"source": "work_lucian_apologia", "target": "person_lucian_samosata_c125_180", "relation": "authored_by", "confidence": 0.85}
+{"source": "work_lucian_dialogues_mortuorum", "target": "person_lucian_samosata_c125_180", "relation": "authored_by", "confidence": 0.85}
+{"source": "work_lucian_iuppiter_confutatus", "target": "person_lucian_samosata_c125_180", "relation": "authored_by", "confidence": 0.85}
+{"source": "work_lucian_vita_demonactis", "target": "person_lucian_samosata_c125_180", "relation": "authored_by", "confidence": 0.85}
+{"source": "person_oinomaos_gadara_2c_ce", "target": "work_oinomaos_goeton_phora", "relation": "wrote", "confidence": 0.85}
+{"source": "work_oinomaos_goeton_phora", "target": "person_oinomaos_gadara_2c_ce", "relation": "authored_by", "confidence": 0.85}
+{"source": "person_diogenes_oinoanda_c200_ce", "target": "work_diogenes_oinoanda_inscription", "relation": "wrote", "confidence": 0.85}
+{"source": "work_diogenes_oinoanda_inscription", "target": "person_diogenes_oinoanda_c200_ce", "relation": "authored_by", "confidence": 0.85}
+{"source": "person_diogenianus_epicurean_2c_ce", "target": "work_diogenianus_peri_heimarmenes", "relation": "wrote", "confidence": 0.85}
+{"source": "work_diogenianus_peri_heimarmenes", "target": "person_diogenianus_epicurean_2c_ce", "relation": "authored_by", "confidence": 0.85}
+{"source": "person_hierocles_of_alexandria_1p6q8s54", "target": "work_hierocles_peri_pronoias", "relation": "wrote", "confidence": 0.85}
+{"source": "work_hierocles_peri_pronoias", "target": "person_hierocles_of_alexandria_1p6q8s54", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_chaldean_origin_fatalism", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_presocratics_create_heimarmene_concept", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_plato_aristotle_partial_determinism", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_stoic_integral_fatalism", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_hellenistic_astrological_diffusion", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_astrologers_pragmatic_responses", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_stoic_joyful_resignation", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_christian_baptismal_liberation", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_lucian_sophist_satirist_carneadean_topos", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_lucian_epicurean_2c_revival", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_oinomaos_cynic_carneadean_libre_adaptation", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_oinomaos_julian_pagan_critique", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_plotinus_non_witness_explanation", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_neoplatonic_school_no_carneadean_use", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_hierocles_bizarre_carneadean_inversion", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_chaldean_origin_fatalism", "target": "concept_heimarmene_astrologica_amand", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_presocratics_create_heimarmene_concept", "target": "concept_heimarmene_fate_stoics_j0k1l2m3", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_plato_aristotle_partial_determinism", "target": "person_plato_428_348bce_a1b2c3d4", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_plato_aristotle_partial_determinism", "target": "person_aristotle_384_322bce_c2d4f6a8", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_stoic_integral_fatalism", "target": "person_zeno_citium_334_262bce", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_stoic_integral_fatalism", "target": "person_cleanthes_assos_330_230bce", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_stoic_integral_fatalism", "target": "person_chrysippus_280_206bce_i9j0k1l2", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_stoic_integral_fatalism", "target": "person_posidonius_apameia_135_51bce", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_hellenistic_astrological_diffusion", "target": "concept_heimarmene_astrologica_amand", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_astrologers_pragmatic_responses", "target": "concept_heimarmene_astrologica_amand", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_stoic_joyful_resignation", "target": "person_cleanthes_assos_330_230bce", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_intro_christian_baptismal_liberation", "target": "concept_heimarmene_astrologica_amand", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_lucian_sophist_satirist_carneadean_topos", "target": "person_lucian_samosata_c125_180", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_lucian_sophist_satirist_carneadean_topos", "target": "argument_lucian_zeus_confutatus_carneadean_topos", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_lucian_sophist_satirist_carneadean_topos", "target": "argument_carneadean_general_theme_amand1945", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_lucian_epicurean_2c_revival", "target": "person_diogenes_oinoanda_c200_ce", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_lucian_epicurean_2c_revival", "target": "person_diogenianus_epicurean_2c_ce", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_oinomaos_cynic_carneadean_libre_adaptation", "target": "person_oinomaos_gadara_2c_ce", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_oinomaos_cynic_carneadean_libre_adaptation", "target": "argument_oinomaos_carneadean_libre_adaptation", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_oinomaos_cynic_carneadean_libre_adaptation", "target": "argument_carneadean_general_theme_amand1945", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_oinomaos_julian_pagan_critique", "target": "person_oinomaos_gadara_2c_ce", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_plotinus_non_witness_explanation", "target": "person_plotinus_d270", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_plotinus_non_witness_explanation", "target": "concept_plotinian_intellectual_eph_hemin", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_plotinus_non_witness_explanation", "target": "argument_carneadean_general_theme_amand1945", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_neoplatonic_school_no_carneadean_use", "target": "person_porphyry", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_neoplatonic_school_no_carneadean_use", "target": "person_iamblichus_d325", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_neoplatonic_school_no_carneadean_use", "target": "person_proclus_412_485ce_f3d8b2a9", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_hierocles_bizarre_carneadean_inversion", "target": "person_hierocles_of_alexandria_1p6q8s54", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_hierocles_bizarre_carneadean_inversion", "target": "argument_hierocles_carneadean_inversion_for_providential_heimarmene", "relation": "discusses", "confidence": 0.85}
+{"source": "work_lucian_iuppiter_confutatus", "target": "argument_lucian_zeus_confutatus_carneadean_topos", "relation": "contains", "confidence": 0.85}
+{"source": "work_oinomaos_goeton_phora", "target": "argument_oinomaos_carneadean_libre_adaptation", "relation": "contains", "confidence": 0.85}
+{"source": "work_diogenes_oinoanda_inscription", "target": "argument_diogenes_oinoanda_no_heimarmene_fragm_xxxiii", "relation": "contains", "confidence": 0.85}
+{"source": "work_hierocles_peri_pronoias", "target": "argument_hierocles_carneadean_inversion_for_providential_heimarmene", "relation": "contains", "confidence": 0.85}
+{"source": "argument_lucian_zeus_confutatus_carneadean_topos", "target": "work_lucian_iuppiter_confutatus", "relation": "cites_primary_source", "confidence": 0.95}
+{"source": "argument_oinomaos_carneadean_libre_adaptation", "target": "work_oinomaos_goeton_phora", "relation": "cites_primary_source", "confidence": 0.95}
+{"source": "argument_diogenes_oinoanda_no_heimarmene_fragm_xxxiii", "target": "work_diogenes_oinoanda_inscription", "relation": "cites_primary_source", "confidence": 0.95}
+{"source": "argument_hierocles_carneadean_inversion_for_providential_heimarmene", "target": "work_hierocles_peri_pronoias", "relation": "cites_primary_source", "confidence": 0.95}
+{"source": "argument_plotinus_freedom_argument_7c561972", "target": "passage_plotinus_vi_8_2", "relation": "evidenced_by", "confidence": 0.85}
+{"source": "argument_plotinus_freedom_argument_7c561972", "target": "passage_plotinus_vi_8_6", "relation": "evidenced_by", "confidence": 0.85}
+{"source": "argument_plotinus_freedom_argument_7c561972", "target": "passage_plotinus_vi_8_8", "relation": "evidenced_by", "confidence": 0.85}
+{"source": "argument_plotinus_freedom_argument_7c561972", "target": "passage_plotinus_iii_1_4", "relation": "evidenced_by", "confidence": 0.85}
+{"source": "argument_plotinus_freedom_argument_7c561972", "target": "passage_plotinus_iii_1_5", "relation": "evidenced_by", "confidence": 0.85}
+{"source": "concept_plotinian_intellectual_eph_hemin", "target": "passage_plotinus_vi_8_2", "relation": "evidenced_by", "confidence": 0.85}
+{"source": "concept_plotinian_intellectual_eph_hemin", "target": "passage_plotinus_vi_8_6", "relation": "evidenced_by", "confidence": 0.85}
+{"source": "concept_plotinian_intellectual_eph_hemin", "target": "passage_plotinus_vi_8_8", "relation": "evidenced_by", "confidence": 0.85}
+{"source": "concept_plotinian_intellectual_eph_hemin", "target": "passage_plotinus_iii_1_8", "relation": "evidenced_by", "confidence": 0.85}
+{"source": "concept_plotinian_intellectual_eph_hemin", "target": "passage_plotinus_iii_1_9", "relation": "evidenced_by", "confidence": 0.85}
+{"source": "concept_sympatheia_universal_posidonius_nyssa", "target": "passage_plotinus_iii_1_7", "relation": "evidenced_by", "confidence": 0.85}
+{"source": "person_carneades_214_129bce_l2m3n4o5", "target": "person_lucian_samosata_c125_180", "relation": "influences", "confidence": 0.6, "metadata": {"amand_qualification": "topos morale antifataliste tombé dans le domaine public — pas filiation directe selon Amand"}}
+{"source": "person_carneades_214_129bce_l2m3n4o5", "target": "person_oinomaos_gadara_2c_ce", "relation": "influences", "confidence": 0.7, "metadata": {"amand_qualification": "libre adaptation du τόπος carnéadien selon Amand"}}
+{"source": "person_carneades_214_129bce_l2m3n4o5", "target": "person_diogenianus_epicurean_2c_ce", "relation": "influences", "confidence": 0.7, "metadata": {"amand_qualification": "dépendance très nette d'après Amand — comparaison souhaitée avec De divinatione de Cicéron"}}
+{"source": "person_carneades_214_129bce_l2m3n4o5", "target": "person_diogenes_oinoanda_c200_ce", "relation": "influences", "confidence": 0.5, "metadata": {"amand_qualification": "probable mais Amand suggère écho via Épicure plutôt que Carnéade direct"}}
+{"source": "person_carneades_214_129bce_l2m3n4o5", "target": "person_demonax_cyprus_2c_ce", "relation": "influences", "confidence": 0.5, "metadata": {"amand_qualification": "dilemme mantique/fatalisme — topos diffusé, source précise non identifiable"}}
+{"source": "person_plotinus_d270", "target": "person_porphyry", "relation": "influences", "confidence": 0.98, "metadata": {"relation_amand": "maître direct (Porphyre disciple à Rome 263-269)"}}
+{"source": "person_porphyry", "target": "person_iamblichus_d325", "relation": "influences", "confidence": 0.9, "metadata": {"relation_amand": "enseignement néoplatonicien transmis via Anatolius selon Eunape Vit. Soph."}}
+{"source": "person_iamblichus_d325", "target": "person_proclus_412_485ce_f3d8b2a9", "relation": "influences", "confidence": 0.85, "metadata": {"relation_amand": "lignée néoplatonicienne syrienne via Syrianos selon Marinus Vit. Procli"}}
+{"source": "person_plotinus_d270", "target": "person_hierocles_of_alexandria_1p6q8s54", "relation": "influences", "confidence": 0.7, "metadata": {"relation_amand": "Hiéroclès reste plutôt en deçà du plotinisme — 'platonisme moyen pré-plotinien' selon Praechter cité par Amand"}}
+{"source": "work_plotinus_enn_iii_1", "target": "work_porphyry_vita_plotini", "relation": "precedes", "confidence": 0.85}
+{"source": "work_porphyry_vita_plotini", "target": "work_iamblichus_de_anima", "relation": "precedes", "confidence": 0.85}
+{"source": "work_iamblichus_de_anima", "target": "work_proclus_tria_opuscula_c9a8e4b3", "relation": "precedes", "confidence": 0.85}
+{"source": "work_proclus_tria_opuscula_c9a8e4b3", "target": "work_hierocles_peri_pronoias", "relation": "precedes", "confidence": 0.85}
+{"source": "work_lucian_iuppiter_confutatus", "target": "work_oinomaos_goeton_phora", "relation": "precedes", "confidence": 0.85}
+{"source": "person_hierocles_of_alexandria_1p6q8s54", "target": "person_origen_alexandria_185_254ce_s9t0u1v2", "relation": "influenced_by", "confidence": 0.7, "metadata": {"amand_qualification": "proximité doctrinale notée par Amand — possibility of direct contact via Alexandrian school"}}
+{"source": "argument_lucian_zeus_confutatus_carneadean_topos", "target": "person_chrysippus_280_206bce_i9j0k1l2", "relation": "critiques", "confidence": 0.85}
+{"source": "argument_oinomaos_carneadean_libre_adaptation", "target": "person_chrysippus_280_206bce_i9j0k1l2", "relation": "critiques", "confidence": 0.85}
+{"source": "argument_diogenes_oinoanda_no_heimarmene_fragm_xxxiii", "target": "person_chrysippus_280_206bce_i9j0k1l2", "relation": "critiques", "confidence": 0.85}
+{"source": "argument_lucian_zeus_confutatus_carneadean_topos", "target": "concept_heimarmene_fate_stoics_j0k1l2m3", "relation": "responds_to", "confidence": 0.85}
+{"source": "argument_oinomaos_carneadean_libre_adaptation", "target": "concept_heimarmene_fate_stoics_j0k1l2m3", "relation": "responds_to", "confidence": 0.85}
+{"source": "argument_hierocles_carneadean_inversion_for_providential_heimarmene", "target": "argument_carneadean_general_theme_amand1945", "relation": "interprets", "confidence": 0.85}
+{"source": "synthesis_amand1945_hierocles_bizarre_carneadean_inversion", "target": "person_origen_alexandria_185_254ce_s9t0u1v2", "relation": "discusses", "confidence": 0.8, "metadata": {"amand_qualification": "parallel between Hierocles and Origen on providential pedagogy"}}
