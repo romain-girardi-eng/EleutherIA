@@ -105,6 +105,7 @@ jobs:
         with:
           name: deploy-delta-${{ github.run_id }}
           path: /tmp/deploy_delta.json
+          if-no-files-found: ignore
 
       - name: Apply
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run != 'true')
@@ -144,3 +145,4 @@ jobs:
         with:
           name: post-deploy-delta-${{ github.run_id }}
           path: /tmp/post_deploy_delta.json
+          if-no-files-found: ignore
