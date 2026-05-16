@@ -165,3 +165,124 @@ def test_full_matrix_shape(analyzer) -> None:
         for cell in row:
             assert isinstance(cell, analyzer.PairScore)
             assert 0 <= cell.total_score <= 3
+
+
+# ---------------------------------------------------------------------------
+# Figure-generation tests (Tasks 11-12)
+# ---------------------------------------------------------------------------
+
+
+FIGURES_SCRIPT = ROOT / "scripts" / "generate_provenance_figures.py"
+
+skip_if_no_figures_script = pytest.mark.skipif(
+    not FIGURES_SCRIPT.exists(),
+    reason="generate_provenance_figures.py not yet implemented",
+)
+
+
+def _build_full_sample_matrix() -> list[dict]:
+    """Build a synthetic 24-row flat matrix covering all 6 pivots × 4 stoics."""
+    pivots = [
+        "argument_carneadean_general_theme_amand1945",
+        "argument_carneadean_legislation_amand1945",
+        "argument_carneadean_virtue_vice_amand1945",
+        "argument_carneadean_incentives_amand1945",
+        "argument_carneadean_action_futility_amand1945",
+        "argument_carneadean_piety_amand1945",
+    ]
+    stoics = [
+        "person_chrysippus_280_206bce_i9j0k1l2",
+        "person_cleanthes_assos_330_230bce",
+        "person_posidonius_apameia_135_51bce",
+        "person_panaetius_rhodes_185_109bce",
+    ]
+    rows: list[dict] = []
+    for i, pivot in enumerate(pivots):
+        for j, stoic in enumerate(stoics):
+            score = (i + j) % 4  # spread 0..3 across the cells
+            rows.append(
+                {
+                    "pivot": pivot,
+                    "stoic": stoic,
+                    "thematic_hits": ["t"] * min(score, 1),
+                    "conceptual_hits": ["c"] if score >= 2 else [],
+                    "textual_hits": ["x"] if score >= 3 else [],
+                    "total_score": score,
+                }
+            )
+    return rows
+
+
+@skip_if_no_figures_script
+def test_heatmap_generation(tmp_path: Path) -> None:
+    """``generate_heatmap`` writes a non-empty PNG (and matching SVG) to disk."""
+    import importlib.util as _ilu
+
+    spec = _ilu.spec_from_file_location("gpf", FIGURES_SCRIPT)
+    assert spec is not None and spec.loader is not None
+    module = _ilu.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    sample = _build_full_sample_matrix()
+    out = tmp_path / "heatmap.png"
+    module.generate_heatmap(sample, out)
+
+    assert out.exists()
+    assert out.stat().st_size > 1000
+    # SVG counterpart
+    svg = out.with_suffix(".svg")
+    assert svg.exists()
+    assert svg.stat().st_size > 500
+
+
+@skip_if_no_figures_script
+def test_case_study_generation(tmp_path: Path) -> None:
+    """``generate_case_study`` produces a per-pivot bar chart (PNG + SVG)."""
+    import importlib.util as _ilu
+
+    spec = _ilu.spec_from_file_location("gpf", FIGURES_SCRIPT)
+    assert spec is not None and spec.loader is not None
+    module = _ilu.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    stoics = [
+        "person_chrysippus_280_206bce_i9j0k1l2",
+        "person_cleanthes_assos_330_230bce",
+        "person_posidonius_apameia_135_51bce",
+        "person_panaetius_rhodes_185_109bce",
+    ]
+    sample = [
+        {
+            "pivot": "argument_carneadean_virtue_vice_amand1945",
+            "stoic": s,
+            "thematic_hits": ["a"] * (i + 1),
+            "conceptual_hits": [],
+            "textual_hits": ["b"] if i == 0 else [],
+            "total_score": 2 if i == 0 else 1,
+        }
+        for i, s in enumerate(stoics)
+    ]
+    out = tmp_path / "case.png"
+    module.generate_case_study(sample, "argument_carneadean_virtue_vice_amand1945", out)
+
+    assert out.exists()
+    assert out.stat().st_size > 1000
+    assert out.with_suffix(".svg").exists()
+
+
+@skip_if_no_figures_script
+def test_case_study_filters_by_pivot(tmp_path: Path) -> None:
+    """``generate_case_study`` must filter out unrelated pivots silently."""
+    import importlib.util as _ilu
+
+    spec = _ilu.spec_from_file_location("gpf", FIGURES_SCRIPT)
+    assert spec is not None and spec.loader is not None
+    module = _ilu.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    sample = _build_full_sample_matrix()  # all 24 rows, 6 pivots
+    out = tmp_path / "case-piety.png"
+    module.generate_case_study(sample, "argument_carneadean_piety_amand1945", out)
+
+    assert out.exists()
+    assert out.stat().st_size > 1000
