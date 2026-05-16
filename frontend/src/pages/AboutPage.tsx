@@ -15,7 +15,7 @@ export default function AboutPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
-          <h1 className="text-5xl md:text-6xl font-display font-bold text-stone-800 mb-4">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold text-stone-800 mb-4">
             About{" "}
             <Typewriter
               text={["EleutherIA", "the Project", "the Database"]}
@@ -26,7 +26,7 @@ export default function AboutPage() {
               cursorChar="_"
             />
           </h1>
-          <p className="text-lg text-stone-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto">
             A FAIR-compliant knowledge graph documenting ancient debates on free will
           </p>
         </motion.div>
@@ -36,29 +36,28 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
+          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-5 sm:p-8 shadow-sm"
         >
-          <h2 className="text-3xl font-display font-bold text-stone-800 mb-6">{t('about.authorTitle')}</h2>
+          <h2 className="text-2xl sm:text-3xl font-display font-bold text-stone-800 mb-6">{t('about.authorTitle')}</h2>
 
           <div className="space-y-6 text-stone-600 leading-relaxed">
             <div className="flex flex-col md:flex-row items-start gap-6">
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 mx-auto md:mx-0">
                 <img
                   src="/romain-girardi.jpg"
                   alt={t('about.authorName')}
-                  className="w-40 h-40 rounded-full object-cover shadow-lg border-4 border-amber-200"
-                  style={{ objectPosition: 'center 30%' }}
+                  className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover object-[center_30%] shadow-lg border-4 border-amber-200"
                 />
               </div>
-              <div className="flex-grow">
-                <h3 className="text-2xl font-display font-bold text-stone-800 mb-2">{t('about.authorName')}</h3>
+              <div className="flex-grow min-w-0">
+                <h3 className="text-xl sm:text-2xl font-display font-bold text-stone-800 mb-2">{t('about.authorName')}</h3>
                 <p className="text-stone-500 mb-4">{t('about.authorTitle2')}</p>
                 <p>{t('about.authorBio')}</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-6 rounded-xl border border-amber-200/60">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-4 sm:p-6 rounded-xl border border-amber-200/60">
                 <h4 className="font-display font-bold text-lg text-stone-800 mb-3">{t('about.researchInterests')}</h4>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
@@ -88,7 +87,7 @@ export default function AboutPage() {
                 </ul>
               </div>
 
-              <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-xl border border-orange-200/60">
+              <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-4 sm:p-6 rounded-xl border border-orange-200/60">
                 <h4 className="font-display font-bold text-lg text-stone-800 mb-3">{t('about.academicBackground')}</h4>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
@@ -111,7 +110,7 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="bg-parchment-50 backdrop-blur-md p-6 rounded-xl border border-stone-200">
+            <div className="bg-parchment-50 backdrop-blur-md p-4 sm:p-6 rounded-xl border border-stone-200">
               <h4 className="font-display font-bold text-lg text-stone-800 mb-3">Institutional Affiliations</h4>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
@@ -174,9 +173,9 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-8 shadow-sm"
+          className="bg-parchment-100/70 backdrop-blur-sm rounded-2xl p-5 sm:p-8 shadow-sm"
         >
-          <h2 className="text-3xl font-display font-bold text-stone-800 mb-6">{t('about.projectTitle')}</h2>
+          <h2 className="text-2xl sm:text-3xl font-display font-bold text-stone-800 mb-6">{t('about.projectTitle')}</h2>
 
           <div className="space-y-4 text-stone-600 leading-relaxed">
             <p>

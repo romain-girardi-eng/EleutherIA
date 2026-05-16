@@ -463,10 +463,22 @@
     },
     "pipeline": {
       "title": "Pipeline-Stufen",
-      "embedding": { "title": "1. Embedding + Referenzerkennung", "description": "Abfrage via Gemini eingebettet, plus Regex-CTS-URN-Erkennung für direkte Passagensuche." },
-      "parallelSearch": { "title": "2. Parallele Suche", "description": "Drei Qdrant-Abfragen parallel: KG-Knoten, Textpassagen und Kanten. Reine Vektorähnlichkeit, kein LLM-Aufruf." },
-      "enrichment": { "title": "3. Parallele Anreicherung", "description": "passage_citations-Suche, KG-Nachbarerweiterung und textuelle Verankerung -- alles via SQL, kein LLM." },
-      "synthesis": { "title": "4. Kontextaufbau + Synthese", "description": "Vollständiger ungekürzter Kontext (Primärquellen, ergänzende Passagen, KG-Entitäten, Beziehungen) an einen einzigen LLM-Syntheseaufruf." }
+      "embedding": {
+        "title": "1. Embedding + Referenzerkennung",
+        "description": "Abfrage via Gemini eingebettet, plus Regex-CTS-URN-Erkennung für direkte Passagensuche."
+      },
+      "parallelSearch": {
+        "title": "2. Parallele Suche",
+        "description": "Drei Qdrant-Abfragen parallel: KG-Knoten, Textpassagen und Kanten. Reine Vektorähnlichkeit, kein LLM-Aufruf."
+      },
+      "enrichment": {
+        "title": "3. Parallele Anreicherung",
+        "description": "passage_citations-Suche, KG-Nachbarerweiterung und textuelle Verankerung -- alles via SQL, kein LLM."
+      },
+      "synthesis": {
+        "title": "4. Kontextaufbau + Synthese",
+        "description": "Vollständiger ungekürzter Kontext (Primärquellen, ergänzende Passagen, KG-Entitäten, Beziehungen) an einen einzigen LLM-Syntheseaufruf."
+      }
     },
     "capabilities": {
       "title": "Schlüsselfähigkeiten",
@@ -475,10 +487,22 @@
       "gemini": "Primäre Synthese und Embedding (1M Token Kontext)",
       "kimi": "Erweitertes Argumentieren für komplexe Multi-Hop-Abfragen",
       "keyStrengths": "Stärken",
-      "noTruncation": { "title": "Keine Kürzung", "description": "Vollständiger Passagentext mit CTS-URNs erhalten -- keine 500-Zeichen-Fragmente" },
-      "passageCitations": { "title": "Kurierte passage_citations", "description": "Primäres Retrieval-Signal: KG-zu-Passage-Links mit Konfidenzbewertungen" },
-      "reasoningTrace": { "title": "Argumentationsspur", "description": "Volle Transparenz: sehen, welche Knoten, Kanten und Passagen verwendet wurden" },
-      "sqlFallback": { "title": "Vektorloser SQL-Fallback", "description": "Bei Qdrant-Ausfall fällt Retrieval auf SQL passage_citations zurück" },
+      "noTruncation": {
+        "title": "Keine Kürzung",
+        "description": "Vollständiger Passagentext mit CTS-URNs erhalten -- keine 500-Zeichen-Fragmente"
+      },
+      "passageCitations": {
+        "title": "Kurierte passage_citations",
+        "description": "Primäres Retrieval-Signal: KG-zu-Passage-Links mit Konfidenzbewertungen"
+      },
+      "reasoningTrace": {
+        "title": "Argumentationsspur",
+        "description": "Volle Transparenz: sehen, welche Knoten, Kanten und Passagen verwendet wurden"
+      },
+      "sqlFallback": {
+        "title": "Vektorloser SQL-Fallback",
+        "description": "Bei Qdrant-Ausfall fällt Retrieval auf SQL passage_citations zurück"
+      },
       "evolutionTitle": "Entwicklung von HiRAG",
       "evolution": {
         "fromHirag": "Frühere HiRAG-V2-Pipeline",
@@ -673,7 +697,7 @@
     "philologicalWork": "Philologische Arbeit",
     "philoDesc": "Alle griechischen und lateinischen Texte durchlaufen manuelle Überprüfung. Die Lemmatisierung nutzt LAULA (Lateinisch) und PAULA (Griechisch) morphologische Analysatoren, um lemmabasierte Suche zu ermöglichen. Jeder Wissensgraph-Knoten ist in Primärquellen (antike Texte) oder Sekundärliteratur (moderne Forschung) mit vollständiger bibliographischer Provenienz verankert.",
     "technicalInfra": "Technische Infrastruktur",
-    "techStack": "React 19 + TypeScript + Vite + Tailwind CSS Frontend, FastAPI + Python Backend, PostgreSQL (strukturierte Daten) + Qdrant (Vektor-Embeddings), Cytoscape.js für Netzwerkvisualisierung, GraphRAG-Pipeline mit Gemini API, Cloudflare Workers (Produktionsdeployment)"
+    "techStack": "React 19 + TypeScript + Vite + Tailwind CSS Frontend, FastAPI + Python Backend, PostgreSQL (strukturierte Daten) + Qdrant (Vektor-Embeddings), Cytoscape.js für Netzwerkvisualisierung, GraphRAG-Pipeline mit Gemini API, Docker Compose + Cloudflare-Tunnel (Produktionsdeployment)"
   },
   "login": {
     "title": "Bei Ihrem Konto anmelden",
@@ -1332,11 +1356,26 @@
       "timeline": {
         "title": "1.200 Jahre philosophischer Debatte",
         "periods": {
-          "presocratic": { "era": "Vorsokratisch", "years": "6.-5. Jh. v. Chr." },
-          "classical": { "era": "Klassisch", "years": "5.-4. Jh. v. Chr." },
-          "hellenistic": { "era": "Hellenistisch", "years": "4.-1. Jh. v. Chr." },
-          "imperial": { "era": "Kaiserzeit", "years": "1.-3. Jh. n. Chr." },
-          "lateAntiquity": { "era": "Spätantike", "years": "3.-6. Jh. n. Chr." }
+          "presocratic": {
+            "era": "Vorsokratisch",
+            "years": "6.-5. Jh. v. Chr."
+          },
+          "classical": {
+            "era": "Klassisch",
+            "years": "5.-4. Jh. v. Chr."
+          },
+          "hellenistic": {
+            "era": "Hellenistisch",
+            "years": "4.-1. Jh. v. Chr."
+          },
+          "imperial": {
+            "era": "Kaiserzeit",
+            "years": "1.-3. Jh. n. Chr."
+          },
+          "lateAntiquity": {
+            "era": "Spätantike",
+            "years": "3.-6. Jh. n. Chr."
+          }
         }
       },
       "demo": {
@@ -1976,6 +2015,78 @@
         "confirm": "Ablehnen",
         "cancel": "Abbrechen"
       }
+    }
+  },
+  "cosmograph": {
+    "back": "Zurück",
+    "searchPlaceholder": "Begriff, Denker, Werk oder Forscher suchen — αὐτεξούσιον, Chrysipp, Bobzien…",
+    "searchAria": "Im Wissensgraphen suchen",
+    "searchEmpty": "Keine Treffer. Versuchen Sie einen griechischen/lateinischen Begriff, einen Nachnamen oder eines von: αὐτεξούσιον, prohairesis, heimarmene, Bobzien.",
+    "searchResults": "Suchergebnisse",
+    "tabs": {
+      "atlas": "Atlas",
+      "full": "Gesamter Graph",
+      "path": "Pfad finden",
+      "filter": "Filtern"
+    },
+    "filters": {
+      "period": "Epoche",
+      "type": "Typ",
+      "school": "Schule",
+      "clear": "Filter zurücksetzen"
+    },
+    "path": {
+      "title": "Pfad zwischen zwei Knoten finden",
+      "description": "Wählen Sie eine Quelle und ein Ziel. Der kürzeste semantische Pfad wird im Graphen hervorgehoben.",
+      "source": "Quelle — z. B. Chrysipp",
+      "target": "Ziel — z. B. Augustinus",
+      "searchAria": "Knoten suchen",
+      "computing": "Berechne kürzesten Pfad…",
+      "noPath": "Kein Pfad innerhalb von 6 Schritten. Wählen Sie zentralere Anker über den Atlas.",
+      "error": "Pfad konnte nicht berechnet werden",
+      "length_one": "{{count}} Schritt",
+      "length_other": "{{count}} Schritte",
+      "length": "{{count}} Schritte",
+      "clear": "Löschen",
+      "swap": "Quelle und Ziel tauschen"
+    },
+    "controls": {
+      "fit": "Ansicht einpassen",
+      "pause": "Layout pausieren",
+      "resume": "Layout fortsetzen",
+      "screenshot": "Screenshot",
+      "settings": "Erweitert"
+    },
+    "legend": {
+      "title": "Legende",
+      "types": "Knotentypen",
+      "period": "Epoche (Deckkraft)",
+      "relations": "Kantengewicht",
+      "presocratic": "Vorsokratisch",
+      "lateAntiquity": "Spätantike",
+      "modern": "Modern",
+      "structural": "Autor / Mitglied_von",
+      "doctrinal": "interpretiert / kritisiert",
+      "citation": "zitiert / erwähnt"
+    },
+    "atlas": {
+      "hintLabel": "Atlas der Willensfreiheit",
+      "hintBody": "Eine kuratierte Auswahl der zentralen Begriffe, Schulen, Denker und modernen Forscher zur Willensfreiheit. Suchen Sie für mehr Tiefe, wechseln Sie zum vollen Graphen für die 17,7k Knoten, oder öffnen Sie „Pfad finden“, um eine Verbindung nachzuzeichnen."
+    },
+    "loading": {
+      "eyebrow": "Wissensgraph",
+      "title": "Atlas wird aufgebaut…",
+      "body": "17,7k Knoten und 42,9k Relationen aus antiken Quellen und moderner Rezeption werden geladen."
+    },
+    "error": {
+      "eyebrow": "Wissensgraph",
+      "title": "Graph konnte nicht geladen werden",
+      "retry": "Erneut versuchen",
+      "openDatabase": "Stattdessen die Datenbank öffnen"
+    },
+    "advanced": {
+      "title": "Erweitert",
+      "body": "Simulationsphysik, Lasso-Auswahl und Anheften sind in einen Entwicklermodus verschoben. Sie kehren später hierher zurück. Nutzen Sie für die tägliche wissenschaftliche Arbeit Atlas / Gesamter Graph / Filter / Pfad finden."
     }
   }
 }

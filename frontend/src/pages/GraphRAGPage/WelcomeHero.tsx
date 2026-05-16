@@ -33,15 +33,15 @@ export default function WelcomeHero({
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 py-12">
+    <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 py-8 sm:py-12 pt-24 sm:pt-28">
       <div className="w-full max-w-2xl">
         <motion.div
-          className="text-center mb-10"
+          className="text-center mb-8 sm:mb-10"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-5xl md:text-6xl font-semibold text-stone-800 mb-3 drop-shadow-sm">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold text-stone-800 mb-3 drop-shadow-sm">
             <Typewriter
               text={['Agentic GraphRAG', 'Knowledge Graph', 'Ancient Philosophy', 'Scholarly Q&A']}
               speed={100}
@@ -51,7 +51,7 @@ export default function WelcomeHero({
               cursorChar="_"
             />
           </h1>
-          <p className="text-base text-stone-600 max-w-lg mx-auto">{t('graphrag.description')}</p>
+          <p className="text-sm sm:text-base text-stone-600 max-w-lg mx-auto">{t('graphrag.description')}</p>
         </motion.div>
 
         <motion.div
@@ -66,21 +66,21 @@ export default function WelcomeHero({
               borderRadius={9999}
               color={['#fdba74', '#f97316', '#fbbf24']}
             >
-              <div className="flex gap-3 p-2">
+              <div className="flex gap-2 sm:gap-3 p-2">
                 <input
                   ref={inputRef}
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={t('graphrag.placeholder')}
-                  className="flex-1 px-6 py-3 text-base bg-transparent focus:outline-none focus:ring-0 border-0"
+                  className="flex-1 min-w-0 px-4 sm:px-6 py-3 text-base bg-transparent focus:outline-none focus:ring-0 border-0"
                   autoFocus
                   disabled={loading || streaming}
                 />
                 <button
                   type="submit"
                   disabled={!query.trim() || loading || streaming}
-                  className="px-8 py-3 bg-gradient-to-br from-orange-600 to-orange-500 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all text-base font-medium whitespace-nowrap"
+                  className="px-4 sm:px-8 py-3 min-h-[44px] bg-gradient-to-br from-orange-600 to-orange-500 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm sm:text-base font-medium whitespace-nowrap"
                 >
                   {loading ? 'Thinking...' : t('graphrag.ask')}
                 </button>

@@ -95,15 +95,13 @@ export default function CanonicalPassageDetailPage() {
 
   return (
     <div className="min-h-screen w-full bg-transparent">
-      {/* Sticky breadcrumb */}
-      {/* Sticks 80px from viewport top — matches the desktop fixed
-          navbar height (h-20) so it sits flush *below* it instead of
-          getting clipped behind. */}
-      <div className="sticky top-20 z-30 border-b border-amber-200/40 bg-parchment-50/85 backdrop-blur-md">
+      {/* Sticky breadcrumb — sits flush below the fixed navbar
+          (mobile ~56px, desktop 80px). */}
+      <div className="sticky top-14 sm:top-20 z-30 border-b border-amber-200/40 bg-parchment-50/85 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <Link
             to="/passages-canoniques"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-amber-800 transition-colors"
+            className="inline-flex items-center gap-1.5 min-h-[44px] text-xs font-medium text-stone-500 hover:text-amber-800 transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
             {t('canonicalPassages.detail.backToList')}
@@ -180,7 +178,7 @@ export default function CanonicalPassageDetailPage() {
                   <h2 className="text-xs font-semibold uppercase tracking-wider text-stone-500">
                     {t('canonicalPassages.detail.fullText')}
                   </h2>
-                  <pre className="mt-3 whitespace-pre-wrap rounded-2xl border border-stone-200/60 bg-parchment-50/70 p-5 font-serif text-sm leading-relaxed text-stone-800">
+                  <pre className="mt-3 whitespace-pre-wrap break-words rounded-2xl border border-stone-200/60 bg-parchment-50/70 p-4 sm:p-5 font-serif text-sm leading-relaxed text-stone-800">
                     {detail.full_text}
                   </pre>
                 </div>
@@ -233,6 +231,54 @@ export default function CanonicalPassageDetailPage() {
                   ))}
                 </ul>
               </section>
+
+              {/* Metadata (mobile + tablet only — desktop shows in side rail). */}
+              <div className="mt-10 lg:hidden">
+                <div className="rounded-2xl border border-stone-200/60 bg-white/50 p-4">
+                  <div className="flex items-center gap-2">
+                    <BookMarked className="h-4 w-4 text-amber-700" aria-hidden="true" />
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-stone-700">
+                      {t('canonicalPassages.detail.metadata')}
+                    </h3>
+                  </div>
+                  <dl className="mt-3 grid grid-cols-2 gap-3 text-xs">
+                    {detail.author && (
+                      <div>
+                        <dt className="text-stone-400">
+                          {t('canonicalPassages.detail.author')}
+                        </dt>
+                        <dd className="text-stone-700 font-medium break-words">{detail.author}</dd>
+                      </div>
+                    )}
+                    {detail.work_title && (
+                      <div>
+                        <dt className="text-stone-400">
+                          {t('canonicalPassages.detail.work')}
+                        </dt>
+                        <dd className="text-stone-700 font-medium break-words">
+                          {detail.work_title}
+                        </dd>
+                      </div>
+                    )}
+                    {detail.period && (
+                      <div>
+                        <dt className="text-stone-400">
+                          {t('canonicalPassages.detail.period')}
+                        </dt>
+                        <dd className="text-stone-700 font-medium">{detail.period}</dd>
+                      </div>
+                    )}
+                    <div>
+                      <dt className="text-stone-400">
+                        {t('canonicalPassages.detail.totalCitations')}
+                      </dt>
+                      <dd className="text-stone-700 font-medium">
+                        {detail.citation_count}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
 
               {/* CTA back */}
               <div className="mt-10 rounded-2xl border border-amber-200/60 bg-amber-50/40 p-5 sm:p-6">

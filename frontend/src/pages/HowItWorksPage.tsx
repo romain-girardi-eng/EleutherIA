@@ -170,7 +170,7 @@ export default function HowItWorksPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-white leading-[1.08] max-w-5xl mx-auto mb-6 drop-shadow-[0_2px_24px_rgba(0,0,0,0.9)]"
+            className="font-display text-4xl sm:text-6xl lg:text-7xl xl:text-8xl text-white leading-[1.08] max-w-5xl mx-auto mb-6 drop-shadow-[0_2px_24px_rgba(0,0,0,0.9)]"
           >
             {t('howItWorksPage.hero.titlePrefix')}{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
@@ -421,17 +421,17 @@ export default function HowItWorksPage() {
                 className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 space-y-3"
               >
                 <p className="text-xs font-body uppercase tracking-widest text-white/40">{t('howItWorksPage.embeddings.analogy')}</p>
-                <div className="grid grid-cols-2 gap-3 text-sm font-body">
-                  <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm font-body">
+                  <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-3 overflow-hidden">
                     <p className="text-blue-300 font-semibold mb-1">{t('howItWorksPage.embeddings.physicalSpace')}</p>
-                    <p className="text-white/60 font-mono text-xs">Paris → (48.86°, 2.35°)</p>
-                    <p className="text-white/60 font-mono text-xs">London → (51.51°, −0.13°)</p>
+                    <p className="text-white/60 font-mono text-xs break-all">Paris → (48.86°, 2.35°)</p>
+                    <p className="text-white/60 font-mono text-xs break-all">London → (51.51°, −0.13°)</p>
                     <p className="text-white/40 text-xs mt-1">{t('howItWorksPage.embeddings.physicalClose')}</p>
                   </div>
-                  <div className="rounded-xl bg-orange-500/10 border border-orange-500/20 p-3">
+                  <div className="rounded-xl bg-orange-500/10 border border-orange-500/20 p-3 overflow-hidden">
                     <p className="text-orange-300 font-semibold mb-1">{t('howItWorksPage.embeddings.semanticSpace')}</p>
-                    <p className="text-white/60 font-mono text-xs">"Fate" → [0.89, −0.23, …]</p>
-                    <p className="text-white/60 font-mono text-xs">"Destiny" → [0.91, −0.21, …]</p>
+                    <p className="text-white/60 font-mono text-xs break-all">"Fate" → [0.89, −0.23, …]</p>
+                    <p className="text-white/60 font-mono text-xs break-all">"Destiny" → [0.91, −0.21, …]</p>
                     <p className="text-white/40 text-xs mt-1">{t('howItWorksPage.embeddings.semanticClose')}</p>
                   </div>
                 </div>
@@ -756,10 +756,10 @@ export default function HowItWorksPage() {
                     {t('howItWorksPage.hybridSearch.rrfBody')}
                   </p>
                 </div>
-                <div className="font-mono text-sm text-stone-700 bg-white/70 border border-parchment-300 rounded-xl px-6 py-4 whitespace-nowrap">
-                  RRF(d) = Σ{' '}
+                <div className="font-mono text-xs sm:text-sm text-stone-700 bg-white/70 border border-parchment-300 rounded-xl px-4 sm:px-6 py-3 sm:py-4 overflow-x-auto max-w-full">
+                  <span className="whitespace-nowrap">RRF(d) = Σ{' '}
                   <span className="text-orange-600 font-semibold">1 / (k + rank)</span>
-                  {' '}· k = 60
+                  {' '}· k = 60</span>
                 </div>
               </div>
             </GlassCard>

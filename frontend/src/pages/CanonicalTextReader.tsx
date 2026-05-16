@@ -286,7 +286,7 @@ export default function CanonicalTextReader() {
                 value={referenceSearch}
                 onChange={(e) => setReferenceSearch(e.target.value)}
                 placeholder={t('textReader.search.placeholder')}
-                className="flex-1 min-w-0 px-3 py-2 sm:py-1.5 text-sm border border-amber-200/60 rounded focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
+                className="flex-1 min-w-0 px-3 py-2 sm:py-1.5 text-base sm:text-sm border border-amber-200/60 rounded focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
               />
               <button
                 type="submit"

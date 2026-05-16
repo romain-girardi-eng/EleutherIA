@@ -722,7 +722,7 @@
     "philologicalWork": "Travail philologique",
     "philoDesc": "Tous les textes grecs et latins font l'objet d'une vérification manuelle. La lemmatisation utilise les analyseurs morphologiques LAULA (latin) et PAULA (grec) pour permettre la recherche par lemme. Chaque nœud du graphe de connaissances est ancré dans des sources primaires (textes antiques) ou de la littérature secondaire (études modernes) avec provenance bibliographique complète.",
     "technicalInfra": "Infrastructure technique",
-    "techStack": "Frontend React 19 + TypeScript + Vite + Tailwind CSS, backend FastAPI + Python, PostgreSQL (données structurées) + Qdrant (embeddings vectoriels), Cytoscape.js pour la visualisation de réseaux, pipeline GraphRAG avec API Gemini, Cloudflare Workers (déploiement en production)"
+    "techStack": "Frontend React 19 + TypeScript + Vite + Tailwind CSS, backend FastAPI + Python, PostgreSQL (données structurées) + Qdrant (embeddings vectoriels), Cytoscape.js pour la visualisation de réseaux, pipeline GraphRAG avec API Gemini, Docker Compose + tunnel Cloudflare (déploiement en production)"
   },
   "login": {
     "title": "Connectez-vous à votre compte",
@@ -1385,12 +1385,18 @@
             "era": "Présocratique",
             "years": "VIe-Ve s. av. J.-C."
           },
-          "classical": { "era": "Classique", "years": "Ve-IVe s. av. J.-C." },
+          "classical": {
+            "era": "Classique",
+            "years": "Ve-IVe s. av. J.-C."
+          },
           "hellenistic": {
             "era": "Hellénistique",
             "years": "IVe-Ier s. av. J.-C."
           },
-          "imperial": { "era": "Impérial", "years": "Ier-IIIe s. apr. J.-C." },
+          "imperial": {
+            "era": "Impérial",
+            "years": "Ier-IIIe s. apr. J.-C."
+          },
           "lateAntiquity": {
             "era": "Antiquité tardive",
             "years": "IIIe-VIe s. apr. J.-C."
@@ -2034,6 +2040,78 @@
         "confirm": "Rejeter",
         "cancel": "Annuler"
       }
+    }
+  },
+  "cosmograph": {
+    "back": "Retour",
+    "searchPlaceholder": "Rechercher un concept, un penseur, une œuvre ou un chercheur — αὐτεξούσιον, Chrysippe, Bobzien…",
+    "searchAria": "Rechercher dans le graphe de connaissances",
+    "searchEmpty": "Aucun résultat. Essayez un terme grec ou latin, un patronyme, ou l'un de : αὐτεξούσιον, prohairesis, heimarmène, Bobzien.",
+    "searchResults": "Résultats de recherche",
+    "tabs": {
+      "atlas": "Atlas",
+      "full": "Graphe complet",
+      "path": "Trouver un chemin",
+      "filter": "Filtrer"
+    },
+    "filters": {
+      "period": "Période",
+      "type": "Type",
+      "school": "École",
+      "clear": "Effacer les filtres"
+    },
+    "path": {
+      "title": "Trouver un chemin entre deux nœuds",
+      "description": "Sélectionnez une source et une cible. Le chemin sémantique le plus court sera mis en évidence sur le graphe.",
+      "source": "Source — ex. Chrysippe",
+      "target": "Cible — ex. Augustin",
+      "searchAria": "Rechercher un nœud",
+      "computing": "Calcul du chemin le plus court…",
+      "noPath": "Aucun chemin trouvé en moins de 6 sauts. Essayez l'Atlas pour choisir des ancres plus centrales.",
+      "error": "Impossible de calculer le chemin",
+      "length_one": "{{count}} saut",
+      "length_other": "{{count}} sauts",
+      "length": "{{count}} sauts",
+      "clear": "Effacer",
+      "swap": "Inverser source et cible"
+    },
+    "controls": {
+      "fit": "Ajuster la vue",
+      "pause": "Pause de la simulation",
+      "resume": "Reprendre la simulation",
+      "screenshot": "Capture d'écran",
+      "settings": "Avancé"
+    },
+    "legend": {
+      "title": "Légende",
+      "types": "Types de nœuds",
+      "period": "Période (opacité)",
+      "relations": "Poids des liens",
+      "presocratic": "Présocratique",
+      "lateAntiquity": "Antiquité tardive",
+      "modern": "Moderne",
+      "structural": "auteur / membre_de",
+      "doctrinal": "interprète / critique",
+      "citation": "cite / mentionne"
+    },
+    "atlas": {
+      "hintLabel": "Atlas du libre arbitre",
+      "hintBody": "Une vue curatée des concepts, écoles, penseurs et chercheurs modernes structurant la question du libre arbitre. Cherchez pour approfondir, basculez vers le graphe complet pour voir les 17,7k nœuds, ou ouvrez « Trouver un chemin » pour tracer une connexion."
+    },
+    "loading": {
+      "eyebrow": "Graphe de connaissances",
+      "title": "Construction de l'Atlas…",
+      "body": "Chargement de 17,7k nœuds et 42,9k relations — sources antiques et réception moderne."
+    },
+    "error": {
+      "eyebrow": "Graphe de connaissances",
+      "title": "Impossible de charger le graphe",
+      "retry": "Réessayer",
+      "openDatabase": "Ouvrir la base de données à la place"
+    },
+    "advanced": {
+      "title": "Avancé",
+      "body": "Le réglage de la physique de simulation, la sélection au lasso et l'épinglage sont passés en mode développeur. Ils reviendront derrière ce panneau dans une prochaine itération. En attendant, utilisez Atlas / Graphe complet / Filtrer / Trouver un chemin pour le travail scientifique quotidien."
     }
   }
 }

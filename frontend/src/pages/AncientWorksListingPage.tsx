@@ -251,7 +251,7 @@ export default function TextExplorerPage() {
                 <select
                   value={categoryFilter}
                   onChange={(e) => { setCategoryFilter(e.target.value); setOffset(0); }}
-                  className="px-3 py-2 text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-700 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 min-h-[40px] transition-colors"
+                  className="px-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-700 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 min-h-[40px] transition-colors"
                 >
                   <option value="">{t('ancientWorks.filters.allAuthors')}</option>
                   {stats?.top_authors?.map((author: AuthorStats) => (
@@ -269,8 +269,7 @@ export default function TextExplorerPage() {
                     value={authorFilter}
                     onChange={(e) => { setAuthorFilter(e.target.value); setOffset(0); }}
                     placeholder={t('ancientWorks.filters.searchAuthorPlaceholder')}
-                    className="w-full pl-8.5 pr-3 py-2 text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-700 placeholder:text-stone-400 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 min-h-[40px] transition-colors"
-                    style={{ paddingLeft: '2.125rem' }}
+                    className="w-full pl-9 pr-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-700 placeholder:text-stone-400 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 min-h-[40px] transition-colors"
                   />
                 </div>
 
@@ -278,7 +277,7 @@ export default function TextExplorerPage() {
                 <select
                   value={languageFilter}
                   onChange={(e) => { setLanguageFilter(e.target.value); setOffset(0); }}
-                  className="px-3 py-2 text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-700 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 min-h-[40px] transition-colors"
+                  className="px-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-700 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 min-h-[40px] transition-colors"
                 >
                   <option value="">{t('ancientWorks.filters.allLanguages')}</option>
                   <option value="Greek">{t('ancientWorks.filters.languages.greek')}</option>
@@ -303,7 +302,7 @@ export default function TextExplorerPage() {
                 <select
                   value={sortBy}
                   onChange={(e) => { setSortBy(e.target.value); setOffset(0); }}
-                  className="px-3 py-2 text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-700 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 min-h-[40px] transition-colors"
+                  className="px-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-700 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 min-h-[40px] transition-colors"
                 >
                   <option value="most_cited">{t('ancientWorks.sort.mostCited')}</option>
                   <option value="author">{t('ancientWorks.sort.byAuthor')}</option>

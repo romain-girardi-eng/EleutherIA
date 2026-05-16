@@ -722,7 +722,7 @@
     "philologicalWork": "Philological Work",
     "philoDesc": "All Greek and Latin texts undergo manual verification. Lemmatization uses LAULA (Latin) and PAULA (Greek) morphological analyzers to enable lemma-based search. Every knowledge graph node is grounded in primary sources (ancient texts) or secondary literature (modern scholarship) with full bibliographic provenance.",
     "technicalInfra": "Technical Infrastructure",
-    "techStack": "React 19 + TypeScript + Vite + Tailwind CSS frontend, FastAPI + Python backend, PostgreSQL (structured data) + Qdrant (vector embeddings), Cytoscape.js for network visualization, GraphRAG pipeline with Gemini API, Cloudflare Workers (production deployment)"
+    "techStack": "React 19 + TypeScript + Vite + Tailwind CSS frontend, FastAPI + Python backend, PostgreSQL (structured data) + Qdrant (vector embeddings), Cytoscape.js for network visualization, GraphRAG pipeline with Gemini API, Docker Compose + Cloudflare tunnel (production deployment)"
   },
   "login": {
     "title": "Sign in to your account",
@@ -1381,11 +1381,26 @@
       "timeline": {
         "title": "1,200 Years of Philosophical Debate",
         "periods": {
-          "presocratic": { "era": "Presocratic", "years": "6th-5th c. BCE" },
-          "classical": { "era": "Classical", "years": "5th-4th c. BCE" },
-          "hellenistic": { "era": "Hellenistic", "years": "4th-1st c. BCE" },
-          "imperial": { "era": "Imperial", "years": "1st-3rd c. CE" },
-          "lateAntiquity": { "era": "Late Antiquity", "years": "3rd-6th c. CE" }
+          "presocratic": {
+            "era": "Presocratic",
+            "years": "6th-5th c. BCE"
+          },
+          "classical": {
+            "era": "Classical",
+            "years": "5th-4th c. BCE"
+          },
+          "hellenistic": {
+            "era": "Hellenistic",
+            "years": "4th-1st c. BCE"
+          },
+          "imperial": {
+            "era": "Imperial",
+            "years": "1st-3rd c. CE"
+          },
+          "lateAntiquity": {
+            "era": "Late Antiquity",
+            "years": "3rd-6th c. CE"
+          }
         }
       },
       "demo": {
@@ -2025,6 +2040,78 @@
         "confirm": "Reject",
         "cancel": "Cancel"
       }
+    }
+  },
+  "cosmograph": {
+    "back": "Back",
+    "searchPlaceholder": "Search a concept, thinker, work, or scholar — αὐτεξούσιον, Chrysippus, Bobzien…",
+    "searchAria": "Search the knowledge graph",
+    "searchEmpty": "No match. Try a Greek/Latin term, a surname, or one of: αὐτεξούσιον, prohairesis, heimarmene, Bobzien.",
+    "searchResults": "Search results",
+    "tabs": {
+      "atlas": "Atlas",
+      "full": "Full graph",
+      "path": "Find a path",
+      "filter": "Filter"
+    },
+    "filters": {
+      "period": "Period",
+      "type": "Type",
+      "school": "School",
+      "clear": "Clear filters"
+    },
+    "path": {
+      "title": "Find a path between two nodes",
+      "description": "Select a source and a target. The shortest semantic path will be highlighted on the graph.",
+      "source": "Source — e.g. Chrysippus",
+      "target": "Target — e.g. Augustine",
+      "searchAria": "Search for a node",
+      "computing": "Computing the shortest path…",
+      "noPath": "No path within 6 hops. Try the Atlas to pick more central anchors.",
+      "error": "Could not compute path",
+      "length_one": "{{count}} hop",
+      "length_other": "{{count}} hops",
+      "length": "{{count}} hops",
+      "clear": "Clear",
+      "swap": "Swap source and target"
+    },
+    "controls": {
+      "fit": "Fit view",
+      "pause": "Pause layout",
+      "resume": "Resume layout",
+      "screenshot": "Screenshot",
+      "settings": "Advanced"
+    },
+    "legend": {
+      "title": "Legend",
+      "types": "Node types",
+      "period": "Period (opacity)",
+      "relations": "Edge weight",
+      "presocratic": "Presocratic",
+      "lateAntiquity": "Late Antiquity",
+      "modern": "Modern",
+      "structural": "authored / member_of",
+      "doctrinal": "interprets / critiques",
+      "citation": "cites / mentions"
+    },
+    "atlas": {
+      "hintLabel": "Free Will Atlas",
+      "hintBody": "A curated view of the load-bearing concepts, schools, thinkers, and modern scholars on free will. Search to dive deeper, switch to the full graph for the 17.7k-node map, or open Find a path to trace a connection."
+    },
+    "loading": {
+      "eyebrow": "Knowledge graph",
+      "title": "Building the Atlas…",
+      "body": "Loading 17.7k nodes and 42.9k relations across ancient sources and modern reception."
+    },
+    "error": {
+      "eyebrow": "Knowledge graph",
+      "title": "Could not load the graph",
+      "retry": "Retry",
+      "openDatabase": "Open the database instead"
+    },
+    "advanced": {
+      "title": "Advanced",
+      "body": "Layout physics, lasso selection and pinning have moved to a developer mode. They will return behind this drawer in a later iteration — for now use Atlas / Full graph / Filter / Find a path for everyday scholarly work."
     }
   }
 }

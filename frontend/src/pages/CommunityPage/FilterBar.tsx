@@ -44,7 +44,7 @@ function ChipGroup({
             onClick={() => onSelect(active ? null : option.key)}
             aria-pressed={active}
             className={cn(
-              'rounded-full border px-3 py-1 text-xs font-medium transition-all',
+              'rounded-full border px-3 py-1.5 sm:py-1 min-h-[36px] sm:min-h-0 text-xs font-medium transition-all',
               active
                 ? 'border-amber-400/80 bg-amber-100/70 text-amber-900 shadow-sm'
                 : 'border-stone-200/70 bg-white/60 text-stone-600 hover:border-amber-300/60 hover:bg-amber-50/60 hover:text-amber-800'
