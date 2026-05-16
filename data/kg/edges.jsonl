@@ -44356,3 +44356,118 @@
 {"source": "argument_oinomaos_carneadean_libre_adaptation", "target": "concept_heimarmene_fate_stoics_j0k1l2m3", "relation": "responds_to", "confidence": 0.85}
 {"source": "argument_hierocles_carneadean_inversion_for_providential_heimarmene", "target": "argument_carneadean_general_theme_amand1945", "relation": "interprets", "confidence": 0.85}
 {"source": "synthesis_amand1945_hierocles_bizarre_carneadean_inversion", "target": "person_origen_alexandria_185_254ce_s9t0u1v2", "relation": "discusses", "confidence": 0.8, "metadata": {"amand_qualification": "parallel between Hierocles and Origen on providential pedagogy"}}
+{"source": "person_hippolytus_rome_d235", "target": "work_hippolytus_philosophoumena", "relation": "wrote", "confidence": 0.85}
+{"source": "work_hippolytus_philosophoumena", "target": "person_hippolytus_rome_d235", "relation": "authored_by", "confidence": 0.85}
+{"source": "person_bardesanes_the_syrian_3r8s0u76", "target": "work_bardesanes_liber_legum_regionum", "relation": "wrote", "confidence": 0.85}
+{"source": "work_bardesanes_liber_legum_regionum", "target": "person_bardesanes_the_syrian_3r8s0u76", "relation": "authored_by", "confidence": 0.85}
+{"source": "person_epiphanius_salamis_d403", "target": "work_epiphanius_panarion", "relation": "wrote", "confidence": 0.85}
+{"source": "person_epiphanius_salamis_d403", "target": "work_epiphanius_ancoratus", "relation": "wrote", "confidence": 0.85}
+{"source": "work_epiphanius_panarion", "target": "person_epiphanius_salamis_d403", "relation": "authored_by", "confidence": 0.85}
+{"source": "work_epiphanius_ancoratus", "target": "person_epiphanius_salamis_d403", "relation": "authored_by", "confidence": 0.85}
+{"source": "person_diodore_tarsus_d390", "target": "work_diodore_tarsus_contra_astronomos_heimarmenen", "relation": "wrote", "confidence": 0.85}
+{"source": "person_diodore_tarsus_d390", "target": "work_diodore_tarsus_commentary_romans", "relation": "wrote", "confidence": 0.85}
+{"source": "work_diodore_tarsus_contra_astronomos_heimarmenen", "target": "person_diodore_tarsus_d390", "relation": "authored_by", "confidence": 0.85}
+{"source": "work_diodore_tarsus_commentary_romans", "target": "person_diodore_tarsus_d390", "relation": "authored_by", "confidence": 0.85}
+{"source": "person_anonymous_arian_job_commentator_4c_ce", "target": "work_pseudo_origenes_in_iob_arian_commentary", "relation": "wrote", "confidence": 0.85}
+{"source": "work_pseudo_origenes_in_iob_arian_commentary", "target": "person_anonymous_arian_job_commentator_4c_ce", "relation": "authored_by", "confidence": 0.85}
+{"source": "person_irenaeus_d202", "target": "work_irenaeus_demonstratio_apostolic", "relation": "wrote", "confidence": 0.85}
+{"source": "work_irenaeus_demonstratio_apostolic", "target": "person_irenaeus_d202", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_justin_first_christian_carneadean_user", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_tatian_no_carneadean_link", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_irenaeus_transposed_topos", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_hippolytus_no_carneadean_use", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_bardesanes_secondary_witness_ethnographic", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_clement_alexandria_minimal_echo", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_methodius_indirect_via_hypomnema", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_methodius_anti_origenist_reaction", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_epiphanius_servile_carneadean_topoi", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_epiphanius_antiorigenist_polemic_anti_philosophy", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_diodore_tarsus_largest_antifatalist_treatise", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_diodore_tarsus_two_carneadean_echoes", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_arian_job_witness_carneadean_pity_argument", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_arian_job_homoean_dating_draguet", "target": "scholar_amand_de_mendieta_e", "relation": "authored_by", "confidence": 0.85}
+{"source": "synthesis_amand1945_justin_first_christian_carneadean_user", "target": "person_justin_martyr_2c_ce", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_justin_first_christian_carneadean_user", "target": "person_carneades_214_129bce_l2m3n4o5", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_justin_first_christian_carneadean_user", "target": "argument_justin_1apol_43_three_carneadean_topoi", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_tatian_no_carneadean_link", "target": "person_tatian", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_tatian_no_carneadean_link", "target": "work_tatian_oratio", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_irenaeus_transposed_topos", "target": "person_irenaeus_d202", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_irenaeus_transposed_topos", "target": "argument_irenaeus_adv_haer_iv_37_praise_blame_transposed", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_hippolytus_no_carneadean_use", "target": "person_hippolytus_rome_d235", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_hippolytus_no_carneadean_use", "target": "work_hippolytus_philosophoumena", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_bardesanes_secondary_witness_ethnographic", "target": "person_bardesanes_the_syrian_3r8s0u76", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_bardesanes_secondary_witness_ethnographic", "target": "work_bardesanes_liber_legum_regionum", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_bardesanes_secondary_witness_ethnographic", "target": "argument_bardesanes_nomima_barbarika_amplified", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_bardesanes_secondary_witness_ethnographic", "target": "argument_bardesanes_triple_delimitation_physis_heimarmene_autexousion", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_bardesanes_secondary_witness_ethnographic", "target": "concept_nomima_barbarika_amand", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_clement_alexandria_minimal_echo", "target": "person_clement_alexandria", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_clement_alexandria_minimal_echo", "target": "argument_clement_alex_carneadean_glissement_faith_unbelief", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_clement_alexandria_minimal_echo", "target": "argument_clement_alex_strom_1_83_5_praise_blame", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_methodius_indirect_via_hypomnema", "target": "person_methodius_olympus_d311", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_methodius_indirect_via_hypomnema", "target": "argument_methodius_symposium_three_carneadean_syllogisms", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_methodius_anti_origenist_reaction", "target": "person_methodius_olympus_d311", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_methodius_anti_origenist_reaction", "target": "person_origen_alexandria_185_254ce_s9t0u1v2", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_epiphanius_servile_carneadean_topoi", "target": "person_epiphanius_salamis_d403", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_epiphanius_servile_carneadean_topoi", "target": "work_epiphanius_panarion", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_epiphanius_antiorigenist_polemic_anti_philosophy", "target": "person_epiphanius_salamis_d403", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_epiphanius_antiorigenist_polemic_anti_philosophy", "target": "person_origen_alexandria_185_254ce_s9t0u1v2", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_diodore_tarsus_largest_antifatalist_treatise", "target": "person_diodore_tarsus_d390", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_diodore_tarsus_largest_antifatalist_treatise", "target": "work_diodore_tarsus_contra_astronomos_heimarmenen", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_diodore_tarsus_two_carneadean_echoes", "target": "argument_diodore_tarsus_impossibility_prediction_carneadean", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_diodore_tarsus_two_carneadean_echoes", "target": "person_carneades_214_129bce_l2m3n4o5", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_arian_job_witness_carneadean_pity_argument", "target": "person_anonymous_arian_job_commentator_4c_ce", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_arian_job_witness_carneadean_pity_argument", "target": "work_pseudo_origenes_in_iob_arian_commentary", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_arian_job_witness_carneadean_pity_argument", "target": "argument_arian_job_pity_criminals_carneadean_5th_title", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_arian_job_witness_carneadean_pity_argument", "target": "argument_arian_job_useless_prayer_under_fatalism", "relation": "discusses", "confidence": 0.85}
+{"source": "synthesis_amand1945_arian_job_homoean_dating_draguet", "target": "person_anonymous_arian_job_commentator_4c_ce", "relation": "discusses", "confidence": 0.85}
+{"source": "argument_bardesanes_nomima_barbarika_amplified", "target": "person_bardesanes_the_syrian_3r8s0u76", "relation": "authored_by", "confidence": 0.85}
+{"source": "argument_bardesanes_triple_delimitation_physis_heimarmene_autexousion", "target": "person_bardesanes_the_syrian_3r8s0u76", "relation": "authored_by", "confidence": 0.85}
+{"source": "argument_clement_alex_carneadean_glissement_faith_unbelief", "target": "person_clement_alexandria", "relation": "authored_by", "confidence": 0.85}
+{"source": "argument_clement_alex_strom_1_83_5_praise_blame", "target": "person_clement_alexandria", "relation": "authored_by", "confidence": 0.85}
+{"source": "argument_methodius_symposium_three_carneadean_syllogisms", "target": "person_methodius_olympus_d311", "relation": "authored_by", "confidence": 0.85}
+{"source": "argument_methodius_libre_arbitre_obeissance_irenean", "target": "person_methodius_olympus_d311", "relation": "authored_by", "confidence": 0.85}
+{"source": "argument_irenaeus_adv_haer_iv_37_praise_blame_transposed", "target": "person_irenaeus_d202", "relation": "authored_by", "confidence": 0.85}
+{"source": "argument_justin_1apol_43_three_carneadean_topoi", "target": "person_justin_martyr_2c_ce", "relation": "authored_by", "confidence": 0.85}
+{"source": "argument_diodore_tarsus_impossibility_prediction_carneadean", "target": "person_diodore_tarsus_d390", "relation": "authored_by", "confidence": 0.85}
+{"source": "argument_arian_job_pity_criminals_carneadean_5th_title", "target": "person_anonymous_arian_job_commentator_4c_ce", "relation": "authored_by", "confidence": 0.85}
+{"source": "argument_arian_job_useless_prayer_under_fatalism", "target": "person_anonymous_arian_job_commentator_4c_ce", "relation": "authored_by", "confidence": 0.85}
+{"source": "argument_bardesanes_nomima_barbarika_amplified", "target": "work_bardesanes_liber_legum_regionum", "relation": "cites_primary_source", "confidence": 0.85}
+{"source": "argument_bardesanes_triple_delimitation_physis_heimarmene_autexousion", "target": "work_bardesanes_liber_legum_regionum", "relation": "cites_primary_source", "confidence": 0.85}
+{"source": "argument_justin_1apol_43_three_carneadean_topoi", "target": "work_justin_first_apology", "relation": "cites_primary_source", "confidence": 0.85}
+{"source": "argument_irenaeus_adv_haer_iv_37_praise_blame_transposed", "target": "work_irenaeus_adversus_haereses_book4", "relation": "cites_primary_source", "confidence": 0.85}
+{"source": "argument_clement_alex_carneadean_glissement_faith_unbelief", "target": "work_clement_stromateis", "relation": "cites_primary_source", "confidence": 0.85}
+{"source": "argument_clement_alex_strom_1_83_5_praise_blame", "target": "work_clement_stromateis", "relation": "cites_primary_source", "confidence": 0.85}
+{"source": "argument_methodius_symposium_three_carneadean_syllogisms", "target": "work_methodius_symposium_144841d0", "relation": "cites_primary_source", "confidence": 0.85}
+{"source": "argument_methodius_libre_arbitre_obeissance_irenean", "target": "work_methodius_de_autexusio_4c37c892", "relation": "cites_primary_source", "confidence": 0.85}
+{"source": "argument_diodore_tarsus_impossibility_prediction_carneadean", "target": "work_diodore_tarsus_contra_astronomos_heimarmenen", "relation": "cites_primary_source", "confidence": 0.85}
+{"source": "argument_arian_job_pity_criminals_carneadean_5th_title", "target": "work_pseudo_origenes_in_iob_arian_commentary", "relation": "cites_primary_source", "confidence": 0.85}
+{"source": "argument_arian_job_useless_prayer_under_fatalism", "target": "work_pseudo_origenes_in_iob_arian_commentary", "relation": "cites_primary_source", "confidence": 0.85}
+{"source": "argument_irenaeus_adv_haer_iv_37_praise_blame_transposed", "target": "passage_irenaeus_ah_4_37", "relation": "evidenced_by", "confidence": 0.9, "metadata": {"amand_source": "Amand 1945 p. 222-223 - Adv. Haer. IV.37.1-2 contient l'echo carneadien"}}
+{"source": "person_justin_martyr_2c_ce", "target": "person_tatian", "relation": "influences", "confidence": 0.95, "metadata": {"amand_source": "Amand 1945 p. 209 - 'Tatien n'en est pas moins l'ouvrier de la meme oeuvre que son maitre' Justin"}}
+{"source": "person_irenaeus_d202", "target": "person_methodius_olympus_d311", "relation": "influences", "confidence": 0.9, "metadata": {"amand_source": "Amand 1945 p. 333-335 - 'A la suite des Apologistes et surtout d'Irenee' Methode affirme la liberte comme don divin"}}
+{"source": "person_carneades_214_129bce_l2m3n4o5", "target": "person_bardesanes_the_syrian_3r8s0u76", "relation": "influences", "confidence": 0.75, "metadata": {"amand_source": "Amand 1945 p. 243 - 'Bardesane est peut-etre le premier a avoir mis en oeuvre [nomima barbarika] avec une telle profusion'"}}
+{"source": "person_carneades_214_129bce_l2m3n4o5", "target": "person_diodore_tarsus_d390", "relation": "influences", "confidence": 0.75, "metadata": {"amand_source": "Amand 1945 p. 477-478 - Diodore reproduit deux topoi carneadiens"}}
+{"source": "person_cicero_marcus_tullius_106_43bce_a8f3d2c1", "target": "person_diodore_tarsus_d390", "relation": "influences", "confidence": 0.7, "metadata": {"amand_source": "Amand 1945 p. 470 note - 'parallels entre certains passages de Diodore et des endroits du De natura deorum de Ciceron'"}}
+{"source": "person_diodore_tarsus_d390", "target": "person_john_chrysostom_d407", "relation": "influences", "confidence": 0.95, "metadata": {"amand_source": "Amand 1945 p. 463 - 'maitre de Jean Chrysostome qui a conserve de lui un souvenir enthousiaste'"}}
+{"source": "person_epiphanius_salamis_d403", "target": "person_origen_alexandria_185_254ce_s9t0u1v2", "relation": "critiques", "confidence": 0.95, "metadata": {"amand_source": "Amand 1945 p. 449-451 - polemique antiorigeniste violente, Origene = 'pere de l'arianisme'"}}
+{"source": "person_eusebius_caesarea_d339", "target": "person_epiphanius_salamis_d403", "relation": "influences", "confidence": 0.7, "metadata": {"amand_source": "Amand 1945 p. 441-442 - activite litteraire d'Epiphane contemporaine de Basile/Gregoire de Nazianze, succede a Eusebe heresiologue"}}
+{"source": "person_irenaeus_d202", "target": "person_hippolytus_rome_d235", "relation": "influences", "confidence": 0.9, "metadata": {"amand_source": "Amand 1945 p. 224 - Hippolyte 'disciple d'Irenee, theologien du Logos et polemiste antignostique'"}}
+{"source": "person_carneades_214_129bce_l2m3n4o5", "target": "person_anonymous_arian_job_commentator_4c_ce", "relation": "influences", "confidence": 0.7, "metadata": {"amand_source": "Amand 1945 p. 545 - digression utilise des arguments carneadiens via une source philosophique probable (peut-etre un hypomnema scolaire)"}}
+{"source": "person_anonymous_arian_job_commentator_4c_ce", "target": "person_basil_great_d379", "relation": "influenced_by", "confidence": 0.7, "metadata": {"amand_source": "Amand 1945 p. 537-538 - source philosophique commune avec Basile Hex. VI.5-7"}}
+{"source": "person_eusebius_caesarea_d339", "target": "work_bardesanes_liber_legum_regionum", "relation": "cites_primary_source", "confidence": 0.95, "metadata": {"amand_source": "Amand 1945 p. 239 - PE VI.10.1-48 transcrit deux longs fragments de la version grecque du LLR"}}
+{"source": "argument_bardesanes_nomima_barbarika_amplified", "target": "concept_nomima_barbarika_amand", "relation": "employs", "confidence": 0.85}
+{"source": "argument_diodore_tarsus_impossibility_prediction_carneadean", "target": "concept_nomima_barbarika_amand", "relation": "employs", "confidence": 0.85}
+{"source": "argument_bardesanes_triple_delimitation_physis_heimarmene_autexousion", "target": "concept_heimarmene_fate_stoics_j0k1l2m3", "relation": "discusses", "confidence": 0.85}
+{"source": "person_justin_martyr_2c_ce", "target": "person_tatian", "relation": "precedes", "confidence": 0.85}
+{"source": "person_tatian", "target": "person_irenaeus_d202", "relation": "precedes", "confidence": 0.85}
+{"source": "person_irenaeus_d202", "target": "person_hippolytus_rome_d235", "relation": "precedes", "confidence": 0.85}
+{"source": "person_irenaeus_d202", "target": "person_bardesanes_the_syrian_3r8s0u76", "relation": "precedes", "confidence": 0.85}
+{"source": "person_bardesanes_the_syrian_3r8s0u76", "target": "person_clement_alexandria", "relation": "precedes", "confidence": 0.85}
+{"source": "person_methodius_olympus_d311", "target": "person_epiphanius_salamis_d403", "relation": "precedes", "confidence": 0.85}
+{"source": "person_epiphanius_salamis_d403", "target": "person_diodore_tarsus_d390", "relation": "precedes", "confidence": 0.85}
+{"source": "person_diodore_tarsus_d390", "target": "person_anonymous_arian_job_commentator_4c_ce", "relation": "precedes", "confidence": 0.85}
+{"source": "person_diodore_tarsus_d390", "target": "person_john_chrysostom_d407", "relation": "precedes", "confidence": 0.85}
+{"source": "person_diodore_tarsus_d390", "target": "school_christian_patristic", "relation": "member_of", "confidence": 0.85}
+{"source": "person_crescens_cynic_2c_ce", "target": "school_christian_apologists", "relation": "critiques", "confidence": 0.9, "metadata": {"amand_source": "Amand 1945 p. 195 - Crescens accusateur de Justin et des chretiens cultives"}}
+{"source": "person_clement_alexandria", "target": "person_origen_alexandria_185_254ce_s9t0u1v2", "relation": "precedes", "confidence": 0.85}
+{"source": "person_origen_alexandria_185_254ce_s9t0u1v2", "target": "person_methodius_olympus_d311", "relation": "precedes", "confidence": 0.85}
