@@ -2,37 +2,37 @@
 
 ## Corpus Counts
 
-- `argument`: 1119
+- `argument`: 1317
 - `argument_framework`: 1
-- `concept`: 176
+- `concept`: 210
 - `conceptual_evolution`: 3
 - `controversy`: 5
 - `debate`: 17
-- `event`: 2
-- `group`: 3
-- `passage`: 16858
-- `person`: 362
+- `event`: 5
+- `group`: 8
+- `passage`: 17177
+- `person`: 413
 - `position`: 8
-- `publication`: 310
+- `publication`: 324
 - `quote`: 14
-- `school`: 11
-- `source_collection`: 2
-- `synthesis`: 13
-- `work`: 177
+- `school`: 16
+- `source_collection`: 6
+- `synthesis`: 177
+- `work`: 230
 
 ## Evidence Anchoring
 
-- `academic_antifatalism`: 7
-- `aristotle_voluntary_akrasia`: 48
-- `augustine_grace_will`: 478
-- `epicurean_swerve`: 11
-- `late_antique_providence`: 46
-- `stoic_fate_assent`: 202
-- `unclassified`: 327
+- `academic_antifatalism`: 28
+- `aristotle_voluntary_akrasia`: 53
+- `augustine_grace_will`: 514
+- `epicurean_swerve`: 12
+- `late_antique_providence`: 76
+- `stoic_fate_assent`: 221
+- `unclassified`: 384
 
 ## Edition Metadata
 
-Total: 155
+Total: 208
 
 - `sc10bis_ignatius_ad_ephesios`
 - `sc10bis_ignatius_ad_magnesios`
@@ -50,7 +50,7 @@ Total: 155
 - `sc167_clemens_epistula_ad_corinthios`
 - `sc172_epistula_barnabae`
 - `sc20_theophilus_ad_autolycum`
-- `sc31_melito_peri_pascha_iv`
+- `passage_eusebius_he_iv_26_melito_fr_iv`
 - `sc379_athenagoras_legatio`
 - `sc464_pamphilus_apologia_pro_origene`
 - `sc470_aristides_apologia`
@@ -108,7 +108,6 @@ Total: 155
 - `work_exodus_c9d0e1f2`
 - `work_ezekiel_g3h4i5j6`
 - `work_frankfurt_alternate_possibilities_1969`
-- `work_frede_free_will_2011`
 - `work_free_mele_5m6n7o8p`
 - `work_freedom_and_resentment_strawson_3k4l5m6n`
 - `work_galen_de_placitis`
@@ -134,14 +133,14 @@ Total: 155
 - `work_justin_against_marcion`
 - `work_justin_dialogue_trypho`
 - `work_justin_first_apology`
-- ... 55 more
+- `work_justin_second_apology_sc507`
+- ... 108 more
 
 ## Publication BibTeX Metadata
 
-Total: 227
+Total: 222
 
 - `scholarly_work_acosta_l_pez_de_mesa_2012_plotinus_aristotle_and_the_origin_of_the`
-- `scholarly_work_amand_de_mendieta_1973_fatalisme_et_libert_dans_l_antiquit_grec`
 - `scholarly_work_andresen_1952_justin_und_der_mittlere_platonismus`
 - `scholarly_work_andresen_1955_logos_nomos`
 - `scholarly_work_barclay_1987_mirror_reading_a_polemical_letter_galati`
@@ -160,7 +159,6 @@ Total: 227
 - `scholarly_work_bobzien_1998_determinism_and_freedom_in_stoic_philoso`
 - `scholarly_work_bobzien_1998_the_inadvertent_conception_and_late_birt`
 - `scholarly_work_bobzien_2000_inadvertent`
-- `scholarly_work_bobzien_2001_determinism_and_freedom_in_stoic_philoso`
 - `scholarly_work_bonaiuti_1924_the_genesis_of_st_augustine_s_idea_of_or`
 - `scholarly_work_boulnois_2000_libert_origine_du_mal_et_prescience_divi`
 - `scholarly_work_boys_stones_0_middle_platonists_on_fate_and_human_auto`
@@ -200,8 +198,6 @@ Total: 227
 - `scholarly_work_dettwiler_2012_ep_tre_aux_colossiens`
 - `scholarly_work_dettwiler_2012_ep_tre_aux_eph_siens`
 - `scholarly_work_dettwiler_2020_les_principaux_termes_anthropologiques_c`
-- `scholarly_work_dihle_1982_the_theory_of_will_in_classical_antiquit`
-- `scholarly_work_dihle_1982_theory_will`
 - `scholarly_work_dodson_2017_paul_and_seneca_in_dialogue`
 - `scholarly_work_dodson_2017_paul_and_the_greco_roman_philosophical_t`
 - `scholarly_work_donini_1989_ethos_aristotele_e_il_determinismo`
@@ -226,7 +222,6 @@ Total: 227
 - `scholarly_work_frankfurt_1971_freedom_of_the_will_and_the_concept_of_a`
 - `scholarly_work_frede_1982_the_dramatization_of_determinism_alexand`
 - `scholarly_work_frede_1987_essays_in_ancient_philosophy`
-- `scholarly_work_frede_2011_a_free_will_origins_of_the_notion_in_anc`
 - `scholarly_work_frick_1997_the_concept_of_divine_providence_in_the_`
 - `scholarly_work_furley_1967_greek_atomists`
 - `scholarly_work_gaventa_0_romans`
@@ -240,12 +235,90 @@ Total: 227
 - `scholarly_work_gooch_1987_sovereignty_and_freedom_some_pauline_com`
 - `scholarly_work_goodrich_2013_sold_under_sin_echoes_of_exile_in_romans`
 - `scholarly_work_gorday_1983_principles_of_patristic_exegesis_romans_`
-- ... 127 more
+- `scholarly_work_gourinat_0_responsabilit_morale_et_destin_une_r_pon`
+- `scholarly_work_gourinat_2005_la_prohairesis_chez_pict_te_d_cision_vol`
+- `scholarly_work_graeser_1972_plotinus_and_the_stoics_a_preliminary_st`
+- `scholarly_work_grant_1971_early_alexandrian_christianity`
+- `scholarly_work_grant_1996_irenaeus_of_lyons`
+- ... 122 more
 
 ## Passage Role
 
-Total: 0
+Total: 73
 
+- `passage_origen_pa_3_1_1`
+- `passage_origen_pa_3_1_2`
+- `passage_origen_pa_3_1_4`
+- `passage_origen_pa_3_1_5`
+- `passage_origen_pa_3_1_6`
+- `passage_origen_pa_3_1_7`
+- `passage_origen_pa_3_1_8`
+- `passage_origen_pa_3_1_9`
+- `passage_origen_pa_3_1_10`
+- `passage_origen_pa_3_1_11`
+- `passage_origen_pa_3_1_12`
+- `passage_origen_pa_3_1_13`
+- `passage_origen_pa_3_1_14`
+- `passage_origen_pa_3_1_15`
+- `passage_origen_pa_3_1_16`
+- `passage_origen_pa_3_1_17`
+- `passage_origen_pa_3_1_18`
+- `passage_origen_pa_3_1_19`
+- `passage_origen_pa_3_1_20`
+- `passage_origen_pa_3_1_21`
+- `passage_origen_pa_3_1_22`
+- `passage_origen_pa_3_1_23`
+- `passage_origen_pa_3_1_24`
+- `passage_origen_philocalia_21_5`
+- `passage_origen_philocalia_21_7`
+- `passage_origen_philocalia_21_18`
+- `passage_origen_philocalia_21_23`
+- `passage_origen_philocalia_25_1`
+- `passage_origen_philocalia_25_2`
+- `passage_origen_philocalia_25_3`
+- `passage_origen_philocalia_25_4`
+- `passage_origen_philocalia_26_1`
+- `passage_origen_philocalia_26_2`
+- `passage_origen_philocalia_26_3`
+- `passage_origen_philocalia_26_4`
+- `passage_origen_philocalia_26_5`
+- `passage_origen_philocalia_26_6`
+- `passage_origen_philocalia_26_7`
+- `passage_origen_philocalia_26_8`
+- `passage_origen_philocalia_27_1`
+- `passage_origen_philocalia_27_2`
+- `passage_origen_philocalia_27_3`
+- `passage_origen_philocalia_27_4`
+- `passage_origen_philocalia_27_5`
+- `passage_origen_philocalia_27_6`
+- `passage_origen_philocalia_27_7`
+- `passage_origen_philocalia_27_8`
+- `passage_origen_philocalia_27_12`
+- `passage_origen_philocalia_22_1`
+- `passage_origen_philocalia_22_2`
+- `passage_origen_philocalia_22_3`
+- `passage_origen_philocalia_22_4`
+- `passage_origen_philocalia_22_5`
+- `passage_origen_philocalia_22_6`
+- `passage_origen_philocalia_22_7`
+- `passage_origen_philocalia_22_8`
+- `passage_origen_philocalia_22_9`
+- `passage_origen_philocalia_22_10`
+- `passage_eusebius_praep_ev_book_01`
+- `passage_eusebius_praep_ev_book_02`
+- `passage_eusebius_praep_ev_book_03`
+- `passage_eusebius_praep_ev_book_04`
+- `passage_eusebius_praep_ev_book_05`
+- `passage_eusebius_praep_ev_book_06`
+- `passage_eusebius_praep_ev_book_07`
+- `passage_eusebius_praep_ev_book_08`
+- `passage_eusebius_praep_ev_book_09`
+- `passage_eusebius_praep_ev_book_10`
+- `passage_eusebius_praep_ev_book_11`
+- `passage_eusebius_praep_ev_book_12`
+- `passage_eusebius_praep_ev_book_13`
+- `passage_eusebius_praep_ev_book_14`
+- `passage_eusebius_praep_ev_book_15`
 
 ## Translation Source Links
 
@@ -254,7 +327,7 @@ Total: 0
 
 ## Date Uncertainty
 
-Total: 539
+Total: 643
 
 - `person_al_ashari_m3n4o5p6`
 - `person_al_ghazali_u1v2w3x4`
@@ -327,7 +400,6 @@ Total: 539
 - `person_francisco_suarez_late_16th_c_scholastic_tradition_continued_into_17th_c_d5e0d92c`
 - `person_franciscus_gomarus_2j6e7f35`
 - `person_frankfurt_harry_1929_2023`
-- `person_frede_michael_1940_2007`
 - `person_galen_pergamon_129_216ce`
 - `person_gersonides_o1p2q3r4`
 - `person_ginet_carl_0t1u2v3w`
@@ -356,4 +428,5 @@ Total: 539
 - `person_john_chrysostom_d407`
 - `person_john_damascene_d749`
 - `person_john_duns_scotus_48daa9ee`
-- ... 439 more
+- `person_john_locke_4v8q9r57`
+- ... 543 more
