@@ -192,16 +192,19 @@ def edge_key(e: dict[str, Any]) -> tuple[str, str, str]:
 
 def compute_delta(git_nodes: list[dict], git_edges: list[dict],
                   prod_nodes: list[dict], prod_edges: list[dict]) -> dict[str, Any]:
+    # Pre-compute id/key sets ONCE (was the perf hot path: O(N²) when set was
+    # rebuilt inside each comprehension iteration → 46k × 43k ≈ 2B ops).
     prod_node_ids = {n["id"] for n in prod_nodes}
     prod_edge_keys = {(e["source"], e["target"], e["relation"]) for e in prod_edges}
+    git_node_ids = {n["id"] for n in git_nodes}
+    git_edge_keys = {edge_key(e) for e in git_edges}
 
-    git_by_id = {n["id"]: n for n in git_nodes}
     nodes_to_upsert = git_nodes  # upsert ALL git nodes (idempotent on existing)
     nodes_only_in_git = [n for n in git_nodes if n["id"] not in prod_node_ids]
-    nodes_only_in_prod = [n for n in prod_nodes if n["id"] not in {g["id"] for g in git_nodes}]
-
+    nodes_only_in_prod = [n for n in prod_nodes if n["id"] not in git_node_ids]
     edges_to_insert = [e for e in git_edges if edge_key(e) not in prod_edge_keys]
-    edges_only_in_prod = [e for e in prod_edges if (e["source"], e["target"], e["relation"]) not in {edge_key(g) for g in git_edges}]
+    edges_only_in_prod = [e for e in prod_edges
+                           if (e["source"], e["target"], e["relation"]) not in git_edge_keys]
 
     return {
         "nodes_to_upsert": nodes_to_upsert,
@@ -209,6 +212,8 @@ def compute_delta(git_nodes: list[dict], git_edges: list[dict],
         "nodes_only_in_prod": nodes_only_in_prod,
         "edges_to_insert": edges_to_insert,
         "edges_only_in_prod": edges_only_in_prod,
+        # Cached for FK-safe --max-nodes mode (private, do not include in dump)
+        "_prod_nodes_for_fk_check": prod_nodes,
     }
 
 
@@ -237,6 +242,19 @@ async def apply_delta(conn: asyncpg.Connection, delta: dict[str, Any],
     if max_nodes is not None:
         nodes = nodes[:max_nodes]
         print(f"  (--max-nodes limit: {max_nodes} of {len(delta['nodes_to_upsert'])})")
+        # FK-safe: drop edges whose endpoints aren't in (upserted nodes + prod nodes).
+        # Without this filter, --max-nodes leaves edges pointing at nodes not yet
+        # in prod, triggering kg_edges_target_id_fkey violations.
+        upserted_ids = {n["id"] for n in nodes}
+        prod_ids = {n["id"] for n in delta.get("_prod_nodes_for_fk_check", [])}
+        # If we don't have prod IDs cached, fall back to a conservative filter:
+        # only edges where BOTH endpoints are in the upserted set.
+        valid_ids = upserted_ids | prod_ids if prod_ids else upserted_ids
+        filtered = [e for e in edges if e["source"] in valid_ids and e["target"] in valid_ids]
+        skipped_fk = len(edges) - len(filtered)
+        if skipped_fk:
+            print(f"  (--max-nodes mode: filtered {skipped_fk} edges with endpoints outside upserted+prod sets)")
+        edges = filtered
     if max_edges is not None:
         edges = edges[:max_edges]
         print(f"  (--max-edges limit: {max_edges} of {len(delta['edges_to_insert'])})")
@@ -301,6 +319,8 @@ async def main_async(args: argparse.Namespace) -> int:
 
     # Optionally dump the delta details for audit
     if args.dump_delta:
+        # Strip private cache key before dumping
+        delta.pop("_prod_nodes_for_fk_check", None)
         out = {
             "summary": {
                 "git_nodes": len(git_nodes), "prod_nodes": len(prod_nodes),
