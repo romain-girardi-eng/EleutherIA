@@ -2092,6 +2092,27 @@
       "retry": "Erneut versuchen",
       "openDatabase": "Stattdessen die Datenbank öffnen"
     },
+    "mobile": {
+      "tier": {
+        "atlas": "Atlas",
+        "schools": "Schulen",
+        "detail": "Detail"
+      },
+      "nodeCount_one": "{{count}} Knoten",
+      "nodeCount_other": "{{count}} Knoten",
+      "nodeCount": "{{count}} Knoten",
+      "openSheet": "Graph-Werkzeuge öffnen",
+      "searchOpen": "Suche öffnen",
+      "sheet": {
+        "title": "Graph-Werkzeuge",
+        "eyebrow": "Ansicht"
+      },
+      "hint": {
+        "title": "Zum Vertiefen zusammenkneifen",
+        "body": "Sie starten mit den 12 zentralsten Knoten. Per Pinch-Zoom erscheinen weitere Denker, Schulen und Argumente.",
+        "dismiss": "Verstanden"
+      }
+    },
     "advanced": {
       "title": "Erweitert",
       "body": "Simulationsphysik, Lasso-Auswahl und Anheften sind in einen Entwicklermodus verschoben. Sie kehren später hierher zurück. Nutzen Sie für die tägliche wissenschaftliche Arbeit Atlas / Gesamter Graph / Filter / Pfad finden."

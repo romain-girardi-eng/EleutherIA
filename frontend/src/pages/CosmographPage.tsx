@@ -40,7 +40,10 @@ import { pickAtlasNodeIds } from '../components/cosmograph/FreeWillAtlas';
 import KgSearchBar from '../components/cosmograph/KgSearchBar';
 import KgFilters, { type KgFilterState } from '../components/cosmograph/KgFilters';
 import Legend from '../components/cosmograph/Legend';
+import MobileGraphControls from '../components/cosmograph/MobileGraphControls';
 import PathFinder, { type PathResult } from '../components/cosmograph/PathFinder';
+import { useResponsive } from '../hooks/useResponsive';
+import { useMobileGraphTiers } from '../hooks/useMobileGraphTiers';
 
 type Tab = 'atlas' | 'full' | 'path' | 'filter';
 
@@ -204,6 +207,7 @@ export default function CosmographPage() {
   const navigate = useNavigate();
   const { nodeId } = useParams();
   const graphRef = useRef<CosmographRef>(undefined);
+  const { isMobile } = useResponsive();
 
   const [tab, setTab] = useState<Tab>('atlas');
   const [filters, setFilters] = useState<KgFilterState>({ periods: [], types: [], schools: [] });
@@ -266,6 +270,19 @@ export default function CosmographPage() {
     };
   }, []);
 
+  // --- Mobile progressive zoom tier (disabled on desktop) ---
+  // On mobile, the active slice is driven by the cosmograph zoom level rather
+  // than by the Atlas/Full/Filter tab. The tab still drives behaviour: when the
+  // user picks "Filter" we apply filters to the tier-selected slice; "Full"
+  // becomes "Detail" tier seed; "Path" still uses the whole graph for BFS.
+  const mobileTiers = useMobileGraphTiers({
+    enabled: isMobile,
+    meta: allMeta,
+    edges: allEdges,
+    graphRef,
+    graphReady,
+  });
+
   // --- Derive active slice (atlas / full / filtered) ---
   useEffect(() => {
     if (allMeta.length === 0) return;
@@ -273,16 +290,37 @@ export default function CosmographPage() {
 
     async function computeActive() {
       let metaSlice: ReadonlyArray<AtlasNodeMeta> = allMeta;
-      if (tab === 'atlas') {
-        const ids = pickAtlasNodeIds(allMeta.map((m) => ({ id: m.id, type: m.typeKey })));
-        metaSlice = allMeta.filter((m) => ids.has(m.id));
+      let edgeSlice: ReadonlyArray<AtlasEdgeMeta>;
+
+      if (isMobile && mobileTiers.slice && tab !== 'path') {
+        // Mobile: tier-based slice (Atlas / Schools / Detail) wins over tab.
+        let tierMeta = mobileTiers.slice.metaSlice;
+        let tierEdges = mobileTiers.slice.edgeSlice;
+        if (tab === 'filter') {
+          const filteredAll = filterMeta(allMeta, filters);
+          const filterIds = new Set(filteredAll.map((m) => m.id));
+          tierMeta = tierMeta.filter((m) => filterIds.has(m.id));
+          const tierIds = new Set(tierMeta.map((m) => m.id));
+          tierEdges = tierEdges.filter(
+            (e) => tierIds.has(e.source) && tierIds.has(e.target),
+          );
+        }
+        metaSlice = tierMeta;
+        edgeSlice = tierEdges;
+      } else {
+        // Desktop: original tab-driven slice.
+        if (tab === 'atlas') {
+          const ids = pickAtlasNodeIds(allMeta.map((m) => ({ id: m.id, type: m.typeKey })));
+          metaSlice = allMeta.filter((m) => ids.has(m.id));
+        }
+        if (tab === 'filter') {
+          metaSlice = filterMeta(allMeta, filters);
+        }
+        // tab === 'full' and 'path' use the whole graph
+        const idSet = new Set(metaSlice.map((m) => m.id));
+        edgeSlice = allEdges.filter((e) => idSet.has(e.source) && idSet.has(e.target));
       }
-      if (tab === 'filter') {
-        metaSlice = filterMeta(allMeta, filters);
-      }
-      // tab === 'full' and 'path' use the whole graph
-      const idSet = new Set(metaSlice.map((m) => m.id));
-      const edgeSlice = allEdges.filter((e) => idSet.has(e.source) && idSet.has(e.target));
+
       const built = await buildCosmoData(metaSlice, edgeSlice);
       if (cancelled) return;
       setActiveMeta(metaSlice);
@@ -294,7 +332,7 @@ export default function CosmographPage() {
     return () => {
       cancelled = true;
     };
-  }, [allMeta, allEdges, tab, filters]);
+  }, [allMeta, allEdges, tab, filters, isMobile, mobileTiers.slice]);
 
   // Path mode forces full graph behind the scenes so BFS can find anything.
   useEffect(() => {
@@ -343,6 +381,28 @@ export default function CosmographPage() {
     if (selectedNodeId === nodeId) return;
     void focusNodeById(nodeId, { pushRoute: false });
   }, [graphReady, nodeId, selectedNodeId, focusNodeById]);
+
+  // Mobile: when the tier slice changes (e.g. Atlas → Schools), re-fit the view
+  // so the user always sees the active subgraph centred. `fitViewOnInit` only
+  // runs once; this keeps the experience tight after every tier transition.
+  const lastFittedNodeCount = useRef<number>(0);
+  useEffect(() => {
+    if (!isMobile || !graphReady || !graphRef.current) return;
+    const count = activeMeta.length;
+    if (count === 0) return;
+    if (lastFittedNodeCount.current === count) return;
+    lastFittedNodeCount.current = count;
+    // The simulation needs several hundred ms to lay out the new node set.
+    // Three passes catch the early/medium/late states so the user is never
+    // looking at an off-screen cluster.
+    const handles = [600, 1400, 2400].map((delay) =>
+      window.setTimeout(() => {
+        graphRef.current?.fitView(500, 0.24);
+      }, delay),
+    );
+    return () => handles.forEach((h) => window.clearTimeout(h));
+  }, [isMobile, graphReady, activeMeta.length]);
+
 
   function clearSelection() {
     graphRef.current?.unselectAllPoints();
@@ -402,8 +462,22 @@ export default function CosmographPage() {
         fitViewDuration: 500,
         fitViewPadding: 0.2,
         randomSeed: 'eleutheria-atlas-v3',
-        spaceSize: tab === 'atlas' ? 2200 : 7200,
-        pointSamplingDistance: tab === 'atlas' ? 60 : 260,
+        spaceSize: isMobile
+          ? mobileTiers.tier === 'atlas'
+            ? 1800
+            : mobileTiers.tier === 'schools'
+              ? 3600
+              : 5400
+          : tab === 'atlas'
+            ? 2200
+            : 7200,
+        pointSamplingDistance: isMobile
+          ? mobileTiers.tier === 'atlas'
+            ? 80
+            : 160
+          : tab === 'atlas'
+            ? 60
+            : 260,
         pointColorBy: 'colorKey',
         pointColorByMap: cosmo.colorByMap,
         pointSizeBy: 'importance',
@@ -424,8 +498,12 @@ export default function CosmographPage() {
         pointSizeRange: [4, 30],
         showLabels: false,
         showDynamicLabels: false,
-        showTopLabels: tab === 'atlas',
-        showTopLabelsLimit: tab === 'atlas' ? 14 : 0,
+        showTopLabels: isMobile ? true : tab === 'atlas',
+        showTopLabelsLimit: isMobile
+          ? Math.max(mobileTiers.slice?.labelNodeIds.size ?? 12, 8)
+          : tab === 'atlas'
+            ? 14
+            : 0,
         showFocusedPointLabel: true,
         showHoveredPointLabel: true,
         showSelectedLabels: true,
@@ -453,12 +531,32 @@ export default function CosmographPage() {
         resetSelectionOnEmptyCanvasClick: true,
         linkWidthRange: [0.18, 2.4],
         simulationDecay: 4300,
-        simulationGravity: tab === 'atlas' ? 0.18 : 0.08,
-        simulationCenter: 0.01,
-        simulationRepulsion: tab === 'atlas' ? 1.6 : 2.2,
+        simulationGravity: isMobile
+          ? mobileTiers.tier === 'atlas'
+            ? 0.32
+            : mobileTiers.tier === 'schools'
+              ? 0.18
+              : 0.1
+          : tab === 'atlas'
+            ? 0.18
+            : 0.08,
+        simulationCenter: isMobile ? 0.4 : 0.01,
+        simulationRepulsion: isMobile
+          ? mobileTiers.tier === 'atlas'
+            ? 0.9
+            : 1.4
+          : tab === 'atlas'
+            ? 1.6
+            : 2.2,
         simulationRepulsionTheta: 1.08,
         simulationLinkSpring: 0.74,
-        simulationLinkDistance: tab === 'atlas' ? 28 : 36,
+        simulationLinkDistance: isMobile
+          ? mobileTiers.tier === 'atlas'
+            ? 24
+            : 32
+          : tab === 'atlas'
+            ? 28
+            : 36,
         simulationFriction: 0.9,
         simulationImpulse: 0.56,
       }
@@ -501,6 +599,7 @@ export default function CosmographPage() {
             onSimulationUnpause={() => setSimulationRunning(true)}
             onSimulationPause={() => setSimulationRunning(false)}
             onSimulationEnd={() => setSimulationRunning(false)}
+            onZoom={isMobile ? mobileTiers.handleZoom : undefined}
             onPointClick={(index) => {
               const clicked = activeMeta[index];
               if (!clicked) return;
@@ -513,8 +612,34 @@ export default function CosmographPage() {
             style={{ width: '100%', height: '100%' }}
           />
 
-          {/* === Top bar: search + tabs === */}
-          <div className="pointer-events-none absolute inset-x-0 top-3 z-30 px-3 md:top-4 md:px-6">
+          {/* === Mobile-only controls (FAB, bottom-sheet, tier pill, hint) === */}
+          {isMobile && (
+            <MobileGraphControls
+              tier={mobileTiers.tier}
+              visibleNodeCount={mobileTiers.slice?.visibleNodeIds.size ?? 0}
+              nodes={allMeta}
+              activeTab={tab}
+              onTabChange={(next) => {
+                setTab(next);
+                if (next !== 'path') {
+                  setPathResult(null);
+                }
+              }}
+              filters={filters}
+              onFiltersChange={setFilters}
+              onPickNode={(node) => {
+                if (tab === 'atlas') setTab('full');
+                void focusNodeById(node.id);
+              }}
+              onOpenPathFinder={() => {
+                setTab('path');
+              }}
+            />
+          )}
+
+          {/* === Top bar: search + tabs (desktop only; mobile uses
+              MobileGraphControls below) === */}
+          <div className="pointer-events-none absolute inset-x-0 top-3 z-30 hidden px-3 md:block md:top-4 md:px-6">
             <div className="pointer-events-auto mx-auto flex w-full max-w-3xl flex-col gap-3">
               <div className="flex items-center gap-2">
                 <button
@@ -623,8 +748,8 @@ export default function CosmographPage() {
             </div>
           </div>
 
-          {/* === Top-right: engine switcher + screenshot/help === */}
-          <div className="absolute right-3 top-3 z-30 flex flex-col items-end gap-2 md:right-6 md:top-4">
+          {/* === Top-right: engine switcher + screenshot/help (desktop only) === */}
+          <div className="absolute right-3 top-3 z-30 hidden flex-col items-end gap-2 md:right-6 md:top-4 md:flex">
             {/* Semativerse/Cytoscape switcher hidden on mobile (touch
                 + tiny viewport make the alternate engines unusable). */}
             <div className="hidden md:block rounded-full border border-white/10 bg-slate-950/75 p-1 shadow-[0_14px_40px_rgba(2,6,23,0.4)] backdrop-blur-xl">
@@ -658,8 +783,8 @@ export default function CosmographPage() {
             </div>
           </div>
 
-          {/* === Bottom-right: Legend === */}
-          <div className="pointer-events-none absolute bottom-4 right-3 z-20 md:right-6">
+          {/* === Bottom-right: Legend (desktop only) === */}
+          <div className="pointer-events-none absolute bottom-4 right-3 z-20 hidden md:right-6 md:block">
             <Legend
               labels={{
                 title: t('cosmograph.legend.title', 'Legend'),
@@ -676,9 +801,9 @@ export default function CosmographPage() {
             />
           </div>
 
-          {/* === Bottom-left: contextual hint (Atlas first-time) === */}
-          {tab === 'atlas' && !helpDismissed && (
-            <div className="pointer-events-auto absolute bottom-4 left-3 z-20 max-w-sm rounded-2xl border border-white/10 bg-slate-950/80 p-4 text-[12px] text-slate-300 shadow-[0_18px_50px_rgba(2,6,23,0.4)] backdrop-blur-xl md:left-6">
+          {/* === Bottom-left: contextual hint (Atlas first-time, desktop) === */}
+          {tab === 'atlas' && !helpDismissed && !isMobile && (
+            <div className="pointer-events-auto absolute bottom-4 left-3 z-20 hidden max-w-sm rounded-2xl border border-white/10 bg-slate-950/80 p-4 text-[12px] text-slate-300 shadow-[0_18px_50px_rgba(2,6,23,0.4)] backdrop-blur-xl md:left-6 md:block">
               <div className="mb-1 flex items-center gap-2 text-cyan-100">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span className="text-[11px] font-semibold uppercase tracking-[0.18em]">
@@ -707,7 +832,8 @@ export default function CosmographPage() {
             <AdvancedDrawer onClose={() => setAdvancedOpen(false)} />
           )}
 
-          {/* Node detail panel (right side) */}
+          {/* Node detail panel — full-height right rail on desktop,
+              half-height bottom sheet on mobile. */}
           <NodeDetailPanel
             node={selectedRaw}
             onClose={clearSelection}
@@ -715,6 +841,7 @@ export default function CosmographPage() {
             onNavigateToNode={(nextNodeId) => {
               void focusNodeById(nextNodeId);
             }}
+            mobileHalf={isMobile}
           />
         </CosmographProvider>
       )}

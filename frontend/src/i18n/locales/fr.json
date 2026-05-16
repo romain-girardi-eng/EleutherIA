@@ -2117,6 +2117,27 @@
       "retry": "Réessayer",
       "openDatabase": "Ouvrir la base de données à la place"
     },
+    "mobile": {
+      "tier": {
+        "atlas": "Atlas",
+        "schools": "Écoles",
+        "detail": "Détail"
+      },
+      "nodeCount_one": "{{count}} nœud",
+      "nodeCount_other": "{{count}} nœuds",
+      "nodeCount": "{{count}} nœuds",
+      "openSheet": "Ouvrir les outils du graphe",
+      "searchOpen": "Ouvrir la recherche",
+      "sheet": {
+        "title": "Outils du graphe",
+        "eyebrow": "Affichage"
+      },
+      "hint": {
+        "title": "Pincez pour explorer",
+        "body": "Vous commencez avec les 12 nœuds les plus centraux. Pincez l'écran pour zoomer et faire apparaître davantage de penseurs, d'écoles et d'arguments.",
+        "dismiss": "Compris"
+      }
+    },
     "advanced": {
       "title": "Avancé",
       "body": "Le réglage de la physique de simulation, la sélection au lasso et l'épinglage sont passés en mode développeur. Ils reviendront derrière ce panneau dans une prochaine itération. En attendant, utilisez Atlas / Graphe complet / Filtrer / Trouver un chemin pour le travail scientifique quotidien."
