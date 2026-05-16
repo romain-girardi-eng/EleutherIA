@@ -119,9 +119,11 @@ WITNESS_AUTHORS: tuple[tuple[str, str], ...] = (
 )
 
 # Relations that count as attestation of a pivot when emitted by a sub-argument
-# or by the witness envelope itself.
-ATTEST_RELATIONS: tuple[str, str, str, str] = (
-    "evidence_for",
+# or by the witness envelope itself. Must match edge_types.json — the earlier
+# `evidence_for` member is removed because it was never adopted in the ontology
+# (see audit 2026-05-16 anomaly A1 + the discusses-workaround in coherence
+# patches commit 36b3de99).
+ATTEST_RELATIONS: tuple[str, str, str] = (
     "extends",
     "employs",
     "discusses",
