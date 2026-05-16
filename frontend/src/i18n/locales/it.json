@@ -28,7 +28,15 @@
     "logout": "Esci",
     "menu": "Menu",
     "closeMenu": "Chiudi menu",
-    "openMenu": "Apri menu"
+    "openMenu": "Apri menu",
+    "menuTitle": "Menù",
+    "menuSubtitle": "Ricerca sul libero arbitrio",
+    "groups": {
+      "discover": "Scopri",
+      "library": "Biblioteca",
+      "research": "Ricerca",
+      "community": "Comunità"
+    }
   },
   "home": {
     "welcome": "Benvenuti su EleutherIA",

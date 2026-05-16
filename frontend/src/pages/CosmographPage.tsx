@@ -625,7 +625,9 @@ export default function CosmographPage() {
 
           {/* === Top-right: engine switcher + screenshot/help === */}
           <div className="absolute right-3 top-3 z-30 flex flex-col items-end gap-2 md:right-6 md:top-4">
-            <div className="rounded-full border border-white/10 bg-slate-950/75 p-1 shadow-[0_14px_40px_rgba(2,6,23,0.4)] backdrop-blur-xl">
+            {/* Semativerse/Cytoscape switcher hidden on mobile (touch
+                + tiny viewport make the alternate engines unusable). */}
+            <div className="hidden md:block rounded-full border border-white/10 bg-slate-950/75 p-1 shadow-[0_14px_40px_rgba(2,6,23,0.4)] backdrop-blur-xl">
               <ModeSwitcher />
             </div>
             <div className="flex items-center gap-1">

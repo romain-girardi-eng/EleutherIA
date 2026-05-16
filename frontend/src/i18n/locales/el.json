@@ -28,7 +28,15 @@
     "logout": "Αποσύνδεση",
     "menu": "Μενού",
     "closeMenu": "Κλείσιμο μενού",
-    "openMenu": "Άνοιγμα μενού"
+    "openMenu": "Άνοιγμα μενού",
+    "menuTitle": "Μενού",
+    "menuSubtitle": "Έρευνα για την ελεύθερη βούληση",
+    "groups": {
+      "discover": "Ανακάλυψε",
+      "library": "Βιβλιοθήκη",
+      "research": "Έρευνα",
+      "community": "Κοινότητα"
+    }
   },
   "home": {
     "welcome": "Καλώς ήλθατε στο EleutherIA",
