@@ -1,4 +1,9 @@
-"""Ingestion de la Philocalie d'Origène — chapitre 23 (antifatalisme) prioritaire.
+"""[LEGACY / FALLBACK] Ingestion de la Philocalie d'Origène — chapitre 23 (antifatalisme).
+
+REMPLACÉ PAR : `scripts/ingest_origen_philocalia_sc226_local.py` (2026-05-16)
+  → version locale critique SC 226 Junod 1976, RTF→txt, 26 sections + 70 parallel_to
+  → utilisez le script SC 226 en priorité. Ce script reste comme fallback documenté
+    pour le cas où le RTF SC 226 ne serait pas disponible.
 
 Source : Robinson, J. Armitage. *The Philocalia of Origen*. Cambridge University Press, 1893.
 URL djvu.txt : https://archive.org/download/philocalia-of-origen-1893/Philocalia%20of%20Origen%2C%201893_djvu.txt
