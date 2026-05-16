@@ -59,6 +59,14 @@ on:
         description: 'Limit edge inserts (empty = unlimited)'
         required: false
         default: ''
+      mode:
+        description: 'Apply mode: only-new (fast, default) | smart-diff (catches metadata edits) | full (every node, slowest)'
+        type: choice
+        default: 'only-new'
+        options:
+          - 'only-new'
+          - 'smart-diff'
+          - 'full'
 
 permissions:
   contents: read
@@ -249,10 +257,20 @@ jobs:
       - name: Apply (upsert in single transaction)
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run != 'true')
         run: |
-          # Default to --smart-diff: pushes NEW + CHANGED nodes only. Correct
-          # semantics (catches metadata edits) but ~1000× faster than full upsert
-          # because most routine commits touch only a handful of rows.
-          ARGS="--apply --smart-diff"
+          # Default mode = `only-new`: fastest, pushes net-new nodes/edges.
+          # Smart-diff is the most correct (catches metadata edits on existing
+          # nodes) but each smart-diff upsert is a per-row asyncpg round-trip
+          # through the Supabase session pooler — over the GH Actions → eu-west-1
+          # link that occasionally trips Supabase's statement_timeout (~3min).
+          # Periodic `smart-diff` and full re-syncs are available via
+          # workflow_dispatch `mode=`.
+          MODE="${{ github.event.inputs.mode || 'only-new' }}"
+          case "$MODE" in
+            only-new)   ARGS="--apply --only-new" ;;
+            smart-diff) ARGS="--apply --smart-diff" ;;
+            full)       ARGS="--apply" ;;
+            *)          ARGS="--apply --only-new" ;;
+          esac
           if [ -n "${{ github.event.inputs.max_nodes }}" ]; then
             ARGS="$ARGS --max-nodes ${{ github.event.inputs.max_nodes }}"
           fi
