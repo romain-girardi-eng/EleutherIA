@@ -27,7 +27,7 @@ Read-only inspection of `data/kg/nodes.jsonl`, `data/kg/edges.jsonl`, `data/kg/p
 | `passage` nodes (direct primary text) | **0** |
 | `work` nodes | 1 (`work_chrysippus_svf_ii` — empty shell) |
 | `evidenced_by` edges sourced from Chrysippus nodes | **0** |
-| Total edges incident to `chrysippus*` ids | 353 (234 outgoing / 119 incoming) |
+| Total edges incident to `chrysippus*` ids | 339 distinct edges incident to `chrysippus*` ids (234 out / 119 in, with 14 self-internal edges deduped) |
 
 **Argument breakdown** (19):
 - 2 native ancient arguments (`argument_chrysippus_causal_taxonomy`, `argument_cylinder_analogy_chrysippus_*`)
