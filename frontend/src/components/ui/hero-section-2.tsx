@@ -102,13 +102,9 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
       <motion.section
         ref={ref}
         className={cn(
-          "relative overflow-hidden m-0 p-0 bg-white",
+          "relative overflow-hidden m-0 p-0 bg-white h-[100svh] mt-0 touch-none overscroll-none",
           className
         )}
-        style={{
-          height: '100dvh',
-          marginTop: 0,
-        }}
         initial="hidden"
         animate="visible"
         variants={containerVariants}
@@ -144,7 +140,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
 
         {/* ── MOBILE content overlay (< md) ────────────────────────────────── */}
         <motion.div
-          className="md:hidden relative z-10 flex flex-col items-center justify-between min-h-full px-6 pt-14 pb-10 text-center"
+          className="md:hidden relative z-10 flex flex-col items-center justify-between h-full max-h-full overflow-hidden px-6 pt-14 pb-10 text-center touch-none overscroll-none"
           variants={containerVariants}
         >
           {/* Logo pinned top-left on mobile */}
