@@ -1,0 +1,146 @@
+name: KG Deploy (git → Supabase)
+
+# Runs scripts/deploy_kg_to_supabase.py whenever data/kg/{nodes,edges}.jsonl
+# changes on main. Manual override via workflow_dispatch.
+#
+# REQUIRED SECRETS:
+#   SUPABASE_DATABASE_URL  — direct or session-pooler Supabase URL
+#                            (port 5432; format `postgresql://postgres:PASSWORD@db.<project-ref>.supabase.co:5432/postgres?sslmode=require`)
+#
+# The pooler URL on port 6543 (transaction mode) is NOT reliable for large
+# transactional batch upserts via asyncpg. Use the direct/session-mode URL.
+#
+# Behavior:
+#   1. Dry-run first to report the delta.
+#   2. Refuses to apply if the delta would shrink the KG (sanity check).
+#   3. Applies in a single transaction (rollback-safe).
+#   4. Re-fetches prod stats to confirm parity.
+#
+# To trigger manually with deploy-time tuning:
+#   gh workflow run kg-deploy.yml -f dry_run=false -f max_nodes=100
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/kg/nodes.jsonl'
+      - 'data/kg/edges.jsonl'
+      - 'scripts/deploy_kg_to_supabase.py'
+      - '.github/workflows/kg-deploy.yml'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry-run only (no DB writes)'
+        type: boolean
+        default: false
+      max_nodes:
+        description: 'Limit node upserts (empty = unlimited)'
+        required: false
+        default: ''
+      max_edges:
+        description: 'Limit edge inserts (empty = unlimited)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kg-deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install asyncpg + database package
+        run: |
+          pip install asyncpg
+          pip install -e database/
+
+      - name: Verify secret presence
+        env:
+          SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+        run: |
+          if [ -z "$SUPABASE_DATABASE_URL" ]; then
+            echo "::error::SUPABASE_DATABASE_URL secret not set. Add it under Settings → Secrets and variables → Actions."
+            echo "::error::Format: postgresql://postgres:PASSWORD@db.<project-ref>.supabase.co:5432/postgres?sslmode=require"
+            exit 1
+          fi
+          # Strip password before logging
+          MASKED=$(echo "$SUPABASE_DATABASE_URL" | sed -E 's|(://[^:]+:)[^@]+(@)|\1<REDACTED>\2|')
+          echo "DSN target: $MASKED"
+
+      - name: Dry-run (always)
+        run: python scripts/deploy_kg_to_supabase.py --dump-delta /tmp/deploy_delta.json
+
+      - name: Sanity-gate (refuse destructive deltas)
+        run: |
+          python - <<'PY'
+          import json
+          d = json.load(open('/tmp/deploy_delta.json'))['summary']
+          # If git has FEWER nodes/edges than prod, something is wrong (this workflow only ADDS).
+          if d['git_nodes'] < d['prod_nodes'] - 10 or d['git_edges'] < d['prod_edges'] - 50:
+              print(f"::error::git ({d['git_nodes']} nodes / {d['git_edges']} edges) is substantially smaller than prod ({d['prod_nodes']} / {d['prod_edges']}).")
+              print("::error::This workflow only does upsert/insert — it will not delete prod-only rows.")
+              print("::error::Size mismatch suggests git is OUT OF SYNC with prod. Investigate before re-running.")
+              raise SystemExit(2)
+          else:
+              print(f"::notice::Sanity OK. Delta: +{d['nodes_only_in_git']} nodes / +{d['edges_to_insert']} edges to deploy.")
+          PY
+
+      - name: Upload delta artifact (always — for audit trail)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-delta-${{ github.run_id }}
+          path: /tmp/deploy_delta.json
+
+      - name: Apply
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run != 'true')
+        env:
+          SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+        run: |
+          ARGS="--apply"
+          if [ -n "${{ github.event.inputs.max_nodes }}" ]; then
+            ARGS="$ARGS --max-nodes ${{ github.event.inputs.max_nodes }}"
+          fi
+          if [ -n "${{ github.event.inputs.max_edges }}" ]; then
+            ARGS="$ARGS --max-edges ${{ github.event.inputs.max_edges }}"
+          fi
+          echo "Running: python scripts/deploy_kg_to_supabase.py $ARGS"
+          python scripts/deploy_kg_to_supabase.py $ARGS
+
+      - name: Post-deploy parity check
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run != 'true')
+        run: |
+          echo "Re-running dry-run to verify post-apply parity …"
+          python scripts/deploy_kg_to_supabase.py --dump-delta /tmp/post_deploy_delta.json
+          python - <<'PY'
+          import json
+          d = json.load(open('/tmp/post_deploy_delta.json'))['summary']
+          # After apply, only PROD-ONLY items should remain (rename orphans we don't touch).
+          # Everything in git should now be in prod.
+          if d['nodes_only_in_git'] > 0 or d['edges_to_insert'] > 0:
+              print(f"::warning::Post-deploy still shows {d['nodes_only_in_git']} nodes / {d['edges_to_insert']} edges not in prod.")
+              print("::warning::Some upserts may have been skipped (foreign-key issues, row failures, etc.). Check logs.")
+          else:
+              print(f"::notice::✓ git ↔ prod parity confirmed: {d['git_nodes']} nodes / {d['git_edges']} edges")
+          PY
+
+      - name: Upload post-deploy delta
+        if: always() && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run != 'true'))
+        uses: actions/upload-artifact@v4
+        with:
+          name: post-deploy-delta-${{ github.run_id }}
+          path: /tmp/post_deploy_delta.json
