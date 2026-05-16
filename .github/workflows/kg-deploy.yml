@@ -151,61 +151,77 @@ jobs:
 
       - name: Backup prod state (recovery artifact)
         # Run before apply, even on dry-run, so the artifact always exists for that run.
+        # Reads via DB connection (not the public API) since Cloudflare 403s GH Actions IPs.
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
-          echo "Backing up current prod KG state (recovery artifact, 90-day retention) …"
+          echo "Backing up current prod KG state via DB (recovery artifact, 90-day retention) …"
           python - <<'PY'
-          import json, urllib.request
-          HEADERS = {"User-Agent": "Mozilla/5.0", "Accept": "application/json"}
-          BASE = "https://free-will.app"
+          import asyncio, asyncpg, json, os, hashlib
 
-          def fetch(url):
-              req = urllib.request.Request(url, headers=HEADERS)
-              with urllib.request.urlopen(req, timeout=120) as r:
-                  return json.loads(r.read())
+          async def main():
+              dsn = os.environ["SUPABASE_DATABASE_URL"]
+              conn = await asyncpg.connect(dsn=dsn, statement_cache_size=0)
+              try:
+                  print("  fetching prod nodes via DB …")
+                  rows = await conn.fetch(
+                      "SELECT node_id, label, type, description, period, metadata "
+                      "FROM free_will.kg_nodes")
+                  nodes = []
+                  for r in rows:
+                      md = r["metadata"]
+                      if isinstance(md, str):
+                          try: md = json.loads(md)
+                          except: md = {}
+                      nodes.append({"id": r["node_id"], "label": r["label"], "type": r["type"],
+                                    "description": r["description"], "period": r["period"],
+                                    "metadata": md or {}})
+                  print(f"  prod nodes: {len(nodes):,}")
+                  with open("/tmp/prod_backup_nodes.jsonl", "w", encoding="utf-8") as f:
+                      for n in nodes:
+                          f.write(json.dumps(n, ensure_ascii=False) + "\n")
 
-          print("  fetching prod nodes …")
-          nodes = fetch(f"{BASE}/api/kg/nodes?limit=50000")
-          print(f"  prod nodes: {len(nodes):,}")
-          with open("/tmp/prod_backup_nodes.jsonl", "w", encoding="utf-8") as f:
-              for n in nodes:
-                  f.write(json.dumps(n, ensure_ascii=False) + "\n")
+                  print("  fetching prod edges via DB …")
+                  rows = await conn.fetch(
+                      "SELECT source_id, target_id, relation, weight, metadata "
+                      "FROM free_will.kg_edges")
+                  edges = []
+                  for r in rows:
+                      md = r["metadata"]
+                      if isinstance(md, str):
+                          try: md = json.loads(md)
+                          except: md = {}
+                      edges.append({"source": r["source_id"], "target": r["target_id"],
+                                    "relation": r["relation"],
+                                    "weight": float(r["weight"]) if r["weight"] else 1.0,
+                                    "metadata": md or {}})
+                  print(f"  prod edges: {len(edges):,}")
+                  with open("/tmp/prod_backup_edges.jsonl", "w", encoding="utf-8") as f:
+                      for e in edges:
+                          f.write(json.dumps(e, ensure_ascii=False) + "\n")
+              finally:
+                  await conn.close()
 
-          print("  fetching prod edges (paginated) …")
-          all_edges = []
-          offset = 0
-          while True:
-              page = fetch(f"{BASE}/api/kg/edges?limit=10000&offset={offset}")
-              if not page: break
-              all_edges.extend(page)
-              if len(page) < 10000: break
-              offset += 10000
-          print(f"  prod edges: {len(all_edges):,}")
-          with open("/tmp/prod_backup_edges.jsonl", "w", encoding="utf-8") as f:
-              for e in all_edges:
-                  f.write(json.dumps(e, ensure_ascii=False) + "\n")
+              def sha(p):
+                  h = hashlib.sha256()
+                  with open(p, "rb") as fp:
+                      for chunk in iter(lambda: fp.read(8192), b""): h.update(chunk)
+                  return h.hexdigest()
+              manifest = {
+                  "kind": "prod-backup-pre-deploy",
+                  "source": "supabase_db",
+                  "node_count": len(nodes),
+                  "edge_count": len(edges),
+                  "files": {
+                      "/tmp/prod_backup_nodes.jsonl": {"sha256": sha("/tmp/prod_backup_nodes.jsonl")},
+                      "/tmp/prod_backup_edges.jsonl": {"sha256": sha("/tmp/prod_backup_edges.jsonl")},
+                  },
+              }
+              with open("/tmp/prod_backup_manifest.json", "w") as f:
+                  json.dump(manifest, f, indent=2, ensure_ascii=False)
+              print(f"\n  Backup manifest:")
+              print(json.dumps(manifest, indent=2))
 
-          # Manifest with checksums
-          import hashlib
-          def sha(p):
-              h = hashlib.sha256()
-              with open(p, "rb") as f:
-                  for chunk in iter(lambda: f.read(8192), b""): h.update(chunk)
-              return h.hexdigest()
-          manifest = {
-              "kind": "prod-backup-pre-deploy",
-              "api_base": BASE,
-              "node_count": len(nodes),
-              "edge_count": len(all_edges),
-              "files": {
-                  "/tmp/prod_backup_nodes.jsonl": {"sha256": sha("/tmp/prod_backup_nodes.jsonl")},
-                  "/tmp/prod_backup_edges.jsonl": {"sha256": sha("/tmp/prod_backup_edges.jsonl")},
-              },
-          }
-          with open("/tmp/prod_backup_manifest.json", "w") as f:
-              json.dump(manifest, f, indent=2, ensure_ascii=False)
-          print(f"\n  Backup manifest:")
-          print(json.dumps(manifest, indent=2))
+          asyncio.run(main())
           PY
 
       - name: Upload prod backup (90-day retention)
