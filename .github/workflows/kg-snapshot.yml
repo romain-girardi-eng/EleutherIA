@@ -1,14 +1,29 @@
 name: KG Snapshot
 
+# SAFETY NOTE (2026-05-16):
+# Daily cron disabled — git was getting ahead of the live the platform DB, so the
+# snapshot bot was at risk of overwriting unsynced edits. Re-enable the schedule
+# trigger ONLY after either (a) the loader script (scripts/deploy_kg_to_supabase.py)
+# is in regular use to push git → prod, or (b) the team accepts that git is
+# strictly downstream of prod.
+#
+# Manual runs remain available via workflow_dispatch.
+
 on:
-  schedule:
-    - cron: '0 4 * * *'
   workflow_dispatch:
     inputs:
       base_url:
         description: 'Backend base URL (defaults to the platform production)'
         required: false
         default: ''
+      allow_destructive:
+        description: 'Allow snapshot to commit even when it would DELETE nodes/edges (use when prod is intentionally smaller than git)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
 
 permissions:
   contents: write
@@ -35,6 +50,15 @@ jobs:
           pip install -e database/
           pip install -e "knowledge graph/[semantic]"
 
+      - name: Record pre-snapshot counts
+        id: pre
+        run: |
+          NODES_BEFORE=$(wc -l < data/kg/nodes.jsonl | tr -d ' ')
+          EDGES_BEFORE=$(wc -l < data/kg/edges.jsonl | tr -d ' ')
+          echo "nodes=$NODES_BEFORE" >> "$GITHUB_OUTPUT"
+          echo "edges=$EDGES_BEFORE" >> "$GITHUB_OUTPUT"
+          echo "Before snapshot: $NODES_BEFORE nodes / $EDGES_BEFORE edges"
+
       - name: Export KG snapshot
         env:
           KG_API_BASE: ${{ github.event.inputs.base_url || 'https://free-will.app' }}
@@ -43,6 +67,25 @@ jobs:
 
       - name: Validate snapshot invariants
         run: python scripts/validate_kg_shacl.py --skip-quality --max-examples 50
+
+      - name: Destructive-snapshot safety gate
+        id: safety
+        run: |
+          NODES_AFTER=$(wc -l < data/kg/nodes.jsonl | tr -d ' ')
+          EDGES_AFTER=$(wc -l < data/kg/edges.jsonl | tr -d ' ')
+          NODES_BEFORE=${{ steps.pre.outputs.nodes }}
+          EDGES_BEFORE=${{ steps.pre.outputs.edges }}
+          NODES_DELTA=$((NODES_AFTER - NODES_BEFORE))
+          EDGES_DELTA=$((EDGES_AFTER - EDGES_BEFORE))
+          echo "After snapshot:  $NODES_AFTER nodes ($NODES_DELTA) / $EDGES_AFTER edges ($EDGES_DELTA)"
+          ALLOW='${{ github.event.inputs.allow_destructive }}'
+          if { [ "$NODES_DELTA" -lt -10 ] || [ "$EDGES_DELTA" -lt -50 ]; } && [ "$ALLOW" != "true" ]; then
+            echo ""
+            echo "::error::Snapshot would shrink the KG by $NODES_DELTA nodes / $EDGES_DELTA edges."
+            echo "::error::This usually means git is ahead of the the platform DB (unsynced local edits)."
+            echo "::error::To override, re-run with allow_destructive=true."
+            exit 2
+          fi
 
       - name: Show diff summary
         run: |
