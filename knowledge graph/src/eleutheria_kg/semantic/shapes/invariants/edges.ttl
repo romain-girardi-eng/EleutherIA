@@ -657,13 +657,13 @@ kg:Shape_influences_Range a sh:NodeShape ;
 
 kg:Shape_influences_RangeProp a sh:PropertyShape ;
     sh:path kg:influences ;
-    sh:or ( [ sh:class kg:Person ] [ sh:class kg:School ] [ sh:class kg:Work ] ) ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:ArgumentFramework ] [ sh:class kg:Concept ] [ sh:class kg:Controversy ] [ sh:class kg:Group ] [ sh:class kg:Person ] [ sh:class kg:School ] [ sh:class kg:Work ] ) ;
     sh:severity sh:Violation ;
     sh:message "Edge `influences` violates source/target type constraints from edge_types.json" .
 
 kg:Shape_influences_Domain a sh:NodeShape ;
     sh:targetSubjectsOf kg:influences ;
-    sh:or ( [ sh:class kg:Person ] [ sh:class kg:School ] [ sh:class kg:Work ] ) ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:ArgumentFramework ] [ sh:class kg:Concept ] [ sh:class kg:Controversy ] [ sh:class kg:Person ] [ sh:class kg:School ] [ sh:class kg:Work ] ) ;
     sh:severity sh:Violation ;
     sh:message "Edge `influences` violates source/target type constraints from edge_types.json" .
 
