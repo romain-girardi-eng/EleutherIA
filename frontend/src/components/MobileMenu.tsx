@@ -34,7 +34,6 @@ import {
   ScrollText,
   MessageSquare,
   Sparkles,
-  Search,
   Network,
   GitPullRequest,
   UploadCloud,
@@ -91,7 +90,6 @@ const GROUPS: MenuGroup[] = [
     items: [
       { to: '/graphrag', labelKey: 'nav.graphrag', Icon: MessageSquare },
       { to: '/research', labelKey: 'nav.research', Icon: Sparkles },
-      { to: '/search', labelKey: 'nav.search', Icon: Search },
       { to: '/visualizer', labelKey: 'nav.visualizer', Icon: Network },
       { to: '/passages-canoniques', labelKey: 'nav.canonicalPassages', Icon: ScrollText },
     ],

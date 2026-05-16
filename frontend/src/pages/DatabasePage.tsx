@@ -194,9 +194,6 @@ export default function DatabasePage() {
             <Link to="/texts" className="inline-flex items-center gap-1.5 text-sm font-medium text-stone-600 hover:text-stone-800 transition-colors">
               Browse texts <ArrowRight className="w-3.5 h-3.5" />
             </Link>
-            <Link to="/search" className="inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors">
-              Hybrid search <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
           </div>
         </motion.section>
 

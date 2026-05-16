@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import {
   Home,
-  Search,
   Network,
   MessageSquare,
   BookOpen,
@@ -61,7 +60,6 @@ const useDefaultItems = (): MobileNavItem[] => {
 
   return [
     { to: '/', icon: Home, label: t('mobileNav.home') },
-    { to: '/search', icon: Search, label: t('mobileNav.search') },
     { to: '/visualizer', icon: Network, label: t('mobileNav.graph') },
     { to: '/graphrag', icon: MessageSquare, label: t('mobileNav.qa') },
     { to: '/texts', icon: BookOpen, label: t('mobileNav.texts') },
@@ -79,7 +77,7 @@ const useDefaultItems = (): MobileNavItem[] => {
  * <MobileNav
  *   items={[
  *     { to: '/', icon: Home, label: 'Home', badge: 3 },
- *     { to: '/search', icon: Search, label: 'Search' },
+ *     { to: '/visualizer', icon: Network, label: 'Graph' },
  *   ]}
  * />
  */

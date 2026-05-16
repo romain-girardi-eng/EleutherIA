@@ -32,7 +32,6 @@ import './index.css';
 // Lazy load heavy components for better initial bundle size
 // These pages contain large dependencies (Cosmograph, D3, etc.)
 const CosmographPage = lazy(() => import('./pages/CosmographPage'));
-const SearchPage = lazy(() => import('./pages/SearchPage'));
 const GraphRAGPage = lazy(() => import('./pages/GraphRAGPage'));
 const GraphRAGShowcase = lazy(() => import('./pages/GraphRAGShowcase'));
 const ResearchPage = lazy(() => import('./pages/Research'));
@@ -77,7 +76,6 @@ function getPageTitle(pathname: string, t: TFunction): string {
     '/': t('appShell.pageTitles.home'),
     '/database': t('appShell.pageTitles.database'),
     '/visualizer': t('appShell.pageTitles.visualizer'),
-    '/search': t('appShell.pageTitles.search'),
     '/graphrag': t('appShell.pageTitles.graphrag'),
     '/graphrag-showcase': t('appShell.pageTitles.graphragShowcase'),
     '/recherches': t('appShell.pageTitles.recherches'),
@@ -146,14 +144,6 @@ function AppContent() {
   /*
   useKeyboardShortcuts({
     shortcuts: [
-      {
-        key: 'k',
-        ctrl: true,
-        callback: () => {
-          navigate('/search');
-          announce('Navigated to search page', 'polite');
-        },
-      },
       {
         key: 'Escape',
         callback: () => {
@@ -345,7 +335,6 @@ function AppContent() {
               <NavLink to="/how-it-works">{t('nav.howItWorks')}</NavLink>
               <NavLink to="/database">{t('nav.database')}</NavLink>
               <NavLink to="/visualizer">{t('nav.visualizer')}</NavLink>
-              <NavLink to="/search">{t('nav.search')}</NavLink>
               <NavLink to="/graphrag">{t('nav.graphrag')}</NavLink>
               <NavLink to="/recherches">{t('nav.recherches')}</NavLink>
               <NavLink to="/contributions">{t('nav.contributions')}</NavLink>
@@ -444,7 +433,6 @@ function AppContent() {
               <Route path="/visualizer/:nodeId" element={<CosmographPage />} />
               <Route path="/graph" element={<CosmographPage />} />
               <Route path="/graph/:nodeId" element={<CosmographPage />} />
-              <Route path="/search" element={<SearchPage />} />
               <Route path="/graphrag" element={<GraphRAGPage />} />
               <Route path="/graphrag-showcase" element={<GraphRAGShowcase />} />
               <Route path="/research" element={<ResearchPage />} />
