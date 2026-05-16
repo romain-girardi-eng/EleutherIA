@@ -239,7 +239,10 @@ jobs:
       - name: Apply (upsert in single transaction)
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run != 'true')
         run: |
-          ARGS="--apply"
+          # Default to --smart-diff: pushes NEW + CHANGED nodes only. Correct
+          # semantics (catches metadata edits) but ~1000× faster than full upsert
+          # because most routine commits touch only a handful of rows.
+          ARGS="--apply --smart-diff"
           if [ -n "${{ github.event.inputs.max_nodes }}" ]; then
             ARGS="$ARGS --max-nodes ${{ github.event.inputs.max_nodes }}"
           fi

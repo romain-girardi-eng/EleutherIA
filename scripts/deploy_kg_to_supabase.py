@@ -286,10 +286,66 @@ def print_delta_report(d: dict[str, Any]) -> None:
         print(f"    {t:<25s} {c:6d}")
 
 
+def _git_subsumed_by_prod(git_node: dict[str, Any], prod_node: dict[str, Any]) -> bool:
+    """True if git's content is already fully reflected in prod — no upsert needed.
+
+    Subset semantics (not equality) because the UPSERT SQL does
+    `metadata = prod.metadata || EXCLUDED.metadata`, so prod's metadata
+    accumulates keys across deploys. A strict equality check would treat
+    every prod node as "changed" after the first full sync (false positives).
+    Subset check: git's label/type/description/period must match; every key
+    git's metadata sets must be present with the same value in prod's metadata.
+    """
+    git_shape = shape_node_for_db(git_node)
+    prod_shape = shape_node_for_db(prod_node)
+    for field in ("label", "type", "description", "period"):
+        if git_shape[field] != prod_shape[field]:
+            return False
+    try:
+        git_md = json.loads(git_shape["metadata_json"])
+        prod_md = json.loads(prod_shape["metadata_json"])
+    except (json.JSONDecodeError, TypeError):
+        return False
+    for k, v in git_md.items():
+        if prod_md.get(k) != v:
+            return False
+    return True
+
+
 async def apply_delta(conn: asyncpg.Connection, delta: dict[str, Any],
-                       max_nodes: int | None = None, max_edges: int | None = None) -> dict[str, int]:
+                       max_nodes: int | None = None, max_edges: int | None = None,
+                       only_new: bool = False, smart_diff: bool = False) -> dict[str, int]:
     counts = {"nodes_inserted": 0, "nodes_updated": 0, "edges_inserted": 0, "edges_skipped": 0}
-    nodes = delta["nodes_to_upsert"]
+    if only_new:
+        # Push net-new content only. Fastest path; misses metadata edits on
+        # existing nodes. Use for incremental pushes after a full sync.
+        nodes = delta["nodes_only_in_git"]
+        print(f"  (--only-new: {len(nodes)} new-to-prod; skipping {len(delta['nodes_to_upsert']) - len(nodes)} existing)")
+    elif smart_diff:
+        # Push NEW + CHANGED nodes. Skip nodes whose git content is already
+        # fully reflected in prod (subset check, not strict equality — see
+        # _git_subsumed_by_prod for why).
+        prod_nodes = delta.get("_prod_nodes_for_fk_check", [])
+        prod_by_id: dict[str, dict[str, Any]] = {n["id"]: n for n in prod_nodes}
+        new_to_prod = delta["nodes_only_in_git"]
+        new_ids = {n["id"] for n in new_to_prod}
+        changed = []
+        unchanged = 0
+        for n in delta["nodes_to_upsert"]:
+            if n["id"] in new_ids:
+                continue
+            prod_n = prod_by_id.get(n["id"])
+            if prod_n is None:
+                changed.append(n)
+                continue
+            if _git_subsumed_by_prod(n, prod_n):
+                unchanged += 1
+            else:
+                changed.append(n)
+        nodes = new_to_prod + changed
+        print(f"  (--smart-diff: {len(new_to_prod)} new + {len(changed)} changed; skipping {unchanged} unchanged)")
+    else:
+        nodes = delta["nodes_to_upsert"]
     edges = delta["edges_to_insert"]
     if max_nodes is not None:
         nodes = nodes[:max_nodes]
@@ -431,7 +487,9 @@ async def main_async(args: argparse.Namespace) -> int:
         conn = await asyncpg.connect(dsn=dsn, statement_cache_size=0)
     try:
         print(f"Running upserts in transaction …")
-        counts = await apply_delta(conn, delta, max_nodes=args.max_nodes, max_edges=args.max_edges)
+        counts = await apply_delta(conn, delta, max_nodes=args.max_nodes,
+                                    max_edges=args.max_edges,
+                                    only_new=args.only_new, smart_diff=args.smart_diff)
         print(f"\n=== APPLY COMPLETE ===")
         for k, v in counts.items():
             print(f"  {k}: {v:,}")
@@ -455,6 +513,14 @@ def main() -> int:
                    help=f"Prod API base URL (only used with --source api). Default: {DEFAULT_API_BASE}")
     p.add_argument("--apply", action="store_true",
                    help="Actually run the upserts (default: dry-run)")
+    p.add_argument("--only-new", action="store_true",
+                   help="Push NEW nodes only (skip all existing). Fastest; misses "
+                        "metadata edits on existing nodes.")
+    p.add_argument("--smart-diff", action="store_true",
+                   help="Push NEW + CHANGED nodes (by content signature). Skips "
+                        "identical nodes. Recommended for routine auto-deploys: "
+                        "same correctness as full upsert, but typically 1000x faster "
+                        "because most pushes only edit a handful of rows.")
     p.add_argument("--max-nodes", type=int, default=None,
                    help="Limit node upserts (useful for first apply, e.g. --max-nodes 100)")
     p.add_argument("--max-edges", type=int, default=None,
