@@ -106,8 +106,10 @@ def fetch_json(url: str) -> Any:
         return json.loads(r.read())
 
 
-def fetch_prod_state(base: str) -> tuple[list[dict], list[dict]]:
-    print(f"Fetching prod from {base} …")
+def fetch_prod_state_via_api(base: str) -> tuple[list[dict], list[dict]]:
+    """Fetch prod state through the public API. Cloudflare-protected: requires a
+    browser User-Agent (set in HEADERS) and reliably blocks GitHub Actions IPs."""
+    print(f"Fetching prod via API at {base} …")
     nodes = fetch_json(f"{base}/api/kg/nodes?limit=50000")
     if not isinstance(nodes, list):
         raise RuntimeError("/api/kg/nodes response is not a list")
@@ -124,6 +126,56 @@ def fetch_prod_state(base: str) -> tuple[list[dict], list[dict]]:
         offset += 10000
     print(f"  prod edges: {len(edges):,}")
     return nodes, edges
+
+
+async def fetch_prod_state_via_db(conn: "asyncpg.Connection") -> tuple[list[dict], list[dict]]:
+    """Fetch prod state by querying Supabase directly. Required for environments
+    where the public API is unreachable (e.g. GitHub Actions IPs are blocked by
+    the the platform Cloudflare front)."""
+    print("Fetching prod via direct DB query …")
+    node_rows = await conn.fetch(
+        "SELECT node_id, label, type, description, period, metadata "
+        "FROM free_will.kg_nodes"
+    )
+    nodes = []
+    for r in node_rows:
+        md = r["metadata"]
+        if isinstance(md, str):
+            try: md = json.loads(md)
+            except (json.JSONDecodeError, TypeError): md = {}
+        nodes.append({
+            "id": r["node_id"],
+            "label": r["label"],
+            "type": r["type"],
+            "description": r["description"],
+            "period": r["period"],
+            "metadata": md or {},
+        })
+    print(f"  prod nodes: {len(nodes):,}")
+
+    edge_rows = await conn.fetch(
+        "SELECT source_id, target_id, relation, weight, metadata "
+        "FROM free_will.kg_edges"
+    )
+    edges = []
+    for r in edge_rows:
+        md = r["metadata"]
+        if isinstance(md, str):
+            try: md = json.loads(md)
+            except (json.JSONDecodeError, TypeError): md = {}
+        edges.append({
+            "source": r["source_id"],
+            "target": r["target_id"],
+            "relation": r["relation"],
+            "weight": float(r["weight"]) if r["weight"] is not None else 1.0,
+            "metadata": md or {},
+        })
+    print(f"  prod edges: {len(edges):,}")
+    return nodes, edges
+
+
+# Backwards-compat alias (older callers used fetch_prod_state)
+fetch_prod_state = fetch_prod_state_via_api
 
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -312,7 +364,28 @@ async def main_async(args: argparse.Namespace) -> int:
     git_edges = load_jsonl(EDGES_PATH)
     print(f"  git: {len(git_nodes):,} nodes, {len(git_edges):,} edges")
 
-    prod_nodes, prod_edges = fetch_prod_state(args.api_base)
+    # Open DB connection up front (used for both prod state fetch + writes).
+    # Source selection:
+    #   --source db   (default) — fetch prod state via asyncpg; works from
+    #                              anywhere (GH Actions, local). Requires DSN.
+    #   --source api            — fetch via public API. No DSN needed for
+    #                              dry-run, but Cloudflare blocks GH Actions IPs.
+    conn = None
+    if args.source == "db":
+        dsn = os.environ.get("SUPABASE_DATABASE_URL") or os.environ.get("DATABASE_URL")
+        if not dsn:
+            print("\nERROR: --source db requires SUPABASE_DATABASE_URL or DATABASE_URL.")
+            print("Either set the env var, or pass --source api (Cloudflare-blocked on GH IPs).")
+            return 2
+        print(f"Connecting to Supabase …")
+        conn = await asyncpg.connect(dsn=dsn, statement_cache_size=0)
+        try:
+            prod_nodes, prod_edges = await fetch_prod_state_via_db(conn)
+        except Exception:
+            await conn.close()
+            raise
+    else:
+        prod_nodes, prod_edges = fetch_prod_state_via_api(args.api_base)
 
     delta = compute_delta(git_nodes, git_edges, prod_nodes, prod_edges)
     print_delta_report(delta)
@@ -343,18 +416,19 @@ async def main_async(args: argparse.Namespace) -> int:
         print(f"\nDelta detail written to {args.dump_delta}")
 
     if not args.apply:
+        if conn is not None:
+            await conn.close()
         print("\n=== DRY RUN — no DB writes performed. Use --apply to deploy. ===")
         return 0
 
-    dsn = os.environ.get("SUPABASE_DATABASE_URL") or os.environ.get("DATABASE_URL")
-    if not dsn:
-        print("\nERROR: neither SUPABASE_DATABASE_URL nor DATABASE_URL set. Cannot --apply.")
-        return 2
-    if dsn == os.environ.get("DATABASE_URL"):
-        print("  (using DATABASE_URL fallback)")
-
-    print(f"\nConnecting to Supabase …")
-    conn = await asyncpg.connect(dsn=dsn, statement_cache_size=0)
+    # If we used --source api, we don't yet have a DB connection — open one now.
+    if conn is None:
+        dsn = os.environ.get("SUPABASE_DATABASE_URL") or os.environ.get("DATABASE_URL")
+        if not dsn:
+            print("\nERROR: --apply requires SUPABASE_DATABASE_URL or DATABASE_URL.")
+            return 2
+        print(f"\nConnecting to Supabase …")
+        conn = await asyncpg.connect(dsn=dsn, statement_cache_size=0)
     try:
         print(f"Running upserts in transaction …")
         counts = await apply_delta(conn, delta, max_nodes=args.max_nodes, max_edges=args.max_edges)
@@ -373,8 +447,12 @@ async def main_async(args: argparse.Namespace) -> int:
 
 def main() -> int:
     p = argparse.ArgumentParser(description="Deploy git KG state to Supabase")
+    p.add_argument("--source", choices=("db", "api"), default="db",
+                   help="Where to fetch prod state from (default: db). "
+                        "Use 'api' only if you don't have a DB connection; "
+                        "the public API is Cloudflare-protected and blocks GH Actions IPs.")
     p.add_argument("--api-base", default=DEFAULT_API_BASE,
-                   help=f"Prod API base URL (default: {DEFAULT_API_BASE})")
+                   help=f"Prod API base URL (only used with --source api). Default: {DEFAULT_API_BASE}")
     p.add_argument("--apply", action="store_true",
                    help="Actually run the upserts (default: dry-run)")
     p.add_argument("--max-nodes", type=int, default=None,
