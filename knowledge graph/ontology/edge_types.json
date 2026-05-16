@@ -1099,6 +1099,30 @@
       "target_types": [
         "argument_reconstruction"
       ]
+    },
+    "has_position": {
+      "description": "A debate or controversy has a stance/position as one of its sides. Modern scholars and ancient thinkers can hold the position via 'holds_position' (inverse).",
+      "category": "structural",
+      "inverse": "position_in_debate",
+      "source_types": [
+        "debate",
+        "controversy"
+      ],
+      "target_types": [
+        "position"
+      ]
+    },
+    "position_in_debate": {
+      "description": "A position belongs to a debate or controversy (inverse of has_position).",
+      "category": "structural",
+      "inverse": "has_position",
+      "source_types": [
+        "position"
+      ],
+      "target_types": [
+        "debate",
+        "controversy"
+      ]
     }
   },
   "categories": {
