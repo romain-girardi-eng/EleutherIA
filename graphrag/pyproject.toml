@@ -46,6 +46,11 @@ dev = [
     "pytest-cov>=7.0.0",
     "ruff>=0.15.0",
     "mypy>=1.14.0",
+    # tests/unit/test_infer_transitive.py imports the semantic layer (rdflib).
+    # tests/unit/test_thesis_routes.py imports fastapi to exercise route shape.
+    # Pin both here so `pip install -e graphrag/[dev]` is self-sufficient for CI.
+    "rdflib>=7.1.1",
+    "fastapi>=0.130.0",
 ]
 api = [
     "fastapi>=0.130.0",
