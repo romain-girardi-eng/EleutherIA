@@ -2092,6 +2092,27 @@
       "retry": "Riprova",
       "openDatabase": "Apri invece il database"
     },
+    "mobile": {
+      "tier": {
+        "atlas": "Atlante",
+        "schools": "Scuole",
+        "detail": "Dettaglio"
+      },
+      "nodeCount_one": "{{count}} nodo",
+      "nodeCount_other": "{{count}} nodi",
+      "nodeCount": "{{count}} nodi",
+      "openSheet": "Apri gli strumenti del grafo",
+      "searchOpen": "Apri la ricerca",
+      "sheet": {
+        "title": "Strumenti del grafo",
+        "eyebrow": "Vista"
+      },
+      "hint": {
+        "title": "Pizzica per approfondire",
+        "body": "Parti dai 12 nodi più centrali. Pizzica per zoomare e far apparire altri pensatori, scuole e argomenti.",
+        "dismiss": "Capito"
+      }
+    },
     "advanced": {
       "title": "Avanzato",
       "body": "La fisica del layout, la selezione a lazo e l'epinglatura sono state spostate in modalità sviluppatore. Torneranno dietro questo pannello in una prossima iterazione — per ora usa Atlante / Grafo completo / Filtra / Trova un percorso per il lavoro accademico quotidiano."

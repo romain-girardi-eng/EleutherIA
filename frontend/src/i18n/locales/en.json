@@ -2117,6 +2117,27 @@
       "retry": "Retry",
       "openDatabase": "Open the database instead"
     },
+    "mobile": {
+      "tier": {
+        "atlas": "Atlas",
+        "schools": "Schools",
+        "detail": "Detail"
+      },
+      "nodeCount_one": "{{count}} node",
+      "nodeCount_other": "{{count}} nodes",
+      "nodeCount": "{{count}} nodes",
+      "openSheet": "Open graph tools",
+      "searchOpen": "Open search",
+      "sheet": {
+        "title": "Graph tools",
+        "eyebrow": "View"
+      },
+      "hint": {
+        "title": "Pinch to dive deeper",
+        "body": "You start with the 12 most central nodes. Pinch-zoom in and more thinkers, schools and arguments appear.",
+        "dismiss": "Got it"
+      }
+    },
     "advanced": {
       "title": "Advanced",
       "body": "Layout physics, lasso selection and pinning have moved to a developer mode. They will return behind this drawer in a later iteration — for now use Atlas / Full graph / Filter / Find a path for everyday scholarly work."

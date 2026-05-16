@@ -35,6 +35,12 @@ interface NodeDetailPanelProps {
   onClose: () => void;
   onNavigateToNode?: (nodeId: string) => void;
   relationships?: RelatedNode[];
+  /**
+   * When true, render the panel as a half-height bottom sheet (mobile)
+   * instead of the full-height right rail (desktop). The graph beneath
+   * stays visible so the user can keep zooming/panning.
+   */
+  mobileHalf?: boolean;
 }
 
 function getTypePresentation(type: string) {
@@ -105,6 +111,7 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
   onClose,
   onNavigateToNode,
   relationships = [],
+  mobileHalf = false,
 }: NodeDetailPanelProps) {
   const { t } = useTranslation();
   const [copiedCitation, setCopiedCitation] = useState(false);
@@ -196,7 +203,13 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
     <>
       <div className="fixed inset-x-0 bottom-0 top-12 z-40 bg-[linear-gradient(90deg,rgba(2,6,23,0.02)_0%,rgba(2,6,23,0.08)_52%,rgba(2,6,23,0.18)_100%)] pointer-events-none" />
 
-      <aside className="fixed inset-y-12 right-0 z-50 w-full overflow-hidden border-l border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(2,6,23,0.94)_100%)] text-slate-100 shadow-[-24px_0_90px_rgba(2,6,23,0.55)] sm:w-[24rem] xl:w-[25.5rem]">
+      <aside
+        className={
+          mobileHalf
+            ? 'fixed inset-x-0 bottom-0 z-50 h-[55svh] max-h-[55svh] overflow-hidden rounded-t-3xl border-t border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(2,6,23,0.94)_100%)] text-slate-100 shadow-[0_-24px_80px_rgba(2,6,23,0.6)]'
+            : 'fixed inset-y-12 right-0 z-50 w-full overflow-hidden border-l border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(2,6,23,0.94)_100%)] text-slate-100 shadow-[-24px_0_90px_rgba(2,6,23,0.55)] sm:w-[24rem] xl:w-[25.5rem]'
+        }
+      >
         <div className="pointer-events-none absolute inset-0">
           <div
             className="absolute inset-x-0 top-0 h-64 opacity-90"
