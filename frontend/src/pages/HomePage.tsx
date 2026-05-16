@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Maximize2, Minimize2, ChevronRight } from 'lucide-react';
 import { HeroSection } from '../components/ui/hero-section-2';
@@ -13,10 +13,19 @@ export default function HomePage() {
   // Lock page scroll — this page is a single full-screen canvas, no
   // scrolling needed. iOS Safari ignores `overflow:hidden` alone (the
   // rubber-band gesture still lets the user drag the document a few
-  // pixels), so we belt-and-suspender it: position-fixed body + null
-  // overscroll-behavior + overflow:hidden on both `html` and `body`.
-  // All styles are restored on unmount.
-  useEffect(() => {
+  // pixels), and the App shell wrapping us is `min-h-screen` (= 100vh
+  // which on iOS includes the URL bar) so the document is taller than
+  // the visible viewport even before any user action.
+  //
+  // Belt-and-suspender, applied via `useLayoutEffect` so it lands
+  // BEFORE the first paint (avoids the brief moment where the user
+  // could already scroll while React mounts):
+  //   - html and body height pinned to exactly 100dvh
+  //   - position-fixed body so the viewport can't shift
+  //   - overscroll-behavior + touch-action killed
+  //   - overflow:hidden on both elements
+  // All styles snapshotted on mount and restored verbatim on unmount.
+  useLayoutEffect(() => {
     const body = document.body;
     const html = document.documentElement;
 
@@ -32,32 +41,39 @@ export default function HomePage() {
       bodyTouchAction: body.style.touchAction,
       htmlOverflow: html.style.overflow,
       htmlOverscroll: html.style.overscrollBehavior,
+      htmlHeight: html.style.height,
     };
 
+    // Snap any in-progress scroll back to top BEFORE we lock —
+    // otherwise the visible viewport stays where the user dragged.
+    window.scrollTo(0, 0);
+
+    html.style.height = '100dvh';
+    html.style.overflow = 'hidden';
+    html.style.overscrollBehavior = 'none';
+    body.style.height = '100dvh';
     body.style.overflow = 'hidden';
     body.style.position = 'fixed';
     body.style.top = '0';
     body.style.left = '0';
     body.style.right = '0';
     body.style.width = '100%';
-    body.style.height = '100%';
     body.style.overscrollBehavior = 'none';
     body.style.touchAction = 'none';
-    html.style.overflow = 'hidden';
-    html.style.overscrollBehavior = 'none';
 
     return () => {
+      html.style.height = prev.htmlHeight;
+      html.style.overflow = prev.htmlOverflow;
+      html.style.overscrollBehavior = prev.htmlOverscroll;
+      body.style.height = prev.bodyHeight;
       body.style.overflow = prev.bodyOverflow;
       body.style.position = prev.bodyPosition;
       body.style.top = prev.bodyTop;
       body.style.left = prev.bodyLeft;
       body.style.right = prev.bodyRight;
       body.style.width = prev.bodyWidth;
-      body.style.height = prev.bodyHeight;
       body.style.overscrollBehavior = prev.bodyOverscroll;
       body.style.touchAction = prev.bodyTouchAction;
-      html.style.overflow = prev.htmlOverflow;
-      html.style.overscrollBehavior = prev.htmlOverscroll;
     };
   }, []);
 
