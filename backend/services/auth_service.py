@@ -9,6 +9,8 @@ from collections import defaultdict
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
+# Password hashing — use bcrypt directly (passlib has compatibility issues with bcrypt >= 4.1)
+import bcrypt as _bcrypt
 import jwt
 from eleutheria_database.services.db import DatabaseService
 
@@ -18,9 +20,6 @@ logger = logging.getLogger(__name__)
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "change-me-in-production")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_HOURS = int(os.getenv("JWT_EXPIRATION_HOURS", "168"))  # 7 days
-
-# Password hashing — use bcrypt directly (passlib has compatibility issues with bcrypt >= 4.1)
-import bcrypt as _bcrypt
 
 # Rate limiting (in-memory sliding window)
 _rate_windows: dict[str, list[float]] = defaultdict(list)

@@ -29,9 +29,8 @@ import argparse
 import asyncio
 import json
 import os
-import re
 import sys
-from collections import Counter, defaultdict
+from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any

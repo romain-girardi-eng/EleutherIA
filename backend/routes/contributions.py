@@ -231,20 +231,52 @@ def _proposal_summary(row: dict[str, Any]) -> ProposalSummary:
     )
 
 
-async def _enqueue_processing(contribution_id: str) -> None:
-    """Best-effort dispatch of the extraction workflow.
+async def _run_sync_fallback(contribution_id: str) -> None:
+    """Run the contribution pipeline inline in a detached task.
 
-    The workflow itself is owned by another agent; we simply hand the
-    contribution id to Temporal. If Temporal isn't reachable we log and
-    return — the contribution row sits at ``status='uploaded'`` and an
-    out-of-band CLI runner can pick it up.
+    Used when Temporal dispatch fails so the contribution still gets
+    processed without operator intervention. Allocates a fresh
+    ``DatabaseService`` and ``LLMService`` so the lifecycle is independent
+    of the request that spawned us.
     """
+    try:
+        from eleutheria_database.services.db import DatabaseService
+        from eleutheria_graphrag.services.llm_service import LLMService
+
+        from backend.services.contribution_pipeline import process_contribution_sync
+
+        db = DatabaseService()
+        await db.connect()
+        llm = LLMService()
+        try:
+            await process_contribution_sync(contribution_id, db, llm)
+            logger.info(
+                "Sync fallback completed for contribution %s", contribution_id
+            )
+        finally:
+            await db.close()
+    except Exception:
+        logger.exception(
+            "Sync fallback runner failed for contribution %s", contribution_id
+        )
+
+
+async def _enqueue_processing(contribution_id: str) -> None:
+    """Dispatch the extraction workflow, falling back to an in-process run.
+
+    Primary path: hand the contribution id to Temporal (workflow lives in
+    the eleutheria-worker container). If Temporal is unreachable (cluster
+    down, transient network issue) we schedule
+    :func:`process_contribution_sync` on a detached asyncio task so the
+    contribution still progresses without operator intervention.
+    """
+    import asyncio
+    import os
+
     try:
         from backend.services.temporal import get_temporal_client
 
         client = await get_temporal_client()
-        import os
-
         task_queue = os.getenv(_TEMPORAL_TASK_QUEUE_ENV, "eleutheria-ingestion")
         workflow_id = f"contribution-{contribution_id}"
         await client.start_workflow(
@@ -254,12 +286,16 @@ async def _enqueue_processing(contribution_id: str) -> None:
             task_queue=task_queue,
         )
         logger.info("Dispatched %s for %s", _PROCESS_WORKFLOW_TYPE, contribution_id)
+        return
     except Exception:
         logger.warning(
-            "Temporal dispatch failed for contribution %s — fallback runner will pick it up",
+            "Temporal dispatch failed for contribution %s — running sync fallback",
             contribution_id,
             exc_info=True,
         )
+
+    # Sync fallback: detached background task so upload still returns fast.
+    asyncio.create_task(_run_sync_fallback(contribution_id))
 
 
 # ---------------------------------------------------------------------------
@@ -346,13 +382,23 @@ async def upload_contribution(
             status_code=502, detail="PDF storage upload failed"
         ) from exc
 
+    # ``storage.put_pdf`` returns ``{contribution_id}/{filename}`` (a
+    # relative key, not a URL). For the FS fallback we resolve it to the
+    # absolute on-disk path so the worker's ``download_pdf`` can read it
+    # back. For Supabase Storage we'd want a signed/public URL here, but
+    # that path isn't configured on prod (legacy JWT vs sb_secret_* mismatch).
+    if not storage._has_supabase():  # noqa: SLF001 — public-ish accessor
+        pdf_db_value = str(storage._fs_path(storage_path))  # noqa: SLF001
+    else:
+        pdf_db_value = storage_path
+
     await db.execute(
         """
         UPDATE free_will.kg_contributions
         SET pdf_url = $1
         WHERE contribution_id = $2
         """,
-        storage_path,
+        pdf_db_value,
         uuid.UUID(contribution_id),
     )
 
