@@ -28,7 +28,15 @@
     "logout": "Abmelden",
     "menu": "Menü",
     "closeMenu": "Menü schließen",
-    "openMenu": "Menü öffnen"
+    "openMenu": "Menü öffnen",
+    "menuTitle": "Menü",
+    "menuSubtitle": "Forschung zum freien Willen",
+    "groups": {
+      "discover": "Entdecken",
+      "library": "Bibliothek",
+      "research": "Forschung",
+      "community": "Gemeinschaft"
+    }
   },
   "home": {
     "welcome": "Willkommen bei EleutherIA",

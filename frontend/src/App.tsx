@@ -25,7 +25,8 @@ import ReportErrorPage from './pages/ReportErrorPage';
 import { NotFoundPage } from './components/ui/not-found-page';
 import { SkipLinks } from './components/ui/SkipLinks';
 import { Button } from './components/ui/button';
-import LanguageSwitcher from './components/LanguageSwitcher';
+import { LanguageChips } from './components/LanguageChips';
+import { MobileMenu } from './components/MobileMenu';
 import './index.css';
 
 // Lazy load heavy components for better initial bundle size
@@ -279,8 +280,8 @@ function AppContent() {
                 <NavLink to="/contribuer">{t('nav.contribute')}</NavLink>
               )}
 
-              {/* Language Switcher */}
-              <LanguageSwitcher variant="dropdown" />
+              {/* Language chips — always visible flag buttons */}
+              <LanguageChips size="compact" inverted={isHomePage} />
 
 
               {/* User Menu - Only show when authenticated */}
@@ -340,88 +341,16 @@ function AppContent() {
             </button>
           </div>
 
-          {/* Enhanced Mobile Menu with Animation */}
-          <AnimatePresence>
-            {mobileMenuOpen && (
-              <motion.div
-                id="mobile-menu"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
-                className={cn(
-                  "lg:hidden overflow-hidden",
-                  isHomePage
-                    ? "bg-zinc-900/95 backdrop-blur-md border-t border-white/10"
-                    : "bg-parchment-50 border-t border-amber-200/40"
-                )}
-              >
-                <div className="py-2 space-y-1">
-                  {[
-                    { to: '/how-it-works', label: t('nav.howItWorks') },
-                    { to: '/database', label: t('nav.database') },
-                    { to: '/visualizer', label: t('nav.visualizer') },
-                    { to: '/search', label: t('nav.search') },
-                    { to: '/graphrag', label: t('nav.graphrag') },
-                    { to: '/recherches', label: t('nav.recherches') },
-                    { to: '/contributions', label: t('nav.contributions') },
-                    { to: '/passages-canoniques', label: t('nav.canonicalPassages') },
-                    { to: '/research', label: t('nav.research') },
-                    { to: '/texts', label: t('nav.texts') },
-                    { to: '/bibliography', label: t('nav.bibliography') },
-                    { to: '/about', label: t('nav.about') },
-                    { to: '/credits', label: t('nav.credits') },
-                    ...(isAuthenticated
-                      ? [{ to: '/contribuer', label: t('nav.contribute') }]
-                      : []),
-                  ].map((item, index) => (
-                    <motion.div
-                      key={item.to}
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <NavLink to={item.to} inverted={isHomePage}>{item.label}</NavLink>
-                    </motion.div>
-                  ))}
-
-                  {/* Language Switcher - Mobile */}
-                  <motion.div
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.45 }}
-                    className="pt-2 px-2"
-                  >
-                    <LanguageSwitcher variant="inline" />
-                  </motion.div>
-
-                  {/* Mobile User Menu */}
-                  {isAuthenticated && (
-                    <motion.div
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.45 }}
-                      className="flex items-center justify-between pt-2 border-t border-amber-200/40"
-                    >
-                      <div className="flex items-center space-x-2 text-sm text-academic-muted">
-                        <User className="w-4 h-4" />
-                        <span>{user?.username}</span>
-                      </div>
-                      <Button
-                        onClick={logout}
-                        variant="ghost"
-                        size="sm"
-                      >
-                        <LogOut className="w-4 h-4 mr-1" />
-                        {t('nav.logout')}
-                      </Button>
-                    </motion.div>
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </nav>
+
+        {/* Full-screen mobile drawer — replaces the inline strip menu */}
+        <MobileMenu
+          open={mobileMenuOpen}
+          onClose={() => setMobileMenuOpen(false)}
+          isAuthenticated={isAuthenticated}
+          username={user?.username}
+          onLogout={logout}
+        />
       </header>
 
         {/* Main Content */}
@@ -484,10 +413,32 @@ function AppContent() {
           </ErrorBoundary>
         </main>
 
-        {/* Footer - Hidden on full-screen pages */}
+        {/* Footer - Hidden on full-screen pages.
+            Mobile (< md): a single compact line — no 3-column grid, no
+            social-icon row. The vertical space the full footer ate on
+            phones wasn't worth its content. */}
         {!hideFooter && (
         <footer className="bg-academic-paper border-t border-academic-border mt-2">
-          <div className="academic-container py-2">
+          {/* Compact mobile footer */}
+          <div className="md:hidden academic-container py-3 text-center text-[11px] text-academic-muted">
+            <p className="break-words">
+              © 2025 Romain Girardi ·{' '}
+              <a href="https://creativecommons.org/licenses/by/4.0/" className="text-primary-600 hover:underline">
+                CC BY 4.0
+              </a>{' '}
+              ·{' '}
+              <a
+                href="https://github.com/romain-girardi-eng/EleutherIA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary-600 hover:underline"
+              >
+                GitHub
+              </a>
+            </p>
+          </div>
+          {/* Full footer (md+) */}
+          <div className="hidden md:block academic-container py-2">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="pb-2 sm:pb-0">
                 <h3 className="font-semibold text-sm mb-2">{t('appShell.footer.aboutTitle')}</h3>
