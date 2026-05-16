@@ -2096,7 +2096,10 @@
       "tier": {
         "atlas": "Atlas",
         "schools": "Schulen",
-        "detail": "Detail"
+        "detail": "Detail",
+        "overview": "Übersicht",
+        "mid": "Argumente",
+        "full": "Volldetail"
       },
       "nodeCount_one": "{{count}} Knoten",
       "nodeCount_other": "{{count}} Knoten",

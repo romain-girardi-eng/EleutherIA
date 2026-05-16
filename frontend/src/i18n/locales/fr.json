@@ -2121,7 +2121,10 @@
       "tier": {
         "atlas": "Atlas",
         "schools": "Écoles",
-        "detail": "Détail"
+        "detail": "Détail",
+        "overview": "Vue d'ensemble",
+        "mid": "Arguments",
+        "full": "Détails complets"
       },
       "nodeCount_one": "{{count}} nœud",
       "nodeCount_other": "{{count}} nœuds",

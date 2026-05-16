@@ -2096,7 +2096,10 @@
       "tier": {
         "atlas": "Atlante",
         "schools": "Scuole",
-        "detail": "Dettaglio"
+        "detail": "Dettaglio",
+        "overview": "Vista d'insieme",
+        "mid": "Argomenti",
+        "full": "Dettaglio completo"
       },
       "nodeCount_one": "{{count}} nodo",
       "nodeCount_other": "{{count}} nodi",

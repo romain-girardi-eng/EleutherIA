@@ -32,15 +32,15 @@ interface MobileGraphControlsProps {
 const HINT_STORAGE_KEY = 'eleutheria.kg.mobile.hint.shown';
 
 const TIER_LABEL: Record<MobileTier, { i18nKey: string; fallback: string }> = {
-  atlas: { i18nKey: 'cosmograph.mobile.tier.atlas', fallback: 'Atlas' },
-  schools: { i18nKey: 'cosmograph.mobile.tier.schools', fallback: 'Schools' },
-  detail: { i18nKey: 'cosmograph.mobile.tier.detail', fallback: 'Detail' },
+  overview: { i18nKey: 'cosmograph.mobile.tier.overview', fallback: 'Vue d’ensemble' },
+  mid: { i18nKey: 'cosmograph.mobile.tier.mid', fallback: 'Arguments' },
+  full: { i18nKey: 'cosmograph.mobile.tier.full', fallback: 'Détails' },
 };
 
 const TIER_ICON: Record<MobileTier, typeof Sparkles> = {
-  atlas: Sparkles,
-  schools: Layers,
-  detail: Network,
+  overview: Sparkles,
+  mid: Layers,
+  full: Network,
 };
 
 export default function MobileGraphControls({
