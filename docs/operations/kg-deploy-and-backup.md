@@ -62,34 +62,99 @@ the platform Postgres, what backups exist, and how to recover from common incide
 
 ## How to deploy git state to prod
 
+### Recommended: auto-deploy via CI (`.github/workflows/kg-deploy.yml`)
+
+**One-time setup**: add a single GitHub secret.
+
+1. **Settings → Secrets and variables → Actions → New repository secret**
+2. Name: `SUPABASE_DATABASE_URL`
+3. Value: a Supabase **direct or session-pooler URL on port 5432**:
+   ```
+   postgresql://postgres:PASSWORD@db.<project-ref>.supabase.co:5432/postgres?sslmode=require
+   ```
+   (NOT the transaction-pooler URL on port 6543 — asyncpg's batched
+   transactional upserts can fail there.)
+
+After that, **every push to main** that touches `data/kg/nodes.jsonl`,
+`data/kg/edges.jsonl`, the loader script, or the workflow itself triggers an
+automatic deploy.
+
+The workflow's safety pipeline:
+
+  1. **SHACL invariants gate** — refuses to deploy if the commit's `data/kg/*.jsonl`
+     has any ontology violations.
+  2. **Compute delta** vs the live the platform API, attach as a `deploy-delta-<run-id>`
+     artifact (90-day retention).
+  3. **Sanity gate** — refuses if git is substantially smaller than prod
+     (>10 nodes or >50 edges fewer).
+  4. **Prod backup** — fetches current prod nodes/edges as a recovery artifact
+     `prod-backup-pre-<run-id>` (90-day retention) BEFORE any DB write.
+  5. **Apply** in a single Postgres transaction (rolls back on any per-row error).
+  6. **Post-deploy parity check** — re-runs the dry-run; fails the workflow if
+     more than 5 nodes / 25 edges remain unsynced (partial-deploy detection).
+  7. **Post-deploy delta artifact** attached for audit.
+
+Manual triggers via the GitHub UI or:
+
+```bash
+# Dispatch with default (production target)
+gh workflow run kg-deploy.yml
+
+# Dry-run against prod
+gh workflow run kg-deploy.yml -f dry_run=true
+
+# Scoped first apply: 100 nodes + 500 edges
+gh workflow run kg-deploy.yml -f max_nodes=100 -f max_edges=500
+
+# Deploy to a staging Supabase project instead
+# (requires STAGING_SUPABASE_DATABASE_URL secret to be set)
+gh workflow run kg-deploy.yml -f target=staging
+```
+
+### Manual path (escape hatch, runs on your machine)
+
 ```bash
 cd /Users/romaingirardi/Projects/EleutherIA
 
 # 1. Sanity check git state
 git status                                  # working tree should be clean
-git log --oneline -5
 
 # 2. Tag a safe-point (recoverable git ref)
 git tag -a "safe-point/$(date +%Y-%m-%d)-pre-deploy" \
-    -m "Safe point before deploy: $(wc -l < data/kg/nodes.jsonl) nodes, $(wc -l < data/kg/edges.jsonl) edges"
+    -m "Safe point before deploy: $(wc -l < data/kg/nodes.jsonl) nodes"
 git push origin "safe-point/$(date +%Y-%m-%d)-pre-deploy"
 
 # 3. Dry-run the deploy script (no DB writes)
 .venv/bin/python3 scripts/deploy_kg_to_supabase.py --dump-delta /tmp/deploy_delta.json
-
-# 4. Review the delta: nodes-to-upsert, new-by-type, prod-only items.
-#    Pay special attention to "prod-only nodes" — these are NOT deleted but
-#    should be inspected: are they legitimately orphaned (renamed in git)?
 cat /tmp/deploy_delta.json | jq '.summary'
-cat /tmp/deploy_delta.json | jq '.nodes_only_in_prod_sample'
 
-# 5. If delta looks correct, apply
-export SUPABASE_DATABASE_URL="postgresql://..."   # production connection string
+# 4. Apply
+export SUPABASE_DATABASE_URL="postgresql://postgres:PASSWORD@db.<ref>.supabase.co:5432/postgres?sslmode=require"
 .venv/bin/python3 scripts/deploy_kg_to_supabase.py --apply
 
-# 6. Verify parity post-deploy
-.venv/bin/python3 scripts/deploy_kg_to_supabase.py   # rerun dry-run — should show 0/0 to upsert/insert
+# 5. Verify parity
+.venv/bin/python3 scripts/deploy_kg_to_supabase.py  # should show 0/0 to upsert/insert
 ```
+
+### Recovering from a bad deploy
+
+If a deploy produces unexpected results, recovery options (in order):
+
+1. **From the workflow artifact** — every deploy run uploads `prod-backup-pre-<run-id>`
+   (90 days). Download from the GH Actions UI:
+   ```bash
+   gh run download <run-id> -n prod-backup-pre-<run-id>
+   ```
+   This gives you `prod_backup_{nodes,edges}.jsonl` + a manifest with sha256s.
+   You can then run the loader in reverse mode (manual SQL) to restore.
+
+2. **From Supabase PITR** — Supabase dashboard → Database → Backups → restore
+   from any point in the last 7 days (free tier; longer with paid plans).
+
+3. **From a local snapshot** — `data/kg/snapshots/<date>-<reason>/`.
+
+4. **From a git tag** — `safe-point/*` tags push to origin; reset HEAD or
+   cherry-pick the jsonl files.
 
 ### First-time apply — be conservative
 
