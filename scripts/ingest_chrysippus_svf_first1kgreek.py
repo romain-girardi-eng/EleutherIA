@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -46,7 +47,6 @@ TEI_URL = (
     "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/"
     "data/tlg1264/tlg001/tlg1264.tlg001.1st1K-grc1.xml"
 )
-TEI_NS = "{http://www.tei-c.org/ns/1.0}"
 NS_MAP = {"t": "http://www.tei-c.org/ns/1.0"}
 
 CTS_URN_BASE = "urn:cts:greekLit:tlg1264.tlg001.1st1K-grc1"
@@ -60,6 +60,24 @@ SOURCE_TAG = "OpenGreekAndLatin/First1KGreek (TEI re-encoding of von Arnim 1903)
 
 # Anti-fatalist / εἱμαρμένη / determinism core (Bobzien 1998 ch. 4-5).
 DEFAULT_FRAGMENT_RANGE = list(range(913, 1001))
+
+
+# -----------------------------------------------------------------------------
+# TEI fetch
+# -----------------------------------------------------------------------------
+
+
+def ensure_tei_local() -> Path:
+    """Return the local TEI path, downloading from OGL if missing or truncated."""
+    if TEI_LOCAL.exists() and TEI_LOCAL.stat().st_size > 100_000:
+        return TEI_LOCAL
+    TEI_LOCAL.parent.mkdir(parents=True, exist_ok=True)
+    print(f"  Fetching TEI from {TEI_URL}")
+    with urllib.request.urlopen(TEI_URL, timeout=60) as resp:
+        data = resp.read()
+    TEI_LOCAL.write_bytes(data)
+    print(f"  Saved {len(data):,} bytes to {TEI_LOCAL}")
+    return TEI_LOCAL
 
 
 # -----------------------------------------------------------------------------
@@ -199,13 +217,9 @@ def main() -> int:
 
     print(f"== Chrysippus SVF II ingestion (range {lo}-{hi}) — commit={args.commit} ==")
 
-    if not TEI_LOCAL.exists():
-        print(f"FATAL: TEI file missing at {TEI_LOCAL}. Download with:")
-        print(f"  curl -sL -o {TEI_LOCAL} {TEI_URL}")
-        return 2
-
-    # Phase 1 : parse TEI
+    # Phase 1 : parse TEI (auto-fetch from OGL if missing)
     print("\n== PHASE 1 : PARSE TEI ==")
+    ensure_tei_local()
     fragments = extract_fragments_from_tei(TEI_LOCAL)
     print(f"  Total fragments in TEI: {len(fragments)}")
 
