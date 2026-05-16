@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../api/client';
+import { useKgStats, formatCount } from '../hooks/useKgStats';
 import { useDebounce } from '../hooks/useDebounce';
 import { useKeyboardShortcut, formatShortcut } from '../hooks/useKeyboardShortcut';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
@@ -31,7 +32,12 @@ interface PassageSearchResult {
 }
 
 export default function AdvancedSearchPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const stats = useKgStats();
+  const tCounts = {
+    workCount: formatCount(stats.works, i18n.language),
+    passageCount: formatCount(stats.passages, i18n.language),
+  };
 
   // Search state
   const [query, setQuery] = useState('');
@@ -134,7 +140,7 @@ export default function AdvancedSearchPage() {
             <div>
               <CardTitle className="text-3xl">{t('advancedSearch.title')}</CardTitle>
               <CardDescription>
-                {t('advancedSearch.subtitle')}
+                {t('advancedSearch.subtitle', tCounts)}
               </CardDescription>
             </div>
 

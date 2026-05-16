@@ -51,11 +51,11 @@
     "features": {
       "kg": {
         "title": "Wissensgraph",
-        "description": "Erkunden Sie 2.159 Knoten und 7.856 Beziehungen in einer interaktiven Netzwerkvisualisierung"
+        "description": "Erkunden Sie {{nodeCount}} Knoten und {{edgeCount}} Beziehungen in einer interaktiven Netzwerkvisualisierung"
       },
       "search": {
         "title": "Hybride Suche",
-        "description": "Volltext-, lemmatische und semantische Suche in 151 antiken Werken mit 14.623 Passagen"
+        "description": "Volltext-, lemmatische und semantische Suche in {{workCount}} antiken Werken mit {{passageCount}} Passagen"
       },
       "graphrag": {
         "title": "GraphRAG Q&A",
@@ -63,7 +63,7 @@
       },
       "texts": {
         "title": "Antike Texte",
-        "description": "Durchsuchen und lesen Sie 151 antike griechische und lateinische Werke mit Lemmatisierung"
+        "description": "Durchsuchen und lesen Sie {{workCount}} antike griechische und lateinische Werke mit Lemmatisierung"
       }
     },
     "quickStart": "Schnellstart",
@@ -71,7 +71,7 @@
     "about": {
       "title": "Über diese Datenbank",
       "description1": "(Ἐλευθερία = Freiheit + IA = Intelligence Artificielle) dokumentiert die historische Entwicklung antiker Debatten über freien Willen, Determinismus und moralische Verantwortung, von der klassischen griechischen Philosophie bis zur Spätantike.",
-      "description2": "Die Datenbank kombiniert einen umfassenden Wissensgraph mit 151 antiken Werken (14.623 Passagen) und ermöglicht fortgeschrittene Forschung durch:",
+      "description2": "Die Datenbank kombiniert einen umfassenden Wissensgraph mit {{workCount}} antiken Werken ({{passageCount}} Passagen) und ermöglicht fortgeschrittene Forschung: Querverweise zu Argumenten, Verfolgung von Einflussnetzwerken und Verbindung moderner Forschung mit Primärquellen über agentisches GraphRAG.",
       "feature1": "Interaktive Netzwerkvisualisierung mit Cytoscape.js",
       "feature2": "Hybride Suche, die Volltext-, lemmatische und semantische Ansätze kombiniert",
       "feature3": "GraphRAG-Fragebeantwortung mit Zitatverfolgung",
@@ -83,7 +83,7 @@
   },
   "search": {
     "title": "Hybride Suche",
-    "subtitle": "Durchsuchen Sie 151 antike Texte mit Volltext-, lemmatischen und semantischen Ansätzen",
+    "subtitle": "Durchsuchen Sie {{workCount}} antike Texte mit Volltext-, lemmatischen und semantischen Ansätzen",
     "placeholder": "Passagen, Konzepte oder Autoren suchen...",
     "searchPlaceholder": "z.B. ἐφ' ἡμῖν, liberum arbitrium, freiwillige Handlung...",
     "queryLabel": "Suchanfrage",
@@ -94,7 +94,7 @@
     "searchButton": "Suchen",
     "searching": "Suche läuft...",
     "searchFailed": "Suche fehlgeschlagen",
-    "loadingMessage": "Durchsuche 151 antike Texte...",
+    "loadingMessage": "Durchsuche {{workCount}} antike Texte...",
     "foundResults": "{{count}} Ergebnisse gefunden",
     "noResultsTitle": "Keine Ergebnisse",
     "noResultsDesc": "Keine Ergebnisse für diesen Suchmodus gefunden. Versuchen Sie einen anderen Suchmodus oder eine andere Anfrage.",
@@ -136,7 +136,7 @@
   },
   "advancedSearch": {
     "title": "Erweiterte Suche",
-    "subtitle": "Echtzeit-Suche in 37.839 Passagen aus 258 antiken Werken",
+    "subtitle": "Echtzeit-Suche in {{passageCount}} Passagen aus {{workCount}} antiken Werken",
     "shortcuts": {
       "focusSearch": "Suche fokussieren",
       "toggleFilters": "Filter umschalten",
@@ -462,7 +462,7 @@
     "overview": {
       "title": "Architekturüberblick",
       "architectureLabel": "Agentische Pipeline",
-      "description": "EleutherIA nutzt eine agentische GraphRAG-Pipeline, die einen kurierten Wissensgraphen (2.193 Knoten, 8.616 Kanten) mit einem autonomen Retrieval- und Synthesemotor kombiniert. Das System hat sich von der früheren HiRAG-V2-Pipeline zu einer gestrafften 5-Schritte-, 2-LLM-Aufruf-Architektur entwickelt.",
+      "description": "EleutherIA nutzt eine agentische GraphRAG-Pipeline, die einen kurierten Wissensgraphen ({{nodeCount}} Knoten, {{edgeCount}} Kanten) mit einem autonomen Such- und Synthese-System kombiniert. Anders als traditionelles RAG nutzt unser System Claude als Reasoning-Agent, um den Graphen zu navigieren, Kontext aufzubauen und wissenschaftliche Antworten zu synthetisieren.",
       "coreInnovation": "Kerninnovation",
       "innovationDescription": "Statt 10+ LLM-Aufrufe pro Abfrage nutzt die agentische Pipeline paralleles Retrieval, kurierte passage_citations und Geminis 1M-Token-Kontextfenster:",
       "fsmOrchestration": "12-Knoten pydantic-graph FSM für autonome Orchestrierung",
@@ -558,13 +558,13 @@
       "models": "Modelle",
       "modelsText": "Gemini 3 (primär, 1M Kontext) + Kimi K2.5 Thinking (erweitertes Argumentieren) mit automatischem Fallback.",
       "result": "Ergebnis",
-      "resultText": "Wissenschaftliche Antworten basierend auf 2.193 KG-Knoten und 17.000+ Passagen mit vollständiger Zitatverfolgung und Argumentationstransparenz."
+      "resultText": "Wissenschaftliche Antworten basierend auf {{nodeCount}} KG-Knoten und {{passageCount}}+ Passagen mit vollständiger Zitatverfolgung und Argumentationstransparenz"
     }
   },
   "kg": {
     "title": "Wissensgraph-Visualisierer",
     "loadingGraph": "Wissensgraph wird geladen...",
-    "statsDisplay": "2.159 Knoten · 7.856 Kanten",
+    "statsDisplay": "{{nodeCount}} Knoten · {{edgeCount}} Kanten",
     "failedToLoad": "Graph konnte nicht geladen werden",
     "openFilters": "Filter öffnen",
     "openHelp": "Hilfe und Informationen öffnen",
@@ -1307,7 +1307,7 @@
         "title": "Drei integrierte Systeme",
         "kg": {
           "title": "Wissensgraph",
-          "description": "2.159 vernetzte Konzepte, Personen, Argumente und Werke über 1.200 Jahre philosophischer Debatte.",
+          "description": "{{nodeCount}} vernetzte Konzepte, Personen, Argumente und Werke über 1.200 Jahre philosophischer Debatte.",
           "features": [
             "199 Philosophen",
             "176 Konzepte",
@@ -1317,7 +1317,7 @@
         },
         "texts": {
           "title": "Antike Texte",
-          "description": "151 kanonische Werke mit 14.623 Passagen auf Griechisch, Latein, Hebräisch und Englisch mit vollständiger morphologischer Analyse.",
+          "description": "{{workCount}} kanonische Werke mit {{passageCount}} Passagen auf Griechisch, Latein, Hebräisch und Englisch mit vollständiger morphologischer Analyse.",
           "features": [
             "Vollständiges SBLGNT",
             "LXX Septuaginta",
@@ -1469,7 +1469,7 @@
         "semanticSearch": {
           "title": "Semantische Suche",
           "description": "Frage in Embedding umwandeln → Ähnliche Knoten im Wissensgraph finden",
-          "detail": "Ihre Frage wird zu einem 3.072-Zahlen-Vektor. Wir vergleichen ihn mit allen 2.159 KG-Knoten und finden die 10 ähnlichsten.",
+          "detail": "Ihre Frage wird zu einem 3.072-Zahlen-Vektor. Wir vergleichen ihn mit allen {{nodeCount}} KG-Knoten und finden die 10 ähnlichsten.",
           "input": "\"Was sagten die Stoiker über das Schicksal?\"",
           "output": "Gefunden: Stoizismus (0,89), Schicksal (0,87), Chrysipp (0,84)..."
         },
@@ -1544,7 +1544,7 @@
     },
     "ancientTexts": {
       "title": "Datenbank antiker Texte",
-      "subtitle": "151 Werke, 14.623 Passagen, 5 Sprachen",
+      "subtitle": "{{workCount}} Werke, {{passageCount}} Passagen, 5 Sprachen",
       "schools": {
         "stoic": "Stoisch",
         "aristotelian": "Aristotelisch",
