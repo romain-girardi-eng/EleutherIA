@@ -56,12 +56,12 @@ def _repair(text: str) -> str:
 def _try_loads(candidate: str) -> Any:
     try:
         return json.loads(candidate)
-    except (json.JSONDecodeError, ValueError):
+    except json.JSONDecodeError, ValueError:
         repaired = _repair(candidate)
         if repaired != candidate:
             try:
                 return json.loads(repaired)
-            except (json.JSONDecodeError, ValueError):
+            except json.JSONDecodeError, ValueError:
                 return None
         return None
 
@@ -144,7 +144,7 @@ def _python_literal(text: str) -> Any:
     """Last-resort: parse Python dict/list literals (single quotes, True, etc.)."""
     try:
         value = ast.literal_eval(text)
-    except (ValueError, SyntaxError, MemoryError, TypeError):
+    except ValueError, SyntaxError, MemoryError, TypeError:
         return None
     if isinstance(value, dict | list | str | int | float | bool) or value is None:
         return value

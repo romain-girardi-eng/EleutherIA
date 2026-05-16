@@ -107,9 +107,7 @@ class OpposingTestimony(BaseModel):
     to_period: str | None = Field(
         None, description="Period in which the later reaction emerges"
     )
-    school: str | None = Field(
-        None, description="KG node id for the reacting school"
-    )
+    school: str | None = Field(None, description="KG node id for the reacting school")
     response_summary: str | None = Field(
         None, description="Summary of how the later period reacted"
     )

@@ -449,7 +449,7 @@ class BibliographyBuilder:
                     continue
                 try:
                     score = float(item.get("relevance_score", 0.0))
-                except (TypeError, ValueError):
+                except TypeError, ValueError:
                     score = 0.0
                 score = max(0.0, min(1.0, score))
                 raw_anchors = item.get("in_answer_citations") or []

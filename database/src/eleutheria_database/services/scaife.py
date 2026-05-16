@@ -374,8 +374,7 @@ def fetch_work_with_fallbacks(
             failures.append(f"{source_name}: {exc}")
 
     raise RuntimeError(
-        "All corpus sources failed for "
-        f"{work_urn}: " + "; ".join(failures)
+        f"All corpus sources failed for {work_urn}: " + "; ".join(failures)
     )
 
 

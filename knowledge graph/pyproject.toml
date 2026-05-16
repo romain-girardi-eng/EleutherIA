@@ -44,6 +44,11 @@ dev = [
     "pytest-cov>=7.0.0",
     "ruff>=0.15.0",
     "mypy>=1.14.0",
+    # services/snapshot.py does an optional `import httpx` for snapshot
+    # uploads. The unit tests patch `httpx.put`, which requires httpx to
+    # actually be importable, otherwise tests/unit/test_snapshot.py fails
+    # with ModuleNotFoundError in CI.
+    "httpx>=0.27",
 ]
 api = [
     "fastapi>=0.130.0",

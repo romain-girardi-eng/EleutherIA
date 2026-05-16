@@ -92,8 +92,12 @@ async def get_node(
 async def get_node_neighbors(
     node_id: str,
     analytics: Annotated[KGAnalytics, Depends(get_analytics)],
-    depth: int = Query(1, ge=1, le=3, description="Traversal depth (1 = direct neighbors)"),
-    grouped: bool = Query(True, description="Return 1-hop neighbors grouped by edge type + direction"),
+    depth: int = Query(
+        1, ge=1, le=3, description="Traversal depth (1 = direct neighbors)"
+    ),
+    grouped: bool = Query(
+        True, description="Return 1-hop neighbors grouped by edge type + direction"
+    ),
 ) -> dict[str, Any]:
     """
     Get the direct neighbors of a knowledge-graph node.
