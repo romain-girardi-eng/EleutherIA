@@ -28,7 +28,6 @@ import { apiClient } from '../api/client';
 import type { KGEdge, KGNode } from '../types';
 
 import ModeSwitcher from '../components/canvas/ModeSwitcher';
-import BottomTabNav from '../components/mobile/BottomTabNav';
 import NodeDetailPanel from '../components/NodeDetailPanel';
 
 import {
@@ -846,9 +845,9 @@ export default function CosmographPage() {
         </CosmographProvider>
       )}
 
-      <div className="md:hidden">
-        <BottomTabNav />
-      </div>
+      {/* BottomTabNav (Observatory ↔ Semativerse) removed on mobile —
+          the alternate engine isn't usable at this viewport and the
+          tab strip stole 64 px of canvas. */}
     </div>
   );
 }

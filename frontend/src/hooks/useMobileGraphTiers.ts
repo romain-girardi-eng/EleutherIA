@@ -191,6 +191,33 @@ export function useMobileGraphTiers({
   }, [enabled, graphReady, tier, recomputeKey]);
 
   const slice = useMemo<MobileTierSlice | null>(() => {
+    try {
+      return computeSlice();
+    } catch (err) {
+      // Cosmograph's sampling APIs sometimes throw mid-zoom (the user
+      // reported a white-screen crash on pinch). Fall back to the
+      // atlas anchors so the canvas stays usable.
+      console.warn('useMobileGraphTiers slice failed, falling back to atlas:', err);
+      const anchorIds = new Set(atlasAnchors.map((m) => m.id));
+      const visibleEdgeIds = new Set<string>();
+      const edgeSlice: AtlasEdgeMeta[] = [];
+      for (const edge of edges) {
+        if (anchorIds.has(edge.source) && anchorIds.has(edge.target)) {
+          visibleEdgeIds.add(edge.id);
+          edgeSlice.push(edge);
+        }
+      }
+      return {
+        tier: 'atlas',
+        visibleNodeIds: anchorIds,
+        visibleEdgeIds,
+        labelNodeIds: anchorIds,
+        metaSlice: atlasAnchors,
+        edgeSlice,
+      };
+    }
+
+    function computeSlice(): MobileTierSlice | null {
     if (!enabled || meta.length === 0) return null;
 
     const anchorIds = new Set(atlasAnchors.map((m) => m.id));
@@ -333,6 +360,7 @@ export function useMobileGraphTiers({
       metaSlice,
       edgeSlice,
     };
+    } // end computeSlice
     // viewportSample intentionally listed: re-samples the camera frustum.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
