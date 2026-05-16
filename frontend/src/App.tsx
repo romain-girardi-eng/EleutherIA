@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { LogOut, User, Loader2, Menu, X } from 'lucide-react';
 import { cn } from './lib/utils';
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
@@ -195,6 +195,58 @@ function AppContent() {
   }, [location.pathname, announce, t]);
 
   const isHomePage = location.pathname === '/';
+
+  // Scroll-lock the homepage at the App shell level — applies during
+  // the Suspense fallback BEFORE the lazy HomePage chunk mounts (the
+  // previous in-HomePage useLayoutEffect ran too late, the user could
+  // already scroll while React was loading the chunk). useLayoutEffect
+  // here fires before paint on every route change.
+  useLayoutEffect(() => {
+    if (!isHomePage) return;
+    const html = document.documentElement;
+    const body = document.body;
+    const prev = {
+      htmlHeight: html.style.height,
+      htmlOverflow: html.style.overflow,
+      htmlOverscroll: html.style.overscrollBehavior,
+      bodyHeight: body.style.height,
+      bodyOverflow: body.style.overflow,
+      bodyPosition: body.style.position,
+      bodyTop: body.style.top,
+      bodyLeft: body.style.left,
+      bodyRight: body.style.right,
+      bodyWidth: body.style.width,
+      bodyOverscroll: body.style.overscrollBehavior,
+      bodyTouchAction: body.style.touchAction,
+    };
+    window.scrollTo(0, 0);
+    html.style.height = '100dvh';
+    html.style.overflow = 'hidden';
+    html.style.overscrollBehavior = 'none';
+    body.style.height = '100dvh';
+    body.style.overflow = 'hidden';
+    body.style.position = 'fixed';
+    body.style.top = '0';
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.width = '100%';
+    body.style.overscrollBehavior = 'none';
+    body.style.touchAction = 'none';
+    return () => {
+      html.style.height = prev.htmlHeight;
+      html.style.overflow = prev.htmlOverflow;
+      html.style.overscrollBehavior = prev.htmlOverscroll;
+      body.style.height = prev.bodyHeight;
+      body.style.overflow = prev.bodyOverflow;
+      body.style.position = prev.bodyPosition;
+      body.style.top = prev.bodyTop;
+      body.style.left = prev.bodyLeft;
+      body.style.right = prev.bodyRight;
+      body.style.width = prev.bodyWidth;
+      body.style.overscrollBehavior = prev.bodyOverscroll;
+      body.style.touchAction = prev.bodyTouchAction;
+    };
+  }, [isHomePage]);
 
   // Dark-themed pages where the glow should be hidden
   const isDarkPage = isHomePage || location.pathname === '/how-it-works' || ['/visualizer', '/graph'].some(path =>
