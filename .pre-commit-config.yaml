@@ -140,6 +140,19 @@ repos:
         types_or: [yaml, json]
         exclude: ^(frontend/node_modules|\.vscode|package-lock\.json)
 
+  # ==========================================
+  # KG: SHACL invariants (block bad KG snapshots)
+  # ==========================================
+  - repo: local
+    hooks:
+      - id: kg-shacl-invariants
+        name: KG SHACL invariants
+        entry: .venv/bin/python scripts/validate_kg_shacl.py --invariants-only --fail-on-violation
+        language: system
+        pass_filenames: false
+        files: ^data/kg/.*\.jsonl$
+        stages: [commit]
+
 # ==========================================
 # CI Configuration (skip some hooks in CI)
 # ==========================================

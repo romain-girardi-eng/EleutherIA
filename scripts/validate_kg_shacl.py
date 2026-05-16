@@ -40,6 +40,19 @@ def parse_args() -> argparse.Namespace:
         help="Only run blocking invariant shapes.",
     )
     parser.add_argument(
+        "--invariants-only",
+        action="store_true",
+        help="Alias for --skip-quality. Only run blocking invariant shapes.",
+    )
+    parser.add_argument(
+        "--fail-on-violation",
+        action="store_true",
+        help=(
+            "Exit with code 2 if SHACL reports any invariant violation. "
+            "On a conforming KG this still returns 0."
+        ),
+    )
+    parser.add_argument(
         "--max-examples",
         type=int,
         default=100,
@@ -64,9 +77,10 @@ def main() -> int:
     (ROOT / args.invariant_report).write_text(invariant_markdown, encoding="utf-8")
     print(invariant_markdown)
     if not invariant_report.conforms:
-        return 1
+        return 2 if args.fail_on_violation else 1
 
-    if not args.skip_quality:
+    invariants_only = args.invariants_only or args.skip_quality
+    if not invariants_only:
         quality_report = validate_kg(graph, load_quality_shapes())
         quality_markdown = quality_report.format_markdown_report(
             max_examples=args.max_examples

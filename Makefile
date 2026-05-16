@@ -3,10 +3,9 @@
 
 .PHONY: help install install-database install-kg install-graphrag \
         run local stop local-clean prod prod-stop \
-        cf-deploy cf-dev cf-logs \
         test test-database test-kg test-graphrag test-coverage \
         lint format typecheck quality fix \
-        kg-rdf kg-shacl kg-bibtex scholarly-backlog sparql sparql-stop \
+        kg-rdf kg-shacl kg-shacl-strict kg-bibtex scholarly-backlog sparql sparql-stop \
         frontend-install frontend-dev frontend-build frontend-test \
         logs docs docs-serve clean
 
@@ -38,6 +37,7 @@ help:
 	@echo "  make quality          Run lint + typecheck"
 	@echo "  make fix              Auto-fix + format"
 	@echo "  make kg-shacl         Validate KG invariant SHACL and write quality report"
+	@echo "  make kg-shacl-strict  Validate KG invariants only; exit 2 on any violation (CI gate)"
 	@echo "  make kg-rdf           Export KG RDF into data/rdf/eleutheria.{ttl,jsonld,nt}"
 	@echo "  make kg-bibtex        Export publication nodes to data/kg/publications.bib"
 	@echo "  make scholarly-backlog Export evidence/edition/date backlog reports"
@@ -58,11 +58,6 @@ help:
 	@echo "Docker (Production — Supabase + Qdrant Cloud):"
 	@echo "  make prod             Start backend + frontend"
 	@echo "  make prod-stop        Stop production services"
-	@echo ""
-	@echo "Cloudflare Workers (Production — free-will.app):"
-	@echo "  make cf-deploy        Deploy to Cloudflare Workers"
-	@echo "  make cf-dev           Start local CF dev server"
-	@echo "  make cf-logs          Tail production logs"
 	@echo ""
 	@echo "Database:"
 	@echo "  make db-backup        Backup PostgreSQL"
@@ -130,19 +125,6 @@ prod-stop:
 	docker compose -f deploy/production/docker-compose.yml down
 
 # =============================================================================
-# Cloudflare Workers (Production — free-will.app)
-# =============================================================================
-
-cf-deploy:
-	cd deploy/cloudflare && npx wrangler deploy
-
-cf-dev:
-	cd deploy/cloudflare && npx wrangler dev
-
-cf-logs:
-	cd deploy/cloudflare && npx wrangler tail
-
-# =============================================================================
 # Testing
 # =============================================================================
 
@@ -186,6 +168,9 @@ kg-rdf:
 kg-shacl:
 	python "knowledge graph/src/eleutheria_kg/semantic/shapes/generate_shapes.py"
 	python scripts/validate_kg_shacl.py
+
+kg-shacl-strict:
+	.venv/bin/python scripts/validate_kg_shacl.py --invariants-only --fail-on-violation
 
 kg-bibtex:
 	python scripts/export_publications_bibtex.py
