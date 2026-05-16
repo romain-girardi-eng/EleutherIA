@@ -1194,7 +1194,12 @@ def db_shell() -> None:
 
 @app.command()
 def info() -> None:
-    """Show project information."""
+    """Show project information with LIVE corpus/KG counts from the database.
+
+    Falls back to a hint string ("—") for any count that can't be fetched
+    (DB unreachable, etc.). Never shows pre-baked stale numbers; we tried
+    that and they were 4-5x off after a few weeks of growth.
+    """
     table = Table(title="EleutherIA Project Info")
     table.add_column("Property", style="cyan")
     table.add_column("Value", style="green")
@@ -1203,10 +1208,37 @@ def info() -> None:
     table.add_row("Repository", "github.com/romain-girardi-eng/EleutherIA")
     table.add_row("License", "CC BY 4.0")
     table.add_row("", "")
-    table.add_row("KG Nodes", "4,245")
-    table.add_row("KG Edges", "10,621")
-    table.add_row("Ancient Works", "175")
-    table.add_row("Passages", "17,036")
+
+    live = _query_supabase()
+    source: str
+    if live:
+        source = "live · Supabase"
+        n = live.get("nodes", 0)
+        e = live.get("edges", 0)
+        w = live.get("works", 0)
+        p = live.get("passages", 0)
+    else:
+        # Best-effort fallback to the public API stats endpoint
+        api = api_request("/kg/stats") or {}
+        works_api = api_request("/works/stats") or {}
+        if api or works_api:
+            source = "fallback · public API"
+            n = api.get("total_nodes", 0)
+            e = api.get("total_edges", 0)
+            w = (works_api.get("works") or {}).get("total_works", 0)
+            p = (works_api.get("passages") or {}).get("total_passages", 0)
+        else:
+            source = "unavailable (set DATABASE_URL or start the backend)"
+            n = e = w = p = None
+
+    def f(v: Any) -> str:
+        return f"{v:,}" if isinstance(v, (int, float)) and v else "—"
+
+    table.add_row("KG Nodes", f(n))
+    table.add_row("KG Edges", f(e))
+    table.add_row("Ancient Works", f(w))
+    table.add_row("Passages", f(p))
+    table.add_row("Counts source", f"[dim]{source}[/dim]")
     table.add_row("", "")
     table.add_row("Backend", "FastAPI + Python 3.14+")
     table.add_row("Frontend", "React 19 + TypeScript")

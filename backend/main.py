@@ -126,7 +126,7 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=allowed_origins,
-        allow_origin_regex=r"https://.*\.eleutheria\.pages\.dev|https://visual-pulpit.*\.vercel\.app|https://free-will\.app|https://.*\.up\.railway\.app",
+        allow_origin_regex=r"https://free-will\.app|https://.*\.free-will\.com",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -189,7 +189,19 @@ def create_app() -> FastAPI:
         graphrag_ok = (
             getattr(svc.graphrag, "_kg_loaded", False) if svc.graphrag else False
         )
-        kg_nodes = len(svc.analytics.kg_data.get("nodes", [])) if svc.analytics else 0
+        # Prefer LIVE DB count over the in-memory snapshot — analytics is loaded
+        # once at startup and would otherwise drift between deploys without a pod
+        # restart. The COUNT(*) on free_will.kg_nodes is cheap (~5ms).
+        kg_nodes = 0
+        if db_ok:
+            try:
+                row = await svc.db.fetchrow("SELECT count(*)::int AS n FROM free_will.kg_nodes")
+                if row:
+                    kg_nodes = int(row["n"])
+            except Exception:
+                kg_nodes = len(svc.analytics.kg_data.get("nodes", [])) if svc.analytics else 0
+        else:
+            kg_nodes = len(svc.analytics.kg_data.get("nodes", [])) if svc.analytics else 0
         core_ready = graphrag_ok and kg_nodes > 0
 
         return {
