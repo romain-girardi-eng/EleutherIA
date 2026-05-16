@@ -10,21 +10,19 @@ export default function HomePage() {
   const [isCSSFullscreen, setIsCSSFullscreen] = useState(false);
   const particleContainerRef = useRef<HTMLDivElement>(null);
 
-  // Lock page scroll — this page is a single full-screen canvas, no
-  // scrolling needed. iOS Safari ignores `overflow:hidden` alone (the
-  // rubber-band gesture still lets the user drag the document a few
-  // pixels), and the App shell wrapping us is `min-h-screen` (= 100vh
-  // which on iOS includes the URL bar) so the document is taller than
-  // the visible viewport even before any user action.
-  //
-  // Belt-and-suspender, applied via `useLayoutEffect` so it lands
-  // BEFORE the first paint (avoids the brief moment where the user
-  // could already scroll while React mounts):
-  //   - html and body height pinned to exactly 100dvh
-  //   - position-fixed body so the viewport can't shift
-  //   - overscroll-behavior + touch-action killed
-  //   - overflow:hidden on both elements
-  // All styles snapshotted on mount and restored verbatim on unmount.
+  // Lock page scroll — single full-screen canvas, no scrolling.
+  // iOS Safari (incl. iOS 17/18) leaks scroll via three vectors that all
+  // need to be closed simultaneously:
+  //   1. `100dvh` resizes when the URL bar collapses → use `100svh`
+  //      (smallest viewport, never reflows) instead.
+  //   2. `overflow:hidden` alone doesn't stop rubber-band → pin body
+  //      with `position:fixed; inset:0`.
+  //   3. `touch-action` does NOT inherit, so killing it on body only
+  //      blocks gestures starting on body itself — children still
+  //      accept them. The Hero section sets `touch-action:none` on its
+  //      own root to close that path.
+  // Block also prevents the scroll-leak that happens when React mounts
+  // (useLayoutEffect lands before first paint).
   useLayoutEffect(() => {
     const body = document.body;
     const html = document.documentElement;
@@ -35,6 +33,7 @@ export default function HomePage() {
       bodyTop: body.style.top,
       bodyLeft: body.style.left,
       bodyRight: body.style.right,
+      bodyBottom: body.style.bottom,
       bodyWidth: body.style.width,
       bodyHeight: body.style.height,
       bodyOverscroll: body.style.overscrollBehavior,
@@ -42,21 +41,22 @@ export default function HomePage() {
       htmlOverflow: html.style.overflow,
       htmlOverscroll: html.style.overscrollBehavior,
       htmlHeight: html.style.height,
+      htmlTouchAction: html.style.touchAction,
     };
 
-    // Snap any in-progress scroll back to top BEFORE we lock —
-    // otherwise the visible viewport stays where the user dragged.
     window.scrollTo(0, 0);
 
-    html.style.height = '100dvh';
+    html.style.height = '100svh';
     html.style.overflow = 'hidden';
     html.style.overscrollBehavior = 'none';
-    body.style.height = '100dvh';
+    html.style.touchAction = 'none';
+    body.style.height = '100svh';
     body.style.overflow = 'hidden';
     body.style.position = 'fixed';
     body.style.top = '0';
     body.style.left = '0';
     body.style.right = '0';
+    body.style.bottom = '0';
     body.style.width = '100%';
     body.style.overscrollBehavior = 'none';
     body.style.touchAction = 'none';
@@ -65,12 +65,14 @@ export default function HomePage() {
       html.style.height = prev.htmlHeight;
       html.style.overflow = prev.htmlOverflow;
       html.style.overscrollBehavior = prev.htmlOverscroll;
+      html.style.touchAction = prev.htmlTouchAction;
       body.style.height = prev.bodyHeight;
       body.style.overflow = prev.bodyOverflow;
       body.style.position = prev.bodyPosition;
       body.style.top = prev.bodyTop;
       body.style.left = prev.bodyLeft;
       body.style.right = prev.bodyRight;
+      body.style.bottom = prev.bodyBottom;
       body.style.width = prev.bodyWidth;
       body.style.overscrollBehavior = prev.bodyOverscroll;
       body.style.touchAction = prev.bodyTouchAction;
@@ -179,15 +181,13 @@ export default function HomePage() {
   );
 
   return (
-    // Lock the homepage to exactly the dynamic viewport height. `min-h-screen`
-    // resolves to `min-height: 100vh`, which on mobile Safari/Chrome includes
-    // the URL bar — the document was a few pixels taller than the visible
-    // viewport, so the user could scroll up/down by a hair. `100dvh` tracks
-    // the visible viewport, and `overflow-hidden` clips anything else. Both
-    // wrappers get it so neither one re-introduces overflow.
-    <div className="h-[100dvh] overflow-hidden relative">
-      {/* Main Content */}
-      <main className="h-[100dvh] overflow-hidden relative">
+    // Lock to `100svh` (smallest viewport) rather than `100dvh`: dvh
+    // grows when iOS Safari's URL bar collapses, causing the section
+    // to reflow during scroll gestures — the user reads that as scroll.
+    // svh stays put. Trade-off: a thin band may remain at the bottom
+    // when the URL bar is gone, which is fine for a single-screen page.
+    <div className="h-[100svh] overflow-hidden relative touch-none overscroll-none">
+      <main className="h-[100svh] overflow-hidden relative touch-none overscroll-none">
         <HeroSection
           logo={{ url: "/logo.svg", alt: "EleutherIA" }}
           title={
