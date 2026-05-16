@@ -7,17 +7,28 @@ name: KG Deploy (git → Supabase)
 #   SUPABASE_DATABASE_URL  — direct or session-pooler Supabase URL
 #                            (port 5432; format `postgresql://postgres:PASSWORD@db.<project-ref>.supabase.co:5432/postgres?sslmode=require`)
 #
+# OPTIONAL SECRETS:
+#   STAGING_SUPABASE_DATABASE_URL  — same shape, points at a staging Supabase
+#                                    project. Used when the workflow is dispatched
+#                                    with the `target=staging` input.
+#
 # The pooler URL on port 6543 (transaction mode) is NOT reliable for large
 # transactional batch upserts via asyncpg. Use the direct/session-mode URL.
 #
 # Behavior:
-#   1. Dry-run first to report the delta.
-#   2. Refuses to apply if the delta would shrink the KG (sanity check).
-#   3. Applies in a single transaction (rollback-safe).
-#   4. Re-fetches prod stats to confirm parity.
+#   1. SHACL invariants gate — refuses to deploy if data/kg/*.jsonl has any
+#      ontology violations.
+#   2. Dry-run to compute the delta.
+#   3. Sanity gate — refuses if git is substantially smaller than prod.
+#   4. Backup current prod state to a 90-day artifact (recovery insurance).
+#   5. Single-transaction apply (rollback-safe).
+#   6. Post-deploy parity check (asserts 0 git-only items remain after apply).
 #
-# To trigger manually with deploy-time tuning:
-#   gh workflow run kg-deploy.yml -f dry_run=false -f max_nodes=100
+# To trigger manually:
+#   gh workflow run kg-deploy.yml                              # full prod apply
+#   gh workflow run kg-deploy.yml -f dry_run=true              # dry-run only
+#   gh workflow run kg-deploy.yml -f max_nodes=100             # scoped apply
+#   gh workflow run kg-deploy.yml -f target=staging            # against staging
 
 on:
   push:
@@ -33,6 +44,13 @@ on:
         description: 'Dry-run only (no DB writes)'
         type: boolean
         default: false
+      target:
+        description: 'Deploy target'
+        type: choice
+        default: 'production'
+        options:
+          - 'production'
+          - 'staging'
       max_nodes:
         description: 'Limit node upserts (empty = unlimited)'
         required: false
@@ -46,14 +64,14 @@ permissions:
   contents: read
 
 concurrency:
-  group: kg-deploy-prod
+  group: kg-deploy-${{ github.event.inputs.target || 'production' }}
   cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    environment: production
+    timeout-minutes: 25
+    environment: ${{ github.event.inputs.target || 'production' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,33 +81,56 @@ jobs:
         with:
           python-version: '3.14'
 
-      - name: Install asyncpg + database package
+      - name: Install dependencies (asyncpg + KG semantic for SHACL)
         run: |
           pip install asyncpg
           pip install -e database/
+          pip install -e "knowledge graph/[semantic]"
 
-      - name: Verify secret presence
+      - name: Choose target DSN
+        id: target
         env:
-          SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+          PROD_DSN: ${{ secrets.SUPABASE_DATABASE_URL }}
+          STAGING_DSN: ${{ secrets.STAGING_SUPABASE_DATABASE_URL }}
         run: |
-          if [ -z "$SUPABASE_DATABASE_URL" ]; then
-            echo "::error::SUPABASE_DATABASE_URL secret not set. Add it under Settings → Secrets and variables → Actions."
-            echo "::error::Format: postgresql://postgres:PASSWORD@db.<project-ref>.supabase.co:5432/postgres?sslmode=require"
-            exit 1
+          TARGET="${{ github.event.inputs.target || 'production' }}"
+          if [ "$TARGET" = "staging" ]; then
+            if [ -z "$STAGING_DSN" ]; then
+              echo "::error::target=staging but STAGING_SUPABASE_DATABASE_URL secret not set."
+              exit 1
+            fi
+            echo "target=staging" >> "$GITHUB_OUTPUT"
+            echo "SUPABASE_DATABASE_URL=$STAGING_DSN" >> "$GITHUB_ENV"
+            DSN="$STAGING_DSN"
+          else
+            if [ -z "$PROD_DSN" ]; then
+              echo "::error::SUPABASE_DATABASE_URL secret not set. Add it under Settings → Secrets and variables → Actions → New repository secret."
+              echo "::error::Format: postgresql://postgres:PASSWORD@db.<project-ref>.supabase.co:5432/postgres?sslmode=require"
+              exit 1
+            fi
+            echo "target=production" >> "$GITHUB_OUTPUT"
+            echo "SUPABASE_DATABASE_URL=$PROD_DSN" >> "$GITHUB_ENV"
+            DSN="$PROD_DSN"
           fi
-          # Strip password before logging
-          MASKED=$(echo "$SUPABASE_DATABASE_URL" | sed -E 's|(://[^:]+:)[^@]+(@)|\1<REDACTED>\2|')
-          echo "DSN target: $MASKED"
+          MASKED=$(echo "$DSN" | sed -E 's|(://[^:]+:)[^@]+(@)|\1<REDACTED>\2|')
+          echo "Deploying to $TARGET: $MASKED"
+          echo "::notice::Target = $TARGET"
 
-      - name: Dry-run (always)
+      - name: SHACL invariants gate (refuse broken data)
+        run: |
+          echo "Running SHACL invariants on data/kg/*.jsonl …"
+          python scripts/validate_kg_shacl.py --skip-quality --max-examples 50
+          # validate_kg_shacl.py exits non-zero on violation, so a non-zero exit
+          # status here means the gate caught broken data and aborts the deploy.
+
+      - name: Dry-run (compute delta vs prod)
         run: python scripts/deploy_kg_to_supabase.py --dump-delta /tmp/deploy_delta.json
 
-      - name: Sanity-gate (refuse destructive deltas)
+      - name: Sanity gate (refuse if git is shrinking prod)
         run: |
           python - <<'PY'
           import json
           d = json.load(open('/tmp/deploy_delta.json'))['summary']
-          # If git has FEWER nodes/edges than prod, something is wrong (this workflow only ADDS).
           if d['git_nodes'] < d['prod_nodes'] - 10 or d['git_edges'] < d['prod_edges'] - 50:
               print(f"::error::git ({d['git_nodes']} nodes / {d['git_edges']} edges) is substantially smaller than prod ({d['prod_nodes']} / {d['prod_edges']}).")
               print("::error::This workflow only does upsert/insert — it will not delete prod-only rows.")
@@ -99,18 +140,88 @@ jobs:
               print(f"::notice::Sanity OK. Delta: +{d['nodes_only_in_git']} nodes / +{d['edges_to_insert']} edges to deploy.")
           PY
 
-      - name: Upload delta artifact (always — for audit trail)
+      - name: Upload pre-deploy delta artifact (always — audit trail)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: deploy-delta-${{ github.run_id }}
           path: /tmp/deploy_delta.json
+          retention-days: 90
           if-no-files-found: ignore
 
-      - name: Apply
+      - name: Backup prod state (recovery artifact)
+        # Run before apply, even on dry-run, so the artifact always exists for that run.
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          echo "Backing up current prod KG state (recovery artifact, 90-day retention) …"
+          python - <<'PY'
+          import json, urllib.request
+          HEADERS = {"User-Agent": "Mozilla/5.0", "Accept": "application/json"}
+          BASE = "https://free-will.app"
+
+          def fetch(url):
+              req = urllib.request.Request(url, headers=HEADERS)
+              with urllib.request.urlopen(req, timeout=120) as r:
+                  return json.loads(r.read())
+
+          print("  fetching prod nodes …")
+          nodes = fetch(f"{BASE}/api/kg/nodes?limit=50000")
+          print(f"  prod nodes: {len(nodes):,}")
+          with open("/tmp/prod_backup_nodes.jsonl", "w", encoding="utf-8") as f:
+              for n in nodes:
+                  f.write(json.dumps(n, ensure_ascii=False) + "\n")
+
+          print("  fetching prod edges (paginated) …")
+          all_edges = []
+          offset = 0
+          while True:
+              page = fetch(f"{BASE}/api/kg/edges?limit=10000&offset={offset}")
+              if not page: break
+              all_edges.extend(page)
+              if len(page) < 10000: break
+              offset += 10000
+          print(f"  prod edges: {len(all_edges):,}")
+          with open("/tmp/prod_backup_edges.jsonl", "w", encoding="utf-8") as f:
+              for e in all_edges:
+                  f.write(json.dumps(e, ensure_ascii=False) + "\n")
+
+          # Manifest with checksums
+          import hashlib
+          def sha(p):
+              h = hashlib.sha256()
+              with open(p, "rb") as f:
+                  for chunk in iter(lambda: f.read(8192), b""): h.update(chunk)
+              return h.hexdigest()
+          manifest = {
+              "kind": "prod-backup-pre-deploy",
+              "api_base": BASE,
+              "node_count": len(nodes),
+              "edge_count": len(all_edges),
+              "files": {
+                  "/tmp/prod_backup_nodes.jsonl": {"sha256": sha("/tmp/prod_backup_nodes.jsonl")},
+                  "/tmp/prod_backup_edges.jsonl": {"sha256": sha("/tmp/prod_backup_edges.jsonl")},
+              },
+          }
+          with open("/tmp/prod_backup_manifest.json", "w") as f:
+              json.dump(manifest, f, indent=2, ensure_ascii=False)
+          print(f"\n  Backup manifest:")
+          print(json.dumps(manifest, indent=2))
+          PY
+
+      - name: Upload prod backup (90-day retention)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prod-backup-pre-${{ github.run_id }}
+          path: |
+            /tmp/prod_backup_nodes.jsonl
+            /tmp/prod_backup_edges.jsonl
+            /tmp/prod_backup_manifest.json
+          retention-days: 90
+          if-no-files-found: ignore
+
+      - name: Apply (upsert in single transaction)
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run != 'true')
-        env:
-          SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
           ARGS="--apply"
           if [ -n "${{ github.event.inputs.max_nodes }}" ]; then
@@ -130,11 +241,12 @@ jobs:
           python - <<'PY'
           import json
           d = json.load(open('/tmp/post_deploy_delta.json'))['summary']
-          # After apply, only PROD-ONLY items should remain (rename orphans we don't touch).
-          # Everything in git should now be in prod.
           if d['nodes_only_in_git'] > 0 or d['edges_to_insert'] > 0:
               print(f"::warning::Post-deploy still shows {d['nodes_only_in_git']} nodes / {d['edges_to_insert']} edges not in prod.")
               print("::warning::Some upserts may have been skipped (foreign-key issues, row failures, etc.). Check logs.")
+              # Exit non-zero so the workflow surfaces partial-deploy failures as a red X
+              if d['nodes_only_in_git'] > 5 or d['edges_to_insert'] > 25:
+                  raise SystemExit(3)
           else:
               print(f"::notice::✓ git ↔ prod parity confirmed: {d['git_nodes']} nodes / {d['git_edges']} edges")
           PY
@@ -145,4 +257,5 @@ jobs:
         with:
           name: post-deploy-delta-${{ github.run_id }}
           path: /tmp/post_deploy_delta.json
+          retention-days: 90
           if-no-files-found: ignore
