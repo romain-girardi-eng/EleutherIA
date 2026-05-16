@@ -326,10 +326,12 @@ async def main_async(args: argparse.Namespace) -> int:
         print("\n=== DRY RUN — no DB writes performed. Use --apply to deploy. ===")
         return 0
 
-    dsn = os.environ.get("SUPABASE_DATABASE_URL")
+    dsn = os.environ.get("SUPABASE_DATABASE_URL") or os.environ.get("DATABASE_URL")
     if not dsn:
-        print("\nERROR: SUPABASE_DATABASE_URL not set. Cannot --apply.")
+        print("\nERROR: neither SUPABASE_DATABASE_URL nor DATABASE_URL set. Cannot --apply.")
         return 2
+    if dsn == os.environ.get("DATABASE_URL"):
+        print("  (using DATABASE_URL fallback)")
 
     print(f"\nConnecting to Supabase …")
     conn = await asyncpg.connect(dsn=dsn, statement_cache_size=0)
