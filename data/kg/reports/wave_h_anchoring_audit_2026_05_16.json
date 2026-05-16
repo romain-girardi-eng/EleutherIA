@@ -1,0 +1,3292 @@
+{
+  "generated_at": "2026-05-16 16:00:54.193257+00:00",
+  "wave": "wave_h_anchoring_chrysippe_carneade_cicero_2026_05_16",
+  "totals": {
+    "chrysippean_arguments": 35,
+    "carneadean_arguments": 59,
+    "chrysippean_zero_anchor": 0,
+    "carneadean_zero_anchor": 0
+  },
+  "chrysippean": [
+    {
+      "argument_id": "scholarly_argument_bobzien_divination_and_determinism_the_3",
+      "total_anchor_edges": 2,
+      "passage_anchor_edges": 2,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_8",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_bobzien_divination_and_determinism_5",
+      "total_anchor_edges": 2,
+      "passage_anchor_edges": 2,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_8",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_telfer_origin_of_autexousia_terminolo_0",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_dl_lives_7_1_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_dl_lives_7_1_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_dl_lives_7_1_42",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_bobzien_stoic_modal_logic_2",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_14",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_bobzien_stoic_modal_logic_and_continge_2",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_14",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_bobzien_chrysippus_and_early_stoics_on_1",
+      "total_anchor_edges": 4,
+      "passage_anchor_edges": 4,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_20",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_21",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_bobzien_stoic_causal_determinism_vs_fa_0",
+      "total_anchor_edges": 4,
+      "passage_anchor_edges": 4,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_20",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_21",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_uster_stoic_causal_determinism_and_i_1",
+      "total_anchor_edges": 4,
+      "passage_anchor_edges": 4,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_20",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_21",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_bobzien_2001_b1_sea_battle_chrysippus_bivalence",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 4,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_de_fato_cicero_44bce_b9c4e5d2",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_18",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_19",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_20",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_21",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_hall_fate_vs_free_will_in_greek_phi_1",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_gourinat_chrysippus_s_compatibilism_0",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_bobzien_chrysippus_compatibilism_and_m_1",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_koch_stoic_causal_theory_and_human__0",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_koch_academic_reactions_to_stoic_ca_1",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_f_rst_stoic_compatibilism_chrysippus_2",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_eliasson_chrysippus_and_stoic_3",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_gomez_2014_chrysippus_reactive_compatibilism",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholar_position_sharples_chrysippus_early_compatibilist",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_salles_2014_epictetus_causal_eph_hemin_continuity_chrysippus",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_bobzien_2001_b1_chrysippean_modal_system",
+      "total_anchor_edges": 6,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_de_fato_cicero_44bce_b9c4e5d2",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_11",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_17",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_gourinat_cicero_s_critique_of_chrysippu_2",
+      "total_anchor_edges": 6,
+      "passage_anchor_edges": 6,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_44",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_bobzien_chrysippus_modal_logic_and_con_2",
+      "total_anchor_edges": 7,
+      "passage_anchor_edges": 7,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_dl_lives_7_1_75",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_dl_lives_7_1_76",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_salles_chrysippus_theory_of_action_an_3",
+      "total_anchor_edges": 7,
+      "passage_anchor_edges": 7,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_dl_lives_7_1_50",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_dl_lives_7_1_51",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_bobzien_chrysippus_psychology_of_actio_5",
+      "total_anchor_edges": 7,
+      "passage_anchor_edges": 7,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_dl_lives_7_1_50",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_dl_lives_7_1_51",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_gourinat_2014_in_nostra_potestate_not_eph_hemin",
+      "total_anchor_edges": 7,
+      "passage_anchor_edges": 7,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_25",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_44",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_bobzien_chrysippus_s_arguments_for_cau_1",
+      "total_anchor_edges": 7,
+      "passage_anchor_edges": 7,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_20",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_21",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_22",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_27",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_28",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_29",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_30",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_bobzien_2001_b1_synkatathesis_psychology_action",
+      "total_anchor_edges": 8,
+      "passage_anchor_edges": 7,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_gellius_na_vii_2",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_dl_lives_7_1_50",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_dl_lives_7_1_51",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_chrysippus_causal_taxonomy",
+      "total_anchor_edges": 8,
+      "passage_anchor_edges": 8,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_28",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_29",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_30",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_sharples_stoic_providence_and_determini_1",
+      "total_anchor_edges": 8,
+      "passage_anchor_edges": 8,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_20",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_21",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_27",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_28",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_29",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_30",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_cylinder_analogy_chrysippus_k1l2m3n4",
+      "total_anchor_edges": 20,
+      "passage_anchor_edges": 20,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_1",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_2",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_3",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_4",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_10",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_11",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_15",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_uster_chrysippus_s_cylinder_and_cone_0",
+      "total_anchor_edges": 20,
+      "passage_anchor_edges": 20,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_1",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_2",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_3",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_4",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_10",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_11",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_15",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholar_position_salles_chrysippus_frankfurt_style",
+      "total_anchor_edges": 20,
+      "passage_anchor_edges": 20,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_1",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_2",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_3",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_4",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_10",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_11",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_15",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_bobzien_chrysippus_s_compatibilism_3",
+      "total_anchor_edges": 20,
+      "passage_anchor_edges": 20,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_1",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_2",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_3",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_4",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_10",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_11",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_15",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_gourinat_the_cylinder_analogy_and_its_l_3",
+      "total_anchor_edges": 20,
+      "passage_anchor_edges": 20,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_1",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_2",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_3",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_4",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_10",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_11",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_15",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_bobzien_chrysippus_compatibilism_fate__1",
+      "total_anchor_edges": 20,
+      "passage_anchor_edges": 20,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_39",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_41",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_42",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_43",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_1",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_2",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_3",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_4",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_10",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_11",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_gellius_na_vii_2_7_2_15",
+          "target_type": "passage"
+        }
+      ]
+    }
+  ],
+  "carneadean": [
+    {
+      "argument_id": "argument_eus_carneadean_pe_vi_6_arg5_laws_abolition",
+      "total_anchor_edges": 1,
+      "passage_anchor_edges": 1,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_18",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_eus_carneadean_pe_vi_6_arg7_marionettes_consciousness",
+      "total_anchor_edges": 1,
+      "passage_anchor_edges": 1,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_20",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_eus_carneadean_pe_vi_6_arg6_piety_destroyed",
+      "total_anchor_edges": 1,
+      "passage_anchor_edges": 1,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_19",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_eus_carneadean_pe_vi_6_general_theme",
+      "total_anchor_edges": 1,
+      "passage_anchor_edges": 1,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_eus_carneadean_pe_vi_6_conclusion_autexousion",
+      "total_anchor_edges": 1,
+      "passage_anchor_edges": 1,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_21",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_basil_carneadean_hex_vi_7_laws_useless",
+      "total_anchor_edges": 2,
+      "passage_anchor_edges": 1,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_basil_hexaemeron",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_18",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_origen_witness_carneades_transposition_theological_consequences_amand1945",
+      "total_anchor_edges": 2,
+      "passage_anchor_edges": 1,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_origen_philocalia",
+          "target_type": "work"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_origen_philocalia_23_1",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_greg_naz_carmen_dogm_5_carneadean",
+      "total_anchor_edges": 2,
+      "passage_anchor_edges": 1,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_gregory_naz_carmina_dogmatica",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_irenaeus_adv_haer_iv_37_praise_blame_transposed",
+      "total_anchor_edges": 2,
+      "passage_anchor_edges": 1,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_irenaeus_adversus_haereses_book4",
+          "target_type": "work"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_irenaeus_ah_4_37",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_basil_carneadean_hex_vi_7_christian_hopes_destroyed",
+      "total_anchor_edges": 2,
+      "passage_anchor_edges": 1,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_basil_hexaemeron",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_19",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_origen_witness_carneades_transposition_gnostic_excursus_amand1945",
+      "total_anchor_edges": 2,
+      "passage_anchor_edges": 1,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_origen_philocalia",
+          "target_type": "work"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_origen_philocalia_23_3",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_eus_carneadean_pe_vi_6_arg4_moral_action_proves_autonomy",
+      "total_anchor_edges": 2,
+      "passage_anchor_edges": 2,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_16",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_17",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_piety_amand1945",
+      "total_anchor_edges": 2,
+      "passage_anchor_edges": 2,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_19",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_19",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_legislation_amand1945",
+      "total_anchor_edges": 2,
+      "passage_anchor_edges": 2,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_18",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_18",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_origen_witness_carneades_transposition_god_as_evil_amand1945",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 2,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_origen_philocalia",
+          "target_type": "work"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_origen_philocalia_23_2",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_origen_philocalia_23_3",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_lucian_zeus_confutatus_carneadean_topos",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 2,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_lucian_iuppiter_confutatus",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_18",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_origen_witness_carneades_transposition_prayer_useless_amand1945",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 2,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_origen_philocalia",
+          "target_type": "work"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_origen_philocalia_23_3",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_origen_philocalia_23_4",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_origen_witness_carneades_transposition_praise_blame_amand1945",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 2,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_origen_philocalia",
+          "target_type": "work"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_origen_philocalia_23_1",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_origen_philocalia_23_2",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_origen_witness_carneades_transposition_theological_method_amand1945",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_antiastrological_collective_death_amand1945",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_95",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_96",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_97",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_antiastrological_nomima_barbarika_amand1945",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_95",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_96",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_97",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_antiastrological_animals_amand1945",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_95",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_96",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_97",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_eus_carneadean_pe_vi_6_arg1_virtue_vice",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneades_autonomous_mental_causation_argument_4e7e9250",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_23",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_24",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_25",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_anti_teleology_cosmos_amand1945",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_nat_deor_1",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_nat_deor_2",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_nat_deor_3",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_providence_mantike_alexander_amand1945",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_alex_fat_17",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_alex_fat_17_en",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_19",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_minns_justin_martyr_s_anti_stoic_arg_0",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_23",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_24",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_25",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_eus_carneadean_pe_vi_6_arg2_indolence",
+      "total_anchor_edges": 3,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_10",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_justin_1apol_43_three_carneadean_topoi",
+      "total_anchor_edges": 4,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_justin_first_apology",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_18",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_arian_job_pity_criminals_carneadean_5th_title",
+      "total_anchor_edges": 4,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_pseudo_origenes_in_iob_arian_commentary",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_15",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_16",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_17",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_hierocles_carneadean_inversion_for_providential_heimarmene",
+      "total_anchor_edges": 4,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_hierocles_peri_pronoias",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_gregory_disccat31_carneadean_moral_amand1945",
+      "total_anchor_edges": 4,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_gregory_oratio_catechetica",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_clement_alex_carneadean_glissement_faith_unbelief",
+      "total_anchor_edges": 4,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_clement_stromateis",
+          "target_type": "work"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_clement_strom_2_11_50",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_clement_strom_2_11_51",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_clement_strom_2_11_52",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_diodore_tarsus_impossibility_prediction_carneadean",
+      "total_anchor_edges": 4,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_diodore_tarsus_contra_astronomos_heimarmenen",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_95",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_96",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_97",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_methodius_symposium_three_carneadean_syllogisms",
+      "total_anchor_edges": 4,
+      "passage_anchor_edges": 3,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_methodius_symposium_144841d0",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_cafma_futility_of_legislation_9d4e6g32",
+      "total_anchor_edges": 4,
+      "passage_anchor_edges": 4,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_23",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_24",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_25",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_18",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_cafma_futility_of_piety_2g7h9j65",
+      "total_anchor_edges": 4,
+      "passage_anchor_edges": 4,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_23",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_24",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_25",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_19",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_oinomaos_carneadean_libre_adaptation",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 4,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_oinomaos_goeton_phora",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_8",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_eus_carneadean_pe_vi_6_arg3_exhortations_useless",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_15",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_16",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_stoic_pragmatic_self_refutation_amand1945",
+      "total_anchor_edges": 5,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_16",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_17",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_10",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_assent_chain_via_cicero_amand1945",
+      "total_anchor_edges": 6,
+      "passage_anchor_edges": 5,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_cic_fat_17",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_cicero_fat_17",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "work_de_fato_cicero_44bce_b9c4e5d2",
+          "target_type": "work"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_17",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_40",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_origen_witness_carneadean_transposition_envelope_amand1945",
+      "total_anchor_edges": 6,
+      "passage_anchor_edges": 6,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_10",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_cafma_futility_of_effort_8c3d5f21",
+      "total_anchor_edges": 6,
+      "passage_anchor_edges": 6,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_23",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_24",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_25",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_10",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_general_theme_amand1945",
+      "total_anchor_edges": 6,
+      "passage_anchor_edges": 6,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_4",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_23",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_24",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_25",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_action_futility_amand1945",
+      "total_anchor_edges": 6,
+      "passage_anchor_edges": 6,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_10",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_16",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_10",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_cafma_character_contradiction_1f6g8i54",
+      "total_anchor_edges": 6,
+      "passage_anchor_edges": 6,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_23",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_24",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_25",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_virtue_vice_amand1945",
+      "total_anchor_edges": 6,
+      "passage_anchor_edges": 6,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_16",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_antiastrological_horoscope_impossibility_amand1945",
+      "total_anchor_edges": 6,
+      "passage_anchor_edges": 6,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_85",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_86",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_87",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_88",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_89",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_90",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_antiastrological_twins_amand1945",
+      "total_anchor_edges": 6,
+      "passage_anchor_edges": 6,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_90",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_91",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_92",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_93",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_94",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_95",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_basil_observation_impossible_at_birth",
+      "total_anchor_edges": 7,
+      "passage_anchor_edges": 6,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_basil_hexaemeron",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_85",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_86",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_87",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_88",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_89",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_90",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_nemesius_nat_hom_35_carneadean_summary_amand1945",
+      "total_anchor_edges": 7,
+      "passage_anchor_edges": 6,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_nemesius_de_nat_hom",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_10",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_basil_kings_born_daily",
+      "total_anchor_edges": 7,
+      "passage_anchor_edges": 6,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "work_basil_hexaemeron",
+          "target_type": "work"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_90",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_91",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_92",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_93",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_94",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_95",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_stoic_pragmatic_punishment_amand1945",
+      "total_anchor_edges": 7,
+      "passage_anchor_edges": 7,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_15",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_16",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_17",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_18",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_cafma_carneades_m3n4o5p6",
+      "total_anchor_edges": 8,
+      "passage_anchor_edges": 8,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_23",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_24",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_25",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_16",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_18",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_19",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_incentives_amand1945",
+      "total_anchor_edges": 8,
+      "passage_anchor_edges": 8,
+      "anchors": [
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "evidenced_by",
+          "target": "passage_eusebius_praep_ev_6_6_15",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_15",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_cafma_futility_of_sanctions_0e5f7h43",
+      "total_anchor_edges": 8,
+      "passage_anchor_edges": 8,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_23",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_24",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_25",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_13",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_14",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_15",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_16",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_amand_de_mendieta_carneades_anti_fatalist_moral__0",
+      "total_anchor_edges": 9,
+      "passage_anchor_edges": 9,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_23",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_24",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_25",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_10",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "argument_carneadean_anti_mantike_amand1945",
+      "total_anchor_edges": 10,
+      "passage_anchor_edges": 10,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_1",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_2",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_3",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_4",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_div_10",
+          "target_type": "passage"
+        }
+      ]
+    },
+    {
+      "argument_id": "scholarly_argument_amand_de_mendieta_reconstruction_of_carneades_ar_4",
+      "total_anchor_edges": 12,
+      "passage_anchor_edges": 12,
+      "anchors": [
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_23",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_24",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_cic_fat_25",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_5",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_6",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_7",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_8",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_9",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_10",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_12",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_18",
+          "target_type": "passage"
+        },
+        {
+          "relation": "cites_primary_source",
+          "target": "passage_eusebius_praep_ev_6_6_19",
+          "target_type": "passage"
+        }
+      ]
+    }
+  ]
+}
