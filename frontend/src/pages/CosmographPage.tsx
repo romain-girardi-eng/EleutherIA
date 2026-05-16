@@ -44,6 +44,49 @@ import PathFinder, { type PathResult } from '../components/cosmograph/PathFinder
 import { useResponsive } from '../hooks/useResponsive';
 import { useMobileGraphTiers } from '../hooks/useMobileGraphTiers';
 
+import { Component, type ErrorInfo, type ReactNode } from 'react';
+
+/** Catches render-time crashes from the cosmograph WebGL layer
+ *  so the page doesn't go white. Surfaces a recovery card with a
+ *  reload button — the actual error is logged to the console. */
+class CosmographErrorBoundary extends Component<
+  { children: ReactNode },
+  { hasError: boolean; message: string }
+> {
+  state = { hasError: false, message: '' };
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, message: error.message ?? 'Unknown error' };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('Cosmograph crashed:', error, info.componentStack);
+  }
+
+  render() {
+    if (!this.state.hasError) return this.props.children;
+    return (
+      <div className="absolute inset-0 flex items-center justify-center p-6">
+        <div className="max-w-md rounded-2xl border border-amber-300/40 bg-slate-950/85 p-6 text-center shadow-2xl backdrop-blur-md">
+          <p className="text-base font-semibold text-amber-200">
+            Le graphe a planté
+          </p>
+          <p className="mt-2 text-sm text-slate-300">
+            {this.state.message}
+          </p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="mt-4 inline-flex items-center justify-center rounded-full bg-amber-500/90 px-4 py-2 text-sm font-medium text-slate-950 transition-colors hover:bg-amber-400"
+          >
+            Recharger
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
 type Tab = 'atlas' | 'full' | 'path' | 'filter';
 
 type EdgeApiResponse = KGEdge[] | { edges?: KGEdge[] };
@@ -529,35 +572,34 @@ export default function CosmographPage() {
         focusPointOnLabelClick: true,
         resetSelectionOnEmptyCanvasClick: true,
         linkWidthRange: [0.18, 2.4],
-        simulationDecay: 4300,
+        // Mobile: kill the physics simulation entirely. The continuous
+        // force loop was triggering the white-screen crash on pinch
+        // (Cosmograph's sampling APIs throw mid-simulation under iOS).
+        // We render the nodes once at their initial positions and let
+        // the user pan/zoom around a static layout — way less GPU on
+        // a phone too. Desktop keeps the full simulation.
+        enableSimulation: !isMobile,
+        simulationDecay: isMobile ? 0 : 4300,
         simulationGravity: isMobile
-          ? mobileTiers.tier === 'atlas'
-            ? 0.32
-            : mobileTiers.tier === 'schools'
-              ? 0.18
-              : 0.1
+          ? 0
           : tab === 'atlas'
             ? 0.18
             : 0.08,
-        simulationCenter: isMobile ? 0.4 : 0.01,
+        simulationCenter: isMobile ? 0 : 0.01,
         simulationRepulsion: isMobile
-          ? mobileTiers.tier === 'atlas'
-            ? 0.9
-            : 1.4
+          ? 0
           : tab === 'atlas'
             ? 1.6
             : 2.2,
         simulationRepulsionTheta: 1.08,
-        simulationLinkSpring: 0.74,
+        simulationLinkSpring: isMobile ? 0 : 0.74,
         simulationLinkDistance: isMobile
-          ? mobileTiers.tier === 'atlas'
-            ? 24
-            : 32
+          ? 0
           : tab === 'atlas'
             ? 28
             : 36,
         simulationFriction: 0.9,
-        simulationImpulse: 0.56,
+        simulationImpulse: 0,
       }
     : undefined;
 
@@ -590,6 +632,7 @@ export default function CosmographPage() {
 
       {cosmo && dynamicConfig && (
         <CosmographProvider>
+          <CosmographErrorBoundary>
           <Cosmograph
             {...dynamicConfig}
             ref={graphRef}
@@ -610,6 +653,7 @@ export default function CosmographPage() {
             onBackgroundClick={() => clearSelection()}
             style={{ width: '100%', height: '100%' }}
           />
+          </CosmographErrorBoundary>
 
           {/* === Mobile-only controls (FAB, bottom-sheet, tier pill, hint) === */}
           {isMobile && (
