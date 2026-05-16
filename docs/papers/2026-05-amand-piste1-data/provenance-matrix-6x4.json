@@ -1,0 +1,267 @@
+{
+  "generated_at": "2026-05-16T20:24:59.529531+00:00",
+  "amand_pivots": [
+    "argument_carneadean_general_theme_amand1945",
+    "argument_carneadean_legislation_amand1945",
+    "argument_carneadean_virtue_vice_amand1945",
+    "argument_carneadean_incentives_amand1945",
+    "argument_carneadean_action_futility_amand1945",
+    "argument_carneadean_piety_amand1945"
+  ],
+  "stoic_primary": [
+    "person_chrysippus_280_206bce_i9j0k1l2",
+    "person_cleanthes_assos_330_230bce",
+    "person_posidonius_apameia_135_51bce",
+    "person_panaetius_rhodes_185_109bce"
+  ],
+  "matrix": [
+    [
+      {
+        "pivot": "argument_carneadean_general_theme_amand1945",
+        "stoic": "person_chrysippus_280_206bce_i9j0k1l2",
+        "thematic_hits": [
+          "responsibility",
+          "εἱμαρμένη"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [
+          "αναγκη",
+          "ειμαρμενη",
+          "πεπρωμενη"
+        ],
+        "total_score": 2
+      },
+      {
+        "pivot": "argument_carneadean_general_theme_amand1945",
+        "stoic": "person_cleanthes_assos_330_230bce",
+        "thematic_hits": [
+          "εἱμαρμένη"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [
+          "ειμαρμενη",
+          "πεπρωμενη"
+        ],
+        "total_score": 2
+      },
+      {
+        "pivot": "argument_carneadean_general_theme_amand1945",
+        "stoic": "person_posidonius_apameia_135_51bce",
+        "thematic_hits": [
+          "responsibility"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 1
+      },
+      {
+        "pivot": "argument_carneadean_general_theme_amand1945",
+        "stoic": "person_panaetius_rhodes_185_109bce",
+        "thematic_hits": [],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 0
+      }
+    ],
+    [
+      {
+        "pivot": "argument_carneadean_legislation_amand1945",
+        "stoic": "person_chrysippus_280_206bce_i9j0k1l2",
+        "thematic_hits": [],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 0
+      },
+      {
+        "pivot": "argument_carneadean_legislation_amand1945",
+        "stoic": "person_cleanthes_assos_330_230bce",
+        "thematic_hits": [
+          "νόμος"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 1
+      },
+      {
+        "pivot": "argument_carneadean_legislation_amand1945",
+        "stoic": "person_posidonius_apameia_135_51bce",
+        "thematic_hits": [
+          "judgment"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 1
+      },
+      {
+        "pivot": "argument_carneadean_legislation_amand1945",
+        "stoic": "person_panaetius_rhodes_185_109bce",
+        "thematic_hits": [],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 0
+      }
+    ],
+    [
+      {
+        "pivot": "argument_carneadean_virtue_vice_amand1945",
+        "stoic": "person_chrysippus_280_206bce_i9j0k1l2",
+        "thematic_hits": [
+          "moral",
+          "responsibility",
+          "vice"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [
+          "αρετη",
+          "κακια"
+        ],
+        "total_score": 2
+      },
+      {
+        "pivot": "argument_carneadean_virtue_vice_amand1945",
+        "stoic": "person_cleanthes_assos_330_230bce",
+        "thematic_hits": [
+          "moral"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 1
+      },
+      {
+        "pivot": "argument_carneadean_virtue_vice_amand1945",
+        "stoic": "person_posidonius_apameia_135_51bce",
+        "thematic_hits": [
+          "moral",
+          "responsibility"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 1
+      },
+      {
+        "pivot": "argument_carneadean_virtue_vice_amand1945",
+        "stoic": "person_panaetius_rhodes_185_109bce",
+        "thematic_hits": [
+          "moral"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 1
+      }
+    ],
+    [
+      {
+        "pivot": "argument_carneadean_incentives_amand1945",
+        "stoic": "person_chrysippus_280_206bce_i9j0k1l2",
+        "thematic_hits": [
+          "exhortation"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 1
+      },
+      {
+        "pivot": "argument_carneadean_incentives_amand1945",
+        "stoic": "person_cleanthes_assos_330_230bce",
+        "thematic_hits": [],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 0
+      },
+      {
+        "pivot": "argument_carneadean_incentives_amand1945",
+        "stoic": "person_posidonius_apameia_135_51bce",
+        "thematic_hits": [],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 0
+      },
+      {
+        "pivot": "argument_carneadean_incentives_amand1945",
+        "stoic": "person_panaetius_rhodes_185_109bce",
+        "thematic_hits": [],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 0
+      }
+    ],
+    [
+      {
+        "pivot": "argument_carneadean_action_futility_amand1945",
+        "stoic": "person_chrysippus_280_206bce_i9j0k1l2",
+        "thematic_hits": [
+          "action"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 1
+      },
+      {
+        "pivot": "argument_carneadean_action_futility_amand1945",
+        "stoic": "person_cleanthes_assos_330_230bce",
+        "thematic_hits": [
+          "action"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 1
+      },
+      {
+        "pivot": "argument_carneadean_action_futility_amand1945",
+        "stoic": "person_posidonius_apameia_135_51bce",
+        "thematic_hits": [],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 0
+      },
+      {
+        "pivot": "argument_carneadean_action_futility_amand1945",
+        "stoic": "person_panaetius_rhodes_185_109bce",
+        "thematic_hits": [],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 0
+      }
+    ],
+    [
+      {
+        "pivot": "argument_carneadean_piety_amand1945",
+        "stoic": "person_chrysippus_280_206bce_i9j0k1l2",
+        "thematic_hits": [],
+        "conceptual_hits": [],
+        "textual_hits": [
+          "θεοι"
+        ],
+        "total_score": 1
+      },
+      {
+        "pivot": "argument_carneadean_piety_amand1945",
+        "stoic": "person_cleanthes_assos_330_230bce",
+        "thematic_hits": [],
+        "conceptual_hits": [],
+        "textual_hits": [
+          "θεοι"
+        ],
+        "total_score": 1
+      },
+      {
+        "pivot": "argument_carneadean_piety_amand1945",
+        "stoic": "person_posidonius_apameia_135_51bce",
+        "thematic_hits": [
+          "divine"
+        ],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 1
+      },
+      {
+        "pivot": "argument_carneadean_piety_amand1945",
+        "stoic": "person_panaetius_rhodes_185_109bce",
+        "thematic_hits": [],
+        "conceptual_hits": [],
+        "textual_hits": [],
+        "total_score": 0
+      }
+    ]
+  ]
+}
