@@ -1,0 +1,150 @@
+{
+  "wave": "wave_l_synthesis_crosslink_2026_05_16",
+  "generated_at": "2026-05-16 17:27:00.680181+00:00",
+  "total_inserted_this_run": 0,
+  "total_auto_linked_in_graph": 358,
+  "sample_size": 20,
+  "instructions": "Each entry is one auto-inserted discusses edge (synthesis -> target). Flag false positives so the wave-L script can be re-run with the bad matched_labels added to LABEL_STOPWORDS. Confidence is 0.5 by default and the metadata flag `auto_linked_from_description: true` makes bulk-revert easy.",
+  "samples": [
+    {
+      "synthesis_id": "synthesis_amand1945_firmicus_book_i_apologetic_structure",
+      "synthesis_label": "Amand 1945 — Structure du livre I de la Mathesis : apologie introductive contre 3 arguments carnéadiens",
+      "target_id": "work_de_natura_deorum_cicero",
+      "target_type": "work",
+      "matched_label": "de natura deorum"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_cicero_ch2i_cadre",
+      "synthesis_label": "Amand 1945 — Cadre Cicéron : transmetteur latin indirect du De fato carnéadien",
+      "target_id": "person_cicero_marcus_tullius_106_43bce_a8f3d2c1",
+      "target_type": "person",
+      "matched_label": "Cicéron"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_alexander_no_astrological_targeting",
+      "synthesis_label": "Amand 1945 — Absence d'allusions astrologiques chez Alexandre (cible polémique = εἱμαρμένη métaphysique chrysippéenne)",
+      "target_id": "scholar_amand_de_mendieta_e",
+      "target_type": "person",
+      "matched_label": "Amand"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_origen_carneadean_filiation",
+      "synthesis_label": "Amand 1945 — Filiation Carnéade → Origène (4 siècles, vraisemblablement via Cicéron)",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_type": "person",
+      "matched_label": "Origène"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_origen_pivot_witness",
+      "synthesis_label": "Amand 1945 — Origène = 1er témoin patristique pivot de la lignée carnéadienne",
+      "target_id": "work_plutarch_de_fato_complete",
+      "target_type": "work",
+      "matched_label": "Pseudo-Plutarque De Fato"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_eus_dependence_origen",
+      "synthesis_label": "Amand 1945: Eusebius as faithful disciple of Origen (free will doctrine)",
+      "target_id": "scholar_amand_de_mendieta_e",
+      "target_type": "person",
+      "matched_label": "Amand"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_posidonius_scientific_foundation_astrology",
+      "synthesis_label": "Amand 1945 — Posidonios d'Apamée fondateur scientifique de l'astrologie hellénistique (selon F. Cumont, K. Reinhardt rep",
+      "target_id": "person_augustine_hippo_d430",
+      "target_type": "person",
+      "matched_label": "Augustin"
+    },
+    {
+      "synthesis_id": "synthesis_epict_eph_hemin_doctrine",
+      "synthesis_label": "Epictetus: τὸ ἐφ' ἡμῖν - Complete Doctrine Synthesis (185 Passages)",
+      "target_id": "concept_synkatathesis_stoic_assent",
+      "target_type": "concept",
+      "matched_label": "συγκατάθεσις"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_origen_carneadean_method_signature",
+      "synthesis_label": "Amand 1945 — Méthode signature : transposition philosophique → théologique de la matière carnéadienne",
+      "target_id": "scholar_amand_de_mendieta_e",
+      "target_type": "person",
+      "matched_label": "Amand"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_cicero_ch2i_cadre",
+      "synthesis_label": "Amand 1945 — Cadre Cicéron : transmetteur latin indirect du De fato carnéadien",
+      "target_id": "work_de_divinatione_cicero",
+      "target_type": "work",
+      "matched_label": "de divinatione"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_firmicus_absolute_fatalism_doctrine",
+      "synthesis_label": "Amand 1945 — Fatalisme absolu professé par Firmicus (Mathesis I, 9, 2-3)",
+      "target_id": "scholar_amand_de_mendieta_e",
+      "target_type": "person",
+      "matched_label": "Amand"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_clitomachus_transmission_carneadean_theses",
+      "synthesis_label": "Amand 1945 — Clitomaque, transmetteur écrit des thèses publiques de Carnéade (source du De divinatione II)",
+      "target_id": "person_sextus_empiricus_c160_210ce_d4f8a2b1",
+      "target_type": "person",
+      "matched_label": "Sextus Empiricus"
+    },
+    {
+      "synthesis_id": "synthesis_destree2014_ch10_vimercati_panaetius",
+      "synthesis_label": "Vimercati — Panaetius on self-knowledge and moral responsibility",
+      "target_id": "person_panaetius_rhodes_185_109bce",
+      "target_type": "person",
+      "matched_label": "panétius"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_eus_psychological_argument_modernity",
+      "synthesis_label": "Amand 1945: 'modern' allure of Eusebius' psychological conclusion (PE VI.6.20-21)",
+      "target_id": "person_eusebius_caesarea_d339",
+      "target_type": "person",
+      "matched_label": "Eusèbe"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_alexander_defends_contingency",
+      "synthesis_label": "Amand 1945 — Alexandre défenseur de la contingence (τὸ ἐνδεχόμενον) contre le fatalisme chrysippéen",
+      "target_id": "person_chrysippus_280_206bce_i9j0k1l2",
+      "target_type": "person",
+      "matched_label": "Chrysippe"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_intro_plato_aristotle_partial_determinism",
+      "synthesis_label": "Platon et Aristote : déterminismes partiels (Amand 1945)",
+      "target_id": "scholar_amand_de_mendieta_e",
+      "target_type": "person",
+      "matched_label": "Amand"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_alexander_no_astrological_targeting",
+      "synthesis_label": "Amand 1945 — Absence d'allusions astrologiques chez Alexandre (cible polémique = εἱμαρμένη métaphysique chrysippéenne)",
+      "target_id": "person_aristotle_384_322bce_c2d4f6a8",
+      "target_type": "person",
+      "matched_label": "Aristote"
+    },
+    {
+      "synthesis_id": "synthesis_destree2014_ch16_gerson_plotinus_strawson",
+      "synthesis_label": "Gerson — Moral responsibility and what is up to us in Plotinus",
+      "target_id": "person_strawson_galen_contemporary",
+      "target_type": "person",
+      "matched_label": "Galen Strawson"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_plato_partial_anti_fatalism",
+      "synthesis_label": "Amand 1945 — Platon : antifataliste partiel, prédestination des âmes + liberté de la vertu",
+      "target_id": "scholar_amand_de_mendieta_e",
+      "target_type": "person",
+      "matched_label": "Amand"
+    },
+    {
+      "synthesis_id": "synthesis_amand1945_philo_de_providentia_literary_source_uncertain",
+      "synthesis_label": "Amand 1945 — Source littéraire du Περὶ προνοίας philonien : Clitomaque ou plus probablement un sous-produit scolaire",
+      "target_id": "person_philo_alexandria_a1b2c3d4",
+      "target_type": "person",
+      "matched_label": "Philon"
+    }
+  ]
+}
