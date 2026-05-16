@@ -253,9 +253,7 @@ def _format_flags_block(flags: list[MethodologyFlag]) -> str:
     return "\n".join(lines)
 
 
-def _ensure_carried_flags(
-    polished_md: str, flags: list[MethodologyFlag]
-) -> str:
+def _ensure_carried_flags(polished_md: str, flags: list[MethodologyFlag]) -> str:
     """Append any flags the polisher dropped as a trailing editorial block."""
     if not flags:
         return polished_md

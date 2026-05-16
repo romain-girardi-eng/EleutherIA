@@ -272,7 +272,7 @@ def _edge_score(edge: dict[str, Any]) -> float:
     raw = metadata.get("confidence", edge.get("weight", metadata.get("weight", 1.0)))
     try:
         score = float(raw)
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         score = 1.0
     relation = edge.get("relation")
     if relation in {"evidenced_by", "grounded_in", "source_for"}:

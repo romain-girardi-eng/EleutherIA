@@ -9,13 +9,13 @@ grounding stay inspectable end-to-end.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 
-class QueryComplexity(str, Enum):
+class QueryComplexity(StrEnum):
     """Classification tier for adaptive query routing."""
 
     SIMPLE = "simple"
@@ -23,7 +23,7 @@ class QueryComplexity(str, Enum):
     COMPLEX = "complex"
 
 
-class EvidenceSource(str, Enum):
+class EvidenceSource(StrEnum):
     """Where a piece of evidence originated."""
 
     SEMANTIC_SEARCH = "semantic_search"
@@ -35,21 +35,21 @@ class EvidenceSource(str, Enum):
     TREE_REASONING = "tree_reasoning"
 
 
-class EvidenceLayer(str, Enum):
+class EvidenceLayer(StrEnum):
     """Primary (ancient) vs secondary (modern) source layer."""
 
     PRIMARY = "primary"
     SECONDARY = "secondary"
 
 
-class GroundingPolicy(str, Enum):
+class GroundingPolicy(StrEnum):
     """Policy for which evidence types may support a claim."""
 
     MIXED_EVIDENCE = "mixed_evidence"
     PASSAGE_FIRST = "passage_first"
 
 
-class ClaimStatus(str, Enum):
+class ClaimStatus(StrEnum):
     """Support status for a drafted claim."""
 
     SUPPORTED = "supported"

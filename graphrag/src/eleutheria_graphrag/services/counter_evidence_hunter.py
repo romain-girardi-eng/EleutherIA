@@ -450,9 +450,7 @@ class CounterEvidenceHunter:
     # Dimension 2 — Scholar critique via engages_with(critiques|opposes)
     # ==================================================================
 
-    async def hunt_scholar_critiques(
-        self, claim: ClaimUnit
-    ) -> list[OpposingTestimony]:
+    async def hunt_scholar_critiques(self, claim: ClaimUnit) -> list[OpposingTestimony]:
         if self.tools.get_neighbors is None or not claim.seed_node_ids:
             return []
 
@@ -465,9 +463,7 @@ class CounterEvidenceHunter:
                     {"node_id": seed, "relation_filter": "engages_with", "limit": 30}
                 )
             except Exception:
-                logger.debug(
-                    "engages_with lookup failed for %s", seed, exc_info=True
-                )
+                logger.debug("engages_with lookup failed for %s", seed, exc_info=True)
                 return []
             return self._extract_edges(nbr)
 
@@ -503,7 +499,9 @@ class CounterEvidenceHunter:
                         "scholarly_work": metadata.get("scholarly_work")
                         or metadata.get("publication")
                         or "",
-                        "summary": metadata.get("summary") or e.get("description") or "",
+                        "summary": metadata.get("summary")
+                        or e.get("description")
+                        or "",
                         "page_ref": metadata.get("page_ref")
                         or metadata.get("page")
                         or "",
@@ -550,9 +548,7 @@ class CounterEvidenceHunter:
     # Dimension 3 — Period-shift detection
     # ==================================================================
 
-    async def hunt_period_shifts(
-        self, claim: ClaimUnit
-    ) -> list[OpposingTestimony]:
+    async def hunt_period_shifts(self, claim: ClaimUnit) -> list[OpposingTestimony]:
         if self.tools.get_neighbors is None or not claim.seed_node_ids:
             return []
 
@@ -574,9 +570,7 @@ class CounterEvidenceHunter:
         if self.tools.get_node_detail is not None:
             for seed in seeds:
                 try:
-                    detail = await self.tools.get_node_detail.execute(
-                        {"node_id": seed}
-                    )
+                    detail = await self.tools.get_node_detail.execute({"node_id": seed})
                 except Exception:
                     continue
                 payload = (
@@ -780,8 +774,7 @@ class CounterEvidenceHunter:
                     excerpt=warning[:600],
                     force="moderate",
                     brief_reasoning=(
-                        "Unresolved scholarly dispute "
-                        "in scholarly_consensus_topics."
+                        "Unresolved scholarly dispute in scholarly_consensus_topics."
                     ),
                     topic_slug=str(slug),
                     methodological_warning=warning,

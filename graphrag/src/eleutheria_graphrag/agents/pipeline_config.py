@@ -6,14 +6,14 @@ augmentation stages (CRAG, reranking, Self-RAG, expansion, tree reasoning).
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel
 
 from eleutheria_graphrag.agents.state import QueryComplexity
 
 
-class QueryType(str, Enum):
+class QueryType(StrEnum):
     """Five-type query taxonomy for adaptive pipeline routing."""
 
     SPECIFIC_ENTITY = "specific_entity"

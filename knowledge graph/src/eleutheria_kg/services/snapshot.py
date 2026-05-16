@@ -165,7 +165,7 @@ def _normalize_edge(row: dict[str, Any]) -> dict[str, Any]:
     weight = row.get("weight", metadata.get("weight", 1.0))
     try:
         normalized_weight = float(weight)
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         normalized_weight = 1.0
 
     return {
