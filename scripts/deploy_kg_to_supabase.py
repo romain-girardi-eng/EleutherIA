@@ -498,6 +498,25 @@ async def main_async(args: argparse.Namespace) -> int:
             "(SELECT count(*) FROM free_will.kg_edges) AS e"
         )
         print(f"\n  Post-apply DB counts: {stats['n']:,} nodes, {stats['e']:,} edges")
+
+        # Best-effort: tell the running backend to reload its in-memory KG
+        # snapshot so /api/health, /api/kg/stats, and GraphRAG-served routes
+        # reflect the deploy without a pod restart. Never raises; if the
+        # backend is unreachable or doesn't support /reload yet, we simply
+        # log and move on.
+        try:
+            reload_url = f"{args.api_base.rstrip('/')}/api/kg/reload"
+            req = urllib.request.Request(reload_url, method="POST", headers=HEADERS)
+            with urllib.request.urlopen(req, timeout=30) as r:
+                body = json.loads(r.read().decode("utf-8") or "{}")
+                if body.get("ok"):
+                    print(f"  Pinged {reload_url}: backend reloaded "
+                          f"({body.get('kg_nodes', '?')} nodes, {body.get('kg_edges', '?')} edges in-memory)")
+                else:
+                    print(f"  Pinged {reload_url}: backend declined ({body.get('reason','no reason')})")
+        except Exception as e:
+            print(f"  (skipped backend reload: {e})")
+
         return 0
     finally:
         await conn.close()

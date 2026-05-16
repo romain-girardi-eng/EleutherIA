@@ -9,13 +9,14 @@ and what the eleutheria_kg package exposes.
 import logging
 from typing import Annotated, Any
 
+from eleutheria_database.services.db import DatabaseService
 from eleutheria_kg.services.analytics import ANCIENT_PERIODS, KGAnalytics
 from eleutheria_kg.services.cache import KGCache
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
-from backend.dependencies import get_analytics, get_cache
+from backend.dependencies import get_analytics, get_cache, get_db, get_services
 
 logger = logging.getLogger(__name__)
 
@@ -59,14 +60,92 @@ async def get_node_connections(
 async def get_kg_stats(
     analytics: Annotated[KGAnalytics, Depends(get_analytics)],
     cache: Annotated[KGCache, Depends(get_cache)],
+    db: Annotated[DatabaseService, Depends(get_db)],
 ) -> dict[str, Any]:
-    """Get KG statistics (alias for /statistics)."""
-    cached = cache.get("kg_statistics")
+    """KG statistics with LIVE counts.
+
+    `total_nodes`, `total_edges`, and the `node_types` / `edge_types` histograms
+    are queried from Postgres on every call (cheap — backed by indexes on
+    `type` / `relation`, ~10ms total). This guarantees the numbers shown in
+    the frontend, in `/api/health`, and in the CLI track the actual DB rather
+    than the in-memory analytics snapshot, which is loaded once at startup and
+    would otherwise drift after every deploy.
+
+    The heavier analytics-derived fields (`density`, `connected_components`)
+    still come from the cached snapshot — they're expensive to recompute and
+    can lag the DB by minutes without confusing users.
+    """
+    live: dict[str, Any] = {}
+    try:
+        nrow = await db.fetchrow("SELECT count(*)::int AS n FROM free_will.kg_nodes")
+        erow = await db.fetchrow("SELECT count(*)::int AS n FROM free_will.kg_edges")
+        ntype_rows = await db.fetch(
+            "SELECT type, count(*)::int AS n FROM free_will.kg_nodes GROUP BY type"
+        )
+        etype_rows = await db.fetch(
+            "SELECT relation, count(*)::int AS n FROM free_will.kg_edges GROUP BY relation"
+        )
+        live["total_nodes"] = int(nrow["n"]) if nrow else 0
+        live["total_edges"] = int(erow["n"]) if erow else 0
+        live["node_types"] = {r["type"]: int(r["n"]) for r in ntype_rows if r["type"]}
+        live["edge_types"] = {r["relation"]: int(r["n"]) for r in etype_rows if r["relation"]}
+        live["live"] = True
+    except Exception as e:
+        logger.warning("Live KG stats query failed (%s); falling back to in-memory snapshot", e)
+        live["live"] = False
+
+    # Cached analytics-derived fields (density, connected_components, etc.)
+    cached = cache.get("kg_statistics_analytics")
     if cached:
-        return cached
-    stats = analytics.get_statistics()
-    cache.set("kg_statistics", stats, ttl=300)
-    return stats
+        analytics_part = cached
+    else:
+        analytics_part = analytics.get_statistics()
+        cache.set("kg_statistics_analytics", analytics_part, ttl=300)
+
+    # Live fields override the cached snapshot
+    merged = {**analytics_part, **{k: v for k, v in live.items() if k != "live"}}
+    merged["live_counts"] = bool(live.get("live", False))
+    return merged
+
+
+@router.post("/reload")
+async def reload_kg(
+    request: Request,
+) -> dict[str, Any]:
+    """Re-load the in-memory KG snapshot from Postgres.
+
+    Designed to be called by `scripts/deploy_kg_to_supabase.py` immediately
+    after a successful `--apply`, so the running backend serves fresh KG data
+    without a pod restart. The heavy services (`KGAnalytics`, `GraphRAGService`)
+    read from this in-memory snapshot for performance.
+
+    Best-effort: returns 200 with `{ok: false, reason: ...}` on partial failure
+    rather than raising, so the deploy script's reload call never breaks a
+    successful deploy.
+    """
+    svc = get_services()
+    try:
+        kg_data = await svc._load_kg_data()
+        svc.analytics.set_data(kg_data)
+        if svc.graphrag is not None:
+            svc.graphrag.kg_data = kg_data
+            await svc.graphrag.load_kg()
+        # Bust any cached statistics
+        cache: KGCache = svc.cache
+        for key in ("kg_statistics", "kg_statistics_analytics"):
+            try:
+                cache.delete(key)
+            except Exception:
+                pass
+        return {
+            "ok": True,
+            "kg_nodes": len(kg_data.get("nodes", [])),
+            "kg_edges": len(kg_data.get("edges", [])),
+            "kg_source": svc.kg_source,
+        }
+    except Exception as e:
+        logger.exception("KG reload failed")
+        return {"ok": False, "reason": str(e)}
 
 
 # ---------- Viz endpoint ----------
