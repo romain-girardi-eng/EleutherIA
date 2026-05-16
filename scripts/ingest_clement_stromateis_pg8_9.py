@@ -1,4 +1,8 @@
-"""Ingestion de Clément d'Alexandrie, Stromateis I.82-84 + II.11-12.
+"""[LEGACY / FALLBACK] Ingestion de Clément d'Alexandrie, Stromateis I.82-84 + II.11-12.
+
+REMPLACÉ PAR : `scripts/ingest_clement_stromateis_tlg_local.py` (2026-05-16)
+  → version locale critique TLG XML (Stählin GCS, perseus-grc2 re-encoding)
+  → utilisez le script TLG en priorité. Ce script reste comme fallback documenté.
 
 Sources :
   - PG 8 (Migne 1857) : Stromata Books I-IV
