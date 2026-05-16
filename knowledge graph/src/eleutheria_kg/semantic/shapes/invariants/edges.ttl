@@ -555,6 +555,22 @@ kg:Shape_hasMember_Domain a sh:NodeShape ;
     sh:severity sh:Violation ;
     sh:message "Edge `has_member` violates source/target type constraints from edge_types.json" .
 
+kg:Shape_hasPosition_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:hasPosition ;
+    sh:property kg:Shape_hasPosition_RangeProp .
+
+kg:Shape_hasPosition_RangeProp a sh:PropertyShape ;
+    sh:path kg:hasPosition ;
+    sh:class kg:Position ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `has_position` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_hasPosition_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:hasPosition ;
+    sh:or ( [ sh:class kg:Debate ] [ sh:class kg:Controversy ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `has_position` violates source/target type constraints from edge_types.json" .
+
 kg:Shape_hasSection_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:hasSection ;
     sh:property kg:Shape_hasSection_RangeProp .
@@ -778,6 +794,22 @@ kg:Shape_participatesIn_Domain a sh:NodeShape ;
     sh:or ( [ sh:class kg:Person ] [ sh:class kg:School ] ) ;
     sh:severity sh:Violation ;
     sh:message "Edge `participates_in` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_positionInDebate_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:positionInDebate ;
+    sh:property kg:Shape_positionInDebate_RangeProp .
+
+kg:Shape_positionInDebate_RangeProp a sh:PropertyShape ;
+    sh:path kg:positionInDebate ;
+    sh:or ( [ sh:class kg:Debate ] [ sh:class kg:Controversy ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `position_in_debate` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_positionInDebate_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:positionInDebate ;
+    sh:class kg:Position ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `position_in_debate` violates source/target type constraints from edge_types.json" .
 
 kg:Shape_precedes_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:precedes ;

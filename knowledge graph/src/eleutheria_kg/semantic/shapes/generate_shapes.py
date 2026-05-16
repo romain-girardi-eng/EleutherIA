@@ -95,6 +95,42 @@ PREFIX_TO_TYPE_PREFIX: Final[dict[str, str]] = {
     "work": "work",
 }
 
+# Legitimate project-specific ID prefixes that must NEVER be flagged as
+# "ID prefix violations" by the id_prefix SHACL shape. These coexist with
+# the canonical type prefixes above; the swap-detection logic in
+# ``_node_prefix_shape`` only fires when an ID starts with a *foreign
+# canonical* prefix, so the prefixes listed here pass through naturally.
+# Documenting them here makes the convention explicit:
+# - ``sc<N>(bis)?_*``        : passage IDs anchored to a Sources Chrétiennes volume
+# - ``scholarly_argument_*`` : argument nodes from the modern-scholarship layer
+# - ``scholar_position_*``   : scholarly_position nodes
+# - ``scholarly_work_*``     : modern scholarly publications
+# - ``scholar_*``            : modern scholars (persons in the secondary layer)
+# - ``pub_*``                : legacy publication-shell IDs
+# - ``council_*``            : ecumenical/local councils (events)
+# - ``collection_*``         : doxographic/source collections
+# - ``source_collection_*``  : critical-edition source collections
+# - ``argument_framework_*`` : meta-argument frameworks
+# - ``conceptual_evolution_*``: concept-evolution nodes
+# - ``position_*`` / ``scholar_position_*``: positions in debates
+ALLOWED_PROJECT_PREFIXES: Final[frozenset[str]] = frozenset(
+    {
+        "sc",
+        "scholar",
+        "scholarly_argument",
+        "scholar_position",
+        "scholarly_work",
+        "pub",
+        "council",
+        "collection",
+        "source_collection",
+        "argument_framework",
+        "conceptual_evolution",
+        "position",
+        "passage",
+    }
+)
+
 ROOT = Path(__file__).resolve().parents[5]
 ONTOLOGY_DIR = ROOT / "knowledge graph" / "ontology"
 SHAPES_DIR = Path(__file__).parent
