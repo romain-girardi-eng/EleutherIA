@@ -45,9 +45,34 @@ EDGES_PATH = ROOT / "data" / "kg" / "edges.jsonl"
 POSIDONIUS_PERSON_ID = "person_posidonius_apameia_135_51bce"
 WIRED_DATE = "2026-05-16"
 
-# Keyword variants to match in passage text. ``posidoni`` covers Latin
-# ``Posidonius``/``Posidonio``/``Posidonii`` and Greek transliterations.
-_KEYWORDS = ("posidoni",)
+# Keyword variants to match in passage text (lower-cased).
+#
+# - ``posidoni`` covers Latin ``Posidonius``/``Posidonio``/``Posidonii`` and
+#   Greek transliterations.
+# - ``ποσειδωνι`` / ``ποσειδώνι`` cover the philosopher's name in its oblique
+#   Greek forms (``Ποσειδώνιος``, ``Ποσειδωνίου``, ``Ποσειδωνίῳ``,
+#   ``Ποσειδώνιον``). The ``-ωνι-`` stem is the discriminator that excludes
+#   Poseidon the god (``Ποσειδῶν``, ``Ποσειδῶνος``, ``Ποσειδῶνι``,
+#   ``Ποσειδῶνα``), since those forms have ``ω`` followed by ``ν`` directly
+#   and never carry an extra ``ι`` from the philosopher's
+#   ``-ώνι-ος`` suffix.
+_KEYWORDS = ("posidoni", "ποσειδωνι", "ποσειδώνι")
+
+# Passages that match the keyword but refer to something else than the
+# philosopher Posidonius of Apamea. Manually curated to avoid spurious
+# testimonia.
+#
+# - ``passage_dl_lives_5_4_73`` — a freed slave named *Posidonius* in Lyco of
+#   Troas's will, not the philosopher.
+# - ``sc20_theophilus_ad_autolycum_ii_liv_2_…`` — Theophilus lists names
+#   derived from gods (``Apolloniuses``, ``Posidoniuses``, etc.); no
+#   philosopher reference.
+_EXCLUDED_PASSAGE_IDS = frozenset(
+    {
+        "passage_dl_lives_5_4_73",
+        "sc20_theophilus_ad_autolycum_ii_liv_2_superiorite_des_auteurs_sacres_sur_les_profanes_chap_7",
+    }
+)
 
 
 def find_posidonius_passages() -> list[str]:
@@ -68,6 +93,8 @@ def find_posidonius_passages() -> list[str]:
                 + " "
                 + (node.get("description_en") or "")
             ).lower()
+            if node["id"] in _EXCLUDED_PASSAGE_IDS:
+                continue
             if any(kw in text for kw in _KEYWORDS):
                 out.append(node["id"])
     return out
