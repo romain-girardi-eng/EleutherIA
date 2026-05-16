@@ -5,30 +5,17 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../api/client';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useKgStats, formatCount } from '../hooks/useKgStats';
 
 export default function DatabasePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [nodeTypeData, setNodeTypeData] = useState<Record<string, Array<{ id: string; label: string }>>>({});
   const [expandedTypes, setExpandedTypes] = useState<Set<string>>(new Set());
 
-  const [kgStats, setKgStats] = useState({ nodes: 0, edges: 0, sources: 0 });
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const kgStatsResponse = await apiClient.getKGStats();
-        const worksStatsResponse = await apiClient.getWorksStats();
-        setKgStats({
-          nodes: kgStatsResponse.totalNodes || 0,
-          edges: kgStatsResponse.totalEdges || 0,
-          sources: worksStatsResponse.total_passages || 0,
-        });
-      } catch (err) {
-        console.error('Failed to fetch KG stats:', err);
-      }
-    };
-    fetchStats();
-  }, []);
+  // Single source of truth for KG/corpus counts — fetches /api/kg/stats + /api/works/stats once.
+  const stats = useKgStats();
+  const fmt = (n: number) => formatCount(n, i18n.language);
+  const kgStats = { nodes: stats.nodes, edges: stats.edges, sources: stats.passages };
 
   useEffect(() => {
     apiClient.getNodes()
@@ -127,10 +114,10 @@ export default function DatabasePage() {
           className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-16"
         >
           {[
-            { value: kgStats.nodes.toLocaleString(), label: 'KG Nodes' },
-            { value: kgStats.edges.toLocaleString(), label: 'Relationships' },
-            { value: '376', label: 'Ancient Texts' },
-            { value: kgStats.sources.toLocaleString(), label: 'Passages' },
+            { value: fmt(kgStats.nodes), label: 'KG Nodes' },
+            { value: fmt(kgStats.edges), label: 'Relationships' },
+            { value: fmt(stats.works), label: 'Ancient Texts' },
+            { value: fmt(kgStats.sources), label: 'Passages' },
           ].map((m, i) => (
               <motion.div
                 key={i}
@@ -239,9 +226,9 @@ export default function DatabasePage() {
           {/* Inline stats */}
           <div className="flex flex-wrap gap-3 mb-6">
             {[
-              { val: kgStats.nodes.toLocaleString(), label: 'nodes' },
-              { val: kgStats.edges.toLocaleString(), label: 'edges' },
-              { val: '13', label: 'node types' },
+              { val: fmt(kgStats.nodes), label: 'nodes' },
+              { val: fmt(kgStats.edges), label: 'edges' },
+              { val: fmt(Object.keys(stats.nodeTypes).length || 13), label: 'node types' },
             ].map((s) => (
               <div key={s.label} className="inline-flex items-center gap-2 px-3 py-1.5 bg-stone-100/50 border border-stone-200/30 rounded-lg">
                 <span className="text-sm"><strong className="text-stone-700 font-semibold">{s.val}</strong> <span className="text-stone-500">{s.label}</span></span>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { tArray } from '../i18n/utils';
+import { useKgStats, formatCount } from '../hooks/useKgStats';
 import {
   HelpCircle,
   Loader2,
@@ -53,7 +54,14 @@ const SOURCE_FILTER_ORDER: SearchSourceFilter[] = ['all', 'citation', 'fulltext'
 const LANGUAGE_FILTER_ORDER: SearchLanguageFilter[] = ['all', 'greek', 'latin', 'english', 'other'];
 
 export default function SearchPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const stats = useKgStats();
+  const tCounts = {
+    workCount: formatCount(stats.works, i18n.language),
+    passageCount: formatCount(stats.passages, i18n.language),
+    nodeCount: formatCount(stats.nodes, i18n.language),
+    edgeCount: formatCount(stats.edges, i18n.language),
+  };
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<HybridSearchResponse | null>(null);
@@ -616,7 +624,7 @@ export default function SearchPage() {
                 />
                 {t('search.titleSuffix', '') ? ` ${t('search.titleSuffix')}` : ''}
               </h1>
-              <p className="text-base sm:text-lg text-stone-600 md:text-xl">{t('search.subtitle')}</p>
+              <p className="text-base sm:text-lg text-stone-600 md:text-xl">{t('search.subtitle', tCounts)}</p>
             </div>
 
             <button
@@ -666,7 +674,7 @@ export default function SearchPage() {
       {loading && (
         <div className="flex min-h-screen flex-col items-center justify-center bg-transparent">
           <div className="mb-4 inline-block h-12 w-12 animate-spin rounded-full border-3 border-amber-200 border-t-orange-500" />
-          <p className="text-lg text-stone-600">{t('search.loadingMessage')}</p>
+          <p className="text-lg text-stone-600">{t('search.loadingMessage', tCounts)}</p>
         </div>
       )}
 

@@ -51,11 +51,11 @@
     "features": {
       "kg": {
         "title": "Grafo di Conoscenza",
-        "description": "Esplora 2.159 nodi e 7.856 relazioni in una visualizzazione di rete interattiva"
+        "description": "Esplora {{nodeCount}} nodi e {{edgeCount}} relazioni in una visualizzazione di rete interattiva"
       },
       "search": {
         "title": "Ricerca Ibrida",
-        "description": "Ricerca full-text, lemmatica e semantica su 151 opere antiche con 14.623 passi"
+        "description": "Ricerca full-text, lemmatica e semantica su {{workCount}} opere antiche con {{passageCount}} passi"
       },
       "graphrag": {
         "title": "GraphRAG Q&A",
@@ -63,7 +63,7 @@
       },
       "texts": {
         "title": "Testi Antichi",
-        "description": "Consulta e leggi 151 opere greche e latine antiche con lemmatizzazione"
+        "description": "Consulta e leggi {{workCount}} opere greche e latine antiche con lemmatizzazione"
       }
     },
     "quickStart": "Avvio Rapido",
@@ -71,7 +71,7 @@
     "about": {
       "title": "Informazioni sul Database",
       "description1": "(Ἐλευθερία = libertà + IA = Intelligence Artificielle) documenta lo sviluppo storico dei dibattiti antichi sul libero arbitrio, determinismo e responsabilità morale, dalla filosofia greca classica fino alla Tarda Antichità.",
-      "description2": "Il database combina un completo grafo di conoscenza con 151 opere antiche (14.623 passi), consentendo ricerche avanzate attraverso:",
+      "description2": "Il database combina un completo grafo di conoscenza con {{workCount}} opere antiche ({{passageCount}} passi), consentendo ricerche avanzate: riferimenti incrociati di argomenti, tracciamento delle reti di influenza e connessione della ricerca moderna alle fonti primarie tramite GraphRAG Agentico.",
       "feature1": "Visualizzazione di rete interattiva con Cytoscape.js",
       "feature2": "Ricerca ibrida che combina approcci full-text, lemmatici e semantici",
       "feature3": "Sistema di domande e risposte GraphRAG con tracciamento delle citazioni",
@@ -83,7 +83,7 @@
   },
   "search": {
     "title": "Ricerca Ibrida",
-    "subtitle": "Cerca tra 151 testi antichi utilizzando approcci full-text, lemmatici e semantici",
+    "subtitle": "Cerca tra {{workCount}} testi antichi utilizzando approcci full-text, lemmatici e semantici",
     "placeholder": "Cerca passi, concetti o autori...",
     "searchPlaceholder": "es. ἐφ' ἡμῖν, liberum arbitrium, azione volontaria...",
     "queryLabel": "Query di Ricerca",
@@ -94,7 +94,7 @@
     "searchButton": "Cerca",
     "searching": "Ricerca in corso...",
     "searchFailed": "Ricerca Fallita",
-    "loadingMessage": "Ricerca tra 151 testi antichi...",
+    "loadingMessage": "Ricerca tra {{workCount}} testi antichi...",
     "foundResults": "Trovati {{count}} risultati",
     "noResultsTitle": "Nessun Risultato",
     "noResultsDesc": "Nessun risultato trovato per questa modalità di ricerca. Prova una modalità o query diversa.",
@@ -136,7 +136,7 @@
   },
   "advancedSearch": {
     "title": "Ricerca Avanzata",
-    "subtitle": "Ricerca in tempo reale su 37.839 passi da 258 opere antiche",
+    "subtitle": "Ricerca in tempo reale su {{passageCount}} passi da {{workCount}} opere antiche",
     "shortcuts": {
       "focusSearch": "Attiva ricerca",
       "toggleFilters": "Attiva/disattiva filtri",
@@ -462,7 +462,7 @@
     "overview": {
       "title": "Panoramica dell'Architettura",
       "architectureLabel": "Pipeline Agentica",
-      "description": "EleutherIA utilizza una pipeline GraphRAG Agentico che combina un grafo della conoscenza curato (2.193 nodi, 8.616 archi) con un motore autonomo di recupero e sintesi. Il sistema si è evoluto dalla precedente pipeline HiRAG V2 a un'architettura semplificata a 5 passaggi e 2 chiamate LLM.",
+      "description": "EleutherIA utilizza una pipeline GraphRAG Agentico che combina un grafo della conoscenza curato ({{nodeCount}} nodi, {{edgeCount}} archi) con un sistema autonomo di recupero e sintesi. A differenza del RAG tradizionale, il nostro sistema utilizza Claude come agente di ragionamento per navigare il grafo, costruire il contesto e sintetizzare risposte accademiche.",
       "coreInnovation": "Innovazione Principale",
       "innovationDescription": "Invece di 10+ chiamate LLM per query, la pipeline agentica utilizza recupero parallelo, passage_citations curate e la finestra di contesto da 1M token di Gemini:",
       "fsmOrchestration": "FSM pydantic-graph a 12 nodi per l'orchestrazione autonoma",
@@ -558,13 +558,13 @@
       "models": "Modelli",
       "modelsText": "Gemini 3 (principale, contesto 1M) + Kimi K2.5 Thinking (ragionamento esteso) con fallback automatico.",
       "result": "Risultato",
-      "resultText": "Risposte accademiche ancorate a 2.193 nodi KG e oltre 17.000 passi con tracciamento completo delle citazioni e trasparenza del ragionamento."
+      "resultText": "Risposte accademiche ancorate a {{nodeCount}} nodi KG e oltre {{passageCount}} passi con tracciamento completo delle citazioni e trasparenza del ragionamento"
     }
   },
   "kg": {
     "title": "Visualizzatore del Grafo di Conoscenza",
     "loadingGraph": "Caricamento grafo di conoscenza...",
-    "statsDisplay": "2.159 nodi · 7.856 relazioni",
+    "statsDisplay": "{{nodeCount}} nodi · {{edgeCount}} relazioni",
     "failedToLoad": "Errore nel caricamento del grafo",
     "openFilters": "Apri filtri",
     "openHelp": "Apri aiuto e informazioni",
@@ -1307,7 +1307,7 @@
         "title": "Tre sistemi integrati",
         "kg": {
           "title": "Grafo di conoscenza",
-          "description": "2.159 concetti, persone, argomenti e opere interconnessi che coprono 1.200 anni di dibattito filosofico.",
+          "description": "{{nodeCount}} concetti, persone, argomenti e opere interconnessi che coprono 1.200 anni di dibattito filosofico.",
           "features": [
             "199 filosofi",
             "176 concetti",
@@ -1317,7 +1317,7 @@
         },
         "texts": {
           "title": "Testi antichi",
-          "description": "151 opere canoniche con 14.623 passaggi in greco, latino, ebraico e inglese con analisi morfologica completa.",
+          "description": "{{workCount}} opere canoniche con {{passageCount}} passaggi in greco, latino, ebraico e inglese con analisi morfologica completa.",
           "features": [
             "SBLGNT completo",
             "LXX Settanta",
@@ -1469,7 +1469,7 @@
         "semanticSearch": {
           "title": "Ricerca semantica",
           "description": "Converti la domanda in embedding → Trova nodi simili",
-          "detail": "La tua domanda diventa un vettore di 3.072 numeri. Lo confrontiamo con tutti i 2.159 nodi del grafo e troviamo i 10 più simili.",
+          "detail": "La tua domanda diventa un vettore di 3.072 numeri. Lo confrontiamo con tutti i {{nodeCount}} nodi del grafo e troviamo i 10 più simili.",
           "input": "\"Cosa dicevano gli stoici sul destino?\"",
           "output": "Trovato: Stoicismo (0,89), Destino (0,87), Crisippo (0,84)..."
         },
@@ -1544,7 +1544,7 @@
     },
     "ancientTexts": {
       "title": "Database di testi antichi",
-      "subtitle": "151 opere, 14.623 passaggi, 5 lingue",
+      "subtitle": "{{workCount}} opere, {{passageCount}} passaggi, 5 lingue",
       "schools": {
         "stoic": "Stoico",
         "aristotelian": "Aristotelico",

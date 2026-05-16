@@ -51,11 +51,11 @@
     "features": {
       "kg": {
         "title": "Knowledge Graph",
-        "description": "Explore 2,193 nodes and 8,616 relationships in an interactive network visualization"
+        "description": "Explore {{nodeCount}} nodes and {{edgeCount}} relationships in an interactive network visualization"
       },
       "search": {
         "title": "Hybrid Search",
-        "description": "Full-text, lemmatic, and semantic search across 189 ancient works with 16,968 passages"
+        "description": "Full-text, lemmatic, and semantic search across {{workCount}} ancient works with {{passageCount}} passages"
       },
       "graphrag": {
         "title": "GraphRAG Q&A",
@@ -63,7 +63,7 @@
       },
       "texts": {
         "title": "Ancient Texts",
-        "description": "Browse and read 189 ancient Greek and Latin works with lemmatization"
+        "description": "Browse and read {{workCount}} ancient Greek and Latin works with lemmatization"
       }
     },
     "quickStart": "Quick Start",
@@ -71,7 +71,7 @@
     "about": {
       "title": "About This Database",
       "description1": "(Ἐλευθερία = freedom + IA = Intelligence Artificielle) documents the historical development of ancient debates on free will, determinism, and moral responsibility, spanning from Classical Greek philosophy through Late Antiquity.",
-      "description2": "The database combines a comprehensive knowledge graph with 189 ancient works (16,968 passages), enabling advanced research through:",
+      "description2": "The database combines a comprehensive knowledge graph with {{workCount}} ancient works ({{passageCount}} passages), enabling advanced research workflows: cross-referencing arguments, tracing influence networks, and connecting modern scholarship to primary sources through agentic GraphRAG.",
       "feature1": "Interactive network visualization with Cytoscape.js",
       "feature2": "Hybrid search combining full-text, lemmatic, and semantic approaches",
       "feature3": "GraphRAG question answering with citation tracking",
@@ -83,7 +83,7 @@
   },
   "search": {
     "title": "Hybrid Search",
-    "subtitle": "Search across 189 ancient texts using full-text, lemmatic, and semantic approaches",
+    "subtitle": "Search across {{workCount}} ancient texts using full-text, lemmatic, and semantic approaches",
     "placeholder": "Search passages, concepts, or authors...",
     "searchPlaceholder": "e.g., ἐφ' ἡμῖν, liberum arbitrium, voluntary action...",
     "queryLabel": "Search Query",
@@ -94,7 +94,7 @@
     "searchButton": "Search",
     "searching": "Searching...",
     "searchFailed": "Search Failed",
-    "loadingMessage": "Searching across 189 ancient texts...",
+    "loadingMessage": "Searching across {{workCount}} ancient texts...",
     "foundResults": "Found {{count}} results",
     "noResultsTitle": "No Results",
     "noResultsDesc": "No results found for this search mode. Try a different search mode or query.",
@@ -161,7 +161,7 @@
   },
   "advancedSearch": {
     "title": "Advanced Search",
-    "subtitle": "Real-time search across 37,839 passages from 258 ancient works",
+    "subtitle": "Real-time search across {{passageCount}} passages from {{workCount}} ancient works",
     "shortcuts": {
       "focusSearch": "Focus search",
       "toggleFilters": "Toggle filters",
@@ -487,7 +487,7 @@
     "overview": {
       "title": "Architecture Overview",
       "architectureLabel": "Agentic Pipeline",
-      "description": "EleutherIA uses an Agentic GraphRAG pipeline that combines a curated knowledge graph (2,193 nodes, 8,616 edges) with an autonomous retrieval and synthesis engine. The system evolved from the former HiRAG V2 pipeline into a streamlined 5-step, 2-LLM-call architecture.",
+      "description": "EleutherIA uses an Agentic GraphRAG pipeline that combines a curated knowledge graph ({{nodeCount}} nodes, {{edgeCount}} edges) with an autonomous retrieval and synthesis system. Unlike traditional RAG, our system uses Claude as a reasoning agent to navigate the graph, build context, and synthesize scholarly answers.",
       "coreInnovation": "Core Innovation",
       "innovationDescription": "Instead of 10+ LLM calls per query, the agentic pipeline uses parallel retrieval, curated passage_citations, and Gemini's 1M token context window:",
       "fsmOrchestration": "12-node pydantic-graph FSM for autonomous orchestration",
@@ -583,13 +583,13 @@
       "models": "Models",
       "modelsText": "Gemini 3 (primary, 1M context) + Kimi K2.5 Thinking (extended reasoning) with automatic fallback.",
       "result": "Result",
-      "resultText": "Scholarly answers grounded in 2,193 KG nodes and 17,000+ passages with full citation tracking and reasoning transparency."
+      "resultText": "Scholarly answers grounded in {{nodeCount}} KG nodes and {{passageCount}}+ passages with full citation tracking and reasoning transparency"
     }
   },
   "kg": {
     "title": "Knowledge Graph Visualizer",
     "loadingGraph": "Loading knowledge graph...",
-    "statsDisplay": "2,193 nodes · 8,616 edges",
+    "statsDisplay": "{{nodeCount}} nodes · {{edgeCount}} edges",
     "failedToLoad": "Failed to load graph",
     "openFilters": "Open filters",
     "openHelp": "Open help and information",
@@ -1332,7 +1332,7 @@
         "title": "Three Integrated Systems",
         "kg": {
           "title": "Knowledge Graph",
-          "description": "2,193 interconnected concepts, persons, arguments, and works spanning 1,200 years of philosophical debate.",
+          "description": "{{nodeCount}} interconnected concepts, persons, arguments, and works spanning 1,200 years of philosophical debate.",
           "features": [
             "199 philosophers",
             "176 concepts",
@@ -1342,7 +1342,7 @@
         },
         "texts": {
           "title": "Ancient Texts",
-          "description": "189 canonical works with 16,968 passages in Greek, Latin, Hebrew, and English with full morphological analysis.",
+          "description": "{{workCount}} canonical works with {{passageCount}} passages in Greek, Latin, Hebrew, and English with full morphological analysis.",
           "features": [
             "Complete SBLGNT",
             "LXX Septuagint",
@@ -1494,7 +1494,7 @@
         "semanticSearch": {
           "title": "Semantic Search",
           "description": "Convert question to embedding → Find similar nodes in knowledge graph",
-          "detail": "Your question becomes a 3,072-number vector. We compare it to all 2,193 KG nodes and find the top 10 most similar.",
+          "detail": "Your question becomes a 3,072-number vector. We compare it to all {{nodeCount}} KG nodes and find the top 10 most similar.",
           "input": "\"What did Stoics say about fate?\"",
           "output": "Found: Stoicism (0.89), Fate (0.87), Chrysippus (0.84)..."
         },
@@ -1569,7 +1569,7 @@
     },
     "ancientTexts": {
       "title": "Ancient Texts Database",
-      "subtitle": "189 works, 16,968 passages, 5 languages",
+      "subtitle": "{{workCount}} works, {{passageCount}} passages, 5 languages",
       "schools": {
         "stoic": "Stoic",
         "aristotelian": "Aristotelian",

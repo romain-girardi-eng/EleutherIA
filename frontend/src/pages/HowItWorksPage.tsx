@@ -18,6 +18,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { tArray } from '../i18n/utils';
+import { useKgStats, formatCount } from '../hooks/useKgStats';
 import {
   Network, Search, BookOpen, Brain, Sparkles,
   ChevronRight, GitBranch, Globe, CheckCircle2, Languages,
@@ -48,7 +49,9 @@ import AgenticGraphRAGDetails from '../components/AgenticGraphRAGDetails';
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
 export default function HowItWorksPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const stats = useKgStats();
+  const fmt = (n: number) => formatCount(n, i18n.language);
   const [activeId, setActiveId] = useState('hero');
   const containerRef = useRef<HTMLDivElement>(null);
   const [navHeight, setNavHeight] = useState(48);
@@ -278,10 +281,10 @@ export default function HowItWorksPage() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12"
           >
             {[
-              { icon: <Network className="w-5 h-5" />, value: '2,193', label: t('home.stats.nodes') },
-              { icon: <GitBranch className="w-5 h-5" />, value: '8,616', label: t('home.stats.edges') },
-              { icon: <BookOpen className="w-5 h-5" />, value: '189', label: t('home.stats.works') },
-              { icon: <Quote className="w-5 h-5" />, value: '17k+', label: t('home.stats.passages') },
+              { icon: <Network className="w-5 h-5" />, value: fmt(stats.nodes), label: t('home.stats.nodes') },
+              { icon: <GitBranch className="w-5 h-5" />, value: fmt(stats.edges), label: t('home.stats.edges') },
+              { icon: <BookOpen className="w-5 h-5" />, value: fmt(stats.works), label: t('home.stats.works') },
+              { icon: <Quote className="w-5 h-5" />, value: fmt(stats.passages), label: t('home.stats.passages') },
             ].map((stat) => (
               <div
                 key={stat.label}

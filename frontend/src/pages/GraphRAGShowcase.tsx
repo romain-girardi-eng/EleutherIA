@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useKgStats, formatCount } from '../hooks/useKgStats';
 import {
   Brain,
   Network,
@@ -94,7 +95,9 @@ const StatCard: React.FC<StatCardProps> = ({ label, value, icon, delay, color = 
 };
 
 export default function GraphRAGShowcase() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const stats = useKgStats();
+  const fmt = (n: number) => formatCount(n, i18n.language);
   const navigate = useNavigate();
   const [activeDemo, setActiveDemo] = useState<number>(0);
 
@@ -230,21 +233,21 @@ export default function GraphRAGShowcase() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           <StatCard
             label="Knowledge Graph Nodes"
-            value="2,193"
+            value={fmt(stats.nodes)}
             icon={<Network className="w-6 h-6" />}
             delay={0.1}
             color="sage"
           />
           <StatCard
             label="Relationships Mapped"
-            value="8,616"
+            value={fmt(stats.edges)}
             icon={<TrendingUp className="w-6 h-6" />}
             delay={0.2}
             color="sage"
           />
           <StatCard
             label="Bibliography Entries"
-            value="1,413"
+            value={fmt(stats.publicationCount)}
             icon={<BookOpen className="w-6 h-6" />}
             delay={0.3}
             color="sage"

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight, CheckCircle2, Zap, BookOpen, Code } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useKgStats, formatCount } from '../hooks/useKgStats';
 
 interface ImplementationSection {
   title: string;
@@ -9,7 +10,9 @@ interface ImplementationSection {
 }
 
 const AgenticGraphRAGDetails: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const stats = useKgStats();
+  const fmt = (n: number) => formatCount(n, i18n.language);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['overview']));
 
   const toggleSection = (sectionId: string) => {
@@ -31,7 +34,7 @@ const AgenticGraphRAGDetails: React.FC = () => {
           <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
             <h4 className="font-semibold text-blue-900 mb-2">{t('agenticGraphrag.overview.architectureLabel')}</h4>
             <p className="text-sm text-blue-800 mb-2">
-              {t('agenticGraphrag.overview.description')}
+              {t('agenticGraphrag.overview.description', { nodeCount: fmt(stats.nodes), edgeCount: fmt(stats.edges) })}
             </p>
           </div>
 
@@ -259,11 +262,11 @@ const AgenticGraphRAGDetails: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-700">{t('agenticGraphrag.technical.metrics.kgNodes')}:</span>
-                  <span className="font-mono text-blue-900">2,193</span>
+                  <span className="font-mono text-blue-900">{fmt(stats.nodes)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-700">{t('agenticGraphrag.technical.metrics.passages')}:</span>
-                  <span className="font-mono text-blue-900">17,000+</span>
+                  <span className="font-mono text-blue-900">{fmt(stats.passages)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-700">{t('agenticGraphrag.technical.metrics.contextWindow')}:</span>
@@ -339,7 +342,7 @@ const AgenticGraphRAGDetails: React.FC = () => {
             <strong>{t('agenticGraphrag.summary.models')}:</strong> {t('agenticGraphrag.summary.modelsText')}
           </p>
           <p>
-            <strong>{t('agenticGraphrag.summary.result')}:</strong> {t('agenticGraphrag.summary.resultText')}
+            <strong>{t('agenticGraphrag.summary.result')}:</strong> {t('agenticGraphrag.summary.resultText', { nodeCount: fmt(stats.nodes), passageCount: fmt(stats.passages) })}
           </p>
         </div>
       </div>

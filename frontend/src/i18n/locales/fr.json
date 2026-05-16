@@ -51,11 +51,11 @@
     "features": {
       "kg": {
         "title": "Graphe de connaissances",
-        "description": "Explorez 2 159 nœuds et 7 856 relations dans une visualisation de réseau interactive"
+        "description": "Explorez {{nodeCount}} nœuds et {{edgeCount}} relations dans une visualisation de réseau interactive"
       },
       "search": {
         "title": "Recherche hybride",
-        "description": "Recherche plein texte, lemmatique et sémantique sur 151 œuvres antiques avec 14 623 passages"
+        "description": "Recherche plein texte, lemmatique et sémantique sur {{workCount}} œuvres antiques avec {{passageCount}} passages"
       },
       "graphrag": {
         "title": "GraphRAG Q&R",
@@ -63,7 +63,7 @@
       },
       "texts": {
         "title": "Textes antiques",
-        "description": "Parcourez et lisez 151 œuvres grecques et latines antiques avec lemmatisation"
+        "description": "Parcourez et lisez {{workCount}} œuvres grecques et latines antiques avec lemmatisation"
       }
     },
     "quickStart": "Démarrage rapide",
@@ -71,7 +71,7 @@
     "about": {
       "title": "À propos de cette base de données",
       "description1": "(Ἐλευθερία = liberté + IA = Intelligence Artificielle) documente le développement historique des débats antiques sur le libre arbitre, le déterminisme et la responsabilité morale, de la philosophie grecque classique à l'Antiquité tardive.",
-      "description2": "La base de données combine un graphe de connaissances complet avec 151 œuvres antiques (14 623 passages), permettant une recherche avancée grâce à :",
+      "description2": "La base de données combine un graphe de connaissances complet avec {{workCount}} œuvres antiques ({{passageCount}} passages), permettant une recherche avancée : recoupement des arguments, traçage des réseaux d'influence et connexion de la recherche moderne aux sources primaires via le GraphRAG agentique.",
       "feature1": "Visualisation de réseau interactive avec Cytoscape.js",
       "feature2": "Recherche hybride combinant approches plein texte, lemmatique et sémantique",
       "feature3": "Système de questions-réponses GraphRAG avec suivi des citations",
@@ -83,7 +83,7 @@
   },
   "search": {
     "title": "Recherche hybride",
-    "subtitle": "Recherchez dans 151 textes antiques en utilisant des approches plein texte, lemmatique et sémantique",
+    "subtitle": "Recherchez dans {{workCount}} textes antiques en utilisant des approches plein texte, lemmatique et sémantique",
     "placeholder": "Rechercher des passages, concepts ou auteurs...",
     "searchPlaceholder": "ex. : ἐφ' ἡμῖν, liberum arbitrium, action volontaire...",
     "queryLabel": "Requête de recherche",
@@ -94,7 +94,7 @@
     "searchButton": "Rechercher",
     "searching": "Recherche en cours...",
     "searchFailed": "Échec de la recherche",
-    "loadingMessage": "Recherche dans 151 textes antiques...",
+    "loadingMessage": "Recherche dans {{workCount}} textes antiques...",
     "foundResults": "{{count}} résultats trouvés",
     "noResultsTitle": "Aucun résultat",
     "noResultsDesc": "Aucun résultat trouvé pour ce mode de recherche. Essayez un autre mode ou une autre requête.",
@@ -161,7 +161,7 @@
   },
   "advancedSearch": {
     "title": "Recherche avancée",
-    "subtitle": "Recherche en temps réel dans 37 839 passages de 258 œuvres antiques",
+    "subtitle": "Recherche en temps réel dans {{passageCount}} passages de {{workCount}} œuvres antiques",
     "shortcuts": {
       "focusSearch": "Activer la recherche",
       "toggleFilters": "Basculer les filtres",
@@ -487,7 +487,7 @@
     "overview": {
       "title": "Vue d'ensemble de l'architecture",
       "architectureLabel": "Pipeline agentique",
-      "description": "EleutherIA utilise un pipeline GraphRAG Agentique qui combine un graphe de connaissances curé (2 193 nœuds, 8 616 arêtes) avec un moteur autonome de récupération et de synthèse. Le système a évolué depuis l'ancien pipeline HiRAG V2 vers une architecture simplifiée en 5 étapes et 2 appels LLM.",
+      "description": "EleutherIA utilise un pipeline GraphRAG Agentique qui combine un graphe de connaissances curé ({{nodeCount}} nœuds, {{edgeCount}} arêtes) avec un système autonome de récupération et de synthèse. Contrairement au RAG traditionnel, notre système utilise Claude comme agent de raisonnement pour naviguer le graphe, construire le contexte et synthétiser des réponses académiques.",
       "coreInnovation": "Innovation principale",
       "innovationDescription": "Au lieu de plus de 10 appels LLM par requête, le pipeline agentique utilise la récupération parallèle, les passage_citations curées et la fenêtre de contexte de 1M tokens de Gemini :",
       "fsmOrchestration": "FSM pydantic-graph à 12 nœuds pour l'orchestration autonome",
@@ -583,13 +583,13 @@
       "models": "Modèles",
       "modelsText": "Gemini 3 (principal, contexte 1M) + Kimi K2.5 Thinking (raisonnement étendu) avec repli automatique.",
       "result": "Résultat",
-      "resultText": "Réponses académiques ancrées dans 2 193 nœuds KG et plus de 17 000 passages avec suivi complet des citations et transparence du raisonnement."
+      "resultText": "Réponses académiques ancrées dans {{nodeCount}} nœuds KG et plus de {{passageCount}} passages avec suivi complet des citations et transparence du raisonnement"
     }
   },
   "kg": {
     "title": "Visualiseur de graphe de connaissances",
     "loadingGraph": "Chargement du graphe de connaissances...",
-    "statsDisplay": "2 159 nœuds · 7 856 arêtes",
+    "statsDisplay": "{{nodeCount}} nœuds · {{edgeCount}} arêtes",
     "failedToLoad": "Échec du chargement du graphe",
     "openFilters": "Ouvrir les filtres",
     "openHelp": "Ouvrir l'aide et les informations",
@@ -1332,7 +1332,7 @@
         "title": "Trois systèmes intégrés",
         "kg": {
           "title": "Graphe de connaissances",
-          "description": "2 159 concepts, personnes, arguments et œuvres interconnectés couvrant 1 200 ans de débat philosophique.",
+          "description": "{{nodeCount}} concepts, personnes, arguments et œuvres interconnectés couvrant 1 200 ans de débat philosophique.",
           "features": [
             "199 philosophes",
             "176 concepts",
@@ -1342,7 +1342,7 @@
         },
         "texts": {
           "title": "Textes anciens",
-          "description": "151 œuvres canoniques avec 14 623 passages en grec, latin, hébreu et anglais avec analyse morphologique complète.",
+          "description": "{{workCount}} œuvres canoniques avec {{passageCount}} passages en grec, latin, hébreu et anglais avec analyse morphologique complète.",
           "features": [
             "SBLGNT complet",
             "Septante LXX",
@@ -1494,7 +1494,7 @@
         "semanticSearch": {
           "title": "Recherche sémantique",
           "description": "Convertir la question en embedding → Trouver les nœuds similaires",
-          "detail": "Votre question devient un vecteur de 3 072 nombres. Nous le comparons aux 2 159 nœuds du graphe et trouvons les 10 plus similaires.",
+          "detail": "Votre question devient un vecteur de 3 072 nombres. Nous le comparons aux {{nodeCount}} nœuds du graphe et trouvons les 10 plus proches.",
           "input": "« Que disaient les stoïciens sur le destin ? »",
           "output": "Trouvé : Stoïcisme (0,89), Destin (0,87), Chrysippe (0,84)..."
         },
@@ -1569,7 +1569,7 @@
     },
     "ancientTexts": {
       "title": "Base de textes anciens",
-      "subtitle": "151 œuvres, 14 623 passages, 5 langues",
+      "subtitle": "{{workCount}} œuvres, {{passageCount}} passages, 5 langues",
       "schools": {
         "stoic": "Stoïcien",
         "aristotelian": "Aristotélicien",
