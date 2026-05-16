@@ -417,7 +417,7 @@ def main() -> int:
     # Update ontology if needed
     ontology = json.loads(ONTOLOGY_PATH.read_text())
     inf = ontology["edge_types"]["influences"]
-    widened: dict[str, list[str]] = {}
+    widened: dict[str, dict[str, list[str]]] = {}
     before_src = list(inf.get("source_types", []))
     before_tgt = list(inf.get("target_types", []))
     after_src = list(before_src)
