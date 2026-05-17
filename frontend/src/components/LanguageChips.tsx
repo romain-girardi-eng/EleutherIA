@@ -10,7 +10,6 @@
 
 import { useTranslation } from 'react-i18next';
 import { Check } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { languages } from '../i18n/config';
 import { cn } from '../lib/utils';
 
@@ -58,16 +57,15 @@ export function LanguageChips({
       {languages.map((lang) => {
         const active = i18n.language === lang.code;
         return (
-          <motion.button
+          <button
             key={lang.code}
             type="button"
             role="radio"
             aria-checked={active}
             aria-label={t('common.switchToLanguage', { language: lang.name })}
             onClick={() => changeLanguage(lang.code)}
-            whileTap={{ scale: 0.92 }}
             className={cn(
-              'inline-flex items-center justify-center select-none transition-all',
+              'inline-flex items-center justify-center select-none transition-all active:scale-95',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60',
               SIZE_CLASSES[size],
               active
@@ -91,7 +89,7 @@ export function LanguageChips({
             {active && size === 'large' && (
               <Check className="ml-auto h-4 w-4 text-amber-700" aria-hidden="true" />
             )}
-          </motion.button>
+          </button>
         );
       })}
     </div>

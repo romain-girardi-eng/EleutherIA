@@ -8,6 +8,7 @@ from unittest.mock import AsyncMock
 import pytest
 
 from eleutheria_graphrag.agents.dependencies import Deps
+from eleutheria_graphrag.agents.state import RAGState
 from eleutheria_graphrag.agents.tools.infer_transitive import (
     InferTransitiveFactsTool,
 )
@@ -116,6 +117,7 @@ async def test_inverse_wrote_to_authored_by(deps: Deps) -> None:
     ids = {n.node_id for n in result.derived_nodes}
     assert "person_plato" in ids
     assert result.inverse_relation == "wrote"
+    assert ["work_x", "authored_by", "person_plato"] in result.inferred_edges
 
 
 @pytest.mark.asyncio
@@ -176,3 +178,14 @@ async def test_non_transitive_relation_caps_at_one_hop(deps: Deps) -> None:
     assert "book_b" not in ids
     assert result.is_transitive is False
     assert result.max_depth == 1
+
+
+@pytest.mark.asyncio
+async def test_inferred_edges_are_recorded_on_state(deps: Deps) -> None:
+    state = RAGState(question="who authored work x")
+    deps.state = state
+    tool = InferTransitiveFactsTool(deps)
+
+    await tool.execute({"node_id": "work_x", "relation": "authored_by"})
+
+    assert ("work_x", "authored_by", "person_plato") in state.inferred_edges

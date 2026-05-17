@@ -47,7 +47,7 @@ class AnswerRequest(BaseModel):
     rigor_level: str = "standard"
     citation_style: str = "inline"
     temperature: float = 0.7
-    retrieval_mode: str = "auto"  # "auto" | "vector" | "sql"
+    retrieval_mode: str = "auto"  # "auto" | legacy "vector" alias | "sql"
     model: str = "gemini-3.1-pro"
     thread_id: str | None = None
 
@@ -127,7 +127,7 @@ async def graphrag_answer(
             "id": nid,
             "label": node.get("label", nid),
             "type": node.get("type", "concept"),
-            "reason": "Retrieved via semantic search",
+            "reason": "Retrieved via vectorless SQL/tree/lemma discovery",
         })
 
     context_nodes = result.get("context_nodes", [])

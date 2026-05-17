@@ -6,7 +6,6 @@ Production setup for [free-will.app](https://free-will.app). The canonical produ
 
 - Docker and Docker Compose
 - A [Supabase](https://supabase.com) project
-- A [Qdrant Cloud](https://cloud.qdrant.io) cluster
 - At least one LLM API key (Gemini, Kimi, or OpenRouter)
 
 ## Setup
@@ -61,17 +60,12 @@ Expected snapshot import volume is currently about `17,757` KG nodes, `43,063` K
 - If your Supabase plan supports it, restrict direct Postgres access to trusted
   IP ranges after the bootstrap is complete.
 
-### 2. Qdrant Cloud
-
-1. Create a cluster at [cloud.qdrant.io](https://cloud.qdrant.io)
-2. Note the cluster hostname and API key
-
-### 3. Configure & Deploy
+### 2. Configure & Deploy
 
 ```bash
 cd deploy/production
 cp .env.example .env
-# Edit .env with your Supabase URL, Qdrant host, API keys
+# Edit .env with your Supabase URL and LLM API keys
 
 docker compose up -d --build
 ```
@@ -108,12 +102,12 @@ PY
 ## Architecture
 
 ```
-Internet → Nginx (frontend :80) → FastAPI (backend :8000) → Supabase + Qdrant Cloud
+Internet → Nginx (frontend :80) → FastAPI (backend :8000) → Supabase
 ```
 
 - **Backend** connects to Supabase via `DATABASE_URL` (asyncpg DSN with SSL)
 - **Frontend** serves the React SPA and proxies `/api` to the backend
-- No local PostgreSQL or Qdrant containers needed
+- No local PostgreSQL container needed
 
 ## Updating
 

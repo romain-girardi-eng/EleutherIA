@@ -17,9 +17,9 @@ interface ModelSelectorProps {
 }
 
 const MODES = [
-  { value: 'auto', label: 'Auto (vector + fallback)' },
-  { value: 'vector', label: 'Vector (Qdrant)' },
-  { value: 'sql', label: 'SQL (vectorless)' },
+  { value: 'auto', label: 'Auto (SQL/snapshot)' },
+  { value: 'vector', label: 'Legacy alias (auto)' },
+  { value: 'sql', label: 'SQL primary' },
 ];
 
 export function ModelSelector({

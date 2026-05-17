@@ -1,5 +1,4 @@
 export { AuroraStrip } from './AuroraStrip';
-export { EmbeddingScatterPlot } from './EmbeddingScatterPlot';
 export { BackgroundMesh } from './BackgroundMesh';
 export { CompareCards } from './CompareCards';
 export { DotNavigator } from './DotNavigator';

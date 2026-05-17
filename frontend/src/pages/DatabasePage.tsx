@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight, ExternalLink, Database, BookOpen, Network, GraduationCap, ChevronsUpDown, ArrowRight, Shield, Globe, Layers, RefreshCw, Languages, Cpu, Sparkles } from 'lucide-react';
+import { ChevronDown, ChevronRight, ExternalLink, Database, BookOpen, Network, GraduationCap, ChevronsUpDown, ArrowRight, Shield, Globe, Layers, RefreshCw, Languages, Sparkles } from 'lucide-react';
 import { Typewriter } from '../components/ui/typewriter';
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -475,8 +475,8 @@ export default function DatabasePage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
               { name: 'PostgreSQL', desc: 'Full-text search, lemmatic matching, JSON support', icon: Database },
-              { name: 'Qdrant Cloud', desc: '3072-dim embeddings for semantic search', icon: Cpu },
-              { name: 'Gemini API', desc: 'Embedding & LLM synthesis (Gemini 2.0 Flash)', icon: Sparkles },
+              { name: 'GraphRAG SQLStrategy', desc: 'Lemma expansion, tree routing, and passage citations', icon: Network },
+              { name: 'Gemini / Kimi', desc: 'Cited synthesis and extended reasoning', icon: Sparkles },
             ].map((tech) => {
               const TIcon = tech.icon;
               return (

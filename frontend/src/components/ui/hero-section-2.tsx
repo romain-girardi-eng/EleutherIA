@@ -1,6 +1,5 @@
 import React from 'react';
 import { cn } from "@/lib/utils";
-import { motion, type Variants } from 'framer-motion';
 
 // Icon component for contact details
 const InfoIcon = ({ type }: { type: 'website' | 'phone' | 'address' | 'doi' | 'github' | 'email' }) => {
@@ -72,42 +71,13 @@ interface HeroSectionProps {
 
 const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
   ({ className, logo, slogan, title, subtitle, callToAction, ctaArea, backgroundImage, backgroundComponent, contactInfo }, ref) => {
-
-    // Animation variants for the container to orchestrate children animations
-    const containerVariants: Variants = {
-      hidden: { opacity: 0 },
-      visible: {
-        opacity: 1,
-        transition: {
-          staggerChildren: 0.15,
-          delayChildren: 0.2,
-        },
-      },
-    };
-
-    // Animation variants for individual text/UI elements
-    const itemVariants: Variants = {
-      hidden: { y: 20, opacity: 0 },
-      visible: {
-        y: 0,
-        opacity: 1,
-        transition: {
-          duration: 0.5,
-          ease: "easeOut" as const,
-        },
-      },
-    };
-
     return (
-      <motion.section
+      <section
         ref={ref}
         className={cn(
           "relative overflow-hidden m-0 p-0 bg-white h-[100svh] mt-0 touch-none overscroll-none",
           className
         )}
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
       >
 
         {/* ── Single background — rendered ONCE, never display:none ────────── */}
@@ -139,56 +109,54 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
         />
 
         {/* ── MOBILE content overlay (< md) ────────────────────────────────── */}
-        <motion.div
+        <div
           className="md:hidden relative z-10 flex flex-col items-center justify-between h-full max-h-full overflow-hidden px-6 pt-14 pb-10 text-center touch-none overscroll-none"
-          variants={containerVariants}
         >
           {/* Logo pinned top-left on mobile */}
           {logo && (
-            <motion.div variants={itemVariants} className="absolute top-4 left-4 z-20">
+            <div className="absolute top-4 left-4 z-20">
               <img
                 src={logo.url}
                 alt={logo.alt}
+                width={220}
+                height={96}
                 className="h-12 sm:h-14 brightness-0 invert opacity-90"
               />
-            </motion.div>
+            </div>
           )}
           <div className="flex flex-col items-center flex-1 justify-center gap-5">
-            <motion.h1
+            <h1
               className="font-display text-3xl sm:text-4xl font-bold leading-tight text-white"
-              variants={itemVariants}
             >
               {title}
-            </motion.h1>
+            </h1>
             {slogan && (
-              <motion.p className="text-sm sm:text-base text-white/70 leading-snug" variants={itemVariants}>
+              <p className="text-sm sm:text-base text-white/70 leading-snug">
                 {slogan}
-              </motion.p>
+              </p>
             )}
-            <motion.p className="text-sm sm:text-sm text-white/65 leading-relaxed max-w-xs" variants={itemVariants}>
+            <p className="text-sm sm:text-sm text-white/65 leading-relaxed max-w-xs">
               {subtitle}
-            </motion.p>
+            </p>
             {ctaArea ? (
-              <motion.div variants={itemVariants} className="w-full max-w-sm flex flex-col gap-2.5">
+              <div className="w-full max-w-sm flex flex-col gap-2.5">
                 {ctaArea}
-              </motion.div>
+              </div>
             ) : (
-              <motion.a
+              <a
                 href={callToAction.href}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-500 hover:bg-orange-400 text-white font-semibold text-sm transition-colors"
-                variants={itemVariants}
               >
                 {callToAction.text}
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14"></path>
                   <path d="m12 5 7 7-7 7"></path>
                 </svg>
-              </motion.a>
+              </a>
             )}
           </div>
-          <motion.div
+          <div
             className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[10px] text-white/40 border-t border-white/10 pt-4 w-full"
-            variants={itemVariants}
           >
             {contactInfo.map((info, index) => (
               <div key={index} className="flex items-center gap-1">
@@ -202,8 +170,8 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                 )}
               </div>
             ))}
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         {/* ── DESKTOP panel — diagonal clip, warm living surface ───────────── */}
         {/* 55% wide: 100%=55% screen at top, 90.91%=50% screen at bottom.    */}
@@ -238,47 +206,48 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
 
           <div className="max-w-2xl mx-auto w-full">
             {logo && (
-              <motion.header variants={itemVariants}>
+              <header>
                 <div className="flex flex-col items-start">
                   <img
                     src={logo.url}
                     alt={logo.alt}
+                    width={220}
+                    height={96}
                     className="h-48 lg:h-56 xl:h-64 2xl:h-72 max-h-[30vh]"
                   />
                 </div>
-              </motion.header>
+              </header>
             )}
-            <motion.main variants={containerVariants}>
-              <motion.h1 className="text-2xl font-bold leading-tight text-academic-text md:text-3xl lg:text-4xl xl:text-5xl" variants={itemVariants}>
+            <main>
+              <h1 className="text-2xl font-bold leading-tight text-academic-text md:text-3xl lg:text-4xl xl:text-5xl">
                 {title}
-              </motion.h1>
+              </h1>
               {slogan && (
-                <motion.p className="text-base md:text-lg lg:text-xl text-academic-muted leading-snug mt-1" variants={itemVariants}>
+                <p className="text-base md:text-lg lg:text-xl text-academic-muted leading-snug mt-1">
                   {slogan}
-                </motion.p>
+                </p>
               )}
-              <motion.p className="mt-2 mb-2 lg:mb-4 text-sm text-academic-muted leading-snug md:text-base" variants={itemVariants}>
+              <p className="mt-2 mb-2 lg:mb-4 text-sm text-academic-muted leading-snug md:text-base">
                 {subtitle}
-              </motion.p>
+              </p>
               {ctaArea ? (
-                <motion.div variants={itemVariants} className="flex flex-col gap-2.5">
+                <div className="flex flex-col gap-2.5">
                   {ctaArea}
-                </motion.div>
+                </div>
               ) : (
-                <motion.a
+                <a
                   href={callToAction.href}
                   className="inline-flex items-center gap-2 text-sm md:text-base font-bold tracking-widest text-primary-600 transition-colors hover:text-primary-700 uppercase"
-                  variants={itemVariants}
                 >
                   {callToAction.text}
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14"></path>
                     <path d="m12 5 7 7-7 7"></path>
                   </svg>
-                </motion.a>
+                </a>
               )}
-            </motion.main>
-            <motion.footer className="mt-2 lg:mt-4 pt-2 lg:pt-3 border-t border-academic-muted/20" variants={itemVariants}>
+            </main>
+            <footer className="mt-2 lg:mt-4 pt-2 lg:pt-3 border-t border-academic-muted/20">
               <div className="flex flex-wrap gap-x-3 lg:gap-x-4 gap-y-0.5 text-[10px] sm:text-xs text-academic-muted">
                 {contactInfo.map((info, index) => (
                   <div key={index} className="flex items-center">
@@ -293,11 +262,11 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                   </div>
                 ))}
               </div>
-            </motion.footer>
+            </footer>
           </div>
         </div>
 
-      </motion.section>
+      </section>
     );
   }
 );

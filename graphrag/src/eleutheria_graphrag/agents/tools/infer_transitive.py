@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import logging
 from collections import deque
+from functools import lru_cache
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -32,26 +33,66 @@ from eleutheria_graphrag.agents.dependencies import Deps
 
 logger = logging.getLogger(__name__)
 
+_DEFAULT_INVERSE_PAIRS: tuple[tuple[str, str], ...] = (
+    ("wrote", "authored_by"),
+    ("part_of", "contains"),
+    ("cites", "cited_by"),
+    ("translation_of", "has_translation"),
+    ("teaches", "taught_by"),
+    ("preserves", "preserved_in"),
+    ("evidenced_by", "source_for"),
+    ("interprets", "interpreted_by"),
+    ("supports", "supported_by"),
+    ("critiques", "critiqued_by"),
+    ("argues_for", "supported_by"),
+    ("argues_against", "opposed_by"),
+    ("refutes", "refuted_by"),
+    ("responds_to", "has_response"),
+    ("discusses", "discussed_in"),
+    ("employs", "employed_by"),
+    ("presupposes", "presupposed_by"),
+    ("grounded_in", "grounds"),
+    ("holds_position", "held_by"),
+    ("endorses", "endorsed_by"),
+    ("rejects", "rejected_by"),
+    ("extends", "extended_by"),
+    ("participates_in", "has_participant"),
+    ("contributes_to", "contributed_to_by"),
+    ("represents", "represented_by"),
+    ("exemplifies", "exemplified_by"),
+    ("specializes_in", "specialist"),
+    ("precedes", "follows"),
+    ("variant_of", "has_variant"),
+    ("reconstructs", "reconstructed_by"),
+    ("reconstructed_from", "source_for_reconstruction"),
+)
 
-# Build the inverse-pair index lazily; importing the kg package at module
-# import time would be fine but the symmetric expansion below uses dicts
-# of strings, not rdflib IRIs.
+
+# Build the inverse-pair index lazily so the tool registry can load even in
+# minimal deployments where the optional semantic stack is not installed.
+@lru_cache(maxsize=1)
 def _build_inverse_index() -> dict[str, str]:
     """Return a dict mapping each relation name to its declared inverse.
 
     Honors both directions of CLEAN_INVERSE_PAIRS. If a relation has no
     declared inverse, it is absent from the dict.
     """
-    from eleutheria_kg.semantic.vocab import CLEAN_INVERSE_PAIRS
+    try:
+        from eleutheria_kg.semantic.vocab import CLEAN_INVERSE_PAIRS
+
+        pairs = CLEAN_INVERSE_PAIRS
+    except Exception:  # noqa: BLE001
+        logger.warning(
+            "semantic vocabulary unavailable; using built-in inverse pairs",
+            exc_info=True,
+        )
+        pairs = _DEFAULT_INVERSE_PAIRS
 
     index: dict[str, str] = {}
-    for a, b in CLEAN_INVERSE_PAIRS:
+    for a, b in pairs:
         index.setdefault(a, b)
         index.setdefault(b, a)
     return index
-
-
-_INVERSE_INDEX: dict[str, str] = _build_inverse_index()
 
 
 # Relations the semantic layer treats as transitive. Must stay in sync
@@ -70,6 +111,13 @@ class DerivedNode(BaseModel):
         default_factory=list,
         description="Sequence of (relation, direction) labels traversed",
     )
+    inferred_edge: list[str] | None = Field(
+        None,
+        description=(
+            "Derived KG triple [subject, relation, object] when this node was "
+            "surfaced by inverseOf/transitivity rather than a direct edge."
+        ),
+    )
 
 
 class InferTransitiveResult(BaseModel):
@@ -80,6 +128,10 @@ class InferTransitiveResult(BaseModel):
     is_transitive: bool
     max_depth: int
     derived_nodes: list[DerivedNode]
+    inferred_edges: list[list[str]] = Field(
+        default_factory=list,
+        description="Derived triples recorded for proof-chain reconstruction",
+    )
     truncated: bool = Field(
         False, description="True if the BFS hit a per-call node cap"
     )
@@ -155,6 +207,7 @@ class InferTransitiveFactsTool:
         relation = args.get("relation")
         max_depth = int(args.get("max_depth", 5))
         max_depth = max(1, min(max_depth, 10))
+        inverse_index = _build_inverse_index()
 
         if not node_id or not isinstance(node_id, str):
             raise ValueError("infer_transitive: 'node_id' must be a non-empty string")
@@ -169,13 +222,13 @@ class InferTransitiveFactsTool:
                 start_node_id=node_id,
                 start_label=node_id,
                 relation=relation,
-                inverse_relation=_INVERSE_INDEX.get(relation),
+                inverse_relation=inverse_index.get(relation),
                 is_transitive=relation in _TRANSITIVE_RELATIONS,
                 max_depth=max_depth,
                 derived_nodes=[],
             )
 
-        inverse_relation = _INVERSE_INDEX.get(relation)
+        inverse_relation = inverse_index.get(relation)
         is_transitive = relation in _TRANSITIVE_RELATIONS
 
         # BFS over (relation outgoing) ∪ (inverse-relation incoming).
@@ -189,6 +242,16 @@ class InferTransitiveFactsTool:
 
         outgoing = self._deps.outgoing_edges
         incoming = self._deps.incoming_edges
+        inferred_edges: set[tuple[str, str, str]] = set()
+        state_sink = self._state_inferred_edges_sink()
+
+        def record_inferred(edge: tuple[str, str, str]) -> list[str] | None:
+            if not all(edge):
+                return None
+            inferred_edges.add(edge)
+            if state_sink is not None:
+                state_sink.add(edge)
+            return [edge[0], edge[1], edge[2]]
 
         while queue:
             cur_id, depth, path = queue.popleft()
@@ -204,12 +267,20 @@ class InferTransitiveFactsTool:
                     continue
                 node = self._deps.node_lookup.get(tgt, {})
                 new_path = [*path, f"{relation}→"]
+                inferred_edge = None
+                if (
+                    is_transitive
+                    and depth >= 1
+                    and all(step == f"{relation}→" for step in path)
+                ):
+                    inferred_edge = record_inferred((node_id, relation, tgt))
                 visited[tgt] = DerivedNode(
                     node_id=tgt,
                     label=node.get("label", tgt),
                     type=node.get("type", ""),
                     distance=depth + 1,
                     derivation=new_path,
+                    inferred_edge=inferred_edge,
                 )
                 if len(visited) >= _RESULT_CAP:
                     truncated = True
@@ -233,12 +304,14 @@ class InferTransitiveFactsTool:
                         continue
                     node = self._deps.node_lookup.get(tgt, {})
                     new_path = [*path, f"{inverse_relation}→"]
+                    inferred_edge = record_inferred((tgt, relation, cur_id))
                     visited[tgt] = DerivedNode(
                         node_id=tgt,
                         label=node.get("label", tgt),
                         type=node.get("type", ""),
                         distance=depth + 1,
                         derivation=new_path,
+                        inferred_edge=inferred_edge,
                     )
                     if len(visited) >= _RESULT_CAP:
                         truncated = True
@@ -259,12 +332,14 @@ class InferTransitiveFactsTool:
                         continue
                     node = self._deps.node_lookup.get(src, {})
                     new_path = [*path, f"←{relation}"]
+                    inferred_edge = record_inferred((cur_id, inverse_relation, src))
                     visited[src] = DerivedNode(
                         node_id=src,
                         label=node.get("label", src),
                         type=node.get("type", ""),
                         distance=depth + 1,
                         derivation=new_path,
+                        inferred_edge=inferred_edge,
                     )
                     if len(visited) >= _RESULT_CAP:
                         truncated = True
@@ -287,12 +362,14 @@ class InferTransitiveFactsTool:
                         continue
                     node = self._deps.node_lookup.get(src, {})
                     new_path = [*path, f"←{inverse_relation}"]
+                    inferred_edge = record_inferred((cur_id, relation, src))
                     visited[src] = DerivedNode(
                         node_id=src,
                         label=node.get("label", src),
                         type=node.get("type", ""),
                         distance=depth + 1,
                         derivation=new_path,
+                        inferred_edge=inferred_edge,
                     )
                     if len(visited) >= _RESULT_CAP:
                         truncated = True
@@ -315,5 +392,21 @@ class InferTransitiveFactsTool:
             is_transitive=is_transitive,
             max_depth=effective_depth,
             derived_nodes=derived_sorted,
+            inferred_edges=[list(edge) for edge in sorted(inferred_edges)],
             truncated=truncated,
         )
+
+    def _state_inferred_edges_sink(self) -> set[tuple[str, str, str]] | None:
+        state = getattr(self._deps, "state", None)
+        if state is None:
+            return None
+        sink = getattr(state, "inferred_edges", None)
+        if isinstance(sink, set):
+            return sink
+        try:
+            sink = set()
+            state.inferred_edges = sink
+            return sink
+        except Exception:  # noqa: BLE001
+            logger.debug("could not attach inferred edge sink to state", exc_info=True)
+            return None

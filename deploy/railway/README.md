@@ -16,8 +16,8 @@ This document is retained only as historical rollback context.
     Cloudflare Pages            Railway (EU-West)
     (frontend React)         (Python FastAPI)
      Static assets              |        |
-                          Supabase    Qdrant Cloud
-                         (Postgres)   (Vectors)
+                          Supabase
+                         (Postgres)
 ```
 
 This was the former Railway topology. It is not the production deployment path anymore; use the the platform compose fragment and Cloudflare tunnel instead.
@@ -45,10 +45,6 @@ railway link          # Link this repo
 # Database (Supabase)
 railway variables set DATABASE_URL="postgresql://postgres.xxx:password@aws-0-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require"
 
-# Vector DB (Qdrant Cloud)
-railway variables set QDRANT_URL="https://xxx.eu-west-1-0.aws.cloud.qdrant.io:6333"
-railway variables set QDRANT_API_KEY="your-key"
-
 # LLM providers
 railway variables set GEMINI_API_KEY="your-key"
 railway variables set OPENROUTER_API_KEY="your-key"
@@ -60,10 +56,9 @@ railway variables set ALLOWED_ORIGINS="https://free-will.app"
 
 # Config
 railway variables set LLM_PREFERRED_PROVIDER="gemini"
-railway variables set GEMINI_EMBEDDING_MODEL="models/gemini-embedding-001"
 railway variables set OPENROUTER_HTTP_REFERER="https://free-will.app"
 railway variables set OPENROUTER_APP_NAME="EleutherIA"
-railway variables set QDRANT_REQUIRED="false"
+railway variables set RETRIEVAL_MODE="auto"
 ```
 
 ### 4. Deploy
@@ -119,16 +114,13 @@ The `railway.json` at the repo root configures:
 | Variable | Required | Description |
 |---|---|---|
 | `DATABASE_URL` | yes | Supabase Postgres connection string (pooler port 6543) |
-| `QDRANT_URL` | no | Qdrant Cloud endpoint |
-| `QDRANT_API_KEY` | no | Qdrant Cloud API key |
-| `GEMINI_API_KEY` | yes | Google AI API key (primary LLM + embeddings) |
+| `GEMINI_API_KEY` | yes | Google AI API key (primary LLM provider) |
 | `OPENROUTER_API_KEY` | yes | OpenRouter API key (multi-model routing) |
 | `MOONSHOT_API_KEY` | no | Kimi/Moonshot API key (thinking mode) |
 | `JWT_SECRET_KEY` | yes | JWT signing secret |
 | `ALLOWED_ORIGINS` | yes | Comma-separated allowed CORS origins |
 | `LLM_PREFERRED_PROVIDER` | no | Default: `gemini` |
 | `RETRIEVAL_MODE` | no | Default: `auto`. Set to `sql` to force vectorless mode |
-| `QDRANT_REQUIRED` | no | Default: `false`. Set to `true` to fail-fast if Qdrant is down |
 
 ## Monitoring
 

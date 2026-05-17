@@ -340,9 +340,9 @@ export default function GraphRAGPage() {
 
   const initializeReasoningSteps = (q: string) => {
     const steps: ReasoningStep[] = [
-      { id: 1, type: 'search', label: 'Semantic Search', description: 'Embedding query and searching vector database', status: 'pending' },
+      { id: 1, type: 'search', label: 'Seed Discovery', description: 'Expanding lemmas and routing through SQL, tree, and passage citations', status: 'pending' },
       { id: 2, type: 'traverse', label: 'Graph Traversal', description: 'Expanding knowledge graph connections', status: 'pending' },
-      { id: 3, type: 'context', label: 'Context Building', description: 'Assembling citations and context', status: 'pending' },
+      { id: 3, type: 'context', label: 'Context Building', description: 'Assembling passages, citations, and proof context', status: 'pending' },
       { id: 4, type: 'synthesis', label: 'LLM Synthesis', description: 'Generating scholarly answer', status: 'pending' },
       { id: 5, type: 'complete', label: 'Complete', description: 'Answer ready with citations', status: 'pending' },
     ];
@@ -463,7 +463,7 @@ export default function GraphRAGPage() {
                     timestamp: Date.now(),
                   }]);
 
-                  if (msg.includes('embedding') || msg.includes('searching') || msg.includes('initializ')) {
+                  if (msg.includes('retrieval') || msg.includes('searching') || msg.includes('initializ')) {
                     updateReasoningStep(1, 'active');
                   } else if (msg.includes('retrieving') || msg.includes('found') || msg.includes('knowledge graph')) {
                     updateReasoningStep(1, 'complete');

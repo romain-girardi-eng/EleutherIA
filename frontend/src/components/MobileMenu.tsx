@@ -192,7 +192,7 @@ export function MobileMenu({
             {/* Header */}
             <header className="shrink-0 flex items-center justify-between px-5 py-4 border-b border-amber-200/40">
               <div className="flex items-center gap-3">
-                <img src="/logo.svg" alt="EleutherIA" className="h-9 w-9" />
+                <img src="/logo-880.webp" alt="EleutherIA" className="h-9 w-9" />
                 <div className="leading-tight">
                   <div className="font-display text-base font-semibold text-stone-900">
                     EleutherIA

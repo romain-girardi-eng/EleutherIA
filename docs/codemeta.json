@@ -48,8 +48,7 @@
   ],
   "runtimePlatform": [
     "Docker",
-    "PostgreSQL 16+",
-    "Qdrant"
+    "PostgreSQL 16+"
   ],
   "operatingSystem": [
     "Linux",
@@ -58,7 +57,6 @@
   ],
   "softwareRequirements": [
     "PostgreSQL >= 16",
-    "Qdrant >= 1.13",
     "Python >= 3.11",
     "Node.js >= 20"
   ],

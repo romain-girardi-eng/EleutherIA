@@ -1,13 +1,25 @@
-import { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
+import { lazy, Suspense, useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Maximize2, Minimize2, ChevronRight } from 'lucide-react';
 import { HeroSection } from '../components/ui/hero-section-2';
-import { MorphingParticles } from '../components/MorphingParticles';
+
+const MorphingParticles = lazy(() =>
+  import('../components/MorphingParticles').then((module) => ({
+    default: module.MorphingParticles,
+  })),
+);
+
+function ParticleFallback() {
+  return (
+    <div className="absolute inset-0 bg-zinc-950" />
+  );
+}
 
 export default function HomePage() {
   const { t } = useTranslation();
   const [isNativeFullscreen, setIsNativeFullscreen] = useState(false);
   const [isCSSFullscreen, setIsCSSFullscreen] = useState(false);
+  const [showParticles, setShowParticles] = useState(false);
   const particleContainerRef = useRef<HTMLDivElement>(null);
 
   // Lock page scroll — single full-screen canvas, no scrolling.
@@ -108,6 +120,40 @@ export default function HomePage() {
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
+  useEffect(() => {
+    const connection = (navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }).connection;
+    const isSlowConnection =
+      connection?.saveData === true ||
+      connection?.effectiveType === 'slow-2g' ||
+      connection?.effectiveType === '2g';
+    const canRenderParticles =
+      window.matchMedia('(min-width: 1024px) and (hover: hover)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+      !isSlowConnection;
+
+    if (!canRenderParticles) {
+      setShowParticles(false);
+      return;
+    }
+
+    const startParticles = () => setShowParticles(true);
+    let timeoutId: ReturnType<typeof globalThis.setTimeout> | undefined;
+    let idleId: number | undefined;
+
+    if ('requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(startParticles, { timeout: 5000 });
+    } else {
+      timeoutId = globalThis.setTimeout(startParticles, 4000);
+    }
+
+    return () => {
+      if (idleId !== undefined) window.cancelIdleCallback(idleId);
+      if (timeoutId !== undefined) globalThis.clearTimeout(timeoutId);
+    };
+  }, []);
+
   const isFullscreen = isNativeFullscreen || isCSSFullscreen;
 
   // Codex Index — Roman numerals + hairline rules, like an ancient manuscript's table of contents
@@ -128,7 +174,7 @@ export default function HomePage() {
             {t('nav.howItWorks')}
           </div>
           <div className="text-[9px] text-white/30 md:text-zinc-400 mt-0.5 leading-tight">
-            Architecture · embeddings · pipeline
+            Architecture · retrieval · pipeline
           </div>
         </div>
         <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-amber-400 md:text-amber-600 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
@@ -189,7 +235,7 @@ export default function HomePage() {
     <div className="h-[100svh] overflow-hidden relative touch-none overscroll-none">
       <main className="h-[100svh] overflow-hidden relative touch-none overscroll-none">
         <HeroSection
-          logo={{ url: "/logo.svg", alt: "EleutherIA" }}
+          logo={{ url: "/logo-880.webp", alt: "EleutherIA" }}
           title={
             <>
               {t('learn.hero.title')} <br />
@@ -207,28 +253,36 @@ export default function HomePage() {
               ref={particleContainerRef}
               className={isCSSFullscreen ? "fixed inset-0 z-[9999] bg-zinc-950" : "absolute inset-0 bg-zinc-950"}
             >
-              <MorphingParticles
-                morphDuration={7}
-                rotationSpeed={0.12}
-                particleSize={0.5}
-                lineOpacity={0.02}
-                connectionDistance={16}
-                colorScheme="warm"
-                enableBloom={true}
-                bloomIntensity={0.2}
-                enableHover={true}
-              />
-              <button
-                onClick={toggleFullscreen}
-                className="absolute bottom-4 right-4 z-50 p-2 rounded-lg bg-black/40 hover:bg-black/60 border border-white/20 hover:border-white/40 transition-all duration-200 group backdrop-blur-sm"
-                title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Particles'}
-              >
-                {isFullscreen ? (
-                  <Minimize2 className="w-5 h-5 text-white/70 group-hover:text-white" />
-                ) : (
-                  <Maximize2 className="w-5 h-5 text-white/70 group-hover:text-white" />
-                )}
-              </button>
+              {showParticles ? (
+                <Suspense fallback={<ParticleFallback />}>
+                  <MorphingParticles
+                    morphDuration={7}
+                    rotationSpeed={0.12}
+                    particleSize={0.5}
+                    lineOpacity={0.02}
+                    connectionDistance={16}
+                    colorScheme="warm"
+                    enableBloom={true}
+                    bloomIntensity={0.2}
+                    enableHover={true}
+                  />
+                </Suspense>
+              ) : (
+                <ParticleFallback />
+              )}
+              {showParticles && (
+                <button
+                  onClick={toggleFullscreen}
+                  className="absolute bottom-4 right-4 z-50 p-2 rounded-lg bg-black/40 hover:bg-black/60 border border-white/20 hover:border-white/40 transition-all duration-200 group backdrop-blur-sm"
+                  title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Particles'}
+                >
+                  {isFullscreen ? (
+                    <Minimize2 className="w-5 h-5 text-white/70 group-hover:text-white" />
+                  ) : (
+                    <Maximize2 className="w-5 h-5 text-white/70 group-hover:text-white" />
+                  )}
+                </button>
+              )}
             </div>
           }
           contactInfo={[

@@ -412,33 +412,33 @@ export default function GraphRAGShowcase() {
             {[
               {
                 step: 1,
-                title: "Vector Search",
-                description: "Query embedded with Gemini, compared against 2,193 node embeddings in Qdrant vector DB",
+                title: "Seed Discovery",
+                description: "SQLStrategy expands lemmas, detects work and author mentions, and finds KG labels, descriptions, and passage anchors",
               },
               {
                 step: 2,
-                title: "Graph Traversal",
-                description: "Breadth-first search expands from starting nodes via relationships (authored, influenced, refutes)",
+                title: "Tree + Lemma Routing",
+                description: "Known works route directly through the text tree; Greek and Latin lemmas retrieve attested passages",
               },
               {
                 step: 3,
-                title: "Context Building",
-                description: "Ancient sources and modern scholarship extracted from retrieved nodes",
+                title: "Citation Anchoring",
+                description: "Curated passage_citations connect KG nodes to primary text evidence with confidence scores",
               },
               {
                 step: 4,
-                title: "LLM Synthesis",
-                description: "Gemini generates scholarly answer grounded exclusively in KG context",
+                title: "Graph Expansion",
+                description: "Ontology-aware neighbor expansion adds relevant concepts, works, and arguments without vector similarity",
               },
               {
                 step: 5,
-                title: "Citation Extraction",
-                description: "Automatic extraction of ancient sources and modern scholarship",
+                title: "Context Building",
+                description: "Primary passages, KG metadata, proof chains, and citation ledgers are packed for synthesis",
               },
               {
                 step: 6,
-                title: "Reasoning Path",
-                description: "Full transparency: see which nodes and relationships were used",
+                title: "Cited Synthesis",
+                description: "Gemini or Kimi writes a scholarly answer with verified citations and an exposed reasoning path",
               },
             ].map((item, idx) => (
               <motion.div
@@ -482,7 +482,7 @@ export default function GraphRAGShowcase() {
             </h2>
             <p className="text-lg text-stone-600 max-w-3xl mx-auto mb-2">
               Our system implements an <span className="font-bold text-[#769687]">Agentic Graph Retrieval-Augmented Generation</span> pipeline
-              with a 12-node FSM, multi-model support (Gemini/Kimi), and vectorless SQL fallback for maximum retrieval quality.
+              with a 12-node FSM, multi-model support (Gemini/Kimi), and vectorless SQL/tree/lemma retrieval as the primary path.
             </p>
           </div>
 
@@ -498,8 +498,8 @@ export default function GraphRAGShowcase() {
                 <h3 className="text-xl font-bold text-stone-800">Parallel Retrieval</h3>
               </div>
               <p className="text-stone-600 leading-relaxed mb-3">
-                Embeds the query once, then executes three parallel Qdrant searches across KG nodes, text passages,
-                and edges for maximum recall with minimal latency.
+                Expands the query into lemmas, resolves author and work mentions through the tree, searches KG labels and
+                descriptions, and anchors results in passage_citations for maximum recall without vector storage.
               </p>
               <ul className="space-y-2 text-sm text-stone-600">
                 <li className="flex items-start gap-2">
@@ -512,7 +512,7 @@ export default function GraphRAGShowcase() {
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-[#769687] mt-0.5 flex-shrink-0" />
-                  <span><strong>SQL Fallback:</strong> Vectorless retrieval via passage_citations when needed</span>
+                  <span><strong>SQL Retrieval:</strong> passage_citations, full-text search, lemmatic search, and snapshot fallback</span>
                 </li>
               </ul>
             </div>

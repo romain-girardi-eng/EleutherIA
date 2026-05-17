@@ -288,7 +288,6 @@ class CachedApiClient {
   // Other search
   fulltextSearch = apiClient.fulltextSearch.bind(apiClient);
   lemmaticSearch = apiClient.lemmaticSearch.bind(apiClient);
-  semanticSearch = apiClient.semanticSearch.bind(apiClient);
   searchKG = apiClient.searchKG.bind(apiClient);
 
   // Generic methods

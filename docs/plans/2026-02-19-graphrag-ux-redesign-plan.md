@@ -1499,9 +1499,6 @@ cd frontend && npm run build
 ```
 Expected: successful build.
 
-**Step 2:** Deploy:
-```bash
-vercel --prod
-```
+**Step 2:** Deploy through the configured production host.
 
 **Step 3:** Verify live site at `https://free-will.app/graphrag`.

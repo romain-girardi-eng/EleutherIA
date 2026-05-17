@@ -55,7 +55,7 @@
       },
       "search": {
         "title": "Hybrid Search",
-        "description": "Full-text, lemmatic, and semantic search across {{workCount}} ancient works with {{passageCount}} passages"
+        "description": "Full-text and lemmatic search across {{workCount}} ancient works with {{passageCount}} passages"
       },
       "graphrag": {
         "title": "GraphRAG Q&A",
@@ -157,6 +157,9 @@
       "englishExamples": "Try \"voluntary action\", \"free will\", \"moral responsibility\"",
       "hybrid": "Hybrid search",
       "hybridDesc": "combines all three modes using Reciprocal Rank Fusion (RRF)"
+    },
+    "page": {
+      "description": "Full-text and lemmatic search across {{workCount}} ancient works with {{passageCount}} passages"
     }
   },
   "advancedSearch": {
@@ -262,7 +265,7 @@
     "authRequiredDesc": "Please log in to use GraphRAG Q&A. This feature uses AI services and requires authentication.",
     "howItWorks": "How GraphRAG Works",
     "whyBrilliant": "Why It's Brilliant",
-    "basedOn": "Agentic GraphRAG pipeline with 12-node FSM, multi-model support, and vectorless SQL fallback.",
+    "basedOn": "Agentic GraphRAG pipeline with 12-node FSM, multi-model support, and primary vectorless SQL retrieval.",
     "poweredBy": "Powered by Agentic GraphRAG",
     "benefits": {
       "hierarchical": "Graph-structured knowledge with autonomous retrieval and synthesis pipeline",
@@ -483,26 +486,26 @@
   },
   "agenticGraphrag": {
     "pageTitle": "Agentic GraphRAG Architecture",
-    "pageDescription": "A transparent explanation of our agentic retrieval pipeline: 12-node FSM, multi-model support, vectorless SQL fallback, and full reasoning trace.",
+    "pageDescription": "A transparent explanation of our agentic retrieval pipeline: 12-node FSM, multi-model support, primary vectorless SQL retrieval, and full reasoning trace.",
     "overview": {
       "title": "Architecture Overview",
       "architectureLabel": "Agentic Pipeline",
       "description": "EleutherIA uses an Agentic GraphRAG pipeline that combines a curated knowledge graph ({{nodeCount}} nodes, {{edgeCount}} edges) with an autonomous retrieval and synthesis system. Unlike traditional RAG, our system uses Claude as a reasoning agent to navigate the graph, build context, and synthesize scholarly answers.",
       "coreInnovation": "Core Innovation",
-      "innovationDescription": "Instead of 10+ LLM calls per query, the agentic pipeline uses parallel retrieval, curated passage_citations, and Gemini's 1M token context window:",
+      "innovationDescription": "The agentic pipeline uses vectorless SQL/tree/lemma retrieval, curated passage_citations, and Gemini's 1M token context window:",
       "fsmOrchestration": "12-node pydantic-graph FSM for autonomous orchestration",
       "multiModel": "Multi-model: Gemini 3 (primary) + Kimi K2.5 Thinking (extended reasoning)",
-      "vectorlessFallback": "Vectorless SQL fallback via passage_citations for robust retrieval"
+      "vectorlessFallback": "Primary vectorless SQL retrieval via passage_citations"
     },
     "pipeline": {
       "title": "Pipeline Stages",
       "embedding": {
-        "title": "1. Embed + Detect References",
-        "description": "Query embedded via Gemini, plus regex CTS URN detection for direct passage lookup."
+        "title": "1. Expand + Detect References",
+        "description": "Query terms and lemmas are expanded, with regex CTS URN detection for direct passage lookup."
       },
       "parallelSearch": {
-        "title": "2. Parallel Search",
-        "description": "Three Qdrant queries in parallel: KG nodes, text passages, and edges. Pure vector similarity, no LLM call."
+        "title": "2. Vectorless Discovery",
+        "description": "SQLStrategy combines tree routing, KG label/description matches, passage_citations, and full-text/lemmatic RRF."
       },
       "enrichment": {
         "title": "3. Parallel Enrichment",
@@ -517,7 +520,7 @@
       "title": "Key Capabilities",
       "multiModelTitle": "Multi-Model Support",
       "multiModelDesc": "The pipeline routes to different models based on task complexity:",
-      "gemini": "Primary synthesis and embedding (1M token context)",
+      "gemini": "Primary synthesis and long-context reasoning (1M token context)",
       "kimi": "Extended reasoning for complex multi-hop queries",
       "keyStrengths": "Key Strengths",
       "noTruncation": {
@@ -533,8 +536,8 @@
         "description": "Full transparency: see which nodes, edges, and passages were used"
       },
       "sqlFallback": {
-        "title": "Vectorless SQL Fallback",
-        "description": "When Qdrant is unavailable, retrieval falls back to SQL passage_citations"
+        "title": "Vectorless SQL Retrieval",
+        "description": "The primary retrieval path uses SQL passage_citations, text-tree routing, and lemmatic/full-text search"
       },
       "evolutionTitle": "Evolution from HiRAG",
       "evolution": {
@@ -543,7 +546,7 @@
         "pageindexV3": "PageIndex V3 (Feb 2026)",
         "pageindexV3Desc": "Reduced to 5 steps, 2 LLM calls by leveraging passage_citations and Gemini 1M context",
         "current": "Current Agentic GraphRAG",
-        "currentDesc": "12-node FSM with multi-model routing, vectorless fallback, and streaming support"
+        "currentDesc": "12-node FSM with multi-model routing, vectorless retrieval, and streaming support"
       },
       "netResult": "Result",
       "netResultDescription": "2 LLM calls instead of 10+, full untruncated context, and multi-model routing deliver faster, more accurate scholarly answers with complete source attribution."
@@ -559,8 +562,8 @@
       "apiEndpointsDesc": "GraphRAG routes: /query, /query/stream with SSE, hybrid search endpoints",
       "pipelineSteps": "Pipeline Steps",
       "steps": {
-        "embed": "Embed query + detect CTS URN references",
-        "search": "Parallel Qdrant search (nodes + passages + edges)",
+        "embed": "Expand terms + detect CTS URN references",
+        "search": "Vectorless SQL/tree/lemma discovery",
         "enrich": "Parallel enrichment (passage_citations + KG neighbors)",
         "context": "Build full untruncated context",
         "synthesize": "One LLM synthesis call with anti-hallucination prompt"
@@ -706,7 +709,7 @@
     "projectIntro": "(Ἐλευθερία = freedom + IA = Intelligence Artificielle) emerged from the need for a comprehensive, structured database documenting ancient philosophical debates on free will, fate, and moral responsibility. This research infrastructure was developed as part of doctoral research at Université Côte d'Azur, investigating how early Christian authors conceptualized human freedom and agency.",
     "projectContext": "When examining the notion of free will among the first Christian authors, it became clear that existing resources lacked the systematic structure necessary for computational analysis and cross-referential research. The philosophical landscape spanning from Classical Greek thought (4th c. BCE) through Late Antiquity (6th c. CE) is incredibly rich, with complex networks of influence, argumentation, and conceptual evolution that traditional bibliographic approaches struggle to capture.",
     "projectDetails": "This database represents an independent effort to address that gap. Every node, edge, and citation has been meticulously researched and verified against ancient sources and modern scholarship. The project integrates 2,193 philosophical entities (persons, works, concepts, arguments) connected through 8,616 relationships, alongside 189 ancient works (16,968 passages) with full lemmatization support.",
-    "projectGoal": "The goal is to provide researchers, students, and anyone interested in ancient philosophy with a FAIR-compliant (Findable, Accessible, Interoperable, Reusable) resource that combines traditional philological rigor with modern computational capabilities. The integration of GraphRAG (Graph-based Retrieval-Augmented Generation) enables semantic search and question-answering while maintaining complete provenance and citation tracking.",
+    "projectGoal": "The goal is to provide researchers, students, and anyone interested in ancient philosophy with a FAIR-compliant (Findable, Accessible, Interoperable, Reusable) resource that combines traditional philological rigor with modern computational capabilities. The integration of GraphRAG (Graph-based Retrieval-Augmented Generation) enables vectorless evidence retrieval and question-answering while maintaining complete provenance and citation tracking.",
     "projectNote": "Note: This database represents a personal research initiative. All aspects—from conceptualization and philological work to data curation, technical implementation, and interface design—were undertaken individually to support doctoral research needs.",
     "authorTitle": "About the Author",
     "authorName": "Romain Girardi",
@@ -726,11 +729,11 @@
     "degree4": "Bachelor's degree in Classical Letters, distinction (2017)",
     "implementationTitle": "Implementation & Technical Infrastructure",
     "poweredByGraphRAG": "Powered by Agentic GraphRAG",
-    "graphragDesc": "This database implements Agentic GraphRAG, combining a knowledge graph with an autonomous retrieval pipeline. A 12-node FSM orchestrates parallel search, enrichment, and synthesis across 2,193 nodes and 17,000+ passages. Multi-model support (Gemini/Kimi) and vectorless SQL fallback ensure robust scholarly answers with proper attribution.",
+    "graphragDesc": "This database implements Agentic GraphRAG, combining a knowledge graph with an autonomous retrieval pipeline. A 12-node FSM orchestrates vectorless discovery, enrichment, and synthesis across 2,193 nodes and 17,000+ passages. Multi-model support (Gemini/Kimi) and SQL/tree/lemma retrieval ensure robust scholarly answers with proper attribution.",
     "philologicalWork": "Philological Work",
     "philoDesc": "All Greek and Latin texts undergo manual verification. Lemmatization uses LAULA (Latin) and PAULA (Greek) morphological analyzers to enable lemma-based search. Every knowledge graph node is grounded in primary sources (ancient texts) or secondary literature (modern scholarship) with full bibliographic provenance.",
     "technicalInfra": "Technical Infrastructure",
-    "techStack": "React 19 + TypeScript + Vite + Tailwind CSS frontend, FastAPI + Python backend, PostgreSQL (structured data) + Qdrant (vector embeddings), Cytoscape.js for network visualization, GraphRAG pipeline with Gemini API, Docker Compose + Cloudflare tunnel (production deployment)"
+    "techStack": "React 19 + TypeScript + Vite + Tailwind CSS frontend, FastAPI + Python backend, PostgreSQL (structured data, full-text search, lemmatic search), Cytoscape.js for network visualization, vectorless Agentic GraphRAG with Gemini/Kimi, Docker Compose + Cloudflare tunnel (production deployment)"
   },
   "login": {
     "title": "Sign in to your account",
@@ -1274,7 +1277,7 @@
       "tryGraphRAG": "Try GraphRAG",
       "overview": "Overview",
       "knowledgeGraph": "Knowledge Graph",
-      "embeddings": "Embeddings",
+      "embeddings": "Retrieval",
       "graphrag": "GraphRAG",
       "hybridSearch": "Hybrid Search",
       "ancientTexts": "Ancient Texts",
@@ -1287,7 +1290,7 @@
       "slogan": "How It Works",
       "title": "Ancient Philosophy",
       "titleHighlight": "Meets Modern AI",
-      "subtitle": "Discover how knowledge graphs, semantic embeddings, and GraphRAG combine to illuminate 1,200 years of philosophical thought. 2,193 nodes, 189 ancient works, and 16,968 passages at your fingertips.",
+      "subtitle": "Discover how knowledge graphs, vectorless retrieval, and GraphRAG combine to illuminate 1,200 years of philosophical thought. 2,193 nodes, 189 ancient works, and 16,968 passages at your fingertips.",
       "cta": "Start Learning",
       "doi": "DOI: 10.5281/zenodo.17379489",
       "license": "CC BY 4.0 License",
@@ -1352,10 +1355,10 @@
         },
         "ai": {
           "title": "AI Assistant",
-          "description": "GraphRAG combines knowledge graph traversal with semantic search and LLM synthesis for cited answers.",
+          "description": "GraphRAG combines knowledge graph traversal with SQL/tree/lemma retrieval and LLM synthesis for cited answers.",
           "features": [
-            "3,072-dim embeddings",
-            "Hybrid search",
+            "Vectorless retrieval",
+            "Hybrid text search",
             "Streaming responses",
             "Source grounding"
           ]
@@ -1419,35 +1422,35 @@
       }
     },
     "embeddings": {
-      "title": "Understanding Embeddings",
-      "subtitle": "How computers understand meaning through numbers",
+      "title": "Understanding Retrieval",
+      "subtitle": "How EleutherIA finds evidence with vectorless retrieval",
       "gpsAnalogy": {
-        "title": "Think of Embeddings as GPS for Ideas",
-        "description": "Just like GPS coordinates tell you where a city is in physical space, embeddings tell you where an idea is in",
-        "semanticSpace": "semantic space",
+        "title": "Think of retrieval as routes through evidence",
+        "description": "Instead of assigning coordinates to ideas, EleutherIA follows structured routes through",
+        "semanticSpace": "the corpus and graph",
         "physical": {
           "title": "Physical World",
           "closeMeans": "Close = Similar location"
         },
         "semantic": {
           "title": "Semantic World",
-          "closeMeans": "Close = Similar meaning"
+          "closeMeans": "Linked = cited evidence"
         }
       },
       "steps": {
         "input": {
           "title": "Text Input",
-          "description": "Any text can be converted to an embedding",
+          "description": "Any question can be expanded into terms, lemmas, and references",
           "example": "\"The Stoics believed fate is compatible with freedom\""
         },
         "processing": {
-          "title": "AI Processing",
-          "description": "Google Gemini reads the text and encodes its meaning"
+          "title": "Retrieval Processing",
+          "description": "The backend routes the query through SQL, tree indexes, and passage citations"
         },
         "output": {
-          "title": "Vector Output",
-          "description": "3,072 numbers that capture the meaning",
-          "comment": "// 3,072 dimensions"
+          "title": "Evidence Output",
+          "description": "Passage anchors and graph nodes with citations",
+          "comment": "// vectorless"
         }
       },
       "comparison": {
@@ -1458,20 +1461,20 @@
           "misses": "Misses: \"liberty\", \"ἐφ' ἡμῖν\", \"liberum arbitrium\""
         },
         "semantic": {
-          "title": "Semantic Search",
-          "description": "Finds texts by meaning, regardless of exact words used.",
+          "title": "Evidence Routing",
+          "description": "Finds texts by graph links, lemma expansion, and curated passage citations.",
           "finds1": "Finds: \"free will\", \"liberty\", \"ἐφ' ἡμῖν\"",
           "finds2": "Finds: \"liberum arbitrium\", \"moral agency\""
         }
       },
       "journey": {
-        "title": "Watch Text Become a Vector",
-        "description": "Experience the magical journey of how philosophical text transforms into a 3,072-dimensional embedding. Click Play to watch the 6-stage process.",
-        "loading": "Loading embedding journey..."
+        "title": "Watch a Query Become Evidence",
+        "description": "Follow how a philosophical question becomes terms, lemmas, tree sections, passage anchors, and graph context.",
+        "loading": "Loading retrieval journey..."
       },
       "semanticSpace": {
-        "title": "Explore the Semantic Space",
-        "description": "Each glowing point represents a philosophical concept. Concepts with similar meanings cluster together in 3D space. Drag to rotate, scroll to zoom.",
+        "title": "Explore the Concept Map",
+        "description": "Each point represents a philosophical concept. Curated relationships cluster related ideas in 3D space. Drag to rotate, scroll to zoom.",
         "loading": "Loading 3D visualization...",
         "legend": {
           "stoic": "Stoic Concepts",
@@ -1492,11 +1495,11 @@
       },
       "steps": {
         "semanticSearch": {
-          "title": "Semantic Search",
-          "description": "Convert question to embedding → Find similar nodes in knowledge graph",
-          "detail": "Your question becomes a 3,072-number vector. We compare it to all {{nodeCount}} KG nodes and find the top 10 most similar.",
+          "title": "Seed Discovery",
+          "description": "Expand question terms -> find KG nodes and passage anchors",
+          "detail": "Your question becomes lemmas, text-tree routes, KG label matches, and passage_citations. The backend uses vectorless SQL retrieval, not embeddings.",
           "input": "\"What did Stoics say about fate?\"",
-          "output": "Found: Stoicism (0.89), Fate (0.87), Chrysippus (0.84)..."
+          "output": "Found: Stoicism, Fate, Chrysippus, De Fato..."
         },
         "graphTraversal": {
           "title": "Graph Traversal",
@@ -1548,8 +1551,8 @@
           "example": "Query: \"λόγος\" → Finds all 10+ Greek forms"
         },
         "semantic": {
-          "title": "Semantic Search",
-          "description": "Finds texts by meaning using embeddings",
+          "title": "Graph Evidence",
+          "description": "Finds texts through KG links and passage citations",
           "speed": "< 2s",
           "strength": "Conceptual Understanding",
           "example": "Query: \"free will\" → Also finds \"liberty\", \"ἐφ' ἡμῖν\""
@@ -1616,16 +1619,16 @@
       "searchPlaceholder": "Search glossary...",
       "terms": {
         "embedding": {
-          "term": "Embedding",
-          "definition": "A list of numbers (3,072) that represents the meaning of text. Similar meanings have similar vectors."
+          "term": "Legacy Embedding",
+          "definition": "Legacy vector representation. EleutherIA's current production GraphRAG retrieval is vectorless."
         },
         "vector": {
-          "term": "Vector",
-          "definition": "A list of numbers. In EleutherIA, each text is represented by 3,072 numbers."
+          "term": "Legacy Vector",
+          "definition": "A numeric representation used by older semantic-search prototypes; not the current production retrieval path."
         },
         "semanticSearch": {
-          "term": "Semantic Search",
-          "definition": "Finding texts by meaning, not just keywords. \"Free will\" also finds \"liberty\" and \"ἐφ' ἡμῖν\"."
+          "term": "Graph Evidence Search",
+          "definition": "Finding texts through lemmas, KG links, and curated passage citations rather than only exact keywords."
         },
         "knowledgeGraph": {
           "term": "Knowledge Graph",
@@ -1657,11 +1660,11 @@
         },
         "cosineSimilarity": {
           "term": "Cosine Similarity",
-          "definition": "Measure of vector similarity. 1.0 = identical, 0.0 = completely different."
+          "definition": "A vector-similarity measure used by older prototypes; current retrieval uses SQL, lemmas, and curated citations."
         },
         "qdrant": {
-          "term": "Qdrant",
-          "definition": "Vector database optimized for storing and searching embeddings efficiently."
+          "term": "Legacy Vector Store",
+          "definition": "Former vector-store dependency. Current production retrieval is vectorless."
         }
       }
     },

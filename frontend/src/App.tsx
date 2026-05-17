@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { LogOut, User, Loader2, Menu, X } from 'lucide-react';
 import { cn } from './lib/utils';
 import { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -16,17 +15,11 @@ import { Glow } from './components/ui/glow';
 import { PremiumBackground } from './components/ui/premium-background';
 import { CandlelightCursor } from './components/ui/candlelight-cursor';
 import { ShaderBackground } from './components/ui/shader-background';
-// HomePage - lazy loaded below
-import LoginPage from './pages/LoginPage';
-import DatabasePage from './pages/DatabasePage';
-import AboutPage from './pages/AboutPage';
-import CreditsPage from './pages/CreditsPage';
-import ReportErrorPage from './pages/ReportErrorPage';
 import { NotFoundPage } from './components/ui/not-found-page';
 import { SkipLinks } from './components/ui/SkipLinks';
 import { Button } from './components/ui/button';
 import { LanguageChips } from './components/LanguageChips';
-import { MobileMenu } from './components/MobileMenu';
+import { SeoManager } from './components/SeoManager';
 import './index.css';
 
 // Lazy load heavy components for better initial bundle size
@@ -40,6 +33,14 @@ const SimpleTextReader = lazy(() => import('./pages/SimpleTextReader'));
 const CanonicalTextReader = lazy(() => import('./pages/CanonicalTextReader'));
 const BibliographyPage = lazy(() => import('./pages/BibliographyPage'));
 const BookReaderPage = lazy(() => import('./components/book-reader/BookReaderPage'));
+const DatabasePage = lazy(() => import('./pages/DatabasePage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const CreditsPage = lazy(() => import('./pages/CreditsPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const ReportErrorPage = lazy(() => import('./pages/ReportErrorPage'));
+const MobileMenu = lazy(() =>
+  import('./components/MobileMenu').then((module) => ({ default: module.MobileMenu })),
+);
 
 // Shared trace read-only page
 const SharedTracePage = lazy(() => import('./pages/SharedTracePage'));
@@ -274,6 +275,8 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-transparent m-0 p-0">
+      <SeoManager />
+
       {/* Skip Links for Accessibility */}
       <SkipLinks />
 
@@ -324,8 +327,10 @@ function AppContent() {
               aria-label={t('appShell.logoHomeAria')}
             >
               <img
-                src="/logo.svg"
+                src="/logo-880.webp"
                 alt={t('appShell.logoAlt')}
+                width={220}
+                height={96}
                 className="h-10 sm:h-20 w-auto transition-transform group-hover:scale-105"
               />
             </Link>
@@ -382,42 +387,32 @@ function AppContent() {
               aria-controls="mobile-menu"
               aria-label={mobileMenuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
             >
-              <AnimatePresence mode="wait">
-                {mobileMenuOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <X className="w-5 h-5" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu className="w-5 h-5" />
-                  </motion.div>
+              <span
+                className={cn(
+                  "inline-flex transition-transform duration-200",
+                  mobileMenuOpen ? "rotate-90" : "rotate-0",
                 )}
-              </AnimatePresence>
+                aria-hidden="true"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </span>
             </button>
           </div>
 
         </nav>
 
         {/* Full-screen mobile drawer — replaces the inline strip menu */}
-        <MobileMenu
-          open={mobileMenuOpen}
-          onClose={() => setMobileMenuOpen(false)}
-          isAuthenticated={isAuthenticated}
-          username={user?.username}
-          onLogout={logout}
-        />
+        {mobileMenuOpen && (
+          <Suspense fallback={null}>
+            <MobileMenu
+              open={mobileMenuOpen}
+              onClose={() => setMobileMenuOpen(false)}
+              isAuthenticated={isAuthenticated}
+              username={user?.username}
+              onLogout={logout}
+            />
+          </Suspense>
+        )}
       </header>
 
         {/* Main Content */}

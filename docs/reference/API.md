@@ -262,7 +262,7 @@ Returns aggregate statistics for the entire corpus.
 
 ## Knowledge Graph API
 
-Browse and analyze the knowledge graph (17,746 nodes, 42,925 edges).
+Browse and analyze the knowledge graph (19,081 nodes, 43,649 edges).
 
 ### List Nodes
 
@@ -276,7 +276,7 @@ Returns knowledge graph nodes with optional filtering.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `node_type` | string | - | Filter by type: `Person`, `Concept`, `Argument`, `Work`, `School`, `Debate`, `Position`, `Event`, `Institution`, `Text_Fragment`, `Modern_Interpretation`, `Term`, `Source_Collection`, `Doctrine`, `Passage`, `Publication`, `Quote`, `Synthesis`, `Controversy`, `Conceptual_Evolution`, `Group`, `Argument_Framework` |
+| `node_type` | string | - | Filter by type: `Person`, `Concept`, `Argument`, `Argument_Framework`, `Argument_Reconstruction`, `Work`, `School`, `Debate`, `Position`, `Event`, `Institution`, `Text_Fragment`, `Textual_Variant`, `Modern_Interpretation`, `Term`, `Source_Collection`, `Doctrine`, `Passage`, `Publication`, `Quote`, `Synthesis`, `Controversy`, `Conceptual_Evolution`, `Group` |
 | `period` | string | - | Filter by period: `Presocratic`, `Classical Greek`, `Hellenistic Greek`, `Roman Republican`, `Roman Imperial`, `Late Antiquity` |
 | `school` | string | - | Filter by school: `Stoic`, `Epicurean`, `Academic`, `Peripatetic`, `Pyrrhonist`, `Platonist` |
 | `search` | string | - | Text search in label and description |
@@ -381,19 +381,9 @@ Returns knowledge graph edges with optional filtering.
 | `limit` | integer | 100 | Results per page (1-1000) |
 | `offset` | integer | 0 | Pagination offset |
 
-**Relation Types (56 across 12 categories):**
-- Argumentative: `argues_for`, `argues_against`, `refutes`, `responds_to`, `supports`, `critiques`
-- Intellectual: `influences`, `influenced`, `influenced_by`, `taught_by`, `teaches`, `student_of`, `extends`
-- Affiliation: `belongs_to_school`, `has_member`, `member_of`, `founded`
-- Authorship: `wrote`, `authored_by`, `created_by`, `developed_by`
-- Citation: `cites`, `cited_by`, `source_for`, `evidenced_by`
-- Textual: `preserves`, `preserved_in`
-- Structural: `contains`, `part_of`, `translation_of`, `has_translation`, `has_section`, `has_chapter`, `belongs_to_corpus`
-- Semantic: `discusses`, `discussed_in`, `defines`, `related_to`, `contrasts_with`, `parallel_to`, `employs`, `presupposes`, `grounded_in`
-- Doctrinal: `holds_position`, `endorses`, `rejects`
-- Debate: `participates_in`, `contributes_to`
-- Hermeneutic: `interprets`, `interpreted_by`, `represents`, `exemplifies`, `specializes_in`
-- Temporal: `contemporary_of`, `precedes`, `follows`
+**Edge Types (75):**
+
+Canonical edge types are defined in `knowledge graph/ontology/edge_types.json`: `agrees_with`, `argues_against`, `argues_for`, `attested_by`, `attests`, `authored_by`, `belongs_to_corpus`, `belongs_to_school`, `cited_by`, `cites`, `cites_primary_source`, `contains`, `contemporary_of`, `contrasts_with`, `contributes_to`, `created_by`, `creates`, `critiques`, `defines`, `developed_by`, `discussed_in`, `discusses`, `edited_by`, `employs`, `endorses`, `engages_with`, `evidenced_by`, `exemplifies`, `extends`, `follows`, `founded`, `grounded_in`, `has_chapter`, `has_member`, `has_position`, `has_section`, `has_translation`, `has_variant`, `holds_position`, `influenced`, `influenced_by`, `influences`, `interpreted_by`, `interprets`, `member_of`, `opposes`, `parallel_to`, `part_of`, `participates_in`, `position_in_debate`, `precedes`, `preserved_in`, `preserves`, `presupposes`, `published`, `reconstructed_by`, `reconstructed_from`, `reconstructs`, `refutes`, `rejects`, `related_to`, `represents`, `responds_to`, `source_for`, `source_for_reconstruction`, `specializes_in`, `student_of`, `supports`, `taught_by`, `teaches`, `translation_of`, `uses_methodology_of`, `variant_of`, `wrote`, `wrote_about`.
 
 **Response:**
 ```json
@@ -421,8 +411,8 @@ Returns knowledge graph statistics.
 **Response:**
 ```json
 {
-  "total_nodes": 17746,
-  "total_edges": 42925,
+  "total_nodes": 19081,
+  "total_edges": 43649,
   "density": 0.00027,
   "connected_components": 1,
   "avg_degree": 4.84,
@@ -618,7 +608,7 @@ Returns nodes grouped by historical period for timeline visualization.
 
 ## GraphRAG API
 
-Graph-based Retrieval Augmented Generation for scholarly Q&A. Uses the **PageIndex V3** pipeline: direct KG + passage retrieval with ONE synthesis call (see [PageIndex V3 docs](../PAGEINDEX_V3.md)).
+Graph-based Retrieval Augmented Generation for scholarly Q&A. The current production path is agentic and vectorless: SQLStrategy expands lemmas, routes author/work mentions through the text tree, matches KG labels/descriptions, anchors evidence through `passage_citations`, and synthesizes cited answers with an LLM.
 
 ### Query (Non-Streaming)
 
@@ -626,7 +616,7 @@ Graph-based Retrieval Augmented Generation for scholarly Q&A. Uses the **PageInd
 POST /graphrag/query
 ```
 
-Executes a PageIndex V3 query: parallel vector search, passage_citations enrichment, and LLM synthesis.
+Executes an agentic GraphRAG query: vectorless discovery, `passage_citations` enrichment, graph expansion, evidence packing, and LLM synthesis.
 
 **Request Body:**
 
@@ -669,14 +659,14 @@ curl -X POST "https://free-will.app/api/graphrag/answer" \
   "metadata": {
     "llm_provider": "gemini",
     "model": "gemini-3.1-pro-preview",
-    "pipeline": "pageindex-v3",
+    "pipeline": "agentic-graphrag",
     "quality_score": 0.85,
     "quality_badge": "High"
   },
   "pageIndexInfo": {
     "linkedPassagesCount": 12,
     "neighborsCount": 8,
-    "semanticPassagesCount": 5,
+    "retrievalModeUsed": "sql",
     "totalContextChars": 28500,
     "estimatedTokens": 7125
   }
@@ -696,9 +686,9 @@ Executes a GraphRAG query with Server-Sent Events (SSE) for real-time streaming.
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `question` | string | **required** | User question |
-| `semantic_k` | integer | 10 | Semantic search results |
-| `graph_depth` | integer | 2 | Graph traversal depth |
-| `max_context_nodes` | integer | 30 | Max context nodes |
+| `semantic_k` | integer | 10 | Deprecated compatibility field; ignored by the agentic pipeline |
+| `graph_depth` | integer | 2 | Deprecated compatibility field; ignored by the agentic pipeline |
+| `max_context_nodes` | integer | 30 | Deprecated compatibility field; ignored by the agentic pipeline |
 
 **Example:**
 ```bash
@@ -755,7 +745,7 @@ Returns GraphRAG service health status.
 {
   "status": "healthy",
   "kg_loaded": true,
-  "nodes_count": 17746
+  "nodes_count": 19081
 }
 ```
 
@@ -830,13 +820,15 @@ X-RateLimit-Reset: 1706644800
 
 ---
 
-## Appendix: Node Types (22)
+## Appendix: Node Types (24)
 
 | Type | Description |
 |------|-------------|
 | `Person` | Philosophers and scholars |
 | `Concept` | Philosophical concepts |
 | `Argument` | Named arguments |
+| `Argument_Framework` | Structured frameworks for analyzing arguments |
+| `Argument_Reconstruction` | Scholarly reconstructions of arguments |
 | `Work` | Ancient texts and modern scholarship |
 | `School` | Philosophical schools |
 | `Debate` | Philosophical debates |
@@ -844,6 +836,7 @@ X-RateLimit-Reset: 1706644800
 | `Event` | Historical events |
 | `Institution` | Academies, schools |
 | `Text_Fragment` | Fragmentary texts preserved in secondary sources |
+| `Textual_Variant` | Variant textual readings |
 | `Modern_Interpretation` | Scholarly interpretations |
 | `Term` | Technical philosophical terms |
 | `Source_Collection` | Collections (SVF, LS, etc.) |
@@ -855,7 +848,6 @@ X-RateLimit-Reset: 1706644800
 | `Controversy` | Scholarly or philosophical controversies |
 | `Conceptual_Evolution` | Historical evolution of a concept |
 | `Group` | Groups of philosophers or intellectual communities |
-| `Argument_Framework` | Structured frameworks for analyzing arguments |
 
 ## Appendix: Historical Periods
 

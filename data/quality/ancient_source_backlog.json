@@ -1,0 +1,1060 @@
+{
+  "generator": "scripts/generate_ancient_source_backlog.py",
+  "source": "live_db",
+  "inputs": {
+    "database": "free_will schema",
+    "kg_nodes": 20101,
+    "ancient_works": 176
+  },
+  "entry_count": 78,
+  "status_counts": {
+    "blocker": 14,
+    "covered": 23,
+    "metadata_only": 11,
+    "missing_work_node": 2,
+    "partial": 28
+  },
+  "entries": [
+    {
+      "priority": "P0",
+      "status": "partial",
+      "work_node_id": "work_de_interpretatione_aristotle_c350bce_e4f6g8h0",
+      "db_work_id": [
+        "2294b88a-4f75-51a6-937f-72b306011d65",
+        "78ff298e-c197-5f66-842e-100ab4722f4e"
+      ],
+      "label": "Aristotle, De Interpretatione",
+      "passage_count": 59,
+      "kg_passage_count": 59,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify chapter 9 coverage and add translations where missing.",
+      "notes": "Tier 1 future-contingents source. Matched KG label(s): De Interpretatione (Περὶ Ἑρμηνείας). Matched DB work(s): Aristotle, De anima [grc], Aristotle, De interpretatione [grc]. Expected passages from plan/seed: 29."
+    },
+    {
+      "priority": "P0",
+      "status": "partial",
+      "work_node_id": "work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9",
+      "db_work_id": [
+        "d6defac3-cceb-5836-b0fe-966cb9ee1384",
+        "a016d0df-d8ca-5178-901d-a12d515bfa26",
+        "5eccf3a0-a044-5bf6-b871-1bd2aa05a511",
+        "250b675c-69ee-5047-9dfc-4cd02c638662",
+        "86f7bf81-c51f-525e-8500-e185e9aa3588",
+        "688ed799-9e94-5caf-b341-9cfb0a482d61"
+      ],
+      "label": "Aristotle, Nicomachean Ethics",
+      "passage_count": 681,
+      "kg_passage_count": 681,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Split any mislinked Magna Moralia passages out of the Nicomachean Ethics work node.",
+      "notes": "Tier 1 for voluntary action; current graph should be checked for work-node granularity. Matched KG label(s): Nicomachean Ethics (Ἠθικὰ Νικομάχεια). Matched DB work(s): Aristotle, Ethica Nicomachea [grc], Aristotle, Magna Moralia [grc], Aristotle, Nicomachean Ethics (Ἠθικὰ Νικομάχεια) [eng], Aristotle, Physica [grc], Aristotle, Ἠθικὰ Εὐδήμεια [grc], Aristotle of Stagira, Nicomachean Ethics III.1 [eng]. Expected passages from plan/seed: 116."
+    },
+    {
+      "priority": "P0",
+      "status": "partial",
+      "work_node_id": "work_augustine_de_gratia_la",
+      "db_work_id": [
+        "c82efc8c-d16d-5428-bc88-edc96e055f7e",
+        "e6e89652-3b4d-535e-a619-c7d2700bffb2",
+        "bb522ce4-300b-5879-9c16-6987b5061919"
+      ],
+      "label": "Augustine, De Gratia et Libero Arbitrio",
+      "passage_count": 71,
+      "kg_passage_count": 50,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify the dedicated work node and reconcile existing passages.",
+      "notes": "Tier 1 grace/free-will source. Matched KG label(s): De Gratia et Libero Arbitrio (Augustine). Matched DB work(s): Augustine, De Correptione et Gratia [lat], Augustine, De Gratia et Libero Arbitrio (Augustine) [eng], Augustine, De Libero Arbitrio [lat]. Expected passages from plan/seed: 25."
+    },
+    {
+      "priority": "P0",
+      "status": "partial",
+      "work_node_id": [
+        "work_de_libero_arbitrio",
+        "work_augustine_de_libero_arbitrio"
+      ],
+      "db_work_id": [
+        "c82efc8c-d16d-5428-bc88-edc96e055f7e",
+        "e6e89652-3b4d-535e-a619-c7d2700bffb2",
+        "12b3a5d6-2d08-5c6d-a822-749ca6fd2fd5",
+        "2518fb78-1c25-585f-b84f-778b2a11189c",
+        "bb522ce4-300b-5879-9c16-6987b5061919",
+        "270ecb79-9581-5188-a495-096f88a37d9c",
+        "211e032e-6d5e-52c2-85cf-93e885eadcd4",
+        "910d85b9-53eb-5fb2-9fcf-4ebfe93e1ca4",
+        "9e69c43a-0afb-5b79-8944-3a974844a0ae",
+        "48a62e79-a6a6-5141-8622-7a3566a19047",
+        "8bc6a885-64ff-5fce-a8ed-eeaf1e233f60",
+        "a6a679e0-9b30-5911-8d18-710d8b661533",
+        "f8de216d-4b6d-5c11-b17c-97d510996169",
+        "82308a09-3b9b-54d2-b884-af0120be9a12"
+      ],
+      "label": "Augustine, De Libero Arbitrio",
+      "passage_count": 786,
+      "kg_passage_count": 577,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Reconcile old KG nodes to DB passages and split unrelated works from the De Libero Arbitrio node.",
+      "notes": "Tier 1; old-pipeline nodes were previously unlinked. Matched KG label(s): De Libero Arbitrio Voluntatis (On Free Choice of the Will), Augustine, De Libero Arbitrio (On the Free Choice of the Will). Matched DB work(s): Augustine, De Correptione et Gratia [lat], Augustine, De Gratia et Libero Arbitrio (Augustine) [eng], Augustine, De Libero Arbitrio [lat], Augustine, De Libero Arbitrio [lat], Augustine, De Libero Arbitrio [lat], Augustine, De Libero Arbitrio Voluntatis (On Free Choice of the Will) [eng], Augustine, De Natura Boni [lat], Augustine, Libellus Adversus Fulgentium Donatistam [lat], Evodius Bishop of Uzalis -424, De fide Contra Manicheos [lat], Gregory of Nazianzus, Adversus Eunomianos (orat. 27) [grc], Gregory of Nazianzus, De Filio (Orat. 29) [grc], Gregory of Nazianzus, De Filio (Orat. 30) [grc], Gregory of Nazianzus, De Spiritu Sancto (Orat. 31) [grc], Gregory of Nazianzus, De Theologia (Orat. 28) [grc]. Expected passages from plan/seed: 170."
+    },
+    {
+      "priority": "P0",
+      "status": "partial",
+      "work_node_id": "work_consolatio_philosophiae_boethius_524ce_f1g2h3i4",
+      "db_work_id": [
+        "a9adc7e8-bd12-5f08-b637-2839b91db257",
+        "70ed4e48-e92f-5862-ad51-96fb5e7b2944"
+      ],
+      "label": "Boethius, De Consolatione Philosophiae",
+      "passage_count": 258,
+      "kg_passage_count": 258,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Reconcile old KG nodes to DB passage IDs.",
+      "notes": "Tier 1 for providence and foreknowledge. Matched KG label(s): De consolatione philosophiae (Consolation of Philosophy). Matched DB work(s): Boethius, De consolatione philosophiae (Consolation of Philosophy) [eng], Boethius d. 524, De consolatione philosophiae [lat]. Expected passages from plan/seed: 129."
+    },
+    {
+      "priority": "P0",
+      "status": "partial",
+      "work_node_id": "work_de_fato_cicero_44bce_b9c4e5d2",
+      "db_work_id": [
+        "b6e9f045-9142-5bd2-a520-085612d0dcc4",
+        "3138b941-79dd-54c2-bb26-012c0212116f",
+        "91edb0a6-66c5-5b55-96ca-dd2694e968f3"
+      ],
+      "label": "Cicero, De Fato",
+      "passage_count": 98,
+      "kg_passage_count": 96,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify existing passage nodes and translation coverage.",
+      "notes": "Tier 1 locus classicus for Hellenistic fate debates. Matched KG label(s): De Fato (On Fate). Matched DB work(s): Cicero, Cicero, De Fato [eng], Cicero, De Fato (On Fate) [eng], Marcus Tullius Cicero, De Fato [lat]. Expected passages from plan/seed: 48."
+    },
+    {
+      "priority": "P0",
+      "status": "partial",
+      "work_node_id": "work_epictetus_discourses",
+      "db_work_id": [
+        "26c492f3-daac-54a9-b654-6f472460cf33",
+        "90bedc65-501d-5ce3-83da-62fa152c9f29",
+        "449be5d8-3439-557f-983a-0b29b78e2672"
+      ],
+      "label": "Epictetus, Discourses and Enchiridion",
+      "passage_count": 559,
+      "kg_passage_count": 350,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Reconcile old KG nodes to DB passage IDs and verify work split.",
+      "notes": "Tier 1 Stoic prohairesis source. Matched KG label(s): Discourses (Διατριβαί) - Epictetus. Matched DB work(s): Epictetus, Discourses [grc], Epictetus, Discourses (Διατριβαί) - Epictetus [eng], Epictetus, Discourses and Enchiridion [eng]. Expected passages from plan/seed: 185."
+    },
+    {
+      "priority": "P0",
+      "status": "partial",
+      "work_node_id": [
+        "work_plutarch_de_fato_complete",
+        "work_plutarch_de_fato_authentic"
+      ],
+      "db_work_id": [
+        "2605f763-fbad-5661-9007-5b6d8df10d82",
+        "e80fcd1d-4072-5ef4-b471-db80800c0db0",
+        "6f16a0c0-034d-5df9-b001-97bb411132c5",
+        "02ea590e-aafa-5de5-bea6-f05e56d1b4dd"
+      ],
+      "label": "Pseudo-Plutarch, De Fato",
+      "passage_count": 91,
+      "kg_passage_count": 91,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify whether complete De Fato coverage should be split from authentic/disputed Plutarch nodes.",
+      "notes": "Tier 1 Platonist fate text. Matched KG label(s): Pseudo-Plutarch, De Fato (Moralia 568b-574f), Plutarque, De Fato (authentique disputé). Matched DB work(s): Plutarch, De Communibus Notitiis adversus Stoicos [grc], Plutarch, De Stoicorum Repugnantiis (On Stoic Self-Contradictions) [grc], Plutarch, De fato [grc], Plutarch, Pseudo-Plutarch, De Fato (Moralia 568b-574f) [eng]. Expected passages from plan/seed: 19."
+    },
+    {
+      "priority": "P0",
+      "status": "partial",
+      "work_node_id": "work_de_providentia_seneca_a2b3c4d5",
+      "db_work_id": [
+        "31911c53-b3c2-5d9e-8b19-77ba1c11a29b",
+        "2f89dab9-ce5d-5629-993f-990ce538c020",
+        "a75a26bd-0fd9-582d-b1f1-942c9fbadbc2"
+      ],
+      "label": "Seneca, De Providentia",
+      "passage_count": 2271,
+      "kg_passage_count": 2271,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Separate true De Providentia passages from Seneca Epistulae passages before judging coverage.",
+      "notes": "Tier 1 in the passage expansion plan; count should be near 68 after reconciliation. Matched KG label(s): De Providentia (On Providence). Matched DB work(s): Seneca, De Providentia [lat], Seneca, De Providentia (On Providence) [eng], Seneca, Epistulae Morales ad Lucilium [lat]. Expected passages from plan/seed: 68."
+    },
+    {
+      "priority": "P0",
+      "status": "covered",
+      "work_node_id": "work_aristotle_eudemian_ethics",
+      "db_work_id": "86f7bf81-c51f-525e-8500-e185e9aa3588",
+      "label": "Aristotle, Eudemian Ethics",
+      "passage_count": 41,
+      "kg_passage_count": 41,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Attach existing EE passages to the dedicated Eudemian Ethics work node or ingest missing passages.",
+      "notes": "Tier 1 and explicit key gap; expected 41 passages in the passage expansion plan. Matched KG label(s): Aristote, Éthique à Eudème (Ethica Eudemia). Matched DB work(s): Aristotle, Ἠθικὰ Εὐδήμεια [grc]. Expected passages from plan/seed: 41."
+    },
+    {
+      "priority": "P0",
+      "status": "covered",
+      "work_node_id": "work_augustine_de_civitate_dei",
+      "db_work_id": [
+        "db0ba923-3382-505a-b15e-096189195350",
+        "2518fb78-1c25-585f-b84f-778b2a11189c"
+      ],
+      "label": "Augustine, De Civitate Dei V/XII/XIV",
+      "passage_count": 164,
+      "kg_passage_count": 164,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify selected-book coverage and add DB passage IDs where missing.",
+      "notes": "Tier 1 for fate, foreknowledge, and original sin. Matched KG label(s): Augustine, De Civitate Dei (The City of God). Matched DB work(s): Augustine, Augustine, De Civitate Dei (The City of God) [eng], Augustine, De Libero Arbitrio [lat]. Expected passages from plan/seed: 158."
+    },
+    {
+      "priority": "P0",
+      "status": "covered",
+      "work_node_id": [
+        "work_epicurus_letters_fragments",
+        "work_epicurus_kuriai_doxai",
+        "work_epicurus_letter_herodotus",
+        "work_epicurus_letter_menoeceus"
+      ],
+      "db_work_id": "7689d078-3516-5470-9f63-1706bee2d9d8",
+      "label": "Epicurus, Letters and Fragments",
+      "passage_count": 193,
+      "kg_passage_count": 193,
+      "source_route": "json_mirror",
+      "recommended_next_step": "Consolidate Epicurus letters, Principal Doctrines, Vatican Sayings, and fragments under citable work nodes.",
+      "notes": "Tier 1 and explicit key gap; use verified Greek text mirrors or manual Usener/Arrighetti coverage. Matched KG label(s): Epicurus, Letters and Fragments, Principal Doctrines (Kuriai Doxai / Ratae Sententiae), Letter to Herodotus (Epistula ad Herodotum), Letter to Menoeceus (Epistula ad Menoeceum). Matched DB work(s): Epicurus, Letters and Fragments [grc]. Expected passages from plan/seed: 193."
+    },
+    {
+      "priority": "P0",
+      "status": "covered",
+      "work_node_id": "work_de_rerum_natura_lucretius_50sbce_l2m3n4o5",
+      "db_work_id": [
+        "ad4c0fb0-4157-52ca-9da2-4eccba61e481",
+        "3b70b3a0-927d-5cbb-9101-b89c8b01d849",
+        "272fcba1-3282-5ca7-845b-3ad9da38351d"
+      ],
+      "label": "Lucretius, De Rerum Natura",
+      "passage_count": 304,
+      "kg_passage_count": 302,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify passage count against DB and add translations where missing.",
+      "notes": "Tier 1 Epicurean source for clinamen and anti-determinism. Matched KG label(s): De Rerum Natura (On the Nature of Things). Matched DB work(s): Lucretius, De Rerum Natura (On the Nature of Things) [eng], Titus Lucretius Carus, De Rerum Natura [lat], Titus Lucretius Carus, Lucretius, De Rerum Natura [eng]. Expected passages from plan/seed: 300."
+    },
+    {
+      "priority": "P0",
+      "status": "covered",
+      "work_node_id": "work_marcus_aurelius_meditations",
+      "db_work_id": [
+        "579745e5-16f6-515e-9cd7-6aab8b7ea9b8",
+        "ff5760a5-862c-5767-9c0f-ee84dc0d42f1"
+      ],
+      "label": "Marcus Aurelius, Meditations",
+      "passage_count": 599,
+      "kg_passage_count": 596,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Reconcile old KG nodes to DB passages, then create missing passage nodes.",
+      "notes": "Tier 1 in the 2026-02-25 passage expansion plan; old-pipeline nodes were previously unlinked. Matched KG label(s): Meditations (Τὰ εἰς ἑαυτόν). Matched DB work(s): Marcus Aurelius, Meditationes (Ta eis heauton) [grc], Marcus Aurelius, Meditations (Τὰ εἰς ἑαυτόν) [eng]. Expected passages from plan/seed: 577."
+    },
+    {
+      "priority": "P0",
+      "status": "covered",
+      "work_node_id": "work_methodius_de_libero_arbitrio",
+      "db_work_id": [
+        "a8a32daa-098c-5ff3-8070-1aa23c16aafc",
+        "a2e395d0-9295-58d4-b095-55720af0bf0b"
+      ],
+      "label": "Methodius, De Libero Arbitrio",
+      "passage_count": 104,
+      "kg_passage_count": 104,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Create or retarget passages for Methodius instead of sharing Augustine work nodes.",
+      "notes": "Tier 1 early Christian free-will treatise. Matched KG label(s): Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου). Matched DB work(s): Methodius, De Libero Arbitrio [grc], Methodius of Olympus, Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου) [eng]. Expected passages from plan/seed: 97."
+    },
+    {
+      "priority": "P0",
+      "status": "covered",
+      "work_node_id": "work_plutarch_stoic_repugnantiis",
+      "db_work_id": "e80fcd1d-4072-5ef4-b471-db80800c0db0",
+      "label": "Plutarch, De Stoicorum Repugnantiis",
+      "passage_count": 47,
+      "kg_passage_count": 47,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Attach or ingest passages for the dedicated work node.",
+      "notes": "Tier 1 and explicit key gap. Matched KG label(s): Plutarque, De Stoicorum Repugnantiis. Matched DB work(s): Plutarch, De Stoicorum Repugnantiis (On Stoic Self-Contradictions) [grc]. Expected passages from plan/seed: 47."
+    },
+    {
+      "priority": "P0",
+      "status": "covered",
+      "work_node_id": "work_seneca_epistulae_morales",
+      "db_work_id": "a75a26bd-0fd9-582d-b1f1-942c9fbadbc2",
+      "label": "Seneca, Epistulae Morales",
+      "passage_count": 2135,
+      "kg_passage_count": 2135,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Create or repair the Epistulae work node and retarget Epistulae passage part_of edges away from De Providentia.",
+      "notes": "Tier 1 in the passage expansion plan; current graph may conflate Epistulae with De Providentia. Matched KG label(s): Seneca, Epistulae Morales ad Lucilium. Matched DB work(s): Seneca, Epistulae Morales ad Lucilium [lat]. Expected passages from plan/seed: 2135."
+    },
+    {
+      "priority": "P1",
+      "status": "missing_work_node",
+      "work_node_id": [],
+      "db_work_id": [],
+      "label": "Stobaeus, Anthologium/Eclogae",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Create a source-collection/work node and ingest priority fate/free-will excerpts.",
+      "notes": "Explicit key gap and witness for many fragments."
+    },
+    {
+      "priority": "P1",
+      "status": "missing_work_node",
+      "work_node_id": [],
+      "db_work_id": [],
+      "label": "Zeno, SVF I fragments",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Add SVF collection anchors and Zeno fragment passage nodes from verified edition.",
+      "notes": "Explicit key gap."
+    },
+    {
+      "priority": "P1",
+      "status": "blocker",
+      "work_node_id": [],
+      "db_work_id": [],
+      "label": "Diogenes of Oenoanda, Inscription",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Source Smith edition and create inscription fragment passages.",
+      "notes": "Explicit key gap; gap plan treats it as description-only until a digital edition is sourced."
+    },
+    {
+      "priority": "P1",
+      "status": "blocker",
+      "work_node_id": "work_diogenianus_peri_heimarmenes",
+      "db_work_id": [],
+      "label": "Diogenianus, Anti-Stoic Fragments",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Create fragment collection/work node and ingest verified testimonia.",
+      "notes": "Explicit key gap. Matched KG label(s): Diogénianos, Περὶ εἱμαρμένης."
+    },
+    {
+      "priority": "P1",
+      "status": "blocker",
+      "work_node_id": [],
+      "db_work_id": [],
+      "label": "Oenomaus of Gadara, Fragments",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Create fragment collection/work node and ingest verified testimonia.",
+      "notes": "Explicit key gap."
+    },
+    {
+      "priority": "P1",
+      "status": "blocker",
+      "work_node_id": [
+        "work_proclus_de_providentia_fato_in_nobis",
+        "work_proclus_tria_opuscula_c9a8e4b3"
+      ],
+      "db_work_id": [],
+      "label": "Proclus, De Providentia/Fato/In Nobis",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Use Boese/Isaac-aligned evidence and distinguish Greek fragments from Latin translation.",
+      "notes": "Explicit key gap; gap plan notes partial Latin/fragmentary evidence. Matched KG label(s): Proclus, Sur la Providence, le Destin et ce qui dépend de nous (De Providentia, Fato et eo quod in nobis), Tria Opuscula (Three Essays) - Proclus."
+    },
+    {
+      "priority": "P1",
+      "status": "metadata_only",
+      "work_node_id": "work_nemesius_de_nat_hom",
+      "db_work_id": [],
+      "label": "Nemesius, De Natura Hominis",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Use generic Scaife CTS fetcher, then create KG passages.",
+      "notes": "Verified available on Scaife in the 2026-03-10 gap plan; explicit key gap. Matched KG label(s): Nemesius, De Natura Hominis."
+    },
+    {
+      "priority": "P1",
+      "status": "metadata_only",
+      "work_node_id": "work_porphyry_peri_tou_eph_hemin",
+      "db_work_id": [],
+      "label": "Porphyry, Peri tou eph' hemin",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Create passages from a verified critical edition or fragment witness.",
+      "notes": "Explicit key gap. Matched KG label(s): Porphyre, Sur ce qui dépend de nous (Περὶ τοῦ ἐφ' ἡμῖν)."
+    },
+    {
+      "priority": "P1",
+      "status": "partial",
+      "work_node_id": "work_de_gen_corr_aristotle",
+      "db_work_id": "497c064e-3694-5097-a59a-becef143841c",
+      "label": "Aristotle, De Generatione et Corruptione",
+      "passage_count": 69,
+      "kg_passage_count": 69,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Verify current Scaife ingestion and translation coverage.",
+      "notes": "Verified available on Scaife in the gap plan. Matched KG label(s): Aristotle, De Generatione et Corruptione. Matched DB work(s): Aristotle, De Generatione et Corruptione [grc]. Expected passages from plan/seed: 50."
+    },
+    {
+      "priority": "P1",
+      "status": "partial",
+      "work_node_id": "work_de_divinatione_cicero",
+      "db_work_id": "394b8997-fd22-50b5-b314-786f9be37d3c",
+      "label": "Cicero, De Divinatione",
+      "passage_count": 100,
+      "kg_passage_count": 100,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Verify current Scaife ingestion and complete missing passages.",
+      "notes": "Verified available on Scaife in the gap plan. Matched KG label(s): Cicero, De Divinatione. Matched DB work(s): Cicero, De Divinatione [lat]. Expected passages from plan/seed: 130."
+    },
+    {
+      "priority": "P1",
+      "status": "partial",
+      "work_node_id": "work_de_natura_deorum_cicero",
+      "db_work_id": "82b0f76a-22d2-5456-8db7-03925d58985e",
+      "label": "Cicero, De Natura Deorum",
+      "passage_count": 22,
+      "kg_passage_count": 22,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Verify current Scaife ingestion and complete missing passages.",
+      "notes": "Verified available on Scaife in the gap plan. Matched KG label(s): Cicero, De Natura Deorum. Matched DB work(s): Cicero, De Natura Deorum [lat]. Expected passages from plan/seed: 200."
+    },
+    {
+      "priority": "P1",
+      "status": "partial",
+      "work_node_id": "work_cleanthes_hymn_to_zeus",
+      "db_work_id": "f569f047-fb15-5922-aaf3-e59f3afd26bf",
+      "label": "Cleanthes, Hymn to Zeus",
+      "passage_count": 51,
+      "kg_passage_count": 1,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Verify the single passage and connect to Stoic fragment collection.",
+      "notes": "Verified available on Scaife in the gap plan. Matched KG label(s): Cléanthe, Hymne à Zeus (Ὕμνος εἰς Δία). Matched DB work(s): Cleanthes of Assos, Cleanthes, Hymn to Zeus (Ὕμνος εἰς Δία) [grc]. Expected passages from plan/seed: 1."
+    },
+    {
+      "priority": "P1",
+      "status": "partial",
+      "work_node_id": "work_laws_plato_c350bce_d4e5f6g7",
+      "db_work_id": "97e2b96f-656b-5fb7-92f0-486b78299eaa",
+      "label": "Plato, Laws Book X",
+      "passage_count": 326,
+      "kg_passage_count": 326,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Slice or tag Book X passages from Laws coverage.",
+      "notes": "Verified available on Scaife in the gap plan. Matched KG label(s): Laws (Νόμοι). Matched DB work(s): Plato, Laws (Νόμοι) [grc]. Expected passages from plan/seed: 40."
+    },
+    {
+      "priority": "P1",
+      "status": "partial",
+      "work_node_id": "work_republic_plato_c380bce_c3d4e5f6",
+      "db_work_id": [
+        "1f417c70-7e4b-5dcd-b7af-99efdeaa50c1",
+        "bfd59f54-16d2-5493-bedc-464863c0eb9b",
+        "73b8a30b-242d-5161-97a5-2bc175333e9d",
+        "af3c6067-7ec8-52da-8b26-f4c6562492bb"
+      ],
+      "label": "Plato, Republic Book X",
+      "passage_count": 405,
+      "kg_passage_count": 404,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Slice or tag Book X passages from Republic coverage.",
+      "notes": "Verified available on Scaife in the gap plan for Myth of Er priority. Matched KG label(s): Republic (Πολιτεία). Matched DB work(s): Plato, Republic [eng], Plato, Republic [grc], Plato, Republic (Πολιτεία) [grc], Plato, Ἀπολογία Σωκράτους [grc]. Expected passages from plan/seed: 30."
+    },
+    {
+      "priority": "P1",
+      "status": "partial",
+      "work_node_id": "work_plutarch_de_communibus_notitiis",
+      "db_work_id": "2605f763-fbad-5661-9007-5b6d8df10d82",
+      "label": "Plutarch, De Communibus Notitiis adversus Stoicos",
+      "passage_count": 6,
+      "kg_passage_count": 6,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Attach or ingest passages for the dedicated work node.",
+      "notes": "Explicit key gap. Matched KG label(s): Plutarque, De Communibus Notitiis adversus Stoicos. Matched DB work(s): Plutarch, De Communibus Notitiis adversus Stoicos [grc]."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_didaskalikos_alcinous_2nd_ce_q7r8s9t0",
+      "db_work_id": "063de036-a8cd-5afe-9d48-c814b4e98d27",
+      "label": "Alcinous, Didaskalikos",
+      "passage_count": 1,
+      "kg_passage_count": 1,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify the single existing passage and translation.",
+      "notes": "Tier 2 Middle Platonist handbook. Matched KG label(s): Didaskalikos (Handbook of Platonism). Matched DB work(s): Alcinous, Handbook of Platonism (Didaskalikos) [grc]. Expected passages from plan/seed: 1."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_aristotle_de_anima",
+      "db_work_id": "2294b88a-4f75-51a6-937f-72b306011d65",
+      "label": "Aristotle, De Anima",
+      "passage_count": 30,
+      "kg_passage_count": 30,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Ingest from First1K/Scaife and connect to Aristotle work metadata.",
+      "notes": "Tier 2 and explicit key gap. Matched KG label(s): Aristotle, De anima. Matched DB work(s): Aristotle, De anima [grc]. Expected passages from plan/seed: 30."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_aristotle_magna_moralia",
+      "db_work_id": "a016d0df-d8ca-5178-901d-a12d515bfa26",
+      "label": "Aristotle, Magna Moralia",
+      "passage_count": 434,
+      "kg_passage_count": 434,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Create a dedicated Magna Moralia work node and retarget current MM passages.",
+      "notes": "Tier 2 and explicit key gap; current passages may be attached to Nicomachean Ethics. Matched KG label(s): Aristotle, Magna Moralia. Matched DB work(s): Aristotle, Magna Moralia [grc]. Expected passages from plan/seed: 434."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_metaphysics_theta_aristotle_c350bce_f5g7h9i1",
+      "db_work_id": "d579e8ee-b823-531f-9316-a15b4b4e3771",
+      "label": "Aristotle, Metaphysics",
+      "passage_count": 142,
+      "kg_passage_count": 142,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify whether current Book Theta-only node satisfies the intended work scope.",
+      "notes": "Tier 2; potentiality and actuality. Matched KG label(s): Metaphysics Book Theta (Potentiality and Actuality). Matched DB work(s): Aristotle, τὰ Μετὰ τὰ Φυσικά [grc]. Expected passages from plan/seed: 142."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_aristotle_physics",
+      "db_work_id": "250b675c-69ee-5047-9dfc-4cd02c638662",
+      "label": "Aristotle, Physics",
+      "passage_count": 71,
+      "kg_passage_count": 71,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Ingest from OGA/Scaife and verify causal vocabulary coverage.",
+      "notes": "Tier 2 and explicit key gap. Matched KG label(s): Aristotle, Physica. Matched DB work(s): Aristotle, Physica [grc]. Expected passages from plan/seed: 71."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "text_aspasius_in_en",
+      "db_work_id": "c537a996-cc69-5bbe-856c-a1431f152a2d",
+      "label": "Aspasius, In Ethica Nicomachea",
+      "passage_count": 6,
+      "kg_passage_count": 6,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify commentary passages on voluntary action.",
+      "notes": "Tier 2 earliest EN commentary. Matched KG label(s): Aspasius - In Ethica Nicomachea. Matched DB work(s): Aspasius, In Ethica Nicomachea Commentaria [grc]. Expected passages from plan/seed: 6."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_calcidius_in_timaeum",
+      "db_work_id": "07c22e2b-6f0f-5fca-81c5-3cd2fa185fe0",
+      "label": "Calcidius, In Timaeum",
+      "passage_count": 5,
+      "kg_passage_count": 5,
+      "source_route": "json_mirror",
+      "recommended_next_step": "Verify DLT source and add passage nodes.",
+      "notes": "Tier 2 Latin Platonist source on fate/providence. Matched KG label(s): Calcidius, Commentarius in Platonis Timaeum. Matched DB work(s): Calcidius, Commentarius in Platonis Timaeum [lat]. Expected passages from plan/seed: 5."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_diogenes_laertius_lives",
+      "db_work_id": [
+        "cf87f70e-84a3-5b9a-8808-f0f3a116ccd9",
+        "23c8ec1c-656e-5933-96c0-876a29a5d8fe"
+      ],
+      "label": "Diogenes Laertius, Vitae Philosophorum",
+      "passage_count": 1204,
+      "kg_passage_count": 1204,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify DB reconciliation and book-level passage counts.",
+      "notes": "Tier 2 doxographic source for all schools. Matched KG label(s): Diogenes Laertius, Lives of Eminent Philosophers. Matched DB work(s): Diogenes Laertius, Noctes Atticae [lat], Diogenes Laertius, Vitae Philosophorum (Lives of Eminent Philosophers) [grc]. Expected passages from plan/seed: 1203."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_plato_apology",
+      "db_work_id": "af3c6067-7ec8-52da-8b26-f4c6562492bb",
+      "label": "Plato, Apology",
+      "passage_count": 125,
+      "kg_passage_count": 125,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Ingest or reconcile Apology passages.",
+      "notes": "Tier 2 Socratic moral autonomy source. Matched KG label(s): Plato, Ἀπολογία Σωκράτους. Matched DB work(s): Plato, Ἀπολογία Σωκράτους [grc]. Expected passages from plan/seed: 125."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_plato_phaedo",
+      "db_work_id": "6f130faa-f9b2-5f04-8499-2adeeb1852ff",
+      "label": "Plato, Phaedo",
+      "passage_count": 59,
+      "kg_passage_count": 59,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify passage coverage.",
+      "notes": "Tier 2 source for soul, immortality, and choice. Matched KG label(s): Plato, Phaedo. Matched DB work(s): Plato, Φαίδων [grc]. Expected passages from plan/seed: 59."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_plato_phaedrus",
+      "db_work_id": "94be11d0-d5dd-5015-af5a-02b8d156845c",
+      "label": "Plato, Phaedrus",
+      "passage_count": 261,
+      "kg_passage_count": 261,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Ingest or reconcile Phaedrus passages.",
+      "notes": "Tier 2 source for soul self-motion. Matched KG label(s): Plato, Phaedrus. Matched DB work(s): Plato, Φαῖδρος [grc]. Expected passages from plan/seed: 261."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_plato_timaeus",
+      "db_work_id": [
+        "07c22e2b-6f0f-5fca-81c5-3cd2fa185fe0",
+        "b2d07a86-2b37-55fe-8d82-57eb9544d140",
+        "910c033a-f80c-5ce9-8456-fae3a0a93a3b"
+      ],
+      "label": "Plato, Timaeus",
+      "passage_count": 82,
+      "kg_passage_count": 82,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify passage coverage and translations.",
+      "notes": "Tier 2 cosmology, necessity, and demiurge source. Matched KG label(s): Plato, Timaeus. Matched DB work(s): Calcidius, Commentarius in Platonis Timaeum [lat], Plato, Timaeus [eng], Plato, Τίμαιος (Timaeus) [grc]. Expected passages from plan/seed: 76."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": [
+        "work_plotinus_enneads_iv_8",
+        "work_plotinus_enn_iii_1"
+      ],
+      "db_work_id": [
+        "23c5db3c-3d81-5531-99cd-22c77faaaee3",
+        "ca5d3686-5869-5e1d-88d8-28bb52c9dd44",
+        "35b3f803-ca27-5c79-b3b2-52f6e77d6d22",
+        "b2b50087-6b32-57ab-9dae-9d811a060cb1",
+        "99cc527d-321c-5077-92c3-048a21d0bfdf",
+        "a68a5697-9c00-5af0-a7a5-bb705447725a"
+      ],
+      "label": "Plotinus, Enneads",
+      "passage_count": 1368,
+      "kg_passage_count": 1365,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify whether all Enneads passages should remain under the current IV.8-labeled node.",
+      "notes": "Tier 2; VI.8 and III.1 are key for freedom and fate. Matched KG label(s): Plotinus, Enneads IV.8 - On the Descent of the Soul into Bodies, Plotinus, Ennead III.1 - Peri Heimarmenes (On Fate). Matched DB work(s): Plotinus, Ennead III.1 - Peri Heimarmenes (On Fate) [grc], Plotinus, Enneades [grc], Plotinus, Plotinus on heimarmene (fate) as sovereign cause (Enneads III.1) [eng], Plotinus, Plotinus, Enneads [eng], Plotinus, Plotinus, Enneads III.1 (On Fate) [eng], Plotinus, Plotinus, Enneads VI.8 [eng]. Expected passages from plan/seed: 1355."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_porphyry_ad_marcellam",
+      "db_work_id": "71ac3e34-9aca-5098-937b-a05c86591869",
+      "label": "Porphyry, Ad Marcellam",
+      "passage_count": 35,
+      "kg_passage_count": 35,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify passage coverage.",
+      "notes": "Tier 2 Neoplatonist ethics source. Matched KG label(s): Ad Marcellam (Πρὸς Μαρκέλλαν). Matched DB work(s): Porphyrius, Ad Marcellam [grc]. Expected passages from plan/seed: 35."
+    },
+    {
+      "priority": "P1",
+      "status": "covered",
+      "work_node_id": "work_sextus_outlines_pyrrhonism_f9a7c8e4",
+      "db_work_id": "b86b851f-486a-5668-b9f9-a91c81606e0a",
+      "label": "Sextus Empiricus, PH and Against the Professors",
+      "passage_count": 534,
+      "kg_passage_count": 534,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Verify work split and passage counts for PH versus M.",
+      "notes": "Tier 2 skeptical context. Matched KG label(s): Outlines of Pyrrhonism (Πυρρώνειοι Ὑποτυπώσεις) - Sextus Empiricus. Matched DB work(s): Sextus Empiricus, Against the Professors and Outlines of Pyrrhonism [grc]. Expected passages from plan/seed: 534."
+    },
+    {
+      "priority": "P2",
+      "status": "blocker",
+      "work_node_id": [
+        "work_diodore_tarsus_contra_astronomos_heimarmenen",
+        "work_diodore_tarsus_commentary_romans"
+      ],
+      "db_work_id": [],
+      "label": "Diodore of Tarsus, Fragments",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Consolidate the existing metadata work nodes and ingest only verified fragment witnesses.",
+      "notes": "Explicit key gap. Matched KG label(s): Diodore de Tarse, Contre les astronomes, les astrologues et le Destin, Diodore de Tarse, Commentaire sur l'epitre aux Romains."
+    },
+    {
+      "priority": "P2",
+      "status": "blocker",
+      "work_node_id": "work_gregory_contra_eunomium",
+      "db_work_id": [],
+      "label": "Gregory of Nyssa, Contra Eunomium",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Source GNO text and create passages.",
+      "notes": "Explicit Gregory of Nyssa core-work gap. Matched KG label(s): Gregory of Nyssa, Contra Eunomium."
+    },
+    {
+      "priority": "P2",
+      "status": "blocker",
+      "work_node_id": "work_gregory_contra_fatum",
+      "db_work_id": [],
+      "label": "Gregory of Nyssa, Contra Fatum",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Source GNO III.2 or another verified edition before ingestion.",
+      "notes": "Not available on Scaife per gap plan; explicit key gap. Matched KG label(s): Gregory of Nyssa, Contra Fatum."
+    },
+    {
+      "priority": "P2",
+      "status": "blocker",
+      "work_node_id": "work_gregory_de_anima_resurrectione",
+      "db_work_id": [],
+      "label": "Gregory of Nyssa, De Anima et Resurrectione",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Source GNO/PG text and create passages.",
+      "notes": "Explicit Gregory of Nyssa core-work gap. Matched KG label(s): Gregory of Nyssa, De Anima et Resurrectione (Macrinia)."
+    },
+    {
+      "priority": "P2",
+      "status": "blocker",
+      "work_node_id": "work_gregory_de_hom_opif",
+      "db_work_id": [],
+      "label": "Gregory of Nyssa, De Hominis Opificio",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Source GNO/PG text and create passages.",
+      "notes": "Not available on Scaife per gap plan; part of explicit Gregory of Nyssa core gap. Matched KG label(s): Gregory of Nyssa, De Hominis Opificio."
+    },
+    {
+      "priority": "P2",
+      "status": "blocker",
+      "work_node_id": "work_gregory_oratio_catechetica",
+      "db_work_id": [],
+      "label": "Gregory of Nyssa, Oratio Catechetica Magna",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Source GNO/PG text and create passages.",
+      "notes": "Explicit Gregory of Nyssa core-work gap. Matched KG label(s): Gregory of Nyssa, Oratio Catechetica Magna."
+    },
+    {
+      "priority": "P2",
+      "status": "blocker",
+      "work_node_id": [],
+      "db_work_id": [],
+      "label": "Iamblichus, De Mysteriis",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Source a verified edition before ingestion.",
+      "notes": "Not available on Scaife per gap plan."
+    },
+    {
+      "priority": "P2",
+      "status": "blocker",
+      "work_node_id": "work_john_damascus_de_fide",
+      "db_work_id": [],
+      "label": "John of Damascus, De Fide Orthodoxa",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Source Kotter PTS or verified Greek text before passage ingestion.",
+      "notes": "Not available on Scaife per gap plan; explicit key gap. Matched KG label(s): John of Damascus, De Fide Orthodoxa."
+    },
+    {
+      "priority": "P2",
+      "status": "blocker",
+      "work_node_id": "work_lactantius_divinarum_institutionum",
+      "db_work_id": [],
+      "label": "Lactantius, Divine Institutes",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Source a verified Latin edition and create passage nodes.",
+      "notes": "Explicit key gap. Matched KG label(s): Lactance, Divinarum Institutionum libri VII."
+    },
+    {
+      "priority": "P2",
+      "status": "blocker",
+      "work_node_id": "work_philo_de_providentia",
+      "db_work_id": [],
+      "label": "Philo, De Providentia",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Source Cohn-Wendland/Armenian/Greek-fragment evidence before passage ingestion.",
+      "notes": "Not available on Scaife per gap plan. Matched KG label(s): Philo, De Providentia."
+    },
+    {
+      "priority": "P2",
+      "status": "metadata_only",
+      "work_node_id": "work_aristotle_de_motu",
+      "db_work_id": [],
+      "label": "Aristotle, De Motu Animalium",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "json_mirror",
+      "recommended_next_step": "Use First1K/TLG or Nussbaum-aligned critical text and add passages.",
+      "notes": "Not available on Scaife per gap plan; explicit key gap. Matched KG label(s): Aristotle, De Motu Animalium."
+    },
+    {
+      "priority": "P2",
+      "status": "metadata_only",
+      "work_node_id": "work_josephus_antiquitates",
+      "db_work_id": [],
+      "label": "Josephus, Antiquitates Judaicae",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "json_mirror",
+      "recommended_next_step": "Use Perseus XML or another verified Greek source and target sectarian fate passages first.",
+      "notes": "Not available on Scaife per gap plan; alternative Perseus source listed. Matched KG label(s): Josephus, Antiquitates Judaicae."
+    },
+    {
+      "priority": "P2",
+      "status": "metadata_only",
+      "work_node_id": "work_josephus_bellum_jud",
+      "db_work_id": [],
+      "label": "Josephus, Bellum Judaicum",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "json_mirror",
+      "recommended_next_step": "Use Perseus XML or another verified Greek source and target fate passages first.",
+      "notes": "Not available on Scaife per gap plan; alternative Perseus source listed. Matched KG label(s): Josephus, Bellum Judaicum."
+    },
+    {
+      "priority": "P2",
+      "status": "metadata_only",
+      "work_node_id": "work_theodoret_graecarum_affectionum_curatio",
+      "db_work_id": [],
+      "label": "Theodoret, Graecarum Affectionum Curatio",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Source verified Greek edition and create passages.",
+      "notes": "Explicit key gap. Matched KG label(s): Théodoret, Graecarum Affectionum Curatio."
+    },
+    {
+      "priority": "P2",
+      "status": "partial",
+      "work_node_id": "work_basil_hexaemeron",
+      "db_work_id": "af6cabcc-05f7-57ec-a84d-09a3bee88fab",
+      "label": "Basil, Hexaemeron",
+      "passage_count": 15,
+      "kg_passage_count": 15,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Ingest from Scaife CTS if needed.",
+      "notes": "Verified available on Scaife in the gap plan. Matched KG label(s): Homiliae in Hexaemeron (Ὁμιλίαι εἰς τὴν Ἑξαήμερον). Matched DB work(s): Basil the Great, Hexaemeron [grc]. Expected passages from plan/seed: 80."
+    },
+    {
+      "priority": "P2",
+      "status": "partial",
+      "work_node_id": "work_clement_protrepticus",
+      "db_work_id": "0acdd201-a4c7-570e-b9ac-f3358764010f",
+      "label": "Clement of Alexandria, Protrepticus",
+      "passage_count": 51,
+      "kg_passage_count": 51,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Ingest from Scaife CTS if not covered elsewhere.",
+      "notes": "Verified available on Scaife in the gap plan. Matched KG label(s): Clement of Alexandria, Protrepticus (Λόγος προτρεπτικὸς πρὸς Ἕλληνας). Matched DB work(s): Clement of Alexandria, Protrepticus [grc]. Expected passages from plan/seed: 120."
+    },
+    {
+      "priority": "P2",
+      "status": "partial",
+      "work_node_id": "work_clement_stromateis",
+      "db_work_id": "18b2a243-abf0-58c4-b938-0de34ebccc6d",
+      "label": "Clement of Alexandria, Stromata",
+      "passage_count": 6,
+      "kg_passage_count": 6,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Compare existing Clement/SC coverage, then ingest missing passages from Scaife.",
+      "notes": "Verified available on Scaife in the gap plan. Matched KG label(s): Clement of Alexandria, Stromateis (Στρωματεῖς). Matched DB work(s): Clement of Alexandria, Stromateis [grc]. Expected passages from plan/seed: 500."
+    },
+    {
+      "priority": "P2",
+      "status": "partial",
+      "work_node_id": "work_galen_de_placitis",
+      "db_work_id": "63499044-05ad-5c13-aa85-147d017359d2",
+      "label": "Galen, De Placitis Hippocratis et Platonis",
+      "passage_count": 3,
+      "kg_passage_count": 3,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Ingest from Scaife CTS and create work/passages.",
+      "notes": "Verified available on Scaife in the gap plan. Matched KG label(s): Galen, De Placitis Hippocratis et Platonis. Matched DB work(s): Galen, De Placitis Hippocratis et Platonis [grc]."
+    },
+    {
+      "priority": "P2",
+      "status": "partial",
+      "work_node_id": "work_philo_de_opificio",
+      "db_work_id": "cc47ea16-0100-57de-b704-8e412920e5fc",
+      "label": "Philo, De Opificio Mundi",
+      "passage_count": 172,
+      "kg_passage_count": 172,
+      "source_route": "manual_critical_edition",
+      "recommended_next_step": "Source Cohn-Wendland/Loeb-aligned Greek before passage ingestion.",
+      "notes": "Not available on Scaife per gap plan. Matched KG label(s): Philo, De Opificio Mundi. Matched DB work(s): Philo of Alexandria, De Opificio Mundi [grc]."
+    },
+    {
+      "priority": "P2",
+      "status": "partial",
+      "work_node_id": "work_simplicius_in_enchiridion",
+      "db_work_id": "d6e02ca2-e765-5971-a860-b7c9f2955cbe",
+      "label": "Simplicius, In Epicteti Enchiridion",
+      "passage_count": 9,
+      "kg_passage_count": 9,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Complete Scaife ingestion and verify commentary passage granularity.",
+      "notes": "Verified available on Scaife in the gap plan. Matched KG label(s): Simplicius, In Epicteti Enchiridion Commentarius. Matched DB work(s): Simplicius, In Epicteti Enchiridion Commentarius [grc]. Expected passages from plan/seed: 100."
+    },
+    {
+      "priority": "P2",
+      "status": "partial",
+      "work_node_id": "work_tertullian_adv_marcionem",
+      "db_work_id": "1d90676f-7025-5271-9190-a0b2f10e10ca",
+      "label": "Tertullian, Adversus Marcionem",
+      "passage_count": 13,
+      "kg_passage_count": 13,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Ingest from Scaife/CSEL and prioritize Book II if splitting by book.",
+      "notes": "Verified available on Scaife and explicit key gap. Matched KG label(s): Tertullian, Adversus Marcionem. Matched DB work(s): Tertullian, Adversus Marcionem [lat]. Expected passages from plan/seed: 150."
+    },
+    {
+      "priority": "P2",
+      "status": "partial",
+      "work_node_id": "work_tertullian_de_anima",
+      "db_work_id": "90e9bbae-242a-5987-8589-8a5b9ecad0eb",
+      "label": "Tertullian, De Anima",
+      "passage_count": 31,
+      "kg_passage_count": 31,
+      "source_route": "scaife_library",
+      "recommended_next_step": "Ingest from Scaife/CCSL and add translations.",
+      "notes": "Verified available on Scaife and explicit key gap. Matched KG label(s): Tertullian, De Anima. Matched DB work(s): Tertullian, De Anima [lat]. Expected passages from plan/seed: 58."
+    },
+    {
+      "priority": "P3",
+      "status": "metadata_only",
+      "work_node_id": "work_exodus_c9d0e1f2",
+      "db_work_id": [],
+      "label": "Exodus",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Ingest or reconcile Exodus passages relevant to hardening and divine agency.",
+      "notes": "Explicit key gap. Matched KG label(s): Exodus (Shemot)."
+    },
+    {
+      "priority": "P3",
+      "status": "metadata_only",
+      "work_node_id": "work_ezekiel_g3h4i5j6",
+      "db_work_id": [],
+      "label": "Ezekiel",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Ingest or reconcile Ezekiel passages relevant to responsibility and new heart language.",
+      "notes": "Explicit key gap. Matched KG label(s): Ezekiel (Yechezkel)."
+    },
+    {
+      "priority": "P3",
+      "status": "metadata_only",
+      "work_node_id": "work_genesis_u1v2w3x4",
+      "db_work_id": [],
+      "label": "Genesis",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Ingest or reconcile Genesis passages relevant to creation, fall, and responsibility.",
+      "notes": "Explicit key gap. Matched KG label(s): Genesis (Bereshit)."
+    },
+    {
+      "priority": "P3",
+      "status": "metadata_only",
+      "work_node_id": "work_sirach_a3b4c5d6",
+      "db_work_id": [],
+      "label": "Sirach / Ecclesiasticus",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Ingest or reconcile Septuagint/Vulgate Sirach passages, prioritizing Sirach 15.",
+      "notes": "Tier 4 plus explicit key gap. Matched KG label(s): Wisdom of Sirach (Ecclesiasticus). Expected passages from plan/seed: 67."
+    },
+    {
+      "priority": "P3",
+      "status": "metadata_only",
+      "work_node_id": "work_wisdom_of_solomon",
+      "db_work_id": [],
+      "label": "Wisdom of Solomon",
+      "passage_count": 0,
+      "kg_passage_count": 0,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Ingest or reconcile Wisdom passages from Septuagint source.",
+      "notes": "Explicit key gap. Matched KG label(s): Sagesse de Salomon (Σοφία Σαλωμῶνος)."
+    },
+    {
+      "priority": "P3",
+      "status": "partial",
+      "work_node_id": "work_new_testament",
+      "db_work_id": "71f3d25b-dafb-51e3-8d45-2c2950bdaa58",
+      "label": "Galatians",
+      "passage_count": 119,
+      "kg_passage_count": 119,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Split Galatians from the generic New Testament node or create a dedicated work node.",
+      "notes": "Tier 4 plus explicit key gap. Matched KG label(s): New Testament (Novum Testamentum). Matched DB work(s): New Testament, 1 Corinthians (SBLGNT) [grc]. Expected passages from plan/seed: 149."
+    },
+    {
+      "priority": "P3",
+      "status": "partial",
+      "work_node_id": "work_new_testament",
+      "db_work_id": "71f3d25b-dafb-51e3-8d45-2c2950bdaa58",
+      "label": "John",
+      "passage_count": 119,
+      "kg_passage_count": 119,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Split Gospel of John from the generic New Testament node or create a dedicated work node.",
+      "notes": "Tier 4 plus explicit key gap. Matched KG label(s): New Testament (Novum Testamentum). Matched DB work(s): New Testament, 1 Corinthians (SBLGNT) [grc]. Expected passages from plan/seed: 866."
+    },
+    {
+      "priority": "P3",
+      "status": "partial",
+      "work_node_id": "work_new_testament",
+      "db_work_id": [
+        "71f3d25b-dafb-51e3-8d45-2c2950bdaa58",
+        "c6c93a59-63b9-52d5-ad30-d5c0b22d0aca",
+        "f35b5a44-591c-5a40-b9f8-69ecdc666b9e"
+      ],
+      "label": "Romans",
+      "passage_count": 123,
+      "kg_passage_count": 119,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Split Romans from the generic New Testament node or create a dedicated work node.",
+      "notes": "Tier 4 plus explicit key gap. Matched KG label(s): New Testament (Novum Testamentum). Matched DB work(s): New Testament, 1 Corinthians (SBLGNT) [grc], Origen, Commentary on Romans (Commentarii in Epistulam ad Romanos) [eng], Origen, Contra Celsum [grc]. Expected passages from plan/seed: 430."
+    },
+    {
+      "priority": "P3",
+      "status": "partial",
+      "work_node_id": "work_septuagint",
+      "db_work_id": "090a6c0c-2c7a-5729-9ed9-310a77a437e2",
+      "label": "Septuagint Psalms",
+      "passage_count": 1,
+      "kg_passage_count": 1,
+      "source_route": "db_reconciliation",
+      "recommended_next_step": "Split Psalms from generic Septuagint coverage and create priority passage nodes.",
+      "notes": "Tier 4 background source. Matched KG label(s): Septuagint (Μετάφρασις τῶν Ἑβδομήκοντα). Matched DB work(s): Septuagint, Psalms (LXX) [grc]. Expected passages from plan/seed: 729."
+    }
+  ]
+}

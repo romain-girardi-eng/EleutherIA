@@ -63,15 +63,13 @@ make dev
 
 ### Option 2: Manual
 
-Start PostgreSQL and Qdrant:
+Start PostgreSQL:
 ```bash
 docker run -d -p 5432:5432 \
   -e POSTGRES_USER=eleutheria \
   -e POSTGRES_PASSWORD=eleutheria \
   -e POSTGRES_DB=eleutheria \
   postgres:16-alpine
-
-docker run -d -p 6333:6333 qdrant/qdrant
 ```
 
 Start backend:
@@ -212,7 +210,6 @@ Settings (`.vscode/settings.json`):
 ```bash
 # Check what's using ports
 lsof -i :5432  # PostgreSQL
-lsof -i :6333  # Qdrant
 lsof -i :8000  # Backend
 lsof -i :5173  # Frontend
 ```

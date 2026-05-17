@@ -81,14 +81,14 @@ class DepsContainer:
         )
 
         db = DatabaseService()
-        try:
-            await db.connect()
-            logger.info("MCP server: Postgres connection established")
-        except Exception:
-            logger.warning(
-                "MCP server: Postgres unavailable, falling back to snapshot",
-                exc_info=True,
-            )
+        if os.getenv("DATABASE_URL") or os.getenv("POSTGRES_HOST"):
+            try:
+                await db.connect()
+                logger.info("MCP server: Postgres connection established")
+            except Exception:
+                logger.warning("MCP server: Postgres unavailable, falling back to snapshot")
+        else:
+            logger.info("MCP server: no Postgres env configured; using snapshot")
 
         kg_data: dict[str, Any] = {}
         if db.is_connected():
@@ -130,7 +130,13 @@ class DepsContainer:
         try:
             analytics = KGAnalytics()
             analytics.set_data(kg_data)
-            pagerank_scores = analytics.compute_pagerank() or {}
+            try:
+                pagerank_scores = analytics.calculate_centrality(metric="pagerank") or {}
+            except ModuleNotFoundError as exc:
+                if exc.name != "scipy":
+                    raise
+                logger.info("MCP server: scipy unavailable; using degree centrality")
+                pagerank_scores = analytics.calculate_centrality(metric="degree") or {}
         except Exception:
             logger.warning("MCP server: PageRank skipped", exc_info=True)
 

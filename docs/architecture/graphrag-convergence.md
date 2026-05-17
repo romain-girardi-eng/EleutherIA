@@ -4,6 +4,10 @@
 **Branch:** `main` (commits `0f70aea`, `7eec0f3`)
 **Production:** https://free-will.app
 
+## Status
+
+This February 2026 report is historical. The production backend now uses the Python/FastAPI agentic GraphRAG stack with vectorless SQLStrategy retrieval: lemma expansion, tree routing, KG label/description matching, `passage_citations`, and full-text/lemmatic RRF. The Cloudflare Worker/vector-search path described below is no longer the active architecture.
+
 ## Overview
 
 The GraphRAG Convergence plan unified two parallel agentic implementations into a single production pipeline on Cloudflare Workers:
@@ -33,7 +37,7 @@ Query
 [4. HyDE] --- Hypothetical Document Embeddings for semantic gap bridging
   |
   v
-[5. Semantic Search] --- Qdrant top-k with fused standard + HyDE results
+[5. Legacy Vector Search] --- retired vector top-k path with fused standard + HyDE results
   |
   v
 [6. Weighted Graph Traversal] --- PageRank-boosted min-heap BFS with edge-type multipliers

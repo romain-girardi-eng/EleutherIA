@@ -6,6 +6,10 @@ from eleutheria_graphrag.agents.tools.get_neighbors import (
     EdgeSummary,
     GetNeighborsResult,
 )
+from eleutheria_graphrag.agents.tools.infer_transitive import (
+    DerivedNode,
+    InferTransitiveResult,
+)
 from eleutheria_graphrag.agents.tools.read_passages import (
     PassageSummary,
     ReadPassagesResult,
@@ -120,6 +124,39 @@ def test_deduplication():
     # Should only appear once
     assert len(collector.primary_evidence) == 1
     assert len(collector.secondary_evidence) == 0  # Deduplicated
+
+
+def test_ingest_infer_transitive_records_nodes_and_edges():
+    collector = EvidenceCollector()
+    result = InferTransitiveResult(
+        start_node_id="work_republic",
+        start_label="Republic",
+        relation="authored_by",
+        inverse_relation="wrote",
+        is_transitive=False,
+        max_depth=1,
+        derived_nodes=[
+            DerivedNode(
+                node_id="person_plato",
+                label="Plato",
+                type="person",
+                distance=1,
+                derivation=["←wrote"],
+                inferred_edge=["work_republic", "authored_by", "person_plato"],
+            )
+        ],
+        inferred_edges=[["work_republic", "authored_by", "person_plato"]],
+    )
+
+    collector.ingest("infer_transitive", {"node_id": "work_republic"}, result)
+
+    assert "work_republic" in collector.context_node_ids
+    assert "person_plato" in collector.context_node_ids
+    assert ("work_republic", "authored_by", "person_plato") in collector.inferred_edges
+
+    state = RAGState(question="who authored Republic")
+    collector.populate_state(state)
+    assert ("work_republic", "authored_by", "person_plato") in state.inferred_edges
 
 
 def test_populate_state():

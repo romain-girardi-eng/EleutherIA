@@ -637,7 +637,7 @@ p,.body{font-size:1.7rem;line-height:1.55;}
     <p class="sm mut" style="font-size:1rem;line-height:1.5;max-width:72rem;">Le moteur ne récupère plus seulement des fragments. Il ouvre un <strong>graphe de recherche</strong>, planifie la lecture, navigue les œuvres hiérarchiquement, construit un dossier de preuves, puis rédige et vérifie la réponse.</p>
     <p class="xs mut" style="font-size:.98rem;">103 œuvres indexées hiérarchiquement · cache de prompt Gemini validé · raisonnement visible dans le panneau droit</p>
     <div class="f fc g2">
-      <div class="pstep"><div class="pnum">1</div><div><strong style="font-size:1.08rem;">Découverte du corpus</strong><br><span class="sm mut">Recherche large dans le KG, Qdrant, les passages et les œuvres candidates</span></div><div class="badge bk" style="margin-left:auto;font-size:.82rem;">PostgreSQL + Qdrant</div></div>
+      <div class="pstep"><div class="pnum">1</div><div><strong style="font-size:1.08rem;">Découverte du corpus</strong><br><span class="sm mut">Recherche large dans le KG, les passages et les œuvres candidates</span></div><div class="badge bk" style="margin-left:auto;font-size:.82rem;">PostgreSQL</div></div>
       <div class="parr">&#8595;</div>
       <div class="pstep"><div class="pnum">2</div><div><strong style="font-size:1.08rem;">Carnet de recherche</strong><br><span class="sm mut">Facettes, hypothèses, priorités de lecture et budget de contexte</span></div><div class="badge bo" style="margin-left:auto;font-size:.82rem;">raisonnement</div></div>
       <div class="parr">&#8595;</div>
@@ -699,9 +699,9 @@ p,.body{font-size:1.7rem;line-height:1.55;}
         <p style="font-size:1rem;line-height:1.48;">Il formule des hypothèses, choisit les sections utiles, produit des notes de lecture et rédige la synthèse.</p>
       </div>
       <div class="gc" style="padding:1.35rem;">
-        <div class="badge bo" style="margin-bottom:.7rem;font-size:.9rem;">PostgreSQL + Qdrant + index arborescent</div>
+        <div class="badge bo" style="margin-bottom:.7rem;font-size:.9rem;">PostgreSQL + index arborescent</div>
         <h3 style="margin:.1rem 0 .45rem;font-size:1.75rem;">La bibliothèque</h3>
-        <p style="font-size:1rem;line-height:1.48;">Cette couche donne accès aux textes, aux relations, aux embeddings et à la structure hiérarchique des œuvres.</p>
+        <p style="font-size:1rem;line-height:1.48;">Cette couche donne accès aux textes, aux relations, aux citations et à la structure hiérarchique des œuvres.</p>
       </div>
       <div class="gc" style="padding:1.35rem;">
         <div class="badge bo" style="margin-bottom:.7rem;font-size:.9rem;">Graphe de recherche</div>
@@ -793,8 +793,8 @@ p,.body{font-size:1.7rem;line-height:1.55;}
       </div>
       <div class="lc f fc g3">
         <div style="font-weight:700;color:var(--orange-600);font-size:1.15rem;">Sémantique</div>
-        <p class="sm" style="color:var(--stone-600);">Vecteurs Qdrant (embeddings Gemini). Similarité de sens.</p>
-        <div class="cb xs">qdrant.search(embed("libre arbitre"))</div>
+        <p class="sm" style="color:var(--stone-600);">Citations KG, lemmes et plein texte. Récupération sans vecteurs.</p>
+        <div class="cb xs">sqlstrategy.search("libre arbitre")</div>
       </div>
     </div>
     <div class="f ac jc g4 mt4 fr8">
@@ -829,7 +829,7 @@ p,.body{font-size:1.7rem;line-height:1.55;}
       <div class="gc f fc ac g4 tc">
         <div class="fl" style="background:#6366f1;">I</div>
         <strong style="font-size:1.15rem;">Interopérable</strong>
-        <p class="xs mut">URN CTS (Perseus/TLG/PHI) · JSON · PostgreSQL + Qdrant</p>
+        <p class="xs mut">URN CTS (Perseus/TLG/PHI) · JSON · PostgreSQL</p>
       </div>
       <div class="gc f fc ac g4 tc">
         <div class="fl" style="background:var(--emerald-500);">R</div>
@@ -849,9 +849,9 @@ p,.body{font-size:1.7rem;line-height:1.55;}
     <div class="gr2 mt2" style="gap:1.1rem;">
       <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Interface</strong><span class="sm" style="color:var(--stone-600);">React 19 · TypeScript · Tailwind CSS · Cosmograph (graphe GPU)</span></div>
       <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Orchestration Python</strong><span class="sm" style="color:var(--stone-600);">FastAPI · Python 3.11+ · pydantic-graph FSM · scoring, budget tokens, grounding programmatique</span></div>
-      <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Bases de données</strong><span class="sm" style="color:var(--stone-600);">PostgreSQL + Qdrant Cloud (17 746 vecteurs nommés, 3072 dimensions)</span></div>
+      <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Bases de données</strong><span class="sm" style="color:var(--stone-600);">PostgreSQL (textes, KG, citations, index lemmatiques)</span></div>
       <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Modèles</strong><span class="sm" style="color:var(--stone-600);">Gemini (synthèse + cache de prompt) · Kimi K2.5 (raisonnement étendu, 4 nœuds) · OpenRouter/gpt-oss en secours</span></div>
-      <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Déploiement</strong><span class="sm" style="color:var(--stone-600);">Docker Compose · Cloudflare · Vercel</span></div>
+      <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Déploiement</strong><span class="sm" style="color:var(--stone-600);">Docker Compose · Cloudflare</span></div>
       <div class="pc f fc g2"><strong style="color:var(--orange-600);font-size:1.15rem;">Qualité</strong><span class="sm" style="color:var(--stone-600);">262 tests GraphRAG passés · banc d'essai en direct 4/4 · Ruff · mypy · ESLint</span></div>
     </div>
   </div>

@@ -189,7 +189,7 @@ export default function CreditsPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-orange-600">•</span>
-                  <span><strong>Qdrant</strong> - Vector database (Apache 2.0)</span>
+                  <span><strong>pydantic-graph</strong> - Agentic finite-state GraphRAG orchestration (MIT)</span>
                 </li>
               </ul>
             </div>

@@ -1,0 +1,325 @@
+{
+  "site": {
+    "name": "EleutherIA",
+    "origin": "https://free-will.app",
+    "defaultImage": "/og-image.png",
+    "imageWidth": "1280",
+    "imageHeight": "640",
+    "imageAlt": "EleutherIA knowledge graph for ancient free will debates",
+    "author": "Romain Girardi",
+    "authorUrl": "https://free-will.app/about",
+    "authorOrcid": "https://orcid.org/0000-0002-5310-5346",
+    "repository": "https://github.com/romain-girardi-eng/EleutherIA",
+    "doi": "10.5281/zenodo.17379489",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "language": "en",
+    "keywords": "ancient philosophy, free will, determinism, moral responsibility, knowledge graph, GraphRAG, digital humanities, Greek philosophy, Latin texts, Stoicism, Augustine, Aristotle"
+  },
+  "routes": [
+    {
+      "path": "/",
+      "title": "EleutherIA | Ancient Free Will Knowledge Graph",
+      "description": "Explore EleutherIA, a FAIR-aligned knowledge graph and AI research platform for ancient debates on free will, fate, providence, and moral responsibility.",
+      "h1": "Ancient Philosophy Meets Modern AI",
+      "summary": "EleutherIA combines ancient Greek and Latin texts, a curated knowledge graph, vectorless retrieval, and citation-grounded GraphRAG to study 1,200 years of free will debates.",
+      "robots": "index, follow",
+      "changefreq": "weekly",
+      "priority": 1,
+      "schemas": ["website", "dataset", "software", "person"]
+    },
+    {
+      "path": "/how-it-works",
+      "title": "How EleutherIA Works | Knowledge Graph, Vectorless GraphRAG",
+      "description": "Learn how EleutherIA connects knowledge graph modeling, SQL/tree/lemma retrieval, passage citations, and GraphRAG to make ancient free will debates searchable and citable.",
+      "h1": "How EleutherIA Works",
+      "summary": "This page explains the EleutherIA research architecture: source ingestion, knowledge graph curation, vectorless retrieval, hybrid search, and a multi-stage GraphRAG pipeline.",
+      "robots": "index, follow",
+      "changefreq": "monthly",
+      "priority": 0.9,
+      "schemas": ["breadcrumb", "software"]
+    },
+    {
+      "path": "/database",
+      "title": "EleutherIA Database Overview | Ancient Free Will Knowledge Graph",
+      "description": "Browse the structure, corpus coverage, philosophical traditions, and FAIR data model behind the EleutherIA ancient free will database.",
+      "h1": "Database Overview",
+      "summary": "The database organizes authors, works, passages, concepts, arguments, traditions, and citations into a research-grade knowledge graph for ancient free will studies.",
+      "robots": "index, follow",
+      "changefreq": "weekly",
+      "priority": 0.9,
+      "schemas": ["breadcrumb", "dataset"]
+    },
+    {
+      "path": "/visualizer",
+      "title": "Knowledge Graph Visualizer | EleutherIA",
+      "description": "Explore the EleutherIA knowledge graph visually, moving between philosophers, works, concepts, arguments, and source passages in ancient free will debates.",
+      "h1": "Knowledge Graph Visualizer",
+      "summary": "The visualizer lets researchers inspect the structure of the EleutherIA graph and follow relations between ancient authors, concepts, works, and debates.",
+      "robots": "index, follow",
+      "changefreq": "weekly",
+      "priority": 0.75,
+      "schemas": ["breadcrumb", "software"]
+    },
+    {
+      "path": "/graph",
+      "title": "Knowledge Graph Explorer | EleutherIA",
+      "description": "Inspect EleutherIA's graph of ancient free will concepts, sources, philosophers, and arguments through an interactive graph exploration interface.",
+      "h1": "Knowledge Graph Explorer",
+      "summary": "The graph explorer is an alternate entry point into the EleutherIA knowledge graph, built for inspecting relationships across the corpus.",
+      "robots": "index, follow",
+      "changefreq": "weekly",
+      "priority": 0.7,
+      "schemas": ["breadcrumb", "software"]
+    },
+    {
+      "path": "/graphrag",
+      "title": "GraphRAG Q&A for Ancient Free Will | EleutherIA",
+      "description": "Ask citation-grounded research questions about ancient free will, fate, providence, and moral responsibility using EleutherIA's agentic GraphRAG system.",
+      "h1": "Agentic GraphRAG",
+      "summary": "GraphRAG combines retrieval from the ancient text corpus and knowledge graph with structured reasoning to produce scholarly answers with verifiable citations.",
+      "robots": "index, follow",
+      "changefreq": "weekly",
+      "priority": 0.85,
+      "schemas": ["breadcrumb", "software"]
+    },
+    {
+      "path": "/graphrag-showcase",
+      "title": "Agentic GraphRAG for Ancient Philosophy | EleutherIA",
+      "description": "See how EleutherIA's GraphRAG system grounds answers in ancient sources, graph paths, vectorless retrieval, and transparent scholarly evidence.",
+      "h1": "GraphRAG Question Answering",
+      "summary": "The showcase explains how the GraphRAG pipeline retrieves, reasons over, and cites ancient evidence for questions about freedom, fate, and moral agency.",
+      "robots": "index, follow",
+      "changefreq": "monthly",
+      "priority": 0.8,
+      "schemas": ["breadcrumb", "software"]
+    },
+    {
+      "path": "/research",
+      "title": "Live Research Mode | EleutherIA",
+      "description": "Watch EleutherIA's agentic research process assemble evidence, reason over sources, and produce transparent answers for ancient philosophy questions.",
+      "h1": "Live Research",
+      "summary": "Live Research exposes the reasoning workflow behind longer scholarly synthesis, showing how sources and sub-questions are assembled into an answer.",
+      "robots": "index, follow",
+      "changefreq": "monthly",
+      "priority": 0.7,
+      "schemas": ["breadcrumb", "software"]
+    },
+    {
+      "path": "/texts",
+      "title": "Ancient Works Library | EleutherIA",
+      "description": "Browse ancient Greek, Latin, and related works used by EleutherIA to study free will, fate, providence, and moral responsibility.",
+      "h1": "Ancient Works Library",
+      "summary": "The ancient works library provides access to the primary corpus behind the knowledge graph, including classical, Hellenistic, imperial, and late antique sources.",
+      "robots": "index, follow",
+      "changefreq": "weekly",
+      "priority": 0.9,
+      "schemas": ["breadcrumb", "collection"]
+    },
+    {
+      "path": "/bibliography",
+      "title": "Bibliography on Ancient Free Will | EleutherIA",
+      "description": "Explore the modern scholarship cited by EleutherIA, including secondary literature on ancient philosophy, theology, determinism, and moral responsibility.",
+      "h1": "Bibliography",
+      "summary": "The bibliography records secondary scholarship used to interpret and contextualize ancient free will debates across the EleutherIA corpus.",
+      "robots": "index, follow",
+      "changefreq": "monthly",
+      "priority": 0.75,
+      "schemas": ["breadcrumb", "collection"]
+    },
+    {
+      "path": "/about",
+      "title": "About EleutherIA | Romain Girardi",
+      "description": "Learn about EleutherIA, Romain Girardi's FAIR-aligned scholarly platform for ancient free will debates, knowledge graphs, and GraphRAG research.",
+      "h1": "About EleutherIA",
+      "summary": "EleutherIA is developed by Romain Girardi as a digital humanities research platform for studying ancient debates about free will, fate, and moral responsibility.",
+      "robots": "index, follow",
+      "changefreq": "monthly",
+      "priority": 0.8,
+      "schemas": ["breadcrumb", "person", "dataset"]
+    },
+    {
+      "path": "/credits",
+      "title": "Credits and Attributions | EleutherIA",
+      "description": "Review EleutherIA's open-source dependencies, text sources, data attributions, licensing context, and scholarly infrastructure credits.",
+      "h1": "Credits and Attributions",
+      "summary": "The credits page documents the open-source tools, datasets, text repositories, licenses, and standards that support the EleutherIA platform.",
+      "robots": "index, follow",
+      "changefreq": "monthly",
+      "priority": 0.55,
+      "schemas": ["breadcrumb"]
+    },
+    {
+      "path": "/recherches",
+      "title": "Published Research Questions | EleutherIA",
+      "description": "Browse published EleutherIA research questions and citation-grounded answers about ancient free will, fate, providence, and moral responsibility.",
+      "h1": "Published Researches",
+      "summary": "Published research pages collect questions explored with EleutherIA and preserve source-grounded answers for reuse by the scholarly community.",
+      "robots": "index, follow",
+      "changefreq": "weekly",
+      "priority": 0.75,
+      "schemas": ["breadcrumb", "collection"]
+    },
+    {
+      "path": "/contributions",
+      "title": "Community Contributions | EleutherIA",
+      "description": "Explore scholarly contributions submitted to EleutherIA to enrich the knowledge graph with articles, proposals, and curated evidence.",
+      "h1": "Community Contributions",
+      "summary": "Community contributions let researchers add scholarship and structured proposals that can improve EleutherIA's knowledge graph and citations.",
+      "robots": "index, follow",
+      "changefreq": "weekly",
+      "priority": 0.65,
+      "schemas": ["breadcrumb", "collection"]
+    },
+    {
+      "path": "/passages-canoniques",
+      "title": "Canonical Free Will Passages | EleutherIA Reception Map",
+      "description": "Discover the canonical ancient passages most frequently used in EleutherIA research on free will, fate, providence, and moral responsibility.",
+      "h1": "Canonical Passages",
+      "summary": "The reception map highlights loci classici: ancient passages repeatedly cited in research answers and central to the history of free will debates.",
+      "robots": "index, follow",
+      "changefreq": "weekly",
+      "priority": 0.9,
+      "schemas": ["breadcrumb", "collection"]
+    },
+    {
+      "path": "/report-error",
+      "title": "Report a Scholarly Error | EleutherIA",
+      "description": "Report philological, bibliographic, or structural errors in EleutherIA so the research database can remain accurate and transparent.",
+      "h1": "Report an Error",
+      "summary": "This utility page lets readers submit corrections to improve the quality and reliability of the EleutherIA research infrastructure.",
+      "robots": "noindex, nofollow",
+      "changefreq": "yearly",
+      "priority": 0,
+      "schemas": []
+    },
+    {
+      "path": "/login",
+      "title": "Sign In | EleutherIA",
+      "description": "Sign in to EleutherIA.",
+      "h1": "Sign In",
+      "summary": "Authentication page for EleutherIA users.",
+      "robots": "noindex, nofollow",
+      "changefreq": "yearly",
+      "priority": 0,
+      "schemas": []
+    },
+    {
+      "path": "/admin",
+      "title": "Admin Dashboard | EleutherIA",
+      "description": "Administrative tools for EleutherIA.",
+      "h1": "Admin Dashboard",
+      "summary": "Private administrative area for EleutherIA.",
+      "robots": "noindex, nofollow",
+      "changefreq": "yearly",
+      "priority": 0,
+      "schemas": []
+    },
+    {
+      "path": "/profile",
+      "title": "User Profile | EleutherIA",
+      "description": "EleutherIA user profile.",
+      "h1": "User Profile",
+      "summary": "User profile area for EleutherIA accounts.",
+      "robots": "noindex, nofollow",
+      "changefreq": "yearly",
+      "priority": 0,
+      "schemas": []
+    },
+    {
+      "path": "/contribuer",
+      "title": "Contribute | EleutherIA",
+      "description": "Authenticated contribution workflow for EleutherIA.",
+      "h1": "Contribute",
+      "summary": "Authenticated contribution workflow for adding scholarly material to EleutherIA.",
+      "robots": "noindex, nofollow",
+      "changefreq": "yearly",
+      "priority": 0,
+      "schemas": []
+    },
+    {
+      "path": "/community/contribute",
+      "title": "Submit a Correction | EleutherIA",
+      "description": "Submit a scholarly correction to EleutherIA.",
+      "h1": "Submit Correction",
+      "summary": "Correction submission page for the EleutherIA community.",
+      "robots": "noindex, nofollow",
+      "changefreq": "yearly",
+      "priority": 0,
+      "schemas": []
+    }
+  ],
+  "prefixRules": [
+    {
+      "prefix": "/texts/",
+      "title": "Ancient Text Reader | EleutherIA",
+      "description": "Read an ancient work in EleutherIA with canonical references, source passages, and knowledge graph links.",
+      "h1": "Ancient Text Reader",
+      "summary": "EleutherIA text reader pages connect primary source passages to the knowledge graph.",
+      "robots": "index, follow",
+      "schemas": ["breadcrumb", "creativeWork"]
+    },
+    {
+      "prefix": "/recherches/",
+      "title": "Published Research Answer | EleutherIA",
+      "description": "Read a published EleutherIA research answer grounded in ancient sources and knowledge graph evidence.",
+      "h1": "Published Research Answer",
+      "summary": "Public research detail pages preserve citation-grounded answers generated through EleutherIA.",
+      "robots": "index, follow",
+      "schemas": ["breadcrumb", "article"]
+    },
+    {
+      "prefix": "/contributions/",
+      "title": "Scholarly Contribution | EleutherIA",
+      "description": "Review a scholarly contribution submitted to EleutherIA for knowledge graph enrichment.",
+      "h1": "Scholarly Contribution",
+      "summary": "Contribution detail pages document scholarship submitted to improve EleutherIA.",
+      "robots": "index, follow",
+      "schemas": ["breadcrumb", "article"]
+    },
+    {
+      "prefix": "/passages-canoniques/",
+      "title": "Canonical Passage Detail | EleutherIA",
+      "description": "Inspect a canonical ancient passage and its role in EleutherIA research on free will and moral responsibility.",
+      "h1": "Canonical Passage Detail",
+      "summary": "Canonical passage detail pages explain why a source passage is central to the corpus.",
+      "robots": "index, follow",
+      "schemas": ["breadcrumb", "creativeWork"]
+    },
+    {
+      "prefix": "/visualizer/",
+      "title": "Knowledge Graph Node | EleutherIA",
+      "description": "Inspect a knowledge graph node in EleutherIA's map of ancient free will debates.",
+      "h1": "Knowledge Graph Node",
+      "summary": "Node detail pages expose the graph context around a person, work, concept, argument, or source passage.",
+      "robots": "index, follow",
+      "schemas": ["breadcrumb"]
+    },
+    {
+      "prefix": "/graph/",
+      "title": "Knowledge Graph Node | EleutherIA",
+      "description": "Inspect a knowledge graph node in EleutherIA's map of ancient free will debates.",
+      "h1": "Knowledge Graph Node",
+      "summary": "Node detail pages expose the graph context around a person, work, concept, argument, or source passage.",
+      "robots": "index, follow",
+      "schemas": ["breadcrumb"]
+    },
+    {
+      "prefix": "/profile/",
+      "title": "User Profile | EleutherIA",
+      "description": "EleutherIA user profile.",
+      "h1": "User Profile",
+      "summary": "User profile area for EleutherIA accounts.",
+      "robots": "noindex, nofollow",
+      "schemas": []
+    },
+    {
+      "prefix": "/share/",
+      "title": "Shared Research Trace | EleutherIA",
+      "description": "Read a shared EleutherIA research trace.",
+      "h1": "Shared Research Trace",
+      "summary": "Shared research traces expose reproducible answer evidence when explicitly shared.",
+      "robots": "noindex, nofollow",
+      "schemas": []
+    }
+  ]
+}

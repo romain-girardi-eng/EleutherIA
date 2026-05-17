@@ -65,8 +65,8 @@
 
 **Hybrid top-down / bottom-up approach:**
 - Formal ontology in `knowledge graph/ontology/` (JSON, version 3.0.0)
-- **22 node types:** person, concept, argument, work, school, passage, debate, position, event, institution, text_fragment, modern_interpretation, term, source_collection, doctrine, publication, quote, synthesis, controversy, conceptual_evolution, group, argument_framework
-- **56 relation types** in **12 categories:** Argumentative (argues_for/against, refutes, responds_to, supports, critiques), Intellectual (influences, taught_by, student_of, extends), Affiliation (belongs_to_school, member_of, founded), Authorship (wrote, authored_by, created_by), Citation (cites, source_for, evidenced_by), Textual (preserves, preserved_in), Structural (contains, part_of, translation_of), Semantic (discusses, defines, related_to, contrasts_with, employs, presupposes), Doctrinal (holds_position, endorses, rejects), Debate (participates_in, contributes_to), Hermeneutic (interprets, represents, exemplifies), Temporal (contemporary_of, precedes, follows)
+- **24 node types:** person, concept, argument, argument_framework, argument_reconstruction, work, school, passage, debate, position, event, institution, text_fragment, textual_variant, modern_interpretation, term, source_collection, doctrine, publication, quote, synthesis, controversy, conceptual_evolution, group
+- **75 edge types** in the formal ontology, including argumentative, intellectual, affiliation, authorship, citation, textual, structural, semantic, doctrinal, debate, hermeneutic, temporal, and reconstruction relations
 
 ### Q: Who validates the relations?
 
@@ -107,12 +107,14 @@
 - **ORCID:** `0000-0002-5310-5346`
 - **CC BY 4.0**
 
-**What does not exist yet:**
-- No native RDF/OWL/Turtle export of the KG — the CLI has a stub `--format rdf` that prints "not yet implemented"
-- Ontology is in JSON, not OWL/RDFS
-- No CIDOC-CRM mapping
+**Semantic layer now delivered:**
+- Native KG export to Turtle, JSON-LD, and N-Triples.
+- Current RDF export: **200,275 triples** from **19,081 nodes** and **43,649 edges**.
+- Ontology aligned with CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, BIBO, and Wikidata IRIs.
+- SHACL validation gate covers invariants and quality shapes.
+- OWL-RL restricted inference materializes inverse and transitive facts with proof chains.
 
-**Honest answer:** The JSON ontology is designed to be convertible to OWL (types, source/target constraints are documented). RDF export is on the roadmap. CodeMeta is already valid JSON-LD. Current priority is corpus completeness and data quality.
+**Honest answer:** FAIR interoperability is implemented for the KG through RDF/OWL/SHACL exports and validation. The JSON ontology remains the canonical editable source, while the semantic layer provides W3C-standard publication and reasoning outputs.
 
 ---
 
@@ -125,7 +127,7 @@
 - **Fallback chain (normal mode):** Gemini → Kimi (`kimi-latest`, 20 req/min) → OpenRouter (`google/gemini-3-flash-preview`, 60 req/min)
 - **Fallback chain (thinking mode):** Gemini → OpenRouter → Kimi (for extended reasoning)
 - **Gemini prompt caching:** SHA-256 cache key, 15 min TTL, minimum threshold 4096 tokens (pro) / 1024 (flash) — reduces costs on repeated queries
-- **Embedding:** `models/gemini-embedding-001` (3072 dimensions, Matryoshka Representation Learning)
+- **Retrieval:** vectorless SQLStrategy (lemma expansion, tree routing, KG label/description match, `passage_citations`, full-text/lemmatic RRF)
 
 ### Q: How do you prevent hallucinations?
 
@@ -152,7 +154,7 @@
 2.  ExpandQuery           → Expansion with Greek/Latin terms, philosophers, concepts, schools
                             Skipped for SPECIFIC_ENTITY/SIMPLE
 
-3.  DiscoverCorpus        → Broad search: KG nodes + linked passages via Qdrant
+3.  DiscoverCorpus        → Broad vectorless discovery: KG nodes + linked passages via SQL/tree/lemma retrieval
 
 4.  BuildResearchNotebook → Research framing (LLM)
 
@@ -181,37 +183,24 @@
 - Simple (SPECIFIC_ENTITY): **1-2 calls** (DraftClaimLedger + RenderGroundedAnswer)
 - Complex (COMPARATIVE/TEMPORAL): **up to 11 calls** (classification, expansion, framing, reading plan, navigation ×N, counter-evidence, sufficiency, claims, render, polish)
 
-### Q: Embedding model? Performance on ancient Greek?
+### Q: How does retrieval handle ancient Greek without embeddings?
 
-- **Model:** `models/gemini-embedding-001` (Google)
-- **Dimensions:** 3072 (configurable via `EMBEDDING_DIMENSIONS`)
-- **Distance:** Cosine (Qdrant)
-- **Matryoshka Representation Learning** — allows truncating vectors to lower dimensions if needed
-
-**Qdrant collections (6):**
-
-| Collection | Usage |
-|---|---|
-| `kg_nodes_dual` | Production, named vector "gemini" (preferred) |
-| `kg_nodes_gemini` | Legacy, fallback |
-| `ancient_free_will_vectors` | Historical, fallback filtered by `node_id` |
-| `text_embeddings` | Passage embeddings |
-| `passages_contextual` | Passages re-embedded with contextual header (author/work/period) — **preferred** |
-| `kg_edges` | Edge embeddings |
-
-**Ancient Greek performance:** The Gemini model is multilingual and handles polytonic Greek. The `passages_contextual` collection improves results by adding context (author, work, period) before the Greek text during embedding, which disambiguates polysemous terms.
+- **Lemma expansion:** Greek and Latin forms are expanded before lookup.
+- **Tree routing:** author/work mentions resolve to hierarchical sections and passage anchors.
+- **KG label/description matching:** SQL matches concepts, persons, works, and arguments directly.
+- **passage_citations:** curated KG-to-passage links are the primary evidence bridge.
+- **Full-text + lemmatic RRF:** PostgreSQL merges textual signals without a vector database.
 
 ### Q: Hybrid search — how does it work?
 
-**3 modes merged by Reciprocal Rank Fusion (RRF, k=60):**
+**2 textual modes merged by Reciprocal Rank Fusion (RRF, k=60), plus KG/passage citation routing in GraphRAG:**
 
 1. **Full-text** (PostgreSQL): `to_tsvector('simple')` + `plainto_tsquery('simple')` + `ts_rank()` — `'simple'` config for language-agnostic matching of Greek/Latin
 2. **Lemmatic:** JSONB query `passages.morphology @> '[{"l": "<lemma>"}]'` — searches the pre-computed morphological cache
-3. **Semantic:** Gemini embedding of the query → Qdrant search → normalized scores
 
 RRF formula: `score(d) = Σ 1/(k + rank_i(d))` — results present in multiple lists have their source concatenated (e.g., "fulltext, lemmatic").
 
-Toggleable flags: `enable_fulltext`, `enable_lemmatic`, `enable_semantic` on `POST /search/hybrid`.
+Toggleable flags: `enable_fulltext`, `enable_lemmatic`; `enable_semantic` is retained as a no-op compatibility field on `POST /search/hybrid`.
 
 ---
 
@@ -254,15 +243,15 @@ Dedicated Phase 12 — **41 nodes** where "compatibilism/incompatibilism" was pr
 
 | Mode | Stack | Usage |
 |---|---|---|
-| **Local** | Docker Compose (PostgreSQL 16-alpine, Qdrant 1.13.3, FastAPI, Nginx) | Development |
-| **Production Docker** | Supabase (pgbouncer:6543, SSL) + Qdrant Cloud + Docker backend/frontend | Staging |
-| **Production live** | **Cloudflare Workers** (Hono, TypeScript) + Supabase + Qdrant Cloud | `free-will.app` |
+| **Local** | Docker Compose (PostgreSQL 16-alpine, FastAPI, Nginx) | Development |
+| **Production Docker** | Supabase (pgbouncer:6543, SSL) + Docker backend/frontend | Staging |
+| **Production live** | the platform Docker Compose + Cloudflare tunnel + Supabase | `free-will.app` |
 
 **Docker Compose:**
 - 4 core services + 3 optional (pgAdmin 8, Prometheus 2.51, Grafana 10.4)
 - Isolated networks: `internal` (bridge, no external access), `frontend` (backend+frontend), `monitoring`
 - Security: `read_only: true`, `no-new-privileges`, tmpfs for `/tmp`
-- Memory limits: Postgres 1G, Qdrant 2G, Backend 1G/2CPU, Frontend 256M/1CPU
+- Memory limits: Postgres 1G, Backend 1G/2CPU, Frontend 256M/1CPU
 
 **Cloudflare Workers (production):**
 - Hono framework, full TypeScript services: GraphRAG agentic/hierarchical/workflow, KG, cache, auth
@@ -284,7 +273,7 @@ Dedicated Phase 12 — **41 nodes** where "compatibilism/incompatibilism" was pr
 1. `git clone` + `cp .env.example .env` + add API key(s)
 2. `docker compose -f deploy/docker-compose.yml up`
 3. Full dataset on Zenodo (`10.5281/zenodo.17379489`)
-4. **Gap:** Qdrant embeddings are not in the Zenodo dataset — must re-embed with `scripts/reembed_kg_nodes.py` (requires a Gemini key)
+4. **No vector artifact gap:** retrieval is reproducible from PostgreSQL data, KG snapshots, `passage_citations`, and lemmatic/full-text indexes.
 
 ---
 
@@ -294,7 +283,7 @@ Dedicated Phase 12 — **41 nodes** where "compatibilism/incompatibilism" was pr
 
 - **React 19.1** + **TypeScript 5.9** + **Vite 7.1**
 - **Cosmograph** (2D graph visualization, GPU-accelerated)
-- **Three.js / React Three Fiber** (3D semantic embedding space)
+- **Three.js / React Three Fiber** (3D concept map / exploratory visualization)
 - **D3.js 7** (timelines, charts)
 - **Framer Motion 12** (animations)
 - **Radix UI + Tailwind CSS** (UI components)
@@ -348,10 +337,11 @@ Dedicated Phase 12 — **41 nodes** where "compatibilism/incompatibilism" was pr
 
 | Metric | Value |
 |---|---|
-| KG nodes | 17,746 |
-| KG edges | 42,925 |
-| Node types | 22 |
-| Relation types | 56 (12 categories) |
+| KG nodes | 19,081 |
+| KG edges | 43,649 |
+| Node types | 24 |
+| Edge types | 75 |
+| RDF triples | 200,275 |
 | Works | 487 |
 | Passages | 69,277 |
 | Passage-KG citations | 13,293 |
@@ -359,10 +349,9 @@ Dedicated Phase 12 — **41 nodes** where "compatibilism/incompatibilism" was pr
 | UI languages | 5 (EN, FR, DE, IT, EL) |
 | Temporal coverage | ~1,200 years (6th c. BCE → 6th c. CE) |
 | Tests | 330+ (208 Python + 122 TypeScript) |
-| Embedding dimensions | 3,072 (Gemini, cosine) |
+| Production embedding dimensions | 0 (vectorless retrieval) |
 | Max LLM context | 1M tokens (850k available) |
 | Passage bundle budget | 552,500 tokens (65% of budget) |
-| Qdrant collections | 6 |
 | DOI | 10.5281/zenodo.17379489 |
 | License | CC BY 4.0 |
 | ORCID | 0000-0002-5310-5346 |

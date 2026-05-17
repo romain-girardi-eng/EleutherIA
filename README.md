@@ -33,7 +33,7 @@ EleutherIA unifies three systems into one platform:
 
 **1. Ancient Texts Corpus** -- 487 works, 69,000+ passages in Greek, Latin, and English with lemmatization, CTS URN referencing, and hierarchical structure from Presocratic fragments to Boethius's *Consolation*.
 
-**2. Knowledge Graph** -- 17,700+ nodes and 42,900+ edges mapping philosophers, concepts, arguments, schools, and works with 56 relation types across 12 categories. A dual-layer architecture separates ancient primary sources from modern scholarly reception.
+**2. Knowledge Graph** -- 19,081 nodes and 43,649 edges mapping philosophers, concepts, arguments, schools, and works with 75 edge types. A dual-layer architecture separates ancient primary sources from modern scholarly reception.
 
 **3. Agentic GraphRAG** -- A 12-node reasoning engine (pydantic-graph FSM) that decomposes complex scholarly questions, retrieves evidence across the knowledge graph and text corpus, synthesizes answers with verified citations, and self-evaluates quality, all grounded in actual ancient sources with zero fabrication.
 
@@ -101,7 +101,7 @@ eleutheria shell            # Interactive mode
 ```
 EleutherIA/
 ├── database/       Ancient texts corpus (487 works, 69k passages)
-├── knowledge graph/  Knowledge graph (17.7k nodes, 42.9k edges)
+├── knowledge graph/  Knowledge graph (19,081 nodes, 43,649 edges)
 ├── graphrag/       Agentic RAG engine (12-node FSM, multi-LLM)
 ├── backend/        FastAPI gateway (auth, search, migrations)
 ├── frontend/       React 19 app (graph viz, search, i18n)
@@ -115,9 +115,9 @@ EleutherIA/
 
 | Package | Purpose |
 |---------|---------|
-| [`database/`](database/) | Ancient Greek/Latin texts corpus with PostgreSQL, lemmatization, and hybrid search (full-text + lemmatic + semantic, merged via RRF) |
-| [`knowledge graph/`](knowledge%20graph/) | FAIR-compliant knowledge graph with Qdrant vector embeddings, community detection, centrality analytics, a formal ontology (22 node types, 58 edge types), and a neurosymbolic layer (RDF/OWL/SHACL exports aligned on CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, BIBO, Wikidata) |
-| [`graphrag/`](graphrag/) | Agentic query engine: 12-node pydantic-graph FSM with query decomposition, multi-hop retrieval, CRAG validation, dual reranking, citation verification, and self-RAG refinement |
+| [`database/`](database/) | Ancient Greek/Latin texts corpus with PostgreSQL, lemmatization, and hybrid text search (full-text + lemmatic, merged via RRF) |
+| [`knowledge graph/`](knowledge%20graph/) | FAIR-compliant knowledge graph with community detection, centrality analytics, a formal ontology (24 node types, 75 edge types), and a neurosymbolic layer (RDF/OWL/SHACL exports aligned on CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, BIBO, Wikidata) |
+| [`graphrag/`](graphrag/) | Agentic query engine: 12-node pydantic-graph FSM with vectorless SQL/tree/lemma discovery, multi-hop retrieval, CRAG validation, reranking, citation verification, and self-RAG refinement |
 
 Each package can be installed and used independently.
 
@@ -127,11 +127,11 @@ Each package can be installed and used independently.
 |------------|---------|
 | **Agentic reasoning** | 12-node finite state machine routes queries by complexity, decomposes multi-hop questions, and iteratively refines answers |
 | **Multi-LLM orchestration** | Gemini (gemini-3.1-pro-preview, 1M token context) + Kimi K2.5 Thinking (extended reasoning) + OpenRouter fallback with automatic failover |
-| **Hybrid search** | Full-text (PostgreSQL ts_rank) + lemmatic (Greek/Latin morphology) + semantic (Qdrant vectors), merged via Reciprocal Rank Fusion |
+| **Hybrid search** | Full-text (PostgreSQL ts_rank) + lemmatic (Greek/Latin morphology), merged via Reciprocal Rank Fusion |
 | **Citation verification** | Post-generation check that every citation maps to an actual passage in the database; zero tolerance for fabricated ancient text |
 | **Neurosymbolic reasoning** | OWL2-RL forward-chaining (inverse + transitive closure on `part_of`/`contains`/`belongs_to_corpus`) materialises ~40k inferred facts in &lt;1 s; SHACL validation gate catches data invariants on every snapshot; claim ledger carries proof chains showing how each inferred fact was derived |
-| **FAIR / Linked Data export** | One-command Turtle, JSON-LD, and N-Triples export of the full KG (~158k triples) aligned on CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, BIBO; persistent dereferenceable IRIs under `https://free-will.app/kg/` |
-| **Interactive visualization** | Cosmograph GPU-accelerated graph (17k+ nodes), D3.js timelines, Three.js 3D embeddings, community detection overlays |
+| **FAIR / Linked Data export** | One-command Turtle, JSON-LD, and N-Triples export of the full KG (200,275 RDF triples) aligned on CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, BIBO; persistent dereferenceable IRIs under `https://free-will.app/kg/` |
+| **Interactive visualization** | Cosmograph GPU-accelerated graph (19k+ nodes), D3.js timelines, curated 3D concept maps, community detection overlays |
 | **Dual-layer KG** | Primary layer (ancient sources) separated from secondary layer (modern scholarship), enabling source-vs-interpretation distinction |
 | **Internationalization** | Full UI in English, French, German, Italian, and Modern Greek |
 | **Streaming answers** | Server-Sent Events for real-time answer generation with source attribution |
@@ -140,10 +140,10 @@ Each package can be installed and used independently.
 
 | Layer | Technologies |
 |-------|-------------|
-| **Backend** | FastAPI, Python 3.11+, PostgreSQL 16, Qdrant, Alembic |
+| **Backend** | FastAPI, Python 3.11+, PostgreSQL 16, Alembic |
 | **Frontend** | React 19, TypeScript, Vite, Tailwind CSS, Cosmograph, D3.js, Three.js, Framer Motion, react-i18next |
 | **LLM** | Gemini (gemini-3.1-pro-preview, primary), Kimi K2.5 Thinking (extended reasoning), OpenRouter (fallback) |
-| **Search** | PostgreSQL GIN indexes, Qdrant vector DB, Reciprocal Rank Fusion |
+| **Search** | PostgreSQL GIN indexes, lemmatic indexes, tree routing, passage_citations, Reciprocal Rank Fusion |
 | **Deployment** | Docker Compose (local), the platform compose + Cloudflare tunnel (production API, worker, public SPARQL), hosted SPA at `free-will.app` |
 | **Quality** | Ruff, mypy, ESLint, Vitest, pytest (330+ tests), pre-commit hooks |
 
@@ -151,12 +151,13 @@ Each package can be installed and used independently.
 
 | Metric | Count |
 |--------|-------|
-| Knowledge graph nodes | 17,746 |
-| Knowledge graph edges | 42,925 |
+| Knowledge graph nodes | 19,081 |
+| Knowledge graph edges | 43,649 |
 | Ancient works | 487 |
 | Text passages | 69,277 |
-| Node types | 22 |
-| Relation types | 56 (12 categories) |
+| Node types | 24 |
+| Edge types | 75 |
+| RDF triples | 200,275 |
 | Passage citations | 13,293 |
 | Supported languages | 5 (EN, FR, DE, IT, EL) |
 

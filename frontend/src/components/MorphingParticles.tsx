@@ -3,9 +3,9 @@
  *
  * Advanced morphing particle system for EleutherIA, transitions between:
  * - Knowledge Graph (clustered nodes with edges)
- * - Semantic Search Paths (query expansion from center)
+ * - Retrieval Paths (query expansion from center)
  * - Reasoning Chains (branching inference paths)
- * - Embedding Space (vector cloud visualization)
+ * - Concept Map (curated graph-cloud visualization)
  * - Query Burst (search radiating outward)
  *
  * Morphing particle effects adapted for GraphRAG visualization.
@@ -274,7 +274,7 @@ const rainbowPalette = [
 ];
 
 // ============================================================================
-// SHAPE GENERATORS - GraphRAG / Semantic Search themed
+// SHAPE GENERATORS - GraphRAG / retrieval themed
 // ============================================================================
 
 type ShapeData = { pos: THREE.Vector3; normal: THREE.Vector3 };
@@ -407,7 +407,7 @@ const generateKnowledgeGraph: ShapeGenerator = (index, total) => {
   return { pos, normal };
 };
 
-/** Semantic Search Paths - Query expanding into multiple search directions */
+/** Retrieval Paths - Query expanding into multiple search directions */
 const generateSemanticPaths: ShapeGenerator = (index, total) => {
   const numPaths = 12; // Search paths from query
   const pathIndex = index % numPaths;

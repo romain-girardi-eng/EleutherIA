@@ -143,7 +143,7 @@ CREATE INDEX IF NOT EXISTS idx_passage_relationships_type ON passage_relationshi
 -- Views for Search Optimization
 -- ============================================
 
--- passage_search: Lightweight view for search metadata around the stored vector
+-- passage_search: Lightweight view for search metadata around PostgreSQL tsvector
 CREATE OR REPLACE VIEW passage_search AS
 SELECT
     p.passage_id,

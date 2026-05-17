@@ -11,8 +11,10 @@ from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.react_loop import (
     AgentLoop,
     _compress_old_results,
+    _count_results,
     _parse_action,
     _summarize_result,
+    _touched_node_ids,
 )
 from eleutheria_graphrag.agents.sse_emitter import NullEmitter
 from eleutheria_graphrag.agents.state import QueryComplexity, RAGState
@@ -160,6 +162,21 @@ class TestSummarizeResult:
         s = _summarize_result("search_nodes", {"error": "DB down"}, True)
         assert "Error" in s
         assert "DB down" in s
+
+    def test_infer_transitive(self):
+        result = {
+            "start_node_id": "work_republic",
+            "start_label": "Republic",
+            "relation": "authored_by",
+            "derived_nodes": [{"node_id": "person_plato", "label": "Plato"}],
+        }
+        s = _summarize_result("infer_transitive", result, False)
+        assert "Inferred 1 authored_by nodes" in s
+        assert _count_results("infer_transitive", result) == (1, 0)
+        assert _touched_node_ids("infer_transitive", result) == [
+            "work_republic",
+            "person_plato",
+        ]
 
 
 # ── _compress_old_results tests ──────────────────────────────────────────
