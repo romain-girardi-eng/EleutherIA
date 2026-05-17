@@ -36,7 +36,7 @@ dependencies = [
     "eleutheria-kg>=2.0.0",
     "pydantic>=2.10.0",
     "httpx>=0.28.0",
-    "pydantic-ai[graph]>=1.0.0",
+    "pydantic-ai[graph]>=1.56.0",  # <1.56: GHSA-2jrp-274c-jhv3 (CVSS 8.6) — large jump from 1.0; verify agent flow
     # Runtime proof-chain reconstruction imports eleutheria_kg.semantic.proof,
     # whose lightweight path needs rdflib even when SHACL/owlrl are absent.
     "rdflib>=7.1.1",
@@ -44,7 +44,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=9.0.0",
+    "pytest>=9.0.3",  # <9.0.3: GHSA-6w46-j5rx-g56g
     "pytest-asyncio>=1.0.0",
     "pytest-cov>=7.0.0",
     "ruff>=0.15.0",

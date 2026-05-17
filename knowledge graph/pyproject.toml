@@ -39,7 +39,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=9.0.0",
+    "pytest>=9.0.3",  # 9.0.0-9.0.2: GHSA-6w46-j5rx-g56g (CVSS 6.8)
     "pytest-asyncio>=1.0.0",
     "pytest-cov>=7.0.0",
     "ruff>=0.15.0",
@@ -54,7 +54,7 @@ dev = [
     # TEI XML from First1KGreek. tests/unit/test_chrysippus_svf_extractor.py
     # and tests/unit/test_cleanthes_extractor.py import those scripts at
     # collection time, so lxml must be importable in CI.
-    "lxml>=5.0.0",
+    "lxml>=6.1.0",  # 5.x has GHSA-vfmq-68hx-4jfw (CVSS 7.5)
     # Root-level scripts/generate_provenance_figures.py imports matplotlib
     # to render the Amand-Stoic 6×4 heatmap and case-study figures.
     # tests/unit/test_amand_stoic_provenance.py imports that script, so
