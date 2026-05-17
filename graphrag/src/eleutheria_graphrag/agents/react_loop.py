@@ -279,7 +279,8 @@ def _parse_action(raw: str, tools: ToolRegistry) -> AgentAction | None:
     """Parse LLM output into an AgentAction."""
     try:
         parsed = parse_json(raw)
-    except json.JSONDecodeError, ValueError:
+    except (json.JSONDecodeError, ValueError) as _exc:
+        del _exc
         return None
 
     if not isinstance(parsed, dict):
@@ -443,20 +444,14 @@ def _summarize_for_context(tool: str, result: dict[str, Any]) -> str:
         lines = [
             f"- {n.get('node_id', '?')}: {n.get('label', '?')} [{n.get('type', '?')}] "
             f"(distance={n.get('distance', '?')}, derivation={', '.join(n.get('derivation') or [])})"
-            + (
-                f" inferred={n.get('inferred_edge')}"
-                if n.get("inferred_edge")
-                else ""
-            )
+            + (f" inferred={n.get('inferred_edge')}" if n.get("inferred_edge") else "")
             for n in nodes[:50]
         ]
         suffix = "\n- [truncated]" if result.get("truncated") else ""
         return (
             f"Inferred via {result.get('relation', '?')} from "
             f"{result.get('start_label') or result.get('start_node_id', '?')} "
-            f"({len(nodes)} nodes):\n"
-            + "\n".join(lines)
-            + suffix
+            f"({len(nodes)} nodes):\n" + "\n".join(lines) + suffix
         )
 
     return json.dumps(result, default=str, ensure_ascii=False)[:500]

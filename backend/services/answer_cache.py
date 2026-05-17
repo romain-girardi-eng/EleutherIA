@@ -222,7 +222,8 @@ class AnswerCache:
         if trace_id:
             try:
                 trace_uuid = UUID(trace_id)
-            except TypeError, ValueError:
+            except (TypeError, ValueError) as _exc:
+                del _exc
                 trace_uuid = None
 
         try:
@@ -296,7 +297,8 @@ def _coerce_json(value: Any, *, default: Any) -> Any:
     if isinstance(value, str):
         try:
             return json.loads(value)
-        except TypeError, ValueError:
+        except (TypeError, ValueError) as _exc:
+            del _exc
             return default
     return value
 

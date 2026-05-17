@@ -218,7 +218,9 @@ def _proof_chain_for_inferred(
                     continue
                 target_id = edge.get("target") or edge.get("target_id", "")
                 if target_id:
-                    graph.add((mint_node_iri(source_id), prop, mint_node_iri(target_id)))
+                    graph.add(
+                        (mint_node_iri(source_id), prop, mint_node_iri(target_id))
+                    )
         steps = build_proof_chain(graph, (subj_iri, prop, obj_iri))
         chain_steps.extend(serialize_proof_chain(steps))
 

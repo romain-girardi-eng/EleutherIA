@@ -238,7 +238,8 @@ def _as_list_of_dicts(value: Any) -> list[dict[str, Any]]:
 
         try:
             decoded = json.loads(value)
-        except TypeError, ValueError:
+        except (TypeError, ValueError) as _exc:
+            del _exc
             return []
         value = decoded
     if isinstance(value, list):
@@ -254,7 +255,8 @@ def _as_dict(value: Any) -> dict[str, Any]:
 
         try:
             decoded = json.loads(value)
-        except TypeError, ValueError:
+        except (TypeError, ValueError) as _exc:
+            del _exc
             return {}
         value = decoded
     return value if isinstance(value, dict) else {}

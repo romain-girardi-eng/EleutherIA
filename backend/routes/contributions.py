@@ -170,7 +170,8 @@ def _maybe_json(value: Any) -> Any:
     if isinstance(value, str) and value:
         try:
             return json.loads(value)
-        except json.JSONDecodeError, ValueError:
+        except (json.JSONDecodeError, ValueError) as _exc:
+            del _exc
             return None
     return None
 
