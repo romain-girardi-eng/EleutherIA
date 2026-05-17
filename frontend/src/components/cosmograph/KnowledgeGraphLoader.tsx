@@ -144,17 +144,16 @@ export function KnowledgeGraphLoader({
                 src={posterSrc}
                 alt=""
                 aria-hidden="true"
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 h-full w-full object-contain"
               />
             ) : (
               <video
                 ref={videoRef}
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 h-full w-full object-contain"
                 poster={posterSrc}
                 muted
                 playsInline
                 autoPlay
-                loop
                 preload="auto"
                 aria-hidden="true"
                 onCanPlay={() => setVideoReady(true)}
@@ -165,20 +164,6 @@ export function KnowledgeGraphLoader({
               </video>
             )}
 
-            {/* Cinematic vignette (corners) */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(2,6,23,0.75)_100%)]"
-            />
-            {/* Top + bottom letterbox gradients */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-slate-950/80 to-transparent"
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950 via-slate-950/85 to-transparent"
-            />
             {/* Hairline gold border (inside) */}
             <div
               aria-hidden
@@ -194,35 +179,35 @@ export function KnowledgeGraphLoader({
                 transition={{ duration: 1.6, ease: 'easeInOut', repeat: Infinity }}
               />
             )}
-
-            {/* Caption block — anchored to the bottom of the frame */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 px-6 pb-6 sm:px-10 sm:pb-8">
-              <motion.h2
-                className="text-balance text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay: 0.32 }}
-              >
-                {t('cosmograph.loading.title', 'Building the Atlas…')}
-              </motion.h2>
-
-              <div className="mt-2 min-h-[1.5rem] sm:min-h-[1.75rem]">
-                <AnimatePresence mode="wait">
-                  <motion.p
-                    key={messageIndex}
-                    className="text-sm leading-6 text-amber-100/85 sm:text-[15px]"
-                    initial={{ opacity: 0, y: 6, filter: 'blur(4px)' }}
-                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                    exit={{ opacity: 0, y: -6, filter: 'blur(4px)' }}
-                    transition={{ duration: 0.55, ease: EASE_OUT_QUART }}
-                  >
-                    {messages[messageIndex]}
-                  </motion.p>
-                </AnimatePresence>
-              </div>
-            </div>
           </div>
         </div>
+
+        {/* Caption block — below the video frame so it never crops */}
+        <motion.div
+          className="mt-7 flex flex-col items-center text-center"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay: 0.32 }}
+        >
+          <h2 className="text-balance text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl">
+            {t('cosmograph.loading.title', 'Building the Atlas…')}
+          </h2>
+
+          <div className="mt-2 min-h-[1.5rem] sm:min-h-[1.75rem]">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={messageIndex}
+                className="text-sm leading-6 text-amber-100/85 sm:text-[15px]"
+                initial={{ opacity: 0, y: 6, filter: 'blur(4px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, y: -6, filter: 'blur(4px)' }}
+                transition={{ duration: 0.55, ease: EASE_OUT_QUART }}
+              >
+                {messages[messageIndex]}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+        </motion.div>
 
         {/* Stats + indeterminate progress */}
         <motion.div
