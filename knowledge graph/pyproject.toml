@@ -55,6 +55,11 @@ dev = [
     # and tests/unit/test_cleanthes_extractor.py import those scripts at
     # collection time, so lxml must be importable in CI.
     "lxml>=5.0.0",
+    # Root-level scripts/generate_provenance_figures.py imports matplotlib
+    # to render the Amand-Stoic 6×4 heatmap and case-study figures.
+    # tests/unit/test_amand_stoic_provenance.py imports that script, so
+    # matplotlib must be importable in CI.
+    "matplotlib>=3.9.0",
 ]
 api = [
     "fastapi>=0.130.0",
