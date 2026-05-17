@@ -379,9 +379,14 @@ function AppContent() {
             {/* Mobile Menu Button with Animation */}
             <button
               className={cn(
-                "lg:hidden p-2 rounded-lg transition-colors",
-                isHomePage ? "text-white hover:bg-white/10 ml-auto" : "text-stone-600 hover:bg-stone-100"
+                "lg:hidden relative z-[55] p-3 -m-1 rounded-lg transition-colors touch-manipulation",
+                // Mobile = parchment palette on every page (incl. home).
+                // Desktop on home stays on the dark-friendly white variant.
+                isHomePage
+                  ? "text-stone-700 hover:bg-amber-100/60 ml-auto lg:text-white lg:hover:bg-white/10"
+                  : "text-stone-600 hover:bg-stone-100"
               )}
+              data-allow-touch="true"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"

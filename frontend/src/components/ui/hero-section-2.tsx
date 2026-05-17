@@ -75,16 +75,15 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
       <section
         ref={ref}
         className={cn(
-          "relative overflow-hidden m-0 p-0 bg-white h-[100svh] mt-0 touch-none overscroll-none",
+          "relative overflow-hidden m-0 p-0 bg-parchment-50 md:bg-white h-[100svh] mt-0 touch-none overscroll-none",
           className
         )}
       >
 
         {/* ── Single background — rendered ONCE, never display:none ────────── */}
-        {/* Mobile: left-0 → full-screen canvas, particles center at 50%.      */}
-        {/* Desktop: md:left-1/2 → right-half canvas, particles center at 75%. */}
+        {/* Mobile: parchment cream (canvas hidden), Desktop: zinc-950 right-half */}
         {backgroundComponent ? (
-          <div className="absolute top-0 bottom-0 left-0 right-0 md:left-1/2 bg-zinc-950">
+          <div className="absolute top-0 bottom-0 left-0 right-0 md:left-1/2 bg-parchment-50 md:bg-zinc-950">
             {backgroundComponent}
           </div>
         ) : backgroundImage ? (
@@ -93,19 +92,19 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
             style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
           />
         ) : (
-          <div className="absolute inset-0 bg-zinc-950" />
+          <div className="absolute inset-0 bg-parchment-50 md:bg-zinc-950" />
         )}
 
-        {/* ── MOBILE scrims (< md) ─────────────────────────────────────────── */}
+        {/* ── MOBILE scrims (< md) — warm parchment wash + soft gold halo ──── */}
         <div
           aria-hidden="true"
           className="md:hidden absolute inset-0 z-[2] pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 90% 70% at 50% 55%, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.2) 100%)' }}
+          style={{ background: 'radial-gradient(ellipse 90% 70% at 50% 38%, rgba(251,191,36,0.18) 0%, rgba(253,251,247,0.0) 65%)' }}
         />
         <div
           aria-hidden="true"
           className="md:hidden absolute bottom-0 left-0 right-0 h-40 z-[2] pointer-events-none"
-          style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%)' }}
+          style={{ background: 'linear-gradient(to top, rgba(253,251,247,0.92) 0%, rgba(253,251,247,0.0) 100%)' }}
         />
 
         {/* ── MOBILE content overlay (< md) ────────────────────────────────── */}
@@ -120,22 +119,22 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                 alt={logo.alt}
                 width={220}
                 height={96}
-                className="h-12 w-auto sm:h-14 brightness-0 invert opacity-90"
+                className="h-12 w-auto sm:h-14"
               />
             </div>
           )}
           <div className="flex flex-col items-center flex-1 justify-center gap-5">
             <h1
-              className="font-display text-3xl sm:text-4xl font-bold leading-tight text-white"
+              className="font-display text-3xl sm:text-4xl font-bold leading-tight text-stone-900"
             >
               {title}
             </h1>
             {slogan && (
-              <p className="text-sm sm:text-base text-white/70 leading-snug">
+              <p className="text-sm sm:text-base text-stone-600 leading-snug">
                 {slogan}
               </p>
             )}
-            <p className="text-sm sm:text-sm text-white/65 leading-relaxed max-w-xs">
+            <p className="text-sm sm:text-sm text-stone-700 leading-relaxed max-w-xs">
               {subtitle}
             </p>
             {ctaArea ? (
@@ -145,7 +144,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
             ) : (
               <a
                 href={callToAction.href}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-500 hover:bg-orange-400 text-white font-semibold text-sm transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-amber-600 hover:bg-amber-500 text-white font-semibold text-sm transition-colors shadow-[0_8px_24px_-8px_rgba(180,83,9,0.45)]"
               >
                 {callToAction.text}
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -156,13 +155,13 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
             )}
           </div>
           <div
-            className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[10px] text-white/40 border-t border-white/10 pt-4 w-full"
+            className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[10px] text-stone-500 border-t border-amber-300/50 pt-4 w-full"
           >
             {contactInfo.map((info, index) => (
               <div key={index} className="flex items-center gap-1">
                 <InfoIcon type={info.type} />
                 {info.href ? (
-                  <a href={info.href} target="_blank" rel="noopener noreferrer" className="hover:text-white/70 transition-colors">
+                  <a href={info.href} target="_blank" rel="noopener noreferrer" className="hover:text-amber-800 transition-colors">
                     {info.label}
                   </a>
                 ) : (
