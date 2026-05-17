@@ -38,6 +38,7 @@ import {
 import { pickAtlasNodeIds } from '../components/cosmograph/FreeWillAtlas';
 import KgSearchBar from '../components/cosmograph/KgSearchBar';
 import KgFilters, { type KgFilterState } from '../components/cosmograph/KgFilters';
+import KnowledgeGraphLoader from '../components/cosmograph/KnowledgeGraphLoader';
 import Legend from '../components/cosmograph/Legend';
 import MobileGraphControls from '../components/cosmograph/MobileGraphControls';
 import PathFinder, { type PathResult } from '../components/cosmograph/PathFinder';
@@ -625,7 +626,7 @@ export default function CosmographPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(34,211,238,0.10),transparent_34%),radial-gradient(circle_at_78%_18%,rgba(251,191,36,0.10),transparent_30%),radial-gradient(circle_at_50%_85%,rgba(244,114,182,0.10),transparent_28%)]" />
       </div>
 
-      {loading && <LoadingOverlay />}
+      {loading && <KnowledgeGraphLoader />}
       {!loading && error && <ErrorOverlay message={error} onRetry={() => window.location.reload()} />}
 
       {cosmo && dynamicConfig && (
@@ -964,31 +965,6 @@ function IconButton({
     >
       {icon}
     </button>
-  );
-}
-
-function LoadingOverlay() {
-  const { t } = useTranslation();
-  return (
-    <div className="absolute inset-0 z-40 flex items-center justify-center bg-slate-950/78 backdrop-blur-xl">
-      <div className="mx-6 max-w-md rounded-3xl border border-white/10 bg-slate-950/80 px-8 py-7 text-center shadow-[0_24px_80px_rgba(2,6,23,0.55)]">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-cyan-300/20 bg-cyan-300/10">
-          <Network className="h-7 w-7 text-cyan-200" />
-        </div>
-        <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-200/80">
-          {t('cosmograph.loading.eyebrow', 'Knowledge graph')}
-        </p>
-        <h2 className="mt-1.5 text-xl font-semibold text-white">
-          {t('cosmograph.loading.title', 'Building the Atlas…')}
-        </h2>
-        <p className="mt-2 text-sm leading-6 text-slate-300">
-          {t(
-            'cosmograph.loading.body',
-            'Loading 17.7k nodes and 42.9k relations across ancient sources and modern reception.',
-          )}
-        </p>
-      </div>
-    </div>
   );
 }
 
