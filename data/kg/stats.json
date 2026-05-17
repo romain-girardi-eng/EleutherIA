@@ -1,7 +1,7 @@
 {
   "edge_relations": {
     "agrees_with": 4,
-    "authored_by": 17795,
+    "authored_by": 17780,
     "belongs_to_corpus": 26,
     "cites_primary_source": 897,
     "contains": 156,
@@ -26,6 +26,7 @@
     "has_chapter": 788,
     "has_position": 43,
     "has_section": 1236,
+    "has_translation": 2952,
     "holds_position": 14,
     "influenced_by": 24,
     "influences": 162,
@@ -33,7 +34,7 @@
     "member_of": 77,
     "opposes": 3,
     "parallel_to": 77,
-    "part_of": 20554,
+    "part_of": 20539,
     "participates_in": 34,
     "precedes": 38,
     "presupposes": 24,
@@ -50,7 +51,7 @@
     "wrote": 28,
     "wrote_about": 27
   },
-  "generated_at": "2026-05-17T10:55:11.572367+00:00",
+  "generated_at": "2026-05-17T12:56:01.075881+00:00",
   "node_types": {
     "argument": 1317,
     "argument_framework": 1,
@@ -60,7 +61,7 @@
     "debate": 17,
     "event": 5,
     "group": 8,
-    "passage": 17316,
+    "passage": 17301,
     "person": 413,
     "position": 8,
     "publication": 324,
@@ -70,6 +71,6 @@
     "synthesis": 177,
     "work": 238
   },
-  "total_edges": 50735,
-  "total_nodes": 20078
+  "total_edges": 53657,
+  "total_nodes": 20063
 }

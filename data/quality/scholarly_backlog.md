@@ -10,7 +10,7 @@
 - `debate`: 17
 - `event`: 5
 - `group`: 8
-- `passage`: 17316
+- `passage`: 17301
 - `person`: 413
 - `position`: 8
 - `publication`: 324
@@ -244,86 +244,13 @@ Total: 222
 
 ## Passage Role
 
-Total: 15
+Total: 0
 
-- `passage_eusebius_praep_ev_book_01`
-- `passage_eusebius_praep_ev_book_02`
-- `passage_eusebius_praep_ev_book_03`
-- `passage_eusebius_praep_ev_book_04`
-- `passage_eusebius_praep_ev_book_05`
-- `passage_eusebius_praep_ev_book_06`
-- `passage_eusebius_praep_ev_book_07`
-- `passage_eusebius_praep_ev_book_08`
-- `passage_eusebius_praep_ev_book_09`
-- `passage_eusebius_praep_ev_book_10`
-- `passage_eusebius_praep_ev_book_11`
-- `passage_eusebius_praep_ev_book_12`
-- `passage_eusebius_praep_ev_book_13`
-- `passage_eusebius_praep_ev_book_14`
-- `passage_eusebius_praep_ev_book_15`
 
 ## Translation Source Links
 
-Total: 58
+Total: 0
 
-- `passage_origen_pa_3_1_1`
-- `passage_origen_pa_3_1_2`
-- `passage_origen_pa_3_1_4`
-- `passage_origen_pa_3_1_5`
-- `passage_origen_pa_3_1_6`
-- `passage_origen_pa_3_1_7`
-- `passage_origen_pa_3_1_8`
-- `passage_origen_pa_3_1_9`
-- `passage_origen_pa_3_1_10`
-- `passage_origen_pa_3_1_11`
-- `passage_origen_pa_3_1_12`
-- `passage_origen_pa_3_1_13`
-- `passage_origen_pa_3_1_14`
-- `passage_origen_pa_3_1_15`
-- `passage_origen_pa_3_1_16`
-- `passage_origen_pa_3_1_17`
-- `passage_origen_pa_3_1_18`
-- `passage_origen_pa_3_1_19`
-- `passage_origen_pa_3_1_20`
-- `passage_origen_pa_3_1_21`
-- `passage_origen_pa_3_1_22`
-- `passage_origen_pa_3_1_23`
-- `passage_origen_pa_3_1_24`
-- `passage_origen_philocalia_21_5`
-- `passage_origen_philocalia_21_7`
-- `passage_origen_philocalia_21_18`
-- `passage_origen_philocalia_21_23`
-- `passage_origen_philocalia_25_1`
-- `passage_origen_philocalia_25_2`
-- `passage_origen_philocalia_25_3`
-- `passage_origen_philocalia_25_4`
-- `passage_origen_philocalia_26_1`
-- `passage_origen_philocalia_26_2`
-- `passage_origen_philocalia_26_3`
-- `passage_origen_philocalia_26_4`
-- `passage_origen_philocalia_26_5`
-- `passage_origen_philocalia_26_6`
-- `passage_origen_philocalia_26_7`
-- `passage_origen_philocalia_26_8`
-- `passage_origen_philocalia_27_1`
-- `passage_origen_philocalia_27_2`
-- `passage_origen_philocalia_27_3`
-- `passage_origen_philocalia_27_4`
-- `passage_origen_philocalia_27_5`
-- `passage_origen_philocalia_27_6`
-- `passage_origen_philocalia_27_7`
-- `passage_origen_philocalia_27_8`
-- `passage_origen_philocalia_27_12`
-- `passage_origen_philocalia_22_1`
-- `passage_origen_philocalia_22_2`
-- `passage_origen_philocalia_22_3`
-- `passage_origen_philocalia_22_4`
-- `passage_origen_philocalia_22_5`
-- `passage_origen_philocalia_22_6`
-- `passage_origen_philocalia_22_7`
-- `passage_origen_philocalia_22_8`
-- `passage_origen_philocalia_22_9`
-- `passage_origen_philocalia_22_10`
 
 ## Date Uncertainty
 
