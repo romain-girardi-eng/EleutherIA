@@ -229,6 +229,20 @@ export default function GraphRAGShowcase() {
           </div>
         </motion.div>
 
+        {/* Hero illustration — L'Éclair dans le Graphe */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.7 }}
+          className="max-w-5xl mx-auto mb-16"
+        >
+          <img
+            src="/graphrag-eclair.webp"
+            alt="A luminous gold path traced through a vast knowledge graph — the agent's chosen reasoning route through 17,000+ nodes"
+            className="w-full h-auto rounded-2xl shadow-xl"
+          />
+        </motion.div>
+
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           <StatCard

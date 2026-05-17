@@ -106,6 +106,61 @@ export default function DatabasePage() {
           </p>
         </motion.div>
 
+        {/* ── Hero illustration: Scroll devient Graphe ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.7 }}
+          className="max-w-5xl mx-auto mb-16"
+        >
+          <img
+            src="/scroll-devient-graphe.webp"
+            alt="An ancient Greek papyrus on the left, its inked verses transforming into a luminous network of golden knowledge-graph nodes on the right"
+            className="w-full h-auto rounded-2xl shadow-xl"
+          />
+        </motion.div>
+
+        {/* ── Les Voix — schools tracked in the corpus ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.6 }}
+          className="max-w-5xl mx-auto mb-16"
+        >
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-800/5 border border-stone-300/30 text-xs font-medium text-stone-500 tracking-wide uppercase mb-3">
+              Les Voix
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-display font-semibold text-stone-800 tracking-tight mb-2">
+              Philosophical traditions in the corpus
+            </h2>
+            <p className="text-sm text-stone-500 max-w-xl mx-auto">
+              Twelve centuries, four traditions — one luminous map.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {[
+              { src: '/voice-01-stoicien.webp', label: 'Stoïcien', caption: 'εἱμαρμένη — fate' },
+              { src: '/voice-02-epicurien.webp', label: 'Épicurien', caption: 'κλίνωμα — atomic swerve' },
+              { src: '/voice-03-pere-eglise.webp', label: 'Père de l’Église', caption: 'providentia — providence' },
+              { src: '/voice-04-sceptique.webp', label: 'Sceptique', caption: 'ἐποχή — suspension of judgment' },
+            ].map((v) => (
+              <figure key={v.src} className="group">
+                <img
+                  src={v.src}
+                  alt={v.label}
+                  loading="lazy"
+                  className="w-full aspect-square object-cover rounded-xl shadow-md group-hover:shadow-lg transition-shadow"
+                />
+                <figcaption className="mt-2 text-center">
+                  <div className="text-sm font-display font-semibold text-stone-800">{v.label}</div>
+                  <div className="text-xs text-stone-500 italic">{v.caption}</div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </motion.div>
+
         {/* ── Key metrics ── */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}

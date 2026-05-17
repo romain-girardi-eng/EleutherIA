@@ -150,3 +150,6 @@ agents.md
 
 # Local Codex workspace artifacts
 .superpowers/
+
+# Local media archive (source PNG/MP4 — keepers in frontend/public/ are WebP)
+media/
