@@ -128,7 +128,7 @@ export interface GraphRAGQuery {
   mode?: 'fast' | 'auto' | 'local' | 'global' | 'bridge';
 
   // Feature flags for fine-grained control
-  use_hyde?: boolean;       // Hypothetical document embedding
+  use_hyde?: boolean;       // Legacy flag; ignored by the current vectorless agentic pipeline
   use_expansion?: boolean;  // Query expansion
   use_crag?: boolean;       // Corrective RAG validation
   use_selfrag?: boolean;    // Self-evaluation

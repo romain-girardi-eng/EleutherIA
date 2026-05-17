@@ -51,7 +51,7 @@ export const extraResources = {
       trySearchingFor: 'Try searching for:',
       titlePrefix: '',
       titleSuffix: 'Search',
-      titleWords: ['Hybrid', 'Textual', 'Lemmatic', 'Semantic'],
+      titleWords: ['Hybrid', 'Textual', 'Lemmatic', 'Graph'],
       autocomplete: {
         occurrencesAbbrev: 'occ.',
         passages: '{{count}} passages',
@@ -76,7 +76,7 @@ export const extraResources = {
       title: 'Search Guide',
       description: "Learn how to use EleutherIA's hybrid search",
       modeName: 'Hybrid Search',
-      model: 'Gemini (3072-dim) + Full-text + Lemmatic',
+      model: 'SQLStrategy + Full-text + Lemmatic',
       method: 'RRF (Reciprocal Rank Fusion)',
       granularity: 'Passage-level (~200-500 tokens)',
       bestFor: 'Best For:',
@@ -97,7 +97,7 @@ export const extraResources = {
         {
           query: 'What is the Stoic view on fate?',
           explanation: 'Conceptual query looking for passages discussing Stoic fate',
-          why: 'Asks about a concept and combines semantic understanding with exact text matching',
+          why: 'Asks about a concept and combines graph evidence with exact text matching',
         },
         {
           query: 'free will and determinism',
@@ -112,7 +112,7 @@ export const extraResources = {
         {
           query: "ἐφ' ἡμῖν",
           explanation: "Search for the Greek phrase 'what is up to us'",
-          why: 'Lemmatic search finds grammatical forms while semantic search finds related concepts',
+          why: 'Lemmatic search finds grammatical forms while graph citations find related passages',
         },
       ],
       tips: [
@@ -216,7 +216,7 @@ export const extraResources = {
         },
         semativerse: {
           label: 'Semativerse',
-          description: 'Embedding space',
+          description: 'Concept space',
         },
       },
       mobileGraph: {
@@ -399,7 +399,7 @@ export const extraResources = {
         hero: 'Home',
         problem: 'The Problem',
         kg: 'Knowledge Graph',
-        embeddings: 'Vector Embeddings',
+        embeddings: 'Retrieval',
         pipeline: 'GraphRAG Pipeline',
         tech: 'Architecture',
         search: 'Hybrid Search',
@@ -439,7 +439,7 @@ export const extraResources = {
           title: 'Seconds with cited, verifiable, scholarly answers',
           items: [
             '2,193 nodes connected by 8,616 typed relationships',
-            'Hybrid search: keyword + lemmatic + semantic merged by RRF',
+            'Vectorless retrieval: SQL + tree routing + lemmatic RRF',
             '17,000+ passages with CTS URN citations and confidence scores',
             'FAIR-compliant, CC BY 4.0, DOI-minted on Zenodo',
           ],
@@ -474,24 +474,42 @@ export const extraResources = {
         },
       },
       embeddings: {
-        label: 'Semantic Layer',
-        titleLine1: 'Ideas Have',
-        titleLine2: 'Coordinates',
+        label: 'Vectorless Retrieval Layer',
+        titleLine1: 'Evidence Has',
+        titleLine2: 'Routes',
         subtitle:
-          'Every philosophical concept is converted into a 3,072-number vector embedding. Concepts with similar meanings land close together regardless of the language they were written in.',
-        analogy: 'Analogy',
-        physicalSpace: 'Physical space',
-        semanticSpace: 'Semantic space',
-        physicalClose: 'Close = same location',
-        semanticClose: 'Close = same meaning',
-        dimensions: 'dimensions per concept',
-        projected: 'projected to 2D below via PCA',
+          'The live backend no longer projects questions into an retrieval space. It routes evidence through lemma expansion, work trees, KG labels, passage_citations, and full-text/lemmatic RRF.',
+        analogy: 'Retrieval signals',
+        physicalSpace: 'Question route',
+        semanticSpace: 'Evidence route',
+        physicalClose: 'Terms and references become database routes',
+        semanticClose: 'Curated links become cited source anchors',
+        dimensions: 'production retrieval dimensions',
+        projected: 'Embedding visualization endpoints are retired compatibility stubs',
+        cards: {
+          lemma: {
+            title: 'Lemma Expansion',
+            body: 'Greek and Latin forms are expanded before retrieval, so inflected passages remain discoverable without vector lookup.',
+          },
+          tree: {
+            title: 'Tree Routing',
+            body: 'Author and work mentions resolve to hierarchical text sections, then surface relevant passage anchors directly.',
+          },
+          citations: {
+            title: 'Passage Citations',
+            body: 'Curated KG-to-passage links provide the primary evidence bridge with confidence scores and CTS references.',
+          },
+          graph: {
+            title: 'Graph Expansion',
+            body: 'Ontology-aware neighbor expansion adds concepts, works, and arguments around the discovered seed nodes.',
+          },
+        },
         scatter: {
-          ariaLabel: 'Semantic vector space',
-          axisLabel: 'dim\u2081 / dim\u2082 (PCA projection of 3,072 dims)',
+          ariaLabel: 'Concept routing map',
+          axisLabel: 'curated KG proximity',
           nearestTo: 'Nearest concepts to "{{word}}"',
           placeholder: 'Type a word and press Enter\u2026',
-          embed: 'Embed \u2192',
+          embed: 'Route \u2192',
         },
       },
       pipeline: {
@@ -510,11 +528,11 @@ export const extraResources = {
         autoPlay: '\u25B6 Auto-play',
         steps: {
           1: {
-            title: 'Semantic Search',
-            subtitle: 'Query \u2192 Top-k KG nodes',
-            detail: 'Your question is embedded into a 3,072-dimensional vector by Gemini. Qdrant returns the 10 most semantically similar Knowledge Graph nodes \u2014 not keyword matches, but conceptual proximity.',
+            title: 'Seed Discovery',
+            subtitle: 'Query \u2192 SQL/tree/lemma routes',
+            detail: 'The question is expanded into search terms and lemmas, work and author mentions are resolved through the text tree, and KG labels/descriptions are matched in SQL.',
             input: '"What did Stoics say about fate?"',
-            output: 'Stoicism (0.89) \u00B7 Fate (0.87) \u00B7 Chrysippus (0.84) \u2026',
+            output: 'Stoicism \u00B7 Fate \u00B7 Chrysippus \u00B7 De Fato \u2026',
           },
           2: {
             title: 'Graph Traversal',
@@ -557,7 +575,7 @@ export const extraResources = {
         agenticGraphragTitle: 'Powered by Agentic GraphRAG',
         paperBadge: '12-node FSM',
         agenticGraphragBody:
-          'An agentic pipeline with multi-model support (Gemini/Kimi), vectorless SQL fallback, and full reasoning trace for scholarly Q&A.',
+          'An agentic pipeline with multi-model support (Gemini/Kimi), primary vectorless SQL retrieval, and full reasoning trace for scholarly Q&A.',
         vsTraditionalRag: 'vs Traditional RAG',
         vsStandardGraphRag: 'vs Standard GraphRAG',
         findingsLink: 'Learn more about the architecture',
@@ -572,7 +590,7 @@ export const extraResources = {
         ],
         stackItems: [
           'Agentic GraphRAG',
-          'Qdrant vector DB',
+          'Vectorless SQLStrategy',
           'PostgreSQL + GIN',
           'FastAPI backend',
           'React 19 + TypeScript',
@@ -582,10 +600,10 @@ export const extraResources = {
       },
       hybridSearch: {
         label: 'Layer 2 - Hybrid Search',
-        titlePrefix: 'Three search engines,',
+        titlePrefix: 'Two textual engines,',
         titleHighlight: 'one result',
         subtitle:
-          'Full-text, lemmatic, and semantic searches run in parallel. Results are merged by Reciprocal Rank Fusion, so items appearing in multiple lists rank highest.',
+          'Full-text and lemmatic searches run in parallel. Results are merged by Reciprocal Rank Fusion, so passages appearing in multiple lists rank highest.',
         methods: {
           fullText: {
             title: 'Full-Text',
@@ -598,14 +616,14 @@ export const extraResources = {
             example: 'logos -> logou logoi logon ...',
           },
           semantic: {
-            title: 'Semantic',
-            description: 'Gemini embeddings and Qdrant ANN search. Finds conceptual similarity across languages.',
-            example: '"free will" -> eph hemin · liberum arbitrium',
+            title: 'Graph Evidence',
+            description: 'KG labels, passage_citations, and neighbor expansion connect concepts to cited passages.',
+            example: '"free will" -> eph hemin · passage anchors',
           },
         },
         rrfTitle: 'Reciprocal Rank Fusion',
         rrfBody:
-          'Items found by all three engines rank highest. The formula penalizes lower ranks while rewarding cross-list agreement.',
+          'Items found by multiple textual signals rank highest. The formula penalizes lower ranks while rewarding cross-list agreement.',
       },
       fair: {
         label: 'Open Scholarship',
@@ -939,7 +957,7 @@ export const extraResources = {
       title: 'Guide de recherche',
       description: 'Apprenez à utiliser la recherche hybride d’EleutherIA',
       modeName: 'Recherche hybride',
-      model: 'Gemini (3072 dimensions) + plein texte + lemmatique',
+      model: 'SQLStrategy + plein texte + lemmatique',
       method: 'RRF (fusion réciproque des rangs)',
       granularity: 'Niveau du passage (~200-500 tokens)',
       bestFor: 'Idéal pour :',
@@ -1079,7 +1097,7 @@ export const extraResources = {
         },
         semativerse: {
           label: 'Semativerse',
-          description: 'Espace d’embeddings',
+          description: 'Espace conceptuel',
         },
       },
       mobileGraph: {
@@ -1266,7 +1284,7 @@ export const extraResources = {
         hero: 'Accueil',
         problem: 'Le problème',
         kg: 'Graphe de connaissances',
-        embeddings: 'Embeddings vectoriels',
+        embeddings: 'Récupération',
         pipeline: 'Pipeline GraphRAG',
         tech: 'Architecture',
         search: 'Recherche hybride',
@@ -1341,24 +1359,42 @@ export const extraResources = {
         },
       },
       embeddings: {
-        label: 'Couche sémantique',
-        titleLine1: 'Les idées ont',
-        titleLine2: 'des coordonnées',
+        label: 'Couche de récupération sans vecteurs',
+        titleLine1: 'Les preuves ont',
+        titleLine2: 'des routes',
         subtitle:
-          'Chaque concept philosophique est converti en un embedding vectoriel de 3 072 nombres. Les concepts proches par le sens se retrouvent proches, quelle que soit la langue.',
-        analogy: 'Analogie',
-        physicalSpace: 'Espace physique',
-        semanticSpace: 'Espace sémantique',
-        physicalClose: 'Proche = même lieu',
-        semanticClose: 'Proche = même sens',
-        dimensions: 'dimensions par concept',
-        projected: 'projet\u00E9es en 2D ci-dessous via PCA',
+          'Le backend actif ne projette plus les questions dans un espace d’embeddings. Il route les preuves par expansion lemmatique, arbre des œuvres, libellés du KG, passage_citations et RRF plein texte/lemmatique.',
+        analogy: 'Signaux de récupération',
+        physicalSpace: 'Route de la question',
+        semanticSpace: 'Route des preuves',
+        physicalClose: 'Les termes et références deviennent des routes SQL',
+        semanticClose: 'Les liens curés deviennent des ancres citées',
+        dimensions: 'dimension de récupération en production',
+        projected: 'Les endpoints de visualisation de récupération sont des stubs de compatibilité retirés',
+        cards: {
+          lemma: {
+            title: 'Expansion lemmatique',
+            body: 'Les formes grecques et latines sont étendues avant la recherche, sans similarité vectorielle.',
+          },
+          tree: {
+            title: 'Routage par arbre',
+            body: 'Les auteurs et œuvres cités résolvent vers des sections hiérarchiques puis vers des passages.',
+          },
+          citations: {
+            title: 'Passage citations',
+            body: 'Les liens KG-vers-passage curés sont le pont principal vers les sources avec scores de confiance.',
+          },
+          graph: {
+            title: 'Expansion du graphe',
+            body: 'Les voisins ontologiques ajoutent concepts, œuvres et arguments autour des nœuds sources.',
+          },
+        },
         scatter: {
-          ariaLabel: 'Espace vectoriel s\u00E9mantique',
-          axisLabel: 'dim\u2081 / dim\u2082 (projection PCA de 3 072 dimensions)',
+          ariaLabel: 'Carte de routage conceptuel',
+          axisLabel: 'proximité KG curée',
           nearestTo: 'Concepts les plus proches de \u00AB{{word}}\u00BB',
           placeholder: 'Tapez un mot et appuyez sur Entr\u00E9e\u2026',
-          embed: 'Plonger \u2192',
+          embed: 'Router \u2192',
         },
       },
       pipeline: {
@@ -1377,11 +1413,11 @@ export const extraResources = {
         autoPlay: '\u25B6 Lecture auto',
         steps: {
           1: {
-            title: 'Recherche s\u00E9mantique',
-            subtitle: 'Requ\u00EAte \u2192 Top-k n\u0153uds KG',
-            detail: 'Votre question est convertie en vecteur de 3 072 dimensions par Gemini. Qdrant renvoie les 10 n\u0153uds du graphe de connaissances les plus proches s\u00E9mantiquement \u2014 non pas par mots-cl\u00E9s, mais par proximit\u00E9 conceptuelle.',
+            title: 'Découverte des nœuds sources',
+            subtitle: 'Requête → routes SQL/arbre/lemmes',
+            detail: 'La question est étendue en termes et lemmes, les œuvres et auteurs sont résolus par l’arbre textuel, et les libellés/descriptions du KG sont recherchés en SQL.',
             input: '\u00AB Que disaient les sto\u00EFciens du destin ? \u00BB',
-            output: 'Sto\u00EFcisme (0,89) \u00B7 Destin (0,87) \u00B7 Chrysippe (0,84) \u2026',
+            output: 'Sto\u00EFcisme \u00B7 Destin \u00B7 Chrysippe \u00B7 De Fato \u2026',
           },
           2: {
             title: 'Parcours du graphe',
@@ -1439,7 +1475,7 @@ export const extraResources = {
         ],
         stackItems: [
           'GraphRAG Agentique',
-          'Base vectorielle Qdrant',
+          'SQLStrategy sans vecteurs',
           'PostgreSQL + GIN',
           'Backend FastAPI',
           'React 19 + TypeScript',
@@ -1465,8 +1501,8 @@ export const extraResources = {
             example: 'logos -> logou logoi logon ...',
           },
           semantic: {
-            title: 'Sémantique',
-            description: 'Embeddings Gemini et recherche ANN Qdrant. Trouve des proximités conceptuelles entre langues.',
+            title: 'Preuves KG',
+            description: 'Libellés KG, passage_citations et expansion du graphe relient les concepts aux passages cités.',
             example: '"free will" -> eph hemin · liberum arbitrium',
           },
         },
@@ -1809,7 +1845,7 @@ export const extraResources = {
       title: 'Suchleitfaden',
       description: 'So nutzen Sie die hybride Suche von EleutherIA',
       modeName: 'Hybride Suche',
-      model: 'Gemini (3072 Dimensionen) + Volltext + lemmatisch',
+      model: 'SQLStrategy + Volltext + lemmatisch',
       method: 'RRF (Reciprocal Rank Fusion)',
       granularity: 'Passagenebene (~200-500 Tokens)',
       bestFor: 'Besonders geeignet für:',
@@ -1949,7 +1985,7 @@ export const extraResources = {
         },
         semativerse: {
           label: 'Semativerse',
-          description: 'Embedding-Raum',
+          description: 'Konzept-Raum',
         },
       },
       mobileGraph: {
@@ -2136,7 +2172,7 @@ export const extraResources = {
         hero: 'Start',
         problem: 'Das Problem',
         kg: 'Wissensgraph',
-        embeddings: 'Vektor-Embeddings',
+        embeddings: 'Retrieval',
         pipeline: 'GraphRAG-Pipeline',
         tech: 'Architektur',
         search: 'Hybride Suche',
@@ -2211,24 +2247,42 @@ export const extraResources = {
         },
       },
       embeddings: {
-        label: 'Semantische Ebene',
-        titleLine1: 'Ideen haben',
-        titleLine2: 'Koordinaten',
+        label: 'Vektorlose Retrieval-Ebene',
+        titleLine1: 'Evidenz hat',
+        titleLine2: 'Routen',
         subtitle:
-          'Jedes philosophische Konzept wird in ein Vektor-Embedding aus 3.072 Zahlen umgewandelt. Konzepte mit ähnlicher Bedeutung liegen nahe beieinander, unabhängig von der Sprache.',
-        analogy: 'Analogie',
-        physicalSpace: 'Physischer Raum',
-        semanticSpace: 'Semantischer Raum',
-        physicalClose: 'Nah = gleicher Ort',
-        semanticClose: 'Nah = gleiche Bedeutung',
-        dimensions: 'Dimensionen pro Konzept',
-        projected: 'unten per PCA in 2D projiziert',
+          'Der aktive Backend-Pfad projiziert Fragen nicht mehr in einen Embedding-Raum. Er routet Evidenz über Lemma-Erweiterung, Werkbäume, KG-Labels, passage_citations und Volltext/Lemma-RRF.',
+        analogy: 'Retrieval-Signale',
+        physicalSpace: 'Frageroute',
+        semanticSpace: 'Evidenzroute',
+        physicalClose: 'Begriffe und Referenzen werden zu SQL-Routen',
+        semanticClose: 'Kuratierte Links werden zu Zitierankern',
+        dimensions: 'Produktions-Retrieval-Dimensionen',
+        projected: 'Embedding-Visualisierungsendpunkte sind zurückgezogene Kompatibilitäts-Stubs',
+        cards: {
+          lemma: {
+            title: 'Lemma-Erweiterung',
+            body: 'Griechische und lateinische Formen werden vor dem Retrieval erweitert, ohne Vektorähnlichkeit.',
+          },
+          tree: {
+            title: 'Tree Routing',
+            body: 'Autor- und Werkerwähnungen werden auf Textabschnitte und Passage-Anker aufgelöst.',
+          },
+          citations: {
+            title: 'Passage Citations',
+            body: 'Kuratierte KG-zu-Passage-Links bilden die primäre Evidenzbrücke mit Konfidenzwerten.',
+          },
+          graph: {
+            title: 'Graph-Erweiterung',
+            body: 'Ontologiebewusste Nachbarn ergänzen Konzepte, Werke und Argumente um die Startknoten.',
+          },
+        },
         scatter: {
-          ariaLabel: 'Semantischer Vektorraum',
-          axisLabel: 'dim\u2081 / dim\u2082 (PCA-Projektion von 3.072 Dimensionen)',
+          ariaLabel: 'Konzept-Routing-Karte',
+          axisLabel: 'kuratierte KG-Nähe',
           nearestTo: 'N\u00E4chste Konzepte zu "{{word}}"',
           placeholder: 'Geben Sie ein Wort ein und dr\u00FCcken Sie Enter\u2026',
-          embed: 'Einbetten \u2192',
+          embed: 'Routen \u2192',
         },
       },
       pipeline: {
@@ -2246,7 +2300,7 @@ export const extraResources = {
         pause: '\u23F8 Pause',
         autoPlay: '\u25B6 Automatisch',
         steps: {
-          1: { title: 'Semantische Suche', subtitle: 'Abfrage \u2192 Top-k KG-Knoten', detail: 'Ihre Frage wird von Gemini in einen 3.072-dimensionalen Vektor umgewandelt. Qdrant liefert die 10 semantisch \u00E4hnlichsten Wissensgraph-Knoten \u2014 keine Schl\u00FCsselwort-Treffer, sondern konzeptuelle N\u00E4he.', input: '\u00ABWas sagten die Stoiker \u00FCber das Schicksal?\u00BB', output: 'Stoizismus (0,89) \u00B7 Schicksal (0,87) \u00B7 Chrysipp (0,84) \u2026' },
+          1: { title: 'Seed Discovery', subtitle: 'Abfrage → SQL/Tree/Lemma-Routen', detail: 'Die Frage wird in Suchbegriffe und Lemmata erweitert, Werk- und Autorennennungen werden über den Textbaum aufgelöst, und KG-Labels/Beschreibungen werden in SQL gesucht.', input: '\u00ABWas sagten die Stoiker \u00FCber das Schicksal?\u00BB', output: 'Stoizismus \u00B7 Schicksal \u00B7 Chrysipp \u00B7 De Fato \u2026' },
           2: { title: 'Graphdurchlauf', subtitle: 'BFS von Startknoten', detail: 'Ausgehend von den 10 Startknoten folgt die Engine den KG-Kanten \u2014 \u00ABformulierte\u00BB, \u00ABwiderspricht\u00BB, \u00ABbeeinflusste\u00BB \u2014 bis zur Tiefe 2, wodurch der Kontext auf 25\u201350 verwandte Knoten erweitert wird, ohne wissenschaftliche Pr\u00E4zision zu verlieren.', input: 'Start: Stoizismus, Schicksal, Chrysipp', output: '+Determinismus  +Epiktet  +Kompatibilismus  +De Fato \u2026' },
           3: { title: 'Zitationsextraktion', subtitle: 'Antike + moderne Quellen', detail: 'Jeder erweiterte Knoten tr\u00E4gt kuratierte Felder f\u00FCr \u00ABantike Quellen\u00BB und \u00ABmoderne Forschung\u00BB. Diese werden extrahiert, dedupliziert und nach Relevanz geordnet \u2014 eine knappe Bibliographie mit Konfidenzwerten.', input: '25 erweiterte KG-Knoten', output: '10 antike Quellen + 12 moderne Zitate' },
           4: { title: 'Kontextaufbau', subtitle: 'LOKAL \u00B7 GLOBAL \u00B7 BR\u00DCCKE', detail: 'Der Kontext wird in drei Ebenen organisiert: LOKAL (direkte Antworten unmittelbarer Knoten), GLOBAL (Zusammenfassungen auf Gemeinschaftsebene) und BR\u00DCCKE (Argumentationspfade zwischen entfernten Konzepten). ~3.000 Zeichen, hochstrukturiert.', input: 'Rohe Knoten + deduplizierte Zitate', output: '~3.000 Zeichen strukturierter, gestufter Kontext' },
@@ -2279,7 +2333,7 @@ export const extraResources = {
         ],
         stackItems: [
           'Agentisches GraphRAG',
-          'Qdrant-Vektordatenbank',
+          'Vektorlose SQLStrategy',
           'PostgreSQL + GIN',
           'FastAPI-Backend',
           'React 19 + TypeScript',
@@ -2305,8 +2359,8 @@ export const extraResources = {
             example: 'logos -> logou logoi logon ...',
           },
           semantic: {
-            title: 'Semantisch',
-            description: 'Gemini-Embeddings und Qdrant-ANN-Suche. Findet konzeptuelle Ähnlichkeiten über Sprachen hinweg.',
+            title: 'Graph-Evidenz',
+            description: 'KG-Labels, passage_citations und Grapherweiterung verbinden Konzepte mit zitierten Passagen.',
             example: '"free will" -> eph hemin · liberum arbitrium',
           },
         },
@@ -2623,7 +2677,7 @@ export const extraResources = {
       trySearchingFor: 'Prova a cercare:',
       titlePrefix: 'Ricerca',
       titleSuffix: '',
-      titleWords: ['ibrida', 'testuale', 'lemmatica', 'semantica'],
+      titleWords: ['ibrida', 'testuale', 'lemmatica', 'grafo'],
       autocomplete: {
         occurrencesAbbrev: 'occ.',
         passages: '{{count}} passi',
@@ -2648,7 +2702,7 @@ export const extraResources = {
       title: 'Guida alla ricerca',
       description: 'Impara a usare la ricerca ibrida di EleutherIA',
       modeName: 'Ricerca ibrida',
-      model: 'Gemini (3072 dimensioni) + full-text + lemmatica',
+      model: 'SQLStrategy + full-text + lemmatica',
       method: 'RRF (Reciprocal Rank Fusion)',
       granularity: 'Livello del passo (~200-500 token)',
       bestFor: 'Ideale per:',
@@ -2669,7 +2723,7 @@ export const extraResources = {
         {
           query: 'Qual è la visione stoica del destino?',
           explanation: 'Query concettuale per trovare passi che discutono il destino nello stoicismo',
-          why: 'Riguarda un concetto e combina comprensione semantica e corrispondenza testuale esatta',
+          why: 'Riguarda un concetto e combina evidenza del grafo e corrispondenza testuale esatta',
         },
         {
           query: 'libero arbitrio e determinismo',
@@ -2684,7 +2738,7 @@ export const extraResources = {
         {
           query: "ἐφ' ἡμῖν",
           explanation: 'Ricerca dell’espressione greca “ciò che dipende da noi”',
-          why: 'La ricerca lemmatica trova le forme grammaticali e quella semantica i concetti correlati',
+          why: 'La ricerca lemmatica trova le forme grammaticali e le citazioni del grafo i passi correlati',
         },
       ],
       tips: [
@@ -2788,7 +2842,7 @@ export const extraResources = {
         },
         semativerse: {
           label: 'Semativerse',
-          description: 'Spazio degli embedding',
+          description: 'Spazio concettuale',
         },
       },
       mobileGraph: {
@@ -2975,7 +3029,7 @@ export const extraResources = {
         hero: 'Home',
         problem: 'Il problema',
         kg: 'Grafo della conoscenza',
-        embeddings: 'Embedding vettoriali',
+        embeddings: 'Retrieval',
         pipeline: 'Pipeline GraphRAG',
         tech: 'Architettura',
         search: 'Ricerca ibrida',
@@ -3015,7 +3069,7 @@ export const extraResources = {
           title: 'Secondi con risposte accademiche, verificabili e citate',
           items: [
             '2.193 nodi collegati da 8.616 relazioni tipizzate',
-            'Ricerca ibrida: parola chiave + lemmatica + semantica unite con RRF',
+            'Retrieval senza vettori: SQL + albero + lemmatica RRF',
             'Oltre 17.000 passi con citazioni CTS URN e punteggi di affidabilità',
             'Conforme ai principi FAIR, CC BY 4.0, DOI pubblicato su Zenodo',
           ],
@@ -3050,24 +3104,42 @@ export const extraResources = {
         },
       },
       embeddings: {
-        label: 'Livello semantico',
-        titleLine1: 'Le idee hanno',
-        titleLine2: 'coordinate',
+        label: 'Livello di retrieval senza vettori',
+        titleLine1: 'Le prove hanno',
+        titleLine2: 'percorsi',
         subtitle:
-          'Ogni concetto filosofico viene convertito in un embedding vettoriale di 3.072 numeri. I concetti con significato simile finiscono vicini, indipendentemente dalla lingua.',
-        analogy: 'Analogia',
-        physicalSpace: 'Spazio fisico',
-        semanticSpace: 'Spazio semantico',
-        physicalClose: 'Vicino = stesso luogo',
-        semanticClose: 'Vicino = stesso significato',
-        dimensions: 'dimensioni per concetto',
-        projected: 'proiettate in 2D qui sotto tramite PCA',
+          'Il backend attivo non proietta più le domande in uno spazio di embedding. Instrada le prove tramite espansione lemmatica, albero delle opere, label KG, passage_citations e RRF full-text/lemmatico.',
+        analogy: 'Segnali di retrieval',
+        physicalSpace: 'Percorso della domanda',
+        semanticSpace: 'Percorso delle prove',
+        physicalClose: 'Termini e riferimenti diventano percorsi SQL',
+        semanticClose: 'Link curati diventano ancore citabili',
+        dimensions: 'dimensioni di retrieval in produzione',
+        projected: 'Gli endpoint di visualizzazione retrieval sono stub di compatibilità ritirati',
+        cards: {
+          lemma: {
+            title: 'Espansione lemmatica',
+            body: 'Le forme greche e latine vengono espanse prima del retrieval, senza similarità vettoriale.',
+          },
+          tree: {
+            title: 'Tree routing',
+            body: 'Autori e opere citati si risolvono in sezioni testuali e ancore di passaggio.',
+          },
+          citations: {
+            title: 'Passage citations',
+            body: 'I link curati KG-passaggio sono il ponte primario verso le fonti con punteggi di fiducia.',
+          },
+          graph: {
+            title: 'Espansione del grafo',
+            body: 'I vicini ontologici aggiungono concetti, opere e argomenti attorno ai nodi seme.',
+          },
+        },
         scatter: {
-          ariaLabel: 'Spazio vettoriale semantico',
-          axisLabel: 'dim\u2081 / dim\u2082 (proiezione PCA di 3.072 dim.)',
+          ariaLabel: 'Mappa di routing concettuale',
+          axisLabel: 'prossimità KG curata',
           nearestTo: 'Concetti pi\u00F9 vicini a "{{word}}"',
           placeholder: 'Digita una parola e premi Invio\u2026',
-          embed: 'Embedding \u2192',
+          embed: 'Instrada \u2192',
         },
       },
       pipeline: {
@@ -3086,11 +3158,11 @@ export const extraResources = {
         autoPlay: '\u25B6 Riproduzione auto',
         steps: {
           1: {
-            title: 'Ricerca semantica',
-            subtitle: 'Domanda \u2192 Top-k nodi KG',
-            detail: 'La tua domanda viene convertita in un vettore a 3.072 dimensioni da Gemini. Qdrant restituisce i 10 nodi del grafo della conoscenza pi\u00F9 simili semanticamente \u2014 non corrispondenze di parole chiave, ma prossimit\u00E0 concettuale.',
+            title: 'Scoperta dei nodi seme',
+            subtitle: 'Domanda → percorsi SQL/albero/lemmi',
+            detail: 'La domanda viene espansa in termini e lemmi, autori e opere sono risolti tramite l’albero testuale e label/descrizioni KG sono cercate in SQL.',
             input: '"Cosa dicevano gli Stoici del destino?"',
-            output: 'Stoicismo (0,89) \u00B7 Destino (0,87) \u00B7 Crisippo (0,84) \u2026',
+            output: 'Stoicismo \u00B7 Destino \u00B7 Crisippo \u00B7 De Fato \u2026',
           },
           2: {
             title: 'Attraversamento del grafo',
@@ -3148,7 +3220,7 @@ export const extraResources = {
         ],
         stackItems: [
           'GraphRAG Agentico',
-          'Database vettoriale Qdrant',
+          'SQLStrategy senza vettori',
           'PostgreSQL + GIN',
           'Backend FastAPI',
           'React 19 + TypeScript',
@@ -3158,10 +3230,10 @@ export const extraResources = {
       },
       hybridSearch: {
         label: 'Livello 2 - Ricerca ibrida',
-        titlePrefix: 'Tre motori di ricerca,',
+        titlePrefix: 'Due motori testuali,',
         titleHighlight: 'un solo risultato',
         subtitle:
-          'La ricerca full-text, lemmatica e semantica vengono eseguite in parallelo. I risultati sono fusi con RRF, così gli elementi presenti in più liste salgono in cima.',
+          'La ricerca full-text e lemmatica vengono eseguite in parallelo. I risultati sono fusi con RRF, così gli elementi presenti in più liste salgono in cima.',
         methods: {
           fullText: {
             title: 'Full-text',
@@ -3174,8 +3246,8 @@ export const extraResources = {
             example: 'logos -> logou logoi logon ...',
           },
           semantic: {
-            title: 'Semantica',
-            description: 'Embedding Gemini e ricerca ANN in Qdrant. Trova somiglianze concettuali tra lingue.',
+            title: 'Evidenza KG',
+            description: 'Label KG, passage_citations ed espansione del grafo collegano concetti a passaggi citati.',
             example: '"free will" -> eph hemin · liberum arbitrium',
           },
         },
@@ -3517,7 +3589,7 @@ export const extraResources = {
       title: 'Οδηγός αναζήτησης',
       description: 'Μάθετε πώς να χρησιμοποιείτε την υβριδική αναζήτηση του EleutherIA',
       modeName: 'Υβριδική αναζήτηση',
-      model: 'Gemini (3072 διαστάσεις) + πλήρες κείμενο + λημματική',
+      model: 'SQLStrategy + πλήρες κείμενο + λημματική',
       method: 'RRF (Reciprocal Rank Fusion)',
       granularity: 'Επίπεδο αποσπάσματος (~200-500 tokens)',
       bestFor: 'Κατάλληλο για:',
@@ -3657,7 +3729,7 @@ export const extraResources = {
         },
         semativerse: {
           label: 'Semativerse',
-          description: 'Χώρος embeddings',
+          description: 'Χώρος εννοιών',
         },
       },
       mobileGraph: {
@@ -3844,7 +3916,7 @@ export const extraResources = {
         hero: 'Αρχική',
         problem: 'Το πρόβλημα',
         kg: 'Γράφος γνώσης',
-        embeddings: 'Διανυσματικά embeddings',
+        embeddings: 'Ανάκτηση',
         pipeline: 'Ροή GraphRAG',
         tech: 'Αρχιτεκτονική',
         search: 'Υβριδική αναζήτηση',
@@ -3919,24 +3991,42 @@ export const extraResources = {
         },
       },
       embeddings: {
-        label: 'Σημασιολογικό επίπεδο',
-        titleLine1: 'Οι ιδέες έχουν',
-        titleLine2: 'συντεταγμένες',
+        label: 'Επίπεδο ανάκτησης χωρίς διανύσματα',
+        titleLine1: 'Οι μαρτυρίες έχουν',
+        titleLine2: 'διαδρομές',
         subtitle:
-          'Κάθε φιλοσοφική έννοια μετατρέπεται σε ένα διανυσματικό embedding 3.072 αριθμών. Οι έννοιες με παρόμοιο νόημα τοποθετούνται κοντά, ανεξάρτητα από τη γλώσσα.',
-        analogy: 'Αναλογία',
-        physicalSpace: 'Φυσικός χώρος',
-        semanticSpace: 'Σημασιολογικός χώρος',
-        physicalClose: 'Κοντά = ίδιο μέρος',
-        semanticClose: 'Κοντά = ίδιο νόημα',
-        dimensions: '\u03B4\u03B9\u03B1\u03C3\u03C4\u03AC\u03C3\u03B5\u03B9\u03C2 \u03B1\u03BD\u03AC \u03AD\u03BD\u03BD\u03BF\u03B9\u03B1',
-        projected: '\u03C0\u03C1\u03BF\u03B2\u03AC\u03BB\u03BB\u03BF\u03BD\u03C4\u03B1\u03B9 \u03C3\u03B5 2D \u03C0\u03B1\u03C1\u03B1\u03BA\u03AC\u03C4\u03C9 \u03BC\u03AD\u03C3\u03C9 PCA',
+          'Το ενεργό backend δεν προβάλλει πια τις ερωτήσεις σε χώρο embeddings. Δρομολογεί τις μαρτυρίες με λημματική επέκταση, δέντρο έργων, ετικέτες KG, passage_citations και RRF πλήρους κειμένου/λημμάτων.',
+        analogy: 'Σήματα ανάκτησης',
+        physicalSpace: 'Διαδρομή ερώτησης',
+        semanticSpace: 'Διαδρομή τεκμηρίων',
+        physicalClose: 'Όροι και παραπομπές γίνονται SQL διαδρομές',
+        semanticClose: 'Επιμελημένοι σύνδεσμοι γίνονται αγκυρώσεις πηγών',
+        dimensions: 'διαστάσεις ανάκτησης στην παραγωγή',
+        projected: 'Τα endpoints visualization retrieval είναι αποσυρμένα compatibility stubs',
+        cards: {
+          lemma: {
+            title: 'Λημματική επέκταση',
+            body: 'Οι ελληνικοί και λατινικοί τύποι επεκτείνονται πριν την ανάκτηση, χωρίς διανυσματική ομοιότητα.',
+          },
+          tree: {
+            title: 'Δρομολόγηση δέντρου',
+            body: 'Αναφορές σε συγγραφείς και έργα λύνονται σε ενότητες κειμένου και anchors χωρίων.',
+          },
+          citations: {
+            title: 'Passage citations',
+            body: 'Οι επιμελημένοι σύνδεσμοι KG-χωρίων είναι η κύρια γέφυρα προς τις πηγές με βαθμούς εμπιστοσύνης.',
+          },
+          graph: {
+            title: 'Επέκταση γράφου',
+            body: 'Οντολογικοί γείτονες προσθέτουν έννοιες, έργα και επιχειρήματα γύρω από τους κόμβους εκκίνησης.',
+          },
+        },
         scatter: {
-          ariaLabel: '\u03A3\u03B7\u03BC\u03B1\u03C3\u03B9\u03BF\u03BB\u03BF\u03B3\u03B9\u03BA\u03CC\u03C2 \u03B4\u03B9\u03B1\u03BD\u03C5\u03C3\u03BC\u03B1\u03C4\u03B9\u03BA\u03CC\u03C2 \u03C7\u03CE\u03C1\u03BF\u03C2',
-          axisLabel: 'dim\u2081 / dim\u2082 (\u03C0\u03C1\u03BF\u03B2\u03BF\u03BB\u03AE PCA 3.072 \u03B4\u03B9\u03B1\u03C3\u03C4.)',
+          ariaLabel: 'Χάρτης εννοιολογικής δρομολόγησης',
+          axisLabel: 'επιμελημένη εγγύτητα KG',
           nearestTo: '\u0395\u03B3\u03B3\u03CD\u03C4\u03B5\u03C1\u03B5\u03C2 \u03AD\u03BD\u03BD\u03BF\u03B9\u03B5\u03C2 \u03C3\u03C4\u03BF "{{word}}"',
           placeholder: '\u03A0\u03BB\u03B7\u03BA\u03C4\u03C1\u03BF\u03BB\u03BF\u03B3\u03AE\u03C3\u03C4\u03B5 \u03BC\u03B9\u03B1 \u03BB\u03AD\u03BE\u03B7 \u03BA\u03B1\u03B9 \u03C0\u03B1\u03C4\u03AE\u03C3\u03C4\u03B5 Enter\u2026',
-          embed: 'Embedding \u2192',
+          embed: 'Δρομολόγηση \u2192',
         },
       },
       pipeline: {
@@ -3955,11 +4045,11 @@ export const extraResources = {
         autoPlay: '\u25B6 \u0391\u03C5\u03C4\u03CC\u03BC\u03B1\u03C4\u03B7 \u03B1\u03BD\u03B1\u03C0\u03B1\u03C1\u03B1\u03B3\u03C9\u03B3\u03AE',
         steps: {
           1: {
-            title: '\u03A3\u03B7\u03BC\u03B1\u03C3\u03B9\u03BF\u03BB\u03BF\u03B3\u03B9\u03BA\u03AE \u03B1\u03BD\u03B1\u03B6\u03AE\u03C4\u03B7\u03C3\u03B7',
-            subtitle: '\u0395\u03C1\u03CE\u03C4\u03B7\u03C3\u03B7 \u2192 Top-k \u03BA\u03CC\u03BC\u03B2\u03BF\u03B9 KG',
-            detail: '\u0397 \u03B5\u03C1\u03CE\u03C4\u03B7\u03C3\u03AE \u03C3\u03B1\u03C2 \u03BC\u03B5\u03C4\u03B1\u03C4\u03C1\u03AD\u03C0\u03B5\u03C4\u03B1\u03B9 \u03C3\u03B5 \u03B4\u03B9\u03AC\u03BD\u03C5\u03C3\u03BC\u03B1 3.072 \u03B4\u03B9\u03B1\u03C3\u03C4\u03AC\u03C3\u03B5\u03C9\u03BD \u03B1\u03C0\u03CC \u03C4\u03BF Gemini. \u03A4\u03BF Qdrant \u03B5\u03C0\u03B9\u03C3\u03C4\u03C1\u03AD\u03C6\u03B5\u03B9 \u03C4\u03BF\u03C5\u03C2 10 \u03C3\u03B7\u03BC\u03B1\u03C3\u03B9\u03BF\u03BB\u03BF\u03B3\u03B9\u03BA\u03AC \u03C0\u03B9\u03BF \u03CC\u03BC\u03BF\u03B9\u03BF\u03C5\u03C2 \u03BA\u03CC\u03BC\u03B2\u03BF\u03C5\u03C2 \u03C4\u03BF\u03C5 \u03B3\u03C1\u03AC\u03C6\u03BF\u03C5 \u03B3\u03BD\u03CE\u03C3\u03B7\u03C2 \u2014 \u03CC\u03C7\u03B9 \u03B1\u03BD\u03C4\u03B9\u03C3\u03C4\u03BF\u03B9\u03C7\u03AF\u03C3\u03B5\u03B9\u03C2 \u03BB\u03AD\u03BE\u03B5\u03C9\u03BD-\u03BA\u03BB\u03B5\u03B9\u03B4\u03B9\u03CE\u03BD, \u03B1\u03BB\u03BB\u03AC \u03B5\u03BD\u03BD\u03BF\u03B9\u03BF\u03BB\u03BF\u03B3\u03B9\u03BA\u03AE \u03B5\u03B3\u03B3\u03CD\u03C4\u03B7\u03C4\u03B1.',
+            title: 'Ανακάλυψη κόμβων εκκίνησης',
+            subtitle: 'Ερώτηση → SQL/δέντρο/λήμματα',
+            detail: 'Η ερώτηση επεκτείνεται σε όρους και λήμματα, οι αναφορές σε έργα και συγγραφείς λύνονται μέσω του δέντρου κειμένων, και οι ετικέτες/περιγραφές KG αναζητούνται σε SQL.',
             input: '"\u03A4\u03B9 \u03AD\u03BB\u03B5\u03B3\u03B1\u03BD \u03BF\u03B9 \u03A3\u03C4\u03C9\u03B9\u03BA\u03BF\u03AF \u03B3\u03B9\u03B1 \u03C4\u03B7 \u03BC\u03BF\u03AF\u03C1\u03B1;"',
-            output: '\u03A3\u03C4\u03C9\u03B9\u03BA\u03B9\u03C3\u03BC\u03CC\u03C2 (0,89) \u00B7 \u039C\u03BF\u03AF\u03C1\u03B1 (0,87) \u00B7 \u03A7\u03C1\u03CD\u03C3\u03B9\u03C0\u03C0\u03BF\u03C2 (0,84) \u2026',
+            output: '\u03A3\u03C4\u03C9\u03B9\u03BA\u03B9\u03C3\u03BC\u03CC\u03C2 \u00B7 \u039C\u03BF\u03AF\u03C1\u03B1 \u00B7 \u03A7\u03C1\u03CD\u03C3\u03B9\u03C0\u03C0\u03BF\u03C2 \u00B7 De Fato \u2026',
           },
           2: {
             title: '\u0394\u03B9\u03AC\u03C3\u03C7\u03B9\u03C3\u03B7 \u03B3\u03C1\u03AC\u03C6\u03BF\u03C5',
@@ -4017,7 +4107,7 @@ export const extraResources = {
         ],
         stackItems: [
           'Agentic GraphRAG',
-          'Διανυσματική βάση Qdrant',
+          'SQLStrategy χωρίς διανύσματα',
           'PostgreSQL + GIN',
           'Backend FastAPI',
           'React 19 + TypeScript',
@@ -4043,8 +4133,8 @@ export const extraResources = {
             example: 'logos -> logou logoi logon ...',
           },
           semantic: {
-            title: 'Σημασιολογική',
-            description: 'Embeddings Gemini και αναζήτηση ANN στο Qdrant. Εντοπίζει εννοιολογική ομοιότητα μεταξύ γλωσσών.',
+            title: 'Τεκμήρια KG',
+            description: 'Ετικέτες KG, passage_citations και επέκταση γράφου συνδέουν έννοιες με παρατεθειμένα χωρία.',
             example: '"free will" -> eph hemin · liberum arbitrium',
           },
         },

@@ -29,14 +29,14 @@ EleutherIA is a FAIR-compliant knowledge graph system with three independent pac
 └───────┬───────┘ └───────┬───────┘ └───────┬───────┘
         │                 │                 │
         ▼                 ▼                 │
-┌───────────────┐ ┌───────────────┐         │
-│  PostgreSQL   │ │    Qdrant     │◄────────┘
-│  (Relational) │ │   (Vectors)   │
-│               │ │               │
-│ - Works       │ │ - KG nodes    │
-│ - Passages    │ │ - Text embeds │
-│ - Citations   │ │ - Edge embeds │
-└───────────────┘ └───────────────┘
+┌───────────────────────────────────────────┐
+│              PostgreSQL                   │
+│  Relational corpus + KG + citations       │
+│                                           │
+│ - Works       - KG nodes                  │
+│ - Passages    - KG edges                  │
+│ - Citations   - Lemma/full-text indexes   │
+└───────────────────────────────────────────┘
 ```
 
 ## The Three Packages
@@ -62,31 +62,32 @@ EleutherIA is a FAIR-compliant knowledge graph system with three independent pac
 
 **Key Components:**
 - `KGAnalytics` - Community detection, centrality
-- `QdrantService` - Vector similarity search
+- `KGCache` - TTL-based caching
 - `KGCache` - TTL-based caching
 
 **Data:**
 - 17,746 nodes (22 types) — including passage translation pairs
 - 42,925 edges (56 relation types)
-- 3072-dim Gemini embeddings
+- Curated KG metadata, passage translation pairs, and graph analytics
 
 **Two-Node Passage Architecture:**
-Every passage has a source node (Greek/Latin) and a translation node (English, `_en` suffix). The source node preserves authoritative text; the translation node makes it discoverable via English semantic search. Linked by `translation_of` / `has_translation` edges. See [Passage Translation Architecture](../plans/2026-02-24-passage-translation-architecture.md).
+Every passage has a source node (Greek/Latin) and a translation node (English, `_en` suffix). The source node preserves authoritative text; the translation node makes it discoverable through English labels, full-text/lemmatic search, and curated `passage_citations`. Linked by `translation_of` / `has_translation` edges. See [Passage Translation Architecture](../plans/2026-02-24-passage-translation-architecture.md).
 
 ### 3. eleutheria-graphrag
 
 **Purpose:** Graph-based RAG for Q&A
 
 **Key Components:**
-- `PageIndex V3` - Direct retrieval pipeline (2 LLM calls)
+- `SQLStrategy` - Vectorless retrieval over tree routes, KG labels, passage_citations, and lemmatic/full-text RRF
 - `LLMService` - Multi-provider LLM interface (Kimi K2 / Gemini)
 - Streaming SSE responses
 
-**Pipeline (PageIndex V3):**
-1. Embed query → Qdrant parallel search (KG nodes + passages + edges)
-2. Enrich → passage_citations lookup + KG neighbor expansion
-3. Build FULL context (no truncation — Gemini 1M token context)
-4. ONE synthesis call → scholarly answer with citations
+**Pipeline:**
+1. Expand query terms/lemmas and detect CTS URN references
+2. Discover seeds via SQLStrategy: text-tree routing, KG label/description match, passage_citations, and full-text/lemmatic RRF
+3. Enrich with KG neighbor expansion, proof chains, and passage evidence
+4. Build full context for long-context synthesis
+5. Generate a scholarly answer with verified citations
 
 ## Data Flow
 
@@ -100,14 +101,14 @@ User Query
 │ Search      │
 └──────┬──────┘
        │
-       ├──────────────┬──────────────┐
-       ▼              ▼              ▼
-┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│ Full-text   │ │ Lemmatic    │ │ Semantic    │
-│ PostgreSQL  │ │ PostgreSQL  │ │ Qdrant      │
-└──────┬──────┘ └──────┬──────┘ └──────┬──────┘
-       │              │              │
-       └──────────────┴──────────────┘
+       ├──────────────┐
+       ▼              ▼
+┌─────────────┐ ┌─────────────┐
+│ Full-text   │ │ Lemmatic    │
+│ PostgreSQL  │ │ PostgreSQL  │
+└──────┬──────┘ └──────┬──────┘
+       │              │
+       └──────────────┘
                       │
                       ▼
                ┌─────────────┐
@@ -119,22 +120,22 @@ User Query
                Final Results
 ```
 
-### GraphRAG Query (PageIndex V3)
+### GraphRAG Query
 ```
 User Question
     │
     ▼
 ┌─────────────────────────────────────┐
-│ 1. Embed + Detect References        │
-│    Query → Gemini embedding          │
+│ 1. Expand + Detect References       │
+│    Terms, lemmas, CTS URNs           │
 │    + CTS URN reference detection     │
 └──────────────────┬──────────────────┘
                    │
                    ▼
 ┌─────────────────────────────────────┐
-│ 2. Parallel Search (no LLM)         │
-│    KG nodes + passages + edges       │
-│    via Qdrant vector similarity      │
+│ 2. Vectorless Discovery             │
+│    SQLStrategy: tree + KG labels     │
+│    + citations + RRF                 │
 └──────────────────┬──────────────────┘
                    │
                    ▼
@@ -174,7 +175,7 @@ User Question
 | `passage_citations` | Links passages to KG nodes |
 | `kg_nodes` | 17,746 knowledge graph nodes |
 | `kg_edges` | 42,925 relationships |
-| `text_embeddings` | 3072-dim vectors in Qdrant |
+| `work_tree_indices` | Hierarchical text routing metadata |
 
 ### Key Indexes
 
@@ -190,7 +191,6 @@ User Question
 | Visualization | Cosmograph (GPU-accelerated WebGL) |
 | API | FastAPI (Python 3.11+) |
 | Database | PostgreSQL 16 |
-| Vector DB | Qdrant |
 | LLM | Gemini (gemini-3.1-pro-preview, primary), Kimi K2.5 Thinking (extended reasoning) |
 | Deployment | Docker Compose (local), the platform compose + Cloudflare tunnel (production API, worker, public SPARQL), Cloudflare Pages (production frontend) |
 

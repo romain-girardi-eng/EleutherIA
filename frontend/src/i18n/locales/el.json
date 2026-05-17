@@ -600,7 +600,7 @@
     "philologicalWork": "Φιλολογική Εργασία",
     "philoDesc": "Όλα τα ελληνικά και λατινικά κείμενα υφίστανται χειροκίνητη επαλήθευση. Η λημματοποίηση χρησιμοποιεί τους μορφολογικούς αναλυτές LAULA (Λατινικά) και PAULA (Ελληνικά) για να επιτρέψει την αναζήτηση βασισμένη σε λήμματα. Κάθε κόμβος γραφήματος γνώσης είναι θεμελιωμένος σε πρωτογενείς πηγές (αρχαία κείμενα) ή δευτερογενή λογοτεχνία (σύγχρονη επιστήμη) με πλήρη βιβλιογραφική καταγωγή.",
     "technicalInfra": "Τεχνική Υποδομή",
-    "techStack": "Frontend React 19 + TypeScript + Vite + Tailwind CSS, backend FastAPI + Python, PostgreSQL (δομημένα δεδομένα) + Qdrant (διανυσματικές ενσωματώσεις), Cytoscape.js για οπτικοποίηση δικτύου, αγωγός GraphRAG με Gemini API, Docker Compose + Cloudflare tunnel (παραγωγική ανάπτυξη)"
+    "techStack": "Frontend React 19 + TypeScript + Vite + Tailwind CSS, backend FastAPI + Python, PostgreSQL (δομημένα δεδομένα, πλήρες κείμενο και λημματική), Cytoscape.js για οπτικοποίηση δικτύου, agentic GraphRAG χωρίς διανύσματα με Gemini/Kimi, Docker Compose + Cloudflare tunnel (παραγωγική ανάπτυξη)"
   },
   "login": {
     "title": "Συνδεθείτε στον λογαριασμό σας",
@@ -1143,7 +1143,7 @@
       "title": "Μάθετε για το EleutherIA",
       "overview": "Επισκόπηση",
       "knowledgeGraph": "Γράφημα Γνώσης",
-      "embeddings": "Ενσωματώσεις",
+      "embeddings": "Retrieval",
       "graphrag": "GraphRAG",
       "hybridSearch": "Υβριδική Αναζήτηση",
       "ancientTexts": "Αρχαία Κείμενα",
@@ -1157,7 +1157,7 @@
       "slogan": "Πώς λειτουργεί",
       "title": "Η αρχαία φιλοσοφία",
       "titleHighlight": "συναντά τη σύγχρονη AI",
-      "subtitle": "Ανακαλύψτε πώς τα γραφήματα γνώσης, οι σημασιολογικές ενσωματώσεις και το GraphRAG συνδυάζονται για να φωτίσουν 1.200 χρόνια φιλοσοφικής σκέψης. 2.159 κόμβοι, 151 αρχαία έργα και 14.600+ χωρία στα χέρια σας.",
+      "subtitle": "Discover how knowledge graphs, vectorless retrieval, and GraphRAG combine to illuminate 1,200 years of philosophical thought. 2,193 nodes, 189 ancient works, and 16,968 passages at your fingertips.",
       "cta": "Ξεκινήστε να Μαθαίνετε",
       "doi": "DOI: 10.5281/zenodo.17379489",
       "license": "Άδεια CC BY 4.0",
@@ -1222,12 +1222,12 @@
         },
         "ai": {
           "title": "Βοηθός AI",
-          "description": "Το GraphRAG συνδυάζει διάσχιση γραφήματος γνώσης με σημασιολογική αναζήτηση και σύνθεση LLM για τεκμηριωμένες απαντήσεις.",
+          "description": "GraphRAG combines knowledge graph traversal with SQL/tree/lemma retrieval and LLM synthesis for cited answers.",
           "features": [
-            "Ενσωματώσεις 3.072 διαστάσεων",
-            "Υβριδική αναζήτηση",
-            "Απαντήσεις σε ροή",
-            "Θεμελίωση πηγών"
+            "Vectorless retrieval",
+            "Hybrid text search",
+            "Streaming responses",
+            "Source grounding"
           ]
         }
       }
@@ -1289,35 +1289,35 @@
       }
     },
     "embeddings": {
-      "title": "Κατανόηση των Ενσωματώσεων",
-      "subtitle": "Πώς οι υπολογιστές κατανοούν το νόημα μέσω αριθμών",
+      "title": "Understanding Retrieval",
+      "subtitle": "How EleutherIA finds evidence with vectorless retrieval",
       "gpsAnalogy": {
-        "title": "Σκεφτείτε τις Ενσωματώσεις ως GPS για Ιδέες",
-        "description": "Ακριβώς όπως οι συντεταγμένες GPS σας λένε πού βρίσκεται μια πόλη στον φυσικό χώρο, οι ενσωματώσεις σας λένε πού βρίσκεται μια ιδέα στον",
-        "semanticSpace": "σημασιολογικό χώρο",
+        "title": "Think of retrieval as routes through evidence",
+        "description": "Instead of assigning coordinates to ideas, EleutherIA follows structured routes through",
+        "semanticSpace": "the corpus and graph",
         "physical": {
           "title": "Φυσικός Κόσμος",
           "closeMeans": "Κοντά = Παρόμοια τοποθεσία"
         },
         "semantic": {
           "title": "Σημασιολογικός Κόσμος",
-          "closeMeans": "Κοντά = Παρόμοιο νόημα"
+          "closeMeans": "Linked = cited evidence"
         }
       },
       "steps": {
         "input": {
           "title": "Εισαγωγή Κειμένου",
-          "description": "Οποιοδήποτε κείμενο μπορεί να μετατραπεί σε ενσωμάτωση",
+          "description": "Any question can be expanded into terms, lemmas, and references",
           "example": "\"Οι Στωικοί πίστευαν ότι η μοίρα είναι συμβατή με την ελευθερία\""
         },
         "processing": {
-          "title": "Επεξεργασία AI",
-          "description": "Το Google Gemini διαβάζει το κείμενο και κωδικοποιεί το νόημά του"
+          "title": "Retrieval Processing",
+          "description": "The backend routes the query through SQL, tree indexes, and passage citations"
         },
         "output": {
-          "title": "Διανυσματική Έξοδος",
-          "description": "3.072 αριθμοί που αποτυπώνουν το νόημα",
-          "comment": "// 3.072 διαστάσεις"
+          "title": "Evidence Output",
+          "description": "Passage anchors and graph nodes with citations",
+          "comment": "// vectorless"
         }
       },
       "comparison": {
@@ -1328,20 +1328,20 @@
           "misses": "Χάνει: \"ελευθερία\", \"ἐφ' ἡμῖν\", \"liberum arbitrium\""
         },
         "semantic": {
-          "title": "Σημασιολογική Αναζήτηση",
+          "title": "Evidence Routing",
           "description": "Βρίσκει κείμενα με βάση το νόημα, ανεξάρτητα από τις ακριβείς λέξεις που χρησιμοποιούνται.",
           "finds1": "Βρίσκει: \"ελεύθερη βούληση\", \"ελευθερία\", \"ἐφ' ἡμῖν\"",
           "finds2": "Βρίσκει: \"liberum arbitrium\", \"ηθική δράση\""
         }
       },
       "journey": {
-        "title": "Παρακολουθήστε το Κείμενο να Γίνεται Διάνυσμα",
-        "description": "Βιώστε το μαγικό ταξίδι του πώς το φιλοσοφικό κείμενο μετατρέπεται σε ενσωμάτωση 3.072 διαστάσεων. Κάντε κλικ στο Play για να παρακολουθήσετε τη διαδικασία 6 σταδίων.",
-        "loading": "Φόρτωση ταξιδιού ενσωμάτωσης..."
+        "title": "Watch a Query Become Evidence",
+        "description": "Follow how a philosophical question becomes terms, lemmas, tree sections, passage anchors, and graph context.",
+        "loading": "Loading retrieval journey..."
       },
       "semanticSpace": {
-        "title": "Εξερευνήστε τον Σημασιολογικό Χώρο",
-        "description": "Κάθε φωτεινό σημείο αντιπροσωπεύει μια φιλοσοφική έννοια. Έννοιες με παρόμοια νοήματα ομαδοποιούνται στον τρισδιάστατο χώρο. Σύρετε για περιστροφή, κυλήστε για ζουμ.",
+        "title": "Explore the Concept Map",
+        "description": "Each point represents a philosophical concept. Curated relationships cluster related ideas in 3D space. Drag to rotate, scroll to zoom.",
         "loading": "Φόρτωση τρισδιάστατης οπτικοποίησης...",
         "legend": {
           "stoic": "Στωικές Έννοιες",
@@ -1362,11 +1362,11 @@
       },
       "steps": {
         "semanticSearch": {
-          "title": "Σημασιολογική Αναζήτηση",
-          "description": "Μετατροπή ερώτησης σε ενσωμάτωση → Εύρεση παρόμοιων κόμβων στο γράφημα γνώσης",
-          "detail": "Η ερώτησή σας γίνεται διάνυσμα 3.072 αριθμών. Το συγκρίνουμε με όλους τους {{nodeCount}} κόμβους KG και βρίσκουμε τους 10 πιο παρόμοιους.",
+          "title": "Seed Discovery",
+          "description": "Expand question terms -> find KG nodes and passage anchors",
+          "detail": "Your question becomes lemmas, text-tree routes, KG label matches, and passage_citations. The backend uses vectorless SQL retrieval, not embeddings.",
           "input": "\"Τι είπαν οι Στωικοί για τη μοίρα;\"",
-          "output": "Βρέθηκαν: Στωικισμός (0.89), Μοίρα (0.87), Χρύσιππος (0.84)..."
+          "output": "Found: Stoicism, Fate, Chrysippus, De Fato..."
         },
         "graphTraversal": {
           "title": "Διάσχιση Γραφήματος",
@@ -1418,9 +1418,9 @@
           "example": "Ερώτημα: \"λόγος\" → Βρίσκει όλους τους 10+ ελληνικούς τύπους"
         },
         "semantic": {
-          "title": "Σημασιολογική Αναζήτηση",
+          "title": "Graph Evidence",
           "speed": "< 2s",
-          "description": "Βρίσκει κείμενα με βάση το νόημα χρησιμοποιώντας ενσωματώσεις",
+          "description": "Finds texts through KG links and passage citations",
           "strength": "Εννοιολογική Κατανόηση",
           "example": "Ερώτημα: \"ελεύθερη βούληση\" → Βρίσκει επίσης \"ελευθερία\", \"ἐφ' ἡμῖν\""
         }
@@ -1486,16 +1486,16 @@
       "searchPlaceholder": "Αναζήτηση γλωσσαρίου...",
       "terms": {
         "embedding": {
-          "term": "Ενσωμάτωση",
-          "definition": "Μια λίστα αριθμών (3.072) που αντιπροσωπεύει το νόημα κειμένου. Παρόμοια νοήματα έχουν παρόμοια διανύσματα."
+          "term": "Legacy Embedding",
+          "definition": "Legacy vector representation. EleutherIA's current production GraphRAG retrieval is vectorless."
         },
         "vector": {
-          "term": "Διάνυσμα",
-          "definition": "Μια λίστα αριθμών. Στο EleutherIA, κάθε κείμενο αντιπροσωπεύεται από 3.072 αριθμούς."
+          "term": "Legacy Vector",
+          "definition": "A numeric representation used by older semantic-search prototypes; not the current production retrieval path."
         },
         "semanticSearch": {
-          "term": "Σημασιολογική Αναζήτηση",
-          "definition": "Εύρεση κειμένων με βάση το νόημα, όχι μόνο λέξεις-κλειδιά. \"Ελεύθερη βούληση\" βρίσκει επίσης \"ελευθερία\" και \"ἐφ' ἡμῖν\"."
+          "term": "Graph Evidence Search",
+          "definition": "Finding texts through lemmas, KG links, and curated passage citations rather than only exact keywords."
         },
         "knowledgeGraph": {
           "term": "Γράφημα Γνώσης",
@@ -1527,11 +1527,11 @@
         },
         "cosineSimilarity": {
           "term": "Ομοιότητα Συνημιτόνου",
-          "definition": "Μέτρο ομοιότητας διανυσμάτων. 1.0 = πανομοιότυπα, 0.0 = εντελώς διαφορετικά."
+          "definition": "A vector-similarity measure used by older prototypes; current retrieval uses SQL, lemmas, and curated citations."
         },
         "qdrant": {
-          "term": "Qdrant",
-          "definition": "Βάση δεδομένων διανυσμάτων βελτιστοποιημένη για αποθήκευση και αναζήτηση ενσωματώσεων αποτελεσματικά."
+          "term": "Legacy Vector Store",
+          "definition": "Former vector-store dependency. Current production retrieval is vectorless."
         }
       }
     },
@@ -1548,7 +1548,7 @@
   },
   "agenticGraphrag": {
     "pageTitle": "Αρχιτεκτονική Agentic GraphRAG",
-    "pageDescription": "Μια διαφανής εξήγηση της agentικής pipeline ανάκτησης: FSM 12 κόμβων, υποστήριξη πολλαπλών μοντέλων, SQL fallback χωρίς διανύσματα και πλήρες ίχνος συλλογισμού.",
+    "pageDescription": "Διαφανής εξήγηση του agentic pipeline ανάκτησης: FSM 12 κόμβων, υποστήριξη πολλών μοντέλων, SQL ανάκτηση χωρίς διανύσματα και πλήρης ίχνος συλλογισμού.",
     "overview": {
       "title": "Επισκόπηση Αρχιτεκτονικής",
       "architectureLabel": "Agentική Pipeline",
@@ -1557,17 +1557,17 @@
       "innovationDescription": "Αντί για 10+ κλήσεις LLM ανά ερώτημα, η agentική pipeline χρησιμοποιεί παράλληλη ανάκτηση, επιμελημένα passage_citations και το παράθυρο πλαισίου 1M tokens του Gemini:",
       "fsmOrchestration": "FSM pydantic-graph 12 κόμβων για αυτόνομη ενορχήστρωση",
       "multiModel": "Πολλαπλά μοντέλα: Gemini 3 (κύριο) + Kimi K2.5 Thinking (εκτεταμένος συλλογισμός)",
-      "vectorlessFallback": "SQL fallback χωρίς διανύσματα μέσω passage_citations για ισχυρή ανάκτηση"
+      "vectorlessFallback": "Κύρια SQL ανάκτηση χωρίς διανύσματα μέσω passage_citations"
     },
     "pipeline": {
       "title": "Στάδια Pipeline",
       "embedding": {
-        "title": "1. Embedding + Εντοπισμός Αναφορών",
-        "description": "Διανυσματοποίηση ερωτήματος μέσω Gemini, συν εντοπισμός CTS URN μέσω regex για άμεση αναζήτηση αποσπασμάτων."
+        "title": "1. Expand + Detect References",
+        "description": "Query terms and lemmas are expanded, with regex CTS URN detection for direct passage lookup."
       },
       "parallelSearch": {
-        "title": "2. Παράλληλη Αναζήτηση",
-        "description": "Τρία ερωτήματα Qdrant παράλληλα: κόμβοι KG, αποσπάσματα κειμένου και ακμές. Καθαρή διανυσματική ομοιότητα, χωρίς κλήση LLM."
+        "title": "2. Vectorless Discovery",
+        "description": "SQLStrategy combines tree routing, KG label/description matches, passage_citations, and full-text/lemmatic RRF."
       },
       "enrichment": {
         "title": "3. Παράλληλος Εμπλουτισμός",
@@ -1582,7 +1582,7 @@
       "title": "Βασικές Δυνατότητες",
       "multiModelTitle": "Υποστήριξη Πολλαπλών Μοντέλων",
       "multiModelDesc": "Η pipeline δρομολογεί σε διαφορετικά μοντέλα ανάλογα με την πολυπλοκότητα της εργασίας:",
-      "gemini": "Κύρια σύνθεση και embedding (πλαίσιο 1M tokens)",
+      "gemini": "Primary synthesis and long-context reasoning (1M token context)",
       "kimi": "Εκτεταμένος συλλογισμός για σύνθετα multi-hop ερωτήματα",
       "keyStrengths": "Δυνατά Σημεία",
       "noTruncation": {
@@ -1598,8 +1598,8 @@
         "description": "Πλήρης διαφάνεια: δείτε ποιοι κόμβοι, ακμές και αποσπάσματα χρησιμοποιήθηκαν"
       },
       "sqlFallback": {
-        "title": "SQL Fallback Χωρίς Διανύσματα",
-        "description": "Όταν το Qdrant δεν είναι διαθέσιμο, η ανάκτηση χρησιμοποιεί SQL passage_citations"
+        "title": "Vectorless SQL Retrieval",
+        "description": "The primary retrieval path uses SQL passage_citations, text-tree routing, and lemmatic/full-text search"
       },
       "evolutionTitle": "Εξέλιξη από το HiRAG",
       "evolution": {
@@ -1608,7 +1608,7 @@
         "pageindexV3": "PageIndex V3 (Φεβ. 2026)",
         "pageindexV3Desc": "Μειώθηκε σε 5 βήματα, 2 κλήσεις LLM αξιοποιώντας passage_citations και πλαίσιο 1M του Gemini",
         "current": "Τρέχον Agentic GraphRAG",
-        "currentDesc": "FSM 12 κόμβων με δρομολόγηση πολλαπλών μοντέλων, fallback χωρίς διανύσματα και υποστήριξη streaming"
+        "currentDesc": "12-node FSM with multi-model routing, vectorless retrieval, and streaming support"
       },
       "netResult": "Αποτέλεσμα",
       "netResultDescription": "2 κλήσεις LLM αντί για 10+, πλήρες μη περικομμένο πλαίσιο και δρομολόγηση πολλαπλών μοντέλων για ταχύτερες, ακριβέστερες ακαδημαϊκές απαντήσεις με πλήρη απόδοση πηγών."
@@ -1624,8 +1624,8 @@
       "apiEndpointsDesc": "Διαδρομές GraphRAG: /query, /query/stream με SSE, τελικά σημεία υβριδικής αναζήτησης",
       "pipelineSteps": "Βήματα Pipeline",
       "steps": {
-        "embed": "Διανυσματοποίηση ερωτήματος + εντοπισμός αναφορών CTS URN",
-        "search": "Παράλληλη αναζήτηση Qdrant (κόμβοι + αποσπάσματα + ακμές)",
+        "embed": "Expand terms + detect CTS URN references",
+        "search": "Vectorless SQL/tree/lemma discovery",
         "enrich": "Παράλληλος εμπλουτισμός (passage_citations + γείτονες KG)",
         "context": "Κατασκευή πλήρους μη περικομμένου πλαισίου",
         "synthesize": "Μία κλήση LLM σύνθεσης με prompt κατά των ψευδαισθήσεων"

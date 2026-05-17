@@ -53,6 +53,7 @@ class EvidenceCollector:
         self.evidence_bundles: list[EvidenceBundle] = []
         self.seed_node_ids: list[str] = []
         self.context_node_ids: list[str] = []
+        self.inferred_edges: set[tuple[str, str, str]] = set()
         self.tool_calls: list[ToolCallRecord] = []
 
     def ingest(self, tool_name: str, _args: dict[str, Any], result: BaseModel) -> None:
@@ -69,6 +70,8 @@ class EvidenceCollector:
             self._ingest_passages(result_dict, tool_name)
         elif tool_name == "get_node_detail":
             self._ingest_node_detail(result_dict)
+        elif tool_name == "infer_transitive":
+            self._ingest_infer_transitive(result_dict)
         # read_work_section doesn't directly produce evidence
 
     def record_call(
@@ -103,6 +106,10 @@ class EvidenceCollector:
         state.seed_node_ids = self.seed_node_ids
         state.context_node_ids = self.context_node_ids
         state.passages_used = len(self.evidence_bundles)
+        if self.inferred_edges:
+            if not isinstance(getattr(state, "inferred_edges", None), set):
+                state.inferred_edges = set()
+            state.inferred_edges.update(self.inferred_edges)
 
         # Leave context_pack.prompt_context empty — DraftClaimLedger will
         # call _build_context_pack(state) which builds the proper prompt
@@ -227,5 +234,61 @@ class EvidenceCollector:
                     source=EvidenceSource.DIRECT_LOOKUP,
                     period=result.get("period"),
                     school=result.get("school"),
+                )
+            )
+
+    def _ingest_infer_transitive(self, result: dict[str, Any]) -> None:
+        """Ingest ontology-derived nodes from infer_transitive."""
+        start_id = str(result.get("start_node_id") or "")
+        if start_id and start_id not in self.seen_node_ids:
+            self.seen_node_ids.add(start_id)
+            self.context_node_ids.append(start_id)
+            self.secondary_evidence.append(
+                Evidence(
+                    id=start_id,
+                    label=str(result.get("start_label") or start_id),
+                    source=EvidenceSource.GRAPH_TRAVERSAL,
+                    metadata={
+                        "tool": "infer_transitive",
+                        "relation": result.get("relation"),
+                        "role": "start_node",
+                    },
+                )
+            )
+
+        for raw_edge in result.get("inferred_edges", []):
+            if isinstance(raw_edge, (list, tuple)) and len(raw_edge) == 3:
+                s_id, rel, o_id = (str(raw_edge[0]), str(raw_edge[1]), str(raw_edge[2]))
+                if s_id and rel and o_id:
+                    self.inferred_edges.add((s_id, rel, o_id))
+
+        for node in result.get("derived_nodes", []):
+            nid = str(node.get("node_id") or "")
+            if not nid:
+                continue
+            raw_edge = node.get("inferred_edge")
+            if isinstance(raw_edge, (list, tuple)) and len(raw_edge) == 3:
+                s_id, rel, o_id = (str(raw_edge[0]), str(raw_edge[1]), str(raw_edge[2]))
+                if s_id and rel and o_id:
+                    self.inferred_edges.add((s_id, rel, o_id))
+            if nid in self.seen_node_ids:
+                continue
+            self.seen_node_ids.add(nid)
+            self.context_node_ids.append(nid)
+            self.secondary_evidence.append(
+                Evidence(
+                    id=nid,
+                    label=str(node.get("label") or nid),
+                    type=str(node.get("type") or ""),
+                    source=EvidenceSource.GRAPH_TRAVERSAL,
+                    score=max(0.0, 1.0 / max(1, int(node.get("distance") or 1))),
+                    metadata={
+                        "tool": "infer_transitive",
+                        "relation": result.get("relation"),
+                        "inverse_relation": result.get("inverse_relation"),
+                        "distance": node.get("distance"),
+                        "derivation": node.get("derivation") or [],
+                        "inferred_edge": node.get("inferred_edge"),
+                    },
                 )
             )

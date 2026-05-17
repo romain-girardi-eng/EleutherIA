@@ -125,7 +125,7 @@ const GraphControls = memo(function GraphControls({
   const layouts = [
     { value: 'hierarchical', label: 'Hierarchical', description: 'Author → Work → Passage structure (zoom to reveal passages)' },
     { value: 'fcose', label: t('kg.layouts.schoolClusters'), description: 'Philosophical schools grouped spatially with balanced hierarchy' },
-    { value: 'semantic', label: t('kg.layouts.semanticMap'), description: 'Arranged by conceptual similarity using AI embeddings' },
+    { value: 'semantic', label: t('kg.layouts.semanticMap'), description: 'Arranged by curated conceptual similarity' },
     { value: 'breadthfirst', label: t('kg.layouts.temporal'), description: 'Chronological tree structure' },
     { value: 'cose', label: 'Force-Directed', description: 'Classic automatic layout' },
     { value: 'concentric', label: t('kg.layouts.circular'), description: 'Rings based on connections' },

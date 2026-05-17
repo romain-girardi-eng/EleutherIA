@@ -6,7 +6,8 @@ This service provides database-level search functionality:
 - Lemmatic search on pre-indexed lemma data
 - Reciprocal Rank Fusion (RRF) for combining results
 
-Note: Semantic (vector) search is provided by the kg package.
+The legacy vector leg has been retired; GraphRAG now uses the vectorless
+SQL/tree/lemma retrieval strategy in the graphrag package.
 """
 
 import logging

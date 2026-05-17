@@ -77,8 +77,8 @@ export const mockReasoningSteps: ReasoningStep[] = [
   {
     id: 1,
     type: 'search',
-    label: 'Semantic Search',
-    description: 'Searching for relevant concepts',
+    label: 'Seed Discovery',
+    description: 'Routing through SQL, lemmas, and passage citations',
     status: 'complete',
     nodes: ['person_chrysippus', 'concept_heimarmene']
   },

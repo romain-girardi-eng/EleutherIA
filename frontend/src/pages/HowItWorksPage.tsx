@@ -2,10 +2,10 @@
  * HowItWorksPage — scroll-snap educational landing page
  *
  * Sections:
- *   1. Hero             — dark, particles, title, scroll hint
+ *   1. Hero             — parchment opener, route summary, scroll hint
  *   2. The Problem      — parchment, compare cards, key stats
  *   3. Knowledge Graph  — white, KG diagram, node types
- *   4. Embeddings       — dark, interactive scatter plot
+ *   4. Retrieval        — dark, vectorless SQL/tree/lemma/citation routing
  *   5. GraphRAG Pipeline — dark, 5-stage interactive pipeline
  *   6. Architecture     — white, Agentic GraphRAG + corpus stats
  *   7. Hybrid Search    — parchment, 3 methods + RRF
@@ -26,11 +26,9 @@ import {
 } from 'lucide-react';
 
 import {
-  AuroraStrip,
   BackgroundMesh,
   CompareCards,
   DotNavigator,
-  EmbeddingScatterPlot,
   FAIRBadges,
   GitHubPill,
   GlassCard,
@@ -40,7 +38,6 @@ import {
 } from '../components/how-it-works';
 import type { DotNavSection } from '../components/how-it-works';
 
-import { MorphingParticles } from '../components/MorphingParticles';
 import DatabaseWithRestApi from '../components/ui/database-with-rest-api';
 import AgenticGraphRAGDetails from '../components/AgenticGraphRAGDetails';
 
@@ -125,104 +122,103 @@ export default function HowItWorksPage() {
       />
 
       {/* ── Section 1: Hero ─────────────────────────────────────────────── */}
-      <ScrollSection id="hero" className="bg-zinc-950" noInner>
-        {/* Particles background */}
-        <div className="absolute inset-0">
-          <MorphingParticles
-            morphDuration={7}
-            rotationSpeed={0.1}
-            particleSize={0.45}
-            lineOpacity={0.015}
-            connectionDistance={14}
-            colorScheme="warm"
-            enableBloom
-            bloomIntensity={0.18}
-            enableHover
-          />
-        </div>
+      <ScrollSection id="hero" className="bg-parchment-100" noInner>
+        <BackgroundMesh variant="grid" color="rgba(180,120,40,1)" opacity={0.045} />
 
-        {/* Subtle dot mesh overlay */}
-        <BackgroundMesh variant="dots" color="rgba(255,255,255,1)" opacity={0.03} />
-
-        {/* Dark radial scrim — kills particle bleed behind text */}
         <div
-          aria-hidden="true"
-          className="absolute inset-0 z-[2] pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)',
-          }}
-        />
-
-        {/* Hero content */}
-        <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center" style={{ minHeight: 'var(--snap-h, 100dvh)' }}>
-          {/* Kicker */}
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-6"
-          >
-            <span className="inline-flex items-center gap-2 text-xs font-body uppercase tracking-[0.2em] text-orange-400 border border-orange-500/30 bg-orange-500/10 rounded-full px-4 py-1.5">
-              <Sparkles className="w-3.5 h-3.5" />
-              {t('howItWorksPage.hero.badge')}
-            </span>
-          </motion.div>
-
-          {/* Main title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display text-4xl sm:text-6xl lg:text-7xl xl:text-8xl text-white leading-[1.08] max-w-5xl mx-auto mb-6 drop-shadow-[0_2px_24px_rgba(0,0,0,0.9)]"
-          >
-            {t('howItWorksPage.hero.titlePrefix')}{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
-              {t('howItWorksPage.hero.titleHighlight')}
-            </span>
-            <br />
-            {t('howItWorksPage.hero.titleSuffix')}
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="font-body text-lg sm:text-xl text-white/85 max-w-2xl mx-auto mb-12 leading-relaxed drop-shadow-[0_1px_12px_rgba(0,0,0,0.95)]"
-          >
-            {t('howItWorksPage.hero.subtitle')}
-          </motion.p>
-
-          {/* CTA row */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
-            className="flex flex-wrap items-center justify-center gap-4 mb-20"
-          >
-            <Link
-              to="/graphrag"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-500 hover:bg-orange-400 text-white font-body font-medium text-sm transition-colors"
+          className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 grid lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-16 items-center"
+          style={{ minHeight: 'var(--snap-h, 100dvh)' }}
+        >
+          <div className="pt-14 pb-28 lg:pb-20">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.12 }}
+              className="mb-6"
             >
-              <Sparkles className="w-4 h-4" />
-              {t('howItWorksPage.hero.cta')}
-            </Link>
-            <GitHubPill variant="dark" label={t('learn.hero.openSource')} />
+              <span className="inline-flex items-center gap-2 text-xs font-body uppercase tracking-[0.18em] text-orange-700 border border-orange-400/40 bg-orange-50 rounded-full px-4 py-1.5">
+                <Sparkles className="w-3.5 h-3.5" />
+                {t('howItWorksPage.hero.badge')}
+              </span>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              className="font-display text-4xl sm:text-6xl lg:text-7xl text-stone-800 leading-[1.08] max-w-4xl mb-6"
+            >
+              {t('howItWorksPage.hero.titlePrefix')}{' '}
+              <span className="text-orange-700">{t('howItWorksPage.hero.titleHighlight')}</span>
+              <br />
+              {' '}
+              {t('howItWorksPage.hero.titleSuffix')}
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.36, ease: [0.22, 1, 0.36, 1] }}
+              className="font-body text-lg sm:text-xl text-stone-600 max-w-2xl mb-10 leading-relaxed"
+            >
+              {t('howItWorksPage.hero.subtitle')}
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.5 }}
+              className="flex flex-wrap items-center gap-4"
+            >
+              <Link
+                to="/graphrag"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-800 hover:bg-orange-900 text-white font-body font-medium text-sm transition-colors"
+              >
+                <Sparkles className="w-4 h-4" />
+                {t('howItWorksPage.hero.cta')}
+              </Link>
+              <GitHubPill variant="light" label={t('learn.hero.openSource')} />
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
+            className="hidden lg:block border-l border-stone-300/70 pl-8"
+          >
+            <p className="text-xs font-body uppercase tracking-[0.18em] text-stone-400 mb-6">
+              Vectorless GraphRAG route
+            </p>
+            <div className="space-y-5">
+              {[
+                { icon: <BookOpen className="w-4 h-4" />, title: 'Question', body: 'Greek, Latin, English, or a CTS reference' },
+                { icon: <GitBranch className="w-4 h-4" />, title: 'Retrieval', body: 'SQLStrategy, lemmas, work tree, passage citations' },
+                { icon: <Quote className="w-4 h-4" />, title: 'Evidence', body: 'Primary passages, KG context, proof chains' },
+                { icon: <Sparkles className="w-4 h-4" />, title: 'Answer', body: 'Cited synthesis with verification' },
+              ].map((item) => (
+                <div key={item.title} className="grid grid-cols-[2.25rem_1fr] gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-orange-100 text-orange-700 border border-orange-200 flex items-center justify-center">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <h2 className="font-display text-lg text-stone-800 leading-tight">{item.title}</h2>
+                    <p className="font-body text-sm text-stone-500 leading-relaxed">{item.body}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </motion.div>
 
-          {/* Scroll hint */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
-            className="absolute bottom-10"
+            transition={{ delay: 0.9 }}
+            className="absolute bottom-7 left-1/2 -translate-x-1/2"
           >
-            <ScrollHint theme="light" label={t('howItWorksPage.hero.scrollHint')} />
+            <ScrollHint theme="dark" label={t('howItWorksPage.hero.scrollHint')} />
           </motion.div>
         </div>
-
-        {/* Bottom transition strip */}
-        <AuroraStrip position="bottom" palette="warm" height="180px" />
       </ScrollSection>
 
       {/* ── Section 2: The Problem ───────────────────────────────────────── */}
@@ -384,12 +380,12 @@ export default function HowItWorksPage() {
         </div>
       </ScrollSection>
 
-      {/* ── Section 4: Vector Embeddings ─────────────────────────────────── */}
+      {/* ── Section 4: Vectorless Retrieval ──────────────────────────────── */}
       <ScrollSection id="embeddings" className="bg-zinc-950">
         <BackgroundMesh variant="dots" color="rgba(255,255,255,1)" opacity={0.025} />
 
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-20">
-          <SectionLabel icon={<Brain className="w-4 h-4" />} text={t('howItWorksPage.embeddings.label')} />
+          <SectionLabel icon={<GitBranch className="w-4 h-4" />} text={t('howItWorksPage.embeddings.label')} />
 
           <div className="grid lg:grid-cols-[2fr_3fr] gap-12 items-start mt-10">
 
@@ -415,7 +411,6 @@ export default function HowItWorksPage() {
                 {t('howItWorksPage.embeddings.subtitle')}
               </motion.p>
 
-              {/* GPS analogy card */}
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -425,22 +420,21 @@ export default function HowItWorksPage() {
               >
                 <p className="text-xs font-body uppercase tracking-widest text-white/40">{t('howItWorksPage.embeddings.analogy')}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm font-body">
-                  <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-3 overflow-hidden">
+                  <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-3">
                     <p className="text-blue-300 font-semibold mb-1">{t('howItWorksPage.embeddings.physicalSpace')}</p>
-                    <p className="text-white/60 font-mono text-xs break-all">Paris → (48.86°, 2.35°)</p>
-                    <p className="text-white/60 font-mono text-xs break-all">London → (51.51°, −0.13°)</p>
+                    <p className="text-white/60 font-mono text-xs break-words">Query → terms + references</p>
+                    <p className="text-white/60 font-mono text-xs break-words">Works → tree sections</p>
                     <p className="text-white/40 text-xs mt-1">{t('howItWorksPage.embeddings.physicalClose')}</p>
                   </div>
-                  <div className="rounded-xl bg-orange-500/10 border border-orange-500/20 p-3 overflow-hidden">
+                  <div className="rounded-xl bg-orange-500/10 border border-orange-500/20 p-3">
                     <p className="text-orange-300 font-semibold mb-1">{t('howItWorksPage.embeddings.semanticSpace')}</p>
-                    <p className="text-white/60 font-mono text-xs break-all">"Fate" → [0.89, −0.23, …]</p>
-                    <p className="text-white/60 font-mono text-xs break-all">"Destiny" → [0.91, −0.21, …]</p>
+                    <p className="text-white/60 font-mono text-xs break-words">KG node → passage_citations</p>
+                    <p className="text-white/60 font-mono text-xs break-words">Lemma → attested passages</p>
                     <p className="text-white/40 text-xs mt-1">{t('howItWorksPage.embeddings.semanticClose')}</p>
                   </div>
                 </div>
               </motion.div>
 
-              {/* Dimension callout */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -448,7 +442,7 @@ export default function HowItWorksPage() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="flex items-baseline gap-3"
               >
-                <span className="font-display text-5xl text-orange-400">3 072</span>
+                <span className="font-display text-5xl text-orange-400">0</span>
                 <span className="font-body text-sm text-white/50 leading-snug">
                   {t('howItWorksPage.embeddings.dimensions')}<br />
                   <span className="text-white/30 text-xs">{t('howItWorksPage.embeddings.projected')}</span>
@@ -456,14 +450,46 @@ export default function HowItWorksPage() {
               </motion.div>
             </div>
 
-            {/* ── Right column: interactive scatter plot ── */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.05 }}
+              className="grid sm:grid-cols-2 gap-4"
             >
-              <EmbeddingScatterPlot />
+              {[
+                {
+                  icon: <Languages className="w-5 h-5" />,
+                  title: t('howItWorksPage.embeddings.cards.lemma.title'),
+                  body: t('howItWorksPage.embeddings.cards.lemma.body'),
+                },
+                {
+                  icon: <BookOpen className="w-5 h-5" />,
+                  title: t('howItWorksPage.embeddings.cards.tree.title'),
+                  body: t('howItWorksPage.embeddings.cards.tree.body'),
+                },
+                {
+                  icon: <Quote className="w-5 h-5" />,
+                  title: t('howItWorksPage.embeddings.cards.citations.title'),
+                  body: t('howItWorksPage.embeddings.cards.citations.body'),
+                },
+                {
+                  icon: <Network className="w-5 h-5" />,
+                  title: t('howItWorksPage.embeddings.cards.graph.title'),
+                  body: t('howItWorksPage.embeddings.cards.graph.body'),
+                },
+              ].map((card) => (
+                <div
+                  key={card.title}
+                  className="rounded-2xl border border-white/10 bg-white/5 p-5 min-h-[180px]"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-orange-500/15 text-orange-300 flex items-center justify-center mb-4">
+                    {card.icon}
+                  </div>
+                  <h3 className="font-display text-xl text-white mb-2">{card.title}</h3>
+                  <p className="font-body text-sm leading-relaxed text-white/60">{card.body}</p>
+                </div>
+              ))}
             </motion.div>
 
           </div>

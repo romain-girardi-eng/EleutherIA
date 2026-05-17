@@ -174,6 +174,33 @@ def test_proof_chain_helper_returns_empty_when_no_inferred() -> None:
     assert chain == []
 
 
+def test_proof_chain_helper_reconstructs_transitive_edge() -> None:
+    deps = Deps(
+        db=AsyncMock(),
+        llm=AsyncMock(),
+        node_lookup={},
+        outgoing_edges={
+            "passage_p": [
+                {"source": "passage_p", "target": "chapter_c", "relation": "part_of"}
+            ],
+            "chapter_c": [
+                {"source": "chapter_c", "target": "book_b", "relation": "part_of"}
+            ],
+            "book_b": [
+                {"source": "book_b", "target": "work_x", "relation": "part_of"}
+            ],
+        },
+        incoming_edges={},
+    )
+    state = RAGState(question="where is passage p")
+    state.inferred_edges.add(("passage_p", "part_of", "work_x"))
+
+    chain = _proof_chain_for_inferred(state, deps, "passage_p", "work_x")
+
+    assert chain
+    assert chain[0]["rule"] == "transitivity"
+
+
 # ---------------------------------------------------------------------------
 # 3. Pydantic round-trip preserves proof_chain
 # ---------------------------------------------------------------------------

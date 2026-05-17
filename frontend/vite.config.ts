@@ -2,6 +2,60 @@ import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
+const vendorGroups: Array<[string, string[]]> = [
+  [
+    'cosmograph-vendor',
+    [
+      '@cosmograph/react',
+      '@cosmograph/cosmograph',
+      '@cosmograph/ui',
+      '@cosmos.gl/graph',
+      '@uwdata/mosaic-core',
+      'apache-arrow',
+      '@supabase/supabase-js',
+    ],
+  ],
+  ['three-vendor', ['three']],
+  ['charts-vendor', ['d3', 'recharts']],
+  ['animation-vendor', ['framer-motion']],
+  ['react-vendor', ['react', 'react-dom', 'react-router-dom']],
+  [
+    'ui-vendor',
+    [
+      'react-markdown',
+      'lucide-react',
+      '@radix-ui/react-hover-card',
+      '@radix-ui/react-slot',
+      'class-variance-authority',
+      'clsx',
+      'tailwind-merge',
+    ],
+  ],
+]
+
+function matchesPackage(modulePath: string, packageName: string): boolean {
+  return (
+    modulePath === packageName ||
+    modulePath.startsWith(`${packageName}/`) ||
+    (packageName === 'd3' && modulePath.startsWith('d3-'))
+  )
+}
+
+function manualChunks(id: string): string | undefined {
+  if (id.includes('vite/preload-helper')) return 'preload-helper'
+
+  const [, modulePath] = id.split('node_modules/')
+  if (!modulePath) return undefined
+
+  for (const [chunkName, packages] of vendorGroups) {
+    if (packages.some((packageName) => matchesPackage(modulePath, packageName))) {
+      return chunkName
+    }
+  }
+
+  return undefined
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -35,6 +89,10 @@ export default defineConfig({
     },
   },
   build: {
+    // Avoid eager modulepreload hints for route-only chunks. The app has several
+    // very heavy research/graph routes; loading them on demand gives crawlers and
+    // first-time visitors a much smaller initial network footprint.
+    modulePreload: false,
     // Disable source maps for smaller production bundle
     sourcemap: false,
     // Optimize chunk size
@@ -45,29 +103,8 @@ export default defineConfig({
     target: 'es2020',
     rollupOptions: {
       output: {
-        // Manual chunks for better code splitting and caching
-        manualChunks: {
-          // Cosmograph GPU graph stack
-          'cosmograph-vendor': [
-            '@cosmograph/react',
-            '@cosmograph/cosmograph',
-            '@cosmograph/ui',
-            '@cosmos.gl/graph',
-            '@uwdata/mosaic-core',
-            'apache-arrow',
-            '@supabase/supabase-js',
-          ],
-          // Three.js - heavy 3D library (loaded on demand)
-          'three-vendor': ['three'],
-          // Separate charting/data visualization libraries
-          'charts-vendor': ['d3', 'recharts'],
-          // Separate animation libraries
-          'animation-vendor': ['framer-motion'],
-          // Separate React ecosystem
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          // Separate markdown and UI libraries
-          'ui-vendor': ['react-markdown', 'lucide-react', '@radix-ui/react-hover-card', '@radix-ui/react-slot'],
-        },
+        // Manual chunks for better code splitting and caching.
+        manualChunks,
       },
     },
   },

@@ -366,7 +366,7 @@ class GraphRAGService:
             weight = edge.get("weight", metadata.get("weight", 1.0))
             try:
                 normalized_weight = float(weight)
-            except TypeError, ValueError:
+            except (TypeError, ValueError):
                 normalized_weight = 1.0
             source = str(edge.get("source") or edge.get("source_id") or "")
             target = str(edge.get("target") or edge.get("target_id") or "")
@@ -417,7 +417,7 @@ class GraphRAGService:
             max_context_nodes: Deprecated — ignored by agentic pipeline.
             include_passages: Deprecated — ignored by agentic pipeline.
             selected_model: Model key from model_registry (e.g. "claude-sonnet-4.6").
-            retrieval_mode: "auto", "vector", or "sql".
+            retrieval_mode: "auto", "sql", or legacy "vector" alias.
 
         Returns:
             Dictionary with answer, citations, and metadata.

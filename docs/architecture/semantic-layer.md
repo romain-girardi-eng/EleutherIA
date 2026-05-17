@@ -87,7 +87,7 @@ Les inverses « propres » (paires symétriques sans triangle ambigu) sont décl
 eleutheria export kg --format rdf --output /chemin/eleutheria_kg
 ```
 
-Produit `*.ttl`, `*.jsonld`, `*.nt` partageant la même base. À 17 757 nœuds / 43 063 arêtes → **157 805 triples** (Turtle ~40 MB, JSON-LD ~49 MB, N-Triples ~52 MB).
+Produit `*.ttl`, `*.jsonld`, `*.nt` partageant la même base. À 19 081 nœuds / 43 649 arêtes → **200 275 triples RDF**.
 
 API programmatique : `build_graph(nodes_path, edges_path) -> rdflib.Graph` + `export_graph(g, basename)`.
 
@@ -124,7 +124,7 @@ from eleutheria_kg.semantic import (
     inverse_neighbors,
 )
 
-# Restricted closure (recommandée en runtime) : 0.34 s sur 158k triples,
+# Restricted closure (recommandée en runtime) : 0.34 s sur ~200k triples,
 # matérialise +40 716 inverses + transitivité part_of/contains/etc.
 g = materialize_inverses_and_transitivity(g)  # mutates in place
 
@@ -166,7 +166,7 @@ Détails opérationnels dans `[local-notes]`.
 
 ## Hors-scope (intentionnel)
 
-- Sidecar GraphDB / RDFox / Stardog — pas justifié à 17k nœuds ; pile Python suffit.
+- Sidecar GraphDB / RDFox / Stardog — pas justifié à 19k nœuds ; pile Python suffit.
 - OWL-DL (Pellet / HermiT) — overkill ; OWL2-RL couvre nos cas.
 - Conformité CIDOC-CRM complète — mapping partiel suffisant pour la découvrabilité.
 - Endpoint SPARQL public — Apache Jena Fuseki en sidecar the platform, exposé à `https://free-will.app/eleutheria/sparql`.

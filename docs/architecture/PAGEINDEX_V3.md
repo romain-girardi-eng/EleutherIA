@@ -1,4 +1,4 @@
-# PageIndex V3: Direct Agentic Search
+# PageIndex V3: Superseded Direct Search Design
 
 **Date:** 2026-02-20
 **Version:** v5.0.0
@@ -6,7 +6,7 @@
 
 ## Summary
 
-PageIndex V3 replaces the former HiRAG V2 pipeline (13 stages) with a direct retrieval architecture that leverages the curated `passage_citations` database and modern LLM context windows (~1M tokens). Instead of 10+ LLM calls per query (HyDE, CRAG, Self-RAG, LLM reranking, query expansion, sufficiency checks), PageIndex V3 uses **2 LLM calls**: one embedding and one synthesis.
+PageIndex V3 was the February 2026 direct-retrieval design. It has since been superseded by the current agentic vectorless GraphRAG pipeline: SQLStrategy, lemma expansion, tree routing, KG label/description matching, `passage_citations`, and full-text/lemmatic RRF. This document is retained as architecture history.
 
 ## Motivation
 
@@ -19,22 +19,21 @@ The former HiRAG V2 pipeline (deployed Feb 13, 2026) suffered from:
 
 ## Architecture
 
-### Pipeline (5 steps, 2 LLM calls)
+### Current Successor Pipeline
 
 ```
 User Question
     │
     ▼
 ┌─────────────────────────────────────┐
-│ Step 1: Embed + Detect References   │  ONE embedding call
-│   Query → Gemini embedding          │  + regex CTS URN detection
-│   + passage reference detection     │
+│ Step 1: Expand + Detect References  │  terms + lemmas
+│   CTS URN / passage references      │  + author/work mentions
 └──────────────────┬──────────────────┘
                    │
                    ▼
 ┌─────────────────────────────────────┐
-│ Step 2: Parallel Search (no LLM)    │  3 Qdrant queries in parallel
-│   KG nodes + text passages + edges  │  Pure vector similarity
+│ Step 2: Vectorless Discovery        │  SQLStrategy
+│   tree + KG labels + citations      │  + full-text/lemmatic RRF
 └──────────────────┬──────────────────┘
                    │
                    ▼
@@ -66,10 +65,10 @@ User Question
 
 ### Key Design Decisions
 
-1. **No HyDE** — Gemini embeddings are strong enough for direct semantic search on this corpus
-2. **No query expansion** — The embedding model handles Greek/Latin terms well; expansion added noise
-3. **No CRAG validation** — With full passage text in context, the LLM can self-validate
-4. **No LLM reranking** — Vector similarity + passage_citations confidence scores suffice
+1. **No vector store dependency** — production retrieval is SQL/tree/lemma/citation based
+2. **LLM-driven lemma expansion** — Greek/Latin terms are expanded before lookup
+3. **Tree routing** — author/work mentions route directly to hierarchical passage anchors
+4. **Curated citation anchors** — `passage_citations` is the primary evidence bridge
 5. **No Self-RAG** — Quality comes from giving the LLM complete, untruncated source text
 6. **No truncation** — Gemini's 1M token context handles the full corpus context
 
@@ -98,7 +97,7 @@ GET /rest/v1/passage_citations
 The context builder produces four sections with NO truncation:
 
 1. **PRIMARY ANCIENT SOURCES** — From passage_citations (highest quality, with CTS URNs)
-2. **SUPPLEMENTARY PASSAGES** — From semantic search (vector similarity)
+2. **SUPPLEMENTARY PASSAGES** — From full-text/lemmatic search and tree-routed anchors
 3. **KNOWLEDGE GRAPH ENTITIES** — Seed nodes with descriptions
 4. **RELATIONSHIPS & CONNECTIONS** — KG neighbors and edges
 
@@ -106,11 +105,11 @@ The context builder produces four sections with NO truncation:
 
 | Removed Stage | Why |
 |---------------|-----|
-| HyDE (Hypothetical Document Embeddings) | Added latency; direct embeddings work well on this corpus |
+| HyDE (Hypothetical Document Embeddings) | Added latency; replaced by lemma expansion and curated evidence routing |
 | Query Classification | Unnecessary routing complexity; one pipeline handles all query types |
-| Query Expansion | Greek/Latin expansion added noise; embedding model handles terms directly |
+| Vector search | Replaced by SQLStrategy, tree routing, and passage_citations |
 | CRAG Validation | Full context lets the LLM self-validate |
-| LLM Reranking | Vector similarity + confidence scores are sufficient |
+| LLM Reranking | Current pipeline uses deterministic retrieval signals plus verification |
 | Sufficiency Loop | Removed re-retrieval iterations; single retrieval pass is sufficient |
 | Self-RAG Evaluation | Quality comes from complete source text, not post-hoc evaluation |
 | Evidence Layering | Simplified to direct section-based context building |

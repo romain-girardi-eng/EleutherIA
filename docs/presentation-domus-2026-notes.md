@@ -163,7 +163,7 @@ Ces notes sont faites pour accompagner les slides, pas pour les lire. L'idee est
 - Presenter ce slide comme une coupe transversale, pas comme un inventaire d'outils.
 - Dire que l'interface React sert a rendre visibles le graphe, les sources et le raisonnement.
 - FastAPI orchestre les services Python.
-- PostgreSQL stocke les textes et les relations tabulaires, Qdrant gere la couche vectorielle, et les modeles sont distribues selon les taches.
+- PostgreSQL stocke les textes, les relations tabulaires, les citations et les index de recherche; la couche GraphRAG actuelle est sans vecteurs et les modeles sont distribues selon les taches.
 - Ajouter que l'interet de cette architecture est sa modularite : on peut faire evoluer une couche sans tout refaire.
 
 ## Slide 25 - L'effort d'ingenierie

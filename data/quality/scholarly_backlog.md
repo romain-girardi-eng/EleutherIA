@@ -10,7 +10,7 @@
 - `debate`: 17
 - `event`: 5
 - `group`: 8
-- `passage`: 17177
+- `passage`: 17316
 - `person`: 413
 - `position`: 8
 - `publication`: 324
@@ -18,7 +18,7 @@
 - `school`: 16
 - `source_collection`: 6
 - `synthesis`: 177
-- `work`: 230
+- `work`: 238
 
 ## Evidence Anchoring
 
@@ -32,7 +32,7 @@
 
 ## Edition Metadata
 
-Total: 208
+Total: 216
 
 - `sc10bis_ignatius_ad_ephesios`
 - `sc10bis_ignatius_ad_magnesios`
@@ -134,7 +134,7 @@ Total: 208
 - `work_justin_dialogue_trypho`
 - `work_justin_first_apology`
 - `work_justin_second_apology_sc507`
-- ... 108 more
+- ... 116 more
 
 ## Publication BibTeX Metadata
 
@@ -244,7 +244,27 @@ Total: 222
 
 ## Passage Role
 
-Total: 73
+Total: 15
+
+- `passage_eusebius_praep_ev_book_01`
+- `passage_eusebius_praep_ev_book_02`
+- `passage_eusebius_praep_ev_book_03`
+- `passage_eusebius_praep_ev_book_04`
+- `passage_eusebius_praep_ev_book_05`
+- `passage_eusebius_praep_ev_book_06`
+- `passage_eusebius_praep_ev_book_07`
+- `passage_eusebius_praep_ev_book_08`
+- `passage_eusebius_praep_ev_book_09`
+- `passage_eusebius_praep_ev_book_10`
+- `passage_eusebius_praep_ev_book_11`
+- `passage_eusebius_praep_ev_book_12`
+- `passage_eusebius_praep_ev_book_13`
+- `passage_eusebius_praep_ev_book_14`
+- `passage_eusebius_praep_ev_book_15`
+
+## Translation Source Links
+
+Total: 58
 
 - `passage_origen_pa_3_1_1`
 - `passage_origen_pa_3_1_2`
@@ -304,30 +324,10 @@ Total: 73
 - `passage_origen_philocalia_22_8`
 - `passage_origen_philocalia_22_9`
 - `passage_origen_philocalia_22_10`
-- `passage_eusebius_praep_ev_book_01`
-- `passage_eusebius_praep_ev_book_02`
-- `passage_eusebius_praep_ev_book_03`
-- `passage_eusebius_praep_ev_book_04`
-- `passage_eusebius_praep_ev_book_05`
-- `passage_eusebius_praep_ev_book_06`
-- `passage_eusebius_praep_ev_book_07`
-- `passage_eusebius_praep_ev_book_08`
-- `passage_eusebius_praep_ev_book_09`
-- `passage_eusebius_praep_ev_book_10`
-- `passage_eusebius_praep_ev_book_11`
-- `passage_eusebius_praep_ev_book_12`
-- `passage_eusebius_praep_ev_book_13`
-- `passage_eusebius_praep_ev_book_14`
-- `passage_eusebius_praep_ev_book_15`
-
-## Translation Source Links
-
-Total: 0
-
 
 ## Date Uncertainty
 
-Total: 643
+Total: 651
 
 - `person_al_ashari_m3n4o5p6`
 - `person_al_ghazali_u1v2w3x4`
@@ -429,4 +429,4 @@ Total: 643
 - `person_john_damascene_d749`
 - `person_john_duns_scotus_48daa9ee`
 - `person_john_locke_4v8q9r57`
-- ... 543 more
+- ... 551 more

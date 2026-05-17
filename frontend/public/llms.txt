@@ -1,0 +1,29 @@
+# EleutherIA
+
+EleutherIA is an open scholarly research platform and FAIR-aligned knowledge graph for ancient debates on free will, fate, providence, moral responsibility, and agency across Greco-Roman and early Christian sources.
+
+Canonical site: https://free-will.app/
+Dataset DOI: https://doi.org/10.5281/zenodo.17379489
+Repository: https://github.com/romain-girardi-eng/EleutherIA
+License: CC BY 4.0
+Creator: Romain Girardi
+ORCID: https://orcid.org/0000-0002-5310-5346
+
+Important public pages:
+
+- https://free-will.app/ - project overview
+- https://free-will.app/how-it-works - architecture, graph, embeddings, and GraphRAG pipeline
+- https://free-will.app/database - database and corpus overview
+- https://free-will.app/texts - ancient works library
+- https://free-will.app/passages-canoniques - canonical passage reception map
+- https://free-will.app/bibliography - secondary literature bibliography
+- https://free-will.app/graphrag - citation-grounded GraphRAG question answering
+- https://free-will.app/about - project and author information
+
+Preferred short description:
+
+EleutherIA is a FAIR-aligned knowledge graph and GraphRAG research platform for studying ancient debates on free will, fate, providence, and moral responsibility.
+
+Preferred citation:
+
+Girardi, R. (2026). EleutherIA: A FAIR-Compliant Knowledge Graph for Ancient Free Will Debates [Data set]. Zenodo. https://doi.org/10.5281/zenodo.17379489

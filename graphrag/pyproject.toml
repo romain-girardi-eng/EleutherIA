@@ -37,6 +37,9 @@ dependencies = [
     "pydantic>=2.10.0",
     "httpx>=0.28.0",
     "pydantic-ai[graph]>=1.0.0",
+    # Runtime proof-chain reconstruction imports eleutheria_kg.semantic.proof,
+    # whose lightweight path needs rdflib even when SHACL/owlrl are absent.
+    "rdflib>=7.1.1",
 ]
 
 [project.optional-dependencies]
@@ -46,10 +49,8 @@ dev = [
     "pytest-cov>=7.0.0",
     "ruff>=0.15.0",
     "mypy>=1.14.0",
-    # tests/unit/test_infer_transitive.py imports the semantic layer (rdflib).
     # tests/unit/test_thesis_routes.py imports fastapi to exercise route shape.
-    # Pin both here so `pip install -e graphrag/[dev]` is self-sufficient for CI.
-    "rdflib>=7.1.1",
+    # Pin it here so `pip install -e graphrag/[dev]` is self-sufficient for CI.
     "fastapi>=0.130.0",
 ]
 api = [

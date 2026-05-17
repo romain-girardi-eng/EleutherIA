@@ -21,14 +21,12 @@ pip install eleutheria-kg[api]
 ## Quick Start
 
 ```python
-from eleutheria_kg import KGAnalytics, QdrantService
+from eleutheria_kg import KGAnalytics
 from eleutheria_database import DatabaseService
 
-# Connect to services
+# Connect to the relational corpus/KG store
 db = DatabaseService()
-qdrant = QdrantService()
 await db.connect()
-await qdrant.connect()
 
 # Load knowledge graph
 kg_data = await load_kg_from_database(db)
@@ -46,8 +44,9 @@ communities = analytics.detect_communities(algorithm="leiden")
 # Calculate centrality
 centrality = analytics.calculate_centrality(metric="betweenness")
 
-# Semantic search
-results = await qdrant.search_nodes(query_embedding, limit=10)
+# Current GraphRAG retrieval is vectorless and lives in the graphrag package:
+# SQLStrategy combines tree routing, KG label matches, passage_citations,
+# lemmatic lookup, and full-text/lemmatic RRF.
 ```
 
 ## Features
@@ -56,7 +55,7 @@ results = await qdrant.search_nodes(query_embedding, limit=10)
 - **42,925 edges** across 56 relation types
 - **Community detection** via Leiden, Louvain, or greedy modularity
 - **Centrality metrics** (betweenness, PageRank, degree)
-- **Semantic search** via Qdrant vector similarity (3072-dim Gemini embeddings)
+- **Vectorless GraphRAG retrieval** via SQLStrategy, tree routing, passage_citations, lemmatic lookup, and full-text/lemmatic RRF
 - **Dual-layer structure** separating ancient sources from modern scholarship
 
 ## Knowledge Graph Schema
@@ -109,16 +108,13 @@ Endpoints:
 - `GET /edges` - List edges
 - `GET /communities` - Get community assignments
 - `GET /centrality` - Get centrality scores
-- `GET /search` - Semantic search
+- `GET /search` - Label/description KG search
 
 ## Configuration
 
 Environment variables:
 ```bash
-QDRANT_HOST=localhost
-QDRANT_HTTP_PORT=6333
-QDRANT_API_KEY=  # For Qdrant Cloud
-EMBEDDING_DIMENSIONS=3072
+ELEUTHERIA_DB_SCHEMA=free_will
 ```
 
 ## License

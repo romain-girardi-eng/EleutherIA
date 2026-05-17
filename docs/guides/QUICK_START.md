@@ -47,7 +47,6 @@ make run
 |---------|-----|
 | Frontend | http://localhost |
 | API Docs | http://localhost:8000/docs |
-| Qdrant Dashboard | http://localhost:6333/dashboard |
 
 ## Using the Application
 
@@ -58,15 +57,16 @@ make run
 3. Enter a Greek term (e.g., "ἐφ' ἡμῖν") or English query
 4. Results show passages with highlighted matches
 
-### Ask Questions (GraphRAG — PageIndex V3)
+### Ask Questions (Agentic GraphRAG)
 
 1. Go to http://localhost/graphrag
 2. Enter a question like "What did the Stoics believe about fate?"
 3. The system will:
    - Search the knowledge graph and passage database in parallel
    - Retrieve linked ancient text passages (via passage_citations)
+   - Use vectorless SQL/tree/lemma retrieval
    - Build full context with no truncation
-   - Generate a scholarly answer with ONE synthesis call
+   - Generate a scholarly answer with verified citations
    - Cite ancient sources with CTS URNs
 
 ### Explore the Knowledge Graph
@@ -89,7 +89,7 @@ pip install eleutheria-graphrag[llm]
 
 ```python
 from eleutheria_database import DatabaseService
-from eleutheria_kg import QdrantService, KGAnalytics
+from eleutheria_kg import KGAnalytics
 from eleutheria_graphrag import GraphRAGService
 
 # Connect

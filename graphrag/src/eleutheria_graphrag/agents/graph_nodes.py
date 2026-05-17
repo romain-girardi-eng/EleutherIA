@@ -155,6 +155,7 @@ def _proof_chain_for_inferred(
     try:
         from rdflib import Graph
 
+        from eleutheria_kg.semantic.inference import TRANSITIVE_PROPERTIES
         from eleutheria_kg.semantic.proof import (
             build_proof_chain,
             serialize_proof_chain,
@@ -175,10 +176,7 @@ def _proof_chain_for_inferred(
         inverse_index.setdefault(a, b)
         inverse_index.setdefault(b, a)
 
-    # Build a focused subgraph: just the asserted premises (the reverse
-    # of the inferred edge, looked up in deps.outgoing_edges). Cheap —
-    # one premise per inferred edge, no full-KG rdflib load.
-    graph = Graph()
+    # Build focused subgraphs from deps.outgoing_edges, never a full rdflib load.
     subj_iri = mint_node_iri(subject_id)
     obj_iri = mint_node_iri(object_id)
     outgoing = getattr(deps, "outgoing_edges", {}) or {}
@@ -186,24 +184,42 @@ def _proof_chain_for_inferred(
     chain_steps: list[dict[str, Any]] = []
     for s_id, derived_rel, o_id in matches:
         premise_rel = inverse_index.get(derived_rel)
-        if not premise_rel:
+        if premise_rel:
+            # The asserted premise is ``(o_id, premise_rel, s_id)`` — verify
+            # it really is in the edge dicts before claiming a proof.
+            premise_asserted = any(
+                edge.get("relation") == premise_rel
+                and (edge.get("target") or edge.get("target_id", "")) == s_id
+                for edge in outgoing.get(o_id, [])
+            )
+            if premise_asserted:
+                graph = Graph()
+                graph.add(
+                    (
+                        mint_node_iri(o_id),
+                        edge_property(premise_rel),
+                        mint_node_iri(s_id),
+                    )
+                )
+                steps = build_proof_chain(
+                    graph,
+                    (subj_iri, edge_property(derived_rel), obj_iri),
+                )
+                chain_steps.extend(serialize_proof_chain(steps))
+                continue
+
+        prop = edge_property(derived_rel)
+        if prop not in TRANSITIVE_PROPERTIES:
             continue
-        # The asserted premise is ``(o_id, premise_rel, s_id)`` — verify
-        # it really is in the edge dicts before claiming a proof.
-        premise_asserted = any(
-            edge.get("relation") == premise_rel
-            and (edge.get("target") or edge.get("target_id", "")) == s_id
-            for edge in outgoing.get(o_id, [])
-        )
-        if not premise_asserted:
-            continue
-        premise_subject_iri = mint_node_iri(o_id)
-        premise_object_iri = mint_node_iri(s_id)
-        graph.add((premise_subject_iri, edge_property(premise_rel), premise_object_iri))
-        steps = build_proof_chain(
-            graph,
-            (subj_iri, edge_property(derived_rel), obj_iri),
-        )
+        graph = Graph()
+        for source_id, edges in outgoing.items():
+            for edge in edges:
+                if edge.get("relation") != derived_rel:
+                    continue
+                target_id = edge.get("target") or edge.get("target_id", "")
+                if target_id:
+                    graph.add((mint_node_iri(source_id), prop, mint_node_iri(target_id)))
+        steps = build_proof_chain(graph, (subj_iri, prop, obj_iri))
         chain_steps.extend(serialize_proof_chain(steps))
 
     return chain_steps

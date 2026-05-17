@@ -56,7 +56,7 @@ function buildFallbackResearchGraph(response: GraphRAGResponse): ResearchGraphPa
         id: 'legacy_search',
         title: 'Retrieve source nodes',
         status: 'complete',
-        summary: `${startingNodes.length || response.nodes_used || 0} seed nodes retrieved from the legacy GraphRAG pipeline.`,
+        summary: `${startingNodes.length || response.nodes_used || 0} seed nodes retrieved from the agentic GraphRAG pipeline.`,
         metrics: [
           { label: 'Seeds', value: startingNodes.length || response.nodes_used || 0 },
           { label: 'Sources', value: sources.length },

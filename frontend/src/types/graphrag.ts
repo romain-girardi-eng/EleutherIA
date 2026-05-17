@@ -217,7 +217,8 @@ export interface ReasoningPath {
 export interface GraphRAGAnswer {
   answer: string;
   reasoning_path: {
-    query_embedding: number[];
+    query_terms?: string[];
+    retrieval_mode_used?: 'sql' | 'snapshot' | 'auto' | string;
     retrieved_nodes: GraphRAGNode[];
     graph_context: {
       nodes: GraphRAGNode[];

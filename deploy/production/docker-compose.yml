@@ -1,11 +1,10 @@
 # =============================================================================
 # EleutherIA — Production Deployment
 # =============================================================================
-# Backend + Frontend only. PostgreSQL (Supabase) and Qdrant (Cloud) are
-# external managed services.
+# Backend + Frontend only. PostgreSQL (Supabase) is the external managed store.
 #
 # Usage:
-#   cp .env.example .env   # Fill in Supabase + Qdrant Cloud credentials
+#   cp .env.example .env   # Fill in Supabase and LLM credentials
 #   docker compose up -d --build
 #
 # For local self-contained setup, use deploy/docker-compose.yml instead.

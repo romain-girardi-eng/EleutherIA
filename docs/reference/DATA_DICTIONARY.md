@@ -92,13 +92,15 @@ Knowledge graph edges (relationships).
 | metadata | JSONB | Additional metadata |
 | created_at | TIMESTAMPTZ | Creation timestamp |
 
-## Node Types (15)
+## Node Types (24)
 
 | Type | Description | Example |
 |------|-------------|---------|
 | Person | Philosopher or scholar | Chrysippus |
 | Concept | Philosophical concept | fate, determinism |
 | Argument | Philosophical argument | lazy argument |
+| Argument_Framework | Argument model or schema | Stoic compatibilist framework |
+| Argument_Reconstruction | Scholarly reconstruction of an argument | Bobzien reconstruction |
 | Work | Text or book | On Fate |
 | School | Philosophical school | Stoicism |
 | Passage | Specific text passage | SVF 3.191 |
@@ -107,10 +109,17 @@ Knowledge graph edges (relationships).
 | Event | Historical event | Death of Chrysippus |
 | Institution | Academy, Stoa | Platonic Academy |
 | Text_Fragment | Fragment preserved elsewhere | Chrysippus fr. 1 |
+| Textual_Variant | Variant textual reading | alternative manuscript reading |
 | Modern_Interpretation | Scholarly interpretation | Bobzien's reading |
 | Term | Technical term | to eph' hemin |
 | Source_Collection | Collection like SVF | SVF |
 | Doctrine | Formal doctrine | Stoic determinism |
+| Publication | Modern scholarly publication | Bobzien 1998 |
+| Quote | Notable philosophical quotation | Chrysippus quotation |
+| Synthesis | Scholarly synthesis across sources | Stoic fate synthesis |
+| Controversy | Scholarly or philosophical controversy | compatibility debate |
+| Conceptual_Evolution | Historical evolution of a concept | evolution of eph' hemin |
+| Group | Intellectual community or group | early Stoics |
 
 ### Two-Node Passage Architecture
 
@@ -119,11 +128,11 @@ Every passage has two KG nodes:
 1. **Source node** — Original Greek/Latin text in `description`. Node ID: `passage_alex_fat_1`. `metadata.language`: `grc` or `lat`.
 2. **Translation node** — English AI translation in `description`. Node ID: `passage_alex_fat_1_en`. `metadata.language`: `eng`, `metadata.source`: `ai_translation`.
 
-The translation node links to the source via a `translation_of` edge (inverse: `has_translation`). This keeps authoritative text untouched while making passages discoverable via English semantic search (Qdrant).
+The translation node links to the source via a `translation_of` edge (inverse: `has_translation`). This keeps authoritative text untouched while making passages discoverable through English labels, lemmatic/full-text search, and curated `passage_citations`.
 
 See [Passage Translation Architecture](../plans/2026-02-24-passage-translation-architecture.md) for full design.
 
-## Edge Types (56)
+## Edge Types (75)
 
 See [knowledge graph/ontology/edge_types.json](../../knowledge%20graph/ontology/edge_types.json) for complete list with source/target type constraints.
 

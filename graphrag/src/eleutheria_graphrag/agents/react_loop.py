@@ -347,6 +347,13 @@ def _summarize_result(tool: str, result: dict[str, Any], error: bool) -> str:
         nodes = result.get("nodes", [])
         return f"Subgraph: {len(nodes)} relevant nodes from {result.get('seed_count', 0)} seeds"
 
+    if tool == "infer_transitive":
+        nodes = result.get("derived_nodes", [])
+        relation = result.get("relation", "?")
+        start = result.get("start_label") or result.get("start_node_id") or "?"
+        suffix = " (truncated)" if result.get("truncated") else ""
+        return f"Inferred {len(nodes)} {relation} nodes from {start}{suffix}"
+
     return "OK"
 
 
@@ -362,6 +369,8 @@ def _count_results(tool: str, result: dict[str, Any]) -> tuple[int, int]:
         passages = len(result.get("passages", []))
     elif tool == "read_work_section":
         nodes = len(result.get("sections", []))
+    elif tool == "infer_transitive":
+        nodes = len(result.get("derived_nodes", []))
     return nodes, passages
 
 
@@ -428,6 +437,27 @@ def _summarize_for_context(tool: str, result: dict[str, Any]) -> str:
             for n in nodes
         ]
         return f"Subgraph ({len(nodes)} nodes):\n" + "\n".join(lines)
+
+    if tool == "infer_transitive":
+        nodes = result.get("derived_nodes", [])
+        lines = [
+            f"- {n.get('node_id', '?')}: {n.get('label', '?')} [{n.get('type', '?')}] "
+            f"(distance={n.get('distance', '?')}, derivation={', '.join(n.get('derivation') or [])})"
+            + (
+                f" inferred={n.get('inferred_edge')}"
+                if n.get("inferred_edge")
+                else ""
+            )
+            for n in nodes[:50]
+        ]
+        suffix = "\n- [truncated]" if result.get("truncated") else ""
+        return (
+            f"Inferred via {result.get('relation', '?')} from "
+            f"{result.get('start_label') or result.get('start_node_id', '?')} "
+            f"({len(nodes)} nodes):\n"
+            + "\n".join(lines)
+            + suffix
+        )
 
     return json.dumps(result, default=str, ensure_ascii=False)[:500]
 
@@ -830,6 +860,16 @@ def _touched_node_ids(tool: str, result: dict[str, Any]) -> list[str]:
     if tool == "get_node_detail":
         nid = result.get("node_id")
         return [str(nid)] if nid else []
+    if tool == "infer_transitive":
+        ids = [
+            str(n.get("node_id"))
+            for n in result.get("derived_nodes", [])
+            if n.get("node_id")
+        ]
+        start_id = result.get("start_node_id")
+        if start_id:
+            ids.insert(0, str(start_id))
+        return list(dict.fromkeys(ids))
     return []
 
 

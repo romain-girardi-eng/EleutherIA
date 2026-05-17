@@ -282,7 +282,7 @@ export function CitationRenderer({
       return;
     }
 
-    // Check if nodeId is a UUID (passage ID from text_embeddings)
+    // Check if nodeId is a UUID (passage ID from passage_citations/text corpus)
     const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (uuidPattern.test(nodeId) || nodeId.startsWith('passage_')) {
       // This is a passage reference - check if we have workId in metadata to navigate
@@ -554,7 +554,7 @@ export function SourcesPanel({
       return;
     }
 
-    // Check if nodeId is a UUID (passage ID from text_embeddings)
+    // Check if nodeId is a UUID (passage ID from passage_citations/text corpus)
     const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (uuidPattern.test(nodeId) || nodeId.startsWith('passage_')) {
       // This is a passage reference - check if we have workId in metadata to navigate

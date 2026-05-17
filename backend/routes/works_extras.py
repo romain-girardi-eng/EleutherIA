@@ -31,6 +31,92 @@ citations_router = APIRouter(tags=["citations"])
 embeddings_router = APIRouter(tags=["embeddings"])
 
 
+@router.get("")
+@router.get("/")
+async def list_works_compat(
+    db: Annotated[DatabaseService, Depends(get_db)],
+    language: str | None = Query(None),
+    author: str | None = Query(None),
+    period: str | None = Query(None),
+    source: str | None = Query(None),
+    search: str | None = Query(None),
+    sort_by: str = Query("author"),
+    limit: int = Query(100, ge=1, le=1000),
+    offset: int = Query(0, ge=0),
+) -> dict[str, Any]:
+    """List ancient works in the shape expected by the frontend.
+
+    The installable database package exposes ``GET /api/works`` as a raw list.
+    The frontend has long consumed a paginated object, so this compatibility
+    route is mounted before the package router and keeps the public `/texts`
+    page from failing when it expects `works` and `total` keys.
+    """
+    conditions: list[str] = []
+    params: list[Any] = []
+    idx = 0
+
+    def add_param(value: Any) -> str:
+        nonlocal idx
+        idx += 1
+        params.append(value)
+        return f"${idx}"
+
+    if language:
+        conditions.append(f"w.language = {add_param(language)}")
+    if author:
+        conditions.append(f"w.author ILIKE '%' || {add_param(author)} || '%'")
+    if period:
+        conditions.append(f"w.period ILIKE '%' || {add_param(period)} || '%'")
+    if source:
+        conditions.append(f"w.source ILIKE '%' || {add_param(source)} || '%'")
+    if search:
+        placeholder = add_param(search)
+        conditions.append(
+            f"""(
+                w.title ILIKE '%' || {placeholder} || '%'
+                OR w.author ILIKE '%' || {placeholder} || '%'
+                OR w.canonical_id ILIKE '%' || {placeholder} || '%'
+            )"""
+        )
+
+    where_clause = f"WHERE {' AND '.join(conditions)}" if conditions else ""
+
+    sort_sql = {
+        "title": "w.title ASC, w.author ASC",
+        "author": "w.author ASC, w.title ASC",
+        "period": "w.period ASC NULLS LAST, w.author ASC, w.title ASC",
+        "language": "w.language ASC, w.author ASC, w.title ASC",
+        "most_passages": "w.total_divisions DESC NULLS LAST, w.author ASC, w.title ASC",
+        "most_cited": "w.total_divisions DESC NULLS LAST, w.author ASC, w.title ASC",
+        "featured": "w.total_divisions DESC NULLS LAST, w.author ASC, w.title ASC",
+    }.get(sort_by, "w.author ASC, w.title ASC")
+
+    count_sql = f"""
+    SELECT count(*)::int AS total
+    FROM free_will.ancient_works w
+    {where_clause}
+    """
+    count_row = await db.fetchrow(count_sql, *params)
+
+    limit_placeholder = add_param(limit)
+    offset_placeholder = add_param(offset)
+    list_sql = f"""
+    SELECT *
+    FROM free_will.ancient_works w
+    {where_clause}
+    ORDER BY {sort_sql}
+    LIMIT {limit_placeholder} OFFSET {offset_placeholder}
+    """
+    rows = await db.fetch(list_sql, *params)
+
+    return {
+        "works": [dict(row) for row in rows],
+        "total": int(count_row["total"]) if count_row else 0,
+        "offset": offset,
+        "limit": limit,
+    }
+
+
 @router.get("/search")
 async def search_works(
     db: Annotated[DatabaseService, Depends(get_db)],

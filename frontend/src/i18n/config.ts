@@ -2,14 +2,26 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import en from './locales/en.json';
-import fr from './locales/fr.json';
-import de from './locales/de.json';
-import it from './locales/it.json';
-import el from './locales/el.json';
 import { extraResources } from './extraResources';
 
 // Type definition for translations
 export type TranslationKey = keyof typeof en;
+type LocaleCode = keyof typeof extraResources;
+type TranslationResource = Record<string, unknown>;
+
+const localeLoaders: Partial<Record<LocaleCode, () => Promise<{ default: TranslationResource }>>> = {
+  fr: () => import('./locales/fr.json') as Promise<{ default: TranslationResource }>,
+  de: () => import('./locales/de.json') as Promise<{ default: TranslationResource }>,
+  it: () => import('./locales/it.json') as Promise<{ default: TranslationResource }>,
+  el: () => import('./locales/el.json') as Promise<{ default: TranslationResource }>,
+};
+
+const loadingLocales = new Map<string, Promise<boolean>>();
+
+function normalizeLocale(locale: string): LocaleCode {
+  const baseLocale = locale.split('-')[0] as LocaleCode;
+  return baseLocale in extraResources ? baseLocale : 'en';
+}
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -40,19 +52,45 @@ function deepMerge(
   return merged;
 }
 
+async function loadLocale(locale: string): Promise<boolean> {
+  const normalizedLocale = normalizeLocale(locale);
+  if (normalizedLocale === 'en' || i18n.hasResourceBundle(normalizedLocale, 'translation')) {
+    return false;
+  }
+
+  const existingLoad = loadingLocales.get(normalizedLocale);
+  if (existingLoad) return existingLoad;
+
+  const loader = localeLoaders[normalizedLocale];
+  if (!loader) return false;
+
+  const load = loader().then(({ default: baseResource }) => {
+    i18n.addResourceBundle(
+      normalizedLocale,
+      'translation',
+      deepMerge(baseResource, extraResources[normalizedLocale]),
+      true,
+      true,
+    );
+    return true;
+  }).finally(() => {
+    loadingLocales.delete(normalizedLocale);
+  });
+
+  loadingLocales.set(normalizedLocale, load);
+  return load;
+}
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
       en: { translation: deepMerge(en, extraResources.en) },
-      fr: { translation: deepMerge(fr, extraResources.fr) },
-      de: { translation: deepMerge(de, extraResources.de) },
-      it: { translation: deepMerge(it, extraResources.it) },
-      el: { translation: deepMerge(el, extraResources.el) }
     },
     fallbackLng: 'en',
     supportedLngs: ['en', 'fr', 'de', 'it', 'el'],
+    partialBundledLanguages: true,
 
     interpolation: {
       escapeValue: false // React already escapes values
@@ -69,6 +107,20 @@ i18n
       useSuspense: false // Avoid suspense issues
     }
   });
+
+i18n.on('languageChanged', (locale) => {
+  if (i18n.hasResourceBundle(normalizeLocale(locale), 'translation')) return;
+
+  void loadLocale(locale).then((loaded) => {
+    if (loaded && normalizeLocale(i18n.language) === normalizeLocale(locale)) {
+      i18n.emit('languageChanged', i18n.language);
+    }
+  });
+});
+
+void loadLocale(i18n.language).then((loaded) => {
+  if (loaded) i18n.emit('languageChanged', i18n.language);
+});
 
 export default i18n;
 

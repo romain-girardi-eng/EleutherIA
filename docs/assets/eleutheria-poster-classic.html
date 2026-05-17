@@ -607,7 +607,7 @@
             <div class="step-number">2</div>
             <div class="step-content">
               <div class="step-name">Recherche parallèle (sans LLM)</div>
-              <div class="step-desc">Nœuds KG + passages + arêtes via Qdrant</div>
+              <div class="step-desc">Nœuds KG + passages via SQLStrategy</div>
             </div>
           </div>
           <div class="pipeline-step">
@@ -639,7 +639,7 @@
         <div class="section-title">Recherche hybride trimodale</div>
         <p>
           <strong>Plein texte</strong> (PostgreSQL ts_rank) · <strong>Lemmatique</strong> (index pré-calculé
-          grec/latin) · <strong>Sémantique</strong> (Qdrant, embeddings 3072-dim)
+          grec/latin) · <strong>Citations KG</strong> (passage_citations, sans vecteurs)
           <br><br>
           Fusion par <strong>Reciprocal Rank Fusion</strong> (RRF) pour combiner les trois canaux
           en un classement unique.
@@ -717,8 +717,8 @@
             <div class="tech-name">PostgreSQL 16</div>
           </div>
           <div class="tech-item">
-            <div class="tech-cat">Base vectorielle</div>
-            <div class="tech-name">Qdrant</div>
+            <div class="tech-cat">Récupération</div>
+            <div class="tech-name">SQLStrategy</div>
           </div>
           <div class="tech-item">
             <div class="tech-cat">LLM primaire</div>

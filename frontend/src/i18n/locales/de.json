@@ -458,7 +458,7 @@
   },
   "agenticGraphrag": {
     "pageTitle": "Agentische GraphRAG-Architektur",
-    "pageDescription": "Eine transparente Erklärung unserer agentischen Retrieval-Pipeline: 12-Knoten-FSM, Multi-Modell-Unterstützung, vektorloser SQL-Fallback und vollständige Argumentationsspur.",
+    "pageDescription": "Transparente Erklärung der agentischen Retrieval-Pipeline: 12-Knoten-FSM, Multi-Modell-Support, vektorloses SQL-Retrieval und vollständige Argumentationsspur.",
     "overview": {
       "title": "Architekturüberblick",
       "architectureLabel": "Agentische Pipeline",
@@ -467,17 +467,17 @@
       "innovationDescription": "Statt 10+ LLM-Aufrufe pro Abfrage nutzt die agentische Pipeline paralleles Retrieval, kurierte passage_citations und Geminis 1M-Token-Kontextfenster:",
       "fsmOrchestration": "12-Knoten pydantic-graph FSM für autonome Orchestrierung",
       "multiModel": "Multi-Modell: Gemini 3 (primär) + Kimi K2.5 Thinking (erweitertes Argumentieren)",
-      "vectorlessFallback": "Vektorloser SQL-Fallback über passage_citations für robustes Retrieval"
+      "vectorlessFallback": "Primäres vektorloses SQL-Retrieval über passage_citations"
     },
     "pipeline": {
       "title": "Pipeline-Stufen",
       "embedding": {
-        "title": "1. Embedding + Referenzerkennung",
-        "description": "Abfrage via Gemini eingebettet, plus Regex-CTS-URN-Erkennung für direkte Passagensuche."
+        "title": "1. Expand + Detect References",
+        "description": "Query terms and lemmas are expanded, with regex CTS URN detection for direct passage lookup."
       },
       "parallelSearch": {
-        "title": "2. Parallele Suche",
-        "description": "Drei Qdrant-Abfragen parallel: KG-Knoten, Textpassagen und Kanten. Reine Vektorähnlichkeit, kein LLM-Aufruf."
+        "title": "2. Vectorless Discovery",
+        "description": "SQLStrategy combines tree routing, KG label/description matches, passage_citations, and full-text/lemmatic RRF."
       },
       "enrichment": {
         "title": "3. Parallele Anreicherung",
@@ -492,7 +492,7 @@
       "title": "Schlüsselfähigkeiten",
       "multiModelTitle": "Multi-Modell-Unterstützung",
       "multiModelDesc": "Die Pipeline leitet basierend auf Aufgabenkomplexität an verschiedene Modelle weiter:",
-      "gemini": "Primäre Synthese und Embedding (1M Token Kontext)",
+      "gemini": "Primary synthesis and long-context reasoning (1M token context)",
       "kimi": "Erweitertes Argumentieren für komplexe Multi-Hop-Abfragen",
       "keyStrengths": "Stärken",
       "noTruncation": {
@@ -508,8 +508,8 @@
         "description": "Volle Transparenz: sehen, welche Knoten, Kanten und Passagen verwendet wurden"
       },
       "sqlFallback": {
-        "title": "Vektorloser SQL-Fallback",
-        "description": "Bei Qdrant-Ausfall fällt Retrieval auf SQL passage_citations zurück"
+        "title": "Vectorless SQL Retrieval",
+        "description": "The primary retrieval path uses SQL passage_citations, text-tree routing, and lemmatic/full-text search"
       },
       "evolutionTitle": "Entwicklung von HiRAG",
       "evolution": {
@@ -518,7 +518,7 @@
         "pageindexV3": "PageIndex V3 (Feb. 2026)",
         "pageindexV3Desc": "Auf 5 Schritte, 2 LLM-Aufrufe reduziert durch Nutzung von passage_citations und Gemini-1M-Kontext",
         "current": "Aktuelles Agentisches GraphRAG",
-        "currentDesc": "12-Knoten-FSM mit Multi-Modell-Routing, vektorlosem Fallback und Streaming-Unterstützung"
+        "currentDesc": "12-node FSM with multi-model routing, vectorless retrieval, and streaming support"
       },
       "netResult": "Ergebnis",
       "netResultDescription": "2 LLM-Aufrufe statt 10+, vollständiger ungekürzter Kontext und Multi-Modell-Routing für schnellere, genauere wissenschaftliche Antworten mit vollständiger Quellenattribution."
@@ -534,8 +534,8 @@
       "apiEndpointsDesc": "GraphRAG-Routen: /query, /query/stream mit SSE, hybride Suchendpunkte",
       "pipelineSteps": "Pipeline-Schritte",
       "steps": {
-        "embed": "Abfrage einbetten + CTS-URN-Referenzen erkennen",
-        "search": "Parallele Qdrant-Suche (Knoten + Passagen + Kanten)",
+        "embed": "Expand terms + detect CTS URN references",
+        "search": "Vectorless SQL/tree/lemma discovery",
         "enrich": "Parallele Anreicherung (passage_citations + KG-Nachbarn)",
         "context": "Vollständigen ungekürzten Kontext aufbauen",
         "synthesize": "Ein LLM-Syntheseaufruf mit Anti-Halluzinations-Prompt"
@@ -705,7 +705,7 @@
     "philologicalWork": "Philologische Arbeit",
     "philoDesc": "Alle griechischen und lateinischen Texte durchlaufen manuelle Überprüfung. Die Lemmatisierung nutzt LAULA (Lateinisch) und PAULA (Griechisch) morphologische Analysatoren, um lemmabasierte Suche zu ermöglichen. Jeder Wissensgraph-Knoten ist in Primärquellen (antike Texte) oder Sekundärliteratur (moderne Forschung) mit vollständiger bibliographischer Provenienz verankert.",
     "technicalInfra": "Technische Infrastruktur",
-    "techStack": "React 19 + TypeScript + Vite + Tailwind CSS Frontend, FastAPI + Python Backend, PostgreSQL (strukturierte Daten) + Qdrant (Vektor-Embeddings), Cytoscape.js für Netzwerkvisualisierung, GraphRAG-Pipeline mit Gemini API, Docker Compose + Cloudflare-Tunnel (Produktionsdeployment)"
+    "techStack": "React 19 + TypeScript + Vite + Tailwind CSS Frontend, FastAPI + Python Backend, PostgreSQL (strukturierte Daten, Volltext- und Lemmasuche), Cytoscape.js für Netzwerkvisualisierung, vektorloses Agentic GraphRAG mit Gemini/Kimi, Docker Compose + Cloudflare-Tunnel (Produktionsdeployment)"
   },
   "login": {
     "title": "Bei Ihrem Konto anmelden",
@@ -1248,7 +1248,7 @@
       "title": "EleutherIA kennenlernen",
       "overview": "Überblick",
       "knowledgeGraph": "Wissensgraph",
-      "embeddings": "Embeddings",
+      "embeddings": "Retrieval",
       "graphrag": "GraphRAG",
       "hybridSearch": "Hybridsuche",
       "ancientTexts": "Antike Texte",
@@ -1262,7 +1262,7 @@
       "slogan": "So funktioniert es",
       "title": "Antike Philosophie",
       "titleHighlight": "trifft moderne KI",
-      "subtitle": "Entdecken Sie, wie Wissensgraphen, semantische Embeddings und GraphRAG zusammenwirken, um 1.200 Jahre philosophisches Denken zu erhellen. 2.159 Knoten, 151 antike Werke und 14.600+ Passagen griffbereit.",
+      "subtitle": "Discover how knowledge graphs, vectorless retrieval, and GraphRAG combine to illuminate 1,200 years of philosophical thought. 2,193 nodes, 189 ancient works, and 16,968 passages at your fingertips.",
       "cta": "Jetzt lernen",
       "doi": "DOI: 10.5281/zenodo.17379489",
       "license": "CC BY 4.0 Lizenz",
@@ -1327,12 +1327,12 @@
         },
         "ai": {
           "title": "KI-Assistent",
-          "description": "GraphRAG kombiniert Wissensgraph-Traversierung mit semantischer Suche und LLM-Synthese für zitierte Antworten.",
+          "description": "GraphRAG combines knowledge graph traversal with SQL/tree/lemma retrieval and LLM synthesis for cited answers.",
           "features": [
-            "3.072-dim Embeddings",
-            "Hybridsuche",
-            "Streaming-Antworten",
-            "Quellenverankerung"
+            "Vectorless retrieval",
+            "Hybrid text search",
+            "Streaming responses",
+            "Source grounding"
           ]
         }
       }
@@ -1394,35 +1394,35 @@
       }
     },
     "embeddings": {
-      "title": "Embeddings verstehen",
-      "subtitle": "Wie Computer durch Zahlen Bedeutung verstehen",
+      "title": "Understanding Retrieval",
+      "subtitle": "How EleutherIA finds evidence with vectorless retrieval",
       "gpsAnalogy": {
-        "title": "Embeddings als GPS für Ideen",
-        "description": "So wie GPS-Koordinaten angeben, wo eine Stadt im physischen Raum liegt, geben Embeddings an, wo eine Idee im",
-        "semanticSpace": "semantischen Raum liegt",
+        "title": "Think of retrieval as routes through evidence",
+        "description": "Instead of assigning coordinates to ideas, EleutherIA follows structured routes through",
+        "semanticSpace": "the corpus and graph",
         "physical": {
           "title": "Physische Welt",
           "closeMeans": "Nah = Ähnlicher Ort"
         },
         "semantic": {
           "title": "Semantische Welt",
-          "closeMeans": "Nah = Ähnliche Bedeutung"
+          "closeMeans": "Linked = cited evidence"
         }
       },
       "steps": {
         "input": {
           "title": "Texteingabe",
-          "description": "Jeder Text kann in ein Embedding umgewandelt werden",
+          "description": "Any question can be expanded into terms, lemmas, and references",
           "example": "\"Die Stoiker glaubten, dass Schicksal mit Freiheit vereinbar ist\""
         },
         "processing": {
-          "title": "KI-Verarbeitung",
-          "description": "Google Gemini liest den Text und kodiert seine Bedeutung"
+          "title": "Retrieval Processing",
+          "description": "The backend routes the query through SQL, tree indexes, and passage citations"
         },
         "output": {
-          "title": "Vektor-Ausgabe",
-          "description": "3.072 Zahlen, die die Bedeutung erfassen",
-          "comment": "// 3.072 Dimensionen"
+          "title": "Evidence Output",
+          "description": "Passage anchors and graph nodes with citations",
+          "comment": "// vectorless"
         }
       },
       "comparison": {
@@ -1433,20 +1433,20 @@
           "misses": "Verpasst: \"Freiheit\", \"ἐφ' ἡμῖν\", \"liberum arbitrium\""
         },
         "semantic": {
-          "title": "Semantische Suche",
+          "title": "Evidence Routing",
           "description": "Findet Texte nach Bedeutung, unabhängig von den verwendeten Wörtern.",
           "finds1": "Findet: \"freier Wille\", \"Freiheit\", \"ἐφ' ἡμῖν\"",
           "finds2": "Findet: \"liberum arbitrium\", \"moralische Handlungsfähigkeit\""
         }
       },
       "journey": {
-        "title": "Beobachten Sie, wie Text zum Vektor wird",
-        "description": "Erleben Sie die magische Reise, wie philosophischer Text zu einem 3.072-dimensionalen Embedding wird. Klicken Sie auf Abspielen, um den 6-stufigen Prozess zu sehen.",
-        "loading": "Embedding-Reise wird geladen..."
+        "title": "Watch a Query Become Evidence",
+        "description": "Follow how a philosophical question becomes terms, lemmas, tree sections, passage anchors, and graph context.",
+        "loading": "Loading retrieval journey..."
       },
       "semanticSpace": {
-        "title": "Den semantischen Raum erkunden",
-        "description": "Jeder leuchtende Punkt repräsentiert ein philosophisches Konzept. Konzepte mit ähnlichen Bedeutungen gruppieren sich im 3D-Raum. Ziehen zum Drehen, Scrollen zum Zoomen.",
+        "title": "Explore the Concept Map",
+        "description": "Each point represents a philosophical concept. Curated relationships cluster related ideas in 3D space. Drag to rotate, scroll to zoom.",
         "loading": "3D-Visualisierung wird geladen...",
         "legend": {
           "stoic": "Stoische Konzepte",
@@ -1467,11 +1467,11 @@
       },
       "steps": {
         "semanticSearch": {
-          "title": "Semantische Suche",
-          "description": "Frage in Embedding umwandeln → Ähnliche Knoten im Wissensgraph finden",
-          "detail": "Ihre Frage wird zu einem 3.072-Zahlen-Vektor. Wir vergleichen ihn mit allen {{nodeCount}} KG-Knoten und finden die 10 ähnlichsten.",
+          "title": "Seed Discovery",
+          "description": "Expand question terms -> find KG nodes and passage anchors",
+          "detail": "Your question becomes lemmas, text-tree routes, KG label matches, and passage_citations. The backend uses vectorless SQL retrieval, not embeddings.",
           "input": "\"Was sagten die Stoiker über das Schicksal?\"",
-          "output": "Gefunden: Stoizismus (0,89), Schicksal (0,87), Chrysipp (0,84)..."
+          "output": "Found: Stoicism, Fate, Chrysippus, De Fato..."
         },
         "graphTraversal": {
           "title": "Graph-Traversierung",
@@ -1523,8 +1523,8 @@
           "example": "Anfrage: \"λόγος\" → Findet alle 10+ griechischen Formen"
         },
         "semantic": {
-          "title": "Semantische Suche",
-          "description": "Findet Texte nach Bedeutung mittels Embeddings",
+          "title": "Graph Evidence",
+          "description": "Finds texts through KG links and passage citations",
           "speed": "< 2s",
           "strength": "Konzeptuelles Verständnis",
           "example": "Anfrage: \"freier Wille\" → Findet auch \"Freiheit\", \"ἐφ' ἡμῖν\""
@@ -1591,16 +1591,16 @@
       "searchPlaceholder": "Glossar durchsuchen...",
       "terms": {
         "embedding": {
-          "term": "Embedding",
-          "definition": "Eine Liste von Zahlen (3.072), die die Bedeutung von Text repräsentiert. Ähnliche Bedeutungen haben ähnliche Vektoren."
+          "term": "Legacy Embedding",
+          "definition": "Legacy vector representation. EleutherIA's current production GraphRAG retrieval is vectorless."
         },
         "vector": {
-          "term": "Vektor",
-          "definition": "Eine Liste von Zahlen. In EleutherIA wird jeder Text durch 3.072 Zahlen repräsentiert."
+          "term": "Legacy Vector",
+          "definition": "A numeric representation used by older semantic-search prototypes; not the current production retrieval path."
         },
         "semanticSearch": {
-          "term": "Semantische Suche",
-          "definition": "Texte nach Bedeutung finden, nicht nur nach Stichwörtern. \"Freier Wille\" findet auch \"Freiheit\" und \"ἐφ' ἡμῖν\"."
+          "term": "Graph Evidence Search",
+          "definition": "Finding texts through lemmas, KG links, and curated passage citations rather than only exact keywords."
         },
         "knowledgeGraph": {
           "term": "Wissensgraph",
@@ -1632,11 +1632,11 @@
         },
         "cosineSimilarity": {
           "term": "Kosinus-Ähnlichkeit",
-          "definition": "Maß für Vektor-Ähnlichkeit. 1,0 = identisch, 0,0 = völlig unterschiedlich."
+          "definition": "A vector-similarity measure used by older prototypes; current retrieval uses SQL, lemmas, and curated citations."
         },
         "qdrant": {
-          "term": "Qdrant",
-          "definition": "Vektordatenbank, optimiert für effizientes Speichern und Suchen von Embeddings."
+          "term": "Legacy Vector Store",
+          "definition": "Former vector-store dependency. Current production retrieval is vectorless."
         }
       }
     },

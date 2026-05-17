@@ -252,15 +252,6 @@ class ApiClient {
     return response.data;
   }
 
-  async semanticSearch(query: string, limit: number = 10, collection: string = 'text_embeddings') {
-    const response = await this.client.post('/api/search/semantic', {
-      query,
-      limit,
-      collection,
-    });
-    return response.data;
-  }
-
   // Lemma Autocomplete - supports Latin-to-Greek transliteration
   async autocompleteLemmas(query: string, options?: {
     language?: string;
@@ -421,7 +412,7 @@ class ApiClient {
               id: s.passage_id || `source_${i}`,
               label: `${s.author}, ${s.work}`,
               type: 'passage',
-              reason: 'Retrieved via semantic search',
+              reason: 'Retrieved via vectorless evidence routing',
             })),
             expanded_nodes: [],
             traversed_edges: [],

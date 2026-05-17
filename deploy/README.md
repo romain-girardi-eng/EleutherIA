@@ -4,7 +4,7 @@ Two deployment options: **local** (self-contained Docker) and **production Docke
 
 ## Local — Self-Contained
 
-Everything runs in Docker: PostgreSQL, Qdrant, backend, and frontend. Zero external dependencies.
+Everything runs in Docker: PostgreSQL, backend, and frontend. Zero external dependencies for retrieval; the current GraphRAG path is vectorless.
 
 ```bash
 # From repo root
@@ -20,7 +20,6 @@ make run
 | Frontend   | 80   | http://localhost                  |
 | Backend    | 8000 | http://localhost:8000/docs        |
 | PostgreSQL | 5432 | localhost:5432                    |
-| Qdrant     | 6333 | http://localhost:6333/dashboard   |
 
 Optional profiles:
 
@@ -36,16 +35,16 @@ make local-clean  # Stop + delete volumes
 make logs         # Tail logs
 ```
 
-## Production — Supabase + Qdrant Cloud
+## Production — Supabase
 
-Only backend and frontend run as containers. PostgreSQL and Qdrant are external managed services.
+Only backend and frontend run as containers. PostgreSQL is provided by Supabase; GraphRAG retrieval is SQL/tree/lemma based.
 
 See [`production/README.md`](production/README.md) for full setup instructions.
 
 ```bash
 cd deploy/production
 cp .env.example .env
-# Fill in Supabase URL, Qdrant host, API keys
+# Fill in Supabase URL and LLM API keys
 # Rebuild Supabase first from repo root if needed:
 # uv run --with asyncpg python database/scripts/bootstrap_supabase.py --replace-data
 

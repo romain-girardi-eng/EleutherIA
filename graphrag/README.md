@@ -23,16 +23,13 @@ pip install eleutheria-graphrag[api]
 ```python
 from eleutheria_graphrag import GraphRAGService
 from eleutheria_database import DatabaseService
-from eleutheria_kg import QdrantService
 
 # Connect services
 db = DatabaseService()
-qdrant = QdrantService()
 await db.connect()
-await qdrant.connect()
 
 # Initialize GraphRAG
-graphrag = GraphRAGService(db, qdrant)
+graphrag = GraphRAGService(db)
 await graphrag.load_kg()
 
 # Ask a question
@@ -46,32 +43,33 @@ print(f"Sources: {result['citations']}")
 
 ## Features
 
-- **PageIndex V3 pipeline** (2 LLM calls, direct retrieval):
-  1. Embed query → parallel Qdrant search (KG nodes + passages + edges)
-  2. Enrich → passage_citations lookup + KG neighbor expansion
-  3. Build FULL context (no truncation — Gemini 1M token context)
-  4. ONE synthesis call → scholarly answer with citations
+- **Agentic vectorless pipeline**:
+  1. Expand query terms and lemmas; detect CTS URNs and author/work mentions
+  2. Discover seeds via SQLStrategy: tree routing, KG label/description match, `passage_citations`, lemmatic lookup, and full-text/lemmatic RRF
+  3. Enrich with KG neighbor expansion, proof chains, and passage evidence
+  4. Build full context for long-context synthesis
+  5. Generate a scholarly answer with verified citations
 
 - **Streaming responses** via Server-Sent Events
 - **Citation grounding** to specific ancient passages with CTS URNs
 - **Multi-provider LLM support** (Kimi K2, Gemini)
 - **passage_citations** as primary retrieval signal (curated KG-to-passage links)
 
-## Pipeline Overview (PageIndex V3)
+## Pipeline Overview
 
 ```
 User Query
     │
     ▼
 ┌─────────────────┐
-│ 1. Embed +      │  Query → Gemini embedding
+│ 1. Expand +     │  Query terms + lemmas
 │    Detect Refs  │  + CTS URN reference detection
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│ 2. Parallel     │  KG nodes + passages + edges
-│    Search       │  via Qdrant (no LLM calls)
+│ 2. Discover     │  SQLStrategy:
+│    Seeds        │  tree + KG labels + citations
 └────────┬────────┘
          │
          ▼
@@ -106,9 +104,8 @@ MOONSHOT_API_KEY=your-key    # For Kimi K2
 OPENROUTER_API_KEY=your-key  # For OpenRouter
 GEMINI_API_KEY=your-key      # For Gemini
 
-# Vector DB
-QDRANT_HOST=localhost
-QDRANT_HTTP_PORT=6333
+# Retrieval
+RETRIEVAL_MODE=auto  # auto uses SQL when DB is connected, snapshot otherwise
 ```
 
 ## API Routes (Optional)

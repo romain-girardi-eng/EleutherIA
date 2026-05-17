@@ -462,7 +462,7 @@ def _collect_passage_sources(
             or (work_node or {}).get("id")
             or f"{author}_{work_title}"
         )
-        canonical_ref = (
+        canonical_ref = str(
             metadata.get("canonical_ref")
             or metadata.get("section")
             or str(node.get("label") or node_id)
