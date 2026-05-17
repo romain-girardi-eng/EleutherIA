@@ -270,6 +270,11 @@ export default function CosmographPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [graphReady, setGraphReady] = useState(false);
+  // The loader video is meant to mask the fetch latency. We keep the loader
+  // mounted until BOTH the data is in AND the video has played through —
+  // whichever takes longer wins. Reduced-motion users short-circuit this
+  // gate from inside the loader so they aren't held back by a phantom video.
+  const [loaderVideoEnded, setLoaderVideoEnded] = useState(false);
 
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [pathSource, setPathSource] = useState<AtlasNodeMeta | null>(null);
@@ -429,17 +434,14 @@ export default function CosmographPage() {
     void focusNodeById(nodeId, { pushRoute: false });
   }, [graphReady, nodeId, selectedNodeId, focusNodeById]);
 
-  // Re-fit the view whenever the active node set changes (tier transition on
-  // mobile, tab switch on desktop). `fitViewOnInit` only runs once and the
-  // simulation needs several hundred ms to lay out a new node set — three
-  // passes catch the early/medium/late states.
-  const lastFittedNodeCount = useRef<number>(0);
+  // Re-fit the view only when the *user* explicitly switches the active
+  // slice (tab change, filter change). Crucially, mobile tier transitions
+  // are driven by the user's pinch zoom — re-fitting then yanks the camera
+  // away from where they're aiming and feels like the graph "refreshes"
+  // every time they zoom. We deliberately ignore those.
   useEffect(() => {
     if (!graphReady || !graphRef.current) return;
-    const count = activeMeta.length;
-    if (count === 0) return;
-    if (lastFittedNodeCount.current === count) return;
-    lastFittedNodeCount.current = count;
+    if (activeMeta.length === 0) return;
     const padding = isMobile ? 0.24 : 0.16;
     const handles = [600, 1400, 2400].map((delay) =>
       window.setTimeout(() => {
@@ -447,7 +449,8 @@ export default function CosmographPage() {
       }, delay),
     );
     return () => handles.forEach((h) => window.clearTimeout(h));
-  }, [isMobile, graphReady, activeMeta.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab, filters, graphReady]);
 
 
   function clearSelection() {
@@ -629,7 +632,9 @@ export default function CosmographPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(34,211,238,0.10),transparent_34%),radial-gradient(circle_at_78%_18%,rgba(251,191,36,0.10),transparent_30%),radial-gradient(circle_at_50%_85%,rgba(244,114,182,0.10),transparent_28%)]" />
       </div>
 
-      {loading && <KnowledgeGraphLoader />}
+      {(loading || !loaderVideoEnded) && !error && (
+        <KnowledgeGraphLoader onVideoEnded={() => setLoaderVideoEnded(true)} />
+      )}
       {!loading && error && <ErrorOverlay message={error} onRetry={() => window.location.reload()} />}
 
       {cosmo && dynamicConfig && (

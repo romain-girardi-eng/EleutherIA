@@ -9,6 +9,11 @@ interface KnowledgeGraphLoaderProps {
   videoWebmSrc?: string;
   /** Poster image shown while video buffers and for reduced-motion users. */
   posterSrc?: string;
+  /** Fires once when the video has played through. The video is meant to
+   *  cover the data-fetch latency; the parent uses this to know that the
+   *  loader has paid its full visual debt and can be torn down as soon as
+   *  the underlying data is ready. */
+  onVideoEnded?: () => void;
 }
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -21,6 +26,7 @@ export function KnowledgeGraphLoader({
   videoMp4Src = '/loader-kg.mp4',
   videoWebmSrc = '/loader-kg.webm',
   posterSrc = '/loader-kg-poster.jpg',
+  onVideoEnded,
 }: KnowledgeGraphLoaderProps) {
   const { t } = useTranslation();
   const prefersReducedMotion = useReducedMotion();
@@ -69,13 +75,22 @@ export function KnowledgeGraphLoader({
     if (!el || prefersReducedMotion) return;
     const tryPlay = () => {
       void el.play().catch(() => {
-        // Autoplay blocked — poster fallback is already visible.
+        // Autoplay blocked — poster fallback is already visible. We still
+        // want the parent to be unblocked: treat blocked autoplay as
+        // "video ended" after a tick so it doesn't gate the loader forever.
+        window.setTimeout(() => onVideoEnded?.(), 300);
       });
     };
     if (el.readyState >= 2) tryPlay();
     else el.addEventListener('canplay', tryPlay, { once: true });
     return () => el.removeEventListener('canplay', tryPlay);
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, onVideoEnded]);
+
+  // Reduced-motion users have no video to wait for — fire the gate immediately
+  // so the parent can tear the loader down the moment the data is ready.
+  useEffect(() => {
+    if (prefersReducedMotion) onVideoEnded?.();
+  }, [prefersReducedMotion, onVideoEnded]);
 
   return (
     <motion.div
@@ -158,6 +173,7 @@ export function KnowledgeGraphLoader({
                 aria-hidden="true"
                 onCanPlay={() => setVideoReady(true)}
                 onLoadedData={() => setVideoReady(true)}
+                onEnded={() => onVideoEnded?.()}
               >
                 <source src={videoWebmSrc} type="video/webm" />
                 <source src={videoMp4Src} type="video/mp4" />
