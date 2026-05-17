@@ -120,7 +120,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                 alt={logo.alt}
                 width={220}
                 height={96}
-                className="h-12 sm:h-14 brightness-0 invert opacity-90"
+                className="h-12 w-auto sm:h-14 brightness-0 invert opacity-90"
               />
             </div>
           )}
@@ -213,7 +213,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                     alt={logo.alt}
                     width={220}
                     height={96}
-                    className="h-48 lg:h-56 xl:h-64 2xl:h-72 max-h-[30vh]"
+                    className="h-48 w-auto max-w-full lg:h-56 xl:h-64 2xl:h-72 max-h-[30vh]"
                   />
                 </div>
               </header>
