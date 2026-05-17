@@ -252,7 +252,11 @@ export default function CosmographPage() {
   const graphRef = useRef<CosmographRef>(undefined);
   const { isMobile } = useResponsive();
 
-  const [tab, setTab] = useState<Tab>('atlas');
+  const [tab, setTab] = useState<Tab>(() =>
+    typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches
+      ? 'full'
+      : 'atlas',
+  );
   const [filters, setFilters] = useState<KgFilterState>({ periods: [], types: [], schools: [] });
   const [allMeta, setAllMeta] = useState<ReadonlyArray<AtlasNodeMeta>>([]);
   const [allEdges, setAllEdges] = useState<ReadonlyArray<AtlasEdgeMeta>>([]);
@@ -425,22 +429,21 @@ export default function CosmographPage() {
     void focusNodeById(nodeId, { pushRoute: false });
   }, [graphReady, nodeId, selectedNodeId, focusNodeById]);
 
-  // Mobile: when the tier slice changes (e.g. Atlas → Schools), re-fit the view
-  // so the user always sees the active subgraph centred. `fitViewOnInit` only
-  // runs once; this keeps the experience tight after every tier transition.
+  // Re-fit the view whenever the active node set changes (tier transition on
+  // mobile, tab switch on desktop). `fitViewOnInit` only runs once and the
+  // simulation needs several hundred ms to lay out a new node set — three
+  // passes catch the early/medium/late states.
   const lastFittedNodeCount = useRef<number>(0);
   useEffect(() => {
-    if (!isMobile || !graphReady || !graphRef.current) return;
+    if (!graphReady || !graphRef.current) return;
     const count = activeMeta.length;
     if (count === 0) return;
     if (lastFittedNodeCount.current === count) return;
     lastFittedNodeCount.current = count;
-    // The simulation needs several hundred ms to lay out the new node set.
-    // Three passes catch the early/medium/late states so the user is never
-    // looking at an off-screen cluster.
+    const padding = isMobile ? 0.24 : 0.16;
     const handles = [600, 1400, 2400].map((delay) =>
       window.setTimeout(() => {
-        graphRef.current?.fitView(500, 0.24);
+        graphRef.current?.fitView(500, padding);
       }, delay),
     );
     return () => handles.forEach((h) => window.clearTimeout(h));
