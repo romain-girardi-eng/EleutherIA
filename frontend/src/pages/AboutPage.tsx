@@ -44,9 +44,9 @@ export default function AboutPage() {
             <div className="flex flex-col md:flex-row items-start gap-6">
               <div className="flex-shrink-0 mx-auto md:mx-0">
                 <img
-                  src="/romain-girardi.jpg"
+                  src="/romain-girardi-painted.webp"
                   alt={t('about.authorName')}
-                  className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover object-[center_30%] shadow-lg border-4 border-amber-200"
+                  className="w-40 h-40 sm:w-48 sm:h-48 rounded-2xl object-cover shadow-lg"
                 />
               </div>
               <div className="flex-grow min-w-0">
