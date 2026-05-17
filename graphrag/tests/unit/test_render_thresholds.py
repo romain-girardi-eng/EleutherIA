@@ -133,38 +133,27 @@ def _build_answer(
 # ---------------------------------------------------------------------------
 
 
-# NOTE: The 5 failing tests below assert against an earlier render-quality
-# spec (4-section bodies, 2,800-char strict floor, 3-section llm_short).
-# Commit ce5d5f10 changed `_render_requirements` to require facets+2 framing
-# sections (so 4 facets → 6 sections) and bumped the strict floor to
-# 3,000 + 1,200*facets chars. The tests in TestClassifyRenderQuality and
-# TestExpandRetry need their expected values + answer fixtures regenerated
-# against the new spec. Skipping until Romain confirms which spec is the
-# intended truth.
-_RENDER_THRESHOLDS_DRIFT = pytest.mark.skip(
-    reason="Test expectations diverged from `_render_requirements` in "
-    "commit ce5d5f10 (chapter-length floor). Needs regeneration of "
-    "expected required_sections / min_chars / answer fixtures."
-)
-
-
-@_RENDER_THRESHOLDS_DRIFT
 class TestClassifyRenderQuality:
     def test_strict_band_when_long_dense_and_well_cited(self):
         state = _four_facet_state()
         reqs = _render_requirements(state)
-        # 4 supported facets → 4 required sections. Hard floor ≥ 2,800
-        # (matches the prod Bobzien/Frede trace requirement).
-        assert reqs["required_sections"] == 4
-        assert reqs["min_chars"] >= 2800
+        # 4 supported facets → 6 required sections (4 facets + 2 framing
+        # sections, per `_render_requirements`). Strict floor scales with
+        # facet count AND quoted claims: 3000 + 1200×4 (facets) + 600×4
+        # (quoted claims) = 10,200 chars. Required quote blocks = 4.
+        assert reqs["required_sections"] == 6
+        assert reqs["min_chars"] >= 10200
+        assert reqs["required_quote_blocks"] >= 4
 
-        # Build an answer that comfortably clears whatever min_chars is.
-        # ~1,400 chars/section × 4 sections, 3 citations/section, 1 block
-        # quote/section → strict.
+        # Strict needs: chars ≥ min_chars, sections ≥ required_sections,
+        # citations ≥ required_sections × STRICT_MIN_CITATIONS_PER_SECTION (4),
+        # quote_blocks ≥ required_quote_blocks (4).
+        # 6 sections × ~1,800 chars/section ≈ 10.8 k chars, 4 citations/section
+        # → 24 inline cites, 1 quote block/section → 12 quotes.
         answer = _build_answer(
-            section_count=4,
-            body_chars_per_section=1400,
-            citations_per_section=3,
+            section_count=6,
+            body_chars_per_section=1800,
+            citations_per_section=4,
             quote_blocks_per_section=1,
         )
         band, metrics = _classify_render_quality(state, answer)
@@ -175,14 +164,21 @@ class TestClassifyRenderQuality:
             f"citations={metrics['inline_citations']})"
         )
         assert metrics["chars"] >= reqs["min_chars"]
-        assert metrics["section_headers"] >= 4
-        assert metrics["inline_citations"] >= 12
+        assert metrics["section_headers"] >= 6
+        assert metrics["inline_citations"] >= 24
 
     def test_llm_short_band_when_prose_is_good_but_short(self):
-        """Mid-band: 1,800-2,799 chars, 3 sections, 2 citations/section."""
+        """Mid-band: ≥ LLM_SHORT_MIN_CHARS (5000) but below strict floor,
+        ≥ max(3, required_sections - 1) sections, ≥ 3 citations/section."""
         state = _four_facet_state()
+        # 5 sections × ~1,100 body chars → ~5.3 k chars (between the 5 k
+        # llm_short floor and the 7.8 k strict floor), 3 citations/section
+        # → 15 inline cites (matches the 5×3 llm_short citation target).
         answer = _build_answer(
-            section_count=3, body_chars_per_section=650, citations_per_section=2
+            section_count=5,
+            body_chars_per_section=1100,
+            citations_per_section=3,
+            quote_blocks_per_section=0,
         )
         band, metrics = _classify_render_quality(state, answer)
         assert band == "llm_short", (
@@ -190,8 +186,9 @@ class TestClassifyRenderQuality:
             f"(chars={metrics['chars']}, sections={metrics['section_headers']}, "
             f"citations={metrics['inline_citations']})"
         )
-        assert 1800 <= metrics["chars"] < 2800
-        assert metrics["section_headers"] >= 3
+        assert 5000 <= metrics["chars"] < 7800
+        assert metrics["section_headers"] >= 5
+        assert metrics["inline_citations"] >= 15
 
     def test_inadequate_band_when_too_short(self):
         state = _four_facet_state()
@@ -229,20 +226,24 @@ class TestAnswerShapeMetrics:
 # ---------------------------------------------------------------------------
 
 
-@_RENDER_THRESHOLDS_DRIFT
 class TestExpandRetry:
     @pytest.mark.asyncio
     async def test_expand_retry_promotes_short_to_strict(self):
-        """First draft = llm_short (~2,000 chars). Expand call returns a
-        strict-band answer. Final mode is 'llm', expand_retry_count == 1."""
+        """First draft = llm_short. Expand call returns a strict-band
+        answer. Final mode is 'llm', expand_retry_count == 1."""
         state = _four_facet_state()
+        # llm_short: 5 sections × ~1,100 chars × 3 cits → ~5.3 k chars / 15 cit
         short_draft = _build_answer(
-            section_count=3, body_chars_per_section=650, citations_per_section=2
-        )
-        long_expanded = _build_answer(
-            section_count=4,
-            body_chars_per_section=1400,
+            section_count=5,
+            body_chars_per_section=1100,
             citations_per_section=3,
+            quote_blocks_per_section=0,
+        )
+        # strict: 6 sections × ~1,400 chars × 4 cits + 1 quote/section
+        long_expanded = _build_answer(
+            section_count=6,
+            body_chars_per_section=1800,
+            citations_per_section=4,
             quote_blocks_per_section=1,
         )
         polished = long_expanded + "\n\n(polished)"
@@ -267,11 +268,18 @@ class TestExpandRetry:
         """First draft = llm_short. Expansion stays in llm_short band but
         is longer → accepted. Final mode = 'llm_short', polish runs."""
         state = _four_facet_state()
+        # Both drafts sit in llm_short (5 k–7.8 k chars, ≥ 5 sections, ≥ 15 cits).
         short_draft = _build_answer(
-            section_count=3, body_chars_per_section=650, citations_per_section=2
+            section_count=5,
+            body_chars_per_section=1100,
+            citations_per_section=3,
+            quote_blocks_per_section=0,
         )
         slightly_longer = _build_answer(
-            section_count=3, body_chars_per_section=750, citations_per_section=2
+            section_count=5,
+            body_chars_per_section=1200,
+            citations_per_section=3,
+            quote_blocks_per_section=0,
         )
 
         deps = make_deps()
@@ -315,10 +323,11 @@ class TestExpandRetry:
         """When the first draft already lands in the strict band, no
         expand retry runs (cost saving). Polish still runs."""
         state = _four_facet_state()
+        # strict: 6 sections × ~1,400 chars × 4 cits + 1 quote/section
         strict_draft = _build_answer(
-            section_count=4,
-            body_chars_per_section=1400,
-            citations_per_section=3,
+            section_count=6,
+            body_chars_per_section=1800,
+            citations_per_section=4,
             quote_blocks_per_section=1,
         )
         polished = strict_draft + "\n\n(polished)"
