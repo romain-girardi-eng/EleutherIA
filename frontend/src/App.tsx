@@ -230,25 +230,39 @@ function AppContent() {
 
     // iOS 18 Safari hard lock: swallow touchmove at the document level.
     // `passive: false` is required for preventDefault to take effect.
-    // We let interactive elements (buttons, links, inputs) keep their
-    // own scroll/tap behavior by only preventing the default when the
-    // target isn't inside one of them and isn't inside an explicitly
-    // scrollable container.
-    const swallow = (event: TouchEvent) => {
+    //
+    // The subtle bit: we cannot rely on `event.target` of the *touchmove*,
+    // because a 1-2px finger jitter can shift the target from the button
+    // onto a parent that isn't interactive. preventDefault then cancels
+    // the tap gesture and the click never fires — that's why the burger
+    // would mute under iOS even though the button is on top of the stack.
+    // Anchor the decision on touchstart instead: if the gesture *began*
+    // on an interactive element, it stays interactive for its full life.
+    const INTERACTIVE_SELECTOR =
+      'button, a, input, textarea, select, [contenteditable="true"], [data-allow-touch="true"]';
+    let gestureIsInteractive = false;
+    const onTouchStart = (event: TouchEvent) => {
       const target = event.target as HTMLElement | null;
-      if (!target) {
-        event.preventDefault();
-        return;
-      }
-      const interactive = target.closest(
-        'button, a, input, textarea, select, [contenteditable="true"], [data-allow-touch="true"]',
-      );
-      if (interactive) return;
+      gestureIsInteractive = !!target?.closest(INTERACTIVE_SELECTOR);
+    };
+    const endGesture = () => {
+      gestureIsInteractive = false;
+    };
+    const swallow = (event: TouchEvent) => {
+      if (gestureIsInteractive) return;
+      const target = event.target as HTMLElement | null;
+      if (target?.closest(INTERACTIVE_SELECTOR)) return;
       event.preventDefault();
     };
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchend', endGesture, { passive: true });
+    document.addEventListener('touchcancel', endGesture, { passive: true });
     document.addEventListener('touchmove', swallow, { passive: false });
 
     return () => {
+      document.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchend', endGesture);
+      document.removeEventListener('touchcancel', endGesture);
       document.removeEventListener('touchmove', swallow);
       html.style.height = prev.htmlHeight;
       html.style.overflow = prev.htmlOverflow;
@@ -303,7 +317,7 @@ function AppContent() {
       {/* Header / Navigation */}
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 m-0",
+          "fixed top-0 left-0 right-0 z-50 m-0 pointer-events-auto touch-manipulation",
           // Desktop (lg+): warm parchment on inner pages, white on homepage
           isHomePage
             ? "lg:bg-academic-paper lg:border-b lg:border-academic-border lg:shadow-sm"
