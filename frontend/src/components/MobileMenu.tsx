@@ -15,7 +15,7 @@
  * (slide from right + staggered children).
  */
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -146,8 +146,16 @@ export function MobileMenu({
   }, [open]);
 
   // Close on route change (when user taps a link).
+  //
+  // CRITICAL: useEffect runs on mount too, and this component mounts the
+  // moment `mobileMenuOpen` flips to true. Without the ref guard below,
+  // mount calls `onClose()` immediately and the drawer slams shut a frame
+  // after opening — the bug that masqueraded as "burger doesn't work".
+  // Snapshot the pathname at mount and only close when it actually changes.
+  const initialPathnameRef = useRef(location.pathname);
   useEffect(() => {
     if (!open) return;
+    if (location.pathname === initialPathnameRef.current) return;
     onClose();
     // We intentionally depend only on location.pathname.
     // eslint-disable-next-line react-hooks/exhaustive-deps

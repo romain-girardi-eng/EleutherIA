@@ -61,7 +61,6 @@ export default function HomePage() {
     html.style.height = '100svh';
     html.style.overflow = 'hidden';
     html.style.overscrollBehavior = 'none';
-    html.style.touchAction = 'none';
     body.style.height = '100svh';
     body.style.overflow = 'hidden';
     body.style.position = 'fixed';
@@ -71,7 +70,10 @@ export default function HomePage() {
     body.style.bottom = '0';
     body.style.width = '100%';
     body.style.overscrollBehavior = 'none';
-    body.style.touchAction = 'none';
+    // touch-action is NOT pinned at the document level here — see the
+    // matching note in App.tsx. Cascading `none` would kill tap→click on
+    // descendant buttons (the burger). The Hero section keeps its own
+    // `touch-none` so rubber-band on the hero canvas stays blocked.
 
     return () => {
       html.style.height = prev.htmlHeight;
