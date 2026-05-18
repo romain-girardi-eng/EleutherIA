@@ -44,7 +44,6 @@ import Legend from '../components/cosmograph/Legend';
 import MobileGraphControls from '../components/cosmograph/MobileGraphControls';
 import PathFinder, { type PathResult } from '../components/cosmograph/PathFinder';
 import { useResponsive } from '../hooks/useResponsive';
-import { useMobileGraphTiers } from '../hooks/useMobileGraphTiers';
 
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 
@@ -323,56 +322,37 @@ export default function CosmographPage() {
     };
   }, []);
 
-  // --- Mobile progressive zoom tier (disabled on desktop) ---
-  // On mobile, the active slice is driven by the cosmograph zoom level rather
-  // than by the Atlas/Full/Filter tab. The tab still drives behaviour: when the
-  // user picks "Filter" we apply filters to the tier-selected slice; "Full"
-  // becomes "Detail" tier seed; "Path" still uses the whole graph for BFS.
-  const mobileTiers = useMobileGraphTiers({
-    enabled: isMobile,
-    meta: allMeta,
-    edges: allEdges,
-    graphRef,
-    graphReady,
-  });
+  // Mobile zoom-tier system retired: pinching used to swap the slice
+  // mid-gesture, which restarted the simulation and felt like a full
+  // refresh. The active slice is now driven entirely by the tab on
+  // mobile too, so pinch-zoom is purely a camera transform.
 
   // --- Derive active slice (atlas / full / filtered) ---
+  //
+  // The mobile "zoom tier" system used to switch slices mid-pinch (overview
+  // / mid / detail) whenever the user crossed a zoom threshold. That meant
+  // rebuilding the Cosmograph dataset and restarting the simulation on
+  // every pinch — perceived as "the whole graph refreshes when I zoom".
+  // We now use the same tab-driven slice everywhere; zoom on mobile is
+  // purely camera transform, no data churn.
   useEffect(() => {
     if (allMeta.length === 0) return;
     let cancelled = false;
 
     async function computeActive() {
       let metaSlice: ReadonlyArray<AtlasNodeMeta> = allMeta;
-      let edgeSlice: ReadonlyArray<AtlasEdgeMeta>;
 
-      if (isMobile && mobileTiers.slice && tab !== 'path') {
-        // Mobile: tier-based slice (Atlas / Schools / Detail) wins over tab.
-        let tierMeta = mobileTiers.slice.metaSlice;
-        let tierEdges = mobileTiers.slice.edgeSlice;
-        if (tab === 'filter') {
-          const filteredAll = filterMeta(allMeta, filters);
-          const filterIds = new Set(filteredAll.map((m) => m.id));
-          tierMeta = tierMeta.filter((m) => filterIds.has(m.id));
-          const tierIds = new Set(tierMeta.map((m) => m.id));
-          tierEdges = tierEdges.filter(
-            (e) => tierIds.has(e.source) && tierIds.has(e.target),
-          );
-        }
-        metaSlice = tierMeta;
-        edgeSlice = tierEdges;
-      } else {
-        // Desktop: original tab-driven slice.
-        if (tab === 'atlas') {
-          const ids = pickAtlasNodeIds(allMeta.map((m) => ({ id: m.id, type: m.typeKey })));
-          metaSlice = allMeta.filter((m) => ids.has(m.id));
-        }
-        if (tab === 'filter') {
-          metaSlice = filterMeta(allMeta, filters);
-        }
-        // tab === 'full' and 'path' use the whole graph
-        const idSet = new Set(metaSlice.map((m) => m.id));
-        edgeSlice = allEdges.filter((e) => idSet.has(e.source) && idSet.has(e.target));
+      if (tab === 'atlas') {
+        const ids = pickAtlasNodeIds(allMeta.map((m) => ({ id: m.id, type: m.typeKey })));
+        metaSlice = allMeta.filter((m) => ids.has(m.id));
       }
+      if (tab === 'filter') {
+        metaSlice = filterMeta(allMeta, filters);
+      }
+      // tab === 'full' and 'path' use the whole graph
+
+      const idSet = new Set(metaSlice.map((m) => m.id));
+      const edgeSlice = allEdges.filter((e) => idSet.has(e.source) && idSet.has(e.target));
 
       const built = await buildCosmoData(metaSlice, edgeSlice);
       if (cancelled) return;
@@ -385,7 +365,7 @@ export default function CosmographPage() {
     return () => {
       cancelled = true;
     };
-  }, [allMeta, allEdges, tab, filters, isMobile, mobileTiers.slice]);
+  }, [allMeta, allEdges, tab, filters]);
 
   // Path mode forces full graph behind the scenes so BFS can find anything.
   useEffect(() => {
@@ -513,11 +493,9 @@ export default function CosmographPage() {
         fitViewPadding: 0.2,
         randomSeed: 'eleutheria-atlas-v3',
         spaceSize: isMobile
-          ? mobileTiers.tier === 'overview'
+          ? tab === 'atlas'
             ? 3600
-            : mobileTiers.tier === 'mid'
-              ? 5400
-              : 7200
+            : 7200
           : tab === 'atlas'
             ? 2200
             : 7200,
@@ -548,7 +526,7 @@ export default function CosmographPage() {
         showDynamicLabels: false,
         showTopLabels: isMobile ? true : tab === 'atlas',
         showTopLabelsLimit: isMobile
-          ? Math.max(mobileTiers.slice?.labelNodeIds.size ?? 12, 8)
+          ? tab === 'atlas' ? 16 : 24
           : tab === 'atlas'
             ? 14
             : 0,
@@ -660,7 +638,11 @@ export default function CosmographPage() {
             onSimulationUnpause={() => setSimulationRunning(true)}
             onSimulationPause={() => setSimulationRunning(false)}
             onSimulationEnd={() => setSimulationRunning(false)}
-            onZoom={isMobile ? mobileTiers.handleZoom : undefined}
+            // Zoom is purely camera transform — no data slicing on pinch.
+            // The mobile-tier system (see useMobileGraphTiers) used to swap
+            // slices here and that's what made the graph "refresh" on every
+            // pinch. Now we leave the dataset untouched.
+            onZoom={undefined}
             onPointClick={(index) => {
               const clicked = activeMeta[index];
               if (!clicked) return;
@@ -674,11 +656,9 @@ export default function CosmographPage() {
           />
           </CosmographErrorBoundary>
 
-          {/* === Mobile-only controls (FAB, bottom-sheet, tier pill, hint) === */}
+          {/* === Mobile-only controls (FAB, bottom-sheet) === */}
           {isMobile && (
             <MobileGraphControls
-              tier={mobileTiers.tier}
-              visibleNodeCount={mobileTiers.slice?.visibleNodeIds.size ?? 0}
               nodes={allMeta}
               activeTab={tab}
               onTabChange={(next) => {

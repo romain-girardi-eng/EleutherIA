@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Filter as FilterIcon,
-  Layers,
   Network,
   Route,
   Search,
@@ -10,7 +9,6 @@ import {
   X,
 } from 'lucide-react';
 
-import type { MobileTier } from '../../hooks/useMobileGraphTiers';
 import type { AtlasNodeMeta } from './AtlasHelpers';
 import KgFilters, { type KgFilterState } from './KgFilters';
 import KgSearchBar from './KgSearchBar';
@@ -18,8 +16,6 @@ import KgSearchBar from './KgSearchBar';
 export type MobileTabId = 'atlas' | 'full' | 'path' | 'filter';
 
 interface MobileGraphControlsProps {
-  readonly tier: MobileTier;
-  readonly visibleNodeCount: number;
   readonly nodes: ReadonlyArray<AtlasNodeMeta>;
   readonly activeTab: MobileTabId;
   readonly onTabChange: (tab: MobileTabId) => void;
@@ -29,23 +25,7 @@ interface MobileGraphControlsProps {
   readonly onOpenPathFinder: () => void;
 }
 
-const HINT_STORAGE_KEY = 'eleutheria.kg.mobile.hint.shown';
-
-const TIER_LABEL: Record<MobileTier, { i18nKey: string; fallback: string }> = {
-  overview: { i18nKey: 'cosmograph.mobile.tier.overview', fallback: 'Vue d’ensemble' },
-  mid: { i18nKey: 'cosmograph.mobile.tier.mid', fallback: 'Arguments' },
-  full: { i18nKey: 'cosmograph.mobile.tier.full', fallback: 'Détails' },
-};
-
-const TIER_ICON: Record<MobileTier, typeof Sparkles> = {
-  overview: Sparkles,
-  mid: Layers,
-  full: Network,
-};
-
 export default function MobileGraphControls({
-  tier,
-  visibleNodeCount,
   nodes,
   activeTab,
   onTabChange,
@@ -57,27 +37,7 @@ export default function MobileGraphControls({
   const { t } = useTranslation();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(true);
-  const [hintVisible, setHintVisible] = useState(false);
   const searchInputRef = useRef<HTMLDivElement | null>(null);
-
-  // First-visit hint
-  useEffect(() => {
-    try {
-      const shown = window.localStorage.getItem(HINT_STORAGE_KEY);
-      if (!shown) setHintVisible(true);
-    } catch {
-      // localStorage may throw in private mode; ignore.
-    }
-  }, []);
-
-  const dismissHint = () => {
-    setHintVisible(false);
-    try {
-      window.localStorage.setItem(HINT_STORAGE_KEY, '1');
-    } catch {
-      // ignore
-    }
-  };
 
   // Collapse search on first user interaction (touch/zoom outside).
   useEffect(() => {
@@ -94,9 +54,6 @@ export default function MobileGraphControls({
       window.removeEventListener('wheel', collapseOnInteract);
     };
   }, []);
-
-  const TierIcon = TIER_ICON[tier];
-  const tierLabel = t(TIER_LABEL[tier].i18nKey, TIER_LABEL[tier].fallback);
 
   return (
     <>
@@ -131,20 +88,6 @@ export default function MobileGraphControls({
         )}
       </div>
 
-      {/* === Tier indicator pill (bottom-right above FAB) === */}
-      <div className="pointer-events-none absolute bottom-[8.5rem] right-3 z-20 md:hidden">
-        <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-950/82 px-3 py-1.5 text-[11px] font-medium text-slate-200 shadow-[0_8px_24px_rgba(2,6,23,0.45)] backdrop-blur-xl">
-          <TierIcon className="h-3.5 w-3.5 text-cyan-200" aria-hidden="true" />
-          <span className="font-semibold">{tierLabel}</span>
-          <span className="text-slate-400">·</span>
-          <span>
-            {t('cosmograph.mobile.nodeCount', '{{count}} nodes', {
-              count: visibleNodeCount,
-            })}
-          </span>
-        </div>
-      </div>
-
       {/* === Single sticky FAB (bottom-right, above BottomTabNav h-16) === */}
       <button
         type="button"
@@ -153,45 +96,8 @@ export default function MobileGraphControls({
         aria-expanded={sheetOpen}
         className="pointer-events-auto absolute bottom-20 right-3 z-30 inline-flex h-14 w-14 items-center justify-center rounded-full border border-cyan-300/30 bg-gradient-to-br from-cyan-400/95 to-cyan-600/95 text-slate-950 shadow-[0_14px_32px_rgba(34,211,238,0.4)] transition-transform active:scale-95 md:hidden"
       >
-        <TierIcon className="h-6 w-6" aria-hidden="true" />
+        <Network className="h-6 w-6" aria-hidden="true" />
       </button>
-
-      {/* === Pinch-to-zoom hint overlay (first visit only) === */}
-      {hintVisible && (
-        <div className="pointer-events-auto absolute inset-x-3 bottom-40 z-40 mx-auto max-w-sm rounded-2xl border border-cyan-300/20 bg-slate-950/92 p-4 text-[12px] text-slate-200 shadow-[0_24px_60px_rgba(2,6,23,0.6)] backdrop-blur-xl md:hidden">
-          <div className="flex items-start gap-3">
-            <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-cyan-300/30 bg-cyan-300/10">
-              <Sparkles className="h-4 w-4 text-cyan-200" aria-hidden="true" />
-            </div>
-            <div className="flex-1">
-              <p className="font-semibold text-white">
-                {t('cosmograph.mobile.hint.title', 'Pinch to dive deeper')}
-              </p>
-              <p className="mt-1 leading-5 text-slate-300">
-                {t(
-                  'cosmograph.mobile.hint.body',
-                  'You start with the 12 most central nodes. Pinch-zoom in and more thinkers, schools and arguments appear.',
-                )}
-              </p>
-              <button
-                type="button"
-                onClick={dismissHint}
-                className="mt-3 inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] font-medium text-slate-100 transition-colors hover:bg-white/[0.08]"
-              >
-                {t('cosmograph.mobile.hint.dismiss', 'Got it')}
-              </button>
-            </div>
-            <button
-              type="button"
-              onClick={dismissHint}
-              aria-label={t('common.dismiss', 'Dismiss')}
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition-colors hover:text-white"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* === Bottom-sheet (FAB target) === */}
       {sheetOpen && (
