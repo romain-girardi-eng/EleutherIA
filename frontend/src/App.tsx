@@ -174,7 +174,15 @@ function AppContent() {
   });
   */
 
-  // Reset mobile menu when location changes
+  // Reset mobile menu when location changes.
+  //
+  // CRITICAL: do NOT depend on `announce` or `t`. `t` (react-i18next) often
+  // returns a new function reference on render and `announce` comes through
+  // a context value object that gets re-created on every provider render.
+  // Listing them here re-fires this effect within a few hundred ms of every
+  // render, which would re-set `mobileMenuOpen = false` and slam the burger
+  // drawer shut the moment the user opens it — that's exactly the bug we
+  // chased through three rounds of touch/z-index fixes.
   useEffect(() => {
     setMobileMenuOpen(false);
 
@@ -183,7 +191,8 @@ function AppContent() {
     if (pageTitle) {
       announce(`Navigated to ${pageTitle}`, 'polite');
     }
-  }, [location.pathname, announce, t]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   const isHomePage = location.pathname === '/';
 
@@ -226,7 +235,13 @@ function AppContent() {
     body.style.right = '0';
     body.style.width = '100%';
     body.style.overscrollBehavior = 'none';
-    body.style.touchAction = 'none';
+    // NOTE: do NOT set `body.style.touchAction = 'none'`. Per the Pointer
+    // Events spec the effective touch-action of any descendant is computed
+    // from the whole hit-test chain — a `none` on body cascades down and
+    // suppresses tap→click conversion on buttons, even when those buttons
+    // declare `touch-action: manipulation` themselves. The touchmove
+    // swallow listener below already kills rubber-band/scroll on iOS 18
+    // without needing the body-level CSS hammer.
 
     // iOS 18 Safari hard lock: swallow touchmove at the document level.
     // `passive: false` is required for preventDefault to take effect.
@@ -408,12 +423,16 @@ function AppContent() {
             >
               <span
                 className={cn(
-                  "inline-flex transition-transform duration-200",
+                  "inline-flex transition-transform duration-200 pointer-events-none",
                   mobileMenuOpen ? "rotate-90" : "rotate-0",
                 )}
                 aria-hidden="true"
               >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {mobileMenuOpen ? (
+                  <X className="w-5 h-5 pointer-events-none" />
+                ) : (
+                  <Menu className="w-5 h-5 pointer-events-none" />
+                )}
               </span>
             </button>
           </div>
