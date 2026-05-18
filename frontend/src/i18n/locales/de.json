@@ -36,6 +36,24 @@
       "library": "Bibliothek",
       "research": "Forschung",
       "community": "Gemeinschaft"
+    },
+    "descriptions": {
+      "howItWorks": "Pipeline, Quellen, Methodik",
+      "about": "Mission, Umfang und Team",
+      "database": "17,7k Knoten, 42,9k Kanten",
+      "texts": "487 griechische und lateinische Werke",
+      "bibliography": "Moderne Forschung und Editionen",
+      "graphrag": "Fundierte Fragen stellen",
+      "research": "Live agentische Spuren",
+      "visualizer": "Interaktive Netzwerkerkundung",
+      "canonicalPassages": "Rezeptionskarte des Korpus",
+      "recherches": "Galerie öffentlicher Recherchen",
+      "contributions": "Community-Beiträge",
+      "contribute": "PDF-Korrektur einreichen"
+    },
+    "cta": {
+      "label": "Wissensgraph",
+      "hint": "Netzwerk erkunden"
     }
   },
   "home": {

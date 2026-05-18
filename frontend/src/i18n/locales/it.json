@@ -36,6 +36,24 @@
       "library": "Biblioteca",
       "research": "Ricerca",
       "community": "Comunità"
+    },
+    "descriptions": {
+      "howItWorks": "Pipeline, fonti, metodologia",
+      "about": "Missione, ambito e team",
+      "database": "17,7k nodi, 42,9k archi",
+      "texts": "487 opere greche e latine",
+      "bibliography": "Studi moderni ed edizioni",
+      "graphrag": "Domande con fonti verificate",
+      "research": "Tracce agentiche in diretta",
+      "visualizer": "Esplorazione interattiva della rete",
+      "canonicalPassages": "Mappa di ricezione del corpus",
+      "recherches": "Galleria di ricerche pubbliche",
+      "contributions": "Contributi della comunità",
+      "contribute": "Invia una correzione PDF"
+    },
+    "cta": {
+      "label": "Grafo di conoscenza",
+      "hint": "Esplora la rete"
     }
   },
   "home": {
