@@ -69,28 +69,48 @@ export function KnowledgeGraphLoader({
     return () => window.clearInterval(id);
   }, [messages.length, prefersReducedMotion]);
 
+  // `onVideoEnded` typically comes from the parent as `() => setX(true)` —
+  // a NEW reference on every parent render. We hold it in a ref so its
+  // identity doesn't trigger the autoplay effect to re-run (which would
+  // call `el.play()` on an already-ended video and restart it from frame
+  // zero — the loop-on-loop bug). The ref also serves as a guard: once
+  // the video has ended we lock it down so nothing tries to play again.
+  const endedRef = useRef(false);
+  const onVideoEndedRef = useRef(onVideoEnded);
+  useEffect(() => {
+    onVideoEndedRef.current = onVideoEnded;
+  }, [onVideoEnded]);
+
   // Coax autoplay on Safari/iOS the moment the element is ready.
   useEffect(() => {
     const el = videoRef.current;
     if (!el || prefersReducedMotion) return;
     const tryPlay = () => {
+      if (endedRef.current || el.ended) return;
       void el.play().catch(() => {
         // Autoplay blocked — poster fallback is already visible. We still
         // want the parent to be unblocked: treat blocked autoplay as
         // "video ended" after a tick so it doesn't gate the loader forever.
-        window.setTimeout(() => onVideoEnded?.(), 300);
+        window.setTimeout(() => {
+          if (endedRef.current) return;
+          endedRef.current = true;
+          onVideoEndedRef.current?.();
+        }, 300);
       });
     };
     if (el.readyState >= 2) tryPlay();
     else el.addEventListener('canplay', tryPlay, { once: true });
     return () => el.removeEventListener('canplay', tryPlay);
-  }, [prefersReducedMotion, onVideoEnded]);
+  }, [prefersReducedMotion]);
 
   // Reduced-motion users have no video to wait for — fire the gate immediately
   // so the parent can tear the loader down the moment the data is ready.
   useEffect(() => {
-    if (prefersReducedMotion) onVideoEnded?.();
-  }, [prefersReducedMotion, onVideoEnded]);
+    if (prefersReducedMotion && !endedRef.current) {
+      endedRef.current = true;
+      onVideoEndedRef.current?.();
+    }
+  }, [prefersReducedMotion]);
 
   return (
     <motion.div
@@ -173,7 +193,15 @@ export function KnowledgeGraphLoader({
                 aria-hidden="true"
                 onCanPlay={() => setVideoReady(true)}
                 onLoadedData={() => setVideoReady(true)}
-                onEnded={() => onVideoEnded?.()}
+                onEnded={(e) => {
+                  if (endedRef.current) return;
+                  endedRef.current = true;
+                  // Pause explicitly so any stray play() call (e.g. from the
+                  // browser's media controls or a stale effect re-run) can't
+                  // rewind us back to frame 0. The last frame stays visible.
+                  e.currentTarget.pause();
+                  onVideoEndedRef.current?.();
+                }}
               >
                 <source src={videoWebmSrc} type="video/webm" />
                 <source src={videoMp4Src} type="video/mp4" />
