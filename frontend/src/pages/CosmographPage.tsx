@@ -23,6 +23,7 @@ import {
   type CosmographData,
   type CosmographRef,
 } from '@cosmograph/react';
+import { AnimatePresence } from 'framer-motion';
 
 import { apiClient } from '../api/client';
 import type { KGEdge, KGNode } from '../types';
@@ -632,9 +633,20 @@ export default function CosmographPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(34,211,238,0.10),transparent_34%),radial-gradient(circle_at_78%_18%,rgba(251,191,36,0.10),transparent_30%),radial-gradient(circle_at_50%_85%,rgba(244,114,182,0.10),transparent_28%)]" />
       </div>
 
-      {(loading || !loaderVideoEnded) && !error && (
-        <KnowledgeGraphLoader onVideoEnded={() => setLoaderVideoEnded(true)} />
-      )}
+      {/* Loader stays visible until ALL three are true:
+            1. data fetch resolved   (loading === false)
+            2. loader video played   (loaderVideoEnded)
+            3. Cosmograph mounted    (graphReady — onMount fired)
+          Without (3), `loading` flips false the instant the API resolves
+          but the canvas is not yet rendered → a brief dark flash. */}
+      <AnimatePresence>
+        {(loading || !loaderVideoEnded || !graphReady) && !error && (
+          <KnowledgeGraphLoader
+            key="kg-loader"
+            onVideoEnded={() => setLoaderVideoEnded(true)}
+          />
+        )}
+      </AnimatePresence>
       {!loading && error && <ErrorOverlay message={error} onRetry={() => window.location.reload()} />}
 
       {cosmo && dynamicConfig && (
