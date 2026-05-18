@@ -1,0 +1,97 @@
+name: Deploy Frontend (GHCR)
+
+# Builds the frontend Docker image and pushes it to GitHub Container Registry
+# on every push to `main` that touches `frontend/**`. The image is published
+# as `ghcr.io/<owner>/eleutheria-frontend:{latest,sha-<short-sha>}`.
+#
+# the platform's compose file (deploy/deploy-compose.yml) consumes the `:latest`
+# tag, so the production redeploy is:
+#
+#     docker compose -f deploy/deploy-compose.yml pull eleutheria-frontend
+#     docker compose -f deploy/deploy-compose.yml up -d eleutheria-frontend
+#
+# Wire those two commands into the platform's deploy hook (Watchtower, a cron, or
+# a CD agent) and every push becomes a production deploy.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-frontend.yml'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Extra image tag to publish alongside :latest (e.g. v1.2.3)'
+        required: false
+        default: ''
+
+concurrency:
+  group: deploy-frontend
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/eleutheria-frontend
+  VITE_API_URL: https://free-will.app
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lowercase image name
+        id: img
+        run: echo "name=$(echo '${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+
+      - name: Derive tags
+        id: tags
+        run: |
+          short_sha="${GITHUB_SHA:0:7}"
+          base="${{ env.REGISTRY }}/${{ steps.img.outputs.name }}"
+          tags="${base}:latest"
+          tags="${tags},${base}:sha-${short_sha}"
+          if [ -n "${{ inputs.tag }}" ]; then
+            tags="${tags},${base}:${{ inputs.tag }}"
+          fi
+          {
+            echo "tags<<EOF"
+            echo "${tags}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.tags.outputs.tags }}
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.created=${{ github.event.head_commit.timestamp }}
+          build-args: |
+            VITE_API_URL=${{ env.VITE_API_URL }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
