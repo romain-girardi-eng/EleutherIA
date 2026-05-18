@@ -202,9 +202,8 @@ export function CitationRenderer({
       parts.push(
         <span
           key={`citation-group-${matchIndex}`}
-          className="inline-flex flex-wrap items-center align-middle"
+          className="inline-flex flex-wrap items-center gap-0.5 align-middle"
         >
-          <span>[</span>
           {citationGroup.map((part, groupIndex) => {
             if (typeof part === 'string') {
               return (
@@ -247,7 +246,6 @@ export function CitationRenderer({
               />
             );
           })}
-          <span>]</span>
         </span>
       );
 
