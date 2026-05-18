@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { LogOut, User, Loader2, Menu, X } from 'lucide-react';
+import { Loader2, Menu, X } from 'lucide-react';
 import { cn } from './lib/utils';
 import { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,8 +17,7 @@ import { CandlelightCursor } from './components/ui/candlelight-cursor';
 import { ShaderBackground } from './components/ui/shader-background';
 import { NotFoundPage } from './components/ui/not-found-page';
 import { SkipLinks } from './components/ui/SkipLinks';
-import { Button } from './components/ui/button';
-import { LanguageChips } from './components/LanguageChips';
+import { DesktopNav } from './components/DesktopNav';
 import { SeoManager } from './components/SeoManager';
 import './index.css';
 
@@ -364,46 +363,13 @@ function AppContent() {
               />
             </Link>
 
-            {/* Navigation Links - Hidden on mobile */}
-            <div className="hidden lg:flex items-center space-x-6">
-              <NavLink to="/how-it-works">{t('nav.howItWorks')}</NavLink>
-              <NavLink to="/database">{t('nav.database')}</NavLink>
-              <NavLink to="/visualizer">{t('nav.visualizer')}</NavLink>
-              <NavLink to="/graphrag">{t('nav.graphrag')}</NavLink>
-              <NavLink to="/recherches">{t('nav.recherches')}</NavLink>
-              <NavLink to="/contributions">{t('nav.contributions')}</NavLink>
-              <NavLink to="/passages-canoniques">{t('nav.canonicalPassages')}</NavLink>
-              <NavLink to="/research">{t('nav.research')}</NavLink>
-              <NavLink to="/texts">{t('nav.texts')}</NavLink>
-              <NavLink to="/bibliography">{t('nav.bibliography')}</NavLink>
-              <NavLink to="/about">{t('nav.about')}</NavLink>
-              {isAuthenticated && (
-                <NavLink to="/contribuer">{t('nav.contribute')}</NavLink>
-              )}
-
-              {/* Language chips — always visible flag buttons */}
-              <LanguageChips size="compact" inverted={isHomePage} />
-
-
-              {/* User Menu - Only show when authenticated */}
-              {isAuthenticated && (
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center space-x-2 text-sm text-academic-muted">
-                    <User className="w-4 h-4" />
-                    <span>{user?.username}</span>
-                  </div>
-                  <Button
-                    onClick={logout}
-                    variant="ghost"
-                    size="sm"
-                    aria-label={t('nav.logout')}
-                  >
-                    <LogOut className="w-4 h-4 mr-1" />
-                    {t('nav.logout')}
-                  </Button>
-                </div>
-              )}
-            </div>
+            {/* Desktop nav — grouped dropdowns, CTA, lang & user (>= lg). */}
+            <DesktopNav
+              inverted={false}
+              isAuthenticated={isAuthenticated}
+              username={user?.username}
+              onLogout={logout}
+            />
 
             {/* Mobile Menu Button with Animation */}
             <button
@@ -614,29 +580,6 @@ function AppContent() {
         </footer>
         )}
       </div>
-  );
-}
-
-// Navigation Link Component
-function NavLink({ to, children, inverted = false }: { to: string; children: React.ReactNode; inverted?: boolean }) {
-  const location = useLocation();
-  const isActive = location.pathname === to;
-
-  return (
-    <Link
-      to={to}
-      className={cn(
-        "font-medium text-sm transition-colors block lg:inline-block py-0.5 lg:py-0 rounded px-2 lg:px-0 lg:hover:bg-transparent",
-        inverted
-          ? "text-white/80 hover:text-orange-300 hover:bg-white/5"
-          : isActive
-            ? "text-orange-600"
-            : "text-stone-600 hover:text-orange-600 hover:bg-stone-50"
-      )}
-      aria-current={isActive ? 'page' : undefined}
-    >
-      {children}
-    </Link>
   );
 }
 

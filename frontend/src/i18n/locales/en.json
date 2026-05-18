@@ -36,6 +36,24 @@
       "library": "Library",
       "research": "Research",
       "community": "Community"
+    },
+    "descriptions": {
+      "howItWorks": "Pipeline, sources, methodology",
+      "about": "Mission, scope, and team",
+      "database": "Browse 17.7k nodes, 42.9k edges",
+      "texts": "487 Greek and Latin works",
+      "bibliography": "Modern scholarship and editions",
+      "graphrag": "Ask grounded scholarly questions",
+      "research": "Live agentic retrieval traces",
+      "visualizer": "Interactive network exploration",
+      "canonicalPassages": "Reception map of the corpus",
+      "recherches": "Public researches gallery",
+      "contributions": "Community contributions",
+      "contribute": "Submit a PDF correction"
+    },
+    "cta": {
+      "label": "Knowledge Graph",
+      "hint": "Explore the network"
     }
   },
   "home": {
