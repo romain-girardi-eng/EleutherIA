@@ -27,8 +27,13 @@ on:
         default: ''
 
 concurrency:
+  # Sequential builds, no cancellation. Cancelling an in-flight build when
+  # a newer push arrives produces `conclusion: cancelled`, which downstream
+  # CI watchers treat as a failure even though nothing actually broke. The
+  # CI overhead of letting a superseded build finish is negligible (~1 min)
+  # and the latest push still wins because it pushes the final :latest tag.
   group: deploy-frontend
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 env:
   REGISTRY: ghcr.io
