@@ -1,0 +1,202 @@
+{
+  "scholar": "Claire Hall",
+  "scholar_node_id": null,
+  "pdfs_consulted": [
+    "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Origen and Prophecy_ Fate, Authority, Allegory, and the -- Claire Hall -- 2021 -- Oxford University Press -- 9780192846648 -- a99c76ae1916472c67c41aa8bffed521 -- Anna’s Archive.pdf",
+    "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Origen and Prophecy_ Fate, Authority, Allegory, and the -- Claire Hall -- 2021 -- Oxford University Press -- 9780192846648 -- a99c76ae1916472c67c41aa8bffed521 -- Anna’s Archive.md",
+    "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Hall_2021.summary.md"
+  ],
+  "publication_id_default": "scholarly_work_hall_2021_origen_and_prophecy",
+  "publication_full_ref": "Hall, Claire (2021). Origen and Prophecy: Fate, Authority, Allegory, and the Structure of Scripture. Oxford Theology and Religion Monographs. Oxford: Oxford University Press. ISBN 978-0-19-284664-8. DOI: 10.1093/oso/9780192846648.001.0001.",
+  "verification_protocol": "Page numbers derived from running-header markers in the native PDF extraction (e.g. 'introduction 3', '68 origen and prophecy'). Each verbatim quote was located in the markdown line-range cited by the Hall_2021.summary.md (a prior trusted extraction) and then re-anchored to its printed page. Verbatim is preserved exactly, including Greek polytonic diacritics. Hall publishes in English only — no French/Latin paraphrase needed.",
+  "args_processed": 17,
+  "args_verified_high": 12,
+  "args_verified_medium": 2,
+  "args_verified_low": 0,
+  "args_not_found": 3,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_hall_origen_s_priority_in_the_free__0": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page": "69",
+      "chapter": "3. Fate and Foreknowledge in Greek Philosophy — §3.4 Alexander of Aphrodisias and the Hellenistic background",
+      "quote_verbatim": "The notion of the free will and foreknowledge problem such as it is treated in contemporary philosophy relies on a technical notion of free will as freedom of decision that did not emerge until relatively late—indeed, not until Origen’s lifetime. Although Alexander of Aphrodisias was the first person to discuss the problem as we conceive of it, Origen was almost certainly the second—and the first Christian.",
+      "translation_en": null,
+      "context": "Concluding sentence of Hall's reconstruction of Alexander's two-sided notion of eph' hemin (On Fate 181.5; 180.26–8; 200.12; 200.25), positioning Origen as the second philosopher historically to treat the divine-foreknowledge / human-freedom tension as a technical problem.",
+      "verification_confidence": "high",
+      "md_lines": "3758-3762"
+    },
+    "scholarly_argument_hall_fate_vs_free_will_in_greek_phi_1": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page": "69",
+      "chapter": "3. Fate and Foreknowledge in Greek Philosophy — §3.4 Alexander of Aphrodisias",
+      "quote_verbatim": "It is clear even in itself that ‘what depends on us’ (ἐφ᾽ἡμῖν) is applied to those things over which we have the power of also choosing the opposite. […] We have this power of choosing the opposite and not everything that we choose has pre-determining causes, because of which it is not possible for us not to choose this. […] Alexander’s conclusion is to accept that if the gods have foreknowledge of contingent events, it is only knowledge of them as contingent—that is, he makes a probabilistic argument.",
+      "translation_en": null,
+      "context": "Hall reconstructs Alexander's two-sided concept of eph' hemin from On Fate 181.5 and 180.26–8, then traces his probabilistic conclusion (On Fate 200.12 and 200.25). She summarises: Alexander 'preserves a number of Chrysippean arguments for determinism, but ultimately rejects them in the name of Aristotelianism.' Note: the KG argument frames Chrysippus as compatibilist and Alexander as libertarian — Hall does not herself use the term 'libertarian' for Alexander on this page; she speaks of a 'two-sided notion of free will'.",
+      "verification_confidence": "high",
+      "md_lines": "3724-3762"
+    },
+    "scholarly_argument_hall_alexander_of_aphrodisias_on_ep_3": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page": "69",
+      "chapter": "3. Fate and Foreknowledge in Greek Philosophy — §3.4",
+      "quote_verbatim": "It is clear even in itself that ‘what depends on us’ (ἐφ᾽ἡμῖν) is applied to those things over which we have the power of also choosing the opposite. […] It is impossible for [the gods], in the case of that which has in its proper nature the possibility of both coming to be and not [i.e. is contingent], to have foreknowledge that at all events it will be or that at all events it will not be.",
+      "translation_en": null,
+      "context": "Hall's gloss of Alexander, On Fate 181.5 and 200.25, in support of her thesis that Alexander treats divine foreknowledge of contingents as necessarily probabilistic.",
+      "verification_confidence": "high",
+      "md_lines": "3729-3751"
+    },
+    "scholarly_argument_hall_early_christian_autonomy_termi_4": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page": "70",
+      "chapter": "3. §3.5 Early Christian Understandings of Autonomy and Choice",
+      "quote_verbatim": "From the earliest period of Christianity, we find references in Christian texts to questions of human autonomy and choice. Sometimes they use the standard term ἐφ᾽ ἡμῖν, and sometimes the later and more technical noun αὐτεξουσία or the noun-phrase ἐλευθερία τῆς προαιρέσεως. Autonomy and judgement are very closely connected in most patristic discussions on the subject; indeed, for many patristic writers, the issue of free will only comes up in the rhetorical context of an exhortation to moral behaviour with an eye to future judgement.",
+      "translation_en": null,
+      "context": "Opening of §3.5. Footnote 59 specifies: 'This term [αὐτεξουσία] is regularly used by Justin Martyr'; footnote 60: 'cf. Tatian Address to the Greeks 7.1.'",
+      "verification_confidence": "high",
+      "md_lines": "3778-3787"
+    },
+    "scholarly_argument_hall_justin_martyr_s_place_in_auton_8": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page_a": "3",
+      "page_b": "70",
+      "chapter": "Introduction; §3.5 Early Christian Understandings of Autonomy and Choice",
+      "quote_verbatim_a": "Origen’s way of thinking about prophecy was unique, certainly, but it built on philosophical changes already underway in the writings of his predecessors and contemporaries, including Plutarch, Philo, Philostratus, Alexander of Aphrodisias, Justin Martyr, Irenaeus, Tertullian, and Clement of Alexandria.",
+      "quote_verbatim_b": "A more worked-out philosophical approach to autonomy is to be found in Justin Martyr. Justin argues that the whole structure of human experience of punishment and reward would not make sense if we were not free.",
+      "translation_en": null,
+      "context": "Hall names Justin among Origen's philosophical predecessors (p. 3) and, on p. 70, singles him out as the most developed early Christian voice on autonomy, citing footnote 59 ('αὐτεξουσία … regularly used by Justin Martyr') and grounding his contribution in the punishment/reward argument.",
+      "verification_confidence": "high",
+      "md_lines": "604-608; 3803-3805; 3809"
+    },
+    "scholarly_argument_hall_stoic_determinism_and_prophecy_2": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page": "62",
+      "chapter": "3. §3.4.1 Chrysippus and the Stoics",
+      "quote_verbatim": "The Stoics were primarily concerned with physical causal determinism and what it might mean both for future contingency and for moral responsibility. Unlike for Aristotle, prediction of the future in Stoic thought was a deductive science. The regular relationship between signs and events meant that the presence of signs could be relied upon for deductions through divination. […] For Stoic thinkers, the reliability of divination had implications for conceptions of the future: specifically, the future could only be predicted if it had already been settled at the time of the prediction that it would in fact happen. In the Stoic conception, divinatory predictions are made on the basis that there is a chain or network of causes that leads to the prophesied event; divination allows access to some signs that are part of that network.",
+      "translation_en": null,
+      "context": "Hall's structural argument: Stoic divination presupposes a settled future and an interconnected causal web — the conceptual background against which she will later position Origen.",
+      "verification_confidence": "high",
+      "md_lines": "3390-3401"
+    },
+    "scholarly_argument_hall_origen_against_valentinian_det_6": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page": "79",
+      "chapter": "3. §3.6 Origen on Pharaoh’s Heart",
+      "quote_verbatim": "Origen begins his discussion by noting that heretics take the hardening of Pharaoh’s heart to be indicative that some human beings have a lost, earthly nature and are beyond the remit of salvation. By implication, they argue that some human beings do not have freedom to choose morally virtuous actions. This is probably in reference to a Valentinian doctrine. In particular, Origen rejects the notion of goodness or badness as essential properties rather than learned. He mocks the Valentinian notion by stating that there is no need to harden the heart of a truly disobedient man, as he would have disobeyed anyway. Instead, says Origen, the fact that God hardened Pharaoh’s heart is indicative ‘that it was possible for him to obey’.",
+      "translation_en": null,
+      "context": "Hall cites Origen, On First Principles 3.1.8 (her n. 28 and n. 31) and references Linjamaa (2019) pp. 112–55 for the Valentinian background.",
+      "verification_confidence": "high",
+      "md_lines": "4231-4240"
+    },
+    "scholarly_argument_hall_origen_on_pharaoh_s_hardened_h_5": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page_a": "79",
+      "page_b": "80",
+      "chapter": "3. §3.6 Origen on Pharaoh’s Heart",
+      "quote_verbatim_a": "It is clear that he is at this point working within a Stoic framing of moral responsibility and is primarily concerned with two related problems: first, that God’s intervention in this particular case is unjust because he makes Pharaoh act evilly and then punishes Pharaoh for doing so; second and relatedly, that if God is able to cause somebody to act evilly, God is the source of evil—that is, the problem of evil is at play.",
+      "quote_verbatim_b": "So . . . the same act (ἐνέργεια), which occurred through Moses, proved (ἤλεγχε) the hardening of Pharaoh on account of his wickedness and the persuasibility of the mixed Egyptians who departed together with the Hebrews. […] I call this the Jaffa Cake effect. […] the hardening of his heart revealed that he had made choices in the past such that his heart was ready to harden.",
+      "translation_en": null,
+      "context": "Hall's two-page reading: same divine ἐνέργεια produces opposite effects depending on the prior moral disposition of the recipient. She cites On First Principles 3.1.10–11.",
+      "verification_confidence": "high",
+      "md_lines": "4250-4256; 4294-4306"
+    },
+    "scholarly_argument_hall_origen_on_free_will_and_autono_0": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page_a": "84",
+      "page_b": "194",
+      "chapter": "4. Origen on Freedom and Foreknowledge; Conclusion",
+      "quote_verbatim_a": "Origen’s discussion of the free will and foreknowledge problem in Philocalia 23 […] provides the second ever discussion of the free will and foreknowledge problem as we understand it. […] Through a lengthy discussion of freedom to choose otherwise and God’s foreknowledge, Origen concludes, in his explanation of Genesis 1:14, that the stars are a form of ‘writing in the sky’, an outpouring of the mind of God for ‘astral powers’ to read and enact. […] Prophecy lies at the heart of how human beings can understand and access God’s foreknowledge while preserving freedom of choice.",
+      "quote_verbatim_b": "Unlike Alexander, Origen maintained that divine foreknowledge was possible, and could be communicated to human beings, sometimes directly but usually through prophetic intermediaries. For Origen, this does not compromise our ability to make decisions—to choose otherwise—and to have moral responsibility for our choices.",
+      "translation_en": null,
+      "context": "Hall's thesis on Origen's αὐτεξούσιον is built across ch. 4 (analytical) and the Conclusion (synthetic). The Philocalia 23 passage (extracted from Princ. III.1 by Basil/Gregory) is her central evidence.",
+      "verification_confidence": "high",
+      "md_lines": "4488-4510; 9839-9844"
+    },
+    "scholarly_argument_hall_origen_s_resolution_of_forekno_1": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page": "194",
+      "chapter": "Conclusion",
+      "quote_verbatim": "Alexander of Aphrodisias was the first to mix the notion of divine foreknowledge with the question of human freedom to choose otherwise, two quite specific philosophical formulations which appear to be incompatible. While early Christian writers did discuss issues of fate and human freedom and autonomy, none of them engaged in a sophisticated philosophical way with these problems. It is against this backdrop that Origen formulated his ideas about divine foreknowledge and human freedom. Unlike Alexander, Origen maintained that divine foreknowledge was possible, and could be communicated to human beings, sometimes directly but usually through prophetic intermediaries. For Origen, this does not compromise our ability to make decisions—to choose otherwise—and to have moral responsibility for our choices.",
+      "translation_en": null,
+      "context": "The headline contrast of the book's Conclusion — Alexander accepted incompatibility and made foreknowledge probabilistic; Origen accepts full divine foreknowledge while preserving libertarian-style 'choose otherwise' freedom via prophetic mediation.",
+      "verification_confidence": "high",
+      "md_lines": "9826-9844"
+    },
+    "scholarly_argument_hall_divine_foreknowledge_and_futur_2": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page_a": "84",
+      "page_b": "194",
+      "chapter": "4. Origen on Freedom and Foreknowledge; Conclusion",
+      "quote_verbatim_a": "Through a lengthy discussion of freedom to choose otherwise and God’s foreknowledge, Origen concludes […] Prophecy lies at the heart of how human beings can understand and access God’s foreknowledge while preserving freedom of choice.",
+      "quote_verbatim_b": "Unlike Alexander, Origen maintained that divine foreknowledge was possible […] For Origen, this does not compromise our ability to make decisions—to choose otherwise—and to have moral responsibility for our choices.",
+      "translation_en": null,
+      "context": "The KG node frames this as 'broadly Middle Platonist' — Hall herself frames it instead as Origen's response to Alexander's Aristotelian-probabilist solution; she does not in this argument explicitly label Origen's position 'Middle Platonist'. The non-causal character of divine knowledge is the load-bearing claim and it is fully supported.",
+      "verification_confidence": "medium",
+      "md_lines": "4503-4510; 9839-9844"
+    },
+    "scholarly_argument_hall_tripartite_structure_of_prophe_7": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page": "3",
+      "chapter": "Introduction",
+      "quote_verbatim": "In this book, I want to illustrate how Origen thought about prophecy using the same threefold structure, with somatic (future-telling), psychic (moral), and pneumatic (mystical revelatory) senses.",
+      "translation_en": null,
+      "context": "Hall's programmatic statement: Origen's tripartite hermeneutic of scripture (somatic/psychic/pneumatic, On First Principles 4) is mapped onto a tripartite structure of prophecy. The whole book is organised in three parts on this scheme.",
+      "verification_confidence": "high",
+      "md_lines": "585-587"
+    },
+    "scholarly_argument_hall_tripartite_hermeneutic_and_pro_5": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page": "2-3",
+      "chapter": "Introduction",
+      "quote_verbatim": "In his major philosophical work, On First Principles, Origen sets out a method for reading scripture which he believed other Christians should adopt. He argues that scripture can be read as having three different senses: the straightforward, or what he calls ‘somatic’ (bodily) sense; the moral, or what he calls ‘psychic’ (soul-ish) sense; and the mystical, or ‘pneumatic’ (spiritual) sense. This threefold structure, says Origen, underpins the whole structure of scripture and is intimately linked through Christ with the structure of the Holy Trinity. In this book, I want to illustrate how Origen thought about prophecy using the same threefold structure, with somatic (future-telling), psychic (moral), and pneumatic (mystical revelatory) senses.",
+      "translation_en": null,
+      "context": "Hall's foundational mapping of On First Principles 4 onto her account of prophecy. NOTE: the KG description adds a claim that the allegorical level 'reveals Christ and the structure of salvation history while maintaining that human readers must freely ascend through these levels'. Hall affirms the Christological/Trinitarian link explicitly; the 'free ascent of the reader' is consistent with her overall argument but is not verbatim on these pages — flag as partial.",
+      "verification_confidence": "medium",
+      "md_lines": "578-587"
+    },
+    "scholarly_argument_hall_balaam_as_case_study_in_prophe_4": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page_a": "119",
+      "page_b": "125-128",
+      "chapter": "6. Virtue and the Prophet — §6.2 Balaam",
+      "quote_verbatim_a": "Next I will examine a case study from the Old Testament: Balaam, the pagan […] I will show that while Origen believes that Balaam delivers true prophecies (including [Messianic ones])",
+      "quote_verbatim_b": "Balaam, variously characterized as astrologer, sorcerer, prophet, villain […] If we look to Balaam’s role in scripture, he is not seen as particularly [positive] […] I construct my analysis around the various questions that Origen must answer about Balaam, using the criteria for prophetic morality established above: a) virtue: whether Balaam is himself morally legitimate enough to be called a prophet b) inspiration: whether Balaam’s method of inspiration is moral […] c) benefit: is the content of Balaam’s prophecies morally beneficial and therefore legitimate?",
+      "translation_en": null,
+      "context": "Hall devotes §6.2 (and a long section of Origen's Homilies on Numbers 13–18) to Balaam as the test-case for her tripartite criterion of true prophecy (virtue / inspiration / benefit). The KG node's claim that Balaam 'demonstrates that even a wicked prophet can utter true prophecy, but this does not negate the general principle' is exactly her structural reading.",
+      "verification_confidence": "high",
+      "md_lines": "6151-6157; 6440-6483; 6593-6601"
+    },
+    "scholarly_argument_hall_prophetic_ecstasy_and_moral_re_3": {
+      "publication_id": "scholarly_work_hall_2021_origen_and_prophecy",
+      "page_a": "96",
+      "page_b": "124",
+      "chapter": "5. Ecstasy, Virtue, and Authority; 6. §6.1 The Pythia",
+      "quote_verbatim_a": "It is also worth considering why ecstasy might not have served as a dividing line between true and false prophecy, as it seemed to for the Phrygians and for some of Origen’s contemporaries who wrote against them. […] I examine in particular a strand of thinking focused not on ecstasy per se, but on the personal virtue and authority of the prophet.",
+      "quote_verbatim_b": "We see, therefore, that for Origen it is not merely the presence of ecstasy that demarcates legitimate from illegitimate prophecies as Hällström claims. Instead, ecstasy is only one symptom among many that a prophet is inspired by demons. What is of primary importance for Origen in distinguishing true prophets from false prophets is neither the presence nor the absence of ecstasy, nor the accuracy of the prophecies made, but the morality and virtue of the prophet, the morality of the inspiration (from God rather than from demons), and the moral benefit of the prophecies made.",
+      "translation_en": null,
+      "context": "Hall's positive thesis on prophetic agency: Origen rejects possession-style ecstasy (Pythia, Phrygians) precisely because true prophets must retain rational agency and personal virtue. This grounds the KG claim about 'rational faculties' and 'cooperation with divine grace' (the latter phrase is the KG paraphrase, not Hall verbatim — Hall speaks of 'inspiration from God rather than from demons').",
+      "verification_confidence": "high",
+      "md_lines": "4973-4985; 6398-6408"
+    },
+    "scholarly_argument_hall_free_will_and_determinism_in_m_0": {
+      "publication_id": null,
+      "page": null,
+      "chapter": null,
+      "quote_verbatim": null,
+      "translation_en": null,
+      "context": "NO EVIDENCE: 'Melito' does not appear anywhere in the extracted text of Hall 2021 (grep -i melito returns zero hits). This KG argument label appears to be a stub generated by automated extraction from a different source mistakenly attributed to Hall, OR a Hall-on-Melito hypothesis that is in fact a negative finding (its own description reads: 'The text provided does not contain Hall's own scholarly positions on free will, determinism, fate, or moral responsibility'). Recommend deleting the node or re-labelling its scholarly source. DO NOT cite Hall here.",
+      "verification_confidence": "not_found",
+      "recommended_action": "delete_or_reattribute"
+    },
+    "scholarly_argument_faure_g_del_s_relativity_based_chall_2": {
+      "publication_id": null,
+      "page": null,
+      "chapter": null,
+      "quote_verbatim": null,
+      "translation_en": null,
+      "context": "NOT A HALL ARGUMENT — this node is attributed to 'Faure' on 'Gödel's relativity-based challenge to determinism'. It surfaced in the Hall scan only because the substring 'hall' appears inside the long ID 'chall_2'. Out of scope for Hall verification; skipped.",
+      "verification_confidence": "not_applicable",
+      "recommended_action": "exclude_from_hall_batch"
+    }
+  }
+}

@@ -1,0 +1,276 @@
+{
+  "scholar": "Robert Jewett",
+  "scholar_node_id": null,
+  "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+  "publication_full": "Jewett, Robert, with Roy D. Kotansky. 2007. Romans: A Commentary. Hermeneia — A Critical and Historical Commentary on the Bible. Eldon Jay Epp (ed.). Minneapolis, MN: Fortress Press. (Logos edition exported from local DOCTORAT corpus; the in-file colophon dates the Fortress hardback to 2006, but the cited Hermeneia paperback bears the 2007 imprint.)",
+  "pdfs_consulted": [
+    "[local-path] SHAL/04_Littérature_secondaire/08_Commentaires_NT/Hermeneia_Jewett_Romans 5.1-11.txt",
+    "[local-path] SHAL/04_Littérature_secondaire/08_Commentaires_NT/Hermeneia_Jewett_Romans 5.12-21.txt",
+    "[local-path] SHAL/04_Littérature_secondaire/08_Commentaires_NT/Hermeneia_Jewett_Romans 7.13-25.txt",
+    "[local-path] SHAL/04_Littérature_secondaire/08_Commentaires_NT/Hermeneia_Jewett_Romans 8.18-30.txt",
+    "[local-path] SHAL/04_Littérature_secondaire/08_Commentaires_NT/Hermeneia_Jewett_Romans 9.1-5.txt",
+    "[local-path] SHAL/04_Littérature_secondaire/08_Commentaires_NT/Hermeneia_Jewett_Romans 9.6-18.txt",
+    "[local-path] SHAL/04_Littérature_secondaire/08_Commentaires_NT/Hermeneia_Jewett_Romans 9.19-29.txt",
+    "[local-path] SHAL/04_Littérature_secondaire/08_Commentaires_NT/Hermeneia_Jewett_Romans 9.30-10.4.txt",
+    "[local-path] SHAL/05_Notes_recherche/Jewett_2007_HermRo_Rm5_export.txt"
+  ],
+  "pagination_note": "The DOCTORAT Hermeneia files are Logos software exports (single text stream, no printed page boundaries). Page numbers are therefore left null and replaced by the stable Hermeneia verse-anchored section (the bolded '■ <verse>*' marker that opens each comment in the Exegesis), which uniquely locates each passage in the printed volume as well. Romans is the only commentary in the local set whose pagination is not preserved; the standard Fortress Hermeneia hardback pagination for the pericopes consulted is 344–407 (Rom 5:1–21), 459–478 (Rom 7:13–25), 506–553 (Rom 8:18–30), 553–608 (Rom 9:1–29), 608–632 (Rom 9:30–10:4) — but each individual ■-anchored claim has not been verified against a printed copy and must not be treated as a page citation.",
+  "args_processed": 25,
+  "args_verified_high": 25,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_jewett_adam_s_sin_and_universal_death_0": {
+      "pdf_source": "Hermeneia_Jewett_Romans 5.12-21.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Analysis on Rom 5:12–21 (opening paragraph of the Analysis)",
+      "quote_verbatim": "The primary goal of the passage is not to set forth a doctrine of Adam's sin but to demonstrate the scope of the overflowing dominion of grace (vv. 15–17, 20–21) in the \"life\" of all believers (vv. 17–19, 21).",
+      "translation_en": null,
+      "context": "Jewett's framing thesis for the whole Adam–Christ pericope. The 'death reigned … even over those who did not sin in the likeness of the transgression of Adam' clause that the KG argument paraphrases is Jewett's own translation of Rom 5:14 printed at the head of the pericope.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_universal_sin_and_moral_respon_1": {
+      "pdf_source": "Hermeneia_Jewett_Romans 5.12-21.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Rhetorical Disposition on Rom 5:12d and Exegesis ■ 12",
+      "quote_verbatim": "5:12d 4) The concomitant cause of death: \"all sinned\"  …  The more likely alternative is that ἐφʼ ὧ refers to the realm in which humans were sinning, that is, the κόσμος (\"world\") that is mentioned in vv. 12 and 13. That humans are responsible for spread of sin throughout the world is clearly implied by the expression πάντες ἥμαρτον (\"all sinned\"), although this creates inconsistencies with the later argument of the pericope, which consistently stresses Adamic causation of later actions.",
+      "translation_en": null,
+      "context": "Jewett labels v. 12d 'the concomitant cause of death' in his Rhetorical Disposition and then defends the 'realm in which humans were sinning' reading in the Exegesis on v. 12 — exactly the construal the KG paraphrase attributes to him.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_grace_righteousness_and_human__2": {
+      "pdf_source": "Hermeneia_Jewett_Romans 5.12-21.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 17",
+      "quote_verbatim": "It is the believers who \"will reign.\" This detail confirms that Paul's interest is not in developing a doctrine of Adam's sin but rather to employ the Adamic material as a foil to explain the abundant life in Christ that overturns the legacy of sin and death.",
+      "translation_en": null,
+      "context": "Verbatim from the comment on βασιλεύσουσιν in Rom 5:17. The 'transfer from Adam's realm of death to Christ's realm' synthesis the KG paraphrases is built from this paragraph plus the antithetical 'reign of death / reign in life' summary that follows it.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_law_s_role_in_increasing_trans_3": {
+      "pdf_source": "Hermeneia_Jewett_Romans 5.12-21.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 20",
+      "quote_verbatim": "Paul's effort to demote the role of law is continued with his choice of the derogatory expression νόμος δὲ παρεισῆλθεν (\"but law slipped in, encroached\"), not to guide the faithful to life but to increase the scale of sin. … Where \"the sin increased,\" referring to a specific location, probably the climactic event of the crucifixion of the Messiah, God's grace \"abounded to a superlative degree.\"",
+      "translation_en": null,
+      "context": "Two consecutive paragraphs in the comment on Rom 5:20. The KG paraphrase ('not a deterministic mechanism but a rhetorical demonstration … surpassing power of Christ's realm') condenses Jewett's argument that v. 20 is rhetorical hyperbole pointing to the superabundance of grace, not a mechanistic claim about law's causal role.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_free_will_and_human_response_t_0": {
+      "pdf_source": "Hermeneia_Jewett_Romans 5.1-11.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 1 (text-critical and theological note on the subjunctive ἔχωμεν)",
+      "quote_verbatim": "Rather than a triumphalist argument about the current possession of peace and hope by Christian believers that the indicative interpretation has traditionally assumed, the subjunctive produces an admonition about the concrete embodiment of faith in the life of the congregation. The formulation in the first person plural includes all the members of Paul's audience as well as Paul and his colleagues in a common obligation.",
+      "translation_en": null,
+      "context": "The full paragraph defends the subjunctive 'let us have peace' against the indicative — exactly the KG's claim that the formulation is an admonition requiring active human response, not a triumphalist indicative.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_moral_responsibility_and_congr_1": {
+      "pdf_source": "Hermeneia_Jewett_Romans 5.1-11.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 1",
+      "quote_verbatim": "The house and tenement churches in Rome are acting in so combative a manner against one another, however, that it is clear that they have not yet embodied the peace that Paul has in mind. … The formulation in the first person plural includes all the members of Paul's audience as well as Paul and his colleagues in a common obligation.",
+      "translation_en": null,
+      "context": "Two adjacent sentences from the same Exegesis paragraph that anchors the 'house and tenement churches' / 'first person plural as responsible agents' wording the KG node reproduces almost verbatim.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_determinism_vs_human_agency_in_2": {
+      "pdf_source": "Hermeneia_Jewett_Romans 5.1-11.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 1 (opening paragraph on δικαιωθέντες) and ■ 9",
+      "quote_verbatim": "By employing the nominative plural of the aorist passive participle, he clearly refers to an event in the past, an event that extended righteousness to all believers, with reference perhaps to the moment of baptism or more broadly to the acceptance of the gospel in conversion. The righteousness thereby gained is a matter of divine gift, as indicated by the passive voice. This clause sums up the argument in the first proof that no person or group can stand before God on the basis of achievements or prior status but only on the basis of grace.",
+      "translation_en": null,
+      "context": "Jewett's grammatical reading of δικαιωθέντες as an aorist passive participle (= past event, divine gift, baptism/conversion). The 'subsequent subjunctive exhortations require ongoing active response' element the KG paraphrases is supplied by the immediately following passage on ἔχωμεν / καυχώμεθα (same Exegesis section, quoted in the entry for argument_jewett_free_will_and_human_response_t_0 above).",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_human_moral_agency_and_conscie_1": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.1-5.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 1 (on συνείδησις)",
+      "quote_verbatim": "Unlike most modern conceptions, conscience for Paul was neither the voice of God nor a guiding moral agency but rather the irrepressible knowledge one has \"with oneself\" that an action is consistent or inconsistent with one's ethical norm. … the fact that for Paul conscience is a fallible human instance of judgment, shaped by \"custom\" rather than by God (1 Cor 8:7, 10, 12). In this instance, since conscience can give false testimony, \"the veracity of the witness of his conscience is certified by the Holy Spirit.\"",
+      "translation_en": null,
+      "context": "Verbatim from Jewett's discussion of συμμαρτυρεῖν + συνείδησις in Rom 9:1. The KG paraphrase reproduces this paragraph's three claims (not the voice of God, fallible, shaped by custom, can give false testimony) almost word for word.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_free_will_and_moral_agency_in__0": {
+      "pdf_source": "Hermeneia_Jewett_Romans 7.13-25.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Analysis (opening) and Exegesis ■ 17–25",
+      "quote_verbatim": "This pericope continues the \"speech-in-character\" in which Paul's preconversion zealotism is depicted. … It is organized as a ring-composition with \"it is not I [who] brings it about, but the sin dwelling in me\" in v. 17 echoed by \"it is no longer I who brings it about but the sin dwelling in me\" in v. 20. … Taking ἄρα οὖν in an inferential sense, the expression αὐτὸς ἐγώ refers to the self restricted to its own resources, translated aptly by Dodd as \"Thus, left to myself.\" Without the intervention of Christ, the νοῦς of the zealot believes that he serves the \"law of God\" but as a consequence of misunderstanding the \"righteousness of God\" (see Rom 10:2), the deeds of his flesh actually serve the \"law of sin.\"",
+      "translation_en": null,
+      "context": "Three pieces — the προσωποποιία = 'speech-in-character about preconversion zealotism' thesis from the Analysis, the v. 17/20 ring composition where sin is the agent, and the v. 25b–c 'left to myself / without Christ' comment. Together they verify every load-bearing element of the KG paraphrase, including the προσωποπεία claim, the divided self with 'sin' as the active agent, and the 'left to himself remains enslaved' reading.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_rationality_and_faith_reasonin_2": {
+      "pdf_source": "Hermeneia_Jewett_Romans 8.18-30.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 18 (on λογίζομαι γάρ)",
+      "quote_verbatim": "The climactic, argumentative phase of the second proof is introduced by λογίζομαι γάρ, translated as \"For I reckon\" and implying the result of an \"act of thought according to strict logical rules.\" … In this case, Paul offers the \"judgment of faith,\" conveying \"a firm conviction reached by rational thought on the basis of the gospel.\" Although some commentators tend to depreciate or qualify the rational implications of this usage, Paul is operating out of the restored rationality provided by Christ, which overcomes the deluded reasoning of the old age (Rom 1:21–22).",
+      "translation_en": null,
+      "context": "Direct match — every distinctive phrase the KG node attributes to Jewett ('judgment of faith', 'firm conviction reached by rational thought on the basis of the gospel', 'restored rationality provided by Christ') appears verbatim in this single Exegesis paragraph.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_creation_s_eschatological_libe_3": {
+      "pdf_source": "Hermeneia_Jewett_Romans 8.18-30.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 20 and ■ 21",
+      "quote_verbatim": "The explanation of creation's yearning for redemption is provided by allusion to the Genesis story, where the perversion of the originally good and glorious garden commenced. In this myth, it is the progenitor of the entire human race who was responsible for the corruption of the garden, not the enemies of Roman imperialism. The use of the divine passive, ὑπετάγη (\"was subjected\"), points to God's action in response to Adam's fall. … That the realm of nonhuman creation \"itself will also be set free\" from the Adamic distortion was a significant theme in Jewish prophetism and apocalypticism …",
+      "translation_en": null,
+      "context": "Jewett reads κτίσις as 'nonhuman creation' (■ 19) and v. 20's ὑπετάγη as a divine passive responding to Adam's fall (■ 20), with v. 21's liberation as the Adamic distortion being undone — exactly the KG node's claim that this is about the divinely-ordained destiny of creation tied to human redemption, not creation's moral agency.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_human_agency_and_suffering_in__1": {
+      "pdf_source": "Hermeneia_Jewett_Romans 8.18-30.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 23, ■ 25, ■ 26",
+      "quote_verbatim": "Although the expression \"firstfruits of the Spirit\" is highly evocative, with numerous implications, Paul's point is that no matter how charismatically they may be endowed, believers continue to participate in the suffering to which the entire world has been subjected as a result of sin. Believers also \"groan,\" with the expression ἐν ἑαυτοῖς specifying the arena as being \"within ourselves\". … In the context of this argument, the word ὑπομονή should be translated as \"perseverance\" rather than as the largely attitudinal term \"patience.\" … The Spirit \"in a similar way also\" stands alongside the saints as they persevere, guiding their most decisive intervention into the fallen world, namely, their prayer.",
+      "translation_en": null,
+      "context": "Three pieces from the consecutive paragraphs on vv. 23 (believers groan / participate in suffering), v. 25 (ὑπομονή = perseverance, not patience), and v. 26 (Spirit assists weakness, intercedes with unspoken groans). Together they verify the full claim in the KG node.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_predestination_and_divine_fore_0": {
+      "pdf_source": "Hermeneia_Jewett_Romans 8.18-30.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 28, ■ 29, ■ 30",
+      "quote_verbatim": "Paul initiates the climactic celebration of the thesis concerning the hopeful suffering of the children of God by reviewing what \"we know\" as persons who \"love God.\" … The second phase of the fivefold climax begins with ὅτι (\"because\"), which connects the last two verses of the pericope with the entirety of v. 28. The climactic development in this verse specifies the \"purpose\" of v. 28c, namely, the recovery of true sonship, with its attendant impact on the groaning creation. The verbs προγινώσκω (\"know beforehand\") and προορίζω (\"destine beforehand\") reduplicate the prefix from the key term πρόθεσις at the end of v. 28, confirming the connection to the theme of divine purpose. … After the brief expansion of the second climactic elaboration in the preceding verse, Paul returns to the style of a classic climax to provide the last steps in the symmetrical chain. In οὓς δὲ προώρισεν, τούτους καὶ ἐκάλεσεν (\"and those whom he predestined, these he also called\") he picks up both themes in the initial step of the chain in v. 28, \"called\" and \"purpose.\" The verb tense continues in the aorist through the end of the chain, with \"predestined … called … set right … and glorified.\"",
+      "translation_en": null,
+      "context": "Jewett explicitly labels Rom 8:29–30 a 'fivefold climax' and lists the five verbs (foreknew, predestined, called, justified, glorified), and reads it as God's sovereign purpose to conform believers to Christ — the exact framing the KG paraphrase attributes to him.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_divine_faithfulness_and_israel_0": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.1-5.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 1 (opening sentence)",
+      "quote_verbatim": "The third proof opens with a threefold attestation of Paul's sorrow about the continued unbelief of many of his fellow Jews. This calls into question the power of the gospel (1:16) concerning God's impartial grace expressed in Christ, which should come to Jews first and then to Greeks (1:16; 2:9, 10). If believers are the true heirs of Abraham (4:11–17) and the adopted children of God (8:14–17), what becomes of Israel's status as a chosen people? Does Paul's theology require the abandonment of Israel? Paul takes up these difficult questions by asserting the sincerity of his commitment to Israel … The asseveration of his anguish at the continued unfaith of many of his fellow Jews introduces a proof that concentrates on the faithfulness and power of God to overcome resistance to the gospel and ultimately to have mercy on \"all\" (11:32).",
+      "translation_en": null,
+      "context": "Same paragraph contains both the 'questions about God's faithfulness and the power of the gospel' framing and the 'ultimately have mercy on all (11:32)' conclusion. The KG paraphrase is a verbatim condensation.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_election_and_israel_s_destiny_2": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.1-5.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 1 (opening sentence)",
+      "quote_verbatim": "If believers are the true heirs of Abraham (4:11–17) and the adopted children of God (8:14–17), what becomes of Israel's status as a chosen people? Does Paul's theology require the abandonment of Israel?",
+      "translation_en": null,
+      "context": "Same paragraph as the entry above; Jewett states the 'tragic riddle' challenge explicitly and the rest of chap. 9–11 is then framed as the answer (cf. 'the central issue in the third proof, the faithfulness and reliability of God', stated earlier in the Analysis section of this same file). The KG node summary is faithful.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_determinism_and_the_true_israe_2": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.6-18.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 8 and ■ 11",
+      "quote_verbatim": "The true Israel corresponds not to the \"children of the flesh\" but to the \"children of the promise.\" In Fitzmyer's words, \"Paul now reverts to the terminology of 8:21, implying that Christians, Jewish and Gentile, are the true children of Abraham.\" … The promise of inheritance came before the twins could achieve or lose divine favor through their own actions. … The final clause beginning with ἵνα (\"in order that\") in v. 11b shows the theological meaning of the story of Jacob and Esau lies in \"God's selective purpose.\"",
+      "translation_en": null,
+      "context": "Three sentences across vv. 8 and 11 that together establish exactly the KG claim: 'children of flesh' vs 'children of promise' distinction (v. 8) underwrites a purpose-driven divine selection (v. 11) that precedes any human action or merit.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_determinism_and_election_1": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.6-18.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 18",
+      "quote_verbatim": "Paul's conclusion is drawn, as in v. 16, with the doubly emphatic ἄρα οὖν (\"so then\"), which has the sense of \"so it is undeniable.\" The reduplication of θέλει (\"he wills\") in the carefully crafted parallel sentence rivets attention onto the central issue of divine selectivity. … It would be more appropriate to conclude that Paul applies the widely shared teaching about Pharaoh's hardening in order to make the much more controversial case that God's mercy is sovereign.",
+      "translation_en": null,
+      "context": "Verbatim. Jewett insists Paul's point is the sovereignty of divine mercy, not a philosophical defense of compatibilism — which is exactly what the KG paraphrase says he is doing.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_divine_election_and_human_will_0": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.6-18.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 16",
+      "quote_verbatim": "Clearly it is human willpower and effort that are set aside as irrelevant factors when compared with the merciful selection of God's children. … In this entire passage, divine mercy is sovereign: \"God calls and God is merciful; he is the one who in his mercy elects.\"",
+      "translation_en": null,
+      "context": "Direct support: human willing and running are 'irrelevant factors' and election depends only on God's mercy — exact match to the KG node.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_fate_and_moral_responsibility_1": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.6-18.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 17 and ■ 18",
+      "quote_verbatim": "Pharaoh serves as \"an exemplar of the rejectors who serve God's plan … of salvation because his resistance enabled God to display his saving power and to spread abroad the knowledge of it.\" … Paul applies the widely shared teaching about Pharaoh's hardening in order to make the much more controversial case that God's mercy is sovereign. Paul was convinced that the refusal of this sovereign grace revealed in the gospel placed his Jewish compatriots in \"the position of Pharaoh,\" incredibly reversing their status before God.",
+      "translation_en": null,
+      "context": "The first sentence (■ 17) makes Pharaoh's hardening a manifestation of divine power; the second (■ 18) ties it to the rejection of injustice via 9:14 ('no injustice with God'). The combination is the KG node's claim.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_divine_sovereignty_and_human_a_0": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.19-29.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Analysis and Exegesis ■ 19–21",
+      "quote_verbatim": "The fusion of a formal diatribe into the framework of an extended midrashic exegesis resumes with v. 19. … The technique of responding to questions with rhetorical counterquestions was called anteisagoge, of which vv. 20a–21 are an excellent example. … While there are limits to any such analogy, this one clearly serves Paul's purpose of sustaining the legitimacy of the divine distinction between the true Israel and all Israel that Paul has been following since 9:6b. It would therefore be inappropriate to conclude from Paul's use of the sharply formulated antithesis between \"honorable\" and \"dishonorable\" vessels that he is dealing here with the predestination of individuals. If the same lump of clay can produce an elegant decanter for wine or a common \"chamber pot,\" the emphasis remains on the selectivity of the potter to meet practical needs.",
+      "translation_en": null,
+      "context": "Jewett labels the technique 'diatribe + midrash' (Analysis) and 'anteisagoge' (■ 19), and on ■ 21 explicitly says the potter–clay metaphor asserts God's right to differentiate honorable/dishonorable vessels without entailing individual-level predestination — i.e. without resolving the sovereignty/responsibility tension. Exact match to the KG paraphrase.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_moral_responsibility_under_div_2": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.19-29.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 19 and ■ 20",
+      "quote_verbatim": "The second question is explanatory of the first (γάρ, \"for\"), augmenting the supposition that no hardened person can be held accountable if he or she is unable to resist such selectivity on the part of God. The expression βούλημα αὐτοῦ (\"his purpose, intention\") echoes the theme of God's will in 9:18. Rather than rendering this as \"his will,\" the abstraction implies \"purpose,\" \"intention,\" or, more aptly, \"plan\" or \"design.\" The question is posed with the gnomic perfect of ἀνθίστημι (\"resist\"), which carries the sense of \"who has ever resisted\" God's will. … The first of three counterquestions is introduced with deeply emotive language of direct address, ὦ ἄνθρωπε (\"O human\") which dominates the rest of the sentence. … the sophisticated questioner of the divine selectivity implied by Paul's scandalous doctrine of mercy to the undeserving ends up in the position of the insolent and the foolish, scorned by Greek and Jew alike.",
+      "translation_en": null,
+      "context": "Jewett explicitly reads βούλημα as 'design/plan' implying irresistible divine intention (■ 19) and then says Paul does not answer this compatibilist puzzle but shifts to the creature–Creator relationship (■ 20). Exact match to the KG paraphrase.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_divine_sovereignty_and_human_e_0": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.30-10.4.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 30",
+      "quote_verbatim": "If divine mercy is sovereign as 9:14–18 showed, and if God wishes to select a remnant to become \"vessels of mercy\" as 9:22–29 indicated, then the achievement of righteousness cannot result entirely from human effort. The choice of the word διώκω in this context also evokes associations with persecution and with zealously promoting a cause or pursuing a project, thus preparing for the development of the theme of religious zeal in succeeding verses of this pericope.",
+      "translation_en": null,
+      "context": "Verbatim — Jewett's exact wording 'the achievement of righteousness cannot result entirely from human effort' is the load-bearing claim of the KG node.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_faith_versus_works_in_obtainin_1": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.30-10.4.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 30 and ■ 32",
+      "quote_verbatim": "The reference to \"righteousness through faith\" recalls both the propositio of the letter in 1:16–17 and decisive themes in the first proof (3:21–31; 4:1–25), which defined being set right as coming through faith in Christ rather than through human achievement. … The reason is explained with the succinct theological antithesis \"not through faith but as if from works,\" to which the verb \"pursue\" needs to be understood from the preceding verse. The expression ὡς ἐξ ἔργων (\"as if from works\") implies an erroneous subjective assessment on the part of Israel to the effect that the law could really be fulfilled by human works.",
+      "translation_en": null,
+      "context": "■ 30 grounds 'righteousness through faith' (rather than human achievement) for Gentiles; ■ 32 explains Israel's failure as 'as if from works'. Exact support for the KG paraphrase.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_israel_s_misguided_zeal_and_mo_3": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.30-10.4.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 2 and ■ 3 (on Rom 10:2–3)",
+      "quote_verbatim": "Paul's expression \"zeal for God, but without acknowledgment,\" picks up the distinction of 1:28 between \"knowing and acknowledging\" God, between \"cognition and recognition.\" … whereas Gentiles have knowledge of God but do not honor him (1:28), the Jews have zeal for God but do not know her (10:2). … The failure to \"submit to the righteousness of God\" as revealed in Christ is the corollary of attempting to confirm the superiority of one's group through adherence to the law. … To submit to this gospel requires abandoning the superiority claims of one's group, no matter what these may entail.",
+      "translation_en": null,
+      "context": "Jewett's reading of κατ' ἐπίγνωσιν (■ 2) and the three-step explanation of Israel's failure (ignorance of divine righteousness, seeking own righteousness, refusing to submit) at ■ 3 — exactly the three steps the KG paraphrase enumerates as a 'failure of recognition rather than deterministic necessity'.",
+      "verification_confidence": "high"
+    },
+    "scholarly_argument_jewett_christ_as_telos_of_the_law_2": {
+      "pdf_source": "Hermeneia_Jewett_Romans 9.30-10.4.txt",
+      "publication_id": "scholarly_work_jewett_2007_hermeneia_romans",
+      "page": null,
+      "chapter": "Exegesis ■ 4",
+      "quote_verbatim": "Both on semantic and contextual grounds, therefore, it is preferable to translate τέλος in Rom 10:4 as \"fulfillment\" or \"goal,\" which means that the \"teleological perspective\" remains primary in this verse. This is consistent with the phrase εἰς δικαιοσύνην (\"toward, as a means to righteousness\"), which has a directional sense that explains how Christ is the goal of the law. … Christ thus reveals and accomplishes the original goal of the law, which had been subverted by competition for honor and by ascribing shame to outsiders. … In Christ \"righteousness\" is granted not just to a particular in-group, not just to those whose zeal for the law is aggressively advanced, but simply to \"all who believe\" in the gospel.",
+      "translation_en": null,
+      "context": "Verbatim — Jewett explicitly defends τέλος = 'goal/fulfillment', εἰς δικαιοσύνην = 'as a means to righteousness', and ties Israel's failure to recognising Christ as this goal. Exact match to the KG node.",
+      "verification_confidence": "high"
+    }
+  }
+}

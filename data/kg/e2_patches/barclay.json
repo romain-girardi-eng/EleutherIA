@@ -1,0 +1,130 @@
+{
+  "scholar": "John M. G. Barclay",
+  "scholar_node_id": "scholar_barclay_j",
+  "pdfs_consulted": [
+    "[local-path] SHAL/04_Littérature_secondaire/03_Paul/divine-and-human-agency-in-paul-and-his-cultural-environment-9780567660800-9780567084538_compress.md",
+    "[local-path] SHAL/04_Littérature_secondaire/09_Methodologie/Mirror-Reading-the-Bible-John-M.G.-Barclay.md"
+  ],
+  "publications_used": [
+    "scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_",
+    "scholarly_work_barclay_1987_mirror_reading_a_polemical_letter_galati"
+  ],
+  "args_processed": 9,
+  "args_verified_high": 9,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "note": "Sources consulted: (1) J. M. G. Barclay, 'Introduction' (= ch. 1, pp. 1-8) in J. M. G. Barclay & S. J. Gathercole (eds.), Divine and Human Agency in Paul and his Cultural Environment (LNTS 335; London/New York: T&T Clark, 2006); (2) J. M. G. Barclay, 'Mirror-Reading a Polemical Letter: Galatians as a Test Case', JSNT 31 (1987), pp. 73-93. Page numbers are taken from the running heads embedded in the OCR'd Markdown (Introduction = pp. 1-8; Mirror-Reading paginates 73-93). NOT consulted: Paul and the Gift (Eerdmans, 2015) — no PDF located in DOCTORAT/03_Paul/ (only the 2006 volume and the 1987 article are present locally); arguments here are anchored exclusively in the 2006 Introduction, whose programmatic statements cover the same H1 territory (Pauline paradox, divine/human agency, grace vs works, new perspective, reception history) and in the 1987 mirror-reading methodology article.",
+  "publication_id_note": "scholarly_work_barclay_2007_introduction is an under-named duplicate of the 2006 Introduction (LNTS 335 published Dec 2006 / 2007 reprint); the 2006 entry is preferred.",
+  "patches": {
+    "scholarly_argument_barclay_pauline_paradox_of_divine_and__0": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/03_Paul/divine-and-human-agency-in-paul-and-his-cultural-environment-9780567660800-9780567084538_compress.md",
+      "publication_id": "scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_",
+      "page": "1-2 (ch. 1, Introduction, opening)",
+      "chapter": "Introduction (ch. 1)",
+      "quote_verbatim": "Moreover, some of Paul's statements on the relation of divine to human agency strike us as paradoxical, if not downright incoherent. He urges the Philippians, for instance: 'Work out your own salvation with fear and trembling, for God is at work in you, both to will and to work for his good pleasure' (Phil. 2.12-13). In statements such as this (cf. 1 Cor. 15.9-10) we are perplexed by the juxtaposition of two agencies: that of the Philippians, the recipient of Paul's exhortation, who are clearly responsible for their 'work', and that of God, whose 'work' is taken to be not independent of theirs, but in some sense the source of their action, even of their will to act.",
+      "context": "Programmatic opening of the volume: Barclay names Phil. 2.12-13 and 1 Cor. 15.9-10 as the locus classicus where Pauline juxtaposition of divine and human agency looks paradoxical, setting up the three-model schema (competitive / kinship / non-contrastive transcendence) developed pp. 6-8.",
+      "verification_confidence": "high",
+      "match_keywords": ["paradoxical", "incoherent", "Phil. 2.12-13", "1 Cor. 15.9-10", "juxtaposition", "two agencies"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_barclay_agent"
+    },
+    "scholarly_argument_barclay_divine_and_human_agency_in_pau_0": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/03_Paul/divine-and-human-agency-in-paul-and-his-cultural-environment-9780567660800-9780567084538_compress.md",
+      "publication_id": "scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_",
+      "page": "6-8 (ch. 1, Introduction, end)",
+      "chapter": "Introduction (ch. 1), three-model schema (competitive / kinship / non-contrastive transcendence)",
+      "quote_verbatim": "But where some correlation is either implicit or explicit, it may be shaped by one of the following three models: 1. The first model – and the one that occurs most naturally to the modern mind – places divine and human agency in an essentially competitive relationship... 2. The second model presents divine and human agency as related to one another by kinship... 3. The third model presents divine agency in terms of non-contrastive transcendence. Here divine agency is certainly not in principle exclusive of human agency: transcendence is not viewed in contrastive terms. God's sovereignty does not limit or reduce human freedom, but is precisely what grounds and enables it. The two agencies thus stand in direct, and not inverse proportion: the more the human agent is operative, the more (not the less) may be attributed to God.",
+      "context": "Barclay's central methodological contribution: Paul's paradoxes are not incoherent once read under the third model (non-contrastive transcendence, drawing on K. Tanner, God and Creation, 1988). The three models 'should be retained as live options in interpreting the logical structures of the texts we study'.",
+      "verification_confidence": "high",
+      "match_keywords": ["three models", "competitive", "kinship", "non-contrastive transcendence", "direct, and not inverse proportion", "Tanner", "paradoxical but not incoherent"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_barclay_agent"
+    },
+    "scholarly_argument_barclay_divine_initiative_and_human_in_2": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/03_Paul/divine-and-human-agency-in-paul-and-his-cultural-environment-9780567660800-9780567084538_compress.md",
+      "publication_id": "scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_",
+      "page": "1 (ch. 1, Introduction, opening paragraph)",
+      "chapter": "Introduction (ch. 1)",
+      "quote_verbatim": "Most careful readers have detected in Paul a radical view of the insufficiency of human agents – their incapacity to do God's will and their enslavement by supra-human powers. The antithesis between divine grace and human 'works' (e.g., Rom. 4.4-6; 9.6-13; 11.6, if understood in generalizable terms) has made Paul the key spokesman for the unconditionality of divine initiative in salvation... Similarly, the strong Pauline statements about the power of 'sin' and the captivity of the self, even of the will (Rom. 7.7-25), have spawned a tradition of deep pessimism about Adamic humanity, which has surfaced perhaps most powerfully at those times of cultural change inhabited and engendered by Augustine and Luther.",
+      "context": "Barclay sets out the dominant 'Augustinian-Lutheran' reading of Paul (radical insufficiency of human agents, captivity of the will, Rom. 7.7-25) as the inherited frame the rest of the volume will reframe rather than reject.",
+      "verification_confidence": "high",
+      "match_keywords": ["radical view of the insufficiency", "incapacity", "enslavement", "supra-human powers", "Rom. 7.7-25", "captivity of the will", "Augustine", "Luther"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_barclay_agent"
+    },
+    "scholarly_argument_barclay_divine_grace_and_human_works_3": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/03_Paul/divine-and-human-agency-in-paul-and-his-cultural-environment-9780567660800-9780567084538_compress.md",
+      "publication_id": "scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_",
+      "page": "1 (ch. 1, Introduction, opening paragraph)",
+      "chapter": "Introduction (ch. 1)",
+      "quote_verbatim": "The antithesis between divine grace and human 'works' (e.g., Rom. 4.4-6; 9.6-13; 11.6, if understood in generalizable terms) has made Paul the key spokesman for the unconditionality of divine initiative in salvation; Paul's vehemence in argumentation on this point has encouraged hefty polemics against any hint that human achievement could accomplish redemption or even contribute to it.",
+      "context": "Barclay's statement of the traditional grace/works antithesis (the Reformation construal) and the cited proof-texts (Rom. 4.4-6; 9.6-13; 11.6), immediately before he qualifies it via E. P. Sanders and the 'new perspective' (pp. 2-3).",
+      "verification_confidence": "high",
+      "match_keywords": ["antithesis between divine grace and human 'works'", "Rom. 4.4-6", "9.6-13", "11.6", "unconditionality of divine initiative", "key spokesman"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_barclay_agent"
+    },
+    "scholarly_argument_barclay_human_moral_responsibility_in__1": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/03_Paul/divine-and-human-agency-in-paul-and-his-cultural-environment-9780567660800-9780567084538_compress.md",
+      "publication_id": "scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_",
+      "page": "1-2 (ch. 1, Introduction)",
+      "chapter": "Introduction (ch. 1)",
+      "quote_verbatim": "Following this lead, we quickly discover further layers of complexity in Paul's discourse on agency. On the one hand, his letters are full of statements which state or presuppose that human beings are capable and effective agents, responsible for their own actions. He bemoans human sin as 'disobedience', and speaks of God's judgment and wrath in ways that presuppose human guilt and human responsibility. He also cajoles, exhorts and instructs his converts as if they were both capable of, and responsible for, their own activity.",
+      "context": "Barclay's documentation of the 'human-side' pole of the Pauline paradox: imperatives, exhortations, and the language of disobedience/judgment all presuppose effective human moral agency. This is the data the 'three-model' analysis (pp. 6-8) is designed to make sense of.",
+      "verification_confidence": "high",
+      "match_keywords": ["capable and effective agents", "responsible for their own actions", "disobedience", "human guilt", "cajoles, exhorts and instructs"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_barclay_agent"
+    },
+    "scholarly_argument_barclay_human_moral_responsibility_in__2": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/03_Paul/divine-and-human-agency-in-paul-and-his-cultural-environment-9780567660800-9780567084538_compress.md",
+      "publication_id": "scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_",
+      "page": "2 (ch. 1, Introduction)",
+      "chapter": "Introduction (ch. 1)",
+      "quote_verbatim": "On the one hand, his letters are full of statements which state or presuppose that human beings are capable and effective agents, responsible for their own actions... On the other hand, he speaks as if God's agency is effective everywhere, even in cases where humans are said to work. On the negative side, human sin is correlated with God 'handing them over' (Rom. 1.24, 26, 28); on the positive, human righteousness is identified with the leading of the Spirit (Gal. 5.18). Yet, even where all is of grace, human agency is not effaced: the dialectic of 1 Cor. 15.9-10 suggests that divine and human agency are not necessarily correlated to one another in inverse proportion.",
+      "context": "Duplicate-content argument: where _1 isolates the human-responsibility pole, _2 captures the same point inside the full dialectic (Rom. 1.24-28 'handing over' + Gal. 5.18 'leading of the Spirit' + 1 Cor. 15.9-10), grounding the non-inverse-proportion conclusion that becomes model 3 on pp. 7-8. Recommend merging _2 into _1 in a later cleanup pass.",
+      "verification_confidence": "high",
+      "match_keywords": ["capable and effective agents", "Rom. 1.24, 26, 28", "Gal. 5.18", "1 Cor. 15.9-10", "inverse proportion", "human agency is not effaced"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_barclay_agent"
+    },
+    "scholarly_argument_barclay_new_perspective_on_paul_1": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/03_Paul/divine-and-human-agency-in-paul-and-his-cultural-environment-9780567660800-9780567084538_compress.md",
+      "publication_id": "scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_",
+      "page": "2-3 (ch. 1, Introduction, §1)",
+      "chapter": "Introduction (ch. 1), §1: state of Pauline scholarship after Sanders",
+      "quote_verbatim": "E. P. Sanders' reconfiguration of the relationship between Paul and Second Temple Judaism persuaded many scholars that the terms adopted in the old debates were wholly inapt. Paul was not distinguished from Judaism by his emphasis on divine grace, in contrast to Jewish concern with human works. Jewish covenantal nomism was founded on divine mercy in election, and Paul had nothing particularly striking to say on grace and human works, at least nothing different from the ways those themes were correlated in his contemporary Judaism. The subsequent 'new perspective', interpreting Paul's remarks on 'works' as (Jewish) culture-specific and ungeneralizable, undercut the whole tradition of interpretation which found in Paul a programmatic distinction between divine and human agency.",
+      "context": "Barclay's diagnosis: Sanders (Paul and Palestinian Judaism, 1977, pp. 515-18, 543, cited in n. 1) plus the 'new perspective' (Dunn, Wright et al.) collectively dissolved the traditional grace/works frame and thereby made the divine/human agency question disappear — which is exactly what the 2006 volume sets out to reopen.",
+      "verification_confidence": "high",
+      "match_keywords": ["new perspective", "E. P. Sanders", "covenantal nomism", "(Jewish) culture-specific", "ungeneralizable", "programmatic distinction"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_barclay_agent"
+    },
+    "scholarly_argument_barclay_reception_history_of_pauline_a_3": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/03_Paul/divine-and-human-agency-in-paul-and-his-cultural-environment-9780567660800-9780567084538_compress.md",
+      "publication_id": "scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_",
+      "page": "2 (ch. 1, Introduction)",
+      "chapter": "Introduction (ch. 1)",
+      "quote_verbatim": "If such statements and structures of thought strike us as paradoxical, we are not the first to be so struck. In the long and rich history of reception of Paul, his statements on agency have spawned extremely violent debates – most notably in Augustine's debates with Pelagius, and subsequently in numerous disputes between Protestants and Catholics, internal arguments among Catholic theologians, and bitter controversies between Protestant sects. Each side has accused the other of deforming Christian discourse by one-sided recourse to Paul, sometimes with good reason, sometimes without.",
+      "context": "Barclay's reception-history sketch (Augustine/Pelagius → Reformation → intra-Catholic + intra-Protestant disputes) used to justify a fresh comparative approach. Key proof-text for placing Barclay in the H1 lineage on divine-human agency reception.",
+      "verification_confidence": "high",
+      "match_keywords": ["history of reception", "extremely violent debates", "Augustine", "Pelagius", "Protestants and Catholics", "Protestant sects"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_barclay_agent"
+    },
+    "scholarly_argument_barclay_methodology_of_mirror_reading__0": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/09_Methodologie/Mirror-Reading-the-Bible-John-M.G.-Barclay.md",
+      "publication_id": "scholarly_work_barclay_1987_mirror_reading_a_polemical_letter_galati",
+      "page": "73-74 (Introduction) and 84-86 (§4, A Possible Methodology)",
+      "chapter": "§1 Introduction (pp. 73-74); §4 A Possible Methodology (pp. 84-86), seven criteria",
+      "quote_verbatim": "Like most New Testament methods, such mirror-reading is both essential and extremely problematic, and it is to some of the problems and possible solutions that I want to address myself in this article... What is needed is a carefully controlled method of working which uses logical criteria and proceeds with suitable caution. The following are what I consider to be the seven most appropriate criteria for this exercise: 1. Type of utterance... 2. Tone. If Paul issues a statement with emphasis and urgency... 3. Frequency. If Paul repeatedly returns to the same theme... 4. Clarity... 5. Unfamiliarity... 6. Consistency... 7. Historical plausibility.",
+      "context": "Barclay's seven-criteria methodology for mirror-reading polemical NT letters (here applied to Galatians, but generalizable). The phrase 'both essential and extremely problematic' (p. 74) is the standard citation handle; the seven criteria are spelled out pp. 84-85 with the scholar tested under Ed Sanders's 'sliding scale' (Certain → Highly Probable → Probable → Possible → Conceivable → Incredible, p. 86).",
+      "verification_confidence": "high",
+      "match_keywords": ["mirror-reading", "essential and extremely problematic", "seven criteria", "type of utterance", "tone", "frequency", "clarity", "unfamiliarity", "consistency", "historical plausibility", "Galatians"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_barclay_agent"
+    }
+  }
+}

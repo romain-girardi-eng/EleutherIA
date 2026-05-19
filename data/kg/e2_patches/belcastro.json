@@ -1,0 +1,163 @@
+{
+  "scholar": "Mauro Belcastro",
+  "scholar_node_id": "scholar_belcastro_m",
+  "pdfs_consulted": [
+    "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Belcastro_Predestinazione_Origene.pdf"
+  ],
+  "extracted_text_used": [
+    "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Belcastro_Predestinazione_Origene.md"
+  ],
+  "pdf_metadata": {
+    "title": "La predestinazione nel Commento alla Lettera ai Romani di Origene. Trasformazione e normalizzazione di un paradosso",
+    "author": "Mauro Belcastro",
+    "journal": "Adamantius",
+    "volume": "21",
+    "year": "2015 (issue) / 2016 (printed)",
+    "pages": "211-243",
+    "url": "https://archive-ouverte.unige.ch/unige:90865",
+    "note": "Issue masthead reads 'ADAMANTIUS 21 (2015)' but the published/cited year is 2016 (see 'How to cite'). Page markers in extracted .md confirm article spans pp. 211-243."
+  },
+  "kg_publication_mapping_note": "Two Belcastro publication nodes exist in the KG: (a) scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let — the 2016 Adamantius article actually present in DOCTORAT; (b) pub_belcastro_predestinazione_origene — described in KG metadata as a 2017 EDB monograph, NOT present locally. All quotes below are sourced from (a). Where an argument was previously wired by e1 to (b) with low confidence (e.g. e1_match_score ~0.32), the evidence below corrects the publication_id to (a).",
+  "args_processed": 9,
+  "args_verified": 9,
+  "args_not_found": 0,
+  "patches": {
+    "scholarly_argument_belcastro_origen_s_transformation_of_pau_0": {
+      "pdf_source": "Belcastro 2016 — La predestinazione nel Commento alla Lettera ai Romani di Origene (Adamantius 21)",
+      "publication_id": "scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let",
+      "page": "211 (extracted .md L. 60-67)",
+      "chapter": "Introduzione, § 1. Alcune ipotesi",
+      "quote_it": "L'indagine qui presentata vuole mettere in luce gli esiti dell'operazione origeniana di trasformazione del concetto paolino espresso dal verbo προορίζω. Il neologismo paolino è assunto da Origene in tutta la serietà e difficoltà che esso presenta: ciò che qui importa sottolineare è la differente costruzione semantica che egli compie nella sottolineatura del verbo. […] La trasformazione dell'idea di predestinazione in Origene, infatti, non comporta anche una sua rimozione: è cioè propria di Origene la volontà di mantenimento di questo problema interpretabile solo nella soluzione che lui stesso dà.",
+      "quote_it_supporting_n3": "[Nota 3] In un primo senso, la trasformazione avviene nel passaggio dalla considerazione dell'azione predestinante di Dio, espressa appunto dal verbo predestinare e dello status participiale del predestinato, alla predestinazione, sostantivo che così esprime una dottrina teologica che inizia la sua storia con la riflessione gnostica ed origeniana.",
+      "translation_en": "The inquiry presented here aims to bring to light the results of Origen's operation of transforming the Pauline concept expressed by the verb προορίζω. The Pauline neologism is taken up by Origen with all the seriousness and difficulty it presents: what matters to underline here is the different semantic construction that he performs in emphasizing the verb. […] The transformation of the idea of predestination in Origen, in fact, does not entail its removal: it is properly Origen's own will to maintain this problem as interpretable only within the solution he himself gives. [Note 3:] In a first sense, the transformation occurs in the passage from the consideration of God's predestinating action — expressed precisely by the verb predestinare and by the participial status of the predestinatus — to predestination, a substantive which thus expresses a theological doctrine whose history begins with Gnostic and Origenian reflection.",
+      "context": "Belcastro's programmatic statement of the verb→noun (action→doctrine) transformation, with the explicit qualification that Origen 'maintains the problem' rather than removing it. Directly grounds the KG argument that Origen transforms προορίζω from a divine action into a theological doctrine.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_belcastro_agent"
+    },
+    "scholarly_argument_belcastro_origen_s_doctrine_of_predestin_1": {
+      "pdf_source": "Belcastro 2016 — La predestinazione nel Commento alla Lettera ai Romani di Origene (Adamantius 21)",
+      "publication_id": "scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let",
+      "page": "211-212 (extracted .md L. 119-134)",
+      "chapter": "Introduzione, § 1. Alcune ipotesi",
+      "quote_it": "[…] della speculazione dei più eminenti avversari origeniani, gli gnostici, i quali per primi, appunto, interpretano le scelte umane come condizionate dalla eterna decisione di Dio sugli eletti, in una costituzione fisica della natura spirituale (salvata per natura). Per questo, Origene si confronterà strutturalmente con il pensiero gnostico, interprete di una visione per lui determinista della problematica predestinazionista, ne assumerà le prospettive e ne supererà (mantenendole dialetticamente) sinteticamente le istanze. […] Origene, in questo senso, è il primo autore cristiano a pensare una dottrina organica della predestinazione (anche se normalizzata e svuotata di qualunque senso paradossale); proprio per questo […] è possibile parlare di predestinazione in Origene, perché è lui stesso a parlarne, nella pretesa, coerentemente con il suo pensiero, di far emergere dal concetto biblico il vero senso, quello interiore.",
+      "translation_en": "[…] of the speculation of Origen's most eminent adversaries, the Gnostics, who were the first, precisely, to interpret human choices as conditioned by God's eternal decision concerning the elect, in a physical constitution of spiritual nature (saved by nature). For this reason, Origen will engage structurally with Gnostic thought — for him the interpreter of a deterministic vision of the predestinationist problem — assuming its perspectives and synthetically surpassing them (while maintaining them dialectically). […] Origen, in this sense, is the first Christian author to formulate an organic doctrine of predestination (although normalized and emptied of any paradoxical sense); precisely for this reason […] it is possible to speak of predestination in Origen, because he himself speaks of it, with the claim, coherently with his thought, of bringing out from the biblical concept the true, inner meaning.",
+      "context": "Direct verbatim support for the KG argument's two claims: (i) Origen is the first Christian author to formulate an organic doctrine of predestination; (ii) he does so in dialectical engagement with Gnostic thought, not mere opposition — 'assuming its perspectives and synthetically surpassing them while maintaining them dialectically'.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_belcastro_agent"
+    },
+    "scholarly_argument_belcastro_free_will_libero_arbitrio_and__2": {
+      "pdf_source": "Belcastro 2016 — La predestinazione nel Commento alla Lettera ai Romani di Origene (Adamantius 21)",
+      "publication_id": "scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let",
+      "page": "211 (extracted .md L. 64-71)",
+      "chapter": "Introduzione, § 1. Alcune ipotesi",
+      "quote_it": "Il problema della predestinazione è qui ipotizzato come centro teoretico del pensiero origeniano nella diversità, e per certi versi inconciliabilità di soluzione, rispetto a quello paolino, e il Commento a Romani (CRm) come punto di vista privilegiato per condurre un'analisi sul problema. La trasformazione dell'idea di predestinazione in Origene, infatti, non comporta anche una sua rimozione: è cioè propria di Origene la volontà di mantenimento di questo problema interpretabile solo nella soluzione che lui stesso dà, ovvero nel superamento del paradosso che viene a crearsi allor quando si consideri insieme l'assoluta onnipotenza divina e le sue disposizioni con l'assoluta libertà d'arbitrio dell'uomo, che a suo avviso farebbe cadere l'azione di Dio in un'insormontabile e blasfema contraddizione.",
+      "translation_en": "The problem of predestination is here hypothesized as the theoretical centre of Origen's thought, in its difference from — and in some respects irreconcilability with — the Pauline solution, and the Commentary on Romans (CRm) as the privileged vantage point for an analysis of the problem. The transformation of the idea of predestination in Origen, in fact, does not entail its removal: it is properly Origen's own will to maintain this problem as interpretable only within the solution he himself gives, namely in the overcoming of the paradox which arises when one considers together absolute divine omnipotence and its dispositions with the absolute freedom of will (libero arbitrio) of man — which in his view would make God's action fall into an insurmountable and blasphemous contradiction.",
+      "context": "Verbatim formulation of the core 'paradox': absolute divine omnipotence + absolute human libero arbitrio = blasphemous contradiction unless resolved; Origen's transformation makes free will central while preserving divine action. Direct support for the KG argument's two-pole framing.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_belcastro_agent",
+      "publication_id_correction_note": "e1 had wired this to pub_belcastro_predestinazione_origene (the 2017 monograph) with weak match (0.32). The verbatim is from the 2016 Adamantius article actually present in DOCTORAT; corrected publication_id accordingly."
+    },
+    "scholarly_argument_belcastro_relationship_between_divine_om_2": {
+      "pdf_source": "Belcastro 2016 — La predestinazione nel Commento alla Lettera ai Romani di Origene (Adamantius 21)",
+      "publication_id": "scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let",
+      "page": "211 (extracted .md L. 67-71)",
+      "chapter": "Introduzione, § 1. Alcune ipotesi",
+      "quote_it": "[…] è cioè propria di Origene la volontà di mantenimento di questo problema interpretabile solo nella soluzione che lui stesso dà, ovvero nel superamento del paradosso che viene a crearsi allor quando si consideri insieme l'assoluta onnipotenza divina e le sue disposizioni con l'assoluta libertà d'arbitrio dell'uomo, che a suo avviso farebbe cadere l'azione di Dio in un'insormontabile e blasfema contraddizione.",
+      "translation_en": "[…] it is properly Origen's own will to maintain this problem as interpretable only within the solution he himself gives, namely in the overcoming of the paradox which arises when one considers together absolute divine omnipotence and its dispositions with the absolute freedom of will (libero arbitrio) of man — which in his view would make God's action fall into an insurmountable and blasphemous contradiction.",
+      "context": "Same locus as the previous argument, foregrounding the 'insurmountable and blasphemous contradiction' phrasing that the KG argument paraphrases verbatim.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_belcastro_agent",
+      "publication_id_correction_note": "Same correction as above: e1 had wired this to pub_belcastro_predestinazione_origene with match 0.32; verbatim is from the 2016 Adamantius article."
+    },
+    "scholarly_argument_belcastro_predestination_as_prescience_v_3": {
+      "pdf_source": "Belcastro 2016 — La predestinazione nel Commento alla Lettera ai Romani di Origene (Adamantius 21)",
+      "publication_id": "scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let",
+      "page": "212 + 234 (extracted .md L. 145-151 and L. 1561-1570)",
+      "chapter": "Introduzione, § 1, n. 7 [polemic with Cipriani] + § 3.2. La predestinazione come prescienza",
+      "quote_it": "[p. 212, n. 7] Sulla sua specifica interpretazione della predestinazione origeniana, poi, non concordo con il sostanziale appiattimento di questa sulla (comunque determinante) prescienza. Quanto segue penso possa contribuire in modo più esaustivo alla complessità del problema. [p. 234] sicché, lungi dall'essere l'espressione della decisione di Dio, la predestinazione è il frutto della prescienza che, oltretutto, non ne è causa: «Dunque viene prima la prescienza di Dio, mediante la quale vengono conosciuti quelli che avranno in se stessi le fatiche e i meriti, e così poi segue la predestinazione; d'altra parte però la prescienza non sarà ritenuta come causa della predestinazione. Infatti, ciò che presso gli uomini viene considerato merito di ciascuno deducendolo dalle azioni passate, presso Dio viene giudicato sulla base della azioni future» [CRm I,5,3, cit. Belcastro].",
+      "translation_en": "[p. 212, n. 7:] As for [Cipriani's] specific interpretation of Origenian predestination, I do not agree with the substantial flattening of it onto (however determining) prescience. What follows I think may contribute more exhaustively to the complexity of the problem. [p. 234:] thus, far from being the expression of God's decision, predestination is the fruit of prescience which, moreover, is not its cause: 'God's prescience therefore comes first, through which those who will have in themselves labour and merit are known, and thus predestination follows; on the other hand prescience will not be considered as the cause of predestination. For what among men is considered as each one's merit, deduced from past actions, before God is judged on the basis of future actions' [CRm I,5,3, cited by Belcastro].",
+      "context": "Direct verbatim of Belcastro's explicit refusal of the 'predestination = mere prescience' reading (against Cipriani), and his constructive thesis that predestination is genuine but transformed — the fruit of prescience without being caused by it.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_belcastro_agent"
+    },
+    "scholarly_argument_belcastro_prescience_as_prevision_of_pos_3": {
+      "pdf_source": "Belcastro 2016 — La predestinazione nel Commento alla Lettera ai Romani di Origene (Adamantius 21)",
+      "publication_id": "scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let",
+      "page": "212 + 220-221 (extracted .md L. 190-192 and L. 715-728, 782-790)",
+      "chapter": "§ 1. Alcune ipotesi (p. 212) + § 3.1. La chiamata in Paolo (pp. 220-221)",
+      "quote_it": "[p. 212] Per quanto concerne il tema specifico qui trattato, mi limito ad indicare (lasciando aperta tutta la problematica delle relazioni qui appena tratteggiata), e a sviluppare più oltre, la specifica rielaborazione del problema della prescienza come previsione delle possibilità. [pp. 220-221] Strutturato così il discorso origeniano vede molto appropriato il ricorso alla «previsione» di Dio sulle libere scelte che il chiamato farà. […] né Paolo è stato eletto per caso (sortis incerto) oppure per una diversità di natura (naturae melioris), ma fu egli ad offrire in se stesso i motivi della sua elezione a colui «che conosce ogni cosa prima che avvenga» (Dn 13,42). […] Origene cerca di sfuggire al pericolo determinista, annunciato nella «sortis incerto, vel naturae melioris», nella misura in cui sposta la causa della predestinazione non su di un'interpretazione della prescienza come causa dell'agire, ma sulle azioni dell'uomo, sul contenuto della prescienza e quindi sul chiamato. […] la predestinazione non è da considerarsi come causa che determina una scelta, ma come una previsione che conferma la sua libertà.",
+      "translation_en": "[p. 212:] As for the specific theme treated here, I limit myself to indicating (leaving open all the problematic of the relations just sketched), and to developing further below, the specific reworking of the problem of prescience as prevision of possibilities. [pp. 220-221:] Structured in this way, Origen's discourse finds the recourse to God's 'prevision' of the free choices the called one will make very appropriate. […] Paul was not elected by chance (sortis incerto) nor by a difference of nature (naturae melioris), but it was he who offered in himself the reasons for his election to him 'who knows all things before they come to be' (Dan 13,42). […] Origen tries to escape the deterministic danger, announced in 'sortis incerto, vel naturae melioris', insofar as he shifts the cause of predestination not onto an interpretation of prescience as cause of action, but onto the actions of man, onto the content of prescience, and thus onto the called one. […] predestination is not to be considered as the cause that determines a choice, but as a prevision that confirms its freedom.",
+      "context": "Twofold support: (i) Belcastro's programmatic announcement at p. 212 of 'prescience as prevision of possibilities' as his specific contribution; (ii) the substantive development at pp. 220-221 where prescience is recast as a prevision that confirms (rather than causes) the freedom of the called.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_belcastro_agent"
+    },
+    "scholarly_argument_belcastro_origen_s_late_theological_deve_4": {
+      "pdf_source": "Belcastro 2016 — La predestinazione nel Commento alla Lettera ai Romani di Origene (Adamantius 21)",
+      "publication_id": "scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let",
+      "page": "211 (extracted .md L. 97-103, footnote 5)",
+      "chapter": "Introduzione, § 1. Alcune ipotesi, n. 5",
+      "quote_it": "Diversamente da altri testi, in CRm Origene affronta il problema della predestinazione da un punto di vista decisamente più teologico, assumendo come dati di fatto le acquisizioni ontologiche altrove consolidate, traendone qui le conseguenze spirituali. Il testo appartiene alla produzione tarda di Origene.",
+      "translation_en": "Unlike other texts, in CRm [the Commentary on Romans] Origen tackles the problem of predestination from a decidedly more theological viewpoint, taking as data of fact the ontological acquisitions consolidated elsewhere, drawing from them here the spiritual consequences. The text belongs to Origen's late production.",
+      "context": "Verbatim source for the KG argument's three claims about CRm: (i) 'more decisively theological viewpoint'; (ii) spiritual consequences drawn from ontological acquisitions consolidated elsewhere; (iii) belongs to Origen's late production. The Italian 'produzione tarda' = 'late production'.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_belcastro_agent"
+    },
+    "scholarly_argument_belcastro_origen_s_philosophical_foundat_4": {
+      "pdf_source": "Belcastro 2016 — La predestinazione nel Commento alla Lettera ai Romani di Origene (Adamantius 21)",
+      "publication_id": "scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let",
+      "page": "212 (extracted .md L. 167-175, footnote 11)",
+      "chapter": "Introduzione, § 1. Alcune ipotesi, n. 11",
+      "quote_it": "[…] in questo senso rilevo il decisivo legame della speculazione origeniana con l'impianto metafisico platonico, tanto da considerarlo del tutto centrale per le sue più complesse formulazioni, ma anche per l'interpretazione del pensiero paolino nel suo insieme, nell'operazione di normalizzazione e di eticizzazione del carismatico, diventa centrale la speculazione su fondamento metafisico. Sul sincretismo (eclettismo) di platonismo mistico, aristotelismo e stoicismo (almeno per quanto riguarda il problema etico), cf. A. MAGRIS, L'idea di destino, cit., vol. 2, 836-842.",
+      "translation_en": "[…] in this sense I note the decisive bond of Origen's speculation with the Platonic metaphysical framework, to such an extent that I consider it wholly central to his most complex formulations, and also for the interpretation of Pauline thought as a whole; in the operation of normalization and ethicization of the charismatic, speculation on a metaphysical foundation becomes central. On the syncretism (eclecticism) of mystical Platonism, Aristotelianism and Stoicism (at least as regards the ethical problem), cf. A. MAGRIS, L'idea di destino, op. cit., vol. 2, 836-842.",
+      "context": "Direct verbatim grounding the KG argument's claim that Origen's speculation is structurally tied to a Platonic metaphysical framework (with Aristotelian and Stoic elements on ethics), central to his complex formulations and to the 'normalization and ethicization of the charismatic'.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_belcastro_agent"
+    },
+    "scholarly_argument_belcastro_philosophical_foundations_plat_5": {
+      "pdf_source": "Belcastro 2016 — La predestinazione nel Commento alla Lettera ai Romani di Origene (Adamantius 21)",
+      "publication_id": "scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let",
+      "page": "212 (extracted .md L. 167-175, footnote 11)",
+      "chapter": "Introduzione, § 1. Alcune ipotesi, n. 11",
+      "quote_it": "[…] in questo senso rilevo il decisivo legame della speculazione origeniana con l'impianto metafisico platonico, tanto da considerarlo del tutto centrale per le sue più complesse formulazioni, ma anche per l'interpretazione del pensiero paolino nel suo insieme, nell'operazione di normalizzazione e di eticizzazione del carismatico, diventa centrale la speculazione su fondamento metafisico.",
+      "translation_en": "[…] in this sense I note the decisive bond of Origen's speculation with the Platonic metaphysical framework, to such an extent that I consider it wholly central to his most complex formulations, and also for the interpretation of Pauline thought as a whole; in the operation of normalization and ethicization of the charismatic, speculation on a metaphysical foundation becomes central.",
+      "context": "Near-duplicate KG argument of '…_origen_s_philosophical_foundat_4'; same verbatim locus. Both KG arguments are anchored in the same footnote (n. 11, p. 212). Candidate for KG-side merge/dedup in a future cleanup pass.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_belcastro_agent",
+      "dedup_recommendation": "scholarly_argument_belcastro_origen_s_philosophical_foundat_4 and scholarly_argument_belcastro_philosophical_foundations_plat_5 paraphrase the same locus of Belcastro 2016 p. 212 n. 11; consider merging."
+    }
+  },
+  "page_to_md_line_map": {
+    "p_211": "L. 117-(116 marker)",
+    "p_212-213": "L. 117-252 (marker '213' at L. 252)",
+    "p_214-215": "L. 253-388",
+    "p_216-217": "L. 389-515",
+    "p_218-219": "L. 516-647",
+    "p_220-221": "L. 648-779",
+    "p_222-223": "L. 780-912",
+    "p_224-225": "L. 913-1045",
+    "p_226-227": "L. 1046-1170",
+    "p_228-229": "L. 1171-1299",
+    "p_230-231": "L. 1300-1426",
+    "p_232-233": "L. 1427-1558",
+    "p_234-235": "L. 1559-1687",
+    "p_236-237": "L. 1688-1813",
+    "p_238-239": "L. 1814-1942",
+    "p_240-241": "L. 1943-2070",
+    "p_242-243": "L. 2071-2187",
+    "note": "Page markers in extracted .md only stamp odd pages (right-hand pages in the PDF). Each interval ≈ 2 pages of the printed article. Specific page attributions above resolve to the more precise of the two using the chapter/footnote landmark."
+  },
+  "kg_recommendations": [
+    "Re-point pub_evidence_attached arguments (free_will_libero_arbitrio_and__2, relationship_between_divine_om_2) from pub_belcastro_predestinazione_origene (the 2017 EDB monograph, not on disk) to scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let (the 2016 Adamantius article actually verified).",
+    "Consider merging scholarly_argument_belcastro_origen_s_philosophical_foundat_4 and scholarly_argument_belcastro_philosophical_foundations_plat_5: identical thesis, identical Belcastro locus (p. 212 n. 11).",
+    "Once Belcastro 2017 EDB monograph is obtained, re-verify that the 2017 book reproduces the same theses (likely — the 2016 article is plausibly a draft chapter). Until then, all e2 evidence is sourced exclusively from the 2016 Adamantius article."
+  ]
+}

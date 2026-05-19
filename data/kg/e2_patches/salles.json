@@ -1,0 +1,93 @@
+{
+  "scholar": "Ricardo Salles",
+  "scholar_node_id": "person_salles_ricardo_contemporary",
+  "pdfs_consulted": [
+    "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/Ricardo Salles - The Stoics on Determinism and Compatibilism-Ashgate (2005).pdf"
+  ],
+  "args_processed": 6,
+  "args_verified_high": 6,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_salles_stoic_determinism_0": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/Ricardo Salles - The Stoics on Determinism and Compatibilism-Ashgate (2005).pdf",
+      "publication_id": "scholarly_work_salles_2005_the_stoics_on_determinism_and_compatibil",
+      "page": "xviii",
+      "chapter": "Introduction",
+      "quote_verbatim": "The book is divided into two parts. Its first part is devoted to analysing the arguments produced by the Stoics in favour of their determinism. The thesis that every individual state and event is causally necessary is based on the combination of two claims: (a) everything has a cause and (b) causes, that is, the whole set of causal factors involved in the production of a state or an event, are necessitating.",
+      "translation_en": null,
+      "context": "Introduction, pp. xviii-xix. Salles states the two-pillar structure of Stoic determinism (everything has a cause + causes are necessitating) that grounds the claim that every state and event, including human action and psychology, is necessitated by prior causes. Chs. 1-2 develop each pillar.",
+      "verification_confidence": "high",
+      "match_keywords": ["determinism", "stoic", "every", "state", "event", "necessitated", "prior", "causes"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_salles_agent"
+    },
+    "scholarly_argument_salles_stoic_compatibilism_1": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/Ricardo Salles - The Stoics on Determinism and Compatibilism-Ashgate (2005).pdf",
+      "publication_id": "scholarly_work_salles_2005_the_stoics_on_determinism_and_compatibil",
+      "page": "xix",
+      "chapter": "Introduction",
+      "quote_verbatim": "The second part of the book is devoted to compatibilism — the thesis that despite determinism we are responsible for many of our actions. In Stoicism, there are at least four different theories that dealt either directly or indirectly with this problem, and three of them were explicitly compatibilist.",
+      "translation_en": null,
+      "context": "Introduction, p. xix. Salles' programmatic statement of Stoic compatibilism: prior necessitation does not preclude genuine moral responsibility. Developed in detail in Chs. 3-6, esp. §4.4 'The Argument for Compatibilism' (p. 61).",
+      "verification_confidence": "high",
+      "match_keywords": ["compatibilism", "despite", "determinism", "responsible", "actions"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_salles_agent"
+    },
+    "scholarly_argument_salles_hard_determinism_vs_stoic_comp_2": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/Ricardo Salles - The Stoics on Determinism and Compatibilism-Ashgate (2005).pdf",
+      "publication_id": "scholarly_work_salles_2005_the_stoics_on_determinism_and_compatibil",
+      "page": "xx",
+      "chapter": "Introduction — The First Theory",
+      "quote_verbatim": "Three of the four theories were authored by Chrysippus. The first one was designed to rebut an objection that takes us to the problem of external determinism. The objection itself is attested in Cicero (106-43 BC) and was probably designed by Epicurus (341-271 BC) [...]. The objection is that if everything has an antecedent cause, as Stoic determinism demands, then everything we do is in fact fully determined by external factors alone; thus, it is these factors, if anything, that should get the credit or the blame for what we do. This 'externalist objection' [...] runs under the assumption that the ascription of responsibility, either moral or legal, requires, as a necessary condition, that my actions be events that are not determined solely by factors that are external to me. This 'internality requirement' is not questioned by Chrysippus.",
+      "translation_en": null,
+      "context": "Introduction p. xx, summarising the Chrysippean reply to what Salles calls the 'externalist objection' (the proto-'hard-determinist' position that universal necessitation eliminates responsibility). Salles develops this in Ch. 3 'The Threat of External Determination', esp. §3.2 ''Epicurus' and the Threat of External Determination' (p. 39).",
+      "verification_confidence": "high",
+      "match_keywords": ["external", "determinism", "responsibility", "stoic", "rejected", "chrysippus", "internality"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_salles_agent"
+    },
+    "scholarly_argument_salles_chrysippus_theory_of_action_an_3": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/Ricardo Salles - The Stoics on Determinism and Compatibilism-Ashgate (2005).pdf",
+      "publication_id": "scholarly_work_salles_2005_the_stoics_on_determinism_and_compatibil",
+      "page": "63",
+      "chapter": "4. Reflection and Responsibility — §4.4 The Argument for Compatibilism / §4.5 Chrysippus and Harry Frankfurt",
+      "quote_verbatim": "Thus, even though the necessity of the action is derivative — it is necessary given certain conditions — it derives from a combination of two factors, each of which is necessitated and fated on its own. [...] Notice that an action's depending on me does not require that I could have acted otherwise (either in those very circumstances or at some other time). [...] As the text stands, the absence of obstacles to an alternative course of action is irrelevant for determining whether the action depended on me. Thus, notwithstanding the all-encompassing scope of necessity, the impulse's being based on a krisis is deemed by the doctrine [sufficient for the action's depending on me].",
+      "translation_en": null,
+      "context": "Ch. 4 (pp. 51-67), 'Reflection and Responsibility'. Salles reconstructs Chrysippus' psychology of action (impulse + krisis) and its role in grounding compatibilist moral responsibility (§4.2 'Chrysippus' Account of Human Nature' p. 54; §4.3 'The Role of Reflection in the Psychology of Action' p. 56; §4.4 'The Argument for Compatibilism' p. 61; §4.5 'Chrysippus and Harry Frankfurt' p. 63). Internal causes also at §3.3 (p. 42).",
+      "verification_confidence": "high",
+      "match_keywords": ["chrysippus", "impulse", "krisis", "reflection", "psychology", "action", "human", "nature", "responsibility"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_salles_agent"
+    },
+    "scholarly_argument_salles_epictetus_on_responsibility_fo_4": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/Ricardo Salles - The Stoics on Determinism and Compatibilism-Ashgate (2005).pdf",
+      "publication_id": "scholarly_work_salles_2005_the_stoics_on_determinism_and_compatibil",
+      "page": "101",
+      "chapter": "6. Epictetus on Responsibility for Unreflective Action — §6.3 Ought and Can: Responsibility and Epictetan Therapy",
+      "quote_verbatim": "In this section, I discuss a crucial step in the Normative Argument. Unreflective agents are blameworthy, the argument runs, because their precipitancy — understood as a pattern of mental behaviour consisting in the repeated failure to reflect critically on impressions before reacting to them — is something that ought to be avoided. But precipitancy cannot be something that one ought to avoid unless it is also something that one can avoid. On general philosophical grounds, the truth of (1) presupposes the truth of (2): (1) Φ-ing is something that I ought to avoid. (2) I can avoid to Φ.",
+      "translation_en": null,
+      "context": "Ch. 6 (pp. 91-110). Salles reconstructs Epictetus' 'Normative Argument' extending Stoic responsibility to unreflective/precipitate agents (§6.1 Psychology of Unreflective Action p. 91; §6.2 Epictetus' Normative Argument p. 97; §6.3 Ought and Can p. 101). The 'ought implies can' structure is explicit on p. 101.",
+      "verification_confidence": "high",
+      "match_keywords": ["epictetus", "responsibility", "unreflective", "precipitancy", "normative", "ought", "can", "psychology"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_salles_agent"
+    },
+    "scholarly_argument_salles_everlasting_recurrence_and_det_5": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/Ricardo Salles - The Stoics on Determinism and Compatibilism-Ashgate (2005).pdf",
+      "publication_id": "scholarly_work_salles_2005_the_stoics_on_determinism_and_compatibil",
+      "page": "23",
+      "chapter": "2. The Basis of Stoic Determinism (b): Causation is Necessitating",
+      "quote_verbatim": "The present chapter deals with the thesis that causation is necessitating, the other constitutive premiss of Stoic determinism. This thesis follows from the combination of two ideas: (i) particular causal relations are subsumed under strict regularities and (ii) these regularities necessitate — in the same circumstances, the same effects have to obtain. [...] This 'regularity-based' account of causal necessitation is central to Stoic philosophy as it is a consequence of an essential part of Stoic physics, namely, the doctrine of everlasting recurrence.",
+      "translation_en": null,
+      "context": "Ch. 2 (pp. 19-29). Salles argues that the orthodox Stoic doctrine of everlasting recurrence (transcyclical indiscernibility and identity, §§2.1-2.3) is what licenses 'same causes, same effects' and therefore necessitating causation — the second pillar of Stoic determinism. Restated in the Introduction at p. xix ('The second claim — (b) — rests on the idea that individual causal relations are necessary in virtue of being subsumed under strict regularities. This principle of \"same causes, same effects\" is entailed by the doctrine of everlasting recurrence').",
+      "verification_confidence": "high",
+      "match_keywords": ["everlasting", "recurrence", "transcyclical", "indiscernibility", "identity", "necessitating", "determinism", "orthodox"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_salles_agent"
+    }
+  }
+}

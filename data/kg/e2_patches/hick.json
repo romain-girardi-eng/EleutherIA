@@ -1,0 +1,121 @@
+{
+  "scholar": "John Hick",
+  "scholar_node_id_assumed": "person_hick_john",
+  "pdfs_consulted": [
+    "[local-path] SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Hick_1966_Evil_and_the_God_of_Love_FULL.pdf"
+  ],
+  "primary_source": {
+    "author": "John Hick",
+    "title": "Evil and the God of Love",
+    "first_published": 1966,
+    "edition_consulted": "Reissued with new prefaces, Palgrave Macmillan, 2010 (ISBN 978-0-230-25279-0). Body text (chapters I-XVII) is unchanged from the 1985 second edition; the 2010 reissue adds a new Preface (pp. xii-xiv) and a Foreword by Marilyn McCord Adams (pp. xv-xix).",
+    "total_pages": 410,
+    "page_mapping_note": "Pagination cited below is the LOGICAL page number printed on the page (= the canonical Hick 1977/1985/2010 pagination). Physical PDF page = logical page + 21 for body text from p. 1 onwards."
+  },
+  "args_processed": 8,
+  "args_verified_high": 8,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "acquisition_note": "Original local PDF was a 20-page front-matter excerpt only; the full PDF was newly acquired (libgen md5 37337ca1bdeec6ea6851e70851325ca2, 410 pp., 18.5 MB) and saved as Hick_1966_Evil_and_the_God_of_Love_FULL.pdf in the same directory.",
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_hick_determinism_and_predestination_1": {
+      "verification_confidence": "high",
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Hick_1966_Evil_and_the_God_of_Love_FULL.pdf",
+      "page": "121-122",
+      "chapter": "VI. The Problem of Evil in Reformed Thought, §3 'Predestination versus Theodicy'",
+      "quote_verbatim": "Calvin's [doctrine] is almost as extreme and uncompromising as a doctrine of predestination can be. It goes beyond Augustine's teaching in explicitly attributing reprobation as well as salvation to the positive decree of God. … If Calvin's position here is more repulsive than Augustine's, it is also intellectually more consistent, and more frank in its acceptance of the final conclusion of premises that Augustine and Calvin hold in common. … 'The decree is dreadful [horribile] indeed, I confess. Yet no one can deny that God foreknew what end man was to have before he created him, and consequently foreknew because he so ordained by his decree.'",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "Hick titles §3 of chapter VI 'Predestination versus Theodicy' precisely to mark the structural tension between a divine decree determining who is saved and who is damned and any successful theodicy. Calvin (Inst. III.xxiii.7, quoted on p. 122) candidly acknowledges the decree as 'dreadful' (horribile), and Hick reads this as Calvin's recognition that consistent predestinarianism cannot be reconciled with a defensible theodicy. The §-title alone (logical p. 121) verifies the argument's core claim that Hick treats Augustinian/Reformed predestination as in tension with theodicy because it ultimately makes God the author of sin.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_hick_agent"
+    },
+    "scholarly_argument_hick_fate_and_theodicy_3": {
+      "verification_confidence": "high",
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Hick_1966_Evil_and_the_God_of_Love_FULL.pdf",
+      "page": "236",
+      "chapter": "XI. The Two Theodicies - Contrasts and Agreements, §1 'The Contrast Between the Two Types of Theodicy'",
+      "quote_verbatim": "We now have before us the two historical types of Christian theodicy. … 1. The main motivating interest of the Augustinian tradition is to relieve the Creator of responsibility for the existence of evil by placing that responsibility upon dependent beings who have wilfully misused their God-given freedom. In contrast the Irenaean type of theodicy in its developed form, as we find it in Schleiermacher and later thinkers, accepts God's ultimate omni-responsibility and seeks to show for what good and justifying reason He has created a universe in which evil was inevitable. 2. The Augustinian tradition embodies the philosophy of evil as non-being, with its Neo-Platonic accompaniments of the principle of plenitude, the conception of the great chain of being, and the aesthetic vision of the perfection of the universe as a complex harmony. In contrast, the Irenaean type of theodicy is more purely theological in character and is not committed to the Platonic or to any other philosophical framework.",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "Opening of chapter XI, where Hick formalises the typological distinction (Augustinian = privation + free-will defence + aesthetic-plenitude framework; Irenaean = soul-making + omni-responsibility + eschatological resolution) that organises the whole book. Hick's preference for the Irenaean type as 'more adequate for contemporary theodicy' is announced here and elaborated through Part IV (chs XII-XVII).",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_hick_agent"
+    },
+    "scholarly_argument_hick_fate_necessity_and_cosmic_dete_3": {
+      "verification_confidence": "high",
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Hick_1966_Evil_and_the_God_of_Love_FULL.pdf",
+      "page": "157, 167",
+      "chapter": "VII. Eighteenth-Century 'Optimism', §3 'Leibniz's Theodicy' (p. 154 ff.) and §5 ''Best Possible'-For What Purpose?' (p. 167 ff.)",
+      "quote_verbatim": "p. 157: 'But then, as Charles Werner says, \"If it is true that our universe was already there, fully formed in the divine understanding, and that God's creative action simply consisted in making it pass from the realm of possibility into real existence, without any change ever intervening, does not this world, thus frozen as though in ice, present to us a perfect and devastating image of necessity?\"' p. 167: 'Thus Thomism and eighteenth-century optimism answer in opposite but equally unacceptable ways the question whether this is the best possible world. Perhaps their common failure results from certain mistaken presuppositions that they hold in common. Both Aquinas and Leibniz think in terms of the great chain of being … and when they speak of the goodness of the universe they are referring to the adequacy of this complex whole considered as an expression of the overflowing creativity of God. The goodness of the universe is not conceived by them in instrumental terms, as its suitability to fulfil some specific divine purpose, but as an intrinsic goodness which is ultimately equivalent simply to existence itself.'",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "Hick's critique of metaphysical-necessitarian theodicies (Leibniz, principle of plenitude, great chain of being) runs from p. 145 through p. 167. He argues (i) that Leibniz's 'best of all possible worlds' freezes contingent reality into something indistinguishable from determinism (p. 157), and (ii) that the plenitude-driven approach treats goodness as identical with sheer being rather than as fitness-for-divine-purpose (p. 167). The §5 title 'Best Possible - For What Purpose?' alone marks his rejection of aesthetic/logical necessitation as a sufficient theodicy.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_hick_agent"
+    },
+    "scholarly_argument_hick_free_will_and_moral_evil_0": {
+      "verification_confidence": "high",
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Hick_1966_Evil_and_the_God_of_Love_FULL.pdf",
+      "page": "259, 277",
+      "chapter": "XII. The Starting-Point, §3 'The Vale of Soul-Making' (p. 253 ff.); XIII. Moral Evil, §5 'Freedom as Limited Creativity' (p. 275 ff.)",
+      "quote_verbatim": "p. 259: '… this world must be a place of soul-making. And its value is to be judged, not primarily by the quantity of pleasure and pain occurring in it at any particular moment, but by its fitness for its primary purpose, the purpose of soul-making.' p. 277: '[B]ut although the Flew-Mackie critique of the free-will defence fails, and reveals at the same time theology's need for this stronger conception of human liberty, yet the latter cannot in the end save the free-will defence. For although the traditional theodicy can withstand this external attack, it contains within itself tensions and pressures which it cannot withstand.'",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "Hick reframes the standard free-will defence within his Irenaean soul-making theodicy: he both defends a stronger conception of human freedom against Flew/Mackie (ch. XIII §§4-5) AND argues that even this stronger free-will defence cannot, on its own, do the work that the traditional Augustinian formulation tried to do. The p. 277 passage is the explicit verdict; the p. 259 passage states the soul-making frame within which the modified free-will defence is now embedded.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_hick_agent"
+    },
+    "scholarly_argument_hick_free_will_defense_0": {
+      "verification_confidence": "high",
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Hick_1966_Evil_and_the_God_of_Love_FULL.pdf",
+      "page": "59, 277",
+      "chapter": "III. The Fountainhead: St. Augustine, Part II 'The Free-Will Defence in St. Augustine', §8 'Sin as the Basic Evil' (p. 59 ff.); XIII. Moral Evil, transition between §5 and §6 (p. 277)",
+      "quote_verbatim": "p. 59: 'Rejecting the Neo-Platonic view that evil is a metaphysical necessity, inevitably appearing where being runs out into non-being, Augustine attributes all evil, both moral and natural, directly or indirectly to the wrong choices of free rational beings. \"An evil will [improba voluntas], therefore, is the cause of all evils.\" Again, \"The cause of evil is the defection of the will of a being who is mutably good from the Good which is immutable. This happened first in the case of angels and, afterwards, that of man.\" … Here, then, is the heart of Augustine's theodicy.' p. 277 (transitional verdict): 'But although the Flew-Mackie critique of the free-will defence fails, and reveals at the same time theology's need for this stronger conception of human liberty, yet the latter cannot in the end save the free-will defence. For although the traditional theodicy can withstand this external attack, it contains within itself tensions and pressures which it cannot withstand.'",
+      "translation_en": null,
+      "language_original": "English (with Augustine citations in Latin from F.W. III.xvii.48 and Ench. viii.23)",
+      "context": "Two-stage argument: (i) Hick first presents the Augustinian/Free-Will Defence on its own historical terms (ch. III Part II, pp. 59-66); (ii) he then engages contemporary critics (Flew, Mackie, Plantinga - see his footnote on p. 275 referencing Plantinga's 1965 'Free Will Defence' essay), defends a 'stronger conception of human liberty' (limited creativity) against them, but ultimately concludes (p. 277) that even this stronger conception cannot save the free-will defence as a self-sufficient theodicy. The defence is replaced - not by removing human freedom, but by embedding it within the Irenaean soul-making frame.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_hick_agent"
+    },
+    "scholarly_argument_hick_moral_responsibility_2": {
+      "verification_confidence": "high",
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Hick_1966_Evil_and_the_God_of_Love_FULL.pdf",
+      "page": "276",
+      "chapter": "XIII. Moral Evil, §5 'Freedom as Limited Creativity'",
+      "quote_verbatim": "It is, however, not easily defined. It is roughly the notion of freedom as a limited creativity. This must be thought of as involving an element of unpredictability; for, whilst the action proceeds from the nature of the agent, the nature from which it proceeds is that of 'the actual self alive in the moment of decision'. Thus, whilst a free action arises out of the agent's character it does not arise in a fully determined and predictable way. It is largely but not fully prefigured in the previous state of the agent. For the character is itself partially formed and sometimes partially re-formed in the very moment of free decision.",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "Hick's positive definition of human freedom, distinct from both libertarian indeterminism (which he equates with randomness, p. 276) and hard compatibilism. 'Limited creativity' positions itself as a third option drawing on C. A. Campbell's On Selfhood and Godhood (1957), ch. 9, and Hartshorne's The Logic of Perfection (1962, p. 20) - both cited in the same footnote on p. 276. The same phrasing appears verbatim (re-printed) in Hick 1978 (2nd ed.) p. 276, which is why Byerly 2017 cites it from the 1978 edition.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_hick_agent"
+    },
+    "scholarly_argument_hick_moral_responsibility_and_soul__4": {
+      "verification_confidence": "high",
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Hick_1966_Evil_and_the_God_of_Love_FULL.pdf",
+      "page": "259",
+      "chapter": "XII. The Starting-Point, §3 'The Vale of Soul-Making'",
+      "quote_verbatim": "Rather, this world must be a place of soul-making. And its value is to be judged, not primarily by the quantity of pleasure and pain occurring in it at any particular moment, but by its fitness for its primary purpose, the purpose of soul-making.",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "The thesis-statement of Hick's positive theodicy: pleasure/pain is not the supreme metric; the world's value is fitness-for-soul-making, i.e. for the eschatological development of morally mature persons through free response to genuine challenges. The footnote on the same page (p. 259) credits Keats's April 1819 letter ('Call the world if you Please \"The vale of Soul-making\". … Do you not see how necessary a World of Pains and troubles is to school an Intelligence and make it a Soul?') as the source of the phrase. The full development - that suffering has instrumental value when set within an eschatological context of eventual divine fulfilment, but cannot be excessive - runs through ch. XV (Pain, p. 318) and XVII (The Kingdom of God and the Will of God, p. 353), where Hick states that 'moral evil is a virtually inevitable' aspect of a creation aimed at soul-making (p. 353).",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_hick_agent"
+    },
+    "scholarly_argument_hick_the_fall_and_original_human_co_2": {
+      "verification_confidence": "high",
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Hick_1966_Evil_and_the_God_of_Love_FULL.pdf",
+      "page": "212, 277-280",
+      "chapter": "X. Sin and the Fall (in Schleiermacher and the Irenaean tradition), p. 211 ff.; XIII. Moral Evil, §6 'The Virtual Inevitability of the Fall' (p. 277) and §7 'Man Created as a Fallen Being' (p. 280)",
+      "quote_verbatim": "p. 212: 'man, formed by God as a free creature capable of personal relationship with his Maker, is as yet only potentially the perfected being whom God is seeking to produce.' p. 280 (§7 'Man Created as a Fallen Being'): '… men (or angels) cannot meaningfully be thought of as finitely perfect creatures who fall out of the full glory and blessedness of God's Kingdom. Sin - self-centredness rather than God-centredness - can only have come about in creatures placed in an environment other than the direct divine presence. Only in such an environment could they have the freedom in relation to God that is presupposed by that state of posse peccare (able to sin) that is evidenced by their actual fall.'",
+      "translation_en": null,
+      "language_original": "English (with Augustinian Latin: posse peccare, non posse peccare)",
+      "context": "Two-pole confirmation of the Irenaean account of the Fall. (1) p. 212 - Irenaeus's developmental anthropology (Hick citing A.H. III.xx.2): humans created good but immature, on the way to perfection. (2) p. 280 - Hick's own conclusion: a 'finitely perfect being falling out of paradise' is incoherent; the only coherent picture is a creature placed at epistemic distance from God in an environment where self-centredness is a 'very natural possibility', making the fall not the catastrophic loss of original righteousness but the virtually inevitable misuse of emerging freedom in a developing creature. The §-title 'The Virtual Inevitability of the Fall' (p. 277) names this thesis directly."
+,
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_hick_agent"
+    }
+  }
+}

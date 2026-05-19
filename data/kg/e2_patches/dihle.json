@@ -1,0 +1,348 @@
+{
+  "scholar": "Albrecht Dihle",
+  "scholar_node_id": "scholar_albrecht_dihle",
+  "pdfs_consulted": [
+    "Albrecht Dihle - The Theory of Will in Classical Antiquity (Sather Classical Lectures) (1982, University of California Press).pdf",
+    "Dihle_1982_Theory_Will.txt"
+  ],
+  "publication_id": "pub_dihle_1982_theory_of_will",
+  "edition_canonical": "Dihle, Albrecht. The Theory of Will in Classical Antiquity. Sather Classical Lectures 48. Berkeley/Los Angeles/London: University of California Press, 1982.",
+  "args_processed": 26,
+  "args_verified": 22,
+  "args_not_found": 0,
+  "args_thesis_misrepresented": 4,
+  "patches": {
+    "argument_dihle_1982_greek_intellectualism_thesis": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "68",
+      "chapter": "Lect. IV — St. Paul and Philo (opening)",
+      "quote_verbatim": "In the two preceding chapters we came to understand why the Greeks, in their attempts to analyze and to evaluate human action, never developed a distinct concept of will.",
+      "translation_en": null,
+      "context": "Opening sentence of Chapter IV. Dihle here states the conclusion of Lectures II-III (the Greek view of human action) as a prelude to introducing Paul.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_greek_concept_of_will_0": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "68",
+      "chapter": "Lect. IV — St. Paul and Philo (opening)",
+      "quote_verbatim": "the Greeks, in their attempts to analyze and to evaluate human action, never developed a distinct concept of will. […] the concept of choice does not admit the existence of a will separate from the intellectual cognition and evaluation of means and ends. It only admits intention as an intellectual phenomenon and striving as the result of instinct or emotion or a combination of both.",
+      "translation_en": null,
+      "context": "Two sentences spanning p. 68-69: the central thesis followed by its philosophical grounding in the prohairesis-model.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_historical_development_of_the__3": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "68",
+      "chapter": "Lect. IV — St. Paul and Philo",
+      "quote_verbatim": "All the questions implied in that problem, however, were to be dealt with, through the many centuries of medieval and post-medieval philosophy, predominantly with the aid of such a concept, which also made a lasting impact on all European languages.",
+      "translation_en": null,
+      "context": "Dihle states that the concept of will emerged only after Greek philosophy and went on to dominate medieval/post-medieval thought.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "argument_dihle_1982_critique_anachronism_in_attribution_will_to_greeks": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "69-70",
+      "chapter": "Lect. IV — St. Paul and Philo",
+      "quote_verbatim": "The concept of choice (προαίρεσις) is based on the assumption that intention, psychologically as well as with regard to moral judgement, depends on the knowledge of something definite. […] That is one reason why the concept of choice does not admit the existence of a will separate from the intellectual cognition and evaluation of means and ends.",
+      "translation_en": null,
+      "context": "Dihle's metahistorical correction: translating prohairesis as 'will' obscures that prohairesis requires antecedent cognition.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "argument_dihle_1982_synkatathesis_is_cognitive_not_volitional": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "61-62",
+      "chapter": "Lect. III — The Greek View of Human Action II",
+      "quote_verbatim": "The assent, as described previously, is voluntary, yet necessitated in the case of a right decision by the truth of the underlying φαντασία […]. All the four basic functions of the ἡγεμονικόν, that is to say perception, imagination, assent, and impulse, are entirely rational in the orthodox Stoic view and can be described or analyzed, therefore, in terms of cognition and judgement.",
+      "translation_en": null,
+      "context": "Dihle's reply to the strongest objection against his thesis: Stoic synkatathesis looks voluntaristic but in orthodox Stoic doctrine remains an entirely intellectual act.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "argument_dihle_1982_paul_no_dedicated_term_for_will": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "83-84",
+      "chapter": "Lect. IV — St. Paul and Philo",
+      "quote_verbatim": "There is no such term in the language of St. Paul and his contemporaries. Even the will of God […] has no definite term. θέλησις, θέλημα, βουλή, βούλησις, βούλημα, εὐδοκία, γνώμη are used almost as synonyms with reference to the will of God in the earliest writings of Christian literature.",
+      "translation_en": null,
+      "context": "Pivotal philological observation: Paul lacks a dedicated lexical item for what he is conceptually distinguishing.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_paul_s_concept_of_will_1": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "83",
+      "chapter": "Lect. IV — St. Paul and Philo",
+      "quote_verbatim": "St. Paul would be easier to understand in this chapter of his doctrine, had he introduced an unmistakable term to denote the will of man; for it is, in his view, a will, as distinguished from all intellectual achievements—even with regard to the knowledge of the divine Law—as well as from all unconscious and spontaneous emotions, which responds to the commandment of God.",
+      "translation_en": null,
+      "context": "Dihle's claim that Paul conceptually operates with a distinct notion of will although he has no term for it.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "argument_dihle_1982_paul_romans_7_split_will": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "86-87",
+      "chapter": "Lect. IV — St. Paul and Philo",
+      "quote_verbatim": "Therefore, the conflict which is spoken of in Rom. 7:7ff cannot be taken as one of a deliberate intention contradicted or thwarted by an unconscious impulse, as Bultmann is inclined to believe […]. Both kinds of intention, κατὰ σάρκα and κατὰ πνεῦμα, come to being in the full light of human consciousness, though independently of the intellectual achievement of the individual in question.",
+      "translation_en": null,
+      "context": "Dihle distinguishes the Pauline conflict in Rom. 7 from any cognitive akrasia and from a Bultmannian unconscious-impulse reading.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "argument_dihle_1982_pauline_conscience_distinctive": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "80-81",
+      "chapter": "Lect. IV — St. Paul and Philo",
+      "quote_verbatim": "Conscience, according to St. Paul, does not originate from the intellect, which has thoroughly examined what the individual has done or is about to do. This, however, is the meaning of συνείδησις wherever it occurs in Greek philosophical texts—which happens very seldom, anyway. […] Conscience, in the view of St. Paul […], spontaneously and distinctly indicates to its owner whether or not a doing of his has been or will be in accordance with the will of God.",
+      "translation_en": null,
+      "context": "Paul's syneidesis is set against the philosophical-Stoic syneidesis (rational self-examination).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_paul_s_doctrine_of_conscience_2": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "80-81",
+      "chapter": "Lect. IV — St. Paul and Philo",
+      "quote_verbatim": "the gentiles, or at least some of them, will have, on doomsday, three advocates or witnesses: the work of the Law inscribed in their heart, their conscience (συνείδησις), and their thoughts (λογισμοί) that accuse and excuse one another (Rom. 2:14/15). […] Conscience, according to St. Paul, does not originate from the intellect […].",
+      "translation_en": null,
+      "context": "Dihle's exegesis of Rom. 2:14-15 grounding the non-cognitive, spontaneous character of Pauline syneidesis.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "argument_dihle_1982_augustine_invents_philosophical_voluntas": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "144",
+      "chapter": "Lect. VI — St. Augustine and His Concept of Will (closing)",
+      "quote_verbatim": "St. Augustine was, in fact, the inventor of our modern notion of will, which he conceived for the needs and purposes of his specific theology and in continuation of the attempts of Greek theologians, who developed their doctrine of the Trinity in terms of Neoplatonic ontology.",
+      "translation_en": null,
+      "context": "Conclusive sentence of Lect. VI — the canonical formulation of Dihle's Augustinian-invention thesis.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_augustine_s_invention_of_the_p_3": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "123-125, 144",
+      "chapter": "Lect. VI — St. Augustine and His Concept of Will",
+      "quote_verbatim": "It is generally accepted in the study of the history of philosophy that the notion of will, as it is used as a tool of analysis […] from the early Scholastics to Schopenhauer and Nietzsche, was invented by St. Augustine. […] He attempted to apply what he had perceived by means of introspection and self-analysis to the image of the Trinity. So Trinitarian theology and human psychology became directly related to each other.",
+      "translation_en": null,
+      "context": "Composite citation: p. 123 (opening claim) + p. 125 (introspection + Trinity-psychology linkage) which exactly maps the KG description.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholar_position_dihle_will_christian_innovation": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "123, 144",
+      "chapter": "Lect. VI — St. Augustine and His Concept of Will",
+      "quote_verbatim": "the notion of will […] was invented by St. Augustine. […] St. Augustine was, in fact, the inventor of our modern notion of will.",
+      "translation_en": null,
+      "context": "Twin opening/closing statements of Lect. VI that together constitute Dihle's scholar-position on the emergence of will as a distinct faculty.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "argument_dihle_1982_voluntas_latin_pre_augustine_loose_semantics": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "133-135",
+      "chapter": "Lect. VI — St. Augustine and His Concept of Will",
+      "quote_verbatim": "Cicero […] used the word voluntas not only to denote what was called προαίρεσις or βούλησις in Greek. Sometimes, even in philosophical texts, voluntas means desire or spontaneous wish rather than deliberate intention, and in other passages the impulse itself (ὁρμή) […] is called voluntas. The large semantic area which is apparently attached to the word in Cicero's philosophical vocabulary corresponds to the general usage of his time.",
+      "translation_en": null,
+      "context": "Dihle's philological core: pre-Augustinian voluntas already exists but covers an unstable semantic field (prohairesis ≈ boulesis ≈ horme ≈ spontaneous wish), exactly as the KG description claims.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "argument_dihle_1982_augustine_responds_to_manichean_and_pelagian": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "128-131",
+      "chapter": "Lect. VI — St. Augustine and His Concept of Will",
+      "quote_verbatim": "Cupiditas or libido (ἐπιθυμία), ambitio or superbia (φιλαρχία, φιλοτιμία), and curiositas (φαντασία) do not result, as the Neoplatonists believed, from a misconception of reality but from the perverted will (mala voluntas). […] The Pelagian controversy resulted from this situation. […] St. Augustine radically opposed Pelagius' doctrine: man has indeed been created with the ability to distinguish between good and evil and to decide for the better. Yet the fall of Adam […] has perverted the will, the most important factor of human nature.",
+      "translation_en": null,
+      "context": "Dihle ties the genesis of voluntas augustinienne explicitly to (i) anti-Manichean reading of evil as deficiency of will and (ii) anti-Pelagian doctrine of perverted will.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "argument_dihle_1982_plotinus_remains_intellectualist": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "113-115",
+      "chapter": "Lect. V — Philosophy and Religion in Late Antiquity",
+      "quote_verbatim": "Up to this point everything in Plotinus' and Porphyry's doctrine seems to agree with traditional Greek, especially Platonic, intellectualism, the notion of will being quite superfluous in such a context. There are, however, some details which, from an intellectualistic point of view, seem to be unduly stressed.",
+      "translation_en": null,
+      "context": "Dihle concedes Plotinian voluntaristic vocabulary (autexousios, tolma, boulesis) but maintains that the architecture remains intellectualist.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_greek_philosophical_theology_a_0": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "1-2",
+      "chapter": "Lect. I — Cosmological Conceptions in the Second Century A.D.",
+      "quote_verbatim": "The Greek creator or demiurge brings to reality only what reason evinces as being possible, and from all possibilities he always chooses the best one. […] There is no need for assuming behind or apart from the entirely rational programming of reality a will of which the impulse or manifestation is unpredictable.",
+      "translation_en": null,
+      "context": "Galen-passage commentary: Plato/Aristotle demiurge is constrained by rationality, not by arbitrary will.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_greek_philosophical_theology_v_0": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "2-3",
+      "chapter": "Lect. I — Cosmological Conceptions in the Second Century A.D.",
+      "quote_verbatim": "Greek philosophical theology concentrated instead, from the very beginning, on the order, regularity, and beauty that are established and maintained through divine activity. […] The Greek creator or demiurge brings to reality only what reason evinces as being possible, and from all possibilities he always chooses the best one.",
+      "translation_en": null,
+      "context": "Dihle's contrast between the Greek demiurge (rational, choosing-the-best) and the Biblical creator (arbitrary will).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_absence_of_will_as_arbitrary_i_2": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "2",
+      "chapter": "Lect. I — Cosmological Conceptions in the Second Century A.D.",
+      "quote_verbatim": "The word τὸ θέλον, used by the astrologer Vettius Valens (5.9) in order to denote what is going to happen according to the cosmic order, has not that connotation of will. Nature, cosmos, order of the universe, providence—all these concepts illustrate that everything happens only in consequence of a preconceived and rational arrangement without a separate will spontaneously interfering with the process.",
+      "translation_en": null,
+      "context": "Exact verbatim match for the KG description.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_the_concept_of_will_velle_in_g_1": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "2",
+      "chapter": "Lect. I — Cosmological Conceptions in the Second Century A.D.",
+      "quote_verbatim": "The word τὸ θέλον, used by the astrologer Vettius Valens (5.9) in order to denote what is going to happen according to the cosmic order, has not that connotation of will. Nature, cosmos, order of the universe, providence—all these concepts illustrate that everything happens only in consequence of a preconceived and rational arrangement without a separate will spontaneously interfering with the process.",
+      "translation_en": null,
+      "context": "Same passage as the previous patch — the Vettius Valens example is Dihle's locus classicus for the absence of voluntaristic θέλειν in Greek cosmology.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_jewish_and_christian_conceptio_1": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "1, 4-5",
+      "chapter": "Lect. I — Cosmological Conceptions in the Second Century A.D.",
+      "quote_verbatim": "The Jews, he [Galen] says, derive the origin and structure of the universe exclusively from the arbitrary intention of the divine creator. He can transform a lump of earth into a horse or a bird or whatever he pleases. Creation depends solely and entirely on the will of the creator. This opinion, according to Galen, is certainly preferable to the aleatoric conception of Epicurus who attributes everything to chance. But it is quite incompatible with Greek ideas of cosmology and cosmogony as expounded most clearly by Plato and Aristotle.",
+      "translation_en": null,
+      "context": "Galen-paraphrase opens the book; sets the Greek-vs-Biblical contrast that frames the whole project.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_monotheistic_convergence_with__3": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "3-4",
+      "chapter": "Lect. I — Cosmological Conceptions in the Second Century A.D.",
+      "quote_verbatim": "Both conceptions, the Greek and the Biblical, were monotheistic, despite their disagreement in many other respects. […] But this supreme creator and ruler always restricts his activity, according to philosophical doctrine, by laws or rules which the human mind can understand as reasonable, good, and salutary. Such a creator, to be sure, has also the desire to create and to govern the universe. But he does not create ex nihilo.",
+      "translation_en": null,
+      "context": "Verbatim formulation of monotheistic-convergence-with-persistent-difference.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_prayer_and_divine_rationality_1": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "3",
+      "chapter": "Lect. I — Cosmological Conceptions in the Second Century A.D.",
+      "quote_verbatim": "For the Stoics, for instance (Cleanthes ap. Sen. ep. 41.1, quaest. nat. 2.35), the purpose of prayer was only to ascertain the identity between reason as the ruler of the universe and reason as the leading force in the human soul. But even Platonists like Plutarch (Is. et Os. 1) or Maximus of Tyre (or. 5) who regarded prayer as a dialogue between two partners, explicitly rejected the idea that prayer could influence or change the intention of God.",
+      "translation_en": null,
+      "context": "Exact source for the prayer/divine-rationality argument.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "scholarly_argument_dihle_prayer_and_divine_immutability_2": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "3",
+      "chapter": "Lect. I — Cosmological Conceptions in the Second Century A.D.",
+      "quote_verbatim": "even Platonists like Plutarch (Is. et Os. 1) or Maximus of Tyre (or. 5) who regarded prayer as a dialogue between two partners, explicitly rejected the idea that prayer could influence or change the intention of God. Such a change could only lead to something worse, since God could not possibly improve on his own perfect rationality.",
+      "translation_en": null,
+      "context": "Same locus as the previous patch — prayer-and-divine-immutability is the same argument unfolded.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "argument_dihle_1982_indian_parallel_dharma_intellectualism": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "5-7 (main text); n. 19, p. 165 (Megasthenes ref.)",
+      "chapter": "Lect. I — Cosmological Conceptions in the Second Century A.D.",
+      "quote_verbatim": "In the view of Galen and Celsus, the Judaeo-Christian doctrine is entirely different from the teaching of the Indian Brahmans or Persian Magi, who all corroborated Plato's doctrine and gave testimony to the fact that men were able to recover, by means of philosophy, their primeval or natural knowledge of the cosmic order.",
+      "translation_en": null,
+      "context": "Dihle (himself an indologist) signals that the Indian/Brahmanic tradition was perceived by Galen and Celsus as cognate with Greek intellectualism, against the Biblical voluntarism. The Megasthenes-statement is cited at n. 19, p. 165. Note: the txt-line reference (md ll. 6639) in the KG description is an internal md-line, not a page number; the substantive claim is on pp. 5-7.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent"
+    },
+    "argument_dihle_1982_hebrew_obedience_non_cognitive_will": {
+      "pdf_source": "Albrecht Dihle - The Theory of Will in Classical Antiquity (1982).pdf",
+      "publication_id": "pub_dihle_1982_theory_of_will",
+      "page": "1, 4-5",
+      "chapter": "Lect. I — Cosmological Conceptions in the Second Century A.D.; Lect. IV — St. Paul and Philo",
+      "quote_verbatim": "Creation depends solely and entirely on the will of the creator. […] There is no standard, nor rule applicable to the creator and his creation alike. Creation results from the power and the pleasure or will of Yahveh, and from nothing else. He can create, change, and destroy as He pleases.",
+      "translation_en": null,
+      "context": "Dihle's articulation of the Biblical, voluntaristic God-concept (p. 4-5). The KG description additionally invokes Hebrew-specific terms (ratzon, kavod, 'emunah, yir'ah, mibtah, Is. 7:9 'shema'/'ta'amenu'/'tdaminu') which Dihle himself does NOT actually thematize in the 1982 book — see thesis_misrepresented note below. The Hebrew voluntarism is articulated by Dihle in book-level terms (will / power / pleasure of Yahveh), not via the Hebrew lexicon enumerated in the KG description.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_dihle_agent",
+      "thesis_misrepresented": true,
+      "thesis_misrepresented_note": "The KG description attributes to Dihle a specifically Hebrew-philological argument (ratzon/kavod/'emunah/yir'ah/mibtah + Is 7:9 wordplay ta'amenu/tdaminu) that I cannot locate in Dihle 1982. Dihle makes the same point at a conceptual level (creation by arbitrary will of Yahveh, obedience preceding cognition) but does not deploy these Hebrew lexemes. Quote-verbatim above is the genuinely Dihlean form of the claim."
+    }
+  },
+  "thesis_misrepresented_summary": [
+    {
+      "argument_id": "argument_dihle_1982_hebrew_obedience_non_cognitive_will",
+      "issue": "KG description embellishes Dihle with a Hebrew-philological apparatus (ratzon/kavod/'emunah/yir'ah/mibtah, Isaiah 7:9 wordplay) not present in Dihle 1982. The conceptual claim (Yahveh's arbitrary will, obedience non-cognitive) IS Dihle's; the Hebrew-lexical scaffolding is not."
+    },
+    {
+      "argument_id": "argument_dihle_1982_indian_parallel_dharma_intellectualism",
+      "issue": "KG description claims Dihle argues that Indian classical thought (Vedanta, Buddhism, Jainism) is intellectualist re: dharma/jnana/vidya. In Dihle 1982 the Indian/Brahmanic tradition is invoked only briefly via Galen/Celsus/Megasthenes as a witness to a cosmology cognate with Greek intellectualism (pp. 5-7, n. 19 p. 165). Dihle's full indological argument is developed elsewhere (Die Goldene Regel, 1962; Der Wille als Voraussetzung der Person, 1985); the KG description over-attributes the technical Sanskrit terms to the 1982 book."
+    },
+    {
+      "argument_id": "scholarly_argument_dihle_paul_s_concept_of_will_1",
+      "issue": "Minor: KG description says Paul 'implicitly but revolutionarily introduced a notion of will'. Dihle's actual claim is more cautious: Paul operates with a concept of will conceptually but lacks any term (p. 83). The word 'revolutionarily' is the KG redactor's, not Dihle's."
+    },
+    {
+      "argument_id": "scholar_position_dihle_will_christian_innovation",
+      "issue": "Not strictly misrepresented but worth flagging: Dihle's thesis is precisely targeted on Augustine (p. 144), not on 'the Christian tradition' as a whole. Earlier Christian authors (incl. Marius Victorinus, p. 123) are credited with preparation; the canonical inventor is Augustine alone."
+    }
+  ]
+}

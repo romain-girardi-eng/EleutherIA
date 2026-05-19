@@ -1,0 +1,171 @@
+{
+  "scholar": "Ilaria Ramelli",
+  "scholar_node_id": "person_ilaria_ramelli_contemporary",
+  "pdfs_consulted": [
+    "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf"
+  ],
+  "pdfs_searched_not_found_in_doctorat": [
+    "Ramelli 2013 — The Christian Doctrine of Apokatastasis (Brill) — NOT present in DOCTORAT folder",
+    "Ramelli 2009 — Bardaisan of Edessa (Gorgias) — NOT present in DOCTORAT folder",
+    "Ramelli 2017 — Origen, Patristic Philosophy and Christian Platonism (OUP) — NOT present in DOCTORAT folder"
+  ],
+  "args_processed": 12,
+  "args_verified_high": 12,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "verified_by": "e2_ramelli_agent",
+  "notes": [
+    "All 12 needs_evidence arguments attributed to Ramelli match the single Ramelli paper present in DOCTORAT: Ramelli 2014, 'Alexander of Aphrodisias: a source of Origen's philosophy?', Philosophie antique 14, pp. 237-289.",
+    "Article written in English (with a French RÉSUMÉ on p. 237 and an English SUMMARY on p. 237-238). All verbatim below are English from the body of the article — no translation needed.",
+    "Printed page numbers (237-289) are used. PDF and printed pages align: p. 237 is the title page, p. 238 begins the abstract.",
+    "Some Greek transliterations in the verbatim are preserved exactly as printed (with original diacritics where retained by the OCR)."
+  ],
+  "patches": {
+    "scholarly_argument_ramelli_alexander_of_aphrodisias_as_so_0": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf",
+      "publication_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori",
+      "page": "237-238",
+      "chapter": "SUMMARY",
+      "quote_verbatim": "Alexander of Aphrodisias and Origen are two semi-contemporary philosophers and teachers of philosophy who composed the same kinds of works. Origen was a Christian philosopher, a disciple of Ammonius Saccas, Plotinus' teacher. It is very probable that Origen knew Alexander of Aphrodisias' works, which were read at the school of Plotinus, and drew inspiration from them. Many clues support my hypothesis.",
+      "translation_en": null,
+      "context": "Opening English SUMMARY of the article, stating Ramelli's central thesis that Alexander of Aphrodisias was very probably a philosophical source for Origen.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_ramelli_agent"
+    },
+    "scholarly_argument_ramelli_origen_s_knowledge_of_alexande_0": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf",
+      "publication_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori",
+      "page": "240",
+      "chapter": "Two Semi-Contemporary Philosophers and Teachers of Philosophy who Wrote the Same Kinds of Works",
+      "quote_verbatim": "Origen very probably knew at least Alexander's works; he might even have met him, since he was in Athens – as well as in Ephesus, Antioch, and Rome – in the first half of the third century, as is attested by his own Letter to Friends in Alexandria reported by Rufinus in De adulteratione librorum Origenis 7: fratres miserunt ad me Athenas… Pierre Nautin places Origen's second stay in Athens (Eus. HE VI 32,2) between the end of 245 and the beginning of 246. There can be no certainty about Origen's personal acquaintance with Alexander, but it is highly probable that Origen knew his works, as his younger contemporaries Plotinus and Porphyry did too… Alexander's commentaries were widely read in the circle of Plotinus (Porphyry V. Plot. 14, 13).",
+      "translation_en": null,
+      "context": "p. 240: Ramelli argues for the high probability that Origen knew Alexander's works (Nautin's dating of Origen's Athenian stay to 245-246 CE), grounded in Porphyry's testimony that Alexander's commentaries were read in Plotinus's school.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_ramelli_agent"
+    },
+    "scholarly_argument_ramelli_matter_and_evil_origen_s_align_4": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf",
+      "publication_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori",
+      "page": "240-241",
+      "chapter": "Two Semi-Contemporary Philosophers and Teachers of Philosophy who Wrote the Same Kinds of Works",
+      "quote_verbatim": "while for Alexander matter is a quasi-substance, distinct from both privation and qualities, for Plotinus matter is privation and somehow connected to evil, what Alexander did not admit of. In this respect Alexander seems to me to be much closer to Origen, who also refused to connect matter with evil.",
+      "translation_en": null,
+      "context": "p. 240-241: Ramelli aligns Origen with Alexander against Plotinus on the question of matter and evil — both Alexander and Origen refuse to connect matter with evil, while Plotinus does.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_ramelli_agent"
+    },
+    "scholarly_argument_ramelli_origen_s_modification_of_stoic_3": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf",
+      "publication_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori",
+      "page": "259-260",
+      "chapter": "Origen Seems to Modify the Stoic Doctrine of Mixture Coming Closer to Alexander",
+      "quote_verbatim": "Origen is likely to have had Alexander's treatment in mind when he described the union of natures – the soul and the divine Logos – in the one Hypostasis of Christ, all the more so in that Alexander in his refutation of the Stoic doctrine of mixture repeatedly used exactly the example of the union of fire and iron, both in De mixtione (216 and 226 Bruns) and in other works (e.g. De an. mant. 140 Bruns). Moreover, Origen's explicit insistence on the immutability of the soul in its union with the Logos in the passage I quoted (nec convertibilis aut mutabilis) seems to perfectly correspond to Alexander's criticism of Chrysippus's theory of mixture in De mixt. 213 Bruns: while Chrysippus claimed that the two components can separate again… Alexander denied this possibility, and Origen sided with the latter.",
+      "translation_en": null,
+      "context": "p. 259-260: Ramelli demonstrates that Origen's reworking of the Stoic doctrine of mixture (κρᾶσις / μῖξις) — using the fire-and-iron analogy in Princ. II, 6, 3-6 — sides with Alexander's anti-Chrysippean position rather than the original Stoic view.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_ramelli_agent"
+    },
+    "scholarly_argument_ramelli_moral_responsibility_and_fate_2": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf",
+      "publication_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori",
+      "page": "264",
+      "chapter": "Alexander's and Origen's Struggle Against Stoic Fatalistic Determinism",
+      "quote_verbatim": "Alexander tackled the question of determinism in De Fato – which, albeit he never mentions the Stoics therein, is largely considered to be devoted to a refutation of Stoic determinism, and was completed sometime between 198 and 209 –, and in De an. c. mant. ch. 25 Sharples, which summarises his De Fato, as well as in some of his Quaestiones (2-5). He entered an ancient debate – very lively in his day, as Bardaisan's own De Fato testifies – by developing an Aristotelian notion of fate.",
+      "translation_en": null,
+      "context": "p. 264: Ramelli situates Alexander's De Fato in a broader 'ancient debate – very lively in his day' on fate, alongside Bardaisan's De Fato. She also notes (p. 239) that both Alexander and Bardaisan dedicated their De Fato treatises to imperial figures (Septimius Severus/Caracalla; an 'Antoninus'), confirming that the topic was 'deemed worthy of imperial dedications'.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_ramelli_agent"
+    },
+    "scholarly_argument_ramelli_alexander_s_concept_of_to_eph__5": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf",
+      "publication_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori",
+      "page": "264",
+      "chapter": "Alexander's and Origen's Struggle Against Stoic Fatalistic Determinism",
+      "quote_verbatim": "Alexander deems Stoic compatibilism between Fate and free will unsuccessful, untenable, and dangerous for moral life, in that it excludes responsibility (DF chs. 7-21). It rules out τὸ ἐφ᾿ἡμῖν. This is in fact the same criticism that Origen levelled against Gnostic determinism.",
+      "translation_en": null,
+      "context": "p. 264: Direct match for the argument. Ramelli explicitly states that Alexander's rejection of Stoic compatibilism on the grounds that it excludes τὸ ἐφ᾿ἡμῖν (what depends on us) is the same criticism Origen applied to Gnostic determinism.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_ramelli_agent"
+    },
+    "scholarly_argument_ramelli_anti_determinism_and_free_will_1": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf",
+      "publication_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori",
+      "page": "265",
+      "chapter": "Alexander's and Origen's Struggle Against Stoic Fatalistic Determinism",
+      "quote_verbatim": "Alexander's treatment is very likely to be in the background of Origen's refutation of determinism, all the more so in that Origen not only refuted Gnostic determinism (especially in its Valentinian form involving the different predestination of three classes of humans «by nature», which destroyed free will and responsibility), but precisely also Stoic determinism – just like Alexander – in his criticism of the Stoic notion of apokatastasis and of the whole cosmological and ethical conception that was attached to it… In De or. VI, 2 Origen avers that a human being can never act as though he or she were not responsible for his or her deeds and thereby liable to praise or blame. Origen is in line with Alexander's polemic against Stoic fatalism and his reception of Carneades' objection to it (the ἀργὸς λόγος argument). The very arguments based on the importance of praise and blame and the prayer of request and thanksgiving are the same in Origen (the author of a De oratione) and Alexander (see esp. DF 20).",
+      "translation_en": null,
+      "context": "p. 265: Core verbatim for the argument that both Alexander and Origen refuted Stoic determinism with the same arguments — particularly praise/blame and petitionary prayer.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_ramelli_agent"
+    },
+    "scholarly_argument_ramelli_determinism_and_free_will_stoi_1": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf",
+      "publication_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori",
+      "page": "265",
+      "chapter": "Alexander's and Origen's Struggle Against Stoic Fatalistic Determinism",
+      "quote_verbatim": "Moreover, here, as I shall show, Origen's presentation of Stoic thought is very similar to that of Alexander. Indeed, Origen's attack on Stoic determinism has much in common with Alexander's.",
+      "translation_en": null,
+      "context": "p. 265: Direct statement that the presentation and refutation of Stoic determinist thought are the same in Alexander and Origen. This is the most concise verbatim restating the argument's thesis.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_ramelli_agent"
+    },
+    "scholarly_argument_ramelli_origen_s_refutation_of_gnostic_3": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf",
+      "publication_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori",
+      "page": "265",
+      "chapter": "Alexander's and Origen's Struggle Against Stoic Fatalistic Determinism",
+      "quote_verbatim": "Alexander's treatment is very likely to be in the background of Origen's refutation of determinism, all the more so in that Origen not only refuted Gnostic determinism (especially in its Valentinian form involving the different predestination of three classes of humans «by nature», which destroyed free will and responsibility), but precisely also Stoic determinism – just like Alexander – in his criticism of the Stoic notion of apokatastasis and of the whole cosmological and ethical conception that was attached to it.",
+      "translation_en": null,
+      "context": "p. 265: Ramelli identifies Origen's refutation of Valentinian Gnostic determinism (the three classes of humans 'by nature' that destroys free will) as paralleling Alexander's criticism of Stoic determinism. Footnote 87 cross-references Ramelli 2006 on Gnostic determinism.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_ramelli_agent"
+    },
+    "scholarly_argument_ramelli_origen_s_distinction_between_c_2": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf",
+      "publication_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori",
+      "page": "265-266",
+      "chapter": "Alexander's and Origen's Struggle Against Stoic Fatalistic Determinism",
+      "quote_verbatim": "There are two main differences between the Stoic theory of apokatastasis and Origen's Christian doctrine of apokatastasis. The first is that the Stoics posited an infinite series of aeons, whereas Origen postulated an end of all aeons, which coincides with apokatastasis itself. This will put an end to every time and every aeon. The second difference between Origen's doctrine of apokatastasis and the Stoic, deterministic one is the following: while the Stoics thought that in each aeon everything would happen, and the same people would behave, in the very same way (or almost) as in all the others, Origen thought of each aeon as different from all others, in that they are the theatre of the moral and spiritual development of rational creatures and their free choices.",
+      "translation_en": null,
+      "context": "p. 265-266: Direct verbatim of the two-part Origenian distinction between Christian and Stoic apokatastasis: (a) end vs. infinite series of aeons, (b) free-will-driven variation vs. identical repetition.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_ramelli_agent"
+    },
+    "scholarly_argument_ramelli_free_will_as_central_to_origen_4": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf",
+      "publication_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori",
+      "page": "266",
+      "chapter": "Alexander's and Origen's Struggle Against Stoic Fatalistic Determinism",
+      "quote_verbatim": "The point against determinism was really the gist of Origen's polemic against the Stoic notion of «periodic time». For example, in CC IV, 12 and 67-68, absolutely reliable passages preserved in their original Greek and not in translation, nor in fragments, Origen criticises the Stoic theory exactly because it denies human free will and responsibility (with the relevant above-mentioned argument of praise and blame): «If this is the case, our freedom of will is over. For, if during given cycles, out of necessity, the same things have happened, happen, and will happen... it is clear that out of necessity Socrates will always devote himself to philosophy, and will be accused of introducing new divinities and of corrupting youth; and that Anitus and Meletus will always be his accusers, and that the Areopagus judges will condemn him to death... If one accepts this idea, I do not quite know how our freedom will be saved and how praises and blames will possibly be justified.» (CC IV, 67-68.)",
+      "translation_en": null,
+      "context": "p. 266: Exact source of the CC IV, 67-68 quotation embedded in the KG argument description. Ramelli quotes Origen (in English translation) and identifies free will as 'really the gist of Origen's polemic against the Stoic notion of «periodic time»'.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_ramelli_agent"
+    },
+    "scholarly_argument_ramelli_origen_s_synthesis_of_philosop_6": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .pdf",
+      "publication_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori",
+      "page": "238",
+      "chapter": "SUMMARY",
+      "quote_verbatim": "It is very probable that Origen knew Alexander of Aphrodisias' works, which were read at the school of Plotinus, and drew inspiration from them… Both the presentation and the refutation of Stoic determinism are very similar in Alexander and Origen. The doctrine of God as Intellect and the whole characterisation of God in Alexander is remarkably similar to that which is found in Origen and is almost sure to have exerted some influence on him. The doctrine of the soul and its existence in a body and the doctrine of the Ideas also reveal impressive parallels in our two philosophers.",
+      "translation_en": null,
+      "context": "p. 238 (English SUMMARY): Ramelli's high-level statement of the synthesis thesis — that Origen integrated Platonic-Aristotelian anti-determinism (mediated via Alexander) with Christian theology, with parallels across determinism, God, soul, and Ideas.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_ramelli_agent"
+    }
+  }
+}

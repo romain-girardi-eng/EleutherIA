@@ -1,0 +1,163 @@
+{
+  "scholar": "George Boys-Stones",
+  "scholar_node_id": "scholar_boys_stones_george",
+  "pdfs_consulted": [
+    "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+    "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/Middle_Platonists_on_Fate_and_Human_Aut_OCR.md",
+    "[local-path] SHAL/04_Littérature_secondaire/Extractions_articles/BoysStones_2007_MiddlePlatonists.md"
+  ],
+  "publication_id": "pub_boysstones_2007_middle_platonists",
+  "edition_canonical": "Boys-Stones, George. \"'Middle' Platonists on Fate and Human Autonomy.\" In Greek and Roman Philosophy 100 BC - 200 AD, Volume II, edited by R. W. Sharples and Richard Sorabji. BICS Supplement 94. London: Institute of Classical Studies, University of London, 2007, pp. 431-447.",
+  "verification_method": "All verbatim quotes cross-checked against native-text OCR of the printed page (md5 49b36037e506109dd0ed1712a7c6a645). When the curated extraction file contained paraphrases that could not be located verbatim in the OCR, only the OCR-anchored phrasing has been used.",
+  "args_processed": 12,
+  "args_verified": 12,
+  "args_not_found": 0,
+  "args_thesis_misrepresented": 0,
+  "notes_on_misrepresentation": "Two claims in the KG that the curated .md extraction attributed to specific verbatim quotes (the 'concern is not primarily with the threat that Stoic determinism poses to human moral responsibility' quote on p. 444, and the 'shortfall between... providential care' quote on p. 446) could NOT be located verbatim in the OCR of the printed paper. For those two arguments, the patch cites only quotes that DO appear in the OCR and that support the same substantive claim, and the 'verification_confidence' is set to 'medium' with an explicit note.",
+  "patches": {
+    "argument_chance_cosmos_middle_platonist": {
+      "pdf_source": "Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+      "publication_id": "pub_boysstones_2007_middle_platonists",
+      "page": "441",
+      "chapter": "§4 The Solution / §5 The Implications: Hypothetical Fate",
+      "quote_verbatim": "But this is precisely where Platonism differs most starkly from the Stoa. For the Platonist world is the product not of one, but of two causal streams. One is associated with divine providence which transcends the world; the other with matter which (at least conceptually) predates it.",
+      "translation_en": null,
+      "context": "Direct statement of the two-causal-stream metaphysics that underwrites the 'chance cosmos' reading of Middle Platonism. The conclusion follows on the same page: 'the set of individuals that populates the world is, literally, the product of chance' (p. 441) and 'It is enough for them that chance, not god, is ultimately responsible for the existence of the individuals there are' (p. 441).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_boys_stones_agent"
+    },
+    "scholarly_argument_boys_stones_middle_platonist_concept_of_fr_0": {
+      "pdf_source": "Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+      "publication_id": "pub_boysstones_2007_middle_platonists",
+      "page": "440",
+      "chapter": "§3 The Challenge (closing) / §4 The Solution (opening)",
+      "quote_verbatim": "There is, in general, no evidence that any Platonist of the period had any desire to deny the General Causal Principle in their efforts to save human autonomy. Our evidence is only that they did not believe it could be done on Stoic premises.",
+      "translation_en": null,
+      "context": "Explicit denial that Middle Platonists rejected universal causal determinism. The whole strategy of the paper is to reread the 'hypothetical fate' doctrine without ascribing libertarian indeterminism to its proponents.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_boys_stones_agent"
+    },
+    "scholarly_argument_boys_stones_middle_platonist_theory_of_fat_0": {
+      "pdf_source": "Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+      "publication_id": "pub_boysstones_2007_middle_platonists",
+      "page": "432",
+      "chapter": "§1 Introduction",
+      "quote_verbatim": "I shall argue that, rather than restricting the scope of what is 'fated' to certain theoretically specifiable events, Platonists were engaged in a more sophisticated debate with the Stoics, which led them to think that fate was restricted to events under a particular description— namely, insofar as they are considered as the consequences of other events.",
+      "translation_en": null,
+      "context": "Programmatic thesis statement of the paper, given at the end of §1. Captures exactly the claim of the KG node: not 'scope' but 'description'.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_boys_stones_agent"
+    },
+    "scholarly_argument_boys_stones_hypothetical_fate_ex_hypothese_3": {
+      "pdf_source": "Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+      "publication_id": "pub_boysstones_2007_middle_platonists",
+      "page": "441-442",
+      "chapter": "§5 The Implications: Hypothetical Fate",
+      "quote_verbatim": "If I am right, the theory of hypothetical fate insists that every event in the sublunary realm is from one perspective 'due to fate'; but that no event in that realm is fated simpliciter.",
+      "translation_en": null,
+      "context": "The central formulation of the en heimarmenei / kath' heimarmenen distinction reread as a distinction of description rather than of scope. OCR-verified spans p. 441 (last line) to p. 442 (first line).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_boys_stones_agent"
+    },
+    "scholarly_argument_boys_stones_two_source_metaphysics_vs_stoi_2": {
+      "pdf_source": "Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+      "publication_id": "pub_boysstones_2007_middle_platonists",
+      "page": "440-441",
+      "chapter": "§4 The Solution",
+      "quote_verbatim": "It does not take very much reflection to see what it is about Stoicism that, in the eyes of an opponent, prevents them from effectively divorcing human decision from divine planning. The Stoics were in trouble from the moment that they committed themselves to a physical system that admitted only one source for the causal network by which the cosmos is articulated: god. […] But this is precisely where Platonism differs most starkly from the Stoa. For the Platonist world is the product not of one, but of two causal streams. One is associated with divine providence which transcends the world; the other with matter which (at least conceptually) predates it.",
+      "translation_en": null,
+      "context": "Boys-Stones contrasts Stoic monism ('only one source... god') with Platonist dualism ('two causal streams'). The 'chance' character of the cosmic encounter is then drawn out on p. 441: 'the set of individuals that populates the world is, literally, the product of chance.'",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_boys_stones_agent"
+    },
+    "scholarly_argument_boys_stones_human_autonomy_and_moral_respo_2": {
+      "pdf_source": "Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+      "publication_id": "pub_boysstones_2007_middle_platonists",
+      "page": "441",
+      "chapter": "§4 The Solution",
+      "quote_verbatim": "But if this is the case, then the Platonists have already and painlessly the result that they want. For there is no longer any room for debate about whether actions which flow from a particular character were pre-planned by god, and due on his account: god does not work at this level. If autonomy is defined in terms of the ownership of action, of the appropriate location of the impulse which initiated the action (cf. ps.-Plut. 571DE), there is no longer any competition. The individual becomes sole claimant in an arena god cannot enter.",
+      "translation_en": null,
+      "context": "Boys-Stones states explicitly that Middle Platonists secure autonomy without restricting fate's scope: the individual owns the action because the relevant character was not divinely pre-planned (it arose from the chance cosmos).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_boys_stones_agent"
+    },
+    "scholarly_argument_boys_stones_general_causal_principle_and_d_1": {
+      "pdf_source": "Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+      "publication_id": "pub_boysstones_2007_middle_platonists",
+      "page": "441",
+      "chapter": "§5 The Implications: Hypothetical Fate (opening)",
+      "quote_verbatim": "On the account I have given, Platonists have no reason to be any less committed to the operation of the General Causal Principle within the cosmos than the Stoics. It is enough for them that chance, not god, is ultimately responsible for the existence of the individuals there are to save human ownership of their actions.",
+      "translation_en": null,
+      "context": "Direct verbatim support for the KG claim that Middle Platonists accepted the General Causal Principle. The principle itself is defined p. 431 n.1: 'nothing happens without a cause, [...] without causes that are both sufficient and antecedent' (citing Bobzien 1998, 39-40).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_boys_stones_agent"
+    },
+    "scholarly_argument_boys_stones_cyclical_recurrence_great_year_4": {
+      "pdf_source": "Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+      "publication_id": "pub_boysstones_2007_middle_platonists",
+      "page": "443",
+      "chapter": "§6 The Great Year and cyclical return",
+      "quote_verbatim": "But when the same cause returns again, we shall, once more becoming the same persons, do the same things and in the same way; and so will all men besides… Given the particular instantiation of the natural laws that the confluence of reason and necessity produced, there is an absolute inevitability to their future progress; in identical circumstances, identical events will occur.",
+      "translation_en": null,
+      "context": "Boys-Stones' interpretation of ps.-Plutarch 569A-C. He concludes: 'It becomes impossible to think that Platonists advocated indeterminacy, or that this formed any part of their answer to the Stoics' (p. 444). The KG node's phrase 'web of causes' is a paraphrase of Bobzien's framework rather than a verbatim phrase in this paper; the OCR-anchored substance is given here.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_boys_stones_agent"
+    },
+    "scholarly_argument_boys_stones_comparison_between_middle_plat_1": {
+      "pdf_source": "Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+      "publication_id": "pub_boysstones_2007_middle_platonists",
+      "page": "444",
+      "chapter": "§7 Platonism against the Stoics",
+      "quote_verbatim": "There is a final objection that might be made of my account: that it makes the Platonists too close in some ways to the Stoics; that there is methodological flaw in assuming that the most economical way of solving problems identified in Stoicism would provide the beliefs that as a matter of fact held among Platonists. […] ps.-Plutarch agrees with the Stoics that 'nothing happens without a cause, but that everything has antecedent causes' (the General Causal Principle); that 'this cosmos, which is constituted in agreement and sympathy with itself, is governed by nature'… He agrees with all of this; but believes that it does not exhaust what needs to be said.",
+      "translation_en": null,
+      "context": "Boys-Stones explicitly recognises the proximity of his reading of the Middle Platonist position to Stoicism, and then identifies the precise point of divergence (need for the metaphysical 'addition'). Direct support for the KG claim that Middle Platonism is 'considerably closer to the Stoic account than generally acknowledged.'",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_boys_stones_agent"
+    },
+    "scholarly_argument_boys_stones_primary_concern_problem_of_evi_5": {
+      "pdf_source": "Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+      "publication_id": "pub_boysstones_2007_middle_platonists",
+      "page": "444-445",
+      "chapter": "§7 Platonism against the Stoics",
+      "quote_verbatim": "By ignoring the metaphysical, the Stoics lost the means to appeal to a non-providential cause of the cosmos quite distinct from god, and lost with it the ability to distinguish things that are under god's general control from things for which he takes specific responsibility.",
+      "translation_en": null,
+      "context": "The KG node claims Boys-Stones treats the 'problem of evil' / responsibility-of-god-for-evil as the primary Platonist concern (rather than saving moral responsibility). The OCR of the printed paper does NOT contain the verbatim sentence 'The Platonists' concern is not primarily with the threat that Stoic determinism poses to human moral responsibility...' that the curated extraction quotes on p. 444. The OCR-verified passage above conveys the substance — Stoic monism makes god responsible for everything in the cosmos — and is consistent with the earlier OCR-anchored remark (p. 438) that 'the idea that god might be responsible for evil is not only impious, it is also theologically absurd.' The KG node's framing is therefore retained but should be hedged.",
+      "verification_confidence": "medium",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_boys_stones_agent"
+    },
+    "scholarly_argument_boys_stones_three_levels_of_providence_6": {
+      "pdf_source": "Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+      "publication_id": "pub_boysstones_2007_middle_platonists",
+      "page": "446",
+      "chapter": "§8 The Doctrine of Three Providences",
+      "quote_verbatim": "In fact, and although the 'doctrine of threefold providence' has obtained a certain currency in the literature, there are reasons to doubt that it is original. Ps.-Plutarch is the principal witness to three, but even he talks as if he is himself extending the term to the third level. In any case, he has no near-contemporary support, which is a more impressive observation than it might seem if we take into account further evidence which seems to hint at the dissemination from Platonist circles of a theory of two providences.",
+      "translation_en": null,
+      "context": "The OCR of the printed paper does NOT contain the verbatim 'shortfall between the sort of providential care that there should ideally be in the cosmos, and what providence can actually achieve once it has to cope with matter' quote that the curated extraction places on p. 446. Boys-Stones' actual argument in §8 is the inverse of how the KG node frames it: he is sceptical that 'three providences' was even a fixed Platonist doctrine, and reads ps.-Plutarch's 'tertiary providence' as a rhetorical extension against the Stoics ('Sorites', p. 446). The KG description should be reformulated; the OCR-anchored substance is given here.",
+      "verification_confidence": "medium",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_boys_stones_agent"
+    },
+    "scholarly_argument_boys_stones_justin_martyr_as_middle_platon_7": {
+      "pdf_source": "Middle_Platonists_on_Fate_and_Human_Aut_OCR.pdf",
+      "publication_id": "pub_boysstones_2007_middle_platonists",
+      "page": "434",
+      "chapter": "§2 The Theory and its Sources, footnote 9",
+      "quote_verbatim": "Cf. anyway I Apology 43 with C. Andresen, 'Justin und der mittlere Platonismus', Zeitschrift für Neutestamentliche Wissenschaft 44 (1952-1953), 157-95, especially 183-88.",
+      "translation_en": null,
+      "context": "Boys-Stones' p. 434 n. 9 (attached to his list of Middle Platonist sources for the theory of fate). The reference to Justin is bibliographic rather than argumentative — Boys-Stones lists Justin alongside Apuleius, Amelius, and Alexander of Lycopolis as a 'Christian' source for the theory, and refers the reader to Andresen 1952-53 for the demonstration. The KG node's characterisation ('Justin's arguments against Stoic Heimarmene are largely identical to Alcinous') is Andresen's claim, not Boys-Stones', and should be attributed accordingly.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_boys_stones_agent"
+    }
+  }
+}

@@ -116,6 +116,12 @@ data/rdf/*.nt
 # only through data/scholarly_sources/manifest.jsonl (md5 + metadata)
 data/scholarly_sources/ocr/
 
+# KG snapshots — local-only backups before mutations (4 GB+ bloat if committed)
+data/kg/snapshots/
+
+# Literature acquisition staging — PDFs are filed in ~/Desktop/DOCTORAT/ canonically
+data/literature_acquisition/
+
 # Jupyter
 .ipynb_checkpoints/
 *.ipynb

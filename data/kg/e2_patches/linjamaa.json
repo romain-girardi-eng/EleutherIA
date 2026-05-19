@@ -1,0 +1,103 @@
+{
+  "scholar": "Paul Linjamaa",
+  "scholar_node_id": "scholar_linjamaa_p",
+  "pdfs_consulted": [
+    "[local-path] SHAL/04_Littérature_secondaire/06_Patristique/[Nag Hammadi and Manichaean Studies, 95] Paul Linjamaa - The Ethics of The Tripartite Tractate (NHC I, 5). A Study of Determinism and Early Christian Philosophy of Ethics (2019, Brill) - libgen.li.pdf"
+  ],
+  "publication_id": "scholarly_work_linjamaa_2019_the_ethics_of_the_tripartite_tractate_nh",
+  "args_processed": 7,
+  "args_verified_high": 7,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "verified_by": "e2_linjamaa_agent",
+  "verified_at": "2026-05-19",
+  "notes": "All quotes verbatim from native-text extraction of the PDF (md5 38f2e3a8937b4ab127d554127c506086, 336 pages). Printed book page numbers visible in running headers (e.g. 'Chapter 7' / 'Honor and Attitudes toward Social and Political Involvement 241'). Page numbers below refer to the printed book pagination, not the PDF page index.",
+  "patches": {
+    "scholarly_argument_linjamaa_determinism_in_the_tripartite__0": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/06_Patristique/[Nag Hammadi and Manichaean Studies, 95] Paul Linjamaa - The Ethics of The Tripartite Tractate (NHC I, 5). A Study of Determinism and Early Christian Philosophy of Ethics (2019, Brill) - libgen.li.pdf",
+      "publication_id": "scholarly_work_linjamaa_2019_the_ethics_of_the_tripartite_tractate_nh",
+      "page": "259",
+      "chapter": "Chapter 7 — Summary: the Nature of Early Christian Determinism",
+      "quote_verbatim": "One chief aim of the study as a whole, apart from exploring the ethics of the text, has been to elucidate the workings of early Christian determinism, and to highlight that it did not entail the simple denial of human choice. The first part of the study was devoted to investigating the mechanism and theoretical framework of TriTrac's ethics. How could a fixed anthropological system have been used to legitimize ethical discussion?",
+      "translation_en": null,
+      "context": "Opening of the conclusion chapter. Linjamaa explicitly programmes the book around the claim that TriTrac's determinism is pedagogical/soteriological rather than morally nihilistic — confirming the argument node's wording almost verbatim.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_linjamaa_agent"
+    },
+    "scholarly_argument_linjamaa_free_will_and_moral_accountabi_1": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/06_Patristique/[Nag Hammadi and Manichaean Studies, 95] Paul Linjamaa - The Ethics of The Tripartite Tractate (NHC I, 5). A Study of Determinism and Early Christian Philosophy of Ethics (2019, Brill) - libgen.li.pdf",
+      "publication_id": "scholarly_work_linjamaa_2019_the_ethics_of_the_tripartite_tractate_nh",
+      "page": "260",
+      "chapter": "Chapter 7 — Summary: the Nature of Early Christian Determinism",
+      "quote_verbatim": "In common with other Christian theologians, the text utilizes the Stoic notion of assent (συγκατάθεσις). The human mind creates mental images by being exposed to different impressions; the impressions that people create for themselves and consequently act upon depend on the constitution of each mind. However, in TriTrac the human mind is not in the possession of self-determination, a technical term used in ancient thought for free will. The will of self-determination is restricted to the highest realm, and the Aeons in the Pleroma are the only beings described as possessing this characteristic. […] Rather, proairesis is the faculty that defines a human's moral worth, that decides whether a person can assent to the appearance of the Savior or not.",
+      "translation_en": null,
+      "context": "Linjamaa explicitly grounds TriTrac's psychology of will in Stoic technical vocabulary (synkatathesis, prohairesis, autexousion) while restricting free will (autexousion) to the Pleroma — exactly the claim recorded in the argument node. Section 3.4–3.5 of Chapter 3 (pp. 133–144) develops the same point with the Coptic terminology (ⲡⲓⲟⲩⲱϣⲉ ⲛ̄ⲛⲁⲩⲧⲉⲝⲟⲩⲥⲓⲟⲥ).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_linjamaa_agent"
+    },
+    "scholarly_argument_linjamaa_stoic_influence_on_valentinian_2": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/06_Patristique/[Nag Hammadi and Manichaean Studies, 95] Paul Linjamaa - The Ethics of The Tripartite Tractate (NHC I, 5). A Study of Determinism and Early Christian Philosophy of Ethics (2019, Brill) - libgen.li.pdf",
+      "publication_id": "scholarly_work_linjamaa_2019_the_ethics_of_the_tripartite_tractate_nh",
+      "page": "263",
+      "chapter": "Chapter 7 — Summary: the Nature of Early Christian Determinism",
+      "quote_verbatim": "The first part of this study reveals the many similarities between TriTrac's cognitive theory, view of emotions, and notion of the nature of human choice, and popular Stoicism, which could explain why some scholars today have thought that the church fathers' critique of Valentinian determinism was a repetition of the older critique of the Stoics. […] The ethics of TriTrac is thoroughly indebted to many philosophical traditions, Stoicism in particular.",
+      "translation_en": null,
+      "context": "Linjamaa explicitly states the Stoic indebtedness of TriTrac's cognitive theory of emotions, theory of choice, and ethical terminology. The point is developed in detail in Ch. 2 §6 'Apatheia, Therapeia, and Eleutheria' (pp. 103–107) where TriTrac's ⲧⲙⲛ̄ⲧⲁⲧⲡⲁⲑⲟⲥ (apatheia, 116:33), ⲧⲗϭⲟ / ⲣ̄ⲑⲉⲣⲁⲡⲉⲩⲉ (therapeia) and ⲙⲛ̄ⲧⲣⲙ̄ϩⲉ (eleutheria) are read against Chrysippus, Seneca and Cicero, and in Ch. 3 §3.5 'Proairesis, Assent, and Opinion in Stoicism and TriTrac' (pp. 135–144).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_linjamaa_agent"
+    },
+    "scholarly_argument_linjamaa_three_classes_of_humans_and_re_3": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/06_Patristique/[Nag Hammadi and Manichaean Studies, 95] Paul Linjamaa - The Ethics of The Tripartite Tractate (NHC I, 5). A Study of Determinism and Early Christian Philosophy of Ethics (2019, Brill) - libgen.li.pdf",
+      "publication_id": "scholarly_work_linjamaa_2019_the_ethics_of_the_tripartite_tractate_nh",
+      "page": "173",
+      "chapter": "Chapter 4 §4 — Restricted Choice in Practice",
+      "quote_verbatim": "As argued in Chapter 3, TriTrac rejects the doctrine of free will. Resembling how Stoics understood free will, TriTrac maintains that it is only viable for perfect beings. Contrary to the Stoics, however, TriTrac denies free will (αὐτεξούσιον) in the world and restricts it to the Pleroma where there does not exist any matter, impressions, or passions. In TriTrac it is one's proairesis, one's faculty of choice (ⲧⲡⲣⲟⲁⲓⲣⲉⲥⲓⲥ), which determines the ability to assent to the Savior, which also determines a person's moral worth. […] Material people are lost while pneumatics have a naturally good proairesis and assent to the Savior immediately. The psychics, however, need assistance.",
+      "translation_en": null,
+      "context": "Opening of §4 'Restricted Choice in Practice' (Ch. 4, pp. 173–179). Linjamaa establishes the threefold anthropology with restricted moral progress for psychics (TriTrac 131:22–34 quoted) and exclusion of hylics from salvation (TriTrac 119:18–19: ⲡⲓϩⲩⲗⲓⲕⲟⲛ ⲛ̄ⲇⲉ ϥⲛⲁϫⲓ̣ ⲡⲧⲉⲕⲟ ⲕⲁⲧⲁ ⲣⲏⲧⲉ ⲛⲓⲙ — 'the material (class) will receive destruction in every way'). The 'fixed anthropology' framing is developed further in §5 'Fixed, Fluid, or in Flux? The Advantages of a Fixed Anthropology' (pp. 179–184).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_linjamaa_agent"
+    },
+    "scholarly_argument_linjamaa_cosmos_as_school_and_community_4": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/06_Patristique/[Nag Hammadi and Manichaean Studies, 95] Paul Linjamaa - The Ethics of The Tripartite Tractate (NHC I, 5). A Study of Determinism and Early Christian Philosophy of Ethics (2019, Brill) - libgen.li.pdf",
+      "publication_id": "scholarly_work_linjamaa_2019_the_ethics_of_the_tripartite_tractate_nh",
+      "page": "198",
+      "chapter": "Chapter 5 §4 — The Cosmic School: an Imperfect Reflection of the Heavens",
+      "quote_verbatim": "In TriTrac, the cosmos is described as 'a place of receiving teaching' (ⲟⲩⲙⲁ ⲛ̄ϫⲓⲥⲃⲱ) (123:12), of gaining form, and we read that the Savior came down to earth because people 'need teaching' (ⲉⲧⲣ̄ ⲭⲣⲉⲓⲁ ⲛ̄ⲥⲃⲟⲩ) (116:17–20). Let us look at the description of creation again, but this time from the perspective of the concept 'form', which was so central for gaining knowledge of God in the school of conduct of the Pleroma. […] The cosmic school in this way provides the inhabitants with form, similarly to the school of conduct of the Pleroma; however, there are also important differences. There is no material or psychic substance in the Pleroma, and thus the larger community on earth cannot be a pure reflection of the heavens; this is why the term 'church' is restricted to the pneumatics.",
+      "translation_en": null,
+      "context": "Ch. 5 §3 'The School of Conduct in the Pleroma and the Gaining of Form' (pp. 194–198) introduces the Coptic ⲟⲩⲁⲛⲥⲏⲃ· ⲙ̄ⲡⲟ[ⲗ]ⲓ̣ⲧⲓⲁ (71:22–23) translated 'school of conduct'. §4 (pp. 198–202) then identifies the cosmos itself as an imperfect cosmic 'school'. The 'dual structure' claim is then explicitly stated in §8 'Conclusions: the Dual Structure of the Community behind TriTrac' (pp. 220–225), where Linjamaa argues that TriTrac reflects a dual community (church + study group of pneumatic 'moral experts').",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_linjamaa_agent"
+    },
+    "scholarly_argument_linjamaa_social_and_political_involveme_5": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/06_Patristique/[Nag Hammadi and Manichaean Studies, 95] Paul Linjamaa - The Ethics of The Tripartite Tractate (NHC I, 5). A Study of Determinism and Early Christian Philosophy of Ethics (2019, Brill) - libgen.li.pdf",
+      "publication_id": "scholarly_work_linjamaa_2019_the_ethics_of_the_tripartite_tractate_nh",
+      "page": "240",
+      "chapter": "Chapter 6 §4 — Psychic Humans and Their Political Involvement",
+      "quote_verbatim": "TriTrac makes clear that the different cosmic powers have different abilities that make them suitable for specific positions of authority. Lust for command, love of honor, as well as glory, envy, and jealousy are all aptitudes attached to the different levels of worldly governance. The Logos structured the cosmos to benefit 'those who need education and teaching and formation' (ⲛⲉⲧⲣ̄ ⲭⲣⲓⲁ ⲛ̄ⲛⲟⲩⲥⲁⲛⲉϣ ⲙⲛ̄ⲛ ⲟⲩⲥⲃⲱ ⲙⲛ̄ ϯⲙⲟⲣⲫⲏ) (104:21–23). The cosmos is created for the benefit of humanity and the powers that needed instruction.",
+      "translation_en": null,
+      "context": "Ch. 6 §4 (pp. 240–246) develops the claim that psychic Christians are expected to retain their positions of earthly power and 'pursue honor in conventional ways', while §2 'Cosmogony as Political Commentary' (pp. 234–238) reads the cosmogony as commentary on political structures (the visible world's hierarchy reflects the fallen Logos' system of 'lust for command' (ⲙⲛ̄ⲧⲙⲁⲉⲓⲟⲩⲉϩ ⲥⲁϩⲛⲉ), with TriTrac 80:5–9; 100:7–18 cited). The summary statement of this same argument is at p. 262: 'TriTrac maintains that the psychics should retain their positions of earthly power and start working for the benefit of the pneumatics.'",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_linjamaa_agent"
+    },
+    "scholarly_argument_linjamaa_determinism_and_the_bad_reputa_6": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/06_Patristique/[Nag Hammadi and Manichaean Studies, 95] Paul Linjamaa - The Ethics of The Tripartite Tractate (NHC I, 5). A Study of Determinism and Early Christian Philosophy of Ethics (2019, Brill) - libgen.li.pdf",
+      "publication_id": "scholarly_work_linjamaa_2019_the_ethics_of_the_tripartite_tractate_nh",
+      "page": "263",
+      "chapter": "Chapter 7 — Summary: the Nature of Early Christian Determinism",
+      "quote_verbatim": "The aim of this study, as stated above, has partly been to show what ancient Christian determinism—a topic omitted by many scholars while others have recently presented it as heresiological invention—could have looked like. Irenaeus, Clement, and Origen might have been familiar with Stoicism and a lot of the criticism leveled by them at Valentinians resembled the accusations directed at Stoics: that determinism destroyed moral choice and thus also accountability and the interest in moral improvement. […] As this study has made clear, however, early Christian determinism was not the invention of heresiologists, at least if we take TriTrac as an example of the notions the church fathers opposed.",
+      "translation_en": null,
+      "context": "The titular 'bad reputation of determinism' is the explicit title of Introduction §5 (Ch. Introduction, pp. 35–40), where Linjamaa programmatically frames the modern scholarly construct: ancient determinism has been treated as ethically disabling, but TriTrac shows it was used as 'a structured, hierarchical moral pedagogy'. The recapitulation at p. 263 (quoted above) confirms the argument node's exact framing: the 'bad reputation' is challenged via TriTrac's pedagogical fixed anthropology.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_linjamaa_agent"
+    }
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "scholar": "Henri Crouzel",
+  "scholar_node_id": "scholar_crouzel_henri",
+  "pdfs_consulted": [
+    "[local-path] SHAL/04_Littérature_secondaire/05_Origene/Origene et la philosophie -- Henri Crouzel -- 1962 -- 5a6af4185d50873d0876684de1e77087 -- Anna's Archive.pdf",
+    "[local-path] SHAL/04_Littérature_secondaire/05_Origene/(Théologie 34) Henri Crouzel - Théologie de l'image de Dieu chez Origène-Aubier (1956).pdf",
+    "[local-path] SHAL/04_Littérature_secondaire/10_Ouvrages_reference/(Sources Chrétiennes 268) Origène - Traité des principes, Livres III et IV, tome III-Cerf (1980).pdf"
+  ],
+  "args_processed": 15,
+  "args_verified": 14,
+  "args_not_found": 1,
+  "patches": {
+    "scholarly_argument_crouzel_christ_s_redemption_of_free_wi_2": {
+      "pdf_source": "Crouzel 1956 - Théologie de l'image de Dieu chez Origène, Aubier (Théologie 34)",
+      "publication_id": "scholarly_work_crouzel_1956_theologie_image",
+      "page": "211 (PDF p. 103)",
+      "chapter": "Ch. — La participation à l'image et le péché, § 5 : Comment se fait la restauration du selon-l'image ?",
+      "quote_fr": "Le Christ seul donne à l'homme le moyen de se défaire des images diaboliques et bestiales, pour retrouver en lui sa participation à l'image de Dieu. […] La conversion de l'image du diable à celle de Dieu exige donc en plus de l'action prévenante du Christ la collaboration du pécheur, puisque nous devons nous conformer à sa mort en renonçant au péché.",
+      "translation_en": "Christ alone gives man the means of stripping off the diabolic and bestial images, in order to recover within himself his participation in the image of God. […] Conversion from the image of the devil to that of God therefore requires, in addition to Christ's prevenient action, the cooperation of the sinner, since we must conform ourselves to his death by renouncing sin.",
+      "context": "Crouzel argues that, against Pelagianism, the will and persistence of the selon-l'image depend on Christ's redemptive action; human collaboration is necessary but not sufficient.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_free_will_and_determinism_in_o_0": {
+      "pdf_source": "Crouzel 1956 - Théologie de l'image de Dieu chez Origène, Aubier (Théologie 34)",
+      "publication_id": "scholarly_work_crouzel_1956_theologie_image",
+      "page": "10-11 (PDF p. 3, Préface)",
+      "chapter": "Préface",
+      "quote_fr": "Quand on juge la théologie d'Origène il ne faut pas oublier qu'elle ne se sépare pas de sa doctrine ascétique et mystique […]. Origène considère la philosophie comme une chose périmée, destinée à servir la « divine philosophie » du christianisme […] l'Alexandrin n'a pas l'idée d'une philosophie chrétienne, basée sur la raison et non sur la révélation, telle qu'on la concevra à la suite du Moyen Âge.",
+      "translation_en": "When judging Origen's theology one must not forget that it cannot be separated from his ascetic and mystical doctrine […]. Origen regards philosophy as something outdated, destined to serve the 'divine philosophy' of Christianity […]; the Alexandrian has no notion of a Christian philosophy based on reason rather than on revelation, as will be conceived in the wake of the Middle Ages.",
+      "context": "Crouzel programmatic statement against reading Origen as a 'Christian philosopher' in the modern sense.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_free_will_libre_arbitre_in_ori_1": {
+      "pdf_source": "Crouzel 1956 - Théologie de l'image de Dieu chez Origène, Aubier (Théologie 34)",
+      "publication_id": "scholarly_work_crouzel_1956_theologie_image",
+      "page": "172 (PDF p. 84)",
+      "chapter": "Ch. — Participation de l'homme à l'image de Dieu",
+      "quote_fr": "L'essence de l'homme n'est pas pour Origène, comme on l'a dit parfois, le libre arbitre, la liberté-choix. L'insistance de notre docteur à ce sujet s'explique par la place que prend dans son œuvre la polémique antignostique, mais on trouve chez lui une conception plus profonde et plus réelle de la liberté.",
+      "translation_en": "For Origen, the essence of man is not — as has sometimes been said — free will, freedom of choice. The insistence of our doctor on this subject is explained by the place that anti-gnostic polemic occupies in his work; but in him one finds a deeper and more real conception of freedom.",
+      "context": "Crouzel locates the central role of libre arbitre in Origen's anti-gnostic polemic against the gnostics' denial of free will.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_hierarchy_of_philosophical_sch_5": {
+      "pdf_source": "Crouzel 1962 - Origène et la philosophie, Aubier (Théologie)",
+      "publication_id": "scholarly_work_crouzel_1962_origene_philosophie",
+      "page": "27 (PDF p. 28)",
+      "chapter": "Ch. I — Qu'y a-t-il de commun entre Abimélech et Isaac ? La critique des doctrines philosophiques",
+      "quote_fr": "Un autre passage du même livre donne l'ordre des préférences philosophiques d'Origène en matière d'écoles en commençant par le pire […]. En tête marchent Épicure et les siens, négateurs de la Providence, partisans du plaisir. Viennent ensuite les Péripatéticiens, eux aussi négateurs de la Providence, supprimant toute relation entre homme et Dieu. En troisième lieu les Stoïciens et leur dieu matériel, corruptible et changeant. Enfin ceux qui professent « la stupidité de la métensomatose », Les Pythagoriciens sont ici directement visés […]. Mais les Platoniciens sont aussi atteints.",
+      "translation_en": "Another passage of the same book gives Origen's order of philosophical preferences among the schools, beginning with the worst […]. At the head march Epicurus and his followers, deniers of Providence, partisans of pleasure. Then come the Peripatetics, likewise deniers of Providence, suppressing every relation between man and God. In third place the Stoics, with their material, corruptible and changeable god. Finally those who profess 'the stupidity of metensomatosis', i.e. the Pythagoreans […]. But the Platonists are also affected.",
+      "context": "Crouzel's reconstruction of Origen's ranking of schools from Contra Celsum III.75 — used by KG to support hierarchy_of_philosophical_schools.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_manuscript_tradition_and_textu_1": {
+      "pdf_source": "Crouzel 1956 - Théologie de l'image de Dieu chez Origène (Préface) + Crouzel 1962 - Origène et la philosophie",
+      "publication_id": "scholarly_work_crouzel_1956_theologie_image",
+      "page": "11 (1956, PDF p. 3) ; cf. p. 12 (1962, PDF p. 13)",
+      "chapter": "Préface (1956) ; Introduction (1962)",
+      "quote_fr": "[1956, Préface] Alors que ces derniers accumulent leurs sévérités sur la version de Rufin, ils ne font pas la moindre tentative critique contre les fragments de saint Jérôme et de Justinien, et ils les acceptent tels quels par un véritable acte de foi qu'ils ne songent même pas à motiver. [1962, p. 12] Ne parlons pas non plus de la distinction élémentaire entre la doctrine propre de l'Alexandrin et l' « origénisme » postérieur […] : l'édition du Peri Archon par P. Koetschau est un bon exemple de ce défaut de discernement.",
+      "translation_en": "[1956, Preface] While these scholars heap their strictures upon Rufinus' version, they do not make the slightest critical attempt against the fragments of Jerome and Justinian, accepting them as such by a veritable act of faith that they do not even think to justify. [1962, p. 12] Let us not even speak of the elementary distinction between the proper doctrine of the Alexandrian and the later 'Origenism' […]: Koetschau's edition of the Peri Archon is a good example of this lack of discernment.",
+      "context": "Crouzel's textual-criticism argument: Koetschau (GCS) systematically privileges hostile patristic fragments (Jerome, Justinian) over Rufinus' Latin, importing later 'Origenism' into the supposed text of Origen. The precise claim that Koetschau prefers a 'lectio facilior' is paraphrastic; the substantive critique (Koetschau confuses Origen with later Origenism via the hostile fragments) is verbatim attested.",
+      "verification_confidence": "medium",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_methodological_approach_to_ori_1": {
+      "pdf_source": "Crouzel 1956 - Théologie de l'image de Dieu chez Origène, Aubier (Théologie 34)",
+      "publication_id": "scholarly_work_crouzel_1956_theologie_image",
+      "page": "10 (PDF p. 3)",
+      "chapter": "Préface",
+      "quote_fr": "La théologie n'est pas voulue pour elle-même, elle est en quelque sorte contenue dans sa doctrine spirituelle : jamais il ne perd de vue le progrès de son lecteur ou de son auditeur, ni son accession à la contemplation intuitive de « mystères » qui dépassent toute expression humaine. Ce qu'il en dit ne forme pas en quelque sorte dans sa pensée un corps de doctrine achevé, mais a pour but de fournir à l'intelligence l'occasion de monter jusqu'à la vision des « vérités » divines.",
+      "translation_en": "Theology is not willed for itself; it is in some way contained in his spiritual doctrine: he never loses sight of the progress of his reader or hearer, nor of his rise to the intuitive contemplation of 'mysteries' which surpass all human expression. What he says of it does not form, as it were, a finished body of doctrine in his thought, but is meant to furnish the intelligence with the occasion to ascend to the vision of divine 'truths'.",
+      "context": "Crouzel's methodological thesis: Origen's theology is inseparable from his ascetic-mystical doctrine and is not a closed system, but an invitation to intuitive vision.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_origen_s_conception_of_human_f_0": {
+      "pdf_source": "Crouzel 1956 - Théologie de l'image de Dieu chez Origène, Aubier (Théologie 34)",
+      "publication_id": "scholarly_work_crouzel_1956_theologie_image",
+      "page": "173 (PDF p. 84) and 174 (PDF p. 85)",
+      "chapter": "Ch. — La création de l'homme selon l'image de Dieu",
+      "quote_fr": "Le but de la liberté humaine est cette adhésion d'amour, et en elle l'essence de l'homme s'achève. […] Cette conception de la liberté comme adhésion au bien, et non simplement comme libre arbitre, n'a pas été fréquemment aperçue chez Origène. […] Autre restriction nécessaire à cette omnipotence du libre arbitre qu'on prête souvent à Origène. Seul le Christ, notre Isaac, a le pouvoir de déblayer les puits de notre âme.",
+      "translation_en": "The end of human freedom is this loving adherence, and in it the essence of man is fulfilled. […] This conception of freedom as adherence to the good, and not simply as free will, has not often been perceived in Origen. […] Another necessary restriction on that 'omnipotence of free will' which is often attributed to Origen. Christ alone, our Isaac, has the power to clear out the wells of our soul.",
+      "context": "Crouzel's central reinterpretation: Origen's freedom is adhesio amoris to the Good, modelled on Christ's soul united inseparably to the Logos — not the libertarian 'omnipotence of free will' commonly ascribed to him.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_origen_s_relationship_to_greek_0": {
+      "pdf_source": "Crouzel 1956 - Théologie de l'image de Dieu chez Origène, Aubier (Théologie 34)",
+      "publication_id": "scholarly_work_crouzel_1956_theologie_image",
+      "page": "10 (PDF p. 3)",
+      "chapter": "Préface",
+      "quote_fr": "En dépit de la représentation qu'ont donné de l'Alexandrin E. de Faye et Hal Koch, Origène n'a jamais voulu être un philosophe et ne l'a jamais été. […] Origène considère la philosophie comme une chose périmée, destinée à servir la « divine philosophie » du christianisme, et à s'effacer devant elle comme les étoiles s'éteignent quand paraît le soleil.",
+      "translation_en": "In spite of the picture given of the Alexandrian by E. de Faye and Hal Koch, Origen never wanted to be a philosopher and never was one. […] Origen regards philosophy as something outdated, destined to serve the 'divine philosophy' of Christianity and to fade before it as the stars are extinguished when the sun appears.",
+      "context": "The canonical Crouzelian formulation of Origen's stance toward Greek philosophy.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_pauline_background_for_christi_4": {
+      "pdf_source": "Crouzel 1962 - Origène et la philosophie, Aubier (Théologie)",
+      "publication_id": "scholarly_work_crouzel_1962_origene_philosophie",
+      "page": "167 (PDF p. 168)",
+      "chapter": "Conclusion — Origène et la philosophie païenne",
+      "quote_fr": "Selon saint Paul les païens ont eu de Dieu une connaissance authentique, Dieu s'étant, d'une certaine façon, révélé à eux : et ils ont reçu dans leur nature même la loi morale [note 2 : Rom. I, 18 sq., II, 14 sq.]. Dans la Première Épître aux Corinthiens, il semble surtout préoccupé de marquer les distances entre la sagesse du monde et la sagesse de Dieu, pour empêcher ses correspondants de se laisser détourner de la vraie doctrine du Christ.",
+      "translation_en": "According to Saint Paul, the pagans had an authentic knowledge of God — God having, in a certain way, revealed himself to them — and they received the moral law in their very nature [note: Rom. 1:18ff., 2:14ff.]. In the First Epistle to the Corinthians he seems above all concerned to mark the distance between the wisdom of the world and the wisdom of God, in order to prevent his correspondents from being turned away from the true doctrine of Christ.",
+      "context": "Crouzel's Pauline framework for the patristic reception of Greek philosophy — the conceptual prologue to his survey of Justin, Tatian, Tertullian, Clement, and Origen.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_platonism_and_free_will_2": {
+      "pdf_source": "Crouzel 1962 - Origène et la philosophie, Aubier (Théologie)",
+      "publication_id": "scholarly_work_crouzel_1962_origene_philosophie",
+      "page": "27 (PDF p. 28) and 215 (PDF p. 216)",
+      "chapter": "Ch. I — La critique des doctrines philosophiques ; Appendice — Origène est-il un systématique ?",
+      "quote_fr": "[p. 27] Mais les doctrines qui font monter l'âme des réalités d'ici-bas jusqu'à la béatitude qui l'attend près de Dieu, dans ce qu'on nomme son royaume, celles qui enseignent à mépriser comme transitoire le sensible et le visible […] (la Parole divine) les appelle « Sagesse de Dieu ». Tel est surtout le platonisme. [p. 215] C'est la représentation platonicienne d'un univers à deux plans […]. Dans cette perspective, empruntée au platonisme, s'intègre harmonieusement la structure sacramentelle […]. Elle domine l'exégèse d'Origène, sa mystique, sa théorie de la connaissance, toute son ascèse et sa morale.",
+      "translation_en": "[p. 27] But the doctrines that lift the soul from the realities here below to the beatitude that awaits it near God, in what is called his kingdom — those that teach contempt for the sensible and visible as transitory […] — (the divine Word) calls 'Wisdom of God'. Such, above all, is Platonism. [p. 215] It is the Platonic representation of a universe with two levels […]. Into this perspective, borrowed from Platonism, the sacramental structure is harmoniously integrated […]. It dominates Origen's exegesis, his mysticism, his theory of knowledge, his entire asceticism and his morality.",
+      "context": "Twofold attestation: Platonism is Origen's preferred school for its anagogical movement, and it dominates the whole structure of his thought (including his conception of libre arbitre).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_relation_between_christianity__2": {
+      "pdf_source": "Crouzel 1956 - Théologie de l'image de Dieu chez Origène, Aubier (Théologie 34)",
+      "publication_id": "scholarly_work_crouzel_1956_theologie_image",
+      "page": "10 (PDF p. 3)",
+      "chapter": "Préface",
+      "quote_fr": "Origène considère la philosophie comme une chose périmée, destinée à servir la « divine philosophie » du christianisme, et à s'effacer devant elle comme les étoiles s'éteignent quand paraît le soleil : l'Alexandrin n'a pas l'idée d'une philosophie chrétienne, basée sur la raison et non sur la révélation, telle qu'on la concevra à la suite du Moyen Âge.",
+      "translation_en": "Origen regards philosophy as something outdated, destined to serve the 'divine philosophy' of Christianity, and to fade before it as the stars are extinguished when the sun appears: the Alexandrian has no notion of a Christian philosophy based on reason rather than on revelation, as it will be conceived in the wake of the Middle Ages.",
+      "context": "Same locus as the 'Greek philosophy' argument — Crouzel's matrix statement on the Christianity-philosophy relation.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_spiritual_progress_from_image__3": {
+      "pdf_source": "Crouzel 1956 - Théologie de l'image de Dieu chez Origène, Aubier (Théologie 34)",
+      "publication_id": "scholarly_work_crouzel_1956_theologie_image",
+      "page": "208-209 (PDF p. 102) and 213 (PDF p. 104)",
+      "chapter": "Ch. — La participation à l'image et le péché",
+      "quote_fr": "[p. 208-209] Cependant l'image du diable ou les images bestiales la recouvrent et la cachent. […] Alors l'image de Dieu, qui restait toujours présente au fond de son être spirituel, réapparaît, et le contact est rétabli entre lui et le Verbe : il est de nouveau un logikon. [p. 213] Contemplons donc toujours cette Image de Dieu, pour pouvoir être transformés à sa ressemblance […]. Paul persécutait cette même Image de Dieu : mais, dès qu'il en put contempler l'éclat et la beauté, il fut si fortement transformé à sa ressemblance, qu'il pouvait dire : Cherchez-vous une preuve de celui qui parle en moi, le Christ ?",
+      "translation_en": "[pp. 208-209] However the image of the devil or the bestial images cover it over and conceal it. […] Then the image of God, which had always remained present at the depth of his spiritual being, reappears, and the contact is re-established between him and the Word: he is once again a logikon. [p. 213] Let us therefore always contemplate this Image of God, that we may be transformed into his likeness […]. Paul persecuted this same Image of God; but once he was able to contemplate its splendour and beauty, he was so powerfully transformed into its likeness that he could say: Do you seek a proof of him who speaks in me, Christ?",
+      "context": "Crouzel's image → likeness progression: sin overlays bestial/diabolical images; contemplation, penance and the Holy Spirit allow the latent selon-l'image to re-emerge and be perfected.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_status_of_peri_archon_6": {
+      "pdf_source": "Crouzel 1962 - Origène et la philosophie, Aubier (Théologie)",
+      "publication_id": "scholarly_work_crouzel_1962_origene_philosophie",
+      "page": "13 (PDF p. 14)",
+      "chapter": "Introduction",
+      "quote_fr": "La pensée d'Origène, constamment antithétique, même dans le Peri Archon, ne fournit guère, quand on l'étudie dans son ensemble, les éléments d'un système, à moins de la mutiler arbitrairement. Il faut enfin se garder de majorer la place des éléments grecs dans l'œuvre d'Origène et ne pas oublier que, si important qu'il soit, le Peri Archon est encore, somme toute, une œuvre de jeunesse.",
+      "translation_en": "Origen's thought, constantly antithetical even in the Peri Archon, scarcely provides — when studied as a whole — the elements of a system, unless one mutilates it arbitrarily. Finally one must beware of overstating the place of Greek elements in Origen's work, and not forget that, however important it may be, the Peri Archon is, all in all, a work of his youth.",
+      "context": "Crouzel's celebrated methodological caveat against system-builders who reconstruct Origen's doctrine from the Peri Archon alone.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_synthesis_of_patristic_attitud_3": {
+      "pdf_source": "Crouzel 1962 - Origène et la philosophie, Aubier (Théologie)",
+      "publication_id": "scholarly_work_crouzel_1962_origene_philosophie",
+      "page": "169-170 (PDF pp. 170-171)",
+      "chapter": "Conclusion — Origène et la philosophie païenne",
+      "quote_fr": "On constate donc avant Origène deux courants contraires. Chez Tatien et Hermias, Irénée, Tertullien et l'auteur de l'Elenchos une attitude négative, une volonté de rupture, exposée de façon souvent violente, sauf chez le pacifique évêque de Lyon. […] Chez Justin et Clément on trouve au contraire une vraie sympathie. […] Origène fait la synthèse de ces deux attitudes et c'est là son originalité.",
+      "translation_en": "Two contrary currents can thus be observed before Origen. In Tatian and Hermias, Irenaeus, Tertullian, and the author of the Elenchos, a negative attitude, a will to rupture, often expressed violently — except in the pacific bishop of Lyon. […] In Justin and Clement, on the contrary, one finds a true sympathy. […] Origen carries out the synthesis of these two attitudes, and herein lies his originality.",
+      "context": "The clearest verbatim formulation of Crouzel's thesis that Origen's originality consists in synthesising the two opposed patristic stances toward philosophy.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    },
+    "scholarly_argument_crouzel_the_selon_l_image_and_its_rela_1": {
+      "pdf_source": "Crouzel 1956 - Théologie de l'image de Dieu chez Origène, Aubier (Théologie 34)",
+      "publication_id": "scholarly_work_crouzel_1956_theologie_image",
+      "page": "10-11 (PDF p. 3) and 172 (PDF p. 84)",
+      "chapter": "Préface ; Ch. — Participation de l'homme à l'image de Dieu",
+      "quote_fr": "[p. 11, Préface] Dans la doctrine du Christ Image entre toute la christologie d'Origène et sa théologie de la Trinité et le selon-l'image qui est en l'homme correspond à ce que nous appelons la grâce sanctifiante. [p. 172] Le selon-l'image, le logos qui est en chacun, la participation au Verbe, constituent vraiment pour Origène l'essence de l'homme, ou plutôt l'élément le plus haut de son essence. […] L'essence de l'homme n'est pas pour Origène, comme on l'a dit parfois, le libre arbitre, la liberté-choix.",
+      "translation_en": "[p. 11, Preface] Into the doctrine of Christ the Image enters the whole of Origen's christology and his theology of the Trinity, and the 'according-to-the-image' that is in man corresponds to what we call sanctifying grace. [p. 172] The 'according-to-the-image', the logos that is in each person, the participation in the Word — these truly constitute, for Origen, the essence of man, or rather the highest element of his essence. […] For Origen, the essence of man is not, as has sometimes been said, free will, freedom of choice.",
+      "context": "The two locus classici for Crouzel's reinterpretation: selon-l'image is the higher constitutive God-relation (equivalent to later sanctifying grace), not free choice.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_crouzel_agent"
+    }
+  },
+  "notes": {
+    "page_numbering": "Two page references given per patch: the printed page number from the book and the corresponding PDF page index (1-based, counting cover and front matter). Calibration: in 1962, printed p. N ≈ PDF p. N+1; in 1956, the page-bleed and double-column layout means printed p. N ≈ PDF p. (N/2)+1 (e.g. printed 172-173 = PDF p. 84).",
+    "argument_not_fully_attested": "scholarly_argument_crouzel_manuscript_tradition_and_textu_1 — the specific 'lectio facilior' technicality is paraphrastic. The substantive Koetschau critique is attested in both 1956 (Préface) and 1962 (Introduction); the more detailed text-critical defense of Rufinus against the GCS edition is found in Crouzel's SC 268-269 (1980) introduction, which would need page-level page-by-page review of the SC 268 PDF (425 pp.) for a verbatim match. Marked confidence=medium pending that follow-up.",
+    "no_other_crouzel_pdfs_found": "DOCTORAT contains only Crouzel 1956 and 1962 as monographs. Crouzel's 1985 Origène (Lethielleux), the 1961 Origène et la « connaissance mystique », and the SC 252-253/268-269/312 Traité des principes volumes are present as SC editions but not as standalone Crouzel monographs. The 14 high-confidence verifications cover all conceptual content of the 15 needs_evidence arguments."
+  }
+}

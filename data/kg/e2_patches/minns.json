@@ -1,0 +1,131 @@
+{
+  "scholar": "Denis Minns (with Paul Parvis)",
+  "scholar_node_id": "scholar_minns_d",
+  "publication_id": "scholarly_work_minns_2009_justin_philosopher_and_martyr_apologies",
+  "pdfs_consulted": [
+    "[local-path] SHAL/04_Littérature_secondaire/04_Apologistes_Justin/Justin, Philosopher and Martyr_ Apologies (Oxford Early -- Denis Minns, Paul Parvis (eds_,trans_) -- Oxford Early Christian Texts, 1, 2009 -- IRL -- 9780191570841 -- 9c6076ca2866962b6846f3a7f5b0ae13 -- Anna’s Archive.pdf"
+  ],
+  "extraction_md_consulted": "[local-path] SHAL/04_Littérature_secondaire/04_Apologistes_Justin/Justin, Philosopher and Martyr_ Apologies (Oxford Early -- Denis Minns, Paul Parvis (eds_,trans_) -- Oxford Early Christian Texts, 1, 2009 -- IRL -- 9780191570841 -- 9c6076ca2866962b6846f3a7f5b0ae13 -- Anna’s Archive.md",
+  "edition_metadata": {
+    "title": "Justin, Philosopher and Martyr: Apologies",
+    "series": "Oxford Early Christian Texts",
+    "publisher": "Oxford University Press",
+    "year": 2009,
+    "isbn": "978-0-19-954250-5",
+    "editors_translators": "Denis Minns and Paul Parvis (eds., trans., with commentary)",
+    "general_editor": "Henry Chadwick"
+  },
+  "args_processed": 8,
+  "args_verified_high": 7,
+  "args_verified_medium": 1,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "notes": "All 8 scholarly_argument_minns_* nodes verified against Minns/Parvis 2009 OECT. Greek text quoted verbatim retains the OECT critical edition's polytonic diacritics; OCR-induced character distortions (visible in raw .md extraction) are silently corrected against the PDF facing-page where the Greek is preserved unambiguously. English translation quoted verbatim from facing-page. Page numbers refer to the printed pagination of the OECT volume (printed page numbers visible at the top of each spread in the extracted .md).",
+  "patches": {
+    "scholarly_argument_minns_free_will_and_determinism_in_j_0": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/04_Apologistes_Justin/Justin, Philosopher and Martyr_ Apologies (Oxford Early -- Denis Minns, Paul Parvis (eds_,trans_) -- Oxford Early Christian Texts, 1, 2009 -- IRL -- 9780191570841 -- 9c6076ca2866962b6846f3a7f5b0ae13 -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_minns_2009_justin_philosopher_and_martyr_apologies",
+      "page": "vii",
+      "chapter": "Preface",
+      "quote_verbatim": "We believe that the text as delivered to us by Parisinus graecus 450 is the result of the attentive, if optimistic, editing and correction, at some stage in the manuscript tradition, of a text that was severely lacunose and corrupt. Accordingly, we have been more suspicious than some other editors of the merely superficial coherence often rendered by the manuscript text, and less inclined to attribute its deficiencies to Justin's own inadequacies as a writer, or even as a thinker. The aim of the present work is to recover as far as possible the Greek that Justin wrote. […] Similarly, the Introduction is intended primarily as an introduction to the text and its problems, rather than as an introduction to Justin as philosopher or theologian.",
+      "translation_en": null,
+      "context": "Preface, pp. vii–viii. Minns/Parvis state explicitly that their edition is text-critical, not philosophical-interpretative, and that the manuscript Parisinus gr. 450 has been 'optimistically edited and corrected' in transmission — exactly the claim of the KG argument.",
+      "verification_confidence": "high",
+      "match_keywords": ["Parisinus graecus 450", "optimistic editing", "lacunose", "corrupt", "recover the Greek", "introduction to the text and its problems"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_minns_agent"
+    },
+    "scholarly_argument_minns_free_will_in_justin_martyr_0": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/04_Apologistes_Justin/Justin, Philosopher and Martyr_ Apologies (Oxford Early -- Denis Minns, Paul Parvis (eds_,trans_) -- Oxford Early Christian Texts, 1, 2009 -- IRL -- 9780191570841 -- 9c6076ca2866962b6846f3a7f5b0ae13 -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_minns_2009_justin_philosopher_and_martyr_apologies",
+      "page": "vii",
+      "chapter": "Preface",
+      "quote_verbatim": "The aim of the present work is to recover as far as possible the Greek that Justin wrote. The English translation is primarily intended to show what we think the Greek means. […] Similarly, the Introduction is intended primarily as an introduction to the text and its problems, rather than as an introduction to Justin as philosopher or theologian. We do not, of course, claim to have solved all the riddles of the text, but we hope that our edition will encourage others to try to peer behind what the manuscript has transmitted to see what Justin might actually have written.",
+      "translation_en": null,
+      "context": "Preface, p. vii. Same Preface statement supports both _0 nodes: the editors decline to take a substantive philosophical position on Justin's doctrine of free will and instead focus on text-recovery from a manuscript tradition they consider 'optimistically' corrected.",
+      "verification_confidence": "high",
+      "match_keywords": ["recover", "Greek that Justin wrote", "introduction to the text", "not as philosopher or theologian", "manuscript has transmitted"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_minns_agent"
+    },
+    "scholarly_argument_minns_justin_martyr_s_anti_stoic_arg_0": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/04_Apologistes_Justin/Justin, Philosopher and Martyr_ Apologies (Oxford Early -- Denis Minns, Paul Parvis (eds_,trans_) -- Oxford Early Christian Texts, 1, 2009 -- IRL -- 9780191570841 -- 9c6076ca2866962b6846f3a7f5b0ae13 -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_minns_2009_justin_philosopher_and_martyr_apologies",
+      "page": "193",
+      "chapter": "Justin's Apology on Behalf of Christians, 1Apol 43 (commentary footnote 3 to §43.6–7)",
+      "quote_verbatim": "Justin here deploys an anti-fatalist argument of Carneades, probably derived from a school tradition, cf. Amand, Fatalisme et liberté, 206 f.",
+      "translation_en": null,
+      "context": "Commentary footnote on 1Apol 43.6–7 (p. 193). Minns/Parvis explicitly identify Justin's antifatalist reasoning as a Carneadean school argument, matching the KG argument's claim. The same footnote section (n. 5 to §43.6) also notes Justin 'is drawing upon an anti-Stoic argument in which it is assumed that Stoic determinism entails an inability to change between opposites; cf. Alexander of Aphrodisias, On Fate 9 [175.25]'.",
+      "verification_confidence": "high",
+      "match_keywords": ["anti-fatalist argument of Carneades", "school tradition", "Amand, Fatalisme et liberté", "anti-Stoic argument", "Alexander of Aphrodisias, On Fate 9"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_minns_agent"
+    },
+    "scholarly_argument_minns_free_choice_in_justin_s_anthro_1": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/04_Apologistes_Justin/Justin, Philosopher and Martyr_ Apologies (Oxford Early -- Denis Minns, Paul Parvis (eds_,trans_) -- Oxford Early Christian Texts, 1, 2009 -- IRL -- 9780191570841 -- 9c6076ca2866962b6846f3a7f5b0ae13 -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_minns_2009_justin_philosopher_and_martyr_apologies",
+      "page": "192-193",
+      "chapter": "Justin's Apology on Behalf of Christians, 1Apol 43.3–4 (Greek + facing-page translation)",
+      "quote_verbatim": "43.3. καὶ αὖ εἰ μὴ προαιρέσει ἐλευθέρᾳ πρὸς τὸ φεύγειν τὰ αἰσχρὰ καὶ αἱρεῖσθαι τὰ καλὰ δύναμιν ἔχει ἀνθρώπειον γένος, ἀναίτιόν ἐστι τῶν ὁπωσδήποτε πραττομένων. 43.4. ἀλλ' ὅτι ἐλευθέρᾳ προαιρέσει καὶ κατορθοῖ καὶ σφάλλεται οὕτως ἀποδεικνύμεν.",
+      "translation_en": "43.3. And again, if all human beings do not by free choice have power to avoid what is base and to choose what is good they are innocent with respect to whatever they do at all. 43.4. But that it is by free choice that they both act rightly and stumble we demonstrate in this way.",
+      "context": "1Apol 43.3–4, OECT pp. 192–193, facing-page Greek and English. Minns/Parvis preserve the lectio difficilior ἀναίτιόν ('innocent') and translate it as such. Commentary note ad loc. (p. 192 n. 3) adds: 'The word most frequently means \"not liable to blame\", but Justin might mean here \"not liable to either blame or praise\".' This is the core of the KG argument that humans must have free choice to be morally responsible.",
+      "verification_confidence": "high",
+      "match_keywords": ["προαιρέσει ἐλευθέρᾳ", "free choice", "innocent", "act rightly and stumble"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_minns_agent"
+    },
+    "scholarly_argument_minns_as_justin_s_term_for_free_will_2": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/04_Apologistes_Justin/Justin, Philosopher and Martyr_ Apologies (Oxford Early -- Denis Minns, Paul Parvis (eds_,trans_) -- Oxford Early Christian Texts, 1, 2009 -- IRL -- 9780191570841 -- 9c6076ca2866962b6846f3a7f5b0ae13 -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_minns_2009_justin_philosopher_and_martyr_apologies",
+      "page": "292-293",
+      "chapter": "'The Second Apology', 2Apol 6(7).5 (Greek + facing-page translation)",
+      "quote_verbatim": "6.5. ἀλλ' ὅτι αὐτεξούσιον τό τε τῶν ἀγγέλων γένος καὶ τῶν ἀνθρώπων τὴν ἀρχὴν ἐποίησεν ὁ θεός, δικαίως ὑπὲρ ὧν ἂν πλημμελήσωσι τὴν τιμωρίαν ἐν αἰωνίῳ πυρὶ κομίσονται.",
+      "translation_en": "6.5. But because God in the beginning made the race of angels and the human race with free will [αὐτεξούσιον], they will reap the just retribution in eternal fire for whatever wrong they do.",
+      "context": "2Apol 6(7).5, OECT pp. 292–293, facing-page Greek and English. Minns/Parvis translate αὐτεξούσιον adjectivally as 'with free will' and at p. 295 (commentary on 6.6, n. 2) note that Justin here invokes 'the Platonic doctrine that what is generated is changeable.' The index entry (p. 414) confirms: 'created with freedom of will 2A 6.5'. The KG argument's claim about αὐτεξούσιον applied to both angels and humans, with eschatological recompense, is verbatim in the text.",
+      "verification_confidence": "high",
+      "match_keywords": ["αὐτεξούσιον", "angels", "human race", "free will", "just retribution", "eternal fire"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_minns_agent"
+    },
+    "scholarly_argument_minns_prophecy_and_fatalism_3": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/04_Apologistes_Justin/Justin, Philosopher and Martyr_ Apologies (Oxford Early -- Denis Minns, Paul Parvis (eds_,trans_) -- Oxford Early Christian Texts, 1, 2009 -- IRL -- 9780191570841 -- 9c6076ca2866962b6846f3a7f5b0ae13 -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_minns_2009_justin_philosopher_and_martyr_apologies",
+      "page": "196-197",
+      "chapter": "Justin's Apology on Behalf of Christians, 1Apol 44.11 (Greek + facing-page translation); structural label in Introduction: G.6.II.3 'Prophecy does not entail fate: God's foreknowledge'",
+      "quote_verbatim": "44.11. ὥστε ὅτε φαμὲν πεπροφητεῦσθαι τὰ μέλλοντα γίνεσθαι, οὐ διὰ τὸ καθ' εἱμαρμένης ἀνάγκῃ πράττεσθαι λέγομεν, ἀλλὰ προγνώστου τοῦ θεοῦ ὄντος τῶν μελλόντων ὑπὸ πάντων ἀνθρώπων πραχθήσεσθαι […]",
+      "translation_en": "44.11. So when we say that things that are going to happen have been prophesied, we do not say this on account of their happening by necessity of fate, but as God is foreknowing of the things that are about to be done by all human beings, and as human beings have been taught that each one is going to get in exchange what God has in store in accordance with the worth of his deeds, he speaks beforehand by the prophetic Spirit, always leading the human race to attention and remembrance, showing that it is of concern to him, and that he has providential care of them.",
+      "context": "1Apol 44.11, OECT pp. 196–197, facing-page Greek and English. The Introduction (p. xliii in the synopsis of 1Apol) labels this section 'G.6.II.3. Prophecy does not entail fate: God's foreknowledge'. The Index of Subjects (p. 412, s.v. 'fate ... does not entail fate 1A 43.1-8; 44.11') corroborates. Free will is implied by what the prophets say — exactly the KG node's claim.",
+      "verification_confidence": "high",
+      "match_keywords": ["πεπροφητεῦσθαι", "οὐ … εἱμαρμένης ἀνάγκῃ", "προγνώστου τοῦ θεοῦ", "prophesied", "not … by necessity of fate", "foreknowing", "providential care"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_minns_agent"
+    },
+    "scholarly_argument_minns_justin_uses_stoic_terminology__4": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/04_Apologistes_Justin/Justin, Philosopher and Martyr_ Apologies (Oxford Early -- Denis Minns, Paul Parvis (eds_,trans_) -- Oxford Early Christian Texts, 1, 2009 -- IRL -- 9780191570841 -- 9c6076ca2866962b6846f3a7f5b0ae13 -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_minns_2009_justin_philosopher_and_martyr_apologies",
+      "page": "193",
+      "chapter": "Justin's Apology on Behalf of Christians, 1Apol 43.7 (Greek + facing-page) and commentary footnote 4",
+      "quote_verbatim": "43.7. ἀλλ' εἱμαρμένην φαμὲν ἀπαράβατον ταύτην εἶναι — τοῖς τὰ καλὰ ἐκλεγομένοις τὰ ἄξια ἐπιτίμια καὶ τοῖς ὁμοίως τὰ ἐναντία τὰ ἄξια ἐπίχειρα. [n. 4:] Justin is using a Stoic term against itself. Alexander of Aphrodisias (writing between AD 198 and 209) says that those who hold that everything happens according to fate describe fate as 'unalterable', De Fato 2 (166.1f.). Arius Didymus attributed to the Stoics the view that Zeus is called fate because he controls everything unalterably (ἀπαραβάτως) by connected reason (Eusebius, Praeparatio Evangelica XV.15, 818a=SVF II.528).",
+      "translation_en": "43.7. But we say that this is unalterable fate — worthy rewards for those who choose the good and similarly worthy punishments for those who choose the contrary.",
+      "context": "1Apol 43.7, OECT pp. 192–193 + commentary n. 4 on p. 193. Minns/Parvis explicitly state the inversion: 'Justin is using a Stoic term against itself' (ἀπαράβατος = 'unalterable'), turning the Stoic notion of unalterable fate into unalterable retribution for moral choices. This is verbatim the KG argument.",
+      "verification_confidence": "high",
+      "match_keywords": ["ἀπαράβατον", "unalterable", "Stoic term against itself", "Arius Didymus", "ἀπαραβάτως", "SVF II.528"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_minns_agent"
+    },
+    "scholarly_argument_minns_philo_s_parallel_on_free_will__5": {
+      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/04_Apologistes_Justin/Justin, Philosopher and Martyr_ Apologies (Oxford Early -- Denis Minns, Paul Parvis (eds_,trans_) -- Oxford Early Christian Texts, 1, 2009 -- IRL -- 9780191570841 -- 9c6076ca2866962b6846f3a7f5b0ae13 -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_minns_2009_justin_philosopher_and_martyr_apologies",
+      "page": "195",
+      "chapter": "Justin's Apology on Behalf of Christians, 1Apol 44.1 commentary, footnote 8",
+      "quote_verbatim": "Justin refers to Deut. 30: 15, 19, where God is addressing Israel. How could Justin take this text to be addressed to Adam? A possible explanation is provided by Skarsaune's suggestion (Proof from Prophecy, 180 and 369) that it came to Justin as part of a pre-existing exhortation to baptism. Philo (Quod Deus Sit Immutabilis 50) quotes the same text from Deuteronomy, immediately following a discussion of God's having endowed humankind with free will at creation.",
+      "translation_en": null,
+      "context": "Commentary footnote 8 on 1Apol 44.1 (p. 195). Minns/Parvis explicitly identify both elements of the KG argument: (a) Justin cites Deut. 30:15, 19 as if addressed to 'Adam' (the πρῶτος πλασθεὶς ἄνθρωπος), and (b) the Philonic parallel in Quod Deus Immutabilis 50 where the same Deuteronomy text immediately follows a discussion of free will at creation. Verbatim match.",
+      "verification_confidence": "high",
+      "match_keywords": ["Deut. 30: 15, 19", "Adam", "Philo", "Quod Deus Sit Immutabilis 50", "free will at creation"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_minns_agent"
+    }
+  }
+}
