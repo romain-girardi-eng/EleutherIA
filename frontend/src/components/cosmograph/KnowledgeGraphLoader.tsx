@@ -82,25 +82,45 @@ export function KnowledgeGraphLoader({
   }, [onVideoEnded]);
 
   // Coax autoplay on Safari/iOS the moment the element is ready.
+  //
+  // The .catch() path used to be our only autoplay-blocked signal, but
+  // iOS Safari doesn't always reject the play() promise — it can resolve
+  // silently while keeping the element paused, leaving a tap-to-play
+  // chrome overlay on top of the poster. We add a hard watchdog: 1.4 s
+  // after the canplay event, if the video hasn't actually advanced past
+  // frame 0, treat that as blocked and unblock the parent so the loader
+  // can come down. The user never gets stuck on a play-button poster.
   useEffect(() => {
     const el = videoRef.current;
     if (!el || prefersReducedMotion) return;
+    let watchdog: number | null = null;
+    const markBlocked = () => {
+      if (endedRef.current) return;
+      endedRef.current = true;
+      onVideoEndedRef.current?.();
+    };
     const tryPlay = () => {
       if (endedRef.current || el.ended) return;
-      void el.play().catch(() => {
-        // Autoplay blocked — poster fallback is already visible. We still
-        // want the parent to be unblocked: treat blocked autoplay as
-        // "video ended" after a tick so it doesn't gate the loader forever.
-        window.setTimeout(() => {
-          if (endedRef.current) return;
-          endedRef.current = true;
-          onVideoEndedRef.current?.();
-        }, 300);
+      const startTime = el.currentTime;
+      const promise = el.play();
+      if (watchdog !== null) window.clearTimeout(watchdog);
+      watchdog = window.setTimeout(() => {
+        if (endedRef.current) return;
+        if (el.paused || el.currentTime <= startTime + 0.05) {
+          markBlocked();
+        }
+      }, 1400);
+      void promise?.catch(() => {
+        if (watchdog !== null) window.clearTimeout(watchdog);
+        window.setTimeout(markBlocked, 300);
       });
     };
     if (el.readyState >= 2) tryPlay();
     else el.addEventListener('canplay', tryPlay, { once: true });
-    return () => el.removeEventListener('canplay', tryPlay);
+    return () => {
+      el.removeEventListener('canplay', tryPlay);
+      if (watchdog !== null) window.clearTimeout(watchdog);
+    };
   }, [prefersReducedMotion]);
 
   // Reduced-motion users have no video to wait for — fire the gate immediately
@@ -184,7 +204,7 @@ export function KnowledgeGraphLoader({
             ) : (
               <video
                 ref={videoRef}
-                className="absolute inset-0 h-full w-full object-contain"
+                className="silent-video absolute inset-0 h-full w-full object-contain"
                 poster={posterSrc}
                 muted
                 playsInline
