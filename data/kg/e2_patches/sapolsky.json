@@ -1,0 +1,95 @@
+{
+  "scholar": "Robert M. Sapolsky",
+  "scholar_node_id_assumed": "person_sapolsky_robert",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Robert M. Sapolsky - Determined_ A Science of Life without Free Will (2023).pdf"
+  ],
+  "primary_source": {
+    "author": "Robert M. Sapolsky",
+    "title": "Determined: A Science of Life Without Free Will",
+    "first_published": 2023,
+    "edition_consulted": "Penguin Press, New York, October 2023 (hardcover first edition). PDF is the ebook-format edition (952 reflow pages).",
+    "total_pages": 952,
+    "page_mapping_note": "The PDF is a reflowable ebook edition where logical page numbers are not consistently printed on each page. Citations below use (a) chapter and section names, and (b) the physical PDF page number from the consulted file, so that the passages can be located deterministically in this exact PDF copy. Hardcover pagination of the Penguin print edition differs; for hardcover-printed-page citation the user should consult a hardcover copy."
+  },
+  "args_processed": 6,
+  "args_verified_high": 6,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_sapolsky_determinism_vs_indeterminism_1": {
+      "verification_confidence": "high",
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Robert M. Sapolsky - Determined_ A Science of Life without Free Will (2023).pdf",
+      "page": "physical PDF pp. 222-223 (Chapter 10.5 'Interlude')",
+      "chapter": "Chapter 10.5 'Interlude' (between Part I and Part II of the book); summary of the indeterminism arguments first introduced in chapters 5-10 ('A Primer on Chaos', 'Is Your Free Will Chaotic?', 'A Primer on Emergent Complexity', 'Does Your Free Will Just Emerge?', 'A Primer on Quantum Indeterminacy', 'Is Your Free Will Random?')",
+      "quote_verbatim": "Moreover, this seamless continuum of biology and environment forming us doesn't leave room for novel portals of free will by way of the revolutions of chapters 5-10. Yes, all the interesting things in the world can be shot through with chaoticism, including a cell, an organ, an organism, a society. And as a result, there are really important things that can't be predicted, that can never be predicted. But nonetheless, every step in the progression of a chaotic system is made of determinism, not whim. And yes, take a huge number of simple component parts that interact in simple ways, let them interact, and stunningly adaptive complexity emerges. But the component parts remain precisely as simple, and they can't transcend their biological constraints to contain magical things like free will — a brick may want to be something elegant and glamorous, but it will always remain a brick. And yes, truly indeterministic things seem to happen way down at the subatomic level. Nonetheless, it's not possible for that level of weirdness to [bubble all the way up to behaviour].",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "Sapolsky's 10.5 'Interlude' explicitly summarises why chaos theory, emergent complexity, and quantum indeterminacy — the three families of indeterministic phenomena discussed in chapters 5-10 — fail to ground free will. His structural argument: (i) chaos = unpredictable but deterministic at each step; (ii) emergent complexity = stunning behaviour from simple parts, but parts remain bound by their biology; (iii) quantum indeterminacy = real at the subatomic level but cannot bubble up to alter brain-scale behaviour in a way that constitutes agency. The argument's payoff is stated on the same page: indeterminism does not provide the kind of causation needed for meaningful agency.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sapolsky_agent"
+    },
+    "scholarly_argument_sapolsky_equality_of_moral_status_4": {
+      "verification_confidence": "high",
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Robert M. Sapolsky - Determined_ A Science of Life without Free Will (2023).pdf",
+      "page": "physical PDF p. 14 (Introduction)",
+      "chapter": "Introduction (no chapter number; opens the book)",
+      "quote_verbatim": "Oh, as long as we're at it, that you recognize that the experience of love is made of the same building blocks that constitute wildebeests or asteroids. That no one has earned or is entitled to being treated better or worse than anyone else. And that it makes as little sense to hate someone as to hate a tornado because it supposedly decided to level your house, or to love a lilac because it supposedly decided to make a wonderful fragrance. That's what it means to conclude that there is no free will. This is what I've concluded, for a long, long time. And even I think that taking that seriously sounds absolutely nutty.",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "Sapolsky's thesis-statement on the practical/moral implications of no-free-will. The argument is: if no one earned their character or actions, then differential treatment by desert is unjustified; the moral status of persons-as-causal-loci is the same as that of tornadoes or lilacs. The KG node's wording ('hatred and love directed at persons as if they chose their characteristics is as irrational as hating tornadoes or loving lilacs for their decisions') is a near-paraphrase of this passage.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sapolsky_agent"
+    },
+    "scholarly_argument_sapolsky_free_will_existence_0": {
+      "verification_confidence": "high",
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Robert M. Sapolsky - Determined_ A Science of Life without Free Will (2023).pdf",
+      "page": "physical PDF p. 11 (Chapter 1 'Turtles All the Way Down') and p. 223 (Chapter 10.5 'Interlude')",
+      "chapter": "Chapter 1 'Turtles All the Way Down'; Chapter 10.5 'Interlude'",
+      "quote_verbatim": "p. 11: 'Here is the point of this book: While it may seem ridiculous and nonsensical to explain something by resorting to an infinity of turtles all the way down, it actually is much more ridiculous and nonsensical to believe that somewhere down there, there's a turtle floating in the air. The science of human behavior shows that turtles can't float; instead, it is indeed turtles all the way down. … when you behave in a particular way, which is to say when your brain has generated a particular behavior, it is because of the determinism that came just before, which was caused by the determinism just before that, and before that, all the way down.' p. 223: 'it's biological turtles all the way down with respect to all of who we are, not just some parts. It's not the case that while our natural attributes and aptitudes are made of sciencey stuff, our character, resilience, and backbone come packaged in a soul. Everything is turtles all the way down.'",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "Sapolsky's core thesis: every behavioural state of the brain is fully determined by the prior biological state, which is determined by the one before it, indefinitely back. The 'turtles all the way down' metaphor (a cosmological joke borrowed from William James / Hawking lore) names this regress of antecedent biological causation. The argument is reiterated as the structural conclusion of Part I in 10.5 'Interlude' (p. 223).",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sapolsky_agent"
+    },
+    "scholarly_argument_sapolsky_levels_of_causal_analysis_5": {
+      "verification_confidence": "high",
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Robert M. Sapolsky - Determined_ A Science of Life without Free Will (2023).pdf",
+      "page": "physical PDF p. 12 (Introduction)",
+      "chapter": "Introduction",
+      "quote_verbatim": "Once you work with the notion that every aspect of behavior has deterministic, prior causes, you observe a behavior and can answer why it occurred: as just noted, because of the action of neurons in this or that part of your brain in the preceding second. And in the seconds to minutes before, those neurons were activated by a thought, a memory, an emotion, or sensory stimuli. And in the hours to days before that behavior occurred, the hormones in your circulation shaped those thoughts, memories, and emotions and altered how sensitive your brain was to particular environmental stimuli. And in the preceding months to years, experience and environment changed how those neurons function, causing some to sprout new connections and become more excitable, and causing the opposite in others. And from there, we hurtle back decades in identifying antecedent causes. Explaining why that behavior occurred requires recognizing how during your adolescence a key brain region was still being constructed, shaped by socialization and acculturation. Further back, there's childhood experience shaping the construction of your brain, with the same then applying to your fetal environment. Moving further back, we have to factor in the genes you inherited and their effects on behavior. … influenced by culture, which means as well by the centuries of ecological factors that influenced what kind of culture your ancestors invented, and by the evolutionary pressures that molded the species you belong to.",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "The structural template of the whole book: behaviour is explained by nested timescales — neurons (seconds) → thoughts/emotions/sensory stimuli (seconds-to-minutes) → hormones (hours-to-days) → neuroplasticity (months-to-years) → adolescence-childhood-fetal environment (decades) → genes → culture/evolution (centuries-to-millennia). This is the same architecture Sapolsky used in 'Behave' (2017); 'Determined' applies it to argue that there is no causal gap at any timescale into which free will could insert itself.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sapolsky_agent"
+    },
+    "scholarly_argument_sapolsky_moral_responsibility_and_blame_2": {
+      "verification_confidence": "high",
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Robert M. Sapolsky - Determined_ A Science of Life without Free Will (2023).pdf",
+      "page": "physical PDF p. 14 (Introduction); developed in Chapter 14 'The Joy of Punishment'",
+      "chapter": "Introduction (thesis); Chapter 14 'The Joy of Punishment' (full development)",
+      "quote_verbatim": "p. 14: '[The implications of no free will are that] blame, and that punishment as retribution is indefensible — sure, keep dangerous people from damaging others, but do so as straightforwardly and nonjudgmentally as keeping a car with faulty brakes off the road.'",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "Sapolsky's core normative claim: the abolition of free will entails the abolition of retributive blame and retributive punishment, but does not entail the abolition of restraint. The 'faulty brakes' analogy is the KG node's exact source. The full chapter-14 development ('The Joy of Punishment') traces the neuroscience of retribution (dopaminergic reward in the dorsal striatum when punishing free-riders) and argues that this neural pleasure is itself a determined response, not a moral warrant.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sapolsky_agent"
+    },
+    "scholarly_argument_sapolsky_praise_and_desert_3": {
+      "verification_confidence": "high",
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Robert M. Sapolsky - Determined_ A Science of Life without Free Will (2023).pdf",
+      "page": "physical PDF p. 14 (Introduction)",
+      "chapter": "Introduction",
+      "quote_verbatim": "That it can be okay to praise someone or express gratitude toward them as an instrumental intervention, to make it likely that they will repeat that behavior in the future, or as an inspiration to others, but never because they deserve it. And that this applies to you when you've been smart or self-disciplined or kind.",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "Sapolsky's positive policy on praise/gratitude under no-free-will: forward-looking instrumental justification is permitted (operant-conditioning a desirable behaviour, providing a model for others); backward-looking desert-based justification is denied. The crucial reflexive move — 'this applies to you when you've been smart or self-disciplined or kind' — extends the argument to the agent's first-person stance, denying that the no-free-will conclusion is only about how to treat others.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sapolsky_agent"
+    }
+  }
+}

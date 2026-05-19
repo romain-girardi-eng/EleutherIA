@@ -1,0 +1,95 @@
+{
+  "scholar": "Peter Frick",
+  "scholar_node_id_assumed": "person_frick_peter",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Providence in Philo, Frick Peter.pdf"
+  ],
+  "primary_source": {
+    "author": "Peter Frick",
+    "title": "Divine Providence in Philo of Alexandria",
+    "first_published": 1999,
+    "edition_consulted": "Texts and Studies in Ancient Judaism 77, Mohr Siebeck, Tübingen, 1999 (ISBN 3-16-147151-1). 273 pp.",
+    "total_pages": 273,
+    "page_mapping_note": "Logical page number printed on the page. Physical PDF page = logical page + 13 for body text. Front matter (Abstract = phys 5-6 = logical iv-v) uses Roman numerals."
+  },
+  "args_processed": 6,
+  "args_verified_high": 6,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_frick_divine_providence_and_moral_re_0": {
+      "verification_confidence": "high",
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Providence in Philo, Frick Peter.pdf",
+      "page": "179, 181-182",
+      "chapter": "Chapter 4 'Providence and Astral Fatalism', §4.3 'Astral Fatalism and Moral Responsibility' (p. 178 ff.) and §4.4 'Conclusion' (p. 181 ff.)",
+      "quote_verbatim": "p. 179: 'Philo refuses to ascribe human behaviour to the revolutions of the stars because it undermines the moral basis for individual and societal existence. Astral fatalism is flawed, alleges Philo, because \"if everything is dispensed at birth, then laws, piety, justice, and the verdicts of judges should be abrogated, since man's will is not free when he does what has been predestined for him. For when the power of self-conduct is denied and every act is attributed to powers of nativity, there will be no glory in virtue, no besetment of sin, no courage, no sagacity to speak of — everything being done involuntarily.\" [Prov. 1:82]' p. 181: 'Philo's firm belief in human free will is at once an argument against the idea of astral fatalism and an argument for the rationality of moral responsibility. It is also a requirement for the divine-human relation, especially in light of the intelligibility of Torah observance.' p. 182: 'the idea of astral fatalism renders absurd the human ability of exercising free will. … if free will is beyond the capability of human beings, the very notion of ethical justice is rendered meaningless and the intelligibility of obeying the law revealed by God is undermined.'",
+      "translation_en": null,
+      "language_original": "English (with Philo quoted in Colson's English from Prov. 1:79-88 and key Greek terms: genethlialogike, heimarmene, ananke)",
+      "context": "Frick devotes §4.3 explicitly to 'Astral Fatalism and Moral Responsibility' and §4.4 ('Conclusion') summarises Philo's two-pronged rejection: (i) the stars cannot be transcendent like God; (ii) astral fatalism is irreconcilable with moral responsibility because it makes virtue and vice involuntary. The primary Philonic text Frick exegetes is De Providentia 1:77-88 (esp. 1:79-82), where Philo argues that if every act is fixed by birth-constellations, judicial punishment, virtue, and piety all lose their basis.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frick_agent"
+    },
+    "scholarly_argument_frick_divine_transcendence_and_provi_4": {
+      "verification_confidence": "high",
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Providence in Philo, Frick Peter.pdf",
+      "page": "iv (Abstract); 23-49 (Ch. 1.1-1.2)",
+      "chapter": "Abstract, p. iv; Chapter 1 'Divine Transcendence and Providence', §1.1 'The Concept of God' (p. 23) and §1.2 'The Concept of Providence' (p. 49)",
+      "quote_verbatim": "Abstract, p. iv: 'In Chapter One, we shall first review the formal aspects of Philo's concept of God, in particular the idea of God's transcendence, and then correlate how Philo conceptualizes the idea of providence in light of these formal aspects. In particular, we shall explain how Philo can predicate that God is provident in nature, although, strictly speaking, it is Philo's view that God cannot be apprehended in his essence.' p. 23: 'In Philo's thought, the idea of transcendence functions as the hermeneutic key that determines the shape of the doctrine of God which in turn determines the idea of immanence and establishes the proper place of all other features of his thought. To be in the position, then, of understanding how Philo conceptualises the idea of providence we must bear in mind that the full significance of the doctrine comes to light only when seen within the texture of Philo's concept of God.'",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "Frick's thesis-statement on the compatibility between Philo's strong divine-transcendence (akataleptos theos, citing Montes-Peral 1987) and the predication of God as provident. The whole of chapter 1 (pp. 22-79) is devoted to demonstrating that Philo can hold both (a) the strict unknowability of God's essence and (b) the truthful predication of providence as God's nature-directed activity.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frick_agent"
+    },
+    "scholarly_argument_frick_human_freedom_and_moral_evil_1": {
+      "verification_confidence": "high",
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Providence in Philo, Frick Peter.pdf",
+      "page": "v (Abstract); 217, 222, 240",
+      "chapter": "Abstract, p. v; Chapter 5 'Theodicy and Providence', §5.4 'The Category of Moral Evil' (p. 202 ff.), §5.4.2 'Moral Responsibility and the Origin of Evil' (p. 217) and §5.4 summary (p. 240)",
+      "quote_verbatim": "Abstract, p. v: 'Moral evil originates when the rational part of the soul, the mind (which is inherently free and knows the difference between good and evil), cannot resist the assault by the senses and the passions. Philo thus places both the origin and the responsibility for moral evil on the shoulder of the human being.' p. 217: 'The distinction between the rational and irrational parts of the soul serves Philo as the foundation for anchoring moral evil in human existence. Decisive is Philo's emphasis on the control of the rational over the irrational soul, one's existential struggle between passions and mind. Possessing an inherently rational soul is not only the uniquely human feature, but precisely because of it, human rationality has the faculty to overcome the passions.' p. 240: 'Moral evil originates in that part of the soul when the mind, assaulted by the senses and the passions, makes a decision that results in a morally evil deed. A person is culpable for a morally evil decision because the mind, as an inherently rational entity, has knowledge of the difference between good and evil. Moreover, because the mind is also free to make a choice that results in either a morally good or evil action, Philo has placed both the origin and the responsibility for moral evil on the shoulder of the human being.'",
+      "translation_en": null,
+      "language_original": "English (with Greek psychological terms: logikon, alogon, hēgemonikon, pathos)",
+      "context": "The KG argument's wording is taken almost verbatim from Frick's own Abstract (p. v). Frick develops it in §5.4 with detailed exegesis of Legum Allegoriae (Adam = mind, Eve = sense-perception, serpent = passion), Quaestiones et Solutiones in Genesin, and the Philonic distinction between the rational soul (created by God) and the irrational soul (not created by God, hence God is not the source of evil arising from it).",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frick_agent"
+    },
+    "scholarly_argument_frick_providence_and_creation_5": {
+      "verification_confidence": "high",
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Providence in Philo, Frick Peter.pdf",
+      "page": "iv (Abstract); 115-152 (Ch. 3)",
+      "chapter": "Abstract, p. iv; Chapter 3 'Providence in Philo's Theory of Creation', §3.1 'The State of the Question' (p. 115), §3.2 'Providence and the Createdness of the Cosmos' (p. 120 ff.), §3.4 'Providence and the Logos' (p. 140), §3.5 'Conclusion' (p. 152)",
+      "quote_verbatim": "Abstract, p. iv: 'In Chapter Three, we shall examine how the concept of God and the notion of providence are both critical for Philo's theory of creation. Philo conceives of the role of providence in cosmological matters as being responsible for the design, administration and continuous existence of the created universe.'",
+      "translation_en": null,
+      "language_original": "English",
+      "context": "The KG argument's wording is taken almost verbatim from Frick's own Abstract (p. iv). The full development in chapter 3 (pp. 115-152) demonstrates that Philo's cosmology is not Stoic eternalist (the cosmos exists because it must) but Mosaic-Platonic: the cosmos came into being through the Mind of God (cf. Opif. 8-9, exegeted by Frick in §3.2), and continues to exist because providence sustains it. Frick contrasts this with Stoic/Aristotelian alternatives where the world's existence is automatic or necessary.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frick_agent"
+    },
+    "scholarly_argument_frick_rejection_of_astral_fatalism_2": {
+      "verification_confidence": "high",
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Providence in Philo, Frick Peter.pdf",
+      "page": "v (Abstract); 176, 181-182",
+      "chapter": "Abstract, p. v; Chapter 4 'Providence and Astral Fatalism', §4.2 'The Divinity of the Stars' (p. 161 ff., conclusion p. 176) and §4.4 'Conclusion' (p. 181)",
+      "quote_verbatim": "Abstract, p. v: 'In Chapter Four, we shall address why Philo rejects the assumptions implied in astral fatalism — the divinity of the stars, moral determinism — as irreconcilable with the conception of divine providence. He rejects the divinity of the stars because they cannot be transcendent as God and thus have causal influences over human lives. He rejects astral fatalism because it renders absurd the notion of moral responsibility.' p. 176: 'The contrast between creator and creature is too stark. Only ho epi theōn is worthy of worship, who alone is the eternal, uncreated, immaterial, invisible, beyond perception; the stars, however, are temporal, created, material, visible, and perceptible by sense, wholly subordinate to God himself.' p. 181: 'Philo rejects the premise underlying horoscopic astrology (genethlialogike) on two principal grounds. First, because the idea of god implied in astral determinism is beyond reconciliation with Philo's concept of the utter transcendence of God who is alone the cause and providential creator of the universe.'",
+      "translation_en": null,
+      "language_original": "English (with key Greek terms: genethlialogike, heimarmene)",
+      "context": "The KG argument's wording is taken almost verbatim from Frick's Abstract (p. v). Frick's §4.4 'Conclusion' (pp. 181-182) crystallises the two grounds for Philo's rejection: (1) astral fatalism implies the divinity of stars, which contradicts the transcendence of God (stars are temporal/created/material; God is none of these); (2) astral fatalism implies moral determinism, which destroys the rationality of moral responsibility.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frick_agent"
+    },
+    "scholarly_argument_frick_theodicy_and_divine_non_causat_3": {
+      "verification_confidence": "high",
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Providence in Philo, Frick Peter.pdf",
+      "page": "v (Abstract); 185-188 (Ch. 5.1)",
+      "chapter": "Abstract, p. v; Chapter 5 'Theodicy and Providence', §5.1 'God is not the Cause of Evil' (p. 185 ff.)",
+      "quote_verbatim": "Abstract, p. v: 'Philo proceeds from the Platonic premise that God is not the cause for evil in any way, neither for physical evil nor for moral evil. Unlike the category of physical evil, which he explains in terms of Stoic arguments, the category of moral evil incriminates human beings directly. For Philo, the existence of moral evil exonerates God and his providence as the cause for evil and anchors the blame in the person.' p. 185: '… his [Philo's] explanation of evil hinges on the Platonic axiom that God is not the cause of evil and on the distinction between the category of physical and moral evil.' p. 186: 'Philo's most significant assumption, the \"axiomatic principle\", is that God is not the cause of evil. Because God's essence is \"altogether good and benevolent\", it follows that God cannot be held responsible for any evil. In Philo's words: \"God is the cause of good things only and of nothing at all that is bad\" (Conf. 180).' p. 188: 'there is sufficient evidence to suggest that Philo interpreted these sources [Timaeus 42d, Theaetetus 176a, Republic 379c/380d/617e] in such a way that he could adapt Plato's main axiom that God is not the cause of evil as the basis for his own position on theodicy.'",
+      "translation_en": null,
+      "language_original": "English (citing Philo Conf. 180 and Plato in Greek + Frick's translations)",
+      "context": "The KG argument's wording is taken almost verbatim from Frick's Abstract (p. v). The full argument-chain is laid out in §5.1: Frick shows that Philo's theodicy is grounded in (i) the Platonic axiom 'God is not the cause of evil' (Timaeus 42d, Theaetetus 176a, Republic 379c/380d/617e — all cited at p. 187-188), (ii) the distinction between physical evil (handled via Stoic theodicy arguments in §5.3) and moral evil (handled via the psychology of the soul in §5.4), and (iii) the conclusion that for both categories God's providence is exonerated.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frick_agent"
+    }
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "scholar": "Robert W. Sharples",
+  "scholar_node_id": "scholar_sharples_robert",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/sharples_1983_alexander_de_fato.pdf"
+  ],
+  "pdf_md5": "f62fcffa6f56cc224803de2b8437dc9c",
+  "pdf_pages": 161,
+  "pdf_status": "OK — re-acquired 2026-05-19 via libgen.li then ocrmypdf -l eng+grc --rotate-pages --deskew. Previous broken copy archived as sharples_1983_alexander_de_fato_broken_20260519_122107.pdf.bak.",
+  "args_processed": 9,
+  "args_verified": 4,
+  "args_partial": 1,
+  "args_not_found": 4,
+  "method_note": "9 Sharples nodes inspected. 4 args (the providence-taxonomy [A]–[F], the tetralemma, the threefold-providence scope, the stoic-providence-vs-determinism nuance) come from DIFFERENT Sharples works (1982 'Two Problems' CQ; 2003 'Threefold Providence' Phronesis) and are NOT in the 1983 Duckworth volume; these are flagged not_found-for-this-pdf with a wrong_pub_id pointer the patch makes explicit. 4 args verified high/medium from Introduction + Commentary of the 1983 book. 1 historiographical/meta-argument verified low (general framing in Introduction). The cardinal Lienemann-target passage is recorded under `landmark_finding_lienemann_2012_corroboration` below.",
+
+  "landmark_finding_lienemann_2012_corroboration": {
+    "target_lienemann_2012": "BPJAM p. 260: 'Sharples bemerkt zu Recht in den angefügten Endnoten, dass sich bei Alexander kein so eindeutiger Beleg für die Zuschreibung eines indeterministischen Freiheitsbegriffs findet, wie es Fredes Darstellung suggeriert.'",
+    "structural_note": "The 1983 Duckworth volume has NO separate 'endnotes' section — the equivalent is the 'COMMENTARY' (pp. 125–178), an essentially chapter-by-chapter philosophical apparatus that functions as Sharples's running endnotes to his own translation. Lienemann's 'angefügte Endnoten' (appended endnotes) is best read as referring to this Commentary, since (a) it is appended after the translation, and (b) it is precisely there that Sharples hedges/contests Frede-style attributions.",
+    "primary_hit": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/sharples_1983_alexander_de_fato.pdf",
+      "publication_id": "pub_sharples_1983_alexander_fate",
+      "section": "Commentary, on De Fato XI",
+      "page": "141",
+      "quote_verbatim": "More generally, Alexander is wrong to assume that determinism implies that deliberation will make no difference to our actions (179.17-23, cf. XII 181.3-5); it is perfectly compatible with determinism that deliberation should lead us to decide against the course of action that initially appeared favourable, only it will be predetermined that it should do so.",
+      "context": "Sharples explicitly states that Alexander's central anti-determinist move presupposes incompatibilism rather than demonstrating it. The 'libertarian' Alexander Frede describes is, on Sharples's reading, an Alexander whose argument against determinism only works because Alexander already assumes that determinism precludes effective deliberation — which is exactly what a (soft-determinist) compatibilist would deny. This is the textbook hedge Lienemann 2012 (BPJAM p. 260) attributes to Sharples.",
+      "verification_confidence": "high",
+      "grep_target": "Alexander is wrong to assume that determinism implies that deliberation"
+    },
+    "corroborating_hit_1": {
+      "section": "Commentary, on De Fato XIV (continuing into XV)",
+      "page": "147",
+      "quote_verbatim": "by the distinction that he draws between voluntary and responsible action Alexander puts himself in a position which risks being paradoxical if pressed.",
+      "context": "Sharples diagnoses an internal incoherence in Alexander's voluntary/responsible distinction — i.e. the very distinction Frede uses to credit Alexander with the 'discovery' of free will.",
+      "grep_target": "puts himself in a position which risks being paradoxical if pressed"
+    },
+    "corroborating_hit_2": {
+      "section": "Commentary, on De Fato XV",
+      "page": "148",
+      "quote_verbatim": "it can hardly be said that Alexander gives adequate attention in the de fato to the analysis of causation as such — even in chs. XXII–XXV, between which and the present chapter no explicit link is drawn — or that he is fully conscious of the significance of the difference between his approach and his opponents'; the impression given is rather of an uncritical acceptance of Aristotelian positions, and of a series of debating points rather than a detailed examination of the issue.",
+      "context": "Methodological deflation of De Fato as a rigorous anti-determinist demonstration. Frede 2011 treats De Fato as the locus classicus of libertarian free will; Sharples says it is closer to a string of debating points without a serious causal theory underneath.",
+      "grep_target": "the impression given is rather of an uncritical acceptance of Aristotelian positions, and of a series of debating points"
+    },
+    "corroborating_hit_3": {
+      "section": "Commentary, on De Fato V",
+      "page": "129",
+      "quote_verbatim": "Such possibility is incompatible with determinism if it is understood in Alexander's libertarian sense, but not if it is taken in a qualified soft-determinist one; nor would the appeal to common usage (169.10-12) necessarily be regarded by a Stoic as finally settling the matter.",
+      "context": "Sharples explicitly relativizes the libertarian reading: it works only IF one already grants Alexander's libertarian construal of 'possibility'. Direct support for Lienemann's claim that Sharples sees no 'eindeutiger Beleg' for indeterminism in Alexander beyond Alexander's own stipulation.",
+      "grep_target": "incompatible with determinism if it is understood in Alexander"
+    },
+    "corroborating_hit_4": {
+      "section": "Commentary, on Mantissa XXII (De Fato XXXIX continuation)",
+      "page": "173",
+      "quote_verbatim": "211.20ff. wrongly assumes that determinism implies that our being wise or otherwise will have no effect on our actions (above, p. 10).",
+      "context": "Same 'wrongly assumes' diagnostic as the primary hit at p. 141 — Sharples flags that the Mantissa material reproduces, in compressed form, the very begging-of-the-question that vitiates the central De Fato anti-determinist arguments.",
+      "grep_target": "wrongly assumes that determinism implies that our being wise"
+    },
+    "balancing_finding": {
+      "section": "Introduction, §2 'Alexander and the De Fato'",
+      "page": "22",
+      "quote_verbatim": "One crucial point that is however clear is that Alexander's own conception of responsibility is a libertarian one. He objects not just to determination of our actions by external causes alone, but to that resulting from a combination of internal and external factors; it is not enough that an individual contributes something to the result, if that contribution is predetermined.",
+      "context": "Sharples DOES grant — and is the one who established for English-language scholarship — that Alexander's own conception of moral responsibility is libertarian. So Lienemann's reading is not that Sharples denies the libertarian label outright, but that Sharples carefully separates (a) Alexander's stipulated/intended position [yes, libertarian] from (b) whether De Fato actually demonstrates indeterminism in any modern philosophical sense [no — it argues badly, stipulates incompatibilism, and risks paradox]. Frede 2011 collapses (a) and (b); Sharples 1983 keeps them apart, and that distinction is precisely what Lienemann mobilises.",
+      "grep_target": "Alexander's own conception of responsibility is a libertarian one"
+    },
+    "secondary_balancing_finding": {
+      "section": "Introduction, §2",
+      "page": "22",
+      "quote_verbatim": "at the same time, he faces very real difficulties in combining his libertarian position with an account of the rational element in human behaviour, and does not really solve it.",
+      "context": "Even where Sharples affirms Alexander's libertarianism (p. 22), he immediately appends that Alexander 'does not really solve' the central difficulty — again the exact gap Lienemann 2012 amplifies against Frede's strong libertarian reconstruction."
+    },
+    "scholarly_significance_for_thesis": "Lienemann 2012 BPJAM p. 260 is correctly grounded: Sharples 1983, in his running commentary, repeatedly says that (i) Alexander's anti-determinist arguments work only by assuming what they ought to demonstrate, (ii) the voluntary/responsible distinction risks paradox, (iii) the libertarian reading of 'possibility' is one available reading among others, and (iv) Alexander does not actually solve the difficulty of reconciling libertarianism with rationality. Frede 2011 (A Free Will: Origins of the Notion in Ancient Thought) treats De Fato as the inaugural document of a fully formed libertarian concept of free will. Sharples's careful philological hedging — built into the Duckworth commentary — is the textual evidence Lienemann uses to resist that reading. For the thesis: this is the citation pivot for the chapter on the Sharples–Bobzien–Frede–Lienemann debate over whether 'free will' really emerged with Alexander or only with Augustine."
+  },
+
+  "patches": {
+
+    "scholarly_argument_sharples_alexander_of_aphrodisias_on_pr_2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/sharples_1983_alexander_de_fato.pdf",
+      "publication_id": "pub_sharples_1983_alexander_fate",
+      "page": "26-27",
+      "chapter": "Introduction §2 'Alexander and the De Fato'",
+      "quote_verbatim": "not the heavenly bodies but the sublunary; it is exercised by the souls of the heavenly spheres (rather than by the Unmoved Mover(s) themselves) through the medium of the heavenly rotations, which ensure the preservation of species — the connection between the heavenly rotations and the continuity of sublunary coming-to-be being a central idea in Aristotle. Providence is not however concerned with the fortunes of individuals — this meeting the objection that the undeserved misfortunes of individuals seem incompatible with divine providence.",
+      "context": "Position [D] of the modern taxonomy (providence over species not individuals) is correctly attributed to Alexander; for-the-most-part [F] formula confirmed throughout commentary (e.g. 'not always but for the most part' at pp. 25, 27, and commentary on ch. VI). The [A]-[F] LETTERING itself, however, is from Sharples 1982/2003 articles — not in the 1983 book. Description's CONTENT is correct, its CITATION of [A]-[F] in the 1983 book is anachronistic.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sharples_agent"
+    },
+
+    "scholarly_argument_sharples_alexander_of_aphrodisias_schol_2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/sharples_1983_alexander_de_fato.pdf",
+      "publication_id": "pub_sharples_1983_alexander_fate",
+      "page": "5, 19-32",
+      "chapter": "Introduction §1 ('The problem before Alexander') + §2 ('Alexander and the De Fato')",
+      "quote_verbatim": "Although there are passages in which it is recognised that there is something problematic in holding someone responsible for an action that a god has foretold he will perform, it is generally misleading in the interpretation of the literature of the fifth century B.C. and earlier [...] [Sharples then traces the determinism problem from Presocratic background through Aristotle, Epicurus, Stoics, Carneades, down to Alexander as its 'central' culminating treatment].",
+      "context": "Sharples's whole Introduction is structured exactly as the arg-node describes: history of the determinism problem culminating with Alexander's De Fato, embedded in a history of recent Alexander scholarship (esp. Donini, Long, Theiler, Verbeke, Pohlenz, von Arnim — sustained engagement throughout). The two themes ARE connected, as the arg claims.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sharples_agent"
+    },
+
+    "scholarly_argument_sharples_aristotelian_theology_and_prov_4": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/sharples_1983_alexander_de_fato.pdf",
+      "publication_id": "pub_sharples_1983_alexander_fate",
+      "wrong_e1_pub_id_correction": "pub_sharples_1982_providence",
+      "wrong_e1_pub_id_note": "Currently wired to pub_sharples_1982_providence (Class. Quart. 'Two Problems'). The 1983 Duckworth volume covers the same doctrine more fully in Introduction §2; both citations are legitimate, but the primary anchor should be the 1983 book since that is the standard reference. Recommend e1 re-wire to pub_sharples_1983_alexander_fate as primary and keep pub_sharples_1982_providence as secondary.",
+      "page": "26",
+      "chapter": "Introduction §2",
+      "quote_verbatim": "not the heavenly bodies but the sublunary; it is exercised by the souls of the heavenly spheres (rather than by the Unmoved Mover(s) themselves) through the medium of the heavenly rotations, which ensure the preservation of species.",
+      "context": "Sharples expressly states that for Alexander the Unmoved Mover does NOT exercise providence — the souls of the heavenly spheres do, via heavenly rotation, securing species-preservation. This exactly matches the arg-node description. The 'via media between Stoic determinism and Epicurean indifference' framing is also articulated in the 1983 Introduction (pp. 25–28, esp. n.180 on Epicurean denial of providence; ch. on dialectical relation to Stoic providence at pp. 158–164 of the Commentary).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sharples_agent"
+    },
+
+    "scholarly_argument_sharples_free_will_and_determinism_in_a_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/sharples_1983_alexander_de_fato.pdf",
+      "publication_id": "pub_sharples_1983_alexander_fate",
+      "page": "3-20",
+      "chapter": "Introduction §1 'The problem before Alexander'",
+      "quote_verbatim": "[Sharples surveys, across §1, how the 'problem' of determinism vs. responsibility was articulated at distinct historical moments — Aristotle's awareness of necessity in NE III.5, Epicurus's swerve as response to atomist determinism, the Stoic-Academic confrontation — without committing himself to a single explanation of why the problem crystallised when it did.]",
+      "context": "The arg-node's claim ('formulated at particular times in antiquity for reasons that cannot be fully determined; we cannot know if the factors were sufficient conditions since we have no access to other possible worlds') is a META-historiographical claim. The 1983 Introduction is, in PRACTICE, exactly such a non-deterministic historical narrative — Sharples never says 'the determinism problem was bound to emerge' — but he does NOT make the explicit modal/possible-worlds argument the node attributes to him. This sounds more like Sharples's later 2008 'L'accident du déterminisme' (PUF), whose very title makes the contingency point. Likely the arg was generated from the 2008 paper, not the 1983 book.",
+      "verification_confidence": "low",
+      "wrong_source_suspicion": "Probably belongs to pub_sharples_2008_accident_determinisme (whose title 'L'accident du déterminisme' literally makes the contingency claim). The 1983 Introduction is COMPATIBLE with the claim but does not voice it.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sharples_agent"
+    },
+
+    "scholarly_argument_sharples_historical_determinism_0": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/sharples_1983_alexander_de_fato.pdf",
+      "publication_id": "pub_sharples_1983_alexander_fate",
+      "page": null,
+      "chapter": null,
+      "quote_verbatim": null,
+      "context": "The meta-historiographical thesis ('historical explanations cannot be entirely deterministic; statistical analysis useless for non-repeatable historical situations') is NOT in the 1983 Duckworth volume. The 1983 book treats the history of the problem, not the philosophy of historiography. This is almost certainly from Sharples 2008 'L'accident du déterminisme' (PUF, Les Études philosophiques 2008/3, pp. 285–303), where the contingency-of-the-problem thesis is precisely the framing argument. The local .md summary of that 2008 paper is on disk at the DOCTORAT folder.",
+      "verification_confidence": "not_found",
+      "wrong_source_suspicion": "Should be re-wired from pub_sharples_1983_alexander_fate to pub_sharples_2008_accident_determinisme.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sharples_agent"
+    },
+
+    "scholarly_argument_sharples_scope_of_divine_providence_0": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/sharples_1983_alexander_de_fato.pdf",
+      "publication_id": "pub_sharples_1983_alexander_fate",
+      "page": null,
+      "chapter": null,
+      "quote_verbatim": null,
+      "context": "The systematic [A]-[F] taxonomy of providence positions, the 'apparently similar doctrines (neglect vs. delegation) must be carefully distinguished' argument, and the Middle Platonist threefold providence reading of Timaeus — none of these appear in the 1983 Duckworth book under that taxonomic structure. The lettered taxonomy [A]-[F] is from Sharples 1982 'Alexander of Aphrodisias on Divine Providence: Two Problems' (Class. Quart. 32, pp. 198-211) and developed further in Sharples 2003 'Threefold Providence' (the e1_pub_id currently wired to this node — 'scholarly_work_sharples_2003_threefold_providence_the_history_and_bac' — is correct). NOT verifiable in this 1983 PDF.",
+      "verification_confidence": "not_found",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sharples_agent"
+    },
+
+    "scholarly_argument_sharples_stoic_providence_and_determini_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/sharples_1983_alexander_de_fato.pdf",
+      "publication_id": "pub_sharples_1983_alexander_fate",
+      "wrong_e1_pub_id_note": "Currently wired to scholarly_work_sharples_2003_threefold_providence. The CONTENT of the arg (orthodox Chrysippean Stoicism + Cicero ND 2.166-7 + Plutarch Stoic. Rep. 37 + 'inferior spirits' as polemical question) is more developed in the 2003 article, but the SAME LINE of argument is sketched in the 1983 Commentary at pp. 158–164 (esp. on De Fato XXV) where Sharples discusses Chrysippus on occasional exceptions to providence.",
+      "page": "159",
+      "chapter": "Commentary, on De Fato XXV",
+      "quote_verbatim": "Chrysippus had himself used it [the household analogy] to argue that there could be occasional exceptions to providence (SVF 2.1178, cf. Cicero de nat. deorum 2.167), though it is difficult to see how this could be reconciled with his normal position, or to suppose that such occurrences were not for him predetermined by fate.",
+      "context": "Sharples 1983 sketches the very nuance the arg-node ascribes: Chrysippus's apparent exception (the inferior-spirits / household-mismanagement passage) is hard to reconcile with the predominant determinist picture, hence is probably either polemical or to be re-read so as not to break the determinist thesis. Full taxonomy developed in 2003 article; embryonic statement IS in 1983.",
+      "verification_confidence": "medium",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sharples_agent"
+    },
+
+    "scholarly_argument_sharples_tension_between_neglect_and_de_3": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/sharples_1983_alexander_de_fato.pdf",
+      "publication_id": "pub_sharples_1983_alexander_fate",
+      "page": null,
+      "chapter": null,
+      "quote_verbatim": null,
+      "context": "The fully articulated 'tension between [D] (neglect of individuals) and [E] (delegation to lesser beings)' diagnosis, mobilising Nemesius's objection that care for species requires care for individuals (since universals depend on particulars), belongs to Sharples 1983 ARTICLE 'Nemesius of Emesa and some theories of divine providence' (Vigiliae Christianae) — explicitly mentioned in the 1983 Duckworth Commentary at p. 159 as 'forthcoming in Vigiliae Christianae' — and is fully developed in Sharples 1982 'Two Problems' (CQ) and Sharples 2003 'Threefold Providence'. The Duckworth book CONTAINS the forward-reference but does not itself argue the [D]/[E] tension.",
+      "verification_confidence": "not_found",
+      "wrong_source_suspicion": "Should be re-wired to either pub_sharples_1982_providence (CQ 'Two Problems') or Sharples's 1983 'Nemesius and some theories of divine providence' (Vigiliae Christianae 37, pp. 141-156). Neither of those publication nodes is currently in the KG under a distinct pub_* id for the Vigiliae piece — may need creation.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sharples_agent"
+    },
+
+    "scholarly_argument_sharples_the_tetralemma_argument_5": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/sharples_1983_alexander_de_fato.pdf",
+      "publication_id": "pub_sharples_1983_alexander_fate",
+      "page": null,
+      "chapter": null,
+      "quote_verbatim": null,
+      "context": "The 'tetralemma' / four-fold argument concerning divine will and ability (wants/can; wants/cannot; can/doesn't want; neither), deployed by Sextus Empiricus (Adv. Math. 9.150-189; PH 3.9-12) and Lactantius (De Ira Dei 13, citing Cicero), is not discussed in the 1983 Duckworth volume on De Fato. The tetralemma is an anti-providential / Academic-skeptical argument that does not appear in Alexander's De Fato itself, and Sharples does not import it into his commentary. This arg belongs to Sharples 1983 'Nemesius' paper, or to Sharples 1991 Cicero De Fato edition, or to Sharples 2003 'Threefold Providence' — but NOT to the 1983 Duckworth volume.",
+      "verification_confidence": "not_found",
+      "wrong_source_suspicion": "Should be re-wired from pub_sharples_1983_alexander_fate to either pub_sharples_1991_cicero_boethius (which does treat Carneadean and Academic-skeptical arguments) or the Sharples 2003 'Threefold Providence' Phronesis article.",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_sharples_agent"
+    }
+  },
+
+  "recommendations": {
+    "rewire_e1_pub_id": [
+      "scholarly_argument_sharples_aristotelian_theology_and_prov_4: ADD pub_sharples_1983_alexander_fate as primary anchor (currently only pub_sharples_1982_providence).",
+      "scholarly_argument_sharples_free_will_and_determinism_in_a_1: re-wire from None to pub_sharples_2008_accident_determinisme.",
+      "scholarly_argument_sharples_historical_determinism_0: re-wire from None to pub_sharples_2008_accident_determinisme.",
+      "scholarly_argument_sharples_tension_between_neglect_and_de_3: re-wire from None to pub_sharples_1982_providence (and consider creating a pub_sharples_1983_nemesius_vigiliae node for the Vigiliae Christianae 37 paper).",
+      "scholarly_argument_sharples_the_tetralemma_argument_5: re-wire from None to pub_sharples_1991_cicero_boethius."
+    ],
+    "do_not_lift_needs_evidence_for": [
+      "scholarly_argument_sharples_free_will_and_determinism_in_a_1",
+      "scholarly_argument_sharples_historical_determinism_0",
+      "scholarly_argument_sharples_scope_of_divine_providence_0",
+      "scholarly_argument_sharples_tension_between_neglect_and_de_3",
+      "scholarly_argument_sharples_the_tetralemma_argument_5"
+    ],
+    "lift_needs_evidence_for": [
+      "scholarly_argument_sharples_alexander_of_aphrodisias_on_pr_2",
+      "scholarly_argument_sharples_alexander_of_aphrodisias_schol_2",
+      "scholarly_argument_sharples_aristotelian_theology_and_prov_4"
+    ],
+    "consider_creating_new_argument_node": "The 'Sharples-vs-Frede on Alexander's libertarianism' position (documented in landmark_finding_lienemann_2012_corroboration above) is currently NOT represented in the KG. It is the citation pivot for the Lienemann 2012 / Frede 2011 debate and merits its own scholarly_position_* or scholarly_argument_* node, anchored on pub_sharples_1983_alexander_fate p. 141 and p. 148, with a critiques edge to a position_frede_alexander_libertarian node."
+  }
+}

@@ -800,7 +800,7 @@ NEW_ARGUMENTS: list[dict[str, Any]] = [
             "anachronique consiste a lire le sens (b) chez les "
             "Stoiciens anciens. Distinction fondatrice pour toute la "
             "lecture revisionniste de Bobzien et fondement de son "
-            "argumentation dans Bobzien 1998 OSAP"
+            "argumentation dans Bobzien 1998 Phronesis"
         ),
         description_en=(
             "Bobzien 2001 key thesis §6.3.5 + §7.1: to_eph_hemin has "
@@ -823,7 +823,7 @@ NEW_ARGUMENTS: list[dict[str, Any]] = [
             extra={
                 "argument_type": "central conceptual distinction",
                 "central_thesis": True,
-                "linked_to_bobzien_1998": "fully argued in companion 1998 OSAP paper",
+                "linked_to_bobzien_1998": "fully argued in companion 1998 Phronesis paper",
             },
         ),
         confidence=0.95,
@@ -1313,7 +1313,7 @@ NEW_ARGUMENTS: list[dict[str, Any]] = [
             "l'absorption du probleme dans des cadres theologiques "
             "(predestination + grace) qui transforment la question. "
             "Pour Bobzien, cette these est complementee par son 1998 "
-            "OSAP companion paper"
+            "Phronesis companion paper"
         ),
         description_en=(
             "Bobzien 2001 §8.7 (p. 396-412) concluding argument: "
@@ -1339,7 +1339,7 @@ NEW_ARGUMENTS: list[dict[str, Any]] = [
             extra={
                 "argument_type": "historical-conceptual narrative",
                 "central_thesis": True,
-                "companion_paper": "Bobzien 1998 OSAP 'The Inadvertent Conception and Late Birth of the Free-Will Problem'",
+                "companion_paper": "Bobzien 1998 Phronesis 'The Inadvertent Conception and Late Birth of the Free-Will Problem'",
             },
         ),
         confidence=0.95,

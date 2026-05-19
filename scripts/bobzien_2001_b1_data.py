@@ -34,7 +34,7 @@ UPDATES: list[dict[str, Any]] = [
             "compatibilisme causal sophistique mais distinct du probleme moderne. "
             "Le probleme du libre arbitre est ne tardivement et par "
             "inadvertance au IIe siecle CE avec Alexandre d'Aphrodise (these "
-            "complementaire : Bobzien 1998 OSAP)"
+            "complementaire : Bobzien 1998 Phronesis)"
         ),
         "description_en": (
             "Susanne Bobzien (b. 1960), German-British philosopher, Joseph C. "
@@ -51,7 +51,7 @@ UPDATES: list[dict[str, Any]] = [
             "sophisticated causal compatibilism distinct from the modern "
             "problem. The free-will problem emerged late and inadvertently "
             "in the 2nd century CE with Alexander of Aphrodisias (companion "
-            "thesis: Bobzien 1998 OSAP)"
+            "thesis: Bobzien 1998 Phronesis)"
         ),
         "metadata_updates": {
             "specialty": "ancient Stoicism, Stoic logic, determinism, philosophy of free will",
@@ -307,7 +307,7 @@ UPDATES: list[dict[str, Any]] = [
                 "frame, generating misunderstandings Bobzien systematically "
                 "diagnoses. Crucially Alexander's two-sided to_eph_hemin = "
                 "first unambiguous evidence of libertarian-style free will in "
-                "antiquity (this thesis fully argued in Bobzien 1998 OSAP / "
+                "antiquity (this thesis fully argued in Bobzien 1998 "
                 "Phronesis companion paper)"
             ),
         },
@@ -664,7 +664,7 @@ UPDATES: list[dict[str, Any]] = [
                 "Aphrodisias and is read back anachronistically into the "
                 "early Stoa by later commentators. This is Bobzien's "
                 "central exegetical claim and the foundation for her 1998 "
-                "OSAP paper on the late birth of the free-will problem"
+                "Phronesis paper on the late birth of the free-will problem"
             ),
         },
     },

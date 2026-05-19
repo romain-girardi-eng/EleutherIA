@@ -1,0 +1,537 @@
+{
+  "scholar": "Michael Frede",
+  "scholar_node_id": "scholar_frede_michael",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Frede_2011_Free_Will.txt",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Destrée - 2014 - What is Up to Us Studies on Agency and Responsibi.pdf",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Michael Frede - Essays in Ancient Philosophy .pdf"
+  ],
+  "disambiguation_note": "Michael Frede (1940-2007) ≠ Dorothea Frede (his daughter, Aristotelian, b.1941). PDFs 'Frede - 1982 - The Dramatization of Determinism' and 'The Dramatization of Determinism- Alexander of Aphrodisias' De Fato- D. Frede' are BOTH by Dorothea Frede (JSTOR metadata confirms: Phronesis 27.3, 1982, pp.276-298). All KG arguments 'scholarly_argument_frede_alexander_*' (treating Alexander's De Fato) likely belong to Dorothea Frede, not Michael Frede — flagged for reattribution but NOT patched here.",
+  "args_processed": 47,
+  "args_verified": 21,
+  "args_not_found": 6,
+  "args_reattribute_to_dorothea": 8,
+  "args_not_targeted_michael_frede": 12,
+  "patches": {
+    "argument_frede_2011_notion_is_technical_and_datable": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "3",
+      "chapter": "Chapter 1 — Introduction",
+      "quote_verbatim": "I assume, and I will try to show, that this notion in its origins is a technical, philosophical notion which already presupposes quite definite and far from trivial assumptions about ourselves and the world. It is for this reason that I presume its having an identifiable historical origin.",
+      "translation_en": null,
+      "context": "Frede ouvre le livre en posant sa thèse-cadre : la notion de libre arbitre est philosophiquement technique (non ordinaire) et historiquement datable. Il oppose explicitement cette position aux scholars (Ross, Dihle) qui présumaient les Grecs déjà porteurs d'une notion 'ordinaire' de libre arbitre.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_2011_aristotle_no_will_no_free_will": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "25",
+      "chapter": "Chapter 2 — Aristotle on Choice without a Will",
+      "quote_verbatim": "It should now be clear why Aristotle does not have a notion of a will. One's willing, one's desire of reason, is a direct function of one's cognitive state, of what reason takes to be a good thing to do.",
+      "translation_en": null,
+      "context": "Frede conclut Ch.2 en formulant sa thèse négative : Aristote n'a ni notion de volonté ni a fortiori de libre arbitre. La boulēsis aristotélicienne est fonction directe de l'état cognitif (voir le bien = vouloir le bien), donc ne constitue pas une 'volonté' indépendante. Le titre du chapitre lui-même est explicite : 'Aristotle on Choice WITHOUT a Will'.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_2011_stoic_assent_is_proto_will": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "44",
+      "chapter": "Chapter 3 — The Emergence of a Notion of Will in Stoicism",
+      "quote_verbatim": "So now we have the notion of assent, and hence the appropriate notion of a willing, but we do not yet have the notion of a choice, let alone of a will.",
+      "translation_en": null,
+      "context": "Frede situe au cœur de Ch.3 la genèse stoïcienne classique : l'assentiment (synkatathesis/sunkatathesis) à une impression impulsive constitue un 'willing' (vouloir), mais pas encore une 'volonté' (will) ni un 'choix' (prohairesis). Les matériaux conceptuels sont là, la chose elle-même viendra avec Épictète.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_2011_epictetus_first_free_will": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "78",
+      "chapter": "Chapter 5 — The Emergence of a Notion of a Free Will in Stoicism",
+      "quote_verbatim": "So here we have our first actual notion of a free will. It is a notion of a will such that there is no power or force in the world which could prevent it from making the choices one needs to make to live a good life or force it to make choices which would prevent us from living a good life.",
+      "translation_en": null,
+      "context": "Thèse centrale du livre, formulée à l'issue de l'analyse d'Épictète (Ch.5 §2, pp.74-85). Frede affirme que la 'première notion effective' (first actual notion) du libre arbitre émerge avec Épictète, comme conséquence de la conjonction du synkatathesis stoïcien + intériorisation de prohairesis + thèse selon laquelle rien d'extérieur ne peut forcer le sage.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_2011_autexousion_stoic_origin_then_christian": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "75",
+      "chapter": "Chapter 5 — The Emergence of a Notion of a Free Will in Stoicism",
+      "quote_verbatim": "The Stoics in this context use a term which refers to this ability to act of one's own initiative, namely, to autexousion. The term is twice found in the fragments of Musonius and then more often in Epictetus. It comes to be used by Platonists and Peripatetics but also from Justin Martyr onwards very frequently by Christian authors.",
+      "translation_en": null,
+      "context": "Frede documente la trajectoire historique du terme autexousion : origine stoïcienne (Musonius x2, puis Épictète), adoption par Platoniciens/Péripatéticiens, popularisation par les chrétiens à partir de Justin Martyr. Note importante de Frede : malgré sa traduction usuelle, le terme ne dénote pas en soi 'libre arbitre' mais la capacité d'agir de sa propre initiative.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_2011_origen_stoic_christianity_anti_gnostic": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "114",
+      "chapter": "Chapter 7 — An Early Christian View on a Free Will: Origen",
+      "quote_verbatim": "Hence one thing is obvious: Origen is very heavily relying on the late Stoic doctrine of free will; if there is some deviation from it, Origen's remarks on freedom are certainly not meant to be directed against the Stoics to put them right.",
+      "translation_en": null,
+      "context": "Frede synthétise au début du §3 de Ch.7 sa thèse sur Origène : le De principiis III.1 est massivement stoïcien (terminologie + arguments parallèles à Épictète), Origène n'écrit pas contre les Stoïciens mais contre les Gnostiques et le déterminisme astral, qu'il identifie explicitement comme adversaires (Praef. De Princ. + CC 5.61 + Comm. Genesis attaqué).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_2011_origen_differences_from_platonism_not_christianity": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "122",
+      "chapter": "Chapter 7 — An Early Christian View on a Free Will: Origen",
+      "quote_verbatim": "Origen, unlike Chrysippus and Epictetus, but like Alexander, identifies freedom (to autexousion) with there being things which are up to you to do or not to do, that is to say, things such that you are responsible for doing them. He does not think that freedom is something we would naturally have if nothing went wrong with our development, and which we lose the moment we take a wrong step.",
+      "translation_en": null,
+      "context": "Frede liste les écarts d'Origène avec les Stoïciens classiques : (1) identification autexousion ↔ eph' hēmin (alors que les Stoïciens distinguent liberté du sage et eph' hēmin) ; (2) freedom permanente vs liberté que l'on perd ; (3) erreurs accumulatives (pas toutes égales). Frede attribue ces écarts à l'arrière-plan platonicien d'Origène, non à sa foi chrétienne.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_2011_plotinus_hierarchized_freedom": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "144",
+      "chapter": "Chapter 8 — Reactions to the Stoic Notion of a Free Will: Plotinus",
+      "quote_verbatim": "In any case, we see sufficiently by now why he thinks that an intellect is unqualifiedly free, but a soul is free only insofar as it has become like an intellect with its freedom qua soul something highly tenuous and qualified. Finally, we see that the embodied human being is free, insofar as its soul is free, but that its freedom to do things in the world is so highly qualified that freedom hardly seems the right word for it.",
+      "translation_en": null,
+      "context": "Frede formule la hiérarchie plotinienne de la liberté (Enn. VI.8) : intellect = liberté pleine et inconditionnée ; âme = liberté tenue et qualifiée (en tant qu'elle devient comme intellect) ; homme incarné = liberté si qualifiée que le mot 'liberté' convient à peine. Le Dieu de Plotin (l'Un) est au sommet : liberté absolue.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_2011_plotinus_divine_will_not_judeo_christian": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "151",
+      "chapter": "Chapter 8 — Reactions to the Stoic Notion of a Free Will: Plotinus",
+      "quote_verbatim": "Nevertheless one eminent Plotinian scholar, A. H. Armstrong, tried to persuade us that Plotinus was writing under Christian influence. Armstrong starts out by claiming that the question of God's freedom did not seriously occupy philosophers until roughly the time of Plotinus and that, when it came to occupy them, it was \"probably due to Jewish and Christian contacts\" (399).",
+      "translation_en": null,
+      "context": "Polémique frontale de Frede contre A. H. Armstrong, qui voyait dans Enn. VI.8 une importation chrétienne. Frede réfute en montrant que (a) Plotin écrit 590 ans après Aristote, dans une longue tradition philosophique grecque ; (b) la thèse 'Dieu agit par acte libre de volonté' n'est PAS spécifiquement judéo-chrétienne.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_2011_augustine_no_new_notion_vs_dihle": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "157",
+      "chapter": "Chapter 9 — Augustine: A Radically New Notion of a Free Will?",
+      "quote_verbatim": "It seems more promising instead to expect Augustine, given his originality, to have something new to say on the will but new on a much more modest scale and within the confines of an evolving Christian position. […] I will argue for the conclusion that, to a large extent, the differences are due to the fact that Augustine follows the Stoic view on freedom much more closely than Origen does.",
+      "translation_en": null,
+      "context": "Frede répond à Dihle 1982 (The Theory of Will in Classical Antiquity) qui faisait d'Augustin l'inventeur effectif du libre arbitre. Frede soutient l'inverse : Augustin n'invente pas une notion radicalement nouvelle, il suit le stoïcisme tardif (plus servilement qu'Origène) à l'intérieur d'une position chrétienne en évolution.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_2011_augustine_stoic_paul_via_marius_victorinus": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "172",
+      "chapter": "Chapter 9 — Augustine: A Radically New Notion of a Free Will?",
+      "quote_verbatim": "But we also need to keep in mind that Augustine's interpretation of Paul seems to be rather like Marius Victorinus's interpretation. […] There Victorinus takes the position that, as Paul says, God operates in us so as to make us will what he wants us to but also arranges the world in such a way that our willing is efficacious. […] So for Victorinus already both the willing and the doing are God's.",
+      "translation_en": null,
+      "context": "Là où Origène avait refusé l'interprétation paulinienne (Rm 9.16, Ph 2.13) selon laquelle Dieu cause notre vouloir, Augustin l'accepte. Frede identifie Marius Victorinus comme précédent direct : conversion tardive au christianisme, traducteur d'Aristote, traducteur des Platonici libri lus par Augustin (cf. Conf.), commentaire sur Philippiens 2.13.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_2011_christianity_anti_gnostic_anti_astral_motivation": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "114",
+      "chapter": "Chapter 7 — An Early Christian View on a Free Will: Origen",
+      "quote_verbatim": "I want to argue that these views are astral determinism and various forms of what we now call \"Gnosticism,\" though for Origen himself the \"Gnostics\" were just one particular group among them (see CC 5.61).",
+      "translation_en": null,
+      "context": "Frede identifie les deux motivations chrétiennes de l'investissement du libre arbitre : (1) polémique anti-gnostique ; (2) polémique anti-astrologique. La référence à CC 5.61 + Praef. De Princ. + Comm. Genesis ancre la thèse. Augustin (sermon cité) atteste encore le second motif : 'beaucoup hésitent à se convertir à cause de leurs croyances astrologiques' (p.115).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_2011_ancient_notion_not_basically_flawed": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "179",
+      "chapter": "Chapter 10 — Conclusion",
+      "quote_verbatim": "free will which, perhaps for good reasons, we might not want to accept but which do not seem to be basically flawed in the way a notion like Alexander's is. To the contrary, considered from a sufficiently abstract level and disregarding the particular features which reflect their particular historical circumstances, they seem to me to more or less share one feature which I find rather attractive.",
+      "translation_en": null,
+      "context": "Frede répond à sa quatrième question initiale (la notion antique du libre arbitre était-elle fatalement viciée ?). Réponse : NON, sauf chez Alexandre d'Aphrodise. Toutes les autres formulations antiques (Épictète, Origène, Plotin, Augustin) partagent une idée que Frede trouve 'rather attractive'.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_aristotle_on_will_1": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "19",
+      "chapter": "Chapter 2 — Aristotle on Choice without a Will",
+      "quote_verbatim": "we should reassure ourselves that we have understood not only that Aristotle does not have a notion of a free will but also why he does not have a notion of a free will.",
+      "translation_en": null,
+      "context": "Ouverture du Ch.2 : Frede annonce le programme — montrer qu'Aristote n'a ni notion de volonté ni notion de libre arbitre, et expliquer pourquoi (parce que sa boulēsis est dépendance directe de la cognition).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_aristotle_on_will_and_free_wil_1": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "25",
+      "chapter": "Chapter 2 — Aristotle on Choice without a Will",
+      "quote_verbatim": "It should now be clear why Aristotle does not have a notion of a will. One's willing, one's desire of reason, is a direct function of one's cognitive state, of what reason takes to be a good thing to do.",
+      "translation_en": null,
+      "context": "Conclusion analytique de Ch.2 (p.25) — Aristote a boulēsis (vouloir = désir-de-raison) et prohairesis (choix), mais sans 'volonté' indépendante. Le vouloir est fonction de la cognition : voir le bien = vouloir le bien. Pas d'espace pour une 'volonté' qui pourrait choisir contre la raison.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_historical_origin_of_free_will_0": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "3",
+      "chapter": "Chapter 1 — Introduction",
+      "quote_verbatim": "I assume, and I will try to show, that this notion in its origins is a technical, philosophical notion which already presupposes quite definite and far from trivial assumptions about ourselves and the world. It is for this reason that I presume its having an identifiable historical origin.",
+      "translation_en": null,
+      "context": "Thèse-cadre de l'Introduction : le libre arbitre n'est pas une notion ordinaire pré-théorique mais un concept philosophique technique avec une origine historique datable.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_origin_of_free_will_0": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "175",
+      "chapter": "Chapter 10 — Conclusion",
+      "quote_verbatim": "The notion of a free will first arises in late Stoicism in the first century a.d. It is a notion we clearly find in Epictetus. The notion is the conception of an ability to make choices and decisions, in particular choices and decisions which",
+      "translation_en": null,
+      "context": "Réponse résumée de Ch.10 (Conclusion) : la notion de libre arbitre émerge en stoïcisme tardif, Ier s. apr. J.-C., chez Épictète. Pas chez Aristote, pas chez les premiers Stoïciens (Zénon, Chrysippe).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_origin_of_free_will_concept_0": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "78",
+      "chapter": "Chapter 5 — The Emergence of a Notion of a Free Will in Stoicism",
+      "quote_verbatim": "So here we have our first actual notion of a free will. It is a notion of a will such that there is no power or force in the world which could prevent it from making the choices one needs to make to live a good life or force it to make choices which would prevent us from living a good life.",
+      "translation_en": null,
+      "context": "Localisation précise de l'émergence : Épictète, section §2 de Ch.5. La 'first actual notion' est définie par l'imprenabilité externe — rien dans le monde ne peut forcer ou empêcher les choix nécessaires à la vie bonne.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_epictetus_and_free_will_3": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "45",
+      "chapter": "Chapter 3 — The Emergence of a Notion of Will in Stoicism (section: 'Epictetus and the first notion of a will')",
+      "quote_verbatim": "epictetus and the first notion of a will — In Epictetus's Discourses the notion of prohairesis (choice) plays perhaps the central role. It is our prohairesis which defines us as a person, as the sort of person we are; it is our prohairesis which determines how we behave.",
+      "translation_en": null,
+      "context": "Section dédiée à Épictète dans Ch.3 (pp.45-48), intitulée 'Epictetus and the first notion of a will'. Frede argumente que prohairesis chez Épictète est emprunté à la terminologie aristotélicienne MAIS reçoit un sens stoïcien transformé : la prohairesis devient le siège exclusif de ce qui dépend vraiment de nous.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_epictetus_as_originator_of_fre_3": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "78",
+      "chapter": "Chapter 5 — The Emergence of a Notion of a Free Will in Stoicism",
+      "quote_verbatim": "So here we have our first actual notion of a free will. It is a notion of a will such that there is no power or force in the world which could prevent it from making the choices one needs to make to live a good life or force it to make choices which would prevent us from living a good life.",
+      "translation_en": null,
+      "context": "Voir argument_frede_2011_epictetus_first_free_will (même verbatim, doublon dans la KG à fusionner).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_autexousion_terminology_4": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "75",
+      "chapter": "Chapter 5 — The Emergence of a Notion of a Free Will in Stoicism",
+      "quote_verbatim": "The Stoics in this context use a term which refers to this ability to act of one's own initiative, namely, to autexousion. The term is twice found in the fragments of Musonius and then more often in Epictetus. It comes to be used by Platonists and Peripatetics but also from Justin Martyr onwards very frequently by Christian authors.",
+      "translation_en": null,
+      "context": "Doublon de argument_frede_2011_autexousion_stoic_origin_then_christian — même verbatim documentant l'origine stoïcienne et l'adoption chrétienne à partir de Justin.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_christian_motivation_for_free__7": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "114",
+      "chapter": "Chapter 7 — An Early Christian View on a Free Will: Origen",
+      "quote_verbatim": "I want to argue that these views are astral determinism and various forms of what we now call \"Gnosticism,\" though for Origen himself the \"Gnostics\" were just one particular group among them (see CC 5.61).",
+      "translation_en": null,
+      "context": "Doublon de argument_frede_2011_christianity_anti_gnostic_anti_astral_motivation. Identifie les deux motivations chrétiennes principales pour adopter le libre arbitre stoïcien : (1) anti-gnosticisme, (2) anti-astrologie.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_christian_adoption_of_free_wil_4": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "104",
+      "chapter": "Chapter 7 — An Early Christian View on a Free Will: Origen",
+      "quote_verbatim": "The Christians got their notion of a free will from Platonism and, most of all, from Stoicism. Many of the massive assumptions associated in Stoicism with the doctrine of free will, their Christian beliefs, and whether those beliefs even allowed them to find or see a radically new way of understanding human beings, human freedom, and the will.",
+      "translation_en": null,
+      "context": "Ouverture de Ch.7 : Frede répond à 'd'où les chrétiens ont-ils tiré leur notion de libre arbitre ?' — réponse : du platonisme et surtout du stoïcisme. Le passage prépare la thèse-clé du livre : la notion stoïcienne tardive trouve son chemin dans la doctrine chrétienne via Origène puis Augustin.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_origen_on_free_will_5": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "113",
+      "chapter": "Chapter 7 — An Early Christian View on a Free Will: Origen",
+      "quote_verbatim": "Origen here simply identifies freedom with there being things which are up to us to do or not to do. So by the end of III.1.1 he announces that he is first going to set out the notion of what is up to us and then, on the basis of having explicated this notion, clarify",
+      "translation_en": null,
+      "context": "Frede commente l'ouverture de De Principiis III.1 (Origène) : la liberté est définie comme co-extensive à ce qui dépend de nous (eph' hēmin). Ceci constitue déjà une déviation par rapport au stoïcisme classique (qui réserve la liberté pleine au sage).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_origen_s_doctrine_of_free_will_5": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "114",
+      "chapter": "Chapter 7 — An Early Christian View on a Free Will: Origen",
+      "quote_verbatim": "Hence one thing is obvious: Origen is very heavily relying on the late Stoic doctrine of free will; if there is some deviation from it, Origen's remarks on freedom are certainly not meant to be directed against the Stoics to put them right.",
+      "translation_en": null,
+      "context": "Doublon de argument_frede_2011_origen_stoic_christianity_anti_gnostic. Documente la dépendance stoïcienne massive d'Origène dans De Princ. III.1.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_origen_s_differences_from_stoi_6": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "122",
+      "chapter": "Chapter 7 — An Early Christian View on a Free Will: Origen",
+      "quote_verbatim": "Origen, unlike Chrysippus and Epictetus, but like Alexander, identifies freedom (to autexousion) with there being things which are up to you to do or not to do, that is to say, things such that you are responsible for doing them.",
+      "translation_en": null,
+      "context": "Doublon de argument_frede_2011_origen_differences_from_platonism_not_christianity. Liste des écarts d'Origène avec Chrysippe/Épictète, attribués au platonisme d'Origène (non à son christianisme).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_origen_s_doctrine_of_apokatast_8": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "122",
+      "chapter": "Chapter 7 — An Early Christian View on a Free Will: Origen",
+      "quote_verbatim": "But Origen's created free intellects do not unshakably know the good. They are cognitively separated from it by a gap which can never be completely filled, which may get smaller, as it may get bigger, but never disappears. Hence Origen's intellects can make mistakes, however far they have advanced in wisdom. There is never a state, as in Stoicism, in which there is no possibility of a mistake […]. This is Origen's famous doctrine of the apokatastasis.",
+      "translation_en": null,
+      "context": "Frede dérive l'apokatastasis origénienne (universal restoration) de la doctrine de la liberté : puisque les intellects créés ne peuvent jamais connaître inébranlablement le Bien (contrairement au sage stoïcien), la possibilité de la chute persiste — et inversement, la possibilité du retour persiste pour les démons. Ouvre Ch.7 §4 (pp.122-124).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_plotinus_on_free_will_6": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "130",
+      "chapter": "Chapter 8 — Reactions to the Stoic Notion of a Free Will: Plotinus",
+      "quote_verbatim": "Plotinus proposes that the whole of reality originates in an absolutely free and unconditioned act of divine will and that the free will of embodied human beings has to be understood as a faint image of this divine will.",
+      "translation_en": null,
+      "context": "Frede ouvre Ch.8 (Plotinus) avec l'analyse d'Enn. VI.8 ('On Voluntariness and the Will of the One'). Plotin construit une métaphysique hiérarchique de la liberté : Un = liberté absolue, intellect = liberté pleine, âme = qualifiée, homme incarné = liberté à peine méritant le nom.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_stoic_origin_of_the_will_2": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "44",
+      "chapter": "Chapter 3 — The Emergence of a Notion of Will in Stoicism",
+      "quote_verbatim": "So now we have the notion of assent, and hence the appropriate notion of a willing, but we do not yet have the notion of a choice, let alone of a will.",
+      "translation_en": null,
+      "context": "Doublon de argument_frede_2011_stoic_assent_is_proto_will. Le stoïcisme classique fournit la matière première (assentiment + désir rationnel = vouloir) mais pas encore la 'volonté' propre — celle-ci émergera avec Épictète.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_stoic_psychology_and_assent_2": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "43",
+      "chapter": "Chapter 3 — The Emergence of a Notion of Will in Stoicism",
+      "quote_verbatim": "action, unless one is physically and literally forced into doing something, presupposes an act of reason's assent to an appropriate impulsive impression. This assent will constitute a rational impulse which prompts or drives, as it were, the action. So any human desire (orexis) is a desire of reason. Thus any desire of a grown-up human being is a willing, a boulēsis.",
+      "translation_en": null,
+      "context": "Frede explicite la psychologie stoïcienne de l'assentiment : toute action humaine (sauf contrainte physique) implique un assentiment rationnel à une impression impulsive. Ce mécanisme est la condition psychologique du futur 'libre arbitre' épictétien.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_stoic_theory_of_assent_and_wil_2": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "44",
+      "chapter": "Chapter 3 — The Emergence of a Notion of Will in Stoicism",
+      "quote_verbatim": "So now we have the notion of assent, and hence the appropriate notion of a willing, but we do not yet have the notion of a choice, let alone of a will.",
+      "translation_en": null,
+      "context": "Doublon de scholarly_argument_frede_stoic_origin_of_the_will_2 et argument_frede_2011_stoic_assent_is_proto_will.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_augustine_on_free_will_7": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "157",
+      "chapter": "Chapter 9 — Augustine: A Radically New Notion of a Free Will?",
+      "quote_verbatim": "I will argue for the conclusion that, to a large extent, the differences are due to the fact that Augustine follows the Stoic view on freedom much more closely than Origen does. But I want to anticipate this proposal by addressing immediately what I take to be the main argument for the claim that Augustine's notion of the will is radically different from anything we find in Greek philosophy.",
+      "translation_en": null,
+      "context": "Annonce explicite par Frede au début de Ch.9 : Augustin n'est pas l'inventeur d'une notion radicalement nouvelle, mais un bénéficiaire (et raffineur) de la notion stoïcienne tardive — paradoxalement plus stoïcien qu'Origène ne l'était.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_methodology_for_studying_free__5": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "1",
+      "chapter": "Editor's Preface (A. A. Long, paraphrasing Frede's method)",
+      "quote_verbatim": "Frede's strategy is to avoid any initial presuppositions about the term's precise meaning and instead let his understanding of it emerge from the texts. This leads him to set Aristotle aside (albeit in a characteristically illuminating chapter) and to shift the focus firmly to Stoicism.",
+      "translation_en": null,
+      "context": "ATTENTION : ce verbatim est tiré de la Préface du livre, écrite par l'éditeur A. A. Long, et résume la méthodologie de Frede. Frede lui-même n'a pas formulé cette méthodologie en propres termes dans une section dédiée. Le verbatim est néanmoins fidèle et autorisé par l'éditeur (qui était à la fois ami de Frede et son éditeur posthume). Pour une formulation directe par Frede, voir p.3 (notion-cadre 'technical philosophical notion').",
+      "verification_confidence": "medium",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_methodology_8": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "1",
+      "chapter": "Editor's Preface (A. A. Long, paraphrasing Frede's method)",
+      "quote_verbatim": "Frede's strategy is to avoid any initial presuppositions about the term's precise meaning and instead let his understanding of it emerge from the texts.",
+      "translation_en": null,
+      "context": "Doublon de scholarly_argument_frede_methodology_for_studying_free__5 — même citation Long (éditeur), à fusionner.",
+      "verification_confidence": "medium",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_platonist_and_peripatetic_resp_3": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "89",
+      "chapter": "Chapter 6 — Platonist and Peripatetic Criticisms and Responses",
+      "quote_verbatim": "[Title of Chapter 6]: Platonist and Peripatetic Criticisms and Responses",
+      "translation_en": null,
+      "context": "VERIFICATION PARTIELLE — Le Ch.6 entier traite des réponses platoniciennes et péripatéticiennes à la doctrine stoïcienne du libre arbitre (pp.89-101). Un verbatim spécifique demanderait une lecture ciblée de la thèse précise visée par l'argument KG. Page proposée = début du Ch.6 (89). Recommandation : reformuler l'argument KG plus précisément pour cibler une page spécifique.",
+      "verification_confidence": "low",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "scholarly_argument_frede_platonist_and_peripatetic_resp_4": {
+      "pdf_source": "[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.pdf",
+      "publication_id": "pub_frede_2011_free_will",
+      "page": "89",
+      "chapter": "Chapter 6 — Platonist and Peripatetic Criticisms and Responses",
+      "quote_verbatim": "[Title of Chapter 6]: Platonist and Peripatetic Criticisms and Responses",
+      "translation_en": null,
+      "context": "Doublon de scholarly_argument_frede_platonist_and_peripatetic_resp_3. Même vérification partielle (Ch.6 complet, pp.89-101).",
+      "verification_confidence": "low",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    },
+    "argument_frede_michael_2014_eph_hemin_emerges_with_alexander_epictetus_christianity": {
+      "pdf_source": "Destrée - 2014 - What is Up to Us Studies on Agency and Responsibi.pdf",
+      "publication_id": "pub_frede_2014_eph_hemin",
+      "page": "352",
+      "chapter": "Chapter 22 — Michael Frede, 'The eph' hêmin in ancient philosophy' (Destrée & Meyer eds, 2014; originally posthumous in Philosophia 37, 2007, 110-123)",
+      "quote_verbatim": "this notion in [Aristotle] becomes something like a technical philosophical term. It will remain in philosophical use throughout antiquity and beyond. But in the course of this history the term comes to be used and to be understood as meaning, or at least as implying, something about the psychological make-up of human beings […], an understanding which went far beyond what had been meant or implied in ordinary language or, I think, in Aristotle. It came to be thought that it meant or implied some kind of freedom of choice or even a free will.",
+      "translation_en": null,
+      "context": "Thèse-cadre du chapitre 22 (Frede 2007/2014) : ἐφ' ἡμῖν est chez Aristote un terme technique pour 'ce qui est en notre pouvoir' (sans implication de volonté libre). Après Aristote, le terme acquiert progressivement une connotation psychologique de 'liberté de choix' voire de 'libre arbitre' — chez Alexandre d'Aphrodise, chez Épictète, puis chez les chrétiens Justin et Tatien (qui parlent de prohairesis eleuthera).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_frede_agent"
+    }
+  },
+  "not_found_arguments": [
+    {
+      "arg_id": "argument_frede_2011_christianity_anti_gnostic_anti_astral_motivation",
+      "status": "verified_via_p114_thesis",
+      "note": "Trouvé p.114 mais l'argument KG indique 'p.114-121' donc le verbatim couvre l'ouverture seulement. Vérification complète demanderait extraction de pp.115-121."
+    },
+    {
+      "arg_id": "scholarly_argument_frede_aristotle_s_awareness_of_deter_0",
+      "status": "verified_via_p13_15",
+      "note": "Pages 13, 15 mentionnent physical determinism + autres formes. Pas trouvé de formulation explicite 'logical, physical, ethical, teleological' chez Frede 2011 (cette taxonomie 4-quadruple est de Dorothea Frede 1982). Possible confusion KG entre Michael et Dorothea Frede sur la taxonomie 4-formes de déterminisme."
+    },
+    {
+      "arg_id": "scholarly_argument_frede_methodology_of_studying_ancien_0",
+      "status": "not_found",
+      "note": "Pas de section méthodologique générale sur 'plusieurs approches sans privilégier une seule' chez Frede 2011 (qui est focalisé sur le seul cas du libre arbitre). Possible confusion avec Essays in Ancient Philosophy où Frede expose sa méthode plus largement (volume non-recherché ici en détail)."
+    },
+    {
+      "arg_id": "scholarly_argument_frede_tensions_in_aristotle_on_causa_3",
+      "status": "not_found",
+      "note": "Tensions Aristote (nécessité min en éthique, max en science) — pas localisé chez Frede 2011 dans cette formulation. Pourrait provenir des Essays (où Frede a un texte sur les causes aristotéliciennes)."
+    },
+    {
+      "arg_id": "scholarly_argument_frede_tensions_in_aristotle_s_own_po_4",
+      "status": "not_found",
+      "note": "Doublon de l'argument précédent. Même non-localisation."
+    },
+    {
+      "arg_id": "scholarly_argument_frede_translation_and_interpretation_3",
+      "status": "not_found",
+      "note": "'Translating poiētikē aitia as efficient cause is misleading' — Frede 2011 ne traite pas en détail cette question terminologique. Possible source : Essays in Ancient Philosophy (où Frede a un chapitre sur la causalité aristotélicienne)."
+    }
+  ],
+  "reattribute_to_dorothea_frede_1982": [
+    {
+      "arg_id": "scholarly_argument_frede_alexander_of_aphrodisias_targe_1",
+      "actual_publication": "Dorothea Frede, 'The Dramatization of Determinism: Alexander of Aphrodisias\\' De Fato', Phronesis 27.3 (1982), 276-298",
+      "actual_pdf": "Frede - 1982 - The Dramatization of Determinism Alexander of Aphrodisias' De Fato.pdf",
+      "evidence": "JSTOR metadata in PDF: 'Author(s): Dorothea Frede'"
+    },
+    {
+      "arg_id": "scholarly_argument_frede_alexander_of_aphrodisias_treat_1",
+      "actual_publication": "Dorothea Frede 1982",
+      "evidence": "même paper"
+    },
+    {
+      "arg_id": "scholarly_argument_frede_alexander_s_critique_of_stoic__2",
+      "actual_publication": "Dorothea Frede 1982",
+      "evidence": "même paper"
+    },
+    {
+      "arg_id": "scholarly_argument_frede_alexander_s_identification_of__2",
+      "actual_publication": "Dorothea Frede 1982",
+      "evidence": "même paper — fate=nature 169,18ff est l'analyse de D. Frede"
+    },
+    {
+      "arg_id": "scholarly_argument_frede_alexander_s_shift_to_efficient_4",
+      "actual_publication": "Dorothea Frede 1982",
+      "evidence": "même paper — analyse cause efficiente est centrale chez D. Frede"
+    }
+  ],
+  "not_targeted_michael_frede": [
+    "scholar_position_frede_will_originates_epictetus (concerns scholar position, not argument-claim)",
+    "argument_epictetus_dichotomy_control (about Epictetus directly, not Frede's claim)",
+    "argument_justin_angel_fall (about Justin, not Frede)",
+    "scholarly_argument_acosta_l_pez_de_mesa_origin_of_free_will_in_ancient_0 (Acosta, not Frede)",
+    "scholarly_argument_blackson_* (3 args by Blackson)",
+    "scholarly_argument_gill_* (2 args by Gill)",
+    "scholarly_argument_mansfeld_* (5 args by Mansfeld)",
+    "scholarly_argument_olive_translation_and_interpretation_1 (Olive critiques Frede)",
+    "scholarly_argument_sorabji_freedom_and_the_will_in_ancien_0 (Sorabji, not Frede)",
+    "argument_bobzien_* (Bobzien)",
+    "argument_dihle_* (Dihle)",
+    "argument_frede_d_2014_aristotle_psychological_determinism (DOROTHEA Frede, not Michael)",
+    "argument_wildberg_2014_simplicius_neoplatonist_reading_epictetus_prohairesis_not_free_will (Wildberg)"
+  ]
+}

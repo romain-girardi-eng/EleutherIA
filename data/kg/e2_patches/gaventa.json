@@ -1,0 +1,161 @@
+{
+  "scholar": "Beverly Roberts Gaventa",
+  "scholar_node_id": "person_gaventa_beverly_roberts",
+  "publication_id": "scholarly_work_gaventa_2024_romans_ntl",
+  "publication_full_ref": "Beverly Roberts Gaventa, Romans: A Commentary, The New Testament Library (Louisville, KY: Westminster John Knox, 2024)",
+  "sources_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/08_Commentaires_NT/NTL_Gaventa_Romans 5.txt",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/08_Commentaires_NT/NTL_Gaventa_Romans 7.txt",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/08_Commentaires_NT/NTL_Gaventa_Romans 8.txt",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/08_Commentaires_NT/NTL_Gaventa_Romans 9-10.21.txt"
+  ],
+  "source_format_note": "OCR-extracted .txt of Gaventa NTL Romans (WJK 2024), one file per chapter range. No printed page numbers preserved in extraction; citations therefore reference (a) the file (chapter range), (b) the section header / pericope shown in the file, and (c) the line number inside the .txt file for reproducibility. Verbatims are copied byte-for-byte from the .txt files. PDF of the full commentary is not present in DOCTORAT; only the four chapter extracts above are available — Romans 1–4, 6, 10:22–end, and 11–16 are not in the corpus and were therefore not searchable.",
+  "args_processed": 15,
+  "args_verified_high": 15,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_gaventa_cosmic_scope_of_salvation_and__1": {
+      "source_file": "NTL_Gaventa_Romans 5.txt",
+      "section": "Romans 5:1–8:39 — Christ, Cosmos, and Consequences (introduction)",
+      "line_in_txt": 17,
+      "quote_verbatim": "Now he returns to interpret the consequences of Christ’s death in ch. 5 by casting the problem in cosmic terms. The powers of Sin and Death had invaded the entire human cosmos and were defeated only through Jesus Christ and his life-giving work (6:1–7:6). Not even the holy law of God remained exempt from the enslaving grasp of Sin (7:7–25).",
+      "supporting_quote_line_42": "The peace with God that Paul celebrates in this opening line of ch. 5 is the result not simply of a reconciliation between God and human beings (whether individuals or corporate groups), but of the defeat of Sin and Death.",
+      "verification_confidence": "high",
+      "match_keywords": ["powers of Sin and Death", "invaded the entire human cosmos", "defeated", "Christ", "reconciliation", "defeat of Sin and Death"]
+    },
+    "scholarly_argument_gaventa_determinism_and_moral_responsi_1": {
+      "source_file": "NTL_Gaventa_Romans 9-10.21.txt",
+      "section": "Romans 9–11 introduction and 9:6–13 commentary",
+      "line_in_txt": 25,
+      "quote_verbatim": "However the question has come to Paul, his answer begins with a general statement about God’s gifts to Israel (9:1–5), a statement that expands in vv. 6–13 into a history of Israel’s creation. This is an idiosyncratic history, however, by virtue of its insistence on God’s creation without reference to Israel’s goodness, faith, obedience, or even potential. That insistence on God’s creation sets the tone for the argument that follows.",
+      "supporting_quote_line_15": "Given the conclusion of this section, with its repeated insistence on God’s provision for all (11:26–32) and its warning against pretending to know God’s plans (11:20, 25, 33–36), another potential concern lies with the false claim to understand God’s mind. ... the overarching question is where Israel belongs in God’s eschatological victory.",
+      "verification_confidence": "high",
+      "match_keywords": ["idiosyncratic history", "without reference to Israel’s goodness, faith, obedience, or even potential", "gentile arrogance", "doxology"]
+    },
+    "scholarly_argument_gaventa_divine_election_and_human_agen_0": {
+      "source_file": "NTL_Gaventa_Romans 9-10.21.txt",
+      "section": "Romans 9:6–13 — Rebekah and the electing purpose",
+      "line_in_txt": 91,
+      "quote_verbatim": "The reason for Paul’s odd specificity about the twins’ conception and gestation comes into view with the end of v. 11. This happened “so that” the “electing purpose” might remain that of God alone. Reference to either God’s purpose or God’s act of election would have made the point, which Paul reinforces by use of both words (as in 8:28). Verse 12a takes the matter further still with the additional phrase “not from actions but from the one who calls.” ... the contrast has to do not with the law but with whether the initiative is that of a human being or of God (see Watson 2016, 189).",
+      "supporting_quote_line_25": "a history of Israel’s creation. This is an idiosyncratic history, however, by virtue of its insistence on God’s creation without reference to Israel’s goodness, faith, obedience, or even potential.",
+      "translation_paul_text_line_31": "Romans 9:11–12 (Gaventa’s rendering): “before they were born or had done anything whether good or bad—so that the electing purpose might remain God’s, not from actions but from the one who calls.”",
+      "verification_confidence": "high",
+      "match_keywords": ["electing purpose", "not from actions but from the one who calls", "without reference", "initiative", "of God"]
+    },
+    "scholarly_argument_gaventa_divine_liberation_and_human_ag_1": {
+      "source_file": "NTL_Gaventa_Romans 8.txt",
+      "section": "8:1–17 Liberation by the Spirit",
+      "line_in_txt": 4,
+      "quote_verbatim": "Paul has twice announced the implications of God’s action in Christ Jesus in terms of breaking humanity out of the powerful grip of Sin and Death (5:1; 6:1–7:6). ... Paul shifts to describe what God’s liberation looks like, first in the case of the addressees (8:1–17) and then in a larger, cosmic context (8:18–39).",
+      "supporting_quote_line_26": "The Spirit is associated with Christ or God as a powerful agent. That agent is actively involved in human lives in the context of the conflict between God and anti-God powers in that the Spirit liberates “you” (and see also vv. 5–7).",
+      "supporting_quote_line_87": "Paul has repeatedly demonstrated that there is no escape from life in the flesh apart from God’s action in Jesus Christ. In addition, life in the Spirit is “possible” not because humans freely choose it but because they are chosen (see especially 8:28–30 and the language of calling in 1:1, 7, and elsewhere). What v. 15 will affirm is that you “received,” not that you “chose” from a menu of options.",
+      "verification_confidence": "high",
+      "match_keywords": ["liberation", "Spirit liberates", "not because humans freely choose it but because they are chosen", "powerful agent", "received not chose"]
+    },
+    "scholarly_argument_gaventa_faith_as_condition_for_liberat_2": {
+      "source_file": "NTL_Gaventa_Romans 8.txt",
+      "section": "8:1–4 — “Therefore, now: no condemnation…” (commentary on v. 1)",
+      "line_in_txt": 24,
+      "quote_verbatim": "Curiously, nothing is said here about faith as a qualifying factor. The language of faith has slipped off the screen and will not return until the end of ch. 9. Nonetheless, pistis as trust or reliance on God’s action in Jesus Christ is at the heart of what it means to be “in Christ” (as in 1:16; 3:22; 5:1). The phrase “in Christ Jesus” also recalls the action that made possible the declaration of no condemnation. Together with “now,” the phrase signals the advent of a radically new human situation “in Christ Jesus.”",
+      "verification_confidence": "high",
+      "match_keywords": ["nothing is said here about faith as a qualifying factor", "slipped off the screen", "pistis", "at the heart of what it means to be in Christ", "1:16", "3:22", "5:1", "locative"]
+    },
+    "scholarly_argument_gaventa_fate_and_eschatological_promis_2": {
+      "source_file": "NTL_Gaventa_Romans 9-10.21.txt",
+      "section": "Romans 9–11 introduction",
+      "line_in_txt": 15,
+      "quote_verbatim": "Given the conclusion of this section, with its repeated insistence on God’s provision for all (11:26–32) and its warning against pretending to know God’s plans (11:20, 25, 33–36), another potential concern lies with the false claim to understand God’s mind. ... reading these chapters in close proximity to the end of ch. 8, with its triumphant declaration of God’s present provision for and future redemption of all creation, suggests that the overarching question is where Israel belongs in God’s eschatological victory.",
+      "supporting_quote_line_192": "Yet God has left a remnant, a seed, anticipating the discussion of the remnant and the remainder in ch. 11, where both the remnant and the remainder play a role in the salvation of “all Israel” (11:26). ... On either interpretation, it is God’s action that produces the seed, and it is God who will use that seed to bring about Israel’s redemption.",
+      "verification_confidence": "high",
+      "match_keywords": ["eschatological victory", "where Israel belongs", "all Israel", "11:26", "false claim to understand God’s mind", "God’s provision for all"]
+    },
+    "scholarly_argument_gaventa_human_agency_and_divine_action_0": {
+      "source_file": "NTL_Gaventa_Romans 5.txt",
+      "section": "Commentary on Romans 5:1–2 ([5:1–2])",
+      "line_in_txt": 38,
+      "quote_verbatim": "By virtue of being rectified ek pisteōs (“by faith”), Paul is able to write what follows. Paul does not explain whose pistis is meant (whether “our” faith or the faithfulness of God/Jesus Christ), since by this time the audience is expected to understand that pistis is God’s faithful action on behalf of humankind that generates human trust. Thus, faith is the sort evidenced in the peculiar story of Abraham, faith strengthened by God, not an individual virtue or an intellectual victory of conviction over doubt. The content specified in ch. 4, of course, is Abraham’s confidence that God will do as God has said and “our” confidence in the One who raised Jesus from the dead (4:20, 24).",
+      "verification_confidence": "high",
+      "match_keywords": ["rectified ek pisteōs", "God’s faithful action", "generates human trust", "faith strengthened by God", "not an individual virtue", "Abraham’s confidence"]
+    },
+    "scholarly_argument_gaventa_human_enslavement_to_sin_and_d_0": {
+      "source_file": "NTL_Gaventa_Romans 8.txt",
+      "section": "8:1–17 Liberation by the Spirit (opening framing of 7:7–25)",
+      "line_in_txt": 4,
+      "quote_verbatim": "Paul has twice announced the implications of God’s action in Christ Jesus in terms of breaking humanity out of the powerful grip of Sin and Death (5:1; 6:1–7:6). Now, having reached the bottom of the spiral (Keck 1995, 25–26) with its depiction of Sin’s ability to make use even of the holy law of God, to inhabit the body of the person, to bring about a fissure in the law itself (7:7–25), Paul shifts to describe what God’s liberation looks like...",
+      "supporting_quote_R7_line_235": "The power of Sin, introduced in 3:9 and then narrated in terms of its grasping entry into the world in 5:12–21, is not simply repeated here in ch. 7 but articulated in horrifying terms: “Sin lives in me” (vv. 17, 20). Sin’s domination is not observed at arm’s length but experienced in parasitic terms. It cannot be avoided or defended against, since it lives within the person. To say that Sin colonizes the human person is not at all an exaggeration, given Paul’s use of the verb oikeō (“lives”) in this passage.",
+      "supporting_quote_R7_line_source": "NTL_Gaventa_Romans 7.txt line 235",
+      "verification_confidence": "high",
+      "match_keywords": ["powerful grip of Sin and Death", "make use even of the holy law", "inhabit the body", "fissure in the law", "Sin colonizes", "oikeō", "lives in me"]
+    },
+    "scholarly_argument_gaventa_moral_agency_and_regime_change_1": {
+      "source_file": "NTL_Gaventa_Romans 7.txt",
+      "section": "Romans 7:1–6 introduction — regime change",
+      "line_in_txt": 4,
+      "quote_verbatim": "It is one thing for Paul to say, in effect, “No one can live simultaneously under two regimes,” when the regimes being juxtaposed are those of Sin and of God (as in 6:13, 16, 19–23). But within the discussion in 6:15–23, Paul has inserted another claim: “You are not under law but under grace” (6:15)—a statement that poses the issue of regime change in a provocative way, as it aligns grace with God and then law with Sin.",
+      "supporting_quote_line_63": "The claim that “you” died to the law and now belong to Christ epitomizes the regime change Paul has been eliciting since at least 6:1. It assumes that one may not belong both to the law and to Christ ... On this point, Romans is no less radical than Galatians: the Christ event is all-encompassing, and one may not live in both regimes at the same time (Gaventa 2014c). Importantly, Paul does not say that “you choose” the other, Christ to whom “you” now belong.",
+      "supporting_quote_line_5": "It repeats a great deal of the vocabulary of 6:15–23 (Gieniusz 1993); it also grounds the argument about not living in two regimes simultaneously with a scenario drawn from common life.",
+      "verification_confidence": "high",
+      "match_keywords": ["No one can live simultaneously under two regimes", "under law", "under grace", "regime change", "may not belong both to the law and to Christ", "does not say that you choose"]
+    },
+    "scholarly_argument_gaventa_paul_s_view_of_the_law_as_cons_0": {
+      "source_file": "NTL_Gaventa_Romans 7.txt",
+      "section": "Commentary on Romans 7:1 — “the law lords it over”",
+      "line_in_txt": 20,
+      "quote_verbatim": "What Paul expects his addressees to understand is that “the law lords it [or rules] over a person as long as she lives.” At first glance, this implies only that the law pertains to the living. Paul’s wording, however, transforms an obvious point into something far more provocative. He writes that “the law lords it over” (ho nomos kyrieuei), thereby putting the law in the company of ruling figures of a malicious sort. Paul has earlier referred to the reign of Death (basileuein in 5:14, 17) and that of Sin (basileuein in 5:21 and 6:12; kyrieuein in 6:14), so to attribute “lording it over” to the law of Moses threatens to make the law guilty by toxic association even before Paul has introduced his analogy.",
+      "supporting_quote_line_71": "Paul further characterizes the sinful passions as “aroused by the law” (literally, “through the law”). ... Now the law is associated directly with Sin in “our” very bodies. And the “now time” of v. 6 is the time when “we” have been released from the law by virtue of dying to its captivity.",
+      "supporting_quote_paul_text_line_11": "Romans 7:6 (Gaventa’s rendering): “But now we have been released from the law, dead to what held us, so that we serve as slaves to what is new, to the spirit, and not to what is obsolete, to the letter.”",
+      "verification_confidence": "high",
+      "match_keywords": ["the law lords it over", "ho nomos kyrieuei", "company of ruling figures of a malicious sort", "released from the law", "newness", "spirit", "letter"]
+    },
+    "scholarly_argument_gaventa_spirit_s_liberating_work_and_t_3": {
+      "source_file": "NTL_Gaventa_Romans 5.txt",
+      "section": "Romans 5:1–8:39 — Christ, Cosmos, and Consequences (introduction)",
+      "line_in_txt": 17,
+      "quote_verbatim": "In ch. 8 Paul turns to the liberating work of the Spirit (introduced in 5:5), which means the “slaves of righteousness” have become nothing less than siblings of Jesus Christ, anticipating God’s final triumph and the redemption and vindication of God’s whole creation.",
+      "supporting_quote_R8_line_165": "The phrase that immediately follows underscores divine agency as well as deepening the rhetorical surprise: adoption is identified as “the redemption of our body.” ... That redemption is of “our body,” the singular signaling the unity of creation. God’s redemptive action in Jesus Christ is not confined to the human world but has repercussions for all the created order.",
+      "supporting_quote_R8_line_168": "Verses 31–39 will then make clear that the context of the birth pangs is one of ongoing conflict. Although defeated in the resurrection of Jesus, the anti-God powers have by no means finally surrendered their struggle for God’s creation.",
+      "verification_confidence": "high",
+      "match_keywords": ["liberating work of the Spirit", "slaves of righteousness", "siblings of Jesus Christ", "God’s final triumph", "redemption and vindication of God’s whole creation"]
+    },
+    "scholarly_argument_gaventa_the_i_of_romans_and_the_addres_4": {
+      "source_file": "NTL_Gaventa_Romans 8.txt",
+      "section": "Commentary on Romans 8:2 — “freed you”",
+      "line_in_txt": 28,
+      "quote_verbatim": "The object of this liberative act is the singular “you,” which comes as a surprise, since “you” in Paul is most often plural (as in the immediate context, 8:9–11). The “I” that has dominated 7:7–25 makes this switch to second-person even more puzzling, yet that “I” provides the clue for understanding the pronoun here. Having completed the speech of the “I” who so compellingly voices the enslavement produced by Sin’s malicious use of God’s good law, Paul turns to address that same “I” with a word of liberation: Now God’s action in Jesus Christ has freed you.",
+      "supporting_quote_line_22": "The terrifying recognition by the “I” that there are two laws—the law of God that is “holy and right and good” (7:12) and the other law that has been seized upon by Sin itself (7:23)—and that these two laws are both at work in “me” has already prompted a cry for deliverance and a confession of dual enslavement (7:24b).",
+      "verification_confidence": "high",
+      "match_keywords": ["singular you", "comes as a surprise", "the I that has dominated 7:7–25", "address that same I", "word of liberation", "freed you"]
+    },
+    "scholarly_argument_gaventa_the_law_s_powerlessness_and_go_3": {
+      "source_file": "NTL_Gaventa_Romans 8.txt",
+      "section": "Commentary on Romans 8:3 — adynaton",
+      "line_in_txt": 30,
+      "quote_verbatim": "The claim that the law is adynaton (“powerless”) recalls the depiction of Sin’s horrifying seizure of the law for its own ends (7:7–25). Paul claims that the law was rendered powerless by the flesh, although the agent at work in ch. 7 is Sin rather than flesh (though see 7:18, 25). This shift in nomenclature anticipates the discussion that follows, which contrasts life “in the flesh” with life “in the Spirit.”",
+      "supporting_quote_line_31": "But adynatos can connote powerlessness ... and the question of power lies at the heart of this letter, having been introduced as early as 1:4 with reference to Christ’s resurrection. Paul declares in 1:16 that the gospel is God’s own power (dynamis), and 4:21 recalls Abraham’s confidence that God is powerful (dynatos) to complete what has been promised. Assurance about God’s power to protect “us” from any other power culminates the argument of ch. 8 (vv. 38–39). God’s powerful intervention comes about in a context in which Sin has decimated the law’s power.",
+      "verification_confidence": "high",
+      "match_keywords": ["adynaton", "powerless", "dynamis", "1:4", "1:16", "4:21", "8:38–39", "right decree of the law"]
+    },
+    "scholarly_argument_gaventa_the_law_s_role_in_arousing_sin_2": {
+      "source_file": "NTL_Gaventa_Romans 7.txt",
+      "section": "Commentary on Romans 7:5 — sinful passions aroused by the law",
+      "line_in_txt": 71,
+      "quote_verbatim": "Paul further characterizes the sinful passions as “aroused by the law” (literally, “through the law”). This continues the provocative comments about the law that have littered Paul’s argument up to this point in the letter. He has already written that God’s rectifying act comes apart from the law’s action (3:19–21), that the promise to Abraham is not connected to the law (4:13), and even that the law produces wrath (4:15) and that its arrival increases disobedience (5:20). Now the law is associated directly with Sin in “our” very bodies.",
+      "supporting_quote_line_80": "Here he explains with some care how Sin can make use of the law without the law itself being identical to Sin or inherently sinful. The problem is instead that Sin has weaponized even the holy law of Moses to take “me” captive.",
+      "supporting_quote_line_163": "“So the law itself is holy, and the commandment is holy and right and good.” ... He has instead asserted the law’s use by Sin, which makes space for this conclusion that goes well beyond dissociating the law from Sin, associating it instead with God.",
+      "verification_confidence": "high",
+      "match_keywords": ["sinful passions aroused by the law", "law is not identical to Sin", "Sin has weaponized", "law itself is holy", "bearing fruit for Death", "while we were in the flesh"]
+    },
+    "scholarly_argument_gaventa_universal_scope_of_god_s_actio_2": {
+      "source_file": "NTL_Gaventa_Romans 5.txt",
+      "section": "Commentary on Romans 5:1–2 ([5:1–2])",
+      "line_in_txt": 37,
+      "quote_verbatim": "And the repeated use of “all” in 5:12–21 stands as a warning against any presumption that the actions of God are limited in their scope to those who presently constitute the “we” (to say nothing of texts such as 9:14–23; 11:17–18).",
+      "supporting_quote_R8_line_87": "Paul has repeatedly demonstrated that there is no escape from life in the flesh apart from God’s action in Jesus Christ. In addition, life in the Spirit is “possible” not because humans freely choose it but because they are chosen (see especially 8:28–30 and the language of calling in 1:1, 7, and elsewhere).",
+      "verification_confidence": "high",
+      "match_keywords": ["repeated use of all", "5:12–21", "warning against any presumption", "actions of God are limited", "to those who presently constitute the we", "9:14–23", "11:17–18"]
+    }
+  }
+}

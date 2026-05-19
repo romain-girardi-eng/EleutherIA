@@ -1,0 +1,127 @@
+{
+  "scholar": "Phillip Cary",
+  "scholar_node_id": "scholar_cary_p",
+  "scholar_disambiguation": "Phillip Cary, Ph.D., Professor of Philosophy at Eastern University (St. Davids, PA), Scholar-in-Residence at the Templeton Honors College. Author of 'Augustine's Invention of the Inner Self' (Oxford UP, 2000). NOT Patrick Cary (17th c. English poet) and NOT a different Cary; the 2007 Behavioral Sciences & the Law article is signed by the same Phillip Cary (cf. p. 165 footnote: pcary@eastern.edu).",
+  "pdfs_consulted": [
+    "04_Littérature_secondaire/01_Philosophie_antique/Behavioral Sci   The Law - 2007 - Cary - A brief history of the concept of free will  issues that are and are not germane.pdf",
+    "04_Littérature_secondaire/01_Philosophie_antique/Behavioral Sci   The Law - 2007 - Cary - A brief history of the concept of free will  issues that are and are not germane.md",
+    "04_Littérature_secondaire/07_Libre_arbitre_theologie/cary_2000_augustine_inner_self.epub (referenced only — none of the 9 needs_evidence arguments are derived from this work)"
+  ],
+  "publication_id": "scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w",
+  "edition_canonical": "Cary, Phillip. \"A Brief History of the Concept of Free Will: Issues That Are and Are Not Germane to Legal Reasoning.\" Behavioral Sciences & the Law 25 (2007): 165–181. DOI: 10.1002/bsl.748.",
+  "args_processed": 9,
+  "args_verified": 9,
+  "args_not_found": 0,
+  "args_thesis_misrepresented": 0,
+  "notes": "All 9 needs_evidence arguments tagged as Cary derive from the single 2007 BSL article. Descriptions in the KG are faithful English paraphrases of explicit passages in the article (abstract + body). The abstract (p. 165) already contains the verbatim seed for 5 of the 9 arguments; body sections supply the others. No fabrication; no second Cary work was needed.",
+  "patches": {
+    "scholarly_argument_cary_plato_on_rational_governance_o_0": {
+      "pdf_source": "Behavioral Sci & The Law - 2007 - Cary - A brief history of the concept of free will.pdf",
+      "publication_id": "scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w",
+      "page": "167",
+      "section": "PLATO: FROM TRAGIC FATE TO PRACTICAL REASON",
+      "quote_verbatim": "Plato developed the concept of a rational part of the soul, which is expected to govern the lower, passionate parts of the soul. […] The capacity to make rational judgments that affect our desires lies at the heart of Western philosophy's concept of human freedom. Without reason we would be like beasts driven by passions which (as the very word suggests) are passive, arising in us independently of our choice. […] Unlike the beasts, of course, I can choose what to do with my anger and whether to act on it, based on a rational judgment about what action would be good to take, not just on how I happen to feel. Thus while animals do perform certain kinds of action (some animals too can raise their hands or paws when they want to) they do not have rational control over their actions or their passions.",
+      "translation_en": null,
+      "context": "Cary articulates Plato's tripartite-soul model via Republic 439c and 430d–445e, framing rational control as the foundation of Western freedom; the contrast with animals is explicit.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_cary_agent"
+    },
+    "scholarly_argument_cary_pre_philosophical_greek_concep_1": {
+      "pdf_source": "Behavioral Sci & The Law - 2007 - Cary - A brief history of the concept of free will.pdf",
+      "publication_id": "scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w",
+      "page": "166",
+      "section": "PLATO: FROM TRAGIC FATE TO PRACTICAL REASON (opening)",
+      "quote_verbatim": "The crucial precursor to modern determinism is the mythic conception of fate, which originated before philosophy. The word comes from the Latin fatum, meaning \"what is said.\" Your fate is what is said by a god through an oracle or a prophet about what will inevitably happen to you or (worse yet) what you will inevitably do. […] This is exactly how the Greeks expected fate to work: You are free to do anything you choose and run away as far as you wish, but no matter what else happens you will eventually end up accomplishing what is fated for you.",
+      "translation_en": null,
+      "context": "Cary's etymology of fatum + Oedipus illustration of mythic-fate logic; spans bottom of p. 166 to top of p. 167.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_cary_agent"
+    },
+    "scholarly_argument_cary_distinction_between_metaphysic_2": {
+      "pdf_source": "Behavioral Sci & The Law - 2007 - Cary - A brief history of the concept of free will.pdf",
+      "publication_id": "scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w",
+      "page": "165-167",
+      "section": "Introduction + PLATO: FROM TRAGIC FATE TO PRACTICAL REASON",
+      "quote_verbatim": "A court of law does not need to settle the metaphysical problem of free will and determinism, for instance, before going about its work. But it does need some workable idea of when human freedom and responsibility are compromised by coercion or ignorance. A defense of the very existence of free will is therefore less germane to its work than an understanding of how the freedom of human choices is supported or undermined by speciﬁc circumstances. […] In the tragedy of Oedipus one can already see the difference between the issues about human freedom that a court of law must deal with and those it had better leave alone. \"Was it really impossible for Oedipus to have escaped his fate?\" may be a deeply interesting question, but it is not one that can be decided in court. On the other hand, every court needs to have the conceptual resources to distinguish between Oedipus's crime of passion and deliberate parricide.",
+      "translation_en": null,
+      "context": "Two paragraphs anchoring Cary's central thesis: pp. 165-166 (introduction) state the metaphysics/legal-practice split; p. 167 illustrates it via Oedipus.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_cary_agent"
+    },
+    "scholarly_argument_cary_historical_threats_to_free_wil_3": {
+      "pdf_source": "Behavioral Sci & The Law - 2007 - Cary - A brief history of the concept of free will.pdf",
+      "publication_id": "scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w",
+      "page": "166",
+      "section": "Introduction",
+      "quote_verbatim": "Throughout its history, what is meant by the concept of freedom has depended in large measure on what threatens to undermine it. Originally the great threat was called fate; other threats that emerged later included the force of circumstances, coercion, the causal nexus of the physical world, providence, the grace of God, and the very nature of motivation itself. In modern philosophy the best name for the threat to free will is determinism, but the modern concept of determinism has its precursors in medieval theologies of predestination and ancient philosophies of fate.",
+      "translation_en": null,
+      "context": "Programmatic paragraph announcing the article's organizing principle: freedom defined negatively, by the threats it must overcome.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_cary_agent"
+    },
+    "scholarly_argument_cary_causal_vs_logical_determinism_4": {
+      "pdf_source": "Behavioral Sci & The Law - 2007 - Cary - A brief history of the concept of free will.pdf",
+      "publication_id": "scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w",
+      "page": "166",
+      "section": "Introduction",
+      "quote_verbatim": "This article focuses on forms of causal determinism, where the factor that is said to determine our choices is some type of efﬁcient causality. It shall leave aside considerations of what may be called logical determinism, where the key contention is that sentences predicting the future are already either true or false, and therefore the future events they describe are already determined. Questions about the effect of divine foreknowledge on free will derive from logical determinism, since God presumably knows every possible sentence predicting the future and whether it is true or false. Causal determinism, however, brings us closer to the kinds of issue that come up in a court of law. Claims of causal determinism can arise within many disciplines, resulting in sociological or biological forms of determinism, for instance, but none of these claims are convincing if there is not an underlying physical determinism.",
+      "translation_en": null,
+      "context": "Cary's methodological narrowing: he sets aside logical/theological foreknowledge problems and focuses on causal/physical determinism as legally relevant.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_cary_agent"
+    },
+    "scholarly_argument_cary_augustine_and_the_concept_of_w_5": {
+      "pdf_source": "Behavioral Sci & The Law - 2007 - Cary - A brief history of the concept of free will.pdf",
+      "publication_id": "scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w",
+      "page": "165, 172",
+      "section": "Abstract + AUGUSTINE: FREE WILL AND GRACE",
+      "quote_verbatim": "The concept of will itself also has a history, being ﬁrst conceived as a distinct power by Augustine. […] The origination of the concept of will as a distinct power of the soul, irreducible to more fundamental acts of believing, desiring and reasoning, has most often been attributed to the Christian philosopher and theologian Augustine (Dihle, 1982; Kahn, 1988; Sorabji, 2004). By a \"power\" of the soul (sometimes translated \"faculty\"), ancient and medieval philosophers meant an innate ability to act or to feel, like the power of sight or thirst, thought or desire. What is new in Augustine (354–430 A.D) is the notion that our choices arise from a power all their own, whose fundamental nature is neither to think nor to experience the desires of the body, but which is responsive to both of these inﬂuences.",
+      "translation_en": null,
+      "context": "Abstract sentence (p. 165) restated and grounded in the AUGUSTINE section (p. 172) with the canonical scholarly attribution (Dihle 1982 / Kahn 1988 / Sorabji 2004).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_cary_agent"
+    },
+    "scholarly_argument_cary_hellenistic_positions_on_deter_6": {
+      "pdf_source": "Behavioral Sci & The Law - 2007 - Cary - A brief history of the concept of free will.pdf",
+      "publication_id": "scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w",
+      "page": "165, 169-170",
+      "section": "Abstract + HELLENISTIC PHILOSOPHY: A NEW KIND OF FATE",
+      "quote_verbatim": "Hellenistic philosophers propounded analogues of modern positions against determinism (Epicureans) or for the compatibility of free will and determinism (Stoics). […] By introducing this arbitrary swerve, the Epicureans in effect made room for free will (Long & Sedley, 1987, pp. 102–112). […] Fascinatingly, the other great school of philosophy that arose in the Hellenistic period, the Stoics, opted for a very different approach to the problem of determinism and human freedom. Instead of devising a physics that is non-deterministic, they embraced the idea of a deterministic fate and argued that this was compatible with a deep kind of human freedom and responsibility.",
+      "translation_en": null,
+      "context": "Abstract (p. 165) summarises; pp. 169-170 (HELLENISTIC section) develop the Epicurean-swerve vs Stoic-compatibility contrast that the KG node paraphrases.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_cary_agent"
+    },
+    "scholarly_argument_cary_modern_physics_and_motivation_7": {
+      "pdf_source": "Behavioral Sci & The Law - 2007 - Cary - A brief history of the concept of free will.pdf",
+      "publication_id": "scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w",
+      "page": "165, 176",
+      "section": "Abstract + MODERNITY: FREE WILL AND DETERMINISM",
+      "quote_verbatim": "Modern physics raised new problems about free will, as human motivations began to look less like rational perceptions of the good and more like mechanistic causes. […] Modern thought inherited the Augustinian concept of volition as an inner act of the will, free from external compulsion but tied to the intellect's rational perception of the good. This concept came to be threatened and indeed undermined by new forms of scientiﬁc determinism. The modern physics of Isaac Newton (1643–1727) was mechanistic, which is to say that its explanations of motion relied exclusively on efﬁcient rather than ﬁnal causes—on push and pull rather than purpose and goal. […] The effect was to get rid of both rational appetite and practical reason, making human desire into an inherently irrational passion, more like thirst than like an Augustinian will, and reducing reason to a kind of calculating ability.",
+      "translation_en": null,
+      "context": "Abstract (p. 165) and opening of the MODERNITY section (p. 176): Newtonian mechanism eliminates teleology, recasting motivation as efficient-causal push/pull rather than rational pursuit of the good.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_cary_agent"
+    },
+    "scholarly_argument_cary_contemporary_philosophy_s_cont_8": {
+      "pdf_source": "Behavioral Sci & The Law - 2007 - Cary - A brief history of the concept of free will.pdf",
+      "publication_id": "scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w",
+      "page": "165, 179, 181",
+      "section": "Abstract + RECENT POSITIONS + CONCLUSION",
+      "quote_verbatim": "Contemporary philosophy has not solved the problem of free will but has spun off analyses of the nature of action and moral responsibility that are of interest for legal reasoning. […] Of particular interest from the standpoint of legal reasoning is that the recent English-language debate between compatibilists, incompatibilists, and libertarians has spun off an extensive philosophical literature on action theory, which especially concerns the concept of acting for a reason […] as well as very rich discussions of moral responsibility […] and also a revived interest in a sub-division of philosophical ethics that has come to be called moral psychology. […] The more modest considerations of voluntariness found in Aristotle and explored extensively in recent philosophical work on the theory of action and moral psychology are more germane to the tasks of legal reasoning, which must continue to function no matter what the philosophers decide about determinism and free will.",
+      "translation_en": null,
+      "context": "Abstract claim (p. 165) developed in RECENT POSITIONS (p. 179) and reasserted in the CONCLUSION (p. 181): contemporary work on action theory and moral psychology — not the unsolved metaphysical debate — is what legal reasoning can use.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_cary_agent"
+    }
+  }
+}

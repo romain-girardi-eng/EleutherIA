@@ -1,0 +1,111 @@
+{
+  "scholar": "René Brouwer",
+  "scholar_node_id": "scholar_brouwer_r",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Brouwer et Vimercati - 2020 - Fate, Providence and Free Will Philosophy and Religion in Dialogue in the Early Imperial Age.pdf"
+  ],
+  "pdfs_searched_not_found": [
+    "Brouwer 2014 — The Stoic Sage (Cambridge UP) — NOT present in DOCTORAT corpus",
+    "Brouwer 2021 — Law and Philosophy in the Early Stoa (OUP) — NOT present in DOCTORAT corpus"
+  ],
+  "args_processed": 7,
+  "args_verified_high": 7,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "co_authorship_note": "All seven arguments map to the introduction co-authored by René Brouwer and Emmanuele Vimercati (pp. 1-12). Verbatim quotes are from that co-signed introduction; attribution to Brouwer alone in the KG label is therefore strictly accurate only for the introduction's joint position. Page numbers follow the printed Brill pagination as indicated by the running headers ('Brouwer & Vimercati' p. 2; 'Introduction' p. 3) and the DOI page-marker (DOI:10.1163/9789004436381_002 immediately precedes the printed '2' header).",
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_brouwer_periodization_of_free_will_deb_0": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Brouwer et Vimercati - 2020 - Fate, Providence and Free Will Philosophy and Religion in Dialogue in the Early Imperial Age.pdf",
+      "publication_id": "scholarly_work_brouwer_2020_fate_providence_and_free_will_philosophy",
+      "page": "1",
+      "chapter": "Introduction (Brouwer & Vimercati)",
+      "quote_verbatim": "The topic of this book is the debate about fate, providence and freedom in the early Imperial age. With \"early Imperial\" we refer to the period between 31 BCE and 250 CE: it starts with Augustus' imperial rule, during whose reign the debate among philosophers about fate and freedom was rekindled, and ends with Plotinus and Origen, when the different positions in the debate were more or less fully developed.",
+      "translation_en": null,
+      "context": "Opening paragraph of the joint Introduction, p. 1. Defines the periodisation (31 BCE – 250 CE) as bracketed by Augustus on one end and Plotinus/Origen on the other, on the grounds that the philosophical debate about fate and freedom is 'rekindled' under Augustus and reaches its mature form with Plotinus and Origen.",
+      "verification_confidence": "high",
+      "match_keywords": ["early Imperial", "31 BCE", "250 CE", "Augustus", "rekindled", "Plotinus", "Origen", "fully developed"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_brouwer_agent"
+    },
+    "scholarly_argument_brouwer_interaction_between_philosophy_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Brouwer et Vimercati - 2020 - Fate, Providence and Free Will Philosophy and Religion in Dialogue in the Early Imperial Age.pdf",
+      "publication_id": "scholarly_work_brouwer_2020_fate_providence_and_free_will_philosophy",
+      "page": "1",
+      "chapter": "Introduction (Brouwer & Vimercati)",
+      "quote_verbatim": "The aim of this book is to show how in this period the notions of fate, providence and freedom were developed and debated, not only within and between the philosophical schools, but also in the interaction with other \"religious\" movements, here understood in the general sense of people sharing beliefs in and worship of (a) superhuman controlling power(s), such as Gnosticism, Hermetism and – of course – Judaism and Christianity.",
+      "translation_en": null,
+      "context": "Programmatic statement of the volume's thesis, p. 1, immediately following the periodisation. Brouwer & Vimercati explicitly extend the philosophical debate beyond the schools to encompass 'religious' movements (Gnosticism, Hermetism, Judaism, Christianity) that 'rethink their own doctrines in terms of this debate' (p. 2). The qualifier on 'religious' (the Boys-Stones 2017 reservation) is acknowledged on p. 1 but the traditional term is retained for practical reasons.",
+      "verification_confidence": "high",
+      "match_keywords": ["interaction", "religious", "movements", "Gnosticism", "Hermetism", "Judaism", "Christianity", "fate", "providence", "freedom"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_brouwer_agent"
+    },
+    "scholarly_argument_brouwer_hellenistic_origins_of_the_deb_2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Brouwer et Vimercati - 2020 - Fate, Providence and Free Will Philosophy and Religion in Dialogue in the Early Imperial Age.pdf",
+      "publication_id": "scholarly_work_brouwer_2020_fate_providence_and_free_will_philosophy",
+      "page": "1",
+      "chapter": "Introduction (Brouwer & Vimercati) — §1 The Archaic and Classical Premises (lead-in)",
+      "quote_verbatim": "In the Hellenistic period the debate among philosophers had started with Stoics and Epicureans, who took up the opposite positions in the debate: determinism vs. libertarianism respectively. The Academic Sceptics joined in by attacking their dogmatic positions.",
+      "translation_en": null,
+      "context": "P. 1 (final paragraph spanning to p. 2). Three-corner sketch of the Hellenistic origin: Stoic determinism vs. Epicurean libertarianism (Brouwer's own characterisation, the modernity of which is hedged elsewhere in the volume), with Academic Sceptics attacking both dogmatic positions. The argument is developed at length in §2 'The Hellenistic Debate' (pp. ~11-15, line 400 ff. of the OCR), with Carneadean antifatalism as the principal weapon of the Sceptics.",
+      "verification_confidence": "high",
+      "match_keywords": ["Hellenistic", "Stoics", "Epicureans", "determinism", "libertarianism", "Academic Sceptics", "dogmatic"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_brouwer_agent"
+    },
+    "scholarly_argument_brouwer_broadening_of_the_debate_in_ea_3": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Brouwer et Vimercati - 2020 - Fate, Providence and Free Will Philosophy and Religion in Dialogue in the Early Imperial Age.pdf",
+      "publication_id": "scholarly_work_brouwer_2020_fate_providence_and_free_will_philosophy",
+      "page": "1",
+      "chapter": "Introduction (Brouwer & Vimercati)",
+      "quote_verbatim": "In the early Imperial period the debate was broadened. Platonists and Aristotelians, explicitly referring back to the writings of the founders of their schools, now venerated as \"authorities\", developed their own dogmatic positions in the controversy. The debate broadened in another way, too: members of the different religious sects, Jews, Christians, but also Hermetics and Gnostics, became interested in the debate among philosophers, if only to give as much as possible a rational justification of their beliefs. They hence started to rethink their own doctrines in terms of this debate, eagerly picking up on the philosophers' terminology related to the emerging notion of the free will.",
+      "translation_en": null,
+      "context": "P. 1 (spanning to the bottom of p. 1 / top of p. 2). Brouwer & Vimercati's twofold 'broadening' thesis: (a) Platonists and Aristotelians enter the debate by appealing to canonical 'authorities' (Plato, Aristotle); (b) religious sects (Jewish, Christian, Hermetic, Gnostic) appropriate philosophical vocabulary to articulate their own positions on the 'emerging notion of the free will' — note the deliberately diachronic phrase 'emerging notion'.",
+      "verification_confidence": "high",
+      "match_keywords": ["broadened", "Platonists", "Aristotelians", "authorities", "founders", "religious sects", "Jews", "Christians", "Hermetics", "Gnostics", "rational justification", "emerging", "free will"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_brouwer_agent"
+    },
+    "scholarly_argument_brouwer_influence_on_late_antiquity_an_4": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Brouwer et Vimercati - 2020 - Fate, Providence and Free Will Philosophy and Religion in Dialogue in the Early Imperial Age.pdf",
+      "publication_id": "scholarly_work_brouwer_2020_fate_providence_and_free_will_philosophy",
+      "page": "1-2",
+      "chapter": "Introduction (Brouwer & Vimercati)",
+      "quote_verbatim": "The early Imperial debate turned out to be influential. In late antiquity, the discussion was continued by the Greek and Latin church fathers, among whom can be singled out Gregory of Nyssa (c. 335–395), especially in his Against Fate, and Augustine of Hippo (354–430), in e.g. his On Free Will. In this context, Boethius (c. 477–524) was a transitional figure between antiquity and the middle ages: in his writings the ancient tradition culminated and a new era begins. In his On the Consolation of Philosophy (see Sharples 1991 for text and commentary) he joined in the discussion and in so doing advanced it considerably.",
+      "translation_en": null,
+      "context": "Bottom of p. 1 / top of p. 2. Brouwer & Vimercati trace the reception of the early Imperial debate into late antiquity (Gregory of Nyssa's Contra Fatum, Augustine's De Libero Arbitrio) and identify Boethius (Consolatio Philosophiae) as the transitional figure between antiquity and the middle ages. Note: 'On Free Will' renders De Libero Arbitrio; 'Against Fate' = Contra Fatum (or 'Adversus eos qui de fato dicunt').",
+      "verification_confidence": "high",
+      "match_keywords": ["influential", "late antiquity", "church fathers", "Gregory of Nyssa", "Against Fate", "Augustine", "On Free Will", "Boethius", "transitional", "Consolation of Philosophy"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_brouwer_agent"
+    },
+    "scholarly_argument_brouwer_medieval_voluntarism_and_intel_5": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Brouwer et Vimercati - 2020 - Fate, Providence and Free Will Philosophy and Religion in Dialogue in the Early Imperial Age.pdf",
+      "publication_id": "scholarly_work_brouwer_2020_fate_providence_and_free_will_philosophy",
+      "page": "2",
+      "chapter": "Introduction (Brouwer & Vimercati)",
+      "quote_verbatim": "In the high middle ages \"voluntarists\", like Henry of Ghent (1217–1293) and Duns Scotus (1266–1308), argued for the independence of the will from the intellect, whereas \"intellectualists\", like Thomas Aquinas (1225–1274), defended the subordination of the will to the intellect – Aquinas seeking a more balanced relationship between the two faculties.",
+      "translation_en": null,
+      "context": "P. 2, middle paragraph. Brouwer & Vimercati's brief sketch of the medieval reception, presented as a continuation of the ancient debate: 'voluntarists' (Henry of Ghent, Duns Scotus) defending the will's independence from the intellect, vs. 'intellectualists' (Aquinas) defending its subordination. The scare-quotes around the labels in the original signal that they are modern historiographical categories. Note Aquinas qualification: 'seeking a more balanced relationship'.",
+      "verification_confidence": "high",
+      "match_keywords": ["voluntarists", "Henry of Ghent", "Duns Scotus", "intellectualists", "Thomas Aquinas", "will", "intellect", "independence", "subordination"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_brouwer_agent"
+    },
+    "scholarly_argument_brouwer_modern_continuation_of_the_deb_6": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/Brouwer et Vimercati - 2020 - Fate, Providence and Free Will Philosophy and Religion in Dialogue in the Early Imperial Age.pdf",
+      "publication_id": "scholarly_work_brouwer_2020_fate_providence_and_free_will_philosophy",
+      "page": "2",
+      "chapter": "Introduction (Brouwer & Vimercati)",
+      "quote_verbatim": "In the early modern period the debate about determinism and freedom continued with thinkers like Erasmus, Luther, Hobbes, Descartes, Spinoza, Locke, Leibniz and Hume. Even if the notion of providence has received less attention these days (cf. Lloyd 2008), the discussion between determinists (now often invoking recent insights in neuroscience concerning the operations of the brain as evidence) and libertarians still rages on (for overviews see De Caro et al. 2014, Keil 2017).",
+      "translation_en": null,
+      "context": "P. 2, end of the reception-history paragraph. Brouwer & Vimercati extend the trajectory through early modernity (Erasmus–Luther through Hume) and into contemporary debate, observing that (a) 'providence' has fallen out of fashion (citing Lloyd 2008) and (b) contemporary determinists invoke neuroscience of the brain as evidence — a self-conscious gesture toward the modern frame of the volume.",
+      "verification_confidence": "high",
+      "match_keywords": ["early modern", "Erasmus", "Luther", "Hobbes", "Descartes", "Spinoza", "Locke", "Leibniz", "Hume", "neuroscience", "brain", "libertarians", "determinists"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_brouwer_agent"
+    }
+  }
+}

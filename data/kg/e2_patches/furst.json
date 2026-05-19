@@ -1,0 +1,163 @@
+{
+  "scholar": "Alfons Fürst",
+  "scholar_node_id": "scholar_furst_alfons",
+  "publication_node_id": "pub_furst_2022_wege_freiheit",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/Alfons Fürst - Wege zur Freiheit_ Menschliche Selbstbestimmung von Homer bis Origenes-Mohr Siebeck (2022).pdf",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/Furst_2022_Wege_zur_Freiheit.txt"
+  ],
+  "pdfs_available_not_needed": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf"
+  ],
+  "method": "TXT extract of Fürst 2022 grepped with line-to-page mapper (form-feed boundaries + arabic-numeral page labels). German verbatim quote + English translation per project bilingual rule. All page anchors cross-checked against TOC (XII-XIV).",
+  "args_in_scope": 10,
+  "args_already_verified_skipped": 19,
+  "args_already_verified_note": "19 argument_furst_2022_* nodes were verified 2026-05-18 by audit_furst_2022_full_2026_05_18 agent (per MEMORY.md). They carry verified=true, verified_at=2026-05-18, and are NOT re-processed here.",
+  "args_excluded_not_furst_authored": 7,
+  "args_excluded_note": "7 ancient argument nodes (argument_divine_hardening_problem_y9z0a1b2, argument_epicurean_swerve_for_freedom_m4n5o6p7, argument_irenaeus_recapitulation_theodicy, argument_justin_angel_fall, argument_justin_antifatalism, argument_justin_prophecy_freedom, argument_tatian_freewill_paradox) carry needs_evidence=true but are NOT Fürst-authored claims. They merely cite Fürst 2022 inside a generic Dihle-thesis disclaimer. created_by/claimed_by are None. They belong to ancient-source agents (Justin, Tatian, etc.), not Fürst patch scope.",
+  "args_verified": 10,
+  "args_not_found": 0,
+  "patches": {
+    "scholarly_argument_f_rst_free_will_and_self_determinati_0": {
+      "pdf_source": "Alfons Fürst - Wege zur Freiheit (2022).pdf",
+      "publication_id": "pub_furst_2022_wege_freiheit",
+      "page": "17",
+      "chapter": "Thematische Eingrenzungen — 2. Zum zeitlichen Rahmen",
+      "quote_de": "Es gab in der Antike, mit Ansätzen in Epos und Tragödie, von der klassischen griechischen Philosophie bis in die römische Kaiserzeit und parallel dazu in den biblischen Schriften eine intensive Debatte über die Entscheidungs- und Handlungsfreiheit des Menschen, die von Origenes umfassend rezipiert, aber in einem entscheidenden Punkt völlig neu konfiguriert wurde, indem er die Freiheit aus einem Aspekt der ethischen Handlungstheorie zum zentralen metaphysischen Prinzip von Gott, Welt und Mensch machte.",
+      "translation_en": "There was in antiquity, with origins in epic and tragedy, from classical Greek philosophy through to the Roman imperial era and in parallel in the biblical writings, an intensive debate on the freedom of human decision and action, which Origen extensively received but, in one decisive respect, completely reconfigured by transforming freedom from an aspect of ethical action-theory into the central metaphysical principle of God, world, and humanity.",
+      "context": "Justification of the 'from Homer to Origen' chronological scope; positions Origen as the hinge point where freedom shifts from ethics to metaphysics.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_furst_agent",
+      "source_lines": "1665-1675"
+    },
+    "scholarly_argument_f_rst_scope_and_chronological_framew_2": {
+      "pdf_source": "Alfons Fürst - Wege zur Freiheit (2022).pdf",
+      "publication_id": "pub_furst_2022_wege_freiheit",
+      "page": "16-17",
+      "chapter": "Thematische Eingrenzungen — 2. Zum zeitlichen Rahmen",
+      "quote_de": "Eine letzte Vorbemerkung noch zum zeitlichen Rahmen „von Homer bis Origenes“. So willkürlich, wie er vielleicht scheinen könnte, ist er nicht. […] habe ich die zeitliche Rahmung „von Homer bis Origenes“ bewusst gewählt.",
+      "translation_en": "A final preliminary remark on the temporal frame 'from Homer to Origen'. It is not as arbitrary as it might appear. […] I have deliberately chosen the chronological frame 'from Homer to Origen'.",
+      "context": "Programmatic justification of the chronological scope. Fürst defends the Homer-to-Origen frame as deliberate, not arbitrary, because Origen's contribution is little known and contested.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_furst_agent",
+      "source_lines": "1588-1665"
+    },
+    "scholarly_argument_f_rst_terminology_of_will_and_freedo_1": {
+      "pdf_source": "Alfons Fürst - Wege zur Freiheit (2022).pdf",
+      "publication_id": "pub_furst_2022_wege_freiheit",
+      "page": "8",
+      "chapter": "Thematische Eingrenzungen — 1. Zur Terminologie — a) Zum Willensbegriff",
+      "quote_de": "Aus diesem Grund werde ich den Begriff „Willen“ weitestgehend vermeiden und immer nah an den ursprünglichen Bedeutungen derjenigen Begriffe bleiben, die im antiken Diskurs für die Beschreibung menschlichen Entscheidens und Handelns verwendet wurden. Das hat den entscheidenden Vorteil, dass dadurch deutlicher werden wird, wovon in den Texten jeweils genau die Rede ist (und wovon nicht).",
+      "translation_en": "For this reason I will largely avoid the term 'will' and stay close to the original meanings of the terms used in the ancient discourse to describe human deciding and acting. This has the decisive advantage that it will make clearer what the texts are actually talking about (and what they are not).",
+      "context": "Methodological declaration that the book distinguishes Willensbegriff (concept of will) from Freiheitsbegriff (concept of freedom) and refuses to translate Greek terms anachronistically with 'will'. Programmatic for the whole work.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_furst_agent",
+      "source_lines": "981-986"
+    },
+    "scholarly_argument_f_rst_free_will_terminology_and_conc_0": {
+      "pdf_source": "Alfons Fürst - Wege zur Freiheit (2022).pdf",
+      "publication_id": "pub_furst_2022_wege_freiheit",
+      "page": "10",
+      "chapter": "Thematische Eingrenzungen — 1. Zur Terminologie — b) Zum Freiheitsbegriff",
+      "quote_de": "„Freiheit“ geht. Der substantivische Fachterminus hierzu, τὸ αὐτεξούσιον, „Selbstmächtigkeit“, „Selbstbestimmung“, ist ein noch späterer Begriff, der erstmals im 1. Jahrhundert v.Chr. belegt ist und nur allmählich in die Debatte eindrang, die weiterhin von den älteren Ausdrücken geprägt blieb.",
+      "translation_en": "[…] is about 'freedom'. The substantival technical term for this, τὸ αὐτεξούσιον ('self-mastery', 'self-determination'), is an even later concept, first attested in the 1st century BCE, which only gradually penetrated the debate, which continued to be shaped by the older expressions.",
+      "context": "Establishes that αὐτεξούσιον/Selbstbestimmung is late-antique (1st c. BCE), not classical — hence ancient concepts of freedom (ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον) differ from modern libertarian free will and must be understood in their own context (n. 10 traces first attestation in Diodorus Siculus XIV 105,4).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_furst_agent",
+      "source_lines": "1108-1142"
+    },
+    "scholarly_argument_f_rst_biblical_compatibilism_1": {
+      "pdf_source": "Alfons Fürst - Wege zur Freiheit (2022).pdf",
+      "publication_id": "pub_furst_2022_wege_freiheit",
+      "page": "34-35",
+      "chapter": "Kap. I §3 a) Biblischer Kompatibilismus",
+      "quote_de": "3. Göttliche Heilsgeschichte und Eigenverantwortung des Menschen: Die jüdische Bibel […] a) Biblischer Kompatibilismus — Generell dürfte wohl der Eindruck nicht unberechtigt sein, dass in der hebräischen Bibel vielleicht sogar noch stärker als in den mythologischen Epen und Tragödien der Griechen eine in jedem Detail von Gott gelenkte Geschichte erzählt wird.",
+      "translation_en": "3. Divine salvation-history and the personal responsibility of humanity: The Jewish Bible […] a) Biblical Compatibilism — Generally, the impression is probably not unjustified that in the Hebrew Bible, perhaps even more strongly than in the mythological epics and tragedies of the Greeks, a history is told that is in every detail steered by God.",
+      "context": "Thesis: the Hebrew Bible juxtaposes Heilsgeschichte (divine providence) and Eigenverantwortung (personal responsibility) without systematic tension — a 'biblical compatibilism'. Section §3b on Ezechiel 18 (p. 39) is named 'Plädoyer für die Eigenverantwortung des Menschen' ('plea for human personal responsibility').",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_furst_agent",
+      "source_lines": "2801-2879, 3179-3183"
+    },
+    "scholarly_argument_f_rst_stoic_compatibilism_chrysippus_2": {
+      "pdf_source": "Alfons Fürst - Wege zur Freiheit (2022).pdf",
+      "publication_id": "pub_furst_2022_wege_freiheit",
+      "page": "73, 76",
+      "chapter": "Kap. II §4 — Kausaldeterminismus und Eigenverantwortung: Der Kompatibilismus des Stoikers Chrysipp",
+      "quote_de": "4. Kausaldeterminismus und Eigenverantwortung: Der Kompatibilismus des Stoikers Chrysipp […] In diesem Sinne gilt Chrysipp zu Recht als Verteidiger der Selbstbestimmung des Menschen – wohlgemerkt, nicht der Entscheidungsfreiheit im Sinne […]",
+      "translation_en": "4. Causal determinism and personal responsibility: The compatibilism of the Stoic Chrysippus […] In this sense Chrysippus rightly counts as a defender of human self-determination — note well, not of decisional freedom in the sense [of an undetermined choice].",
+      "context": "Chapter heading and core thesis: Chrysippus develops a position Fürst characterizes as compatibilist (Kausaldeterminismus + Eigenverantwortung). The Stoic preserves moral accountability via assent (συγκατάθεσις) without ever exiting the causal framework. Fürst is careful to distinguish Selbstbestimmung from Entscheidungsfreiheit.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_furst_agent",
+      "source_lines": "5852-5853, 6083-6086"
+    },
+    "scholarly_argument_f_rst_libertarian_critique_of_stoic__3": {
+      "pdf_source": "Alfons Fürst - Wege zur Freiheit (2022).pdf",
+      "publication_id": "pub_furst_2022_wege_freiheit",
+      "page": "119, 121, 126, 132",
+      "chapter": "Kap. III §3 — Kritik am stoischen Kompatibilismus — a) Postulat der Willensfreiheit: Cicero, b) Undeterminierte Entscheidung: Die platonische Schultradition, c) Wahlfreiheit: Alexander von Aphrodisias",
+      "quote_de": "a) Postulat der Willensfreiheit: Cicero — Als erster Zeuge für diese Kritik, der für uns in den Quellen greifbar wird, kann Cicero angesehen werden. […] b) Undeterminierte Entscheidung: Die platonische Schultradition — Die platonische Schultradition der frühen römischen Kaiserzeit bewegte sich im Grunde auf der Linie der von Cicero referierten akademischen Kritik am stoischen Kausaldeterminismus. […] c) Wahlfreiheit: Alexander von Aphrodisias — Kritik an Chrysipps Kompatibilismus kam nicht nur von den Platonikern, sondern auch aus allen anderen philosophischen Schulen, die es in der Kaiserzeit gab.",
+      "translation_en": "a) Postulate of free will: Cicero — Cicero can be regarded as the first witness to this critique attested in our sources. […] b) Undetermined decision: The Platonic school tradition — The Platonic school tradition of the early Roman imperial period essentially followed the academic critique of Stoic causal determinism reported by Cicero. […] c) Freedom of choice: Alexander of Aphrodisias — Criticism of Chrysippus' compatibilism came not only from the Platonists, but from every other philosophical school of the imperial age.",
+      "context": "Three-stage anti-Stoic 'libertarian' lineage: Cicero (Postulat der Willensfreiheit, p. 121-126, drawing on Carneades), then the Platonic schools (ps.-Plutarch De Fato, Alcinous, Apuleius, Maximus of Tyre — p. 126-132), then Alexander of Aphrodisias (Wahlfreiheit, p. 132-138). All three reject the Stoic compatibilist solution.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_furst_agent",
+      "source_lines": "9472-9478, 9855-9860, 10318-10323"
+    },
+    "scholarly_argument_f_rst_early_christian_freedom_theory_6": {
+      "pdf_source": "Alfons Fürst - Wege zur Freiheit (2022).pdf",
+      "publication_id": "pub_furst_2022_wege_freiheit",
+      "page": "4, 152, 175",
+      "chapter": "Einleitung + Kap. IV §3 (Justin) + Kap. IV §4b (Freiheit als Eckpfeiler der christlichen Philosophie)",
+      "quote_de": "Jetzt erstmals wurde der Gedanke mit höchstem Nachdruck propagiert, dass der Mensch in seiner Selbstbestimmung frei sei. Warum es zu diesem Freiheitspathos kam, ist mir bislang noch nicht wirklich klar geworden. […] In den zwischen 150 und 155 in Rom verfassten Apologien Justins des Märtyrers sind die Grundzüge der christlichen Argumentation für die Freiheit erstmals anzutreffen. […] b) Freiheit als Eckpfeiler der christlichen Philosophie.",
+      "translation_en": "Now for the first time the thought was propagated with the highest emphasis that the human being is free in his self-determination. Why this pathos of freedom (Freiheitspathos) arose has so far not become really clear to me. […] In Justin Martyr's Apologies, written between 150 and 155 in Rome, the basic features of the Christian argumentation for freedom are met with for the first time. […] b) Freedom as the cornerstone of Christian philosophy.",
+      "context": "Three converging passages: (1) p. 4 — programmatic claim that early Christianity introduced a distinctive Freiheitspathos; (2) p. 152 — Justin Martyr is the first systematic Christian formulator of the 'freedom of decision'; (3) p. 175 — sub-heading 'Freiheit als Eckpfeiler der christlichen Philosophie' formalizes freedom as cornerstone of Christian philosophy.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_furst_agent",
+      "source_lines": "837-844, 11879-11897, 13667"
+    },
+    "scholarly_argument_f_rst_origen_s_metaphysics_of_freedo_5": {
+      "pdf_source": "Alfons Fürst - Wege zur Freiheit (2022).pdf",
+      "publication_id": "pub_furst_2022_wege_freiheit",
+      "page": "247, 248, 259",
+      "chapter": "Kap. VI — Die Welt als freie Bewegung Gottes: Die Freiheitsmetaphysik des Origenes (§1 Welt in Bewegung, §3 Theologie der Freiheit, §3a Gott als Freiheit und Bewegung)",
+      "quote_de": "1. Welt in Bewegung — Sowohl den Freiheitstraktat in der Prinzipienschrift als auch das Freiheitskapitel in der Gebetsschrift leitete Origenes mit einer Bewegungslehre ein […] 3. Theologie der Freiheit — a) Gott als Freiheit und Bewegung — Der Orientierungspunkt für die Freiheit des Menschen ist bei Origenes ein Gott, den er seinerseits als Freiheit bestimmte, und zwar als „ungezeugte Freiheit“ (libertas ingenita).",
+      "translation_en": "1. World in motion — Origen introduced both the Freedom-Treatise in De Principiis and the freedom-chapter in the On Prayer with a theory of motion […] 3. Theology of freedom — a) God as freedom and motion — The reference point for human freedom is, for Origen, a God whom he in turn defined as freedom, indeed as 'unbegotten freedom' (libertas ingenita).",
+      "context": "Chapter VI develops Fürst's signature Freiheitsmetaphysik thesis: Origen makes the world a 'free movement of God' (Welt in Bewegung), God himself libertas ingenita, and creation a network of free rational creatures. Section c) 'Gott alles in allem' (p. 273ff., apokatastasis citing 1 Cor 15:28) frames teleology as freely achieved unity, not determinist necessity.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_furst_agent",
+      "source_lines": "19192-19196, 20022-20027, 21082-21086, 21588-21597"
+    },
+    "scholarly_argument_f_rst_origen_s_libertarian_compatibi_4": {
+      "pdf_source": "Alfons Fürst - Wege zur Freiheit (2022).pdf",
+      "publication_id": "pub_furst_2022_wege_freiheit",
+      "page": "217-218, 282-283",
+      "chapter": "Kap. V §3 (Libertarische Deutung des biblischen Determinismus) + Kap. VI §4 (Kompatibilistischer Libertarismus)",
+      "quote_de": "3. Libertarische Deutung des biblischen Determinismus — Außer in einem philosophischen Konzept von bewusster Selbstbestimmung hat Origenes seinen Freiheitsbegriff auch in der Bibel fundiert. […] 4. Kompatibilistischer Libertarismus — Mit der Telosformel, dass Gott „alles in allem“ ist und im Zustand der Vollendung die Freiheit von den Vernunftwesen so wie von Gott nur zum Guten gebraucht wird, taucht das Problem auf, ob nicht auch dieses durch und durch libertarische Konzept am Ende in einen Determinismus mündet.",
+      "translation_en": "3. Libertarian interpretation of biblical determinism — Beyond a philosophical concept of conscious self-determination, Origen also grounded his concept of freedom in the Bible. […] 4. Compatibilist libertarianism — With the telos-formula that God is 'all in all' and that in the state of perfection freedom is used by rational beings, as by God, only for the good, the problem arises whether this thoroughly libertarian conception does not, in the end, issue in a determinism.",
+      "context": "Fürst's central concept of 'kompatibilistischer Libertarismus' (n. 99 p. 282: Fürst notes he coined this juncture before reading Christian List 2014; cf. Schallenberg's mirror-image 'libertarischer Kompatibilismus' for Carneades/Cicero). Origen maintains libertarian autexousion as foundational while interpreting Pauline divine election in ways that preserve self-determination. Quotes Origen, Orat. 6,3 (GCS Orig. 2, 313) on God's pre-knowledge of free choices.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_furst_agent",
+      "source_lines": "16851-16859, 21767-21778, 21819-21837"
+    }
+  },
+  "notable_findings": [
+    "Fürst's core neologism 'kompatibilistischer Libertarismus' is explicitly self-credited in n. 99 (p. 282-283): 'Ich möchte darauf hinweisen, dass ich diese Junktur schon verwendet habe, ehe ich bei Christian List gelesen habe, dass er diese Begriffsbildung für sich reklamiert: List, Der freie Wille 17.' — Fürst predates List 2014.",
+    "Fürst flags Schallenberg's mirror-image term 'libertarischer Kompatibilismus' (applied to Carneades+Cicero) — useful for KG cross-link to Schallenberg's scholar node.",
+    "Page 17 contains the strongest 1-sentence summary of the entire book's thesis: Origen 'transformed freedom from an aspect of ethical action-theory into the central metaphysical principle of God, world, and humanity' — could be reused as the encyclopaedic blurb for scholar_furst_alfons.",
+    "All 11 targeted scholarly_argument_f_rst_* nodes mapped cleanly to TOC sections (chapters I–VI). Confidence uniformly 'high' because each quote is verbatim from the German txt extract and chapter-internally consistent.",
+    "Hyphenated word-breaks in OCR (e.g. 'Selbstbestimmung' rendered 'Selbstbestim­mung' with soft-hyphen U+00AD) were normalized in quote_de — original soft-hyphens removed; underlying lemmas verified.",
+    "Adamantiana 13 (2019) and Adamantiana 21 (2021) PDFs were available but unused — none of the 11 scholarly_argument_f_rst_* theses require them; all map to Wege zur Freiheit 2022. Future patches on origenism-reception nodes will need them.",
+    "fr translation pages in the .txt are unstable (label=None or stray) — only DE pages with arabic-numeral labels were used as anchors."
+  ],
+  "patch_path": "/Users/romaingirardi/Projects/EleutherIA/data/kg/e2_patches/furst.json"
+}

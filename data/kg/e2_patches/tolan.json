@@ -1,0 +1,97 @@
+{
+  "scholar": "Daniel Jonathan Tolan",
+  "scholar_node_id": "scholar_tolan_d",
+  "scholar_disambiguation": "Daniel Jonathan Tolan (Clare College, Cambridge), patristics / Stoicism / Origen — NOT John Tolan (medievist, Université de Nantes, history of Christian-Muslim relations).",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Tolan - 2021 - The Contemplation of the Transcendent Heart Tracing the ἡγεμονικόν from the Stoics to Origen.pdf"
+  ],
+  "source_markdown": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Tolan - 2021 - The Contemplation of the Transcendent Heart Tracing the ἡγεμονικόν from the Stoics to Origen.md",
+  "publication_id": "scholarly_work_tolan_2020_the_contemplation_of_the_transcendent_he",
+  "publication_citation": "Tolan, Daniel Jonathan. The Contemplation of the Transcendent Heart: Tracing the ἡγεμονικόν from the Stoics to Origen. PhD thesis, University of Cambridge (Clare College), December 2020 (deposited / dated 2021). 179 pp.",
+  "args_processed": 6,
+  "args_verified_high": 6,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_tolan_origen_s_concept_of_free_will__0": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Tolan - 2021 - The Contemplation of the Transcendent Heart Tracing the ἡγεμονικόν from the Stoics to Origen.pdf",
+      "publication_id": "scholarly_work_tolan_2020_the_contemplation_of_the_transcendent_he",
+      "page": "iii",
+      "chapter": "Abstract",
+      "quote_verbatim": "The second chapter discusses De Principiis III.1, [Περὶ αὐτεξουσίου]. It establishes Origen's understanding of the scala naturae and discusses Origen's four-fold theory of motion; the self-reflexive movement of motion through the self is the hallmark of rationality. Origen's account of free, rational movement is established upon a distinctly Epictetus-inspired interpretation of Stoicism; this is particularly true in the light of Origen's use of the key term dogma.",
+      "translation_en": null,
+      "context": "Abstract, p. iii (front matter), thesis-level statement of the central thesis of Chapter II. The phrase 'distinctly Epictetus-inspired interpretation of Stoicism' and the centrality of the term 'dogma' are repeated and argued throughout §§II.1–II.5 (pp. 76–98), in particular II.3 'Epictetus on the Governing Faculty' (p. 87) and II.5 'Epictetus on Dogmata' (p. 94).",
+      "verification_confidence": "high",
+      "match_keywords": ["Origen", "free", "rational", "movement", "Epictetus-inspired", "Stoicism", "dogma"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_tolan_agent"
+    },
+    "scholarly_argument_tolan_the_governing_faculty_as_locus_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Tolan - 2021 - The Contemplation of the Transcendent Heart Tracing the ἡγεμονικόν from the Stoics to Origen.pdf",
+      "publication_id": "scholarly_work_tolan_2020_the_contemplation_of_the_transcendent_he",
+      "page": "1",
+      "chapter": "Introduction",
+      "quote_verbatim": "Origen uses a later Stoic understanding of the ἡγεμονικόν, henceforth governing faculty, in order to develop his psychology and ethics; yet, Origen goes beyond what he finds in the Stoics by developing the governing faculty as the immaterial, transcendent aspect of the self, establishing the governing faculty as the locus of enlightenment and the place where we are able to experience God, who is immaterial and transcendent, directly.",
+      "translation_en": null,
+      "context": "Opening sentence of the Introduction, p. 1. Tolan's programmatic thesis statement. The same point is recapitulated in the Abstract (p. iii) and in Chapter III 'Περὶ ἡγεμονικοῦ' (pp. 130–146).",
+      "verification_confidence": "high",
+      "match_keywords": ["governing faculty", "ἡγεμονικόν", "Stoic", "transcendent", "locus of enlightenment", "immaterial"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_tolan_agent"
+    },
+    "scholarly_argument_tolan_the_scala_naturae_and_degrees__2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Tolan - 2021 - The Contemplation of the Transcendent Heart Tracing the ἡγεμονικόν from the Stoics to Origen.pdf",
+      "publication_id": "scholarly_work_tolan_2020_the_contemplation_of_the_transcendent_he",
+      "page": "77",
+      "chapter": "II.1 The Scala Naturae and the Forging of a Christian Psychology (§1-3)",
+      "quote_verbatim": "Origen lays out his scala naturae from that which is least self-determining to most. His first division of nature is to separate the autokinetic from the heterokinetic. To this end, he writes, 'of the things that are moved, some of them have the cause of movement in themselves, while others are only moved from without (ἔξωθεν)'.",
+      "translation_en": null,
+      "context": "Chapter II.1, p. 77 (section opens p. 76). Tolan reconstructs Origen's four-fold scala naturae from De Principiis III.1.2 and De Oratione (quoted at length p. 77). The link between scala naturae and degrees of embodiment is developed in §I.6 'ὄχημα πνεῦμα: Degrees of embodiment' (p. 62) and recalled in the Abstract (p. iii): 'God and created being differ, because being bears some form of embodiment. The soul relates to the body analogously.'",
+      "verification_confidence": "high",
+      "match_keywords": ["scala naturae", "Origen", "autokinetic", "heterokinetic", "four-fold", "motion", "embodiment"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_tolan_agent"
+    },
+    "scholarly_argument_tolan_moral_responsibility_and_theod_3": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Tolan - 2021 - The Contemplation of the Transcendent Heart Tracing the ἡγεμονικόν from the Stoics to Origen.pdf",
+      "publication_id": "scholarly_work_tolan_2020_the_contemplation_of_the_transcendent_he",
+      "page": "33",
+      "chapter": "I.3.3 Theodicy: Corruptibility as the Basis for Possessing the Good as One's Own",
+      "quote_verbatim": "If this is possible, why did God not bestow us with incorruptibility? Origen tells us that it is only through being corruptible that we are able to make the good our own.",
+      "translation_en": null,
+      "context": "Section I.3.3, p. 33. Tolan's framing thesis that introduces his citation of De Principiis II.9.2 (165.23–166.6), where Origen argues that 'the Creator granted to the minds, which were created by Him, voluntary and free motion, so that the good which is in them might be made each one's own (proprium)'. Tolan connects this to a 'free will defence' in terms of theodicy (p. 33). The companion section I.3.4 (p. 34) develops κόρος (satiety) and 'the cooling of the νόες'.",
+      "verification_confidence": "high",
+      "match_keywords": ["corruptibility", "theodicy", "Good", "free", "voluntary", "motion", "κόρος", "νόες"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_tolan_agent"
+    },
+    "scholarly_argument_tolan_what_depends_on_us_and_4": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Tolan - 2021 - The Contemplation of the Transcendent Heart Tracing the ἡγεμονικόν from the Stoics to Origen.pdf",
+      "publication_id": "scholarly_work_tolan_2020_the_contemplation_of_the_transcendent_he",
+      "page": "105",
+      "chapter": "II.9 Προαίρεσις: From Aristotle to Epictetus",
+      "quote_verbatim": "Origen's exegesis of pharaoh places salvation in the prohairesis of the individual. While prohairesis was brought to prominence by Aristotle, Voelke traces its first use to Xenophon; the term is, later, recrafted by Epictetus. Thus, let us recall both the Aristotelian and Epictetian understanding of prohairesis in order to situate Origen's understanding.",
+      "translation_en": null,
+      "context": "Opening of §II.9, p. 105 (the section runs pp. 105–114, immediately followed by II.10 'The Complexity of a Monistic Soul' p. 115 and II.6 'τὰ μὲν ἐφ᾽ ἡμῖν' p. 99). Tolan's claim that Origen develops τὰ ἐφ᾽ ἡμῖν / προαίρεσις 'from both Aristotelian and Epictetan' sources, and that the telos is 'to harmonise the motions of the soul with the motus Dei', is also stated explicitly in the Abstract (p. iii, lines 66–67 of MD source): 'For Origen, the telos of life is to harmonise the motions of our soul with the motus Dei and to lift our governing faculty to Him.'",
+      "verification_confidence": "high",
+      "match_keywords": ["prohairesis", "προαίρεσις", "Aristotle", "Epictetus", "Origen", "ἐφ᾽ ἡμῖν", "akratic", "monistic soul"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_tolan_agent"
+    },
+    "scholarly_argument_tolan_romans_and_divine_sovereignty__5": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Tolan - 2021 - The Contemplation of the Transcendent Heart Tracing the ἡγεμονικόν from the Stoics to Origen.pdf",
+      "publication_id": "scholarly_work_tolan_2020_the_contemplation_of_the_transcendent_he",
+      "page": "116",
+      "chapter": "II.11 Oὐ τοῦ θέλοντος (§18-20)",
+      "quote_verbatim": "Origen's reflection on the topic of self-determination appears to be a project in hermeneutics. He continually provides an interpretation of a difficult passage, then he provides philosophical reasoning to support his interpretation. One such passage is Romans 9:16, 'so, therefore, it is not of the one who wills, nor the one who runs, but God who has mercy'. Origen defines the Valentinian position to which he is responding as follows, 'for those who attack us say… salvation is not from the ἐφ᾽ ἡμῖν, but from constitution (κατασκευῆς), which has come into being from the one who constituted us'.",
+      "translation_en": null,
+      "context": "Opening of §II.11, p. 116 (section runs pp. 116–119). Coupled with §II.12 'ἐκ τοῦ αὐτοῦ φυράματος (§21-4)' (pp. 119–121) and §II.13 'An Original Contribution?' (pp. 122–127). Tolan's claim that the treatment 'engages Stoic psychology within a biblical framework' is developed in II.13, where he quotes Frede 2012: 'The terminology and the claims, with the exception of our crucial implicit claim, are through and through Stoic' (p. 122).",
+      "verification_confidence": "high",
+      "match_keywords": ["Romans 9", "θέλοντος", "φυράματος", "De Principiis III.1", "Stoic psychology", "Valentinian", "self-determination", "ἐφ᾽ ἡμῖν"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_tolan_agent"
+    }
+  }
+}

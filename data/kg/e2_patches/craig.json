@@ -1,0 +1,107 @@
+{
+  "scholar": "William Lane Craig",
+  "scholar_node_id": "scholar_craig_w",
+  "disambiguation": "William Lane Craig (b. 1949), American analytic philosopher of religion (Westmont College / Université Catholique de Louvain at time of writing; later Talbot School of Theology / Houston Baptist), defender of Molinism and the A-theory of time. NOT to be confused with Edward Craig (Routledge Encyclopedia of Philosophy editor) nor with William Craig the logician (Craig interpolation theorem). All seven arguments verified in Brill 1990 monograph.",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Divine Foreknowledge and human freedom, Craig,1990.pdf"
+  ],
+  "args_processed": 7,
+  "args_verified_high": 7,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_craig_theological_fatalism_0": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Divine Foreknowledge and human freedom, Craig,1990.pdf",
+      "publication_id": "pub_craig_1990_divine_foreknowledge_human_freedom",
+      "page": "171",
+      "chapter": "Chapter VIII (Transition to Theological Fatalism), Conclusion",
+      "quote_verbatim": "In summary, then, it seems that theological fatalists have fared no better than logical fatalists in carrying their case: indeed, their fallacies are the same. We have seen repeatedly a confusion between the counterfactual dependence of a past state of affairs on some future state of affairs and the logically impossible feat of changing the past. We have seen a failure to appreciate the fact that the future is unalterable in the same sense as the past, but that freedom is preserved because the future is causally open. We have seen a confusion between necessitas consequentiae and necessitas consequentis and an attendant misconstruction of 'within one's power.' In short, the argument for theological fatalism seems unsound.",
+      "translation_en": null,
+      "context": "Concluding paragraph of Ch. VIII (pp. 162-171), where Craig collapses Prior's and Pike's versions of theological fatalism into the same modal fallacies as logical fatalism. The thesis frames the entire monograph: divine foreknowledge is compatible with future contingency. Origenian parallel (Princ. III.1; Philocalia 25) — the prescience/freedom problem Craig dissolves was already posed by Origen, who answered via the asymmetric semantic relation (truth follows the act, not vice versa), the very move Craig refines via counterfactual conditional logic.",
+      "verification_confidence": "high",
+      "match_keywords": ["theological fatalism", "logical fatalists", "counterfactual dependence", "necessitas consequentiae", "argument", "unsound"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_craig_agent"
+    },
+    "scholarly_argument_craig_backward_causation_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Divine Foreknowledge and human freedom, Craig,1990.pdf",
+      "publication_id": "pub_craig_1990_divine_foreknowledge_human_freedom",
+      "page": "156-157",
+      "chapter": "Chapter VI (Backward Causation), Conclusion",
+      "quote_verbatim": "In summary, we have seen that while the standard objections aimed at demonstrating the logical impossibility of backward causation fail, there are nevertheless good reasons to doubt the real possibility of retrocausation. There is no unequivocal evidence supporting either the presence or even possibility of backward causation, and there is good reason to reject its real possibility on the basis of the nature of time. Backward causation would appear to entail a B-theory of time, but it seems doubtful that that theory captures the essence of time without distortion. Since on the A-theory of time backward causation would appear to involve something's being produced by nothing, it follows that backward causation is ontologically or metaphysically impossible. That means that the proposition 'An effect cannot precede its cause' expresses a synthetic a priori truth, that is, a proposition true in all ontologically possible worlds.",
+      "translation_en": null,
+      "context": "Ch. VI Conclusion (pp. 156-157). Craig's dual verdict: backward causation is logically possible (Dummett, Flew, Scriven et al. fail to refute it on logical grounds) but metaphysically impossible given the A-theory of time. The argument blocks any 'retro-causal' solution to the foreknowledge/freedom problem (e.g. Pike's worry that human action would have to causally affect God's past belief). Origen had implicitly held the same asymmetry in Princ. III.1.6-7 (Junod SC 226): foreknowledge does not cause, it follows the foreknown act.",
+      "verification_confidence": "high",
+      "match_keywords": ["backward causation", "logically possible", "metaphysically impossible", "A-theory", "B-theory", "retrocausation"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_craig_agent"
+    },
+    "scholarly_argument_craig_middle_knowledge_molinism_2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Divine Foreknowledge and human freedom, Craig,1990.pdf",
+      "publication_id": "pub_craig_1990_divine_foreknowledge_human_freedom",
+      "page": "237-238",
+      "chapter": "Chapter XIII (Middle Knowledge), Natural, Middle, and Free Knowledge",
+      "quote_verbatim": "In the second moment, God possesses knowledge of all true counterfactual propositions, including counterfactuals of creaturely freedom. That is to say, He knows what contingent states of affairs would obtain if certain antecedent states of affairs were to obtain; whereas by His natural knowledge God knew what any free creature could do in any set of circumstances, now in this second moment God knows what any free creature would do in any set of circumstances. This is not because the circumstances causally determine the creature's choice, but simply because this is how the creature would freely choose. Molina calls this counterfactual knowledge 'middle knowledge' because it stands in between the first and third moment in divine knowledge.",
+      "translation_en": null,
+      "context": "Ch. XIII opening (pp. 237-238), Craig's exposition of Molina's three logical moments of divine knowledge (natural / middle / free) and his own neo-Molinist defence. Middle knowledge is the keystone: God knows counterfactuals of creaturely freedom without causally determining them, which Craig holds to be the most promising basis for reconciling foreknowledge, providence and predestination with libertarian freedom (cf. pp. 246-247 'theological grounds for positing middle knowledge'). Modern-patristic connector: same problem as Origen Princ. III.1 / Philocalia 25-27 (πρόγνωσις / αἰτία), now solved via counterfactual semantics rather than the semantic-asymmetry move alone.",
+      "verification_confidence": "high",
+      "match_keywords": ["middle knowledge", "Molina", "counterfactuals", "creaturely freedom", "natural knowledge", "free knowledge", "scientia media"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_craig_agent"
+    },
+    "scholarly_argument_craig_temporal_necessity_accidental__3": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Divine Foreknowledge and human freedom, Craig,1990.pdf",
+      "publication_id": "pub_craig_1990_divine_foreknowledge_human_freedom",
+      "page": "189-190",
+      "chapter": "Chapter IX (Temporal Necessity), Hard Facts and Soft Facts / Temporal Necessity and Contingency",
+      "quote_verbatim": "We can on the basis of our prior discussion state that a proposition is temporally necessary iff it expresses a hard fact and temporally contingent iff it expresses a soft fact. A proposition moves from being temporally contingent to temporally necessary once the future condition becomes itself a hard fact. […] Now consider 34. God believed that p where p is a future-tense proposition. Is (34) temporally necessary? The answer, as we have seen repeatedly, is, no. For God's belief is counterfactually dependent upon and conditioned by the events or actualities described in p, such that if these were different, then God's belief would have been different. The claim that God's beliefs about the future are hard facts and that (34) is therefore temporally necessary is without foundation.",
+      "translation_en": null,
+      "context": "Ch. IX §'Hard Facts and Soft Facts' / 'Temporal Necessity and Contingency' (pp. 189-190). Craig accepts the Adams/Pike/Plantinga distinction between hard/soft facts but redefines softness in terms of counterfactual dependence on future conditions (not Adams's logical-truth-condition account). The crucial move: God's past belief about a future free act is a soft fact and therefore not temporally necessary — defusing the Pikean fatalist who treats 'God believed at t₁ that S would do A at t₂' as fixed in the same way Caesar's death on the Senate steps is fixed.",
+      "verification_confidence": "high",
+      "match_keywords": ["temporal necessity", "hard facts", "soft facts", "counterfactually dependent", "accidental necessity", "future-tense"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_craig_agent"
+    },
+    "scholarly_argument_craig_newcomb_s_paradox_4": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Divine Foreknowledge and human freedom, Craig,1990.pdf",
+      "publication_id": "pub_craig_1990_divine_foreknowledge_human_freedom",
+      "page": "221",
+      "chapter": "Chapter X (Newcomb's Paradox), Conclusion",
+      "quote_verbatim": "Newcomb's Paradox thus serves as an illustrative vindication of the compatibility of divine foreknowledge and human freedom. A proper understanding of the counterfactual conditionals involved enables us to see that the pastness of God's knowledge serves neither to make God's beliefs counterfactually closed nor to rob us of genuine freedom. It is evident that our decisions determine God's past beliefs about those decisions and do so without invoking an objectionable backward causation. It is also clear that in the context of foreknowledge, backtracking counterfactuals are entirely appropriate and that no alteration of the past occurs. With the justification of the one box strategy, the death of theological fatalism seems ensured.",
+      "translation_en": null,
+      "context": "Ch. X Conclusion (p. 221). Craig defends the one-box strategy against Nozick's and Ahern's two-boxer / fatalist reading. The decisive distinction: counterfactual dependence ≠ backward causation (the latter rejected metaphysically in Ch. VI, the former embraced as 'backtracking counterfactuals'). Newcomb's puzzle is treated as an isomorph of the divine-foreknowledge case, and its resolution as confirmation of the compatibility thesis defended throughout the book.",
+      "verification_confidence": "high",
+      "match_keywords": ["Newcomb's Paradox", "one-box strategy", "backtracking counterfactuals", "foreknowledge", "freedom", "two-box"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_craig_agent"
+    },
+    "scholarly_argument_craig_tensed_theory_of_time_a_theory_5": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Divine Foreknowledge and human freedom, Craig,1990.pdf",
+      "publication_id": "pub_craig_1990_divine_foreknowledge_human_freedom",
+      "page": "191",
+      "chapter": "Chapter IX (Temporal Necessity), Backward Causation and Intuitions of the Past's Necessity — Causal Closedness of the Past",
+      "quote_verbatim": "Now it might be wondered why, if the past via God's foreknowledge and action is virtually as counterfactually open as the future, do we have such strong intuitions about the necessity of the past, intuitions often expressed in terms of the unalterability of the past? The answer, I have suggested, lies in the impossibility of backward causation. Given an A-theory of time, it is metaphysically impossible for a present event to have a future cause. Causal series run forward in time, not backward, and thus it is impossible for us to act as efficient causes in bringing about past events. It is this metaphysical impossibility which generates our intuitions of the necessity of the past.",
+      "translation_en": null,
+      "context": "Ch. IX §'Causal Closedness of the Past' (p. 191). Craig explicitly grounds his anti-fatalist account in the A-theory (tensed, presentist/growing-block) of time. The A-theory licenses asymmetry of causation (forward only), which in turn (i) blocks human retro-causal influence on God's past belief while (ii) preserving counterfactual openness. Cross-reference to Appendix I (pp. 279-286) where Craig argues that even Special Relativity, properly interpreted, is not fatalistic and does not require a B-theory.",
+      "verification_confidence": "high",
+      "match_keywords": ["A-theory", "B-theory", "tensed theory", "backward causation", "metaphysically impossible", "causal asymmetry"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_craig_agent"
+    },
+    "scholarly_argument_craig_principle_of_bivalence_6": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Divine Foreknowledge and human freedom, Craig,1990.pdf",
+      "publication_id": "pub_craig_1990_divine_foreknowledge_human_freedom",
+      "page": "50-51",
+      "chapter": "Chapter IV (Suggested Escapes from Fatalism), Grounds for Denying Bivalence of Future Contingent Propositions — Fatalism",
+      "quote_verbatim": "Indeed, it needs to be asked, what good reason is there, after all, for denying the Principle of Bivalence with regard to future contingent propositions? 'To avoid fatalism' seems to be the primary reason given by most would-be fatalists. This, however, is surely inadequate, for such a denial is then entirely ad hoc. There is no independent reason to think that future contingent propositions are neither true nor false; one simply does not like the alleged consequences of such propositions' being bivalent. […] The fact that the fatalist's case reduces to such a non-causal constraint upon my freedom casts doubt, not on the Principle of Bivalence, but on his conceptions of power and necessity. […] Therefore, the threat of fatalism constitutes insufficient grounds for rejecting Bivalence with regard to future contingent propositions.",
+      "translation_en": null,
+      "context": "Ch. IV §'Grounds for Denying Bivalence of Future Contingent Propositions — Fatalism' (pp. 50-51). Craig rejects the Aristotelian/Łukasiewiczian / Prior / McCall manoeuvre of escaping fatalism by suspending bivalence for future contingents. The escape is ad hoc; the real culprit is the fatalist's notion of 'within one's power' (treated at length in Chs. V and VII). Direct ancient genealogy: Aristotle De Int. 9 (sea-battle), which Origen too refuses to use as an escape — Origen instead locates the asymmetry in πρόγνωσις vs αἰτία (Philocalia 23.1-2; Princ. III.1.6).",
+      "verification_confidence": "high",
+      "match_keywords": ["Principle of Bivalence", "future contingent", "ad hoc", "fatalism", "true nor false", "within one's power"],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_craig_agent"
+    }
+  }
+}

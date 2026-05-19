@@ -1,0 +1,114 @@
+{
+  "scholar": "Robert M. Grant",
+  "scholar_disambiguation": "Robert McQueen Grant (1917-2014), American patristics scholar, University of Chicago Divinity School. NOT Edward Grant (medievalist), NOT Robert Grant the Scottish biblical critic. Author of Greek Apologists of the Second Century (Westminster, 1988), Irenaeus of Lyons (Routledge, 1996), and the Presidential Address Eusebius and the Life of Origen / Early Alexandrian Christianity (Church History 40.2, 1971).",
+  "scholar_node_id": null,
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/Grant - 1971 - Early Alexandrian Christianity.pdf",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/Robert M. Grant - Irenaeus of Lyons (The Early Church Fathers)  -Routledge (1996).pdf"
+  ],
+  "pdf_quality_note": "Both PDFs are fully OCR'd / native-text (md5-hashed extractions in DOCTORAT). 1971 article (Church History 40.2, pp. 133-144, 12 PDF pages, native text) located all four Origen-biographical arguments verbatim. 1996 Routledge monograph (7530-line markdown extraction) supplied the cathedral-architecture quote in Grant's own voice on chapter-1 opening (book p. 1); however, three of the Irenaeus-themed KG arguments (free will + moral responsibility; Irenaeus against Gnostic determinism; tradition/memory as foundation) are KG-side interpolations that paraphrase Irenaeus's own positions as presented in Grant's exposition rather than appearing as first-person Grant claims. Grant's 1988 Greek Apologists of the Second Century is NOT present in DOCTORAT.",
+  "args_processed": 8,
+  "args_verified_high": 5,
+  "args_verified_medium": 0,
+  "args_verified_low_paraphrase_only": 3,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19",
+  "patches": {
+    "scholarly_argument_grant_origen_s_self_castration_and_a_0": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/Grant - 1971 - Early Alexandrian Christianity.pdf",
+      "publication": "R. M. Grant, 'Eusebius and the Life of Origen', in 'Early Alexandrian Christianity', Church History 40.2 (June 1971), 133-144",
+      "page": "134",
+      "section": "Eusebius and the Life of Origen (opening section)",
+      "quote_verbatim": "When he does not become a martyr, he rejects Greek literature, stops wearing shoes, abstains from wine and most foods, sleeps on the floor, castrates himself. Is there a real Origen here at all? Or do the stories derived from various kinds of adulation somehow cancel one another out? In any event, it is extremely precarious for a historian to make any use of these stories, and he must not be seduced by Eusebius' apparently chronological sequences.",
+      "translation_en": null,
+      "context": "Grant explicitly groups the ascetic catalogue (no shoes, no wine, sleeping on the floor, self-castration) and treats them as elements of an apologetic 'life of St. Origen' assembled by Pamphilus and Eusebius from hagiographic topoi. The KG claim that Grant treats these as 'deliberate voluntary choices' while remaining 'skeptical of the historicity of these accounts' is exactly Grant's position here: he reports them in the active voice (Origen 'rejects… stops… abstains… castrates himself') yet immediately questions 'Is there a real Origen here at all?'",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_grant_agent"
+    },
+    "scholarly_argument_grant_origen_s_voluntary_martyrdom_a_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/Grant - 1971 - Early Alexandrian Christianity.pdf",
+      "publication": "R. M. Grant, 'Eusebius and the Life of Origen', in 'Early Alexandrian Christianity', Church History 40.2 (June 1971), 133-144",
+      "page": "134",
+      "section": "Eusebius and the Life of Origen",
+      "quote_verbatim": "Photius' summary proves that the Apology underlies Eusebius' account of Origen in Book VI of the Church History. It discussed the martyrdom of Origen's father, the boy's letter to him, and the attempt to martyrdom prevented by the boy's mother. […] Origen himself was ever eager for martyrdom. […] He is the boy wonder who urges his father to die but cannot be a martyr himself without his clothes.",
+      "translation_en": null,
+      "context": "Two adjacent passages (lines 71-72 and 96, 104 of the OCR) together establish the KG claim. Grant accepts the orientation toward martyrdom as a chosen disposition Pamphilus/Eusebius themselves emphasize ('ever eager for martyrdom'), while questioning the historicity of the surrounding folkloric detail ('boy wonder', 'sleeping beauty not wakened by his father's kiss'). The mother-prevented-martyrdom episode (HE VI.2) is reported via the Apology source-chain, not endorsed as fact.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_grant_agent"
+    },
+    "scholarly_argument_grant_origen_s_voluntary_absence_fro_2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/Grant - 1971 - Early Alexandrian Christianity.pdf",
+      "publication": "R. M. Grant, 'Eusebius and the Life of Origen', in 'Early Alexandrian Christianity', Church History 40.2 (June 1971), 133-144",
+      "page": "135",
+      "section": "Eusebius and the Life of Origen",
+      "quote_verbatim": "Origen's own works provide a somewhat different picture of him. He turns out to be a rather vain man, self-righteous, humorless. He vehemently attacks Demetrius and other bishops who venture to oppose him, but when confronting the bishop of Rome he is ready to blame his theological indiscretions on his friend and patron Ambrose. Whether by chance or not, he seems to be absent from Egypt just at the 14-year intervals when poll-tax registration would make taking an oath necessary.",
+      "translation_en": null,
+      "context": "Verbatim source for the KG claim. Grant's hedge 'Whether by chance or not' is preserved exactly. Note n. 7 references the Hombert-Préaux papyrological study of the Roman Egyptian census (Recherches sur le recensement dans l'Egypte romaine, Pap. Lugd. Bat. 5, Leiden 1952, 76-84) as the demographic backbone of the inference. The poll-tax oath would have been a religious-civic compromise Origen avoided.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_grant_agent"
+    },
+    "scholarly_argument_grant_eusebius_s_suppression_of_evid_3": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/Grant - 1971 - Early Alexandrian Christianity.pdf",
+      "publication": "R. M. Grant, 'Eusebius and the Life of Origen', in 'Early Alexandrian Christianity', Church History 40.2 (June 1971), 133-144",
+      "page": "133 (primary) + 142 (recapitulation)",
+      "section": "Eusebius and the Life of Origen (p. 133) ; Conclusions and Suggestions (p. 142)",
+      "quote_verbatim": "In Origen's own time Demetrius of Alexandria saw heretical implications in it; Eusebius does his best to obscure the fact. His successor Peter, recently a martyr, had sharply criticized some of Origen's doctrines; Eusebius says nothing about his criticisms. Another martyr, Methodius, also attacked Origen; in the Church History Eusebius carefully refrained from mentioning him at all. As for Eustathius, later bishop of Antioch, Eusebius answered his criticisms of Origen by getting him deposed and sent into exile. […] He described Peter, bishop of Alexandria, only as an ascetic and martyr, without mentioning his criticisms of Origenism or his difficulties with Meletius.",
+      "translation_en": null,
+      "context": "Combines the programmatic statement on p. 133 (the four suppressed critics: Demetrius, Peter of Alexandria, Methodius, Eustathius of Antioch) with the conclusion's recap on p. 142. This is the KG argument verbatim. The deeper thesis of the article — that Eusebius's HE is 'official history' containing 'a judicious mixture of authentic record with a good deal of suppression of fact and occasional outright lies' (p. 133, lines 19-20 of the OCR) — frames the entire claim.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_grant_agent"
+    },
+    "scholarly_argument_grant_irenaeus_synthesis_of_biblical_3": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/Robert M. Grant - Irenaeus of Lyons (The Early Church Fathers)  -Routledge (1996).pdf",
+      "publication": "R. M. Grant, Irenaeus of Lyons (The Early Church Fathers), London-New York, Routledge, 1996",
+      "page": "1",
+      "section": "Ch. 1 — The Life of Irenaeus (opening paragraph)",
+      "quote_verbatim": "Irenaeus of Lyons was the most important Christian controversialist and theologian between the apostles and the third-century genius Origen. He gathered up and combined the traditions of predecessors from Asia Minor, Syria, and Rome and used them to refute the Gnostics who were subverting the Gospel. He built up a body of Christian theology that resembled a French Gothic cathedral, strongly supported by columns of biblical faith and tradition, illuminated by vast expanses of exegetical and logical argument, and upheld by flying buttresses of rhetorical and philosophical considerations from the outside.",
+      "translation_en": null,
+      "context": "Verbatim source for the KG 'architectural synthesis' claim: biblical 'columns', exegetical/logical 'illumination', rhetorical/philosophical 'flying buttresses'. The metaphor is Grant's own and opens the monograph. The link the KG draws to 'human moral agency against Gnostic fragmentation of human nature' is an interpretive extension — Grant himself confines the metaphor here to the synthesis of traditions used against Gnostic exegesis, not yet to anthropology.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_grant_agent"
+    },
+    "scholarly_argument_grant_irenaeus_on_free_will_and_mora_0": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/Robert M. Grant - Irenaeus of Lyons (The Early Church Fathers)  -Routledge (1996).pdf",
+      "publication": "R. M. Grant, Irenaeus of Lyons (The Early Church Fathers), London-New York, Routledge, 1996",
+      "page": null,
+      "section": null,
+      "quote_verbatim": null,
+      "translation_en": null,
+      "context": "NO VERBATIM GRANT STATEMENT FOUND in his own voice asserting that 'Irenaeus held that humans have free will and are morally responsible for their choices'. The 1996 monograph is largely a thematic translation/exposition of Adversus haereses: when free will and the three-classes doctrine appear (book pp. 16-17, OCR lines 813-822 and 2050-2096), Grant is paraphrasing Valentinian doctrine that Irenaeus then refutes — he never compresses Irenaeus's own anthropology into the summary form the KG node attributes to him. The KG node label is a reasonable inference from Grant's overall presentation, but is not a verbatim Grant thesis. RECOMMENDATION: either (a) downgrade this node to a description of Irenaeus's own position (with reference to AH 4.37 / 4.39) rather than a Grant claim, or (b) re-attribute to a scholar who does state this thesis explicitly (e.g. Behr 2000, Minns 1994, Steenberg 2008).",
+      "verification_confidence": "low_paraphrase_only",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_grant_agent"
+    },
+    "scholarly_argument_grant_irenaeus_against_gnostic_deter_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/Robert M. Grant - Irenaeus of Lyons (The Early Church Fathers)  -Routledge (1996).pdf",
+      "publication": "R. M. Grant, Irenaeus of Lyons (The Early Church Fathers), London-New York, Routledge, 1996",
+      "page": null,
+      "section": null,
+      "quote_verbatim": null,
+      "translation_en": null,
+      "context": "NO VERBATIM GRANT STATEMENT FOUND in his own voice on 'Irenaeus presented as fundamentally opposed to Valentinian and other Gnostic systems that posited fixed natures (spiritual, psychic, hylic) determining salvation or damnation'. The three-natures schema is presented (book p. 16, OCR line 817: 'There are also three classes of human beings: material (incapable of salvation); psychic (strengthened by works and mere faith, members of the church); and spiritual'), but this is Grant translating/summarizing the Valentinian position itself (AH 1.7.5), NOT Grant articulating Irenaeus's counter-thesis as the KG claims. Grant returns to the three classes in Ch. 7 (p. 50ff., 'Three classes of human beings', OCR line 2091) as exposition. Grant nowhere writes a sentence of the form 'Irenaeus rejected/opposed Valentinian determinism'. RECOMMENDATION: same as above — re-attribute or rephrase as KG-author inference 'on the basis of Grant's exposition'.",
+      "verification_confidence": "low_paraphrase_only",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_grant_agent"
+    },
+    "scholarly_argument_grant_tradition_and_memory_as_founda_2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/Robert M. Grant - Irenaeus of Lyons (The Early Church Fathers)  -Routledge (1996).pdf",
+      "publication": "R. M. Grant, Irenaeus of Lyons (The Early Church Fathers), London-New York, Routledge, 1996",
+      "page": "2",
+      "section": "Ch. 1 — The Life of Irenaeus (Florinus letter, with Grant's framing sentence)",
+      "quote_verbatim": "He insists that early memories are best, for presumably critics were questioning his claims about traditions. […] The whole passage suggests that Irenaeus' insistence on memory and tradition was under attack.",
+      "translation_en": null,
+      "context": "PARTIAL VERIFICATION. Grant himself frames Irenaeus's memory/tradition apologetic at book p. 1-2 (OCR lines 185-186 and 209): 'his insistence on memory and tradition'. This anchors the first half of the KG claim. However, the KG node extends the inference to 'free will and moral responsibility grounded in apostolic memory rather than philosophical speculation' — that explicit connection (memory-tradition → moral agency) is NOT in Grant's text. Grant ties memory to doctrinal continuity and anti-Gnostic polemic, not to anthropology of choice. RECOMMENDATION: trim the KG description to what Grant actually claims (memory/tradition as warrant for doctrinal authority) or split the node into two: (a) Grant-attested (apostolic memory secures tradition against critics) and (b) KG-inferential (memory underwrites moral accountability).",
+      "verification_confidence": "low_paraphrase_only",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_grant_agent"
+    }
+  }
+}

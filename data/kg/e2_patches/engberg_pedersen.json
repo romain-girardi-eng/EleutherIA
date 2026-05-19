@@ -1,0 +1,136 @@
+{
+  "scholar": "Troels Engberg-Pedersen",
+  "scholar_node_id": "scholar_engberg_pedersen_t",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/Paul and the Stoics -- Troels Engberg-Pedersen -- 2000 -- Bloomsbury T & T Clark -- 9780567087126 -- 15240030034518e337136c628e8ed3cb -- Anna’s Archive.pdf",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/Cosmology and Self in the Apostle Paul_ The Material Spirit -- Troels Engberg-Pedersen -- 2010 -- Oxford University Press -- 9780199558568 -- a23951d9645e1336d44ca71273751a5f -- Anna’s Archive.pdf"
+  ],
+  "args_processed": 10,
+  "args_verified_high": 10,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_engberg_pedersen_free_will_and_moral_agency_in__0": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/Paul and the Stoics -- Troels Engberg-Pedersen -- 2000 -- Bloomsbury T & T Clark -- 9780567087126 -- 15240030034518e337136c628e8ed3cb -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_engberg_pedersen_2000_paul_and_the_stoics",
+      "page": "33-35",
+      "chapter": "2. The Model",
+      "quote_verbatim": "This chapter presents the model I claim underlies much of Paul's thought and practice in the letters. The model pertains most directly to Paul's 'anthropology' and 'ethics'. It expresses the basic logical shape of that — as well as of Stoic 'anthropology' and 'ethics'. […] The model depicts a change that may occur in the perception of individuals of their own identity and what has value for them. At the I-stage the individual person (i) perceives him- or herself as an embodied individual, the one who may say 'I' of him- or herself, and (ii) is merely concerned about fulfilling the desires of that individual. Then a shift may occur, which leads the person to the S-stage. […] The change in the individual perception of the person's own identity — in his or her self-understanding — has two elements. First, the individual is 'struck' by what figures at the X-level. In Paul X stands for God and Christ, in Stoicism also God (though certainly a different kind of God). […] Second, this transference of identity from I to X also has the direct result of bringing the individual from the I- to the S-stage. This is due to the specific content of what the individual has identified with at the X-level. In Paul that content comes out in the Christ event, in Stoicism in the special character of reason.",
+      "translation_en": null,
+      "context": "Chapter 2 'The Model' (pp. 33-44) explicitly introduces and defends the I→X→S model as the heuristic anthropological-ethical structure shared by Paul and the Stoics. Direct verbatim source for the argument's claim about 'shared I→X→S model' and 'structured moral progression'.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_engberg_pedersen_agent"
+    },
+    "scholarly_argument_engberg_pedersen_determinism_and_fate_in_stoic__1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/Paul and the Stoics -- Troels Engberg-Pedersen -- 2000 -- Bloomsbury T & T Clark -- 9780567087126 -- 15240030034518e337136c628e8ed3cb -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_engberg_pedersen_2000_paul_and_the_stoics",
+      "page": "45",
+      "chapter": "3. The Stoics",
+      "quote_verbatim": "How was the I→X→S-model fleshed out by the Stoics? In discussing this, we shall have two aims. One is to focus on the features which are central to the Stoic ethical system when looked at in its own terms. We want to obtain a sure grasp of Stoic ethics as a whole, not just to look at individual motifs. This is partly because what we are after is 'a comparison of (whole) patterns of thought' (to paraphrase E. P. Sanders), partly because in this way we may fill in a gap in present-day New Testament scholarship. Most scholars have heard of, say, the Stoic wise man (sophos), the 'indifferents' (adiaphora) or Stoic 'freedom' (eleutheria), but few have studied Stoic ethics as a comprehensive philosophical system.",
+      "translation_en": null,
+      "context": "Opening paragraph of Ch. 3 'The Stoics' (p. 45) — direct verbatim source for the argument that Stoic ethics 'must be studied as a comprehensive philosophical system rather than through isolated motifs', and that concepts like eleutheria and sophos are part of that integrated system rather than isolatable themes.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_engberg_pedersen_agent"
+    },
+    "scholarly_argument_engberg_pedersen_stoic_freedom_eleutheria_and_d_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/Cosmology and Self in the Apostle Paul_ The Material Spirit -- Troels Engberg-Pedersen -- 2010 -- Oxford University Press -- 9780199558568 -- a23951d9645e1336d44ca71273751a5f -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_engberg_pedersen_2010_cosmology_and_self_in_the_apostle_paul_t",
+      "page": "137-138",
+      "chapter": "4. Divine and Human Agency and Freedom — Conclusion",
+      "quote_verbatim": "It is this precise understanding of freedom that lies behind Paul's repeated claim that Christ-believers are free: (Gal. 5:1, NRSV) 'For freedom Christ has set us free.' […] Believers are free because they themselves understand — through the physical influx of the cognitive pneuma — that in the world as a whole, including the present world that is animated by evil powers, the ultimate power is God's as is shown by his acts, including the Christ event. The freedom of believers therefore is a freedom of understanding and it consists in following God in the precise sense of directing oneself to God by responding with love of God to the love of humankind that God has shown in the Christ event and in the gift of the pneuma itself. […] We have employed Epictetus here to bring out this precise cognitive and cosmological sense of freedom in Paul. For the idea itself that cognition gives freedom is central to Stoicism and particularly clearly elaborated in its religious dimension by Epictetus […] Similarly, as we have seen, Pauline freedom is the Stoic freedom of understanding God's acts that lifts human beings out of any form of servitude to the powers of the present world — and indeed to God himself.",
+      "translation_en": null,
+      "context": "Conclusion of Ch. 4 (printed pp. 137-138). Direct verbatim source for the argument that Stoic eleutheria is internal self-determination through reason/cognition (not indeterministic choice), and that this framework is the lens for Paul's notion of moral transformation/freedom.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_engberg_pedersen_agent"
+    },
+    "scholarly_argument_engberg_pedersen_fate_and_moral_responsibility__2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/Cosmology and Self in the Apostle Paul_ The Material Spirit -- Troels Engberg-Pedersen -- 2010 -- Oxford University Press -- 9780199558568 -- a23951d9645e1336d44ca71273751a5f -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_engberg_pedersen_2010_cosmology_and_self_in_the_apostle_paul_t",
+      "page": "107-108",
+      "chapter": "4. Divine and Human Agency and Freedom — Overview",
+      "quote_verbatim": "We shall reject the supposed contrast between 'apocalypticism' and 'philosophy' in terms of agency by coming to see that in two paradigmatic figures in ancient thought — Paul the 'apocalypticist' and Epictetus the Stoic philosopher — one does not find the intrinsic opposition between divine ('external') and human ('autonomous') agency that is often taken to capture the essence of the contrast. On the contrary, both thinkers operate with the idea of an overlap between divine and human agency that trades on the specific character of human cognition. In both thinkers true human cognition is an understanding of the world as governed by God as an agent, and the kind of human agency that reflects such an understanding is truly willed and free in the way suggested above. Here there is absolutely no opposition between divine and human agency.",
+      "translation_en": null,
+      "context": "Ch. 4 Overview (pp. 107-108). Direct verbatim source for the argument that the Stoic combination of cosmic determinism and individual ethical responsibility provides a model for Paul's reconciliation of divine initiative and human ethical effort.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_engberg_pedersen_agent"
+    },
+    "scholarly_argument_engberg_pedersen_progression_and_moral_developm_3": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/Paul and the Stoics -- Troels Engberg-Pedersen -- 2000 -- Bloomsbury T & T Clark -- 9780567087126 -- 15240030034518e337136c628e8ed3cb -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_engberg_pedersen_2000_paul_and_the_stoics",
+      "page": "47",
+      "chapter": "3. The Stoics",
+      "quote_verbatim": "Finally, there is an account of a number of concepts in Stoic ethics that fill in the I→X→S-model at various points: 'progression' (prokopē); 'appropriate acts' or 'duties' (kathēkonta) as distinct from '(actually) right acts' (katorthōmata); 'passions' (pathē), 'freedom from passion' (apatheia) and 'good emotions' (eupatheiai) such as, e.g. joy (chara). As is generally recognized, most of these concepts […]",
+      "translation_en": null,
+      "context": "p. 47 (Ch. 3 'The Stoics'). Direct verbatim source for the listing of prokopē as one of the Stoic concepts filling out the I→X→S model — i.e., the structured developmental movement from I-stage deficiency toward the S-stage. This is the explicit Stoic technical background for the argument that both Paul and the Stoics employ a structured prokopē model of ethical progression.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_engberg_pedersen_agent"
+    },
+    "scholarly_argument_engberg_pedersen_paul_s_paraklesis_and_moral_tr_2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/Paul and the Stoics -- Troels Engberg-Pedersen -- 2000 -- Bloomsbury T & T Clark -- 9780567087126 -- 15240030034518e337136c628e8ed3cb -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_engberg_pedersen_2000_paul_and_the_stoics",
+      "page": "105-107",
+      "chapter": "5. Philippians II — The Solution Developed",
+      "quote_verbatim": "Paul's turning towards the Philippians: the logic of paraklesis. […] The argument will be that they can all be brought together under the idea of Paul — the 'sage' and 'teacher', the one who knows — 'bending down' to the Philippians — to be understood as his 'quasi-pupils', who know less, but are progressing in knowledge — in order to make them 'move up' by their own means to his own level of insight. Furthermore, it will be claimed that this idea defines Paul's own notion of paraklēsis — and that Philippians is, first and foremost, a letter of paraklesis. Three points should be noted in the notion of paraklesis as so defined: (i) that it operates within a field of understanding and knowledge of a special kind, (ii) the specific point of speaking of 'bending down' and 'moving up', and (iii) the point of saying that the quasi-pupils should move up 'by their own means'. […] In all this Paul is speaking and acting as a teacher in relation to his pupils in the way of the Stoic sage. He too will attempt to make others travel the same route that he has himself gone instead of merely keeping the insight he has acquired to himself.",
+      "translation_en": null,
+      "context": "Opening of Ch. 5 'Philippians II' (pp. 105-107). Direct verbatim source for the entire argument — the paraklesis/sage/quasi-pupils/bending down/moving up by their own means schema is set out verbatim here.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_engberg_pedersen_agent"
+    },
+    "scholarly_argument_engberg_pedersen_pauline_pneuma_and_stoic_cosmo_0": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/Cosmology and Self in the Apostle Paul_ The Material Spirit -- Troels Engberg-Pedersen -- 2010 -- Oxford University Press -- 9780199558568 -- a23951d9645e1336d44ca71273751a5f -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_engberg_pedersen_2010_cosmology_and_self_in_the_apostle_paul_t",
+      "page": "3-4, 16-17",
+      "chapter": "Introduction & 1. A Stoic Understanding of the Pneuma and Resurrection in 1 Corinthians 15",
+      "quote_verbatim": "In Chapter 1 we shall develop the ontology of Paul's notion of pneuma ('spirit') by analysing the cosmology that appears to be invoked in his account in 1 Corinthians 15 of the specific (ontological) shape of the resurrection body, the 'pneumatic' body. We shall find that Paul understood the pneuma as a through and through material, bodily phenomenon. We shall also situate him in relation to Greco-Roman philosophy of his own day. […] [P]aul's basic, philosophical reference point was materialistic and monistic Stoicism — which indeed was importantly present in the two other writers, too — rather than immaterialistic and dualistic Platonism. […] [I]f, as I shall argue here, Paul's understanding of the pneuma is in fact much more like the Stoic one, then we are up against a huge, Jewish and Christian, Platonizing tradition with roots in the Wisdom of Solomon and Philo — a tradition that has left us with an exceedingly vague and unclear, 'spiritual' meaning of the term.",
+      "translation_en": null,
+      "context": "Introduction (pp. 3-4) and Ch. 1 (pp. 16-17). Direct verbatim source for the central thesis of the 2010 book — Pauline pneuma as material/bodily on Stoic cosmology, opposed to the immaterial Platonist reading.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_engberg_pedersen_agent"
+    },
+    "scholarly_argument_engberg_pedersen_paul_s_world_view_as_both_jewi_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/Cosmology and Self in the Apostle Paul_ The Material Spirit -- Troels Engberg-Pedersen -- 2010 -- Oxford University Press -- 9780199558568 -- a23951d9645e1336d44ca71273751a5f -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_engberg_pedersen_2010_cosmology_and_self_in_the_apostle_paul_t",
+      "page": "ix (Preface) & 26",
+      "chapter": "Preface & 1. A Stoic Understanding of the Pneuma and Resurrection in 1 Corinthians 15",
+      "quote_verbatim": "Building on an earlier work that I edited, entitled Paul Beyond the Judaism/Hellenism Divide (2001), the book argues that Paul's world-view, which is certainly a Jewish, 'apocalyptic' one, can be more fully understood when one sees that parts of it are also spelled out by Paul in terms of Greco–Roman philosophical cosmology, in particular Stoicism. […] [T]he resulting picture of Paul's 'apocalyptic' and Stoic world-view is an utterly fascinating one in all its concreteness.",
+      "translation_en": null,
+      "context": "Preface (printed p. ix; PDF p. 13) and Ch. 1 transition to 1 Cor 15 analysis (printed p. 26). The Preface contains the book's central thesis statement verbatim — Paul's Jewish apocalyptic world-view is also expressible in Greco-Roman (Stoic) cosmological terms.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_engberg_pedersen_agent"
+    },
+    "scholarly_argument_engberg_pedersen_self_and_agency_in_paul_2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/Cosmology and Self in the Apostle Paul_ The Material Spirit -- Troels Engberg-Pedersen -- 2010 -- Oxford University Press -- 9780199558568 -- a23951d9645e1336d44ca71273751a5f -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_engberg_pedersen_2010_cosmology_and_self_in_the_apostle_paul_t",
+      "page": "vii (Preface) & 3",
+      "chapter": "Preface & Introduction",
+      "quote_verbatim": "This book attempts to synthesize what can be known of Paul's overall world-view, not least to be understood in concrete, cosmological terms, and to connect his world-view with his notion of self as this emerges in his accounts of his own conversion. What binds together world-view and self in Paul is a constant focus on body and bodiliness. […] 'I cannot think of anybody in antiquity who spoke so much about the body as Paul did.' This observation, which was made several years ago by Wayne Meeks, has stuck in my mind. I believe that Meeks is right that Paul was almost obsessed with the body, and certainly not just the 'fleshly' body as something to be subdued; rather, his thought as a whole was focused on bodiliness.",
+      "translation_en": null,
+      "context": "Preface (printed p. vii) and Introduction (printed p. 3) of the 2010 book. Direct verbatim source for the argument — Paul's notion of self connected to cosmological world-view through bodiliness, including accounts of his own conversion.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_engberg_pedersen_agent"
+    },
+    "scholarly_argument_engberg_pedersen_paul_and_the_judaism_hellenism_3": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/Cosmology and Self in the Apostle Paul_ The Material Spirit -- Troels Engberg-Pedersen -- 2010 -- Oxford University Press -- 9780199558568 -- a23951d9645e1336d44ca71273751a5f -- Anna’s Archive.pdf",
+      "publication_id": "scholarly_work_engberg_pedersen_2010_cosmology_and_self_in_the_apostle_paul_t",
+      "page": "183",
+      "chapter": "6. Bodily Practice — Paul's Christian Habitus in Context: A Breakthrough",
+      "quote_verbatim": "Differently from Bourdieu, however, but in accordance with the general insight that one must constantly go 'beyond the Judaism/Hellenism divide' in one's analysis of Paul, we may try to articulate Paul's new, 'Christian' habitus — with 'Christian' in scare quotes since Paul was precisely only in the middle of articulating a specifically Christian position in the letters themselves — in relation not just to a single preceding habitus, but to two: a 'traditional Jewish' one and a Greco–Roman, philosophical one.",
+      "translation_en": null,
+      "context": "Ch. 6 (printed p. 183). Direct verbatim source for the 'beyond the Judaism/Hellenism divide' methodological principle. The 2001 edited volume of the same title is cited as the programmatic background.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_engberg_pedersen_agent"
+    }
+  }
+}

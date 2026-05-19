@@ -1,0 +1,173 @@
+{
+  "scholar": "T. H. Irwin",
+  "scholar_node_id": "scholar_irwin_terence",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Irwin-DiscoveredWill-1992.pdf",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Terence Irwin - The Development of Ethics_ A Historical and Critical Study. Volume 1_ From Socrates to the Reformation-Oxford University Press (2007).pdf"
+  ],
+  "args_processed": 7,
+  "args_verified_high": 7,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_irwin_greek_concept_of_the_will_0": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Irwin-DiscoveredWill-1992.pdf",
+      "publication_id": "scholarly_work_irwin_1992_who_discovered_the_will",
+      "page": "453",
+      "chapter": "1. Approaches to the Question",
+      "quote_verbatim": "Many modern critics regard the concept of the will as an anachronism that ought to be excluded from our account of Greek philosophers. Ross remarks: 'It has often been complained that the psychology of Plato and Aristotle has no distinct conception of the will.' Gauthier insists that 'in the psychology of Aristotle the will does not exist'. According to MacIntyre, 'Aristotle, like every other ancient pre-Christian author, had no concept of the will and there is no conceptual space in his scheme for such an alien notion in the explanations of defect and error.' [...] Those who deny that Greek philosophers have any concept of the will recognize that Greek theories explain choice and action by reference to beliefs and desires. But they argue that the features ascribed to beliefs and desires in these theories fall short of the characteristic features of the will.",
+      "translation_en": null,
+      "context": "Opening paragraph + thesis question of Irwin 1992. Irwin frames the consensus denial (Ross, Gauthier, MacIntyre) that he will challenge by arguing Aristotle did have a concept of will overlooked by modern critics.",
+      "verification_confidence": "high",
+      "match_score": 20,
+      "match_keywords": [
+        "Greek philosophers",
+        "concept of the will",
+        "Aristotle",
+        "overlooked",
+        "intellectualist",
+        "anti-intellectualist"
+      ],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_irwin_agent"
+    },
+    "scholarly_argument_irwin_intellectualism_vs_anti_intell_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Irwin-DiscoveredWill-1992.pdf",
+      "publication_id": "scholarly_work_irwin_1992_who_discovered_the_will",
+      "page": "454",
+      "chapter": "1. Approaches to the Question",
+      "quote_verbatim": "Both these views seem to treat agents as passive subjects of their desires, and in doing so they seem to leave out an important aspect of human agency. The intellectualist view recognizes one constant motivational force, our desire for the good; the anti-intellectualist view, recognizing conflicts of motives, allows other forces besides the desire for the good, but it treats the agent as a mere victim and spectator of possible conflicts. Both accounts seem to overlook our capacity to reflect on our desires and to choose between them. We are inclined to say that we need not simply contemplate our desires; if we reflect on them, we can decide whether or not to regard a desire as expressing our will, and we can act accordingly.",
+      "translation_en": null,
+      "context": "Irwin 1992 p. 454, paragraph immediately following the exposition of Socratic/Stoic intellectualism and Plato/Aristotle's divided-soul anti-intellectualism (p. 453). Both schools, on Irwin's reading, treat agents passively; the missing third element is the reflective capacity Irwin will call 'will'.",
+      "verification_confidence": "high",
+      "match_score": 20,
+      "match_keywords": [
+        "intellectualist",
+        "anti-intellectualist",
+        "passive",
+        "reflect on our desires",
+        "Socratic",
+        "Stoic",
+        "divided soul"
+      ],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_irwin_agent"
+    },
+    "scholarly_argument_irwin_augustine_s_concept_of_will_2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Irwin-DiscoveredWill-1992.pdf",
+      "publication_id": "scholarly_work_irwin_1992_who_discovered_the_will",
+      "page": "454-455",
+      "chapter": "1. Approaches to the Question",
+      "quote_verbatim": "This conception of the will and its moral importance is prominent in the moral psychology of St Augustine. Rejecting the view that we are passive in relation to our choices, he identifies the will with the unforced movement of the mind towards getting or keeping something. Our consciousness of our will is inseparable from consciousness of ourselves, and we attribute an action to ourselves precisely in so far as we attribute it to our will. The will, rather than any external influence or internal force, is both the cause of our being subject to sin and the cause of our turning towards virtue. [p. 455] [...] Virtue, as Augustine conceives it, is precisely the good use of free choice. The overriding direction of people's will is expressed in their love, and virtue is the proper ordering or direction of people's love. If the will correctly aims at the right ultimate end, and the expressions of will towards the means are rightly connected with it, then the agent is virtuous. The will orders and directs not only our desires, but also our perceptions, memories, and beliefs, in the direction it has chosen.",
+      "translation_en": null,
+      "context": "Irwin 1992 pp. 454-455. Augustine paragraph immediately following Irwin's identification of will as 'a third element in rational choice besides mere belief and mere desire' (p. 454). Compiles Irwin's references to De duab. anim. 14 (unforced movement), De civ. Dei (virtue as good use of free choice), and De Trinitate (consciousness of will). The same definition recurs in Irwin 2007, Development of Ethics vol 1 §225, citing De duab. anim. 14 in n. 61.",
+      "verification_confidence": "high",
+      "match_score": 18,
+      "match_keywords": [
+        "Augustine",
+        "unforced movement of the mind",
+        "good use of free choice",
+        "ordering of love",
+        "will",
+        "pervasive"
+      ],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_irwin_agent"
+    },
+    "scholarly_argument_irwin_aquinas_s_interpretation_of_ar_3": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Irwin-DiscoveredWill-1992.pdf",
+      "publication_id": "scholarly_work_irwin_1992_who_discovered_the_will",
+      "page": "455-456",
+      "chapter": "2. Aquinas and Aristotle",
+      "quote_verbatim": "In attributing a concept of the will to Aristotle, Aquinas makes two claims. First, he claims that Aristotle's concept of 'wish' (boulesis) is really a concept of the will. Second, he claims that Aristotle's remarks about 'voluntary' (hekousion) action are about the role of the will. These are his general interpretative claims about Aristotle; but the Aristotelian passages he cites raise their own difficulties of exegesis, and it is not easy to decide for or against Aquinas. Aquinas's exegesis is careful and fair; he cannot be accused of simply forcing his general interpretation into his exegesis of individual passages. Indeed, I will sometimes suggest that Aquinas's exegesis is wrong, and that the right exegesis would actually support his general interpretation better than his own exegesis supports it. On the other hand I will not try to answer all the exegetical questions that would need to be answered if we were trying to vindicate Aquinas's general interpretation. I will simply argue that a reasonable case can be made for some of Aquinas's claims, and that he focusses on an important aspect of Aristotle's theory that receives too little attention from Aristotle himself.",
+      "translation_en": null,
+      "context": "Irwin 1992 pp. 455-456 (top of §2 'Aquinas and Aristotle', spanning the page break at line 195 of the .md extraction). Exact match for the argument's three sub-claims: (1) boulesis-as-will, (2) hekousion-as-will, (3) Aquinas's exegesis is careful and a reasonable case can be made for his interpretation.",
+      "verification_confidence": "high",
+      "match_score": 22,
+      "match_keywords": [
+        "Aquinas",
+        "two claims",
+        "boulesis",
+        "wish",
+        "voluntary",
+        "hekousion",
+        "exegesis",
+        "careful",
+        "reasonable case"
+      ],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_irwin_agent"
+    },
+    "scholarly_argument_irwin_scope_of_history_of_ethics_0": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Terence Irwin - The Development of Ethics_ A Historical and Critical Study. Volume 1_ From Socrates to the Reformation-Oxford University Press (2007).pdf",
+      "publication_id": "scholarly_work_irwin_2007_the_development_of_ethics_a_historical_a",
+      "page": "vii-viii",
+      "chapter": "Preface",
+      "quote_verbatim": "Kneale and Kneale decided, quite reasonably, to devote most space to logic after 1879, and to treat the previous history relatively briefly. Any similar decision about the history of ethics would be misguided. Even if we supposed that, say, moral philosophy made a great advance in 1874 with Sidgwick's Methods of Ethics, we could hardly understand or evaluate Sidgwick's achievement without a comparison with his predecessors. More important, good reasons can be given for doubting whether Sidgwick in the 19th century, or Kant or Hume in the 18th, or Hobbes in the 17th, made the sort of advance that would justify us in relegating their predecessors to a relatively minor role. [...] Fewer people, however, have taken it to be equally important to discuss moral philosophy between Aristotle and Hobbes. I have tried to do something to encourage the closer study of moral philosophy between the 4th century [BC] and the 17th century [AD]. This choice has greatly increased the size of the book.",
+      "translation_en": null,
+      "context": "Preface to Irwin 2007 vol 1, pp. vii-viii. Direct statement of the scope thesis: moral philosophy between Aristotle and the 17th century has been neglected, and Sidgwick/Kant/Hume/Hobbes cannot be properly evaluated without their predecessors.",
+      "verification_confidence": "high",
+      "match_score": 20,
+      "match_keywords": [
+        "Aristotle",
+        "17th century",
+        "Sidgwick",
+        "Kant",
+        "Hume",
+        "Hobbes",
+        "neglected",
+        "predecessors"
+      ],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_irwin_agent"
+    },
+    "scholarly_argument_irwin_aristotelian_tradition_in_ethi_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Terence Irwin - The Development of Ethics_ A Historical and Critical Study. Volume 1_ From Socrates to the Reformation-Oxford University Press (2007).pdf",
+      "publication_id": "scholarly_work_irwin_2007_the_development_of_ethics_a_historical_a",
+      "page": "viii",
+      "chapter": "Preface",
+      "quote_verbatim": "One might well argue, however, that my treatment of this important period is still too short. While I have given some space to Aquinas and to Suarez, the treatment of Augustine, Scotus, and Ockham is quite brief, and many important people (including Neoplatonists, Church Fathers, Abelard, and less well-known mediaeval writers) are omitted. The decision to omit them reflects my aim (explained further in the Introduction) of concentrating on the development of an Aristotelian outlook, but it may have been mistaken.",
+      "translation_en": null,
+      "context": "Preface to Irwin 2007 vol 1, p. viii. Exact match for the argument's claims: (a) central thread is the Aristotelian outlook, (b) Augustine/Scotus/Ockham are treated briefly, (c) Neoplatonists, Church Fathers, Abelard, and lesser mediaeval writers are omitted.",
+      "verification_confidence": "high",
+      "match_score": 22,
+      "match_keywords": [
+        "Aristotelian outlook",
+        "central thread",
+        "Augustine",
+        "Scotus",
+        "Ockham",
+        "Neoplatonists",
+        "Church Fathers",
+        "Abelard"
+      ],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_irwin_agent"
+    },
+    "scholarly_argument_irwin_method_in_history_of_ethics_2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Terence Irwin - The Development of Ethics_ A Historical and Critical Study. Volume 1_ From Socrates to the Reformation-Oxford University Press (2007).pdf",
+      "publication_id": "scholarly_work_irwin_2007_the_development_of_ethics_a_historical_a",
+      "page": "viii",
+      "chapter": "Preface",
+      "quote_verbatim": "A further reason for the length of this book is my aim of expounding different views fully enough to show what can be said for and against them. This is not meant to be a neutral exposition that refrains from evaluation; I also try to defend, object, or revise, where it seems appropriate. [...] I have not refrained from going over familiar issues; nor have I discussed someone at greater length simply because he has attracted more attention from other critics. Readers may well find, therefore, that the discussion of Kant (e.g.) is rather thin, in so far as it overlooks some of the questions, elaborations, and complications that have resulted from later philosophical criticism. This uneven character (as it may seem) of different parts of the book reflects my attempt to allocate space to different people according to their importance in the argument, not according to the degree of attention they have attracted.",
+      "translation_en": null,
+      "context": "Preface to Irwin 2007 vol 1, p. viii. Verbatim source for all three methodological claims in the argument: (1) expound views fully enough to show what can be said for and against, (2) not neutral exposition — defend, object, revise, (3) allocate space by importance in the argument, not by degree of attention from other critics.",
+      "verification_confidence": "high",
+      "match_score": 24,
+      "match_keywords": [
+        "expounding",
+        "fully enough",
+        "neutral exposition",
+        "defend",
+        "object",
+        "revise",
+        "allocate space",
+        "importance in the argument"
+      ],
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_irwin_agent"
+    }
+  }
+}

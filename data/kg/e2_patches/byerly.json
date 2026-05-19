@@ -1,0 +1,115 @@
+{
+  "scholar": "T. Ryan Byerly",
+  "scholar_node_id": "scholar_byerly_t",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Byerly_2017_Free_Will_Theodicies_Theological_Determinists.pdf"
+  ],
+  "publication_node_id": "pub_byerly_2017_freewill_theodicies_theological_determinists",
+  "publication_citation": "Byerly, T. R. (2017). Free Will Theodicies for Theological Determinists. Sophia 56(2), 289–310. DOI: 10.1007/s11841-016-0563-8",
+  "page_mapping_note": "PDF page 1 = Sophia journal page 289. Offset +288 between PDF page index and Sophia pagination, verified via Springer front matter and running headers ('T.R. Byerly' on verso, 'Free Will Theodicies for Theological Determinists' on recto).",
+  "args_processed": 7,
+  "args_verified_high": 7,
+  "args_verified_medium": 0,
+  "args_verified_low": 0,
+  "args_not_found": 0,
+  "generated_at": "2026-05-19T00:00:00Z",
+  "patches": {
+    "scholarly_argument_byerly_theological_determinism_and_fr_0": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Byerly_2017_Free_Will_Theodicies_Theological_Determinists.pdf",
+      "publication_id": "pub_byerly_2017_freewill_theodicies_theological_determinists",
+      "page": "290",
+      "pdf_page_index": 2,
+      "chapter": "Introduction (after Keywords)",
+      "quote_verbatim": "In this paper, I will challenge the view that libertarianism is necessary in order to adopt the theodicies of Plantinga, Swinburne, and Hick. I will show that a theist who affirms that all the free actions that exist are causally determined (a theological determinist, as I will stipulatively define the view) can adopt quite a lot from the approaches of these authors. More specifically, she can employ the basic argumentative strategies most central to these authors' projects in order to offer accounts of why it could have been or plausibly is the case that God could not have achieved certain freedom goods without permitting various moral and natural evils. She can use their strategies, that is, to offer free will theodicies.",
+      "translation_en": null,
+      "context": "Byerly's programmatic thesis: theological determinists (compatibilists in his sense) can adapt the central strategies of the three canonical libertarian free-will theodicies (Plantinga, Swinburne, Hick).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_byerly_agent"
+    },
+    "scholarly_argument_byerly_definition_of_theological_dete_2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Byerly_2017_Free_Will_Theodicies_Theological_Determinists.pdf",
+      "publication_id": "pub_byerly_2017_freewill_theodicies_theological_determinists",
+      "page": "290",
+      "pdf_page_index": 2,
+      "chapter": "Introduction — footnote 5",
+      "quote_verbatim": "The term 'theological determinism' is often used with a different meaning, requiring that all contingent facts are determined by the divine will. This is not a requirement of 'theological determinism' as I have defined it; however, much of what I will say in the paper is still relevant for such views. One important point of difference is that only a 'theological determinist' in my stipulative sense, and not in this other sense, can affirm the compatibilist Molinist view I discuss in 'Greater Moral Goods Free Will Theodicies for Theological Determinists' section.",
+      "translation_en": null,
+      "context": "Byerly's explicit stipulative definition (footnote 5): theological determinism = the view that all FREE ACTIONS are causally determined (weaker than the common usage requiring that all contingent facts be determined by the divine will). This weaker reading is what licenses compatibilist Molinism.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_byerly_agent"
+    },
+    "scholarly_argument_byerly_compatibilism_and_the_value_of_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Byerly_2017_Free_Will_Theodicies_Theological_Determinists.pdf",
+      "publication_id": "pub_byerly_2017_freewill_theodicies_theological_determinists",
+      "page": "292",
+      "pdf_page_index": 4,
+      "chapter": "Character Formation Free Will Theodicies for Theological Determinists",
+      "quote_verbatim": "Hick may say these acts are for this reason not free, or do not exhibit the most valuable sort of freedom. But, since the theological determinist affirms that free action is compatible with causal determinism, she needs not concede this point. She may instead maintain that these causally determined acts are indeed free, and perhaps even that they exhibit the most valuable kind of freedom, and as such the goods achieved through them are freedom goods. According to her Hick-inspired free will theodicy, God permits certain natural evils because permitting them is required in order to make it possible for created persons to achieve the freedom good of cultivating a virtuous character through their own free decisions.",
+      "translation_en": null,
+      "context": "Direct contradiction of Hick's libertarian assumption: Byerly argues the theological determinist can affirm that causally determined acts are not merely free but may exhibit the most valuable kind of freedom.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_byerly_agent"
+    },
+    "scholarly_argument_byerly_compatibilist_character_format_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Byerly_2017_Free_Will_Theodicies_Theological_Determinists.pdf",
+      "publication_id": "pub_byerly_2017_freewill_theodicies_theological_determinists",
+      "page": "291-292",
+      "pdf_page_index": "3-4",
+      "chapter": "Character Formation Free Will Theodicies for Theological Determinists",
+      "quote_verbatim": "As it turns out, it is not difficult to see how a theological determinist could adapt this aspect of Hick's theodicy. For, she too may affirm that inculcating a virtuous character by means of performing free acts productive of virtue is a great freedom good. Moreover, she may think this is a freedom good that can only be achieved by God through permitting evils to occur. For, like Hick, she may think that it is only an environment in which there are challenges to be met, problems to be solved, and dangers to be faced that these character-forming actions can take place. The only difference between her and Hick is that she thinks that those free actions created agents perform in response to these evils are acts that are causally determined to occur.",
+      "translation_en": null,
+      "context": "Core compatibilist character-formation theodicy: virtue inculcation through free acts in a challenging environment remains a freedom good even when those free acts are causally determined. The only divergence from Hick is the determinism clause.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_byerly_agent"
+    },
+    "scholarly_argument_byerly_hick_s_libertarianism_and_its__2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Byerly_2017_Free_Will_Theodicies_Theological_Determinists.pdf",
+      "publication_id": "pub_byerly_2017_freewill_theodicies_theological_determinists",
+      "page": "291",
+      "pdf_page_index": 3,
+      "chapter": "Character Formation Free Will Theodicies for Theological Determinists",
+      "quote_verbatim": "As Dan Speak (2013) helpfully points out, Hick's commitment to libertarianism comes out most clearly in his discussion on the freedom of human persons to respond in love to God. For Hick, God cannot ensure that human persons will respond to him with the most valuable kind of love. This is because the kind of freedom necessary for this most valuable loving response requires that the response not be causally determined. As Hick explains, 'Whilst a free action [of the kind in view here] arises out of the agent's character it does not arise in a fully determined and predictable way. It is largely but not fully prefigured in the previous state of the agent. For the character is itself partially formed and sometimes partially re-formed in the very moment of free decision (1978: 276).' The fact that Hick affirms libertarianism here may lead some readers to think that adopting the central elements of his theodicy requires affirming libertarianism. […] Nonetheless, it is worth our while to consider whether central aspects of his theodicy could nonetheless be adapted by theological determinists, who by definition deny libertarianism and instead affirm compatibilism—the view that free actions can be causally determined.",
+      "translation_en": null,
+      "context": "Byerly concedes Hick's explicit libertarianism (loving response to God) while arguing it is dispensable for the soul-building core. The Hick 1978:276 verbatim is reproduced inside Byerly's text.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_byerly_agent"
+    },
+    "scholarly_argument_byerly_compatibilist_molinism_1": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Byerly_2017_Free_Will_Theodicies_Theological_Determinists.pdf",
+      "publication_id": "pub_byerly_2017_freewill_theodicies_theological_determinists",
+      "page": "302",
+      "pdf_page_index": 14,
+      "chapter": "Greater Moral Goods Free Will Theodicies for Theological Determinists",
+      "quote_verbatim": "Perhaps somewhat surprisingly, the first proposal is that the facts that play the role played by the counterfactuals of creaturely freedom in Plantinga's theodicy are these very counterfactuals of creaturely freedom. In other words, the proposal is that theological determinists adopt all of the details of Plantinga's proposal, except for his commitment to libertarianism. We might call such a theological determinist a compatibilist Molinist (since she thinks that free actions are compatible with causal determinism), where we would call Plantinga an incompatibilist Molinist (since he thinks free actions are incompatible with causal determinism).",
+      "translation_en": null,
+      "context": "Byerly's coining of 'compatibilist Molinism': Plantinga's Molinist machinery (counterfactuals of creaturely freedom with truth-values independent of divine will) retained, but libertarianism dropped. Only available to a theological determinist in Byerly's weaker stipulative sense — not to the stronger 'all contingent facts determined by divine will' variant (cf. fn 5, p. 290).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_byerly_agent"
+    },
+    "scholarly_argument_byerly_molinism_and_theological_deter_2": {
+      "pdf_source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Byerly_2017_Free_Will_Theodicies_Theological_Determinists.pdf",
+      "publication_id": "pub_byerly_2017_freewill_theodicies_theological_determinists",
+      "page": "290",
+      "pdf_page_index": 2,
+      "chapter": "Introduction — footnote 5",
+      "quote_verbatim": "The term 'theological determinism' is often used with a different meaning, requiring that all contingent facts are determined by the divine will. This is not a requirement of 'theological determinism' as I have defined it […]. One important point of difference is that only a 'theological determinist' in my stipulative sense, and not in this other sense, can affirm the compatibilist Molinist view I discuss in 'Greater Moral Goods Free Will Theodicies for Theological Determinists' section.",
+      "translation_en": null,
+      "context": "This argument is the explicit articulation of the asymmetry: compatibilist Molinism is available only to Byerly-style (weak) theological determinists, not to strong theological determinists who hold that ALL contingent facts (and not merely all free actions) are determined by the divine will. Source identical to scholarly_argument_byerly_definition_of_theological_dete_2 (same footnote covers both arguments).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_byerly_agent"
+    }
+  },
+  "notes_for_kg_curator": [
+    "All 7 Byerly arguments flagged 'needs_evidence' in nodes.jsonl have been located in the 2017 Sophia article. Zero arguments unresolved.",
+    "Pagination uses Sophia 56:289–310 (offset +288 over PDF page index).",
+    "Byerly's article is the SOLE source: he has only one entry in /07_Libre_arbitre_theologie/ matching 'byerly'. No Sophia/Religious Studies companion piece is present in DOCTORAT.",
+    "Patristic relevance for Romain's thesis: Byerly's compatibilist reading of free-will theodicies aligns conceptually with the Augustinian–Calvinist axis (massa damnata + donum perseverantiae, cf. Phase 11 Augustine) against the Origenian autexousion tradition. The 'compatibilist Molinism' construct is also useful when reading later receptions of Origen's prescience argument (De Princ. III; cf. Phase 9)."
+  ]
+}

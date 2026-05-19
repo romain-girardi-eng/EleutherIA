@@ -1,0 +1,188 @@
+{
+  "scholar": "Erik Eliasson",
+  "scholar_node_id": "scholar_eliasson_e",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/[Philosophia Antiqua 113] Erik Eliasson - The Notion of That Which Depends on Us in Plotinus and Its Background (Philosophia Antiqua - Volume 113) (2008, Brill Academic Publishers).pdf",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Eliasson - 2009 - Sur la conception plotinienne du destin dans le traité 3.pdf"
+  ],
+  "method_note": "All 15 needs_evidence arguments labelled 'Eliasson:' verified against the two PDFs Eliasson authored that are present in DOCTORAT. 2008 monograph (English, Brill Philosophia Antiqua 113) supplies evidence for theses on Aristotle, Chrysippus/Stoics, Alexander, Middle Platonists and the general Plotinus reconsidered theses. 2009 article (French, Les Études philosophiques) supplies bilingual evidence for theses specifically on Plato (Republic X myth of Er, Timaeus, Laws X), Plotinus III.1[3] and its relation to Middle Platonism. No OCR of the PDFs was needed: both have native-extraction .md files with full body text already in DOCTORAT.",
+  "args_processed": 15,
+  "args_verified_high": 15,
+  "args_not_found": 0,
+  "patches": {
+    "scholarly_argument_eliasson_plato_s_concept_of_fate_1": {
+      "pdf_source": "Eliasson - 2009 - Sur la conception plotinienne du destin dans le traité 3.pdf",
+      "publication_id": "scholarly_work_eliasson_2009_sur_la_conception_plotinienne_du_destin_",
+      "page": "408",
+      "chapter": "Les sources platoniciennes (article §1)",
+      "quote_fr": "La notion de destin (εἱμαρμένη, fatum) fut probablement introduite dans un contexte philosophique par Platon. On voit facilement cependant qu'il ne s'agit pas chez lui d'une véritable théorie sur un sujet philosophique déjà établi, comme ce sera le cas plus tard. Il reste que, pour les théories platoniciennes postérieures, les textes de Platon constituent des sources, encore peu techniques, à la fois des intuitions qui guident leurs développements et de leurs principaux éléments.",
+      "translation_en": "The notion of fate (heimarmene, fatum) was probably introduced into a philosophical context by Plato. One easily sees, however, that in him it is not a true theory on an already established philosophical subject, as will be the case later. It remains that, for the later Platonic theories, Plato's texts constitute sources, still little technical, both of the intuitions that guide their developments and of their main elements.",
+      "context": "Ouverture de la section 'Les sources platoniciennes'. Eliasson y formule explicitement la thèse pré-technique du nœud KG : Platon n'a pas de théorie élaborée du destin, mais fournit aux platoniciens postérieurs intuitions + éléments.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_interpretation_of_republic_x_m_2": {
+      "pdf_source": "Eliasson - 2009 - Sur la conception plotinienne du destin dans le traité 3.pdf",
+      "publication_id": "scholarly_work_eliasson_2009_sur_la_conception_plotinienne_du_destin_",
+      "page": "409",
+      "chapter": "Les sources platoniciennes — exégèse du mythe d'Er",
+      "quote_fr": "Tout d'abord, le tirage des sorts est désigné comme déterminant seulement l'ordre selon lequel les âmes choisissent, mais peu après (619 b 3) on voit qu'être le dernier à choisir constitue un désavantage décisif, même si ce n'est pas au point que la vie heureuse en devienne entièrement impossible à atteindre. […] Enfin, on ne voit pas clairement en quel sens la vertu serait « sans maître ». Le choix d'une vie vertueuse avant l'incarnation garantit-il une vie complètement vertueuse ici-bas ? Ou bien, dans la phrase « ἀρετὴ δὲ ἀδέσποτον », le δέ est-il adversatif et indique-t-il qu'ici-bas beaucoup d'autres aspects sont déterminés ἐξ ἀνάγκης ?",
+      "translation_en": "First, the casting of lots is designated as determining only the order in which the souls choose, but shortly afterwards (619 b 3) we see that being the last to choose constitutes a decisive disadvantage, even if not to the point that a happy life becomes entirely impossible to attain. […] Finally, it is not clear in what sense virtue would be 'without master'. Does the choice of a virtuous life before incarnation guarantee a completely virtuous life here below? Or, in the phrase 'aretē de adespoton', is the de adversative, indicating that here below many other aspects are determined ex anankēs?",
+      "context": "Eliasson énumère explicitement les difficultés exégétiques du mythe d'Er (tirage des sorts, choix de démon, vertu sans maître), exactement les éléments listés dans la description du nœud KG.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_plato_s_synthesis_in_the_myth__3": {
+      "pdf_source": "Eliasson - 2009 - Sur la conception plotinienne du destin dans le traité 3.pdf",
+      "publication_id": "scholarly_work_eliasson_2009_sur_la_conception_plotinienne_du_destin_",
+      "page": "409",
+      "chapter": "Les sources platoniciennes — synthèse du mythe d'Er",
+      "quote_fr": "Sans négliger ces problèmes, l'essentiel est que Platon tente ici de combiner deux éléments traditionnels, l'action humaine, la puissance et l'intervention divines, en faisant retomber sur le premier presque toute la faute des malheurs de la vie et en donnant au second un rôle central dans l' « exécution » des choix humains, tout en laissant la possibilité d'expliquer aussi certains aspects positifs et négatifs comme des effets du hasard, représenté par le tirage au sort.",
+      "translation_en": "Without neglecting these problems, the essential point is that Plato here attempts to combine two traditional elements, human action and divine power/intervention, placing on the former almost all the blame for life's misfortunes, and giving the latter a central role in the 'execution' of human choices, while leaving the possibility of also explaining certain positive and negative aspects as effects of chance, represented by the casting of lots.",
+      "context": "Conclusion synthétique d'Eliasson sur le mythe d'Er — formulation quasi mot-à-mot de la description du nœud KG (action humaine + puissance divine + hasard via le tirage au sort).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_timaeus_on_laws_of_fate_4": {
+      "pdf_source": "Eliasson - 2009 - Sur la conception plotinienne du destin dans le traité 3.pdf",
+      "publication_id": "scholarly_work_eliasson_2009_sur_la_conception_plotinienne_du_destin_",
+      "page": "410",
+      "chapter": "Les sources platoniciennes — le Timée",
+      "quote_fr": "Retenons l'idée de lois de la destinée (νόμοι εἱμαρμένοι) comme conditions ou limites appliquées par la nécessité à l'âme, suite à son incarnation. Même si ce passage mentionne le contexte de l'existence antérieure à l'incarnation de l'âme, on doit noter qu'il s'agit plus exactement ici des « lois » dans le sens des difficultés et des contraintes qui généralement accompagnent l'âme dans la vie incarnée, et qu'il n'est pas fait mention d'un choix lié par nécessité à des conséquences spécifiques ou globales pour cette vie.",
+      "translation_en": "Let us retain the idea of laws of fate (nomoi heimarmenoi) as conditions or limits applied by necessity to the soul, following its incarnation. Although this passage mentions the context of the soul's pre-incarnation existence, one must note that what is at stake here, more exactly, is 'laws' in the sense of difficulties and constraints that generally accompany the soul in embodied life, and that there is no mention of a choice bound by necessity to specific or global consequences for that life.",
+      "context": "Glose d'Eliasson sur Timée 42 a 3 - b 2. Reformulation exacte du nœud KG (lois de la destinée = conditions/limites par nécessité, non choix conséquentiel).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_laws_x_on_order_and_law_of_fat_5": {
+      "pdf_source": "Eliasson - 2009 - Sur la conception plotinienne du destin dans le traité 3.pdf",
+      "publication_id": "scholarly_work_eliasson_2009_sur_la_conception_plotinienne_du_destin_",
+      "page": "410-411",
+      "chapter": "Les sources platoniciennes — les Lois X",
+      "quote_fr": "L'important dans ce passage et dans le récit de l'Athénien en général est la notion d'un ordre et d'une loi du destin (τάξις καὶ νόμος τῆς εἱμαρμένης), et surtout sa relation avec la distinction (μέν…δέ) entre les causes des changements des êtres animés que ces derniers ont en eux-mêmes et les déplacements qui en résultent, qui sont eux aussi déterminés par l'ordre et la loi du destin auxquels ces déplacements sont conformes.",
+      "translation_en": "The important point in this passage and in the Athenian's account in general is the notion of an order and law of fate (taxis kai nomos tēs heimarmenēs), and especially its relation to the distinction (men…de) between the causes of changes that animated beings have in themselves and the resulting movements, which are also determined by the order and law of fate to which these movements are conformed.",
+      "context": "Eliasson glose Lois X 904 c 6-9 (Burnet). Exact match de la description du nœud KG : notion d'ordre+loi du destin et sa relation à la distinction causes en soi / déplacements résultants.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_plotinus_s_treatise_iii_on_fat_0": {
+      "pdf_source": "Eliasson - 2009 - Sur la conception plotinienne du destin dans le traité 3.pdf",
+      "publication_id": "scholarly_work_eliasson_2009_sur_la_conception_plotinienne_du_destin_",
+      "page": "416",
+      "chapter": "La réception plotinienne dans le traité Sur le Destin (III.1 [3])",
+      "quote_fr": "Dans le traité nommé par Porphyre Sur le Destin (III.1[3]), Plotin analyse les théories proposées sur le destin (εἱμαρμένη), identifiant ainsi les questions principales sur le sujet. Après avoir fait une critique de l'incapacité de toutes les théories antérieures à y répondre, il propose lui-même, vers la fin du traité, une solution. Selon certains commentateurs, comme Bréhier, il faudrait penser que « Plotin est (...) décidé à réfuter la doctrine du destin ». Dans ce qui suit, nous allons tenter de montrer que Plotin nous présente plutôt une théorie précise sur le destin, mais une théorie qui s'inscrit dans la tradition platonicienne dont nous venons de voir les origines chez Platon et la forme plus élaborée dans le médioplatonisme.",
+      "translation_en": "In the treatise named by Porphyry On Fate (III.1[3]), Plotinus analyses the theories proposed on fate (heimarmenē), thereby identifying the principal questions on the subject. After criticizing the inability of all earlier theories to answer them, he himself proposes, near the end of the treatise, a solution. According to some commentators, like Bréhier, one should think that 'Plotinus is (...) determined to refute the doctrine of fate'. In what follows we will try to show that Plotinus rather presents us with a precise theory on fate, but a theory that fits into the Platonic tradition whose origins we have just seen in Plato and whose more elaborated form in Middle Platonism.",
+      "context": "Thèse-cadre explicite de l'article : III.1[3] n'est pas pure polémique anti-stoïcienne, mais défense positive d'une théorie médio-platonicienne du destin. Exact match du nœud KG.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_the_scope_and_target_of_plotin_1": {
+      "pdf_source": "Eliasson - 2009 - Sur la conception plotinienne du destin dans le traité 3.pdf",
+      "publication_id": "scholarly_work_eliasson_2009_sur_la_conception_plotinienne_du_destin_",
+      "page": "407",
+      "chapter": "Introduction de l'article",
+      "quote_fr": "Notre objectif est de préciser non seulement ce que, à propos du destin, Plotin réfute, mais aussi ce qu'il défend lui-même. Nous tenterons de montrer en particulier comment Plotin propose une version de la théorie médioplatonicienne du destin et de « ce qui dépend de nous » (τὸ ἐφ' ἡμῖν).",
+      "translation_en": "Our aim is to clarify not only what, on the subject of fate, Plotinus refutes, but also what he himself defends. We will try to show in particular how Plotinus proposes a version of the Middle Platonist theory of fate and of 'what depends on us' (to eph' hēmin).",
+      "context": "Formulation programmatique de l'article (p. 407, dernière phrase de l'introduction). Le nœud KG énonce exactement cette double thèse (réfutation + défense, négative + positive).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_plotinus_s_theory_of_fate_heim_0": {
+      "pdf_source": "Eliasson - 2009 - Sur la conception plotinienne du destin dans le traité 3.pdf",
+      "publication_id": "scholarly_work_eliasson_2009_sur_la_conception_plotinienne_du_destin_",
+      "page": "407",
+      "chapter": "Introduction de l'article",
+      "quote_fr": "Sans naturellement négliger l'importance de ces influences souvent mentionnées, nous voudrions ici nous intéresser à la relation de l'analyse plotinienne du destin à celle du médio-platonisme, en les considérant toutes les deux comme des exemples de réception de quelques intuitions, voire de quelques idées (sinon d'une théorie) de Platon, sur ce sujet, effectivement postplatonicien, du destin.",
+      "translation_en": "Without of course neglecting the importance of these often mentioned influences, we should like here to focus on the relation of the Plotinian analysis of fate to that of Middle Platonism, considering both as examples of reception of a few intuitions, even a few ideas (if not of a theory) of Plato, on this — effectively post-Platonic — subject of fate.",
+      "context": "Eliasson positionne III.1[3] comme version médio-platonicienne du destin (vs Bréhier/Chappuis qui surinsistent sur l'anti-stoïcisme). Exact match du nœud KG (theory of fate in Ennead III.1[3]).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_the_relationship_between_ploti_2": {
+      "pdf_source": "Eliasson - 2009 - Sur la conception plotinienne du destin dans le traité 3.pdf",
+      "publication_id": "scholarly_work_eliasson_2009_sur_la_conception_plotinienne_du_destin_",
+      "page": "428",
+      "chapter": "Conclusion de l'article",
+      "quote_fr": "Plotin donc, tout en suivant certains éléments de la théorie médioplatonicienne « standard », propose une solution qui suit la réception des intuitions platoniciennes que l'on trouve au chapitre 2 du Didaskalikos. […] La solution de Plotin au problème du destin n'est certes pas d'introduire la notion de « libre arbitre » mais seulement d'identifier en quel sens nous sommes capables de déterminer quelque chose, et notamment nous-mêmes, nos activités et nos actions.",
+      "translation_en": "Plotinus, then, while following some elements of the 'standard' Middle Platonist theory, proposes a solution that follows the reception of Platonic intuitions found in Chapter 2 of the Didaskalikos. […] Plotinus's solution to the problem of fate is certainly not to introduce the notion of 'free will' but only to identify in what sense we are capable of determining something, and especially ourselves, our activities and our actions.",
+      "context": "Conclusion de l'article: relation Plotin/Médio-Platonisme = réception convergente d'intuitions platoniciennes. Note Eliasson : refus explicite de l'anachronisme 'libre arbitre' (cf. fn 1 p. 428 critiquant Brisson et al. 2002).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_that_which_depends_on_us_in_pl_0": {
+      "pdf_source": "[Philosophia Antiqua 113] Erik Eliasson - The Notion of That Which Depends on Us in Plotinus and Its Background (2008, Brill).pdf",
+      "publication_id": "pub_eliasson_2008_notion_eph_hemin_plotinus",
+      "page": "1-2",
+      "chapter": "Ch. 1 — Introduction",
+      "quote_verbatim": "Now, this notion, sometimes loosely translated as 'freedom', 'free choice', 'free will', 'free action', or 'self-determination', occurs in fact in a great number of Greek philosophical writings from the 4th century BC up to the 6th century AD.",
+      "context": "Eliasson ouvre le livre en listant les traductions habituelles de τὸ ἐφ' ἡμῖν (freedom, free choice, free will, free action, self-determination) — qu'il jugera toutes inadéquates ou partielles, justifiant son approche terminologique-historique. Exact match du nœud KG (list of standard interpretations all inadequate).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_plotinus_s_notion_of_reconside_5": {
+      "pdf_source": "[Philosophia Antiqua 113] Erik Eliasson - The Notion of That Which Depends on Us in Plotinus and Its Background (2008, Brill).pdf",
+      "publication_id": "pub_eliasson_2008_notion_eph_hemin_plotinus",
+      "page": "169-170",
+      "chapter": "Ch. 6 — Plotinus Reconsidered (opening)",
+      "quote_verbatim": "Therefore, with the aim of coming to terms with some of these problems, I set out to analyze the notions of ἐφ' ἡμῖν in the three main schools within the tradition of writings on ἐφ' ἡμῖν preceding Plotinus. The aim of this analysis was to discern within the Aristotelian, Stoic and Middle-Platonist traditions respectively, both the specific features of their notions of what is ἐφ' ἡμῖν as well as their specific conceptions of what the underlying philosophical issue was. Now, then, we are more able to say something specific on how Plotinus' notion relates to this tradition, i.e. what more specifically it is that he criticizes, what he adopts in his own account, and what he achieves by his own analysis.",
+      "context": "Ouverture méthodologique du Ch. 6 ('Plotinus Reconsidered'). Eliasson explicite la nécessité d'un détour terminologique-historique par Aristote/Stoïciens/Médio-Platoniciens pour situer Plotin hors VI.8. Exact match du nœud KG.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_aristotle_s_notion_of_1": {
+      "pdf_source": "[Philosophia Antiqua 113] Erik Eliasson - The Notion of That Which Depends on Us in Plotinus and Its Background (2008, Brill).pdf",
+      "publication_id": "pub_eliasson_2008_notion_eph_hemin_plotinus",
+      "page": "60",
+      "chapter": "Ch. 3.1.5 — Conclusions concerning Aristotle's notion of ἐφ' ἡμῖν",
+      "quote_verbatim": "The basic unclarity consists in that he employs both what we have called an exclusive notion of ἐφ' ἡμῖν, related to a notion of action on which all actions, including actions that are ἐφ' ἡμῖν, are rational actions; and what we have called an inclusive notion of ἐφ' ἡμῖν, related to a notion of action on which only some actions are rational while others are in various senses non-rational, and on which actions that are ἐφ' ἡμῖν are not by definition rational. Moreover, Aristotle, in discussing deliberation gives a systematic account of the things that depend on us, τὰ ἐφ' ἡμῖν. What this account adds to the picture is that Aristotle, on the one hand, seems to take τὰ ἐφ' ἡμῖν to depict an ontological class of things that are ἐφ' ἡμῖν for all and everyone in equal manner, while at the same time allowing for some of these things not being ἐφ' ἡμῖν on some occasions.",
+      "context": "Conclusion section 3.1.5 (pp. 60-61). Eliasson établit ses deux thèses-clé sur Aristote, exactement reproduites dans le nœud KG : (i) double notion inclusive/exclusive de ἐφ' ἡμῖν ; (ii) Aristote applique le concept aux états internes autant qu'aux actions et propose une ontologie tentative sous-jacente.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_alexander_of_aphrodisias_on_2": {
+      "pdf_source": "[Philosophia Antiqua 113] Erik Eliasson - The Notion of That Which Depends on Us in Plotinus and Its Background (2008, Brill).pdf",
+      "publication_id": "pub_eliasson_2008_notion_eph_hemin_plotinus",
+      "page": "79-80",
+      "chapter": "Ch. 3.5 — Conclusions concerning Aristotelian notions of ἐφ' ἡμῖν",
+      "quote_verbatim": "Finally, Alexander of Aphrodisias, in spelling out what he sees as the common notion of τὰ ἐφ' ἡμῖν, in his De fato opts for an exclusive notion, seeing it as applicable only to rational animals acting 'in accordance with reason and judgment', while still ascribing action and voluntary action to irrational animals.",
+      "context": "Conclusion §3.5 sur l'ensemble de la tradition aristotélicienne. Eliasson y synthétise ce qui est nouveau chez Alexandre (cf. aussi §3.4 pp. 72-79 développant les 4 définitions d'Alexandre : assentiment rationnel, kyrios, exousia, autexousion). Match du nœud KG (Alexander developing a distinctive notion against Stoic determinism, key stage in concept's development).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_chrysippus_and_stoic_3": {
+      "pdf_source": "[Philosophia Antiqua 113] Erik Eliasson - The Notion of That Which Depends on Us in Plotinus and Its Background (2008, Brill).pdf",
+      "publication_id": "pub_eliasson_2008_notion_eph_hemin_plotinus",
+      "page": "96-97",
+      "chapter": "Ch. 4.1.3 — Conclusions concerning Chrysippus' notion of ἐφ' ἡμῖν",
+      "quote_verbatim": "Thus, the issue for Chrysippus is in general to spell out that we make a contribution to our actions such that our actions cannot be explained solely in terms of the preceding external causes, but must make reference to us as well. Moreover, Chrysippus should be seen as working with an exclusive notion of ἐφ' ἡμῖν, since in his view, human action by definition follows from assent, and assent by definition is an act of the rational ruling part of the soul.",
+      "context": "Conclusion §4.1.3 sur Chrysippe. Eliasson révise explicitement la lecture standard (Bobzien 1998a) et insiste : (i) le concept chrysippéen doit être lu dans le cadre du compatibilisme stoïcien et de la théorie des kathēkonta-via-assentiment, (ii) il faut un réexamen attentif des sources (Cicéron, Aulu-Gelle, Alexandre, Plutarque, Origène, Clément, Némésius). Exact match du nœud KG.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    },
+    "scholarly_argument_eliasson_middle_platonist_notions_of_4": {
+      "pdf_source": "[Philosophia Antiqua 113] Erik Eliasson - The Notion of That Which Depends on Us in Plotinus and Its Background (2008, Brill).pdf",
+      "publication_id": "pub_eliasson_2008_notion_eph_hemin_plotinus",
+      "page": "166-167",
+      "chapter": "Ch. 5.6 — Conclusions concerning Middle-Platonist notions of ἐφ' ἡμῖν",
+      "quote_verbatim": "In analyzing the notion of ἐφ' ἡμῖν in the authors traditionally labelled Middle Platonists, it is clear that we can discern a standard notion that includes a number of specific elements, based on a specific way of answering the question of how to reconcile the all-inclusiveness of fate with a notion of something being ἐφ' ἡμῖν. […] In the main sources for this account analyzed above, Alcinous' Didascalicus, Ps.-Plutarch's De fato, Nemesius of Emesa's De natura hominis, Calcidius' In Timaeum, Apuleius' De Platone, and Maximus of Tyre's Orations, the main idea is that all things are included in fate. But significantly, among the things included in fate, some are fated, i.e. they follow from fate and are necessary, others are not fated and not necessary, and among the latter, they place what is ἐφ' ἡμῖν.",
+      "context": "Conclusion §5.6 (pp. 166-167). Eliasson identifie explicitement la 'standard notion' médio-platonicienne de ἐφ' ἡμῖν et énumère les six sources principales (Alcinous, Ps.-Plutarque, Némésius, Calcidius, Apulée, Maxime de Tyr) — exactement la liste du nœud KG (qui ajoute Philon et Plutarque, traités par Eliasson comme exceptions explicites au standard, pp. 166-167).",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_eliasson_agent"
+    }
+  }
+}

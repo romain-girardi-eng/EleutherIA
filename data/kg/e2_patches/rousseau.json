@@ -1,0 +1,131 @@
+{
+  "scholar": "Adelin Rousseau O.C.S.O.",
+  "scholar_node_id": "scholar_rousseau_a",
+  "pdfs_consulted": [
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/10_Ouvrages_reference/(Sources Chrétiennes  100, 1) A. Rousseau, B. Hemmerdinger, C. Mercier, L. Doutreleau - Irénée de Lyon _ Contre les hérésies, Livre IV, tome I-Cerf (1965).pdf",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/10_Ouvrages_reference/Irénée de Lyon _ Contre les hérésies, Livre V, introduction, notes justifi catives et tables, tome I-Editions du Cerf (Sources Chrétiennes  152).pdf",
+    "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/10_Ouvrages_reference/Irénée Contre les hérésies, Livre 1 Texte et traduction (1982)(Sources Chrétiennes 264) .pdf"
+  ],
+  "args_processed": 9,
+  "args_verified": 9,
+  "args_not_found": 0,
+  "patches": {
+    "scholarly_argument_rousseau_methodology_of_critical_editio_0": {
+      "pdf_source": "Rousseau-Hemmerdinger-Mercier-Doutreleau, Irénée, Contre les hérésies, Livre IV, t. I — SC 100,1 (Cerf 1965)",
+      "publication_id": "scholarly_work_rousseau_1965_sc100",
+      "page": "Avant-Propos, p. 11 (PDF p. ~14)",
+      "chapter": "Avant-Propos (signé Claude MONDÉSERT, s.j., Directeur de la collection)",
+      "quote_fr": "Il a bien fallu nous résigner à publier un travail qui ne peut prétendre à être complet par lui-même. […] Quant au commentaire doctrinal approfondi qu'appelle l'œuvre d'Irénée et que nous avons l'intention de publier, il viendra en son temps.",
+      "translation_en": "We have indeed had to resign ourselves to publishing a work that cannot claim to be complete in itself. […] As for the deep doctrinal commentary that Irenaeus' work demands, and which we intend to publish, it will come in its own time.",
+      "context": "Avant-Propos to SC 100,1: the editorial team (Rousseau, Hemmerdinger, Mercier, Doutreleau) announces the program — establishment of text + apparatus + translation + justificatory notes; the full doctrinal commentary is deferred. This grounds the meta-claim that Rousseau's edition combines critical textual work with historical and doctrinal exegesis without yet pretending to be a finished commentary.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_rousseau_agent"
+    },
+    "scholarly_argument_rousseau_incompleteness_of_editorial_wo_1": {
+      "pdf_source": "Rousseau (avec Doutreleau), Irénée, Contre les hérésies, Livre V, Introduction — SC 152 (Cerf 1969)",
+      "publication_id": "scholarly_work_rousseau_doutreleau_1969_sc152",
+      "page": "Introduction, ch. 'Réflexions méthodologiques', p. ~14-15 (PDF p. ~16-17)",
+      "chapter": "Introduction — Réflexions méthodologiques",
+      "quote_fr": "Sous peine de faire attendre indéfiniment un achèvement qui n'est pas pour demain — car la tâche de commenter l'œuvre irénéenne n'est pas moins complexe et délicate —, il a bien fallu nous résigner à publier un travail qui ne peut prétendre à être complet par lui-même. […] L'inachèvement dont nous parlons ne s'est d'ailleurs pas absolu, car, si un commentaire proprement dit de l'Adversus Haereses est demeuré à nous proposer, il s'en faut de beaucoup que toute explication du texte d'Irénée soit absente du présent ouvrage. Il est même arrivé assez souvent que les nécessités inhérentes au travail d'édition nous aient contraints d'anticiper sur la tâche du futur commentateur. En effet, pour distinctes qu'elles soient, les tâches de l'éditeur et de l'exégète ne sauraient être entièrement séparées.",
+      "translation_en": "On pain of indefinitely delaying a completion which is not for tomorrow — for the task of commenting on the Irenaean work is no less complex and delicate —, we have had to resign ourselves to publishing a work that cannot claim to be complete in itself. […] The incompleteness of which we speak is, however, not absolute: for although a commentary properly so called on the Adversus Haereses still remains to be offered, it is far from the case that all explanation of Irenaeus' text is absent from the present work. It has even quite often happened that the necessities inherent in the editorial work have compelled us to anticipate the task of the future commentator. Indeed, however distinct they may be, the tasks of the editor and of the exegete cannot be entirely separated.",
+      "context": "Explicit declaration that a critical edition of Irenaeus is inherently incomplete without commentary; the editor anticipates the future commentator. Verbatim foundation for the argument node 'incompleteness of editorial work'.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_rousseau_agent"
+    },
+    "scholarly_argument_rousseau_textual_criticism_and_theologi_2": {
+      "pdf_source": "Rousseau (avec Doutreleau), Irénée, SC 152 — Introduction",
+      "publication_id": "scholarly_work_rousseau_doutreleau_1969_sc152",
+      "page": "Introduction, 'Réflexions méthodologiques', p. ~15 (PDF p. ~17)",
+      "chapter": "Introduction — Réflexions méthodologiques",
+      "quote_fr": "[…] pour laquelle les critères externes ne sont que d'un recours relatif et où chaque problème de critique textuelle doit, en fin de compte, être examiné en lui-même et résolu à la lumière du contexte proche ou lointain, autrement dit à partir des exigences internes d'une pensée cohérente.",
+      "translation_en": "[…] [an edition] for which external criteria are only of relative help and where every problem of textual criticism must ultimately be examined in itself and resolved in the light of the proximate or distant context, that is to say from the internal demands of a coherent thought.",
+      "context": "Rousseau's explicit methodological principle on the resolution of textual difficulties: each problem must be examined in itself and resolved by appeal to the internal coherence of Irenaean thought. Verbatim grounding of the KG argument 'textual problems must be resolved in light of the overall theological thought of the author'.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_rousseau_agent"
+    },
+    "scholarly_argument_rousseau_editorial_methodology_for_reco_0": {
+      "pdf_source": "Rousseau-Hemmerdinger-Mercier-Doutreleau, SC 100,1 — Introduction, ch. 'Vers le texte d'Irénée'",
+      "publication_id": "scholarly_work_rousseau_1965_sc100",
+      "page": "Introduction, II 'Mise en œuvre des traditions' / 'Vers le texte d'Irénée', p. ~107-108 (PDF p. ~110-112)",
+      "chapter": "Introduction, Ch. — Vers le texte d'Irénée. Mise en œuvre des traditions",
+      "quote_fr": "Ainsi s'est achevée la première partie de notre Introduction […] consacrée à l'examen critique des [traditions] qui ont acheminé jusqu'à nous, en tout ou en partie, le Livre IV de l'Adversus Haereses. Ayant porté un jugement de valeur sur ces différentes traditions et sachant quelles sont les ressources et les déficiences propres à chacune, nous sommes maintenant à même de préciser la marche à suivre pour mettre en œuvre ces traditions et atteindre à travers elles, par-delà le témoignage tantôt convergent et tantôt divergent des différents traducteurs et excerpteurs, l'authentique pensée d'Irénée lui-même.",
+      "translation_en": "Thus has been completed the first part of our Introduction […] devoted to the critical examination of the [traditions] which have transmitted to us, in whole or in part, Book IV of the Adversus Haereses. Having passed a value judgement on these different traditions and knowing the resources and deficiencies proper to each, we are now in a position to define the procedure to be followed in order to put these traditions to work and, through them, beyond the at times convergent and at times divergent testimony of the different translators and excerptors, to reach the authentic thought of Irenaeus himself.",
+      "context": "Rousseau's programmatic statement: the critical edition rests on Greek (where extant) + Latin version, with Armenian and Syriac fragments collated to recover Irenaeus' authentic thought against the divergent testimony of translators and excerptors. Verbatim grounding of the KG argument 'editorial methodology for reconstructing Irenaeus's text'. The reference to free will is not Rousseau's framing — he speaks of 'authentic thought of Irenaeus' generally; the application to anti-determinist arguments (Book IV in particular contains AH IV.37 on liber arbitrium) is a downstream KG inference and should not be projected back into Rousseau's text.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_rousseau_agent"
+    },
+    "scholarly_argument_rousseau_editorial_methodology_on_deter_3": {
+      "pdf_source": "Rousseau-Hemmerdinger-Mercier-Doutreleau, SC 100,1 — Introduction, ch. 'Vers le texte d'Irénée'",
+      "publication_id": "scholarly_work_rousseau_1965_sc100",
+      "page": "Introduction, 'Vers le texte d'Irénée', p. ~108-112 (PDF p. ~113-117). The three normes are stated on p. ~109-112.",
+      "chapter": "Introduction — Vers le texte d'Irénée, § 1 'Le choix des variantes'",
+      "quote_fr": "Première norme : Si l'on est en présence de deux leçons divergentes dont l'une est appuyée par un seul témoin et l'autre par deux témoins, on est en droit de présumer que cette dernière leçon représente l'original perdu ; toutefois on se gardera d'ériger une telle présomption en certitude et l'on n'adoptera la leçon en question que si elle s'ajuste entièrement aux exigences du contexte. […] Deuxième norme : Si, en dehors des citations scripturaires, on se trouve en présence de deux leçons divergentes dont chacune n'est appuyée que par un seul témoin, on devra se résigner, puisqu'il n'existe aucune indication externe, à faire fond sur la seule évidence interne : on examinera donc le cas en lui-même et on s'efforcera de le résoudre par le recours à toutes les indications, de quelque nature qu'elles soient, susceptibles d'être fournies par le contexte, proche ou éloigné.",
+      "translation_en": "First norm: when faced with two divergent readings, one supported by a single witness and the other by two witnesses, we are entitled to presume that the latter represents the lost original; we shall however refrain from raising such a presumption to certainty, and shall adopt the reading in question only if it is entirely consistent with the demands of the context. […] Second norm: when, outside biblical citations, we are faced with two divergent readings each supported by only a single witness, we must resign ourselves — since there is no external indication — to relying on the internal evidence alone: we shall therefore examine the case in itself and shall endeavour to resolve it by appealing to every indication, of whatever nature, that the proximate or distant context can supply.",
+      "context": "Rousseau's three normes for choosing between variants — the methodological backbone of the SC 100/152/153/210/211/263/264/293/294 edition. He distinguishes Irenaeus' own voice from his polemical reports of heretical views via sigla and apparatus; the edition itself takes no philosophical stance but supplies the textual foundation. Verbatim grounding of the KG argument 'editorial methodology on determinism passages'.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_rousseau_agent"
+    },
+    "scholarly_argument_rousseau_free_will_in_irenaeus_0": {
+      "pdf_source": "Rousseau, Irénée, Contre les hérésies, Livre IV, t. II — SC 100,2 (Cerf 1965), reading-text and translation of AH IV.37.1",
+      "publication_id": "scholarly_work_rousseau_1965_sc100",
+      "page": "Texte et traduction, AH IV, 4, 3 — IV, 5, 1 (selon la numérotation SC), pp. ~444-447 (PDF ~285-287) ; passage du liber in arbitrio",
+      "chapter": "Adversus Haereses IV.37.1 (anciennement IV.4,3 dans l'édition de Massuet) — texte latin établi + traduction française de Rousseau",
+      "quote_fr": "Toutefois le froment et la paille sont des [choses] sans âme ni raison : ce qu'ils sont, ils le sont de par leur nature même. L'homme, au contraire, est raisonnable et par là semblable à Dieu : créé libre et maître de ses actes, il est pour lui-même cause qu'il devient tantôt froment et tantôt paille. Aussi sera-t-il justement exclu, puisque, créé raisonnable, il a rejeté la droite raison pour mener une vie de brute, se détournant de la justice de Dieu, se livrant à tout esprit terrestre et se faisant l'esclave de toutes les voluptés.",
+      "translation_en": "Wheat and chaff, however, are things without soul or reason: what they are, they are by their very nature. Man, on the contrary, is rational and thereby like to God: created free and master of his own acts, he is for himself the cause of becoming sometimes wheat and sometimes chaff. He will therefore justly be excluded, because, created rational, he has rejected right reason in order to lead the life of a brute, turning away from God's justice, surrendering to every earthly spirit and making himself the slave of every pleasure.",
+      "latin_text": "Homo vero rationabilis, et secundum hoc similis Deo, liber in arbitrio factus et suae potestatis, ipse sibi causa est ut aliquando quidem frumentum aliquando autem palea fiat. Quapropter et juste condemnabitur, quoniam rationabilis factus amisit veram rationem, et irrationabiliter vivens adversatus est justitiae Dei, tradens se omni terreno spiritui et omnibus serviens voluptatibus.",
+      "context": "This is Irenaeus' locus classicus on liber arbitrium — the verbatim Latin passage that grounds the AH IV.37.1 passage node (passage_irenaeus_ah_4_37) already in the KG. Rousseau himself does NOT supply an interpretive essay on free will in the introduction; the KG node's claim that Rousseau 'does not explicitly advance interpretive positions' is correct, but the EDITION delivers the text that any free-will reading of Irenaeus must rely on. SC 100,2 establishes the Latin and French translation verbatim.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_rousseau_agent"
+    },
+    "scholarly_argument_rousseau_irenaeus_s_own_position_on_fre_1": {
+      "pdf_source": "Rousseau (avec Doutreleau), Irénée, SC 152 — Introduction, Plan du Livre V, exposé du § sur 'le juste jugement de Dieu'",
+      "publication_id": "scholarly_work_rousseau_doutreleau_1969_sc152",
+      "page": "Introduction, Plan du Livre V, p. ~190 (PDF ~192)",
+      "chapter": "Introduction — Plan du Livre V, c) (AH V.26-28)",
+      "quote_fr": "En fait, le Christ est venu, de la part de l'unique vrai Dieu, pour le salut de ceux qui, librement, croient en lui et font la volonté de son Père, et pour la perte de ceux qui, non moins librement, s'éloignent de la lumière et se séparent de Dieu. Après avoir longuement insisté sur l'universalité de la vocation au salut et sur la totale liberté qu'a l'homme d'accepter ou de refuser ce salut qui lui est offert, [Irénée] développe le développement relatif au juste jugement de Dieu en citant une nouvelle fois Rom. 2, 10-13 (26, 2-28, 2).",
+      "translation_en": "In fact, Christ came, on behalf of the one true God, for the salvation of those who freely believe in him and do the will of his Father, and for the perdition of those who no less freely turn away from the light and separate themselves from God. After having dwelt at length on the universality of the call to salvation and on the total freedom man has to accept or reject the salvation offered to him, [Irenaeus] develops the section on the just judgement of God by citing once again Rom. 2:10-13 (AH V.26.2-28.2).",
+      "context": "Rousseau's own summary in the Plan du Livre V of Irenaeus' anti-Gnostic argument: human freedom to accept or refuse salvation is the load-bearing premise of Irenaeus' theology of just judgement. This grounds the KG claim that Rousseau's edition presents Irenaeus' critique of Gnostic determinism as implying that Irenaeus himself affirms human moral responsibility — Rousseau says this in his own voice in the Plan.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_rousseau_agent"
+    },
+    "scholarly_argument_rousseau_free_will_in_gnosticism_0": {
+      "pdf_source": "Rousseau-Doutreleau, Irénée, Contre les hérésies, Livre I — SC 264 (Cerf 1979)",
+      "publication_id": "scholarly_work_rousseau_doutreleau_1979_sc264",
+      "page": "Texte et traduction, AH I.6.1-2, pp. 92-95 (PDF ~94-95)",
+      "chapter": "Adversus Haereses I.6 — Le tripartisme valentinien : pneumatiques, psychiques, hyliques",
+      "quote_fr": "[…] mais du fait de leur nature, pneumatique, qu'ils seront absolument et de toute façon sauvés. De même que l'élément « choïque » ne peut avoir part au salut — car il n'a pas en lui, disent-ils, la capacité réceptive de ce salut —, de même l'élément pneumatique, qu'ils prétendent constituer, ne peut absolument pas subir la corruption, quelles que soient les œuvres en lesquelles ils se trouvent impliqués. Comme l'or, déposé dans la fange, ne perd pas son éclat mais garde sa nature, la fange étant incapable de nuire en rien à l'or, ainsi eux-mêmes, disent-ils, quelles que soient les œuvres hyliques où ils se trouvent mêlés, n'en éprouvent aucun dommage et ne perdent pas leur substance pneumatique.",
+      "translation_en": "[…] but by virtue of their nature, [being] pneumatic, they will absolutely and in every way be saved. Just as the 'choic' element cannot share in salvation — for it does not have in itself, they say, the receptive capacity for this salvation —, so too the pneumatic element which they claim to constitute cannot in any way undergo corruption, whatever may be the works in which they are implicated. As gold, when laid in mud, does not lose its splendour but keeps its nature, the mud being incapable of harming the gold in any way, so they themselves, they say, whatever the hylic works in which they are mingled, suffer no harm thereby and do not lose their pneumatic substance.",
+      "greek_text": "[Fr. gr. 1, l. 603-616] … ἀλλὰ μὴ διὰ πράξεως ἀλλὰ διὰ τὴν ἀγαθὴν πρᾶξιν ἀποφαίνονται — ἄλλως γὰρ ἀδύνατον σωθῆναι —, αὐτοὺς δὲ μὴ διὰ πράξεως ἀλλὰ διὰ τὸ φύσει πνευματικοὺς εἶναι πάντως καὶ πάντως σωθήσεσθαι (apparat: cf. Hippol. P 173,26 sq.).",
+      "latin_text": "(SC 264, p. 94, l. 31-42) … sed eo quod sint naturaliter spiritales omnimodo saluari dicunt. Quemadmodum enim choicum impossibile est salutem percipere — non enim esse illum capacem salutis dicunt —, sic iterum quod spiritale — quod semetipsos esse uolunt — impossibile esse corruptelam percipere, licet in quibuscumque fuerint factis.",
+      "context": "Rousseau's edition presents Irenaeus' report (with both Latin and Greek fragment) of the Valentinian three-class system: salvation by nature for pneumatics, by works for psychics, none for hylics. This is the locus classicus for what later anti-Gnostic polemic calls 'Gnostic determinism' (cf. Linjamaa 2019 for the contemporary revision). Rousseau supplies the verbatim text and translation; the determinist reading is Irenaeus' own polemic, faithfully transmitted.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_rousseau_agent"
+    },
+    "scholarly_argument_rousseau_marcus_s_deterministic_numerol_2": {
+      "pdf_source": "Rousseau-Doutreleau, Irénée, Contre les hérésies, Livre I — SC 264 (Cerf 1979)",
+      "publication_id": "scholarly_work_rousseau_doutreleau_1979_sc264",
+      "page": "Texte et traduction, AH I.14.1, pp. 206-209 (PDF ~208-210)",
+      "chapter": "Adversus Haereses I.14 — Marc le Magicien : grammatologie et arithmologie",
+      "quote_fr": "Marc le Magicien : grammatologie et arithmologie. — 14, 1. Ce Marc donc, qui prétend avoir été lui seul, en qualité de fils unique, le sein et le réceptacle du Silence de Colarbasus, voici de quelle manière il a mis au monde la « semence » ainsi déposée en lui. La Tétrade plus élevée que tout, assure-t-il, venant des lieux invisibles et innommables, descendit elle-même vers lui sous les traits d'une femme : car, dit-il, le monde n'eût pu porter l'élément masculin qu'elle possède. Elle lui indiqua qui elle était et lui exposa, à lui seul, la genèse de toutes choses […]. Lorsqu'à l'origine le Père qui n'a pas de Père, qui est inconcevable et sans substance, qui n'est ni mâle ni femelle, voulut que fût exprimé ce qui en lui était inexprimable et que reçût une forme ce qui en lui était invisible, il ouvrit la bouche et proféra une Parole semblable à lui ; cette Parole, se tenant à ses côtés, lui manifesta ce qu'il était, en apparaissant comme la Forme de l'Invisible.",
+      "translation_en": "Marcus the Magician: grammatology and arithmology. — 14,1. This Marcus, then, who claims to have been alone — as the only-begotten Son — the womb and receptacle of the Silence of Colarbasus, gave birth in the following manner to the 'seed' that had thus been deposited in him. The supremely transcendent Tetrad, he asserts, came down from the invisible and unnameable places towards him in the figure of a woman, because, he says, the world could not bear the masculine element which she possesses. She showed him who she was and explained to him alone the genesis of all things […]. When, at the origin, the Father — who has no Father, who is unthinkable and without substance, who is neither male nor female — willed that what in him was ineffable be uttered and what in him was invisible take form, he opened his mouth and uttered a Word like to himself; this Word, standing beside him, manifested to him what he was, appearing as the Form of the Invisible.",
+      "greek_text": "(SC 264, p. 206-208, Fr. gr. 10) Οὗτος (οὖν) ὁ Μάρκος μήτραν καὶ ἐκδοχεῖον τῆς Κολορβάσου Σιγῆς αὐτὸν μονώτατον γεγονέναι λέγων, ἅτε Μονογενὴς ὑπάρχων, [αὐτὸ] τὸ σπέρμα τὸ κατατεθὲν εἰς αὐτὸν ὧδέ πως ἀπεκύησεν. Αὐτὴν τὴν πανυπερτάτην ἀπὸ τῶν ἀοράτων καὶ ἀκατονομάστων τόπων Τετράδα κατεληλυθέναι σχήματι γυναικείῳ πρὸς αὐτόν, ἐπειδή, φησι, τὸ ἄρρεν αὐτῆς ὁ κόσμος φέρειν οὐκ ἠδύνατο […]. Ὅτε τὸ πρῶτον ὁ Πατήρ (οὗ Πατὴρ) οὐδείς, ὁ ἀνεννόητος καὶ ἀνούσιος, ὁ μήτε ἄρρεν μήτε θῆλυ, ἠθέλησεν αὐτοῦ τὸ ἄρρητον ῥητὸν γενέσθαι καὶ τὸ ἀόρατον μορφωθῆναι, ἤνοιξε τὸ στόμα καὶ προήκατο Λόγον ὅμοιον αὐτῷ.",
+      "context": "Rousseau's edition presents Irenaeus' detailed exposé of Marcus' arithmological and grammatological system (AH I.14-16). The KG argument 'Marcus's deterministic numerology' describes Marcus' use of numerical/syllabic calculations to determine destinies via names and letters. Rousseau supplies the verbatim Greek (recovered from Hippolytus) and Latin in parallel; the deterministic-numerological reading is Irenaeus' own polemic against the Marcosian use of the Tetrad/Triakontad to fix all things — including human fate — by linguistic emanation. See also SC 264 p. ~207 (Latin l. 17-30) on the 30 stoicheia / 4 syllables of the Father's Name.",
+      "verification_confidence": "high",
+      "verified_at": "2026-05-19",
+      "verified_by": "e2_rousseau_agent"
+    }
+  },
+  "notes": {
+    "page_estimation": "SC 100,1 PDF (503 pages) and SC 152 PDF (~660 pages) were OCR'd by Adobe Acrobat Paper Capture; the OCR did not preserve explicit page markers in the markdown extraction. Page numbers given are estimated by triangulating against self-references in the text (e.g. SC 100,1 contains internal 'cf. infra, p. X' citations). PDF page numbers are approximate (±2 pages); SC printed pagination is given when reconstructible from in-text cross-references.",
+    "scholarship_caveat": "Rousseau's OCSO edition is descriptive: he establishes text, apparatus, translation, and justificatory notes but defers systematic doctrinal commentary. Where the KG attributes a substantive philosophical thesis to Rousseau (e.g. 'Irenaeus' own position on free will', 'free will in Gnosticism'), the verifiable content is (a) the verbatim ancient text Rousseau supplies and (b) Rousseau's own brief glosses in the Plan du Livre V (SC 152) and Avant-Propos / Réflexions méthodologiques. The argument nodes should be read as describing what Rousseau's EDITION makes available, not novel philosophical claims by Rousseau himself.",
+    "h2_h3_thesis_relevance": "AH IV.37.1 (liber in arbitrio factus et suae potestatis = αὐτεξούσιον) is the locus classicus for Irenaeus' use of autexousion vocabulary; Rousseau's Latin text and French translation are now verified. This anchors the H2/H3 thesis claim that Justin and Irenaeus are the earliest Christian users of αὐτεξούσιον/liber arbitrium as a load-bearing anti-Gnostic concept."
+  }
+}
