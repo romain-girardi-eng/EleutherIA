@@ -2137,6 +2137,32 @@
     "advanced": {
       "title": "Erweitert",
       "body": "Simulationsphysik, Lasso-Auswahl und Anheften sind in einen Entwicklermodus verschoben. Sie kehren später hierher zurück. Nutzen Sie für die tägliche wissenschaftliche Arbeit Atlas / Gesamter Graph / Filter / Pfad finden."
+    },
+    "explore": {
+      "region": "Wissensgraph erkunden",
+      "breadcrumb": "Erkundungspfad",
+      "breadcrumbHidden_one": "{{count}} früherer Schritt ausgeblendet",
+      "breadcrumbHidden_other": "{{count}} frühere Schritte ausgeblendet",
+      "breadcrumbHidden": "{{count}} frühere Schritte ausgeblendet",
+      "readMore": "Weiterlesen",
+      "readLess": "Weniger anzeigen",
+      "passagesIndexed_one": "{{count}} Passage indiziert",
+      "passagesIndexed_other": "{{count}} Passagen indiziert",
+      "passagesIndexed": "{{count}} Passagen indiziert",
+      "searchPlaceholder": "Zu Denker, Begriff oder Werk springen…",
+      "searchAria": "Zu einem Knoten springen",
+      "searchEmpty": "Kein Treffer. Versuchen Sie einen griechischen oder lateinischen Begriff oder einen Nachnamen.",
+      "searchResults": "Suchergebnisse",
+      "graphNode": "Graph-Knoten",
+      "moreSpokes_one": "+ {{count}} weitere",
+      "moreSpokes_other": "+ {{count}} weitere",
+      "moreSpokes": "+ {{count}} weitere",
+      "announceFocal": "Erkundung von {{name}}",
+      "noNeighbors": "Dieser Knoten hat keine Nachbarn im kuratierten Graphen. Verwenden Sie die Suche, um woanders hinzuspringen.",
+      "openMap": "Kartenansicht öffnen",
+      "openExplore": "Erkundungsansicht öffnen",
+      "toggleMap": "Karte",
+      "toggleExplore": "Erkunden"
     }
   }
 }

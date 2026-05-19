@@ -2162,6 +2162,32 @@
     "advanced": {
       "title": "Avancé",
       "body": "Le réglage de la physique de simulation, la sélection au lasso et l'épinglage sont passés en mode développeur. Ils reviendront derrière ce panneau dans une prochaine itération. En attendant, utilisez Atlas / Graphe complet / Filtrer / Trouver un chemin pour le travail scientifique quotidien."
+    },
+    "explore": {
+      "region": "Explorer le graphe de connaissance",
+      "breadcrumb": "Fil d'exploration",
+      "breadcrumbHidden_one": "{{count}} étape précédente masquée",
+      "breadcrumbHidden_other": "{{count}} étapes précédentes masquées",
+      "breadcrumbHidden": "{{count}} étapes précédentes masquées",
+      "readMore": "Lire la suite",
+      "readLess": "Réduire",
+      "passagesIndexed_one": "{{count}} passage indexé",
+      "passagesIndexed_other": "{{count}} passages indexés",
+      "passagesIndexed": "{{count}} passages indexés",
+      "searchPlaceholder": "Aller à un penseur, concept ou ouvrage…",
+      "searchAria": "Aller à un nœud",
+      "searchEmpty": "Aucun résultat. Essayez un terme grec ou latin, ou un nom de famille.",
+      "searchResults": "Résultats de recherche",
+      "graphNode": "Nœud du graphe",
+      "moreSpokes_one": "+ {{count}} de plus",
+      "moreSpokes_other": "+ {{count}} de plus",
+      "moreSpokes": "+ {{count}} de plus",
+      "announceFocal": "Exploration de {{name}} en cours",
+      "noNeighbors": "Ce nœud n'a aucun voisin dans le graphe sélectionné. Utilisez la recherche pour aller ailleurs.",
+      "openMap": "Ouvrir la vue carte",
+      "openExplore": "Ouvrir la vue exploration",
+      "toggleMap": "Carte",
+      "toggleExplore": "Explorer"
     }
   }
 }
