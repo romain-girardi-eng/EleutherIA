@@ -253,11 +253,20 @@ export default function CosmographPage() {
   const graphRef = useRef<CosmographRef>(undefined);
   const { isMobile } = useResponsive();
 
-  const [tab, setTab] = useState<Tab>(() =>
-    typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches
-      ? 'full'
-      : 'explore',
-  );
+  // Default tab is *derived* from viewport, not stored on first render. The
+  // useState initializer ran during prerender (no `window`), so it had no way
+  // of knowing the visitor was on a phone — and the server-rendered value
+  // would persist on the client even after hydration because nothing flipped
+  // it back. We track only the user's *explicit* choice; the actual `tab`
+  // value falls back to a viewport-aware default on every render.
+  const [userTab, setUserTab] = useState<Tab | null>(null);
+  const tab: Tab = userTab ?? (isMobile ? 'explore' : 'full');
+  const setTab = useCallback((next: Tab | ((current: Tab) => Tab)) => {
+    setUserTab((prev) => {
+      const current = prev ?? (isMobile ? 'explore' : 'full');
+      return typeof next === 'function' ? (next as (c: Tab) => Tab)(current) : next;
+    });
+  }, [isMobile]);
   const [filters, setFilters] = useState<KgFilterState>({ periods: [], types: [], schools: [] });
   const [allMeta, setAllMeta] = useState<ReadonlyArray<AtlasNodeMeta>>([]);
   const [allEdges, setAllEdges] = useState<ReadonlyArray<AtlasEdgeMeta>>([]);
@@ -731,7 +740,11 @@ export default function CosmographPage() {
           {isMobile && (
             <button
               type="button"
-              onClick={() => setTab((current) => (current === 'explore' ? 'full' : 'explore'))}
+              // Mobile Map = the curated Atlas (~150 nodes). The full 17.7k
+              // graph at this viewport collapses into a hairball; Atlas
+              // shows the load-bearing thinkers, schools and concepts so
+              // the canvas is actually readable.
+              onClick={() => setTab((current) => (current === 'explore' ? 'atlas' : 'explore'))}
               aria-label={
                 tab === 'explore'
                   ? (t('cosmograph.explore.openMap', 'Open the map view') as string)
@@ -971,16 +984,21 @@ export default function CosmographPage() {
           )}
 
           {/* Node detail panel — full-height right rail on desktop,
-              half-height bottom sheet on mobile. */}
-          <NodeDetailPanel
-            node={selectedRaw}
-            onClose={clearSelection}
-            relationships={selectedRelationships}
-            onNavigateToNode={(nextNodeId) => {
-              void focusNodeById(nextNodeId);
-            }}
-            mobileHalf={isMobile}
-          />
+              half-height bottom sheet on mobile. Hidden when the mobile
+              Explore overlay is active because Explore already renders
+              the focused node as its main card; rendering both stacks two
+              versions of the same node on screen. */}
+          {!(isMobile && tab === 'explore') && (
+            <NodeDetailPanel
+              node={selectedRaw}
+              onClose={clearSelection}
+              relationships={selectedRelationships}
+              onNavigateToNode={(nextNodeId) => {
+                void focusNodeById(nextNodeId);
+              }}
+              mobileHalf={isMobile}
+            />
+          )}
         </CosmographProvider>
       )}
 

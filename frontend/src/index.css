@@ -1985,3 +1985,21 @@
 .terminal-loader {
   font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
 }
+
+/* iOS Safari renders a tap-to-play chrome overlay on muted+autoplay
+   videos before they actually start. On the KG loader the overlay just
+   confuses the user — they shouldn't be invited to tap a loading
+   screen. Scoped to the loader's `.silent-video` class so other videos
+   on the site keep their native controls. The watchdog in
+   KnowledgeGraphLoader handles the case where playback never starts. */
+.silent-video::-webkit-media-controls-start-playback-button,
+.silent-video::-webkit-media-controls-overlay-play-button,
+.silent-video::-webkit-media-controls,
+.silent-video::-webkit-media-controls-panel,
+.silent-video::-webkit-media-controls-play-button {
+  display: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
