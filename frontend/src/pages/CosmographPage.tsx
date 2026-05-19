@@ -277,6 +277,32 @@ export default function CosmographPage() {
   // gate from inside the loader so they aren't held back by a phantom video.
   const [loaderVideoEnded, setLoaderVideoEnded] = useState(false);
 
+  // Semantic-zoom tier: derived from current camera zoom, debounced. Drives
+  // *render* density only (top-label cap, link visibility range, hub label
+  // opacity) — never the underlying point/link dataset. Crossing a tier
+  // boundary therefore never restarts the simulation.
+  const [zoomTier, setZoomTier] = useState<'overview' | 'mid' | 'close'>('overview');
+  const zoomDebounceRef = useRef<number | null>(null);
+  const handleSemanticZoom = useCallback((...args: unknown[]) => {
+    let next = NaN;
+    for (const arg of args) {
+      if (typeof arg === 'number' && Number.isFinite(arg)) { next = arg; break; }
+      if (arg && typeof arg === 'object' && 'k' in arg && typeof (arg as { k: unknown }).k === 'number') {
+        next = (arg as { k: number }).k; break;
+      }
+      if (arg && typeof arg === 'object' && 'transform' in arg) {
+        const tf = (arg as { transform?: { k?: number } }).transform;
+        if (tf && typeof tf.k === 'number') { next = tf.k; break; }
+      }
+    }
+    if (!Number.isFinite(next)) return;
+    if (zoomDebounceRef.current !== null) window.clearTimeout(zoomDebounceRef.current);
+    zoomDebounceRef.current = window.setTimeout(() => {
+      const tier = next >= 4.0 ? 'close' : next >= 1.5 ? 'mid' : 'overview';
+      setZoomTier((prev) => (prev === tier ? prev : tier));
+    }, 180);
+  }, []);
+
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [pathSource, setPathSource] = useState<AtlasNodeMeta | null>(null);
   const [pathTarget, setPathTarget] = useState<AtlasNodeMeta | null>(null);
@@ -480,8 +506,19 @@ export default function CosmographPage() {
         linkDefaultWidth: 1,
         hoveredLinkColor: '#f8fafc',
         hoveredLinkWidthIncrease: 1.5,
-        linkVisibilityDistanceRange: [32, 120],
-        linkVisibilityMinTransparency: 0.08,
+        // Semantic zoom: edges fade with distance more aggressively at low
+        // zoom (overview) and progressively reveal as the user zooms in.
+        // The data array is untouched — only this range changes.
+        linkVisibilityDistanceRange:
+          tab === 'atlas'
+            ? [32, 120]
+            : zoomTier === 'close'
+              ? [20, 90]
+              : zoomTier === 'mid'
+                ? [40, 140]
+                : [60, 200],
+        linkVisibilityMinTransparency:
+          zoomTier === 'overview' ? 0.04 : zoomTier === 'mid' ? 0.06 : 0.1,
         curvedLinks: true,
         linkDefaultArrows: false,
         enableZoom: true,
@@ -525,12 +562,18 @@ export default function CosmographPage() {
         pointSizeRange: [4, 30],
         showLabels: false,
         showDynamicLabels: false,
-        showTopLabels: isMobile ? true : tab === 'atlas',
-        showTopLabelsLimit: isMobile
-          ? tab === 'atlas' ? 16 : 24
-          : tab === 'atlas'
-            ? 14
-            : 0,
+        showTopLabels: tab === 'atlas' ? true : true,
+        // Semantic-zoom label budget: pull more labels in as the camera
+        // dives in. atlas (~150 nodes) keeps its small fixed limit; full
+        // graph (17k nodes) scales 12 → 36 → 120 across the three tiers.
+        showTopLabelsLimit:
+          tab === 'atlas'
+            ? isMobile ? 16 : 14
+            : zoomTier === 'close'
+              ? 120
+              : zoomTier === 'mid'
+                ? 36
+                : 12,
         showFocusedPointLabel: true,
         showHoveredPointLabel: true,
         showSelectedLabels: true,
@@ -639,11 +682,10 @@ export default function CosmographPage() {
             onSimulationUnpause={() => setSimulationRunning(true)}
             onSimulationPause={() => setSimulationRunning(false)}
             onSimulationEnd={() => setSimulationRunning(false)}
-            // Zoom is purely camera transform — no data slicing on pinch.
-            // The mobile-tier system (see useMobileGraphTiers) used to swap
-            // slices here and that's what made the graph "refresh" on every
-            // pinch. Now we leave the dataset untouched.
-            onZoom={undefined}
+            // Camera transform only — the dataset never changes on zoom.
+            // We read the zoom value to drive *semantic zoom* (label count,
+            // edge visibility range) but never to swap the points/links.
+            onZoom={handleSemanticZoom}
             onPointClick={(index) => {
               const clicked = activeMeta[index];
               if (!clicked) return;
