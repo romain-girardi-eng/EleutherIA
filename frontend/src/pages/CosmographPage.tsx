@@ -43,6 +43,7 @@ import KnowledgeGraphLoader from '../components/cosmograph/KnowledgeGraphLoader'
 import Legend from '../components/cosmograph/Legend';
 import MobileGraphControls from '../components/cosmograph/MobileGraphControls';
 import PathFinder, { type PathResult } from '../components/cosmograph/PathFinder';
+import EgoExplore from '../components/cosmograph/EgoExplore';
 import { useResponsive } from '../hooks/useResponsive';
 
 import { Component, type ErrorInfo, type ReactNode } from 'react';
@@ -88,7 +89,7 @@ class CosmographErrorBoundary extends Component<
   }
 }
 
-type Tab = 'atlas' | 'full' | 'path' | 'filter';
+type Tab = 'explore' | 'atlas' | 'full' | 'path' | 'filter';
 
 type EdgeApiResponse = KGEdge[] | { edges?: KGEdge[] };
 
@@ -255,7 +256,7 @@ export default function CosmographPage() {
   const [tab, setTab] = useState<Tab>(() =>
     typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches
       ? 'full'
-      : 'atlas',
+      : 'explore',
   );
   const [filters, setFilters] = useState<KgFilterState>({ periods: [], types: [], schools: [] });
   const [allMeta, setAllMeta] = useState<ReadonlyArray<AtlasNodeMeta>>([]);
@@ -656,8 +657,13 @@ export default function CosmographPage() {
           />
           </CosmographErrorBoundary>
 
-          {/* === Mobile-only controls (FAB, bottom-sheet) === */}
-          {isMobile && (
+          {/* === Mobile-only controls (FAB, bottom-sheet) ===
+              MobileGraphControls owns the 'atlas/full/path/filter' tab set; the
+              Explore tab lives in its own dedicated layer and is reached via
+              the Explore/Map toggle below. When the user is on Explore we hide
+              MobileGraphControls so its FAB doesn't compete with the Explore
+              search bar pinned at the bottom of the viewport. */}
+          {isMobile && tab !== 'explore' && (
             <MobileGraphControls
               nodes={allMeta}
               activeTab={tab}
@@ -677,6 +683,54 @@ export default function CosmographPage() {
                 setTab('path');
               }}
             />
+          )}
+
+          {/* === Mobile-only Explore <-> Map toggle (top-right) === */}
+          {isMobile && (
+            <button
+              type="button"
+              onClick={() => setTab((current) => (current === 'explore' ? 'full' : 'explore'))}
+              aria-label={
+                tab === 'explore'
+                  ? (t('cosmograph.explore.openMap', 'Open the map view') as string)
+                  : (t('cosmograph.explore.openExplore', 'Open the explore view') as string)
+              }
+              className={[
+                'absolute right-3 top-3 z-40 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-medium shadow-[0_8px_24px_-12px_rgba(15,23,42,0.45)] backdrop-blur-md transition-colors md:hidden',
+                tab === 'explore'
+                  ? 'border border-amber-300/70 bg-white/85 text-amber-900 hover:bg-amber-50'
+                  : 'border border-white/15 bg-slate-950/75 text-slate-100 hover:bg-slate-900/80',
+              ].join(' ')}
+            >
+              {tab === 'explore' ? (
+                <>
+                  <MapIcon className="h-3.5 w-3.5" aria-hidden />
+                  {t('cosmograph.explore.toggleMap', 'Map')}
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-3.5 w-3.5" aria-hidden />
+                  {t('cosmograph.explore.toggleExplore', 'Explore')}
+                </>
+              )}
+            </button>
+          )}
+
+          {/* === Mobile Explore overlay === */}
+          {isMobile && tab === 'explore' && (
+            <div
+              role="region"
+              aria-label={t('cosmograph.explore.region', 'Explore the knowledge graph') as string}
+              className="absolute inset-0 z-30"
+            >
+              <EgoExplore
+                meta={allMeta}
+                rawById={rawById}
+                relationships={relationships}
+                initialNodeId={nodeId ?? selectedNodeId ?? undefined}
+                onPickNode={(id) => setSelectedNodeId(id)}
+              />
+            </div>
           )}
 
           {/* === Top bar: search + tabs (desktop only; mobile uses
@@ -897,6 +951,8 @@ export default function CosmographPage() {
 
 // === Inline subcomponents ===
 
+type DesktopTab = Exclude<Tab, 'explore'>;
+
 function TabStrip({
   value,
   onChange,
@@ -904,11 +960,11 @@ function TabStrip({
   counts,
 }: {
   value: Tab;
-  onChange: (next: Tab) => void;
-  labels: Record<Tab, string>;
+  onChange: (next: DesktopTab) => void;
+  labels: Record<DesktopTab, string>;
   counts: { atlas: number; full: number; filter: number };
 }) {
-  const items: Array<{ id: Tab; icon: import('react').ReactNode; count?: number }> = [
+  const items: Array<{ id: DesktopTab; icon: import('react').ReactNode; count?: number }> = [
     { id: 'atlas', icon: <Sparkles className="h-3.5 w-3.5" />, count: counts.atlas },
     { id: 'full', icon: <Network className="h-3.5 w-3.5" />, count: counts.full },
     { id: 'path', icon: <Route className="h-3.5 w-3.5" /> },

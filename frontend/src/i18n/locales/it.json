@@ -2137,6 +2137,32 @@
     "advanced": {
       "title": "Avanzato",
       "body": "La fisica del layout, la selezione a lazo e l'epinglatura sono state spostate in modalità sviluppatore. Torneranno dietro questo pannello in una prossima iterazione — per ora usa Atlante / Grafo completo / Filtra / Trova un percorso per il lavoro accademico quotidiano."
+    },
+    "explore": {
+      "region": "Esplora il grafo della conoscenza",
+      "breadcrumb": "Percorso di esplorazione",
+      "breadcrumbHidden_one": "{{count}} passaggio precedente nascosto",
+      "breadcrumbHidden_other": "{{count}} passaggi precedenti nascosti",
+      "breadcrumbHidden": "{{count}} passaggi precedenti nascosti",
+      "readMore": "Continua a leggere",
+      "readLess": "Riduci",
+      "passagesIndexed_one": "{{count}} passo indicizzato",
+      "passagesIndexed_other": "{{count}} passi indicizzati",
+      "passagesIndexed": "{{count}} passi indicizzati",
+      "searchPlaceholder": "Vai a un pensatore, concetto o opera…",
+      "searchAria": "Vai a un nodo",
+      "searchEmpty": "Nessuna corrispondenza. Prova un termine greco o latino, o un cognome.",
+      "searchResults": "Risultati della ricerca",
+      "graphNode": "Nodo del grafo",
+      "moreSpokes_one": "+ {{count}} altro",
+      "moreSpokes_other": "+ {{count}} altri",
+      "moreSpokes": "+ {{count}} altri",
+      "announceFocal": "Esplorazione di {{name}} in corso",
+      "noNeighbors": "Questo nodo non ha vicini nel grafo curato. Usa la ricerca per saltare altrove.",
+      "openMap": "Apri la vista mappa",
+      "openExplore": "Apri la vista esplorazione",
+      "toggleMap": "Mappa",
+      "toggleExplore": "Esplora"
     }
   }
 }

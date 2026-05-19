@@ -2165,6 +2165,32 @@
     "advanced": {
       "title": "Advanced",
       "body": "Layout physics, lasso selection and pinning have moved to a developer mode. They will return behind this drawer in a later iteration — for now use Atlas / Full graph / Filter / Find a path for everyday scholarly work."
+    },
+    "explore": {
+      "region": "Explore the knowledge graph",
+      "breadcrumb": "Exploration trail",
+      "breadcrumbHidden_one": "{{count}} earlier step hidden",
+      "breadcrumbHidden_other": "{{count}} earlier steps hidden",
+      "breadcrumbHidden": "{{count}} earlier steps hidden",
+      "readMore": "Read more",
+      "readLess": "Read less",
+      "passagesIndexed_one": "{{count}} passage indexed",
+      "passagesIndexed_other": "{{count}} passages indexed",
+      "passagesIndexed": "{{count}} passages indexed",
+      "searchPlaceholder": "Jump to a thinker, concept or work…",
+      "searchAria": "Jump to a node",
+      "searchEmpty": "No match. Try a Greek or Latin term, or a surname.",
+      "searchResults": "Search results",
+      "graphNode": "Graph node",
+      "moreSpokes_one": "+ {{count}} more",
+      "moreSpokes_other": "+ {{count}} more",
+      "moreSpokes": "+ {{count}} more",
+      "announceFocal": "Now exploring {{name}}",
+      "noNeighbors": "This node has no neighbors in the curated graph. Use search to jump elsewhere.",
+      "openMap": "Open the map view",
+      "openExplore": "Open the explore view",
+      "toggleMap": "Map",
+      "toggleExplore": "Explore"
     }
   }
 }
