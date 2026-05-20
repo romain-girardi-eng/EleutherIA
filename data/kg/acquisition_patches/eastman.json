@@ -1,0 +1,161 @@
+{
+  "_meta": {
+    "source": "Susan Grove Eastman, Paul and the Person: Reframing Paul's Anthropology (Grand Rapids: Wm. B. Eerdmans Publishing Co., 2017). Foreword by John M. G. Barclay. ISBN 978-0-8028-6896-1 (pbk.); eISBN 978-1-4674-4839-0. LCCN 2017014597. Read from local EPUB.",
+    "local_epub_path": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/eastman_2017_person.epub",
+    "epub_structure_note": "EPUB has no print page numbers in body text; arguments are anchored by EPUB chapter + nearest <a id=\"page_N\"/> print-page anchor where present, plus a grep-able verbatim quote. Every quote below was verified to occur verbatim in the cited XHTML file at extraction time (unzip -o eastman_2017_person.epub -d /tmp/eastman_ex). Chapter file map: introduction.xhtml = Introduction 'The Puzzle of Pauline Anthropology'; chapter001.xhtml = ch.1 'The Way to Freedom: Epictetus on the Person'; chapter003.xhtml = ch.3 'Embodied and Embedded'; chapter004.xhtml = ch.4 'Relationality Gone Bad: The Evacuation of the Self in Romans 7'; chapter005.xhtml = ch.5 'Divine Participation: The New Christological Agent in Philippians 2'; chapter006.xhtml = ch.6 'The Saving Relation: Union with Christ in Galatians 2'; conclusion.xhtml = Conclusion 'Pushing the Reset Button on Paul's Anthropology'.",
+    "verified_against_existing_nodes": [
+      "person_epictetus_of_hierapolis_3c385bc2",
+      "person_augustine_hippo_d430",
+      "work_new_testament",
+      "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6",
+      "concept_prohairesis_alex",
+      "concept_autonomy_8j2e3f91"
+    ],
+    "no_person_paul_node": "There is NO person_paul node in data/kg/nodes.jsonl (only person_sartre_jean_paul_8h9i0j1k and scholarly_argument_* nodes referencing Paul exist). Arguments therefore relate_to work_new_testament for Paul's epistles rather than to a Paul person node. KG NOT modified per instructions; a future patch could create person_paul and re-wire.",
+    "bio_verification": "VERIFIED. Author = Susan Grove Eastman, b. 1952 (Library of Congress CIP data, copyright.xhtml: 'Eastman, Susan Grove, 1952– author'). Duke Divinity School affiliation confirmed in preface.xhtml ('Here at Duke I have learned much...'; 'doctoral students... in my course \"Paul and the Person\"'; 'Deans Richard Hays and Ellen Davis') and acknowledgements (Duke Divinity School Initiative for Theology, Medicine, and Culture; Duke Institute for Brain Sciences). NT/Pauline anthropology specialty confirmed by subject matter and her prior monograph, cited in preface.xhtml fn.1: 'Recovering Paul's Mother Tongue: Language and Theology in Galatians (Grand Rapids: Eerdmans, 2007).' Emeritus status NOT stated in this 2017 volume — left unasserted.",
+    "h1_relevance": "Central to thesis on libertarian free will in early Christianity: Eastman argues Paul's self is a relationally constituted, participatory, intersubjective agent ('self-in-relation-to-another'), explicitly NOT the autonomous, self-determining, freestanding individual of modern (Enlightenment) anthropology. She denies Paul has an 'inner sanctum' or a prohairesis (contra Epictetus). This sharpens the question of what 'free will' could mean for Paul: Eastman holds persons are 'never free agents, if freedom is understood in terms of individual autonomy.' Useful as a counter-pole when situating Paul vs the modern free-agent and vs Stoic/Epictetan inner freedom."
+  },
+  "scholar": {
+    "id": "scholar_eastman_susan",
+    "label": "Susan Grove Eastman",
+    "description": "Susan Grove Eastman (b. 1952) is a New Testament scholar specializing in the letters of Paul, with a focus on Pauline anthropology, participation ('in Christ'/'with Christ' language), and the theological interpretation of Scripture. She taught at Duke Divinity School, where she developed the course 'Paul and the Person' and participated in the Duke Divinity School Initiative for Theology, Medicine, and Culture and the Neurohumanities Research Group of the Duke Institute for Brain Sciences (preface.xhtml). Her earlier monograph is Recovering Paul's Mother Tongue: Language and Theology in Galatians (Eerdmans, 2007). Her work crosses disciplinary boundaries, putting Paul into 'second-person' conversation with developmental psychology, cognitive science, and the neuroscience of mirror neurons. (Bio drawn from the 2017 volume's copyright page and preface; emeritus status not stated in this source.)",
+    "metadata": {
+      "role": "scholar",
+      "period": "Modern",
+      "specialty": "New Testament, Pauline anthropology, theology and the cognitive sciences (second-person perspective)",
+      "affiliations": ["Duke Divinity School"],
+      "affiliation_source": "preface.xhtml and acknowledgements; copyright.xhtml LC CIP data for birth year (1952)",
+      "birth_year": 1952,
+      "prior_work": "Recovering Paul's Mother Tongue: Language and Theology in Galatians (Eerdmans, 2007)"
+    }
+  },
+  "publication": {
+    "id": "pub_eastman_2017_paul_and_the_person",
+    "label": "Eastman 2017 — Paul and the Person: Reframing Paul's Anthropology",
+    "description": "Monograph reframing Paul's anthropology as participatory and relational rather than individualistic and autonomous. Eastman argues Paul understands human beings as 'relationally constituted agents who are both embodied and embedded in their world' — a self that is always a 'self-in-relation-to-another', never a freestanding individual. Through a 'second-person hermeneutic', she juxtaposes Paul with Epictetus (Part 1) and with contemporary developmental psychology, cognitive science, and neuroscience (mirror neurons), then reads Romans 7, Philippians 2, and Galatians 2 (Part 2). Foreword by John M. G. Barclay.",
+    "metadata": {
+      "type": "monograph",
+      "year": 2017,
+      "publisher": "Wm. B. Eerdmans Publishing Co.",
+      "place": "Grand Rapids, Michigan",
+      "isbn": "978-0-8028-6896-1",
+      "eisbn": "978-1-4674-4839-0",
+      "lccn": "2017014597",
+      "foreword_by": "John M. G. Barclay",
+      "local_epub_path": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/eastman_2017_person.epub",
+      "format": "epub",
+      "year_verified": true
+    }
+  },
+  "arguments": [
+    {
+      "id": "argument_eastman_2017_relationally_constituted_self",
+      "label": "Eastman: the Pauline self as relationally constituted, embodied, embedded agent",
+      "type": "argument",
+      "period": "Modern",
+      "relates_to": ["work_new_testament", "concept_autonomy_8j2e3f91"],
+      "description": "Eastman's central thesis. Against the view that Paul either has no concept of the person or operates with an abstract/individualistic one, she argues Paul 'displays a functional understanding of human beings as relationally constituted agents who are both embodied and embedded in their world.' The self is therefore not the modern bounded, freestanding individual but a 'self-in-relation-to-another.' This sets up the whole book's contrast between a participatory Pauline anthropology and modern individualist/autonomous models of the self.",
+      "verbatim_evidence": {
+        "quote": "he displays a functional understanding of human beings as relationally constituted agents who are both embodied and embedded in their world",
+        "epub_chapter": "introduction.xhtml (Introduction, 'The Puzzle of Pauline Anthropology')",
+        "print_page_anchor": "page_1/page_2"
+      }
+    },
+    {
+      "id": "argument_eastman_2017_no_freestanding_self_vs_autonomy",
+      "label": "Eastman: no freestanding autonomous self in Paul's cosmos",
+      "type": "argument",
+      "period": "Modern",
+      "relates_to": ["work_new_testament", "concept_autonomy_8j2e3f91"],
+      "description": "Eastman argues Paul leaves no room for the autonomous individual who stands apart and chooses among identities. The only relational loci are personal ('I-Thou', Paul and Christ) or depersonalizing ('I-It', the self and 'sin' in Rom 7:17-20); there is no neutral standpoint. This is the load-bearing claim for situating Paul against the modern notion of the free, self-determining agent: for Paul the person is 'participatory all the way down', yet this does not mean there is no self.",
+      "verbatim_evidence": {
+        "quote": "there is no place where an autonomous “individual” can stand aside and evaluate, let alone choose, between different possible identities. There is no freestanding “self” in Paul’s cosmos",
+        "epub_chapter": "introduction.xhtml (Introduction)",
+        "print_page_anchor": "page_8/page_9"
+      }
+    },
+    {
+      "id": "argument_eastman_2017_never_free_agents_individual_autonomy",
+      "label": "Eastman: persons are never 'free' agents in the sense of individual autonomy",
+      "type": "argument",
+      "period": "Modern",
+      "relates_to": ["work_new_testament", "concept_autonomy_8j2e3f91"],
+      "description": "The most directly free-will-relevant claim. Eastman concludes that, as bodies, persons are 'relationally constituted beings from the very beginning of life and are never “free” agents, if “freedom” is understood in terms of individual autonomy; they are from the beginning selves-in-relation-to-another.' She does not deny agency or responsibility outright but redefines freedom away from autonomy and toward right relation. Central for contrasting Paul with the modern libertarian free agent.",
+      "verbatim_evidence": {
+        "quote": "persons are relationally constituted beings from the very beginning of life and are never “free” agents, if “freedom” is understood in terms of individual autonomy; they are from the beginning selves-in-relation-to-another",
+        "epub_chapter": "conclusion.xhtml (Conclusion, 'Pushing the Reset Button on Paul's Anthropology')",
+        "print_page_anchor": null
+      }
+    },
+    {
+      "id": "argument_eastman_2017_romans7_no_inner_sanctum_no_prohairesis",
+      "label": "Eastman: Romans 7 — no inner sanctum and no prohairesis in Paul (contra Epictetus)",
+      "type": "argument",
+      "period": "Modern",
+      "relates_to": ["work_new_testament", "person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "concept_prohairesis_alex"],
+      "description": "Eastman reads Romans 7:14-25 as the 'evacuation of the self': the 'I' is 'fleshly' and 'sold under sin', constituted in its totality by an indwelling, dominating power, not divided into a sinful part and a rational sanctum. Crucially, she denies Paul has the Stoic/Epictetan resource of an inner citadel: 'For Paul, there is no inner sanctum and no proairesis that can resist and stand outside or act upon these powers.' This explicitly contrasts Paul's self with Epictetus's prohairesis (the inviolable faculty of choice) discussed in ch.1, and is the sharpest point against reading Paul as having a free, self-standing will.",
+      "verbatim_evidence": {
+        "quote": "For Paul, there is no inner sanctum and no proairesis that can resist and stand outside or act upon these powers.",
+        "epub_chapter": "chapter004.xhtml (ch.4, 'Relationality Gone Bad: The Evacuation of the Self in Romans 7', Conclusion section)",
+        "print_page_anchor": null,
+        "note": "'proairesis' is wrapped in an <i> tag in the XHTML, so contiguous source grep splits it; plain-text extraction confirms the verbatim sentence."
+      }
+    },
+    {
+      "id": "argument_eastman_2017_epictetus_prohairesis_inner_freedom_contrast",
+      "label": "Eastman: Epictetus as the foil — inner freedom of the prohairesis vs Paul",
+      "type": "argument",
+      "period": "Modern",
+      "relates_to": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_alex", "concept_autonomy_8j2e3f91"],
+      "description": "In Part 1 Eastman uses Epictetus as the primary ancient interlocutor and foil. For Epictetus the self is secured by an inviolable inner faculty of choice (prohairesis) that no external power can touch, grounding individual freedom and inner detachment (ch.1 sections 'Individualism: The Self as Self-Relation' and 'Self-Perception, Inner Detachment, and Individual Freedom'). Eastman presents Epictetus's Stoic 'participation' as immanent within a continuum of nature where God is wholly immanent, which she then contrasts with Paul's radically transcendent Creator and his denial of any inner sanctum. The juxtaposition is methodological: 'Juxtaposing Paul's thought with the naturalistic theology of Epictetus sharpens and clarifies Paul's distinctive views.'",
+      "verbatim_evidence": {
+        "quote": "Juxtaposing Paul’s thought with the naturalistic theology of Epictetus sharpens and clarifies Paul’s distinctive views",
+        "epub_chapter": "conclusion.xhtml (Conclusion); see also chapter001.xhtml (ch.1, headings 'Individualism: The Self as Self-Relation', 'Self-Perception, Inner Detachment, and Individual Freedom')",
+        "print_page_anchor": null
+      }
+    },
+    {
+      "id": "argument_eastman_2017_sin_not_decision_self_determining_individuals",
+      "label": "Eastman: sin is not a decision of self-determining individuals but a relational power",
+      "type": "argument",
+      "period": "Modern",
+      "relates_to": ["work_new_testament"],
+      "description": "Eastman reframes sin (and thus moral responsibility) relationally: 'Sin is thus not a decision made by self-determining individuals, but rather a socially mediated power greater than human beings yet operative through human thoughts, words, and deeds.' She preserves a layered responsibility ('persons make decisions and are responsible on one level for those choices; but on another level the very perception of what choices are available is already constrained and deceived by sin') and recasts redemption not as an individual's inward turn but as 'liberation from one realm of power to another, from the rule of sin and death to life in Christ.' Directly relevant to whether Pauline accountability presupposes libertarian self-determination.",
+      "verbatim_evidence": {
+        "quote": "Sin is thus not a decision made by self-determining individuals, but rather a socially mediated power greater than human beings yet operative through human thoughts, words, and deeds.",
+        "epub_chapter": "conclusion.xhtml (Conclusion)",
+        "print_page_anchor": null
+      }
+    },
+    {
+      "id": "argument_eastman_2017_christological_agent_shared_agency_phil2",
+      "label": "Eastman: shared/intersubjective agency — the new Christological agent (Philippians 2, Galatians 2)",
+      "type": "argument",
+      "period": "Modern",
+      "relates_to": ["work_new_testament"],
+      "description": "Eastman's positive account of redeemed agency: human action is reconstituted through Christ's 'mimetic assimilation to the human condition', which she treats 'as constitutive of human personhood on the most elemental, primal level' (Phil 2:5-13, ch.5). The result is a non-autonomous but real agency — Paul's 'I, yet not I, but Christ' (Gal 2:20) is not a split self but an intersubjective self whose acting subject is shared with the indwelling Christ. God in Christ 'affords a structure of the self that is intersubjective all the way down.' This is Eastman's alternative to both autonomous free agency and mere passivity: agency that is gifted and shared, not self-originating.",
+      "verbatim_evidence": {
+        "quote": "we may see Christ’s mimetic assimilation to the human condition as constitutive of human personhood on the most elemental, primal level",
+        "epub_chapter": "chapter005.xhtml (ch.5, 'Divine Participation: The New Christological Agent in Philippians 2', Conclusion section)",
+        "print_page_anchor": null,
+        "supporting_quote": {
+          "quote": "God in Christ affords a structure of the self that is intersubjective all the way down.",
+          "epub_chapter": "conclusion.xhtml (Conclusion)"
+        }
+      }
+    },
+    {
+      "id": "argument_eastman_2017_gifted_identity_criteria_free_personhood",
+      "label": "Eastman: personhood as a divinely gifted, criteria-free status",
+      "type": "argument",
+      "period": "Modern",
+      "relates_to": ["work_new_testament"],
+      "description": "Eastman draws the anthropological payoff: because the self is relationally constituted, personhood is not earned by any innate capacity but granted. Paul's anthropology 'counters any criterialism about qualifications for being a person', because dignity is grounded in Christ's incarnational assimilation to the human condition (even to the form of a slave and a crucified criminal): 'Every human being is thereby a person in the divine image.' She also flags the danger of purely relational personhood detached from divine benevolence ('what is given by other human beings can also be withheld'), which is why she anchors gifted identity christologically. Relevant for debates on the status/dignity of the person prior to and apart from any exercise of autonomous will.",
+      "verbatim_evidence": {
+        "quote": "Paul’s anthropology counters any criterialism about qualifications for being a person, precisely because it is grounded in the story of Christ’s mimetic assimilation to the human condition",
+        "epub_chapter": "conclusion.xhtml (Conclusion, 'The Category of “Personhood”')",
+        "print_page_anchor": null
+      }
+    }
+  ]
+}

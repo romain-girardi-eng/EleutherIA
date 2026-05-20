@@ -1,0 +1,269 @@
+{
+  "_meta": {
+    "acquisition_date": "2026-05-21",
+    "source_pdf": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/blowers_2016_maximus.pdf",
+    "reader": "strategic targeted read (grep gnomic|natural will|θέλημα|προαίρεσις|monothelete|γνώμη)",
+    "thesis_relevance": "Maximus the Confessor as the terminal pivot of the ancient autexousion debate: his distinction θέλημα φυσικόν (natural will) vs γνώμη (gnomic/deliberative will), worked out in the monenergist–monothelete controversy (Ekthesis 638, Disputatio cum Pyrrho 645), supplies the late-antique Greek answer to whether human and divine freedom are univocal. All Greek terms and printed page numbers below are grep-verifiable in /tmp/blowers.txt (pdftotext -layout extraction).",
+    "kg_state_note": "person_maximus_confessor_d662 + 4 Maximus argument nodes + works (Disp. Pyrrho, Ambigua, Opuscula, Q. Thal.) ALREADY EXIST (wave_k_maximus_monothelite_2026_05_16). This patch adds the SCHOLAR (Blowers) + PUBLICATION + scholarly arguments interpreting Maximus, NOT duplicate primary-source argument nodes. Edges proposed link scholarly_argument_* → existing person_maximus_confessor_d662 / existing concept nodes.",
+    "do_not_modify_kg": true
+  },
+
+  "scholar": {
+    "id": "scholar_blowers_paul",
+    "label": "Paul M. Blowers",
+    "description": "Paul M. Blowers (b. 1955), American patristics scholar, Dean E. Walker Professor of Church History at Emmanuel Christian Seminary (Johnson City, Tennessee). A specialist in Greek patristic theology, biblical interpretation, and cosmology, he is among the leading Anglophone interpreters of Maximus the Confessor and of early Christian readings of nature and creation. His monograph 'Maximus the Confessor: Jesus Christ and the Transfiguration of the World' (OUP 2016, Oxford Early Christian Studies) is a comprehensive study giving sustained attention to Maximus's doctrine of human will and freedom — in particular the distinction between natural will (θέλημα φυσικόν) and gnomic will (γνώμη), and its function in the dyothelite Christology of the monenergist–monothelete controversy.",
+    "metadata": {
+      "role": "scholar",
+      "period": "Modern",
+      "specialty": "Patristics; Maximus the Confessor; early Christian cosmology and biblical interpretation",
+      "affiliations": ["Emmanuel Christian Seminary, Johnson City, Tennessee (Dean E. Walker Professor of Church History)"],
+      "key_works": [
+        "Maximus the Confessor: Jesus Christ and the Transfiguration of the World (OUP 2016)",
+        "Drama of the Divine Economy: Creator and Creation in Early Christian Theology and Piety (OUP 2012)"
+      ],
+      "source_quality": "biography_partly_external_to_pdf — affiliation/professorship NOT printed in the extracted body; flagged for verification",
+      "needs_verification": ["birth_year 1955", "current chair title", "affiliation"]
+    }
+  },
+
+  "publication": {
+    "id": "pub_blowers_2016_maximus_confessor",
+    "label": "Blowers 2016 — Maximus the Confessor: Jesus Christ and the Transfiguration of the World",
+    "description": "Comprehensive monograph on Maximus the Confessor (c. 580–662) presenting his Christocentric vision of cosmic transfiguration. Central for the free-will debate are Ch. 3 (the constitution of human volition: natural will θέλημα φυσικόν vs gnomic/deliberative will γνώμη and προαίρεσις), Ch. 5 (the Adamic fall as a failure of gnomic will and abuse of self-determination αὐτεξουσία), and Ch. 7 (the dyothelite battle over wills in the monenergist–monothelete controversy and Maximus's denial of γνώμη in Christ). Blowers tracks Maximus's developing doctrine — from allowing a gnomic will in Christ in early works to denying it after the Ekthesis (638), redefining γνώμη as a 'mode/quality of willing' (τρόπος / ποιὰ θέλησις) rather than a faculty of nature.",
+    "metadata": {
+      "type": "monograph",
+      "year": 2016,
+      "publisher": "Oxford University Press",
+      "place": "Oxford",
+      "series": "Oxford Early Christian Studies (OECS)",
+      "isbn": "9780199673940",
+      "isbn_printed_form": "978-0-19-967394-0 (hbk)",
+      "authored_by": "scholar_blowers_paul",
+      "local_pdf_path": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/blowers_2016_maximus.pdf",
+      "key_chapters_for_free_will": [
+        "Ch. 3 (constitution of human volition; figure 3 phases of the will; pp. 121–124, 159–165)",
+        "Ch. 5 (Adamic fall as failure of gnomic will; pp. 209–217)",
+        "Ch. 7 (battle over wills; soteriology of gnomic will; pp. 233–246)"
+      ]
+    }
+  },
+
+  "scholarly_arguments": [
+    {
+      "id": "scholarly_argument_blowers_natural_vs_gnomic_will",
+      "label": "Blowers: natural will (θέλημα φυσικόν) vs gnomic will (γνώμη) as Maximus's core volitional distinction",
+      "description": "Blowers (pp. 121–123, 157–158) reconstructs Maximus's foundational distinction between the 'natural will' (θέλημα φυσική / θέλησις φυσική) — the ontologically basic faculty that aims all rational creatures at their true telos — and the 'gnomic will' (γνώμη), 'free will as we rational creatures actually experience it, comprising deliberation and subsequent choice over the proper course of action toward a perceived good' (p.122). Maximus's late technical definition (640s) of γνώμη: 'deep-seated desire for those things that are within our power, whence arises choice' (ὄρεξις ἐνδιάθετος τῶν ἐφ' ἡμῖν, ἐξ' ἧς ἡ προαίρεσις), or 'a disposition toward what is in our power, over which we have appetitively deliberated' (διάθεσις ἐπὶ ἐφ' ἡμῖν ὀρεκτικῶς βουλευθεῖσι) (p.122). Gnomic will is morally neutral in itself but, post-Adam, lacks 'original innocence'; it is 'the gnomic will, not the natural will, that needs training' (p.123).",
+      "verbatim_anchors": [
+        "p.122: \"gnomic will is free will as we rational creatures actually experience it, comprising deliberation and subsequent choice\"",
+        "p.122: \"ὄρεξις ἐνδιάθετος τῶν ἐφ' ἡμῖν, ἐξ' ἧς ἡ προαίρεσις\"",
+        "p.123: \"it is the gnomic will, not the natural will, that needs training in order for the rational creature to attain moral virtuosity\"",
+        "pp.157–158: \"the ontologically more basic 'natural will' (θέλημα φυσική) that aims all rational creatures toward their true telos\""
+      ],
+      "edges": [
+        {"target": "person_maximus_confessor_d662", "relation": "interprets"},
+        {"target": "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "relation": "discusses"}
+      ],
+      "metadata": {
+        "creator_id": "scholar_blowers_paul",
+        "publication": "pub_blowers_2016_maximus_confessor",
+        "primary_sources_cited": ["Maximus, Opusculum 1 (PG 91:9–37)", "Disputatio cum Pyrrho (PG 91:312B–C, 28 senses of γνώμη)", "Q. Thal. 2 (CCSG 7)"],
+        "page_anchor": "pp. 121–123, 157–158"
+      }
+    },
+    {
+      "id": "scholarly_argument_blowers_will_as_natural_faculty",
+      "label": "Blowers: Maximus reconceives 'will' (θέλησις) as a faculty of nature, not a Stoic rationalized desire",
+      "description": "Blowers (pp. 159–161) argues that Maximus, drawing on Aristotle, the Stoics, and especially Nemesius of Emesa's De natura hominis, treats human volition as a whole physio-psychological process of endowed faculties and stages (reconstructed in Blowers's 'Figure 3' from Opusculum 1 + Disputatio cum Pyrrho). Following Richard Sorabji, Blowers holds that 'both Augustine and Maximus were instrumental in cultivating a uniquely Christian notion of the will as an independent faculty' (p.160). Maximus's θέλησις, defined with Clement of Alexandria as 'a faculty desirous of what is in accordance with nature' (δύναμις τοῦ κατὰ φύσιν ὄντος ὀρεκτική), closely parallels Stoic oikeiôsis (p.160). Demetrios Bathrellos stresses that non-rational appetitive elements (ὄρεξις, ὁρμή) factor positively into the definition.",
+      "verbatim_anchors": [
+        "p.160: \"'Will' (θέλησις) as such was a term rarely used in classical sources\"",
+        "p.160: \"both Augustine and Maximus were instrumental in cultivating a uniquely Christian notion of the will as an independent faculty\"",
+        "p.160: \"δύναμις τοῦ κατὰ φύσιν ὄντος ὀρεκτική\""
+      ],
+      "edges": [
+        {"target": "person_maximus_confessor_d662", "relation": "interprets"},
+        {"target": "concept_voluntas_y7z8a9b0", "relation": "discusses"}
+      ],
+      "metadata": {
+        "creator_id": "scholar_blowers_paul",
+        "publication": "pub_blowers_2016_maximus_confessor",
+        "engages_scholars": ["Richard Sorabji", "Demetrios Bathrellos", "Nemesius of Emesa (source)"],
+        "page_anchor": "pp. 159–161"
+      }
+    },
+    {
+      "id": "scholarly_argument_blowers_wills_vs_mode_of_willing",
+      "label": "Blowers: Maximus distinguishes the wills themselves from the 'mode of willing' (τὸ πῶς θέλειν)",
+      "description": "Blowers (p.52, with p.164) identifies as a major theme of Maximus's mature Christology the distinction between the wills themselves and the 'mode of willing' (τὸ πῶς θέλειν) or 'mode of use' (τρόπος τῆς χρήσεως). This logos–tropos distinction is the hinge of Maximus's solution: Christ possesses a complete human natural will (a faculty of his human nature), while γνώμη is relocated to the order of tropos — 'a mode (τρόπος) of use [of the will], not a principle of nature' and 'a quality of willing' (ποιὰ θέλησις) (p.164). This allows Maximus to deny γνώμη in Christ without denying his human natural will, since γνώμη is no longer a stage or faculty of volition but a (fallen) qualitative mode of using it.",
+      "verbatim_anchors": [
+        "p.52: \"distinguishing the wills themselves from the 'mode of willing' (τὸ πῶς θέλειν) or 'mode of use' (τρόπος τῆς χρήσεως)\"",
+        "p.164: \"deemed it a 'quality of willing' (ποιὰ θέλησις), 'a mode (τρόπος) of use [of the will], not a principle of nature'\""
+      ],
+      "edges": [
+        {"target": "person_maximus_confessor_d662", "relation": "interprets"},
+        {"target": "argument_maximus_two_wills", "relation": "discusses"}
+      ],
+      "metadata": {
+        "creator_id": "scholar_blowers_paul",
+        "publication": "pub_blowers_2016_maximus_confessor",
+        "primary_sources_cited": ["Disputatio cum Pyrrho", "Opuscula 1, 3, 16"],
+        "page_anchor": "pp. 52, 164"
+      }
+    },
+    {
+      "id": "scholarly_argument_blowers_freedom_not_reducible_to_choice",
+      "label": "Blowers: for Maximus true freedom is not reducible to deliberation or choice (γνώμη/προαίρεσις)",
+      "description": "Blowers (pp. 164–165) argues that Maximus denies γνώμη in Christ not because choice was ontologically impossible for him (which would obliterate the voluntary character of his human will and 'blaspheme God's own natural freedom from inner compulsion'), but because 'true freedom is not reducible merely to decision or choice' (p.165). Perfect freedom is the deified 'use' (χρῆσις) of the whole panoply of natural faculties, which in Christ operated in a divine mode (θεϊκῶς) and liberated creatures to embrace their telos — being (τὸ εἶναι), well-being (τὸ εὖ εἶναι), and eternal well-being (τὸ ἀεὶ εὖ εἶναι). This dissociates freedom from the liberty of indifference: for Maximus, hesitation and the capacity to choose otherwise are marks of fallenness, not of freedom's perfection.",
+      "verbatim_anchors": [
+        "p.165: \"true freedom is not reducible merely to decision or choice\"",
+        "p.164–165: \"blaspheme God's own natural freedom from inner compulsion\"",
+        "p.165: \"'eternal well-being' (τὸ ἀεὶ εὖ εἶναι)\""
+      ],
+      "edges": [
+        {"target": "person_maximus_confessor_d662", "relation": "interprets"},
+        {"target": "concept_libertas_indifferentiae_4f8a9b57", "relation": "discusses"}
+      ],
+      "metadata": {
+        "creator_id": "scholar_blowers_paul",
+        "publication": "pub_blowers_2016_maximus_confessor",
+        "page_anchor": "pp. 164–165"
+      }
+    },
+    {
+      "id": "scholarly_argument_blowers_gethsemane_dyothelite_locus",
+      "label": "Blowers: the Gethsemane prayer is the exegetical locus of Maximus's two-wills doctrine",
+      "description": "Blowers (pp. 156–164) presents the agony in Gethsemane (Matt. 26:36–42) as the single biblical pericope decisive for Maximus's dyothelite Christology. Against the monothelete reading (the divine will overriding/supplanting the human will), and against their appeal to Gregory Nazianzen's θεωθὲν ὅλον ('wholly deified'), Maximus argues that Christ demonstrates a genuine human natural will obediently handed over to the divine will in 'harmony' (συμφυΐα) and 'concurrence' (σύννευσις), not opposition (Opusculum 6, c.640). The real struggle is internal to Christ's humanity — his natural instinct to fear death versus his natural will — resolved by impulse (ὁρμή: ὥρμα κατ' αὐτοῦ) toward the Father, not by the suppression of one will by another. Blowers engages von Balthasar (asymmetric reading) and Marcel Doucet (corrective emphasis on internal human obedience).",
+      "verbatim_anchors": [
+        "p.157: \"a single biblical pericope—the agony of Christ in Gethsemane (Matt. 26:36–42 et par.)\"",
+        "p.162: \"perfect harmony (συμφυΐα) and concurrence (σύννευσις) with his divine will\"",
+        "p.163–164: \"ὥρμα κατ' αὐτοῦ ... the role of impulse (ὁρμή)\""
+      ],
+      "edges": [
+        {"target": "person_maximus_confessor_d662", "relation": "interprets"},
+        {"target": "argument_maximus_two_wills", "relation": "discusses"}
+      ],
+      "metadata": {
+        "creator_id": "scholar_blowers_paul",
+        "publication": "pub_blowers_2016_maximus_confessor",
+        "engages_scholars": ["Hans Urs von Balthasar", "Marcel Doucet"],
+        "primary_sources_cited": ["Opusculum 6 (c.640)", "Opuscula 7, 16, 3", "Disputatio cum Pyrrho", "Gregory Nazianzen (θεωθὲν ὅλον vs θεόθεν ὅλον)"],
+        "page_anchor": "pp. 156–164"
+      }
+    },
+    {
+      "id": "scholarly_argument_blowers_adamic_fall_gnomic_failure",
+      "label": "Blowers: Maximus attributes the Adamic fall to a failure of gnomic will and abuse of self-determination (αὐτεξουσία)",
+      "description": "Blowers (pp. 213–217) shows that Maximus attributes Adam's lapse 'most basically to a failure of gnomic will (γνώμη)', though he can also call it 'an abuse of freedom or self-determination (αὐτεξουσία)' (p.213). Gnomic will, morally neutral in itself, 'all too easily devolves into vacillation'; Adam in a split second invented an illusory good (bodily pleasure). Crucially, Maximus distances himself from the Augustinian doctrine of original sin: with the Greek patristic consensus, Adam transmitted the consequences (passion, death, 'generic/ancestral sin' γενικὴ / προγονικὴ ἁμαρτία) but not the guilt; sin becoming 'law of nature' is purely 'circumstantial' (περιστατικός), not a genetic incapacitation of the will to do the good (pp. 216–217). Blowers engages Jean-Claude Larchet on the limited common ground with the West.",
+      "verbatim_anchors": [
+        "p.213: \"attributes Adam's lapse most basically to a failure of gnomic will (γνώμη) ... an abuse of freedom or self-determination (αὐτεξουσία)\"",
+        "p.216: \"Maximus clearly distanced himself ... from an Augustinian doctrine of original sin\"",
+        "p.217: \"'generic sin' refers to the consequential burden ... not a genetic incapacitation in willing or doing the good\""
+      ],
+      "edges": [
+        {"target": "person_maximus_confessor_d662", "relation": "interprets"},
+        {"target": "concept_autexousion_christian", "relation": "discusses"},
+        {"target": "concept_original_sin", "relation": "discusses"}
+      ],
+      "metadata": {
+        "creator_id": "scholar_blowers_paul",
+        "publication": "pub_blowers_2016_maximus_confessor",
+        "engages_scholars": ["Jean-Claude Larchet", "Gregory of Nyssa (source)"],
+        "page_anchor": "pp. 213–217"
+      }
+    },
+    {
+      "id": "scholarly_argument_blowers_gnomic_surrender_freedom",
+      "label": "Blowers: freedom is perfected as 'gnomic surrender' (ἐκχώρησις γνωμική) to benevolent necessity",
+      "description": "Blowers (pp. 121–122, 209–211) develops Maximus's paradoxical account whereby the highest freedom is the 'gnomic surrender' (ἐκχώρησις / ἐγχώρησις γνωμική) of self-interested γνώμη to God's 'benevolent necessity' (ἀνάγκη). Drawing on Gregory of Nyssa's 'necessary order of nature' (ἡ ἀναγκαία τῆς φύσεως τάξις), Maximus frames creaturely self-determination (αὐτεξουσία) as a predisposition toward its telos: 'the greatest liberation for creatures is precisely a sanguine passivity or gnomic surrender ... to the benevolent necessity of God freely working within them' (pp. 210–211). Creatures conform their προαίρεσις and γνώμη to the natural will and divine appetency (ὄρεξις) for God. This redefines freedom as teleological fulfilment (κατὰ φύσιν), not autonomy of indifference — the conceptual antithesis of a libertarian liberty of contraries.",
+      "verbatim_anchors": [
+        "p.122: \"the 'gnomic surrender' (ἐκχώρησις γνωμική) ... creatures' sustained deliverance to God of their self-interested will, or γνώμη\"",
+        "pp.210–211: \"The greatest liberation for creatures is precisely a sanguine passivity or 'gnomic surrender' (ἐγχώρησις γνωμική) to the benevolent necessity of God\""
+      ],
+      "edges": [
+        {"target": "person_maximus_confessor_d662", "relation": "interprets"},
+        {"target": "concept_synergism", "relation": "discusses"},
+        {"target": "concept_autexousion_christian", "relation": "discusses"}
+      ],
+      "metadata": {
+        "creator_id": "scholar_blowers_paul",
+        "publication": "pub_blowers_2016_maximus_confessor",
+        "engages_scholars": ["Gregory of Nyssa (source)"],
+        "page_anchor": "pp. 121–122, 209–211"
+      }
+    },
+    {
+      "id": "scholarly_argument_blowers_denial_gnomic_will_soteriological_cost",
+      "label": "Blowers: Maximus's denial of gnomic will in Christ may carry a soteriological cost",
+      "description": "Blowers (pp. 165, 235–246) raises a critical question about the development from Maximus's early works (which allowed Christ a gnomic will exercised virtuously — 'keeping his gnomic will [γνώμην] impassible [ἀπαθῆ] and imperturbable', Comm. on the Lord's Prayer) to his mature denial of γνώμη in Christ. Blowers asks whether this came 'at too high a soteriological price': 'How could Christ liberate rational creatures from gnomic vacillation ... if he did not experience it in his own right?' (pp. 165, 244–245). He surveys the modern debate (Renczes affirming the positive import of γνώμη; Larchet emphasizing that the tropos of Christ's deified human will precluded a gnomic mode; Basil Studer; Ian McFarland, 'Willing is Not Choosing'), holding that atonement must address the differentiated gnomic wills of individuated persons. This is the scholarly fault-line on whether Maximus's solution fully redeems the experiential locus of human freedom.",
+      "verbatim_anchors": [
+        "p.165: \"whether Maximus' christologically justified denial of gnômê in the Savior came at too high a soteriological price\"",
+        "p.236: \"keeping his gnomic will (γνώμην) impassible (ἀπαθῆ) and imperturbable\"",
+        "p.246: \"the tropos of Christ's deified human will precluded a gnomic mode\""
+      ],
+      "edges": [
+        {"target": "person_maximus_confessor_d662", "relation": "interprets"},
+        {"target": "argument_maximus_two_wills", "relation": "discusses"}
+      ],
+      "metadata": {
+        "creator_id": "scholar_blowers_paul",
+        "publication": "pub_blowers_2016_maximus_confessor",
+        "engages_scholars": ["Philipp Gabriel Renczes", "Jean-Claude Larchet", "Basil Studer", "Ian McFarland"],
+        "primary_sources_cited": ["Commentary on the Lord's Prayer", "Disputatio cum Pyrrho", "Q. Thal."],
+        "page_anchor": "pp. 165, 235–246"
+      }
+    }
+  ],
+
+  "new_concepts": [
+    {
+      "id": "concept_thelema_physikon_natural_will",
+      "label": "Natural will (θέλημα φυσικόν / θέλησις φυσική)",
+      "description": "The 'natural will' in Maximus the Confessor: the ontologically basic volitional faculty (δύναμις) inhering in rational nature, defined (with Clement of Alexandria) as 'a faculty desirous of what is in accordance with nature' (δύναμις τοῦ κατὰ φύσιν ὄντος ὀρεκτική). It teleologically orients every rational creature toward its proper end (telos) and the good; it is intrinsically free because conformity to one's nature (κατὰ φύσιν) is, for Maximus, what freedom is. It belongs to the order of nature (φύσις), not of the hypostasis, which is why Christ possesses a complete human natural will. Distinguished from the gnomic will (γνώμη), the deliberative/opinion-forming mode of the fallen creature. The natural will does not deliberate; deliberation belongs to γνώμη and προαίρεσις. Central to Maximus's dyothelite Christology and to the late-antique reception of the autexousion debate. (Blowers 2016, pp. 121–123, 157–161; Maximus, Opusculum 1, PG 91:9–37; Disputatio cum Pyrrho.)",
+      "metadata": {
+        "greek_term": "θέλημα φυσικόν / θέλησις φυσική",
+        "period": "Late Antiquity",
+        "tradition": "Byzantine / Neo-Chalcedonian / Dyothelite",
+        "source": "pub_blowers_2016_maximus_confessor",
+        "primary_locus": "Maximus, Opusculum 1 (PG 91:9–37); Disputatio cum Pyrrho (PG 91:287–354)",
+        "related_concepts": ["concept_gnomic_will_gnome", "concept_autexousion_christian", "concept_theosis"],
+        "edges": [
+          {"target": "person_maximus_confessor_d662", "relation": "discussed_by"}
+        ]
+      }
+    },
+    {
+      "id": "concept_gnomic_will_gnome",
+      "label": "Gnomic will (γνώμη / θέλημα γνωμικόν)",
+      "description": "The 'gnomic will' in Maximus the Confessor: the deliberative, opinion-forming, self-interested inclination of the fallen rational creature — 'free will as we rational creatures actually experience it, comprising deliberation and subsequent choice over the proper course of action toward a perceived good' (Blowers 2016, p.122). Maximus's late technical definition (640s): 'deep-seated desire for those things that are within our power, whence arises choice' (ὄρεξις ἐνδιάθετος τῶν ἐφ' ἡμῖν, ἐξ' ἧς ἡ προαίρεσις). Morally neutral in itself but lacking 'original innocence' (it found itself in Adam's fall), it is marked by ignorance, hesitation, and vacillation. In his mature Christology Maximus relocates γνώμη from a faculty/stage of volition to a 'quality of willing' (ποιὰ θέλησις) and a 'mode (τρόπος) of use, not a principle of nature', and denies it of Christ — who therefore has a human natural will but no γνώμη. Maximus claims to distinguish 28 senses of γνώμη in Scripture and the Fathers (Disp. Pyrr., PG 91:312B–C). Closely linked to προαίρεσις (deliberate choice). The pivot of the dyothelite settlement at Constantinople III (681).",
+      "metadata": {
+        "greek_term": "γνώμη / θέλημα γνωμικόν",
+        "period": "Late Antiquity",
+        "tradition": "Byzantine / Neo-Chalcedonian / Dyothelite",
+        "source": "pub_blowers_2016_maximus_confessor",
+        "primary_locus": "Maximus, Disputatio cum Pyrrho (PG 91:287–354, esp. 312B–C); Opuscula 1, 3, 16; Q. Thal. 1, 42",
+        "related_concepts": ["concept_thelema_physikon_natural_will", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "concept_autexousion_christian"],
+        "edges": [
+          {"target": "person_maximus_confessor_d662", "relation": "discussed_by"}
+        ]
+      }
+    }
+  ],
+
+  "existing_nodes_referenced": {
+    "persons": ["person_maximus_confessor_d662", "person_pyrrhus_constantinople_d654", "person_sophronius_jerusalem_560_638", "person_sergius_constantinople_565_638"],
+    "concepts": [
+      "concept_monothelitism",
+      "concept_synergism",
+      "concept_autexousion_christian",
+      "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6",
+      "concept_voluntas_y7z8a9b0",
+      "concept_libertas_indifferentiae_4f8a9b57",
+      "concept_original_sin",
+      "concept_theosis"
+    ],
+    "arguments": ["argument_maximus_two_wills", "argument_maximus_two_energies", "argument_maximus_natural_will_freedom", "argument_maximus_natural_vs_gnomic_will", "argument_maximus_proairesis_baptismal_repair"],
+    "works": ["work_maximus_disp_pyrrho", "work_maximus_opuscula", "work_maximus_ambigua_iohannem", "work_maximus_quaestiones_thalassium"],
+    "events": ["event_psephos_633", "council_constantinople_iii_681"]
+  },
+
+  "scholar_publication_edge": {"source": "scholar_blowers_paul", "relation": "authored", "target": "pub_blowers_2016_maximus_confessor"}
+}

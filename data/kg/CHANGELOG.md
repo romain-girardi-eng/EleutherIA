@@ -6,16 +6,35 @@ Snapshots préservés sous `data/kg/snapshots/<date>-pre-<wave>/`. Scripts sous 
 
 ---
 
-## État final (2026-05-19)
+## État final (2026-05-21)
 
 | Métrique | Valeur |
 |---|---:|
-| Total nodes | 20 110 |
-| Total edges | 56 201 |
+| Total nodes | 20 208 |
+| Total edges | 56 531 |
 | `needs_evidence` flaggés | 1 087 (-32.4% depuis 1 608) |
 | E2 verified verbatim+page | 551 (513 high + 19 medium + 4 low + 14 not_found + 1 not_applicable) |
 | Audit indépendant n=98 | 99% CORRECT (IC95 [94%, 100%]) |
 | Scholars couverts E2 | 27 |
+
+---
+
+## Session 2026-05-21
+
+### Intégration 9 acquisitions full-text (sub-agents lecteurs → verbatim + pages)
+- `integrate_acquisition_patches_2026_05_21.py` — **+98 nodes** (8 persons/scholars, 9 publications, 3 concepts, 78 arguments) + **314 edges** (9 authored_by + 78 created_by + 227 discusses)
+- Normalise les schémas hétérogènes des 9 patches (`arguments`/`scholarly_arguments`, `discusses`/`relates_to`/`related_persons`/`edges`, `quote_verbatim`/`verbatim_evidence`/`verbatim_anchors`, `page`/`page_or_loc`)
+- Args portent `e2_verified` (verbatim + page depuis lecture directe), `needs_evidence=false`
+- **9 ouvrages** : Barclay 2020 *Paul and the Power of Grace*, Blowers 2016 *Maximus the Confessor*, Boys-Stones 2018 *Platonist Philosophy*, Brand (Qumrân/Belial), Carter 2024 (fatalisme De Int. 9), Eastman 2017 *Paul and the Person*, Hildebrandt, Klawans (Second Temple), Sytsma (autexousion ↔ apocatastase)
+- **3 nouveaux concepts** : θέλημα φυσικόν (natural will), gnomic will (γνώμη), belial demonic source
+- **Lacune structurelle comblée** : création de `person_paul_apostle` (aucun node Paul n'existait — seulement J.-P. Sartre)
+
+### Wire Paul node
+- `wire_paul_node_2026_05_21.py` — 16 discusses → `person_paul_apostle` depuis les args Eastman (8) + Barclay (8), tous deux exégèse paulinienne intégrale
+
+### Reste de cette wave
+- Boys-Stones suggérait persons_to_create Numénius/Atticus (placeholders sans id dans le patch) — non créés ; leurs discusses sont skippés (targets absents)
+- Carter 2024 contredit le node `sea_battle` existant — à arbitrer dans une passe future
 
 ---
 

@@ -1,0 +1,153 @@
+{
+  "scholar": {
+    "id": "scholar_hildebrandt_ronja",
+    "label": "Ronja Hildebrandt",
+    "description": "Scholar of ancient philosophy working on Stoic determinism, fate, and moral responsibility, and on Alexander of Aphrodisias' De fato. Affiliated with the Department of Philosophy, Humboldt University Berlin, and the Department of Philosophy and Political Science, Technical University Dortmund; from November 2022 to September 2023 visiting professor in the Research Training Group 'Philosophy, Science and the Sciences' at Humboldt University Berlin. Contact address per the article: Emil-Figge-Straße 50, 44227 Dortmund (TU Dortmund).",
+    "metadata": {
+      "role": "scholar",
+      "period": "Modern",
+      "surname": "Hildebrandt",
+      "given_names": "Ronja",
+      "specialty": "Ancient philosophy; Stoic determinism and fate; Alexander of Aphrodisias' De fato; moral responsibility; the Lazy Argument",
+      "affiliations": [
+        "Humboldt University Berlin, Department of Philosophy",
+        "Technical University Dortmund, Department of Philosophy and Political Science"
+      ],
+      "verification_sources": [
+        "hildebrandt_2022_alexander_lazy_arguments.pdf (article byline + Acknowledgments, p. 25, p. 42)"
+      ],
+      "source_track": "local_pdf",
+      "confidence": "high"
+    }
+  },
+  "publication": {
+    "id": "pub_hildebrandt_2022_alexander_lazy_arguments",
+    "label": "Hildebrandt 2022 — Alexander of Aphrodisias' Lazy Arguments against Stoic Determinism",
+    "description": "Article in Studia Philosophica Estonica 15 (2022): 25-44. Argues that, although most of Alexander of Aphrodisias' objections to Stoic determinism in De fato are unconvincing, one argument is more successful: an innovative version of the Lazy Argument (argos logos, De fato XXI). Unlike traditional versions, it does not claim that actions do not matter, but that it is too risky to believe Stoic determinism because, given uncertainty, the belief can give average rational agents good reasons to be lazy.",
+    "metadata": {
+      "type": "article",
+      "year": 2022,
+      "author": "Ronja Hildebrandt",
+      "journal": "Studia Philosophica Estonica",
+      "volume": 15,
+      "pages": "25-44",
+      "doi": "10.12697/spe.2022.15.01",
+      "issn": "1736-5899",
+      "license": "OA",
+      "local_pdf_path": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/hildebrandt_2022_alexander_lazy_arguments.pdf"
+    }
+  },
+  "arguments": [
+    {
+      "id": "scholarly_argument_hildebrandt_alexander_new_lazy_argument_risk",
+      "label": "Hildebrandt: Alexander's new Lazy Argument is a risk/safety argument against Stoic determinism",
+      "description": "Hildebrandt's central thesis. Against the scholarly consensus (Long, Sharples, Frede, Hahmann) that all of Alexander's objections in De fato fail, she argues that one succeeds: an innovative version of the Lazy Argument at De fato XXI (191,2-25). It does not claim, as traditional versions do, that actions do not matter; it claims that, since the truth of Stoic determinism is uncertain, it is too risky to believe it, because the belief can give average rational agents good reasons to be lazy. Safer therefore not to believe it.",
+      "page": "25 (abstract); 27; 37-41",
+      "quote_verbatim": "Alexander’s new version asserts that it is too risky to believe in Stoic determinism because it can give average rational agents good reasons to be lazy. Since we cannot know whether Stoic determinism is true, it is safer not to believe it.",
+      "discusses": [
+        "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+        "person_chrysippus_280_206bce_i9j0k1l2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_hildebrandt_alexander_objections_fail_homonymy",
+      "label": "Hildebrandt: most Alexandrian objections fail by exploiting the homonymy of 'contingent'",
+      "description": "Hildebrandt agrees with Long, Sharples, Frede and Hahmann that many of Alexander's De fato objections (e.g. the appeal to contingent properties to endechomenon, IX 174,30-175,7, and to chance effects apo tuches, 171,18-175,28) miss their target. Alexander is misled by, or knowingly exploits, the homonymy of 'contingent': he uses it in the Aristotelian sense 'not determined by the subject's essence' / 'has only accidental causes', whereas the Stoics use it in the sense 'not determined by past and present causal factors'. A property can be contingent in the Aristotelian sense and necessary in the Stoic sense, so the objection is not a genuine counterexample.",
+      "page": "27-30",
+      "quote_verbatim": "Alexander is misled by, or knowingly exploits, the homonymy of the term “contingent”,",
+      "discusses": [
+        "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+        "person_chrysippus_280_206bce_i9j0k1l2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_hildebrandt_traditional_lazy_argument_three_versions",
+      "label": "Hildebrandt: Alexander's first two Lazy Arguments (uselessness of deliberation / of effort) are unconvincing",
+      "description": "Hildebrandt distinguishes Alexander's three Lazy-Argument versions. The first (De fato XI, 179,12-20) claims that under determinism deliberation is useless, since after deliberating one must do what one would have done without deliberating; the second (XVI, 186,30-187,2) claims that effort is useless, so people would choose easy over noble actions. Both give the core Ciceronian Lazy Argument (Cicero, De fato 28-29) Alexander's own spin but remain unconvincing.",
+      "page": "30-32",
+      "quote_verbatim": "His first version is not about the uselessness of ac-\ntions but about the uselessness of deliberations.",
+      "discusses": [
+        "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+        "person_cicero_marcus_tullius_106_43bce_a8f3d2c1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_hildebrandt_chrysippus_cofated_response",
+      "label": "Hildebrandt: Chrysippus rebuts traditional Lazy Arguments via co-fatedness (confatalia)",
+      "description": "Reconstruction of Chrysippus' reply (Cicero, De fato 30; co-fatedness, Fat. 28-30) to traditional Lazy Arguments: deliberations and actions are not in vain because they are co-fated with the effects they bring about. Fate works through our deliberations and actions; it is not a series of milestones but a nexus of all causal factors. The Lazy Argument errs by treating fate as separable from the agent's contribution. Hildebrandt notes incomplete versions of this response are also transmitted in Origen (Against Celsus II.20), Seneca (QNat II.37-38) and Eusebius (Praep. Evang. VI.8).",
+      "page": "32-33 (n. 16)",
+      "quote_verbatim": "deliberations about these actions) are not in vain because they are co-fated\nwith the effects they bring about.",
+      "discusses": [
+        "person_chrysippus_280_206bce_i9j0k1l2",
+        "person_cicero_marcus_tullius_106_43bce_a8f3d2c1",
+        "person_origen_alexandria_185_254ce_s9t0u1v2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_hildebrandt_chrysippus_cylinder_moral_responsibility",
+      "label": "Hildebrandt: Chrysippus' rolling-cylinder analogy grounds moral responsibility under determinism",
+      "description": "To strengthen the Stoic reply to the worry that necessitated acts are not 'up to us' (eph' hemin), Hildebrandt adduces Chrysippus' cylinder analogy (Cicero, De fato 42-43; Gellius, NA VII.2, 11-13). Two causal factors are distinguished: (a) the external impetus (preceding cause) and (b) the agent's individual nature/character (complete cause, via assent to an impression). Actions are up to us not because we could have chosen otherwise, but because they are determined primarily by factors internal to us and free from external coercion; this makes us morally responsible and answers the worry an Aristotelian like Alexander could raise.",
+      "page": "33-37",
+      "quote_verbatim": "they are up\nto us because we are free from external coercion and determined primarily\nby factors internal to us.",
+      "discusses": [
+        "person_chrysippus_280_206bce_i9j0k1l2",
+        "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+        "person_cicero_marcus_tullius_106_43bce_a8f3d2c1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_hildebrandt_de_fato_xxi_risk_asymmetry",
+      "label": "Hildebrandt: De fato XXI weighs the asymmetric risk of believing vs. disbelieving determinism",
+      "description": "Exposition of Alexander's new Lazy Argument (De fato XXI, 191,2-25). Alexander compares two errors under uncertainty: (i) determinism is true but we believe it false, and (ii) determinism is false but we believe it true. Error (i) costs little: if all is fated, those who believe they have power err only in words, not deeds (191,13-17), because they were not in control anyway. Error (ii) is dangerous: believing determinism true can make agents lazy and abandon good but strenuous deeds (191,17-23). Hence one should choose the less dangerous road. Hildebrandt notes Weidemann (1999) likens this to (half of) Pascal's Wager.",
+      "page": "37-40 (n. 33)",
+      "quote_verbatim": "In chapter XXI, Alexander suggests a new version of the Lazy Argument",
+      "discusses": [
+        "person_alexander_aphrodisias_fl200ce_n5o6p7q8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_hildebrandt_average_rational_agent_laziness",
+      "label": "Hildebrandt: the argument targets the average, not the perfect, rational agent",
+      "description": "Hildebrandt's key reconstructive move: Alexander's argument need not show that the perfect rational agent (the Stoic sage) would become lazy, only that the average rational agent could, given limited epistemic access. So the Stoics need not be wrong about determinism; their views need only be controversial. Beyond Alexander's own reason (that one might conclude actions do not matter), Hildebrandt adds two further reasons drawn partly from Brennan (2005): (1) doubt about whether deliberations/actions are up to us, since individual nature is not ultimately up to us; (2) doubt, following Brennan, that one cannot know which action is co-fated with the desired outcome, making laziness rational.",
+      "page": "39-41 (n. 37)",
+      "quote_verbatim": "he only needs\nto give average rational agents good reasons to be lazy.",
+      "discusses": [
+        "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+        "person_chrysippus_280_206bce_i9j0k1l2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_hildebrandt_risk_obtains_even_if_determinism_true",
+      "label": "Hildebrandt: the laziness risk obtains even if Stoic determinism is true",
+      "description": "Hildebrandt extends Alexander's argument beyond what he states: the risk of making average agents lazy arises not only if Stoic determinism is false but also if it is true. If determinism is true and agents correctly believe it, the same reasons can still persuade them that laziness is permissible, and they may refrain from good but strenuous deeds that the Stoics would deem impermissible. Their laziness would be predetermined, yet it would still have been better had they not believed determinism. In either case, promoting belief in Stoic determinism on a large scale is dangerous for average rational agents; no Stoic response to this new version has been transmitted.",
+      "page": "41-42",
+      "quote_verbatim": "the risk of making people lazy does not only occur\nif Stoic determinism is false but also if Stoic determinism is true.",
+      "discusses": [
+        "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+        "person_chrysippus_280_206bce_i9j0k1l2"
+      ],
+      "confidence": "high"
+    }
+  ],
+  "new_concepts": [],
+  "notes": {
+    "existing_lazy_argument_nodes_in_kg": [
+      "debate_lazy_argument (debate) — The Lazy Argument (Argos Logos / Ignava Ratio)",
+      "argument_lazy_argument_alex (argument) — Lazy Argument (Argos Logos) in Alexander",
+      "argument_origen_argos_logos (argument) — Origen's Refutation of the Argos Logos (Lazy Argument)",
+      "argument_the_lazy_argument_argos_logos_702a77ed (argument) — The Lazy Argument (Argos Logos)",
+      "concept_confatalia_chrysippus (concept) — Confatalia (Co-fated Events)"
+    ],
+    "no_new_concept_needed": "An argos logos / Lazy Argument node ecosystem already exists (debate + 3 argument nodes + confatalia concept). No new_concepts created. Scholarly arguments wired via discusses to persons; a curator may optionally link them to debate_lazy_argument / concept_confatalia_chrysippus.",
+    "origen_link_basis": "Hildebrandt cites Origen, Against Celsus II.20 twice: (a) footnote 2 (p.26) as a witness to the traditional Lazy Argument transmitted alongside Cicero Fat. 28-29; (b) footnote 16 (p.32) as transmitting an incomplete version of Chrysippus' co-fated response. Origen wired only on the co-fated-response argument where the link is substantive.",
+    "targets_verified": "All 4 discuss targets confirmed present in data/kg/nodes.jsonl: person_alexander_aphrodisias_fl200ce_n5o6p7q8, person_chrysippus_280_206bce_i9j0k1l2, person_cicero_marcus_tullius_106_43bce_a8f3d2c1, person_origen_alexandria_185_254ce_s9t0u1v2.",
+    "no_existing_hildebrandt_node": "grep confirmed no scholar/pub node for Hildebrandt prior to this patch."
+  }
+}

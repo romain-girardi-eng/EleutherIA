@@ -1,0 +1,202 @@
+{
+  "_meta": {
+    "source": "Barclay, John M. G. Paul and the Power of Grace. Grand Rapids: Eerdmans, 2020.",
+    "local_epub_path": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/barclay_2020_grace.epub",
+    "format": "epub",
+    "pagination_note": "EPUB without printed-page reflow markers. No page numbers used. Each argument is located by chapter + section heading + textual repère; every quote_verbatim is grep-able from the tag-stripped XHTML (smart quotes/dashes normalized to ASCII).",
+    "relationship_to_existing_nodes": "scholar_barclay_j ALREADY EXISTS — not recreated. This 2020 monograph is the synthetic, non-technical sequel to Paul and the Gift (2015); the full exegetical apparatus with the Greek text lives in the 2015 volume. Distinct from Barclay's 2006/2007 KG publications (Divine and Human Agency in Paul and His Cultural Environment, T&T Clark).",
+    "chapters_read": [
+      "Prologue: What Do We Mean by Grace? (007_Prologue.xhtml)",
+      "Ch. 1 Grace as Gift (008_Chapter01.xhtml)",
+      "Ch. 2 Perfections of Gift and Grace (009_Chapter02.xhtml)",
+      "Ch. 7 The Incongruous Gift and Its Fitting Result, Romans 1-5 (014_Chapter07.xhtml)",
+      "Ch. 8 New Life in Dying Bodies, Romans 5-8 and 12-15 (015_Chapter08.xhtml)",
+      "Ch. 13 Paul and the Dynamics of Grace Today (020_Chapter13.xhtml)"
+    ],
+    "thesis": "Paul's grace is the incongruous gift: God's benefit in Christ given without regard to the worth of its recipients (in the absence of worth, to 'the ungodly'), yet a gift with power that does not leave them as they were but remakes them. Grace is 'unconditioned' (no prior conditions of merit) but not 'unconditional' (it carries strong obligations and effects transformation): free but not cheap. Disaggregating 'grace' into six independent perfections (superabundance, singularity, priority, incongruity, efficacy, noncircularity) dissolves the confusion behind centuries of dispute. On agency, Paul's efficacy of grace reconfigures the agent without abolishing it: the believer lives an 'ex-centric' existence sourced in the risen Christ, the Spirit enables but does not override the believer's agency (no puppets), producing 'newly competent agents'.",
+    "h1_relevance": "Directly central to H1 (divine/human agency in Paul). Barclay maps the very axis on which the free-will debate turns onto a gift-anthropology grid: the 'efficacy' perfection runs from grace-as-aid through grace-creating-the-self to grace-replacing-agency (Augustine's pole) — but Barclay reads Paul's efficacy as remaking, not replacing, the agent, an explicit 'enabled but not overridden' synergy that historicizes (without anachronism) the later autexousion / liberum-arbitrium-vs-gratia debates.",
+    "method": "Targeted reading via unzip + tag-stripping (sed) of XHTML, with smart-quote/dash normalization. All quote_verbatim strings verified grep-able against the normalized chapter text."
+  },
+  "publication": {
+    "id": "pub_barclay_2020_power_of_grace",
+    "scholar_id": "scholar_barclay_j",
+    "label": "Barclay 2020 — Paul and the Power of Grace",
+    "description": "Synthetic sequel to Paul and the Gift (2015). Argues Paul's charis is an 'incongruous' gift — given without regard to worth yet a power that remakes recipients. Disaggregates grace into six perfections and reads divine grace as reconfiguring, not abolishing, human agency.",
+    "type": "node",
+    "node_type": "publication",
+    "metadata": {
+      "type": "monograph",
+      "year": 2020,
+      "publisher": "Eerdmans",
+      "place": "Grand Rapids",
+      "isbn": "978-0-8028-7461-0",
+      "local_epub_path": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/03_Paul/barclay_2020_grace.epub",
+      "format": "epub",
+      "sequel_to": "Barclay, Paul and the Gift (Eerdmans, 2015)",
+      "subject": "Pauline theology of grace, gift-anthropology, divine and human agency, Second Temple Judaism"
+    }
+  },
+  "edges": [
+    {
+      "source": "pub_barclay_2020_power_of_grace",
+      "target": "scholar_barclay_j",
+      "type": "authored_by",
+      "confidence": "high"
+    }
+  ],
+  "arguments": [
+    {
+      "id": "scholarly_argument_barclay_2020_incongruous_gift",
+      "label": "The Christ-gift is incongruous: given in the absence of worth, it creates worth (Barclay 2020)",
+      "description": "Barclay's organizing thesis. Whereas gifts in Paul's Greco-Roman world were normally distributed discriminately to worthy recipients, Paul takes the Christ-gift to be given without regard to worth, and in the absence of worth — an 'incongruous' gift that does not match the worth of its recipients but creates it. This grounds Paul's gentile mission and the formation of boundary-crossing communities, and reframes 'grace' from an idea or thing into a divine dynamic with social effect.",
+      "chapter": "Prologue: What Do We Mean by Grace? (final summary section)",
+      "page_or_loc": "Prologue, penultimate paragraph (repère: 'an unconditioned or incongruous gift...')",
+      "quote_verbatim": "Paul took the Christ-gift, the ultimate gift of God to the world, to be given without regard to worth, and in the absence of worth—an unconditioned or incongruous gift that did not match the worth of its recipients but created it.",
+      "discusses": [
+        "concept_grace_freedom_synergy"
+      ],
+      "related_persons": [
+        "person_philo_alexandria_a1b2c3d4"
+      ],
+      "related_arguments": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_barclay_2020_six_perfections",
+      "label": "Six independent perfections of grace; disputes arise from perfecting it differently (Barclay 2020)",
+      "description": "Barclay's analytic core, drawn from Kenneth Burke's notion of 'perfecting' a concept to its extreme. Gift/grace has at least six possible perfections — superabundance, singularity, priority, incongruity, efficacy, noncircularity — each independent of the others, so that they do not form a single 'package'. Disaggregating them shows that long-running disputes (Marcion, Augustine, Pelagius, Aquinas, Luther, Calvin) are not about believing in grace more or less but about perfecting it differently: 'Pelagius did not believe in grace less than Augustine; he simply believed in it differently.'",
+      "chapter": "Ch. 2 Perfections of Gift and Grace, §'Six Perfections of Grace'",
+      "page_or_loc": "Ch. 2, after the enumerated list of six perfections (repère: 'By separating out or disaggregating these six...')",
+      "quote_verbatim": "By separating out or disaggregating these six different perfections of grace, it becomes clear that they do not constitute a single \"package.\"",
+      "discusses": [
+        "concept_grace_freedom_synergy",
+        "concept_synergism"
+      ],
+      "related_persons": [
+        "person_augustine_hippo_d430",
+        "person_pelagius_d420"
+      ],
+      "related_arguments": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_barclay_2020_efficacy_spectrum_agency",
+      "label": "The 'efficacy' perfection scales from grace-as-aid to grace-replacing-agency (Barclay 2020)",
+      "description": "Barclay's taxonomy of the agency question. The 'efficacy' perfection of grace can be pushed to varying extremes: grace may create the capacity to receive virtue, or aid its development by instruction and example, or — at the far end — create a newly configured self, a self that can choose only the destiny God determines, or even replace human agency such that God alone acts in the performance of virtue. He notes that ancient philosophers were generally concerned to preserve human moral responsibility so that the gods are not exclusively responsible for human good or bad action — exactly the axis of the free-will debate.",
+      "chapter": "Ch. 2 Perfections of Gift and Grace, perfection 5 (Efficacy)",
+      "page_or_loc": "Ch. 2, item '5. Efficacy' (repère: 'perhaps grace replaces human agency...')",
+      "quote_verbatim": "perhaps God's grace creates a newly configured self; perhaps this self can choose only the destiny determined by God; or perhaps grace replaces human agency such that God alone can be said to act in the performance of virtue.",
+      "discusses": [
+        "concept_grace_freedom_synergy",
+        "concept_predestination_augustinian"
+      ],
+      "related_persons": [
+        "person_augustine_hippo_d430"
+      ],
+      "related_arguments": [
+        "argument_augustines_antipelagian_argument_grace_necessity_0b29401f"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_barclay_2020_unconditioned_not_unconditional",
+      "label": "Grace is unconditioned (no prior worth) but not unconditional (it transforms): free, not cheap (Barclay 2020)",
+      "description": "Barclay's pivotal distinction, applied to Romans. Paul perfects the incongruity of grace but not its noncircularity: grace is 'unconditioned' (given in the absence of merit or worth) yet not 'unconditional' if that means without expectation of alteration in its recipients. The incongruous gift is designed to create a fit — to turn the ungodly into those who 'do the good' at the judgment — so it is free in the sense of having no prior conditions, but not 'cheap', since it expects a transformative result. Resolves the apparent contradiction between justification of the ungodly and judgment according to works.",
+      "chapter": "Ch. 7 The Incongruous Gift and Its Fitting Result (Romans 1-5), Conclusion",
+      "page_or_loc": "Ch. 7 Conclusion (repère: 'the grace of God is unconditioned ... but not unconditional')",
+      "quote_verbatim": "the grace of God is unconditioned (given in the absence of merit or worth) but not unconditional, if by that we mean without expectation of alteration in the recipients of the gift.",
+      "discusses": [
+        "concept_grace_freedom_synergy",
+        "concept_synergism"
+      ],
+      "related_persons": [
+        "person_martin_luther_8f2a3b91"
+      ],
+      "related_arguments": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_barclay_2020_spirit_enables_not_overrides",
+      "label": "The Spirit enables the believer's agency without overriding it: no puppets (Barclay 2020)",
+      "description": "Barclay's decisive H1 statement on divine/human agency in Paul. In Romans 8 the Spirit does not displace the believer's agency, as if one agency overrode the other; Paul gives instructions to believers, who are not 'merely puppets on a string', yet their agency is enabled and sourced in the agency of the Spirit. Believers do not create a new existence but express what is already created in Christ — a 'non-contrastive' or asymmetric account of divine and human agency in which the more God acts, the more (not less) the human acts.",
+      "chapter": "Ch. 8 New Life in Dying Bodies, §'Newness of Life: Ex-centric Existence in Christ'",
+      "page_or_loc": "Ch. 8, discussion of Romans 8:9-13 (repère: 'The Spirit does not take the place of the believer...')",
+      "quote_verbatim": "The Spirit does not take the place of the believer, as if one agency overrides the other. Paul can give instructions to believers (here in 8:12-13, and much more in later chapters), who are not merely puppets on a string, controlled by the Spirit. But their agency is enabled and sourced in the agency of the Spirit.",
+      "discusses": [
+        "concept_grace_freedom_synergy",
+        "concept_autexousion_christian_freedom_u1v2w3x4"
+      ],
+      "related_persons": [],
+      "related_arguments": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_barclay_2020_ex_centric_existence",
+      "label": "Believers live an 'ex-centric' existence: the self is reconstituted with its center outside itself in Christ (Barclay 2020)",
+      "description": "Barclay's account of how grace reconfigures the agent. Because the new life is sourced not in human resources but in the risen Christ, Paul figures salvation not as a reformation of the human person or a technique of self-mastery but as an 'ex-centric' existence — an existence whose center lies outside oneself, drawing on Jesus's life from the dead. The believer's new self is a secondary, derived reality ('It is no longer I who live, but Christ who lives in me', Gal 2:20), yet it subsists only insofar as it is active: the given life must be acted out.",
+      "chapter": "Ch. 8 New Life in Dying Bodies, §'Newness of Life: Ex-centric Existence in Christ'",
+      "page_or_loc": "Ch. 8 (repère: 'a kind of \"ex-centric\" existence')",
+      "quote_verbatim": "Believers live a life derived from elsewhere, in a kind of \"ex-centric\" existence (an existence whose center is outside of oneself) that draws on Jesus's life from the dead.",
+      "discusses": [
+        "concept_grace_freedom_synergy"
+      ],
+      "related_persons": [],
+      "related_arguments": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_barclay_2020_undeserved_but_obliging",
+      "label": "The gift is undeserved but strongly obliging — circular only by remaking the agent who responds (Barclay 2020)",
+      "description": "Barclay's summative agency formula, closing Ch. 8. The Christ-gift is entirely undeserved but strongly obliging, unconditioned but not unconditional; it is circular only by remaking the human agent who responds to it. The 'obedience of faith' is not instrumental toward an additional gift but integral to the one gift, as 'newly competent agents' express in bodily practice their freedom from Sin and slavery to Righteousness — without which grace is 'ineffective and unfulfilled'. The remaking, not abolition, of the agent is the heart of Barclay's reading of Pauline efficacy.",
+      "chapter": "Ch. 8 New Life in Dying Bodies, Conclusion (final paragraph)",
+      "page_or_loc": "Ch. 8 final paragraph (repère: 'It is circular but only by remaking the human agent...')",
+      "quote_verbatim": "Thus, the gift is entirely undeserved but strongly obliging, unconditioned but not unconditional. It is circular but only by remaking the human agent who responds to the gift. The \"obedience of faith\" is not instrumental toward acquiring an additional gift, but it is integral to the gift itself, as newly competent agents express in bodily practice their freedom from Sin and slavery to Righteousness.",
+      "discusses": [
+        "concept_grace_freedom_synergy",
+        "concept_synergism"
+      ],
+      "related_persons": [],
+      "related_arguments": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_barclay_2020_grace_creates_worth",
+      "label": "God's love does not find but creates worth: grace confers value rather than rewarding it (Barclay 2020)",
+      "description": "Barclay's constructive recontextualization, via Luther's Heidelberg Disputation (thesis 28). Against the dominant philosophical tradition that love is drawn to a pre-existing good in its object, the love of God 'does not find, but creates what is pleasing to it', conferring worth and fashioning it out of nothing. Human worth on Paul's good news is founded on grace, not on any ascribed or achieved 'symbolic capital'; this grounds a 'psychology of grace' and locates the value of each person not in nature (imago Dei) but in grace — undercutting all hierarchies of worth.",
+      "chapter": "Ch. 13 Paul and the Dynamics of Grace Today, §'Because You're Worth It'",
+      "page_or_loc": "Ch. 13 (repère: Luther Heidelberg Disputation thesis 28; 'creates what is pleasing and good')",
+      "quote_verbatim": "Rather, it creates what is pleasing and good, confers it, and fashions it out of nothing. As Luther commented on this thesis: \"Therefore sinners are attractive [to God] because they are loved; they are not loved because they are attractive…\"",
+      "discusses": [
+        "concept_grace_freedom_synergy"
+      ],
+      "related_persons": [
+        "person_martin_luther_8f2a3b91"
+      ],
+      "related_arguments": [],
+      "confidence": "high"
+    }
+  ],
+  "persons_to_create": [],
+  "concepts_status": {
+    "all_argument_targets_exist": true,
+    "verified_existing": [
+      "scholar_barclay_j",
+      "concept_grace_freedom_synergy",
+      "concept_synergism",
+      "concept_predestination_augustinian",
+      "concept_autexousion_christian_freedom_u1v2w3x4",
+      "person_augustine_hippo_d430",
+      "person_pelagius_d420",
+      "person_philo_alexandria_a1b2c3d4",
+      "person_martin_luther_8f2a3b91",
+      "argument_augustines_antipelagian_argument_grace_necessity_0b29401f"
+    ],
+    "no_new_concepts_required": true,
+    "notes": [
+      "person_paul (the apostle) has NO node in the KG — confirmed by grep across nodes.jsonl. Arguments are therefore NOT wired to a Paul person node; the proper target would be a future person_paul_apostle. Flag for the team: Paul, the central subject of every argument here, is a structural gap in the primary layer.",
+      "Marcion has no person node; referenced in Ch. 2 only — not used as a target to avoid fabrication.",
+      "A dedicated concept for 'incongruous gift' / 'charis as gift' does not yet exist; concept_grace_freedom_synergy is the closest existing anchor and is used as the primary discusses target. Consider creating concept_incongruous_grace_barclay if the team wants Barclay's distinctive category represented natively.",
+      "concepts_status target verification done via exact-id grep on data/kg/nodes.jsonl on 2026-05-21."
+    ]
+  }
+}
