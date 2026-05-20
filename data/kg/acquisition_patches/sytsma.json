@@ -1,0 +1,202 @@
+{
+  "_meta": {
+    "source": "Lee W. Sytsma, Reconciling Universal Salvation and Freedom of Choice in Origen of Alexandria. PhD dissertation, Marquette University, May 2018 (262 pp.). Director: Michel Barnes. Committee: Mickey Mattox, Michael Cover, Aaron Pidel. e-Publications@Marquette, Dissertations no. 769. Basis for the Gorgias Press 2020 monograph.",
+    "pdf_txt_verbatim_source": "/tmp/sytsma.txt (pdftotext -layout)",
+    "extraction_date": "2026-05-21",
+    "integrity_note": "All quote_verbatim strings are grep-confirmed in the pdftotext output. Printed page numbers (not PDF page numbers) are given. No ancient Greek/Latin was generated; Greek tokens reproduced verbatim from Sytsma's own text.",
+    "central_thesis": "Origen consistently held BOTH a permanent, divinely foreordained universal restoration (apokatastasis) AND robust moral autonomy (autexousion). He reconciled them through a multi-layered doctrine of divine foreknowledge: God knows not only what each soul WILL choose (simple foreknowledge) but what each soul WOULD freely choose in any hypothetical state of affairs (a counterfactual / 'middle-knowledge'-like foreknowledge). On that basis God preselects and prearranges into the actual timeline only the set of free choices that infallibly leads to universal salvation, without coercing any choice in the moment. The work is framed as 'a critique of the modern critique of Origen' (the modern charge that universalism is incompatible with free will).",
+    "scholar_bio_status": "bio partially verified from the dissertation front matter itself (Marquette PhD 2018, director Barnes); broader affiliation/career NOT independently verified online — flagged bio_unverified."
+  },
+
+  "scholar": {
+    "id": "scholar_sytsma_lee",
+    "label": "Lee W. Sytsma",
+    "description": "Historical theologian working on patristics and early Christian thought, with a focus on Origen of Alexandria. PhD in Theology, Marquette University, 2018 (dissertation directed by Michel R. Barnes; committee: Mickey Mattox, Michael Cover, Aaron Pidel). B.A., M.T.S. Author of the monograph 'Universal Salvation and Freedom of Choice in Origen of Alexandria' (Gorgias Press, 2020), a revision of his Marquette dissertation. Specializes in Origen's doctrines of moral autonomy (autexousion / to eph' hēmin), divine providence, and the apokatastasis.",
+    "type": "person",
+    "role": "scholar",
+    "period": "Modern",
+    "metadata": {
+      "role": "scholar",
+      "period": "Modern",
+      "surname": "Sytsma",
+      "given_names": "Lee W.",
+      "specialty": "Origen, patristics, early Christian doctrines of free will / moral autonomy and universal salvation",
+      "specialization": ["Origen", "patristics", "apokatastasis", "moral autonomy / autexousion", "divine providence and foreknowledge"],
+      "degrees": ["B.A.", "M.T.S.", "PhD (Theology, Marquette University, 2018)"],
+      "dissertation_director": "Michel R. Barnes",
+      "dissertation_committee": ["Mickey Mattox", "Michael Cover", "Aaron Pidel"],
+      "affiliations": [],
+      "bio_unverified": true,
+      "bio_source": "Dissertation front matter (title page, acknowledgements, abstract). Affiliation/current post NOT independently verified."
+    }
+  },
+
+  "publication": {
+    "id": "pub_sytsma_2020_universal_salvation_origen",
+    "label": "Sytsma 2020 — Universal Salvation and Freedom of Choice according to Origen of Alexandria",
+    "description": "Monograph (Gorgias Press, 2020) revising Sytsma's 2018 Marquette dissertation 'Reconciling Universal Salvation and Freedom of Choice in Origen of Alexandria'. Argues that Origen coherently held both a permanent, foreordained apokatastasis and a technically defined moral autonomy (autexousion), reconciled through God's multi-layered foreknowledge — including foreknowledge of how each soul WOULD freely choose in any hypothetical situation. God preselects and prearranges only the set of free choices that infallibly yields universal restoration, never coercing the moment of choice. Explicitly a 'critique of the modern critique of Origen'.",
+    "type": "publication",
+    "metadata": {
+      "type": "monograph",
+      "year": 2020,
+      "author": "Lee W. Sytsma",
+      "author_id": "scholar_sytsma_lee",
+      "publisher": "Gorgias Press",
+      "isbn": "9781463239510",
+      "doi": "10.31826/9781463239510",
+      "doi_unverified": true,
+      "phd_version": "Reconciling Universal Salvation and Freedom of Choice in Origen of Alexandria, PhD diss., Marquette University, May 2018, 262 pp. (e-Publications@Marquette, Dissertations no. 769; https://epublications.marquette.edu/dissertations_mu/769)",
+      "local_pdf_path": "[local-path] SHAL/04_Littérature_secondaire/05_Origene/sytsma_2020_universal_salvation_origen.pdf",
+      "verified_from_pdf": true,
+      "isbn_doi_note": "ISBN/DOI taken from task brief; the local PDF is the 2018 Marquette dissertation version. ISBN and DOI flagged unverified against an external catalogue."
+    }
+  },
+
+  "arguments": [
+    {
+      "id": "scholarly_argument_sytsma_critique_of_modern_critique",
+      "label": "Sytsma: Origen coherently held BOTH a permanent foreordained apokatastasis AND moral autonomy — contra the modern incompatibility charge",
+      "description": "Sytsma's overarching thesis: although many modern scholars argue Origen could not have held universal salvation because it is logically incompatible with his insistence on freedom of choice, Origen in fact upheld both consistently. The dissertation is framed as 'a critique of the modern critique of Origen', defending the internal coherence of Origen's twin commitments to a foreordained universal restoration and to genuine creaturely moral autonomy.",
+      "page": "3",
+      "chapter": "Introduction",
+      "quote_verbatim": "this dissertation might also be described as a critique of the modern critique of Origen.",
+      "discusses": ["person_origen_alexandria_185_254ce_s9t0u1v2", "concept_apocatastasis", "concept_autexousion_christian"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_sytsma_autexousion_technical_term",
+      "label": "Sytsma: 'free will' is a misleading gloss — Origen's term is the technical to autexousion (and to eph' hēmin)",
+      "description": "Sytsma argues that vague phrases like 'free will' obscure Origen's thought; one must grasp the careful, technical sense of moral autonomy. Following Bugár and Bobzien, he notes that by Origen's time to autexousion emerged as the technical term for moral agency (alongside the older to eph' hēmin), and that rendering autexousion as 'free will' misleads because it does not imply an independent faculty called 'the will'. Sytsma therefore uses 'freedom of choice' / 'moral autonomy'.",
+      "page": "79-80",
+      "chapter": "Ch. 2 (Origen's Understanding of Moral Autonomy)",
+      "quote_verbatim": "“autonomy” appears to emerge as the technical term for this issue, although τὸ ἐφ' ἡμῖν",
+      "discusses": ["person_origen_alexandria_185_254ce_s9t0u1v2", "concept_autexousion_christian"],
+      "discusses_unverified": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_sytsma_autexousion_not_a_faculty_of_will",
+      "label": "Sytsma: to autexousion does NOT denote an independent mental faculty 'the will' (anti-anachronism)",
+      "description": "Sytsma cautions against the standard English rendering of to autexousion as 'free will', because for Origen and his 2nd-3rd c. contemporaries the rational mind was always the subject of choice; there was no separate faculty 'the will' standing apart from reason and emotion (Alexander of Aphrodisias being the exceptional case). This guards against importing a post-classical (Augustinian / modern) concept of will into Origen.",
+      "page": "80",
+      "chapter": "Ch. 2 (Greek Vocabulary and Expressions of Moral Autonomy)",
+      "quote_verbatim": "since τὸ αὐτεξούσιον does not imply an",
+      "discusses": ["person_origen_alexandria_185_254ce_s9t0u1v2", "concept_autexousion_christian", "concept_to_eph_hemin_basil"],
+      "discusses_unverified": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_sytsma_two_requirements_moral_autonomy",
+      "label": "Sytsma: Origen sets exactly two conditions for genuine moral autonomy (self-origination + binary alternative possibilities)",
+      "description": "Sytsma reconstructs Origen's definition of moral autonomy as requiring two conditions: (1) the assent/choice must be performed by the soul itself, not by an agent external to it; and (2) the soul must have the capability for binary possibilities — the capacity to move toward or away from the good. Crucially, condition (2) is NOT Alexander of Aphrodisias's absolute libertarian indeterminacy but a more modest two-sided possibility between competing inclinations of spirit and body.",
+      "page": "81, 211 (recap)",
+      "chapter": "Ch. 2 / Ch. 5",
+      "quote_verbatim": "Origen had two requirements for genuine moral autonomy: first, the assent (choice) must",
+      "discusses": ["person_origen_alexandria_185_254ce_s9t0u1v2", "concept_autexousion_christian", "concept_prohairesis_alex"],
+      "discusses_unverified": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_sytsma_origen_adopts_stoic_impression_assent",
+      "label": "Sytsma: Origen adopts the Stoic impression-and-assent psychology of choice, with two key Christian alterations",
+      "description": "Sytsma argues Origen took over the Stoic mechanics of choice — impression (phantasia), assent (synkatathesis), impulse (hormē), with passions as rational impulsive-impressions — but altered the model in two ways: (1) embedding it in a tripartite (spirit/soul/body) anthropology where the soul arbitrates between spirit and body, and (2) granting a far greater potential for moral progress than the Stoics allowed. He situates Origen between Epictetus and Alexander of Aphrodisias on assent and 'what is up to us'.",
+      "page": "82-104",
+      "chapter": "Ch. 2 (Origen Adopts the Stoic Model of Impression and Assent; Origen's Alterations)",
+      "quote_verbatim": "Origen Adopts the Stoic Model of Impression and Assent",
+      "discusses": ["person_origen_alexandria_185_254ce_s9t0u1v2", "concept_synkatathesis_stoic_assent", "concept_autexousion_christian"],
+      "discusses_unverified": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_sytsma_anti_determinism_idle_argument_deprinc_iii",
+      "label": "Sytsma: Origen's lifelong anti-determinism (gnostic 'natures', astral fate, the Idle Argument) culminates in De Principiis III.1",
+      "description": "Sytsma traces Origen's sustained polemic against deterministic theologies: against 'gnostic' fixed natures (which he says destroy prohairesis and autexousion), against astral/heimarmenē determinism (Commentary on Genesis, preserved in Philocalia 23), and against the Idle/Lazy Argument (argos logos), which Origen rebuts at Contra Celsum II.20. His most systematic defense of moral freedom is the Peri autexousiou of De Principiis Book III.1 — whose Greek heading literally opens 'Peri autexousiou'.",
+      "page": "44-53, 157-169 (Cels II.20; PArch III.1)",
+      "chapter": "Ch. 2 (Theological Opponents) / Ch. 2 textual analysis",
+      "quote_verbatim": "the “Idle (or lazy) Argument” (ἀργὸς λόγος), which has been preserved in Cicero's On Fate",
+      "discusses": ["person_origen_alexandria_185_254ce_s9t0u1v2", "concept_autexousion_christian", "concept_heimarmene_fate_stoics_j0k1l2m3"],
+      "discusses_unverified": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_sytsma_permanent_apokatastasis",
+      "label": "Sytsma: Origen DID hold a final and permanent restoration of all rational souls (apokatastasis)",
+      "description": "Against scholars who deny Origen's universalism or read it as merely hypothetical/hopeful, Sytsma argues that despite Origen's deliberately guarded and sometimes conflicting statements (concealed for pastoral reasons), he genuinely held a final and PERMANENT restoration of all rational souls. The apparent contradiction with continuing freedom is resolved later via foreknowledge; the permanency of the apocatastasis is itself part of the foreordained plan.",
+      "page": "12-13, 134-167",
+      "chapter": "Ch. 4 (Apocatastasis)",
+      "quote_verbatim": "permanent restoration of all rational souls",
+      "discusses": ["person_origen_alexandria_185_254ce_s9t0u1v2", "concept_apocatastasis"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_sytsma_universalism_as_teleological_predetermination",
+      "label": "Sytsma: Origen's universalism is a form of divine predeterminism / foreordination (teleological predetermination)",
+      "description": "Sytsma argues Origen's universalism constitutes a soteriology describable as divine predeterminism and foreordination: the apokatastasis is not a hopeful possibility but a fixed, foreordained telos of cosmic history toward which all of salvation-history is directed. He labels this 'universalism as teleological predetermination', distinguishing Origen's position from purely hypothetical or open-ended readings.",
+      "page": "13, 167-172",
+      "chapter": "Ch. 4 (Universalism as Teleological Predetermination)",
+      "quote_verbatim": "Origen’s universalism constitutes a soteriology which can be described as a form of divine predeterminism and",
+      "discusses": ["person_origen_alexandria_185_254ce_s9t0u1v2", "concept_apocatastasis"],
+      "discusses_unverified": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_sytsma_three_types_foreknowledge",
+      "label": "Sytsma: Origen deploys THREE types of divine foreknowledge — simple, of-future-possibilities, and of counterfactuals of creaturely freedom",
+      "description": "Central interpretive move: Sytsma distinguishes three types of divine foreknowledge in Origen — (1) simple foreknowledge (what WILL happen), (2) foreknowledge of future possibilities (what COULD have happened differently), and (3) foreknowledge of the counterfactuals of creaturely freedom (what any creature WOULD freely do if placed in any hypothetical state of affairs). Type 3 is the linchpin enabling reconciliation; Sytsma notes Origen never labels it a 'third type' but reconstructs it from the texts.",
+      "page": "197-210",
+      "chapter": "Ch. 5 (God's Three Types of Foreknowledge; Foreknowledge of Hypothetical Voluntary Possibilities)",
+      "quote_verbatim": "the knowledge of how each rational soul would freely choose in any hypothetical state of",
+      "discusses": ["person_origen_alexandria_185_254ce_s9t0u1v2", "concept_divine_prescience"],
+      "discusses_unverified": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_sytsma_preselection_prearrangement_thesis",
+      "label": "Sytsma: God preselects and prearranges into history only the set of free choices that infallibly leads to the apokatastasis (the reconciliation)",
+      "description": "Sytsma's core synthetic claim: armed with counterfactual foreknowledge, God 'manufactures' the external circumstances under which each soul will freely respond as God intends, and in pre-planning salvation-history selects only those free choices that infallibly culminate in universal restoration. Thus God foreordains the outcome through (not against) genuine free choices, never coercing the moment of choice — escaping the charge of fatalism while securing a permanent apocatastasis.",
+      "page": "182-223 (synthesis 210-223)",
+      "chapter": "Ch. 5 (Synthesis: God Preselects and Prearranges Only the Set of Free Choices That Leads to the Apocatastasis)",
+      "quote_verbatim": "God preselects only those choices which",
+      "discusses": ["person_origen_alexandria_185_254ce_s9t0u1v2", "concept_apocatastasis", "concept_autexousion_christian", "concept_divine_prescience"],
+      "discusses_unverified": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_sytsma_god_manufactures_circumstances",
+      "label": "Sytsma: God can engineer circumstances guaranteeing a soul will FREELY respond as God wills (compatibility of guarantee + freedom)",
+      "description": "Sytsma specifies the mechanism: because God knows how each soul would freely respond in any hypothetical situation, God can arrange external circumstances such that the soul's free response is guaranteed in advance, while moral autonomy (self-origination + binary alternatives in the moment) is fully preserved. This is the precise hinge by which divine guarantee and creaturely freedom are rendered logically compatible in Origen.",
+      "page": "183-184",
+      "chapter": "Ch. 5 (chapter argument summary)",
+      "quote_verbatim": "God can manufacture external circumstances in such a way that",
+      "discusses": ["person_origen_alexandria_185_254ce_s9t0u1v2", "concept_autexousion_christian", "concept_divine_prescience"],
+      "discusses_unverified": [],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_sytsma_providence_is_saving_grace",
+      "label": "Sytsma: in Origen divine providence IS saving grace (pronoia/oikonomia = charis), strengthening the 'grace' side of grace-vs-free-will",
+      "description": "Sytsma argues (confirming Drewery and citing Koch's pronoia/paideusis) that for Origen divine providence is essentially identical with saving grace: every providential act — reward, punishment, teaching, abandonment — is part of God's salvific plan for the soul it targets. Since every soul is foreordained for salvation, providence has no function outside salvific grace. This recasts the 'grace vs. free will' framing for Origen and amplifies the role of grace.",
+      "page": "172-180, 230 (conclusion)",
+      "chapter": "Ch. 4 (Providence as Saving Grace) / Conclusion",
+      "quote_verbatim": "providence is essentially the same thing as saving grace in Origen’s theology.",
+      "discusses": ["person_origen_alexandria_185_254ce_s9t0u1v2", "concept_grace_freedom_synergy", "concept_apocatastasis"],
+      "discusses_unverified": [],
+      "confidence": "high"
+    }
+  ],
+
+  "concepts_to_consider_creating": [
+    {
+      "suggested_id": "concept_apokatastasis_origen",
+      "rationale": "Existing concept_apocatastasis is generic; Sytsma's whole thesis turns on Origen's SPECIFIC permanent+foreordained version. A dedicated Origenian apokatastasis node (subtype_of concept_apocatastasis) would let the preselection/predetermination arguments attach precisely. Optional — generic node is currently used in discusses[]."
+    },
+    {
+      "suggested_id": "concept_counterfactual_foreknowledge_creaturely_freedom",
+      "rationale": "Sytsma's 'third type of foreknowledge' (what a creature WOULD freely do in any hypothetical state of affairs) is a distinct, near-Molinist 'middle knowledge' notion not captured by concept_divine_prescience (which = simple foreknowledge). Strong candidate for a new concept node; the three-types and preselection args currently fall back on concept_divine_prescience."
+    },
+    {
+      "suggested_id": "concept_to_autexousion_origen OR reuse concept_autexousion_christian",
+      "rationale": "concept_autexousion_christian was used for all autexousion args. If a more Origen-specific autexousion node is desired (distinct from Methodius/Eusebius autexousion variants already in KG), consider one; otherwise concept_autexousion_christian is the correct generic Christian node."
+    }
+  ]
+}

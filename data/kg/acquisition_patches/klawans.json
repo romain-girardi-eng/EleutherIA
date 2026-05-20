@@ -1,0 +1,178 @@
+{
+  "_meta": {
+    "source": "Klawans, Jonathan. Josephus and the Theologies of Ancient Judaism. Oxford / New York: Oxford University Press, 2012.",
+    "local_pdf_path": "[local-path] SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/klawans_2012_josephus.pdf",
+    "chapters_read": ["Ch. 1 Theology, Josephus, and Understandings of Ancient Judaism (intro to schools, pp. 9-13, sect. on the four school-passages and the reliability question)", "Ch. 2 Fate, Free Will, and Ancient Jewish Types of Compatibilism (pp. 44-91, read in full)"],
+    "method": "Targeted reading via pdftotext -layout + Contents (p. xi) navigation + grep on fate|heimarmene|free will|determinism|Pharisee|Sadducee|Essene|providence|fortune. All quote_verbatim strings are grep-able from the printed-page OCR text. Page numbers are the book's printed pages, taken from the running headers ('Fate, Free Will, and Ancient Jewish Types of Compatibilism' = pp. 44-91).",
+    "policy": "ZERO fabrication. quote_verbatim are Klawans' own English analytical prose, copied from the printed text. No Greek/Latin invented; the Greek that appears here (e.g. εἱμαρμένη) is reproduced from Klawans/his cited sources, not generated. Ancient-source citations (Ant., War, Apion, 1QS, Sir.) are Klawans' references, not independent claims.",
+    "note_scholar": "scholar_klawans_jonathan does NOT yet exist in the KG (grep'd: 0 hits) — created here.",
+    "note_targets": "All target IDs were verified present in data/kg/nodes.jsonl before writing. person_josephus_flavius_e5f6g7h8, person_ben_sira_i9j0k1l2, person_bobzien_susanne_contemporary, scholar_frede_dorothea, group_pharisees_w1x2y3z4, group_sadducees_a5b6c7d8, group_essenes_e9f0g1h2, concept_heimarmene_fate_stoics_j0k1l2m3, concept_hashgachah_o3p4q5r6 (Divine Providence), concept_two_spirits_doctrine_s7t8u9v0, concept_eph_hemin_two_sided_potestative, concept_eph_hemin_one_sided_causative, concept_chrysippean_compatibilism_bobzien, concept_cylinder_analogy_chrysippus_e5f6g7h8, argument_furst_2022_josephus_three_jewish_sects_freedom_taxonomy, argument_qumran_predestination_c3d4e5f6, argument_sirach_free_will_theodicy_m7n8o9p0, scholarly_argument_moore_josephus_s_philosophical_frami_3, argument_bobzien_2001_b1_cylinder_compatibilism_reconstruction, argument_bobzien_2001_b1_eph_hemin_one_vs_two_sided.",
+    "note_existing_josephus_nodes": "The Fürst Josephus taxonomy node (argument_furst_2022_josephus_three_jewish_sects_freedom_taxonomy) is the primary cross-link target requested by the user. Also pre-existing on the same Ant. 13.171-73 passage: scholarly_work_martin_0_josephus_use_of_heimarmene_in_the_jewish, scholarly_work_moore_1929_fate_and_free_will_in_the_jewish_philoso, scholarly_argument_moore_josephus_s_philosophical_frami_3. Klawans engages and partly corrects this older Moore/Martin tradition.",
+    "do_not_apply_directly": "This patch is a PROPOSAL. It is NOT applied to the KG by this agent (per instructions: NE PAS modifier KG). Review before ingestion."
+  },
+  "scholar": {
+    "id": "scholar_klawans_jonathan",
+    "label": "Jonathan Klawans",
+    "description": "Professor of Religion at Boston University, where he directed the Division of Religious and Theological Studies (from 2007). Specialist in ancient Judaism and Flavius Josephus, with earlier work on purity, sacrifice and impurity in the Second Temple period (Impurity and Sin in Ancient Judaism, 2000; Purity, Sacrifice, and the Temple, 2006). Trained under David Weiss Halivni. His 2012 monograph Josephus and the Theologies of Ancient Judaism rehabilitates Josephus as the single most informed extant source on the theological disputes of the Jewish 'schools', against a scholarly trend that downplays his philosophical reports as Hellenizing apologetic. Affiliations stated in the book's front matter: Boston University, Department of Religion.",
+    "type": "node",
+    "node_type": "person",
+    "metadata": {
+      "role": "scholar",
+      "period": "Modern",
+      "specialty": "Ancient Judaism, Josephus, Second Temple theology",
+      "affiliations": ["Boston University — Department of Religion", "Boston University — Division of Religious and Theological Studies (Director from 2007)"],
+      "bio_status": "verified from book front matter (Acknowledgments, pp. xv-xvi: Boston University, Division of Religious and Theological Studies Directorship 2007, Department of Religion, teacher David Weiss Halivni). External biographical detail (titles of earlier monographs) added from standard catalogue knowledge — flag for confirmation if needed."
+    }
+  },
+  "publication": {
+    "id": "pub_klawans_2012_josephus_theologies",
+    "scholar_id": "scholar_klawans_jonathan",
+    "label": "Klawans 2012 — Josephus and the Theologies of Ancient Judaism",
+    "description": "Monograph defending the descriptive accuracy and analytic value of Josephus's reports on the theology of the Jewish schools (Pharisees, Sadducees, Essenes). Chapter 2 ('Fate, Free Will, and Ancient Jewish Types of Compatibilism', pp. 44-91) is the core for the free-will debate: Josephus characterises the three schools by their stance on εἱμαρμένη (fate) — Essenes attribute all to fate (determinism), Sadducees deny it (relative libertarianism), Pharisees take a middle position. Klawans corroborates this typology against Qumran (1QS = Essene-type determinism), Ben Sira 15 (Sadducee-type libertarianism) and rabbinic sources (two types of Pharisaic compatibilism), distinguishes 'fate' from 'providence' (his catchphrase for Josephus's own view: 'Providence always, fate at times'), and argues Josephus's Pharisaic two-sided free will is NOT identical to Stoic/Chrysippean compatibilism.",
+    "type": "node",
+    "node_type": "publication",
+    "metadata": {
+      "type": "monograph",
+      "year": 2012,
+      "publisher": "Oxford University Press",
+      "place": "Oxford / New York",
+      "pages": 402,
+      "isbn": "978-0-19-992861-3",
+      "author": "Jonathan Klawans",
+      "scholar_id": "scholar_klawans_jonathan",
+      "local_pdf_path": "[local-path] SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/klawans_2012_josephus.pdf",
+      "relevant_chapters": ["1 Theology, Josephus, and Understandings of Ancient Judaism", "2 Fate, Free Will, and Ancient Jewish Types of Compatibilism (pp. 44-91)"]
+    }
+  },
+  "edges": [
+    {"source": "pub_klawans_2012_josephus_theologies", "target": "scholar_klawans_jonathan", "type": "authored_by", "confidence": "high"}
+  ],
+  "arguments": [
+    {
+      "id": "scholarly_argument_klawans_2012_josephus_fate_typology_of_schools",
+      "label": "Josephus types the three Jewish schools by their stance on fate (Klawans 2012)",
+      "description": "Klawans' foundational observation: Josephus characterises the three legitimate Jewish schools precisely by their differing positions on εἱμαρμένη (fate). The Essenes 'declare that fate is the mistress of all things' (Ant. 13.172); the Sadducees 'do away with fate, holding that there is no such thing' (13.173); the Pharisees hold a middle position — 'certain events are the work of fate, but not all; as to other events it depends on ourselves whether they shall take place or not.' This stance is given pride of place: it is the FIRST thing Josephus says about the schools in Antiquities 13, and he opens his Pharisee/Sadducee descriptions in War 2.162-64 the same way. Klawans treats this tripartite fate-typology as Josephus's own organising frame, recoverable and broadly accurate once its over-simplifications are recognised. This is the exact taxonomy Fürst (2022, Kap. III 1) reuses.",
+      "page": "44-45",
+      "chapter": "Ch. 2, opening",
+      "quote_verbatim": "When he first introduces the schools in Antiquities, he informs us that the three groups can be characterized by differing approaches to “human affairs” (13.171). The Essenes “declare that fate [eiuapyévn] is the mistress of all things, and that nothing befalls people unless it be in accordance with her decree” (Ant. 13.172). By contrast, the Sadducees “do away with fate, holding that there is no such thing” (13.173).",
+      "discusses": [
+        "concept_heimarmene_fate_stoics_j0k1l2m3",
+        "concept_eph_hemin_two_sided_potestative"
+      ],
+      "related_persons": ["person_josephus_flavius_e5f6g7h8"],
+      "related_groups": ["group_pharisees_w1x2y3z4", "group_sadducees_a5b6c7d8", "group_essenes_e9f0g1h2"],
+      "related_arguments": ["argument_furst_2022_josephus_three_jewish_sects_freedom_taxonomy", "scholarly_argument_moore_josephus_s_philosophical_frami_3"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_klawans_2012_essene_determinism_matches_qumran",
+      "label": "Essene determinism = Qumran predestinarianism (1QS) (Klawans 2012)",
+      "description": "Klawans argues that the unqualified determinism Josephus attributes to the Essenes ('Fate is mistress of all things', Ant. 13.172; the belief 'is wont to leave everything in the hands of God', 18.18) finds a striking analogue in the sectarian scrolls, above all the Community Rule's Treatise of the Two Spirits (1QS 3.15-21, 4.18-20): 'From the God of knowledge comes all that is and shall be. Before ever they existed, he established their whole design.' Klawans grants this is no simple identity (Josephus omits the Qumran dualism, and the Essene hypothesis is bracketed), but the predetermination of all events 'to the exclusion of human freedom' is the shared core. Daniel and Ecclesiastes, by contrast, fall short of the STRONG determinism needed to raise the free-will problem.",
+      "page": "49-52",
+      "chapter": "Ch. 2, 'Fate among Essenes and the Qumran Sectarians'",
+      "quote_verbatim": "Josephus describes the Essenes as believing in the predetermination of all events, apparently to the exclusion of human freedom. The Dead Sea sectarians, it appears, emphasized God’s omniscience and his power to such a degree that, as they understood it, all proceeds according to a divine plan, which has been put in place long ago.",
+      "discusses": [
+        "concept_two_spirits_doctrine_s7t8u9v0",
+        "concept_heimarmene_fate_stoics_j0k1l2m3"
+      ],
+      "related_persons": ["person_josephus_flavius_e5f6g7h8"],
+      "related_groups": ["group_essenes_e9f0g1h2"],
+      "related_arguments": ["argument_qumran_predestination_c3d4e5f6"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_klawans_2012_sadducee_libertarianism_matches_ben_sira",
+      "label": "Sadducee libertarianism = Ben Sira's free-will theodicy (Sir. 15) (Klawans 2012)",
+      "description": "Klawans argues that Josephus's fate-denying Sadducees (War 2.164-65: 'man has the free choice of good and evil... it rests with each person's will') have a strong precedent in Ben Sira 15.11-20 ('If you choose, you can keep his commandment... Before each person are life and death; whichever one chooses will be given him'). Both combine (a) freedom of choice, (b) denial that anyone is destined to do evil, and (c) God's absolute opposition to evil. The motive is theodicy: denying free choice 'implicates God in the commission of evil', so the libertarian separates God from evil to keep divine punishment just and deserved. Ben Sira's polemical 'Say not...' confirms these issues were genuinely debated in 2nd-c. BCE Judaism. Klawans labels this the 'relative libertarianism' of the Sadducees and Ben Sira.",
+      "page": "52-54",
+      "chapter": "Ch. 2, 'Free Will among the Sadducees and Ben Sira'",
+      "quote_verbatim": "What we find in this passage is the clear combination of three related, but separable, ideas: the freedom of choice (esp. vv. 14-17), the denial that anyone could be destined to do evil (vv. 11-12, 20) and God’s absolute opposition to evil (vv. 13, 20). The combination of ideas is stunningly similar to Josephus’s assertion that the Sadducees “do away with fate altogether...”",
+      "discusses": [
+        "concept_eph_hemin_two_sided_potestative"
+      ],
+      "related_persons": ["person_josephus_flavius_e5f6g7h8", "person_ben_sira_i9j0k1l2"],
+      "related_groups": ["group_sadducees_a5b6c7d8"],
+      "related_arguments": ["argument_sirach_free_will_theodicy_m7n8o9p0"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_klawans_2012_two_types_pharisaic_compatibilism",
+      "label": "Two distinct Pharisaic compatibilisms: fusion (Type 1) vs partial determinism (Type 2) (Klawans 2012)",
+      "description": "Klawans' signature contribution: Josephus attributes to the Pharisees not one but TWO distinct compromises between fate and free will. Type 1 (Fusion): War 2.163 / Ant. 18.13 — everything (πάντα) is determined by fate, yet human will is 'fused' (κρᾶσις) with fate in many actions, including the choice of good or evil; fate cooperates 'in each action'. This implicates God in human evil and has rabbinic parallels (b. Shabbat 104a; b. Makkot 10b). Type 2 (Partial determinism): Ant. 13.172 — 'certain events but not all (τινὰ καὶ οὐ πάντα) are the work of fate; as to others it depends on ourselves'; some events are fated, the rest are wholly the result of free human decision (parallels: b. Berakhot 33b 'all is in the hands of heaven except the fear of heaven'; b. Niddah 16b; b. Yevamot 49b-50a). Klawans insists Type 2 is, strictly, NOT compatibilism at all but a partial determinism.",
+      "page": "67-74",
+      "chapter": "Ch. 2, 'Categorizing Compatibilisms' (Type 1 Fusion / Type 2 Partial Determinism)",
+      "quote_verbatim": "in his discussions of the Pharisees, Josephus attributes to them not just one type of compromise between fate and free will, but two.",
+      "discusses": [
+        "concept_eph_hemin_two_sided_potestative",
+        "concept_conditional_fate_9a5c8b4d"
+      ],
+      "related_persons": ["person_josephus_flavius_e5f6g7h8"],
+      "related_groups": ["group_pharisees_w1x2y3z4"],
+      "related_arguments": ["argument_furst_2022_josephus_three_jewish_sects_freedom_taxonomy"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_klawans_2012_pharisaic_vs_stoic_compatibilism",
+      "label": "Pharisaic two-sided free will ≠ Stoic/Chrysippean compatibilism (Klawans 2012)",
+      "description": "Klawans argues that, although Josephus's terminology is Hellenistic (Stoic), the Pharisaic position is NOT equivalent to Chrysippean Stoic compatibilism. Drawing on Cicero's On Fate 39-43 (the cylinder-and-cone analogy, Chrysippus as 'arbitrator' between Democritus/Aristotle-style necessity and free voluntary motion) and on Bobzien, Frede and Salles, he shows Stoic compatibilism allows assent but NOT alternate outcomes — 'no more than a cylinder could spin or a cone roll' — so it is really a rearticulation of determinism (a free will not 'worth wanting', pace Dennett). Jewish compatibilism Type 1 explicitly allows alternate outcomes (b. Makkot 10b: 'whichever direction a person chooses to go, they direct that one in that way') and lets the human make the first move; Type 2 is partial determinism. Klawans cites Bobzien's footnote that Josephus Ant. 13.172 is the earliest clearly TWO-SIDED concept of 'what depends on us' in the fate debate, and floats the hypothesis that Josephus may record the earliest (Pharisaic) attempt to wed Stoic determinism to a two-sided free will.",
+      "page": "75-79",
+      "chapter": "Ch. 2, 'Jewish and Stoic Compatibilisms'",
+      "quote_verbatim": "while it allows some place for “what depends on us” (td 2o’yiv; see Cicero, On Fate, 43, and Josephus Ant. 13.172, 18.13), it does not allow for the possibility that individuals have power to effect alternate outcomes—no more than a cylinder could spin or a cone roll.",
+      "discusses": [
+        "concept_chrysippean_compatibilism_bobzien",
+        "concept_cylinder_analogy_chrysippus_e5f6g7h8",
+        "concept_eph_hemin_two_sided_potestative",
+        "concept_eph_hemin_one_sided_causative"
+      ],
+      "related_persons": ["person_josephus_flavius_e5f6g7h8", "person_bobzien_susanne_contemporary", "scholar_frede_dorothea"],
+      "related_groups": ["group_pharisees_w1x2y3z4"],
+      "related_arguments": ["argument_bobzien_2001_b1_cylinder_compatibilism_reconstruction", "argument_bobzien_2001_b1_eph_hemin_one_vs_two_sided"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_klawans_2012_fate_vs_providence_distinction",
+      "label": "Fate (εἱμαρμένη) must be distinguished from providence (πρόνοια) in Josephus (Klawans 2012)",
+      "description": "Against the prevailing Josephan-scholarship trend (and against the Stoic/Calvinist identification of fate with providence), Klawans argues Josephus uses 'fate' (εἱμαρμένη) and 'providence' (πρόνοια) with discernible differences. 'Fate' carries the (debated) belief that all events are planned in advance such that freedom is challenged — hence Josephus reserves it for the schools' debates and for specific predicted events. 'Providence', by contrast, is Josephus's own firm belief: God justly and caringly rewards the righteous and punishes the wicked (Ant. 8.314), WITHOUT requiring an all-encompassing fixed plan and without threatening free choice (Ant. 1.14-15, 20-23). πρόνοια also reflects genuine Second Temple Jewish usage (Wisdom, 3-4 Macc., Philo). The pattern matches Middle Platonism/Gnosticism, which subordinated fate to providence. The crucial methodological move: watch whether Josephus uses the word 'all'.",
+      "page": "46-48, 81-84",
+      "chapter": "Ch. 2, terminological section + 'Josephus's Compatibilism: Providence Always, Fate at Times'",
+      "quote_verbatim": "Josephus’s belief in providence, however, does not necessarily involve all-encompassing fixed plans on the part of God. Nor does it pose any particular challenge to human freedom, for it would appear that Josephus believes in freedom of choice, too (Ant. 1.14-15, 20-23).",
+      "discusses": [
+        "concept_hashgachah_o3p4q5r6",
+        "concept_heimarmene_fate_stoics_j0k1l2m3"
+      ],
+      "related_persons": ["person_josephus_flavius_e5f6g7h8"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_klawans_2012_josephus_own_compatibilism_providence_always_fate_at_times",
+      "label": "Josephus's own view: 'Providence always, fate at times' (Klawans 2012)",
+      "description": "Klawans reconstructs Josephus's personal position (consistent with his Life-claim to follow the Pharisees) as a partial determinism summed up by the catchphrase 'Providence always, fate at times'. Evidence: in the Herod excursus (Ant. 16.395-404) Josephus weighs fate against the doctrine that 'we attribute some part of the cause to ourselves' as 'philosophically discussed... in the Law', and assigns blame to the human actors. In the Daniel passage (Ant. 10.277-80) he uses fulfilled prophecy against the Epicureans (who deny πρόνοια) to prove providence, NOT to prove that all events are fated — the world is providentially guided in real time ('a well-piloted ship', not on 'autopilot'). Only a few events are fated: those deemed necessary by providence and typically foretold by prophets, and above all the destruction of the Temple, which is 'conditionally fated' — the inexorable result of the people's free choice to sin. So Josephus is a consistent compatibilist, not an Essene-style determinist; this distinguishes him from Calvinist predestinarians and Stoic determinists alike.",
+      "page": "81-91",
+      "chapter": "Ch. 2, 'Josephus's Compatibilism' + Conclusion",
+      "quote_verbatim": "Josephus’s compatibilism is not a full fusion of fate with free will, but a partial determinism, one well characterized by the catchphrase “Providence always, fate at times.”",
+      "discusses": [
+        "concept_hashgachah_o3p4q5r6",
+        "concept_heimarmene_fate_stoics_j0k1l2m3",
+        "concept_conditional_fate_9a5c8b4d"
+      ],
+      "related_persons": ["person_josephus_flavius_e5f6g7h8"],
+      "related_groups": ["group_pharisees_w1x2y3z4"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_klawans_2012_defend_reliability_against_hellenizing_dismissal",
+      "label": "Defending Josephus's reliability against the 'Hellenizing apologetic' dismissal (Klawans 2012)",
+      "description": "Methodological core of the book. Klawans concedes that Josephus's school-descriptions are 'colored by Hellenistic philosophical concerns', use Stoic terminology, are 'somewhat exaggerated (at each extreme)' and simplified, and serve apologetic ends (Josephus favours the deterministic Essenes, disdains the libertarian Sadducees, and identifies Pharisees with Stoics / hints Sadducees ~ Epicureans). Many scholars therefore treat the fate/free-will passage (Ant. 13.171-73) as un-Jewish apologetic, doubt its placement, or even Josephus's authorship. Klawans rejects this dismissal: the typology is corroborated 'in a great many respects' by Qumran, Ben Sira and rabbinic literature, so it is 'not only descriptively accurate; ... also analytically insightful'. He rehabilitates Josephus as 'our most informed source' and reframes the typology as good pedagogy that legitimately uses 'clear, but imprecise, analogies' — explicitly correcting a scholarly tradition (e.g. Flusser) that charged Josephus with insufficient philosophical understanding. Note: he separately argues Josephus should NOT be read as equating Sadducees with Epicurean providence-deniers (he 'left this blank empty').",
+      "page": "12-13, 89-91",
+      "chapter": "Ch. 1 (Overlooking Josephus) + Ch. 2 Conclusion",
+      "quote_verbatim": "Josephus’s descriptions, therefore, are not only descriptively accurate; they are also analytically insightful.",
+      "discusses": [
+        "concept_heimarmene_fate_stoics_j0k1l2m3"
+      ],
+      "related_persons": ["person_josephus_flavius_e5f6g7h8"],
+      "related_groups": ["group_pharisees_w1x2y3z4", "group_sadducees_a5b6c7d8", "group_essenes_e9f0g1h2"],
+      "related_arguments": ["argument_furst_2022_josephus_three_jewish_sects_freedom_taxonomy", "scholarly_argument_moore_josephus_s_philosophical_frami_3"],
+      "confidence": "high"
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "scholar": {
+    "id": "scholar_brand_miryam",
+    "label": "Miryam T. Brand",
+    "description": "Scholar of Second Temple Judaism, the Dead Sea Scrolls, and the history of ideas about sin, evil, and human agency in ancient Judaism. Evil Within and Without is the revised version of her doctoral dissertation, written under the supervision of Professor Lawrence H. Schiffman (New York University); the book also acknowledges the support of New York University's Department of the Humanities and the W. F. Albright Institute of Archaeological Research (Jerusalem), where much of the work was completed. Specialist in the source and nature of sin in Apocrypha, Pseudepigrapha, the Dead Sea Scrolls, and Philo.",
+    "metadata": {
+      "role": "scholar",
+      "period": "Modern",
+      "surname": "Brand",
+      "given_names": "Miryam T.",
+      "specialty": "Second Temple Judaism; Dead Sea Scrolls; the source and nature of sin; human agency, determinism, and free will in ancient Jewish literature",
+      "affiliations": [
+        "New York University (PhD; dissertation supervised by Lawrence H. Schiffman)",
+        "W. F. Albright Institute of Archaeological Research, Jerusalem (research fellow)"
+      ],
+      "verification_sources": [
+        "brand_2013_evil.pdf — Acknowledgments, p. 5 (advisor 'Professor Lawrence Schiffman'; 'transform my dissertation into a work')",
+        "brand_2013_evil.pdf — Acknowledgments, p. 6 (lines 124–129: NYU Department of the Humanities and the W. F. Albright Institute of Archaeological Research)",
+        "brand_2013_evil.pdf — series page (Schiffman listed as New York University)"
+      ],
+      "source_track": "local_pdf",
+      "confidence": "high"
+    }
+  },
+  "publication": {
+    "id": "pub_brand_2013_evil_within_without",
+    "label": "Brand 2013 — Evil Within and Without: The Source of Sin in Second Temple Literature",
+    "description": "Monograph (JAJSup 9; Göttingen: Vandenhoeck & Ruprecht, 2013), the first comprehensive analysis of how Second Temple Jewish literature portrays the source of sin. Brand argues that the source of sin (internal/human inclination vs. external/demonic), the tension between determinism and free will, and identity are three interacting issues, and that a text's view of free will correlates with its genre: prayer presents sin as innate and inevitable absent divine aid; covenantal texts insist on free choice; wisdom/philosophical texts (Ben Sira, Philo) defend free will to absolve God; demonic-source narratives periodize evil. The Treatise of the Two Spirits combines internal and external, free-will and predestinarian views.",
+    "metadata": {
+      "type": "monograph",
+      "year": 2013,
+      "author": "Miryam T. Brand",
+      "publisher": "Vandenhoeck & Ruprecht",
+      "place": "Göttingen",
+      "series": "Journal of Ancient Judaism Supplements (JAJSup)",
+      "series_volume": 9,
+      "isbn": "978-3-525-35407-0",
+      "isbn_ebook": "978-3-647-35407-1",
+      "pages": "336",
+      "local_pdf_path": "[local-path] SHAL/04_Littérature_secondaire/02_Judaisme_Second_Temple/brand_2013_evil.pdf"
+    }
+  },
+  "arguments": [
+    {
+      "id": "scholarly_argument_brand_genre_determines_free_will_view",
+      "label": "Brand: a Second Temple text's view of free will correlates with its genre, not a single 'Qumran theology'",
+      "description": "Brand's organizing thesis. Against the trend to harmonize a single deterministic 'Qumran theology' of sin, she shows that Second Temple texts (including those at Qumran) display unremarked variability and 'do not fall into easy categories of righteous versus sinner and determinism versus free will'. The portrayal of free will versus determinism correlates with genre: prayer tends to present sin as innate and inevitable without divine help; covenantal texts (legal introductions) insist on human free choice to ground responsibility; wisdom/philosophical texts (Ben Sira, Philo) defend free will to absolve God; demonic-source narratives can support either approach. The expectation of theological consistency within and between ancient texts is itself anachronistic.",
+      "page": "25; 31; 275",
+      "quote_verbatim": "In particular, texts do not fall into easy categories of righteous versus sinner and determinism versus free will.",
+      "discusses": [
+        "concept_two_spirits_doctrine_s7t8u9v0",
+        "person_ben_sira_i9j0k1l2",
+        "person_philo_alexandria_a1b2c3d4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_brand_internal_vs_external_source_of_sin",
+      "label": "Brand: Second Temple texts locate the source of sin as internal (human inclination) or external (demonic), often combined",
+      "description": "Brand's primary analytic axis, drawn from the philosophy of action: she divides texts according to whether they portray sin's source as internal and human (an inherent inclination toward sin) or external and demonic, while stressing that these are not mutually exclusive and that 'not all demonic texts are completely external in perspective.' Part I treats the human inclination (prayer, covenantal, wisdom genres + 4 Ezra / 2 Baruch); Part II traces demonic figures (Watchers, Mastema, Belial). The framework lets her describe each text on its own terms rather than imposing a 'must' reading.",
+      "page": "25; 27; 274",
+      "quote_verbatim": "these texts reflect the idea that sin is inherent to the human, originates from external influences, or is a combination of these two factors.",
+      "discusses": [
+        "concept_yetzer_ha_ra_u3v4w5x6",
+        "concept_two_spirits_doctrine_s7t8u9v0"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_brand_prayer_genre_sin_inevitable",
+      "label": "Brand: the prayer genre presents sin as innate and inevitable absent divine assistance",
+      "description": "Brand argues that the experience of prayer itself shapes a near-deterministic view of sin: confronting God's exaltedness, petitioners express helplessness and an acknowledgement that their desire to sin can only be overcome with God's help, presenting sin 'as a disease that must be cured' or as intrinsic to human physicality (especially in sectarian prayer). Even Ben Sira and Philo, who elsewhere defend free choice, present the desire to sin as overwhelming when they adopt the language of prayer. The act of prayer is itself the means by which the petitioner prevents her own sin.",
+      "page": "57; 72; 275-276",
+      "quote_verbatim": "Although Ben Sira and Philo usually\nemphasize the free choice of human beings, when they employ the language of\nprayer, they present the desire to sin as overwhelming if divine assistance is\nabsent.",
+      "discusses": [
+        "work_dss_hodayot_i1j2k3l4",
+        "person_philo_alexandria_a1b2c3d4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_brand_hodayot_predestination_physicality",
+      "label": "Brand: the Hodayot bind innate sinfulness to human physicality within a predestinarian system",
+      "description": "Reading 1QHa VII.25b–27a ('in your hand is the inclination of every spirit … you determined before you created it') and VII.27–30 (predestination of wicked and righteous 'from the womb'), Brand argues the Hodayot integrate the common prayer paradigm of innate, inevitable sinfulness into a strong predestinarian theology tied to human physicality: humans are sinful because they are creatures of clay. Divine help against sin is granted only to the predestined righteous; wicked behavior proves one was never rescued and was 'set apart' as wicked. She distinguishes 'determinism' (all actions predetermined by God) from 'predestination' (predetermined election/rejection of particular people).",
+      "page": "66-68",
+      "quote_verbatim": "in your hand is the inclination of every\nspirit, [and all] its [activi]ty (27) you determined before you created it…",
+      "discusses": [
+        "work_dss_hodayot_i1j2k3l4",
+        "argument_qumran_predestination_c3d4e5f6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_brand_covenantal_texts_free_choice",
+      "label": "Brand: covenantal texts (CD, 1QS) emphasize free choice to ground communal responsibility, even amid predestination",
+      "description": "Brand argues that the covenantal genre — legal introductions like the Damascus Document (CD II.14–III.12a) and the 1QS recension of the Community Rule — emphasizes human free will rather than predetermination, because the genre's aim is to place responsibility for keeping the law on the member. CD juxtaposes a predestinarian preamble (CD II.2–13) with a section emphasizing freedom of choice (keyword bḥr) while still assuming the human will (rṣwn) naturally tends to sin; the wicked are 'led astray' (t‘h) because God withholds the hidden commandments from them, not by raw fatalism. The link between an innate inclination to sin and free will appears only in the Cave 1 (1QS) version of the Rule, marking a 'free choice' redaction; the decision to join the yaḥad and 'circumcise' one's inclination is not predetermined.",
+      "page": "82-84; 87-88; 277",
+      "quote_verbatim": "the innate and internal nature of the inclina-\ntion to sin does not obviate free will. No deterministic aspect is mentioned",
+      "discusses": [
+        "concept_yetzer_ha_ra_u3v4w5x6",
+        "argument_qumran_predestination_c3d4e5f6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_brand_ben_sira_free_will_theodicy",
+      "label": "Brand: Ben Sira 15:11–20 argues for free will and against attributing sin to God, responding to deterministic thought",
+      "description": "Brand reads Sir 15:11–20 ('Do not say: From God is my sin, for that which he hated he did not make') as Ben Sira's most direct grappling with the problem of sin: an argument for human free will and a rebuttal of the position that one's sins can be blamed on God. She holds that Ben Sira is 'evidently responding to deterministic approaches', plausibly a Judean development of broader Hellenistic determinism (Stoic and later Platonic/Aristotelian), and that the disputed term yēṣer here functions closer to neutral capacity/'free choice' than to the later rabbinic 'evil inclination'. Ben Sira's wider thought is inconsistent, also containing the Pythagorean doctrine of opposites and a more deterministic strand (Sir 33:7–15).",
+      "page": "95-96; 103; 118; 278",
+      "quote_verbatim": "This section is an argument for human free will with regard to\nthe decision to sin",
+      "discusses": [
+        "person_ben_sira_i9j0k1l2",
+        "argument_sirach_free_will_theodicy_m7n8o9p0"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_brand_philo_free_will_amid_pessimism",
+      "label": "Brand: Philo defends free will to absolve God of sin despite a deeply pessimistic view of the human inclination",
+      "description": "Brand argues that the wisdom/philosophical texts (Ben Sira and Philo) are the only Second Temple works that address the problem of sin directly, and that both aim to place responsibility for sin in human hands and distance God from it: 'Human free will is assured, and God has nothing to do with the human choice to sin.' Philo's view is far more pessimistic than Ben Sira's — nearly all his statements present humans as inevitably inclined toward sin — yet he insists this does not impede free will; in one extreme passage he even describes all free will as an illusion. The emphasis on agency serves the protreptic aim of encouraging ethical behavior.",
+      "page": "119; 126; 278",
+      "quote_verbatim": "Human free will is assured, and God has nothing to\ndo with the human choice to sin.",
+      "discusses": [
+        "person_philo_alexandria_a1b2c3d4",
+        "person_ben_sira_i9j0k1l2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_brand_two_spirits_synthesizes_views",
+      "label": "Brand: the Treatise of the Two Spirits merges internal/external and free-will/predestinarian views into one theology",
+      "description": "Brand's reading of the Treatise of the Two Spirits (1QS III.13–IV.26). The opening (III.15–16, 'From the God of knowledge comes all that is and shall occur … Nothing can be changed') asserts omniscient predetermination, yet most of the Treatise concerns an internal human landscape: two spirits of truth and deceit struggle within every heart (IV.23–26), so even the predestined righteous (IV.22) must contend with a 'spirit of deceit' in their innards until purification at the eschaton. The (possibly secondary) crux III.18b–25a externalizes this as the cosmic Prince of Lights / Angel of Darkness dualism, plausibly under diffuse Persian/Zoroastrian influence (Yasna 30, 45) though Brand cautions against overstating direct influence. The Treatise's power to integrate internal inclination, demonic Belial-like agency, and predestination explains its inclusion in the Community Rule.",
+      "page": "258; 266-270; 271-272; 281",
+      "quote_verbatim": "From the God of knowledge comes all that is occurring and shall occur. Before they\ncame into being he established all their designs",
+      "discusses": [
+        "concept_two_spirits_doctrine_s7t8u9v0",
+        "argument_qumran_predestination_c3d4e5f6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_brand_demonic_periodization_of_evil",
+      "label": "Brand: demonic-source texts absolve God by externalizing sin and periodizing evil to a pre-eschatological 'dominion of Belial'",
+      "description": "Brand argues that narrative texts attributing sin to demonic forces (Watchers in 1 Enoch 1–36; Mastema and Belial in Jubilees and the Dead Sea Scrolls) externalize the source of sin to absolve God: if demons, not God, implant the desire to sin, the theodicy problem of why God made humans able to sin is sidestepped. The new difficulty — why God lets demons roam among the chosen — is answered by 'periodizing' evil: evil has free rein only in the present age (the 'dominion of Belial') and will be destroyed at the eschaton. This eschatological periodization, sharper and more pessimistic than the Zoroastrian 'mixture', presupposes an apocalyptic worldview; the Treatise calls the present period of evil a divine 'mystery' (1QS III.23).",
+      "page": "278-279; 195",
+      "quote_verbatim": "in the present period (the era before\nthe eschaton), evil is given free rein. At the eschaton the dominion of evil\nforces will end",
+      "discusses": [
+        "concept_two_spirits_doctrine_s7t8u9v0"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_brand_original_sin_post_destruction",
+      "label": "Brand: 'original sin' (the inheritance of an evil heart from Adam) emerges chiefly in post-70 CE 4 Ezra and 2 Baruch",
+      "description": "Brand argues that the idea that humans are sinful because Adam and Eve ate the forbidden fruit is rare in surviving Second Temple literature: the earliest possible trace is Sir 25:24 (re a wicked wife), but only 4 Ezra and 2 Baruch, written after the Temple's destruction, explicitly present the desire to sin as originating with Adam's transgression. 4 Ezra makes the 'evil heart' an innate, inevitable inheritance from Adam (though inconsistent on whether it came at creation or after his sin); 2 Baruch (54:15–19) ultimately rejects collective original sin. Brand concludes the idea was a widely known if not commonly accepted Jewish notion by 70 CE, not exclusive to Paul (cf. Rom 5:12–13), and gained traction because it distanced responsibility for the catastrophe from both God and contemporary Jews. She separately notes that the strong Second Temple belief that the law combats sin illuminates Paul's counter-claims in Rom 5:20 and 7:7–13.",
+      "page": "281-283; 280; 141",
+      "quote_verbatim": "the idea of “original sin” (as indicated in Rom 5: 12–13 and perhaps 1 Cor\n15: 20–22) was not exclusive to Paul, but was a widely known (if not com-\nmonly accepted) idea in the Jewish tradition by the time of the destruction of\nthe Temple.",
+      "discusses": [
+        "concept_original_sin"
+      ],
+      "confidence": "high"
+    }
+  ],
+  "new_concepts": [
+    {
+      "id": "concept_belial_demonic_source_of_sin",
+      "label": "Belial (Demonic Source of Sin, Second Temple)",
+      "description": "Belial (Heb. bly‘l), the chief demonic figure of much Second Temple sectarian literature, presented as an external source of sin and as a community marker. In the Damascus Document, Belial deceives Israel about the correct law (the 'traps/nets of Belial', CD IV.15) and stands behind the success of 'evil' leaders; in the War Scroll he leads the army of darkness (including the Gentile nations); in the Community Rule he survives mainly in name, as a 'lot' (gwrl) into which humans place themselves through their own sinning. Per Brand (2013), the term 'dominion of Belial' designates the present pre-eschatological period of unrestrained evil; Belial threatens community members only from the outside and has no power over their inner character. Distinct from the internal yetzer ha-ra and from the cosmic Angel of Darkness of the Treatise of the Two Spirits, though the Treatise lets the evil spirit serve as a stand-in for Belial.",
+      "rationale": "Brand devotes Part II (esp. chs. 8, 10, 11) to Belial as the principal demonic source of sin; no Belial node exists in the KG (only concept_two_spirits_doctrine and concept_yetzer_ha_ra). Proposed so the demonic-source-of-sin arguments can be wired to a dedicated concept by a curator.",
+      "metadata": {
+        "type": "concept",
+        "period": "Second Temple Judaism",
+        "language": "Hebrew",
+        "source_track": "local_pdf",
+        "verification_source": "brand_2013_evil.pdf chs. 8, 10, 11 (Belial in Jubilees, Damascus Document, War Scroll, Community Rule); 'dominion of Belial' p. 279",
+        "confidence": "high"
+      }
+    }
+  ],
+  "notes": {
+    "existing_second_temple_nodes_reused": [
+      "concept_two_spirits_doctrine_s7t8u9v0 — Two Spirits Doctrine (Qumran)",
+      "argument_qumran_predestination_c3d4e5f6 — Qumran Predestinarian Argument (Two Spirits)",
+      "concept_yetzer_ha_ra_u3v4w5x6 — Evil Inclination (Yetzer Ha-Ra)",
+      "concept_yetzer_ha_tov_y7z8a9b0 — Good Inclination (Yetzer Ha-Tov) [not directly cited; Brand argues the 'good inclination' is largely absent at Qumran, following Rosen-Zvi]",
+      "work_dss_hodayot_i1j2k3l4 — Thanksgiving Hymns (Hodayot, 1QH)",
+      "argument_sirach_free_will_theodicy_m7n8o9p0 — Sirach free-will theodicy",
+      "concept_original_sin — Original Sin",
+      "person_ben_sira_i9j0k1l2 — Ben Sira",
+      "person_philo_alexandria_a1b2c3d4 — Philo of Alexandria",
+      "person_josephus_flavius_e5f6g7h8 — Josephus (relevant to the fate/free-will framing but not directly an interlocutor in Brand's source-of-sin analysis)"
+    ],
+    "no_paul_node": "Brand explicitly excludes a full treatment of Paul (Introduction, p. 28: 'all Pauline works would be within the purview … However, the unique nature of Paul's thought … preclude a truly in-depth study'), pointing out Pauline implications opportunistically (Rom 5:12–13; 5:20; 7:7–13). No person_paul node exists in nodes.jsonl, so no edges to Paul were created; the Pauline-background relevance (H1) is captured in argument descriptions only.",
+    "no_existing_brand_node": "grep of nodes.jsonl confirmed no scholar/publication node for Miryam T. Brand prior to this patch (the 6 'brand' hits are all false positives: Vandenhoeck imprint, German words, scholar_markschies_christoph).",
+    "targets_verified": "All discuss targets confirmed present in data/kg/nodes.jsonl: concept_two_spirits_doctrine_s7t8u9v0, argument_qumran_predestination_c3d4e5f6, concept_yetzer_ha_ra_u3v4w5x6, work_dss_hodayot_i1j2k3l4, argument_sirach_free_will_theodicy_m7n8o9p0, concept_original_sin, person_ben_sira_i9j0k1l2, person_philo_alexandria_a1b2c3d4.",
+    "quote_integrity": "All quote_verbatim strings are copied from pdftotext -layout output of brand_2013_evil.pdf (336 pp.); newline characters preserved where the PDF line-wraps. Page numbers are the printed page numbers visible in the running heads, not PDF sheet numbers. No ancient Greek/Latin/Hebrew text was generated; the few transliterated terms (bḥr, rṣwn, t‘h, yēṣer, bly‘l, gwrl) reproduce Brand's own transliterations.",
+    "bio_caveat": "Affiliation stated conservatively from grep-able Acknowledgments only (NYU dissertation under Schiffman; W. F. Albright Institute fellowship). Current institutional post is not stated in the front matter and was NOT inferred."
+  }
+}

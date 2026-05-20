@@ -1,0 +1,178 @@
+{
+  "_meta": {
+    "source": "Boys-Stones, George. Platonist Philosophy 80 BC to AD 250: An Introduction and Collection of Sources in Translation. Cambridge: Cambridge University Press, 2018.",
+    "local_pdf_path": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/boys_stones_2018_platonist.pdf",
+    "chapters_read": ["Ch. 11 Providence (pp. 323-343)", "Ch. 12 Fate (pp. 344-364)"],
+    "method": "Targeted reading via pdftotext -layout + TOC navigation. All quote_verbatim strings are grep-able from the printed-page text; page numbers are the book's printed pages.",
+    "policy": "No fabrication. quote_verbatim are Boys-Stones' English (his analytical prose or his own published translations of the ancient sources in the collection). No Greek/Latin invented.",
+    "note_scholar": "scholar_boys_stones_g already exists — NOT recreated. This 2018 monograph is distinct from pub_boysstones_2007_middle_platonists (the 2007 chapter) and pub_boys_stones_2007_origen.",
+    "do_not_apply_directly": "This patch is a proposal. It is NOT applied to the KG by this agent. Review before ingestion."
+  },
+  "publication": {
+    "id": "pub_boys_stones_2018_platonist_philosophy",
+    "scholar_id": "scholar_boys_stones_g",
+    "label": "Boys-Stones 2018 — Platonist Philosophy 80 BC to AD 250",
+    "description": "Boys-Stones' synthetic introduction to and source-collection for Middle Platonism (c. 80 BC – AD 250). Chs. 11 (Providence) and 12 (Fate) reconstruct the Platonist account of divine care, secondary/tertiary providence, theodicy, and a 'hypothetical fate' on which no individual is fated absolutely yet every event is causally determined — distinguishing Platonist from Stoic determinism. Translates Atticus, ps.-Plutarch On Fate, Alcinous, Maximus of Tyre, Apuleius, Plutarch and Origen.",
+    "type": "node",
+    "node_type": "publication",
+    "metadata": {
+      "type": "monograph",
+      "year": 2018,
+      "publisher": "Cambridge University Press",
+      "place": "Cambridge",
+      "pages": 664,
+      "isbn": "9780521547390",
+      "author": "George Boys-Stones",
+      "scholar_id": "scholar_boys_stones_g",
+      "local_pdf_path": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/boys_stones_2018_platonist.pdf",
+      "relevant_chapters": ["11 Providence", "12 Fate"],
+      "distinct_from": ["pub_boysstones_2007_middle_platonists", "pub_boys_stones_2007_origen"]
+    }
+  },
+  "edges": [
+    {"source": "pub_boys_stones_2018_platonist_philosophy", "target": "scholar_boys_stones_g", "type": "authored_by", "confidence": "high"}
+  ],
+  "arguments": [
+    {
+      "id": "scholarly_argument_boys_stones_2018_no_divine_determination_individuals",
+      "label": "No divine agency determines any individual (Boys-Stones 2018)",
+      "description": "Boys-Stones' core reconstruction of the Platonist response to Stoic fate: divine causes operate only at the level of the species/forms, never at the level of individuals. The creator's thoughts do not extend beyond the forms, and the world soul cares only that the species exist; which individuals there are, with their individuating features, is irrelevant to (and beyond the planning capacity of) any god — since the everlasting cosmos contains infinitely many individuals and 'not even god can take an infinite number of factors into account when he plans.' Hence the gods take credit for the systems they design without being responsible for any particular individual's defects or moral failings. This is the structural premise underwriting the whole Platonist theodicy of fate.",
+      "page": "345-347",
+      "chapter": "Ch. 12 Fate, §12.2.2 The Limits of Divine Control",
+      "quote_verbatim": "The Platonist approach to these issues can be summarised by one simple claim: contrary to the views of the Stoics, no divine agency at all determines the existence, nature or choices of any human individual.",
+      "discusses": [
+        "concept_middle_platonist_providence_fate_r8s9t0u1",
+        "concept_heimarmene_fate_stoics_j0k1l2m3"
+      ],
+      "related_persons": ["person_pseudo_plutarch_2c_ce", "person_alcinous_2c_ce"],
+      "related_arguments": ["argument_chance_cosmos_middle_platonist"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_boys_stones_2018_autonomy_as_external_independence",
+      "label": "Autonomy = independence from external agency, not indeterminacy (Boys-Stones 2018)",
+      "description": "Boys-Stones argues that the ancient debate over moral responsibility was not about whether choice is causally inevitable but about the SOURCE of the constraints: a decision fully determined by my own nature still counts as autonomous, whereas a choice constrained by an external agency does not 'belong' to me (his runs-into-someone vs. is-pushed-into-someone example). On this reading Platonists vindicate human autonomy not by denying inevitability — they accept causal determination of embodied choice — but by denying that any external agent (notably the Stoic creator who plans every individual) owns my choices. The very move that removes individuals from providence's remit is the move that restores autonomy to the individual. Key for the eph' hēmin debate: indeterminist 'free will' is, on this reading, not part of the ancient question at all.",
+      "page": "347-349",
+      "chapter": "Ch. 12 Fate, §12.2.3 Human Autonomy",
+      "quote_verbatim": "the very same move by which the Platonists remove responsibility for the individual from providence counts as the move by which they restore autonomy to the individual.",
+      "discusses": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_autonomy_8j2e3f91",
+        "concept_mr1_autonomy_responsibility"
+      ],
+      "related_persons": ["person_pseudo_plutarch_2c_ce", "person_alcinous_2c_ce"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_boys_stones_2018_eph_hemin_not_free_will",
+      "label": "'eph' hēmin' is agent-autonomy, prejudicially translated 'free will' (Boys-Stones 2018)",
+      "description": "Methodological/terminological argument in the Notes to Ch. 12: the Greek for agent-autonomy is τὸ ἐφ' ἡμῖν, 'what is up to us,' a phrase Boys-Stones says is 'often prejudicially translated as freedom (of the will).' He flags Eliasson's distinction between an 'exclusivist' sense (applying only to intentions) and an 'inclusivist' sense (applying also to the effects of our choices), and points to Frede 2011 (supplanting Dihle 1982) for the later evolution toward a notion of 'free will' closer to the modern one. Directly relevant to the thesis: warns against retrojecting libertarian 'free will' onto Middle Platonist eph' hēmin.",
+      "page": "353-355",
+      "chapter": "Ch. 12 Fate, Notes 4(e) Autonomy and 'free will'",
+      "quote_verbatim": "The Greek for agent-autonomy is τὸ ἐφ’ ἡμῖν, ‘what is up to us’ – a phrase often prejudicially translated as ‘freedom (of the will)’.",
+      "discusses": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_frede_general_schema_of_free_will"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_boys_stones_2018_hypothetical_fate",
+      "label": "Hypothetical fate: nothing fated absolutely, everything fated conditionally (Boys-Stones 2018)",
+      "description": "Boys-Stones' interpretation of Platonist 'conditional/hypothetical' fate (G, H, J): the claim is NOT that human choices are indeterminate while their consequences are fixed. Rather, no individual sublunary event considered as such is 'fated' (= providentially planned), while every individual event whatsoever follows inevitably from its prior causal chain. So everything is 'hypothetically fated' but nothing is fated absolutely, because no determining cause accounts for which individuals populate the cosmos. The 'laws' of fate (Alcinous, ps.-Plutarch) reduce to the laws of nature; fate 'as substance' is identified with the world soul, fate 'as activity' is those laws playing out at the individual level. He reads the Laius/Paris examples as illustrating that the gods control the world but do not force us to act.",
+      "page": "349-350",
+      "chapter": "Ch. 12 Fate, §12.2.4 'Hypothetical' Fate",
+      "quote_verbatim": "no individual event in the sublunary cosmos at all, and considered as such, is ‘fated’, that is, providentially planned; on the other hand, every individual event in the sublunary cosmos whatsoever follows inevitably from the causal chains which led up to it.",
+      "discusses": [
+        "concept_hypothetical_fate_middle_platonist",
+        "concept_conditional_fate_9a5c8b4d"
+      ],
+      "related_persons": ["person_alcinous_2c_ce", "person_pseudo_plutarch_2c_ce"],
+      "related_arguments": ["argument_chance_cosmos_middle_platonist"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_boys_stones_2018_cyclical_recurrence_no_astral_determinism",
+      "label": "Platonist cyclical recurrence is causal, not astral determinism (Boys-Stones 2018)",
+      "description": "Boys-Stones argues that the Platonist (ps.-Plutarch, On Fate 569; Origen, Against Celsus 5.21) belief in exact cyclical recurrence — the same individuals reborn doing the same things, e.g. ps.-Plutarch writing On Fate again — confirms that Platonists held to full causal explanation even where events are not 'fated' (= providentially determined). The cycle is linked to the revolution of the heavens but is NOT astral determinism: the heavens do not determine that any individual be born at a given place/time; they shape local climatic conditions, hence temperaments, hence the regular patterns that make recurrence intelligible. A robust causal chain 'albeit not determined by god.' Important counter-evidence against reading indeterminist freedom into Middle Platonism.",
+      "page": "350-351",
+      "chapter": "Ch. 12 Fate, §12.3 Cyclical Recurrence",
+      "quote_verbatim": "Confirmation that Platonists subscribed to the idea of full causal explanation even where things were not fated (in the sense of being determined by providence) lies in the suggestion made by some of our texts that at least some Platonists ... believed in the cyclical recurrence of history.",
+      "discusses": [
+        "concept_hypothetical_fate_middle_platonist",
+        "concept_heimarmene_fate_stoics_j0k1l2m3"
+      ],
+      "related_persons": ["person_pseudo_plutarch_2c_ce", "person_origen_alexandria_185_254ce_s9t0u1v2"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_boys_stones_2018_myth_of_er_discarnate_indeterminacy",
+      "label": "Myth of Er: possible indeterminist freedom only for the discarnate soul (Boys-Stones 2018)",
+      "description": "Boys-Stones' qualified, minority reading of the soul's choice of life (Republic 10, Myth of Er; sources H/K): while embodied human choice is causally determined, choices made by the soul ON ITS OWN need not be — there is no natural compulsion for a particular soul to enter a particular body, and the texts leave room for genuine indeterminacy in the soul's selection of a life (his 'DCD3': only the discarnate soul makes undetermined choices, citing Dörrie 1977). He notes this is the strongest prima facie evidence (K) for indeterminist freedom in Platonism, but his own inclination is to DOUBT that any Platonist actually intended it — it would be conspicuously innovative, would invite comparison to the Epicurean swerve, and is scientifically uneconomical. Directly bears on whether libertarian free will has any Middle Platonist anchor.",
+      "page": "351-353",
+      "chapter": "Ch. 12 Fate, §12.4 The Myth of Er: the Soul's Choice of Life",
+      "quote_verbatim": "all of this leaves room to think that souls have an unrestricted freedom from causal determination that embodied humans do not.",
+      "discusses": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_hypothetical_fate_middle_platonist"
+      ],
+      "related_persons": ["person_plutarch_45_120ce_b9c2a8f3", "person_alcinous_2c_ce"],
+      "confidence": "medium"
+    },
+    {
+      "id": "scholarly_argument_boys_stones_2018_origen_platonists_no_better_than_stoics",
+      "label": "Origen: Platonists secure autonomy no better than Stoics (Boys-Stones 2018)",
+      "description": "Boys-Stones marshals Origen (Against Celsus 5.21 = source I) as Christian evidence that the Platonist account of responsibility is merely negative — I am responsible for my actions just because no one else is — and so does no better than the Stoics at securing genuine human autonomy. In the Notes he adds (citing Boys-Stones 2007c) that Origen thinks Platonists do not go far enough, and develops in effect his own version of 'DCD3' (undetermined choice located in the discarnate/pre-existent soul): one hard corollary Origen draws is that embodied people deserve whatever temporal suffering they meet, because it reflects the moral state of their souls when they chose that life (On Principles 1.8.1; cf. 3.5.2). Pivotal for the thesis' Origen chapter: the Christian critique of Platonist eph' hēmin.",
+      "page": "349, 356",
+      "chapter": "Ch. 12 Fate, §12.2.3 + Notes 6 Christian thinking about fate and providence",
+      "quote_verbatim": "Origen, although he thinks that Platonists do not go far enough in securing human autonomy, develops what is in effect his own version of DCD3",
+      "discusses": [
+        "concept_autexousion_christian",
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_mr1_autonomy_responsibility"
+      ],
+      "related_persons": ["person_origen_alexandria_185_254ce_s9t0u1v2"],
+      "confidence": "high"
+    },
+    {
+      "id": "scholarly_argument_boys_stones_2018_secondary_tertiary_providence",
+      "label": "Providence by proxy: secondary (world soul) and tertiary (daimons/humans) providence (Boys-Stones 2018)",
+      "description": "Boys-Stones' reconstruction of the Platonist transmission of providence (Ch. 11, sources A, B, E, F, G): providence can be exercised 'by proxy.' The world soul is the true agent of god's care, exercising 'secondary providence' that is not diluted but is the very same providence as the creator's; daimons (and, de facto, virtuous humans/heroes) exercise 'tertiary providence,' the good they do being inherited from the world soul and the form of the good. This dissolves the apparent 'two-world' gap between an impersonal transcendent god and human ethical life: god's providence is the ideal form of our own beneficent agency ('becoming like god'). Contextualises eph' hēmin: human moral agency is continuous with, not severed from, divine causation.",
+      "page": "326-329",
+      "chapter": "Ch. 11 Providence, §11.2.3 World Soul and Daimons / §11.2.4 And Humans?",
+      "quote_verbatim": "when the world soul acts to benefit the world in virtue of the goodness that it in turn has derived from the creator, then it secondarily exercises the very same providence as that of the creator.",
+      "discusses": [
+        "concept_triple_providence_plut",
+        "concept_pronoia_levels_proclus_a6d8c9b4",
+        "concept_middle_platonist_providence_fate_r8s9t0u1"
+      ],
+      "related_persons": ["person_apuleius_madauros_124_170", "person_plutarch_45_120ce_b9c2a8f3"],
+      "confidence": "high"
+    }
+  ],
+  "persons_to_create": [
+    {"suggested_id": "person_numenius_apamea_2c_ce", "label": "Numenius of Apamea", "note": "Middle/Neo-Pythagorean Platonist (2nd c. CE); cited in Ch. 11-12 Notes (providence = first intellect; Myth of Er commentary). NOT in KG. Create only if the team wants the source-author tier populated."},
+    {"suggested_id": "person_atticus_2c_ce", "label": "Atticus", "note": "Middle Platonist (fl. c. 176 CE); source A/B in Ch. 11 (anti-Aristotle on providence). NOT in KG — author of the key providence proof-texts."},
+    {"suggested_id": "person_aristides_quintilianus_3c_ce", "label": "Aristides Quintilianus", "note": "Source C in Ch. 12 (On Music 3.26, duality of determinism / Plataea oracle). NOT in KG. Lower priority — minor witness."},
+    {"suggested_id": "person_nicostratus_2c_ce", "label": "Nicostratus", "note": "Middle Platonist; source E in Ch. 12 (future contingents / sea-battle, Int. 9). NOT in KG. Lower priority."},
+    {"suggested_id": "person_celsus_2c_ce", "label": "Celsus (the Platonist)", "note": "2nd-c. Platonist polemicist; source B/G in Ch. 11-12, preserved in Origen Contra Celsum. NOT in KG as person_*. Relevant to Origen reception."}
+  ],
+  "concepts_status": {
+    "all_argument_targets_exist": true,
+    "verified_existing": [
+      "concept_middle_platonist_providence_fate_r8s9t0u1",
+      "concept_hypothetical_fate_middle_platonist",
+      "concept_conditional_fate_9a5c8b4d",
+      "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+      "concept_eph_hemin_kyrion_plut",
+      "concept_heimarmene_fate_stoics_j0k1l2m3",
+      "concept_triple_providence_plut",
+      "concept_pronoia_levels_proclus_a6d8c9b4",
+      "concept_autonomy_8j2e3f91",
+      "concept_mr1_autonomy_responsibility",
+      "concept_autexousion_christian",
+      "concept_frede_general_schema_of_free_will"
+    ],
+    "no_new_concepts_required": true
+  }
+}
