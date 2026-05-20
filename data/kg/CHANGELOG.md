@@ -10,8 +10,8 @@ Snapshots préservés sous `data/kg/snapshots/<date>-pre-<wave>/`. Scripts sous 
 
 | Métrique | Valeur |
 |---|---:|
-| Total nodes | 20 208 |
-| Total edges | 56 531 |
+| Total nodes | 20 212 |
+| Total edges | 56 544 |
 | `needs_evidence` flaggés | 1 087 (-32.4% depuis 1 608) |
 | E2 verified verbatim+page | 551 (513 high + 19 medium + 4 low + 14 not_found + 1 not_applicable) |
 | Audit indépendant n=98 | 99% CORRECT (IC95 [94%, 100%]) |
@@ -32,9 +32,17 @@ Snapshots préservés sous `data/kg/snapshots/<date>-pre-<wave>/`. Scripts sous 
 ### Wire Paul node
 - `wire_paul_node_2026_05_21.py` — 16 discusses → `person_paul_apostle` depuis les args Eastman (8) + Barclay (8), tous deux exégèse paulinienne intégrale
 
-### Reste de cette wave
-- Boys-Stones suggérait persons_to_create Numénius/Atticus (placeholders sans id dans le patch) — non créés ; leurs discusses sont skippés (targets absents)
-- Carter 2024 contredit le node `sea_battle` existant — à arbitrer dans une passe future
+### Fix SHACL gate + arbitrage Carter ↔ sea-battle
+- `fix_carter_sea_battle_2026_05_21.py` — le wave acquisition avait créé 4 edges `discusses → position_fatalism` (Carter), mais `discusses` exclut `position` de sa range → **4 violations SHACL** (gate CI + deploy en échec).
+  - Reclassement ontology-valid : les arguments fatalistes reconstruits `argues_for` le fatalisme ; la lecture « both-false » de Carter (solution anti-fataliste d'Aristote) `argues_against`
+  - **Arbitrage** : edge `critiques` Carter both-false → `argument_boethius_future_contingents` (Carter retient la Bivalence et rejette la Règle des Paires Contradictoires, contre la lecture bivalence-denial canonisée par Boèce)
+  - Nuance de `concept_sea_battle_future_contingents` : 3 familles interprétatives (bivalence-restriction/gap boéthien-Łukasiewicz ; nécessité-seule ; both-false/RCP de Carter 2024)
+  - Gate re-validé localement : **Conforms: True, 0 violation**
+
+### Création source-authors Middle Platonist (Boys-Stones tier)
+- `create_middle_platonists_2026_05_21.py` — **+4 persons** (Numenius of Apamea, Atticus, Celsus le Platonicien, Nicostratus) + 12 edges
+  - `member_of school_middle_platonism` ×4 ; `discusses` arg→person depuis les args providence/cyclical-recurrence ; `discusses` Nicostratus→sea-battle ; `critiques` Origène→Celse (Contra Celsum réfute l'Alēthēs Logos)
+  - Aristides Quintilianus (théoricien de la musique, témoin mineur) **différé** — pas d'appartenance d'école forcée
 
 ---
 
