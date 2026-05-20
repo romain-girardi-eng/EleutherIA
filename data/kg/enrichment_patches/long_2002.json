@@ -1,0 +1,80 @@
+{
+  "publication_id": "pub_long_2002_epictetus",
+  "scholar_id": "scholar_long_anthony",
+  "local_pdf_path": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Long_2002_Epictetus_A_Stoic_and_Socratic_Guide_to_Life.pdf",
+  "pub_description_note": "Full-text reading confirms Long's central thesis that Epictetus made prohairesis (volition) the locus of self, agency, and freedom, and refines the stub by stressing Long's explicit, Bobzien-aligned caveat that this is NOT a modern 'free will' (freedom from fate or antecedent causation) but an ethical, internal autonomy.",
+  "arguments": [
+    {
+      "id": "scholarly_argument_long_2002_what_is_up_to_us_principal_project",
+      "label": "Long: Epictetus's principal project is that only judgements, desires, and goals are 'up to us'",
+      "description": "Long opens the book by stating that Epictetus's whole programme rests on the claim that nothing lies completely in our power except our own mental acts. Even our body and its movements are not fully ours; the corollary is that nothing external can constrain or frustrate us unless we permit it. This is Long's framing of the eph' hemin ('what is up to us') doctrine as the core of Epictetus's thought.",
+      "page": "1",
+      "quote_verbatim": "His principal project is to assure his listeners that nothing lies completely in their power except their judgements and desires and goals. Even our bodily frame and its movements are not entirely ours or up to us. The corollary is that nothing outside the mind or volition can, of its own nature, constrain or frustrate us unless we choose to let it do so.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2"]
+    },
+    {
+      "id": "scholarly_argument_long_2002_socratic_paradigm_synthesis",
+      "label": "Long: Socrates, not any Stoic, is Epictetus's primary authorizing paradigm (Stoic-Socratic synthesis)",
+      "description": "Long argues that what makes the Stoicism of the Discourses distinctive is its saturation by the figure of Socrates, who authorizes Epictetus's method, self-examination, and life-model more than any Stoic predecessor. This grounds Long's reading of Epictetus as a Stoic-Socratic guide rather than a mere Stoic popularizer.",
+      "page": "67",
+      "quote_verbatim": "In the previous chapter we saw how Epictetus canonizes the Stoic Zeno and the Cynic Diogenes as well as Socrates, but it is Socrates who primarily authorizes everything Epictetus is trying to give his students in terms of philosophical methodology, self-examination, and a life model for them to imitate. This strikingly explicit coincidence between Epictetus' objectives and Socrates makes the Stoicism of the discourses particularly distinctive.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2"]
+    },
+    {
+      "id": "scholarly_argument_long_2002_prohairesis_centre_of_person",
+      "label": "Long: prohairesis is Epictetus's favourite name for the purposive, self-conscious centre of a person",
+      "description": "Long identifies prohairesis as Epictetus's preferred designation for the self: the reasoning, self-studying faculty that God has given each person as 'me'. Long deliberately leaves the term untranslated at first to avoid begging interpretive questions, but stresses it names the purposive and self-conscious centre of a person.",
+      "page": "207",
+      "quote_verbatim": "He also calls it 'me' (i.e. the self) and prohairesis, which I have translated by 'volition' in the citation at the head of this chapter and in most of the word's earlier occurrences in this book. Because any rendering of this term is controversial, for the time being I shall leave it untranslated, in order to avoid begging too many questions. But, however prohairesis is translated, it is Epictetus' favourite name for the purposive and self-conscious centre of a person.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6"]
+    },
+    {
+      "id": "scholarly_argument_long_2002_only_stoic_prohairesis_key_term",
+      "label": "Long: Epictetus is the only Stoic to make prohairesis a key term, decisive for the history of the will",
+      "description": "Long notes that, although earlier Stoics knew the word, Epictetus is uniquely the Stoic who made prohairesis a central technical term, preferring it over the standard hegemonikon. How one interprets it bears not only on Epictetus but on the history of the very idea of a free will.",
+      "page": "211",
+      "quote_verbatim": "One thing is quite clear: Epictetus is the only Stoic according to our record who made prohairesis a key term. Earlier Stoics did have a use for the word (see p. 220), but they almost certainly did not employ it extensively or with the broad scope that Epictetus adopts.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    },
+    {
+      "id": "scholarly_argument_long_2002_aristotelian_tie_to_what_is_up_to_us",
+      "label": "Long: Epictetus endorses Aristotle's conceptual tie between prohairesis and 'what is up to us'",
+      "description": "Long traces Epictetus's link between prohairesis and the eph' hemin to an Aristotelian precedent (EN III.5 1113a10), while noting that Epictetus extends the term well beyond Aristotle's deliberative sense because Stoic psychology treats the whole mind as rational. The shared core is the restriction of the faculty to 'things that are up to us' and its tie to moral character.",
+      "page": "213",
+      "quote_verbatim": "Notwithstanding these differences over psychology, Epictetus completely endorses Aristotle's strong conceptual tie between prohairesis and 'what is up to us'. We cannot, he is saying, take responsibility for every impression that is presented to us; for impressions are typically generated by external conditions over which we have only limited control. What we are always in a position to do is to decide what to make of any impression, and whether or not to give it our assent.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "person_aristotle_384_322bce_c2d4f6a8", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "concept_prohairesis_alex"]
+    },
+    {
+      "id": "scholarly_argument_long_2002_self_is_prohairesis_pre_choice",
+      "label": "Long: the essence of the self is prohairesis ('pre-choice'), the mental dispositions preceding every action",
+      "description": "Long locates the essence of the self not in bodily action (which can be externally impeded) but in the mental processes and dispositions that necessarily precede every bodily act. He glosses the etymology of prohairesis as 'pre-choice' or 'choice before choice', justifying his preferred translation 'volition' as Epictetus's claim that the self is fundamentally a decision-making, evaluative disposition.",
+      "page": "220",
+      "quote_verbatim": "Epictetus locates the essence of the self in the mental processes and dispositions that necessarily precede every bodily action; for prohairesis literally means 'pre-choice' or 'choice before choice', which is how the term is defined in early Stoicism.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    },
+    {
+      "id": "scholarly_argument_long_2002_volition_does_not_beg_free_will_question",
+      "label": "Long: 'volition' is chosen precisely so as NOT to beg the question of undetermined free will",
+      "description": "Long defends rendering prohairesis as 'volition' partly because it does not commit us to any view about the mind's metaphysical autonomy. People have volitions whether or not these are predetermined; Epictetus attributes autonomy to prohairesis as a thesis he tries to prove, not as something built into the word. This is a key methodological hedge against reading modern free will into Epictetus.",
+      "page": "220",
+      "quote_verbatim": "When we characterize persons in terms of their volitions, we do not thereby adopt a view concerning the undetermined freedom of their will; for we take people to have volitions irrespective of whether these are predetermined or independent of antecedent causation. Epictetus does attribute autonomy to prohairesis, but that is an attribute that he seeks to prove rather than something he builds into his basic use of this word.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    },
+    {
+      "id": "scholarly_argument_long_2002_freedom_not_freedom_from_fate",
+      "label": "Long: Epictetus's 'free will' is NOT freedom from fate or antecedent causation, but compliance with one's allotment",
+      "description": "In section 8.3 ('The Freedom of the Will?') Long gives his central qualification: Epictetus's freedom is not an open future or indeterminate power of choice, nor freedom from antecedent causation, but freedom from being constrained by externals, and a willing compliance with one's predestined lot. The autonomy is internal and ethical, not metaphysically libertarian.",
+      "page": "221",
+      "quote_verbatim": "It is virtually certain that Epictetus' concept of a free will, far from requiring the will's freedom from fate (i.e. a completely open future or set of alternative possibilities or choices), presupposes people's willingness to comply with their predestined allotment. The issue that concerns him is neither the will's freedom from antecedent causation nor the attribution to persons of a completely open future and indeterminate power of choice. Rather, it is freedom from being constrained by (as distinct from going along with) external contingencies.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    },
+    {
+      "id": "scholarly_argument_long_2002_bobzien_not_compatibilist_but_ethical",
+      "label": "Long (with Bobzien): prohairesis is not a compatibilist contribution but ethical guidance",
+      "description": "In the Further Reading notes Long endorses Susanne Bobzien's (1998) reading that Epictetus's concept of prohairesis and 'what depends on us' is not offered as a compatibilist intervention in the freedom-versus-determinism debate (which for Chrysippus was a topic of physics) but as practical, ethical guidance for distinguishing what is in our power from what is not. Long broadly accepts this account.",
+      "page": "230",
+      "quote_verbatim": "She argues, to my mind quite convincingly, that his concept of prohairesis and 'what depends on us' is not advanced as a 'compatibilist' contribution to the classic issue of freedom versus determinism (a topic of physics for Chrysippus) but as ethical guidance, to enable people to discriminate between the mental realm of 'things that depend on us' and everything that falls outside that realm. In my treatment of this topic I have broadly accepted her account.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    }
+  ]
+}

@@ -10,8 +10,8 @@ Snapshots préservés sous `data/kg/snapshots/<date>-pre-<wave>/`. Scripts sous 
 
 | Métrique | Valeur |
 |---|---:|
-| Total nodes | 20 212 |
-| Total edges | 56 544 |
+| Total nodes | 20 229 |
+| Total edges | 56 612 |
 | `needs_evidence` flaggés | 1 087 (-32.4% depuis 1 608) |
 | E2 verified verbatim+page | 551 (513 high + 19 medium + 4 low + 14 not_found + 1 not_applicable) |
 | Audit indépendant n=98 | 99% CORRECT (IC95 [94%, 100%]) |
@@ -43,6 +43,13 @@ Snapshots préservés sous `data/kg/snapshots/<date>-pre-<wave>/`. Scripts sous 
 - `create_middle_platonists_2026_05_21.py` — **+4 persons** (Numenius of Apamea, Atticus, Celsus le Platonicien, Nicostratus) + 12 edges
   - `member_of school_middle_platonism` ×4 ; `discusses` arg→person depuis les args providence/cyclical-recurrence ; `discusses` Nicostratus→sea-battle ; `critiques` Origène→Celse (Contra Celsum réfute l'Alēthēs Logos)
   - Aristides Quintilianus (théoricien de la musique, témoin mineur) **différé** — pas d'appartenance d'école forcée
+
+### Enrichissement full-text Long 2002 + Dobbin 1991 (prohairesis chez Épictète)
+- PDFs acquis (Long via libgen.li ; Dobbin via academia.edu copie auteur) et classés en `04_Littérature_secondaire/01_Philosophie_antique/`
+- `integrate_enrichment_patches_2026_05_21.py` — **+17 arguments** (9 Long + 8 Dobbin) avec `quote_verbatim` + page imprimée exacte, e2-verified par lecture directe ; **+68 edges** ; 2 pub nodes enrichis (`local_pdf_path`, `fulltext_reading_note`)
+  - Les nodes `pub_long_2002_epictetus`, `pub_dobbin_1991_prohairesis_epictetus`, `scholar_long_anthony`, `scholar_dobbin_r` existaient déjà (stubs biblio) — enrichis, pas recréés
+  - **Désaccord savant encodé** : edge `critiques` Long (p. 221/229) → Dobbin (p. 133) — Long rejette la lecture de Dobbin selon laquelle la προαίρεσις est « immune to fate » / brise le nexus causal (« I do not find it ultimately compelling », p. 229) ; pour Long la liberté épictétéenne est *compliance* avec le destin, pas affranchissement de la causalité antécédente
+  - Correction de l'agent lecteur : « prosōpon » **absent** du texte de Dobbin (l'identification est prohairesis = le soi/la personne/l'homme, « you are prohairesis ») — framing prosōpon abandonné plutôt que fabriqué
 
 ---
 

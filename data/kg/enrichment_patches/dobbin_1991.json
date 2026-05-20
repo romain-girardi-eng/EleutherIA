@@ -1,0 +1,73 @@
+{
+  "publication_id": "pub_dobbin_1991_prohairesis_epictetus",
+  "scholar_id": "scholar_dobbin_r",
+  "local_pdf_path": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Dobbin_1991_Prohairesis_in_Epictetus_AncientPhilosophy.pdf",
+  "pub_description_note": "Full-text reading confirms Dobbin's core thesis that προαίρεσις in Epictetus designates the self/person (the Aristotelian dictum 'such an ἀρχή is man' echoed by Epictetus' 'you are προαίρεσις'), but refines it: Dobbin grounds the term not in popular Hellenistic usage (contra Sandbach, Dihle) nor in a mere revival (contra Kahn) but in the Aristotelian/neo-Aristotelian ἀρχαί tradition and the anti-Stoic free-will polemic, and he carefully hedges that this 'concept of the will' only 'foreshadows' Kant's Wille and was not allowed to develop fully because Epictetus subordinates προαίρεσις to nature.",
+  "scan_note": "Polytonic Greek glyphs are mangled by the scanned text layer (e.g. προαίρεσις extracts as 'Tlpoa(pECJlS', ἀρχή as 'ｾｘｐｩ｣'). Greek terms in the quotes below were reconstructed from the obvious word, not copied from the garbled glyphs. English wording is copied from the extracted text, with unambiguous OCR letter-substitutions repaired to Dobbin's printed spelling (e.g. 'bIarne'->'blame', 'fuU'->'full', 'natUre'->'nature', 'seIf'->'self', 'hirn'->'him'); Dobbin's own idiosyncratic spellings ('responsibilty', 'possibilty') are preserved as printed. NOTE: Dobbin frames the identification as προαίρεσις = the self / the person / man ('you are προαίρεσις'); the Greek term πρόσωπον (prosōpon) does NOT occur anywhere in this article, so no quote can attest a literal 'prohairesis-prosōpon' wording — the identification is with man/self/person, not with the word prosōpon. Flagged per the brief.",
+  "arguments": [
+    {
+      "id": "scholarly_argument_dobbin_1991_prohairesis_is_man",
+      "label": "Dobbin: Aristotle's 'such an archē (prohairesis) is man' is echoed by Epictetus' 'you are prohairesis'",
+      "description": "Dobbin locates the prohairesis-as-self thesis in a direct line from Aristotle to Epictetus. Aristotle's blunt statement that 'such an ἀρχή (i.e. προαίρεσις) is man' (EN 1139b5) is, on Dobbin's reading, deliberately echoed by Epictetus when he tells his audience 'you are προαίρεσις'. The term thereby becomes cardinal to what Dobbin calls the ancient tradition of philosophical anthropology, though its precise meaning shifts between the two authors.",
+      "page": "113",
+      "quote_verbatim": "And so, in a formulation full of significance for later writers such as Epictetus, Aristotle states bluntly, 'Such an ἀρχή (i.e., προαίρεσις) is man' (1139b5). This will be echoed centuries later by Epictetus' statement to his audience, 'You are προαίρεσις' (iii 1, 40; iv 5, 12; cf. ii 10, 1). The term, then, becomes cardinal in what one might call the ancient tradition of philosophical anthropology.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "person_aristotle_384_322bce_c2d4f6a8", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    },
+    {
+      "id": "scholarly_argument_dobbin_1991_responsibility_for_self_strong_sense",
+      "label": "Dobbin: prohairesis in Epictetus is responsibility for self in the strong sense, free moral self-determination",
+      "description": "Against the orthodox Stoic compatibilist reading (Long-Sedley), Dobbin argues Epictetus makes προαίρεσις carry responsibility for the self in a 'strong sense' that goes beyond merely being our own principal cause. He endorses Bonhöffer's verdict that prohairesis signifies in Epictetus nothing other than the possibility of free, moral self-determination, and stresses it is the one area immune from fate, where the agent rather than Zeus has full control.",
+      "page": "121",
+      "quote_verbatim": "But Epictetus is explicit that προαίρεσις comprises responsibilty for self in the strong sense. As Bonhöffer saw, 'Prohairesis signifies in Epictetus nothing other than the possibilty of free, moral self-determination' (Bonhöffer 1890, 259-260). And Epictetus makes it clear that this is in fact the one area which is immune from fate; where we, in other words, not Zeus, have full control.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    },
+    {
+      "id": "scholarly_argument_dobbin_1991_anti_stoic_polemic_origin",
+      "label": "Dobbin: Epictetus' prohairesis is a direct response to Academic/neo-Aristotelian attacks on Stoic fate",
+      "description": "Dobbin's central historical claim is that Epictetus did not draw prohairesis from popular usage or from a simple revival of Aristotle, but from the anti-Stoic free-will polemic of the Hellenistic and early Roman eras, in which Academics and neo-Aristotelians (notably Alexander of Aphrodisias, reported in Cicero) charged the Stoics with leaving no room for προαίρεσις. Epictetus' vigorous defense of human freedom, deploying their pet term, is on this view a deliberate counter-move.",
+      "page": "118",
+      "quote_verbatim": "Such criticisms are reported in Cicero, and common in the writings of neo-Aristotelian philosophers like Alexander of Aphrodisias. Epictetus' vigorous defense of human freedom, and his use of προαίρεσις in precisely this connection, are, I want to argue, in direct response to such attacks.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_alex", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    },
+    {
+      "id": "scholarly_argument_dobbin_1991_emergence_of_will_kant_hedge",
+      "label": "Dobbin: prohairesis shows the emergence of a 'concept of the will' that only foreshadows Kant and is not allowed to go far",
+      "description": "Dobbin grants that the contrast of προαίρεσις with φύσις yields the emergence of a concept of the will as the proper focus of praise and blame, a faculty that can override one's nature, foreshadowing Kant's Wille. He immediately hedges, however: as a Stoic, Epictetus did not allow this development to go far, subordinating προαίρεσις to φύσις as sovereign. This is Dobbin's explicit qualification of how far the identification amounts to a modern 'will'.",
+      "page": "128",
+      "quote_verbatim": "In these passages it is fair to detect the emergence of a concept of the will, as the real and proper focus of praise and blame. That there is a faculty in man that can distinguish itself from and even override one's 'nature' is a realization that foreshadows Kant's Wille. But for obvious reasons this development was not allowed to go far in Epictetus.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    },
+    {
+      "id": "scholarly_argument_dobbin_1991_prohairesis_equals_logos_defining_mark",
+      "label": "Dobbin: Epictetus makes prohairesis the supreme faculty, equivalent to logos and the defining mark of man",
+      "description": "Dobbin shows that in Epictetus προαίρεσις is treated as a virtual synonym of λόγος (reason), the supreme faculty that uses and judges all the others, pre-empting an otherwise prominent Stoic term. On the Aristotelian principle that a whole is identified with its most sovereign element, Epictetus makes προαίρεσις, conceived as reason, the defining mark of man, hence 'you are not flesh, nor hair, but προαίρεσις'.",
+      "page": "131",
+      "quote_verbatim": "Epictetus goes on to make προαίρεσις, conceived as reason, the defining mark of man. Cf. iii 1, 40: 'You are not flesh, nor hair, but προαίρεσις; iv 5, 11-12: '\"My crockery is broken.\" Are you a piece of crockery then? No, but you are προαίρεσις (cf. also ii 10, 1). Such declarations naturally recall Aristotle's dictum 'Such an ἀρχή (i.e., προαίρεσις) is man.'",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "person_aristotle_384_322bce_c2d4f6a8", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    },
+    {
+      "id": "scholarly_argument_dobbin_1991_prohairesis_replaces_arete_logos",
+      "label": "Dobbin: in Epictetus prohairesis virtually replaces both aretē and logos",
+      "description": "Dobbin argues that Epictetus' relocation of the good into προαίρεσις means the term has virtually replaced ἀρετή (virtue) in his version of Stoicism, just as it has replaced λόγος. Because, as moral character, προαίρεσις can be either good or bad, it is a neutral term that generalizes the lessons of the old Stoa while being far less formidable than the old Stoic ideal of virtue embodied in the now-vanished sage.",
+      "page": "131",
+      "quote_verbatim": "It follows that προαίρεσις has virtually replaced ἀρετή in his version of Stoicism, as it has replaced λόγος. Unlike ἀρετή, it is a neutral term, since, as moral character it can be either good or bad, and so its use tends to generalize the lessons of the old Stoa.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    },
+    {
+      "id": "scholarly_argument_dobbin_1991_preserve_of_freedom_bounded_by_self",
+      "label": "Dobbin: prohairesis is a preserve of freedom immune to fate but narrowly bounded by the self",
+      "description": "In Epictetus' most striking passages, προαίρεσις is subject only to itself, not even to God, opening a preserve of freedom immune to the causal nexus outside the self. Dobbin stresses this freedom is very narrowly circumscribed by the bounds of the self, identified with the mind and its psychological impulses; fate is retained but consigned to the external world, while an inner world of equal complexity is set against it.",
+      "page": "133",
+      "quote_verbatim": "There is, then, a preserve of freedom immune to the causal nexus outside the self; but it is very narrowly circumscribed by the bounds of the self, conceived as the mind and the psychological impulses springing from it. In the sphere of τὰ ἐκτός Epictetus believes man is powerless. He retains the particularly Stoic category of fate, but consigns it to the world outside the self.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    },
+    {
+      "id": "scholarly_argument_dobbin_1991_new_philosophy_of_mind",
+      "label": "Dobbin: Epictetus develops the inherited term in a unique direction and elaborates a new philosophy of mind",
+      "description": "Dobbin's concluding thesis is that Epictetus borrowed προαίρεσις, the philosophical word for freedom in the face of determinism, but developed it in a unique direction, using one word to fuse intellect, mind, soul, character and freedom into a single idea. This 'psychological monism' lets him collapse what the Stoics expressed as identity statements into a single versatile term, and amounts to a new philosophy of mind.",
+      "page": "133",
+      "quote_verbatim": "The mind is free, tractable, and its own master. Epictetus borrowed the philosophical word for freedom in the face of determinism; but he developed it in a unique direction and with it elaborated a new philosophy of mind.",
+      "discusses": ["person_epictetus_of_hierapolis_3c385bc2", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "debate_prohairesis_meaning"]
+    }
+  ]
+}
