@@ -40,8 +40,8 @@
     "descriptions": {
       "howItWorks": "Pipeline, fonti, metodologia",
       "about": "Missione, ambito e team",
-      "database": "17,7k nodi, 42,9k archi",
-      "texts": "487 opere greche e latine",
+      "database": "{{nodes}} nodi, {{edges}} archi",
+      "texts": "{{works}} opere greche e latine",
       "bibliography": "Studi moderni ed edizioni",
       "graphrag": "Domande con fonti verificate",
       "research": "Tracce agentiche in diretta",
@@ -2097,12 +2097,17 @@
     },
     "atlas": {
       "hintLabel": "Atlante del libero arbitrio",
-      "hintBody": "Una vista curata dei concetti, scuole, pensatori e studiosi moderni centrali sul libero arbitrio. Cerca per approfondire, passa al grafo completo per la mappa di 17,7k nodi, o apri Trova un percorso per tracciare una connessione."
+      "hintBody": "Una vista curata dei concetti, scuole, pensatori e studiosi moderni centrali sul libero arbitrio. Cerca per approfondire, passa al grafo completo per la mappa di {{nodes}} nodi, o apri Trova un percorso per tracciare una connessione."
     },
     "loading": {
       "eyebrow": "Grafo della conoscenza",
       "title": "Costruzione dell'Atlante…",
-      "body": "Caricamento di 17,7k nodi e 42,9k relazioni tra fonti antiche e ricezione moderna."
+      "body": "Caricamento di {{nodes}} nodi e {{edges}} relazioni tra fonti antiche e ricezione moderna.",
+      "statNodes": "nodi",
+      "statEdges": "relazioni",
+      "cycle": {
+        "weaving": "{{nodes}} voci intrecciate in un unico grafo…"
+      }
     },
     "error": {
       "eyebrow": "Grafo della conoscenza",

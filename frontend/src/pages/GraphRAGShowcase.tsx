@@ -16,7 +16,6 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { GradientButton } from '../components/ui/gradient-button';
-import { apiClient } from '../api/client';
 
 interface FeatureCardProps {
   icon: React.ReactNode;
@@ -101,32 +100,6 @@ export default function GraphRAGShowcase() {
   const navigate = useNavigate();
   const [activeDemo, setActiveDemo] = useState<number>(0);
 
-  // Dynamic KG stats state
-  const [kgStats, setKgStats] = useState({
-    nodes: 0,
-    edges: 0,
-    sources: 0
-  });
-
-  // Fetch KG stats on mount
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const kgStatsResponse = await apiClient.getKGStats();
-        const worksStatsResponse = await apiClient.getWorksStats();
-
-        setKgStats({
-          nodes: kgStatsResponse.totalNodes || 0,
-          edges: kgStatsResponse.totalEdges || 0,
-          sources: worksStatsResponse.total_passages || 0
-        });
-      } catch (err) {
-        console.error('Failed to fetch KG stats:', err);
-      }
-    };
-    fetchStats();
-  }, []);
-
   const demoQueries = [
     {
       query: "What is Aristotle's concept of voluntary action?",
@@ -203,7 +176,7 @@ export default function GraphRAGShowcase() {
 
           <p className="text-xl lg:text-2xl text-stone-600 max-w-3xl mx-auto mb-8 leading-relaxed">
             The world's first <span className="font-bold text-primary-700">Graph-based Retrieval-Augmented Generation</span> system
-            for ancient debates on free will. Get scholarly answers grounded in {kgStats.nodes.toLocaleString()} nodes, {kgStats.edges.toLocaleString()} relationships, and {kgStats.sources.toLocaleString()} sources.
+            for ancient debates on free will. Get scholarly answers grounded in {fmt(stats.nodes)} nodes, {fmt(stats.edges)} relationships, and {fmt(stats.passages)} sources.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -574,7 +547,7 @@ export default function GraphRAGShowcase() {
           </h2>
           <p className="text-lg text-stone-600 mb-8 max-w-2xl mx-auto">
             Experience the future of philosophical research. Ask questions about free will, fate, and moral responsibility,
-            and get answers backed by {kgStats.sources.toLocaleString()} scholarly sources.
+            and get answers backed by {fmt(stats.passages)} scholarly sources.
           </p>
           <GradientButton
             variant="academic"

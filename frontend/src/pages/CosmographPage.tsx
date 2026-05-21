@@ -15,6 +15,8 @@ import {
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useKgStats } from '../hooks/useKgStats';
+import { formatCompact } from '../lib/formatCompact';
 import {
   Cosmograph,
   CosmographProvider,
@@ -247,7 +249,9 @@ function filterMeta(
 }
 
 export default function CosmographPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const kgStats = useKgStats();
+  const nodesCompact = formatCompact(kgStats.nodes, i18n.language);
   const navigate = useNavigate();
   const { nodeId } = useParams();
   const graphRef = useRef<CosmographRef>(undefined);
@@ -972,7 +976,8 @@ export default function CosmographPage() {
               <p className="leading-5">
                 {t(
                   'cosmograph.atlas.hintBody',
-                  'A curated view of the load-bearing concepts, schools, thinkers, and modern scholars on free will. Search to dive deeper, switch to the full graph for the 17.7k-node map, or open Find a path to trace a connection.',
+                  'A curated view of the load-bearing concepts, schools, thinkers, and modern scholars on free will. Search to dive deeper, switch to the full graph for the {{nodes}}-node map, or open Find a path to trace a connection.',
+                  { nodes: nodesCompact },
                 )}
               </p>
             </div>
