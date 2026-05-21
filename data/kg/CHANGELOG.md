@@ -10,8 +10,8 @@ Snapshots préservés sous `data/kg/snapshots/<date>-pre-<wave>/`. Scripts sous 
 
 | Métrique | Valeur |
 |---|---:|
-| Total nodes | 20 229 |
-| Total edges | 56 612 |
+| Total nodes | 20 247 |
+| Total edges | 56 854 |
 | `needs_evidence` flaggés | 1 087 (-32.4% depuis 1 608) |
 | E2 verified verbatim+page | 551 (513 high + 19 medium + 4 low + 14 not_found + 1 not_applicable) |
 | Audit indépendant n=98 | 99% CORRECT (IC95 [94%, 100%]) |
@@ -50,6 +50,14 @@ Snapshots préservés sous `data/kg/snapshots/<date>-pre-<wave>/`. Scripts sous 
   - Les nodes `pub_long_2002_epictetus`, `pub_dobbin_1991_prohairesis_epictetus`, `scholar_long_anthony`, `scholar_dobbin_r` existaient déjà (stubs biblio) — enrichis, pas recréés
   - **Désaccord savant encodé** : edge `critiques` Long (p. 221/229) → Dobbin (p. 133) — Long rejette la lecture de Dobbin selon laquelle la προαίρεσις est « immune to fate » / brise le nexus causal (« I do not find it ultimately compelling », p. 229) ; pour Long la liberté épictétéenne est *compliance* avec le destin, pas affranchissement de la causalité antécédente
   - Correction de l'agent lecteur : « prosōpon » **absent** du texte de Dobbin (l'identification est prohairesis = le soi/la personne/l'homme, « you are prohairesis ») — framing prosōpon abandonné plutôt que fabriqué
+
+### Récupération Supabase + sync superset git (incident perte projet)
+**Contexte** : ancien projet Supabase `yngxlwbduhthkergfkif` supprimé ; projet vivant `[redacted-project-ref]` (aws-0-eu-west-1) récupéré (reset mot de passe, prod re-pointée, voir skill `eleutheria-prod-supabase`). La DB vivante contenait 18 nodes + edges absents de git.
+- `sync_supabase_superset_to_git_2026_05_21.py` — append des 18 person nodes Supabase-only (Pascal, Leibniz, Hume, Ockham, al-Ashari, etc. — réception médiévale/moderne) ; **0 node local-only** (Supabase ⊇ git)
+- `sync_supabase_valid_edges_2026_05_21.py` — sur 469 edges Supabase-only : **242 valides appendées**, **227 mises en quarantaine** (`quarantine_supabase_drift_2026_05_21.jsonl`)
+  - **Découverte qualité** : la DB vivante avait dérivé hors du gate SHACL — 195 `created_by` inversés (`person → concept/work/argument`), 23 `related_to` hors-domaine, 5 `group created_by`, 4 `teacher_of` (relation hors-ontologie). Jamais importées dans git (auraient cassé le gate) — quarantaine pour révision/réparation puis redéploiement propre
+  - Gate re-validé : **Conforms: True, 0 violation**
+- Net : git redevient le superset propre de Supabase (par signature unique) ; les ~198 doublons d'edges + 227 edges invalides de la DB restent à nettoyer côté Supabase
 
 ---
 
