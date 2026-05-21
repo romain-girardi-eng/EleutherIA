@@ -280,7 +280,7 @@ export default function DatabasePage() {
             {[
               { val: fmt(kgStats.nodes), label: 'nodes' },
               { val: fmt(kgStats.edges), label: 'edges' },
-              { val: fmt(Object.keys(stats.nodeTypes).length || 13), label: 'node types' },
+              { val: fmt(Object.keys(stats.nodeTypes).length || Number.NaN), label: 'node types' },
             ].map((s) => (
               <div key={s.label} className="inline-flex items-center gap-2 px-3 py-1.5 bg-stone-100/50 border border-stone-200/30 rounded-lg">
                 <span className="text-sm"><strong className="text-stone-700 font-semibold">{s.val}</strong> <span className="text-stone-500">{s.label}</span></span>

@@ -9,9 +9,10 @@ import { useEffect, useState } from 'react';
  * Returns RAW numbers; consumers format with `value.toLocaleString(i18n.language)`
  * to respect the user's locale (1,234 / 1.234 / 1 234).
  *
- * Fallback values are conservative and reflect order-of-magnitude truths so
- * the UI never shows "loading…" indefinitely — better to show a slightly stale
- * value than to break copy that depends on a number being present.
+ * No hardcoded stat numbers: until the live fetch resolves (and if it fails)
+ * every count is non-finite, which all formatters (`formatCount`,
+ * `formatCompact`, `formatFull`) render as "—". The last successful fetch is
+ * cached in localStorage and reused on return so numbers persist across visits.
  */
 
 const STORAGE_KEY = 'kg_stats_v1';
@@ -67,21 +68,23 @@ export interface KgStats {
   publicationCount: number;
 }
 
-const FALLBACK: Omit<KgStats, 'isCached' | 'isLoading' | 'error'> = {
-  nodes: 19_900,
-  edges: 47_400,
+// "Unknown" state — no hardcoded stat numbers. Non-finite counts render as "—"
+// via the formatters until the live fetch resolves (or if it fails).
+const UNKNOWN: Omit<KgStats, 'isCached' | 'isLoading' | 'error'> = {
+  nodes: Number.NaN,
+  edges: Number.NaN,
   nodeTypes: {},
   edgeTypes: {},
-  connectedComponents: 0,
-  works: 166,
-  uniqueAuthors: 59,
-  passages: 16_185,
-  totalWords: 2_912_280,
-  languagesCount: 3,
-  personCount: 380,
-  argumentCount: 1_300,
-  conceptCount: 200,
-  publicationCount: 310,
+  connectedComponents: Number.NaN,
+  works: Number.NaN,
+  uniqueAuthors: Number.NaN,
+  passages: Number.NaN,
+  totalWords: Number.NaN,
+  languagesCount: Number.NaN,
+  personCount: Number.NaN,
+  argumentCount: Number.NaN,
+  conceptCount: Number.NaN,
+  publicationCount: Number.NaN,
 };
 
 const API_URL = (
@@ -148,20 +151,20 @@ async function fetchFresh(): Promise<CachedRecord['payload']> {
   const edgeTypes = kg.edge_types ?? {};
 
   return {
-    nodes: kg.total_nodes ?? FALLBACK.nodes,
-    edges: kg.total_edges ?? FALLBACK.edges,
+    nodes: kg.total_nodes ?? Number.NaN,
+    edges: kg.total_edges ?? Number.NaN,
     nodeTypes,
     edgeTypes,
-    connectedComponents: kg.connected_components ?? 0,
-    works: works.works?.total_works ?? FALLBACK.works,
-    uniqueAuthors: works.works?.unique_authors ?? FALLBACK.uniqueAuthors,
-    passages: works.passages?.total_passages ?? FALLBACK.passages,
-    totalWords: works.works?.total_words ?? FALLBACK.totalWords,
-    languagesCount: works.works?.languages_count ?? FALLBACK.languagesCount,
-    personCount: nodeTypes['person'] ?? FALLBACK.personCount,
-    argumentCount: nodeTypes['argument'] ?? FALLBACK.argumentCount,
-    conceptCount: nodeTypes['concept'] ?? FALLBACK.conceptCount,
-    publicationCount: nodeTypes['publication'] ?? FALLBACK.publicationCount,
+    connectedComponents: kg.connected_components ?? Number.NaN,
+    works: works.works?.total_works ?? Number.NaN,
+    uniqueAuthors: works.works?.unique_authors ?? Number.NaN,
+    passages: works.passages?.total_passages ?? Number.NaN,
+    totalWords: works.works?.total_words ?? Number.NaN,
+    languagesCount: works.works?.languages_count ?? Number.NaN,
+    personCount: nodeTypes['person'] ?? Number.NaN,
+    argumentCount: nodeTypes['argument'] ?? Number.NaN,
+    conceptCount: nodeTypes['concept'] ?? Number.NaN,
+    publicationCount: nodeTypes['publication'] ?? Number.NaN,
   };
 }
 
@@ -169,7 +172,7 @@ export function useKgStats(): KgStats {
   const cached = readCache();
   const initial: KgStats = cached
     ? { ...cached.payload, isCached: true, isLoading: false, error: null }
-    : { ...FALLBACK, isCached: false, isLoading: true, error: null };
+    : { ...UNKNOWN, isCached: false, isLoading: true, error: null };
   const [stats, setStats] = useState<KgStats>(initial);
 
   useEffect(() => {

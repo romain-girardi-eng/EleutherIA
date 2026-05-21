@@ -40,8 +40,8 @@
     "descriptions": {
       "howItWorks": "Pipeline, Quellen, Methodik",
       "about": "Mission, Umfang und Team",
-      "database": "17,7k Knoten, 42,9k Kanten",
-      "texts": "487 griechische und lateinische Werke",
+      "database": "{{nodes}} Knoten, {{edges}} Kanten",
+      "texts": "{{works}} griechische und lateinische Werke",
       "bibliography": "Moderne Forschung und Editionen",
       "graphrag": "Fundierte Fragen stellen",
       "research": "Live agentische Spuren",
@@ -2097,12 +2097,17 @@
     },
     "atlas": {
       "hintLabel": "Atlas der Willensfreiheit",
-      "hintBody": "Eine kuratierte Auswahl der zentralen Begriffe, Schulen, Denker und modernen Forscher zur Willensfreiheit. Suchen Sie für mehr Tiefe, wechseln Sie zum vollen Graphen für die 17,7k Knoten, oder öffnen Sie „Pfad finden“, um eine Verbindung nachzuzeichnen."
+      "hintBody": "Eine kuratierte Auswahl der zentralen Begriffe, Schulen, Denker und modernen Forscher zur Willensfreiheit. Suchen Sie für mehr Tiefe, wechseln Sie zum vollen Graphen für die {{nodes}} Knoten, oder öffnen Sie \"Pfad finden\", um eine Verbindung nachzuzeichnen."
     },
     "loading": {
       "eyebrow": "Wissensgraph",
       "title": "Atlas wird aufgebaut…",
-      "body": "17,7k Knoten und 42,9k Relationen aus antiken Quellen und moderner Rezeption werden geladen."
+      "body": "{{nodes}} Knoten und {{edges}} Relationen aus antiken Quellen und moderner Rezeption werden geladen.",
+      "statNodes": "Knoten",
+      "statEdges": "Relationen",
+      "cycle": {
+        "weaving": "{{nodes}} Stimmen werden zu einem Graphen verwoben…"
+      }
     },
     "error": {
       "eyebrow": "Wissensgraph",

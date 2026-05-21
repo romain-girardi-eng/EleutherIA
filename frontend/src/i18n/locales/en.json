@@ -40,8 +40,8 @@
     "descriptions": {
       "howItWorks": "Pipeline, sources, methodology",
       "about": "Mission, scope, and team",
-      "database": "Browse 17.7k nodes, 42.9k edges",
-      "texts": "487 Greek and Latin works",
+      "database": "Browse {{nodes}} nodes, {{edges}} edges",
+      "texts": "{{works}} Greek and Latin works",
       "bibliography": "Modern scholarship and editions",
       "graphrag": "Ask grounded scholarly questions",
       "research": "Live agentic retrieval traces",
@@ -2125,12 +2125,17 @@
     },
     "atlas": {
       "hintLabel": "Free Will Atlas",
-      "hintBody": "A curated view of the load-bearing concepts, schools, thinkers, and modern scholars on free will. Search to dive deeper, switch to the full graph for the 17.7k-node map, or open Find a path to trace a connection."
+      "hintBody": "A curated view of the load-bearing concepts, schools, thinkers, and modern scholars on free will. Search to dive deeper, switch to the full graph for the {{nodes}}-node map, or open Find a path to trace a connection."
     },
     "loading": {
       "eyebrow": "Knowledge graph",
       "title": "Building the Atlas…",
-      "body": "Loading 17.7k nodes and 42.9k relations across ancient sources and modern reception."
+      "body": "Loading {{nodes}} nodes and {{edges}} relations across ancient sources and modern reception.",
+      "statNodes": "nodes",
+      "statEdges": "relations",
+      "cycle": {
+        "weaving": "Weaving {{nodes}} voices into a single graph…"
+      }
     },
     "error": {
       "eyebrow": "Knowledge graph",

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useKgStats } from '../../hooks/useKgStats';
+import { formatCompact } from '../../lib/formatCompact';
 
 interface KnowledgeGraphLoaderProps {
   /** Path under /public to the optimized MP4 (no audio). */
@@ -19,25 +21,27 @@ interface KnowledgeGraphLoaderProps {
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 const EASE_OUT_QUART = [0.25, 1, 0.5, 1] as const;
 
-const NODE_COUNT = 17_746;
-const EDGE_COUNT = 42_925;
-
 export function KnowledgeGraphLoader({
   videoMp4Src = '/loader-kg.mp4',
   videoWebmSrc = '/loader-kg.webm',
   posterSrc = '/loader-kg-poster.jpg',
   onVideoEnded,
 }: KnowledgeGraphLoaderProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const kgStats = useKgStats();
   const prefersReducedMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [videoReady, setVideoReady] = useState(false);
+
+  const nodesCompact = formatCompact(kgStats.nodes, i18n.language);
+  const edgesCompact = formatCompact(kgStats.edges, i18n.language);
 
   const messages = useMemo(
     () => [
       t(
         'cosmograph.loading.cycle.weaving',
-        'Weaving 17.7k voices into a single graph…',
+        'Weaving {{nodes}} voices into a single graph…',
+        { nodes: nodesCompact },
       ),
       t(
         'cosmograph.loading.cycle.tracing',
@@ -56,7 +60,7 @@ export function KnowledgeGraphLoader({
         'Unfolding the Atlas of free will…',
       ),
     ],
-    [t],
+    [t, nodesCompact],
   );
 
   const [messageIndex, setMessageIndex] = useState(0);
@@ -282,14 +286,14 @@ export function KnowledgeGraphLoader({
         >
           <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-slate-300/80 sm:text-xs">
             <span className="tabular-nums text-amber-200/90">
-              {NODE_COUNT.toLocaleString()}
+              {nodesCompact}
             </span>
             <span className="text-slate-500/80">
               {t('cosmograph.loading.statNodes', 'nodes')}
             </span>
             <span aria-hidden className="h-1 w-1 rounded-full bg-amber-200/40" />
             <span className="tabular-nums text-amber-200/90">
-              {EDGE_COUNT.toLocaleString()}
+              {edgesCompact}
             </span>
             <span className="text-slate-500/80">
               {t('cosmograph.loading.statEdges', 'relations')}

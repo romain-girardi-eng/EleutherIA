@@ -40,8 +40,8 @@
     "descriptions": {
       "howItWorks": "Pipeline, sources, méthodologie",
       "about": "Mission, périmètre et équipe",
-      "database": "17,7k nœuds, 42,9k arêtes",
-      "texts": "487 œuvres grecques et latines",
+      "database": "{{nodes}} nœuds, {{edges}} arêtes",
+      "texts": "{{works}} œuvres grecques et latines",
       "bibliography": "Études modernes et éditions",
       "graphrag": "Posez des questions sourcées",
       "research": "Traces agentiques en direct",
@@ -2122,12 +2122,17 @@
     },
     "atlas": {
       "hintLabel": "Atlas du libre arbitre",
-      "hintBody": "Une vue curatée des concepts, écoles, penseurs et chercheurs modernes structurant la question du libre arbitre. Cherchez pour approfondir, basculez vers le graphe complet pour voir les 17,7k nœuds, ou ouvrez « Trouver un chemin » pour tracer une connexion."
+      "hintBody": "Une vue curatée des concepts, écoles, penseurs et chercheurs modernes structurant la question du libre arbitre. Cherchez pour approfondir, basculez vers le graphe complet pour voir les {{nodes}} nœuds, ou ouvrez « Trouver un chemin » pour tracer une connexion."
     },
     "loading": {
       "eyebrow": "Graphe de connaissances",
       "title": "Construction de l'Atlas…",
-      "body": "Chargement de 17,7k nœuds et 42,9k relations — sources antiques et réception moderne."
+      "body": "Chargement de {{nodes}} nœuds et {{edges}} relations — sources antiques et réception moderne.",
+      "statNodes": "nœuds",
+      "statEdges": "relations",
+      "cycle": {
+        "weaving": "Entrelacement de {{nodes}} voix en un seul graphe…"
+      }
     },
     "error": {
       "eyebrow": "Graphe de connaissances",

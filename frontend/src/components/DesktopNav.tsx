@@ -17,6 +17,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useKgStats } from '../hooks/useKgStats';
+import { formatCompact } from '../lib/formatCompact';
 import {
   ChevronDown,
   Compass,
@@ -117,8 +119,24 @@ const panelVariants = {
 
 type OpenKey = NavGroup['id'] | 'lang' | 'user' | null;
 
+/** Returns interpolation vars for nav description keys that embed live counts. */
+function navDescVars(
+  descKey: string,
+  nodes: string,
+  edges: string,
+  works: string,
+): Record<string, string> | undefined {
+  if (descKey === 'nav.descriptions.database') return { nodes, edges };
+  if (descKey === 'nav.descriptions.texts') return { works };
+  return undefined;
+}
+
 export function DesktopNav({ inverted, isAuthenticated, username, onLogout }: DesktopNavProps) {
   const { t, i18n } = useTranslation();
+  const kgStats = useKgStats();
+  const nodesCompact = formatCompact(kgStats.nodes, i18n.language);
+  const edgesCompact = formatCompact(kgStats.edges, i18n.language);
+  const worksCompact = formatCompact(kgStats.works, i18n.language);
   const location = useLocation();
   const [open, setOpen] = useState<OpenKey>(null);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -276,7 +294,7 @@ export function DesktopNav({ inverted, isAuthenticated, username, onLogout }: De
                                 {t(item.labelKey)}
                               </span>
                               <span className="block text-[12px] text-stone-500 leading-snug mt-0.5">
-                                {t(item.descKey)}
+                                {t(item.descKey, navDescVars(item.descKey, nodesCompact, edgesCompact, worksCompact))}
                               </span>
                             </span>
                           </Link>

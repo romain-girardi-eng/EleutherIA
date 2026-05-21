@@ -17,7 +17,7 @@ export function GraphRAGEnhancementIndicator({
   className = '',
 }: GraphRAGEnhancementIndicatorProps) {
   const stats = useKgStats();
-  const edgeTypeCount = Object.keys(stats.edgeTypes).length || 32;
+  const edgeTypeCount = Object.keys(stats.edgeTypes).length || Number.NaN;
   if (!enhancements || enhancements.mode === 'original') {
     return null;
   }
@@ -27,7 +27,7 @@ export function GraphRAGEnhancementIndicator({
       <Badge
         variant="secondary"
         className="flex items-center gap-1 bg-gradient-to-r from-purple-500/10 to-blue-500/10 text-purple-700 dark:text-purple-300"
-        title={`Using ULTRA-ENHANCED GraphRAG with edge relationships - Leverages ${formatCount(stats.edges)} edges with ${edgeTypeCount} relationship types`}
+        title={`Using ULTRA-ENHANCED GraphRAG with edge relationships - Leverages ${formatCount(stats.edges)} edges with ${formatCount(edgeTypeCount)} relationship types`}
       >
         <Zap className="h-3 w-3" />
         Enhanced Mode
@@ -79,7 +79,7 @@ export function GraphRAGModeToggle({
   className?: string;
 }) {
   const stats = useKgStats();
-  const edgeTypeCount = Object.keys(stats.edgeTypes).length || 32;
+  const edgeTypeCount = Object.keys(stats.edgeTypes).length || Number.NaN;
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       <label className="flex items-center gap-2 cursor-pointer">
@@ -96,7 +96,7 @@ export function GraphRAGModeToggle({
 
       <div
         className="inline-block"
-        title={`🚀 ULTRA-ENHANCED GraphRAG - Enhanced mode leverages all ${formatCount(stats.edges)} edges with ${edgeTypeCount} relationship types to provide: ⚔️ Philosophical debate identification, 💫 Influence chain tracking, 🔨 Argument network mapping, 💬 Rich relationship context. Results in dramatically richer, more accurate philosophical understanding.`}
+        title={`🚀 ULTRA-ENHANCED GraphRAG - Enhanced mode leverages all ${formatCount(stats.edges)} edges with ${formatCount(edgeTypeCount)} relationship types to provide: ⚔️ Philosophical debate identification, 💫 Influence chain tracking, 🔨 Argument network mapping, 💬 Rich relationship context. Results in dramatically richer, more accurate philosophical understanding.`}
       >
         <Info className="h-4 w-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-help" />
       </div>
