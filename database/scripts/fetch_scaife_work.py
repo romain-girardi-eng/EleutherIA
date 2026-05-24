@@ -34,9 +34,26 @@ import re
 import sys
 import time
 from urllib.parse import quote
-from xml.etree import ElementTree as ET
 
 import requests
+
+try:
+    # lxml is faster and doesn't depend on the system expat shared library,
+    # which is broken on some Python 3.14 builds against macOS libexpat.
+    from lxml import etree as _ET_IMPL
+
+    class _ETCompat:
+        """Thin shim so the rest of the module uses ET.Element / ET.fromstring."""
+
+        @staticmethod
+        def fromstring(data: bytes) -> _ET_IMPL._Element:  # type: ignore[name-defined]
+            return _ET_IMPL.fromstring(data)
+
+        Element = _ET_IMPL._Element  # type: ignore[attr-defined]
+
+    ET: _ETCompat = _ETCompat()  # type: ignore[assignment]
+except ImportError:
+    from xml.etree import ElementTree as ET  # type: ignore[assignment]
 
 CTS_BASE = "https://scaife-cts.perseus.org/api/cts"
 SCAIFE_LIBRARY_BASE = "https://scaife.perseus.org/library"
