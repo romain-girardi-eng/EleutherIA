@@ -98,17 +98,36 @@ async def _insert_passages(
     return len(rows)
 
 
-def _fetch_full_work(work_urn: str) -> list[dict]:
-    """Discover refs then fetch each passage; return list of {cts_urn, text_content}."""
-    print(f"  Discovering refs for: {work_urn}")
-    urns = get_valid_reff(work_urn, level=1)
+def _ref_depth(cts_urn: str) -> int:
+    """CTS citation depth of a passage URN: '...:1.3' -> 2, '...:5' -> 1."""
+    ref = cts_urn.split(":")[-1] if ":" in cts_urn else ""
+    return ref.count(".") + 1 if ref else 1
 
+
+def _fetch_full_work(work_urn: str, level: int) -> list[dict]:
+    """Discover refs AT THE GIVEN CITATION LEVEL, then fetch each passage.
+
+    `level` must match the granularity the corpus already uses for this work
+    (derived from its existing passages) so fetched URNs align with existing
+    ones and we fill gaps instead of duplicating the text at a coarser level.
+    Falls back to the deepest non-empty level if the requested one is empty.
+    """
+    def _safe_reff(lvl: int) -> list[str]:
+        try:
+            return get_valid_reff(work_urn, level=lvl) or []
+        except Exception as exc:  # Scaife/CTS reffs endpoint is flaky per work/level
+            print(f"  reffs level {lvl} failed: {exc}")
+            return []
+
+    print(f"  Discovering refs for: {work_urn} at level {level}")
+    urns = _safe_reff(level)
     if not urns:
-        # Try deeper levels before giving up
-        for lvl in (2, 3):
-            urns = get_valid_reff(work_urn, level=lvl)
+        for lvl in (level + 1, level - 1, level + 2):
+            if lvl < 1:
+                continue
+            urns = _safe_reff(lvl)
             if urns:
-                print(f"  Found {len(urns)} refs at level {lvl}")
+                print(f"  (level {level} unavailable; using level {lvl} — GRANULARITY MISMATCH, verify)")
                 break
 
     print(f"  Total refs to fetch: {len(urns)}")
@@ -171,10 +190,13 @@ async def run(canonical_id: str, *, commit: bool, db_url: str) -> None:
         # 4. Load existing passages
         existing = await _load_existing(conn, work_id)
         max_seq = max((p["sequence_number"] for p in existing), default=0)
+        # Match the granularity the corpus already uses for this work, so fetched
+        # URNs align with existing ones (fill gaps, not duplicate at a coarser level).
+        target_level = max((_ref_depth(p["cts_urn"]) for p in existing), default=2)
 
         # 5. Fetch full work from Scaife
-        print("Fetching from Scaife...")
-        fetched = _fetch_full_work(work_urn)
+        print(f"Fetching from Scaife (target citation level {target_level})...")
+        fetched = _fetch_full_work(work_urn, target_level)
 
         # 6. Compute new passages
         new = passages_to_insert(existing, fetched, canonical_id, start_seq=max_seq + 1)
