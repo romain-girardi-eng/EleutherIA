@@ -19,9 +19,12 @@ import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
+from scripts.corpus_lib import write_jsonl
+
 ROOT = Path(__file__).resolve().parents[1]
 SRC = Path("/tmp/corpus_works.json")
 OUT = ROOT / "data" / "corpus" / "curation_triage.tsv"
+MANIFEST = ROOT / "data" / "corpus" / "manifest.jsonl"
 
 # Authors whose works are out of free-will scope for the lean core.
 # NOTE: written in NORMALIZED form (norm_author strips "of <place>").
@@ -122,15 +125,28 @@ def alias_stem(author_n: str, stem: str) -> str:
     return stem
 
 
-def decide_keep(author_n: str, title: str) -> tuple[str, str]:
+def decide_keep(author_full: str, title: str) -> tuple[str, str]:
+    """Final lean-core decision. Uses the FULL author (norm strips 'of <place>',
+    which collides Clement of Alexandria with Clement of Rome). Everything in the
+    cited corpus is free-will-relevant by default; only the explicitly named
+    out-of-scope works are cut (per the approved review split)."""
+    af = (author_full or "").lower()
     tl = (title or "").lower()
-    if any(k in tl for k in KEEP_TITLE_KW):
-        return "keep", "free-will/fate title"
-    if author_n in CUT_AUTHORS or any(k in tl for k in CUT_TITLE_KW):
-        return "cut", "out-of-scope author/title"
-    if author_n in KEEP_AUTHORS:
-        return "keep", "core free-will author"
-    return "review", "borderline — needs judgment"
+    # explicit review-cut decisions (approved):
+    if "gregory of nazianzus" in af:
+        return "cut", "Trinitarian orations, not free will"
+    if "clement of rome" in af:
+        return "cut", "church order, not free will"
+    if "barnab" in tl:
+        return "cut", "typology/covenant, not free will"
+    if "septuagint" in af:
+        return "cut", "single incidental passage"
+    # out-of-scope authors (martyrdom/paschal) + liturgical titles:
+    if any(a in af for a in ("ignatius", "melito", "apollinaris")):
+        return "cut", "martyrdom/paschal author, out of scope"
+    if any(k in tl for k in CUT_TITLE_KW):
+        return "cut", "liturgical/martyrdom title"
+    return "keep", "free-will-relevant (cited)"
 
 
 def main() -> int:
@@ -142,24 +158,32 @@ def main() -> int:
 
     out_lines = ["decision\tcanonical\tpassages\tauthor\ttitle\treason"]
     counts = defaultdict(int)
-    distinct_keep = distinct_cut = distinct_review = 0
+    distinct_keep = distinct_cut = 0
+    manifest_rows: list[dict] = []
     for key, members in sorted(groups.items()):
         members.sort(key=lambda r: r["passages"], reverse=True)
         canonical = members[0]
-        base_decision, reason = decide_keep(key[0], canonical["title"])
+        base_decision, reason = decide_keep(canonical["author"], canonical["title"])
         if base_decision == "keep":
             distinct_keep += 1
-        elif base_decision == "cut":
-            distinct_cut += 1
+            cts = canonical.get("cts_urn") or ""
+            manifest_rows.append({
+                "canonical_id": canonical["canonical_id"],
+                "author": canonical.get("author") or "",
+                "title": canonical.get("title") or "",
+                "period": canonical.get("period") or "",
+                "cts_urn": cts,
+                "source": f"scaife:{cts}" if cts else "",
+                "passages": canonical["passages"],
+                "status": "in_corpus" if canonical["passages"] >= 5 else "thin_needs_ingestion",
+            })
         else:
-            distinct_review += 1
+            distinct_cut += 1
         for i, m in enumerate(members):
             if i == 0:
-                decision = base_decision
-                canon = "self"
-                rsn = reason
+                decision, canon, rsn = base_decision, "self", reason
             else:
-                decision = "merge" if base_decision != "cut" else "cut"
+                decision = "merge" if base_decision == "keep" else "cut"
                 canon = canonical["canonical_id"]
                 rsn = f"dup of canonical ({canonical['passages']} pass.)"
             counts[decision] += 1
@@ -168,10 +192,14 @@ def main() -> int:
             )
 
     OUT.write_text("\n".join(out_lines) + "\n", encoding="utf-8")
+    manifest_rows.sort(key=lambda r: r["canonical_id"])
+    write_jsonl(MANIFEST, manifest_rows)
     print(f"original entries: {len(rows)}  |  distinct works: {len(groups)}")
-    print(f"distinct decisions -> keep: {distinct_keep}  review: {distinct_review}  cut: {distinct_cut}")
+    print(f"distinct decisions -> keep: {distinct_keep}  cut: {distinct_cut}")
     print(f"row-level decisions: {dict(counts)}")
+    thin = sum(1 for r in manifest_rows if r["status"] == "thin_needs_ingestion")
     print(f"wrote {OUT}")
+    print(f"wrote {MANIFEST}: {len(manifest_rows)} lean-core works ({thin} thin/needs-ingestion)")
     return 0
 
 
