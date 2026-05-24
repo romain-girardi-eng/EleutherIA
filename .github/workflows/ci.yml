@@ -88,6 +88,9 @@ jobs:
       - name: Validate KG invariants and write quality report
         run: python scripts/validate_kg_shacl.py --max-examples 100
 
+      - name: Corpus invariants gate (report)
+        run: python -m scripts.check_corpus_invariants
+
       - name: Upload SHACL reports
         if: always()
         uses: actions/upload-artifact@v4
