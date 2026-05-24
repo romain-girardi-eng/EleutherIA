@@ -1,0 +1,3752 @@
+[
+  {
+    "canonical_ref": "1_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:1_1",
+    "passage_id": "4c720919-0afa-489b-b0d5-261be8da949c"
+  },
+  {
+    "canonical_ref": "1_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:1_2",
+    "passage_id": "235c7052-c37e-46e7-9193-596ee5cac0d2"
+  },
+  {
+    "canonical_ref": "1_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:1_3",
+    "passage_id": "3a18e725-c8d0-47a2-aff8-9f6c59eac391"
+  },
+  {
+    "canonical_ref": "1_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:1_4",
+    "passage_id": "c40527fb-7133-4597-8714-3e0f8fe2c140"
+  },
+  {
+    "canonical_ref": "1_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:1_5",
+    "passage_id": "e3f394f1-623d-4eaf-a84c-0dec5265b6a5"
+  },
+  {
+    "canonical_ref": "1_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:1_6",
+    "passage_id": "ee36e24d-f13c-4d8f-9cc1-087032a81d61"
+  },
+  {
+    "canonical_ref": "2_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:2_1",
+    "passage_id": "80b9d804-153b-4442-a77e-561748e28072"
+  },
+  {
+    "canonical_ref": "2_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:2_2",
+    "passage_id": "5e69faff-b615-4c6a-bc30-e500b3b32aab"
+  },
+  {
+    "canonical_ref": "2_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:2_3",
+    "passage_id": "f980bb1a-7846-4fbd-a3b7-abb1efddd6fc"
+  },
+  {
+    "canonical_ref": "2_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:2_4",
+    "passage_id": "eaab4039-c0f2-45e0-898e-a745f817dbf5"
+  },
+  {
+    "canonical_ref": "2_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:2_5",
+    "passage_id": "da3ae016-1251-4023-a42a-d46e60555d04"
+  },
+  {
+    "canonical_ref": "2_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:2_6",
+    "passage_id": "dea731e4-3bc9-495c-a359-469d3ce8e38b"
+  },
+  {
+    "canonical_ref": "3_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:3_1",
+    "passage_id": "0a0ca403-e0c0-44b0-8387-52efbfbed059"
+  },
+  {
+    "canonical_ref": "3_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:3_2",
+    "passage_id": "b6390af3-4fe0-4d45-b895-6c23ff06d82b"
+  },
+  {
+    "canonical_ref": "3_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:3_3",
+    "passage_id": "bfdf131a-63fb-48eb-95a4-2e92fcee3334"
+  },
+  {
+    "canonical_ref": "3_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:3_4",
+    "passage_id": "2a260e1d-6c51-4fbf-8f73-0d984c39cc85"
+  },
+  {
+    "canonical_ref": "3_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:3_5",
+    "passage_id": "e6edecf8-6c2a-4be7-8e03-d8ee73761522"
+  },
+  {
+    "canonical_ref": "3_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:3_6",
+    "passage_id": "901cbd3f-e449-4269-9db5-9212129c980b"
+  },
+  {
+    "canonical_ref": "3_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:3_7",
+    "passage_id": "b90e1780-f07f-482d-a7dc-f5031beb85fa"
+  },
+  {
+    "canonical_ref": "4_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:4_1",
+    "passage_id": "68bb244b-a8a2-4b86-bfd9-f6b92b70d542"
+  },
+  {
+    "canonical_ref": "4_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:4_2",
+    "passage_id": "3b68cbd0-1822-43a8-934f-17a0243e5429"
+  },
+  {
+    "canonical_ref": "4_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:4_3",
+    "passage_id": "f6ce2762-50b8-4532-b05d-576149fc2051"
+  },
+  {
+    "canonical_ref": "4_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:4_4",
+    "passage_id": "a12d0ea3-9fb7-4fce-98f7-448437920335"
+  },
+  {
+    "canonical_ref": "4_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:4_5",
+    "passage_id": "8e719b9b-7ff5-4668-a00f-5ea9920bedda"
+  },
+  {
+    "canonical_ref": "4_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:4_6",
+    "passage_id": "847c6b34-2830-4d66-91a8-80f411ff12eb"
+  },
+  {
+    "canonical_ref": "4_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:4_7",
+    "passage_id": "6df18f54-6a1f-4a3d-920a-6fbb03c57924"
+  },
+  {
+    "canonical_ref": "5_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:5_1",
+    "passage_id": "a201affb-d272-4cb3-aa8a-fe47c476802a"
+  },
+  {
+    "canonical_ref": "5_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:5_2",
+    "passage_id": "1e1ee442-9a2e-4042-8901-6e3360b4b2d4"
+  },
+  {
+    "canonical_ref": "5_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:5_3",
+    "passage_id": "13859bd5-8df7-4b78-af94-943db72e7c8a"
+  },
+  {
+    "canonical_ref": "5_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:5_4",
+    "passage_id": "3807fdb4-7fc2-4901-b55d-7eeeb4c65e97"
+  },
+  {
+    "canonical_ref": "5_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:5_5",
+    "passage_id": "837acf18-3473-4137-b91e-0d6af4da89da"
+  },
+  {
+    "canonical_ref": "5_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:5_6",
+    "passage_id": "c55490f4-4f6a-48a2-a25a-11df8e70d117"
+  },
+  {
+    "canonical_ref": "6_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:6_1",
+    "passage_id": "92554bc2-48a7-42f9-b877-7f968a67b7e8"
+  },
+  {
+    "canonical_ref": "6_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:6_2",
+    "passage_id": "f392bc8d-0dcd-47d0-b3f5-9e27ae3d2b15"
+  },
+  {
+    "canonical_ref": "7_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:7_1",
+    "passage_id": "ad002380-2391-49bb-863a-c86a5f86714c"
+  },
+  {
+    "canonical_ref": "7_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:7_2",
+    "passage_id": "a841359b-b5e1-4853-95f7-7d3547b6377a"
+  },
+  {
+    "canonical_ref": "7_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:7_3",
+    "passage_id": "d89a8712-e250-4200-bf6f-67a4dbb425ec"
+  },
+  {
+    "canonical_ref": "8_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:8_1",
+    "passage_id": "0ace340f-93e9-4da0-829c-d87653084c43"
+  },
+  {
+    "canonical_ref": "8_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:8_2",
+    "passage_id": "39f863f8-92fc-4edb-b8f0-40f1f8127a33"
+  },
+  {
+    "canonical_ref": "8_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:8_3",
+    "passage_id": "85c3f7cd-b19f-4078-8ffb-73eedf0f81b5"
+  },
+  {
+    "canonical_ref": "8_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:8_4",
+    "passage_id": "8e29f53c-b980-44b5-9567-758f8b51aeea"
+  },
+  {
+    "canonical_ref": "9_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:9_1",
+    "passage_id": "229095bc-0fb6-4c56-9d2a-54e732a9ac0f"
+  },
+  {
+    "canonical_ref": "9_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:9_2",
+    "passage_id": "7e910bd8-8ff3-467a-938d-6e9aed06d090"
+  },
+  {
+    "canonical_ref": "9_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:9_3",
+    "passage_id": "b9d064f1-4449-411d-91fc-936dd0d62249"
+  },
+  {
+    "canonical_ref": "10_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:10_1",
+    "passage_id": "ea89a694-2860-4eee-a467-5cccba9fa82f"
+  },
+  {
+    "canonical_ref": "10_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:10_2",
+    "passage_id": "fce17b09-95fc-4636-bcf8-dbb8babeea7c"
+  },
+  {
+    "canonical_ref": "10_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:10_3",
+    "passage_id": "50483768-180d-46c5-860d-7fa50ed46395"
+  },
+  {
+    "canonical_ref": "10_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:10_4",
+    "passage_id": "5ec224d0-d9e2-4d9f-8cdc-ed934c71b1cd"
+  },
+  {
+    "canonical_ref": "11_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:11_1",
+    "passage_id": "01c02e69-4587-4df6-8252-d23444ed6942"
+  },
+  {
+    "canonical_ref": "11_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:11_2",
+    "passage_id": "159284d6-6e85-48de-8757-169a204c4d2a"
+  },
+  {
+    "canonical_ref": "11_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:11_3",
+    "passage_id": "499a4805-0189-426e-82c7-ccbfc270dff0"
+  },
+  {
+    "canonical_ref": "11_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:11_4",
+    "passage_id": "ec6cba34-a247-4e05-a749-a281446672ed"
+  },
+  {
+    "canonical_ref": "11_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:11_5",
+    "passage_id": "dc6a5da5-b885-4a1b-b706-a8c86c27d909"
+  },
+  {
+    "canonical_ref": "12_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:12_1",
+    "passage_id": "7c20c8f2-ac56-4498-8723-aadad75a755f"
+  },
+  {
+    "canonical_ref": "12_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:12_2",
+    "passage_id": "3e2d90ba-20a4-4d7f-8df0-97ccaa4f86e0"
+  },
+  {
+    "canonical_ref": "12_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:12_3",
+    "passage_id": "f8153939-33a5-4a46-8a71-b81534bea5bc"
+  },
+  {
+    "canonical_ref": "13_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:13_1",
+    "passage_id": "9c412db7-4989-486d-b446-dd22ea51bcfc"
+  },
+  {
+    "canonical_ref": "13_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:13_2",
+    "passage_id": "339c0aca-3037-4f2c-b59a-97b913049f95"
+  },
+  {
+    "canonical_ref": "13_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:13_3",
+    "passage_id": "59b1fbec-c1ea-4eb4-96c7-3a35cf31c7f4"
+  },
+  {
+    "canonical_ref": "13_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:13_4",
+    "passage_id": "cd89362b-eeb0-410a-9151-c9fb80dd69b7"
+  },
+  {
+    "canonical_ref": "13_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:13_5",
+    "passage_id": "159f7ddc-5e54-4c89-a02f-063a4f9be2cb"
+  },
+  {
+    "canonical_ref": "13_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:13_6",
+    "passage_id": "2b75731a-26a1-4542-8d94-d5df87cd401a"
+  },
+  {
+    "canonical_ref": "13_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:13_7",
+    "passage_id": "738d48e7-880a-40aa-b8bd-e0eed2ceeb7e"
+  },
+  {
+    "canonical_ref": "13_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:13_8",
+    "passage_id": "4bcb893b-00b6-4213-a4d7-b80efde9f107"
+  },
+  {
+    "canonical_ref": "13_9",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:13_9",
+    "passage_id": "1a3e3043-99b6-49bf-b2b9-35151d4d53e4"
+  },
+  {
+    "canonical_ref": "14_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:14_1",
+    "passage_id": "d4e6c179-5903-4b79-9bfd-09923531ea6d"
+  },
+  {
+    "canonical_ref": "14_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:14_2",
+    "passage_id": "1dc82bd8-d006-42fe-ba89-89b70283547d"
+  },
+  {
+    "canonical_ref": "14_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:14_3",
+    "passage_id": "012e86f1-0d1a-463c-a3c0-9dae4fd5fa3b"
+  },
+  {
+    "canonical_ref": "14_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:14_4",
+    "passage_id": "97073fb8-70e2-46a0-80ca-a37bee1bea9a"
+  },
+  {
+    "canonical_ref": "14_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:14_5",
+    "passage_id": "50b73879-8865-4626-9ce3-a97e0e349e37"
+  },
+  {
+    "canonical_ref": "14_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:14_6",
+    "passage_id": "0fcdfe11-12e6-43e8-965b-f9df6141c95a"
+  },
+  {
+    "canonical_ref": "14_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:14_7",
+    "passage_id": "d2882e53-6f2c-419c-ad51-21477b2e77cf"
+  },
+  {
+    "canonical_ref": "14_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:14_8",
+    "passage_id": "54a9525f-7996-434d-934e-aa2c312ec752"
+  },
+  {
+    "canonical_ref": "15_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:15_1",
+    "passage_id": "3da01558-e150-4d04-aede-44d71a86dd22"
+  },
+  {
+    "canonical_ref": "15_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:15_2",
+    "passage_id": "e203a63e-ebd7-4817-80bf-82bc09c78341"
+  },
+  {
+    "canonical_ref": "15_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:15_3",
+    "passage_id": "d30d7a0d-8a9e-4b16-b505-b9f98b1db33b"
+  },
+  {
+    "canonical_ref": "15_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:15_4",
+    "passage_id": "c9874d34-f253-4d2d-addd-8ab45778d2f0"
+  },
+  {
+    "canonical_ref": "15_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:15_5",
+    "passage_id": "599b9153-75ea-42b7-ada2-9a66fb78838f"
+  },
+  {
+    "canonical_ref": "15_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:15_6",
+    "passage_id": "d96bf0b6-0685-49e0-b52f-81f542d2fa0f"
+  },
+  {
+    "canonical_ref": "15_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:15_7",
+    "passage_id": "9d64d62c-f069-4540-b393-6e6c5f7d6f41"
+  },
+  {
+    "canonical_ref": "16_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:16_1",
+    "passage_id": "7fc95519-b627-4070-aeb1-8b3f5a54a2c5"
+  },
+  {
+    "canonical_ref": "16_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:16_2",
+    "passage_id": "4b0eae17-892a-4145-a31c-29b327e6b9b6"
+  },
+  {
+    "canonical_ref": "21_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:21_3",
+    "passage_id": "26a62f6d-fce5-4a40-89c7-3b513937b43b"
+  },
+  {
+    "canonical_ref": "16_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:16_3",
+    "passage_id": "47fe5c68-cc15-4f85-895c-ad4b2f06433b"
+  },
+  {
+    "canonical_ref": "16_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:16_4",
+    "passage_id": "cd1e4f1e-ff94-4f54-9110-be11159a59b4"
+  },
+  {
+    "canonical_ref": "16_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:16_5",
+    "passage_id": "34e90852-87a7-495d-9cf6-ff74b347d95d"
+  },
+  {
+    "canonical_ref": "17_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:17_1",
+    "passage_id": "dd1b12b1-e5eb-43c8-a867-609e7217b2a9"
+  },
+  {
+    "canonical_ref": "17_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:17_2",
+    "passage_id": "1ac2539c-de1a-4b52-a4e2-7e8689790bc1"
+  },
+  {
+    "canonical_ref": "17_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:17_3",
+    "passage_id": "120c03ff-96fa-42e5-8a8d-dcb531b59594"
+  },
+  {
+    "canonical_ref": "17_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:17_4",
+    "passage_id": "656bd9b3-97d1-4ad8-9a96-080b79dcdcd6"
+  },
+  {
+    "canonical_ref": "18_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:18_1",
+    "passage_id": "2a575bfb-5a90-4fe0-869b-86c4de91c219"
+  },
+  {
+    "canonical_ref": "18_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:18_2",
+    "passage_id": "f657fe15-f0c3-41ce-a6d7-2449c9ff8826"
+  },
+  {
+    "canonical_ref": "18_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:18_3",
+    "passage_id": "3e5fffe1-c29b-4637-8ac8-40efc95d2c88"
+  },
+  {
+    "canonical_ref": "19_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:19_1",
+    "passage_id": "30fae23c-5477-4f03-b08d-b1cb26936c35"
+  },
+  {
+    "canonical_ref": "19_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:19_2",
+    "passage_id": "d78d45df-f3a4-4897-b38b-5a4ff2510b0e"
+  },
+  {
+    "canonical_ref": "19_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:19_3",
+    "passage_id": "0ae7fd98-de8e-48c5-a304-b50005728b95"
+  },
+  {
+    "canonical_ref": "19_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:19_4",
+    "passage_id": "591ae01e-ed55-4abd-97b3-51d46d598442"
+  },
+  {
+    "canonical_ref": "19_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:19_5",
+    "passage_id": "cb325884-448a-427a-b1ee-364478364be6"
+  },
+  {
+    "canonical_ref": "19_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:19_6",
+    "passage_id": "c49df97a-b4dc-4544-9ccc-cef498812568"
+  },
+  {
+    "canonical_ref": "20_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:20_1",
+    "passage_id": "d823e1df-4935-4f42-8c99-0bf7106c92ce"
+  },
+  {
+    "canonical_ref": "20_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:20_2",
+    "passage_id": "6250c5b5-d918-40b1-ace8-5acb4b89ed05"
+  },
+  {
+    "canonical_ref": "20_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:20_3",
+    "passage_id": "f525206e-00d5-40c9-9051-aac27c8c9e34"
+  },
+  {
+    "canonical_ref": "20_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:20_4",
+    "passage_id": "73bcd589-09ad-4545-b598-a6694f878059"
+  },
+  {
+    "canonical_ref": "21_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:21_1",
+    "passage_id": "75290eca-27a6-4b48-b558-00b497b9c55f"
+  },
+  {
+    "canonical_ref": "21_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:21_2",
+    "passage_id": "43d3f4f8-cbea-4c0d-9643-b4843f8c2d37"
+  },
+  {
+    "canonical_ref": "21_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:21_4",
+    "passage_id": "cc22c7d6-e503-422c-9449-9a3972e79d64"
+  },
+  {
+    "canonical_ref": "22_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:22_1",
+    "passage_id": "80d0130a-3cdf-4c41-bb0e-06c18330cec5"
+  },
+  {
+    "canonical_ref": "22_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:22_2",
+    "passage_id": "9b771478-81f9-44a7-a8af-5201d23cdbcc"
+  },
+  {
+    "canonical_ref": "22_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:22_3",
+    "passage_id": "d27d4add-e184-4368-937b-23aa9484e718"
+  },
+  {
+    "canonical_ref": "22_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:22_4",
+    "passage_id": "3ea8547c-89e7-47de-b1d4-f0423133c315"
+  },
+  {
+    "canonical_ref": "49_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:49_7",
+    "passage_id": "021a246e-e5f1-4cb1-9c26-c3010e4206de"
+  },
+  {
+    "canonical_ref": "22_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:22_5",
+    "passage_id": "75510c06-dae5-4656-8a6d-d7f05acdf860"
+  },
+  {
+    "canonical_ref": "22_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:22_6",
+    "passage_id": "e0444471-39a2-4fa2-9695-713dfd1c70c6"
+  },
+  {
+    "canonical_ref": "22_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:22_7",
+    "passage_id": "33c608a4-9225-4857-ad4b-6831cfeaed24"
+  },
+  {
+    "canonical_ref": "22_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:22_8",
+    "passage_id": "70aec20b-9c67-4d02-9fff-e943e14323cd"
+  },
+  {
+    "canonical_ref": "22_9",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:22_9",
+    "passage_id": "8adab596-0e29-4d65-a8e1-9049cc9a6ce1"
+  },
+  {
+    "canonical_ref": "22_10",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:22_10",
+    "passage_id": "de21db4b-b958-47d8-8233-c8a1c455e45d"
+  },
+  {
+    "canonical_ref": "22_11",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:22_11",
+    "passage_id": "c3c0f63b-3e12-4bdf-b98f-b1167a0bac79"
+  },
+  {
+    "canonical_ref": "23_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:23_1",
+    "passage_id": "e2fd3f2e-fa19-41d3-87a3-46c39cc65b97"
+  },
+  {
+    "canonical_ref": "23_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:23_2",
+    "passage_id": "5714b6aa-eb57-4340-b865-10d31abc80d8"
+  },
+  {
+    "canonical_ref": "23_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:23_3",
+    "passage_id": "885060bc-3f0a-4afd-82de-507d5447204e"
+  },
+  {
+    "canonical_ref": "23_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:23_4",
+    "passage_id": "3a6f839b-4ed8-4534-bf49-6d7bf455f9e8"
+  },
+  {
+    "canonical_ref": "23_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:23_5",
+    "passage_id": "71a3db5f-21d6-4ac3-b4b9-d818b93deed1"
+  },
+  {
+    "canonical_ref": "24_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:24_1",
+    "passage_id": "9c842aa5-7d44-45c6-b9c2-b6c1e46bde2c"
+  },
+  {
+    "canonical_ref": "24_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:24_2",
+    "passage_id": "f012b31d-1195-45e6-9df0-a3994b72037f"
+  },
+  {
+    "canonical_ref": "24_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:24_3",
+    "passage_id": "fe90d5f3-e724-450f-9fa3-24a211ffa5c0"
+  },
+  {
+    "canonical_ref": "25_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:25_5",
+    "passage_id": "b781b9c7-6472-4527-8c55-94814eb5db11"
+  },
+  {
+    "canonical_ref": "24_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:24_4",
+    "passage_id": "610b6057-9576-43e3-b0ea-72354a601d75"
+  },
+  {
+    "canonical_ref": "25_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:25_1",
+    "passage_id": "047d4d68-20cc-46c0-bf0b-6a09d4b04041"
+  },
+  {
+    "canonical_ref": "25_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:25_2",
+    "passage_id": "ea4bd77d-f534-4a62-8003-3d1786e54288"
+  },
+  {
+    "canonical_ref": "25_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:25_3",
+    "passage_id": "ac1e99ee-4327-49bf-9170-5490c1f823d1"
+  },
+  {
+    "canonical_ref": "25_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:25_4",
+    "passage_id": "a631c8d1-d37a-48e5-871d-9f1dec7b48ea"
+  },
+  {
+    "canonical_ref": "25_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:25_6",
+    "passage_id": "a7db67da-7d1e-4cba-a896-70b628a3d16b"
+  },
+  {
+    "canonical_ref": "26_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:26_1",
+    "passage_id": "b4f8a782-aaf3-4cd1-9f96-12e27f3f3abd"
+  },
+  {
+    "canonical_ref": "26_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:26_2",
+    "passage_id": "130fc822-a50f-45d4-bc1b-469495bf965f"
+  },
+  {
+    "canonical_ref": "26_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:26_3",
+    "passage_id": "6426b869-7b96-4913-8499-99b1198b34fe"
+  },
+  {
+    "canonical_ref": "26_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:26_4",
+    "passage_id": "9399b071-1661-477e-8574-9eba4cb55ede"
+  },
+  {
+    "canonical_ref": "65_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:65_5",
+    "passage_id": "a8107393-ea28-47f3-b01c-6d8bcf0e5762"
+  },
+  {
+    "canonical_ref": "27_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:27_1",
+    "passage_id": "2b0315a6-b2d2-4978-959b-e796f64ef70b"
+  },
+  {
+    "canonical_ref": "27_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:27_2",
+    "passage_id": "1bf8b1a8-3afd-4060-a4b3-c2f4aeced99e"
+  },
+  {
+    "canonical_ref": "27_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:27_3",
+    "passage_id": "10219ae4-478e-43b4-b782-9b667a86ef7a"
+  },
+  {
+    "canonical_ref": "27_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:27_4",
+    "passage_id": "5f9ec2e8-44b3-4205-b743-536294aede3a"
+  },
+  {
+    "canonical_ref": "27_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:27_5",
+    "passage_id": "5c211a91-9634-400d-9272-53dca3f236cc"
+  },
+  {
+    "canonical_ref": "29_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:29_1",
+    "passage_id": "d785f214-1137-4c55-bb54-9420d1573599"
+  },
+  {
+    "canonical_ref": "28_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:28_1",
+    "passage_id": "ece96adf-9339-4b15-b306-defd70ffef7d"
+  },
+  {
+    "canonical_ref": "28_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:28_2",
+    "passage_id": "1cc79941-8ef2-4e56-8c7f-f51a1bb796c9"
+  },
+  {
+    "canonical_ref": "28_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:28_3",
+    "passage_id": "f3915ffa-aee5-400b-994d-58739e0a50b2"
+  },
+  {
+    "canonical_ref": "28_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:28_4",
+    "passage_id": "acfc0ee3-c595-45b3-9285-67e168bfee84"
+  },
+  {
+    "canonical_ref": "28_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:28_5",
+    "passage_id": "bf4564ec-bd54-4b36-bf8c-005548577617"
+  },
+  {
+    "canonical_ref": "28_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:28_6",
+    "passage_id": "6a554dbf-4fd9-4f0d-a0c8-e27366666027"
+  },
+  {
+    "canonical_ref": "29_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:29_2",
+    "passage_id": "1e01f107-5ea4-4108-9776-1d4f9cb4973f"
+  },
+  {
+    "canonical_ref": "29_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:29_3",
+    "passage_id": "860288fb-f49d-485a-a68b-ed83a1ab4246"
+  },
+  {
+    "canonical_ref": "30_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:30_1",
+    "passage_id": "aaf55dab-8699-44d0-ae71-88565c00038d"
+  },
+  {
+    "canonical_ref": "30_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:30_2",
+    "passage_id": "457c8629-7f10-4f28-ac38-61a14a3df69d"
+  },
+  {
+    "canonical_ref": "30_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:30_3",
+    "passage_id": "17eed3d4-603f-43fa-ba2c-00526a7eb25d"
+  },
+  {
+    "canonical_ref": "31_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:31_7",
+    "passage_id": "2ba8fe84-fa91-45e9-ae24-0636f59c59cd"
+  },
+  {
+    "canonical_ref": "31_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:31_1",
+    "passage_id": "c1695247-78a7-4ab6-927d-c35e3baea74c"
+  },
+  {
+    "canonical_ref": "31_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:31_2",
+    "passage_id": "14186b6d-5d7e-4c8e-b72d-d7816c8d0aca"
+  },
+  {
+    "canonical_ref": "31_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:31_3",
+    "passage_id": "c57b3fee-c4ef-4fff-86d4-1a84975bd778"
+  },
+  {
+    "canonical_ref": "31_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:31_4",
+    "passage_id": "ee7f5a27-2129-4b9b-bf41-841fde8d8842"
+  },
+  {
+    "canonical_ref": "31_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:31_5",
+    "passage_id": "868044a4-8cb3-467b-939e-21f4606fc3f5"
+  },
+  {
+    "canonical_ref": "31_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:31_6",
+    "passage_id": "b6b6bf46-983f-493c-9ff8-bbb8cc629d25"
+  },
+  {
+    "canonical_ref": "32_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:32_1",
+    "passage_id": "77823e6d-2424-4fec-9885-495aab2b2dff"
+  },
+  {
+    "canonical_ref": "32_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:32_2",
+    "passage_id": "dfe37330-8b03-492d-860a-bb9043522ce2"
+  },
+  {
+    "canonical_ref": "32_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:32_3",
+    "passage_id": "4f6a5683-2a0d-4ef5-a89f-c48f814dcc58"
+  },
+  {
+    "canonical_ref": "32_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:32_4",
+    "passage_id": "455f2231-536d-4108-a779-092653d0c702"
+  },
+  {
+    "canonical_ref": "32_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:32_5",
+    "passage_id": "43ff2928-80ff-4639-b4da-1fb514b37e6f"
+  },
+  {
+    "canonical_ref": "36_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:36_4",
+    "passage_id": "10c1f1ea-6e09-43ca-bb55-69f4c0209015"
+  },
+  {
+    "canonical_ref": "32_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:32_6",
+    "passage_id": "ad9c4e1e-250d-4195-9f10-7be9948d688d"
+  },
+  {
+    "canonical_ref": "33_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:33_1",
+    "passage_id": "d10e1ac0-62a1-4ecb-b040-e96e5a671d77"
+  },
+  {
+    "canonical_ref": "33_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:33_2",
+    "passage_id": "f50c1e5a-03bc-420c-abe1-c0e44c0c5f13"
+  },
+  {
+    "canonical_ref": "34_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:34_1",
+    "passage_id": "b015132c-e229-4bca-a2de-c63b87e2d3d0"
+  },
+  {
+    "canonical_ref": "34_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:34_2",
+    "passage_id": "598c43ed-9dc7-4231-9c09-f646f733a9f6"
+  },
+  {
+    "canonical_ref": "34_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:34_3",
+    "passage_id": "2ee82262-3719-4359-aebc-4dc4526b97f8"
+  },
+  {
+    "canonical_ref": "34_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:34_4",
+    "passage_id": "8072bb48-286f-4e3a-a5f4-052e936a41a2"
+  },
+  {
+    "canonical_ref": "34_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:34_5",
+    "passage_id": "9bd35173-350e-44d3-a185-4ba0ecc6a319"
+  },
+  {
+    "canonical_ref": "34_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:34_6",
+    "passage_id": "342695f3-bb76-4187-b8bf-40c5a7a4d0f3"
+  },
+  {
+    "canonical_ref": "34_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:34_7",
+    "passage_id": "b78e18b5-eb64-4232-b972-60f762b7a7c2"
+  },
+  {
+    "canonical_ref": "34_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:34_8",
+    "passage_id": "a9ca20f4-31b9-4d53-8526-bdea5f88bf69"
+  },
+  {
+    "canonical_ref": "35_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:35_1",
+    "passage_id": "e2f2cd7c-6f02-4e8c-82b5-dfea0f24a61a"
+  },
+  {
+    "canonical_ref": "35_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:35_2",
+    "passage_id": "75cb276a-bdb6-44c7-993e-4a8176abc550"
+  },
+  {
+    "canonical_ref": "35_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:35_3",
+    "passage_id": "ef52f34a-e226-4f63-a823-5ac7bbcb56b7"
+  },
+  {
+    "canonical_ref": "35_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:35_4",
+    "passage_id": "40474585-180c-4b25-b41f-6c96bae03fc3"
+  },
+  {
+    "canonical_ref": "35_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:35_5",
+    "passage_id": "a475e3ad-34f3-4751-b15b-7837aaf41981"
+  },
+  {
+    "canonical_ref": "35_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:35_6",
+    "passage_id": "6d4d8c9e-1c86-45f9-a119-300d5fbff647"
+  },
+  {
+    "canonical_ref": "35_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:35_7",
+    "passage_id": "61edc963-9602-464d-8036-6bdf3100d0a8"
+  },
+  {
+    "canonical_ref": "35_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:35_8",
+    "passage_id": "b7cb320f-3f8c-4953-a825-a560159d9c8f"
+  },
+  {
+    "canonical_ref": "36_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:36_1",
+    "passage_id": "a74d8171-46a2-4969-aaf6-c3770b82b8c7"
+  },
+  {
+    "canonical_ref": "36_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:36_2",
+    "passage_id": "09927f79-89a1-4bc4-ac9a-1ae30dd2c4f5"
+  },
+  {
+    "canonical_ref": "36_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:36_3",
+    "passage_id": "60051164-9001-4ea9-a81c-d3e1ded3d41e"
+  },
+  {
+    "canonical_ref": "36_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:36_5",
+    "passage_id": "979fc600-76fe-496c-af23-d15bdabace82"
+  },
+  {
+    "canonical_ref": "36_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:36_6",
+    "passage_id": "24003af5-1a1e-4880-96f3-03aaaaec7196"
+  },
+  {
+    "canonical_ref": "37_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:37_1",
+    "passage_id": "1a764feb-4b19-4d36-ab94-c7a24236782b"
+  },
+  {
+    "canonical_ref": "37_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:37_2",
+    "passage_id": "55f3b27f-0297-48a4-a575-390ae8f8c137"
+  },
+  {
+    "canonical_ref": "37_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:37_3",
+    "passage_id": "b244506f-9416-4db2-ba6a-030798d8b180"
+  },
+  {
+    "canonical_ref": "37_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:37_4",
+    "passage_id": "10fbfeda-48c5-4dfb-8300-86a0b82d8e92"
+  },
+  {
+    "canonical_ref": "38_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:38_1",
+    "passage_id": "3f3e9bbc-3535-4ae3-9fc8-fd03d0707b08"
+  },
+  {
+    "canonical_ref": "38_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:38_2",
+    "passage_id": "f804e7ca-b3ac-4e5d-8156-c2136cb26af6"
+  },
+  {
+    "canonical_ref": "38_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:38_3",
+    "passage_id": "03352d02-55f2-44f2-b3ff-95005d77f81b"
+  },
+  {
+    "canonical_ref": "38_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:38_4",
+    "passage_id": "860f34b9-283c-4fdb-938b-04dbf417ff01"
+  },
+  {
+    "canonical_ref": "38_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:38_5",
+    "passage_id": "cc64ab77-2710-4229-8ad5-2ea943a21b89"
+  },
+  {
+    "canonical_ref": "39_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:39_7",
+    "passage_id": "1443134c-4ec9-4edb-97fe-3c42a6089774"
+  },
+  {
+    "canonical_ref": "39_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:39_1",
+    "passage_id": "ac213a1b-f920-481c-a349-7563bd96028f"
+  },
+  {
+    "canonical_ref": "39_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:39_2",
+    "passage_id": "0adfddbf-e13e-427f-993f-1b29b9219b5e"
+  },
+  {
+    "canonical_ref": "39_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:39_3",
+    "passage_id": "59002d12-dc15-4b49-9e68-efd32b547597"
+  },
+  {
+    "canonical_ref": "39_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:39_4",
+    "passage_id": "765347bf-c93f-4c79-ab73-83409a7804aa"
+  },
+  {
+    "canonical_ref": "39_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:39_5",
+    "passage_id": "c1968319-91fc-469b-b15f-02237c56ae19"
+  },
+  {
+    "canonical_ref": "39_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:39_6",
+    "passage_id": "8e39c302-3b8d-41a2-8045-7e251b872dd8"
+  },
+  {
+    "canonical_ref": "39_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:39_8",
+    "passage_id": "fe3653a8-c120-4b91-b7f2-fc133dfffef5"
+  },
+  {
+    "canonical_ref": "40_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:40_1",
+    "passage_id": "1e35a461-45be-4232-abc5-ee8dab969741"
+  },
+  {
+    "canonical_ref": "40_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:40_2",
+    "passage_id": "59add444-05db-42c9-be56-55534859ce26"
+  },
+  {
+    "canonical_ref": "40_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:40_3",
+    "passage_id": "f83f8e07-1342-40aa-b37e-143d406eace0"
+  },
+  {
+    "canonical_ref": "40_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:40_4",
+    "passage_id": "e3447d9d-c28b-40eb-af62-d52e58589fc8"
+  },
+  {
+    "canonical_ref": "40_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:40_5",
+    "passage_id": "5588a88a-103e-4dbd-a08b-7d5b8c36ce48"
+  },
+  {
+    "canonical_ref": "41_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:41_1",
+    "passage_id": "4b27c9c1-4dd4-45f3-8734-bb840962cfee"
+  },
+  {
+    "canonical_ref": "41_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:41_2",
+    "passage_id": "33e68c89-b24c-4489-825f-f63e170366be"
+  },
+  {
+    "canonical_ref": "41_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:41_3",
+    "passage_id": "8dd44fb4-e865-42f3-bcf1-170132661fb1"
+  },
+  {
+    "canonical_ref": "41_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:41_4",
+    "passage_id": "36fd361e-7b68-44cf-a006-e7532ab3f187"
+  },
+  {
+    "canonical_ref": "42_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:42_1",
+    "passage_id": "2799007e-f4f2-4bcd-abcb-3dc3a8e3ae11"
+  },
+  {
+    "canonical_ref": "42_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:42_2",
+    "passage_id": "dc51ab02-670e-4393-934d-f06716bcdb02"
+  },
+  {
+    "canonical_ref": "42_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:42_3",
+    "passage_id": "49beedab-ae12-4d34-aaad-f5b80f7c0a35"
+  },
+  {
+    "canonical_ref": "42_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:42_4",
+    "passage_id": "b6c47720-9812-4bbd-b3cc-29dd8e53c042"
+  },
+  {
+    "canonical_ref": "43_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:43_1",
+    "passage_id": "e64be00b-c0b7-49f8-8003-5a13bc4774a8"
+  },
+  {
+    "canonical_ref": "43_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:43_2",
+    "passage_id": "caf78f8e-ac47-4d93-aa85-1d3a83bc9c36"
+  },
+  {
+    "canonical_ref": "43_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:43_3",
+    "passage_id": "c062363e-94fd-4dff-a5a1-b30a6d5debcd"
+  },
+  {
+    "canonical_ref": "43_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:43_4",
+    "passage_id": "aab30d86-a84b-4794-85f0-c842fc140159"
+  },
+  {
+    "canonical_ref": "43_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:43_5",
+    "passage_id": "f7598647-a74b-4c99-a77b-dc122077c1eb"
+  },
+  {
+    "canonical_ref": "43_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:43_6",
+    "passage_id": "a152b657-7abc-4707-85e4-5555085e8523"
+  },
+  {
+    "canonical_ref": "43_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:43_7",
+    "passage_id": "d0b97f16-9409-4c05-83b5-e7bd0fce7db3"
+  },
+  {
+    "canonical_ref": "43_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:43_8",
+    "passage_id": "caea11e0-aa35-49b5-8656-1cd57c6cd934"
+  },
+  {
+    "canonical_ref": "44_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:44_1",
+    "passage_id": "f4e68458-dfbf-4339-9455-fb7aa8e04301"
+  },
+  {
+    "canonical_ref": "44_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:44_2",
+    "passage_id": "c9857d7d-6d56-462c-a1d1-54acc3e8f528"
+  },
+  {
+    "canonical_ref": "44_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:44_3",
+    "passage_id": "7a7dcf45-dc88-4a0a-be82-3a38dffed2e4"
+  },
+  {
+    "canonical_ref": "44_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:44_4",
+    "passage_id": "8b301161-236d-41f8-9c91-20fb47cd0b0d"
+  },
+  {
+    "canonical_ref": "45_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:45_1",
+    "passage_id": "aeed9643-9a64-4382-814f-646cea2816be"
+  },
+  {
+    "canonical_ref": "45_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:45_2",
+    "passage_id": "7ac73b2b-1c33-42c6-8f80-41f2f44d3709"
+  },
+  {
+    "canonical_ref": "45_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:45_3",
+    "passage_id": "fcd0cfec-8b18-4078-8354-ea46502781fb"
+  },
+  {
+    "canonical_ref": "45_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:45_4",
+    "passage_id": "30a3935f-d84c-4237-ac63-5f4e4cc4b3e3"
+  },
+  {
+    "canonical_ref": "46_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:46_1",
+    "passage_id": "656e9976-1200-4d66-b906-99b6d49fd929"
+  },
+  {
+    "canonical_ref": "46_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:46_2",
+    "passage_id": "4aa6c35e-9ea8-4c78-9e44-10cc2e92fdbe"
+  },
+  {
+    "canonical_ref": "46_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:46_3",
+    "passage_id": "de97a85d-f5a4-4493-937e-148034a31e06"
+  },
+  {
+    "canonical_ref": "46_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:46_4",
+    "passage_id": "f6a13d97-3b2c-46d3-a5d3-fc3d4f604507"
+  },
+  {
+    "canonical_ref": "46_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:46_5",
+    "passage_id": "b7458b28-8dda-4154-92a0-64e8316ae978"
+  },
+  {
+    "canonical_ref": "46_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:46_6",
+    "passage_id": "52429b86-ada4-444b-b8a5-25cf9b60b28a"
+  },
+  {
+    "canonical_ref": "46_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:46_7",
+    "passage_id": "e4add995-1343-4c34-bd02-eed9a8b889a0"
+  },
+  {
+    "canonical_ref": "47_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:47_1",
+    "passage_id": "17c1a582-dbf5-4cde-991f-902346946211"
+  },
+  {
+    "canonical_ref": "47_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:47_2",
+    "passage_id": "9b1a8434-9345-4a29-be26-e2f4af95b328"
+  },
+  {
+    "canonical_ref": "48_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:48_4",
+    "passage_id": "4e86f762-57ee-46a0-97d9-fb37b0079b39"
+  },
+  {
+    "canonical_ref": "47_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:47_3",
+    "passage_id": "54842972-a477-45b3-9387-a044c8e7324d"
+  },
+  {
+    "canonical_ref": "47_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:47_4",
+    "passage_id": "f2d4e1d3-c183-46f5-bdab-88a6da177bcf"
+  },
+  {
+    "canonical_ref": "47_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:47_5",
+    "passage_id": "1e774a21-704e-4c21-a397-ad66c9b64f98"
+  },
+  {
+    "canonical_ref": "48_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:48_1",
+    "passage_id": "a1016e99-7bea-4ce1-a806-e42ee610e4c3"
+  },
+  {
+    "canonical_ref": "48_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:48_2",
+    "passage_id": "3571c36a-42b9-4b5d-8bcb-7a6543ab9316"
+  },
+  {
+    "canonical_ref": "48_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:48_3",
+    "passage_id": "32e9cdd4-1a37-4307-bf23-877a74538c45"
+  },
+  {
+    "canonical_ref": "49_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:49_1",
+    "passage_id": "8a7980ba-1d8f-4fd7-b41c-5c2202f6b3fa"
+  },
+  {
+    "canonical_ref": "49_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:49_2",
+    "passage_id": "8919ee21-fbb0-4afa-9200-c7c28c7842fc"
+  },
+  {
+    "canonical_ref": "49_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:49_3",
+    "passage_id": "adfec1bb-a41f-4fa7-ae90-f29976f052e4"
+  },
+  {
+    "canonical_ref": "49_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:49_4",
+    "passage_id": "48cbf538-4cca-40f1-9cd0-b5b03200567b"
+  },
+  {
+    "canonical_ref": "49_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:49_5",
+    "passage_id": "40e6a825-8319-4a9b-a3eb-483b1cd6ca9f"
+  },
+  {
+    "canonical_ref": "49_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:49_6",
+    "passage_id": "98c20917-07d7-4dc9-9d7c-a1fd74bb457c"
+  },
+  {
+    "canonical_ref": "49_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:49_8",
+    "passage_id": "614ca178-d792-4c03-9e28-1f2d8a899a25"
+  },
+  {
+    "canonical_ref": "50_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:50_1",
+    "passage_id": "e0f744df-96ac-420c-b585-2d8fa81bee20"
+  },
+  {
+    "canonical_ref": "50_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:50_2",
+    "passage_id": "b6b5d0bf-7050-4e5d-a9a7-5e045f3c64d2"
+  },
+  {
+    "canonical_ref": "50_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:50_3",
+    "passage_id": "ffe27aa8-ded2-487c-be13-c5238f185117"
+  },
+  {
+    "canonical_ref": "50_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:50_4",
+    "passage_id": "a3ea2554-0edb-4d2a-b645-59a96c062165"
+  },
+  {
+    "canonical_ref": "50_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:50_5",
+    "passage_id": "d61b5375-c32a-496d-8285-7b60f0e9ea2e"
+  },
+  {
+    "canonical_ref": "51_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:51_1",
+    "passage_id": "8882a07d-a67f-4fa7-9918-74f23c0459ba"
+  },
+  {
+    "canonical_ref": "51_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:51_2",
+    "passage_id": "6d3766ce-8759-486b-ad2c-9f33fca8e4a7"
+  },
+  {
+    "canonical_ref": "51_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:51_3",
+    "passage_id": "e002bb32-8a34-4d35-944a-b831f4e360df"
+  },
+  {
+    "canonical_ref": "52_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:52_1",
+    "passage_id": "270f600c-e4a1-45a3-8a4c-a9e31b2c0edf"
+  },
+  {
+    "canonical_ref": "56_20",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_20",
+    "passage_id": "1558238d-cc01-4d94-81ad-46fc3335887f"
+  },
+  {
+    "canonical_ref": "52_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:52_2",
+    "passage_id": "f0826808-8abf-4501-a8af-18e6df172c89"
+  },
+  {
+    "canonical_ref": "52_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:52_3",
+    "passage_id": "000a15fa-e983-41f7-9c2d-e1b356fd06ed"
+  },
+  {
+    "canonical_ref": "52_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:52_4",
+    "passage_id": "14b16e2b-1332-494f-8d36-3a5d036ff380"
+  },
+  {
+    "canonical_ref": "53_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:53_1",
+    "passage_id": "b388e1ca-ca21-43b0-b6ac-1668318430f9"
+  },
+  {
+    "canonical_ref": "53_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:53_2",
+    "passage_id": "536f4bd5-c470-4c07-946a-3438fe98941d"
+  },
+  {
+    "canonical_ref": "58_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:58_4",
+    "passage_id": "e4b8617c-63fe-4ca5-9813-7e10c5a79f52"
+  },
+  {
+    "canonical_ref": "53_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:53_3",
+    "passage_id": "73a2f573-048d-49e8-bec7-f25e33594b5b"
+  },
+  {
+    "canonical_ref": "53_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:53_4",
+    "passage_id": "493985b4-4448-4e65-87a4-c2d18a61cf39"
+  },
+  {
+    "canonical_ref": "53_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:53_5",
+    "passage_id": "7e2e4ff9-9478-4515-b3af-220beec040fe"
+  },
+  {
+    "canonical_ref": "53_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:53_6",
+    "passage_id": "4957042c-5e46-41d6-a034-55e24b60faf9"
+  },
+  {
+    "canonical_ref": "54_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:54_1",
+    "passage_id": "3dfe6ac5-417e-46b6-8bea-815479f88950"
+  },
+  {
+    "canonical_ref": "54_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:54_2",
+    "passage_id": "09d30767-64d3-45ce-942c-6c180d994e23"
+  },
+  {
+    "canonical_ref": "55_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:55_1",
+    "passage_id": "2d9dbef3-4503-44c9-8a65-1f53533c306b"
+  },
+  {
+    "canonical_ref": "55_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:55_2",
+    "passage_id": "d8cccf0a-51ec-426f-8e5e-ba27a6376353"
+  },
+  {
+    "canonical_ref": "55_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:55_3",
+    "passage_id": "95477f4e-18d9-4a94-9d68-b79db39ec4cf"
+  },
+  {
+    "canonical_ref": "56_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_1",
+    "passage_id": "d5594fc7-cbd9-4e1b-9e8e-ff103e6c2c69"
+  },
+  {
+    "canonical_ref": "56_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_2",
+    "passage_id": "4718cca4-ddc7-4699-a28f-872cb8f6d0f2"
+  },
+  {
+    "canonical_ref": "64_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:64_7",
+    "passage_id": "0418025a-5b9c-402c-ad97-2a2727d7a297"
+  },
+  {
+    "canonical_ref": "56_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_3",
+    "passage_id": "f3329266-5e9e-4e4c-9ff0-573195cd65f1"
+  },
+  {
+    "canonical_ref": "56_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_4",
+    "passage_id": "d6cdccd5-6e79-4652-9a72-4e0a9b10545b"
+  },
+  {
+    "canonical_ref": "56_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_5",
+    "passage_id": "4741a102-0be6-43ee-b2bf-453ee8cbb4cc"
+  },
+  {
+    "canonical_ref": "56_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_6",
+    "passage_id": "1fefc8fe-f370-490a-aacb-b01e115c6554"
+  },
+  {
+    "canonical_ref": "56_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_7",
+    "passage_id": "bfc478be-ef2b-4f13-8856-9695caeae711"
+  },
+  {
+    "canonical_ref": "56_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_8",
+    "passage_id": "2ebcc286-16da-4fca-9c37-b5e6d21b354b"
+  },
+  {
+    "canonical_ref": "56_9",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_9",
+    "passage_id": "f3185b34-2feb-447d-a55e-ece081d30fcc"
+  },
+  {
+    "canonical_ref": "56_10",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_10",
+    "passage_id": "eac6b0f3-f2e9-42cd-986c-6ec41d81ced4"
+  },
+  {
+    "canonical_ref": "56_11",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_11",
+    "passage_id": "30d1aa77-c85a-483e-802b-a2c52f144164"
+  },
+  {
+    "canonical_ref": "56_12",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_12",
+    "passage_id": "c6954124-36aa-4c1b-8f9c-4fd4f49eb844"
+  },
+  {
+    "canonical_ref": "56_13",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_13",
+    "passage_id": "be729b91-26df-4e5f-9bf4-e38efb3318b5"
+  },
+  {
+    "canonical_ref": "56_14",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_14",
+    "passage_id": "cf5dcd03-bfa6-40bf-a7f1-7f6dab8189d0"
+  },
+  {
+    "canonical_ref": "56_15",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_15",
+    "passage_id": "82d86942-8bf1-4a94-b5f3-584c66b0c335"
+  },
+  {
+    "canonical_ref": "56_16",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_16",
+    "passage_id": "3142b41c-387d-402e-8dd6-3bd5f6f578e0"
+  },
+  {
+    "canonical_ref": "56_17",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_17",
+    "passage_id": "c0cf438b-d173-404e-bb74-ffb87b20a47b"
+  },
+  {
+    "canonical_ref": "56_18",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_18",
+    "passage_id": "4c4f0596-d7e3-4cb2-8c29-bb79383f8dc6"
+  },
+  {
+    "canonical_ref": "56_19",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_19",
+    "passage_id": "12b11213-8870-4ff3-a13b-411a94ecb993"
+  },
+  {
+    "canonical_ref": "56_21",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_21",
+    "passage_id": "646ba7d0-7839-42fa-9f6d-07d0238e92f1"
+  },
+  {
+    "canonical_ref": "56_22",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_22",
+    "passage_id": "1cb594d4-1fa2-4b5a-ade2-0cec12a8d0da"
+  },
+  {
+    "canonical_ref": "56_23",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:56_23",
+    "passage_id": "fe4a98cb-1e61-4cb4-b20b-a85e4c99317c"
+  },
+  {
+    "canonical_ref": "57_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:57_1",
+    "passage_id": "edc6a376-54d5-4bc2-a506-edffd0fcb28c"
+  },
+  {
+    "canonical_ref": "57_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:57_2",
+    "passage_id": "48fffd9d-ce46-4557-9195-0adb6263a9fa"
+  },
+  {
+    "canonical_ref": "57_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:57_3",
+    "passage_id": "05ffa918-65b7-40a6-b8b7-b25fdf6dc606"
+  },
+  {
+    "canonical_ref": "57_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:57_4",
+    "passage_id": "d6563cb8-3250-4e9e-9742-7ce433d87da6"
+  },
+  {
+    "canonical_ref": "58_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:58_1",
+    "passage_id": "3ae8f89d-5997-4f73-acc5-3a2aaa4d4a54"
+  },
+  {
+    "canonical_ref": "58_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:58_2",
+    "passage_id": "420ef915-843f-42ce-baa4-c1f3d8279ac8"
+  },
+  {
+    "canonical_ref": "58_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:58_3",
+    "passage_id": "2b92d00d-efc3-4f74-87f8-68b297ff0e1c"
+  },
+  {
+    "canonical_ref": "58_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:58_5",
+    "passage_id": "3ed8ef95-cc29-493f-95c6-2c3a0790d164"
+  },
+  {
+    "canonical_ref": "58_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:58_6",
+    "passage_id": "cb605c89-8836-4627-be97-e624cdbafb9f"
+  },
+  {
+    "canonical_ref": "58_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:58_7",
+    "passage_id": "2fa2f220-6fec-455d-89dd-d363cd8be958"
+  },
+  {
+    "canonical_ref": "58_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:58_8",
+    "passage_id": "f05c4f61-83f9-44ef-a081-e3b90d1160f0"
+  },
+  {
+    "canonical_ref": "58_10",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:58_10",
+    "passage_id": "e9bcefa5-cac6-4307-b9c0-17ca1015878e"
+  },
+  {
+    "canonical_ref": "58_11",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:58_11",
+    "passage_id": "b25294ac-75cc-4f25-9271-507c8cbde8dd"
+  },
+  {
+    "canonical_ref": "58_12",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:58_12",
+    "passage_id": "4d056131-1030-441b-89f9-0a77e327615c"
+  },
+  {
+    "canonical_ref": "58_13",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:58_13",
+    "passage_id": "cb396449-11df-40a7-ae1e-4350c08715dd"
+  },
+  {
+    "canonical_ref": "59_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:59_1",
+    "passage_id": "e300905e-5c00-4b3f-b783-daa3de7b0edc"
+  },
+  {
+    "canonical_ref": "59_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:59_2",
+    "passage_id": "e86e7654-4b12-45d3-9f41-48ba67b7c7b1"
+  },
+  {
+    "canonical_ref": "59_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:59_3",
+    "passage_id": "824a4f23-b3f7-4786-aa67-fd6315c9f20d"
+  },
+  {
+    "canonical_ref": "60_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:60_1",
+    "passage_id": "4707588a-6ae2-4d6f-b049-d9b9d04d7baf"
+  },
+  {
+    "canonical_ref": "60_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:60_2",
+    "passage_id": "cd01cdfc-b554-4797-8eb0-eff1e04bbb5f"
+  },
+  {
+    "canonical_ref": "60_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:60_3",
+    "passage_id": "91cda09b-f3ca-44b0-90d1-f47ca97dd70b"
+  },
+  {
+    "canonical_ref": "60_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:60_4",
+    "passage_id": "32746d5b-82ac-4f0f-802e-21a1ad5f14f3"
+  },
+  {
+    "canonical_ref": "60_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:60_5",
+    "passage_id": "3b46ecdd-9d11-4f31-9b2a-e7ed6f079924"
+  },
+  {
+    "canonical_ref": "61_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:61_1",
+    "passage_id": "d7c129ec-0049-4bf8-8bf9-6a3e82b8190a"
+  },
+  {
+    "canonical_ref": "61_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:61_2",
+    "passage_id": "f405890e-bd11-4cd5-abe2-c8d9bef5725a"
+  },
+  {
+    "canonical_ref": "61_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:61_3",
+    "passage_id": "02912d0f-2392-4916-864e-ba56bdf2d253"
+  },
+  {
+    "canonical_ref": "61_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:61_4",
+    "passage_id": "6992ee51-e15e-4e87-8854-abb9af8a9e8a"
+  },
+  {
+    "canonical_ref": "61_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:61_5",
+    "passage_id": "33337dae-e105-4112-91f3-de1195c3002d"
+  },
+  {
+    "canonical_ref": "62_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:62_1",
+    "passage_id": "3a0dbccd-e240-4867-979e-889e333d665d"
+  },
+  {
+    "canonical_ref": "62_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:62_2",
+    "passage_id": "54d4fa3e-b5b0-4b07-9fab-407e83114451"
+  },
+  {
+    "canonical_ref": "62_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:62_3",
+    "passage_id": "21d61b45-afdb-4fd8-96a8-92529caa1aac"
+  },
+  {
+    "canonical_ref": "62_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:62_4",
+    "passage_id": "0c50337c-0870-4b6f-b55b-a2a81c524d67"
+  },
+  {
+    "canonical_ref": "62_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:62_5",
+    "passage_id": "8d25eac2-2732-4348-8fa6-f78a3555ef98"
+  },
+  {
+    "canonical_ref": "63_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:63_1",
+    "passage_id": "8db9782c-db46-4e94-8eb9-8bc1aa9e7523"
+  },
+  {
+    "canonical_ref": "63_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:63_2",
+    "passage_id": "c9a52877-491e-4c39-8c3a-5dca1bc30958"
+  },
+  {
+    "canonical_ref": "63_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:63_3",
+    "passage_id": "6df911d5-5fb6-470e-81e4-2208f25d9fb5"
+  },
+  {
+    "canonical_ref": "63_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:63_4",
+    "passage_id": "153d9f2d-3f5c-42bf-8f0c-3263db1fc2a4"
+  },
+  {
+    "canonical_ref": "63_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:63_5",
+    "passage_id": "31e38634-f3f0-4518-93b4-d65382c161bc"
+  },
+  {
+    "canonical_ref": "64_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:64_1",
+    "passage_id": "6acf2c60-3cb5-409a-b1cd-2477e3d7326a"
+  },
+  {
+    "canonical_ref": "64_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:64_2",
+    "passage_id": "f0d8163f-7a3c-4b01-9f95-217ca6837bb5"
+  },
+  {
+    "canonical_ref": "64_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:64_3",
+    "passage_id": "d18d4c54-0314-4239-8c0e-5651c1095fca"
+  },
+  {
+    "canonical_ref": "64_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:64_4",
+    "passage_id": "87122ed3-6155-4e5a-a3f5-f4dcdac79a02"
+  },
+  {
+    "canonical_ref": "64_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:64_5",
+    "passage_id": "e33d4c9b-965f-4fa0-8b48-55d8b617de83"
+  },
+  {
+    "canonical_ref": "64_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:64_6",
+    "passage_id": "878ee8cd-4d1b-4e39-9d16-e12d6faabd97"
+  },
+  {
+    "canonical_ref": "64_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:64_8",
+    "passage_id": "726a5c9d-5244-49b1-8e7b-cc15865a1286"
+  },
+  {
+    "canonical_ref": "65_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:65_1",
+    "passage_id": "34fc69b9-1642-4325-a981-73e94b8a96ba"
+  },
+  {
+    "canonical_ref": "65_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:65_2",
+    "passage_id": "647be1b9-7126-4c12-9189-5dd4043f50b0"
+  },
+  {
+    "canonical_ref": "65_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:65_3",
+    "passage_id": "8c5a8044-2fa7-4b01-8a91-00b45327eaf5"
+  },
+  {
+    "canonical_ref": "65_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:65_4",
+    "passage_id": "f91b3faa-1042-4836-a755-cb5de5a438cc"
+  },
+  {
+    "canonical_ref": "65_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:65_6",
+    "passage_id": "aa28c977-0da2-4a2f-a1fd-6700cc1a0c81"
+  },
+  {
+    "canonical_ref": "65_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:65_7",
+    "passage_id": "a3d9a4c5-8393-44f8-835d-d70d801eb60f"
+  },
+  {
+    "canonical_ref": "66_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:66_1",
+    "passage_id": "1df3120a-f9ce-442e-9a9f-3faa9ba92845"
+  },
+  {
+    "canonical_ref": "66_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:66_2",
+    "passage_id": "5ea4f5a3-29d6-4577-996f-d6adb018e101"
+  },
+  {
+    "canonical_ref": "66_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:66_3",
+    "passage_id": "bb3d03f1-ba76-47e4-82c7-d1769b83d478"
+  },
+  {
+    "canonical_ref": "66_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:66_4",
+    "passage_id": "88a2c999-114f-4f06-9196-b523dae98419"
+  },
+  {
+    "canonical_ref": "67_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:67_1",
+    "passage_id": "1efa7a17-db75-4461-a4e0-b5ab577232c9"
+  },
+  {
+    "canonical_ref": "67_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:67_2",
+    "passage_id": "50a12b72-8744-452c-b1bb-2dd9f1669e28"
+  },
+  {
+    "canonical_ref": "67_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:67_3",
+    "passage_id": "b306ef89-6857-4664-a6d1-d74ac002c445"
+  },
+  {
+    "canonical_ref": "67_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:67_4",
+    "passage_id": "137593fa-5cd0-4fe3-9870-f21f715975c8"
+  },
+  {
+    "canonical_ref": "67_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:67_5",
+    "passage_id": "61de7cce-3d0e-4dad-8b45-a2d861e61144"
+  },
+  {
+    "canonical_ref": "67_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:67_6",
+    "passage_id": "d789f821-3dc3-446b-b046-d5484b52e45d"
+  },
+  {
+    "canonical_ref": "67_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:67_7",
+    "passage_id": "dc63b7ee-1954-42b5-b325-ceca23f04b0f"
+  },
+  {
+    "canonical_ref": "67_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:67_8",
+    "passage_id": "de1b0dfa-72f8-4717-8d83-eaf7e329af0c"
+  },
+  {
+    "canonical_ref": "67_9",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:67_9",
+    "passage_id": "70511372-ebca-44f0-be5e-688b5a6ea6c6"
+  },
+  {
+    "canonical_ref": "67_10",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:67_10",
+    "passage_id": "b8954b03-09be-4d28-a6c9-bde69b37f50c"
+  },
+  {
+    "canonical_ref": "67_11",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:67_11",
+    "passage_id": "3ffada21-2566-4946-be27-2527a1275fad"
+  },
+  {
+    "canonical_ref": "68_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:68_1",
+    "passage_id": "75b49b03-5606-4c79-81b9-5b39ef1e1968"
+  },
+  {
+    "canonical_ref": "68_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:68_2",
+    "passage_id": "a5b50fb6-bfe0-4d0e-97c3-431936dde393"
+  },
+  {
+    "canonical_ref": "68_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:68_3",
+    "passage_id": "9f4bf00b-45f9-4586-8448-5d7261d909a2"
+  },
+  {
+    "canonical_ref": "68_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:68_4",
+    "passage_id": "17092846-9ac3-4938-b387-0b594a223191"
+  },
+  {
+    "canonical_ref": "68_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:68_5",
+    "passage_id": "f4413474-75e4-4a86-a768-3f0d9e12b100"
+  },
+  {
+    "canonical_ref": "68_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:68_6",
+    "passage_id": "e6c2db72-d413-4c1f-8f80-1d3bae3860de"
+  },
+  {
+    "canonical_ref": "68_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:68_7",
+    "passage_id": "1e04529e-400e-4164-912c-01e71bb3cee1"
+  },
+  {
+    "canonical_ref": "68_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:68_8",
+    "passage_id": "9bcd0575-47a2-4219-ae4d-29e1f41dd3f5"
+  },
+  {
+    "canonical_ref": "68_9",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:68_9",
+    "passage_id": "904f6e14-5ab6-41e1-ad44-2d9ebd750c57"
+  },
+  {
+    "canonical_ref": "69_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:69_1",
+    "passage_id": "d42a0b4f-78d4-4f19-b46a-89e6c95b61b4"
+  },
+  {
+    "canonical_ref": "69_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:69_2",
+    "passage_id": "1f235d5b-55f1-42df-9d8e-8604db89abbd"
+  },
+  {
+    "canonical_ref": "69_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:69_3",
+    "passage_id": "9b05aa40-9c5f-4030-b892-2706731d53cf"
+  },
+  {
+    "canonical_ref": "69_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:69_4",
+    "passage_id": "a0ded7d3-c87e-459e-88e8-9edb5b505ced"
+  },
+  {
+    "canonical_ref": "69_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:69_5",
+    "passage_id": "cd0e7c94-87da-43d1-aee2-7516f3289a4d"
+  },
+  {
+    "canonical_ref": "69_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:69_6",
+    "passage_id": "c9e37979-b162-45b8-99a6-945e68e2472d"
+  },
+  {
+    "canonical_ref": "69_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:69_7",
+    "passage_id": "f2ed672d-fb53-47d1-aac8-0c17c7f3780a"
+  },
+  {
+    "canonical_ref": "70_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:70_1",
+    "passage_id": "859ca7e2-1f1a-4ef1-9c4a-0ca9fc5df4ec"
+  },
+  {
+    "canonical_ref": "70_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:70_2",
+    "passage_id": "6e95db13-8155-4010-968a-386f1efd4bcb"
+  },
+  {
+    "canonical_ref": "70_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:70_3",
+    "passage_id": "f2c6e296-ed03-471d-a469-ca0e7d1b92bd"
+  },
+  {
+    "canonical_ref": "70_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:70_4",
+    "passage_id": "c56b4268-b6f0-459c-856a-079b092e9eba"
+  },
+  {
+    "canonical_ref": "70_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:70_5",
+    "passage_id": "7f402c04-5752-4938-8571-c65b4e8b38e9"
+  },
+  {
+    "canonical_ref": "71_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:71_1",
+    "passage_id": "bfefec31-d34a-4c9b-8f24-0642f3d8dadc"
+  },
+  {
+    "canonical_ref": "71_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:71_2",
+    "passage_id": "80f5930c-a5d3-4d10-a280-d489b18cdfac"
+  },
+  {
+    "canonical_ref": "71_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:71_3",
+    "passage_id": "16dbcdd4-0be8-4426-83f4-c1b5649d0021"
+  },
+  {
+    "canonical_ref": "71_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:71_4",
+    "passage_id": "d7e60330-8c42-447a-be93-18190f9db01a"
+  },
+  {
+    "canonical_ref": "72_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:72_1",
+    "passage_id": "612a7690-aa0a-495d-82b1-7b5ff0225436"
+  },
+  {
+    "canonical_ref": "72_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:72_2",
+    "passage_id": "6b4579d0-1714-451c-8b63-fab5fad237b6"
+  },
+  {
+    "canonical_ref": "72_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:72_3",
+    "passage_id": "551a3162-7e7a-49fe-a8ef-39990979a11f"
+  },
+  {
+    "canonical_ref": "72_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:72_4",
+    "passage_id": "611b490e-2bc0-4da5-9271-18c9eccde55f"
+  },
+  {
+    "canonical_ref": "73_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:73_6",
+    "passage_id": "885b2ac2-d843-4a52-95bd-6b3a6cd6e448"
+  },
+  {
+    "canonical_ref": "73_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:73_1",
+    "passage_id": "a1b03e71-4428-4444-a853-e635c31f35fa"
+  },
+  {
+    "canonical_ref": "73_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:73_2",
+    "passage_id": "a0306a11-b9bd-44d4-b070-dcacf88becf3"
+  },
+  {
+    "canonical_ref": "73_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:73_3",
+    "passage_id": "2017e0d8-02d1-4624-8e02-9ed865af75cb"
+  },
+  {
+    "canonical_ref": "73_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:73_4",
+    "passage_id": "24bfdd2e-9033-4c35-9c04-dde6d71b6fb2"
+  },
+  {
+    "canonical_ref": "73_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:73_5",
+    "passage_id": "4d00e19e-62ca-490d-9e0c-c1a7d9152599"
+  },
+  {
+    "canonical_ref": "74_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:74_1",
+    "passage_id": "0830245a-c079-464d-baf4-84189a7d0f32"
+  },
+  {
+    "canonical_ref": "74_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:74_2",
+    "passage_id": "635db88d-c060-4607-8d8d-fb8f1b9f6ec3"
+  },
+  {
+    "canonical_ref": "74_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:74_3",
+    "passage_id": "68626fd2-19bc-4571-8374-e34d1c52cf5f"
+  },
+  {
+    "canonical_ref": "74_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:74_4",
+    "passage_id": "3d9caeb1-b6f0-4884-851e-19b5be4ff76d"
+  },
+  {
+    "canonical_ref": "75_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:75_1",
+    "passage_id": "ccae80de-8dc3-41fa-a1bb-3a8ba9db57c5"
+  },
+  {
+    "canonical_ref": "75_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:75_2",
+    "passage_id": "1ec2cb2b-7c8d-4001-b058-ad57e46bd4e5"
+  },
+  {
+    "canonical_ref": "75_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:75_3",
+    "passage_id": "a67ee351-7ac5-45d8-8617-11084f65768b"
+  },
+  {
+    "canonical_ref": "75_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:75_4",
+    "passage_id": "273d873a-4612-432a-9447-64d5f977482c"
+  },
+  {
+    "canonical_ref": "76_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:76_1",
+    "passage_id": "1483b8df-3d97-43e1-b440-f63d8895cf97"
+  },
+  {
+    "canonical_ref": "76_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:76_2",
+    "passage_id": "fadaadd1-a44d-4dce-b4d8-fd363a3dffff"
+  },
+  {
+    "canonical_ref": "76_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:76_3",
+    "passage_id": "bcb66b6f-7bba-46ac-8408-3ddcf8af3541"
+  },
+  {
+    "canonical_ref": "77_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:77_2",
+    "passage_id": "18b5d04a-533f-4141-84b5-75de774a0d9e"
+  },
+  {
+    "canonical_ref": "76_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:76_4",
+    "passage_id": "eb8df07d-0184-45bb-b8f1-34d0b610d090"
+  },
+  {
+    "canonical_ref": "76_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:76_5",
+    "passage_id": "5e203124-57b7-4f29-9fbd-54d0d1a1444a"
+  },
+  {
+    "canonical_ref": "76_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:76_6",
+    "passage_id": "661a2f0a-434e-4b55-8cb9-a615cd99c57f"
+  },
+  {
+    "canonical_ref": "76_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:76_7",
+    "passage_id": "e050fcd5-52df-4981-bc2a-6252f7dcc650"
+  },
+  {
+    "canonical_ref": "77_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:77_1",
+    "passage_id": "ecd63c57-ad7d-48a3-aa6f-7c064500c2bb"
+  },
+  {
+    "canonical_ref": "77_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:77_3",
+    "passage_id": "1b74027e-65a0-460f-8adb-11d80794175e"
+  },
+  {
+    "canonical_ref": "77_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:77_4",
+    "passage_id": "1097d352-aa31-48fd-8724-274614f6c4eb"
+  },
+  {
+    "canonical_ref": "78_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:78_1",
+    "passage_id": "4673bf15-06d5-44e7-8248-695c910b8a66"
+  },
+  {
+    "canonical_ref": "78_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:78_2",
+    "passage_id": "e7fcab55-3d18-4dcf-aa81-6e463f3d0fc3"
+  },
+  {
+    "canonical_ref": "78_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:78_3",
+    "passage_id": "80a999c2-dff9-48a8-9ce7-e676c7d8ee54"
+  },
+  {
+    "canonical_ref": "78_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:78_4",
+    "passage_id": "563679ec-8aa4-4bfb-8880-4beee6731d75"
+  },
+  {
+    "canonical_ref": "78_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:78_5",
+    "passage_id": "bc0511cd-0f93-4fba-848a-8ea176d66854"
+  },
+  {
+    "canonical_ref": "78_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:78_6",
+    "passage_id": "15efa75e-347d-455b-ade9-de1347ae3292"
+  },
+  {
+    "canonical_ref": "78_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:78_7",
+    "passage_id": "4eefa8eb-36c7-4028-ae42-1b9d05850cef"
+  },
+  {
+    "canonical_ref": "78_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:78_8",
+    "passage_id": "80bc8d50-fd5c-4e48-a658-b037333d3b65"
+  },
+  {
+    "canonical_ref": "78_9",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:78_9",
+    "passage_id": "47477c13-7f29-4a13-be69-65934945442b"
+  },
+  {
+    "canonical_ref": "78_10",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:78_10",
+    "passage_id": "fb41f29b-c7ef-4d97-aae2-0da4978af1e6"
+  },
+  {
+    "canonical_ref": "78_11",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:78_11",
+    "passage_id": "6bc0b591-f28b-4bdf-8491-990080f77c58"
+  },
+  {
+    "canonical_ref": "79_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:79_1",
+    "passage_id": "f99a4a29-389c-4f54-9db8-fc026fec5cea"
+  },
+  {
+    "canonical_ref": "79_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:79_2",
+    "passage_id": "09fb51ae-9003-4823-82b0-b76567443c59"
+  },
+  {
+    "canonical_ref": "79_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:79_3",
+    "passage_id": "a14a71b8-1f00-4347-bf93-af0e53e421f7"
+  },
+  {
+    "canonical_ref": "79_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:79_4",
+    "passage_id": "88bf6ce8-5378-47e8-a736-d333ce2a0207"
+  },
+  {
+    "canonical_ref": "80_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:80_1",
+    "passage_id": "56d7dd28-21fa-458a-b08a-159a52964daf"
+  },
+  {
+    "canonical_ref": "80_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:80_2",
+    "passage_id": "099b1eb3-c8f3-4b8e-9c54-5a3e4a772d2e"
+  },
+  {
+    "canonical_ref": "80_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:80_3",
+    "passage_id": "98258e79-63c8-4604-b2b8-7be76c74fc5f"
+  },
+  {
+    "canonical_ref": "80_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:80_4",
+    "passage_id": "ae598c52-d2fb-40c4-9388-6697a4f4c16f"
+  },
+  {
+    "canonical_ref": "80_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:80_5",
+    "passage_id": "731f032f-1bd2-4f6d-97e1-23ab39c673a1"
+  },
+  {
+    "canonical_ref": "81_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:81_1",
+    "passage_id": "5fddba71-6579-436e-ada2-413164e40707"
+  },
+  {
+    "canonical_ref": "81_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:81_2",
+    "passage_id": "dc88b84e-e0f9-4341-97a3-29abcfb76c3c"
+  },
+  {
+    "canonical_ref": "81_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:81_3",
+    "passage_id": "5c6764b8-d8a1-4d8a-b536-e3bb8c891e07"
+  },
+  {
+    "canonical_ref": "81_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:81_4",
+    "passage_id": "19bdcd14-b74b-4ddf-8dce-0e7cd7e9ec48"
+  },
+  {
+    "canonical_ref": "82_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:82_1",
+    "passage_id": "b8a073b7-17fe-4b1f-a6bf-b66691867af3"
+  },
+  {
+    "canonical_ref": "83_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:83_3",
+    "passage_id": "be286f40-6d0b-44a7-8506-49da7d4db74f"
+  },
+  {
+    "canonical_ref": "82_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:82_2",
+    "passage_id": "17d42faa-aa6b-40bc-939d-2fda4c33a8d2"
+  },
+  {
+    "canonical_ref": "82_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:82_3",
+    "passage_id": "32e8a525-6f0c-4385-84e6-b18808378ffa"
+  },
+  {
+    "canonical_ref": "82_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:82_4",
+    "passage_id": "9a39c955-ff5c-4efc-87ad-ee9d7b50f07e"
+  },
+  {
+    "canonical_ref": "83_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:83_1",
+    "passage_id": "c5cf75b8-0b1d-42f0-a00d-bb445ca91c84"
+  },
+  {
+    "canonical_ref": "83_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:83_2",
+    "passage_id": "ad7acbdd-dcc5-4176-86f8-f345edf3d236"
+  },
+  {
+    "canonical_ref": "83_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:83_4",
+    "passage_id": "06f19e61-25a8-4851-8d4c-0e78a10b805a"
+  },
+  {
+    "canonical_ref": "84_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:84_1",
+    "passage_id": "98750332-93a1-4803-9130-60691742dbe4"
+  },
+  {
+    "canonical_ref": "84_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:84_2",
+    "passage_id": "e3a187ae-1611-47c1-a8d8-85ccbb996f17"
+  },
+  {
+    "canonical_ref": "84_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:84_3",
+    "passage_id": "715b838b-67b5-46de-9af8-8f0c6253b811"
+  },
+  {
+    "canonical_ref": "84_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:84_4",
+    "passage_id": "f2f2cd45-5ca6-489e-bc86-250fb6b88d5b"
+  },
+  {
+    "canonical_ref": "85_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:85_1",
+    "passage_id": "f81f1ee0-a1a3-445a-bf50-86b48852d681"
+  },
+  {
+    "canonical_ref": "85_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:85_2",
+    "passage_id": "bd9a0e29-1aa7-4a36-8f85-3bd0d2e61b3d"
+  },
+  {
+    "canonical_ref": "85_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:85_3",
+    "passage_id": "c1ba6680-1b4e-4c98-994c-a2548552896d"
+  },
+  {
+    "canonical_ref": "85_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:85_4",
+    "passage_id": "14cdc04a-707c-4f5e-9c33-69643b5fe838"
+  },
+  {
+    "canonical_ref": "85_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:85_5",
+    "passage_id": "42f96276-ae91-4806-b7c5-a60f7b85d188"
+  },
+  {
+    "canonical_ref": "85_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:85_6",
+    "passage_id": "823ca0f2-ac56-4c7e-8364-ce30ed03aa30"
+  },
+  {
+    "canonical_ref": "85_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:85_7",
+    "passage_id": "a3d20f56-b48f-4065-a2f9-081774ee9c96"
+  },
+  {
+    "canonical_ref": "85_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:85_8",
+    "passage_id": "6097dfbb-af0a-4440-8219-8021f48c4b2d"
+  },
+  {
+    "canonical_ref": "85_9",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:85_9",
+    "passage_id": "04c5a795-a86f-4e4b-8ee3-a723557e83a1"
+  },
+  {
+    "canonical_ref": "86_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:86_1",
+    "passage_id": "6200d60e-4ea1-420b-8974-e2ecb0e017f5"
+  },
+  {
+    "canonical_ref": "86_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:86_2",
+    "passage_id": "f61f0f10-8360-41fb-b15d-6c245eb73251"
+  },
+  {
+    "canonical_ref": "86_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:86_3",
+    "passage_id": "1eefdd1b-61e6-4d74-a3df-bf8e40e3e144"
+  },
+  {
+    "canonical_ref": "86_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:86_4",
+    "passage_id": "f677f3cd-ab8c-408e-af3e-9af2f069090d"
+  },
+  {
+    "canonical_ref": "86_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:86_5",
+    "passage_id": "dd69b21f-db78-4781-9506-406a281aea93"
+  },
+  {
+    "canonical_ref": "86_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:86_6",
+    "passage_id": "9b348dc5-4fdb-4281-b6f5-85cea59cd11c"
+  },
+  {
+    "canonical_ref": "87_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:87_1",
+    "passage_id": "b50f096c-d6e7-4762-a0b7-ad5f4fe71f54"
+  },
+  {
+    "canonical_ref": "87_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:87_2",
+    "passage_id": "517f14c5-a473-4b4d-9c0d-d232b27eddf2"
+  },
+  {
+    "canonical_ref": "87_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:87_3",
+    "passage_id": "abc16a6d-da2c-4884-b7c5-e731cdbaa0f1"
+  },
+  {
+    "canonical_ref": "87_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:87_4",
+    "passage_id": "7becfd71-9d76-472d-a24c-7fd45fd0d3bd"
+  },
+  {
+    "canonical_ref": "87_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:87_5",
+    "passage_id": "1aa27283-af5e-47ba-b5a3-1f90434edd54"
+  },
+  {
+    "canonical_ref": "87_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:87_6",
+    "passage_id": "21ca9c79-1716-4020-b059-82416e848d26"
+  },
+  {
+    "canonical_ref": "88_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:88_1",
+    "passage_id": "9727824d-95fe-4ef7-91b0-1b0440adaa18"
+  },
+  {
+    "canonical_ref": "88_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:88_2",
+    "passage_id": "800bca66-0e66-46ea-939e-d346c6fc1908"
+  },
+  {
+    "canonical_ref": "88_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:88_3",
+    "passage_id": "24360396-0be7-4a22-9117-417e8a127e53"
+  },
+  {
+    "canonical_ref": "88_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:88_4",
+    "passage_id": "efbba9af-d8c6-440e-b4dd-d1486b98c0b1"
+  },
+  {
+    "canonical_ref": "88_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:88_6",
+    "passage_id": "8b2929da-55c2-461b-9ed8-07eccdfcb5cb"
+  },
+  {
+    "canonical_ref": "88_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:88_7",
+    "passage_id": "72307414-0ebf-4200-b4f4-18df9d177afb"
+  },
+  {
+    "canonical_ref": "88_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:88_8",
+    "passage_id": "1550e7e9-d4f1-4ee1-a11e-5828146aff6b"
+  },
+  {
+    "canonical_ref": "89_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:89_1",
+    "passage_id": "0a1081ab-121f-48cf-b555-c39fbd644f07"
+  },
+  {
+    "canonical_ref": "89_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:89_2",
+    "passage_id": "be0c9c75-2fcf-443a-af36-2066961c144c"
+  },
+  {
+    "canonical_ref": "89_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:89_3",
+    "passage_id": "a9a06c6e-5182-4fa0-ac27-daa069134c01"
+  },
+  {
+    "canonical_ref": "90_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:90_1",
+    "passage_id": "00e98a47-4bc6-431d-b494-799d09d013c8"
+  },
+  {
+    "canonical_ref": "90_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:90_2",
+    "passage_id": "3f676c50-482d-4fa3-a2bc-20103ac3f091"
+  },
+  {
+    "canonical_ref": "90_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:90_3",
+    "passage_id": "5cc67669-9d73-4b21-b3c0-f6dff5f01b16"
+  },
+  {
+    "canonical_ref": "90_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:90_4",
+    "passage_id": "1e4abede-8d30-4340-a65f-571117b08244"
+  },
+  {
+    "canonical_ref": "90_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:90_5",
+    "passage_id": "0a5b50f7-7a53-45bd-a942-8144917bfaf5"
+  },
+  {
+    "canonical_ref": "91_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:91_1",
+    "passage_id": "1b8d9b8a-532c-44b0-9658-33e244914018"
+  },
+  {
+    "canonical_ref": "91_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:91_2",
+    "passage_id": "8a07f83f-075e-4f42-8fd6-84e1bf72bca0"
+  },
+  {
+    "canonical_ref": "91_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:91_3",
+    "passage_id": "588e86e1-b3d8-483a-985f-0d36659841f8"
+  },
+  {
+    "canonical_ref": "91_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:91_4",
+    "passage_id": "c6abd2f1-dfe0-4d34-9c67-6da5516d62a9"
+  },
+  {
+    "canonical_ref": "92_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:92_1",
+    "passage_id": "e7ba856b-c520-4594-b329-df27fe0ed81a"
+  },
+  {
+    "canonical_ref": "92_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:92_2",
+    "passage_id": "6da37b04-fda5-459a-977b-041b86c83170"
+  },
+  {
+    "canonical_ref": "92_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:92_3",
+    "passage_id": "8ece6f34-cff9-4dc0-83f1-8eeae7042d17"
+  },
+  {
+    "canonical_ref": "92_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:92_4",
+    "passage_id": "fca6062a-21e1-4381-86cb-207827eb1c53"
+  },
+  {
+    "canonical_ref": "92_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:92_5",
+    "passage_id": "c07346c7-06f4-4f1c-aafe-17b8d332fe9d"
+  },
+  {
+    "canonical_ref": "92_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:92_6",
+    "passage_id": "45ee8517-f20f-4991-9f23-4c64de6a69ae"
+  },
+  {
+    "canonical_ref": "93_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:93_1",
+    "passage_id": "32b1a3fe-7abe-4719-8aff-7135b03473f1"
+  },
+  {
+    "canonical_ref": "93_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:93_2",
+    "passage_id": "b6066073-f9db-4d91-ba9c-f2d7c5730350"
+  },
+  {
+    "canonical_ref": "93_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:93_3",
+    "passage_id": "e6b8505f-bc0c-443e-8c86-abcbacb540a5"
+  },
+  {
+    "canonical_ref": "93_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:93_4",
+    "passage_id": "5b8b17c9-31e1-4a20-9f5e-3147679c8502"
+  },
+  {
+    "canonical_ref": "93_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:93_5",
+    "passage_id": "8e5ebda7-f66b-4d4c-b748-c17f094fb169"
+  },
+  {
+    "canonical_ref": "94_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:94_1",
+    "passage_id": "68779208-1648-42ff-9713-31239762d463"
+  },
+  {
+    "canonical_ref": "94_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:94_2",
+    "passage_id": "8c1dbdbd-efbc-4e96-a37b-b0ea0f36a569"
+  },
+  {
+    "canonical_ref": "94_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:94_3",
+    "passage_id": "9495dcbe-154d-417d-822e-27db91ab0775"
+  },
+  {
+    "canonical_ref": "94_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:94_4",
+    "passage_id": "7bbb72f7-faa5-4c57-9651-5cc0973ef718"
+  },
+  {
+    "canonical_ref": "94_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:94_5",
+    "passage_id": "1084ddb5-03fc-457b-b50c-89b2ab6c2a74"
+  },
+  {
+    "canonical_ref": "95_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:95_1",
+    "passage_id": "1fd2218c-f8e3-4179-b6b7-ea54bcb7b37f"
+  },
+  {
+    "canonical_ref": "95_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:95_2",
+    "passage_id": "d951f1b2-e93c-4726-af12-60927138ebe5"
+  },
+  {
+    "canonical_ref": "95_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:95_3",
+    "passage_id": "456eaaca-8007-455a-961b-bd50b7bb5b26"
+  },
+  {
+    "canonical_ref": "108_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:108_1",
+    "passage_id": "996f3a10-1fea-4736-9bca-8db26ab1d11d"
+  },
+  {
+    "canonical_ref": "95_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:95_4",
+    "passage_id": "57fbae7e-325d-4a18-89ab-d1b303eec496"
+  },
+  {
+    "canonical_ref": "96_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:96_1",
+    "passage_id": "e1ee2422-5cfd-4156-b74d-209779e5c18f"
+  },
+  {
+    "canonical_ref": "96_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:96_2",
+    "passage_id": "f2baf840-24f7-4494-a44a-c250188aafd4"
+  },
+  {
+    "canonical_ref": "96_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:96_3",
+    "passage_id": "9792c1f9-95f4-4c9b-a215-3b60aa8a6242"
+  },
+  {
+    "canonical_ref": "97_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:97_1",
+    "passage_id": "4cf6b413-f285-4601-abcd-41922fcf1b24"
+  },
+  {
+    "canonical_ref": "102_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:102_2",
+    "passage_id": "dec22879-6d16-4700-b1d1-be2473e93185"
+  },
+  {
+    "canonical_ref": "97_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:97_2",
+    "passage_id": "cd1eb5ba-524b-4396-80a5-1660d26347a6"
+  },
+  {
+    "canonical_ref": "97_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:97_3",
+    "passage_id": "fd809236-1912-4b1d-b136-c6d1dc7ab8df"
+  },
+  {
+    "canonical_ref": "97_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:97_4",
+    "passage_id": "831f7bd5-c658-4187-b059-e348cd0a695e"
+  },
+  {
+    "canonical_ref": "98_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:98_1",
+    "passage_id": "9d5d92df-9e08-4057-a9d3-eca5c7ae6341"
+  },
+  {
+    "canonical_ref": "98_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:98_2",
+    "passage_id": "64fd8362-3289-4977-b9ef-f5f2c41de197"
+  },
+  {
+    "canonical_ref": "98_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:98_3",
+    "passage_id": "f4ffab1b-9727-49f8-a049-b09da5930981"
+  },
+  {
+    "canonical_ref": "98_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:98_4",
+    "passage_id": "6b53cae4-983a-4c6f-8d11-54f0065acac7"
+  },
+  {
+    "canonical_ref": "98_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:98_5",
+    "passage_id": "456387a2-cfc3-47d4-bed0-b29f9a12c5aa"
+  },
+  {
+    "canonical_ref": "99_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:99_1",
+    "passage_id": "e1965a8c-2e91-4281-808c-b53229a6b951"
+  },
+  {
+    "canonical_ref": "99_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:99_2",
+    "passage_id": "c0daa4b1-e5a5-482a-9ad0-64eefa337cca"
+  },
+  {
+    "canonical_ref": "99_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:99_3",
+    "passage_id": "c8832740-2291-4ec4-a591-8989fe0e62f3"
+  },
+  {
+    "canonical_ref": "100_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:100_1",
+    "passage_id": "06c0b1a7-8cc9-4335-b9dc-823c7c868ed5"
+  },
+  {
+    "canonical_ref": "100_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:100_2",
+    "passage_id": "97043aa2-7021-4a14-b205-a0e8102e84b0"
+  },
+  {
+    "canonical_ref": "100_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:100_3",
+    "passage_id": "8d1df41e-ed32-4f44-b1a3-c7e68af64f7a"
+  },
+  {
+    "canonical_ref": "100_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:100_4",
+    "passage_id": "287ea110-18c6-48b0-a42e-6dd38dcd3a5a"
+  },
+  {
+    "canonical_ref": "100_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:100_5",
+    "passage_id": "bd90986f-9308-4984-9022-b52805446b3f"
+  },
+  {
+    "canonical_ref": "100_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:100_6",
+    "passage_id": "057e5df0-5d09-4a05-99be-d1f9444fcaa5"
+  },
+  {
+    "canonical_ref": "101_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:101_1",
+    "passage_id": "7b62a92e-6f43-41ac-93d7-abd96b3ead2b"
+  },
+  {
+    "canonical_ref": "101_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:101_2",
+    "passage_id": "899dbe63-6ba2-48d1-985a-ec99bf2c0ef3"
+  },
+  {
+    "canonical_ref": "101_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:101_3",
+    "passage_id": "b7709b56-a8f3-474f-a79b-791828441b55"
+  },
+  {
+    "canonical_ref": "102_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:102_1",
+    "passage_id": "259fcb29-4427-446c-8a68-fe2afcd9d84a"
+  },
+  {
+    "canonical_ref": "102_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:102_3",
+    "passage_id": "2f964a9d-cbc8-45c5-8ed3-53468537382f"
+  },
+  {
+    "canonical_ref": "Justin, Dialogue 102.4: God Made Angels and Humans Self-Determining",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:102_4",
+    "passage_id": "7b029b3b-d680-4362-a0ea-8ef4b2aef215"
+  },
+  {
+    "canonical_ref": "102_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:102_5",
+    "passage_id": "ffcdc298-14dc-4439-adb1-60342164f18a"
+  },
+  {
+    "canonical_ref": "102_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:102_6",
+    "passage_id": "ac21b010-1410-4d6e-906a-8ac70b888ef5"
+  },
+  {
+    "canonical_ref": "102_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:102_7",
+    "passage_id": "b95dc60b-6493-4f7d-a7ea-8c357968bd86"
+  },
+  {
+    "canonical_ref": "103_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:103_1",
+    "passage_id": "12a2f31f-aaf4-4ed3-a929-cce986c7fb43"
+  },
+  {
+    "canonical_ref": "103_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:103_2",
+    "passage_id": "060cf1b2-50dc-42df-bc16-47af8955a3ac"
+  },
+  {
+    "canonical_ref": "103_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:103_3",
+    "passage_id": "e30c1680-803d-4015-bcac-20d693a41a40"
+  },
+  {
+    "canonical_ref": "103_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:103_4",
+    "passage_id": "a821568d-f806-4cc4-95b1-3ed52fbd74dc"
+  },
+  {
+    "canonical_ref": "103_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:103_5",
+    "passage_id": "ae70a1e5-32b4-4753-a638-8dd6436fc793"
+  },
+  {
+    "canonical_ref": "103_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:103_6",
+    "passage_id": "90aaf20d-9ecb-487c-8dfc-743732680beb"
+  },
+  {
+    "canonical_ref": "103_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:103_7",
+    "passage_id": "d4b16846-f862-46e2-82cb-a3ce77b7c1fa"
+  },
+  {
+    "canonical_ref": "103_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:103_8",
+    "passage_id": "fe6ae70d-1d3e-4f9b-8139-4b6fd13f6492"
+  },
+  {
+    "canonical_ref": "103_9",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:103_9",
+    "passage_id": "27d7492b-3e9d-4759-b94a-87d390a5339e"
+  },
+  {
+    "canonical_ref": "104_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:104_1",
+    "passage_id": "8308f1a7-a17f-474b-88cf-3c9f0c1bccbb"
+  },
+  {
+    "canonical_ref": "104_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:104_2",
+    "passage_id": "e07a752a-2da2-461e-a84d-5d2224d7b309"
+  },
+  {
+    "canonical_ref": "105_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:105_1",
+    "passage_id": "f238a57d-e25d-4239-996a-54de3d9e1900"
+  },
+  {
+    "canonical_ref": "105_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:105_2",
+    "passage_id": "06d33a82-363a-4674-96dd-10e2fc267240"
+  },
+  {
+    "canonical_ref": "105_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:105_3",
+    "passage_id": "bf002c31-b6e8-4054-8dca-b9be95cf74a3"
+  },
+  {
+    "canonical_ref": "105_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:105_4",
+    "passage_id": "80e02272-e83d-405c-9323-e2038bd2b5bf"
+  },
+  {
+    "canonical_ref": "105_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:105_5",
+    "passage_id": "6ce6d9f0-5f8c-4407-ab7a-d8c3ad40f800"
+  },
+  {
+    "canonical_ref": "105_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:105_6",
+    "passage_id": "8cfcf85b-85ce-4649-98a2-1b00f3d978c7"
+  },
+  {
+    "canonical_ref": "106_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:106_1",
+    "passage_id": "2a27404c-ace8-4f4e-81c1-2c154c89d2e9"
+  },
+  {
+    "canonical_ref": "106_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:106_2",
+    "passage_id": "acf3955d-9a9f-477a-a882-727b5a11ff21"
+  },
+  {
+    "canonical_ref": "106_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:106_3",
+    "passage_id": "fe0f2e06-5ed4-4e4a-b096-87fb14ef0848"
+  },
+  {
+    "canonical_ref": "106_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:106_4",
+    "passage_id": "a92e372d-5724-49f8-b49a-ec3a4bddbea3"
+  },
+  {
+    "canonical_ref": "107_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:107_1",
+    "passage_id": "525903df-eee1-4c94-862c-ac957cd4c068"
+  },
+  {
+    "canonical_ref": "107_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:107_2",
+    "passage_id": "9786da6a-0855-4cc7-83c5-2be6f20ce874"
+  },
+  {
+    "canonical_ref": "107_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:107_3",
+    "passage_id": "0b3f4058-92ca-425b-8079-0fd364c9427d"
+  },
+  {
+    "canonical_ref": "107_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:107_4",
+    "passage_id": "3da96a82-2061-485e-a816-459c6a52e4fb"
+  },
+  {
+    "canonical_ref": "108_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:108_2",
+    "passage_id": "7b5ca629-24ae-4f1d-87cb-06097a1b5c69"
+  },
+  {
+    "canonical_ref": "108_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:108_3",
+    "passage_id": "f93fd480-a3ed-4c73-b679-77ca526dc93f"
+  },
+  {
+    "canonical_ref": "109_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:109_1",
+    "passage_id": "0a967457-f545-48b5-91bb-6292f890b0a2"
+  },
+  {
+    "canonical_ref": "109_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:109_2",
+    "passage_id": "0b72399a-d581-4d45-aeaf-5a8e02f791f9"
+  },
+  {
+    "canonical_ref": "109_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:109_3",
+    "passage_id": "2516f502-6d87-48fa-afea-111468ca85ff"
+  },
+  {
+    "canonical_ref": "110_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:110_1",
+    "passage_id": "abc9f9fd-b361-4a2b-8d1f-775d36318f49"
+  },
+  {
+    "canonical_ref": "110_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:110_2",
+    "passage_id": "08bfd44a-63f3-493e-90ae-0f293eba8809"
+  },
+  {
+    "canonical_ref": "110_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:110_3",
+    "passage_id": "6d728ee8-15e4-44df-b80e-009e3ce81ebd"
+  },
+  {
+    "canonical_ref": "110_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:110_4",
+    "passage_id": "6cc246ae-3468-4df7-9974-6392fca37cc0"
+  },
+  {
+    "canonical_ref": "110_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:110_5",
+    "passage_id": "f8ed24e7-40fe-45c5-ab83-f20dc64cf1bd"
+  },
+  {
+    "canonical_ref": "110_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:110_6",
+    "passage_id": "f03df5d8-e902-4999-a055-a37c2bd7743f"
+  },
+  {
+    "canonical_ref": "111_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:111_1",
+    "passage_id": "2e259b42-2887-447c-9add-20d14e593587"
+  },
+  {
+    "canonical_ref": "111_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:111_2",
+    "passage_id": "97a7502f-ef2e-4a03-b79a-aa4dc73c145e"
+  },
+  {
+    "canonical_ref": "111_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:111_3",
+    "passage_id": "0031e298-41c6-443d-9209-924601e92b87"
+  },
+  {
+    "canonical_ref": "111_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:111_4",
+    "passage_id": "10adf284-b222-42c4-b59d-f048a1dfade2"
+  },
+  {
+    "canonical_ref": "112_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:112_1",
+    "passage_id": "aba8c487-f689-4b28-90e4-1b7485075fc0"
+  },
+  {
+    "canonical_ref": "112_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:112_2",
+    "passage_id": "9103b98d-5e45-48d9-b9bf-f937996b02a2"
+  },
+  {
+    "canonical_ref": "112_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:112_3",
+    "passage_id": "2e4835f8-f8e8-4df9-a3cb-e6f80dcb82c9"
+  },
+  {
+    "canonical_ref": "112_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:112_4",
+    "passage_id": "b6aaf35d-e639-47a7-a462-0c554fb411fd"
+  },
+  {
+    "canonical_ref": "112_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:112_5",
+    "passage_id": "9a0c8f36-9700-4dae-9fe3-01056b12deeb"
+  },
+  {
+    "canonical_ref": "113_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:113_1",
+    "passage_id": "0ae1348b-d151-4e7c-a23a-d3b977fada80"
+  },
+  {
+    "canonical_ref": "113_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:113_2",
+    "passage_id": "e0ccce2f-226e-41d6-b92e-9c2734e9ebe6"
+  },
+  {
+    "canonical_ref": "113_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:113_3",
+    "passage_id": "997e384b-7136-4496-aedd-e1b1aa339cbf"
+  },
+  {
+    "canonical_ref": "113_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:113_4",
+    "passage_id": "15e9cda1-8f84-4818-b33f-795ba2ae0142"
+  },
+  {
+    "canonical_ref": "113_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:113_5",
+    "passage_id": "8aedc5d9-7a84-4b97-9149-b15ab884637e"
+  },
+  {
+    "canonical_ref": "113_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:113_6",
+    "passage_id": "acc943ba-854e-4386-a834-99e6706263cb"
+  },
+  {
+    "canonical_ref": "113_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:113_7",
+    "passage_id": "fa3a25ac-e357-4140-9cb7-8332db96fc5f"
+  },
+  {
+    "canonical_ref": "114_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:114_1",
+    "passage_id": "d0effa7f-f6c6-4a3f-bc5f-008ab30b9eb1"
+  },
+  {
+    "canonical_ref": "114_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:114_2",
+    "passage_id": "b77c9352-0d1c-44d4-a74c-35c2aaa78408"
+  },
+  {
+    "canonical_ref": "114_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:114_3",
+    "passage_id": "8d990117-1073-4795-b8ae-d040dbcf9c15"
+  },
+  {
+    "canonical_ref": "114_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:114_4",
+    "passage_id": "74c48294-3cd9-4615-bc80-c8b5f87d6332"
+  },
+  {
+    "canonical_ref": "114_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:114_5",
+    "passage_id": "d82dd534-528c-40bd-b4d0-591e0ae3e125"
+  },
+  {
+    "canonical_ref": "115_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:115_1",
+    "passage_id": "709b4ecd-d042-4f33-b8fb-e8d27fa2c53f"
+  },
+  {
+    "canonical_ref": "115_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:115_2",
+    "passage_id": "81a39ef5-9690-4dab-9fbf-8fca271dd247"
+  },
+  {
+    "canonical_ref": "115_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:115_3",
+    "passage_id": "5916f2f7-c49f-47b6-b000-63830e2b6ae9"
+  },
+  {
+    "canonical_ref": "115_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:115_4",
+    "passage_id": "08c085e5-eeb8-47eb-b9ed-9f2e2d6d83df"
+  },
+  {
+    "canonical_ref": "115_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:115_5",
+    "passage_id": "69faf7f9-f76d-49b0-b57e-7e8d2620b6c1"
+  },
+  {
+    "canonical_ref": "115_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:115_6",
+    "passage_id": "9d404b5e-15ac-47d2-9b7d-092cc24a812e"
+  },
+  {
+    "canonical_ref": "116_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:116_1",
+    "passage_id": "156eba5b-8501-4b5b-ace6-f54c3e005e98"
+  },
+  {
+    "canonical_ref": "116_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:116_2",
+    "passage_id": "db131e1e-714c-4734-8de1-cbbd7c48b3cf"
+  },
+  {
+    "canonical_ref": "116_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:116_3",
+    "passage_id": "e30fb57e-2288-4a72-be56-865e0a64e157"
+  },
+  {
+    "canonical_ref": "117_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:117_1",
+    "passage_id": "b159a649-5a14-4257-9631-f78469aff62c"
+  },
+  {
+    "canonical_ref": "117_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:117_2",
+    "passage_id": "9c2a366b-be18-471a-b359-c3761b708eab"
+  },
+  {
+    "canonical_ref": "117_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:117_3",
+    "passage_id": "68bc9030-3b0f-4055-88c3-1afff8c92fb8"
+  },
+  {
+    "canonical_ref": "117_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:117_4",
+    "passage_id": "bd27aeb5-0364-4d4c-a4d3-1dc2d6a3f334"
+  },
+  {
+    "canonical_ref": "117_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:117_5",
+    "passage_id": "9ab75e82-e6ec-4ad6-9fbe-69e75acb7a2c"
+  },
+  {
+    "canonical_ref": "118_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:118_1",
+    "passage_id": "617d2d6a-0226-4c27-ae77-1f8b6f2e2225"
+  },
+  {
+    "canonical_ref": "118_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:118_2",
+    "passage_id": "91b4fc17-8150-456d-b7ee-4163e431aaee"
+  },
+  {
+    "canonical_ref": "118_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:118_3",
+    "passage_id": "d1784d78-6867-4f9a-8f17-8ce4f356d7ec"
+  },
+  {
+    "canonical_ref": "118_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:118_4",
+    "passage_id": "2e5dce70-6c4f-4a7d-8f7b-113a26cb518a"
+  },
+  {
+    "canonical_ref": "118_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:118_5",
+    "passage_id": "3f911600-336e-44a9-903e-ad49258380a8"
+  },
+  {
+    "canonical_ref": "119_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:119_6",
+    "passage_id": "0ca53642-e1d1-4798-91a1-7c42ecda3ad8"
+  },
+  {
+    "canonical_ref": "119_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:119_1",
+    "passage_id": "aaeac550-fb6e-4a15-89e4-dbb5331efa83"
+  },
+  {
+    "canonical_ref": "119_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:119_2",
+    "passage_id": "a85ecf2b-0154-4607-833d-c6a6c8336071"
+  },
+  {
+    "canonical_ref": "119_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:119_3",
+    "passage_id": "377691ff-0a71-4e0f-b3aa-2eb2a1ef8290"
+  },
+  {
+    "canonical_ref": "119_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:119_4",
+    "passage_id": "c8c27b78-1198-44e8-a152-606b4b7d4f78"
+  },
+  {
+    "canonical_ref": "119_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:119_5",
+    "passage_id": "593ecd3c-4a47-46ff-8d99-65745631ec02"
+  },
+  {
+    "canonical_ref": "120_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:120_1",
+    "passage_id": "d99752e2-70bc-4b89-8ee0-c5af83af0b20"
+  },
+  {
+    "canonical_ref": "120_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:120_2",
+    "passage_id": "adcdc3ea-496c-4e9a-8ae2-4cafbcf9fa83"
+  },
+  {
+    "canonical_ref": "120_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:120_3",
+    "passage_id": "81ae3169-faa6-4a4f-ad75-81ef23c76d76"
+  },
+  {
+    "canonical_ref": "120_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:120_4",
+    "passage_id": "18f82650-51bd-4c1a-9299-0699894bd9d9"
+  },
+  {
+    "canonical_ref": "120_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:120_5",
+    "passage_id": "7ad00e92-11bf-4ec3-be12-388957b467ae"
+  },
+  {
+    "canonical_ref": "123_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:123_1",
+    "passage_id": "e7cd2965-d5c0-4481-94de-94d55fbf90bf"
+  },
+  {
+    "canonical_ref": "120_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:120_6",
+    "passage_id": "5db026af-2024-413d-ba43-1b07463e07b1"
+  },
+  {
+    "canonical_ref": "121_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:121_1",
+    "passage_id": "b10faa1b-b439-4704-a384-7e6f19db9688"
+  },
+  {
+    "canonical_ref": "121_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:121_2",
+    "passage_id": "2e83b10d-8ff5-4375-9513-de1174c88ee8"
+  },
+  {
+    "canonical_ref": "121_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:121_3",
+    "passage_id": "33f5cc6e-13d3-4e68-863c-614c7fa52106"
+  },
+  {
+    "canonical_ref": "121_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:121_4",
+    "passage_id": "a68292ec-6a69-457d-8c3e-abc73c496242"
+  },
+  {
+    "canonical_ref": "122_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:122_1",
+    "passage_id": "f2301a86-1733-4c28-b0db-64515fafc7dc"
+  },
+  {
+    "canonical_ref": "122_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:122_2",
+    "passage_id": "f51db520-0005-4af9-8a3c-f00e63c8f773"
+  },
+  {
+    "canonical_ref": "122_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:122_3",
+    "passage_id": "d512a18a-3000-40fc-a978-dd217fd0c5cb"
+  },
+  {
+    "canonical_ref": "122_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:122_4",
+    "passage_id": "069dd472-b548-4f5b-9090-ca32f8c09f9c"
+  },
+  {
+    "canonical_ref": "122_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:122_5",
+    "passage_id": "20adc89c-b73d-481f-b184-c41688ffef3b"
+  },
+  {
+    "canonical_ref": "122_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:122_6",
+    "passage_id": "7b7639d9-ec05-4368-a250-f4636d947996"
+  },
+  {
+    "canonical_ref": "123_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:123_2",
+    "passage_id": "88f34d61-8124-4be2-825a-273abbac3246"
+  },
+  {
+    "canonical_ref": "123_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:123_3",
+    "passage_id": "d3d3aa78-7a3b-406f-9be0-b895006a9845"
+  },
+  {
+    "canonical_ref": "123_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:123_4",
+    "passage_id": "2b652e2f-9cd4-4851-81c3-696308203beb"
+  },
+  {
+    "canonical_ref": "123_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:123_5",
+    "passage_id": "6aff69c6-3dc6-4368-b6c9-8f5455d601eb"
+  },
+  {
+    "canonical_ref": "123_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:123_6",
+    "passage_id": "76482a4d-4253-4149-a968-36b229b8221c"
+  },
+  {
+    "canonical_ref": "123_7",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:123_7",
+    "passage_id": "134ad59b-144e-4337-8c50-4a005ddea243"
+  },
+  {
+    "canonical_ref": "123_8",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:123_8",
+    "passage_id": "21e65487-e7bf-4f2b-8591-f8577adaed87"
+  },
+  {
+    "canonical_ref": "123_9",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:123_9",
+    "passage_id": "822eeb7e-b295-4681-848b-cb54ff820616"
+  },
+  {
+    "canonical_ref": "124_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:124_1",
+    "passage_id": "bc3642d3-b966-47db-80e7-85ed7841c3b5"
+  },
+  {
+    "canonical_ref": "124_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:124_2",
+    "passage_id": "42fe8a02-98c9-4290-9f46-f883d0232b66"
+  },
+  {
+    "canonical_ref": "124_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:124_3",
+    "passage_id": "e63dcf7f-dcd9-44f4-9e51-893f287c5986"
+  },
+  {
+    "canonical_ref": "124_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:124_4",
+    "passage_id": "34041045-e97b-443d-a5ca-3c6555436d74"
+  },
+  {
+    "canonical_ref": "125_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:125_1",
+    "passage_id": "17986265-e417-490b-bdca-1a9a212f155d"
+  },
+  {
+    "canonical_ref": "125_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:125_2",
+    "passage_id": "8108ca56-761a-486d-a3af-fc9912497a38"
+  },
+  {
+    "canonical_ref": "125_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:125_3",
+    "passage_id": "6531ad95-b798-467d-a77b-0581f7b9aa56"
+  },
+  {
+    "canonical_ref": "125_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:125_4",
+    "passage_id": "a94e6781-0f6c-4244-a2e4-879620ba4ee7"
+  },
+  {
+    "canonical_ref": "125_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:125_5",
+    "passage_id": "cbd8c025-2766-4230-8772-4bc9a53998ef"
+  },
+  {
+    "canonical_ref": "126_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:126_1",
+    "passage_id": "dc47c816-2795-45f1-90c0-76061771d488"
+  },
+  {
+    "canonical_ref": "126_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:126_2",
+    "passage_id": "fcac3646-ae59-45b8-8467-e6d94e61a3d4"
+  },
+  {
+    "canonical_ref": "126_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:126_3",
+    "passage_id": "18e60828-3d2a-4518-ae68-862b66dee81a"
+  },
+  {
+    "canonical_ref": "126_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:126_4",
+    "passage_id": "ae9169fd-fa45-4096-bb81-2a224d09d9b0"
+  },
+  {
+    "canonical_ref": "126_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:126_5",
+    "passage_id": "b0b74472-d11e-44b2-ac97-309f44e3b9ae"
+  },
+  {
+    "canonical_ref": "126_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:126_6",
+    "passage_id": "c755999f-cd1b-46ed-a11d-d1a7e393aeee"
+  },
+  {
+    "canonical_ref": "127_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:127_1",
+    "passage_id": "2f6710ad-29aa-4b58-bb74-e86da6520309"
+  },
+  {
+    "canonical_ref": "127_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:127_2",
+    "passage_id": "63b594bc-94e3-46eb-b109-997473d3d5e7"
+  },
+  {
+    "canonical_ref": "127_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:127_3",
+    "passage_id": "8938c539-2f04-4428-8f88-c26793240deb"
+  },
+  {
+    "canonical_ref": "127_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:127_4",
+    "passage_id": "640e140d-6bc3-4ee0-8d9d-ae456253ab9a"
+  },
+  {
+    "canonical_ref": "127_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:127_5",
+    "passage_id": "e50f9286-0df2-4327-9485-56baa0409e07"
+  },
+  {
+    "canonical_ref": "128_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:128_1",
+    "passage_id": "64bce15c-d3bf-42b0-9508-61bd067c3d0c"
+  },
+  {
+    "canonical_ref": "128_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:128_2",
+    "passage_id": "4ac320d9-ef6b-4316-8c75-1b50b9424ca0"
+  },
+  {
+    "canonical_ref": "128_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:128_3",
+    "passage_id": "ed18dc69-a396-4934-bd61-431a1a67bfff"
+  },
+  {
+    "canonical_ref": "128_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:128_4",
+    "passage_id": "2ee579ef-bb2d-4e70-8158-c7da02b42685"
+  },
+  {
+    "canonical_ref": "129_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:129_1",
+    "passage_id": "13353d55-f08a-446b-9b77-2783566435bb"
+  },
+  {
+    "canonical_ref": "129_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:129_2",
+    "passage_id": "6b560ce7-e46a-4e8b-a1e7-b3b6881ea4c4"
+  },
+  {
+    "canonical_ref": "129_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:129_3",
+    "passage_id": "344d226f-fe2f-4f9c-9fd0-2ac2f3a6cdac"
+  },
+  {
+    "canonical_ref": "129_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:129_4",
+    "passage_id": "d8c7bb57-110f-409b-b0fa-3e50a989a97a"
+  },
+  {
+    "canonical_ref": "130_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:130_1",
+    "passage_id": "c72c9d48-927e-4c03-b295-2ffc7d6ba123"
+  },
+  {
+    "canonical_ref": "130_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:130_2",
+    "passage_id": "676ea3f5-fb7d-4677-b1fb-5dba31fe8b7a"
+  },
+  {
+    "canonical_ref": "Justin, Dialogue 130.3: Those Who Choose to Be Persuaded",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:130_3",
+    "passage_id": "a0fb6da6-bfbd-49a2-a79a-22c0d81053fc"
+  },
+  {
+    "canonical_ref": "130_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:130_4",
+    "passage_id": "79b4ccc7-670b-405f-b6cb-86c9671632c6"
+  },
+  {
+    "canonical_ref": "131_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:131_1",
+    "passage_id": "fe215a0d-762e-4daa-ba11-eca36125b8f9"
+  },
+  {
+    "canonical_ref": "131_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:131_2",
+    "passage_id": "6d48f813-4b52-4135-ae6a-2c2c5c40f380"
+  },
+  {
+    "canonical_ref": "131_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:131_3",
+    "passage_id": "fb05439e-99f1-4035-bc13-2e1230599c3f"
+  },
+  {
+    "canonical_ref": "131_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:131_4",
+    "passage_id": "2957581a-937b-4d00-8fba-f86bada3ac61"
+  },
+  {
+    "canonical_ref": "131_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:131_5",
+    "passage_id": "9947e4ec-1a96-4e88-8816-2f4a3903b55c"
+  },
+  {
+    "canonical_ref": "131_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:131_6",
+    "passage_id": "9b410738-0ae2-409b-900f-78d352633725"
+  },
+  {
+    "canonical_ref": "132_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:132_1",
+    "passage_id": "acdfb31e-8cf4-4225-862d-67991e26fad2"
+  },
+  {
+    "canonical_ref": "132_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:132_2",
+    "passage_id": "1186a065-018c-438d-a60e-649be79010c7"
+  },
+  {
+    "canonical_ref": "132_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:132_3",
+    "passage_id": "6dd6c8de-f0f2-4510-bcab-c3c2f2c57ace"
+  },
+  {
+    "canonical_ref": "133_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:133_1",
+    "passage_id": "dc50547e-cab1-4ebf-b838-fce27e45cbeb"
+  },
+  {
+    "canonical_ref": "133_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:133_2",
+    "passage_id": "eb524a31-1b9f-467f-865d-576e62aa873e"
+  },
+  {
+    "canonical_ref": "133_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:133_3",
+    "passage_id": "9209f36b-357f-4291-9cd2-28b1da18106b"
+  },
+  {
+    "canonical_ref": "133_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:133_4",
+    "passage_id": "c0cf571b-2a83-4660-9e6d-efa68d239c8b"
+  },
+  {
+    "canonical_ref": "133_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:133_5",
+    "passage_id": "2b96dcca-5602-4920-931c-5eea9b3ac0f3"
+  },
+  {
+    "canonical_ref": "133_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:133_6",
+    "passage_id": "11ff0225-dd4d-4740-89b6-4193ab270e7c"
+  },
+  {
+    "canonical_ref": "134_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:134_1",
+    "passage_id": "53a7d229-7e33-4b68-ab3a-078b60346268"
+  },
+  {
+    "canonical_ref": "134_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:134_2",
+    "passage_id": "5d4a04c8-0410-4982-9b97-d802dad9617d"
+  },
+  {
+    "canonical_ref": "134_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:134_3",
+    "passage_id": "531a1bc6-f039-4a2a-bb2d-bf3ec12215cd"
+  },
+  {
+    "canonical_ref": "134_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:134_4",
+    "passage_id": "466461ef-1684-44b5-b827-bd966a56b5bb"
+  },
+  {
+    "canonical_ref": "134_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:134_5",
+    "passage_id": "628a2c6f-4fe9-452b-9b2e-588cfe605524"
+  },
+  {
+    "canonical_ref": "134_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:134_6",
+    "passage_id": "35a001c2-ca2a-4b4d-8ce9-80a80e9e2c5f"
+  },
+  {
+    "canonical_ref": "135_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:135_1",
+    "passage_id": "1b03b6aa-b232-429e-a56a-787f346ddd13"
+  },
+  {
+    "canonical_ref": "135_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:135_2",
+    "passage_id": "9718a715-51bd-4386-945e-50a5dbbdf830"
+  },
+  {
+    "canonical_ref": "135_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:135_3",
+    "passage_id": "743be7de-a5b6-4d39-9935-f4c429bf652e"
+  },
+  {
+    "canonical_ref": "135_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:135_4",
+    "passage_id": "aea7dbba-7335-401c-a8c2-e1ec0612dcac"
+  },
+  {
+    "canonical_ref": "135_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:135_5",
+    "passage_id": "d7f04af1-88d4-45ef-9b00-758f470f27ee"
+  },
+  {
+    "canonical_ref": "135_6",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:135_6",
+    "passage_id": "432e0777-214e-41fc-865a-a7820ed977b3"
+  },
+  {
+    "canonical_ref": "136_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:136_1",
+    "passage_id": "5ac86ea6-45f1-4c9a-bd70-3e1d3c278cea"
+  },
+  {
+    "canonical_ref": "136_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:136_2",
+    "passage_id": "49c6e42f-c190-4926-a79a-6a1c8f70c750"
+  },
+  {
+    "canonical_ref": "136_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:136_3",
+    "passage_id": "38e8e148-5df9-449d-9669-7637b0c42c31"
+  },
+  {
+    "canonical_ref": "137_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:137_1",
+    "passage_id": "b3f7fd9a-8fb8-44d6-bc61-73e538b23160"
+  },
+  {
+    "canonical_ref": "137_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:137_2",
+    "passage_id": "8f43faab-fa2d-4801-a61e-863223cd4e32"
+  },
+  {
+    "canonical_ref": "137_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:137_3",
+    "passage_id": "9c79130b-fd5e-4156-82ba-81c43e4a5df0"
+  },
+  {
+    "canonical_ref": "140_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:140_2",
+    "passage_id": "8d2b4d4d-2685-41a3-b3fc-3b1345def71d"
+  },
+  {
+    "canonical_ref": "137_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:137_4",
+    "passage_id": "e7f430bf-f348-464b-a273-9d4495759f92"
+  },
+  {
+    "canonical_ref": "138_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:138_1",
+    "passage_id": "5ed3dc8e-38c2-4f1a-9a57-4d2c62787628"
+  },
+  {
+    "canonical_ref": "138_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:138_2",
+    "passage_id": "983aa600-0d71-490f-8613-b2cc09abd795"
+  },
+  {
+    "canonical_ref": "138_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:138_3",
+    "passage_id": "537cf3ed-8250-4462-9d38-64f43e958eca"
+  },
+  {
+    "canonical_ref": "139_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:139_1",
+    "passage_id": "5a9ce80e-873d-4346-9cbd-4e4fa04252f5"
+  },
+  {
+    "canonical_ref": "139_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:139_2",
+    "passage_id": "71ed0dc4-8453-4a93-bfd4-7971cf42a082"
+  },
+  {
+    "canonical_ref": "139_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:139_3",
+    "passage_id": "b75278ce-3a12-438b-80d3-b240dc937c12"
+  },
+  {
+    "canonical_ref": "139_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:139_4",
+    "passage_id": "28f01a5a-b53f-4b9e-bb81-41cf8809ffbd"
+  },
+  {
+    "canonical_ref": "139_5",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:139_5",
+    "passage_id": "e3cb5e3f-5422-4981-b5bc-690c7432b54a"
+  },
+  {
+    "canonical_ref": "140_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:140_1",
+    "passage_id": "5a8fdd18-9a15-4f0a-9764-2a266fa8ce90"
+  },
+  {
+    "canonical_ref": "140_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:140_3",
+    "passage_id": "82d584b3-a333-4d02-85a1-f8f4edc2cefe"
+  },
+  {
+    "canonical_ref": "141_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:141_1",
+    "passage_id": "1cda1b29-a1e3-41e7-9ca2-1bb2cb593899"
+  },
+  {
+    "canonical_ref": "141_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:141_2",
+    "passage_id": "a72fc2c7-cd6b-4e8a-afbb-2374388c4cb3"
+  },
+  {
+    "canonical_ref": "141_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:141_3",
+    "passage_id": "f6cd99b1-eed5-4953-9be8-0a6f87479857"
+  },
+  {
+    "canonical_ref": "Justin, Dialogue 140.4-141.2: Prescience and Free Will",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:140_4",
+    "passage_id": "9a8ffeae-8eab-445f-9475-5071fc3590f4"
+  },
+  {
+    "canonical_ref": "141_4",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:141_4",
+    "passage_id": "7b82c39f-4d13-4ecb-a565-41d5787ecdc6"
+  },
+  {
+    "canonical_ref": "142_1",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:142_1",
+    "passage_id": "5cb0e397-b090-437c-a312-927a79482276"
+  },
+  {
+    "canonical_ref": "142_2",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:142_2",
+    "passage_id": "f5768045-79d7-4325-9b57-ec77786ee08c"
+  },
+  {
+    "canonical_ref": "142_3",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:142_3",
+    "passage_id": "afb26a68-c875-43e0-9f44-eb713d9772d7"
+  },
+  {
+    "canonical_ref": "Justin, Dialogue 88.4-5: Free Will and Adamic Sin",
+    "cts_urn": "urn:cts:greekLit:tlg0645.tlg003.perseus-grc2:88_5",
+    "passage_id": "ad0049c4-8fa3-417c-9f02-42a98b0a862f"
+  }
+]
