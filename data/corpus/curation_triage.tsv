@@ -1,0 +1,175 @@
+decision	canonical	passages	author	title	reason
+keep	self	1	Alcinous	Handbook of Platonism (Didaskalikos)	core free-will author
+keep	self	39	Alexander of Aphrodisias	De Fato	free-will/fate title
+merge	tlg0732_tlg014_grc	39	Alexander of Aphrodisias	De Fato	dup of canonical (39 pass.)
+merge	tlg0732_tlg014_grc	2	Alexander of Aphrodisias	De Fato	dup of canonical (39 pass.)
+merge	tlg0732_tlg014_grc	2	Alexander of Aphrodisias	De Fato	dup of canonical (39 pass.)
+merge	tlg0732_tlg014_grc	1	Alexander of Aphrodisias	Alexander of Aphrodisias, De Fato	dup of canonical (39 pass.)
+review	self	88	Anonymous	Épître de Barnabé	borderline — needs judgment
+merge	sc172_epistula_barnabae_grc	87	Anonymous	Épître de Barnabé	dup of canonical (88 pass.)
+cut	self	27	Anonymous	Martyrium Polycarpi	out-of-scope author/title
+cut	self	2	Apollinaris of Hierapolis	Apollinaris, Peri Pascha (fr.)	out-of-scope author/title
+cut	sc123_apollinaris_peri_pascha_eng	2	Apollinaris of Hierapolis	Peri Pascha	dup of canonical (2 pass.)
+review	self	27	Aristides of Athens	Apologie, Texte grec	borderline — needs judgment
+merge	sc470_aristides_apologia_grc	24	Aristides of Athens	Apologie, Texte grec	dup of canonical (27 pass.)
+keep	self	142	Aristotle	τὰ Μετὰ τὰ Φυσικά	core free-will author
+merge	oga_tlg0086_tlg025_perseus_grc2_grc	41	Aristotle	Ἠθικὰ Εὐδήμεια	dup of canonical (142 pass.)
+merge	oga_tlg0086_tlg025_perseus_grc2_grc	0	Aristotle of Stagira	ἐπʼ αὐτῷ καὶ τὸ πράττειν καὶ μή.	dup of canonical (142 pass.)
+keep	self	30	Aristotle	De anima	core free-will author
+keep	self	69	Aristotle	De Generatione et Corruptione	core free-will author
+keep	self	29	Aristotle	De interpretatione	core free-will author
+keep	self	434	Aristotle	Magna Moralia	core free-will author
+keep	self	116	Aristotle	Ethica Nicomachea	core free-will author
+merge	oga_tlg0086_tlg010_perseus_grc2_grc	18	Aristotle	Nicomachean Ethics (Ἠθικὰ Νικομάχεια)	dup of canonical (116 pass.)
+merge	oga_tlg0086_tlg010_perseus_grc2_grc	1	Aristotle of Stagira	Nicomachean Ethics III.1	dup of canonical (116 pass.)
+keep	self	71	Aristotle	Physica	core free-will author
+keep	self	6	Aspasius	In Ethica Nicomachea Commentaria	core free-will author
+review	self	48	Athenagoras of Athens	Supplique au sujet des chrétiens (éd. Pouderon)	borderline — needs judgment
+merge	sc379_athenagoras_legatio_eng	38	Athenagoras of Athens	Supplique au sujet des chrétiens (éd. Pouderon)	dup of canonical (48 pass.)
+keep	self	2	Augustine of Hippo	Confessions VIII	core free-will author
+keep	self	6	Augustine	Augustine, De Civitate Dei (The City of God)	core free-will author
+keep	self	21	Augustine	De Correptione et Gratia	core free-will author
+keep	self	25	Augustine	De Gratia et Libero Arbitrio (Augustine)	free-will/fate title
+keep	self	171	Augustine	De Libero Arbitrio	free-will/fate title
+merge	urn_cts_latinlit_stoa0040_stoa003_lat	170	Augustine	De Libero Arbitrio Voluntatis (On Free Choice of the Will)	dup of canonical (171 pass.)
+merge	urn_cts_latinlit_stoa0040_stoa003_lat	158	Augustine	De Libero Arbitrio	dup of canonical (171 pass.)
+merge	urn_cts_latinlit_stoa0040_stoa003_lat	25	Augustine	De Libero Arbitrio	dup of canonical (171 pass.)
+keep	self	39	Augustine	De Natura Boni	core free-will author
+keep	self	26	Augustine	Libellus Adversus Fulgentium Donatistam	core free-will author
+keep	self	16	Aulus Gellius	Noctes Atticae VII.2 (De Fato et Chrysippo)	free-will/fate title
+keep	self	129	Boethius	De consolatione philosophiae (Consolation of Philosophy)	free-will/fate title
+merge	urn_cts_latinlit_phi2089_phi002_eng	129	Boethius d. 524	De consolatione philosophiae	dup of canonical (129 pass.)
+keep	self	1	Boethius (Anicius Manlius Severinus Boethius)	simultaneous and perfect possession o...	core free-will author
+keep	self	5	Calcidius	Commentarius in Platonis Timaeum	core free-will author
+keep	self	88	Chrysippus of Soli	Stoicorum Veterum Fragmenta II — Fragmenta Logica et Physica	core free-will author
+keep	self	100	Cicero	De Divinatione	free-will/fate title
+keep	self	48	Cicero	De Fato (On Fate)	free-will/fate title
+merge	urn_cts_latinlit_phi0474_phi049_eng	48	Marcus Tullius Cicero	De Fato	dup of canonical (48 pass.)
+merge	urn_cts_latinlit_phi0474_phi049_eng	2	Cicero	Cicero, De Fato	dup of canonical (48 pass.)
+keep	self	22	Cicero	De Natura Deorum	free-will/fate title
+keep	self	51	Cleanthes of Assos	Cleanthes, Hymn to Zeus (Ὕμνος εἰς Δία)	core free-will author
+review	self	84	Clement of Rome	Épître aux Corinthiens	borderline — needs judgment
+merge	sc167_clemens_epistula_ad_corinthios_eng	83	Clement of Rome	Épître aux Corinthiens	dup of canonical (84 pass.)
+review	self	51	Clement of Alexandria	Protrepticus	borderline — needs judgment
+review	self	6	Clement of Alexandria	Stromateis	borderline — needs judgment
+cut	self	6	Didache	Didache - Complete Works	out-of-scope author/title
+keep	self	1	Diogenes Laertius	Noctes Atticae	core free-will author
+keep	self	1203	Diogenes Laertius	Vitae Philosophorum (Lives of Eminent Philosophers)	core free-will author
+keep	self	235	Epictetus	Discourses	core free-will author
+merge	urn_cts_greeklit_tlg0557_grc	187	Epictetus	Discourses (Διατριβαί) - Epictetus	dup of canonical (235 pass.)
+merge	urn_cts_greeklit_tlg0557_grc	137	Epictetus	Discourses and Enchiridion	dup of canonical (235 pass.)
+merge	urn_cts_greeklit_tlg0557_grc	1	Epictetus of Hierapolis	Epictetus, Discourses	dup of canonical (235 pass.)
+keep	self	193	Epicurus	Letters and Fragments	core free-will author
+review	self	222	Eusebius of Caesarea	Praeparatio Evangelica	borderline — needs judgment
+review	self	36	Evodius Bishop of Uzalis -424	De fide Contra Manicheos	borderline — needs judgment
+review	self	3	Galen	De Placitis Hippocratis et Platonis	borderline — needs judgment
+review	self	9	Gregory of Nazianzus	Adversus Eunomianos (orat. 27)	borderline — needs judgment
+review	self	21	Gregory of Nazianzus	De Filio (Orat. 29)	borderline — needs judgment
+merge	urn_cts_greeklit_tlg2022_tlg009_grc	21	Gregory of Nazianzus	De Filio (Orat. 30)	dup of canonical (21 pass.)
+review	self	33	Gregory of Nazianzus	De Spiritu Sancto (Orat. 31)	borderline — needs judgment
+review	self	31	Gregory of Nazianzus	De Theologia (Orat. 28)	borderline — needs judgment
+review	self	114	Hermas	Hermas, Pastor	borderline — needs judgment
+merge	sc53bis_hermas_pastor_eng	114	Hermas	Pastor (Shepherd)	dup of canonical (114 pass.)
+cut	self	22	Ignatius of Antioch	Ad Ephesios	out-of-scope author/title
+cut	sc10bis_ignatius_ad_ephesios_grc	22	Ignatius of Antioch	Ignatius, Ad Ephesios	dup of canonical (22 pass.)
+cut	self	16	Ignatius of Antioch	Ad Magnesios	out-of-scope author/title
+cut	sc10bis_ignatius_ad_magnesios_grc	16	Ignatius of Antioch	Ignatius, Ad Magnesios	dup of canonical (16 pass.)
+cut	self	12	Ignatius of Antioch	Ad Philadelphenos	out-of-scope author/title
+cut	sc10bis_ignatius_ad_philadelphenos_grc	12	Ignatius of Antioch	Ignatius, Ad Philadelphenos	dup of canonical (12 pass.)
+cut	self	9	Ignatius of Antioch	Ad Polycarpum	out-of-scope author/title
+cut	sc10bis_ignatius_ad_polycarpum_grc	9	Ignatius of Antioch	Ignatius, Ad Polycarpum	dup of canonical (9 pass.)
+cut	self	11	Ignatius of Antioch	Ad Romanos	out-of-scope author/title
+cut	sc10bis_ignatius_ad_romanos_grc	11	Ignatius of Antioch	Ignatius, Ad Romanos	dup of canonical (11 pass.)
+cut	self	12	Ignatius of Antioch	Ad Smyrnaeos	out-of-scope author/title
+cut	sc10bis_ignatius_ad_smyrnaeos_grc	12	Ignatius of Antioch	Ignatius, Ad Smyrnaeos	dup of canonical (12 pass.)
+cut	self	14	Ignatius of Antioch	Ad Trallianos	out-of-scope author/title
+cut	sc10bis_ignatius_ad_trallianos_grc	14	Ignatius of Antioch	Ignatius, Ad Trallianos	dup of canonical (14 pass.)
+review	self	1	Irenaeus	Adversus Haereses	borderline — needs judgment
+merge	work_irenaeus_adversus_haereses_book4_grc	1	Irenaeus	Adversus Haereses	dup of canonical (1 pass.)
+merge	work_irenaeus_adversus_haereses_book4_grc	1	Irenaeus	Irenaeus, Adversus Haereses Book 3	dup of canonical (1 pass.)
+merge	work_irenaeus_adversus_haereses_book4_grc	1	Irenaeus	Irenaeus, Adversus Haereses Book 4	dup of canonical (1 pass.)
+review	self	7	Iulius Firmicus Maternus	Mathesis	borderline — needs judgment
+keep	self	25	John Chrysostom	Chrysostomus, De Providentia	free-will/fate title
+merge	sc79_chrysostomus_de_providentia_eng	25	John Chrysostom	De Providentia	dup of canonical (25 pass.)
+keep	self	83	Justin Martyr	Apologia I	core free-will author
+merge	sc507_iustinus_apologia_i_grc	83	Justin Martyr	Iustinus, Apologia I	dup of canonical (83 pass.)
+merge	sc507_iustinus_apologia_i_grc	68	Justin Martyr	Apologia Prima	dup of canonical (83 pass.)
+merge	sc507_iustinus_apologia_i_grc	2	Justin Martyr	First Apology (Ἀπολογία πρώτη)	dup of canonical (83 pass.)
+keep	self	15	Justin Martyr	Apologia Secunda	core free-will author
+keep	self	750	Justin Martyr	Dialogus cum Tryphone	core free-will author
+merge	urn_cts_greeklit_tlg0645_tlg003_grc	4	Justin Martyr	Dialogue with Trypho (Διάλογος πρὸς Τρύφωνα)	dup of canonical (750 pass.)
+keep	self	300	Titus Lucretius Carus	De Rerum Natura	core free-will author
+merge	urn_cts_latinlit_phi0550_phi001_lat	2	Lucretius	De Rerum Natura (On the Nature of Things)	dup of canonical (300 pass.)
+merge	urn_cts_latinlit_phi0550_phi001_lat	2	Titus Lucretius Carus	Lucretius, De Rerum Natura	dup of canonical (300 pass.)
+keep	self	580	Marcus Aurelius	Meditationes (Ta eis heauton)	core free-will author
+merge	urn_cts_greeklit_tlg0562_tlg001_grc	19	Marcus Aurelius	Meditations (Τὰ εἰς ἑαυτόν)	dup of canonical (580 pass.)
+cut	self	4	Melito of Sardis	Apologia ad Antoninum	out-of-scope author/title
+cut	sc123_melito_apologia_ad_antoninum_grc	4	Melito of Sardis	Melito, Apologia ad Antoninum (fr.)	dup of canonical (4 pass.)
+cut	self	2	Melito of Sardis	De Anima et Corpore	out-of-scope author/title
+cut	sc123_melito_de_anima_et_corpore_grc	2	Melito of Sardis	Melito, De Anima et Corpore (fr.)	dup of canonical (2 pass.)
+cut	self	2	Melito of Sardis	Eclogae	out-of-scope author/title
+cut	sc123_melito_eclogae_grc	2	Melito of Sardis	Melito, Eclogae (fr.)	dup of canonical (2 pass.)
+cut	self	2	Melito of Sardis	On the Pascha (Περὶ Πάσχα)	out-of-scope author/title
+cut	self	109	Melito of Sardis	Melito, Peri Pascha	out-of-scope author/title
+cut	sc123_melito_peri_pascha_eng	109	Melito of Sardis	Peri Pascha	dup of canonical (109 pass.)
+cut	sc123_melito_peri_pascha_eng	2	Melito of Sardis	Melito, Peri Pascha fr. IV	dup of canonical (109 pass.)
+cut	sc123_melito_peri_pascha_eng	2	Melito of Sardis	Peri Pascha	dup of canonical (109 pass.)
+cut	self	2	Melito of Sardis	Peri Pascha IV	out-of-scope author/title
+keep	self	97	Methodius	De Libero Arbitrio	free-will/fate title
+merge	urn_cts_greeklit_tlg2959_tlg001_grc	7	Methodius of Olympus	Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου)	dup of canonical (97 pass.)
+review	self	119	New Testament	1 Corinthians (SBLGNT)	borderline — needs judgment
+keep	self	987	Origen	Contre Celse, Livre II	core free-will author
+merge	sc_origenes_contra_celsum_grc	971	Origen	Contre Celse, Livre II	dup of canonical (987 pass.)
+keep	self	2	Origen	Commentary on Romans (Commentarii in Epistulam ad Romanos)	core free-will author
+keep	self	2	Origen	Contra Celsum	core free-will author
+merge	work_origen_commentary_romans_grc	1	Origen	Contra Celsum	dup of canonical (2 pass.)
+merge	work_origen_commentary_romans_grc	1	Origen	Contra Celsum	dup of canonical (2 pass.)
+keep	self	24	Origen	De Principiis (Περὶ Ἀρχῶν) - Origen	free-will/fate title
+merge	work_de_principiis_origen_230s_v2w3x4y5_eng	4	Origen of Alexandria	De Principiis (Peri Archon)	dup of canonical (24 pass.)
+merge	work_de_principiis_origen_230s_v2w3x4y5_eng	4	Origen of Alexandria	Origenes, De Principiis (Excerpta graeca)	dup of canonical (24 pass.)
+merge	work_de_principiis_origen_230s_v2w3x4y5_eng	1	Origen of Alexandria	Origen, De Principiis (Peri Archon)	dup of canonical (24 pass.)
+keep	self	1	Origen	On Prayer (Περὶ εὐχῆς)	core free-will author
+keep	self	30	Origen (compiled by Basil of Caesarea & Gregory of Nazianzus c. 358/360)	Philocalia	free-will/fate title
+review	self	265	Pamphilus of Caesarea	Apologia pro Origene	borderline — needs judgment
+merge	sc464_pamphilus_apologia_pro_origene_lat	265	Pamphilus of Caesarea	Pamphilus, Apologia pro Origene	dup of canonical (265 pass.)
+keep	self	172	Philo of Alexandria	De Opificio Mundi	core free-will author
+keep	self	261	Plato	Φαῖδρος	core free-will author
+merge	urn_cts_greeklit_tlg0059_tlg012_grc	125	Plato	Ἀπολογία Σωκράτους	dup of canonical (261 pass.)
+merge	urn_cts_greeklit_tlg0059_tlg012_grc	76	Plato	Τίμαιος (Timaeus)	dup of canonical (261 pass.)
+merge	urn_cts_greeklit_tlg0059_tlg012_grc	59	Plato	Φαίδων	dup of canonical (261 pass.)
+keep	self	326	Plato	Laws (Νόμοι)	core free-will author
+keep	self	278	Plato	Republic (Πολιτεία)	core free-will author
+merge	urn_cts_greeklit_tlg0059_tlg030_grc	1	Plato	Republic	dup of canonical (278 pass.)
+merge	urn_cts_greeklit_tlg0059_tlg030_grc	1	Plato	Republic	dup of canonical (278 pass.)
+keep	self	1	Plato	Timaeus	core free-will author
+keep	self	1355	Plotinus	Enneades	core free-will author
+merge	urn_cts_greeklit_tlg2000_tlg001_grc	10	Plotinus	Ennead III.1 - Peri Heimarmenes (On Fate)	dup of canonical (1355 pass.)
+merge	urn_cts_greeklit_tlg2000_tlg001_grc	1	Plotinus	Enneades IV.4.30: Self-Determining Principle (English)	dup of canonical (1355 pass.)
+merge	urn_cts_greeklit_tlg2000_tlg001_grc	1	Plotinus	Plotinus, Enneads	dup of canonical (1355 pass.)
+merge	urn_cts_greeklit_tlg2000_tlg001_grc	1	Plotinus	Plotinus, Enneads III.1 (On Fate)	dup of canonical (1355 pass.)
+merge	urn_cts_greeklit_tlg2000_tlg001_grc	1	Plotinus	Plotinus, Enneads VI.8	dup of canonical (1355 pass.)
+merge	urn_cts_greeklit_tlg2000_tlg001_grc	0	Plotinus	Enneades	dup of canonical (1355 pass.)
+merge	urn_cts_greeklit_tlg2000_tlg001_grc	0	Plotinus	Plotinus on heimarmene (fate) as sovereign cause (Enneads III.1)	dup of canonical (1355 pass.)
+keep	self	6	Plutarch	De Communibus Notitiis adversus Stoicos	core free-will author
+keep	self	19	Plutarch	De fato	free-will/fate title
+merge	urn_cts_greeklit_tlg0007_tlg099_grc	19	Plutarch	Pseudo-Plutarch, De Fato (Moralia 568b-574f)	dup of canonical (19 pass.)
+keep	self	47	Plutarch	De Stoicorum Repugnantiis (On Stoic Self-Contradictions)	core free-will author
+keep	self	35	Porphyrius	Ad Marcellam	core free-will author
+keep	self	5	Pseudo-Justin	Cohortatio ad Graecos	core free-will author
+merge	sc528_pseudo_iustinus_cohortatio_grc	5	Pseudo-Justin (Anonymous)	Pseudo-Iustinus, Cohortatio ad Graecos	dup of canonical (5 pass.)
+keep	self	68	Seneca	De Providentia	free-will/fate title
+merge	urn_cts_latinlit_stoa0255_stoa012_lat	68	Seneca	De Providentia (On Providence)	dup of canonical (68 pass.)
+keep	self	2135	Seneca	Epistulae Morales ad Lucilium	core free-will author
+review	self	1	Septuagint	Psalms (LXX)	borderline — needs judgment
+keep	self	534	Sextus Empiricus	Against the Professors and Outlines of Pyrrhonism	core free-will author
+keep	self	9	Simplicius	In Epicteti Enchiridion Commentarius	core free-will author
+review	self	98	Tatian	Oratio ad Graecos	borderline — needs judgment
+review	self	3	Tatian	Oration to the Greeks (Λόγος πρὸς Ἕλληνας)	borderline — needs judgment
+review	self	13	Tertullian	Adversus Marcionem	borderline — needs judgment
+review	self	31	Tertullian	De Anima	borderline — needs judgment
+review	self	82	Theophilus of Antioch	Ad Autolycum	borderline — needs judgment
+merge	sc20_theophilus_ad_autolycum_grc	82	Theophilus of Antioch	Theophilus, Ad Autolycum	dup of canonical (82 pass.)
+merge	sc20_theophilus_ad_autolycum_grc	1	Theophilus of Antioch	Ad Autolycum	dup of canonical (82 pass.)
+merge	sc20_theophilus_ad_autolycum_grc	1	Theophilus of Antioch	Theophilus, Ad Autolycum Book 2	dup of canonical (82 pass.)
+cut	self	27	Unknown	Martyrium Polycarpi	out-of-scope author/title
+keep	self	21	Unknown	Philocalia (Φιλοκαλία Ὠριγένους)	free-will/fate title
