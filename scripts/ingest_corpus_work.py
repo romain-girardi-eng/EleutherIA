@@ -11,7 +11,6 @@ import argparse
 import asyncio
 import os
 import sys
-import time
 from pathlib import Path
 
 import asyncpg
@@ -21,11 +20,7 @@ from dotenv import load_dotenv
 #   get_valid_reff   — discover all leaf URNs for a work-level URN
 #   get_passage      — fetch + strip TEI → plain text for one URN
 #   RATE_LIMIT_SECONDS — shared courtesy delay between requests
-from database.scripts.fetch_scaife_work import (
-    RATE_LIMIT_SECONDS,
-    get_passage,
-    get_valid_reff,
-)
+from scripts.corpus_github_fetch import fetch_work_passages
 from scripts.corpus_ingest_merge import passages_to_insert
 from scripts.corpus_lib import read_jsonl
 
@@ -104,57 +99,6 @@ def _ref_depth(cts_urn: str) -> int:
     return ref.count(".") + 1 if ref else 1
 
 
-def _fetch_full_work(work_urn: str, level: int) -> list[dict]:
-    """Discover refs AT THE GIVEN CITATION LEVEL, then fetch each passage.
-
-    `level` must match the granularity the corpus already uses for this work
-    (derived from its existing passages) so fetched URNs align with existing
-    ones and we fill gaps instead of duplicating the text at a coarser level.
-    Falls back to the deepest non-empty level if the requested one is empty.
-    """
-    def _safe_reff(lvl: int) -> list[str]:
-        try:
-            return get_valid_reff(work_urn, level=lvl) or []
-        except Exception as exc:  # Scaife/CTS reffs endpoint is flaky per work/level
-            print(f"  reffs level {lvl} failed: {exc}")
-            return []
-
-    print(f"  Discovering refs for: {work_urn} at level {level}")
-    urns = _safe_reff(level)
-    if not urns:
-        for lvl in (level + 1, level - 1, level + 2):
-            if lvl < 1:
-                continue
-            urns = _safe_reff(lvl)
-            if urns:
-                print(f"  (level {level} unavailable; using level {lvl} — GRANULARITY MISMATCH, verify)")
-                break
-
-    print(f"  Total refs to fetch: {len(urns)}")
-
-    passages: list[dict] = []
-    errors = 0
-    for i, urn in enumerate(urns):
-        try:
-            text = get_passage(urn)
-        except Exception as exc:
-            print(f"  WARN: failed to fetch {urn}: {exc}")
-            errors += 1
-            continue
-
-        text = text.strip()
-        if text:
-            passages.append({"cts_urn": urn, "text_content": text})
-
-        if i < len(urns) - 1:
-            time.sleep(RATE_LIMIT_SECONDS)
-
-    if errors:
-        print(f"  Fetch errors: {errors}/{len(urns)}")
-
-    return passages
-
-
 async def run(canonical_id: str, *, commit: bool, db_url: str) -> None:
     # 1. Load manifest and find work entry
     manifest = read_jsonl(MANIFEST_PATH)
@@ -194,9 +138,22 @@ async def run(canonical_id: str, *, commit: bool, db_url: str) -> None:
         # URNs align with existing ones (fill gaps, not duplicate at a coarser level).
         target_level = max((_ref_depth(p["cts_urn"]) for p in existing), default=2)
 
-        # 5. Fetch full work from Scaife
-        print(f"Fetching from Scaife (target citation level {target_level})...")
-        fetched = _fetch_full_work(work_urn, target_level)
+        # 5. Fetch full work from the PerseusDL/First1KGreek GitHub TEI
+        print(f"Fetching TEI from GitHub (target citation level {target_level})...")
+        fetched = fetch_work_passages(work_urn, target_level)
+
+        # Granularity guard: if the fetched refs don't overlap the existing ones,
+        # the edition's citation scheme differs (e.g. letters vs sections) and
+        # inserting would DUPLICATE the work at a different granularity. Refuse.
+        existing_urns = {p["cts_urn"] for p in existing}
+        overlap = len(existing_urns & {f["cts_urn"] for f in fetched})
+        frac = overlap / len(existing) if existing else 1.0
+        if len(existing) > 5 and frac < 0.8:
+            print(f"existing={len(existing)} fetched={len(fetched)} overlap={overlap} ({frac:.0%})")
+            print("WARNING: the fetched edition contains <80% of the existing passages — "
+                  "granularity/edition mismatch (e.g. letters vs sections). "
+                  "Refusing to insert (would duplicate). Skipping.")
+            return
 
         # 6. Compute new passages
         new = passages_to_insert(existing, fetched, canonical_id, start_seq=max_seq + 1)
@@ -210,8 +167,8 @@ async def run(canonical_id: str, *, commit: bool, db_url: str) -> None:
             sample = fetched[0]["text_content"][:80]
             print(f"Sample: {sample!r}")
         else:
-            print("WARNING: fetched=0 — no passages returned from Scaife.")
-            print("  Check that the work URN exists and the CTS API is reachable.")
+            print("WARNING: fetched=0 — no passages parsed from the GitHub TEI.")
+            print("  Check that the work URN/version exists in the PerseusDL/First1KGreek repos.")
             print("  No rows will be inserted.")
             return
 
