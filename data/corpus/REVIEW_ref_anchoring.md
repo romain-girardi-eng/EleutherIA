@@ -98,6 +98,45 @@ Latin De Fato text node exists before aligning.
 
 ---
 
+## Greek TEXT corruption — REPAIRED (638 passages)
+A deeper integrity problem than references: stored Greek with unconverted betacode.
+- **Betacode-residue repair** (`fix_betacode_text_2026_05_25.py`, 592 passages):
+  grave `\`, acute `/`, circumflex `=`, capital `*`+breathing left as literal ASCII
+  (`περι\`→`περὶ`, `*̔ρώμῃ`→`Ῥώμῃ`) → proper polytonic Unicode. Mainly Sextus PH
+  (all 534), Epictetus (48), Didache. Gated to the unambiguous residue marker;
+  passage_id preserved.
+- **Embedded raw betacode** (`fix_embedded_betacode_2026_05_25.py`, 46 passages):
+  Greek quoted in betacode inside Latin/Greek classical works (Cicero De Div/Nat
+  Deorum, Seneca, Augustine, Plutarch): `ei(marme/nhn`→`εἱμαρμένην`. Allowlisted to
+  genuine classical works; rejects Latin apex (`U/bi`), English or-slashes, OCR `e(`.
+- Residual: 3 non-betacode artifacts (Latin OCR `e(iiciens`, an Aspasius apparatus
+  line, a French parenthetical) — correctly left untouched.
+
+## MISATTRIBUTION — NEEDS A DECISION (not auto-fixed: destructive + scholarly)
+**`urn_cts_greeklit_tlg0086_tlg003_grc`** is titled *Aristotle, De Generatione et
+Corruptione* but its 69 passages are the **Constitution of Athens** (Ἀθηναίων
+Πολιτεία): ch.1 (Cylonian affair) … ch.69 (jury-voting urns). The refs `1`–`69`
+are actually correct *for Ath. Pol.* — only the identity is false. The mis-ingestion
+fetched `tlg0086.tlg003` (Ath. Pol.) instead of the De Gen. et Corr. tlg number.
+**Blast radius:** the `ancient_works` row + 69 passages + 69 `passage_citations`
++ KG work node `work_de_gen_corr_aristotle` + 69 `passage_arist_gen_corr_*` KG nodes
++ 138 edges. **Options:** (a) re-ingest genuine De Gen. et Corr. (free-will-relevant
+Book II on necessity) into the slot — fulfils original intent but needs section
+selection; (b) relabel everything truthfully to *Athenaion Politeia* — honest but
+out-of-scope for free will; (c) remove the erroneous subgraph entirely. Recommended
+(a) if DGC is wanted in the corpus, else (c).
+
+## Remaining (structural, lower severity)
+- **Sextus PH** (`tlg0544.tlg001`): text now clean, but the 534 passages are
+  overlapping sliding-windows mixing PH + Adversus Mathematicos (the `M.` prefix =
+  *Mathematicos*), indexed `M.N`. Canonical refs need a clean re-ingest of PH + AM
+  as per-section passages with citation remapping (538 citations) — a dedicated
+  migration, not a safe in-place fix.
+- **Epictetus** (`tlg0557`): `Epict. N` flat indices; clean re-ingest needed (1160
+  citations).
+- **Boethius / Latin works** not on Perseus: local-edition alignment.
+
 ## Principle
 Wrong anchoring is worse than honest non-anchoring. Every committed ref is adopted
-verbatim from a published edition the passage text demonstrably reproduces.
+verbatim from a published edition the passage text demonstrably reproduces; every
+text repair is a deterministic, verifiable conversion of data already present.
