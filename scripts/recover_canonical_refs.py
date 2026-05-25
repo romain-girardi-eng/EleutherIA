@@ -104,6 +104,59 @@ def fetch_leaves(work_urn: str) -> list[Leaf]:
 
 
 # --------------------------------------------------------------------------- #
+# Edition resolution — discover available TEI versions on GitHub
+# --------------------------------------------------------------------------- #
+
+# preferred edition versions, best first (richest/most canonical citation scheme)
+_VER_PREF = ["perseus-grc2", "perseus-grc1", "1st1K-grc1", "opp-grc1", "opp-grc2",
+             "perseus-lat2", "perseus-lat1", "opp-lat1", "1st1K-lat1"]
+
+
+def _ns_for_author(author: str) -> str:
+    return "greekLit" if author.startswith("tlg") else "latinLit"
+
+
+def _parse_base(urn: str | None) -> tuple[str, str, str, str | None] | None:
+    """Parse a CTS URN into (namespace, author, work, version|None).
+
+    Requires at least author.work. Returns None if the work part is missing.
+    """
+    if not urn or not urn.startswith("urn:cts:"):
+        return None
+    parts = urn.split(":")
+    if len(parts) < 4:
+        return None
+    ns = parts[2]
+    tail = parts[3].split(".")
+    if len(tail) < 2:
+        return None
+    author, work = tail[0], tail[1]
+    version = tail[2] if len(tail) >= 3 else None
+    return ns, author, work, version
+
+
+def candidate_edition_urns(work_cts: str | None, passage_cts: str | None,
+                           tlg_code: str | None) -> list[str]:
+    """Ordered list of full edition CTS work-URNs to try (best first)."""
+    base = _parse_base(work_cts) or _parse_base(passage_cts)
+    if not base and tlg_code and "." in tlg_code:
+        a, w = tlg_code.split(".")[:2]
+        base = (_ns_for_author(a), a, w, None)
+    if not base:
+        return []
+    ns, author, work, version = base
+    # Candidate versions: probe standard edition strings directly via raw GitHub
+    # (CDN, no API rate limit). The stored version (if any) is tried first.
+    std = ([v for v in _VER_PREF if "grc" in v] if ns == "greekLit"
+           else [v for v in _VER_PREF if "lat" in v])
+    seen: list[str] = []
+    if version and version not in std:
+        seen.append(version)
+    seen += std
+    return [f"urn:cts:{ns}:{author}.{work}.{v}" for v in dict.fromkeys(seen)]
+
+
+# --------------------------------------------------------------------------- #
 # Alignment
 # --------------------------------------------------------------------------- #
 
@@ -188,10 +241,19 @@ def align(passages: list[tuple], leaves: list[Leaf]) -> tuple[list[tuple], int]:
 # --------------------------------------------------------------------------- #
 
 def clean_title(title: str) -> str:
-    """Strip parenthetical glosses and language tags from a work title."""
-    t = re.sub(r"\([^)]*\)", "", title or "")          # drop "(Φαίδων)", "(English)"
-    t = re.sub(r"\s+", " ", t).strip(" ,;:-")
-    return t
+    """Short work tag for a canonical_ref. Strip parenthetical glosses; when the
+    main title is non-Latin (e.g. Greek), prefer an ASCII gloss in parentheses
+    so the reference stays legible ('Τίμαιος (Timaeus)' -> 'Timaeus')."""
+    title = title or ""
+    parens = re.findall(r"\(([^)]*)\)", title)
+    main = re.sub(r"\([^)]*\)", "", title)
+    main_ascii = main.encode("ascii", "ignore").decode().strip()
+    if not main_ascii:  # main title is Greek/non-ASCII — use first ASCII gloss
+        for p in parens:
+            pa = p.encode("ascii", "ignore").decode().strip()
+            if pa and pa.lower() != "english":
+                return re.sub(r"\s+", " ", pa).strip(" ,;:-")
+    return re.sub(r"\s+", " ", main).strip(" ,;:-")
 
 
 def work_abbrev(old_cref: str, title: str) -> str:
@@ -210,11 +272,12 @@ def work_abbrev(old_cref: str, title: str) -> str:
 
 async def process_work(conn, canonical_id: str, urn_override: str | None) -> WorkResult:
     row = await conn.fetchrow(
-        f"SELECT work_id, canonical_id, title FROM {SCHEMA}.ancient_works WHERE canonical_id=$1",
-        canonical_id)
+        f"""SELECT work_id, canonical_id, title, cts_urn, tlg_code
+            FROM {SCHEMA}.ancient_works WHERE canonical_id=$1""", canonical_id)
     if not row:
         return WorkResult(canonical_id, "", status="NO_TEI", note="work not in ancient_works")
     work_id, title = row["work_id"], row["title"]
+    work_cts, tlg_code = row["cts_urn"], row["tlg_code"]
     prows = await conn.fetch(
         f"""SELECT passage_id, sequence_number, text_content, canonical_ref, cts_urn
             FROM {SCHEMA}.passages WHERE work_id=$1 ORDER BY sequence_number""", work_id)
@@ -224,35 +287,51 @@ async def process_work(conn, canonical_id: str, urn_override: str | None) -> Wor
     if not passages:
         res.status = "EMPTY"; return res
 
-    # resolve work URN: override, else strip ref from first non-null cts_urn
-    work_urn = urn_override
-    if not work_urn:
-        for r in prows:
-            if r["cts_urn"] and ":" in r["cts_urn"]:
-                work_urn = r["cts_urn"].rsplit(":", 1)[0]
-                break
-    res.work_urn = work_urn or ""
-    if not work_urn:
-        res.status = "NO_TEI"; res.note = "no cts_urn to derive edition URN"; return res
+    # resolve edition URN(s): override wins; else try work-level cts_urn,
+    # passage cts_urn, tlg_code — discovering GitHub editions when needed.
+    first_passage_cts = next((r["cts_urn"] for r in prows if r["cts_urn"]), None)
+    if urn_override:
+        candidates = [urn_override]
+    else:
+        candidates = candidate_edition_urns(work_cts, first_passage_cts, tlg_code)
+    if not candidates:
+        res.status = "NO_TEI"; res.note = "no resolvable edition URN"; return res
 
-    try:
-        leaves = fetch_leaves(work_urn)
-    except Exception as exc:  # noqa: BLE001
-        res.status = "NO_TEI"; res.note = f"TEI fetch failed: {str(exc)[:80]}"; return res
-    if not leaves:
-        res.status = "NO_TEI"; res.note = "TEI had no parseable leaves"; return res
+    # try each candidate edition; keep the one that aligns best
+    best = None  # (frac, n_aligned, per_passage, leaves, urn)
+    tried_note = []
+    for cand in candidates[:6]:
+        try:
+            leaves = fetch_leaves(cand)
+        except Exception as exc:  # noqa: BLE001
+            tried_note.append(f"{cand.rsplit('.',1)[-1]}:fetchfail")
+            continue
+        if not leaves:
+            tried_note.append(f"{cand.rsplit('.',1)[-1]}:noleaves")
+            continue
+        per_passage, n_aligned = align(passages, leaves)
+        frac = n_aligned / len(passages)
+        if best is None or frac > best[0]:
+            best = (frac, n_aligned, per_passage, leaves, cand)
+        if frac >= 0.9:  # good enough, stop early
+            break
 
-    per_passage, n_aligned = align(passages, leaves)
+    if best is None:
+        res.status = "NO_TEI"
+        res.note = f"no edition fetched ({'; '.join(tried_note) or 'none'})"
+        return res
+
+    frac, n_aligned, per_passage, leaves, edition_urn = best
+    res.work_urn = edition_urn
     res.n_aligned = n_aligned
-    frac = n_aligned / len(passages)
     if frac < MIN_GLOBAL_MATCH:
         res.status = "MISMATCH"
-        res.note = (f"only {n_aligned}/{len(passages)} passages align to "
-                    f"{work_urn} ({len(leaves)} leaves) — possible misattribution")
-        # show a TEI sample so the human can identify the actual work
+        res.note = (f"best edition {edition_urn} aligns only {n_aligned}/{len(passages)} "
+                    f"({len(leaves)} leaves) — possible misattribution")
         res.samples.append("TEI[0]: " + " ".join(leaves[0].tokens[:14]))
         res.samples.append("DB[0] : " + " ".join(norm_tokens(passages[0][2])[:14]))
         return res
+    work_urn = edition_urn
 
     abbrev = work_abbrev(passages[0][3] or "", title)
     pmap = {r["passage_id"]: r for r in prows}
