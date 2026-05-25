@@ -1,67 +1,44 @@
 #!/usr/bin/env python3
 """Export the live KG (nodes + edges) as sorted JSONL files under data/kg/.
 
-Designed to run from a GitHub Action daily: commit only if the snapshot
-changed, so Git history becomes a time-series of every KG mutation.
+SOURCE OF TRUTH = the Supabase Postgres DB (DATABASE_URL), read directly via
+asyncpg — the same store the corpus snapshot and production use. (This previously
+pulled from a Railway HTTP backend that has since diverged from Supabase; that
+default was stale and would clobber the mirror.)
 
-Source: the Railway-hosted backend at $KG_API_BASE (public endpoints,
-no auth required). Falls back to a sensible default for local runs.
+Deterministic output: JSONL sorted by a stable key with stable in-object key
+ordering, so `git diff` and delta packing stay clean. Designed to run from a
+GitHub Action: commit only if the snapshot changed.
 
-The output is deterministic: JSONL sorted by a stable key, with stable
-key ordering inside each object. That makes `git diff` and delta packing
-work well.
+Edges whose (source, target, relation) triple appears in the quarantine file
+(`data/kg/quarantine_supabase_drift_*.jsonl`) are excluded, preserving the prior
+deliberate decision to keep that drift out of the mirror.
 """
-
 from __future__ import annotations
 
 import argparse
+import asyncio
+import datetime
 import json
 import os
 import sys
-import urllib.error
-import urllib.request
+import uuid
 from pathlib import Path
 from typing import Any
 
-DEFAULT_BASE = "https://eleutheria-backend-production.up.railway.app"
-NODES_PATH = "/api/kg/nodes"
-EDGES_PATH = "/api/kg/edges"
-STATS_PATH = "/api/kg/stats"
+import asyncpg
+from dotenv import load_dotenv
 
-EDGES_PAGE_SIZE = 10000  # server caps at 10000
-REQUEST_TIMEOUT = 120
+SCHEMA = "free_will"
+ROOT = Path(__file__).resolve().parents[1]
 
 
-def fetch_json(url: str) -> Any:
-    req = urllib.request.Request(url, headers={"Accept": "application/json"})
-    with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
-        return json.loads(resp.read())
-
-
-def fetch_nodes(base: str) -> list[dict]:
-    data = fetch_json(f"{base}{NODES_PATH}?limit=50000")
-    if not isinstance(data, list):
-        raise RuntimeError(f"Unexpected /api/kg/nodes response: {type(data).__name__}")
-    return data
-
-
-def fetch_edges(base: str) -> list[dict]:
-    out: list[dict] = []
-    offset = 0
-    while True:
-        url = f"{base}{EDGES_PATH}?limit={EDGES_PAGE_SIZE}&offset={offset}"
-        page = fetch_json(url)
-        if not isinstance(page, list):
-            raise RuntimeError(
-                f"Unexpected /api/kg/edges response: {type(page).__name__}"
-            )
-        if not page:
-            break
-        out.extend(page)
-        if len(page) < EDGES_PAGE_SIZE:
-            break
-        offset += EDGES_PAGE_SIZE
-    return out
+def _db_url() -> str:
+    load_dotenv(ROOT / ".env")
+    url = os.getenv("DATABASE_URL")
+    if not url:
+        sys.exit("ERROR: DATABASE_URL not found in environment or .env")
+    return url.replace("postgresql://", "postgres://")
 
 
 def canonical_dumps(obj: Any) -> str:
@@ -69,48 +46,18 @@ def canonical_dumps(obj: Any) -> str:
     return json.dumps(obj, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
 
 
-def normalize_mapping(value: Any) -> dict[str, Any]:
-    if isinstance(value, dict):
-        return value
-    if isinstance(value, str) and value.strip():
-        try:
-            parsed = json.loads(value)
-        except json.JSONDecodeError:
-            return {}
-        return parsed if isinstance(parsed, dict) else {}
-    return {}
-
-
-def normalize_node(row: dict[str, Any]) -> dict[str, Any]:
-    node_id = str(row.get("id") or row.get("node_id") or "")
-    metadata = normalize_mapping(row.get("metadata"))
-    return {
-        **row,
-        "id": node_id,
-        "node_id": node_id,
-        "metadata": metadata,
-    }
-
-
-def normalize_edge(row: dict[str, Any]) -> dict[str, Any]:
-    source = str(row.get("source") or row.get("source_id") or "")
-    target = str(row.get("target") or row.get("target_id") or "")
-    metadata = normalize_mapping(row.get("metadata"))
-    weight = row.get("weight", metadata.get("weight", 1.0))
-    try:
-        normalized_weight = float(weight)
-    except (TypeError, ValueError):
-        normalized_weight = 1.0
-    return {
-        **row,
-        "source": source,
-        "source_id": source,
-        "target": target,
-        "target_id": target,
-        "relation": row.get("relation") or row.get("edge_type") or "",
-        "weight": normalized_weight,
-        "metadata": metadata,
-    }
+def _coerce(d: dict) -> dict:
+    """Match the mirror's scalar forms: UUID/datetime -> str; weight -> float.
+    metadata is left exactly as the DB JSON string."""
+    out: dict[str, Any] = {}
+    for k, v in d.items():
+        if isinstance(v, (datetime.datetime, datetime.date, uuid.UUID)):
+            out[k] = str(v)
+        elif k == "weight" and v is not None:
+            out[k] = float(v)
+        else:
+            out[k] = v
+    return out
 
 
 def write_jsonl(path: Path, rows: list[dict]) -> None:
@@ -137,11 +84,8 @@ def node_sort_key(n: dict) -> tuple[str, str]:
 
 
 def edge_sort_key(e: dict) -> tuple[str, str, str]:
-    return (
-        str(e.get("source") or ""),
-        str(e.get("target") or ""),
-        str(e.get("relation") or ""),
-    )
+    return (str(e.get("source") or ""), str(e.get("target") or ""),
+            str(e.get("relation") or ""))
 
 
 def build_counts(nodes: list[dict], edges: list[dict]) -> dict[str, Any]:
@@ -161,76 +105,62 @@ def build_counts(nodes: list[dict], edges: list[dict]) -> dict[str, Any]:
     }
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description="Export KG snapshot as sorted JSONL")
-    parser.add_argument(
-        "--base",
-        default=os.environ.get("KG_API_BASE", DEFAULT_BASE),
-        help="Backend base URL (default: env KG_API_BASE or Railway production)",
-    )
-    parser.add_argument(
-        "--out",
-        default="data/kg",
-        help="Output directory relative to repo root (default: data/kg)",
-    )
-    parser.add_argument(
-        "--skip-stats-endpoint",
-        action="store_true",
-        help="Do not call /api/kg/stats (counts are recomputed locally anyway)",
-    )
-    args = parser.parse_args()
+def _quarantine_triples(out_dir: Path) -> set[tuple]:
+    triples: set[tuple] = set()
+    for q in out_dir.glob("quarantine_*drift*.jsonl"):
+        for ln in q.read_text(encoding="utf-8").splitlines():
+            if not ln.strip():
+                continue
+            e = json.loads(ln)
+            triples.add((e.get("source_id") or e.get("source"),
+                         e.get("target_id") or e.get("target"),
+                         e.get("relation")))
+    return triples
 
-    out_dir = Path(args.out)
-    base = args.base.rstrip("/")
 
-    print(f"[snapshot] base={base}", file=sys.stderr)
-    print(f"[snapshot] output={out_dir}", file=sys.stderr)
-
+async def _fetch(out_dir: Path) -> tuple[list[dict], list[dict]]:
+    conn = await asyncpg.connect(_db_url())
     try:
-        print("[snapshot] fetching nodes...", file=sys.stderr)
-        nodes = [normalize_node(row) for row in fetch_nodes(base)]
-        print(f"[snapshot]   {len(nodes)} nodes", file=sys.stderr)
+        node_rows = await conn.fetch(f"SELECT * FROM {SCHEMA}.kg_nodes")
+        edge_rows = await conn.fetch(f"SELECT * FROM {SCHEMA}.kg_edges")
+    finally:
+        await conn.close()
+    nodes = [_coerce(dict(r)) for r in node_rows]
+    quarantine = _quarantine_triples(out_dir)
+    edges = []
+    for r in edge_rows:
+        e = _coerce(dict(r))
+        if (e.get("source_id"), e.get("target_id"), e.get("relation")) in quarantine:
+            continue
+        edges.append(e)
+    if quarantine:
+        print(f"[snapshot] excluded {len(edge_rows) - len(edges)} quarantined edge(s)",
+              file=sys.stderr)
+    return nodes, edges
 
-        print("[snapshot] fetching edges (paginated)...", file=sys.stderr)
-        edges = [normalize_edge(row) for row in fetch_edges(base)]
-        print(f"[snapshot]   {len(edges)} edges", file=sys.stderr)
-    except urllib.error.HTTPError as e:
-        print(f"[snapshot] ERROR HTTP {e.code}: {e.reason}", file=sys.stderr)
-        return 2
-    except urllib.error.URLError as e:
-        print(f"[snapshot] ERROR URL: {e.reason}", file=sys.stderr)
-        return 2
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Export KG snapshot from Supabase as sorted JSONL")
+    parser.add_argument("--out", default="data/kg",
+                        help="Output directory relative to repo root (default: data/kg)")
+    args = parser.parse_args()
+    out_dir = ROOT / args.out if not os.path.isabs(args.out) else Path(args.out)
+
+    print("[snapshot] source=Supabase (DATABASE_URL)", file=sys.stderr)
+    nodes, edges = asyncio.run(_fetch(out_dir))
+    print(f"[snapshot]   {len(nodes)} nodes, {len(edges)} edges", file=sys.stderr)
 
     nodes.sort(key=node_sort_key)
     edges.sort(key=edge_sort_key)
-
     write_jsonl(out_dir / "nodes.jsonl", nodes)
     write_jsonl(out_dir / "edges.jsonl", edges)
-
     counts = build_counts(nodes, edges)
     write_json(out_dir / "stats.json", counts)
-
-    remote_stats: Any = None
-    if not args.skip_stats_endpoint:
-        try:
-            remote_stats = fetch_json(f"{base}{STATS_PATH}")
-        except Exception as e:
-            print(f"[snapshot] stats endpoint unavailable: {e}", file=sys.stderr)
-
-    snapshot_meta = {
-        "source": base,
-        "counts": counts,
-    }
-    if remote_stats:
-        snapshot_meta["remote_stats"] = remote_stats
-    write_json(out_dir / "_snapshot.json", snapshot_meta)
-
-    print(
-        f"[snapshot] wrote {len(nodes)} nodes, {len(edges)} edges to {out_dir}/",
-        file=sys.stderr,
-    )
+    write_json(out_dir / "_snapshot.json", {"source": "supabase", "counts": counts})
+    print(f"[snapshot] wrote {len(nodes)} nodes, {len(edges)} edges to {out_dir}/",
+          file=sys.stderr)
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())
