@@ -236,6 +236,61 @@ def align(passages: list[tuple], leaves: list[Leaf]) -> tuple[list[tuple], int]:
     return out, aligned
 
 
+def align_global(passages: list[tuple], leaves: list[Leaf],
+                 thresh: float = 0.6) -> tuple[list[tuple], int]:
+    """Order-independent alignment for cherry-picked / reordered subsets.
+
+    For each passage, find the best-overlapping window in the edition's token
+    stream (anchored on any of the passage's first tokens), independent of
+    document order, and assign the leaf-range it covers. Accept only when the
+    token-set overlap meets *thresh*; otherwise leave unaligned (flag).
+    """
+    flat: list[str] = []
+    leaf_of: list[int] = []
+    for li, lf in enumerate(leaves):
+        for tok in lf.tokens:
+            flat.append(tok)
+            leaf_of.append(li)
+    L = len(flat)
+    pos: dict[str, list[int]] = {}
+    for i, t in enumerate(flat):
+        pos.setdefault(t, []).append(i)
+
+    out: list[tuple] = []
+    aligned = 0
+    for pid, _seq, text, old_cref in passages:
+        pt = norm_tokens(text)
+        n = len(pt)
+        if not pt or not flat:
+            out.append((pid, None, old_cref))
+            continue
+        ptset = set(pt)
+        starts: set[int] = set()
+        for a in range(min(4, n)):              # anchor on any of first 4 tokens
+            for p in pos.get(pt[a], ()):
+                s0 = p - a
+                if 0 <= s0 <= L - 1:
+                    starts.add(s0)
+        best_ov, best_s, best_e = 0.0, -1, -1
+        for s0 in starts:
+            e0 = min(s0 + n, L)
+            ov = len(ptset & set(flat[s0:e0])) / len(ptset)
+            if ov > best_ov:
+                best_ov, best_s, best_e = ov, s0, e0 - 1
+        if best_ov < thresh or best_s < 0:
+            out.append((pid, None, old_cref))
+            continue
+        start_leaf = leaf_of[best_s]
+        end_leaf = leaf_of[min(best_e, len(leaf_of) - 1)]
+        if end_leaf < start_leaf:
+            end_leaf = start_leaf
+        ref = (leaves[start_leaf].ref if start_leaf == end_leaf
+               else f"{leaves[start_leaf].ref}-{leaves[end_leaf].ref}")
+        out.append((pid, ref, old_cref))
+        aligned += 1
+    return out, aligned
+
+
 # --------------------------------------------------------------------------- #
 # canonical_ref label
 # --------------------------------------------------------------------------- #
@@ -270,7 +325,8 @@ def work_abbrev(old_cref: str, title: str) -> str:
 # Per-work driver
 # --------------------------------------------------------------------------- #
 
-async def process_work(conn, canonical_id: str, urn_override: str | None) -> WorkResult:
+async def process_work(conn, canonical_id: str, urn_override: str | None,
+                       global_mode: bool = False) -> WorkResult:
     row = await conn.fetchrow(
         f"""SELECT work_id, canonical_id, title, cts_urn, tlg_code
             FROM {SCHEMA}.ancient_works WHERE canonical_id=$1""", canonical_id)
@@ -309,7 +365,8 @@ async def process_work(conn, canonical_id: str, urn_override: str | None) -> Wor
         if not leaves:
             tried_note.append(f"{cand.rsplit('.',1)[-1]}:noleaves")
             continue
-        per_passage, n_aligned = align(passages, leaves)
+        aligner = align_global if global_mode else align
+        per_passage, n_aligned = aligner(passages, leaves)
         frac = n_aligned / len(passages)
         if best is None or frac > best[0]:
             best = (frac, n_aligned, per_passage, leaves, cand)
@@ -374,11 +431,12 @@ def _db_url() -> str:
     return url.replace("postgresql://", "postgres://")
 
 
-async def run(ids: list[str], commit: bool, urn_override: str | None) -> None:
+async def run(ids: list[str], commit: bool, urn_override: str | None,
+              global_mode: bool = False) -> None:
     conn = await asyncpg.connect(_db_url())
     try:
         for cid in ids:
-            res = await process_work(conn, cid, urn_override)
+            res = await process_work(conn, cid, urn_override, global_mode)
             tag = f"[{res.status}]"
             print(f"\n{tag:11} {cid}")
             print(f"   urn={res.work_urn}  passages={res.n_passages} "
@@ -404,6 +462,8 @@ def main() -> None:
     ap.add_argument("--urn-override", default=None,
                     help="force the edition CTS work-URN (single-work runs)")
     ap.add_argument("--commit", action="store_true")
+    ap.add_argument("--global", dest="global_mode", action="store_true",
+                    help="order-independent per-passage best-match (cherry-picked subsets)")
     args = ap.parse_args()
     ids = list(args.canonical_id)
     if args.from_file:
@@ -411,7 +471,7 @@ def main() -> None:
             ids += [ln.strip() for ln in fh if ln.strip() and not ln.startswith("#")]
     if not ids:
         sys.exit("ERROR: provide --canonical-id or --from-file")
-    asyncio.run(run(ids, args.commit, args.urn_override))
+    asyncio.run(run(ids, args.commit, args.urn_override, args.global_mode))
 
 
 if __name__ == "__main__":
