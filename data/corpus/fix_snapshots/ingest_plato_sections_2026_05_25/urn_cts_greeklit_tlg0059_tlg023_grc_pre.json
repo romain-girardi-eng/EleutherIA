@@ -1,0 +1,33 @@
+{
+  "canonical_id": "urn_cts_greeklit_tlg0059_tlg023_grc",
+  "cts_urn": "urn:cts:greekLit:tlg0059.tlg023.perseus-grc2",
+  "total_fetched": 81,
+  "kept_count": 21,
+  "keep_pages": [
+    466,
+    467,
+    468,
+    469,
+    470,
+    471,
+    472,
+    473,
+    474,
+    475,
+    476,
+    477,
+    478,
+    479,
+    480,
+    481,
+    507,
+    508,
+    509,
+    510,
+    511
+  ],
+  "first_kept_cts_urn": "urn:cts:greekLit:tlg0059.tlg023.perseus-grc2:466",
+  "last_kept_cts_urn": "urn:cts:greekLit:tlg0059.tlg023.perseus-grc2:511",
+  "first_kept_text_sample": "ΣΩ. ἐὰν μὲν οὖν καὶ ἐγὼ σοῦ ἀποκρινομένου μὴ ἔχω ὅτι χρήσωμαι, ἀπότεινε καὶ σὺ λόγον, ἐὰν δὲ ἔχω, ἔα με χρῆσθαι· δίκαιον",
+  "timestamp": "2026-05-25T07:10:02.991925+00:00"
+}
