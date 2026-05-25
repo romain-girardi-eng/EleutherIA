@@ -126,15 +126,36 @@ selection; (b) relabel everything truthfully to *Athenaion Politeia* — honest 
 out-of-scope for free will; (c) remove the erroneous subgraph entirely. Recommended
 (a) if DGC is wanted in the corpus, else (c).
 
-## Remaining (structural, lower severity)
-- **Sextus PH** (`tlg0544.tlg001`): text now clean, but the 534 passages are
-  overlapping sliding-windows mixing PH + Adversus Mathematicos (the `M.` prefix =
-  *Mathematicos*), indexed `M.N`. Canonical refs need a clean re-ingest of PH + AM
-  as per-section passages with citation remapping (538 citations) — a dedicated
-  migration, not a safe in-place fix.
-- **Epictetus** (`tlg0557`): `Epict. N` flat indices; clean re-ingest needed (1160
-  citations).
-- **Boethius / Latin works** not on Perseus: local-edition alignment.
+## Sextus + Epictetus — IN-PLACE REF RECOVERY (DONE; citations preserved)
+A full re-ingest was rejected after a dry-run showed it would delete 738
+concept→passage evidential citations (the existing passages are a heavily-cited
+curated evidence base). Instead, refs were recovered in place on the now-clean text
+(`--global` per-passage best-match aligner, conservative 0.7 threshold):
+- **Epictetus** (`tlg0557_grc`): 46 `Epict. N` flat → `Epict. Disc. b.c.s`; 189
+  summary/excerpt passages left untouched. All 235 passages + 738 citations kept.
+- **Sextus** (`tlg0544.tlg001`): 136 PH passages → `PH 1.x`; 396 → `AM 7.x`
+  (confirming the `M.137+` are Adversus Mathematicos VII, not PH). 532/534 refs
+  fixed; all 538 citations kept. (The node still mixes PH + AM passages — a
+  structural mislabel; refs are now individually correct. Split deferred.)
+
+## Boethius — DONE (Latin)
+Consolatio is on Perseus at **stoa0058.stoa001.perseus-lat2** (the stored
+`lat7127.011` URN is fabricated/404). 127 Latin passages `Cons. N` flat →
+`Cons. 1.M1` / `Cons. 3.P9` (book.prose/metre). English translation node
+(`phi2089.phi002_eng`) left flagged — its TEI div structure didn't parse.
+
+## Still flagged (no clean source / genuinely irreducible)
+- Boethius English node; Evodius *De Fide* (not on Perseus, no local edition);
+  Origen *De Principiis* (SC 252/253/268/269/312 on disk — complex Greek-fragment +
+  Rufinus-Latin work, dedicated pass).
+- 65 descriptive refs (Contra Celsum book-ambiguous from SC vol, Aristides papyrus,
+  Epictetus *Fragments*, Melito) + 3 non-betacode OCR artifacts.
+- ~191 Epictetus/Sextus summary passages that don't text-align (kept their refs).
+
+## Final corpus state
+betacode-grave residue **0** · non-standard refs **65 (0.4%)** · dangling
+citations **0** · passage roles original/translation/**paraphrase** (174 English
+summaries honestly tagged) · DB↔git in parity (corpus + KG subgraphs).
 
 ## Principle
 Wrong anchoring is worse than honest non-anchoring. Every committed ref is adopted
