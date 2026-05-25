@@ -144,13 +144,32 @@ Consolatio is on Perseus at **stoa0058.stoa001.perseus-lat2** (the stored
 `Cons. 1.M1` / `Cons. 3.P9` (book.prose/metre). English translation node
 (`phi2089.phi002_eng`) left flagged — its TEI div structure didn't parse.
 
+## Follow-up round — DONE
+- **KG export repointed to Supabase** (`export_kg_snapshot.py` now reads the live
+  DB, not the stale Railway backend). Mirror resynced: dropped 27 malformed
+  null-endpoint edges + stale Railway edge_ids, added ~2160 legitimate edges git
+  was missing; the 227 quarantined drift triples stay excluded. git now == Supabase
+  minus quarantine.
+- **Sextus PH/AM split**: 396 Adversus Mathematicos passages moved out of the
+  Pyrrhonism node into the AM work node (new AM KG work node + retargeted anchors);
+  PH node now holds only its 138 PH passages. Citations preserved.
+- **Boethius English node**: 127 refs copied from the Latin node by sequence
+  (`Cons. b.M/P`). **Origen De Principiis**: 32 fragments → `De Princ. 3.1.x`
+  (Peri autexousiou + IV).
+
 ## Still flagged (no clean source / genuinely irreducible)
-- Boethius English node; Evodius *De Fide* (not on Perseus, no local edition);
-  Origen *De Principiis* (SC 252/253/268/269/312 on disk — complex Greek-fragment +
-  Rufinus-Latin work, dedicated pass).
+- Evodius *De Fide Contra Manichaeos* (not on Perseus, no local edition) — refs
+  unrecoverable without a source.
+- ~189 Epictetus + 2 Sextus passages: genuine **Greek primary text** (role=original)
+  that the conservative aligner (0.7) couldn't place precisely — left with internal-
+  index refs (forcing refs would risk misassignment; honest as-is).
 - 65 descriptive refs (Contra Celsum book-ambiguous from SC vol, Aristides papyrus,
   Epictetus *Fragments*, Melito) + 3 non-betacode OCR artifacts.
-- ~191 Epictetus/Sextus summary passages that don't text-align (kept their refs).
+
+## Final corpus state (verified)
+passages 17,823 · citations 19,953 (dangling **0**) · kg_nodes 20,060 · betacode
+residue **0** · non-standard refs **65 (0.4%)** · roles original/translation/
+paraphrase · DB↔git in parity (KG git = Supabase minus 227 quarantined edges).
 
 ## Final corpus state
 betacode-grave residue **0** · non-standard refs **65 (0.4%)** · dangling
