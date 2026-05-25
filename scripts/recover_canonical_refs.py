@@ -237,7 +237,7 @@ def align(passages: list[tuple], leaves: list[Leaf]) -> tuple[list[tuple], int]:
 
 
 def align_global(passages: list[tuple], leaves: list[Leaf],
-                 thresh: float = 0.6) -> tuple[list[tuple], int]:
+                 thresh: float = 0.7) -> tuple[list[tuple], int]:
     """Order-independent alignment for cherry-picked / reordered subsets.
 
     For each passage, find the best-overlapping window in the edition's token
@@ -326,7 +326,7 @@ def work_abbrev(old_cref: str, title: str) -> str:
 # --------------------------------------------------------------------------- #
 
 async def process_work(conn, canonical_id: str, urn_override: str | None,
-                       global_mode: bool = False) -> WorkResult:
+                       global_mode: bool = False, abbrev_override: str | None = None) -> WorkResult:
     row = await conn.fetchrow(
         f"""SELECT work_id, canonical_id, title, cts_urn, tlg_code
             FROM {SCHEMA}.ancient_works WHERE canonical_id=$1""", canonical_id)
@@ -381,7 +381,10 @@ async def process_work(conn, canonical_id: str, urn_override: str | None,
     frac, n_aligned, per_passage, leaves, edition_urn = best
     res.work_urn = edition_urn
     res.n_aligned = n_aligned
-    if frac < MIN_GLOBAL_MATCH:
+    # In global (in-place) mode we apply refs per-passage to whatever aligns
+    # confidently and leave the rest untouched — the overall fraction may be low
+    # (excerpt/summary passages), so the misattribution gate does not apply.
+    if not global_mode and frac < MIN_GLOBAL_MATCH:
         res.status = "MISMATCH"
         res.note = (f"best edition {edition_urn} aligns only {n_aligned}/{len(passages)} "
                     f"({len(leaves)} leaves) — possible misattribution")
@@ -390,7 +393,7 @@ async def process_work(conn, canonical_id: str, urn_override: str | None,
         return res
     work_urn = edition_urn
 
-    abbrev = work_abbrev(passages[0][3] or "", title)
+    abbrev = abbrev_override or work_abbrev(passages[0][3] or "", title)
     pmap = {r["passage_id"]: r for r in prows}
     unaligned: list[str] = []
     for pid, ref, old_cref in per_passage:
@@ -432,11 +435,11 @@ def _db_url() -> str:
 
 
 async def run(ids: list[str], commit: bool, urn_override: str | None,
-              global_mode: bool = False) -> None:
+              global_mode: bool = False, abbrev_override: str | None = None) -> None:
     conn = await asyncpg.connect(_db_url())
     try:
         for cid in ids:
-            res = await process_work(conn, cid, urn_override, global_mode)
+            res = await process_work(conn, cid, urn_override, global_mode, abbrev_override)
             tag = f"[{res.status}]"
             print(f"\n{tag:11} {cid}")
             print(f"   urn={res.work_urn}  passages={res.n_passages} "
@@ -464,6 +467,8 @@ def main() -> None:
     ap.add_argument("--commit", action="store_true")
     ap.add_argument("--global", dest="global_mode", action="store_true",
                     help="order-independent per-passage best-match (cherry-picked subsets)")
+    ap.add_argument("--abbrev", default=None,
+                    help="force the canonical_ref work abbreviation (e.g. 'PH', 'AM')")
     args = ap.parse_args()
     ids = list(args.canonical_id)
     if args.from_file:
@@ -471,7 +476,7 @@ def main() -> None:
             ids += [ln.strip() for ln in fh if ln.strip() and not ln.startswith("#")]
     if not ids:
         sys.exit("ERROR: provide --canonical-id or --from-file")
-    asyncio.run(run(ids, args.commit, args.urn_override, args.global_mode))
+    asyncio.run(run(ids, args.commit, args.urn_override, args.global_mode, args.abbrev))
 
 
 if __name__ == "__main__":
