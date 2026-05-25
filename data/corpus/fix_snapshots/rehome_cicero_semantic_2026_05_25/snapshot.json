@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-05-25T07:44:19.002386+00:00",
+  "citations_before": [
+    {
+      "citation_id": "9d2c3306-7d2f-4794-bb90-e7d37fc40f99",
+      "kg_node_id": "passage_cic_div_21",
+      "passage_id": "95a723e9-1f71-4e7a-80f4-60d33139d2d5",
+      "old_ref": "De Div. 21",
+      "old_cts_urn": "urn:cts:latinLit:phi0474.phi042.perseus-lat1:21",
+      "old_work": "urn_cts_latinlit_phi0474_phi042_lat",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0
+    }
+  ],
+  "nodes_before": [
+    {
+      "node_id": "passage_cic_div_21",
+      "label": "Cicero, De Divinatione, De Div. 21",
+      "description": "si paterfamilias uxori ancillarum usum fructum legavit a filio neque a secundo herede legavit, mortuo filio mulier usum fructum non amittet. Quod enim semel testamento alicui datum est, id ab eo invito cui datum est auferri non potest. Repugnat enim recte accipere et invitum reddere. Ab efficientibus rebus hoc modo:",
+      "metadata": "{\"author\": \"Cicero\", \"school\": \"Academic\", \"cts_urn\": \"urn:cts:latinLit:phi0474.phi042.perseus-lat1:21\", \"language\": \"lat\", \"word_count\": 50, \"work_title\": \"De Divinatione\", \"char_length\": 317, \"passage_role\": \"original\", \"canonical_ref\": \"De Div. 21\", \"db_passage_id\": \"95a723e9-1f71-4e7a-80f4-60d33139d2d5\", \"auto_generated\": true, \"attestation_type\": \"testimonium\", \"work_canonical_id\": \"urn:cts:latinLit:phi0474.phi042\", \"doxographical_source\": \"heuristic\", \"doxographical_confidence\": \"medium\"}"
+    }
+  ],
+  "plan": [
+    {
+      "node_id": "passage_cic_div_21",
+      "citing_argument": "argument_cicero_de_div_anti_mantike_amand1945",
+      "genuine_passage_id": "a4acd438-56ad-4f5c-a980-502a2312938a",
+      "genuine_ref": "2.21",
+      "genuine_cts_urn": "urn:cts:latinLit:phi0474.phi053.perseus-lat1:2.21",
+      "reason": "Sole citing argument (argument_cicero_de_div_anti_mantike_amand1945) names the explicit locus 'De divinatione II, 8, 21' and quotes the Stoic-divination dilemma; genuine De Div 2.21 contains it verbatim ('Ubi est igitur ista divinatio Stoicorum? ... sin autem id potest flecti, nullum est fatum')."
+    }
+  ]
+}
