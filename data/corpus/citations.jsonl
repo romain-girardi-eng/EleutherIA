@@ -11595,7 +11595,6 @@
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"synthesis_epict_eph_hemin_doctrine","passage_id":"959a70b2-c284-5310-8ccb-0fda6222084f"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc147_origenes_contra_celsum_v_par58_en","passage_id":"959ef3ad-1b3f-5128-be91-6dd54c42d57b"}
 {"citation_type":"evidenced_by","confidence":0.75,"kg_node_id":"argument_cicero_de_div_anti_mantike_amand1945","passage_id":"95a723e9-1f71-4e7a-80f4-60d33139d2d5"}
-{"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_cic_div_21","passage_id":"95a723e9-1f71-4e7a-80f4-60d33139d2d5"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_15_99_4","passage_id":"95b1bc1f-c93d-4845-bbcb-40c97baf32a3"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_3_29_3","passage_id":"95b4f5a3-cb99-441f-a2c1-bae621b7ecf0"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_20_121_24","passage_id":"95b5d78c-448b-441f-94a4-0abc4b234734"}
@@ -12809,6 +12808,7 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc150_origenes_contra_celsum_vii_par44_a","passage_id":"a4a0a7bd-8229-4a1e-97c2-55b4d7324d24"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_8_73_14","passage_id":"a4a4b912-da4f-422e-8407-cec174028f93"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_mm_2_7_24","passage_id":"a4a6f1d0-0dbd-49c3-9a8c-d28aa723501f"}
+{"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_cic_div_21","passage_id":"a4acd438-56ad-4f5c-a980-502a2312938a"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_3_1_7","passage_id":"a4adad7a-d10d-4d81-a810-9bd512e9f758"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_philo_de_opif_143","passage_id":"a4b71a1b-9484-4bdb-a143-7235a055a0fb"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_lucr_drn_10011025_s289","passage_id":"a4b9ed5d-5d3b-4653-a73c-507092da6f06"}
