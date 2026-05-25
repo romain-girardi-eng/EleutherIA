@@ -3,7 +3,7 @@
     "agrees_with": 8,
     "argues_against": 1,
     "argues_for": 3,
-    "authored_by": 17686,
+    "authored_by": 17687,
     "belongs_to_corpus": 32,
     "belongs_to_school": 1,
     "cites": 1,
@@ -72,8 +72,8 @@
     "school": 16,
     "source_collection": 6,
     "synthesis": 177,
-    "work": 240
+    "work": 241
   },
-  "total_edges": 56626,
-  "total_nodes": 20059
+  "total_edges": 56627,
+  "total_nodes": 20060
 }
