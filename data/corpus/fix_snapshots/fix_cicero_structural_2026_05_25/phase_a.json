@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-05-25T08:03:37.025456+00:00",
+  "phase": "A",
+  "citations_to_create": [],
+  "stale_bogus_deleted": [],
+  "skipped_args": {
+    "argument_carneadean_antiastrological_horoscope_impossibility_amand1945": "Desc cites Amand p.49-51 only; names no De Div/De Nat Deorum section.",
+    "argument_carneadean_antiastrological_twins_amand1945": "Desc cites Augustine De civ. dei V.1 + Bouché-Leclercq; names no Cicero section.",
+    "argument_carneadean_antiastrological_animals_amand1945": "Desc cites Augustine De civ. dei V.7, Aulus Gellius XIV.1.31, Diodore; names no Cicero section.",
+    "argument_basil_observation_impossible_at_birth": "Basil Hex VI.5 (PG 29) + Sextus/Origen; names no Cicero section.",
+    "argument_basil_kings_born_daily": "Basil Hex VI.7 (PG 29) + Ptolemy; names no Cicero section."
+  },
+  "missing_loci": []
+}

@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-05-25T08:03:37.025456+00:00",
+  "phase": "C",
+  "works": {
+    "Topica": {
+      "present": false
+    },
+    "Orator": {
+      "present": false
+    }
+  }
+}
