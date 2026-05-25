@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-05-25T07:16:32.161761+00:00",
+  "work_id": "b86b851f-486a-5668-b9f9-a91c81606e0a",
+  "before": {
+    "canonical_id": "urn_cts_greeklit_tlg0544_grc",
+    "title": "Against the Professors and Outlines of Pyrrhonism",
+    "cts_urn": null,
+    "tlg_code": null
+  },
+  "after": {
+    "canonical_id": "urn_cts_greeklit_tlg0544_tlg001_grc",
+    "title": "Outlines of Pyrrhonism (Πυρρώνειοι ὑποτυπώσεις)",
+    "cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1",
+    "tlg_code": "tlg0544.tlg001"
+  },
+  "note": "M.N canonical_refs are non-CTS sequential labels from original import; passage text and passage_citations untouched; ref-fix deferred.",
+  "committed": true,
+  "committed_at": "2026-05-25T07:16:32.298105+00:00"
+}
