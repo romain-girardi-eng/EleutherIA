@@ -159,3 +159,7 @@ agents.md
 
 # Local media archive (source PNG/MP4 — keepers in frontend/public/ are WebP)
 media/
+
+# Corpus working artifacts (TEI download cache + audit/reading scratch output)
+data/corpus/_audit_cache/
+data/corpus/missing_sections/
