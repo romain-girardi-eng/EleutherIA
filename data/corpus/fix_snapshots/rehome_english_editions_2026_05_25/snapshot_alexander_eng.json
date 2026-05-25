@@ -1,0 +1,645 @@
+{
+  "eng_passages": [
+    {
+      "passage_id": "34005c9d-6a6c-54c3-a209-3ea2bd0c4086",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:1",
+      "canonical_ref": "De Fato 1",
+      "sequence_number": 1
+    },
+    {
+      "passage_id": "290aec25-79e6-5af8-b17f-dec3d5ddb7c1",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:2",
+      "canonical_ref": "De Fato 2",
+      "sequence_number": 2
+    },
+    {
+      "passage_id": "f8bf0d55-219f-54be-bd36-d302da32a06e",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:3",
+      "canonical_ref": "De Fato 3",
+      "sequence_number": 3
+    },
+    {
+      "passage_id": "b0309a9e-0a2b-5ca1-97a2-1fe7f761b6f8",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:4",
+      "canonical_ref": "De Fato 4",
+      "sequence_number": 4
+    },
+    {
+      "passage_id": "5cd0c423-896c-509f-be5a-3bcdc160ae22",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:5",
+      "canonical_ref": "De Fato 5",
+      "sequence_number": 5
+    },
+    {
+      "passage_id": "390543ea-d68b-5c7f-8e78-91ef2fe1de4a",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:6",
+      "canonical_ref": "De Fato 6",
+      "sequence_number": 6
+    },
+    {
+      "passage_id": "fc89f409-f3e0-56fa-8235-6b6549c03698",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:7",
+      "canonical_ref": "De Fato 7",
+      "sequence_number": 7
+    },
+    {
+      "passage_id": "81b08734-53ad-54e5-b505-aa05e850c7c5",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:8",
+      "canonical_ref": "De Fato 8",
+      "sequence_number": 8
+    },
+    {
+      "passage_id": "0d3f8085-6ec8-5fe6-aa1a-ef23ca36c30a",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:9",
+      "canonical_ref": "De Fato 9",
+      "sequence_number": 9
+    },
+    {
+      "passage_id": "4980d6a5-deda-58d6-b0ef-db72e0e311be",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:10",
+      "canonical_ref": "De Fato 10",
+      "sequence_number": 10
+    },
+    {
+      "passage_id": "cba82661-cb89-5128-8ff1-ed6e14701bfe",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:11",
+      "canonical_ref": "De Fato 11",
+      "sequence_number": 11
+    },
+    {
+      "passage_id": "247ae1d4-e440-51aa-8f96-a307e8a436a7",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:12",
+      "canonical_ref": "De Fato 12",
+      "sequence_number": 12
+    },
+    {
+      "passage_id": "5ad8dee0-e267-507f-8766-24240f1c46e6",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:13",
+      "canonical_ref": "De Fato 13",
+      "sequence_number": 13
+    },
+    {
+      "passage_id": "4794774b-089a-5c91-8ae8-dd59ea7caa06",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:14",
+      "canonical_ref": "De Fato 14",
+      "sequence_number": 14
+    },
+    {
+      "passage_id": "05669eb7-aba8-5b0e-a79b-c8d7f075dafa",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:15",
+      "canonical_ref": "De Fato 15",
+      "sequence_number": 15
+    },
+    {
+      "passage_id": "4fb1e081-aef1-5d2c-a12f-a5bb5ea41737",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:16",
+      "canonical_ref": "De Fato 16",
+      "sequence_number": 16
+    },
+    {
+      "passage_id": "8369a97c-f865-5f57-8ed8-5f002218a083",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:17",
+      "canonical_ref": "De Fato 17",
+      "sequence_number": 17
+    },
+    {
+      "passage_id": "6192bfab-b433-5605-841d-8ad27111e712",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:18",
+      "canonical_ref": "De Fato 18",
+      "sequence_number": 18
+    },
+    {
+      "passage_id": "e57718e5-02ca-56e3-9438-fb313799b565",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:19",
+      "canonical_ref": "De Fato 19",
+      "sequence_number": 19
+    },
+    {
+      "passage_id": "175e9a69-adb7-5766-89ce-d6fde548627c",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:20",
+      "canonical_ref": "De Fato 20",
+      "sequence_number": 20
+    },
+    {
+      "passage_id": "a4f628af-1f67-572d-a46e-8712fdf84377",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:21",
+      "canonical_ref": "De Fato 21",
+      "sequence_number": 21
+    },
+    {
+      "passage_id": "1ba4688f-fff5-541c-b077-e30bc10cd0e5",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:22",
+      "canonical_ref": "De Fato 22",
+      "sequence_number": 22
+    },
+    {
+      "passage_id": "4ed3d271-7cae-5663-9ede-70c2b094d600",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:23",
+      "canonical_ref": "De Fato 23",
+      "sequence_number": 23
+    },
+    {
+      "passage_id": "a039a1b0-64e4-50f4-9781-2f4982d544ac",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:24",
+      "canonical_ref": "De Fato 24",
+      "sequence_number": 24
+    },
+    {
+      "passage_id": "1d17ce8e-087c-5ad3-8036-545faed02d13",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:25",
+      "canonical_ref": "De Fato 25",
+      "sequence_number": 25
+    },
+    {
+      "passage_id": "69c242d2-4d9d-534f-b1ed-a993077f6159",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:26",
+      "canonical_ref": "De Fato 26",
+      "sequence_number": 26
+    },
+    {
+      "passage_id": "2e930d3d-db18-5f18-942d-725e3ade2a06",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:27",
+      "canonical_ref": "De Fato 27",
+      "sequence_number": 27
+    },
+    {
+      "passage_id": "140dff48-58a7-52b1-9f7a-c471f93d96ea",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:28",
+      "canonical_ref": "De Fato 28",
+      "sequence_number": 28
+    },
+    {
+      "passage_id": "3924d08f-eadf-53b3-a619-647dcf3ec0fe",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:29",
+      "canonical_ref": "De Fato 29",
+      "sequence_number": 29
+    },
+    {
+      "passage_id": "c556c656-1ea2-5edc-b179-65d14e86deee",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:30",
+      "canonical_ref": "De Fato 30",
+      "sequence_number": 30
+    },
+    {
+      "passage_id": "96ab2da6-3ef9-5cb7-ac67-c7addc1405d8",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:31",
+      "canonical_ref": "De Fato 31",
+      "sequence_number": 31
+    },
+    {
+      "passage_id": "80160b7e-2fad-5d96-ad3c-c422a34c6a55",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:32",
+      "canonical_ref": "De Fato 32",
+      "sequence_number": 32
+    },
+    {
+      "passage_id": "48f82c21-6729-51f4-a917-30fac79e2394",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:33",
+      "canonical_ref": "De Fato 33",
+      "sequence_number": 33
+    },
+    {
+      "passage_id": "ff2d7d76-d920-5780-a3e6-ed4437464e52",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:34",
+      "canonical_ref": "De Fato 34",
+      "sequence_number": 34
+    },
+    {
+      "passage_id": "c63b3c1d-0649-5693-8c33-cbe1622b55fb",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:35",
+      "canonical_ref": "De Fato 35",
+      "sequence_number": 35
+    },
+    {
+      "passage_id": "eb755543-1d48-5da4-9e7c-66867d895aec",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:36",
+      "canonical_ref": "De Fato 36",
+      "sequence_number": 36
+    },
+    {
+      "passage_id": "0f1b0380-3842-562a-832e-cb168d6559d7",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:37",
+      "canonical_ref": "De Fato 37",
+      "sequence_number": 37
+    },
+    {
+      "passage_id": "99913e71-a5ca-573b-9fab-4dfcf1c9a0dc",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:38",
+      "canonical_ref": "De Fato 38",
+      "sequence_number": 38
+    },
+    {
+      "passage_id": "31eff100-fab1-5c1a-8d74-4199ccc3d291",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:39",
+      "canonical_ref": "De Fato 39",
+      "sequence_number": 39
+    }
+  ],
+  "eng_citations": [
+    {
+      "citation_id": "fe1716ee-ed15-4eeb-bf89-01e5192d7af7",
+      "passage_id": "34005c9d-6a6c-54c3-a209-3ea2bd0c4086",
+      "kg_node_id": "passage_alex_fat_1_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:1",
+      "canonical_ref": "De Fato 1"
+    },
+    {
+      "citation_id": "aac4e3de-7286-4757-b2cf-06052d9bf7d9",
+      "passage_id": "4980d6a5-deda-58d6-b0ef-db72e0e311be",
+      "kg_node_id": "passage_alex_fat_10_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:10",
+      "canonical_ref": "De Fato 10"
+    },
+    {
+      "citation_id": "fae7570d-cb92-4b8c-93bc-d9c1dac34618",
+      "passage_id": "cba82661-cb89-5128-8ff1-ed6e14701bfe",
+      "kg_node_id": "passage_alex_fat_11_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:11",
+      "canonical_ref": "De Fato 11"
+    },
+    {
+      "citation_id": "19f7cdcc-dd99-46de-8966-e3fcae0ccc49",
+      "passage_id": "247ae1d4-e440-51aa-8f96-a307e8a436a7",
+      "kg_node_id": "passage_alex_fat_12_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:12",
+      "canonical_ref": "De Fato 12"
+    },
+    {
+      "citation_id": "2e85e3fd-a551-44d5-b33f-2ab632ba1a2e",
+      "passage_id": "5ad8dee0-e267-507f-8766-24240f1c46e6",
+      "kg_node_id": "passage_alex_fat_13_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:13",
+      "canonical_ref": "De Fato 13"
+    },
+    {
+      "citation_id": "ac529149-e507-4561-893b-d2afd1f3294a",
+      "passage_id": "4794774b-089a-5c91-8ae8-dd59ea7caa06",
+      "kg_node_id": "passage_alex_fat_14_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:14",
+      "canonical_ref": "De Fato 14"
+    },
+    {
+      "citation_id": "d6e55fb6-93a1-4cae-bc86-1c6398b21082",
+      "passage_id": "05669eb7-aba8-5b0e-a79b-c8d7f075dafa",
+      "kg_node_id": "passage_alex_fat_15_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:15",
+      "canonical_ref": "De Fato 15"
+    },
+    {
+      "citation_id": "bd1d4097-d9bf-49f8-914d-f956f4d5f8b2",
+      "passage_id": "4fb1e081-aef1-5d2c-a12f-a5bb5ea41737",
+      "kg_node_id": "argument_alexander_witness2_ch16_praise_blame_punishment_amand1945",
+      "citation_type": "evidenced_by",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:16",
+      "canonical_ref": "De Fato 16"
+    },
+    {
+      "citation_id": "d10eb300-4b03-4ea9-acdc-db9be3e3805b",
+      "passage_id": "4fb1e081-aef1-5d2c-a12f-a5bb5ea41737",
+      "kg_node_id": "argument_alexander_witness2_ch16_theme_virtue_neglect_amand1945",
+      "citation_type": "evidenced_by",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:16",
+      "canonical_ref": "De Fato 16"
+    },
+    {
+      "citation_id": "ff9db824-b8aa-4d22-bb55-b2c3368c5980",
+      "passage_id": "4fb1e081-aef1-5d2c-a12f-a5bb5ea41737",
+      "kg_node_id": "passage_alex_fat_16_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:16",
+      "canonical_ref": "De Fato 16"
+    },
+    {
+      "citation_id": "a32a0d7c-55f1-4c79-8ab5-54a5af9f8665",
+      "passage_id": "8369a97c-f865-5f57-8ed8-5f002218a083",
+      "kg_node_id": "argument_carneadean_providence_mantike_alexander_amand1945",
+      "citation_type": "evidenced_by",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:17",
+      "canonical_ref": "De Fato 17"
+    },
+    {
+      "citation_id": "5ebb3c13-e80e-4de1-bbf2-a5ad62cee40c",
+      "passage_id": "8369a97c-f865-5f57-8ed8-5f002218a083",
+      "kg_node_id": "passage_alex_fat_17_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:17",
+      "canonical_ref": "De Fato 17"
+    },
+    {
+      "citation_id": "20bfe558-5e94-4ba4-bae2-b7e055a2aede",
+      "passage_id": "6192bfab-b433-5605-841d-8ad27111e712",
+      "kg_node_id": "argument_alexander_witness2_ch18_stoic_practical_self_refutation_amand1945",
+      "citation_type": "evidenced_by",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:18",
+      "canonical_ref": "De Fato 18"
+    },
+    {
+      "citation_id": "1838b26c-521a-40a0-8482-d19fc622e7d0",
+      "passage_id": "6192bfab-b433-5605-841d-8ad27111e712",
+      "kg_node_id": "passage_alex_fat_18_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:18",
+      "canonical_ref": "De Fato 18"
+    },
+    {
+      "citation_id": "42c46580-73f8-4153-9a34-6090ddc7408c",
+      "passage_id": "e57718e5-02ca-56e3-9438-fb313799b565",
+      "kg_node_id": "argument_alexander_witness2_ch19_de_facto_punishment_amand1945",
+      "citation_type": "evidenced_by",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:19",
+      "canonical_ref": "De Fato 19"
+    },
+    {
+      "citation_id": "c01c9455-8c60-4d28-81a1-5cab3e4c9d6d",
+      "passage_id": "e57718e5-02ca-56e3-9438-fb313799b565",
+      "kg_node_id": "passage_alex_fat_19_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:19",
+      "canonical_ref": "De Fato 19"
+    },
+    {
+      "citation_id": "9c877a7c-d416-4ba9-a36b-60ff87e1f5dd",
+      "passage_id": "290aec25-79e6-5af8-b17f-dec3d5ddb7c1",
+      "kg_node_id": "passage_alex_fat_2_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:2",
+      "canonical_ref": "De Fato 2"
+    },
+    {
+      "citation_id": "e5264163-22e9-45ee-b88a-eb6f0388371d",
+      "passage_id": "175e9a69-adb7-5766-89ce-d6fde548627c",
+      "kg_node_id": "argument_alexander_witness2_ch20_conclusion_amand1945",
+      "citation_type": "evidenced_by",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:20",
+      "canonical_ref": "De Fato 20"
+    },
+    {
+      "citation_id": "e756bb89-0c52-45b8-ba88-4db57adc9de3",
+      "passage_id": "175e9a69-adb7-5766-89ce-d6fde548627c",
+      "kg_node_id": "passage_alex_fat_20_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:20",
+      "canonical_ref": "De Fato 20"
+    },
+    {
+      "citation_id": "013262bc-ca87-49c5-bd35-6d74f2f7a8c4",
+      "passage_id": "a4f628af-1f67-572d-a46e-8712fdf84377",
+      "kg_node_id": "passage_alex_fat_21_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:21",
+      "canonical_ref": "De Fato 21"
+    },
+    {
+      "citation_id": "1c6fcf22-301d-4569-80e2-b7d27e6d28bf",
+      "passage_id": "1ba4688f-fff5-541c-b077-e30bc10cd0e5",
+      "kg_node_id": "passage_alex_fat_22_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:22",
+      "canonical_ref": "De Fato 22"
+    },
+    {
+      "citation_id": "bc0a4530-1dde-49f0-a49e-821656022654",
+      "passage_id": "4ed3d271-7cae-5663-9ede-70c2b094d600",
+      "kg_node_id": "passage_alex_fat_23_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:23",
+      "canonical_ref": "De Fato 23"
+    },
+    {
+      "citation_id": "7a782b5c-7979-4b6c-a8a6-a1212d3b390c",
+      "passage_id": "a039a1b0-64e4-50f4-9781-2f4982d544ac",
+      "kg_node_id": "passage_alex_fat_24_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:24",
+      "canonical_ref": "De Fato 24"
+    },
+    {
+      "citation_id": "a259b3d7-d9f3-4e60-9792-9c300485e389",
+      "passage_id": "1d17ce8e-087c-5ad3-8036-545faed02d13",
+      "kg_node_id": "passage_alex_fat_25_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:25",
+      "canonical_ref": "De Fato 25"
+    },
+    {
+      "citation_id": "c59fbdc7-0890-4a64-8062-48fc98fd441c",
+      "passage_id": "69c242d2-4d9d-534f-b1ed-a993077f6159",
+      "kg_node_id": "passage_alex_fat_26_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:26",
+      "canonical_ref": "De Fato 26"
+    },
+    {
+      "citation_id": "0e351073-5aa8-44d4-a732-643abb6712af",
+      "passage_id": "2e930d3d-db18-5f18-942d-725e3ade2a06",
+      "kg_node_id": "passage_alex_fat_27_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:27",
+      "canonical_ref": "De Fato 27"
+    },
+    {
+      "citation_id": "dc062d84-9acd-44d2-8adb-eb1b447b50dc",
+      "passage_id": "140dff48-58a7-52b1-9f7a-c471f93d96ea",
+      "kg_node_id": "passage_alex_fat_28_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:28",
+      "canonical_ref": "De Fato 28"
+    },
+    {
+      "citation_id": "962ba033-ba4f-4e89-96b9-65656ac0ed14",
+      "passage_id": "3924d08f-eadf-53b3-a619-647dcf3ec0fe",
+      "kg_node_id": "passage_alex_fat_29_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:29",
+      "canonical_ref": "De Fato 29"
+    },
+    {
+      "citation_id": "51886ccb-c697-4d10-ad74-aeb062db6144",
+      "passage_id": "f8bf0d55-219f-54be-bd36-d302da32a06e",
+      "kg_node_id": "passage_alex_fat_3_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:3",
+      "canonical_ref": "De Fato 3"
+    },
+    {
+      "citation_id": "10dfff28-4ebd-4122-8d96-5d038045971b",
+      "passage_id": "c556c656-1ea2-5edc-b179-65d14e86deee",
+      "kg_node_id": "passage_alex_fat_30_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:30",
+      "canonical_ref": "De Fato 30"
+    },
+    {
+      "citation_id": "e1f237f9-1c0b-4fc6-bc58-b627de5e0e76",
+      "passage_id": "96ab2da6-3ef9-5cb7-ac67-c7addc1405d8",
+      "kg_node_id": "passage_alex_fat_31_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:31",
+      "canonical_ref": "De Fato 31"
+    },
+    {
+      "citation_id": "f80c01ce-a86c-4c71-982d-01ed6d73cf2a",
+      "passage_id": "80160b7e-2fad-5d96-ad3c-c422a34c6a55",
+      "kg_node_id": "passage_alex_fat_32_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:32",
+      "canonical_ref": "De Fato 32"
+    },
+    {
+      "citation_id": "5736e80d-8a74-4d2d-aec1-a27430147d80",
+      "passage_id": "48f82c21-6729-51f4-a917-30fac79e2394",
+      "kg_node_id": "passage_alex_fat_33_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:33",
+      "canonical_ref": "De Fato 33"
+    },
+    {
+      "citation_id": "72163a34-6646-4d88-9df9-9ae644a0d216",
+      "passage_id": "ff2d7d76-d920-5780-a3e6-ed4437464e52",
+      "kg_node_id": "passage_alex_fat_34_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:34",
+      "canonical_ref": "De Fato 34"
+    },
+    {
+      "citation_id": "a6f12db0-f3ba-467a-a1c1-2318868ca804",
+      "passage_id": "c63b3c1d-0649-5693-8c33-cbe1622b55fb",
+      "kg_node_id": "passage_alex_fat_35_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:35",
+      "canonical_ref": "De Fato 35"
+    },
+    {
+      "citation_id": "a0ae0760-3d08-4dd3-ab5d-3c5514fcb028",
+      "passage_id": "eb755543-1d48-5da4-9e7c-66867d895aec",
+      "kg_node_id": "passage_alex_fat_36_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:36",
+      "canonical_ref": "De Fato 36"
+    },
+    {
+      "citation_id": "33bc9ac0-f0bc-441e-8907-4322ba967bc6",
+      "passage_id": "0f1b0380-3842-562a-832e-cb168d6559d7",
+      "kg_node_id": "passage_alex_fat_37_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:37",
+      "canonical_ref": "De Fato 37"
+    },
+    {
+      "citation_id": "54a0e769-941c-4da8-84e4-c830a1382ede",
+      "passage_id": "99913e71-a5ca-573b-9fab-4dfcf1c9a0dc",
+      "kg_node_id": "passage_alex_fat_38_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:38",
+      "canonical_ref": "De Fato 38"
+    },
+    {
+      "citation_id": "41ed92eb-a1e0-4ebe-9fb9-1ea69c520fb8",
+      "passage_id": "31eff100-fab1-5c1a-8d74-4199ccc3d291",
+      "kg_node_id": "passage_alex_fat_39_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:39",
+      "canonical_ref": "De Fato 39"
+    },
+    {
+      "citation_id": "263aa18f-7bcf-4e31-9d93-868b050467dc",
+      "passage_id": "b0309a9e-0a2b-5ca1-97a2-1fe7f761b6f8",
+      "kg_node_id": "passage_alex_fat_4_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:4",
+      "canonical_ref": "De Fato 4"
+    },
+    {
+      "citation_id": "b33223ea-ce53-4164-8e4f-bda354dac65b",
+      "passage_id": "5cd0c423-896c-509f-be5a-3bcdc160ae22",
+      "kg_node_id": "passage_alex_fat_5_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:5",
+      "canonical_ref": "De Fato 5"
+    },
+    {
+      "citation_id": "cea1ab0e-4c9b-48e6-9581-c34cb37d2ffb",
+      "passage_id": "390543ea-d68b-5c7f-8e78-91ef2fe1de4a",
+      "kg_node_id": "passage_alex_fat_6_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:6",
+      "canonical_ref": "De Fato 6"
+    },
+    {
+      "citation_id": "9ee9a38b-d740-432d-b76e-c1fe59349caa",
+      "passage_id": "fc89f409-f3e0-56fa-8235-6b6549c03698",
+      "kg_node_id": "passage_alex_fat_7_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:7",
+      "canonical_ref": "De Fato 7"
+    },
+    {
+      "citation_id": "14d154bc-40fe-4d48-a905-7fc2e335dc70",
+      "passage_id": "81b08734-53ad-54e5-b505-aa05e850c7c5",
+      "kg_node_id": "passage_alex_fat_8_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:8",
+      "canonical_ref": "De Fato 8"
+    },
+    {
+      "citation_id": "d546cbc5-1df8-4112-96ac-3bd4c9b6c86d",
+      "passage_id": "0d3f8085-6ec8-5fe6-aa1a-ef23ca36c30a",
+      "kg_node_id": "passage_alex_fat_9_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:9",
+      "canonical_ref": "De Fato 9"
+    }
+  ]
+}

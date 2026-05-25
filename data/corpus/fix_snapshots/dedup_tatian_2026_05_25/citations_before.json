@@ -1,0 +1,779 @@
+[
+  {
+    "citation_id": "8294bb19-71a1-4614-b6fb-eae12ce2a256",
+    "passage_id": "02b9eb09-b8af-4c02-8d4a-f994413a1728",
+    "kg_node_id": "passage_tatian_18_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "bd7939ea-5e8f-49e9-970c-0b8760ac3523",
+    "passage_id": "04a012aa-e662-42ed-ab7e-004ff86e51d1",
+    "kg_node_id": "passage_tatian_1_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "fab6b3f3-97ef-4bd3-aa75-fa487d1377cf",
+    "passage_id": "071be711-0259-4dcd-8107-ed671de2dc5c",
+    "kg_node_id": "passage_tatian_35_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "0b5b5b2f-af33-4287-81a1-af9cfe178825",
+    "passage_id": "0ad1bd43-6ba1-4335-b546-7251001f7383",
+    "kg_node_id": "passage_tatian_15_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "834a1dbb-7912-4fb5-9188-b9ed9428ca7b",
+    "passage_id": "0b6da01e-f72f-4b33-89e1-35aece6e3a4b",
+    "kg_node_id": "passage_tatian_29_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "79c83acf-f21f-4b2c-baba-1131173588ab",
+    "passage_id": "0dc1c27a-4c07-4540-8c7a-9848bcb4ee68",
+    "kg_node_id": "passage_tatian_42_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "33debcd0-91e6-4202-9223-d5adef67c5c3",
+    "passage_id": "103575fe-536e-4617-ae29-a37a0d8d6322",
+    "kg_node_id": "passage_tatian_17_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "d5170d4a-cf94-45dd-8d56-6c45017858a5",
+    "passage_id": "16167cda-9952-4a24-885b-13f0fb7a30fa",
+    "kg_node_id": "passage_tatian_12_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "2fa53388-b685-46f8-b29f-bbac6ace7bbc",
+    "passage_id": "161e51dc-64b8-4ac1-b4e1-134e3bc85eaa",
+    "kg_node_id": "passage_tatian_12_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "aaf7d819-f4f1-44e1-987f-fd0974c4cf57",
+    "passage_id": "1954e39f-00d0-4705-a7ff-cc845af5a563",
+    "kg_node_id": "passage_tatian_3_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "88dd4bcb-29ae-4750-854c-cd99abbd132e",
+    "passage_id": "1e4b0729-1e97-4559-9921-d0ffdb416ae5",
+    "kg_node_id": "passage_tatian_31_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "a4fc91b6-e448-44ff-b494-9fa7f58bc126",
+    "passage_id": "245a8d4a-d402-45a8-a7b9-4650e012dc89",
+    "kg_node_id": "passage_tatian_34_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "61b97150-5c72-454e-9bb2-f1b98f0e5be4",
+    "passage_id": "25cbef0e-a981-4c94-8395-d3edcc1b651a",
+    "kg_node_id": "passage_tatian_33_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "0da9efe2-3344-4a7b-9c68-4e2e4a8e1a8d",
+    "passage_id": "2a478a19-77cd-4314-b70e-3e2a55ab187d",
+    "kg_node_id": "passage_tatian_38_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "6c680dbf-60cc-4d67-98af-f684eccb8673",
+    "passage_id": "2bc3ada4-5472-4b9c-9aa7-78896d83c35c",
+    "kg_node_id": "passage_tatian_19_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "7a36cba7-163f-48c8-bb9b-f95482a3609b",
+    "passage_id": "2d084d31-b920-478b-8c42-58aaa5f80af8",
+    "kg_node_id": "passage_tatian_10_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "d6243226-15ee-408d-919b-1e7b2146cf6e",
+    "passage_id": "2de19140-0ddc-4e41-bfa3-1d046d984ff7",
+    "kg_node_id": "passage_tatian_15_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "d9490849-b200-43bb-bc28-df61047c3886",
+    "passage_id": "32a158e2-c139-47a1-9420-cd59ba9b55b1",
+    "kg_node_id": "passage_tatian_39_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "4333eb63-98be-4264-87d2-d9c3ee129988",
+    "passage_id": "330b4bfc-0ccf-4c06-a01d-4f8c806688df",
+    "kg_node_id": "passage_tatian_26_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "fb52860a-7ca8-4e94-a864-4cd63e842c4f",
+    "passage_id": "35072cd3-0da2-42b6-be13-52f12833adf6",
+    "kg_node_id": "passage_tatian_26_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "097d3039-a083-4d77-af9e-338f17773f56",
+    "passage_id": "3c51df53-54a3-48c1-8267-52a5ed93ba5a",
+    "kg_node_id": "passage_tatian_39_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "f4d8ec64-906a-4001-9514-fd3656585f5d",
+    "passage_id": "3d1d7512-f815-42a3-9bf5-731d99753933",
+    "kg_node_id": "passage_tatian_21_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "83d75a28-0d4a-4e73-846b-e67ae334b991",
+    "passage_id": "3f5fbd39-c23a-4938-9d87-13351dbf093e",
+    "kg_node_id": "passage_tatian_5_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "c7f225fd-3c30-471a-83dc-cd183143e4b1",
+    "passage_id": "47437519-565e-46f1-88e4-9afdea50a3f5",
+    "kg_node_id": "passage_tatian_23_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "c75d6f70-e232-4278-bbf1-a2aeb174a79c",
+    "passage_id": "4a581196-c2d3-4bb9-92fe-7c55f3ece6e9",
+    "kg_node_id": "passage_tatian_28_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "c280b413-3a84-4848-8eca-560c8b3d6c2d",
+    "passage_id": "4b57006b-8b41-4f31-b14e-7f54da609bba",
+    "kg_node_id": "passage_tatian_35_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "c90066cf-eea4-44d7-81ba-43d04a218f60",
+    "passage_id": "54589fa1-0cec-4232-ab37-df72db119bf5",
+    "kg_node_id": "passage_tatian_27_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "d33f111b-491a-4bed-8ac6-fa19be7a2dd7",
+    "passage_id": "56827782-3b55-4206-8a36-c5854ce36e09",
+    "kg_node_id": "passage_tatian_7_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "1d354f03-9898-4be5-971d-657638361987",
+    "passage_id": "56fa068a-e845-49fa-add0-09158e4b5770",
+    "kg_node_id": "passage_tatian_2_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "dfd6cfc7-a1bb-4bc5-b7fc-98ac61dfeba2",
+    "passage_id": "5c2f2a79-e26e-4f78-b4d0-03647a1715eb",
+    "kg_node_id": "passage_tatian_3_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "b5ad638e-7d6c-4940-bf07-b821ff253d6d",
+    "passage_id": "628e5168-99f8-4713-b5f7-341ed63291a5",
+    "kg_node_id": "passage_tatian_40_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "375b619d-f5cd-4446-99c9-9f9d8d635356",
+    "passage_id": "62f07356-eb6e-4279-a944-fe52ae5554e0",
+    "kg_node_id": "passage_tatian_34_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "bcbdc2c2-9835-4d65-b085-fb5625776e35",
+    "passage_id": "63ff5c99-61ff-4345-b5fb-dafad1e7c448",
+    "kg_node_id": "passage_tatian_22_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "f918f4ac-7cf8-49d3-bc42-a73f225e0c5a",
+    "passage_id": "662575cf-8db2-4467-8e69-8531e3b466c3",
+    "kg_node_id": "passage_tatian_21_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "36a19f11-fabd-4bc4-b005-ec2a02a75dd1",
+    "passage_id": "67f85d86-8638-4623-87ce-f1096cfbb8f2",
+    "kg_node_id": "passage_tatian_10_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "5e4b606c-1bff-429d-84b0-69dd5a846288",
+    "passage_id": "6a2e7bf0-8ddb-4c1a-9514-ba5c084aead4",
+    "kg_node_id": "passage_tatian_41_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "19df45eb-a50a-4f19-8359-9180da8edfcc",
+    "passage_id": "6c3385fb-38b2-4e14-87df-620631b1d377",
+    "kg_node_id": "passage_tatian_3_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "a377c2c6-1ddf-4c96-a997-1d1e054f1418",
+    "passage_id": "6dcfe239-6fde-462c-a74e-2ddb0e65308e",
+    "kg_node_id": "passage_tatian_22_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "32f3de37-ff94-48bb-992a-aaae61ca4f93",
+    "passage_id": "764b9daa-4c5f-4ca0-a606-cc336cd45f77",
+    "kg_node_id": "passage_tatian_25_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "cec7c0ec-a4a5-4c53-832a-fd76cd022270",
+    "passage_id": "77425415-8306-4fae-9b0f-976e42e2d479",
+    "kg_node_id": "passage_tatian_14_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "5b02b428-126d-4a85-8d69-a9465efbf604",
+    "passage_id": "7cf1609f-5ce4-4bf4-b66d-91721f99c02e",
+    "kg_node_id": "passage_tatian_19_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "0e47ec1d-2d3a-49f7-b940-c8020492364e",
+    "passage_id": "808cc931-ec5a-4c61-a138-4c54d483d08c",
+    "kg_node_id": "passage_tatian_37_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "273685ee-4e8b-4f56-9e95-db59e891bf9c",
+    "passage_id": "80e8fcf5-1c4b-4a4c-afa6-029f466dfb43",
+    "kg_node_id": "passage_tatian_32_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "df803eb7-16a5-42e4-8da1-392411b4e86f",
+    "passage_id": "842bb2a2-f534-4b9d-8760-533015395703",
+    "kg_node_id": "passage_tatian_26_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "4137c79b-c400-47de-88dc-abfd619cbc7f",
+    "passage_id": "890918ec-e7fb-466f-b755-f99239a71e3a",
+    "kg_node_id": "passage_tatian_40_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "c90924eb-3524-464c-ba52-3bff9b69aac1",
+    "passage_id": "8ac4c3f3-aab5-4680-80fc-5bc76ee466b0",
+    "kg_node_id": "argument_tatian_above_fate",
+    "citation_type": "grounded_in",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "52acc43c-d204-4ecf-9505-d65f090419a0",
+    "passage_id": "8ac4c3f3-aab5-4680-80fc-5bc76ee466b0",
+    "kg_node_id": "concept_heimarmene_fate_stoics_j0k1l2m3",
+    "citation_type": "evidenced_by",
+    "confidence": 0.85
+  },
+  {
+    "citation_id": "ca65b52c-a53a-41af-ae7d-e09ce880001c",
+    "passage_id": "8ac4c3f3-aab5-4680-80fc-5bc76ee466b0",
+    "kg_node_id": "passage_tatian_8_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "7a0b2cd1-3775-4a5c-bddd-d30c7f88df0c",
+    "passage_id": "8ac4c3f3-aab5-4680-80fc-5bc76ee466b0",
+    "kg_node_id": "passage_tatian_orat_8_9",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "904b906e-f7f4-428a-b8a2-87e346b78ae1",
+    "passage_id": "8cc979d7-e5d6-4880-8f97-7a26800feae0",
+    "kg_node_id": "passage_tatian_29_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "b36aa9fe-8055-47de-8318-0c330c57ee62",
+    "passage_id": "8e412b53-504c-4cfb-8dcd-83f58847eb4c",
+    "kg_node_id": "passage_tatian_14_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "003fa9ba-3b4a-48ec-951e-e38c9c85734f",
+    "passage_id": "9049e7c9-55b3-401b-af48-2061fedd189c",
+    "kg_node_id": "passage_tatian_8_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "adfc65b9-ff35-40e4-9161-b604de936410",
+    "passage_id": "915a040a-cd74-4fc9-91a6-06e2f17788bd",
+    "kg_node_id": "passage_tatian_31_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "b460bc00-25c3-4e90-b6e8-d52fdf76da3c",
+    "passage_id": "96abd640-40ad-411d-9bd9-19ba30dd1268",
+    "kg_node_id": "passage_tatian_17_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "0f0b7a14-2225-426e-9c5a-734259f55698",
+    "passage_id": "98d2f9ed-689f-4aa8-94ce-d121adefc2c9",
+    "kg_node_id": "passage_tatian_1_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "a8b9eeae-54ea-4cc8-9440-376297b75f43",
+    "passage_id": "9a953cc1-de90-466f-9ce0-f8821e85288d",
+    "kg_node_id": "passage_tatian_41_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "8cb4531c-6263-4600-82e8-f746f324a409",
+    "passage_id": "9b019453-480e-44bb-b9a8-126bf4657c3c",
+    "kg_node_id": "passage_tatian_21_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "23e43ebd-a1b8-44c7-8804-1b7b6673fe95",
+    "passage_id": "9b395079-cae1-410d-95fb-93cfedad8b95",
+    "kg_node_id": "passage_tatian_12_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "8df6a10b-ece7-4983-8f15-a9c556d579d6",
+    "passage_id": "9c676659-b123-49cd-834e-72b8677640b1",
+    "kg_node_id": "passage_tatian_12_4",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "6c2a7f2c-1b28-493e-8e32-02e75060a517",
+    "passage_id": "9e1a5801-cd3b-4b1b-b0d5-612affb90ce2",
+    "kg_node_id": "passage_tatian_13_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "1dede876-c7c7-4948-8c85-29e502fc49c0",
+    "passage_id": "9f79e224-961f-4c7c-b9f3-3b2c8570dcca",
+    "kg_node_id": "passage_tatian_9_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "dac5a2a9-01b4-450b-abbd-8ac024b828aa",
+    "passage_id": "a169384a-e491-4fcd-840e-1103b01c3328",
+    "kg_node_id": "passage_tatian_25_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "bbe853cf-c4cc-40a8-96b3-c81d0fa53140",
+    "passage_id": "a195bc60-70d1-406d-ab28-2ad462f64a68",
+    "kg_node_id": "passage_tatian_13_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "500b853e-afbc-45b1-b862-519e2c13f98a",
+    "passage_id": "a36c2d9d-9306-4b6f-979a-b8922f7e5d04",
+    "kg_node_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+    "citation_type": "evidenced_by",
+    "confidence": 0.9
+  },
+  {
+    "citation_id": "4f638ac5-ed36-4d30-bb0b-fdedc6854fd7",
+    "passage_id": "a36c2d9d-9306-4b6f-979a-b8922f7e5d04",
+    "kg_node_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+    "citation_type": "discusses",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "bcb055b2-e081-402f-b94e-1455890dfe33",
+    "passage_id": "a36c2d9d-9306-4b6f-979a-b8922f7e5d04",
+    "kg_node_id": "concept_heimarmene_fate_stoics_j0k1l2m3",
+    "citation_type": "evidenced_by",
+    "confidence": 0.85
+  },
+  {
+    "citation_id": "6a6f44b3-7163-4433-a366-ad787c8c4262",
+    "passage_id": "a36c2d9d-9306-4b6f-979a-b8922f7e5d04",
+    "kg_node_id": "passage_tatian_7_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "3d88f920-a74e-4d52-9708-1cf6015cf23a",
+    "passage_id": "a36c2d9d-9306-4b6f-979a-b8922f7e5d04",
+    "kg_node_id": "passage_tatian_orat_7",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "3748868e-ef2a-44e6-ac40-1c672ed95594",
+    "passage_id": "a98b975c-9791-4e1b-881e-095ba93b04d8",
+    "kg_node_id": "passage_tatian_39_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "b3c08bb3-ee91-47d9-bf3a-86c564e87c84",
+    "passage_id": "ab9edfce-b97c-44a2-9343-b1e162a28b6e",
+    "kg_node_id": "passage_tatian_33_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "41d054bf-806c-464d-b2cf-14ba9f51eb9e",
+    "passage_id": "abc4d835-8dfe-4675-ad56-f3283b85bc6b",
+    "kg_node_id": "passage_tatian_36_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "ee2d99c3-3f01-4fad-b54b-81a8e7fc70d5",
+    "passage_id": "abf966e8-bfbe-42db-b1da-4b60b4b0d909",
+    "kg_node_id": "passage_tatian_20_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "c33a6cd0-5342-4085-ba88-02fc90e8c3a3",
+    "passage_id": "b851c6c6-5590-4eb7-9b3e-bd3f3f2c6b42",
+    "kg_node_id": "passage_tatian_27_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "d2a6e4a6-490d-45c4-9678-54456f219bd0",
+    "passage_id": "b8c7e7f9-3548-4c86-ae4e-8a2701c31b6b",
+    "kg_node_id": "passage_tatian_18_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "96b64df7-c0a3-427a-937a-1256359dbde9",
+    "passage_id": "ba946085-2e55-4227-930a-38c8ff2cc30e",
+    "kg_node_id": "passage_tatian_31_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "4305381f-a2fa-452f-bcf5-20f6e0ee78a8",
+    "passage_id": "bbb59403-7cea-40f8-9f74-5a8d804ccc40",
+    "kg_node_id": "passage_tatian_37_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "80ae2288-e070-4ef1-a6b5-4117cae626d6",
+    "passage_id": "bea30080-5319-4bcf-a3d0-4c8801b3608b",
+    "kg_node_id": "passage_tatian_6_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "93f1d99b-d2cf-4202-9b56-942fb1ea5f32",
+    "passage_id": "c055123e-47f0-4ba4-8cdb-e1eb83a206da",
+    "kg_node_id": "passage_tatian_5_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "8eacfbd8-c1bc-4eb5-bbcd-1ff2da4877bb",
+    "passage_id": "c5637aac-73d4-4b4d-9b85-1664a04e4f31",
+    "kg_node_id": "passage_tatian_8_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "ffab1fdb-2cad-4423-9e04-73f77e2b78c7",
+    "passage_id": "c684c41a-cabe-400c-826d-25befaae0490",
+    "kg_node_id": "passage_tatian_17_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "1e3b714c-4f6d-4334-a6ba-994180b3f0b8",
+    "passage_id": "c6a0a5e4-c139-4a26-b079-8b740b701704",
+    "kg_node_id": "passage_tatian_24_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "143d6665-2f57-40e9-a8e9-4ff738cd7527",
+    "passage_id": "c8077aeb-d9ed-4b34-93b7-9c0b1caf801f",
+    "kg_node_id": "passage_tatian_10_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "d477911c-d727-4f7f-8204-e6bf96d12596",
+    "passage_id": "caee9190-ffcb-4111-a7ef-1a98976a761d",
+    "kg_node_id": "passage_tatian_1_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "73584595-1264-4f04-b6f8-24145631b0e6",
+    "passage_id": "cbb585b5-7d3e-455e-bc36-b2bef117b9c0",
+    "kg_node_id": "passage_tatian_2_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "21667d9f-3a15-4d70-9dea-e36a67c37535",
+    "passage_id": "cd7d4168-c8b8-4555-a55b-29732e1b1a08",
+    "kg_node_id": "passage_tatian_32_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "fc8fd10a-0373-4e6d-a224-98692a46c3b7",
+    "passage_id": "ce388f19-6e52-49ef-aa10-39d8eab8da96",
+    "kg_node_id": "passage_tatian_16_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "3dc05bf7-8bcb-4b26-b5b5-1836fd162c92",
+    "passage_id": "d20522bc-0c07-4dcc-81ad-8c2d1f52949b",
+    "kg_node_id": "passage_tatian_30_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "c0e865a9-03c0-48e4-b3a0-dc774f2780aa",
+    "passage_id": "d6337b3b-5df2-4060-b6ca-7c0851a6a138",
+    "kg_node_id": "passage_tatian_4_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "fc169eb5-fc8a-42a5-bff1-f5a8fcc1302c",
+    "passage_id": "d733e0d8-bc58-4ad5-80e0-8d91ae30a2ec",
+    "kg_node_id": "passage_tatian_41_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "d6df116b-2255-4038-a37f-018157b7b2d6",
+    "passage_id": "dddc0b2d-30ec-465f-b06a-1f1b9ed28904",
+    "kg_node_id": "passage_tatian_6_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "7901782d-abde-46c0-b67c-9ad639a2612b",
+    "passage_id": "de42fb55-af87-4af3-b9e0-cd27da3d9050",
+    "kg_node_id": "passage_tatian_8_4",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "6c74a54e-45c5-49ee-a034-36607e3e44f5",
+    "passage_id": "deacfd2c-c5df-4147-bf8e-9c166af7601d",
+    "kg_node_id": "passage_tatian_34_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "f92037a8-541c-4e5f-acdc-be497090354d",
+    "passage_id": "e06ffb4e-a568-4982-94d2-506db13f472a",
+    "kg_node_id": "passage_tatian_9_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "c8e3d5f0-8f1f-4112-88c6-d9ea6cdaf8cf",
+    "passage_id": "e0ae5416-7ab2-4a19-87fa-c1c814b9af2d",
+    "kg_node_id": "passage_tatian_23_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "db18c614-0e7b-4e92-afcb-c166ab8025be",
+    "passage_id": "e3643908-0865-44e0-a5d4-56ea9f56a62e",
+    "kg_node_id": "passage_tatian_36_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "7837f073-4cc7-4001-9011-7ee02770942b",
+    "passage_id": "e3a3a853-296a-48f0-9791-fc732546f900",
+    "kg_node_id": "passage_tatian_20_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "c5dd1f53-1592-40fa-a83e-2fba840b6098",
+    "passage_id": "e5b22a38-4860-473b-94b8-090825a00b12",
+    "kg_node_id": "passage_tatian_33_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "710873f4-8f22-498b-a170-b929866a7084",
+    "passage_id": "ee1c8759-c1d0-4ffa-a6ff-9a00e8070978",
+    "kg_node_id": "passage_tatian_16_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "7d477c20-1de4-444f-97d0-fb3a58849aec",
+    "passage_id": "f0fc5be8-5965-420b-9d81-d0ff96b12117",
+    "kg_node_id": "passage_tatian_11_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "b26dc9bf-9de5-4b40-b88b-9f3d01358544",
+    "passage_id": "f11e9e25-be9a-45f0-a24b-3d1145183027",
+    "kg_node_id": "passage_tatian_32_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "32ed77b2-317c-4bf6-ac84-b7f7f459a9c6",
+    "passage_id": "f440198a-1ab3-47ef-9b49-9a852e7fd885",
+    "kg_node_id": "passage_tatian_4_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "d8603469-07ce-4997-8f4a-0833f435a2fe",
+    "passage_id": "f4421893-42bf-4ccc-9f52-3647f9e84afb",
+    "kg_node_id": "passage_tatian_19_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "33381215-9eb4-44a5-8384-7fa5fbb43530",
+    "passage_id": "f470a2d3-f9f0-40ed-bfb7-d0a134cfc71a",
+    "kg_node_id": "passage_tatian_8_5",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "1ad7c85a-9b64-47eb-bf67-48386d47da73",
+    "passage_id": "f8ceab87-f393-4ca6-aceb-e28dd1346abe",
+    "kg_node_id": "argument_tatian_freewill_paradox",
+    "citation_type": "grounded_in",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "ec7a2512-8a32-4f27-87a3-96d7b642b11c",
+    "passage_id": "f8ceab87-f393-4ca6-aceb-e28dd1346abe",
+    "kg_node_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+    "citation_type": "discusses",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "ba002782-6adb-4632-b0fe-f0e128ca2993",
+    "passage_id": "f8ceab87-f393-4ca6-aceb-e28dd1346abe",
+    "kg_node_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+    "citation_type": "evidenced_by",
+    "confidence": 0.9
+  },
+  {
+    "citation_id": "a0175422-4fdf-4603-8138-0d2f0761a522",
+    "passage_id": "f8ceab87-f393-4ca6-aceb-e28dd1346abe",
+    "kg_node_id": "concept_heimarmene_fate_stoics_j0k1l2m3",
+    "citation_type": "evidenced_by",
+    "confidence": 0.85
+  },
+  {
+    "citation_id": "5832b7d2-58a7-44d8-97d1-3c310306505b",
+    "passage_id": "f8ceab87-f393-4ca6-aceb-e28dd1346abe",
+    "kg_node_id": "concept_liberum_arbitrium_u3v4w5x6",
+    "citation_type": "evidenced_by",
+    "confidence": 0.9
+  },
+  {
+    "citation_id": "675dc774-a597-4cf3-af0b-d33583704c65",
+    "passage_id": "f8ceab87-f393-4ca6-aceb-e28dd1346abe",
+    "kg_node_id": "passage_tatian_11_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "897c07e0-cdf0-4b7f-8eb0-da689d2874e1",
+    "passage_id": "f8ceab87-f393-4ca6-aceb-e28dd1346abe",
+    "kg_node_id": "passage_tatian_orat_11",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  },
+  {
+    "citation_id": "5b75722e-1ffc-435e-aa8e-1f8bdbc7f5bc",
+    "passage_id": "fdefee1b-2430-4ed0-acc2-88f48f2fc875",
+    "kg_node_id": "passage_tatian_15_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0
+  }
+]

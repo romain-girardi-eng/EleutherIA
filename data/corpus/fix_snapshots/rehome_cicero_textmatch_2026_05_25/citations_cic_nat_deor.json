@@ -1,0 +1,178 @@
+[
+  {
+    "citation_id": "6c167522-017c-4c37-8655-2eedcb3e6691",
+    "passage_id": "9ad21b8a-dcc7-434e-b786-92b25e1a5bd3",
+    "kg_node_id": "passage_cic_nat_deor_1",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 1"
+  },
+  {
+    "citation_id": "7010cb5d-3169-4248-b11a-1eb57693bf5b",
+    "passage_id": "cdd48f6b-5e9d-44e0-844c-256917a19e0e",
+    "kg_node_id": "passage_cic_nat_deor_10",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 10"
+  },
+  {
+    "citation_id": "e8619744-1adf-44ee-b49d-bd49d0aec61e",
+    "passage_id": "974640b9-e67e-4930-bb29-2b5e907aed99",
+    "kg_node_id": "passage_cic_nat_deor_12",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 12"
+  },
+  {
+    "citation_id": "7ff0b82e-fd03-4060-b277-3dd151d59c1b",
+    "passage_id": "11215ba5-6934-4db7-8150-a65aa933b2d9",
+    "kg_node_id": "passage_cic_nat_deor_13",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 13"
+  },
+  {
+    "citation_id": "1b1d664f-07d7-4e6b-b0b1-f765bf11c47a",
+    "passage_id": "5882fb8e-5734-476f-b168-c37320fb0980",
+    "kg_node_id": "passage_cic_nat_deor_14",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 14"
+  },
+  {
+    "citation_id": "ee6b0860-09b4-4ed6-9e07-e18d73f802e6",
+    "passage_id": "838c717c-c9b4-4031-8888-f30c159214bb",
+    "kg_node_id": "passage_cic_nat_deor_15",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 15"
+  },
+  {
+    "citation_id": "abae471e-a37f-4dd9-a8ea-238e6861b5a8",
+    "passage_id": "4069af79-459b-486c-b148-4c11960d3ba3",
+    "kg_node_id": "passage_cic_nat_deor_16",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 16"
+  },
+  {
+    "citation_id": "991d279e-9b8b-4499-a2bc-1aefc9a98708",
+    "passage_id": "f7713638-7941-4ac0-90eb-f7e6f1a81fa9",
+    "kg_node_id": "passage_cic_nat_deor_17",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 17"
+  },
+  {
+    "citation_id": "36e77e2a-fd05-4f14-9e22-1df30d39c6c1",
+    "passage_id": "3f912a42-08ca-41d3-8490-e8d92c946856",
+    "kg_node_id": "passage_cic_nat_deor_18",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 18"
+  },
+  {
+    "citation_id": "d424f9d0-fa76-4d62-887d-306690059d1a",
+    "passage_id": "7d1a7375-5d03-4f95-bea4-a5ee6ffb0bdb",
+    "kg_node_id": "passage_cic_nat_deor_19",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 19"
+  },
+  {
+    "citation_id": "11a7cec1-e1f1-4c7e-b780-5832b2165a69",
+    "passage_id": "8c7c9871-a3d2-4f1f-9f4d-f6edb5350483",
+    "kg_node_id": "passage_cic_nat_deor_2",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 2"
+  },
+  {
+    "citation_id": "c1dd85a7-e119-408c-be8e-a5e38d43b2f2",
+    "passage_id": "c7370cb8-ae25-410b-8f0a-f0784ea204b9",
+    "kg_node_id": "passage_cic_nat_deor_20",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 20"
+  },
+  {
+    "citation_id": "fc50a119-96c1-47fc-9067-4d74a3ba3ce7",
+    "passage_id": "102b593d-5fad-4760-bc22-d95cfcceba24",
+    "kg_node_id": "passage_cic_nat_deor_21",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 21"
+  },
+  {
+    "citation_id": "7e04c40c-7bee-4333-8e9a-d700603cc1bf",
+    "passage_id": "adb37890-0a62-451d-ab86-9764dca57f74",
+    "kg_node_id": "passage_cic_nat_deor_22",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 22"
+  },
+  {
+    "citation_id": "3677beac-1eb2-4c0f-bf73-6543f0ed1a3a",
+    "passage_id": "2df70d46-510a-4697-aed9-b3c4a4cd8867",
+    "kg_node_id": "passage_cic_nat_deor_23",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 23"
+  },
+  {
+    "citation_id": "d01ba0c7-aeda-4d3f-a874-0d3f367f966c",
+    "passage_id": "f36ca6dd-9317-4a7f-9129-89f3030e010c",
+    "kg_node_id": "passage_cic_nat_deor_3",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 3"
+  },
+  {
+    "citation_id": "b1fc3bba-c0df-4db5-8835-beaf1eb766c2",
+    "passage_id": "37f6ccde-5155-4cfd-8ecc-2cdd577b8316",
+    "kg_node_id": "passage_cic_nat_deor_4",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 4"
+  },
+  {
+    "citation_id": "532ab171-7baf-415a-9158-6f20afbf6da9",
+    "passage_id": "9b31d8ef-01fa-4cfb-a207-de275991125b",
+    "kg_node_id": "passage_cic_nat_deor_5",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 5"
+  },
+  {
+    "citation_id": "f73a7654-b70a-462c-9859-407dc80253fb",
+    "passage_id": "daeb0ed5-3e62-419a-8e71-98222c378ac3",
+    "kg_node_id": "passage_cic_nat_deor_6",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 6"
+  },
+  {
+    "citation_id": "c62d0892-a008-4348-a6a0-a4f4425779b5",
+    "passage_id": "6d2ab026-2283-4c18-82be-01f11f8776fa",
+    "kg_node_id": "passage_cic_nat_deor_7",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 7"
+  },
+  {
+    "citation_id": "5a65ae15-f1c2-4c00-8206-4ca7ad092f53",
+    "passage_id": "ed2be14b-8e66-4484-ab9f-faa765325fff",
+    "kg_node_id": "passage_cic_nat_deor_8",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 8"
+  },
+  {
+    "citation_id": "acc8f95c-fb0c-43e4-a0ca-291f130402d3",
+    "passage_id": "563e25da-b5be-49d8-b29e-aaab8fe3c2fa",
+    "kg_node_id": "passage_cic_nat_deor_9",
+    "citation_type": "snapshot_passage_node",
+    "confidence": 1.0,
+    "passage_canonical_ref": "De Nat. Deor. 9"
+  }
+]

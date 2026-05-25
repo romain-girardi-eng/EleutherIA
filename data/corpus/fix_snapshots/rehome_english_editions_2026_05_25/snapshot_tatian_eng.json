@@ -1,0 +1,51 @@
+{
+  "eng_passages": [
+    {
+      "passage_id": "60635166-3d8d-57e3-96c8-e7e85ab7537d",
+      "cts_urn": "urn:cts:greekLit:tlg1766.tlg001.perseus-grc1:7",
+      "canonical_ref": "Orat. 7.1",
+      "sequence_number": 70001
+    },
+    {
+      "passage_id": "d49ec53b-9efa-5a75-9638-86c9923ab965",
+      "cts_urn": "urn:cts:greekLit:tlg1766.tlg001.perseus-grc1:8",
+      "canonical_ref": "Orat. 8.1",
+      "sequence_number": 80001
+    },
+    {
+      "passage_id": "44da2422-b6db-5687-8dc1-8fccbb9f0725",
+      "cts_urn": "urn:cts:greekLit:tlg1766.tlg001.perseus-grc1:11",
+      "canonical_ref": "Orat. 11.1",
+      "sequence_number": 110001
+    }
+  ],
+  "eng_citations": [
+    {
+      "citation_id": "b7b4409d-3acf-4328-9119-6447ee8a9d21",
+      "passage_id": "44da2422-b6db-5687-8dc1-8fccbb9f0725",
+      "kg_node_id": "passage_tatian_orat_11_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg1766.tlg001.perseus-grc1:11",
+      "canonical_ref": "Orat. 11.1"
+    },
+    {
+      "citation_id": "bfe89cb3-e835-4bf4-97f5-0a960b544b17",
+      "passage_id": "60635166-3d8d-57e3-96c8-e7e85ab7537d",
+      "kg_node_id": "passage_tatian_orat_7_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg1766.tlg001.perseus-grc1:7",
+      "canonical_ref": "Orat. 7.1"
+    },
+    {
+      "citation_id": "cd83a031-c07c-4512-94bc-28c9c067ba7e",
+      "passage_id": "d49ec53b-9efa-5a75-9638-86c9923ab965",
+      "kg_node_id": "passage_tatian_orat_8_9_en",
+      "citation_type": "snapshot_passage_node",
+      "confidence": 1.0,
+      "passage_cts_urn": "urn:cts:greekLit:tlg1766.tlg001.perseus-grc1:8",
+      "canonical_ref": "Orat. 8.1"
+    }
+  ]
+}

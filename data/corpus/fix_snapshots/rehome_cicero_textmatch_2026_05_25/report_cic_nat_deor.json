@@ -1,0 +1,181 @@
+{
+  "rehomed": [],
+  "manual": [
+    {
+      "citation_id": "6c167522-017c-4c37-8655-2eedcb3e6691",
+      "kg_node_id": "passage_cic_nat_deor_1",
+      "old_passage_id": "9ad21b8a-dcc7-434e-b786-92b25e1a5bd3",
+      "node_text_preview": "oratorvm genera esse dicuntur tamquam poetarum; id secus est, nam alterum est mu",
+      "best_ratio": 0.1952191235059761,
+      "reason": "best ratio 0.195 < 0.9"
+    },
+    {
+      "citation_id": "7010cb5d-3169-4248-b11a-1eb57693bf5b",
+      "kg_node_id": "passage_cic_nat_deor_10",
+      "old_passage_id": "cdd48f6b-5e9d-44e0-844c-256917a19e0e",
+      "node_text_preview": "ita fit ut Demosthenes certe possit sum misse dicere, elate Lysias fortasse non ",
+      "best_ratio": 0.2962962962962963,
+      "reason": "best ratio 0.296 < 0.9"
+    },
+    {
+      "citation_id": "e8619744-1adf-44ee-b49d-bd49d0aec61e",
+      "kg_node_id": "passage_cic_nat_deor_12",
+      "old_passage_id": "974640b9-e67e-4930-bb29-2b5e907aed99",
+      "node_text_preview": "sin autem intellegentiam ponunt in audiendi fastidio neque eos quicquam excelsum",
+      "best_ratio": 0.2204968944099379,
+      "reason": "best ratio 0.220 < 0.9"
+    },
+    {
+      "citation_id": "7ff0b82e-fd03-4060-b277-3dd151d59c1b",
+      "kg_node_id": "passage_cic_nat_deor_13",
+      "old_passage_id": "11215ba5-6934-4db7-8150-a65aa933b2d9",
+      "node_text_preview": "ex quo intellegitur, quoniam Graecorum oratorum praestantissimi sint ei qui fuer",
+      "best_ratio": 0.1981981981981982,
+      "reason": "best ratio 0.198 < 0.9"
+    },
+    {
+      "citation_id": "1b1d664f-07d7-4e6b-b0b1-f765bf11c47a",
+      "kg_node_id": "passage_cic_nat_deor_14",
+      "old_passage_id": "5882fb8e-5734-476f-b168-c37320fb0980",
+      "node_text_preview": "converti enim ex Atticis duorum eloquentissimorum nobilissimas orationes inter s",
+      "best_ratio": 0.1996615905245347,
+      "reason": "best ratio 0.200 < 0.9"
+    },
+    {
+      "citation_id": "ee6b0860-09b4-4ed6-9e07-e18d73f802e6",
+      "kg_node_id": "passage_cic_nat_deor_15",
+      "old_passage_id": "838c717c-c9b4-4031-8888-f30c159214bb",
+      "node_text_preview": "hic labor meus hoc adsequetur, ut nostri homines quid ab illis exigant, qui se A",
+      "best_ratio": 0.2195540308747856,
+      "reason": "best ratio 0.220 < 0.9"
+    },
+    {
+      "citation_id": "abae471e-a37f-4dd9-a8ea-238e6861b5a8",
+      "kg_node_id": "passage_cic_nat_deor_16",
+      "old_passage_id": "4069af79-459b-486c-b148-4c11960d3ba3",
+      "node_text_preview": "num melius quam Plato? Necesse est tamen oratori quem quaerimus controversias ex",
+      "best_ratio": 0.24951267056530213,
+      "reason": "best ratio 0.250 < 0.9"
+    },
+    {
+      "citation_id": "991d279e-9b8b-4499-a2bc-1aefc9a98708",
+      "kg_node_id": "passage_cic_nat_deor_17",
+      "old_passage_id": "f7713638-7941-4ac0-90eb-f7e6f1a81fa9",
+      "node_text_preview": "quin ipsum Isocratem, quem divinus auctor Plato suum fere aequalem admirabiliter",
+      "best_ratio": 0.20810810810810812,
+      "reason": "best ratio 0.208 < 0.9"
+    },
+    {
+      "citation_id": "36e77e2a-fd05-4f14-9e22-1df30d39c6c1",
+      "kg_node_id": "passage_cic_nat_deor_18",
+      "old_passage_id": "3f912a42-08ca-41d3-8490-e8d92c946856",
+      "node_text_preview": "Huic labori nostro duo genera reprehensionum oppo- nuntur. Vnum hoc: 'Verum meli",
+      "best_ratio": 0.21818181818181817,
+      "reason": "best ratio 0.218 < 0.9"
+    },
+    {
+      "citation_id": "d424f9d0-fa76-4d62-887d-306690059d1a",
+      "kg_node_id": "passage_cic_nat_deor_19",
+      "old_passage_id": "7d1a7375-5d03-4f95-bea4-a5ee6ffb0bdb",
+      "node_text_preview": "Sed adgrediamur iam quod suscepimus, si prius exposue rimus quae causa in iudici",
+      "best_ratio": 0.1140861466821886,
+      "reason": "best ratio 0.114 < 0.9"
+    },
+    {
+      "citation_id": "11a7cec1-e1f1-4c7e-b780-5832b2165a69",
+      "kg_node_id": "passage_cic_nat_deor_2",
+      "old_passage_id": "8c7c9871-a3d2-4f1f-9f4d-f6edb5350483",
+      "node_text_preview": "oratorum autem si quis ita numerat plura genera, ut alios grandis aut gravis aut",
+      "best_ratio": 0.21851851851851853,
+      "reason": "best ratio 0.219 < 0.9"
+    },
+    {
+      "citation_id": "c1dd85a7-e119-408c-be8e-a5e38d43b2f2",
+      "kg_node_id": "passage_cic_nat_deor_20",
+      "old_passage_id": "c7370cb8-ae25-410b-8f0a-f0784ea204b9",
+      "node_text_preview": "hunc igitur Ctesiphontem in iudicium adduxit Aeschines, quod contra leges scrips",
+      "best_ratio": 0.17257318952234207,
+      "reason": "best ratio 0.173 < 0.9"
+    },
+    {
+      "citation_id": "fc50a119-96c1-47fc-9067-4d74a3ba3ce7",
+      "kg_node_id": "passage_cic_nat_deor_21",
+      "old_passage_id": "102b593d-5fad-4760-bc22-d95cfcceba24",
+      "node_text_preview": "itaque causa fuit Aeschini, cum ipse a Demo sthene esset capitis accusatus, quod",
+      "best_ratio": 0.2484472049689441,
+      "reason": "best ratio 0.248 < 0.9"
+    },
+    {
+      "citation_id": "7e04c40c-7bee-4333-8e9a-d700603cc1bf",
+      "kg_node_id": "passage_cic_nat_deor_22",
+      "old_passage_id": "adb37890-0a62-451d-ab86-9764dca57f74",
+      "node_text_preview": "hanc multam Aeschines a Ctesiphonte petivit quadriennio ante Philippi Macedonis ",
+      "best_ratio": 0.2691511387163561,
+      "reason": "best ratio 0.269 < 0.9"
+    },
+    {
+      "citation_id": "3677beac-1eb2-4c0f-bf73-6543f0ed1a3a",
+      "kg_node_id": "passage_cic_nat_deor_23",
+      "old_passage_id": "2df70d46-510a-4697-aed9-b3c4a4cd8867",
+      "node_text_preview": "quorum ego orationes si, ut spero, ita expres sero virtutibus utens illorum omni",
+      "best_ratio": 0.1737704918032787,
+      "reason": "best ratio 0.174 < 0.9"
+    },
+    {
+      "citation_id": "d01ba0c7-aeda-4d3f-a874-0d3f367f966c",
+      "kg_node_id": "passage_cic_nat_deor_3",
+      "old_passage_id": "f36ca6dd-9317-4a7f-9129-89f3030e010c",
+      "node_text_preview": "oratorem genere non divido; perfectum enim quaero. Vnum est autem genus perfecti",
+      "best_ratio": 0.2795275590551181,
+      "reason": "best ratio 0.280 < 0.9"
+    },
+    {
+      "citation_id": "b1fc3bba-c0df-4db5-8835-beaf1eb766c2",
+      "kg_node_id": "passage_cic_nat_deor_4",
+      "old_passage_id": "37f6ccde-5155-4cfd-8ecc-2cdd577b8316",
+      "node_text_preview": "haec ut alius melius quam alius, concedendum est; verum id fit non genere sed gr",
+      "best_ratio": 0.208398133748056,
+      "reason": "best ratio 0.208 < 0.9"
+    },
+    {
+      "citation_id": "532ab171-7baf-415a-9158-6f20afbf6da9",
+      "kg_node_id": "passage_cic_nat_deor_5",
+      "old_passage_id": "9b31d8ef-01fa-4cfb-a207-de275991125b",
+      "node_text_preview": "sententiarum autem toti dem genera sunt quot dixi esse laudum. Sunt enim docendi",
+      "best_ratio": 0.25140712945590993,
+      "reason": "best ratio 0.251 < 0.9"
+    },
+    {
+      "citation_id": "f73a7654-b70a-462c-9859-407dc80253fb",
+      "kg_node_id": "passage_cic_nat_deor_6",
+      "old_passage_id": "daeb0ed5-3e62-419a-8e71-98222c378ac3",
+      "node_text_preview": "ea igitur omnia in quo summa erunt, erit perfectissimus orator; in quo media, me",
+      "best_ratio": 0.1888745148771022,
+      "reason": "best ratio 0.189 < 0.9"
+    },
+    {
+      "citation_id": "c62d0892-a008-4348-a6a0-a4f4425779b5",
+      "kg_node_id": "passage_cic_nat_deor_7",
+      "old_passage_id": "6d2ab026-2283-4c18-82be-01f11f8776fa",
+      "node_text_preview": "haec autem dixi brevius quidem quam res petebat, sed ad id quod agimus non fuit ",
+      "best_ratio": 0.16358024691358025,
+      "reason": "best ratio 0.164 < 0.9"
+    },
+    {
+      "citation_id": "5a65ae15-f1c2-4c00-8206-4ca7ad092f53",
+      "kg_node_id": "passage_cic_nat_deor_8",
+      "old_passage_id": "ed2be14b-8e66-4484-ab9f-faa765325fff",
+      "node_text_preview": "haec vitaverunt fere omnes qui aut Attici numerantur aut dicunt Attice. Sed qui ",
+      "best_ratio": 0.2072992700729927,
+      "reason": "best ratio 0.207 < 0.9"
+    },
+    {
+      "citation_id": "acc8f95c-fb0c-43e4-a0ca-291f130402d3",
+      "kg_node_id": "passage_cic_nat_deor_9",
+      "old_passage_id": "563e25da-b5be-49d8-b29e-aaab8fe3c2fa",
+      "node_text_preview": "si modo id ipsum adsequemur; est enim permagnum— imitemur, si potuerimus, Lysiam",
+      "best_ratio": 0.20754716981132076,
+      "reason": "best ratio 0.208 < 0.9"
+    }
+  ]
+}
