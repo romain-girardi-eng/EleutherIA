@@ -53,17 +53,29 @@ order subset vs 789 TEI leaves, so the cursor-based aligner only catches 136.
 **Path:** dedicated pass with a per-passage best-window cosine match (threshold
 > 0.85, unique), not the sequential cursor; then rebuild `book.section` refs.
 
-### 3. English-summary / KG-anchor "shell" nodes (~4,378 passages, null cts_urn)
-A large class of "passages" are **not transcribed primary text** — they are
-English analytic summaries, paraphrases, or reference-tag strings (e.g.
-`alexander_of_aphrodisias_de_fato_eng`: *"one can see whether in saying these
-things…"*; `cicero_cicero_de_fato_eng`: *"introduction establishing the
-connection between ethics, morals, logic…"*; Justin/Methodius/Timaeus `_eng`
-slots). They carry a descriptive `canonical_ref`, not a locus, and no edition can
-ref them. **Decision needed:** (a) leave as analytic notes; (b) extract the locus
-they cite (many embed it, e.g. "via Cicero, De Fato 31") into a structured ref;
-or (c) mark them with a distinct `passage_role` to separate them from primary
-text in the UI/exports. Recommended: (c) + (b) where a locus is embedded.
+### 3. Non-standard (descriptive) refs — DE-MANGLED (DONE)
+An earlier estimate of "~4,378 shell passages" was wrong: that count was mostly
+SC-edition **primary text + translations** with *good* structured refs that merely
+lack a *CTS URN* (e.g. Contra Celsum `1.18`). The genuinely non-standard refs were
+only **658 (3.7%)**. `scripts/demangle_refs_2026_05_25.py` reformatted **593** of
+them in place — zero fabrication, only restructuring locus data already in the
+string:
+- **French SC-importer refs** (`'1.chap.: 4, verset: 9b-14'` → `1.4.9b-14`;
+  `'2.liv.: 2 (gloss), chap.: 36'` → `2.36`): Barnabas, Theophilus, Clement Cor.,
+  Athenagoras — matched to the corpus `{book}.{chapter}[.{section}]` convention.
+- **Summary refs with a locus** (`'Origen, De Principiis III.1.3: …'` → that
+  citation; `'Lucretius on the swerve (DRN II.251-293)'` → `DRN II.251-293`;
+  `'De Fato 14 (gloss)'` → `De Fato 14`): Philocalia, Methodius, Augustine *De
+  Civ.*, Justin *Dialogue*, Alexander, Lucretius, etc.
+
+**65 left flagged** (irreducible — locus not safely recoverable):
+- Contra Celsum (16): `'SC 150, par.: 65, §118'` — book ambiguous from the SC
+  volume (Borret SC 132/136/147/150 each span two books); Koetschau §-only.
+- Aristides (17): papyrus-fragment / Barlaam-romance prose, no clean scheme.
+- Epictetus *Fragments* (22): `'Epictetus, Fragments: …'` — fragment, no number.
+- Melito *Apologia* (6): `'1.fragm.: 1, chap.: 1, par.: 4-5'` — fragment scheme.
+- 4 pure-prose summaries / Greek-incipit refs (Plotinus, Boethius, Aristotle EN,
+  Alexander) with no locus at all.
 
 ### 4. NO-TEI primary works → local DOCTORAT critical editions
 Genuine primary text absent from Perseus / First1KGreek, to be aligned against the
