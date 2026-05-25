@@ -1,0 +1,813 @@
+{
+  "rehomed": [],
+  "manual": [
+    {
+      "citation_id": "ba02aa39-e73c-4a23-9857-eb15427ed47a",
+      "kg_node_id": "passage_cic_div_1",
+      "old_passage_id": "f34cb9b9-5a6d-444b-b9f6-1071c10e103a",
+      "node_canonical_ref": "De Div. 1",
+      "passage_canonical_ref": "De Div. 1",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "a4144500-aea0-4dc5-93dd-600c664b7dcd",
+      "kg_node_id": "passage_cic_div_10",
+      "old_passage_id": "aa3e3ac0-5e94-4a25-8447-056f0b494e9a",
+      "node_canonical_ref": "De Div. 10",
+      "passage_canonical_ref": "De Div. 10",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "46c307a9-7dd4-4532-980b-db097b8dd051",
+      "kg_node_id": "passage_cic_div_100",
+      "old_passage_id": "68d4ea02-018c-4c2c-8555-703820f1887c",
+      "node_canonical_ref": "De Div. 100",
+      "passage_canonical_ref": "De Div. 100",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "c545feee-2d23-4b8b-b240-c08f30a10233",
+      "kg_node_id": "passage_cic_div_11",
+      "old_passage_id": "4648e4b2-1f9d-465e-927e-c3046546ed62",
+      "node_canonical_ref": "De Div. 11",
+      "passage_canonical_ref": "De Div. 11",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "9dc7d8e7-1cbc-4483-a65e-e0a4ed459b08",
+      "kg_node_id": "passage_cic_div_12",
+      "old_passage_id": "a4fe5e93-4dca-4557-bcd4-d812c0c16440",
+      "node_canonical_ref": "De Div. 12",
+      "passage_canonical_ref": "De Div. 12",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "11e086a9-5035-4c53-b349-0763eb1d82d6",
+      "kg_node_id": "passage_cic_div_13",
+      "old_passage_id": "76e1ec7b-d915-4a1a-b897-133cb7ba8b76",
+      "node_canonical_ref": "De Div. 13",
+      "passage_canonical_ref": "De Div. 13",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "d0b08784-2580-454e-a497-73b2809ce6f3",
+      "kg_node_id": "passage_cic_div_14",
+      "old_passage_id": "5115b441-ca49-407a-a511-637192d96ce7",
+      "node_canonical_ref": "De Div. 14",
+      "passage_canonical_ref": "De Div. 14",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "1b0c7319-ceb8-4c48-904c-1a92527cec22",
+      "kg_node_id": "passage_cic_div_15",
+      "old_passage_id": "24f8ca07-14e6-420f-a0ab-c83bd43bea6b",
+      "node_canonical_ref": "De Div. 15",
+      "passage_canonical_ref": "De Div. 15",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "ab2ce8b5-f65e-46d0-a3e8-a244563a9a5e",
+      "kg_node_id": "passage_cic_div_16",
+      "old_passage_id": "39d4a831-a238-4718-9f6e-b26bec73cb30",
+      "node_canonical_ref": "De Div. 16",
+      "passage_canonical_ref": "De Div. 16",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "e24cb516-b120-442e-80f0-c2df03428cf8",
+      "kg_node_id": "passage_cic_div_17",
+      "old_passage_id": "07fbcbe1-89a8-43ec-86b6-eefa6e4c6cef",
+      "node_canonical_ref": "De Div. 17",
+      "passage_canonical_ref": "De Div. 17",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "ffe74913-ab6f-4d01-abf2-2723c020e944",
+      "kg_node_id": "passage_cic_div_18",
+      "old_passage_id": "87f22ddd-b6f5-4682-8b81-64feeba2c473",
+      "node_canonical_ref": "De Div. 18",
+      "passage_canonical_ref": "De Div. 18",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "a8feeccb-aa5b-4e91-852f-88254346e4d6",
+      "kg_node_id": "passage_cic_div_19",
+      "old_passage_id": "3b08c5c1-1923-43f1-9832-d4348eafee2d",
+      "node_canonical_ref": "De Div. 19",
+      "passage_canonical_ref": "De Div. 19",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "7d52320d-1ddb-4f61-ace4-fed9fc31f25f",
+      "kg_node_id": "passage_cic_div_2",
+      "old_passage_id": "b2fcb4d7-2f5d-4013-81f5-8d698cd131d5",
+      "node_canonical_ref": "De Div. 2",
+      "passage_canonical_ref": "De Div. 2",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "debb7fdf-581f-4462-9cb6-5a0300f38ab9",
+      "kg_node_id": "passage_cic_div_20",
+      "old_passage_id": "6cdf3662-cabe-4c38-b404-99b0cc76c3c5",
+      "node_canonical_ref": "De Div. 20",
+      "passage_canonical_ref": "De Div. 20",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "f110cf56-25b0-4079-bf99-3cdafaa79af9",
+      "kg_node_id": "argument_cicero_de_div_anti_mantike_amand1945",
+      "old_passage_id": "95a723e9-1f71-4e7a-80f4-60d33139d2d5",
+      "node_canonical_ref": null,
+      "passage_canonical_ref": "De Div. 21",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "9d2c3306-7d2f-4794-bb90-e7d37fc40f99",
+      "kg_node_id": "passage_cic_div_21",
+      "old_passage_id": "95a723e9-1f71-4e7a-80f4-60d33139d2d5",
+      "node_canonical_ref": "De Div. 21",
+      "passage_canonical_ref": "De Div. 21",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "0b1a0354-3a4a-4ecc-8b6c-5a1c2ee50ae5",
+      "kg_node_id": "passage_cic_div_22",
+      "old_passage_id": "21b7e387-ca87-410b-9aa1-6b2c2dfb6b4b",
+      "node_canonical_ref": "De Div. 22",
+      "passage_canonical_ref": "De Div. 22",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "e355785f-f515-4d10-b844-9163781e6d7a",
+      "kg_node_id": "passage_cic_div_23",
+      "old_passage_id": "e0672a19-f5bb-4223-b2e5-30601e92cbeb",
+      "node_canonical_ref": "De Div. 23",
+      "passage_canonical_ref": "De Div. 23",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "cbee60eb-4a6a-4d31-bec7-2da7d6b22a8e",
+      "kg_node_id": "passage_cic_div_24",
+      "old_passage_id": "25d6e1b6-90f4-44f4-91e4-0b74610189b3",
+      "node_canonical_ref": "De Div. 24",
+      "passage_canonical_ref": "De Div. 24",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "e29aae54-1913-49d2-aed6-6947cf1efb95",
+      "kg_node_id": "passage_cic_div_25",
+      "old_passage_id": "09c0162d-73ef-43e0-9706-19eb94b25795",
+      "node_canonical_ref": "De Div. 25",
+      "passage_canonical_ref": "De Div. 25",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "aed46081-c0eb-4214-8790-0690d63b8f9d",
+      "kg_node_id": "passage_cic_div_26",
+      "old_passage_id": "5774da55-a347-4497-8f8e-44523099042e",
+      "node_canonical_ref": "De Div. 26",
+      "passage_canonical_ref": "De Div. 26",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "dfd49611-53ff-48e3-b3e7-7acac8c60869",
+      "kg_node_id": "passage_cic_div_27",
+      "old_passage_id": "93933c47-554b-4941-bd5f-0e9a2e6ccb85",
+      "node_canonical_ref": "De Div. 27",
+      "passage_canonical_ref": "De Div. 27",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "0ee6e729-c929-4a2d-9526-fcbdba8f4567",
+      "kg_node_id": "passage_cic_div_28",
+      "old_passage_id": "abb51e10-6b96-483d-92fe-6014130c8edf",
+      "node_canonical_ref": "De Div. 28",
+      "passage_canonical_ref": "De Div. 28",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "e7f66179-8c47-49a1-be5f-d741c5420381",
+      "kg_node_id": "passage_cic_div_29",
+      "old_passage_id": "06679ad2-b141-4f50-a428-f9f432a44a09",
+      "node_canonical_ref": "De Div. 29",
+      "passage_canonical_ref": "De Div. 29",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "b650f780-7a97-4089-ae18-97b9eb014399",
+      "kg_node_id": "passage_cic_div_3",
+      "old_passage_id": "3380a312-6a8d-4bf6-94a3-91b932ad078a",
+      "node_canonical_ref": "De Div. 3",
+      "passage_canonical_ref": "De Div. 3",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "cc8ee2fc-96e1-4347-8ed2-6cdf8df922bd",
+      "kg_node_id": "passage_cic_div_30",
+      "old_passage_id": "8fbfd9f0-161f-4c78-a470-d808a156aaa1",
+      "node_canonical_ref": "De Div. 30",
+      "passage_canonical_ref": "De Div. 30",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "ce34965d-f3e8-4ad1-bbb9-5c92237eadee",
+      "kg_node_id": "passage_cic_div_31",
+      "old_passage_id": "12c4b627-0158-480e-ad1e-41f72a347d6b",
+      "node_canonical_ref": "De Div. 31",
+      "passage_canonical_ref": "De Div. 31",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "fb1b1045-4d87-4945-be20-361d6c6fd571",
+      "kg_node_id": "passage_cic_div_32",
+      "old_passage_id": "e979579d-12f7-4675-9293-7d033d33f19b",
+      "node_canonical_ref": "De Div. 32",
+      "passage_canonical_ref": "De Div. 32",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "44dbdc95-a36a-44f2-88b4-826369b06c43",
+      "kg_node_id": "passage_cic_div_33",
+      "old_passage_id": "5a991ae9-cc15-4029-abd3-c50baceaff90",
+      "node_canonical_ref": "De Div. 33",
+      "passage_canonical_ref": "De Div. 33",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "8d403b6d-e481-4c0a-955b-b0f0a7b8fdb1",
+      "kg_node_id": "passage_cic_div_34",
+      "old_passage_id": "9424f131-7426-43de-b9fa-266e1af60ccc",
+      "node_canonical_ref": "De Div. 34",
+      "passage_canonical_ref": "De Div. 34",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "f5666a87-1df5-42aa-8e98-7a8196e00af2",
+      "kg_node_id": "passage_cic_div_35",
+      "old_passage_id": "7d077460-da10-4e17-a731-e86bbe1ae724",
+      "node_canonical_ref": "De Div. 35",
+      "passage_canonical_ref": "De Div. 35",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "3226586b-a3f0-4342-ace3-e09e621b7f69",
+      "kg_node_id": "passage_cic_div_36",
+      "old_passage_id": "2725a8ac-1899-4803-a5fa-3f5da758ebc6",
+      "node_canonical_ref": "De Div. 36",
+      "passage_canonical_ref": "De Div. 36",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "c1769bcf-5802-4660-8054-8b5da147c775",
+      "kg_node_id": "passage_cic_div_37",
+      "old_passage_id": "3bc43472-8034-4c19-b84c-2d6bb232a8af",
+      "node_canonical_ref": "De Div. 37",
+      "passage_canonical_ref": "De Div. 37",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "a43a5848-f9e8-483f-8ebe-2803deb9f9b8",
+      "kg_node_id": "passage_cic_div_38",
+      "old_passage_id": "cdfeb75b-ca60-43c0-882c-b7bf8e90f37d",
+      "node_canonical_ref": "De Div. 38",
+      "passage_canonical_ref": "De Div. 38",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "38428697-57da-4d18-b7f6-8dad690ed3b2",
+      "kg_node_id": "passage_cic_div_39",
+      "old_passage_id": "3cc54d32-2403-42f2-b251-1e2c014f989c",
+      "node_canonical_ref": "De Div. 39",
+      "passage_canonical_ref": "De Div. 39",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "81464f5b-b2be-4e8b-926d-4f5ba57a451f",
+      "kg_node_id": "passage_cic_div_4",
+      "old_passage_id": "99fd5dd2-b0fc-49df-ae1c-e5ac4c077821",
+      "node_canonical_ref": "De Div. 4",
+      "passage_canonical_ref": "De Div. 4",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "1e92a6ac-a761-4f92-8c57-b25738865087",
+      "kg_node_id": "passage_cic_div_40",
+      "old_passage_id": "e1fa1261-ae9d-46f3-ab93-7ac51013c55b",
+      "node_canonical_ref": "De Div. 40",
+      "passage_canonical_ref": "De Div. 40",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "5372a41f-2a43-44ea-9c07-b26a450347c7",
+      "kg_node_id": "passage_cic_div_41",
+      "old_passage_id": "90b49821-fda9-47d8-a7a8-020ed1b0871a",
+      "node_canonical_ref": "De Div. 41",
+      "passage_canonical_ref": "De Div. 41",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "fe68a70a-99b5-4d8a-8723-966807a75d83",
+      "kg_node_id": "passage_cic_div_42",
+      "old_passage_id": "c9179847-9863-4923-b49d-b05201c4516f",
+      "node_canonical_ref": "De Div. 42",
+      "passage_canonical_ref": "De Div. 42",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "58ba7411-e036-4b1d-adbc-ca706d3fe24c",
+      "kg_node_id": "passage_cic_div_43",
+      "old_passage_id": "a90fe7bb-70d7-4fb0-a155-ae71fb0796f5",
+      "node_canonical_ref": "De Div. 43",
+      "passage_canonical_ref": "De Div. 43",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "90858ccb-fc4c-496d-b2cd-ec87abe97723",
+      "kg_node_id": "passage_cic_div_44",
+      "old_passage_id": "aa4ed58b-8065-4b35-b010-f66b658c770d",
+      "node_canonical_ref": "De Div. 44",
+      "passage_canonical_ref": "De Div. 44",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "8c72c410-6d9c-4dcb-ba43-69b0ce2a5e40",
+      "kg_node_id": "passage_cic_div_45",
+      "old_passage_id": "e5ace9e8-ada2-42fe-94ea-7f3fc263b39f",
+      "node_canonical_ref": "De Div. 45",
+      "passage_canonical_ref": "De Div. 45",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "b66edcdb-ba10-4534-8a38-22524de39e10",
+      "kg_node_id": "passage_cic_div_46",
+      "old_passage_id": "bfd772ff-ac42-438d-9b4a-582a041a65bb",
+      "node_canonical_ref": "De Div. 46",
+      "passage_canonical_ref": "De Div. 46",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "336ae56b-ce3e-47b1-81d3-b57ae3c6c083",
+      "kg_node_id": "passage_cic_div_47",
+      "old_passage_id": "a125b3cd-7b5f-400d-826b-e8b21804086a",
+      "node_canonical_ref": "De Div. 47",
+      "passage_canonical_ref": "De Div. 47",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "9e123906-f2e7-4c2e-b1c4-e77f371e7615",
+      "kg_node_id": "passage_cic_div_48",
+      "old_passage_id": "6d7ff50d-388b-4ca0-a17e-f331e2ab6b8b",
+      "node_canonical_ref": "De Div. 48",
+      "passage_canonical_ref": "De Div. 48",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "96e7e909-b12f-4a60-916d-b3ad7befd0fe",
+      "kg_node_id": "passage_cic_div_49",
+      "old_passage_id": "fae1a229-5251-4e04-98ee-e63796633c99",
+      "node_canonical_ref": "De Div. 49",
+      "passage_canonical_ref": "De Div. 49",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "9ad46a10-d387-4e41-94b7-93325b6bfdc2",
+      "kg_node_id": "passage_cic_div_5",
+      "old_passage_id": "870067d3-1131-4e94-8dcc-37d68bd18d72",
+      "node_canonical_ref": "De Div. 5",
+      "passage_canonical_ref": "De Div. 5",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "51ddda61-3b3d-418c-b210-56ed11a7ddab",
+      "kg_node_id": "passage_cic_div_50",
+      "old_passage_id": "02e3d1da-71ec-4d64-95cf-3ca2f2033cac",
+      "node_canonical_ref": "De Div. 50",
+      "passage_canonical_ref": "De Div. 50",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "b9ca58ad-eaa1-4ef0-9e1a-e070cc8f2012",
+      "kg_node_id": "passage_cic_div_51",
+      "old_passage_id": "e6d0fbbf-ace0-46ad-a3ae-fb0871791a04",
+      "node_canonical_ref": "De Div. 51",
+      "passage_canonical_ref": "De Div. 51",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "d1edb6ba-36ed-46ec-98ff-8117a561fbc7",
+      "kg_node_id": "passage_cic_div_52",
+      "old_passage_id": "a7dc84a7-e76e-4060-8e7d-33a3629787e0",
+      "node_canonical_ref": "De Div. 52",
+      "passage_canonical_ref": "De Div. 52",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "c55fc1cf-6dd5-43ed-8ac4-9506d10c1d4c",
+      "kg_node_id": "passage_cic_div_53",
+      "old_passage_id": "d2f2dba2-30f9-44f8-bcb9-86bc0fcb13ef",
+      "node_canonical_ref": "De Div. 53",
+      "passage_canonical_ref": "De Div. 53",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "f63f0222-0d69-4374-8695-778856237197",
+      "kg_node_id": "passage_cic_div_54",
+      "old_passage_id": "00b70a0b-cfaa-4188-962e-a4bdd2a8ff96",
+      "node_canonical_ref": "De Div. 54",
+      "passage_canonical_ref": "De Div. 54",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "0b7d198e-62de-47a6-a46c-e77583922a0c",
+      "kg_node_id": "passage_cic_div_55",
+      "old_passage_id": "96638b1b-78d4-4361-a749-4dbc45078c2a",
+      "node_canonical_ref": "De Div. 55",
+      "passage_canonical_ref": "De Div. 55",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "a33931c2-07bd-4348-a730-3e73895c4786",
+      "kg_node_id": "passage_cic_div_56",
+      "old_passage_id": "ca29185b-9414-4843-8cda-7fef6e29edd1",
+      "node_canonical_ref": "De Div. 56",
+      "passage_canonical_ref": "De Div. 56",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "81a51020-540f-4772-9178-a40b4050a55d",
+      "kg_node_id": "passage_cic_div_57",
+      "old_passage_id": "954f94b2-00d7-4ef1-b6d4-2f0e500fcd5b",
+      "node_canonical_ref": "De Div. 57",
+      "passage_canonical_ref": "De Div. 57",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "7497cd75-63ff-4ed2-b02a-c5b37487c55a",
+      "kg_node_id": "passage_cic_div_58",
+      "old_passage_id": "82532935-c8b8-4755-b3b9-ecd42e9be08a",
+      "node_canonical_ref": "De Div. 58",
+      "passage_canonical_ref": "De Div. 58",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "af173bf3-a6e0-459e-b7d4-2c751ea3b989",
+      "kg_node_id": "passage_cic_div_59",
+      "old_passage_id": "27e2d198-9c80-44cf-aadd-c1b01d05d9fd",
+      "node_canonical_ref": "De Div. 59",
+      "passage_canonical_ref": "De Div. 59",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "cbe2757a-a334-4b15-ad08-43fa45fac424",
+      "kg_node_id": "passage_cic_div_6",
+      "old_passage_id": "a98b5c86-7674-475d-a188-e1682c1a932b",
+      "node_canonical_ref": "De Div. 6",
+      "passage_canonical_ref": "De Div. 6",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "d281b0d3-3213-40fa-b529-478a5b62e9bc",
+      "kg_node_id": "passage_cic_div_60",
+      "old_passage_id": "90b93898-df95-48eb-b5b5-3f929785216d",
+      "node_canonical_ref": "De Div. 60",
+      "passage_canonical_ref": "De Div. 60",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "13337ad8-e15a-4013-897a-16ea79b9e3f0",
+      "kg_node_id": "passage_cic_div_61",
+      "old_passage_id": "39fba3b8-4d2e-43a0-af51-2c8bf926a061",
+      "node_canonical_ref": "De Div. 61",
+      "passage_canonical_ref": "De Div. 61",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "029bdb6b-7719-4038-8dce-929204f194f2",
+      "kg_node_id": "passage_cic_div_62",
+      "old_passage_id": "eab45501-976c-4d44-b5b9-c484a683c2ee",
+      "node_canonical_ref": "De Div. 62",
+      "passage_canonical_ref": "De Div. 62",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "ffdbff06-f1d3-45bb-b8cd-abd5e3e1b7e7",
+      "kg_node_id": "passage_cic_div_63",
+      "old_passage_id": "662e5608-b388-4475-bff4-bc43e76e4180",
+      "node_canonical_ref": "De Div. 63",
+      "passage_canonical_ref": "De Div. 63",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "11165cd3-8e40-4581-ad3a-c8fe72161cf8",
+      "kg_node_id": "passage_cic_div_64",
+      "old_passage_id": "a029e26c-19f9-4ec8-bae6-efaba5979bc4",
+      "node_canonical_ref": "De Div. 64",
+      "passage_canonical_ref": "De Div. 64",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "ce41b7db-765a-42d3-911a-b3814c05b537",
+      "kg_node_id": "passage_cic_div_65",
+      "old_passage_id": "d14d83f0-7992-42b8-995d-2edbe0200113",
+      "node_canonical_ref": "De Div. 65",
+      "passage_canonical_ref": "De Div. 65",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "d22ac706-a60e-4224-b36f-07cbff34bcc7",
+      "kg_node_id": "passage_cic_div_66",
+      "old_passage_id": "2142db57-cbc3-463d-b9ae-bce0ee857616",
+      "node_canonical_ref": "De Div. 66",
+      "passage_canonical_ref": "De Div. 66",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "48eafa97-58a0-41b0-b7b3-815be396db24",
+      "kg_node_id": "passage_cic_div_67",
+      "old_passage_id": "c5e443fc-6801-46ef-a95c-1e5e914b0f88",
+      "node_canonical_ref": "De Div. 67",
+      "passage_canonical_ref": "De Div. 67",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "a0784450-bf0f-4d58-a9ff-b8cdb299a97a",
+      "kg_node_id": "passage_cic_div_68",
+      "old_passage_id": "3953bfe7-42c7-4dae-9664-1084647a4732",
+      "node_canonical_ref": "De Div. 68",
+      "passage_canonical_ref": "De Div. 68",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "0deabd51-b865-4386-86e0-80534ac13433",
+      "kg_node_id": "passage_cic_div_69",
+      "old_passage_id": "f73de3cb-4221-4ac6-92ac-419aab633bdd",
+      "node_canonical_ref": "De Div. 69",
+      "passage_canonical_ref": "De Div. 69",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "65fe8bf7-1018-4418-8cca-4fb0af2ef3c6",
+      "kg_node_id": "passage_cic_div_7",
+      "old_passage_id": "c6e90cd9-ac46-457b-b7f6-e352ea9c0ccf",
+      "node_canonical_ref": "De Div. 7",
+      "passage_canonical_ref": "De Div. 7",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "f0d572ea-3c02-4de8-94fc-12f47349ae59",
+      "kg_node_id": "passage_cic_div_70",
+      "old_passage_id": "2a71bf06-e55e-43be-be83-b2648d41f28b",
+      "node_canonical_ref": "De Div. 70",
+      "passage_canonical_ref": "De Div. 70",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "07efa72e-b2cd-4de8-b2b3-53d2ccf6197e",
+      "kg_node_id": "passage_cic_div_71",
+      "old_passage_id": "a8071eb3-2910-431d-a9d9-2d936f707d26",
+      "node_canonical_ref": "De Div. 71",
+      "passage_canonical_ref": "De Div. 71",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "de557118-9ec7-4ccc-985e-3f0c8acdd8ed",
+      "kg_node_id": "passage_cic_div_72",
+      "old_passage_id": "fb8aa1b7-b096-4294-8138-5cd50c97968b",
+      "node_canonical_ref": "De Div. 72",
+      "passage_canonical_ref": "De Div. 72",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "73d6b8a6-33f6-47d7-b63b-c2be89f2f37c",
+      "kg_node_id": "passage_cic_div_73",
+      "old_passage_id": "a430be45-3047-40ec-9b4c-5eeca3273d01",
+      "node_canonical_ref": "De Div. 73",
+      "passage_canonical_ref": "De Div. 73",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "487d9876-440e-4686-91bd-2ad4acce0902",
+      "kg_node_id": "passage_cic_div_74",
+      "old_passage_id": "86c3d385-a34f-4f0e-9fe0-e8b7420109b9",
+      "node_canonical_ref": "De Div. 74",
+      "passage_canonical_ref": "De Div. 74",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "0e3d85c0-d99d-400b-bab3-d48595b85233",
+      "kg_node_id": "passage_cic_div_75",
+      "old_passage_id": "d5d964e7-0584-4c27-855b-e40814703387",
+      "node_canonical_ref": "De Div. 75",
+      "passage_canonical_ref": "De Div. 75",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "7d949042-7bbc-4584-964b-4eacc0307eb2",
+      "kg_node_id": "passage_cic_div_76",
+      "old_passage_id": "d5637668-8ea4-480e-97e9-867f30559db0",
+      "node_canonical_ref": "De Div. 76",
+      "passage_canonical_ref": "De Div. 76",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "d2872625-d3ce-4613-81ce-debb3c515a46",
+      "kg_node_id": "passage_cic_div_77",
+      "old_passage_id": "daca15c4-1f9c-442c-be54-ecf854d9b56e",
+      "node_canonical_ref": "De Div. 77",
+      "passage_canonical_ref": "De Div. 77",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "9a96b1d4-8d3f-46d1-afde-de7297799a1e",
+      "kg_node_id": "passage_cic_div_78",
+      "old_passage_id": "3141ee6c-4431-4939-b560-db7f6650fb1c",
+      "node_canonical_ref": "De Div. 78",
+      "passage_canonical_ref": "De Div. 78",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "a7356836-548b-4b8b-a3ed-7540d400db4c",
+      "kg_node_id": "passage_cic_div_79",
+      "old_passage_id": "16204a40-a5a2-462d-bcfd-f7cb63a3cf80",
+      "node_canonical_ref": "De Div. 79",
+      "passage_canonical_ref": "De Div. 79",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "7134446c-8d58-416e-87c9-0f0150dca878",
+      "kg_node_id": "passage_cic_div_8",
+      "old_passage_id": "22b45e94-01f5-4d13-b07f-616e9a52dd11",
+      "node_canonical_ref": "De Div. 8",
+      "passage_canonical_ref": "De Div. 8",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "792a152c-0fdf-4528-aaf0-debdd664978a",
+      "kg_node_id": "passage_cic_div_80",
+      "old_passage_id": "e94fac99-a697-440d-9eb2-6d180d3c05de",
+      "node_canonical_ref": "De Div. 80",
+      "passage_canonical_ref": "De Div. 80",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "7efa7e03-fbc2-43ee-b3bc-5951b9c16855",
+      "kg_node_id": "passage_cic_div_81",
+      "old_passage_id": "a7f4e23d-e552-451f-890a-bd3cd3ecfeda",
+      "node_canonical_ref": "De Div. 81",
+      "passage_canonical_ref": "De Div. 81",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "3316bbd7-b8d7-4ac9-b7dd-c9444c4a0e78",
+      "kg_node_id": "passage_cic_div_82",
+      "old_passage_id": "e6b0eedc-72b5-487d-b16f-899233d9e7ea",
+      "node_canonical_ref": "De Div. 82",
+      "passage_canonical_ref": "De Div. 82",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "d61328f9-027e-475f-b62c-3c565cbbf040",
+      "kg_node_id": "passage_cic_div_83",
+      "old_passage_id": "10ed9aa8-a5eb-4338-8886-b599e8a72ba0",
+      "node_canonical_ref": "De Div. 83",
+      "passage_canonical_ref": "De Div. 83",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "3d767831-150f-40d0-ac9a-012b5b480743",
+      "kg_node_id": "passage_cic_div_84",
+      "old_passage_id": "805997c6-296e-4e36-8a4a-18b2c3d7d5a4",
+      "node_canonical_ref": "De Div. 84",
+      "passage_canonical_ref": "De Div. 84",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "e3a9af01-9143-4dad-94ba-eadfce3673a2",
+      "kg_node_id": "passage_cic_div_85",
+      "old_passage_id": "aa6196e5-e4fc-4979-8732-5d0e1576783e",
+      "node_canonical_ref": "De Div. 85",
+      "passage_canonical_ref": "De Div. 85",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "267cbe09-b6ad-426a-84ea-7029bed844cd",
+      "kg_node_id": "passage_cic_div_86",
+      "old_passage_id": "8c100790-38ce-4a4f-8b5e-c4458c348cff",
+      "node_canonical_ref": "De Div. 86",
+      "passage_canonical_ref": "De Div. 86",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "f300be02-ff58-4d94-b621-97dee8ac755b",
+      "kg_node_id": "passage_cic_div_87",
+      "old_passage_id": "a4690bc2-0b6c-4862-abc1-a9a36c69b1f6",
+      "node_canonical_ref": "De Div. 87",
+      "passage_canonical_ref": "De Div. 87",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "a810fc53-d87e-45cd-b5ce-c06a965fbca3",
+      "kg_node_id": "passage_cic_div_88",
+      "old_passage_id": "56d0c72e-ed63-453e-a1c7-dbc5342c1eb7",
+      "node_canonical_ref": "De Div. 88",
+      "passage_canonical_ref": "De Div. 88",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "17606d4b-00b7-410b-b80d-fe7991facb50",
+      "kg_node_id": "passage_cic_div_89",
+      "old_passage_id": "8b9b24fa-7bcc-4d39-8b91-737649322196",
+      "node_canonical_ref": "De Div. 89",
+      "passage_canonical_ref": "De Div. 89",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "900d2a5c-5ec4-48a7-945b-03d30bd78ae3",
+      "kg_node_id": "passage_cic_div_9",
+      "old_passage_id": "47b65a9e-9ce0-4d11-a6cc-e54097366331",
+      "node_canonical_ref": "De Div. 9",
+      "passage_canonical_ref": "De Div. 9",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "fed9b856-f293-4b56-b5dd-b007dcf8c38d",
+      "kg_node_id": "passage_cic_div_90",
+      "old_passage_id": "0138ef13-5c69-4a73-bfdf-b093dec0e8ef",
+      "node_canonical_ref": "De Div. 90",
+      "passage_canonical_ref": "De Div. 90",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "0cf78ca8-1028-4dc4-b3c1-8e891c6cd4d7",
+      "kg_node_id": "passage_cic_div_91",
+      "old_passage_id": "69dd5f66-1bda-4a87-af7f-c292d401ce20",
+      "node_canonical_ref": "De Div. 91",
+      "passage_canonical_ref": "De Div. 91",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "01108d51-a20c-4682-8921-0d8ef3d0af79",
+      "kg_node_id": "passage_cic_div_92",
+      "old_passage_id": "cdffbad0-4ba1-45a9-af5c-734c37929994",
+      "node_canonical_ref": "De Div. 92",
+      "passage_canonical_ref": "De Div. 92",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "61455849-9f96-4a3c-bdd1-0e075d6132b5",
+      "kg_node_id": "passage_cic_div_93",
+      "old_passage_id": "99eacec2-8e58-435b-89db-1166793ed0ae",
+      "node_canonical_ref": "De Div. 93",
+      "passage_canonical_ref": "De Div. 93",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "066d915a-e0a7-4f89-85ca-4c7303556d88",
+      "kg_node_id": "passage_cic_div_94",
+      "old_passage_id": "2343ab6d-d503-442c-9911-f5eaf178357a",
+      "node_canonical_ref": "De Div. 94",
+      "passage_canonical_ref": "De Div. 94",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "2892c7ed-e6be-48e7-bf1f-cce4f3c21301",
+      "kg_node_id": "passage_cic_div_95",
+      "old_passage_id": "0cf63deb-f823-4d5a-b265-1ce1f516e5dd",
+      "node_canonical_ref": "De Div. 95",
+      "passage_canonical_ref": "De Div. 95",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "4619c26f-3784-4d17-a1f7-c4133aea485a",
+      "kg_node_id": "passage_cic_div_96",
+      "old_passage_id": "d8107007-89fd-4e31-88af-cc36558786cb",
+      "node_canonical_ref": "De Div. 96",
+      "passage_canonical_ref": "De Div. 96",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "0b80173d-eff8-407b-819b-dd915f35e214",
+      "kg_node_id": "passage_cic_div_97",
+      "old_passage_id": "29324c01-93d2-4fc8-823e-235cbe015b7e",
+      "node_canonical_ref": "De Div. 97",
+      "passage_canonical_ref": "De Div. 97",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "75cee1d8-d306-4173-8771-3e93eedced40",
+      "kg_node_id": "passage_cic_div_98",
+      "old_passage_id": "22c4a9f8-048f-46d5-929f-4532928a3a29",
+      "node_canonical_ref": "De Div. 98",
+      "passage_canonical_ref": "De Div. 98",
+      "reason": "no unique ref match in real work"
+    },
+    {
+      "citation_id": "cd091bad-f2c9-4006-b1fc-3a746d82ba4a",
+      "kg_node_id": "passage_cic_div_99",
+      "old_passage_id": "06dc3a13-db88-40a6-b17f-df2004a644be",
+      "node_canonical_ref": "De Div. 99",
+      "passage_canonical_ref": "De Div. 99",
+      "reason": "no unique ref match in real work"
+    }
+  ]
+}
