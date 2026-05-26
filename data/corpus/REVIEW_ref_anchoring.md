@@ -184,7 +184,21 @@ Consolatio is on Perseus at **stoa0058.stoa001.perseus-lat2** (the stored
   verified against SC (SC has no English) — they need a separate audit against
   Falls / Schoedel / Ehrman / Chadwick / Butterworth / Crouzel / Grant / Harvey.
 
-## Still flagged
+## Third follow-up round — DONE
+- **Sextus AM IX–X granularity redundancy**: decision = keep both. The 791
+  per-section AM IX–X passages + the 109 overlapping-window books 9–10 are
+  complementary (different granularity, both cited); deletion would lose
+  citations without an integrity gain.
+- **Railway-staleness warnings added** to the three rollback runbooks
+  (`incident-playbook.md`, `phase-c-cutover.md`, `migration-master-runbook.md`):
+  a rollback to Railway now flags that Railway's DB has diverged from Supabase
+  and serves out-of-date data unless re-synced.
+- **2 of 3 OCR artifacts cleaned**: Seneca *Ep.* phi1017 `e(iiciens` → `efficiens`;
+  Origen *Philocalia* `(pneumatiques)mais` → `(pneumatiques) mais`. The Aspasius
+  apparatus line (`A.SPA.Sil L\ ETli. MCOM. I 11 [Ari.st. p.`) is OCR/apparatus
+  garbage in a single passage — left, no clean source.
+
+## Still flagged (genuinely irreducible / out of scope)
 - **English translation nodes** (~2,250 passages across 26 nodes): unverified
   against published English critical editions (Falls, Schoedel, Ehrman, Chadwick,
   Butterworth, Crouzel, Grant, Harvey). Separate audit category.
@@ -192,7 +206,7 @@ Consolatio is on Perseus at **stoa0058.stoa001.perseus-lat2** (the stored
 - ~189 Epictetus + 2 Sextus Greek excerpt passages with internal-index refs
   (genuine primary text, conservative-non-misassignment policy).
 - 65 descriptive refs (Contra Celsum book-ambiguous from SC vol, Aristides
-  papyrus, Epictetus *Fragments*, Melito) + 3 non-betacode OCR artifacts.
+  papyrus, Epictetus *Fragments*, Melito) + 1 Aspasius OCR-garbage passage.
 
 ## Final corpus state (verified)
 passages 17,823 · citations 19,766 (dangling **0**, kg-node dangling **0**)
