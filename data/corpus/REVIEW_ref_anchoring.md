@@ -166,10 +166,40 @@ Consolatio is on Perseus at **stoa0058.stoa001.perseus-lat2** (the stored
 - 65 descriptive refs (Contra Celsum book-ambiguous from SC vol, Aristides papyrus,
   Epictetus *Fragments*, Melito) + 3 non-betacode OCR artifacts.
 
+## Second follow-up round — DONE
+- **187 dangling citation→kg_node FKs resolved**: all 187 pointed at one missing
+  alias (`concept_epict_eph_hemin_synthesis`); every affected passage already cited
+  the canonical `synthesis_epict_eph_hemin_doctrine`, so all 187 were deduplicated.
+  Both invariants (dangling citation→passage + →kg_node) now **0**.
+- **227-edge quarantine resolved**: all were ontology violations (195 reversed
+  person→created_by→work; 23 wrong source-types for related_to; 4 unknown
+  teacher_of relation; 5 group→created_by). Deleted from Supabase (cleaning prod,
+  not just git); restored 148 canonical inverses (145 authored_by + 3 student_of)
+  where the only authorship info was the reversed edge. Quarantine file removed
+  (resolved). DB↔git now matched on edges (no deliberate exclusions).
+- **SC text verification (4,081 passages)**: 26/26 original-language SC works
+  (Greek + Latin, incl. all 987 Contra Celsum) match their on-disk SC critical
+  editions at **85–100 %** (22 of 26 at ≥95 %). No fabrication, no misattribution
+  in the Greek/Latin SC content. The 26 English translation nodes can't be
+  verified against SC (SC has no English) — they need a separate audit against
+  Falls / Schoedel / Ehrman / Chadwick / Butterworth / Crouzel / Grant / Harvey.
+
+## Still flagged
+- **English translation nodes** (~2,250 passages across 26 nodes): unverified
+  against published English critical editions (Falls, Schoedel, Ehrman, Chadwick,
+  Butterworth, Crouzel, Grant, Harvey). Separate audit category.
+- Evodius *De Fide Contra Manichaeos*: no source available.
+- ~189 Epictetus + 2 Sextus Greek excerpt passages with internal-index refs
+  (genuine primary text, conservative-non-misassignment policy).
+- 65 descriptive refs (Contra Celsum book-ambiguous from SC vol, Aristides
+  papyrus, Epictetus *Fragments*, Melito) + 3 non-betacode OCR artifacts.
+
 ## Final corpus state (verified)
-passages 17,823 · citations 19,953 (dangling **0**) · kg_nodes 20,060 · betacode
-residue **0** · non-standard refs **65 (0.4%)** · roles original/translation/
-paraphrase · DB↔git in parity (KG git = Supabase minus 227 quarantined edges).
+passages 17,823 · citations 19,766 (dangling **0**, kg-node dangling **0**)
+· kg_nodes 20,060 · kg_edges 56,775 (DB == git, no quarantine)
+· betacode residue **0** · non-standard refs **65 (0.4%)** · roles original/
+translation/paraphrase · **SC Greek/Latin content text-verified faithful to the
+critical editions on disk**.
 
 ## Final corpus state
 betacode-grave residue **0** · non-standard refs **65 (0.4%)** · dangling
