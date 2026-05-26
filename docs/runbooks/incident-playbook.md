@@ -181,7 +181,7 @@ ssh deploy-host dmesg | grep -i "killed process"
 |--------|---------|
 | Revert API container | `ssh deploy-host docker compose restart eleutheria-api` |
 | Stop API container | `ssh deploy-host docker compose stop eleutheria-api` |
-| DNS revert to Railway | Cloudflare dashboard → edit `api.free-will.app` CNAME → `<old-railway>.up.railway.app` |
+| DNS revert to Railway | Cloudflare dashboard → edit `api.free-will.app` CNAME → `<old-railway>.up.railway.app` ⚠️ **Railway KG is stale vs Supabase (different node/edge counts as of 2026-05-26); rollback serves out-of-date data — sync Railway DB to current Supabase first or accept data drift for the incident window.** |
 | Revert DB | `export DATABASE_URL="<old-supabase>"` + restart |
 | Reload tunnel | `ssh deploy-host cloudflared tunnel reload <deploy-tunnel-id>` |
 | Tail logs | `ssh deploy-host docker compose logs -f eleutheria-api` |
