@@ -4,7 +4,7 @@
       "agrees_with": 8,
       "argues_against": 1,
       "argues_for": 3,
-      "authored_by": 17687,
+      "authored_by": 17832,
       "belongs_to_corpus": 32,
       "belongs_to_school": 1,
       "cites": 1,
@@ -49,7 +49,7 @@
       "responds_to": 56,
       "source_for": 420,
       "specializes_in": 11,
-      "student_of": 9,
+      "student_of": 12,
       "supports": 178,
       "translation_of": 2953,
       "uses_methodology_of": 1,
@@ -75,7 +75,7 @@
       "synthesis": 177,
       "work": 241
     },
-    "total_edges": 56627,
+    "total_edges": 56775,
     "total_nodes": 20060
   },
   "source": "supabase"
