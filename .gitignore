@@ -173,3 +173,7 @@ data/audit/wave1_greek/
 data/audit/wave2_anach/
 data/audit/wave1_scan_findings_live.json
 data/audit/*_args.json
+data/audit/wave3/
+data/audit/cite_fix/
+data/audit/cite_descfix/
+data/corpus/*.bak-*

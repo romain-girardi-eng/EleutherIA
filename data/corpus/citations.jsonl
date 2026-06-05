@@ -2452,7 +2452,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_lucr_drn_301325_s202","passage_id":"1e475ec6-35e7-4623-b84c-cb7506e60d9f"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_90_4","passage_id":"1e4abede-8d30-4340-a65f-571117b08244"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plut_stoic_rep_24","passage_id":"1e4def75-a0be-46aa-8eae-962f7c2d5cbb"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_ananke_necessity_democritus_h8i9j0k1","passage_id":"1e5a059b-17cd-4677-9d8a-0199ded2f94b"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_endechomenon_contingent_aristotle_e5f6g7h8","passage_id":"1e5a059b-17cd-4677-9d8a-0199ded2f94b"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"1e5a059b-17cd-4677-9d8a-0199ded2f94b"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_exousia_alex","passage_id":"1e5a059b-17cd-4677-9d8a-0199ded2f94b"}
@@ -4167,7 +4166,7 @@
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_endechomenon_contingent_aristotle_e5f6g7h8","passage_id":"35466003-c2b0-48f5-b5ae-be6365c0fcb0"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"35466003-c2b0-48f5-b5ae-be6365c0fcb0"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_heimarmene_fate_stoics_j0k1l2m3","passage_id":"35466003-c2b0-48f5-b5ae-be6365c0fcb0"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_hypothetical_fate_middle_platonist","passage_id":"35466003-c2b0-48f5-b5ae-be6365c0fcb0"}
+{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_hypothetical_fate_middle_platonist","passage_id":"0b6bfaef-6e09-481f-babb-b918b83c9597"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_saving_teaching_alex","passage_id":"35466003-c2b0-48f5-b5ae-be6365c0fcb0"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_alex_fat_31","passage_id":"35466003-c2b0-48f5-b5ae-be6365c0fcb0"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_alex_fat_31_en","passage_id":"35466003-c2b0-48f5-b5ae-be6365c0fcb0"}
@@ -7277,7 +7276,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_4_1_2","passage_id":"5ee63984-b491-44cb-84b5-f5bcc4b06f4f"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc147_origenes_contra_celsum_vi_par30","passage_id":"5ee898e5-8cde-43c5-9ee4-552990b987ae"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epicur_39","passage_id":"5eec877b-b032-4428-bb64-406db7012cdb"}
-{"citation_type":"evidenced_by","confidence":0.75,"kg_node_id":"argument_chrysostom_antiastrological_demonic_amand1945","passage_id":"5ef27e3e-3180-5ec7-9acc-62e6d10a3e4e"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc79_chrysostomus_de_providentia_chap3","passage_id":"5ef27e3e-3180-5ec7-9acc-62e6d10a3e4e"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_19_117_10","passage_id":"5ef46dae-4d65-4c35-b5a4-3257d9cba434"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_7_1_152","passage_id":"5ef59fee-3cfa-4728-a1d5-fb6d21eea2fd"}
@@ -7612,7 +7610,7 @@
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_endechomenon_contingent_aristotle_e5f6g7h8","passage_id":"635354f8-a5be-4b0d-901e-b163f0da6f39"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"635354f8-a5be-4b0d-901e-b163f0da6f39"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_heimarmene_fate_stoics_j0k1l2m3","passage_id":"635354f8-a5be-4b0d-901e-b163f0da6f39"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_hypothetical_fate_middle_platonist","passage_id":"635354f8-a5be-4b0d-901e-b163f0da6f39"}
+{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_hypothetical_fate_middle_platonist","passage_id":"27229be5-146e-44b3-9635-b2aaeab917d2"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_alex_fat_30","passage_id":"635354f8-a5be-4b0d-901e-b163f0da6f39"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_alex_fat_30_en","passage_id":"635354f8-a5be-4b0d-901e-b163f0da6f39"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_672","passage_id":"63561c34-7828-4d7e-b1dd-10df30c18c90"}
@@ -7861,7 +7859,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sext_363","passage_id":"66791f1d-6a09-41da-946b-7af20eb67fb3"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"667a67f2-c9b9-5777-8490-c74fa7f95702"}
 {"citation_type":"evidenced_by","confidence":0.85,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"667a67f2-c9b9-5777-8490-c74fa7f95702"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6","passage_id":"667a67f2-c9b9-5777-8490-c74fa7f95702"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_176","passage_id":"667a67f2-c9b9-5777-8490-c74fa7f95702"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"synthesis_epict_eph_hemin_doctrine","passage_id":"667a67f2-c9b9-5777-8490-c74fa7f95702"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_phdr_272e","passage_id":"667e59c8-b4f5-4600-8344-aa9dcaa42df5"}
@@ -8000,7 +7997,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_74_3","passage_id":"68626fd2-19bc-4571-8374-e34d1c52cf5f"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_tim_50","passage_id":"68672741-fe2b-4c01-b71b-e3e4d5e6f8a7"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_philo_de_opif_55","passage_id":"686d81da-54cd-4f79-9ed3-933f2605bd2d"}
-{"citation_type":"evidenced_by","confidence":0.75,"kg_node_id":"argument_chrysostom_antiastrological_demonic_amand1945","passage_id":"68714e3e-ed76-57c6-b5ea-97839093b1f2"}
 {"citation_type":"evidenced_by","confidence":0.75,"kg_node_id":"argument_chrysostom_libre_arbitre_pastoral_amand1945","passage_id":"68714e3e-ed76-57c6-b5ea-97839093b1f2"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc79_chrysostomus_de_providentia_chap2","passage_id":"68714e3e-ed76-57c6-b5ea-97839093b1f2"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_2_18_7","passage_id":"687249e2-2072-463a-aa8d-a91ea93b660d"}
@@ -8009,7 +8005,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc507_iustinus_apologia_i_chap55","passage_id":"687905d3-75db-525f-b184-99c5330b95c8"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"68796652-59e3-5d2a-8a81-8bebd0d64ead"}
 {"citation_type":"evidenced_by","confidence":0.85,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"68796652-59e3-5d2a-8a81-8bebd0d64ead"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6","passage_id":"68796652-59e3-5d2a-8a81-8bebd0d64ead"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_183","passage_id":"68796652-59e3-5d2a-8a81-8bebd0d64ead"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"synthesis_epict_eph_hemin_doctrine","passage_id":"68796652-59e3-5d2a-8a81-8bebd0d64ead"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_6_2_20","passage_id":"687a337d-a637-42f1-bdd3-ec8ac6a53b8f"}
@@ -8425,8 +8420,8 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par69_en","passage_id":"6dba3743-e373-5d45-b872-573851e4931c"}
 {"citation_type":"evidenced_by","confidence":1.0,"kg_node_id":"argument_origen_witness_antiastrological_dissertation_envelope_amand1945","passage_id":"6dbcda73-8fa2-57e5-8dd4-9ca3ed245d2c"}
 {"citation_type":"evidenced_by","confidence":1.0,"kg_node_id":"argument_origen_witness_carneades_transposition_gnostic_excursus_amand1945","passage_id":"6dbcda73-8fa2-57e5-8dd4-9ca3ed245d2c"}
-{"citation_type":"evidenced_by","confidence":1.0,"kg_node_id":"argument_origen_witness_carneades_transposition_god_as_evil_amand1945","passage_id":"6dbcda73-8fa2-57e5-8dd4-9ca3ed245d2c"}
-{"citation_type":"evidenced_by","confidence":1.0,"kg_node_id":"argument_origen_witness_carneades_transposition_prayer_useless_amand1945","passage_id":"6dbcda73-8fa2-57e5-8dd4-9ca3ed245d2c"}
+{"citation_type":"evidenced_by","confidence":1.0,"kg_node_id":"argument_origen_witness_carneades_transposition_god_as_evil_amand1945","passage_id":"481e3e44-0c73-54f3-9190-73f09e332def"}
+{"citation_type":"evidenced_by","confidence":1.0,"kg_node_id":"argument_origen_witness_carneades_transposition_prayer_useless_amand1945","passage_id":"defc60b4-92f2-53c3-8d98-67ef21f45da3"}
 {"citation_type":"evidenced_by","confidence":1.0,"kg_node_id":"argument_origen_witness_diss_problem1_prescience_amand1945","passage_id":"6dbcda73-8fa2-57e5-8dd4-9ca3ed245d2c"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_origen_philocalia_23_3","passage_id":"6dbcda73-8fa2-57e5-8dd4-9ca3ed245d2c"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sext_333","passage_id":"6dbfbbad-3040-4594-847f-528abb8f97c9"}
@@ -8864,7 +8859,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_prov_2_2_en","passage_id":"73e0f556-c3f3-578d-9737-6dc4b546b080"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"73e888c4-da67-5ea5-97b8-db96813894e9"}
 {"citation_type":"evidenced_by","confidence":0.85,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"73e888c4-da67-5ea5-97b8-db96813894e9"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6","passage_id":"73e888c4-da67-5ea5-97b8-db96813894e9"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_184","passage_id":"73e888c4-da67-5ea5-97b8-db96813894e9"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"synthesis_epict_eph_hemin_doctrine","passage_id":"73e888c4-da67-5ea5-97b8-db96813894e9"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc136_origenes_contra_celsum_iv_par75_en","passage_id":"73f0431a-0cbf-5d52-9948-e67bec8c4545"}
@@ -8995,7 +8989,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_boeth_cons_71","passage_id":"759f99d4-c9bb-47ff-9a72-ce82e62c1cc4"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_boethius_cons_71","passage_id":"759f99d4-c9bb-47ff-9a72-ce82e62c1cc4"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plut_stoic_rep_27","passage_id":"75a600f3-0c29-492d-8263-0606920be4d3"}
-{"citation_type":"evidenced_by","confidence":0.4,"kg_node_id":"argument_tertullians_antimarcionite_argument_for_free_will_f49cad73","passage_id":"75a9225a-8a3b-43d4-934a-371c464975e1"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_tert_de_anima_2","passage_id":"75a9225a-8a3b-43d4-934a-371c464975e1"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_met_11_4","passage_id":"75b12c96-3e86-4e9d-9c97-09b1dca44150"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_lucr_drn_947971","passage_id":"75b49152-c170-494f-ac4d-9d6786709d86"}
@@ -11717,7 +11710,7 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_dla_3_5_15","passage_id":"98c41ece-a261-4e9f-be2e-c621ce3e061b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_3_5_15","passage_id":"98c41ece-a261-4e9f-be2e-c621ce3e061b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_6_60_2","passage_id":"98c7a37d-2f4e-4b20-8b5a-0dba28b17da0"}
-{"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_homonymy_alex","passage_id":"98c9a41f-e99e-4f5b-827f-cdeeb3fa8220"}
+{"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_homonymy_alex","passage_id":"ae88c271-a54c-4da5-8842-fc4eecc661c2"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_incompatibilism_alexander_p7q8r9s0","passage_id":"98c9a41f-e99e-4f5b-827f-cdeeb3fa8220"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_stoic_redefinition_alex","passage_id":"98c9a41f-e99e-4f5b-827f-cdeeb3fa8220"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_ananke_necessity_democritus_h8i9j0k1","passage_id":"98c9a41f-e99e-4f5b-827f-cdeeb3fa8220"}
@@ -11837,7 +11830,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc150_origenes_contra_celsum_vii_par52_en","passage_id":"9a5f87a5-5f39-5732-890d-23907b0d7d5e"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc150_origenes_contra_celsum_viii_par32_a","passage_id":"9a676f22-42c6-4ddf-9a83-52a491121f08"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_lucr_drn_226250_s199","passage_id":"9a709f26-8607-4865-bdf8-d34e2352e5eb"}
-{"citation_type":"evidenced_by","confidence":0.75,"kg_node_id":"concept_sympatheia_universal_posidonius_nyssa","passage_id":"9a70c74b-0a94-4455-b31e-4f631cd03963"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_iii_1_7","passage_id":"9a70c74b-0a94-4455-b31e-4f631cd03963"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_met_1_3","passage_id":"9a7b82fd-5328-4118-9dd6-8170489e7594"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_i_1_10","passage_id":"9a814e64-ccc3-487d-bb13-5e8ad847ffe2"}
@@ -13109,9 +13101,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc507_iustinus_apologia_i_ii9","passage_id":"aabc62a1-09cb-5abb-9b44-3ee83347298f"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc123_melito_peri_pascha_chap9","passage_id":"aabd5e2e-2f80-58a6-90bd-fc904f8ce644"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_6_61_3","passage_id":"aabd8c89-b39e-4607-97fa-5d9faae0554f"}
-{"citation_type":"evidenced_by","confidence":0.75,"kg_node_id":"argument_pseudo_chrysostom_de_fato_recapitulation_amand1945","passage_id":"aabdca4b-4724-567c-9635-990f8d475113"}
-{"citation_type":"evidenced_by","confidence":0.75,"kg_node_id":"argument_pseudo_chrysostom_de_fato_v_apologetic_amand1945","passage_id":"aabdca4b-4724-567c-9635-990f8d475113"}
-{"citation_type":"evidenced_by","confidence":0.75,"kg_node_id":"argument_pseudo_chrysostom_de_fato_v_witness6_amand1945","passage_id":"aabdca4b-4724-567c-9635-990f8d475113"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc79_chrysostomus_de_providentia_chap5","passage_id":"aabdca4b-4724-567c-9635-990f8d475113"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_420","passage_id":"aabf2758-3e03-4900-a8a9-85f35d03a07f"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc136_origenes_contra_celsum_iii_par17_en","passage_id":"aac50f3c-6c4a-5e4c-9b3e-5b1f2cb6d9fa"}
@@ -13462,7 +13451,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_apol_27d","passage_id":"aefcb3c4-8df0-4f47-859f-8ebff953ec9a"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_15_94_48","passage_id":"af033977-2f28-4619-8ed9-f891e346cc79"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc53bis_hermas_pastor_chap27_en","passage_id":"af066fe6-53ff-5d74-bc5e-1475b342f665"}
-{"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_arts_efficacy_alex","passage_id":"af0813bf-6ed5-40b9-9f3a-0dbd820a0f58"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_civilization_alex","passage_id":"af0813bf-6ed5-40b9-9f3a-0dbd820a0f58"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_deliberation_alex","passage_id":"af0813bf-6ed5-40b9-9f3a-0dbd820a0f58"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_deliberation_complete_alex","passage_id":"af0813bf-6ed5-40b9-9f3a-0dbd820a0f58"}
@@ -14023,7 +14011,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_31_6","passage_id":"b6b6bf46-983f-493c-9ff8-bbb8cc629d25"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_phys_4_13","passage_id":"b6bf016c-9bfd-4846-a8d4-4031699efd5e"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_human_constitution_alex","passage_id":"b6c318f2-8577-49ee-8a73-26315325cccf"}
-{"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_human_dignity_alex","passage_id":"b6c318f2-8577-49ee-8a73-26315325cccf"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_ananke_necessity_democritus_h8i9j0k1","passage_id":"b6c318f2-8577-49ee-8a73-26315325cccf"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_endechomenon_contingent_aristotle_e5f6g7h8","passage_id":"b6c318f2-8577-49ee-8a73-26315325cccf"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"b6c318f2-8577-49ee-8a73-26315325cccf"}
@@ -14444,7 +14431,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_19_114_26","passage_id":"bc1f43f7-d6ee-473b-ac1a-dd5d95d5a570"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_10_1_144","passage_id":"bc2051d2-5ff8-489d-b6e4-10e7ceae4432"}
 {"citation_type":"evidenced_by","confidence":1.0,"kg_node_id":"argument_origen_witness_antiastrological_dissertation_envelope_amand1945","passage_id":"bc25fce3-aefc-5fed-bde7-3993a66d94ff"}
-{"citation_type":"evidenced_by","confidence":1.0,"kg_node_id":"argument_origen_witness_carneades_transposition_prayer_useless_amand1945","passage_id":"bc25fce3-aefc-5fed-bde7-3993a66d94ff"}
 {"citation_type":"evidenced_by","confidence":1.0,"kg_node_id":"argument_origen_witness_diss_problem1_prescience_amand1945","passage_id":"bc25fce3-aefc-5fed-bde7-3993a66d94ff"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_origen_philocalia_23_4","passage_id":"bc25fce3-aefc-5fed-bde7-3993a66d94ff"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_lucr_drn_376400","passage_id":"bc269618-970b-4862-aa81-d63d2a221462"}
@@ -17638,7 +17624,7 @@
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_endechomenon_contingent_aristotle_e5f6g7h8","passage_id":"e62896b9-235c-4584-b82b-cec83bcbd601"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"e62896b9-235c-4584-b82b-cec83bcbd601"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_exousia_alex","passage_id":"e62896b9-235c-4584-b82b-cec83bcbd601"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_external_principle_action","passage_id":"e62896b9-235c-4584-b82b-cec83bcbd601"}
+{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_external_principle_action","passage_id":"fe6fc065-9a84-4664-9630-752bc1c6bcad"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_hegemonikon_stoic","passage_id":"e62896b9-235c-4584-b82b-cec83bcbd601"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_heimarmene_fate_stoics_j0k1l2m3","passage_id":"e62896b9-235c-4584-b82b-cec83bcbd601"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_horme_alex","passage_id":"e62896b9-235c-4584-b82b-cec83bcbd601"}
@@ -18144,7 +18130,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_philo_de_opif_38","passage_id":"ec1656b2-bfb6-47fe-8ee7-f2073bd773f0"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_19_112_3","passage_id":"ec170de0-c51d-4536-9c5f-3c2cb885d9d5"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_da_2_2","passage_id":"ec1e9c55-a596-4b79-9fad-33535fa6731d"}
-{"citation_type":"evidenced_by","confidence":0.4,"kg_node_id":"argument_tertullians_antimarcionite_argument_for_free_will_f49cad73","passage_id":"ec24f319-f842-4f3a-9ceb-0a6b99feddb8"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_tert_de_anima_1","passage_id":"ec24f319-f842-4f3a-9ceb-0a6b99feddb8"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_origen_philocalia_21_23","passage_id":"ec281097-0419-5d60-afdc-1d5a8236160b"}
 {"citation_type":"discusses","confidence":0.75,"kg_node_id":"work_de_principiis_origen_230s_v2w3x4y5","passage_id":"ec281097-0419-5d60-afdc-1d5a8236160b"}
