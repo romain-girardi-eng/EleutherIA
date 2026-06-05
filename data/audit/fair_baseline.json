@@ -1,0 +1,14 @@
+{
+ "persons_total": 453,
+ "persons_with_qid": 37,
+ "persons_with_qid_pct": 8,
+ "qid_errors_found_among_present": 14,
+ "works_total": 241,
+ "works_with_cts_urn": 29,
+ "works_with_cts_urn_pct": 12,
+ "arguments_synthesis_total": 1596,
+ "passage_grounded": 133,
+ "passage_grounded_pct": 8,
+ "needs_evidence_flagged": 1611,
+ "structural_layer": "clean (0 FK orphans, 0 ontology/SHACL violations, 0 sigma errors)"
+}

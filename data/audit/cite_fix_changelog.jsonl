@@ -1,0 +1,21 @@
+{"op": "remove", "kg_node_id": "argument_chrysostom_antiastrological_demonic_amand1945", "passage_id": "68714e3e-ed76-57c6-b5ea-97839093b1f2"}
+{"op": "remove", "kg_node_id": "argument_arts_efficacy_alex", "passage_id": "af0813bf-6ed5-40b9-9f3a-0dbd820a0f58"}
+{"op": "remove", "kg_node_id": "argument_pseudo_chrysostom_de_fato_recapitulation_amand1945", "passage_id": "aabdca4b-4724-567c-9635-990f8d475113"}
+{"op": "remove", "kg_node_id": "argument_chrysostom_antiastrological_demonic_amand1945", "passage_id": "5ef27e3e-3180-5ec7-9acc-62e6d10a3e4e"}
+{"op": "remove", "kg_node_id": "argument_origen_witness_carneades_transposition_prayer_useless_amand1945", "passage_id": "bc25fce3-aefc-5fed-bde7-3993a66d94ff"}
+{"op": "remove", "kg_node_id": "concept_ananke_necessity_democritus_h8i9j0k1", "passage_id": "1e5a059b-17cd-4677-9d8a-0199ded2f94b"}
+{"op": "remove", "kg_node_id": "concept_sympatheia_universal_posidonius_nyssa", "passage_id": "9a70c74b-0a94-4455-b31e-4f631cd03963"}
+{"op": "remove", "kg_node_id": "argument_pseudo_chrysostom_de_fato_v_witness6_amand1945", "passage_id": "aabdca4b-4724-567c-9635-990f8d475113"}
+{"op": "remove", "kg_node_id": "argument_tertullians_antimarcionite_argument_for_free_will_f49cad73", "passage_id": "ec24f319-f842-4f3a-9ceb-0a6b99feddb8"}
+{"op": "remove", "kg_node_id": "argument_pseudo_chrysostom_de_fato_v_apologetic_amand1945", "passage_id": "aabdca4b-4724-567c-9635-990f8d475113"}
+{"op": "remove", "kg_node_id": "argument_tertullians_antimarcionite_argument_for_free_will_f49cad73", "passage_id": "75a9225a-8a3b-43d4-934a-371c464975e1"}
+{"op": "remove", "kg_node_id": "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "passage_id": "73e888c4-da67-5ea5-97b8-db96813894e9"}
+{"op": "remove", "kg_node_id": "argument_human_dignity_alex", "passage_id": "b6c318f2-8577-49ee-8a73-26315325cccf"}
+{"op": "remove", "kg_node_id": "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "passage_id": "667a67f2-c9b9-5777-8490-c74fa7f95702"}
+{"op": "remove", "kg_node_id": "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "passage_id": "68796652-59e3-5d2a-8a81-8bebd0d64ead"}
+{"op": "repoint", "kg_node_id": "argument_origen_witness_carneades_transposition_prayer_useless_amand1945", "old_passage_id": "6dbcda73-8fa2-57e5-8dd4-9ca3ed245d2c", "new_passage_id": "defc60b4-92f2-53c3-8d98-67ef21f45da3"}
+{"op": "repoint", "kg_node_id": "argument_homonymy_alex", "old_passage_id": "98c9a41f-e99e-4f5b-827f-cdeeb3fa8220", "new_passage_id": "ae88c271-a54c-4da5-8842-fc4eecc661c2"}
+{"op": "repoint", "kg_node_id": "argument_origen_witness_carneades_transposition_god_as_evil_amand1945", "old_passage_id": "6dbcda73-8fa2-57e5-8dd4-9ca3ed245d2c", "new_passage_id": "481e3e44-0c73-54f3-9190-73f09e332def"}
+{"op": "repoint", "kg_node_id": "concept_external_principle_action", "old_passage_id": "e62896b9-235c-4584-b82b-cec83bcbd601", "new_passage_id": "fe6fc065-9a84-4664-9630-752bc1c6bcad"}
+{"op": "repoint", "kg_node_id": "concept_hypothetical_fate_middle_platonist", "old_passage_id": "35466003-c2b0-48f5-b5ae-be6365c0fcb0", "new_passage_id": "0b6bfaef-6e09-481f-babb-b918b83c9597"}
+{"op": "repoint", "kg_node_id": "concept_hypothetical_fate_middle_platonist", "old_passage_id": "635354f8-a5be-4b0d-901e-b163f0da6f39", "new_passage_id": "27229be5-146e-44b3-9635-b2aaeab917d2"}

@@ -108,3 +108,14 @@ Confirmed fabrications:
 
 - **Citation–claim support (214 grounded claim nodes):** 43 confirmed mismatches where the cited passage does not support the asserted claim → **review queue `docs/kg-citation-mismatch-review.md`** (touches passage_citations; single-pass; not auto-applied).
 - **Anachronism (132 candidates):** 20 unhedged modern labels confirmed; 10 high-confidence hedges applied surgically; rest rejected as legitimate modern-scholarship framing.
+
+
+## Wave 3 — Breadth (publications + concepts + ancient arguments)
+
+845 nodes targeted; 678 audited (single-pass deep web-grounded; 14 batches lost their StructuredOutput tail — ~167 nodes to re-run). **78 confirmed**, 59 applied.
+
+Dominant: fabricated bibliography (45) — non-existent Alexander *De Fato* Bruns loci ('Fat. 611-616'), wrong ISBNs/DOIs/years, fabricated SC references; plus more corrupt concept QIDs (original_sin→'nirvana', grace_freedom_synergy→'Crime', pedagogical_theodicy→a Tunisian town); 2 critical publication misattributions (Long 1988; Cross 1956 → actual author J.P. Hyatt).
+
+## Citation–claim integrity (passage_citations)
+
+53 flagged mismatches adversarially re-verified (two passes). **55 of 88 decisions overturned as false-positives** (citation genuinely supports the claim). Applied: 15 citations removed + 6 re-pointed (each new target verified in-corpus). Conservative by design — no citation removed without confirming the cited text fails to support the claim.
