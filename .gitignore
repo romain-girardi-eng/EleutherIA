@@ -163,3 +163,13 @@ media/
 # Corpus working artifacts (TEI download cache + audit/reading scratch output)
 data/corpus/_audit_cache/
 data/corpus/missing_sections/
+
+# KG audit — local backups, tmp, and bulky per-node verdict dirs (provenance kept via changelogs/ledgers)
+data/kg/*.bak-*
+data/kg/*.tmp
+data/audit/wave1/
+data/audit/wave2/
+data/audit/wave1_greek/
+data/audit/wave2_anach/
+data/audit/wave1_scan_findings_live.json
+data/audit/*_args.json
