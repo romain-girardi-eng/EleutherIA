@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-06-10T23:22:46Z",
+  "generated_at": "2026-06-10T23:47:44Z",
   "sources": {
     "kg": "data/kg/nodes.jsonl + data/kg/edges.jsonl",
     "corpus": "data/corpus/*.jsonl",
     "ontology": "knowledge graph/ontology/*.json"
   },
   "kg": {
-    "nodes": 20060,
-    "edges": 56448,
-    "works": 241,
+    "nodes": 20063,
+    "edges": 56452,
+    "works": 243,
     "passage_nodes": 17115,
     "node_types_in_use": 17,
     "edge_relations_in_use": 52,
     "node_type_counts": {
       "passage": 17115,
       "argument": 1419,
-      "person": 453,
+      "person": 454,
       "publication": 357,
-      "work": 241,
+      "work": 243,
       "concept": 215,
       "synthesis": 177,
       "debate": 17,
@@ -33,7 +33,7 @@
     },
     "edge_relation_counts": {
       "part_of": 20357,
-      "authored_by": 17791,
+      "authored_by": 17793,
       "discusses": 4623,
       "has_translation": 2953,
       "translation_of": 2953,
@@ -46,14 +46,14 @@
       "engages_with": 332,
       "critiques": 243,
       "creates": 231,
-      "interprets": 195,
+      "interprets": 196,
       "supports": 178,
       "influences": 167,
       "contains": 156,
       "extends": 147,
       "contributes_to": 131,
       "employs": 107,
-      "member_of": 84,
+      "member_of": 85,
       "parallel_to": 81,
       "responds_to": 56,
       "grounded_in": 47,
@@ -87,12 +87,12 @@
     }
   },
   "corpus": {
-    "passages": 20415,
-    "works_with_text": 182,
+    "passages": 21046,
+    "works_with_text": 187,
     "passage_citations": 19748,
-    "manifest_entries": 87,
+    "manifest_entries": 92,
     "manifest_status_counts": {
-      "in_corpus": 77,
+      "in_corpus": 82,
       "thin_needs_ingestion": 10
     }
   },
