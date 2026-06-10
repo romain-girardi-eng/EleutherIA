@@ -23,6 +23,40 @@ export type ResolvedSeoRoute = {
 
 export const seoSite: SeoSite = seoConfig.site;
 
+export type SeoLocale = { lang: string; ogLocale: string };
+
+export const seoLocales: SeoLocale[] = seoSite.locales;
+
+const ogLocaleByLang = new Map<string, string>(
+  seoLocales.map((locale) => [locale.lang, locale.ogLocale]),
+);
+
+export function ogLocaleFor(lang: string): string {
+  const base = lang.split('-')[0];
+  return ogLocaleByLang.get(base) ?? seoLocales[0].ogLocale;
+}
+
+function withLangParam(url: string, lang: string): string {
+  const separator = url.includes('?') ? '&' : '?';
+  return `${url}${separator}${seoSite.langParam}=${lang}`;
+}
+
+export type HreflangAlternate = { hreflang: string; href: string };
+
+/**
+ * The SPA serves every language from the same URL; the active locale is
+ * selected client-side. `?lang=xx` is honoured by the i18n querystring
+ * detector, so each alternate resolves to the advertised language.
+ */
+export function hreflangAlternatesFor(canonicalUrl: string): HreflangAlternate[] {
+  const alternates: HreflangAlternate[] = seoLocales.map((locale) => ({
+    hreflang: locale.lang,
+    href: withLangParam(canonicalUrl, locale.lang),
+  }));
+  alternates.push({ hreflang: 'x-default', href: canonicalUrl });
+  return alternates;
+}
+
 const exactRoutes = new Map<string, SeoRoute>(
   seoConfig.routes.map((route) => [normalizePath(route.path), route]),
 );
@@ -110,6 +144,7 @@ function breadcrumbFor(route: ResolvedSeoRoute): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    inLanguage: seoSite.language,
     itemListElement: items,
   };
 }
@@ -145,6 +180,14 @@ function websiteSchema(route: ResolvedSeoRoute): Record<string, unknown> {
     inLanguage: seoSite.language,
     description: route.description,
     creator: { '@id': `${seoSite.origin}/about#romain-girardi` },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${seoSite.origin}${seoSite.searchAction}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
   };
 }
 
@@ -158,6 +201,7 @@ function datasetSchema(): Record<string, unknown> {
     description:
       'A FAIR-aligned knowledge graph and ancient text corpus for Greco-Roman and early Christian debates on free will, fate, providence, and moral responsibility.',
     url: seoSite.origin,
+    inLanguage: seoSite.language,
     identifier: `https://doi.org/${seoSite.doi}`,
     sameAs: [`https://doi.org/${seoSite.doi}`, seoSite.repository],
     license: seoSite.license,
@@ -165,6 +209,25 @@ function datasetSchema(): Record<string, unknown> {
     keywords: seoSite.keywords.split(', '),
     creator: { '@id': `${seoSite.origin}/about#romain-girardi` },
     citation: `Girardi, R. (2026). EleutherIA: A FAIR-Compliant Knowledge Graph for Ancient Free Will Debates [Data set]. Zenodo. https://doi.org/${seoSite.doi}`,
+  };
+}
+
+function dataCatalogSchema(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'DataCatalog',
+    '@id': `${seoSite.origin}/#datacatalog`,
+    name: 'EleutherIA Data Catalog',
+    description:
+      'A FAIR-aligned catalog of structured data on ancient debates about free will, fate, providence, and moral responsibility: a knowledge graph of philosophers, concepts, arguments, and works, plus a Greek and Latin critical-edition corpus, all citation-grounded.',
+    url: seoSite.origin,
+    inLanguage: seoSite.language,
+    license: seoSite.license,
+    isAccessibleForFree: true,
+    publisher: { '@id': `${seoSite.origin}/about#romain-girardi` },
+    creator: { '@id': `${seoSite.origin}/about#romain-girardi` },
+    sameAs: `https://doi.org/${seoSite.doi}`,
+    dataset: { '@id': `${seoSite.origin}/#dataset` },
   };
 }
 
@@ -177,6 +240,7 @@ function softwareSchema(route: ResolvedSeoRoute): Record<string, unknown> {
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web',
     url: seoSite.origin,
+    inLanguage: seoSite.language,
     description: route.description,
     creator: { '@id': `${seoSite.origin}/about#romain-girardi` },
     license: seoSite.license,
@@ -192,6 +256,7 @@ function collectionSchema(route: ResolvedSeoRoute): Record<string, unknown> {
     '@id': `${route.canonicalUrl}#collection`,
     name: route.h1,
     url: route.canonicalUrl,
+    inLanguage: seoSite.language,
     description: route.description,
     isPartOf: { '@id': `${seoSite.origin}/#website` },
   };
@@ -204,6 +269,7 @@ function articleSchema(route: ResolvedSeoRoute): Record<string, unknown> {
     '@id': `${route.canonicalUrl}#article`,
     headline: route.h1,
     url: route.canonicalUrl,
+    inLanguage: seoSite.language,
     description: route.description,
     author: { '@id': `${seoSite.origin}/about#romain-girardi` },
     isPartOf: { '@id': `${seoSite.origin}/#website` },
@@ -217,6 +283,7 @@ function creativeWorkSchema(route: ResolvedSeoRoute): Record<string, unknown> {
     '@id': `${route.canonicalUrl}#creative-work`,
     name: route.h1,
     url: route.canonicalUrl,
+    inLanguage: seoSite.language,
     description: route.description,
     isPartOf: { '@id': `${seoSite.origin}/#dataset` },
   };
@@ -229,6 +296,8 @@ export function structuredDataFor(route: ResolvedSeoRoute): Record<string, unkno
         return [websiteSchema(route)];
       case 'dataset':
         return [datasetSchema()];
+      case 'dataCatalog':
+        return [dataCatalogSchema()];
       case 'software':
         return [softwareSchema(route)];
       case 'person':

@@ -97,8 +97,11 @@ i18n
     },
 
     detection: {
-      order: ['localStorage', 'navigator', 'htmlTag'],
+      // `querystring` first so hreflang `?lang=xx` URLs resolve to the
+      // advertised language; the choice is then cached to localStorage.
+      order: ['querystring', 'localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
+      lookupQuerystring: 'lang',
       lookupLocalStorage: 'eleutherai-language'
     },
 

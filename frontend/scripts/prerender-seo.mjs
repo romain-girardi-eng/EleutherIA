@@ -37,6 +37,24 @@ function escapeHtml(value) {
     .replace(/"/g, '&quot;');
 }
 
+const locales = config.site.locales;
+const langParam = config.site.langParam;
+const defaultOgLocale = locales[0].ogLocale;
+
+function withLangParam(url, lang) {
+  const separator = url.includes('?') ? '&' : '?';
+  return `${url}${separator}${langParam}=${lang}`;
+}
+
+function hreflangAlternates(canonical) {
+  const alternates = locales.map((locale) => ({
+    hreflang: locale.lang,
+    href: withLangParam(canonical, locale.lang),
+  }));
+  alternates.push({ hreflang: 'x-default', href: canonical });
+  return alternates;
+}
+
 function personSchema() {
   return {
     '@context': 'https://schema.org',
@@ -62,6 +80,14 @@ function websiteSchema(route) {
     inLanguage: config.site.language,
     description: route.description,
     creator: { '@id': `${config.site.origin}/about#romain-girardi` },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${config.site.origin}${config.site.searchAction}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
   };
 }
 
@@ -75,6 +101,7 @@ function datasetSchema() {
     description:
       'A FAIR-aligned knowledge graph and ancient text corpus for Greco-Roman and early Christian debates on free will, fate, providence, and moral responsibility.',
     url: config.site.origin,
+    inLanguage: config.site.language,
     identifier: `https://doi.org/${config.site.doi}`,
     sameAs: [`https://doi.org/${config.site.doi}`, config.site.repository],
     license: config.site.license,
@@ -82,6 +109,25 @@ function datasetSchema() {
     keywords: config.site.keywords.split(', '),
     creator: { '@id': `${config.site.origin}/about#romain-girardi` },
     citation: `Girardi, R. (2026). EleutherIA: A FAIR-Compliant Knowledge Graph for Ancient Free Will Debates [Data set]. Zenodo. https://doi.org/${config.site.doi}`,
+  };
+}
+
+function dataCatalogSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'DataCatalog',
+    '@id': `${config.site.origin}/#datacatalog`,
+    name: 'EleutherIA Data Catalog',
+    description:
+      'A FAIR-aligned catalog of structured data on ancient debates about free will, fate, providence, and moral responsibility: a knowledge graph of philosophers, concepts, arguments, and works, plus a Greek and Latin critical-edition corpus, all citation-grounded.',
+    url: config.site.origin,
+    inLanguage: config.site.language,
+    license: config.site.license,
+    isAccessibleForFree: true,
+    publisher: { '@id': `${config.site.origin}/about#romain-girardi` },
+    creator: { '@id': `${config.site.origin}/about#romain-girardi` },
+    sameAs: `https://doi.org/${config.site.doi}`,
+    dataset: { '@id': `${config.site.origin}/#dataset` },
   };
 }
 
@@ -94,6 +140,7 @@ function softwareSchema(route) {
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web',
     url: config.site.origin,
+    inLanguage: config.site.language,
     description: route.description,
     creator: { '@id': `${config.site.origin}/about#romain-girardi` },
     license: config.site.license,
@@ -128,6 +175,7 @@ function breadcrumbSchema(route) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    inLanguage: config.site.language,
     itemListElement: items,
   };
 }
@@ -139,6 +187,7 @@ function collectionSchema(route) {
     '@id': `${absoluteUrl(route.path)}#collection`,
     name: route.h1,
     url: absoluteUrl(route.path),
+    inLanguage: config.site.language,
     description: route.description,
     isPartOf: { '@id': `${config.site.origin}/#website` },
   };
@@ -151,6 +200,8 @@ function schemaFor(route) {
         return [websiteSchema(route)];
       case 'dataset':
         return [datasetSchema()];
+      case 'dataCatalog':
+        return [dataCatalogSchema()];
       case 'software':
         return [softwareSchema(route)];
       case 'person':
@@ -170,6 +221,7 @@ function stripSeoTags(html) {
     .replace(/\s*<title>[\s\S]*?<\/title>/i, '')
     .replace(/\s*<meta\s+(?:name|property)=["'](?:title|description|keywords|author|robots|language|og:[^"']+|twitter:[^"']+)["'][^>]*>\n?/gi, '')
     .replace(/\s*<link\s+rel=["']canonical["'][^>]*>\n?/gi, '')
+    .replace(/\s*<link\s+rel=["']alternate["'][^>]*hreflang=[^>]*>\n?/gi, '')
     .replace(/\s*<script[^>]+type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>\n?/gi, '');
 }
 
@@ -177,6 +229,16 @@ function seoHead(route) {
   const canonical = absoluteUrl(route.path);
   const image = absoluteUrl(config.site.defaultImage);
   const ogType = route.schemas.includes('article') ? 'article' : 'website';
+  const indexable = !/noindex/i.test(route.robots);
+  const hreflang = indexable
+    ? hreflangAlternates(canonical)
+        .map((alt) => `    <link rel="alternate" hreflang="${escapeHtml(alt.hreflang)}" href="${escapeHtml(alt.href)}" />`)
+        .join('\n') + '\n'
+    : '';
+  const ogLocaleAlternates = locales
+    .filter((locale) => locale.ogLocale !== defaultOgLocale)
+    .map((locale) => `<meta property="og:locale:alternate" content="${escapeHtml(locale.ogLocale)}" />`)
+    .join('\n    ');
   const jsonLd = schemaFor(route)
     .map((schema) => `<script type="application/ld+json" data-eleutheria-jsonld="true">${JSON.stringify(schema)}</script>`)
     .join('\n    ');
@@ -189,7 +251,7 @@ function seoHead(route) {
     <meta name="robots" content="${escapeHtml(route.robots)}" />
     <meta name="language" content="English" />
     <link rel="canonical" href="${escapeHtml(canonical)}" />
-    <meta property="og:type" content="${escapeHtml(ogType)}" />
+${hreflang}    <meta property="og:type" content="${escapeHtml(ogType)}" />
     <meta property="og:url" content="${escapeHtml(canonical)}" />
     <meta property="og:title" content="${escapeHtml(route.title)}" />
     <meta property="og:description" content="${escapeHtml(route.description)}" />
@@ -198,6 +260,8 @@ function seoHead(route) {
     <meta property="og:image:height" content="${escapeHtml(config.site.imageHeight)}" />
     <meta property="og:image:alt" content="${escapeHtml(config.site.imageAlt)}" />
     <meta property="og:site_name" content="${escapeHtml(config.site.name)}" />
+    <meta property="og:locale" content="${escapeHtml(defaultOgLocale)}" />
+    ${ogLocaleAlternates}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="${escapeHtml(canonical)}" />
     <meta name="twitter:title" content="${escapeHtml(route.title)}" />
@@ -244,17 +308,28 @@ for (const route of config.routes) {
   await writeFile(filePath, renderRouteHtml(route), 'utf8');
 }
 
+const lastmod = new Date().toISOString().slice(0, 10);
+
 const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${config.routes
   .filter((route) => route.priority > 0)
-  .map(
-    (route) => `  <url>
-    <loc>${absoluteUrl(route.path)}</loc>
+  .map((route) => {
+    const loc = absoluteUrl(route.path);
+    const alternates = hreflangAlternates(loc)
+      .map(
+        (alt) =>
+          `    <xhtml:link rel="alternate" hreflang="${alt.hreflang}" href="${alt.href}" />`,
+      )
+      .join('\n');
+    return `  <url>
+    <loc>${loc}</loc>
+    <lastmod>${lastmod}</lastmod>
     <changefreq>${route.changefreq}</changefreq>
     <priority>${Number(route.priority).toFixed(2).replace(/0$/, '').replace(/\.0$/, '.0')}</priority>
-  </url>`,
-  )
+${alternates}
+  </url>`;
+  })
   .join('\n')}
 </urlset>
 `;
