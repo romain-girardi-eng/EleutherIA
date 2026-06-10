@@ -49,6 +49,16 @@ export default function DatabasePage() {
     { key: 'reformulation', label: 'Reformulations', desc: 'Conceptual redefinitions', count: 53 },
   ];
 
+  // Live count per node type: prefer /api/kg/stats.node_types, then the
+  // per-node listing from getNodes(), then the static fallback.
+  const liveCount = (nt: { key: string; count: number }) => {
+    const fromStats = stats.nodeTypes[nt.key];
+    if (Number.isFinite(fromStats)) return fromStats;
+    const listed = (nodeTypeData[nt.key] || []).length;
+    return listed || nt.count;
+  };
+  const maxNodeTypeCount = Math.max(...nodeTypes.map(liveCount), 1);
+
   const fairPrinciples = [
     {
       letter: 'F',
@@ -211,9 +221,9 @@ export default function DatabasePage() {
           {/* Inline stats */}
           <div className="flex flex-wrap gap-3 mb-6">
             {[
-              { val: '376', label: 'texts', icon: BookOpen },
-              { val: '109', label: 'lemmatized', icon: Languages },
-              { val: '2', label: 'languages', icon: Globe },
+              { val: fmt(stats.works), label: 'texts', icon: BookOpen },
+              { val: fmt(stats.passages), label: 'passages', icon: Languages },
+              { val: fmt(stats.languagesCount), label: 'languages', icon: Globe },
             ].map((s) => {
               const SIcon = s.icon;
               return (
@@ -229,8 +239,8 @@ export default function DatabasePage() {
           <div className="bg-stone-50/50 rounded-xl border border-stone-200/40 p-5 mb-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                ['Full-Text Search', 'PostgreSQL across all 376 texts'],
-                ['Lemmatic Search', 'Morphological analysis on 109 texts'],
+                ['Full-Text Search', 'PostgreSQL ts_rank across the entire corpus'],
+                ['Lemmatic Search', 'Morphological analysis on Greek and Latin lemmas'],
                 ['Complete Texts', 'Full texts with proper encoding'],
                 ['Structured Metadata', 'Author, title, date, language, citations'],
               ].map(([title, desc]) => (
@@ -305,9 +315,9 @@ export default function DatabasePage() {
               {nodeTypes.map((nt) => {
                 const isExpanded = expandedTypes.has(nt.key);
                 const items = nodeTypeData[nt.key] || [];
-                const actualCount = items.length || nt.count;
-                // Bar width proportional to max count
-                const barWidth = Math.round((actualCount / 161) * 100);
+                const actualCount = liveCount(nt);
+                // Bar width proportional to the largest live node-type count.
+                const barWidth = Math.round((actualCount / maxNodeTypeCount) * 100);
 
                 return (
                   <div key={nt.key}>
@@ -398,7 +408,7 @@ export default function DatabasePage() {
               <span className="text-sm"><strong className="text-stone-700 font-semibold">1,125+</strong> <span className="text-stone-500">references</span></span>
             </div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-stone-100/50 border border-stone-200/30 rounded-lg">
-              <span className="text-sm"><strong className="text-stone-700 font-semibold">91.8%</strong> <span className="text-stone-500">citation coverage</span></span>
+              <span className="text-sm"><span className="text-stone-500">Confidence-scored</span> <strong className="text-stone-700 font-semibold">citation coverage</strong></span>
             </div>
           </div>
 

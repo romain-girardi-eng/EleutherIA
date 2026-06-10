@@ -2,6 +2,7 @@ import { lazy, Suspense, useState, useRef, useEffect, useLayoutEffect, useCallba
 import { useTranslation } from 'react-i18next';
 import { Maximize2, Minimize2, ChevronRight } from 'lucide-react';
 import { HeroSection } from '../components/ui/hero-section-2';
+import { useKgStats, formatCount } from '../hooks/useKgStats';
 
 const MorphingParticles = lazy(() =>
   import('../components/MorphingParticles').then((module) => ({
@@ -16,7 +17,9 @@ function ParticleFallback() {
 }
 
 export default function HomePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const stats = useKgStats();
+  const fmt = (n: number) => formatCount(n, i18n.language);
   const [isNativeFullscreen, setIsNativeFullscreen] = useState(false);
   const [isCSSFullscreen, setIsCSSFullscreen] = useState(false);
   const [showParticles, setShowParticles] = useState(false);
@@ -197,7 +200,7 @@ export default function HomePage() {
             {t('nav.visualizer')}
           </div>
           <div className="text-[9px] text-zinc-400 mt-0.5 leading-tight">
-            2,193 nodes · 8,616 edges
+            {fmt(stats.nodes)} nodes · {fmt(stats.edges)} edges
           </div>
         </div>
         <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-orange-600 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
@@ -244,7 +247,11 @@ export default function HomePage() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">{t('learn.hero.titleHighlight')}</span>
             </>
           }
-          subtitle={t('learn.hero.subtitle')}
+          subtitle={t('learn.hero.subtitle', {
+            nodes: fmt(stats.nodes),
+            works: fmt(stats.works),
+            passages: fmt(stats.passages),
+          })}
           callToAction={{
             text: t('learn.hero.cta'),
             href: "/how-it-works",
