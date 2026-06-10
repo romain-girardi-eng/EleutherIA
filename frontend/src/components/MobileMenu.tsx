@@ -28,6 +28,8 @@ import {
   Users,
   HelpCircle,
   Info,
+  BookA,
+  MessageCircleQuestion,
   Database as DatabaseIcon,
   BookOpenText,
   BookMarked,
@@ -73,6 +75,8 @@ const GROUPS: MenuGroup[] = [
     items: [
       { to: '/how-it-works', labelKey: 'nav.howItWorks', Icon: HelpCircle },
       { to: '/about', labelKey: 'nav.about', Icon: Info },
+      { to: '/glossary', labelKey: 'nav.glossary', Icon: BookA },
+      { to: '/faq', labelKey: 'nav.faq', Icon: MessageCircleQuestion },
     ],
   },
   {

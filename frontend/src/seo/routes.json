@@ -148,6 +148,28 @@
       "schemas": ["breadcrumb", "person", "dataset"]
     },
     {
+      "path": "/glossary",
+      "title": "Glossary of Ancient Free Will Terms | EleutherIA",
+      "description": "Definitions of the key Greek and Latin concepts in ancient debates on free will, fate, and moral responsibility: heimarmene, eph' hemin, prohairesis, synkatathesis, autexousion, liberum arbitrium, and more.",
+      "h1": "Key Terms in the Ancient Free-Will Debate",
+      "summary": "A grounded scholarly glossary of Greek and Latin terms for fate, necessity, voluntary action, assent, and free will, each defined from the EleutherIA knowledge graph with verbatim original-language forms.",
+      "robots": "index, follow",
+      "changefreq": "monthly",
+      "priority": 0.8,
+      "schemas": ["breadcrumb", "definedTermSet"]
+    },
+    {
+      "path": "/faq",
+      "title": "Frequently Asked Questions | EleutherIA",
+      "description": "Answers to common questions about EleutherIA: what the platform is, what data it contains, how its citation-grounded GraphRAG works, and key questions about ancient free will, fate, and moral responsibility.",
+      "h1": "Frequently Asked Questions",
+      "summary": "Grounded answers about EleutherIA's knowledge graph, ancient text corpus, vectorless GraphRAG retrieval, open licensing, and core questions in the ancient free will debate.",
+      "robots": "index, follow",
+      "changefreq": "monthly",
+      "priority": 0.8,
+      "schemas": ["breadcrumb", "faqPage"]
+    },
+    {
       "path": "/credits",
       "title": "Credits and Attributions | EleutherIA",
       "description": "Review EleutherIA's open-source dependencies, text sources, data attributions, licensing context, and scholarly infrastructure credits.",

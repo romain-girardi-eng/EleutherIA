@@ -1,4 +1,6 @@
 import seoConfig from './routes.json';
+import { glossary } from '../content/glossary';
+import { FAQ_ENTRIES } from '../content/faq';
 
 type SeoSite = typeof seoConfig.site;
 type SeoRoute = (typeof seoConfig.routes)[number];
@@ -289,6 +291,60 @@ function creativeWorkSchema(route: ResolvedSeoRoute): Record<string, unknown> {
   };
 }
 
+function definedTermSetSchema(route: ResolvedSeoRoute): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    '@id': `${route.canonicalUrl}#glossary`,
+    name: route.h1,
+    url: route.canonicalUrl,
+    inLanguage: seoSite.language,
+    description: route.description,
+    isPartOf: { '@id': `${seoSite.origin}/#website` },
+    hasDefinedTerm: glossary.map((entry) => ({
+      '@type': 'DefinedTerm',
+      '@id': `${seoSite.origin}${entry.nodeUrl}`,
+      name: entry.term,
+      ...(entry.originalTerm ? { alternateName: entry.originalTerm } : {}),
+      description: entry.definition,
+      url: absoluteUrl(entry.nodeUrl),
+      inDefinedTermSet: `${route.canonicalUrl}#glossary`,
+    })),
+  };
+}
+
+/** Stable FAQ anchor — mirrors faqAnchor() in pages/FAQPage.tsx. */
+function faqAnchor(question: string): string {
+  return question
+    .toLowerCase()
+    .replace(/['’"“”]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 64);
+}
+
+function faqPageSchema(route: ResolvedSeoRoute): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${route.canonicalUrl}#faq`,
+    name: route.h1,
+    url: route.canonicalUrl,
+    inLanguage: seoSite.language,
+    description: route.description,
+    isPartOf: { '@id': `${seoSite.origin}/#website` },
+    mainEntity: FAQ_ENTRIES.map((entry) => ({
+      '@type': 'Question',
+      '@id': `${route.canonicalUrl}#${faqAnchor(entry.question)}`,
+      name: entry.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: entry.answer,
+      },
+    })),
+  };
+}
+
 export function structuredDataFor(route: ResolvedSeoRoute): Record<string, unknown>[] {
   const schemas = route.schemas.flatMap((schema) => {
     switch (schema) {
@@ -310,6 +366,10 @@ export function structuredDataFor(route: ResolvedSeoRoute): Record<string, unkno
         return [articleSchema(route)];
       case 'creativeWork':
         return [creativeWorkSchema(route)];
+      case 'definedTermSet':
+        return [definedTermSetSchema(route)];
+      case 'faqPage':
+        return [faqPageSchema(route)];
       default:
         return [];
     }
