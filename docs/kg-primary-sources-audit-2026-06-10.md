@@ -116,3 +116,27 @@ all 2,136 citation-bearing edges carry confidence. Cleanup backlog (mechanical):
 edge types; synonym predicate families (student_of/teaches/taught_by, member_of/has_member);
 work_canonical_id strings that misname their work (stoa001 vs stoa003) — invasive FK rename,
 belongs in the data-normalization track.
+
+## Follow-up wave (2026-06-11, "do it all")
+
+- **Theodoret, Graec. aff. cur. — INGESTED (1,095 passages)** directly from the local TLG E disk:
+  compiled `tlgu` (Marinakis, GPL) to decode TLG4089.001 with full book/section/line citations;
+  TLG canon confirms the underlying edition is **Canivet, SC 57 (1958)** — the SC critical
+  edition. Section-level passages (median 359 chars), editorial ⟨⟩ normalized. Book 6 = Περὶ
+  προνοίας (92 passages) now available for providence/fate work.
+- **Aristides SC 470 — FIXED**: the corrupt-OCR papyrus passage replaced with the verbatim
+  SC 470 transcription (P.Oxy XV 1778 + Heidelberg G 1013, fol. 1v = Apol. V,2) from the local
+  source file, editorial restorations `[...]` preserved as printed.
+- **Apuleius De Platone — honestly NOT ingested**: no open critical edition with stated
+  provenance exists online (Perseus lacks it; csel-dev none; Bibliotheca Augustana uncredited).
+  Blocked-reason recorded in node metadata; needs Thomas BT 1908 scan, Moreschini BT, or PHI disk.
+- **CSEL 74 collation of De Lib. Arb. — requires the physical volume** (CSEL 74 in copyright,
+  no digital text; csel-dev does not include it). The applied augustinus.it/NBA text keeps full
+  per-passage provenance in `restore_changelog.jsonl`; collate when the volume is at hand.
+- **Ontology organized via `status` field** on every type: edge types 52 active /
+  16 reserved_inverse (zero instances but targets of OWL inverse materialization — keep) /
+  5 reserved (true pruning candidates: attested_by, attests, founded, position_in_debate;
+  has_member kept as declared inverse) / 2 deprecated (influenced, belongs_to_school).
+  Node types: 17 active / 7 reserved. Shapes generator verified tolerant of the new field.
+
+Corpus now **20,415 passages**. Sole remaining text gap: Apuleius De Platone.

@@ -1,0 +1,8 @@
+{
+ "work_node": "work_theodoret_graecarum_affectionum_curatio",
+ "work_canonical_id": "urn_cts_greeklit_tlg4089_tlg001_grc",
+ "urn": "urn:cts:greekLit:tlg4089.tlg001",
+ "n_passages": 1095,
+ "edition_statement": "Théodoret de Cyr, Thérapeutique des maladies helléniques, ed. P. Canivet, 2 vols., Sources chrétiennes 57, Paris: Cerf, 1958 (via TLG E, tlgu conversion)",
+ "source": "local TLG E disk TLG4089.TXT work 001"
+}

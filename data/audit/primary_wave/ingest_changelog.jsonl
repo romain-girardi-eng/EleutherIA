@@ -18,3 +18,4 @@
 {"node_id": "work_plutarch_de_fato_authentic", "action": "work_node_ingest_metadata", "changes": {"needs_text_ingestion": "removed", "work_canonical_id": [null, "urn_cts_greeklit_tlg0007_tlg108_grc"], "cts_urn": ["urn:cts:greekLit:tlg0007.tlg103", "urn:cts:greekLit:tlg0007.tlg108"]}}
 {"node_id": "work_plutarch_stoic_repugnantiis", "action": "work_node_ingest_metadata", "changes": {"needs_text_ingestion": "removed", "work_canonical_id": [null, "urn_cts_greeklit_tlg0007_tlg136_grc"]}}
 {"node_id": "work_wisdom_of_solomon", "action": "work_node_ingest_metadata", "changes": {"needs_text_ingestion": "removed", "work_canonical_id": [null, "urn_cts_greeklit_tlg0527_tlg033_grc"], "cts_urn": [null, "urn:cts:greekLit:tlg0527.tlg033"]}}
+{"work": "ingest_work_theodoret_curatio", "action": "append", "n": 1095, "wcid": "urn_cts_greeklit_tlg4089_tlg001_grc", "edition": "Canivet SC 57 via TLG E + tlgu"}

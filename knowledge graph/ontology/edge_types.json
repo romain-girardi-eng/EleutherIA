@@ -17,7 +17,8 @@
         "concept",
         "position",
         "argument"
-      ]
+      ],
+      "status": "active"
     },
     "argues_against": {
       "description": "Source argues against target position/concept",
@@ -32,7 +33,8 @@
         "concept",
         "position",
         "argument"
-      ]
+      ],
+      "status": "active"
     },
     "refutes": {
       "description": "Source refutes target argument",
@@ -44,7 +46,8 @@
       ],
       "target_types": [
         "argument"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "responds_to": {
       "description": "Source is a response to target",
@@ -65,7 +68,8 @@
         "concept",
         "debate",
         "person"
-      ]
+      ],
+      "status": "active"
     },
     "influences": {
       "description": "Source intellectually influences target",
@@ -89,7 +93,8 @@
         "person",
         "school",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "influenced": {
       "description": "DEPRECATED alias of influences — instance data migrated to influences on 2026-06-11; do not use for new edges",
@@ -112,7 +117,8 @@
         "person",
         "school",
         "work"
-      ]
+      ],
+      "status": "deprecated"
     },
     "influenced_by": {
       "description": "Source is influenced by target",
@@ -128,7 +134,8 @@
         "person",
         "school",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "taught_by": {
       "description": "Source was taught by target",
@@ -139,7 +146,8 @@
       ],
       "target_types": [
         "person"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "teaches": {
       "description": "Source teaches target",
@@ -150,7 +158,8 @@
       ],
       "target_types": [
         "person"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "student_of": {
       "description": "Source is a student of target",
@@ -161,7 +170,8 @@
       ],
       "target_types": [
         "person"
-      ]
+      ],
+      "status": "active"
     },
     "belongs_to_school": {
       "description": "DEPRECATED alias of member_of (person->school) — instance data migrated to member_of on 2026-06-11; do not use for new edges",
@@ -172,7 +182,8 @@
       ],
       "target_types": [
         "school"
-      ]
+      ],
+      "status": "deprecated"
     },
     "has_member": {
       "description": "Source school has target as member",
@@ -183,7 +194,8 @@
       ],
       "target_types": [
         "person"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "member_of": {
       "description": "Source is a member of target group or school",
@@ -197,7 +209,8 @@
       "target_types": [
         "group",
         "school"
-      ]
+      ],
+      "status": "active"
     },
     "founded": {
       "description": "Source founded target school/institution",
@@ -209,7 +222,8 @@
       "target_types": [
         "school",
         "institution"
-      ]
+      ],
+      "status": "reserved"
     },
     "wrote": {
       "description": "Source wrote target work",
@@ -220,7 +234,8 @@
       ],
       "target_types": [
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "authored_by": {
       "description": "Source was authored by target person",
@@ -236,7 +251,8 @@
       ],
       "target_types": [
         "person"
-      ]
+      ],
+      "status": "active"
     },
     "created_by": {
       "description": "Source (created thing) was created/developed by target (creator)",
@@ -253,7 +269,8 @@
         "concept",
         "group",
         "person"
-      ]
+      ],
+      "status": "active"
     },
     "creates": {
       "description": "Source (creator) created/developed target (created thing). Inverse of `created_by`.",
@@ -270,7 +287,8 @@
         "concept",
         "publication",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "developed_by": {
       "description": "Source concept/argument was developed by target",
@@ -285,7 +303,8 @@
         "concept",
         "person",
         "school"
-      ]
+      ],
+      "status": "active"
     },
     "cites": {
       "description": "Source cites target",
@@ -299,7 +318,8 @@
         "work",
         "passage",
         "person"
-      ]
+      ],
+      "status": "active"
     },
     "cited_by": {
       "description": "Source is cited by target",
@@ -313,7 +333,8 @@
       "target_types": [
         "work",
         "passage"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "source_for": {
       "description": "Source provides evidence for target",
@@ -338,7 +359,8 @@
         "school",
         "synthesis",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "evidenced_by": {
       "description": "Source claim-bearing node is evidenced by target passage",
@@ -352,7 +374,8 @@
       ],
       "target_types": [
         "passage"
-      ]
+      ],
+      "status": "active"
     },
     "attested_by": {
       "description": "Source fragmentary passage (lost original) is doxographically attested by the target transmitting passage (extant Cicero, Gellius, Plutarch, etc.).",
@@ -365,7 +388,8 @@
       ],
       "target_types": [
         "passage"
-      ]
+      ],
+      "status": "reserved"
     },
     "attests": {
       "description": "Source transmitting passage attests / reports a fragmentary passage of a lost work.",
@@ -378,7 +402,8 @@
         "passage",
         "quote",
         "argument"
-      ]
+      ],
+      "status": "reserved"
     },
     "preserves": {
       "description": "Source preserves target fragment",
@@ -390,7 +415,8 @@
       ],
       "target_types": [
         "text_fragment"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "preserved_in": {
       "description": "Source is preserved in target",
@@ -401,7 +427,8 @@
       ],
       "target_types": [
         "work"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "contains": {
       "description": "Source contains target",
@@ -423,7 +450,8 @@
         "passage",
         "text_fragment",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "part_of": {
       "description": "Source is part of target",
@@ -442,7 +470,8 @@
         "passage",
         "work",
         "source_collection"
-      ]
+      ],
+      "status": "active"
     },
     "translation_of": {
       "description": "Source passage is an aligned translation of the target passage",
@@ -453,7 +482,8 @@
       ],
       "target_types": [
         "passage"
-      ]
+      ],
+      "status": "active"
     },
     "has_translation": {
       "description": "Source passage has target passage as an aligned translation",
@@ -464,7 +494,8 @@
       ],
       "target_types": [
         "passage"
-      ]
+      ],
+      "status": "active"
     },
     "has_section": {
       "description": "Source work has target passage as a section",
@@ -475,7 +506,8 @@
       ],
       "target_types": [
         "passage"
-      ]
+      ],
+      "status": "active"
     },
     "has_chapter": {
       "description": "Source work has target passage as a chapter",
@@ -486,7 +518,8 @@
       ],
       "target_types": [
         "passage"
-      ]
+      ],
+      "status": "active"
     },
     "belongs_to_corpus": {
       "description": "Source work belongs to target collection/corpus",
@@ -497,7 +530,8 @@
       ],
       "target_types": [
         "source_collection"
-      ]
+      ],
+      "status": "active"
     },
     "discusses": {
       "description": "Source discusses target concept/topic",
@@ -524,7 +558,8 @@
         "school",
         "synthesis",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "discussed_in": {
       "description": "Source concept is discussed in target",
@@ -537,7 +572,8 @@
       "target_types": [
         "work",
         "passage"
-      ]
+      ],
+      "status": "active"
     },
     "defines": {
       "description": "Source defines target term/concept",
@@ -554,7 +590,8 @@
         "concept",
         "debate",
         "term"
-      ]
+      ],
+      "status": "active"
     },
     "related_to": {
       "description": "Source is related to target",
@@ -565,7 +602,8 @@
       ],
       "target_types": [
         "*"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "contrasts_with": {
       "description": "Source concept contrasts with target",
@@ -578,7 +616,8 @@
       "target_types": [
         "concept",
         "position"
-      ]
+      ],
+      "status": "active"
     },
     "parallel_to": {
       "description": "Source has parallel content or ideas to target",
@@ -593,7 +632,8 @@
         "concept",
         "passage",
         "person"
-      ]
+      ],
+      "status": "active"
     },
     "employs": {
       "description": "Source employs target concept or argument",
@@ -610,7 +650,8 @@
         "argument",
         "argument_framework",
         "concept"
-      ]
+      ],
+      "status": "active"
     },
     "presupposes": {
       "description": "Source presupposes target concept or argument",
@@ -625,7 +666,8 @@
       "target_types": [
         "argument",
         "concept"
-      ]
+      ],
+      "status": "active"
     },
     "grounded_in": {
       "description": "Source is grounded in target evidence or debate",
@@ -639,7 +681,8 @@
       "target_types": [
         "debate",
         "passage"
-      ]
+      ],
+      "status": "active"
     },
     "holds_position": {
       "description": "Source holds target philosophical position",
@@ -651,7 +694,8 @@
       ],
       "target_types": [
         "position"
-      ]
+      ],
+      "status": "active"
     },
     "endorses": {
       "description": "Source endorses target doctrine",
@@ -664,7 +708,8 @@
       "target_types": [
         "doctrine",
         "position"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "rejects": {
       "description": "Source rejects target doctrine",
@@ -677,7 +722,8 @@
       "target_types": [
         "doctrine",
         "position"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "supports": {
       "description": "Source supports target argument or concept",
@@ -697,7 +743,8 @@
         "argument",
         "concept",
         "person"
-      ]
+      ],
+      "status": "active"
     },
     "critiques": {
       "description": "Source critiques target",
@@ -725,7 +772,8 @@
         "school",
         "synthesis",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "extends": {
       "description": "Source extends or builds upon target",
@@ -747,7 +795,8 @@
         "publication",
         "synthesis",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "participates_in": {
       "description": "Source participates in target debate or event",
@@ -761,7 +810,8 @@
         "controversy",
         "debate",
         "event"
-      ]
+      ],
+      "status": "active"
     },
     "contributes_to": {
       "description": "Source contributes to target debate or concept",
@@ -777,7 +827,8 @@
       "target_types": [
         "concept",
         "debate"
-      ]
+      ],
+      "status": "active"
     },
     "interprets": {
       "description": "Source interprets target",
@@ -798,7 +849,8 @@
         "person",
         "school",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "interpreted_by": {
       "description": "Source is interpreted by target",
@@ -812,7 +864,8 @@
       "target_types": [
         "person",
         "modern_interpretation"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "represents": {
       "description": "Source represents or exemplifies target",
@@ -825,7 +878,8 @@
       "target_types": [
         "debate",
         "school"
-      ]
+      ],
+      "status": "active"
     },
     "exemplifies": {
       "description": "Source exemplifies target concept or pattern",
@@ -847,7 +901,8 @@
         "debate",
         "school",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "specializes_in": {
       "description": "Source person specializes in target school or tradition",
@@ -858,7 +913,8 @@
       ],
       "target_types": [
         "school"
-      ]
+      ],
+      "status": "active"
     },
     "contemporary_of": {
       "description": "Source is contemporary of target",
@@ -875,7 +931,8 @@
         "person",
         "event",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "precedes": {
       "description": "Source chronologically precedes target",
@@ -893,7 +950,8 @@
         "person",
         "event",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "follows": {
       "description": "Source chronologically follows target",
@@ -910,7 +968,8 @@
         "person",
         "event",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "wrote_about": {
       "description": "Modern scholar (source) wrote scholarly work about target ancient/modern subject",
@@ -927,7 +986,8 @@
         "person",
         "school",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "engages_with": {
       "description": "Modern scholar or scholarly position engages with another scholar/position (stance carried in metadata: agrees|critiques|qualifies|opposes)",
@@ -942,7 +1002,8 @@
         "argument",
         "person",
         "publication"
-      ]
+      ],
+      "status": "active"
     },
     "cites_primary_source": {
       "description": "Modern scholarly argument cites an ancient primary source (passage or work) as evidence",
@@ -956,7 +1017,8 @@
       "target_types": [
         "passage",
         "work"
-      ]
+      ],
+      "status": "active"
     },
     "published": {
       "description": "Scholar published a scholarly work (analogous to `wrote` but for modern publications)",
@@ -967,7 +1029,8 @@
       ],
       "target_types": [
         "publication"
-      ]
+      ],
+      "status": "active"
     },
     "agrees_with": {
       "description": "Source position/scholar agrees with target position/scholar",
@@ -982,7 +1045,8 @@
         "argument",
         "person",
         "publication"
-      ]
+      ],
+      "status": "active"
     },
     "opposes": {
       "description": "Source position/scholar opposes target position/scholar (stronger than `critiques`)",
@@ -997,7 +1061,8 @@
         "argument",
         "person",
         "publication"
-      ]
+      ],
+      "status": "active"
     },
     "uses_methodology_of": {
       "description": "Source scholar/work uses methodology developed by target scholar/work",
@@ -1011,7 +1076,8 @@
       "target_types": [
         "person",
         "publication"
-      ]
+      ],
+      "status": "active"
     },
     "edited_by": {
       "description": "Source publication/work was edited by target person",
@@ -1024,7 +1090,8 @@
       ],
       "target_types": [
         "person"
-      ]
+      ],
+      "status": "active"
     },
     "variant_of": {
       "description": "Source textual-variant node records an apparatus variant for the target passage, quote, or fragment",
@@ -1037,7 +1104,8 @@
         "passage",
         "quote",
         "text_fragment"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "has_variant": {
       "description": "Source passage, quote, or fragment has the target textual-variant apparatus entry",
@@ -1050,7 +1118,8 @@
       ],
       "target_types": [
         "textual_variant"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "reconstructs": {
       "description": "Source argument-reconstruction node reconstructs the target ancient or reported argument",
@@ -1061,7 +1130,8 @@
       ],
       "target_types": [
         "argument"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "reconstructed_by": {
       "description": "Source argument is reconstructed by the target argument-reconstruction node",
@@ -1072,7 +1142,8 @@
       ],
       "target_types": [
         "argument_reconstruction"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "reconstructed_from": {
       "description": "Source argument reconstruction is derived from the target source passage, work, or publication",
@@ -1085,7 +1156,8 @@
         "passage",
         "publication",
         "work"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "source_for_reconstruction": {
       "description": "Source passage, work, or publication supplies evidence for the target argument reconstruction",
@@ -1098,7 +1170,8 @@
       ],
       "target_types": [
         "argument_reconstruction"
-      ]
+      ],
+      "status": "reserved_inverse"
     },
     "has_position": {
       "description": "A debate or controversy has a stance/position as one of its sides. Modern scholars and ancient thinkers can hold the position via 'holds_position' (inverse).",
@@ -1110,7 +1183,8 @@
       ],
       "target_types": [
         "position"
-      ]
+      ],
+      "status": "active"
     },
     "position_in_debate": {
       "description": "A position belongs to a debate or controversy (inverse of has_position).",
@@ -1122,7 +1196,8 @@
       "target_types": [
         "debate",
         "controversy"
-      ]
+      ],
+      "status": "reserved"
     }
   },
   "categories": {
