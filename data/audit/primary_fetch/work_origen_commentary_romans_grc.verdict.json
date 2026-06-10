@@ -1,0 +1,30 @@
+{
+  "work_id": "work_origen_commentary_romans_grc",
+  "n_passages": 2,
+  "n_english": 2,
+  "classification": {
+    "77133ff1-b633-5c4d-a136-1eebf8762c2b": "english_summary_with_unverifiable_latin_quotes",
+    "f53cf750-135d-5313-b9c8-e7fe218f6e38": "english_summary_with_unverifiable_latin_quotes"
+  },
+  "real_work_title": "Origen, Commentarii in epistulam ad Romanos (survives complete only in Rufinus's Latin translation; Greek original lost for Book VII apart from catena fragments not held locally)",
+  "correct_urn": null,
+  "urn_or_ref_inconsistencies": [
+    "Work id suffix '_grc' but the work survives in full only in Rufinus's LATIN; both passages carry ENGLISH summaries, not ancient text in any language.",
+    "cts_urn 'urn:cts:greekLit:tlg2042.tlg012' is work-level only (no passage component) and unverified: local TLG XML confirms tlg2042.tlg008 = De Oratione; no evidence that tlg012 = Commentarii in Romanos [undetermined]. A greekLit URN is in any case inappropriate for the Latin Rufinus text; no CTS edition of the Latin Comm. Rom. known on Scaife -> correct_urn: none.",
+    "canonical_ref 'Commentary on Romans VII.16' does not match the SC 543 / Hammond Bammel chapter numbering, where the Rom 9:14-19 / Pharaoh material is Book VII caput 14 (SC 543 caput 16 covers Rom 9:22-26). 'VII.16' is presumably an older chapter division [undetermined].",
+    "Both passages share identical canonical_ref and sequence_number 16 despite covering different sub-sections.",
+    "Exact duplicate texts exist under sibling work 'work_origen_commentary_romans_eng' (passage_ids 06e8989f-778c-5ab1-8e7f-f46e60a6bcfa, 60c247a1-3164-51e8-ba8e-f9323de2fdd7).",
+    "The Latin 'quotes' embedded in the English summaries ('Non enim Deus indurat cor Pharaonis... permittit ut ipse se induret peccando', sun/occasio analogy, 'fingere sibi ex adverso personam... ad destruendum liberum arbitrium') are NOT found in the SC 543 (= Hammond Bammel) critical text of any of the 10 books -> likely fabricated/loose reconstructions; the sun analogy actually belongs to De Principiis III.1 ('sol ceram quidem soluit, limum uero arefacit', SC 268)."
+  ],
+  "source": {
+    "kind": "local",
+    "path_or_urn": "[local-path] SHAL/02_Corpus/Sources chrétiennes txt/03_Origene/bilingue/SC543_Origenes_Commentaire_Romains_livre_7_bilingue.txt (SC 543, Brésard-Fédou 2011; text = Hammond Bammel)"
+  },
+  "staged_files": [
+    "data/audit/primary_fetch/work_origen_commentary_romans_grc/SC543_CommRom_VII_14_latin.txt",
+    "data/audit/primary_fetch/work_origen_commentary_romans_grc/mapping.json"
+  ],
+  "alignment_confidence": 0.7,
+  "recommended_action": "Replace text_content of both passages with the staged verbatim SC 543 Latin (f53cf750 -> VII.14.2-3 objector-persona exegesis; 77133ff1 -> VII.14.5 Pharaoh hardening), correct canonical_ref to Book VII caput 14 (SC numbering), reclassify the work as Latin (Rufinus) — rename '_grc' suffix or set language=lat — drop the unverified greekLit URN, and deduplicate against work_origen_commentary_romans_eng. Alignment is thematic, not quote-verbatim (the corpus's own Latin quotes are unattested in the critical text), so maintainer review of each mapping item is required before application.",
+  "notes": "Greek original of Comm. Rom. Book VII is lost (Tura papyrus covers Rom 3-5 only; catena fragments for Rom 9 not held locally; Philocalia file SC 226 ch. 21-27 contains no Comm. Rom. Greek). Verbatim authentic Latin core sentences: VII.14.2 'Igitur ex persona contradicentis sibi dicit apostolus : Numquid iniquitas apud Deum ?'; VII.14.3 'Illud sine dubio contradictio ista molitur quod in homine non sit libertas arbitrii'; VII.14.5 'Non ergo quem uult Deus indurat sed qui patientiae obtemperare noluerit induratur.' No corpus or KG files were modified; staging only."
+}

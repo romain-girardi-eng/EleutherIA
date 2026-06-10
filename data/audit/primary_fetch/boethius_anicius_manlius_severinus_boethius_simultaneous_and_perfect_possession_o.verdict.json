@@ -1,0 +1,25 @@
+{
+  "work_id": "boethius_anicius_manlius_severinus_boethius_simultaneous_and_perfect_possession_o",
+  "n_passages": 1,
+  "n_english": 1,
+  "real_work_title": "Boethius, De consolatione philosophiae (Book 5, prose 6 — definition of eternity)",
+  "correct_urn": "urn:cts:latinLit:stoa0058.stoa001.perseus-lat2:5.P6",
+  "urn_or_ref_inconsistencies": [
+    "Work id is a slugified English paraphrase of the eternity definition, not a work identifier; cts_urn is null and canonical_ref is a truncated English sentence ('Boethius: Eternity... the whole, simultaneous and perfect possession o...')",
+    "The corpus's existing Consolatio work is keyed urn_cts_latinlit_phi2089_phi002_lat (PHI numeration) while its passages carry stoa0058.stoa001 URNs — two different identifier schemes for the same work",
+    "perseus-lat1 edition does not exist in PerseusDL canonical-latinLit; lat2 is the only canonical Latin edition",
+    "Corpus lat2 passages use v-orthography ('vitae') and contain {duplicated-word} artifacts, whereas the canonical lat2 XML uses u-orthography ('uitae') — corpus text was normalized/ingested with artifacts at some earlier stage"
+  ],
+  "source": {
+    "kind": "other",
+    "path_or_urn": "https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/stoa0058/stoa001/stoa0058.stoa001.perseus-lat2.xml (Loeb Stewart-Rand critical edition via Perseus); no Boethius text found in local DOCTORAT corpus; scaife-cts.perseus.org unreachable (TLS 'unrecognized name' error)"
+  },
+  "staged_files": [
+    "data/audit/primary_fetch/boethius_anicius_manlius_severinus_boethius_simultaneous_and_perfect_possession_o/stoa0058.stoa001.perseus-lat2.xml",
+    "data/audit/primary_fetch/boethius_anicius_manlius_severinus_boethius_simultaneous_and_perfect_possession_o/cons_phil_5_P6_perseus-lat2.txt",
+    "data/audit/primary_fetch/boethius_anicius_manlius_severinus_boethius_simultaneous_and_perfect_possession_o/mapping.json"
+  ],
+  "alignment_confidence": 0.95,
+  "recommended_action": "merge_into_existing_work",
+  "notes": "The single passage is a 100% English scholarly summary (no Latin). The verbatim Latin already exists in the corpus: work urn_cts_latinlit_phi2089_phi002_lat, passages c1718a96-5a4d-42c8-993f-b691839b1bd0 (Cons. 5.M5-5.P6, includes 'Aeternitas igitur est interminabilis vitae tota simul et perfecta possessio') and b5aab3f4-725c-49d3-86e0-a09f76469757 (Cons. 5.P6). Recommend deleting this shell work + passage and re-pointing any KG citations to those existing passages; staged Perseus lat2 text provided only as fallback if direct replacement is preferred. No matching node id found in data/kg/nodes.jsonl for this slug — check kg_nodes in the DB for the shell node."
+}

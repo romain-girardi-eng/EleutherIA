@@ -1,0 +1,36 @@
+{
+  "work_id": "plotinus_plotinus_enneads_iii_1_on_fate",
+  "n_passages": 1,
+  "n_english": 1,
+  "real_work_title": "Plotinus, Enneads III.1 — Περὶ εἱμαρμένης (On Fate); Porphyrian chronological order treatise 3",
+  "correct_urn": "urn:cts:greekLit:tlg2000.tlg001.1st1K-grc1:3.1.1-3.1.10",
+  "urn_or_ref_inconsistencies": [
+    "passage cts_urn is null while canonical_ref says 'Enneads III.1'",
+    "work_canonical_id has duplicated author prefix ('plotinus_plotinus_') and is absent from data/corpus/manifest.jsonl (orphan work id)",
+    "corpus splits Plotinus across 4 ad-hoc work ids (plotinus_plotinus_enneads, plotinus_plotinus_enneads_iii_1_on_fate, plotinus_plotinus_enneads_vi_8, plotinus_enneades_iv_4_30_self_determining_principle_english) instead of one Enneads work",
+    "KG passage nodes (passage_plotinus_enn_iii_1_3_1_*) cite edition 'opp-grc2' (urn:cts:greekLit:tlg2000.tlg001.opp-grc2:3.1.x) while the staged source text is the First1KGreek '1st1K-grc1' Volkmann edition — edition siglum mismatch",
+    "KG passage nodes carry work_canonical_id 'urn:cts:greekLit:tlg2000.tlg001.iii.1' (URN-style) vs corpus 'plotinus_plotinus_enneads_iii_1_on_fate' — id scheme mismatch; KG work node is 'work_plotinus_enn_iii_1'",
+    "KG already holds the Greek per-section (10 passage nodes) while the corpus row is an English paraphrase — corpus/KG divergence"
+  ],
+  "source": {
+    "kind": "local",
+    "path_or_urn": "data/audit/primary_fetch/plotinus_plotinus_enneads/tlg2000.tlg001.1st1K-grc1.xml (First1KGreek, ed. Volkmann, Teubner; previously fetched; section 3.1.1 byte-identical to prior staged extract)"
+  },
+  "staged_files": [
+    "enn_3.1.10_grc.txt",
+    "enn_3.1.1_grc.txt",
+    "enn_3.1.2_grc.txt",
+    "enn_3.1.3_grc.txt",
+    "enn_3.1.4_grc.txt",
+    "enn_3.1.5_grc.txt",
+    "enn_3.1.6_grc.txt",
+    "enn_3.1.7_grc.txt",
+    "enn_3.1.8_grc.txt",
+    "enn_3.1.9_grc.txt",
+    "enn_3.1_full_grc.txt",
+    "mapping.json"
+  ],
+  "alignment_confidence": 0.95,
+  "recommended_action": "Replace the single English-paraphrase passage with the verbatim Greek of Enneads III.1 (preferably split into 10 per-section passages 3.1.1-3.1.10 using the staged enn_3.1.N_grc.txt files, matching the existing KG passage nodes), set cts_urn per section, and reconcile the work id / edition siglum (1st1K-grc1 vs opp-grc2) between corpus and KG.",
+  "notes": "No Plotinus critical edition found in the local DOCTORAT corpus; source is the already-fetched First1KGreek TEI (Volkmann edition) staged under data/audit/primary_fetch/plotinus_plotinus_enneads/. Greek extracted with whitespace-normalisation only (itertext + split/join); no text composed. enn_3.1_full_grc.txt carries [3.1.n] reference markers added for review; mapping.json replacement_text is pure source text. Confidence 0.95 (not 1.0) only because the original ref 'Enneads III.1' is work-level and the replacement spans all 10 sections."
+}

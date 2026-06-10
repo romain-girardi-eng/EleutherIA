@@ -1,0 +1,10 @@
+[
+  {
+    "passage_id": "baa51e4b-9ad7-54a1-a971-74de1631661e",
+    "canonical_ref": "De Principiis III.1.1",
+    "correct_cts_urn": "urn:cts:greekLit:tlg2042.tlg002:3.1.1",
+    "replacement_text": "<ΠΕΡΙ ΑΡΧΩΝ ΤΟΜΟΣ ΤΡΙΤΟΣ>αʹ. Περὶ αὐτεξουσίου, καὶ τῶν δοκούντων τοῦτο ἀναιρεῖνῥητῶν γραφικῶν λύσις καὶ ἑρμηνεία1. Ἐπεὶ δὲ ἐν τῷ κηρύγματι τῷ ἐκκλησιαστικῷ περιέχεταιὁ περὶ κρίσεως δικαίας θεοῦ λόγος, ὅστις καὶ τοὺς ἀκούοντας,πιστευθεὶς εἶναι ἀληθής, προκαλεῖται ἐπὶ τὸ καλῶς βιοῦνκαὶ παντὶ τρόπῳ φεύγειν τὴν ἁμαρτίαν, δηλονότι συγκατα-τιθεμένους τὸ ἐφ' ἡμῖν εἶναι τὰ ἐπαίνου καὶ ψόγου ἄξια, φέρε καὶ τὰ περὶ τοῦ αὐτεξουσίου ἰδίᾳ ὀλίγα διαλάβωμεν,ἀναγκαιοτάτου ὡς ἔνι μάλιστα προβλήματος.\nἽνα δὲ νοήσωμεν τί τὸ αὐτεξούσιον, τὴν ἔννοιαν αὐτοῦἀναπτύξαι δεῖ, ἵνα ταύτης σαφηνισθείσης ἀκριβῶς παρασταθῇτὸ ζητούμενον.",
+    "source": "LOCAL: Sources chretiennes txt/03_Origene/source/SC268_Origenes_Traite_des_Principes_Extraits_grecs_livre_3_source.txt (SC 268, Crouzel-Simonetti 1980, Extraits grecs = Philocalie 21); only mechanical removal of '--- N ---' SC page-number markers applied, no other alteration",
+    "alignment_confidence": 0.95
+  }
+]

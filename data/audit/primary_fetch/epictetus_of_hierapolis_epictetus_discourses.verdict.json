@@ -1,0 +1,24 @@
+{
+  "work_id": "epictetus_of_hierapolis_epictetus_discourses",
+  "n_passages": 1,
+  "n_english": 1,
+  "real_work_title": "Epictetus, Discourses (Dissertationes ab Arriano digestae / Διατριβαί), ed. Schenkl, Teubner 1916",
+  "correct_urn": "urn:cts:greekLit:tlg0557.tlg001.perseus-grc2",
+  "urn_or_ref_inconsistencies": [
+    "Passage b8313f3c-5ede-51bf-b5ed-09d23a2e4a14 has cts_urn = null despite work being CTS-covered (tlg0557.tlg001)",
+    "Corpus work_canonical_id 'epictetus_of_hierapolis_epictetus_discourses' does not match the KG work node id 'work_epictetus_discourses' (KG node exists, holds the scholarly description)",
+    "text_content is an explicit English paraphrase ('English paraphrase of Epictetus, Discourses I.1...') in a Greek original-language work",
+    "canonical_ref 'Discourses I.1' is non-URN-style prose; should be '1.1' aligned to urn ...perseus-grc2:1.1"
+  ],
+  "source": {
+    "kind": "local",
+    "path_or_urn": "[local-path] SHAL/02_Corpus/TLG/Epictetus_tlg0557/Discourses_grc_Schenkl.txt"
+  },
+  "staged_files": [
+    "data/audit/primary_fetch/epictetus_of_hierapolis_epictetus_discourses/Discourses_1.1_grc_Schenkl.txt",
+    "data/audit/primary_fetch/epictetus_of_hierapolis_epictetus_discourses/mapping.json"
+  ],
+  "alignment_confidence": 0.95,
+  "recommended_action": "Replace the single English-paraphrase passage with the staged verbatim Greek of Diss. 1.1 (32 sections, 1.1.1-1.1.32), set cts_urn to urn:cts:greekLit:tlg0557.tlg001.perseus-grc2:1.1, and reconcile work_canonical_id with KG node work_epictetus_discourses. Consider full ingestion of the Discourses via the local verified Perseus/Schenkl files (database/scripts/ingest_scaife_work.py-style) since only 1 stub passage exists for this major work.",
+  "notes": "Local source is the verified Perseus digital critical text (Schenkl 1916, perseus-grc2), fetched 2026-05-31, README attests genuine polytonic UTF-8, not OCR, quotable verbatim. The English paraphrase content (eph' hemin distinction, prohairesis, phantasiai) matches chapter 1.1 'Peri ton eph' hemin kai ouk eph' hemin' exactly. The chapter title head element is not in the plain-text extraction; staged text starts at section 1.1.1. Confidence 0.95 (not 1.0) only because 'Discourses I.1' could in principle denote section 1.1.1 alone rather than the whole chapter; the paraphrase summarizes the whole chapter, so the full chapter was staged."
+}

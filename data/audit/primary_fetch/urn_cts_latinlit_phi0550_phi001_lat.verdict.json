@@ -1,0 +1,30 @@
+{
+  "work_id": "urn_cts_latinlit_phi0550_phi001_lat",
+  "n_passages": 300,
+  "n_english": 2,
+  "english_passage_ids": [
+    "924a969a-5428-42f7-96a2-2bb094d558bc",
+    "dd949fff-90da-4315-a4fc-ae455566b268"
+  ],
+  "real_work_title": "Lucretius, De Rerum Natura",
+  "correct_urn": "urn:cts:latinLit:phi0550.phi001.perseus-lat1",
+  "urn_or_ref_inconsistencies": [
+    "Task brief said ~1 English passage; actually 2 (2.250-274 AND 2.275-299) — both are English summaries with embedded partial Latin quotes and self-referential 'VERIFIED Latin from database (passage_id: ...)' text",
+    "canonical_ref of the 2 English passages uses 'DRN ' prefix ('DRN 2.250-274', 'DRN 2.275-299') while all 298 other passages use bare refs ('2.225-249') — should be normalized to '2.250-274' / '2.275-299'",
+    "cts_urn fields point to the range start line only (':2.250'), consistent with the rest of the corpus; no phi-number mismatch found"
+  ],
+  "source": {
+    "kind": "other",
+    "path_or_urn": "https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0550/phi001/phi0550.phi001.perseus-lat1.xml",
+    "detail": "Scaife CTS API (scaife-cts.perseus.org) unreachable (TLS 'unrecognized name' error); fell back to the canonical PerseusDL GitHub TEI source of the SAME perseus-lat1 edition used by the other 299 passages. Local DOCTORAT corpus (02_Corpus/05_Philosophie.txt §V.D.1) has only an excerpted DRN II.251-293 (Bailey/Deufert-based, with ellipsis), not alignable to the 25-line chunk boundaries."
+  },
+  "staged_files": [
+    "data/audit/primary_fetch/urn_cts_latinlit_phi0550_phi001_lat/phi0550.phi001.perseus-lat1.xml",
+    "data/audit/primary_fetch/urn_cts_latinlit_phi0550_phi001_lat/drn_2.250-274.perseus-lat1.txt",
+    "data/audit/primary_fetch/urn_cts_latinlit_phi0550_phi001_lat/drn_2.275-299.perseus-lat1.txt",
+    "data/audit/primary_fetch/urn_cts_latinlit_phi0550_phi001_lat/mapping.json"
+  ],
+  "alignment_confidence": 0.98,
+  "recommended_action": "Replace text_content of the 2 English-summary passages with the staged perseus-lat1 Latin (25 lines each) and normalize canonical_ref to '2.250-274' / '2.275-299'. Alignment verified: TEI line 249 byte-matches the last line of corpus passage 2.225-249 and TEI line 300 matches the first line of 2.300-324 (same edition, exact dovetail).",
+  "notes": "Replacement text is verbatim from the TEI <l> elements (per-line leading/trailing whitespace stripped, lines joined with \\n — identical formatting convention to the existing 298 Latin passages). The local excerpt in 05_Philosophie.txt confirms key lines (nec declinando faciunt primordia motus / principium quoddam, quod fati foedera rumpat) against Bailey/Deufert critical editions. The embedded Latin quotes inside the English summaries also match the fetched text verbatim."
+}

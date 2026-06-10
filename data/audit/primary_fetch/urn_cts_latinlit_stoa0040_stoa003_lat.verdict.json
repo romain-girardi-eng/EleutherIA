@@ -1,0 +1,28 @@
+{
+ "work_id": "urn_cts_latinlit_stoa0040_stoa003_lat",
+ "n_passages": 171,
+ "n_english": 170,
+ "real_work_title": "Augustinus, De libero arbitrio (libri tres)",
+ "correct_urn": null,
+ "urn_or_ref_inconsistencies": [
+  "WORK MISIDENTIFIED BY URN: urn:cts:latinLit:stoa0040.stoa003 is Augustine, De civitate Dei (per Perseus Catalog and OpenGreekAndLatin csel-dev __cts__.xml, CSEL 40 Hoffmann). The content is De libero arbitrio, which has NO registered CTS work identifier in the Perseus/Stoa catalog (stoa047-049 do not exist; csel-dev lacks it because CSEL 74 dates to 1956). correct_urn therefore null/undetermined — a new local work id should be minted or the DLL identifier used.",
+  "93/171 passages have cts_urn passage reference disagreeing with canonical_ref (e.g. canonical_ref 1.1.1 vs cts_urn ...:2.1.1; 1.4.9 vs :3.4.9) — the urn book/chapter components are corrupted; canonical_ref values are the reliable ones (all 171 match the NBA paragraph anchors exactly).",
+  "Duplicate canonical_ref 3.4.9: two passages share it (3e7b416a-93fe-4f6b-baa9-642f99ab730e = pure Latin verbatim of 3.4.9 opening, verified; c-other English-summary passage) — needs deduplication."
+ ],
+ "source": {
+  "kind": "other",
+  "path_or_urn": "https://www.augustinus.it/latino/libero_arbitrio/libero_arbitrio_{1,2,3}_libro.htm — Sant'Agostino/NBA electronic Latin text (editio maurina; NBA = Nuova Biblioteca Agostiniana, Citta Nuova). Not found locally in DOCTORAT corpus; not on Scaife/First1KGreek/csel-dev. Critical editions of record: CSEL 74 (W.M. Green 1956) and CCSL 29 (Green 1970) — print-only; maintainer should collate against one of them before final acceptance."
+ },
+ "staged_files": [
+  "data/audit/primary_fetch/urn_cts_latinlit_stoa0040_stoa003_lat/augustinus_it_libero_arbitrio_1_libro.htm",
+  "data/audit/primary_fetch/urn_cts_latinlit_stoa0040_stoa003_lat/augustinus_it_libero_arbitrio_2_libro.htm",
+  "data/audit/primary_fetch/urn_cts_latinlit_stoa0040_stoa003_lat/augustinus_it_libero_arbitrio_3_libro.htm",
+  "data/audit/primary_fetch/urn_cts_latinlit_stoa0040_stoa003_lat/de_libero_arbitrio_liber1_augustinus_it.txt",
+  "data/audit/primary_fetch/urn_cts_latinlit_stoa0040_stoa003_lat/de_libero_arbitrio_liber2_augustinus_it.txt",
+  "data/audit/primary_fetch/urn_cts_latinlit_stoa0040_stoa003_lat/de_libero_arbitrio_liber3_augustinus_it.txt",
+  "data/audit/primary_fetch/urn_cts_latinlit_stoa0040_stoa003_lat/mapping.json"
+ ],
+ "alignment_confidence": 0.97,
+ "recommended_action": "Replace all 171 text_content values with the staged verbatim Latin paragraphs via mapping.json (ref-anchored: NBA HTML anchors LA_bbb_ccc_ppp match canonical_ref book.chapter.paragraph 171/171). 162/171 additionally confirmed by substring match of the old embedded Latin quote; 5 by shorter probe; 4 anchor-only (old quotes were ellipsized). Also: mint a correct work id (stoa0040.stoa003 must NOT be used — it denotes De civitate Dei), repair the 93 corrupted cts_urn refs from canonical_ref, deduplicate the two 3.4.9 passages, and ideally collate the NBA text against CSEL 74 / CCSL 29 before final acceptance.",
+ "notes": "Counts: 171 passages total (task estimate ~132 was wrong). 170 are English-summary composites (English summary + embedded 'Latin:' quote + English translation + analysis bullets); 1 (3e7b416a, ref 3.4.9) is already pure Latin and verified verbatim against the source. Source paragraph counts: liber 1=36, 2=56, 3=78 (+1 corpus duplicate = 171). NBA prints four paragraphs split across chapter boundaries (1.21, 2.37, 2.50, 3.36 appear under two chapters) — corpus mirrors this. Editorial NBA rubric headings (e.g. 'Unde malum?') and footnote markers were stripped from replacement_text; the Latin itself is byte-verbatim from the fetched HTML (windows-1252 decoded, NFC, whitespace-normalized at line level only). No fabricated text anywhere: every replacement_text string is extracted from the staged HTML files."
+}

@@ -1,0 +1,416 @@
+[
+ {
+  "node_id": "argument_agent_causation_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "αἴτιον οὐκ ἀναγκαστικόν",
+  "needle": "αἴτιον οὐκ ἀναγκαστικόν",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "argument_alexander_witness2_ch18_stoic_practical_self_refutation_amand1945",
+  "verdict": "fabricated",
+  "run_excerpt": "φιλανθρωπίας ἕνεκα",
+  "needle": "φιλανθρωπίας ἕνεκα",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG1286 (Corpus Hermeticum&TLG4330 &1Cosmas &Hieromonachus Alchem.TLG) @byte 159325\n  ...τῆς ἀληθείας ἐνέργημα εἶναι. ἙΡΜΟΥ ΕΚ ΤΟΥ ΠΡΟΣ ΤΑΤ Ἐγώ, ὦ τέκνον, καὶ τῆς φιλανθρωπίας ἕνεκα καὶ τῆς πρὸς τὸν θεὸν εὐσεβείας πρῶτον τόδε συγγράφω· οὐδεμία γὰρ ἂν γένοιτο δικαιοτάτη εὐσέβεια η...\nTLG2037 (Joannes &1Stobaeus &AnthologusTLG0099 &1Strabo &Geogr.TLG050) @byte 356949\n  ...αἰτίων. Ἑρμοῦ ἐκ τοῦ πρὸς Τ"
+ },
+ {
+  "node_id": "argument_alexander_witness2_ch19_de_facto_punishment_amand1945",
+  "verdict": "fabricated",
+  "run_excerpt": "ὥσπερ τὰ τῶν βαρέων σωμάτων κάτω φέρεσθαι",
+  "needle": "ὥσπερ τὰ τῶν βαρέων σωμάτων κάτω φέρεσθαι",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "argument_causal_asymmetry_alex",
+  "verdict": "attested_external",
+  "run_excerpt": "ἀναγκαῖον ἐξ ὑποθέσεως",
+  "needle": "ἀναγκαῖον ἐξ ὑποθέσεως",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG4015 (Joannes Philoponus &Phil.TLG3063 &1Joannes Scylitzes &Hist.T) @byte 2708843\n  ...ὸ κυρίως ἀναγκαῖον ἐπὶ τῶν ἀιδίων λέγεται. ἐπὶ δὲ τῶν ἐν γενέσει καὶ φθορᾷ πραγμάτων λέγεται τὸ ἀναγκαῖον ἐξ ὑποθέσεως καὶ μετὰ προσδι-ορισμοῦ καὶ προσθήκης τινός, ὡς τὸ ἀνάγκη τὸν ἄνθρωπον ἀναπνεῖν, ἔστ' ἂν ζῇ ·..."
+ },
+ {
+  "node_id": "argument_chain_causation_critique_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "ἁλυσιδωτὴ αἰτιότης",
+  "needle": "ἁλυσιδωτὴ αἰτιότης",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "argument_deliberation_complete_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "οὐδεὶς βουλεύεται περὶ τῶν ἀναγκαίων",
+  "needle": "οὐδεὶς βουλεύεται περὶ τῶν ἀναγκαίων",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "argument_epictetus_impression_testing",
+  "verdict": "fabricated",
+  "run_excerpt": "μὴ συναρπασθῇς ὑπὸ τῆς φαντασίας",
+  "needle": "μὴ συναρπασθῇς ὑπὸ τῆς φαντασίας",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "argument_irenaeus_recapitulation_theodicy",
+  "verdict": "undetermined",
+  "run_excerpt": "ὑπὸ τὴν ἁμαρτίαν πεπτωκότα",
+  "needle": "ὑπὸ τὴν ἁμαρτίαν πεπτωκότα",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "argument_justin_antifatalism",
+  "verdict": "undetermined",
+  "run_excerpt": "τὸ ἐφ' ἡμῖν οὐδὲν ἔστιν ὅλως",
+  "needle": "τὸ ἐφ' ἡμῖν οὐδὲν ἔστιν ὅλως",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "argument_justin_equals_alcinous_heimarmene",
+  "verdict": "attested_external",
+  "run_excerpt": "ἐπεὶ καὶ τὸ ἐφ' ἡμῖν οἰχήσεται καὶ ἔπαινοι καὶ ψόγοι καὶ πᾶν τὸ τούτοις παραπλήσιον",
+  "needle": "ἐπεὶ καὶ τὸ ἐφ' ἡμῖν οἰχήσεται καὶ ἔπαινοι καὶ",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG0693 (Albinus &Phil.TLG0400 &1Alcaeus &Comic.TLG0383 &1Alcaeus &Ly) @byte 71643\n  ...εἰς ἄπειρον γὰρ τοῦτο, ἀπείρων μὲν ὄντων τῶν γεννωμένων, ἀπείρων δὲ τῶν περὶ αὐτοὺς συμβαινόντων· ἐπεὶ καὶ τὸ ἐφ' ἡμῖν οἰχήσεται καὶ ἔπαινοι καὶ ψόγοι καὶ πᾶν τὸ τούτοις παραπλήσιον· ἀλλὰ διότι ἥτις ἂν ἕληται ψυχὴ τοιοῦτον βίον καὶ τάδε τινὰ..."
+ },
+ {
+  "node_id": "argument_maximus_two_wills",
+  "verdict": "attested_external",
+  "run_excerpt": "δύο θελήματα φυσικά",
+  "needle": "δύο θελήματα φυσικά",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG3018 (Georgius &1Cedrenus &Chronogr.TLG1248 &1Celsus &Phil.TLG1249) @byte 1279534\n  ...ν ἓν θέλημα καὶ μίαν ἐνέργειαν ἐπὶ τοῦ κυρίου ἡμῶν Ἰησοῦ Χριστοῦ. οὓς ἀναθεματίσασα ἐξεφώνησε δύο θελήματα φυσικὰ ἤγουν θελή-σεις καὶ δύο φυσικὰς ἐνεργείας ἐπὶ τοῦ ἑνὸς δείκνυσθαι Χριστοῦ τοῦ θεοῦ ἡμῶν. ὡσαύτω...\nTLG3043 (Georgius &Monachus Chronogr.TLG3187 &1Georgius &Gramm.TLG305) @byte 1101024\n  ...ʽ`ν θέλ"
+ },
+ {
+  "node_id": "argument_origen_prescience_causality",
+  "verdict": "fabricated",
+  "run_excerpt": "οὐχ ὅτι γινώσκει... διὰ τοῦτο ἔσται, ἀλλ' ὅτι ἐσόμενόν ἐστι, διὰ τοῦτο γινώσκεται",
+  "needle": "διὰ τοῦτο ἔσται, ἀλλ' ὅτι ἐσόμενόν ἐστι, διὰ τοῦτο",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "argument_praise_blame_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "ἐδύνατο μὴ ποιῆσαι",
+  "needle": "ἐδύνατο μὴ ποιῆσαι",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "argument_pyrrhus_one_energy",
+  "verdict": "attested_external",
+  "run_excerpt": "μία θεανδρικὴ ἐνέργεια",
+  "needle": "μία θεανδρικὴ ἐνέργεια",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "argument_theodicy_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "θεὸς αἴτιος κακίας",
+  "needle": "θεὸς αἴτιος κακίας",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "concept_autokrateia_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "μὴ ὑπ᾽ ἄλλου κρατούμενον",
+  "needle": "μὴ ὑπ᾽ ἄλλου κρατούμενον",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "concept_inner_freedom_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "οὐδεὶς δύναται ἀφελέσθαι",
+  "needle": "οὐδεὶς δύναται ἀφελέσθαι",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG1700 (Testamenta XII Patriarcharum&TLG1701 &1Testamentum Abrahae&T) @byte 35620\n  ...πόλεις ὀλοθρευθῶσι καὶ χῶραι καὶ χρυσὸς καὶ ἄργυρος καὶ πᾶσα κτῆσις ἀπολεῖται, τοῦ σοφοῦ τὴν σοφίαν οὐδεὶς δύναται ἀφελέσθαι, εἰ μὴ τύφλωσις ἀσεβείας καὶ πήρωσις ἁμαρτίας· ὅτι γενήσεται αὐτῷ αὐτὴ καὶ παρὰ τοῖς πολεμίο..."
+ },
+ {
+  "node_id": "concept_inner_freedom_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "τύραννος...οὐ δύναται ποιῆσαι συγκατατίθεσθαι",
+  "needle": "οὐ δύναται ποιῆσαι συγκατατίθεσθαι",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "concept_nepios_adam_infant_doctrine",
+  "verdict": "undetermined",
+  "run_excerpt": "ἀσυνήθη, ἀγύμναστα",
+  "needle": "ἀσυνήθη, ἀγύμναστα",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "concept_non_necessitating_cause_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "αἴτιον οὐκ ἀναγκαστικόν",
+  "needle": "αἴτιον οὐκ ἀναγκαστικόν",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "concept_prohairesis_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "τὸ ἐκ βουλῆς αἱρετόν",
+  "needle": "τὸ ἐκ βουλῆς αἱρετόν",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "concept_saving_teaching_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "σῴζουσα διδασκαλία",
+  "needle": "σῴζουσα διδασκαλία",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "concept_self_happiness_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "δι᾽ αὑτῶν εὐδαιμονεῖν",
+  "needle": "δι᾽ αὑτῶν εὐδαιμονεῖν",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "concept_self_happiness_alex",
+  "verdict": "fabricated",
+  "run_excerpt": "ἐφ᾽ ἡμῖν ἡ εὐδαιμονία",
+  "needle": "ἐφ᾽ ἡμῖν ἡ εὐδαιμονία",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "person_alcinous_2c_ce",
+  "verdict": "fabricated",
+  "run_excerpt": "Περὶ προνοίας καὶ εἱμαρμένης",
+  "needle": "Περὶ προνοίας καὶ εἱμαρμένης",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG2049 (Sallustius &Phil.TLG4340 &1Salmanas &Alchem.TLG0501 &1Sannyr) @byte 851\n  ... ́τητος. ιδ . Ὅτι γῆ μέση. καὶ διὰ τί. ιε . Περὶ νοῦ καὶ ψυχῆς. ι . Ὅτι ἀθάνατος ἡ ψυχή. ιζ . Περὶ Προνοίας καὶ Εἱμαρμένης καὶ Τύχης. ιη . Περὶ Ἀρετῆς καὶ Κακίας. ιθ . Περὶ ὀρθῆς πολιτείας καὶ φαύλης. κ . Ποθὲν τὰ κ...\nTLG2062 (Joannes Chrysostomus &Scr. Eccl.John ChrysostomTLG2934 &1Joa) @byte 4378666\n  ...ʽ ́μα"
+ },
+ {
+  "node_id": "person_cyril_alexandria",
+  "verdict": "attested_external",
+  "run_excerpt": "τῶν ἰδίων θελημάτων τὰς ἡνίας πεπιστευμένος",
+  "needle": "τῶν ἰδίων θελημάτων τὰς ἡνίας πεπιστευμένος",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG4090 (Cyrillus &Theol.TLG4242 &1Cyrus &Rhet.TLG1908 &1Daimachus &H) @byte 9995451\n  ...νον καὶ ἐν τοῖς καθ' ἡμᾶς αὐτοὺς, ἐκεῖνο διασκεψώμεθα. δ . Πεποίητο μὲν γὰρ ὁ ἄνθρωπος ἐν ἀρχαῖς τῶν ἰδίων θελημάτων τὰς ἡνίας πεπιστευμένος, καὶ τὴν ἐφ' ᾧπερ ἂν ἕλοιτο ῥοπὴν ἀνειμένην ἔχων. Ἐλεύθε-ρον γὰρ τὸ Θεῖον, πρὸς ὃ καὶ μεμο..."
+ },
+ {
+  "node_id": "person_cyrus_alexandria_d641",
+  "verdict": "fabricated",
+  "run_excerpt": "Πάκτον τῆς ἑνώσεως",
+  "needle": "Πάκτον τῆς ἑνώσεως",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "person_cyrus_alexandria_d641",
+  "verdict": "attested_external",
+  "run_excerpt": "μία θεανδρικὴ ἐνέργεια",
+  "needle": "μία θεανδρικὴ ἐνέργεια",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "person_diogenes_laertius_3c_ce",
+  "verdict": "attested_external",
+  "run_excerpt": "Βίοι καὶ γνῶμαι τῶν ἐν φιλοσοφίᾳ εὐδοκιμησάντων",
+  "needle": "Βίοι καὶ γνῶμαι τῶν ἐν φιλοσοφίᾳ εὐδοκιμησάντων",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "person_pyrrhus_constantinople_d654",
+  "verdict": "fabricated",
+  "run_excerpt": "Διάλεξις σὺν Πύρρῳ",
+  "needle": "Διάλεξις σὺν Πύρρῳ",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "person_sextus_empiricus_c160_210ce_d4f8a2b1",
+  "verdict": "attested_external",
+  "run_excerpt": "Πυρρώνειοι ὑποτυπώσεις",
+  "needle": "Πυρρώνειοι ὑποτυπώσεις",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "person_tatian",
+  "verdict": "attested_external",
+  "run_excerpt": "Λόγος πρὸς Ἕλληνας",
+  "needle": "Λόγος πρὸς Ἕλληνας",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "scholarly_argument_dettwiler_free_will_and_divine_determina_0",
+  "verdict": "undetermined",
+  "run_excerpt": "γεννηθῆναι ἐκ θεοῦ",
+  "needle": "γεννηθῆναι ἐκ θεοῦ",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG2102 (Didymus Caecus &Scr. Eccl.Didymus the BlindTLG0856 &1Dieuche) @byte 4779129\n  ... ́νευ ἔργων σπουδαίων νεκρὰν πίστιν ἐχόντων, ἥτις οὐδὲ ὅλως πίστις ὑπάρχει· ὁ οὕτως πιστεύσας ὡς γεννηθῆναι ἐκ θεοῦ ἔχει ζωὴν αἰώνιον, ᾗ φησιν ὁ σωτήρ· ὁ πιστεύων εἰς ἐμὲ ἔχει ζωὴν αἰώνιον · εἰ δὴ γεννᾶταί...\nTLG4102 (Catenae &(Novum Testamentum)TLG1247 &1[2Cebes]2 &Phil.TLG301) @byte 8187128\n  ...ʼ ́νευ ἔργω"
+ },
+ {
+  "node_id": "synthesis_amand1945_philo_early_period_school_compilation",
+  "verdict": "fabricated",
+  "run_excerpt": "ὑπομνήματα ὑπομνηματικά",
+  "needle": "ὑπομνήματα ὑπομνηματικά",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "synthesis_epict_eph_hemin_doctrine",
+  "verdict": "fabricated",
+  "run_excerpt": "τί γάρ ἐστιν ἐμόν; προαίρεσις",
+  "needle": "τί γάρ ἐστιν ἐμόν",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "work_4_maccabees",
+  "verdict": "attested_external",
+  "run_excerpt": "ὁ εὐσεβὴς λογισμός",
+  "needle": "ὁ εὐσεβὴς λογισμός",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG0527 (Septuaginta&TLG1670 &1Serapion &Scr. Eccl.TLG0347 &1Serapion) @byte 2897859\n  ...ΜΑΚΚΑΒΑΙΩΝ Δ Φιλοσοφώτατον λόγον ἐπιδείκνυσθαι μέλλων, εἰ αὐτοδέσποτός ἐστιν τῶν παθῶν ὁ εὐσεβὴς λογισμός, συμβουλεύσαιμ' ἂν ὑμῖν ὀρθῶς ὅπως προσέχητε προθύμως τῇ φιλοσοφίᾳ. καὶ γὰρ ἀναγ-καῖος εἰς ἐ...\nTLG0527 (Septuaginta&TLG1670 &1Serapion &Scr. Eccl.TLG0347 &1Serapion) @byte 2921678\n  ...οῦ θανάτου βασάνων"
+ },
+ {
+  "node_id": "work_didaskalikos_alcinous_2nd_ce_q7r8s9t0",
+  "verdict": "fabricated",
+  "run_excerpt": "Περὶ προνοίας καὶ εἱμαρμένης",
+  "needle": "Περὶ προνοίας καὶ εἱμαρμένης",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG2049 (Sallustius &Phil.TLG4340 &1Salmanas &Alchem.TLG0501 &1Sannyr) @byte 851\n  ... ́τητος. ιδ . Ὅτι γῆ μέση. καὶ διὰ τί. ιε . Περὶ νοῦ καὶ ψυχῆς. ι . Ὅτι ἀθάνατος ἡ ψυχή. ιζ . Περὶ Προνοίας καὶ Εἱμαρμένης καὶ Τύχης. ιη . Περὶ Ἀρετῆς καὶ Κακίας. ιθ . Περὶ ὀρθῆς πολιτείας καὶ φαύλης. κ . Ποθὲν τὰ κ...\nTLG2062 (Joannes Chrysostomus &Scr. Eccl.John ChrysostomTLG2934 &1Joa) @byte 4378666\n  ...ʽ ́μα"
+ },
+ {
+  "node_id": "work_diogenes_laertius_lives",
+  "verdict": "attested_external",
+  "run_excerpt": "Βίοι καὶ γνῶμαι τῶν ἐν φιλοσοφίᾳ εὐδοκιμησάντων",
+  "needle": "Βίοι καὶ γνῶμαι τῶν ἐν φιλοσοφίᾳ εὐδοκιμησάντων",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "work_epictetus_discourses",
+  "verdict": "attested_external",
+  "run_excerpt": "Ἀρριανοῦ τῶν Ἐπικτήτου Διατριβῶν",
+  "needle": "Ἀρριανοῦ τῶν Ἐπικτήτου Διατριβῶν",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "work_gregory_contra_eunomium",
+  "verdict": "attested_external",
+  "run_excerpt": "Πρὸς Εὐνόμιον ἀντιρρητικός",
+  "needle": "Πρὸς Εὐνόμιον ἀντιρρητικός",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "work_gregory_de_anima_resurrectione",
+  "verdict": "attested_external",
+  "run_excerpt": "Περὶ ψυχῆς καὶ ἀναστάσεως",
+  "needle": "Περὶ ψυχῆς καὶ ἀναστάσεως",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG2017 (Gregorius Nyssenus &Theol.TLG2063 &1Gregorius Thaumaturgus &) @byte 4982331\n  ...ΤΟΥ ΕΝ ΑΓΙΟΙΣ ΠΑΤΡΟΣ ΗΜΩΝ ΓΡΗΓΟΡΙΟΥ ΕΠΙΣΚΟΠΟΥ ΝΥΣΣΗΣ ΠΕΡΙ ΨΥΧΗΣ ΚΑΙ ΑΝΑΣΤΑΣΕΩΣ Ο ΛΟΓΟΣ Ο ΛΕΓΟΜΕΝΟΣ ΤΑ ΜΑΚΡΙΝΙΑ. Ἐπειδὴ τοῦ ἀνθρωπίνου βίου πρὸς Θεὸν με..."
+ },
+ {
+  "node_id": "work_justin_second_apology_sc507",
+  "verdict": "attested_external",
+  "run_excerpt": "Ἀπολογία δευτέρα ὑπὲρ Χριστιανῶν",
+  "needle": "Ἀπολογία δευτέρα ὑπὲρ Χριστιανῶν",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "work_maximus_quaestiones_thalassium",
+  "verdict": "attested_external",
+  "run_excerpt": "Πρὸς Θαλάσσιον περὶ διαφόρων ἀπόρων τῆς Θείας Γραφῆς",
+  "needle": "Πρὸς Θαλάσσιον περὶ διαφόρων ἀπόρων τῆς Θείας Γραφῆς",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "work_metaphysics_theta_aristotle_c350bce_f5g7h9i1",
+  "verdict": "attested_external",
+  "run_excerpt": "δυνάμεις μετὰ λόγου",
+  "needle": "δυνάμεις μετὰ λόγου",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "work_plutarch_de_communibus_notitiis",
+  "verdict": "attested_external",
+  "run_excerpt": "Περὶ τῶν κοινῶν ἐννοιῶν πρὸς τοὺς Στωϊκούς",
+  "needle": "Περὶ τῶν κοινῶν ἐννοιῶν πρὸς τοὺς Στωϊκούς",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG0007 (Plutarchus &Biogr. et Phil.TLG0625 &1Polemaeus &Trag.TLG2233) @byte 8071620\n  ... ́αις θύραις λέγων δὸς χλαῖναν Ἱππώνακτι· κάρτα γὰρ ῥιγῶ καὶ βαμβακύζω. ΠΕΡΙ ΤΩΝ ΚΟΙΝΩΝ ΕΝΝΟΙΩΝ ΠΡΟΣ ΤΟΥΣ ΣΤΩΙΚΟΥΣ ΕΤΑΙΡΟΣ. Σοὶ μὲν εἰκός, ὦ Διαδούμενε, μὴ πάνυ μέλειν, εἴ τινι δοκεῖτε παρὰ τὰς..."
+ },
+ {
+  "node_id": "work_plutarch_stoic_repugnantiis",
+  "verdict": "attested_external",
+  "run_excerpt": "Περὶ Στωϊκῶν ἐναντιωμάτων",
+  "needle": "Περὶ Στωϊκῶν ἐναντιωμάτων",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG0007 (Plutarchus &Biogr. et Phil.TLG0625 &1Polemaeus &Trag.TLG2233) @byte 7970468\n  ...υχῆς εἶδος, ὡς ἦν ἀνυστόν, ἐκ διαφόρων ὅμοιον ἔκ τε πολλῶν ἓν ἀπεργασάμενος. ΠΕΡΙ ΣΤΩΙΚΩΝ ΕΝΑΝΤΙΩΜΑΤΩΝ Πρῶτον ἀξιῶ τὴν τῶν δογμάτων ὁμολογίαν ἐν τοῖς βίοις θεωρεῖσθαι· δεῖ γὰρ οὐχ οὕτως τὸν ῥ..."
+ },
+ {
+  "node_id": "work_sextus_outlines_pyrrhonism_f9a7c8e4",
+  "verdict": "attested_external",
+  "run_excerpt": "Πυρρώνειοι ὑποτυπώσεις",
+  "needle": "Πυρρώνειοι ὑποτυπώσεις",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "work_tatian_oratio",
+  "verdict": "fabricated",
+  "run_excerpt": "οὐ φύσει... ἐκ τῆς τοῦ ἐλευθέρου γνώμης",
+  "needle": "ἐκ τῆς τοῦ ἐλευθέρου γνώμης",
+  "tlg": "absent",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "work_theodoret_graecarum_affectionum_curatio",
+  "verdict": "attested_external",
+  "run_excerpt": "Ἑλληνικῶν θεραπευτικὴ παθημάτων",
+  "needle": "Ἑλληνικῶν θεραπευτικὴ παθημάτων",
+  "tlg": "FOUND",
+  "tlg_hits": "TLG4089 (Theodoretus &Scr. Eccl. et Theol.TLG1715 &1Theodoridas &Epig) @byte 48\n  ...ΘΕΟΔΩΡΗΤΟΥ ΕΛΛΗΝΙΚΩΝ ΘΕΡΑΠΕΥΤΙΚΗ ΠΑΘΗΜΑΤΩΝ. ΠΡΟΘΕΩΡΙΑ. Πολλάκις μοι τῶν τῆς Ἑλληνικῆς μυθολογίας ἐξηρτημένων ξυντετυχηκότες τινὲς τ..."
+ },
+ {
+  "node_id": "concept_non_causa_sed_occasio",
+  "run_excerpt": "Quomodo sol non est causa caecitatis... sed occasio tantum... sic et Deus non est causa indurati cor",
+  "verdict": "fabricated",
+  "evidence": "Absent from corpus (audit_fetch corpus: 'non est causa caecitatis', 'causa indurati cordis', 'occasio tantum' all NOT found); absent from SC543_Origenes_Commentaire_Romains_livre_7_bilingue.txt (zero hits for 'occasio' in book 7; Pharaoh discussion is VII.14, which reads 'Non ergo quem uult Deus indurat sed qui patientiae obtemperare noluerit induratur'; VII.16 covers Rom 9:22-26 vasa irae, no sun analogy); absent from De Princ. III.1 (SC268 livre 3: analogies are rain/Heb 6:7-8 and 'sol ceram quidem soluit, limum uero arefacit', III.1.10-11); no web attestation",
+  "confidence": 0.85,
+  "recommended_action": "replace_with_english",
+  "action_detail": "The Latin 'quotation' (with its suspicious ellipses) is a composed pseudo-quote: a sun-causing-blindness analogy that exists nowhere in the critical text of Com. Rom. or De Principiis. The locus 'Com. Rm VII.16' is also wrong for Pharaoh's hardening (= VII.14 in SC/Hammond Bammel). The underlying doctrine IS genuine and can be re-grounded in English on verified texts: De Princ. III.1.10 'qui benignitatem et patientiam eius ad occasionem paenitentiae suae et emendationis accipiunt' and III.1.21 'ex se ipso causas et occasiones praestitit conditori' (SC 268), plus Com. Rom. VII.14 (SC 543). Remove the fabricated Latin sentence; the very label 'non causa sed occasio' as a fixed Origenian formula is unattested in the local editions — defer the renaming decision to Romain.",
+  "tlg": "not_greek_or_too_short",
+  "tlg_hits": null
+ },
+ {
+  "node_id": "concept_providentia_fatum_boethius_h3i4j5k6",
+  "run_excerpt": "fatum ex providentiae fonte proficiscitur",
+  "verdict": "fabricated",
+  "evidence": "Not in corpus (audit_fetch corpus 'fatum ex providentiae' NOT found); faculty.georgetown.edu/jod/boethius/jkok/4p6_t.htm confirms the phrase does not occur in 4.pr.6; genuine wordings are 'Quae cum ab immobilis prouidentiae proficiscatur exordiis' (4.pr.6, corpus e7ef13a1-e460-482e-bae0-8ec10a783ba1) and 'ordo ille... qui de providentiae fonte descendens' (5.pr.1, corpus 328f5325-8a63-5995-a882-cb10ff6eceb9)",
+  "confidence": 0.9,
+  "recommended_action": "replace_with_english",
+  "action_detail": "Presented in quotation marks as Boethius's Latin, but it is a stitched conflation of 4.pr.6 ('ab immobilis providentiae proficiscatur exordiis') and 5.pr.1 ('de providentiae fonte descendens'). Either state the point in English ('fate proceeds from providence') or substitute one of the two verbatim corpus-attested phrases above with its correct locus. The doctrinal content of the bullet is accurate.",
+  "tlg": "not_greek_or_too_short",
+  "tlg_hits": null
+ }
+]
