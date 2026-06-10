@@ -45,6 +45,8 @@ scholarly reception.
 - https://free-will.app/bibliography — modern scholarship and critical editions
 - https://free-will.app/graphrag — ask citation-grounded questions about ancient free will
 - https://free-will.app/research — watch the agent assemble evidence in real time
+- https://free-will.app/glossary — grounded definitions of the key Greek and Latin terms (heimarmene, eph' hemin, prohairesis, synkatathesis, autexousion, liberum arbitrium)
+- https://free-will.app/faq — common questions about the platform, its data, its citation-grounded GraphRAG, and core points of the ancient free-will debate
 - https://free-will.app/about — author, affiliations, and methodology
 
 ## Technical resources

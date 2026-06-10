@@ -11,6 +11,26 @@ const indexPath = path.join(distDir, 'index.html');
 const config = JSON.parse(await readFile(configPath, 'utf8'));
 const baseHtml = await readFile(indexPath, 'utf8');
 
+// Shared content modules — the SAME plain JSON the React pages import, so the
+// prerendered static HTML carries the real glossary/FAQ text (critical for GEO:
+// AI crawlers and non-JS bots read this body, not a nav stub).
+const glossary = JSON.parse(
+  await readFile(path.join(rootDir, 'src/content/glossary.json'), 'utf8'),
+);
+const faqEntries = JSON.parse(
+  await readFile(path.join(rootDir, 'src/content/faq.json'), 'utf8'),
+);
+
+/** Stable FAQ anchor — mirrors faqAnchor() in src/pages/FAQPage.tsx + seo.ts. */
+function faqAnchor(question) {
+  return String(question)
+    .toLowerCase()
+    .replace(/['’"“”]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 64);
+}
+
 const topLinks = config.routes
   .filter((route) => route.priority > 0)
   .map((route) => ({
@@ -193,6 +213,52 @@ function collectionSchema(route) {
   };
 }
 
+function definedTermSetSchema(route) {
+  const canonical = absoluteUrl(route.path);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    '@id': `${canonical}#glossary`,
+    name: route.h1,
+    url: canonical,
+    inLanguage: config.site.language,
+    description: route.description,
+    isPartOf: { '@id': `${config.site.origin}/#website` },
+    hasDefinedTerm: glossary.map((entry) => ({
+      '@type': 'DefinedTerm',
+      '@id': `${config.site.origin}${entry.nodeUrl}`,
+      name: entry.term,
+      ...(entry.originalTerm ? { alternateName: entry.originalTerm } : {}),
+      description: entry.definition,
+      url: absoluteUrl(entry.nodeUrl),
+      inDefinedTermSet: `${canonical}#glossary`,
+    })),
+  };
+}
+
+function faqPageSchema(route) {
+  const canonical = absoluteUrl(route.path);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${canonical}#faq`,
+    name: route.h1,
+    url: canonical,
+    inLanguage: config.site.language,
+    description: route.description,
+    isPartOf: { '@id': `${config.site.origin}/#website` },
+    mainEntity: faqEntries.map((entry) => ({
+      '@type': 'Question',
+      '@id': `${canonical}#${faqAnchor(entry.question)}`,
+      name: entry.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: entry.answer,
+      },
+    })),
+  };
+}
+
 function schemaFor(route) {
   return route.schemas.flatMap((schema) => {
     switch (schema) {
@@ -210,6 +276,10 @@ function schemaFor(route) {
         return [breadcrumbSchema(route)];
       case 'collection':
         return [collectionSchema(route)];
+      case 'definedTermSet':
+        return [definedTermSetSchema(route)];
+      case 'faqPage':
+        return [faqPageSchema(route)];
       default:
         return [];
     }
@@ -270,20 +340,77 @@ ${hreflang}    <meta property="og:type" content="${escapeHtml(ogType)}" />
     ${jsonLd}`;
 }
 
-function fallbackBody(route) {
+function coreLinksNav(route) {
   const links = topLinks
     .filter((link) => link.path !== route.path)
     .slice(0, 8)
     .map((link) => `<li><a href="${escapeHtml(link.path)}">${escapeHtml(link.label)}</a></li>`)
     .join('');
+  return `<nav aria-label="Core EleutherIA pages">
+        <ul style="display:grid;gap:.5rem;margin:0;padding-left:1.25rem">${links}</ul>
+      </nav>`;
+}
+
+/**
+ * Glossary body — emits the real term + definition text as a static <dl> so AI
+ * crawlers and non-JS bots read actual content, not a nav stub. Greek/Latin in
+ * `originalTerm`/`definition` comes verbatim from the shared JSON.
+ */
+function glossaryBody(route) {
+  const terms = glossary
+    .map((entry) => {
+      const original = entry.originalTerm
+        ? ` <span lang="grc" style="color:#c2410c">(${escapeHtml(entry.originalTerm)})</span>`
+        : '';
+      return `<div style="margin:0 0 1.5rem">
+          <dt style="font-weight:700;font-size:1.25rem;margin:0 0 .35rem">${escapeHtml(entry.term)}${original}</dt>
+          <dd style="margin:0 0 .35rem">${escapeHtml(entry.definition)}</dd>
+          <dd style="margin:0"><a href="${escapeHtml(entry.nodeUrl)}">View in graph</a></dd>
+        </div>`;
+    })
+    .join('');
+
+  return `<main data-prerendered-seo="true" style="font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:48rem;margin:4rem auto;padding:2rem;color:#292524;line-height:1.6">
+      <p style="margin:0 0 .75rem;color:#a16207;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.75rem">EleutherIA — Glossary</p>
+      <h1 style="font-size:clamp(2rem,6vw,4rem);line-height:1.05;margin:0 0 1rem">${escapeHtml(route.h1)}</h1>
+      <p style="font-size:1.125rem;margin:0 0 1.5rem">${escapeHtml(route.summary)}</p>
+      <dl style="margin:0 0 2rem">${terms}</dl>
+      ${coreLinksNav(route)}
+    </main>`;
+}
+
+/**
+ * FAQ body — emits the real question + answer text as static sections so the
+ * prerendered HTML is independently citable by AI search.
+ */
+function faqBody(route) {
+  const items = faqEntries
+    .map(
+      (entry) => `<section id="${escapeHtml(faqAnchor(entry.question))}" style="margin:0 0 1.5rem">
+          <h2 style="font-size:1.25rem;margin:0 0 .35rem">${escapeHtml(entry.question)}</h2>
+          <p style="margin:0">${escapeHtml(entry.answer)}</p>
+        </section>`,
+    )
+    .join('');
+
+  return `<main data-prerendered-seo="true" style="font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:48rem;margin:4rem auto;padding:2rem;color:#292524;line-height:1.6">
+      <p style="margin:0 0 .75rem;color:#a16207;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.75rem">EleutherIA — FAQ</p>
+      <h1 style="font-size:clamp(2rem,6vw,4rem);line-height:1.05;margin:0 0 1rem">${escapeHtml(route.h1)}</h1>
+      <p style="font-size:1.125rem;margin:0 0 1.5rem">${escapeHtml(route.summary)}</p>
+      ${items}
+      ${coreLinksNav(route)}
+    </main>`;
+}
+
+function fallbackBody(route) {
+  if (normalizePath(route.path) === '/glossary') return glossaryBody(route);
+  if (normalizePath(route.path) === '/faq') return faqBody(route);
 
   return `<main data-prerendered-seo="true" style="font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:48rem;margin:4rem auto;padding:2rem;color:#292524;line-height:1.6">
       <p style="margin:0 0 .75rem;color:#a16207;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.75rem">EleutherIA</p>
       <h1 style="font-size:clamp(2rem,6vw,4rem);line-height:1.05;margin:0 0 1rem">${escapeHtml(route.h1)}</h1>
       <p style="font-size:1.125rem;margin:0 0 1.5rem">${escapeHtml(route.summary)}</p>
-      <nav aria-label="Core EleutherIA pages">
-        <ul style="display:grid;gap:.5rem;margin:0;padding-left:1.25rem">${links}</ul>
-      </nav>
+      ${coreLinksNav(route)}
     </main>`;
 }
 

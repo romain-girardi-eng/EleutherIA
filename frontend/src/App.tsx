@@ -71,6 +71,10 @@ const ContributionDetailPage = lazy(() => import('./pages/ContributionDetailPage
 // HomePage - Main landing page with educational content and features overview
 const HomePage = lazy(() => import('./pages/HomePage'));
 
+// Glossary + FAQ - grounded scholarly reference pages (GEO/SEO content)
+const GlossaryPage = lazy(() => import('./pages/GlossaryPage'));
+const FAQPage = lazy(() => import('./pages/FAQPage'));
+
 // Helper function to get page titles for screen reader announcements
 function getPageTitle(pathname: string, t: TFunction): string {
   const routes: Record<string, string> = {
@@ -86,6 +90,8 @@ function getPageTitle(pathname: string, t: TFunction): string {
     '/texts': t('appShell.pageTitles.texts'),
     '/bibliography': t('appShell.pageTitles.bibliography'),
     '/about': t('appShell.pageTitles.about'),
+    '/glossary': t('nav.glossary'),
+    '/faq': t('nav.faq'),
     '/how-it-works': t('appShell.pageTitles.howItWorks'),
     '/credits': t('appShell.pageTitles.credits'),
     '/login': t('appShell.pageTitles.login'),
@@ -444,6 +450,8 @@ function AppContent() {
               <Route path="/simple/:textId" element={<SimpleTextReader />} />
               <Route path="/bibliography" element={<BibliographyPage />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/glossary" element={<GlossaryPage />} />
+              <Route path="/faq" element={<FAQPage />} />
               <Route path="/credits" element={<CreditsPage />} />
               <Route path="/report-error" element={<ReportErrorPage />} />
               {/* Public shared trace */}

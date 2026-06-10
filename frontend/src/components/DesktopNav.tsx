@@ -27,6 +27,8 @@ import {
   Users,
   HelpCircle,
   Info,
+  BookA,
+  MessageCircleQuestion,
   Database as DatabaseIcon,
   BookOpenText,
   BookMarked,
@@ -76,6 +78,8 @@ const GROUPS: NavGroup[] = [
     items: [
       { to: '/how-it-works', labelKey: 'nav.howItWorks', descKey: 'nav.descriptions.howItWorks', Icon: HelpCircle },
       { to: '/about', labelKey: 'nav.about', descKey: 'nav.descriptions.about', Icon: Info },
+      { to: '/glossary', labelKey: 'nav.glossary', descKey: 'nav.descriptions.glossary', Icon: BookA },
+      { to: '/faq', labelKey: 'nav.faq', descKey: 'nav.descriptions.faq', Icon: MessageCircleQuestion },
     ],
   },
   {

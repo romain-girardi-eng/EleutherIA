@@ -1,0 +1,50 @@
+[
+  {
+    "question": "What is EleutherIA?",
+    "answer": "EleutherIA (from the Greek ἐλευθερία, “freedom,” combined with IA, French for AI) is an open scholarly research platform for ancient debates on free will, fate, providence, and moral responsibility across the Greco-Roman and early Christian worlds. It unifies a FAIR-aligned knowledge graph, an ancient-text corpus in Greek and Latin, and an agentic GraphRAG engine for citation-grounded question answering. Its coverage spans roughly twelve centuries, from the Presocratics (6th c. BCE) to Boethius and the late Church Fathers (6th c. CE). It is live at https://free-will.app."
+  },
+  {
+    "question": "What data does EleutherIA contain?",
+    "answer": "As of the 2026-06-05 knowledge-graph snapshot, the graph contains 20,060 nodes and 56,737 edges spanning 241 ancient works, with roughly 17,800 anchored passages in Greek and Latin (with English translations) and 19,751 passage citations linking the graph to primary-text evidence. The nodes cover philosophers, concepts, arguments, schools, and works; the corpus carries critical-edition provenance and per-passage integrity hashes. The data is released open-access under CC BY 4.0 and archived on Zenodo (DOI 10.5281/zenodo.17379489)."
+  },
+  {
+    "question": "Is the EleutherIA data open?",
+    "answer": "Yes. EleutherIA is open-access and released under the Creative Commons Attribution 4.0 (CC BY 4.0) licence, which permits reuse with attribution. The dataset — knowledge graph, corpus, and supporting code — is archived on Zenodo under the concept DOI 10.5281/zenodo.17379489, and an RDF export (aligned on CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, and BIBO) makes the graph interoperable with the wider linked-data ecosystem."
+  },
+  {
+    "question": "Who built EleutherIA and how do I cite it?",
+    "answer": "EleutherIA was created by Romain Girardi (Université Côte d’Azur, CEPAM UMR 7264; and Faculté de Théologie Jean Calvin, Université de Genève; ORCID 0000-0002-5310-5346). To cite it, use: Girardi, R. (2026). EleutherIA: A FAIR-Compliant Knowledge Graph for Ancient Free Will Debates [Data set]. Zenodo. https://doi.org/10.5281/zenodo.17379489. For thesis or publication references, cite the version DOI of the frozen release used, together with the Git commit hash and the data snapshot date."
+  },
+  {
+    "question": "How does EleutherIA avoid fabricating ancient text?",
+    "answer": "EleutherIA enforces a strict no-fabrication policy: it never generates, paraphrases, reconstructs, or translates ancient Greek or Latin. Any quoted ancient-language span is verified verbatim against the cited passage in the corpus by a deterministic quote-fidelity gate, backed by a corpus-backed ancient-text verifier and an adversarial per-claim citation auditor. Every quotation must exist in the passages table with a verifiable source (CTS URN or passage id); when a claim cannot be grounded, the platform falls back to English rather than inventing text."
+  },
+  {
+    "question": "How does search and question answering work in EleutherIA?",
+    "answer": "EleutherIA uses a vectorless agentic GraphRAG engine: an LLM-driven agent that reasons over hybrid retrieval rather than relying on opaque embeddings. Retrieval combines PostgreSQL full-text search, pre-indexed Greek and Latin lemmatic search, and hierarchical tree navigation (work → book → chapter → passage), merged via Reciprocal Rank Fusion and enriched by knowledge-graph traversal. The agent then synthesises a scholarly answer with verified citations, so every claim traces back to an actual ancient source or piece of modern scholarship."
+  },
+  {
+    "question": "What is a knowledge graph and why use one for ancient philosophy?",
+    "answer": "A knowledge graph models a domain as nodes (entities) and typed edges (relationships) rather than as flat text. In EleutherIA, nodes represent philosophers, concepts, arguments, schools, and works, while edges encode relations such as authorship, influence, critique, and evidential support, using a formal ontology of 24 node types and 75 edge types. This lets a researcher follow multi-hop connections — for example tracing how a Stoic argument was critiqued by Alexander of Aphrodisias and later reconstructed by modern scholars — across material otherwise scattered through hundreds of Greek and Latin texts."
+  },
+  {
+    "question": "Did the Stoics believe in free will?",
+    "answer": "In the EleutherIA knowledge graph, the Stoics held a doctrine of universal causal determinism called Εἱμαρμένη (fate): everything follows from an eternal, unbreakable chain of causes governed by divine reason. Chrysippus nonetheless argued this is compatible with moral responsibility, because assent (συγκατάθεσις, synkatathesis) to an impression is “up to us” — it depends on the agent’s own character, illustrated by the cylinder analogy reported in Cicero’s De Fato 43. Modern scholars commonly characterise this position as a form of compatibilism, though that label is a modern analytic category applied retrospectively to ancient thought."
+  },
+  {
+    "question": "What is autexousion?",
+    "answer": "Autexousion (αὐτεξούσιον) is the term for self-determination or free will that became central in early Christian (Patristic) theology, formed from αὐτός (self) + ἐξουσία — “having power over oneself.” According to the EleutherIA knowledge graph, writers such as Irenaeus, Origen, Methodius, and Gregory of Nyssa used it to defend human freedom against Gnostic, Stoic, and astrological determinism, holding that humans were created self-determining by God and that the misuse of this capacity — not matter or divine decree — is the source of sin. It emphasises the self-originating character of choice more strongly than the older philosophical terms it built upon."
+  },
+  {
+    "question": "What is the difference between fate and necessity in ancient thought?",
+    "answer": "In the EleutherIA knowledge graph these are distinct concepts. Necessity (Ἀνάγκη, ananke) is the older, more mechanistic notion of compulsion and constraint, substantivised as a cosmological principle among the Presocratics such as Democritus and Parmenides. Stoic fate (Εἱμαρμένη, heimarmenê), by contrast, is presented as rational, teleological, and providential — an ordered causal sequence governed by divine reason rather than blind mechanical compulsion. The Stoics held that fate, so understood, was compatible with responsibility, whereas Democritean necessity left less room for it."
+  },
+  {
+    "question": "What did Aristotle mean by “what is in our power” (eph’ hêmin)?",
+    "answer": "To eph’ hêmin (τὸ ἐφ' ἡμῖν, “what is in our power / up to us”) is Aristotle’s concept, in Nicomachean Ethics III.5, for the domain of human agency that is the proper object of praise and blame. In the EleutherIA knowledge graph it implies genuine alternatives (we can act or not act), an internal origin of action, and rational control through deliberation; Aristotle ties it closely to voluntary action (ἑκούσιον, hekousion) and deliberate choice. Ancient debates later divided over whether “up to us” entails a two-sided power for opposites or, on the Stoic reading reconstructed by Bobzien (1998), a one-sided causal responsibility compatible with determinism."
+  },
+  {
+    "question": "What did Augustine contribute to the free-will debate?",
+    "answer": "According to the EleutherIA knowledge graph, Augustine of Hippo (354–430 CE) produced among the most consequential Latin treatments of free will, grace, and moral responsibility in antiquity. His early De Libero Arbitrio defends human free choice as the cause of moral evil, while the Confessiones introduce a phenomenology of the divided will (duae voluntates). His later anti-Pelagian works progressively restrict post-lapsarian free will in favour of grace and predestination, and De Civitate Dei develops the “deficient cause” (causa deficiens) account of evil as privation rather than a positive force."
+  }
+]

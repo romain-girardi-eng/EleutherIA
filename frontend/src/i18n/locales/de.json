@@ -18,6 +18,8 @@
     "bibliography": "Bibliographie",
     "about": "Über",
     "howItWorks": "Wie es funktioniert",
+    "glossary": "Glossar",
+    "faq": "FAQ",
     "credits": "Mitwirkende",
     "admin": "Admin-Dashboard",
     "citationNetwork": "Zitatnetzwerk",
@@ -40,6 +42,8 @@
     "descriptions": {
       "howItWorks": "Pipeline, Quellen, Methodik",
       "about": "Mission, Umfang und Team",
+      "glossary": "Zentrale griechische und lateinische Begriffe",
+      "faq": "Häufige Fragen, belegte Antworten",
       "database": "{{nodes}} Knoten, {{edges}} Kanten",
       "texts": "{{works}} griechische und lateinische Werke",
       "bibliography": "Moderne Forschung und Editionen",

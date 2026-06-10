@@ -18,6 +18,8 @@
     "bibliography": "Bibliografia",
     "about": "Informazioni",
     "howItWorks": "Come funziona",
+    "glossary": "Glossario",
+    "faq": "FAQ",
     "credits": "Crediti",
     "admin": "Dashboard Admin",
     "citationNetwork": "Rete di Citazioni",
@@ -40,6 +42,8 @@
     "descriptions": {
       "howItWorks": "Pipeline, fonti, metodologia",
       "about": "Missione, ambito e team",
+      "glossary": "Termini greci e latini fondamentali",
+      "faq": "Domande frequenti, risposte documentate",
       "database": "{{nodes}} nodi, {{edges}} archi",
       "texts": "{{works}} opere greche e latine",
       "bibliography": "Studi moderni ed edizioni",
