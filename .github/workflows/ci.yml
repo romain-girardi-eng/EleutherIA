@@ -39,7 +39,7 @@ jobs:
           python-version: "3.14"
 
       - name: Install package
-        run: pip install -e "database/[dev]"
+        run: pip install -e "database/[dev,api,full]"
 
       - name: Run tests
         run: cd database && python -m pytest tests/ -v

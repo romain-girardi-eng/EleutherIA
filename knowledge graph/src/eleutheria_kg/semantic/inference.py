@@ -78,9 +78,7 @@ def _read_graphs(graph: Graph, sink: Graph | None) -> tuple[Graph, ...]:
     return (graph, sink)
 
 
-def _present(
-    graphs: tuple[Graph, ...], triple: tuple[URIRef, URIRef, URIRef]
-) -> bool:
+def _present(graphs: tuple[Graph, ...], triple: tuple[URIRef, URIRef, URIRef]) -> bool:
     return any(triple in g for g in graphs)
 
 

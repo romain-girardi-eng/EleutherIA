@@ -286,8 +286,7 @@ def _cts_resolver_iri(cts_urn: str) -> URIRef:
     percent-encoded so the resulting IRI always serializes cleanly.
     """
     return URIRef(
-        "https://data.perseus.org/citations/"
-        + quote(cts_urn, safe=":/.,;@()_-")
+        "https://data.perseus.org/citations/" + quote(cts_urn, safe=":/.,;@()_-")
     )
 
 
@@ -367,7 +366,7 @@ def _emit_edge_provenance(
         if prov_prop in (KG.confidence,):
             try:
                 g.add((statement, prov_prop, Literal(float(value))))
-            except (TypeError, ValueError):
+            except TypeError, ValueError:
                 g.add((statement, prov_prop, Literal(str(value))))
         elif isinstance(value, bool):
             g.add((statement, prov_prop, Literal(value)))
