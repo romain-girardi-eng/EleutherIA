@@ -1,0 +1,957 @@
+{
+ "_doc": "Adjudicated Greek runs (audit 2026-06-10/11): present in node descriptions but legitimately absent from the corpus (quotes from non-ingested editions, terminology lists, titles). Hash = sha1 of accent/sigma-normalized run. check_greek_gate.py treats these as known-good.",
+ "allow": {
+  "synthesis_amand1945_maximus_tyre_mantike_freedom_reconciliation": [
+   {
+    "hash": "57a1e4815e4ba493",
+    "excerpt": "Εἰ μαντικῆς οὔσης, ἔστιν τι ἐφ' ἡμῖν"
+   },
+   {
+    "hash": "a2de6f34ec61aaf8",
+    "excerpt": "εἰ δὲ ἀνακέκραται τὸ ἐφ' ἡμῖν τοῖς ὅλοις, μέρος ὅσον καὶ τοῦ"
+   },
+   {
+    "hash": "6b01b54b8f9dbb48",
+    "excerpt": "πεπρωμένη, Ἐρινύς, Αἶσα, Μοῖρα"
+   }
+  ],
+  "work_hierocles_peri_pronoias": [
+   {
+    "hash": "3bd0bac32b5ac396",
+    "excerpt": "Περὶ προνοίας καὶ εἱμαρμένης καὶ τῆς τοῦ ἐφ' ἡμῖν πρὸς τὴν θ"
+   },
+   {
+    "hash": "d98dc8989bd2a7ae",
+    "excerpt": "τὸ ἐφ' ἡμῖν παιδεύουσα"
+   },
+   {
+    "hash": "f05d9dbb51fb8673",
+    "excerpt": "κρίσις θεία οὖσα ἐν τοῖς οὐκ ἐφ' ἡμῖν πρὸς τὴν ἀξίαν ἀμοιβὴν"
+   }
+  ],
+  "argument_hierocles_carneadean_inversion_for_providential_heimarmene": [
+   {
+    "hash": "56f11ec7c15a301e",
+    "excerpt": "ἡ τῆς προνοητικῆς εἱμαρμένης τάξις"
+   },
+   {
+    "hash": "f05d9dbb51fb8673",
+    "excerpt": "κρίσις θεία οὖσα ἐν τοῖς οὐκ ἐφ' ἡμῖν πρὸς τὴν ἀξίαν ἀμοιβὴν"
+   }
+  ],
+  "argument_homonymy_alex": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   },
+   {
+    "hash": "cf3f35e3667a4ec8",
+    "excerpt": "οὐκ ὄνομα μόνον ... ἀλλὰ καὶ σημαινόμενον"
+   }
+  ],
+  "argument_origen_witness_personality_christian_gnosis_amand1945": [
+   {
+    "hash": "bd523fdb9bcf1192",
+    "excerpt": "θεόπνευσται γραφαί"
+   },
+   {
+    "hash": "d31def3a449e2767",
+    "excerpt": "κανὼν ἐκκλησιαστικός"
+   }
+  ],
+  "argument_pyrrhus_one_energy": [
+   {
+    "hash": "3ea8df1a25b9c42b",
+    "excerpt": "καινήν τινα τὴν θεανδρικὴν ἐνέργειαν"
+   },
+   {
+    "hash": "217997d8927add64",
+    "excerpt": "μία θεανδρικὴ ἐνέργεια"
+   }
+  ],
+  "scholarly_argument_blowers_natural_vs_gnomic_will": [
+   {
+    "hash": "c4eeb3fbf31bb552",
+    "excerpt": "ὄρεξις ἐνδιάθετος τῶν ἐφ' ἡμῖν, ἐξ' ἧς ἡ προαίρεσις"
+   },
+   {
+    "hash": "e47814de8bce690f",
+    "excerpt": "διάθεσις ἐπὶ ἐφ' ἡμῖν ὀρεκτικῶς βουλευθεῖσι"
+   }
+  ],
+  "concept_arche_alex": [
+   {
+    "hash": "d6dcdb7d9bdb300d",
+    "excerpt": "ὁ ἄνθρωπος ἀρχὴ καὶ αἰτία"
+   },
+   {
+    "hash": "13b950ca44bdb4fa",
+    "excerpt": "τὴν ἀρχὴν ἔχειν ἐν αὑτῷ"
+   }
+  ],
+  "concept_causal_asymmetry_alex": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   },
+   {
+    "hash": "45598cdc29246763",
+    "excerpt": "ἀναγκαῖον ἐξ ὑποθέσεως"
+   }
+  ],
+  "concept_nepios_adam_infant_doctrine": [
+   {
+    "hash": "580d1675a03cb04e",
+    "excerpt": "ἀσυνήθη, ἀγύμναστα"
+   },
+   {
+    "hash": "8cfaacd502cf5a55",
+    "excerpt": "κατὰ τοῦτο καὶ νήπια, κατὰ τοῦτο καὶ ἀσυνήθη καὶ ἀγύμναστα π"
+   }
+  ],
+  "concept_stoic_causal_principle": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   },
+   {
+    "hash": "45598cdc29246763",
+    "excerpt": "ἀναγκαῖον ἐξ ὑποθέσεως"
+   }
+  ],
+  "synthesis_amand1945_philo_early_period_school_compilation": [
+   {
+    "hash": "a891b5e31c596f71",
+    "excerpt": "Περὶ ἀφθαρσίας κόσμου, Περὶ τοῦ πάντα σπουδαῖον εἶναι ἐλεύθε"
+   },
+   {
+    "hash": "ddfad57c718ef5e7",
+    "excerpt": "γράμματα ὑπομνηματικά, ὑπομνήματα, σχολαί, ὑποσημειώσεις"
+   }
+  ],
+  "synthesis_amand1945_pseudo_plutarch_albinus_parallel": [
+   {
+    "hash": "d62992dd91bb8d41",
+    "excerpt": "Εἰσαγωγὴ εἰς τὴν φιλοσοφίαν Πλάτωνος"
+   },
+   {
+    "hash": "eb5be66c1df59413",
+    "excerpt": "πάντα ἐν εἱμαρμένῃ εἶναι, οὐ μὴν πάντα καθειμάρθαι"
+   }
+  ],
+  "work_maximus_tyre_dissertation_13": [
+   {
+    "hash": "57a1e4815e4ba493",
+    "excerpt": "Εἰ μαντικῆς οὔσης, ἔστιν τι ἐφ' ἡμῖν"
+   },
+   {
+    "hash": "683d26fbffc53e5c",
+    "excerpt": "ἀμφίβιον καὶ κεκραμένην ὁμοῦ ἐξουσίᾳ καὶ ἀνάγκῃ"
+   }
+  ],
+  "work_sirach_a3b4c5d6": [
+   {
+    "hash": "3c05bc6f87bddf98",
+    "excerpt": "μὴ εἴπῃς ὅτι Διὰ κύριον ἀπέστην"
+   },
+   {
+    "hash": "21f401225e3f461b",
+    "excerpt": "αὐτὸς ἐξ ἀρχῆς ἐποίησεν ἄνθρωπον καὶ ἀφῆκεν αὐτὸν ἐν χειρὶ δ"
+   }
+  ],
+  "argument_agent_causation_alex": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "argument_alexander_witness2_ch16_praise_blame_punishment_amand1945": [
+   {
+    "hash": "f4ce9acec19d5ddf",
+    "excerpt": "αἱ ἀρεταὶ καὶ αἱ κακίαι"
+   }
+  ],
+  "argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "argument_augustines_antipelagian_argument_grace_necessity_0b29401f": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "argument_basil_carneadean_hex_vi_7_christian_hopes_destroyed": [
+   {
+    "hash": "f05ad462a09e1615",
+    "excerpt": "αἱ δὲ μεγάλαι τῶν χριστιανῶν ἐλπίδες φροῦδαι ἡμῖν οἰχήσονται"
+   }
+  ],
+  "argument_bobzien_2001_b1_cylinder_in_later_fate_theory": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "argument_bobzien_2001_b1_philopator_late_compatibilism": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "argument_bobzien_2001_b1_rise_fall_freedom_problem": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "argument_carneadean_anti_mantike_amand1945": [
+   {
+    "hash": "a6b10f9a8c8f6e69",
+    "excerpt": "τερατοσκόποι, οἰωνιστική, κλῆροι"
+   }
+  ],
+  "argument_causal_asymmetry_alex": [
+   {
+    "hash": "45598cdc29246763",
+    "excerpt": "ἀναγκαῖον ἐξ ὑποθέσεως"
+   }
+  ],
+  "argument_diogenes_oinoanda_no_heimarmene_fragm_xxxiii": [
+   {
+    "hash": "427ee126bc380846",
+    "excerpt": "τὸ δὲ μέγιστον· πιστευθείσης γὰρ εἱμαρμένης, αἴρεται πᾶσα νο"
+   }
+  ],
+  "argument_epictetus_impression_testing": [
+   {
+    "hash": "352be3fda3522b2a",
+    "excerpt": "πειρῶ ὑπὸ τῆς φαντασίας μὴ συναρπασθῆναι"
+   }
+  ],
+  "argument_furst_2022_aristotle_no_will_intellectualism": [
+   {
+    "hash": "9877d90b32be1d43",
+    "excerpt": "τὸ ἐφ᾽ ἡμῖν, προαίρεσις, αὐτεξούσιον"
+   }
+  ],
+  "argument_furst_2022_josephus_three_jewish_sects_freedom_taxonomy": [
+   {
+    "hash": "0bb2f0108ad7084d",
+    "excerpt": "εἱμαρμένη, ἐφ᾽ ἡμῖν, ὁρμή"
+   }
+  ],
+  "argument_future_contingents_alex": [
+   {
+    "hash": "a9a37295b20fe38b",
+    "excerpt": "τὸ ἐνδεχόμενον ὡς ἐνδεχόμενον"
+   }
+  ],
+  "argument_justin_equals_alcinous_heimarmene": [
+   {
+    "hash": "df6a4aad71129e05",
+    "excerpt": "ἐπεὶ καὶ τὸ ἐφ' ἡμῖν οἰχήσεται καὶ ἔπαινοι καὶ ψόγοι καὶ πᾶν"
+   }
+  ],
+  "argument_lucian_zeus_confutatus_carneadean_topos": [
+   {
+    "hash": "fd76632ab71ed84d",
+    "excerpt": "Ὅτι οὐδὲν ἑκόντες οἱ ἄνθρωποι ποιοῦμεν, ἀλλά τινι ἀνάγκῃ ἀφύ"
+   }
+  ],
+  "argument_maximus_two_wills": [
+   {
+    "hash": "1d372f02b3736051",
+    "excerpt": "δύο θελήματα φυσικά"
+   }
+  ],
+  "argument_origen_prescience_causality": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "argument_origen_witness_aristotelism_influence_amand1945": [
+   {
+    "hash": "a9a07f981efaade3",
+    "excerpt": "ποιότητες, ὑποκείμενον"
+   }
+  ],
+  "argument_origen_witness_diss_precession_equinoxes_amand1945": [
+   {
+    "hash": "877c9b67a5d00cb3",
+    "excerpt": "νοητὸν δωδεκατημόριον"
+   }
+  ],
+  "argument_origen_witness_diss_problem3_human_ignorance_amand1945": [
+   {
+    "hash": "877c9b67a5d00cb3",
+    "excerpt": "νοητὸν δωδεκατημόριον"
+   }
+  ],
+  "argument_origen_witness_diss_problem4_angelic_knowledge_amand1945": [
+   {
+    "hash": "958e6af3f5015113",
+    "excerpt": "ἀξία βίβλος τοῦ θεοῦ"
+   }
+  ],
+  "argument_origen_witness_freewill_doctrine_envelope_amand1945": [
+   {
+    "hash": "0720d6acad8ecd5e",
+    "excerpt": "Περὶ ἀρχῶν περὶ αὐτεξουσίου"
+   }
+  ],
+  "argument_origen_witness_stoicism_influence_amand1945": [
+   {
+    "hash": "4e7f51603e44a0ac",
+    "excerpt": "καθῆκον, κατόρθωμα, προκόπτων, σπουδαῖος, φαῦλος"
+   }
+  ],
+  "argument_sirach_free_will_theodicy_m7n8o9p0": [
+   {
+    "hash": "facf5f3ebf5afea8",
+    "excerpt": "ἐν χειρὶ διαβουλίου αὐτοῦ"
+   }
+  ],
+  "argument_theophilus_capable_of_both": [
+   {
+    "hash": "0d0e91f55a71f743",
+    "excerpt": "αὐτὸς ἑαυτῷ αἴτιος τοῦ θανάτου"
+   }
+  ],
+  "scholarly_argument_blowers_gethsemane_dyothelite_locus": [
+   {
+    "hash": "83b80e59e4341249",
+    "excerpt": "ὁρμή: ὥρμα κατ' αὐτοῦ"
+   }
+  ],
+  "scholarly_argument_blowers_gnomic_surrender_freedom": [
+   {
+    "hash": "d8bd17b2a02387e9",
+    "excerpt": "ἡ ἀναγκαία τῆς φύσεως τάξις"
+   }
+  ],
+  "scholarly_argument_blowers_will_as_natural_faculty": [
+   {
+    "hash": "ff2cdf7b46349a3b",
+    "excerpt": "δύναμις τοῦ κατὰ φύσιν ὄντος ὀρεκτική"
+   }
+  ],
+  "scholarly_argument_blowers_wills_vs_mode_of_willing": [
+   {
+    "hash": "6311f75953cde5a8",
+    "excerpt": "τρόπος τῆς χρήσεως"
+   }
+  ],
+  "scholarly_argument_bobzien_middle_platonists_on_contingen_7": [
+   {
+    "hash": "4649450c6eaba277",
+    "excerpt": "ἐξουσία, δύναμις, αὐτεξούσιον"
+   }
+  ],
+  "scholarly_argument_crubellier_two_definitions_of_prohairesis_1": [
+   {
+    "hash": "8ea89a804877bd94",
+    "excerpt": "ὀρεκτικὸς νοῦς ἢ ὄρεξις διανοητική"
+   }
+  ],
+  "scholarly_argument_eliasson_laws_x_on_order_and_law_of_fat_5": [
+   {
+    "hash": "1346d807d44560be",
+    "excerpt": "τάξις καὶ νόμος τῆς εἱμαρμένης"
+   }
+  ],
+  "scholarly_argument_goodrich_free_will_and_moral_agency_in__0": [
+   {
+    "hash": "5a07560a29235b7d",
+    "excerpt": "πεπραμένος ὑπὸ τὴν ἁμαρτίαν"
+   }
+  ],
+  "scholarly_argument_guyomarc_h_alexander_s_conception_of_what_2": [
+   {
+    "hash": "307ddf939fdf4f98",
+    "excerpt": "δύναμις τῶν ἐναντίων"
+   }
+  ],
+  "scholarly_argument_havrda_clement_s_polemic_against_vale_1": [
+   {
+    "hash": "adf1011a0094bcbc",
+    "excerpt": "ἑκουσίῳ προαιρέσει σῳζόμενοι"
+   }
+  ],
+  "scholarly_argument_pr_aux_textual_criticism_of_octavius__4": [
+   {
+    "hash": "58bdf9650d141047",
+    "excerpt": "ὁ κλῆρος τῆς τύχης"
+   }
+  ],
+  "scholarly_argument_velardo_josephus_s_use_of_heimarmene_0": [
+   {
+    "hash": "cee04e762d9abb6d",
+    "excerpt": "τὴν εἱμαρμένην ἄφυκτον"
+   }
+  ],
+  "scholarly_argument_vibe_philo_s_concept_of_human_freed_0": [
+   {
+    "hash": "cc717a54c60c6656",
+    "excerpt": "αὐτοκελεύστου γνώμης"
+   }
+  ],
+  "concept_academic_skepticism_epoche_n4o5p6q7": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "concept_ananke_necessity_democritus_h8i9j0k1": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "concept_axia_biblos_tou_theou_origen_amand1945": [
+   {
+    "hash": "958e6af3f5015113",
+    "excerpt": "ἀξία βίβλος τοῦ θεοῦ"
+   }
+  ],
+  "concept_causal_conception_eph_hemin_salles": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "concept_chrysippean_compatibilism_bobzien": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "concept_ep_ison_middle_platonist": [
+   {
+    "hash": "4317fd83bc44d10a",
+    "excerpt": "αὐτό τε δυνάμεθα καὶ τὸ ἀντικείμενον αὐτῷ"
+   }
+  ],
+  "concept_eph_hemin_kyrion_plut": [
+   {
+    "hash": "82e5fb5259c9a4ac",
+    "excerpt": "τὸ ἐφ' ἡμῖν ὡς κύριον χρῆσθαι τῷ ἐνδεχομένῳ"
+   }
+  ],
+  "concept_eph_hemin_two_sided_potestative": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "concept_exousia_alex": [
+   {
+    "hash": "1b09db5bbfa4dcc4",
+    "excerpt": "ἐξουσίαν... μὴ ποιεῖν"
+   }
+  ],
+  "concept_four_categories_alex": [
+   {
+    "hash": "eebe3fba81234f37",
+    "excerpt": "ἐξ ἀνάγκης, ὡς ἐπὶ τὸ πολύ, ἀπὸ τύχης, ἐφ᾽ ἡμῖν"
+   }
+  ],
+  "concept_gnomic_will_gnome": [
+   {
+    "hash": "c4eeb3fbf31bb552",
+    "excerpt": "ὄρεξις ἐνδιάθετος τῶν ἐφ' ἡμῖν, ἐξ' ἧς ἡ προαίρεσις"
+   }
+  ],
+  "concept_heimarmene_astrologica_amand": [
+   {
+    "hash": "1ef3f3a30fc3a986",
+    "excerpt": "συμπάθεια τῶν ὅλων"
+   }
+  ],
+  "concept_heimarmene_conditional_amand1945": [
+   {
+    "hash": "4fa1034883fa1f45",
+    "excerpt": "Πάντα ἐν εἱμαρμένῃ εἶναι"
+   }
+  ],
+  "concept_hypothetical_fate_middle_platonist": [
+   {
+    "hash": "f9bac2b69e27267d",
+    "excerpt": "εἱμαρμένη ἐξ ὑποθέσεως"
+   }
+  ],
+  "concept_kompatibilistischer_libertarismus_origenian": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "concept_mr2_ability_responsibility": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "concept_pelagianism": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "concept_philopator_compatibilism_bobzien": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "concept_practical_life_alex": [
+   {
+    "hash": "8d04de7838220d6c",
+    "excerpt": "πᾶς ὁ πρακτικὸς βίος ἀναιρεῖται"
+   }
+  ],
+  "concept_saving_teaching_alex": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "concept_selbstbestimmung_modern_furst": [
+   {
+    "hash": "9877d90b32be1d43",
+    "excerpt": "τὸ ἐφ᾽ ἡμῖν, προαίρεσις, αὐτεξούσιον"
+   }
+  ],
+  "concept_socratic_intellectualism_f6g7h8i9": [
+   {
+    "hash": "93e103944613bc5b",
+    "excerpt": "οὐδεὶς ἑκὼν ἁμαρτάνει"
+   }
+  ],
+  "concept_synkatathesis_logike_alex": [
+   {
+    "hash": "9bc27866e4ab5242",
+    "excerpt": "λογικὴ συγκατάθεσις"
+   }
+  ],
+  "concept_thelema_physikon_natural_will": [
+   {
+    "hash": "ff2cdf7b46349a3b",
+    "excerpt": "δύναμις τοῦ κατὰ φύσιν ὄντος ὀρεκτική"
+   }
+  ],
+  "concept_thelesis_willing_87d2b3cf": [
+   {
+    "hash": "42752110eb7f54c5",
+    "excerpt": "ψυχῆς ἔνδοθεν κίνησις"
+   }
+  ],
+  "concept_to_endechomenon_alexander_amand1945": [
+   {
+    "hash": "701635ab5e8d9779",
+    "excerpt": "τὸ ἐνδεχομένως γεγονὸς ἐν τινι καὶ μὴ γεγονέναι ἐν αὐτῷ οἷόν"
+   }
+  ],
+  "concept_to_eph_hemin_basil": [
+   {
+    "hash": "e92365c75096ef1d",
+    "excerpt": "τὸ ἐφ' ἡμῖν ἐστι τὸ αὐτεξούσιον"
+   }
+  ],
+  "concept_two_sidedness_eph_hemin": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "concept_tyrannike_hamartia": [
+   {
+    "hash": "3a6a23e9fc52e5b8",
+    "excerpt": "ἡ τυραννικὴ ἁμαρτία"
+   }
+  ],
+  "debate_prohairesis_meaning": [
+   {
+    "hash": "5f1d4dd64138c646",
+    "excerpt": "ἡ ἐπὶ τὸ προκριθὲν ἐκ τῆς βουλῆς μετὰ ὀρέξεως ὁρμὴ προαίρεσι"
+   }
+  ],
+  "debate_source_of_action_90c57974": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "group_pharisees_w1x2y3z4": [
+   {
+    "hash": "96a09c7f14cc7152",
+    "excerpt": "εἱμαρμένη, τὸ ἐφ' ἡμῖν"
+   }
+  ],
+  "person_athenagoras": [
+   {
+    "hash": "e4384440d29cc890",
+    "excerpt": "Πρεσβεία περὶ Χριστιανῶν"
+   }
+  ],
+  "person_cyril_alexandria": [
+   {
+    "hash": "4097c719e6753242",
+    "excerpt": "τῶν ἰδίων θελημάτων τὰς ἡνίας πεπιστευμένος"
+   }
+  ],
+  "person_cyrus_alexandria_d641": [
+   {
+    "hash": "217997d8927add64",
+    "excerpt": "μία θεανδρικὴ ἐνέργεια"
+   }
+  ],
+  "person_diogenes_laertius_3c_ce": [
+   {
+    "hash": "a4755551dab9af61",
+    "excerpt": "Βίοι καὶ γνῶμαι τῶν ἐν φιλοσοφίᾳ εὐδοκιμησάντων"
+   }
+  ],
+  "person_diogenianus_epicurean_2c_ce": [
+   {
+    "hash": "8d68da6ae5b7217d",
+    "excerpt": "Πεπρωμένη, Λάχεσις, Ἄτροπος, Κλωθώ, εἱμαρμένη"
+   }
+  ],
+  "person_heraclitus_fl500bce_a1b2c3d4": [
+   {
+    "hash": "635668dfd02c52d5",
+    "excerpt": "ἦθος ἀνθρώπῳ δαίμων"
+   }
+  ],
+  "person_maximus_of_tyre_125_185ce": [
+   {
+    "hash": "57a1e4815e4ba493",
+    "excerpt": "Εἰ μαντικῆς οὔσης, ἔστιν τι ἐφ' ἡμῖν"
+   }
+  ],
+  "person_posidonius_apameia_135_51bce": [
+   {
+    "hash": "1ef3f3a30fc3a986",
+    "excerpt": "συμπάθεια τῶν ὅλων"
+   }
+  ],
+  "person_sextus_empiricus_c160_210ce_d4f8a2b1": [
+   {
+    "hash": "d8d4d589e6ec8457",
+    "excerpt": "Πυρρώνειοι ὑποτυπώσεις"
+   }
+  ],
+  "person_socrates_470_399bce_b2c3d4e5": [
+   {
+    "hash": "93e103944613bc5b",
+    "excerpt": "οὐδεὶς ἑκὼν ἁμαρτάνει"
+   }
+  ],
+  "person_tatian": [
+   {
+    "hash": "3096e528421de90f",
+    "excerpt": "Λόγος πρὸς Ἕλληνας"
+   }
+  ],
+  "person_theophilus_antioch_c183": [
+   {
+    "hash": "0d0e91f55a71f743",
+    "excerpt": "αὐτὸς ἑαυτῷ αἴτιος τοῦ θανάτου"
+   }
+  ],
+  "pub_blackson_epictetus_frede_argument": [
+   {
+    "hash": "6e42070439229262",
+    "excerpt": "συγκατάθεσις, συγκαταθετικός λόγος"
+   }
+  ],
+  "pub_dihle_1982_theory_of_will": [
+   {
+    "hash": "6d8110c8f1f014c3",
+    "excerpt": "ὄρεξις, ἐπιθυμία, βούλησις"
+   }
+  ],
+  "pub_dihle_1982_theory_will": [
+   {
+    "hash": "6d8110c8f1f014c3",
+    "excerpt": "ὄρεξις, ἐπιθυμία, βούλησις"
+   }
+  ],
+  "scholarly_work_velardo_2013_notas_teol_gicas_de_bellum_judaicum": [
+   {
+    "hash": "cee04e762d9abb6d",
+    "excerpt": "Τὴν εἱμαρμένην ἄφυκτον"
+   }
+  ],
+  "school_middle_platonism": [
+   {
+    "hash": "f09ed670d6697340",
+    "excerpt": "ἐξ ὑποθέσεως εἱμαρμένη"
+   }
+  ],
+  "school_peripatetics": [
+   {
+    "hash": "2c36f9abbda1b942",
+    "excerpt": "δυνάμεις μετὰ λόγου"
+   }
+  ],
+  "collection_aetius_placita": [
+   {
+    "hash": "8d623ac754633b91",
+    "excerpt": "εἱμαρμένη, πρόνοια"
+   }
+  ],
+  "synthesis_amand1945_alexander_defends_contingency": [
+   {
+    "hash": "701635ab5e8d9779",
+    "excerpt": "τὸ ἐνδεχομένως γεγονὸς ἐν τινι καὶ μὴ γεγονέναι ἐν αὐτῷ οἷόν"
+   }
+  ],
+  "synthesis_amand1945_alexander_physical_determinism_sublunar": [
+   {
+    "hash": "8390cce9bd2b7576",
+    "excerpt": "Περὶ κράσεως καὶ αὐξήσεως"
+   }
+  ],
+  "synthesis_amand1945_aristotle_most_complete_pre_carneadean_anti_fatalist": [
+   {
+    "hash": "c0badd57e0d75891",
+    "excerpt": "ἐφ' ἡμῖν δὴ καὶ ἡ ἀρετή, ὁμοίως δὲ καὶ ἡ κακία"
+   }
+  ],
+  "synthesis_amand1945_carneades_partial_acceptance_natural_sympathy": [
+   {
+    "hash": "1ef3f3a30fc3a986",
+    "excerpt": "συμπάθεια τῶν ὅλων"
+   }
+  ],
+  "synthesis_amand1945_gorgias_first_moral_refutation": [
+   {
+    "hash": "d7a38c6e97dc525b",
+    "excerpt": "Μοῖρα, Αἶσα, Κῆρες, Ἐρινύες"
+   }
+  ],
+  "synthesis_amand1945_hierocles_bizarre_carneadean_inversion": [
+   {
+    "hash": "f05d9dbb51fb8673",
+    "excerpt": "κρίσις θεία οὖσα ἐν τοῖς οὐκ ἐφ' ἡμῖν πρὸς τὴν ἀξίαν ἀμοιβὴν"
+   }
+  ],
+  "synthesis_amand1945_intro_christian_baptismal_liberation": [
+   {
+    "hash": "a3a6f111b810a10f",
+    "excerpt": "οὔτε ἄγγελοι οὔτε ἀρχαί... οὔτε ὕψωμα οὔτε βάθος"
+   }
+  ],
+  "synthesis_amand1945_intro_stoic_joyful_resignation": [
+   {
+    "hash": "072569350a258260",
+    "excerpt": "στρατιῶται τῆς εἱμαρμένης"
+   }
+  ],
+  "synthesis_amand1945_origen_first_precession_polemicist": [
+   {
+    "hash": "877c9b67a5d00cb3",
+    "excerpt": "νοητὸν δωδεκατημόριον"
+   }
+  ],
+  "synthesis_amand1945_philo_attitude_astrology_signs_not_causes": [
+   {
+    "hash": "e6c0382058c87c96",
+    "excerpt": "λογικαὶ καὶ θεῖαι φύσεις, οὐκ ἄνευ σωμάτων"
+   }
+  ],
+  "synthesis_amand1945_philo_resolute_defender_human_freedom": [
+   {
+    "hash": "5777647ae6e65d7f",
+    "excerpt": "ἄφετον καὶ ἐλεύθερον"
+   }
+  ],
+  "synthesis_amand1945_pseudo_plutarch_de_fato_conditional_heimarmene": [
+   {
+    "hash": "eb5be66c1df59413",
+    "excerpt": "πάντα ἐν εἱμαρμένῃ εἶναι, οὐ μὴν πάντα καθειμάρθαι"
+   }
+  ],
+  "synthesis_bobzien2001_ch6_chrysippean_compatibilism": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "synthesis_bobzien2001_ch8_philopator_late_stoic": [
+   {
+    "hash": "929a84413dd46cf0",
+    "excerpt": "ἑκούσιον, ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "synthesis_furst2022_origen_central_freedom": [
+   {
+    "hash": "3732e33e8debab87",
+    "excerpt": "καλῶς βιοῦν, εὖ πράττειν"
+   }
+  ],
+  "sc268_origenes_peri_archon": [
+   {
+    "hash": "7c6b9db4e9f27c7a",
+    "excerpt": "αὐτεξούσιον, ἐφ' ἡμῖν, εἱμαρμένη, συγκατάθεσις"
+   }
+  ],
+  "sc379_athenagoras_legatio": [
+   {
+    "hash": "e4384440d29cc890",
+    "excerpt": "Πρεσβεία περὶ Χριστιανῶν"
+   }
+  ],
+  "work_4_maccabees": [
+   {
+    "hash": "4030599db54eebf5",
+    "excerpt": "ὁ εὐσεβὴς λογισμός"
+   }
+  ],
+  "work_athenagoras_legatio_sc379": [
+   {
+    "hash": "e4384440d29cc890",
+    "excerpt": "Πρεσβεία περὶ Χριστιανῶν"
+   }
+  ],
+  "work_basil_homiliae_quod_deus_non_est_auctor_malorum": [
+   {
+    "hash": "e92365c75096ef1d",
+    "excerpt": "τὸ ἐφ' ἡμῖν ἐστι τὸ αὐτεξούσιον"
+   }
+  ],
+  "work_cleanthes_svf_i_fragments": [
+   {
+    "hash": "e6dc5e180af6cd3f",
+    "excerpt": "φύσις, Ζεύς, εἱμαρμένη"
+   }
+  ],
+  "work_de_fato_alexander_c200ce_o6p7q8r9": [
+   {
+    "hash": "949a5bdac2d1dcb9",
+    "excerpt": "Περὶ εἱμαρμένης καὶ τοῦ ἐφ' ἡμῖν πρὸς τοὺς αὐτοκράτορας"
+   }
+  ],
+  "work_de_gen_corr_aristotle": [
+   {
+    "hash": "f2d06cc22948e13c",
+    "excerpt": "ἐξ ὑποθέσεως ἀναγκαῖον"
+   }
+  ],
+  "work_didaskalikos_alcinous_2nd_ce_q7r8s9t0": [
+   {
+    "hash": "ecd8551e2d30c284",
+    "excerpt": "Περὶ δὲ εἱμαρμένης"
+   }
+  ],
+  "work_diogenes_laertius_lives": [
+   {
+    "hash": "a4755551dab9af61",
+    "excerpt": "Βίοι καὶ γνῶμαι τῶν ἐν φιλοσοφίᾳ εὐδοκιμησάντων"
+   }
+  ],
+  "work_epictetus_discourses": [
+   {
+    "hash": "f30383017babca4d",
+    "excerpt": "Ἀρριανοῦ τῶν Ἐπικτήτου Διατριβῶν"
+   }
+  ],
+  "work_eusebius_demonstratio_evangelica": [
+   {
+    "hash": "34387c29907ba073",
+    "excerpt": "ἄφετον καὶ ἐλεύθερον ἐπὶ τῆς αὐθεκουσίου περὶ τὸ καλὸν ἢ τοὐ"
+   }
+  ],
+  "work_gregory_contra_eunomium": [
+   {
+    "hash": "2aac1647220233ba",
+    "excerpt": "Πρὸς Εὐνόμιον ἀντιρρητικός"
+   }
+  ],
+  "work_gregory_de_anima_resurrectione": [
+   {
+    "hash": "c5229b2e4797d891",
+    "excerpt": "Περὶ ψυχῆς καὶ ἀναστάσεως"
+   }
+  ],
+  "work_justin_second_apology_sc507": [
+   {
+    "hash": "dd503f513b019806",
+    "excerpt": "Ἀπολογία δευτέρα ὑπὲρ Χριστιανῶν"
+   }
+  ],
+  "work_maximus_quaestiones_thalassium": [
+   {
+    "hash": "cfc4adecaf7fa85f",
+    "excerpt": "Πρὸς Θαλάσσιον περὶ διαφόρων ἀπόρων τῆς Θείας Γραφῆς"
+   }
+  ],
+  "work_metaphysics_theta_aristotle_c350bce_f5g7h9i1": [
+   {
+    "hash": "2c36f9abbda1b942",
+    "excerpt": "δυνάμεις μετὰ λόγου"
+   }
+  ],
+  "work_origen_homilies_jeremiah": [
+   {
+    "hash": "0d7e2a44a7f9f364",
+    "excerpt": "τὸ γὰρ αὐτεξούσιον ἐλεύθερόν ἐστι"
+   }
+  ],
+  "work_origen_philocalia": [
+   {
+    "hash": "81286d56d3b4553f",
+    "excerpt": "αὐτεξούσιον, προαίρεσις, ἐφ' ἡμῖν"
+   }
+  ],
+  "work_plotinus_ennead_vi_8_d8b9c5a4": [
+   {
+    "hash": "045dcc0a0602e43a",
+    "excerpt": "ἐφ' ἡμῖν, αὐτεξούσιον"
+   }
+  ],
+  "work_plutarch_de_communibus_notitiis": [
+   {
+    "hash": "f975258146bd8915",
+    "excerpt": "Περὶ τῶν κοινῶν ἐννοιῶν πρὸς τοὺς Στωϊκούς"
+   }
+  ],
+  "work_plutarch_stoic_repugnantiis": [
+   {
+    "hash": "2f6005fac378fa67",
+    "excerpt": "Περὶ Στωϊκῶν ἐναντιωμάτων"
+   }
+  ],
+  "work_sextus_outlines_pyrrhonism_f9a7c8e4": [
+   {
+    "hash": "d8d4d589e6ec8457",
+    "excerpt": "Πυρρώνειοι ὑποτυπώσεις"
+   }
+  ],
+  "work_theodoret_graecarum_affectionum_curatio": [
+   {
+    "hash": "7c88b0190abbaada",
+    "excerpt": "Ἑλληνικῶν θεραπευτικὴ παθημάτων"
+   }
+  ],
+  "argument_origen_witness_carneades_transposition_praise_blame_amand1945": [
+   {
+    "hash": "bed4432f18cfd209",
+    "excerpt": "Ἕπεται δὲ τοῖς ταῦτα δογματίζουσιν ἐξ ὅλων τὸ ἐφ᾽ ἡμῖν ἀναιρ",
+    "provenance": "verbatim TLG2042 Origenes (De Princ. III.1/Philocalia) + TLG2018 Eusebius PE VI — verified 2026-06-11"
+   }
+  ],
+  "concept_triple_providence_plut": [
+   {
+    "hash": "4057f142f11c71b2",
+    "excerpt": "πρόνοια ἡ μὲν ἀνωτάτω καὶ πρώτη τοῦ πρώτου θεοῦ νόησις... ἡ ",
+    "provenance": "verbatim TLG0007 Ps-Plutarch De fato 572F-573A — verified 2026-06-11"
+   }
+  ]
+ }
+}

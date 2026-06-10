@@ -153,6 +153,14 @@ repos:
         files: ^data/kg/.*\.jsonl$
         stages: [commit]
 
+      - id: greek-fabrication-gate
+        name: Greek zero-fabrication gate
+        entry: python3 scripts/check_greek_gate.py
+        language: system
+        pass_filenames: false
+        files: ^data/kg/nodes\.jsonl$
+        stages: [commit]
+
 # ==========================================
 # CI Configuration (skip some hooks in CI)
 # ==========================================
