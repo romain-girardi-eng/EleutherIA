@@ -8,6 +8,7 @@ GET  /share/{token}                         — no auth, returns read-only HTML
 from __future__ import annotations
 
 import html
+import json
 import logging
 import os
 import secrets
@@ -105,7 +106,7 @@ async def render_shared_trace(
         """
         SELECT st.token, st.expires_at, st.view_count,
                qt.query, qt.final_answer_text, qt.final_answer_citations,
-               qt.started_at, qt.completed_at, qt.mode
+               qt.started_at, qt.completed_at, qt.mode, qt.metadata
         FROM free_will.shared_traces st
         JOIN free_will.query_traces qt USING (trace_id)
         WHERE st.token = $1
@@ -138,10 +139,42 @@ async def render_shared_trace(
 
     query = row.get("query") or ""
     answer = row.get("final_answer_text") or ""
-    citations_raw = row.get("final_answer_citations") or []
+    citations_raw = _coerce_json_value(row.get("final_answer_citations"), [])
+    trace_metadata = _coerce_json_value(row.get("metadata"), {})
     started_at = row.get("started_at")
 
-    return HTMLResponse(_render_page(query, answer, citations_raw, started_at))
+    claim_ledger: list[Any] = []
+    answer_metadata: dict[str, Any] = {}
+    if isinstance(trace_metadata, dict):
+        raw_ledger = trace_metadata.get("claim_ledger")
+        if isinstance(raw_ledger, list):
+            claim_ledger = raw_ledger
+        raw_meta = trace_metadata.get("answer_metadata")
+        if isinstance(raw_meta, dict):
+            answer_metadata = raw_meta
+
+    return HTMLResponse(
+        _render_page(
+            query,
+            answer,
+            citations_raw,
+            started_at,
+            claim_ledger=claim_ledger,
+            answer_metadata=answer_metadata,
+        )
+    )
+
+
+def _coerce_json_value(value: Any, default: Any) -> Any:
+    """asyncpg may return JSONB columns as parsed objects or as strings."""
+    if value is None:
+        return default
+    if isinstance(value, str):
+        try:
+            return json.loads(value)
+        except (TypeError, ValueError):
+            return default
+    return value
 
 
 # ---------------------------------------------------------------------------
@@ -154,22 +187,42 @@ def _render_page(
     answer: str,
     citations: list[Any],
     started_at: datetime | None,
+    *,
+    claim_ledger: list[Any] | None = None,
+    answer_metadata: dict[str, Any] | None = None,
 ) -> str:
     date_str = started_at.strftime("%Y-%m-%d") if started_at else ""
     q_escaped = html.escape(query)
     a_escaped = html.escape(answer).replace("\n", "<br>")
 
     citation_rows = ""
+    citation_labels: dict[str, str] = {}
     for i, c in enumerate(citations or [], start=1):
         if isinstance(c, dict):
-            label = html.escape(c.get("work_label") or c.get("passage_id") or "")
+            label = html.escape(
+                c.get("work_label")
+                or c.get("label")
+                or c.get("passage_id")
+                or c.get("id")
+                or ""
+            )
+            if c.get("id"):
+                citation_labels[str(c["id"])] = label
             urn = html.escape(c.get("cts_urn") or "")
             excerpt = html.escape(c.get("excerpt") or "")
+            verified = c.get("verified")
+            note = html.escape(c.get("verification_note") or "")
+            verdict_badge = ""
+            if verified is True:
+                verdict_badge = '<span class="verdict ok">vérifiée</span>'
+            elif verified is False:
+                verdict_badge = '<span class="verdict warn">non vérifiée</span>'
             citation_rows += (
                 f'<li class="citation"><span class="cnum">[{i}]</span> '
-                f'<strong>{label}</strong>'
+                f'<strong>{label}</strong> {verdict_badge}'
                 + (f' <code class="urn">{urn}</code>' if urn else "")
                 + (f'<br><em class="excerpt">{excerpt}</em>' if excerpt else "")
+                + (f'<br><em class="excerpt">{note}</em>' if note else "")
                 + "</li>\n"
             )
 
@@ -177,6 +230,10 @@ def _render_page(
         f'<section class="citations"><h2>Sources</h2><ol>{citation_rows}</ol></section>'
         if citation_rows
         else ""
+    )
+
+    claims_section = _render_claims_section(
+        claim_ledger or [], answer_metadata or {}, citation_labels
     )
 
     return f"""<!DOCTYPE html>
@@ -202,6 +259,14 @@ def _render_page(
   .cnum{{color:var(--amber);font-weight:700;margin-right:.4rem}}
   .urn{{font-size:.75rem;color:#a8a29e;background:#f5f5f4;padding:.1rem .3rem;border-radius:.2rem}}
   .excerpt{{color:#57534e;font-size:.85rem;display:block;margin-top:.25rem}}
+  .verdict{{font-size:.7rem;padding:.1rem .4rem;border-radius:.25rem;vertical-align:middle}}
+  .verdict.ok{{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0}}
+  .verdict.warn{{background:#fffbeb;color:#b45309;border:1px solid #fde68a}}
+  .claims{{margin-bottom:2rem}}
+  .claims h2{{font-size:1rem;text-transform:uppercase;letter-spacing:.1em;color:#78716c;margin-bottom:.75rem}}
+  .claim{{padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.9rem}}
+  .claim .evidence{{color:#78716c;font-size:.8rem;display:block;margin-top:.2rem}}
+  .verifnote{{font-size:.8rem;color:#78716c;margin-top:.5rem}}
   footer{{font-size:.75rem;color:#a8a29e;text-align:center;border-top:1px solid var(--border);padding-top:1rem}}
   a{{color:var(--amber)}}
 </style>
@@ -215,10 +280,91 @@ def _render_page(
   <h1>{q_escaped}</h1>
   <section class="answer">{a_escaped}</section>
   {citations_section}
+  {claims_section}
   <footer>Généré par <a href="https://free-will.app">EleutherIA</a> · CC BY 4.0</footer>
 </div>
 </body>
 </html>"""
+
+
+def _render_claims_section(
+    claim_ledger: list[Any],
+    answer_metadata: dict[str, Any],
+    citation_labels: dict[str, str],
+) -> str:
+    """Claims-with-evidence + verification summary for the share page.
+
+    Renders the typed claim ledger (claim text, status, evidence ids resolved
+    to citation labels when possible) and a one-line verification note from
+    the citation audit / text verification reports. Empty string when the
+    trace carries no provenance (older traces).
+    """
+    claim_rows = ""
+    for item in claim_ledger:
+        if not isinstance(item, dict):
+            continue
+        claim_text = html.escape(str(item.get("claim") or ""))
+        if not claim_text:
+            continue
+        status = str(item.get("status") or "supported")
+        status_class = "ok" if status == "supported" else "warn"
+        status_label = "étayée" if status == "supported" else "insuffisante"
+        evidence_ids = item.get("evidence_ids") or []
+        evidence_labels = [
+            citation_labels.get(str(eid), html.escape(str(eid)))
+            for eid in evidence_ids
+            if eid
+        ]
+        evidence_html = (
+            f'<span class="evidence">Preuves : {", ".join(evidence_labels)}</span>'
+            if evidence_labels
+            else ""
+        )
+        claim_rows += (
+            f'<li class="claim">{claim_text} '
+            f'<span class="verdict {status_class}">{status_label}</span>'
+            f"{evidence_html}</li>\n"
+        )
+
+    notes: list[str] = []
+    verifier = answer_metadata.get("citation_verifier_v2")
+    if isinstance(verifier, dict) and verifier.get("total"):
+        notes.append(
+            f"Audit des citations : {int(verifier.get('verified') or 0)}/"
+            f"{int(verifier.get('total') or 0)} vérifiées"
+        )
+    text_verification = answer_metadata.get("text_verification")
+    if isinstance(text_verification, dict):
+        unverified = int(text_verification.get("unverified") or 0)
+        verified = int(text_verification.get("verified") or 0)
+        if unverified:
+            notes.append(
+                f"Textes anciens : {unverified} extrait(s) non vérifié(s) "
+                "dans le corpus"
+            )
+        elif verified:
+            notes.append(f"Textes anciens : {verified} extrait(s) vérifié(s)")
+    grounding = answer_metadata.get("grounding")
+    if isinstance(grounding, dict) and grounding.get("score") is not None:
+        coverage = grounding.get("coverage")
+        notes.append(
+            f"Score d'ancrage : {grounding['score']}/100"
+            + (f" ({coverage})" if coverage else "")
+        )
+
+    if not claim_rows and not notes:
+        return ""
+
+    notes_html = (
+        f'<p class="verifnote">{" · ".join(html.escape(n) for n in notes)}</p>'
+        if notes
+        else ""
+    )
+    list_html = f"<ol>{claim_rows}</ol>" if claim_rows else ""
+    return (
+        '<section class="claims"><h2>Affirmations et preuves</h2>'
+        f"{list_html}{notes_html}</section>"
+    )
 
 
 def _error_page(message: str) -> str:

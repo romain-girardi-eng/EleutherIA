@@ -56,6 +56,8 @@ interface Props {
   kgActivations: KGActivation[];
   streamedAnswer: string;
   finalAnswer: FinalAnswerEvent | null;
+  /** Verification lifecycle of the streamed prose (from useResearchStream). */
+  answerVerification?: 'none' | 'pending' | 'verified';
   /** Live token + USD cost accumulator from ``useResearchStream``. */
   tokenUsage?: TokenUsageState;
   /** Session identifier used to scope localStorage (bibliography, history). */
@@ -81,6 +83,7 @@ export function ResearchSession({
   kgActivations,
   streamedAnswer,
   finalAnswer,
+  answerVerification = 'none',
   tokenUsage,
   sessionId = 'default',
   traceId,
@@ -94,6 +97,9 @@ export function ResearchSession({
   const isLive =
     status === 'streaming' || status === 'connecting' || status === 'synthesizing';
   const renderedAnswer = finalAnswer ? finalAnswer.answer : streamedAnswer;
+  // Streamed prose is a preview until the citation audit completes; the
+  // final answer payload is always post-verification.
+  const verificationPending = answerVerification === 'pending' && !finalAnswer;
   const effectiveTraceId = traceId ?? finalAnswer?.trace_id;
 
   const bibliography = useBibliography(sessionId);
@@ -213,6 +219,7 @@ export function ResearchSession({
               citations={citations}
               isLive={isLive && !finalAnswer}
               traceId={effectiveTraceId}
+              verificationPending={verificationPending}
             />
           </div>
           <MethodologyNotesPane
@@ -269,6 +276,7 @@ export function ResearchSession({
               citations={citations}
               isLive={isLive && !finalAnswer}
               traceId={effectiveTraceId}
+              verificationPending={verificationPending}
             />
           )}
           {mobileTab === 'methodology' && (

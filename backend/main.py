@@ -47,6 +47,7 @@ from backend.routes.works_extras import (
 from backend.routes.works_extras import (
     router as works_extras_router,
 )
+from backend.services.rate_limit import LLMRateLimitMiddleware
 
 logger = logging.getLogger(__name__)
 
@@ -117,6 +118,12 @@ def create_app() -> FastAPI:
         version="2.0.0",
         lifespan=lifespan,
     )
+
+    # Per-IP throttle on the LLM-invoking endpoints only (admission control;
+    # SSE streams are never wrapped). Added before CORS so CORS stays
+    # outermost and 429 responses carry CORS headers for the browser FE.
+    # See backend/services/rate_limit.py.
+    app.add_middleware(LLMRateLimitMiddleware)
 
     # CORS
     allowed_origins = os.getenv(

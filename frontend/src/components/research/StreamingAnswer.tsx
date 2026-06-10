@@ -62,6 +62,12 @@ interface Props {
   traceId?: string;
   /** Override the export URL builder (used in tests). */
   buildExportUrl?: (traceId: string, fmt: ExportFormat) => string;
+  /**
+   * True while streamed prose is on screen but the citation audit has not
+   * completed yet — renders a "preview" banner so unverified claims are
+   * never presented as final.
+   */
+  verificationPending?: boolean;
 }
 
 const SOURCE_PATTERN = /\[Source\s+(\d+)\]/g;
@@ -122,6 +128,7 @@ export function StreamingAnswer({
   footnotes,
   traceId,
   buildExportUrl,
+  verificationPending,
 }: Props) {
   const { t } = useTranslation();
   const segments = useMemo(() => splitSegments(text), [text]);
@@ -163,6 +170,18 @@ export function StreamingAnswer({
         className,
       )}
     >
+      {verificationPending && (
+        <p
+          role="status"
+          className="not-prose mb-3 inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-800"
+        >
+          <span
+            className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-500"
+            aria-hidden="true"
+          />
+          {t('research.answer.pendingVerification')}
+        </p>
+      )}
       {segments.map((seg, i) => {
         if (seg.kind === 'text') {
           return <ReactMarkdown key={i}>{seg.value}</ReactMarkdown>;

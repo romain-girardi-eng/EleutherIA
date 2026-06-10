@@ -269,3 +269,156 @@ async def test_record_hit_executes_update() -> None:
     await cache.record_hit("some-key")
     db.execute.assert_awaited_once()
     assert db.execute.await_args.args[1] == "some-key"
+
+
+# ---------- provenance (metadata + claim_ledger) round-trip ----------
+
+
+@pytest.mark.asyncio
+async def test_store_packs_provenance_into_reasoning_path_json() -> None:
+    """Regression: metadata + claim_ledger must survive the cache (G9-B)."""
+    import json as json_mod
+
+    db = _make_db(fetchval_return=0)
+    cache = AnswerCache(db)
+    metadata = {"text_verification": {"verified": 3, "unverified": 1}}
+    ledger = [{"claim": "c1", "evidence_ids": ["P1"], "status": "supported"}]
+    await cache.store(
+        question="q",
+        model="m",
+        retrieval_mode="auto",
+        answer="a" * 1500,
+        citations=[],
+        passage_citations=[],
+        sources=[],
+        reasoning_path={"total_nodes": 3},
+        total_tokens=1,
+        total_cost_usd=0.0,
+        trace_id=None,
+        metadata=metadata,
+        claim_ledger=ledger,
+    )
+    args = db.execute.await_args.args
+    # reasoning_path_json is the 10th SQL parameter (args[10] after sql)
+    stored_reasoning = json_mod.loads(args[10])
+    assert stored_reasoning["total_nodes"] == 3
+    provenance = stored_reasoning["__answer_provenance__"]
+    assert provenance["metadata"] == metadata
+    assert provenance["claim_ledger"] == ledger
+
+
+@pytest.mark.asyncio
+async def test_lookup_unpacks_provenance_and_strips_reserved_key() -> None:
+    now = datetime.now(UTC)
+    metadata = {"grounding": {"score": 92, "method": "verifier_v2_sample"}}
+    ledger = [{"claim": "c1", "status": "supported"}]
+    db = _make_db(
+        fetchrow_return={
+            "cache_key": "k",
+            "answer": "the answer",
+            "citations_json": [],
+            "passage_citations_json": [],
+            "sources_json": [],
+            "reasoning_path_json": {
+                "total_nodes": 4,
+                "__answer_provenance__": {
+                    "metadata": metadata,
+                    "claim_ledger": ledger,
+                },
+            },
+            "total_tokens": 1,
+            "total_cost_usd": 0.0,
+            "trace_id": None,
+            "kg_version_at_creation": 0,
+            "hit_count": 0,
+            "created_at": now,
+        },
+        fetchval_return=0,
+    )
+    cache = AnswerCache(db)
+    result = await cache.lookup(question="q", model="m", retrieval_mode="auto")
+    assert result is not None
+    assert result["metadata"] == metadata
+    assert result["claim_ledger"] == ledger
+    # Reserved key must not leak into the replayed reasoning_path.
+    assert result["reasoning_path"] == {"total_nodes": 4}
+
+
+@pytest.mark.asyncio
+async def test_lookup_without_provenance_returns_empty_defaults() -> None:
+    """Older cache rows (no packed provenance) keep working."""
+    now = datetime.now(UTC)
+    db = _make_db(
+        fetchrow_return={
+            "cache_key": "k",
+            "answer": "the answer",
+            "citations_json": [],
+            "passage_citations_json": [],
+            "sources_json": [],
+            "reasoning_path_json": {"total_nodes": 4},
+            "total_tokens": 1,
+            "total_cost_usd": 0.0,
+            "trace_id": None,
+            "kg_version_at_creation": 0,
+            "hit_count": 0,
+            "created_at": now,
+        },
+        fetchval_return=0,
+    )
+    cache = AnswerCache(db)
+    result = await cache.lookup(question="q", model="m", retrieval_mode="auto")
+    assert result is not None
+    assert result["metadata"] == {}
+    assert result["claim_ledger"] == []
+    assert result["reasoning_path"] == {"total_nodes": 4}
+
+
+# ---------- fast/deep mode segmentation ----------
+
+
+def test_cache_key_changes_when_mode_changes() -> None:
+    """Regression: deep (counter-evidence) and fast answers must never
+    share a cache slot — a deep request used to silently replay a cached
+    fast answer and skip the counter-evidence hunt."""
+    k_fast = AnswerCache.cache_key("q", "gemini-3.1-pro", "auto", "fast")
+    k_deep = AnswerCache.cache_key("q", "gemini-3.1-pro", "auto", "deep")
+    assert k_fast != k_deep
+
+
+def test_cache_key_defaults_to_fast_mode() -> None:
+    assert AnswerCache.cache_key("q", "m", "auto") == AnswerCache.cache_key(
+        "q", "m", "auto", "fast"
+    )
+
+
+@pytest.mark.asyncio
+async def test_lookup_keys_on_mode() -> None:
+    db = _make_db(fetchrow_return=None, fetchval_return=0)
+    cache = AnswerCache(db)
+    await cache.lookup(question="q", model="m", retrieval_mode="auto", mode="deep")
+    looked_up_key = db.fetchrow.await_args.args[1]
+    assert looked_up_key == AnswerCache.cache_key("q", "m", "auto", "deep")
+    assert looked_up_key != AnswerCache.cache_key("q", "m", "auto", "fast")
+
+
+@pytest.mark.asyncio
+async def test_store_keys_on_mode() -> None:
+    db = _make_db(fetchval_return=0)
+    cache = AnswerCache(db)
+    await cache.store(
+        question="q",
+        model="m",
+        retrieval_mode="auto",
+        mode="deep",
+        answer="a" * 1500,
+        citations=[],
+        passage_citations=[],
+        sources=[],
+        reasoning_path={},
+        total_tokens=0,
+        total_cost_usd=0,
+        trace_id=None,
+    )
+    stored_key = db.execute.await_args.args[1]
+    assert stored_key == AnswerCache.cache_key("q", "m", "auto", "deep")
+    assert stored_key != AnswerCache.cache_key("q", "m", "auto", "fast")

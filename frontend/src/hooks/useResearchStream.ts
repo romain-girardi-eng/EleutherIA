@@ -120,6 +120,8 @@ export interface UseResearchStreamReturn {
   tokenUsage: TokenUsageState;
   streamedAnswer: string;
   finalAnswer: FinalAnswerEvent | null;
+  /** Verification lifecycle of the streamed prose (preview → verified). */
+  answerVerification: AnswerVerificationState;
   traceId: string | null;
   error: string | null;
   retryCount: number;
@@ -131,11 +133,33 @@ export interface UseResearchStreamReturn {
   reset: () => void;
 }
 
+/** Verdicts that arrived before (or without) a matching citation_found. */
+export interface PendingVerification {
+  verified: boolean;
+  reason?: string;
+}
+
+/**
+ * Verification lifecycle of the streamed prose:
+ *  - 'none'     — nothing streamed yet
+ *  - 'pending'  — prose is on screen but the citation audit hasn't completed
+ *  - 'verified' — citation_audit stage completed (or final_answer arrived)
+ */
+export type AnswerVerificationState = 'none' | 'pending' | 'verified';
+
 interface State {
   status: SessionStatus;
   events: AgentEvent[];
   citationsById: Record<string, CitationEntry>;
   citationOrder: string[];
+  /**
+   * citation_verified verdicts whose id had no entry in citationsById at
+   * arrival time (node-shaped ids, audit racing ahead of citation_found).
+   * Reconciled into citationsById on citation_found / final_answer instead
+   * of being dropped.
+   */
+  pendingVerifications: Record<string, PendingVerification>;
+  answerVerification: AnswerVerificationState;
   activeSubagents: Record<string, ActiveSubagent>;
   toolCallsById: Record<string, PairedToolCall>;
   toolCallOrder: string[];
@@ -154,6 +178,8 @@ const initialState: State = {
   events: [],
   citationsById: {},
   citationOrder: [],
+  pendingVerifications: {},
+  answerVerification: 'none',
   activeSubagents: {},
   toolCallsById: {},
   toolCallOrder: [],
@@ -358,6 +384,8 @@ export function reduce(state: State, action: Action): State {
         case 'citation_found': {
           const cit = event as CitationFoundEvent;
           const id = cit.passage_id;
+          // A verdict may have arrived before this citation — apply it now.
+          const pending = state.pendingVerifications[id];
           const entry: CitationEntry = {
             passage_id: cit.passage_id,
             cts_urn: cit.cts_urn,
@@ -365,8 +393,9 @@ export function reduce(state: State, action: Action): State {
             excerpt: cit.excerpt,
             node_ids: cit.node_ids,
             confidence: cit.confidence,
-            verified: state.citationsById[id]?.verified,
-            verification_reason: state.citationsById[id]?.verification_reason,
+            verified: state.citationsById[id]?.verified ?? pending?.verified,
+            verification_reason:
+              state.citationsById[id]?.verification_reason ?? pending?.reason,
             arrived_at: state.citationsById[id]?.arrived_at ?? at,
           };
           return {
@@ -382,7 +411,19 @@ export function reduce(state: State, action: Action): State {
         case 'citation_verified': {
           const v = event as CitationVerifiedEvent;
           const existing = state.citationsById[v.passage_id];
-          if (!existing) return { ...state, events };
+          if (!existing) {
+            // Node-shaped ids (kg nodes) and audit-before-found races used to
+            // be dropped here. Accumulate the verdict in a side map and
+            // reconcile when the citation (or final answer) lands.
+            return {
+              ...state,
+              events,
+              pendingVerifications: {
+                ...state.pendingVerifications,
+                [v.passage_id]: { verified: v.verified, reason: v.reason },
+              },
+            };
+          }
           return {
             ...state,
             events,
@@ -421,6 +462,12 @@ export function reduce(state: State, action: Action): State {
           return {
             ...state,
             events,
+            // The citation audit verdicts are all on the wire once this
+            // stage completes — the streamed prose is no longer a preview.
+            answerVerification:
+              event.stage === 'citation_audit'
+                ? 'verified'
+                : state.answerVerification,
             stageTimings: [
               ...state.stageTimings,
               {
@@ -461,13 +508,30 @@ export function reduce(state: State, action: Action): State {
             ...state,
             events,
             streamedAnswer: state.streamedAnswer + event.delta,
+            // Prose is rendering before the citation audit has run — flag it
+            // as a preview until stage_complete(citation_audit) arrives.
+            answerVerification:
+              state.answerVerification === 'none'
+                ? 'pending'
+                : state.answerVerification,
             status: state.status === 'streaming' ? 'synthesizing' : state.status,
           };
 
         case 'final_answer': {
           const final = event as FinalAnswerEvent;
-          // Reconcile verification flags from the final citation list.
+          // Reconcile verification flags from the final citation list and
+          // from any verdicts that arrived before their citation_found.
           const reconciled: Record<string, CitationEntry> = { ...state.citationsById };
+          for (const [id, pending] of Object.entries(state.pendingVerifications)) {
+            const existing = reconciled[id];
+            if (existing && existing.verified === undefined) {
+              reconciled[id] = {
+                ...existing,
+                verified: pending.verified,
+                verification_reason: pending.reason,
+              };
+            }
+          }
           for (const c of final.citations as FinalAnswerCitation[]) {
             const existing = reconciled[c.passage_id];
             if (existing) {
@@ -480,6 +544,8 @@ export function reduce(state: State, action: Action): State {
             citationsById: reconciled,
             finalAnswer: final,
             traceId: final.trace_id,
+            answerVerification:
+              state.answerVerification === 'none' ? 'none' : 'verified',
             status: 'complete',
           };
         }
@@ -682,6 +748,7 @@ export function useResearchStream(
     tokenUsage: state.tokenUsage,
     streamedAnswer: state.streamedAnswer,
     finalAnswer: state.finalAnswer,
+    answerVerification: state.answerVerification,
     traceId: state.traceId,
     error: state.error,
     retryCount: state.retryCount,

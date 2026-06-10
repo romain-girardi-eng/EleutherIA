@@ -38,7 +38,7 @@ async def get_query_audit(
     db: Annotated[DatabaseService, Depends(get_db)],
 ) -> dict[str, Any]:
     """Return the full audit trail for one query."""
-    await get_current_user(request, db)
+    user = await get_current_user(request, db)
 
     trace_uuid = _coerce_uuid(trace_id)
     row = await db.fetchrow(
@@ -65,6 +65,14 @@ async def get_query_audit(
         trace_uuid,
     )
     if row is None:
+        raise HTTPException(status_code=404, detail="Trace not found")
+
+    # Ownership check — traces are private to their creator. Legacy rows with
+    # no user_id stay readable; admins can inspect any trace. 404 (not 403)
+    # so trace_ids can't be enumerated.
+    owner_id = row.get("user_id")
+    is_admin = (user.get("role") or "").lower() == "admin"
+    if owner_id is not None and str(owner_id) != str(user["user_id"]) and not is_admin:
         raise HTTPException(status_code=404, detail="Trace not found")
 
     agent_tree = row.get("agent_tree") or {}

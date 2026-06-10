@@ -57,6 +57,20 @@ def _fake_node_lookup() -> dict[str, dict[str, Any]]:
             "type": "work",
             "description": "Aristotle's ethical treatise",
         },
+        "passage_ne_1": {
+            "id": "passage_ne_1",
+            "label": "Nicomachean Ethics III.1",
+            "type": "passage",
+            "description": "Original-language passage placeholder",
+            "metadata": {"language": "grc", "work_title": "Nicomachean Ethics"},
+        },
+        "passage_ne_1_en": {
+            "id": "passage_ne_1_en",
+            "label": "Nicomachean Ethics III.1 (English)",
+            "type": "passage",
+            "description": "English machine translation placeholder",
+            "metadata": {"language": "eng", "translation_type": "machine"},
+        },
     }
 
 
@@ -80,6 +94,14 @@ def _fake_edges() -> tuple[dict[str, list[dict[str, Any]]], dict[str, list[dict[
     incoming: dict[str, list[dict[str, Any]]] = {
         "work_ne": [out["person_aristotle"][0]],
         "concept_prohairesis": [out["person_aristotle"][1]],
+        "passage_ne_1": [
+            {
+                "source": "passage_ne_1_en",
+                "target": "passage_ne_1",
+                "relation": "translation_of",
+                "weight": 0.5,
+            }
+        ],
     }
     return out, incoming
 
@@ -197,6 +219,22 @@ async def test_read_passages_handles_missing_node() -> None:
     payload = _extract_payload(await mcp.call_tool("read_passages", {"node_id": "nonexistent"}))
     assert payload["node_id"] == "nonexistent"
     assert payload["passages"] == []
+
+
+@pytest.mark.asyncio
+async def test_read_passages_exposes_translation_provenance() -> None:
+    """Machine translations must never be presented without an AI flag."""
+    mcp = build_server()
+    payload = _extract_payload(
+        await mcp.call_tool("read_passages", {"node_id": "passage_ne_1"})
+    )
+    rows = [p for p in payload["passages"] if p["passage_id"] == "passage_ne_1"]
+    assert rows, payload
+    passage = rows[0]
+    assert passage["translation"] == "English machine translation placeholder"
+    assert passage["translation_type"] == "machine"
+    assert passage["translation_ai_generated"] is True
+    json.dumps(payload)
 
 
 @pytest.mark.asyncio

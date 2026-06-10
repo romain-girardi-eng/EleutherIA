@@ -240,4 +240,101 @@ describe('useResearchStream reducer', () => {
     expect(state.finalAnswer?.trace_id).toBe('t1');
     expect(state.status).toBe('complete');
   });
+
+  it('accumulates citation_verified verdicts for unknown ids instead of dropping them', () => {
+    // Verdict arrives BEFORE its citation_found (node-shaped id / audit race).
+    let state = reduce(initial, {
+      type: 'event',
+      at: 1,
+      event: {
+        type: 'citation_verified',
+        passage_id: 'p-early',
+        verified: false,
+        reason: '[REJECTED] does not support the claim',
+      },
+    });
+    expect(state.citationsById['p-early']).toBeUndefined();
+    expect(state.pendingVerifications['p-early']).toEqual({
+      verified: false,
+      reason: '[REJECTED] does not support the claim',
+    });
+
+    // The citation lands later — the stored verdict must be applied.
+    const cit: CitationFoundEvent = {
+      type: 'citation_found',
+      passage_id: 'p-early',
+      excerpt: 'one',
+      node_ids: [],
+      confidence: 0.8,
+    };
+    state = reduce(state, { type: 'event', at: 2, event: cit });
+    expect(state.citationsById['p-early'].verified).toBe(false);
+    expect(state.citationsById['p-early'].verification_reason).toBe(
+      '[REJECTED] does not support the claim',
+    );
+  });
+
+  it('reconciles pending verdicts on final_answer', () => {
+    let state = reduce(initial, {
+      type: 'event',
+      at: 1,
+      event: {
+        type: 'citation_verified',
+        passage_id: 'p1',
+        verified: true,
+        reason: '[VERIFIED] ok',
+      },
+    });
+    const cit: CitationFoundEvent = {
+      type: 'citation_found',
+      passage_id: 'p1',
+      excerpt: 'one',
+      node_ids: [],
+      confidence: 0.8,
+    };
+    state = reduce(state, { type: 'event', at: 2, event: cit });
+    const final: FinalAnswerEvent = {
+      type: 'final_answer',
+      answer: 'answer',
+      citations: [],
+      trace_id: 't1',
+    };
+    state = reduce(state, { type: 'event', at: 3, event: final });
+    expect(state.citationsById.p1.verified).toBe(true);
+  });
+
+  it('flags streamed prose as pending verification until citation_audit completes', () => {
+    let state = reduce(initial, {
+      type: 'event',
+      at: 1,
+      event: { type: 'token', delta: 'Chrysippus ' },
+    });
+    expect(state.answerVerification).toBe('pending');
+
+    state = reduce(state, {
+      type: 'event',
+      at: 2,
+      event: { type: 'stage_complete', stage: 'citation_audit', duration_ms: 1200 },
+    });
+    expect(state.answerVerification).toBe('verified');
+  });
+
+  it('marks the answer verified on final_answer even without a citation_audit stage', () => {
+    let state = reduce(initial, {
+      type: 'event',
+      at: 1,
+      event: { type: 'token', delta: 'text' },
+    });
+    state = reduce(state, {
+      type: 'event',
+      at: 2,
+      event: {
+        type: 'final_answer',
+        answer: 'answer',
+        citations: [],
+        trace_id: 't1',
+      },
+    });
+    expect(state.answerVerification).toBe('verified');
+  });
 });

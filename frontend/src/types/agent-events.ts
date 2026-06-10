@@ -275,6 +275,7 @@ export interface StageCompleteEvent {
     | 'agent_loop'
     | 'synthesis'
     | 'verify'
+    | 'citation_audit'
     | 'polish';
   duration_ms: number;
   metadata?: Record<string, unknown>;

@@ -349,6 +349,13 @@ export const extraResources = {
         translation: 'Translation',
         sources: 'Sources ({{count}})',
       },
+      textVerification: {
+        title: 'Unverified ancient text',
+        body_one:
+          '{{count}} quoted ancient passage could not be verified against the corpus and was flagged.',
+        body_other:
+          '{{count}} quoted ancient passages could not be verified against the corpus and were flagged.',
+      },
       sourceDetail: {
         close: 'Close source detail',
         confidence: 'Confidence {{value}}',
@@ -746,6 +753,8 @@ export const extraResources = {
         idleSubtitle: 'Submit a question to begin a research session.',
         preparing: 'Preparing the answer…',
         citationMissing: 'Citation not yet received',
+        pendingVerification: 'Preview — citations not yet audited',
+        verified: 'Citations audited',
       },
       subagents: {
         ConceptMapper: 'Concept Mapper',
@@ -1235,6 +1244,13 @@ export const extraResources = {
         translation: 'Traduction',
         sources: 'Sources ({{count}})',
       },
+      textVerification: {
+        title: 'Texte ancien non vérifié',
+        body_one:
+          '{{count}} passage ancien cité n’a pas pu être vérifié dans le corpus et a été signalé.',
+        body_other:
+          '{{count}} passages anciens cités n’ont pas pu être vérifiés dans le corpus et ont été signalés.',
+      },
       sourceDetail: {
         close: 'Fermer le détail de la source',
         confidence: 'Confiance {{value}}',
@@ -1634,6 +1650,8 @@ export const extraResources = {
         idleSubtitle: 'Soumettez une question pour démarrer une session.',
         preparing: 'Préparation de la réponse…',
         citationMissing: 'Citation non encore reçue',
+        pendingVerification: 'Aperçu — citations non encore auditées',
+        verified: 'Citations auditées',
       },
       subagents: {
         ConceptMapper: 'Cartographe de concepts',
@@ -2123,6 +2141,13 @@ export const extraResources = {
         translation: 'Übersetzung',
         sources: 'Quellen ({{count}})',
       },
+      textVerification: {
+        title: 'Nicht verifizierter antiker Text',
+        body_one:
+          '{{count}} zitierte antike Passage konnte nicht im Korpus verifiziert werden und wurde markiert.',
+        body_other:
+          '{{count}} zitierte antike Passagen konnten nicht im Korpus verifiziert werden und wurden markiert.',
+      },
       sourceDetail: {
         close: 'Quelldetails schließen',
         confidence: 'Konfidenz {{value}}',
@@ -2491,6 +2516,8 @@ export const extraResources = {
         idleSubtitle: 'Stellen Sie eine Frage, um eine Sitzung zu starten.',
         preparing: 'Antwort wird vorbereitet…',
         citationMissing: 'Zitat noch nicht eingegangen',
+        pendingVerification: 'Vorschau — Zitate noch nicht geprüft',
+        verified: 'Zitate geprüft',
       },
       subagents: {
         ConceptMapper: 'Konzept-Kartograph',
@@ -2980,6 +3007,13 @@ export const extraResources = {
         translation: 'Traduzione',
         sources: 'Fonti ({{count}})',
       },
+      textVerification: {
+        title: 'Testo antico non verificato',
+        body_one:
+          '{{count}} passo antico citato non ha potuto essere verificato nel corpus ed è stato segnalato.',
+        body_other:
+          '{{count}} passi antichi citati non hanno potuto essere verificati nel corpus e sono stati segnalati.',
+      },
       sourceDetail: {
         close: 'Chiudi dettaglio fonte',
         confidence: 'Affidabilità {{value}}',
@@ -3378,6 +3412,8 @@ export const extraResources = {
         idleSubtitle: 'Invia una domanda per avviare una sessione di ricerca.',
         preparing: 'Preparazione della risposta…',
         citationMissing: 'Citazione non ancora ricevuta',
+        pendingVerification: 'Anteprima — citazioni non ancora verificate',
+        verified: 'Citazioni verificate',
       },
       subagents: {
         ConceptMapper: 'Cartografo di concetti',
@@ -3867,6 +3903,13 @@ export const extraResources = {
         translation: 'Μετάφραση',
         sources: 'Πηγές ({{count}})',
       },
+      textVerification: {
+        title: 'Μη επαληθευμένο αρχαίο κείμενο',
+        body_one:
+          '{{count}} παρατιθέμενο αρχαίο χωρίο δεν μπόρεσε να επαληθευτεί στο σώμα κειμένων και επισημάνθηκε.',
+        body_other:
+          '{{count}} παρατιθέμενα αρχαία χωρία δεν μπόρεσαν να επαληθευτούν στο σώμα κειμένων και επισημάνθηκαν.',
+      },
       sourceDetail: {
         close: 'Κλείσιμο λεπτομερειών πηγής',
         confidence: 'Αξιοπιστία {{value}}',
@@ -4265,6 +4308,8 @@ export const extraResources = {
         idleSubtitle: 'Υποβάλετε μια ερώτηση για να ξεκινήσει η συνεδρία.',
         preparing: 'Προετοιμασία απάντησης…',
         citationMissing: 'Η παραπομπή δεν έχει ληφθεί ακόμη',
+        pendingVerification: 'Προεπισκόπηση — οι παραπομπές δεν έχουν ελεγχθεί ακόμη',
+        verified: 'Οι παραπομπές ελέγχθηκαν',
       },
       subagents: {
         ConceptMapper: 'Χαρτογράφος εννοιών',
