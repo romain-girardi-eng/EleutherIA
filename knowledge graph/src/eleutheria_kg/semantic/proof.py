@@ -200,7 +200,7 @@ def confidences_from_reified(graph: Graph) -> dict[Triple, float]:
         ):
             try:
                 out[(s, p, o)] = float(value)
-            except (TypeError, ValueError):
+            except TypeError, ValueError:
                 continue
     return out
 
