@@ -9,88 +9,213 @@
       "color": "#2563eb",
       "icon": "user",
       "properties": {
-        "birth_date": { "type": "string", "description": "Approximate birth date" },
-        "death_date": { "type": "string", "description": "Approximate death date" },
-        "floruit": { "type": "string", "description": "Period of activity" },
-        "wikidata_qid": { "type": "string", "description": "Wikidata entity identifier" },
-        "works": { "type": "array", "description": "List of works" },
-        "note": { "type": "string", "description": "Additional notes" }
+        "birth_date": {
+          "type": "string",
+          "description": "Approximate birth date"
+        },
+        "death_date": {
+          "type": "string",
+          "description": "Approximate death date"
+        },
+        "floruit": {
+          "type": "string",
+          "description": "Period of activity"
+        },
+        "wikidata_qid": {
+          "type": "string",
+          "description": "Wikidata entity identifier"
+        },
+        "works": {
+          "type": "array",
+          "description": "List of works"
+        },
+        "note": {
+          "type": "string",
+          "description": "Additional notes"
+        }
       },
-      "examples": ["Chrysippus", "Epictetus", "Susanne Bobzien"]
+      "examples": [
+        "Chrysippus",
+        "Epictetus",
+        "Susanne Bobzien"
+      ],
+      "status": "active"
     },
     "concept": {
       "description": "A philosophical concept or technical term",
       "color": "#16a34a",
       "icon": "lightbulb",
       "properties": {
-        "greek_term": { "type": "string", "description": "Original Greek term" },
-        "latin_term": { "type": "string", "description": "Latin equivalent" },
-        "definition": { "type": "string", "description": "Concept definition" }
+        "greek_term": {
+          "type": "string",
+          "description": "Original Greek term"
+        },
+        "latin_term": {
+          "type": "string",
+          "description": "Latin equivalent"
+        },
+        "definition": {
+          "type": "string",
+          "description": "Concept definition"
+        }
       },
-      "examples": ["to_eph_hemin", "fate", "moral_responsibility"]
+      "examples": [
+        "to_eph_hemin",
+        "fate",
+        "moral_responsibility"
+      ],
+      "status": "active"
     },
     "argument": {
       "description": "A philosophical argument or line of reasoning",
       "color": "#db2777",
       "icon": "message-square",
       "properties": {
-        "argument_type": { "type": "string", "description": "Type of argument" },
-        "premises": { "type": "array", "description": "Argument premises" },
-        "conclusion": { "type": "string", "description": "Argument conclusion" },
-        "ancient_sources": { "type": "array", "description": "Ancient source references" },
-        "modern_scholarship": { "type": "array", "description": "Modern scholarly references" }
+        "argument_type": {
+          "type": "string",
+          "description": "Type of argument"
+        },
+        "premises": {
+          "type": "array",
+          "description": "Argument premises"
+        },
+        "conclusion": {
+          "type": "string",
+          "description": "Argument conclusion"
+        },
+        "ancient_sources": {
+          "type": "array",
+          "description": "Ancient source references"
+        },
+        "modern_scholarship": {
+          "type": "array",
+          "description": "Modern scholarly references"
+        }
       },
-      "examples": ["lazy_argument", "master_argument", "consequence_argument"]
+      "examples": [
+        "lazy_argument",
+        "master_argument",
+        "consequence_argument"
+      ],
+      "status": "active"
     },
     "work": {
       "description": "A philosophical text or scholarly work",
       "color": "#f97316",
       "icon": "book",
       "properties": {
-        "cts_urn": { "type": "string", "description": "Canonical Text Services URN" },
-        "date": { "type": "string", "description": "Date of composition" },
+        "cts_urn": {
+          "type": "string",
+          "description": "Canonical Text Services URN"
+        },
+        "date": {
+          "type": "string",
+          "description": "Date of composition"
+        },
         "date_uncertainty": {
           "type": "object",
           "description": "Formal date uncertainty record with best, range_lower, range_upper, confidence, and source"
         },
-        "author": { "type": "string", "description": "Author name" },
-        "language": { "type": "string", "enum": ["grc", "lat", "eng"] },
+        "author": {
+          "type": "string",
+          "description": "Author name"
+        },
+        "language": {
+          "type": "string",
+          "enum": [
+            "grc",
+            "lat",
+            "eng"
+          ]
+        },
         "editions": {
           "type": "array",
           "description": "Critical editions with editor, series, year, identifier, and note"
         }
       },
-      "examples": ["chrysippus_on_fate", "epictetus_discourses"]
+      "examples": [
+        "chrysippus_on_fate",
+        "epictetus_discourses"
+      ],
+      "status": "active"
     },
     "school": {
       "description": "A philosophical school or tradition",
       "color": "#9333ea",
       "icon": "users",
       "properties": {
-        "founded": { "type": "string", "description": "Founding date/period" },
-        "founder": { "type": "string", "description": "School founder" },
-        "location": { "type": "string", "description": "Primary location" },
-        "key_doctrines": { "type": "array", "description": "Core doctrines" },
-        "key_figures": { "type": "array", "description": "Key figures" },
-        "key_texts": { "type": "array", "description": "Key texts" },
-        "position_on_free_will": { "type": "string", "description": "School's stance on free will" }
+        "founded": {
+          "type": "string",
+          "description": "Founding date/period"
+        },
+        "founder": {
+          "type": "string",
+          "description": "School founder"
+        },
+        "location": {
+          "type": "string",
+          "description": "Primary location"
+        },
+        "key_doctrines": {
+          "type": "array",
+          "description": "Core doctrines"
+        },
+        "key_figures": {
+          "type": "array",
+          "description": "Key figures"
+        },
+        "key_texts": {
+          "type": "array",
+          "description": "Key texts"
+        },
+        "position_on_free_will": {
+          "type": "string",
+          "description": "School's stance on free will"
+        }
       },
-      "examples": ["stoicism", "epicureanism", "academic_skepticism"]
+      "examples": [
+        "stoicism",
+        "epicureanism",
+        "academic_skepticism"
+      ],
+      "status": "active"
     },
     "passage": {
       "description": "A specific textual passage",
       "color": "#94a3b8",
       "icon": "file-text",
       "properties": {
-        "cts_urn": { "type": "string", "description": "CTS URN reference" },
-        "canonical_ref": { "type": "string", "description": "Standard citation" },
-        "author": { "type": "string", "description": "Passage author" },
-        "work": { "type": "string", "description": "Source work title" },
-        "work_id": { "type": "string", "description": "Reference to work node" },
-        "passage_id": { "type": "string", "description": "Database passage ID" },
+        "cts_urn": {
+          "type": "string",
+          "description": "CTS URN reference"
+        },
+        "canonical_ref": {
+          "type": "string",
+          "description": "Standard citation"
+        },
+        "author": {
+          "type": "string",
+          "description": "Passage author"
+        },
+        "work": {
+          "type": "string",
+          "description": "Source work title"
+        },
+        "work_id": {
+          "type": "string",
+          "description": "Reference to work node"
+        },
+        "passage_id": {
+          "type": "string",
+          "description": "Database passage ID"
+        },
         "passage_role": {
           "type": "string",
-          "enum": ["original", "translation", "paraphrase"],
+          "enum": [
+            "original",
+            "translation",
+            "paraphrase"
+          ],
           "description": "Role of the passage text for philological filtering"
         },
         "source_passage_id": {
@@ -101,195 +226,385 @@
           "type": "object",
           "description": "Critical edition metadata for the passage when finer than the work-level edition"
         },
-        "key_concepts": { "type": "array", "description": "Key philosophical concepts" },
-        "key_terms": { "type": "array", "description": "Key terms in the passage" }
-      }
+        "key_concepts": {
+          "type": "array",
+          "description": "Key philosophical concepts"
+        },
+        "key_terms": {
+          "type": "array",
+          "description": "Key terms in the passage"
+        }
+      },
+      "status": "active"
     },
     "debate": {
       "description": "A philosophical debate or controversy",
       "color": "#22c55e",
       "icon": "message-circle",
       "properties": {
-        "participants": { "type": "array", "description": "Debate participants" },
-        "period": { "type": "string", "description": "When the debate occurred" },
-        "central_question": { "type": "string", "description": "Core question at stake" },
-        "positions": { "type": "object", "description": "Named positions in the debate" }
+        "participants": {
+          "type": "array",
+          "description": "Debate participants"
+        },
+        "period": {
+          "type": "string",
+          "description": "When the debate occurred"
+        },
+        "central_question": {
+          "type": "string",
+          "description": "Core question at stake"
+        },
+        "positions": {
+          "type": "object",
+          "description": "Named positions in the debate"
+        }
       },
-      "examples": ["free_will_determinism_debate", "fate_providence_debate"]
+      "examples": [
+        "free_will_determinism_debate",
+        "fate_providence_debate"
+      ],
+      "status": "active"
     },
     "position": {
       "description": "A philosophical position or stance",
       "color": "#facc15",
       "icon": "target",
       "properties": {
-        "position_type": { "type": "string", "description": "Type of position" }
+        "position_type": {
+          "type": "string",
+          "description": "Type of position"
+        }
       },
-      "examples": ["compatibilism", "hard_determinism", "libertarianism"]
+      "examples": [
+        "compatibilism",
+        "hard_determinism",
+        "libertarianism"
+      ],
+      "status": "active"
     },
     "event": {
       "description": "A historical event relevant to philosophical development",
       "color": "#ef4444",
       "icon": "calendar",
       "properties": {
-        "date": { "type": "string", "description": "Event date" },
-        "location": { "type": "string", "description": "Event location" }
-      }
+        "date": {
+          "type": "string",
+          "description": "Event date"
+        },
+        "location": {
+          "type": "string",
+          "description": "Event location"
+        }
+      },
+      "status": "active"
     },
     "institution": {
       "description": "An educational or religious institution",
       "color": "#8b5cf6",
       "icon": "building",
       "properties": {
-        "founded": { "type": "string" },
-        "location": { "type": "string" }
+        "founded": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        }
       },
-      "examples": ["platonic_academy", "lyceum", "stoa_poikile"]
+      "examples": [
+        "platonic_academy",
+        "lyceum",
+        "stoa_poikile"
+      ],
+      "status": "reserved"
     },
     "text_fragment": {
       "description": "A fragmentary text preserved in secondary sources",
       "color": "#14b8a6",
       "icon": "scissors",
       "properties": {
-        "source_work": { "type": "string", "description": "Work preserving the fragment" },
-        "svf_number": { "type": "string", "description": "SVF reference if applicable" }
-      }
+        "source_work": {
+          "type": "string",
+          "description": "Work preserving the fragment"
+        },
+        "svf_number": {
+          "type": "string",
+          "description": "SVF reference if applicable"
+        }
+      },
+      "status": "reserved"
     },
     "modern_interpretation": {
       "description": "A modern scholarly interpretation or theory",
       "color": "#f59e0b",
       "icon": "eye",
       "properties": {
-        "interpreter": { "type": "string", "description": "Modern scholar" },
-        "publication_year": { "type": "integer", "description": "Year published" }
-      }
+        "interpreter": {
+          "type": "string",
+          "description": "Modern scholar"
+        },
+        "publication_year": {
+          "type": "integer",
+          "description": "Year published"
+        }
+      },
+      "status": "reserved"
     },
     "term": {
       "description": "A technical philosophical term",
       "color": "#3b82f6",
       "icon": "type",
       "properties": {
-        "original_form": { "type": "string", "description": "Original Greek/Latin" },
-        "definition": { "type": "string", "description": "Technical definition" }
-      }
+        "original_form": {
+          "type": "string",
+          "description": "Original Greek/Latin"
+        },
+        "definition": {
+          "type": "string",
+          "description": "Technical definition"
+        }
+      },
+      "status": "reserved"
     },
     "source_collection": {
       "description": "A collection of ancient sources (e.g., SVF, LS)",
       "color": "#ec4899",
       "icon": "folder",
       "properties": {
-        "editor": { "type": "string" },
-        "publication_year": { "type": "integer" }
+        "editor": {
+          "type": "string"
+        },
+        "publication_year": {
+          "type": "integer"
+        }
       },
-      "examples": ["svf", "long_sedley"]
+      "examples": [
+        "svf",
+        "long_sedley"
+      ],
+      "status": "active"
     },
     "doctrine": {
       "description": "A formal philosophical doctrine",
       "color": "#10b981",
       "icon": "bookmark",
       "properties": {
-        "school": { "type": "string", "description": "Associated school" }
-      }
+        "school": {
+          "type": "string",
+          "description": "Associated school"
+        }
+      },
+      "status": "reserved"
     },
     "publication": {
       "description": "A modern scholarly publication (article, book, chapter)",
       "color": "#06b6d4",
       "icon": "newspaper",
       "properties": {
-        "author": { "type": "string", "description": "Publication author" },
-        "year": { "type": "integer", "description": "Publication year" },
-        "journal": { "type": "string", "description": "Journal name" },
-        "publisher": { "type": "string", "description": "Publisher" },
-        "doi": { "type": "string", "description": "Digital Object Identifier" },
-        "isbn": { "type": "string", "description": "ISBN for books or edited volumes" },
-        "bibtex_key": { "type": "string", "description": "Stable BibTeX key for export" },
-        "key_claim": { "type": "string", "description": "Central claim or thesis" },
-        "zotero_key": { "type": "string", "description": "Zotero reference key" }
+        "author": {
+          "type": "string",
+          "description": "Publication author"
+        },
+        "year": {
+          "type": "integer",
+          "description": "Publication year"
+        },
+        "journal": {
+          "type": "string",
+          "description": "Journal name"
+        },
+        "publisher": {
+          "type": "string",
+          "description": "Publisher"
+        },
+        "doi": {
+          "type": "string",
+          "description": "Digital Object Identifier"
+        },
+        "isbn": {
+          "type": "string",
+          "description": "ISBN for books or edited volumes"
+        },
+        "bibtex_key": {
+          "type": "string",
+          "description": "Stable BibTeX key for export"
+        },
+        "key_claim": {
+          "type": "string",
+          "description": "Central claim or thesis"
+        },
+        "zotero_key": {
+          "type": "string",
+          "description": "Zotero reference key"
+        }
       },
-      "examples": ["bobzien_1998_determinism", "frede_2011_free_will"]
+      "examples": [
+        "bobzien_1998_determinism",
+        "frede_2011_free_will"
+      ],
+      "status": "active"
     },
     "quote": {
       "description": "A notable philosophical quotation",
       "color": "#facc15",
       "icon": "quote",
       "properties": {
-        "wikidata_qid": { "type": "string", "description": "Wikidata entity identifier" }
-      }
+        "wikidata_qid": {
+          "type": "string",
+          "description": "Wikidata entity identifier"
+        }
+      },
+      "status": "active"
     },
     "synthesis": {
       "description": "A scholarly synthesis or analysis combining multiple sources",
       "color": "#10b981",
       "icon": "layers",
       "properties": {
-        "synthesis_type": { "type": "string", "description": "Type of synthesis" },
-        "author": { "type": "string", "description": "Author of the synthesis" },
-        "source_work": { "type": "string", "description": "Source work analyzed" },
-        "key_terms": { "type": "array", "description": "Key terms covered" },
-        "themes": { "type": "array", "description": "Thematic categories" }
-      }
+        "synthesis_type": {
+          "type": "string",
+          "description": "Type of synthesis"
+        },
+        "author": {
+          "type": "string",
+          "description": "Author of the synthesis"
+        },
+        "source_work": {
+          "type": "string",
+          "description": "Source work analyzed"
+        },
+        "key_terms": {
+          "type": "array",
+          "description": "Key terms covered"
+        },
+        "themes": {
+          "type": "array",
+          "description": "Thematic categories"
+        }
+      },
+      "status": "active"
     },
     "controversy": {
       "description": "A specific scholarly or philosophical controversy",
       "color": "#f43f5e",
       "icon": "flame",
       "properties": {
-        "participants": { "type": "array", "description": "Controversy participants" },
-        "period": { "type": "string", "description": "Historical period" }
-      }
+        "participants": {
+          "type": "array",
+          "description": "Controversy participants"
+        },
+        "period": {
+          "type": "string",
+          "description": "Historical period"
+        }
+      },
+      "status": "active"
     },
     "conceptual_evolution": {
       "description": "The historical evolution of a philosophical concept",
       "color": "#818cf8",
       "icon": "git-branch",
       "properties": {
-        "concept": { "type": "string", "description": "The concept that evolved" },
-        "stages": { "type": "array", "description": "Stages of evolution" }
-      }
+        "concept": {
+          "type": "string",
+          "description": "The concept that evolved"
+        },
+        "stages": {
+          "type": "array",
+          "description": "Stages of evolution"
+        }
+      },
+      "status": "active"
     },
     "group": {
       "description": "A group of philosophers or intellectual community",
       "color": "#84cc16",
       "icon": "users-2",
       "properties": {
-        "members": { "type": "array", "description": "Group members" },
-        "period": { "type": "string", "description": "Active period" }
-      }
+        "members": {
+          "type": "array",
+          "description": "Group members"
+        },
+        "period": {
+          "type": "string",
+          "description": "Active period"
+        }
+      },
+      "status": "active"
     },
     "argument_framework": {
       "description": "A structured framework for analyzing philosophical arguments",
       "color": "#e879f9",
       "icon": "network",
       "properties": {
-        "framework_type": { "type": "string", "description": "Type of framework" },
-        "components": { "type": "array", "description": "Framework components" }
-      }
+        "framework_type": {
+          "type": "string",
+          "description": "Type of framework"
+        },
+        "components": {
+          "type": "array",
+          "description": "Framework components"
+        }
+      },
+      "status": "active"
     },
     "textual_variant": {
       "description": "A philological apparatus entry recording a disputed reading for a passage or fragment",
       "color": "#64748b",
       "icon": "git-compare",
       "properties": {
-        "lemma": { "type": "string", "description": "Lemma or text span under discussion" },
-        "lection_principale": { "type": "string", "description": "Adopted reading" },
+        "lemma": {
+          "type": "string",
+          "description": "Lemma or text span under discussion"
+        },
+        "lection_principale": {
+          "type": "string",
+          "description": "Adopted reading"
+        },
         "lections_alternatives": {
           "type": "array",
           "description": "Alternative readings, each with manuscript/witness, reading, and critical source"
         },
-        "source_critique": { "type": "string", "description": "Critical edition or apparatus from which the variant is drawn" },
-        "confidence": { "type": "number", "description": "Editorial confidence in the encoded variant record" }
+        "source_critique": {
+          "type": "string",
+          "description": "Critical edition or apparatus from which the variant is drawn"
+        },
+        "confidence": {
+          "type": "number",
+          "description": "Editorial confidence in the encoded variant record"
+        }
       },
-      "examples": ["variant_svf_2_974_lemma_hormes", "variant_cicero_de_fato_12"]
+      "examples": [
+        "variant_svf_2_974_lemma_hormes",
+        "variant_cicero_de_fato_12"
+      ],
+      "status": "reserved"
     },
     "argument_reconstruction": {
       "description": "A historically explicit reconstruction of an argument as reported by a polemical or doxographical source",
       "color": "#c026d3",
       "icon": "workflow",
       "properties": {
-        "target_argument": { "type": "string", "description": "Argument being reconstructed" },
-        "source_text": { "type": "string", "description": "Passage or work that supplies the reconstruction" },
-        "fidelity_score": { "type": "number", "description": "0-1 estimate of fidelity to the original argument" },
-        "reconstruction_note": { "type": "string", "description": "Methodological note distinguishing source report from original argument" }
+        "target_argument": {
+          "type": "string",
+          "description": "Argument being reconstructed"
+        },
+        "source_text": {
+          "type": "string",
+          "description": "Passage or work that supplies the reconstruction"
+        },
+        "fidelity_score": {
+          "type": "number",
+          "description": "0-1 estimate of fidelity to the original argument"
+        },
+        "reconstruction_note": {
+          "type": "string",
+          "description": "Methodological note distinguishing source report from original argument"
+        }
       },
-      "examples": ["argument_reconstruction_cicero_carneades_stoic_fate"]
+      "examples": [
+        "argument_reconstruction_cicero_carneades_stoic_fate"
+      ],
+      "status": "reserved"
     }
   }
 }
