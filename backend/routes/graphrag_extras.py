@@ -27,6 +27,108 @@ router = APIRouter(tags=["graphrag-extras"])
 
 # ---------- /answer alias (Phase 3) ----------
 
+
+def _build_quality_metrics(
+    metadata: dict[str, Any],
+    *,
+    citation_count: int,
+    node_count: int,
+    has_sources: bool,
+) -> dict[str, Any]:
+    """Honest quality metrics for the /answer payload.
+
+    Measured values come from the pipeline reports carried in the answer
+    metadata: ``grounding`` (verifier-v2 sample score), ``citation_verifier_v2``
+    (adversarial citation audit) and ``text_verification`` (ancient-text
+    verifier). When a measured value is absent we fall back to count-based
+    estimates — labelled as estimates via ``*_method`` fields and caveats,
+    never presented as measurements.
+    """
+    caveats: list[str] = []
+
+    def _dict(key: str) -> dict[str, Any] | None:
+        value = metadata.get(key)
+        return value if isinstance(value, dict) else None
+
+    grounding = _dict("grounding")
+    verifier = _dict("citation_verifier_v2")
+    text_verification = _dict("text_verification")
+
+    # Accuracy / grounding — measured by the adversarial verifier when it ran.
+    grounding_score: int | None = None
+    if grounding is not None and isinstance(grounding.get("score"), int | float):
+        grounding_score = int(grounding["score"])
+        accuracy = round(grounding_score / 100, 2)
+        accuracy_method = f"measured:{grounding.get('method', 'grounding')}"
+        coverage = grounding.get("coverage")
+        if isinstance(coverage, str) and coverage != "full":
+            caveats.append(f"Grounding audited on a sample ({coverage}).")
+    else:
+        accuracy = min(1.0, citation_count / 5) if citation_count > 0 else 0.5
+        accuracy_method = "estimate:citation_count_heuristic"
+        caveats.append(
+            "Accuracy is a citation-count estimate — no citation audit ran "
+            "for this answer."
+        )
+
+    # Completeness has no measured counterpart yet — always an estimate.
+    completeness = min(1.0, node_count / 20)
+    completeness_method = "estimate:context_node_count"
+
+    if grounding_score is not None:
+        confidence_score = grounding_score
+        confidence_method = accuracy_method
+    else:
+        confidence_score = round(
+            (completeness * 40 + accuracy * 40 + 20) if has_sources else 50
+        )
+        confidence_method = "estimate:count_heuristics"
+        caveats.append(
+            "Confidence is heuristic (citation/node counts) — not a "
+            "measured verification score."
+        )
+
+    # Quality badge: pipeline-computed when present, else derived estimate.
+    badge = metadata.get("quality_badge")
+    if not isinstance(badge, str) or not badge:
+        badge = (
+            "High"
+            if confidence_score >= 75
+            else "Medium"
+            if confidence_score >= 50
+            else "Low"
+        )
+
+    if verifier is not None:
+        rejected = int(verifier.get("rejected") or 0)
+        missing = int(verifier.get("missing") or 0)
+        if rejected or missing:
+            caveats.append(
+                f"Citation audit flagged {rejected + missing} claim(s) whose "
+                "cited source does not support them."
+            )
+    if text_verification is not None and int(
+        text_verification.get("unverified") or 0
+    ):
+        caveats.append(
+            f"{text_verification['unverified']} quoted ancient text(s) could "
+            "not be verified against the corpus."
+        )
+
+    return {
+        "confidence_score": confidence_score,
+        "confidence_method": confidence_method,
+        "grounding_score": grounding_score,
+        "completeness": round(completeness, 2),
+        "completeness_method": completeness_method,
+        "accuracy": round(accuracy, 2),
+        "accuracy_method": accuracy_method,
+        "citation_audit": verifier,
+        "text_verification": text_verification,
+        "quality_badge": badge,
+        "caveats": caveats,
+    }
+
 class AnswerRequest(BaseModel):
     """Request body matching what the frontend sends to /api/graphrag/answer."""
     query: str = Field(..., min_length=1)
@@ -75,6 +177,9 @@ async def graphrag_answer(
             include_passages=True,
             selected_model=body.model,
             retrieval_mode=body.retrieval_mode,
+            # mode='deep' → two-pass adversarial counter-evidence hunt +
+            # methodology/polishing (GraphRAGService gates both on this flag).
+            hunt_counter_evidence=body.mode == "deep",
         )
     except Exception as e:
         logger.exception("GraphRAG query failed")
@@ -151,12 +256,16 @@ async def graphrag_answer(
             "type": s["nodeType"],
         }
 
-    # Compute quality metrics from citation count + node coverage
+    # Quality metrics — measured values from the pipeline when available,
+    # explicit count-based estimates otherwise (never presented as measured).
     citation_count = len(result.get("citations", []))
     node_count = len(context_nodes)
-    completeness = min(1.0, node_count / 20)
-    accuracy = min(1.0, citation_count / 5) if citation_count > 0 else 0.5
-    confidence_score = round((completeness * 40 + accuracy * 40 + 20) if sources else 50)
+    answer_metadata = result.get("metadata", {}) or {}
+    quality_metrics = _build_quality_metrics(
+        answer_metadata, citation_count=citation_count, node_count=node_count,
+        has_sources=bool(sources),
+    )
+    confidence_score = quality_metrics["confidence_score"]
 
     return {
         "query": body.query,
@@ -179,15 +288,9 @@ async def graphrag_answer(
         "edges_traversed": 0,
         "llm_model": result.get("llm_model", ""),
         "llm_provider": result.get("llm_provider", ""),
-        "quality_metrics": {
-            "confidence_score": confidence_score,
-            "completeness": round(completeness, 2),
-            "accuracy": round(accuracy, 2),
-            "clarity": 0.85,
-            "quality_badge": "High" if confidence_score >= 75 else "Medium" if confidence_score >= 50 else "Low",
-            "caveats": [],
-        },
-        "metadata": result.get("metadata", {}),
+        "quality_metrics": quality_metrics,
+        "claim_ledger": result.get("claim_ledger", []),
+        "metadata": answer_metadata,
         "retrieval_stats": {
             "rerank_used": body.use_reranking,
             "crag_used": body.use_crag,

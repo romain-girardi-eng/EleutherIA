@@ -33,7 +33,11 @@ def register(mcp: FastMCP) -> None:
             ``{"node_id": ..., "node_label": ..., "passages": [...]}``. Each
             passage carries ``passage_id``, ``work_title``, ``author``,
             ``canonical_ref``, ``language``, ``text_content``, optional
-            ``translation``, and ``confidence``.
+            ``translation`` with its provenance (``translation_type``, e.g.
+            ``"machine"``, and ``translation_ai_generated``), and
+            ``confidence``. When ``translation_ai_generated`` is true or
+            provenance is unknown, do NOT attribute the translation to a
+            named scholar.
         """
         args = {"node_id": node_id, "limit": limit}
         sid = session_id_from_context(getattr(mcp, "request_context", None))

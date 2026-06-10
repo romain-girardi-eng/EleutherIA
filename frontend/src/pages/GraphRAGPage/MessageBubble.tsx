@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { useTranslation } from 'react-i18next';
-import { Zap, BookOpen, ChevronDown, ChevronUp, Clock, Cpu, FileText, ExternalLink } from 'lucide-react';
+import { Zap, BookOpen, ChevronDown, ChevronUp, Clock, Cpu, FileText, ExternalLink, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { CitationRenderer, SourcesPanel } from '../../components/CitationRenderer';
 import type { GraphRAGChatMessage } from '../../types';
@@ -24,6 +24,12 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
 
   const resp = message.graphrag_response;
   const verifiedPassages = resp?.verified_passages;
+  // Ancient-text verifier report — unverified quoted Greek/Latin must be
+  // surfaced, never silently rendered as if it were corpus-verified.
+  const textVerification = resp?.metadata?.text_verification;
+  const unverifiedTexts = textVerification?.unverified_texts ?? [];
+  const unverifiedCount =
+    textVerification?.unverified ?? unverifiedTexts.length;
   const sources = resp?.sources;
   const processingTime = resp?.processing_time;
   const tokensUsed = message.tokens_used;
@@ -88,6 +94,36 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                   </span>
                 )}
               </div>
+
+              {/* Unverified ancient text banner (text_verification report) */}
+              {unverifiedCount > 0 && (
+                <div
+                  role="alert"
+                  className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3"
+                >
+                  <div className="flex items-center gap-2 text-amber-800">
+                    <AlertTriangle className="w-4 h-4 shrink-0" aria-hidden="true" />
+                    <span className="text-xs xl:text-sm font-semibold">
+                      {t('graphRagUi.textVerification.title')}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-[11px] xl:text-xs text-amber-700">
+                    {t('graphRagUi.textVerification.body', { count: unverifiedCount })}
+                  </p>
+                  {unverifiedTexts.length > 0 && (
+                    <ul className="mt-2 space-y-1">
+                      {unverifiedTexts.slice(0, 5).map((item, i) => (
+                        <li
+                          key={i}
+                          className="text-[11px] xl:text-xs font-mono text-amber-900/80 truncate"
+                        >
+                          {item.text}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
 
               {/* Main answer content */}
               {(sources && sources.length > 0) ||

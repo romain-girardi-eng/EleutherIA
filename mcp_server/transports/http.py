@@ -14,6 +14,7 @@ unauthenticated MCP endpoint never goes online by accident.
 from __future__ import annotations
 
 import argparse
+import hmac
 import logging
 import os
 import sys
@@ -43,7 +44,8 @@ class BearerAuthMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
         provided = request.headers.get("authorization", "")
         expected = f"Bearer {self._token}"
-        if provided != expected:
+        # Constant-time comparison — a plain == leaks token prefixes via timing.
+        if not hmac.compare_digest(provided.encode(), expected.encode()):
             return JSONResponse({"error": "unauthorized"}, status_code=401)
         return await call_next(request)
 

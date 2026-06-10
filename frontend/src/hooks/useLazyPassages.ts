@@ -24,7 +24,10 @@ interface Passage {
   citation_hierarchy?: Record<string, unknown>;
   translation_text?: string | null;
   translation_language?: string | null;
-  translation_source?: 'scholarly' | 'ai_generated' | null;
+  // API derives this from the _en node's translation_type metadata: known
+  // values plus 'unknown' (unverified provenance) and pass-through of any
+  // future translation_type label — hence the open string union.
+  translation_source?: 'scholarly' | 'ai_generated' | 'unknown' | (string & {}) | null;
   kg_node_count?: number;
 }
 

@@ -1,7 +1,9 @@
 """AnswerCache — replay-cache for /api/graphrag/query/stream answers.
 
-A persistent (normalized_question, model, retrieval_mode) -> final answer
-cache, stored in ``free_will.answer_cache``. Looked up by the SSE endpoint
+A persistent (normalized_question, model, retrieval_mode, mode) -> final
+answer cache, stored in ``free_will.answer_cache``. ``mode`` ('fast' |
+'deep') segments the key: deep (counter-evidence) and fast answers must
+never share a cache slot. Looked up by the SSE endpoint
 BEFORE running the agent pipeline; a hit lets us replay the cached
 ``complete`` payload immediately and skip the ~$0.45 / 7-minute synthesis.
 
@@ -15,6 +17,18 @@ Invalidation is twofold:
 
 Hits bump ``hit_count`` and ``last_hit_at`` so we can rank popular queries
 and pre-warm the cache for them.
+
+Rollback hazard — ``__answer_provenance__`` piggyback: :meth:`AnswerCache.store`
+packs the answer provenance (metadata + claim_ledger) into
+``reasoning_path_json`` under the reserved ``__answer_provenance__`` key
+(no schema migration), and :meth:`AnswerCache.lookup` strips it back out.
+Old code (pre-piggyback) returns ``reasoning_path_json`` verbatim, so on a
+code rollback any row written by the new code replays a ``reasoning_path``
+that still contains the raw ``__answer_provenance__`` blob — leaking
+verification metadata into the reasoning-path UI. Safe rollback procedure:
+clear the cache (``TRUNCATE free_will.answer_cache`` or bump
+``free_will.kg_version``) when reverting to a build that predates the
+marker.
 
 Threading: the service holds no state — every public method does its work
 through the shared :class:`DatabaseService` connection pool. Safe to share
@@ -38,6 +52,11 @@ logger = logging.getLogger(__name__)
 
 _WHITESPACE_RE = re.compile(r"\s+")
 _KEY_SEP = "\x1f"  # ASCII unit-separator — never appears in user text
+
+# Reserved key inside ``reasoning_path_json`` used to piggyback the answer
+# provenance (metadata + claim_ledger) without a schema migration. Stripped
+# back out on lookup so the replayed ``reasoning_path`` keeps its shape.
+_PROVENANCE_KEY = "__answer_provenance__"
 
 
 class AnswerCache:
@@ -68,14 +87,25 @@ class AnswerCache:
         return normalised
 
     @staticmethod
-    def cache_key(question: str, model: str, retrieval_mode: str) -> str:
-        """Stable sha256 hex digest over the normalised triple."""
+    def cache_key(
+        question: str, model: str, retrieval_mode: str, mode: str = "fast"
+    ) -> str:
+        """Stable sha256 hex digest over the normalised key tuple.
+
+        ``mode`` ('fast' | 'deep') is part of the key: deep answers carry
+        counter-evidence ledger items that fast answers must never replay,
+        and a deep request must never silently reuse a fast answer (mirrors
+        ``ResponseCache._key`` in graphrag_service). Rows written before the
+        ``mode`` segment existed simply miss — no migration needed.
+        """
         parts = (
             AnswerCache.normalize_question(question)
             + _KEY_SEP
             + model
             + _KEY_SEP
             + retrieval_mode
+            + _KEY_SEP
+            + (mode or "fast")
         )
         return hashlib.sha256(parts.encode("utf-8")).hexdigest()
 
@@ -98,6 +128,7 @@ class AnswerCache:
         question: str,
         model: str,
         retrieval_mode: str,
+        mode: str = "fast",
         ttl_days: int = 14,
     ) -> dict[str, Any] | None:
         """Look up a fresh cache entry; return its replay payload or ``None``.
@@ -111,6 +142,8 @@ class AnswerCache:
                 "passage_citations": list,
                 "sources": list,
                 "reasoning_path": dict,
+                "metadata": dict,        # answer provenance (may be empty)
+                "claim_ledger": list,    # typed claims (may be empty)
                 "total_tokens": int,
                 "total_cost_usd": float,
                 "trace_id": str | None,
@@ -121,7 +154,7 @@ class AnswerCache:
         if not self._db.is_connected():
             return None
 
-        key = self.cache_key(question, model, retrieval_mode)
+        key = self.cache_key(question, model, retrieval_mode, mode)
         current_version = await self._current_kg_version()
 
         try:
@@ -158,6 +191,13 @@ class AnswerCache:
 
         await self.record_hit(key)
 
+        reasoning_path = _coerce_json(row["reasoning_path_json"], default={})
+        provenance: dict[str, Any] = {}
+        if isinstance(reasoning_path, dict):
+            raw_provenance = reasoning_path.pop(_PROVENANCE_KEY, None)
+            if isinstance(raw_provenance, dict):
+                provenance = raw_provenance
+
         return {
             "cache_key": row["cache_key"],
             "answer": row["answer"],
@@ -166,7 +206,9 @@ class AnswerCache:
                 row["passage_citations_json"], default=[]
             ),
             "sources": _coerce_json(row["sources_json"], default=[]),
-            "reasoning_path": _coerce_json(row["reasoning_path_json"], default={}),
+            "reasoning_path": reasoning_path,
+            "metadata": provenance.get("metadata") or {},
+            "claim_ledger": provenance.get("claim_ledger") or [],
             "total_tokens": int(row["total_tokens"] or 0),
             "total_cost_usd": float(row["total_cost_usd"] or 0),
             "trace_id": str(row["trace_id"]) if row["trace_id"] is not None else None,
@@ -197,6 +239,7 @@ class AnswerCache:
         question: str,
         model: str,
         retrieval_mode: str,
+        mode: str = "fast",
         answer: str,
         citations: list[Any],
         passage_citations: list[Any],
@@ -205,17 +248,34 @@ class AnswerCache:
         total_tokens: int,
         total_cost_usd: float,
         trace_id: str | None,
+        metadata: dict[str, Any] | None = None,
+        claim_ledger: list[Any] | None = None,
     ) -> None:
         """Upsert a fresh cache entry.
 
         On conflict the row is fully overwritten, ``hit_count`` is reset to
         0, and ``created_at`` jumps to ``now()`` — re-rendering counts as a
         fresh entry so TTL restarts from the most recent synthesis.
+
+        ``metadata`` and ``claim_ledger`` carry the answer provenance
+        (text_verification, grounding, citation_verifier_v2, research-graph
+        keys, typed claims). They are packed into ``reasoning_path_json``
+        under :data:`_PROVENANCE_KEY` — no schema change — and unpacked by
+        :meth:`lookup` so cache replays keep the full verification contract.
         """
         if not self._db.is_connected():
             return
 
-        key = self.cache_key(question, model, retrieval_mode)
+        if metadata or claim_ledger:
+            reasoning_path = {
+                **reasoning_path,
+                _PROVENANCE_KEY: {
+                    "metadata": metadata or {},
+                    "claim_ledger": claim_ledger or [],
+                },
+            }
+
+        key = self.cache_key(question, model, retrieval_mode, mode)
         normalized = self.normalize_question(question)
         version = await self._current_kg_version()
         trace_uuid: UUID | None = None

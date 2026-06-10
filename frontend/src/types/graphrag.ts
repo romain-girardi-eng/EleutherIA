@@ -156,8 +156,45 @@ export interface ResearchGraphPayload {
   reading_decisions: ResearchGraphDecision[];
 }
 
+/** One verified/unverified span from the ancient-text verifier. */
+export interface TextVerificationSpan {
+  text: string;
+  language?: string;
+  status?: string;
+  source_id?: string;
+}
+
+/** Report from the ancient-text verifier (graphrag text_verifier).
+ * Mirrors `VerificationResult.to_metadata()` in
+ * graphrag/src/eleutheria_graphrag/agents/text_verifier.py. */
+export interface TextVerificationReport {
+  verified: number;
+  unverified: number;
+  verified_spans?: TextVerificationSpan[];
+  unverified_spans?: TextVerificationSpan[];
+  db_checked?: number;
+  bundle_whitelisted?: number;
+  enforced?: boolean;
+  misattributed?: number;
+  status?: string;
+  unverified_texts?: Array<{
+    text: string;
+    language?: string;
+    words?: number;
+    action?: string;
+  }>;
+  misattributed_texts?: Array<{
+    text: string;
+    claimed?: string;
+    actual?: string;
+    actual_ref?: string;
+    action?: string;
+  }>;
+}
+
 export interface GraphRAGMetadata {
   research_graph?: ResearchGraphPayload;
+  text_verification?: TextVerificationReport;
   debug_trace?: Record<string, unknown>;
   query_type?: string;
   complexity?: string;

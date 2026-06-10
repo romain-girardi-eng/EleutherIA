@@ -25,15 +25,18 @@ USER = {
 
 
 class _AuditStubDB:
-    def __init__(self, row: dict[str, Any] | None) -> None:
+    def __init__(
+        self, row: dict[str, Any] | None, user: dict[str, Any] = USER
+    ) -> None:
         self._row = row
+        self._user = user
 
     def is_connected(self) -> bool:
         return True
 
     async def fetchrow(self, sql: str, *args: Any) -> dict[str, Any] | None:
         if "FROM free_will.users" in sql:
-            return USER
+            return self._user
         if "FROM free_will.query_traces" in sql:
             return self._row
         return None
@@ -44,15 +47,19 @@ def _jwt(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("JWT_SECRET_KEY", "test-secret-not-for-prod-32b")
 
 
-def _build_app(monkeypatch: pytest.MonkeyPatch, row: dict[str, Any] | None) -> FastAPI:
+def _build_app(
+    monkeypatch: pytest.MonkeyPatch,
+    row: dict[str, Any] | None,
+    user: dict[str, Any] = USER,
+) -> FastAPI:
     application = FastAPI()
     application.include_router(audit_router, prefix="/api/graphrag")
     monkeypatch.setattr(
         auth_route_module,
         "decode_token",
-        lambda token: {"sub": USER["user_id"]},
+        lambda token: {"sub": user["user_id"]},
     )
-    application.dependency_overrides[get_db] = lambda: _AuditStubDB(row)
+    application.dependency_overrides[get_db] = lambda: _AuditStubDB(row, user)
     return application
 
 
@@ -149,6 +156,49 @@ def test_audit_accepts_non_uuid_trace_id(monkeypatch: pytest.MonkeyPatch) -> Non
     assert response.status_code == 200, response.text
     body = response.json()
     assert body["trace_id"] == "ses_abc123"
+
+
+def test_audit_404_for_non_owner(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A trace owned by someone else must be invisible to other users."""
+    trace_uuid = uuid.uuid4()
+    row = _row(trace_uuid)
+    row["user_id"] = uuid.UUID("00000000-0000-0000-0000-000000000099")
+    app = _build_app(monkeypatch, row)
+    client = TestClient(app)
+    response = client.get(
+        f"/api/graphrag/query/{trace_uuid}/audit",
+        headers={"Authorization": "Bearer test"},
+    )
+    assert response.status_code == 404
+
+
+def test_audit_admin_can_read_any_trace(monkeypatch: pytest.MonkeyPatch) -> None:
+    trace_uuid = uuid.uuid4()
+    row = _row(trace_uuid)
+    row["user_id"] = uuid.UUID("00000000-0000-0000-0000-000000000099")
+    admin = {**USER, "role": "admin"}
+    app = _build_app(monkeypatch, row, user=admin)
+    client = TestClient(app)
+    response = client.get(
+        f"/api/graphrag/query/{trace_uuid}/audit",
+        headers={"Authorization": "Bearer test"},
+    )
+    assert response.status_code == 200, response.text
+
+
+def test_audit_legacy_trace_without_owner_readable(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    trace_uuid = uuid.uuid4()
+    row = _row(trace_uuid)
+    row["user_id"] = None
+    app = _build_app(monkeypatch, row)
+    client = TestClient(app)
+    response = client.get(
+        f"/api/graphrag/query/{trace_uuid}/audit",
+        headers={"Authorization": "Bearer test"},
+    )
+    assert response.status_code == 200, response.text
 
 
 _ = json  # silence unused import flake on some setups
