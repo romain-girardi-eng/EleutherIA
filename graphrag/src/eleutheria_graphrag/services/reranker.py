@@ -96,9 +96,18 @@ class RerankerService:
             return []
 
         top_k = top_k or self.top_k
-        score_threshold = score_threshold or self.score_threshold
+        score_threshold = (
+            self.score_threshold if score_threshold is None else score_threshold
+        )
 
-        model = self._load_model()
+        # Lazy model load runs in a worker thread (first call may download /
+        # deserialize weights for tens of seconds). Degrades cleanly: when the
+        # model cannot be loaded the input order is preserved.
+        try:
+            model = await asyncio.to_thread(self._load_model)
+        except Exception:
+            logger.exception("Cross-encoder unavailable — skipping rerank")
+            return evidence[:top_k]
 
         # Build (query, document) pairs for scoring
         pairs: list[tuple[str, str]] = []

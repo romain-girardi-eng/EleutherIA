@@ -6,17 +6,10 @@ import pytest
 from pydantic_graph import End
 
 from eleutheria_graphrag.agents.graph_nodes import (
-    BuildResearchNotebook,
     ClassifyQueryType,
-    DiscoverCorpus,
     DraftClaimLedger,
-    EvidenceSufficiency,
-    ExpandEvidenceBundles,
-    PlanReading,
     ProgrammaticVerify,
     RenderGroundedAnswer,
-    SeekCounterEvidence,
-    TreeNavigateWorks,
     _augment_claim_ledger_from_dossier,
     _build_context_from_evidence,
     _build_context_pack,
@@ -37,6 +30,15 @@ from eleutheria_graphrag.agents.graph_nodes import (
     _render_evidence_packet,
     _salvage_claim_ledger,
     _verify_answer_programmatically,
+)
+from eleutheria_graphrag.agents.legacy_fsm_nodes import (
+    BuildResearchNotebook,
+    DiscoverCorpus,
+    EvidenceSufficiency,
+    ExpandEvidenceBundles,
+    PlanReading,
+    SeekCounterEvidence,
+    TreeNavigateWorks,
 )
 from eleutheria_graphrag.agents.pipeline_config import PipelineConfig, QueryType
 from eleutheria_graphrag.agents.state import (

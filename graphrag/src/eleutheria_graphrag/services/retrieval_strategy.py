@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import logging
+import os
 import re
-from typing import TYPE_CHECKING, Any, Protocol
+from typing import TYPE_CHECKING, Any, NamedTuple, Protocol
 
 from eleutheria_graphrag.services.snapshot_retrieval import node_is_passage
 
@@ -56,6 +57,32 @@ class RetrievalStrategy(Protocol):
 
 DB_SCHEMA = "free_will"
 
+_ALLOWED_PASSAGE_ROLES = {"original", "translation", "paraphrase"}
+_PASSAGE_ROLE_ENV = "ELEUTHERIA_PASSAGE_ROLE_FILTER"
+
+
+def passage_role_condition(alias: str = "p") -> str:
+    """SQL predicate restricting primary-text retrieval to one passage role.
+
+    Defaults to ``original`` so translation/paraphrase stub rows never feed
+    ancient-text evidence. Override with ``ELEUTHERIA_PASSAGE_ROLE_FILTER``
+    (a role name, or ``all`` to disable). The value is validated against a
+    closed allowlist before being inlined into SQL.
+    """
+    role = os.environ.get(_PASSAGE_ROLE_ENV, "original").strip().lower()
+    if role in {"", "all", "any", "off"}:
+        return "TRUE"
+    if role not in _ALLOWED_PASSAGE_ROLES:
+        role = "original"
+    return f"{alias}.passage_role = '{role}'"
+
+
+class StepResult(NamedTuple):
+    """Hits plus the errors a retrieval step absorbed while producing them."""
+
+    hits: list[str]
+    errors: list[str]
+
 
 def _dedup(items: list[str]) -> list[str]:
     return list(dict.fromkeys(items))
@@ -81,6 +108,8 @@ class SQLStrategy:
     ) -> None:
         self._min_bundles = min_bundles
         self._lemma_expander = lemma_expander
+        # Cached once per strategy instance; None means "not probed yet".
+        self._oga_passage_id_capable: bool | None = None
 
     async def discover_seeds(
         self,
@@ -90,113 +119,137 @@ class SQLStrategy:
     ) -> tuple[list[str], list[str]]:
         seed_ids: list[str] = []
         passage_anchor_ids: list[str] = []
+        errors: list[str] = []
+        state = getattr(deps, "state", None)
+
+        def _finish() -> tuple[list[str], list[str]]:
+            # Public contract unchanged — partial failures surface through
+            # ``state.metadata['retrieval_errors']`` when a state is attached.
+            if errors and state is not None:
+                metadata = getattr(state, "metadata", None)
+                if isinstance(metadata, dict):
+                    metadata.setdefault("retrieval_errors", []).extend(errors)
+            return _dedup(seed_ids), _dedup(passage_anchor_ids[:12])
 
         # Step 0 — lemma expansion (best-effort; falls through silently)
-        expanded_terms = await self._expand_lemmas(queries)
+        expanded_terms, expand_errors = await self._expand_lemmas(queries)
+        errors.extend(expand_errors)
 
         # Step 1 — tree routing: if a query mentions a known work/author, pull
         # chapter-level passages directly from the tree before generic search.
-        tree_passage_ids = await self._step_tree(queries, deps)
+        tree_passage_ids, tree_errors = await self._step_tree(queries, deps)
+        errors.extend(tree_errors)
         if tree_passage_ids:
             passage_anchor_ids.extend(
                 pid for pid in tree_passage_ids if pid not in passage_anchor_ids
             )
 
         # Step 2 — direct passage_citations via kg_nodes label/description match
-        matched_node_ids = await self._step_label_match(queries, deps)
+        matched_node_ids, label_errors = await self._step_label_match(queries, deps)
+        errors.extend(label_errors)
         if matched_node_ids:
-            citations = await self._fetch_citations(matched_node_ids, deps)
+            citations, citation_errors = await self._fetch_citations(
+                matched_node_ids, deps
+            )
+            errors.extend(citation_errors)
             seed_ids.extend(matched_node_ids)
-            passage_anchor_ids.extend(c["kg_node_id"] for c in citations)
+            passage_anchor_ids.extend(str(c["passage_id"]) for c in citations)
 
             # 1-hop graph expansion from in-memory edges, ontology-aware
             # by default — records inferred (inverseOf) triples in
             # ``deps.state`` when the caller attaches one.
-            state = getattr(deps, "state", None)
             expanded = self._expand_1hop(matched_node_ids, deps, state=state)
             seed_ids.extend(nid for nid in expanded if nid not in seed_ids)
 
         if len(passage_anchor_ids) >= self._min_bundles:
-            return _dedup(seed_ids), _dedup(passage_anchor_ids[:12])
+            return _finish()
 
         # Step 3 — lemmatic lookup against oga_tokens using expanded terms
-        lemma_passage_ids = await self._step_lemma_lookup(expanded_terms, deps)
+        lemma_passage_ids, lemma_errors = await self._step_lemma_lookup(
+            expanded_terms, deps
+        )
+        errors.extend(lemma_errors)
         passage_anchor_ids.extend(
             pid for pid in lemma_passage_ids if pid not in passage_anchor_ids
         )
 
         if len(passage_anchor_ids) >= self._min_bundles:
-            return _dedup(seed_ids), _dedup(passage_anchor_ids[:12])
+            return _finish()
 
         # Step 4 — HybridSearch (FTS + lemmatic with RRF)
         if deps.search is not None:
-            hybrid_ids = await self._step_hybrid_search(queries, deps)
+            hybrid_ids, hybrid_errors = await self._step_hybrid_search(queries, deps)
+            errors.extend(hybrid_errors)
             seed_ids.extend(nid for nid in hybrid_ids if nid not in seed_ids)
             passage_anchor_ids.extend(
                 nid for nid in hybrid_ids if nid not in passage_anchor_ids
             )
 
-        return _dedup(seed_ids), _dedup(passage_anchor_ids[:12])
+        return _finish()
 
     # ------------------------------------------------------------------
     # Step implementations
     # ------------------------------------------------------------------
 
-    async def _expand_lemmas(self, queries: list[str]) -> list[str]:
+    async def _expand_lemmas(self, queries: list[str]) -> StepResult:
         if self._lemma_expander is None:
-            return []
+            return StepResult([], [])
         joined = " ".join(q.strip() for q in queries if q and q.strip())
         if not joined:
-            return []
+            return StepResult([], [])
         try:
-            return await self._lemma_expander.expand(joined, max_lemmas=8)
-        except Exception:
+            return StepResult(
+                await self._lemma_expander.expand(joined, max_lemmas=8), []
+            )
+        except Exception as exc:
             logger.warning(
                 "Lemma expansion failed for queries %r", queries, exc_info=True
             )
-            return []
+            return StepResult([], [f"lemma_expansion: {exc}"])
 
-    async def _step_tree(self, queries: list[str], deps: Any) -> list[str]:
+    async def _step_tree(self, queries: list[str], deps: Any) -> StepResult:
         """Resolve any work/author titles in the query via TreeIndexService.
 
         Returns a list of passage IDs from the resolved works' opening sections.
         """
         tree = getattr(deps, "tree_index", None)
         if tree is None:
-            return []
+            return StepResult([], [])
 
         candidates = _author_work_candidates(queries)
         if not candidates:
-            return []
+            return StepResult([], [])
 
         try:
             work_ids = await tree.resolve_work_ids(candidates)
-        except Exception:
+        except Exception as exc:
             logger.warning("TreeIndex.resolve_work_ids failed", exc_info=True)
-            return []
+            return StepResult([], [f"tree_resolve: {exc}"])
 
         if not work_ids:
-            return []
+            return StepResult([], [])
 
         # Surface a handful of passages from each matched work via a direct
         # passage lookup (cheaper than fully loading the tree for a coarse seed).
         placeholders = ", ".join(f"${i + 1}" for i in range(len(work_ids)))
         sql = f"""
-            SELECT passage_id
-            FROM {DB_SCHEMA}.passages
-            WHERE work_id::text = ANY(ARRAY[{placeholders}])
-            ORDER BY sequence_number
+            SELECT p.passage_id
+            FROM {DB_SCHEMA}.passages p
+            WHERE p.work_id::text = ANY(ARRAY[{placeholders}])
+              AND {passage_role_condition("p")}
+            ORDER BY p.sequence_number
             LIMIT 12
         """
         try:
             rows = await deps.db.fetch(sql, *work_ids)
-        except Exception:
+        except Exception as exc:
             logger.warning("Tree-routed passage fetch failed", exc_info=True)
-            return []
-        return [str(r["passage_id"]) for r in rows]
+            return StepResult([], [f"tree_passages: {exc}"])
+        return StepResult([str(r["passage_id"]) for r in rows], [])
 
-    async def _step_label_match(self, queries: list[str], deps: Any) -> list[str]:
+    async def _step_label_match(self, queries: list[str], deps: Any) -> StepResult:
         """Find kg_nodes matching query terms. Prioritizes label matches over description."""
+        errors: list[str] = []
         seen: set[str] = set()
         patterns: list[str] = []
         for q in queries:
@@ -206,7 +259,7 @@ class SQLStrategy:
                     seen.add(low)
                     patterns.append(f"%{term}%")
         if not patterns:
-            return []
+            return StepResult([], [])
         patterns = patterns[:30]
 
         placeholders = ", ".join(f"${i + 1}" for i in range(len(patterns)))
@@ -223,8 +276,9 @@ class SQLStrategy:
         """
         try:
             label_rows = await deps.db.fetch(sql, *patterns)
-        except Exception:
+        except Exception as exc:
             logger.warning("SQLStrategy label match failed", exc_info=True)
+            errors.append(f"label_match: {exc}")
             label_rows = []
 
         result_ids = [r["node_id"] for r in label_rows]
@@ -246,19 +300,20 @@ class SQLStrategy:
                     for r in desc_rows:
                         if r["node_id"] not in result_ids:
                             result_ids.append(r["node_id"])
-                except Exception:
+                except Exception as exc:
                     logger.warning(
                         "SQLStrategy description match failed", exc_info=True
                     )
+                    errors.append(f"description_match: {exc}")
 
-        return result_ids
+        return StepResult(result_ids, errors)
 
     async def _fetch_citations(
         self, node_ids: list[str], deps: Any
-    ) -> list[dict[str, Any]]:
+    ) -> tuple[list[dict[str, Any]], list[str]]:
         """Fetch passage_citations for given node IDs, ordered by confidence."""
         if not node_ids:
-            return []
+            return [], []
 
         placeholders = ", ".join(f"${i + 1}" for i in range(len(node_ids)))
         sql = f"""
@@ -269,10 +324,10 @@ class SQLStrategy:
             LIMIT 100
         """
         try:
-            return await deps.db.fetch(sql, *node_ids)
-        except Exception:
+            return await deps.db.fetch(sql, *node_ids), []
+        except Exception as exc:
             logger.warning("SQLStrategy fetch_citations failed", exc_info=True)
-            return []
+            return [], [f"fetch_citations: {exc}"]
 
     def _expand_1hop(
         self,
@@ -361,40 +416,88 @@ class SQLStrategy:
 
         return expanded[:50]
 
+    async def _oga_has_passage_id(self, deps: Any) -> bool:
+        """Probe (once) whether ``oga_tokens.passage_id`` exists.
+
+        Keeps the code safe to deploy before the
+        ``20260610_01_add_passage_id_to_oga_tokens.sql`` migration runs.
+        Probe failures are not cached so a transient outage does not pin
+        the degraded path for the process lifetime.
+        """
+        if self._oga_passage_id_capable is not None:
+            return self._oga_passage_id_capable
+        sql = """
+            SELECT 1
+            FROM information_schema.columns
+            WHERE table_schema = $1
+              AND table_name = 'oga_tokens'
+              AND column_name = 'passage_id'
+        """
+        try:
+            rows = await deps.db.fetch(sql, DB_SCHEMA)
+        except Exception:
+            logger.warning(
+                "oga_tokens.passage_id capability probe failed", exc_info=True
+            )
+            return False
+        self._oga_passage_id_capable = bool(rows)
+        return self._oga_passage_id_capable
+
     async def _step_lemma_lookup(
         self, expanded_terms: list[str], deps: Any
-    ) -> list[str]:
+    ) -> StepResult:
         """Look up passage IDs by lemma stems against ``oga_tokens.lemma``."""
         if not expanded_terms:
-            return []
+            return StepResult([], [])
 
         # Filter to stems that look indexable. Skip pure stopwords and 1-char items.
         stems = [
             t for t in expanded_terms if len(t) >= 3 and t.lower() not in STOP_TERMS
         ][:16]
         if not stems:
-            return []
+            return StepResult([], [])
 
         patterns = [f"{stem}%" for stem in stems]
         placeholders = ", ".join(f"${i + 1}" for i in range(len(patterns)))
+        role_cond = passage_role_condition("p")
 
-        sql = f"""
-            SELECT DISTINCT p.passage_id
-            FROM {DB_SCHEMA}.oga_tokens t
-            JOIN {DB_SCHEMA}.passages p ON p.work_id = t.work_id
-            WHERE t.lemma ILIKE ANY(ARRAY[{placeholders}])
-            LIMIT 40
-        """
+        if await self._oga_has_passage_id(deps):
+            # Passage-level anchoring: rank passages by distinct matched lemmas.
+            sql = f"""
+                SELECT t.passage_id
+                FROM {DB_SCHEMA}.oga_tokens t
+                JOIN {DB_SCHEMA}.passages p ON p.passage_id = t.passage_id
+                WHERE t.lemma ILIKE ANY(ARRAY[{placeholders}])
+                  AND {role_cond}
+                GROUP BY t.passage_id
+                ORDER BY count(DISTINCT t.lemma) DESC
+                LIMIT 40
+            """
+        else:
+            logger.warning(
+                "oga_tokens.passage_id missing — lemma lookup degrades to a "
+                "work-level join returning arbitrary passages per work; apply "
+                "migration 20260610_01_add_passage_id_to_oga_tokens.sql"
+            )
+            sql = f"""
+                SELECT DISTINCT p.passage_id
+                FROM {DB_SCHEMA}.oga_tokens t
+                JOIN {DB_SCHEMA}.passages p ON p.work_id = t.work_id
+                WHERE t.lemma ILIKE ANY(ARRAY[{placeholders}])
+                  AND {role_cond}
+                LIMIT 40
+            """
         try:
             rows = await deps.db.fetch(sql, *patterns)
-        except Exception:
+        except Exception as exc:
             logger.warning("SQLStrategy lemma lookup failed", exc_info=True)
-            return []
-        return [str(r["passage_id"]) for r in rows]
+            return StepResult([], [f"lemma_lookup: {exc}"])
+        return StepResult([str(r["passage_id"]) for r in rows], [])
 
-    async def _step_hybrid_search(self, queries: list[str], deps: Any) -> list[str]:
+    async def _step_hybrid_search(self, queries: list[str], deps: Any) -> StepResult:
         """Use HybridSearchService for FTS + lemmatic search."""
         all_ids: list[str] = []
+        errors: list[str] = []
         for query in queries[:3]:
             try:
                 results = await deps.search.hybrid_search(query, limit=30)
@@ -402,13 +505,14 @@ class SQLStrategy:
                     pid = r.get("passage_id") or r.get("id")
                     if pid and pid not in all_ids:
                         all_ids.append(pid)
-            except Exception:
+            except Exception as exc:
                 logger.warning(
                     "SQLStrategy hybrid_search failed for %r",
                     query,
                     exc_info=True,
                 )
-        return all_ids
+                errors.append(f"hybrid_search[{query!r}]: {exc}")
+        return StepResult(all_ids, errors)
 
 
 class SnapshotStrategy:

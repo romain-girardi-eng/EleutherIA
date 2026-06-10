@@ -1,27 +1,64 @@
 """
-Deterministic verification of Greek and Latin text in agent responses.
+Deterministic verification of ancient Greek and Latin text in agent responses.
 
-Any ancient Greek or Latin text beyond short technical terms (≤ 3 words)
-MUST exist in the database. This prevents the LLM from fabricating,
-paraphrasing, or reconstructing ancient text.
+Ancient text in a rendered answer must come from somewhere real. The check is
+whitelist-first: any span already present — accent-, final-sigma- and
+punctuation-insensitively, word-boundary-aligned — in the evidence gathered
+for the current query is verified WITHOUT touching the database. Only the
+remainder triggers a bounded DB probe: candidate rows are fetched by a
+rare-token anchor (exact orthography, so the LIKE stays cheap and bounded),
+then fold-compared in Python. The accent-insensitivity lives entirely in the
+Python fold-compare — never in an un-indexable SQL expression over 69k rows.
 
-This is a HARD requirement for scholarly integrity.
+Report-only by default: outcomes are recorded under
+``metadata.text_verification`` and prose is NEVER altered unless
+``ELEUTHERIA_TEXT_VERIFIER_ENFORCE`` is truthy (the v1 verifier was disabled
+for false positives; the rework re-ships observation-first).
 """
 
 from __future__ import annotations
 
 import logging
+import os
 import re
 import unicodedata
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
+from eleutheria_graphrag.agents.ancient_text_matching import (
+    MODERN_STOPWORDS,
+    contains_word_bounded,
+    fold_ancient_text,
+)
+
 logger = logging.getLogger(__name__)
+
+# Deletion is opt-in: report-only first deployment (default false).
+ENFORCE_ENV_VAR = "ELEUTHERIA_TEXT_VERIFIER_ENFORCE"
+_REMOVED_LINE_MARKER = "*[removed: unverified ancient text]*"
 
 # Unicode ranges for ancient Greek
 _GREEK_BASIC = range(0x0370, 0x0400)  # Greek and Coptic
 _GREEK_EXTENDED = range(0x1F00, 0x2000)  # Greek Extended
-_GREEK_COMBINING = range(0x0300, 0x0370)  # Combining diacriticals (used with Greek)
+
+_GREEK_CHAR_RE = re.compile(r"[Ͱ-Ͽἀ-῿]")
+
+# Paired quotation marks (same pairs as the graph_nodes render-time quote
+# gate): straight/curly double, curly single, guillemets (double and
+# single), German low-9 variants. One capture group per pair.
+_QUOTED_SPAN_RE = re.compile(
+    r"[\"“](.+?)[\"”]"
+    r"|‘(.+?)’"
+    r"|«\s*(.+?)\s*»"
+    r"|‹\s*(.+?)\s*›"
+    r"|„(.+?)[“”]"
+    r"|‚(.+?)[‘’]"
+)
+
+_ELLIPSIS_RE = re.compile(r"…|⋯|\.{3,}")
+
+_TOKEN_STRIP_CHARS = ".,;:·()[]\"'«»‹›„“”‘’‚!?—–…"
 
 # Pattern to find Greek text runs (3+ Greek chars in a row, possibly with spaces/punctuation)
 _GREEK_RUN_RE = re.compile(
@@ -30,8 +67,11 @@ _GREEK_RUN_RE = re.compile(
     re.UNICODE,
 )
 
-# Known short technical terms that are OK without DB verification
-# These are vocabulary items, not text passages
+# Curated SINGLE-WORD technical vocabulary that never needs verification.
+# Multi-word phrases were deliberately dropped from this list: anything
+# beyond two words is quotation-shaped and goes through the whitelist/DB
+# path (two-word technical phrases — "ἐφ' ἡμῖν", "liberum arbitrium",
+# "nunc stans" — already pass via the ``_MAX_TERM_WORDS`` free pass).
 _KNOWN_TERMS: set[str] = {
     # Greek terms
     "αὐτεξούσιον",
@@ -41,8 +81,6 @@ _KNOWN_TERMS: set[str] = {
     "εἱμαρμένης",
     "πρόνοια",
     "προνοίας",
-    "ἐφ' ἡμῖν",
-    "τὸ ἐφ' ἡμῖν",
     "προαίρεσις",
     "προαιρέσεως",
     "συγκατάθεσις",
@@ -73,79 +111,182 @@ _KNOWN_TERMS: set[str] = {
     "ἐλευθερία",
     "ἀνάγκη",
     "τύχη",
-    "Περὶ Ἀρχῶν",
-    "Περὶ εἱμαρμένης",
     # Latin terms
-    "liberum arbitrium",
     "fatum",
     "fata",
     "necessitas",
     "voluntas",
-    "nunc stans",
-    "massa damnata",
-    "donum perseverantiae",
     "aeternitas",
     "praescientia",
     "providentia",
     "concursus",
 }
 
-# Maximum word count for a "short term" that doesn't need DB verification
-_MAX_TERM_WORDS = 4
+# Spans of at most this many words are vocabulary, not quotation: free pass.
+# Lowered from 4 to 2 — three-word Greek already reads as a quotation.
+_MAX_TERM_WORDS = 2
+
+# Common ENGLISH content words (folded form). MODERN_STOPWORDS only carries
+# function words, so a quoted English phrase made of content words ("moral
+# responsibility requires causal freedom") used to be classified as candidate
+# ancient Latin and flagged as report-only noise. None of these strings is a
+# valid classical Latin word-form (homograph-audited the same way as
+# MODERN_STOPWORDS — e.g. "divine" was deliberately left out: it is a real
+# Latin vocative/adverb).
+_ENGLISH_CONTENT_WORDS = frozenset(
+    {
+        "action",
+        "agency",
+        "agent",
+        "against",
+        "ancient",
+        "argument",
+        "arguments",
+        "because",
+        "between",
+        "cause",
+        "causes",
+        "causal",
+        "century",
+        "choice",
+        "choices",
+        "christian",
+        "claim",
+        "claims",
+        "compatibilism",
+        "concept",
+        "could",
+        "debate",
+        "determinism",
+        "deterministic",
+        "doctrine",
+        "early",
+        "effect",
+        "event",
+        "events",
+        "every",
+        "fate",
+        "fated",
+        "foreknowledge",
+        "free",
+        "freedom",
+        "god",
+        "however",
+        "human",
+        "incompatibilism",
+        "knowledge",
+        "moral",
+        "nature",
+        "necessity",
+        "passage",
+        "philosopher",
+        "philosophers",
+        "philosophy",
+        "possible",
+        "power",
+        "reason",
+        "responsibility",
+        "responsible",
+        "scholar",
+        "scholars",
+        "should",
+        "soul",
+        "stoic",
+        "stoics",
+        "theory",
+        "therefore",
+        "things",
+        "through",
+        "treatise",
+        "whether",
+        "without",
+        "world",
+    }
+)
+
+# Reject a quoted span as English (not candidate Latin) when more than this
+# fraction of its alphabetic tokens is in _ENGLISH_CONTENT_WORDS. Strictly
+# greater-than: a single incidental hit in a long genuine Latin quote can
+# never trip it.
+_ENGLISH_CONTENT_RATIO = 0.4
+
+# DB probe bounds: at most _MAX_ANCHORS anchor tokens per span, at most
+# _CANDIDATE_LIMIT candidate rows per (anchor, table) probe.
+_ANCHOR_MIN_CHARS = 4
+_MAX_ANCHORS = 2
+_CANDIDATE_LIMIT = 25
+
+
+@dataclass
+class SpanCheck:
+    """One ancient-text span found in the answer and its verification outcome."""
+
+    text: str
+    language: str  # "greek" | "latin"
+    position: int  # char offset in the answer
+    status: str  # "bundle" | "db_passage" | "db_node" | "unverified"
+    source_id: str | None = None
+    source_title: str | None = None
 
 
 @dataclass
 class VerificationResult:
-    """Result of Greek/Latin text verification."""
+    """Aggregate outcome of one answer's ancient-text verification."""
 
-    verified_extracts: list[VerifiedExtract] = field(default_factory=list)
-    unverified_extracts: list[UnverifiedExtract] = field(default_factory=list)
-    misattributed_extracts: list[MisattributedExtract] = field(default_factory=list)
-    total_greek_chars: int = 0
-    total_extracts_found: int = 0
-    all_verified: bool = True
+    verified_spans: list[SpanCheck] = field(default_factory=list)
+    unverified_spans: list[SpanCheck] = field(default_factory=list)
+    db_checked: int = 0
+    bundle_whitelisted: int = 0
+
+    @property
+    def all_verified(self) -> bool:
+        return not self.unverified_spans
+
+    def to_metadata(self) -> dict[str, Any]:
+        """Shape recorded under ``metadata.text_verification``.
+
+        Emits BOTH the detailed span lists and the aggregate contract the
+        downstream consumers read (``verified``/``unverified`` integer
+        counts + ``unverified_texts``): the share renderer
+        (``backend/routes/share.py``), the /answer quality metrics
+        (``backend/routes/graphrag_extras.py``) and the frontend banner
+        (``MessageBubble.tsx`` via ``TextVerificationReport``) all key off
+        the aggregate fields — without them the unverified-ancient-text
+        surface is silently dead end-to-end.
+        """
+        return {
+            "verified": len(self.verified_spans),
+            "unverified": len(self.unverified_spans),
+            "unverified_texts": [
+                {
+                    "text": span.text[:120],
+                    "language": span.language,
+                    "action": "flagged",
+                }
+                for span in self.unverified_spans
+            ],
+            "verified_spans": [
+                {
+                    "text": span.text[:120],
+                    "language": span.language,
+                    "status": span.status,
+                    **({"source_id": span.source_id} if span.source_id else {}),
+                }
+                for span in self.verified_spans
+            ],
+            "unverified_spans": [
+                {"text": span.text[:120], "language": span.language}
+                for span in self.unverified_spans
+            ],
+            "db_checked": self.db_checked,
+            "bundle_whitelisted": self.bundle_whitelisted,
+        }
 
 
-@dataclass
-class VerifiedExtract:
-    """A Greek/Latin extract that was found in the database."""
-
-    text: str
-    passage_id: str
-    work_title: str
-    canonical_ref: str | None
-
-
-@dataclass
-class UnverifiedExtract:
-    """A Greek/Latin extract NOT found in the database — potential fabrication."""
-
-    text: str
-    word_count: int
-    position: int  # char position in answer
-    action: str  # "flagged" or "removed"
-
-
-@dataclass
-class MisattributedExtract:
-    """A Greek/Latin extract found in the DB but attributed to the wrong work."""
-
-    text: str
-    claimed_work: str  # What the LLM said
-    actual_work: str  # What the DB says
-    actual_ref: str | None
-    position: int
-    action: str = "corrected"
-
-
-# Pattern to detect work attribution near a Greek passage
-# Matches: "Phaedo 43a", "De Principiis III.1", "Republic X.617e", etc.
-_WORK_ATTR_RE = re.compile(
-    r"(?:(?:in|from|of|in his|Plato'?s?|Origen'?s?)\s+)?"
-    r"([A-Z][a-zA-Z\s]+?)"  # Work title
-    r"(?:\s+(?:[IVXLC]+\.?|\d+)[.\s]*(?:\d+[a-z]?)?)?",  # Optional ref number
-    re.UNICODE,
-)
+def enforcement_enabled() -> bool:
+    """Whether unverified spans may alter prose (default: report-only)."""
+    raw = os.getenv(ENFORCE_ENV_VAR, "false").strip().lower()
+    return raw in {"1", "true", "yes", "on"}
 
 
 def extract_greek_runs(text: str) -> list[tuple[str, int]]:
@@ -162,233 +303,295 @@ def extract_greek_runs(text: str) -> list[tuple[str, int]]:
     return runs
 
 
+def extract_quoted_latin_spans(text: str) -> list[tuple[str, int]]:
+    """Quoted Latin-script spans that look like candidate ancient Latin.
+
+    Only QUOTED spans (any paired quote marks, incl. guillemets and German
+    low-9 quotes) are extracted: unquoted Latin prose is statistically
+    indistinguishable from English here, and the blockquote Latin gate in
+    ``graph_nodes`` already covers quotation-formatted lines. A span counts
+    as candidate Latin when none of its folded words is a modern function
+    word (en/fr/de/it) — the same heuristic as the render-time gate — AND
+    at most :data:`_ENGLISH_CONTENT_RATIO` of its alphabetic tokens is in
+    the small :data:`_ENGLISH_CONTENT_WORDS` lexicon (quoted English phrases
+    built from content words carry no function words, so the stopword check
+    alone misclassified them as Latin).
+
+    Residual limitation: a short quoted English phrase whose content words
+    all fall outside the ~70-word lexicon (e.g. rare or technical English
+    vocabulary) still passes as candidate Latin and shows up as report-only
+    noise. The lexicon is deliberately tiny and homograph-audited rather
+    than exhaustive — growing it risks rejecting genuine Latin.
+    """
+    spans: list[tuple[str, int]] = []
+    for match in _QUOTED_SPAN_RE.finditer(text):
+        quote = next(group for group in match.groups() if group is not None)
+        if _GREEK_CHAR_RE.search(quote):
+            continue  # Greek-bearing quotes are handled by the run extractor
+        words = fold_ancient_text(quote).split()
+        if len(words) <= _MAX_TERM_WORDS:
+            continue
+        if any(word in MODERN_STOPWORDS for word in words):
+            continue
+        alpha_words = [word for word in words if word.isalpha()]
+        if not alpha_words:
+            continue
+        english_hits = sum(1 for word in alpha_words if word in _ENGLISH_CONTENT_WORDS)
+        if english_hits / len(alpha_words) > _ENGLISH_CONTENT_RATIO:
+            continue
+        spans.append((quote, match.start()))
+    return spans
+
+
 def is_known_term(text: str) -> bool:
-    """Check if a Greek/Latin text is a known short technical term."""
-    cleaned = text.strip().rstrip(".,;:·)")
+    """Free pass: 1-2-word spans (vocabulary, technical phrases, titles) and
+    curated single-word technical terms. Anything longer is quotation-shaped
+    and must be verified against evidence or the corpus."""
+    cleaned = text.strip().strip(_TOKEN_STRIP_CHARS)
+    if not cleaned:
+        return True
     if cleaned in _KNOWN_TERMS:
         return True
-    # Check word count
-    words = cleaned.split()
-    return len(words) <= _MAX_TERM_WORDS
+    return len(cleaned.split()) <= _MAX_TERM_WORDS
 
 
-async def verify_greek_text(
+async def verify_ancient_text(
     answer: str,
     db: Any,
-    schema: str = "free_will",
+    *,
+    evidence_texts: Sequence[str] = (),
+    schema: str | None = None,
 ) -> VerificationResult:
-    """Verify all Greek text in an answer against the passage database.
+    """Verify every ancient-text span in ``answer``.
 
-    Short terms (≤ 4 words or in known terms list) pass automatically.
-    Longer extracts must match text in the passages table.
+    ``schema`` defaults to ``ELEUTHERIA_DB_SCHEMA`` — the same env var the
+    rest of the graphrag DB layer reads (``graph_helpers``, ``graph_nodes``,
+    the agent tools) — falling back to ``free_will``. Resolved at call time
+    so tests and deployments can repoint it without re-importing.
 
-    Returns a VerificationResult with verified/unverified extracts.
+    Per-span resolution order:
+
+    1. free pass — 1-2-word vocabulary and curated single-word terms;
+    2. whitelist — the span appears (folded, word-boundary-aligned) in one
+       of ``evidence_texts`` (the bundles/evidence already gathered for this
+       query): verified with NO DB query;
+    3. bounded DB probe — anchor-token candidate fetch, folded comparison
+       in Python (see :func:`_search_passage_for_text`);
+    4. otherwise the span is recorded as unverified. Nothing is deleted
+       here — enforcement is the caller's decision (see
+       :func:`enforce_answer` / :func:`enforcement_enabled`).
     """
+    if schema is None:
+        schema = os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
     result = VerificationResult()
-    runs = extract_greek_runs(answer)
-    result.total_extracts_found = len(runs)
-    result.total_greek_chars = sum(_count_greek_chars(t) for t, _ in runs)
+    folded_sources = [
+        folded
+        for folded in (fold_ancient_text(text) for text in evidence_texts if text)
+        if folded
+    ]
 
-    for greek_text, position in runs:
-        if is_known_term(greek_text):
-            continue  # Short term, OK
+    spans: list[tuple[str, int, str]] = [
+        (text, position, "greek") for text, position in extract_greek_runs(answer)
+    ]
+    spans += [
+        (text, position, "latin")
+        for text, position in extract_quoted_latin_spans(answer)
+    ]
 
-        word_count = len(greek_text.split())
+    for span_text, position, language in spans:
+        if is_known_term(span_text):
+            continue
+        segments = _folded_segments(span_text)
+        if not segments:
+            continue
 
-        # Search for this text in the database
-        found = await _search_passage_for_text(greek_text, db, schema)
+        check = SpanCheck(
+            text=span_text,
+            language=language,
+            position=position,
+            status="unverified",
+        )
 
+        if any(
+            all(contains_word_bounded(source, segment) for segment in segments)
+            for source in folded_sources
+        ):
+            check.status = "bundle"
+            result.bundle_whitelisted += 1
+            result.verified_spans.append(check)
+            continue
+
+        result.db_checked += 1
+        found = (
+            await _search_passage_for_text(span_text, segments, db, schema)
+            if db is not None
+            else None
+        )
         if found:
-            actual_title = found.get("title", "")
-            actual_ref = found.get("canonical_ref")
-
-            # Check attribution: look for work titles near the Greek text
-            # (in the 200 chars before the Greek passage)
-            context_before = answer[max(0, position - 200) : position]
-            claimed_work = _extract_claimed_work(context_before)
-
-            if (
-                claimed_work
-                and actual_title
-                and not _titles_match(claimed_work, actual_title)
-            ):
-                result.misattributed_extracts.append(
-                    MisattributedExtract(
-                        text=greek_text[:100],
-                        claimed_work=claimed_work,
-                        actual_work=actual_title,
-                        actual_ref=actual_ref,
-                        position=position,
-                    )
-                )
-                result.all_verified = False
-                logger.warning(
-                    "MISATTRIBUTED: LLM claims '%s' but DB says '%s' for: %s",
-                    claimed_work,
-                    actual_title,
-                    greek_text[:60],
-                )
-            else:
-                result.verified_extracts.append(
-                    VerifiedExtract(
-                        text=greek_text,
-                        passage_id=found["passage_id"],
-                        work_title=actual_title,
-                        canonical_ref=actual_ref,
-                    )
-                )
+            check.status = str(found["source"])
+            check.source_id = found.get("passage_id")
+            check.source_title = found.get("title")
+            result.verified_spans.append(check)
         else:
-            result.unverified_extracts.append(
-                UnverifiedExtract(
-                    text=greek_text,
-                    word_count=word_count,
-                    position=position,
-                    action="flagged",
-                )
-            )
-            result.all_verified = False
+            result.unverified_spans.append(check)
 
-    if result.unverified_extracts:
+    if result.unverified_spans:
         logger.warning(
-            "Found %d unverified Greek/Latin extracts in answer",
-            len(result.unverified_extracts),
+            "Text verifier: %d unverified ancient-text span(s)",
+            len(result.unverified_spans),
         )
-        for uv in result.unverified_extracts:
-            logger.warning("  UNVERIFIED (%d words): %s", uv.word_count, uv.text[:100])
-
-    if result.misattributed_extracts:
-        logger.warning(
-            "Found %d misattributed Greek/Latin extracts",
-            len(result.misattributed_extracts),
-        )
+        for span in result.unverified_spans:
+            logger.warning("  UNVERIFIED (%s): %s", span.language, span.text[:100])
 
     return result
 
 
-def sanitize_answer(answer: str, verification: VerificationResult) -> str:
-    """Remove or flag unverified/misattributed Greek/Latin text.
+def enforce_answer(answer: str, result: VerificationResult) -> str:
+    """Drop whole lines containing unverified spans (enforce mode only).
 
-    Unverified extracts:
-    - > 8 words: remove and replace with [text removed: unverified]
-    - 5-8 words: add [unverified] marker
-
-    Misattributed extracts:
-    - Add correction note: [correction: this passage is from X, not Y]
+    The whole line goes, not just the span: stripping the quote marks or the
+    span while keeping surrounding text would launder an unverifiable
+    quotation into plain prose. Callers must gate this behind
+    :func:`enforcement_enabled` — the default deployment is report-only.
     """
-    if verification.all_verified:
+    if result.all_verified:
         return answer
 
-    sanitized = answer
+    lines = answer.split("\n")
+    offsets: list[int] = []
+    cursor = 0
+    for line in lines:
+        offsets.append(cursor)
+        cursor += len(line) + 1
 
-    # Collect all actions with positions
-    actions: list[tuple[int, str, str]] = []  # (position, type, replacement)
+    drop: set[int] = set()
+    for span in result.unverified_spans:
+        start = span.position
+        end = span.position + len(span.text)
+        for index, line_start in enumerate(offsets):
+            line_end = line_start + len(lines[index])
+            if start <= line_end and end >= line_start:
+                drop.add(index)
 
-    for extract in verification.unverified_extracts:
-        if extract.word_count > 8:
-            actions.append(
-                (
-                    extract.position,
-                    "replace",
-                    "[text removed: unverified ancient text]",
-                )
-            )
-            extract.action = "removed"
-        elif extract.word_count > _MAX_TERM_WORDS:
-            end_pos = extract.position + len(extract.text)
-            actions.append(
-                (
-                    end_pos,
-                    "insert",
-                    " [unverified]",
-                )
-            )
-            extract.action = "flagged"
+    return "\n".join(
+        _REMOVED_LINE_MARKER if index in drop else line
+        for index, line in enumerate(lines)
+    )
 
-    for misattr in verification.misattributed_extracts:
-        end_pos = misattr.position + len(misattr.text)
-        correction = f" [correction: this passage is from {misattr.actual_work}"
-        if misattr.actual_ref:
-            correction += f" {misattr.actual_ref}"
-        correction += f", not {misattr.claimed_work}]"
-        actions.append(
-            (
-                end_pos,
-                "insert",
-                correction,
-            )
-        )
-        misattr.action = "corrected"
 
-    # Apply from end to start to preserve positions
-    for pos, action_type, text in sorted(actions, key=lambda a: a[0], reverse=True):
-        if action_type == "replace":
-            # Find the original text at this position
-            for uv in verification.unverified_extracts:
-                if uv.position == pos:
-                    sanitized = sanitized[:pos] + text + sanitized[pos + len(uv.text) :]
-                    break
-        elif action_type == "insert":
-            sanitized = sanitized[:pos] + text + sanitized[pos:]
+def _folded_segments(span_text: str) -> list[str]:
+    """Fold each ellipsis-separated segment; drop sub-2-char leftovers."""
+    segments: list[str] = []
+    for part in _ELLIPSIS_RE.split(span_text):
+        folded = fold_ancient_text(part)
+        if len(re.sub(r"\W+", "", folded)) >= 2:
+            segments.append(folded)
+    return segments
 
-    return sanitized
+
+def _anchor_tokens(span_text: str) -> list[str]:
+    """Longest distinct tokens of the span, in original orthography.
+
+    The anchor must match the corpus byte-for-byte for the LIKE probe to
+    hit; only ONE word of the span needs to match exactly — the rest of the
+    accent/sigma/punctuation tolerance lives in the Python fold-compare.
+    Longest first: longer tokens are rarer, keeping candidate sets small.
+    """
+    tokens = [token.strip(_TOKEN_STRIP_CHARS) for token in span_text.split()]
+    tokens = [token for token in tokens if len(token) >= _ANCHOR_MIN_CHARS]
+    tokens.sort(key=len, reverse=True)
+    return list(dict.fromkeys(tokens))[:_MAX_ANCHORS]
+
+
+def _fold_match(
+    rows: Sequence[Any],
+    segments: list[str],
+) -> Any | None:
+    """First candidate row whose text contains every folded segment."""
+    for row in rows or []:
+        text = row.get("text_content") or ""
+        folded = fold_ancient_text(str(text))
+        if all(contains_word_bounded(folded, segment) for segment in segments):
+            return row
+    return None
 
 
 async def _search_passage_for_text(
-    greek_text: str,
+    span_text: str,
+    segments: list[str],
     db: Any,
     schema: str,
 ) -> dict[str, Any] | None:
-    """Search for a Greek text snippet in the database.
+    """Bounded corpus probe for one span.
 
-    Checks both the passages table AND kg_nodes descriptions,
-    since some ancient text is stored in KG node descriptions
-    (e.g., from Scaife ingestions).
-
-    Uses substring matching (LIKE) on text_content / description.
-    Normalizes Unicode to handle diacritical variations.
+    A LIKE over the *folded* form of 69k passages is un-indexable, so the
+    probe instead fetches up to ``_CANDIDATE_LIMIT`` candidate rows per
+    anchor token (exact orthography) from the passages table and from
+    passage/quote kg_nodes, then fold-compares the candidates in Python.
+    Audit-flagged kg_nodes (non-empty ``metadata.integrity_status``) are
+    excluded: a node flagged ``greek_unverified`` /
+    ``fabrication_confirmed_pending_fix`` must never count as verification.
+    Worst case: ``_MAX_ANCHORS × unicode-variants × 2 tables`` LIKE queries,
+    each capped at ``_CANDIDATE_LIMIT`` rows.
     """
-    search_text = greek_text.strip().strip(".,;:·()\"'")
-    if len(search_text) < 4:
-        return None
+    for anchor in _anchor_tokens(span_text):
+        for variant in _unicode_variants(anchor):
+            try:
+                rows = await db.fetch(
+                    f"""
+                    SELECT p.passage_id::text AS passage_id,
+                           w.title,
+                           p.canonical_ref,
+                           p.text_content
+                    FROM {schema}.passages p
+                    JOIN {schema}.ancient_works w ON w.work_id = p.work_id
+                    WHERE p.text_content LIKE '%' || $1 || '%'
+                    LIMIT {_CANDIDATE_LIMIT}
+                    """,
+                    variant,
+                )
+            except Exception:
+                logger.debug(
+                    "Passage probe failed for anchor: %s", variant[:40], exc_info=True
+                )
+                rows = []
+            hit = _fold_match(rows, segments)
+            if hit is not None:
+                return {
+                    "passage_id": hit.get("passage_id"),
+                    "title": hit.get("title"),
+                    "canonical_ref": hit.get("canonical_ref"),
+                    "source": "db_passage",
+                }
 
-    for text_variant in _unicode_variants(search_text):
-        # Check passages table
-        try:
-            row = await db.fetchrow(
-                f"""
-                SELECT p.passage_id::text, w.title, p.canonical_ref
-                FROM {schema}.passages p
-                JOIN {schema}.ancient_works w ON w.work_id = p.work_id
-                WHERE p.text_content LIKE '%' || $1 || '%'
-                LIMIT 1
-                """,
-                text_variant,
-            )
-            if row:
-                return dict(row)
-        except Exception:
-            logger.debug(
-                "Passage search failed for: %s", text_variant[:50], exc_info=True
-            )
-
-        # Check KG node descriptions (many passage nodes store text here)
-        try:
-            row = await db.fetchrow(
-                f"""
-                SELECT node_id AS passage_id, label AS title, NULL AS canonical_ref
-                FROM {schema}.kg_nodes
-                WHERE description LIKE '%' || $1 || '%'
-                  AND type IN ('passage', 'quote')
-                LIMIT 1
-                """,
-                text_variant,
-            )
-            if row:
-                return dict(row)
-        except Exception:
-            logger.debug(
-                "KG node search failed for: %s", text_variant[:50], exc_info=True
-            )
+            try:
+                rows = await db.fetch(
+                    f"""
+                    SELECT node_id AS passage_id,
+                           label AS title,
+                           description AS text_content
+                    FROM {schema}.kg_nodes
+                    WHERE description LIKE '%' || $1 || '%'
+                      AND type IN ('passage', 'quote')
+                      AND (metadata->>'integrity_status' IS NULL
+                           OR metadata->>'integrity_status' = '')
+                    LIMIT {_CANDIDATE_LIMIT}
+                    """,
+                    variant,
+                )
+            except Exception:
+                logger.debug(
+                    "KG node probe failed for anchor: %s", variant[:40], exc_info=True
+                )
+                rows = []
+            hit = _fold_match(rows, segments)
+            if hit is not None:
+                return {
+                    "passage_id": hit.get("passage_id"),
+                    "title": hit.get("title"),
+                    "canonical_ref": None,
+                    "source": "db_node",
+                }
 
     return None
 
@@ -413,86 +616,3 @@ def _count_greek_chars(text: str) -> int:
         if cp in _GREEK_BASIC or cp in _GREEK_EXTENDED:
             count += 1
     return count
-
-
-# Common ancient work titles for attribution detection
-_WORK_TITLES = {
-    "phaedo",
-    "phaedrus",
-    "republic",
-    "laws",
-    "timaeus",
-    "crito",
-    "symposium",
-    "apology",
-    "meno",
-    "gorgias",
-    "protagoras",
-    "theaetetus",
-    "de principiis",
-    "contra celsum",
-    "de oratione",
-    "commentary on romans",
-    "philocalia",
-    "exhortation to martyrdom",
-    "de fato",
-    "academica",
-    "de natura deorum",
-    "de divinatione",
-    "de rerum natura",
-    "nicomachean ethics",
-    "de anima",
-    "metaphysics",
-    "physics",
-    "discourses",
-    "enchiridion",
-    "meditations",
-    "letters to lucilius",
-    "de providentia",
-    "de ira",
-    "consolation of philosophy",
-    "stromata",
-    "protrepticus",
-    "de libero arbitrio",
-    "confessions",
-    "city of god",
-    "against heresies",
-    "adversus haereses",
-}
-
-
-def _extract_claimed_work(context: str) -> str | None:
-    """Extract the work title the LLM claims a passage is from.
-
-    Looks for patterns like "Phaedo 43a", "in his De Principiis", etc.
-    """
-    context_lower = context.lower()
-    for title in _WORK_TITLES:
-        if title in context_lower:
-            # Find the original case version
-            idx = context_lower.rfind(title)
-            return context[idx : idx + len(title)]
-    return None
-
-
-def _titles_match(claimed: str, actual: str) -> bool:
-    """Check if a claimed work title matches the actual title from the DB.
-
-    Handles partial matches: "Phaedo" matches "Phaedo (Φαίδων)",
-    "De Principiis" matches "De Principiis (Περὶ Ἀρχῶν) - Origen".
-    """
-    claimed_lower = claimed.lower().strip()
-    actual_lower = actual.lower().strip()
-
-    # Direct containment
-    if claimed_lower in actual_lower or actual_lower in claimed_lower:
-        return True
-
-    # First word match (e.g., "Crito" matches "Crito (Κρίτων)")
-    claimed_first = claimed_lower.split()[0] if claimed_lower else ""
-    actual_first = actual_lower.split()[0] if actual_lower else ""
-    return bool(
-        claimed_first
-        and actual_first
-        and (claimed_first == actual_first or claimed_first in actual_lower)
-    )

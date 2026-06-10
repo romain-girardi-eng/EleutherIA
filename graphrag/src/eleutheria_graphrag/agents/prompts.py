@@ -10,10 +10,39 @@ from __future__ import annotations
 import json
 from typing import Any
 
+
+def kg_scale_summary(kg_data: dict[str, Any] | None) -> str:
+    """Honest, order-of-magnitude description of the loaded KG snapshot.
+
+    Computed from the actual ``deps.kg_data`` payload at prompt-build time —
+    never hardcoded — so the prompt cannot drift from the dataset the agent
+    is actually querying. Returns a count-free description when no snapshot
+    is loaded (DB-only deployments, unit tests).
+    """
+    nodes = (kg_data or {}).get("nodes") or []
+    edges = (kg_data or {}).get("edges") or []
+    if not nodes:
+        return "a knowledge graph and a corpus of ancient works"
+
+    def _approx(count: int) -> str:
+        return f"~{round(count / 1000)}k" if count >= 1000 else f"~{count}"
+
+    works = sum(1 for node in nodes if node.get("type") == "work")
+    passages = sum(1 for node in nodes if node.get("type") == "passage")
+    summary = (
+        f"a knowledge graph ({_approx(len(nodes))} nodes, {_approx(len(edges))} edges)"
+    )
+    if works and passages:
+        summary += (
+            f" and a corpus of {works} ancient works"
+            f" ({_approx(passages)} anchored passages)"
+        )
+    return summary
+
+
 AGENT_SYSTEM_PROMPT = """\
 You are a scholarly research agent specializing in ancient philosophy. You have \
-access to a knowledge graph (17,700 nodes, 42,900 edges) and a corpus of 487 \
-ancient works (69,000 passages) covering philosophical debates on free will, \
+access to {kg_scale} covering philosophical debates on free will, \
 fate, and moral responsibility from the 6th century BCE to the 6th century CE.
 
 ## Your Mission
@@ -96,6 +125,7 @@ def format_system_prompt(
     budget: int,
     remaining: int,
     tool_descriptions: list[dict[str, Any]],
+    kg_data: dict[str, Any] | None = None,
 ) -> str:
     """Format the agent system prompt with current budget and tool descriptions."""
     tools_json = json.dumps(tool_descriptions, indent=2, ensure_ascii=False)
@@ -103,6 +133,7 @@ def format_system_prompt(
         budget=budget,
         remaining=remaining,
         tool_descriptions=tools_json,
+        kg_scale=kg_scale_summary(kg_data),
     )
 
 

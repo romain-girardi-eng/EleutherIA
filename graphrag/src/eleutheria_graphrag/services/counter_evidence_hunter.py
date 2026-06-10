@@ -42,6 +42,10 @@ from collections.abc import AsyncIterator, Awaitable, Callable
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
+from eleutheria_graphrag.agents.ancient_text_matching import (
+    contains_word_bounded,
+    fold_ancient_text,
+)
 from eleutheria_graphrag.models.counter_evidence import (
     ClaimFinding,
     ClaimUnit,
@@ -313,11 +317,20 @@ class CounterEvidenceHunter:
         valid_node_ids = {e["target"] for e in kg_edges if e.get("target")}
         valid_node_ids.update(e["source"] for e in kg_edges if e.get("source"))
 
+        # Grounding whitelist for excerpts: everything the LLM was shown.
+        # An excerpt that is not a (fold-insensitive) substring of these
+        # texts was invented and must be dropped.
+        source_texts = [str(p.get("text_content") or "") for p in passage_hits] + [
+            str(p.get("work_title") or "") for p in passage_hits
+        ]
+        source_texts.extend(str(e.get("label") or "") for e in kg_edges)
+
         raw = await self._classify_with_llm(claim, passage_hits, kg_edges)
         return self._parse_and_validate(
             raw,
             valid_passage_ids=valid_passage_ids,
             valid_node_ids=valid_node_ids,
+            source_texts=source_texts,
         )
 
     # ------------------------------------------------------------------
@@ -828,6 +841,7 @@ class CounterEvidenceHunter:
         *,
         valid_passage_ids: set[str],
         valid_node_ids: set[str],
+        source_texts: list[str] | None = None,
     ) -> list[OpposingTestimony]:
         if not raw:
             return []
@@ -839,6 +853,16 @@ class CounterEvidenceHunter:
         except json.JSONDecodeError:
             logger.warning("Hunter returned invalid JSON; dropping payload")
             return []
+
+        # Substring-grounding discipline (accent/sigma/punctuation-insensitive,
+        # same folding the answer-level text verifier uses): an excerpt that
+        # cannot be located in the fetched tool results is dropped — the
+        # testimony itself survives on its validated ids alone.
+        folded_source = ""
+        if source_texts is not None:
+            folded_source = "\n".join(
+                fold_ancient_text(text) for text in source_texts if text
+            )
 
         items = payload.get("opposing_testimonia") or []
         out: list[OpposingTestimony] = []
@@ -860,13 +884,25 @@ class CounterEvidenceHunter:
                 continue
             if not pid and not nid:
                 continue
+            excerpt = str(item.get("excerpt", ""))[:600]
+            if excerpt and source_texts is not None:
+                folded_excerpt = fold_ancient_text(excerpt)
+                if not folded_excerpt or not contains_word_bounded(
+                    folded_source, folded_excerpt
+                ):
+                    logger.warning(
+                        "Dropping ungrounded hunter excerpt (not in tool "
+                        "results): %.80r",
+                        excerpt,
+                    )
+                    excerpt = ""
             out.append(
                 OpposingTestimony(
                     type=_cast_type(ttype),
                     source=str(item.get("source", "")).strip() or "unknown",
                     source_node_id=nid or None,
                     passage_id=pid or None,
-                    excerpt=str(item.get("excerpt", ""))[:600],
+                    excerpt=excerpt,
                     force=_cast_force(force),
                     brief_reasoning=str(item.get("brief_reasoning", "")).strip(),
                 )

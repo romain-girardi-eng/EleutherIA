@@ -26,7 +26,9 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 import re
+import uuid
 from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING, Any
 
@@ -96,6 +98,100 @@ PassageFetcher = Callable[[str], Awaitable[dict[str, Any] | None]]
 A ``None`` return (or empty ``text``) means MISSING. Implementations must
 re-fetch each call — caching defeats the v2 contract.
 """
+
+
+def build_db_passage_fetcher(
+    db: Any,
+    *,
+    schema: str | None = None,
+    node_lookup: dict[str, dict[str, Any]] | None = None,
+) -> PassageFetcher:
+    """Production :data:`PassageFetcher`: one fresh SELECT per call.
+
+    Resolution order per the v2 contract (no caching, never trust the
+    synthesizer's text):
+
+    1. ``passages`` table by ``passage_id`` (passage citations);
+    2. ``kg_nodes`` table by ``node_id`` (node citations — the description is
+       the canonical claimable text for metadata-grounded claims);
+    3. optional ``node_lookup`` snapshot as last resort when the DB is
+       unreachable, so offline runs degrade to WEAK/REJECTED verdicts on real
+       text instead of marking every citation MISSING.
+
+    The passages arm only runs when ``citation_id`` parses as a UUID — the
+    comparison is then ``passage_id = $1::uuid`` (index scan). Node-shaped
+    ids skip the passages arm entirely instead of forcing the old
+    ``passage_id::text = $1`` seq scan over 69k rows.
+    """
+    resolved_schema = schema or os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
+
+    async def fetch(citation_id: str) -> dict[str, Any] | None:
+        rows: list[dict[str, Any]] = []
+        passage_uuid = _try_parse_uuid(citation_id)
+        if passage_uuid is not None:
+            try:
+                rows = await db.fetch(
+                    f"""
+                    SELECT
+                        p.passage_id::text AS passage_id,
+                        p.text_content,
+                        p.canonical_ref,
+                        w.title,
+                        w.author
+                    FROM {resolved_schema}.passages p
+                    LEFT JOIN {resolved_schema}.ancient_works w
+                        ON p.work_id = w.work_id
+                    WHERE p.passage_id = $1::uuid
+                    """,
+                    str(passage_uuid),
+                )
+            except Exception:
+                logger.debug(
+                    "Fresh passage fetch failed for %s", citation_id, exc_info=True
+                )
+        if rows:
+            row = rows[0]
+            return {
+                "text": row.get("text_content") or "",
+                "label": row.get("canonical_ref") or citation_id,
+                "work_title": row.get("title"),
+                "author": row.get("author"),
+                "source": "passages",
+            }
+
+        try:
+            rows = await db.fetch(
+                f"""
+                SELECT node_id, label, description
+                FROM {resolved_schema}.kg_nodes
+                WHERE node_id = $1
+                """,
+                citation_id,
+            )
+        except Exception:
+            logger.debug(
+                "Fresh kg_node fetch failed for %s", citation_id, exc_info=True
+            )
+            rows = []
+        if rows:
+            row = rows[0]
+            return {
+                "text": row.get("description") or "",
+                "label": row.get("label") or citation_id,
+                "source": "kg_nodes",
+            }
+
+        if node_lookup:
+            node = node_lookup.get(citation_id)
+            if node:
+                return {
+                    "text": str(node.get("description") or ""),
+                    "label": str(node.get("label") or citation_id),
+                    "source": "kg_snapshot",
+                }
+        return None
+
+    return fetch
 
 
 class CitationVerifierV2:
@@ -292,6 +388,14 @@ class CitationVerifierV2:
 
 
 # --------------------------------------------------------------------- helpers
+
+
+def _try_parse_uuid(value: str) -> uuid.UUID | None:
+    """Parse ``value`` as a UUID, or ``None`` for node-shaped ids."""
+    try:
+        return uuid.UUID(value)
+    except ValueError, AttributeError, TypeError:
+        return None
 
 
 _JSON_BLOCK_RE = re.compile(r"\{[\s\S]*\}")

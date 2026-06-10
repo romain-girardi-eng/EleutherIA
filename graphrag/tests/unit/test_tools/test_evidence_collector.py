@@ -1,7 +1,7 @@
 """Tests for EvidenceCollector."""
 
 from eleutheria_graphrag.agents.evidence_collector import EvidenceCollector
-from eleutheria_graphrag.agents.state import RAGState
+from eleutheria_graphrag.agents.state import RAGState, RetrievalBudget
 from eleutheria_graphrag.agents.tools.get_neighbors import (
     EdgeSummary,
     GetNeighborsResult,
@@ -86,6 +86,59 @@ def test_ingest_passages():
     assert len(collector.evidence_bundles) == 1
     assert collector.evidence_bundles[0].work_title == "De Principiis"
     assert collector.evidence_bundles[0].original_text == "Περὶ αὐτεξουσίου"
+
+
+def test_ingest_passages_token_estimate_counts_translation():
+    # The context pack emits original + translation in full, so the budget
+    # estimate must cover both texts, not just the original.
+    original = "Περὶ αὐτεξουσίου"
+    translation = "A long English rendering whose tokens must also be budgeted."
+    collector = EvidenceCollector()
+    result = ReadPassagesResult(
+        node_id="person_origen",
+        node_label="Origen",
+        passages=[
+            PassageSummary(
+                passage_id="p1",
+                work_title="De Principiis",
+                text_content=original,
+                translation=translation,
+                confidence=0.95,
+            ),
+        ],
+    )
+
+    collector.ingest("read_passages", {"node_id": "person_origen"}, result)
+
+    bundle = collector.evidence_bundles[0]
+    assert bundle.translation_text == translation
+    assert bundle.token_estimate == RetrievalBudget.estimate_tokens(
+        f"{original}\n{translation}"
+    )
+    assert bundle.token_estimate > RetrievalBudget.estimate_tokens(original)
+
+
+def test_ingest_passages_token_estimate_without_translation():
+    original = "Περὶ αὐτεξουσίου"
+    collector = EvidenceCollector()
+    result = ReadPassagesResult(
+        node_id="person_origen",
+        node_label="Origen",
+        passages=[
+            PassageSummary(
+                passage_id="p1",
+                work_title="De Principiis",
+                text_content=original,
+                confidence=0.95,
+            ),
+        ],
+    )
+
+    collector.ingest("read_passages", {"node_id": "person_origen"}, result)
+
+    bundle = collector.evidence_bundles[0]
+    assert bundle.translation_text is None
+    assert bundle.token_estimate == RetrievalBudget.estimate_tokens(original)
 
 
 def test_deduplication():
@@ -208,3 +261,44 @@ def test_populate_state():
     # context_pack is left empty — DraftClaimLedger builds it from state
     assert state.context_pack.prompt_context == ""
     assert len(state.research_notebook.tool_calls) == 1
+
+
+def test_ingest_node_detail_blanks_integrity_flagged_description():
+    """Defense-in-depth: even if a tool ships a flagged description, the
+    collector must not let it enter Evidence (it would whitelist its own
+    Greek in the text verifier)."""
+    from eleutheria_graphrag.agents.tools.get_node_detail import NodeDetail
+
+    collector = EvidenceCollector()
+    detail = NodeDetail(
+        node_id="passage_flagged_x3",
+        label="Flagged passage",
+        type="passage",
+        description="A description that slipped past the tool gate.",
+        metadata={"integrity_status": "greek_unverified"},
+    )
+
+    collector.ingest("get_node_detail", {"node_id": "passage_flagged_x3"}, detail)
+
+    assert collector.primary_evidence[0].description == ""
+    assert collector.primary_evidence[0].label == "Flagged passage"
+
+
+def test_ingest_node_detail_keeps_unflagged_description():
+    from eleutheria_graphrag.agents.tools.get_node_detail import NodeDetail
+
+    collector = EvidenceCollector()
+    detail = NodeDetail(
+        node_id="passage_clean_x4",
+        label="Clean passage",
+        type="passage",
+        description="A perfectly citable description.",
+        metadata={},
+    )
+
+    collector.ingest("get_node_detail", {"node_id": "passage_clean_x4"}, detail)
+
+    assert (
+        collector.primary_evidence[0].description
+        == "A perfectly citable description."
+    )
