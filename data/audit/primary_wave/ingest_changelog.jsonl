@@ -19,3 +19,18 @@
 {"node_id": "work_plutarch_stoic_repugnantiis", "action": "work_node_ingest_metadata", "changes": {"needs_text_ingestion": "removed", "work_canonical_id": [null, "urn_cts_greeklit_tlg0007_tlg136_grc"]}}
 {"node_id": "work_wisdom_of_solomon", "action": "work_node_ingest_metadata", "changes": {"needs_text_ingestion": "removed", "work_canonical_id": [null, "urn_cts_greeklit_tlg0527_tlg033_grc"], "cts_urn": [null, "urn:cts:greekLit:tlg0527.tlg033"]}}
 {"work": "ingest_work_theodoret_curatio", "action": "append", "n": 1095, "wcid": "urn_cts_greeklit_tlg4089_tlg001_grc", "edition": "Canivet SC 57 via TLG E + tlgu"}
+{"work": "urn_cts_greeklit_tlg4016_tlg003_grc", "action": "append", "n": 272, "edition": "Busse, CAG 4.5, 1897"}
+{"work": "urn_cts_greeklit_tlg0732_tlg011_grc", "action": "append", "n": 86, "edition": "Bruns, Suppl. Arist. 2.1, 1887"}
+{"work": "urn_cts_greeklit_tlg0732_tlg012_grc", "action": "append", "n": 116, "edition": "Bruns, Suppl. Arist. 2.2, 1892"}
+{"work": "urn_cts_greeklit_tlg0732_tlg013_grc", "action": "append", "n": 47, "edition": "Bruns, Suppl. Arist. 2.2, 1892"}
+{"work": "urn_cts_greeklit_tlg2934_tlg004_grc", "action": "append", "n": 187, "edition": "Kotter, PTS 12, 1973"}
+{"node_id": "work_alexander_mantissa", "action": "work_node_corpus_link", "set": {"work_canonical_id": "urn_cts_greeklit_tlg0732_tlg011_grc", "cts_urn": "urn:cts:greekLit:tlg0732.tlg011", "edition": "Bruns, Supplementum Aristotelicum 2.1, 1887 (text via TLG E)"}}
+{"node_id": "work_alexander_quaestiones", "action": "work_node_corpus_link", "set": {"work_canonical_id": "urn_cts_greeklit_tlg0732_tlg012_grc", "cts_urn": "urn:cts:greekLit:tlg0732.tlg012", "edition": "Bruns, Supplementum Aristotelicum 2.2, 1892 (text via TLG E)"}}
+{"node_id": "work_john_damascus_de_fide", "action": "work_node_corpus_link", "set": {"work_canonical_id": "urn_cts_greeklit_tlg2934_tlg004_grc", "cts_urn": "urn:cts:greekLit:tlg2934.tlg004", "edition": "Kotter, Die Schriften des Johannes von Damaskos II, PTS 12, 1973 (text via TLG E)"}}
+{"node_id": "person_ammonius_hermiae_c440_520", "action": "create_node"}
+{"node_id": "work_ammonius_in_de_interpretatione", "action": "create_node"}
+{"node_id": "work_alexander_ethica_problemata", "action": "create_node"}
+{"action": "create_edge", "triple": ["work_ammonius_in_de_interpretatione", "authored_by", "person_ammonius_hermiae_c440_520"]}
+{"action": "create_edge", "triple": ["person_ammonius_hermiae_c440_520", "member_of", "school_neoplatonism"]}
+{"action": "create_edge", "triple": ["work_ammonius_in_de_interpretatione", "interprets", "work_de_interpretatione_aristotle_c350bce_e4f6g8h0"]}
+{"action": "create_edge", "triple": ["work_alexander_ethica_problemata", "authored_by", "person_alexander_aphrodisias_fl200ce_n5o6p7q8"]}
