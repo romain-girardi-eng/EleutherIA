@@ -1,0 +1,25 @@
+{
+  "work_id": "urn_cts_latinlit_phi0474_phi049_lat",
+  "n_passages": 48,
+  "n_english": 48,
+  "classification_detail": "All 48 passages (Fat. 1-48) are mixed-format text_content: English summary paragraph + embedded 'Latin:' excerpt + English 'Translation:'. None carries pure original-language text. 31/48 embedded Latin excerpts are verbatim substrings of the Mueller/Perseus text; 17/48 diverge (ellipsis-abridged excerpts and orthographic variants, e.g. 'in eis' vs Mueller 'in iis') — unverified provenance, must be replaced.",
+  "real_work_title": "Cicero, De Fato (M. Tulli Ciceronis De fato, ed. C. F. W. Mueller, Teubner 1915)",
+  "correct_urn": "urn:cts:latinLit:phi0474.phi054.perseus-lat1",
+  "urn_or_ref_inconsistencies": [
+    "work_canonical_id suffix 'phi049' = Tusculanae Disputationes in Perseus canonical-latinLit, NOT De Fato",
+    "per-passage cts_urn uses phi0474.phi056 = Epistulae ad Familiares, NOT De Fato",
+    "content (canonical_ref 'Fat. N', Latin text) is unambiguously De Fato = phi0474.phi054; both identifiers are wrong",
+    "passage section numbering itself (1-48) is internally consistent and matches De Fato sections"
+  ],
+  "source": {
+    "kind": "local",
+    "path_or_urn": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/02_Corpus/Cicero_De_Fato_LAT.txt (verbatim local copy of Perseus canonical-latinLit phi0474.phi054.perseus-lat1, Mueller Teubner 1915, fetched 2026-05-30; complete sections 1-48)"
+  },
+  "staged_files": [
+    "data/audit/primary_fetch/urn_cts_latinlit_phi0474_phi049_lat/Cicero_De_Fato_LAT.perseus-lat1.txt",
+    "data/audit/primary_fetch/urn_cts_latinlit_phi0474_phi049_lat/mapping.json"
+  ],
+  "alignment_confidence": 0.98,
+  "recommended_action": "Replace text_content of all 48 passages with the staged verbatim Latin (mapping.json, 48 entries, 1:1 by section number); update cts_urn to urn:cts:latinLit:phi0474.phi054.perseus-lat1:{N}; rename/repoint work_canonical_id from ...phi049_lat to ...phi054_lat (and any KG work node accordingly). Preserve existing English translations separately if a translation field exists — do not keep them inside text_content.",
+  "notes": "Staged text is byte-verbatim from the local file, which transparently marks edition lacunae as '[lacune: gap reason=\"omitted\"]' (sections 1, 5, 45, 47) and source beta-code Greek as '[grec translittere dans la source: ...]' — no text was reconstructed. Maintainer may wish to convert beta-code markers to Greek script via a deterministic beta-code decoder before application, or keep markers as-is. De Fato is transmitted mutilated; lacunae are genuine, not data loss."
+}

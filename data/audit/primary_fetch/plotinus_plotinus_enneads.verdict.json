@@ -1,0 +1,26 @@
+{
+  "work_id": "plotinus_plotinus_enneads",
+  "n_passages": 1,
+  "n_english": 1,
+  "real_work_title": "Plotinus, Enneades (Ἐννεάδες)",
+  "correct_urn": "urn:cts:greekLit:tlg2000.tlg001 (edition: urn:cts:greekLit:tlg2000.tlg001.1st1K-grc1)",
+  "urn_or_ref_inconsistencies": [
+    "cts_urn is null on the single passage record",
+    "canonical_ref is a descriptive English phrase ('Plotinus on autexousion and inner freedom under constraint'), not a canonical citation (expected e.g. '6.8.1')",
+    "text_content is explicitly an English paraphrase ('English paraphrase summarizing...') in a work meant to carry original Greek",
+    "work id 'plotinus_plotinus_enneads' lacks language suffix but the work is an original-language (Greek) work"
+  ],
+  "source": {
+    "kind": "other",
+    "path_or_urn": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg2000/tlg001/tlg2000.tlg001.1st1K-grc1.xml (ed. Volkmann, Teubner 1883-1884); no local copy in DOCTORAT corpus (checked 02_Corpus/TLG, 03_Sources_critiques — secondary literature only); Scaife CTS GetPassage returned empty for tlg2000"
+  },
+  "staged_files": [
+    "data/audit/primary_fetch/plotinus_plotinus_enneads/tlg2000.tlg001.1st1K-grc1.xml",
+    "data/audit/primary_fetch/plotinus_plotinus_enneads/enn_3.1.1_grc.txt",
+    "data/audit/primary_fetch/plotinus_plotinus_enneads/enn_6.8.1_grc.txt",
+    "data/audit/primary_fetch/plotinus_plotinus_enneads/mapping.json"
+  ],
+  "alignment_confidence": "low",
+  "recommended_action": "Do not auto-replace. The record is a thematic summary spanning Enn. III.1 and VI.8 with no single locus; maintainer should either (a) replace it with the verbatim Greek of a chosen locus (VI.8.1 and III.1.1 staged, full Volkmann edition available in staged XML for any other section), setting canonical_ref + cts_urn accordingly, or (b) delete the paraphrase record and ingest the relevant Enneads sections properly from the staged TEI XML.",
+  "notes": "Greek text extracted byte-verbatim (whitespace-normalized only) from First1KGreek TEI sections book/chapter/section. Full Enneads (6 books, 54 treatises, 653 sections) available in the staged XML for proper ingestion."
+}

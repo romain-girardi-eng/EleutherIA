@@ -1,0 +1,69 @@
+[
+  {
+    "passage_id": "978fc8cb-d39e-4fd7-a690-1a2c958c634a",
+    "canonical_ref": "V.X (De Civ. Dei V.10)",
+    "correct_cts_urn": "urn:cts:latinLit:stoa0040.stoa003.opp-lat3:5.10",
+    "replacement_text": "Non ergo propterea nihil est in nostra uoluntate, quia Deus \n praesciuit quid futurum esset in nostra uoluntate. Non enim, \n qui hoc praesciuit, nihil praesciuit. Porro si ille, qui praesciuit \n quid futurum esset in nostra uoluntate, non utique \n nihil, sed aliquid praesciuit: profecto et illo praesciente est \n aliquid in nostra uoluntate. Quocirca nullo modo cogimur aut \n retenta praescientia Dei tollere uoluntatis arbitrium aut retento \n uoluntatis arbitrio Deum (quod nefas est) negare praescium \n futurorum; sed utrumque amplectimur, utrumque fideliter et \n ueraciter confitemur;",
+    "source": "Scaife/Perseus, Augustine De civitate dei, CSEL 40 (ed. E. Hoffmann, Prague/Vienna/Leipzig 1899-1900), urn:cts:latinLit:stoa0040.stoa003.opp-lat3 (staged file: civdei_5.10.txt)",
+    "alignment_confidence": 0.95
+  },
+  {
+    "passage_id": "8646a858-3698-43f6-8a47-1e4ad5667cb6",
+    "canonical_ref": "XII.I (De Civ. Dei XII.1)",
+    "correct_cts_urn": "urn:cts:latinLit:stoa0040.stoa003.opp-lat3:12.1",
+    "replacement_text": "Angelorum bonorum et malo rum inter se contrarios adpetitus \n non naturis principiisque diuersis, cum Deus omnium \n substantiarum bonus auctor et conditor utrosque creauerit, sed \n uoluntatibus et cupiditatibus extitisse dubitare fas non est. \n dum alii constanter in communi omnibus bono, quod ipse \n illis Deus est, adque in eius aeternitate ueritate caritate persistunt; \n alii sua potestate potius delectati, uelut bonum suum \n sibi ipsi essent, a superiore communi omnium beatifico bono * \n ad propria defluxerunt",
+    "source": "Scaife/Perseus, Augustine De civitate dei, CSEL 40 (ed. E. Hoffmann, Prague/Vienna/Leipzig 1899-1900), urn:cts:latinLit:stoa0040.stoa003.opp-lat3 (staged file: civdei_12.1.txt)",
+    "alignment_confidence": 0.95,
+    "notes": "Source OCR artifacts preserved verbatim: 'malo rum' (read: malorum), 'est.' for 'est,' mid-sentence, stray '*'. Dombart-Kalb reads 'atque' where Hoffmann CSEL prints 'adque'."
+  },
+  {
+    "passage_id": "45d76959-9613-4808-9b79-71e7ad3043b9",
+    "canonical_ref": "XII.VI (De Civ. Dei XII.6)",
+    "correct_cts_urn": "urn:cts:latinLit:stoa0040.stoa003.opp-lat3:12.6",
+    "replacement_text": "Proinde causa beatitudinis angelorum bonorum ea uerissima \n reperitur, quod ei adhaerent qui summe est. Cum uero causa \n miseriae malorum angelorum quaeritur, ea merito occurrit, \n quod ab illo, qui summe est, auersi ad se ipsos conuersi sunt, \n qui non summe sunt; et hoc uitium quid aliud quam superbia \n nuncupetur? Initium quippe omnis peccati superbia.",
+    "source": "Scaife/Perseus, Augustine De civitate dei, CSEL 40 (ed. E. Hoffmann, Prague/Vienna/Leipzig 1899-1900), urn:cts:latinLit:stoa0040.stoa003.opp-lat3 (staged file: civdei_12.6.txt)",
+    "alignment_confidence": 0.95
+  },
+  {
+    "passage_id": "04f089a3-ed74-4f55-ae32-d2eed73bc063",
+    "canonical_ref": "XII.IX (De Civ. Dei XII.9)",
+    "correct_cts_urn": "urn:cts:latinLit:stoa0040.stoa003.opp-lat3:12.9",
+    "replacement_text": "Cum ergo malae uoluntatis efficiens naturalis uel, si dici \n potest, essentialis nulla sit causa (ab ipsa quippe incipit \n spirituum mutabilium malum, quo minuitur adque deprauatur \n naturae bonum, nec talem uoluntatem facit nisi defectio, qua \n deseritur Deus. cuius defectionis etiam causa utique deficit",
+    "source": "Scaife/Perseus, Augustine De civitate dei, CSEL 40 (ed. E. Hoffmann, Prague/Vienna/Leipzig 1899-1900), urn:cts:latinLit:stoa0040.stoa003.opp-lat3 (staged file: civdei_12.9.txt)",
+    "alignment_confidence": 0.95,
+    "notes": "Source OCR artifact preserved verbatim: 'Deus.' (read: 'Deus,'). 'adque' is Hoffmann's orthography."
+  },
+  {
+    "passage_id": "963e4777-88ad-46de-883f-4f61d110f2af",
+    "canonical_ref": "XIV.VI (De Civ. Dei XIV.6)",
+    "correct_cts_urn": "urn:cts:latinLit:stoa0040.stoa003.opp-lat3:14.6",
+    "replacement_text": "Interest autem qualis sit uoluntas hominis; quia si peruersa \n est, peruersos habebit hos motus; si autem recta est, \n non solum inculpabiles, uerum etiam laudalibes erunt. Voluntas \n est quippe in omnibus; immo omnes nihil aliud quam \n uoluntates sunt. Nam quid est cupiditas et laetitia nisi uoluntas \n in eorum consensione quae uolumus? Et quid est metus \n adque tristitia nisi uoluntas in dissensione ab his quae nolumus",
+    "source": "Scaife/Perseus, Augustine De civitate dei, CSEL 40 (ed. E. Hoffmann, Prague/Vienna/Leipzig 1899-1900), urn:cts:latinLit:stoa0040.stoa003.opp-lat3 (staged file: civdei_14.6.txt)",
+    "alignment_confidence": 0.95,
+    "notes": "Source OCR artifact preserved verbatim: 'laudalibes' (read: laudabiles). 'adque' is Hoffmann's orthography."
+  },
+  {
+    "passage_id": "458be1e8-ecd8-46b6-9520-54d839348324",
+    "canonical_ref": "V.XXVI.5",
+    "correct_cts_urn": null,
+    "replacement_text": null,
+    "source": "Latin Library page footer artifact; chapter V.26 text already complete in chunks V.XXVI.1-4 (ends 'quod oportet audire' = CSEL chapter end). Recommend DELETE.",
+    "alignment_confidence": 1.0
+  },
+  {
+    "passage_id": "ec117576-4a7c-4329-a1a3-01e182223767",
+    "canonical_ref": "XII.XXVIII.3",
+    "correct_cts_urn": null,
+    "replacement_text": null,
+    "source": "Latin Library page footer artifact; chapter XII.28 complete in chunks .1-.2 (ends 'crudelis potest esse iustitia' = CSEL chapter end). Recommend DELETE.",
+    "alignment_confidence": 1.0
+  },
+  {
+    "passage_id": "adcb4416-83f5-4e9a-8c75-132015f91989",
+    "canonical_ref": "XIV.XXVIII.2",
+    "correct_cts_urn": null,
+    "replacement_text": null,
+    "source": "Latin Library page footer artifact; chapter XIV.28 complete in chunk .1 (ends 'ut sit Deus omnia in omnibus' = CSEL book end). Recommend DELETE.",
+    "alignment_confidence": 1.0
+  }
+]

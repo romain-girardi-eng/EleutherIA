@@ -1,0 +1,25 @@
+{
+  "work_id": "plotinus_enneades_iv_4_30_self_determining_principle_english",
+  "n_passages": 1,
+  "n_english": 1,
+  "real_work_title": "Plotinus, Enneades III.2.10 (On Providence I) — not IV.4.30 as labeled",
+  "correct_urn": "urn:cts:greekLit:tlg2000.tlg001.1st1K-grc1:3.2.10",
+  "urn_or_ref_inconsistencies": [
+    "Corpus passage 8ac930c2 has cts_urn 'urn:cts:greekLit:tlg2000.tlg001.perseus-grc1:1' — version 'perseus-grc1' does not exist on Scaife (only 1st1K-grc1) and ref ':1' contradicts canonical_ref 'Enn. IV.4.30'",
+    "canonical_ref 'Enn. IV.4.30' is factually wrong for the described content: Scaife IV.4.30 is about astral memory/prayers (see staged evidence file); the autexousion/archai text is Enn. III.2.10",
+    "Sibling Greek corpus passage cc1c7382 (work urn_cts_greeklit_tlg2000_tlg001_grc) carries the verbatim Volkmann Greek of III.2.10-III.2.11 but is mislabeled 'Enn. IV.4.30' / urn ...perseus-grc1:4.4.30",
+    "KG nodes passage_plotinus_enn_4_4_30, passage_plotinus_enn_4_4_30_en, passage_plotinus_iv_4_30 all repeat the wrong IV.4.30 ref and the nonexistent perseus-grc1 version"
+  ],
+  "source": {
+    "kind": "scaife",
+    "path_or_urn": "urn:cts:greekLit:tlg2000.tlg001.1st1K-grc1:3.2.10 (First1KGreek; ed. Richard Volkmann, Plotini Enneades, Teubner 1883-1884)"
+  },
+  "staged_files": [
+    "data/audit/primary_fetch/plotinus_enneades_iv_4_30_self_determining_principle_english/enn_3_2_10_scaife_1st1K-grc1.txt",
+    "data/audit/primary_fetch/plotinus_enneades_iv_4_30_self_determining_principle_english/enn_4_4_30_scaife_1st1K-grc1_evidence.txt",
+    "data/audit/primary_fetch/plotinus_enneades_iv_4_30_self_determining_principle_english/mapping.json"
+  ],
+  "alignment_confidence": 0.95,
+  "recommended_action": "merge_or_delete_duplicate_and_fix_refs",
+  "notes": "This work is an AI-generated English summary shell (work id suffix _english, KG metadata source=ai_translation, source_model=claude-opus-4-6) duplicating an existing Greek corpus passage (cc1c7382, verified byte-verbatim against Volkmann via First1KGreek). Greek text was checked locally first (DOCTORAT corpus has no Plotinus primary text) then fetched from Scaife. Recommended: (1) delete or demote the English-summary passage 8ac930c2 / work shell, or replace its text with the staged III.2.10 Greek if an original-language record is wanted; (2) correct canonical_ref IV.4.30 -> III.2.10(-11) and cts_urn perseus-grc1 -> 1st1K-grc1:3.2.10 on passage cc1c7382 and the three KG nodes. No corpus/KG files were modified."
+}

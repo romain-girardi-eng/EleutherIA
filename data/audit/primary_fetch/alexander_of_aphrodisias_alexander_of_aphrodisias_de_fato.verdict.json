@@ -1,0 +1,28 @@
+{
+  "work_id": "alexander_of_aphrodisias_alexander_of_aphrodisias_de_fato",
+  "n_passages": 1,
+  "n_english": 1,
+  "real_work_title": "Alexander of Aphrodisias, De fato (Περὶ εἱμαρμένης καὶ τοῦ ἐφ' ἡμῖν πρὸς τοὺς αὐτοκράτορας)",
+  "correct_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1",
+  "urn_or_ref_inconsistencies": [
+    "The single passage (71695c44) has cts_urn=null and canonical_ref is a descriptive English title ('Alexander of Aphrodisias on what is up to us...'), not a reference; its text states it paraphrases De Fato 13-15",
+    "Work id has doubled author prefix ('alexander_of_aphrodisias_alexander_of_aphrodisias_de_fato') and coexists with two other corpus work ids for the same work: alexander_of_aphrodisias_de_fato_grc (2 passages) and alexander_of_aphrodisias_de_fato_eng (2 passages) — three work_canonical_ids fragment one work",
+    "KG work node work_de_fato_alexander_c200ce_o6p7q8r9 metadata.cts_urn = 'urn:cts:greekLit:tlg2018.tlg005' is WRONG: tlg2018 is Eusebius of Caesarea; Alexander of Aphrodisias De fato is tlg0732.tlg014 (First1KGreek edition 1st1K-grc1)",
+    "The two alexander_of_aphrodisias_de_fato_eng passages carry the Greek-edition URN (tlg0732.tlg014.1st1K-grc1:14/15) on English-translation text",
+    "The two alexander_of_aphrodisias_de_fato_grc passages embed markdown headers, Sharples English translation, and commentary inside text_content rather than clean original Greek (the Greek they contain matches Bruns and the fetched First1KGreek text)"
+  ],
+  "source": {
+    "kind": "scaife",
+    "path_or_urn": "First1KGreek (OpenGreekAndLatin) data/tlg0732/tlg014/tlg0732.tlg014.1st1K-grc1.xml — Bruns, Supplementum Aristotelicum II.2, Berlin: Reimer, 1892 (Scaife CTS API unreachable from this host; fetched raw TEI from First1KGreek GitHub). Not present in local DOCTORAT corpus."
+  },
+  "staged_files": [
+    "data/audit/primary_fetch/alexander_of_aphrodisias_alexander_of_aphrodisias_de_fato/tlg0732.tlg014.1st1K-grc1.xml",
+    "data/audit/primary_fetch/alexander_of_aphrodisias_alexander_of_aphrodisias_de_fato/de_fato_section_13.grc.txt",
+    "data/audit/primary_fetch/alexander_of_aphrodisias_alexander_of_aphrodisias_de_fato/de_fato_section_14.grc.txt",
+    "data/audit/primary_fetch/alexander_of_aphrodisias_alexander_of_aphrodisias_de_fato/de_fato_section_15.grc.txt",
+    "data/audit/primary_fetch/alexander_of_aphrodisias_alexander_of_aphrodisias_de_fato/mapping.json"
+  ],
+  "alignment_confidence": 0.85,
+  "recommended_action": "Replace passage 71695c44's English paraphrase with the staged Greek of De Fato 13-15 (Bruns via First1KGreek), set cts_urn=urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:13-15 and canonical_ref='De Fato 13-15' — or better, split into three per-section passages using the staged per-section files. Then merge the three duplicate work ids (alexander_of_aphrodisias_alexander_of_aphrodisias_de_fato / _de_fato_grc / _de_fato_eng) into one grc work, and fix the KG node's cts_urn (tlg2018.tlg005 -> tlg0732.tlg014).",
+  "notes": "Greek staged text is extracted verbatim from the First1KGreek TEI edition divs (sections 13-15) with only TEI <note> elements (Bruns apparatus criticus + marginal chapter numerals) removed and whitespace normalized; section 14's opening matches the independently-verified Greek already present in corpus passage aed97e25 ('ἔνεστι δ' ὁρᾶν, εἰ ταῦτα λέγοντες σώζουσιν τὰς κοινὰς...'). Alignment confidence 0.85 (not 1.0) because the original passage is a summary of 'chapters 13-15' and the exact intended span boundaries are the editor's call. No files outside data/audit/primary_fetch/ were modified."
+}

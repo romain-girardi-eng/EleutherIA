@@ -1,0 +1,25 @@
+{
+  "work_id": "plotinus_plotinus_enneads_vi_8",
+  "n_passages": 1,
+  "n_english": 1,
+  "real_work_title": "Plotinus, Enneads VI.8 [39] — Περὶ τοῦ ἑκουσίου καὶ θελήματος τοῦ ἑνός (On the Voluntary and the Will of the One)",
+  "correct_urn": "urn:cts:greekLit:tlg2000.tlg001:6.8 (edition: urn:cts:greekLit:tlg2000.tlg001.1st1K-grc1:6.8)",
+  "urn_or_ref_inconsistencies": [
+    "corpus passage 70cbd2f3-edb7-5bd0-b827-08a8f14a2c10 has cts_urn=null despite an original-language work",
+    "work_canonical_id duplicates the author prefix: 'plotinus_plotinus_enneads_vi_8'",
+    "KG work node work_plotinus_ennead_vi_8_d8b9c5a4 metadata cts_urn 'urn:cts:greekLit:tlg2000.tlg001.6.8' is malformed (passage reference joined by '.' instead of ':', no edition component)",
+    "single corpus passage covers the entire 21-chapter treatise (canonical_ref 'Enneads VI.8'); ideally should be split into per-chapter passages 6.8.1-6.8.21"
+  ],
+  "source": {
+    "kind": "other",
+    "path_or_urn": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg2000/tlg001/tlg2000.tlg001.1st1K-grc1.xml (First1KGreek / OpenGreekAndLatin; ed. Richard Volkmann, Plotini Enneades, Teubner 1883-1884). Local DOCTORAT corpus checked first: no Plotinus present. Scaife CTS API unreachable (TLS 'unrecognized name' error)."
+  },
+  "staged_files": [
+    "data/audit/primary_fetch/plotinus_plotinus_enneads_vi_8/tlg2000.tlg001.1st1K-grc1.xml",
+    "data/audit/primary_fetch/plotinus_plotinus_enneads_vi_8/enneads_6.8.grc.txt",
+    "data/audit/primary_fetch/plotinus_plotinus_enneads_vi_8/mapping.json"
+  ],
+  "alignment_confidence": 0.95,
+  "recommended_action": "Replace the single English-paraphrase passage with the staged Greek of Enneads VI.8 (Volkmann/First1KGreek), set cts_urn to urn:cts:greekLit:tlg2000.tlg001.1st1K-grc1:6.8, and fix the malformed cts_urn on KG node work_plotinus_ennead_vi_8_d8b9c5a4. Preferably split into 21 per-chapter passages (section divs 6.8.1-6.8.21 are staged individually in enneads_6.8.grc.txt). Note: Volkmann (Teubner 1883-84) is a legitimate critical edition but is superseded by Henry-Schwyzer (OCT editio minor III, 1982), which is not freely available; flag edition provenance in metadata.",
+  "notes": "Identification certain: opening of staged text 'Ἆῤ ἔστι καὶ ἐπὶ θεῶν εἴ τί ἐστιν ἐπ’ αὐτοῖς ζητεῖν...' is the incipit of Enneads VI.8.1. Greek extracted from TEI with whitespace normalization and exclusion of <del> (editor-deleted) readings only; no text composed or altered. Confidence 0.95 rather than 1.0 only because the corpus row carries one undivided passage for the whole treatise, so alignment is at treatise granularity."
+}

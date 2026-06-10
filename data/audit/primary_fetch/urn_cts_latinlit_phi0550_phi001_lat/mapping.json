@@ -1,0 +1,18 @@
+[
+  {
+    "passage_id": "924a969a-5428-42f7-96a2-2bb094d558bc",
+    "canonical_ref": "2.250-274",
+    "correct_cts_urn": "urn:cts:latinLit:phi0550.phi001.perseus-lat1:2.250",
+    "replacement_text": "declinare quis est qui possit cernere sese?\nDenique si semper motu conectitur omnis\net vetere exoritur motus novus ordine certo\nnec declinando faciunt primordia motus\nprincipium quoddam, quod fati foedera rumpat,\nex infinito ne causam causa sequatur,\nlibera per terras unde haec animantibus exstat,\nunde est haec, inquam, fatis avolsa voluntas,\nper quam progredimur quo ducit quemque voluptas,\ndeclinamus item motus nec tempore certo\nnec regione loci certa, sed ubi ipsa tulit mens?\nnam dubio procul his rebus sua cuique voluntas\nprincipium dat et hinc motus per membra rigantur.\nnonne vides etiam patefactis tempore puncto\ncarceribus non posse tamen prorumpere equorum\nvim cupidam tam de subito quam mens avet ipsa?\nomnis enim totum per corpus materiai\ncopia conciri debet, concita per artus\nomnis ut studium mentis conixa sequatur;\nut videas initum motus a corde creari\nex animique voluntate id procedere primum,\ninde dari porro per totum corpus et artus.\nnec similest ut cum inpulsi procedimus ictu\nviribus alterius magnis magnoque coactu;\nnam tum materiem totius corporis omnem",
+    "source": "PerseusDL canonical-latinLit phi0550.phi001.perseus-lat1.xml (raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0550/phi001/), same perseus-lat1 edition as the other 299 corpus passages",
+    "alignment_confidence": 0.98
+  },
+  {
+    "passage_id": "dd949fff-90da-4315-a4fc-ae455566b268",
+    "canonical_ref": "2.275-299",
+    "correct_cts_urn": "urn:cts:latinLit:phi0550.phi001.perseus-lat1:2.275",
+    "replacement_text": "perspicuumst nobis invitis ire rapique,\ndonec eam refrenavit per membra voluntas.\niamne vides igitur, quamquam vis extera multos\npellat et invitos cogat procedere saepe\npraecipitesque rapi, tamen esse in pectore nostro\nquiddam quod contra pugnare obstareque possit?\ncuius ad arbitrium quoque copia materiai\ncogitur inter dum flecti per membra per artus\net proiecta refrenatur retroque residit.\nquare in seminibus quoque idem fateare necessest,\nesse aliam praeter plagas et pondera causam\nmotibus, unde haec est nobis innata potestas,\nde nihilo quoniam fieri nihil posse videmus.\npondus enim prohibet ne plagis omnia fiant\nexterna quasi vi; sed ne res ipsa necessum\nintestinum habeat cunctis in rebus agendis\net devicta quasi cogatur ferre patique,\nid facit exiguum clinamen principiorum\nnec regione loci certa nec tempore certo.\nNec stipata magis fuit umquam materiai\ncopia nec porro maioribus intervallis;\nnam neque adaugescit quicquam neque deperit inde.\nqua propter quo nunc in motu principiorum\ncorpora sunt, in eodem ante acta aetate fuere\net post haec semper simili ratione ferentur,",
+    "source": "PerseusDL canonical-latinLit phi0550.phi001.perseus-lat1.xml (raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0550/phi001/), same perseus-lat1 edition as the other 299 corpus passages",
+    "alignment_confidence": 0.98
+  }
+]

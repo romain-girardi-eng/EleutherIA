@@ -1,0 +1,11 @@
+# Verbatim extract (byte-identical SOURCE blocks) from local file:
+# /Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/02_Corpus/Sources chrétiennes txt/03_Origene/source/SC268_Origenes_Traite_des_Principes_Extraits_grecs_livre_3_source.txt
+# Edition: Origene, Traite des Principes, SC 268 (Crouzel-Simonetti, 1980), Greek extracts (= Philocalie 21)
+# Locus: De Principiis III.1.1 (two consecutive SOURCE blocks labelled [liv.: 3, chap.: 1, par.: 1])
+# NOTE: '--- N ---' tokens are SC page numbers embedded by the extraction; some words are concatenated across original line breaks (extraction artifact).
+
+## BLOCK 1
+--- 16 ---<ΠΕΡΙ ΑΡΧΩΝ ΤΟΜΟΣ ΤΡΙΤΟΣ>αʹ. Περὶ αὐτεξουσίου, καὶ τῶν δοκούντων τοῦτο ἀναιρεῖνῥητῶν γραφικῶν λύσις καὶ ἑρμηνεία1. Ἐπεὶ δὲ ἐν τῷ κηρύγματι τῷ ἐκκλησιαστικῷ περιέχεταιὁ περὶ κρίσεως δικαίας θεοῦ λόγος, ὅστις καὶ τοὺς ἀκούοντας,πιστευθεὶς εἶναι ἀληθής, προκαλεῖται ἐπὶ τὸ καλῶς βιοῦνκαὶ παντὶ τρόπῳ φεύγειν τὴν ἁμαρτίαν, δηλονότι συγκατα-τιθεμένους τὸ ἐφ' ἡμῖν εἶναι τὰ ἐπαίνου καὶ ψόγου ἄξια,--- 18 ---φέρε καὶ τὰ περὶ τοῦ αὐτεξουσίου ἰδίᾳ ὀλίγα διαλάβωμεν,ἀναγκαιοτάτου ὡς ἔνι μάλιστα προβλήματος.
+
+## BLOCK 2
+Ἵνα δὲ νοήσωμεν τί τὸ αὐτεξούσιον, τὴν ἔννοιαν αὐτοῦἀναπτύξαι δεῖ, ἵνα ταύτης σαφηνισθείσης ἀκριβῶς παρασταθῇτὸ ζητούμενον.

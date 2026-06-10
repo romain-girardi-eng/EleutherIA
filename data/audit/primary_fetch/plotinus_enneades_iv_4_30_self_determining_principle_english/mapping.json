@@ -1,0 +1,11 @@
+[
+  {
+    "passage_id": "8ac930c2-a7f8-51b4-a6e7-7d68aa4c95f3",
+    "canonical_ref": "Enn. III.2.10",
+    "correct_cts_urn": "urn:cts:greekLit:tlg2000.tlg001.1st1K-grc1:3.2.10",
+    "replacement_text": "ἀλλ̓ εἰ ἄνθρωποι ἄκοντές εἰσι κακοὶ καὶ τοιοῦτοι οὐχ ἑκόντες, οὔτ̓ ἄν\n τις τοὺς ἀδικοῦντας αἰτιάσαιτο, οὔτε τοὺς πάσχοντας ὡς δἰ αὑτοὺς\n ταῦτα πάσχοντας. εἰ δὲ δὴ καὶ ἀνάγκη οὕτω κακοὺς γίνεσθαι εἴτε ὑπὸ\n τῆς φορᾶς εἴτε τῆς ἀρχῆς διδούσης τὸ ἀκόλουθον ἐντεῦθεν, φυσικῶς\n οὕτως. εἰ δὲ δὴ ὁ λόγος αὐτός ἐστιν ὁ ποιῶν, πῶς οὐκ ἄδικα οὕτως;\n ἀλλὰ τὸ μὲν ἄκοντες, ὅτι ἁμαρτία ἀκούσιον: τοῦτο δὲ οὐκ ἀναιρεῖ τὸ\n αὐτοὺς τοὺς πράττοντας παῤ αὑτῶν εἶναι, ἀλλ̓ ὅτι αὐτοὶ ποιοῦσι, διὰ\n τοῦτο καὶ αὐτοὶ ἁμαρτάνουσιν: ἢ οὐδ̓ ἂν ὅλως ἥμαρτον μὴ αὐτοὶ οἱ\n ποιοῦντες ὄντες. τὸ δὲ τῆς ἀνάγκης οὐκ ἔξωθεν, ἀλλ̓ ὅτι πάντως. τὸ\n δὲ τῆς φορᾶς οὐχ ὥστε μηδὲν ἐφ̓ ἡμῖν εἶναι: καὶ γὰρ εἰ ἔξωθεν τὸ\n πᾶν, οὕτως ἂν ἦν, ὡς αὐτοὶ οἱ ποιοῦντες ἐβούλοντο: ὥστε οὐκ ἂν\n αὐτοῖς ἐναντία ἐτίθεντο ἄνθρωποι οὐδ̓ ἂν ἀσεβεῖς, εἰ θεοὶ ἐποίουν.\n νῦν δὲ παῤ αὐτῶν τοῦτο. ἀρχῆς δὲ δοθείσης τὸ ἐφεξῆς περαίνεται\n συμπαραλαμβανομένων εἰς τὴν ἀκολουθίαν καὶ τῶν ὅσαι εἰσὶν ἀρχαί:\n ἀρχαὶ δὲ καὶ ἄνθρωποι. κινοῦνται γοῦν πρὸς τὰ καλὰ οἰκείᾳ φύσει καὶ\n ἀρχὴ αὕτη αὐτεξούσιος. \n",
+    "source": "Scaife Perseus (https://scaife.perseus.org/library/passage/urn:cts:greekLit:tlg2000.tlg001.1st1K-grc1:3.2.10/text/), First1KGreek edition of Volkmann, Plotini Enneades, Teubner 1883-1884",
+    "alignment_confidence": 0.95,
+    "note": "The English summary's content (humans as archai, moved toward the beautiful by their own nature, arche autexousios) corresponds to the END of Enn. III.2.10, NOT IV.4.30. IV.4.30 (fetched as evidence) concerns astral memory/prayers and contains no autexousion material. A verbatim Greek passage already exists in the corpus: passage cc1c7382-8890-4a80-8d8e-4082e72722ff (work urn_cts_greeklit_tlg2000_tlg001_grc) spanning III.2.10 end - III.2.11 start, verified byte-verbatim (whitespace-normalized) against the Volkmann/First1KGreek XML, but it is mislabeled as 'Enn. IV.4.30' / urn ...perseus-grc1:4.4.30. Preferred fix is deduplication + reference correction rather than text replacement."
+  }
+]

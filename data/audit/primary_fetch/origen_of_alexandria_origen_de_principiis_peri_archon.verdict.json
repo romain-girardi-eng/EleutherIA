@@ -1,0 +1,24 @@
+{
+  "work_id": "origen_of_alexandria_origen_de_principiis_peri_archon",
+  "n_passages": 1,
+  "n_english": 1,
+  "real_work_title": "Origen, De Principiis (Peri Archon) — Greek of Book III.1 preserved via Philocalia 21",
+  "correct_urn": "urn:cts:greekLit:tlg2042.tlg002:3.1.1",
+  "urn_or_ref_inconsistencies": [
+    "Passage cts_urn is null while manifest.jsonl entry for the same work (under DIFFERENT canonical_id 'work_de_principiis_origen_230s_v2w3x4y5_eng') gives source 'scaife:urn:cts:greekLit:tlg2042.tlg002'",
+    "work_canonical_id 'origen_of_alexandria_origen_de_principiis_peri_archon' exists in passages.jsonl only: absent from data/corpus/manifest.jsonl and from data/kg/nodes.jsonl (KG work nodes are 'work_de_principiis_origen_230s_v2w3x4y5' and 'sc268_origenes_peri_archon') — orphan/triplicate work identity",
+    "canonical_ref 'De Principiis III.1' is chapter-level but text_content paraphrases specifically III.1.1",
+    "Linked KG node 'quote_origen_autexousion_abbb5a2e' correctly flags quote_status 'English paraphrase, not verbatim Greek', yet citation edge 'exemplifies' to concept_autexousion carries confidence 1.0"
+  ],
+  "source": {
+    "kind": "local",
+    "path_or_urn": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/02_Corpus/Sources chrétiennes txt/03_Origene/source/SC268_Origenes_Traite_des_Principes_Extraits_grecs_livre_3_source.txt (SC 268, Crouzel-Simonetti 1980, Extraits grecs = Philocalie 21)"
+  },
+  "staged_files": [
+    "data/audit/primary_fetch/origen_of_alexandria_origen_de_principiis_peri_archon/SC268_DePrincipiis_III.1.1_greek_raw.txt",
+    "data/audit/primary_fetch/origen_of_alexandria_origen_de_principiis_peri_archon/mapping.json"
+  ],
+  "alignment_confidence": 0.95,
+  "recommended_action": "replace_with_staged_greek_after_review",
+  "notes": "Single passage is an English paraphrase of De Principiis III.1.1. Verbatim Greek located LOCALLY in the SC 268 (Crouzel-Simonetti) 'Extraits grecs' OCR file: two consecutive SOURCE blocks labelled [liv.: 3, chap.: 1, par.: 1] (incipit 'Ἐπεὶ δὲ ἐν τῷ κηρύγματι...' + 'Ἵνα δὲ νοήσωμεν τί τὸ αὐτεξούσιον...'), matching the paraphrase content exactly. replacement_text in mapping.json is byte-verbatim except mechanical removal of '--- N ---' SC page-number markers. CAVEATS for reviewer: (a) the SC extraction concatenates some words across original line breaks (e.g. 'περιέχεταιὁ') — do NOT auto-fix; verify against printed SC 268 pp. 16-19; (b) secondary local witness exists (02_Corpus/Philocalia_21-22-24.txt, Robinson 1893 OCR, lower quality); (c) corpus-level cleanup needed: merge work_canonical_id 'origen_of_alexandria_origen_de_principiis_peri_archon' into the canonical De Principiis work identity; (d) TLG work number tlg2042.002 commonly designates De Principiis fragments — confirm Scaife resolvability of the proposed URN before persisting it."
+}

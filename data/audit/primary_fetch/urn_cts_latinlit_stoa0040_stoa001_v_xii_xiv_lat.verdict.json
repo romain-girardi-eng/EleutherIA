@@ -1,0 +1,40 @@
+{
+  "work_id": "urn_cts_latinlit_stoa0040_stoa001_v_xii_xiv_lat",
+  "n_passages": 158,
+  "n_english": 8,
+  "n_english_detail": {
+    "english_summary_hybrid": 5,
+    "latin_library_footer_junk": 3,
+    "verbatim_latin": 150
+  },
+  "real_work_title": "Augustine, De civitate dei (City of God), Books V, XII, XIV",
+  "correct_urn": "urn:cts:latinLit:stoa0040.stoa003 (edition: urn:cts:latinLit:stoa0040.stoa003.opp-lat3, CSEL 40, ed. E. Hoffmann 1899-1900)",
+  "urn_or_ref_inconsistencies": [
+    "work_canonical_id and the 5 populated cts_urn fields use stoa0040.stoa001, which in the Perseus/Stoa catalogue is Augustine's CONFESSIONES, not De civitate dei (= stoa0040.stoa003). Verified via Scaife library API.",
+    "canonical_ref format split: 153 passages use Roman style 'V.XXVI.4'; the 5 hybrid passages use prose style 'Augustine, De Civitate Dei XII.6'.",
+    "Subsection mismatch on hybrids: refs 'XII.1.2'/'XII.9.1'/'V.10.2' vs urns ':12.1'/':12.9'/':5.10' (subsection dropped in urn).",
+    "Mislabeled ref 'V.XXXIII.1': content is De Civ. Dei V.23 (Radagaisus chapter, CSEL CAPUT XXIII; Book V has only 26 chapters). Verified against fetched civdei_5.23.txt.",
+    "cts_urn is null on 153/158 passages.",
+    "sequence_number anomalies on the 5 injected hybrids: 10002, 90001, 100002 (out-of-band vs normal 1-11).",
+    "The 150 Latin passages derive from The Latin Library scrape (3 page-footer artifacts 'Augustine Christian Latin The Latin Library The Classics Page'), not from a critical edition."
+  ],
+  "source": {
+    "kind": "scaife",
+    "path_or_urn": "https://scaife.perseus.org/library/passage/urn:cts:latinLit:stoa0040.stoa003.opp-lat3:{5.10,5.23,5.26,12.1,12.6,12.9,12.28,14.6,14.27(incl. CAPUT XXVIII)}/text/ — CSEL 40 (Hoffmann). No De civitate dei found in local DOCTORAT corpus."
+  },
+  "staged_files": [
+    "civdei_5.10.txt",
+    "civdei_5.23.txt",
+    "civdei_5.26.txt",
+    "civdei_12.1.txt",
+    "civdei_12.6.txt",
+    "civdei_12.9.txt",
+    "civdei_12.28.txt",
+    "civdei_14.6.txt",
+    "civdei_14.27-28.txt",
+    "mapping.json"
+  ],
+  "alignment_confidence": "0.95 for the 5 replacement spans (anchored start/end phrase match against CSEL 40 text; spans contain OGL OCR artifacts flagged in mapping notes); 1.0 for the 3 footer-junk deletions (chapter text verified complete in preceding chunks against CSEL chapter ends).",
+  "recommended_action": "(1) Replace text_content of the 5 hybrid passages with the verbatim CSEL 40 spans in mapping.json (maintainer should review flagged OCR artifacts: 'malo rum', 'laudalibes', stray '*', two comma/period slips — do NOT silently emend; consider Dombart-Kalb Teubner if cleaner text needed). (2) Delete the 3 Latin Library footer-junk passages (no text lost). (3) Fix work URN stoa001->stoa003 in work_canonical_id and cts_urn fields. (4) Relabel 'V.XXXIII.1' -> 'V.XXIII.1'. (5) Normalize the 5 prose-style canonical_refs to the Roman 'BOOK.CHAPTER.CHUNK' scheme and fix out-of-band sequence_numbers.",
+  "notes": "Scaife text endpoint output includes line breaks and trailing apparatus criticus blocks in the raw chapter files; replacement_text spans were excerpted to exclude apparatus. Embedded 'LATIN TEXT (verified from database)' in the hybrids matches CSEL wording except orthographic adque/atque and the OCR slips noted. 14.28 is served under Scaife citation node 14.27 (file civdei_14.27-28.txt contains both CAPUT XXVII and XXVIII)."
+}
