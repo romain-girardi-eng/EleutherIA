@@ -1,12 +1,61 @@
 {
-  "entries_written": 324,
+  "entries_written": 357,
   "missing": [
+    {
+      "label": "Barclay 2020 — Paul and the Power of Grace",
+      "missing": [
+        "author"
+      ],
+      "node_id": "pub_barclay_2020_power_of_grace"
+    },
+    {
+      "label": "Blowers 2016 — Maximus the Confessor: Jesus Christ and the Transfiguration of the World",
+      "missing": [
+        "author"
+      ],
+      "node_id": "pub_blowers_2016_maximus_confessor"
+    },
+    {
+      "label": "Carter — Fatalism and False Futures in De Interpretatione 9",
+      "missing": [
+        "author"
+      ],
+      "node_id": "pub_carter_2024_fatalism_de_int_9"
+    },
+    {
+      "label": "Destrée, Salles & Zingano (eds.), What is Up to Us? Studies on Agency and Responsibility in Ancient Philosophy (2014)",
+      "missing": [
+        "author"
+      ],
+      "node_id": "pub_destree_salles_zingano_2014_what_is_up_to_us"
+    },
+    {
+      "label": "Eastman 2017 — Paul and the Person: Reframing Paul's Anthropology",
+      "missing": [
+        "author"
+      ],
+      "node_id": "pub_eastman_2017_paul_and_the_person"
+    },
+    {
+      "label": "Fürst (ed.) 2019 — Perspectives on Origen and the History of his Reception (Adamantiana 21)",
+      "missing": [
+        "author"
+      ],
+      "node_id": "pub_furst_2019_perspectives_origen_ad21"
+    },
     {
       "label": "Acosta López de Mesa 2012 — Plotinus, Aristotle and the Origin of the Free Will / Plotino, Aristóteles y el ",
       "missing": [
         "author"
       ],
       "node_id": "scholarly_work_acosta_l_pez_de_mesa_2012_plotinus_aristotle_and_the_origin_of_the"
+    },
+    {
+      "label": "Amand de Mendieta 1973 — Fatalisme et liberté dans l'antiquité grecque: recherches sur la survivance de l",
+      "missing": [
+        "author"
+      ],
+      "node_id": "scholarly_work_amand_de_mendieta_1973_fatalisme_et_libert_dans_l_antiquit_grec"
     },
     {
       "label": "Andresen 1952 — Justin und der mittlere Platonismus",
@@ -136,7 +185,7 @@
       "node_id": "scholarly_work_bobzien_2000_inadvertent"
     },
     {
-      "label": "Bonaiuti 1924 — The Genesis of St. Augustine's Idea of Original Sin",
+      "label": "Bonaiuti 1917 — The Genesis of St. Augustine's Idea of Original Sin",
       "missing": [
         "author"
       ],
@@ -150,7 +199,7 @@
       "node_id": "scholarly_work_boulnois_2000_libert_origine_du_mal_et_prescience_divi"
     },
     {
-      "label": "Boys-Stones ? — 'Middle' Platonists on Fate and Human Autonomy",
+      "label": "Boys-Stones 2007 — 'Middle' Platonists on Fate and Human Autonomy",
       "missing": [
         "author",
         "year"
@@ -228,7 +277,7 @@
       "node_id": "scholarly_work_craig_1991_divine_foreknowledge_and_human_freedom_t"
     },
     {
-      "label": "Cross 1956 — The View of Man in the Qumran 'Hodayot'",
+      "label": "Hyatt 1956 — The View of Man in the Qumran 'Hodayot'",
       "missing": [
         "author"
       ],
@@ -412,6 +461,21 @@
       "node_id": "scholarly_work_dettwiler_2020_les_principaux_termes_anthropologiques_c"
     },
     {
+      "label": "Dihle 1982 — The Theory of Will in Classical Antiquity",
+      "missing": [
+        "author"
+      ],
+      "node_id": "scholarly_work_dihle_1982_the_theory_of_will_in_classical_antiquit"
+    },
+    {
+      "label": "The Theory of Will in Classical Antiquity",
+      "missing": [
+        "author",
+        "unique_bibtex_key"
+      ],
+      "node_id": "scholarly_work_dihle_1982_theory_will"
+    },
+    {
       "label": "Dodson 2017 — Paul and Seneca in Dialogue",
       "missing": [
         "author"
@@ -580,7 +644,22 @@
       "node_id": "scholarly_work_frede_1987_essays_in_ancient_philosophy"
     },
     {
-      "label": "Frick 1997 — The Concept of Divine Providence in the Thought of Philo of Alexandria",
+      "label": "Frede 2011 — A Free Will: Origins of the Notion in Ancient Thought",
+      "missing": [
+        "author"
+      ],
+      "node_id": "scholarly_work_frede_2011_a_free_will_origins_of_the_notion_in_anc"
+    },
+    {
+      "label": "A Free Will: Origins of the Notion in Ancient Thought",
+      "missing": [
+        "author",
+        "unique_bibtex_key"
+      ],
+      "node_id": "scholarly_work_frede_2011_free_will"
+    },
+    {
+      "label": "Frick 1999 — Divine Providence in Philo of Alexandria",
       "missing": [
         "author"
       ],
@@ -724,7 +803,7 @@
       "node_id": "scholarly_work_guillon_2017_le_libre_arbitre_perspectives_contempora"
     },
     {
-      "label": "Guyomarc'h 2015 — La Causalité humaine: Sur le De fato d'Alexandre d'Aphrodise",
+      "label": "Koch 2019 — La Causalité humaine : Sur le De fato d'Alexandre d'Aphrodise",
       "missing": [
         "author"
       ],
@@ -796,8 +875,7 @@
     {
       "label": "Hendriksen ? — New Testament Commentary: Romans",
       "missing": [
-        "author",
-        "year"
+        "author"
       ],
       "node_id": "scholarly_work_hendriksen_0_new_testament_commentary_romans"
     },
@@ -1019,7 +1097,7 @@
       "node_id": "scholarly_work_mansfeld_2012_will_and_free_will_in_antiquity_a_discus"
     },
     {
-      "label": "Martin ? — Josephus' Use of Heimarmene in the Jewish Antiquities XIII, 171-3",
+      "label": "Martin 1981 — Josephus' Use of Heimarmene in the Jewish Antiquities XIII, 171-3",
       "missing": [
         "author",
         "year"
@@ -1041,7 +1119,7 @@
       "node_id": "scholarly_work_maston_2010_divine_and_human_agency_in_second_temple"
     },
     {
-      "label": "Matteoli 2011 — Alle origini della teologia di Pelagio: Tematiche e fonti delle Expositiones XII",
+      "label": "Matteoli 2011 — Alle origini della teologia di Pelagio: Tematiche e fonti delle Expositiones XIII epistularum Pauli",
       "missing": [
         "author"
       ],
@@ -1541,7 +1619,7 @@
       "node_id": "scholarly_work_werline_1999_the_transformation_of_pauline_arguments_"
     },
     {
-      "label": "Wolfson 1947 — Philo on Free Will and the Historical Influence of His View",
+      "label": "Wolfson 1942 — Philo on Free Will and the Historical Influence of His View",
       "missing": [
         "author"
       ],
@@ -1574,15 +1652,8 @@
         "author"
       ],
       "node_id": "scholarly_work_zetterholm_2004_a_feminist_paul_a_hermeneutical_experime"
-    },
-    {
-      "label": "Destrée, Salles & Zingano (eds.), What is Up to Us? Studies on Agency and Responsibility in Ancient Philosophy (2014)",
-      "missing": [
-        "author"
-      ],
-      "node_id": "pub_destree_salles_zingano_2014_what_is_up_to_us"
     }
   ],
-  "nodes_with_missing_fields": 224,
-  "publication_count": 324
+  "nodes_with_missing_fields": 234,
+  "publication_count": 357
 }
