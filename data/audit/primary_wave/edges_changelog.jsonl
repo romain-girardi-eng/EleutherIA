@@ -1,0 +1,378 @@
+{"action": "delete_self_loop", "edge_id": "f5700883-6c44-41ae-8d3f-61832f88fad7", "source": "scholar_gourinat_jean_baptiste", "relation": "engages_with"}
+{"action": "delete_self_loop", "edge_id": "9e0697eb-0b8f-44ce-9f97-13054e4a87dc", "source": "scholar_guyomarc_h_g", "relation": "engages_with"}
+{"action": "delete_self_loop", "edge_id": "b4b4bbc9-a39a-41d7-bc33-d1dc5c0d2710", "source": "scholar_ramelli_ilaria", "relation": "engages_with"}
+{"action": "delete_duplicate", "edge_id": "b0d7186c-10fe-4c0b-9f8a-8aed7bff8519", "kept": "3032bd72-7764-4302-8112-19a79bc96860", "triple": ["concept_platonic_vs_christian_original_sin", "critiques", "synthesis_ditte_hamartia_double_sin_plotinus"]}
+{"action": "delete_duplicate", "edge_id": "2c3ea7e5-99c8-4a04-bd79-912ea5f8c657", "kept": "5bdc3058-8e46-4faa-a0ba-5db0c0a6bf54", "triple": ["passage_epict_1", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "56fb600a-7803-4a59-8a89-09327d63ae2f", "kept": "40382a7d-41bd-4f56-bf58-19c50a865932", "triple": ["passage_epict_10", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "8b1c9ea0-b6c1-4038-b79b-05de79dc5c92", "kept": "fdd6c72e-f63b-4946-b88e-2d4e702d0cb7", "triple": ["passage_epict_100", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "821068ca-6eab-411d-9a7f-53ac7a08fa44", "kept": "c36bc4dd-43e7-4622-9fc1-414e2613e1ac", "triple": ["passage_epict_101", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "46bd2265-d0d3-430d-b08c-772895f6308d", "kept": "5f88d2a2-6fe3-454c-a1c9-5cfcc7f31806", "triple": ["passage_epict_102", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "6d772de0-d9e8-44a8-b803-c1e3f71198ed", "kept": "56cdecce-ac4b-4156-a8de-d4d538023734", "triple": ["passage_epict_103", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "6b581a86-889b-4230-a1bc-3d32f0ad6761", "kept": "7c3e7407-5e4a-4093-aebd-11806c8d1c3c", "triple": ["passage_epict_104", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "725d9576-385b-4471-ab04-035c61f0d95f", "kept": "3dc26561-031d-4220-ad9f-2a5f1e982e19", "triple": ["passage_epict_105", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "c05dd34f-821a-419b-8b11-5d86bf830d3f", "kept": "c8da824a-f9c3-4f47-b89d-9571cd03329c", "triple": ["passage_epict_106", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "9ac0d86e-2757-4e7b-9ee4-3a5c17bb41aa", "kept": "b18635a9-a765-4326-b8f8-9ddb2d80d63a", "triple": ["passage_epict_107", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "9513cd9a-d611-4242-ac04-c332da43be83", "kept": "fd8d3379-b959-4235-8969-10c4c2984818", "triple": ["passage_epict_108", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "16ef9425-6d08-4149-8601-b6dedc150a65", "kept": "085d6ef5-851b-4d8d-a59d-9d09e5c94ee7", "triple": ["passage_epict_109", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "1d1b403b-4139-4689-b622-75c6fcc2b68f", "kept": "fa3e7d8c-d9f1-4ce4-8a51-22c0cdab9614", "triple": ["passage_epict_11", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "d9a84ae7-725f-4e8b-8f44-3d4a2a06cd6e", "kept": "8a69906f-d6ae-4dc1-b58b-f40f80dcf51e", "triple": ["passage_epict_110", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "4ad3363c-5474-419c-9bf5-d1e0b036a59c", "kept": "686ad402-d8ab-45e4-9c9e-5c85bd00008a", "triple": ["passage_epict_111", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "6efa957b-bdf9-436f-abc0-d045c9f7a04f", "kept": "3ca819e3-40a0-4ce4-b13a-663533ccf8a8", "triple": ["passage_epict_112", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "5660cdec-d863-46b5-91c8-bf7e2c3267ce", "kept": "f7d25ab3-6c84-4ad0-94e6-a19defeebf02", "triple": ["passage_epict_113", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "ca98d861-6cb5-445f-847f-a449c8ad8057", "kept": "e620c5a7-3cca-49ed-b0f6-32e9b1bcc313", "triple": ["passage_epict_114", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "77f8518f-0ff6-47dd-9c5a-d954324b4f48", "kept": "492a6d97-6432-4f2c-9440-0aa0bfdec2e0", "triple": ["passage_epict_115", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "89af651c-e495-412e-a1cc-305e1730268c", "kept": "fa13ff6d-7cfe-4edc-a595-92b4f7c38872", "triple": ["passage_epict_116", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "a8fee6b3-80e8-49f4-8a14-3b00fbe05b69", "kept": "92b30747-bd30-4452-a132-49cda3501acd", "triple": ["passage_epict_117", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "3ed82c52-273e-4402-8ac5-79152dc40cd9", "kept": "8ba9c4c2-acf1-4c9c-81fc-7e36d5e378a2", "triple": ["passage_epict_118", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "a26b636e-1420-4346-beeb-c5ba04754916", "kept": "c1f91957-838f-4b88-aa12-4f7f279d1b1c", "triple": ["passage_epict_119", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "7c25ac02-632a-4cb8-ad59-b9616a038f04", "kept": "40dcd778-faba-4187-9ae0-5c6f2e4be704", "triple": ["passage_epict_12", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "f537b95b-12a8-4323-a76a-1f1def27680b", "kept": "73da5a18-a5da-400c-a5e4-e9fff4e99096", "triple": ["passage_epict_120", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "58b5e91e-cb55-4892-a54d-4ef5798c5dc6", "kept": "6e48b8a5-1be5-4e5b-99c0-aa69fd280888", "triple": ["passage_epict_121", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "ba10dadc-7205-4d47-881b-fb7ddfb7f770", "kept": "9c61c00d-6538-4349-be96-bbde02664fc6", "triple": ["passage_epict_122", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "8b34f9bb-1337-4e10-99fa-631056856a67", "kept": "f63e88fc-940c-41a0-8a89-4dd5ca368690", "triple": ["passage_epict_123", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "94a30896-1f5e-4112-ac6c-6749d52f540b", "kept": "e86b65ea-8739-46f3-8069-bf14461a06dd", "triple": ["passage_epict_124", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "00588d21-455f-4217-bd2c-e1e0dac91e79", "kept": "ffc6878b-ed8b-46bb-ae39-ac6be1f0e565", "triple": ["passage_epict_125", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "ff058a5c-a60f-4d6c-94d0-b2bdf97eebac", "kept": "4873bca9-cbc3-476c-b01b-27116cf07586", "triple": ["passage_epict_126", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "0d3a688d-8e45-4c62-956a-a4569e5c7973", "kept": "f1900927-1f9c-4f88-bdd4-7cdd2a302142", "triple": ["passage_epict_127", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "d9ec1aec-bb9b-4bad-9af3-21e8a6429b05", "kept": "503f8ca0-af84-4e69-b655-abc0da733b5a", "triple": ["passage_epict_128", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "6e506490-5ad0-4b92-b913-5edf174c9547", "kept": "d0727736-ca81-4244-9500-ae71638a96b2", "triple": ["passage_epict_129", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "ed527dc4-b9ca-4988-87b5-b0f9c8139bc7", "kept": "3ab772bb-c490-4245-b2db-d47b8ccc0282", "triple": ["passage_epict_13", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "7e7a2f42-41a3-4b1f-a8dc-ecabcf400c37", "kept": "047bd617-e1be-426d-98d6-cfb78d79c181", "triple": ["passage_epict_130", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "b100e5f9-3409-44ff-b7ff-0decd1177f32", "kept": "d908cc43-5af7-4458-84b2-47ae44c3ed7d", "triple": ["passage_epict_131", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "aa952c1a-b4c6-470a-a446-3787fb73a821", "kept": "2226070c-71c2-4c93-b513-54795f1922a3", "triple": ["passage_epict_132", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "3cd9e008-1cfd-49b7-bb49-5ea43a9df622", "kept": "ee2e3462-e186-4725-8258-e92c815d7497", "triple": ["passage_epict_133", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "ee03e2fb-34ad-4c6b-97b3-323e4f3e1f7d", "kept": "0087dcf4-83d0-4428-81ab-f28ee72be47c", "triple": ["passage_epict_134", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "52525362-ff4a-4631-aad5-c23b49506eb0", "kept": "5a675ca6-7236-4d06-82fd-e385bd7f9668", "triple": ["passage_epict_135", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "bce3b115-2fb0-470c-9749-dabeba7d4440", "kept": "41f9c4a5-91bf-41f7-a204-8aa05e19f766", "triple": ["passage_epict_136", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "994e66f1-dbdd-42de-acb4-e177fc33943c", "kept": "f26c184b-1c20-4faa-9e0d-aefbe1075a45", "triple": ["passage_epict_137", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "85539142-b2bf-417a-868a-0b88976f0c55", "kept": "095658a1-d8d9-4657-a459-bd2962d5b306", "triple": ["passage_epict_138", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "b682c4eb-daaa-4905-a374-b118bf0f957c", "kept": "33e18ed3-c467-4bbd-a9c0-5aadaf48eef9", "triple": ["passage_epict_139", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "2c929fc4-25c7-44ec-9a96-f17ab2f4f9ce", "kept": "3de0622b-64f7-4172-9dbf-132153fdc72c", "triple": ["passage_epict_14", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "2b21f994-e1b7-4b7c-9fa8-e79b5c973a3a", "kept": "557e9d43-463d-499a-b401-897c8278c2e3", "triple": ["passage_epict_140", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "804d3603-375c-43e2-bc7b-d267ed38a7cd", "kept": "d04e6c19-6f6b-4ee3-ab10-d8950771a876", "triple": ["passage_epict_141", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "c2fd100c-69e5-450e-b442-819fdafe139d", "kept": "22ecb42e-9548-4cd7-899b-98c60ab9f714", "triple": ["passage_epict_142", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "05db75bc-b4bc-44bb-87ca-b2037ac79c42", "kept": "e7d931ca-80a7-4740-a0f3-3afe92d7557a", "triple": ["passage_epict_143", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "de8dec5a-bc01-40b0-8744-3444015b5fdb", "kept": "1ec26351-1e41-42f7-8b67-2fc8fbd13024", "triple": ["passage_epict_144", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "8ac5e2c6-4c75-4c73-b1ac-697a60e27f76", "kept": "10b4ec7f-36ea-4e05-8af7-e626708f2046", "triple": ["passage_epict_145", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "f5b87bf3-905e-4e80-9034-9223f89f1c06", "kept": "51febcea-3d16-4d78-bd59-3d2d2a26e4b3", "triple": ["passage_epict_146", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "1ac7785b-d481-4cd8-9484-1b48414fd5df", "kept": "58f9c0ec-93b3-4c65-ac26-5ce518a8ea6e", "triple": ["passage_epict_147", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "eed2f563-59e3-4d18-94ce-2467d730a15e", "kept": "916715e3-f0a7-4a38-b610-9cf1f6fd59f6", "triple": ["passage_epict_148", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "71a4c0d1-45cd-4144-84ef-53680ed559f2", "kept": "338c4c57-888e-453d-8366-1042c38b7738", "triple": ["passage_epict_149", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "ba220095-e985-4c6a-9d1b-e4ea73e6add5", "kept": "b2a95daa-51d7-4323-81ea-03b876c6d637", "triple": ["passage_epict_15", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "83b46844-d688-417a-a24a-c11579171001", "kept": "943c2720-e731-42e7-92fa-13a396ef79c5", "triple": ["passage_epict_150", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "742d8030-0322-4428-96bc-91058fbaa000", "kept": "91453da4-0f49-4d31-8934-cb227b4207a0", "triple": ["passage_epict_151", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "c04f8d3e-f84c-497e-9ecf-e5d1269a59d8", "kept": "5dec43a4-7ab8-47ef-8847-651b8eabecfc", "triple": ["passage_epict_152", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "78b5aa98-7af0-4aa9-adbf-9c9c09d527a1", "kept": "313e93c1-2f19-483e-bb91-57f608a07c5e", "triple": ["passage_epict_153", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "ee017c57-5313-4029-87ab-59ceefdd302b", "kept": "1e534b61-7dc9-4a27-89e4-92fe7ea784bf", "triple": ["passage_epict_154", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "2d5d53f2-9e32-40ae-a137-7f8c1dec0d7c", "kept": "cf9de044-d500-4533-8589-4067b6d4fe6f", "triple": ["passage_epict_155", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "83aeefce-cc81-468f-986f-c3e5efecd4d6", "kept": "e5c54b5c-a0a2-4ce2-a1aa-c057c1e9aa24", "triple": ["passage_epict_156", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "a95a46ea-6892-418a-8b1c-364cdde7be0c", "kept": "e00253e5-d8f0-4202-90d2-28c8002dd616", "triple": ["passage_epict_157", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "3869b53a-170c-4b09-a564-4d0cc82f5b87", "kept": "6b6b0884-1db5-4306-a192-22e63a83a3b9", "triple": ["passage_epict_158", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "1959c191-07f4-442d-8ea4-06ee20b4745f", "kept": "caff0064-031f-44cd-9486-4fb5dc368e34", "triple": ["passage_epict_159", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "857a1ad4-2a09-4a55-b226-fe01f75fe92e", "kept": "3a72e250-89b0-4e77-ae73-5c955870b339", "triple": ["passage_epict_16", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "a9fdf3cc-3622-44f3-adfc-5c93eaf5cc21", "kept": "87da4e2b-fd02-4568-a2c3-89082bb9e94c", "triple": ["passage_epict_160", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "9b69ab26-1b22-4f3e-b4d7-f1ef8b19447b", "kept": "e2d2072c-1e7a-447f-abeb-1c368df740a1", "triple": ["passage_epict_161", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "4fb8ff61-4e50-42d5-a072-bb4b7d981f96", "kept": "b7b54efc-6d1c-4130-96f2-816caf2f91bf", "triple": ["passage_epict_162", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "f412bf47-b7d3-43c9-bbfb-668751734dae", "kept": "6c2478e0-7a09-4528-99b0-d4d3cbf6ba96", "triple": ["passage_epict_163", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "04a997ac-7405-4864-bf9b-c896a8f7be52", "kept": "61b46fc9-55a0-4ac5-9724-befa131448b0", "triple": ["passage_epict_164", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "726e3510-0a1c-4d46-924d-fe8f6d79e426", "kept": "f5a2e00a-931b-4789-8b47-35af0fe853ea", "triple": ["passage_epict_165", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "4cc8ae14-b29b-4ec9-8395-3a00a140ddf5", "kept": "336a09d2-0c69-42ae-900a-458510b7ed17", "triple": ["passage_epict_166", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "c7779e29-bd5c-4f24-aa44-7f1c9bec41fa", "kept": "977092c6-ebb0-49bf-8cc2-b92d4364d039", "triple": ["passage_epict_167", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "2da48938-6c7c-4505-a38d-2e8318756dcd", "kept": "bcde8803-1a18-4fa3-b267-f5ab66f82edd", "triple": ["passage_epict_168", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "650b6d6e-04fe-411a-9400-9d429f987501", "kept": "1302c846-346a-42b4-861b-5bef71985b0c", "triple": ["passage_epict_169", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "89ab3a9e-35e4-4b3e-b62a-c3f21be8f629", "kept": "74c086af-f915-42d0-a468-c8e23455c66f", "triple": ["passage_epict_17", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "746bb04b-3e54-4a02-b0bb-46261b7d5e41", "kept": "8c150c6a-af8d-41af-827a-7fd03a93ddaf", "triple": ["passage_epict_170", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "0462af53-42d1-45d5-b10c-64f170cccbdd", "kept": "c8e3602a-b6fe-439c-8e8e-86176756b86e", "triple": ["passage_epict_171", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "c2b2abda-49aa-40c6-bc97-1a7755f255c9", "kept": "219ab0fd-93ac-4be7-a88c-48ac946dfd1b", "triple": ["passage_epict_172", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "0d47dbb1-bd68-4e7a-b2c5-6f632ddda05f", "kept": "6c1abbd0-ef7d-4ab1-9451-485da419b439", "triple": ["passage_epict_173", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "266d1f6c-56fa-4c95-8d60-25d997674f86", "kept": "727e0619-816e-4b45-8ba3-4c54f6f6defc", "triple": ["passage_epict_174", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "04378d25-7caf-40ed-bb6c-6f2f2c25635f", "kept": "9c4fcf60-a3a8-4d16-97c3-b11f996ca9ca", "triple": ["passage_epict_175", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "836c4d85-b576-440a-a30a-2a81437f52e4", "kept": "41b533f9-2f8b-4716-a274-908ccea88170", "triple": ["passage_epict_176", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "97a7f25e-f15e-46b6-8678-0e45b3a67e75", "kept": "2ce5fdfc-432a-40d1-8372-c64a8aaad538", "triple": ["passage_epict_177", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "3b64e27e-f53c-4d22-b461-065bcc428ce3", "kept": "f57b531a-ad8d-4a7f-91fc-0445dbfd4bff", "triple": ["passage_epict_178", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "8f87d6af-5675-4536-bbe9-e58312e8f11b", "kept": "04f1ad5e-eda3-4bac-a979-d15179a00a1a", "triple": ["passage_epict_179", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "cf86573f-8462-4c98-b27b-60b83bbff9f7", "kept": "8f417354-f1ac-4aaa-9e44-f511eb0011f2", "triple": ["passage_epict_18", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "bc4e41c0-5928-4141-8323-fd1ac2b3b077", "kept": "002f2d89-9547-454f-877f-7e752243cfca", "triple": ["passage_epict_180", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "f88bd30b-0543-421c-a0d8-a61629da9cb1", "kept": "55ef064f-ec1a-4db4-a3d2-286d0dca8109", "triple": ["passage_epict_181", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "d1ba175e-6765-4dfb-a5ac-5183182008af", "kept": "99cf3e0b-51cd-42df-b0b8-52c65c98160e", "triple": ["passage_epict_182", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "48f03f07-a470-44ee-bf21-17d8de5d9ea9", "kept": "aed41bf0-8402-4abf-aac5-dffe2b891b4f", "triple": ["passage_epict_183", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "77ee9dce-692d-47cd-8149-642f2520ae80", "kept": "d719bed6-ebd6-4c3c-8fae-5d8be0bec8d9", "triple": ["passage_epict_184", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "8a8bf0c1-366b-4eaa-8869-7054d7d51141", "kept": "96967b32-63a8-40cb-a4c3-b1d85b5102cd", "triple": ["passage_epict_185", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "99015b4d-3a9c-4bfa-a4b4-513e6c8dd042", "kept": "63eb0103-1b3c-4050-b813-c44ffde1b17c", "triple": ["passage_epict_19", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "3e788273-820a-4388-aeab-698341b0bd72", "kept": "b0528783-d6c5-43c0-95c4-cbf61b730053", "triple": ["passage_epict_2", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "4d3c15c6-10cb-491c-a8d8-b78d4a84506e", "kept": "99c9d337-6e89-4a1a-a0aa-57da3beef2f2", "triple": ["passage_epict_20", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "bc07bcb9-3dc4-4a3f-a5c0-87b849f17d99", "kept": "859dcf64-f40a-4c0a-91e0-887b6dc2fb3b", "triple": ["passage_epict_21", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "f8642a7d-ed4a-4566-81f9-4225f6db6188", "kept": "3afc265c-8e75-4850-9ad7-bc26eb2a93d9", "triple": ["passage_epict_22", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "65e09e6b-eac7-45ed-807f-9287ffd7b39e", "kept": "fcf8f247-a615-4ccb-a0ac-07518fb9f9f6", "triple": ["passage_epict_23", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "41abbc6c-9abe-4095-bd48-163d9c782efd", "kept": "704370ed-1f3f-49e9-a97c-6319da076ae7", "triple": ["passage_epict_24", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "a305f1b0-7bd2-4870-be55-a7d70e5cc828", "kept": "3d0150db-b701-4545-aea1-5a9ce8e11df4", "triple": ["passage_epict_25", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "5577e21e-721e-4c85-a526-ce4fd36f4aa5", "kept": "8d61516b-ec51-4976-bab1-6eff9e5e7528", "triple": ["passage_epict_26", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "556b0981-4d67-4544-a187-02a2bd3a03cd", "kept": "1314e67e-44d1-4617-ac68-6542ad9c45a5", "triple": ["passage_epict_27", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "0921dd5e-1b71-4c5f-bfd2-6bf6ee9fd974", "kept": "99abc3f8-67bf-4b52-af4b-4c65a7681ca3", "triple": ["passage_epict_28", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "d81894f0-d010-474b-a11c-dde191415efd", "kept": "27e41d93-f487-4307-86c5-5791bafef8f4", "triple": ["passage_epict_29", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "d27eb506-6c3e-4f22-8b08-da55ede5a288", "kept": "212702e4-45b6-4c3c-8841-73bcf7f7c181", "triple": ["passage_epict_3", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "c5ef7581-c50f-45db-9e62-03d749d1e35d", "kept": "d79ae55f-633f-42b7-b253-b5090e8c1c0d", "triple": ["passage_epict_30", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "0cb5efe4-ab63-4f7e-939b-c2ca84d50eaf", "kept": "f34de078-5fc0-4b3c-bc5a-2527ddfae707", "triple": ["passage_epict_31", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "64891f71-fd0a-49f4-840d-5d792362344f", "kept": "faa5836e-7e9d-404d-9468-859a341f42f6", "triple": ["passage_epict_32", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "e4243ab5-7c23-4011-8a26-bedddd706d87", "kept": "85ea0b1c-40bb-4a4e-ae68-8bb4d2c043df", "triple": ["passage_epict_33", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "988d1ae8-ae10-4e6e-9794-29c56f46c5e0", "kept": "0bfaeb75-191f-424e-92e5-f3c1eebdbac2", "triple": ["passage_epict_34", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "5a481245-af18-432c-b2be-e7f53d89ac40", "kept": "38219b2d-2065-4b80-8edb-6efa9f8ba6d8", "triple": ["passage_epict_35", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "2c3a3f95-4544-4ec2-8357-de28a2ef73dc", "kept": "525e0c0f-cf6b-42ca-979d-593f63444694", "triple": ["passage_epict_36", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "fae97516-5154-4c35-8658-85cbe1d18408", "kept": "8481f0b8-25c0-4d82-abef-687434a27678", "triple": ["passage_epict_37", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "a97d14d5-d282-4208-a575-f58bc0e6b498", "kept": "66e1307e-127a-4eef-be0d-25635e9f0a2c", "triple": ["passage_epict_38", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "b58f21fc-705f-426f-88a1-16be4a162acd", "kept": "e445a29f-85f5-48ae-a727-acd6114731ff", "triple": ["passage_epict_39", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "41fa015c-b988-46f1-8c56-5ea196c94704", "kept": "dd7e618d-02fe-49d3-bc95-a819a79adcc6", "triple": ["passage_epict_4", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "81c43fe5-54d8-4184-a176-5afc18ad2eed", "kept": "97c2413b-d74b-4fd7-abfb-f2db05c3ccfa", "triple": ["passage_epict_40", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "64834c3f-2b81-4720-a5d1-95ed75315b27", "kept": "a2391ea2-b932-49ab-9c52-af607b52a735", "triple": ["passage_epict_41", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "369f44c6-052d-4d7e-9a0a-e47767572d3e", "kept": "a8e27d2a-cee3-43bc-a260-90392af5a8f3", "triple": ["passage_epict_42", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "688bcadd-7e1b-4418-9dff-62cde584e443", "kept": "c50905a0-54d4-42dc-a3cd-7a4c64d58ce8", "triple": ["passage_epict_43", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "6c406399-87fd-487b-a5cd-5e188fb36cf6", "kept": "3c6d0e87-9e5c-429b-ad91-c599d7d36a60", "triple": ["passage_epict_44", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "1f00c553-3a27-4071-b7a5-7b79f462e952", "kept": "acefc41b-b337-4d57-a61d-b6f821765b11", "triple": ["passage_epict_45", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "dc4539f1-6d44-4a01-98b9-db85f54566a0", "kept": "2f228192-73f4-4606-a4c0-096ca6d02b12", "triple": ["passage_epict_46", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "3c9b42a4-8f14-477e-8061-4d84b6e2ddda", "kept": "e96a0cde-3f6c-41b1-a431-6cf9c3a2e567", "triple": ["passage_epict_47", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "710dc284-7eca-4614-9410-c9b8c8402513", "kept": "baa06b90-05f2-4e5a-892d-d57bf67d5aa5", "triple": ["passage_epict_48", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "1f5f4227-d270-477c-bb15-958b7a4769de", "kept": "bd674e3d-0262-4f9b-bbd5-743b5c65b42b", "triple": ["passage_epict_49", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "f14810a0-c1f0-4696-b756-c5e375261725", "kept": "f7756918-f141-4eb6-a045-3711baa7e9a2", "triple": ["passage_epict_5", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "840eabe3-76b5-473d-8968-c1d81ceaef59", "kept": "87fe5a01-0129-4859-bf89-98c0191e18e0", "triple": ["passage_epict_50", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "e027b56e-60d7-4193-be78-a9252c1e9904", "kept": "0bb57338-ac19-4c28-a3dc-3750c263af01", "triple": ["passage_epict_51", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "f796abe0-fd15-4b8c-a108-48f3251b9522", "kept": "8270d9ce-2fae-43ab-952e-fc9285a96176", "triple": ["passage_epict_52", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "7ced6f78-0d1f-4961-bb8a-aa9e2553193b", "kept": "973d40a8-0b6e-463a-a50e-9c91a076f4f0", "triple": ["passage_epict_53", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "40247c8a-06d6-4871-b456-a10faeabbecf", "kept": "30c1007e-f6ee-4e03-a737-1b24497bd369", "triple": ["passage_epict_54", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "19761d8e-2113-4923-bb69-7fe49d6312bb", "kept": "805d8187-d975-4dc3-bd92-94be1a842feb", "triple": ["passage_epict_55", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "ea66fd2a-0520-490f-b96c-0585f5dff34e", "kept": "c17001e0-3d85-4a91-97ff-378bb39c4834", "triple": ["passage_epict_56", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "aeb9b886-ba40-4af0-ac0b-25fdb89717ae", "kept": "6cb5f7aa-502c-4639-97e0-c060ecff9098", "triple": ["passage_epict_57", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "84d67545-0adf-4827-a122-02929c075c86", "kept": "97c8b2bd-8418-4a78-b944-d3ea885823cd", "triple": ["passage_epict_58", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "af43757a-d296-47ef-be66-349fb7a41a37", "kept": "86d60c01-5989-4dc1-8bbc-010565b65073", "triple": ["passage_epict_59", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "5c7c5152-ca50-43e7-915b-1be519f01780", "kept": "b5256366-8d5b-4930-897f-c9f3d44c2d0f", "triple": ["passage_epict_6", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "aae5c934-1683-428b-8a79-f29bdeff6b0d", "kept": "454c39c1-e2bc-447a-9ae9-8c79e8bbaae0", "triple": ["passage_epict_60", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "5834ed5c-2d5f-448e-9456-1f1396ec014b", "kept": "87dc55f0-4070-4cc1-9e34-ec5205daa089", "triple": ["passage_epict_61", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "dc6ba5ce-410b-4da8-be71-bbd82727114c", "kept": "ffd0fc48-a167-443b-b76f-c5c781b37f6d", "triple": ["passage_epict_62", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "a66732fb-8dc6-4a6c-87f1-21b3aa8b1729", "kept": "8aead943-ee98-4ce9-a931-fe7fe9c91863", "triple": ["passage_epict_63", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "9e8b1679-18bc-4f66-9932-7000f7745060", "kept": "45d358e0-fe3d-4d1a-bb52-912358738b55", "triple": ["passage_epict_64", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "3fb8d7ae-27f1-431e-8f6e-9101bef89e6d", "kept": "84d0cffd-b2d2-4676-923a-35eda6da7d8f", "triple": ["passage_epict_65", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "b6a7b174-9400-4b5e-bef3-0a7107c6f16c", "kept": "387885dd-4c26-4e40-a5e2-b893547eaf56", "triple": ["passage_epict_66", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "feb1cde2-bd9e-4ab0-8482-bff713d8c38e", "kept": "0adf8f77-f971-4c30-b723-7f114154b4ce", "triple": ["passage_epict_67", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "0c1527de-31fb-48d4-a54b-c2a0bcb5d8d6", "kept": "8f981311-5033-400b-9293-fda472cfacae", "triple": ["passage_epict_68", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "b6ac88bc-db64-403d-b889-2ca9567b7d50", "kept": "4ee62357-afa7-4afd-995c-f9978b5529cf", "triple": ["passage_epict_69", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "c394998c-bd3b-47d8-accf-3439a94ae44e", "kept": "00928673-b51d-4794-8625-9387373fc6db", "triple": ["passage_epict_7", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "4639621b-74fb-4fcb-b876-900a8ebf3c55", "kept": "b616c3d2-5f23-446d-810e-4dedb2b7ef0e", "triple": ["passage_epict_70", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "6e26b3d0-5cd6-4543-9abc-ebc90e90adab", "kept": "9a9a3acc-3cd0-4879-90f2-b00643283052", "triple": ["passage_epict_71", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "98924e6c-9202-469f-a1d8-787f9c3f653a", "kept": "127a9221-dc00-4aae-9c4e-4e43f07b9f09", "triple": ["passage_epict_72", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "1c9a09bd-dd79-4029-a08f-536804733cf4", "kept": "0664b134-7c38-40c7-a834-33756580cd56", "triple": ["passage_epict_73", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "256ade64-ed29-462a-b1bb-36dab6b23dc0", "kept": "56a20c16-c94e-49d0-92b2-ca55eaf2fc8e", "triple": ["passage_epict_74", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "737cbf43-1563-48f8-8523-1212ca323332", "kept": "9c417aa7-764f-4028-996f-e2a4277ab57c", "triple": ["passage_epict_75", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "f2291e3f-1e49-4751-9930-b391c1afcaea", "kept": "8e3d7c76-4088-40bb-b724-ecc9ff19ba3d", "triple": ["passage_epict_76", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "0bcf5ece-11b6-4cf7-bf83-921cc8302188", "kept": "b9ae5e53-c47f-4937-9491-21fa9ef62231", "triple": ["passage_epict_77", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "373338bd-23d3-4af5-9692-09d701a21a29", "kept": "07d65150-b4c5-41c9-8a5c-b72ff09c442c", "triple": ["passage_epict_78", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "6bda5554-5838-4021-b5ad-0e6f88238b22", "kept": "9d548c45-a423-4501-870a-2c785b73dba0", "triple": ["passage_epict_79", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "07267bc3-7517-4cc4-9d18-a8d01d51ea87", "kept": "b33f28b6-71c9-460b-aa41-91c505f540c5", "triple": ["passage_epict_8", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "03b3509b-e889-4575-b92e-0659fcc324a6", "kept": "661f6771-4828-49db-8c40-7ca872f0b776", "triple": ["passage_epict_80", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "8e61048a-956b-462f-b905-427432f46241", "kept": "470c911a-abdd-42df-8225-40d1289e42b0", "triple": ["passage_epict_81", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "e1971eab-dbdf-4318-b808-f1fd097eed7a", "kept": "ab534cf5-9135-46b0-8974-b29a007b82ed", "triple": ["passage_epict_82", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "fd66e13e-8ac7-4973-9514-aa85298f5843", "kept": "50c51117-0b02-4d6d-a566-4b71e318a9e2", "triple": ["passage_epict_83", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "51c508a5-fb86-4992-800a-12f7b368dd44", "kept": "ac385a7c-93d0-4a33-b7f4-530bd355c875", "triple": ["passage_epict_84", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "c86039a8-f8a8-4725-b31f-a49c5b4a80f0", "kept": "d7bd0bc2-d61e-46f3-9001-953035e5ed49", "triple": ["passage_epict_85", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "5a67a82b-c643-4d52-a59a-3383fc469b79", "kept": "1113213b-555b-44f2-97f8-5416aae5ffd4", "triple": ["passage_epict_86", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "a9553f92-d486-46c7-b027-4d0156f6645b", "kept": "98154672-bab0-4b5b-9b56-36efa264b8a1", "triple": ["passage_epict_87", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "f04293b8-a16b-4a1b-8708-12c017115969", "kept": "d773bdfd-2721-48b8-a4b5-32d4094d3d06", "triple": ["passage_epict_88", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "30ad504b-e020-402e-bd35-7c7ae730bfaa", "kept": "b440ec91-2bff-4e6b-a79b-648c12663eba", "triple": ["passage_epict_89", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "17f883ff-16c8-4295-a04e-4b967750d2b9", "kept": "c50c00c8-1762-4655-a0a1-3ca941ef705a", "triple": ["passage_epict_9", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "795fd5d6-378e-45e5-bcfc-0782bbde288b", "kept": "2e13c575-266c-4fc8-9e2e-8e96e6f20acd", "triple": ["passage_epict_90", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "a2ea46c1-6360-4f21-8c14-114b5849bcd7", "kept": "4d5a7ca2-d6fa-4549-a07f-0594538ae3e6", "triple": ["passage_epict_91", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "1f1798ca-2385-4440-9d89-adbbac0bb6ad", "kept": "632c403a-f230-437b-9680-7b3c631ba153", "triple": ["passage_epict_92", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "811c0491-b65d-489f-af11-531c9be48861", "kept": "1b82fe53-aaa2-407f-85a5-319200390db1", "triple": ["passage_epict_93", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "f94c11da-7904-430b-bc49-3b632bb217be", "kept": "64228c6b-f4db-4ecb-8e90-8d575afa7655", "triple": ["passage_epict_94", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "0ad1527e-4152-4357-832e-3c61209a0a0f", "kept": "5500aeb2-c627-48a4-9820-da0203744ee2", "triple": ["passage_epict_95", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "cd19bd40-bcdf-4e19-b2f9-a384aad66143", "kept": "da7f5ea0-61a7-4fab-980d-467676b387c4", "triple": ["passage_epict_96", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "6a90b1eb-e4e2-4a6b-9900-f04865477ed1", "kept": "41872bd1-9298-4b18-9459-f5ccfea902be", "triple": ["passage_epict_97", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "b847648d-9497-4648-97ed-14468de8a6bf", "kept": "d679cae6-debc-4bf6-b736-48540eed88bb", "triple": ["passage_epict_98", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "d88cce9c-2e82-4174-a8e2-89d538bb2b48", "kept": "18094eb3-9a0a-4cb2-ba37-09b9a6373ac7", "triple": ["passage_epict_99", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "2548a640-e99c-44fc-b76c-6828264a7cf2", "kept": "b7a3d1d4-b80e-4862-9c23-426a05f23f79", "triple": ["passage_epictetus_disc_i_1_1", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "850bec06-e5ea-4ade-b51d-4b102e1f9652", "kept": "d987077b-f9e4-49aa-9039-d2ff926bc0a0", "triple": ["passage_epictetus_disc_i_1_23", "discusses", "synthesis_epict_eph_hemin_doctrine"]}
+{"action": "delete_duplicate", "edge_id": "10a335c1-3f87-470a-927b-22525a287d92", "kept": "281b724e-9052-4101-b317-bdd46345256c", "triple": ["person_plotinus_d270", "extends", "synthesis_ditte_hamartia_double_sin_plotinus"]}
+{"action": "delete_duplicate", "edge_id": "fef7b94c-f58a-4d1c-91f3-d7566fa74b0a", "kept": "e17ecc3f-873e-40d5-9f4f-7d8a1a029d1a", "triple": ["synthesis_cic_fat_in_nostra_potestate", "part_of", "work_de_fato_cicero_44bce_b9c4e5d2"]}
+{"action": "delete_duplicate", "edge_id": "d900d392-0e07-487e-ae86-651df719bdb8", "kept": "e78f7956-afe4-4b02-ab6f-5dfcf392781f", "triple": ["synthesis_cic_fat_index", "part_of", "work_de_fato_cicero_44bce_b9c4e5d2"]}
+{"action": "delete_duplicate", "edge_id": "dab40bd3-383e-4200-b8b2-f1d099babe85", "kept": "8fb397a0-9ac4-4ea2-942b-f317bb4b91ce", "triple": ["synthesis_ditte_hamartia_double_sin_plotinus", "presupposes", "concept_undescended_soul_plotinus"]}
+{"action": "delete_duplicate", "edge_id": "682c78a8-379b-45d4-b199-833e8c96c068", "kept": "e57580a4-700c-4fbf-9300-d045b0ba7d2c", "triple": ["synthesis_epict_eph_hemin_doctrine", "part_of", "work_epictetus_discourses"]}
+{"action": "delete_duplicate", "edge_id": "a5bc591b-e4a1-4201-8491-8adce45e2055", "kept": "4b38e53b-a653-411d-86d3-840ad9f12efe", "triple": ["synthesis_epict_thematic_index", "part_of", "work_epictetus_discourses"]}
+{"action": "delete_duplicate", "edge_id": "9d2eac74-8bd8-4e3a-b710-b2574163fc20", "kept": "b57ed8c3-33c3-44a6-8c50-b2448cc8e3d6", "triple": ["work_de_fato_cicero_44bce_b9c4e5d2", "source_for", "synthesis_cic_fat_in_nostra_potestate"]}
+{"action": "delete_duplicate", "edge_id": "5a6a9d57-9523-4c8c-ab30-b1e691c83f04", "kept": "2a99eb6f-6f07-455b-87cc-148122ee10c1", "triple": ["work_de_fato_cicero_44bce_b9c4e5d2", "source_for", "synthesis_cic_fat_index"]}
+{"action": "delete_duplicate", "edge_id": "b4f91f84-4c9c-4c6d-9c11-026971c86ad9", "kept": "4de5bea0-aef5-4be0-a993-2bb410f9464f", "triple": ["work_epictetus_discourses", "source_for", "synthesis_epict_thematic_index"]}
+{"action": "delete_duplicate", "edge_id": "d906f27f-eb00-486c-9577-471e7977ab39", "kept": "0def577d-805f-4d9f-89f5-d58472b96b46", "triple": ["work_plotinus_enneads_iv_8", "source_for", "synthesis_ditte_hamartia_double_sin_plotinus"]}
+{"action": "rename_relation", "edge_id": "2df96a58-0064-4d0a-ae63-2190791d21cf", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "d1066846-5d94-4521-99fb-5b94a19861cc", "triple": ["argument_cafma_carneades_m3n4o5p6", "influences", "argument_justin_antifatalism"]}
+{"action": "rename_relation", "edge_id": "b80adb4a-d872-45b9-9b2b-e7ba872f8fbb", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "a8158480-9582-43ac-8c93-807d48502473", "triple": ["argument_cafma_framework_5a7b9e12", "influences", "concept_hypomnema_school_handbooks_1z6a8c54"]}
+{"action": "rename_relation", "edge_id": "cbccf8d5-bef0-4d19-b4c5-40bb15fde750", "from": "influenced", "to": "influences"}
+{"action": "rename_relation", "edge_id": "536a29a4-35ae-42a1-b522-3dbf35752411", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "13232031-a639-416b-833a-c2d55457a867", "triple": ["argument_consequence_argument_0n1o2p3q", "influences", "concept_semicompatibilism_6t7u8v9w"]}
+{"action": "rename_relation", "edge_id": "2b37e98c-83fb-4c5c-bb2f-f42d09cb9485", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "6270505b-76f2-4987-ac23-932eeffcf7b2", "triple": ["argument_edwardsian_compatibilism_5a9v0w68", "influences", "argument_humean_compatibilism_3y7t8u46"]}
+{"action": "rename_relation", "edge_id": "2ca33d2c-72a0-40db-ac1f-6c2e178c9296", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "a58530f3-d1c8-4530-b2cc-71dc2875319f", "triple": ["argument_epictetus_prohairesis_argument_aa13b932", "influences", "person_frankfurt_harry_1929_2023"]}
+{"action": "rename_relation", "edge_id": "a6a43f81-c537-4dda-b41f-42a78029254b", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "1e3bcdcb-4e99-4656-a9ab-07453d35df17", "triple": ["argument_ezekiel_individual_responsibility_q1r2s3t4", "influences", "argument_sirach_free_will_theodicy_m7n8o9p0"]}
+{"action": "rename_relation", "edge_id": "e2cd1de8-0b0e-4c5a-871c-1ec0292fe7bc", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "9db9cb7f-d141-40ad-a3a6-21ec14ffb4ae", "triple": ["argument_frankfurt_cases_1o2p3q4r", "influences", "concept_semicompatibilism_6t7u8v9w"]}
+{"action": "rename_relation", "edge_id": "7a6fc430-916a-438e-ae74-d7483d661871", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "3228b786-8464-4c93-ad84-8c8dc51076b2", "triple": ["argument_hobbesian_compatibilism_1w5r6s24", "influences", "argument_humean_compatibilism_3y7t8u46"]}
+{"action": "rename_relation", "edge_id": "a2eb3288-b65f-408f-8312-0a4f4d5b6cf6", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "89ab982f-83f6-4fbd-8e68-a40b240cfd1d", "triple": ["argument_hobbesian_compatibilism_1w5r6s24", "influences", "argument_lockean_analysis_2x6s7t35"]}
+{"action": "rename_relation", "edge_id": "b86a6438-2523-4a28-a92c-841c13abd2f5", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "6a87e435-1f81-41cd-8cf1-afacd0374a11", "triple": ["argument_justin_antifatalism", "influences", "argument_tatian_above_fate"]}
+{"action": "rename_relation", "edge_id": "f5846527-b20f-4b20-8556-be46585410fd", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "81307134-1ce9-4cfd-a507-378fbd581505", "triple": ["argument_kantian_third_antinomy_6b0w1x79", "influences", "argument_leibnizian_compatibilism_0v4q5r13"]}
+{"action": "rename_relation", "edge_id": "1ab2b6f8-18c2-4423-a34e-a871ccf7c779", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "a46785e5-4271-4833-a26e-36b13626b1f0", "triple": ["argument_lockean_analysis_2x6s7t35", "influences", "person_david_hume_7y1t2u80"]}
+{"action": "rename_relation", "edge_id": "3449732f-b5c5-4bec-b667-f96a1d9e51e3", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "0157a525-e277-499e-ba00-15c0fbd07c3f", "triple": ["argument_lockean_analysis_2x6s7t35", "influences", "person_thomas_reid_8z2u3v91"]}
+{"action": "rename_relation", "edge_id": "facfeadb-fa73-416f-9f86-126361c26b45", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "fd69f40e-5f1a-4c3c-8691-d09a6b3ae6ca", "triple": ["argument_sirach_free_will_theodicy_m7n8o9p0", "influences", "group_sadducees_a5b6c7d8"]}
+{"action": "rename_relation", "edge_id": "63d27cc0-09af-456e-8a23-f10a8c6f3221", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "5acc3f04-ca0b-4be4-aef3-b33e2b672935", "triple": ["concept_bondage_of_will_1c5x6y24", "influences", "person_augustine_hippo_d430"]}
+{"action": "rename_relation", "edge_id": "7f96a8ff-315e-4538-b990-26b4808376d1", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "66eff24f-78ee-458c-afae-63c5d1f6a2b6", "triple": ["concept_gratia_operans", "influences", "concept_gratia_cooperans"]}
+{"action": "rename_relation", "edge_id": "0dfc880e-443f-47a6-a120-1b9f94bd1873", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "b99822f0-4709-4f8e-90bf-244d132b9724", "triple": ["concept_isostheneia_4b7e9c3a", "influences", "concept_academic_skepticism_epoche_n4o5p6q7"]}
+{"action": "rename_relation", "edge_id": "9ff947b5-5871-41a6-872b-7d5abe4a4a63", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "2bbcb846-5c66-45f4-805a-f9f525adb6fb", "triple": ["concept_olympic_paradigm_positive_embodiment", "influences", "person_iamblichus_d325"]}
+{"action": "rename_relation", "edge_id": "07891fe7-9e25-4cfc-8b4a-4e95961ed410", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "3dd78d13-4aee-4f7c-b075-1de731c9b2fc", "triple": ["concept_orphic_paradigm_embodiment_as_sin", "influences", "person_plotinus_d270"]}
+{"action": "rename_relation", "edge_id": "3fbcfa74-d723-47b0-a435-87001adc94bc", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "87648c74-6d82-45d3-8ee2-c2fa11982cbd", "triple": ["concept_orphic_zagreus_dionysus_myth", "influences", "concept_orphic_paradigm_embodiment_as_sin"]}
+{"action": "rename_relation", "edge_id": "8c1cf8c6-95ea-414c-a72e-74cc011c7cda", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "04832560-0f69-44fe-b6fd-eb0ad6230572", "triple": ["concept_reactive_attitudes_7u8v9w0x", "influences", "person_mckenna_michael_4x5y6z7a"]}
+{"action": "rename_relation", "edge_id": "a992948b-4615-4478-bb7e-dfbfa5fb408d", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "5590cd63-e24b-4bce-89c6-9551c9b9110b", "triple": ["concept_reactive_attitudes_7u8v9w0x", "influences", "person_wallace_r_jay_5y6z7a8b"]}
+{"action": "rename_relation", "edge_id": "35b63742-1b7e-4cf4-99ec-49f3edf036e5", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "7fb24a98-f8ed-4e8a-b8da-dcf305cf0619", "triple": ["concept_scientia_media_2d6y7z35", "influences", "person_john_duns_scotus_48daa9ee"]}
+{"action": "rename_relation", "edge_id": "f4988f72-12f0-4157-a138-e348b3f79e98", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "8806b6c7-2b76-4da2-b3d4-bb7dafa2c4dc", "triple": ["concept_tripartite_soul_plato_e5f6g7h8", "influences", "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6"]}
+{"action": "rename_relation", "edge_id": "84a52f0b-9e7a-4c1b-9073-4862cc1d91f3", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "16d8db08-e639-400b-8bad-1d7229f90273", "triple": ["controversy_de_auxiliis_2n6i7j35", "influences", "controversy_luther_erasmus_1m5h6i24"]}
+{"action": "rename_relation", "edge_id": "88c47da4-0687-4e57-9526-7ec96c9531cc", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "c3f5896b-4356-4b6b-9ec5-3ddba24a803e", "triple": ["controversy_luther_erasmus_1m5h6i24", "influences", "controversy_synod_of_dort_5q9l0m68"]}
+{"action": "rename_relation", "edge_id": "b21e2dc0-9b60-44ce-a080-377dd5225f30", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "47475e05-5077-4130-bd54-1bcf6817ba31", "triple": ["person_alexander_aphrodisias_fl200ce_n5o6p7q8", "influences", "argument_plutarch_providence_cooperation_8c5a9d3f"]}
+{"action": "rename_relation", "edge_id": "1e971f85-60dc-44e2-bed6-d0a9de529c1c", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "0d1e0301-2d0d-4799-b1a8-b275678dc7c4", "triple": ["person_aristotle_384_322bce_c2d4f6a8", "influences", "person_wolf_susan_contemporary"]}
+{"action": "rename_relation", "edge_id": "50a0271f-c23f-4635-9024-bff02e8abfab", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "54ffa01b-128d-46d6-afdf-95742f32a375", "triple": ["person_augustine_hippo_d430", "influences", "person_anselm_of_canterbury_4e07b080"]}
+{"action": "rename_relation", "edge_id": "9a3bbe9d-aab8-4155-a8d5-0bdba8539f66", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "97ed5b4f-7bbb-4c73-aae4-03aa24578e99", "triple": ["person_austin_john_langshaw_1k2l3m4n", "influences", "person_strawson_peter_frederick_2l3m4n5o"]}
+{"action": "rename_relation", "edge_id": "2d011a6b-21fa-45c0-8d99-76b4373b6cd4", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "393b987d-0bb8-4f0e-aa47-412f795dc618", "triple": ["person_averroes_c9d0e1f2", "influences", "person_thomas_aquinas_61b633ce"]}
+{"action": "rename_relation", "edge_id": "0e671fe8-76d7-437a-91f3-884035f505c9", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "b853b61b-26de-4f8f-8cc4-e3b807a6f0eb", "triple": ["person_ayer_alfred_jules_7g8h9i0j", "influences", "person_dennett_daniel_2v3w4x5y"]}
+{"action": "rename_relation", "edge_id": "358df601-d5b8-4e40-b172-440923f81410", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "53e5a357-be27-4304-845c-9efcd1133f9b", "triple": ["person_baruch_spinoza_8p2k3l91", "influences", "person_thomas_hobbes_2t6o7p35"]}
+{"action": "rename_relation", "edge_id": "cf64ce5f-ddb1-4c1d-89b6-6ed6cba417cc", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "6027403b-223b-49ac-9e74-c86b28b5b93e", "triple": ["person_ben_sira_i9j0k1l2", "influences", "person_philo_alexandria_a1b2c3d4"]}
+{"action": "rename_relation", "edge_id": "da8c5ff0-f25c-4c58-b83f-8f9386358d9b", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "c867819c-71b7-4247-8bb7-30bc4891ee99", "triple": ["person_bergson_henri_5e6f7g8h", "influences", "person_sartre_jean_paul_8h9i0j1k"]}
+{"action": "rename_relation", "edge_id": "554dc681-7aa2-4304-93e6-6975d357105d", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "a12f982a-a624-4115-81ab-30bc436e15dd", "triple": ["person_boethius_480_524ce_w3x4y5z6", "influences", "person_aristotle_384_322bce_c2d4f6a8"]}
+{"action": "rename_relation", "edge_id": "c8e828d9-2319-40cb-b0d1-ec321af7d0c6", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "074bfff6-981e-4603-8aa7-2ff5b7f05d77", "triple": ["person_boethius_480_524ce_w3x4y5z6", "influences", "person_plato_428_348bce_a1b2c3d4"]}
+{"action": "rename_relation", "edge_id": "7e7189bb-9eb7-4c13-b2ed-427d72525bdb", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "b29787e1-979e-4571-94d1-363094a238f9", "triple": ["person_broad_charlie_dunbar_0j1k2l3m", "influences", "person_chisholm_roderick_5o6p7q8r"]}
+{"action": "rename_relation", "edge_id": "5dd9cdee-5e3e-4ffe-8bc2-d9ea2517dc29", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "4126b8a5-0f64-4592-ac60-5b81881be4bb", "triple": ["person_christian_wolff_1s5n6o24", "influences", "person_immanuel_kant_0b4w5x13"]}
+{"action": "rename_relation", "edge_id": "88b92e4f-8265-49ee-acf6-260a50aa64fe", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "517e6947-b96b-408a-934d-0f995b6da593", "triple": ["person_chrysippus_280_206bce_i9j0k1l2", "influences", "person_frankfurt_harry_1929_2023"]}
+{"action": "rename_relation", "edge_id": "6a864589-0a90-4743-a9d9-0a92a7e24402", "from": "belongs_to_school", "to": "member_of"}
+{"action": "delete_duplicate_post_rename", "edge_id": "dd1631a0-1d53-45c2-a8a5-1c39bc7af858", "triple": ["person_cicero_marcus_tullius_106_43bce_a8f3d2c1", "member_of", "school_academics"]}
+{"action": "rename_relation", "edge_id": "a553f070-b6b3-4df4-be0f-a1a46f035a69", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "0e0114ec-9a8e-4e25-a76d-6bd910b7c119", "triple": ["person_clitomachus_of_carthage_7l2m4o10", "influences", "person_cicero_marcus_tullius_106_43bce_a8f3d2c1"]}
+{"action": "rename_relation", "edge_id": "c6564f02-9573-448a-937d-3b757239fb2a", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "3540c473-3e55-4ccb-b5ad-ab2796018c29", "triple": ["person_cornelius_jansen_5m9h0i68", "influences", "person_martin_luther_8f2a3b91"]}
+{"action": "rename_relation", "edge_id": "f7b87f27-a358-4f0a-bafc-139b6e645515", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "e22f1a22-2e17-4cd7-b039-5646791b2d3e", "triple": ["person_cyril_alexandria", "influences", "person_irenaeus_d202"]}
+{"action": "rename_relation", "edge_id": "2a95e379-c2f9-4e2d-807d-4d267f37628b", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "f897bea8-830d-47e7-bde4-ef7748f4322d", "triple": ["person_david_hume_7y1t2u80", "influences", "person_immanuel_kant_0b4w5x13"]}
+{"action": "rename_relation", "edge_id": "2441238c-b144-421f-bc65-1bac912f01ac", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "492b413d-69d0-41a9-bc67-81264ac4a8f7", "triple": ["person_davidson_donald_3m4n5o6p", "influences", "person_fischer_john_martin_3w4x5y6z"]}
+{"action": "rename_relation", "edge_id": "0a79bb3b-bce8-4b34-92d2-16460d6d4b86", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "e47b234c-8bb6-484a-b452-e75ea07a3931", "triple": ["person_democritus_460_370bce_g7h8i9j0", "influences", "person_epicurus_341_270bce_j0k1l2m3"]}
+{"action": "rename_relation", "edge_id": "b0199743-c001-4aaf-a35b-e5eefb1016a0", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "62aa057d-8426-43bb-8ecb-e5d841c640a5", "triple": ["person_diogenianos_8m3n5p21", "influences", "argument_cafma_framework_5a7b9e12"]}
+{"action": "rename_relation", "edge_id": "0f5ac346-444d-4ff7-bc87-caf121b9a473", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "4b223ca9-5540-4d4e-8208-ae1b263a4921", "triple": ["person_ekstrom_laura_1u2v3w4x", "influences", "concept_hierarchical_mesh_8v9w0x1y"]}
+{"action": "rename_relation", "edge_id": "a8fb375b-eb9a-4e78-9fbb-2479b1db61c2", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "042751d6-4b08-4fad-8a94-f5fdec74d735", "triple": ["person_favorinus_of_arles_9n4o6q32", "influences", "argument_cafma_framework_5a7b9e12"]}
+{"action": "rename_relation", "edge_id": "1e810798-7e8c-469b-9d50-0a011d40ca8e", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "cb3af4a4-b9b6-4c98-a43e-32397fcc3ed9", "triple": ["person_gersonides_o1p2q3r4", "influences", "person_averroes_c9d0e1f2"]}
+{"action": "rename_relation", "edge_id": "5fcc4446-5d0f-4d15-9d2c-29d708f935e9", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "7f3b40dd-0015-4904-bb9d-caa0e255ec15", "triple": ["person_james_william_4d5e6f7g", "influences", "person_kane_robert_1938_2022"]}
+{"action": "rename_relation", "edge_id": "4cf28e24-7e38-407a-ab39-d246d7438928", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "b1b846fa-be78-451e-b34b-10f24cda3af7", "triple": ["person_john_calvin_0h4c5d13", "influences", "person_augustine_hippo_d430"]}
+{"action": "rename_relation", "edge_id": "832a0a63-f898-47f0-b2f9-f30994f3cc73", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "0250e154-5a1b-4802-ac76-97b334f5cf31", "triple": ["person_john_calvin_0h4c5d13", "influences", "person_martin_luther_8f2a3b91"]}
+{"action": "rename_relation", "edge_id": "440a15c2-d3e0-4d5f-9f53-bebdda75279a", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "a180d663-2a4b-4e38-a876-1a47f48aab2c", "triple": ["person_john_duns_scotus_48daa9ee", "influences", "concept_scientia_media_2d6y7z35"]}
+{"action": "rename_relation", "edge_id": "70d41955-64b5-48cb-a275-fa80e9c94715", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "d962f886-37fc-4a3e-acc8-a9f2dd7fd5cd", "triple": ["person_jonathan_edwards_9a3v4w02", "influences", "person_augustine_hippo_d430"]}
+{"action": "rename_relation", "edge_id": "f3bf215b-0765-42a2-b1cc-e5a639a1a2a2", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "7d44952b-3ce2-48bd-886f-ba6a2924f068", "triple": ["person_jonathan_edwards_9a3v4w02", "influences", "person_john_locke_4v8q9r57"]}
+{"action": "rename_relation", "edge_id": "3e71849d-7a3f-4da4-b39d-653503bbf614", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "f80f2845-f1ab-48d2-9113-44af75734e5e", "triple": ["person_lucretius_99_55bce_k1l2m3n4", "influences", "person_epicurus_341_270bce_j0k1l2m3"]}
+{"action": "rename_relation", "edge_id": "ca372454-1064-459f-82ed-1fc16e52dfa9", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "9b58de66-caa5-410c-aa30-af60fac0d967", "triple": ["person_maimonides_k7l8m9n0", "influences", "person_avicenna_y5z6a7b8"]}
+{"action": "rename_relation", "edge_id": "626c80af-25ba-4abf-b634-5fbe4871280b", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "a552f839-4340-41a0-810f-10da5d8aa9dd", "triple": ["person_maimonides_k7l8m9n0", "influences", "person_thomas_aquinas_61b633ce"]}
+{"action": "rename_relation", "edge_id": "1c00ac85-3794-4e35-a509-0bcf93cc28e9", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "921fe011-a395-46de-be19-4587f5dce20a", "triple": ["person_martin_luther_8f2a3b91", "influences", "person_augustine_hippo_d430"]}
+{"action": "rename_relation", "edge_id": "1bbe8156-67ac-45b8-acf3-45885ba2f948", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "a08043eb-d054-428a-bdfb-248b65ab5763", "triple": ["person_mill_john_stuart_2b3c4d5e", "influences", "concept_reasons_responsiveness_0x1y2z3a"]}
+{"action": "rename_relation", "edge_id": "2efb5ba0-f886-47bb-a470-a0c84d92a9ba", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "40075a64-4d54-4bc2-97b9-69f9283265d6", "triple": ["person_nicolas_malebranche_9q3l4m02", "influences", "person_gottfried_leibniz_0r4m5n13"]}
+{"action": "rename_relation", "edge_id": "82a7288f-dd5c-4c4f-8c02-03eb98bc102e", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "7d4e5bfd-a90b-44c8-b567-d58a7471e6e1", "triple": ["person_oshana_marina_7k8l9m0n", "influences", "person_westlund_andrea_8l9m0n1o"]}
+{"action": "rename_relation", "edge_id": "bc257978-c447-4227-8afe-a48def882748", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "c966f79b-9ae6-4c2a-b8ce-4ad9adf2dc3e", "triple": ["person_philo_alexandria_a1b2c3d4", "influences", "argument_sirach_free_will_theodicy_m7n8o9p0"]}
+{"action": "rename_relation", "edge_id": "ddebecc7-09c7-48d9-937e-ae5c7e9bccea", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "a905ac9d-0ffb-4d9b-914d-91e2fdd42621", "triple": ["person_philo_alexandria_a1b2c3d4", "influences", "group_pharisees_w1x2y3z4"]}
+{"action": "rename_relation", "edge_id": "282fec2f-126c-4c03-acd2-b1464ed41537", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "0a98aa7b-41ba-41b6-9889-5f9ff78112d7", "triple": ["person_posidonius_apameia_135_51bce", "influences", "concept_tripartite_soul_plato_e5f6g7h8"]}
+{"action": "rename_relation", "edge_id": "9fbad4df-5f66-4871-9eb7-de28914fd8e7", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "34366788-dc4d-4b29-a8b0-edf541c207ee", "triple": ["person_saadia_gaon_g3h4i5j6", "influences", "school_mutazilites_q7r8s9t0"]}
+{"action": "rename_relation", "edge_id": "607d03d1-b892-44e4-a4c7-3a85c80357da", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "549350da-8d41-47e6-beac-25db07a22a99", "triple": ["person_sartre_jean_paul_8h9i0j1k", "influences", "person_camus_albert_9i0j1k2l"]}
+{"action": "rename_relation", "edge_id": "6a37eee2-da9d-4fd3-9470-6e3026ef6bac", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "8274b22d-9047-455f-a80b-44a3330a1870", "triple": ["person_schlick_moritz_6f7g8h9i", "influences", "person_ayer_alfred_jules_7g8h9i0j"]}
+{"action": "rename_relation", "edge_id": "b2354fc0-7e30-4a8d-b2f3-5dcffb0ac04d", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "cbedb978-e2f1-4bbb-9a42-8b117a8cae9c", "triple": ["person_schopenhauer_arthur_1a2b3c4d", "influences", "person_nietzsche_friedrich_3c4d5e6f"]}
+{"action": "rename_relation", "edge_id": "d774bc4a-b29c-410a-a722-125c457e400c", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "c73d2032-da74-48af-9dc1-d27a7d62a79c", "triple": ["person_sextus_empiricus_c160_210ce_d4f8a2b1", "influences", "person_david_hume_7y1t2u80"]}
+{"action": "rename_relation", "edge_id": "8cc68d0d-e9b9-4c4d-9b3c-521058ad57c0", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "ed0c1247-7e6b-4db8-a1e6-06516f3c10ea", "triple": ["person_sextus_empiricus_c160_210ce_d4f8a2b1", "influences", "person_strawson_galen_contemporary"]}
+{"action": "rename_relation", "edge_id": "53e11519-4fe4-4748-8ae4-2b0f2542baef", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "99e443da-f669-45b2-975a-8983a57c5175", "triple": ["person_strawson_peter_frederick_2l3m4n5o", "influences", "person_strawson_galen_contemporary"]}
+{"action": "rename_relation", "edge_id": "820125ff-5260-4fb8-875c-954be2b9d23a", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "7058ef4e-2c60-4454-a4ea-92f3c98ea9ca", "triple": ["person_tatian", "influences", "concept_apocatastasis"]}
+{"action": "rename_relation", "edge_id": "12017ce5-f3a4-4cd4-9339-0113d22ad43a", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "8717651a-fd54-49f0-8ae7-f99999aac34d", "triple": ["person_theophilus_antioch_c183", "influences", "person_irenaeus_d202"]}
+{"action": "rename_relation", "edge_id": "0b563d6c-5a73-4376-bf72-962c4ce9785a", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "aa5cd7c4-dad3-4d48-9f6f-427a14be4482", "triple": ["person_thomas_bradwardine_m5n6o7p8", "influences", "person_john_wyclif_q9r0s1t2"]}
+{"action": "rename_relation", "edge_id": "daa57637-8c84-446a-a19e-568fad493746", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "2a1f444f-1c2b-44a8-81ec-6062036dc489", "triple": ["text_anonymous_in_en", "influences", "person_alexander_aphrodisias_fl200ce_n5o6p7q8"]}
+{"action": "rename_relation", "edge_id": "95e4f7a3-820f-4b25-bda6-646ca9660dd7", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "8955952a-3303-4ac7-985c-d459cc011ed2", "triple": ["text_aspasius_in_en", "influences", "person_alexander_aphrodisias_fl200ce_n5o6p7q8"]}
+{"action": "rename_relation", "edge_id": "bf16b359-9c69-494c-8a6c-6d124fcc3b1a", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "e2956eff-b25b-4744-9bc0-5bba80af80f1", "triple": ["work_de_causa_dei_bradwardine_g7h8i9j0", "influences", "person_gregory_of_rimini_i1j2k3l4"]}
+{"action": "rename_relation", "edge_id": "b4f825fa-1a12-4ab6-9669-3b31c5d88246", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "4fc8a134-8282-4953-9ba9-6263d9fc8ed4", "triple": ["work_de_fato_alexander_c200ce_o6p7q8r9", "influences", "work_de_interpretatione_aristotle_c350bce_e4f6g8h0"]}
+{"action": "rename_relation", "edge_id": "966a4811-f2f1-4c85-a95e-d1d383189441", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "52b145b3-d0c9-4b50-a66f-76e659cb2a8b", "triple": ["work_de_fato_alexander_c200ce_o6p7q8r9", "influences", "work_metaphysics_theta_aristotle_c350bce_f5g7h9i1"]}
+{"action": "rename_relation", "edge_id": "aaf0674b-9700-48b6-b8cd-49c23fbb9063", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "a609fad2-f5fc-4f4a-82f6-bd86824ec0c3", "triple": ["work_de_fato_alexander_c200ce_o6p7q8r9", "influences", "work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9"]}
+{"action": "rename_relation", "edge_id": "9e1652c2-2e19-471d-bcc6-a8e1492a43e6", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "c765456c-25a9-4965-b5d1-8683376a7cc8", "triple": ["work_de_fato_cicero_44bce_b9c4e5d2", "influences", "argument_cafma_carneades_m3n4o5p6"]}
+{"action": "rename_relation", "edge_id": "de665070-b727-47c4-88e5-0a55e1fbf1b7", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "19e001b9-5fd4-46b2-882d-41db1159c3e6", "triple": ["work_diogenes_laertius_lives", "influences", "concept_olympic_paradigm_positive_embodiment"]}
+{"action": "rename_relation", "edge_id": "c1881244-3256-4bd7-a357-07c0b2260567", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "0289569c-2827-41cd-bc2b-2d2379e46afc", "triple": ["work_freedom_and_resentment_strawson_3k4l5m6n", "influences", "person_mckenna_michael_4x5y6z7a"]}
+{"action": "rename_relation", "edge_id": "52df05d0-80b3-4b57-aefb-2c13d497c50d", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "ace07876-71a0-4585-81a1-8e550cc03cd6", "triple": ["work_laws_plato_c350bce_d4e5f6g7", "influences", "concept_hekousion_voluntary_aristotle_a1b2c3d4"]}
+{"action": "rename_relation", "edge_id": "4bbad767-4faf-443c-9a4e-d88a7bd94bc9", "from": "influenced", "to": "influences"}
+{"action": "delete_duplicate_post_rename", "edge_id": "d5b2f3d8-36e6-4cae-b494-0998abcf3c17", "triple": ["work_laws_plato_c350bce_d4e5f6g7", "influences", "work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9"]}

@@ -5310,7 +5310,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_1_7_9","passage_id":"45859b73-bce6-4bf3-b640-dcdcd174786e"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_4_34_2","passage_id":"4589a86d-d985-44fb-9fc3-43774f18d8d7"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc150_origenes_contra_celsum_viii_par49_a","passage_id":"458b4007-54b8-4aea-85ca-871b9e8589b4"}
-{"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_civ_v_xxvi_s61","passage_id":"458be1e8-ecd8-46b6-9520-54d839348324"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_phd_52a","passage_id":"458d4f37-0b82-4828-a5b0-9e898c207a7d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_ne_9_1","passage_id":"4593042c-140b-41b9-a54e-1b0a9734cd9c"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc147_origenes_contra_celsum_v_par65_a","passage_id":"459819a0-652a-4ddf-885c-3ee788cbeb0d"}
@@ -13351,7 +13350,6 @@
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"synthesis_epict_eph_hemin_doctrine","passage_id":"adbd0913-fd53-517f-9c1b-30ac907c4e79"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_20_119_10","passage_id":"adbec394-fc24-4f0c-b278-ef4b5f0fad0b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_11_85_16","passage_id":"adc604a3-09fb-4247-b325-b3c63ef68721"}
-{"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_civ_xiv_xxviii_s158","passage_id":"adcb4416-83f5-4e9a-8c75-132015f91989"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_20_124_21","passage_id":"adcc227d-1f97-4f6f-abe5-e67bf55b14e5"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_120_2","passage_id":"adcdc3ea-496c-4e9a-8ae2-4cafbcf9fa83"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_civ_v_xii_s29","passage_id":"add3bdcd-0aee-4e32-b076-240127106e3b"}
@@ -18126,7 +18124,6 @@
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"person_posidonius_apameia_135_51bce","passage_id":"ebf4c98a-dc95-4da0-ba63-d2e4145e8010"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc147_origenes_contra_celsum_vi_par65_en","passage_id":"ebfec767-1d12-5e2d-ac8b-0a8c3e43c750"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_9_75_1","passage_id":"ec06c253-e7cb-401d-a945-ed7c983d4455"}
-{"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_civ_xii_xxviii_s100","passage_id":"ec117576-4a7c-4329-a1a3-01e182223767"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_philo_de_opif_38","passage_id":"ec1656b2-bfb6-47fe-8ee7-f2073bd773f0"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_19_112_3","passage_id":"ec170de0-c51d-4536-9c5f-3c2cb885d9d5"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_da_2_2","passage_id":"ec1e9c55-a596-4b79-9fad-33535fa6731d"}

@@ -1,0 +1,567 @@
+[
+ {
+  "node_id": "argument_agent_causation_alex",
+  "find": "• αἴτιον οὐκ ἀναγκαστικόν (aition ouk anankastikon) - non-necessitating cause",
+  "replace": "• non-necessitating cause (English label; no corresponding Greek technical term is attested in De Fato)",
+  "rationale": "The Greek phrase is a back-formation from the English gloss presented as Alexander's terminology. Audit found zero occurrences of the stem ἀναγκαστικ- in the complete De Fato; I additionally ran the full local TLG E search now: the exact phrase 'αἴτιον οὐκ ἀναγκαστικόν' has 0 hits in the entire TLG, and the only ἀναγκαστικ- hit in Alexander (TLG0732) is 'ἀναγκαστικωτάτη τῶν πίστεων' in a logical/syllogistic context, not a causal term — resolving the Mantissa/Quaestiones caveat. Replaced with English per policy, keeping the scholarly point.",
+  "evidence": "scripts/tlg_search.py search 'αἴτιον οὐκ ἀναγκαστικόν' → 0 hits TLG-wide; stem search 'ἀναγκαστικ' → sole TLG0732 (Alexander) hit is syllogistic ('ἀναγκαστικωτάτη τῶν πίστεων'), never with αἴτιον; corpus De Fato 12/20 passages 28bc2223/d570b896 contain no such phrase",
+  "confidence": 0.9,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "argument_alexander_witness2_ch16_praise_blame_punishment_amand1945",
+  "find": "ἀληθὲς προλεγόμενον »",
+  "replace": "ἀληθὲς περὶ ἑκάστου προλεγόμενον »",
+  "rationale": "Genuine quote with an unmarked omission: the node silently drops 'περὶ ἑκάστου' between ἀληθὲς and προλεγόμενον, which is not covered by the bracketed ellipsis. Restored the verbatim corpus reading, copied exactly from the De Fato 16 passage.",
+  "evidence": "data/corpus/passages.jsonl, tlg0732_tlg014_grc De Fato 16, passage 61206085-ccf3-4c59-9ccd-b38e9d57cbe4: 'εἰ δ’ ἦν πάλαι καὶ πρόπαλαι καὶ πρὸ τοῦ τὴν ἀρχήν τινα αὐτῶν γενέσθαι ἀληθὲς περὶ ἑκάστου προλεγόμενον' (re-retrieved verbatim via grep)",
+  "confidence": 0.95,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "argument_alexander_witness2_ch18_stoic_practical_self_refutation_amand1945",
+  "find": "(φιλανθρωπίας ἕνεκα)",
+  "replace": "(διὰ φιλανθρωπίαν)",
+  "rationale": "« φιλανθρωπίας ἕνεκα » is a Greek back-translation of Amand's French 'par amour de l'humanité' presented as Alexander's words; it occurs nowhere in De Fato or the corpus. The genuine reading at exactly this point of De Fato 18 is 'διὰ φιλανθρωπίαν', substituted verbatim from the corpus passage. The surrounding French quotation (Amand's translation) is untouched and still reads naturally.",
+  "evidence": "data/corpus/passages.jsonl, tlg0732_tlg014_grc De Fato 18, passage f9f32da1-ed39-40a6-8bea-daeb8405b437, ending '…αἱρούμενοι δὲ τὸ γράφειν διὰ φιλανθρωπίαν.' (re-retrieved verbatim via grep; 'φιλανθρωπίας ἕνεκα' = 0 corpus hits)",
+  "confidence": 0.95,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "argument_alexander_witness2_ch19_de_facto_punishment_amand1945",
+  "find": "« ὥσπερ τὰ τῶν βαρέων σωμάτων κάτω φέρεσθαι »",
+  "replace": "« ὡς τοῖς βαρέσιν ἀφεθεῖσιν ἄνωθεν τὸ φέρεσθαι κάτω »",
+  "rationale": "The guillemeted Greek is composed (a back-translation of Amand's French paraphrase 'la nature des corps graves est de tomber'); 'βαρέων σωμάτων' occurs nowhere in the corpus. Substituted Alexander's genuine wording at this point of De Fato 19, copied verbatim from the corpus passage. The following French gloss remains an accurate paraphrase.",
+  "evidence": "data/corpus/passages.jsonl, tlg0732_tlg014_grc De Fato 19, passage 4975cde6-5b21-4a9a-b97a-9df600a65a35: 'ὡς τοῖς βαρέσιν ἀφεθεῖσιν ἄνωθεν τὸ φέρεσθαι κάτω, καὶ τοῖς περιφερέσι τὸ κατὰ τοῦ πρανοῦς…' (re-retrieved verbatim via grep)",
+  "confidence": 0.92,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "argument_chain_causation_critique_alex",
+  "find": "• ἁλυσιδωτὴ αἰτιότης (halusidōtē aitiotēs) - chain-like causation",
+  "replace": "• chain-like causation — Alexander's actual wording is δίκην ἁλύσεως, 'after the manner of a chain' (De Fato 23)",
+  "rationale": "Pseudo-technical term composed to back-translate 'chain-like causation': αἰτιότης never occurs in De Fato (late Neoplatonic vocabulary) and ἁλυσιδωτός (of chain-mail) is never used by Alexander; 0 hits corpus-wide and in local editions. Replaced with English plus Alexander's genuine phrase δίκην ἁλύσεως, copied verbatim from the De Fato 23 corpus passage. (Note for Romain, not patched here: the audit flags the other two bullets — αἰτία προηγουμένη nominative, συνεχὴς ἀκολουθία — as also not verbatim in De Fato.)",
+  "evidence": "data/corpus/passages.jsonl, tlg0732_tlg014_grc De Fato 23, passage 0b1a5ef0-d117-4275-8d82-7ddadc1f634f: 'δίκην ἁλύσεως τοῖς πρώτοις συνηρτῆσθαι τὰ δεύτερα, ὃ ὥσπερ οὐσίαν τῆς εἱμαρμένης ὑποτίθενται' (re-retrieved verbatim via grep); ἁλυσιδωτ-/αἰτιότης = 0 corpus hits",
+  "confidence": 0.9,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "argument_deliberation_complete_alex",
+  "find": "Sources: Fat. 554-558: Phronesis concerns contingents; deliberation about necessities pointless\nFat. 555: \"No one deliberates about necessary things\" (οὐδεὶς βουλεύεται περὶ τῶν ἀναγκαίων)\nFat. 556-558: We deliberate about what's up to us; determinism makes deliberation futile; but we do deliberate",
+  "replace": "Sources: De Fato 11-12 (Bruns 178-180): if everything comes about from pre-established antecedent causes, human deliberation about what to do would be in vain — yet nature makes man a deliberative animal and nature does nothing in vain; deliberation concerns only what is up to us, not what happens of necessity. Cf. the Aristotelian principle at EN 6.2, 1139a13-14: οὐδεὶς δὲ βουλεύεται περὶ τῶν μὴ ἐνδεχομένων ἄλλως ἔχειν (\"no one deliberates about things that cannot be otherwise\")",
+  "rationale": "Composed Greek quote at a nonexistent locus: 'Fat. 554-558'/'Fat. 555' do not exist (De Fato spans Bruns 164-212, chs. 1-39), and the phrase 'οὐδεὶς βουλεύεται περὶ τῶν ἀναγκαίων' is absent from the corpus and local editions. Replaced with an English paraphrase anchored to the node's genuine citations (De Fato 11-12, corpus passages af0813bf/28bc2223) and the genuine Aristotelian tag, copied verbatim from the corpus EN passage.",
+  "evidence": "data/corpus/passages.jsonl: De Fato 11 passage af0813bf-6ed5-40b9-9f3a-0dbd820a0f58 ('τὸ καὶ βουλεύεσθαι τοὺς ἀνθρώπους μάτην… εἰ μηδὲν μάτην ἡ φύσις ποιεῖ… βουλευτικὸν εἶναι ζῷον τὸν ἄνθρωπον'), De Fato 12 passage 28bc2223 ('διὸ οὐδὲ ἐπὶ τοῖς ἀναγκαίως γινομένοις ἡ προαίρεσις'); Aristotle EN 6.2 passage 12d569cb-a526-455e-83da-3419e94817c8: 'οὐδεὶς δὲ βουλεύεται περὶ τῶν μὴ ἐνδεχομένων ἄλλως ἔχειν' (re-retrieved verbatim via grep)",
+  "confidence": 0.9,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "argument_epictetus_impression_testing",
+  "find": "'Do not be carried away by the impression' (μὴ συναρπασθῇς ὑπὸ τῆς φαντασίας, Ench. 1)",
+  "replace": "'try not to be carried away by the impression' (πειρῶ ὑπὸ τῆς φαντασίας μὴ συναρπασθῆναι, Ench. 20; cf. Ench. 34, Diss. 2.18.24)",
+  "rationale": "The quoted Greek was a composite pseudo-quote (Ench. 34/Diss. 2.18.24 verb form spliced with Ench. 20 phrasing) at a wrong locus (Ench. 1). Substituted the genuine verbatim Schenkl reading of Ench. 20, which expresses exactly the impression-testing point the sentence makes, with corrected locus and cross-references to the genuine parallels.",
+  "evidence": "Local TLG: /Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/02_Corpus/TLG/Epictetus_tlg0557/Enchiridion_grc_Schenkl.xml — chapter div n=\"20\" contains verbatim 'πειρῶ ὑπὸ τῆς φαντασίας μὴ συναρπασθῆναι' (also Enchiridion_grc_Schenkl.txt line 87); Ench. 34 'φύλασσε σαυτόν, μὴ συναρπασθῇς ὑπʼ αὐτῆς' (txt line 234) and Diss. 2.18.24 'ὑπὸ τῆς ὀξύτητος μὴ συναρπασθῇς' (Discourses_grc_Schenkl.txt line 3585) confirmed as the genuine parallels.",
+  "confidence": 0.88,
+  "skip": false
+ },
+ {
+  "node_id": "argument_future_contingents_alex",
+  "find": "1. Knowledge follows being, not vice versa (Fat. 473)\n2. God knows contingents AS contingent (Fat. 472)\n3. Truth of future statements doesn't confer necessity (Fat. 475)\n4. Disjunction is necessary, disjuncts are not (Fat. 478)\n5. The fatalist equivocates on \"necessary\" (Fat. 479-480)",
+  "replace": "1. Foreknowledge means knowing things as they are — knowledge accords with the nature of its objects (De Fato 30, Bruns 200-201)\n2. The gods foreknow contingents AS contingent — οἱ θεοὶ τὰ ἐνδεχόμενα ἂν ὡς ἐνδεχόμενα προγιγνώσκοιεν (De Fato 30, Bruns 200-201)\n3. Necessity does not follow from such foreknowledge (De Fato 30, Bruns 200-201)\n4. The truth and necessity of the sea-battle proposition are analysed at De Fato 10, where Alexander argues that on Stoic premises a fated future truth collapses into necessity",
+  "rationale": "Loci 'Fat. 472-480' are nonexistent (Bruns De Fato pages run 164-212). Re-anchored the points to the real text: points 1-3 are verified verbatim in the node's own cited passage De Fato 30 (Bruns 200-201); the sea-battle/necessity material is in De Fato 10, where Alexander attacks the Stoic non-necessary-future-truth move, so the old points 3-5 were merged into one accurately attributed point. Greek copied verbatim from the cited corpus passage.",
+  "evidence": "data/corpus/passages.jsonl — passage 635354f8-a5be-4b0d-901e-b163f0da6f39 (De Fato 30): 'ὁ τὰ ἐνδεχόμενα προγινώσκων ὡς τοιαῦτα προγνώσεται ... ὥστε καὶ οἱ θεοὶ τὰ ἐνδεχόμενα ἂν ὡς ἐνδεχόμενα προγιγνώσκοιεν, ᾧ οὐ πάντως ἀκολουθήσει τὸ ἀναγκαῖον' and 'τῆς μὲν γὰρ φύσεως τῆς τῶν πραγμάτων τοῦτο χωρούσης'; passage 98c9a41f-e99e-4f5b-827f-cdeeb3fa8220 (De Fato 10): sea-battle axiom 'ἔσται αὔριον ναυμαχία' ἀληθὲς μὲν εἶναι δύνασθαι, οὐ μέντοι καὶ ἀναγκαῖον' with Alexander's reduction to necessity; Bruns 200-201 for ch. 30 per audit's First1K page-break verification.",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "argument_homonymy_alex",
+  "find": "Fat. 209: \"DECEIVING through HOMONYMY\" (ὁμωνυμίᾳ παρακρουόμενοι). Fat. 211: Using the name, changing the meaning.",
+  "replace": "De Fato 14 (Bruns 182): the Stoics \"deceive the hearers through homonymy\" (διὰ τῆς ὁμωνυμίας παρακρούεσθαι τοὺς ἀκούοντας). De Fato 14 (Bruns 182-183): their critics demand not the name only but also the meaning (οὐκ ὄνομα μόνον ... ἀλλὰ καὶ σημαινόμενον).",
+  "rationale": "Loci 'Fat. 209/211' are false (Bruns 209-211 contain the law argument, chs. 36-38); both the homonymy charge and the name-vs-meaning point are in De Fato 13-14 = Bruns 182-183. Replaced the grammatically adapted pseudo-quote with the verbatim infinitive form from the node's own cited passage, and the name/meaning point with its verbatim wording.",
+  "evidence": "data/corpus/passages.jsonl — passage ae88c271-a54c-4da5-8842-fc4eecc661c2 (De Fato 14, node's own citation): 'οὐκ ὄνομα μόνον τοῦ ἐφ' ἡμῖν τιθέντες τοῦτ' ἀπαιτοῦσιν, ἀλλὰ καὶ σημαινόμενον' and (also in passage 71695c44, De Fato 13-15) 'διὰ τῆς ὁμωνυμίας παρακρούεσθαι τοὺς ἀκούοντας ἡγοῦνται φεύγειν τὰ ἄτοπα'; Bruns 182-183 per audit's First1K page-break verification.",
+  "confidence": 0.87,
+  "skip": false
+ },
+ {
+  "node_id": "argument_hypothetical_fate_plut",
+  "find": "Fat. 15: \"νόμους εἱμαρμένους\" - fated laws as legislation",
+  "replace": "Fat. 9: \"νόμους τε τοὺς εἱμαρμένους\" - the fated laws as legislation (Ps-Plutarch quoting Plato, Timaeus 41e)",
+  "rationale": "Locus 'Fat. 15' does not exist (the work has chapters 1-11). The genuine wording 'νόμους τε τοὺς εἱμαρμένους' occurs in Ps-Plutarch De Fato 9 (quoting Plato, Tim. 41e); corrected locus, substituted verbatim phrase, and noted the Platonic source.",
+  "evidence": "data/corpus/passages.jsonl — passage f7ce09d8-54e2-4ff0-9606-2421badd2018 (De Fato 9, urn:cts:greekLit:tlg0007.tlg108.perseus-grc2:9): 'νόμους τε τοὺς εἱμαρμένους εἶπεν αὐταῖς· ταῦτα τίς οὐκ ἂν...'; same wording in passage 7afa4740 (Plato, Timaeus 41): 'νόμους τε τοὺς εἱμαρμένους εἶπεν αὐταῖς, ὅτι γένεσις πρώτη...'.",
+  "confidence": 0.9,
+  "skip": false
+ },
+ {
+  "node_id": "argument_irenaeus_recapitulation_theodicy",
+  "find": "humans \"fell under the power of sin\" (ὑπὸ τὴν ἁμαρτίαν πεπτωκότα).",
+  "replace": "humans \"fell under the power of sin\" (AH III.18.2; Book III is preserved in Latin translation).",
+  "rationale": "Decisive negative evidence obtained: the Greek phrase has zero hits in the full local TLG E corpus (which includes the transmitted Greek fragments of Adversus Haereses), zero hits in the project corpus, and AH Book III's Greek is lost apart from fragments — so this wording cannot be Irenaeus' transmitted text (at best a modern retroversion presented as ancient). Per zero-fabrication policy, removed the Greek and kept the genuine English content (ANF/AH III.18.2: 'those who had fallen under the power of sin') with a transmission note. The node's other two unflagged Greek phrases carry the same suspicion (audit note) but are outside this item's scope.",
+  "evidence": "python3 scripts/tlg_search.py search 'ὑπὸ τὴν ἁμαρτίαν πεπτωκότα' → 0 hits across full TLG E corpus; data/corpus/passages.jsonl 0 hits; no Irenaeus SC volumes in /Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/02_Corpus/Sources chrétiennes txt/; audit-cited newadvent AH III.18.2 English confirms the doctrinal content via the Latin transmission.",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "argument_justin_antifatalism",
+  "find": "(οὐδὲ τὸ ἐφ' ἡμῖν ἐστιν ὅλως (SC 507 Munier 2006 ; var. Goodspeed 1914 : τὸ ἐφ' ἡμῖν οὐδὲν ἔστιν ὅλως), 1 Apol. 43.2)",
+  "replace": "(οὐδὲ τὸ ἐφ' ἡμῖν ἐστιν ὅλως, SC 507 Munier 2006, 1 Apol. 43.2)",
+  "rationale": "Decisive evidence found: the local TLG E text of Justin's Apology (tlg0645, based on Goodspeed, Die ältesten Apologeten) reads 'οὔτε τὸ ἐφ' ἡμῖν ἐστιν ὅλως' — the same word order as SC 507/Rauschen/Gildersleeve — while the claimed 'Goodspeed 1914' variant word order returns 0 hits in the entire TLG corpus. The variant attribution is therefore invented; deleted the parenthetical variant, keeping the corpus-verified SC 507 reading, and flattened the now-redundant nested parentheses.",
+  "evidence": "python3 scripts/tlg_search.py search 'ἐφ ἡμῖν ἐστιν ὅλως' → 1 hit, TLG0645 (Justinus Martyr, Apol.): '...καθ' εἱμαρμένην πάντα γίνεται, οὔτε τὸ ἐφ' ἡμῖν ἐστιν ὅλως· εἰ γὰρ εἵμαρται...'; search for variant order 'τὸ ἐφ ἡμῖν οὐδὲν ἔστιν ὅλως' → 0 hits; corpus passage c2b1124e (sc507_iustinus_apologia_i_grc 1.43) per audit confirms the SC 507 reading kept in the node.",
+  "confidence": 0.88,
+  "skip": false
+ },
+ {
+  "node_id": "argument_origen_prescience_causality",
+  "find": "(οὐχ ὅτι γινώσκει... διὰ τοῦτο ἔσται, ἀλλ' ὅτι ἐσόμενόν ἐστι, διὰ τοῦτο γινώσκεται)",
+  "replace": "— a formula preserved in Rufinus' Latin of the Commentary on Romans VII (SC 543): \"non propterea erit aliquid quia id scit Deus futurum, sed quia futurum est scitur a Deo antequam fiat\"; the Greek of De Orat. 6 makes the same point (God's foreknowledge is not the cause of future events), with a close Greek parallel at Philocalia 23.3",
+  "rationale": "Audit verdict: fabricated. The Greek is a back-translation of Rufinus' Latin, absent from the entire De Oratione (TLG tlg2042) and from the Philocalia. Replaced with the genuine Rufinus Latin (copied verbatim from the local SC 543 edition) plus English pointers to the real loci. NOTE for follow-up: the linked DB passage 4bf277af-bdd7-55d0-b50b-113e788ec5f7 embeds the same composed Greek and needs separate removal/replacement (outside the scope of description patches).",
+  "evidence": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/02_Corpus/Sources chrétiennes txt/03_Origene/bilingue/SC543_Origenes_Commentaire_Romains_livre_7_bilingue.txt line 549 (Latin verbatim); absence from De Oratione per audit search of TLG_tlg2042_Origenes_De_Oratione.xml",
+  "confidence": 0.9,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "argument_origen_witness_aristotelism_influence_amand1945",
+  "find": "ὑποκείμενα",
+  "replace": "ὑποκείμενον",
+  "rationale": "Audit verdict: fix_spelling. Amand 1945 p. 292 prints the singular ὑποκείμενον ('la notion d'οὐσίαι rationnelles, celles de ποιότητες et d'ὑποκείμενον'); the node paraphrases Amand and should match his wording. Verified directly on the page image (PDF p. 324 of the 1973 Hakkert reprint).",
+  "evidence": "Amand de Mendieta, Fatalisme et liberté (1973 reprint) PDF in 04_Littérature_secondaire/01_Philosophie_antique/, page image p. 324 (book p. 292), read in this session",
+  "confidence": 0.9,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "argument_praise_blame_alex",
+  "find": "• ἐδύνατο μὴ ποιῆσαι (edynato mē poiēsai) - was able not to do",
+  "replace": "• \"was able not to do\" — Alexander's actual phrasing at De Fato 20: τοῦ μὴ πράττειν αὐτὸ τὴν ἐξουσίαν ἔχοντος (\"having the power not to do it\")",
+  "rationale": "Audit verdict: fabricated. No ἐδύνατο/ἠδύνατο form occurs anywhere in the complete De Fato corpus text. Replaced the composed gloss with English plus Alexander's genuine wording, copied verbatim from the corpus passage already cited by this node.",
+  "evidence": "corpus passage 61206085/d570b896 set; verbatim Greek from passage d570b896-73be-45f2-bd92-de1ace50cd0b (De Fato 20): 'ὡς καὶ τοῦ μὴ πράττειν αὐτὸ τὴν ἐξουσίαν ἔχοντος τότε'",
+  "confidence": 0.9,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "argument_praise_blame_alex",
+  "find": "otherwise (Fat. 481)\n2. We don't blame fire or stones - they act by necessity (Fat. 482)\n3. If humans acted by necessity like stones, blame would be inappropriate (Fat. 484)\n4. Same logic applies to praise (Fat. 485)\n5. Empirical evidence: same circumstances produce different characters (Fat. 489-490)",
+  "replace": "otherwise\n2. We don't blame fire or stones - they act by necessity\n3. If humans acted by necessity like stones, blame would be inappropriate\n4. Same logic applies to praise\n5. Empirical evidence: same circumstances produce different characters\n(Sources: De Fato 16, 20, 26, 28, 35-36; the treatise comprises 39 chapters, Bruns pp. 164-212)",
+  "rationale": "Audit verdict (same item, action_detail): the loci 'Fat. 481-490' are nonexistent — De Fato runs chapters 1-39 (Bruns Suppl. Arist. II.2, pp. 164-212). Removed the fake loci and substituted the node's genuine corpus citations as the source note.",
+  "evidence": "Node's own verified passage citations (De Fato 16/20/26/28/35/36, urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1) retrieved via audit_fetch; complete De Fato chapter range 0-39 in data/corpus/passages.jsonl",
+  "confidence": 0.85,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "argument_pyrrhus_one_energy",
+  "find": "anticipée par le Pseudo-Denys, *Lettre* 4 (μία θεανδρικὴ ἐνέργεια) et par le Pact of Union de Cyrus d'Alexandrie 633.",
+  "replace": "préparée par le Pseudo-Denys, *Lettre* 4, qui parle toutefois d'une activité théandrique « nouvelle » (καινήν τινα τὴν θεανδρικὴν ἐνέργειαν), et formulée avec μία par le Pact of Union de Cyrus d'Alexandrie (633) — substitution de μία à la καινή dionysienne que Maxime dénonce précisément.",
+  "rationale": "Audit verdict: fix_reference. The formula μία θεανδρικὴ ἐνέργεια is genuinely attested (Cyrus 633, debated in the Disputatio cum Pyrrho), but Pseudo-Dionysius Ep. 4 reads καινήν τινα τὴν θεανδρικὴν ἐνέργειαν; μία is the monenergist alteration. TLG verification this session confirms both the Ep. 4 wording and John of Damascus' explicit statement that Dionysius said καινήν, not μίαν. Second occurrence of the formula (the Conclusion line) correctly describes the monoenergist position and is left intact per the audit.",
+  "evidence": "TLG2798 Pseudo-Dionysius @byte 424037: 'καινήν τινα τὴν θεανδρικὴν ἐνέργειαν ἡμῖν πεπολιτευμένος' (verbatim, retrieved via scripts/tlg_search.py); TLG2934 Joannes Damascenus @byte 1238720: 'οὐδὲ εἶπεν ὁ μέγας Διονύσιος μίαν θεανδρικὴν ἐνέργειαν, ἀλλ' ἀπολύτως καινὴν'",
+  "confidence": 0.92,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "argument_theodicy_alex",
+  "find": "• θεὸς αἴτιος κακίας (theos aitios kakias) - god cause of vice\n• ἡ εἱμαρμένη θεός (hē heimarmenē theos) - fate is god",
+  "replace": "• \"god as cause of vice\" - the consequence Alexander presses against the Stoics\n• \"fate is god\" - the Stoic identification Alexander targets",
+  "rationale": "Audit verdict: fabricated (composed slogan-glosses presented as Alexander's Greek terminology; neither phrase occurs in the complete De Fato corpus text). Replaced with English glosses per recommended_action. Removing unverifiable Greek is the conservative move even though Mantissa/Quaestiones cannot be fully excluded; the genuine πρόνοια bullet above is untouched (πρόνοιαν is verbatim in cited passage De Fato 17).",
+  "evidence": "Complete De Fato (tlg0732.tlg014, chs 0-39) in data/corpus/passages.jsonl searched by audit (no αἴτιος κακίας in any order); node's genuine citations De Fato 17/19/23 retrieved via audit_fetch this session confirm Alexander's actual providence vocabulary (πρόνοια, κατά τινα ἀνάγκην προκαταβεβλημένην)",
+  "confidence": 0.85,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "concept_arche_alex",
+  "find": "Ὁ ἌΝΘΡΩΠΟΣ ἈΡΧῊ ΚΑῚ ΑἸΤΊΑ",
+  "replace": "ὁ ἄνθρωπος ἀρχὴ καὶ αἰτία",
+  "rationale": "Audit verdict: fix_spelling. ALL-CAPS rendering with corrupted accentuation of a genuine De Fato 15 sentence; restored the verbatim lowercase form per the corpus passage.",
+  "evidence": "corpus passage 6d9d85c8-ffa3-48f5-b5fe-9ef25cd19aa0 (De Fato 15) text_content, retrieved this session: 'ὁ γὰρ ἄνθρωπος ἀρχὴ καὶ αἰτία τῶν δι' αὐτοῦ γινομένων πράξεων.' (also passage 1339426a per audit)",
+  "confidence": 0.95,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "concept_arche_alex",
+  "find": "Fat. 233: \"To be rational is nothing other than to be an origin OF actions\". Fat. 235: \"TAKING THIS AWAY TAKES AWAY THE human\" (τοῦτο ἀναιρῶν ἀναιρεῖ τὸν ἄνθρωπον). Fat. 246: \"The human IS origin AND cause of the things through [him]\". Fat. 247: \"THIS IS what it is TO BE human: to have the origin IN ONESELF\". Fat. 253: \"The human HIMSELF\" is the cause we should seek. Fat. 254: Restates the definition.",
+  "replace": "De Fato 15: \"ὁ γὰρ ἄνθρωπος ἀρχὴ καὶ αἰτία τῶν δι' αὐτοῦ γινομένων πράξεων\" (\"for the human being is origin and cause of the actions that come about through him\"). For Alexander, to be rational is to be an origin of one's actions, and to remove this is to remove the human being as such.",
+  "rationale": "Audit verdict: fix_reference. The loci Fat. 233/235/246/247/253/254 are impossible (De Fato = 39 chapters, Bruns pp. 164-212); the verified sentence is at De Fato ch. 15. Replaced the fake-loci block with the verbatim corpus Greek of De Fato 15 plus an English restatement of the same points. The embedded Greek 'τοῦτο ἀναιρῶν ἀναιρεῖ τὸν ἄνθρωπον' was independently checked against the corpus this session and not found, so it is dropped rather than retained.",
+  "evidence": "corpus passage 6d9d85c8-ffa3-48f5-b5fe-9ef25cd19aa0 (De Fato 15) text_content verbatim; accent-sensitive corpus search for 'ἀναιρῶν ἀναιρεῖ' returned no match (audit_fetch corpus, this session)",
+  "confidence": 0.85,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "concept_arche_alex",
+  "find": "Fat. 248: Humans \"do not always follow circumstances\". Fat. 250: We can prioritize noble, pleasant, or advantageous.",
+  "replace": "Humans do not always follow circumstances, and can prioritize the noble, the pleasant, or the advantageous.",
+  "rationale": "Audit verdict: fix_reference (same impossible-locus family — Fat. 248/250 exceed both the 39-chapter and the Bruns page range when read consistently with the surrounding fake loci 233-254). Removed the unverifiable loci and the quote marks (wording not verified in corpus), keeping the doctrinal point in plain English.",
+  "evidence": "Complete De Fato chapter structure (0-39) in data/corpus/passages.jsonl; Bruns pagination 164-212 per audit; no corpus anchor exists for these loci",
+  "confidence": 0.82,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "concept_autokrateia_alex",
+  "find": "Fat. 625-626: \"The free is the self-governing (τὸ αὐτοκρατές); and choice is self-governing. Self-governing is what is not ruled by another (μὴ ὑπ᾽ ἄλλου κρατούμενον) but by itself (ὑφ᾽ ἑαυτοῦ).\"",
+  "replace": "The free is the self-governing, and choice is self-governing: what is self-governing is ruled not by another but by itself (this formulation is unattested verbatim in the De Fato; the locus previously cited here does not exist in Bruns's pagination).",
+  "rationale": "Audit verdict: fabricated quotation at impossible locus 'Fat. 625-626' (De Fato = chs. 1-39, Bruns pp. 164-212). Replaced quoted Greek + bogus locus with English paraphrase preserving the scholarly point; kept the lexeme header (αὐτοκράτεια is real Greek). Did not assert a Mantissa anchor since none was retrieved — Romain to decide if one exists.",
+  "evidence": "Negative verification reconfirmed: full De Fato (tlg0732_tlg014_grc, data/corpus/passages.jsonl, all 39 chs) lacks κρατούμενον/αὐτοκρατ-; TLG E search 'ἄλλου κρατούμενον' hits only Pseudo-Sphrantzes (TLG3176, Byzantine historian), zero Alexander hits; 'αὐτοκρατὲς δὲ τὸ' = 0 hits.",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "concept_divine_prescience",
+  "find": "(τὸ ἐνδεχόμενον ὡς ἐνδεχόμενον; De Fato 30)",
+  "replace": "(τὰ ἐνδεχόμενα ἂν ὡς ἐνδεχόμενα προγιγνώσκοιεν; De Fato 30)",
+  "rationale": "Audit verdict: locus and doctrine correct, but node's singular form is a grammatical adaptation, not verbatim. Substituted the verbatim corpus plural clause, copied byte-exact from the De Fato 30 passage; sentence still reads naturally ('the gods know contingents as contingent (...)').",
+  "evidence": "data/corpus/passages.jsonl, urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:30, passage_id 635354f8-a5be-4b0d-901e-b163f0da6f39: \"ὥστε καὶ οἱ θεοὶ τὰ ἐνδεχόμενα ἂν ὡς ἐνδεχόμενα προγιγνώσκοιεν\" — replacement Greek verified byte-verbatim ('in corpus: True').",
+  "confidence": 0.9,
+  "skip": false
+ },
+ {
+  "node_id": "concept_eph_hemin_kyrion_plut",
+  "find": "Fat. 8: Eph' hēmin is KYRION",
+  "replace": "Fat. 6: Eph' hēmin is KYRION",
+  "rationale": "Audit verdict: fix_reference. The κύριον thesis (τὸ δʼ ἐφʼ ἡμῖν ὡς κύριον χρῆσθαι τῷ ἐνδεχομένῳ) stands in Ps-Plutarch De Fato 6, not 8; section 8 merely lists τὸ ἐφʼ ἡμῖν among things ἐντὸς τῆς εἱμαρμένης with no κύριον claim. Quoted Greek untouched per fix_reference semantics.",
+  "evidence": "Node's own attached citation passage 15cd3c13-ae01-43e2-b89f-724c52ac3894 (urn:cts:greekLit:tlg0007.tlg108.perseus-grc2:6, De Fato 6) contains \"τὸ δʼ ἐφʼ ἡμῖν ὡς κύριον χρῆσθαι τῷ ἐνδεχομένῳ\"; attached De Fato 8 passage 821bd3e4 confirmed to lack any κύριον claim.",
+  "confidence": 0.95,
+  "skip": false
+ },
+ {
+  "node_id": "concept_exousia_alex",
+  "find": "Fat. 54-56: \"Things according to reason",
+  "replace": "Fat. 5: \"Things according to reason",
+  "rationale": "Audit verdict: fix_reference — 'Fat. 54-56' is an impossible locus (Bruns pagination of De Fato spans 164.3-212.8). The quoted phrase matches De Fato ch. 5 exactly. Residual corrupt/ambiguous loci left untouched: 'Fat. 165' and 'Fat. 187' fall within the Bruns page range so may be genuine page refs; 'Fat. 262' is ambiguous between chs. 18 and 33 (both have close parallels) — left for Romain.",
+  "evidence": "data/corpus/passages.jsonl, urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:5 (De Fato 5): \"τῷ τὸν ποιοῦντα αὐτὰ καὶ τοῦ μὴ ποιεῖν ἔχειν ἐξουσίαν\" — sole chapter hit for this phrase in an accent-insensitive scan of all De Fato chapters.",
+  "confidence": 0.9,
+  "skip": false
+ },
+ {
+  "node_id": "concept_exousia_alex",
+  "find": "Fat. 242: \"From nature",
+  "replace": "Fat. 14: \"From nature",
+  "rationale": "Same audit item (fix_reference): 'Fat. 242' impossible (Bruns max 212.8). The English gloss 'From nature the exousia of doing something else through deliberating' matches De Fato ch. 14 verbatim content (audit: 'deliberation/exousia = ch. 14').",
+  "evidence": "data/corpus/passages.jsonl, urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:14 (De Fato 14): \"εἰ δ' ἔχομεν καὶ τοῦ βουλευσάμενοί τι ποιεῖν παρὰ τῆς φύσεως τὴν ἐξουσίαν, δῆλον ὡς ἔχοιμεν ἂν ἐξουσίαν καὶ τοῦ διὰ τοῦ βουλεύσασθαι ἄλλο τι πρᾶξαι\" — exact match of 'from nature' + 'exousia' + 'doing something else through deliberating'.",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "concept_exousia_alex",
+  "find": "Fat. 297: \"Having the power OF choice\" (τὴν ἐξουσίαν τῆς αἱρέσεως)",
+  "replace": "Fat. 19: \"Having the power OF choice\" (τὴν ἐξουσίαν τῆς αἱρέσεως)",
+  "rationale": "Same audit item (fix_reference): 'Fat. 297' impossible (Bruns max 212.8). Audit evidence maps τὴν ἐξουσίαν τῆς αἱρέσεως to chs. 11+19; ch. 19 carries the exact form with the article plus ἔχοντες ('having'), matching the node's English gloss, so ch. 19 chosen.",
+  "evidence": "data/corpus/passages.jsonl, urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:19 (De Fato 19): \"αὐτοὶ τὴν ἐξουσίαν τῆς αἱρέσεως ἔχοντες\" (verbatim with τὴν); ch. 11 has the anarthrous variant \"ἔχοντας ἡμᾶς ἐξουσίαν τῆς αἱρέσεως τῶν πρακτέων\".",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "concept_gnomic_will_gnome",
+  "find": "ἐξ' ἧς ἡ προαίρεσις",
+  "replace": "ἐξ ἧς ἡ προαίρεσις",
+  "rationale": "Audit verdict fix_spelling rests on the claim that Blowers p. 122 prints 'ἐξ ἧς'. Re-retrieval contradicts this: I rendered the named PDF page at 300dpi and read it visually — the printed text is \"ὄρεξις ἐνδιάθετος τῶν ἐφ' ἡμῖν, ἐξ' ἧς ἡ προαίρεσις\" WITH the apostrophe after ἐξ (text layer agrees). So the node faithfully reproduces its cited source; the grammatically correct Maximus reading 'ἐξ ἧς' (ἐξ never elides) is not retrievable from any allowed source (TLG E: 0 hits for ὄρεξις ἐνδιάθετος / ἐξ ἧς ἡ προαίρεσις — Maximus Opuscula absent; local corpus: no hit). Under zero-fabrication rules I cannot substitute a reading I could not retrieve, even a one-character orthographic fix.",
+  "evidence": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/06_Patristique/blowers_2016_maximus.pdf, pdf page 46 (printed p. 122), rendered at 300dpi and zoomed: prints 'ἐξ' ἧς' with apostrophe, identical to the node; TLG E searches 'ὄρεξις ἐνδιάθετος', 'ἐξ ἧς ἡ προαίρεσις' = 0 hits.",
+  "confidence": 0.9,
+  "skip": true,
+  "skip_reason": "Audit evidence not confirmed on re-retrieval: the Blowers PDF itself prints 'ἐξ' ἧς' (apostrophe present), same as the node, and the genuine Maximus reading 'ἐξ ἧς' (PG 91) is not retrievable from corpus/local files/TLG E. Defer to Romain: correct against PG 91:17C/153A or keep Blowers's printed form."
+ },
+ {
+  "node_id": "concept_inner_freedom_alex",
+  "find": "• οὐδεὶς δύναται ἀφελέσθαι (oudeis dynatai aphelesthai) - no one can take away",
+  "replace": "• \"no one can take away\": the inner act of choice cannot be seized by another (no verbatim Greek formulation attested in the De Fato)",
+  "rationale": "Audit verdict: fabricated Greek gloss presented as Alexander's terminology. Independently reconfirmed via the new TLG tool: 'οὐδεὶς δύναται ἀφελέσθαι' occurs only in Testamenta XII Patriarcharum; 'δύναται ἀφελέσθαι' hits Epictetus (Diss., incl. 2.2.3 near-parallel), Test. XII Patr., Sozomen — never Alexander (TLG0732). Replaced with English per audit; did not insert the Epictetus quote (would be a new insertion, flagged for Romain).",
+  "evidence": "TLG E search 'οὐδεὶς δύναται ἀφελέσθαι' → only TLG1700 (Test. XII Patr.); 'δύναται ἀφελέσθαι' → TLG0557 Epictetus (×2, incl. 'τίς αὐτὰ δύναται ἀφελέσθαι;' = Diss. 2.2.3), TLG1700, TLG2048 Sozomen; zero hits in Alexander. Corpus De Fato (tlg0732_tlg014_grc, all 39 chs) lacks any form of ἀφελέσθαι.",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "concept_inner_freedom_alex",
+  "find": "This anticipates Epictetus's famous distinction",
+  "replace": "This echoes Epictetus's famous distinction",
+  "rationale": "Second defect flagged in the same audit item: 'anticipates' is chronologically backwards — Epictetus (c. 50-135 CE) wrote before Alexander of Aphrodisias (fl. c. 200 CE), so Alexander echoes, not anticipates, the dichotomy of control.",
+  "evidence": "Standard chronology (Epictetus c. 50-135 CE; Alexander fl. c. 200 CE, De Fato dedicated to Septimius Severus and Caracalla — cf. corpus De Fato 1/39 address to the αὐτοκράτορες); audit action_detail explicitly notes the claim is 'chronologically backwards'.",
+  "confidence": 0.9,
+  "skip": false
+ },
+ {
+  "node_id": "concept_inner_freedom_alex",
+  "find": "\n• τύραννος...οὐ δύναται ποιῆσαι συγκατατίθεσθαι (tyrannos...cannot make assent)",
+  "replace": "",
+  "rationale": "Fabricated Greek gloss (unidiomatic ποιῆσαι συγκατατίθεσθαι, composed with ellipsis). Deleting the bullet suffices: the scholarly point already exists in English below ('Tyrant can kill but cannot force assent to evil'), so the description reads naturally after removal.",
+  "evidence": "Corpus De Fato tlg0732.tlg014 (all chapters checked by audit): no τύραννος, no ποιῆσαι συγκατατίθεσθαι. Confirmed now: tlg_search.py 'ποιῆσαι συγκατατίθεσθαι' = 0 hits in full TLG E.",
+  "confidence": 0.9,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "concept_nepios_adam_infant_doctrine",
+  "find": "habituated virtue (ἀσυνήθη, ἀγύμναστα), and experiential knowledge necessary for successfully resisting temptation.",
+  "replace": "habituated virtue (ἀσυνήθη, ἀγύμναστα — attested in the surviving Greek fragment of AH 4.38.1: «κατὰ τοῦτο καὶ νήπια, κατὰ τοῦτο καὶ ἀσυνήθη καὶ ἀγύμναστα πρὸς τὴν τελείαν ἀγωγήν»; cf. Latin 'insueta et inexercitata ad perfectam disciplinam'), and experiential knowledge necessary for successfully resisting temptation.",
+  "rationale": "Deferred item resolved: the Greek words are NOT a retroversion from the Latin — they are attested verbatim in the surviving Greek fragment of AH 4.38.1 found in the TLG Irenaeus fragments. Per audit contingency ('if attested, keep with edition note'), the Greek is kept and an attestation note with the verbatim fragment text is added.",
+  "evidence": "TLG1447 Irenaeus @byte 258015 (tlg_search.py 'ἀγύμναστα'): '...καθ' ὃ γὰρ νεώτερα, κατὰ τοῦτο καὶ νήπια, κατὰ τοῦτο καὶ ἀσυνήθη καὶ ἀγύμναστα πρὸς τὴν τελείαν ἀγωγήν. Ὡς οὖν ἡ μὲν μήτηρ δύναται τέλειον παρασχεῖν τῷ βρέφει τὸ ἔμβρωμα...' — context (mother/infant food imagery) confirms AH 4.38.1; inserted Greek copied verbatim from this TLG hit.",
+  "confidence": 0.95,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "concept_non_necessitating_cause_alex",
+  "find": "Greek terminology:\n• αἴτιον οὐκ ἀναγκαστικόν (aition ouk anankastikon)\n• διττὸν τὸ αἴτιον (ditton to aition) - cause is twofold\n\nA cause",
+  "replace": "A cause",
+  "rationale": "Both Greek glosses are back-formations of the modern scholarly term, unattested anywhere. Removing the fabricated 'Greek terminology' block leaves the English definition intact and natural. NOTE for fix wave: the node LABEL still contains '(αἴτιον οὐκ ἀναγκαστικόν)' and must be Englished separately (labels are not patchable via description find/replace).",
+  "evidence": "Corpus De Fato tlg0732.tlg014: zero ἀναγκαστικ- forms (audit). Confirmed now: tlg_search.py 'αἴτιον οὐκ ἀναγκαστικόν' = 0 hits and 'διττὸν τὸ αἴτιον' = 0 hits in full TLG E. Bobzien 2001 grounds the concept in Cicero Top. 59/Fat. 44 (Latin).",
+  "confidence": 0.88,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "concept_prohairesis_alex",
+  "find": "Alexander defines prohairesis at De Fato 175 as: \"impulse (ὁρμή) + desire (ὄρεξις) + what is chosen from deliberation (τὸ ἐκ βουλῆς αἱρετόν).\"",
+  "replace": "Alexander defines prohairesis at De Fato 12 (Bruns ~180): «ἡ γὰρ ἐπὶ τὸ προκριθὲν ἐκ τῆς βουλῆς μετὰ ὀρέξεως ὁρμὴ προαίρεσις» — \"for prohairesis is the impulse (ὁρμή), accompanied by desire (ὄρεξις), toward what has been preferred as a result of deliberation (βουλή).\"",
+  "rationale": "The quoted 'definition' was a composed compression at a wrong locus (De Fato 175 ≈ ch. 9-10, not where the definition stands). Per audit's preferred option, substituted the genuine verbatim definition from corpus De Fato 12 and corrected the reference. NOTE for fix wave: metadata field source='De Fato 175' should also be updated to 'De Fato 12'.",
+  "evidence": "Corpus passage 28bc2223-dabd-4bb0-933f-faa0fbcc2ef9 (De Fato 12, urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:12), re-retrieved now; Greek copied verbatim: 'ἡ γὰρ ἐπὶ τὸ προκριθὲν ἐκ τῆς βουλῆς μετὰ ὀρέξεως ὁρμὴ προαίρεσις'. Also confirmed fabrication: tlg_search.py 'ἐκ βουλῆς αἱρετόν' = 0 hits in full TLG E.",
+  "confidence": 0.9,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "concept_saving_teaching_alex",
+  "find": "σῴζουσα διδασκαλία (sōzousa didaskalia) - The teaching that saves; philosophy that preserves rather than destroys humanity.\n\nFat. 653-654: \"Philosophy should save the human being, not destroy it. The saving teaching is this: that virtue and vice are up to us.\"",
+  "replace": "The \"saving teaching\": philosophy that preserves rather than destroys humanity. Alexander's genuine theme is that the reality of what is up to us (τὸ ἐφ’ ἡμῖν) must be \"saved\" by any acceptable doctrine, and that determinism destroys it (cf. De Fato 14, 16, 21, 33, 38).",
+  "rationale": "Composed Greek label plus invented quotation at an impossible Bruns page (De Fato ends at p. 212; 'Fat. 653-654' nonexistent). Replaced with English paraphrase of Alexander's genuine 'saving' theme per audit instruction. τὸ ἐφ’ ἡμῖν is verbatim throughout the corpus De Fato. NOTE for fix wave: the node LABEL still contains 'σῴζουσα διδασκαλία' and must be Englished separately.",
+  "evidence": "Corpus De Fato (audit): phrase absent; σώζ-/διδασκαλίαν only separately (chs 1, 3, 14, 16, 27, 38). Confirmed now: tlg_search.py 'σῴζουσα διδασκαλία' = 0 hits in full TLG E. τὸ ἐφ’ ἡμῖν verified verbatim in retrieved corpus passages 28bc2223 (De Fato 12), 4eb69aae (De Fato 21), 94409d47 (De Fato 33).",
+  "confidence": 0.85,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "concept_self_happiness_alex",
+  "find": "δι᾽ αὑτῶν εὐδαιμονεῖν (di' hautōn eudaimonein) - Being happy through oneself; self-produced flourishing achieved through one's own virtuous activity.\n\nFat. 598: \"Happiness is up to us; for we produce it through virtue\" (ἐφ᾽ ἡμῖν ἡ εὐδαιμονία)\nFat. 599: \"Being happy through ourselves is most divine\" (θειότατον)\n\nThe ultimate fruit",
+  "replace": "Being happy through oneself: self-produced flourishing achieved through one's own virtuous activity.\n\nThe ultimate fruit",
+  "rationale": "Greek phrase unattested and both loci impossible (Bruns De Fato = pp. 164-212; 'Fat. 598/599' nonexistent — same pattern as 'In Fat. 580'). Removed the Greek and both pseudo-quotations, keeping the English point. NOTE for fix wave (per audit): the node LABEL 'Self-Achieved Happiness / δι᾽ αὑτῶν εὐδαιμονεῖν (Alexander)' is built on this fabricated phrase and needs Romain's decision; node has no citations.",
+  "evidence": "Corpus De Fato (audit): only εὐδαιμονεῖν is ch. 7 about luck. Confirmed now: tlg_search.py 'αὑτῶν εὐδαιμονεῖν' — sole TLG hit is Libanius ('ἀνθ' ἑαυτῶν εὐδαιμονεῖν'), unrelated; exact phrase with δι᾽ unattested.",
+  "confidence": 0.85,
+  "skip": false,
+  "skip_reason": ""
+ },
+ {
+  "node_id": "concept_self_happiness_alex",
+  "find": "Fat. 598: \"Happiness is up to us; for we produce it through virtue\" (ἐφ᾽ ἡμῖν ἡ εὐδαιμονία)\nFat. 599: \"Being happy through ourselves is most divine\" (θειότατον)\n\n",
+  "replace": "",
+  "rationale": "Audit verdict: fabricated. Loci Fat. 598/599 are impossible (Bruns pagination of De Fato ends at 212) and the Greek 'quotes' are composed. The scholarly point (self-produced happiness through virtue, what makes us most god-like) is already fully stated in English in the following paragraph, so deleting the two fake-quote lines leaves a naturally reading description with no loss of content.",
+  "evidence": "Audit: complete De Fato in corpus lacks the phrase (only εὐδαιμονίαν τοῦ κόσμου at ch. 25); θειότατοι in De Fato 39 addresses the emperors. TLG search 'δι αὑτῶν εὐδαιμονεῖν' (beta: di autwn eudaimonein): 0 hits corpus-wide.",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "concept_synkatathesis_logike_alex",
+  "find": "ΛΟΓΙΚῊ ΣΥΓΚΑΤΆΘΕΣΙΣ (LOGIKĒ SYNKATAThesis)",
+  "replace": "λογικὴ συγκατάθεσις (logikē synkatathesis)",
+  "rationale": "Pure case-folding of the ALL-CAPS import artifact already present in the node text, per audit action_detail. The term itself is genuine Alexander: dative form 'ἐν τῇ λογικῇ συγκαταθέσει' attested verbatim in corpus De Fato 14; accusative 'συγκατάθεσιν' also in the same passage, confirming the accentuation pattern.",
+  "evidence": "Corpus passage ae88c271-a54c-4da5-8842-fc4eecc661c2 (De Fato 14): 'εἰ δὲ τὸ ἐφ’ ἡμῖν ἐστι ἐν τῇ λογικῇ συγκαταθέσει' — retrieved from data/corpus/passages.jsonl in this session.",
+  "confidence": 0.9,
+  "skip": false
+ },
+ {
+  "node_id": "concept_synkatathesis_logike_alex",
+  "find": "Sources: - Fat. 230-231: What is up to us is in rational assent Fat. 257: Self-caused assent through syllogism.",
+  "replace": "Source: De Fato 14 (184.11 Bruns): \"εἰ δὲ τὸ ἐφ’ ἡμῖν ἐστι ἐν τῇ λογικῇ συγκαταθέσει, ἥτις διὰ τοῦ βουλεύεσθαι γίνεται\" — what is up to us lies in rational assent, which comes about through deliberation.",
+  "rationale": "fix_reference: the loci 'Fat. 230-231' and 'Fat. 257' are nonexistent Bruns pages (De Fato spans Bruns 164-212). The genuine locus is De Fato 14, Bruns 184.11, where the exact claim is made. Greek copied verbatim from the corpus passage; Bruns page marker 'p. 184, 11' copied from the SVF II.981 corpus passage immediately preceding the same sentence.",
+  "evidence": "Corpus passage ae88c271-a54c-4da5-8842-fc4eecc661c2 (De Fato 14), Greek retrieved verbatim this session; corpus passage 537989b4-73ef-59db-a94e-882cec72834d (SVF II.981) prints 'p. 184, 11.' directly before the identical sentence.",
+  "confidence": 0.9,
+  "skip": false
+ },
+ {
+  "node_id": "person_alcinous_2c_ce",
+  "find": "(Περὶ προνοίας καὶ εἱμαρμένης)",
+  "replace": "(on providence and fate)",
+  "rationale": "replace_with_english: the parenthetical Greek presented as the title of Didaskalikos ch. 26 is not transmitted — both First1KGreek (Hermann) and the local TLG E text of Alcinous/Albinus have no chapter heading; the chapter opens 'Περὶ δὲ εἱμαρμένης τοιαῦτά τινα τῷ ἀνδρὶ ἀρέσκει'. The exact phrase is instead the title of Hierocles' lost treatise (Photius, per Amand). English gloss is safe regardless of whether a modern edition supplies a heading.",
+  "evidence": "TLG0693 (Albinus/Alcinous), local TLG E corpus @byte 71266: 'Περὶ δὲ εἱμαρμένης τοιαῦτά τινα τῷ ἀνδρὶ ἀρέσκει. Πάντα μέν φησιν ἐν εἱμαρμένῃ εἶναι...' — no title; retrieved this session via scripts/tlg_search.py. Audit: Hermann via First1KGreek concurs; phrase matches Hierocles' lost work in local Amand 1945/1973 .md.",
+  "confidence": 0.82,
+  "skip": false
+ },
+ {
+  "node_id": "person_alcinous_2c_ce",
+  "find": "The soul is δέσποτον of its own acting or not acting (Didasc. 179.10–11).",
+  "replace": "The soul is ἀδέσποτον — without master — and acting or not acting is up to it and not necessitated (Didasc. 179.10–11).",
+  "rationale": "Secondary defect flagged in the same audit item and now decisively verified: the transmitted text reads ἀδέσποτον, not δέσποτον. TLG: 'Ἀδέσποτον οὖν ἡ ψυχὴ καὶ ἐπ' αὐτῇ μὲν τὸ πρᾶξαι ἢ μή, καὶ οὐ κατηνάγκασται τοῦτο'. The word ἀδέσποτον in the replacement is copied verbatim from the TLG hit; the rest is English paraphrase of the retrieved clause.",
+  "evidence": "TLG0693 (Albinus/Alcinous), local TLG E corpus @byte 71870: 'Ἀδέσποτον οὖν ἡ ψυχὴ καὶ ἐπ' αὐτῇ μὲν τὸ πρᾶξαι ἢ μή, καὶ οὐ κατηνάγκασται τοῦτο' — retrieved this session via scripts/tlg_search.py.",
+  "confidence": 0.9,
+  "skip": false
+ },
+ {
+  "node_id": "person_cyrus_alexandria_d641",
+  "find": "*Pact of Union* (Πάκτον τῆς ἑνώσεως)",
+  "replace": "*Pact of Union* (*Satisfactio* / *Plérophorie*)",
+  "rationale": "replace_with_english: 'Πάκτον τῆς ἑνώσεως' is an unattested back-translation of the modern English/Latin designation into Greek presented as if it were the 633 document's Greek title. The attested names per the audit's retrieved source are Satisfactio / Plerophoria (the Nine Chapters, ACO ser. II). French spelling 'Plérophorie' used to match the node's French prose.",
+  "evidence": "Audit negative searches: data/corpus/passages.jsonl accent-insensitive 0 hits; web searches 0 Greek attestations; newadvent.org/cathen/04597c.htm (fetched by audit) names the document only Satisfactio / Pact of Union / Plerophoria. Corpus re-checked this session: no hit.",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "person_heraclitus_fl500bce_a1b2c3d4",
+  "find": "De Fato 71",
+  "replace": "De Fato 6",
+  "rationale": "fix_reference: the quote ἦθος ἀνθρώπῳ δαίμων is genuine (DK 22 B119, standard Stobaeus form) and Alexander cites it (variant ἦθος γὰρ ἀνθρώπων δαίμων) in De Fato chapter 6, not 71 — De Fato has only 39 chapters; '71' is likely a mangled Bruns page (ch. 6 ends on Bruns p. 171). The node's own attached citation already points to De Fato 6 (urn ...1st1K-grc1:6).",
+  "evidence": "Node citation passage 6a47201d-f42b-4e41-8b18-c2be5d11a93a, canonical_ref 'De Fato 6', cts_urn urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:6 (retrieved this session); audit located 'ἦθος γὰρ ἀνθρώπων δαίμων κατὰ τὸν Ἡράκλειτον' at char ~2035 of that passage.",
+  "confidence": 0.95,
+  "skip": false
+ },
+ {
+  "node_id": "person_pyrrhus_constantinople_d654",
+  "find": " (Διάλεξις σὺν Πύρρῳ, PG 91, 287-354)",
+  "replace": " (PG 91, 287-354)",
+  "rationale": "replace_with_english: 'Διάλεξις σὺν Πύρρῳ' is a back-translation of Latin 'cum Pyrrho' (σύν + dative is unidiomatic for a Greek title) and appears nowhere in PG 91; the attested PG 91,288 heading is 'Παρασημείωσις τῆς γενομένης ζητήσεως...'. Dropping the pseudo-Greek parenthetical leaves the established Latin title 'Disputatio cum Pyrrho (PG 91, 287-354)', which reads naturally; inserting the long attested heading is an editorial choice left to Romain per the audit.",
+  "evidence": "Audit retrieved PG 91, 287-292 (documentacatholicaomnia.eu scan): heading at PG 91,288 reads 'ΠΑΡΑΣΗΜΕΙΩΣΙΣ ΤΗΣ ΓΕΝΟΜΕΝΗΣ ΖΗΤΗΣΕΩΣ ... παρὰ Πύρρου ... καὶ Μαξίμου'; corpus accent-insensitive search 0 hits for 'Διάλεξις σὺν Πύρρῳ'.",
+  "confidence": 0.88,
+  "skip": false
+ },
+ {
+  "node_id": "scholarly_argument_crubellier_two_definitions_of_prohairesis_1",
+  "find": "ὄρεξις βουλευτική τῶν ἐφ' ἡμῖν",
+  "replace": "βουλευτικὴ ὄρεξις τῶν ἐφ’ ἡμῖν",
+  "rationale": "Node's contiguous word order 'ὄρεξις βουλευτική τῶν ἐφ' ἡμῖν' is attested neither in NE 1113a10-11 nor EE II.10; reordered to the verbatim NE wording as transmitted in the corpus (Aspasius/anon. In EN Commentaria) and quoted identically in Crubellier n.41.",
+  "evidence": "data/corpus/passages.jsonl passage_id=8f09ece1-51c4-4ccb-9620-86f419890b38: 'ἡ προαίρεσις ἄν εἴη βουλευτικὴ ὄρεξις τῶν ἐφ’ ἡμῖν' (retrieved this run, copied verbatim incl. U+2019 apostrophe); Crubellier md n.41 concurs.",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "scholarly_argument_dettwiler_free_will_and_divine_determina_0",
+  "find": "(γεννηθῆναι ἐκ θεοῦ)",
+  "replace": "(John 1:13: ἐκ θεοῦ ἐγεννήθησαν)",
+  "rationale": "Deferred item resolved by TLG: the node's phrase 'γεννηθῆναι ἐκ θεοῦ' is not verbatim John 1:13 nor Dettwiler (who writes 'γεννηθῆναι (ἐκ)', p.188); TLG attests it only in Didymus Caecus/Catenae, not John. Substituted the verbatim John 1:13 reading with explicit locus; English gloss 'born of God' already precedes the parenthesis.",
+  "evidence": "TLG search 'ἐκ θεοῦ ἐγεννήθησαν' (this run): Eusebius TLG2018 @byte 5828094 'οὐδὲ ἐκ θελήματος ἀνδρὸς ἀλλ' ἐκ θεοῦ ἐγεννήθησαν' and Epiphanius TLG2021 @byte 1356093, both quoting John 1:13 verbatim; node phrase attested only as Didymus paraphrase (TLG2102 @byte 4779129).",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "scholarly_argument_guyomarc_h_necessity_and_fate_alexander_s_3",
+  "find": "(τὰ γιγνόμενα καθʼ εἱμαρμένην καίτοι ἀπαραβάτως γινόμενα μὴ ἐξ ἀνάγκης γίνεσθαι)",
+  "replace": "(φασιν μηδὲ τὰ γιγνόμενα καθʼ εἱμαρμένην καίτοι ἀπαραβάτως γινόμενα ἐξ ἀνάγκης γίνεσθαι)",
+  "rationale": "Deferred item resolved: TLG full-corpus search for the node's adapted form ('γινόμενα μὴ ἐξ ἀνάγκης γίνεσθαι') returns 0 hits — the repositioned negation (μή inserted, μηδέ dropped) is unattested. Restored the verbatim Alexander De Fato wording from the local Guyomarc'h edition (line-wrap joined with a space, U+02BC apostrophe preserved); sentence still reads naturally as the quoted Stoic claim.",
+  "evidence": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/La_Causalite_humaine_Sur_le_De_fato_dAle.md lines 779-780: 'φasin μηδὲ τὰ γιγνόμενα καθʼ εἱμαρμένην καίτοι ἀπαραβάτως γινόμενα ἐξ ἀνάγκης γίνεσθαι' retrieved this run; TLG search 'γινόμενα μὴ ἐξ ἀνάγκης γίνεσθαι' = 0 hits.",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "synthesis_amand1945_alexander_physical_determinism_sublunar",
+  "find": "αὐξήσεως II, Bruns",
+  "replace": "αὐξήσεως 11, Bruns",
+  "rationale": "fix_reference: Amand cites De mixtione chapter 11 (', 11, éd. IV. BRUNS, p. 225'), which the node misrendered as roman numeral 'II'. Greek title untouched.",
+  "evidence": "Amand 1945 md (04_Littérature_secondaire/01_Philosophie_antique/Fatalisme et liberté ... Anna's Archive.md) lines 7923-7924: 'Traité du mélange total et de la dilatation (Περὶ κράσεως καὶ αὐξήσεως), 11, éd. IV. BRUNS, p. 225'.",
+  "confidence": 0.9,
+  "skip": false
+ },
+ {
+  "node_id": "synthesis_amand1945_philo_early_period_school_compilation",
+  "find": "γράμματα et ὑπομνήματα ὑπομνηματικά",
+  "replace": "γράμματα ὑπομνηματικά, ὑπομνήματα, σχολαί, ὑποσημειώσεις",
+  "rationale": "fix_spelling: the node recombined Amand's words into a phrase he never wrote ('ὑπομνήματα ὑπομνηματικά'); replaced with Amand's verbatim enumeration, copied exactly from the local md (line-wrap joined with a space).",
+  "evidence": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Fatalisme et liberté dans l'antiquité grecque; recherches -- Amand de Mendieta ... Anna's Archive.md lines 5281-5282: '(γράμματα ὑπομνηματικά, ὑπομνήματα, σχολαί, ὑποσημειώσεις)' retrieved this run.",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "synthesis_epict_eph_hemin_doctrine",
+  "find": "(Passage 14: τί γάρ ἐστιν ἐμόν; προαίρεσις)",
+  "replace": "(Passage 14: 'what is mine?' — prohairesis; cf. Diss. 1.1.21: τί ἐμὸν καὶ τί οὐκ ἐμὸν καὶ τί μοι ἔξεστιν καὶ τί μοι οὐκ ἔξεστιν)",
+  "rationale": "replace_with_english: the composed Greek Q&A exists nowhere in Epictetus (Schenkl text + corpus exhaustively searched by the audit). Scholarly point kept in English; the genuine nearest text from Diss. 1.1.21 substituted verbatim with its real locus, per the prefer-genuine-reading rule.",
+  "evidence": "Genuine Greek copied verbatim this run from data/corpus/passages.jsonl passage_id=54994a1c-560a-5c5e-8f94-d868e1370731 ('Epict. Disc. I.1 cont.'): 'τί ἐμὸν καὶ τί οὐκ ἐμὸν καὶ τί μοι ἔξεστιν καὶ τί μοι οὐκ ἔξεστιν'; fabricated phrase absent from corpus and Schenkl TLG files per audit.",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "work_didaskalikos_alcinous_2nd_ce_q7r8s9t0",
+  "find": "Chapter 26, 'On Providence and Fate' (Περὶ προνοίας καὶ εἱμαρμένης), is the crucial text.",
+  "replace": "Chapter 26, on fate, is the crucial text (the chapter carries no transmitted title; it opens Περὶ δὲ εἱμαρμένης, 'but concerning fate...').",
+  "rationale": "The quoted Greek chapter title is not in the Didaskalikos; it is the attested title of Hierocles' treatise (Photius codd. 214/251). Ch. 26 has no transmitted heading and opens with the fate formula, copied verbatim from the retrieved TLG text. 'On Providence and Fate' is also misleading: the chapter is on fate and barely mentions providence.",
+  "evidence": "Local TLG E corpus via scripts/tlg_search.py: TLG0693 (Alcinous/Albinus) @byte 71256 reads '...εἰς τὸ θυμοειδές. Περὶ δὲ εἱμαρμένης τοιαῦτά τινα τῷ ἀνδρὶ ἀρέσκει. Πάντα μέν φησιν...' — continuous text, no heading; 'περὶ προνοίας καὶ εἱμαρμένης' absent from the work (corroborates audit's First1KGreek tlg0693.tlg001 check).",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "work_plutarch_de_communibus_notitiis",
+  "find": "urn:cts:greekLit:tlg0007.tlg153",
+  "replace": "urn:cts:greekLit:tlg0007.tlg138",
+  "rationale": "Audit verdict: Greek title genuine; the defect is metadata.cts_urn (tlg0007.tlg153 does not exist; correct Perseus URN is tlg0007.tlg138). The bad URN appears only in metadata.cts_urn, NOT in the node description, so a description-level find/replace cannot apply. Needs a metadata patch: set metadata.cts_urn = urn:cts:greekLit:tlg0007.tlg138.",
+  "evidence": "scripts/audit_fetch.py node output: description contains no URN string; metadata = {\"cts_urn\": \"urn:cts:greekLit:tlg0007.tlg153\"}. Audit evidence: PerseusDL tlg0007.tlg138.perseus-grc2.xml carries the Greek title; catalog 404 for tlg153, 200 for tlg138.",
+  "confidence": 0.9,
+  "skip": true,
+  "skip_reason": "Defect is in metadata.cts_urn, which is not a substring of the description; this patch mechanism targets the description only. Apply via metadata fix: cts_urn -> urn:cts:greekLit:tlg0007.tlg138."
+ },
+ {
+  "node_id": "work_plutarch_stoic_repugnantiis",
+  "find": "urn:cts:greekLit:tlg0007.tlg152",
+  "replace": "urn:cts:greekLit:tlg0007.tlg136",
+  "rationale": "Audit verdict: Greek title genuine (incl. Στωϊκῶν diaeresis); the defect is metadata.cts_urn (tlg0007.tlg152 does not exist; correct Perseus URN is tlg0007.tlg136). The bad URN appears only in metadata.cts_urn, NOT in the node description, so a description-level find/replace cannot apply. Needs a metadata patch: set metadata.cts_urn = urn:cts:greekLit:tlg0007.tlg136.",
+  "evidence": "scripts/audit_fetch.py node output: description contains no URN string; metadata = {\"cts_urn\": \"urn:cts:greekLit:tlg0007.tlg152\"}. Audit evidence: Wikidata Q20380067 + it.wiki attest the title verbatim; catalog 404 for tlg152, 200 for tlg136.",
+  "confidence": 0.85,
+  "skip": true,
+  "skip_reason": "Defect is in metadata.cts_urn, which is not a substring of the description; this patch mechanism targets the description only. Apply via metadata fix: cts_urn -> urn:cts:greekLit:tlg0007.tlg136."
+ },
+ {
+  "node_id": "work_sextus_outlines_pyrrhonism_f9a7c8e4",
+  "find": "urn:cts:greekLit:tlg2042.tlg005",
+  "replace": "urn:cts:greekLit:tlg0544.tlg001",
+  "rationale": "Audit verdict: title genuine; the defect is metadata.cts_urn — tlg2042 is Origen, not Sextus Empiricus; correct URN is tlg0544.tlg001 (First1KGreek __cts__.xml, Pyrrhoniae Hypotyposes, Mutschmann). The bad URN appears only in metadata.cts_urn, NOT in the node description, so a description-level find/replace cannot apply. Needs a metadata patch: set metadata.cts_urn = urn:cts:greekLit:tlg0544.tlg001.",
+  "evidence": "scripts/audit_fetch.py node output: description contains no URN string; metadata = {\"cts_urn\": \"urn:cts:greekLit:tlg2042.tlg005\"}. Audit evidence: First1KGreek tlg0544.tlg001.1st1K-grc1.xml (Mutschmann 1912).",
+  "confidence": 0.9,
+  "skip": true,
+  "skip_reason": "Defect is in metadata.cts_urn, which is not a substring of the description; this patch mechanism targets the description only. Apply via metadata fix: cts_urn -> urn:cts:greekLit:tlg0544.tlg001."
+ },
+ {
+  "node_id": "work_tatian_oratio",
+  "find": "possessing good \"not by nature but by free choice\" (οὐ φύσει... ἐκ τῆς τοῦ ἐλευθέρου γνώμης)",
+  "replace": "not possessing the good by nature (τἀγαθοῦ φύσιν μὴ ἔχον) — that belongs to God alone — but brought to completion by humans through freedom of choice (τῇ δὲ ἐλευθερίᾳ τῆς προαιρέσεως)",
+  "rationale": "The parenthetical Greek 'οὐ φύσει... ἐκ τῆς τοῦ ἐλευθέρου γνώμης' is fabricated (absent from the whole Oratio, grammatically anomalous back-translation). Per audit evidence, the genuine Orat. 7 reading was retrieved and substituted verbatim; the English is adjusted to render the attested wording faithfully.",
+  "evidence": "Local TLG E corpus via scripts/tlg_search.py: TLG1766 (Tatianus) @byte 12376: 'αὐτεξούσιον γέγονε τἀγαθοῦ φύσιν μὴ ἔχον, ὃ πλὴν μόνον παρὰ τῷ θεῷ, τῇ δὲ ἐλευθερίᾳ τῆς προαιρέσεως ὑπὸ τῶν ἀνθρώπων ἐκτελειούμενον' — both Greek runs in 'replace' copied verbatim from this hit; fabricated phrase confirmed absent (audit: TLG_tlg1766 Otto XML whole-text search).",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "argument_horn_2014_augustine_liberum_arbitrium_equivalent_plus_eph_hemin",
+  "find": "De trin. 10.10.13-15.12.21",
+  "replace": "De trin. 10.10.13-16 et 15.12.21",
+  "rationale": "The node collapses Horn's two De trinitate loci into one false continuous range. Footnote 29 of Horn's chapter gives two distinct loci: De trinitate 10.10.13-16 and 15.12.21. 'et' used since the description is in French. Chapter ordinal '19' left untouched (unverifiable in the OCR, flagged minor by the audit). No ancient-language text involved.",
+  "evidence": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/01_Philosophie_antique/Destrée - 2014 - What is Up to Us Studies on Agency and Responsibi.md, lines 14111-14112 (footnote 29): 'De libero arbitrio 2.3.7, De civitate dei 11.26 and De trinitate 10.10.13-6 and 15.12.21.' — re-retrieved and read directly.",
+  "confidence": 0.9,
+  "skip": false
+ },
+ {
+  "node_id": "concept_non_causa_sed_occasio",
+  "find": "From Com. Rm VII.16: explaining Pharaoh's hardening, Origen writes: \"Quomodo sol non est causa caecitatis... sed occasio tantum... sic et Deus non est causa indurati cordis, sed occasio.\" (\"As the sun is not the cause of blindness but only the occasion... so God is not the cause of a hardened heart but the occasion.\")",
+  "replace": "Explaining Pharaoh's hardening in Com. Rom. VII.14 (SC 543), Origen writes: \"Non ergo quem uult Deus indurat sed qui patientiae obtemperare noluerit induratur\" (\"It is therefore not whom he wills that God hardens; rather, he who has refused to comply with his patience is hardened\"). The occasio vocabulary itself is attested in De Principiis III.1 (SC 268): those \"qui benignitatem et patientiam eius ad occasionem paenitentiae suae et emendationis accipiunt\" (III.1.10: \"who take his kindness and patience as an occasion for their own repentance and amendment\"), and each vessel \"ex se ipso causas et occasiones praestitit conditori\" (III.1.21: \"of itself supplied the causes and occasions to its maker\").",
+  "rationale": "The sun-causing-blindness Latin 'quotation' is a composed pseudo-quote absent from the critical text of Com. Rom. and De Principiis, and the locus VII.16 is wrong for Pharaoh's hardening (= VII.14 in SC 543). Replaced with the genuine Pharaoh passage and the two verified occasio readings from De Princ. III.1, each quoted verbatim from the local SC editions with English translation. Node label renaming ('non causa sed occasio' as fixed formula) left untouched per audit (deferred to Romain).",
+  "evidence": "SC543_Origenes_Commentaire_Romains_livre_7_bilingue.txt line 1049 ('Non ergo quem uult Deus indurat sed qui patientiae ob-temperare noluerit induratur', line-break hyphen joined); SC268_Origenes_Traite_des_Principes_livre_3_bilingue.txt ('qui benignitatem et patientiam eius ad occasionem paeni-tentiae suae et emendationis accipiunt', hyphen joined; line 309 'ex se ipso causas et occasiones praestitit conditori'). Fabrication confirmed: zero corpus/SC hits for 'causa caecitatis'/'occasio tantum'.",
+  "confidence": 0.88,
+  "skip": false
+ },
+ {
+  "node_id": "concept_providentia_fatum_boethius_h3i4j5k6",
+  "find": "• Relation: \"fatum ex providentiae fonte proficiscitur\" - Fate proceeds from Providence",
+  "replace": "• Relation: Fate proceeds from Providence — Boethius describes the order of fate as \"de providentiae fonte descendens\" (\"descending from the fountain of providence\", Cons. V.pr.1)",
+  "rationale": "The quoted Latin 'fatum ex providentiae fonte proficiscitur' is a stitched conflation of 4.pr.6 and 5.pr.1 wordings, attested nowhere. Substituted the verbatim corpus-attested 5.pr.1 phrase with its correct locus; the doctrinal point (fate proceeds from providence) is preserved. The 4.pr.6 alternative was not used because the corpus passage text is OCR-corrupted at that spot ('providentiae - dentiae').",
+  "evidence": "audit_fetch corpus 'de providentiae fonte descendens' → exact-substring hit in passage 328f5325-8a63-5995-a882-cb10ff6eceb9 (Cons. 5.P1-5.P2, urn:cts:latinLit:stoa0058.stoa001.perseus-lat2:5.P1-5.P2); fabricated phrase absent from corpus.",
+  "confidence": 0.92,
+  "skip": false
+ },
+ {
+  "node_id": "group_anti_pelagians",
+  "find": "massa damnata, *De Correptione et Gratia* 7.16",
+  "replace": "massa damnata, *De civitate Dei* XXI.12",
+  "rationale": "The phrase 'massa damnata' is genuine Augustine but occurs at De civitate Dei XXI.12 ('uniuersa generis humani massa damnata'), not De Correptione et Gratia 7.16 (which contains no 'massa'; De Corr. 7.12 has the different phrase 'perditionis massa'). Locus corrected, quoted phrase untouched, per fix_reference verdict.",
+  "evidence": "Audit-adjudicated external sources: thelatinlibrary.com/augustine/civ21.shtml (De civ. Dei 21.12 'Hinc est uniuersa generis humani massa damnata'); augustinus.it De Corr. 7.12 'ab illa perditionis massa' and no 'massa' in §16.",
+  "confidence": 0.85,
+  "skip": false
+ },
+ {
+  "node_id": "synthesis_amand1945_carneades_partial_acceptance_natural_sympathy",
+  "find": "Amand cite explicitement (p. 65)",
+  "replace": "Amand cite explicitement (p. 64)",
+  "rationale": "The Latin quotation is verbatim from Amand's footnote 3 (quoting Cicero De Fato 5.9, éd. Yon, with the edition's u-orthography Vt/ualentes), but that footnote is printed on p. 64, not p. 65: in the local .md the footnote text precedes the page header 'CARNÉADE ET LA « SYMPATHIE UNIVERSELLE » 65'. Only the page number is corrected; quotation and locus 'De fato 4.7-8 et 5.9-11' match the footnote exactly.",
+  "evidence": "Local file 04_Littérature_secondaire/01_Philosophie_antique/Fatalisme et liberté dans l'antiquité grecque -- Amand de Mendieta -- 1973 ... .md, lines ~4400-4412: footnote 3 with 'Vt enim et ingeniosi et tardi ita nascantur antecedentibus causis itemque ualentes et imbecilli...' followed by the p. 65 page break; also corpus 5e270ba8-3c17-5708-afac-45163def5674 (Cic. De Fato 9).",
+  "confidence": 0.95,
+  "skip": false
+ }
+]

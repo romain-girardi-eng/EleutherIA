@@ -90,10 +90,29 @@ all 2,136 citation-bearing edges carry confidence. Cleanup backlog (mechanical):
 - 28 dangling `inverse` declarations + 6 asymmetric inverse pairs (e.g. influenced/influenced_by/influences fragmentation: 166/88/27)
 - 21 defined edge types and 7 node types unused (decide: implement or prune from ontology)
 
-## Proposed apply order (each item individually verified; awaiting go)
+## Apply status (Romain approved "fix all", 2026-06-11)
 
-1. **A — KG descriptions**: 26 fabrication fixes (English replacement or reference fix) — surgical, per-item evidence in queue.
-2. **B — Greek replacements (9)**: verbatim corpus readings supplied; Romain approves each.
-3. **C — Corpus restoration**: apply staged `mapping.json` per work; start with Cicero De Fato (local source, 0.98); hold Augustine until edition check vs CSEL 74.
-4. **D — Mechanical**: duplicate edges, self-loops, metadata-wrapper sweep (§5), URN mismatch fixes.
-5. **E — Ingestions**: 10 scaife_ready works; TLG locus mapping (.IDT parsing) unlocks Theodoret + future Greek ingestion directly from TLG E.
+- **A+B — APPLIED**: 55 surgical description patches (53 workflow-generated + 2 manually re-verified)
+  + 3 metadata `cts_urn` fixes (Plutarch ×2; Sextus PH was pointing at Origen's tlg2042!).
+  Every new Greek machine-gated: must be verbatim in corpus, local edition, or TLG E.
+  1 patch superseded (overlap), 1 correctly skipped (evidence didn't confirm — original kept).
+  Changelog: `data/audit/primary_wave/description_patch_changelog.jsonl`.
+- **C — APPLIED**: 237 passages restored to verbatim originals (236 from gated mappings + De Civ.
+  Dei V.9.3 hybrid recovered separately, cross-validated against its DB-verified fragments);
+  61 passage cts_urn fixes; 3 footer-junk passages + 3 orphan citations deleted.
+  All 242 mapping entries gated (verbatim-in-staged-source check) before write; restored
+  Plotinus III.1 verified verbatim in TLG2000. Augustine De Lib. Arb. applied from augustinus.it
+  (NBA) — **CSEL 74 collation still recommended**. Changelog: `restore_changelog.jsonl`.
+- **D — APPLIED**: 198 duplicate triples + 3 self-loops removed; metadata-wrapper sweep found 28
+  (not 2) — 27 stripped to clean Greek, 1 (Aristides SC 470, corrupt OCR) deferred;
+  `influenced`→`influences` (88 edges, 87 were importer double-writes) and
+  `belongs_to_school`→`member_of` migrated; `has_member.inverse` fixed; alias types marked
+  deprecated in `edge_types.json`. Edges 56,737 → 56,448. The 28 "dangling inverses" are
+  intentional (vocab.py curates `CLEAN_INVERSE_PAIRS`) — left alone.
+- **E — pending**: 10 scaife_ready ingestions (next wave); TLG .IDT locus parsing unlocks
+  Theodoret (TLG4089) + direct TLG ingestion.
+
+**Design decisions left for Romain**: prune-or-implement the 7 unused node types / 21 unused
+edge types; synonym predicate families (student_of/teaches/taught_by, member_of/has_member);
+work_canonical_id strings that misname their work (stoa001 vs stoa003) — invasive FK rename,
+belongs in the data-normalization track.
