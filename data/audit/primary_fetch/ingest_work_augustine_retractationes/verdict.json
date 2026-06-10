@@ -1,0 +1,25 @@
+{
+  "work_node": "work_augustine_retractationes",
+  "work_canonical_id": "urn_cts_latinlit_stoa0040_stoa077_lat",
+  "urn": "urn:cts:latinLit:stoa0040.stoa077.opp-lat1",
+  "n_passages": 451,
+  "sample_refs": [
+    "Retract. pr.1",
+    "Retract. 1.25.47",
+    "Retract. 2.93.2"
+  ],
+  "tlg_checks": [
+    {
+      "note": "skipped — Latin work; TLG E check applies to Greek works only. Independent verification instead: the famous 396-pivot sentence 'in cuius quaestionis solutione laboratum est quidem pro libero arbitrio uoluntatis humanae, sed uicit dei gratia' (Retract. 2.27.3, on Ad Simplicianum) matches the attested wording verbatim."
+    }
+  ],
+  "edition_statement": "Pius Knöll (ed.), Sancti Aureli Augustini Opera, Sectio I Pars II: Retractationum libri II, CSEL 36, F. Tempsky / G. Freytag, Vienna-Leipzig 1902. TEI from OpenGreekAndLatin/csel-dev (University of Leipzig 2014, CC BY-SA 4.0), OCR by Jouve.",
+  "issues": [
+    "Source is OCR of CSEL 36 (Knöll 1902); chapter numbering of Book 2 is continuous old-style (Ad Simplicianum = Retract. 2.27, not Mutzenbecher II.1; De Gratia et Libero Arbitrio under old ch. numbering near 2.66/92 equivalent). KG description cites Mutzenbecher CCSL 57 numbering — locus mapping differs.",
+    "2 sections empty in the digital edition and skipped: 1.3.6, 2.69.5 (encoding gaps, no text in TEI).",
+    "Residual OCR artifacts kept verbatim (zero-fix policy): 'quo- Diam' for quoniam (1.7.3), 'pro- Sciant' (1.14.11), 'uolun- .' truncated word (1.12.6), 'quod- ei' spurious hyphen (2.85.1), '0 utinam' digit zero for O (1.1.14), 'intrabitiš' diacritic artifact (1.18.6), 'Dc ordine' for De (1.3.11).",
+    "Editorial-only removals (documented): 8 leaked CSEL marginal line numbers (standalone 15/20), 2 stray OCR bullets ('»' 1.9.10, '•' 2.59.2), 7 verified line-break hyphenations rejoined (explicit list, e.g. disci-plinis, inter-rogatio).",
+    "48 sections under 50 chars are genuine short units (mostly the quaestio-title list of Retract. 1.25 = De diversis quaestionibus LXXXIII), kept verbatim.",
+    "Apparatus criticus, source footnotes, chapter/margin note markers and CAPVT headings stripped; no TEI tags or note text leaked (regex gate passed); all text Latin script + one genuine Greek word ἐγχερίδιον (2.89.1)."
+  ]
+}

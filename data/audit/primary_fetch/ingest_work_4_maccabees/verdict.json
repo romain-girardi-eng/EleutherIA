@@ -1,0 +1,39 @@
+{
+  "work_node": "work_4_maccabees",
+  "work_canonical_id": "urn_cts_greeklit_tlg0527_tlg026_grc",
+  "urn": "urn:cts:greekLit:tlg0527.tlg026.1st1K-grc1",
+  "n_passages": 71,
+  "sample_refs": [
+    "4 Macc. 1.1-6",
+    "4 Macc. 9.9-16",
+    "4 Macc. 18.16-24"
+  ],
+  "tlg_checks": [
+    {
+      "ref": "4 Macc. 1.1-6",
+      "needle": "αὐτοδέσποτός ἐστιν τῶν παθῶν ὁ εὐσεβὴς λογισμός",
+      "result": "hit",
+      "tlg_loc": "TLG0527 (Septuaginta) @byte 2897823"
+    },
+    {
+      "ref": "4 Macc. 9.9-16",
+      "needle": "κατὰ ἀχαρίστων ὠργίσθη",
+      "result": "hit",
+      "tlg_loc": "TLG0527 (Septuaginta) @byte 2931137"
+    },
+    {
+      "ref": "4 Macc. 18.16-24",
+      "needle": "τοῖς ποιοῦσιν αὐτοῦ τὸ θέλημα",
+      "result": "hit",
+      "tlg_loc": "TLG0527 (Septuaginta) @byte 2962054",
+      "note": "exact Swete phrase 'ἐπαροιμίαζεν ἡμῖν τὸν λέγοντα' misses because TLG E follows Rahlfs (ὑμῖν, om. τόν); shorter distinctive substrings from same verse hit"
+    }
+  ],
+  "edition_statement": "Henry Barclay Swete, The Old Testament in Greek, vol. 3, Cambridge University Press, 1905 (First1KGreek tlg0527.tlg026.1st1K-grc1, digitized via The Internet Archive, CC BY-SA 4.0)",
+  "issues": [
+    "Upstream OCR corruption in the First1KGreek source file, kept byte-verbatim per zero-fabrication policy: 4 Macc. 1.1 reads 'ΦIΔΟΣOΦΩΤΑΤΟΝ' (Latin I/O + Δ-for-Λ OCR error for ΦΙΛΟΣΟΦΩΤΑΤΟΝ); ~19 tokens across the work contain Latin-letter OCR substitutions (e.g. 'Bλλʼ' 12.11, 'εὐσεβείmς' 1.24, 'καρτερίn' 2.x, 'aόνον' 9.x).",
+    "Passage '4 Macc. 17.7-14' contains literal 'U+03F2' escape strings in place of lunate sigma plus heavy OCR garbling in vv. 17.9-10 ('φυνὴ φεραιά', 'Ἐβρδίων πολιτίαν') — present verbatim in the upstream XML; flag for manual repair against Swete vol. 3 before corpus promotion.",
+    "Greek-letter ratio < 0.97 in exactly 1 of 71 passages (17.7-14, ratio 0.964) — same OCR cause.",
+    "Editorial apparatus and marginal sigla are encoded as <note> elements in the TEI and were excluded; no TEI tag or note text leaked into text_content (verified by regex gate)."
+  ]
+}

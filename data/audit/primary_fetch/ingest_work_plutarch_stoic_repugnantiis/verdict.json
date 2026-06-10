@@ -1,0 +1,38 @@
+{
+  "work_node": "work_plutarch_stoic_repugnantiis",
+  "work_canonical_id": "urn_cts_greeklit_tlg0007_tlg136_grc",
+  "urn": "urn:cts:greekLit:tlg0007.tlg136.perseus-grc2",
+  "n_passages": 47,
+  "sample_refs": [
+    "De Stoic. rep. 1",
+    "De Stoic. rep. 24",
+    "De Stoic. rep. 47"
+  ],
+  "tlg_checks": [
+    {
+      "ref": "De Stoic. rep. 1",
+      "needle": "ὡς τὸν βίον τοῦ φιλοσόφου τῷ λόγῳ σύμφωνον",
+      "result": "hit",
+      "tlg_locus": "TLG0007 Plutarchus @byte 7970716"
+    },
+    {
+      "ref": "De Stoic. rep. 24",
+      "needle": "οἱ ἄχρι Πολέμωνος καὶ Στράτωνος",
+      "result": "hit",
+      "tlg_locus": "TLG1696 Straton Phil. (fragment collection quoting this Plutarch passage)"
+    },
+    {
+      "ref": "De Stoic. rep. 47",
+      "needle": "τὴν γὰρ φαντασίαν βουλόμενος οὐκ οὖσαν αὐτοτελῆ",
+      "result": "hit",
+      "tlg_locus": "TLG1264 Chrysippus (SVF fragment collection quoting this Plutarch passage)"
+    }
+  ],
+  "edition_statement": "Plutarch, Moralia, vol. 6, ed. Grēgorios N. Vernardakēs, Leipzig: Teubner, 1895 (Perseus perseus-grc2, release 2010-12-13; notes not included)",
+  "issues": [
+    "Sections 13, 31, 47 contain <gap reason='lost'/> lacunae in the edition; gap markers were dropped (no character inserted), so words on either side of a lacuna are separated only by a space",
+    "TEI header <title> reads 'Περὶ Στωικῶν ἐνιγμάτων' (Perseus header typo for ἐναντιωμάτων); body text unaffected",
+    "Section (chapter) is the only CTS citation level (1-47); 9 sections exceed 2000 chars (max 4713), retained at natural citation level",
+    "Perseus source is Vernardakis 1895, not the Pohlenz 1959 / Cherniss 1976 editions named in the KG node description"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "work_node": "work_plato_sophist",
+  "work_canonical_id": "urn_cts_greeklit_tlg0059_tlg007_grc",
+  "urn": "urn:cts:greekLit:tlg0059.tlg007.perseus-grc2",
+  "n_passages": 262,
+  "sample_refs": [
+    "Soph. 216a",
+    "Soph. 242d",
+    "Soph. 268d"
+  ],
+  "tlg_checks": [
+    {
+      "ref": "Soph. 217b",
+      "needle": "φθόνος μὲν γὰρ οὐδεὶς οὐδὲ χαλεπὸν εἰπεῖν",
+      "result": "hit",
+      "tlg_id": "TLG0059"
+    },
+    {
+      "ref": "Soph. 242d",
+      "needle": "τοτὲ δὲ καὶ φίλα γιγνόμενα γάμους τε",
+      "result": "hit",
+      "tlg_id": "TLG0059"
+    },
+    {
+      "ref": "Soph. 267d",
+      "needle": "μιμητὴν δὴ τοῦτόν γε ἕτερον ἐκείνου λεκτέον",
+      "result": "hit",
+      "tlg_id": "TLG0059"
+    }
+  ],
+  "edition_statement": "Plato, Platonis Opera, ed. John Burnet, vol. 1, Oxford: Clarendon Press, 1905 (Perseus perseus-grc2 digital edition, Trustees of Tufts University); source: PerseusDL canonical-greekLit tlg0059.tlg007.perseus-grc2.xml",
+  "issues": [
+    "Editorially bracketed/added words (TEI <del>: 27, <add>: 19, <sic>: 4) retained as plain text without brackets, per Burnet's printed text; TEI <bibl> reference annotations (6) excluded",
+    "Segmented at Stephanus letter-section level (216a-268d, 262 sections); passage lengths 167-506 chars, below the typical ~200-2000 band at the low end for a few short sections",
+    "Speaker labels (ΘΕΟ./ΣΩ./ΞΕ./ΘΕΑΙ.) retained as printed in the edition; dialogue turns within a section joined with single spaces"
+  ]
+}

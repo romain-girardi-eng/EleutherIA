@@ -1,0 +1,42 @@
+{
+  "work_node": "work_plutarch_de_fato_authentic",
+  "work_canonical_id": "urn_cts_greeklit_tlg0007_tlg108_grc",
+  "urn": "urn:cts:greekLit:tlg0007.tlg108.perseus-grc2",
+  "n_passages": 12,
+  "sample_refs": [
+    "De fato 0",
+    "De fato 6",
+    "De fato 11"
+  ],
+  "tlg_checks": [
+    {
+      "ref": "De fato 0",
+      "needle": "τὰ περὶ τῆς εἱμαρμένης δοκοῦνθʼ ἡμῖν",
+      "result": "hit",
+      "tlg_author": "TLG0007 Plutarchus",
+      "byte": 6323038
+    },
+    {
+      "ref": "De fato 6",
+      "needle": "καὶ ἡ τύχη τό τε δυνατὸν καὶ τὸ ἐνδεχόμενον",
+      "result": "hit",
+      "tlg_author": "TLG0007 Plutarchus",
+      "byte": 6332729
+    },
+    {
+      "ref": "De fato 11",
+      "needle": "ὁ μὲν οὖν ἡμέτερος λόγος ἐπὶ κεφαλαίων εἰπεῖν",
+      "result": "hit",
+      "tlg_author": "TLG0007 Plutarchus",
+      "byte": 6347437
+    }
+  ],
+  "edition_statement": "Plutarch, Moralia, vol. 3, ed. Grēgorios N. Vernardakēs, Leipzig: Teubner, 1891 (Perseus 4.0 digitization, perseus-grc2; EpiDoc/CTS conversion 2019)",
+  "issues": [
+    "KG node metadata.cts_urn says tlg0007.tlg103, but the verified URN for De fato is tlg0007.tlg108 (tlg103 is a different Moralia treatise) — KG metadata should be corrected separately; KG not modified per task constraints.",
+    "Node description cites Hubert Teubner 1929 / De Lacy-Einarson LCL 405 as critical editions; the only openly licensed digitized edition available is Vernardakes Teubner 1891 (Perseus), which is what was ingested.",
+    "CTS section numbering is 0-11: Perseus numbers the proem (568b-c) as section 0; conventional chapter citation is 1-11.",
+    "4 editorial lacunae (<gap reason='lost'/>) in the Vernardakes text rendered as ' … ' (no text composed).",
+    "Initial TLG search misses for one sample were caused by line-break hyphenation in the TLG E files (e.g. 'σα-φῶς'), not by text divergence; alternate substrings from the same passages all hit."
+  ]
+}
