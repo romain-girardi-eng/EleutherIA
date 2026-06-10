@@ -28,7 +28,7 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 
-from rdflib import Graph, URIRef
+from rdflib import Dataset, Graph, URIRef
 from rdflib.namespace import OWL
 
 from eleutheria_kg.semantic.vocab import (
@@ -52,6 +52,12 @@ _TRANSITIVE_PROPERTIES: tuple[URIRef, ...] = (
     URIRef(f"{KG}{_camel_case('has_chapter')}"),
 )
 
+# Named graph that holds materialized (derived) triples when the closure is
+# run with :func:`materialize_into_dataset`. Keeping inferred triples out of
+# the asserted graph lets proof-chain reconstruction distinguish asserted
+# from derived facts.
+INFERRED_GRAPH_ID: URIRef = URIRef("https://free-will.app/kg/graph/inferred")
+
 
 def _inverse_pairs_as_iris() -> list[tuple[URIRef, URIRef]]:
     """Return the clean inverse pairs as ``(prop_a, prop_b)`` IRI tuples."""
@@ -65,55 +71,95 @@ def _symmetric_properties_as_iris() -> list[URIRef]:
     return [URIRef(f"{KG}{_camel_case(rel)}") for rel in SYMMETRIC_EDGES]
 
 
-def _materialize_inverses(graph: Graph) -> int:
+def _read_graphs(graph: Graph, sink: Graph | None) -> tuple[Graph, ...]:
+    """Graphs the closure must read from: asserted + (separate) sink."""
+    if sink is None or sink is graph:
+        return (graph,)
+    return (graph, sink)
+
+
+def _present(
+    graphs: tuple[Graph, ...], triple: tuple[URIRef, URIRef, URIRef]
+) -> bool:
+    return any(triple in g for g in graphs)
+
+
+def _property_triples(
+    graphs: tuple[Graph, ...], prop: URIRef
+) -> list[tuple[URIRef, URIRef, URIRef]]:
+    """Snapshot all ``(s, prop, o)`` triples across ``graphs`` (deduped).
+
+    Returns a list so callers can mutate the graphs while iterating.
+    """
+    seen: set[tuple[URIRef, URIRef, URIRef]] = set()
+    out: list[tuple[URIRef, URIRef, URIRef]] = []
+    for g in graphs:
+        for s, _, o in g.triples((None, prop, None)):
+            if not isinstance(s, URIRef) or not isinstance(o, URIRef):
+                continue
+            t = (s, prop, o)
+            if t not in seen:
+                seen.add(t)
+                out.append(t)
+    return out
+
+
+def _materialize_inverses(graph: Graph, sink: Graph | None = None) -> int:
     """Add ``o q s`` for every ``s p o`` with a declared inverse ``q``.
 
-    Returns the number of triples added.
+    New triples go into ``sink`` when given (keeping ``graph`` purely
+    asserted), otherwise into ``graph`` itself. Returns the number of
+    triples added.
     """
+    out = graph if sink is None else sink
+    reads = _read_graphs(graph, sink)
     added = 0
     for prop_a, prop_b in _inverse_pairs_as_iris():
-        # Forward: prop_a -> prop_b
-        for s, _, o in graph.triples((None, prop_a, None)):
-            if (o, prop_b, s) not in graph:
-                graph.add((o, prop_b, s))
-                added += 1
-        # Reverse: prop_b -> prop_a (since the pairs in CLEAN_INVERSE_PAIRS
-        # are sometimes asymmetrically declared, we materialize both
-        # directions and dedupe).
-        for s, _, o in graph.triples((None, prop_b, None)):
-            if (o, prop_a, s) not in graph:
-                graph.add((o, prop_a, s))
-                added += 1
+        # Materialize both directions and dedupe, since the pairs in
+        # CLEAN_INVERSE_PAIRS are sometimes asymmetrically declared.
+        for src_prop, dst_prop in ((prop_a, prop_b), (prop_b, prop_a)):
+            for s, _, o in _property_triples(reads, src_prop):
+                derived = (o, dst_prop, s)
+                if not _present(reads, derived):
+                    out.add(derived)
+                    added += 1
     return added
 
 
-def _materialize_symmetric(graph: Graph) -> int:
+def _materialize_symmetric(graph: Graph, sink: Graph | None = None) -> int:
     """Add ``o p s`` for every ``s p o`` where ``p`` is symmetric."""
+    out = graph if sink is None else sink
+    reads = _read_graphs(graph, sink)
     added = 0
     for prop in _symmetric_properties_as_iris():
-        for s, _, o in graph.triples((None, prop, None)):
-            if (o, prop, s) not in graph:
-                graph.add((o, prop, s))
+        for s, _, o in _property_triples(reads, prop):
+            derived = (o, prop, s)
+            if not _present(reads, derived):
+                out.add(derived)
                 added += 1
     return added
 
 
-def _materialize_transitive(graph: Graph, prop: URIRef) -> int:
-    """Materialize the transitive closure of ``prop`` on ``graph``.
+def _materialize_transitive(
+    graph: Graph, prop: URIRef, sink: Graph | None = None
+) -> int:
+    """Materialize the transitive closure of ``prop``.
 
     Iterative fixed-point — each pass adds ``a prop c`` for every
     ``a prop b prop c`` not already present. Terminates when no new
     triple is added. Cycle-safe because :meth:`Graph.add` deduplicates.
+    New triples go into ``sink`` when given, otherwise into ``graph``.
     """
+    out = graph if sink is None else sink
+    reads = _read_graphs(graph, sink)
     added_total = 0
     while True:
         new_edges: list[tuple[URIRef, URIRef]] = []
         # Build an in-memory successor map for this property to avoid
         # quadratic graph.triples() calls per pass.
         successors: dict[URIRef, set[URIRef]] = defaultdict(set)
-        for s, _, o in graph.triples((None, prop, None)):
-            if isinstance(s, URIRef) and isinstance(o, URIRef):
-                successors[s].add(o)
+        for s, _, o in _property_triples(reads, prop):
+            successors[s].add(o)
 
         for a, bs in successors.items():
             for b in bs:
@@ -126,8 +172,9 @@ def _materialize_transitive(graph: Graph, prop: URIRef) -> int:
         if not new_edges:
             break
         for a, c in new_edges:
-            if (a, prop, c) not in graph:
-                graph.add((a, prop, c))
+            derived = (a, prop, c)
+            if not _present(reads, derived):
+                out.add(derived)
                 added_total += 1
     return added_total
 
@@ -137,6 +184,14 @@ def materialize_inverses_and_transitivity(graph: Graph) -> Graph:
 
     The graph is mutated and also returned so the call site can chain.
     Safe to call multiple times — the operation is idempotent.
+
+    .. warning::
+       In-place materialization makes derived triples indistinguishable
+       from asserted ones, so :func:`~eleutheria_kg.semantic.proof.\
+build_proof_chain` over the result returns an empty chain for every
+       derived fact. When proof chains matter, keep the asserted graph
+       separate via :func:`materialize_inferred_graph` or
+       :func:`materialize_into_dataset` instead.
     """
     initial = len(graph)
     inv = _materialize_inverses(graph)
@@ -155,6 +210,51 @@ def materialize_inverses_and_transitivity(graph: Graph) -> Graph:
         len(graph),
     )
     return graph
+
+
+def materialize_inferred_graph(asserted: Graph) -> Graph:
+    """Run the restricted closure WITHOUT mutating ``asserted``.
+
+    Returns a new :class:`~rdflib.Graph` containing only the derived
+    triples (never any triple already asserted). Query the union as
+    ``asserted + inferred``; pass ``asserted`` alone to
+    :func:`~eleutheria_kg.semantic.proof.build_proof_chain` so derived
+    facts keep auditable proof chains.
+    """
+    inferred = Graph()
+    inv = _materialize_inverses(asserted, sink=inferred)
+    sym = _materialize_symmetric(asserted, sink=inferred)
+    trans = 0
+    for prop in _TRANSITIVE_PROPERTIES:
+        trans += _materialize_transitive(asserted, prop, sink=inferred)
+    logger.info(
+        "restricted OWL-RL closure (separate sink): +%d triples "
+        "(inverse=%d, symmetric=%d, transitive=%d)",
+        inv + sym + trans,
+        inv,
+        sym,
+        trans,
+    )
+    return inferred
+
+
+def materialize_into_dataset(asserted: Graph) -> Dataset:
+    """Materialize the restricted closure into a named inference graph.
+
+    Returns an rdflib :class:`~rdflib.Dataset` (``default_union=True``)
+    whose default graph carries the asserted triples verbatim and whose
+    named graph :data:`INFERRED_GRAPH_ID` carries only derived triples.
+    Querying the dataset spans both, ``ds.graph(INFERRED_GRAPH_ID)``
+    isolates the inferences, and the default graph stays purely asserted.
+    """
+    ds = Dataset(default_union=True)
+    default = ds.default_graph
+    for triple in asserted:
+        default.add(triple)
+    inferred_named = ds.graph(INFERRED_GRAPH_ID)
+    for triple in materialize_inferred_graph(asserted):
+        inferred_named.add(triple)
+    return ds
 
 
 def materialize_full_owl_rl(graph: Graph) -> Graph:

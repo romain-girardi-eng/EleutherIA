@@ -7,14 +7,18 @@ plus OWL-RL forward-chaining inference.
 """
 
 from eleutheria_kg.semantic.inference import (
+    INFERRED_GRAPH_ID,
     inverse_neighbors,
     materialize_full_owl_rl,
+    materialize_inferred_graph,
+    materialize_into_dataset,
     materialize_inverses_and_transitivity,
     transitive_closure,
 )
 from eleutheria_kg.semantic.proof import (
     InferenceStep,
     build_proof_chain,
+    confidences_from_reified,
     serialize_proof_chain,
 )
 from eleutheria_kg.semantic.rdf_export import build_graph, export_graph
@@ -33,6 +37,7 @@ from eleutheria_kg.semantic.vocab import (
 )
 
 __all__ = [
+    "INFERRED_GRAPH_ID",
     "KG",
     "KG_RESOURCE",
     "InferenceStep",
@@ -40,10 +45,13 @@ __all__ = [
     "Violation",
     "build_graph",
     "build_proof_chain",
+    "confidences_from_reified",
     "edge_property",
     "export_graph",
     "inverse_neighbors",
     "materialize_full_owl_rl",
+    "materialize_inferred_graph",
+    "materialize_into_dataset",
     "materialize_inverses_and_transitivity",
     "mint_node_iri",
     "node_classes",
