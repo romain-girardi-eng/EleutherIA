@@ -46,6 +46,9 @@ identifiers:
   - type: doi
     value: "10.5281/zenodo.17379489"
     description: "Zenodo concept DOI"
+  - type: doi
+    value: "10.5281/zenodo.20624880"
+    description: "Zenodo version DOI for v5.1.0 (Git commit 32f0ad94, KG snapshot 2026-06-05)"
   - type: url
     value: "https://github.com/romain-girardi-eng/EleutherIA/releases"
     description: "Release-specific Zenodo version DOI and Git commit hash are recorded per frozen release."
