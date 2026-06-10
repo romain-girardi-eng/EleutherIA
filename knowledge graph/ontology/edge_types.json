@@ -92,7 +92,7 @@
       ]
     },
     "influenced": {
-      "description": "Source influenced target (broad influence relationship)",
+      "description": "DEPRECATED alias of influences — instance data migrated to influences on 2026-06-11; do not use for new edges",
       "category": "intellectual",
       "inverse": "influenced_by",
       "source_types": [
@@ -164,7 +164,7 @@
       ]
     },
     "belongs_to_school": {
-      "description": "Source belongs to target school",
+      "description": "DEPRECATED alias of member_of (person->school) — instance data migrated to member_of on 2026-06-11; do not use for new edges",
       "category": "affiliation",
       "inverse": "has_member",
       "source_types": [
@@ -177,7 +177,7 @@
     "has_member": {
       "description": "Source school has target as member",
       "category": "affiliation",
-      "inverse": "belongs_to_school",
+      "inverse": "member_of",
       "source_types": [
         "school"
       ],
