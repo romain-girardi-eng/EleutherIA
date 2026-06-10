@@ -18,6 +18,34 @@ from .config import SC_COLLECTION_NODE
 from .mapper import map_work
 from .models import SCWork
 
+try:
+    # Canonical implementation (eleutheria-database installed, e.g. repo venv).
+    from eleutheria_database.services.text_integrity import (
+        table_has_column,
+        text_sha256,
+    )
+except ImportError:  # pragma: no cover - standalone fallback, keep in sync
+    import hashlib
+    import unicodedata
+
+    def text_sha256(text: str) -> str:
+        """SHA-256 hex of NFC-normalized UTF-8 text (mirror of services.text_integrity)."""
+        return hashlib.sha256(
+            unicodedata.normalize("NFC", text).encode("utf-8")
+        ).hexdigest()
+
+    def table_has_column(cur, table: str, column: str) -> bool:
+        cur.execute(
+            """
+            SELECT 1 FROM information_schema.columns
+            WHERE table_schema = current_schema()
+              AND table_name = %s AND column_name = %s
+            """,
+            (table, column),
+        )
+        return cur.fetchone() is not None
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -383,8 +411,12 @@ class SCImporter:
                 )
 
                 # 2. INSERT passages (batched)
-                passage_rows = [
-                    (
+                # Deploy-safe tamper-evidence: populate text_sha256 only once
+                # migration 20260610_03_text_integrity.sql has run.
+                has_sha256 = table_has_column(cur, "passages", "text_sha256")
+                passage_rows = []
+                for p in payload["passages"]:
+                    row = (
                         str(p["passage_id"]),
                         str(p["work_id"]),
                         p["canonical_ref"],
@@ -398,16 +430,18 @@ class SCImporter:
                         p["word_count"],
                         json.dumps(p["citation_hierarchy"]),
                     )
-                    for p in payload["passages"]
-                ]
+                    if has_sha256:
+                        row = (*row, text_sha256(p["text_content"]))
+                    passage_rows.append(row)
+                sha_column = ", text_sha256" if has_sha256 else ""
                 psycopg2.extras.execute_values(
                     cur,
-                    """
+                    f"""
                     INSERT INTO passages
                         (passage_id, work_id, canonical_ref, cts_urn,
                          book, chapter, section, sequence_number,
                          text_content, char_length, word_count,
-                         citation_hierarchy)
+                         citation_hierarchy{sha_column})
                     VALUES %s
                     """,
                     passage_rows,

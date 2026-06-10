@@ -11,12 +11,74 @@ SQL/tree/lemma retrieval strategy in the graphrag package.
 """
 
 import logging
+import os
 from collections import defaultdict
 from typing import Any
 
 from eleutheria_database.services.db import DatabaseService
 
 logger = logging.getLogger(__name__)
+
+_ALLOWED_PASSAGE_ROLES = {"original", "translation", "paraphrase"}
+_PASSAGE_ROLE_ENV = "ELEUTHERIA_PASSAGE_ROLE_FILTER"
+
+# Capability cache for the post-migration FTS fast path (module-level so the
+# probe runs once per process across all consumers). None = not probed yet.
+_UNACCENT_AVAILABLE: bool | None = None
+_F_UNACCENT_PROBE = (
+    "SELECT to_regprocedure('free_will.f_unaccent(text)') IS NOT NULL AS available"
+)
+
+
+def passage_role_condition(alias: str = "p") -> str:
+    """SQL predicate restricting primary-text retrieval to one passage role.
+
+    Defaults to ``original`` so translation/paraphrase stub rows never feed
+    ancient-text evidence. Override with ``ELEUTHERIA_PASSAGE_ROLE_FILTER``
+    (a role name, or ``all`` to disable). Validated against a closed
+    allowlist before being inlined into SQL.
+    """
+    role = os.environ.get(_PASSAGE_ROLE_ENV, "original").strip().lower()
+    if role in {"", "all", "any", "off"}:
+        return "TRUE"
+    if role not in _ALLOWED_PASSAGE_ROLES:
+        role = "original"
+    return f"{alias}.passage_role = '{role}'"
+
+
+def _legacy_fts_fragments(query_param: str) -> tuple[str, str]:
+    tsq = f"plainto_tsquery('simple', {query_param})"
+    return (
+        f"to_tsvector('simple', p.text_content) @@ {tsq}",
+        f"ts_rank(to_tsvector('simple', p.text_content), {tsq})",
+    )
+
+
+async def fts_fragments(db: DatabaseService, query_param: str) -> tuple[str, str]:
+    """Return ``(match_condition, rank_expression)`` for the FTS leg.
+
+    Once migration ``20260610_02_unify_fts_simple_unaccent.sql`` has run
+    (detected via ``free_will.f_unaccent``), queries hit the stored
+    'simple'+unaccent ``search_vector`` column and its GIN index. Before
+    the migration the legacy runtime ``to_tsvector('simple', ...)``
+    expression is kept, so code and migration can deploy in either order.
+    Probe failures are not cached.
+    """
+    global _UNACCENT_AVAILABLE
+    if _UNACCENT_AVAILABLE is None:
+        try:
+            row = await db.fetchrow(_F_UNACCENT_PROBE)
+            _UNACCENT_AVAILABLE = bool(row and row["available"])
+        except Exception:
+            logger.warning("f_unaccent capability probe failed", exc_info=True)
+            return _legacy_fts_fragments(query_param)
+    if _UNACCENT_AVAILABLE:
+        tsq = f"plainto_tsquery('simple', free_will.f_unaccent({query_param}))"
+        return (
+            f"p.search_vector @@ {tsq}",
+            f"ts_rank(p.search_vector, {tsq})",
+        )
+    return _legacy_fts_fragments(query_param)
 
 
 class HybridSearchService:
@@ -44,7 +106,8 @@ class HybridSearchService:
             List of passage results with rank scores and highlighted snippets
         """
         try:
-            sql = """
+            match_cond, rank_expr = await fts_fragments(self.db, "$1")
+            sql = f"""
             SELECT
                 p.passage_id::text as id,
                 p.passage_id::text as passage_id,
@@ -58,10 +121,7 @@ class HybridSearchService:
                 p.chapter,
                 p.section,
                 p.text_content,
-                ts_rank(
-                    to_tsvector('simple', p.text_content),
-                    plainto_tsquery('simple', $1)
-                ) as rank,
+                {rank_expr} as rank,
                 ts_headline(
                     'simple',
                     p.text_content,
@@ -71,7 +131,8 @@ class HybridSearchService:
                 'fulltext' as source
             FROM free_will.passages p
             JOIN free_will.ancient_works w ON p.work_id = w.work_id
-            WHERE to_tsvector('simple', p.text_content) @@ plainto_tsquery('simple', $1)
+            WHERE {match_cond}
+              AND {passage_role_condition("p")}
             ORDER BY rank DESC
             LIMIT $2
             """
@@ -99,7 +160,7 @@ class HybridSearchService:
             List of passages containing the lemma
         """
         try:
-            sql = """
+            sql = f"""
             SELECT
                 p.passage_id::text as id,
                 p.passage_id::text as passage_id,
@@ -114,6 +175,7 @@ class HybridSearchService:
             FROM free_will.passages p
             JOIN free_will.ancient_works w ON p.work_id = w.work_id
             WHERE p.morphology @> $1::jsonb
+              AND {passage_role_condition("p")}
             LIMIT $2
             """
 
@@ -141,8 +203,10 @@ class HybridSearchService:
             List of matching passages
         """
         try:
+            role_cond = passage_role_condition("p")
             if query:
-                sql = """
+                match_cond, rank_expr = await fts_fragments(self.db, "$2")
+                sql = f"""
                 SELECT
                     p.passage_id::text as id,
                     p.passage_id::text as passage_id,
@@ -152,20 +216,18 @@ class HybridSearchService:
                     w.language,
                     p.canonical_ref,
                     p.text_content,
-                    ts_rank(
-                        to_tsvector('simple', p.text_content),
-                        plainto_tsquery('simple', $2)
-                    ) as rank
+                    {rank_expr} as rank
                 FROM free_will.passages p
                 JOIN free_will.ancient_works w ON p.work_id = w.work_id
                 WHERE w.author ILIKE '%' || $1 || '%'
-                  AND to_tsvector('simple', p.text_content) @@ plainto_tsquery('simple', $2)
+                  AND {match_cond}
+                  AND {role_cond}
                 ORDER BY rank DESC
                 LIMIT $3
                 """
                 results = await self.db.fetch(sql, author, query, limit)
             else:
-                sql = """
+                sql = f"""
                 SELECT
                     p.passage_id::text as id,
                     p.passage_id::text as passage_id,
@@ -178,6 +240,7 @@ class HybridSearchService:
                 FROM free_will.passages p
                 JOIN free_will.ancient_works w ON p.work_id = w.work_id
                 WHERE w.author ILIKE '%' || $1 || '%'
+                  AND {role_cond}
                 ORDER BY p.sequence_number
                 LIMIT $2
                 """

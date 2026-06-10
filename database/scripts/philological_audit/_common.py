@@ -11,8 +11,8 @@ Where ``auto_apply`` flags whether the fix is mechanical enough to apply
 without human review. The ``--apply`` flag on each script only writes
 rows where ``auto_apply == True``.
 
-All scripts respect the same env var ``DATABASE_URL`` and the same DSN
-fallback used elsewhere in the repo (Supabase pooler).
+All scripts read the connection string from the ``DATABASE_URL`` env var;
+there is deliberately no hardcoded fallback.
 """
 
 from __future__ import annotations
@@ -26,17 +26,17 @@ from typing import Any
 
 import asyncpg
 
-DEFAULT_DSN = (
-    "postgresql://postgres.[redacted-project-ref]:[REDACTED]"
-    "@aws-0-eu-west-1.pooler.supabase.com:5432/postgres?sslmode=require"
-)
-
-
 REPORTS_DIR = Path(__file__).resolve().parents[3] / "data" / "philological_audit"
 
 
 def dsn() -> str:
-    return os.environ.get("DATABASE_URL") or DEFAULT_DSN
+    value = os.environ.get("DATABASE_URL", "").strip()
+    if not value:
+        raise RuntimeError(
+            "DATABASE_URL is not set. Export the Postgres DSN before running "
+            "the philological audit scripts."
+        )
+    return value
 
 
 async def connect() -> asyncpg.Connection:

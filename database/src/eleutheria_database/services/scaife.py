@@ -22,6 +22,8 @@ from dataclasses import dataclass, field
 from typing import Any
 from xml.etree import ElementTree as ET
 
+from .text_integrity import table_has_column, text_sha256
+
 CTS_BASE = "https://scaife-cts.perseus.org/api/cts"
 DEFAULT_RATE_LIMIT_SECONDS = 0.5
 DEFAULT_TIMEOUT_SECONDS = 30
@@ -534,42 +536,52 @@ def parse_and_insert(
             ),
         )
 
+    # Deploy-safe tamper-evidence: populate text_sha256 only once migration
+    # 20260610_03_text_integrity.sql has added the column.
+    has_sha256 = table_has_column(cur, "passages", "text_sha256")
+
     rows: list[tuple] = []
     for i, section in enumerate(payload.sections):
         book, chapter, sec = _parse_urn_ref(section.cts_urn)
-        rows.append(
-            (
-                str(uuid.uuid4()),
-                work_id,
-                section.canonical_ref,
-                section.cts_urn,
-                book,
-                chapter,
-                sec,
-                i,
-                section.text,
-                section.char_length,
-                section.word_count,
-            )
+        row: tuple[Any, ...] = (
+            str(uuid.uuid4()),
+            work_id,
+            section.canonical_ref,
+            section.cts_urn,
+            book,
+            chapter,
+            sec,
+            i,
+            section.text,
+            section.char_length,
+            section.word_count,
         )
+        if has_sha256:
+            row = (*row, text_sha256(section.text))
+        rows.append(row)
 
+    sha_column = ", text_sha256" if has_sha256 else ""
+    sha_placeholder = ", %s" if has_sha256 else ""
     inserted = 0
     if rows:
         for chunk_start in range(0, len(rows), 100):
             chunk = rows[chunk_start : chunk_start + 100]
             psycopg2.extras.execute_values(
                 cur,
-                """
+                f"""
                 INSERT INTO passages (
                     passage_id, work_id, canonical_ref, cts_urn,
                     book, chapter, section, sequence_number,
-                    text_content, char_length, word_count
+                    text_content, char_length, word_count{sha_column}
                 )
                 VALUES %s
                 ON CONFLICT DO NOTHING
                 """,
                 chunk,
-                template="(%s::uuid, %s::uuid, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                template=(
+                    "(%s::uuid, %s::uuid, %s, %s, %s, %s, %s, %s, %s, %s, %s"
+                    f"{sha_placeholder})"
+                ),
                 page_size=100,
             )
             inserted += len(chunk)

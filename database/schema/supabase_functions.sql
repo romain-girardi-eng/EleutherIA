@@ -33,7 +33,13 @@ AS $$
     WITH query_input AS (
         SELECT
             NULLIF(BTRIM(p_query_text), '') AS qtext,
-            plainto_tsquery('english', NULLIF(BTRIM(p_query_text), '')) AS tsq
+            -- Must mirror the stored search_vector config:
+            -- to_tsvector('simple', free_will.f_unaccent(text_content)).
+            -- See migration 20260610_02_unify_fts_simple_unaccent.sql.
+            plainto_tsquery(
+                'simple',
+                free_will.f_unaccent(NULLIF(BTRIM(p_query_text), ''))
+            ) AS tsq
     ),
     ranked AS MATERIALIZED (
         SELECT
