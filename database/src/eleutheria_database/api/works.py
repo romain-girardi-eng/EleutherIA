@@ -11,6 +11,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 
 from eleutheria_database.models.works import AncientWork, Passage
 from eleutheria_database.services.db import DatabaseService
+from eleutheria_database.services.hybrid_search import fts_fragments
 
 router = APIRouter(tags=["works"])
 
@@ -29,6 +30,24 @@ async def get_db() -> DatabaseService:
     if _db_service is None:
         raise RuntimeError("Database service not initialized")
     return _db_service
+
+
+def derive_translation_source(
+    has_translation: bool, translation_type: str | None
+) -> str | None:
+    """Label translation provenance from the _en node's metadata.
+
+    ``translation_type`` is set by the provenance audit ('machine' for AI
+    batches). Absent metadata means provenance is unverified — label it
+    'unknown', never assume a scholarly source.
+    """
+    if not has_translation:
+        return None
+    if translation_type == "machine":
+        return "ai_generated"
+    if translation_type:
+        return translation_type
+    return "unknown"
 
 
 @router.get("/works", response_model=list[AncientWork])
@@ -150,11 +169,8 @@ async def list_passages(
                 WHEN tn.node_id IS NOT NULL THEN 'en'
                 ELSE NULL
             END AS translation_language,
-            CASE
-                WHEN tn.node_id LIKE '%_ai_%' THEN 'ai_generated'
-                WHEN tn.node_id IS NOT NULL THEN 'scholarly'
-                ELSE NULL
-            END AS translation_source,
+            tn.node_id AS translation_node_id,
+            tn.metadata->>'translation_type' AS translation_type,
             COALESCE(kg_count.cnt, 0) AS kg_node_count
         FROM free_will.passages p
         LEFT JOIN free_will.passage_citations pc ON p.passage_id = pc.passage_id
@@ -181,7 +197,14 @@ async def list_passages(
         LIMIT ${limit_param} OFFSET ${offset_param}
         """
 
-    return await db.fetch(sql, *params)
+    rows = await db.fetch(sql, *params)
+    if include_translations:
+        for row in rows:
+            row["translation_source"] = derive_translation_source(
+                row.get("translation_node_id") is not None,
+                row.get("translation_type"),
+            )
+    return rows
 
 
 @router.get("/passages/{passage_id}", response_model=Passage)
@@ -212,9 +235,8 @@ async def search_passages(
 
     Returns passages matching the query with highlighted snippets.
     """
-    conditions = [
-        "to_tsvector('simple', p.text_content) @@ plainto_tsquery('simple', $1)"
-    ]
+    match_cond, rank_expr = await fts_fragments(db, "$1")
+    conditions = [match_cond]
     params: list = [q]
     param_count = 1
 
@@ -243,10 +265,7 @@ async def search_passages(
         w.title,
         w.author,
         w.language,
-        ts_rank(
-            to_tsvector('simple', p.text_content),
-            plainto_tsquery('simple', $1)
-        ) as rank,
+        {rank_expr} as rank,
         ts_headline(
             'simple',
             p.text_content,

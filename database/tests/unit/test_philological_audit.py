@@ -146,3 +146,29 @@ def test_translation_provenance_module_loads() -> None:
     mod = _load("audit_translation_provenance")
     assert hasattr(mod, "audit")
     assert hasattr(mod, "apply_fixes")
+
+
+# ---------------------------------------------------------------------------
+# _common.dsn — no hardcoded fallback
+# ---------------------------------------------------------------------------
+
+
+def test_dsn_raises_when_database_url_unset(monkeypatch) -> None:
+    mod = _load("_common")
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+    import pytest
+
+    with pytest.raises(RuntimeError, match="DATABASE_URL"):
+        mod.dsn()
+
+
+def test_dsn_returns_env_value(monkeypatch) -> None:
+    mod = _load("_common")
+    monkeypatch.setenv("DATABASE_URL", "postgresql://example.invalid/db")
+    assert mod.dsn() == "postgresql://example.invalid/db"
+
+
+def test_no_default_dsn_constant() -> None:
+    # Regression: the module must not ship a hardcoded credentialed DSN.
+    mod = _load("_common")
+    assert not hasattr(mod, "DEFAULT_DSN")

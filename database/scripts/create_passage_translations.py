@@ -7,7 +7,8 @@ Two-Node Architecture:
   - English node ({node_id}_en)    → AI translation, linked via translation_of edge
 
 Usage:
-    python3 create_passage_translations.py --translations /tmp/translations_batch_1.json [--confirm]
+    python3 create_passage_translations.py --translations /tmp/translations_batch_1.json \
+        --model gemini-2.5-flash-batch [--confirm]
 
     # Dry-run (default): shows what would be inserted
     # --confirm: actually writes to DB
@@ -16,10 +17,17 @@ Input JSON format:
     [
         {
             "node_id": "passage_alex_fat_1",       # original node ID
-            "translation": "English translation..."  # English description
+            "translation": "English translation...",  # English description
+            "source_model": "gemini-2.5-flash-batch"  # optional; overrides --model
         },
         ...
     ]
+
+Provenance: every _en node records the model that actually produced the
+translation (``source_model``), plus ``translation_type='machine'`` and
+``translation_source='AI batch: <model>'`` so downstream readers never
+mistake the batch for a published scholarly translation. The model must
+come from the input file or --model — it is never hardcoded.
 
 Edges created per _en node:
     1. translation_of → original passage node
@@ -42,7 +50,39 @@ def get_db_url():
     return db_url
 
 
-def insert_translations(translations, db_url, dry_run=True):
+def resolve_source_model(entry, default_model=None):
+    model = entry.get("source_model") or default_model
+    if not model:
+        raise ValueError(
+            f"No source_model for {entry.get('node_id')}: "
+            "add it to the input JSON or pass --model"
+        )
+    return model
+
+
+def build_en_metadata(orig_id, orig_meta, model):
+    en_meta = {
+        "language": "eng",
+        "source": "ai_translation",
+        "source_model": model,
+        "translation_type": "machine",
+        "translation_source": f"AI batch: {model}",
+        "source_language": orig_meta.get("language", "unknown"),
+        "original_node_id": orig_id,
+        "source_passage_id": orig_meta.get("db_passage_id") or orig_id,
+        "passage_role": "translation",
+        "work_title": orig_meta.get("work_title", ""),
+        "author": orig_meta.get("author", ""),
+        "auto_generated": True,
+    }
+    # Carry over useful fields
+    for key in ("edition", "canonical_ref", "cts_urn", "school", "db_passage_id"):
+        if key in orig_meta:
+            en_meta[key] = orig_meta[key]
+    return en_meta
+
+
+def insert_translations(translations, db_url, dry_run=True, default_model=None):
     conn = psycopg2.connect(db_url)
     cur = conn.cursor()
     cur.execute("SET search_path TO free_will")
@@ -111,24 +151,8 @@ def insert_translations(translations, db_url, dry_run=True):
 
         orig = originals[orig_id]
         orig_meta = orig["metadata"] or {}
-
-        # Build _en metadata
-        en_meta = {
-            "language": "eng",
-            "source": "ai_translation",
-            "source_model": "claude-opus-4-6",
-            "source_language": orig_meta.get("language", "unknown"),
-            "original_node_id": orig_id,
-            "source_passage_id": orig_meta.get("db_passage_id") or orig_id,
-            "passage_role": "translation",
-            "work_title": orig_meta.get("work_title", ""),
-            "author": orig_meta.get("author", ""),
-            "auto_generated": True,
-        }
-        # Carry over useful fields
-        for key in ("edition", "canonical_ref", "cts_urn", "school", "db_passage_id"):
-            if key in orig_meta:
-                en_meta[key] = orig_meta[key]
+        model = resolve_source_model(t, default_model)
+        en_meta = build_en_metadata(orig_id, orig_meta, model)
 
         # Build label
         en_label = orig["label"] + " (English)" if orig["label"] else en_id
@@ -149,7 +173,7 @@ def insert_translations(translations, db_url, dry_run=True):
             "translation_of",
             json.dumps({
                 "auto_generated": True,
-                "source_model": "claude-opus-4-6",
+                "source_model": model,
                 "source_language": orig_meta.get("language", "unknown"),
             }),
         ))
@@ -225,6 +249,11 @@ def insert_translations(translations, db_url, dry_run=True):
 def main():
     parser = argparse.ArgumentParser(description="Insert English translation KG nodes")
     parser.add_argument("--translations", required=True, help="JSON file with translations")
+    parser.add_argument(
+        "--model",
+        help="Model that produced these translations (provenance); "
+        "required unless every entry carries source_model",
+    )
     parser.add_argument("--confirm", action="store_true", help="Actually write to DB")
     parser.add_argument("--db-url", help="Database URL (or set DATABASE_URL)")
     args = parser.parse_args()
@@ -234,8 +263,17 @@ def main():
     with open(args.translations) as f:
         translations = json.load(f)
 
+    # Fail fast on missing provenance before touching the DB
+    try:
+        for t in translations:
+            resolve_source_model(t, args.model)
+    except ValueError as e:
+        parser.error(str(e))
+
     print(f"Loaded {len(translations)} translations from {args.translations}")
-    insert_translations(translations, db_url, dry_run=not args.confirm)
+    insert_translations(
+        translations, db_url, dry_run=not args.confirm, default_model=args.model
+    )
 
 
 if __name__ == "__main__":

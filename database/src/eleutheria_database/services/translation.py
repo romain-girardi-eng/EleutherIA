@@ -145,7 +145,9 @@ def call_gemini(prompt: str, api_key: str, model: str = DEFAULT_MODEL) -> str:
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is required to call the model")
 
-    url = GEMINI_API_URL.format(model=model) + f"?key={api_key}"
+    # API key goes in a header, never the URL — query strings end up in
+    # proxy/server logs.
+    url = GEMINI_API_URL.format(model=model)
     payload = json.dumps(
         {
             "contents": [{"parts": [{"text": prompt}]}],
@@ -161,7 +163,10 @@ def call_gemini(prompt: str, api_key: str, model: str = DEFAULT_MODEL) -> str:
     req = urllib.request.Request(
         url,
         data=payload,
-        headers={"Content-Type": "application/json"},
+        headers={
+            "Content-Type": "application/json",
+            "x-goog-api-key": api_key,
+        },
         method="POST",
     )
 

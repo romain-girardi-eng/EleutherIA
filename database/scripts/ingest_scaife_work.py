@@ -49,6 +49,34 @@ import uuid
 import psycopg2
 import psycopg2.extras
 
+try:
+    # Canonical implementation (eleutheria-database installed, e.g. repo venv).
+    from eleutheria_database.services.text_integrity import (
+        table_has_column,
+        text_sha256,
+    )
+except ImportError:  # pragma: no cover - standalone fallback, keep in sync
+    import hashlib
+    import unicodedata
+
+    def text_sha256(text: str) -> str:
+        """SHA-256 hex of NFC-normalized UTF-8 text (mirror of services.text_integrity)."""
+        return hashlib.sha256(
+            unicodedata.normalize("NFC", text).encode("utf-8")
+        ).hexdigest()
+
+    def table_has_column(cur, table: str, column: str) -> bool:
+        cur.execute(
+            """
+            SELECT 1 FROM information_schema.columns
+            WHERE table_schema = current_schema()
+              AND table_name = %s AND column_name = %s
+            """,
+            (table, column),
+        )
+        return cur.fetchone() is not None
+
+
 SCHEMA = "free_will"
 
 
@@ -114,6 +142,10 @@ def main() -> None:
     if existing_passages > 0:
         print(f"WARNING: {existing_passages} passages already exist for this work")
 
+    # Deploy-safe tamper-evidence: populate text_sha256 only once migration
+    # 20260610_03_text_integrity.sql has added the column.
+    has_sha256 = table_has_column(cur, "passages", "text_sha256")
+
     # 3. Insert passages
     passages_to_insert = []
     for i, s in enumerate(sections):
@@ -130,7 +162,7 @@ def main() -> None:
         section = urn_parts[2] if len(urn_parts) >= 3 else None
 
         passage_id = str(uuid.uuid4())
-        passages_to_insert.append((
+        row = (
             passage_id,
             str(work_id),
             ref,
@@ -142,7 +174,10 @@ def main() -> None:
             text,
             len(text),
             len(text.split()),
-        ))
+        )
+        if has_sha256:
+            row = (*row, text_sha256(text))
+        passages_to_insert.append(row)
 
     print(f"\nPassages to insert: {len(passages_to_insert)}")
 
@@ -155,14 +190,17 @@ def main() -> None:
         return
 
     # Insert passages
+    sha_column = ", text_sha256" if has_sha256 else ""
+    sha_placeholder = ", %s" if has_sha256 else ""
     psycopg2.extras.execute_values(
         cur,
-        """INSERT INTO passages (passage_id, work_id, canonical_ref, cts_urn,
-           book, chapter, section, sequence_number, text_content, char_length, word_count)
+        f"""INSERT INTO passages (passage_id, work_id, canonical_ref, cts_urn,
+           book, chapter, section, sequence_number, text_content, char_length,
+           word_count{sha_column})
            VALUES %s
            ON CONFLICT DO NOTHING""",
         passages_to_insert,
-        template="(%s::uuid, %s::uuid, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+        template=f"(%s::uuid, %s::uuid, %s, %s, %s, %s, %s, %s, %s, %s, %s{sha_placeholder})",
         page_size=100,
     )
     print(f"Inserted passages: {cur.rowcount}")
