@@ -18,6 +18,33 @@ from eleutheria_graphrag.services.model_registry import get_model
 DB_SCHEMA = os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
 
 
+def node_integrity_status(node: dict[str, Any]) -> str:
+    """Audit-pipeline flag on a KG node (e.g. ``greek_unverified``,
+    ``fabrication_confirmed_pending_fix``). Defensive: the flag may not exist
+    in data yet and ``metadata`` may not be a dict.
+
+    String metadata is NOT simply waved through: a stringified-JSON dict is
+    parsed, and a string that mentions ``integrity_status`` but cannot be
+    parsed fails CLOSED (synthetic flag) — a flagged node whose metadata got
+    stringified upstream must not slip back into the context pack. Malformed
+    metadata without the marker stays open: there is no flag to honor, and
+    failing closed there would silently drop most of the KG."""
+    metadata = node.get("metadata")
+    if isinstance(metadata, str):
+        if "integrity_status" not in metadata:
+            return ""
+        try:
+            parsed = json.loads(metadata)
+        except ValueError:  # includes json.JSONDecodeError
+            return "malformed_metadata_integrity_marker"
+        if isinstance(parsed, dict):
+            return str(parsed.get("integrity_status") or "").strip()
+        return "malformed_metadata_integrity_marker"
+    if not isinstance(metadata, dict):
+        return ""
+    return str(metadata.get("integrity_status") or "").strip()
+
+
 def append_reasoning_step(
     state: RAGState,
     node_name: str,

@@ -10,6 +10,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from eleutheria_graphrag.agents.dependencies import Deps
+from eleutheria_graphrag.agents.graph_helpers import node_integrity_status
 
 logger = logging.getLogger(__name__)
 
@@ -132,12 +133,22 @@ class SearchNodesTool:
             pr = self._deps.pagerank_scores.get(node_id, 0.0)
             score += pr * 0.1
 
+            # Integrity-flagged descriptions are not citable text: never
+            # surface them in tool results (they would land in Evidence and
+            # whitelist their own fabricated Greek in the text verifier).
+            # The node itself stays findable/traversable — mirrors
+            # _make_evidence_from_node on the FSM path.
+            description = (
+                ""
+                if node_integrity_status(node)
+                else (node.get("description") or "")[:200]
+            )
             results[node_id] = (
                 NodeSummary(
                     node_id=node_id,
                     label=node.get("label", ""),
                     type=node.get("type", ""),
-                    description=(node.get("description") or "")[:200],
+                    description=description,
                     period=node.get("period"),
                     school=node.get("school"),
                     score=round(score, 3),

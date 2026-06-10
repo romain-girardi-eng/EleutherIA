@@ -2,7 +2,8 @@
 
 import pytest
 
-from eleutheria_graphrag.agents.graph_nodes import ClassifyQueryType, ExpandQuery
+from eleutheria_graphrag.agents.graph_nodes import ClassifyQueryType
+from eleutheria_graphrag.agents.legacy_fsm_nodes import ExpandQuery
 from eleutheria_graphrag.agents.pipeline_config import QueryType
 from eleutheria_graphrag.agents.state import QueryComplexity, RAGState
 

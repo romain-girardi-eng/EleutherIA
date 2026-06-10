@@ -2,7 +2,7 @@
 
 import pytest
 
-from eleutheria_graphrag.agents.graph_nodes import DiscoverCorpus, ExpandQuery
+from eleutheria_graphrag.agents.legacy_fsm_nodes import DiscoverCorpus, ExpandQuery
 from eleutheria_graphrag.agents.pipeline_config import PipelineConfig, QueryType
 from eleutheria_graphrag.agents.state import RAGState
 

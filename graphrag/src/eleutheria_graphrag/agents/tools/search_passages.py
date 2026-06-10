@@ -25,7 +25,7 @@ class PassageHit(BaseModel):
     author: str | None = None
     canonical_ref: str | None = None
     language: str | None = None
-    text_content: str = Field(default="", description="Up to 800 chars")
+    text_content: str = Field(default="", description="Full original passage text")
     score: float = 0.0
 
 
@@ -95,7 +95,7 @@ class SearchPassagesTool:
                             author=row.get("author"),
                             canonical_ref=row.get("canonical_ref"),
                             language=row.get("language"),
-                            text_content=(row.get("text_content") or "")[:800],
+                            text_content=row.get("text_content") or "",
                             score=row.get("rank", 0.0),
                         )
                     )
@@ -174,6 +174,6 @@ def _passage_hit_from_row(row: dict[str, Any]) -> PassageHit:
         author=row.get("author"),
         canonical_ref=row.get("canonical_ref"),
         language=row.get("language"),
-        text_content=(row.get("text_content") or "")[:800],
+        text_content=row.get("text_content") or "",
         score=row.get("rank", row.get("confidence", 0.0)),
     )

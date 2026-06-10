@@ -35,6 +35,7 @@ from eleutheria_graphrag.agents.prompts import (
     FORMAT_RETRY,
     format_system_prompt,
     format_user_prompt,
+    kg_scale_summary,
 )
 from eleutheria_graphrag.agents.sse_emitter import SSEEmitter
 from eleutheria_graphrag.agents.state import QueryComplexity, RAGState
@@ -135,6 +136,7 @@ class AgentLoop:
                     budget=self.budget,
                     remaining=self.budget,
                     tool_descriptions=self.tools.tool_descriptions(),
+                    kg_data=self.deps.kg_data,
                 )
             ),
             _user_msg(
@@ -520,18 +522,17 @@ def _tool_msg(content: str) -> dict[str, str]:
 # ───────────────────────────────────────────────────────────────────────────
 
 
-NATIVE_SYSTEM_PROMPT = """\
+NATIVE_SYSTEM_PROMPT_TEMPLATE = """\
 You are a scholarly research agent specializing in ancient philosophy. You have \
-access to a knowledge graph (17,700 nodes, 42,900 edges) and a corpus of 487 \
-ancient works (69,000 passages) covering philosophical debates on free will, \
+access to {kg_scale} covering philosophical debates on free will, \
 fate, and moral responsibility from the 6th century BCE to the 6th century CE.
 
 ## Your Mission
-Produce a deeply grounded scholarly answer. Quality standards:
-- Every substantive claim must cite a specific passage or KG node.
-- ALWAYS read passages — do not summarize from node descriptions alone.
-- Include original Greek/Latin quotations WITH English translations.
-- Verify attributions before quoting.
+Gather the textual evidence for a deeply grounded scholarly answer. A separate \
+synthesis stage will write the final answer from the evidence you retrieve — \
+your job is retrieval coverage, not prose. Quality standards:
+- ALWAYS read passages — do not rely on node descriptions alone.
+- Verify attributions before treating a passage as evidence.
 - NEVER fabricate ancient text. If you cannot find a passage, say so.
 
 ## How to Work
@@ -541,17 +542,26 @@ Produce a deeply grounded scholarly answer. Quality standards:
    At least 3-5 passages per philosopher discussed.
 4. Use search_passages for Greek/Latin terms (αὐτεξούσιον, εἱμαρμένη, \
 liberum arbitrium, ἐφ᾿ ἡμῖν).
-5. Stop calling tools and write the final answer once you have enough \
-textual evidence.
+5. Stop calling tools once you have enough textual evidence.
 
 ## Output Format
-Use the provided tools to gather evidence. When you are ready, reply with a \
-single assistant message (no tool call) containing the scholarly answer in \
-Markdown. The answer must:
-- Cite passages inline (e.g. "(De Princ. III.1.5)") and quote them in blockquotes.
-- Include Greek/Latin original WITH translation when available.
-- End with a brief "Sources" list of the canonical references used.
+Use the provided tools to gather evidence. Everything a tool returns is \
+recorded automatically for the downstream synthesis stage; your final plain \
+message is NOT shown to the user. When you are done retrieving, reply with a \
+single assistant message (no tool call) containing a structured evidence \
+inventory in Markdown:
+- **Evidence found** — each relevant passage/node with its reference \
+(e.g. "De Princ. III.1.5") and one line on what it establishes.
+- **Coverage gaps** — authors, works, or sub-questions you could not ground \
+in retrieved passages (state "none" if fully covered).
+Do not write the scholarly answer itself and do not quote long passages — \
+synthesis happens downstream from the recorded evidence.
 """
+
+
+def _native_system_prompt(deps: Deps) -> str:
+    """Build the native-loop system prompt with truthful KG counts."""
+    return NATIVE_SYSTEM_PROMPT_TEMPLATE.format(kg_scale=kg_scale_summary(deps.kg_data))
 
 
 class _NativeAgentLoopBase:
@@ -580,7 +590,12 @@ class NativeAgentLoop(_NativeAgentLoopBase):
         1. Send the running message list + the tool schemas to the LLM.
         2. If the assistant returns ``tool_calls``: execute them, append the
            tool results to messages, loop.
-        3. If the assistant returns plain ``content``: that's the final answer.
+        3. If the assistant returns plain ``content``: retrieval is done. The
+           text (a structured evidence inventory per the system prompt) is
+           stored on ``final_answer`` for diagnostics (REPL, logs); the
+           user-facing answer is synthesized downstream by
+           ``DraftClaimLedger -> RenderGroundedAnswer`` from the evidence
+           recorded in ``EvidenceCollector``.
 
     The loop is hard-capped at ``MAX_ITERATIONS`` to defend against models that
     refuse to stop calling tools.
@@ -603,7 +618,7 @@ class NativeAgentLoop(_NativeAgentLoopBase):
         """Execute the native tool-calling loop."""
         trace_id = uuid.uuid4().hex
         self.messages = [
-            {"role": "system", "content": NATIVE_SYSTEM_PROMPT},
+            {"role": "system", "content": _native_system_prompt(self.deps)},
             {
                 "role": "user",
                 "content": format_user_prompt(

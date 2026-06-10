@@ -12,6 +12,7 @@ from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.services.snapshot_retrieval import (
     db_is_connected,
     linked_passage_rows,
+    normalize_mapping,
     translation_for_passage,
 )
 
@@ -20,15 +21,34 @@ logger = logging.getLogger(__name__)
 DB_SCHEMA = os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
 
 
+def _ai_generated_flag(translation_type: str | None) -> bool | None:
+    """None (not False) when provenance is unrecorded — unknown is not human."""
+    if translation_type == "machine":
+        return True
+    if translation_type in {"scholarly", "human"}:
+        return False
+    return None
+
+
 class PassageSummary(BaseModel):
     passage_id: str
     work_title: str = ""
     author: str | None = None
     canonical_ref: str | None = None
     language: str | None = None
-    text_content: str = Field(default="", description="Original text up to 800 chars")
+    text_content: str = Field(default="", description="Full original passage text")
     translation: str | None = Field(
         default=None, description="English translation if available"
+    )
+    translation_type: str | None = Field(
+        default=None,
+        description="Translation provenance from the _en node metadata "
+        "(e.g. 'machine' for AI batches); None when unrecorded",
+    )
+    translation_ai_generated: bool | None = Field(
+        default=None,
+        description="True when the translation is machine-generated; "
+        "None when provenance is unknown — never cite as a named scholar",
     )
     confidence: float = 0.0
 
@@ -259,7 +279,7 @@ class ReadPassagesTool:
 
         passages: list[PassageSummary] = []
         for row in rows:
-            translation = await self._fetch_translation(
+            translation, translation_type = await self._fetch_translation(
                 row.get("passage_id", ""), node_id
             )
             passages.append(
@@ -269,8 +289,12 @@ class ReadPassagesTool:
                     author=row.get("author"),
                     canonical_ref=row.get("canonical_ref"),
                     language=row.get("language"),
-                    text_content=(row.get("text_content") or "")[:800],
+                    text_content=row.get("text_content") or "",
                     translation=translation,
+                    translation_type=translation_type if translation else None,
+                    translation_ai_generated=(
+                        _ai_generated_flag(translation_type) if translation else None
+                    ),
                     confidence=row.get("confidence", 0.0),
                 )
             )
@@ -281,20 +305,33 @@ class ReadPassagesTool:
             passages=passages,
         )
 
-    async def _fetch_translation(self, _passage_id: str, kg_node_id: str) -> str | None:
+    async def _fetch_translation(
+        self, _passage_id: str, kg_node_id: str
+    ) -> tuple[str | None, str | None]:
         """Look up English translation via KG _en nodes linked by translation_of.
 
         The translation is stored as the description of the _en suffixed KG node.
+        Returns ``(text, translation_type)`` where ``translation_type`` is the
+        provenance recorded in the translation node's metadata ('machine' for
+        AI batches; None when unrecorded).
         """
         snapshot_translation = translation_for_passage(self._deps, _passage_id)
         if snapshot_translation and snapshot_translation.get("text_content"):
-            return (snapshot_translation["text_content"] or "")[:800]
+            metadata = normalize_mapping(snapshot_translation.get("metadata"))
+            return (
+                snapshot_translation["text_content"] or "",
+                metadata.get("translation_type"),
+            )
 
         # Try: find _en node that translates the passage's KG node
         en_node_id = f"{kg_node_id}_en"
         en_node = self._deps.node_lookup.get(en_node_id)
         if en_node and en_node.get("description"):
-            return (en_node["description"] or "")[:800]
+            metadata = normalize_mapping(en_node.get("metadata"))
+            return (
+                en_node["description"] or "",
+                metadata.get("translation_type"),
+            )
 
         # Try: find translation_of edge from any _en node to this passage's KG node
         for edge in self._deps.incoming_edges.get(kg_node_id, []):
@@ -302,6 +339,10 @@ class ReadPassagesTool:
                 src_id = edge.get("source", "")
                 src_node = self._deps.node_lookup.get(src_id, {})
                 if src_node.get("description"):
-                    return (src_node["description"] or "")[:800]
+                    metadata = normalize_mapping(src_node.get("metadata"))
+                    return (
+                        src_node["description"] or "",
+                        metadata.get("translation_type"),
+                    )
 
-        return None
+        return None, None

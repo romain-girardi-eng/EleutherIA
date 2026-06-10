@@ -3,15 +3,18 @@ FastAPI routes for GraphRAG Q&A.
 """
 
 import contextlib
+import hmac
+import inspect
 import json
 import logging
+import os
 import time
 import uuid
 from collections.abc import AsyncIterator
 from datetime import datetime
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import PlainTextResponse, Response, StreamingResponse
 from pydantic import ValidationError
 
@@ -94,6 +97,7 @@ async def query(
             graph_depth=request.graph_depth,
             max_context_nodes=request.max_context_nodes,
             include_passages=request.include_passages,
+            hunt_counter_evidence=request.mode == "deep",
         )
         return QueryResponse(**result)
     except Exception as e:
@@ -110,6 +114,7 @@ async def query_stream(
     model: str = "gemini-3.1-pro",
     retrieval_mode: str = "auto",
     force_refresh: bool = False,
+    mode: str = "fast",
 ) -> StreamingResponse:
     """
     Execute a GraphRAG query with streaming response.
@@ -122,9 +127,20 @@ async def query_stream(
 
     A pre-flight lookup against ``free_will.answer_cache`` short-circuits the
     pipeline when an unexpired entry exists for the
-    ``(normalized_question, model, retrieval_mode)`` triple. Pass
+    ``(normalized_question, model, retrieval_mode, mode)`` tuple — fast and
+    deep (counter-evidence) answers never share a slot. Pass
     ``force_refresh=true`` to bypass the cache and re-synthesise.
+
+    ``mode`` is normalised to lowercase and must be ``fast`` or ``deep`` —
+    anything else is a 422 (previously ``Deep`` silently ran fast mode AND
+    occupied its own cache slot).
     """
+    mode = mode.strip().lower()
+    if mode not in {"fast", "deep"}:
+        raise HTTPException(
+            status_code=422,
+            detail="mode must be 'fast' or 'deep'",
+        )
 
     trace_id = uuid.uuid4().hex
     # Lazy imports: backend depends on graphrag, not the other way around —
@@ -152,6 +168,7 @@ async def query_stream(
                     question=question,
                     model=model,
                     retrieval_mode=retrieval_mode,
+                    mode=mode,
                 )
             except Exception:  # noqa: BLE001
                 logger.exception("answer cache lookup failed")
@@ -259,7 +276,14 @@ async def query_stream(
                     "total_edges": 0,
                 }
                 cached_ancient = cached_payload.get("citations") or []
+                # Replay the provenance persisted at store time
+                # (text_verification, grounding, citation_verifier_v2,
+                # research graph keys, …) — without it, cache hits silently
+                # downgraded the answer to an unverified shell.
+                stored_metadata = cached_payload.get("metadata") or {}
+                cached_claim_ledger = cached_payload.get("claim_ledger") or []
                 cached_metadata = {
+                    **(stored_metadata if isinstance(stored_metadata, dict) else {}),
                     "cached": True,
                     "cached_from_trace_id": cached_payload.get("trace_id"),
                     "cached_at": cached_at_iso,
@@ -278,6 +302,7 @@ async def query_stream(
                             "modern_scholarship": [],
                         },
                         "passage_citations": cached_passage_citations,
+                        "claim_ledger": cached_claim_ledger,
                         "sources": cached_sources,
                         "reasoning_path": cached_reasoning,
                         "llm_model": model,
@@ -305,14 +330,30 @@ async def query_stream(
                 return
 
             yield f"data: {json.dumps({'type': 'status', 'data': {'message': 'Initializing scholarly agent...', 'step': 1, 'trace_id': trace_id}})}\n\n"
-            async for chunk in graphrag.query_stream(
-                question=question,
-                semantic_k=semantic_k,
-                graph_depth=graph_depth,
-                max_context_nodes=max_context_nodes,
-                selected_model=model,
-                retrieval_mode=retrieval_mode,
+            # mode='deep' pass-through: GraphRAGService.query() already honors
+            # hunt_counter_evidence, but query_stream() does not accept it yet
+            # (the streaming pipeline is being extended separately). Forward
+            # the flag only when the signature supports it so the wiring
+            # activates automatically once the service lands the parameter.
+            stream_kwargs: dict[str, Any] = {
+                "question": question,
+                "semantic_k": semantic_k,
+                "graph_depth": graph_depth,
+                "max_context_nodes": max_context_nodes,
+                "selected_model": model,
+                "retrieval_mode": retrieval_mode,
+            }
+            if (
+                "hunt_counter_evidence"
+                in inspect.signature(graphrag.query_stream).parameters
             ):
+                stream_kwargs["hunt_counter_evidence"] = mode == "deep"
+            elif mode == "deep":
+                logger.warning(
+                    "mode=deep requested but GraphRAGService.query_stream does "
+                    "not accept hunt_counter_evidence yet — running fast mode"
+                )
+            async for chunk in graphrag.query_stream(**stream_kwargs):
                 now = time.monotonic()
                 rollup = _running_payload()
                 if (
@@ -339,6 +380,8 @@ async def query_stream(
                             "tool_result",
                             "status",
                             "error",
+                            "citation_verified",
+                            "stage_complete",
                         ):
                             yield f"data: {chunk}\n\n"
                             continue
@@ -407,6 +450,13 @@ async def query_stream(
                             final_citations = [
                                 c for c in raw_citations if isinstance(c, dict)
                             ]
+                            # Typed claim-ledger entries from the agent's
+                            # complete payload (emitted by _chunk_answer).
+                            final_claim_ledger = [
+                                c
+                                for c in (raw.get("claim_ledger") or [])
+                                if isinstance(c, dict)
+                            ]
                             merged_metadata = dict(raw.get("metadata") or {})
                             cost_payload = _running_payload()
                             if cost_payload is not None:
@@ -446,6 +496,7 @@ async def query_stream(
                                     # [P3] badges clickable and route them to
                                     # the right passage UUID.
                                     "passage_citations": final_citations,
+                                    "claim_ledger": final_claim_ledger,
                                     "sources": sources,
                                     "reasoning_path": reasoning_path_payload,
                                     "llm_model": raw.get("llm_model", ""),
@@ -479,6 +530,7 @@ async def query_stream(
                                         question=question,
                                         model=model,
                                         retrieval_mode=retrieval_mode,
+                                        mode=mode,
                                         answer=final_answer,
                                         citations=[a for a in ancient if a],
                                         passage_citations=final_citations,
@@ -487,6 +539,13 @@ async def query_stream(
                                         total_tokens=cached_tokens,
                                         total_cost_usd=cached_cost,
                                         trace_id=trace_id,
+                                        # Provenance payload — replayed on
+                                        # cache hits so verification data
+                                        # (text_verification, grounding,
+                                        # citation_verifier_v2, research
+                                        # graph) survives the cache.
+                                        metadata=merged_metadata,
+                                        claim_ledger=final_claim_ledger,
                                     )
                                 except Exception:  # noqa: BLE001
                                     logger.exception(
@@ -496,6 +555,24 @@ async def query_stream(
 
                             if writer is not None:
                                 try:
+                                    # Persist provenance on the trace row so
+                                    # the share renderer (/share/{token}) can
+                                    # surface claims + verification verdicts.
+                                    writer.metadata["answer_metadata"] = {
+                                        k: merged_metadata.get(k)
+                                        for k in (
+                                            "text_verification",
+                                            "grounding",
+                                            "citation_verifier_v2",
+                                            "quality_badge",
+                                            "grounding_policy",
+                                        )
+                                        if merged_metadata.get(k) is not None
+                                    }
+                                    if final_claim_ledger:
+                                        writer.metadata["claim_ledger"] = (
+                                            final_claim_ledger
+                                        )
                                     await writer.finalize(
                                         final_answer=final_answer,
                                         citations=final_citations,
@@ -558,8 +635,23 @@ _FORMAT_EXTENSIONS = {
 }
 
 
+def _require_draft_token(request: Request) -> None:
+    """Refuse draft submission unless the shared-secret token matches.
+
+    The endpoint writes into the export cache keyed by trace_id, so leaving it
+    open would let anyone replace the rendered thesis for a real trace. When
+    ``GRAPHRAG_DRAFT_SUBMIT_TOKEN`` is unset the endpoint is disabled outright.
+    """
+    expected = os.environ.get("GRAPHRAG_DRAFT_SUBMIT_TOKEN", "").strip()
+    if not expected:
+        raise HTTPException(status_code=403, detail="draft submission disabled")
+    provided = request.headers.get("authorization", "")
+    if not hmac.compare_digest(provided.encode(), f"Bearer {expected}".encode()):
+        raise HTTPException(status_code=401, detail="unauthorized")
+
+
 @router.post("/query/draft", response_model=dict)
-async def submit_draft(payload: dict) -> dict:
+async def submit_draft(payload: dict, request: Request) -> dict:
     """Validate + cache a ThesisDraft payload.
 
     Used by the orchestrator after a streaming run completes so the FE can
@@ -567,6 +659,7 @@ async def submit_draft(payload: dict) -> dict:
     which the draft is stored.
     """
 
+    _require_draft_token(request)
     trace_id = payload.get("trace_id")
     if not trace_id or not isinstance(trace_id, str):
         raise HTTPException(status_code=400, detail="trace_id is required")

@@ -14,6 +14,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from eleutheria_graphrag.agents.graph_helpers import node_integrity_status
 from eleutheria_graphrag.agents.state import (
     ContextPack,
     Evidence,
@@ -210,7 +211,11 @@ class EvidenceCollector:
                         original_text=text,
                         translation_text=translation,
                         language=p.get("language"),
-                        token_estimate=RetrievalBudget.estimate_tokens(text),
+                        # The context pack emits original AND translation in
+                        # full, so the budget must count both.
+                        token_estimate=RetrievalBudget.estimate_tokens(
+                            "\n".join(part for part in (text, translation) if part)
+                        ),
                         source=(
                             EvidenceSource.PASSAGE_CITATION
                             if tool_name == "read_passages"
@@ -225,12 +230,19 @@ class EvidenceCollector:
         if nid and nid not in self.seen_node_ids:
             self.seen_node_ids.add(nid)
             self.context_node_ids.append(nid)
+            # Defense-in-depth: the tool already blanks integrity-flagged
+            # descriptions, but the result carries metadata, so re-check
+            # here — a flagged description must never enter Evidence (it
+            # would whitelist its own Greek in the text verifier).
+            description = (
+                "" if node_integrity_status(result) else result.get("description", "")
+            )
             self.primary_evidence.append(
                 Evidence(
                     id=nid,
                     label=result.get("label", ""),
                     type=result.get("type", ""),
-                    description=result.get("description", ""),
+                    description=description,
                     source=EvidenceSource.DIRECT_LOOKUP,
                     period=result.get("period"),
                     school=result.get("school"),

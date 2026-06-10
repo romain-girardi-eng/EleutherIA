@@ -32,6 +32,10 @@ from eleutheria_graphrag.services.bibliography_builder import (
     BibliographyToolset,
     render_bibliography_markdown,
 )
+from eleutheria_graphrag.services.citation_verifier_v2 import (
+    CitationVerifierV2,
+    build_db_passage_fetcher,
+)
 from eleutheria_graphrag.services.counter_evidence_hunter import (
     CounterEvidenceHunter,
     MCPToolset,
@@ -71,6 +75,13 @@ def _normalize_json_mapping(value: Any) -> dict[str, Any]:
             return {}
         return parsed if isinstance(parsed, dict) else {}
     return {}
+
+
+def _env_flag(name: str, *, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
 
 
 def _preferred_provider() -> ModelProvider:
@@ -151,12 +162,16 @@ class ResponseCache:
         self._ttl = ttl_seconds
         self._max = max_entries
 
-    def _key(self, question: str, model: str, mode: str) -> str:
-        raw = f"{question.strip().lower()}::{model}::{mode}"
+    def _key(self, question: str, model: str, mode: str, *, deep: bool = False) -> str:
+        # ``deep`` (hunt_counter_evidence / mode='deep') changes the answer
+        # materially — deep and fast responses must never share a cache slot.
+        raw = f"{question.strip().lower()}::{model}::{mode}::deep={int(deep)}"
         return hashlib.sha256(raw.encode()).hexdigest()[:16]
 
-    def get(self, question: str, model: str, mode: str) -> dict[str, Any] | None:
-        key = self._key(question, model, mode)
+    def get(
+        self, question: str, model: str, mode: str, *, deep: bool = False
+    ) -> dict[str, Any] | None:
+        key = self._key(question, model, mode, deep=deep)
         entry = self._cache.get(key)
         if entry is None:
             return None
@@ -166,11 +181,19 @@ class ResponseCache:
             return None
         return result
 
-    def put(self, question: str, model: str, mode: str, result: dict[str, Any]) -> None:
+    def put(
+        self,
+        question: str,
+        model: str,
+        mode: str,
+        result: dict[str, Any],
+        *,
+        deep: bool = False,
+    ) -> None:
         if len(self._cache) >= self._max:
             oldest_key = min(self._cache, key=lambda k: self._cache[k][0])
             del self._cache[oldest_key]
-        key = self._key(question, model, mode)
+        key = self._key(question, model, mode, deep=deep)
         self._cache[key] = (time.time(), result)
 
 
@@ -276,6 +299,22 @@ class GraphRAGService:
         tree_index = TreeIndexService(db=self.db) if db_is_connected(self.db) else None
         llm_reranker = LLMRerankerService(llm=self.llm)
 
+        # Cross-encoder reranker: only constructed when explicitly enabled
+        # (model weights are not vendored — first use downloads/loads them
+        # lazily inside RerankerService). Default off to keep prod startup
+        # and per-query latency unchanged.
+        if self._reranker is None and _env_flag("ELEUTHERIA_RERANKER", default=False):
+            try:
+                from eleutheria_graphrag.services.reranker import RerankerService
+
+                self._reranker = RerankerService()
+                logger.info("Cross-encoder reranker enabled (ELEUTHERIA_RERANKER)")
+            except Exception:
+                logger.warning(
+                    "ELEUTHERIA_RERANKER set but RerankerService unavailable",
+                    exc_info=True,
+                )
+
         # Vectorless retrieval: SQL strategy with LLM lemma expansion when the
         # database is reachable; snapshot strategy as the offline fallback.
         lemma_expander = LemmaExpander(llm=self.llm)
@@ -287,6 +326,22 @@ class GraphRAGService:
         else:
             retrieval_strategy = SnapshotStrategy(min_passages=4)
 
+        # Adversarial post-synthesis citation auditor (v2). Default ON: the
+        # per-query cost is capped by ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS
+        # (default 8) sampled claims, each a single small low-temperature LLM
+        # call, all dispatched within the verifier's concurrency cap of 10 —
+        # one parallel wave per query. Set ELEUTHERIA_VERIFIER_V2=false to
+        # disable.
+        verifier_v2: CitationVerifierV2 | None = None
+        if _env_flag("ELEUTHERIA_VERIFIER_V2", default=True):
+            verifier_v2 = CitationVerifierV2(
+                llm=self.llm,
+                passage_fetcher=build_db_passage_fetcher(
+                    self.db,
+                    node_lookup=self.node_lookup,
+                ),
+            )
+
         # Construct dependency container
         deps = Deps(
             db=self.db,
@@ -296,6 +351,7 @@ class GraphRAGService:
             traversal=traversal,
             reranker=self._reranker,
             verifier=self._verifier,
+            verifier_v2=verifier_v2,
             llm_reranker=llm_reranker,
             tree_index=tree_index,
             retrieval_strategy=retrieval_strategy,
@@ -435,7 +491,12 @@ class GraphRAGService:
                 stacklevel=2,
             )
 
-        cached = self._response_cache.get(question, selected_model, retrieval_mode)
+        cached = self._response_cache.get(
+            question,
+            selected_model,
+            retrieval_mode,
+            deep=hunt_counter_evidence,
+        )
         if cached is not None:
             return {**cached, "cached": True}
 
@@ -444,6 +505,7 @@ class GraphRAGService:
             question,
             selected_model=selected_model,
             retrieval_mode=retrieval_mode,
+            hunt_counter_evidence=hunt_counter_evidence,
         )
 
         # Two-pass adversarial loop (mode=deep / thesis-grade queries).
@@ -486,7 +548,13 @@ class GraphRAGService:
                     exc
                 )
 
-        self._response_cache.put(question, selected_model, retrieval_mode, result)
+        self._response_cache.put(
+            question,
+            selected_model,
+            retrieval_mode,
+            result,
+            deep=hunt_counter_evidence,
+        )
         return result
 
     # ------------------------------------------------------------------
@@ -724,8 +792,14 @@ class GraphRAGService:
         max_context_nodes: int = 30,
         selected_model: str = "gemini-3.1-pro",
         retrieval_mode: str = "auto",
+        hunt_counter_evidence: bool = False,
     ) -> AsyncIterator[str]:
-        """Execute GraphRAG query with streaming response."""
+        """Execute GraphRAG query with streaming response.
+
+        ``hunt_counter_evidence`` (mode='deep' upstream) runs the
+        CounterEvidenceHunter inside the react pipeline after evidence
+        collection and before the claim ledger is drafted.
+        """
         if not self._kg_loaded:
             await self.load_kg()
 
@@ -734,6 +808,7 @@ class GraphRAGService:
             question,
             selected_model=selected_model,
             retrieval_mode=retrieval_mode,
+            hunt_counter_evidence=hunt_counter_evidence,
         ):
             yield chunk
 

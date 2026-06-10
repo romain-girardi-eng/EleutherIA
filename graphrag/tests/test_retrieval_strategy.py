@@ -66,8 +66,9 @@ async def test_sql_strategy_escalates_to_hybrid_search():
             [{"node_id": "concept_fate"}],
             # Step: passage citations
             [{"passage_id": "p1", "kg_node_id": "concept_fate", "confidence": 0.9}],
-            # Step: lemma lookup (no terms expanded → empty)
-            [],
+            # Lemma lookup makes no fetch here: without a LemmaExpander there
+            # are no expanded terms, so the step (and its capability probe)
+            # short-circuits before touching the DB.
         ]
     )
     mock_deps.outgoing_edges = {}
@@ -126,11 +127,13 @@ async def test_sql_strategy_uses_lemma_expander_when_available():
     # Step order:
     #   1. label tier-1 match → empty
     #   2. description tier-2 match → empty
-    #   3. lemma lookup → 2 hits
+    #   3. oga_tokens.passage_id capability probe → column present
+    #   4. lemma lookup → 2 hits
     mock_deps.db.fetch = AsyncMock(
         side_effect=[
             [],  # label match
             [],  # description match
+            [{"?column?": 1}],  # information_schema probe
             [{"passage_id": "p_lemma_1"}, {"passage_id": "p_lemma_2"}],  # lemma lookup
         ]
     )

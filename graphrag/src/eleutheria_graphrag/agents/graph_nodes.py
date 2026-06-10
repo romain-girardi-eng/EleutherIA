@@ -1,28 +1,25 @@
 """
-pydantic-graph FSM nodes for the long-context scholarly GraphRAG pipeline.
+pydantic-graph nodes and shared helpers for the scholarly GraphRAG pipeline.
 
-The active pipeline is:
+The production (react-mode) pipeline uses the nodes defined here:
 
     ClassifyQueryType
-      -> ExpandQuery
-      -> DiscoverCorpus
-      -> BuildResearchNotebook
-      -> TreeNavigateWorks
-      -> ExpandEvidenceBundles
-      -> SeekCounterEvidence
-      -> EvidenceSufficiency
+      -> [agent loop, see react_loop.py]
       -> DraftClaimLedger
       -> RenderGroundedAnswer
       -> ProgrammaticVerify
       -> End
 
-Legacy node names are kept as thin wrappers where that improves compatibility,
-but the shared helpers implement a single structured-agent flow.
+together with ``assess_evidence_sufficiency`` and the helper functions in
+this module. The FSM-only middle nodes (ExpandQuery, DiscoverCorpus,
+BuildResearchNotebook, PlanReading, TreeNavigateWorks, ExpandEvidenceBundles,
+SeekCounterEvidence, the EvidenceSufficiency node shell) and the historical
+compatibility wrappers live in ``legacy_fsm_nodes.py``; they import the
+shared helpers back from this module.
 """
 
 from __future__ import annotations
 
-import asyncio
 import json
 import logging
 import os
@@ -30,11 +27,29 @@ import re
 import time as _time
 from collections import deque
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pydantic_graph import BaseNode, End, GraphRunContext
 
+if TYPE_CHECKING:
+    from eleutheria_graphrag.agents.legacy_fsm_nodes import ExpandQuery
+
+from eleutheria_graphrag.agents.ancient_text_matching import (
+    MODERN_STOPWORDS,
+)
+from eleutheria_graphrag.agents.ancient_text_matching import (
+    contains_word_bounded as _contains_word_bounded,
+)
+from eleutheria_graphrag.agents.ancient_text_matching import (
+    fold_ancient_text as _fold_ancient_text,
+)
+from eleutheria_graphrag.agents.ancient_text_matching import (
+    word_bounded_index as _word_bounded_index,
+)
 from eleutheria_graphrag.agents.dependencies import Deps
+from eleutheria_graphrag.agents.graph_helpers import (
+    node_integrity_status as _node_integrity_status,
+)
 from eleutheria_graphrag.agents.pipeline_config import (
     QueryType,
     get_pipeline_config,
@@ -52,12 +67,9 @@ from eleutheria_graphrag.agents.state import (
     EvidenceSource,
     QueryComplexity,
     RAGState,
-    ReadingDecision,
-    ReadingNote,
     ReasoningStep,
     ResearchFacet,
     ResearchNotebook,
-    ResearchToolCall,
     RetrievalBudget,
     ScholarlyAnswer,
     ScholarlyDossier,
@@ -66,24 +78,20 @@ from eleutheria_graphrag.agents.structured_models import (
     ClaimLedgerDraft,
     ClaimLedgerDraftItem,
     ClassificationResult,
-    CounterEvidenceResult,
     CRAGValidation,
     ExpansionTerms,
-    ReadingPlanResult,
-    ResearchFrame,
     SelfRAGEvaluation,
     SufficiencyAssessment,
-    TreeNavigationResult,
 )
 from eleutheria_graphrag.agents.text_utils import truncate_json, truncate_text
+from eleutheria_graphrag.agents.text_verifier import extract_greek_runs
 from eleutheria_graphrag.services.json_extractor import (
     JSONExtractionError,
     extract_json,
 )
 from eleutheria_graphrag.services.model_registry import get_model
 from eleutheria_graphrag.services.retrieval_strategy import (
-    SnapshotStrategy,
-    SQLStrategy,
+    passage_role_condition,
 )
 from eleutheria_graphrag.services.snapshot_retrieval import (
     db_is_connected,
@@ -292,7 +300,24 @@ DB_SCHEMA = os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
 LINE_SPLIT_RE = re.compile(r"\n+")
 REF_RE = re.compile(r"\[(.*?)\]")
 REF_NUMBER_RE = re.compile(r"\b\d+\b")
-QUOTE_RE = re.compile(r"[\"“](.+?)[\"”]")
+# Paired quotation marks: straight/curly double, curly single, guillemets
+# (double and single), German low-9 variants. One capture group per pair.
+QUOTE_RE = re.compile(
+    r"[\"“](.+?)[\"”]"
+    r"|‘(.+?)’"
+    r"|«\s*(.+?)\s*»"
+    r"|‹\s*(.+?)\s*›"
+    r"|„(.+?)[“”]"
+    r"|‚(.+?)[‘’]"
+)
+GREEK_CHAR_RE = re.compile(r"[\u0370-\u03FF\u1F00-\u1FFF]")
+ELLIPSIS_RE = re.compile(r"…|⋯|\.{3,}")
+# Chunks worth checking independently inside a blockquote line: the quoted
+# matter itself vs. dash/parenthesis attributions ("— Cicero, De Fato 20").
+LATIN_CHUNK_SPLIT_RE = re.compile(r"[—–()\[\]]|\s-\s")
+# MODERN_STOPWORDS (the modern-language function-word gate for candidate
+# ancient Latin) lives in ``ancient_text_matching`` — shared with the
+# post-synthesis text verifier. Imported above.
 TERM_RE = re.compile(r"[A-Za-zÀ-ÿἀ-῾']+")
 STOP_TERMS = {
     "about",
@@ -2332,7 +2357,7 @@ def _bundle_query_score(bundle: EvidenceBundle, state: RAGState) -> int:
 
 
 def _top_bundle_debug_entries(
-    scored_bundles: list[tuple[tuple[int, int, int], EvidenceBundle]],
+    scored_bundles: list[tuple[tuple[float, float, float, float], EvidenceBundle]],
     refs: dict[str, str],
     state: RAGState,
 ) -> list[dict[str, Any]]:
@@ -2568,13 +2593,17 @@ def _make_evidence_from_node(
     metadata = node.get("metadata", {}) or {}
     node_type = str(node.get("type", ""))
     is_passage = node_type.lower() in {"passage", "quote"}
+    # Integrity-flagged descriptions are not citable text: never pack them
+    # into the dossier/context pack (the node itself stays traversable).
+    integrity_flagged = bool(_node_integrity_status(node))
+    description = "" if integrity_flagged else node.get("description", "")
     return Evidence(
         id=node_id,
         label=node.get("label", node_id),
         type=node_type,
         layer=layer,
         source=source,
-        description=node.get("description", ""),
+        description=description,
         score=score,
         period=node.get("period"),
         school=node.get("school"),
@@ -2596,7 +2625,9 @@ def _make_evidence_from_node(
             if is_passage
             else None
         ),
-        text_content=node.get("description") if is_passage else None,
+        text_content=(
+            node.get("description") if is_passage and not integrity_flagged else None
+        ),
         language=metadata.get("language") if is_passage else None,
     )
 
@@ -2667,19 +2698,55 @@ def _candidate_work_titles(state: RAGState) -> list[str]:
     return [title for title, _ in ordered]
 
 
+_PASSAGE_UUID_RE = re.compile(
+    r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}"
+    r"-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+)
+
+
 async def _fetch_passages_for_nodes(
     deps: Deps,
     node_ids: list[str],
     limit: int | None = None,
 ) -> list[dict[str, Any]]:
-    """Fetch passages linked to nodes via passage_citations."""
+    """Fetch passages linked to nodes via passage_citations.
+
+    Anchors that are raw database passage UUIDs (returned by SQLStrategy,
+    not KG node ids) are resolved directly against ``passages`` so they
+    survive into evidence bundles.
+    """
     if not node_ids:
         return []
     if not db_is_connected(deps.db):
         return linked_passage_rows(deps, node_ids, limit=limit)
 
+    role_cond = passage_role_condition("p")
     placeholders = ", ".join(f"${i + 1}" for i in range(len(node_ids)))
     limit_clause = f"LIMIT {limit}" if limit is not None else ""
+
+    uuid_ids = [str(nid) for nid in node_ids if _PASSAGE_UUID_RE.match(str(nid))]
+    direct_clause = ""
+    if uuid_ids:
+        offset = len(node_ids)
+        direct_ph = ", ".join(f"${offset + i + 1}" for i in range(len(uuid_ids)))
+        direct_clause = f"""
+            UNION
+            SELECT
+                p.passage_id,
+                p.work_id::text AS work_id,
+                p.text_content,
+                p.canonical_ref,
+                p.sequence_number,
+                w.title,
+                w.author,
+                w.language,
+                1.0::double precision AS confidence
+            FROM {DB_SCHEMA}.passages p
+            JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
+            WHERE p.passage_id::text IN ({direct_ph})
+              AND {role_cond}
+        """
+
     try:
         rows: list[dict[str, Any]] = await deps.db.fetch(
             f"""
@@ -2697,10 +2764,13 @@ async def _fetch_passages_for_nodes(
             JOIN {DB_SCHEMA}.passages p ON pc.passage_id = p.passage_id
             JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
             WHERE pc.kg_node_id IN ({placeholders})
-            ORDER BY pc.confidence DESC, p.sequence_number
+              AND {role_cond}
+            {direct_clause}
+            ORDER BY confidence DESC NULLS LAST, sequence_number
             {limit_clause}
             """,
             *node_ids,
+            *uuid_ids,
         )
         return rows
     except Exception:
@@ -2806,7 +2876,7 @@ async def _fetch_translation_for_passage(
         if not node:
             continue
         text = node.get("description")
-        if not text:
+        if not text or _node_integrity_status(node):
             continue
         metadata = (
             node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
@@ -2966,7 +3036,7 @@ async def _batch_fetch_translations(
             if not node:
                 continue
             text = node.get("description")
-            if not text:
+            if not text or _node_integrity_status(node):
                 continue
             metadata = (
                 node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
@@ -3276,7 +3346,9 @@ def _resolve_claim_evidence_ids(
     return deduped
 
 
-def _bundle_score(bundle: EvidenceBundle, state: RAGState) -> tuple[int, int, int]:
+def _bundle_score(
+    bundle: EvidenceBundle, state: RAGState
+) -> tuple[float, float, float, float]:
     query_score = _bundle_query_score(bundle, state)
     features = _bundle_academic_features(bundle, state)
     source_weight = 2 if bundle.source == EvidenceSource.TREE_REASONING else 1
@@ -3285,7 +3357,21 @@ def _bundle_score(bundle: EvidenceBundle, state: RAGState) -> tuple[int, int, in
         "ancient_testimony": 2,
         "counter_evidence": 1,
     }.get(features["evidence_class"], 1)
-    return (query_score, evidence_weight + source_weight, -bundle.token_estimate)
+    # Optional cross-encoder rerank score (set by the reranker pass when
+    # ELEUTHERIA_RERANKER is enabled). Acts as a tie-break after the
+    # query score so the query_score>0 packing filter keeps its semantics;
+    # 0.0 (absent) reproduces the legacy ordering exactly.
+    rerank_raw = bundle.metadata.get("rerank_score")
+    try:
+        rerank_score = float(rerank_raw) if rerank_raw is not None else 0.0
+    except TypeError, ValueError:
+        rerank_score = 0.0
+    return (
+        float(query_score),
+        rerank_score,
+        float(evidence_weight + source_weight),
+        float(-bundle.token_estimate),
+    )
 
 
 def _build_context_pack(state: RAGState) -> ContextPack:
@@ -3334,8 +3420,10 @@ def _build_context_pack(state: RAGState) -> ContextPack:
     )
     if any(score_tuple[0] > 0 for score_tuple, _ in scored_bundles):
         scored_bundles = [item for item in scored_bundles if item[0][0] > 0]
-    prioritized_pairs: list[tuple[tuple[int, int, int], EvidenceBundle]] = []
-    overflow_pairs: list[tuple[tuple[int, int, int], EvidenceBundle]] = []
+    prioritized_pairs: list[
+        tuple[tuple[float, float, float, float], EvidenceBundle]
+    ] = []
+    overflow_pairs: list[tuple[tuple[float, float, float, float], EvidenceBundle]] = []
     work_counts: dict[str, int] = {}
     for item in scored_bundles:
         bundle = item[1]
@@ -3365,15 +3453,16 @@ def _build_context_pack(state: RAGState) -> ContextPack:
         bundle_lines = []
         for bundle in pack.passage_bundles:
             ref = pack.bundle_refs[bundle.bundle_id]
+            # Full passage text by design (1M-token context): the per-layer
+            # RetrievalBudget gate above already bounds total bundle tokens,
+            # and quote-containment verification needs the uncut original.
             lines = [
                 f"[{ref}] {_bundle_label(bundle)}",
                 f"Section: {bundle.section_path or 'unknown'}",
-                f'Original: "{truncate_text(bundle.original_text, 1600)}"',
+                f'Original: "{bundle.original_text}"',
             ]
             if bundle.translation_text:
-                lines.append(
-                    f'Translation: "{truncate_text(bundle.translation_text, 1600)}"'
-                )
+                lines.append(f'Translation: "{bundle.translation_text}"')
             bundle_lines.append("\n".join(lines))
         parts.append("## Evidence Bundles\n" + "\n\n".join(bundle_lines))
 
@@ -4372,15 +4461,15 @@ def _normalize_reference_markers(line: str, refs: list[str]) -> str:
     return normalized.strip()
 
 
-def _quote_supported_by_refs(
-    quote: str,
+# ``_fold_ancient_text`` / ``_contains_word_bounded`` are imported from
+# ``ancient_text_matching`` (shared with the post-synthesis text verifier).
+
+
+def _collect_ref_source_texts(
     refs: list[str],
     bundles_by_ref: dict[str, EvidenceBundle],
     nodes_by_ref: dict[str, Evidence],
-) -> bool:
-    normalized_quote = _normalize_quote_text(quote)
-    if len(re.sub(r"\W+", "", normalized_quote)) < 6:
-        return True
+) -> list[str]:
     source_texts: list[str] = []
     for ref in refs:
         if ref in bundles_by_ref:
@@ -4393,7 +4482,184 @@ def _quote_supported_by_refs(
             source_texts.extend(
                 text for text in (evidence.description, evidence.text_content) if text
             )
-    return any(normalized_quote in _normalize_quote_text(text) for text in source_texts)
+    return source_texts
+
+
+def _split_elided_segments(text: str) -> list[str]:
+    """Split an elided quotation on ellipsis tokens into checkable segments."""
+    return [segment for segment in ELLIPSIS_RE.split(text) if segment.strip()]
+
+
+def _segments_in_order(text: str, segments: list[str]) -> bool:
+    """True when every segment matches word-bounded, in order, in ``text``.
+
+    Each segment must start at a strictly later offset than the end of the
+    previous match (an ellipsis elides material *between* segments, so a
+    later segment can never precede or overlap an earlier one). Greedy
+    earliest matching is optimal here: taking the first possible match for
+    each segment leaves maximal room for the remaining ones.
+    """
+    position = 0
+    for segment in segments:
+        index = _word_bounded_index(text, segment, position)
+        if index < 0:
+            return False
+        position = index + len(segment)
+    return True
+
+
+def _segments_supported_by_text(segments: list[str], text: str) -> bool:
+    """Every elided segment must exist verbatim — and in order — in this text.
+
+    The segments of one elided quotation must appear at increasing offsets
+    within a single representation of the source (normalized, else folded):
+    real fragments quoted out of their source order are a stitched
+    fabrication, not an elision.
+    """
+    if _segments_in_order(
+        _normalize_quote_text(text),
+        [_normalize_quote_text(segment) for segment in segments],
+    ):
+        return True
+    return _segments_in_order(
+        _fold_ancient_text(text),
+        [_fold_ancient_text(segment) for segment in segments],
+    )
+
+
+def _quote_supported_by_refs(
+    quote: str,
+    refs: list[str],
+    bundles_by_ref: dict[str, EvidenceBundle],
+    nodes_by_ref: dict[str, Evidence],
+) -> bool:
+    normalized_quote = _normalize_quote_text(quote)
+    # Ancient-language spans are never waved through: any quote containing
+    # Greek must be checked from 2 word-chars up; plain Latin-script quotes
+    # keep the looser 6-char floor for incidental short phrases.
+    min_word_chars = 2 if GREEK_CHAR_RE.search(quote) else 6
+    if len(re.sub(r"\W+", "", normalized_quote)) < min_word_chars:
+        return True
+    source_texts = _collect_ref_source_texts(refs, bundles_by_ref, nodes_by_ref)
+    segments = _split_elided_segments(quote)
+    return any(_segments_supported_by_text(segments, text) for text in source_texts)
+
+
+def _combined_greek_misses(line: str, folded_sources: list[str]) -> list[str]:
+    """Validate a quotation line's Greek as ordered whole-line segments.
+
+    A blockquote stitched together from isolated real fragments — single
+    words or genuine multi-word spans split into separate runs by em-dashes
+    or other separators the run regex does not cross — must not pass by
+    validating each fragment independently. Between ellipsis tokens, the
+    line's Greek must be one contiguous span of a single cited source, and
+    successive segments must occur in source order at increasing offsets —
+    real segments quoted in reverse order are a stitched fabrication.
+    Returns the original runs when unsupported, ``[]`` when the combined
+    check passes.
+    """
+    segments: list[str] = []
+    for piece in ELLIPSIS_RE.split(line):
+        joined = _fold_ancient_text(
+            " ".join(run for run, _pos in extract_greek_runs(piece))
+        )
+        if len(re.sub(r"\W+", "", joined)) >= 2:
+            segments.append(joined)
+    if not segments:
+        return []
+    if any(_segments_in_order(source, segments) for source in folded_sources):
+        return []
+    return [run for run, _pos in extract_greek_runs(line)]
+
+
+def _unsupported_greek_runs(
+    line: str,
+    refs: list[str],
+    bundles_by_ref: dict[str, EvidenceBundle],
+    nodes_by_ref: dict[str, Evidence],
+    min_words: int = 1,
+    combine_short_runs: bool = False,
+) -> list[str]:
+    """Greek runs in a quoted line that are absent from the cited evidence.
+
+    ``min_words`` lets prose lines tolerate short inline technical terms
+    while still rejecting sentence-length unverified Greek.
+    ``combine_short_runs`` (quotation-formatted lines) re-combines multiple
+    runs into ordered whole-line segments: real fragments assembled into a
+    fake quotation — single words or genuine multi-word spans stitched with
+    em-dashes — must be checked as one contiguous sequence, not one by one.
+    """
+    runs = extract_greek_runs(line)
+    if not runs:
+        return []
+    folded_sources = [
+        _fold_ancient_text(text)
+        for text in _collect_ref_source_texts(refs, bundles_by_ref, nodes_by_ref)
+    ]
+    if combine_short_runs and len(runs) >= 2:
+        return _combined_greek_misses(line, folded_sources)
+    unsupported: list[str] = []
+    for run, _pos in runs:
+        # An ASCII "..." glues two elided segments into one run; each
+        # segment must exist verbatim — in source order — in a single
+        # cited source.
+        segments = [
+            folded
+            for folded in (
+                _fold_ancient_text(part) for part in _split_elided_segments(run)
+            )
+            if len(re.sub(r"\W+", "", folded)) >= 2
+        ]
+        if not segments:
+            continue
+        if sum(len(segment.split()) for segment in segments) < min_words:
+            continue
+        if not any(_segments_in_order(source, segments) for source in folded_sources):
+            unsupported.append(run)
+    return unsupported
+
+
+def _unsupported_latin_quotation(
+    line: str,
+    refs: list[str],
+    bundles_by_ref: dict[str, EvidenceBundle],
+    nodes_by_ref: dict[str, Evidence],
+) -> str | None:
+    """Unquoted Latin-script text in a quotation-formatted line that looks
+    ancient (no modern function words) and is absent from the cited evidence.
+    """
+    text = QUOTE_RE.sub(" ", line)
+    text = REF_RE.sub(" ", text)
+    text = text.lstrip("> ").strip()
+    if not text or GREEK_CHAR_RE.search(text):
+        return None
+    folded_sources: list[str] | None = None
+    for chunk in LATIN_CHUNK_SPLIT_RE.split(text):
+        segments = [
+            folded
+            for folded in (
+                _fold_ancient_text(part) for part in _split_elided_segments(chunk)
+            )
+            if folded
+        ]
+        words = [word for segment in segments for word in segment.split()]
+        # Short chunks (attributions, page refs) and anything carrying a
+        # modern function word are prose, not candidate ancient Latin.
+        if len(words) < 5 or any(word in MODERN_STOPWORDS for word in words):
+            continue
+        if folded_sources is None:
+            folded_sources = [
+                _fold_ancient_text(source)
+                for source in _collect_ref_source_texts(
+                    refs, bundles_by_ref, nodes_by_ref
+                )
+            ]
+        if not any(
+            all(_contains_word_bounded(source, segment) for segment in segments)
+            for source in folded_sources
+        ):
+            return chunk.strip()
+    return None
 
 
 def _sanitize_line_quotes(
@@ -4401,32 +4667,22 @@ def _sanitize_line_quotes(
     refs: list[str],
     bundles_by_ref: dict[str, EvidenceBundle],
     nodes_by_ref: dict[str, Evidence],
+    unsupported_quotes: list[str] | None = None,
 ) -> str | None:
     matches = list(QUOTE_RE.finditer(line))
     if not matches:
         return line
 
-    sanitized = line
-    unsupported_found = False
-    for match in reversed(matches):
-        quote = match.group(1)
+    for match in matches:
+        quote = next(group for group in match.groups() if group is not None)
         if _quote_supported_by_refs(quote, refs, bundles_by_ref, nodes_by_ref):
             continue
-        unsupported_found = True
-        sanitized = sanitized[: match.start()] + quote + sanitized[match.end() :]
-
-    sanitized = re.sub(r"\s{2,}", " ", sanitized).strip()
-    if unsupported_found and sanitized.lower().startswith(
-        (
-            "original:",
-            "translation:",
-            "greek original:",
-            "english translation:",
-            "latin original:",
-        )
-    ):
+        # Drop the whole line: stripping the quote marks while keeping the
+        # text would launder an unverifiable quotation into plain prose.
+        if unsupported_quotes is not None:
+            unsupported_quotes.append(quote)
         return None
-    return sanitized or None
+    return line
 
 
 def _is_section_header(line: str) -> bool:
@@ -4445,6 +4701,7 @@ def _verify_answer_programmatically(
     bundles_by_ref, nodes_by_ref = _reverse_ref_maps(state)
     valid_refs = set(bundles_by_ref) | set(nodes_by_ref)
     kept_lines: list[str] = []
+    unsupported_quotes: list[str] = []
     seen_refs: set[str] = set()
     pending_headers: list[str] = []
     pending_blank = False
@@ -4505,9 +4762,30 @@ def _verify_answer_programmatically(
                     ref for ref in _extract_line_refs(block_line) if ref in valid_refs
                 ] or block_refs
                 sanitized = _sanitize_line_quotes(
-                    block_line, refs, bundles_by_ref, nodes_by_ref
+                    block_line, refs, bundles_by_ref, nodes_by_ref, unsupported_quotes
                 )
                 if not sanitized:
+                    continue
+                # Blockquotes are quotations by format: every Greek run must
+                # exist verbatim (modulo accents/final sigma/punctuation) in
+                # the cited evidence, quoted or not — and lines assembled
+                # from isolated single words are checked as one sequence.
+                greek_misses = _unsupported_greek_runs(
+                    sanitized,
+                    refs,
+                    bundles_by_ref,
+                    nodes_by_ref,
+                    combine_short_runs=True,
+                )
+                if greek_misses:
+                    unsupported_quotes.extend(greek_misses)
+                    continue
+                # Same rule for unquoted ancient Latin in quotation format.
+                latin_miss = _unsupported_latin_quotation(
+                    sanitized, refs, bundles_by_ref, nodes_by_ref
+                )
+                if latin_miss:
+                    unsupported_quotes.append(latin_miss)
                     continue
                 kept_lines.append(_normalize_reference_markers(sanitized, refs))
             seen_refs.update(block_refs)
@@ -4517,14 +4795,26 @@ def _verify_answer_programmatically(
         if not valid_line_refs:
             continue
         line = _sanitize_line_quotes(
-            line, valid_line_refs, bundles_by_ref, nodes_by_ref
+            line, valid_line_refs, bundles_by_ref, nodes_by_ref, unsupported_quotes
         )
         if not line:
+            continue
+        # Prose lines tolerate short inline Greek terms, but sentence-length
+        # unverified Greek (4+ words) is fabrication regardless of format.
+        greek_misses = _unsupported_greek_runs(
+            line, valid_line_refs, bundles_by_ref, nodes_by_ref, min_words=4
+        )
+        if greek_misses:
+            unsupported_quotes.extend(greek_misses)
             continue
         line = _normalize_reference_markers(line, valid_line_refs)
         _flush_pending_structure()
         kept_lines.append(line)
         seen_refs.update(valid_line_refs)
+
+    if unsupported_quotes:
+        recorded = state.metadata.setdefault("unsupported_quotes", [])
+        recorded.extend(quote for quote in unsupported_quotes if quote not in recorded)
 
     if not kept_lines:
         fallback = _render_answer_fallback(state)
@@ -4551,7 +4841,10 @@ def _verify_answer_programmatically(
                     label=_bundle_label(bundle),
                     layer=EvidenceLayer.PRIMARY,
                     verified=True,
-                    verification_note="Programmatically verified from evidence bundle",
+                    verification_note=(
+                        "Reference resolved to evidence bundle; quoted ancient "
+                        "text checked for containment"
+                    ),
                 )
             )
         elif ref in nodes_by_ref:
@@ -4565,11 +4858,37 @@ def _verify_answer_programmatically(
                     layer=ev.layer,
                     confidence=ev.confidence,
                     verified=True,
-                    verification_note="Programmatically verified from packed metadata",
+                    verification_note=(
+                        "Reference resolved to packed metadata; quoted text "
+                        "checked for containment"
+                    ),
                 )
             )
 
     return "\n".join(kept_lines), citations
+
+
+def _grounding_score(requested_refs: set[str], citations: list[Citation]) -> int:
+    """Ref-resolution coverage: how much of the draft's claimed grounding
+    survived programmatic verification.
+
+    Ratio of refs in the raw (pre-verification) answer that resolved to a
+    verified citation, on a 0-100 scale. This is NOT a semantic claim-support
+    check — an unquoted fabricated claim citing a resolvable ref still scores
+    100 here; only the v2 adversarial verifier audits claim support. The
+    metric's basis is recorded in ``metadata['grounding']['method']``
+    ('ref_resolution'), and the v2 verifier later overwrites both score and
+    method (with its audited-sample coverage) when it runs. When the raw
+    answer carried no refs at all, a deterministic fallback that emitted
+    citations is fully grounded by construction (100); no refs and no
+    citations is 0.
+    """
+    resolved_refs = {citation.ref for citation in citations}
+    if requested_refs:
+        return int(
+            round(100 * len(resolved_refs & requested_refs) / len(requested_refs))
+        )
+    return 100 if resolved_refs else 0
 
 
 def _quality_badge_from_state(state: RAGState) -> str:
@@ -4605,767 +4924,31 @@ def _make_answer(state: RAGState) -> ScholarlyAnswer:
     )
 
 
-async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
-    """Shared discovery step used by the active pipeline."""
-    state = ctx.state
-    budget = state.retrieval_budget
-    queries = _search_queries(state)
-    trace_payload: dict[str, Any] = {
-        "queries": queries,
-        "semantic_hits": [],
-        "seed_node_ids": [],
-        "passage_anchor_ids": [],
-        "linked_passages": [],
-    }
-    if not queries:
-        _trace_stage(state, "discover_corpus", trace_payload)
-        return
+def _select_passage_anchors(
+    valid_anchors: list[str],
+    strategy_anchors: list[str],
+    node_lookup: dict[str, Any],
+) -> list[str]:
+    """Merge KG anchors with database passage UUIDs from the strategy.
 
-    # --- Strategy-based corpus discovery ---
-    limit = budget.node_search_limit()
-
-    # Vectorless pipeline: SQL when database is connected, snapshot otherwise.
-    # The legacy "vector" mode is silently treated as "auto" for backward
-    # compatibility with stored request payloads.
-    strategy = ctx.deps.retrieval_strategy
-    if strategy is None:
-        if db_is_connected(ctx.deps.db):
-            strategy = SQLStrategy(min_bundles=4)
-            logger.info("Using SQLStrategy (database-backed retrieval)")
-        else:
-            strategy = SnapshotStrategy(min_passages=4)
-            logger.info("Using SnapshotStrategy (snapshot fallback)")
-
-    seed_ids: list[str] = []
-    passage_anchor_ids: list[str] = []
-
-    if strategy is not None:
-        # Expose the live RAGState on Deps so the retrieval strategy can
-        # record ontology-aware inferred edges for proof-chain emission.
-        # Reset on each discovery pass — stale inferences would be wrong.
-        ctx.deps.state = state
-        if not isinstance(getattr(state, "inferred_edges", None), set):
-            state.inferred_edges = set()
-        seed_ids, passage_anchor_ids = await strategy.discover_seeds(
-            queries=queries,
-            deps=ctx.deps,
-            node_limit=limit,
-        )
-
-        # If the configured strategy returned nothing, fall back to the
-        # remaining surface (snapshot when DB is unavailable, SQL otherwise).
-        if not seed_ids:
-            if db_is_connected(ctx.deps.db) and not isinstance(strategy, SQLStrategy):
-                logger.info(
-                    "Primary strategy returned no seeds, retrying via SQLStrategy"
-                )
-                fallback: SQLStrategy | SnapshotStrategy = SQLStrategy(min_bundles=4)
-                fallback_mode = "sql"
-            elif not db_is_connected(ctx.deps.db) and not isinstance(
-                strategy, SnapshotStrategy
-            ):
-                logger.info(
-                    "Primary strategy returned no seeds, retrying via SnapshotStrategy"
-                )
-                fallback = SnapshotStrategy(min_passages=4)
-                fallback_mode = "snapshot"
-            else:
-                fallback = None  # type: ignore[assignment]
-                fallback_mode = ""
-
-            if fallback is not None:
-                seed_ids, passage_anchor_ids = await fallback.discover_seeds(
-                    queries=queries,
-                    deps=ctx.deps,
-                    node_limit=limit,
-                )
-                state.metadata["retrieval_mode_used"] = fallback_mode
-            else:
-                state.metadata["retrieval_mode_used"] = (
-                    "sql" if isinstance(strategy, SQLStrategy) else "snapshot"
-                )
-        else:
-            state.metadata["retrieval_mode_used"] = (
-                "sql"
-                if isinstance(strategy, SQLStrategy)
-                else "snapshot"
-                if isinstance(strategy, SnapshotStrategy)
-                else state.retrieval_mode
-            )
-
-        # Filter seeds to those in node_lookup and build evidence
-        existing = state.all_node_ids()
-        valid_seeds: list[str] = []
-        valid_anchors: list[str] = []
-        for node_id in seed_ids:
-            if node_id in existing or node_id not in ctx.deps.node_lookup:
-                continue
-            evidence = _make_evidence_from_node(
-                node_id,
-                ctx.deps.node_lookup[node_id],
-                source=EvidenceSource.SEMANTIC_SEARCH,
-            )
-            if evidence.layer == EvidenceLayer.PRIMARY:
-                state.primary_evidence.append(evidence)
-            else:
-                state.secondary_evidence.append(evidence)
-            existing.add(node_id)
-            valid_seeds.append(node_id)
-            if (
-                evidence.layer == EvidenceLayer.PRIMARY
-                and evidence.type.lower() != "passage"
-                and len(valid_anchors) < 12
-            ):
-                valid_anchors.append(node_id)
-
-        seed_ids = valid_seeds
-        passage_anchor_ids = (
-            valid_anchors
-            or [a for a in passage_anchor_ids if a in ctx.deps.node_lookup][:12]
-        )
-
-        state.seed_node_ids = list(dict.fromkeys(state.seed_node_ids + seed_ids))
-        state.metadata["passage_anchor_ids"] = passage_anchor_ids
-        trace_payload["seed_node_ids"] = state.seed_node_ids[:20]
-
-        _record_tool_call(
-            state,
-            tool_name="search_entities",
-            stage_id="discover_corpus",
-            query=" | ".join(queries[:4]),
-            rationale=f"strategy-based discovery ({state.metadata.get('retrieval_mode_used', 'auto')})",
-            selected_ids=seed_ids[:20],
-            details={
-                "queries": queries[:8],
-                "hit_count": len(seed_ids),
-            },
-        )
-        if seed_ids:
-            _record_reading_decision(
-                state,
-                stage_id="discover_corpus",
-                decision_type="seed_selection",
-                title="Select high-value seed nodes",
-                rationale="Strategy-selected seeds become the starting corpus map.",
-                selected_ids=seed_ids[:20],
-            )
-
-    traversal_limit = state.retrieval_budget.traversal_node_limit()
-    try:
-        if ctx.deps.traversal and state.seed_node_ids:
-            expanded_ids = ctx.deps.traversal.expand(
-                seed_ids=state.seed_node_ids,
-                max_nodes=traversal_limit,
-                score_threshold=0.03,
-            )
-        else:
-            expanded_ids = _expand_graph(
-                ctx.deps,
-                state.seed_node_ids,
-                depth=2,
-                max_nodes=traversal_limit,
-            )
-    except Exception:
-        expanded_ids = _expand_graph(
-            ctx.deps,
-            state.seed_node_ids,
-            depth=2,
-            max_nodes=traversal_limit,
-        )
-
-    _record_tool_call(
-        state,
-        tool_name="expand_graph_context",
-        stage_id="discover_corpus",
-        rationale="expand immediate KG neighborhood around seed nodes",
-        selected_ids=list(expanded_ids)[:20],
-        details={
-            "seed_count": len(state.seed_node_ids),
-            "expanded_count": len(expanded_ids),
-            "traversal_limit": traversal_limit,
-        },
-    )
-
-    for node_id in expanded_ids:
-        if node_id in existing or node_id not in ctx.deps.node_lookup:
+    SQLStrategy returns raw ``passages.passage_id`` UUIDs that are not KG
+    node ids; they must survive into bundle building rather than being
+    discarded by the node_lookup membership filter.
+    """
+    combined = list(valid_anchors)
+    for anchor in strategy_anchors:
+        anchor_id = str(anchor)
+        if anchor_id in combined:
             continue
-        evidence = _make_evidence_from_node(
-            node_id,
-            ctx.deps.node_lookup[node_id],
-            source=EvidenceSource.GRAPH_TRAVERSAL,
-        )
-        if evidence.layer == EvidenceLayer.PRIMARY:
-            state.primary_evidence.append(evidence)
-        else:
-            state.secondary_evidence.append(evidence)
-        existing.add(node_id)
-
-    state.context_node_ids = list(existing)
-
-    if not passage_anchor_ids:
-        passage_anchor_ids = state.seed_node_ids[:12]
-    if not passage_anchor_ids:
-        passage_anchor_ids = state.context_node_ids[:8]
-    state.metadata["passage_anchor_ids"] = passage_anchor_ids
-    trace_payload["passage_anchor_ids"] = passage_anchor_ids
-    if passage_anchor_ids:
-        _record_reading_decision(
-            state,
-            stage_id="discover_corpus",
-            decision_type="passage_anchor_selection",
-            title="Choose passage anchors",
-            rationale="Prefer primary non-passage nodes to fetch linked textual evidence.",
-            selected_ids=passage_anchor_ids[:12],
-        )
-
-    try:
-        linked_passages = await _fetch_passages_for_nodes(
-            ctx.deps,
-            passage_anchor_ids,
-            limit=max(10, min(60, state.retrieval_budget.passage_bundle_limit() // 3)),
-        )
-    except Exception:
-        linked_passages = []
-
-    _record_tool_call(
-        state,
-        tool_name="read_linked_passages",
-        stage_id="discover_corpus",
-        rationale="fetch passages linked to the strongest anchor nodes",
-        selected_ids=[
-            str(row.get("passage_id"))
-            for row in linked_passages[:16]
-            if row.get("passage_id")
-        ],
-        details={
-            "anchor_ids": passage_anchor_ids[:12],
-            "linked_count": len(linked_passages),
-        },
-    )
-
-    for row in linked_passages:
-        pid = str(row["passage_id"])
-        if pid in existing:
-            continue
-        state.primary_evidence.append(
-            Evidence(
-                id=pid,
-                label=f"{row['author']}, {row['title']} {row['canonical_ref'] or ''}".strip(),
-                type="passage",
-                layer=EvidenceLayer.PRIMARY,
-                source=EvidenceSource.PASSAGE_CITATION,
-                description=truncate_text(row.get("text_content", ""), 700),
-                passage_id=pid,
-                canonical_ref=row.get("canonical_ref"),
-                author=row.get("author"),
-                work_id=row.get("work_id"),
-                work_title=row.get("title"),
-                text_content=row.get("text_content"),
-                confidence=row.get("confidence"),
-                language=row.get("language"),
-            )
-        )
-        existing.add(pid)
-
-    state.passages_used = len(
-        [ev for ev in state.primary_evidence if ev.type == "passage"]
-    )
-    state.accumulated_context = _build_context_from_evidence(state.all_evidence())
-    trace_payload["linked_passages"] = [
-        {
-            "passage_id": str(row["passage_id"]),
-            "title": row.get("title"),
-            "author": row.get("author"),
-            "canonical_ref": row.get("canonical_ref"),
-            "language": row.get("language"),
-            "confidence": row.get("confidence"),
-        }
-        for row in linked_passages[:12]
-    ]
-    _trace_stage(state, "discover_corpus", trace_payload)
+        if anchor_id in node_lookup or _PASSAGE_UUID_RE.match(anchor_id):
+            combined.append(anchor_id)
+    return combined[:12]
 
 
 def _ensure_notebook(state: RAGState) -> ResearchNotebook:
     if not state.research_notebook:
         state.research_notebook = ResearchNotebook()
     return state.research_notebook
-
-
-def _record_tool_call(
-    state: RAGState,
-    *,
-    tool_name: str,
-    stage_id: str,
-    status: str = "complete",
-    query: str | None = None,
-    rationale: str | None = None,
-    work_id: str | None = None,
-    work_title: str | None = None,
-    section_path: str | None = None,
-    selected_ids: list[str] | None = None,
-    details: dict[str, Any] | None = None,
-) -> None:
-    notebook = _ensure_notebook(state)
-    resolved_ids = list(selected_ids or [])
-    notebook.tool_calls.append(
-        ResearchToolCall(
-            tool_call_id=f"{stage_id}:{tool_name}:{len(notebook.tool_calls) + 1}",
-            tool_name=tool_name,
-            stage_id=stage_id,
-            status=status,
-            query=query,
-            rationale=rationale,
-            work_id=work_id,
-            work_title=work_title,
-            section_path=section_path,
-            selected_ids=resolved_ids,
-            detail_count=len(resolved_ids),
-            details=details or {},
-        )
-    )
-
-
-def _record_reading_decision(
-    state: RAGState,
-    *,
-    stage_id: str,
-    decision_type: str,
-    title: str,
-    rationale: str = "",
-    facet_id: str | None = None,
-    selected_ids: list[str] | None = None,
-    rejected_ids: list[str] | None = None,
-    supporting_refs: list[str] | None = None,
-    metadata: dict[str, Any] | None = None,
-) -> None:
-    notebook = _ensure_notebook(state)
-    notebook.reading_decisions.append(
-        ReadingDecision(
-            decision_id=f"{stage_id}:{decision_type}:{len(notebook.reading_decisions) + 1}",
-            stage_id=stage_id,
-            decision_type=decision_type,
-            title=title,
-            rationale=rationale,
-            facet_id=facet_id,
-            selected_ids=list(selected_ids or []),
-            rejected_ids=list(rejected_ids or []),
-            supporting_refs=list(supporting_refs or []),
-            metadata=metadata or {},
-        )
-    )
-
-
-def _selected_section_summary(
-    node: Any, work_id: str, parent_path: str = ""
-) -> list[dict[str, Any]]:
-    """Flatten a tree node recursively into section summary dicts."""
-    current_path = f"{parent_path} > {node.title}" if parent_path else node.title
-    result = [
-        {
-            "work_id": work_id,
-            "node_id": node.node_id,
-            "title": node.title,
-            "path": getattr(node, "path", None) or current_path,
-            "summary": node.summary,
-            "abstract": getattr(node, "abstract", None) or node.summary,
-            "canonical_refs": getattr(node, "canonical_refs", []) or [],
-            "translation_available": getattr(node, "translation_available", False),
-            "quote_density": getattr(node, "quote_density", 0.0),
-            "token_estimate": getattr(node, "token_estimate", 0),
-            "start_passage": node.start_passage,
-            "end_passage": node.end_passage,
-        }
-    ]
-    for child in node.nodes:
-        result.extend(_selected_section_summary(child, work_id, current_path))
-    return result
-
-
-def _heuristic_select_sections(
-    question: str, sections: list[dict[str, Any]]
-) -> list[dict[str, Any]]:
-    query_terms = {
-        token
-        for token in re.findall(r"[A-Za-zÀ-ÿἀ-῾]+", question.lower())
-        if len(token) > 3
-    }
-    scored: list[tuple[int, dict[str, Any]]] = []
-    for section in sections:
-        haystack = " ".join(
-            str(section.get(key, "")).lower()
-            for key in ("title", "summary", "abstract", "path")
-        )
-        score = sum(1 for term in query_terms if term in haystack)
-        if score or not query_terms:
-            scored.append((score, section))
-    if not scored:
-        return sections[: min(6, len(sections))]
-    scored.sort(key=lambda item: item[0], reverse=True)
-    return [section for _, section in scored[: min(8, len(scored))]]
-
-
-async def _navigate_sections_with_llm(
-    ctx: GraphRunContext[RAGState, Deps],
-    *,
-    question: str,
-    work_title: str,
-    author: str,
-    work_id: str,
-    sections: list[dict[str, Any]],
-) -> list[dict[str, Any]]:
-    payload = [
-        {
-            "work_id": work_id,
-            "node_id": section["node_id"],
-            "title": section["title"],
-            "path": section["path"],
-            "summary": section["summary"],
-            "abstract": section.get("abstract", ""),
-            "canonical_refs": section.get("canonical_refs", []),
-        }
-        for section in sections
-    ]
-    prompt = TREE_NAVIGATION_PROMPT.format(
-        question=question,
-        work_title=work_title,
-        author=author,
-        sections_json=truncate_json(payload, 12000),
-    )
-    state = ctx.state
-    model_api_id = _resolve_model_api_id(state)
-    try:
-        _t0 = _time.time()
-        raw = await ctx.deps.llm.generate(
-            prompt,
-            system_prompt=SYSTEM_PROMPT,
-            temperature=0.0,
-            max_tokens=1200,
-            thinking_mode=True,
-            cache_key=f"tree-nav::{work_id}",
-            cache_prefix="tree_navigation_v1",
-            model_override=model_api_id,
-        )
-        _dur = int((_time.time() - _t0) * 1000)
-        parsed = TreeNavigationResult.model_validate(_parse_json(raw))
-        selected_ids = {item.node_id for item in parsed.selected_nodes}
-        selected = [
-            section for section in sections if section["node_id"] in selected_ids
-        ]
-        _append_reasoning_step(
-            state,
-            "TreeNavigateWorks",
-            ctx.deps.llm.last_model_used or state.selected_model,
-            prompt[:200],
-            len(prompt) // 4,
-            raw,
-            duration_ms=_dur,
-            parsed_result={"work_id": work_id, "selected_count": len(selected)},
-        )
-        return selected or _heuristic_select_sections(question, sections)
-    except Exception:
-        _append_reasoning_step(
-            state,
-            "TreeNavigateWorks",
-            None,
-            prompt[:200],
-            len(prompt) // 4,
-            "",
-            skipped=True,
-            skip_reason=f"LLM call failed for work {work_id}, heuristic fallback",
-        )
-        return _heuristic_select_sections(question, sections)
-
-
-async def _build_research_frame(ctx: GraphRunContext[RAGState, Deps]) -> None:
-    state = ctx.state
-    model_api_id = _resolve_model_api_id(state)
-    notebook = _ensure_notebook(state)
-    if notebook.question_frame:
-        notebook.facets = _normalize_notebook_facets(state, notebook.facets)
-        return
-
-    corpus_scope = "\n".join(
-        sorted({ev.label for ev in state.all_evidence() if ev.label})[:20]
-    )
-    if _should_minimize_llm_calls(state):
-        notebook.question_frame = state.question
-        notebook.facets = _default_research_facets(state)
-        if not state.sub_queries:
-            state.sub_queries = [state.question]
-        if not notebook.competing_hypotheses:
-            notebook.competing_hypotheses = [
-                f"The main answer is textually well supported for: {state.question}",
-                f"The evidence is more fragmented or interpretive for: {state.question}",
-            ]
-        notebook.open_questions = state.sub_queries[:3]
-        _append_reasoning_step(
-            state,
-            "BuildResearchNotebook",
-            None,
-            "",
-            0,
-            "",
-            skipped=True,
-            skip_reason="minimal-llm mode",
-        )
-    else:
-        _frame_prompt = FRAME_RESEARCH_PROMPT.format(
-            question=state.question,
-            corpus_scope=corpus_scope or "(none)",
-        )
-        try:
-            _t0 = _time.time()
-            raw = await ctx.deps.llm.generate(
-                _frame_prompt,
-                system_prompt=SYSTEM_PROMPT,
-                temperature=0.0,
-                max_tokens=800,
-                thinking_mode=True,
-                cache_key="research-frame",
-                cache_prefix="research_frame_v1",
-                model_override=model_api_id,
-            )
-            _dur = int((_time.time() - _t0) * 1000)
-            framed = ResearchFrame.model_validate(_parse_json(raw))
-            notebook.question_frame = framed.question_frame
-            notebook.facets = _normalize_notebook_facets(state, framed.facets)
-            notebook.open_questions = framed.open_questions[:5]
-            notebook.competing_hypotheses = framed.competing_hypotheses[:4]
-            if framed.sub_questions:
-                state.sub_queries = framed.sub_questions[:4]
-            _append_reasoning_step(
-                state,
-                "BuildResearchNotebook",
-                ctx.deps.llm.last_model_used or state.selected_model,
-                _frame_prompt[:200],
-                len(_frame_prompt) // 4,
-                raw,
-                duration_ms=_dur,
-                parsed_result={
-                    "question_frame": framed.question_frame,
-                    "facet_count": len(framed.facets),
-                },
-            )
-        except Exception:
-            notebook.question_frame = state.question
-            notebook.facets = _default_research_facets(state)
-            if not state.sub_queries:
-                state.sub_queries = [state.question]
-            if not notebook.competing_hypotheses:
-                notebook.competing_hypotheses = [
-                    f"The main answer is textually well supported for: {state.question}",
-                    f"The evidence is more fragmented or interpretive for: {state.question}",
-                ]
-            notebook.open_questions = state.sub_queries[:3]
-            _append_reasoning_step(
-                state,
-                "BuildResearchNotebook",
-                None,
-                _frame_prompt[:200],
-                len(_frame_prompt) // 4,
-                "",
-                skipped=True,
-                skip_reason="LLM call failed, heuristic fallback",
-            )
-
-    if not notebook.facets:
-        notebook.facets = _default_research_facets(state)
-    notebook.corpus_scope = sorted(
-        {ev.label for ev in state.all_evidence() if ev.label}
-    )[:40]
-    notebook.work_priorities = _candidate_work_titles(state)[
-        : state.retrieval_budget.candidate_work_limit()
-    ]
-    _record_reading_decision(
-        state,
-        stage_id="research_notebook",
-        decision_type="facet_plan",
-        title="Plan scholarly reading facets",
-        rationale="The notebook frames the question into research facets before hierarchical reading.",
-        selected_ids=[facet.facet_id for facet in notebook.facets[:8]],
-        metadata={
-            "question_frame": notebook.question_frame,
-            "work_priorities": notebook.work_priorities[:12],
-        },
-    )
-    _build_scholarly_dossier(state)
-    _trace_stage(
-        state,
-        "research_notebook",
-        {
-            "question_frame": notebook.question_frame,
-            "facets": [
-                {
-                    "facet_id": facet.facet_id,
-                    "title": facet.title,
-                    "priority": facet.priority,
-                    "required_support": facet.required_support,
-                }
-                for facet in notebook.facets
-            ],
-            "sub_queries": state.sub_queries[:8],
-            "competing_hypotheses": notebook.competing_hypotheses[:6],
-            "work_priorities": notebook.work_priorities[:12],
-        },
-    )
-
-
-async def _plan_reading(ctx: GraphRunContext[RAGState, Deps]) -> None:
-    state = ctx.state
-    model_api_id = _resolve_model_api_id(state)
-    notebook = _ensure_notebook(state)
-    candidate_titles = notebook.work_priorities[
-        : state.retrieval_budget.candidate_work_limit()
-    ]
-    planned_work_titles = candidate_titles
-    planned_facet_ids = [facet.facet_id for facet in notebook.facets[:4]]
-    rationale = "heuristic reading plan"
-    mode = "heuristic"
-
-    if candidate_titles and not _should_minimize_llm_calls(state):
-        _plan_prompt = READING_PLAN_PROMPT.format(
-            question_frame=notebook.question_frame or state.question,
-            work_titles="\n".join(f"- {title}" for title in candidate_titles[:12]),
-            facets_json=truncate_json(
-                [
-                    {
-                        "facet_id": facet.facet_id,
-                        "title": facet.title,
-                        "question": facet.question,
-                        "priority": facet.priority,
-                    }
-                    for facet in notebook.facets[:8]
-                ],
-                6000,
-            ),
-        )
-        try:
-            _t0 = _time.time()
-            raw = await ctx.deps.llm.generate(
-                _plan_prompt,
-                system_prompt=SYSTEM_PROMPT,
-                temperature=0.0,
-                max_tokens=700,
-                thinking_mode=True,
-                cache_key="reading-plan",
-                cache_prefix="reading_plan_v1",
-                model_override=model_api_id,
-            )
-            _dur = int((_time.time() - _t0) * 1000)
-            parsed = ReadingPlanResult.model_validate(_parse_json(raw))
-            normalized_titles = [
-                title for title in parsed.work_titles if title in candidate_titles
-            ]
-            if normalized_titles:
-                planned_work_titles = normalized_titles + [
-                    title
-                    for title in candidate_titles
-                    if title not in normalized_titles
-                ]
-            normalized_facets = [
-                facet_id
-                for facet_id in parsed.facet_ids
-                if any(facet.facet_id == facet_id for facet in notebook.facets)
-            ]
-            if normalized_facets:
-                planned_facet_ids = normalized_facets
-            rationale = parsed.rationale or rationale
-            mode = "llm"
-            _append_reasoning_step(
-                state,
-                "PlanReading",
-                ctx.deps.llm.last_model_used or state.selected_model,
-                _plan_prompt[:200],
-                len(_plan_prompt) // 4,
-                raw,
-                duration_ms=_dur,
-                parsed_result={
-                    "work_count": len(normalized_titles),
-                    "facet_count": len(normalized_facets),
-                },
-            )
-        except Exception:
-            mode = "heuristic"
-            _append_reasoning_step(
-                state,
-                "PlanReading",
-                None,
-                "",
-                0,
-                "",
-                skipped=True,
-                skip_reason="LLM call failed, heuristic fallback",
-            )
-    else:
-        _append_reasoning_step(
-            state,
-            "PlanReading",
-            None,
-            "",
-            0,
-            "",
-            skipped=True,
-            skip_reason="no candidates or minimal-llm mode",
-        )
-
-    planned_work_titles = planned_work_titles[
-        : state.retrieval_budget.candidate_work_limit()
-    ]
-    planned_facet_ids = planned_facet_ids[: min(6, len(planned_facet_ids))]
-    state.metadata["planned_work_titles"] = planned_work_titles
-    state.metadata["planned_facet_ids"] = planned_facet_ids
-    notebook.work_priorities = planned_work_titles
-    if planned_facet_ids:
-        facet_by_id = {facet.facet_id: facet for facet in notebook.facets}
-        notebook.facets = [
-            facet_by_id[facet_id]
-            for facet_id in planned_facet_ids
-            if facet_id in facet_by_id
-        ] + [
-            facet
-            for facet in notebook.facets
-            if facet.facet_id not in set(planned_facet_ids)
-        ]
-    _record_tool_call(
-        state,
-        tool_name="plan_reading",
-        stage_id="reading_plan",
-        status=mode,
-        query=notebook.question_frame or state.question,
-        rationale=rationale,
-        selected_ids=planned_work_titles[:12],
-        details={"planned_facet_ids": planned_facet_ids[:8]},
-    )
-    _record_reading_decision(
-        state,
-        stage_id="reading_plan",
-        decision_type="reading_order",
-        title="Prioritize works and facets before hierarchical reading",
-        rationale=rationale,
-        selected_ids=planned_work_titles[:12],
-        metadata={"planned_facet_ids": planned_facet_ids[:8]},
-    )
-    _trace_stage(
-        state,
-        "reading_plan",
-        {
-            "mode": mode,
-            "planned_work_titles": planned_work_titles[:12],
-            "planned_facet_ids": planned_facet_ids[:8],
-            "rationale": rationale,
-        },
-    )
-
-
-@dataclass
-class ClassifyComplexity(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Legacy compatibility node delegating to query-type classification."""
-
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> ExpandQuery:
-        return await ClassifyQueryType().run(ctx)
 
 
 @dataclass
@@ -5376,6 +4959,12 @@ class ClassifyQueryType(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         self,
         ctx: GraphRunContext[RAGState, Deps],
     ) -> ExpandQuery:
+        # ``ExpandQuery`` lives in ``legacy_fsm_nodes`` (FSM-only). Import
+        # lazily to keep the dependency one-directional; the FSM graph in
+        # ``scholarly_agent`` resolves the return annotation through its own
+        # namespace, and the react path ignores the returned node entirely.
+        from eleutheria_graphrag.agents.legacy_fsm_nodes import ExpandQuery
+
         state = ctx.state
         model_api_id = _resolve_model_api_id(state)
         heuristic_query_type = _default_query_type(state.question)
@@ -5462,908 +5051,138 @@ class ClassifyQueryType(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         return ExpandQuery()
 
 
-@dataclass
-class ExpandQuery(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Expand the query and seed philological metadata."""
+async def assess_evidence_sufficiency(
+    state: RAGState,
+    deps: Deps,
+) -> tuple[float, bool, str, str | None]:
+    """Core sufficiency check shared by the FSM node and the react pipeline.
 
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> DiscoverCorpus:
-        state = ctx.state
-        model_api_id = _resolve_model_api_id(state)
-        fallback_expansion = _default_expansion(state.question)
-        if not state.pipeline_config.use_expansion or _should_minimize_llm_calls(state):
-            state.expanded_query = state.question
-            state.expansion_terms = fallback_expansion
-            state.metadata["expanded_query"] = state.expanded_query
-            _append_reasoning_step(
-                state,
-                "ExpandQuery",
-                None,
-                "",
-                0,
-                "",
-                skipped=True,
-                skip_reason="expansion disabled or minimal-llm mode",
-            )
-            _trace_stage(
-                state,
-                "expand_query",
-                {
-                    "mode": "heuristic",
-                    "expanded_query": state.expanded_query,
-                    "philosophers": fallback_expansion.philosophers[:8],
-                    "concepts": fallback_expansion.concepts[:8],
-                    "schools": fallback_expansion.schools[:8],
-                    "periods": fallback_expansion.periods[:6],
-                },
-            )
-            return DiscoverCorpus()
-
-        _expand_prompt = EXPAND_QUERY_PROMPT.format(question=state.question)
-        mode = "llm"
-        try:
-            _t0 = _time.time()
-            raw = await ctx.deps.llm.generate(
-                _expand_prompt,
-                system_prompt=SYSTEM_PROMPT,
-                temperature=0.0,
-                max_tokens=800,
-                cache_key="query-expansion",
-                cache_prefix="query_expansion_v1",
-                model_override=model_api_id,
-            )
-            _dur = int((_time.time() - _t0) * 1000)
-            expansion = _merge_expansion_terms(
-                ExpansionTerms.model_validate(_parse_json(raw)),
-                fallback_expansion,
-            )
-            _append_reasoning_step(
-                state,
-                "ExpandQuery",
-                ctx.deps.llm.last_model_used or state.selected_model,
-                _expand_prompt[:200],
-                len(_expand_prompt) // 4,
-                raw,
-                duration_ms=_dur,
-                parsed_result={"expanded_query": expansion.expanded_query or ""},
-            )
-        except Exception:
-            expansion = fallback_expansion
-            mode = "fallback"
-            _append_reasoning_step(
-                state,
-                "ExpandQuery",
-                None,
-                _expand_prompt[:200],
-                len(_expand_prompt) // 4,
-                "",
-                skipped=True,
-                skip_reason="LLM call failed, fallback expansion",
-            )
-
-        state.expansion_terms = expansion
-        state.expanded_query = expansion.expanded_query or state.question
-        state.metadata["expanded_query"] = state.expanded_query
-        _trace_stage(
-            state,
-            "expand_query",
-            {
-                "mode": mode,
-                "expanded_query": state.expanded_query,
-                "philosophers": expansion.philosophers[:8],
-                "concepts": expansion.concepts[:8],
-                "schools": expansion.schools[:8],
-                "periods": expansion.periods[:6],
-            },
-        )
-        return DiscoverCorpus()
-
-
-@dataclass
-class DiscoverCorpus(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Broad discovery over KG nodes and linked passages."""
-
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> BuildResearchNotebook:
-        _t0 = _time.time()
-        await _discover_corpus(ctx)
-        _dur = int((_time.time() - _t0) * 1000)
+    Computes the heuristic coverage score, optionally asks the LLM for a
+    judgement, and records the outcome on ``state`` (sufficiency_score,
+    insufficient_evidence, crag_validation, reasoning trace). Returns
+    ``(score, sufficient, reason, refinement)`` so callers can decide
+    whether to grant a bounded continuation round.
+    """
+    notebook = _ensure_notebook(state)
+    bundle_count = len(state.context_pack.passage_bundles)
+    work_count = len({bundle.work_id for bundle in state.context_pack.passage_bundles})
+    counter_count = len(notebook.counter_evidence)
+    dossier = (
+        state.scholarly_dossier
+        if state.scholarly_dossier.facets
+        else _build_scholarly_dossier(state)
+    )
+    covered_facets = sum(
+        1
+        for facet in dossier.facets
+        if facet.primary_bundle_ids or facet.testimony_bundle_ids or facet.metadata_ids
+    )
+    heuristic_score = min(
+        1.0,
+        0.12 * bundle_count
+        + 0.08 * work_count
+        + 0.1 * counter_count
+        + 0.08 * covered_facets,
+    )
+    model_api_id = _resolve_model_api_id(state)
+    if _should_minimize_llm_calls(state):
+        score = heuristic_score
+        sufficient = score >= 0.45
+        reason = "heuristic sufficiency (minimal llm mode)"
+        refinement = None
         _append_reasoning_step(
-            ctx.state,
-            "DiscoverCorpus",
+            state,
+            "EvidenceSufficiency",
             None,
             "",
             0,
             "",
             skipped=True,
-            skip_reason="no LLM call (strategy-based retrieval)",
-            duration_ms=_dur,
-        )
-        return BuildResearchNotebook()
-
-
-@dataclass
-class BuildResearchNotebook(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Create the explicit notebook used by later reasoning stages."""
-
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> PlanReading:
-        await _build_research_frame(ctx)
-        return PlanReading()
-
-
-@dataclass
-class PlanReading(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Plan work/facet reading order before tree navigation."""
-
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> TreeNavigateWorks:
-        await _plan_reading(ctx)
-        return TreeNavigateWorks()
-
-
-@dataclass
-class TreeNavigateWorks(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Navigate work trees recursively before loading many passages."""
-
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> ExpandEvidenceBundles:
-        state = ctx.state
-        state.metadata["selected_sections"] = []
-
-        if not ctx.deps.tree_index or not state.pipeline_config.use_tree_reasoning:
-            _skip_reason = (
-                "tree reasoning unavailable"
-                if not ctx.deps.tree_index
-                else "tree reasoning disabled by config"
-            )
-            _append_reasoning_step(
-                state,
-                "TreeNavigateWorks",
-                None,
-                "",
-                0,
-                "",
-                skipped=True,
-                skip_reason=_skip_reason,
-            )
-            _trace_stage(
-                state,
-                "tree_navigation",
-                {
-                    "mode": "skipped",
-                    "reason": _skip_reason,
-                    "candidate_work_titles": state.research_notebook.work_priorities[
-                        : state.retrieval_budget.candidate_work_limit()
-                    ],
-                    "selected_sections": [],
-                },
-            )
-            return ExpandEvidenceBundles()
-
-        work_titles = _candidate_work_titles(state)
-        if not work_titles:
-            return ExpandEvidenceBundles()
-        _record_tool_call(
-            state,
-            tool_name="search_works",
-            stage_id="tree_navigation",
-            query=state.research_notebook.question_frame or state.question,
-            rationale="prioritize works before opening hierarchical indices",
-            selected_ids=work_titles[: state.retrieval_budget.candidate_work_limit()],
-            details={"candidate_count": len(work_titles)},
-        )
-
-        try:
-            work_ids = await ctx.deps.tree_index.resolve_work_ids(
-                work_titles[: state.retrieval_budget.candidate_work_limit()]
-            )
-            indices = await ctx.deps.tree_index.load_indices(
-                work_ids[: state.retrieval_budget.candidate_work_limit()]
-            )
-        except Exception:
-            logger.warning("Tree navigation unavailable")
-            return ExpandEvidenceBundles()
-
-        selected_sections: list[dict[str, Any]] = []
-        minimize_llm = _should_minimize_llm_calls(state)
-        question = state.research_notebook.question_frame or state.question
-
-        # Pre-process each index: record tool call, build sections, collect LLM tasks
-        per_index_data: list[
-            tuple[Any, list[dict[str, Any]], list[dict[str, Any]]]
-        ] = []
-        for index in indices:
-            _record_tool_call(
-                state,
-                tool_name="open_work_tree",
-                stage_id="tree_navigation",
-                rationale="inspect the hierarchical section index before reading passages",
-                work_id=index.work_id,
-                work_title=index.title,
-                selected_ids=[node.node_id for node in index.nodes[:12]],
-                details={
-                    "root_node_count": len(index.nodes),
-                    "author": index.author,
-                },
-            )
-            flat_sections: list[dict[str, Any]] = []
-            for node in index.nodes:
-                flat_sections.extend(_selected_section_summary(node, index.work_id))
-            top_sections = flat_sections[
-                : state.retrieval_budget.section_summary_limit()
-            ]
-            per_index_data.append((index, flat_sections, top_sections))
-
-        # Launch LLM navigation calls in parallel (skip indices with no sections)
-        _nav_semaphore = asyncio.Semaphore(10)
-
-        async def _limited_nav(idx: int, coro: Any) -> tuple[int, list[dict[str, Any]]]:
-            async with _nav_semaphore:
-                return idx, await coro
-
-        nav_coros: list[Any] = []
-        nav_index_map: dict[
-            int, int
-        ] = {}  # maps coro position -> per_index_data position
-        for i, (index, flat_sections, top_sections) in enumerate(per_index_data):
-            if not flat_sections:
-                continue
-            if minimize_llm:
-                continue  # handled synchronously below
-            coro_pos = len(nav_coros)
-            nav_index_map[coro_pos] = i
-            nav_coros.append(
-                _limited_nav(
-                    i,
-                    _navigate_sections_with_llm(
-                        ctx,
-                        question=question,
-                        work_title=index.title,
-                        author=index.author,
-                        work_id=index.work_id,
-                        sections=top_sections,
-                    ),
-                )
-            )
-
-        # Gather parallel LLM results
-        llm_results: dict[int, list[dict[str, Any]]] = {}
-        if nav_coros:
-            raw_results = await asyncio.gather(*nav_coros, return_exceptions=True)
-            for result in raw_results:
-                if isinstance(result, Exception):
-                    logger.warning("Tree navigation failed for a work: %s", result)
-                    continue
-                idx, chosen = result
-                llm_results[idx] = chosen
-
-        # Post-process all indices
-        for i, (index, flat_sections, top_sections) in enumerate(per_index_data):
-            if not flat_sections:
-                continue
-
-            if minimize_llm:
-                chosen = _heuristic_select_sections(question, top_sections)
-                section_mode = "heuristic"
-            elif i in llm_results:
-                chosen = llm_results[i]
-                section_mode = "llm"
-            else:
-                # LLM call failed for this index, fall back to heuristic
-                chosen = _heuristic_select_sections(question, top_sections)
-                section_mode = "heuristic"
-
-            selected_sections.extend(chosen)
-            _record_tool_call(
-                state,
-                tool_name="select_work_sections",
-                stage_id="tree_navigation",
-                status=section_mode,
-                rationale="choose the most promising sections before expanding into passages",
-                work_id=index.work_id,
-                work_title=index.title,
-                selected_ids=[section["node_id"] for section in chosen[:12]],
-                details={
-                    "candidate_sections": len(top_sections),
-                    "selected_count": len(chosen),
-                },
-            )
-            if chosen:
-                _record_reading_decision(
-                    state,
-                    stage_id="tree_navigation",
-                    decision_type="section_selection",
-                    title=f"Select sections in {index.title}",
-                    rationale="Prioritize sections whose summaries best cover the framed research facets.",
-                    selected_ids=[section["node_id"] for section in chosen[:12]],
-                    rejected_ids=[
-                        section["node_id"]
-                        for section in top_sections
-                        if section["node_id"]
-                        not in {item["node_id"] for item in chosen}
-                    ][:12],
-                    metadata={
-                        "work_id": index.work_id,
-                        "work_title": index.title,
-                        "paths": [section.get("path") for section in chosen[:8]],
-                    },
-                )
-
-        state.metadata["selected_sections"] = selected_sections
-        state.research_notebook.work_priorities = work_titles[
-            : state.retrieval_budget.candidate_work_limit()
-        ]
-        _trace_stage(
-            state,
-            "tree_navigation",
-            {
-                "candidate_work_titles": work_titles[
-                    : state.retrieval_budget.candidate_work_limit()
-                ],
-                "selected_sections": [
-                    {
-                        "work_id": section["work_id"],
-                        "node_id": section["node_id"],
-                        "path": section.get("path"),
-                        "title": section.get("title"),
-                    }
-                    for section in selected_sections[:20]
-                ],
+            skip_reason="minimal-llm mode, heuristic only",
+            parsed_result={
+                "score": round(heuristic_score, 4),
+                "sufficient": sufficient,
             },
         )
-        return ExpandEvidenceBundles()
-
-
-@dataclass
-class ExpandEvidenceBundles(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Load passages for selected sections and pair translations when possible."""
-
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> SeekCounterEvidence:
-        _t0 = _time.time()
-        state = ctx.state
-        bundles: list[EvidenceBundle] = []
-        seen_bundle_ids = state.bundle_ids()
-        selected_sections = state.metadata.get("selected_sections", [])
-        translation_pairs: list[dict[str, Any]] = []
-
-        if ctx.deps.tree_index and selected_sections:
-            work_ids = {section["work_id"] for section in selected_sections}
-            indices = await ctx.deps.tree_index.load_indices(list(work_ids))
-            indices_by_id = {index.work_id: index for index in indices}
-
-            # --- Phase 1: batch extract passages (one DB call per section) ---
-            per_limit = max(
-                4,
-                min(
-                    40,
-                    state.retrieval_budget.passage_bundle_limit()
-                    // max(1, len(selected_sections)),
-                ),
-            )
-            section_rows: list[tuple[dict[str, Any], list[dict[str, Any]]]] = []
-            for section in selected_sections:
-                index = indices_by_id.get(section["work_id"])
-                if not index:
-                    continue
-                try:
-                    rows = await ctx.deps.tree_index.extract_passages(
-                        index,
-                        [section["node_id"]],
-                        limit=per_limit,
-                    )
-                except Exception:
-                    continue
-                _record_tool_call(
-                    state,
-                    tool_name="read_section",
-                    stage_id="evidence_bundles",
-                    rationale="expand the selected section into concrete passage bundles",
-                    work_id=index.work_id,
-                    work_title=index.title,
-                    section_path=section.get("path"),
-                    selected_ids=[
-                        str(row.get("passage_id"))
-                        for row in rows[:16]
-                        if row.get("passage_id")
-                    ],
-                    details={
-                        "node_id": section["node_id"],
-                        "selected_count": len(rows),
-                    },
-                )
-                section_rows.append((section, rows))
-
-            # --- Phase 2: collect all unique passage IDs, batch-fetch translations ---
-            all_passage_ids: list[str] = []
-            for _section, rows in section_rows:
-                for row in rows:
-                    bundle_id = f"{row['work_id']}::{row['passage_id']}"
-                    if bundle_id not in seen_bundle_ids:
-                        all_passage_ids.append(str(row["passage_id"]))
-
-            translations_map = (
-                await _batch_fetch_translations(ctx.deps, all_passage_ids)
-                if all_passage_ids
-                else {}
-            )
-
-            # --- Phase 3: build bundles using pre-fetched translations ---
-            for _section, rows in section_rows:
-                for row in rows:
-                    bundle_id = f"{row['work_id']}::{row['passage_id']}"
-                    if bundle_id in seen_bundle_ids:
-                        continue
-                    pid = str(row["passage_id"])
-                    translation = translations_map.get(pid)
-                    if translation:
-                        translation_pairs.append(
-                            {
-                                "original_passage_id": pid,
-                                "translation_passage_id": str(
-                                    translation.get("passage_id")
-                                )
-                                if translation.get("passage_id")
-                                else None,
-                                "translation_node_id": translation.get("kg_node_id"),
-                                "section_path": section.get("path"),
-                            }
-                        )
-                    original_text = row.get("text_content") or ""
-                    translation_text = (
-                        translation.get("text_content") if translation else None
-                    )
-                    bundle = EvidenceBundle(
-                        bundle_id=bundle_id,
-                        work_id=str(row["work_id"]),
-                        work_title=row.get("title", ""),
-                        author=row.get("author"),
-                        section_path=section.get("path", ""),
-                        canonical_ref=row.get("canonical_ref"),
-                        original_passage_id=pid,
-                        translation_passage_id=(
-                            str(translation["passage_id"])
-                            if translation and translation.get("passage_id")
-                            else None
-                        ),
-                        original_text=original_text,
-                        translation_text=translation_text,
-                        language=row.get("language"),
-                        token_estimate=RetrievalBudget.estimate_tokens(
-                            "\n".join(
-                                part
-                                for part in (original_text, translation_text)
-                                if part
-                            )
-                        ),
-                        evidence_role="primary_support",
-                        source=EvidenceSource.TREE_REASONING,
-                        metadata={
-                            "sequence_number": row.get("sequence_number"),
-                            "translation_available": bool(translation_text),
-                            "translation_source": translation.get("source")
-                            if translation
-                            else None,
-                            "translation_node_id": translation.get("kg_node_id")
-                            if translation
-                            else None,
-                        },
-                    )
-                    bundles.append(bundle)
-                    seen_bundle_ids.add(bundle_id)
-
-        if translation_pairs:
-            _record_tool_call(
-                state,
-                tool_name="fetch_translation_pair",
-                stage_id="evidence_bundles",
-                rationale="pair original-language passages with their linked translations",
-                selected_ids=[
-                    item["translation_passage_id"] or item["translation_node_id"]
-                    for item in translation_pairs[:20]
-                    if item["translation_passage_id"] or item["translation_node_id"]
-                ],
-                details={
-                    "pair_count": len(translation_pairs),
-                    "pairs": translation_pairs[:12],
-                },
-            )
-
-        supplemental = await _supplemental_passage_bundles(
-            ctx, bundles, seen_bundle_ids
-        )
-        if supplemental:
-            _record_tool_call(
-                state,
-                tool_name="read_passage_bundle",
-                stage_id="evidence_bundles",
-                rationale="supplement tree-selected evidence with directly linked high-value passages",
-                selected_ids=[bundle.bundle_id for bundle in supplemental[:16]],
-                details={"supplemental_count": len(supplemental)},
-            )
-        bundles.extend(supplemental)
-
-        state.evidence_bundles.extend(bundles)
-        for bundle in state.evidence_bundles:
-            bundle.metadata.update(
-                {
-                    key: value
-                    for key, value in _bundle_academic_features(bundle, state).items()
-                    if value not in (None, False, "", [])
-                }
-            )
-        state.passages_used = len(state.evidence_bundles)
-        notebook = _ensure_notebook(state)
-        for bundle in bundles:
-            notebook.reading_notes.append(
-                ReadingNote(
-                    note_id=bundle.bundle_id,
-                    thesis=f"{bundle.work_title} contributes direct textual evidence.",
-                    work_id=bundle.work_id,
-                    section_path=bundle.section_path,
-                    evidence_ids=[bundle.bundle_id],
-                )
-            )
-        _build_scholarly_dossier(state)
-        state.context_pack = _build_context_pack(state)
-        state.accumulated_context = state.context_pack.prompt_context
-        if bundles:
-            _record_reading_decision(
-                state,
-                stage_id="evidence_bundles",
-                decision_type="bundle_acceptance",
-                title="Accept evidence bundles into the dossier",
-                rationale="Bundles are retained when they add direct text, testimony, or counter-evidence for the active facets.",
-                selected_ids=[bundle.bundle_id for bundle in bundles[:20]],
-                supporting_refs=[
-                    state.context_pack.bundle_refs.get(
-                        bundle.bundle_id, bundle.bundle_id
-                    )
-                    for bundle in bundles[:12]
-                    if state.context_pack.bundle_refs.get(bundle.bundle_id)
-                ],
-                metadata={
-                    "bundle_count": len(bundles),
-                    "work_titles": list(
-                        dict.fromkeys(bundle.work_title for bundle in bundles[:12])
-                    ),
-                },
-            )
-        _trace_stage(
-            state,
-            "evidence_bundles",
-            {
-                "bundle_count": len(state.evidence_bundles),
-                "bundle_sample": [
-                    {
-                        "bundle_id": bundle.bundle_id,
-                        "work_title": bundle.work_title,
-                        "author": bundle.author,
-                        "source": bundle.source.value,
-                        "canonical_ref": bundle.canonical_ref,
-                        "translation_source": bundle.metadata.get("translation_source"),
-                    }
-                    for bundle in state.evidence_bundles[:20]
-                ],
-            },
-        )
-        _append_reasoning_step(
-            state,
-            "ExpandEvidenceBundles",
-            None,
-            "",
-            0,
-            "",
-            skipped=True,
-            skip_reason="no LLM call (passage expansion)",
-            duration_ms=int((_time.time() - _t0) * 1000),
-            parsed_result={"bundle_count": len(state.evidence_bundles)},
-        )
-        return SeekCounterEvidence()
-
-
-@dataclass
-class SeekCounterEvidence(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Mark bundles that complicate the main hypotheses."""
-
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> EvidenceSufficiency:
-        state = ctx.state
-        model_api_id = _resolve_model_api_id(state)
-        notebook = _ensure_notebook(state)
-        if (
-            _should_minimize_llm_calls(state)
-            or not state.evidence_bundles
-            or not notebook.competing_hypotheses
-        ):
-            _append_reasoning_step(
-                state,
-                "SeekCounterEvidence",
-                None,
-                "",
-                0,
-                "",
-                skipped=True,
-                skip_reason="minimal-llm mode or insufficient bundles",
-            )
-            _trace_stage(
-                state,
-                "counter_evidence",
-                {
-                    "mode": "skipped",
-                    "selected_count": 0,
-                    "rationale": "minimal-llm mode or insufficient bundles",
-                    "bundle_ids": [],
-                },
-            )
-            return EvidenceSufficiency()
-
-        payload = [
-            _bundle_prompt_dict(
-                bundle,
-                state.context_pack.bundle_refs.get(bundle.bundle_id, bundle.bundle_id),
-            )
-            for bundle in state.context_pack.passage_bundles[:20]
-        ]
-        _counter_prompt = COUNTER_EVIDENCE_PROMPT.format(
-            question_frame=notebook.question_frame or state.question,
-            hypotheses="\n".join(
-                f"- {item}" for item in notebook.competing_hypotheses[:4]
-            ),
-            bundles_json=truncate_json(payload, 9000),
+    else:
+        _suff_prompt = SUFFICIENCY_PROMPT.format(
+            question=state.question,
+            bundle_count=bundle_count,
+            work_count=work_count,
+            counter_count=counter_count,
+            open_questions=", ".join(notebook.open_questions[:5]) or "(none)",
         )
         try:
             _t0 = _time.time()
-            raw = await ctx.deps.llm.generate(
-                _counter_prompt,
+            raw = await deps.llm.generate(
+                _suff_prompt,
                 system_prompt=SYSTEM_PROMPT,
                 temperature=0.0,
-                max_tokens=600,
-                thinking_mode=True,
-                cache_key="counter-evidence",
-                cache_prefix="counter_evidence_v1",
+                max_tokens=256,
+                cache_key="evidence-sufficiency",
+                cache_prefix="evidence_sufficiency_v1",
                 model_override=model_api_id,
             )
             _dur = int((_time.time() - _t0) * 1000)
-            parsed = CounterEvidenceResult.model_validate(_parse_json(raw))
-            selected = set(parsed.bundle_ids)
-            rationale = parsed.rationale
-            mode = "llm"
+            assessment = SufficiencyAssessment.model_validate(_parse_json(raw))
+            score = max(heuristic_score, assessment.score)
+            sufficient = assessment.sufficient
+            reason = assessment.reason
+            refinement = assessment.refinement
             _append_reasoning_step(
                 state,
-                "SeekCounterEvidence",
-                ctx.deps.llm.last_model_used or state.selected_model,
-                _counter_prompt[:200],
-                len(_counter_prompt) // 4,
+                "EvidenceSufficiency",
+                deps.llm.last_model_used or state.selected_model,
+                _suff_prompt[:200],
+                len(_suff_prompt) // 4,
                 raw,
                 duration_ms=_dur,
-                parsed_result={"selected_count": len(selected), "rationale": rationale},
+                parsed_result={
+                    "score": round(score, 4),
+                    "sufficient": sufficient,
+                    "reason": reason,
+                },
             )
         except Exception:
-            selected = {
-                bundle.bundle_id
-                for bundle in state.evidence_bundles[1:3]
-                if bundle.author != state.evidence_bundles[0].author
-            }
-            rationale = "heuristic author divergence"
-            mode = "heuristic"
-            _append_reasoning_step(
-                state,
-                "SeekCounterEvidence",
-                None,
-                _counter_prompt[:200],
-                len(_counter_prompt) // 4,
-                "",
-                skipped=True,
-                skip_reason="LLM call failed, heuristic fallback",
-            )
-
-        if selected:
-            for bundle in state.evidence_bundles:
-                if bundle.bundle_id in selected:
-                    bundle.evidence_role = "counter_evidence"
-                    bundle.metadata["evidence_class"] = "counter_evidence"
-            notebook.counter_evidence.append(rationale)
-            _build_scholarly_dossier(state)
-            state.context_pack = _build_context_pack(state)
-            state.accumulated_context = state.context_pack.prompt_context
-            _record_reading_decision(
-                state,
-                stage_id="counter_evidence",
-                decision_type="counter_evidence_selection",
-                title="Mark counter-evidence bundles",
-                rationale=rationale,
-                selected_ids=sorted(selected)[:12],
-                supporting_refs=[
-                    state.context_pack.bundle_refs.get(bundle_id, bundle_id)
-                    for bundle_id in sorted(selected)[:12]
-                    if state.context_pack.bundle_refs.get(bundle_id)
-                ],
-            )
-        _trace_stage(
-            state,
-            "counter_evidence",
-            {
-                "mode": mode,
-                "selected_count": len(selected),
-                "bundle_ids": sorted(selected)[:8],
-                "rationale": rationale,
-            },
-        )
-        return EvidenceSufficiency()
-
-
-@dataclass
-class EvidenceSufficiency(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Single sufficiency gate after bundle expansion."""
-
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> DraftClaimLedger | DiscoverCorpus:
-        state = ctx.state
-        notebook = _ensure_notebook(state)
-        bundle_count = len(state.context_pack.passage_bundles)
-        work_count = len(
-            {bundle.work_id for bundle in state.context_pack.passage_bundles}
-        )
-        counter_count = len(notebook.counter_evidence)
-        dossier = (
-            state.scholarly_dossier
-            if state.scholarly_dossier.facets
-            else _build_scholarly_dossier(state)
-        )
-        covered_facets = sum(
-            1
-            for facet in dossier.facets
-            if facet.primary_bundle_ids
-            or facet.testimony_bundle_ids
-            or facet.metadata_ids
-        )
-        heuristic_score = min(
-            1.0,
-            0.12 * bundle_count
-            + 0.08 * work_count
-            + 0.1 * counter_count
-            + 0.08 * covered_facets,
-        )
-        model_api_id = _resolve_model_api_id(state)
-        if _should_minimize_llm_calls(state):
             score = heuristic_score
             sufficient = score >= 0.45
-            reason = "heuristic sufficiency (minimal llm mode)"
+            reason = "heuristic sufficiency"
             refinement = None
             _append_reasoning_step(
                 state,
                 "EvidenceSufficiency",
                 None,
-                "",
-                0,
+                _suff_prompt[:200],
+                len(_suff_prompt) // 4,
                 "",
                 skipped=True,
-                skip_reason="minimal-llm mode, heuristic only",
-                parsed_result={
-                    "score": round(heuristic_score, 4),
-                    "sufficient": sufficient,
-                },
+                skip_reason="LLM call failed, heuristic fallback",
             )
-        else:
-            _suff_prompt = SUFFICIENCY_PROMPT.format(
-                question=state.question,
-                bundle_count=bundle_count,
-                work_count=work_count,
-                counter_count=counter_count,
-                open_questions=", ".join(notebook.open_questions[:5]) or "(none)",
-            )
-            try:
-                _t0 = _time.time()
-                raw = await ctx.deps.llm.generate(
-                    _suff_prompt,
-                    system_prompt=SYSTEM_PROMPT,
-                    temperature=0.0,
-                    max_tokens=256,
-                    cache_key="evidence-sufficiency",
-                    cache_prefix="evidence_sufficiency_v1",
-                    model_override=model_api_id,
-                )
-                _dur = int((_time.time() - _t0) * 1000)
-                assessment = SufficiencyAssessment.model_validate(_parse_json(raw))
-                score = max(heuristic_score, assessment.score)
-                sufficient = assessment.sufficient
-                reason = assessment.reason
-                refinement = assessment.refinement
-                _append_reasoning_step(
-                    state,
-                    "EvidenceSufficiency",
-                    ctx.deps.llm.last_model_used or state.selected_model,
-                    _suff_prompt[:200],
-                    len(_suff_prompt) // 4,
-                    raw,
-                    duration_ms=_dur,
-                    parsed_result={
-                        "score": round(score, 4),
-                        "sufficient": sufficient,
-                        "reason": reason,
-                    },
-                )
-            except Exception:
-                score = heuristic_score
-                sufficient = score >= 0.45
-                reason = "heuristic sufficiency"
-                refinement = None
-                _append_reasoning_step(
-                    state,
-                    "EvidenceSufficiency",
-                    None,
-                    _suff_prompt[:200],
-                    len(_suff_prompt) // 4,
-                    "",
-                    skipped=True,
-                    skip_reason="LLM call failed, heuristic fallback",
-                )
 
-        state.sufficiency_score = score
-        state.insufficient_evidence = not sufficient
-        state.crag_validation = CRAGValidation(
-            relevance=int(min(100, score * 100)),
-            completeness=int(min(100, (0.5 * bundle_count + 5 * work_count))),
-            confidence=int(min(100, score * 100)),
-            missing=notebook.open_questions[:3] if not sufficient else [],
-            suggestions=[refinement] if refinement else [],
-        )
-        _trace_stage(
-            state,
-            "evidence_sufficiency",
-            {
-                "bundle_count": bundle_count,
-                "work_count": work_count,
-                "counter_count": counter_count,
-                "covered_facets": covered_facets,
-                "score": round(score, 4),
-                "sufficient": sufficient,
-                "reason": reason,
-                "refinement": refinement,
-            },
-        )
-
-        if (
-            not sufficient
-            and state.iteration < 1
-            and state.pipeline_config.use_tree_reasoning
-            and refinement
-        ):
-            state.iteration += 1
-            state.sub_queries = [refinement]
-            notebook.uncertainties.append(reason)
-            _record_reading_decision(
-                state,
-                stage_id="evidence_sufficiency",
-                decision_type="refine_search",
-                title="Refine the corpus search",
-                rationale=reason,
-                selected_ids=[refinement],
-                metadata={"score": round(score, 4)},
-            )
-            return DiscoverCorpus()
-
-        if not sufficient:
-            notebook.uncertainties.append(reason)
-        return DraftClaimLedger()
+    state.sufficiency_score = score
+    state.insufficient_evidence = not sufficient
+    state.crag_validation = CRAGValidation(
+        relevance=int(min(100, score * 100)),
+        completeness=int(min(100, (0.5 * bundle_count + 5 * work_count))),
+        confidence=int(min(100, score * 100)),
+        missing=notebook.open_questions[:3] if not sufficient else [],
+        suggestions=[refinement] if refinement else [],
+    )
+    _trace_stage(
+        state,
+        "evidence_sufficiency",
+        {
+            "bundle_count": bundle_count,
+            "work_count": work_count,
+            "counter_count": counter_count,
+            "covered_facets": covered_facets,
+            "score": round(score, 4),
+            "sufficient": sufficient,
+            "reason": reason,
+            "refinement": refinement,
+        },
+    )
+    return score, sufficient, reason, refinement
 
 
 @dataclass
@@ -6610,6 +5429,74 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         return RenderGroundedAnswer()
 
 
+def build_render_prompt(state: RAGState) -> dict[str, Any]:
+    """Build the grounded-answer render prompt and its supporting payloads.
+
+    Shared by the blocking :class:`RenderGroundedAnswer` graph node and the
+    streaming render path in ``ScholarlyAgent.query_stream`` so both produce
+    byte-identical prompts. Returns a dict whose ``mode`` is either
+    ``"deterministic_quote"`` (``answer`` is final — no LLM call needed) or
+    ``"llm"`` (``prompt`` / ``requirements`` drive generation; the dossier,
+    evidence packet and reference map are returned too for the node's
+    expand-retry and polish passes).
+    """
+    model_api_id = _resolve_model_api_id(state)
+    if not state.claim_ledger:
+        state.claim_ledger = _derive_claim_ledger_fallback(state)
+    dossier_payload = _scholarly_dossier_payload(state)
+
+    if state.metadata.get("claim_ledger_mode") == "deterministic_quote":
+        quote_item = state.claim_ledger[0]
+        ref = next(
+            (
+                state.context_pack.bundle_refs[eid]
+                for eid in quote_item.evidence_ids
+                if eid in state.context_pack.bundle_refs
+            ),
+            None,
+        )
+        lines = [quote_item.claim]
+        if quote_item.quote_original and ref:
+            lines.append(f'Greek original: "{quote_item.quote_original}" [{ref}]')
+        if quote_item.quote_translation and ref:
+            lines.append(
+                f'English translation: "{quote_item.quote_translation}" [{ref}]'
+            )
+        return {
+            "mode": "deterministic_quote",
+            "model_api_id": model_api_id,
+            "answer": "\n".join(lines).strip(),
+        }
+
+    reference_map = {
+        item.claim: _claim_reference_markers(state, item) for item in state.claim_ledger
+    }
+    evidence_packet = _render_evidence_packet(state)
+    requirements = _render_requirements(state)
+
+    render_prompt = RENDER_ANSWER_PROMPT.format(
+        question=state.question,
+        ledger_json=truncate_json(
+            [item.model_dump() for item in state.claim_ledger],
+            12000,
+        ),
+        dossier_json=truncate_json(dossier_payload, 16000),
+        reference_json=truncate_json(reference_map, 6000),
+        evidence_packet_json=truncate_json(evidence_packet, 14000),
+        required_sections=requirements["required_sections"],
+        required_quote_blocks=requirements["required_quote_blocks"],
+    )
+    return {
+        "mode": "llm",
+        "model_api_id": model_api_id,
+        "prompt": render_prompt,
+        "requirements": requirements,
+        "dossier_payload": dossier_payload,
+        "evidence_packet": evidence_packet,
+        "reference_map": reference_map,
+    }
+
+
 @dataclass
 class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
     """Render prose from the claim ledger using stable prompt caching."""
@@ -6619,29 +5506,11 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         ctx: GraphRunContext[RAGState, Deps],
     ) -> ProgrammaticVerify:
         state = ctx.state
-        model_api_id = _resolve_model_api_id(state)
-        if not state.claim_ledger:
-            state.claim_ledger = _derive_claim_ledger_fallback(state)
-        dossier_payload = _scholarly_dossier_payload(state)
+        _payload = build_render_prompt(state)
+        model_api_id = _payload["model_api_id"]
 
-        if state.metadata.get("claim_ledger_mode") == "deterministic_quote":
-            quote_item = state.claim_ledger[0]
-            ref = next(
-                (
-                    state.context_pack.bundle_refs[eid]
-                    for eid in quote_item.evidence_ids
-                    if eid in state.context_pack.bundle_refs
-                ),
-                None,
-            )
-            lines = [quote_item.claim]
-            if quote_item.quote_original and ref:
-                lines.append(f'Greek original: "{quote_item.quote_original}" [{ref}]')
-            if quote_item.quote_translation and ref:
-                lines.append(
-                    f'English translation: "{quote_item.quote_translation}" [{ref}]'
-                )
-            state.raw_answer = "\n".join(lines).strip()
+        if _payload["mode"] == "deterministic_quote":
+            state.raw_answer = _payload["answer"]
             state.metadata["render_answer_mode"] = "deterministic_quote"
             _append_reasoning_step(
                 state,
@@ -6663,25 +5532,11 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             )
             return ProgrammaticVerify()
 
-        reference_map = {
-            item.claim: _claim_reference_markers(state, item)
-            for item in state.claim_ledger
-        }
-        evidence_packet = _render_evidence_packet(state)
-        requirements = _render_requirements(state)
-
-        _render_prompt = RENDER_ANSWER_PROMPT.format(
-            question=state.question,
-            ledger_json=truncate_json(
-                [item.model_dump() for item in state.claim_ledger],
-                12000,
-            ),
-            dossier_json=truncate_json(dossier_payload, 16000),
-            reference_json=truncate_json(reference_map, 6000),
-            evidence_packet_json=truncate_json(evidence_packet, 14000),
-            required_sections=requirements["required_sections"],
-            required_quote_blocks=requirements["required_quote_blocks"],
-        )
+        dossier_payload = _payload["dossier_payload"]
+        evidence_packet = _payload["evidence_packet"]
+        reference_map = _payload["reference_map"]
+        requirements = _payload["requirements"]
+        _render_prompt = _payload["prompt"]
         raw_answer = ""
         try:
             _t0 = _time.time()
@@ -6968,6 +5823,7 @@ class ProgrammaticVerify(BaseNode[RAGState, Deps, ScholarlyAnswer]):
     ) -> End[ScholarlyAnswer]:
         state = ctx.state
         _t0 = _time.time()
+        requested_refs = set(_extract_line_refs(state.raw_answer))
         answer, citations = _verify_answer_programmatically(state)
         _dur = int((_time.time() - _t0) * 1000)
         state.raw_answer = answer
@@ -6994,9 +5850,16 @@ class ProgrammaticVerify(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         )
         state.quality_badge = _quality_badge_from_state(state)
         score = int(max(0, min(100, state.sufficiency_score * 100)))
+        grounding = _grounding_score(requested_refs, citations)
+        state.metadata["grounding"] = {
+            "score": grounding,
+            "method": "ref_resolution",
+            "requested_refs": len(requested_refs),
+            "resolved_refs": len({c.ref for c in citations} & requested_refs),
+        }
         state.self_rag_evaluation = SelfRAGEvaluation(
             relevance=score,
-            grounding=100 if citations else 25,
+            grounding=grounding,
             completeness=score,
             confidence=score,
             caveats=state.research_notebook.uncertainties[:3],
@@ -7004,118 +5867,3 @@ class ProgrammaticVerify(BaseNode[RAGState, Deps, ScholarlyAnswer]):
         )
         state.metadata["research_graph"] = _build_research_graph_payload(state)
         return End(_make_answer(state))
-
-
-# ---------------------------------------------------------------------------
-# Legacy compatibility wrappers
-# ---------------------------------------------------------------------------
-
-
-@dataclass
-class DirectKGLookup(DiscoverCorpus):
-    """Compatibility alias for the old direct-lookup node."""
-
-
-@dataclass
-class HybridRetrieve(DiscoverCorpus):
-    """Compatibility alias for the old hybrid-retrieval node."""
-
-
-@dataclass
-class DecomposeQuery(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Compatibility wrapper that seeds sub-queries before discovery."""
-
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> SearchPrimarySources:
-        state = ctx.state
-        if not state.sub_queries:
-            state.sub_queries = [state.expanded_query or state.question]
-        return SearchPrimarySources()
-
-
-@dataclass
-class SearchPrimarySources(DiscoverCorpus):
-    """Compatibility alias for the old primary-source search node."""
-
-
-@dataclass
-class EvaluateSufficiency(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Compatibility wrapper that routes into the new notebook/tree flow."""
-
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> TreeNavigateWorks:
-        await _build_research_frame(ctx)
-        return TreeNavigateWorks()
-
-
-@dataclass
-class SearchSecondarySources(SeekCounterEvidence):
-    """Compatibility alias mapping to counter-evidence search."""
-
-
-@dataclass
-class TreeReasoningRetrieve(TreeNavigateWorks):
-    """Compatibility alias for old tree-reasoning node."""
-
-
-@dataclass
-class CRAGValidate(EvidenceSufficiency):
-    """Compatibility alias for the new single sufficiency gate."""
-
-
-@dataclass
-class DualRerank(ExpandEvidenceBundles):
-    """Compatibility alias; bundle expansion subsumes reranking pressure."""
-
-
-@dataclass
-class FetchPassagesAndLayer(ExpandEvidenceBundles):
-    """Compatibility alias for bundle expansion and context packing."""
-
-
-@dataclass
-class Synthesize(DraftClaimLedger):
-    """Compatibility alias for claim-ledger drafting."""
-
-
-@dataclass
-class SynthesizeWithHierarchy(DraftClaimLedger):
-    """Compatibility alias for hierarchical claim-ledger drafting."""
-
-
-@dataclass
-class VerifyCitations(ProgrammaticVerify):
-    """Compatibility alias for programmatic verification."""
-
-
-@dataclass
-class SelfRAGEvaluate(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Compatibility wrapper returning the final answer immediately."""
-
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> End[ScholarlyAnswer]:
-        if not ctx.state.citations and ctx.state.raw_answer:
-            answer, citations = _verify_answer_programmatically(ctx.state)
-            ctx.state.raw_answer = answer
-            ctx.state.citations = citations
-        ctx.state.quality_badge = _quality_badge_from_state(ctx.state)
-        return End(_make_answer(ctx.state))
-
-
-@dataclass
-class RefineSynthesis(BaseNode[RAGState, Deps, ScholarlyAnswer]):
-    """Compatibility wrapper that re-renders from the ledger."""
-
-    async def run(
-        self,
-        ctx: GraphRunContext[RAGState, Deps],
-    ) -> VerifyCitations:
-        ctx.state.self_rag_iterations += 1
-        ctx.state.raw_answer = _render_answer_fallback(ctx.state)
-        return VerifyCitations()

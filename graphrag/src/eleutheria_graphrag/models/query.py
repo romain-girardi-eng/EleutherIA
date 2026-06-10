@@ -18,6 +18,14 @@ class QueryRequest(BaseModel):
     max_context_nodes: int = Field(30, ge=5, le=100, description="Max nodes in context")
     include_passages: bool = Field(True, description="Include ancient passages")
     stream: bool = Field(False, description="Enable streaming response")
+    mode: str = Field(
+        "fast",
+        description=(
+            "Pipeline depth: 'fast' (single-pass) or 'deep' (two-pass "
+            "adversarial counter-evidence hunt + methodology/polishing)."
+        ),
+        pattern="^(fast|deep)$",
+    )
 
 
 class Citation(BaseModel):

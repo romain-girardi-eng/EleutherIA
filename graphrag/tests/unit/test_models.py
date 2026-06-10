@@ -45,6 +45,19 @@ class TestQueryRequest:
         with pytest.raises(ValidationError):
             QueryRequest(question="Valid question", semantic_k=100)
 
+    def test_mode_defaults_to_fast(self):
+        """mode='deep' gates the counter-evidence hunt; default stays fast."""
+        request = QueryRequest(question="What is Stoic fate?")
+        assert request.mode == "fast"
+
+    def test_mode_accepts_deep(self):
+        request = QueryRequest(question="What is Stoic fate?", mode="deep")
+        assert request.mode == "deep"
+
+    def test_mode_rejects_unknown_values(self):
+        with pytest.raises(ValidationError):
+            QueryRequest(question="What is Stoic fate?", mode="thorough")
+
 
 class TestCitation:
     """Tests for Citation model."""

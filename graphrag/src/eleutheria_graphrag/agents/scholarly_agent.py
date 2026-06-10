@@ -9,6 +9,7 @@ Supports two modes via ELEUTHERIA_AGENT_MODE env var:
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import json
 import logging
 import os
@@ -21,22 +22,54 @@ from pydantic_graph import Graph
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.graph_nodes import (
-    BuildResearchNotebook,
+    SYSTEM_PROMPT,
     ClassifyQueryType,
-    DiscoverCorpus,
     DraftClaimLedger,
+    ProgrammaticVerify,
+    RenderGroundedAnswer,
+    _append_reasoning_step,
+    _build_context_pack,
+    _classify_render_quality,
+    _render_answer_fallback,
+    _trace_stage,
+    assess_evidence_sufficiency,
+    build_render_prompt,
+    truncate_text,
+)
+from eleutheria_graphrag.agents.legacy_fsm_nodes import (
+    BuildResearchNotebook,
+    DiscoverCorpus,
     EvidenceSufficiency,
     ExpandEvidenceBundles,
     ExpandQuery,
     PlanReading,
-    ProgrammaticVerify,
-    RenderGroundedAnswer,
     SeekCounterEvidence,
     TreeNavigateWorks,
 )
-from eleutheria_graphrag.agents.state import RAGState, ScholarlyAnswer
+from eleutheria_graphrag.agents.state import (
+    Citation,
+    ClaimLedgerItem,
+    ClaimStatus,
+    Evidence,
+    RAGState,
+    ScholarlyAnswer,
+)
+from eleutheria_graphrag.models.counter_evidence import (
+    ClaimUnit,
+    CounterEvidenceReport,
+)
+from eleutheria_graphrag.models.counter_evidence import (
+    SynthesizedDraft as CounterEvidenceDraft,
+)
+from eleutheria_graphrag.models.verification import (
+    CitationStatus,
+    DraftClaim,
+    SynthesizedDraft,
+    VerificationReport,
+)
 
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;·?!])\s+")
+_GREEK_CHAR_RE = re.compile(r"[\u0370-\u03FF\u1F00-\u1FFF]")
 logger = logging.getLogger(__name__)
 
 
@@ -55,6 +88,170 @@ def _claim_from_answer(answer_text: str, ref: str) -> str | None:
         if marker in sentence:
             return sentence.strip()
     return None
+
+
+def _verifier_v2_max_claims() -> int:
+    """Per-query sampling budget for the v2 verifier (0 disables it)."""
+    raw = os.getenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", "8")
+    try:
+        value = int(raw)
+    except ValueError:
+        return 8
+    return max(0, value)
+
+
+def _sample_citations_for_verification(
+    answer: ScholarlyAnswer,
+    max_claims: int,
+) -> list[tuple[Citation, str]]:
+    """Pick the highest-risk (citation, claim) pairs, capped at ``max_claims``.
+
+    Risk order: claims quoting ancient Greek first (fabricated ancient text is
+    the worst failure mode), then ascending citation confidence (unknown
+    confidence sorts last as 1.0). Ties keep the original citation order.
+    """
+    scored: list[tuple[bool, float, int, Citation, str]] = []
+    for idx, citation in enumerate(answer.citations):
+        claim_text = _claim_from_answer(answer.answer, citation.ref) or citation.label
+        has_greek = bool(_GREEK_CHAR_RE.search(claim_text))
+        confidence = citation.confidence if citation.confidence is not None else 1.0
+        scored.append((not has_greek, confidence, idx, citation, claim_text))
+    scored.sort(key=lambda item: (item[0], item[1], item[2]))
+    return [(citation, claim) for _, _, _, citation, claim in scored[:max_claims]]
+
+
+def _ledger_item_cites(evidence_ids: list[str], citation_id: str) -> bool:
+    """Whether a ledger item's evidence includes ``citation_id``.
+
+    Ledger evidence ids are bundle ids (``{work_id}::{passage_id}``) or KG
+    node ids, while v2 verdicts are keyed by passage/node id — match both the
+    exact id and the bundle-id suffix form (best-effort, never false on an
+    exact hit).
+    """
+    suffix = f"::{citation_id}"
+    return any(eid == citation_id or eid.endswith(suffix) for eid in evidence_ids)
+
+
+def _text_verifier_enabled() -> bool:
+    """Deterministic ancient-text verifier gate (default ON — report-only)."""
+    raw = os.getenv("ELEUTHERIA_TEXT_VERIFIER", "true").strip().lower()
+    return raw not in {"0", "false", "no", "off"}
+
+
+def _reranker_enabled() -> bool:
+    """Cross-encoder reranker gate (default OFF — model weights not vendored)."""
+    raw = os.getenv("ELEUTHERIA_RERANKER", "false").strip().lower()
+    return raw in {"1", "true", "yes", "on"}
+
+
+def _sufficiency_continuation_budget() -> int:
+    """Max bounded continuation rounds after an insufficient verdict (0 or 1)."""
+    raw = os.getenv("ELEUTHERIA_SUFFICIENCY_CONTINUATIONS", "1")
+    try:
+        value = int(raw)
+    except ValueError:
+        return 1
+    return max(0, min(1, value))
+
+
+def _sufficiency_extra_calls() -> int:
+    """Tool-call budget granted to the single continuation round."""
+    raw = os.getenv("ELEUTHERIA_SUFFICIENCY_EXTRA_CALLS", "3")
+    try:
+        value = int(raw)
+    except ValueError:
+        return 3
+    return max(1, min(5, value))
+
+
+def counter_report_to_ledger_items(
+    report: CounterEvidenceReport,
+    *,
+    max_items: int = 8,
+) -> list[ClaimLedgerItem]:
+    """Convert hunter testimonia into claim-ledger entries.
+
+    ``contradiction`` findings become ``support_type='contradicts'``; every
+    other dimension (qualification, alternative, scholar_critique, …) becomes
+    ``support_type='qualifies'``. Testimonia without a validated passage or
+    node id are skipped — a ledger entry must be anchorable. Quote fields are
+    deliberately left empty: hunter excerpts are tool-result snippets, not
+    verified ancient quotations.
+    """
+    items: list[ClaimLedgerItem] = []
+    seen: set[tuple[str, tuple[str, ...]]] = set()
+    for finding in report.per_claim_findings:
+        for testimony in finding.opposing_testimonia:
+            evidence_ids = [
+                eid for eid in (testimony.passage_id, testimony.source_node_id) if eid
+            ]
+            if not evidence_ids:
+                continue
+            claim = f"Counter-evidence ({testimony.type}): {testimony.source}"
+            if testimony.brief_reasoning:
+                claim = f"{claim} — {testimony.brief_reasoning}"
+            key = (claim, tuple(evidence_ids))
+            if key in seen:
+                continue
+            seen.add(key)
+            items.append(
+                ClaimLedgerItem(
+                    claim=claim,
+                    evidence_ids=evidence_ids,
+                    evidence_class="counter_evidence",
+                    support_type=(
+                        "contradicts"
+                        if testimony.type == "contradiction"
+                        else "qualifies"
+                    ),
+                    confidence=0.7 if testimony.force == "strong" else 0.5,
+                    status=ClaimStatus.SUPPORTED,
+                )
+            )
+            if len(items) >= max_items:
+                return items
+    return items
+
+
+def _collect_evidence_texts(state: RAGState) -> list[str]:
+    """All texts retrieved for this query — the text verifier's whitelist.
+
+    Ancient text the agent actually read (bundle originals/translations,
+    evidence descriptions and passage texts) is legitimate to quote, so it
+    must never be flagged or re-checked against the DB.
+    """
+    texts: list[str] = []
+    bundles = list(state.evidence_bundles)
+    if state.context_pack and state.context_pack.passage_bundles:
+        bundles.extend(state.context_pack.passage_bundles)
+    for bundle in bundles:
+        for text in (bundle.original_text, bundle.translation_text):
+            if text:
+                texts.append(text)
+    for evidence in state.all_evidence():
+        for text in (evidence.description, evidence.text_content):
+            if text:
+                texts.append(text)
+    return texts
+
+
+def _mark_verifier_v2_error(answer: ScholarlyAnswer, exc: Exception) -> ScholarlyAnswer:
+    """Machine-readable skip signal when the v2 audit crashes.
+
+    Downstream consumers must be able to distinguish "audited clean" from
+    "not audited" — a bare log line is invisible to them.
+    """
+    return answer.model_copy(
+        update={
+            "metadata": {
+                **answer.metadata,
+                "citation_verifier_v2": {
+                    "status": "error",
+                    "reason": f"{type(exc).__name__}: {exc}"[:300],
+                },
+            }
+        }
+    )
 
 
 AGENT_MODE = os.getenv("ELEUTHERIA_AGENT_MODE", "react")
@@ -87,6 +284,27 @@ class ScholarlyAgent:
 
     def __init__(self, deps: Deps) -> None:
         self.deps = deps
+        self._tool_registry: Any | None = None
+
+    @property
+    def _tools_by_name(self) -> Any:
+        """Lazily built tool registry for sub-agents (hunter, bibliography).
+
+        ``GraphRAGService`` duck-types this as a ``.get(name)`` mapping when
+        wiring the CounterEvidenceHunter and BibliographyBuilder toolsets.
+        Built on first access so test doubles with mock ``Deps`` never pay
+        (or crash on) registry construction. Returns ``{}`` when the
+        registry cannot be built — callers already degrade on missing tools.
+        """
+        if self._tool_registry is None:
+            try:
+                from eleutheria_graphrag.agents.tools import build_tool_registry
+
+                self._tool_registry = build_tool_registry(self.deps)
+            except Exception:
+                logger.warning("Tool registry construction failed", exc_info=True)
+                return {}
+        return self._tool_registry
 
     async def query(
         self,
@@ -96,6 +314,7 @@ class ScholarlyAgent:
         selected_model: str = "gemini-3.1-pro",
         retrieval_mode: str = "auto",
         agent_mode: str | None = None,
+        hunt_counter_evidence: bool = False,
     ) -> ScholarlyAnswer:
         mode = agent_mode or AGENT_MODE
 
@@ -105,6 +324,8 @@ class ScholarlyAgent:
             selected_model=selected_model,
             retrieval_mode=retrieval_mode,
         )
+        if hunt_counter_evidence:
+            state.metadata["hunt_counter_evidence"] = True
 
         if mode == "react":
             return await self._run_react(state)
@@ -160,11 +381,17 @@ class ScholarlyAgent:
             len(agent.evidence.evidence_bundles),
         )
 
+        # Phase 2.5: post-loop quality gate — optional cross-encoder rerank,
+        # evidence-sufficiency check with one bounded continuation round, and
+        # (deep mode) the counter-evidence hunt whose findings feed the ledger.
+        counter_items = await self._post_loop_quality_phase(state, agent)
+
         # Phase 3: Synthesis (reuse existing FSM nodes)
         # Run DraftClaimLedger → RenderGroundedAnswer → ProgrammaticVerify
         draft_node = DraftClaimLedger()
         ctx = GraphRunContext(state=state, deps=self.deps)
         await draft_node.run(ctx)
+        self._merge_counter_ledger_items(state, counter_items)
 
         render_node = RenderGroundedAnswer()
         ctx = GraphRunContext(state=state, deps=self.deps)
@@ -186,53 +413,327 @@ class ScholarlyAgent:
         # If the LLM failed to include quotation blocks, inject them deterministically
         answer = self._inject_passage_quotations(answer, state)
 
-        # Phase 4: Text verification DISABLED — too many false positives
-        # removing legitimate Greek text retrieved from evidence bundles.
-        # TODO: rework to whitelist evidence bundle text before DB search.
+        # Phase 4: deterministic ancient-text verification. Whitelist-first
+        # (evidence gathered for this query passes without a DB query), then
+        # a bounded DB probe. Report-only unless
+        # ELEUTHERIA_TEXT_VERIFIER_ENFORCE is set.
+        if _text_verifier_enabled():
+            answer = await self._verify_ancient_text(answer, state)
 
         # Phase 5: Adversarial citation verifier (v2). Optional — only runs
         # when ``deps.verifier_v2`` is wired. Degrades gracefully: any error
-        # is logged and the unflagged draft is returned (the verifier never
-        # crashes the pipeline).
+        # is logged, the unflagged draft is returned, and the skip is
+        # recorded machine-readably in metadata.citation_verifier_v2.
         if self.deps.verifier_v2 is not None:
             try:
-                answer = await self._run_citation_verifier_v2(answer)
-            except Exception:
+                answer, _report = await self._run_citation_verifier_v2(answer)
+            except Exception as exc:
                 logger.warning(
                     "CitationVerifierV2 failed — returning unflagged draft",
                     exc_info=True,
                 )
+                answer = _mark_verifier_v2_error(answer, exc)
         return answer
+
+    # ------------------------------------------------------------------
+    # Post-loop quality gate (react paths)
+    # ------------------------------------------------------------------
+
+    async def _post_loop_quality_phase(
+        self, state: RAGState, agent: Any
+    ) -> list[ClaimLedgerItem]:
+        """Quality machinery between the agent loop and DraftClaimLedger.
+
+        1. Optional cross-encoder rerank (ELEUTHERIA_RERANKER, default off).
+        2. Evidence-sufficiency check; when insufficient, at most one bounded
+           continuation round of the agent loop (env-capped).
+        3. Deep mode: CounterEvidenceHunter run against the working
+           hypotheses; findings land in the research notebook (ledger prompt
+           input) and are returned as ready-made ledger items for merging
+           after DraftClaimLedger.
+
+        Every step degrades to a no-op on error — this phase must never take
+        down a query that the legacy pipeline would have answered.
+        """
+        await self._maybe_rerank_bundles(state)
+        if not state.context_pack.prompt_context:
+            state.context_pack = _build_context_pack(state)
+            state.accumulated_context = state.context_pack.prompt_context
+
+        try:
+            continued = await self._maybe_continue_for_sufficiency(state, agent)
+        except Exception:
+            logger.warning("Sufficiency continuation failed", exc_info=True)
+            continued = False
+        if continued:
+            # The continuation round repopulated evidence and reset the
+            # context pack — rerank the new bundle set and rebuild the pack.
+            await self._maybe_rerank_bundles(state)
+            state.context_pack = _build_context_pack(state)
+            state.accumulated_context = state.context_pack.prompt_context
+
+        counter_items: list[ClaimLedgerItem] = []
+        if state.metadata.get("hunt_counter_evidence"):
+            try:
+                counter_items = await self._hunt_counter_evidence_pre_ledger(state)
+            except Exception as exc:
+                logger.warning("Pre-ledger counter-evidence hunt failed: %s", exc)
+                state.metadata["counter_evidence_hunt"] = {
+                    "status": "error",
+                    "reason": f"{type(exc).__name__}: {exc}"[:300],
+                }
+        return counter_items
+
+    async def _maybe_rerank_bundles(self, state: RAGState) -> None:
+        """Score evidence bundles with the cross-encoder (env-gated, lazy).
+
+        Writes ``rerank_score`` into each bundle's metadata; the score is
+        consumed by ``_bundle_score`` when ``_build_context_pack`` orders
+        bundles for packing. Degrades cleanly: any failure (model absent,
+        download error, prediction error) leaves the original order intact.
+        """
+        if (
+            not _reranker_enabled()
+            or self.deps.reranker is None
+            or not state.evidence_bundles
+        ):
+            return
+        try:
+            proxies = [
+                Evidence(
+                    id=bundle.bundle_id,
+                    label=bundle.work_title or bundle.bundle_id,
+                    type="passage",
+                    text_content="\n".join(
+                        text
+                        for text in (bundle.original_text, bundle.translation_text)
+                        if text
+                    ),
+                )
+                for bundle in state.evidence_bundles
+            ]
+            ranked = await self.deps.reranker.rerank(
+                state.question,
+                proxies,
+                top_k=len(proxies),
+                score_threshold=-1e9,
+            )
+            scores = {item.id: item.score for item in ranked}
+            applied = 0
+            for bundle in state.evidence_bundles:
+                if bundle.bundle_id in scores:
+                    bundle.metadata["rerank_score"] = scores[bundle.bundle_id]
+                    applied += 1
+            state.metadata["reranker"] = {"applied": True, "scored": applied}
+        except Exception:
+            logger.warning(
+                "Cross-encoder rerank failed — keeping retrieval order",
+                exc_info=True,
+            )
+            state.metadata["reranker"] = {"applied": False, "error": True}
+
+    async def _maybe_continue_for_sufficiency(
+        self, state: RAGState, agent: Any
+    ) -> bool:
+        """Run the sufficiency check; grant at most one continuation round.
+
+        The check itself (heuristic + LLM) is the extracted core of the FSM
+        ``EvidenceSufficiency`` node. When the verdict is insufficient and the
+        env-capped budget allows, the agent loop is re-run once with the
+        sufficiency feedback injected as a tool-result-style block appended to
+        the user question (the loop rebuilds its conversation from
+        ``state.question`` on each run, so this is the injection point that
+        both the legacy and native loops honour). The round is bounded by
+        shrinking the loop's own call budget. Returns True when a
+        continuation round actually ran.
+        """
+        score, sufficient, reason, refinement = await assess_evidence_sufficiency(
+            state, self.deps
+        )
+        if sufficient:
+            return False
+        budget = _sufficiency_continuation_budget()
+        already = int(state.metadata.get("sufficiency_continuations", 0))
+        if budget < 1 or already >= budget:
+            return False
+        if not hasattr(agent, "run"):
+            return False
+        state.metadata["sufficiency_continuations"] = already + 1
+
+        feedback_lines = [
+            "TOOL RESULT — evidence_sufficiency_check:",
+            f"verdict=insufficient score={score:.2f}",
+            f"reason: {reason}",
+        ]
+        if refinement:
+            feedback_lines.append(f"suggested refinement: {refinement}")
+            state.sub_queries = [refinement]
+        feedback_lines.append(
+            "Fill the evidence gap with a few targeted tool calls, then finish."
+        )
+        feedback = "\n".join(feedback_lines)
+
+        extra = _sufficiency_extra_calls()
+        # Bound the continuation round on either loop implementation.
+        if hasattr(agent, "budget") and isinstance(
+            getattr(agent, "calls_made", None), int
+        ):
+            agent.budget = agent.calls_made + extra
+        if hasattr(agent, "max_iterations"):
+            agent.max_iterations = extra
+
+        original_question = state.question
+        state.question = f"{original_question}\n\n{feedback}"
+        try:
+            await agent.run()
+        except Exception:
+            logger.warning(
+                "Sufficiency continuation round failed — keeping prior evidence",
+                exc_info=True,
+            )
+        finally:
+            state.question = original_question
+        logger.info(
+            "Sufficiency continuation ran (score=%.2f): %s",
+            score,
+            reason,
+        )
+        return True
+
+    def _build_counter_evidence_hunter(self) -> Any | None:
+        """Wire a CounterEvidenceHunter to this agent's tool registry."""
+        from eleutheria_graphrag.services.counter_evidence_hunter import (
+            CounterEvidenceHunter,
+            MCPToolset,
+        )
+
+        tools = self._tools_by_name
+        search_tool = tools.get("search_passages")
+        subgraph_tool = tools.get("explore_subgraph")
+        if search_tool is None or subgraph_tool is None:
+            return None
+        toolset = MCPToolset(
+            search_passages=search_tool,
+            explore_subgraph=subgraph_tool,
+            get_neighbors=tools.get("get_neighbors"),
+            get_node_detail=tools.get("get_node_detail"),
+            query_scholarly_consensus=tools.get("query_scholarly_consensus"),
+        )
+        return CounterEvidenceHunter(llm=self.deps.llm, tools=toolset)
+
+    @staticmethod
+    def _pre_ledger_claim_units(state: RAGState) -> list[ClaimUnit]:
+        """Hunt anchors before a ledger exists: working hypotheses + seeds."""
+        seeds = list(state.seed_node_ids[:5])
+        hypotheses = [
+            h.strip()
+            for h in state.research_notebook.competing_hypotheses[:3]
+            if h and h.strip()
+        ]
+        if not hypotheses:
+            question = state.question.strip()
+            hypotheses = [question] if question else []
+        return [
+            ClaimUnit(
+                claim_id=f"pre{idx + 1}",
+                claim_text=hypothesis[:400],
+                seed_node_ids=seeds,
+            )
+            for idx, hypothesis in enumerate(hypotheses)
+        ]
+
+    async def _hunt_counter_evidence_pre_ledger(
+        self, state: RAGState
+    ) -> list[ClaimLedgerItem]:
+        """Deep mode: adversarial hunt before the claim ledger is drafted.
+
+        Findings are appended to the research notebook (so the ledger and
+        render prompts see them) and converted into counter-evidence ledger
+        items that the caller merges after ``DraftClaimLedger`` runs.
+        """
+        hunter = self._build_counter_evidence_hunter()
+        if hunter is None:
+            state.metadata["counter_evidence_hunt"] = {
+                "status": "skipped",
+                "reason": "agent tools unavailable",
+            }
+            return []
+        claims = self._pre_ledger_claim_units(state)
+        if not claims:
+            state.metadata["counter_evidence_hunt"] = {
+                "status": "skipped",
+                "reason": "no hypotheses to audit",
+            }
+            return []
+        report: CounterEvidenceReport = await hunter.hunt(
+            CounterEvidenceDraft(answer=state.question, claims=claims)
+        )
+        notebook = state.research_notebook
+        for finding in report.per_claim_findings:
+            for testimony in finding.opposing_testimonia[:4]:
+                note = (
+                    f"{testimony.source}: {testimony.brief_reasoning or testimony.type}"
+                )
+                if note not in notebook.counter_evidence:
+                    notebook.counter_evidence.append(note)
+        items = counter_report_to_ledger_items(report)
+        state.metadata["counter_evidence_hunt"] = {
+            "status": "ok",
+            "total_testimonia": report.total_testimonia,
+            "ledger_items": len(items),
+            "aggregate_summary": report.aggregate_summary,
+        }
+        _trace_stage(
+            state,
+            "counter_evidence_hunt",
+            {
+                "mode": "pre_ledger",
+                "claims_audited": len(claims),
+                "total_testimonia": report.total_testimonia,
+                "ledger_items": len(items),
+            },
+        )
+        return items
+
+    @staticmethod
+    def _merge_counter_ledger_items(
+        state: RAGState, counter_items: list[ClaimLedgerItem]
+    ) -> None:
+        """Append hunter-derived counter-evidence claims to the drafted ledger."""
+        if not counter_items:
+            return
+        state.claim_ledger = list(state.claim_ledger) + counter_items
+        state.research_notebook.claim_ledger = state.claim_ledger
+        state.metadata["counter_evidence_ledger_items"] = len(counter_items)
 
     async def _run_citation_verifier_v2(
         self, answer: ScholarlyAnswer
-    ) -> ScholarlyAnswer:
-        """Run the v2 adversarial verifier and attach its report to the answer."""
-        from eleutheria_graphrag.models.verification import (
-            DraftClaim,
-            SynthesizedDraft,
-        )
+    ) -> tuple[ScholarlyAnswer, VerificationReport | None]:
+        """Run the v2 adversarial verifier and attach its report to the answer.
 
+        Returns the (possibly updated) answer and the verification report so
+        the streaming path can emit per-citation SSE events from the checks.
+        """
         verifier = self.deps.verifier_v2
         if verifier is None or not answer.citations:
-            return answer
+            return answer, None
+        max_claims = _verifier_v2_max_claims()
+        if max_claims == 0:
+            return answer, None
 
-        # Map each Citation → DraftClaim. The ``claim`` is the surrounding
-        # sentence in the rendered answer (best-effort) so the verifier has
-        # something to audit even when the synthesizer didn't expose a
-        # structured claim ledger.
-        claims: list[DraftClaim] = []
-        for citation in answer.citations:
-            claim_text = (
-                _claim_from_answer(answer.answer, citation.ref) or citation.label
+        # Sample the highest-risk citations within the per-query budget. The
+        # ``claim`` is the surrounding sentence in the rendered answer
+        # (best-effort) so the verifier has something to audit even when the
+        # synthesizer didn't expose a structured claim ledger.
+        sampled = _sample_citations_for_verification(answer, max_claims)
+        claims = [
+            DraftClaim(
+                claim=claim_text,
+                citation_id=citation.id,
+                citation_kind="passage" if citation.type == "passage" else "node",
             )
-            claims.append(
-                DraftClaim(
-                    claim=claim_text,
-                    citation_id=citation.id,
-                    citation_kind="passage" if citation.type == "passage" else "node",
-                )
-            )
+            for citation, claim_text in sampled
+        ]
 
         draft = SynthesizedDraft(
             question=answer.question,
@@ -262,13 +763,66 @@ class ScholarlyAgent:
                 )
             )
 
-        return answer.model_copy(
+        # REJECTED/MISSING verdicts downgrade the affected ledger claims —
+        # the citation does not support the claim, so the claim is no longer
+        # "supported". No corrective re-retrieval: flag honestly and move on.
+        failing = [
+            check
+            for check in report.checks
+            if check.status in (CitationStatus.REJECTED, CitationStatus.MISSING)
+        ]
+        updated_ledger = answer.claim_ledger
+        if failing:
+            from eleutheria_graphrag.agents.state import ClaimStatus
+
+            failing_ids = {check.citation_id for check in failing}
+            updated_ledger = [
+                item.model_copy(update={"status": ClaimStatus.INSUFFICIENT})
+                if any(
+                    _ledger_item_cites(item.evidence_ids, cid) for cid in failing_ids
+                )
+                else item
+                for item in answer.claim_ledger
+            ]
+
+        # Honest grounding: verified/total over the audited sample replaces
+        # the ref-resolution ratio computed by ProgrammaticVerify. The score
+        # only covers the audited sample, so its coverage is always recorded
+        # alongside it — a 100 over a partial sample must never read as
+        # "every claim verified".
+        evaluation = answer.self_rag_evaluation
+        grounding_meta: dict[str, Any] | None = None
+        if evaluation is not None and report.total:
+            grounding = int(round(100 * report.verified / report.total))
+            audited = min(report.total, len(answer.citations))
+            grounding_meta = {
+                "score": grounding,
+                "method": "verifier_v2_sample",
+                "audited_citations": audited,
+                "total_citations": len(answer.citations),
+                "coverage": (
+                    "full"
+                    if audited >= len(answer.citations)
+                    else f"partial: {audited}/{len(answer.citations)} audited"
+                ),
+            }
+            try:
+                evaluation = evaluation.model_copy(update={"grounding": grounding})
+            except AttributeError:
+                logger.debug("self_rag_evaluation has no model_copy — skipping")
+
+        updated = answer.model_copy(
             update={
                 "citations": updated_citations,
+                "claim_ledger": updated_ledger,
+                "self_rag_evaluation": evaluation,
                 "metadata": {
                     **answer.metadata,
+                    **({"grounding": grounding_meta} if grounding_meta else {}),
                     "citation_verifier_v2": {
                         "total": report.total,
+                        "sampled": len(claims),
+                        "max_claims": max_claims,
                         "verified": report.verified,
                         "weak": report.weak,
                         "rejected": report.rejected,
@@ -277,8 +831,88 @@ class ScholarlyAgent:
                         "flagged_for_rewrite": report.flagged_for_rewrite,
                         "warning": report.warning,
                         "aborted": report.aborted,
+                        # Verification report for REJECTED/MISSING claims —
+                        # the honest record of what failed and why.
+                        "failed_citations": [
+                            {
+                                "citation_id": check.citation_id,
+                                "status": check.status.value,
+                                "claim": check.claim,
+                                "reasoning": check.reasoning,
+                            }
+                            for check in failing
+                        ],
                     },
                 },
+            }
+        )
+        return updated, report
+
+    async def _stream_citation_audit(
+        self,
+        answer: ScholarlyAnswer,
+        result_into: dict[str, Any],
+    ) -> AsyncIterator[str]:
+        """Streaming wrapper for the v2 audit (used by ``_stream_react``).
+
+        Runs the verifier under the SSE heartbeat (the audit is one wave of
+        LLM calls, 10-60 s on a full sample), emits one ``citation_verified``
+        event per check, then a ``citation_audit`` stage_complete. The merged
+        answer lands in ``result_into['answer']``. Degrades gracefully: on any
+        error the unflagged answer is kept and only the stage event is
+        emitted.
+        """
+        stage_started = _time_mod.perf_counter()
+        report: VerificationReport | None = None
+        holder: dict[str, Any] = {}
+        try:
+            async for hb in self._await_with_heartbeat(
+                self._run_citation_verifier_v2(answer),
+                label="Auditing citations",
+                stage_id="citation_audit",
+                result_into=holder,
+            ):
+                yield hb
+            verified_answer, report = holder.get("value", (answer, None))
+            result_into["answer"] = verified_answer
+        except Exception as exc:
+            logger.warning(
+                "CitationVerifierV2 failed in stream — keeping unflagged draft",
+                exc_info=True,
+            )
+            # Machine-readable skip signal: consumers must not read this
+            # answer as "audited clean".
+            result_into["answer"] = _mark_verifier_v2_error(answer, exc)
+
+        if report is not None:
+            for check in report.checks:
+                yield json.dumps(
+                    {
+                        "type": "citation_verified",
+                        "passage_id": check.citation_id,
+                        "verified": check.is_passing,
+                        "status": check.status.value,
+                        "reason": check.reasoning,
+                    }
+                )
+
+        audit_ms = int((_time_mod.perf_counter() - stage_started) * 1000)
+        yield json.dumps(
+            {
+                "type": "stage_complete",
+                "stage": "citation_audit",
+                "duration_ms": audit_ms,
+                "metadata": (
+                    {
+                        "total": report.total,
+                        "verified": report.verified,
+                        "weak": report.weak,
+                        "rejected": report.rejected,
+                        "missing": report.missing,
+                    }
+                    if report is not None
+                    else {"skipped": True}
+                ),
             }
         )
 
@@ -378,75 +1012,53 @@ class ScholarlyAgent:
             }
         )
 
-    async def _verify_ancient_text(self, answer: ScholarlyAnswer) -> ScholarlyAnswer:
-        """Deterministic verification: Greek/Latin text must be in the DB.
+    async def _verify_ancient_text(
+        self, answer: ScholarlyAnswer, state: RAGState
+    ) -> ScholarlyAnswer:
+        """Deterministic post-render check: ancient text must come from evidence.
 
-        Short technical terms (≤ 4 words) pass automatically.
-        Longer extracts are checked against the passages table.
-        Unverified text is flagged or removed.
+        Whitelist-first: spans already present in this query's evidence
+        bundles/descriptions pass with no DB query. The rest goes through a
+        bounded anchor-token DB probe (accent/sigma/punctuation-insensitive
+        comparison in Python). Report-only by default — outcomes land in
+        ``metadata.text_verification``; prose is only altered when
+        ``ELEUTHERIA_TEXT_VERIFIER_ENFORCE`` is truthy. Degrades gracefully:
+        any internal error leaves the answer untouched.
         """
         from eleutheria_graphrag.agents.text_verifier import (
-            sanitize_answer,
-            verify_greek_text,
+            enforce_answer,
+            enforcement_enabled,
+            verify_ancient_text,
         )
 
         try:
-            verification = await verify_greek_text(
+            result = await verify_ancient_text(
                 answer.answer,
                 self.deps.db,
+                evidence_texts=_collect_evidence_texts(state),
             )
-            if not verification.all_verified:
-                sanitized = sanitize_answer(answer.answer, verification)
-                answer = answer.model_copy(
-                    update={
-                        "answer": sanitized,
-                        "metadata": {
-                            **answer.metadata,
-                            "text_verification": {
-                                "verified": len(verification.verified_extracts),
-                                "unverified": len(verification.unverified_extracts),
-                                "misattributed": len(
-                                    verification.misattributed_extracts
-                                ),
-                                "unverified_texts": [
-                                    {
-                                        "text": e.text[:100],
-                                        "words": e.word_count,
-                                        "action": e.action,
-                                    }
-                                    for e in verification.unverified_extracts
-                                ],
-                                "misattributed_texts": [
-                                    {
-                                        "text": e.text[:80],
-                                        "claimed": e.claimed_work,
-                                        "actual": e.actual_work,
-                                        "actual_ref": e.actual_ref,
-                                        "action": e.action,
-                                    }
-                                    for e in verification.misattributed_extracts
-                                ],
-                            },
+            enforce = enforcement_enabled() and not result.all_verified
+            new_text = (
+                enforce_answer(answer.answer, result) if enforce else answer.answer
+            )
+            answer = answer.model_copy(
+                update={
+                    "answer": new_text,
+                    "metadata": {
+                        **answer.metadata,
+                        "text_verification": {
+                            **result.to_metadata(),
+                            "enforced": enforce,
                         },
-                    }
-                )
+                    },
+                }
+            )
+            if not result.all_verified:
                 logger.warning(
-                    "Text verification: %d verified, %d unverified",
-                    len(verification.verified_extracts),
-                    len(verification.unverified_extracts),
-                )
-            else:
-                answer = answer.model_copy(
-                    update={
-                        "metadata": {
-                            **answer.metadata,
-                            "text_verification": {
-                                "verified": len(verification.verified_extracts),
-                                "unverified": 0,
-                                "status": "all_verified",
-                            },
-                        },
-                    }
+                    "Text verification: %d verified, %d unverified (enforce=%s)",
+                    len(result.verified_spans),
+                    len(result.unverified_spans),
+                    enforce,
                 )
         except Exception:
             logger.warning("Text verification failed", exc_info=True)
@@ -489,6 +1101,7 @@ class ScholarlyAgent:
         selected_model: str = "gemini-3.1-pro",
         retrieval_mode: str = "auto",
         agent_mode: str | None = None,
+        hunt_counter_evidence: bool = False,
     ) -> AsyncIterator[str]:
         mode = agent_mode or AGENT_MODE
 
@@ -498,6 +1111,7 @@ class ScholarlyAgent:
                 max_iterations=max_iterations,
                 selected_model=selected_model,
                 retrieval_mode=retrieval_mode,
+                hunt_counter_evidence=hunt_counter_evidence,
             ):
                 yield event_json
             return
@@ -509,6 +1123,7 @@ class ScholarlyAgent:
             selected_model=selected_model,
             retrieval_mode=retrieval_mode,
             agent_mode=agent_mode,
+            hunt_counter_evidence=hunt_counter_evidence,
         )
         async for chunk in self._chunk_answer(answer):
             yield chunk
@@ -520,6 +1135,7 @@ class ScholarlyAgent:
         max_iterations: int = 5,
         selected_model: str = "gemini-3.1-pro",
         retrieval_mode: str = "auto",
+        hunt_counter_evidence: bool = False,
     ) -> AsyncIterator[str]:
         """Stream ReAct agent events as JSON strings.
 
@@ -543,6 +1159,8 @@ class ScholarlyAgent:
             selected_model=selected_model,
             retrieval_mode=retrieval_mode,
         )
+        if hunt_counter_evidence:
+            state.metadata["hunt_counter_evidence"] = True
 
         # Phase 1: Classify
         stage_started = _time.perf_counter()
@@ -610,6 +1228,42 @@ class ScholarlyAgent:
             }
         )
 
+        # Phase 2.5: post-loop quality gate (rerank, sufficiency continuation,
+        # deep-mode counter-evidence hunt). The SSE emitter was closed when the
+        # agent task finished, so a possible continuation round runs against a
+        # NullEmitter; progress is surfaced via the heartbeat wrapper instead.
+        stage_started = _time.perf_counter()
+        from eleutheria_graphrag.agents.sse_emitter import NullEmitter as _NullEmitter
+
+        agent.emitter = _NullEmitter()
+        quality_holder: dict[str, Any] = {}
+        counter_items: list[ClaimLedgerItem] = []
+        try:
+            async for hb in self._await_with_heartbeat(
+                self._post_loop_quality_phase(state, agent),
+                label="Running quality checks",
+                stage_id="quality_gate",
+                result_into=quality_holder,
+            ):
+                yield hb
+            counter_items = quality_holder.get("value") or []
+        except Exception:
+            logger.warning("Post-loop quality phase failed in stream", exc_info=True)
+        quality_ms = int((_time.perf_counter() - stage_started) * 1000)
+        yield json.dumps(
+            {
+                "type": "stage_complete",
+                "stage": "quality_gate",
+                "duration_ms": quality_ms,
+                "metadata": {
+                    "sufficiency_score": round(state.sufficiency_score, 4),
+                    "continuations": state.metadata.get("sufficiency_continuations", 0),
+                    "reranker": state.metadata.get("reranker", {"applied": False}),
+                    "counter_evidence_items": len(counter_items),
+                },
+            }
+        )
+
         # Phase 3: Synthesis (two LLM calls — draft claim ledger then render
         # answer). Each one can run for 30-90 s on a doctoral-grade query;
         # without intermediate SSE traffic the Cloudflare tunnel drops the
@@ -633,14 +1287,14 @@ class ScholarlyAgent:
             stage_id="draft_claim_ledger",
         ):
             yield hb
+        self._merge_counter_ledger_items(state, counter_items)
 
-        ctx = GraphRunContext(state=state, deps=self.deps)
-        async for hb in self._await_with_heartbeat(
-            RenderGroundedAnswer().run(ctx),
-            label="Rendering grounded answer",
-            stage_id="render_grounded_answer",
-        ):
-            yield hb
+        # Stream the render token-by-token instead of blocking on a single
+        # generate() then chunking afterwards. This keeps real prose flowing on
+        # the wire (so a mid-render proxy/tunnel drop still leaves the user a
+        # partial answer) and shows the answer building live.
+        async for ev in self._stream_render(state):
+            yield ev
 
         synthesis_ms = int((_time.perf_counter() - stage_started) * 1000)
         yield json.dumps(
@@ -683,10 +1337,26 @@ class ScholarlyAgent:
         # Phase 3.5: Programmatic passage injection
         answer = self._inject_passage_quotations(answer, state)
 
-        # Phase 4: Text verification DISABLED (false positives)
+        # Phase 4: deterministic ancient-text verification (whitelist-first,
+        # report-only unless ELEUTHERIA_TEXT_VERIFIER_ENFORCE is set).
+        if _text_verifier_enabled():
+            answer = await self._verify_ancient_text(answer, state)
 
-        # Stream the answer in chunks
-        async for chunk in self._chunk_answer(answer):
+        # Phase 5: Adversarial citation audit (v2) post-render. Emits one
+        # ``citation_verified`` SSE event per audited claim and merges the
+        # verdicts into the answer before the authoritative `complete` event.
+        if self.deps.verifier_v2 is not None:
+            audit_holder: dict[str, Any] = {}
+            async for ev in self._stream_citation_audit(answer, audit_holder):
+                yield ev
+            answer = audit_holder.get("answer", answer)
+
+        # Emit the authoritative `complete` event. The prose itself was
+        # already streamed live by `_stream_render`, so don't re-stream it
+        # here (that would duplicate it in the FE buffer); the FE replaces the
+        # streamed preview with this complete payload's (verified + injected)
+        # answer on arrival.
+        async for chunk in self._chunk_answer(answer, stream_prose=False):
             yield chunk
 
     async def _await_with_heartbeat(
@@ -749,6 +1419,167 @@ class ScholarlyAgent:
         if result_into is not None:
             result_into["value"] = value
 
+    async def _stream_render(
+        self, state: RAGState, *, interval: float = 10.0
+    ) -> AsyncIterator[str]:
+        """Stream the grounded-answer render token-by-token.
+
+        Replaces the blocking ``RenderGroundedAnswer`` LLM call in the
+        streaming pipeline. Emitting prose as it is generated (a) keeps the SSE
+        wire warm with real content so a proxy/tunnel request-duration cap
+        cannot sever the connection mid-render and leave the user with nothing,
+        (b) lets the answer render live, and (c) means a partial answer
+        survives any drop (the FE keeps any >200-char stream). Idle heartbeats
+        cover the pre-first-token "thinking" gap of reasoning models. After the
+        stream we classify the draft and fall back if it is empty/inadequate,
+        mirroring ``RenderGroundedAnswer``'s tail. The expand-retry and polish
+        passes are intentionally skipped here to cut synthesis latency.
+
+        Yields raw prose strings (forwarded by the route as ``answer_chunk``
+        events) interleaved with JSON ``status`` heartbeats.
+        """
+        payload = build_render_prompt(state)
+
+        # First-frame ping so the UI enters the render stage immediately.
+        yield json.dumps(
+            {
+                "type": "status",
+                "message": "Rendering grounded answer…",
+                "data": {"step": 99, "stage": "render_grounded_answer", "elapsed_s": 0},
+            }
+        )
+
+        if payload["mode"] == "deterministic_quote":
+            state.raw_answer = payload["answer"]
+            state.metadata["render_answer_mode"] = "deterministic_quote"
+            state.metadata["render_streamed"] = True
+            if state.raw_answer:
+                yield state.raw_answer
+            _trace_stage(
+                state,
+                "render_grounded_answer",
+                {
+                    "mode": "deterministic_quote",
+                    "streamed": True,
+                    "raw_excerpt": truncate_text(state.raw_answer, 2000),
+                },
+            )
+            return
+
+        prompt = payload["prompt"]
+        model_api_id = payload["model_api_id"]
+
+        # Bridge the llm.stream() async-gen onto a queue so we can interleave
+        # idle heartbeats while the model is still "thinking" (no token yet).
+        queue: asyncio.Queue[tuple[str, Any]] = asyncio.Queue()
+
+        async def _pump() -> None:
+            try:
+                async for piece in self.deps.llm.stream(
+                    prompt,
+                    system_prompt=SYSTEM_PROMPT,
+                    temperature=0.2,
+                    max_tokens=16000,
+                    model_override=model_api_id,
+                ):
+                    await queue.put(("chunk", piece))
+                await queue.put(("done", None))
+            except Exception as exc:  # noqa: BLE001
+                await queue.put(("error", exc))
+
+        pump_task = asyncio.create_task(_pump())
+        started = _time_mod.monotonic()
+        chunks: list[str] = []
+        stream_error: Exception | None = None
+        try:
+            while True:
+                try:
+                    kind, value = await asyncio.wait_for(queue.get(), timeout=interval)
+                except TimeoutError:
+                    elapsed = int(_time_mod.monotonic() - started)
+                    yield json.dumps(
+                        {
+                            "type": "status",
+                            "message": f"Rendering grounded answer… ({elapsed}s)",
+                            "data": {
+                                "step": 99,
+                                "stage": "render_grounded_answer",
+                                "elapsed_s": elapsed,
+                            },
+                        }
+                    )
+                    continue
+                if kind == "chunk":
+                    if value:
+                        chunks.append(value)
+                        # Raw prose → the route wraps it as an answer_chunk.
+                        yield value
+                elif kind == "done":
+                    break
+                else:  # "error"
+                    stream_error = value
+                    break
+        finally:
+            if not pump_task.done():
+                pump_task.cancel()
+            with contextlib.suppress(asyncio.CancelledError, Exception):
+                await pump_task
+
+        if stream_error is not None:
+            logger.warning(
+                "Streaming render failed after %d chars: %s",
+                len("".join(chunks)),
+                stream_error,
+            )
+
+        rendered = "".join(chunks).strip()
+        band, _shape = _classify_render_quality(state, rendered)
+        fallback_answer = _render_answer_fallback(state)
+        if not rendered or band == "inadequate":
+            rendered = fallback_answer
+            band = "inadequate"
+        state.raw_answer = rendered
+
+        if rendered == fallback_answer:
+            state.metadata["render_answer_mode"] = "fallback"
+            state.metadata["pipeline_degraded"] = True
+        elif band == "strict":
+            state.metadata["render_answer_mode"] = "llm"
+        else:
+            state.metadata["render_answer_mode"] = "llm_short"
+        state.metadata["render_streamed"] = True
+
+        _append_reasoning_step(
+            state,
+            "RenderGroundedAnswer",
+            self.deps.llm.last_model_used or state.selected_model,
+            prompt[:200],
+            len(prompt) // 4,
+            rendered,
+            skipped=bool(stream_error is not None and not chunks),
+            skip_reason=(
+                f"stream error: {type(stream_error).__name__}"
+                if stream_error is not None
+                else None
+            ),
+            parsed_result={"streamed": True, "render_band": band},
+        )
+        _trace_stage(
+            state,
+            "render_grounded_answer",
+            {
+                "mode": state.metadata["render_answer_mode"],
+                "streamed": True,
+                "render_band": band,
+                "raw_excerpt": truncate_text(state.raw_answer, 2000),
+                "stream_error": (
+                    f"{type(stream_error).__name__}: {stream_error}"
+                    if stream_error is not None
+                    else None
+                ),
+            },
+        )
+
     @staticmethod
     async def _run_agent_and_close(agent: Any, emitter: Any) -> None:
         """Run the agent loop and close the emitter when done."""
@@ -760,26 +1591,34 @@ class ScholarlyAgent:
         finally:
             await emitter.close()
 
-    async def _chunk_answer(self, answer: ScholarlyAnswer) -> AsyncIterator[str]:
-        """Chunk a ScholarlyAnswer into answer_chunk + complete SSE events."""
-        text = answer.answer
-        paragraphs = re.split(r"\n\n+", text)
-        for i, para in enumerate(paragraphs):
-            if i > 0:
-                yield "\n\n"
-            if len(para) <= 500:
-                yield para
-            else:
-                sentences = _SENTENCE_SPLIT_RE.split(para)
-                buffer = ""
-                for sent in sentences:
-                    if buffer and len(buffer) + len(sent) + 1 > 500:
+    async def _chunk_answer(
+        self, answer: ScholarlyAnswer, *, stream_prose: bool = True
+    ) -> AsyncIterator[str]:
+        """Chunk a ScholarlyAnswer into answer_chunk + complete SSE events.
+
+        When ``stream_prose`` is False the prose chunks are skipped and only
+        the ``complete`` event is emitted — used when the answer was already
+        streamed live (see ``_stream_render``) so it is not duplicated.
+        """
+        if stream_prose:
+            text = answer.answer
+            paragraphs = re.split(r"\n\n+", text)
+            for i, para in enumerate(paragraphs):
+                if i > 0:
+                    yield "\n\n"
+                if len(para) <= 500:
+                    yield para
+                else:
+                    sentences = _SENTENCE_SPLIT_RE.split(para)
+                    buffer = ""
+                    for sent in sentences:
+                        if buffer and len(buffer) + len(sent) + 1 > 500:
+                            yield buffer
+                            buffer = sent
+                        else:
+                            buffer = f"{buffer} {sent}" if buffer else sent
+                    if buffer:
                         yield buffer
-                        buffer = sent
-                    else:
-                        buffer = f"{buffer} {sent}" if buffer else sent
-                if buffer:
-                    yield buffer
 
         complete_data = {
             "answer": answer.answer,
@@ -788,6 +1627,10 @@ class ScholarlyAgent:
             "seed_nodes": answer.seed_nodes,
             "context_nodes": answer.context_nodes,
             "passages_used": answer.passages_used,
+            # Typed claim-ledger entries — the SSE route forwards these to
+            # the frontend, the answer cache and the share page (mirror of
+            # query_dict; without this the streaming path always ships []).
+            "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
             "llm_model": self.deps.llm.last_model_used,
             "llm_provider": self.deps.llm.last_provider_used,
             "metadata": {

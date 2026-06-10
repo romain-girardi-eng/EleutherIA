@@ -1309,6 +1309,7 @@ class LLMService:
         temperature: float = 0.7,
         max_tokens: int = 4096,
         thinking_mode: bool = False,
+        model_override: str | None = None,
     ) -> AsyncIterator[str]:
         """
         Generate a streaming response.
@@ -1319,10 +1320,64 @@ class LLMService:
             temperature: Sampling temperature
             max_tokens: Maximum tokens to generate
             thinking_mode: If True, prefer the heavier reasoning path for the active provider
+            model_override: Pin a specific provider/model (e.g. the user-selected
+                model) instead of the default provider loop. Mirrors
+                :meth:`generate`; falls back to the provider loop if the override
+                fails before emitting any token.
 
         Yields:
             Text chunks as they're generated
         """
+        # --- Model override: bypass the normal provider loop (see generate). ---
+        if model_override:
+            override_provider, override_model = self._resolve_model_override(
+                model_override
+            )
+            override_api_key = self._api_key_for(override_provider)
+            if override_api_key:
+                override_config = self._resolve_config(override_provider)
+                override_config["model"] = override_model
+                self.last_provider_used = override_provider.value
+                self.last_model_used = override_model
+                yielded = False
+                try:
+                    if override_provider == ModelProvider.GEMINI:
+                        async for chunk in self._stream_gemini(
+                            prompt,
+                            system_prompt,
+                            temperature,
+                            max_tokens,
+                            override_api_key,
+                            override_config,
+                        ):
+                            yielded = True
+                            yield chunk
+                    else:
+                        async for chunk in self._stream_openai_compatible(
+                            override_provider,
+                            prompt,
+                            system_prompt,
+                            temperature,
+                            max_tokens,
+                            override_api_key,
+                            override_config,
+                        ):
+                            yielded = True
+                            yield chunk
+                    return
+                except Exception as exc:
+                    self._mark_provider_invalid(override_provider, exc)
+                    # Once tokens are on the wire we can't restart cleanly.
+                    if yielded:
+                        raise
+                    logger.warning(
+                        "Streaming model override %s/%s failed (%s); "
+                        "falling back to provider loop",
+                        override_provider.value,
+                        override_model,
+                        self._format_provider_error(exc),
+                    )
+
         providers = self._provider_attempt_order(thinking_mode=thinking_mode)
         if not providers:
             raise RuntimeError("No LLM provider available")

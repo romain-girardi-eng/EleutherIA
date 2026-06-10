@@ -31,10 +31,15 @@ _VALID_DRAFT: dict[str, Any] = {
 }
 
 
+_DRAFT_TOKEN = "test-draft-token"
+_DRAFT_AUTH = {"Authorization": f"Bearer {_DRAFT_TOKEN}"}
+
+
 @pytest.fixture
-def client() -> TestClient:
+def client(monkeypatch: pytest.MonkeyPatch) -> TestClient:
     # Reset the in-memory cache between tests.
     graphrag_routes._draft_store.clear()
+    monkeypatch.setenv("GRAPHRAG_DRAFT_SUBMIT_TOKEN", _DRAFT_TOKEN)
     app = FastAPI()
     app.include_router(graphrag_routes.router, prefix="/api/graphrag")
     return TestClient(app)
@@ -44,6 +49,7 @@ def test_submit_draft_validates(client: TestClient) -> None:
     resp = client.post(
         "/api/graphrag/query/draft",
         json={"trace_id": "abc-123", "draft": _VALID_DRAFT},
+        headers=_DRAFT_AUTH,
     )
     assert resp.status_code == 200
     assert resp.json()["footnotes"] == 1
@@ -53,8 +59,38 @@ def test_submit_draft_rejects_invalid(client: TestClient) -> None:
     resp = client.post(
         "/api/graphrag/query/draft",
         json={"trace_id": "x", "draft": {"title": "broken"}},
+        headers=_DRAFT_AUTH,
     )
     assert resp.status_code == 422
+
+
+def test_submit_draft_requires_token(client: TestClient) -> None:
+    resp = client.post(
+        "/api/graphrag/query/draft",
+        json={"trace_id": "abc-123", "draft": _VALID_DRAFT},
+    )
+    assert resp.status_code == 401
+
+
+def test_submit_draft_rejects_wrong_token(client: TestClient) -> None:
+    resp = client.post(
+        "/api/graphrag/query/draft",
+        json={"trace_id": "abc-123", "draft": _VALID_DRAFT},
+        headers={"Authorization": "Bearer wrong"},
+    )
+    assert resp.status_code == 401
+
+
+def test_submit_draft_disabled_without_env(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("GRAPHRAG_DRAFT_SUBMIT_TOKEN", raising=False)
+    resp = client.post(
+        "/api/graphrag/query/draft",
+        json={"trace_id": "abc-123", "draft": _VALID_DRAFT},
+        headers=_DRAFT_AUTH,
+    )
+    assert resp.status_code == 403
 
 
 def test_export_markdown(client: TestClient) -> None:
