@@ -357,6 +357,7 @@ export function useOpencodeStream(
     tokenUsage: state.tokenUsage,
     streamedAnswer: state.streamedAnswer,
     finalAnswer: state.finalAnswer as FinalAnswerEvent | null,
+    answerVerification: state.answerVerification,
     traceId: state.traceId,
     error: state.error,
     retryCount: state.retryCount,
