@@ -317,19 +317,23 @@ export default function GraphRAGPage() {
   const initialQueryProcessedRef = useRef(false);
   useEffect(() => {
     const state = location.state as { initialQuery?: string } | null;
-    if (state?.initialQuery && !initialQueryProcessedRef.current) {
+    // Accept an initial question from router state (in-app navigation) or from
+    // a `?q=` query param (deep links, schema.org SearchAction).
+    const queryParam = new URLSearchParams(location.search).get('q')?.trim();
+    const initialQuery = state?.initialQuery ?? (queryParam || undefined);
+    if (initialQuery && !initialQueryProcessedRef.current) {
       if (isAuthenticated) {
         initialQueryProcessedRef.current = true;
-        processQuery(state.initialQuery);
+        processQuery(initialQuery);
         window.history.replaceState({}, document.title);
       } else {
-        setPendingQuery(state.initialQuery);
+        setPendingQuery(initialQuery);
         setShowAuthModal(true);
         window.history.replaceState({}, document.title);
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.state, isAuthenticated]);
+  }, [location.state, location.search, isAuthenticated]);
 
   const handleAuthSuccess = () => {
     if (pendingQuery) {

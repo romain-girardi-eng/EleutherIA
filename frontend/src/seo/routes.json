@@ -13,6 +13,16 @@
     "doi": "10.5281/zenodo.17379489",
     "license": "https://creativecommons.org/licenses/by/4.0/",
     "language": "en",
+    "locales": [
+      { "lang": "en", "ogLocale": "en_US" },
+      { "lang": "fr", "ogLocale": "fr_FR" },
+      { "lang": "de", "ogLocale": "de_DE" },
+      { "lang": "it", "ogLocale": "it_IT" },
+      { "lang": "el", "ogLocale": "el_GR" }
+    ],
+    "langParam": "lang",
+    "searchAction": "/graphrag?q={search_term_string}",
+    "apiOrigin": "https://free-will.app",
     "keywords": "ancient philosophy, free will, determinism, moral responsibility, knowledge graph, GraphRAG, digital humanities, Greek philosophy, Latin texts, Stoicism, Augustine, Aristotle"
   },
   "routes": [
@@ -25,7 +35,7 @@
       "robots": "index, follow",
       "changefreq": "weekly",
       "priority": 1,
-      "schemas": ["website", "dataset", "software", "person"]
+      "schemas": ["website", "dataset", "dataCatalog", "software", "person"]
     },
     {
       "path": "/how-it-works",
@@ -47,7 +57,7 @@
       "robots": "index, follow",
       "changefreq": "weekly",
       "priority": 0.9,
-      "schemas": ["breadcrumb", "dataset"]
+      "schemas": ["breadcrumb", "dataset", "dataCatalog"]
     },
     {
       "path": "/visualizer",
