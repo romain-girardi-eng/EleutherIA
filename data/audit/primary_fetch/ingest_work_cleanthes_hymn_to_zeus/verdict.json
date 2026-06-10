@@ -1,0 +1,34 @@
+{
+  "work_node": "work_cleanthes_hymn_to_zeus",
+  "work_canonical_id": "urn_cts_greeklit_tlg1269_tlg002_537_grc",
+  "urn": "urn:cts:greekLit:tlg1269.tlg002.1st1K-grc1:537",
+  "n_passages": 4,
+  "sample_refs": [
+    "Stob. 1.1.12 vv. 1-6",
+    "Stob. 1.1.12 vv. 7-16",
+    "Stob. 1.1.12 vv. 32-39"
+  ],
+  "tlg_checks": [
+    {
+      "sample": "Ζεῦ, φύσεως ἀρχηγέ, νόμου μέτα πάντα κυβερνῶν (v.2)",
+      "result": "hit",
+      "tlg_id": "TLG1269"
+    },
+    {
+      "sample": "πλὴν ὁπόσα ῥέζουσι κακοὶ σφετέραισιν ἀνοίαις (v.17)",
+      "result": "hit",
+      "tlg_id": "TLG1269"
+    },
+    {
+      "sample": "κοινὸν ἀεὶ νόμον ἐν δίκῃ ὑμνεῖν (v.39)",
+      "result": "hit",
+      "tlg_id": "TLG1269"
+    }
+  ],
+  "edition_statement": "Hans Friedrich August von Arnim (ed.), Stoicorum Veterum Fragmenta, vol. I: Zeno et Zenonis discipuli (Leipzig: Teubner, 1905) — Cleanthes, Testimonia et Fragmenta, fr. 537 (Stobaeus Ecl. I 1, 12 p. 25, 3 Wachsmuth); digitized by Open Greek and Latin / First1KGreek",
+  "issues": [
+    "Hymn transmitted as single Stobaeus excerpt (1.1.12 = SVF I 537); segmented into 4 strophic units (vv. 1-6, 7-16, 17-31, 32-39) per Thom 2005 structure, loci appended to the fragment-level URN as :537:<vv-range> (sub-fragment loci are not independently resolvable CTS references)",
+    "Editorial supplements in angle brackets retained as printed by von Arnim: v.11 ⟨τελεῖται⟩, v.30 ⟨ἀλλὰ κακοῖς ἐπέκυρσαν⟩, v.33 ⟨μὲν⟩",
+    "TLG E text of v.4 differs (γενόμεσθα, θεοῦ μίμημα vs Arnim γένος εἴσʼ ἤχου μίμημα) — known textual crux, edition variance only; ingested text is byte-verbatim Arnim/First1KGreek"
+  ]
+}

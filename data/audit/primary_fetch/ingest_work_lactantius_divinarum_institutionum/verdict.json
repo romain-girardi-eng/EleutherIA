@@ -1,0 +1,42 @@
+{
+  "work_node": "work_lactantius_divinarum_institutionum",
+  "work_canonical_id": "urn_cts_latinlit_stoa0171_stoa009_lat",
+  "urn": "urn:cts:latinLit:stoa0171.stoa009.opp-lat1",
+  "n_passages": 523,
+  "sample_refs": [
+    "Div. Inst. 1.1.1-6",
+    "Div. Inst. 4.15.17-24",
+    "Div. Inst. 7.27.12-16"
+  ],
+  "tlg_checks": [
+    {
+      "note": "TLG E check N/A: Latin work (TLG covers Greek). Replaced by verbatim substring checks against source TEI."
+    },
+    {
+      "ref": "Div. Inst. 1.1.1-6",
+      "method": "verbatim substring vs source TEI (notes stripped, dehyphenated)",
+      "result": "hit"
+    },
+    {
+      "ref": "Div. Inst. 4.15.17-24",
+      "method": "verbatim substring vs source TEI (notes stripped, dehyphenated)",
+      "result": "hit"
+    },
+    {
+      "ref": "Div. Inst. 7.27.12-16",
+      "method": "verbatim substring vs source TEI (notes stripped, dehyphenated)",
+      "result": "hit"
+    }
+  ],
+  "edition_statement": "Samuel Brandt & Georg Laubmann (eds.), L. Caeli Firmiani Lactanti Opera omnia, Part 1, Corpus scriptorum ecclesiasticorum Latinorum (CSEL) 19, Wien: Österreichische Akademie der Wissenschaften, 1890. Digitized by Open Greek and Latin (University of Leipzig, 2014), CC BY-SA 4.0. Source file: OpenGreekAndLatin/csel-dev stoa0171.stoa009.opp-lat1.xml",
+  "issues": [
+    "Source TEI not in PerseusDL/canonical-latinLit (404); fetched from OpenGreekAndLatin/csel-dev master.",
+    "Passages segmented as section-ranges within chapters (book.chapter.section, grouped to ~200-2100 chars); range URNs use CTS range syntax e.g. :1.1.1-1.1.6.",
+    "61 passages contain embedded Greek (Sibylline oracles, Greek quotations) — legitimate edition text, not contamination; 14 of these are <85% Latin letters.",
+    "2 passages keep literal angle brackets from the printed edition's editorial supplement marks as OCR'd ('tra<ditas' in 2.6.7-13, '<cuncta.>' in 7.4.16-19) — verbatim, not TEI leakage.",
+    "17 line-break hyphenation artifacts ('xxx- yyy', lowercase both sides) were rejoined (pure dehyphenation, no character changes); uppercase-adjacent cases left untouched.",
+    "OCR'd text (Jouve, OGL 2014): residual OCR errors in the source file are preserved verbatim (zero-fabrication).",
+    "Epitome Divinarum Institutionum front matter (div subtype='MSS' nested in book 7) excluded — separate work.",
+    "Passage length range 221-2081 chars (median 1710); 7 books, 178 chapters, 3274 sections covered with zero text loss vs chapter-level extraction."
+  ]
+}

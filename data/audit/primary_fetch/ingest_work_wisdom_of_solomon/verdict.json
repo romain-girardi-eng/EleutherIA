@@ -1,0 +1,39 @@
+{
+  "work_node": "work_wisdom_of_solomon",
+  "work_canonical_id": "urn_cts_greeklit_tlg0527_tlg033_grc",
+  "urn": "urn:cts:greekLit:tlg0527.tlg033.1st1K-grc1",
+  "n_passages": 42,
+  "sample_refs": [
+    "Wis. 1.1-11",
+    "Wis. 11.16-26",
+    "Wis. 19.11-22"
+  ],
+  "tlg_checks": [
+    {
+      "ref": "Wis. 1.1",
+      "needle": "φρονήσατε περὶ τοῦ κυρίου ἐν ἀγαθότητι",
+      "result": "hit",
+      "tlg": "TLG0527 Septuaginta @byte 3515234"
+    },
+    {
+      "ref": "Wis. 11.4",
+      "needle": "ἐδόθη αὐτοῖς ἐκ πέτρας ἀκροτόμου ὕδωρ",
+      "result": "hit",
+      "tlg": "TLG0527 Septuaginta @byte 3542039"
+    },
+    {
+      "ref": "Wis. 19.13",
+      "needle": "δικαίως γὰρ ἔπασχον ταῖς ἰδίαις αὐτῶν πονηρίαις",
+      "result": "hit",
+      "tlg": "TLG0527 Septuaginta @byte 3570473"
+    }
+  ],
+  "edition_statement": "The Old Testament in Greek, ed. Henry Barclay Swete, vol. 2, Cambridge University Press, 1896 (First1KGreek digitization, tlg0527.tlg033.1st1K-grc1, CC BY-SA 4.0)",
+  "issues": [
+    "Chapter numbering error in the First1KGreek XML: no div n='15'; divs n='16'..'20' actually contain canonical Wisdom 15-19 (verified: div 16 v.1 = 'Σὺ δὲ ὁ θεὸς ἡμῶν χρηστὸς καὶ ἀληθής' = Wis 15:1). canonical_ref uses corrected canonical numbering; cts_urn loci keep the edition's own (mislabeled) chapter numbers so they resolve against the digital edition.",
+    "Lacuna in chapter 3 of the digitization: verses 3:4b-3:17a are absent (one printed page lost in OCR); verse div n='4' conflates Wis 3:4a with Wis 3:17b. Staged as a single passage 'Wis. 3.1-19' containing only the extant text (390 chars). No text was supplied to fill the gap.",
+    "OCR quality of the Swete digitization is imperfect: scattered character errors preserved verbatim per zero-fabrication policy (e.g. 'σκολοὶ' for σκολιοὶ at 1:3, 'ἐποίγῳεν' for ἐποίησεν at 1:13, 'χελέων' for χειλέων at 1:6, 'καταχρἐῳ' for καταχρέῳ at 1:4).",
+    "Stripped non-textual artifacts only: TEI apparatus/marginal notes, page breaks, leaked verse-number digits/superscripts ((⁶), (¹³), 8, §24, ⁴⁷⁸), MS sigla (B/C), pilcrows, asterisk, pipe. No Greek letters altered or added.",
+    "Verse 1:6 OCR runs two verses together ('αὐτοῦὅτι'); preserved verbatim."
+  ]
+}

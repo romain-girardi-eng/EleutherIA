@@ -1,0 +1,21 @@
+{
+  "work_node": "work_cassian_conlationes_13",
+  "work_canonical_id": "urn_cts_latinlit_stoa0076c_stoa001_13_lat",
+  "urn": "urn:cts:latinLit:stoa0076c.stoa001.opp-lat2",
+  "n_passages": 85,
+  "sample_refs": [
+    "Conl. 13.1.1",
+    "Conl. 13.12.3",
+    "Conl. 13.18.5"
+  ],
+  "tlg_checks": [],
+  "edition_statement": "Michael Petschenig (ed.), Johannis Cassiani Opera, Pars II (Conlationes), Corpus Scriptorum Ecclesiasticorum Latinorum (CSEL) 13, Gerold, Vienna, 1886. TEI digitization: Open Greek and Latin / University of Leipzig (OGL csel-dev), OCR by Jouve, corrected and encoded.",
+  "issues": [
+    "Latin work: TLG E check not applicable (tlg_search targets the Greek TLG corpus); skipped per protocol.",
+    "Scope restricted to Conlatio XIII only (book div n='13' of the full Conlationes TEI file): 18 chapters, 85 sections, segmented at section level (13.chapter.section), 238-1143 chars per passage.",
+    "Apparatus footnotes (<note type='footnote'>) excluded; 3 OCR'd marginal line numbers / apparatus callout digits removed from running text (13.14.7 'sed1', 13.14.9 'exer-25 ceat', 13.18.5 ', 30 ut') after verifying digits never belong to the edition's running text; hyphenated line-break words rejoined.",
+    "OCR-flagged readings inside <sic> kept byte-verbatim as printed/OCR'd (e.g. 'eipenderit', 'eopiosissimarum' in 13.3) — no emendation performed per zero-fabrication policy.",
+    "Greek quotations in 13.5.2-13.5.4 (Socrates/physiognomist anecdote) are genuine Petschenig text but OCR quality of the Greek is poor (e.g. 'πσιδεϱαστοι̃' for παιδεραστοῦ); retained verbatim, flagged for manual collation against CSEL 13 pp. 365-366.",
+    "No independent second witness reachable: Scaife CTS API fails with SNI/SSL error in sandbox, The Latin Library lacks Cassian, monumenta.ch index unreachable; text rests on the single OGL csel-dev TEI witness of the CSEL 13 critical edition."
+  ]
+}

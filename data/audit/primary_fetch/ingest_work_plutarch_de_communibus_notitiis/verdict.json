@@ -1,0 +1,40 @@
+{
+  "work_node": "work_plutarch_de_communibus_notitiis",
+  "work_canonical_id": "urn_cts_greeklit_tlg0007_tlg138_grc",
+  "urn": "urn:cts:greekLit:tlg0007.tlg138.perseus-grc2",
+  "n_passages": 50,
+  "sample_refs": [
+    "De comm. not. 1",
+    "De comm. not. 26",
+    "De comm. not. 50"
+  ],
+  "tlg_checks": [
+    {
+      "ref": "De comm. not. 1",
+      "needle": "εἰκός ὦ Διαδούμενε μὴ πάνυ μέλειν",
+      "result": "hit",
+      "note": "TLG0007 @byte 8071749, under title ΠΕΡΙ ΤΩΝ ΚΟΙΝΩΝ ΕΝΝΟΙΩΝ ΠΡΟΣ ΤΟΥΣ ΣΤΩΙΚΟΥΣ. First needle missed due to word-order variant after ἀφʼ ὧν (Vernardakis vs TLG edition); speaker label ΛΑΜΠΡΙΑΣ (Perseus) vs ΕΤΑΙΡΟΣ (TLG)."
+    },
+    {
+      "ref": "De comm. not. 25",
+      "needle": "Χρύσιππος τὴν διαφοράν ὡς δῆλόν ἐστιν",
+      "result": "hit",
+      "note": "TLG1264 (Chrysippus fragments) quoting Plut. de comm. not.; first needle missed on γιγνώσκει (Vernardakis) vs Γινώσκει (TLG) orthographic variant."
+    },
+    {
+      "ref": "De comm. not. 50",
+      "needle": "ποιότητας αὖ πάλιν οὐσίας καὶ σώματα ποιοῦσι",
+      "result": "hit",
+      "note": "TLG0007 (Plutarchus) @byte 8179792, direct hit."
+    }
+  ],
+  "edition_statement": "Plutarch, Moralia, vol. 6, ed. Grēgorios N. Vernardakēs, Leipzig: Teubner, 1895 (Perseus Project digitization, perseus-grc2, CTS conversion by Center for Hellenic Studies)",
+  "issues": [
+    "12 of 50 sections exceed 2000 chars (max 3703); section (Bernardakis chapter) is the work's natural CTS citation level, so kept as-is",
+    "11 lacunae (<gap reason='lost'/>) rendered as '[...]'",
+    "1 editorial <note resp='perseus'> ('An erroneous section 5 appears in print here.') stripped",
+    "KG node description mentions '85 sections' (Stephanus-page based count); perseus-grc2 edition is segmented into 50 Bernardakis chapters",
+    "Local TLG E uses a different critical edition (Pohlenz/Westman) — minor orthographic/word-order variants vs Vernardakis explain initial search misses; all 3 samples confirmed after variant-tolerant needles",
+    "Speaker labels (ΛΑΜΠΡΙΑΣ./ΔΙΑΔΟΥΜ.) retained as printed in the edition"
+  ]
+}
