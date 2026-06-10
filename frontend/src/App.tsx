@@ -7,6 +7,7 @@ import type { TFunction } from 'i18next';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { DeviceProvider } from './context/DeviceContext';
 import { useKeepAlive } from './hooks/useKeepAlive';
+import { useKgStats, formatCount } from './hooks/useKgStats';
 import { AriaLiveProvider, useAriaLive } from './components/AriaLive';
 import { ToastProvider } from './components/ui/Toast';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -130,7 +131,9 @@ function AppContent() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout, isAuthenticated } = useAuth();
   const { announce } = useAriaLive();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const stats = useKgStats();
+  const fmt = (n: number) => formatCount(n, i18n.language);
 
   // Enable keep-alive to prevent backend from sleeping (Render free tier)
   useKeepAlive();
@@ -515,10 +518,10 @@ function AppContent() {
               <div className="pb-2 sm:pb-0">
                 <h3 className="font-semibold text-sm mb-2">{t('appShell.footer.dataTitle')}</h3>
                 <ul className="text-xs text-academic-muted space-y-1">
-                  <li>{t('appShell.footer.stats.nodes')}</li>
-                  <li>{t('appShell.footer.stats.edges')}</li>
-                  <li>{t('appShell.footer.stats.works')}</li>
-                  <li>{t('appShell.footer.stats.passages')}</li>
+                  <li>{t('appShell.footer.stats.nodes', { nodes: fmt(stats.nodes) })}</li>
+                  <li>{t('appShell.footer.stats.edges', { edges: fmt(stats.edges) })}</li>
+                  <li>{t('appShell.footer.stats.works', { works: fmt(stats.works) })}</li>
+                  <li>{t('appShell.footer.stats.passages', { passages: fmt(stats.passages) })}</li>
                 </ul>
               </div>
 

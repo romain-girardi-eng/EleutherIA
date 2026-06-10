@@ -1,9 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Typewriter } from '../components/ui/typewriter';
+import { useKgStats, formatCount } from '../hooks/useKgStats';
 
 export default function AboutPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const stats = useKgStats();
+  const fmt = (n: number) => formatCount(n, i18n.language);
 
   return (
     <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
@@ -183,7 +186,14 @@ export default function AboutPage() {
             </p>
 
             <p>{t('about.projectContext')}</p>
-            <p>{t('about.projectDetails')}</p>
+            <p>
+              {t('about.projectDetails', {
+                nodes: fmt(stats.nodes),
+                edges: fmt(stats.edges),
+                works: fmt(stats.works),
+                passages: fmt(stats.passages),
+              })}
+            </p>
             <p>{t('about.projectGoal')}</p>
 
             <p className="text-sm text-stone-500 italic">

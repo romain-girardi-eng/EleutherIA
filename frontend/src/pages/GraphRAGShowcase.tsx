@@ -211,7 +211,7 @@ export default function GraphRAGShowcase() {
         >
           <img
             src="/graphrag-eclair.webp"
-            alt="A luminous gold path traced through a vast knowledge graph — the agent's chosen reasoning route through 17,000+ nodes"
+            alt="A luminous gold path traced through a vast knowledge graph — the agent's chosen reasoning route through thousands of connected nodes"
             className="w-full h-auto rounded-2xl shadow-xl"
           />
         </motion.div>
@@ -477,11 +477,11 @@ export default function GraphRAGShowcase() {
               <ul className="space-y-2 text-sm text-stone-600">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-[#769687] mt-0.5 flex-shrink-0" />
-                  <span><strong>KG Nodes:</strong> 2,193 nodes across persons, concepts, arguments, works</span>
+                  <span><strong>KG Nodes:</strong> {fmt(stats.nodes)} nodes across persons, concepts, arguments, works</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-[#769687] mt-0.5 flex-shrink-0" />
-                  <span><strong>Passages:</strong> 17,000+ ancient text passages with CTS URNs</span>
+                  <span><strong>Passages:</strong> {fmt(stats.passages)} ancient text passages with CTS URNs</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-[#769687] mt-0.5 flex-shrink-0" />

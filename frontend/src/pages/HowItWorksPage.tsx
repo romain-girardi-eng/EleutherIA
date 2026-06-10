@@ -49,6 +49,12 @@ export default function HowItWorksPage() {
   const { t, i18n } = useTranslation();
   const stats = useKgStats();
   const fmt = (n: number) => formatCount(n, i18n.language);
+  const resolveCounts = (text: string): string =>
+    text
+      .replace(/\{\{nodes\}\}/g, fmt(stats.nodes))
+      .replace(/\{\{edges\}\}/g, fmt(stats.edges))
+      .replace(/\{\{works\}\}/g, fmt(stats.works))
+      .replace(/\{\{passages\}\}/g, fmt(stats.passages));
   const [activeId, setActiveId] = useState('hero');
   const containerRef = useRef<HTMLDivElement>(null);
   const [navHeight, setNavHeight] = useState(48);
@@ -250,20 +256,24 @@ export default function HowItWorksPage() {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="font-body text-lg text-stone-500 mb-12 max-w-2xl"
           >
-            {t('howItWorksPage.problem.subtitle')}
+            {t('howItWorksPage.problem.subtitle', {
+              works: fmt(stats.works),
+              passages: fmt(stats.passages),
+              nodes: fmt(stats.nodes),
+            })}
           </motion.p>
 
           <CompareCards
             before={{
               label: t('howItWorksPage.problem.before.label'),
               title: t('howItWorksPage.problem.before.title'),
-              items: tArray(t, 'howItWorksPage.problem.before.items').map((text) => ({ text })),
+              items: tArray(t, 'howItWorksPage.problem.before.items').map((text) => ({ text: resolveCounts(text) })),
               metric: { value: t('howItWorksPage.problem.before.metricValue'), description: t('howItWorksPage.problem.before.metricDescription') },
             }}
             after={{
               label: t('howItWorksPage.problem.after.label'),
               title: t('howItWorksPage.problem.after.title'),
-              items: tArray(t, 'howItWorksPage.problem.after.items').map((text) => ({ text })),
+              items: tArray(t, 'howItWorksPage.problem.after.items').map((text) => ({ text: resolveCounts(text) })),
               metric: { value: t('howItWorksPage.problem.after.metricValue'), description: t('howItWorksPage.problem.after.metricDescription') },
             }}
           />
@@ -330,15 +340,19 @@ export default function HowItWorksPage() {
               {/* Node type grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {[
-                  { icon: <Users className="w-4 h-4" />, type: t('kg.nodeTypes.persons'), count: 179, color: 'blue' },
-                  { icon: <Brain className="w-4 h-4" />, type: t('kg.nodeTypes.concepts'), count: 121, color: 'violet' },
-                  { icon: <Target className="w-4 h-4" />, type: t('kg.nodeTypes.arguments'), count: 116, color: 'primary' },
-                  { icon: <BookOpen className="w-4 h-4" />, type: t('kg.nodeTypes.works'), count: 66, color: 'amber' },
-                  { icon: <RotateCcw className="w-4 h-4" />, type: t('howItWorksPage.knowledgeGraph.nodeTypeLabels.reformulations'), count: 53, color: 'rose' },
-                  { icon: <Quote className="w-4 h-4" />, type: t('howItWorksPage.knowledgeGraph.nodeTypeLabels.quotes'), count: 14, color: 'emerald' },
-                ].map((nt) => (
-                  <NodeTypeChip key={nt.type} {...nt} />
-                ))}
+                  { icon: <Users className="w-4 h-4" />, type: t('kg.nodeTypes.persons'), nodeType: 'person', fallback: 179, color: 'blue' },
+                  { icon: <Brain className="w-4 h-4" />, type: t('kg.nodeTypes.concepts'), nodeType: 'concept', fallback: 121, color: 'violet' },
+                  { icon: <Target className="w-4 h-4" />, type: t('kg.nodeTypes.arguments'), nodeType: 'argument', fallback: 116, color: 'primary' },
+                  { icon: <BookOpen className="w-4 h-4" />, type: t('kg.nodeTypes.works'), nodeType: 'work', fallback: 66, color: 'amber' },
+                  { icon: <RotateCcw className="w-4 h-4" />, type: t('howItWorksPage.knowledgeGraph.nodeTypeLabels.reformulations'), nodeType: 'reformulation', fallback: 53, color: 'rose' },
+                  { icon: <Quote className="w-4 h-4" />, type: t('howItWorksPage.knowledgeGraph.nodeTypeLabels.quotes'), nodeType: 'quote', fallback: 14, color: 'emerald' },
+                ].map(({ nodeType, fallback, ...nt }) => {
+                  const live = stats.nodeTypes[nodeType];
+                  const count = Number.isFinite(live) ? live : fallback;
+                  return (
+                  <NodeTypeChip key={nt.type} {...nt} count={count} />
+                  );
+                })}
               </div>
             </div>
 
@@ -636,7 +650,7 @@ export default function HowItWorksPage() {
                 <ul className="space-y-2 text-xs font-body text-stone-700">
                   {tArray<string[]>(t, 'howItWorksPage.architecture.corpusStats').map(([n, l]) => (
                     <li key={l} className="flex items-baseline gap-1.5">
-                      <span className="font-mono font-bold text-sm text-orange-600">{n}</span>
+                      <span className="font-mono font-bold text-sm text-orange-600">{resolveCounts(n)}</span>
                       <span className="opacity-80">{l}</span>
                     </li>
                   ))}
