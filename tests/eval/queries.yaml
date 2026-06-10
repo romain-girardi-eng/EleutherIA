@@ -13,8 +13,16 @@
 #                               node id is unstable or several variants are
 #                               acceptable
 #   expected_works              KG work-node IDs we expect to be cited
+#   expected_passages           (optional, gold) passage ids a correct answer
+#                               must cite — scored as citation P/R/F1 via
+#                               eval_lib/scoring.py. Annotated manually,
+#                               item by item; absent until then.
+#   gold_claims                 (optional, gold) atomic claims the answer must
+#                               support; judged adversarially by
+#                               CitationVerifierV2 when ELEUTHERIA_EVAL_JUDGE=1.
+#                               Annotated manually; absent until then.
 #   query_type                  concept-author | school-debate | fact |
-#                               comparison | fragment
+#                               comparison | fragment | romain_thesis_queries
 #   difficulty                  easy | medium | hard
 #
 # All IDs were sampled from data/kg/nodes.jsonl. If an id ever changes, the

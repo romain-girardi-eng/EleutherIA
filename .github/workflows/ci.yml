@@ -100,6 +100,31 @@ jobs:
             kg-invariants-shacl.md
             kg-quality-shacl.md
 
+  kg-work-id-integrity:
+    name: KG work-id Integrity Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install pytest
+        run: pip install pytest pytest-asyncio
+
+      - name: Unit tests (collision detection)
+        run: python -m pytest tests/test_check_kg_work_id_uniqueness.py -q
+
+      # Warns (exit 0) on the known one-kg_work_id<->many-works collisions
+      # committed in data/audit/kg_work_id_known_collisions.json; hard-fails
+      # only when a NEW collision appears (new work node, or a new member work
+      # joining a known group). Shrink the allowlist as works are remediated —
+      # see data/audit/kg_work_id_collisions_report.md for the worklist.
+      - name: kg_work_id uniqueness gate (offline, allowlisted)
+        run: python scripts/check_kg_work_id_uniqueness.py
+
   test-graphrag:
     name: Test GraphRAG Package
     runs-on: ubuntu-latest
@@ -119,6 +144,33 @@ jobs:
 
       - name: Run tests
         run: cd graphrag && python -m pytest tests/ -v
+
+  eval-offline:
+    name: Offline Eval Gate
+    runs-on: ubuntu-latest
+    # Runs after the SHACL gate: the eval suites scan the same KG export the
+    # invariants job has just validated.
+    needs: kg-invariants
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install packages
+        run: |
+          pip install -e database/
+          pip install -e "knowledge graph/"
+          pip install -e "graphrag/[dev]"
+          pip install pyyaml httpx
+
+      - name: Check gold fixtures are in sync with the audit corpus
+        run: python scripts/eval/build_gold_from_audit.py --check
+
+      - name: Run offline eval suites
+        run: python -m pytest tests/eval -q
 
   test-frontend:
     name: Test Frontend

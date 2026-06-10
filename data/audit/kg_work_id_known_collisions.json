@@ -1,0 +1,61 @@
+{
+  "_comment": "Known kg_work_id collisions (one KG work node claimed by several distinct corpus works). CI warns on these but hard-fails on any collision NOT in this list. Shrink this file as works are remediated; never grow it without a scholarly review.",
+  "collisions": {
+    "sc172_epistula_barnabae": [
+      "sc172_epistula_barnabae",
+      "urn:cts:greekLit:tlg1311.tlg001"
+    ],
+    "work_de_interpretatione_aristotle_c350bce_e4f6g8h0": [
+      "first1k:tlg0086.tlg002.1st1K-grc1",
+      "first1k:tlg0086.tlg017.1st1K-grc1"
+    ],
+    "work_de_libero_arbitrio": [
+      "cpl:evodius.de_fide",
+      "urn:cts:greekLit:tlg2022.tlg007",
+      "urn:cts:greekLit:tlg2022.tlg008",
+      "urn:cts:greekLit:tlg2022.tlg009",
+      "urn:cts:greekLit:tlg2022.tlg010",
+      "urn:cts:greekLit:tlg2022.tlg011",
+      "urn:cts:latinLit:stoa0040.adv_fulg",
+      "urn:cts:latinLit:stoa0040.stoa003",
+      "urn:cts:latinLit:stoa0040.stoa045",
+      "urn:cts:latinLit:stoa0040.stoa054"
+    ],
+    "work_de_providentia_seneca_a2b3c4d5": [
+      "urn:cts:latinLit:phi1017.phi015",
+      "urn:cts:latinLit:stoa0255.stoa012"
+    ],
+    "work_diogenes_laertius_lives": [
+      "urn:cts:greekLit:tlg0004.tlg001",
+      "urn:cts:latinLit:phi1254.phi001"
+    ],
+    "work_epictetus_fragments": [
+      "urn:cts:greekLit:tlg0557",
+      "usener:epicurus"
+    ],
+    "work_justin_first_apology": [
+      "urn:cts:greekLit:tlg0645.tlg001",
+      "urn:cts:greekLit:tlg0645.tlg002"
+    ],
+    "work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9": [
+      "first1k:tlg0086.tlg022.1st1K-grc1",
+      "oga:tlg0086.tlg009.perseus-grc2",
+      "oga:tlg0086.tlg010.perseus-grc2",
+      "oga:tlg0086.tlg031.1st1K-grc1"
+    ],
+    "work_plato_timaeus": [
+      "digiliblt:DLT000607",
+      "urn:cts:greekLit:tlg0059.tlg031"
+    ],
+    "work_plutarch_de_fato_complete": [
+      "urn:cts:greekLit:tlg0007.tlg108",
+      "urn:cts:greekLit:tlg0007.tlg135",
+      "urn:cts:greekLit:tlg0007.tlg136"
+    ],
+    "work_republic_plato_c380bce_c3d4e5f6": [
+      "urn:cts:greekLit:tlg0059.tlg002",
+      "urn:cts:greekLit:tlg0059.tlg030"
+    ]
+  },
+  "generated_by": "scripts/check_kg_work_id_uniqueness.py --write-allowlist"
+}

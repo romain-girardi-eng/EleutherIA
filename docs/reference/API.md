@@ -57,7 +57,7 @@ POST /auth/login
 
 ## Works API
 
-Browse the ancient texts corpus (487 works, 69k passages).
+Browse the ancient texts corpus (241 works, ~17.8k passages).
 
 ### List Works
 
@@ -242,18 +242,10 @@ Returns aggregate statistics for the entire corpus.
 ```json
 {
   "works": {
-    "total_works": 487,
-    "greek_works": 310,
-    "latin_works": 28,
-    "english_works": 131,
-    "hebrew_works": 13,
-    "arabic_works": 5,
-    "total_words": 8500000
+    "total_works": 241
   },
   "passages": {
-    "total_passages": 69277,
-    "with_morphology": 12450,
-    "avg_passage_length": 168
+    "total_passages": 17823
   }
 }
 ```
@@ -262,7 +254,7 @@ Returns aggregate statistics for the entire corpus.
 
 ## Knowledge Graph API
 
-Browse and analyze the knowledge graph (19,081 nodes, 43,649 edges).
+Browse and analyze the knowledge graph (20,060 nodes, 56,737 edges).
 
 ### List Nodes
 

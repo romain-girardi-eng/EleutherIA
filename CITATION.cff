@@ -17,10 +17,16 @@ abstract: >-
   worlds. This release combines a curated knowledge graph, an ancient-text
   corpus, and an agentic GraphRAG stack for citation-grounded question
   answering, graph exploration, and data quality auditing. As of the
-  2026-03-10 audit bundled with this release, the live graph contains 17,396
-  nodes, 42,161 edges, and 13,293 passage citations; the broader platform
-  indexes 487 ancient works and more than 69,000 passages in Greek, Latin,
-  English, Hebrew, and Arabic.
+  2026-06-05 KG snapshot bundled with this release, the graph contains
+  20,060 nodes, 56,737 edges, and 19,751 passage citations over 241 ancient
+  works and ~17,800 anchored passages in Greek and Latin (with English
+  translations); the RDF export carries 560,110 triples with per-edge
+  provenance. Version 5.1.0 adds enforced answer-time verification:
+  a deterministic quote-fidelity gate, a corpus-backed ancient-text
+  verifier, an adversarial per-claim citation auditor, a golden evaluation
+  harness in CI, and corpus tamper-evidence tooling. All counts are
+  machine-generated from the dataset snapshots (scripts/gen_stats.py,
+  data/stats.json).
 keywords:
   - ancient philosophy
   - free will
@@ -34,7 +40,7 @@ keywords:
   - moral responsibility
 license: CC-BY-4.0
 version: "5.1.0"
-date-released: "2026-06-30"
+date-released: "2026-06-10"
 doi: "10.5281/zenodo.17379489"
 identifiers:
   - type: doi
