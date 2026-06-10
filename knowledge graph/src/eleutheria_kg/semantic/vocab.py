@@ -18,6 +18,7 @@ from typing import Final
 
 from rdflib import Namespace, URIRef
 from rdflib.namespace import (
+    DCAT,
     DCTERMS,
     FOAF,
     OWL,
@@ -25,6 +26,7 @@ from rdflib.namespace import (
     RDF,
     RDFS,
     SKOS,
+    VOID,
     XSD,
     DefinedNamespaceMeta,
 )
@@ -51,6 +53,8 @@ NAMESPACE_BINDINGS: Final[dict[str, Namespace | DefinedNamespaceMeta]] = {
     "bibo": BIBO,
     "cito": CITO,
     "prov": PROV,
+    "void": VOID,
+    "dcat": DCAT,
     "owl": OWL,
     "rdf": RDF,
     "rdfs": RDFS,
@@ -93,8 +97,10 @@ NODE_TYPE_TO_CLASSES: Final[dict[str, tuple[URIRef, ...]]] = {
 # property is always emitted; if a mapping exists here, an additional
 # ``rdfs:subPropertyOf`` triple is emitted in the ontology header.
 EDGE_TYPE_TO_PROPERTY: Final[dict[str, URIRef]] = {
-    "wrote": DCTERMS.creator,
-    "authored_by": DCTERMS.creator,  # direction flipped at emit time
+    # ``wrote`` points agent -> work: foaf:made has exactly that direction.
+    # dcterms:creator points work -> agent, so it maps ``authored_by`` only.
+    "wrote": FOAF.made,
+    "authored_by": DCTERMS.creator,
     "part_of": DCTERMS.isPartOf,
     "contains": DCTERMS.hasPart,
     "has_section": DCTERMS.hasPart,
@@ -104,8 +110,11 @@ EDGE_TYPE_TO_PROPERTY: Final[dict[str, URIRef]] = {
     "cited_by": CITO.isCitedBy,
     "translation_of": CITO.isTranslationOf,
     "has_translation": CITO.hasTranslation,
-    "influences": CRM.P15_was_influenced_by,
-    "influenced": CRM.P15_was_influenced_by,
+    # crm:P15_was_influenced_by points influenced -> influencer, so only
+    # ``influenced_by`` subsumes under it; the active-voice relations map to
+    # the declared CIDOC inverse crm:P15i_influenced (influencer -> influenced).
+    "influences": CRM.P15i_influenced,
+    "influenced": CRM.P15i_influenced,
     "influenced_by": CRM.P15_was_influenced_by,
     "member_of": CRM.P107i_is_current_or_former_member_of,
     "has_member": CRM.P107_has_current_or_former_member,
@@ -113,22 +122,29 @@ EDGE_TYPE_TO_PROPERTY: Final[dict[str, URIRef]] = {
     "founded": CRM.P94_has_created,
     "founded_by": CRM.P94i_was_created_by,
     "evidenced_by": PROV.wasDerivedFrom,
-    "source_for": PROV.wasUsedBy,
-    "interprets": PROV.wasInformedBy,
-    "discusses": PROV.wasInformedBy,
-    "defines": SKOS.definition,
+    # ``source_for`` / ``source_for_reconstruction`` previously mapped to
+    # prov:wasUsedBy, whose range is prov:Activity — our targets are
+    # entities (arguments, works), so the kg properties stand on their own.
+    # ``discusses`` maps to cito:discusses (deliberately unconstrained
+    # domain/range in CiTO). ``interprets`` / ``reconstructs`` previously
+    # mapped to prov:wasInformedBy (Activity -> Activity only) — removed.
+    # ``defines`` previously mapped to skos:definition, which is a literal-
+    # valued annotation property, not an object property — removed.
+    "discusses": CITO.discusses,
     "variant_of": DCTERMS.isVersionOf,
     "has_variant": DCTERMS.hasVersion,
-    "reconstructs": PROV.wasInformedBy,
     "reconstructed_from": PROV.wasDerivedFrom,
-    "source_for_reconstruction": PROV.wasUsedBy,
 }
 
 
 # Unambiguous owl:inverseOf pairs that survive the ontology audit.
 # Only pairs where both directions point at each other cleanly are listed;
 # three-way inverse declarations in edge_types.json are intentionally
-# excluded to avoid generating contradictory OWL axioms.
+# excluded to avoid generating contradictory OWL axioms. In particular,
+# ``argues_for`` also declares ``supported_by`` as its inverse in
+# edge_types.json, but pairing it here alongside (supports, supported_by)
+# made the closure fabricate ``argues_for`` edges from ``supports`` edges;
+# each relation must therefore appear in at most one pair.
 CLEAN_INVERSE_PAIRS: Final[tuple[tuple[str, str], ...]] = (
     ("wrote", "authored_by"),
     ("part_of", "contains"),
@@ -137,11 +153,9 @@ CLEAN_INVERSE_PAIRS: Final[tuple[tuple[str, str], ...]] = (
     ("teaches", "taught_by"),
     ("preserves", "preserved_in"),
     ("evidenced_by", "source_for"),
-    ("source_for", "evidenced_by"),
     ("interprets", "interpreted_by"),
     ("supports", "supported_by"),
     ("critiques", "critiqued_by"),
-    ("argues_for", "supported_by"),
     ("argues_against", "opposed_by"),
     ("refutes", "refuted_by"),
     ("responds_to", "has_response"),

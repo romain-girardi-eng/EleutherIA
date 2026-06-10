@@ -9,7 +9,10 @@ rdflib = pytest.importorskip("rdflib")
 from rdflib import Graph, URIRef  # noqa: E402
 
 from eleutheria_kg.semantic.inference import (  # noqa: E402
+    INFERRED_GRAPH_ID,
     inverse_neighbors,
+    materialize_inferred_graph,
+    materialize_into_dataset,
     materialize_inverses_and_transitivity,
     transitive_closure,
 )
@@ -183,3 +186,117 @@ def test_materialize_contains_after_inverse_then_transitive() -> None:
     # Inverse direction: w1 contains p1 (via materialized inverse +
     # transitive closure on contains).
     assert (w1, CONTAINS, p1) in g
+
+
+# ---------- separate inference graph (asserted vs derived) -------------------
+
+
+def test_materialize_inferred_graph_does_not_mutate_asserted() -> None:
+    g = _seed_inverse_graph()
+    before = set(g)
+    inferred = materialize_inferred_graph(g)
+    assert set(g) == before, "asserted graph must stay untouched"
+
+    plato = mint_node_iri("person_plato")
+    republic = mint_node_iri("work_republic")
+    assert (republic, AUTHORED_BY, plato) in inferred
+    # The inferred graph carries only derived triples — never asserted ones.
+    assert (plato, WROTE, republic) not in inferred
+
+
+def test_materialize_inferred_graph_matches_inplace_closure() -> None:
+    """Union of asserted + inferred equals the in-place materialization."""
+    seed = _seed_part_of_chain()
+    inplace = _seed_part_of_chain()
+    materialize_inverses_and_transitivity(inplace)
+
+    inferred = materialize_inferred_graph(seed)
+    union = set(seed) | set(inferred)
+    assert union == set(inplace)
+
+    p1 = mint_node_iri("passage_p1")
+    w1 = mint_node_iri("work_w1")
+    # Inverse-then-transitive interplay still holds with a separate sink.
+    assert (w1, CONTAINS, p1) in inferred
+
+
+def test_materialize_into_dataset_uses_named_inference_graph() -> None:
+    g = _seed_inverse_graph()
+    ds = materialize_into_dataset(g)
+
+    plato = mint_node_iri("person_plato")
+    republic = mint_node_iri("work_republic")
+
+    named = ds.graph(INFERRED_GRAPH_ID)
+    assert (republic, AUTHORED_BY, plato) in named
+    assert (plato, WROTE, republic) not in named
+    # Default (asserted) graph carries the asserted triple only.
+    assert (plato, WROTE, republic) in ds.default_graph
+    assert (republic, AUTHORED_BY, plato) not in ds.default_graph
+    # Union view spans both.
+    assert (republic, AUTHORED_BY, plato) in ds
+
+
+def test_proof_chain_survives_when_inference_kept_separate() -> None:
+    """Regression: in-place materialization erased proof chains because
+    derived triples became indistinguishable from asserted ones. Keeping
+    the asserted graph clean preserves the inverseOf derivation."""
+    g = _seed_inverse_graph()
+    plato = mint_node_iri("person_plato")
+    republic = mint_node_iri("work_republic")
+    claim = (republic, AUTHORED_BY, plato)
+
+    # The broken pattern: materialize in place, then ask for a proof.
+    polluted = _seed_inverse_graph()
+    materialize_inverses_and_transitivity(polluted)
+    assert build_proof_chain(polluted, claim) == []  # derivation lost
+
+    # The sound pattern: derive separately, prove over the asserted graph.
+    inferred = materialize_inferred_graph(g)
+    assert claim in inferred
+    chain = build_proof_chain(g, claim)
+    assert len(chain) == 1
+    assert chain[0].rule == "inverseOf"
+    assert chain[0].premises == [(plato, WROTE, republic)]
+
+
+def test_proof_chain_threads_premise_confidence_inverse() -> None:
+    g = _seed_inverse_graph()
+    plato = mint_node_iri("person_plato")
+    republic = mint_node_iri("work_republic")
+    premise = (plato, WROTE, republic)
+
+    chain = build_proof_chain(
+        g,
+        (republic, AUTHORED_BY, plato),
+        confidences={premise: 0.8},
+    )
+    assert len(chain) == 1
+    assert chain[0].confidence == pytest.approx(0.8)
+
+
+def test_proof_chain_threads_premise_confidence_transitive() -> None:
+    g = _seed_part_of_chain()
+    p1 = mint_node_iri("passage_p1")
+    c1 = mint_node_iri("chapter_c1")
+    b1 = mint_node_iri("book_b1")
+    w1 = mint_node_iri("work_w1")
+
+    confidences = {
+        (p1, PART_OF, c1): 0.9,
+        (c1, PART_OF, b1): 0.8,
+        (b1, PART_OF, w1): 1.0,
+    }
+    chain = build_proof_chain(g, (p1, PART_OF, w1), confidences=confidences)
+    assert len(chain) == 1
+    assert chain[0].rule == "transitivity"
+    assert chain[0].confidence == pytest.approx(0.9 * 0.8 * 1.0)
+
+
+def test_proof_chain_confidence_defaults_to_one_without_weights() -> None:
+    g = _seed_inverse_graph()
+    plato = mint_node_iri("person_plato")
+    republic = mint_node_iri("work_republic")
+    chain = build_proof_chain(g, (republic, AUTHORED_BY, plato))
+    assert len(chain) == 1
+    assert chain[0].confidence == pytest.approx(1.0)

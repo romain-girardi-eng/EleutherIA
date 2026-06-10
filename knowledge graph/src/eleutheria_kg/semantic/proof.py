@@ -14,14 +14,17 @@ scope.
 from __future__ import annotations
 
 from collections import deque
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 
-from rdflib import Graph, URIRef
+from rdflib import Graph, Literal, URIRef
+from rdflib.namespace import RDF
 
 from eleutheria_kg.semantic.inference import (
     TRANSITIVE_PROPERTIES,
     declared_inverse,
 )
+from eleutheria_kg.semantic.vocab import KG
 
 # An RDF-ish triple of IRIs. Using URIRef everywhere keeps the chain
 # round-trippable through serialization.
@@ -160,8 +163,67 @@ def _try_transitivity(graph: Graph, claim: Triple) -> list[Triple] | None:
     return None
 
 
-def build_proof_chain(graph: Graph, claim: Triple) -> list[InferenceStep]:
+def _chain_confidence(
+    premises: list[Triple],
+    confidences: Mapping[Triple, float] | None,
+) -> float:
+    """Product of premise edge confidences (1.0 for unknown premises)."""
+    confidence = 1.0
+    if confidences:
+        for premise in premises:
+            confidence *= float(confidences.get(premise, 1.0))
+    return confidence
+
+
+def confidences_from_reified(graph: Graph) -> dict[Triple, float]:
+    """Extract per-triple confidence from RDF reification statements.
+
+    :mod:`eleutheria_kg.semantic.rdf_export` reifies edge provenance as
+    ``rdf:Statement`` nodes carrying ``kg:confidence`` (curated value)
+    and/or ``kg:weight`` (retrieval weight). This reads them back into a
+    mapping suitable for the ``confidences`` argument of
+    :func:`build_proof_chain`. ``kg:confidence`` wins over ``kg:weight``.
+    """
+    out: dict[Triple, float] = {}
+    for statement in graph.subjects(RDF.type, RDF.Statement):
+        s = graph.value(statement, RDF.subject)
+        p = graph.value(statement, RDF.predicate)
+        o = graph.value(statement, RDF.object)
+        value = graph.value(statement, KG.confidence)
+        if value is None:
+            value = graph.value(statement, KG.weight)
+        if (
+            isinstance(s, URIRef)
+            and isinstance(p, URIRef)
+            and isinstance(o, URIRef)
+            and isinstance(value, Literal)
+        ):
+            try:
+                out[(s, p, o)] = float(value)
+            except (TypeError, ValueError):
+                continue
+    return out
+
+
+def build_proof_chain(
+    graph: Graph,
+    claim: Triple,
+    *,
+    confidences: Mapping[Triple, float] | None = None,
+) -> list[InferenceStep]:
     """Reconstruct a proof chain for ``claim`` over ``graph``.
+
+    ``graph`` MUST be the *asserted* graph. Passing a graph that already
+    contains materialized inferences makes every derived claim look
+    directly asserted (empty chain, implicit confidence 1.0) — use
+    :func:`~eleutheria_kg.semantic.inference.materialize_inferred_graph`
+    or :func:`~eleutheria_kg.semantic.inference.materialize_into_dataset`
+    to keep inferences out of the asserted graph.
+
+    ``confidences`` optionally maps asserted premise triples to edge
+    confidence/weight values (see :func:`confidences_from_reified`); each
+    step's confidence is the product of its premise confidences instead
+    of a flat 1.0.
 
     Rule priority (cheapest first, most informative last):
       1. Directly asserted ⇒ empty list (no inference needed).
@@ -177,28 +239,31 @@ def build_proof_chain(graph: Graph, claim: Triple) -> list[InferenceStep]:
     if _triple_present_directly(graph, claim):
         return []
 
+    steps: list[InferenceStep] = []
+
     inverse_step = _try_inverse(graph, claim)
     if inverse_step is not None:
-        return [inverse_step]
+        steps = [inverse_step]
+    else:
+        symmetric_step = _try_symmetric(graph, claim)
+        if symmetric_step is not None:
+            steps = [symmetric_step]
+        else:
+            chain = _try_transitivity(graph, claim)
+            if chain is not None:
+                # One InferenceStep that bundles the full premise chain.
+                # The rule remains "transitivity" regardless of length.
+                steps = [
+                    InferenceStep(
+                        rule="transitivity",
+                        premises=chain,
+                        conclusion=claim,
+                    )
+                ]
 
-    symmetric_step = _try_symmetric(graph, claim)
-    if symmetric_step is not None:
-        return [symmetric_step]
-
-    chain = _try_transitivity(graph, claim)
-    if chain is not None:
-        # One InferenceStep that bundles the full premise chain. The
-        # rule remains "transitivity" regardless of chain length.
-        return [
-            InferenceStep(
-                rule="transitivity",
-                premises=chain,
-                conclusion=claim,
-                confidence=1.0,
-            )
-        ]
-
-    return []
+    for step in steps:
+        step.confidence = _chain_confidence(step.premises, confidences)
+    return steps
 
 
 @dataclass
