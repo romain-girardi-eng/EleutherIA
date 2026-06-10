@@ -8,15 +8,21 @@ from __future__ import annotations
 
 import asyncio
 import asyncpg
+import os
 import re
 import sys
 from pathlib import Path
 
-DATABASE_URL = (
-    "postgresql://postgres.alqwfeddgigzpxrdbdbo:"
-    "ANQffBsZ77fq5CsLWwTaBlfa1ke1gTrQ@"
-    "aws-0-eu-west-1.pooler.supabase.com:5432/postgres?sslmode=require"
-)
+
+def dsn() -> str:
+    """Read the Postgres DSN from the environment; no hardcoded fallback."""
+    value = os.environ.get("DATABASE_URL", "").strip()
+    if not value:
+        raise RuntimeError(
+            "DATABASE_URL is not set. Export the Postgres DSN before running "
+            "this script."
+        )
+    return value
 
 PLOTINUS_CANONICAL_ID = "urn_cts_greeklit_tlg2000_tlg001_grc"
 PLOTINUS_WORK_URN_BASE = "urn:cts:greekLit:tlg2000.tlg001.perseus-grc1"
@@ -187,7 +193,7 @@ async def apply_plotinus_updates(conn: asyncpg.Connection, updates: list[tuple])
 
 
 async def main() -> None:
-    conn = await asyncpg.connect(DATABASE_URL)
+    conn = await asyncpg.connect(dsn())
 
     # Analysis phase
     plotinus_count, collision_count, plotinus_updates = await analyse_plotinus(conn, dry_run=True)

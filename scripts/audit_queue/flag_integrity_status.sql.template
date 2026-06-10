@@ -1,0 +1,28 @@
+-- flag_integrity_status.sql.template
+-- ============================================================================
+-- Template for the integrity_status flagging SQL emitted by
+-- scripts/audit_queue/generate_flag_sql.py from data/audit/review_queue.jsonl.
+--
+-- DO NOT RUN THIS FILE. It is a template: the generator substitutes one
+-- UPDATE per node (greek-fabrication categories only), each on its own line
+-- with a trailing comment carrying the review-queue id, so every statement
+-- can be reviewed and executed selectively, one at a time.
+--
+-- integrity_status values:
+--   'fabrication_confirmed_pending_fix' — fabrication confirmed (audit verdict
+--       or adjudicated accepted); corrective fix not yet applied
+--   'greek_unverified' — Greek run(s) not yet verified against an edition;
+--       entry not yet adjudicated
+--
+-- The GraphRAG context-pack filter excludes/demotes nodes carrying either
+-- flag so unverified Greek never reaches synthesis context unannotated.
+-- ============================================================================
+
+BEGIN;
+
+-- One line per node, generated as:
+UPDATE free_will.kg_nodes SET metadata = jsonb_set(COALESCE(metadata, '{}'::jsonb), '{integrity_status}', '"{{integrity_status}}"'), updated_at = now() WHERE node_id = '{{node_id}}'; -- queue_id={{queue_id}} source={{source_file}}:{{source_line}}
+
+-- Review each statement, run the ones you accept, then:
+COMMIT;
+-- or ROLLBACK;

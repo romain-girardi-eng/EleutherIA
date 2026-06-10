@@ -14,6 +14,7 @@ import pytest
 from tests.eval.run_eval import (
     aggregate,
     compute_query_metrics,
+    extract_predicted_passages,
     extract_returned_ids,
     load_queries,
     run,
@@ -34,6 +35,7 @@ def test_load_queries_yaml_is_valid() -> None:
         "fact",
         "comparison",
         "fragment",
+        "romain_thesis_queries",
     }
     valid_difficulty = {"easy", "medium", "hard"}
     for c in cases:
@@ -45,6 +47,9 @@ def test_load_queries_yaml_is_valid() -> None:
         assert c.expected_entities or c.expected_entity_keywords, (
             f"{c.id}: needs at least one expected_entity or keyword"
         )
+        # Gold annotation fields are optional but must parse as lists.
+        assert isinstance(c.expected_passages, list), c.id
+        assert isinstance(c.gold_claims, list), c.id
 
 
 def test_extract_returned_ids_from_payload() -> None:
@@ -80,6 +85,18 @@ def test_extract_returned_ids_from_payload() -> None:
     assert ids.count("person_aristotle") == 1
     # Works bucket
     assert "work_nicomachean_ethics" in works
+
+
+def test_extract_predicted_passages_only_passage_citations() -> None:
+    payload = {
+        "citations": [
+            {"ref": "1", "type": "node", "id": "person_aristotle", "label": "A"},
+            {"ref": "P1", "type": "passage", "id": "passage_abc", "label": "P"},
+            {"ref": "P2", "type": "passage", "id": "passage_abc", "label": "P"},
+            {"ref": "P3", "type": "passage", "id": "passage_xyz", "label": "P"},
+        ],
+    }
+    assert extract_predicted_passages(payload) == ["passage_abc", "passage_xyz"]
 
 
 def test_compute_query_metrics_basic() -> None:

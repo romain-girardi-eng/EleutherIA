@@ -19,6 +19,7 @@ Changes:
 from __future__ import annotations
 
 import asyncio
+import os
 import sys
 from pathlib import Path
 
@@ -31,11 +32,16 @@ from scripts.corpus_lib import read_jsonl, write_jsonl
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "data" / "corpus" / "manifest.jsonl"
 
-DATABASE_URL = (
-    "postgresql://postgres.alqwfeddgigzpxrdbdbo:"
-    "ANQffBsZ77fq5CsLWwTaBlfa1ke1gTrQ@"
-    "aws-0-eu-west-1.pooler.supabase.com:5432/postgres?sslmode=require"
-)
+
+def dsn() -> str:
+    """Read the Postgres DSN from the environment; no hardcoded fallback."""
+    value = os.environ.get("DATABASE_URL", "").strip()
+    if not value:
+        raise RuntimeError(
+            "DATABASE_URL is not set. Export the Postgres DSN before running "
+            "this script."
+        )
+    return value
 
 # Mapping: old stale canonical_id → correct canonical_id
 REMAP = {
@@ -59,7 +65,7 @@ NEW_WORKS = {
 
 
 async def main() -> None:
-    conn = await asyncpg.connect(DATABASE_URL)
+    conn = await asyncpg.connect(dsn())
 
     # Fetch all live works + passage counts
     rows = await conn.fetch("""

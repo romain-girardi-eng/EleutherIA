@@ -46,6 +46,8 @@ from rich.panel import Panel  # noqa: E402
 from rich.progress import Progress, SpinnerColumn, TextColumn  # noqa: E402
 from rich.table import Table  # noqa: E402
 
+from cli.audit_queue import audit_queue_app  # noqa: E402
+
 app = typer.Typer(
     name="eleutheria",
     help="EleutherIA - Ancient Philosophy Knowledge Graph CLI",
@@ -64,6 +66,7 @@ app.add_typer(db_app, name="db")
 app.add_typer(test_app, name="test")
 app.add_typer(export_app, name="export")
 app.add_typer(import_app, name="import")
+app.add_typer(audit_queue_app, name="audit-queue")
 
 # Get project root
 PROJECT_ROOT = Path(__file__).parent.parent
