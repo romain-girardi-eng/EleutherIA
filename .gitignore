@@ -177,3 +177,7 @@ data/audit/wave3/
 data/audit/cite_fix/
 data/audit/cite_descfix/
 data/corpus/*.bak-*
+
+# Env backups (never commit — may contain rotated secrets)
+.env.bak*
+*.env.bak
