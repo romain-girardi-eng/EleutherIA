@@ -140,3 +140,29 @@ belongs in the data-normalization track.
   Node types: 17 active / 7 reserved. Shapes generator verified tolerant of the new field.
 
 Corpus now **20,415 passages**. Sole remaining text gap: Apuleius De Platone.
+
+## Quality wave (2026-06-11, "fix them all except lemmas")
+
+1. **Zero-fabrication gate** (`scripts/check_greek_gate.py` + pre-commit hook + allowlist with
+   provenance): any Greek entering a node description must be verbatim in corpus/allowlist/TLG E.
+   On its first full run it caught 2 runs the audit prefilter missed — both verified genuine
+   via TLG and allowlisted with provenance.
+2. **Fake loci eliminated**: the Sextus/Epictetus chunk corpus carried sequence numbers
+   disguised as citations ('M. 100' over Outlines text). Real loci recovered by multi-probe
+   alignment against tlgu-decoded TLG E: 1,215 nodes + 339 corpus passages now cite true
+   work+locus; 11 unresolvable marked honestly. 66 further malformed URNs normalized.
+3. **Coverage ingestions from TLG E** (`scripts/ingest_from_tlge.py`): Ammonius In De Int.
+   (CAG 4.5), Alexander Mantissa + Quaestiones + Eth. Probl. (Bruns), John of Damascus
+   Expositio fidei (Kotter PTS 12) — 708 passages; KG nodes created/linked.
+4. **Citation style**: `docs/reference/CITATION_STYLE.md`; 189 refs normalized, 77 Damascene
+   title-units merged.
+5. **QID backfill**: 371 persons (each QID's Wikidata entity actually read before acceptance);
+   the duplicate-QID gate exposed **4 duplicate person pairs**, merged (incl. the mislabeled
+   'Dorothea' node that is in fact Michael Frede).
+6. **Citation grounding**: 219 verbatim-gated passage citations for 121 previously uncited
+   claim nodes; 36 not-groundable recorded with the precise missing locus.
+7. **Prod deploy-up**: Supabase is back; KG deployed (bootstrap --replace-data);
+   `scripts/sync_corpus_to_db.py` rebuilds the corpus tables from the mirror
+   (free-tier disk requires split transactions). Final sync pending at time of writing.
+
+Skipped on request: lemmatization of new passages.
