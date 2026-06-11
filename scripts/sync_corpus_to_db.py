@@ -49,7 +49,7 @@ def work_uuid(canonical_id: str) -> str:
     return str(uuid.uuid5(uuid.NAMESPACE_URL, f'eleutheria:work:{canonical_id}'))
 
 
-async def main(commit: bool):
+async def main(commit: bool, resume: bool = False):
     import asyncpg
     url = os.environ.get('DATABASE_URL')
     if not url:
@@ -87,65 +87,84 @@ async def main(commit: bool):
 
     conn = await asyncio.wait_for(asyncpg.connect(url), timeout=30)
     try:
-        # TRUNCATE in its own transaction so space is reclaimed before the
-        # bulk load (a single transaction doubles storage and can fill the
-        # project disk).
-        await conn.execute(
-            'TRUNCATE free_will.passage_citations, free_will.passages, '
-            'free_will.ancient_works CASCADE')
-        if True:
-            await conn.executemany(
-                '''INSERT INTO free_will.ancient_works
-                   (work_id, canonical_id, title, author, language, period,
-                    source, cts_urn, total_divisions)
-                   VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)''',
-                [(w['work_id'], w['canonical_id'], w['title'], w['author'],
-                  w['language'], w['period'], w['source'], w['cts_urn'], w['n'])
-                 for w in works.values()])
-            rows = []
-            for i, r in enumerate(passages):
-                txt = r.get('text_content') or ''
-                seq = r.get('sequence_number')
-                try:
-                    seq = int(seq)
-                except (TypeError, ValueError):
-                    seq = i + 1
-                urn = r.get('cts_urn')
-                if urn in ('None', 'null', ''):
-                    urn = None
-                rows.append((
-                    r['passage_id'],
-                    works[r.get('work_canonical_id') or 'unknown_work']['work_id'],
-                    r.get('canonical_ref') or f'#{seq}',
-                    urn, seq, txt, len(txt), len(txt.split()), 'original'))
+        existing = await conn.fetchval(
+            'select count(*) from free_will.passages')
+        if not resume:
+            # TRUNCATE in its own transaction so space is reclaimed before
+            # the bulk load (a single transaction doubles storage and can
+            # fill the project disk).
+            await conn.execute(
+                'TRUNCATE free_will.passage_citations, free_will.passages, '
+                'free_will.ancient_works CASCADE')
+        else:
+            print(f'resume mode: {existing} passages already present, '
+                  'ON CONFLICT DO NOTHING')
+
+        await conn.executemany(
+            '''INSERT INTO free_will.ancient_works
+               (work_id, canonical_id, title, author, language, period,
+                source, cts_urn, total_divisions)
+               VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+               ON CONFLICT (work_id) DO NOTHING''',
+            [(w['work_id'], w['canonical_id'], w['title'], w['author'],
+              w['language'], w['period'], w['source'], w['cts_urn'], w['n'])
+             for w in works.values()])
+        rows = []
+        for i, r in enumerate(passages):
+            txt = r.get('text_content') or ''
+            seq = r.get('sequence_number')
+            try:
+                seq = int(seq)
+            except (TypeError, ValueError):
+                seq = i + 1
+            urn = r.get('cts_urn')
+            if urn in ('None', 'null', ''):
+                urn = None
+            rows.append((
+                r['passage_id'],
+                works[r.get('work_canonical_id') or 'unknown_work']['work_id'],
+                r.get('canonical_ref') or f'#{seq}',
+                urn, seq, txt, len(txt), len(txt.split()), 'original'))
+        # batched inserts, one implicit transaction per batch: progress
+        # survives interruption, WAL pressure stays bounded.
+        B = 500
+        for off in range(0, len(rows), B):
             await conn.executemany(
                 '''INSERT INTO free_will.passages
                    (passage_id, work_id, canonical_ref, cts_urn,
                     sequence_number, text_content, char_length, word_count,
                     passage_role)
-                   VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)''', rows)
-            crows = []
-            seen = set()
-            for c in kept_cit:
-                key = (c['passage_id'], c.get('kg_node_id'))
-                if key in seen:
-                    continue
-                seen.add(key)
-                conf = c.get('confidence')
-                try:
-                    conf = float(conf) if conf is not None else None
-                except (TypeError, ValueError):
-                    conf = None
-                crows.append((
-                    str(uuid.uuid5(uuid.NAMESPACE_URL,
-                                   f'eleutheria:cit:{key[0]}:{key[1]}')),
-                    c['passage_id'], c.get('kg_node_id'),
-                    c.get('citation_type'), conf, c.get('notes')))
+                   VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+                   ON CONFLICT (passage_id) DO NOTHING''',
+                rows[off:off + B])
+            if off % 5000 == 0:
+                print(f'passages {off + min(B, len(rows) - off)}/{len(rows)}',
+                      flush=True)
+        crows = []
+        seen = set()
+        for c in kept_cit:
+            key = (c['passage_id'], c.get('kg_node_id'))
+            if key in seen:
+                continue
+            seen.add(key)
+            conf = c.get('confidence')
+            try:
+                conf = float(conf) if conf is not None else None
+            except (TypeError, ValueError):
+                conf = None
+            crows.append((
+                str(uuid.uuid5(uuid.NAMESPACE_URL,
+                               f'eleutheria:cit:{key[0]}:{key[1]}')),
+                c['passage_id'], c.get('kg_node_id'),
+                c.get('citation_type'), conf, c.get('notes')))
+        for off in range(0, len(crows), B):
             await conn.executemany(
                 '''INSERT INTO free_will.passage_citations
                    (citation_id, passage_id, kg_node_id, citation_type,
                     confidence, notes)
-                   VALUES ($1,$2,$3,$4,$5,$6)''', crows)
+                   VALUES ($1,$2,$3,$4,$5,$6)
+                   ON CONFLICT (citation_id) DO NOTHING''',
+                crows[off:off + B])
         for t in ('ancient_works', 'passages', 'passage_citations'):
             print(t, await conn.fetchval(
                 f'select count(*) from free_will.{t}'))
@@ -156,4 +175,7 @@ async def main(commit: bool):
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--commit', action='store_true')
-    asyncio.run(main(ap.parse_args().commit))
+    ap.add_argument('--resume', action='store_true',
+                    help='skip TRUNCATE; insert only missing rows')
+    a = ap.parse_args()
+    asyncio.run(main(a.commit, a.resume))

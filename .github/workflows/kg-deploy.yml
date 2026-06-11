@@ -31,13 +31,11 @@ name: KG Deploy (git → Supabase)
 #   gh workflow run kg-deploy.yml -f target=staging            # against staging
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'data/kg/nodes.jsonl'
-      - 'data/kg/edges.jsonl'
-      - 'scripts/deploy_kg_to_supabase.py'
-      - '.github/workflows/kg-deploy.yml'
+  # push trigger disabled 2026-06-12: the database is self-hosted on the
+  # the platform host (eleutheria-db container, private docker network) and is no
+  # longer reachable from GitHub Actions. Deploy-up now happens on the host:
+  #   git pull && bootstrap_supabase.py --replace-data && sync_corpus_to_db.py --commit
+  workflow_dispatch:
   workflow_dispatch:
     inputs:
       dry_run:
