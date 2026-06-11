@@ -81,7 +81,10 @@ class ApiClient {
 
   // Knowledge Graph Endpoints
   async getNodes(filters?: { type?: string; period?: string; school?: string; limit?: number; offset?: number }): Promise<{ nodes: KGData['nodes'] }> {
-    const response = await this.client.get('/api/kg/nodes', { params: filters });
+    // Backend expects `node_type`, not `type`
+    const { type, ...rest } = filters ?? {};
+    const params = type ? { ...rest, node_type: type } : rest;
+    const response = await this.client.get('/api/kg/nodes', { params });
     const data = response.data;
     // Backend returns a raw array; normalize to { nodes: [...] }
     if (Array.isArray(data)) {
@@ -95,6 +98,11 @@ class ApiClient {
     const data = response.data;
     // Backend returns a raw array; normalize
     return Array.isArray(data) ? data : (data?.edges ?? []);
+  }
+
+  async getBibliography(): Promise<{ references: string[]; count: number }> {
+    const response = await this.client.get('/api/kg/bibliography');
+    return response.data;
   }
 
   async getNode(id: string) {
@@ -655,7 +663,19 @@ class ApiClient {
 
   async getWorksStats() {
     const response = await this.client.get('/api/works/stats');
-    return response.data;
+    const data = response.data;
+    // Current backend nests counts under works/passages; normalize to the
+    // flat WorksStats shape the pages consume.
+    if (data && typeof data === 'object' && 'works' in data) {
+      return {
+        total_works: data.works?.total_works ?? 0,
+        total_passages: data.passages?.total_passages ?? 0,
+        total_citations: data.total_citations,
+        top_authors: data.top_authors,
+        featured_works: data.featured_works,
+      };
+    }
+    return data;
   }
 
   async getWorkKGNodes(workId: string) {

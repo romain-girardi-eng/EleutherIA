@@ -4,6 +4,8 @@ FastAPI routes for knowledge graph operations.
 Provides REST endpoints for browsing and analyzing the knowledge graph.
 """
 
+import json
+import re
 from typing import Annotated, Any, cast
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -172,6 +174,48 @@ async def list_edges(
         edges = [e for e in edges if e.get("target") == target]
 
     return cast(list[dict[str, Any]], edges[offset : offset + limit])
+
+
+def collect_modern_scholarship(nodes: list[dict[str, Any]]) -> list[str]:
+    """Aggregate unique modern-scholarship citations across nodes.
+
+    References live either on the node itself (``modern_scholarship``) or in
+    its metadata, where legacy imports stored them as JSON-encoded strings.
+    """
+    refs: set[str] = set()
+    for node in nodes:
+        ms = node.get("modern_scholarship")
+        if not ms:
+            ms = (node.get("metadata") or {}).get("modern_scholarship")
+        if isinstance(ms, str):
+            try:
+                ms = json.loads(ms)
+            except (json.JSONDecodeError, ValueError):
+                ms = [ms]
+        if not isinstance(ms, list):
+            continue
+        for ref in ms:
+            if isinstance(ref, dict):
+                ref = ref.get("citation") or ref.get("text") or ref.get("title")
+            if isinstance(ref, str) and ref.strip():
+                refs.add(ref.strip())
+    return sorted(refs, key=lambda r: re.split(r"[,.]", r, maxsplit=1)[0].lower())
+
+
+@router.get("/bibliography")
+async def get_bibliography(
+    analytics: Annotated[KGAnalytics, Depends(get_analytics)],
+    cache: Annotated[KGCache, Depends(get_cache)],
+) -> dict[str, Any]:
+    """All unique modern-scholarship references in the knowledge graph."""
+    cached = cache.get("kg_bibliography")
+    if cached:
+        return cast(dict[str, Any], cached)
+
+    references = collect_modern_scholarship(analytics.kg_data.get("nodes", []))
+    result = {"references": references, "count": len(references)}
+    cache.set("kg_bibliography", result, ttl=3600)
+    return result
 
 
 @router.get("/statistics", response_model=KGStatistics)
