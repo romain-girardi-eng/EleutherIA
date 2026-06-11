@@ -181,3 +181,4 @@ data/corpus/*.bak-*
 # Env backups (never commit — may contain rotated secrets)
 .env.bak*
 *.env.bak
+.deploy/
