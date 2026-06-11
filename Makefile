@@ -236,3 +236,39 @@ clean:
 	find . -type d -name "htmlcov" -exec rm -rf {} + 2>/dev/null || true
 	find . -type f -name ".coverage" -delete 2>/dev/null || true
 	@echo "Cache files cleaned!"
+
+# ==========================================================================
+# the platform infra-tenant lifecycle (standard client verbs mapped to this stack)
+# ==========================================================================
+PROD_SSH := deploy-host
+PROD_DIR := /home/ben/EleutherIA
+PROD_COMPOSE := docker compose -p deploy -f deploy-compose.yml -f /tmp/eleutheria-compose-runtime.yml
+
+.PHONY: check deploy deploy-data prod-status prod-logs prod-recreate
+
+# Fast quality gate (used by private-repo `make clients-check`)
+check: lint
+
+# Deploy code: pull on the host, rebuild api+worker images, recreate
+deploy:
+	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git pull origin main && cd deploy && $(PROD_COMPOSE) up -d --build --no-deps eleutheria-api eleutheria-worker'
+	@sleep 10 && curl -sf https://free-will.app/api/health && echo
+
+# Deploy data: git mirror -> prod Postgres (KG + corpus), then health check
+deploy-data:
+	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git pull -q origin main && \
+	  docker run --rm --network private-repo_app-network -v $(PROD_DIR):/repo -w /repo \
+	    --env-file $(PROD_DIR)/.env python:3.12-slim bash -lc \
+	    "pip install -q asyncpg && python database/scripts/bootstrap_supabase.py --skip-schema --replace-data && python scripts/sync_corpus_to_db.py --commit"'
+	@curl -sf https://free-will.app/api/health && echo
+
+prod-status:
+	@ssh -o BatchMode=yes $(PROD_SSH) 'docker ps --filter name=eleutheria --format "table {{.Names}}\t{{.Status}}"'
+	@curl -s https://free-will.app/api/health && echo
+
+prod-logs:
+	ssh -o BatchMode=yes $(PROD_SSH) 'docker logs --tail 100 -f eleutheria-api'
+
+# Recreate api+worker after a .env change (docker restart does NOT re-read env)
+prod-recreate:
+	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR)/deploy && $(PROD_COMPOSE) up -d --force-recreate --no-deps --no-build eleutheria-api eleutheria-worker'

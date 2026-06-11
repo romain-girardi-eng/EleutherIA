@@ -1,0 +1,26 @@
+# EleutherIA — app manifest (the platform infra-tenant)
+#
+# EleutherIA is registered in private-repo as an infrastructure tenant: it
+# benefits from the fleet ops layer (ha-sync backups, ha-probe, doctor,
+# infra-snapshot) while remaining an independent open-source GitHub repo
+# with its own CI, CD (GHCR), and stack (FastAPI + React/Vite + Temporal +
+# self-hosted Postgres). It deliberately does NOT follow the copier client
+# template; the make targets below map the standard lifecycle verbs onto
+# its real stack.
+
+slug: eleutheria
+display_name: EleutherIA
+entity: pragma
+blueprint_version: none   # infra-tenant — not a template client
+
+# Hosting
+primary_hostname: free-will.app
+api_hostname: free-will.app
+port: 8015                # host port of eleutheria-api on the prod box
+home_server: p            # deploy-host
+project_dir: /home/ben/EleutherIA
+
+# Database (self-hosted container, see deploy/deploy-compose.yml)
+databases:
+  - container: eleutheria-db
+    db: eleutheria
