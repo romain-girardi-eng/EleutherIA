@@ -36,7 +36,6 @@ on:
   # longer reachable from GitHub Actions. Deploy-up now happens on the host:
   #   git pull && bootstrap_supabase.py --replace-data && sync_corpus_to_db.py --commit
   workflow_dispatch:
-  workflow_dispatch:
     inputs:
       dry_run:
         description: 'Dry-run only (no DB writes)'
