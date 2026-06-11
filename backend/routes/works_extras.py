@@ -172,10 +172,14 @@ async def get_works_stats(
     """Get corpus statistics for works and passages."""
     works_stats = await db.fetchrow("SELECT * FROM free_will.works_statistics")
     passages_stats = await db.fetchrow("SELECT * FROM free_will.passages_statistics")
+    citations = await db.fetchrow(
+        "SELECT COUNT(*) AS total FROM free_will.passage_citations"
+    )
 
     return {
         "works": dict(works_stats) if works_stats else {},
         "passages": dict(passages_stats) if passages_stats else {},
+        "total_citations": citations["total"] if citations else 0,
     }
 
 

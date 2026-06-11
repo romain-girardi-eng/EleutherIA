@@ -77,48 +77,9 @@ export default function BibliographyPage() {
         setLoadingMessage(`Retrying (attempt ${retryCount + 1})...`);
       }
 
-      const nodesResponse = await apiClient.getNodes();
-      const nodes = nodesResponse.nodes || [];
+      const { references } = await apiClient.getBibliography();
 
-      const bibSet = new Set<string>();
-      type NodeType = {
-        modern_scholarship?: Array<string | { citation?: string; text?: string; title?: string }>;
-        metadata?: {
-          modern_scholarship?: string | Array<string | { citation?: string; text?: string; title?: string }>;
-        };
-      };
-
-      nodes.forEach((node: NodeType) => {
-        let modernScholarship = node.modern_scholarship;
-        if (!modernScholarship && node.metadata?.modern_scholarship) {
-          const metadataMS = node.metadata.modern_scholarship;
-          if (typeof metadataMS === 'string') {
-            try {
-              modernScholarship = JSON.parse(metadataMS);
-            } catch {
-              modernScholarship = [metadataMS];
-            }
-          } else if (Array.isArray(metadataMS)) {
-            modernScholarship = metadataMS;
-          }
-        }
-
-        if (modernScholarship && Array.isArray(modernScholarship)) {
-          modernScholarship.forEach((ref: string | { citation?: string; text?: string; title?: string }) => {
-            let refStr = '';
-            if (typeof ref === 'string') {
-              refStr = ref;
-            } else if (ref && typeof ref === 'object') {
-              refStr = ref.citation || ref.text || ref.title || JSON.stringify(ref);
-            }
-            if (refStr && typeof refStr === 'string' && refStr.trim()) {
-              bibSet.add(refStr.trim());
-            }
-          });
-        }
-      });
-
-      const sortedBib = Array.from(bibSet).sort((a, b) => {
+      const sortedBib = [...(references || [])].sort((a, b) => {
         const authorA = a.split(/[,.]/)[0].toLowerCase();
         const authorB = b.split(/[,.]/)[0].toLowerCase();
         return authorA.localeCompare(authorB);

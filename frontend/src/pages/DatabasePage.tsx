@@ -18,20 +18,20 @@ export default function DatabasePage() {
   const kgStats = { nodes: stats.nodes, edges: stats.edges, sources: stats.passages };
 
   useEffect(() => {
-    apiClient.getNodes()
-      .then((data) => {
-        const nodes = Array.isArray(data) ? data : (data?.nodes || []);
-        const typeData: Record<string, Array<{ id: string; label: string }>> = {};
-        nodes.forEach((node: { id: string; type?: string; label?: string }) => {
-          const type = node.type || 'unknown';
-          if (!typeData[type]) typeData[type] = [];
-          typeData[type].push({ id: node.id, label: node.label || 'Unnamed' });
-        });
-        Object.keys(typeData).forEach(type => {
-          typeData[type].sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
-        });
-        setNodeTypeData(typeData);
-      })
+    const listedTypes = ['person', 'argument', 'concept', 'work', 'reformulation'];
+    Promise.all(
+      listedTypes.map((type) =>
+        apiClient.getNodes({ type, limit: 50000 })
+          .then((data) => {
+            const nodes = Array.isArray(data) ? data : (data?.nodes || []);
+            const entries = nodes
+              .map((node: { id: string; label?: string }) => ({ id: node.id, label: node.label || 'Unnamed' }))
+              .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
+            return [type, entries] as const;
+          })
+      )
+    )
+      .then((pairs) => setNodeTypeData(Object.fromEntries(pairs)))
       .catch(error => console.error('Error loading node type data:', error));
   }, []);
 
