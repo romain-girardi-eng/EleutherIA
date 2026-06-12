@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -10,6 +10,13 @@ const indexPath = path.join(distDir, 'index.html');
 
 const config = JSON.parse(await readFile(configPath, 'utf8'));
 const baseHtml = await readFile(indexPath, 'utf8');
+
+// Hash-named HomePage chunk — modulepreloaded on the landing page so the
+// hero starts downloading in parallel with the entry bundle instead of a
+// third network hop after React mounts.
+const homeChunk = (await readdir(path.join(distDir, 'assets'))).find(
+  (f) => f.startsWith('HomePage-') && f.endsWith('.js'),
+);
 
 // Shared content modules — the SAME plain JSON the React pages import, so the
 // prerendered static HTML carries the real glossary/FAQ text (critical for GEO:
@@ -406,17 +413,26 @@ function fallbackBody(route) {
   if (normalizePath(route.path) === '/glossary') return glossaryBody(route);
   if (normalizePath(route.path) === '/faq') return faqBody(route);
 
-  return `<main data-prerendered-seo="true" style="font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:48rem;margin:4rem auto;padding:2rem;color:#292524;line-height:1.6">
+  return `<main data-prerendered-seo="true" style="font-family:'DM Sans',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:48rem;margin:4rem auto;padding:2rem;color:#292524;line-height:1.6">
       <p style="margin:0 0 .75rem;color:#a16207;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.75rem">EleutherIA</p>
-      <h1 style="font-size:clamp(2rem,6vw,4rem);line-height:1.05;margin:0 0 1rem">${escapeHtml(route.h1)}</h1>
+      <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:clamp(2rem,6vw,4rem);line-height:1.05;margin:0 0 1rem">${escapeHtml(route.h1)}</h1>
       <p style="font-size:1.125rem;margin:0 0 1.5rem">${escapeHtml(route.summary)}</p>
       ${coreLinksNav(route)}
+      <p style="display:flex;align-items:center;gap:.5rem;margin:2.5rem 0 0;color:#a8a29e;font-size:.8125rem">
+        <span style="display:inline-block;width:.5rem;height:.5rem;border-radius:9999px;background:#d97706;animation:eleutheria-pulse 1.2s ease-in-out infinite"></span>
+        Loading the interactive interface…
+      </p>
+      <style>@keyframes eleutheria-pulse{0%,100%{opacity:.25}50%{opacity:1}}</style>
     </main>`;
 }
 
 function renderRouteHtml(route) {
   const stripped = stripSeoTags(baseHtml);
-  const withHead = stripped.replace('</head>', `${seoHead(route)}\n  </head>`);
+  let head = seoHead(route);
+  if (normalizePath(route.path) === '/' && homeChunk) {
+    head += `\n  <link rel="modulepreload" crossorigin href="/assets/${homeChunk}">`;
+  }
+  const withHead = stripped.replace('</head>', `${head}\n  </head>`);
   return withHead.replace(
     /<div id="root"([^>]*)><\/div>/,
     `<div id="root"$1>${fallbackBody(route)}</div>`,
