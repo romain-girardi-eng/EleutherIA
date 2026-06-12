@@ -4,14 +4,13 @@ FastAPI routes for knowledge graph operations.
 Provides REST endpoints for browsing and analyzing the knowledge graph.
 """
 
-import json
-import re
 from typing import Annotated, Any, cast
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from eleutheria_kg.models.kg import KGStatistics
 from eleutheria_kg.services.analytics import KGAnalytics
+from eleutheria_kg.services.bibliography import collect_modern_scholarship
 from eleutheria_kg.services.cache import KGCache
 
 router = APIRouter(tags=["knowledge-graph"])
@@ -174,32 +173,6 @@ async def list_edges(
         edges = [e for e in edges if e.get("target") == target]
 
     return cast(list[dict[str, Any]], edges[offset : offset + limit])
-
-
-def collect_modern_scholarship(nodes: list[dict[str, Any]]) -> list[str]:
-    """Aggregate unique modern-scholarship citations across nodes.
-
-    References live either on the node itself (``modern_scholarship``) or in
-    its metadata, where legacy imports stored them as JSON-encoded strings.
-    """
-    refs: set[str] = set()
-    for node in nodes:
-        ms = node.get("modern_scholarship")
-        if not ms:
-            ms = (node.get("metadata") or {}).get("modern_scholarship")
-        if isinstance(ms, str):
-            try:
-                ms = json.loads(ms)
-            except (json.JSONDecodeError, ValueError):
-                ms = [ms]
-        if not isinstance(ms, list):
-            continue
-        for ref in ms:
-            if isinstance(ref, dict):
-                ref = ref.get("citation") or ref.get("text") or ref.get("title")
-            if isinstance(ref, str) and ref.strip():
-                refs.add(ref.strip())
-    return sorted(refs, key=lambda r: re.split(r"[,.]", r, maxsplit=1)[0].lower())
 
 
 @router.get("/bibliography")
