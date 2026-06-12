@@ -183,6 +183,105 @@ async def get_works_stats(
     }
 
 
+async def _resolve_work(db: DatabaseService, work_id: str) -> dict[str, Any]:
+    """Resolve a work by UUID, canonical_id, or kg_work_id."""
+    work: dict[str, Any] | None = None
+    if len(work_id) == 36 and work_id.count("-") == 4:
+        work = await db.fetchrow(
+            "SELECT work_id, title, canonical_id FROM free_will.ancient_works WHERE work_id = $1::uuid",
+            work_id,
+        )
+    if work is None:
+        work = await db.fetchrow(
+            "SELECT work_id, title, canonical_id FROM free_will.ancient_works WHERE canonical_id = $1 OR kg_work_id = $1",
+            work_id,
+        )
+    if work is None:
+        raise HTTPException(status_code=404, detail="Work not found")
+    return work
+
+
+@router.get("/{work_id}/table-of-contents")
+async def get_table_of_contents(
+    work_id: str,
+    db: Annotated[DatabaseService, Depends(get_db)],
+) -> dict[str, Any]:
+    """Hierarchical table of contents for a work.
+
+    Shape matches the legacy reader contract:
+    ``{"toc": {books, chapters, sections, flat}}`` where entries are
+    ``{passage_id, canonical_ref, sequence_number}``. Works without
+    book/chapter columns get chapters synthesized from the first
+    component of ``canonical_ref`` (e.g. Seneca's letters "12.3" → 12).
+    """
+    work = await _resolve_work(db, work_id)
+    rows = await db.fetch(
+        "SELECT passage_id, canonical_ref, sequence_number, book, chapter "
+        "FROM free_will.passages WHERE work_id = $1 ORDER BY sequence_number",
+        work["work_id"],
+    )
+
+    toc: dict[str, Any] = {"books": {}, "chapters": {}, "sections": [], "flat": []}
+    for r in rows:
+        entry = {
+            "passage_id": str(r["passage_id"]),
+            "canonical_ref": r["canonical_ref"],
+            "sequence_number": r["sequence_number"],
+        }
+        toc["flat"].append(entry)
+
+        book, chapter = r.get("book"), r.get("chapter")
+        if not book and not chapter:
+            ref = r.get("canonical_ref") or ""
+            head, sep, _ = ref.partition(".")
+            if sep and head:
+                chapter = head
+        if book:
+            b = toc["books"].setdefault(book, {"chapters": {}, "passages": []})
+            if chapter:
+                ch = b["chapters"].setdefault(chapter, {"sections": [], "passages": []})
+                ch["sections"].append(entry)
+            else:
+                b["passages"].append(entry)
+        elif chapter:
+            ch = toc["chapters"].setdefault(chapter, {"sections": [], "passages": []})
+            ch["sections"].append(entry)
+        else:
+            toc["sections"].append(entry)
+
+    return {"work_id": str(work["work_id"]), "title": work["title"], "toc": toc}
+
+
+@router.get("/{work_id}/passages/by-reference")
+async def get_passages_by_reference(
+    work_id: str,
+    db: Annotated[DatabaseService, Depends(get_db)],
+    reference: str = Query(
+        ..., min_length=1, description="Canonical reference, e.g. 1.1"
+    ),
+) -> dict[str, Any]:
+    """Look up passages of a work by canonical reference.
+
+    Tries an exact ``canonical_ref`` match first, then falls back to a
+    prefix match (``reference.*``) so "12" finds "12.1", "12.2", …
+    """
+    work = await _resolve_work(db, work_id)
+    rows = await db.fetch(
+        "SELECT * FROM free_will.passages WHERE work_id = $1 AND canonical_ref = $2 "
+        "ORDER BY sequence_number LIMIT 50",
+        work["work_id"],
+        reference.strip(),
+    )
+    if not rows:
+        rows = await db.fetch(
+            "SELECT * FROM free_will.passages WHERE work_id = $1 "
+            "AND canonical_ref LIKE $2 || '.%' ORDER BY sequence_number LIMIT 50",
+            work["work_id"],
+            reference.strip(),
+        )
+    return {"passages": rows, "total": len(rows), "work_id": str(work["work_id"])}
+
+
 @router.get("/{work_id}/section")
 async def get_work_section(
     work_id: str,
