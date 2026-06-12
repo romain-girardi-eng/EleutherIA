@@ -89,10 +89,12 @@ export default defineConfig({
     },
   },
   build: {
-    // Avoid eager modulepreload hints for route-only chunks. The app has several
-    // very heavy research/graph routes; loading them on demand gives crawlers and
-    // first-time visitors a much smaller initial network footprint.
-    modulePreload: false,
+    // Modulepreload only covers the entry's STATIC import graph (react/ui
+    // vendors needed on every page) plus runtime preloading of a lazy
+    // chunk's own deps. Heavy route-only chunks (cosmograph, three) are
+    // lazy and never eagerly hinted. Disabling this created a 3-hop
+    // network waterfall on every cold load.
+    modulePreload: true,
     // Disable source maps for smaller production bundle
     sourcemap: false,
     // Optimize chunk size
