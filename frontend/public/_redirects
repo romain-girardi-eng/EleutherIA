@@ -3,16 +3,15 @@
 # Since 404.html exists (SEO prerender, 2026-06-10), Pages no longer
 # falls back to index.html automatically — without these rules every
 # deep link (/texts/<id>, /share/<token>, …) served the 404 page.
-# Placeholder rules (not /*) keep prerendered top-level pages
-# (/texts/, /glossary/, …) served as real static assets.
+# Splat + /index.html proxy is the documented Pages SPA-subpath form
+# (placeholder targets and bare "/" rewrites are silently dropped).
 
-/texts/:id / 200
-/texts/:id/book / 200
-/simple/:id / 200
-/visualizer/:id / 200
-/graph/:id / 200
-/recherches/:slug / 200
-/contributions/:id / 200
-/passages-canoniques/:id / 200
-/profile/:id / 200
-/share/:token / 200
+/texts/* /index.html 200
+/simple/* /index.html 200
+/visualizer/* /index.html 200
+/graph/* /index.html 200
+/recherches/* /index.html 200
+/contributions/* /index.html 200
+/passages-canoniques/* /index.html 200
+/profile/* /index.html 200
+/share/* /index.html 200
