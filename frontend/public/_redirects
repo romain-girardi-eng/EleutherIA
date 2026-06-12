@@ -5,14 +5,15 @@
 # deep link (/texts/<id>, /share/<token>, …) served the 404 page.
 # Splat + /spa.html proxy: Pages clean-URL normalization 308s any
 # /index.html target to /, and placeholder targets are dropped, so the
-# build emits spa.html (copy of index.html) as a proxyable fallback.
+# build emits spa.html, targeted extensionless (/spa) because Pages
+# pretty-URLs also 308 any explicit .html target.
 
-/texts/* /spa.html 200
-/simple/* /spa.html 200
-/visualizer/* /spa.html 200
-/graph/* /spa.html 200
-/recherches/* /spa.html 200
-/contributions/* /spa.html 200
-/passages-canoniques/* /spa.html 200
-/profile/* /spa.html 200
-/share/* /spa.html 200
+/texts/* /spa 200
+/simple/* /spa 200
+/visualizer/* /spa 200
+/graph/* /spa 200
+/recherches/* /spa 200
+/contributions/* /spa 200
+/passages-canoniques/* /spa 200
+/profile/* /spa 200
+/share/* /spa 200
