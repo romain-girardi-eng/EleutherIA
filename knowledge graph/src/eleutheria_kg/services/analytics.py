@@ -115,12 +115,14 @@ class KGAnalytics:
         self.kg_data = kg_data or {"nodes": [], "edges": []}
         self._graph: nx.Graph | None = None
         self._communities: dict[str, int] | None = None
+        self._community_memo: dict[tuple[str, float], dict[str, int]] = {}
 
     def set_data(self, kg_data: KGData) -> None:
         """Update the knowledge graph data."""
         self.kg_data = kg_data
         self._graph = None
         self._communities = None
+        self._community_memo.clear()
 
     def _build_graph(self) -> nx.Graph:
         """Build a NetworkX graph from KG data."""
@@ -199,6 +201,12 @@ class KGAnalytics:
             )
             algorithm = "greedy"
 
+        memo_key = (algorithm, resolution)
+        memoized = self._community_memo.get(memo_key)
+        if memoized is not None:
+            self._communities = memoized
+            return memoized
+
         graph = self._build_graph()
 
         if algorithm == "leiden":
@@ -210,6 +218,7 @@ class KGAnalytics:
         else:
             communities = self._greedy_communities(graph)
 
+        self._community_memo[memo_key] = communities
         self._communities = communities
         return communities
 

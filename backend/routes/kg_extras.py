@@ -9,6 +9,7 @@ and what the eleutheria_kg package exposes.
 import logging
 from typing import Annotated, Any
 
+import anyio
 from eleutheria_database.services.db import DatabaseService
 from eleutheria_kg.services.analytics import ANCIENT_PERIODS, KGAnalytics
 from eleutheria_kg.services.cache import KGCache
@@ -88,10 +89,14 @@ async def get_kg_stats(
         live["total_nodes"] = int(nrow["n"]) if nrow else 0
         live["total_edges"] = int(erow["n"]) if erow else 0
         live["node_types"] = {r["type"]: int(r["n"]) for r in ntype_rows if r["type"]}
-        live["edge_types"] = {r["relation"]: int(r["n"]) for r in etype_rows if r["relation"]}
+        live["edge_types"] = {
+            r["relation"]: int(r["n"]) for r in etype_rows if r["relation"]
+        }
         live["live"] = True
     except Exception as e:
-        logger.warning("Live KG stats query failed (%s); falling back to in-memory snapshot", e)
+        logger.warning(
+            "Live KG stats query failed (%s); falling back to in-memory snapshot", e
+        )
         live["live"] = False
 
     # Cached analytics-derived fields (density, connected_components, etc.)
@@ -184,8 +189,12 @@ async def get_cytoscape_data(
             if e["source"] in ancient_ids and e["target"] in ancient_ids
         ]
 
-    # Detect communities
-    communities = analytics.detect_communities(communityAlgorithm)
+    # Detect communities — CPU-bound networkx work (~2 min cold on the full
+    # graph); run in a thread so it doesn't freeze the event loop, and rely
+    # on the per-algorithm memo in KGAnalytics for repeat calls.
+    communities = await anyio.to_thread.run_sync(
+        lambda: analytics.detect_communities(communityAlgorithm)
+    )
     colors = analytics.get_community_colors()
 
     # Build Cytoscape elements
@@ -278,7 +287,9 @@ async def get_cytoscape_data(
         },
     }
 
-    cache.set(cache_key, result, ttl=300)
+    # KG data only changes on deploy/reload; a 5-minute TTL forced the
+    # 2-minute community recomputation on nearly every page load.
+    cache.set(cache_key, result, ttl=86400)
     return result
 
 
