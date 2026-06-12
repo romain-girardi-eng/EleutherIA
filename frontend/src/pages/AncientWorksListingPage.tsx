@@ -93,17 +93,33 @@ export default function TextExplorerPage() {
 
   useEffect(() => {
     loadWorks();
-    loadStats();
   }, [loadWorks]);
 
-  const loadStats = async () => {
-    try {
-      const statsData = await cachedApiClient.getWorksStats();
-      setStats(statsData as WorksStats);
-    } catch (err) {
-      console.error('Error loading stats:', err);
-    }
-  };
+  // Stats load once on mount, independently of loadWorks. Keeping them in
+  // the same effect made every setStats re-create loadWorks (stats is one
+  // of its deps), re-run the effect, re-fetch stats, … — the infinite
+  // "Loading works..." flicker. The value-compare guard below stops the
+  // cycle even if a future cache change returns unstable references again.
+  useEffect(() => {
+    let cancelled = false;
+    const loadStats = async () => {
+      try {
+        const statsData = await cachedApiClient.getWorksStats();
+        if (cancelled) return;
+        setStats((prev) =>
+          prev && JSON.stringify(prev) === JSON.stringify(statsData)
+            ? prev
+            : (statsData as WorksStats),
+        );
+      } catch (err) {
+        console.error('Error loading stats:', err);
+      }
+    };
+    loadStats();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const resetFilters = () => {
     setCategoryFilter('');

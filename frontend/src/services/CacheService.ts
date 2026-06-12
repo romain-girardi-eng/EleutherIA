@@ -207,6 +207,24 @@ class CacheService {
     }
   }
 
+
+  /**
+   * Hydrate the memory cache with a value recovered from a secondary store
+   * (localStorage / IndexedDB) and return it. Without this, every call
+   * re-parses JSON and returns a NEW object reference — React callers that
+   * keep the result in state (and depend on it in effects) re-render
+   * forever (the texts-page "Loading works..." flicker loop).
+   */
+  private hydrateMemory<T>(key: string, data: T, ttl: number): T {
+    this.memoryCache.set(key, {
+      data,
+      timestamp: Date.now(),
+      ttl,
+      version: CACHE_VERSION,
+    });
+    return data;
+  }
+
   // ============================================================================
   // IndexedDB Methods (for large data)
   // ============================================================================
@@ -302,8 +320,9 @@ class CacheService {
       return memCached.data;
     }
 
-    // Try localStorage
-    return this.getLocalStorage(cacheKey);
+    // Try localStorage (hydrate memory so the reference stays stable)
+    const stored = this.getLocalStorage(cacheKey);
+    return stored === null ? null : this.hydrateMemory(cacheKey, stored, TTL.WORKS_LIST);
   }
 
   async setWorksList(data: unknown, filters?: Record<string, unknown>): Promise<void> {
@@ -328,7 +347,10 @@ class CacheService {
     if (memCached && Date.now() - memCached.timestamp < memCached.ttl) {
       return memCached.data;
     }
-    return this.getLocalStorage(STORAGE_KEYS.WORKS_STATS);
+    const stored = this.getLocalStorage(STORAGE_KEYS.WORKS_STATS);
+    return stored === null
+      ? null
+      : this.hydrateMemory(STORAGE_KEYS.WORKS_STATS, stored, TTL.WORKS_STATS);
   }
 
   async setWorksStats(data: unknown): Promise<void> {
@@ -354,8 +376,9 @@ class CacheService {
       return memCached.data;
     }
 
-    // Try IndexedDB
-    return this.getIndexedDB('works', workId);
+    // Try IndexedDB (hydrate memory so the reference stays stable)
+    const stored = await this.getIndexedDB('works', workId);
+    return stored === null ? null : this.hydrateMemory(cacheKey, stored, TTL.WORK_DETAIL);
   }
 
   async setWork(workId: string, data: unknown): Promise<void> {
@@ -384,8 +407,9 @@ class CacheService {
       return memCached.data;
     }
 
-    // Try IndexedDB
-    return this.getIndexedDB('passages', cacheKey);
+    // Try IndexedDB (hydrate memory so the reference stays stable)
+    const stored = await this.getIndexedDB('passages', cacheKey);
+    return stored === null ? null : this.hydrateMemory(cacheKey, stored, TTL.PASSAGES);
   }
 
   async setPassages(workId: string, data: unknown, offset: number = 0, limit: number = 50): Promise<void> {
@@ -436,7 +460,10 @@ class CacheService {
     if (memCached && Date.now() - memCached.timestamp < memCached.ttl) {
       return memCached.data;
     }
-    return this.getLocalStorage(STORAGE_KEYS.KG_STATS);
+    const stored = this.getLocalStorage(STORAGE_KEYS.KG_STATS);
+    return stored === null
+      ? null
+      : this.hydrateMemory(STORAGE_KEYS.KG_STATS, stored, TTL.KG_DATA);
   }
 
   async setKGStats(data: unknown): Promise<void> {
@@ -458,7 +485,8 @@ class CacheService {
     if (memCached && Date.now() - memCached.timestamp < memCached.ttl) {
       return memCached.data;
     }
-    return this.getLocalStorage(cacheKey);
+    const stored = this.getLocalStorage(cacheKey);
+    return stored === null ? null : this.hydrateMemory(cacheKey, stored, TTL.KG_DATA);
   }
 
   async setCytoscapeData(data: unknown, options?: { algorithm?: string; ancientOnly?: boolean }): Promise<void> {
