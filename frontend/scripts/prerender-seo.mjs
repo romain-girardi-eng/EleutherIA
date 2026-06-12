@@ -463,4 +463,10 @@ ${alternates}
 
 await writeFile(path.join(distDir, 'sitemap.xml'), sitemapXml, 'utf8');
 
+// SPA fallback copy for Cloudflare Pages: _redirects proxies dynamic
+// routes (/texts/:id, /share/:token, …) here. Targeting /index.html
+// directly is impossible — Pages' clean-URL normalization turns the
+// rewrite into a 308 to /.
+await writeFile(path.join(distDir, 'spa.html'), baseHtml, 'utf8');
+
 console.log(`SEO prerendered ${config.routes.length} route HTML files.`);

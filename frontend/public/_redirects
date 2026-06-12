@@ -3,15 +3,16 @@
 # Since 404.html exists (SEO prerender, 2026-06-10), Pages no longer
 # falls back to index.html automatically — without these rules every
 # deep link (/texts/<id>, /share/<token>, …) served the 404 page.
-# Splat + /index.html proxy is the documented Pages SPA-subpath form
-# (placeholder targets and bare "/" rewrites are silently dropped).
+# Splat + /spa.html proxy: Pages clean-URL normalization 308s any
+# /index.html target to /, and placeholder targets are dropped, so the
+# build emits spa.html (copy of index.html) as a proxyable fallback.
 
-/texts/* /index.html 200
-/simple/* /index.html 200
-/visualizer/* /index.html 200
-/graph/* /index.html 200
-/recherches/* /index.html 200
-/contributions/* /index.html 200
-/passages-canoniques/* /index.html 200
-/profile/* /index.html 200
-/share/* /index.html 200
+/texts/* /spa.html 200
+/simple/* /spa.html 200
+/visualizer/* /spa.html 200
+/graph/* /spa.html 200
+/recherches/* /spa.html 200
+/contributions/* /spa.html 200
+/passages-canoniques/* /spa.html 200
+/profile/* /spa.html 200
+/share/* /spa.html 200
