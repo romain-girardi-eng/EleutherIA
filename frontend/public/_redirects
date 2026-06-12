@@ -6,13 +6,13 @@
 # Placeholder rules (not /*) keep prerendered top-level pages
 # (/texts/, /glossary/, …) served as real static assets.
 
-/texts/:id /index.html 200
-/texts/:id/book /index.html 200
-/simple/:id /index.html 200
-/visualizer/:id /index.html 200
-/graph/:id /index.html 200
-/recherches/:slug /index.html 200
-/contributions/:id /index.html 200
-/passages-canoniques/:id /index.html 200
-/profile/:id /index.html 200
-/share/:token /index.html 200
+/texts/:id / 200
+/texts/:id/book / 200
+/simple/:id / 200
+/visualizer/:id / 200
+/graph/:id / 200
+/recherches/:slug / 200
+/contributions/:id / 200
+/passages-canoniques/:id / 200
+/profile/:id / 200
+/share/:token / 200
