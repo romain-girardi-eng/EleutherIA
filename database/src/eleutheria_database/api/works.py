@@ -130,11 +130,12 @@ async def list_passages(
     ),
     limit: int = Query(100, ge=1, le=1000),
     offset: int = Query(0, ge=0),
-) -> list[dict]:
+) -> dict:
     """
     List passages for a specific work.
 
-    Returns paginated passages in sequence order.
+    Returns ``{"passages": [...], "total": N, "work_id": ...}`` — the
+    contract the frontend readers (useLazyPassages) paginate against.
     When include_translations=true, joins KG translation nodes via
     passage_citation → kg_node translation_of edges.
     """
@@ -204,7 +205,20 @@ async def list_passages(
                 row.get("translation_node_id") is not None,
                 row.get("translation_type"),
             )
-    return rows
+
+    count_row = await db.fetchrow(
+        f"SELECT COUNT(*) AS total FROM free_will.passages p WHERE {where_clause}",
+        *params[: len(params) - 2],
+    )
+    total = count_row["total"] if count_row else len(rows)
+
+    return {
+        "passages": rows,
+        "total": total,
+        "work_id": str(work_id),
+        "offset": offset,
+        "limit": limit,
+    }
 
 
 @router.get("/passages/{passage_id}", response_model=Passage)

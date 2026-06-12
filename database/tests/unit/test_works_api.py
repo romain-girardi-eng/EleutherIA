@@ -32,6 +32,9 @@ class _FakeDb:
         self.last_sql = sql
         return self.rows
 
+    async def fetchrow(self, sql: str, *_params) -> dict:
+        return {"total": len(self.rows)}
+
 
 @pytest.mark.asyncio
 async def test_list_passages_labels_translations_from_metadata():
@@ -66,8 +69,9 @@ async def test_list_passages_labels_translations_from_metadata():
     ]
     db = _FakeDb(rows)
 
-    result = await list_passages(
-        work_id=uuid4(),
+    work_id = uuid4()
+    response = await list_passages(
+        work_id=work_id,
         db=db,
         book=None,
         chapter=None,
@@ -75,6 +79,11 @@ async def test_list_passages_labels_translations_from_metadata():
         limit=100,
         offset=0,
     )
+
+    # Readers paginate against {"passages": [...], "total": N}
+    assert response["work_id"] == str(work_id)
+    assert response["total"] == len(rows)
+    result = response["passages"]
 
     assert result[0]["translation_source"] == "ai_generated"
     assert result[1]["translation_source"] == "unknown"
