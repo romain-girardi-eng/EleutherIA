@@ -1,6 +1,6 @@
 """Tests for the /bibliography aggregation helper."""
 
-from eleutheria_kg.api.routes import collect_modern_scholarship
+from eleutheria_kg.services.bibliography import collect_modern_scholarship
 
 
 def test_collects_from_node_field_and_metadata() -> None:
