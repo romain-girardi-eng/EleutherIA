@@ -13,7 +13,9 @@
  */
 
 // Cache configuration
-const CACHE_VERSION = '1.0.0';
+// 2.0.0: backend migration to self-hosted Postgres changed /api/works/stats
+// shape and regenerated all work_ids — bust every pre-migration cache entry.
+const CACHE_VERSION = '2.0.0';
 const DB_NAME = 'eleutherio_cache';
 const DB_VERSION = 1;
 
