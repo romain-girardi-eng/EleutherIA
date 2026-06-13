@@ -161,6 +161,14 @@ repos:
         files: ^data/kg/nodes\.jsonl$
         stages: [commit]
 
+      - id: citation-fabrication-gate
+        name: Citation zero-fabrication gate (ISBN + verified manifest)
+        entry: python3 scripts/check_citations_gate.py
+        language: system
+        pass_filenames: false
+        files: ^data/kg/nodes\.jsonl$
+        stages: [commit]
+
 # ==========================================
 # CI Configuration (skip some hooks in CI)
 # ==========================================
