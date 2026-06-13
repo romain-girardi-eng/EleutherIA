@@ -11,6 +11,22 @@
 
 # --- Edge type constraints (source/target class) ---
 
+kg:Shape_advancedIn_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:advancedIn ;
+    sh:property kg:Shape_advancedIn_RangeProp .
+
+kg:Shape_advancedIn_RangeProp a sh:PropertyShape ;
+    sh:path kg:advancedIn ;
+    sh:class kg:Publication ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `advanced_in` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_advancedIn_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:advancedIn ;
+    sh:class kg:Argument ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `advanced_in` violates source/target type constraints from edge_types.json" .
+
 kg:Shape_agreesWith_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:agreesWith ;
     sh:property kg:Shape_agreesWith_RangeProp .
