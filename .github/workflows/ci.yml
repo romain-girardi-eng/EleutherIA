@@ -91,6 +91,9 @@ jobs:
       - name: Corpus invariants gate (report)
         run: python -m scripts.check_corpus_invariants
 
+      - name: Citation fabrication gate (ISBN + verified manifest)
+        run: python3 scripts/check_citations_gate.py --all
+
       - name: Upload SHACL reports
         if: always()
         uses: actions/upload-artifact@v4
