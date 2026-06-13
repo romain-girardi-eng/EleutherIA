@@ -1198,6 +1198,18 @@
         "controversy"
       ],
       "status": "reserved"
+    },
+    "advanced_in": {
+      "description": "A modern scholarly argument/interpretation is advanced in (sourced from) the target scholarly publication.",
+      "category": "citation",
+      "inverse": "advances",
+      "source_types": [
+        "argument"
+      ],
+      "target_types": [
+        "publication"
+      ],
+      "status": "active"
     }
   },
   "categories": {
