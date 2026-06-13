@@ -27,3 +27,11 @@ Action: reconcile to one correctly-aligned III.1 from a critical edition.
 Same loci, same work, different ingestion style. Reconcile (keep aug_lib_arb
 as canonical; fold aug_dla's raw Latin into text_content) — careful merge,
 not blind.
+
+## 4. Full passage-corpus anomaly scan (2026-06-13, deterministic over 14,183 passages)
+- **12 empty passages** (no text): `passage_origen_philocalia_22_1..10` (Philocalia 22 ingestion produced blanks — re-ingest from SC 226 Junod), `passage_dl_lives_3_1_16`, `passage_dl_lives_8_2_75` (near-empty fragment connectors). None are cited by grounding edges (no broken groundings).
+- **~193 apparatus-OCR-contaminated** passages (critical apparatus mixed into text): all 76 `passage_meth_dla_*` (German GCS apparatus — SUPERSEDED for grounding by clean Scaife `passage_meth_autex_*`), `passage_aspasius_*`, scattered `aug_civ`/`aug_corrept`. Degraded but contain real text; re-ingest from clean sources when convenient.
+- 122 "lang_mismatch" flags were FALSE POSITIVES (heuristic miscategorized Boethius/Calcidius as Greek authors — they are correctly Latin). No real language mismatches found.
+
+## 5. De Dono Perseverantiae — still blocked (PDF-only)
+Located in PL 45 cols 993-1035 (Documenta Catholica Omnia, PDF-only wrapper — no inline text) and CSEL 105 (Hombert 2018). Not on Latin Library / Scaife / augustinus.it as clean fetchable text. Needs the DCO PDF parsed or library access to ground argument_augustine_donum_perseverantiae.
