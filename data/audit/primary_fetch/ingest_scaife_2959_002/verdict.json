@@ -1,0 +1,7 @@
+{
+ "wcid": "urn_cts_greeklit_tlg2959_tlg002_grc",
+ "urn": "urn:cts:greekLit:tlg2959.tlg002",
+ "n_passages": 17,
+ "edition_statement": "Bonwetsch GCS 27 (1917), via Open Greek and Latin First1K corpus, Scaife urn:cts:greekLit:tlg2959.tlg002.opp-grc1",
+ "source": "Scaife Perseus library tlg2959.tlg002.opp-grc1 (Greek sections only; sections 14/18-20/22 = German Bonwetsch reconstruction of lost Greek, excluded)"
+}
