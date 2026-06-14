@@ -366,7 +366,7 @@ def _emit_edge_provenance(
         if prov_prop in (KG.confidence,):
             try:
                 g.add((statement, prov_prop, Literal(float(value))))
-            except (TypeError, ValueError):
+            except (TypeError, ValueError):  # fmt: skip
                 g.add((statement, prov_prop, Literal(str(value))))
         elif isinstance(value, bool):
             g.add((statement, prov_prop, Literal(value)))
