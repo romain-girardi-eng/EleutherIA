@@ -23,7 +23,7 @@ def collect_modern_scholarship(nodes: list[dict[str, Any]]) -> list[str]:
         if isinstance(ms, str):
             try:
                 ms = json.loads(ms)
-            except (json.JSONDecodeError, ValueError):
+            except (json.JSONDecodeError, ValueError):  # fmt: skip
                 ms = [ms]
         if not isinstance(ms, list):
             continue

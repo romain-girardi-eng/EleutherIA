@@ -367,7 +367,7 @@ class KGAnalytics:
         try:
             path: list[str] = nx.shortest_path(graph, source, target)
             return path
-        except (nx.NetworkXNoPath, nx.NodeNotFound):
+        except (nx.NetworkXNoPath, nx.NodeNotFound):  # fmt: skip
             return None
 
     def get_node_neighbors(
