@@ -3364,7 +3364,7 @@ def _bundle_score(
     rerank_raw = bundle.metadata.get("rerank_score")
     try:
         rerank_score = float(rerank_raw) if rerank_raw is not None else 0.0
-    except TypeError, ValueError:
+    except (TypeError, ValueError):
         rerank_score = 0.0
     return (
         float(query_score),

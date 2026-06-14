@@ -394,7 +394,7 @@ def _try_parse_uuid(value: str) -> uuid.UUID | None:
     """Parse ``value`` as a UUID, or ``None`` for node-shaped ids."""
     try:
         return uuid.UUID(value)
-    except ValueError, AttributeError, TypeError:
+    except (ValueError, AttributeError, TypeError):
         return None
 
 
