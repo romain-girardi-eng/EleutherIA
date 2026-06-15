@@ -1,0 +1,147 @@
+# Gold annotations for the 8 HARD concept-author / debate / comparison / fragment
+# queries in tests/eval/queries.yaml (the original q001-q030 family, difficulty: hard).
+#
+# Set = {q008, q013, q016, q023, q024, q026, q027, q028}.
+#
+# Each entry supplies:
+#   expected_passages  REAL passage_ids from data/corpus/passages.jsonl that a
+#                      correct answer MUST cite. Verified to actually answer the
+#                      query (text inspected, not guessed). Where both a Greek/
+#                      Latin original and an English/translation duplicate exist
+#                      for the same locus, the ORIGINAL-language passage_id is
+#                      used (citation-verifier judges against original text).
+#   gold_claims        Atomic, single-fact claims the answer must support. Each
+#                      claim is grounded in ≥1 of the listed expected_passages
+#                      (the grounding passage is named in the trailing comment).
+#                      No claim asserts anything not present in a cited passage.
+#
+# To activate: merge these two keys into the matching query in queries.yaml, or
+# load this file alongside it. Counts + coverage gaps are reported at the bottom.
+
+queries:
+
+  # ---------------------------------------------------------------------------
+  - id: q008
+    query: "Alexander of Aphrodisias on agent causation"
+    # Alexander, De Fato 14-15 (Greek). The agent-causation core: man is himself
+    # a principle (archē) and cause (aitia) of the actions done through him; it is
+    # because of this power (exousia) that something is "up to us" (eph' hēmin),
+    # not because of some external cause.
+    expected_passages:
+      - aed97e25-98dd-4935-9ec7-80c5dc348ce7   # De Fato 14 (Greek)
+      - 6d9d85c8-ffa3-48f5-b5fe-9ef25cd19aa0   # De Fato 15 (Greek)
+      - 4975cde6-5b21-4a9a-b97a-9df600a65a35   # De Fato 19 (Greek): eph' hēmin = eleutheron + autexousion
+    gold_claims:
+      - "Alexander argues that the human being is himself a principle (archē) and cause (aitia) of the actions done through him."   # De Fato 15: ὁ γὰρ ἄνθρωπος ἀρχὴ καὶ αἰτία τῶν δι' αὐτοῦ γινομένων πράξεων
+      - "For Alexander, something is 'up to us' (eph' hēmin) precisely because we, and not some external cause, are masters (kyrioi) of what comes about in this way."   # De Fato 15
+      - "Alexander treats 'what is up to us' (to eph' hēmin) as signifying the autexousion — the self-determining power to choose opposites — not a mere word."   # De Fato 14 (σημαινόμενον ... τὸ αὐτεξούσιον) + De Fato 19 (ἐλεύθερόν τε καὶ αὐτεξούσιον καὶ κύριον τῆς τῶν ἀντικειμένων αἱρέσεως)
+
+  # ---------------------------------------------------------------------------
+  - id: q013
+    query: "Lazy Argument and the Stoic response"
+    # Cicero, De Fato 28-30 preserves both the Lazy Argument (ignava ratio /
+    # ἀργὸς λόγος) and Chrysippus's reply via the doctrine of confatalia
+    # (co-fated events): the Laius/Oedipus example.
+    expected_passages:
+      - 01aa3782-db59-442d-8887-b74f4f32df38   # Fat. 29 (Latin): the Lazy Argument + "ignavum atque iners"
+      - 8ba2536b-c925-490f-b37b-f48bde28a03f   # Fat. 30 (Latin): Chrysippus's confatalia reply (Laius/Oedipus)
+    gold_claims:
+      - "The Lazy Argument concludes that, since the outcome is fated either way, taking action (e.g. calling a doctor) makes no difference."   # Fat. 29: sive tu medicum adhibueris sive non ... convalesces; medicum ergo adhibere nihil attinet
+      - "Cicero reports that this type of argument was named the 'lazy and inert' argument (ignavum atque iners) because by the same reasoning all action would be removed from life."   # Fat. 29: ignavum atque iners nominatum est, quod ... omnis e vita tolletur actio
+      - "Chrysippus replies by distinguishing simple from co-fated (confatalia) events: that Laius will beget Oedipus is fated together with his lying with his wife, so the two are co-fated rather than independent."   # Fat. 30: copulata enim res est et confatalis
+
+  # ---------------------------------------------------------------------------
+  - id: q016
+    query: "Christian apologists against Gnostic fatalism"
+    # The corpus grounds the apologists-vs-fate side through Justin's antifatalist
+    # locus (1 Apol. 43-44): events are NOT fixed by fated necessity (kath'
+    # heimarmenēn anankēn); without free choice (proairesis eleuthera) praise and
+    # blame are void. (NB: no text in the corpus is specifically anti-Gnostic —
+    # see coverage gaps.)
+    expected_passages:
+      - 688bbd38-3ae3-5c2a-bffc-6d11dd2f039b   # Justin, 1 Apology 43 (Greek quotes embedded)
+      - cfc0d099-45c2-5c7e-b23a-d4e508707f0b   # Justin, 1 Apology 44
+    gold_claims:
+      - "Justin denies that events happen by fated necessity (kath' heimarmenēn anankēn) merely because God foreknows them."   # 1 Apol 43
+      - "Justin argues that if all things happened by fate there would be nothing 'up to us' (to eph' hēmin), and neither the good person would be praiseworthy nor the bad blameworthy."   # 1 Apol 43
+      - "Justin grounds human responsibility in free choice (proairesis eleuthera), the power to flee the shameful and choose the noble."   # 1 Apol 43
+
+  # ---------------------------------------------------------------------------
+  - id: q023
+    query: "Compare Plotinus and Augustine on the freedom of the will"
+    # Plotinus Enn. VI.8: the soul becomes free (eleuthera) through Intellect
+    # (nous), turning to the Good unimpeded; "what is up to us" must be referred
+    # to right reason and right desire, not to mere appetite. Augustine
+    # (De Civ. Dei): the will (voluntas) is the seat of moral quality, and divine
+    # foreknowledge does not abolish it.
+    expected_passages:
+      - 6069392c-49b6-4823-a710-c0043e6e52a2   # Enn. VI.8.7 (Greek): soul becomes free through nous toward the Good
+      - d268796c-f6fd-4a6f-9508-55b84cf14765   # Enn. VI.8.2 (Greek): to eph' hēmin = right reason + right desire
+      - a580914c-841a-560c-9923-5ec6f34f80c0   # Augustine De Civ. Dei V.10 (Latin): foreknowledge does not remove free will
+      - 195ed922-a62f-5410-a3fc-1f9003a9561a   # Augustine De Civ. Dei XIV.6 (Latin): all affections are forms of will
+    gold_claims:
+      - "Plotinus holds that the soul becomes free through Intellect (nous), striving unimpeded toward the Good."   # Enn VI.8.7: Γίνεται οὖν ψυχὴ μὲν ἐλευθέρα διὰ νοῦ πρὸς τὸ ἀγαθὸν σπεύδουσα ἀνεμποδίστως
+      - "For Plotinus, 'what is up to us' is properly assigned to right reason and right desire (orthos logismos / orthē orexis), not to appetite or passion, which are shared with children and beasts."   # Enn VI.8.2
+      - "Augustine argues that divine foreknowledge of our will does not nullify the will, because what God foreknows is precisely that there is something in our will."   # De Civ Dei V.10: Non ergo propterea nihil est in nostra uoluntate, quia Deus praesciuit quid futurum esset in nostra uoluntate
+      - "For Augustine the will (voluntas) is constitutive of all the affections — desire, joy, fear, sadness are all forms of will — so the moral quality of a life depends on the quality of the will."   # De Civ Dei XIV.6: omnes nihil aliud quam uoluntates sunt
+
+  # ---------------------------------------------------------------------------
+  - id: q024
+    query: "How does Alexander of Aphrodisias differ from Chrysippus on causation?"
+    # Chrysippus's compatibilist causal taxonomy survives in Cicero, De Fato 41-43:
+    # perfect/principal vs auxiliary/proximate causes, illustrated by the cylinder
+    # (assent is "extrinsecus pulsa" but rolls by its own nature). Alexander, by
+    # contrast (De Fato 14-15), makes the agent an underived archē — an originating
+    # cause, not a link whose nature is itself externally given.
+    expected_passages:
+      - fc50aff8-32e5-443b-950d-35ad89b15d96   # Cicero Fat. 41 (Latin): Chrysippus's causal taxonomy
+      - 1812b556-ba17-4407-9998-f0383d158dd2   # Cicero Fat. 43 (Latin): the cylinder analogy
+      - 6d9d85c8-ffa3-48f5-b5fe-9ef25cd19aa0   # Alexander De Fato 15 (Greek): man as archē and aitia
+    gold_claims:
+      - "Chrysippus distinguishes perfect and principal causes (perfectae et principales) from auxiliary and proximate ones (adiuvantes et proximae) in order to escape necessity while retaining fate."   # Cicero Fat. 41
+      - "Chrysippus's cylinder analogy holds that the external impression (visum) gives the assent its starting impulse, as a push starts a cylinder rolling, but the assent then moves by its own force and nature (suapte vi et natura)."   # Cicero Fat. 43
+      - "Alexander, against this, makes the human being himself a principle (archē) and cause (aitia) of his actions, not merely a proximate cause whose own nature is externally determined."   # Alexander De Fato 15
+
+  # ---------------------------------------------------------------------------
+  - id: q026
+    query: "Origen and Justin Martyr on autexousion: continuity and divergence"
+    # Both anchor Christian freedom in the language of autexousion / to eph' hēmin
+    # tied to just judgement, praise and blame. Justin's setting is apologetic and
+    # antifatalist (1 Apol. 43); Origen gives the first systematic treatise
+    # "On free will" (De Princ. III.1.1), deriving autexousion from the doctrine
+    # of God's just judgement (κρίσις δικαία) so that praise/blame are "up to us".
+    expected_passages:
+      - 688bbd38-3ae3-5c2a-bffc-6d11dd2f039b   # Justin, 1 Apology 43
+      - baa51e4b-9ad7-54a1-a971-74de1631661e   # Origen, De Principiis III.1.1 (Greek): Περὶ αὐτεξουσίου
+    gold_claims:
+      - "Justin grounds free choice (proairesis eleuthera) in the denial of fate, arguing that without it praise and blame would be meaningless."   # 1 Apol 43
+      - "Origen devotes a dedicated treatment 'On free will' (Peri autexousiou) to the question, calling it one of the most necessary problems."   # De Princ III.1.1: Περὶ αὐτεξουσίου ... ἀναγκαιοτάτου ... προβλήματος
+      - "Origen derives autexousion from the doctrine of God's just judgement: because praise- and blame-worthy things are 'up to us' (to eph' hēmin), free will follows."   # De Princ III.1.1: περὶ κρίσεως δικαίας θεοῦ ... συγκατατιθεμένους τὸ ἐφ' ἡμῖν εἶναι τὰ ἐπαίνου καὶ ψόγου ἄξια
+
+  # ---------------------------------------------------------------------------
+  - id: q027
+    query: "What does Cleanthes' Hymn to Zeus say about fate?"
+    # COVERAGE GAP: Cleanthes' Hymn to Zeus is not present in the corpus
+    # (confirmed absent from data/corpus/passages.jsonl; flagged in project memory
+    # as "Not on Scaife: Cleanthes Hymn"). No passage can honestly be cited as
+    # answering this query. Left empty rather than fabricated.
+    expected_passages: []
+    gold_claims: []
+
+  # ---------------------------------------------------------------------------
+  - id: q028
+    query: "What survives of Chrysippus' On Fate in Gellius and Cicero?"
+    # Two doxographic witnesses in the corpus: Gellius NA VII.2 preserves
+    # Chrysippus's DEFINITION of fate (from On Providence Bk IV) and the cylinder
+    # exemplum; Cicero De Fato 41-43 preserves the causal taxonomy and the
+    # cylinder analogy attributed to Chrysippus.
+    expected_passages:
+      - 2d2eee67-6073-563d-95ce-66ffa11ce8be   # SVF II.1000 = Gellius NA VII.2: Chrysippus's definition of fatum
+      - fa311a9a-11fc-4c84-837c-a8b1369f8477   # Gellius NA VII.2.11 (Latin): the cylinder exemplum
+      - 1812b556-ba17-4407-9998-f0383d158dd2   # Cicero Fat. 43 (Latin): cylinder analogy "qui protrusit cylindrum"
+      - fc50aff8-32e5-443b-950d-35ad89b15d96   # Cicero Fat. 41 (Latin): perfect/principal vs auxiliary/proximate causes
+    gold_claims:
+      - "Gellius reports Chrysippus's definition of fate (heimarmenē) as a sempiternal and unbending series and chain of things, coiling and unfolding itself through eternal sequences."   # SVF II.1000 / Gellius NA VII.2: sempiterna quaedam et indeclinabilis series rerum et catena
+      - "Gellius attributes the cylinder (lapis cylindrus) example to Chrysippus, who used a rolling stone to illustrate how fate gives the impulse while the thing moves by its own nature."   # Gellius NA VII.2.11
+      - "Cicero preserves Chrysippus's cylinder analogy: the impression imparts the starting impulse to assent as one who shoves a cylinder gives it the start of motion, yet assent then moves by its own force."   # Cicero Fat. 43
+      - "Cicero preserves Chrysippus's distinction between perfect/principal and auxiliary/proximate causes as his strategy to retain fate without necessity."   # Cicero Fat. 41

@@ -1,0 +1,130 @@
+# Gold annotations for the first 8 romain_thesis_queries (r001-r008).
+#
+# Schema mirrors tests/eval/queries.yaml — each entry carries the query `id`
+# plus the gold fields `expected_passages` and `gold_claims`. run_eval.py reads
+# these via load_queries(): expected_passages are scored as citation P/R/F1
+# (eval_lib/scoring.py); gold_claims are judged adversarially by
+# CitationVerifierV2 when ELEUTHERIA_EVAL_JUDGE=1.
+#
+# Each expected_passage is a REAL passage_id verified present in
+# data/corpus/passages.jsonl, whose text_content genuinely answers the query.
+# Each gold_claim is atomic and grounded in one of the cited passages
+# (passage id noted in a trailing comment for auditability — comments are
+# ignored by the YAML loader).
+#
+# COVERAGE GAPS (no primary text in data/corpus to ground these — see report):
+#   r003  Ben Sira 15:11-20 — Sirach not in corpus as a primary work; only a
+#         secondary attestation survives (Augustine quoting Sir. 15:17).
+#   r004  Tertullian, De Anima 21 — work absent from corpus entirely.
+#   r006  Pseudo-Clementine Recognitions III — work absent from corpus entirely.
+
+queries:
+  # ---------------------------------------------------------------------------
+  - id: r001
+    query: "Justin's autexousion in 1 Apol. 43 and 2 Apol. 7: continuity or discontinuity with Middle Platonism (Karamanolis vs Andresen)?"
+    query_type: romain_thesis_queries
+    difficulty: hard
+    # Justin's autexousion: 1 Apol. 43-44 + 2 Apol. (the autexousion statement
+    # falls in ch. 6 of the corpus' Marcovich chapter division, which the query
+    # cites as "2 Apol. 7").
+    expected_passages:
+      - 688bbd38-3ae3-5c2a-bffc-6d11dd2f039b  # Justin, 1 Apology 43
+      - cfc0d099-45c2-5c7e-b23a-d4e508707f0b  # Justin, 1 Apology 44
+      - 0b68baff-e316-4734-a491-acb5acdafee3  # Justin, 2 Apology 6 (autexousion)
+    gold_claims:
+      - "Justin argues that if all things happen by fate (kath' heimarmenen), nothing is up to us (to eph' hemin) and there is no ground for praise or blame."  # 1Apol 43
+      - "Justin affirms that the human race has the power of free choice (proairesis eleuthera) to flee what is shameful and choose what is noble."  # 1Apol 43
+      - "Justin distinguishes divine foreknowledge (prognosis) from fated necessity (heimarmene): prophesied events are foreknown, not predetermined by fate."  # 1Apol 44
+      - "Justin states that God made the race of angels and of men autexousion (self-determining) from the beginning, which is why they justly bear punishment for their faults."  # 2Apol 6
+      - "Justin rejects the Stoic doctrine that all things come to be by the necessity of fate (kath' heimarmenes ananken), holding instead that each succeeds or fails according to his own choice (proairesis)."  # 2Apol 6
+
+  # ---------------------------------------------------------------------------
+  - id: r002
+    query: "Origen's anti-astrological argument in De Princ. III.1.5-6: compare Latin (Rufinus) and Greek catenae witnesses"
+    query_type: romain_thesis_queries
+    difficulty: hard
+    # Origen's anti-astrological / free-will argument in De Princ. III.1: the
+    # corpus has Rufinus' Latin (here in SC French translation) for 3.1.5-6 and
+    # the Greek catena fragment via Philocalia 23.
+    expected_passages:
+      - ae853539-5bf0-592e-9323-f4dad81d7fc8  # De Princ. 3.1.5
+      - 5d4a53e1-3e27-5179-98b4-1aa1231218f3  # De Princ. 3.1.6
+      - 481e3e44-0c73-54f3-9190-73f09e332def  # Philocalia 23.1 (Greek catena witness)
+    gold_claims:
+      - "Origen argues it is absurd to shift the cause of our actions onto external events, since we are entirely the cause of them ourselves; to deny this is to make us like wood and stones moved only from outside."  # De Princ 3.1.5
+      - "Origen confirms by Scripture (Micah, Moses, Isaiah) that living well or badly is our own work, not forced by external events or by fate."  # De Princ 3.1.6
+      - "In the Greek catena witness (Philocalia 23), Origen argues that astral determinism would abolish divine judgment, rewards and punishments, and render faith and Christ's coming pointless."  # Philocalia 23.1
+      - "Origen reduces astrological fatalism to absurdity: it would make God, not the stars, blameless for evil deeds while crediting the stars even with Christ's powers."  # Philocalia 23.1
+
+  # ---------------------------------------------------------------------------
+  - id: r003
+    query: "Ben Sira 15:11-20 as locus classicus for free choice in Hellenistic Judaism"
+    query_type: romain_thesis_queries
+    difficulty: medium
+    # COVERAGE GAP: Ben Sira / Sirach 15:11-20 is NOT in data/corpus as a
+    # primary work. The only attestation is secondary — Augustine quoting
+    # Sirach 15:17 in De Gratia et Libero Arbitrio. Annotated thinly; this
+    # query cannot be fully grounded until Sirach is ingested.
+    expected_passages:
+      - 2aaceaa6-3d65-50f3-a898-e3c42631e380  # Augustine, Grat. 1.2, citing Sir. 15:17
+    gold_claims:
+      - "Sirach 15:17 ('Before man is life and death, and whichever he chooses shall be given him') is cited as openly attesting human free choice."  # Grat. 1.2
+
+  # ---------------------------------------------------------------------------
+  # r004 — COVERAGE GAP: Tertullian, De Anima 21 is absent from data/corpus.
+  #        No expected_passages can be supplied without fabrication.
+
+  # ---------------------------------------------------------------------------
+  - id: r005
+    query: "Methodius's anti-Origenist De Libero Arbitrio: genuine controversy or rhetorical exercise?"
+    query_type: romain_thesis_queries
+    difficulty: hard
+    # Methodius, De Libero Arbitrio: the autexousion core (ch. 70-72), the
+    # human-vs-natural-necessity contrast that anchors his anti-Origenist /
+    # anti-Gnostic theodicy.
+    expected_passages:
+      - 38d6ecf4-1b8d-5321-b5de-493b8f7c0f93  # De Lib. Arb. 70
+      - 98e5bb8c-314f-5ef3-a9dc-d27badb59101  # De Lib. Arb. 71
+      - 0a286be9-9289-5003-ac49-382d8ca94ec4  # De Lib. Arb. 72
+    gold_claims:
+      - "Methodius holds that the first human was made autexousion (self-determining), not made evil by God."  # De Lib. Arb. 70
+      - "Methodius contrasts human freedom with the natural elements (heaven, sun, earth) that serve God's command by necessity (ananke), unable to do otherwise."  # De Lib. Arb. 71
+      - "Methodius argues that humans alone have the power (exousia) to choose whom to obey, which is why obedience by the necessitated elements earns no praise."  # De Lib. Arb. 72
+
+  # ---------------------------------------------------------------------------
+  # r006 — COVERAGE GAP: Pseudo-Clementine Recognitions III is absent from
+  #        data/corpus. No expected_passages can be supplied without fabrication.
+
+  # ---------------------------------------------------------------------------
+  - id: r007
+    query: "Clement of Alexandria Stromateis II.6-15: Stoic vs Christian conceptions of moral responsibility"
+    query_type: romain_thesis_queries
+    difficulty: medium
+    # PARTIAL: the corpus lacks Clement, Stromateis II.6-15 specifically; the
+    # nearest grounded locus on moral responsibility / God-not-cause-of-evil /
+    # free choice is Stromateis I.17.83-84 (the same Clementine argument the
+    # query targets, in a neighbouring book). Flagged as partial coverage.
+    expected_passages:
+      - 110618a5-15a9-5cab-aea5-89577d7f597f  # Strom. I.17.83
+      - 134ad4ff-affd-5ec5-8476-215cba8682ec  # Strom. I.17.84
+    gold_claims:
+      - "Clement holds that the devil, being autexousios (self-determining), was able both to repent and to do wrong, so responsibility rests with the agent."  # Strom. I.17.83
+      - "Clement argues that vice is voluntary (the badness being akousion is rejected): the soul's own choice (hairesis) is judged justly, so that God remains not the cause of evil (kakias anaitios)."  # Strom. I.17.84
+      - "Clement traces sins to proairesis and horme (choice and impulse) as their origin, with mistaken judgement sometimes prevailing."  # Strom. I.17.84
+
+  # ---------------------------------------------------------------------------
+  - id: r008
+    query: "Plotinus Ennead VI.8 on the freedom of the One and its Patristic appropriation"
+    query_type: romain_thesis_queries
+    difficulty: hard
+    # Plotinus, Ennead VI.8 (On the Voluntary and the Will of the One). Real
+    # VI.8 text is the tlg2000.tlg001:6.8.X series (NOT the perseus-grc1:6.8.X
+    # series, which is a different mis-enumerated treatise on soul/anger).
+    expected_passages:
+      - 94b6f0bd-1816-4118-82d4-8d57f2b75318  # Enn. VI.8.1
+      - d268796c-f6fd-4a6f-9508-55b84cf14765  # Enn. VI.8.2
+      - 2ff71c7e-0925-4dc6-b33f-a1dc6beae35a  # Enn. VI.8.21
+    gold_claims:
+      - "Plotinus opens VI.8 by asking whether 'what is up to us' (to eph' auto) can be predicated even of the gods and of the First, beyond all things."  # VI.8.1
+      - "Plotinus refuses to locate human self-determination (to eph' hemin) in mere impulse (horme) or appetite (orexis), which children, beasts, and the mad also have; it must rest on right reason and right desire."  # VI.8.2
+      - "Plotinus argues that the One's power is not the power for opposites; its making of itself is a single act identical with its will (boulesis), so that the One's will and its substance (ousia) are not distinct."  # VI.8.21
