@@ -1285,6 +1285,7 @@ class ScholarlyAgent:
             DraftClaimLedger().run(ctx),
             label="Drafting claim ledger",
             stage_id="draft_claim_ledger",
+            max_wait=180.0,
         ):
             yield hb
         self._merge_counter_ledger_items(state, counter_items)
@@ -1314,6 +1315,7 @@ class ScholarlyAgent:
             label="Verifying citations",
             stage_id="verify",
             interval=8.0,
+            max_wait=120.0,
             result_into=verify_result_holder,
         ):
             yield hb
@@ -1380,6 +1382,7 @@ class ScholarlyAgent:
         label: str,
         stage_id: str,
         interval: float = 10.0,
+        max_wait: float = 180.0,
         result_into: dict[str, Any] | None = None,
     ) -> AsyncIterator[str]:
         """Run ``coro`` while yielding ``status`` SSE strings every ``interval`` s.
@@ -1388,6 +1391,15 @@ class ScholarlyAgent:
         silence, which used to drop doctoral-grade queries mid-synthesis.
         Wrapping the long awaits here keeps a steady drip of frames on the
         wire and surfaces real progress (elapsed seconds) to the UI.
+
+        ``max_wait`` is a hard ceiling on the wrapped task: once it elapses the
+        task is cancelled and the generator returns WITHOUT setting
+        ``result_into['value']`` (the caller then falls back). This is the
+        critical safety net — a synthesis-phase LLM call that hangs (no token,
+        no error) would otherwise keep this loop emitting ``status`` heartbeats
+        forever, so the stream never reached ``citations_preview`` / ``complete``
+        and the UI showed prose with zero structured citations. Bounding the
+        wait lets the pipeline finish and emit those terminal frames.
 
         The coroutine's return value, if any, is stashed in
         ``result_into['value']`` for the caller (avoids re-running the
@@ -1403,20 +1415,24 @@ class ScholarlyAgent:
                 "data": {"step": 99, "stage": stage_id, "elapsed_s": 0},
             }
         )
+        timed_out = False
         try:
             while not task.done():
                 try:
                     await asyncio.wait_for(asyncio.shield(task), timeout=interval)
                 except TimeoutError:
-                    elapsed = int(_time_mod.monotonic() - started)
+                    elapsed = _time_mod.monotonic() - started
+                    if elapsed >= max_wait:
+                        timed_out = True
+                        break
                     yield json.dumps(
                         {
                             "type": "status",
-                            "message": f"{label}… ({elapsed}s)",
+                            "message": f"{label}… ({int(elapsed)}s)",
                             "data": {
                                 "step": 99,
                                 "stage": stage_id,
-                                "elapsed_s": elapsed,
+                                "elapsed_s": int(elapsed),
                             },
                         }
                     )
@@ -1425,6 +1441,19 @@ class ScholarlyAgent:
             if not task.done():
                 task.cancel()
             raise
+        if timed_out:
+            # Abandon the stuck task and let the caller fall back. Cancelling
+            # frees the request rather than leaking a runaway coroutine.
+            task.cancel()
+            with contextlib.suppress(asyncio.CancelledError, Exception):
+                await task
+            logger.warning(
+                "Heartbeat-wrapped task %s exceeded max_wait=%.0fs; abandoning "
+                "and falling back",
+                stage_id,
+                max_wait,
+            )
+            return
         try:
             value = task.result()
         except Exception:
@@ -1434,7 +1463,7 @@ class ScholarlyAgent:
             result_into["value"] = value
 
     async def _stream_render(
-        self, state: RAGState, *, interval: float = 10.0
+        self, state: RAGState, *, interval: float = 10.0, max_wait: float = 240.0
     ) -> AsyncIterator[str]:
         """Stream the grounded-answer render token-by-token.
 
@@ -1511,6 +1540,19 @@ class ScholarlyAgent:
                     kind, value = await asyncio.wait_for(queue.get(), timeout=interval)
                 except TimeoutError:
                     elapsed = int(_time_mod.monotonic() - started)
+                    # Hard ceiling: a stalled LLM stream (no token, no done/error)
+                    # would otherwise spin this loop forever emitting heartbeats,
+                    # so the pipeline never reached citations_preview/complete.
+                    # Bail with whatever prose we have; the tail below falls back
+                    # to a deterministic render when chunks are empty/inadequate.
+                    if elapsed >= max_wait:
+                        logger.warning(
+                            "Streaming render exceeded max_wait=%.0fs after %d "
+                            "chars; abandoning stream and falling back",
+                            max_wait,
+                            len("".join(chunks)),
+                        )
+                        break
                     yield json.dumps(
                         {
                             "type": "status",
