@@ -1,0 +1,126 @@
+# Gold annotations for the LAST 7 romain_thesis_queries (r009-r015).
+#
+# Companion to gold_thesis_2.yaml (which covers r001-r008). Same schema:
+#   expected_passages : REAL passage_ids from data/corpus/passages.jsonl that
+#                       a correct answer must cite. Scored as citation P/R/F1
+#                       by tests/eval/eval_lib/scoring.py.
+#   gold_claims       : atomic, each grounded in ONE listed passage; judged
+#                       adversarially by CitationVerifierV2 when
+#                       ELEUTHERIA_EVAL_JUDGE=1.
+#
+# INTEGRITY: every passage_id below was verified to exist in the corpus and to
+# carry the original-language (Greek/Latin) text supporting its claim. Where the
+# corpus stores an English-paraphrase variant and a verbatim variant under the
+# same canonical_ref, the verbatim original-text passage_id is used.
+#
+# These annotations PATCH the matching r0NN entries in tests/eval/queries.yaml;
+# they only add expected_passages + gold_claims (entities/works untouched).
+#
+# COVERAGE GAPS (no corpus text -> NO expected_passages; see notes):
+#   r010  Qumran 1QS Treatise of the Two Spirits  -- not in corpus
+#   r014  Pauline Romans 9                          -- no NT/Pauline text in corpus
+#   r015  Maximus Confessor, Disputatio cum Pyrrho  -- not in corpus
+
+patches:
+  # ---------------------------------------------------------------------------
+  - id: r009
+    query: "Stoic-Patristic synthesis: is autexousion a Christian innovation or a Stoic carryover?"
+    # The strongest evidence is internal to the corpus: Origen and Hippolytus
+    # report the Stoics already using to autexousion (SVF II.975, II.990), while
+    # the apologists (Justin, Theophilus, Methodius) deploy the same term for a
+    # libertarian doctrine the Stoics would have rejected. So: lexical carryover,
+    # doctrinal innovation.
+    expected_passages:
+      - 2427aa5c-54fd-5395-ae7b-ffbf9ad2eb20  # SVF II.975 (Hippolytus): Stoics use τὸ αὐτεξούσιον in the dog-and-cart simile
+      - 3679dbcd-e25a-5963-90dc-e9959797c48b  # SVF II.990 (Origen, De Princ. III): Stoics' notion of τὸ αὐτεξούσιον reported
+      - 7b029b3b-d680-4362-a0ea-8ef4b2aef215  # Justin, Dial. 102.4: God made angels & humans αὐτεξουσίους
+      - b94d6360-df59-5628-ac3b-3c40f9eb0bbd  # Theophilus, Ad Autol. II.27: ἐλεύθερον καὶ αὐτεξούσιον ἐποίησεν ὁ θεός
+      - 38d6ecf4-1b8d-5321-b5de-493b8f7c0f93  # Methodius, De Lib. Arb. 70: first human made αὐτεξούσιον
+    gold_claims:
+      - claim: "The term τὸ αὐτεξούσιον was already in Stoic usage: Hippolytus reports Zeno and Chrysippus illustrating fate with the dog tied to a moving cart, which 'does what is in its own power together with necessity'."
+        grounded_in: 2427aa5c-54fd-5395-ae7b-ffbf9ad2eb20
+      - claim: "Origen, in De Principiis Book III, engages the Stoic notion of τὸ αὐτεξούσιον directly, showing the concept was inherited rather than coined by Christians."
+        grounded_in: 3679dbcd-e25a-5963-90dc-e9959797c48b
+      - claim: "Justin Martyr applies αὐτεξούσιος to both angels and humans as created for righteous action (δικαιοπραξία), giving the Stoic term a libertarian, theodicy-oriented sense."
+        grounded_in: 7b029b3b-d680-4362-a0ea-8ef4b2aef215
+      - claim: "Theophilus of Antioch states that God made man free and self-determining (ἐλεύθερον καὶ αὐτεξούσιον), with man himself the cause of his own death — a Christian appropriation of the formula."
+        grounded_in: b94d6360-df59-5628-ac3b-3c40f9eb0bbd
+
+  # ---------------------------------------------------------------------------
+  - id: r010
+    query: "Qumran 1QS Treatise of the Two Spirits and the Patristic predestination debate"
+    expected_passages: []   # COVERAGE GAP: 1QS / Qumran Community Rule absent from corpus
+    gold_claims: []
+    coverage_gap: "No Qumran / Dead Sea Scrolls text (1QS, Treatise of the Two Spirits) is present in data/corpus/passages.jsonl. The query cannot be scored on citation P/R/F1 until 1QS is ingested. KG node work_1qs_community_rule referenced in queries.yaml is also absent from data/kg/nodes.jsonl (the related node is argument_qumran_predestination_c3d4e5f6)."
+
+  # ---------------------------------------------------------------------------
+  - id: r011
+    query: "Boethius Consolatio V: does the eternity solution actually answer the prescience problem?"
+    expected_passages:
+      - c1718a96-5a4d-42c8-993f-b691839b1bd0  # Cons. 5.P6 opening: God is eternal; sets up the eternity argument
+      - b5aab3f4-725c-49d3-86e0-a09f76469757  # Cons. 5.P6: definition of eternity — interminabilis vitae tota simul ac perfecta possessio
+      - 6dcc4e8f-190e-4bea-9be4-8a073e832ff7  # Cons. 5.P6: nulla necessitas cogit incedere voluntate gradientem (conditional necessity)
+      - 66d37280-c8e9-481b-88a5-084d6b56f781  # Cons. 5.P4: foreknowledge imposes no necessity; libertas voluntatis remains
+      - 356efac6-3591-4d0b-8cb2-eee38f585471  # Cons. 5.P3: the prescience-necessity objection sharply posed
+    gold_claims:
+      - claim: "Boethius poses the problem in V.P3: whatever the order of causes, the outcome of foreknown things seems necessary — praescientia futurorum necessitatis."
+        grounded_in: 356efac6-3591-4d0b-8cb2-eee38f585471
+      - claim: "Boethius's solution rests on a definition of eternity as the whole, simultaneous and perfect possession of unbounded life (interminabilis vitae tota simul et perfecta possessio), placing God outside temporal succession."
+        grounded_in: b5aab3f4-725c-49d3-86e0-a09f76469757
+      - claim: "Boethius distinguishes simple from conditional necessity: no necessity compels a voluntary walker to walk, though it is necessary that he walks while he is walking (nulla necessitas cogit incedere voluntate gradientem) — so divine present-seeing imposes only conditional, not absolute, necessity."
+        grounded_in: 6dcc4e8f-190e-4bea-9be4-8a073e832ff7
+      - claim: "Earlier in V.P4 Boethius grants that even if foreknowledge exists it imposes no necessity on events, so the full freedom of the will (libertas voluntatis) remains intact."
+        grounded_in: 66d37280-c8e9-481b-88a5-084d6b56f781
+
+  # ---------------------------------------------------------------------------
+  - id: r012
+    query: "Augustine's pre-Pelagian De Lib. Arb. III.18-21 vs his post-Pelagian position: a real shift or a clarification?"
+    # De Libero Arbitrio is stored in the corpus under urn stoa0040.stoa003 with
+    # book.chapter.section refs (3.x.y) — the Augustine/Evodius dialogue on
+    # praescientia. The post-Pelagian works are stoa0040.stoa044 (De Gratia et
+    # Libero Arbitrio, 426/7) and stoa0040.stoa045 (De Praedestinatione /
+    # De Dono Perseverantiae). Verbatim-Latin passage variants used.
+    expected_passages:
+      - 79d87f1e-b51f-4e29-af4c-6dc4c32e5af6  # De Lib. Arb. III.18.50: a cause of will that can be resisted but is not = sin
+      - e7b55a5e-f5e1-4d44-831a-46e914b92a63  # De Lib. Arb. III.19.53: the objection — why are we born under ignorance & difficulty?
+      - 81cc7876-8dff-4fd4-85e1-bcd29e70e07c  # De Lib. Arb. III.20.55: ignorance/difficulty/mortality as just penalty of Adam's sin
+      - 08ada494-eef9-40d1-9ff2-39a02a8e9a34  # De Gratia et Lib. Arb. I.1: against those who exalt free will so as to deny grace
+      - bbf3ab84-5727-4fd3-bac5-5d5d202b47ce  # De Praed./Dono Persev. (PL 44): gifts not given according to merits of wills
+    gold_claims:
+      - claim: "In De Libero Arbitrio III (c. 18) Augustine still argues that whatever the 'cause of the will' is, if it can be resisted and is not, the yielding is sin — locating culpability in the will, not in an external compulsion."
+        grounded_in: 79d87f1e-b51f-4e29-af4c-6dc4c32e5af6
+      - claim: "Already in De Libero Arbitrio III.19-20 Augustine introduces the inherited consequences of Adam's sin: humans are born with ignorance, difficulty and mortality as the just penalty (iustissime placuit) of the first sin — anticipating the later doctrine of original sin."
+        grounded_in: 81cc7876-8dff-4fd4-85e1-bcd29e70e07c
+      - claim: "In the post-Pelagian De Gratia et Libero Arbitrio Augustine writes explicitly against those who so exalt human free will that they dare to deny the grace by which we are called and freed — marking the polemical shift toward grace."
+        grounded_in: 08ada494-eef9-40d1-9ff2-39a02a8e9a34
+      - claim: "In the late predestinarian writings Augustine holds that God's gifts are not bestowed according to the merits of human wills (nec tribuuntur ista meritis voluntatum), a strong-grace position in tension with the libertarian emphasis of the early dialogue."
+        grounded_in: bbf3ab84-5727-4fd3-bac5-5d5d202b47ce
+
+  # ---------------------------------------------------------------------------
+  - id: r013
+    query: "Irenaeus Adversus Haereses IV.37-39 on free will: continuity with Justin Martyr?"
+    expected_passages:
+      - 4b7e7f9b-c7ef-5c62-b62f-6be046bdaffa  # Irenaeus AH IV.37.1: τὸ αὐτεξούσιον τοῦ ἀνθρώπου / τὸ συμβουλευτικὸν τοῦ θεοῦ
+      - 7b029b3b-d680-4362-a0ea-8ef4b2aef215  # Justin, Dial. 102.4: God made angels & humans αὐτεξουσίους (continuity anchor)
+      - d2342674-a929-58b2-b580-cd443c2ea6b7  # Justin, Dial. 140.4-141.2: foreknowledge != necessity; self-determination
+    gold_claims:
+      - claim: "In Adversus Haereses IV.37 Irenaeus grounds praise and blame in human self-determination (τὸ αὐτεξούσιον τοῦ ἀνθρώπου), arguing that God is counseling rather than coercive (τὸ συμβουλευτικὸν τοῦ θεοῦ), against Gnostic determinism."
+        grounded_in: 4b7e7f9b-c7ef-5c62-b62f-6be046bdaffa
+      - claim: "Irenaeus's anti-Gnostic use of αὐτεξούσιον continues Justin Martyr, who had already argued that God made both angels and humans self-determining (αὐτεξουσίους) for righteous action."
+        grounded_in: 7b029b3b-d680-4362-a0ea-8ef4b2aef215
+      - claim: "The continuity extends to the foreknowledge problem: Justin (Dial. 140-141) had already insisted that God's foreknowledge of the impious does not make God the cause of their impiety, the same compatibility of prescience and free will Irenaeus presupposes."
+        grounded_in: d2342674-a929-58b2-b580-cd443c2ea6b7
+
+  # ---------------------------------------------------------------------------
+  - id: r014
+    query: "Pauline Romans 9 on predestination vs synergism: Barclay 2015 vs Käsemann"
+    expected_passages: []   # COVERAGE GAP: no Pauline / NT Greek text in corpus
+    gold_claims: []
+    coverage_gap: "The corpus has NO Pauline epistle text (tlg0031 absent). Romans is present only indirectly via Origen's Commentary on Romans (tlg2042.tlg012, e.g. Comm. Rom. VII.16) and via patristic quotations (Irenaeus AH III.20.3 cites Rom 7). Romans 9 itself (predestination locus) cannot be cited from the primary text. The KG node work_pauline_epistle_romans referenced in queries.yaml is also absent from nodes.jsonl; the related modern-scholarship nodes argument_dihle_1982_paul_romans_7_split_will and argument_eastman_2017_romans7_* exist but concern Romans 7, not Romans 9. INGEST NEEDED: NA28 Romans 9 (or at least 9:14-24)."
+
+  # ---------------------------------------------------------------------------
+  - id: r015
+    query: "Maximus Confessor Disputatio cum Pyrrho: natural will vs gnomic will (Bathrellos 2004)"
+    expected_passages: []   # COVERAGE GAP: no Maximus the Confessor text in corpus
+    gold_claims: []
+    coverage_gap: "No Maximus the Confessor text (TLG tlg2892) is present in the corpus, so the Disputatio cum Pyrrho and its θέλημα φυσικόν / θέλημα γνωμικόν distinction cannot be cited from a primary passage. KG side is well-developed (argument_maximus_natural_vs_gnomic_will, argument_maximus_two_wills, argument_maximus_two_energies, argument_maximus_proairesis_baptismal_repair) but person_maximus_confessor and work_maximus_disputatio_cum_pyrrho referenced in queries.yaml are absent from nodes.jsonl. INGEST NEEDED: Disputatio cum Pyrrho (PG 91) — the natural-vs-gnomic-will passages."
