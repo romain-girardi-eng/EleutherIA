@@ -84,7 +84,9 @@ except ImportError:  # ... or executed as a script from tests/eval/
 
 DEFAULT_BASE_URL = "http://localhost:8000"
 QUERY_PATH = "/api/graphrag/query"
-DEFAULT_TIMEOUT = 180.0  # seconds
+# Per-request timeout. The agentic backend's uncached ReAct queries can run for
+# several minutes, so allow an env override (ELEUTHERIA_EVAL_TIMEOUT, seconds).
+DEFAULT_TIMEOUT = float(os.environ.get("ELEUTHERIA_EVAL_TIMEOUT", "180"))
 PASSAGE_PATH = "/api/passages/{passage_id}"
 JUDGE_ENV_FLAG = "ELEUTHERIA_EVAL_JUDGE"
 
@@ -273,8 +275,14 @@ def build_judge(base_url: str) -> Any:
     from eleutheria_graphrag.services.citation_verifier_v2 import CitationVerifierV2
     from eleutheria_graphrag.services.llm_service import LLMService
 
+    # The agentic backend's /api/passages endpoint requires auth (401), so allow
+    # pointing the judge's passage fetch at a key-free corpus server (e.g. the
+    # BM25 baseline on :8011, which serves the SAME data/corpus snapshot the gold
+    # was annotated against).
+    passage_base = os.environ.get("ELEUTHERIA_EVAL_PASSAGE_URL", base_url)
+
     async def fetch_passage(passage_id: str) -> dict[str, Any] | None:
-        url = base_url.rstrip("/") + PASSAGE_PATH.format(passage_id=passage_id)
+        url = passage_base.rstrip("/") + PASSAGE_PATH.format(passage_id=passage_id)
         async with httpx.AsyncClient(timeout=30.0) as client:
             resp = await client.get(url)
             if resp.status_code != 200:
