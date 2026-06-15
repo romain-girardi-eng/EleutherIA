@@ -1354,9 +1354,7 @@ class ScholarlyAgent:
         # audit or connection is later cut. The frame is unaudited (verifier_v2
         # verdicts arrive afterwards as `citation_verified` events and the final
         # `complete` payload supersedes this preview).
-        yield self._build_complete_event(
-            answer, event_type="citations_preview"
-        )
+        yield self._build_complete_event(answer, event_type="citations_preview")
 
         # Phase 5: Adversarial citation audit (v2) post-render. Emits one
         # ``citation_verified`` SSE event per audited claim and merges the
