@@ -1,0 +1,533 @@
+{
+  "generated_at": "2026-06-15T11:20:21.083152+00:00",
+  "top_n": 10,
+  "grounding_gaps": [
+    {
+      "arg_id": "argument_epictetus_prohairesis_argument_aa13b932",
+      "label": "Epictetus' Prohairesis Argument",
+      "period": "Roman Imperial",
+      "concept_degree": 3,
+      "total_degree": 9,
+      "concept_ids": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_heimarmene_fate_stoics_j0k1l2m3",
+        "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6"
+      ],
+      "concept_labels": [
+        "To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power",
+        "Heimarmenê (Εἱμαρμένη) - Stoic Fate",
+        "Prohairesis (Προαίρεσις) - Deliberate Choice"
+      ],
+      "description_excerpt": "Represents mature Roman Stoicism's focus on the inner citadel of the mind. Prohairesis is the core of the self and the locus of freedom. Even under external constraint (slavery, imprisonment), one's prohairesis remains free."
+    },
+    {
+      "arg_id": "argument_the_practical_syllogism_1d2e7506",
+      "label": "The Practical Syllogism",
+      "period": "Classical Greek",
+      "concept_degree": 3,
+      "total_degree": 8,
+      "concept_ids": [
+        "concept_boulesis_rational_desire_ef9f861d",
+        "concept_hekousion_voluntary_aristotle_a1b2c3d4",
+        "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6"
+      ],
+      "concept_labels": [
+        "Βούλησις (Boulēsis) - Rational Desire/Will",
+        "Hekousion (Ἑκούσιον) - Voluntary",
+        "Prohairesis (Προαίρεσις) - Deliberate Choice"
+      ],
+      "description_excerpt": "Aristotle's account of practical reasoning connects thought about an end with desire and action. In De Anima III.10 and Nicomachean Ethics VII.3 practical intellect is oriented toward action rather than contemplation, and action issues when thought and desire converge without impediment."
+    },
+    {
+      "arg_id": "argument_maximus_natural_vs_gnomic_will",
+      "label": "Maximus the Confessor: Natural Will vs. Gnomic Will (Disp. Pyrrh.; Opusc. 1, 3)",
+      "period": "Late Antiquity",
+      "concept_degree": 3,
+      "total_degree": 7,
+      "concept_ids": [
+        "concept_gnomic_will_gnome",
+        "concept_monothelitism",
+        "concept_thelema_physikon_natural_will"
+      ],
+      "concept_labels": [
+        "Gnomic will (γνώμη / θέλημα γνωμικόν)",
+        "Monothelitism (μονοθελητισμός)",
+        "Natural will (θέλημα φυσικόν / θέλησις φυσική)"
+      ],
+      "description_excerpt": "Maximus the Confessor's distinction between the natural will (φυσικὸν θέλημα) and the gnomic will (γνωμικὸν θέλημα), articulated at the Disputatio cum Pyrrho (645 CE, PG 91, 287–354) and in Opuscula theologica et polemica 1, 3, 16 (PG 91, 9–286). Structure of argument — (Premise 1) Will is a propert"
+    },
+    {
+      "arg_id": "argument_qumran_predestination_c3d4e5f6",
+      "label": "Qumran Predestinarian Argument (Two Spirits)",
+      "period": "Second Temple Judaism",
+      "concept_degree": 2,
+      "total_degree": 13,
+      "concept_ids": [
+        "concept_bechirah_c1d2e3f4",
+        "concept_hashgachah_o3p4q5r6"
+      ],
+      "concept_labels": [
+        "Choice/Free Will (Bechirah)",
+        "Divine Providence (Hashgachah)"
+      ],
+      "description_excerpt": "The Treatise of the Two Spirits (1QS III.13–IV.26) constitutes the most sustained and philosophically explicit predestinarian text in Second Temple Judaism. Embedded within the Community Rule (Serek HaYahad), the Treatise presents a cosmological dualism grounded in a doctrine of prior divine determi"
+    },
+    {
+      "arg_id": "argument_maximus_two_wills",
+      "label": "Maxime : deux volontés en Christ (dyothélie)",
+      "period": "Late Antiquity",
+      "concept_degree": 2,
+      "total_degree": 11,
+      "concept_ids": [
+        "concept_monothelitism",
+        "concept_thelema_physikon_natural_will"
+      ],
+      "concept_labels": [
+        "Monothelitism (μονοθελητισμός)",
+        "Natural will (θέλημα φυσικόν / θέλησις φυσική)"
+      ],
+      "description_excerpt": "**Source primaire** : Maxime le Confesseur, *Opusculum* 3 (PG 91, 45-56), *Opusculum* 16 (PG 91, 184-212) et *Disputatio cum Pyrrho* §13-28 (PG 91, 308-336). **Prémisse 1** : La volonté (θέλημα) est une faculté de la NATURE (θέλημα φυσικόν, volonté naturelle), non de l'hypostase — distinction reçue "
+    },
+    {
+      "arg_id": "argument_two_way_powers_aristotle_i9j0k1l2",
+      "label": "Two-Way Powers (Rational Potentialities) Argument",
+      "period": "Classical Greek",
+      "concept_degree": 2,
+      "total_degree": 9,
+      "concept_ids": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6"
+      ],
+      "concept_labels": [
+        "To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power",
+        "Prohairesis (Προαίρεσις) - Deliberate Choice"
+      ],
+      "description_excerpt": "In Metaphysics IX Aristotle distinguishes non-rational powers, each ordered to one effect, from rational powers, which are of opposites. In IX.5 he adds that the exercise of rational powers depends on desire or choice, making this distinction important for later debates about agency."
+    },
+    {
+      "arg_id": "argument_nemesius_nat_hom_35_carneadean_summary_amand1945",
+      "label": "Némésios Nat. Hom. 35 — résumé sec de l'argumentation morale carnéadienne",
+      "period": "Late Antiquity",
+      "concept_degree": 2,
+      "total_degree": 9,
+      "concept_ids": [
+        "concept_heimarmene_fate_stoics_j0k1l2m3",
+        "concept_to_eph_hemin_nemesius"
+      ],
+      "concept_labels": [
+        "Heimarmenê (Εἱμαρμένη) - Stoic Fate",
+        "To eph' hemin (τὸ ἐφ᾽ ἡμῖν) — Nemesius"
+      ],
+      "description_excerpt": "Résumé sec et squelettique de l'argumentation morale antifataliste de Carnéade inséré par Némésios au début du chapitre 35 du Peri physeos anthropou (PG 40, 741 BC, l. 18-33). Pour Amand 1945 (Livre II Ch. XIV §IV, p. 568-569), le passage énumère cinq conséquences absurdes du fatalisme astrologique "
+    },
+    {
+      "arg_id": "argument_gregory_disccat31_carneadean_moral_amand1945",
+      "label": "Gregory of Nyssa Disc. Cat. 31 — argument carnéadien moral comme topos scolaire",
+      "period": "Late Antiquity",
+      "concept_degree": 2,
+      "total_degree": 8,
+      "concept_ids": [
+        "concept_autexousion_christian",
+        "concept_prohairesis_gregory_nyssa"
+      ],
+      "concept_labels": [
+        "Αὐτεξούσιον (Autexousion) - Christian Self-Determination",
+        "Prohairesis (προαίρεσις) — Gregory of Nyssa"
+      ],
+      "description_excerpt": "Argument du Discours catéchétique 31 de Grégoire de Nysse (ed. Srawley p. 113-114 ; PG 45, 77BD), encadré par une aporie théologique : pourquoi Dieu ne force-t-il pas les incrédules à embrasser la foi ? Réponse de Grégoire (résumant un ou deux arguments éthiques de Carnéade) : ce serait détruire le "
+    },
+    {
+      "arg_id": "argument_augustines_antipelagian_argument_grace_necessity_0b29401f",
+      "label": "Augustine's Anti-Pelagian Argument (Grace Necessity)",
+      "period": "Patristic",
+      "concept_degree": 2,
+      "total_degree": 8,
+      "concept_ids": [
+        "concept_gratia_operans",
+        "concept_pelagianism"
+      ],
+      "concept_labels": [
+        "Gratia Operans (Operating Grace)",
+        "Pelagianism"
+      ],
+      "description_excerpt": "**Avertissement méthodologique** : la terminologie « compatibiliste / libertarienne / agent-causation / etc. » employée ci-dessous appartient au vocabulaire de la philosophie analytique moderne (Frankfurt 1969, Kane 1996, Pereboom 2001). Ces étiquettes sont rétroactivement projetées sur la pensée an"
+    },
+    {
+      "arg_id": "argument_aristotles_potentialityactuality_argument_20c5ac91",
+      "label": "Aristotle's Potentiality-Actuality Argument",
+      "period": "Classical Greek",
+      "concept_degree": 2,
+      "total_degree": 7,
+      "concept_ids": [
+        "concept_ananke_necessity_democritus_h8i9j0k1",
+        "concept_endechomenon_contingent_aristotle_e5f6g7h8"
+      ],
+      "concept_labels": [
+        "Ananke (Ἀνάγκη) - Necessity/Determinism",
+        "To Endechomenon (Τὸ ἐνδεχόμενον) - The Contingent"
+      ],
+      "description_excerpt": "Aristotle distinguishes potentiality from actuality and argues against the Megarian claim that a thing has a capacity only when it is actually exercising it. In Metaphysics IX.3-4 he treats unexercised capacities as real and uses them to explain possibility and change."
+    }
+  ],
+  "unmodeled_debates": [
+    {
+      "arg1_id": "argument_agent_causation_alex",
+      "arg1_label": "Agent Causation Argument (Alexander)",
+      "arg1_period": "Roman Imperial",
+      "arg2_id": "argument_common_cause_alex",
+      "arg2_label": "Common Cause vs Chain Cause Model (Alexander)",
+      "arg2_period": "Roman Imperial",
+      "shared_concept_count": 2,
+      "shared_concept_ids": [
+        "concept_arche_alex",
+        "concept_prohairesis_alex"
+      ],
+      "shared_concept_labels": [
+        "Archē (ἀρχή) - Origin/Principle",
+        "Prohairesis (προαίρεσις) - Alexander"
+      ],
+      "both_ancient": true
+    },
+    {
+      "arg1_id": "argument_agent_causation_two_way_powers_alexander_q8r9s0t1",
+      "arg1_label": "Alexander's Agent Causation via Two-Way Powers Argument",
+      "arg1_period": "Roman Imperial",
+      "arg2_id": "argument_deliberate_choice_analysis_aristotle_h8i9j0k1",
+      "arg2_label": "Deliberate Choice (Prohairesis) Analysis Argument",
+      "arg2_period": "Classical Greek",
+      "shared_concept_count": 2,
+      "shared_concept_ids": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6"
+      ],
+      "shared_concept_labels": [
+        "To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power",
+        "Prohairesis (Προαίρεσις) - Deliberate Choice"
+      ],
+      "both_ancient": true
+    },
+    {
+      "arg1_id": "argument_agent_causation_two_way_powers_alexander_q8r9s0t1",
+      "arg1_label": "Alexander's Agent Causation via Two-Way Powers Argument",
+      "arg1_period": "Roman Imperial",
+      "arg2_id": "argument_epictetus_prohairesis_argument_aa13b932",
+      "arg2_label": "Epictetus' Prohairesis Argument",
+      "arg2_period": "Roman Imperial",
+      "shared_concept_count": 2,
+      "shared_concept_ids": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6"
+      ],
+      "shared_concept_labels": [
+        "To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power",
+        "Prohairesis (Προαίρεσις) - Deliberate Choice"
+      ],
+      "both_ancient": true
+    },
+    {
+      "arg1_id": "argument_agent_causation_two_way_powers_alexander_q8r9s0t1",
+      "arg1_label": "Alexander's Agent Causation via Two-Way Powers Argument",
+      "arg1_period": "Roman Imperial",
+      "arg2_id": "argument_incompatibilism_alexander_p7q8r9s0",
+      "arg2_label": "Alexander's Incompatibilist Argument (Fate Destroys Freedom)",
+      "arg2_period": "Roman Imperial",
+      "shared_concept_count": 2,
+      "shared_concept_ids": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6"
+      ],
+      "shared_concept_labels": [
+        "To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power",
+        "Prohairesis (Προαίρεσις) - Deliberate Choice"
+      ],
+      "both_ancient": true
+    },
+    {
+      "arg1_id": "argument_cafma_futility_of_effort_8c3d5f21",
+      "arg1_label": "CAFMA Argument I: Futility of Effort and Labor",
+      "arg1_period": "Hellenistic",
+      "arg2_id": "argument_cafma_futility_of_legislation_9d4e6g32",
+      "arg2_label": "CAFMA Argument II: Futility of Legislation and Justice",
+      "arg2_period": "Hellenistic",
+      "shared_concept_count": 2,
+      "shared_concept_ids": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_heimarmene_fate_stoics_j0k1l2m3"
+      ],
+      "shared_concept_labels": [
+        "To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power",
+        "Heimarmenê (Εἱμαρμένη) - Stoic Fate"
+      ],
+      "both_ancient": true
+    },
+    {
+      "arg1_id": "argument_cafma_futility_of_effort_8c3d5f21",
+      "arg1_label": "CAFMA Argument I: Futility of Effort and Labor",
+      "arg1_period": "Hellenistic",
+      "arg2_id": "argument_cleanthes_hymn_to_zeus_argument_f71f5b37",
+      "arg2_label": "Cleanthes' Hymn to Zeus Argument",
+      "arg2_period": "Hellenistic",
+      "shared_concept_count": 2,
+      "shared_concept_ids": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_heimarmene_fate_stoics_j0k1l2m3"
+      ],
+      "shared_concept_labels": [
+        "To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power",
+        "Heimarmenê (Εἱμαρμένη) - Stoic Fate"
+      ],
+      "both_ancient": true
+    },
+    {
+      "arg1_id": "argument_cafma_futility_of_effort_8c3d5f21",
+      "arg1_label": "CAFMA Argument I: Futility of Effort and Labor",
+      "arg1_period": "Hellenistic",
+      "arg2_id": "argument_epictetus_prohairesis_argument_aa13b932",
+      "arg2_label": "Epictetus' Prohairesis Argument",
+      "arg2_period": "Roman Imperial",
+      "shared_concept_count": 2,
+      "shared_concept_ids": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_heimarmene_fate_stoics_j0k1l2m3"
+      ],
+      "shared_concept_labels": [
+        "To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power",
+        "Heimarmenê (Εἱμαρμένη) - Stoic Fate"
+      ],
+      "both_ancient": true
+    },
+    {
+      "arg1_id": "argument_cafma_futility_of_legislation_9d4e6g32",
+      "arg1_label": "CAFMA Argument II: Futility of Legislation and Justice",
+      "arg1_period": "Hellenistic",
+      "arg2_id": "argument_cleanthes_hymn_to_zeus_argument_f71f5b37",
+      "arg2_label": "Cleanthes' Hymn to Zeus Argument",
+      "arg2_period": "Hellenistic",
+      "shared_concept_count": 2,
+      "shared_concept_ids": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_heimarmene_fate_stoics_j0k1l2m3"
+      ],
+      "shared_concept_labels": [
+        "To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power",
+        "Heimarmenê (Εἱμαρμένη) - Stoic Fate"
+      ],
+      "both_ancient": true
+    },
+    {
+      "arg1_id": "argument_cafma_futility_of_legislation_9d4e6g32",
+      "arg1_label": "CAFMA Argument II: Futility of Legislation and Justice",
+      "arg1_period": "Hellenistic",
+      "arg2_id": "argument_epictetus_prohairesis_argument_aa13b932",
+      "arg2_label": "Epictetus' Prohairesis Argument",
+      "arg2_period": "Roman Imperial",
+      "shared_concept_count": 2,
+      "shared_concept_ids": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_heimarmene_fate_stoics_j0k1l2m3"
+      ],
+      "shared_concept_labels": [
+        "To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power",
+        "Heimarmenê (Εἱμαρμένη) - Stoic Fate"
+      ],
+      "both_ancient": true
+    },
+    {
+      "arg1_id": "argument_cleanthes_hymn_to_zeus_argument_f71f5b37",
+      "arg1_label": "Cleanthes' Hymn to Zeus Argument",
+      "arg1_period": "Hellenistic",
+      "arg2_id": "argument_epictetus_prohairesis_argument_aa13b932",
+      "arg2_label": "Epictetus' Prohairesis Argument",
+      "arg2_period": "Roman Imperial",
+      "shared_concept_count": 2,
+      "shared_concept_ids": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+        "concept_heimarmene_fate_stoics_j0k1l2m3"
+      ],
+      "shared_concept_labels": [
+        "To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power",
+        "Heimarmenê (Εἱμαρμένη) - Stoic Fate"
+      ],
+      "both_ancient": true
+    }
+  ],
+  "transmission_gaps": [
+    {
+      "concept_id": "concept_endechomenon_contingent_aristotle_e5f6g7h8",
+      "label": "To Endechomenon (Τὸ ἐνδεχόμενον) - The Contingent",
+      "description_excerpt": "**Étymologie** : τὸ ἐνδεχόμενον, participe présent neutre substantivé du verbe ἐνδέχομαι (« admettre, accepter, être possible »), littéralement « ce qui admet d'être (autrement) » — concept modal central d'Aristote (*De Int.* 9, *An. Pr.* I.13).  To endechomenon (τὸ ἐνδεχόμενον, the contingent) is A",
+      "attested_periods": [
+        "Presocratic",
+        "Classical Greek",
+        "Late Antiquity"
+      ],
+      "missing_periods": [
+        "Hellenistic",
+        "Patristic",
+        "Roman Imperial"
+      ],
+      "gap_span": 3,
+      "arg_ids_by_period": {
+        "Classical Greek": [
+          "argument_aristotles_potentialityactuality_argument_20c5ac91",
+          "argument_sea_battle_aristotle_f6g7h8i9"
+        ],
+        "Late Antiquity": [
+          "argument_boethian_solution_divine_eternity_k1l2m3n4"
+        ],
+        "Presocratic": [
+          "argument_parmenides_necessity_argument_4e8e0f34"
+        ]
+      },
+      "arg_labels_by_period": {
+        "Classical Greek": [
+          "Aristotle's Potentiality-Actuality Argument",
+          "Sea Battle Argument (Future Contingents)"
+        ],
+        "Late Antiquity": [
+          "Boethian Solution: Divine Timeless Eternity"
+        ],
+        "Presocratic": [
+          "Parmenides' Necessity Argument"
+        ]
+      }
+    },
+    {
+      "concept_id": "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6",
+      "label": "Prohairesis (Προαίρεσις) - Deliberate Choice",
+      "description_excerpt": "**Étymologie** : προαίρεσις < πρό- (« avant ») + αἵρεσις (« choix, prise », de αἱρέω « prendre, saisir »), littéralement « choix préalable / antérieur ». Premier emploi technique chez Aristote, *Éthique à Nicomaque* III.4 (1112a15).  Prohairesis (προαίρεσις, deliberate choice) is Aristotle's technic",
+      "attested_periods": [
+        "Classical Greek",
+        "Roman Imperial"
+      ],
+      "missing_periods": [
+        "Hellenistic"
+      ],
+      "gap_span": 1,
+      "arg_ids_by_period": {
+        "Roman Imperial": [
+          "argument_agent_causation_two_way_powers_alexander_q8r9s0t1",
+          "argument_epictetus_freedom_renunciation",
+          "argument_epictetus_prohairesis_argument_aa13b932",
+          "argument_incompatibilism_alexander_p7q8r9s0"
+        ],
+        "Classical Greek": [
+          "argument_deliberate_choice_analysis_aristotle_h8i9j0k1",
+          "argument_the_practical_syllogism_1d2e7506",
+          "argument_two_way_powers_aristotle_i9j0k1l2"
+        ]
+      },
+      "arg_labels_by_period": {
+        "Roman Imperial": [
+          "Alexander's Agent Causation via Two-Way Powers Argument",
+          "Epictetus's Freedom Through Renunciation (Discourses IV.1)",
+          "Epictetus' Prohairesis Argument",
+          "Alexander's Incompatibilist Argument (Fate Destroys Freedom)"
+        ],
+        "Classical Greek": [
+          "Deliberate Choice (Prohairesis) Analysis Argument",
+          "The Practical Syllogism",
+          "Two-Way Powers (Rational Potentialities) Argument"
+        ]
+      }
+    },
+    {
+      "concept_id": "concept_pronoia_levels_proclus_a6d8c9b4",
+      "label": "Levels of Providence (Proclean)",
+      "description_excerpt": "Proclus's hierarchical theory of providence operating at multiple levels. Primary providence concerns eternal Ideas and universals; secondary providence concerns particular souls and events; tertiary providence operates through natural processes. Higher levels are more free from fate; lower levels m",
+      "attested_periods": [
+        "Hellenistic",
+        "Patristic",
+        "Late Antiquity"
+      ],
+      "missing_periods": [
+        "Roman Imperial"
+      ],
+      "gap_span": 1,
+      "arg_ids_by_period": {
+        "Hellenistic": [
+          "argument_cafma_futility_of_piety_2g7h9j65"
+        ],
+        "Late Antiquity": [
+          "argument_proclus_levels_of_providence_4e8c7b9a"
+        ],
+        "Patristic": [
+          "argument_pseudodionysiuss_hierarchical_causation_argument_e0d73eb9"
+        ]
+      },
+      "arg_labels_by_period": {
+        "Hellenistic": [
+          "CAFMA Argument V: Futility of Piety and Prayer"
+        ],
+        "Late Antiquity": [
+          "Proclus's Hierarchical Providence and Fate Argument"
+        ],
+        "Patristic": [
+          "Pseudo-Dionysius's Hierarchical Causation Argument"
+        ]
+      }
+    },
+    {
+      "concept_id": "concept_clinamen_atomic_swerve_epicurus_m3n4o5p6",
+      "label": "Clinamen / Parenklisis (Atomic Swerve)",
+      "description_excerpt": "**Étymologie** : *clinamen* < lat. *clinare* (« incliner, pencher »), néologisme lucrétien (DRN II.292) calque du grec παρέγκλισις (Épicure, fr. ap. Diog. Laert. X) ; *parenklisis* < παρά- + ἐγκλίνω.  The clinamen or atomic swerve is the Epicurean doctrine that atoms spontaneously deviate minutely f",
+      "attested_periods": [
+        "Presocratic",
+        "Hellenistic"
+      ],
+      "missing_periods": [
+        "Classical Greek"
+      ],
+      "gap_span": 1,
+      "arg_ids_by_period": {
+        "Hellenistic": [
+          "argument_carneades_autonomous_mental_causation_argument_4e7e9250",
+          "argument_epicurean_swerve_for_freedom_m4n5o6p7"
+        ],
+        "Presocratic": [
+          "argument_democritean_atomistic_determinism_c52067ec"
+        ]
+      },
+      "arg_labels_by_period": {
+        "Hellenistic": [
+          "Carneades' Autonomous Mental Causation Argument",
+          "Epicurean Atomic Swerve Argument for Freedom"
+        ],
+        "Presocratic": [
+          "Democritean Atomistic Determinism"
+        ]
+      }
+    },
+    {
+      "concept_id": "concept_autexousion_christian",
+      "label": "Αὐτεξούσιον (Autexousion) - Christian Self-Determination",
+      "description_excerpt": "The key Greek term for free will/self-determination in early Christian theology. Derived from αὐτός (self) + ἐξουσία (power, authority), meaning 'having power over oneself,' 'self-determining,' 'possessing free will.' The term was used by Patristic writers (Irenaeus, Origen, Methodius, Gregory of Ny",
+      "attested_periods": [
+        "Roman Imperial",
+        "Late Antiquity"
+      ],
+      "missing_periods": [
+        "Patristic"
+      ],
+      "gap_span": 1,
+      "arg_ids_by_period": {
+        "Late Antiquity": [
+          "argument_chrysostom_libre_arbitre_pastoral_amand1945",
+          "argument_gregory_disccat31_carneadean_moral_amand1945"
+        ],
+        "Roman Imperial": [
+          "argument_methodius_theodicy_autexousion"
+        ]
+      },
+      "arg_labels_by_period": {
+        "Late Antiquity": [
+          "Chrysostome — libre arbitre comme ressort de l'apostolat oratoire",
+          "Gregory of Nyssa Disc. Cat. 31 — argument carnéadien moral comme topos scolaire"
+        ],
+        "Roman Imperial": [
+          "Methodius's Free Will Theodicy: Evil from Human Choice, Not Matter"
+        ]
+      }
+    }
+  ]
+}

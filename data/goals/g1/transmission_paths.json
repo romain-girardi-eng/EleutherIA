@@ -1,0 +1,1542 @@
+{
+  "stats": {
+    "total_persons": 453,
+    "connected_persons": 129,
+    "isolated_persons": 324,
+    "isolated_ancient": 101,
+    "isolated_scholar": 223,
+    "directed_edges": 160
+  },
+  "top_betweenness": [
+    {
+      "id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "label": "Origen of Alexandria",
+      "betweenness": 385.817
+    },
+    {
+      "id": "person_chrysippus_280_206bce_i9j0k1l2",
+      "label": "Chrysippus of Soli",
+      "betweenness": 220.833
+    },
+    {
+      "id": "person_carneades_214_129bce_l2m3n4o5",
+      "label": "Carneades of Cyrene",
+      "betweenness": 125.833
+    },
+    {
+      "id": "person_aristotle_384_322bce_c2d4f6a8",
+      "label": "Aristotle of Stagira",
+      "betweenness": 106.333
+    },
+    {
+      "id": "person_augustine_hippo_d430",
+      "label": "Augustine of Hippo",
+      "betweenness": 91.0
+    },
+    {
+      "id": "person_irenaeus_d202",
+      "label": "Irenaeus of Lyon",
+      "betweenness": 89.833
+    },
+    {
+      "id": "person_epictetus_of_hierapolis_3c385bc2",
+      "label": "Epictetus of Hierapolis",
+      "betweenness": 87.0
+    },
+    {
+      "id": "person_plotinus_d270",
+      "label": "Plotinus",
+      "betweenness": 81.667
+    },
+    {
+      "id": "person_bardesanes_the_syrian_3r8s0u76",
+      "label": "Bardaisan of Edessa (Bar-Daisan)",
+      "betweenness": 78.95
+    },
+    {
+      "id": "person_eusebius_caesarea_d339",
+      "label": "Eusebius of Caesarea",
+      "betweenness": 73.633
+    }
+  ],
+  "isolated_worklist": [
+    {
+      "id": "person_al_ashari_m3n4o5p6",
+      "label": "Al-Ash'ari (Abū al-Ḥasan al-Ashʿarī)"
+    },
+    {
+      "id": "person_al_ghazali_u1v2w3x4",
+      "label": "Al-Ghazali (Abū Ḥāmid Muḥammad ibn Muḥammad al-Ghazālī)"
+    },
+    {
+      "id": "person_ambrose_milan_339_397",
+      "label": "Ambroise de Milan"
+    },
+    {
+      "id": "person_ammonius_hermiae_c440_520",
+      "label": "Ammonius, son of Hermias"
+    },
+    {
+      "id": "person_annas_julia_contemporary",
+      "label": "Julia Annas"
+    },
+    {
+      "id": "person_anonymous_en_commentator_2c_ce",
+      "label": "Anonymous EN Commentator"
+    },
+    {
+      "id": "person_apollinaris_hierapolis_2c",
+      "label": "Apollinaris of Hierapolis"
+    },
+    {
+      "id": "person_apuleius_madauros_124_170",
+      "label": "Apulée de Madaure"
+    },
+    {
+      "id": "person_arcesilaus_316_241bce",
+      "label": "Arcesilaus of Pitane"
+    },
+    {
+      "id": "person_aristides_athens_2c_ce",
+      "label": "Aristides of Athens"
+    },
+    {
+      "id": "person_aspasius_2c_ce",
+      "label": "Aspasius"
+    },
+    {
+      "id": "person_athanasius_alexandria_298_373",
+      "label": "Athanase d'Alexandrie"
+    },
+    {
+      "id": "person_athenagoras",
+      "label": "Athenagoras of Athens"
+    },
+    {
+      "id": "person_atticus_2c_ce",
+      "label": "Atticus (Middle Platonist)"
+    },
+    {
+      "id": "person_aulus_gellius_125_180ce",
+      "label": "Aulus Gellius"
+    },
+    {
+      "id": "person_bernath_laszlo_contemporary",
+      "label": "László Bernáth"
+    },
+    {
+      "id": "person_blaise_pascal_6n0i1j79",
+      "label": "Blaise Pascal"
+    },
+    {
+      "id": "person_bonaventure_e7f8g9h0",
+      "label": "Bonaventure (Giovanni di Fidanza)"
+    },
+    {
+      "id": "person_caesarius_arles_d542",
+      "label": "Caesarius of Arles"
+    },
+    {
+      "id": "person_calcidius_4c_ce",
+      "label": "Calcidius"
+    },
+    {
+      "id": "person_celsus_platonist_2c_ce",
+      "label": "Celsus (the Platonist)"
+    },
+    {
+      "id": "person_clement_rome_d99",
+      "label": "Clement of Rome"
+    },
+    {
+      "id": "person_crescens_cynic_2c_ce",
+      "label": "Crescens the Cynic"
+    },
+    {
+      "id": "person_cyril_jerusalem_315_386",
+      "label": "Cyrille de Jérusalem"
+    },
+    {
+      "id": "person_cyrus_alexandria_d641",
+      "label": "Cyrus d'Alexandrie"
+    },
+    {
+      "id": "person_diodorus_cronus_48ef6200",
+      "label": "Diodorus Cronus"
+    },
+    {
+      "id": "person_diogenes_laertius_3c_ce",
+      "label": "Diogenes Laertius"
+    },
+    {
+      "id": "person_domingo_banez_4l8g9h57",
+      "label": "Domingo Báñez"
+    },
+    {
+      "id": "person_ekstrom_laura_1u2v3w4x",
+      "label": "Laura Waddell Ekstrom"
+    },
+    {
+      "id": "person_faustus_riez_d495",
+      "label": "Faustus of Riez"
+    },
+    {
+      "id": "person_fm_cornford_cambridge",
+      "label": "Francis Macdonald Cornford"
+    },
+    {
+      "id": "person_francisco_suarez_late_16th_c_scholastic_tradition_continued_into_17th_c_d5e0d92c",
+      "label": "Francisco Suárez (late 16th c.) / Scholastic tradition continued into 17th c."
+    },
+    {
+      "id": "person_franciscus_gomarus_2j6e7f35",
+      "label": "Franciscus Gomarus"
+    },
+    {
+      "id": "person_ginet_carl_0t1u2v3w",
+      "label": "Carl Ginet"
+    },
+    {
+      "id": "person_gottschalk_of_orbais_e5f6g7h8",
+      "label": "Gottschalk of Orbais"
+    },
+    {
+      "id": "person_gregory_of_rimini_i1j2k3l4",
+      "label": "Gregory of Rimini"
+    },
+    {
+      "id": "person_hasdai_crescas_s5t6u7v8",
+      "label": "Hasdai Crescas"
+    },
+    {
+      "id": "person_haynes_john_dylan_2f3g4h5i",
+      "label": "John-Dylan Haynes"
+    },
+    {
+      "id": "person_heraclitus_fl500bce_a1b2c3d4",
+      "label": "Heraclitus of Ephesus"
+    },
+    {
+      "id": "person_hermas_2c_ce",
+      "label": "Hermas"
+    },
+    {
+      "id": "person_hillel_elder_m3n4o5p6",
+      "label": "Hillel the Elder"
+    },
+    {
+      "id": "person_hincmar_of_reims_i9j0k1l2",
+      "label": "Hincmar of Reims"
+    },
+    {
+      "id": "person_honorius_i_pope_d638",
+      "label": "Pope Honorius I (d. 638)"
+    },
+    {
+      "id": "person_ignatius_antioch_d110",
+      "label": "Ignatius of Antioch"
+    },
+    {
+      "id": "person_inwood_brad_contemporary",
+      "label": "Brad Inwood"
+    },
+    {
+      "id": "person_jacobus_arminius_1i5d6e24",
+      "label": "Jacobus Arminius"
+    },
+    {
+      "id": "person_jean_buridan_attributed_e5990f67",
+      "label": "Jean Buridan (attributed)"
+    },
+    {
+      "id": "person_jerome_stridon_347_420",
+      "label": "Jérôme de Stridon"
+    },
+    {
+      "id": "person_john_cassian_d435",
+      "label": "John Cassian"
+    },
+    {
+      "id": "person_john_damascene_d749",
+      "label": "John of Damascus (John Damascene)"
+    },
+    {
+      "id": "person_john_duns_scotus_48daa9ee",
+      "label": "John Duns Scotus"
+    },
+    {
+      "id": "person_john_scotus_eriugena_a1b2c3d4",
+      "label": "John Scotus Eriugena"
+    },
+    {
+      "id": "person_josephus_flavius_e5f6g7h8",
+      "label": "Flavius Josephus"
+    },
+    {
+      "id": "person_julian_eclanum_d454",
+      "label": "Julian of Eclanum"
+    },
+    {
+      "id": "person_knobe_joshua_5i6j7k8l",
+      "label": "Joshua Knobe"
+    },
+    {
+      "id": "person_lactantius_250_325ce",
+      "label": "Lactantius"
+    },
+    {
+      "id": "person_leucippus_and_democritus_8a42be84",
+      "label": "Leucippus and Democritus"
+    },
+    {
+      "id": "person_libet_benjamin_1e2f3g4h",
+      "label": "Benjamin Libet"
+    },
+    {
+      "id": "person_luis_de_molina_3k7f8g46",
+      "label": "Luis de Molina (expanded)"
+    },
+    {
+      "id": "person_mackenzie_catriona_9m0n1o2p",
+      "label": "Catriona Mackenzie"
+    },
+    {
+      "id": "person_marcion_sinope_2c_ce",
+      "label": "Marcion of Sinope"
+    },
+    {
+      "id": "person_martin_i_pope_590_655",
+      "label": "Pape Martin Ier"
+    },
+    {
+      "id": "person_maximus_of_tyre_125_185ce",
+      "label": "Maximus of Tyre"
+    },
+    {
+      "id": "person_mckenna_michael_4x5y6z7a",
+      "label": "Michael McKenna"
+    },
+    {
+      "id": "person_mele_alfred_3g4h5i6j",
+      "label": "Alfred Mele"
+    },
+    {
+      "id": "person_melito_sardis",
+      "label": "Melito of Sardis"
+    },
+    {
+      "id": "person_mill_john_stuart_2b3c4d5e",
+      "label": "John Stuart Mill"
+    },
+    {
+      "id": "person_nahmias_eddy_4h5i6j7k",
+      "label": "Eddy Nahmias"
+    },
+    {
+      "id": "person_nichols_shaun_6j7k8l9m",
+      "label": "Shaun Nichols"
+    },
+    {
+      "id": "person_nicostratus_2c_ce",
+      "label": "Nicostratus (Middle Platonist)"
+    },
+    {
+      "id": "person_numenius_apamea_2c_ce",
+      "label": "Numenius of Apamea"
+    },
+    {
+      "id": "person_nussbaum_martha_contemporary",
+      "label": "Martha Nussbaum"
+    },
+    {
+      "id": "person_oconnor_timothy_8r9s0t1u",
+      "label": "Timothy O'Connor"
+    },
+    {
+      "id": "person_pamphilus_caesarea_d310",
+      "label": "Pamphilus of Caesarea"
+    },
+    {
+      "id": "person_parmenides_of_elea_44a65114",
+      "label": "Parmenides of Elea"
+    },
+    {
+      "id": "person_paul_apostle",
+      "label": "Paul the Apostle"
+    },
+    {
+      "id": "person_pereboom_derk_contemporary",
+      "label": "Derk Pereboom"
+    },
+    {
+      "id": "person_peter_abelard_w9x0y1z2",
+      "label": "Peter Abelard"
+    },
+    {
+      "id": "person_peter_lombard_a3b4c5d6",
+      "label": "Peter Lombard"
+    },
+    {
+      "id": "person_philoponus_johannes_490_570",
+      "label": "Jean Philopon"
+    },
+    {
+      "id": "person_pierre_bayle_701cb0a7",
+      "label": "Pierre Bayle"
+    },
+    {
+      "id": "person_prosper_aquitaine_d455",
+      "label": "Prosper of Aquitaine"
+    },
+    {
+      "id": "person_pseudo_barnabas",
+      "label": "Pseudo-Barnabas (Anonymous)"
+    },
+    {
+      "id": "person_pseudo_justin",
+      "label": "Pseudo-Justin (Anonymous)"
+    },
+    {
+      "id": "person_pseudo_plutarch_2c_ce",
+      "label": "Pseudo-Plutarch"
+    },
+    {
+      "id": "person_pseudodionysius_the_areopagite_anonymous_c_500_ce_4ea569e3",
+      "label": "Pseudo-Dionysius the Areopagite (anonymous, c. 500 CE)"
+    },
+    {
+      "id": "person_pyrrhus_constantinople_d654",
+      "label": "Pyrrhus de Constantinople"
+    },
+    {
+      "id": "person_ralph_cudworth_77de5c65",
+      "label": "Ralph Cudworth"
+    },
+    {
+      "id": "person_saadia_gaon_g3h4i5j6",
+      "label": "Saadia Gaon (Saʿadya ben Yōsēf)"
+    },
+    {
+      "id": "person_seneca_4bce_65ce_a1b2c3d4",
+      "label": "Lucius Annaeus Seneca (Seneca the Younger)"
+    },
+    {
+      "id": "person_sergius_constantinople_565_638",
+      "label": "Sergius Ier de Constantinople"
+    },
+    {
+      "id": "person_shammai_q7r8s9t0",
+      "label": "Shammai"
+    },
+    {
+      "id": "person_simplicius_cilicia_490_560ce",
+      "label": "Simplicius of Cilicia"
+    },
+    {
+      "id": "person_smilansky_saul_9c0d1e2f",
+      "label": "Saul Smilansky"
+    },
+    {
+      "id": "person_sophronius_jerusalem_560_638",
+      "label": "Sophrone de Jérusalem"
+    },
+    {
+      "id": "person_taylor_richard_6p7q8r9s",
+      "label": "Richard Taylor"
+    },
+    {
+      "id": "person_tertullian_d220",
+      "label": "Tertullian"
+    },
+    {
+      "id": "person_theodoret_cyrrhus_393_466ce",
+      "label": "Theodoret of Cyrrhus"
+    },
+    {
+      "id": "person_thomas_reid_8z2u3v91",
+      "label": "Thomas Reid"
+    },
+    {
+      "id": "person_tomasz_stepien_warsaw",
+      "label": "Tomasz Stępień"
+    },
+    {
+      "id": "person_valentinus_gnostic_2c_ce",
+      "label": "Valentinus"
+    },
+    {
+      "id": "person_van_inwagen_peter_9s0t1u2v",
+      "label": "Peter van Inwagen"
+    },
+    {
+      "id": "person_vihvelin_kadri_6z7a8b9c",
+      "label": "Kadri Vihvelin"
+    },
+    {
+      "id": "person_vincent_lerins_d450",
+      "label": "Vincent of Lérins"
+    },
+    {
+      "id": "person_wallace_r_jay_5y6z7a8b",
+      "label": "R. Jay Wallace"
+    },
+    {
+      "id": "person_william_of_ockham_8df17ab4",
+      "label": "William of Ockham"
+    },
+    {
+      "id": "scholar_acosta_l_pez_de_mesa_j",
+      "label": "Juliana Acosta López de Mesa"
+    },
+    {
+      "id": "scholar_alberti_a",
+      "label": "Antonina Alberti"
+    },
+    {
+      "id": "scholar_amand_de_mendieta_e",
+      "label": "Emmanuel Amand de Mendieta"
+    },
+    {
+      "id": "scholar_andresen_carl",
+      "label": "Carl Andresen"
+    },
+    {
+      "id": "scholar_astolfi_a",
+      "label": "Antonella Astolfi"
+    },
+    {
+      "id": "scholar_barclay_j",
+      "label": "John M. G. Barclay"
+    },
+    {
+      "id": "scholar_bardy_g",
+      "label": "Gustave Bardy"
+    },
+    {
+      "id": "scholar_behr_john",
+      "label": "John Behr"
+    },
+    {
+      "id": "scholar_belcastro_m",
+      "label": "Mauro Belcastro"
+    },
+    {
+      "id": "scholar_bett_richard",
+      "label": "Richard Bett"
+    },
+    {
+      "id": "scholar_bird_m",
+      "label": "Michael F. Bird"
+    },
+    {
+      "id": "scholar_blackson_t",
+      "label": "Thomas A. Blackson"
+    },
+    {
+      "id": "scholar_blackwell_b",
+      "label": "Ben C. Blackwell"
+    },
+    {
+      "id": "scholar_blowers_paul",
+      "label": "Paul M. Blowers"
+    },
+    {
+      "id": "scholar_bobichon_p",
+      "label": "Philippe Bobichon"
+    },
+    {
+      "id": "scholar_boeri_marcelo",
+      "label": "Marcelo D. Boeri"
+    },
+    {
+      "id": "scholar_bonaiuti_e",
+      "label": "Ernesto Bonaiuti"
+    },
+    {
+      "id": "scholar_bonazzi_mauro",
+      "label": "Mauro Bonazzi"
+    },
+    {
+      "id": "scholar_boulnois_m",
+      "label": "Marie-Odile Boulnois"
+    },
+    {
+      "id": "scholar_boys_stones_g",
+      "label": "George Boys-Stones"
+    },
+    {
+      "id": "scholar_brand_miryam",
+      "label": "Miryam T. Brand"
+    },
+    {
+      "id": "scholar_brass_m",
+      "label": "Marcel Brass"
+    },
+    {
+      "id": "scholar_brennan_tad",
+      "label": "Tad Brennan"
+    },
+    {
+      "id": "scholar_breytenbach_c",
+      "label": "Cilliers Breytenbach"
+    },
+    {
+      "id": "scholar_broadie_sarah",
+      "label": "Sarah Broadie"
+    },
+    {
+      "id": "scholar_brouwer_r",
+      "label": "René Brouwer"
+    },
+    {
+      "id": "scholar_brunschwig_jacques",
+      "label": "Jacques Brunschwig"
+    },
+    {
+      "id": "scholar_butticaz_s",
+      "label": "Simon Butticaz"
+    },
+    {
+      "id": "scholar_byerly_t",
+      "label": "T. Ryan Byerly"
+    },
+    {
+      "id": "scholar_carter_jason",
+      "label": "Jason W. Carter"
+    },
+    {
+      "id": "scholar_cary_p",
+      "label": "Phillip Cary"
+    },
+    {
+      "id": "scholar_chamberlain_c",
+      "label": "Charles Chamberlain"
+    },
+    {
+      "id": "scholar_comerro_v",
+      "label": "Viviane Comerro"
+    },
+    {
+      "id": "scholar_coope_ursula",
+      "label": "Ursula Coope"
+    },
+    {
+      "id": "scholar_cooper_john",
+      "label": "John Cooper"
+    },
+    {
+      "id": "scholar_coppins_w",
+      "label": "Wayne Coppins"
+    },
+    {
+      "id": "scholar_craig_w",
+      "label": "William Lane Craig"
+    },
+    {
+      "id": "scholar_cross_f",
+      "label": "Frank Moore Cross"
+    },
+    {
+      "id": "scholar_crouzel_henri",
+      "label": "Henri Crouzel"
+    },
+    {
+      "id": "scholar_crubellier_m",
+      "label": "Michel Crubellier"
+    },
+    {
+      "id": "scholar_currado_m",
+      "label": "Micah Currado"
+    },
+    {
+      "id": "scholar_daley_b",
+      "label": "Brian E. Daley"
+    },
+    {
+      "id": "scholar_danielou_j",
+      "label": "Jean Daniélou"
+    },
+    {
+      "id": "scholar_de_monneron_f",
+      "label": "François DE MONNERON"
+    },
+    {
+      "id": "scholar_deery_o",
+      "label": "Oisín Deery"
+    },
+    {
+      "id": "scholar_denzey_lewis_n",
+      "label": "Nicola Denzey Lewis"
+    },
+    {
+      "id": "scholar_dettwiler_a",
+      "label": "Andreas DETTWILER"
+    },
+    {
+      "id": "scholar_di_muzio_g",
+      "label": "Gianluca Di Muzio"
+    },
+    {
+      "id": "scholar_dillon_john",
+      "label": "John Dillon"
+    },
+    {
+      "id": "scholar_djeranian_o",
+      "label": "Olivier D'Jeranian"
+    },
+    {
+      "id": "scholar_dobbin_r",
+      "label": "Robert F. Dobbin"
+    },
+    {
+      "id": "scholar_dodson_j",
+      "label": "Joseph R. Dodson"
+    },
+    {
+      "id": "scholar_donini_p",
+      "label": "Pier Luigi Donini"
+    },
+    {
+      "id": "scholar_double_r",
+      "label": "Richard Double"
+    },
+    {
+      "id": "scholar_dunn_j",
+      "label": "James D. G. Dunn"
+    },
+    {
+      "id": "scholar_eastman_susan",
+      "label": "Susan Grove Eastman"
+    },
+    {
+      "id": "scholar_eche_ique_j",
+      "label": "Javier Echeñique"
+    },
+    {
+      "id": "scholar_edwards_mark",
+      "label": "Mark J. Edwards"
+    },
+    {
+      "id": "scholar_eliasson_e",
+      "label": "Erik Eliasson"
+    },
+    {
+      "id": "scholar_engberg_pedersen_t",
+      "label": "Troels Engberg-Pedersen"
+    },
+    {
+      "id": "scholar_eskola_t",
+      "label": "Timo Eskola"
+    },
+    {
+      "id": "scholar_everson_s",
+      "label": "Stephen Everson"
+    },
+    {
+      "id": "scholar_fantino_j",
+      "label": "Jacques Fantino"
+    },
+    {
+      "id": "scholar_faure_r",
+      "label": "Richard Faure"
+    },
+    {
+      "id": "scholar_fee_g",
+      "label": "Gordon D. Fee"
+    },
+    {
+      "id": "scholar_fitzmyer_j",
+      "label": "Joseph A. Fitzmyer"
+    },
+    {
+      "id": "scholar_forschner_maximilian",
+      "label": "Maximilian Forschner"
+    },
+    {
+      "id": "scholar_frede_dorothea",
+      "label": "Dorothea Frede"
+    },
+    {
+      "id": "scholar_frick_p",
+      "label": "Peter Frick"
+    },
+    {
+      "id": "scholar_furley_david",
+      "label": "David J. Furley"
+    },
+    {
+      "id": "scholar_gauthier_r_a",
+      "label": "René-Antoine Gauthier"
+    },
+    {
+      "id": "scholar_gaventa_b",
+      "label": "Beverly Roberts Gaventa"
+    },
+    {
+      "id": "scholar_gerson_l",
+      "label": "Lloyd P. Gerson"
+    },
+    {
+      "id": "scholar_gibbons_k",
+      "label": "Kathleen Gibbons"
+    },
+    {
+      "id": "scholar_gill_christopher",
+      "label": "Christopher Gill"
+    },
+    {
+      "id": "scholar_gomez_laura",
+      "label": "Laura Liliana Gómez"
+    },
+    {
+      "id": "scholar_gooch_p",
+      "label": "P. W. Gooch"
+    },
+    {
+      "id": "scholar_goodrich_j",
+      "label": "John K. Goodrich"
+    },
+    {
+      "id": "scholar_gorday_p",
+      "label": "Peter Gorday"
+    },
+    {
+      "id": "scholar_gourinat_jean_baptiste",
+      "label": "Jean-Baptiste Gourinat"
+    },
+    {
+      "id": "scholar_graeser_a",
+      "label": "Andreas Graeser"
+    },
+    {
+      "id": "scholar_grant_r",
+      "label": "Robert M. Grant"
+    },
+    {
+      "id": "scholar_graver_margaret",
+      "label": "Margaret Graver"
+    },
+    {
+      "id": "scholar_grgi_f",
+      "label": "Filip Grgić"
+    },
+    {
+      "id": "scholar_guillon_j",
+      "label": "Jean-Baptiste Guillon"
+    },
+    {
+      "id": "scholar_guyomarc_h_g",
+      "label": "Gweltaz Guyomarc'h"
+    },
+    {
+      "id": "scholar_haacker_k",
+      "label": "Klaus Haacker"
+    },
+    {
+      "id": "scholar_hadot_pierre",
+      "label": "Pierre Hadot"
+    },
+    {
+      "id": "scholar_haggard_p",
+      "label": "Patrick Haggard"
+    },
+    {
+      "id": "scholar_hall_c",
+      "label": "Claire Hall"
+    },
+    {
+      "id": "scholar_hall_sg",
+      "label": "Stuart George Hall"
+    },
+    {
+      "id": "scholar_hankinson_rj",
+      "label": "R. J. Hankinson"
+    },
+    {
+      "id": "scholar_hardie_w_f_r",
+      "label": "W. F. R. Hardie"
+    },
+    {
+      "id": "scholar_harl_m",
+      "label": "Marguerite Harl"
+    },
+    {
+      "id": "scholar_hausmann_m",
+      "label": "Marco Hausmann"
+    },
+    {
+      "id": "scholar_havrda_m",
+      "label": "Matyáš Havrda"
+    },
+    {
+      "id": "scholar_hayman_a",
+      "label": "A. P. Hayman"
+    },
+    {
+      "id": "scholar_helm_p",
+      "label": "Paul Helm"
+    },
+    {
+      "id": "scholar_hendriksen_w",
+      "label": "William Hendriksen"
+    },
+    {
+      "id": "scholar_hengstermann_christian",
+      "label": "Christian Hengstermann"
+    },
+    {
+      "id": "scholar_hick_j",
+      "label": "John Hick"
+    },
+    {
+      "id": "scholar_hildebrandt_ronja",
+      "label": "Ronja Hildebrandt"
+    },
+    {
+      "id": "scholar_hogeterp_a",
+      "label": "Albert L. A. Hogeterp"
+    },
+    {
+      "id": "scholar_honderich_t",
+      "label": "Ted Honderich"
+    },
+    {
+      "id": "scholar_horn_christoph",
+      "label": "Christoph Horn"
+    },
+    {
+      "id": "scholar_huby_pamela",
+      "label": "Pamela M. Huby"
+    },
+    {
+      "id": "scholar_hyatt_jp",
+      "label": "J. Philip Hyatt"
+    },
+    {
+      "id": "scholar_irwin_terence",
+      "label": "T. H. Irwin"
+    },
+    {
+      "id": "scholar_jacobsen_a",
+      "label": "Anders-Christian Jacobsen"
+    },
+    {
+      "id": "scholar_jaubert_a",
+      "label": "Annie Jaubert"
+    },
+    {
+      "id": "scholar_jewett_r",
+      "label": "Robert Jewett"
+    },
+    {
+      "id": "scholar_johnson_monte",
+      "label": "Monte Ransome Johnson"
+    },
+    {
+      "id": "scholar_jourdan_f",
+      "label": "Fabienne Jourdan"
+    },
+    {
+      "id": "scholar_jowers_d",
+      "label": "Dennis W. Jowers"
+    },
+    {
+      "id": "scholar_jurasz_i",
+      "label": "Izabela Jurasz"
+    },
+    {
+      "id": "scholar_kahn_charles",
+      "label": "Charles H. Kahn"
+    },
+    {
+      "id": "scholar_karamanolis_george",
+      "label": "George E. Karamanolis"
+    },
+    {
+      "id": "scholar_kenny_anthony",
+      "label": "Anthony Kenny"
+    },
+    {
+      "id": "scholar_kidd_ig",
+      "label": "I. G. Kidd"
+    },
+    {
+      "id": "scholar_king_p",
+      "label": "Peter King"
+    },
+    {
+      "id": "scholar_klawans_jonathan",
+      "label": "Jonathan Klawans"
+    },
+    {
+      "id": "scholar_kobusch_theo",
+      "label": "Theo Kobusch"
+    },
+    {
+      "id": "scholar_koch_i",
+      "label": "Isabelle Koch"
+    },
+    {
+      "id": "scholar_koch_piettre_r",
+      "label": "Renée Koch Piettre"
+    },
+    {
+      "id": "scholar_kowalski_m",
+      "label": "Marcin Kowalski"
+    },
+    {
+      "id": "scholar_l_demann_g",
+      "label": "Gerd Lüdemann"
+    },
+    {
+      "id": "scholar_l_hr_w",
+      "label": "Winrich Alfried Löhr"
+    },
+    {
+      "id": "scholar_laato_a",
+      "label": "Antti Laato"
+    },
+    {
+      "id": "scholar_labarri_re_j",
+      "label": "Jean-Louis Labarrière"
+    },
+    {
+      "id": "scholar_lienemann_beatrice",
+      "label": "Béatrice Lienemann"
+    },
+    {
+      "id": "scholar_lindemann_a",
+      "label": "Andreas Lindemann"
+    },
+    {
+      "id": "scholar_linjamaa_p",
+      "label": "Paul Linjamaa"
+    },
+    {
+      "id": "scholar_list_n",
+      "label": "Nicholas List"
+    },
+    {
+      "id": "scholar_louth_a",
+      "label": "Andrew Louth"
+    },
+    {
+      "id": "scholar_magris_aldo",
+      "label": "Aldo Magris"
+    },
+    {
+      "id": "scholar_mansfeld_j",
+      "label": "Jaap Mansfeld"
+    },
+    {
+      "id": "scholar_markschies_christoph",
+      "label": "Christoph Markschies"
+    },
+    {
+      "id": "scholar_martin_l",
+      "label": "Luther H. Martin"
+    },
+    {
+      "id": "scholar_maso_s",
+      "label": "Stefano Maso"
+    },
+    {
+      "id": "scholar_maston_j",
+      "label": "Jason Maston"
+    },
+    {
+      "id": "scholar_matteoli_s",
+      "label": "Sara Matteoli"
+    },
+    {
+      "id": "scholar_merker_a",
+      "label": "Anne Merker"
+    },
+    {
+      "id": "scholar_meyer_s",
+      "label": "Susan Sauvé Meyer"
+    },
+    {
+      "id": "scholar_michon_c",
+      "label": "Cyrille Michon"
+    },
+    {
+      "id": "scholar_minns_d",
+      "label": "Denis Minns"
+    },
+    {
+      "id": "scholar_mitsis_phillip",
+      "label": "Phillip Mitsis"
+    },
+    {
+      "id": "scholar_moon_j",
+      "label": "John Moon"
+    },
+    {
+      "id": "scholar_moore_g",
+      "label": "George Foot Moore"
+    },
+    {
+      "id": "scholar_morel_pierre_marie",
+      "label": "Pierre-Marie Morel"
+    },
+    {
+      "id": "scholar_muller_j",
+      "label": "Jörn Müller"
+    },
+    {
+      "id": "scholar_munier_c",
+      "label": "Charles Munier"
+    },
+    {
+      "id": "scholar_nadelhoffer_t",
+      "label": "Thomas Nadelhoffer"
+    },
+    {
+      "id": "scholar_nagasawa_m",
+      "label": "Mako A. Nagasawa"
+    },
+    {
+      "id": "scholar_narbonne_j",
+      "label": "Jean-Marc Narbonne"
+    },
+    {
+      "id": "scholar_natali_c",
+      "label": "Carlo Natali"
+    },
+    {
+      "id": "scholar_nickodemus_b",
+      "label": "Benjamin J. Nickodemus"
+    },
+    {
+      "id": "scholar_nielsen_k",
+      "label": "Karen Margrethe Nielsen"
+    },
+    {
+      "id": "scholar_nystr_m_d",
+      "label": "David E. Nyström"
+    },
+    {
+      "id": "scholar_o_keefe_t",
+      "label": "Tim O'Keefe"
+    },
+    {
+      "id": "scholar_olive_j",
+      "label": "Julien Olive"
+    },
+    {
+      "id": "scholar_oropeza_b",
+      "label": "B. J. Oropeza"
+    },
+    {
+      "id": "scholar_oviedo_l",
+      "label": "Lluis Oviedo"
+    },
+    {
+      "id": "scholar_pawlak_m",
+      "label": "Matthew C. Pawlak"
+    },
+    {
+      "id": "scholar_perrone_l",
+      "label": "Lorenzo Perrone"
+    },
+    {
+      "id": "scholar_pironet_f",
+      "label": "Fabienne Pironet"
+    },
+    {
+      "id": "scholar_plantinga_a",
+      "label": "Alvin Plantinga"
+    },
+    {
+      "id": "scholar_pouderon_b",
+      "label": "Bernard Pouderon"
+    },
+    {
+      "id": "scholar_pr_aux_j",
+      "label": "Jean G. Préaux"
+    },
+    {
+      "id": "scholar_prigent_p",
+      "label": "Pierre Prigent"
+    },
+    {
+      "id": "scholar_rambaux_c",
+      "label": "Claude Rambaux"
+    },
+    {
+      "id": "scholar_ramelli_ilaria",
+      "label": "Ilaria Ramelli"
+    },
+    {
+      "id": "scholar_renard_m",
+      "label": "Maguelone Renard"
+    },
+    {
+      "id": "scholar_richardson_c",
+      "label": "Cyril C. Richardson"
+    },
+    {
+      "id": "scholar_rist_john",
+      "label": "John M. Rist"
+    },
+    {
+      "id": "scholar_rousseau_a",
+      "label": "Adelin Rousseau"
+    },
+    {
+      "id": "scholar_runia_d",
+      "label": "David T. Runia"
+    },
+    {
+      "id": "scholar_ryle_g",
+      "label": "Gilbert Ryle"
+    },
+    {
+      "id": "scholar_sagnard_f",
+      "label": "François Sagnard"
+    },
+    {
+      "id": "scholar_sapolsky_r",
+      "label": "Robert M. Sapolsky"
+    },
+    {
+      "id": "scholar_schiffman_l",
+      "label": "Lawrence H. Schiffman"
+    },
+    {
+      "id": "scholar_schneider_j",
+      "label": "Jean-Pierre Schneider"
+    },
+    {
+      "id": "scholar_schockenhoff_e",
+      "label": "Eberhard Schockenhoff"
+    },
+    {
+      "id": "scholar_schofield_malcolm",
+      "label": "Malcolm Schofield"
+    },
+    {
+      "id": "scholar_schr_ter_j",
+      "label": "Jens Schröter"
+    },
+    {
+      "id": "scholar_secord_j",
+      "label": "Jared Secord"
+    },
+    {
+      "id": "scholar_sharples_robert",
+      "label": "Robert W. Sharples"
+    },
+    {
+      "id": "scholar_skarsaune_o",
+      "label": "Oskar Skarsaune"
+    },
+    {
+      "id": "scholar_sommers_t",
+      "label": "Tamler Sommers"
+    },
+    {
+      "id": "scholar_steel_carlos",
+      "label": "Carlos Steel"
+    },
+    {
+      "id": "scholar_still_t",
+      "label": "Todd D. Still"
+    },
+    {
+      "id": "scholar_striker_gisela",
+      "label": "Gisela Striker"
+    },
+    {
+      "id": "scholar_stump_e",
+      "label": "Eleonore Stump"
+    },
+    {
+      "id": "scholar_sytsma_lee",
+      "label": "Lee W. Sytsma"
+    },
+    {
+      "id": "scholar_taormina_daniela",
+      "label": "Daniela Patrizia Taormina"
+    },
+    {
+      "id": "scholar_telfer_w",
+      "label": "W. Telfer"
+    },
+    {
+      "id": "scholar_tieleman_t",
+      "label": "Teun Tieleman"
+    },
+    {
+      "id": "scholar_timpe_k",
+      "label": "Kevin Timpe"
+    },
+    {
+      "id": "scholar_tolan_d",
+      "label": "Daniel Jonathan Tolan"
+    },
+    {
+      "id": "scholar_tomberlin_j",
+      "label": "James E. Tomberlin"
+    },
+    {
+      "id": "scholar_uster_d",
+      "label": "Danilo Šuster"
+    },
+    {
+      "id": "scholar_van_kooten_g",
+      "label": "George H. van Kooten"
+    },
+    {
+      "id": "scholar_vargas_m",
+      "label": "Manuel Vargas"
+    },
+    {
+      "id": "scholar_velardo_l",
+      "label": "Leandro Velardo"
+    },
+    {
+      "id": "scholar_vibe_k",
+      "label": "Klaus Vibe"
+    },
+    {
+      "id": "scholar_vicchio_s",
+      "label": "Stephen J. Vicchio"
+    },
+    {
+      "id": "scholar_vicens_l",
+      "label": "Leigh Vicens"
+    },
+    {
+      "id": "scholar_vimercati_emmanuele",
+      "label": "Emmanuele Vimercati"
+    },
+    {
+      "id": "scholar_wang_p",
+      "label": "Paul Chua Wang"
+    },
+    {
+      "id": "scholar_wells_k",
+      "label": "Kyle B. Wells"
+    },
+    {
+      "id": "scholar_werline_r",
+      "label": "Rodney Werline"
+    },
+    {
+      "id": "scholar_wetzel_james",
+      "label": "James Wetzel"
+    },
+    {
+      "id": "scholar_wildberg_christian",
+      "label": "Christian Wildberg"
+    },
+    {
+      "id": "scholar_williams_b",
+      "label": "Bernard Williams"
+    },
+    {
+      "id": "scholar_wolfson_h",
+      "label": "Harry Austryn Wolfson"
+    },
+    {
+      "id": "scholar_wolter_m",
+      "label": "Michael Wolter"
+    },
+    {
+      "id": "scholar_xie_s",
+      "label": "Simon Shengjian Xie"
+    },
+    {
+      "id": "scholar_young_s",
+      "label": "Stephen L. Young"
+    },
+    {
+      "id": "scholar_zetterholm_m",
+      "label": "Magnus Zetterholm"
+    }
+  ],
+  "paths": {
+    "carneades__to__boethius": {
+      "found": true,
+      "source": "person_carneades_214_129bce_l2m3n4o5",
+      "target": "person_boethius_480_524ce_w3x4y5z6",
+      "source_label": "Carneades of Cyrene",
+      "target_label": "Boethius (Anicius Manlius Severinus Boethius)",
+      "length": 3,
+      "graph": "augmented",
+      "node_chain": [
+        "person_carneades_214_129bce_l2m3n4o5",
+        "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+        "person_augustine_hippo_d430",
+        "person_boethius_480_524ce_w3x4y5z6"
+      ],
+      "hops": [
+        {
+          "from": "person_carneades_214_129bce_l2m3n4o5",
+          "from_label": "Carneades of Cyrene",
+          "to": "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+          "to_label": "Alexander of Aphrodisias",
+          "relation": "influences",
+          "tier": "influence",
+          "licence": {
+            "licence_type": "shared_argument",
+            "argument_id": "argument_frede_2011_alexander_libertarian_dead_end",
+            "passage_id": "passage_alex_fat_11",
+            "all_passages": [
+              "passage_alex_fat_11",
+              "passage_alex_fat_14",
+              "passage_alex_fat_15",
+              "passage_alex_fat_20"
+            ]
+          }
+        },
+        {
+          "from": "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+          "from_label": "Alexander of Aphrodisias",
+          "to": "person_augustine_hippo_d430",
+          "to_label": "Augustine of Hippo",
+          "relation": "shared_argument",
+          "tier": "argument",
+          "licence": {
+            "licence_type": "scholarly_reception",
+            "argument_id": "scholarly_argument_gill_later_ancient_reception_of_sto_3",
+            "passage_id": null
+          }
+        },
+        {
+          "from": "person_augustine_hippo_d430",
+          "from_label": "Augustine of Hippo",
+          "to": "person_boethius_480_524ce_w3x4y5z6",
+          "to_label": "Boethius (Anicius Manlius Severinus Boethius)",
+          "relation": "shared_argument",
+          "tier": "argument",
+          "licence": {
+            "licence_type": "scholarly_reception",
+            "argument_id": "scholarly_argument_brouwer_influence_on_late_antiquity_an_4",
+            "passage_id": null
+          }
+        }
+      ]
+    },
+    "carneades__to__origen": {
+      "found": true,
+      "source": "person_carneades_214_129bce_l2m3n4o5",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "source_label": "Carneades of Cyrene",
+      "target_label": "Origen of Alexandria",
+      "length": 1,
+      "graph": "influence",
+      "node_chain": [
+        "person_carneades_214_129bce_l2m3n4o5",
+        "person_origen_alexandria_185_254ce_s9t0u1v2"
+      ],
+      "hops": [
+        {
+          "from": "person_carneades_214_129bce_l2m3n4o5",
+          "from_label": "Carneades of Cyrene",
+          "to": "person_origen_alexandria_185_254ce_s9t0u1v2",
+          "to_label": "Origen of Alexandria",
+          "relation": "influences",
+          "tier": "influence",
+          "licence": {
+            "licence_type": "shared_argument",
+            "argument_id": "argument_cafma_carneades_m3n4o5p6",
+            "passage_id": "passage_cic_fat_23",
+            "all_passages": [
+              "passage_cic_fat_23",
+              "passage_cic_fat_24",
+              "passage_cic_fat_25",
+              "passage_eusebius_praep_ev_6_6_16",
+              "passage_eusebius_praep_ev_6_6_18",
+              "passage_eusebius_praep_ev_6_6_19",
+              "passage_eusebius_praep_ev_6_6_5",
+              "passage_eusebius_praep_ev_6_6_8"
+            ]
+          }
+        }
+      ]
+    },
+    "alexander_aphrodisias__to__origen": {
+      "found": true,
+      "source": "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "source_label": "Alexander of Aphrodisias",
+      "target_label": "Origen of Alexandria",
+      "length": 1,
+      "graph": "influence",
+      "node_chain": [
+        "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+        "person_origen_alexandria_185_254ce_s9t0u1v2"
+      ],
+      "hops": [
+        {
+          "from": "person_alexander_aphrodisias_fl200ce_n5o6p7q8",
+          "from_label": "Alexander of Aphrodisias",
+          "to": "person_origen_alexandria_185_254ce_s9t0u1v2",
+          "to_label": "Origen of Alexandria",
+          "relation": "influences",
+          "tier": "influence",
+          "licence": {
+            "licence_type": "scholarly_reception",
+            "argument_id": "scholarly_argument_gill_later_ancient_reception_of_sto_3",
+            "passage_id": null
+          }
+        }
+      ]
+    },
+    "chrysippus__to__augustine": {
+      "found": true,
+      "source": "person_chrysippus_280_206bce_i9j0k1l2",
+      "target": "person_augustine_hippo_d430",
+      "source_label": "Chrysippus of Soli",
+      "target_label": "Augustine of Hippo",
+      "length": 2,
+      "graph": "influence",
+      "node_chain": [
+        "person_chrysippus_280_206bce_i9j0k1l2",
+        "person_origen_alexandria_185_254ce_s9t0u1v2",
+        "person_augustine_hippo_d430"
+      ],
+      "hops": [
+        {
+          "from": "person_chrysippus_280_206bce_i9j0k1l2",
+          "from_label": "Chrysippus of Soli",
+          "to": "person_origen_alexandria_185_254ce_s9t0u1v2",
+          "to_label": "Origen of Alexandria",
+          "relation": "influences",
+          "tier": "influence",
+          "licence": {
+            "licence_type": "shared_argument",
+            "argument_id": "argument_cafma_carneades_m3n4o5p6",
+            "passage_id": "passage_cic_fat_23",
+            "all_passages": [
+              "passage_cic_fat_23",
+              "passage_cic_fat_24",
+              "passage_cic_fat_25",
+              "passage_eusebius_praep_ev_6_6_16",
+              "passage_eusebius_praep_ev_6_6_18",
+              "passage_eusebius_praep_ev_6_6_19",
+              "passage_eusebius_praep_ev_6_6_5",
+              "passage_eusebius_praep_ev_6_6_8"
+            ]
+          }
+        },
+        {
+          "from": "person_origen_alexandria_185_254ce_s9t0u1v2",
+          "from_label": "Origen of Alexandria",
+          "to": "person_augustine_hippo_d430",
+          "to_label": "Augustine of Hippo",
+          "relation": "influences",
+          "tier": "influence",
+          "licence": {
+            "licence_type": "scholarly_reception",
+            "argument_id": "argument_frede_2011_christianity_anti_gnostic_anti_astral_motivation",
+            "passage_id": null
+          }
+        }
+      ]
+    }
+  }
+}

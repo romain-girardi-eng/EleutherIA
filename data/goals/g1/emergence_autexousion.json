@@ -1,0 +1,242 @@
+{
+  "concept_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+  "canonical_label": "Autexousion (Αὐτεξούσιον) - Christian Free Will",
+  "merged_alias_ids": [
+    "concept_autexousion_alex",
+    "concept_autexousion_christian",
+    "concept_autexousion_methodian_doctrine_141258ec",
+    "concept_autexousion_pe_vi_6_eusebius",
+    "concept_eleutheron_kai_autexousion",
+    "concept_to_eph_hemin_basil"
+  ],
+  "relations_used": [
+    "advanced_in",
+    "defines",
+    "discusses",
+    "employs",
+    "evidenced_by",
+    "grounded_in"
+  ],
+  "total_attestations": 115,
+  "total_distinct_neighbors": 100,
+  "periods": [
+    {
+      "period": "Classical Greek",
+      "n_attestations": 1,
+      "n_passages": 0,
+      "n_nonpassage": 1,
+      "earliest_grounded_passage": null,
+      "all_passage_ids": [],
+      "nonpassage_neighbors": [
+        "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7"
+      ]
+    },
+    {
+      "period": "Hellenistic",
+      "n_attestations": 2,
+      "n_passages": 0,
+      "n_nonpassage": 2,
+      "earliest_grounded_passage": null,
+      "all_passage_ids": [],
+      "nonpassage_neighbors": [
+        "concept_conditional_fate_9a5c8b4d",
+        "synthesis_amand1945_posidonius_scientific_foundation_astrology"
+      ]
+    },
+    {
+      "period": "Roman Imperial",
+      "n_attestations": 24,
+      "n_passages": 12,
+      "n_nonpassage": 12,
+      "earliest_grounded_passage": {
+        "passage_id": "passage_epict_104",
+        "label": "Epictetus, Discourses I.1: Nothing Can Hinder or Harm Prohairesis",
+        "relation": "evidenced_by",
+        "estimated_year": null,
+        "year_source": "period_fallback",
+        "edge_meta": "{\"term\": \"autexousion\", \"confidence\": 0.9, \"discovery_method\": \"terminology_scan\"}"
+      },
+      "all_passage_ids": [
+        "passage_alex_fat_14",
+        "passage_alex_fat_18",
+        "passage_alex_fat_19",
+        "passage_alexander_de_fato_14",
+        "passage_epict_104",
+        "passage_epict_131",
+        "passage_epict_19",
+        "passage_meth_dla_70",
+        "passage_meth_dla_70",
+        "passage_meth_dla_71",
+        "passage_meth_dla_71",
+        "passage_meth_dla_72"
+      ],
+      "nonpassage_neighbors": [
+        "argument_justin_angel_fall",
+        "argument_justin_prophecy_freedom",
+        "argument_methodius_theodicy_autexousion",
+        "argument_praise_blame_alex",
+        "argument_virtue_acquisition_alex",
+        "sc379_athenagoras_legatio",
+        "sc470_aristides_apologia",
+        "synthesis_epict_thematic_index",
+        "work_de_fato_alexander_c200ce_o6p7q8r9",
+        "work_didaskalikos_alcinous_2nd_ce_q7r8s9t0",
+        "work_epictetus_discourses",
+        "work_methodius_de_libero_arbitrio"
+      ]
+    },
+    {
+      "period": "Late Antiquity",
+      "n_attestations": 3,
+      "n_passages": 2,
+      "n_nonpassage": 1,
+      "earliest_grounded_passage": {
+        "passage_id": "passage_plotinus_enn_4_4_30",
+        "label": "Plotinus, Enneades IV.4.30: Self-Determining Principle",
+        "relation": "evidenced_by",
+        "estimated_year": 204,
+        "year_source": "author:Plotinus",
+        "edge_meta": "{\"term\": \"autexousion\", \"confidence\": 0.9, \"discovery_method\": \"terminology_scan\"}"
+      },
+      "all_passage_ids": [
+        "passage_plotinus_enn_4_4_30",
+        "passage_plotinus_enn_4_4_30"
+      ],
+      "nonpassage_neighbors": [
+        "person_eusebius_caesarea_d339"
+      ]
+    },
+    {
+      "period": "Patristic",
+      "n_attestations": 51,
+      "n_passages": 38,
+      "n_nonpassage": 13,
+      "earliest_grounded_passage": {
+        "passage_id": "passage_justin_1apol_43",
+        "label": "Justin, 1 Apology 43: The Antifatalist Argument",
+        "relation": "discusses",
+        "estimated_year": 100,
+        "year_source": "author:Justin Martyr",
+        "edge_meta": "{}"
+      },
+      "all_passage_ids": [
+        "passage_aristide_sc470_1",
+        "passage_aristide_sc470_10",
+        "passage_aristide_sc470_5",
+        "passage_athenagoras_leg____379_________10________1___26",
+        "passage_athenagoras_leg____379_________24________1_2___75",
+        "passage_athenagoras_leg____379_________24________3_6___76",
+        "passage_athenagoras_leg____379_________25________1___77",
+        "passage_athenagoras_leg____379_________25________2_4___78",
+        "passage_athenagoras_leg____379_________26________1_2___79",
+        "passage_athenagoras_leg____379_________26________3_5___80",
+        "passage_athenagoras_leg____379_________7________1___17",
+        "passage_athenagoras_leg____379_________9________2___24",
+        "passage_athenagoras_leg____379_________9________3___25",
+        "passage_irenaeus_ah_4_37",
+        "passage_irenaeus_ah_4_37",
+        "passage_irenaeus_ah_4_37",
+        "passage_justin_1apol_43",
+        "passage_justin_1apol_44",
+        "passage_justin_dial_102",
+        "passage_justin_dial_102",
+        "passage_justin_dial_140_141",
+        "passage_justin_dial_140_141",
+        "passage_justin_dial_88",
+        "passage_justin_dial_88",
+        "passage_origen_de_orat_6",
+        "passage_origen_pa_3_1_1",
+        "passage_origen_pa_3_1_2",
+        "passage_origen_pa_3_1_24",
+        "passage_origen_pa_3_1_3",
+        "passage_origen_pa_3_1_3",
+        "passage_tatian_orat_11",
+        "passage_tatian_orat_11",
+        "passage_tatian_orat_7",
+        "passage_tatian_orat_7",
+        "passage_tatian_orat_7",
+        "passage_theophilus_autol_2_27",
+        "passage_theophilus_autol_2_27",
+        "passage_theophilus_autol_2_27"
+      ],
+      "nonpassage_neighbors": [
+        "argument_origen_anti_astrological",
+        "argument_origen_argos_logos",
+        "argument_origen_witness_freewill_dogma_status_amand1945",
+        "argument_origen_witness_possibilitas_utriusque_amand1945",
+        "concept_freiheitsmetaphysik_origenian",
+        "debate_christian_gnostic_freedom",
+        "person_basil_great_d379",
+        "person_methodius_olympus_d311",
+        "person_origen_alexandria_185_254ce_s9t0u1v2",
+        "work_de_principiis_origen_230s_v2w3x4y5",
+        "work_justin_dialogue_trypho",
+        "work_origen_exhortation_martyrdom",
+        "work_origen_philocalia"
+      ]
+    },
+    {
+      "period": "Medieval",
+      "n_attestations": 1,
+      "n_passages": 0,
+      "n_nonpassage": 1,
+      "earliest_grounded_passage": null,
+      "all_passage_ids": [],
+      "nonpassage_neighbors": [
+        "concept_liberum_arbitrium_u3v4w5x6"
+      ]
+    },
+    {
+      "period": "Modern",
+      "n_attestations": 17,
+      "n_passages": 0,
+      "n_nonpassage": 17,
+      "earliest_grounded_passage": null,
+      "all_passage_ids": [],
+      "nonpassage_neighbors": [
+        "argument_furst_2022_origen_culmination_autexousion",
+        "concept_selbstbestimmung_modern_furst",
+        "scholar_furst_alfons",
+        "scholarly_argument_barclay_2020_spirit_enables_not_overrides",
+        "scholarly_argument_blowers_adamic_fall_gnomic_failure",
+        "scholarly_argument_blowers_gnomic_surrender_freedom",
+        "scholarly_argument_boys_stones_2018_origen_platonists_no_better_than_stoics",
+        "scholarly_argument_sytsma_anti_determinism_idle_argument_deprinc_iii",
+        "scholarly_argument_sytsma_autexousion_not_a_faculty_of_will",
+        "scholarly_argument_sytsma_autexousion_technical_term",
+        "scholarly_argument_sytsma_critique_of_modern_critique",
+        "scholarly_argument_sytsma_god_manufactures_circumstances",
+        "scholarly_argument_sytsma_origen_adopts_stoic_impression_assent",
+        "scholarly_argument_sytsma_preselection_prearrangement_thesis",
+        "scholarly_argument_sytsma_two_requirements_moral_autonomy",
+        "synthesis_furst2022_origen_central_freedom"
+      ]
+    },
+    {
+      "period": "Contemporary",
+      "n_attestations": 16,
+      "n_passages": 0,
+      "n_nonpassage": 16,
+      "earliest_grounded_passage": null,
+      "all_passage_ids": [],
+      "nonpassage_neighbors": [
+        "scholarly_argument_bobzien_autexousion_as_philosophical_t_6",
+        "scholarly_argument_bobzien_middle_platonists_on_contingen_7",
+        "scholarly_argument_boulnois_free_will_and_the_origin_of_ev_0",
+        "scholarly_argument_currado_hippolytus_on_human_self_deter_4",
+        "scholarly_argument_f_rst_free_will_terminology_and_conc_0",
+        "scholarly_argument_f_rst_origen_s_libertarian_compatibi_4",
+        "scholarly_argument_frede_autexousion_terminology_4",
+        "scholarly_argument_frede_origen_s_differences_from_stoi_6",
+        "scholarly_argument_frede_origen_s_doctrine_of_free_will_5",
+        "scholarly_argument_hall_origen_on_free_will_and_autono_0",
+        "scholarly_argument_havrda_human_freedom_and_moral_respon_3",
+        "scholarly_argument_karamanolis_free_will_and_divine_providenc_0",
+        "scholarly_argument_minns_as_justin_s_term_for_free_will_2",
+        "scholarly_argument_pouderon_free_will_libre_arbitre_in_gre_0",
+        "scholarly_argument_telfer_development_of_autexousia_conc_2",
+        "synthesis_destree2014_ch20_steel_proclus_human_or_divine_freedom"
+      ]
+    }
+  ]
+}
