@@ -37,6 +37,7 @@ import {
   MessageSquare,
   Sparkles,
   Network,
+  Swords,
   GitPullRequest,
   UploadCloud,
   LogOut,
@@ -93,6 +94,7 @@ const GROUPS: MenuGroup[] = [
     Icon: Brain,
     items: [
       { to: '/graphrag', labelKey: 'nav.graphrag', Icon: MessageSquare },
+      { to: '/the-debate', labelKey: 'nav.theDebate', Icon: Swords },
       { to: '/research', labelKey: 'nav.research', Icon: Sparkles },
       { to: '/visualizer', labelKey: 'nav.visualizer', Icon: Network },
       { to: '/passages-canoniques', labelKey: 'nav.canonicalPassages', Icon: ScrollText },
