@@ -1285,7 +1285,7 @@
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_sen_prov_1_6_6", "passage_id": "0ff3a29a-c7a5-4727-aadb-7db911e2d77d"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_sen_prov_6_6", "passage_id": "0ff3a29a-c7a5-4727-aadb-7db911e2d77d"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_plato_phd_53d", "passage_id": "0ff502c0-50df-4c16-8f53-cea01e44304e"}
-{"citation_type": "discusses", "confidence": 0.95, "kg_node_id": "concept_autexousion_christian", "passage_id": "0ff5e641-dc4c-4a96-99ab-8cb70569448b"}
+{"citation_type": "discusses", "confidence": 0.95, "kg_node_id": "concept_autexousion_christian_freedom_u1v2w3x4", "passage_id": "0ff5e641-dc4c-4a96-99ab-8cb70569448b"}
 {"citation_type": "evidenced_by", "confidence": 0.8, "kg_node_id": "concept_hekousion_voluntary_aristotle_a1b2c3d4", "passage_id": "0ff5e641-dc4c-4a96-99ab-8cb70569448b"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_meth_dla_72", "passage_id": "0ff5e641-dc4c-4a96-99ab-8cb70569448b"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_meth_dla_72_s72", "passage_id": "0ff5e641-dc4c-4a96-99ab-8cb70569448b"}
@@ -10105,7 +10105,7 @@
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_boethius_cons_28_en", "passage_id": "848a1ad4-eec5-5de6-b56a-68b67d2ac979"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_plotinus_vi_9_628", "passage_id": "848b814f-3da8-4e6e-a681-769d263e2656"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_dl_lives_2_8_96", "passage_id": "8499f4dd-504a-478b-8e67-52e1a1e9e1e7"}
-{"citation_type": "discusses", "confidence": 0.9, "kg_node_id": "concept_autexousion_christian", "passage_id": "849e47af-eb95-4edd-8920-4ce47e0e8771"}
+{"citation_type": "discusses", "confidence": 0.9, "kg_node_id": "concept_autexousion_christian_freedom_u1v2w3x4", "passage_id": "849e47af-eb95-4edd-8920-4ce47e0e8771"}
 {"citation_type": "evidenced_by", "confidence": 0.9, "kg_node_id": "concept_autexousion_christian_freedom_u1v2w3x4", "passage_id": "849e47af-eb95-4edd-8920-4ce47e0e8771"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_meth_dla_71", "passage_id": "849e47af-eb95-4edd-8920-4ce47e0e8771"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_meth_dla_71_s71", "passage_id": "849e47af-eb95-4edd-8920-4ce47e0e8771"}
@@ -18772,7 +18772,7 @@
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "sc123_melito_peri_pascha_chap51", "passage_id": "f530bf6c-202c-55ea-9a4f-dbbcc00f9ee1"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_plotinus_vi_9_84", "passage_id": "f5332299-bcdb-4315-9068-67b7e703d874"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_plato_laws_4_717", "passage_id": "f534ce2d-dcaf-4a24-ba88-97e84ab1560a"}
-{"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_autexousion_christian", "passage_id": "f5357af8-2b56-48a4-abc2-8a2e86720416"}
+{"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_autexousion_christian_freedom_u1v2w3x4", "passage_id": "f5357af8-2b56-48a4-abc2-8a2e86720416"}
 {"citation_type": "evidenced_by", "confidence": 0.9, "kg_node_id": "concept_autexousion_christian_freedom_u1v2w3x4", "passage_id": "f5357af8-2b56-48a4-abc2-8a2e86720416"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_meth_dla_70", "passage_id": "f5357af8-2b56-48a4-abc2-8a2e86720416"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_meth_dla_70_s70", "passage_id": "f5357af8-2b56-48a4-abc2-8a2e86720416"}

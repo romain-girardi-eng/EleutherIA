@@ -1,0 +1,335 @@
+{
+  "concept_id": "concept_heimarmene_fate_stoics_j0k1l2m3",
+  "canonical_label": "Heimarmenê (Εἱμαρμένη) - Stoic Fate",
+  "merged_alias_ids": [],
+  "relations_used": [
+    "advanced_in",
+    "defines",
+    "discusses",
+    "employs",
+    "evidenced_by",
+    "grounded_in"
+  ],
+  "total_attestations": 176,
+  "total_distinct_neighbors": 163,
+  "periods": [
+    {
+      "period": "Presocratic",
+      "n_attestations": 1,
+      "n_passages": 0,
+      "n_nonpassage": 1,
+      "earliest_grounded_passage": null,
+      "all_passage_ids": [],
+      "nonpassage_neighbors": [
+        "synthesis_amand1945_anaxagoras_first_to_deny_heimarmene"
+      ]
+    },
+    {
+      "period": "Classical Greek",
+      "n_attestations": 3,
+      "n_passages": 0,
+      "n_nonpassage": 3,
+      "earliest_grounded_passage": null,
+      "all_passage_ids": [],
+      "nonpassage_neighbors": [
+        "synthesis_amand1945_aristotle_most_complete_pre_carneadean_anti_fatalist",
+        "synthesis_amand1945_gorgias_first_moral_refutation",
+        "synthesis_amand1945_intro_plato_aristotle_partial_determinism"
+      ]
+    },
+    {
+      "period": "Hellenistic",
+      "n_attestations": 6,
+      "n_passages": 0,
+      "n_nonpassage": 6,
+      "earliest_grounded_passage": null,
+      "all_passage_ids": [],
+      "nonpassage_neighbors": [
+        "debate_lazy_argument",
+        "debate_stoic_academic_hellenistic",
+        "evolution_heimarmene_2b989ed0",
+        "person_chrysippus_280_206bce_i9j0k1l2",
+        "person_zeno_citium_334_262bce",
+        "synthesis_bobzien2001_ch1_determinism_and_fate"
+      ]
+    },
+    {
+      "period": "Roman Republican",
+      "n_attestations": 20,
+      "n_passages": 19,
+      "n_nonpassage": 1,
+      "earliest_grounded_passage": {
+        "passage_id": "passage_cic_fat_1",
+        "label": "Marcus Tullius Cicero, De Fato, Fat. 1",
+        "relation": "evidenced_by",
+        "estimated_year": -106,
+        "year_source": "author:Marcus Tullius Cicero",
+        "edge_meta": "{\"term\": \"heimarmene\", \"confidence\": 0.85, \"discovery_method\": \"terminology_scan\"}"
+      },
+      "all_passage_ids": [
+        "passage_cic_fat_1",
+        "passage_cic_fat_1",
+        "passage_cic_fat_11",
+        "passage_cic_fat_11",
+        "passage_cic_fat_20",
+        "passage_cic_fat_26",
+        "passage_cic_fat_26",
+        "passage_cic_fat_27",
+        "passage_cic_fat_28",
+        "passage_cic_fat_29",
+        "passage_cic_fat_30",
+        "passage_cic_fat_39",
+        "passage_cic_fat_39",
+        "passage_cic_fat_41",
+        "passage_cic_fat_44",
+        "passage_cic_fat_45",
+        "passage_cic_fat_45",
+        "passage_cic_fat_48",
+        "passage_cic_fat_6"
+      ],
+      "nonpassage_neighbors": [
+        "work_de_fato_cicero_44bce_b9c4e5d2"
+      ]
+    },
+    {
+      "period": "Roman Imperial",
+      "n_attestations": 79,
+      "n_passages": 68,
+      "n_nonpassage": 11,
+      "earliest_grounded_passage": {
+        "passage_id": "passage_plut_fat_1",
+        "label": "Plutarch, De fato 1: Two Senses of Fate",
+        "relation": "evidenced_by",
+        "estimated_year": 2,
+        "year_source": "author:Plutarch",
+        "edge_meta": "{\"term\": \"heimarmene\", \"confidence\": 0.85, \"discovery_method\": \"terminology_scan\"}"
+      },
+      "all_passage_ids": [
+        "passage_alex_fat_1",
+        "passage_alex_fat_10",
+        "passage_alex_fat_11",
+        "passage_alex_fat_12",
+        "passage_alex_fat_13",
+        "passage_alex_fat_14",
+        "passage_alex_fat_15",
+        "passage_alex_fat_16",
+        "passage_alex_fat_17",
+        "passage_alex_fat_18",
+        "passage_alex_fat_19",
+        "passage_alex_fat_2",
+        "passage_alex_fat_20",
+        "passage_alex_fat_21",
+        "passage_alex_fat_22",
+        "passage_alex_fat_23",
+        "passage_alex_fat_24",
+        "passage_alex_fat_25",
+        "passage_alex_fat_26",
+        "passage_alex_fat_27",
+        "passage_alex_fat_28",
+        "passage_alex_fat_29",
+        "passage_alex_fat_3",
+        "passage_alex_fat_30",
+        "passage_alex_fat_31",
+        "passage_alex_fat_32",
+        "passage_alex_fat_33",
+        "passage_alex_fat_34",
+        "passage_alex_fat_35",
+        "passage_alex_fat_36",
+        "passage_alex_fat_37",
+        "passage_alex_fat_38",
+        "passage_alex_fat_39",
+        "passage_alex_fat_4",
+        "passage_alex_fat_5",
+        "passage_alex_fat_6",
+        "passage_alex_fat_7",
+        "passage_alex_fat_8",
+        "passage_alex_fat_9",
+        "passage_alexander_de_fato_14",
+        "passage_epict_175",
+        "passage_ma_med_12_14",
+        "passage_ma_med_12_14",
+        "passage_ma_med_2_2",
+        "passage_ma_med_2_2",
+        "passage_ma_med_3_6",
+        "passage_ma_med_3_6",
+        "passage_ma_med_5_24",
+        "passage_ma_med_5_24",
+        "passage_ma_med_5_8",
+        "passage_ma_med_5_8",
+        "passage_plut_fat_1",
+        "passage_plut_fat_14",
+        "passage_plut_fat_15",
+        "passage_plut_fat_17",
+        "passage_plut_fat_18",
+        "passage_plut_fat_19",
+        "passage_plut_fat_2",
+        "passage_plut_fat_4",
+        "passage_plut_fat_5",
+        "passage_plut_fat_6",
+        "passage_plut_fat_7",
+        "passage_sen_prov_5_7",
+        "passage_sen_prov_5_7",
+        "passage_sen_prov_5_8",
+        "passage_sen_prov_5_8",
+        "passage_sen_prov_5_9",
+        "passage_sen_prov_5_9"
+      ],
+      "nonpassage_neighbors": [
+        "concept_ancient_free_will_debate_structure_z6a7b8c9",
+        "person_aulus_gellius_125_180ce",
+        "person_diogenes_laertius_3c_ce",
+        "person_epictetus_of_hierapolis_3c385bc2",
+        "synthesis_amand1945_intro_astrologers_pragmatic_responses",
+        "synthesis_amand1945_intro_stoic_joyful_resignation",
+        "synthesis_amand1945_lucian_epicurean_2c_revival",
+        "work_de_fato_alexander_c200ce_o6p7q8r9",
+        "work_de_providentia_seneca_a2b3c4d5",
+        "work_marcus_aurelius_meditations",
+        "work_plutarch_de_fato_complete"
+      ]
+    },
+    {
+      "period": "Late Antiquity",
+      "n_attestations": 12,
+      "n_passages": 7,
+      "n_nonpassage": 5,
+      "earliest_grounded_passage": {
+        "passage_id": "passage_aug_civ_5_9_3",
+        "label": "Augustine, De Civitate Dei V.9.3: God Knows All AND We Act by Will",
+        "relation": "evidenced_by",
+        "estimated_year": 354,
+        "year_source": "author:Augustine",
+        "edge_meta": "{\"term\": \"heimarmene\", \"confidence\": 0.85, \"discovery_method\": \"terminology_scan\"}"
+      },
+      "all_passage_ids": [
+        "passage_aug_civ_5_9_3",
+        "passage_boethius_cons_104",
+        "passage_boethius_cons_6",
+        "passage_boethius_cons_7",
+        "passage_boethius_cons_93",
+        "passage_boethius_cons_96",
+        "passage_boethius_cons_97"
+      ],
+      "nonpassage_neighbors": [
+        "synthesis_amand1945_basil_hex_vi_7_amand_origin_point",
+        "synthesis_amand1945_basil_origen_christian_insertion",
+        "synthesis_amand1945_diodore_tarsus_largest_antifatalist_treatise",
+        "synthesis_amand1945_diodore_tarsus_two_carneadean_echoes",
+        "work_consolatio_philosophiae_boethius_524ce_f1g2h3i4"
+      ]
+    },
+    {
+      "period": "Patristic",
+      "n_attestations": 8,
+      "n_passages": 5,
+      "n_nonpassage": 3,
+      "earliest_grounded_passage": {
+        "passage_id": "passage_justin_1apol_43",
+        "label": "Justin, 1 Apology 43: The Antifatalist Argument",
+        "relation": "evidenced_by",
+        "estimated_year": 100,
+        "year_source": "author:Justin Martyr",
+        "edge_meta": "{\"notes\": \"Justin argues against heimarmene - if fate rules, eph hemin is abolished\", \"confidence\": 1.0, \"citation_type\": \"refutation\"}"
+      },
+      "all_passage_ids": [
+        "passage_justin_1apol_43",
+        "passage_justin_1apol_44",
+        "passage_tatian_orat_11",
+        "passage_tatian_orat_7",
+        "passage_tatian_orat_8_9"
+      ],
+      "nonpassage_neighbors": [
+        "argument_bardesanes_triple_delimitation_physis_heimarmene_autexousion",
+        "synthesis_amand1945_intro_christian_baptismal_liberation",
+        "work_tatian_oratio"
+      ]
+    },
+    {
+      "period": "Modern",
+      "n_attestations": 8,
+      "n_passages": 0,
+      "n_nonpassage": 8,
+      "earliest_grounded_passage": null,
+      "all_passage_ids": [],
+      "nonpassage_neighbors": [
+        "scholarly_argument_boys_stones_2018_cyclical_recurrence_no_astral_determinism",
+        "scholarly_argument_boys_stones_2018_no_divine_determination_individuals",
+        "scholarly_argument_klawans_2012_defend_reliability_against_hellenizing_dismissal",
+        "scholarly_argument_klawans_2012_essene_determinism_matches_qumran",
+        "scholarly_argument_klawans_2012_fate_vs_providence_distinction",
+        "scholarly_argument_klawans_2012_josephus_fate_typology_of_schools",
+        "scholarly_argument_klawans_2012_josephus_own_compatibilism_providence_always_fate_at_times",
+        "scholarly_argument_sytsma_anti_determinism_idle_argument_deprinc_iii"
+      ]
+    },
+    {
+      "period": "Contemporary",
+      "n_attestations": 21,
+      "n_passages": 0,
+      "n_nonpassage": 21,
+      "earliest_grounded_passage": null,
+      "all_passage_ids": [],
+      "nonpassage_neighbors": [
+        "scholarly_argument_amand_de_mendieta_astrology_and_fatalism_in_anti_1",
+        "scholarly_argument_andresen_heimarmene_fate_and_free_will_1",
+        "scholarly_argument_andresen_methodological_distinction_met_4",
+        "scholarly_argument_andresen_moral_responsibility_and_prais_2",
+        "scholarly_argument_boys_stones_justin_martyr_as_middle_platon_7",
+        "scholarly_argument_denzey_lewis_astral_determinism_in_gospel_o_2",
+        "scholarly_argument_denzey_lewis_heimarmene_fate_in_nag_hammadi_1",
+        "scholarly_argument_denzey_lewis_middle_platonism_heimarmene_an_4",
+        "scholarly_argument_denzey_lewis_savior_god_interventions_as_li_5",
+        "scholarly_argument_dodson_stoic_fate_and_christian_provi_2",
+        "scholarly_argument_eliasson_plotinus_s_theory_of_fate_heim_0",
+        "scholarly_argument_graeser_plotinus_critique_of_stoic_com_1",
+        "scholarly_argument_koch_aristotle_s_alleged_doctrine_o_3",
+        "scholarly_argument_martin_josephus_use_of_heimarmene_to__0",
+        "scholarly_argument_martin_reliability_of_josephus_charac_1",
+        "scholarly_argument_martin_stoic_influence_on_josephus_co_3",
+        "scholarly_argument_moore_josephus_s_philosophical_frami_3",
+        "scholarly_argument_pouderon_determinism_and_fate_heimarmen_1",
+        "scholarly_argument_schneider_heimarmene_fate_and_providence_2",
+        "scholarly_argument_velardo_josephus_s_use_of_heimarmene_0",
+        "synthesis_destree2014_ch18_bonazzi_middle_platonist_hypothetical_fate"
+      ]
+    },
+    {
+      "period": "Cross-period",
+      "n_attestations": 1,
+      "n_passages": 0,
+      "n_nonpassage": 1,
+      "earliest_grounded_passage": null,
+      "all_passage_ids": [],
+      "nonpassage_neighbors": [
+        "synthesis_amand1945_intro_presocratics_create_heimarmene_concept"
+      ]
+    },
+    {
+      "period": "Unknown",
+      "n_attestations": 17,
+      "n_passages": 0,
+      "n_nonpassage": 17,
+      "earliest_grounded_passage": null,
+      "all_passage_ids": [],
+      "nonpassage_neighbors": [
+        "synthesis_amand1945_alexander_de_fato_triple_composition",
+        "synthesis_amand1945_alexander_defends_contingency",
+        "synthesis_amand1945_alexander_no_astrological_targeting",
+        "synthesis_amand1945_antiastrological_polemic_stagnation_post_carneades",
+        "synthesis_amand1945_carneadean_dual_polemic_distinction",
+        "synthesis_amand1945_ch3_moral_argument_scheme_announcement",
+        "synthesis_amand1945_epilogue_astrology_history",
+        "synthesis_amand1945_epilogue_historical",
+        "synthesis_amand1945_epilogue_literary",
+        "synthesis_amand1945_epilogue_philosophical",
+        "synthesis_amand1945_maximus_tyre_mantike_freedom_reconciliation",
+        "synthesis_amand1945_philo_attitude_astrology_signs_not_causes",
+        "synthesis_amand1945_philo_de_providentia_carneadean_strata",
+        "synthesis_amand1945_pre_carneadean_lineage_to_carneades",
+        "synthesis_amand1945_pseudo_plutarch_albinus_parallel",
+        "synthesis_amand1945_pseudo_plutarch_de_fato_conditional_heimarmene",
+        "synthesis_amand1945_transmission_carneades_to_philo_chain"
+      ]
+    }
+  ]
+}
