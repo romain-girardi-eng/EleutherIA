@@ -1,0 +1,222 @@
+diff --git a/frontend/src/pages/GraphRAGPage/index.tsx b/frontend/src/pages/GraphRAGPage/index.tsx
+index b3b03751..aebb7e11 100644
+--- a/frontend/src/pages/GraphRAGPage/index.tsx
++++ b/frontend/src/pages/GraphRAGPage/index.tsx
+@@ -556,6 +556,18 @@ export default function GraphRAGPage() {
+                   break;
+                 }
+ 
++                case 'citations_preview':
++                  // Early structured-citation frame emitted by the agent right
++                  // after ProgrammaticVerify, BEFORE the long verifier-v2 audit
++                  // (which can push the terminal `complete` past Cloudflare's
++                  // ~100s cut). Adopt it as the working `finalResponse` so the
++                  // UI has clickable citations even if the connection drops
++                  // before the authoritative `complete` arrives. The real
++                  // `complete` (audited) supersedes it on arrival.
++                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
++                  finalResponse = (data.data as any) as GraphRAGResponse;
++                  break;
++
+                 case 'complete':
+                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                   finalResponse = (data.data as any) as GraphRAGResponse;
+diff --git a/frontend/src/types/index.ts b/frontend/src/types/index.ts
+index 2a70b5d8..f86ef70d 100644
+--- a/frontend/src/types/index.ts
++++ b/frontend/src/types/index.ts
+@@ -400,6 +400,7 @@ export interface GraphRAGStreamEvent {
+     | 'thinking_chunk'
+     | 'thinking_complete'
+     | 'answer_chunk'
++    | 'citations_preview'
+     | 'complete'
+     | 'error'
+     | 'agent_thinking'
+diff --git a/graphrag/src/eleutheria_graphrag/agents/scholarly_agent.py b/graphrag/src/eleutheria_graphrag/agents/scholarly_agent.py
+index 9f9281e1..0c19afce 100644
+--- a/graphrag/src/eleutheria_graphrag/agents/scholarly_agent.py
++++ b/graphrag/src/eleutheria_graphrag/agents/scholarly_agent.py
+@@ -1342,6 +1342,22 @@ class ScholarlyAgent:
+         if _text_verifier_enabled():
+             answer = await self._verify_ancient_text(answer, state)
+ 
++        # Phase 4.5: Early structured-citation preview. The `citations` array
++        # is fully populated by ProgrammaticVerify (+ injection) at this point,
++        # BEFORE the adversarial verifier-v2 audit (Phase 5), which can run
++        # 10-60 s of extra LLM work. Cloudflare severs the SSE connection after
++        # ~100 s of *silence*, and on slow doctoral queries the terminal
++        # `complete` event — historically the ONLY frame carrying structured
++        # citations — never arrived before the cut, so the UI showed prose with
++        # zero clickable citations. We emit them here as a `citations_preview`
++        # frame so the client has verified, structured citations even if the
++        # audit or connection is later cut. The frame is unaudited (verifier_v2
++        # verdicts arrive afterwards as `citation_verified` events and the final
++        # `complete` payload supersedes this preview).
++        yield self._build_complete_event(
++            answer, event_type="citations_preview"
++        )
++
+         # Phase 5: Adversarial citation audit (v2) post-render. Emits one
+         # ``citation_verified`` SSE event per audited claim and merges the
+         # verdicts into the answer before the authoritative `complete` event.
+@@ -1620,6 +1636,18 @@ class ScholarlyAgent:
+                     if buffer:
+                         yield buffer
+ 
++        yield self._build_complete_event(answer, event_type="complete")
++
++    def _build_complete_event(
++        self, answer: ScholarlyAnswer, *, event_type: str = "complete"
++    ) -> str:
++        """Serialize a ScholarlyAnswer into a `complete`-shaped SSE frame.
++
++        Shared by `_chunk_answer` (terminal `complete` event) and the early
++        `citations_preview` frame emitted before the verifier-v2 audit so both
++        carry an identical structured-citation payload (no schema drift). The
++        route transforms either frame into the frontend GraphRAGResponse shape.
++        """
+         complete_data = {
+             "answer": answer.answer,
+             "question": answer.question,
+@@ -1644,4 +1672,4 @@ class ScholarlyAgent:
+                 "claim_ledger_size": len(answer.claim_ledger),
+             },
+         }
+-        yield json.dumps({"type": "complete", "data": complete_data}, default=str)
++        return json.dumps({"type": event_type, "data": complete_data}, default=str)
+diff --git a/graphrag/src/eleutheria_graphrag/api/routes.py b/graphrag/src/eleutheria_graphrag/api/routes.py
+index fc9d4e07..71a935fa 100644
+--- a/graphrag/src/eleutheria_graphrag/api/routes.py
++++ b/graphrag/src/eleutheria_graphrag/api/routes.py
+@@ -386,9 +386,22 @@ async def query_stream(
+                             yield f"data: {chunk}\n\n"
+                             continue
+ 
+-                        if event_type == "complete":
++                        if event_type in ("complete", "citations_preview"):
+                             # Transform agent data to match the frontend
+                             # GraphRAGResponse shape (same as /answer).
++                            #
++                            # `citations_preview` is an EARLY frame the agent
++                            # emits right after ProgrammaticVerify populates the
++                            # structured citations, BEFORE the long verifier-v2
++                            # audit. It has the identical `data` shape as the
++                            # terminal `complete`, so it runs through the same
++                            # transform — but it does NOT terminate the stream,
++                            # is NOT persisted to the answer cache, and does NOT
++                            # finalize the trace. Its sole purpose is to deliver
++                            # structured, clickable citations to the UI even if
++                            # the audit or the Cloudflare connection is cut
++                            # before the authoritative `complete` arrives.
++                            is_preview = event_type == "citations_preview"
+                             raw = parsed.get("data") or {}
+                             raw_citations = raw.get("citations", [])
+                             ancient = [
+@@ -473,7 +486,11 @@ async def query_stream(
+                                 # Surface trace_id so the FE can deep-link to
+                                 # the audit / export endpoints.
+                                 merged_metadata["trace_id"] = trace_id
+-                                yield f"data: {json.dumps({'type': 'cost_summary', 'data': cost_payload})}\n\n"
++                                # Cost rollup belongs to the authoritative
++                                # `complete`; don't double-emit it on the early
++                                # preview (verifier-v2 costs are not yet in).
++                                if not is_preview:
++                                    yield f"data: {json.dumps({'type': 'cost_summary', 'data': cost_payload})}\n\n"
+                             reasoning_path_payload: dict[str, Any] = {
+                                 "starting_nodes": starting,
+                                 "expanded_nodes": expanded[:20],
+@@ -482,7 +499,7 @@ async def query_stream(
+                                 "total_edges": 0,
+                             }
+                             complete_payload = {
+-                                "type": "complete",
++                                "type": event_type,
+                                 "data": {
+                                     "query": raw.get("question", question),
+                                     "answer": final_answer,
+@@ -507,6 +524,14 @@ async def query_stream(
+                                 },
+                             }
+                             yield f"data: {json.dumps(complete_payload, default=str)}\n\n"
++
++                            # The preview is non-terminal: deliver structured
++                            # citations now, but let the pipeline finish so the
++                            # authoritative `complete` (audited + cost-rolled)
++                            # supersedes it. No cache write, no trace finalize.
++                            if is_preview:
++                                continue
++
+                             complete_sent = True
+ 
+                             # Persist this answer for future cache hits. Skip
+diff --git a/graphrag/tests/unit/test_streaming_render.py b/graphrag/tests/unit/test_streaming_render.py
+index bc2e770c..dcbaa6aa 100644
+--- a/graphrag/tests/unit/test_streaming_render.py
++++ b/graphrag/tests/unit/test_streaming_render.py
+@@ -163,3 +163,65 @@ async def test_complete_event_carries_claim_ledger() -> None:
+     )
+     assert ledger[0]["evidence_ids"] == ["P1"]
+     assert complete["data"]["metadata"]["claim_ledger_size"] == 1
++
++
++def _answer_with_citations(n: int) -> "ScholarlyAnswer":
++    from eleutheria_graphrag.agents.state import Citation, ScholarlyAnswer
++
++    return ScholarlyAnswer(
++        answer=(
++            "The Stoics held that fate (heimarmenē) governs all things "
++            + " ".join(f"[P{i + 1}]" for i in range(n))
++        ),
++        question="What did the Stoics believe about fate?",
++        citations=[
++            Citation(
++                ref=f"P{i + 1}",
++                type="passage",
++                id=f"passage-uuid-{i + 1}",
++                label=f"Chrysippus, On Fate {i + 1}",
++                verified=True,
++            )
++            for i in range(n)
++        ],
++    )
++
++
++@pytest.mark.asyncio
++async def test_citations_preview_event_carries_structured_citations() -> None:
++    """Smoke contract: the early ``citations_preview`` frame (emitted by the
++    agent right after ProgrammaticVerify, BEFORE the long verifier-v2 audit)
++    carries the SAME structured-citation payload as the terminal ``complete``.
++
++    This is the transport fix for the divergence diagnosed in
++    ``data/goals/g3/diagnosis.md``: structured citations used to ride ONLY on
++    the terminal ``complete`` event, which is gated behind the audit and never
++    arrived before Cloudflare's ~100s idle cut on slow queries — so the public
++    path returned prose with zero clickable citations. The preview guarantees
++    >=N structured citations reach the client even if the audit/connection is
++    later cut.
++    """
++    MIN_CITATIONS = 3
++    llm = _FakeLLM(["unused"])
++    agent = _agent_with(llm)
++    answer = _answer_with_citations(MIN_CITATIONS)
++
++    preview = json.loads(
++        agent._build_complete_event(answer, event_type="citations_preview")
++    )
++    complete = json.loads(agent._build_complete_event(answer, event_type="complete"))
++
++    # The preview is a distinct, non-terminal frame...
++    assert preview["type"] == "citations_preview"
++    assert complete["type"] == "complete"
++    # ...but carries an identical structured-citation payload (no schema drift).
++    assert preview["data"]["citations"] == complete["data"]["citations"]
++
++    cites = preview["data"]["citations"]
++    assert len(cites) >= MIN_CITATIONS
++    # Each citation is a structured, clickable tuple — not a bare label string.
++    for c in cites:
++        assert c["ref"]
++        assert c["type"] == "passage"
++        assert c["id"]
++        assert c["label"]

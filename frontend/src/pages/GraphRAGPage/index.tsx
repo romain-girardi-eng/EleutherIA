@@ -556,6 +556,18 @@ export default function GraphRAGPage() {
                   break;
                 }
 
+                case 'citations_preview':
+                  // Early structured-citation frame emitted by the agent right
+                  // after ProgrammaticVerify, BEFORE the long verifier-v2 audit
+                  // (which can push the terminal `complete` past Cloudflare's
+                  // ~100s cut). Adopt it as the working `finalResponse` so the
+                  // UI has clickable citations even if the connection drops
+                  // before the authoritative `complete` arrives. The real
+                  // `complete` (audited) supersedes it on arrival.
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  finalResponse = (data.data as any) as GraphRAGResponse;
+                  break;
+
                 case 'complete':
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   finalResponse = (data.data as any) as GraphRAGResponse;

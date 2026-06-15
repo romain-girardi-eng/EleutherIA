@@ -386,9 +386,22 @@ async def query_stream(
                             yield f"data: {chunk}\n\n"
                             continue
 
-                        if event_type == "complete":
+                        if event_type in ("complete", "citations_preview"):
                             # Transform agent data to match the frontend
                             # GraphRAGResponse shape (same as /answer).
+                            #
+                            # `citations_preview` is an EARLY frame the agent
+                            # emits right after ProgrammaticVerify populates the
+                            # structured citations, BEFORE the long verifier-v2
+                            # audit. It has the identical `data` shape as the
+                            # terminal `complete`, so it runs through the same
+                            # transform — but it does NOT terminate the stream,
+                            # is NOT persisted to the answer cache, and does NOT
+                            # finalize the trace. Its sole purpose is to deliver
+                            # structured, clickable citations to the UI even if
+                            # the audit or the Cloudflare connection is cut
+                            # before the authoritative `complete` arrives.
+                            is_preview = event_type == "citations_preview"
                             raw = parsed.get("data") or {}
                             raw_citations = raw.get("citations", [])
                             ancient = [
@@ -473,7 +486,11 @@ async def query_stream(
                                 # Surface trace_id so the FE can deep-link to
                                 # the audit / export endpoints.
                                 merged_metadata["trace_id"] = trace_id
-                                yield f"data: {json.dumps({'type': 'cost_summary', 'data': cost_payload})}\n\n"
+                                # Cost rollup belongs to the authoritative
+                                # `complete`; don't double-emit it on the early
+                                # preview (verifier-v2 costs are not yet in).
+                                if not is_preview:
+                                    yield f"data: {json.dumps({'type': 'cost_summary', 'data': cost_payload})}\n\n"
                             reasoning_path_payload: dict[str, Any] = {
                                 "starting_nodes": starting,
                                 "expanded_nodes": expanded[:20],
@@ -482,7 +499,7 @@ async def query_stream(
                                 "total_edges": 0,
                             }
                             complete_payload = {
-                                "type": "complete",
+                                "type": event_type,
                                 "data": {
                                     "query": raw.get("question", question),
                                     "answer": final_answer,
@@ -507,6 +524,14 @@ async def query_stream(
                                 },
                             }
                             yield f"data: {json.dumps(complete_payload, default=str)}\n\n"
+
+                            # The preview is non-terminal: deliver structured
+                            # citations now, but let the pipeline finish so the
+                            # authoritative `complete` (audited + cost-rolled)
+                            # supersedes it. No cache write, no trace finalize.
+                            if is_preview:
+                                continue
+
                             complete_sent = True
 
                             # Persist this answer for future cache hits. Skip
