@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { useTranslation } from 'react-i18next';
 import { Zap, BookOpen, ChevronDown, ChevronUp, Clock, Cpu, FileText, ExternalLink, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { CitationRenderer, SourcesPanel } from '../../components/CitationRenderer';
+import { CitationGenerator } from '../../components/CitationGenerator';
 import type { GraphRAGChatMessage } from '../../types';
 
 interface MessageBubbleProps {
@@ -21,6 +22,24 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
   const [showSources, setShowSources] = useState(false);
   const [showPassages, setShowPassages] = useState(false);
   const [expandedPassage, setExpandedPassage] = useState<number | null>(null);
+  const [showCitationPanel, setShowCitationPanel] = useState(false);
+
+  const allCitations = useMemo(() => {
+    if (!message.citations) return [];
+    const ancient = (message.citations.ancient_sources ?? []).map((s, i) => ({
+      id: `ancient_${i}`,
+      text: s,
+      source: s,
+      citation: s,
+    }));
+    const modern = (message.citations.modern_scholarship ?? []).map((s, i) => ({
+      id: `modern_${i}`,
+      text: s,
+      source: s,
+      citation: s,
+    }));
+    return [...ancient, ...modern];
+  }, [message.citations]);
 
   const resp = message.graphrag_response;
   const verifiedPassages = resp?.verified_passages;
@@ -366,6 +385,33 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                           }}
                           className="!border-t-0 !pt-0 !mt-2"
                         />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
+
+              {/* Export bibliography (CitationGenerator) */}
+              {allCitations.length > 0 && (
+                <div className="border-t border-amber-200/40 pt-3">
+                  <button
+                    onClick={() => setShowCitationPanel((p) => !p)}
+                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
+                  >
+                    <FileText className="w-4 h-4" />
+                    <span>{t('graphRagUi.messageBubble.exportBibliography', { count: allCitations.length, defaultValue: 'Export bibliography ({{count}} citations)' })}</span>
+                    {showCitationPanel ? <ChevronUp className="w-4 h-4 ml-auto" /> : <ChevronDown className="w-4 h-4 ml-auto" />}
+                  </button>
+                  <AnimatePresence>
+                    {showCitationPanel && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden mt-3"
+                      >
+                        <CitationGenerator citations={allCitations} />
                       </motion.div>
                     )}
                   </AnimatePresence>

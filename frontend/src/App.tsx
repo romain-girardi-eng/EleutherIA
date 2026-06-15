@@ -71,6 +71,11 @@ const ContributionDetailPage = lazy(() => import('./pages/ContributionDetailPage
 // HomePage - Main landing page with educational content and features overview
 const HomePage = lazy(() => import('./pages/HomePage'));
 
+// The Debate - scrollytelling narrative of the ancient free-will debate
+const TheDebatePage = lazy(() => import('./pages/TheDebatePage'));
+// Debate Map - argument map for a single concept (timeline + argument mapper)
+const DebateMapPage = lazy(() => import('./pages/DebateMapPage'));
+
 // Glossary + FAQ - grounded scholarly reference pages (GEO/SEO content)
 const GlossaryPage = lazy(() => import('./pages/GlossaryPage'));
 const FAQPage = lazy(() => import('./pages/FAQPage'));
@@ -93,6 +98,7 @@ function getPageTitle(pathname: string, t: TFunction): string {
     '/glossary': t('nav.glossary'),
     '/faq': t('nav.faq'),
     '/how-it-works': t('appShell.pageTitles.howItWorks'),
+    '/the-debate': t('nav.theDebate'),
     '/credits': t('appShell.pageTitles.credits'),
     '/login': t('appShell.pageTitles.login'),
     '/report-error': t('appShell.pageTitles.reportError'),
@@ -303,7 +309,7 @@ function AppContent() {
   }, [isHomePage]);
 
   // Dark-themed pages where the glow should be hidden
-  const isDarkPage = isHomePage || location.pathname === '/how-it-works' || ['/visualizer', '/graph'].some(path =>
+  const isDarkPage = isHomePage || location.pathname === '/how-it-works' || location.pathname === '/the-debate' || ['/visualizer', '/graph'].some(path =>
     location.pathname === path || location.pathname.startsWith(`${path}/`)
   );
 
@@ -435,6 +441,8 @@ function AppContent() {
               <Routes>
               <Route path="/" element={<Suspense fallback={<PageLoadingFallback />}><HomePage /></Suspense>} />
               <Route path="/how-it-works" element={<Suspense fallback={<PageLoadingFallback />}><HowItWorksPage /></Suspense>} />
+              <Route path="/the-debate" element={<TheDebatePage />} />
+              <Route path="/debate/:conceptId" element={<DebateMapPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/database" element={<DatabasePage />} />
               <Route path="/visualizer" element={<CosmographPage />} />
@@ -445,8 +453,8 @@ function AppContent() {
               <Route path="/graphrag-showcase" element={<GraphRAGShowcase />} />
               <Route path="/research" element={<ResearchPage />} />
               <Route path="/texts" element={<AncientWorksListingPage />} />
-              <Route path="/texts/:textId/book" element={<BookReaderPage />} />
-              <Route path="/texts/:textId" element={<CanonicalTextReader />} />
+              <Route path="/texts/:textId" element={<BookReaderPage />} />
+              <Route path="/texts/:textId/scroll" element={<CanonicalTextReader />} />
               <Route path="/simple/:textId" element={<SimpleTextReader />} />
               <Route path="/bibliography" element={<BibliographyPage />} />
               <Route path="/about" element={<AboutPage />} />

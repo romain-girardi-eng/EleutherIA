@@ -80,6 +80,8 @@ export default function GraphRAGPage() {
 
   // Advanced settings
   const [ancientOnly, setAncientOnly] = useState(false);
+  const [showRetryDropdown, setShowRetryDropdown] = useState(false);
+  const [selectedRetryModel] = useState('kimi-k2.6');
   const [_reasoningSteps, setReasoningSteps] = useState<ReasoningStep[]>([]);
   const [_currentQuery, setCurrentQuery] = useState<string>('');
 
@@ -851,12 +853,19 @@ export default function GraphRAGPage() {
   }, [tabMessages, tabResponses]);
 
   // Retry with a different model: prompt user via simple inline select
+  const availableModels = Object.keys(modelContextMap).length > 0
+    ? Object.keys(modelContextMap)
+    : ['kimi-k2.6', 'gemini-3.1-pro-preview', 'kimi-k2.5-thinking'];
+
   const handleRetry = useCallback(() => {
     if (!initialQuestion) return;
-    const newModel = window.prompt('Enter model key to retry with (e.g. gemini-3.1-pro, kimi-k2.5-thinking):', selectedModel);
-    if (!newModel || newModel === selectedModel) return;
-    processQuery(initialQuestion, newModel, selectedMode);
-  }, [initialQuestion, selectedModel, selectedMode, processQuery]);
+    setShowRetryDropdown((p) => !p);
+  }, [initialQuestion]);
+
+  const handleRetryWithModel = useCallback((model: string) => {
+    setShowRetryDropdown(false);
+    processQuery(initialQuestion, model, selectedMode);
+  }, [initialQuestion, selectedMode, processQuery]);
 
   // Force a fresh (non-cached) run of the last user question. Re-uses the
   // same processQuery code path as a normal submission; ``setForceRefresh``
@@ -894,7 +903,7 @@ export default function GraphRAGPage() {
           {/* TWO-COLUMN LAYOUT */}
           {(messages.length > 0 || streaming) && (
             <div
-              className="flex bg-parchment-50"
+              className="flex bg-parchment-50 relative"
               style={{
                 position: 'fixed',
                 top: navHeight,
@@ -987,6 +996,39 @@ export default function GraphRAGPage() {
                 onLoadMorePassages={handleLoadMorePassages}
                 onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
               />
+
+              {/* Retry-with-model dropdown overlay */}
+              {showRetryDropdown && (
+                <div
+                  className="absolute top-0 left-0 right-0 bottom-0 z-50 flex items-start justify-center pt-16 bg-black/20"
+                  onClick={() => setShowRetryDropdown(false)}
+                >
+                  <div
+                    className="bg-white rounded-2xl shadow-xl border border-amber-200/60 p-4 w-72"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-3">
+                      Retry with model
+                    </p>
+                    <div className="space-y-1">
+                      {availableModels.map((model) => (
+                        <button
+                          key={model}
+                          onClick={() => handleRetryWithModel(model)}
+                          className={[
+                            'w-full text-left px-3 py-2 rounded-lg text-sm transition-colors',
+                            model === selectedRetryModel
+                              ? 'bg-amber-50 text-amber-900 font-medium border border-amber-200/60'
+                              : 'text-stone-700 hover:bg-stone-50',
+                          ].join(' ')}
+                        >
+                          {model}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import type { AxiosInstance } from 'axios';
 import type {
   KGData,
+  KGNode,
   CytoscapeData,
   HybridSearchResponse,
   SearchQuery,
@@ -112,6 +113,24 @@ class ApiClient {
 
   async getNodeConnections(id: string) {
     const response = await this.client.get(`/api/kg/node/${id}/connections`);
+    return response.data;
+  }
+
+  // Canonical single-node lookup (REST-clean plural path).
+  async getNodeById(id: string): Promise<KGNode> {
+    const response = await this.client.get<KGNode>(`/api/kg/nodes/${encodeURIComponent(id)}`);
+    return response.data;
+  }
+
+  // Grouped neighbours for a node: { node_id, node, neighbors: { outgoing, incoming }, total_count }
+  async getNodeNeighbors(
+    id: string,
+    options?: { depth?: number }
+  ): Promise<KGNodeNeighborsResponse> {
+    const response = await this.client.get<KGNodeNeighborsResponse>(
+      `/api/kg/nodes/${encodeURIComponent(id)}/neighbors`,
+      { params: { grouped: true, depth: options?.depth ?? 1 } }
+    );
     return response.data;
   }
 
@@ -825,6 +844,24 @@ class ApiClient {
     });
     return response.data;
   }
+}
+
+// Knowledge-graph neighbour summary (returned by the grouped neighbors endpoint)
+export interface KGNeighborSummary {
+  node_id: string;
+  label: string;
+  node_type?: string | null;
+  period?: string | null;
+}
+
+export interface KGNodeNeighborsResponse {
+  node_id: string;
+  node: KGNode;
+  neighbors: {
+    outgoing: Record<string, KGNeighborSummary[]>;
+    incoming: Record<string, KGNeighborSummary[]>;
+  };
+  total_count: number;
 }
 
 // Lemma Intelligence Types

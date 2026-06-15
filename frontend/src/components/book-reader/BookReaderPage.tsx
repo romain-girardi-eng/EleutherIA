@@ -258,7 +258,7 @@ export default function BookReaderPage() {
         case 'Home': e.preventDefault(); goToPage(1); break;
         case 'End': e.preventDefault(); goToPage(totalPages); break;
         case 't': if (hasBilingualContent) setIsBilingual((b) => !b); break;
-        case 'v': case 'Escape': if (textId) navigate(`/texts/${textId}`); break;
+        case 'v': case 'Escape': if (textId) navigate(`/texts/${textId}/scroll`); break;
       }
     };
     window.addEventListener('keydown', handler);
@@ -324,7 +324,7 @@ export default function BookReaderPage() {
             </div>
           </div>
           <button
-            onClick={() => { if (textId) navigate(`/texts/${textId}`); }}
+            onClick={() => { if (textId) navigate(`/texts/${textId}/scroll`); }}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-stone-600 hover:text-stone-800 hover:bg-amber-100/40 transition"
             title="Mode scroll"
           >
@@ -398,7 +398,7 @@ export default function BookReaderPage() {
               isBilingual={isBilingual}
               hasBilingual={hasBilingualContent}
               onToggleBilingual={() => setIsBilingual((b) => !b)}
-              onToggleMode={() => { if (textId) navigate(`/texts/${textId}`); }}
+              onToggleMode={() => { if (textId) navigate(`/texts/${textId}/scroll`); }}
             />
           </div>
         </div>

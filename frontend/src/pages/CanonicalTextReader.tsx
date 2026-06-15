@@ -1,9 +1,20 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { BookOpen } from 'lucide-react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { BookOpen, FileText } from 'lucide-react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLazyPassages } from '../hooks/useLazyPassages';
 import { cachedApiClient } from '../api/cachedClient';
+import { CitationGenerator } from '../components/CitationGenerator';
+
+interface Citation {
+  id?: string;
+  text: string;
+  source: string;
+  citation?: string;
+  url?: string;
+  doi?: string;
+  node_id?: string;
+}
 
 // Passage interface moved to useLazyPassages hook
 
@@ -50,6 +61,31 @@ export default function CanonicalTextReader() {
   const [currentPassageIndex, setCurrentPassageIndex] = useState(0);
   const [referenceSearch, setReferenceSearch] = useState('');
   const [notification, setNotification] = useState('');
+  const [showCitationPanel, setShowCitationPanel] = useState(false);
+
+  const workCitations = useMemo<Citation[]>(() => {
+    if (!work) return [];
+    return [{
+      id: work.canonical_id,
+      text: `${work.title}${work.author ? ' — ' + work.author : ''}`,
+      source: [
+        work.author,
+        work.title,
+        work.editor ? `Ed. ${work.editor}` : null,
+        work.publisher,
+        work.publication_date,
+        work.pub_place,
+      ].filter(Boolean).join(', '),
+      citation: [
+        work.author,
+        work.title,
+        work.editor ? `Ed. ${work.editor}` : null,
+        work.publisher,
+        work.publication_date,
+      ].filter(Boolean).join('. '),
+      url: work.doi_url ?? undefined,
+    }];
+  }, [work]);
 
   const passageRefs = useRef<Map<string, HTMLElement>>(new Map());
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -254,13 +290,21 @@ export default function CanonicalTextReader() {
             <Link to="/texts" className="text-sm text-stone-500 hover:text-stone-800">← {t('textReader.nav.library')}</Link>
             <div className="flex items-center gap-2">
               <Link
-                to={`/texts/${textId}/book`}
+                to={`/texts/${textId}`}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-stone-600 hover:text-stone-800 hover:bg-amber-100/40 transition"
                 title="Mode livre"
               >
                 <BookOpen size={14} />
                 <span className="hidden sm:inline">Mode livre</span>
               </Link>
+              <button
+                onClick={() => setShowCitationPanel((p) => !p)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-stone-600 hover:text-stone-800 hover:bg-amber-100/40 transition"
+                title="Citations"
+              >
+                <FileText size={14} />
+                <span className="hidden sm:inline">Citations</span>
+              </button>
               <button
                 onClick={() => setShowTOC(!showTOC)}
                 className="text-sm text-stone-600 hover:text-stone-800 flex items-center gap-1"
@@ -478,6 +522,20 @@ export default function CanonicalTextReader() {
       <div className="fixed bottom-4 left-4 text-xs text-stone-400">
         {t('textReader.shortcuts.help')}
       </div>
+
+      {showCitationPanel && (
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40"
+          onClick={() => setShowCitationPanel(false)}
+        >
+          <div
+            className="w-full sm:max-w-2xl max-h-[80vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CitationGenerator citations={workCitations} />
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );

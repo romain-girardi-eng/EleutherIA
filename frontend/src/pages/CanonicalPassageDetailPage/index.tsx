@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -10,12 +10,24 @@ import {
   ScrollText,
   Calendar,
   BookMarked,
+  FileText,
 } from 'lucide-react';
 import {
   getCanonicalPassage,
   type CanonicalPassageDetail,
 } from '../../api/canonicalPassages';
 import { cn } from '../../lib/utils';
+import { CitationGenerator } from '../../components/CitationGenerator';
+
+interface Citation {
+  id?: string;
+  text: string;
+  source: string;
+  citation?: string;
+  url?: string;
+  doi?: string;
+  node_id?: string;
+}
 
 function formatDate(iso: string, locale: string): string {
   const date = new Date(iso);
@@ -61,6 +73,18 @@ export default function CanonicalPassageDetailPage() {
   const [detail, setDetail] = useState<CanonicalPassageDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCitationPanel, setShowCitationPanel] = useState(false);
+
+  const passageCitations = useMemo<Citation[]>(() => {
+    if (!detail) return [];
+    return [{
+      id: detail.passage_id,
+      text: detail.full_text ?? detail.label,
+      source: [detail.author, detail.work_title, detail.canonical_ref].filter(Boolean).join(', '),
+      citation: [detail.author, detail.work_title, detail.canonical_ref].filter(Boolean).join('. '),
+      node_id: detail.passage_id,
+    }];
+  }, [detail]);
 
   useEffect(() => {
     let cancelled = false;
@@ -161,6 +185,13 @@ export default function CanonicalPassageDetailPage() {
                     count: detail.distinct_answer_count,
                   })}
                 </span>
+                <button
+                  onClick={() => setShowCitationPanel((p) => !p)}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-amber-200/60 bg-amber-50/70 px-3 py-1 text-[11px] font-medium text-amber-800 hover:bg-amber-100 transition-colors"
+                >
+                  <FileText className="h-3 w-3" aria-hidden="true" />
+                  Export citation
+                </button>
               </div>
 
               <h1 className="mt-4 text-2xl sm:text-3xl lg:text-4xl font-display font-semibold text-stone-800 tracking-tight leading-tight">
@@ -373,6 +404,20 @@ export default function CanonicalPassageDetailPage() {
               className="h-5 w-5 animate-spin text-stone-400"
               aria-label={t('canonicalPassages.loading')}
             />
+          </div>
+        )}
+
+        {showCitationPanel && detail && (
+          <div
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40"
+            onClick={() => setShowCitationPanel(false)}
+          >
+            <div
+              className="w-full sm:max-w-2xl max-h-[80vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <CitationGenerator citations={passageCitations} />
+            </div>
           </div>
         )}
       </div>
