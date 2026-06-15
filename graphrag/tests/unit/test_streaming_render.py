@@ -163,3 +163,65 @@ async def test_complete_event_carries_claim_ledger() -> None:
     )
     assert ledger[0]["evidence_ids"] == ["P1"]
     assert complete["data"]["metadata"]["claim_ledger_size"] == 1
+
+
+def _answer_with_citations(n: int) -> "ScholarlyAnswer":
+    from eleutheria_graphrag.agents.state import Citation, ScholarlyAnswer
+
+    return ScholarlyAnswer(
+        answer=(
+            "The Stoics held that fate (heimarmenē) governs all things "
+            + " ".join(f"[P{i + 1}]" for i in range(n))
+        ),
+        question="What did the Stoics believe about fate?",
+        citations=[
+            Citation(
+                ref=f"P{i + 1}",
+                type="passage",
+                id=f"passage-uuid-{i + 1}",
+                label=f"Chrysippus, On Fate {i + 1}",
+                verified=True,
+            )
+            for i in range(n)
+        ],
+    )
+
+
+@pytest.mark.asyncio
+async def test_citations_preview_event_carries_structured_citations() -> None:
+    """Smoke contract: the early ``citations_preview`` frame (emitted by the
+    agent right after ProgrammaticVerify, BEFORE the long verifier-v2 audit)
+    carries the SAME structured-citation payload as the terminal ``complete``.
+
+    This is the transport fix for the divergence diagnosed in
+    ``data/goals/g3/diagnosis.md``: structured citations used to ride ONLY on
+    the terminal ``complete`` event, which is gated behind the audit and never
+    arrived before Cloudflare's ~100s idle cut on slow queries — so the public
+    path returned prose with zero clickable citations. The preview guarantees
+    >=N structured citations reach the client even if the audit/connection is
+    later cut.
+    """
+    MIN_CITATIONS = 3
+    llm = _FakeLLM(["unused"])
+    agent = _agent_with(llm)
+    answer = _answer_with_citations(MIN_CITATIONS)
+
+    preview = json.loads(
+        agent._build_complete_event(answer, event_type="citations_preview")
+    )
+    complete = json.loads(agent._build_complete_event(answer, event_type="complete"))
+
+    # The preview is a distinct, non-terminal frame...
+    assert preview["type"] == "citations_preview"
+    assert complete["type"] == "complete"
+    # ...but carries an identical structured-citation payload (no schema drift).
+    assert preview["data"]["citations"] == complete["data"]["citations"]
+
+    cites = preview["data"]["citations"]
+    assert len(cites) >= MIN_CITATIONS
+    # Each citation is a structured, clickable tuple — not a bare label string.
+    for c in cites:
+        assert c["ref"]
+        assert c["type"] == "passage"
+        assert c["id"]
+        assert c["label"]

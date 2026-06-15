@@ -1342,6 +1342,22 @@ class ScholarlyAgent:
         if _text_verifier_enabled():
             answer = await self._verify_ancient_text(answer, state)
 
+        # Phase 4.5: Early structured-citation preview. The `citations` array
+        # is fully populated by ProgrammaticVerify (+ injection) at this point,
+        # BEFORE the adversarial verifier-v2 audit (Phase 5), which can run
+        # 10-60 s of extra LLM work. Cloudflare severs the SSE connection after
+        # ~100 s of *silence*, and on slow doctoral queries the terminal
+        # `complete` event — historically the ONLY frame carrying structured
+        # citations — never arrived before the cut, so the UI showed prose with
+        # zero clickable citations. We emit them here as a `citations_preview`
+        # frame so the client has verified, structured citations even if the
+        # audit or connection is later cut. The frame is unaudited (verifier_v2
+        # verdicts arrive afterwards as `citation_verified` events and the final
+        # `complete` payload supersedes this preview).
+        yield self._build_complete_event(
+            answer, event_type="citations_preview"
+        )
+
         # Phase 5: Adversarial citation audit (v2) post-render. Emits one
         # ``citation_verified`` SSE event per audited claim and merges the
         # verdicts into the answer before the authoritative `complete` event.
@@ -1620,6 +1636,18 @@ class ScholarlyAgent:
                     if buffer:
                         yield buffer
 
+        yield self._build_complete_event(answer, event_type="complete")
+
+    def _build_complete_event(
+        self, answer: ScholarlyAnswer, *, event_type: str = "complete"
+    ) -> str:
+        """Serialize a ScholarlyAnswer into a `complete`-shaped SSE frame.
+
+        Shared by `_chunk_answer` (terminal `complete` event) and the early
+        `citations_preview` frame emitted before the verifier-v2 audit so both
+        carry an identical structured-citation payload (no schema drift). The
+        route transforms either frame into the frontend GraphRAGResponse shape.
+        """
         complete_data = {
             "answer": answer.answer,
             "question": answer.question,
@@ -1644,4 +1672,4 @@ class ScholarlyAgent:
                 "claim_ledger_size": len(answer.claim_ledger),
             },
         }
-        yield json.dumps({"type": "complete", "data": complete_data}, default=str)
+        return json.dumps({"type": event_type, "data": complete_data}, default=str)
