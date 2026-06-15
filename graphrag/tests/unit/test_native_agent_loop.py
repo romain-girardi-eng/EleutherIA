@@ -170,6 +170,8 @@ async def test_native_loop_unknown_tool() -> None:
 async def test_native_loop_iteration_cap(monkeypatch: pytest.MonkeyPatch) -> None:
     """Hard cap at MAX_ITERATIONS even when the model keeps calling tools."""
     monkeypatch.setenv("MAX_ITERATIONS", "3")
+    # Disable the tool-call budget so this test isolates the iteration cap.
+    monkeypatch.setenv("MAX_TOOL_CALLS", "0")
     deps = _make_deps()
 
     forever_call = {
@@ -195,6 +197,57 @@ async def test_native_loop_iteration_cap(monkeypatch: pytest.MonkeyPatch) -> Non
     await loop.run()
     # 3 iterations × 1 tool call each
     assert loop.calls_made == 3
+
+
+@pytest.mark.asyncio
+async def test_native_loop_tool_call_budget_caps_parallel_calls(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Latency cap: TOTAL tool calls are bounded even with parallel batches.
+
+    Regression for the cold-query blowup — a model that batches several
+    ``tool_calls`` per turn (Gemini does) under the 30-turn iteration cap could
+    run 126-218 sequential tool executions (86-167 s). The total-tool-call
+    budget must stop the loop well before that, regardless of how many calls a
+    single turn requests.
+    """
+    # Generous iteration cap, tight tool-call ceiling — the ceiling must win.
+    monkeypatch.setenv("MAX_ITERATIONS", "30")
+    monkeypatch.setenv("MAX_TOOL_CALLS", "5")
+    deps = _make_deps()
+
+    # Every turn asks for 4 parallel tool calls and never stops on its own.
+    def _batch(i: int) -> dict:
+        return {
+            "role": "assistant",
+            "content": None,
+            "tool_calls": [
+                {
+                    "id": f"call_{i}_{j}",
+                    "type": "function",
+                    "function": {
+                        "name": "search_nodes",
+                        "arguments": json.dumps({"query": "anything"}),
+                    },
+                }
+                for j in range(4)
+            ],
+        }
+
+    deps.llm.generate_with_tools = AsyncMock(side_effect=[_batch(i) for i in range(20)])
+
+    state = RAGState(question="loop", complexity=QueryComplexity.MEDIUM)
+    tools = build_tool_registry(deps)
+    loop = NativeAgentLoop(deps=deps, state=state, tools=tools, emitter=NullEmitter())
+
+    await loop.run()
+
+    # Budget is 5: turn 1 executes 4, turn 2 executes 1 then stops. Never the
+    # 30×4 = 120 the unbounded loop would have run.
+    assert loop.calls_made == 5
+    assert loop.max_tool_calls == 5
+    # The loop broke long before the iteration cap (only 2 LLM turns needed).
+    assert deps.llm.generate_with_tools.await_count == 2
 
 
 def test_build_agent_loop_text_mode(monkeypatch: pytest.MonkeyPatch) -> None:

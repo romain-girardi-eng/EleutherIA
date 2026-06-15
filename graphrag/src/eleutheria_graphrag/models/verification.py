@@ -79,6 +79,14 @@ class CitationCheck(BaseModel):
         None,
         description="Optional remediation: 'remove citation', 'hedge claim', etc.",
     )
+    parse_error: bool = Field(
+        False,
+        description=(
+            "True when this WEAK verdict is a verifier failure (LLM call failed "
+            "or returned unparseable output), NOT a real adversarial judgment. "
+            "Lets benchmarks/downstream distinguish 'unjudged' from 'judged weak'."
+        ),
+    )
 
     @property
     def is_passing(self) -> bool:

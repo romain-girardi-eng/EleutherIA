@@ -144,6 +144,26 @@ def _reranker_enabled() -> bool:
     return raw in {"1", "true", "yes", "on"}
 
 
+def _stream_render_max_tokens() -> int:
+    """Completion-token ceiling for the streamed public-path render.
+
+    Profiling put cold-query *synthesis* (claim ledger + render) at ~169 s, the
+    single largest stage. The render streams up to 16 k completion tokens of a
+    doctoral-length answer from a heavy reasoning model; generation time scales
+    with that ceiling. Capping it for the public/streaming path is the highest-
+    leverage synthesis latency lever — a structured, fully-cited answer fits
+    comfortably in ~7 k tokens. Override with ``ELEUTHERIA_RENDER_MAX_TOKENS``;
+    defaults to 8000 (down from 16000) for the streaming path. Values are
+    clamped to [2000, 16000].
+    """
+    raw = os.getenv("ELEUTHERIA_RENDER_MAX_TOKENS", "8000")
+    try:
+        value = int(raw)
+    except ValueError:
+        return 8000
+    return max(2000, min(16000, value))
+
+
 def _sufficiency_continuation_budget() -> int:
     """Max bounded continuation rounds after an insufficient verdict (0 or 1)."""
     raw = os.getenv("ELEUTHERIA_SUFFICIENCY_CONTINUATIONS", "1")
@@ -1511,6 +1531,7 @@ class ScholarlyAgent:
 
         prompt = payload["prompt"]
         model_api_id = payload["model_api_id"]
+        render_max_tokens = _stream_render_max_tokens()
 
         # Bridge the llm.stream() async-gen onto a queue so we can interleave
         # idle heartbeats while the model is still "thinking" (no token yet).
@@ -1522,7 +1543,7 @@ class ScholarlyAgent:
                     prompt,
                     system_prompt=SYSTEM_PROMPT,
                     temperature=0.2,
-                    max_tokens=16000,
+                    max_tokens=render_max_tokens,
                     model_override=model_api_id,
                 ):
                     await queue.put(("chunk", piece))
