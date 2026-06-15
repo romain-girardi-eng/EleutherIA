@@ -279,3 +279,31 @@ class TestScholarlyAnswerNewFields:
         d = a.model_dump()
         assert d["query_type"] == QueryType.COMPARATIVE
         assert d["quality_badge"] == "Medium"
+
+
+class TestRetrievalBudgetContextCap:
+    """Synthesis-context cap controlling the per-layer packing budgets."""
+
+    def test_default_window_is_full_1m(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.delenv("ELEUTHERIA_SYNTH_CONTEXT_TOKENS", raising=False)
+        from eleutheria_graphrag.agents.state import RetrievalBudget
+
+        budget = RetrievalBudget()
+        assert budget.model_window == 1_000_000
+
+    def test_env_caps_window_and_shrinks_layer_budgets(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        monkeypatch.setenv("ELEUTHERIA_SYNTH_CONTEXT_TOKENS", "200000")
+        from eleutheria_graphrag.agents.state import RetrievalBudget
+
+        budget = RetrievalBudget()
+        assert budget.model_window == 200_000
+        # passage layer = window * (1 - reserved) * 0.65 → far below the 1M default
+        assert budget.layer_budget("passage_bundles") < 200_000
+
+    def test_below_floor_is_ignored(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setenv("ELEUTHERIA_SYNTH_CONTEXT_TOKENS", "100")
+        from eleutheria_graphrag.agents.state import RetrievalBudget
+
+        assert RetrievalBudget().model_window == 1_000_000

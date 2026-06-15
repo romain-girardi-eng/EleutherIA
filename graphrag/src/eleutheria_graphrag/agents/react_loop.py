@@ -74,6 +74,47 @@ _BUDGETS: dict[QueryComplexity, int] = {
     QueryComplexity.COMPLEX: 10,
 }
 
+# Hard ceiling on TOTAL tool calls (not LLM turns) for the native loop.
+#
+# ``MAX_ITERATIONS`` caps LLM turns, but a single turn can request many
+# parallel ``tool_calls`` — Gemini routinely batches 4-7 per turn. With a 30
+# turn cap that is 120-210 sequential tool executions, which profiling showed
+# is the dominant cold-query cost (agent_loop = 86-167 s of the ~280 s total,
+# 126-218 tool calls). The per-turn iteration cap alone does NOT bound this.
+#
+# These ceilings stop dispatching once the loop has gathered enough evidence,
+# which is what keeps a cold query inside the Cloudflare connection window.
+# They are deliberately generous relative to ``_BUDGETS`` (which the legacy
+# text loop uses as a turn budget) so doctoral-grade multi-source reads still
+# complete, while pathological 200-call runs are cut off. Override with
+# ``MAX_TOOL_CALLS`` to force a single ceiling for all tiers.
+_TOOL_CALL_BUDGETS: dict[QueryComplexity, int] = {
+    QueryComplexity.SIMPLE: 12,
+    QueryComplexity.MEDIUM: 20,
+    QueryComplexity.COMPLEX: 30,
+}
+
+
+def _tool_call_budget(complexity: QueryComplexity) -> int:
+    """Total-tool-call ceiling for the native loop (env-overridable).
+
+    ``MAX_TOOL_CALLS`` sets a single ceiling across all tiers; otherwise the
+    per-complexity defaults apply. Returns a large number when explicitly
+    disabled (``MAX_TOOL_CALLS=0``) so the loop falls back to the iteration cap.
+    """
+    raw = os.getenv("MAX_TOOL_CALLS")
+    if raw is not None:
+        try:
+            value = int(raw)
+        except ValueError:
+            value = 0
+        if value > 0:
+            return value
+        if value == 0:
+            return 1_000_000  # disabled — iteration cap is the only belt
+    return _TOOL_CALL_BUDGETS.get(complexity, 20)
+
+
 # Max parse failures before aborting
 _MAX_PARSE_FAILURES = 3
 
@@ -610,6 +651,10 @@ class NativeAgentLoop(_NativeAgentLoopBase):
     ) -> None:
         super().__init__(deps, state, tools, emitter)
         self.max_iterations = _max_iterations()
+        # Hard ceiling on total tool calls (not LLM turns) — the real defence
+        # against the 126-218-call cold-query blowups profiling surfaced. See
+        # ``_tool_call_budget`` for the rationale.
+        self.max_tool_calls = _tool_call_budget(state.complexity)
         self.tool_schemas = build_tool_function_schemas(tools)
         self.messages: list[dict[str, Any]] = []
         self._activated_node_ids: set[str] = set()
@@ -676,7 +721,26 @@ class NativeAgentLoop(_NativeAgentLoopBase):
             self.messages.append(_assistant_with_tool_calls(content, tool_calls))
 
             for call in tool_calls:
+                if self.calls_made >= self.max_tool_calls:
+                    # Budget hit mid-turn: the model echoed tool_calls we must
+                    # answer (an unanswered tool_call id breaks the next
+                    # request), so reply with a terminal stub instead of
+                    # executing — no DB/LLM work, just a "budget reached" note.
+                    self._answer_unexecuted_call(call)
+                    continue
                 await self._dispatch_tool_call(call)
+
+            if self.calls_made >= self.max_tool_calls:
+                await self.emitter.emit_thinking(
+                    f"Tool-call budget of {self.max_tool_calls} reached; "
+                    "proceeding to synthesis."
+                )
+                logger.info(
+                    "Native agent loop hit tool-call budget=%d after %d calls",
+                    self.max_tool_calls,
+                    self.calls_made,
+                )
+                break
         else:
             await self.emitter.emit_thinking(
                 f"Iteration cap of {self.max_iterations} reached; forcing synthesis."
@@ -688,6 +752,24 @@ class NativeAgentLoop(_NativeAgentLoopBase):
         # Transfer evidence to RAGState for synthesis phase.
         self.evidence.populate_state(self.state)
         self.state.iteration = self.calls_made
+
+    def _answer_unexecuted_call(self, call: dict[str, Any]) -> None:
+        """Stub-answer a ``tool_calls`` entry we declined to run (budget hit).
+
+        Every assistant ``tool_call`` must be answered by a matching ``role:
+        tool`` message or the next request 400s. When the tool-call budget is
+        reached mid-turn we still record a (cheap, no-op) result so the message
+        history stays well-formed for the final break.
+        """
+        call_id = (
+            call.get("id") if isinstance(call, dict) else None
+        ) or uuid.uuid4().hex
+        self.messages.append(
+            _tool_result_msg(
+                call_id,
+                json.dumps({"skipped": "tool-call budget reached; synthesizing"}),
+            )
+        )
 
     async def _dispatch_tool_call(self, call: dict[str, Any]) -> None:
         """Execute a single ``tool_calls`` entry and append its result."""

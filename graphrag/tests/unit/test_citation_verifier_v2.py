@@ -334,3 +334,110 @@ class TestVerdictParsing:
 
     def test_rejects_non_json(self) -> None:
         assert _parse_verdict("not json at all") is None
+
+    def test_parses_unescaped_inner_double_quotes(self) -> None:
+        """The G2 killer: the model embeds a verbatim quote inside reasoning.
+
+        The prompt used to demand a double-quoted verbatim quote *inside* the
+        ``reasoning`` JSON string, producing invalid JSON that json.loads
+        rejected — every WEAK/REJECTED verdict failed to parse, pinning
+        verified_rate at 0.0. The repair pass must recover it.
+        """
+        raw = (
+            '{"status": "WEAK", "reasoning": "The passage says "fate is the '
+            'sequence of causes" but never asserts assent is up to us.", '
+            '"suggested_action": ""}'
+        )
+        parsed = _parse_verdict(raw)
+        assert parsed is not None
+        assert parsed["status"] is CitationStatus.WEAK
+        assert "fate is the sequence of causes" in parsed["reasoning"]
+
+    def test_parses_prose_wrapped_json(self) -> None:
+        raw = (
+            "Here is my adversarial verdict:\n"
+            '{"status": "REJECTED", "reasoning": "wrong author"}\n'
+            "Let me know if you need more."
+        )
+        parsed = _parse_verdict(raw)
+        assert parsed is not None
+        assert parsed["status"] is CitationStatus.REJECTED
+
+    def test_extracts_first_of_multiple_objects(self) -> None:
+        """Greedy regex grabbed first { to last } — must take the FIRST object."""
+        raw = (
+            '{"status": "VERIFIED", "reasoning": "ok"} '
+            '{"status": "REJECTED", "reasoning": "noise"}'
+        )
+        parsed = _parse_verdict(raw)
+        assert parsed is not None
+        assert parsed["status"] is CitationStatus.VERIFIED
+
+    def test_tolerates_trailing_comma(self) -> None:
+        parsed = _parse_verdict('{"status":"VERIFIED","reasoning":"ok",}')
+        assert parsed is not None
+        assert parsed["status"] is CitationStatus.VERIFIED
+
+    def test_maps_field_name_variants(self) -> None:
+        """verdict/rationale instead of status/reasoning; status synonym."""
+        parsed = _parse_verdict(
+            '{"verdict": "reject", "rationale": "different topic", '
+            '"evidence_quote": "Marcus Aurelius reflects"}'
+        )
+        assert parsed is not None
+        assert parsed["status"] is CitationStatus.REJECTED
+        assert parsed["reasoning"].startswith("different topic")
+        # evidence_quote is folded into reasoning for downstream consumers.
+        assert "Marcus Aurelius reflects" in parsed["reasoning"]
+
+    def test_folds_evidence_quote_into_reasoning(self) -> None:
+        parsed = _parse_verdict(
+            '{"status":"REJECTED","reasoning":"mismatch",'
+            '"evidence_quote":"by Plato not Aristotle"}'
+        )
+        assert parsed is not None
+        assert '"by Plato not Aristotle"' in parsed["reasoning"]
+
+    def test_fence_without_object_returns_none(self) -> None:
+        assert _parse_verdict("```json\n\n```") is None
+
+
+class TestParseErrorVsWeak:
+    """A parse failure must NOT masquerade as a real WEAK verdict."""
+
+    @pytest.mark.asyncio
+    async def test_unparseable_output_flags_parse_error(self) -> None:
+        # Model returns junk on every retry → fall back to WEAK, but flagged.
+        llm = _llm_returning("not json", "still not json", "garbage")
+        verifier = CitationVerifierV2(
+            llm=llm,
+            passage_fetcher=_fetcher({"p1": "Some valid passage text."}),
+            retries=3,
+        )
+        check = await verifier.verify_one("Claim.", "p1")
+        assert check.status is CitationStatus.WEAK
+        assert check.parse_error is True
+        assert "unable to assess" in check.reasoning.lower()
+        assert llm.generate.await_count == 3
+
+    @pytest.mark.asyncio
+    async def test_real_weak_verdict_not_flagged(self) -> None:
+        llm = _llm_returning(_verdict_json("WEAK", '"only consistent"'))
+        verifier = CitationVerifierV2(
+            llm=llm,
+            passage_fetcher=_fetcher({"p1": "Some valid passage text."}),
+        )
+        check = await verifier.verify_one("Claim.", "p1")
+        assert check.status is CitationStatus.WEAK
+        assert check.parse_error is False
+
+    @pytest.mark.asyncio
+    async def test_requests_json_mime_type(self) -> None:
+        llm = _llm_returning(_verdict_json("VERIFIED"))
+        verifier = CitationVerifierV2(
+            llm=llm,
+            passage_fetcher=_fetcher({"p1": "text"}),
+        )
+        await verifier.verify_one("Claim.", "p1")
+        _, kwargs = llm.generate.await_args
+        assert kwargs.get("response_mime_type") == "application/json"

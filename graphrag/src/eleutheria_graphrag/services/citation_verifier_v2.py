@@ -74,13 +74,18 @@ Bias: when in doubt between VERIFIED and WEAK, choose WEAK. When in doubt \
 between WEAK and REJECTED, choose REJECTED. False approvals defeat the \
 verifier; false rejections merely send the draft back for a better citation.
 
-For REJECTED or WEAK, your ``reasoning`` MUST include a verbatim quote \
-(in double quotes) from the passage above showing the mismatch. No quote, no \
-rejection.
+For REJECTED or WEAK, you MUST supply a verbatim quote from the passage above \
+showing the mismatch, in the ``evidence_quote`` field (NOT inside \
+``reasoning``). No quote, no rejection.
 
-Respond with ONLY a JSON object, no markdown fence, no prose:
+Output format — CRITICAL. Respond with ONLY a single strict JSON object. No \
+markdown fence, no prose before or after. Inside the ``reasoning`` string, do \
+NOT use double-quote characters: write any quoted phrase with single quotes \
+('like this'). Put the verbatim passage quote in ``evidence_quote`` only.
+
 {{"status": "VERIFIED" | "WEAK" | "REJECTED" | "MISSING",
-  "reasoning": "<one sentence>",
+  "reasoning": "<one sentence, no double-quote characters inside>",
+  "evidence_quote": "<verbatim passage quote for WEAK/REJECTED, else empty>",
   "suggested_action": "<optional remediation, or empty string>"}}"""
 
 # How many verifier calls may run in parallel against the LLM.
@@ -315,6 +320,7 @@ class CitationVerifierV2:
             claim=claim.claim,
             passage_excerpt=truncated,
             suggested_action=verdict.get("suggested_action") or None,
+            parse_error=bool(verdict.get("parse_error", False)),
         )
         await self._emit(check)
         return check
@@ -332,17 +338,30 @@ class CitationVerifierV2:
         )
 
         last_error: Exception | None = None
+        last_raw: str | None = None
         for attempt in range(1, self._retries + 1):
             try:
                 raw = await self._llm.generate(
                     prompt,
                     temperature=0.1,
                     max_tokens=400,
+                    response_mime_type="application/json",
                 )
+                last_raw = raw
                 parsed = _parse_verdict(raw)
                 if parsed is not None:
                     return parsed
                 last_error = ValueError("verifier LLM returned unparseable JSON")
+                # A parse failure is NOT a verdict — log the raw output so the
+                # format drift is debuggable instead of vanishing into a WEAK.
+                logger.warning(
+                    "Verifier could not parse LLM output for %s (attempt %d/%d). "
+                    "Raw output: %r",
+                    citation_id,
+                    attempt,
+                    self._retries,
+                    (raw or "")[:1000],
+                )
             except Exception as exc:  # noqa: BLE001 — third-party LLM client
                 last_error = exc
                 logger.debug(
@@ -352,17 +371,26 @@ class CitationVerifierV2:
                     exc,
                 )
 
+        # Genuine failure after retries. Default to WEAK (adversarial bias:
+        # never silently pass), but flag it as a verifier error, not a real
+        # "consistent-but-not-asserted" WEAK verdict, so it can be distinguished
+        # downstream and in benchmarks.
         logger.warning(
             "Verifier unable to assess citation %s after %d attempts (%s) — "
-            "falling back to WEAK",
+            "falling back to WEAK. Last raw output: %r",
             citation_id,
             self._retries,
             last_error,
+            (last_raw or "")[:1000],
         )
         return {
             "status": CitationStatus.WEAK,
-            "reasoning": "Verifier unable to assess: LLM call failed after retries.",
+            "reasoning": (
+                "Verifier unable to assess: LLM call failed or returned "
+                "unparseable output after retries."
+            ),
             "suggested_action": "manual review",
+            "parse_error": True,
         }
 
     async def _emit(self, check: CitationCheck) -> None:
@@ -398,42 +426,207 @@ def _try_parse_uuid(value: str) -> uuid.UUID | None:
         return None
 
 
-_JSON_BLOCK_RE = re.compile(r"\{[\s\S]*\}")
 _VALID_STATUSES = {s.value for s in CitationStatus}
+
+# Field-name variants the model drifts to, mapped to our canonical fields.
+_STATUS_KEYS = ("status", "verdict", "judgment", "judgement", "result", "label")
+_REASONING_KEYS = ("reasoning", "rationale", "reason", "explanation", "justification")
+_QUOTE_KEYS = ("evidence_quote", "quote", "verbatim_quote", "evidence", "passage_quote")
+_ACTION_KEYS = ("suggested_action", "action", "remediation", "suggestion")
+
+# Loose status-token map (handles the model answering with a bare word or a
+# near-synonym instead of the exact enum value).
+_STATUS_ALIASES = {
+    "VERIFIED": "VERIFIED",
+    "VERIFY": "VERIFIED",
+    "SUPPORTED": "VERIFIED",
+    "PASS": "VERIFIED",
+    "WEAK": "WEAK",
+    "PARTIAL": "WEAK",
+    "CONSISTENT": "WEAK",
+    "REJECTED": "REJECTED",
+    "REJECT": "REJECTED",
+    "UNSUPPORTED": "REJECTED",
+    "CONTRADICTED": "REJECTED",
+    "FAIL": "REJECTED",
+    "MISSING": "MISSING",
+    "EMPTY": "MISSING",
+    "UNUSABLE": "MISSING",
+}
+
+
+def _extract_first_json_object(text: str) -> str | None:
+    """Return the first balanced ``{...}`` block (brace-counting, string-aware).
+
+    A greedy ``\\{.*\\}`` regex grabs from the first ``{`` to the *last* ``}``,
+    which swallows trailing prose and any second object. Brace counting that
+    respects JSON string literals returns exactly the first object.
+    """
+    start = text.find("{")
+    if start == -1:
+        return None
+    depth = 0
+    in_string = False
+    escape = False
+    for i in range(start, len(text)):
+        ch = text[i]
+        if in_string:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == '"':
+                in_string = False
+            continue
+        if ch == '"':
+            in_string = True
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start : i + 1]
+    # Unbalanced (truncated). Return the tail from the first brace so the
+    # repair pass below still gets a shot at it.
+    return text[start:]
+
+
+def _strip_trailing_commas(text: str) -> str:
+    """Remove trailing commas before ``}`` / ``]`` (a very common LLM slip)."""
+    return re.sub(r",(\s*[}\]])", r"\1", text)
+
+
+def _repair_inner_quotes(block: str) -> str:
+    """Best-effort repair of unescaped double-quotes *inside* string values.
+
+    The single biggest source of unparseable verdicts: the model embeds a
+    verbatim ``"quote"`` inside the ``reasoning`` value, producing
+    ``"reasoning": "... says "x" ..."``. We walk the JSON char-by-char and,
+    once inside a string value, escape any ``"`` that is not the genuine
+    closing quote (i.e. not followed by ``:``, ``,`` or a closing brace).
+    """
+    out: list[str] = []
+    in_string = False
+    escape = False
+    i = 0
+    n = len(block)
+    while i < n:
+        ch = block[i]
+        if not in_string:
+            out.append(ch)
+            if ch == '"':
+                in_string = True
+            i += 1
+            continue
+        if escape:
+            out.append(ch)
+            escape = False
+            i += 1
+            continue
+        if ch == "\\":
+            out.append(ch)
+            escape = True
+            i += 1
+            continue
+        if ch == '"':
+            # Is this the real closing quote? Peek past whitespace.
+            j = i + 1
+            while j < n and block[j] in " \t\r\n":
+                j += 1
+            nxt = block[j] if j < n else ""
+            if nxt in (":", ",", "}", "]", ""):
+                out.append(ch)
+                in_string = False
+            else:
+                # Stray inner quote — escape it.
+                out.append('\\"')
+            i += 1
+            continue
+        out.append(ch)
+        i += 1
+    return "".join(out)
+
+
+def _loads_tolerant(block: str) -> Any | None:
+    """Try increasingly aggressive repairs to parse ``block`` as JSON."""
+    for candidate in (
+        block,
+        _strip_trailing_commas(block),
+        _strip_trailing_commas(_repair_inner_quotes(block)),
+    ):
+        try:
+            return json.loads(candidate)
+        except json.JSONDecodeError, ValueError:
+            continue
+    return None
+
+
+def _first_present(obj: dict[str, Any], keys: tuple[str, ...]) -> Any:
+    """Return the first value among ``keys`` (case-insensitive) present in ``obj``."""
+    lowered = {str(k).lower(): v for k, v in obj.items()}
+    for key in keys:
+        if key in lowered:
+            return lowered[key]
+    return None
+
+
+def _coerce_status(value: Any) -> str | None:
+    """Map a raw status value to a canonical enum value, or ``None``."""
+    token = str(value or "").strip().upper()
+    if token in _VALID_STATUSES:
+        return token
+    if token in _STATUS_ALIASES:
+        return _STATUS_ALIASES[token]
+    # Sometimes the model answers with a sentence; pick the first known token.
+    for word in re.findall(r"[A-Z]+", token):
+        if word in _VALID_STATUSES:
+            return word
+        if word in _STATUS_ALIASES:
+            return _STATUS_ALIASES[word]
+    return None
 
 
 def _parse_verdict(raw: str) -> dict[str, Any] | None:
-    """Extract the JSON verdict from the LLM response. Returns ``None`` on failure."""
+    """Extract the JSON verdict from the LLM response. Returns ``None`` on failure.
+
+    Resilient to: ```` ```json ```` fences, prose before/after the object, a
+    trailing second object, trailing commas, status field-name variants
+    (``verdict``/``result``/...), and unescaped double-quotes embedded inside
+    string values (the dominant real-world failure — see G2 benchmark).
+    """
     if not raw:
         return None
     text = raw.strip()
-    # Strip optional ```json fences.
-    text = re.sub(r"^```(?:json)?\s*", "", text)
-    text = re.sub(r"\s*```$", "", text)
+    # Strip markdown fences anywhere (opening ```json / ``` and closing ```).
+    text = re.sub(r"```(?:json|JSON)?", "", text)
+    text = text.strip()
 
-    match = _JSON_BLOCK_RE.search(text)
-    if not match:
+    block = _extract_first_json_object(text)
+    if not block:
         return None
-    try:
-        obj = json.loads(match.group())
-    except json.JSONDecodeError:
-        return None
+
+    obj = _loads_tolerant(block)
     if not isinstance(obj, dict):
         return None
 
-    status_raw = str(obj.get("status", "")).strip().upper()
-    if status_raw not in _VALID_STATUSES:
+    status_canonical = _coerce_status(_first_present(obj, _STATUS_KEYS))
+    if status_canonical is None:
         return None
 
-    reasoning = str(obj.get("reasoning", "")).strip()
-    suggested_action = obj.get("suggested_action")
-    if isinstance(suggested_action, str):
-        suggested_action = suggested_action.strip() or None
-    else:
-        suggested_action = None
+    reasoning = str(_first_present(obj, _REASONING_KEYS) or "").strip()
+    quote = str(_first_present(obj, _QUOTE_KEYS) or "").strip()
+    # Fold the evidence quote back into reasoning so downstream consumers (which
+    # expect the verbatim quote in `reasoning` for WEAK/REJECTED) keep working.
+    if quote and quote not in reasoning:
+        reasoning = f'{reasoning} "{quote}"'.strip() if reasoning else f'"{quote}"'
+
+    action_raw = _first_present(obj, _ACTION_KEYS)
+    suggested_action = (
+        action_raw.strip() or None if isinstance(action_raw, str) else None
+    )
 
     return {
-        "status": CitationStatus(status_raw),
+        "status": CitationStatus(status_canonical),
         "reasoning": reasoning,
         "suggested_action": suggested_action,
     }

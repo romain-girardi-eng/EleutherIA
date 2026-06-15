@@ -8,11 +8,35 @@ grounding stay inspectable end-to-end.
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+
+def _default_model_window() -> int:
+    """Synthesis context window used to size the per-layer packing budgets.
+
+    Defaults to the full 1M-token Gemini window. The public/streaming path can
+    shrink this via ``ELEUTHERIA_SYNTH_CONTEXT_TOKENS`` so that
+    ``_build_context_pack`` packs fewer evidence bundles into the render prompt
+    — profiling showed the unbounded 552k-token passage budget (up to 200
+    bundles) feeds a large synthesis prompt. Capping it trims synthesis +
+    verification latency on cold queries without dropping the agent's
+    highest-scored evidence (bundles are packed best-first). Values below 8192
+    are ignored.
+    """
+    raw = os.getenv("ELEUTHERIA_SYNTH_CONTEXT_TOKENS")
+    if raw:
+        try:
+            value = int(raw)
+        except ValueError:
+            return 1_000_000
+        if value >= 8192:
+            return value
+    return 1_000_000
 
 
 class QueryComplexity(StrEnum):
@@ -59,7 +83,7 @@ class ClaimStatus(StrEnum):
 class RetrievalBudget(BaseModel):
     """Token budgets for long-context packing and adaptive retrieval."""
 
-    model_window: int = Field(1_000_000, ge=8192)
+    model_window: int = Field(default_factory=_default_model_window, ge=8192)
     reserved_ratio: float = Field(0.15, ge=0.05, le=0.5)
     layer_ratios: dict[str, float] = Field(
         default_factory=lambda: {

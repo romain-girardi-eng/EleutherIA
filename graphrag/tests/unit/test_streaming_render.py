@@ -109,7 +109,23 @@ async def test_render_passes_model_override_to_stream() -> None:
 
     expected_model = build_render_prompt(state)["model_api_id"]
     assert llm.stream_kwargs.get("model_override") == expected_model
-    assert llm.stream_kwargs.get("max_tokens") == 16000
+    # Public-path render is capped for latency (default 8000, env-overridable).
+    assert llm.stream_kwargs.get("max_tokens") == 8000
+
+
+@pytest.mark.asyncio
+async def test_render_max_tokens_env_override(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """ELEUTHERIA_RENDER_MAX_TOKENS overrides the streamed render ceiling."""
+    monkeypatch.setenv("ELEUTHERIA_RENDER_MAX_TOKENS", "5000")
+    llm = _FakeLLM(["some grounded prose. " * 30])
+    agent = _agent_with(llm)
+    state = RAGState(question="Who was Chrysippus?")
+
+    await _collect(agent._stream_render(state))
+
+    assert llm.stream_kwargs.get("max_tokens") == 5000
 
 
 @pytest.mark.asyncio
