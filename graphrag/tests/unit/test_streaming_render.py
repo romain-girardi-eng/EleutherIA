@@ -9,6 +9,7 @@ the client as it is generated and survives a cut.
 
 from __future__ import annotations
 
+import asyncio
 import json
 from collections.abc import AsyncIterator
 from types import SimpleNamespace
@@ -37,6 +38,30 @@ class _FakeLLM:
             if self._raise_after is not None and i == self._raise_after:
                 raise RuntimeError("provider exploded mid-stream")
             yield chunk
+
+
+class _HangingLLM:
+    """LLM stub whose stream() hangs forever after emitting ``prefix`` chunks.
+
+    Reproduces the production hang: an LLM stream that emits some prose then
+    never sends another token, ``done`` or ``error``. Without a hard ceiling
+    the render loop spins on heartbeats forever and the pipeline never reaches
+    citations_preview/complete.
+    """
+
+    def __init__(self, prefix: list[str] | None = None) -> None:
+        self._prefix = prefix or []
+        self.last_model_used = "hang-model"
+        self.last_provider_used = "hang"
+        self.stream_kwargs: dict[str, Any] = {}
+
+    async def stream(self, _prompt: str, **kwargs: Any) -> AsyncIterator[str]:
+        self.stream_kwargs = kwargs
+        for chunk in self._prefix:
+            yield chunk
+        # Hang forever — no further token, no done, no error.
+        await asyncio.Event().wait()
+        yield ""  # pragma: no cover (never reached)
 
 
 def _agent_with(llm: _FakeLLM) -> ScholarlyAgent:
@@ -225,3 +250,62 @@ async def test_citations_preview_event_carries_structured_citations() -> None:
         assert c["type"] == "passage"
         assert c["id"]
         assert c["label"]
+
+
+@pytest.mark.asyncio
+async def test_render_terminates_when_stream_hangs() -> None:
+    """Regression: a hung LLM stream used to spin the render heartbeat loop
+    forever, so the pipeline never reached citations_preview/complete and the
+    public path returned prose with zero structured citations.
+
+    With ``max_wait`` the render abandons the stuck stream, falls back to a
+    deterministic answer, and RETURNS — so the caller can emit the terminal
+    frames.
+    """
+    llm = _HangingLLM(prefix=["The Stoics held that fate governs all. " * 5])
+    agent = _agent_with(llm)
+    state = RAGState(question="What did the Stoics believe about fate?")
+
+    # Tight ceiling so the test is fast; the generator MUST complete.
+    events = await asyncio.wait_for(
+        _collect(agent._stream_render(state, interval=0.05, max_wait=0.2)),
+        timeout=5.0,
+    )
+
+    # The generator returned (did not hang) and persisted a non-empty answer.
+    assert events  # at least the first status ping + the prefix prose
+    assert state.raw_answer
+    assert state.metadata.get("render_streamed") is True
+
+
+@pytest.mark.asyncio
+async def test_await_with_heartbeat_abandons_hung_task() -> None:
+    """A wrapped coroutine that never completes is abandoned after ``max_wait``;
+    the generator returns WITHOUT populating result_into (caller falls back),
+    instead of emitting status heartbeats indefinitely."""
+    llm = _FakeLLM(["unused"])
+    agent = _agent_with(llm)
+
+    async def _never_returns() -> str:
+        await asyncio.Event().wait()
+        return "unreachable"  # pragma: no cover
+
+    holder: dict[str, Any] = {}
+    events = await asyncio.wait_for(
+        _collect(
+            agent._await_with_heartbeat(
+                _never_returns(),
+                label="Verifying citations",
+                stage_id="verify",
+                interval=0.05,
+                max_wait=0.2,
+                result_into=holder,
+            )
+        ),
+        timeout=5.0,
+    )
+
+    # The generator terminated and never set a value (caller falls back).
+    assert "value" not in holder
+    # All emitted frames are status pings — no crash, no infinite loop.
+    assert all(json.loads(e)["type"] == "status" for e in events)
