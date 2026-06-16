@@ -275,3 +275,125 @@ def test_context_pack_includes_frames_with_flag(monkeypatch) -> None:
     assert len(pack.controversy_frames) == 1
     assert "## Controversy Frames" in pack.prompt_context
     assert "Michael Frede" in pack.prompt_context
+
+
+# ── the live seam: orchestrator populates state.controversy_map → dialectical ─
+
+
+class _ToolsDouble:
+    """Minimal ``.get(name)`` registry double for the assembler seam test."""
+
+    def __init__(self, mapping):
+        self._mapping = mapping
+
+    def get(self, name):
+        return self._mapping.get(name)
+
+
+@pytest.mark.asyncio
+async def test_orchestrator_populates_map_and_seam_routes_dialectical(
+    monkeypatch,
+) -> None:
+    """Flag ON + stubbed find_debates/build_controversy_frame → the orchestrator
+    assembles a ControversyMap and the synthesis seam routes to the dialectical
+    layer (## Controversy Frames present), NOT the facet template.
+    """
+    from types import SimpleNamespace
+
+    from eleutheria_graphrag.agents.graph_nodes import _build_context_pack
+    from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
+    from eleutheria_graphrag.agents.state import RAGState
+
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "1")
+
+    find_tool = AsyncMock()
+    find_tool.execute.return_value = FindDebatesResult(
+        debates=[
+            DebateSummary(
+                debate_id="d_will", label="origins of the will", type="debate"
+            )
+        ],
+        total_found=1,
+    )
+    build_tool = AsyncMock()
+    build_tool.execute.return_value = BuildControversyFrameResult(
+        frame=_frame(
+            "d_will",
+            "When did the will emerge?",
+            n_links=2,
+            positions=[
+                GroundedPosition(
+                    position_id="p_frede",
+                    holder="Michael Frede",
+                    publication="Frede 2011",
+                    claim="Will originates with Epictetus.",
+                )
+            ],
+        )
+    )
+    tools = _ToolsDouble(
+        {"find_debates": find_tool, "build_controversy_frame": build_tool}
+    )
+
+    # llm=None-equivalent: a generate() that raises forces the planner's
+    # deterministic heuristic, so the test needs no real LLM.
+    llm = AsyncMock()
+    llm.generate.side_effect = RuntimeError("no llm in test")
+    agent = ScholarlyAgent(SimpleNamespace(llm=llm))
+
+    state = RAGState(question="What are the big open debates about free will?")
+    assert state.controversy_map is None
+
+    routed = await agent._assemble_controversy_map(state, tools)
+
+    assert routed is True
+    assert state.controversy_map is not None
+    assert [f.frame_id for f in state.controversy_map.frames] == ["d_will"]
+    assert state.metadata["controversy_map"]["status"] == "ok"
+    assert state.research_plan is not None
+
+    # The seam consumes state.controversy_map: with it populated and the flag on,
+    # the context pack carries the ## Controversy Frames dialectical layer rather
+    # than routing synthesis through the facet template.
+    pack = _build_context_pack(state)
+    assert len(pack.controversy_frames) == 1
+    assert "## Controversy Frames" in pack.prompt_context
+    assert "Michael Frede" in pack.prompt_context
+    assert "frames the issue as" not in pack.prompt_context
+
+
+@pytest.mark.asyncio
+async def test_orchestrator_empty_map_falls_back_gracefully(monkeypatch) -> None:
+    """0 frames assembled → controversy_map stays None (legacy path), a degraded
+    note is recorded, and nothing crashes."""
+    from types import SimpleNamespace
+
+    from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
+    from eleutheria_graphrag.agents.state import ControversyFrame, RAGState
+
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "1")
+
+    find_tool = AsyncMock()
+    find_tool.execute.return_value = FindDebatesResult(
+        debates=[DebateSummary(debate_id="d_empty", label="empty", type="debate")],
+        total_found=1,
+    )
+    build_tool = AsyncMock()
+    build_tool.execute.return_value = BuildControversyFrameResult(
+        frame=ControversyFrame(frame_id="d_empty", title="Empty")
+    )
+    tools = _ToolsDouble(
+        {"find_debates": find_tool, "build_controversy_frame": build_tool}
+    )
+
+    llm = AsyncMock()
+    llm.generate.side_effect = RuntimeError("no llm in test")
+    agent = ScholarlyAgent(SimpleNamespace(llm=llm))
+
+    state = RAGState(question="x")
+    routed = await agent._assemble_controversy_map(state, tools)
+
+    assert routed is False
+    assert state.controversy_map is None
+    assert state.metadata["controversy_map"]["status"] == "degraded"
+    assert any("degraded" in h for h in state.research_notebook.competing_hypotheses)

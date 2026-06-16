@@ -1,5 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "//k2p7_swap": "ONE-LINE K2.7 SWAP (ARCHITECTURE §K2.7): when K2.7 lands on Fireworks, change 'model'/'small_model' below to its Fireworks id and add a sibling entry under provider.fireworks.models. Fireworks-only — do NOT add a Moonshot provider here.",
   "model": "fireworks/accounts/fireworks/models/kimi-k2p6",
   "small_model": "fireworks/accounts/fireworks/models/kimi-k2p6",
   "provider": {
