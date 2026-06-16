@@ -4887,6 +4887,47 @@ def _verify_answer_programmatically(
     return "\n".join(kept_lines), citations
 
 
+def _dialectical_citations(state: RAGState) -> list[Citation]:
+    """Build the structured citation list for the dialectical (Scholar-RAG)
+    answer from its prose-derived provenance ledger.
+
+    The dialectical prose cites inline via ``[P_*]``/``[passage_*]``/``[edge:*]``
+    markers; :func:`build_provenance_ledger` already resolved those against the
+    ControversyMap into ``state.claim_ledger``. We surface each SUPPORTED
+    passage-backed ledger item as a ``Citation`` (the UI reference map + the
+    grounding metric consume these). Position/edge items are attribution claims,
+    not passage citations, so they don't become ``Citation`` rows here — the
+    adversarial verifier audits them. Deterministic, no LLM call.
+    """
+    citations: list[Citation] = []
+    seen: set[str] = set()
+    for item in state.claim_ledger:
+        if item.status != ClaimStatus.SUPPORTED:
+            continue
+        if item.support_type != "passage":
+            continue
+        for ev_id in item.evidence_ids:
+            if ev_id in seen:
+                continue
+            seen.add(ev_id)
+            citations.append(
+                Citation(
+                    ref=ev_id,
+                    type="passage",
+                    id=ev_id,
+                    label=ev_id,
+                    layer=EvidenceLayer.PRIMARY,
+                    confidence=item.confidence,
+                    verified=True,
+                    verification_note=(
+                        "Dialectical synthesis: inline marker resolved to a "
+                        "ControversyMap passage (cite-as-you-write provenance)"
+                    ),
+                )
+            )
+    return citations
+
+
 def _grounding_score(requested_refs: set[str], citations: list[Citation]) -> int:
     """Ref-resolution coverage: how much of the draft's claimed grounding
     survived programmatic verification.
@@ -5842,8 +5883,21 @@ class ProgrammaticVerify(BaseNode[RAGState, Deps, ScholarlyAnswer]):
     ) -> End[ScholarlyAnswer]:
         state = ctx.state
         _t0 = _time.time()
-        requested_refs = set(_extract_line_refs(state.raw_answer))
-        answer, citations = _verify_answer_programmatically(state)
+        # Scholar-RAG M4: the dialectical answer carries its OWN inline marker
+        # scheme ([P_*]/[passage_*]/[edge:*]) and is NOT a [B1]/[N3] line-ref
+        # render. The legacy line-pruner (_verify_answer_programmatically) would
+        # drop every prose line (no numeric refs resolve) and replace the answer
+        # with the facet fallback — defeating the cutover. On this path we PRESERVE
+        # the prose verbatim and derive citations from the prose-built provenance
+        # ledger; the adversarial verifier-v2 + scholar verification do the real
+        # claim audit. Legacy path is byte-for-byte unchanged.
+        if state.metadata.get("render_answer_mode") == "dialectical":
+            requested_refs = set(_extract_line_refs(state.raw_answer))
+            answer = state.raw_answer
+            citations = _dialectical_citations(state)
+        else:
+            requested_refs = set(_extract_line_refs(state.raw_answer))
+            answer, citations = _verify_answer_programmatically(state)
         _dur = int((_time.time() - _t0) * 1000)
         state.raw_answer = answer
         state.citations = citations

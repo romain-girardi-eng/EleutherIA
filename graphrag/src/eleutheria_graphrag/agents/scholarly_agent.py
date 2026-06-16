@@ -21,6 +21,11 @@ from typing import Any
 from pydantic_graph import Graph
 
 from eleutheria_graphrag.agents.dependencies import Deps
+from eleutheria_graphrag.agents.dialectical_synthesis import (
+    build_provenance_ledger,
+    scholar_render_max_tokens,
+    synthesize_dialectical,
+)
 from eleutheria_graphrag.agents.graph_nodes import (
     SYSTEM_PROMPT,
     ClassifyQueryType,
@@ -422,9 +427,18 @@ class ScholarlyAgent:
         await draft_node.run(ctx)
         self._merge_counter_ledger_items(state, counter_items)
 
-        render_node = RenderGroundedAnswer()
-        ctx = GraphRunContext(state=state, deps=self.deps)
-        await render_node.run(ctx)
+        # M4 cutover: when Scholar-RAG is on and a ControversyMap assembled, the
+        # FINAL ANSWER PROSE comes from dialectical synthesis over the map — NOT
+        # the facet template. The DraftClaimLedger facet ledger is overwritten by
+        # the prose-derived provenance ledger. On failure / empty prose we fall
+        # back to the legacy RenderGroundedAnswer render (flag-OFF is untouched).
+        dialectical_prose: str | None = None
+        if self._scholar_render_active(state):
+            dialectical_prose = await self._synthesize_dialectical(state)
+        if dialectical_prose is None:
+            render_node = RenderGroundedAnswer()
+            ctx = GraphRunContext(state=state, deps=self.deps)
+            await render_node.run(ctx)
 
         verify_node = ProgrammaticVerify()
         ctx = GraphRunContext(state=state, deps=self.deps)
@@ -555,6 +569,81 @@ class ScholarlyAgent:
         state.metadata["controversy_map"] = {"status": "ok", **meta}
         _trace_stage(state, "controversy_map", meta)
         return True
+
+    # ------------------------------------------------------------------
+    # Dialectical synthesis (Scholar-RAG M4 cutover — flag-gated render)
+    # ------------------------------------------------------------------
+
+    def _scholar_render_active(self, state: RAGState) -> bool:
+        """The dialectical render is THE render path iff the flag is on AND a
+        ControversyMap actually assembled (``state.controversy_map`` populated).
+
+        Both must hold; otherwise the legacy facet-template render runs
+        byte-for-byte unchanged (flag-OFF and flag-ON-but-empty-map both keep
+        the legacy path)."""
+        return scholar_rag_enabled() and state.controversy_map is not None
+
+    async def _synthesize_dialectical(self, state: RAGState) -> str | None:
+        """Produce the final answer prose from ``state.controversy_map`` via
+        :func:`synthesize_dialectical` (M4 cutover), writing it into the same
+        seam the legacy render uses: ``state.raw_answer`` + ``state.claim_ledger``.
+
+        The prose IS the source of truth; the provenance ledger is reconstructed
+        from it (``build_provenance_ledger``) and replaces the pre-built
+        ``DraftClaimLedger`` facet ledger so the verifier and the UI reference
+        map index the dialectical answer, not the discarded template scaffolding.
+
+        Returns the prose on success, or ``None`` on failure / empty result so
+        the caller falls back to the legacy render. Never raises into the
+        pipeline."""
+        cmap = state.controversy_map
+        if cmap is None:  # defensive — caller already gated on this
+            return None
+        try:
+            result = await synthesize_dialectical(
+                state,
+                cmap,
+                self.deps.llm,
+                max_tokens=scholar_render_max_tokens(
+                    getattr(getattr(state, "research_plan", None), "budget_tier", None)
+                    or "standard"
+                ),
+            )
+        except Exception:  # noqa: BLE001 - never crash the pipeline on synthesis
+            logger.warning("Dialectical synthesis raised; legacy render", exc_info=True)
+            return None
+
+        prose = (result.prose or "").strip()
+        if not prose:
+            state.metadata["scholar_synthesis"] = {"status": "empty"}
+            return None
+
+        state.raw_answer = prose
+        # The ledger is a BYPRODUCT of the prose (reverses the legacy
+        # DraftClaimLedger->prose dependency): index the inline markers back to
+        # the map so the verifier + UI reference map reflect the dialectical
+        # answer, not the discarded facet scaffolding.
+        ledger = result.ledger or build_provenance_ledger(prose, cmap)
+        if ledger:
+            state.claim_ledger = ledger
+        state.metadata["render_answer_mode"] = "dialectical"
+        state.metadata["scholar_synthesis"] = {
+            "status": "ok",
+            "model_used": result.model_used,
+            "ledger_size": len(ledger),
+            "degraded": result.degraded,
+        }
+        _trace_stage(
+            state,
+            "dialectical_synthesis",
+            {
+                "mode": "dialectical",
+                "model_used": result.model_used,
+                "ledger_size": len(ledger),
+                "raw_excerpt": truncate_text(prose, 2000),
+            },
+        )
+        return prose
 
     # ------------------------------------------------------------------
     # Post-loop quality gate (react paths)
@@ -1053,6 +1142,12 @@ class ScholarlyAgent:
         This is 100% deterministic — no LLM calls.
         """
         import re as _re
+
+        # Scholar-RAG M4 (F10): the dialectical answer quotes contested primary
+        # text INLINE from the ControversyMap; post-hoc bundle dumping would bolt
+        # legacy node-pasted passages onto it. Skip injection entirely on this path.
+        if state.metadata.get("render_answer_mode") == "dialectical":
+            return answer
 
         text = answer.answer
         # Count existing Greek blockquotes (lines starting with > containing Greek chars)
@@ -1620,6 +1715,84 @@ class ScholarlyAgent:
         if result_into is not None:
             result_into["value"] = value
 
+    async def _stream_dialectical(
+        self,
+        state: RAGState,
+        *,
+        holder: dict[str, Any],
+        interval: float = 10.0,
+        max_wait: float = 240.0,
+    ) -> AsyncIterator[str]:
+        """Stream the dialectical answer for the Scholar-RAG render seam (M4).
+
+        ``synthesize_dialectical`` is a single whole-answer LLM call (not a
+        token stream), so we run it under a heartbeat to keep the SSE wire warm
+        through the 55–95 s synthesis, then chunk its finished prose into raw
+        ``answer_chunk`` strings (the route wraps each yielded string as an
+        ``answer_chunk`` event, identical to ``_stream_render``). The prose lands
+        in ``state.raw_answer`` and the prose-derived provenance ledger in
+        ``state.claim_ledger`` (set inside ``_synthesize_dialectical``).
+
+        Sets ``holder['ok'] = True`` iff dialectical prose was produced and
+        streamed; otherwise leaves it falsy so the caller falls through to the
+        legacy streamed render. Never raises into the pipeline.
+        """
+        result_holder: dict[str, Any] = {}
+        try:
+            async for hb in self._await_with_heartbeat(
+                self._synthesize_dialectical(state),
+                label="Synthesizing dialectical answer",
+                stage_id="dialectical_synthesis",
+                interval=interval,
+                max_wait=max_wait,
+                result_into=result_holder,
+            ):
+                yield hb
+        except Exception:
+            logger.warning(
+                "Dialectical synthesis stream failed; legacy render", exc_info=True
+            )
+            holder["ok"] = False
+            return
+
+        prose = result_holder.get("value")
+        if not prose:
+            holder["ok"] = False
+            return
+
+        state.metadata["render_streamed"] = True
+        # Chunk the finished prose like _chunk_answer: paragraph-first, then
+        # sentence-split long paragraphs. Each yielded string is forwarded by
+        # the route as an answer_chunk event.
+        paragraphs = re.split(r"\n\n+", prose)
+        for i, para in enumerate(paragraphs):
+            if i > 0:
+                yield "\n\n"
+            if len(para) <= 500:
+                yield para
+            else:
+                sentences = _SENTENCE_SPLIT_RE.split(para)
+                buffer = ""
+                for sent in sentences:
+                    if buffer and len(buffer) + len(sent) + 1 > 500:
+                        yield buffer
+                        buffer = sent
+                    else:
+                        buffer = f"{buffer} {sent}" if buffer else sent
+                if buffer:
+                    yield buffer
+
+        _append_reasoning_step(
+            state,
+            "DialecticalSynthesis",
+            self.deps.llm.last_model_used or state.selected_model,
+            "",
+            0,
+            prose,
+            parsed_result={"streamed": True, "render_mode": "dialectical"},
+        )
+        holder["ok"] = True
+
     async def _stream_render(
         self, state: RAGState, *, interval: float = 10.0, max_wait: float = 240.0
     ) -> AsyncIterator[str]:
@@ -1639,8 +1812,6 @@ class ScholarlyAgent:
         Yields raw prose strings (forwarded by the route as ``answer_chunk``
         events) interleaved with JSON ``status`` heartbeats.
         """
-        payload = build_render_prompt(state)
-
         # First-frame ping so the UI enters the render stage immediately.
         yield json.dumps(
             {
@@ -1649,6 +1820,23 @@ class ScholarlyAgent:
                 "data": {"step": 99, "stage": "render_grounded_answer", "elapsed_s": 0},
             }
         )
+
+        # M4 cutover: when Scholar-RAG is on and a ControversyMap assembled, the
+        # streamed prose comes from dialectical synthesis over the map — NOT the
+        # facet template. synthesize_dialectical is whole (one LLM call), so we
+        # run it under a heartbeat then chunk its result into answer_chunk events.
+        # On failure / empty prose we fall through to the legacy streamed render.
+        if self._scholar_render_active(state):
+            dx_holder: dict[str, Any] = {}
+            async for ev in self._stream_dialectical(
+                state, holder=dx_holder, interval=interval
+            ):
+                yield ev
+            if dx_holder.get("ok"):
+                return
+            # else: synthesis failed/empty → fall through to the legacy render.
+
+        payload = build_render_prompt(state)
 
         if payload["mode"] == "deterministic_quote":
             state.raw_answer = payload["answer"]
