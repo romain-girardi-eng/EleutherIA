@@ -8,6 +8,7 @@ import inspect
 import json
 import logging
 import os
+import re
 import time
 import uuid
 from collections.abc import AsyncIterator
@@ -30,6 +31,44 @@ from eleutheria_graphrag.services.thesis_renderer import (
 logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["graphrag"])
+
+# Defensive guard (GOAL-8, B7): a citation label that is actually a raw KG/
+# passage node id must NEVER reach the frontend. Any candidate whose label
+# matches this shape is re-resolved via node_lookup; if still unresolved, it is
+# OMITTED rather than rendered verbatim. Protects cached replays too.
+_LEAKED_ID_RE = re.compile(
+    r"^(?:b_[0-9a-f]+"
+    r"|scholarly_argument_"
+    r"|scholar_position_"
+    r"|concept_"
+    r"|person_"
+    r"|work_"
+    r"|argument_"
+    r"|publication_"
+    r"|pub_)"
+)
+
+
+def _deleak_label(label: str, lookup: dict[str, Any] | None) -> str | None:
+    """Return a display-safe label, or ``None`` if it can't be resolved.
+
+    If ``label`` looks like a raw node id, try to resolve it to a human-readable
+    label via ``lookup`` (the in-memory KG node dicts). If that fails, return
+    ``None`` so the caller OMITS it — a raw id must never render.
+    """
+    text = (label or "").strip()
+    if not text:
+        return None
+    if not _LEAKED_ID_RE.match(text):
+        return text
+    node = (lookup or {}).get(text) or {}
+    resolved = ""
+    if isinstance(node, dict):
+        resolved = str(node.get("label") or "").strip()
+    if resolved and not _LEAKED_ID_RE.match(resolved):
+        return resolved
+    return None
+
 
 # Service instance (to be injected by main app)
 _graphrag: GraphRAGService | None = None
@@ -276,6 +315,42 @@ async def query_stream(
                     "total_edges": 0,
                 }
                 cached_ancient = cached_payload.get("citations") or []
+                # B6/B7 — rebuild BOTH citation layers from the persisted typed
+                # citations (passage_citations carry {type, layer, label}); fall
+                # back to the legacy ancient string list. Every label is deleaked
+                # so a cached row written before GOAL-8 can never replay a raw id.
+                replay_lookup = getattr(graphrag, "node_lookup", {}) or {}
+                _typed = [c for c in cached_passage_citations if isinstance(c, dict)]
+                if _typed:
+                    cached_ancient_labels = [
+                        lbl
+                        for c in _typed
+                        if c.get("layer") != "secondary"
+                        and (
+                            lbl := _deleak_label(
+                                c.get("label") or c.get("citationText") or "",
+                                replay_lookup,
+                            )
+                        )
+                    ]
+                    cached_modern_labels = [
+                        lbl
+                        for c in _typed
+                        if c.get("layer") == "secondary"
+                        and (
+                            lbl := _deleak_label(
+                                c.get("label") or c.get("citationText") or "",
+                                replay_lookup,
+                            )
+                        )
+                    ]
+                else:
+                    cached_ancient_labels = [
+                        lbl
+                        for a in cached_ancient
+                        if (lbl := _deleak_label(a, replay_lookup))
+                    ]
+                    cached_modern_labels = []
                 # Replay the provenance persisted at store time
                 # (text_verification, grounding, citation_verifier_v2,
                 # research graph keys, …) — without it, cache hits silently
@@ -298,8 +373,10 @@ async def query_stream(
                         "query": question,
                         "answer": cached_payload.get("answer", ""),
                         "citations": {
-                            "ancient_sources": [a for a in cached_ancient if a],
-                            "modern_scholarship": [],
+                            "ancient_sources": [a for a in cached_ancient_labels if a],
+                            "modern_scholarship": [
+                                m for m in cached_modern_labels if m
+                            ],
                         },
                         "passage_citations": cached_passage_citations,
                         "claim_ledger": cached_claim_ledger,
@@ -437,18 +514,37 @@ async def query_stream(
                             is_preview = event_type == "citations_preview"
                             raw = parsed.get("data") or {}
                             raw_citations = raw.get("citations", [])
-                            ancient = [
+                            seed_ids = raw.get("seed_nodes", [])
+                            ctx_ids = raw.get("context_nodes", [])
+                            lookup = graphrag.node_lookup
+                            # B6 — ancient (primary/passage) labels, deleaked.
+                            ancient_raw = [
                                 (c.get("label") or c.get("citationText") or "")
                                 for c in raw_citations
                                 if isinstance(c, dict) and c.get("type") == "passage"
                             ] or [
                                 (c.get("label") or c.get("citationText") or "")
                                 for c in raw_citations
-                                if isinstance(c, dict)
+                                if isinstance(c, dict) and c.get("layer") != "secondary"
                             ]
-                            seed_ids = raw.get("seed_nodes", [])
-                            ctx_ids = raw.get("context_nodes", [])
-                            lookup = graphrag.node_lookup
+                            ancient = [
+                                lbl
+                                for c in ancient_raw
+                                if (lbl := _deleak_label(c, lookup))
+                            ]
+                            # B6 — modern scholarship (secondary layer), deleaked.
+                            modern = [
+                                lbl
+                                for c in raw_citations
+                                if isinstance(c, dict)
+                                and c.get("layer") == "secondary"
+                                and (
+                                    lbl := _deleak_label(
+                                        c.get("label") or c.get("citationText") or "",
+                                        lookup,
+                                    )
+                                )
+                            ]
                             starting = [
                                 {
                                     "id": nid,
@@ -538,7 +634,7 @@ async def query_stream(
                                     "answer": final_answer,
                                     "citations": {
                                         "ancient_sources": [a for a in ancient if a],
-                                        "modern_scholarship": [],
+                                        "modern_scholarship": [m for m in modern if m],
                                     },
                                     # Structured claim-ledger entries — the
                                     # frontend needs the {ref, id, type, label}

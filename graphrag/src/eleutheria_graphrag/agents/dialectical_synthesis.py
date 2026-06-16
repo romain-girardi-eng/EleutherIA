@@ -767,21 +767,36 @@ def _split_sentences(prose: str) -> list[str]:
     return [p.strip() for p in parts if p.strip()]
 
 
+def position_marker_id(pos: GroundedPosition) -> str:
+    """The STABLE inline-marker id for a position (``[P_<id>]``).
+
+    This is the only place the raw ``position_id`` is allowed to surface: it
+    keeps the inline cite-as-you-write marker stable and clickable. The
+    human-readable reference (:func:`format_scholar_reference`) must NEVER leak
+    this id — see B4.
+    """
+    return pos.position_id or ""
+
+
 def format_scholar_reference(pos: GroundedPosition) -> str:
     """A human-readable modern-scholarship reference for a position.
 
-    "<Holder> — <Publication>, <page>" using only what the map carries (never
+    "<Holder>, <Publication>, <page>" using only what the map carries (never
     invents a page). Used to make scholar positions FIRST-CLASS CITABLE items in
     the citation payload (the frontend CitationGenerator can export them), not
     only ancient passages.
+
+    Returns ``""`` (NOT the ``position_id``) when nothing human-readable is
+    available — a raw node id must never leak into a citation label. Callers
+    decide what to do with an empty reference (resolve elsewhere, or omit).
     """
-    holder = (pos.holder or pos.position_id).strip()
+    holder = (pos.holder or "").strip()
     parts: list[str] = [holder] if holder else []
     if pos.publication:
         parts.append(pos.publication.strip())
     if pos.page_grounding:
         parts.append(pos.page_grounding.strip())
-    return ", ".join(p for p in parts if p) if parts else (pos.position_id or "")
+    return ", ".join(p for p in parts if p)
 
 
 def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedgerItem]:

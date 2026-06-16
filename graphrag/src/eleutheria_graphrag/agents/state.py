@@ -539,6 +539,12 @@ class Citation(BaseModel):
     confidence: float | None = Field(None, ge=0.0, le=1.0)
     verified: bool = Field(False)
     verification_note: str | None = None
+    cts_urn: str | None = Field(
+        None, description="CTS URN for ancient passages, when resolved"
+    )
+    doi: str | None = Field(
+        None, description="DOI for modern-scholarship references, when resolved"
+    )
 
 
 class ScholarlyAnswer(BaseModel):

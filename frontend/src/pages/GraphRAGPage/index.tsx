@@ -189,13 +189,20 @@ export default function GraphRAGPage() {
   }, [passageContext, passageWindow, fetchPassageContext]);
 
   const handleNodeCitationClick = useCallback((nodeId: string) => {
-    // Open the node's detail in the right panel (KG scholar/argument/concept
-    // citations from [P_<node_id>: ...] markers).
-    handleNodeClick(nodeId);
-    // If there's already a graph response visible, switch to the graph tab so
-    // the Sources / NodeDetailCard can render.
-    if (rightPanelResponse) {
-      setRightPanelState('graph');
+    // B12 — open ONLY the right panel for KG scholar/argument/concept
+    // citations ([P_<node_id>: ...] markers). When the cited node is part of
+    // the visible answer graph, highlight it there (single surface); only fall
+    // back to the NodeDetailPanel overlay when it isn't in the graph at all.
+    const idx = rightPanelResponse?.sources?.findIndex((s) => s.nodeId === nodeId) ?? -1;
+    if (idx >= 0) {
+      setActiveSourceIndex(idx);
+      setPassageContext(null);
+      setPassageWindow(5);
+      setRightPanelState(rightPanelResponse ? 'graph' : 'idle');
+      highlightNodeRef.current?.(idx);
+    } else {
+      // Not in the current answer graph — open the standalone detail overlay.
+      handleNodeClick(nodeId);
     }
   }, [rightPanelResponse]); // handleNodeClick is stable (no deps that change)
 

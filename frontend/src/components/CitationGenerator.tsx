@@ -12,6 +12,13 @@ interface Citation {
   url?: string;
   doi?: string;
   node_id?: string;
+  // Structured bibliographic fields (B11) — when present, BibTeX is built from
+  // these instead of comma-splitting the raw display string.
+  author?: string;
+  year?: number;
+  title?: string;
+  publisher?: string;
+  bibtex_key?: string;
 }
 
 interface CitationGeneratorProps {
@@ -94,9 +101,31 @@ export const CitationGenerator: React.FC<CitationGeneratorProps> = ({
       case 'chicago':
         // Chicago style for ancient texts
         return citation.citation || source;
-      case 'bibtex':
-        const id = (citation.id || citation.source || 'citation').replace(/[^a-zA-Z0-9]/g, '_');
-        return `@book{${id},\n  author = {${source.split(',')[0]}},\n  title = {${source.split(',').slice(1).join(',').trim()}},\n  note = {Ancient source}\n}`;
+      case 'bibtex': {
+        // B11 — build BibTeX from structured fields when available; only fall
+        // back to comma-splitting the raw display string if they're absent.
+        const display = citation.citation || source;
+        const key = (
+          citation.bibtex_key ||
+          citation.id ||
+          citation.node_id ||
+          display ||
+          'citation'
+        ).replace(/[^a-zA-Z0-9]/g, '_');
+        const author = citation.author ?? source.split(',')[0].trim();
+        const title = citation.title ?? source.split(',').slice(1).join(',').trim();
+        const lines = [
+          `@misc{${key},`,
+          `  author = {${author}},`,
+          `  title = {${title}},`,
+          citation.year !== undefined ? `  year = {${citation.year}},` : '',
+          citation.publisher ? `  publisher = {${citation.publisher}},` : '',
+          citation.doi ? `  doi = {${citation.doi}},` : '',
+          '  note = {Cited source}',
+          '}',
+        ].filter(Boolean);
+        return lines.join('\n');
+      }
       default:
         return citation.citation || source;
     }

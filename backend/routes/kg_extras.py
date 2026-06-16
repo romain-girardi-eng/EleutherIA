@@ -6,6 +6,7 @@ These routes bridge the gap between what the frontend API client calls
 and what the eleutheria_kg package exposes.
 """
 
+import contextlib
 import logging
 from typing import Annotated, Any
 
@@ -138,10 +139,8 @@ async def reload_kg(
         # Bust any cached statistics
         cache: KGCache = svc.cache
         for key in ("kg_statistics", "kg_statistics_analytics"):
-            try:
+            with contextlib.suppress(Exception):
                 cache.delete(key)
-            except Exception:
-                pass
         return {
             "ok": True,
             "kg_nodes": len(kg_data.get("nodes", [])),
