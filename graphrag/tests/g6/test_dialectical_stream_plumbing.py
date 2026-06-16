@@ -28,7 +28,9 @@ from unittest.mock import AsyncMock, patch
 import pytest
 
 import eleutheria_graphrag.agents.scholarly_agent as sa_mod
+from eleutheria_graphrag.agents.dialectical_synthesis import SynthesisResult
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
+from eleutheria_graphrag.agents.state import RAGState
 
 from .test_dialectical_render_cutover import (
     DIALECTICAL_PROSE,
@@ -323,6 +325,126 @@ async def test_complete_event_prose_not_streamed_twice(
         if _classify_like_route(ch)[0] == "answer_chunk"
     ]
     assert not after_complete_prose, "prose re-streamed after the complete event"
+
+
+# ── Long multi-section regression: the FULL prose survives (head + tail) ──────
+#
+# The shipped DIALECTICAL_PROSE fixture is a single short paragraph, so it never
+# exercises the multi-paragraph / long-paragraph chunker — the exact path where
+# the streamed answer used to lose its head and keep only the tail (dropped
+# inter-paragraph / inter-sentence separators at chunk boundaries). This builds a
+# >3000-char, multi-section prose and pins that the WHOLE thing flows intact into
+# (a) ``state.raw_answer``, (b) the streamed answer_chunk concatenation, and
+# (c) the terminal ``complete`` event — byte-for-byte, head included.
+
+
+def _long_dialectical_prose() -> str:
+    sections: list[str] = []
+    for n in range(1, 5):
+        body = " ".join(
+            f"Sentence {k} of section {n} stages Bobzien against Frede over the "
+            "Stoic doctrine of assent and the dating of the will."
+            for k in range(18)
+        )
+        sections.append(f"## Section {n}: Fault line {n}\n{body}")
+    prose = "\n\n".join(sections)
+    prose += (
+        "\n\n## Conclusion\nWhat remains genuinely open is the dating of the "
+        "concept."
+    )
+    return prose
+
+
+LONG_DIALECTICAL_PROSE = _long_dialectical_prose()
+
+
+def _make_agent_with_prose(prose: str) -> ScholarlyAgent:
+    llm = AsyncMock()
+    llm.generate = AsyncMock(return_value=prose)
+    llm.last_model_used = "accounts/fireworks/models/kimi-k2p6"
+    llm.last_provider_used = "fireworks"
+    deps = AsyncMock()
+    deps.llm = llm
+    deps.verifier_v2 = None
+    return ScholarlyAgent(deps)
+
+
+def test_long_prose_fixture_is_a_real_multisection_stressor() -> None:
+    """Guard the fixture itself: it must be long + multi-section, or the
+    regression below would silently pass on a trivial input."""
+    assert len(LONG_DIALECTICAL_PROSE) > 3000
+    assert LONG_DIALECTICAL_PROSE.count("\n\n") >= 4
+    assert "## Section 1" in LONG_DIALECTICAL_PROSE
+    assert LONG_DIALECTICAL_PROSE.endswith("the dating of the concept.")
+
+
+@pytest.mark.asyncio
+async def test_long_prose_synthesize_sets_full_raw_answer(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``_synthesize_dialectical`` writes the FULL prose to ``state.raw_answer``
+    byte-for-byte (head section included), not a clipped tail."""
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    agent = _make_agent_with_prose(LONG_DIALECTICAL_PROSE)
+    state = RAGState(question="big open debates about free will")
+    state.controversy_map = _stub_map()
+
+    with patch(
+        "eleutheria_graphrag.agents.scholarly_agent.synthesize_dialectical",
+        new=AsyncMock(
+            return_value=SynthesisResult(
+                prose=LONG_DIALECTICAL_PROSE,
+                model_used="accounts/fireworks/models/kimi-k2p6",
+            )
+        ),
+    ):
+        returned = await agent._synthesize_dialectical(state)
+
+    assert returned == LONG_DIALECTICAL_PROSE
+    assert state.raw_answer == LONG_DIALECTICAL_PROSE
+    assert state.raw_answer.startswith("## Section 1")
+
+
+@pytest.mark.asyncio
+async def test_long_prose_streams_and_completes_whole(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """End-to-end stream of a long multi-section answer: the streamed
+    answer_chunks concatenate to the FULL prose AND the ``complete`` event
+    answer equals the FULL prose — head + tail, byte-for-byte."""
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    agent = _make_agent_with_prose(LONG_DIALECTICAL_PROSE)
+
+    with patch(
+        "eleutheria_graphrag.agents.scholarly_agent.synthesize_dialectical",
+        new=AsyncMock(
+            return_value=SynthesisResult(
+                prose=LONG_DIALECTICAL_PROSE,
+                model_used="accounts/fireworks/models/kimi-k2p6",
+            )
+        ),
+    ):
+        events = await _collect_stream(agent, "big open debates about free will")
+
+    answer_chunk_payloads = [
+        chunk for chunk in events if _classify_like_route(chunk)[0] == "answer_chunk"
+    ]
+    streamed_prose = "".join(answer_chunk_payloads)
+    # The whole answer streamed — head section present, byte-for-byte exact.
+    assert streamed_prose == LONG_DIALECTICAL_PROSE
+    assert "## Section 1" in streamed_prose
+
+    completes = [
+        parsed
+        for chunk in events
+        if (cls := _classify_like_route(chunk))[0] == "complete"
+        for parsed in (cls[1],)
+    ]
+    assert completes, "expected a terminal complete event"
+    complete_answer = completes[-1]["data"]["answer"]
+    assert complete_answer == LONG_DIALECTICAL_PROSE
+    assert complete_answer.startswith("## Section 1")
+    assert complete_answer.endswith("the dating of the concept.")
 
 
 def test_relational_tools_excluded_from_llm_surface_no_double_retrieval(

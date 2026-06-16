@@ -169,6 +169,13 @@ class LLMService:
         self._rate_limiters: dict[ModelProvider, RateLimiter] = {}
         self.last_model_used: str = ""
         self.last_provider_used: str = ""
+        # Thinking models (e.g. Fireworks deepseek-v4-pro, kimi-k2-thinking) return
+        # their chain-of-thought in a SEPARATE ``reasoning_content`` field, leaving
+        # ``content`` a clean finished answer. We surface that here as a side-channel
+        # so callers can route it to the SSE reasoning/trace channel WITHOUT it
+        # leaking into the answer. Empty for non-reasoning models (k2p6, gemini).
+        # Set on every successful generate()/stream() call (reset at the start).
+        self.last_reasoning_content: str = ""
         self.last_token_usage: TokenUsage | None = None
         self._token_usage_callback: TokenUsageCallback | None = None
         self._prompt_cache_names: dict[str, str] = {}
@@ -745,6 +752,9 @@ class LLMService:
         Returns:
             Generated text
         """
+        # Reset the reasoning side-channel so a non-reasoning model (or the Gemini
+        # path, which never sets it) cannot surface a previous call's thinking.
+        self.last_reasoning_content = ""
         # --- Model override: bypass the normal provider loop ---
         if model_override:
             override_provider, override_model = self._resolve_model_override(
@@ -1153,7 +1163,13 @@ class LLMService:
         )
         response.raise_for_status()
         data = response.json()
-        result: str = data["choices"][0]["message"]["content"]
+        message = data["choices"][0]["message"]
+        # ``content`` is the clean finished answer. Thinking models (deepseek-v4-pro,
+        # kimi-k2-thinking) additionally return their chain-of-thought in
+        # ``reasoning_content`` — capture it on the side-channel ONLY (never folded
+        # into the returned answer). Non-reasoning models omit the field → "".
+        result: str = message.get("content") or ""
+        self.last_reasoning_content = message.get("reasoning_content") or ""
         usage = TokenUsage.from_openai_usage(
             data.get("usage") if isinstance(data, dict) else None,
             model=cast(str, config.get("model") or ""),
@@ -1343,6 +1359,10 @@ class LLMService:
         Yields:
             Text chunks as they're generated
         """
+        # Reset the reasoning side-channel; the OpenAI-compatible stream path
+        # accumulates ``reasoning_content`` deltas into it (answer chunks only are
+        # yielded). Gemini streaming never sets it.
+        self.last_reasoning_content = ""
         # --- Model override: bypass the normal provider loop (see generate). ---
         if model_override:
             override_provider, override_model = self._resolve_model_override(
@@ -1507,6 +1527,7 @@ class LLMService:
         ) as response:
             response.raise_for_status()
             stream_usage: dict[str, Any] | None = None
+            reasoning_parts: list[str] = []
             async for line in response.aiter_lines():
                 if line.startswith("data: "):
                     data = line[6:]
@@ -1520,11 +1541,15 @@ class LLMService:
                             chunk_usage = chunk.get("usage")
                             if isinstance(chunk_usage, dict):
                                 stream_usage = chunk_usage
-                        content = (
-                            chunk.get("choices", [{}])[0]
-                            .get("delta", {})
-                            .get("content", "")
-                        )
+                        delta = chunk.get("choices", [{}])[0].get("delta", {})
+                        # Thinking models stream their chain-of-thought as
+                        # ``reasoning_content`` deltas — accumulate them on the
+                        # side-channel; NEVER yield them as answer chunks.
+                        reasoning = delta.get("reasoning_content")
+                        if reasoning:
+                            reasoning_parts.append(reasoning)
+                            self.last_reasoning_content = "".join(reasoning_parts)
+                        content = delta.get("content", "")
                         if content:
                             yield content
                     except json.JSONDecodeError:

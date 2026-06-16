@@ -28,10 +28,12 @@ passages (the prompt forbids inventing it). Gated by ``ELEUTHERIA_SCHOLAR_RAG`` 
 the call site; this module is import-safe and inert until a consumer invokes it.
 
 MODEL: Fireworks-only for now (Romain's constraint). :func:`resolve_scholar_synthesis_model`
-defaults to ``fireworks:kimi-k2p6`` and is the SINGLE place the K2.7 swap lands at
-M6 (it reads ``SCHOLAR_SYNTHESIS_MODEL`` but does not enable Moonshot here). The
-``reasoning_content`` trace and ``provider_override`` are M6 wiring; until then
-``llm.generate`` returns a plain string and the trace is empty.
+defaults to ``fireworks:deepseek-v4-pro`` — a TRUE thinking model that returns its
+chain-of-thought in ``reasoning_content`` and a clean finished answer in ``content``
+(it reads ``SCHOLAR_SYNTHESIS_MODEL`` but does not enable Moonshot here). The
+synthesis routes ``reasoning_content`` (a side-channel on ``LLMService``) to the
+trace, NEVER into the answer; the answer is ``content`` only. The agent ReAct
+retrieval loop stays on the non-reasoning k2p6 instruct model.
 """
 
 from __future__ import annotations
@@ -190,13 +192,43 @@ class SynthesisResult:
 # scholar_synthesis_fallback_chain). The live chain degrades within Fireworks/
 # Gemini, never to Moonshot, per Romain's constraint.
 #
-# ONE-LINE K2.7 SWAP (do NOT enable until K2.7 lands on Fireworks):
-#   - here: set _SCHOLAR_SYNTHESIS_DEFAULT to the Fireworks K2.7 id.
-#   - llm_service.py PROVIDER_CONFIGS[KIMI]: swap model -> kimi-k2.7-code-highspeed
-#     (Moonshot opt-in only; temp clamp already in _openai_compatible_payload).
-#   - opencode.json / repl.py / llm_pricing.py: add the K2.7 model id + price row.
-_SCHOLAR_SYNTHESIS_DEFAULT = "accounts/fireworks/models/kimi-k2p6"
+# The synthesis runs on a TRUE THINKING model: ``deepseek-v4-pro`` returns its
+# chain-of-thought in ``reasoning_content`` and a CLEAN finished scholarly answer
+# in ``content`` (finish_reason=stop) — fixing the k2p6 failure where a
+# non-reasoning instruct model emitted its scratchpad INLINE in ``content`` and
+# hit max_tokens while still planning (finish_reason=length). The answer budget
+# (max_tokens) now applies to ``content`` only; reasoning spends separate tokens.
+#
+# ONE-LINE K2-THINKING SWAP (enable once it lands on this Fireworks account —
+# kimi-k2-thinking is currently 404 here, not enabled):
+#   - set _SCHOLAR_SYNTHESIS_DEFAULT = "accounts/fireworks/models/kimi-k2-thinking"
+#   (it also returns reasoning_content; no other wiring change needed).
+_SCHOLAR_SYNTHESIS_DEFAULT = "accounts/fireworks/models/deepseek-v4-pro"
+# _SCHOLAR_SYNTHESIS_DEFAULT = "accounts/fireworks/models/kimi-k2-thinking"  # when enabled
+# k2p6 (non-reasoning instruct) is kept ONLY for the agent ReAct retrieval loop,
+# not for synthesis — it inlines its scratchpad into content (the root-cause bug).
+_SCHOLAR_SYNTHESIS_AGENT_LOOP_MODEL = "accounts/fireworks/models/kimi-k2p6"
 _SCHOLAR_SYNTHESIS_GEMINI_FALLBACK = "gemini-3.1-pro-preview"
+
+# Fireworks reasoning models that return their chain-of-thought in a SEPARATE
+# ``reasoning_content`` field, leaving ``content`` a clean finished answer. For
+# these the defensive ``strip_reasoning_leak`` post-pass is a NO-OP: the content
+# is already clean, so running the stripper could only risk truncating a real
+# answer. Non-reasoning models (k2p6) still get the stripper.
+_REASONING_SEPARATED_MODELS: frozenset[str] = frozenset(
+    {
+        "accounts/fireworks/models/deepseek-v4-pro",
+        "accounts/fireworks/models/kimi-k2-thinking",
+    }
+)
+
+
+def model_separates_reasoning(model_id: str) -> bool:
+    """True when ``model_id`` returns its chain-of-thought in ``reasoning_content``
+    (so ``content`` is already clean and ``strip_reasoning_leak`` must NOT run)."""
+    if not isinstance(model_id, str):
+        return False
+    return model_id.strip() in _REASONING_SEPARATED_MODELS
 
 
 def resolve_scholar_synthesis_model() -> str:
@@ -230,12 +262,11 @@ def resolve_scholar_synthesis_model() -> str:
 def scholar_synthesis_fallback_chain() -> list[str]:
     """The synthesis ``model_override`` fallback chain (ARCHITECTURE §K2.7).
 
-    Blueprint chain is ``kimi-k2.7-code-highspeed -> kimi-k2.6 (Moonshot) ->
-    fireworks/kimi-k2p6 -> gemini-3.1-pro-preview``. TODAY, Fireworks-only: the
-    two Moonshot rungs are omitted (Romain's constraint) and the live chain is
-    ``<resolved> -> fireworks/kimi-k2p6 -> gemini-3.1-pro-preview``. When K2.7
-    lands on Fireworks, the resolved head simply becomes the K2.7 id — no
-    Moonshot rung is ever added here.
+    TODAY, Fireworks-only (Romain's constraint — no Moonshot rung). The live chain
+    is ``<resolved deepseek-v4-pro> -> fireworks/deepseek-v4-pro -> gemini-3.1-pro-preview``:
+    a true thinking head (clean answer in ``content``, scratch in ``reasoning_content``)
+    that degrades to Gemini, never to Moonshot. When kimi-k2-thinking is enabled on
+    this Fireworks account, the resolved head simply becomes that id.
 
     The caller (M6 synthesis node) tries each override in order; each is a string
     ``LLMService.generate(model_override=...)`` already routes (Fireworks ids by
@@ -364,12 +395,15 @@ async def synthesize_dialectical(
     )
 
     # Try each rung of the fallback chain in order; first non-empty prose wins
-    # (ARCHITECTURE §K2.7 — Fireworks-only today, head becomes K2.7 at M6 swap).
+    # (ARCHITECTURE §K2.7 — Fireworks-only today; head is deepseek-v4-pro, a true
+    # thinking model whose ``content`` is already a clean finished answer).
     prose = ""
+    reasoning_trace = ""
     for candidate in model_chain:
         try:
-            # KIMI temperature is clamped to 1.0 inside _openai_compatible_payload (M6);
-            # Fireworks kimi-k2p6 takes 0.3 as written.
+            # The answer budget (max_tokens) applies to ``content`` only — thinking
+            # models spend SEPARATE tokens on reasoning_content, so the answer is not
+            # starved. Keep temperature at 0.3 (KIMI is clamped to 1.0 in the payload).
             raw = await llm.generate(
                 user_prompt,
                 system_prompt=DIALECTICAL_SYNTHESIS_SYSTEM,
@@ -388,16 +422,20 @@ async def synthesize_dialectical(
             prose = ""
         if prose:
             model_id = candidate
+            # The chain-of-thought (reasoning_content) is a SIDE-CHANNEL on the
+            # LLMService — route it to the trace, NEVER into the answer.
+            reasoning_trace = getattr(llm, "last_reasoning_content", "") or ""
             break
 
-    # Defensive: strip any residual chain-of-thought / self-check the model leaked
-    # despite the prompt's prohibition (the reader sees only the finished essay).
-    if prose:
+    # Defensive chain-of-thought strip — ONLY for providers that inline reasoning
+    # into ``content`` (e.g. k2p6). For a true thinking model (deepseek-v4-pro,
+    # kimi-k2-thinking) ``content`` is already clean (reasoning is in
+    # reasoning_content), so the stripper is a NO-OP that could only risk
+    # truncating a clean answer — skip it.
+    model_used = getattr(llm, "last_model_used", "") or model_id
+    if prose and not model_separates_reasoning(model_used):
         prose = strip_reasoning_leak(prose)
 
-    # reasoning_content is M6 wiring; LLMService.generate returns a plain string today.
-    reasoning_trace = ""
-    model_used = getattr(llm, "last_model_used", "") or model_id
     ledger = build_provenance_ledger(prose, cmap) if prose else []
 
     return SynthesisResult(
