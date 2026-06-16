@@ -16,6 +16,16 @@ from eleutheria_graphrag.agents.dependencies import Deps
 
 logger = logging.getLogger(__name__)
 
+# Tools driven DETERMINISTICALLY by the pipeline (ScholarlyAgent
+# ._assemble_controversy_map: planner -> find_debates -> build_controversy_frame).
+# They remain registered so that orchestration can fetch them via
+# ``registry.get(...)``, but they are hidden from the LLM-facing tool surface
+# (``tool_descriptions`` / function schemas) so the ReAct agent cannot ALSO
+# improvise the same expensive calls (double-retrieval). When the Scholar-RAG
+# flag is OFF these tools are never registered, so the exclusion is a no-op and
+# the default tool surface is byte-for-byte unchanged.
+DETERMINISTIC_ONLY_TOOLS = frozenset({"find_debates", "build_controversy_frame"})
+
 
 @runtime_checkable
 class BaseTool(Protocol):
@@ -52,7 +62,11 @@ class ToolRegistry:
         return self._tools[name]
 
     def tool_descriptions(self) -> list[dict[str, Any]]:
-        """Return JSON-serializable tool descriptions for the LLM prompt."""
+        """Return JSON-serializable tool descriptions for the LLM prompt.
+
+        Excludes ``DETERMINISTIC_ONLY_TOOLS`` so the legacy text-parsing agent
+        loop never improvises calls the pipeline already drives deterministically.
+        """
         return [
             {
                 "name": tool.name,
@@ -60,6 +74,7 @@ class ToolRegistry:
                 "parameters": tool.parameters_schema,
             }
             for tool in self._tools.values()
+            if tool.name not in DETERMINISTIC_ONLY_TOOLS
         ]
 
 

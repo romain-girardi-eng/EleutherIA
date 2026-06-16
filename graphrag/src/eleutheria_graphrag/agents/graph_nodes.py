@@ -4893,35 +4893,65 @@ def _dialectical_citations(state: RAGState) -> list[Citation]:
 
     The dialectical prose cites inline via ``[P_*]``/``[passage_*]``/``[edge:*]``
     markers; :func:`build_provenance_ledger` already resolved those against the
-    ControversyMap into ``state.claim_ledger``. We surface each SUPPORTED
-    passage-backed ledger item as a ``Citation`` (the UI reference map + the
-    grounding metric consume these). Position/edge items are attribution claims,
-    not passage citations, so they don't become ``Citation`` rows here — the
-    adversarial verifier audits them. Deterministic, no LLM call.
+    ControversyMap into ``state.claim_ledger``. We surface:
+
+    - each SUPPORTED PASSAGE item as a PRIMARY ``Citation`` (ancient source), and
+    - each SUPPORTED POSITION item as a SECONDARY ``Citation`` — a FIRST-CLASS
+      modern-scholarship reference (scholar, work, page), so the frontend
+      ``CitationGenerator`` can export it alongside the primary sources (a real
+      scholar's answer enters dialogue with named scholars, and those scholar
+      citations must be citable — not only ancient passages).
+
+    Edge items are structural links, not citations. Deterministic, no LLM call.
     """
     citations: list[Citation] = []
     seen: set[str] = set()
     for item in state.claim_ledger:
         if item.status != ClaimStatus.SUPPORTED:
             continue
-        if item.support_type != "passage":
-            continue
-        for ev_id in item.evidence_ids:
-            if ev_id in seen:
+        if item.support_type == "passage":
+            for ev_id in item.evidence_ids:
+                if ev_id in seen:
+                    continue
+                seen.add(ev_id)
+                citations.append(
+                    Citation(
+                        ref=ev_id,
+                        type="passage",
+                        id=ev_id,
+                        label=ev_id,
+                        layer=EvidenceLayer.PRIMARY,
+                        confidence=item.confidence,
+                        verified=True,
+                        verification_note=(
+                            "Dialectical synthesis: inline marker resolved to a "
+                            "ControversyMap passage (cite-as-you-write provenance)"
+                        ),
+                    )
+                )
+        elif item.support_type == "position":
+            # A named modern scholar's position → a citable SECONDARY reference.
+            # quote_translation carries the formatted "<Holder>, <Publication>,
+            # <page>" reference (set by build_provenance_ledger); evidence_ids[0]
+            # is the holder/position node id.
+            ev_id = item.evidence_ids[0] if item.evidence_ids else ""
+            if not ev_id or ev_id in seen:
                 continue
             seen.add(ev_id)
+            label = (item.quote_translation or ev_id).strip() or ev_id
             citations.append(
                 Citation(
                     ref=ev_id,
-                    type="passage",
+                    type="node",
                     id=ev_id,
-                    label=ev_id,
-                    layer=EvidenceLayer.PRIMARY,
+                    label=label,
+                    layer=EvidenceLayer.SECONDARY,
                     confidence=item.confidence,
                     verified=True,
                     verification_note=(
-                        "Dialectical synthesis: inline marker resolved to a "
-                        "ControversyMap passage (cite-as-you-write provenance)"
+                        "Dialectical synthesis: inline [P_*] marker resolved to a "
+                        "ControversyMap modern-scholar position (scholar + "
+                        "publication + page; cite-as-you-write provenance)"
                     ),
                 )
             )

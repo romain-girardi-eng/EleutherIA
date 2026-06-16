@@ -329,6 +329,15 @@ async def query_stream(
                         )
                 return
 
+            # Scholar-RAG (G6) flag, read once per stream. When ON we forward
+            # the full frontend-protocol trace-event set (and any other typed
+            # event) on its own SSE channel so NONE leak into `answer_chunk`
+            # prose. When OFF the legacy narrow allowlist is preserved
+            # byte-for-byte so the flag-OFF wire stays identical.
+            from eleutheria_graphrag.agents.state import scholar_rag_enabled
+
+            _scholar_rag_on = scholar_rag_enabled()
+
             yield f"data: {json.dumps({'type': 'status', 'data': {'message': 'Initializing scholarly agent...', 'step': 1, 'trace_id': trace_id}})}\n\n"
             # mode='deep' pass-through: GraphRAGService.query() already honors
             # hunt_counter_evidence, but query_stream() does not accept it yet
@@ -373,8 +382,14 @@ async def query_stream(
                         parsed = json.loads(chunk)
                         event_type = parsed.get("type", "")
 
-                        # Forward agent events (thinking, tool calls) directly
-                        if event_type in (
+                        # Forward agent trace events directly on their own
+                        # channel. The legacy (flag-OFF) allowlist is preserved
+                        # byte-for-byte; with Scholar-RAG ON we ALSO forward the
+                        # full frontend-protocol trace-event set so NONE of them
+                        # ever fall through to the `answer_chunk` prose branch
+                        # below (which would leak raw `{"type":"tool_call"…}`
+                        # JSON into the dialectical answer).
+                        _legacy_trace_events = (
                             "agent_thinking",
                             "tool_start",
                             "tool_result",
@@ -382,6 +397,21 @@ async def query_stream(
                             "error",
                             "citation_verified",
                             "stage_complete",
+                        )
+                        _scholar_extra_trace_events = (
+                            "agent_start",
+                            "agent_complete",
+                            "tool_call",
+                            "kg_node_activated",
+                            "citation_found",
+                            "final_answer",
+                            "cost_summary",
+                            "tokens_used_rollup",
+                            "verification_warning",
+                        )
+                        if event_type in _legacy_trace_events or (
+                            _scholar_rag_on
+                            and event_type in _scholar_extra_trace_events
                         ):
                             yield f"data: {chunk}\n\n"
                             continue
@@ -607,6 +637,17 @@ async def query_stream(
                                         "TraceWriter.finalize failed for %s",
                                         trace_id,
                                     )
+                            continue
+
+                        # Safety net (Scholar-RAG path only): any OTHER chunk
+                        # that parsed as a typed JSON event is a trace event by
+                        # construction (prose chunks are raw text, never typed
+                        # JSON). Forward it raw rather than letting it fall
+                        # through to the `answer_chunk` branch and pollute the
+                        # dialectical answer stream. Flag-OFF keeps the legacy
+                        # fall-through unchanged.
+                        if _scholar_rag_on and event_type:
+                            yield f"data: {chunk}\n\n"
                             continue
                     except json.JSONDecodeError:
                         pass

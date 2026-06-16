@@ -291,3 +291,66 @@ async def test_stream_render_emits_dialectical_prose_as_answer_chunks(
         assert fp not in streamed
     assert state.metadata.get("render_answer_mode") == "dialectical"
     assert state.raw_answer == DIALECTICAL_PROSE
+
+
+def test_dialectical_citations_surface_modern_scholarship_as_citable() -> None:
+    """The citation payload built from the prose includes NAMED MODERN SCHOLARS as
+    first-class citable items (SECONDARY layer, scholar + work + page), not only
+    ancient passages — so the frontend CitationGenerator can export them.
+    """
+    from eleutheria_graphrag.agents.dialectical_synthesis import (
+        build_provenance_ledger,
+    )
+    from eleutheria_graphrag.agents.graph_nodes import _dialectical_citations
+    from eleutheria_graphrag.agents.state import EvidenceLayer
+
+    cmap = _stub_map()
+    state = RAGState(question="q")
+    state.controversy_map = cmap
+    state.claim_ledger = build_provenance_ledger(DIALECTICAL_PROSE, cmap)
+    state.metadata["render_answer_mode"] = "dialectical"
+
+    citations = _dialectical_citations(state)
+
+    primary = [c for c in citations if c.layer == EvidenceLayer.PRIMARY]
+    secondary = [c for c in citations if c.layer == EvidenceLayer.SECONDARY]
+
+    # ancient passage cited as PRIMARY
+    assert any(c.id == "cic_fat_41" for c in primary)
+    # BOTH named scholars cited as SECONDARY (modern scholarship), citable items
+    assert len(secondary) >= 2
+    sec_labels = " | ".join(c.label for c in secondary)
+    assert "Bobzien" in sec_labels and "Bobzien 1998" in sec_labels
+    assert "Frede" in sec_labels and "Frede 2011" in sec_labels
+    # page grounding carried into the citable reference
+    assert "p. 330" in sec_labels and "p. 44" in sec_labels
+    # the scholar citations are node-typed, verified, and resolvable
+    for c in secondary:
+        assert c.type == "node"
+        assert c.verified is True
+        assert c.id  # holder/position node id present
+
+
+def test_dialectical_answer_has_no_reasoning_leak_markers() -> None:
+    """A stubbed synthesis whose prose carries a trailing self-check is cleaned
+    before it becomes the answer — no reasoning-leak markers survive.
+    """
+    import asyncio
+
+    from eleutheria_graphrag.agents.dialectical_synthesis import synthesize_dialectical
+
+    leaky = (
+        DIALECTICAL_PROSE + "\n\nLet's double check the Greek quotes.\n"
+        "Matches the text.\nVerified."
+    )
+    llm = AsyncMock()
+    llm.generate = AsyncMock(return_value=leaky)
+    llm.last_model_used = "accounts/fireworks/models/kimi-k2p6"
+
+    result = asyncio.run(
+        synthesize_dialectical(state=None, cmap=_stub_map(), llm=llm)
+    )
+    for marker in ("Let's double check", "Matches the text", "Verified."):
+        assert marker not in result.prose
+    # the substantive scholarly prose survived intact
+    assert "Bobzien holds the ancients had no free-will problem" in result.prose

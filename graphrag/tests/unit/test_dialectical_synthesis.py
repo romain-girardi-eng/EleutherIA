@@ -23,14 +23,17 @@ import pytest
 
 from eleutheria_graphrag.agents.dialectical_synthesis import (
     DIALECTICAL_SYNTHESIS_SYSTEM,
+    DIALECTICAL_SYNTHESIS_TEMPLATE,
     SynthesisResult,
     build_provenance_ledger,
+    format_scholar_reference,
     passes_content_gate,
     resolve_scholar_synthesis_model,
     scholar_render_max_tokens,
     scholar_synthesis_fallback_chain,
     scholar_tool_call_budget,
     serialize_controversy_map,
+    strip_reasoning_leak,
     synthesize_degraded,
     synthesize_dialectical,
 )
@@ -406,3 +409,151 @@ def test_scholar_render_max_tokens_by_tier(monkeypatch: pytest.MonkeyPatch) -> N
 def test_scholar_render_max_tokens_clamped(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RENDER_MAX_TOKENS", "1000")
     assert scholar_render_max_tokens("standard") == 5000  # clamped to floor
+
+
+# ── scholar dialogue + completeness demanded by the prompt ───────────────────
+
+
+def test_system_prompt_demands_named_scholar_dialogue() -> None:
+    sys = DIALECTICAL_SYNTHESIS_SYSTEM.lower()
+    # the answer must ENTER a dialogue with NAMED modern scholars (not just primary)
+    assert "named modern scholar" in sys or "names a modern scholar" in sys
+    assert "dialogue with other scholars" in sys
+    # the scholar-citation form is documented, with year + publication + page
+    assert "[p_<id>:" in sys
+    assert "page" in sys
+
+
+def test_system_prompt_forbids_meta_reasoning_leak() -> None:
+    sys = DIALECTICAL_SYNTHESIS_SYSTEM.lower()
+    assert "output only the finished scholarly prose" in sys
+    assert "matches the text" in sys  # the exact leak phrase is banned
+    assert "let's double-check" in sys or "let me check" in sys
+
+
+def test_write_template_demands_complete_detailed_survey() -> None:
+    tpl = DIALECTICAL_SYNTHESIS_TEMPLATE.lower()
+    # completeness: every fault line, no frame skipped
+    assert "every fault line" in tpl
+    assert "cover all frames present" in tpl
+    # detail / length: full, example-rich, long-form
+    assert "example-rich" in tpl
+    assert "long-form" in tpl
+    assert "multiple" in tpl  # multiple examples per frame
+    # explicit scholar-vs-scholar staging
+    assert "contending modern scholars" in tpl
+    # forbids planning / self-check text in the output
+    assert "write only the essay" in tpl
+
+
+# ── scholar reference formatter (citable modern scholarship) ─────────────────
+
+
+def test_format_scholar_reference_full() -> None:
+    pos = GroundedPosition(
+        position_id="frede_epictetus",
+        holder="Michael Frede",
+        publication="Frede 2011, A Free Will",
+        page_grounding="pp. 153-174",
+    )
+    assert (
+        format_scholar_reference(pos)
+        == "Michael Frede, Frede 2011, A Free Will, pp. 153-174"
+    )
+
+
+def test_format_scholar_reference_no_page_never_invents() -> None:
+    pos = GroundedPosition(
+        position_id="dihle_will",
+        holder="Albrecht Dihle",
+        publication="Dihle 1982",
+    )
+    ref = format_scholar_reference(pos)
+    assert ref == "Albrecht Dihle, Dihle 1982"
+    assert "p." not in ref  # no fabricated page
+
+
+# ── provenance ledger carries the scholar reference for position items ───────
+
+
+def test_position_ledger_item_carries_scholar_reference() -> None:
+    prose = "Frede dates the will to Epictetus [P_frede_epictetus: Frede 2011 p. 44]."
+    ledger = build_provenance_ledger(prose, _map())
+    pos_items = [i for i in ledger if i.support_type == "position"]
+    assert len(pos_items) == 1
+    item = pos_items[0]
+    assert item.status == ClaimStatus.SUPPORTED
+    # quote_translation carries the formatted "<holder>, <pub>, <page>" reference
+    assert item.quote_translation == "Frede, Frede 2011, p. 44"
+    assert item.evidence_class == "attributed_position"
+
+
+# ── defensive chain-of-thought stripper (the reasoning-leak post-clean) ──────
+
+
+def test_strip_reasoning_leak_cuts_trailing_self_check() -> None:
+    prose = (
+        "Bobzien (1998: 330) argues the ancients had no free-will problem, "
+        "whereas Frede (2011: 44) dates a notion of will to Epictetus.\n\n"
+        "Let's double check the Greek quotes.\n"
+        "Matches the text.\n"
+        "Verified."
+    )
+    cleaned = strip_reasoning_leak(prose)
+    assert "Bobzien (1998: 330)" in cleaned
+    assert "Let's double check" not in cleaned
+    assert "Matches the text" not in cleaned
+    assert cleaned.strip().endswith("Epictetus.")
+
+
+def test_strip_reasoning_leak_cuts_leading_preamble() -> None:
+    prose = (
+        "First, I will map the fault lines.\n"
+        "Now let me write the answer.\n\n"
+        "The liveliest dispute is whether antiquity had a concept of the will at all."
+    )
+    cleaned = strip_reasoning_leak(prose)
+    assert cleaned.startswith("The liveliest dispute")
+    assert "First, I will map" not in cleaned
+    assert "Now let me write" not in cleaned
+
+
+def test_strip_reasoning_leak_cuts_verification_heading_block() -> None:
+    prose = (
+        "Sharples (1983: 22) reads Alexander as a libertarian.\n\n"
+        "## Verification\n"
+        "Checking the Latin: matches.\n"
+        "All citations resolve."
+    )
+    cleaned = strip_reasoning_leak(prose)
+    assert "Sharples (1983: 22)" in cleaned
+    assert "Verification" not in cleaned
+    assert "All citations resolve" not in cleaned
+
+
+def test_strip_reasoning_leak_preserves_real_prose() -> None:
+    # a genuine scholarly sentence that merely contains "checks" is NOT a leak.
+    prose = (
+        "Bobzien checks the Chrysippean argument against the lazy-argument and "
+        "finds it wanting [P_bobzien_no_problem: Bobzien 1998 p. 330]."
+    )
+    assert strip_reasoning_leak(prose) == prose
+
+
+def test_synthesize_dialectical_strips_leak_from_prose() -> None:
+    import asyncio
+
+    grounded = (
+        "Bobzien (1998: 330) holds the ancients lacked the concept "
+        "[P_bobzien_no_problem: Bobzien 1998 p. 330], a passage at "
+        "[passage_cic_fat_41: Cicero, De Fato 41] both sides invoke "
+        "[edge: opposes P_bobzien_no_problem->P_frede_epictetus].\n\n"
+        "Let me verify the Latin quote.\nMatches the text."
+    )
+    llm = AsyncMock()
+    llm.generate.return_value = grounded
+    llm.last_model_used = "accounts/fireworks/models/kimi-k2p6"
+    result = asyncio.run(synthesize_dialectical(state=None, cmap=_map(), llm=llm))
+    assert "Let me verify" not in result.prose
+    assert "Matches the text" not in result.prose
+    assert "Bobzien (1998: 330)" in result.prose
