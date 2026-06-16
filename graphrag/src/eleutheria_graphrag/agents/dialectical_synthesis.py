@@ -64,10 +64,16 @@ You are a historian of ancient philosophy writing for a specialist audience \
 structured record of contending scholarly positions and the primary texts they \
 fight over.
 
-You attribute every interpretive claim to a named scholar with a page reference. \
-You ground every claim about an ancient author in a quoted primary passage. You hedge \
-where the evidence underdetermines the question. You never adjudicate a dispute the \
-field has not settled.
+YOU ENTER A SCHOLARLY CONVERSATION. A real scholar's answer is not a summary of \
+ancient doctrines — it is a DIALOGUE WITH OTHER SCHOLARS. Every interpretive move \
+you make NAMES A MODERN SCHOLAR and sets their reading against another's: "Bobzien \
+(1998: 234) argues … whereas Frede (2011: 44) holds …; Sharples (1983: 22) reads the \
+same text differently again." You attribute every interpretive claim to a named \
+scholar with a page reference, and you ground every claim about an ancient author in \
+a quoted primary passage. Naming the contending scholars and their disagreement is \
+NOT optional decoration — it is the substance of the answer. You hedge where the \
+evidence underdetermines the question; you never adjudicate a dispute the field has \
+not settled.
 
 Modern categories — "libertarian free will", "compatibilism", "incompatibilism", \
 "hard/soft determinism", "the will" as a faculty, "the free-will problem", \
@@ -81,10 +87,17 @@ primary text in the original AND English at the point the scholars argue over it
 
 CITE AS YOU WRITE. Every interpretive sentence carries an inline marker drawn from \
 the map you are given, using exactly these forms:
-  [P_<id>: <holder>, <publication+page>]   for an attributed position
-  [edge: <relation> P_<from>->P_<to>]      for a dialectical link you invoke
-  [passage_<id>: <author>, <ref>]          for a quoted/cited primary passage
-Use only ids that appear in the map. Never invent an id.\
+  [P_<id>: <holder> <year>, <publication> p.<n>]   for an attributed scholar position
+  [edge: <relation> P_<from>->P_<to>]               for a dialectical link you invoke
+  [passage_<id>: <author>, <ref>]                   for a quoted/cited primary passage
+Every paragraph of interpretation MUST carry at least one [P_<id>: …] scholar marker. \
+Use only ids that appear in the map. Never invent an id, a scholar, a publication, or \
+a page number — if a position has no page in the map, cite it at work level only.
+
+OUTPUT ONLY THE FINISHED SCHOLARLY PROSE. Do NOT narrate your process. Never write \
+"Let me check", "Let's double-check the Greek", "Matches the text", "I will now", \
+"First, I…", "Verifying…", or any self-check / meta-commentary. Your reasoning is \
+private scratch; the reader sees only the essay.\
 """
 
 # The reasoning steps are MANDATED in the user prompt so they drive reasoning_content
@@ -112,14 +125,28 @@ survey; chronological for a genealogy; point-by-point for a comparison. Never a 
 Definition/Textual-Basis/Counterpoint template.
 
 ------------------------------------------------------------------------------
-WRITE the scholarly answer ({shape}):
+WRITE the scholarly answer ({shape}). This is a FULL, DETAILED, EXAMPLE-RICH survey, \
+not a sketch. Be COMPLETE: cover EVERY fault line the map contains — leave none out. \
+Aim for a long-form essay (several substantial paragraphs per fault line); use the \
+whole space available. Requirements:
 
 - Open with a THESIS SENTENCE that answers the actual question: {question}
-- One movement per fault line; adaptive headings DERIVED FROM FRAME TITLES.
-- Every interpretive sentence carries an inline citation marker AS YOU WRITE IT.
+- One movement per fault line; cover ALL frames present; adaptive headings DERIVED \
+FROM FRAME TITLES. Do not collapse or skip a frame.
+- In EACH movement: name the contending MODERN SCHOLARS and stage their disagreement \
+explicitly ("Bobzien (1998: 234) argues …, whereas Frede (2011: 44) reads … and Dihle \
+(1982: 123) instead …"). Every interpretive paragraph carries ≥1 inline [P_<id>: …] \
+scholar marker AS YOU WRITE IT, plus the [edge: …] for the disagreement and the \
+[passage_<id>: …] for its primary anchor. Give MULTIPLE concrete examples per frame.
 - Quote contested primary text in original + English where the scholars argue over it.
+- Where scholars genuinely conflict vs. merely talk past each other (different sense \
+of "the will", different dating), SAY which — this is the scholar's added value.
 - Hedge with the field's own markers ("Bobzien argues…, though Frede contends…").
-- Close with what remains GENUINELY OPEN.
+- Close with a synthetic conclusion stating what remains GENUINELY OPEN, and resist \
+any anachronistic verdict.
+
+Write ONLY the essay. Do not include any planning, verification, or self-checking \
+text; do not restate these instructions; do not narrate what you are doing.
 {coverage_note}\
 """
 
@@ -363,6 +390,11 @@ async def synthesize_dialectical(
             model_id = candidate
             break
 
+    # Defensive: strip any residual chain-of-thought / self-check the model leaked
+    # despite the prompt's prohibition (the reader sees only the finished essay).
+    if prose:
+        prose = strip_reasoning_leak(prose)
+
     # reasoning_content is M6 wiring; LLMService.generate returns a plain string today.
     reasoning_trace = ""
     model_used = getattr(llm, "last_model_used", "") or model_id
@@ -374,6 +406,139 @@ async def synthesize_dialectical(
         model_used=model_used,
         ledger=ledger,
     )
+
+
+# ── 3b. Defensive chain-of-thought stripper (the reasoning-leak post-clean) ──
+#
+# Even with the prompt forbidding it, K2.x sometimes emits a trailing self-check
+# ("Let's double check the Greek quotes… Matches the text.") or a leading planning
+# preamble. This deterministic post-pass cuts those so they never reach the reader.
+# It is conservative: it only removes lines/blocks that are unmistakably meta — a
+# scholarly sentence about Bobzien is never touched.
+
+# Phrases that open a meta-reasoning / self-verification block (case-insensitive,
+# matched at the START of a line/sentence). Kept tight to avoid eating real prose.
+_REASONING_LEAK_OPENERS: tuple[str, ...] = (
+    "let's double",
+    "let's check",
+    "let's verify",
+    "let me double",
+    "let me check",
+    "let me verify",
+    "let me confirm",
+    "let me re-read",
+    "let me reread",
+    "let me make sure",
+    "let me ensure",
+    "i'll double",
+    "i will double",
+    "i'll verify",
+    "i will verify",
+    "i'll check",
+    "i will check",
+    "now let me",
+    "now i'll",
+    "now i will",
+    "first, i",
+    "first i'll",
+    "verifying the",
+    "checking the",
+    "double-checking",
+    "double checking",
+    "to verify",
+    "as a check",
+    "self-check",
+    "(checking",
+)
+
+# Short trailing confirmations the model emits after a self-check.
+_REASONING_LEAK_CONFIRMATIONS: tuple[str, ...] = (
+    "matches the text",
+    "matches the passage",
+    "this matches",
+    "that matches",
+    "the quote matches",
+    "all citations resolve",
+    "all markers resolve",
+    "everything checks out",
+    "looks correct",
+    "looks good",
+    "the greek is correct",
+    "the latin is correct",
+    "verified.",
+    "confirmed.",
+)
+
+_LEAK_HEADING_RE = re.compile(
+    r"^\s*#{0,6}\s*(verification|self-?check|fact[- ]?check|checks?|"
+    r"double[- ]?check|notes? to self|sanity check)\b",
+    re.IGNORECASE,
+)
+
+
+def _is_reasoning_leak_line(line: str) -> bool:
+    stripped = line.strip().lstrip("-*>").strip()
+    if not stripped:
+        return False
+    low = stripped.lower()
+    if _LEAK_HEADING_RE.match(line):
+        return True
+    if any(low.startswith(opener) for opener in _REASONING_LEAK_OPENERS):
+        return True
+    # A short line (not a real scholarly sentence) that is a bare confirmation.
+    return len(stripped) <= 80 and any(
+        conf in low for conf in _REASONING_LEAK_CONFIRMATIONS
+    )
+
+
+def strip_reasoning_leak(prose: str) -> str:
+    """Cut residual chain-of-thought / self-verification from the finished prose.
+
+    Defensive: the prompt already forbids meta-reasoning, but K2.x occasionally
+    leaks a trailing "Let's double check the Greek… Matches the text." block or a
+    leading "First, I'll…" preamble. This removes such lines/blocks
+    deterministically. A genuine scholarly sentence (about a scholar, a text, a
+    fault line) is never matched. Idempotent; never raises.
+    """
+    if not prose or not prose.strip():
+        return prose
+    lines = prose.splitlines()
+    kept: list[str] = []
+    in_leak_block = False
+    for line in lines:
+        if _is_reasoning_leak_line(line):
+            # Open a leak block: drop this line and following non-blank lines that
+            # are themselves meta or short confirmations, until a blank line or a
+            # line that is clearly real prose (carries a citation marker / >100 ch).
+            in_leak_block = True
+            continue
+        if in_leak_block:
+            low = line.strip().lower()
+            if not low:
+                in_leak_block = False  # blank line closes the leak block
+                continue
+            # Real prose resumes (citation marker or a substantial sentence): keep.
+            if (
+                "[p_" in low
+                or "[passage_" in low
+                or "[edge" in low
+                or "-->" in low
+                or len(line.strip()) > 100
+            ):
+                in_leak_block = False
+                kept.append(line)
+                continue
+            # Still inside the meta block — drop short bridging confirmations.
+            if _is_reasoning_leak_line(line) or len(line.strip()) <= 80:
+                continue
+            in_leak_block = False
+            kept.append(line)
+        else:
+            kept.append(line)
+    cleaned = "\n".join(kept)
+    # Collapse the runs of blank lines the excisions may have left.
+    cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
+    return cleaned.strip()
 
 
 # ── 4. Provenance ledger as a BYPRODUCT (reverses F8) — deterministic post-pass
@@ -417,6 +582,23 @@ def _split_sentences(prose: str) -> list[str]:
     return [p.strip() for p in parts if p.strip()]
 
 
+def format_scholar_reference(pos: GroundedPosition) -> str:
+    """A human-readable modern-scholarship reference for a position.
+
+    "<Holder> — <Publication>, <page>" using only what the map carries (never
+    invents a page). Used to make scholar positions FIRST-CLASS CITABLE items in
+    the citation payload (the frontend CitationGenerator can export them), not
+    only ancient passages.
+    """
+    holder = (pos.holder or pos.position_id).strip()
+    parts: list[str] = [holder] if holder else []
+    if pos.publication:
+        parts.append(pos.publication.strip())
+    if pos.page_grounding:
+        parts.append(pos.page_grounding.strip())
+    return ", ".join(p for p in parts if p) if parts else (pos.position_id or "")
+
+
 def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedgerItem]:
     """Parse inline ``[P_*]``/``[edge:*]``/``[passage_*]`` markers out of the
     finished prose and resolve each to its ControversyMap entry.
@@ -456,6 +638,11 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
                 resolved = True
                 pos = pos_by_id[ref_id]
                 evidence_ids = [pos.holder_node_id or pos.position_id]
+                # Carry the modern-scholarship reference so the citation payload
+                # can surface it as a FIRST-CLASS citable item (scholar+work+page),
+                # not only ancient passages. quote_translation is the UI's display
+                # string; for a position it holds the formatted scholar reference.
+                quote_translation = format_scholar_reference(pos)
             elif kind == "passage" and ref_id in passage_by_id:
                 resolved = True
                 pr = passage_by_id[ref_id]
@@ -543,7 +730,7 @@ async def synthesize_degraded(cmap: ControversyMap, llm: Any) -> str:
             max_tokens=4000,
             model_override=model_id,
         )
-        return (raw or "").strip()
+        return strip_reasoning_leak((raw or "").strip())
     except Exception as exc:  # pragma: no cover - defensive, never raise upstream
         logger.warning("degraded synthesis call failed (%s); empty result", exc)
         return ""

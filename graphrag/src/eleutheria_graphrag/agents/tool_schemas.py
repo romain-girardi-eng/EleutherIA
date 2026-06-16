@@ -12,11 +12,15 @@ from __future__ import annotations
 
 from typing import Any
 
-from eleutheria_graphrag.agents.tools import ToolRegistry
+from eleutheria_graphrag.agents.tools import DETERMINISTIC_ONLY_TOOLS, ToolRegistry
 
 
 def build_tool_function_schemas(tools: ToolRegistry) -> list[dict[str, Any]]:
-    """Return OpenAI-format function schemas for every tool in the registry.
+    """Return OpenAI-format function schemas for every LLM-callable tool.
+
+    Tools driven deterministically by the pipeline (see
+    ``DETERMINISTIC_ONLY_TOOLS``) are excluded so the agent does not duplicate
+    orchestration the pipeline already performs.
 
     Output shape per tool::
 
@@ -31,6 +35,8 @@ def build_tool_function_schemas(tools: ToolRegistry) -> list[dict[str, Any]]:
     """
     schemas: list[dict[str, Any]] = []
     for tool in tools._tools.values():  # noqa: SLF001 — registry exposes no iterator
+        if tool.name in DETERMINISTIC_ONLY_TOOLS:
+            continue
         schemas.append(
             {
                 "type": "function",

@@ -72,14 +72,24 @@ class TestSystemPromptTemplating:
         assert "find_debates" not in prompt
         assert "FIRST move is `find_debates`" not in prompt
 
-    def test_scholar_rag_flag_selects_debate_first_prompt(self, monkeypatch):
-        """Flag ON swaps in the debate-first variant without losing the counts."""
+    def test_scholar_rag_flag_selects_grounding_first_prompt(self, monkeypatch):
+        """Flag ON swaps in the Scholar-RAG grounding-first variant.
+
+        The controversy map is assembled deterministically by the pipeline, so
+        `find_debates` / `build_controversy_frame` are HIDDEN from the agent's
+        tool surface — the prompt must therefore NOT instruct the agent to call
+        them (otherwise it flails on missing tools). The disagreement framing and
+        the holder+page / no-modern-label hard rules survive.
+        """
         monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
         deps = SimpleNamespace(kg_data=_kg_data(241, 17000, 2800, 56000))
         prompt = _native_system_prompt(deps)
         assert "~20k nodes" in prompt
-        assert "find_debates" in prompt
-        assert "build_controversy_frame" in prompt
-        # Debate-first hard rules survive.
-        assert "two sides" in prompt
+        # The deterministically-driven relational tools are NOT advertised to
+        # the agent (no double-retrieval).
+        assert "find_debates" not in prompt
+        assert "build_controversy_frame" not in prompt
+        # Grounding-first framing + the surviving hard rules.
+        assert "GROUND" in prompt
+        assert "disagreement" in prompt
         assert "NEVER assert a modern label" in prompt

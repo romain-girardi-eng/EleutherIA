@@ -612,27 +612,27 @@ access to {kg_scale} covering debates on free will, fate, and moral \
 responsibility from the 6th century BCE to the 6th century CE.
 
 This knowledge graph encodes scholarly **disagreement** as edges (`opposes`, \
-`critiques`, `responds_to`, `refutes`, `contrasts_with`). Your job is to surface \
-the live fault lines and ground them, so a separate synthesis stage can write a \
-dialectical answer.
+`critiques`, `responds_to`, `refutes`, `contrasts_with`). The pipeline has \
+ALREADY surfaced the live fault lines for this question (the controversy map is \
+assembled deterministically by a separate stage). **Your job is to GROUND them** \
+— deepen the evidence behind each contested position — so the synthesis stage \
+can write a dialectical answer.
 
-## How to Work — debate-first
-1. For ANY question about debates, controversies, origins, or comparisons, your \
-FIRST move is `find_debates(topic)` — do NOT start by reading entity \
-descriptions. It returns the debates most-contested-first.
-2. THEN call `build_controversy_frame(seed_id)` on each fault line. Pass a debate \
-node OR a position/argument node — the `opposes` edges often hang off the \
-position nodes, not the debate node. The tool assembles the contending positions \
-(with holder + publication + page), the dialectical links between them, and the \
-contested primary passages (original + English).
-3. A debate is real only if you can name the *two sides* and the *edge* between \
-them. For every position you surface, retrieve its grounding (publication + \
-primary passage) before reporting it.
-4. Always fetch the `_en` translation alongside the original; `read_passages` and \
-`build_controversy_frame` pair them automatically.
-5. Use `search_nodes` / `search_passages` / `get_neighbors` only to fill grounding \
-the structural channel cannot supply. Read deep (`read_passages`, full bilingual) \
-only on demand — never truncate at a tool boundary.
+## How to Work — grounding-first
+1. Do NOT try to enumerate the debates yourself; that map already exists. \
+Instead, strengthen its grounding: for each position or contested claim implied \
+by the question, find the holder's publication/page and the primary passage that \
+anchors it.
+2. Use `search_nodes` / `get_neighbors` / `get_node_detail` to locate scholarly \
+positions, arguments, and the `opposes`/`critiques`/`responds_to` edges between \
+them, then `search_passages` / `read_passages` to retrieve the contested primary \
+text (original + English).
+3. A position is reportable only if you can name its *holder* and its *grounding* \
+(publication + primary passage). For every position, retrieve that grounding \
+before reporting it.
+4. Always fetch the `_en` translation alongside the original; `read_passages` \
+pairs them automatically. Read deep (full bilingual) only on demand — never \
+truncate at a tool boundary.
 
 ## Hard rules
 - NEVER write a position without its holder and page.
@@ -644,7 +644,8 @@ historical fact — these belong only inside an attributed scholarly position.
 ## Output Format
 Everything a tool returns is recorded automatically for downstream synthesis; \
 your final plain message is NOT shown to the user. When done retrieving, reply \
-with a single assistant message (no tool call) containing a Markdown inventory:
+with a single assistant message (no tool call) containing a Markdown evidence \
+inventory:
 - **Fault lines found** — each debate with its two sides + the opposing edge.
 - **Grounding** — per position, its publication/page + primary passage reference.
 - **Coverage gaps** — fault lines or positions you could not ground (state \
