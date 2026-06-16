@@ -88,6 +88,17 @@ You never write Greek or Latin that is not present verbatim in the provided pass
 If a phrase is not in the map, paraphrase it in English instead. You quote contested \
 primary text in the original AND English at the point the scholars argue over it.
 
+GROUND IN QUOTED PRIMARY TEXT, NOT JUST A LOCUS. The map's CONTESTED PRIMARY TEXT / \
+STANDALONE PRIMARY TEXT blocks carry the original-language passage AND its English \
+translation. When a position has such a passage, you MUST QUOTE THE STRONGEST one \
+verbatim — original first, then the English — at the point you state that position, \
+and carry its [passage_<id>: …] marker. Quoting the actual Greek/Latin (copied EXACTLY \
+from the block, with its diacritics) is REQUIRED, not optional: a locus citation \
+("Diss. 1.1") WITHOUT the quoted text is insufficient wherever the map supplies the \
+text. Aim to quote at least two distinct primary passages per dominant fault line when \
+the map provides them. Quote ONLY passages present in the map; never reconstruct or \
+complete fragmentary text.
+
 CITE AS YOU WRITE. Every interpretive sentence carries an inline marker drawn from \
 the map you are given, using exactly these forms:
   [P_<id>: <holder> <year>, <publication> p.<n>]   for an attributed scholar position
@@ -115,8 +126,10 @@ REASON (this becomes your private scratch; it is not the answer):
 lines actually dominate the live scholarship — NOT a doctrinal verdict.
 2. MAP THE FAULT LINES. Per frame: name the >=2 opposing positions and the edge that \
 opposes them. A frame with only one surfaced position is incomplete — say so.
-3. LOCATE THE PRIMARY ANCHOR. Per position, find the dossier passage it argues over. \
-If none, mark "interpretation without surfaced primary grounding" and hedge harder.
+3. LOCATE THE PRIMARY ANCHOR. Per position, find the dossier passage it argues over \
+and pick the STRONGEST quotable one (one carrying real original-language text, not a \
+metadata block) to quote verbatim in the prose. If none, mark "interpretation without \
+surfaced primary grounding" and hedge harder.
 4. WEIGH, DON'T DECIDE — AND DETECT TALKING-PAST. Note where positions GENUINELY \
 conflict vs. talk past each other (different object of choice, different dating of \
 "the will", different sense of the term). Note who responds_to whom. DO NOT pick a \
@@ -141,7 +154,12 @@ explicitly ("Bobzien (1998: 234) argues …, whereas Frede (2011: 44) reads … 
 (1982: 123) instead …"). Every interpretive paragraph carries ≥1 inline [P_<id>: …] \
 scholar marker AS YOU WRITE IT, plus the [edge: …] for the disagreement and the \
 [passage_<id>: …] for its primary anchor. Give MULTIPLE concrete examples per frame.
-- Quote contested primary text in original + English where the scholars argue over it.
+- QUOTE THE PRIMARY TEXT, do not just cite a locus. For each position that has a \
+contested/standalone passage in the map, quote the STRONGEST one verbatim — original \
+language first, then its English — with its [passage_<id>: …] marker, at the point you \
+state the position. Quote at least two distinct primary passages per dominant fault \
+line when the map supplies them. Copy the Greek/Latin EXACTLY from the block; never \
+reconstruct or paraphrase it into the original language.
 - Where scholars genuinely conflict vs. merely talk past each other (different sense \
 of "the will", different dating), SAY which — this is the scholar's added value.
 - Hedge with the field's own markers ("Bobzien argues…, though Frede contends…").
@@ -186,6 +204,15 @@ class SynthesisResult:
     model_used: str = ""
     ledger: list[ClaimLedgerItem] = field(default_factory=list)
     degraded: bool = False  # True when the degraded-mode hedge produced the prose
+    # F4 instrumentation: which rung of the fallback chain produced the prose
+    # (0 = primary deepseek head, 1 = kimi content model, 2 = gemini), how many
+    # rungs were tried, and whether the budget-eaten answer-only re-call fired.
+    # Surfaced in state.metadata so the fallback/recovery rate is visible per
+    # query WITHOUT changing the prod log level (failure-map F6).
+    rung_index: int = 0
+    rungs_tried: int = 1
+    recovered_via_recall: bool = False
+    fell_back: bool = False  # True when a rung past the primary head produced it
 
 
 # M6: the synthesis fallback chain (ARCHITECTURE §K2.7). Fireworks-only TODAY —
@@ -320,11 +347,46 @@ _SCHOLAR_TOOL_CALL_BUDGETS: dict[str, int] = {
 # Per-tier synthesis render cap. >=5000 mandatory: reasoning eats the budget.
 # Streaming cap must match the blocking path (the two must agree — §6); the M6
 # wiring raises scholarly_agent._stream_render_max_tokens to this for flag-ON.
+# Raised (F4): deepseek-v4-pro shares max_tokens between reasoning_content and
+# content, so a bigger total budget — together with the reasoning_effort cap
+# (scholar_reasoning_effort) that bounds the chain-of-thought — leaves an
+# enforced answer reserve so the primary model rarely empties.
 _SCHOLAR_RENDER_TOKENS: dict[str, int] = {
-    "quick": 6000,
-    "standard": 8000,
-    "deep": 8000,
+    "quick": 9000,
+    "standard": 12000,
+    "deep": 14000,
 }
+
+# F4: the reasoning-budget cap passed to the Fireworks thinking model so a long
+# chain-of-thought cannot eat the whole max_tokens and empty the answer. Verified
+# against the live Fireworks API: deepseek-v4-pro honours a top-level
+# ``reasoning_effort`` ("none"|"low"|"medium"|"high"); "low" keeps the thinking
+# model's quality (reasoning stays SEPARATE in reasoning_content, content stays a
+# clean finished answer) while bounding the scratchpad so the answer reserve
+# survives. ``SCHOLAR_SYNTHESIS_REASONING_EFFORT`` overrides; an empty/"default"
+# value disables the cap (provider default). The kimi content-model fallback rung
+# and the deterministic map hedge remain the floor.
+_SCHOLAR_REASONING_EFFORT_DEFAULT = "low"
+_VALID_REASONING_EFFORTS: frozenset[str] = frozenset({"none", "low", "medium", "high"})
+
+
+def scholar_reasoning_effort() -> str | None:
+    """Reasoning-budget cap for the Fireworks thinking-model synthesis (F4).
+
+    Defaults to ``"low"`` — bounds deepseek-v4-pro's ``reasoning_content`` so it
+    cannot consume the whole ``max_tokens`` and return empty ``content``. Override
+    with ``SCHOLAR_SYNTHESIS_REASONING_EFFORT``; ``""``/``"default"`` returns
+    ``None`` (no cap, provider default). An unrecognised value also returns the
+    default. Only the Fireworks/OpenRouter payloads consume it; Gemini ignores it.
+    """
+    raw = (os.getenv("SCHOLAR_SYNTHESIS_REASONING_EFFORT") or "").strip().lower()
+    if raw == "default":
+        return None  # explicit opt-out: provider default, no cap
+    if not raw:
+        return _SCHOLAR_REASONING_EFFORT_DEFAULT
+    if raw in _VALID_REASONING_EFFORTS:
+        return raw
+    return _SCHOLAR_REASONING_EFFORT_DEFAULT
 
 
 def scholar_tool_call_budget(budget_tier: str) -> int:
@@ -369,22 +431,23 @@ def scholar_synthesis_timeout() -> float:
 
 
 def scholar_render_max_tokens(budget_tier: str) -> int:
-    """Flag-ON synthesis render cap by tier (§6); clamped to [5000, 20000].
+    """Flag-ON synthesis render cap by tier (§6); clamped to [8000, 24000].
 
     Streaming and blocking paths MUST agree on this value (§6). Overridable with
-    ``ELEUTHERIA_SCHOLAR_RENDER_MAX_TOKENS``. The ceiling was raised 16000→20000 so
-    deepseek (which shares max_tokens between reasoning_content and content) has
-    more room before a long reasoning run truncates the answer to empty — but the
-    real empty-answer guarantee is the kimi content-model fallback rung and the
-    deterministic map hedge, not this headroom.
+    ``ELEUTHERIA_SCHOLAR_RENDER_MAX_TOKENS``. The ceiling was raised 20000→24000
+    and the per-tier defaults lifted (F4): deepseek shares max_tokens between
+    reasoning_content and content, so a larger total budget — paired with the
+    ``scholar_reasoning_effort`` cap that bounds the chain-of-thought — leaves an
+    enforced answer reserve so the answer rarely empties. The kimi content-model
+    fallback rung and the deterministic map hedge remain the floor.
     """
     raw = os.getenv("ELEUTHERIA_SCHOLAR_RENDER_MAX_TOKENS")
     if raw:
         try:
-            return max(5000, min(20000, int(raw)))
+            return max(8000, min(24000, int(raw)))
         except ValueError:
             pass
-    return _SCHOLAR_RENDER_TOKENS.get(budget_tier, 8000)
+    return _SCHOLAR_RENDER_TOKENS.get(budget_tier, 12000)
 
 
 async def synthesize_dialectical(
@@ -392,7 +455,7 @@ async def synthesize_dialectical(
     cmap: ControversyMap,
     llm: Any,
     *,
-    max_tokens: int = 8000,  # >=5000 mandatory: reasoning eats the budget
+    max_tokens: int = 12000,  # >=5000 mandatory: reasoning eats the budget
     budget_tier: str = "standard",
 ) -> SynthesisResult:
     """Core G6 synthesis. Reason over the ControversyMap, emit cite-as-you-write prose.
@@ -438,16 +501,24 @@ async def synthesize_dialectical(
         coverage_note=coverage_note,
     )
 
+    reasoning_effort = scholar_reasoning_effort()
+
     # Try each rung of the fallback chain in order; first non-empty prose wins
     # (ARCHITECTURE §K2.7 — Fireworks-only today; head is deepseek-v4-pro, a true
     # thinking model whose ``content`` is already a clean finished answer).
     prose = ""
     reasoning_trace = ""
-    for candidate in model_chain:
+    rung_index = 0
+    rungs_tried = 0
+    for idx, candidate in enumerate(model_chain):
+        rungs_tried = idx + 1
         try:
             # The answer budget (max_tokens) applies to ``content`` only — thinking
             # models spend SEPARATE tokens on reasoning_content, so the answer is not
             # starved. Keep temperature at 0.3 (KIMI is clamped to 1.0 in the payload).
+            # reasoning_effort bounds the thinking model's chain-of-thought so it
+            # cannot eat the whole budget and empty the answer (F4); the Gemini and
+            # non-reasoning content rungs simply ignore it.
             raw = await llm.generate(
                 user_prompt,
                 system_prompt=DIALECTICAL_SYNTHESIS_SYSTEM,
@@ -455,6 +526,7 @@ async def synthesize_dialectical(
                 max_tokens=max_tokens,
                 thinking_mode=(budget_tier == "deep"),
                 model_override=candidate,
+                reasoning_effort=reasoning_effort,
                 # Dedicated generous per-call HTTP timeout: a slow thinking-model
                 # synthesis must NEVER be cut by the 120 s client timeout into the
                 # facet-template fallback (see scholar_synthesis_timeout docstring).
@@ -470,6 +542,7 @@ async def synthesize_dialectical(
             prose = ""
         if prose:
             model_id = candidate
+            rung_index = idx
             # The chain-of-thought (reasoning_content) is a SIDE-CHANNEL on the
             # LLMService — route it to the trace, NEVER into the answer.
             reasoning_trace = getattr(llm, "last_reasoning_content", "") or ""
@@ -486,11 +559,23 @@ async def synthesize_dialectical(
 
     ledger = build_provenance_ledger(prose, cmap) if prose else []
 
+    if rung_index > 0 and prose:
+        logger.info(
+            "dialectical synthesis used fallback rung %d/%d (%s) — primary head "
+            "did not produce prose",
+            rung_index,
+            len(model_chain),
+            model_used,
+        )
+
     return SynthesisResult(
         prose=prose,
         reasoning_trace=reasoning_trace,
         model_used=model_used,
         ledger=ledger,
+        rung_index=rung_index,
+        rungs_tried=max(rungs_tried, 1),
+        fell_back=rung_index > 0 and bool(prose),
     )
 
 
@@ -547,6 +632,9 @@ async def _recall_answer_only(
             # A generous answer budget so the essay (not the scratchpad) fills it.
             max_tokens=max(max_tokens, 8000),
             model_override=candidate,
+            # Bound the chain-of-thought on the recovery pass too, so the budget
+            # flows to the answer rather than re-empting on reasoning (F4).
+            reasoning_effort=scholar_reasoning_effort(),
             request_timeout=scholar_synthesis_timeout(),
         )
     except Exception as exc:  # pragma: no cover - defensive, never raise upstream
@@ -570,7 +658,7 @@ async def synthesize_dialectical_stream(
     llm: Any,
     *,
     on_reasoning: ReasoningCallback | None = None,
-    max_tokens: int = 8000,
+    max_tokens: int = 12000,
     budget_tier: str = "standard",
 ) -> SynthesisResult:
     """Streaming twin of :func:`synthesize_dialectical` (M6 live-reasoning path).
@@ -607,9 +695,15 @@ async def synthesize_dialectical_stream(
         coverage_note=coverage_note,
     )
 
+    reasoning_effort = scholar_reasoning_effort()
+
     prose = ""
     reasoning_trace = ""
-    for candidate in model_chain:
+    rung_index = 0
+    rungs_tried = 0
+    recovered_via_recall = False
+    for idx, candidate in enumerate(model_chain):
+        rungs_tried = idx + 1
         answer_parts: list[str] = []
         reasoning_parts: list[str] = []
         try:
@@ -619,6 +713,7 @@ async def synthesize_dialectical_stream(
                 temperature=0.3,
                 max_tokens=max_tokens,
                 model_override=candidate,
+                reasoning_effort=reasoning_effort,
                 request_timeout=scholar_synthesis_timeout(),
             ):
                 if channel == "reasoning":
@@ -669,9 +764,11 @@ async def synthesize_dialectical_stream(
                     candidate,
                 )
                 prose = recovered
+                recovered_via_recall = True
 
         if prose:
             model_id = candidate
+            rung_index = idx
             # Prefer the accumulated reasoning deltas; fall back to the
             # side-channel the segmented stream also populates.
             reasoning_trace = candidate_reasoning
@@ -685,11 +782,24 @@ async def synthesize_dialectical_stream(
 
     ledger = build_provenance_ledger(prose, cmap) if prose else []
 
+    if (rung_index > 0 or recovered_via_recall) and prose:
+        logger.info(
+            "dialectical streaming synthesis: rung %d/%d (%s), recall=%s",
+            rung_index,
+            len(model_chain),
+            model_used,
+            recovered_via_recall,
+        )
+
     return SynthesisResult(
         prose=prose,
         reasoning_trace=reasoning_trace,
         model_used=model_used,
         ledger=ledger,
+        rung_index=rung_index,
+        rungs_tried=max(rungs_tried, 1),
+        recovered_via_recall=recovered_via_recall,
+        fell_back=rung_index > 0 and bool(prose),
     )
 
 
@@ -1033,6 +1143,7 @@ async def synthesize_degraded(cmap: ControversyMap, llm: Any) -> str:
             temperature=0.3,
             max_tokens=4000,
             model_override=model_id,
+            reasoning_effort=scholar_reasoning_effort(),
             request_timeout=scholar_synthesis_timeout(),
         )
         return strip_reasoning_leak((raw or "").strip())

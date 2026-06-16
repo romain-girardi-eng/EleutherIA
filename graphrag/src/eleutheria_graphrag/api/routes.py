@@ -474,6 +474,10 @@ async def query_stream(
                             "error",
                             "citation_verified",
                             "stage_complete",
+                            # F6: per-query grounding diagnostics — forwarded on
+                            # its own channel regardless of the scholar-RAG flag
+                            # so it never leaks into answer_chunk prose.
+                            "scholar_diagnostics",
                         )
                         _scholar_extra_trace_events = (
                             "agent_start",
@@ -874,3 +878,129 @@ async def health() -> dict:
         "kg_loaded": _graphrag._kg_loaded,
         "nodes_count": len(_graphrag.node_lookup) if _graphrag._kg_loaded else 0,
     }
+
+
+# F7: internal smoke endpoint. The Cloudflare tunnel severs long EXTERNAL SSE
+# streams (a `curl …/query/stream` is cut mid-retrieval), so CI/cron cannot
+# E2E-test the answer path from outside. This runs ONE canned scholar-RAG query
+# IN-PROCESS (localhost, no tunnel) and returns pass/fail metrics — the
+# regression catch the external curl cannot do.
+_SMOKE_QUESTION = "Did Epictetus think freedom is up to us?"
+# Greek polytonic ranges — used to assert ≥1 quotable-Greek primary source
+# actually reached the answer (the F3/GOAL-7 grounding contract).
+_GREEK_CHAR_RE = re.compile(r"[Ͱ-Ͽἀ-῿]")
+
+
+def _require_smoke_token(request: Request) -> None:
+    """Refuse the smoke run unless the shared-secret token matches.
+
+    The endpoint spends real LLM budget and exercises the full pipeline, so it
+    is authenticated. When ``GRAPHRAG_SMOKE_TOKEN`` is unset the endpoint is
+    disabled outright (403) — it never runs unauthenticated.
+    """
+    expected = os.environ.get("GRAPHRAG_SMOKE_TOKEN", "").strip()
+    if not expected:
+        raise HTTPException(status_code=403, detail="smoke endpoint disabled")
+    provided = request.headers.get("authorization", "")
+    if not hmac.compare_digest(provided.encode(), f"Bearer {expected}".encode()):
+        raise HTTPException(status_code=401, detail="unauthorized")
+
+
+def _smoke_metrics(result: dict[str, Any], elapsed_s: float) -> dict[str, Any]:
+    """Reduce one canned-query result to pass/fail smoke metrics (F7).
+
+    Pure + defensive — a malformed result yields a failing (not crashing)
+    report. Metrics:
+
+    * ``non_empty``      — the answer prose is substantive (≥200 chars).
+    * ``greek``          — quotable-Greek primary sources that reached the
+      answer (prefers the F6 ``scholar_diagnostics`` count; falls back to
+      scanning citation labels + the answer prose for polytonic Greek).
+    * ``ancient``        — distinct ancient sources (diagnostics, else the
+      count of non-secondary citations).
+    * ``leaked_ids``     — citation labels that are raw node ids (MUST be 0;
+      a raw ``b_…``/``person_…`` id must never render — see ``_deleak_label``).
+    """
+    answer = result.get("answer") or ""
+    citations = [c for c in (result.get("citations") or []) if isinstance(c, dict)]
+    metadata = result.get("metadata") or {}
+    diagnostics = metadata.get("scholar_diagnostics") or {}
+    if not isinstance(diagnostics, dict):
+        diagnostics = {}
+
+    non_empty = isinstance(answer, str) and len(answer.strip()) >= 200
+
+    greek = int(diagnostics.get("passages_with_quotable_greek") or 0)
+    if greek == 0:
+        greek = sum(
+            1 for c in citations if _GREEK_CHAR_RE.search(str(c.get("label") or ""))
+        )
+        if greek == 0 and isinstance(answer, str) and _GREEK_CHAR_RE.search(answer):
+            greek = 1
+
+    ancient = int(diagnostics.get("ancient_sources") or 0)
+    if ancient == 0:
+        ancient = sum(1 for c in citations if c.get("layer") != "secondary")
+
+    leaked_ids = sum(
+        1 for c in citations if _LEAKED_ID_RE.match(str(c.get("label") or "").strip())
+    )
+
+    metrics = {
+        "non_empty": non_empty,
+        "greek": greek,
+        "ancient": ancient,
+        "leaked_ids": leaked_ids,
+        "elapsed_s": round(elapsed_s, 2),
+    }
+    metrics["pass"] = bool(
+        non_empty and greek >= 1 and ancient >= 1 and leaked_ids == 0
+    )
+    return metrics
+
+
+@router.get("/_smoke")
+async def smoke(
+    request: Request,
+    graphrag: Annotated[GraphRAGService, Depends(get_graphrag)],
+) -> dict[str, Any]:
+    """Run ONE canned scholar-RAG query end-to-end and return pass/fail metrics.
+
+    Authenticated (``GRAPHRAG_SMOKE_TOKEN`` shared secret). Runs IN-PROCESS so
+    CI/cron can exercise the full answer path without the Cloudflare tunnel that
+    cuts external streams. Returns ``{pass, non_empty, greek, ancient,
+    leaked_ids, elapsed_s, …}`` with HTTP 200 on pass and 503 on fail so a
+    cron/healthcheck can alert on a non-200.
+    """
+    _require_smoke_token(request)
+    started = time.monotonic()
+    try:
+        result = await graphrag.query(
+            question=_SMOKE_QUESTION,
+            include_passages=True,
+        )
+    except Exception as exc:  # noqa: BLE001 - convert to a 503 so cron alerts
+        # A total pipeline failure (LLM down, DB unreachable, OOM) is EXACTLY
+        # what the smoke test exists to catch — it must be a non-200 like the
+        # metrics-fail path below, not a 200 that a healthcheck reads as healthy.
+        elapsed = time.monotonic() - started
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "pass": False,
+                "non_empty": False,
+                "greek": 0,
+                "ancient": 0,
+                "leaked_ids": 0,
+                "elapsed_s": round(elapsed, 2),
+                "error": f"{type(exc).__name__}: {exc}"[:300],
+                "question": _SMOKE_QUESTION,
+            },
+        ) from exc
+    elapsed = time.monotonic() - started
+    metrics = _smoke_metrics(result, elapsed)
+    metrics["question"] = _SMOKE_QUESTION
+    metrics["llm_model"] = result.get("llm_model", "")
+    if not metrics["pass"]:
+        raise HTTPException(status_code=503, detail=metrics)
+    return metrics

@@ -499,6 +499,7 @@ class LLMService:
         response_json_schema: dict[str, Any] | None = None,
         response_mime_type: str | None = None,
         schema_name: str = "structured_output",
+        reasoning_effort: str | None = None,
     ) -> dict[str, Any]:
         """Build JSON payload for OpenAI-compatible providers.
 
@@ -534,6 +535,18 @@ class LLMService:
             payload["temperature"] = 1.0
         if provider == ModelProvider.FIREWORKS and prompt_cache_id:
             payload["prompt_cache_id"] = prompt_cache_id
+        # Fireworks reasoning models (deepseek-v4-pro, kimi-k2-thinking) share
+        # ``max_tokens`` between ``reasoning_content`` and ``content``. A long
+        # reasoning run can eat the whole budget → finish_reason=length with zero
+        # content deltas → empty answer (failure-map F4). The Fireworks
+        # OpenAI-compatible endpoint honours a top-level ``reasoning_effort``
+        # ("none"|"low"|"medium"|"high"), verified against the live API: passing
+        # "low" caps the chain-of-thought so the answer reserve survives, while
+        # keeping the thinking model's quality (reasoning stays SEPARATE in
+        # reasoning_content, content stays clean). Only attach when explicitly
+        # requested by the caller — every other Fireworks call is unchanged.
+        if provider == ModelProvider.FIREWORKS and reasoning_effort:
+            payload["reasoning_effort"] = reasoning_effort
         if provider == ModelProvider.OPENROUTER:
             provider_block: dict[str, Any] = {}
             provider_only = cast(list[str] | None, config.get("provider_only"))
@@ -545,9 +558,12 @@ class LLMService:
             if provider_block:
                 payload["provider"] = provider_block
 
-            reasoning_effort = cast(str | None, config.get("reasoning_effort"))
-            if reasoning_effort:
-                payload["reasoning"] = {"effort": reasoning_effort}
+            # Explicit caller override wins over the env-configured default.
+            effort = reasoning_effort or cast(
+                str | None, config.get("reasoning_effort")
+            )
+            if effort:
+                payload["reasoning"] = {"effort": effort}
 
         if response_json_schema is not None:
             if provider in (ModelProvider.FIREWORKS, ModelProvider.KIMI):
@@ -746,6 +762,7 @@ class LLMService:
         model_override: str | None = None,
         agent_id: str | None = None,
         request_timeout: float | None = None,
+        reasoning_effort: str | None = None,
     ) -> str:
         """
         Generate a response (non-streaming).
@@ -761,6 +778,11 @@ class LLMService:
                 by the Scholar-RAG dialectical synthesis (a slow thinking model
                 whose generation can exceed the default 120 s client timeout).
                 ``None`` keeps the client-level timeout (unchanged behaviour).
+            reasoning_effort: Optional reasoning-budget cap for thinking models
+                on the OpenAI-compatible providers ("none"|"low"|"medium"|"high").
+                For Fireworks deepseek-v4-pro it bounds ``reasoning_content`` so a
+                long chain-of-thought cannot eat the whole ``max_tokens`` and empty
+                the answer (failure-map F4). ``None`` leaves provider defaults.
 
         Returns:
             Generated text
@@ -808,6 +830,7 @@ class LLMService:
                         response_json_schema=response_json_schema,
                         response_mime_type=response_mime_type,
                         request_timeout=request_timeout,
+                        reasoning_effort=reasoning_effort,
                     )
                 except Exception as exc:
                     logger.warning(
@@ -869,6 +892,7 @@ class LLMService:
                         response_json_schema=response_json_schema,
                         request_timeout=request_timeout,
                         response_mime_type=response_mime_type,
+                        reasoning_effort=reasoning_effort,
                     )
                 except Exception as exc:
                     last_exc = exc
@@ -1159,6 +1183,7 @@ class LLMService:
         response_mime_type: str | None = None,
         schema_name: str = "structured_output",
         request_timeout: float | None = None,
+        reasoning_effort: str | None = None,
     ) -> str:
         """Generate using OpenAI-compatible API (Fireworks, Kimi, OpenRouter)."""
         client = await self._get_client()
@@ -1177,6 +1202,7 @@ class LLMService:
                 response_json_schema=response_json_schema,
                 response_mime_type=response_mime_type,
                 schema_name=schema_name,
+                reasoning_effort=reasoning_effort,
             ),
             # Per-call timeout override: a slow thinking-model synthesis can run
             # well past the shared 120 s client timeout. ``None`` keeps the
@@ -1666,6 +1692,7 @@ class LLMService:
         max_tokens: int = 4096,
         model_override: str | None = None,
         request_timeout: float | None = None,
+        reasoning_effort: str | None = None,
     ) -> AsyncIterator[tuple[Literal["reasoning", "answer"], str]]:
         """Stream a reasoning-model completion as TAGGED segments.
 
@@ -1712,6 +1739,7 @@ class LLMService:
             api_key,
             config,
             request_timeout=request_timeout,
+            reasoning_effort=reasoning_effort,
         ):
             yield segment
 
@@ -1726,6 +1754,7 @@ class LLMService:
         config: dict[str, Any],
         *,
         request_timeout: float | None = None,
+        reasoning_effort: str | None = None,
     ) -> AsyncIterator[tuple[Literal["reasoning", "answer"], str]]:
         """OpenAI-compatible streaming that yields tagged reasoning/answer deltas.
 
@@ -1750,6 +1779,7 @@ class LLMService:
                     temperature,
                     max_tokens,
                     config,
+                    reasoning_effort=reasoning_effort,
                 ),
                 "stream": True,
                 "stream_options": {"include_usage": True},

@@ -29,6 +29,7 @@ this module is import-safe and inert until invoked.
 from __future__ import annotations
 
 import logging
+import os
 from typing import Any
 
 from eleutheria_graphrag.agents.state import (
@@ -39,6 +40,26 @@ from eleutheria_graphrag.agents.state import (
 )
 
 logger = logging.getLogger(__name__)
+
+# F3: the per-frame contested-passage budget handed to build_controversy_frame.
+# Raised 12 -> 18 so MORE quotable-Greek primary passages survive retrieval into
+# the map (the corpus holds ~560 Epictetus passages; only ~1 was reaching the
+# prose). build_controversy_frame round-robins by author and ranks quotable-Greek
+# first WITHIN each author group, so a larger budget surfaces ≥2 quotable-Greek
+# passages per dominant fault line instead of starving the holder's own author.
+# ``ELEUTHERIA_SCHOLAR_CONTESTED_BUDGET`` overrides (clamped to [6, 24]).
+_CONTESTED_PASSAGE_BUDGET_DEFAULT = 18
+
+
+def _contested_passage_budget() -> int:
+    """Per-frame contested-passage budget (F3); clamped to [6, 24]."""
+    raw = os.getenv("ELEUTHERIA_SCHOLAR_CONTESTED_BUDGET")
+    if raw:
+        try:
+            return max(6, min(24, int(raw)))
+        except ValueError:
+            pass
+    return _CONTESTED_PASSAGE_BUDGET_DEFAULT
 
 
 # ── assembly ─────────────────────────────────────────────────────────────────
@@ -82,7 +103,7 @@ async def assemble_controversy_map(
         seen_seeds.add(seed_id)
 
         frame_result = await build_frame_tool.execute(
-            {"seed_id": seed_id, "max_passages": 12}
+            {"seed_id": seed_id, "max_passages": _contested_passage_budget()}
         )
         frame = getattr(frame_result, "frame", None)
         if frame is None:

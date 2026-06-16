@@ -35,7 +35,6 @@ from eleutheria_graphrag.agents.state import (
     PassageRef,
 )
 
-
 # ── fixtures ─────────────────────────────────────────────────────────────────
 
 
@@ -310,3 +309,80 @@ def test_max_verify_rounds_by_tier() -> None:
     assert max_verify_rounds("standard") == 1
     assert max_verify_rounds("deep") == 2
     assert max_verify_rounds("unknown") == 1
+
+
+# ── F2: scholar-fidelity gate (attributed label vs the holder's KG node) ──────
+
+
+def test_fidelity_flags_label_contradicting_holder_node() -> None:
+    """F2: attributing 'incompatibilist' to Frede, whose node says compatibilist."""
+    from eleutheria_graphrag.agents.scholar_verification import scholar_fidelity_gate
+
+    prose = (
+        "On this reading Frede argues that Epictetus is an incompatibilist, "
+        "opposing Bobzien."
+    )
+    holder_descriptions = {
+        "Frede": (
+            "Frede holds that the notion of the will originates with Epictetus, "
+            "but a COMPATIBILIST one — freedom is compatible with the cosmic order."
+        ),
+    }
+    report = scholar_fidelity_gate(prose, holder_descriptions)
+    assert not report.passed
+    assert len(report.violations) == 1
+    v = report.violations[0]
+    assert v.holder == "Frede"
+    assert v.asserted_label == "incompatibilist"
+    assert v.node_label == "compatibilist"
+    assert "Frede" in v.rarr_edit
+
+
+def test_fidelity_passes_when_label_matches_holder_node() -> None:
+    from eleutheria_graphrag.agents.scholar_verification import scholar_fidelity_gate
+
+    prose = "Frede reads Epictetus as a compatibilist about freedom and fate."
+    holder_descriptions = {
+        "Frede": "Frede holds a compatibilist origin of free will in Epictetus."
+    }
+    report = scholar_fidelity_gate(prose, holder_descriptions)
+    assert report.passed
+
+
+def test_fidelity_noop_without_descriptions() -> None:
+    from eleutheria_graphrag.agents.scholar_verification import scholar_fidelity_gate
+
+    prose = "Frede argues Epictetus is an incompatibilist."
+    assert scholar_fidelity_gate(prose, None).passed
+    assert scholar_fidelity_gate(prose, {}).passed
+
+
+def test_fidelity_ignores_other_holders() -> None:
+    """A label about Bobzien must not be charged against Frede's node."""
+    from eleutheria_graphrag.agents.scholar_verification import scholar_fidelity_gate
+
+    prose = "Bobzien is a compatibilist reader of the Stoics."
+    holder_descriptions = {
+        "Frede": "Frede holds an incompatibilist position.",
+    }
+    # The sentence names Bobzien, not Frede → no Frede violation.
+    assert scholar_fidelity_gate(prose, holder_descriptions).passed
+
+
+def test_scholar_verdict_fidelity_rejects_and_adds_rarr_edit() -> None:
+    prose = (
+        "Frede argues that Epictetus is an incompatibilist "
+        "[P_frede_epictetus: Frede, 2011 p. 44]."
+    )
+    holder_descriptions = {
+        "Frede": "Frede holds a compatibilist origin of free will in Epictetus.",
+    }
+    verdict = scholar_verdict(
+        prose,
+        _two_frame_map(),
+        require_completeness=False,
+        holder_descriptions=holder_descriptions,
+    )
+    assert not verdict.accepted
+    assert not verdict.fidelity.passed
+    assert any("Scholar-fidelity" in e for e in verdict.rarr_edits)

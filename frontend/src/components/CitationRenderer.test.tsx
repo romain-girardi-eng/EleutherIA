@@ -79,6 +79,63 @@ describe('CitationRenderer', () => {
     expect(onNodeCitationClick).toHaveBeenCalledWith('scholarly_argument_long_2002');
   });
 
+  it('never renders a raw node id as the inline badge label (id-shape guard)', async () => {
+    const user = userEvent.setup();
+    const onNodeCitationClick = vi.fn();
+
+    // Bare KG marker whose id has a prefix the strip rule misses (b_<hex>):
+    // without the guard the badge would leak "B 9f3a2c1d" (an id-shaped label).
+    render(
+      <MemoryRouter>
+        <CitationRenderer
+          content="On the cylinder analogy [P_b_9f3a2c1d]."
+          sources={[]}
+          onNodeCitationClick={onNodeCitationClick}
+        />
+      </MemoryRouter>,
+    );
+
+    const badge = screen.getByRole('button', { name: /Scholar citation/i });
+    // The rendered label must NOT be the raw node id and must not contain id stems.
+    expect(badge.textContent).not.toContain('b_9f3a2c1d');
+    expect(badge.textContent?.toLowerCase()).not.toContain('9f3a2c1d');
+    expect(badge.textContent?.trim()).toBe('ref');
+
+    // Exactly ONE surface opens on click, carrying the stable node id.
+    await user.click(badge);
+    expect(onNodeCitationClick).toHaveBeenCalledTimes(1);
+    expect(onNodeCitationClick).toHaveBeenCalledWith('b_9f3a2c1d');
+    // It must not also fire any other citation surface.
+    expect(onNodeCitationClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('opens exactly one surface for a primary-passage marker and never a node surface', async () => {
+    const user = userEvent.setup();
+    const onPassageCitationClick = vi.fn();
+    const onNodeCitationClick = vi.fn();
+
+    render(
+      <MemoryRouter>
+        <CitationRenderer
+          content="See the corpus text [passage_abc123def456]."
+          sources={[]}
+          onPassageCitationClick={onPassageCitationClick}
+          onNodeCitationClick={onNodeCitationClick}
+        />
+      </MemoryRouter>,
+    );
+
+    const badge = screen.getByRole('button', { name: /source/i });
+    // The label must not leak the raw passage id.
+    expect(badge.textContent).not.toContain('passage_abc123def456');
+
+    await user.click(badge);
+    // Primary-passage badge opens ONLY the passage reader surface.
+    expect(onPassageCitationClick).toHaveBeenCalledTimes(1);
+    expect(onPassageCitationClick).toHaveBeenCalledWith('passage_abc123def456');
+    expect(onNodeCitationClick).not.toHaveBeenCalled();
+  });
+
   it('keeps [P1] passage citations clickable', async () => {
     const user = userEvent.setup();
     const onPassageCitationClick = vi.fn();
