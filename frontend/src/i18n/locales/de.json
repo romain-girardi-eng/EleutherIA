@@ -55,12 +55,14 @@
       "canonicalPassages": "Rezeptionskarte des Korpus",
       "recherches": "Galerie öffentlicher Recherchen",
       "contributions": "Community-Beiträge",
-      "contribute": "PDF-Korrektur einreichen"
+      "contribute": "PDF-Korrektur einreichen",
+      "projects": "Persönlicher Arbeitsbereich für Forschungsdokumente"
     },
     "cta": {
       "label": "Wissensgraph",
       "hint": "Netzwerk erkunden"
-    }
+    },
+    "projects": "Meine Projekte"
   },
   "home": {
     "welcome": "Willkommen bei EleutherIA",

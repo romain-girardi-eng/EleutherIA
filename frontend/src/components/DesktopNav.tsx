@@ -39,6 +39,7 @@ import {
   Swords,
   GitPullRequest,
   UploadCloud,
+  FolderOpen,
   LogOut,
   User as UserIcon,
   Globe2,
@@ -112,6 +113,7 @@ const GROUPS: NavGroup[] = [
       { to: '/recherches', labelKey: 'nav.recherches', descKey: 'nav.descriptions.recherches', Icon: GitPullRequest },
       { to: '/contributions', labelKey: 'nav.contributions', descKey: 'nav.descriptions.contributions', Icon: BookMarked },
       { to: '/contribuer', labelKey: 'nav.contribute', descKey: 'nav.descriptions.contribute', Icon: UploadCloud, authOnly: true },
+      { to: '/projects', labelKey: 'nav.projects', descKey: 'nav.descriptions.projects', Icon: FolderOpen, authOnly: true },
     ],
   },
 ];

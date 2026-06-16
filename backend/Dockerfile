@@ -48,7 +48,8 @@ RUN pip install --no-cache-dir --no-compile \
     PyJWT \
     "rdflib>=7.6.0" \
     "pyshacl>=0.31.0" \
-    "owlrl>=7.1.4"
+    "owlrl>=7.1.4" \
+    "pypdf>=6.10.2"
 
 # Smoke check: the worker entrypoint must import cleanly. Catches missing
 # deps or moved modules at build time instead of at `docker run`.

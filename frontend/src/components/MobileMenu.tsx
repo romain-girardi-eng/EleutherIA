@@ -40,6 +40,7 @@ import {
   Swords,
   GitPullRequest,
   UploadCloud,
+  FolderOpen,
   LogOut,
   User as UserIcon,
 } from 'lucide-react';
@@ -107,6 +108,7 @@ const GROUPS: MenuGroup[] = [
       { to: '/recherches', labelKey: 'nav.recherches', Icon: GitPullRequest },
       { to: '/contributions', labelKey: 'nav.contributions', Icon: BookMarked },
       { to: '/contribuer', labelKey: 'nav.contribute', Icon: UploadCloud, authOnly: true },
+      { to: '/projects', labelKey: 'nav.projects', Icon: FolderOpen, authOnly: true },
     ],
   },
 ];

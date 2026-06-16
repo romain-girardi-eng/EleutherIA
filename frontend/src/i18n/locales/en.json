@@ -55,12 +55,14 @@
       "canonicalPassages": "Reception map of the corpus",
       "recherches": "Public researches gallery",
       "contributions": "Community contributions",
-      "contribute": "Submit a PDF correction"
+      "contribute": "Submit a PDF correction",
+      "projects": "Personal research document workspace"
     },
     "cta": {
       "label": "Knowledge Graph",
       "hint": "Explore the network"
-    }
+    },
+    "projects": "My Projects"
   },
   "home": {
     "welcome": "Welcome to EleutherIA",
