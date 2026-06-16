@@ -1716,9 +1716,7 @@ class LLMService:
         shared client timeout.
         """
         client = await self._get_client()
-        post_timeout = (
-            request_timeout if request_timeout is not None else self.timeout
-        )
+        post_timeout = request_timeout if request_timeout is not None else self.timeout
 
         async with client.stream(
             "POST",

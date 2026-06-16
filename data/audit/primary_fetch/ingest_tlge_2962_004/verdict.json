@@ -1,0 +1,7 @@
+{
+ "wcid": "dummy",
+ "urn": "urn:cts:greekLit:tlg2962.tlg004",
+ "n_passages": 14,
+ "edition_statement": "test",
+ "source": "local TLG E disk TLG2962.TXT work 004"
+}
