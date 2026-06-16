@@ -78,6 +78,50 @@ _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;·?!])\s+")
 _GREEK_CHAR_RE = re.compile(r"[\u0370-\u03FF\u1F00-\u1FFF]")
 logger = logging.getLogger(__name__)
 
+# Lossless prose-streaming chunker. Splits at paragraph (``\n\n``) then sentence
+# (``. ``) boundaries WITHOUT discarding the boundary whitespace, so the
+# concatenation of the yielded chunks is BYTE-FOR-BYTE the input prose. The
+# earlier ``re.split(r"\n\n+")`` + ``_SENTENCE_SPLIT_RE.split`` chunkers dropped
+# the inter-paragraph/inter-sentence separators at chunk boundaries, silently
+# corrupting (and at the buffer-flush boundary mangling) the streamed answer.
+# A capturing split keeps every delimiter; greedy packing keeps chunks ~<=500
+# chars without ever losing a character.
+_PROSE_SEGMENT_RE = re.compile(r"(\n{2,}|(?<=[.;\u00B7?!])\s+)")
+_PROSE_CHUNK_TARGET = 500
+
+
+def _lossless_prose_chunks(text: str, target: int = _PROSE_CHUNK_TARGET) -> list[str]:
+    """Chunk ``text`` for streaming so ``"".join(chunks) == text`` exactly.
+
+    Tokens (content + the following separator) are packed greedily up to
+    ``target`` chars; an oversized single token is emitted whole rather than
+    split mid-word. Empty input yields no chunks.
+    """
+    if not text:
+        return []
+    parts = _PROSE_SEGMENT_RE.split(text)
+    # ``parts`` alternates content / captured-separator / content / \u2026 . Re-pair
+    # each content piece with the separator that followed it so no character is
+    # ever dropped between tokens.
+    tokens: list[str] = []
+    for i in range(0, len(parts), 2):
+        content = parts[i]
+        sep = parts[i + 1] if i + 1 < len(parts) else ""
+        token = content + sep
+        if token:
+            tokens.append(token)
+    chunks: list[str] = []
+    buffer = ""
+    for token in tokens:
+        if buffer and len(buffer) + len(token) > target:
+            chunks.append(buffer)
+            buffer = token
+        else:
+            buffer += token
+    if buffer:
+        chunks.append(buffer)
+    return chunks
+
 
 def _claim_from_answer(answer_text: str, ref: str) -> str | None:
     """Extract the sentence containing citation ``[ref]`` from the answer.
@@ -633,6 +677,13 @@ class ScholarlyAgent:
             "ledger_size": len(ledger),
             "degraded": result.degraded,
         }
+        # The thinking model's chain-of-thought (reasoning_content) is a trace
+        # artefact ONLY — never part of the answer. Surface it on the metadata so
+        # the SSE reasoning channel can show it, truncated to stay low-risk.
+        if result.reasoning_trace:
+            state.metadata["scholar_synthesis_reasoning"] = truncate_text(
+                result.reasoning_trace, 4000
+            )
         _trace_stage(
             state,
             "dialectical_synthesis",
@@ -1761,26 +1812,14 @@ class ScholarlyAgent:
             return
 
         state.metadata["render_streamed"] = True
-        # Chunk the finished prose like _chunk_answer: paragraph-first, then
-        # sentence-split long paragraphs. Each yielded string is forwarded by
-        # the route as an answer_chunk event.
-        paragraphs = re.split(r"\n\n+", prose)
-        for i, para in enumerate(paragraphs):
-            if i > 0:
-                yield "\n\n"
-            if len(para) <= 500:
-                yield para
-            else:
-                sentences = _SENTENCE_SPLIT_RE.split(para)
-                buffer = ""
-                for sent in sentences:
-                    if buffer and len(buffer) + len(sent) + 1 > 500:
-                        yield buffer
-                        buffer = sent
-                    else:
-                        buffer = f"{buffer} {sent}" if buffer else sent
-                if buffer:
-                    yield buffer
+        # Chunk the finished prose LOSSLESSLY: paragraph-first, then sentence
+        # boundaries, preserving every separator so the concatenation of the
+        # emitted answer_chunks is byte-for-byte the full prose (the old
+        # split-and-rejoin chunker dropped inter-paragraph/inter-sentence
+        # whitespace, which truncated/mangled the streamed answer). Each yielded
+        # string is forwarded by the route as an answer_chunk event.
+        for chunk in _lossless_prose_chunks(prose):
+            yield chunk
 
         _append_reasoning_step(
             state,
@@ -2004,24 +2043,10 @@ class ScholarlyAgent:
         streamed live (see ``_stream_render``) so it is not duplicated.
         """
         if stream_prose:
-            text = answer.answer
-            paragraphs = re.split(r"\n\n+", text)
-            for i, para in enumerate(paragraphs):
-                if i > 0:
-                    yield "\n\n"
-                if len(para) <= 500:
-                    yield para
-                else:
-                    sentences = _SENTENCE_SPLIT_RE.split(para)
-                    buffer = ""
-                    for sent in sentences:
-                        if buffer and len(buffer) + len(sent) + 1 > 500:
-                            yield buffer
-                            buffer = sent
-                        else:
-                            buffer = f"{buffer} {sent}" if buffer else sent
-                    if buffer:
-                        yield buffer
+            # Lossless chunking: the concatenation of the emitted chunks equals
+            # ``answer.answer`` byte-for-byte (no dropped separators).
+            for chunk in _lossless_prose_chunks(answer.answer):
+                yield chunk
 
         yield self._build_complete_event(answer, event_type="complete")
 

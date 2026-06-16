@@ -27,6 +27,7 @@ from eleutheria_graphrag.agents.dialectical_synthesis import (
     SynthesisResult,
     build_provenance_ledger,
     format_scholar_reference,
+    model_separates_reasoning,
     passes_content_gate,
     resolve_scholar_synthesis_model,
     scholar_render_max_tokens,
@@ -222,15 +223,20 @@ def test_content_gate_rejects_fabricated_passage_id() -> None:
 
 def test_resolve_model_defaults_to_fireworks(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("SCHOLAR_SYNTHESIS_MODEL", raising=False)
-    assert resolve_scholar_synthesis_model() == "accounts/fireworks/models/kimi-k2p6"
+    # the synthesis runs on the true thinking model (clean answer in `content`)
+    assert (
+        resolve_scholar_synthesis_model() == "accounts/fireworks/models/deepseek-v4-pro"
+    )
 
 
 def test_resolve_model_ignores_moonshot_optin(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    # Romain's constraint: Moonshot opt-in is NOT honoured until M6 wires K2.7.
+    # Romain's constraint: Moonshot opt-in is NOT honoured until K2-thinking lands.
     monkeypatch.setenv("SCHOLAR_SYNTHESIS_MODEL", "moonshot:kimi-k2.7-code-highspeed")
-    assert resolve_scholar_synthesis_model() == "accounts/fireworks/models/kimi-k2p6"
+    assert (
+        resolve_scholar_synthesis_model() == "accounts/fireworks/models/deepseek-v4-pro"
+    )
 
 
 def test_resolve_model_accepts_fireworks_override(
@@ -258,13 +264,14 @@ async def test_synthesize_dialectical_runs_end_to_end_with_stub() -> None:
     )
     llm = AsyncMock()
     llm.generate.return_value = grounded_prose
-    llm.last_model_used = "accounts/fireworks/models/kimi-k2p6"
+    llm.last_model_used = "accounts/fireworks/models/deepseek-v4-pro"
+    llm.last_reasoning_content = ""
 
     result = await synthesize_dialectical(state=None, cmap=_map(), llm=llm)
 
     assert isinstance(result, SynthesisResult)
     assert result.prose == grounded_prose
-    assert result.model_used == "accounts/fireworks/models/kimi-k2p6"
+    assert result.model_used == "accounts/fireworks/models/deepseek-v4-pro"
     # the prose became a ledger (byproduct), not the other way round
     assert len(result.ledger) == 4
     assert all(i.status == ClaimStatus.SUPPORTED for i in result.ledger)
@@ -277,7 +284,7 @@ async def test_synthesize_dialectical_runs_end_to_end_with_stub() -> None:
     assert "--opposes-->" in user_prompt
     assert "REASON" in user_prompt and "WRITE the scholarly answer" in user_prompt
     assert call.kwargs["system_prompt"] == DIALECTICAL_SYNTHESIS_SYSTEM
-    assert call.kwargs["model_override"] == "accounts/fireworks/models/kimi-k2p6"
+    assert call.kwargs["model_override"] == "accounts/fireworks/models/deepseek-v4-pro"
     # the answer comes from synthesis, not a template
     assert "frames the issue as" not in result.prose
     assert passes_content_gate(result.prose, _map())
@@ -355,8 +362,8 @@ def test_fallback_chain_is_fireworks_then_gemini(
 ) -> None:
     monkeypatch.delenv("SCHOLAR_SYNTHESIS_MODEL", raising=False)
     chain = scholar_synthesis_fallback_chain()
-    # head = resolved Fireworks default; NO Moonshot rung; gemini is the last resort
-    assert chain[0] == "accounts/fireworks/models/kimi-k2p6"
+    # head = resolved Fireworks thinking default; NO Moonshot rung; gemini last resort
+    assert chain[0] == "accounts/fireworks/models/deepseek-v4-pro"
     assert chain[-1] == "gemini-3.1-pro-preview"
     assert not any("moonshot" in m or "kimi-k2.7" in m for m in chain)
     assert len(chain) == len(set(chain))  # deduped
@@ -367,7 +374,7 @@ def test_fallback_chain_ignores_moonshot_optin(
 ) -> None:
     monkeypatch.setenv("SCHOLAR_SYNTHESIS_MODEL", "moonshot:kimi-k2.7-code-highspeed")
     chain = scholar_synthesis_fallback_chain()
-    assert chain[0] == "accounts/fireworks/models/kimi-k2p6"
+    assert chain[0] == "accounts/fireworks/models/deepseek-v4-pro"
     assert not any("moonshot" in m for m in chain)
 
 
@@ -552,8 +559,68 @@ def test_synthesize_dialectical_strips_leak_from_prose() -> None:
     )
     llm = AsyncMock()
     llm.generate.return_value = grounded
+    # k2p6 is a NON-reasoning model that inlines its scratch into content, so the
+    # defensive stripper MUST run here (it does not run for thinking models).
     llm.last_model_used = "accounts/fireworks/models/kimi-k2p6"
+    llm.last_reasoning_content = ""
     result = asyncio.run(synthesize_dialectical(state=None, cmap=_map(), llm=llm))
     assert "Let me verify" not in result.prose
     assert "Matches the text" not in result.prose
     assert "Bobzien (1998: 330)" in result.prose
+
+
+# ── thinking-model path: reasoning_content separated from the answer ──────────
+
+
+def test_model_separates_reasoning_flags_thinking_models() -> None:
+    assert model_separates_reasoning("accounts/fireworks/models/deepseek-v4-pro")
+    assert model_separates_reasoning("accounts/fireworks/models/kimi-k2-thinking")
+    # the non-reasoning instruct model still needs the defensive stripper
+    assert not model_separates_reasoning("accounts/fireworks/models/kimi-k2p6")
+    assert not model_separates_reasoning("gemini-3.1-pro-preview")
+    assert not model_separates_reasoning("")
+
+
+@pytest.mark.asyncio
+async def test_synthesize_uses_content_only_excludes_reasoning_content() -> None:
+    """A thinking model returns BOTH reasoning_content (scratch) + a clean content
+    answer. The synthesized prose must be ``content`` ONLY; reasoning goes to the
+    trace side-channel; the scholar path runs deepseek-v4-pro; strip does NOT run."""
+    clean_answer = (
+        "Bobzien (1998: 330) holds the ancients had no free-will problem "
+        "[P_bobzien_no_problem: Bobzien 1998 p. 330], whereas Frede (2011: 44) dates "
+        "the will to Epictetus [P_frede_epictetus: Frede 2011 p. 44]; the two clash "
+        "[edge: opposes P_bobzien_no_problem->P_frede_epictetus] over Cicero "
+        "[passage_cic_fat_41: Cicero, De Fato 41]."
+    )
+    # The model's private chain-of-thought — contains the EXACT phrases the
+    # defensive stripper would cut if it (wrongly) ran on a clean answer. It must
+    # never appear in the prose.
+    reasoning_scratch = (
+        "The user wants a survey. Let me check the Greek quotes. First, I will map "
+        "the fault lines. Matches the text. Verified."
+    )
+
+    llm = AsyncMock()
+    llm.generate.return_value = clean_answer  # content ONLY (reasoning is separate)
+    llm.last_model_used = "accounts/fireworks/models/deepseek-v4-pro"
+    llm.last_reasoning_content = reasoning_scratch
+
+    result = await synthesize_dialectical(state=None, cmap=_map(), llm=llm)
+
+    # 1. the answer is content ONLY — reasoning_content is excluded
+    assert result.prose == clean_answer
+    assert "The user wants" not in result.prose
+    assert "Let me check" not in result.prose
+    # 2. the scholar path resolved the deepseek-v4-pro thinking model
+    assert result.model_used == "accounts/fireworks/models/deepseek-v4-pro"
+    assert (
+        llm.generate.call_args.kwargs["model_override"]
+        == "accounts/fireworks/models/deepseek-v4-pro"
+    )
+    # 3. reasoning_content is routed to the trace side-channel, not the answer
+    assert result.reasoning_trace == reasoning_scratch
+    # 4. strip_reasoning_leak did NOT run on the clean answer (it would have cut
+    #    the "Matches the text" / "First, I will" lines IF present — but they are
+    #    only in reasoning, never in content). The answer is byte-for-byte intact.
+    assert model_separates_reasoning(result.model_used) is True

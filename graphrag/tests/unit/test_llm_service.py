@@ -159,6 +159,63 @@ class TestLLMService:
 
             result = await llm.generate("Test prompt", max_tokens=16)
             assert result == "Test response"
+            # non-reasoning model: no reasoning_content side-channel
+            assert llm.last_reasoning_content == ""
+
+    @pytest.mark.asyncio
+    async def test_generate_extracts_reasoning_content_separately(self):
+        """A thinking model returns reasoning_content + content; the answer is
+        content ONLY, reasoning is surfaced on the side-channel (not folded in)."""
+        with patch.dict("os.environ", {"FIREWORKS_API_KEY": "test-key"}, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.FIREWORKS)
+
+            mock_response = MagicMock()
+            mock_response.json.return_value = {
+                "choices": [
+                    {
+                        "message": {
+                            "content": "The clean finished answer.",
+                            "reasoning_content": "Let me think. The user wants X.",
+                        }
+                    }
+                ]
+            }
+            mock_response.raise_for_status = MagicMock()
+
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=mock_response)
+            llm._client = mock_client
+
+            result = await llm.generate(
+                "Test prompt",
+                max_tokens=16,
+                model_override="accounts/fireworks/models/deepseek-v4-pro",
+            )
+            # answer is content ONLY — reasoning excluded
+            assert result == "The clean finished answer."
+            assert "Let me think" not in result
+            # reasoning surfaced on the side-channel for the trace
+            assert llm.last_reasoning_content == "Let me think. The user wants X."
+
+    @pytest.mark.asyncio
+    async def test_generate_resets_stale_reasoning_content(self):
+        """A non-reasoning call after a reasoning one must not surface stale scratch."""
+        with patch.dict("os.environ", {"FIREWORKS_API_KEY": "test-key"}, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.FIREWORKS)
+            llm.last_reasoning_content = "stale scratch from a prior thinking call"
+
+            mock_response = MagicMock()
+            mock_response.json.return_value = {
+                "choices": [{"message": {"content": "Plain answer."}}]
+            }
+            mock_response.raise_for_status = MagicMock()
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=mock_response)
+            llm._client = mock_client
+
+            result = await llm.generate("Test prompt", max_tokens=16)
+            assert result == "Plain answer."
+            assert llm.last_reasoning_content == ""
 
     @pytest.mark.asyncio
     async def test_generate_with_system_prompt(self):
