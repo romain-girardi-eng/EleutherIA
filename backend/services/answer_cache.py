@@ -40,6 +40,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import os
 import re
 import unicodedata
 from datetime import UTC, datetime
@@ -53,13 +54,69 @@ logger = logging.getLogger(__name__)
 _WHITESPACE_RE = re.compile(r"\s+")
 _KEY_SEP = "\x1f"  # ASCII unit-separator — never appears in user text
 
-# Cache schema version — folded into every cache key. Bump it whenever the
-# SHAPE/CONTENT of a stored payload changes in a way that makes older rows
-# replay incorrectly. v2 (GOAL-8): rows written before citation resolution
+# Cache schema version — folded into every cache key. This is the MANUAL
+# OVERRIDE lever: bump it to force-invalidate every stored row at once (e.g.
+# when the SHAPE/CONTENT of a stored payload changes in a way unrelated to the
+# synthesis prompt). v2 (GOAL-8): rows written before citation resolution
 # persisted RAW node ids (b_…, scholarly_argument_…, concept_…) as citation
-# labels; bumping the version makes every such row MISS, so leaked ids can
-# never be replayed — a code-only, non-destructive purge (no TRUNCATE needed).
+# labels; bumping made every such row MISS, a code-only non-destructive purge.
+#
+# F5: this constant is now only the MANUAL base segment. The EFFECTIVE version
+# folded into the cache key is :func:`_effective_cache_version`, which mixes
+# this base with a hash of the live scholar-RAG synthesis prompt + an optional
+# build SHA — so ANY prompt/logic change AUTO-invalidates the cache without a
+# hand-bump (the bug that masked GOAL-7 fixes with stale pre-fix answers).
 _CACHE_SCHEMA_VERSION = "v3"
+
+# Optional build/git SHA: when set (e.g. by the deploy pipeline) it is folded
+# into the cache version so a code rollout that changes scholar-RAG LOGIC —
+# even without touching the prompt text — also auto-invalidates the cache.
+_BUILD_SHA_ENV = "ELEUTHERIA_BUILD_SHA"
+
+
+def _synthesis_prompt_fingerprint() -> str:
+    """Short hash of the live dialectical-synthesis prompt text (F5).
+
+    Imports the scholar-RAG synthesis SYSTEM + TEMPLATE constants and hashes
+    them so any edit to the prompt auto-invalidates every cached answer. The
+    import is best-effort: ``answer_cache`` is also usable standalone (CLI,
+    tests) where graphrag may be absent — then we degrade to a static marker
+    so the cache key stays stable rather than crashing. Backend → graphrag is
+    the allowed dependency direction, so this never creates a cycle.
+    """
+    try:
+        from eleutheria_graphrag.agents.dialectical_synthesis import (
+            DIALECTICAL_SYNTHESIS_SYSTEM,
+            DIALECTICAL_SYNTHESIS_TEMPLATE,
+        )
+    except Exception:  # noqa: BLE001 - graphrag optional; never crash key derivation
+        return "noprompt"
+    blob = f"{DIALECTICAL_SYNTHESIS_SYSTEM}\x1f{DIALECTICAL_SYNTHESIS_TEMPLATE}"
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:12]
+
+
+def _effective_cache_version() -> str:
+    """The version segment actually folded into the cache key (F5).
+
+    ``{manual_base}.{prompt_fingerprint}[.{build_sha}]`` — derived, not
+    hand-bumped, so any change to the synthesis prompt (or, when set, the build
+    SHA) makes every prior row MISS automatically. The manual
+    :data:`_CACHE_SCHEMA_VERSION` base is preserved as an explicit override.
+
+    Computed once and memoised: the prompt text is import-time-constant and the
+    env SHA is fixed for the process lifetime, so recomputing per key is waste.
+    """
+    cached = getattr(_effective_cache_version, "_value", None)
+    if cached is not None:
+        return cached  # type: ignore[no-any-return]
+    parts = [_CACHE_SCHEMA_VERSION, _synthesis_prompt_fingerprint()]
+    build_sha = (os.environ.get(_BUILD_SHA_ENV) or "").strip()
+    if build_sha:
+        parts.append(build_sha[:12])
+    value = ".".join(parts)
+    _effective_cache_version._value = value  # type: ignore[attr-defined]
+    return value
+
 
 # Reserved key inside ``reasoning_path_json`` used to piggyback the answer
 # provenance (metadata + claim_ledger) without a schema migration. Stripped
@@ -106,9 +163,12 @@ class AnswerCache:
         ``ResponseCache._key`` in graphrag_service). Rows written before the
         ``mode`` segment existed simply miss — no migration needed.
 
-        A trailing ``_CACHE_SCHEMA_VERSION`` segment lets us invalidate every
-        stored row at once by bumping a constant (GOAL-8: purge rows that
-        persisted leaked raw-id citation labels) — no ``TRUNCATE`` required.
+        A trailing version segment lets us invalidate every stored row at once
+        (GOAL-8: purge rows that persisted leaked raw-id citation labels) — no
+        ``TRUNCATE`` required. F5: that segment is now DERIVED by
+        :func:`_effective_cache_version` (manual base + a hash of the live
+        synthesis prompt + optional build SHA), so any prompt/logic change
+        auto-invalidates the cache; the manual base stays an override lever.
         """
         parts = (
             AnswerCache.normalize_question(question)
@@ -119,7 +179,7 @@ class AnswerCache:
             + _KEY_SEP
             + (mode or "fast")
             + _KEY_SEP
-            + _CACHE_SCHEMA_VERSION
+            + _effective_cache_version()
         )
         return hashlib.sha256(parts.encode("utf-8")).hexdigest()
 

@@ -67,6 +67,78 @@ P0 = correctness/broken feature · P1 = quality/robustness · P2 = architectural
 - **Proposed fix (audit-only here):** quantify how many corpus passages are reference-blocks/gloss vs clean text (per author/work); flag the worst works for clean re-ingestion (separate data project — do NOT auto-rewrite text; academic-integrity policy). This file should carry the audit numbers.
 - **Severity: P1 (audit) / P2 (re-ingestion)**
 
+#### F9 AUDIT RESULTS (prod `free_will.passages`, 2026-06-17, read-only)
+
+Scope: 16,432 `passage_role='original'` rows. Classification:
+- **(a) markdown reference block** — `**Reference:**`/`**Author:**`/`**Work:**`
+- **(b) Greek-gloss bullet** — `Greek:` prefix, or `•` with inline ` - ` glosses
+- **(c) clean continuous Greek/Latin** — substantial polytonic Greek (≥40 chars), or Latin-language work with substantial Latin alpha and no Greek; none of (a)/(b)
+- **(d) empty / other** — everything else (short fragments, and — dominantly — English/French commentary stored as primary text)
+
+**Overall histogram:**
+
+| Category | Passages | % |
+|---|---|---|
+| (a) markdown reference block | 28 | 0.2% |
+| (b) Greek-gloss bullet | 204 | 1.2% |
+| (c) clean Greek/Latin | 13,296 | 80.9% |
+| (d) empty / other | 2,904 | 17.7% |
+
+**Root cause of the 17.7% "other":** 96% of it (2,786 passages) lives in **65 companion works flagged `language=eng`** that hold English/French translation or scholarly commentary stored as `passage_role='original'` — i.e. *not primary Greek/Latin text at all*. These shadow works (canonical_id ending `_eng`, plus one mislabeled `work_origen_philocalia_grc` that actually holds the SC French translation) are the real data-hygiene problem; they should be re-tagged as translations/secondary or dropped from the primary retrieval surface, not text-rewritten. Genuine non-clean primary-language fragments are tiny: 105 grc + 13 lat.
+
+**(b) gloss contamination is almost entirely Epictetus** (191 of 204): the Greek work `urn:cts:greeklit:tlg0557` (Discourses) carries 185 `Greek: • … - gloss` bullet rows + 2 ref-blocks; only 48/235 (20%) are clean. Aristotle (10) and Plutarch (3) account for the rest. The 28 (a) ref-blocks are spread thin (Epictetus 2, Aristotle 2, Plato 2, Alexander 2, Aristides 3, …).
+
+**Per-author %clean (free-will-relevant + top authors, ≥30 passages):**
+
+| Author | Total | %clean | refblk | gloss | other |
+|---|---|---|---|---|---|
+| Seneca | 2271 | 97% | 0 | 0 | 68 |
+| Origen | 1989 | **49%** | 16 | 0 | 1000 |
+| Plotinus | 1369 | 100% | 0 | 0 | 4 |
+| Diogenes Laertius | 1204 | 100% | 0 | 0 | 5 |
+| Plato | 1128 | 100% | 2 | 0 | 2 |
+| Justin Martyr | 1005 | 92% | 0 | 0 | 83 |
+| Aristotle | 884 | 97% | 2 | 10 | 12 |
+| Augustine | 641 | **68%** | 0 | 0 | 203 |
+| Marcus Aurelius | 599 | 99% | 0 | 0 | 7 |
+| Epictetus | 559 | **26%** | 2 | 191 | 220 |
+| Sextus Empiricus | 534 | 100% | 0 | 0 | 0 |
+| Pamphilus of Caesarea | 530 | **49%** | 0 | 0 | 269 |
+| Lucretius | 302 | 99% | 0 | 0 | 2 |
+| Melito of Sardis | 242 | **49%** | 0 | 0 | 123 |
+| Hermas | 228 | **48%** | 0 | 0 | 118 |
+| Epicurus | 193 | 99% | 0 | 0 | 2 |
+| Ignatius of Antioch | 192 | **50%** | 0 | 0 | 96 |
+| Philo of Alexandria | 172 | 100% | 0 | 0 | 0 |
+| Cicero | 96 | **50%** | 0 | 0 | 48 |
+| Chrysippus of Soli | 88 | 76% | 0 | 0 | 21 |
+| Alexander of Aphrodisias | 83 | 81% | 2 | 0 | 14 |
+
+(Boethius appears twice: the clean grc/lat node `Boethius d. 524` is 100%; the `_eng` Consolatio node is 2%.)
+
+**The 10 works most in need of clean re-ingestion** (highest count of non-clean passages; all are `_eng` shadow works or the gloss-laden Epictetus Greek node):
+
+1. `sc_origenes_contra_celsum_eng` — Origen, *Contre Celse* Livre II — 971 passages, **0% clean** (English/French, no primary text)
+2. `sc464_pamphilus_apologia_pro_origene_eng` — Pamphilus, *Apologia pro Origene* — 265 passages, 3% clean (258 non-clean)
+3. `urn:cts:greeklit:tlg0557` (grc) — Epictetus, *Discourses* — 235 passages, 20% clean (185 `Greek: • …` gloss bullets + 2 ref-blocks)
+4. `work_epictetus_discourses_eng` — Epictetus, *Discourses & Enchiridion* — 137 passages, 0% clean
+5. `urn:cts:greeklit:tlg0557_eng` — Epictetus, *Discourses* (eng companion) — 187 passages, 52% clean (89 non-clean)
+6. `urn_cts_latinlit_stoa0040_stoa003_eng` — Augustine, *De Libero Arbitrio* — 170 passages, 0% clean
+7. `sc53bis_hermas_pastor_eng` — Hermas, *Pastor* — 114 passages, 1% clean (113 non-clean)
+8. `sc123_melito_peri_pascha_eng` — Melito, *Peri Pascha* — 109 passages, 0% clean
+9. `urn_cts_latinlit_phi2089_phi002_eng` — Boethius, *Consolatio* — 129 passages, 2% clean (127 non-clean)
+10. `sc172_epistula_barnabae_eng` — *Épître de Barnabé* — 87 passages, 0% clean
+
+Honourable mentions (also 0% clean `_eng` shadow works, 24–84 passages each): `sc167_clemens_epistula_ad_corinthios_eng` (84), `sc507_iustinus_apologia_i_eng` (83), `sc20_theophilus_ad_autolycum_eng` (82), `urn_cts_latinlit_stoa0255_stoa012_eng` Seneca *De Providentia* (68), `work_origen_philocalia_grc` mislabeled grc = French (51), `urn_cts_latinlit_phi0474_phi049_eng` Cicero *De Fato* (48), `sc379_athenagoras_legatio_eng` (48).
+
+**Recommended remediation (data project, not text-rewrite — academic-integrity policy):**
+1. Re-tag the **65 `language=eng` works (2,970 passages)** as `passage_role='translation'`/secondary, or move them out of the primary `passages` retrieval surface entirely. This single action removes ~96% of the "other" bucket and lifts effective primary %clean from 80.9% → ~97%.
+2. Fix `work_origen_philocalia_grc` — relabel its language to its actual content (French translation) or re-ingest the Junod 1976 Greek (SC 226 is on disk per project memory).
+3. Re-ingest **Epictetus Discourses (`tlg0557` grc)** from a clean critical edition (Schenkl/Teubner) to replace the 185 `Greek: • …- gloss` bullet rows with running Greek; this is the only author where the (b) gloss format is material.
+4. Sweep the 28 `**Reference:**` markdown ref-blocks (Epictetus, Aristotle, Plato, Alexander, Aristides) — extract the embedded `**Original Greek:**` body into clean text, drop the metadata scaffold.
+
+*Method note:* counts via temp-table classification over `free_will.passages` joined to `ancient_works`; polytonic Greek detected by Unicode ranges `[Ͱ-Ͽἀ-῿]`; Latin via `language='lat'` + Latin alpha + no Greek. No text was modified (read-only audit).
+
 ---
 
 ## P2 — Architectural debt (flag; likely out of scope for a code spawn)
@@ -81,3 +153,11 @@ P0 = correctness/broken feature · P1 = quality/robustness · P2 = architectural
 ## Fix order for the rigor spawn
 P0 first (F1 verifier, F2 Frede/accuracy), then P1 code fixes (F3 more passages, F4 deepseek budget, F5 cache hash, F6 observability, F7 smoke endpoint, F8 inline badges), F9 as an audit (numbers only, no text rewrite). F10 documented, not auto-fixed.
 Each fix: investigate → implement → ADVERSARIALLY verify (a second agent tries to break it) → live-verify in-container. Maximum rigor, opus.
+
+---
+
+## F11. The entire `scholar_verification.py` layer is UNWIRED (found by the rigor pass)
+- **Evidence:** zero production callers of `scholar_fidelity_gate`, `verify_citations_on_frames`, `completeness_on_map`, `anti_anachronism_gate`, or `scholar_verdict` anywhere in `graphrag/src` (only the module's own test file imports it). The citation verification that DOES run is the separate `citation_verifier_v2`.
+- **Impact:** the architecture's "scholar_verification (referee + completeness critic + anti-anachronism gate)" is not actually exercised on live answers. The F2 fidelity gate is part of this — it is now CORRECT (substring→word-boundary fixed) but still not called.
+- **Resolution status (2026-06-17):** F2's gate correctness fixed; wiring the *whole* verification layer as an ACTIVE check (that regenerates/warns on a violation, not just sets unused metadata) is a scoped follow-up — deliberately NOT jammed into the synthesis hot path as dead advisory metadata. The Frede mischaracterization (F2's motivating case) is currently mitigated by the deepseek-restoration fix (its actual cause was the gemini fallback).
+- **Severity: P1 (follow-up project).**

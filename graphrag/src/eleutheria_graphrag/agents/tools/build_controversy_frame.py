@@ -161,7 +161,7 @@ class BuildControversyFrameTool:
                     "type": "integer",
                     "default": 6,
                     "minimum": 0,
-                    "maximum": 12,
+                    "maximum": 24,
                 },
             },
             "required": ["seed_id"],
@@ -169,7 +169,7 @@ class BuildControversyFrameTool:
 
     async def execute(self, args: dict[str, Any]) -> BuildControversyFrameResult:
         seed_id = args["seed_id"]
-        max_passages = min(max(args.get("max_passages", 6), 0), 12)
+        max_passages = min(max(args.get("max_passages", 6), 0), 24)
 
         node = self._deps.node_lookup.get(seed_id)
         if node is None:
@@ -496,10 +496,9 @@ class BuildControversyFrameTool:
         row = passage_row_from_node(self._deps, pid)
         if row is None:
             return 0
-        text = row.get("text_content") or ""
-        if "**Reference:**" in text or "**Author:**" in text or "**Work:**" in text:
-            return -1
-        return sum(1 for ch in text if "Ͱ" <= ch <= "Ͽ" or "ἀ" <= ch <= "῿")
+        return self._quotable_chars(
+            row.get("text_content") or "", row.get("language") or ""
+        )
 
     def _round_robin_by_author(
         self, passage_ids: list[str], priority_authors: frozenset[str]
@@ -700,7 +699,62 @@ class BuildControversyFrameTool:
                     language=row.get("language") or "",
                 )
             )
-        return refs
+        return self._quotable_greek_lead(refs)
+
+    @staticmethod
+    def _quotable_chars(text: str, language: str) -> int:
+        """Quotable original-language character count (Greek OR Latin), shared.
+
+        Greek (polytonic) scores by its Greek-letter count; a Latin original
+        (``language`` starts ``la``) scores by its Latin-letter count — so clean
+        LATIN passages (Cicero *De Fato*, Boethius, Seneca, Augustine — core
+        fate/foreknowledge sources) are NOT demoted into the same partition as
+        junk. A markdown ``**Reference:**``/``**Author:**``/``**Work:**`` metadata
+        block OR a ``Greek: • … - gloss`` bullet row scores ``-1`` so it never
+        leads — quoting either would dump markdown/gloss into scholarly prose.
+        """
+        low = text.lower()
+        if (
+            "**reference:**" in low
+            or "**author:**" in low
+            or "**work:**" in low
+            or low.lstrip().startswith("greek:")
+            or "•" in text
+        ):
+            return -1
+        greek = sum(1 for ch in text if "Ͱ" <= ch <= "Ͽ" or "ἀ" <= ch <= "῿")
+        if greek:
+            return greek
+        if language.lower().startswith("la"):
+            return sum(1 for ch in text if ch.isalpha() and ord(ch) < 0x250)
+        return 0
+
+    @classmethod
+    def _ref_greek_quotable_chars(cls, ref: PassageRef) -> int:
+        """Quotable-original-text score for an assembled ref (Greek OR Latin).
+
+        Reads the already-fetched ``original_text`` (no extra node lookup);
+        delegates to :meth:`_quotable_chars` so passage-level and node-level
+        ranking agree (gloss/reference junk sinks; clean Latin is not demoted).
+        """
+        return cls._quotable_chars(ref.original_text or "", ref.language or "")
+
+    def _quotable_greek_lead(self, refs: list[PassageRef]) -> list[PassageRef]:
+        """Reorder a frame's contested passages so QUOTABLE-GREEK ones lead (F3).
+
+        STABLE partition: passages carrying substantial quotable Greek keep their
+        relevance order but move ahead of reference/metadata-only blocks, so the
+        synthesis sees ≥2 quotable-Greek primary passages per dominant fault line
+        at the top of the dossier and can quote the strongest one per position
+        (original + English) instead of merely citing a locus. Round-robin author
+        relevance from ``_round_robin_by_author`` is preserved within the quotable
+        and non-quotable partitions. Never drops a passage; never fabricates text.
+        """
+        if len(refs) <= 1:
+            return refs
+        quotable = [r for r in refs if self._ref_greek_quotable_chars(r) > 0]
+        rest = [r for r in refs if self._ref_greek_quotable_chars(r) <= 0]
+        return quotable + rest
 
     @staticmethod
     def _completeness(

@@ -4,6 +4,38 @@ import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import type { SourceCitation } from '../types';
 import { getGraphTypeTheme } from './graphrag/graphTheme';
+import { isLeakedId } from '../utils/citationBibliography';
+
+// ---------------------------------------------------------------------------
+// F8 — id-shape guard for inline citation badge LABELS.
+//
+// An inline badge must NEVER render a raw node id (b_…, scholarly_argument_…,
+// concept_…, person_…, work_…). `isLeakedId` mirrors the backend leaked-id
+// regex; in addition we reject any label that still *looks* like a bare id
+// stem (snake_case token with no spaces, or a uuid). `resolveBadgeLabel`
+// returns a clean label or `null` when the candidate is unsafe — callers then
+// fall back to a neutral footnote marker (e.g. "ref") instead of leaking.
+// ---------------------------------------------------------------------------
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function looksLikeRawId(value: string): boolean {
+  const text = value.trim();
+  if (!text) return true;
+  if (isLeakedId(text)) return true;
+  if (UUID_RE.test(text)) return true;
+  // A single snake_case token with no whitespace and an underscore is an
+  // unresolved id stem (e.g. "long_2002_cup", "passage_abc"). Multi-word
+  // human labels ("Long 2002") contain a space and are allowed.
+  if (!/\s/.test(text) && /_/.test(text)) return true;
+  return false;
+}
+
+/** Clean badge label, or null when the candidate is still an id-shaped leak. */
+function resolveBadgeLabel(candidate: string | null | undefined): string | null {
+  const text = (candidate ?? '').trim();
+  if (!text) return null;
+  return looksLikeRawId(text) ? null : text;
+}
 
 // ---------------------------------------------------------------------------
 // Scholar-RAG marker patterns (used by parseCitationGroup below)
@@ -159,13 +191,19 @@ export function CitationRenderer({
       const afterColon = scholarFull[2].trim();
       // Badge shows "Holder Year" (first comma-separated segment up to 30 chars).
       const firstSegment = afterColon.split(',')[0].trim();
-      const badgeLabel = firstSegment.length > 30 ? firstSegment.slice(0, 28) + '…' : firstSegment;
+      const truncated = firstSegment.length > 30 ? firstSegment.slice(0, 28) + '…' : firstSegment;
+      // F8 — never render an id-shaped label. If the resolved segment still
+      // looks like a raw id, fall back to a neutral "ref" footnote marker.
+      const badgeLabel = resolveBadgeLabel(truncated) ?? 'ref';
       const isPassageNode = nodeId.startsWith('passage_');
       return [{
         kind: 'scholar',
         nodeId,
         badgeLabel,
-        tooltip: afterColon,
+        // F8 — never expose a raw id on hover / to screen readers: if the LLM
+        // echoed an id-shaped string after the colon, show a neutral tooltip
+        // instead of leaking it into title / aria-label / the tooltip div.
+        tooltip: looksLikeRawId(afterColon) ? 'Open reference' : afterColon,
         isPassageNode,
       }];
     }
@@ -175,17 +213,34 @@ export function CitationRenderer({
     if (scholarBare) {
       const nodeId = scholarBare[1];
       const isPassageNode = nodeId.startsWith('passage_');
-      // Derive a readable label from the node id: strip prefix, replace _, capitalize.
-      const humanLabel = nodeId
-        .replace(/^(scholar_position_|scholarly_argument_|argument_|scholar_|position_|concept_|person_|work_)/, '')
-        .replace(/_/g, ' ')
-        .replace(/\b\w/g, (l) => l.toUpperCase())
-        .slice(0, 28);
+      // F8 — id-shape guard runs against the RAW node id (before underscores
+      // are flattened to spaces, which would otherwise defeat looksLikeRawId).
+      // We only render a human label when the id carries a recognised
+      // semantic prefix; otherwise (b_<hex>, publication_…, uuid) we show a
+      // neutral "ref" marker. The click always carries the real nodeId.
+      const KNOWN_PREFIX_RE =
+        /^(scholar_position_|scholarly_argument_|argument_|scholar_|position_|concept_|person_|work_)/;
+      const stripped = nodeId.replace(KNOWN_PREFIX_RE, '');
+      // Only flatten when a KNOWN semantic prefix was actually removed — an id
+      // with no recognised prefix (b_<hex>, publication_…, uuid) is left as a
+      // neutral marker rather than leaked. The flattened candidate is then
+      // re-checked with resolveBadgeLabel as a final id-shape backstop.
+      const flattened =
+        stripped !== nodeId
+          ? stripped
+              .replace(/_/g, ' ')
+              .replace(/\b\w/g, (l) => l.toUpperCase())
+              .trim()
+              .slice(0, 28)
+          : '';
+      const humanLabel = flattened ? resolveBadgeLabel(flattened) : null;
+      const safeLabel = humanLabel ?? 'ref';
       return [{
         kind: 'scholar',
         nodeId,
-        badgeLabel: isPassageNode ? '↗ source' : humanLabel,
-        tooltip: nodeId,
+        badgeLabel: isPassageNode ? 'source' : safeLabel,
+        // F8 — never expose the raw id in the hover tooltip either.
+        tooltip: humanLabel ?? 'Open reference',
         isPassageNode,
       }];
     }
@@ -523,22 +578,21 @@ function PassageCitationLink({ citationNumber, label, passageId, onClick }: Pass
   return (
     <button
       type="button"
-      className={`inline-flex items-center gap-0.5 align-middle ${passageId ? '' : 'cursor-default opacity-50'}`}
+      className={`group/cite mx-px inline-flex items-baseline align-super ${passageId ? 'cursor-pointer' : 'cursor-default opacity-50'}`}
       onClick={passageId ? onClick : undefined}
       title={passageId ? 'Click to read passage in context' : 'Passage not available'}
       aria-label={label ?? `P${citationNumber}`}
       disabled={!passageId}
     >
       <span
-        className="inline-flex min-h-5 items-center justify-center rounded-md px-1.5 py-0.5 text-[11px] font-semibold leading-none select-none transition-all duration-150 hover:brightness-90 hover:scale-110"
+        className="inline-flex min-h-4 items-center justify-center gap-0.5 rounded-full border px-1.5 py-px text-[10px] font-semibold leading-none select-none shadow-sm transition-all duration-150 group-hover/cite:brightness-95 group-hover/cite:-translate-y-px group-focus-visible/cite:ring-2 group-focus-visible/cite:ring-offset-1"
         style={{
           backgroundColor: theme.tint,
           color: theme.text,
-          border: `1px solid ${theme.border}`,
-          boxShadow: `0 1px 2px 0 ${theme.glow}`,
+          borderColor: theme.border,
         }}
       >
-        <svg className="mr-0.5 h-3 w-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="h-2.5 w-2.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
         {label ?? `P${citationNumber}`}
@@ -588,7 +642,7 @@ function CitationLink({
   return (
     <button
       type="button"
-      className={`inline-flex items-center gap-0.5 align-middle ${source ? 'cursor-pointer' : 'cursor-default opacity-50'}`}
+      className={`group/cite mx-px inline-flex items-baseline align-super ${source ? 'cursor-pointer' : 'cursor-default opacity-50'}`}
       onMouseEnter={(e) => onHover(e, citationNumber)}
       onMouseLeave={onLeave}
       onClick={onClick}
@@ -596,12 +650,11 @@ function CitationLink({
       disabled={!source}
     >
       <span
-        className="inline-flex min-h-5 items-center justify-center rounded-md px-1.5 py-0.5 text-[11px] font-semibold leading-none select-none transition-all duration-150 hover:brightness-90 hover:scale-110"
+        className="inline-flex min-h-4 items-center justify-center rounded-full border px-1.5 py-px text-[10px] font-semibold leading-none select-none shadow-sm transition-all duration-150 group-hover/cite:brightness-95 group-hover/cite:-translate-y-px group-focus-visible/cite:ring-2 group-focus-visible/cite:ring-offset-1"
         style={{
           backgroundColor: theme.tint,
           color: theme.text,
-          border: `1px solid ${theme.border}`,
-          boxShadow: `0 1px 2px 0 ${theme.glow}`,
+          borderColor: theme.border,
         }}
       >
         {label ?? citationNumber}
@@ -709,7 +762,7 @@ function ScholarCitationBadge({ badgeLabel, tooltip, onClick }: ScholarCitationB
     <>
       <button
         type="button"
-        className={`inline-flex items-center gap-0.5 align-middle ${onClick ? '' : 'cursor-default'}`}
+        className={`group/cite mx-px inline-flex items-baseline align-super ${onClick ? 'cursor-pointer' : 'cursor-default'}`}
         onClick={onClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setShowTip(false)}
@@ -717,16 +770,10 @@ function ScholarCitationBadge({ badgeLabel, tooltip, onClick }: ScholarCitationB
         aria-label={`Scholar citation: ${tooltip}`}
       >
         <span
-          className="inline-flex min-h-5 items-center justify-center gap-0.5 rounded-md px-1.5 py-0.5 text-[11px] font-semibold leading-none select-none transition-all duration-150 hover:brightness-95 hover:scale-110"
-          style={{
-            backgroundColor: '#FFF7E0',
-            color: '#876114',
-            border: '1px solid #F0D79B',
-            boxShadow: '0 1px 2px 0 #FFEAB3',
-          }}
+          className="inline-flex min-h-4 items-center justify-center gap-0.5 rounded-full border border-[#F0D79B] bg-[#FFF7E0] px-1.5 py-px text-[10px] font-semibold leading-none text-[#876114] shadow-sm select-none transition-all duration-150 group-hover/cite:brightness-95 group-hover/cite:-translate-y-px group-focus-visible/cite:ring-2 group-focus-visible/cite:ring-amber-300 group-focus-visible/cite:ring-offset-1"
         >
           {/* Quill icon — "this is a modern scholar" */}
-          <svg className="h-3 w-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+          <svg className="h-2.5 w-2.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
           </svg>
           {badgeLabel}
@@ -780,20 +827,14 @@ function EdgeCitationBadge({ relation, srcId, dstId, onClick }: EdgeCitationBadg
     <>
       <button
         type="button"
-        className={`inline-flex items-center gap-0.5 align-middle ${onClick ? '' : 'cursor-default'}`}
+        className={`group/cite mx-px inline-flex items-baseline align-super ${onClick ? 'cursor-pointer' : 'cursor-default'}`}
         onClick={onClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setShowTip(false)}
         aria-label={`Graph edge: ${tooltipText}`}
       >
         <span
-          className="inline-flex min-h-5 items-center justify-center gap-0.5 rounded-md px-1.5 py-0.5 text-[11px] font-semibold leading-none select-none transition-all duration-150 hover:brightness-95"
-          style={{
-            backgroundColor: '#F6F5F4',
-            color: '#57534E',
-            border: '1px solid #DEDBD7',
-            boxShadow: '0 1px 2px 0 #EEEAE6',
-          }}
+          className="inline-flex min-h-4 items-center justify-center gap-0.5 rounded-full border border-[#DEDBD7] bg-[#F6F5F4] px-1.5 py-px text-[10px] font-semibold leading-none text-[#57534E] shadow-sm select-none transition-all duration-150 group-hover/cite:brightness-95 group-hover/cite:-translate-y-px group-focus-visible/cite:ring-2 group-focus-visible/cite:ring-stone-300 group-focus-visible/cite:ring-offset-1"
         >
           <svg className="h-3 w-3 flex-shrink-0 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />

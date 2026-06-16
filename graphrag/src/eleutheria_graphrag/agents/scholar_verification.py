@@ -134,6 +134,33 @@ class AnachronismReport:
 
 
 @dataclass
+class ScholarFidelityViolation:
+    """An attributed characterisation that contradicts the holder's KG node.
+
+    F2: the worst failure mode for a scholarly tool is misattributing a named
+    scholar's position (e.g. asserting "Frede reads Epictetus as an
+    incompatibilist" when Frede's node says he holds a *compatibilist* origin of
+    free will). This is a deterministic contradiction check against the holder's
+    own KG description — never a fabricated correction.
+    """
+
+    holder: str
+    asserted_label: str  # the characterisation in the prose ("incompatibilist")
+    node_label: str  # the contradictory label in the holder's KG description
+    sentence: str
+    rarr_edit: str
+
+
+@dataclass
+class ScholarFidelityReport:
+    violations: list[ScholarFidelityViolation] = field(default_factory=list)
+
+    @property
+    def passed(self) -> bool:
+        return not self.violations
+
+
+@dataclass
 class ScholarVerdict:
     """Combined §5.4 verdict + the targeted remediation the caller feeds back."""
 
@@ -141,6 +168,7 @@ class ScholarVerdict:
     citation: CitationReport
     completeness: CompletenessReport
     anachronism: AnachronismReport
+    fidelity: ScholarFidelityReport = field(default_factory=ScholarFidelityReport)
     expansion_queries: list[str] = field(default_factory=list)
     rarr_edits: list[str] = field(default_factory=list)
 
@@ -432,6 +460,111 @@ def anti_anachronism_gate(prose: str) -> AnachronismReport:
     return AnachronismReport(violations=violations)
 
 
+# ── 3b. scholar-fidelity gate (F2: attributed label vs the holder's KG node) ──
+
+# Contradictory position labels in the free-will lexicon. The check is symmetric:
+# if the prose attributes ``label`` to a holder whose KG description asserts a
+# member of ``contradictions[label]`` (and does NOT itself assert ``label``), the
+# attribution contradicts the source-of-truth node → flag it. Labels are matched
+# as whole words, case-insensitively. Deterministic, no LLM, no fabrication.
+_POSITION_CONTRADICTIONS: dict[str, tuple[str, ...]] = {
+    "compatibilist": ("incompatibilist", "libertarian"),
+    "compatibilism": ("incompatibilism", "libertarian"),
+    "incompatibilist": ("compatibilist",),
+    "incompatibilism": ("compatibilism",),
+    "libertarian": ("compatibilist", "compatibilism", "determinist", "determinism"),
+    "determinist": ("libertarian", "indeterminist"),
+    "determinism": ("libertarian", "indeterminism"),
+    "indeterminist": ("determinist",),
+    "indeterminism": ("determinism",),
+}
+
+# All labels we know how to check, longest-first so "incompatibilist" is tried
+# before "compatibilist" (the latter is a substring of the former).
+_FIDELITY_LABELS: tuple[str, ...] = tuple(
+    sorted(_POSITION_CONTRADICTIONS, key=len, reverse=True)
+)
+
+
+def _labels_in(text: str) -> set[str]:
+    """Whole-word position labels present in ``text`` (case-insensitive)."""
+    low = text.lower()
+    found: set[str] = set()
+    for label in _FIDELITY_LABELS:
+        if re.search(rf"\b{re.escape(label)}\b", low):
+            found.add(label)
+    return found
+
+
+def scholar_fidelity_gate(
+    prose: str,
+    holder_descriptions: dict[str, str] | None,
+) -> ScholarFidelityReport:
+    """Flag an attributed characterisation that contradicts the holder's KG node.
+
+    ``holder_descriptions`` maps a holder's display name (or any string the
+    prose uses to name them) to that holder's canonical KG node description —
+    the source of truth. For each sentence that (a) names a known holder and
+    (b) asserts a position label, if the holder's node description asserts a
+    *contradictory* label and does NOT itself assert the prose's label, the
+    sentence misattributes the scholar's position (F2) → a violation with a RARR
+    correction pointing back at the node.
+
+    The map is supplied by the caller from the ControversyMap holders / KG; an
+    empty or ``None`` map makes the gate a no-op (it never invents a position).
+    """
+    report = ScholarFidelityReport()
+    if not holder_descriptions:
+        return report
+
+    # Pre-compute the labels each holder's node actually asserts.
+    holder_node_labels: dict[str, set[str]] = {
+        holder: _labels_in(desc or "") for holder, desc in holder_descriptions.items()
+    }
+
+    for sentence in _split_sentences(prose):
+        asserted = _labels_in(sentence)
+        if not asserted:
+            continue
+        low_sentence = sentence.lower()
+        for holder, node_labels in holder_node_labels.items():
+            # Whole-word match: a substring test wrongly fires "Frede" inside
+            # "Frederick", attributing a violation to a holder the sentence does
+            # not actually name.
+            if not holder or not re.search(
+                rf"\b{re.escape(holder.lower())}\b", low_sentence
+            ):
+                continue
+            if not node_labels:
+                continue
+            for label in asserted:
+                # The node already asserts this very label → consistent, skip.
+                if label in node_labels:
+                    continue
+                contradictions = _POSITION_CONTRADICTIONS.get(label, ())
+                clash = node_labels.intersection(contradictions)
+                if clash:
+                    node_label = sorted(clash)[0]
+                    report.violations.append(
+                        ScholarFidelityViolation(
+                            holder=holder,
+                            asserted_label=label,
+                            node_label=node_label,
+                            sentence=sentence,
+                            rarr_edit=(
+                                f"Scholar-fidelity: the answer attributes "
+                                f"'{label}' to {holder}, but {holder}'s KG node "
+                                f"characterises the position as '{node_label}'. "
+                                f"Correct the attribution to match the node "
+                                f"(or drop the label) — never misstate a named "
+                                f"scholar's position."
+                            ),
+                        )
+                    )
+                    break  # one violation per (holder, sentence) is enough
+    return report
+
+
 # ── 4. combined verdict + iterate condition (§5.4) ───────────────────────────
 
 
@@ -440,27 +573,35 @@ def scholar_verdict(
     cmap: ControversyMap,
     *,
     require_completeness: bool = True,
+    holder_descriptions: dict[str, str] | None = None,
 ) -> ScholarVerdict:
-    """Run the three referees and apply the §5.4 ACCEPT/REJECT condition.
+    """Run the referees and apply the §5.4 ACCEPT/REJECT condition.
 
     ACCEPT iff: citation referee 0-unsupported AND (completeness complete OR
     ``require_completeness`` is False — gaps already prose-stated) AND
-    anachronism 0-unattributed. REJECT → the caller turns
-    ``expansion_queries`` into targeted re-retrieval and applies ``rarr_edits``
-    to the offending spans, then re-verifies (capped by budget tier; on hard
-    failure routes to the M4 degraded mode — never a template).
+    anachronism 0-unattributed AND scholar-fidelity 0-contradictions. REJECT →
+    the caller turns ``expansion_queries`` into targeted re-retrieval and applies
+    ``rarr_edits`` to the offending spans, then re-verifies (capped by budget
+    tier; on hard failure routes to the M4 degraded mode — never a template).
+
+    ``holder_descriptions`` (holder name → canonical KG node description) powers
+    the F2 scholar-fidelity gate; omit it (or pass an empty map) to skip that
+    gate — it never invents a position.
     """
     citation = verify_citations_on_frames(prose, cmap)
     completeness = completeness_on_map(prose, cmap)
     anachronism = anti_anachronism_gate(prose)
+    fidelity = scholar_fidelity_gate(prose, holder_descriptions)
 
     accepted = (
         citation.passed
         and anachronism.passed
+        and fidelity.passed
         and (completeness.complete or not require_completeness)
     )
 
     rarr_edits = [v.rarr_edit for v in anachronism.violations]
+    rarr_edits.extend(v.rarr_edit for v in fidelity.violations)
     rarr_edits.extend(
         f"Drop or re-ground the unresolved citation {v.marker}: {v.reason}."
         for v in citation.unsupported
@@ -471,6 +612,7 @@ def scholar_verdict(
         citation=citation,
         completeness=completeness,
         anachronism=anachronism,
+        fidelity=fidelity,
         expansion_queries=list(completeness.expansion_queries),
         rarr_edits=rarr_edits,
     )

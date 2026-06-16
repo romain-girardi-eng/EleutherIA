@@ -441,3 +441,126 @@ class TestParseErrorVsWeak:
         await verifier.verify_one("Claim.", "p1")
         _, kwargs = llm.generate.await_args
         assert kwargs.get("response_mime_type") == "application/json"
+
+
+class TestReasoningThenJson:
+    """F1: a non-reasoning code model rambles a meta-monologue THEN emits JSON.
+
+    The prod failure: kimi-k2p7-code wrote 'The user wants me to act as an
+    adversarial citation auditor ... Wait, the claim is just "Susanne Bobzien"?'
+    The old parser took the FIRST balanced object and choked on the monologue.
+    """
+
+    def test_extracts_last_verdict_after_monologue(self) -> None:
+        raw = (
+            "The user wants me to act as an adversarial citation auditor for "
+            "ancient philosophy. Let me think about whether the passage supports "
+            "the claim. The passage discusses Chrysippus on assent and that does "
+            "line up with the claim about what is up to us, so I will mark it.\n\n"
+            '{"status": "VERIFIED", "reasoning": "assent clause supports it"}'
+        )
+        parsed = _parse_verdict(raw)
+        assert parsed is not None
+        assert parsed["status"] is CitationStatus.VERIFIED
+        assert "assent clause" in parsed["reasoning"]
+
+    def test_monologue_with_stray_braces_then_verdict(self) -> None:
+        """A reasoning monologue can itself contain brace-y noise (no status)."""
+        raw = (
+            "Hmm, let me reason about this for a long while before I commit to a "
+            "structured answer here. Consider the set {assent, impulse} and the "
+            "mapping {x -> y}; neither is a verdict object at all.\n"
+            '{"status": "REJECTED", "reasoning": "passage is by a different author"}'
+        )
+        parsed = _parse_verdict(raw)
+        assert parsed is not None
+        assert parsed["status"] is CitationStatus.REJECTED
+
+    def test_short_prefix_still_takes_first(self) -> None:
+        """A short lead-in ('Here is the verdict:') keeps first-object semantics."""
+        raw = (
+            'Here is the verdict: {"status": "WEAK", "reasoning": "only consistent"} '
+            '{"status": "VERIFIED", "reasoning": "noise"}'
+        )
+        parsed = _parse_verdict(raw)
+        assert parsed is not None
+        assert parsed["status"] is CitationStatus.WEAK
+
+
+class TestStructuredOutputRequest:
+    """F1a: the verifier asks for a STRICT JSON schema + optional model pin."""
+
+    @pytest.mark.asyncio
+    async def test_passes_strict_json_schema(self) -> None:
+        from eleutheria_graphrag.services.citation_verifier_v2 import (
+            VERDICT_JSON_SCHEMA,
+        )
+
+        llm = _llm_returning(_verdict_json("VERIFIED"))
+        verifier = CitationVerifierV2(llm=llm, passage_fetcher=_fetcher({"p1": "text"}))
+        await verifier.verify_one("Chrysippus held assent is up to us.", "p1")
+        _, kwargs = llm.generate.await_args
+        assert kwargs.get("response_json_schema") is VERDICT_JSON_SCHEMA
+        assert kwargs["response_json_schema"]["properties"]["status"]["enum"] == [
+            "VERIFIED",
+            "WEAK",
+            "REJECTED",
+            "MISSING",
+        ]
+
+    @pytest.mark.asyncio
+    async def test_pins_verifier_model_when_configured(self) -> None:
+        llm = _llm_returning(_verdict_json("VERIFIED"))
+        verifier = CitationVerifierV2(
+            llm=llm,
+            passage_fetcher=_fetcher({"p1": "text"}),
+            verifier_model="accounts/fireworks/models/deepseek-v4-pro",
+        )
+        await verifier.verify_one("Chrysippus held assent is up to us.", "p1")
+        _, kwargs = llm.generate.await_args
+        assert (
+            kwargs.get("model_override") == "accounts/fireworks/models/deepseek-v4-pro"
+        )
+
+
+class TestBareLabelFailsClosed:
+    """F1c/F1d: a bare node label is unauditable → FAIL CLOSED, never the LLM."""
+
+    @pytest.mark.asyncio
+    async def test_bare_name_does_not_call_llm_and_fails_closed(self) -> None:
+        llm = AsyncMock()  # must NOT be called on a bare label
+        verifier = CitationVerifierV2(
+            llm=llm,
+            passage_fetcher=_fetcher({"p1": "some passage text"}),
+        )
+        check = await verifier.verify_one("Susanne Bobzien", "p1")
+        assert check.status is CitationStatus.WEAK
+        assert not check.is_passing  # never silently passes
+        assert check.parse_error is True
+        assert "bare label" in check.reasoning.lower()
+        llm.generate.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_name_plus_page_number_fails_closed(self) -> None:
+        llm = AsyncMock()
+        verifier = CitationVerifierV2(
+            llm=llm,
+            passage_fetcher=_fetcher({"p1": "some passage text"}),
+        )
+        check = await verifier.verify_one("Robert F. Dobbin, 121", "p1")
+        assert check.status is CitationStatus.WEAK
+        assert check.parse_error is True
+        llm.generate.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_real_claim_is_still_audited(self) -> None:
+        llm = _llm_returning(_verdict_json("VERIFIED", "explicit support"))
+        verifier = CitationVerifierV2(
+            llm=llm,
+            passage_fetcher=_fetcher({"p1": "Chrysippus on assent being up to us."}),
+        )
+        check = await verifier.verify_one(
+            "Chrysippus held that assent is up to us.", "p1"
+        )
+        assert check.status is CitationStatus.VERIFIED
+        llm.generate.assert_awaited_once()

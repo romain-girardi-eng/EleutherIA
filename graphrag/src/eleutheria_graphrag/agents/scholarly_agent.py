@@ -343,6 +343,81 @@ def _mark_verifier_v2_error(answer: ScholarlyAnswer, exc: Exception) -> Scholarl
     )
 
 
+def _build_scholar_diagnostics(state: RAGState) -> dict[str, Any]:
+    """Per-query structured diagnostics for the scholar-RAG synthesis (F6).
+
+    Prod drops INFO logs, so the ``ControversyMap assembled: …`` line never
+    surfaces live. This packs the same grounding signals into a plain dict that
+    rides on ``state.metadata['scholar_diagnostics']`` and therefore onto the
+    SSE ``complete.metadata`` — visible WITHOUT changing the prod log level.
+
+    Reads the ControversyMap (``state.controversy_map``) object directly — it
+    is OWNED by ``controversy_map.py`` (another stream); we only read it here.
+    Pure/deterministic, never raises (a diagnostics failure must not break a
+    real answer); degrades to an ``error`` shape on the rare malformed map.
+
+    Shape::
+
+        {
+            "frames": int,                       # contested fault lines
+            "author_histogram": {author: count}, # contested-passage authors
+            "passages_with_quotable_greek": int, # original_text holds polytonic
+            "ancient_sources": int,              # distinct ancient passages
+            "synthesis_model_used": str,         # model that wrote the prose
+            "synthesis_status": str,             # ok|degraded|deterministic_map|…
+            "kimi_fallback_fired": bool,         # 2nd-rung content model wrote it
+            "deterministic_hedge_fired": bool,   # map serialised w/o any LLM
+        }
+    """
+    try:
+        cmap = getattr(state, "controversy_map", None)
+        frames = list(getattr(cmap, "frames", []) or []) if cmap is not None else []
+
+        # Contested-passage author histogram + quotable-Greek + ancient count,
+        # deduplicated by passage_id across all frames (a passage shared by two
+        # frames is ONE primary source, not two).
+        seen_ids: set[str] = set()
+        author_histogram: dict[str, int] = {}
+        quotable_greek = 0
+        ancient_sources = 0
+        for frame in frames:
+            for pref in getattr(frame, "contested_passages", []) or []:
+                pid = str(getattr(pref, "passage_id", "") or "")
+                if pid and pid in seen_ids:
+                    continue
+                if pid:
+                    seen_ids.add(pid)
+                ancient_sources += 1
+                author = (getattr(pref, "author", "") or "?").strip() or "?"
+                author_histogram[author] = author_histogram.get(author, 0) + 1
+                if _GREEK_CHAR_RE.search(getattr(pref, "original_text", "") or ""):
+                    quotable_greek += 1
+
+        synthesis = state.metadata.get("scholar_synthesis")
+        synthesis = synthesis if isinstance(synthesis, dict) else {}
+        status = str(synthesis.get("status") or "")
+        model_used = str(synthesis.get("model_used") or "")
+        # The 2nd synthesis rung is a kimi CONTENT model; the deterministic map
+        # hedge runs WITHOUT any LLM (status='deterministic_map'). Both are
+        # quality-floor signals an operator must see without log access.
+        kimi_fallback_fired = "kimi" in model_used.lower()
+        deterministic_hedge_fired = status == "deterministic_map"
+
+        return {
+            "frames": len(frames),
+            "author_histogram": author_histogram,
+            "passages_with_quotable_greek": quotable_greek,
+            "ancient_sources": ancient_sources,
+            "synthesis_model_used": model_used,
+            "synthesis_status": status,
+            "kimi_fallback_fired": kimi_fallback_fired,
+            "deterministic_hedge_fired": deterministic_hedge_fired,
+        }
+    except Exception as exc:  # noqa: BLE001 - diagnostics must never break answers
+        logger.warning("scholar diagnostics assembly failed", exc_info=True)
+        return {"error": f"{type(exc).__name__}: {exc}"[:200]}
+
+
 AGENT_MODE = os.getenv("ELEUTHERIA_AGENT_MODE", "react")
 
 # FSM graph (kept for fsm mode and as fallback)
@@ -502,6 +577,11 @@ class ScholarlyAgent:
             render_node = RenderGroundedAnswer()
             ctx = GraphRunContext(state=state, deps=self.deps)
             await render_node.run(ctx)
+
+        # F6: structured per-query grounding diagnostics on state.metadata so
+        # they ride onto the SSE complete.metadata — visible in prod (which
+        # drops INFO logs). _make_answer copies state.metadata onto the answer.
+        state.metadata["scholar_diagnostics"] = _build_scholar_diagnostics(state)
 
         verify_node = ProgrammaticVerify()
         ctx = GraphRunContext(state=state, deps=self.deps)
@@ -1728,6 +1808,15 @@ class ScholarlyAgent:
                 "duration_ms": synthesis_ms,
             }
         )
+
+        # F6: structured per-query grounding diagnostics. Set on state.metadata
+        # (which _make_answer copies onto answer.metadata) BEFORE the
+        # citations_preview / complete frames so both carry it, AND surface it
+        # on its OWN trace event so it is visible even if the connection is cut
+        # before the terminal complete. Prod drops INFO logs; this does not.
+        diagnostics = _build_scholar_diagnostics(state)
+        state.metadata["scholar_diagnostics"] = diagnostics
+        yield json.dumps({"type": "scholar_diagnostics", "data": diagnostics})
 
         stage_started = _time.perf_counter()
         verify_node = ProgrammaticVerify()

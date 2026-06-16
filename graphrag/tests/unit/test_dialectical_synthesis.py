@@ -413,14 +413,16 @@ def test_scholar_tool_call_budget_env_override(
 
 def test_scholar_render_max_tokens_by_tier(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("ELEUTHERIA_SCHOLAR_RENDER_MAX_TOKENS", raising=False)
-    assert scholar_render_max_tokens("quick") == 6000
-    assert scholar_render_max_tokens("standard") == 8000
-    assert scholar_render_max_tokens("deep") == 8000  # >=5000 mandatory
+    # F4: per-tier defaults lifted so a reasoning-effort-bounded thinking run still
+    # leaves an answer reserve (deepseek shares max_tokens reasoning/content).
+    assert scholar_render_max_tokens("quick") == 9000
+    assert scholar_render_max_tokens("standard") == 12000
+    assert scholar_render_max_tokens("deep") == 14000  # >=5000 mandatory
 
 
 def test_scholar_render_max_tokens_clamped(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RENDER_MAX_TOKENS", "1000")
-    assert scholar_render_max_tokens("standard") == 5000  # clamped to floor
+    assert scholar_render_max_tokens("standard") == 8000  # clamped to raised floor
 
 
 # ── synthesis timeout: a slow thinking model must NEVER hit the 120 s default ──

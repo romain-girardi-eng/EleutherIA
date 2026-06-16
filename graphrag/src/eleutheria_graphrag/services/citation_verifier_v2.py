@@ -96,6 +96,81 @@ DEFAULT_RETRIES = 3
 # *verbatim* prefix is preserved so the LLM can still quote it).
 PASSAGE_TRUNCATE_CHARS = 4000
 
+# Strict server-side JSON schema for the verdict. On Fireworks/Kimi this is
+# enforced as ``response_format={"type": "json_schema", ...}`` so the model is
+# constrained to a valid verdict object instead of free-running a meta-monologue
+# (F1 root cause: kimi-k2p7-code rambling instead of emitting JSON). On providers
+# that only support ``json_object`` the LLMService degrades gracefully; the
+# tolerant parser is the second line of defence.
+VERDICT_JSON_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "properties": {
+        "status": {
+            "type": "string",
+            "enum": ["VERIFIED", "WEAK", "REJECTED", "MISSING"],
+        },
+        "reasoning": {"type": "string"},
+        "evidence_quote": {"type": "string"},
+        "suggested_action": {"type": "string"},
+    },
+    "required": ["status", "reasoning"],
+}
+
+# Env knob: an explicit model for the verifier call (e.g. a reasoning model that
+# returns parseable verdicts — ``accounts/fireworks/models/deepseek-v4-pro``).
+# Unset → the LLMService default provider chain (unchanged behaviour). Read at
+# call time so deployments can flip it without a code change.
+_VERIFIER_MODEL_ENV = "ELEUTHERIA_VERIFIER_MODEL"
+
+# A claim payload that is just a bare node label ("Susanne Bobzien",
+# "Robert F. Dobbin, 121") is NOT auditable: there is no assertion to test
+# against the passage, only a name. Feeding it to the adversarial auditor is what
+# produced the "Wait, the claim is just 'Susanne Bobzien'?" monologue (F1c). We
+# detect it deterministically and FAIL CLOSED instead of calling the LLM.
+_BARE_LABEL_MAX_WORDS = 6
+_CLAIM_VERB_RE = re.compile(
+    r"\b(?:is|are|was|were|be|been|being|holds?|held|argues?|argued|claims?|"
+    r"claimed|asserts?|asserted|maintains?|maintained|denies?|denied|says?|"
+    r"said|states?|stated|contends?|defends?|rejects?|distinguishes?|"
+    r"believes?|thinks?|shows?|implies|entails?|means?|has|have|had|"
+    r"requires?|presupposes?|originat\w+|reads?|interprets?)\b",
+    re.IGNORECASE,
+)
+
+
+# A bare label looks like a proper name (Title-Case tokens, optionally with
+# initials) possibly trailed by a bare page/line number — exactly the
+# ``citation.label`` fallback the synthesis path leaks ("Susanne Bobzien",
+# "Robert F. Dobbin, 121"). It is NOT a generic short string ("Claim.", "c0").
+_PROPER_NAME_RE = re.compile(r"[A-Z][a-zA-Z.''-]+")
+_NAME_PLUS_NUMBER_RE = re.compile(r"^[A-Z].*?,?\s*\d+\s*$")
+
+
+def _is_bare_label_claim(claim: str) -> bool:
+    """True when ``claim`` is a bare label/name, not an auditable assertion.
+
+    Deterministic, zero-fabrication. A real claim predicates something (it
+    carries a verb). The degenerate input the synthesis path leaks is the bare
+    ``citation.label``: a proper name, or a name + page number, with no verb —
+    "Susanne Bobzien", "Robert F. Dobbin, 121". We flag ONLY that shape so a
+    short test stub or a verbless noun-phrase claim is left to the auditor.
+    """
+    stripped = (claim or "").strip()
+    if not stripped:
+        return True
+    if _CLAIM_VERB_RE.search(stripped):
+        return False
+    words = re.findall(r"\w+", stripped)
+    if not words or len(words) > _BARE_LABEL_MAX_WORDS:
+        return False
+    # name + trailing page/line number ("Robert F. Dobbin, 121")
+    if _NAME_PLUS_NUMBER_RE.match(stripped):
+        return True
+    # ≥2 Title-Case tokens and (nearly) every word capitalised → a proper name
+    proper = _PROPER_NAME_RE.findall(stripped)
+    alpha_words = [w for w in words if w[:1].isalpha()]
+    return len(proper) >= 2 and len(proper) >= len(alpha_words)
+
 
 PassageFetcher = Callable[[str], Awaitable[dict[str, Any] | None]]
 """Async callable: ``citation_id -> {text, label, urn, ...} | None``.
@@ -229,6 +304,7 @@ class CitationVerifierV2:
         retries: int = DEFAULT_RETRIES,
         warn_threshold: float = 0.20,
         abort_threshold: float = 0.50,
+        verifier_model: str | None = None,
     ) -> None:
         self._llm = llm
         self._fetch = passage_fetcher
@@ -237,6 +313,10 @@ class CitationVerifierV2:
         self._retries = max(1, retries)
         self._warn_threshold = warn_threshold
         self._abort_threshold = abort_threshold
+        # Explicit > env > default-chain. A reasoning model that returns
+        # parseable verdicts (e.g. deepseek-v4-pro) can be pinned here without
+        # touching the shared LLMService provider chain.
+        self._verifier_model = verifier_model or os.getenv(_VERIFIER_MODEL_ENV) or None
 
     # ------------------------------------------------------------------ API
 
@@ -283,6 +363,34 @@ class CitationVerifierV2:
             return await self._verify_one(claim)
 
     async def _verify_one(self, claim: DraftClaim) -> CitationCheck:
+        # 0) Guard the auditor input itself (F1c). A bare node label
+        # ("Susanne Bobzien", "Robert F. Dobbin, 121") is not an auditable
+        # claim — there is no assertion to test. Fail CLOSED (WEAK, flagged as a
+        # verifier issue, never a clean VERIFIED) instead of feeding the
+        # adversarial model a name it can only ramble about.
+        if _is_bare_label_claim(claim.claim):
+            logger.warning(
+                "Verifier received a bare-label claim for %s (%r) — not an "
+                "auditable claim+passage pair; failing closed to WEAK.",
+                claim.citation_id,
+                (claim.claim or "")[:120],
+            )
+            check = CitationCheck(
+                citation_id=claim.citation_id,
+                status=CitationStatus.WEAK,
+                reasoning=(
+                    "Verifier could not audit: the claim payload was a bare "
+                    "label/name, not a claim+passage pair. Citation left "
+                    "UNVERIFIED pending a real claim sentence."
+                ),
+                claim=claim.claim,
+                passage_excerpt="",
+                suggested_action="supply the claim sentence for this citation",
+                parse_error=True,
+            )
+            await self._emit(check)
+            return check
+
         # 1) Re-fetch — no caching, no trust of upstream paraphrase.
         try:
             fetched = await self._fetch(claim.citation_id)
@@ -344,8 +452,13 @@ class CitationVerifierV2:
                 raw = await self._llm.generate(
                     prompt,
                     temperature=0.1,
-                    max_tokens=400,
+                    # Reasoning models need headroom to emit reasoning AND the
+                    # verdict object; 400 truncated the JSON on the rambling
+                    # path. The schema keeps the visible output tight.
+                    max_tokens=700,
                     response_mime_type="application/json",
+                    response_json_schema=VERDICT_JSON_SCHEMA,
+                    model_override=self._verifier_model,
                 )
                 last_raw = raw
                 parsed = _parse_verdict(raw)
@@ -455,6 +568,56 @@ _STATUS_ALIASES = {
 }
 
 
+def _iter_json_objects(text: str) -> list[str]:
+    """Return every top-level balanced ``{...}`` block, in source order.
+
+    Brace counting that respects JSON string literals, so a quote containing
+    ``{`` / ``}`` does not corrupt the boundaries. A reasoning model emits a
+    meta-monologue (often with stray braces) and only THEN the real verdict
+    object; returning all candidates lets the caller prefer the LAST one that
+    actually parses to a verdict (F1: reasoning-then-JSON).
+    """
+    blocks: list[str] = []
+    i = 0
+    n = len(text)
+    while i < n:
+        if text[i] != "{":
+            i += 1
+            continue
+        start = i
+        depth = 0
+        in_string = False
+        escape = False
+        closed = False
+        while i < n:
+            ch = text[i]
+            if in_string:
+                if escape:
+                    escape = False
+                elif ch == "\\":
+                    escape = True
+                elif ch == '"':
+                    in_string = False
+            elif ch == '"':
+                in_string = True
+            elif ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+                if depth == 0:
+                    blocks.append(text[start : i + 1])
+                    i += 1
+                    closed = True
+                    break
+            i += 1
+        if not closed:
+            # Unbalanced tail (truncated final object) — keep it so the repair
+            # pass below still gets a shot at it, then stop.
+            blocks.append(text[start:])
+            break
+    return blocks
+
+
 def _extract_first_json_object(text: str) -> str | None:
     """Return the first balanced ``{...}`` block (brace-counting, string-aware).
 
@@ -462,33 +625,8 @@ def _extract_first_json_object(text: str) -> str | None:
     which swallows trailing prose and any second object. Brace counting that
     respects JSON string literals returns exactly the first object.
     """
-    start = text.find("{")
-    if start == -1:
-        return None
-    depth = 0
-    in_string = False
-    escape = False
-    for i in range(start, len(text)):
-        ch = text[i]
-        if in_string:
-            if escape:
-                escape = False
-            elif ch == "\\":
-                escape = True
-            elif ch == '"':
-                in_string = False
-            continue
-        if ch == '"':
-            in_string = True
-        elif ch == "{":
-            depth += 1
-        elif ch == "}":
-            depth -= 1
-            if depth == 0:
-                return text[start : i + 1]
-    # Unbalanced (truncated). Return the tail from the first brace so the
-    # repair pass below still gets a shot at it.
-    return text[start:]
+    blocks = _iter_json_objects(text)
+    return blocks[0] if blocks else None
 
 
 def _strip_trailing_commas(text: str) -> str:
@@ -556,7 +694,7 @@ def _loads_tolerant(block: str) -> Any | None:
     ):
         try:
             return json.loads(candidate)
-        except json.JSONDecodeError, ValueError:
+        except (json.JSONDecodeError, ValueError):  # fmt: skip
             continue
     return None
 
@@ -586,25 +724,8 @@ def _coerce_status(value: Any) -> str | None:
     return None
 
 
-def _parse_verdict(raw: str) -> dict[str, Any] | None:
-    """Extract the JSON verdict from the LLM response. Returns ``None`` on failure.
-
-    Resilient to: ```` ```json ```` fences, prose before/after the object, a
-    trailing second object, trailing commas, status field-name variants
-    (``verdict``/``result``/...), and unescaped double-quotes embedded inside
-    string values (the dominant real-world failure — see G2 benchmark).
-    """
-    if not raw:
-        return None
-    text = raw.strip()
-    # Strip markdown fences anywhere (opening ```json / ``` and closing ```).
-    text = re.sub(r"```(?:json|JSON)?", "", text)
-    text = text.strip()
-
-    block = _extract_first_json_object(text)
-    if not block:
-        return None
-
+def _verdict_from_block(block: str) -> dict[str, Any] | None:
+    """Parse ONE balanced ``{...}`` block into a verdict dict, or ``None``."""
     obj = _loads_tolerant(block)
     if not isinstance(obj, dict):
         return None
@@ -630,3 +751,50 @@ def _parse_verdict(raw: str) -> dict[str, Any] | None:
         "reasoning": reasoning,
         "suggested_action": suggested_action,
     }
+
+
+# A leading meta-monologue (the reasoning/code model's failure mode) is "prose"
+# when there is a substantial run of words before the first JSON object.
+_PROSE_PREFIX_MIN_CHARS = 80
+
+
+def _parse_verdict(raw: str) -> dict[str, Any] | None:
+    """Extract the JSON verdict from the LLM response. Returns ``None`` on failure.
+
+    Resilient to: ```` ```json ```` fences, prose before/after the object, a
+    trailing second object, trailing commas, status field-name variants
+    (``verdict``/``result``/...), unescaped double-quotes embedded inside string
+    values (the G2 benchmark killer), AND a reasoning-then-JSON response where a
+    non-reasoning code model rambles a meta-monologue and only THEN emits the
+    real verdict object (F1).
+
+    Selection rule (honours both failure shapes):
+
+    * if the response *opens* with the JSON (no substantial leading prose), take
+      the FIRST parseable verdict — guards against ``{verdict}{noise}``;
+    * if a meta-monologue precedes the first object, take the LAST parseable
+      verdict — the rambling model's real answer is at the end.
+    """
+    if not raw:
+        return None
+    text = raw.strip()
+    # Strip markdown fences anywhere (opening ```json / ``` and closing ```).
+    text = re.sub(r"```(?:json|JSON)?", "", text)
+    text = text.strip()
+
+    blocks = _iter_json_objects(text)
+    if not blocks:
+        return None
+
+    parsed = [(b, _verdict_from_block(b)) for b in blocks]
+    valid = [(b, v) for b, v in parsed if v is not None]
+    if not valid:
+        return None
+
+    first_block = valid[0][0]
+    prefix = text[: text.find(first_block)]
+    # A short prefix (fence remnants, "Here is the verdict:") keeps the FIRST
+    # object; a long meta-monologue flips to the LAST parseable verdict.
+    if len(prefix.strip()) >= _PROSE_PREFIX_MIN_CHARS:
+        return valid[-1][1]
+    return valid[0][1]
