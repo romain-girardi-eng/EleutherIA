@@ -499,11 +499,7 @@ class BuildControversyFrameTool:
         text = row.get("text_content") or ""
         if "**Reference:**" in text or "**Author:**" in text or "**Work:**" in text:
             return -1
-        return sum(
-            1
-            for ch in text
-            if "Ͱ" <= ch <= "Ͽ" or "ἀ" <= ch <= "῿"
-        )
+        return sum(1 for ch in text if "Ͱ" <= ch <= "Ͽ" or "ἀ" <= ch <= "῿")
 
     def _round_robin_by_author(
         self, passage_ids: list[str], priority_authors: frozenset[str]
