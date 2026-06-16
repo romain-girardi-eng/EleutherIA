@@ -153,6 +153,8 @@ export default function GraphRAGPage() {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       const resp = await fetch(`${apiUrl}/api/texts/passage/${passageId}/context?window=${window}`);
       if (!resp.ok) return null;
+      // The backend adds workIsComplete + textEnglish; cast is safe as-is since
+      // both fields are optional in the type.
       return await resp.json() as PassageContext;
     } catch (err) {
       console.error('Failed to fetch passage context:', err);
@@ -185,6 +187,17 @@ export default function GraphRAGPage() {
       setPassageContext(ctx);
     }
   }, [passageContext, passageWindow, fetchPassageContext]);
+
+  const handleNodeCitationClick = useCallback((nodeId: string) => {
+    // Open the node's detail in the right panel (KG scholar/argument/concept
+    // citations from [P_<node_id>: ...] markers).
+    handleNodeClick(nodeId);
+    // If there's already a graph response visible, switch to the graph tab so
+    // the Sources / NodeDetailCard can render.
+    if (rightPanelResponse) {
+      setRightPanelState('graph');
+    }
+  }, [rightPanelResponse]); // handleNodeClick is stable (no deps that change)
 
   const handleCitationClick = useCallback((citationIndex: number) => {
     setActiveSourceIndex(citationIndex);
@@ -985,6 +998,7 @@ export default function GraphRAGPage() {
                 onNodeClick={handleNodeClick}
                 onCitationClick={handleCitationClick}
                 onPassageCitationClick={handlePassageCitationClick}
+                onNodeCitationClick={handleNodeCitationClick}
                 responseTabs={responseTabs}
                 activeTabId={activeTabId}
                 onTabChange={handleTabChange}

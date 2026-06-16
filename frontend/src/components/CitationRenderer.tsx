@@ -5,6 +5,20 @@ import ReactMarkdown from 'react-markdown';
 import type { SourceCitation } from '../types';
 import { getGraphTypeTheme } from './graphrag/graphTheme';
 
+// ---------------------------------------------------------------------------
+// Scholar-RAG marker patterns (used by parseCitationGroup below)
+//
+// Markers emitted by the scholar-RAG backend inside answer text:
+//   [passage_<id>]                   → corpus passage  → onPassageCitationClick
+//   [P_<kg_node_id>: Holder Year, Pub p.N]  → KG scholar/arg node → onNodeCitationClick
+//   [P_<kg_node_id>]                 → bare KG node ref          → onNodeCitationClick
+//   [edge: <rel> P_<src>->P_<dst>]  → graph edge                → onNodeCitationClick(dst)
+// ---------------------------------------------------------------------------
+const PASSAGE_MARKER_RE = /^passage_\S+$/;
+const SCHOLAR_FULL_RE = /^P_(\S+?):\s*(.+)$/;   // P_<id>: Holder Year, Pub p.N
+const SCHOLAR_BARE_RE = /^P_(\S+)$/;             // P_<id>
+const EDGE_RE = /^edge:\s*(\S+)\s+P_(\S+)->P_(\S+)$/;  // edge: rel P_src->P_dst
+
 export interface PassageCitationEntry {
   id?: string | null;
   ref?: string | null;
@@ -25,6 +39,8 @@ interface CitationRendererProps {
   onNodeClick?: (nodeId: string) => void;
   onSourceClick?: (sourceIndex: number, source?: SourceCitation) => void;
   onPassageCitationClick?: (passageId: string) => void;
+  /** Called when an inline [P_<kg_node_id>: ...] scholar/argument badge is clicked. */
+  onNodeCitationClick?: (nodeId: string) => void;
   className?: string;
   academicMode?: boolean; // Show enhanced confidence badges
   ancientCitationsMetadata?: Array<{
@@ -41,6 +57,7 @@ export function CitationRenderer({
   onNodeClick,
   onSourceClick,
   onPassageCitationClick,
+  onNodeCitationClick,
   className = '',
   academicMode = false,
   ancientCitationsMetadata = []
@@ -102,9 +119,89 @@ export function CitationRenderer({
         citationNumber: number;
         label: string;
         passageId: string | null;
+      }
+    | {
+        // Scholar-RAG passage marker: [passage_<id>]
+        kind: 'passageId';
+        rawId: string;
+      }
+    | {
+        // Scholar-RAG scholar/argument marker: [P_<node_id>: Holder Year, Pub p.N]
+        kind: 'scholar';
+        nodeId: string;
+        /** Display text — "Holder Year" extracted from after the colon. */
+        badgeLabel: string;
+        /** Full tooltip text — "Pub p.N" or full "Holder Year, Pub p.N". */
+        tooltip: string;
+        isPassageNode: boolean;
+      }
+    | {
+        // Scholar-RAG edge marker: [edge: rel P_src->P_dst]
+        kind: 'edge';
+        relation: string;
+        srcId: string;
+        dstId: string;
       };
 
   const parseCitationGroup = (innerText: string): Array<string | CitationToken> | null => {
+    // -- Priority: check for scholar-RAG marker formats FIRST before falling
+    //    through to the legacy numeric/source tokenizer.
+
+    // [passage_<id>] — direct corpus passage node_id
+    if (PASSAGE_MARKER_RE.test(innerText.trim())) {
+      return [{ kind: 'passageId', rawId: innerText.trim() }];
+    }
+
+    // [P_<id>: Holder Year, Pub p.N]
+    const scholarFull = SCHOLAR_FULL_RE.exec(innerText.trim());
+    if (scholarFull) {
+      const nodeId = scholarFull[1];
+      const afterColon = scholarFull[2].trim();
+      // Badge shows "Holder Year" (first comma-separated segment up to 30 chars).
+      const firstSegment = afterColon.split(',')[0].trim();
+      const badgeLabel = firstSegment.length > 30 ? firstSegment.slice(0, 28) + '…' : firstSegment;
+      const isPassageNode = nodeId.startsWith('passage_');
+      return [{
+        kind: 'scholar',
+        nodeId,
+        badgeLabel,
+        tooltip: afterColon,
+        isPassageNode,
+      }];
+    }
+
+    // [P_<id>] — bare KG node reference
+    const scholarBare = SCHOLAR_BARE_RE.exec(innerText.trim());
+    if (scholarBare) {
+      const nodeId = scholarBare[1];
+      const isPassageNode = nodeId.startsWith('passage_');
+      // Derive a readable label from the node id: strip prefix, replace _, capitalize.
+      const humanLabel = nodeId
+        .replace(/^(scholar_position_|scholarly_argument_|argument_|scholar_|position_|concept_|person_|work_)/, '')
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, (l) => l.toUpperCase())
+        .slice(0, 28);
+      return [{
+        kind: 'scholar',
+        nodeId,
+        badgeLabel: isPassageNode ? '↗ source' : humanLabel,
+        tooltip: nodeId,
+        isPassageNode,
+      }];
+    }
+
+    // [edge: rel P_src->P_dst]
+    const edgeMatch = EDGE_RE.exec(innerText.trim());
+    if (edgeMatch) {
+      return [{
+        kind: 'edge',
+        relation: edgeMatch[1],
+        srcId: edgeMatch[2],
+        dstId: edgeMatch[3],
+      }];
+    }
+
+    // Legacy tokenizer path (Source N / PN / N).
     const tokenPattern = /Source\s+\d+|P\d+|\d+/g;
     const parts: Array<string | CitationToken> = [];
     let lastIndex = 0;
@@ -213,6 +310,65 @@ export function CitationRenderer({
                 >
                   {part}
                 </span>
+              );
+            }
+
+            // Scholar-RAG: direct passage_* node id marker
+            if (part.kind === 'passageId') {
+              return (
+                <PassageCitationLink
+                  key={`pid-${matchIndex}-${groupIndex}`}
+                  citationNumber={0}
+                  label="source"
+                  passageId={part.rawId}
+                  onClick={() => {
+                    if (onPassageCitationClick) {
+                      onPassageCitationClick(part.rawId);
+                    }
+                  }}
+                />
+              );
+            }
+
+            // Scholar-RAG: scholar / argument / concept KG node badge
+            if (part.kind === 'scholar') {
+              // If the node is itself a passage node, route to passage reader.
+              if (part.isPassageNode && onPassageCitationClick) {
+                return (
+                  <PassageCitationLink
+                    key={`scholar-passage-${matchIndex}-${groupIndex}`}
+                    citationNumber={0}
+                    label={part.badgeLabel}
+                    passageId={part.nodeId}
+                    onClick={() => onPassageCitationClick(part.nodeId)}
+                  />
+                );
+              }
+              return (
+                <ScholarCitationBadge
+                  key={`scholar-${matchIndex}-${groupIndex}`}
+                  nodeId={part.nodeId}
+                  badgeLabel={part.badgeLabel}
+                  tooltip={part.tooltip}
+                  onClick={() => onNodeCitationClick?.(part.nodeId)}
+                />
+              );
+            }
+
+            // Scholar-RAG: edge badge
+            if (part.kind === 'edge') {
+              return (
+                <EdgeCitationBadge
+                  key={`edge-${matchIndex}-${groupIndex}`}
+                  relation={part.relation}
+                  srcId={part.srcId}
+                  dstId={part.dstId}
+                  onClick={
+                    onNodeCitationClick
+                      ? () => onNodeCitationClick(part.dstId)
+                      : undefined
+                  }
+                />
               );
             }
 
@@ -527,6 +683,141 @@ const CitationTooltip = React.forwardRef<HTMLDivElement, CitationTooltipProps>(
 );
 
 CitationTooltip.displayName = 'CitationTooltip';
+
+// ---------------------------------------------------------------------------
+// Scholar Citation Badge — for [P_<kg_node_id>: Holder Year, Pub p.N] markers
+// Amber/academic tint: visually distinct from primary-passage badges (grey-blue)
+// ---------------------------------------------------------------------------
+interface ScholarCitationBadgeProps {
+  nodeId: string;
+  badgeLabel: string;
+  tooltip: string;
+  onClick?: () => void;
+}
+
+function ScholarCitationBadge({ badgeLabel, tooltip, onClick }: ScholarCitationBadgeProps) {
+  const [showTip, setShowTip] = useState(false);
+  const [tipPos, setTipPos] = useState({ x: 0, y: 0 });
+
+  const handleMouseEnter = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTipPos({ x: rect.left + rect.width / 2, y: rect.top - 5 });
+    setShowTip(true);
+  };
+
+  return (
+    <>
+      <button
+        type="button"
+        className={`inline-flex items-center gap-0.5 align-middle ${onClick ? '' : 'cursor-default'}`}
+        onClick={onClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={() => setShowTip(false)}
+        title={tooltip}
+        aria-label={`Scholar citation: ${tooltip}`}
+      >
+        <span
+          className="inline-flex min-h-5 items-center justify-center gap-0.5 rounded-md px-1.5 py-0.5 text-[11px] font-semibold leading-none select-none transition-all duration-150 hover:brightness-95 hover:scale-110"
+          style={{
+            backgroundColor: '#FFF7E0',
+            color: '#876114',
+            border: '1px solid #F0D79B',
+            boxShadow: '0 1px 2px 0 #FFEAB3',
+          }}
+        >
+          {/* Quill icon — "this is a modern scholar" */}
+          <svg className="h-3 w-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+          {badgeLabel}
+        </span>
+      </button>
+
+      {/* Tooltip */}
+      {showTip && tooltip && (
+        <div
+          className="fixed z-50 pointer-events-none"
+          style={{ left: tipPos.x, top: tipPos.y, transform: 'translate(-50%, -100%)' }}
+        >
+          <div className="mb-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900 shadow-xl max-w-xs">
+            {tooltip}
+          </div>
+          <svg className="mx-auto -mt-2" width="12" height="6" viewBox="0 0 12 6">
+            <path d="M0 0 L6 6 L12 0" fill="#FFFBEB" stroke="#F0D79B" strokeWidth="1" />
+          </svg>
+        </div>
+      )}
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Edge Citation Badge — for [edge: rel P_src->P_dst] markers
+// Muted stone tint with relation label and optional click to open target node
+// ---------------------------------------------------------------------------
+interface EdgeCitationBadgeProps {
+  relation: string;
+  srcId: string;
+  dstId: string;
+  onClick?: () => void;
+}
+
+function EdgeCitationBadge({ relation, srcId, dstId, onClick }: EdgeCitationBadgeProps) {
+  const [showTip, setShowTip] = useState(false);
+  const [tipPos, setTipPos] = useState({ x: 0, y: 0 });
+
+  const humanSrc = srcId.replace(/_/g, ' ').slice(0, 20);
+  const humanDst = dstId.replace(/_/g, ' ').slice(0, 20);
+  const tooltipText = `${humanSrc} → ${relation} → ${humanDst}`;
+
+  const handleMouseEnter = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTipPos({ x: rect.left + rect.width / 2, y: rect.top - 5 });
+    setShowTip(true);
+  };
+
+  return (
+    <>
+      <button
+        type="button"
+        className={`inline-flex items-center gap-0.5 align-middle ${onClick ? '' : 'cursor-default'}`}
+        onClick={onClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={() => setShowTip(false)}
+        aria-label={`Graph edge: ${tooltipText}`}
+      >
+        <span
+          className="inline-flex min-h-5 items-center justify-center gap-0.5 rounded-md px-1.5 py-0.5 text-[11px] font-semibold leading-none select-none transition-all duration-150 hover:brightness-95"
+          style={{
+            backgroundColor: '#F6F5F4',
+            color: '#57534E',
+            border: '1px solid #DEDBD7',
+            boxShadow: '0 1px 2px 0 #EEEAE6',
+          }}
+        >
+          <svg className="h-3 w-3 flex-shrink-0 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          </svg>
+          {relation.replace(/_/g, ' ')}
+        </span>
+      </button>
+
+      {showTip && (
+        <div
+          className="fixed z-50 pointer-events-none"
+          style={{ left: tipPos.x, top: tipPos.y, transform: 'translate(-50%, -100%)' }}
+        >
+          <div className="mb-2 rounded-lg border border-stone-200 bg-white px-3 py-2 text-xs text-stone-700 shadow-xl max-w-xs font-mono">
+            {tooltipText}
+          </div>
+          <svg className="mx-auto -mt-2" width="12" height="6" viewBox="0 0 12 6">
+            <path d="M0 0 L6 6 L12 0" fill="white" stroke="#D6D3D1" strokeWidth="1" />
+          </svg>
+        </div>
+      )}
+    </>
+  );
+}
 
 // Sources Panel Component - displays all citations at the bottom of an answer
 export function SourcesPanel({
