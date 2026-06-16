@@ -103,6 +103,25 @@ async def assemble_controversy_map(
     cmap.order_frames()
     cmap.frames = cmap.frames[:max_frames]
     _fold_author_passages_into_exegesis(cmap)
+    # Observability (GOAL-7): how many primary passages actually reached the
+    # synthesis, broken down by author, so a "no primary text quoted" answer can
+    # be traced to retrieval (empty pool) vs synthesis (pool ignored).
+    _all_passages = [
+        pref for frame in cmap.frames for pref in frame.contested_passages
+    ] + list(cmap.exegesis_units)
+    _by_author: dict[str, int] = {}
+    for _p in _all_passages:
+        _by_author[(_p.author or "?").strip()] = (
+            _by_author.get((_p.author or "?").strip(), 0) + 1
+        )
+    logger.info(
+        "ControversyMap assembled: %d frames, %d contested + %d exegesis passages; "
+        "authors=%s",
+        len(cmap.frames),
+        sum(len(f.contested_passages) for f in cmap.frames),
+        len(cmap.exegesis_units),
+        _by_author,
+    )
     return cmap
 
 
