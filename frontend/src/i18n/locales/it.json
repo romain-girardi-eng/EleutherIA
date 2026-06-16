@@ -55,12 +55,14 @@
       "canonicalPassages": "Mappa di ricezione del corpus",
       "recherches": "Galleria di ricerche pubbliche",
       "contributions": "Contributi della comunità",
-      "contribute": "Invia una correzione PDF"
+      "contribute": "Invia una correzione PDF",
+      "projects": "Spazio di lavoro personale per i documenti"
     },
     "cta": {
       "label": "Grafo di conoscenza",
       "hint": "Esplora la rete"
-    }
+    },
+    "projects": "I miei progetti"
   },
   "home": {
     "welcome": "Benvenuti su EleutherIA",

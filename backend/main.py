@@ -35,6 +35,7 @@ from backend.routes.kg_extras import router as kg_extras_router
 from backend.routes.lemma import router as lemma_router
 from backend.routes.opencode_proxy import router as opencode_router
 from backend.routes.passages import router as passages_router
+from backend.routes.projects import router as projects_router
 from backend.routes.search import router as search_router
 from backend.routes.share import public_router as share_public_router
 from backend.routes.share import router as share_router
@@ -167,6 +168,7 @@ def create_app() -> FastAPI:
     app.include_router(share_public_router)
     app.include_router(community_router)
     app.include_router(contributions_router)
+    app.include_router(projects_router)
 
     # Migration compatibility routers (endpoints called by frontend)
     app.include_router(texts_router, prefix="/api/texts")
@@ -202,13 +204,19 @@ def create_app() -> FastAPI:
         kg_nodes = 0
         if db_ok:
             try:
-                row = await svc.db.fetchrow("SELECT count(*)::int AS n FROM free_will.kg_nodes")
+                row = await svc.db.fetchrow(
+                    "SELECT count(*)::int AS n FROM free_will.kg_nodes"
+                )
                 if row:
                     kg_nodes = int(row["n"])
             except Exception:
-                kg_nodes = len(svc.analytics.kg_data.get("nodes", [])) if svc.analytics else 0
+                kg_nodes = (
+                    len(svc.analytics.kg_data.get("nodes", [])) if svc.analytics else 0
+                )
         else:
-            kg_nodes = len(svc.analytics.kg_data.get("nodes", [])) if svc.analytics else 0
+            kg_nodes = (
+                len(svc.analytics.kg_data.get("nodes", [])) if svc.analytics else 0
+            )
         core_ready = graphrag_ok and kg_nodes > 0
 
         return {

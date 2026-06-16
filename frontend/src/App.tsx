@@ -71,6 +71,10 @@ const ContributionDetailPage = lazy(() => import('./pages/ContributionDetailPage
 // HomePage - Main landing page with educational content and features overview
 const HomePage = lazy(() => import('./pages/HomePage'));
 
+// Research Projects — personal document workspace (authenticated)
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
+const ProjectDetailPage = lazy(() => import('./pages/ProjectDetailPage'));
+
 // The Debate - scrollytelling narrative of the ancient free-will debate
 const TheDebatePage = lazy(() => import('./pages/TheDebatePage'));
 // Debate Map - argument map for a single concept (timeline + argument mapper)
@@ -482,6 +486,23 @@ function AppContent() {
                 element={
                   <ProtectedRoute>
                     <ContributePage />
+                  </ProtectedRoute>
+                }
+              />
+              {/* Research project space (authenticated) */}
+              <Route
+                path="/projects"
+                element={
+                  <ProtectedRoute>
+                    <ProjectsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/projects/:projectId"
+                element={
+                  <ProtectedRoute>
+                    <ProjectDetailPage />
                   </ProtectedRoute>
                 }
               />
