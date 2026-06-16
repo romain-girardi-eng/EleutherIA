@@ -35,6 +35,10 @@ class ProviderPrice:
     output_per_m: float
 
 
+# ONE-LINE K2.7 SWAP (ARCHITECTURE §K2.7): pricing is keyed by PROVIDER, not by
+# model, so a Fireworks K2.7 inherits the "fireworks" row and a Moonshot K2.7 the
+# "moonshot" row — no new key is needed unless K2.7 is priced differently, in
+# which case add a "kimi-k2.7" row here and route it in get_provider_price.
 _DEFAULTS: Final[dict[str, ProviderPrice]] = {
     "fireworks": ProviderPrice(input_per_m=0.85, output_per_m=3.40),
     "gemini": ProviderPrice(input_per_m=1.25, output_per_m=5.00),

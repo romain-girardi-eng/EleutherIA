@@ -66,6 +66,196 @@ class EvidenceLayer(StrEnum):
     SECONDARY = "secondary"
 
 
+# Relations that encode scholarly disagreement / dialectical structure.
+# When a ``get_neighbors`` / ``explore_subgraph`` result carries one of these,
+# the collector retains BOTH endpoints + the relation + direction as a
+# ``DialecticalEdge`` (Scholar-RAG M0b). These are the fault-line edges the old
+# pipeline dropped at ingestion (the literal "0 edges used" bug, failure-map F1).
+DIALECTICAL_RELATIONS: frozenset[str] = frozenset(
+    {
+        "opposes",
+        "critiques",
+        "responds_to",
+        "refutes",
+        "contrasts_with",
+        "agrees_with",
+        "supports",
+        "participates_in",
+        "contributes_to",
+        "has_position",
+        "advanced_in",
+        "engages_with",
+        "interprets",
+    }
+)
+
+
+class DialecticalEdge(BaseModel):
+    """A retained dialectical (disagreement-bearing) edge between two KG nodes.
+
+    Unlike the bare ``Evidence`` the collector kept before, this preserves the
+    full relational triple — both endpoints, the ``relation``, and the
+    ``direction`` — so the synthesis layer can narrate "A --opposes--> B" fault
+    lines instead of being structurally edge-blind. Scholar-RAG M0b.
+    """
+
+    source_id: str
+    relation: str
+    target_id: str
+    direction: str = ""  # "outgoing" | "incoming" | "" (already canonicalised)
+    weight: float | None = None
+    source_label: str = ""
+    target_label: str = ""
+    source_type: str = ""
+    target_type: str = ""
+
+
+def scholar_rag_enabled() -> bool:
+    """Whether the Scholar-RAG (G6) path is active.
+
+    Gated by ``ELEUTHERIA_SCHOLAR_RAG`` (default OFF). The new debate-first
+    tools, planner, dossier, and dialectical synthesis are only *consumed* when
+    this is true; the additive state fields and tool definitions are inert until
+    a consumer reads them, so the existing default pipeline is unaffected.
+    """
+    raw = os.getenv("ELEUTHERIA_SCHOLAR_RAG", "")
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
+# ── Scholar-RAG controversy dossier (ARCHITECTURE §3.1) ──────────────────────
+# The typed intermediate object the M1 tools populate and M3 assembles into a
+# ``ControversyMap``. Defined here (additive, inert without a consumer) so the
+# debate tools and their tests share one canonical shape. Star-tolerant flat
+# links, raw incident-edge ordering — NO strength scalar (amputation 1).
+
+
+class AnswerShape(StrEnum):
+    """The six scholarly answer shapes (+ factual short-circuit)."""
+
+    SURVEY_OF_DEBATES = "survey_of_debates"
+    CONCEPT_GENEALOGY = "concept_genealogy"
+    TRANSMISSION_TRACE = "transmission_trace"
+    POSITION_COMPARISON = "position_comparison"
+    PRIMARY_TEXT_EXEGESIS = "primary_text_exegesis"
+    DOXOGRAPHICAL_SYNTHESIS = "doxographical_synthesis"
+    FACTUAL_LOOKUP = "factual_lookup"
+
+
+class GraphPattern(BaseModel):
+    """One graph-entry pattern in a ResearchPlan DAG (ARCHITECTURE §1).
+
+    A typed, inspectable retrieval program — the named ``edge_program`` is the
+    audit surface the plan can be diffed against the graph before retrieval
+    runs. NOT a fixed list of section titles.
+    """
+
+    intent: str = ""  # "find fault lines in discovery-of-will debate"
+    entry: str = "debate"  # debate|concept|person|passage|school|position
+    seed_query: str = ""  # lexical/lemmatic seed to locate entry nodes
+    edge_program: list[str] = Field(default_factory=list)  # ordered relations to walk
+    depth: int = 2
+    want_bilingual: bool = True
+
+
+class ResearchPlan(BaseModel):
+    """The typed retrieval program emitted by PlanResearch (ARCHITECTURE §1).
+
+    One primary + optional secondary shape, a small DAG of GraphPatterns
+    (executed in topological order), and an ADAPTIVE answer skeleton that the
+    synthesiser may override — never a hard template.
+    """
+
+    primary_shape: AnswerShape = AnswerShape.SURVEY_OF_DEBATES
+    secondary_shape: AnswerShape | None = None
+    patterns: list[GraphPattern] = Field(default_factory=list)  # 3-6 patterns
+    answer_skeleton: list[str] = Field(default_factory=list)  # HINTS, never a template
+    budget_tier: str = "standard"  # quick|standard|deep
+    rationale: str = ""  # why this shape (audit surface)
+
+
+class PassageRef(BaseModel):
+    """A contested primary passage, original + English, fully untruncated."""
+
+    passage_id: str
+    work: str = ""
+    author: str = ""
+    canonical_ref: str = ""
+    cts_urn: str | None = None
+    original_text: str = ""  # FULL, untruncated, polytonic diacritics preserved
+    english_text: str | None = None  # _en counterpart via has_translation
+    language: str = ""
+
+
+class GroundedPosition(BaseModel):
+    """A scholarly position, ALWAYS a holder's claim — never asserted as truth."""
+
+    position_id: str
+    holder: str = ""
+    holder_node_id: str = ""
+    holder_type: str = "modern_scholar"  # modern_scholar | ancient_author | school
+    claim: str = ""
+    publication: str | None = None
+    publication_node_id: str | None = None
+    page_grounding: str | None = None  # present in metadata, else None (never invented)
+    primary_support: list[str] = Field(default_factory=list)  # PassageRef ids
+
+
+class DialecticalLink(BaseModel):
+    """FLAT and STAR-TOLERANT — not pro/con tagging (ARCHITECTURE §3.1)."""
+
+    relation: str
+    from_id: str
+    to_id: str
+    from_holder: str = ""
+    to_holder: str = ""
+    gloss: str | None = None
+
+
+class FrameCompleteness(BaseModel):
+    """Boolean + raw-count completeness signals — no score, no float."""
+
+    has_two_sides: bool = False  # ≥1 position with ≥1 attacker
+    has_orphan_attack: bool = False  # attacker, no surfaced defender ⇒ expand
+    has_primary_grounding: bool = False  # ≥1 contested passage
+    incident_edge_count: int = 0  # raw count — drives ordering (NO score)
+
+
+class ControversyFrame(BaseModel):
+    """One scholarly fault line: positions, the flat links, contested texts."""
+
+    frame_id: str
+    debate_node_id: str | None = None
+    title: str = ""
+    period: str = ""
+    positions: list[GroundedPosition] = Field(default_factory=list)
+    links: list[DialecticalLink] = Field(default_factory=list)
+    contested_passages: list[PassageRef] = Field(default_factory=list)
+    completeness: FrameCompleteness = Field(default_factory=FrameCompleteness)
+    used_fallback: bool = False  # empty-debate-node fallback fired
+
+
+class ControversyMap(BaseModel):
+    """The tri-purpose dossier (ARCHITECTURE §3.1): retrieval target, synthesis
+    context, and verification oracle in one typed object.
+
+    A list of ``ControversyFrame``s ordered by raw ``incident_edge_count`` (NO
+    score, NO DF-QuAD, NO base_strength/contestedness float — amputation 1) plus
+    a pool of standalone exegesis passages and a record of planner patterns that
+    retrieval under-filled (the completeness critic's denominator substrate).
+    """
+
+    question_frame: str = ""
+    shape: AnswerShape = AnswerShape.SURVEY_OF_DEBATES
+    frames: list[ControversyFrame] = Field(default_factory=list)
+    exegesis_units: list[PassageRef] = Field(default_factory=list)
+    coverage_gaps: list[str] = Field(default_factory=list)
+    provenance: dict[str, PassageRef] = Field(default_factory=dict)
+
+    def order_frames(self) -> None:
+        """Sort frames by raw incident dialectical-edge count, desc (no score)."""
+        self.frames.sort(key=lambda f: f.completeness.incident_edge_count, reverse=True)
+
+
 class GroundingPolicy(StrEnum):
     """Policy for which evidence types may support a claim."""
 
@@ -78,6 +268,9 @@ class ClaimStatus(StrEnum):
 
     SUPPORTED = "supported"
     INSUFFICIENT = "insufficient"
+    # Scholar-RAG: a cite-as-you-write marker that does NOT resolve to a map id
+    # (a hallucinated id) — emitted UNVERIFIED for the M5 referee to hard-reject.
+    UNVERIFIED = "unverified"
 
 
 class RetrievalBudget(BaseModel):
@@ -284,6 +477,10 @@ class ContextPack(BaseModel):
     token_estimate: int = Field(0, ge=0)
     bundle_refs: dict[str, str] = Field(default_factory=dict)
     node_refs: dict[str, str] = Field(default_factory=dict)
+    # Scholar-RAG M3: the ``## Controversy Frames`` layer. The serialised frames
+    # give the synthesis prompt a first-class edge slot (failure-map F2 fix).
+    # Populated only when ELEUTHERIA_SCHOLAR_RAG is on; empty/inert by default.
+    controversy_frames: list[ControversyFrame] = Field(default_factory=list)
 
 
 class ResearchNotebook(BaseModel):
@@ -403,6 +600,22 @@ class RAGState:
 
     seed_node_ids: list[str] = field(default_factory=list)
     context_node_ids: list[str] = field(default_factory=list)
+
+    # Dialectical (disagreement-bearing) edges retained at ingestion so the
+    # synthesis layer can narrate real fault lines. Populated by
+    # EvidenceCollector.populate_state from get_neighbors / explore_subgraph
+    # results whose relation ∈ DIALECTICAL_RELATIONS. Scholar-RAG M0b — the
+    # fix for the "0 edges used" root cause (failure-map F1). Empty by default.
+    dialectical_edges: list[DialecticalEdge] = field(default_factory=list)
+
+    # Scholar-RAG M2: the typed retrieval program (question -> answer shape).
+    # Set by PlanResearch only when ELEUTHERIA_SCHOLAR_RAG is on; None by default
+    # so the legacy facet picker stays the default path.
+    research_plan: ResearchPlan | None = None
+
+    # Scholar-RAG M3: the assembled controversy dossier (frames + exegesis +
+    # coverage gaps). Set by the M3 assembler under the flag; None by default.
+    controversy_map: ControversyMap | None = None
 
     accumulated_context: str = ""
     context_pack: ContextPack = field(default_factory=ContextPack)

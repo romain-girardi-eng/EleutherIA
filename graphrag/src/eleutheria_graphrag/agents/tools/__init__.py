@@ -64,7 +64,14 @@ class ToolRegistry:
 
 
 def build_tool_registry(deps: Deps) -> ToolRegistry:
-    """Create a fully populated tool registry from dependencies."""
+    """Create a fully populated tool registry from dependencies.
+
+    The two Scholar-RAG (G6) relational tools — ``find_debates`` and
+    ``build_controversy_frame`` — are registered ONLY when
+    ``ELEUTHERIA_SCHOLAR_RAG`` is on, so the default pipeline's tool surface is
+    unchanged.
+    """
+    from eleutheria_graphrag.agents.state import scholar_rag_enabled
     from eleutheria_graphrag.agents.tools.explore_subgraph import ExploreSubgraphTool
     from eleutheria_graphrag.agents.tools.get_neighbors import GetNeighborsTool
     from eleutheria_graphrag.agents.tools.get_node_detail import GetNodeDetailTool
@@ -85,4 +92,14 @@ def build_tool_registry(deps: Deps) -> ToolRegistry:
     registry.register(ReadWorkSectionTool(deps))
     registry.register(ExploreSubgraphTool(deps))
     registry.register(InferTransitiveFactsTool(deps))
+
+    if scholar_rag_enabled():
+        from eleutheria_graphrag.agents.tools.build_controversy_frame import (
+            BuildControversyFrameTool,
+        )
+        from eleutheria_graphrag.agents.tools.find_debates import FindDebatesTool
+
+        registry.register(FindDebatesTool(deps))
+        registry.register(BuildControversyFrameTool(deps))
+
     return registry

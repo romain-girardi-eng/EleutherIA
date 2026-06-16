@@ -41,6 +41,9 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Path to write the captured event log (defaults to stdout only).",
     )
     parser.add_argument(
+        # ONE-LINE K2.7 SWAP (ARCHITECTURE §K2.7): when K2.7 lands on Fireworks,
+        # change the default below to its Fireworks id. Do NOT point this at a
+        # Moonshot id (Fireworks-only constraint).
         "--model",
         default=os.getenv(
             "ELEUTHERIA_DEFAULT_MODEL", "accounts/fireworks/models/kimi-k2p6"

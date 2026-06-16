@@ -64,3 +64,22 @@ class TestSystemPromptTemplating:
         assert "evidence inventory" in prompt
         assert "Coverage gaps" in prompt
         assert "NOT shown to the user" in prompt
+
+    def test_default_prompt_is_not_debate_first(self):
+        """Flag OFF (default) must keep the legacy retrieval prompt verbatim."""
+        deps = SimpleNamespace(kg_data=_kg_data(241, 17000, 2800, 56000))
+        prompt = _native_system_prompt(deps)
+        assert "find_debates" not in prompt
+        assert "FIRST move is `find_debates`" not in prompt
+
+    def test_scholar_rag_flag_selects_debate_first_prompt(self, monkeypatch):
+        """Flag ON swaps in the debate-first variant without losing the counts."""
+        monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+        deps = SimpleNamespace(kg_data=_kg_data(241, 17000, 2800, 56000))
+        prompt = _native_system_prompt(deps)
+        assert "~20k nodes" in prompt
+        assert "find_debates" in prompt
+        assert "build_controversy_frame" in prompt
+        # Debate-first hard rules survive.
+        assert "two sides" in prompt
+        assert "NEVER assert a modern label" in prompt
