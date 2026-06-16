@@ -27,6 +27,7 @@ from eleutheria_graphrag.agents.dialectical_synthesis import (
     scholar_synthesis_timeout,
     synthesize_degraded,
     synthesize_dialectical,
+    synthesize_dialectical_stream,
 )
 from eleutheria_graphrag.agents.graph_nodes import (
     SYSTEM_PROMPT,
@@ -644,7 +645,12 @@ class ScholarlyAgent:
         the legacy path)."""
         return scholar_rag_enabled() and state.controversy_map is not None
 
-    async def _synthesize_dialectical(self, state: RAGState) -> str | None:
+    async def _synthesize_dialectical(
+        self,
+        state: RAGState,
+        *,
+        on_reasoning: Any | None = None,
+    ) -> str | None:
         """Produce the final answer prose from ``state.controversy_map`` via
         :func:`synthesize_dialectical` (M4 cutover), writing it into the same
         seam the legacy render uses: ``state.raw_answer`` + ``state.claim_ledger``.
@@ -653,6 +659,14 @@ class ScholarlyAgent:
         from it (``build_provenance_ledger``) and replaces the pre-built
         ``DraftClaimLedger`` facet ledger so the verifier and the UI reference
         map index the dialectical answer, not the discarded template scaffolding.
+
+        When ``on_reasoning`` is supplied (the streaming path), the thinking
+        model's ``reasoning_content`` is streamed LIVE through it via
+        :func:`synthesize_dialectical_stream` (each reasoning delta is awaited on
+        the callback, which emits a ``synthesis_reasoning`` SSE event). The
+        reasoning text NEVER enters the answer. With ``on_reasoning=None`` (the
+        non-streaming path) the blocking :func:`synthesize_dialectical` runs,
+        byte-for-byte unchanged.
 
         On success returns the synthesis prose. If the full synthesis genuinely
         fails or returns empty (e.g. every fallback rung errored), it does NOT
@@ -664,16 +678,26 @@ class ScholarlyAgent:
         cmap = state.controversy_map
         if cmap is None:  # defensive — caller already gated on this
             return None
+        max_tokens = scholar_render_max_tokens(
+            getattr(getattr(state, "research_plan", None), "budget_tier", None)
+            or "standard"
+        )
         try:
-            result = await synthesize_dialectical(
-                state,
-                cmap,
-                self.deps.llm,
-                max_tokens=scholar_render_max_tokens(
-                    getattr(getattr(state, "research_plan", None), "budget_tier", None)
-                    or "standard"
-                ),
-            )
+            if on_reasoning is not None:
+                result = await synthesize_dialectical_stream(
+                    state,
+                    cmap,
+                    self.deps.llm,
+                    on_reasoning=on_reasoning,
+                    max_tokens=max_tokens,
+                )
+            else:
+                result = await synthesize_dialectical(
+                    state,
+                    cmap,
+                    self.deps.llm,
+                    max_tokens=max_tokens,
+                )
         except Exception:  # noqa: BLE001 - never crash the pipeline on synthesis
             logger.warning(
                 "Dialectical synthesis raised; trying degraded hedge", exc_info=True
@@ -1851,12 +1875,17 @@ class ScholarlyAgent:
     ) -> AsyncIterator[str]:
         """Stream the dialectical answer for the Scholar-RAG render seam (M4).
 
-        ``synthesize_dialectical`` is a single whole-answer LLM call (not a
-        token stream), so we run it under a heartbeat to keep the SSE wire warm
-        through the 55–95 s synthesis, then chunk its finished prose into raw
-        ``answer_chunk`` strings (the route wraps each yielded string as an
-        ``answer_chunk`` event, identical to ``_stream_render``). The prose lands
-        in ``state.raw_answer`` and the prose-derived provenance ledger in
+        The synthesis runs on a TRUE thinking model whose ``reasoning_content``
+        now streams LIVE: we drive it via ``synthesize_dialectical_stream`` (the
+        segmented LLM stream) on a background task, push each reasoning delta onto
+        a queue as a ``synthesis_reasoning`` SSE event, and drain that queue here
+        WHILE the slow (~5–10 min) synthesis runs — so the right-panel AGENT
+        REASONING workspace fills live instead of freezing on "Rendering…". The
+        reasoning text travels on its OWN channel and NEVER enters the answer.
+        When the synthesis finishes, its clean ``content`` prose is chunked into
+        raw ``answer_chunk`` strings (the route wraps each as an ``answer_chunk``
+        event, identical to ``_stream_render``). The prose lands in
+        ``state.raw_answer`` and the prose-derived provenance ledger in
         ``state.claim_ledger`` (set inside ``_synthesize_dialectical``).
 
         Sets ``holder['ok'] = True`` iff dialectical prose was produced and
@@ -1864,26 +1893,119 @@ class ScholarlyAgent:
         legacy streamed render. Never raises into the pipeline.
 
         ``max_wait`` defaults to ``_dialectical_heartbeat_ceiling()`` (the
-        synthesis HTTP timeout + margin) so the heartbeat NEVER cancels a
+        synthesis HTTP timeout + margin) so the ceiling NEVER cancels a
         healthy-but-slow thinking-model synthesis before its own LLM timeout —
         which would drop us into the legacy facet-template fallback.
         """
         if max_wait is None:
             max_wait = _dialectical_heartbeat_ceiling()
+
+        # Reasoning deltas arrive on a queue from the synthesis task's callback;
+        # the drain loop below interleaves them with idle ``status`` heartbeats
+        # (so the SSE wire stays warm even while the model is still thinking).
+        reasoning_queue: asyncio.Queue[str] = asyncio.Queue()
+
+        async def _on_reasoning(delta: str) -> None:
+            await reasoning_queue.put(delta)
+
         result_holder: dict[str, Any] = {}
+
+        async def _run() -> None:
+            result_holder["value"] = await self._synthesize_dialectical(
+                state, on_reasoning=_on_reasoning
+            )
+
+        synth_task = asyncio.create_task(_run())
+        started = _time_mod.monotonic()
+        # First-frame ping so the UI enters the synthesis stage immediately.
+        yield json.dumps(
+            {
+                "type": "status",
+                "message": "Synthesizing dialectical answer…",
+                "data": {
+                    "step": 99,
+                    "stage": "dialectical_synthesis",
+                    "elapsed_s": 0,
+                },
+            }
+        )
+        timed_out = False
         try:
-            async for hb in self._await_with_heartbeat(
-                self._synthesize_dialectical(state),
-                label="Synthesizing dialectical answer",
-                stage_id="dialectical_synthesis",
-                interval=interval,
-                max_wait=max_wait,
-                result_into=result_holder,
-            ):
-                yield hb
+            while not synth_task.done():
+                try:
+                    delta = await asyncio.wait_for(
+                        reasoning_queue.get(), timeout=interval
+                    )
+                    # LIVE reasoning on its OWN channel — NEVER an answer_chunk.
+                    yield json.dumps(
+                        {
+                            "type": "synthesis_reasoning",
+                            "data": {
+                                "reasoning": delta,
+                                "stage": "Reasoning over the controversy map",
+                            },
+                        }
+                    )
+                except TimeoutError:
+                    elapsed = _time_mod.monotonic() - started
+                    if elapsed >= max_wait:
+                        timed_out = True
+                        break
+                    yield json.dumps(
+                        {
+                            "type": "status",
+                            "message": (
+                                "Synthesizing dialectical answer… "
+                                f"({int(elapsed)}s)"
+                            ),
+                            "data": {
+                                "step": 99,
+                                "stage": "dialectical_synthesis",
+                                "elapsed_s": int(elapsed),
+                            },
+                        }
+                    )
         except Exception:
             logger.warning(
                 "Dialectical synthesis stream failed; legacy render", exc_info=True
+            )
+            if not synth_task.done():
+                synth_task.cancel()
+            with contextlib.suppress(asyncio.CancelledError, Exception):
+                await synth_task
+            holder["ok"] = False
+            return
+
+        # Drain any reasoning deltas that landed after the task finished but
+        # before the loop noticed (so no live thought is silently dropped).
+        while not reasoning_queue.empty():
+            delta = reasoning_queue.get_nowait()
+            yield json.dumps(
+                {
+                    "type": "synthesis_reasoning",
+                    "data": {
+                        "reasoning": delta,
+                        "stage": "Reasoning over the controversy map",
+                    },
+                }
+            )
+
+        if timed_out:
+            synth_task.cancel()
+            with contextlib.suppress(asyncio.CancelledError, Exception):
+                await synth_task
+            logger.warning(
+                "Dialectical synthesis exceeded max_wait=%.0fs; legacy render",
+                max_wait,
+            )
+            holder["ok"] = False
+            return
+
+        try:
+            synth_task.result()  # surface any task exception
+        except Exception:
+            logger.warning(
+                "Dialectical synthesis task raised; legacy render", exc_info=True
             )
             holder["ok"] = False
             return

@@ -14,7 +14,7 @@ import time
 from collections import defaultdict
 from collections.abc import AsyncIterator, Awaitable, Callable
 from enum import Enum
-from typing import Any, cast
+from typing import Any, Literal, cast
 
 import httpx
 
@@ -1627,3 +1627,151 @@ class LLMService:
                             yield text
                     except json.JSONDecodeError:
                         continue
+
+    # ── Segmented stream: distinguishes reasoning deltas from answer deltas ───
+    #
+    # The plain ``stream()`` yields ONLY answer (``content``) deltas and folds
+    # the chain-of-thought (``reasoning_content``) into the ``last_reasoning_content``
+    # side-channel — so a caller can never stream the thinking LIVE. The Scholar-RAG
+    # dialectical synthesis needs the reasoning deltas as they arrive (to drive the
+    # right-panel AGENT REASONING workspace), kept STRICTLY apart from the answer
+    # so reasoning text NEVER leaks into the answer. ``stream_segmented`` yields
+    # ``("reasoning", delta)`` then ``("answer", delta)`` tuples on a single channel,
+    # tagged by origin. deepseek emits reasoning deltas first, then content deltas.
+
+    async def stream_segmented(
+        self,
+        prompt: str,
+        system_prompt: str | None = None,
+        temperature: float = 0.7,
+        max_tokens: int = 4096,
+        model_override: str | None = None,
+        request_timeout: float | None = None,
+    ) -> AsyncIterator[tuple[Literal["reasoning", "answer"], str]]:
+        """Stream a reasoning-model completion as TAGGED segments.
+
+        Yields ``("reasoning", delta)`` for each ``reasoning_content`` delta and
+        ``("answer", delta)`` for each ``content`` delta — the two NEVER mixed.
+        ``self.last_reasoning_content`` still accumulates the full chain-of-thought
+        (so the existing metadata trace continues to work). Only the
+        OpenAI-compatible path (Fireworks/Moonshot/OpenRouter) emits reasoning;
+        Gemini and any non-reasoning model simply yield ``("answer", …)`` deltas.
+
+        Fireworks-only synthesis pins ``model_override`` (e.g. deepseek-v4-pro);
+        ``request_timeout`` is the dedicated generous per-call HTTP timeout the
+        slow thinking-model synthesis needs (mirrors :meth:`generate`). Raises on
+        provider error after first token (the caller cannot restart mid-stream).
+        """
+        self.last_reasoning_content = ""
+        provider, model = self._resolve_model_override(
+            model_override or self.preferred_provider.value
+        )
+        api_key = self._api_key_for(provider)
+        if not api_key:
+            raise RuntimeError(
+                f"No API key for provider {provider.value} (segmented stream)"
+            )
+        config = self._resolve_config(provider)
+        config["model"] = model
+        self.last_provider_used = provider.value
+        self.last_model_used = model
+
+        if provider == ModelProvider.GEMINI:
+            async for chunk in self._stream_gemini(
+                prompt, system_prompt, temperature, max_tokens, api_key, config
+            ):
+                yield ("answer", chunk)
+            return
+
+        async for segment in self._stream_openai_compatible_segmented(
+            provider,
+            prompt,
+            system_prompt,
+            temperature,
+            max_tokens,
+            api_key,
+            config,
+            request_timeout=request_timeout,
+        ):
+            yield segment
+
+    async def _stream_openai_compatible_segmented(
+        self,
+        provider: ModelProvider,
+        prompt: str,
+        system_prompt: str | None,
+        temperature: float,
+        max_tokens: int,
+        api_key: str,
+        config: dict[str, Any],
+        *,
+        request_timeout: float | None = None,
+    ) -> AsyncIterator[tuple[Literal["reasoning", "answer"], str]]:
+        """OpenAI-compatible streaming that yields tagged reasoning/answer deltas.
+
+        Mirrors :meth:`_stream_openai_compatible` but separates the two delta
+        kinds: ``reasoning_content`` → ``("reasoning", …)`` (also accumulated on
+        ``last_reasoning_content``), ``content`` → ``("answer", …)``. Honours a
+        per-call ``request_timeout`` so the slow synthesis is never cut by the
+        shared client timeout.
+        """
+        client = await self._get_client()
+        post_timeout = (
+            request_timeout if request_timeout is not None else self.timeout
+        )
+
+        async with client.stream(
+            "POST",
+            f"{config['base_url']}/chat/completions",
+            headers=self._openai_compatible_headers(provider, api_key, config),
+            json={
+                **self._openai_compatible_payload(
+                    provider,
+                    prompt,
+                    system_prompt,
+                    temperature,
+                    max_tokens,
+                    config,
+                ),
+                "stream": True,
+                "stream_options": {"include_usage": True},
+            },
+            timeout=post_timeout,
+        ) as response:
+            response.raise_for_status()
+            stream_usage: dict[str, Any] | None = None
+            reasoning_parts: list[str] = []
+            async for line in response.aiter_lines():
+                if not line.startswith("data: "):
+                    continue
+                data = line[6:]
+                if data == "[DONE]":
+                    break
+                try:
+                    import json
+
+                    chunk = json.loads(data)
+                except json.JSONDecodeError:
+                    continue
+                if not isinstance(chunk, dict):
+                    continue
+                chunk_usage = chunk.get("usage")
+                if isinstance(chunk_usage, dict):
+                    stream_usage = chunk_usage
+                delta = chunk.get("choices", [{}])[0].get("delta", {})
+                # Reasoning deltas first (accumulate on the side-channel AND
+                # surface live), then answer deltas — NEVER folded together.
+                reasoning = delta.get("reasoning_content")
+                if reasoning:
+                    reasoning_parts.append(reasoning)
+                    self.last_reasoning_content = "".join(reasoning_parts)
+                    yield ("reasoning", reasoning)
+                content = delta.get("content", "")
+                if content:
+                    yield ("answer", content)
+            usage = TokenUsage.from_openai_usage(
+                stream_usage,
+                model=cast(str, config.get("model") or ""),
+                provider=provider.value,
+            )
+            await self._emit_token_usage(usage)

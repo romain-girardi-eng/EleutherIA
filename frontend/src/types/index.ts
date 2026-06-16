@@ -400,6 +400,7 @@ export interface GraphRAGStreamEvent {
     | 'thinking_chunk'
     | 'thinking_complete'
     | 'answer_chunk'
+    | 'synthesis_reasoning'
     | 'citations_preview'
     | 'complete'
     | 'error'

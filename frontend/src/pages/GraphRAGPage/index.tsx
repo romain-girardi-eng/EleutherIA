@@ -112,6 +112,9 @@ export default function GraphRAGPage() {
   const [agentActive, setAgentActive] = useState(false);
   const [streamCost, setStreamCost] = useState<{ total_tokens: number; total_cost_usd: number } | null>(null);
   const agentStepCounterRef = useRef(0);
+  // Live dialectical-synthesis reasoning accumulates into ONE growing step
+  // (the right-panel AGENT REASONING card), so we track its id across deltas.
+  const synthesisReasoningStepIdRef = useRef<string | null>(null);
 
   // Cache replay state: populated when backend emits a `cache_hit` SSE event
   // before the `complete` event. Reset to null at the start of every query so
@@ -382,6 +385,7 @@ export default function GraphRAGPage() {
     setStreamCost(null);
     setCacheInfo(null);
     agentStepCounterRef.current = 0;
+    synthesisReasoningStepIdRef.current = null;
     initializeReasoningSteps(queryText);
 
     try {
@@ -515,6 +519,47 @@ export default function GraphRAGPage() {
                     fullAnswer += chunk;
                     if (fullAnswer.length === chunk.length)
                       updateReasoningStep(4, 'active');
+                  }
+                  break;
+                }
+
+                case 'synthesis_reasoning': {
+                  // LIVE chain-of-thought from the dialectical synthesis (a
+                  // thinking model, ~5-10 min). Accumulate the deltas into ONE
+                  // growing AGENT REASONING card in the right-panel workspace —
+                  // strictly the reasoning channel, NEVER the answer.
+                  const rp = data.data as
+                    | string
+                    | { reasoning?: string; stage?: string }
+                    | undefined;
+                  const delta: string =
+                    typeof rp === 'string' ? rp : String(rp?.reasoning ?? '');
+                  const stage: string =
+                    (typeof rp === 'object' && rp?.stage) ||
+                    'Reasoning over the controversy map';
+                  if (!delta) break;
+                  updateReasoningStep(4, 'active');
+                  setStreamStatus('reasoning over the controversy map…');
+                  if (synthesisReasoningStepIdRef.current === null) {
+                    agentStepCounterRef.current += 1;
+                    const id = `step-${agentStepCounterRef.current}`;
+                    synthesisReasoningStepIdRef.current = id;
+                    setAgentSteps((prev) => [...prev, {
+                      id,
+                      type: 'synthesis_reasoning',
+                      reasoning: delta,
+                      stage,
+                      timestamp: Date.now(),
+                    }]);
+                  } else {
+                    const id = synthesisReasoningStepIdRef.current;
+                    setAgentSteps((prev) =>
+                      prev.map((s) =>
+                        s.id === id
+                          ? { ...s, reasoning: (s.reasoning ?? '') + delta, stage }
+                          : s
+                      )
+                    );
                   }
                   break;
                 }
