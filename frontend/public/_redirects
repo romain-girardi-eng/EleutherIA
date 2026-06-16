@@ -19,3 +19,5 @@
 /share/* /spa 200
 /the-debate /spa 200
 /debate/* /spa 200
+/projects /spa 200
+/projects/* /spa 200
