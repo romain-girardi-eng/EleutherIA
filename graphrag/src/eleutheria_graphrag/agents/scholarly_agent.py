@@ -1955,8 +1955,7 @@ class ScholarlyAgent:
                         {
                             "type": "status",
                             "message": (
-                                "Synthesizing dialectical answer… "
-                                f"({int(elapsed)}s)"
+                                f"Synthesizing dialectical answer… ({int(elapsed)}s)"
                             ),
                             "data": {
                                 "step": 99,
