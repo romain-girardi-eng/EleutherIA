@@ -53,6 +53,7 @@ from eleutheria_graphrag.agents.state import (
     Evidence,
     RAGState,
     ScholarlyAnswer,
+    scholar_rag_enabled,
 )
 from eleutheria_graphrag.models.counter_evidence import (
     ClaimUnit,
@@ -401,6 +402,14 @@ class ScholarlyAgent:
             len(agent.evidence.evidence_bundles),
         )
 
+        # Phase 2.4: Scholar-RAG (G6) controversy-map assembly. Flag-gated and
+        # deterministic — runs the planner + assemble_controversy_map BEFORE the
+        # context pack is (re)built, so the ## Controversy Frames layer fires and
+        # synthesis routes dialectically instead of to the facet template. Inert
+        # (and the legacy path byte-for-byte unchanged) when the flag is off.
+        if scholar_rag_enabled():
+            await self._assemble_controversy_map(state, tools)
+
         # Phase 2.5: post-loop quality gate — optional cross-encoder rerank,
         # evidence-sufficiency check with one bounded continuation round, and
         # (deep mode) the counter-evidence hunt whose findings feed the ledger.
@@ -454,6 +463,98 @@ class ScholarlyAgent:
                 )
                 answer = _mark_verifier_v2_error(answer, exc)
         return answer
+
+    # ------------------------------------------------------------------
+    # Scholar-RAG (G6) controversy-map assembly (flag-gated)
+    # ------------------------------------------------------------------
+
+    async def _assemble_controversy_map(self, state: RAGState, tools: Any) -> bool:
+        """Deterministically populate ``state.controversy_map`` (Scholar-RAG seam).
+
+        Runs the PlanResearch planner to pick an answer shape, then drives the
+        documented ``assemble_controversy_map`` orchestration (find_debates ->
+        build_controversy_frame over the surfaced fault lines). This is the
+        wiring that makes the flag-ON path end-to-end: the context-pack
+        ``## Controversy Frames`` layer (``graph_nodes.py`` seam) only fires
+        when ``state.controversy_map is not None``, which routes synthesis to
+        the dialectical path instead of the facet template.
+
+        Driven deterministically off the planned debates — NOT off the ReAct
+        agent's improvised tool calls — so the seam is reliable. Returns True
+        when a non-empty map (≥1 frame) was assembled; on an empty map or any
+        error, ``state.controversy_map`` is left ``None`` and the caller falls
+        back to the legacy path gracefully (with a prose-stated degraded note).
+        """
+        from eleutheria_graphrag.agents.controversy_map import (
+            assemble_controversy_map,
+        )
+        from eleutheria_graphrag.agents.plan_research import plan_research
+
+        find_tool = tools.get("find_debates")
+        build_tool = tools.get("build_controversy_frame")
+        if find_tool is None or build_tool is None:
+            logger.warning(
+                "Scholar-RAG on but find_debates/build_controversy_frame "
+                "unavailable — falling back to legacy synthesis"
+            )
+            state.metadata["controversy_map"] = {
+                "status": "skipped",
+                "reason": "relational tools unavailable",
+            }
+            return False
+
+        try:
+            plan = await plan_research(state.question, self.deps.llm)
+            state.research_plan = plan
+            cmap = await assemble_controversy_map(
+                state.question,
+                find_tool,
+                build_tool,
+                shape=plan.primary_shape,
+            )
+        except Exception as exc:
+            logger.warning(
+                "Controversy-map assembly failed (%s) — falling back to legacy "
+                "synthesis",
+                exc,
+                exc_info=True,
+            )
+            state.metadata["controversy_map"] = {
+                "status": "error",
+                "reason": f"{type(exc).__name__}: {exc}"[:300],
+            }
+            return False
+
+        meta = {
+            "shape": plan.primary_shape.value,
+            "frames": len(cmap.frames),
+            "coverage_gaps": len(cmap.coverage_gaps),
+            "provenance_passages": len(cmap.provenance),
+        }
+        if not cmap.frames:
+            # Empty map: do NOT route to the dialectical layer. Leave
+            # controversy_map None so the seam stays inert and the legacy
+            # path runs, but record the degraded note (prose-stated downstream).
+            logger.info(
+                "Controversy-map assembly yielded 0 frames — legacy synthesis "
+                "(coverage_gaps=%d)",
+                len(cmap.coverage_gaps),
+            )
+            state.metadata["controversy_map"] = {
+                "status": "degraded",
+                "reason": "assembly yielded 0 frames",
+                **meta,
+            }
+            state.research_notebook.competing_hypotheses.append(
+                "[degraded: no controversy frames assembled — answer falls back "
+                "to the non-dialectical evidence synthesis]"
+            )
+            return False
+
+        state.controversy_map = cmap
+        state.metadata["controversy_map"] = {"status": "ok", **meta}
+        _trace_stage(state, "controversy_map", meta)
+        return True
 
     # ------------------------------------------------------------------
     # Post-loop quality gate (react paths)
@@ -1250,6 +1351,40 @@ class ScholarlyAgent:
                 "metadata": {"tool_calls": tool_calls_observed},
             }
         )
+
+        # Phase 2.4: Scholar-RAG (G6) controversy-map assembly. Flag-gated,
+        # deterministic, and run BEFORE the quality gate rebuilds the context
+        # pack — populating state.controversy_map is what makes the synthesis
+        # seam route to the dialectical layer instead of the facet template.
+        # Inert (zero extra work, no SSE noise) when the flag is off.
+        if scholar_rag_enabled():
+            cm_started = _time.perf_counter()
+            cm_holder: dict[str, Any] = {}
+            try:
+                async for hb in self._await_with_heartbeat(
+                    self._assemble_controversy_map(state, tools),
+                    label="Assembling controversy map",
+                    stage_id="controversy_map",
+                    interval=8.0,
+                    max_wait=120.0,
+                    result_into=cm_holder,
+                ):
+                    yield hb
+            except Exception:
+                logger.warning(
+                    "Controversy-map assembly failed in stream", exc_info=True
+                )
+            cm_ms = int((_time.perf_counter() - cm_started) * 1000)
+            yield json.dumps(
+                {
+                    "type": "stage_complete",
+                    "stage": "controversy_map",
+                    "duration_ms": cm_ms,
+                    "metadata": state.metadata.get(
+                        "controversy_map", {"status": "skipped"}
+                    ),
+                }
+            )
 
         # Phase 2.5: post-loop quality gate (rerank, sufficiency continuation,
         # deep-mode counter-evidence hunt). The SSE emitter was closed when the
