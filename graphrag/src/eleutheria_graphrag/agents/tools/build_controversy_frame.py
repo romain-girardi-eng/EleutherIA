@@ -483,6 +483,28 @@ class BuildControversyFrameTool:
             return match.group(1).lower()
         return passage_id.lower()
 
+    def _greek_quality(self, pid: str) -> int:
+        """Score a passage by how much QUOTABLE original-language text it carries.
+
+        Returns the count of polytonic Greek (and basic Greek) characters in the
+        passage's ``text_content``, so passages with substantial continuous Greek
+        rank ahead of those with little or none. A metadata/reference-only block
+        (``**Reference:** … **Author:** …``) carries NO quotable original text and
+        is pushed to the bottom (``-1``) — quoting it verbatim would dump markdown
+        metadata into the answer instead of Greek.
+        """
+        row = passage_row_from_node(self._deps, pid)
+        if row is None:
+            return 0
+        text = row.get("text_content") or ""
+        if "**Reference:**" in text or "**Author:**" in text or "**Work:**" in text:
+            return -1
+        return sum(
+            1
+            for ch in text
+            if "Ͱ" <= ch <= "Ͽ" or "ἀ" <= ch <= "῿"
+        )
+
     def _round_robin_by_author(
         self, passage_ids: list[str], priority_authors: frozenset[str]
     ) -> list[str]:
@@ -509,6 +531,15 @@ class BuildControversyFrameTool:
         priority_keys = [k for k in order if _is_priority(k)]
         other_keys = [k for k in order if not _is_priority(k)]
         ranked_order = priority_keys + other_keys
+
+        # Within each author group, rank passages that carry QUOTABLE Greek/Latin
+        # text ahead of reference/metadata-only blocks, so the synthesis surfaces
+        # a passage it can actually quote in the original (not merely cite by
+        # locus). A passage whose text_content is a '**Reference:** … **Author:**'
+        # metadata block has nothing to quote — it must not win the slot over a
+        # sibling that carries real original text.
+        for key in ranked_order:
+            groups[key].sort(key=self._greek_quality, reverse=True)
 
         out: list[str] = []
         cursors = dict.fromkeys(ranked_order, 0)

@@ -59,7 +59,7 @@ _KEY_SEP = "\x1f"  # ASCII unit-separator — never appears in user text
 # persisted RAW node ids (b_…, scholarly_argument_…, concept_…) as citation
 # labels; bumping the version makes every such row MISS, so leaked ids can
 # never be replayed — a code-only, non-destructive purge (no TRUNCATE needed).
-_CACHE_SCHEMA_VERSION = "v2"
+_CACHE_SCHEMA_VERSION = "v3"
 
 # Reserved key inside ``reasoning_path_json`` used to piggyback the answer
 # provenance (metadata + claim_ledger) without a schema migration. Stripped
