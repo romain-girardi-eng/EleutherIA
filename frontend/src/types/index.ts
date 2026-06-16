@@ -198,6 +198,27 @@ export interface AncientCitation {
   cts_urn?: string;
 }
 
+/** Typed claim-ledger citation emitted by the GraphRAG backend.
+ *  Mirrors the backend `Citation` Pydantic model: a resolved id + a
+ *  human-readable, deleaked `label`, split by `layer`. */
+export interface PassageCitation {
+  ref?: string | null;
+  type?: string | null;
+  id?: string | null;
+  label?: string | null;
+  layer?: 'primary' | 'secondary' | string | null;
+  confidence?: number | null;
+  verified?: boolean;
+  cts_urn?: string | null;
+  doi?: string | null;
+  /** Optional structured fields the backend may attach for modern works. */
+  author?: string | null;
+  year?: number | null;
+  title?: string | null;
+  publisher?: string | null;
+  bibtex_key?: string | null;
+}
+
 export interface ModernBibliographyEntry {
   citation_key: string;
   author: string;
@@ -230,6 +251,11 @@ export interface GraphRAGResponse {
   };
   // New citation system fields
   sources?: SourceCitation[];
+  /** Typed, resolved claim-ledger citations from the backend (B-backend).
+   *  Each entry carries a real node/passage id + a deleaked display label,
+   *  split by `layer` (primary = ancient sources, secondary = modern
+   *  scholarship). Drives clickable inline badges and the References panel. */
+  passage_citations?: PassageCitation[];
   evidenceMap?: EvidenceMap;
   reasoning_path: {
     starting_nodes: Array<{

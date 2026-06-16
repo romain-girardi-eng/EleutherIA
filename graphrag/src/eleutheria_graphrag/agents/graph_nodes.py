@@ -47,6 +47,7 @@ from eleutheria_graphrag.agents.ancient_text_matching import (
     word_bounded_index as _word_bounded_index,
 )
 from eleutheria_graphrag.agents.dependencies import Deps
+from eleutheria_graphrag.agents.dialectical_synthesis import format_scholar_reference
 from eleutheria_graphrag.agents.graph_helpers import (
     node_integrity_status as _node_integrity_status,
 )
@@ -65,6 +66,8 @@ from eleutheria_graphrag.agents.state import (
     EvidenceBundle,
     EvidenceLayer,
     EvidenceSource,
+    GroundedPosition,
+    PassageRef,
     QueryComplexity,
     RAGState,
     ReasoningStep,
@@ -4903,7 +4906,35 @@ def _dialectical_citations(state: RAGState) -> list[Citation]:
       citations must be citable — not only ancient passages).
 
     Edge items are structural links, not citations. Deterministic, no LLM call.
+
+    Resolution discipline (GOAL-8, B1-B3): a citation ``label`` must NEVER be a
+    raw node id. We resolve each ``evidence_id`` against — in order — the
+    ALREADY-RESOLVED in-memory ControversyMap (``PassageRef`` /
+    ``GroundedPosition``, which carry author/work/holder/publication resolved at
+    map build), then the evidence bundles, then the in-memory KG node lookup. The
+    raw id is kept ONLY as ``Citation.id`` (clickability), never as the label.
     """
+    # B1 — resolution maps from the ALREADY-RESOLVED in-memory ControversyMap
+    # (mirror build_provenance_ledger: positions keyed by position_id, passages
+    # by passage_id over contested_passages + exegesis_units + provenance).
+    pos_by_id: dict[str, GroundedPosition] = {}
+    passage_by_id: dict[str, PassageRef] = {}
+    cmap = state.controversy_map
+    if cmap is not None:
+        for frame in cmap.frames:
+            for pos in frame.positions:
+                pos_by_id[pos.position_id] = pos
+                if pos.holder_node_id:
+                    pos_by_id[pos.holder_node_id] = pos
+            for pr in frame.contested_passages:
+                passage_by_id[pr.passage_id] = pr
+        for pr in cmap.exegesis_units:
+            passage_by_id[pr.passage_id] = pr
+        for pid, pr in cmap.provenance.items():
+            passage_by_id[pid] = pr
+    # node_lookup: in-memory KG node dicts/Evidence by id (no DB call).
+    node_lookup: dict[str, Evidence] = {ev.id: ev for ev in state.all_evidence()}
+
     citations: list[Citation] = []
     seen: set[str] = set()
     for item in state.claim_ledger:
@@ -4914,15 +4945,40 @@ def _dialectical_citations(state: RAGState) -> list[Citation]:
                 if ev_id in seen:
                     continue
                 seen.add(ev_id)
+                # B2 — passage label resolver: (a) PassageRef from the map,
+                # (b) evidence bundle, (c) node_lookup label, (d) raw id.
+                label = ev_id
+                cts_urn: str | None = None
+                pr = passage_by_id.get(ev_id)
+                if pr is not None:
+                    label = " ".join(
+                        part
+                        for part in (
+                            f"{pr.author}, {pr.work}".strip(", ").strip(),
+                            pr.canonical_ref.strip(),
+                        )
+                        if part
+                    ).strip()
+                    cts_urn = pr.cts_urn or None
+                if not label or label == ev_id:
+                    bundle_label = _bundle_label_from_id(state, ev_id)
+                    if bundle_label and bundle_label != ev_id:
+                        label = bundle_label
+                if (not label or label == ev_id) and ev_id in node_lookup:
+                    node_label = (node_lookup[ev_id].label or "").strip()
+                    if node_label:
+                        label = node_label
+                        cts_urn = cts_urn or node_lookup[ev_id].cts_urn
                 citations.append(
                     Citation(
                         ref=ev_id,
                         type="passage",
-                        id=ev_id,
-                        label=ev_id,
+                        id=ev_id,  # KEEP id for clickability
+                        label=label or ev_id,
                         layer=EvidenceLayer.PRIMARY,
                         confidence=item.confidence,
                         verified=True,
+                        cts_urn=cts_urn,
                         verification_note=(
                             "Dialectical synthesis: inline marker resolved to a "
                             "ControversyMap passage (cite-as-you-write provenance)"
@@ -4931,23 +4987,52 @@ def _dialectical_citations(state: RAGState) -> list[Citation]:
                 )
         elif item.support_type == "position":
             # A named modern scholar's position → a citable SECONDARY reference.
-            # quote_translation carries the formatted "<Holder>, <Publication>,
-            # <page>" reference (set by build_provenance_ledger); evidence_ids[0]
-            # is the holder/position node id.
+            # evidence_ids[0] is the holder/position node id.
             ev_id = item.evidence_ids[0] if item.evidence_ids else ""
             if not ev_id or ev_id in seen:
                 continue
             seen.add(ev_id)
-            label = (item.quote_translation or ev_id).strip() or ev_id
+            # B3 — position label resolver: (a) GroundedPosition from the map →
+            # format_scholar_reference; (b) publication metadata via node_lookup;
+            # (c) quote_translation (ledger-carried reference); (d) node label.
+            # NEVER let the label equal the raw id; NEVER invent a year/page.
+            label = ""
+            doi: str | None = None
+            pos = pos_by_id.get(ev_id)
+            if pos is not None:
+                if pos.holder:
+                    label = format_scholar_reference(pos)
+                if not label and pos.publication_node_id:
+                    label, doi = _resolve_publication(
+                        pos.publication_node_id, node_lookup
+                    )
+                if not label and pos.publication:
+                    label = pos.publication.strip()
+            if not label:
+                pub_label, pub_doi = _resolve_publication(ev_id, node_lookup)
+                label = pub_label
+                doi = doi or pub_doi
+            if not label and item.quote_translation:
+                qt = item.quote_translation.strip()
+                if qt and qt != ev_id:
+                    label = qt
+            if not label and ev_id in node_lookup:
+                node_label = (node_lookup[ev_id].label or "").strip()
+                if node_label and node_label != ev_id:
+                    label = node_label
+            # Degrade gracefully: if nothing resolved, OMIT rather than leak the id.
+            if not label or label == ev_id:
+                continue
             citations.append(
                 Citation(
                     ref=ev_id,
                     type="node",
-                    id=ev_id,
+                    id=ev_id,  # KEEP id for clickability
                     label=label,
                     layer=EvidenceLayer.SECONDARY,
                     confidence=item.confidence,
                     verified=True,
+                    doi=doi or None,
                     verification_note=(
                         "Dialectical synthesis: inline [P_*] marker resolved to a "
                         "ControversyMap modern-scholar position (scholar + "
@@ -4956,6 +5041,58 @@ def _dialectical_citations(state: RAGState) -> list[Citation]:
                 )
             )
     return citations
+
+
+def _resolve_publication(
+    node_id: str, node_lookup: dict[str, Evidence]
+) -> tuple[str, str | None]:
+    """Resolve a publication/scholar node id to a human reference + DOI.
+
+    Builds "Surname, Initials (year). Title. Place: Publisher." from whatever
+    KG metadata is present — NEVER inventing a missing year, page, or publisher
+    (degrade to "Author, Title" or just the node label). Returns ("", None) when
+    the id is absent or carries nothing human-readable, so the caller can OMIT
+    rather than leak a raw id. Treats an empty-string DOI as absent.
+    """
+    ev = node_lookup.get(node_id)
+    if ev is None:
+        return "", None
+    meta = ev.metadata or {}
+
+    def _g(*keys: str) -> str:
+        for k in keys:
+            v = meta.get(k)
+            if isinstance(v, str) and v.strip():
+                return v.strip()
+        return ""
+
+    author = _g("author", "scholar", "surname")
+    year = _g("year", "publication_year", "date")
+    title = _g("title", "work", "label") or (ev.label or "").strip()
+    publisher = _g("publisher")
+    place = _g("place", "city")
+    journal = _g("journal")
+    doi_raw = _g("doi")
+    doi = doi_raw or None
+
+    parts: list[str] = []
+    head = author
+    if year:
+        head = f"{head} ({year})" if head else f"({year})"
+    if head:
+        parts.append(head)
+    if title and title != author:
+        parts.append(title)
+    if journal:
+        parts.append(journal)
+    elif publisher:
+        parts.append(f"{place}: {publisher}" if place else publisher)
+    label = ". ".join(p for p in parts if p).strip()
+    if label and not label.endswith("."):
+        label += "."
+    if not label:
+        return "", doi
+    return label, doi
 
 
 def _grounding_score(requested_refs: set[str], citations: list[Citation]) -> int:

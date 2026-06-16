@@ -467,6 +467,48 @@ class BuildControversyFrameTool:
                 ids.add(tgt)
         return ids
 
+    # Bridge node types one hop carries the seed/position to its passages
+    # (argument --discusses--> concept --has_passage--> passage). Capped to
+    # bound latency: at most _MAX_BRIDGE_NODES bridges are walked, and the
+    # total passages returned never exceeds the caller's ``limit``.
+    _BRIDGE_NODE_TYPES: frozenset[str] = frozenset({"concept", "argument"})
+    _MAX_BRIDGE_NODES: int = 8
+
+    def _passage_ids_via_concepts(self, node_id: str, limit: int) -> list[str]:
+        """Two-hop passage discovery: node -> concept/argument bridge -> passage.
+
+        Walks outgoing edges from ``node_id`` to neighbours whose type is in
+        ``_BRIDGE_NODE_TYPES``, then for each bridge calls the existing
+        one-hop ``_passage_ids_for_node``. Returns a deduped, ORDERED list.
+        Fan-out is bounded: at most ``_MAX_BRIDGE_NODES`` bridges and at most
+        ``limit`` passages total — no live DB calls, pure KG adjacency.
+        """
+        if limit <= 0:
+            return []
+        bridge_ids: list[str] = []
+        bridge_seen: set[str] = set()
+        for edge in self._deps.outgoing_edges.get(node_id, []):
+            tgt = edge.get("target", "")
+            if not tgt or tgt in bridge_seen:
+                continue
+            tgt_type = (self._deps.node_lookup.get(tgt, {}).get("type") or "").lower()
+            if tgt_type in self._BRIDGE_NODE_TYPES:
+                bridge_seen.add(tgt)
+                bridge_ids.append(tgt)
+                if len(bridge_ids) >= self._MAX_BRIDGE_NODES:
+                    break
+
+        passage_ids: list[str] = []
+        seen: set[str] = set()
+        for bridge_id in bridge_ids:
+            for pid in sorted(self._passage_ids_for_node(bridge_id)):
+                if pid not in seen:
+                    seen.add(pid)
+                    passage_ids.append(pid)
+                    if len(passage_ids) >= limit:
+                        return passage_ids
+        return passage_ids
+
     def _contested_passages(
         self, seed_id: str, position_ids: set[str], limit: int
     ) -> list[PassageRef]:
@@ -483,6 +525,22 @@ class BuildControversyFrameTool:
                         break
             if len(passage_ids) >= limit:
                 break
+
+        # Second pass: many seed/position nodes have NO direct passage edge —
+        # their primary passages sit one concept/argument hop further
+        # (argument --discusses--> concept --has_passage--> passage). 1-hop
+        # direct passages stay FIRST (priority); only fill the remainder.
+        if len(passage_ids) < limit:
+            for nid in [seed_id, *sorted(position_ids)]:
+                remaining = limit - len(passage_ids)
+                if remaining <= 0:
+                    break
+                for pid in self._passage_ids_via_concepts(nid, remaining):
+                    if pid not in seen:
+                        seen.add(pid)
+                        passage_ids.append(pid)
+                        if len(passage_ids) >= limit:
+                            break
 
         refs: list[PassageRef] = []
         for pid in passage_ids:

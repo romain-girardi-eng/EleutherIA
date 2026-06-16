@@ -53,6 +53,14 @@ logger = logging.getLogger(__name__)
 _WHITESPACE_RE = re.compile(r"\s+")
 _KEY_SEP = "\x1f"  # ASCII unit-separator — never appears in user text
 
+# Cache schema version — folded into every cache key. Bump it whenever the
+# SHAPE/CONTENT of a stored payload changes in a way that makes older rows
+# replay incorrectly. v2 (GOAL-8): rows written before citation resolution
+# persisted RAW node ids (b_…, scholarly_argument_…, concept_…) as citation
+# labels; bumping the version makes every such row MISS, so leaked ids can
+# never be replayed — a code-only, non-destructive purge (no TRUNCATE needed).
+_CACHE_SCHEMA_VERSION = "v2"
+
 # Reserved key inside ``reasoning_path_json`` used to piggyback the answer
 # provenance (metadata + claim_ledger) without a schema migration. Stripped
 # back out on lookup so the replayed ``reasoning_path`` keeps its shape.
@@ -97,6 +105,10 @@ class AnswerCache:
         and a deep request must never silently reuse a fast answer (mirrors
         ``ResponseCache._key`` in graphrag_service). Rows written before the
         ``mode`` segment existed simply miss — no migration needed.
+
+        A trailing ``_CACHE_SCHEMA_VERSION`` segment lets us invalidate every
+        stored row at once by bumping a constant (GOAL-8: purge rows that
+        persisted leaked raw-id citation labels) — no ``TRUNCATE`` required.
         """
         parts = (
             AnswerCache.normalize_question(question)
@@ -106,6 +118,8 @@ class AnswerCache:
             + retrieval_mode
             + _KEY_SEP
             + (mode or "fast")
+            + _KEY_SEP
+            + _CACHE_SCHEMA_VERSION
         )
         return hashlib.sha256(parts.encode("utf-8")).hexdigest()
 

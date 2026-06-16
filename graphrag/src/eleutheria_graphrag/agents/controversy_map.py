@@ -100,7 +100,44 @@ async def assemble_controversy_map(
 
     cmap.order_frames()
     cmap.frames = cmap.frames[:max_frames]
+    _fold_author_passages_into_exegesis(cmap)
     return cmap
+
+
+def _fold_author_passages_into_exegesis(cmap: ControversyMap) -> None:
+    """Build the second passage pool the citation resolver expects (A3, GOAL-7).
+
+    For each :class:`GroundedPosition` carrying a resolvable named ancient
+    author, fold that author's already-fetched contested passages into
+    ``cmap.exegesis_units`` so they are reachable as standalone exegesis even
+    when a frame's holder is a modern scholar. Reuses passages already on the
+    frames — NO new DB calls — and dedupes against every contested passage and
+    against units already pooled.
+    """
+    contested_ids: set[str] = {
+        pref.passage_id for frame in cmap.frames for pref in frame.contested_passages
+    }
+    pooled_ids: set[str] = {pref.passage_id for pref in cmap.exegesis_units}
+    for frame in cmap.frames:
+        authors = {
+            (pos.holder or "").strip().lower()
+            for pos in frame.positions
+            if pos.holder_type == "ancient_author" and (pos.holder or "").strip()
+        }
+        if not authors:
+            continue
+        for pref in frame.contested_passages:
+            pid = pref.passage_id
+            if pid in pooled_ids:
+                continue
+            author = (pref.author or "").strip().lower()
+            if author and any(author in a or a in author for a in authors):
+                cmap.exegesis_units.append(pref)
+                pooled_ids.add(pid)
+    # exegesis is a standalone pool; do not re-add what is already contested.
+    cmap.exegesis_units = [
+        pref for pref in cmap.exegesis_units if pref.passage_id not in contested_ids
+    ]
 
 
 def attach_frames(

@@ -6,6 +6,11 @@ import { Zap, BookOpen, ChevronDown, ChevronUp, Clock, Cpu, FileText, ExternalLi
 import { useNavigate } from 'react-router-dom';
 import { CitationRenderer, SourcesPanel } from '../../components/CitationRenderer';
 import { CitationGenerator } from '../../components/CitationGenerator';
+import BibliographyPanel from '../../components/BibliographyPanel';
+import {
+  buildResolvedCitations,
+  buildBibliography,
+} from '../../utils/citationBibliography';
 import type { GraphRAGChatMessage } from '../../types';
 
 interface MessageBubbleProps {
@@ -17,7 +22,7 @@ interface MessageBubbleProps {
   onNodeCitationClick?: (nodeId: string) => void;
 }
 
-export default function MessageBubble({ message, onNodeClick, onCitationClick, onPassageCitationClick, onNodeCitationClick }: MessageBubbleProps) {
+export default function MessageBubble({ message, onCitationClick, onPassageCitationClick, onNodeCitationClick }: MessageBubbleProps) {
   const { t } = useTranslation();
   const isUser = message.role === 'user';
   const navigate = useNavigate();
@@ -25,23 +30,46 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
   const [showPassages, setShowPassages] = useState(false);
   const [expandedPassage, setExpandedPassage] = useState<number | null>(null);
   const [showCitationPanel, setShowCitationPanel] = useState(false);
+  const [showReferences, setShowReferences] = useState(false);
 
-  const allCitations = useMemo(() => {
-    if (!message.citations) return [];
-    const ancient = (message.citations.ancient_sources ?? []).map((s, i) => ({
-      id: `ancient_${i}`,
-      text: s,
-      source: s,
-      citation: s,
-    }));
-    const modern = (message.citations.modern_scholarship ?? []).map((s, i) => ({
-      id: `modern_${i}`,
-      text: s,
-      source: s,
-      citation: s,
-    }));
-    return [...ancient, ...modern];
-  }, [message.citations]);
+  // B9 — build citations from the backend's typed `passage_citations`
+  // (id/label/layer/type) so each carries a real node id + a resolved,
+  // deleaked label. Raw-id labels are dropped (buildResolvedCitations guard).
+  // The ancient/modern string lists are a fallback only.
+  const allCitations = useMemo(
+    () =>
+      buildResolvedCitations(
+        message.graphrag_response?.passage_citations,
+        message.citations?.ancient_sources,
+        message.citations?.modern_scholarship,
+      ),
+    [
+      message.graphrag_response?.passage_citations,
+      message.citations?.ancient_sources,
+      message.citations?.modern_scholarship,
+    ],
+  );
+
+  // B10 — secondary-layer (modern scholarship) entries feed the academic
+  // References panel; deduplicated + sorted by author.
+  const bibliography = useMemo(
+    () =>
+      buildBibliography(
+        allCitations.filter((c) => c.layer === 'secondary'),
+      ),
+    [allCitations],
+  );
+  const ctsUrns = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          allCitations
+            .map((c) => c.cts_urn)
+            .filter((u): u is string => typeof u === 'string' && u.length > 0),
+        ),
+      ),
+    [allCitations],
+  );
 
   const resp = message.graphrag_response;
   const verifiedPassages = resp?.verified_passages;
@@ -148,22 +176,12 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
 
               {/* Main answer content */}
               {(sources && sources.length > 0) ||
-              ((resp as unknown as { passage_citations?: unknown[] } | undefined)
-                ?.passage_citations?.length ?? 0) > 0 ? (
+              (resp?.passage_citations?.length ?? 0) > 0 ? (
                 <div className="prose prose-sm xl:prose-base max-w-none prose-stone">
                   <CitationRenderer
                     content={message.content}
                     sources={sources ?? []}
-                    passageCitations={
-                      ((resp as unknown as {
-                        passage_citations?: Array<{
-                          id?: string | null;
-                          ref?: string | null;
-                          type?: string | null;
-                          label?: string | null;
-                        }>;
-                      } | undefined)?.passage_citations) ?? []
-                    }
+                    passageCitations={resp?.passage_citations ?? []}
                     onSourceClick={(sourceIndex) => {
                       if (sourceIndex !== -1) {
                         onCitationClick(sourceIndex);
@@ -381,12 +399,68 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                         <SourcesPanel
                           sources={sources}
                           evidenceMap={resp?.evidenceMap}
+                          // B13 — a source click opens ONLY the right panel
+                          // (via the citation index). Dropping the direct
+                          // onNodeClick() avoids the double-panel: the right
+                          // panel highlights the node, the NodeDetailPanel
+                          // overlay no longer also pops.
                           onNodeClick={(nodeId) => {
                             const idx = sources.findIndex((s) => s.nodeId === nodeId);
-                            onNodeClick(nodeId);
                             if (idx !== -1) onCitationClick(idx);
                           }}
                           className="!border-t-0 !pt-0 !mt-2"
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
+
+              {/* B10 — References: real academic citations (Chicago / APA /
+                  Harvard / BibTeX / CTS-URN) built from resolved
+                  modern-scholarship + CTS entries. */}
+              {(bibliography.length > 0 || ctsUrns.length > 0) && (
+                <div className="border-t border-amber-200/40 pt-3">
+                  <button
+                    onClick={() => setShowReferences((p) => !p)}
+                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
+                  >
+                    <BookOpen className="w-4 h-4" />
+                    <span>
+                      {t('graphRagUi.messageBubble.references', {
+                        count: bibliography.length,
+                      })}
+                    </span>
+                    {showReferences ? (
+                      <ChevronUp className="w-4 h-4 ml-auto" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4 ml-auto" />
+                    )}
+                  </button>
+                  <AnimatePresence>
+                    {showReferences && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden mt-3"
+                      >
+                        <BibliographyPanel
+                          bibliography={bibliography}
+                          chicagoBibliography={bibliography
+                            .map((e) => e.full_citation_chicago)
+                            .join('\n\n')}
+                          apaBibliography={bibliography
+                            .map((e) => e.full_citation_apa ?? e.full_citation_chicago)
+                            .join('\n\n')}
+                          harvardBibliography={bibliography
+                            .map((e) => e.full_citation_harvard ?? e.full_citation_chicago)
+                            .join('\n\n')}
+                          bibtexBibliography={bibliography
+                            .map((e) => e.bibtex)
+                            .join('\n\n')}
+                          ctsUrns={ctsUrns}
                         />
                       </motion.div>
                     )}

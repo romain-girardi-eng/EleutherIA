@@ -348,6 +348,7 @@ export const extraResources = {
         originalText: 'Original',
         translation: 'Translation',
         sources: 'Sources ({{count}})',
+        references: 'References ({{count}})',
       },
       textVerification: {
         title: 'Unverified ancient text',
@@ -1341,6 +1342,7 @@ export const extraResources = {
         originalText: 'Original',
         translation: 'Traduction',
         sources: 'Sources ({{count}})',
+        references: 'Références ({{count}})',
       },
       textVerification: {
         title: 'Texte ancien non vérifié',
@@ -2336,6 +2338,7 @@ export const extraResources = {
         originalText: 'Original',
         translation: 'Übersetzung',
         sources: 'Quellen ({{count}})',
+        references: 'Literaturhinweise ({{count}})',
       },
       textVerification: {
         title: 'Nicht verifizierter antiker Text',
@@ -3300,6 +3303,7 @@ export const extraResources = {
         originalText: 'Originale',
         translation: 'Traduzione',
         sources: 'Fonti ({{count}})',
+        references: 'Riferimenti ({{count}})',
       },
       textVerification: {
         title: 'Testo antico non verificato',
@@ -4294,6 +4298,7 @@ export const extraResources = {
         originalText: 'Πρωτότυπο',
         translation: 'Μετάφραση',
         sources: 'Πηγές ({{count}})',
+        references: 'Αναφορές ({{count}})',
       },
       textVerification: {
         title: 'Μη επαληθευμένο αρχαίο κείμενο',
