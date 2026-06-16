@@ -211,11 +211,14 @@ async def test_flag_on_final_answer_is_dialectical_prose_not_template(
 async def test_flag_on_falls_back_to_legacy_when_synthesis_empty(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """Graceful fallback: empty dialectical prose → the legacy render runs (no crash)."""
+    """Last-resort fallback: when BOTH the full dialectical synthesis AND the
+    still-dialectical degraded hedge yield nothing (every LLM call empty), the
+    legacy render runs (no crash). The degraded hedge is the safety belt; only
+    when it too is empty does the legacy facet render become the last resort."""
     monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
 
     llm = AsyncMock()
-    llm.generate = AsyncMock(return_value="")  # synthesis yields nothing
+    llm.generate = AsyncMock(return_value="")  # synthesis AND degraded hedge empty
     llm.last_model_used = "accounts/fireworks/models/kimi-k2p6"
     llm.last_provider_used = "fireworks"
     deps = AsyncMock()
@@ -244,6 +247,65 @@ async def test_flag_on_falls_back_to_legacy_when_synthesis_empty(
     assert legacy_used["render"] is True
     assert state.metadata.get("render_answer_mode") != "dialectical"
     assert isinstance(answer.answer, str)
+
+
+@pytest.mark.asyncio
+async def test_synthesis_failure_uses_degraded_hedge_not_facet_template(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """SAFETY BELT: when the full dialectical synthesis fails/empties, the still-
+    dialectical degraded hedge over the ControversyMap is used — the legacy facet
+    template ("frames the issue as") is NEVER reached."""
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+
+    # Same grounded markers as DIALECTICAL_PROSE so the hedge resolves a citation
+    # and survives ProgrammaticVerify, but explicitly states a coverage limit.
+    degraded_prose = (
+        "Coverage was thin this run, so this is a hedge, not a survey. Bobzien holds "
+        "the ancients had no free-will problem [P_bobzien_no_problem: Bobzien, 1998 "
+        "p. 330], against Frede's dating of will to Epictetus [P_frede_epictetus: "
+        "Frede, 2011 p. 44], with the assent doctrine at [passage_cic_fat_41: "
+        "Cicero, De Fato 41]."
+    )
+
+    async def _generate(*args: object, **kwargs: object) -> str:
+        # The full synthesis fails (empty on every rung); the degraded hedge —
+        # whose prompt asks for a SHORT honest answer — returns grounded prose.
+        prompt = args[0] if args else kwargs.get("prompt", "")
+        if "SHORT, honest scholarly answer" in str(prompt):
+            return degraded_prose
+        return ""  # full synthesis: empty → triggers the safety belt
+
+    llm = AsyncMock()
+    llm.generate = AsyncMock(side_effect=_generate)
+    llm.last_model_used = "accounts/fireworks/models/deepseek-v4-pro"
+    llm.last_provider_used = "fireworks"
+    llm.last_reasoning_content = ""
+    deps = AsyncMock()
+    deps.llm = llm
+    deps.verifier_v2 = None
+
+    state = RAGState(question="big open debates about free will in antiquity")
+    agent = ScholarlyAgent(deps)
+
+    def _boom_fallback(_state):
+        raise AssertionError("legacy facet fallback used despite degraded hedge")
+
+    async def _boom_render(self, ctx):  # noqa: ARG001
+        raise AssertionError("legacy RenderGroundedAnswer used despite degraded hedge")
+
+    with (
+        patch.object(sa_mod, "_render_answer_fallback", _boom_fallback),
+        patch.object(sa_mod.RenderGroundedAnswer, "run", _boom_render),
+    ):
+        answer = await _drive_run_react(agent, state)
+
+    # The degraded hedge IS the answer — still dialectical, not the template.
+    assert "hedge" in answer.answer.lower()
+    for fp in _TEMPLATE_FINGERPRINTS:
+        assert fp not in answer.answer
+    assert state.metadata.get("render_answer_mode") == "dialectical"
+    assert state.metadata.get("scholar_synthesis", {}).get("status") == "degraded"
 
 
 @pytest.mark.asyncio

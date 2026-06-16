@@ -328,6 +328,33 @@ def scholar_tool_call_budget(budget_tier: str) -> int:
     return _SCHOLAR_TOOL_CALL_BUDGETS.get(budget_tier, 24)
 
 
+# The synthesis runs a TRUE thinking model (deepseek-v4-pro): ~150–220 s of
+# generation (large reasoning_content + answer) is normal, and a hard query can
+# push past that. The shared LLM client times out at 120 s, which would cancel a
+# healthy slow synthesis into the legacy facet-template fallback — the worst
+# outcome. Give the synthesis LLM call a dedicated, generous per-request HTTP
+# timeout (budget for up to ~300 s of generation) so it ALWAYS completes. This
+# overrides ONLY the synthesis call; every other LLM call keeps the 120 s client
+# timeout. ``ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT`` overrides (seconds, clamped).
+_SCHOLAR_SYNTHESIS_TIMEOUT_DEFAULT = 360.0
+
+
+def scholar_synthesis_timeout() -> float:
+    """Per-call HTTP timeout (seconds) for the dialectical synthesis LLM call.
+
+    Defaults to 360 s — comfortably above the ~150–220 s deepseek-v4-pro thinking
+    run and the ~300 s generation budget — so a slow-but-healthy synthesis is
+    NEVER cut into the facet-template fallback. Override with
+    ``ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT`` (clamped to [120, 900])."""
+    raw = os.getenv("ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT")
+    if raw:
+        try:
+            return max(120.0, min(900.0, float(raw)))
+        except ValueError:
+            pass
+    return _SCHOLAR_SYNTHESIS_TIMEOUT_DEFAULT
+
+
 def scholar_render_max_tokens(budget_tier: str) -> int:
     """Flag-ON synthesis render cap by tier (§6); clamped to [5000, 16000].
 
@@ -411,6 +438,10 @@ async def synthesize_dialectical(
                 max_tokens=max_tokens,
                 thinking_mode=(budget_tier == "deep"),
                 model_override=candidate,
+                # Dedicated generous per-call HTTP timeout: a slow thinking-model
+                # synthesis must NEVER be cut by the 120 s client timeout into the
+                # facet-template fallback (see scholar_synthesis_timeout docstring).
+                request_timeout=scholar_synthesis_timeout(),
             )
             prose = (raw or "").strip()
         except Exception as exc:  # pragma: no cover - defensive, never raise upstream
@@ -767,6 +798,7 @@ async def synthesize_degraded(cmap: ControversyMap, llm: Any) -> str:
             temperature=0.3,
             max_tokens=4000,
             model_override=model_id,
+            request_timeout=scholar_synthesis_timeout(),
         )
         return strip_reasoning_leak((raw or "").strip())
     except Exception as exc:  # pragma: no cover - defensive, never raise upstream

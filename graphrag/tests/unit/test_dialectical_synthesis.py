@@ -32,6 +32,7 @@ from eleutheria_graphrag.agents.dialectical_synthesis import (
     resolve_scholar_synthesis_model,
     scholar_render_max_tokens,
     scholar_synthesis_fallback_chain,
+    scholar_synthesis_timeout,
     scholar_tool_call_budget,
     serialize_controversy_map,
     strip_reasoning_leak,
@@ -416,6 +417,78 @@ def test_scholar_render_max_tokens_by_tier(monkeypatch: pytest.MonkeyPatch) -> N
 def test_scholar_render_max_tokens_clamped(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RENDER_MAX_TOKENS", "1000")
     assert scholar_render_max_tokens("standard") == 5000  # clamped to floor
+
+
+# ── synthesis timeout: a slow thinking model must NEVER hit the 120 s default ──
+
+
+def test_scholar_synthesis_timeout_default(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT", raising=False)
+    # 360 s default — comfortably above the ~150-220 s deepseek-v4-pro run and the
+    # ~300 s generation budget, and far above the shared 120 s client timeout that
+    # used to cut a healthy synthesis into the facet-template fallback.
+    assert scholar_synthesis_timeout() == 360.0
+    assert scholar_synthesis_timeout() > 300.0
+    assert scholar_synthesis_timeout() > 120.0
+
+
+def test_scholar_synthesis_timeout_env_override(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT", "300")
+    assert scholar_synthesis_timeout() == 300.0
+
+
+def test_scholar_synthesis_timeout_clamped(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT", "30")
+    assert scholar_synthesis_timeout() == 120.0  # clamped to floor
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT", "5000")
+    assert scholar_synthesis_timeout() == 900.0  # clamped to ceiling
+
+
+@pytest.mark.asyncio
+async def test_synthesize_dialectical_threads_generous_request_timeout(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The deepseek synthesis call must pass the dedicated generous
+    ``request_timeout`` so the underlying httpx 120 s client timeout can NEVER
+    cancel a slow-but-healthy thinking-model synthesis into the template."""
+    monkeypatch.delenv("ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT", raising=False)
+    llm = AsyncMock()
+    llm.generate.return_value = "prose"
+    llm.last_reasoning_content = ""
+    await synthesize_dialectical(state=None, cmap=_map(), llm=llm)
+    timeout = llm.generate.call_args.kwargs["request_timeout"]
+    assert timeout == 360.0
+    assert timeout > 120.0  # above the shared client timeout — the bug
+
+
+@pytest.mark.asyncio
+async def test_synthesize_dialectical_completes_under_slow_thinking_model() -> None:
+    """A ~200 s-equivalent thinking-model synthesis must complete, not be cut.
+
+    The stub LLM ``generate`` only returns AFTER asserting the caller granted a
+    request_timeout that exceeds a 200 s generation — i.e. the call would have
+    raised a ReadTimeout under the old 120 s default and dropped to the template.
+    """
+
+    async def _slow_generate(*_args: object, **kwargs: object) -> str:
+        granted = kwargs["request_timeout"]
+        assert isinstance(granted, float)
+        # A 200 s-equivalent run only survives if the granted budget exceeds it.
+        assert granted >= 200.0
+        return (
+            "Bobzien holds the ancients had no free-will problem "
+            "[P_bobzien_no_problem: Bobzien, 1998 p. 330]; the assent doctrine is at "
+            "[passage_cic_fat_41: Cicero, De Fato 41]."
+        )
+
+    llm = AsyncMock()
+    llm.generate.side_effect = _slow_generate
+    llm.last_reasoning_content = ""
+    result = await synthesize_dialectical(state=None, cmap=_map(), llm=llm)
+    assert result.prose  # synthesis produced prose — NOT cancelled to None
+    assert "frames the issue as" not in result.prose
 
 
 # ── scholar dialogue + completeness demanded by the prompt ───────────────────

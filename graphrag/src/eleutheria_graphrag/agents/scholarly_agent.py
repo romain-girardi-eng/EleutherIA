@@ -24,6 +24,8 @@ from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.dialectical_synthesis import (
     build_provenance_ledger,
     scholar_render_max_tokens,
+    scholar_synthesis_timeout,
+    synthesize_degraded,
     synthesize_dialectical,
 )
 from eleutheria_graphrag.agents.graph_nodes import (
@@ -212,6 +214,21 @@ def _stream_render_max_tokens() -> int:
     except ValueError:
         return 8000
     return max(2000, min(16000, value))
+
+
+def _dialectical_heartbeat_ceiling() -> float:
+    """Heartbeat ``max_wait`` ceiling for the Scholar-RAG dialectical synthesis.
+
+    The heartbeat wrapper cancels its wrapped task once this elapses. For the
+    dialectical synthesis that task is the slow deepseek-v4-pro LLM call, whose
+    own HTTP timeout is ``scholar_synthesis_timeout()`` (default 360 s). The
+    heartbeat ceiling MUST sit ABOVE that timeout — otherwise it would cancel a
+    healthy-but-slow synthesis BEFORE the LLM call can return, dropping the
+    pipeline into the legacy facet-template fallback (the worst outcome). We add
+    a margin for ledger build + prose chunking so the LLM timeout is always the
+    binding deadline, never the heartbeat. Flag-OFF paths keep the 240 s default.
+    """
+    return scholar_synthesis_timeout() + 45.0
 
 
 def _sufficiency_continuation_budget() -> int:
@@ -637,8 +654,12 @@ class ScholarlyAgent:
         ``DraftClaimLedger`` facet ledger so the verifier and the UI reference
         map index the dialectical answer, not the discarded template scaffolding.
 
-        Returns the prose on success, or ``None`` on failure / empty result so
-        the caller falls back to the legacy render. Never raises into the
+        On success returns the synthesis prose. If the full synthesis genuinely
+        fails or returns empty (e.g. every fallback rung errored), it does NOT
+        drop to the facet template: a SAFETY-BELT still-dialectical
+        :func:`synthesize_degraded` hedge over the same ControversyMap is
+        attempted, and only if THAT also fails is ``None`` returned (the caller's
+        legacy render is then the absolute last resort). Never raises into the
         pipeline."""
         cmap = state.controversy_map
         if cmap is None:  # defensive — caller already gated on this
@@ -654,13 +675,14 @@ class ScholarlyAgent:
                 ),
             )
         except Exception:  # noqa: BLE001 - never crash the pipeline on synthesis
-            logger.warning("Dialectical synthesis raised; legacy render", exc_info=True)
-            return None
+            logger.warning(
+                "Dialectical synthesis raised; trying degraded hedge", exc_info=True
+            )
+            return await self._synthesize_degraded_fallback(state, cmap, "raised")
 
         prose = (result.prose or "").strip()
         if not prose:
-            state.metadata["scholar_synthesis"] = {"status": "empty"}
-            return None
+            return await self._synthesize_degraded_fallback(state, cmap, "empty")
 
         state.raw_answer = prose
         # The ledger is a BYPRODUCT of the prose (reverses the legacy
@@ -690,6 +712,59 @@ class ScholarlyAgent:
             {
                 "mode": "dialectical",
                 "model_used": result.model_used,
+                "ledger_size": len(ledger),
+                "raw_excerpt": truncate_text(prose, 2000),
+            },
+        )
+        return prose
+
+    async def _synthesize_degraded_fallback(
+        self, state: RAGState, cmap: Any, reason: str
+    ) -> str | None:
+        """SAFETY BELT: when the full dialectical synthesis fails/empties, emit a
+        minimal STILL-DIALECTICAL hedge over the same ControversyMap rather than
+        dropping to the legacy facet template (the "frames the issue as" string).
+
+        :func:`synthesize_degraded` reasons over whatever frames assembled and
+        states its coverage limit in prose — never a node-paste, never a
+        template. On success it lands in the same render seam (``raw_answer`` +
+        a prose-derived ledger) and is marked ``render_answer_mode=dialectical``
+        so the caller does NOT run ``RenderGroundedAnswer``. Returns ``None`` only
+        if even the hedge fails (then the legacy render is the last resort).
+        Never raises into the pipeline."""
+        try:
+            prose = (await synthesize_degraded(cmap, self.deps.llm) or "").strip()
+        except Exception:  # noqa: BLE001 - never crash the pipeline on the hedge
+            logger.warning(
+                "Degraded dialectical hedge raised; legacy render", exc_info=True
+            )
+            prose = ""
+        if not prose:
+            state.metadata["scholar_synthesis"] = {
+                "status": "failed",
+                "reason": reason,
+            }
+            return None
+
+        state.raw_answer = prose
+        ledger = build_provenance_ledger(prose, cmap)
+        if ledger:
+            state.claim_ledger = ledger
+        # Still the dialectical render path — NOT the facet template — so the
+        # caller skips RenderGroundedAnswer. Marked degraded for observability.
+        state.metadata["render_answer_mode"] = "dialectical"
+        state.metadata["scholar_synthesis"] = {
+            "status": "degraded",
+            "reason": reason,
+            "ledger_size": len(ledger),
+            "degraded": True,
+        }
+        _trace_stage(
+            state,
+            "dialectical_synthesis",
+            {
+                "mode": "dialectical_degraded",
+                "reason": reason,
                 "ledger_size": len(ledger),
                 "raw_excerpt": truncate_text(prose, 2000),
             },
@@ -1772,7 +1847,7 @@ class ScholarlyAgent:
         *,
         holder: dict[str, Any],
         interval: float = 10.0,
-        max_wait: float = 240.0,
+        max_wait: float | None = None,
     ) -> AsyncIterator[str]:
         """Stream the dialectical answer for the Scholar-RAG render seam (M4).
 
@@ -1787,7 +1862,14 @@ class ScholarlyAgent:
         Sets ``holder['ok'] = True`` iff dialectical prose was produced and
         streamed; otherwise leaves it falsy so the caller falls through to the
         legacy streamed render. Never raises into the pipeline.
+
+        ``max_wait`` defaults to ``_dialectical_heartbeat_ceiling()`` (the
+        synthesis HTTP timeout + margin) so the heartbeat NEVER cancels a
+        healthy-but-slow thinking-model synthesis before its own LLM timeout —
+        which would drop us into the legacy facet-template fallback.
         """
+        if max_wait is None:
+            max_wait = _dialectical_heartbeat_ceiling()
         result_holder: dict[str, Any] = {}
         try:
             async for hb in self._await_with_heartbeat(

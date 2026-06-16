@@ -738,6 +738,7 @@ class LLMService:
         cache_ttl_seconds: int = 900,
         model_override: str | None = None,
         agent_id: str | None = None,
+        request_timeout: float | None = None,
     ) -> str:
         """
         Generate a response (non-streaming).
@@ -748,6 +749,11 @@ class LLMService:
             temperature: Sampling temperature
             max_tokens: Maximum tokens to generate
             thinking_mode: If True, prefer the heavier reasoning path for the active provider
+            request_timeout: Optional per-call HTTP timeout (seconds) that
+                overrides the shared client timeout for THIS request only. Used
+                by the Scholar-RAG dialectical synthesis (a slow thinking model
+                whose generation can exceed the default 120 s client timeout).
+                ``None`` keeps the client-level timeout (unchanged behaviour).
 
         Returns:
             Generated text
@@ -781,6 +787,7 @@ class LLMService:
                             cache_key=cache_key,
                             cache_prefix=cache_prefix,
                             cache_ttl_seconds=cache_ttl_seconds,
+                            request_timeout=request_timeout,
                         )
                     return await self._generate_openai_compatible(
                         override_provider,
@@ -793,6 +800,7 @@ class LLMService:
                         agent_id=agent_id,
                         response_json_schema=response_json_schema,
                         response_mime_type=response_mime_type,
+                        request_timeout=request_timeout,
                     )
                 except Exception as exc:
                     logger.warning(
@@ -840,6 +848,7 @@ class LLMService:
                             cache_key=cache_key,
                             cache_prefix=cache_prefix,
                             cache_ttl_seconds=cache_ttl_seconds,
+                            request_timeout=request_timeout,
                         )
                     return await self._generate_openai_compatible(
                         provider,
@@ -851,6 +860,7 @@ class LLMService:
                         request_config,
                         agent_id=agent_id,
                         response_json_schema=response_json_schema,
+                        request_timeout=request_timeout,
                         response_mime_type=response_mime_type,
                     )
                 except Exception as exc:
@@ -1141,6 +1151,7 @@ class LLMService:
         response_json_schema: dict[str, Any] | None = None,
         response_mime_type: str | None = None,
         schema_name: str = "structured_output",
+        request_timeout: float | None = None,
     ) -> str:
         """Generate using OpenAI-compatible API (Fireworks, Kimi, OpenRouter)."""
         client = await self._get_client()
@@ -1160,6 +1171,10 @@ class LLMService:
                 response_mime_type=response_mime_type,
                 schema_name=schema_name,
             ),
+            # Per-call timeout override: a slow thinking-model synthesis can run
+            # well past the shared 120 s client timeout. ``None`` keeps the
+            # client-level timeout (every other call site is unchanged).
+            timeout=request_timeout if request_timeout is not None else self.timeout,
         )
         response.raise_for_status()
         data = response.json()
@@ -1193,9 +1208,11 @@ class LLMService:
         cache_key: str | None = None,
         cache_prefix: str | None = None,
         cache_ttl_seconds: int = 900,
+        request_timeout: float | None = None,
     ) -> str:
         """Generate using Gemini API."""
         client = await self._get_client()
+        post_timeout = request_timeout if request_timeout is not None else self.timeout
         cached_content = None
         if cache_key and cache_prefix:
             cached_content = await self._ensure_gemini_cached_content(
@@ -1222,6 +1239,7 @@ class LLMService:
             f"{config['base_url']}/models/{config['model']}:generateContent",
             params={"key": api_key},
             json=body,
+            timeout=post_timeout,
         )
         response.raise_for_status()
         data = response.json()
@@ -1254,6 +1272,7 @@ class LLMService:
             f"{config['base_url']}/models/{config['model']}:generateContent",
             params={"key": api_key},
             json=retry_body,
+            timeout=post_timeout,
         )
         retry_response.raise_for_status()
         retry_data = retry_response.json()
