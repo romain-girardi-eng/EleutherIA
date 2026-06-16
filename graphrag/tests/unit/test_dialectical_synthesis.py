@@ -17,6 +17,8 @@ Covers:
 
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
+from typing import Any
 from unittest.mock import AsyncMock
 
 import pytest
@@ -26,6 +28,7 @@ from eleutheria_graphrag.agents.dialectical_synthesis import (
     DIALECTICAL_SYNTHESIS_TEMPLATE,
     SynthesisResult,
     build_provenance_ledger,
+    deterministic_map_hedge,
     format_scholar_reference,
     model_separates_reasoning,
     passes_content_gate,
@@ -38,6 +41,7 @@ from eleutheria_graphrag.agents.dialectical_synthesis import (
     strip_reasoning_leak,
     synthesize_degraded,
     synthesize_dialectical,
+    synthesize_dialectical_stream,
 )
 from eleutheria_graphrag.agents.state import (
     AnswerShape,
@@ -697,3 +701,146 @@ async def test_synthesize_uses_content_only_excludes_reasoning_content() -> None
     #    the "Matches the text" / "First, I will" lines IF present — but they are
     #    only in reasoning, never in content). The answer is byte-for-byte intact.
     assert model_separates_reasoning(result.model_used) is True
+
+
+# ── SYNTHESIS ROBUSTNESS: never-empty guarantee ──────────────────────────────
+#
+# Root cause: Fireworks deepseek-v4-pro shares max_tokens between reasoning_content
+# and content; a long reasoning run eats the whole budget → finish_reason=length
+# with ZERO content deltas → empty prose. The guarantees under test:
+#   1. the streaming synthesis advances to the kimi-k2p7-code CONTENT rung (which
+#      gives its whole budget to content) and returns NON-EMPTY prose;
+#   2. synthesize_degraded resolves to kimi-k2p7-code (NOT deepseek), so the
+#      safety-belt cannot empty the same budget-shared way;
+#   3. deterministic_map_hedge yields non-empty grounded prose from a populated map
+#      with NO LLM call at all (the absolute floor).
+
+
+class _BudgetEatenThenContentLLM:
+    """Stub LLM: the deepseek rung emits ONLY reasoning + empty content (finish
+    reason 'length'); its answer-only re-call also empties; the kimi rung WRITES.
+
+    No live LLM call. ``stream_segmented`` is the segmented stream the streaming
+    synthesis drives; ``generate`` is the targeted answer-only re-call.
+    """
+
+    def __init__(self, kimi_answer: str) -> None:
+        self._kimi_answer = kimi_answer
+        self.last_reasoning_content = ""
+        self.last_finish_reason = ""
+        self.last_model_used = ""
+        self.stream_calls: list[str] = []
+        self.generate_calls: list[str] = []
+
+    async def stream_segmented(
+        self, _prompt: str, **kwargs: Any
+    ) -> AsyncIterator[tuple[str, str]]:
+        model_override = kwargs.get("model_override")
+        self.stream_calls.append(model_override or "")
+        self.last_model_used = model_override or ""
+        # Mirror the real segmented stream: reset the reasoning side-channel and
+        # finish_reason at the start of every call.
+        self.last_reasoning_content = ""
+        self.last_finish_reason = ""
+        if model_override == "accounts/fireworks/models/deepseek-v4-pro":
+            # Budget eaten by reasoning: reasoning deltas only, NO content, and the
+            # stream truncated at max_tokens (finish_reason=length).
+            for delta in (
+                "Let me map the fault lines. ",
+                "Weighing Bobzien vs Frede. ",
+            ):
+                self.last_reasoning_content += delta
+                yield ("reasoning", delta)
+            self.last_finish_reason = "length"
+            return
+        # The content (kimi) rung: gives its whole budget to content → real prose.
+        self.last_finish_reason = "stop"
+        for delta in (self._kimi_answer,):
+            yield ("answer", delta)
+
+    async def generate(self, _prompt: str, **kwargs: Any) -> str:
+        # The answer-only re-call on the deepseek rung: it STILL empties here, so
+        # the loop must advance to the kimi rung (the real guarantee).
+        model_override = kwargs.get("model_override")
+        self.generate_calls.append(model_override or "")
+        self.last_model_used = model_override or ""
+        return ""
+
+
+@pytest.mark.asyncio
+async def test_stream_never_empty_advances_to_content_rung_when_deepseek_only_reasons() -> (
+    None
+):
+    """deepseek emits ONLY reasoning + empty content (finish_reason=length) and its
+    answer-only re-call also empties; the streaming synthesis MUST advance to the
+    kimi-k2p7-code content rung and return NON-EMPTY prose — never ''."""
+    kimi_answer = (
+        "The central fault line concerns whether antiquity possessed a concept of "
+        "the will at all. Bobzien (1998: 330) holds the ancients had no free-will "
+        "problem [P_bobzien_no_problem: Bobzien 1998 p. 330], reading the Stoic "
+        "debate as one about fate and causation rather than a faculty of volition. "
+        "Frede (2011: 44), by contrast, dates the emergence of the will to Epictetus "
+        "[P_frede_epictetus: Frede 2011 p. 44], finding in prohairesis the first "
+        "genuine theory of a self-determining will. The two readings clash directly "
+        "[edge: opposes P_bobzien_no_problem->P_frede_epictetus] over how to construe "
+        "Cicero's report of Stoic assent "
+        "[passage_cic_fat_41: Cicero, De Fato 41], which each side mobilises for "
+        "incompatible conclusions about the antiquity of the problem."
+    )
+    assert len(kimi_answer) >= 400  # a genuine finished answer, not 'too thin'
+    llm = _BudgetEatenThenContentLLM(kimi_answer)
+
+    result = await synthesize_dialectical_stream(state=None, cmap=_map(), llm=llm)
+
+    # the guarantee: NON-EMPTY prose, sourced from the content rung
+    assert result.prose == kimi_answer
+    assert result.prose != ""
+    assert result.model_used == "accounts/fireworks/models/kimi-k2p7-code"
+    # the deepseek rung was tried (stream) AND its answer-only re-call fired before
+    # advancing to kimi (the targeted recovery, then the content-rung guarantee)
+    assert llm.stream_calls[0] == "accounts/fireworks/models/deepseek-v4-pro"
+    assert llm.generate_calls == ["accounts/fireworks/models/deepseek-v4-pro"]
+    assert "accounts/fireworks/models/kimi-k2p7-code" in llm.stream_calls
+
+
+@pytest.mark.asyncio
+async def test_degraded_uses_content_model_not_deepseek() -> None:
+    """The safety-belt must NOT resolve to deepseek (which empties the same
+    budget-shared way) — it uses the kimi-k2p7-code content model."""
+    llm = AsyncMock()
+    llm.generate.return_value = "A short, honest hedge over the assembled frames."
+    await synthesize_degraded(_map(), llm)
+    model_override = llm.generate.call_args.kwargs["model_override"]
+    assert model_override == "accounts/fireworks/models/kimi-k2p7-code"
+    assert model_override != "accounts/fireworks/models/deepseek-v4-pro"
+
+
+def test_deterministic_map_hedge_is_non_empty_and_grounded() -> None:
+    """The absolute floor: a populated map yields non-empty, attributed prose with
+    resolvable inline markers and NO LLM call."""
+    cmap = _map()
+    hedge = deterministic_map_hedge(cmap)
+    assert hedge  # NON-EMPTY for a populated map
+    # carries the contending holders + their markers + the edge + the quoted passage
+    assert "Bobzien" in hedge and "Frede" in hedge
+    assert "[P_bobzien_no_problem" in hedge and "[P_frede_epictetus" in hedge
+    assert "[edge: opposes P_bobzien_no_problem->P_frede_epictetus]" in hedge
+    assert "[passage_cic_fat_41" in hedge
+    assert "adsensiones igitur, quas prius docui..." in hedge  # quoted original
+    # the prose-derived ledger resolves the markers (it is a real, indexable answer)
+    ledger = build_provenance_ledger(hedge, cmap)
+    assert any(
+        i.support_type == "passage" and i.status == ClaimStatus.SUPPORTED
+        for i in ledger
+    )
+
+
+def test_deterministic_map_hedge_empty_for_empty_map() -> None:
+    """An empty map (no frames/positions/passages) yields '' so the caller can
+    fall through to the legacy render (there is nothing to render)."""
+    from eleutheria_graphrag.agents.state import AnswerShape as _Shape
+
+    empty: Any = ControversyMap(
+        question_frame="q?", shape=_Shape.SURVEY_OF_DEBATES, frames=[]
+    )
+    assert deterministic_map_hedge(empty) == ""

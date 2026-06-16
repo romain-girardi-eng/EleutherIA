@@ -81,7 +81,9 @@ async def assemble_controversy_map(
             continue
         seen_seeds.add(seed_id)
 
-        frame_result = await build_frame_tool.execute({"seed_id": seed_id})
+        frame_result = await build_frame_tool.execute(
+            {"seed_id": seed_id, "max_passages": 12}
+        )
         frame = getattr(frame_result, "frame", None)
         if frame is None:
             cmap.coverage_gaps.append(

@@ -176,6 +176,13 @@ class LLMService:
         # leaking into the answer. Empty for non-reasoning models (k2p6, gemini).
         # Set on every successful generate()/stream() call (reset at the start).
         self.last_reasoning_content: str = ""
+        # The OpenAI ``finish_reason`` of the most recent stream: ``"stop"`` (the
+        # model finished its answer), ``"length"`` (max_tokens hit — for a thinking
+        # model whose reasoning_content shares the budget this is the empty-content
+        # signature: the budget was eaten by reasoning before any answer delta), or
+        # "" (never set / non-streaming). Read by the synthesis robustness path to
+        # detect "length-truncated while reasoning" and trigger targeted recovery.
+        self.last_finish_reason: str = ""
         self.last_token_usage: TokenUsage | None = None
         self._token_usage_callback: TokenUsageCallback | None = None
         self._prompt_cache_names: dict[str, str] = {}
@@ -1382,6 +1389,7 @@ class LLMService:
         # accumulates ``reasoning_content`` deltas into it (answer chunks only are
         # yielded). Gemini streaming never sets it.
         self.last_reasoning_content = ""
+        self.last_finish_reason = ""
         # --- Model override: bypass the normal provider loop (see generate). ---
         if model_override:
             override_provider, override_model = self._resolve_model_override(
@@ -1566,6 +1574,11 @@ class LLMService:
                         choices = chunk.get("choices") or []
                         if not choices:
                             continue
+                        # Stash the finish_reason so a "length"-truncated stream
+                        # (budget eaten by reasoning → no content) is detectable.
+                        finish_reason = choices[0].get("finish_reason")
+                        if finish_reason:
+                            self.last_finish_reason = finish_reason
                         delta = choices[0].get("delta", {})
                         # Thinking models stream their chain-of-thought as
                         # ``reasoning_content`` deltas — accumulate them on the
@@ -1669,6 +1682,7 @@ class LLMService:
         provider error after first token (the caller cannot restart mid-stream).
         """
         self.last_reasoning_content = ""
+        self.last_finish_reason = ""
         provider, model = self._resolve_model_override(
             model_override or self.preferred_provider.value
         )
@@ -1768,6 +1782,12 @@ class LLMService:
                 choices = chunk.get("choices") or []
                 if not choices:
                     continue
+                # Stash the finish_reason: a "length"-truncated stream with no
+                # answer delta is the budget-eaten-by-reasoning signature the
+                # synthesis robustness path keys its targeted recovery on.
+                finish_reason = choices[0].get("finish_reason")
+                if finish_reason:
+                    self.last_finish_reason = finish_reason
                 delta = choices[0].get("delta", {})
                 # Reasoning deltas first (accumulate on the side-channel AND
                 # surface live), then answer deltas — NEVER folded together.

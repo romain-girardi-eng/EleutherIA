@@ -209,6 +209,15 @@ _SCHOLAR_SYNTHESIS_DEFAULT = "accounts/fireworks/models/deepseek-v4-pro"
 # k2p6 (non-reasoning instruct) is kept ONLY for the agent ReAct retrieval loop,
 # not for synthesis — it inlines its scratchpad into content (the root-cause bug).
 _SCHOLAR_SYNTHESIS_AGENT_LOOP_MODEL = "accounts/fireworks/models/kimi-k2p7-code"
+# The SECOND rung of the synthesis chain: a CONTENT (non-reasoning) model. deepseek
+# shares its max_tokens between reasoning_content and content, so a long reasoning
+# run can eat the whole budget → finish_reason=length with ZERO content deltas →
+# empty prose. kimi-k2p7-code does NOT separate reasoning (model_separates_reasoning
+# is False), so the entire budget flows to ``content`` — it RELIABLY WRITES PROSE.
+# It is the real empty-answer guarantee: an empty deepseek result advances here.
+# Its inline scratchpad (if any) is cleaned by strip_reasoning_leak (runs because
+# model_separates_reasoning(kimi-k2p7-code) is False).
+_SCHOLAR_SYNTHESIS_CONTENT_FALLBACK = "accounts/fireworks/models/kimi-k2p7-code"
 _SCHOLAR_SYNTHESIS_GEMINI_FALLBACK = "gemini-3.1-pro-preview"
 
 # Fireworks reasoning models that return their chain-of-thought in a SEPARATE
@@ -264,10 +273,13 @@ def scholar_synthesis_fallback_chain() -> list[str]:
     """The synthesis ``model_override`` fallback chain (ARCHITECTURE §K2.7).
 
     TODAY, Fireworks-only (Romain's constraint — no Moonshot rung). The live chain
-    is ``<resolved deepseek-v4-pro> -> fireworks/deepseek-v4-pro -> gemini-3.1-pro-preview``:
+    is ``<resolved deepseek-v4-pro> -> fireworks/kimi-k2p7-code -> gemini-3.1-pro-preview``:
     a true thinking head (clean answer in ``content``, scratch in ``reasoning_content``)
-    that degrades to Gemini, never to Moonshot. When kimi-k2-thinking is enabled on
-    this Fireworks account, the resolved head simply becomes that id.
+    whose budget-eaten empty result advances to a CONTENT (non-reasoning) model that
+    gives its WHOLE budget to ``content`` and reliably writes prose — the real
+    empty-answer guarantee — before degrading to Gemini. Never Moonshot. When
+    kimi-k2-thinking is enabled on this Fireworks account, the resolved head simply
+    becomes that id.
 
     The caller (M6 synthesis node) tries each override in order; each is a string
     ``LLMService.generate(model_override=...)`` already routes (Fireworks ids by
@@ -275,7 +287,7 @@ def scholar_synthesis_fallback_chain() -> list[str]:
     """
     chain = [
         resolve_scholar_synthesis_model(),
-        _SCHOLAR_SYNTHESIS_DEFAULT,
+        _SCHOLAR_SYNTHESIS_CONTENT_FALLBACK,
         _SCHOLAR_SYNTHESIS_GEMINI_FALLBACK,
     ]
     seen: set[str] = set()
@@ -357,15 +369,19 @@ def scholar_synthesis_timeout() -> float:
 
 
 def scholar_render_max_tokens(budget_tier: str) -> int:
-    """Flag-ON synthesis render cap by tier (§6); clamped to [5000, 16000].
+    """Flag-ON synthesis render cap by tier (§6); clamped to [5000, 20000].
 
     Streaming and blocking paths MUST agree on this value (§6). Overridable with
-    ``ELEUTHERIA_SCHOLAR_RENDER_MAX_TOKENS``.
+    ``ELEUTHERIA_SCHOLAR_RENDER_MAX_TOKENS``. The ceiling was raised 16000→20000 so
+    deepseek (which shares max_tokens between reasoning_content and content) has
+    more room before a long reasoning run truncates the answer to empty — but the
+    real empty-answer guarantee is the kimi content-model fallback rung and the
+    deterministic map hedge, not this headroom.
     """
     raw = os.getenv("ELEUTHERIA_SCHOLAR_RENDER_MAX_TOKENS")
     if raw:
         try:
-            return max(5000, min(16000, int(raw)))
+            return max(5000, min(20000, int(raw)))
         except ValueError:
             pass
     return _SCHOLAR_RENDER_TOKENS.get(budget_tier, 8000)
@@ -492,6 +508,61 @@ async def synthesize_dialectical(
 
 ReasoningCallback = Callable[[str], Awaitable[None]]
 
+# A stream is "too thin" below this many chars: it almost certainly truncated
+# mid-thought (budget eaten by reasoning) rather than a finished short answer.
+_THIN_PROSE_FLOOR = 400
+
+# Appended to the user prompt on the targeted NON-STREAMING re-call when a thinking
+# model burned its whole budget on reasoning_content and emitted no/too-little
+# answer. It orders the model to STOP reasoning and emit the finished essay now —
+# so the answer (not the scratchpad) consumes the budget on this second pass.
+_STOP_REASONING_DIRECTIVE = (
+    "\n\n------------------------------------------------------------------------------"
+    "\nSTOP REASONING. Output ONLY the finished scholarly essay now, in full, with the "
+    "inline [P_*]/[edge:*]/[passage_*] markers. Do not think further."
+)
+
+
+async def _recall_answer_only(
+    llm: Any,
+    candidate: str,
+    user_prompt: str,
+    *,
+    max_tokens: int,
+) -> str:
+    """ONE targeted NON-STREAMING re-call on ``candidate`` to force a finished essay.
+
+    The budget-eaten recovery: when a thinking model burned its whole max_tokens on
+    ``reasoning_content`` and emitted no/too-thin ``content``, re-ask the SAME model
+    in blocking mode with an explicit STOP-REASONING directive appended and a
+    generous answer budget, so the budget now flows to the answer. Returns the
+    cleaned prose (empty on any error — the caller then advances to the next rung).
+    Never raises into the pipeline.
+    """
+    try:
+        raw = await llm.generate(
+            user_prompt + _STOP_REASONING_DIRECTIVE,
+            system_prompt=DIALECTICAL_SYNTHESIS_SYSTEM,
+            temperature=0.3,
+            # A generous answer budget so the essay (not the scratchpad) fills it.
+            max_tokens=max(max_tokens, 8000),
+            model_override=candidate,
+            request_timeout=scholar_synthesis_timeout(),
+        )
+    except Exception as exc:  # pragma: no cover - defensive, never raise upstream
+        logger.warning(
+            "answer-only synthesis re-call failed on %s (%s); advancing rung",
+            candidate,
+            exc,
+        )
+        return ""
+    recovered = (raw or "").strip()
+    if recovered and not model_separates_reasoning(
+        getattr(llm, "last_model_used", "") or candidate
+    ):
+        recovered = strip_reasoning_leak(recovered)
+    return recovered
+
 
 async def synthesize_dialectical_stream(
     state: Any,
@@ -568,13 +639,42 @@ async def synthesize_dialectical_stream(
         # Salvage whatever streamed BEFORE the error: a late-stream failure (e.g.
         # a malformed final chunk) must never discard a fully-streamed answer.
         prose = "".join(answer_parts).strip()
+        candidate_reasoning = "".join(reasoning_parts) or (
+            getattr(llm, "last_reasoning_content", "") or ""
+        )
+
+        # Budget-eaten signature: a thinking model (deepseek) shares max_tokens
+        # between reasoning_content and content. When reasoning ran long, the
+        # answer comes back EMPTY or TOO THIN while reasoning is non-empty (and
+        # finish_reason == "length"). One targeted NON-STREAMING re-call on the
+        # SAME candidate, ordering it to STOP reasoning and emit the essay now,
+        # recovers deepseek's quality before advancing to the content rung.
+        too_thin = len(prose) < _THIN_PROSE_FLOOR
+        had_reasoning = bool(candidate_reasoning.strip())
+        budget_eaten = (getattr(llm, "last_finish_reason", "") == "length") or (
+            too_thin and had_reasoning
+        )
+        if too_thin and had_reasoning and budget_eaten:
+            recovered = await _recall_answer_only(
+                llm,
+                candidate,
+                user_prompt,
+                max_tokens=max_tokens,
+            )
+            if recovered:
+                logger.info(
+                    "dialectical synthesis recovered %d chars via answer-only "
+                    "re-call on %s (reasoning had eaten the budget)",
+                    len(recovered),
+                    candidate,
+                )
+                prose = recovered
+
         if prose:
             model_id = candidate
             # Prefer the accumulated reasoning deltas; fall back to the
             # side-channel the segmented stream also populates.
-            reasoning_trace = "".join(reasoning_parts) or (
-                getattr(llm, "last_reasoning_content", "") or ""
-            )
+            reasoning_trace = candidate_reasoning
             break
 
     model_used = getattr(llm, "last_model_used", "") or model_id
@@ -921,7 +1021,11 @@ async def synthesize_degraded(cmap: ControversyMap, llm: Any) -> str:
         f"run (gaps: {gaps}). Attribute every position; ground in quoted text where "
         "available; do not pad. This is a scholar's hedge, not a survey."
     )
-    model_id = resolve_scholar_synthesis_model()
+    # The safety-belt must NOT empty the same way the head did. deepseek shares its
+    # max_tokens between reasoning_content and content, so a hedge on deepseek can
+    # be eaten by reasoning exactly like the head. Use the CONTENT (non-reasoning)
+    # model — its whole budget goes to ``content`` — with a real answer budget.
+    model_id = _SCHOLAR_SYNTHESIS_CONTENT_FALLBACK
     try:
         raw = await llm.generate(
             degraded_prompt,
@@ -935,3 +1039,113 @@ async def synthesize_degraded(cmap: ControversyMap, llm: Any) -> str:
     except Exception as exc:  # pragma: no cover - defensive, never raise upstream
         logger.warning("degraded synthesis call failed (%s); empty result", exc)
         return ""
+
+
+# ── 7. Deterministic map-derived hedge — the FINAL non-empty guarantee ────────
+#
+# The absolute floor of the synthesis-robustness guarantee: NO LLM call. When a
+# populated ControversyMap exists but every LLM rung AND the degraded hedge came
+# back empty (e.g. all Fireworks rungs 429/error and Gemini 429s too), this
+# serialises the map's contending positions + their grounded passages into
+# readable, attributed prose DIRECTLY — so a populated map ALWAYS yields a real
+# answer instead of falling through to the legacy bare "insufficient evidence"
+# sentence. Carries the inline [P_*]/[edge:*]/[passage_*] markers so
+# build_provenance_ledger indexes it exactly like an LLM answer. Returns "" only
+# for a genuinely empty map (no frames, no positions, no exegesis units).
+
+
+def _hedge_passage_block(pr: PassageRef) -> str:
+    """One quoted-passage line for the deterministic hedge, with its marker."""
+    who = ", ".join(p for p in (pr.author, pr.canonical_ref or pr.work) if p)
+    marker = (
+        f"[passage_{pr.passage_id}: {who}]" if who else f"[passage_{pr.passage_id}]"
+    )
+    original = (pr.original_text or "").strip()
+    english = (pr.english_text or "").strip()
+    if original and english:
+        return f'  {marker} "{original}" — "{english}"'
+    if original:
+        return f"  {marker} {original}"
+    if english:
+        return f"  {marker} {english}"
+    return f"  {marker}"
+
+
+def deterministic_map_hedge(cmap: ControversyMap) -> str:
+    """Build a non-empty, attributed scholarly hedge directly from ``cmap`` — NO LLM.
+
+    The final guarantee in the robustness chain: a populated map ALWAYS yields a
+    real answer. Serialises each frame's contending positions (named holders, with
+    their [P_*] markers and the [edge:*] disagreements between them) and the
+    grounded primary passages they argue over (quoted original + English, with
+    [passage_*] markers) into readable prose. Honest about being a structural
+    fallback rendered without the synthesis model. Returns "" for an empty map.
+    """
+    has_content = any(
+        frame.positions or frame.contested_passages for frame in cmap.frames
+    ) or bool(cmap.exegesis_units)
+    if not has_content:
+        return ""
+
+    lines: list[str] = []
+    question = (cmap.question_frame or "").strip()
+    if question:
+        lines.append(
+            f"On the question — {question} — the controversy map surfaced the "
+            "following contending scholarly positions and the primary texts they "
+            "argue over. (This answer is a structural rendering of the assembled "
+            "evidence; the synthesis model was unavailable on this run, so the "
+            "fault lines are stated without further interpretive weighing.)"
+        )
+    else:
+        lines.append(
+            "The controversy map surfaced the following contending scholarly "
+            "positions and the primary texts they argue over. (This answer is a "
+            "structural rendering of the assembled evidence; the synthesis model "
+            "was unavailable on this run.)"
+        )
+
+    for frame in cmap.frames:
+        if not (frame.positions or frame.contested_passages):
+            continue
+        title = (frame.title or frame.frame_id or "Fault line").strip()
+        lines.append("")
+        lines.append(f"## {title}")
+
+        for pos in frame.positions:
+            holder = (pos.holder or "a scholar").strip()
+            marker = f"[P_{pos.position_id}: {format_scholar_reference(pos) or holder}]"
+            claim = (pos.claim or "").strip()
+            if claim:
+                lines.append(f"- {holder} holds that {claim} {marker}")
+            else:
+                lines.append(
+                    f"- {holder} is recorded as a contending position {marker}"
+                )
+
+        for link in frame.links:
+            frm = (link.from_holder or link.from_id).strip()
+            to = (link.to_holder or link.to_id).strip()
+            rel = (link.relation or "opposes").strip()
+            edge_marker = f"[edge: {rel} P_{link.from_id}->P_{link.to_id}]"
+            gloss = f" — {link.gloss.strip()}" if link.gloss else ""
+            lines.append(f"  Here {frm} {rel} {to}{gloss} {edge_marker}")
+
+        for pr in frame.contested_passages:
+            lines.append(_hedge_passage_block(pr))
+
+    if cmap.exegesis_units:
+        lines.append("")
+        lines.append("## Further primary evidence")
+        for pr in cmap.exegesis_units:
+            lines.append(_hedge_passage_block(pr))
+
+    if cmap.coverage_gaps:
+        lines.append("")
+        gaps = "; ".join(g for g in cmap.coverage_gaps if g)
+        lines.append(
+            f"Coverage limit: the following fault lines were thinly retrieved on "
+            f"this run — {gaps}."
+        )
+
+    return "\n".join(lines).strip()
