@@ -63,6 +63,16 @@ function buildMatchRegex(query: string): RegExp | null {
   }
 }
 
+/** Escape HTML special chars so untrusted document text can be safely injected. */
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /** Count how many matches exist in a string for a given regex (resets lastIndex). */
 function countMatches(text: string, regex: RegExp): number {
   regex.lastIndex = 0;
@@ -193,7 +203,7 @@ function PdfViewer({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const pageRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const [activeMarkEl, setActiveMarkEl] = useState<Element | null>(null);
-  const [renderedPages, setRenderedPages] = useState<Set<number>>(new Set());
+  const [textLayerPages, setTextLayerPages] = useState<Set<number>>(new Set());
 
   // Stable file object so react-pdf doesn't reload on re-renders
   const file = useMemo(() => ({ data: fileData }), [fileData]);
@@ -201,40 +211,39 @@ function PdfViewer({
   // Build regex for customTextRenderer
   const matchRegex = useMemo(() => buildMatchRegex(query), [query]);
 
-  // When active match changes: scroll to the page, then find the active mark element
+  // When the active match changes, scroll its page into view.
   useEffect(() => {
     if (!activeMatch) {
       setActiveMarkEl(null);
       return;
     }
     const pageEl = pageRefs.current[activeMatch.page];
-    if (pageEl && scrollContainerRef.current) {
+    if (pageEl) {
       pageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-    // Wait for text layer to settle then locate the right mark
-    const tid = window.setTimeout(() => {
-      const pageEl2 = pageRefs.current[activeMatch.page];
-      if (!pageEl2) return;
-      const marks = pageEl2.querySelectorAll('mark.elx-hl');
-      const target = marks[activeMatch.indexOnPage] ?? marks[0] ?? null;
-      setActiveMarkEl(target);
-      if (target && scrollContainerRef.current) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }, 80);
-    return () => window.clearTimeout(tid);
   }, [activeMatch]);
 
-  // Re-locate mark when a new page finishes rendering
+  // Locate the active <mark> only once the text layer (which contains the marks)
+  // has actually rendered for that page. react-pdf renders the text layer
+  // asynchronously after the canvas, so this is the only reliable trigger.
   useEffect(() => {
-    if (!activeMatch) return;
-    if (!renderedPages.has(activeMatch.page)) return;
+    if (!activeMatch) {
+      setActiveMarkEl(null);
+      return;
+    }
+    if (!textLayerPages.has(activeMatch.page)) return;
     const pageEl = pageRefs.current[activeMatch.page];
     if (!pageEl) return;
-    const marks = pageEl.querySelectorAll('mark.elx-hl');
-    const target = marks[activeMatch.indexOnPage] ?? marks[0] ?? null;
-    setActiveMarkEl(target);
-  }, [renderedPages, activeMatch]);
+    const raf = window.requestAnimationFrame(() => {
+      const marks = pageEl.querySelectorAll('mark.elx-hl');
+      const target = (marks[activeMatch.indexOnPage] ?? marks[0] ?? null) as Element | null;
+      setActiveMarkEl(target);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+    return () => window.cancelAnimationFrame(raf);
+  }, [activeMatch, textLayerPages]);
 
   // Reset active mark when query clears
   useEffect(() => {
@@ -252,8 +261,8 @@ function PdfViewer({
     [matchRegex],
   );
 
-  const handlePageRenderSuccess = useCallback((page: number) => {
-    setRenderedPages((prev) => new Set(prev).add(page));
+  const handleTextLayerSuccess = useCallback((page: number) => {
+    setTextLayerPages((prev) => new Set(prev).add(page));
   }, []);
 
   // Which pages have matches (for rendering priority hint)
@@ -313,22 +322,23 @@ function PdfViewer({
                     renderTextLayer
                     renderAnnotationLayer={false}
                     customTextRenderer={customTextRenderer as never}
-                    onRenderSuccess={() => handlePageRenderSuccess(pageNum)}
+                    onRenderTextLayerSuccess={() => handleTextLayerSuccess(pageNum)}
                     className="bg-parchment-50"
                   />
-
-                  {/* Frame overlay for active match */}
-                  <AnimatePresence>
-                    {isActive && activeMarkEl && (
-                      <FrameOverlay
-                        key={activeMatch.globalIndex}
-                        targetEl={activeMarkEl}
-                        containerEl={pageRefs.current[pageNum]}
-                        visible
-                      />
-                    )}
-                  </AnimatePresence>
                 </div>
+
+                {/* Frame overlay for the active match — sibling of the sheet so it
+                    positions against the same wrapper it is measured against. */}
+                <AnimatePresence>
+                  {isActive && activeMarkEl && (
+                    <FrameOverlay
+                      key={activeMatch.globalIndex}
+                      targetEl={activeMarkEl}
+                      containerEl={pageRefs.current[pageNum]}
+                      visible
+                    />
+                  )}
+                </AnimatePresence>
 
                 {/* Page number */}
                 <div className="absolute bottom-2 right-3 font-mono text-[10px] text-stone-400 select-none">
@@ -352,18 +362,19 @@ interface TextViewerProps {
 
 function TextViewer({ text, query, activeMatch }: TextViewerProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
   const markRefs = useRef<HTMLElement[]>([]);
   const [activeMarkEl, setActiveMarkEl] = useState<Element | null>(null);
 
-  // Build highlighted HTML
+  // Build highlighted HTML — escape the document text first (it is untrusted
+  // user-uploaded content) then inject our own <mark>/<br/> tags.
   const html = useMemo(() => {
-    if (!query.trim()) return text.replace(/\n/g, '<br/>');
+    const safe = escapeHtml(text).replace(/\n/g, '<br/>');
+    if (!query.trim()) return safe;
     const regex = buildMatchRegex(query);
-    if (!regex) return text.replace(/\n/g, '<br/>');
+    if (!regex) return safe;
     regex.lastIndex = 0;
-    return text
-      .replace(/\n/g, '<br/>')
-      .replace(regex, (match) => `<mark class="elx-hl">${match}</mark>`);
+    return safe.replace(regex, (match) => `<mark class="elx-hl">${match}</mark>`);
   }, [text, query]);
 
   // After render, locate all marks and set active one
@@ -385,6 +396,7 @@ function TextViewer({ text, query, activeMatch }: TextViewerProps) {
       className="relative flex-1 min-h-0 overflow-y-auto px-8 py-8 bg-stone-100/60"
     >
       <div
+        ref={sheetRef}
         className="relative mx-auto max-w-2xl bg-parchment-50 rounded-lg shadow-[0_4px_24px_-8px_rgba(0,0,0,0.18)] px-10 py-10"
       >
         <div
@@ -396,7 +408,7 @@ function TextViewer({ text, query, activeMatch }: TextViewerProps) {
             <FrameOverlay
               key={activeMatch?.globalIndex ?? 0}
               targetEl={activeMarkEl}
-              containerEl={scrollRef.current}
+              containerEl={sheetRef.current}
               visible
             />
           )}
