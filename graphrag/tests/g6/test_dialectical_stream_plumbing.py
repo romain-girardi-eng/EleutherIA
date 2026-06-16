@@ -483,3 +483,57 @@ def test_relational_tools_excluded_from_llm_surface_no_double_retrieval(
     # The retrieval tools the agent SHOULD drive remain exposed.
     assert "search_nodes" in schema_names
     assert "search_passages" in schema_names
+
+
+def test_dialectical_heartbeat_ceiling_exceeds_synthesis_timeout(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The heartbeat ``max_wait`` that wraps the dialectical synthesis MUST sit
+    ABOVE the synthesis LLM HTTP timeout — otherwise the heartbeat would cancel a
+    healthy-but-slow thinking-model synthesis BEFORE its own timeout, dropping the
+    pipeline into the legacy facet-template fallback (the worst outcome)."""
+    from eleutheria_graphrag.agents.dialectical_synthesis import (
+        scholar_synthesis_timeout,
+    )
+
+    monkeypatch.delenv("ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT", raising=False)
+    ceiling = sa_mod._dialectical_heartbeat_ceiling()
+    assert ceiling > scholar_synthesis_timeout()  # the LLM timeout is the deadline
+    assert ceiling >= 360.0  # above the ~300 s generation budget
+    # And it tracks the (env-overridable) synthesis timeout, staying above it.
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT", "300")
+    assert sa_mod._dialectical_heartbeat_ceiling() > scholar_synthesis_timeout()
+
+
+@pytest.mark.asyncio
+async def test_stream_dialectical_default_ceiling_above_synthesis_timeout(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``_stream_dialectical`` with no explicit ``max_wait`` must use the
+    synthesis-derived ceiling (not the old 240 s default that sat BELOW the
+    360 s synthesis timeout and would cancel it)."""
+    from eleutheria_graphrag.agents.dialectical_synthesis import (
+        scholar_synthesis_timeout,
+    )
+
+    monkeypatch.delenv("ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT", raising=False)
+    agent = ScholarlyAgent.__new__(ScholarlyAgent)
+    captured: dict[str, float] = {}
+
+    async def _fake_heartbeat(coro, *, max_wait, result_into=None, **_kw):
+        captured["max_wait"] = max_wait
+        coro.close()  # don't actually run synthesis
+        if result_into is not None:
+            result_into["value"] = None
+        return
+        yield  # make this an async generator
+
+    with patch.object(agent, "_await_with_heartbeat", _fake_heartbeat):
+        holder: dict[str, object] = {}
+        async for _ in agent._stream_dialectical(
+            RAGState(question="q"), holder=holder
+        ):
+            pass
+
+    assert captured["max_wait"] > scholar_synthesis_timeout()
+    assert captured["max_wait"] >= 360.0
