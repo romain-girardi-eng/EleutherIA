@@ -41,6 +41,7 @@ from __future__ import annotations
 import logging
 import os
 import re
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -464,6 +465,118 @@ async def synthesize_dialectical(
     # reasoning_content), so the stripper is a NO-OP that could only risk
     # truncating a clean answer — skip it.
     model_used = getattr(llm, "last_model_used", "") or model_id
+    if prose and not model_separates_reasoning(model_used):
+        prose = strip_reasoning_leak(prose)
+
+    ledger = build_provenance_ledger(prose, cmap) if prose else []
+
+    return SynthesisResult(
+        prose=prose,
+        reasoning_trace=reasoning_trace,
+        model_used=model_used,
+        ledger=ledger,
+    )
+
+
+# ── 3a. STREAMING synthesis — reasoning_content LIVE on its own channel ──────
+#
+# Identical inputs/prompt/budgets/timeout to ``synthesize_dialectical``, but it
+# drives the LLM via ``llm.stream_segmented`` so the chain-of-thought arrives as
+# deltas and can be surfaced LIVE in the AGENT REASONING workspace. The reasoning
+# segments are forwarded to ``on_reasoning`` (a callback the caller wires to an
+# SSE ``synthesis_reasoning`` event); the answer segments are accumulated into the
+# clean ``content`` prose. The reasoning text NEVER enters the answer (separate
+# channels by construction). deepseek emits reasoning deltas first, then content
+# deltas. Same fallback chain (Fireworks-only today), same 360 s timeout; on a
+# rung that yields no answer it tries the next. Never raises into the pipeline.
+
+ReasoningCallback = Callable[[str], Awaitable[None]]
+
+
+async def synthesize_dialectical_stream(
+    state: Any,
+    cmap: ControversyMap,
+    llm: Any,
+    *,
+    on_reasoning: ReasoningCallback | None = None,
+    max_tokens: int = 8000,
+    budget_tier: str = "standard",
+) -> SynthesisResult:
+    """Streaming twin of :func:`synthesize_dialectical` (M6 live-reasoning path).
+
+    Streams the synthesis so ``reasoning_content`` deltas can be surfaced LIVE.
+    For each reasoning delta, ``on_reasoning(delta)`` is awaited (the caller emits
+    a ``synthesis_reasoning`` SSE event); answer deltas are accumulated into the
+    final prose. Returns the same :class:`SynthesisResult` as the blocking path
+    (prose = the streamed ``content`` ONLY; reasoning_trace = the full
+    chain-of-thought). The reasoning text is held STRICTLY apart from the answer.
+    """
+    if budget_tier == "standard":
+        plan = getattr(state, "research_plan", None)
+        plan_tier = getattr(plan, "budget_tier", None)
+        if plan_tier:
+            budget_tier = plan_tier
+
+    model_chain = scholar_synthesis_fallback_chain()
+    model_id = model_chain[0]
+
+    coverage_note = ""
+    if cmap.coverage_gaps:
+        coverage_note = (
+            "\n- One frame or more was thinly retrieved (see COVERAGE GAPS). State "
+            "that coverage limit explicitly in prose; do not pad it with unrelated "
+            "material."
+        )
+
+    map_markdown = serialize_controversy_map(cmap)
+    user_prompt = DIALECTICAL_SYNTHESIS_TEMPLATE.format(
+        map_markdown=map_markdown,
+        shape=getattr(cmap.shape, "value", cmap.shape),
+        question=cmap.question_frame,
+        coverage_note=coverage_note,
+    )
+
+    prose = ""
+    reasoning_trace = ""
+    for candidate in model_chain:
+        answer_parts: list[str] = []
+        reasoning_parts: list[str] = []
+        try:
+            async for channel, delta in llm.stream_segmented(
+                user_prompt,
+                system_prompt=DIALECTICAL_SYNTHESIS_SYSTEM,
+                temperature=0.3,
+                max_tokens=max_tokens,
+                model_override=candidate,
+                request_timeout=scholar_synthesis_timeout(),
+            ):
+                if channel == "reasoning":
+                    # LIVE reasoning — surface on its OWN channel, NEVER the answer.
+                    reasoning_parts.append(delta)
+                    if on_reasoning is not None and delta:
+                        await on_reasoning(delta)
+                elif channel == "answer" and delta:
+                    answer_parts.append(delta)
+            prose = "".join(answer_parts).strip()
+        except Exception as exc:  # pragma: no cover - defensive, never raise upstream
+            logger.warning(
+                "dialectical streaming synthesis failed on %s (%s); next rung",
+                candidate,
+                exc,
+            )
+            prose = ""
+        if prose:
+            model_id = candidate
+            # Prefer the accumulated reasoning deltas; fall back to the
+            # side-channel the segmented stream also populates.
+            reasoning_trace = "".join(reasoning_parts) or (
+                getattr(llm, "last_reasoning_content", "") or ""
+            )
+            break
+
+    model_used = getattr(llm, "last_model_used", "") or model_id
+    # The answer is ``content`` only. For a reasoning-separated model the content
+    # is already clean; for any other rung run the defensive stripper.
     if prose and not model_separates_reasoning(model_used):
         prose = strip_reasoning_leak(prose)
 

@@ -103,6 +103,24 @@ class SSEEmitter:
             }
         )
 
+    async def emit_synthesis_reasoning(
+        self, reasoning: str, *, stage: str = "Reasoning over the controversy map"
+    ) -> None:
+        """Emit a LIVE chain-of-thought delta from the dialectical synthesis.
+
+        Travels on its OWN ``synthesis_reasoning`` channel (NOT ``answer_chunk``):
+        the thinking model's ``reasoning_content`` deltas drive the right-panel
+        AGENT REASONING workspace while the slow (~5-10 min) synthesis runs. The
+        reasoning text MUST NEVER leak into the answer — the answer streams as
+        ``answer_chunk`` AFTER the reasoning completes.
+        """
+        await self._queue.put(
+            {
+                "type": "synthesis_reasoning",
+                "data": {"reasoning": reasoning, "stage": stage},
+            }
+        )
+
     async def emit_complete(self, data: dict[str, Any]) -> None:
         """Emit the final complete response."""
         await self._queue.put(
@@ -341,6 +359,11 @@ class NullEmitter(SSEEmitter):
         pass
 
     async def emit_answer_chunk(self, chunk: str) -> None:
+        pass
+
+    async def emit_synthesis_reasoning(
+        self, reasoning: str, *, stage: str = "Reasoning over the controversy map"
+    ) -> None:
         pass
 
     async def emit_complete(self, data: dict[str, Any]) -> None:

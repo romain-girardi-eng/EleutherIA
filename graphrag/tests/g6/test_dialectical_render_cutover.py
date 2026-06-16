@@ -52,6 +52,29 @@ _TEMPLATE_FINGERPRINTS = (
 )
 
 
+def make_stream_segmented(answer: str, reasoning: str = ""):
+    """An ``llm.stream_segmented`` async-generator double for the streaming path.
+
+    Yields ``("reasoning", …)`` deltas first (split into a few pieces, mirroring
+    deepseek's reasoning-then-content order), then ``("answer", …)`` deltas. The
+    streaming dialectical synthesis consumes this exactly as the real segmented
+    LLM stream — reasoning on its own channel, answer accumulated into ``content``.
+    """
+
+    async def _stream_segmented(*_args, **_kwargs):
+        if reasoning:
+            mid = max(1, len(reasoning) // 2)
+            for piece in (reasoning[:mid], reasoning[mid:]):
+                if piece:
+                    yield ("reasoning", piece)
+        # Chunk the answer into a few deltas so accumulation is exercised.
+        step = max(1, len(answer) // 3)
+        for i in range(0, len(answer), step):
+            yield ("answer", answer[i : i + step])
+
+    return _stream_segmented
+
+
 def _stub_map() -> ControversyMap:
     bobzien = GroundedPosition(
         position_id="bobzien_no_problem",
@@ -319,6 +342,8 @@ async def test_stream_render_emits_dialectical_prose_as_answer_chunks(
 
     llm = AsyncMock()
     llm.generate = AsyncMock(return_value=DIALECTICAL_PROSE)
+    llm.stream_segmented = make_stream_segmented(DIALECTICAL_PROSE)
+    llm.last_reasoning_content = ""
     llm.last_model_used = "accounts/fireworks/models/kimi-k2p6"
     deps = AsyncMock()
     deps.llm = llm

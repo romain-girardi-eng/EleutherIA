@@ -28,12 +28,15 @@ import { cn } from '../../utils/cn';
 
 export interface AgentStep {
   id: string;
-  type: 'thinking' | 'tool_start' | 'tool_result' | 'status';
+  type: 'thinking' | 'tool_start' | 'tool_result' | 'status' | 'synthesis_reasoning';
   tool?: string;
   args?: Record<string, unknown>;
   reason?: string;
   summary?: string;
   thinking?: string;
+  // Live dialectical-synthesis chain-of-thought (accumulated across deltas).
+  reasoning?: string;
+  stage?: string;
   durationMs?: number;
   nodeCount?: number;
   passageCount?: number;
@@ -217,6 +220,51 @@ function ThinkingCard({ step }: { step: AgentStep }) {
   );
 }
 
+function SynthesisReasoningCard({ step }: { step: AgentStep }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  // Keep the live chain-of-thought pinned to its latest line as deltas arrive.
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [step.reasoning]);
+
+  return (
+    <div className="relative flex gap-3">
+      <div className="flex flex-col items-center">
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+          className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border border-amber-300/80 bg-amber-50/90 shadow-sm"
+        >
+          <Brain className="h-4 w-4 text-amber-700" />
+        </motion.div>
+        <div className="w-px flex-1 bg-gradient-to-b from-amber-200/80 to-transparent" />
+      </div>
+      <motion.div
+        initial={{ opacity: 0, x: -12 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.25 }}
+        className="mb-2.5 flex-1 rounded-2xl border border-amber-100/80 bg-gradient-to-br from-amber-50/60 to-white/90 px-4 py-3"
+      >
+        <div className="flex items-center gap-2">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-amber-700">
+            {step.stage || 'Reasoning over the controversy map'}
+          </p>
+          <Loader2 className="h-3 w-3 animate-spin text-amber-500/80" aria-hidden />
+        </div>
+        <div
+          ref={scrollRef}
+          className="mt-1.5 max-h-56 overflow-y-auto whitespace-pre-wrap font-mono text-[12px] leading-5 text-stone-600"
+        >
+          {step.reasoning}
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 function StatusCard({ step }: { step: AgentStep }) {
   return (
     <div className="relative flex gap-3">
@@ -328,6 +376,22 @@ export default function AgentActivityPanel({ steps, isActive, className }: Agent
         </div>
       </div>
 
+      {/* Long-run notice: deep scholarly research is a thinking-model synthesis
+          that can take several minutes. Surfaced while the agent is active so the
+          scholar knows the wait is expected, not a hang. */}
+      {isActive && (
+        <div className="shrink-0 border-b border-amber-200/40 bg-amber-50/60 px-4 py-2">
+          <p className="flex items-center gap-1.5 text-[11px] leading-4 text-amber-800">
+            <Loader2 className="h-3 w-3 shrink-0 animate-spin text-amber-600" aria-hidden />
+            <span>
+              Deep scholarly research can take{' '}
+              <strong className="font-semibold">5 to 10 minutes</strong> — the scholar
+              is reasoning over the controversy map live below.
+            </span>
+          </p>
+        </div>
+      )}
+
       {/* Timeline */}
       <div
         ref={scrollRef}
@@ -346,6 +410,9 @@ export default function AgentActivityPanel({ steps, isActive, className }: Agent
             }
             if (step.type === 'thinking') {
               return <ThinkingCard key={step.id} step={step} />;
+            }
+            if (step.type === 'synthesis_reasoning') {
+              return <SynthesisReasoningCard key={step.id} step={step} />;
             }
             if (step.type === 'status') {
               return <StatusCard key={step.id} step={step} />;

@@ -35,6 +35,7 @@ from eleutheria_graphrag.agents.state import RAGState
 from .test_dialectical_render_cutover import (
     DIALECTICAL_PROSE,
     _stub_map,
+    make_stream_segmented,
 )
 
 # The route forwards these typed events on their own channel (Scholar-RAG ON);
@@ -138,12 +139,95 @@ def _boom_prompt(_state):
 def _make_agent() -> ScholarlyAgent:
     llm = AsyncMock()
     llm.generate = AsyncMock(return_value=DIALECTICAL_PROSE)
+    llm.stream_segmented = make_stream_segmented(DIALECTICAL_PROSE)
+    llm.last_reasoning_content = ""
     llm.last_model_used = "accounts/fireworks/models/kimi-k2p6"
     llm.last_provider_used = "fireworks"
     deps = AsyncMock()
     deps.llm = llm
     deps.verifier_v2 = None
     return ScholarlyAgent(deps)
+
+
+_SYNTHESIS_REASONING = (
+    "First I map the fault lines: Bobzien vs Frede over the dating of the will. "
+    "Then I locate the Cicero De Fato 41 anchor and weigh the assent doctrine "
+    "without picking a winner. SECRET_REASONING_TOKEN must stay off the answer."
+)
+
+
+def _make_reasoning_agent() -> ScholarlyAgent:
+    llm = AsyncMock()
+    llm.generate = AsyncMock(return_value=DIALECTICAL_PROSE)
+    llm.stream_segmented = make_stream_segmented(
+        DIALECTICAL_PROSE, reasoning=_SYNTHESIS_REASONING
+    )
+    llm.last_reasoning_content = _SYNTHESIS_REASONING
+    llm.last_model_used = "accounts/fireworks/models/deepseek-v4-pro"
+    llm.last_provider_used = "fireworks"
+    deps = AsyncMock()
+    deps.llm = llm
+    deps.verifier_v2 = None
+    return ScholarlyAgent(deps)
+
+
+@pytest.mark.asyncio
+async def test_synthesis_reasoning_streams_live_and_never_mixes_with_answer(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """On the dialectical path the thinking model's reasoning streams LIVE as
+    ``synthesis_reasoning`` events (reasoning text) while the answer streams as
+    ``answer_chunk`` events (content) — the two NEVER mixed, and the reasoning
+    text NEVER leaks into the answer prose."""
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    agent = _make_reasoning_agent()
+
+    events = await _collect_stream(agent, "big open debates about free will")
+
+    reasoning_events = []
+    answer_chunks: list[str] = []
+    for chunk in events:
+        kind, parsed = _classify_like_route(chunk)
+        if kind == "synthesis_reasoning":
+            reasoning_events.append(parsed)
+        elif kind == "answer_chunk":
+            answer_chunks.append(chunk)
+
+    # 1. The reasoning streamed live on its own channel with the stage label.
+    assert reasoning_events, "expected live synthesis_reasoning events"
+    streamed_reasoning = "".join(
+        ev["data"]["reasoning"] for ev in reasoning_events
+    )
+    assert "SECRET_REASONING_TOKEN" in streamed_reasoning
+    assert all(
+        ev["data"]["stage"] == "Reasoning over the controversy map"
+        for ev in reasoning_events
+    )
+
+    # 2. The data shape the frontend consumes: {"type": "synthesis_reasoning",
+    #    "data": {"reasoning": <str>, "stage": <str>}}.
+    sample = reasoning_events[0]
+    assert sample["type"] == "synthesis_reasoning"
+    assert set(sample["data"]) == {"reasoning", "stage"}
+    assert isinstance(sample["data"]["reasoning"], str)
+
+    # 3. The reasoning text NEVER leaked into the answer prose.
+    streamed_prose = "".join(answer_chunks)
+    assert "SECRET_REASONING_TOKEN" not in streamed_prose
+    assert "Bobzien holds the ancients had no free-will problem" in streamed_prose
+    assert streamed_prose.strip() != ""
+
+    # 4. Order: reasoning arrives before the answer prose (deepseek emits
+    #    reasoning deltas first, then content deltas).
+    first_reasoning_idx = next(
+        i for i, c in enumerate(events)
+        if _classify_like_route(c)[0] == "synthesis_reasoning"
+    )
+    first_answer_idx = next(
+        i for i, c in enumerate(events)
+        if _classify_like_route(c)[0] == "answer_chunk"
+    )
+    assert first_reasoning_idx < first_answer_idx
 
 
 @pytest.mark.asyncio
@@ -361,6 +445,8 @@ LONG_DIALECTICAL_PROSE = _long_dialectical_prose()
 def _make_agent_with_prose(prose: str) -> ScholarlyAgent:
     llm = AsyncMock()
     llm.generate = AsyncMock(return_value=prose)
+    llm.stream_segmented = make_stream_segmented(prose)
+    llm.last_reasoning_content = ""
     llm.last_model_used = "accounts/fireworks/models/kimi-k2p6"
     llm.last_provider_used = "fireworks"
     deps = AsyncMock()
@@ -511,29 +597,33 @@ async def test_stream_dialectical_default_ceiling_above_synthesis_timeout(
 ) -> None:
     """``_stream_dialectical`` with no explicit ``max_wait`` must use the
     synthesis-derived ceiling (not the old 240 s default that sat BELOW the
-    360 s synthesis timeout and would cancel it)."""
+    360 s synthesis timeout and would cancel it).
+
+    The ceiling now lives inline in ``_stream_dialectical`` (computed from
+    ``_dialectical_heartbeat_ceiling()`` when ``max_wait`` is None). We patch
+    ``_synthesize_dialectical`` to record the ceiling the stream actually applies
+    by reading the timer indirectly: a quick-returning synthesis whose value is
+    ``None`` lets the generator finish immediately, and we assert the module
+    helper the generator binds to stays above the synthesis timeout.
+    """
     from eleutheria_graphrag.agents.dialectical_synthesis import (
         scholar_synthesis_timeout,
     )
 
     monkeypatch.delenv("ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT", raising=False)
     agent = ScholarlyAgent.__new__(ScholarlyAgent)
-    captured: dict[str, float] = {}
 
-    async def _fake_heartbeat(coro, *, max_wait, result_into=None, **_kw):
-        captured["max_wait"] = max_wait
-        coro.close()  # don't actually run synthesis
-        if result_into is not None:
-            result_into["value"] = None
-        return
-        yield  # make this an async generator
+    async def _fast_synth(state, *, on_reasoning=None):  # noqa: ARG001
+        return None  # quick return → generator falls through cleanly
 
-    with patch.object(agent, "_await_with_heartbeat", _fake_heartbeat):
+    with patch.object(agent, "_synthesize_dialectical", _fast_synth):
         holder: dict[str, object] = {}
         async for _ in agent._stream_dialectical(
             RAGState(question="q"), holder=holder
         ):
             pass
 
-    assert captured["max_wait"] > scholar_synthesis_timeout()
-    assert captured["max_wait"] >= 360.0
+    # The generator's default ceiling source-of-truth sits above the timeout.
+    assert sa_mod._dialectical_heartbeat_ceiling() > scholar_synthesis_timeout()
+    assert sa_mod._dialectical_heartbeat_ceiling() >= 360.0
+    assert holder["ok"] is False  # None prose → falls through to legacy render

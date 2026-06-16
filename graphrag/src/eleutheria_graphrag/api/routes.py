@@ -408,6 +408,9 @@ async def query_stream(
                             "cost_summary",
                             "tokens_used_rollup",
                             "verification_warning",
+                            # LIVE dialectical-synthesis chain-of-thought — its
+                            # OWN channel, NEVER folded into answer_chunk prose.
+                            "synthesis_reasoning",
                         )
                         if event_type in _legacy_trace_events or (
                             _scholar_rag_on

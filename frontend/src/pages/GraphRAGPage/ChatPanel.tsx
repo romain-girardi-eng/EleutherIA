@@ -140,9 +140,15 @@ export default function ChatPanel({
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="flex justify-center items-center min-h-[40vh]"
+            className="flex flex-col justify-center items-center gap-4 min-h-[40vh]"
           >
             <TerminalLoader size="large" />
+            <p className="max-w-md text-center text-xs leading-5 text-amber-800/90">
+              Deep scholarly research can take{' '}
+              <strong className="font-semibold">5 to 10 minutes</strong>. The scholar
+              is reasoning over the controversy map — watch the live reasoning in the
+              right-hand panel.
+            </p>
           </motion.div>
         )}
 
