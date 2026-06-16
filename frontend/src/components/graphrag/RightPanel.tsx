@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -7,9 +7,9 @@ import TraversalDAG from './TraversalDAG';
 import ResearchGraphPanel from './ResearchGraphPanel';
 import NodeDetailCard from './NodeDetailCard';
 import PassageReaderPanel from './PassageReaderPanel';
-import AgentActivityPanel from './AgentActivityPanel';
 import type { AgentStep } from './AgentActivityPanel';
 import ResearchTimelinePanel, { type TokenCost } from './ResearchTimelinePanel';
+import LiveReasoningPanel from './LiveReasoningPanel';
 import { cn } from '../../utils/cn';
 import type { GraphRAGResponse, SourceCitation } from '../../types';
 import type { PassageContext } from '../../types/graphrag';
@@ -25,6 +25,8 @@ interface RightPanelProps {
   passageContext?: PassageContext | null;
   agentSteps?: AgentStep[];
   agentActive?: boolean;
+  /** True while the SSE stream is open (synthesis still in flight). */
+  isStreaming?: boolean;
   cost?: TokenCost | null;
   onNodeClick: (nodeId: string) => void;
   onCloseDetail: () => void;
@@ -355,6 +357,7 @@ export default function RightPanel({
   passageContext,
   agentSteps = [],
   agentActive = false,
+  isStreaming = false,
   cost = null,
   onNodeClick: _onNodeClick,
   onCloseDetail,
@@ -373,6 +376,42 @@ export default function RightPanel({
   // Tab system for the graph state
   type PanelTab = 'graph' | 'sources' | 'research' | 'reasoning';
   const [activeTab, setActiveTab] = useState<PanelTab>('sources');
+
+  // -----------------------------------------------------------------------
+  // Live reasoning tab (state === 'reasoning') — Activity | Reasoning
+  // -----------------------------------------------------------------------
+  type LiveTab = 'activity' | 'reasoning';
+  const [activeLiveTab, setActiveLiveTab] = useState<LiveTab>('activity');
+  // Track whether the user has explicitly clicked a live tab
+  const userPickedLiveTabRef = useRef(false);
+
+  // Derive the accumulated reasoning text from agentSteps
+  const synthesisReasoningStep = useMemo(
+    () => agentSteps.find((s) => s.type === 'synthesis_reasoning'),
+    [agentSteps],
+  );
+  const reasoningText = synthesisReasoningStep?.reasoning ?? '';
+
+  // Auto-switch to Reasoning tab when the first synthesis_reasoning delta
+  // arrives — but only if the user hasn't manually picked a tab yet.
+  const prevReasoningLengthRef = useRef(0);
+  useEffect(() => {
+    const len = reasoningText.length;
+    if (len > 0 && prevReasoningLengthRef.current === 0 && !userPickedLiveTabRef.current) {
+      setActiveLiveTab('reasoning');
+    }
+    prevReasoningLengthRef.current = len;
+  }, [reasoningText]);
+
+  // Reset live-tab state when a new query starts (state transitions to 'reasoning')
+  useEffect(() => {
+    if (state === 'reasoning') {
+      setActiveLiveTab('activity');
+      userPickedLiveTabRef.current = false;
+      prevReasoningLengthRef.current = 0;
+    }
+  }, [state]);
+  // -----------------------------------------------------------------------
 
   // Auto-switch to sources tab when response arrives
   useEffect(() => {
@@ -499,16 +538,85 @@ export default function RightPanel({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.28 }}
-                className="h-full min-h-0"
+                className="flex h-full min-h-0 flex-col"
               >
-                <ResearchTimelinePanel
-                  steps={agentSteps}
-                  isActive={agentActive}
-                  response={response}
-                  cost={cost ?? undefined}
-                  onOpenSources={onOpenGraphView}
-                  className="h-full"
-                />
+                {/* Live 2-tab bar: Activity | Reasoning */}
+                <div className="shrink-0 flex gap-0.5 border-b border-stone-200/50 bg-stone-50/70 px-3 pt-2 pb-0">
+                  {([
+                    { id: 'activity' as LiveTab, label: 'Activité', labelEn: 'Activity' },
+                    { id: 'reasoning' as LiveTab, label: 'Raisonnement', labelEn: 'Reasoning', hasContent: reasoningText.length > 0 },
+                  ]).map(({ id, labelEn, hasContent }) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => {
+                        userPickedLiveTabRef.current = true;
+                        setActiveLiveTab(id);
+                      }}
+                      className={cn(
+                        'relative flex items-center gap-1.5 rounded-t-xl border border-b-0 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.13em] transition-all',
+                        activeLiveTab === id
+                          ? 'border-stone-200/60 bg-white text-stone-800 shadow-[0_-2px_6px_-2px_rgba(120,53,15,0.08)]'
+                          : 'border-transparent text-stone-400 hover:text-stone-600',
+                      )}
+                    >
+                      {id === 'reasoning' && <Brain className="h-3 w-3" />}
+                      {labelEn}
+                      {/* Badge: pulsing dot when reasoning is streaming and user is on Activity tab */}
+                      {hasContent && activeLiveTab !== 'reasoning' && isStreaming && (
+                        <motion.span
+                          className="h-1.5 w-1.5 rounded-full bg-amber-500"
+                          animate={{ opacity: [1, 0.3, 1] }}
+                          transition={{ duration: 1.2, repeat: Infinity }}
+                        />
+                      )}
+                      {hasContent && activeLiveTab !== 'reasoning' && !isStreaming && (
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Tab content */}
+                <div className="min-h-0 flex-1 overflow-hidden bg-white/60">
+                  <AnimatePresence mode="wait">
+                    {activeLiveTab === 'activity' && (
+                      <motion.div
+                        key="live-activity"
+                        initial={{ opacity: 0, x: -6 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 6 }}
+                        transition={{ duration: 0.18 }}
+                        className="h-full"
+                      >
+                        <ResearchTimelinePanel
+                          steps={agentSteps}
+                          isActive={agentActive}
+                          response={response}
+                          cost={cost ?? undefined}
+                          onOpenSources={onOpenGraphView}
+                          className="h-full"
+                        />
+                      </motion.div>
+                    )}
+                    {activeLiveTab === 'reasoning' && (
+                      <motion.div
+                        key="live-reasoning"
+                        initial={{ opacity: 0, x: -6 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 6 }}
+                        transition={{ duration: 0.18 }}
+                        className="h-full"
+                      >
+                        <LiveReasoningPanel
+                          reasoning={reasoningText}
+                          isStreaming={isStreaming}
+                          className="h-full"
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </motion.div>
             )}
 
@@ -625,7 +733,7 @@ export default function RightPanel({
                       </motion.div>
                     )}
 
-                    {/* Reasoning tab — agent activity journal */}
+                    {/* Reasoning tab — synthesis chain-of-thought trace */}
                     {activeTab === 'reasoning' && agentSteps.length > 0 && (
                       <motion.div
                         key="tab-reasoning"
@@ -635,9 +743,9 @@ export default function RightPanel({
                         transition={{ duration: 0.2 }}
                         className="h-full overflow-hidden rounded-2xl border border-stone-200/40 bg-white/60"
                       >
-                        <AgentActivityPanel
-                          steps={agentSteps}
-                          isActive={false}
+                        <LiveReasoningPanel
+                          reasoning={reasoningText}
+                          isStreaming={false}
                           className="h-full"
                         />
                       </motion.div>

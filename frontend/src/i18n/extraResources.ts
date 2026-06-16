@@ -403,6 +403,18 @@ export const extraResources = {
         badge: 'Cached answer',
         replayed: 'This answer was replayed from cache',
       },
+      liveReasoning: {
+        headerLabel: 'Model reasoning',
+        live: 'Live',
+        complete: 'Complete',
+        streamingNotice: 'Deep scholarly synthesis in progress — this can take several minutes.',
+        emptyTitle: 'Model reasoning',
+        emptyBodyStreaming: 'The model\'s chain-of-thought will appear here once synthesis begins. Retrieval is still in progress.',
+        emptyBodyIdle: 'The synthesis model\'s full chain-of-thought will appear here during a live query.',
+        tabHint: 'The model\'s chain-of-thought will stream here once synthesis begins. Retrieval may take several minutes before synthesis starts.',
+        tabActivity: 'Activity',
+        tabReasoning: 'Reasoning',
+      },
     },
     howItWorksPage: {
       nav: {
@@ -1382,6 +1394,18 @@ export const extraResources = {
       cache: {
         badge: 'Réponse en cache',
         replayed: 'Cette réponse a été rejouée depuis le cache',
+      },
+      liveReasoning: {
+        headerLabel: 'Raisonnement du modèle',
+        live: 'Direct',
+        complete: 'Terminé',
+        streamingNotice: "Synthèse savante approfondie en cours — cela peut prendre plusieurs minutes.",
+        emptyTitle: 'Raisonnement du modèle',
+        emptyBodyStreaming: "La chaîne de pensée du modèle apparaîtra ici dès le début de la synthèse. La récupération est encore en cours.",
+        emptyBodyIdle: "La chaîne de pensée complète du modèle de synthèse apparaîtra ici lors d'une requête en direct.",
+        tabHint: "La chaîne de pensée du modèle sera diffusée ici dès que la synthèse commencera. La récupération peut prendre plusieurs minutes avant le début de la synthèse.",
+        tabActivity: 'Activité',
+        tabReasoning: 'Raisonnement',
       },
     },
     howItWorksPage: {
@@ -2366,6 +2390,18 @@ export const extraResources = {
         badge: 'Cached answer',
         replayed: 'This answer was replayed from cache',
       },
+      liveReasoning: {
+        headerLabel: 'Modell-Reasoning',
+        live: 'Live',
+        complete: 'Abgeschlossen',
+        streamingNotice: 'Tiefgreifende wissenschaftliche Synthese läuft — das kann mehrere Minuten dauern.',
+        emptyTitle: 'Modell-Reasoning',
+        emptyBodyStreaming: 'Die Gedankenkette des Modells erscheint hier, sobald die Synthese beginnt. Der Abruf läuft noch.',
+        emptyBodyIdle: 'Die vollständige Gedankenkette des Synthesemodells erscheint hier während einer Live-Abfrage.',
+        tabHint: 'Die Gedankenkette des Modells wird hier gestreamt, sobald die Synthese beginnt. Der Abruf kann mehrere Minuten dauern.',
+        tabActivity: 'Aktivität',
+        tabReasoning: 'Reasoning',
+      },
     },
     howItWorksPage: {
       nav: {
@@ -3317,6 +3353,18 @@ export const extraResources = {
       cache: {
         badge: 'Cached answer',
         replayed: 'This answer was replayed from cache',
+      },
+      liveReasoning: {
+        headerLabel: 'Ragionamento del modello',
+        live: 'Dal vivo',
+        complete: 'Completato',
+        streamingNotice: 'Sintesi accademica approfondita in corso — potrebbe richiedere diversi minuti.',
+        emptyTitle: 'Ragionamento del modello',
+        emptyBodyStreaming: "La catena di pensiero del modello apparirà qui non appena la sintesi avrà inizio. Il recupero è ancora in corso.",
+        emptyBodyIdle: "La catena di pensiero completa del modello di sintesi apparirà qui durante una query in diretta.",
+        tabHint: "La catena di pensiero del modello verrà trasmessa qui non appena la sintesi inizierà. Il recupero può richiedere diversi minuti prima dell'avvio della sintesi.",
+        tabActivity: 'Attività',
+        tabReasoning: 'Ragionamento',
       },
     },
     howItWorksPage: {
@@ -4299,6 +4347,18 @@ export const extraResources = {
       cache: {
         badge: 'Cached answer',
         replayed: 'This answer was replayed from cache',
+      },
+      liveReasoning: {
+        headerLabel: 'Συλλογισμός μοντέλου',
+        live: 'Ζωντανά',
+        complete: 'Ολοκληρώθηκε',
+        streamingNotice: 'Σε εξέλιξη βαθιά επιστημονική σύνθεση — μπορεί να διαρκέσει αρκετά λεπτά.',
+        emptyTitle: 'Συλλογισμός μοντέλου',
+        emptyBodyStreaming: 'Η αλυσίδα σκέψης του μοντέλου θα εμφανιστεί εδώ μόλις ξεκινήσει η σύνθεση. Η ανάκτηση βρίσκεται ακόμη σε εξέλιξη.',
+        emptyBodyIdle: 'Η πλήρης αλυσίδα σκέψης του μοντέλου σύνθεσης θα εμφανιστεί εδώ κατά τη διάρκεια ζωντανού ερωτήματος.',
+        tabHint: 'Η αλυσίδα σκέψης του μοντέλου θα μεταδοθεί εδώ μόλις ξεκινήσει η σύνθεση. Η ανάκτηση μπορεί να διαρκέσει αρκετά λεπτά.',
+        tabActivity: 'Δραστηριότητα',
+        tabReasoning: 'Συλλογισμός',
       },
     },
     howItWorksPage: {

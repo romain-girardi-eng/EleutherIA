@@ -1021,6 +1021,7 @@ export default function GraphRAGPage() {
                       passageContext={passageContext}
                       agentSteps={agentSteps}
                       agentActive={agentActive}
+                      isStreaming={streaming}
                       cost={streamCost}
                       onNodeClick={handleNodeClick}
                       onSourceSelect={handleSourceSelect}
