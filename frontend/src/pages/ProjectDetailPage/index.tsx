@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -19,7 +19,6 @@ import { cn } from '../../utils/cn';
 import {
   deleteDocument,
   deleteProject,
-  getDocumentFileBlob,
   getProject,
   uploadDocument,
   type ProjectDetail,
@@ -27,6 +26,7 @@ import {
 } from '../../api/projects';
 import { formatRelativeTime, formatFileSize } from '../ProjectsPage/utils';
 import UploadZone from '../ContributePage/UploadZone';
+import DocumentHighlightViewer from '../../components/projects/DocumentHighlightViewer';
 
 const POLL_INTERVAL_MS = 3500;
 
@@ -59,183 +59,7 @@ function StatusBadge({ status }: { status: ProjectDocument['status'] }) {
   );
 }
 
-// ── Document viewer slide-over ────────────────────────────────────────────────
-
-interface DocumentViewerProps {
-  doc: ProjectDocument;
-  onClose: () => void;
-}
-
-function DocumentViewer({ doc, onClose }: DocumentViewerProps) {
-  const { t, i18n } = useTranslation();
-  const [objectUrl, setObjectUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const objectUrlRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    if (doc.status !== 'ready') {
-      setLoading(false);
-      return;
-    }
-
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-
-    getDocumentFileBlob(doc.document_id)
-      .then((blob) => {
-        if (cancelled) return;
-        const url = URL.createObjectURL(blob);
-        objectUrlRef.current = url;
-        setObjectUrl(url);
-        setLoading(false);
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setError(t('projects.viewer.loadError'));
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-      if (objectUrlRef.current) {
-        URL.revokeObjectURL(objectUrlRef.current);
-        objectUrlRef.current = null;
-      }
-    };
-  }, [doc.document_id, doc.status, t]);
-
-  // Close on Escape
-  useEffect(() => {
-    const handle = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handle);
-    return () => document.removeEventListener('keydown', handle);
-  }, [onClose]);
-
-  const isPdf = doc.content_type === 'application/pdf' || doc.filename.toLowerCase().endsWith('.pdf');
-
-  return (
-    <>
-      {/* Backdrop */}
-      <motion.div
-        key="viewer-backdrop"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[70] bg-stone-950/30 backdrop-blur-sm"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-
-      {/* Slide-over panel */}
-      <motion.aside
-        key="viewer-panel"
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        exit={{ x: '100%' }}
-        transition={{ type: 'spring', stiffness: 340, damping: 38 }}
-        role="dialog"
-        aria-modal="true"
-        aria-label={doc.filename}
-        className={cn(
-          'fixed top-0 right-0 z-[71] h-[100dvh]',
-          'w-full sm:w-[580px] lg:w-[700px]',
-          'flex flex-col',
-          'bg-parchment-50/98 border-l border-amber-200/60',
-          'shadow-[-16px_0_60px_-24px_rgba(120,53,15,0.35)]',
-        )}
-      >
-        {/* Sticky header */}
-        <header className="shrink-0 flex items-start justify-between gap-3 px-5 py-4 border-b border-amber-200/40 bg-white/80 backdrop-blur-sm">
-          <div className="min-w-0 flex-1">
-            <h2 className="font-display text-base font-semibold text-stone-900 leading-tight truncate">
-              {doc.filename}
-            </h2>
-            <div className="flex flex-wrap items-center gap-3 mt-1">
-              <StatusBadge status={doc.status} />
-              {doc.page_count !== null && (
-                <span className="text-xs text-stone-500 font-mono">
-                  {t('projects.viewer.pages', { count: doc.page_count })}
-                </span>
-              )}
-              <span className="text-xs text-stone-400 font-mono">
-                {formatFileSize(doc.size_bytes)}
-              </span>
-              <span className="text-xs text-stone-400">
-                {formatRelativeTime(doc.created_at, i18n.language)}
-              </span>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label={t('projects.viewer.close')}
-            className="shrink-0 h-9 w-9 inline-flex items-center justify-center rounded-full text-stone-400 hover:bg-amber-100/60 hover:text-amber-900 transition-colors"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </header>
-
-        {/* Body */}
-        <div className="flex-1 min-h-0 relative">
-          {loading && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="flex flex-col items-center gap-3">
-                <Loader2 className="h-8 w-8 animate-spin text-amber-600" />
-                <p className="text-sm text-stone-500">{t('projects.viewer.loading')}</p>
-              </div>
-            </div>
-          )}
-
-          {!loading && error && (
-            <div className="absolute inset-0 flex items-center justify-center p-6">
-              <div className="text-center">
-                <AlertTriangle className="h-10 w-10 text-amber-500 mx-auto mb-3" />
-                <p className="text-stone-600 text-sm">{error}</p>
-              </div>
-            </div>
-          )}
-
-          {!loading && !error && doc.status === 'processing' && (
-            <div className="absolute inset-0 flex items-center justify-center p-6">
-              <div className="text-center">
-                <Loader2 className="h-10 w-10 text-amber-500 animate-spin mx-auto mb-3" />
-                <p className="text-stone-600 text-sm">{t('projects.viewer.stillProcessing')}</p>
-              </div>
-            </div>
-          )}
-
-          {!loading && !error && doc.status === 'ready' && objectUrl && (
-            isPdf ? (
-              <iframe
-                src={objectUrl}
-                title={doc.filename}
-                className="w-full h-full border-0"
-                aria-label={doc.filename}
-              />
-            ) : (
-              <div className="w-full h-full overflow-auto p-6">
-                <p className="text-stone-600 text-sm">{t('projects.viewer.nonPdfNote')}</p>
-                <a
-                  href={objectUrl}
-                  download={doc.filename}
-                  className="mt-3 inline-flex items-center gap-1.5 text-sm text-amber-700 underline underline-offset-2 hover:text-amber-900"
-                >
-                  {t('projects.viewer.download')}
-                </a>
-              </div>
-            )
-          )}
-        </div>
-      </motion.aside>
-    </>
-  );
-}
+// (DocumentViewer replaced by DocumentHighlightViewer — see import above)
 
 // ── Document row ──────────────────────────────────────────────────────────────
 
@@ -604,6 +428,12 @@ export default function ProjectDetailPage() {
   const { t } = useTranslation();
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // URL deep-link params: ?doc=<documentId>&highlight=<phrase>&page=<n>
+  const urlDocId = searchParams.get('doc');
+  const urlHighlight = searchParams.get('highlight') ?? undefined;
+  const urlPage = searchParams.get('page') ? Number(searchParams.get('page')) : undefined;
 
   const [project, setProject] = useState<ProjectDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -627,6 +457,13 @@ export default function ProjectDetailPage() {
         if (isMountedRef.current) {
           setProject(data);
           setLoading(false);
+          // Open document from URL deep-link
+          if (urlDocId) {
+            const linked = data.documents.find((d) => d.document_id === urlDocId);
+            if (linked && linked.status === 'ready') {
+              setViewingDoc(linked);
+            }
+          }
         }
       } catch {
         if (isMountedRef.current) {
@@ -640,7 +477,8 @@ export default function ProjectDetailPage() {
     return () => {
       isMountedRef.current = false;
     };
-  }, [projectId, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId, t]); // urlDocId intentionally excluded — only read on initial load
 
   // Poll when any document is processing
   useEffect(() => {
@@ -682,6 +520,36 @@ export default function ProjectDetailPage() {
     };
   }, [project, projectId]);
 
+  // Sync viewer open/close to URL params
+  const openViewer = useCallback(
+    (doc: ProjectDocument) => {
+      setViewingDoc(doc);
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          next.set('doc', doc.document_id);
+          return next;
+        },
+        { replace: true },
+      );
+    },
+    [setSearchParams],
+  );
+
+  const closeViewer = useCallback(() => {
+    setViewingDoc(null);
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete('doc');
+        next.delete('highlight');
+        next.delete('page');
+        return next;
+      },
+      { replace: true },
+    );
+  }, [setSearchParams]);
+
   const handleDocUploaded = useCallback((doc: ProjectDocument) => {
     setProject((prev) =>
       prev
@@ -705,8 +573,8 @@ export default function ProjectDetailPage() {
           }
         : prev
     );
-    if (viewingDoc?.document_id === documentId) setViewingDoc(null);
-  }, [viewingDoc]);
+    if (viewingDoc?.document_id === documentId) closeViewer();
+  }, [viewingDoc, closeViewer]);
 
   const handleProjectUpdated = useCallback((updated: Partial<ProjectDetail>) => {
     setProject((prev) => (prev ? { ...prev, ...updated } : prev));
@@ -847,7 +715,7 @@ export default function ProjectDetailPage() {
                       key={doc.document_id}
                       doc={doc}
                       projectId={project.project_id}
-                      onView={(d) => setViewingDoc(d)}
+                      onView={openViewer}
                       onDeleted={handleDocDeleted}
                     />
                   ))}
@@ -858,13 +726,18 @@ export default function ProjectDetailPage() {
         </div>
       </div>
 
-      {/* Document viewer slide-over */}
+      {/* Document highlight viewer slide-over */}
       <AnimatePresence>
         {viewingDoc && (
-          <DocumentViewer
+          <DocumentHighlightViewer
             key={viewingDoc.document_id}
-            doc={viewingDoc}
-            onClose={() => setViewingDoc(null)}
+            documentId={viewingDoc.document_id}
+            filename={viewingDoc.filename}
+            contentType={viewingDoc.content_type}
+            pageCount={viewingDoc.page_count ?? undefined}
+            initialHighlight={urlHighlight}
+            initialPage={urlPage}
+            onClose={closeViewer}
           />
         )}
       </AnimatePresence>
