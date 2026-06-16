@@ -231,13 +231,14 @@ async def test_flag_on_final_answer_is_dialectical_prose_not_template(
 
 
 @pytest.mark.asyncio
-async def test_flag_on_falls_back_to_legacy_when_synthesis_empty(
+async def test_flag_on_populated_map_never_empties_uses_deterministic_hedge(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """Last-resort fallback: when BOTH the full dialectical synthesis AND the
-    still-dialectical degraded hedge yield nothing (every LLM call empty), the
-    legacy render runs (no crash). The degraded hedge is the safety belt; only
-    when it too is empty does the legacy facet render become the last resort."""
+    """NEVER-EMPTY GUARANTEE: when EVERY LLM call empties (full synthesis AND the
+    degraded hedge — e.g. all Fireworks rungs 429 and Gemini 429s too), a POPULATED
+    controversy map must STILL yield a real, attributed answer via the deterministic
+    map-derived hedge — it must NOT fall through to the legacy render that lands on
+    the bare 'insufficient evidence' sentence."""
     monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
 
     llm = AsyncMock()
@@ -263,13 +264,19 @@ async def test_flag_on_falls_back_to_legacy_when_synthesis_empty(
     with patch.object(sa_mod.RenderGroundedAnswer, "run", _legacy_render):
         answer = await _drive_run_react(agent, state)
 
-    # The legacy render WAS invoked (graceful fallback, no crash) and the answer
-    # is NOT marked dialectical. (ProgrammaticVerify may then prune the unref'd
-    # legacy stub prose to the insufficient-evidence message — that is the legacy
-    # path doing its normal thing; what matters is we degraded to it.)
-    assert legacy_used["render"] is True
-    assert state.metadata.get("render_answer_mode") != "dialectical"
-    assert isinstance(answer.answer, str)
+    # The deterministic map hedge fired: the legacy render was NEVER used, the
+    # answer is marked dialectical, and it is a real, non-empty, attributed answer
+    # carrying the contending scholars from the map (not the bare hedge sentence).
+    assert legacy_used["render"] is False
+    assert state.metadata.get("render_answer_mode") == "dialectical"
+    assert state.metadata.get("scholar_synthesis", {}).get("status") == (
+        "deterministic_map"
+    )
+    assert isinstance(answer.answer, str) and answer.answer.strip()
+    assert "Bobzien" in answer.answer and "Frede" in answer.answer
+    assert "insufficient" not in answer.answer.lower()
+    for fp in _TEMPLATE_FINGERPRINTS:
+        assert fp not in answer.answer
 
 
 @pytest.mark.asyncio
@@ -434,9 +441,7 @@ def test_dialectical_answer_has_no_reasoning_leak_markers() -> None:
     llm.generate = AsyncMock(return_value=leaky)
     llm.last_model_used = "accounts/fireworks/models/kimi-k2p6"
 
-    result = asyncio.run(
-        synthesize_dialectical(state=None, cmap=_stub_map(), llm=llm)
-    )
+    result = asyncio.run(synthesize_dialectical(state=None, cmap=_stub_map(), llm=llm))
     for marker in ("Let's double check", "Matches the text", "Verified."):
         assert marker not in result.prose
     # the substantive scholarly prose survived intact

@@ -23,6 +23,7 @@ from pydantic_graph import Graph
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.dialectical_synthesis import (
     build_provenance_ledger,
+    deterministic_map_hedge,
     scholar_render_max_tokens,
     scholar_synthesis_timeout,
     synthesize_degraded,
@@ -760,10 +761,29 @@ class ScholarlyAgent:
             prose = (await synthesize_degraded(cmap, self.deps.llm) or "").strip()
         except Exception:  # noqa: BLE001 - never crash the pipeline on the hedge
             logger.warning(
-                "Degraded dialectical hedge raised; legacy render", exc_info=True
+                "Degraded dialectical hedge raised; trying deterministic map hedge",
+                exc_info=True,
             )
             prose = ""
+
+        # FINAL GUARANTEE: when even the LLM hedge empties (e.g. all Fireworks
+        # rungs 429 and Gemini 429s too), a POPULATED controversy map must STILL
+        # yield a real answer — never fall through to the legacy Gemini path that
+        # 429s and shows the bare "insufficient evidence" sentence. Serialise the
+        # contending positions + grounded passages into prose deterministically.
+        hedge_mode = "degraded"
         if not prose:
+            try:
+                prose = (deterministic_map_hedge(cmap) or "").strip()
+            except Exception:  # noqa: BLE001 - the floor must never raise
+                logger.warning("Deterministic map hedge raised", exc_info=True)
+                prose = ""
+            if prose:
+                hedge_mode = "deterministic_map"
+
+        if not prose:
+            # Only a genuinely empty map (no frames/positions/passages) reaches
+            # here — there is nothing to render, so the legacy path is correct.
             state.metadata["scholar_synthesis"] = {
                 "status": "failed",
                 "reason": reason,
@@ -778,7 +798,7 @@ class ScholarlyAgent:
         # caller skips RenderGroundedAnswer. Marked degraded for observability.
         state.metadata["render_answer_mode"] = "dialectical"
         state.metadata["scholar_synthesis"] = {
-            "status": "degraded",
+            "status": hedge_mode,
             "reason": reason,
             "ledger_size": len(ledger),
             "degraded": True,
@@ -787,7 +807,7 @@ class ScholarlyAgent:
             state,
             "dialectical_synthesis",
             {
-                "mode": "dialectical_degraded",
+                "mode": f"dialectical_{hedge_mode}",
                 "reason": reason,
                 "ledger_size": len(ledger),
                 "raw_excerpt": truncate_text(prose, 2000),
@@ -1865,6 +1885,56 @@ class ScholarlyAgent:
         if result_into is not None:
             result_into["value"] = value
 
+    async def _stream_map_hedge(
+        self, state: RAGState, holder: dict[str, Any]
+    ) -> AsyncIterator[str]:
+        """FINAL GUARANTEE for the streaming seam: emit a deterministic, non-empty
+        map-derived hedge as answer_chunks when the streaming synthesis failed /
+        timed out / emptied.
+
+        A POPULATED controversy map must ALWAYS yield a real answer — never fall
+        through to the legacy Gemini render that 429s and shows the bare
+        "insufficient evidence" sentence. Serialises the contending positions +
+        their grounded passages into prose (no LLM call), lands it in
+        ``state.raw_answer`` + a prose-derived ledger, and chunks it losslessly.
+        Sets ``holder['ok']`` True iff a real hedge was produced; an empty map
+        leaves it falsy so the legacy render runs (nothing to render anyway)."""
+        cmap = getattr(state, "controversy_map", None)
+        prose = ""
+        if cmap is not None:
+            try:
+                prose = (deterministic_map_hedge(cmap) or "").strip()
+            except Exception:  # noqa: BLE001 - the floor must never raise
+                logger.warning("Deterministic map hedge raised", exc_info=True)
+                prose = ""
+        if not prose:
+            holder["ok"] = False
+            return
+
+        state.raw_answer = prose
+        ledger = build_provenance_ledger(prose, cmap)
+        if ledger:
+            state.claim_ledger = ledger
+        state.metadata["render_streamed"] = True
+        state.metadata["render_answer_mode"] = "dialectical"
+        state.metadata["scholar_synthesis"] = {
+            "status": "deterministic_map",
+            "ledger_size": len(ledger),
+            "degraded": True,
+        }
+        for chunk in _lossless_prose_chunks(prose):
+            yield chunk
+        _append_reasoning_step(
+            state,
+            "DialecticalSynthesis",
+            "deterministic_map_hedge",
+            "",
+            0,
+            prose,
+            parsed_result={"streamed": True, "render_mode": "dialectical_hedge"},
+        )
+        holder["ok"] = True
+
     async def _stream_dialectical(
         self,
         state: RAGState,
@@ -1966,13 +2036,15 @@ class ScholarlyAgent:
                     )
         except Exception:
             logger.warning(
-                "Dialectical synthesis stream failed; legacy render", exc_info=True
+                "Dialectical synthesis stream failed; deterministic map hedge",
+                exc_info=True,
             )
             if not synth_task.done():
                 synth_task.cancel()
             with contextlib.suppress(asyncio.CancelledError, Exception):
                 await synth_task
-            holder["ok"] = False
+            async for ev in self._stream_map_hedge(state, holder):
+                yield ev
             return
 
         # Drain any reasoning deltas that landed after the task finished but
@@ -1994,24 +2066,29 @@ class ScholarlyAgent:
             with contextlib.suppress(asyncio.CancelledError, Exception):
                 await synth_task
             logger.warning(
-                "Dialectical synthesis exceeded max_wait=%.0fs; legacy render",
+                "Dialectical synthesis exceeded max_wait=%.0fs; deterministic "
+                "map hedge",
                 max_wait,
             )
-            holder["ok"] = False
+            async for ev in self._stream_map_hedge(state, holder):
+                yield ev
             return
 
         try:
             synth_task.result()  # surface any task exception
         except Exception:
             logger.warning(
-                "Dialectical synthesis task raised; legacy render", exc_info=True
+                "Dialectical synthesis task raised; deterministic map hedge",
+                exc_info=True,
             )
-            holder["ok"] = False
+            async for ev in self._stream_map_hedge(state, holder):
+                yield ev
             return
 
         prose = result_holder.get("value")
         if not prose:
-            holder["ok"] = False
+            async for ev in self._stream_map_hedge(state, holder):
+                yield ev
             return
 
         state.metadata["render_streamed"] = True

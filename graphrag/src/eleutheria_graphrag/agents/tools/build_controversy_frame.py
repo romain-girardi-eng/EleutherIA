@@ -109,6 +109,13 @@ _STOP_TERMS: frozenset[str] = frozenset(
 )
 
 
+# Author key derived from a ``passage_<author>_*`` id when no richer signal
+# exists. The segment after ``passage_`` up to the next underscore/digit is the
+# author token (``passage_epict_1`` -> ``epict``, ``passage_alex_de_fato`` ->
+# ``alex``). Used only as the LAST resort behind metadata/authored_by.
+_PASSAGE_ID_AUTHOR_RE = re.compile(r"^passage_([A-Za-z]+)")
+
+
 class BuildControversyFrameResult(BaseModel):
     """The assembled frame plus a flag for whether the fallback was needed."""
 
@@ -451,6 +458,90 @@ class BuildControversyFrameTool:
 
     # ── passages ─────────────────────────────────────────────────────────
 
+    def _passage_author_key(self, passage_id: str) -> str:
+        """Stable author key for a passage id (metadata > authored_by > id prefix).
+
+        The round-robin grouping key. Prefers the passage node's ``author``
+        metadata or its ``authored_by`` neighbour label; falls back to the
+        ``passage_<author>_*`` id token so that ``passage_epict_*`` and
+        ``passage_alex_*`` group apart even when metadata is sparse. Never
+        fabricates: returns the id itself only when no author signal exists.
+        """
+        node = self._deps.node_lookup.get(passage_id, {})
+        metadata = normalize_mapping(node.get("metadata"))
+        author = metadata.get("author")
+        if isinstance(author, str) and author.strip():
+            return author.strip().lower()
+        for edge in self._deps.outgoing_edges.get(passage_id, []):
+            if (edge.get("relation") or "") == "authored_by":
+                tgt = self._deps.node_lookup.get(edge.get("target", ""), {})
+                label = tgt.get("label")
+                if isinstance(label, str) and label.strip():
+                    return label.strip().lower()
+        match = _PASSAGE_ID_AUTHOR_RE.match(passage_id)
+        if match:
+            return match.group(1).lower()
+        return passage_id.lower()
+
+    def _round_robin_by_author(
+        self, passage_ids: list[str], priority_authors: frozenset[str]
+    ) -> list[str]:
+        """Interleave passage ids one-per-author so no author monopolises the cap.
+
+        Groups ``passage_ids`` by :meth:`_passage_author_key` (stable order
+        within each group), then emits round-robin. Authors whose key matches a
+        frame-holder / question term in ``priority_authors`` are drained FIRST
+        (relevance rank), so an Epictetus question surfaces Epictetus passages
+        before unrelated authors even under a tight cap. Fully deterministic.
+        """
+        groups: dict[str, list[str]] = {}
+        order: list[str] = []
+        for pid in passage_ids:
+            key = self._passage_author_key(pid)
+            if key not in groups:
+                groups[key] = []
+                order.append(key)
+            groups[key].append(pid)
+
+        def _is_priority(key: str) -> bool:
+            return any(term in key or key in term for term in priority_authors)
+
+        priority_keys = [k for k in order if _is_priority(k)]
+        other_keys = [k for k in order if not _is_priority(k)]
+        ranked_order = priority_keys + other_keys
+
+        out: list[str] = []
+        cursors = dict.fromkeys(ranked_order, 0)
+        remaining = sum(len(groups[k]) for k in ranked_order)
+        while remaining:
+            for key in ranked_order:
+                idx = cursors[key]
+                if idx < len(groups[key]):
+                    out.append(groups[key][idx])
+                    cursors[key] = idx + 1
+                    remaining -= 1
+        return out
+
+    def _priority_authors(self, position_ids: set[str]) -> frozenset[str]:
+        """Author terms that should rank first: the frame's grounded holders.
+
+        Derives author tokens from each groundable position's holder label and
+        from any ancient-author the position points at, lowercased. An Epictetus
+        question reaches Epictetus passages because the holders (Dobbin/Long on
+        Epictetus, or Epictetus himself) yield the ``epict`` token via the
+        passages' own author key space — we match on whole label tokens too.
+        """
+        terms: set[str] = set()
+        for pid in position_ids:
+            pos = self._ground_position(pid) if self._is_groundable(pid) else None
+            if pos is None:
+                continue
+            for source in (pos.holder, pos.claim):
+                for tok in _TERM_RE.findall((source or "").lower()):
+                    if len(tok) > 3 and tok not in _STOP_TERMS:
+                        terms.add(tok)
+        return frozenset(terms)
+
     def _passage_ids_for_node(self, node_id: str) -> set[str]:
         ids: set[str] = set()
         for edge in self._deps.incoming_edges.get(node_id, []):
@@ -474,7 +565,12 @@ class BuildControversyFrameTool:
     _BRIDGE_NODE_TYPES: frozenset[str] = frozenset({"concept", "argument"})
     _MAX_BRIDGE_NODES: int = 8
 
-    def _passage_ids_via_concepts(self, node_id: str, limit: int) -> list[str]:
+    def _passage_ids_via_concepts(
+        self,
+        node_id: str,
+        limit: int,
+        priority_authors: frozenset[str] = frozenset(),
+    ) -> list[str]:
         """Two-hop passage discovery: node -> concept/argument bridge -> passage.
 
         Walks outgoing edges from ``node_id`` to neighbours whose type is in
@@ -482,6 +578,11 @@ class BuildControversyFrameTool:
         one-hop ``_passage_ids_for_node``. Returns a deduped, ORDERED list.
         Fan-out is bounded: at most ``_MAX_BRIDGE_NODES`` bridges and at most
         ``limit`` passages total — no live DB calls, pure KG adjacency.
+
+        Candidate ids are ordered by AUTHOR ROUND-ROBIN (relevance-ranked by
+        ``priority_authors``) BEFORE the cap, so a single author (e.g. the
+        alphabetically-first ``passage_alex_*``) cannot monopolise the slots and
+        starve the holder's own author (the Epictetus-surfacing fix).
         """
         if limit <= 0:
             return []
@@ -498,44 +599,54 @@ class BuildControversyFrameTool:
                 if len(bridge_ids) >= self._MAX_BRIDGE_NODES:
                     break
 
-        passage_ids: list[str] = []
+        candidates: list[str] = []
         seen: set[str] = set()
         for bridge_id in bridge_ids:
             for pid in sorted(self._passage_ids_for_node(bridge_id)):
                 if pid not in seen:
                     seen.add(pid)
-                    passage_ids.append(pid)
-                    if len(passage_ids) >= limit:
-                        return passage_ids
-        return passage_ids
+                    candidates.append(pid)
+        ordered = self._round_robin_by_author(candidates, priority_authors)
+        return ordered[:limit]
 
     def _contested_passages(
         self, seed_id: str, position_ids: set[str], limit: int
     ) -> list[PassageRef]:
         if limit <= 0:
             return []
+        priority_authors = self._priority_authors(position_ids)
         passage_ids: list[str] = []
         seen: set[str] = set()
+
+        # 1-hop direct passages stay FIRST (priority), but within that pass the
+        # candidates are author round-robin'd + relevance-ranked so the cap is
+        # shared across authors instead of filled by the alphabetically-first.
+        direct_candidates: list[str] = []
+        direct_seen: set[str] = set()
         for nid in [seed_id, *sorted(position_ids)]:
             for pid in sorted(self._passage_ids_for_node(nid)):
-                if pid not in seen:
-                    seen.add(pid)
-                    passage_ids.append(pid)
-                    if len(passage_ids) >= limit:
-                        break
-            if len(passage_ids) >= limit:
-                break
+                if pid not in direct_seen:
+                    direct_seen.add(pid)
+                    direct_candidates.append(pid)
+        for pid in self._round_robin_by_author(direct_candidates, priority_authors):
+            if pid not in seen:
+                seen.add(pid)
+                passage_ids.append(pid)
+                if len(passage_ids) >= limit:
+                    break
 
         # Second pass: many seed/position nodes have NO direct passage edge —
         # their primary passages sit one concept/argument hop further
-        # (argument --discusses--> concept --has_passage--> passage). 1-hop
-        # direct passages stay FIRST (priority); only fill the remainder.
+        # (argument --discusses--> concept --has_passage--> passage). Only fill
+        # the remainder; the helper applies the same author round-robin.
         if len(passage_ids) < limit:
             for nid in [seed_id, *sorted(position_ids)]:
                 remaining = limit - len(passage_ids)
                 if remaining <= 0:
                     break
-                for pid in self._passage_ids_via_concepts(nid, remaining):
+                for pid in self._passage_ids_via_concepts(
+                    nid, remaining, priority_authors
+                ):
                     if pid not in seen:
                         seen.add(pid)
                         passage_ids.append(pid)
