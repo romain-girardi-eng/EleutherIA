@@ -1560,7 +1560,13 @@ class LLMService:
                             chunk_usage = chunk.get("usage")
                             if isinstance(chunk_usage, dict):
                                 stream_usage = chunk_usage
-                        delta = chunk.get("choices", [{}])[0].get("delta", {})
+                        # The final usage chunk (include_usage) carries an EMPTY
+                        # choices list — `[][0]` would raise IndexError and abort
+                        # the whole synthesis. Skip any choiceless chunk.
+                        choices = chunk.get("choices") or []
+                        if not choices:
+                            continue
+                        delta = choices[0].get("delta", {})
                         # Thinking models stream their chain-of-thought as
                         # ``reasoning_content`` deltas — accumulate them on the
                         # side-channel; NEVER yield them as answer chunks.
@@ -1756,7 +1762,13 @@ class LLMService:
                 chunk_usage = chunk.get("usage")
                 if isinstance(chunk_usage, dict):
                     stream_usage = chunk_usage
-                delta = chunk.get("choices", [{}])[0].get("delta", {})
+                # The final usage chunk (include_usage) carries an EMPTY choices
+                # list — `[][0]` would raise IndexError and abort the synthesis
+                # (dropping the fully-streamed answer → fallback rung). Skip it.
+                choices = chunk.get("choices") or []
+                if not choices:
+                    continue
+                delta = choices[0].get("delta", {})
                 # Reasoning deltas first (accumulate on the side-channel AND
                 # surface live), then answer deltas — NEVER folded together.
                 reasoning = delta.get("reasoning_content")

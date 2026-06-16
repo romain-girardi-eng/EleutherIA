@@ -557,14 +557,17 @@ async def synthesize_dialectical_stream(
                         await on_reasoning(delta)
                 elif channel == "answer" and delta:
                     answer_parts.append(delta)
-            prose = "".join(answer_parts).strip()
         except Exception as exc:  # pragma: no cover - defensive, never raise upstream
             logger.warning(
-                "dialectical streaming synthesis failed on %s (%s); next rung",
+                "dialectical streaming synthesis errored on %s (%s); "
+                "salvaging %d streamed answer chars",
                 candidate,
                 exc,
+                sum(len(p) for p in answer_parts),
             )
-            prose = ""
+        # Salvage whatever streamed BEFORE the error: a late-stream failure (e.g.
+        # a malformed final chunk) must never discard a fully-streamed answer.
+        prose = "".join(answer_parts).strip()
         if prose:
             model_id = candidate
             # Prefer the accumulated reasoning deltas; fall back to the
