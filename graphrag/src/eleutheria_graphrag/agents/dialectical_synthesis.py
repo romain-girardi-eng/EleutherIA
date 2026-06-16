@@ -207,7 +207,7 @@ _SCHOLAR_SYNTHESIS_DEFAULT = "accounts/fireworks/models/deepseek-v4-pro"
 # _SCHOLAR_SYNTHESIS_DEFAULT = "accounts/fireworks/models/kimi-k2-thinking"  # when enabled
 # k2p6 (non-reasoning instruct) is kept ONLY for the agent ReAct retrieval loop,
 # not for synthesis — it inlines its scratchpad into content (the root-cause bug).
-_SCHOLAR_SYNTHESIS_AGENT_LOOP_MODEL = "accounts/fireworks/models/kimi-k2p6"
+_SCHOLAR_SYNTHESIS_AGENT_LOOP_MODEL = "accounts/fireworks/models/kimi-k2p7-code"
 _SCHOLAR_SYNTHESIS_GEMINI_FALLBACK = "gemini-3.1-pro-preview"
 
 # Fireworks reasoning models that return their chain-of-thought in a SEPARATE
