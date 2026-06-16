@@ -13,9 +13,11 @@ interface MessageBubbleProps {
   onNodeClick: (nodeId: string) => void;
   onCitationClick: (citationIndex: number) => void;
   onPassageCitationClick?: (passageId: string) => void;
+  /** Called when an inline [P_<kg_node_id>: ...] scholar/argument badge is clicked. */
+  onNodeCitationClick?: (nodeId: string) => void;
 }
 
-export default function MessageBubble({ message, onNodeClick, onCitationClick, onPassageCitationClick }: MessageBubbleProps) {
+export default function MessageBubble({ message, onNodeClick, onCitationClick, onPassageCitationClick, onNodeCitationClick }: MessageBubbleProps) {
   const { t } = useTranslation();
   const isUser = message.role === 'user';
   const navigate = useNavigate();
@@ -168,6 +170,7 @@ export default function MessageBubble({ message, onNodeClick, onCitationClick, o
                       }
                     }}
                     onPassageCitationClick={onPassageCitationClick}
+                    onNodeCitationClick={onNodeCitationClick}
                   />
                 </div>
               ) : (

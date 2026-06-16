@@ -380,6 +380,9 @@ export const extraResources = {
         cited: 'cited',
         passageCount: '{{count}} of {{total}} passages',
         viewInTextReader: 'View in text reader',
+        notFound: 'Passage not found in the corpus.',
+        singleCitationNote: 'Single passage — full text of this work is not in the corpus.',
+        translationLabel: 'EN',
         language: {
           latin: 'Latin',
           greek: 'Greek',
@@ -1274,6 +1277,9 @@ export const extraResources = {
         cited: 'cité',
         passageCount: '{{count}} sur {{total}} passages',
         viewInTextReader: 'Voir dans le lecteur de texte',
+        notFound: 'Passage introuvable dans le corpus.',
+        singleCitationNote: "Passage unique — le texte intégral de cette oeuvre n'est pas dans le corpus.",
+        translationLabel: 'EN',
         language: {
           latin: 'Latin',
           greek: 'Grec',
@@ -2171,6 +2177,9 @@ export const extraResources = {
         cited: 'zitiert',
         passageCount: '{{count}} von {{total}} Passagen',
         viewInTextReader: 'Im Textleser anzeigen',
+        notFound: 'Passage nicht im Korpus gefunden.',
+        singleCitationNote: 'Einzelpassage — der vollständige Text dieses Werks ist nicht im Korpus.',
+        translationLabel: 'EN',
         language: {
           latin: 'Latein',
           greek: 'Griechisch',
@@ -3037,6 +3046,9 @@ export const extraResources = {
         cited: 'citato',
         passageCount: '{{count}} di {{total}} passi',
         viewInTextReader: 'Apri nel lettore di testi',
+        notFound: 'Passo non trovato nel corpus.',
+        singleCitationNote: "Passo singolo — il testo completo di quest'opera non è nel corpus.",
+        translationLabel: 'EN',
         language: {
           latin: 'Latino',
           greek: 'Greco',
@@ -3933,6 +3945,9 @@ export const extraResources = {
         cited: 'παρατεθειμένο',
         passageCount: '{{count}} από {{total}} αποσπάσματα',
         viewInTextReader: 'Προβολή στον αναγνώστη κειμένου',
+        notFound: 'Απόσπασμα δεν βρέθηκε στο σώμα κειμένων.',
+        singleCitationNote: 'Μεμονωμένο απόσπασμα — το πλήρες κείμενο αυτού του έργου δεν είναι στο σώμα.',
+        translationLabel: 'EN',
         language: {
           latin: 'Λατινικά',
           greek: 'Ελληνικά',

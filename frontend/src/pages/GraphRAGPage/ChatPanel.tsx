@@ -33,6 +33,8 @@ interface ChatPanelProps {
   onNodeClick: (nodeId: string) => void;
   onCitationClick: (citationIndex: number) => void;
   onPassageCitationClick?: (passageId: string) => void;
+  /** Called when a [P_<kg_node_id>: ...] inline scholar/argument badge is clicked. */
+  onNodeCitationClick?: (nodeId: string) => void;
   responseTabs: ResponseTab[];
   activeTabId: string;
   onTabChange: (tabId: string) => void;
@@ -58,6 +60,7 @@ export default function ChatPanel({
   onNodeClick,
   onCitationClick,
   onPassageCitationClick,
+  onNodeCitationClick,
   responseTabs,
   activeTabId,
   onTabChange,
@@ -130,6 +133,7 @@ export default function ChatPanel({
               onNodeClick={onNodeClick}
               onCitationClick={onCitationClick}
               onPassageCitationClick={onPassageCitationClick}
+              onNodeCitationClick={onNodeCitationClick}
             />
           ))}
         </AnimatePresence>

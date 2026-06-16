@@ -28,11 +28,11 @@ export default function PassageReaderPanel({
   const passages = passageContext?.passages ?? [];
   const workId = passageContext?.workId ?? '';
   const totalPassagesInWork = passageContext?.totalPassagesInWork ?? 0;
+  const workIsComplete = passageContext?.workIsComplete ?? true;
+  const hasMoreBefore = passageContext?.hasMoreBefore;
+  const hasMoreAfter = passageContext?.hasMoreAfter;
 
-  // Auto-scroll to target passage on mount. Guard against ``target`` being
-  // null — a backend response with HTTP 200 but malformed body (or a
-  // not-yet-loaded passage_id) used to crash the panel with
-  // "Cannot read properties of null (reading 'passageId')".
+  // Auto-scroll to target passage on mount.
   useEffect(() => {
     if (!target?.passageId) return;
     const timer = setTimeout(() => {
@@ -41,24 +41,19 @@ export default function PassageReaderPanel({
     return () => clearTimeout(timer);
   }, [target?.passageId]);
 
-  // Early exit when the API didn't return a target passage. Render an
-  // explicit "not found" state instead of letting downstream code deref
-  // null fields. Pre-compute the rest of the derived values only when we
-  // have a target.
   if (!target) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
         <BookOpen className="h-8 w-8 text-stone-300" />
         <p className="text-sm font-medium text-stone-600">
-          {t('graphRagUi.passageReader.notFound') ??
-            'Passage non trouvé dans la base.'}
+          {t('graphRagUi.passageReader.notFound')}
         </p>
         <button
           type="button"
           onClick={onClose}
           className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-600 hover:border-amber-300 hover:bg-amber-50"
         >
-          {t('graphRagUi.passageReader.close') ?? 'Fermer'}
+          {t('graphRagUi.passageReader.close')}
         </button>
       </div>
     );
@@ -69,18 +64,28 @@ export default function PassageReaderPanel({
     ? 'bg-red-50 text-red-700 border-red-200'
     : 'bg-blue-50 text-blue-700 border-blue-200';
 
-  const langLabel = target.language === 'lat' ? t('graphRagUi.passageReader.language.latin') : t('graphRagUi.passageReader.language.greek');
+  const langLabel = target.language === 'lat'
+    ? t('graphRagUi.passageReader.language.latin')
+    : t('graphRagUi.passageReader.language.greek');
 
   // Reference range for the header
   const firstRef = passages[0]?.canonicalRef || '';
   const lastRef = passages[passages.length - 1]?.canonicalRef || '';
   const rangeLabel = firstRef === lastRef ? firstRef : `${firstRef} — ${lastRef}`;
 
-  // Check if we can load more in each direction
+  // Scroll controls — only when work is complete and we have a real window.
+  // Use precise server-computed booleans when available; fall back to seq
+  // position estimates (firstSeq > 1 / lastSeq < total - 1) otherwise.
   const firstSeq = passages[0]?.sequenceNumber ?? 0;
   const lastSeq = passages[passages.length - 1]?.sequenceNumber ?? 0;
-  const canLoadUp = firstSeq > 1;
-  const canLoadDown = lastSeq < totalPassagesInWork - 1;
+  const canLoadUp = workIsComplete && (
+    hasMoreBefore !== undefined ? hasMoreBefore : firstSeq > 1
+  );
+  const canLoadDown = workIsComplete && (
+    hasMoreAfter !== undefined ? hasMoreAfter : lastSeq < totalPassagesInWork - 1
+  );
+
+  const translationLabel = t('graphRagUi.passageReader.translationLabel');
 
   return (
     <motion.div
@@ -121,38 +126,39 @@ export default function PassageReaderPanel({
 
       {/* Scrollable Passage Body */}
       <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
-        {/* Load more above */}
+        {/* Load more above — only when full work is available */}
         {canLoadUp && (
           <div className="flex justify-center py-3">
             <button
               onClick={() => onLoadMore('up')}
-            disabled={loading}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-stone-400 hover:text-stone-600 bg-amber-50 hover:bg-amber-100/50 rounded-lg transition-colors disabled:opacity-30"
-          >
-            <ChevronUp className="w-3.5 h-3.5" />
-            {t('graphRagUi.passageReader.loadEarlier')}
-          </button>
-        </div>
+              disabled={loading}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-stone-400 hover:text-stone-600 bg-amber-50 hover:bg-amber-100/50 rounded-lg transition-colors disabled:opacity-30"
+            >
+              <ChevronUp className="w-3.5 h-3.5" />
+              {t('graphRagUi.passageReader.loadEarlier')}
+            </button>
+          </div>
         )}
 
         {/* Passages list */}
-        <div className="px-4 py-2 space-y-1">
+        <div className="px-4 py-2 space-y-2">
           {passages.map((passage) => {
             const isTarget = passage.isTarget;
             const isGreek = passage.language === 'grc';
+            const hasEnglish = Boolean(passage.textEnglish);
             return (
               <div
                 key={passage.passageId}
                 ref={isTarget ? targetRef : undefined}
                 className={cn(
-                  'rounded-lg px-4 py-3 transition-colors',
+                  'rounded-xl px-4 py-3 transition-colors',
                   isTarget
-                    ? 'bg-amber-100/40 border-l-4 border-amber-600'
-                    : 'bg-transparent hover:bg-amber-50/50 border-l-2 border-transparent'
+                    ? 'bg-amber-100/50 border-l-4 border-amber-500 shadow-sm'
+                    : 'bg-transparent hover:bg-amber-50/40 border-l-2 border-transparent opacity-75 hover:opacity-100'
                 )}
               >
-                {/* Reference badge */}
-                <div className="flex items-center gap-2 mb-1.5">
+                {/* Reference badge row */}
+                <div className="flex items-center gap-2 mb-2">
                   <span className={cn(
                     'inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono',
                     isTarget
@@ -162,44 +168,81 @@ export default function PassageReaderPanel({
                     {passage.canonicalRef}
                   </span>
                   {isTarget && (
-                    <span className="text-[10px] font-medium text-amber-600 uppercase tracking-wider">
+                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-amber-200/60 text-[10px] font-semibold text-amber-700 uppercase tracking-wider">
                       {t('graphRagUi.passageReader.cited')}
                     </span>
                   )}
                 </div>
 
-                {/* Passage text */}
+                {/* Original text */}
                 <p className={cn(
-                  'leading-relaxed text-[13px]',
+                  'leading-relaxed',
+                  isTarget ? 'text-[14px]' : 'text-[13px]',
                   isGreek ? 'font-serif italic' : 'font-serif',
-                  isTarget ? 'text-stone-800' : 'text-stone-600'
+                  isTarget ? 'text-stone-800' : 'text-stone-500'
                 )}>
                   {passage.textContent}
                 </p>
+
+                {/* English translation — shown beneath original when available */}
+                {hasEnglish && (
+                  <div className={cn(
+                    'mt-2 pt-2 border-t',
+                    isTarget ? 'border-amber-200/50' : 'border-stone-100'
+                  )}>
+                    <div className="flex items-start gap-1.5">
+                      <span className={cn(
+                        'shrink-0 mt-0.5 inline-flex items-center justify-center rounded px-1 py-0 text-[9px] font-bold uppercase tracking-wider',
+                        isTarget
+                          ? 'bg-amber-100 text-amber-600'
+                          : 'bg-stone-100 text-stone-400'
+                      )}>
+                        {translationLabel}
+                      </span>
+                      <p className={cn(
+                        'leading-relaxed text-[12px]',
+                        isTarget ? 'text-stone-600' : 'text-stone-400'
+                      )}>
+                        {passage.textEnglish}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
 
-        {/* Load more below */}
+        {/* Single-citation note — shown when work is not fully in corpus */}
+        {!workIsComplete && (
+          <div className="mx-4 mb-3 rounded-lg border border-stone-200/60 bg-stone-50/80 px-3 py-2">
+            <p className="text-[11px] text-stone-400 italic text-center">
+              {t('graphRagUi.passageReader.singleCitationNote')}
+            </p>
+          </div>
+        )}
+
+        {/* Load more below — only when full work is available */}
         {canLoadDown && (
           <div className="flex justify-center py-3">
             <button
               onClick={() => onLoadMore('down')}
-            disabled={loading}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-stone-400 hover:text-stone-600 bg-amber-50 hover:bg-amber-100/50 rounded-lg transition-colors disabled:opacity-30"
-          >
-            <ChevronDown className="w-3.5 h-3.5" />
-            {t('graphRagUi.passageReader.loadLater')}
-          </button>
-        </div>
+              disabled={loading}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-stone-400 hover:text-stone-600 bg-amber-50 hover:bg-amber-100/50 rounded-lg transition-colors disabled:opacity-30"
+            >
+              <ChevronDown className="w-3.5 h-3.5" />
+              {t('graphRagUi.passageReader.loadLater')}
+            </button>
+          </div>
         )}
       </div>
 
       {/* Sticky Footer */}
       <div className="shrink-0 px-4 py-2.5 border-t border-amber-200/40 bg-parchment-100 flex items-center justify-between">
         <span className="text-[10px] text-stone-400">
-          {t('graphRagUi.passageReader.passageCount', { count: passages.length, total: totalPassagesInWork })}
+          {workIsComplete
+            ? t('graphRagUi.passageReader.passageCount', { count: passages.length, total: totalPassagesInWork })
+            : null}
         </span>
         <button
           onClick={() => navigate(`/texts?work=${workId}&passage=${target.passageId}`)}

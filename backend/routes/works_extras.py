@@ -443,14 +443,31 @@ async def get_passage_context(
     db: Annotated[DatabaseService, Depends(get_db)],
     window: int = Query(5, ge=1, le=20),
 ) -> dict[str, Any]:
-    """Get a passage with surrounding context (N passages before/after)."""
-    # First, get the target passage with its work info
+    """Get a passage with surrounding context (N passages before/after).
+
+    Accepts either a passages UUID or a KG passage_* node_id (resolved via
+    passage_citations).  Returns ``work_is_complete`` so the frontend knows
+    whether to render the full scroll-reader or just the single citation card.
+    Each passage item carries ``textEnglish`` (may be None) sourced from the
+    companion ``{node_id}_en`` KG-node description, mirroring the /section
+    endpoint's join logic.
+
+    A work is considered *complete* when it has ≥ 10 passages with
+    ``passage_role = 'original'``.  Works with fewer than 10 original passages
+    are fragment/citation-only collections; only the single cited passage is
+    returned for those.
+
+    The response also includes ``hasMoreBefore`` / ``hasMoreAfter`` booleans
+    (precise existence checks, not estimates) and ``totalOriginalPassages`` so
+    the frontend can show/hide Load-earlier / Load-later controls exactly.
+    """
+    # Resolve target passage: try direct UUID match first.
     target = await db.fetchrow(
         """
         SELECT
             p.passage_id, p.text_content, p.canonical_ref,
             p.cts_urn, p.book, p.chapter, p.section,
-            p.sequence_number, p.work_id,
+            p.sequence_number, p.work_id, p.passage_role,
             w.title AS work_title, w.author, w.language
         FROM free_will.passages p
         JOIN free_will.ancient_works w ON p.work_id = w.work_id
@@ -459,14 +476,14 @@ async def get_passage_context(
         passage_id,
     )
 
-    # If not found by UUID, try matching by kg_node_id in passage_citations
+    # If not found by UUID, try KG node_id via passage_citations.
     if not target:
         target = await db.fetchrow(
             """
             SELECT
                 p.passage_id, p.text_content, p.canonical_ref,
                 p.cts_urn, p.book, p.chapter, p.section,
-                p.sequence_number, p.work_id,
+                p.sequence_number, p.work_id, p.passage_role,
                 w.title AS work_title, w.author, w.language
             FROM free_will.passage_citations pc
             JOIN free_will.passages p ON pc.passage_id = p.passage_id
@@ -483,21 +500,84 @@ async def get_passage_context(
             "passages": [],
             "workId": "",
             "totalPassagesInWork": 0,
+            "totalOriginalPassages": 0,
+            "workIsComplete": False,
+            "hasMoreBefore": False,
+            "hasMoreAfter": False,
         }
 
     work_id = target["work_id"]
     seq = target["sequence_number"]
 
-    # Get surrounding passages within the same work
+    # Count original passages to decide completeness (single cheap query).
+    total_original: int = int(
+        await db.fetchval(
+            "SELECT COUNT(*) FROM free_will.passages WHERE work_id = $1 AND passage_role = 'original'",
+            work_id,
+        )
+        or 0
+    )
+    work_is_complete: bool = total_original >= 10
+
+    # When the work is NOT complete, return only the single target passage.
+    if not work_is_complete:
+        # Build English lookup for just the target passage.
+        en_lookup: dict[str, str] = {}
+        target_id = str(target["passage_id"])
+        en_row = await db.fetchrow(
+            """
+            SELECT n.description
+            FROM free_will.passage_citations pc
+            JOIN free_will.kg_nodes n ON n.node_id = pc.kg_node_id || '_en'
+            WHERE pc.passage_id = $1::uuid
+            LIMIT 1
+            """,
+            target_id,
+        )
+        if en_row:
+            en_lookup[target_id] = en_row["description"]
+
+        def _fmt_single(row: Any, is_target: bool = False) -> dict[str, Any]:
+            pid = str(row["passage_id"])
+            return {
+                "passageId": pid,
+                "textContent": row["text_content"],
+                "textEnglish": en_lookup.get(pid),
+                "canonicalRef": row["canonical_ref"],
+                "author": target["author"] or "",
+                "workTitle": target["work_title"] or "",
+                "language": target["language"] or "grc",
+                "ctsUrn": row.get("cts_urn"),
+                "book": row.get("book"),
+                "chapter": row.get("chapter"),
+                "section": row.get("section"),
+                "sequenceNumber": row["sequence_number"],
+                "isTarget": is_target,
+            }
+
+        target_formatted = _fmt_single(target, is_target=True)
+        return {
+            "target": target_formatted,
+            "passages": [target_formatted],
+            "workId": str(work_id),
+            "totalPassagesInWork": total_original,
+            "totalOriginalPassages": total_original,
+            "workIsComplete": False,
+            "hasMoreBefore": False,
+            "hasMoreAfter": False,
+        }
+
+    # Full work — fetch surrounding context, filtering original passages only.
     context_rows = await db.fetch(
         """
         SELECT
             p.passage_id, p.text_content, p.canonical_ref,
             p.cts_urn, p.book, p.chapter, p.section,
-            p.sequence_number
+            p.sequence_number, p.passage_role
         FROM free_will.passages p
         WHERE p.work_id = $1
           AND p.sequence_number BETWEEN $2 AND $3
+          AND p.passage_role = 'original'
         ORDER BY p.sequence_number
         """,
         work_id,
@@ -505,16 +585,28 @@ async def get_passage_context(
         seq + window,
     )
 
-    # Get total passages in work
-    total = await db.fetchval(
-        "SELECT COUNT(*) FROM free_will.passages WHERE work_id = $1",
-        work_id,
-    )
+    # Build English lookup via companion _en KG nodes (same join as /section).
+    en_lookup = {}
+    if context_rows:
+        ids = [str(r["passage_id"]) for r in context_rows]
+        en_rows = await db.fetch(
+            """
+            SELECT pc.passage_id, n.description
+            FROM free_will.passage_citations pc
+            JOIN free_will.kg_nodes n ON n.node_id = pc.kg_node_id || '_en'
+            WHERE pc.passage_id = ANY($1::uuid[])
+            """,
+            ids,
+        )
+        for r in en_rows:
+            en_lookup[str(r["passage_id"])] = r["description"]
 
     def format_passage(row: Any, is_target: bool = False) -> dict[str, Any]:
+        pid = str(row["passage_id"])
         return {
-            "passageId": str(row["passage_id"]),
+            "passageId": pid,
             "textContent": row["text_content"],
+            "textEnglish": en_lookup.get(pid),
             "canonicalRef": row["canonical_ref"],
             "author": target["author"] or "",
             "workTitle": target["work_title"] or "",
@@ -532,12 +624,51 @@ async def get_passage_context(
     ]
 
     target_formatted = format_passage(target, is_target=True)
+    # Ensure target is present even if filtered out by passage_role.
+    if not any(p["isTarget"] for p in passages):
+        passages.append(target_formatted)
+        passages.sort(key=lambda p: p["sequenceNumber"])
+
+    # Precise existence checks for the Load-earlier / Load-later controls.
+    window_min_seq = min((r["sequence_number"] for r in context_rows), default=seq)
+    window_max_seq = max((r["sequence_number"] for r in context_rows), default=seq)
+
+    has_more_before: bool = bool(
+        await db.fetchval(
+            """
+            SELECT EXISTS (
+                SELECT 1 FROM free_will.passages
+                WHERE work_id = $1 AND passage_role = 'original'
+                  AND sequence_number < $2
+            )
+            """,
+            work_id,
+            window_min_seq,
+        )
+    )
+    has_more_after: bool = bool(
+        await db.fetchval(
+            """
+            SELECT EXISTS (
+                SELECT 1 FROM free_will.passages
+                WHERE work_id = $1 AND passage_role = 'original'
+                  AND sequence_number > $2
+            )
+            """,
+            work_id,
+            window_max_seq,
+        )
+    )
 
     return {
         "target": target_formatted,
         "passages": passages,
         "workId": str(work_id),
-        "totalPassagesInWork": int(total or 0),
+        "totalPassagesInWork": total_original,
+        "totalOriginalPassages": total_original,
+        "workIsComplete": True,
+        "hasMoreBefore": has_more_before,
+        "hasMoreAfter": has_more_after,
     }
 
 

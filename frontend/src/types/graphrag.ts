@@ -421,6 +421,8 @@ export interface QualityMetrics {
 export interface ContextPassage {
   passageId: string;
   textContent: string;
+  /** English translation from companion _en KG node, if available. */
+  textEnglish?: string;
   canonicalRef: string;
   author: string;
   workTitle: string;
@@ -438,4 +440,12 @@ export interface PassageContext {
   passages: ContextPassage[];
   workId: string;
   totalPassagesInWork: number;
+  /** Count of original-role passages in the work (same as totalPassagesInWork for complete works). */
+  totalOriginalPassages?: number;
+  /** True when the full work text is in the corpus (enables context scroll). */
+  workIsComplete?: boolean;
+  /** Whether original passages exist before the current window's earliest sequence. */
+  hasMoreBefore?: boolean;
+  /** Whether original passages exist after the current window's latest sequence. */
+  hasMoreAfter?: boolean;
 }
