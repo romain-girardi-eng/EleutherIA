@@ -16,7 +16,9 @@ from pydantic import BaseModel
 
 from eleutheria_graphrag.agents.graph_helpers import node_integrity_status
 from eleutheria_graphrag.agents.state import (
+    DIALECTICAL_RELATIONS,
     ContextPack,
+    DialecticalEdge,
     Evidence,
     EvidenceBundle,
     EvidenceSource,
@@ -55,6 +57,8 @@ class EvidenceCollector:
         self.seed_node_ids: list[str] = []
         self.context_node_ids: list[str] = []
         self.inferred_edges: set[tuple[str, str, str]] = set()
+        self.dialectical_edges: list[DialecticalEdge] = []
+        self._seen_dialectical: set[tuple[str, str, str]] = set()
         self.tool_calls: list[ToolCallRecord] = []
 
     def ingest(self, tool_name: str, _args: dict[str, Any], result: BaseModel) -> None:
@@ -99,6 +103,47 @@ class EvidenceCollector:
             )
         )
 
+    def _record_dialectical_edge(
+        self,
+        *,
+        source_id: str,
+        relation: str,
+        target_id: str,
+        direction: str = "",
+        weight: float | None = None,
+        source_label: str = "",
+        target_label: str = "",
+        source_type: str = "",
+        target_type: str = "",
+    ) -> None:
+        """Retain a disagreement-bearing edge (Scholar-RAG M0b).
+
+        Keeps BOTH endpoints + ``relation`` + ``direction`` — the data the old
+        ``_ingest_get_neighbors`` dropped (failure-map F1, the "0 edges" root
+        cause). Only relations in ``DIALECTICAL_RELATIONS`` are retained;
+        duplicate (source, relation, target) triples are collapsed.
+        """
+        rel = (relation or "").strip()
+        if not source_id or not target_id or rel not in DIALECTICAL_RELATIONS:
+            return
+        key = (source_id, rel, target_id)
+        if key in self._seen_dialectical:
+            return
+        self._seen_dialectical.add(key)
+        self.dialectical_edges.append(
+            DialecticalEdge(
+                source_id=source_id,
+                relation=rel,
+                target_id=target_id,
+                direction=direction,
+                weight=weight,
+                source_label=source_label,
+                target_label=target_label,
+                source_type=source_type,
+                target_type=target_type,
+            )
+        )
+
     def populate_state(self, state: RAGState) -> None:
         """Write accumulated evidence into RAGState for synthesis phase."""
         state.primary_evidence = self.primary_evidence
@@ -106,6 +151,7 @@ class EvidenceCollector:
         state.evidence_bundles = self.evidence_bundles
         state.seed_node_ids = self.seed_node_ids
         state.context_node_ids = self.context_node_ids
+        state.dialectical_edges = self.dialectical_edges
         state.passages_used = len(self.evidence_bundles)
         if self.inferred_edges:
             if not isinstance(getattr(state, "inferred_edges", None), set):
@@ -159,7 +205,36 @@ class EvidenceCollector:
                 )
 
     def _ingest_explore_subgraph(self, result: dict[str, Any]) -> None:
-        """Ingest results from explore_subgraph tool."""
+        """Ingest results from explore_subgraph tool.
+
+        Today's ``ExploreSubgraphResult`` carries only ``nodes``, but the same
+        dialectical-edge retention is applied to any ``edges`` the result may
+        carry (Scholar-RAG M0b — subgraph results may grow an edge list), so a
+        future edge-bearing subgraph never silently drops fault lines.
+        """
+        node_types = {
+            n.get("node_id", ""): n.get("type", "") for n in result.get("nodes", [])
+        }
+        node_labels = {
+            n.get("node_id", ""): n.get("label", "") for n in result.get("nodes", [])
+        }
+        for edge in result.get("edges", []):
+            source_id = edge.get("source", "") or edge.get("source_id", "")
+            target_id = edge.get("target", "") or edge.get("target_id", "")
+            if not source_id or not target_id:
+                continue
+            self._record_dialectical_edge(
+                source_id=source_id,
+                relation=edge.get("relation", ""),
+                target_id=target_id,
+                direction=edge.get("direction", ""),
+                weight=edge.get("weight"),
+                source_label=node_labels.get(source_id, ""),
+                target_label=node_labels.get(target_id, ""),
+                source_type=node_types.get(source_id, ""),
+                target_type=node_types.get(target_id, ""),
+            )
+
         for node in result.get("nodes", []):
             nid = node.get("node_id", "")
             if nid and nid not in self.seen_node_ids:
@@ -176,17 +251,57 @@ class EvidenceCollector:
                 )
 
     def _ingest_get_neighbors(self, result: dict[str, Any]) -> None:
-        """Ingest results from get_neighbors tool."""
+        """Ingest results from get_neighbors tool.
+
+        Retains the relation + direction + both endpoints of every dialectical
+        edge (Scholar-RAG M0b) — the data the old collector dropped, keeping
+        only ``edge_node_id`` (failure-map F1, the "0 edges used" root cause).
+        """
+        center_id = result.get("center_node", "")
+        center_label = result.get("center_label", center_id)
         for edge in result.get("edges", []):
             nid = edge.get("edge_node_id", "")
+            other_label = edge.get("label", "")
+            other_type = edge.get("type", "")
+
+            # Canonicalise source/target from the edge direction so the
+            # retained triple matches the underlying KG orientation.
+            direction = edge.get("direction", "")
+            if direction == "incoming":
+                source_id, source_label, source_type = nid, other_label, other_type
+                target_id, target_label, target_type = (
+                    center_id,
+                    center_label,
+                    "",
+                )
+            else:  # "outgoing" or unknown — treat center as the source
+                source_id, source_label, source_type = (
+                    center_id,
+                    center_label,
+                    "",
+                )
+                target_id, target_label, target_type = nid, other_label, other_type
+
+            self._record_dialectical_edge(
+                source_id=source_id,
+                relation=edge.get("relation", ""),
+                target_id=target_id,
+                direction=direction,
+                weight=edge.get("weight"),
+                source_label=source_label,
+                target_label=target_label,
+                source_type=source_type,
+                target_type=target_type,
+            )
+
             if nid and nid not in self.seen_node_ids:
                 self.seen_node_ids.add(nid)
                 self.context_node_ids.append(nid)
                 self.secondary_evidence.append(
                     Evidence(
                         id=nid,
-                        label=edge.get("label", ""),
-                        type=edge.get("type", ""),
+                        label=other_label,
+                        type=other_type,
                         source=EvidenceSource.GRAPH_TRAVERSAL,
                     )
                 )

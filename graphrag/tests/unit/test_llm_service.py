@@ -967,3 +967,25 @@ class TestFireworksPromptCache:
             assert sent["prompt_cache_id"].startswith(
                 "eleutheria-scholar-orchestrator-"
             )
+
+
+class TestKimiTemperatureClamp:
+    """M6: Moonshot/KIMI 400s on any temperature != 1.0 — the mandatory clamp."""
+
+    def _payload(self, provider: ModelProvider, temperature: float) -> dict:
+        return LLMService._openai_compatible_payload(
+            provider,
+            "user prompt",
+            "system prompt",
+            temperature,
+            128,
+            dict(PROVIDER_CONFIGS[provider]),
+        )
+
+    def test_kimi_temperature_clamped_to_one(self) -> None:
+        payload = self._payload(ModelProvider.KIMI, 0.3)
+        assert payload["temperature"] == 1.0
+
+    def test_fireworks_temperature_not_clamped(self) -> None:
+        payload = self._payload(ModelProvider.FIREWORKS, 0.3)
+        assert payload["temperature"] == 0.3

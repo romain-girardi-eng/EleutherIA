@@ -103,6 +103,15 @@ PROVIDER_CONFIGS = {
         "title_env": "OPENROUTER_APP_NAME",
         "rate_limit": 60,
     },
+    # KIMI = Moonshot-direct, an OPT-IN provider. Disabled by default (no key
+    # configured) per Romain's Fireworks-only constraint. ONE-LINE K2.7 SWAP
+    # point (ARCHITECTURE §K2.7) — do NOT apply until K2.7 is wanted on Moonshot:
+    #   "model":          "kimi-k2.7-code-highspeed",   # primary synthesis
+    #   "thinking_model": "kimi-k2.7-code",             # deep tier
+    #   add "model_env": "MOONSHOT_MODEL", "thinking_model_env":
+    #       "MOONSHOT_THINKING_MODEL" for overridability.
+    # The mandatory temperature=1.0 clamp already lives in
+    # _openai_compatible_payload, so the swap needs no further change there.
     ModelProvider.KIMI: {
         "base_url": "https://api.moonshot.ai/v1",
         "model": "kimi-latest",
@@ -503,6 +512,12 @@ class LLMService:
             "temperature": temperature,
             "max_tokens": max_tokens,
         }
+        # KIMI/Moonshot 400s on any temperature other than 1.0 (mandatory clamp,
+        # ARCHITECTURE §K2.7). Harmless today (KIMI/Moonshot stays opt-in,
+        # disabled by default per Romain's Fireworks-only constraint); it makes
+        # the K2.7-on-Moonshot swap one-line-ready without a future 400.
+        if provider == ModelProvider.KIMI:
+            payload["temperature"] = 1.0
         if provider == ModelProvider.FIREWORKS and prompt_cache_id:
             payload["prompt_cache_id"] = prompt_cache_id
         if provider == ModelProvider.OPENROUTER:

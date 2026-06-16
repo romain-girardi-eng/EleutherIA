@@ -637,7 +637,10 @@ class ScholarlyAgent:
             explore_subgraph=subgraph_tool,
             get_neighbors=tools.get("get_neighbors"),
             get_node_detail=tools.get("get_node_detail"),
-            query_scholarly_consensus=tools.get("query_scholarly_consensus"),
+            # The dead `query_scholarly_consensus` ref always resolved to None.
+            # Repoint it to the Scholar-RAG `find_debates` tool (present only when
+            # ELEUTHERIA_SCHOLAR_RAG is on; None otherwise — unchanged default).
+            query_scholarly_consensus=tools.get("find_debates"),
         )
         return CounterEvidenceHunter(llm=self.deps.llm, tools=toolset)
 

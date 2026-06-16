@@ -73,6 +73,7 @@ from eleutheria_graphrag.agents.state import (
     RetrievalBudget,
     ScholarlyAnswer,
     ScholarlyDossier,
+    scholar_rag_enabled,
 )
 from eleutheria_graphrag.agents.structured_models import (
     ClaimLedgerDraft,
@@ -3444,7 +3445,25 @@ def _build_context_pack(state: RAGState) -> ContextPack:
         bundle_tokens_used += bundle.token_estimate
         bundle_idx += 1
 
+    # Scholar-RAG M3: a top-level ``## Controversy Frames`` layer serialising the
+    # assembled fault lines (positions w/ holder+page, ``A --opposes--> B`` link
+    # lines, contested passages original+English). This gives the synthesis
+    # prompt a first-class edge slot (failure-map F2 fix). Only emitted when the
+    # flag is on AND a ControversyMap was assembled — inert by default so the
+    # legacy three-layer pack is byte-for-byte unchanged.
+    if scholar_rag_enabled() and state.controversy_map is not None:
+        from eleutheria_graphrag.agents.controversy_map import (
+            render_controversy_frames_layer,
+        )
+
+        pack.controversy_frames = list(state.controversy_map.frames)
+        frames_layer = render_controversy_frames_layer(state.controversy_map)
+    else:
+        frames_layer = ""
+
     parts: list[str] = []
+    if frames_layer:
+        parts.append(frames_layer)
     if pack.kg_metadata:
         parts.append("## KG Metadata\n" + "\n".join(pack.kg_metadata))
     if pack.section_summaries:
