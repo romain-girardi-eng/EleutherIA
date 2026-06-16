@@ -704,8 +704,8 @@ class TestFireworksProvider:
         """Fireworks provider config exposes Kimi K2.6 + OpenAI-compatible base URL."""
         config = PROVIDER_CONFIGS[ModelProvider.FIREWORKS]
         assert config["base_url"] == "https://api.fireworks.ai/inference/v1"
-        assert config["model"] == "accounts/fireworks/models/kimi-k2p6"
-        assert config["thinking_model"] == "accounts/fireworks/models/kimi-k2p6"
+        assert config["model"] == "accounts/fireworks/models/kimi-k2p7-code"
+        assert config["thinking_model"] == "accounts/fireworks/models/kimi-k2p7-code"
         assert config["env_key"] == "FIREWORKS_API_KEY"
         assert config["base_url_env"] == "FIREWORKS_BASE_URL"
         assert config["model_env"] == "FIREWORKS_MODEL"
@@ -755,10 +755,10 @@ class TestFireworksProvider:
         """Model overrides starting with accounts/fireworks/ should route to Fireworks."""
         llm = LLMService()
         provider, model = llm._resolve_model_override(
-            "accounts/fireworks/models/kimi-k2p6"
+            "accounts/fireworks/models/kimi-k2p7-code"
         )
         assert provider == ModelProvider.FIREWORKS
-        assert model == "accounts/fireworks/models/kimi-k2p6"
+        assert model == "accounts/fireworks/models/kimi-k2p7-code"
 
     @pytest.mark.asyncio
     async def test_generate_fireworks_chat_completions(self):
@@ -780,13 +780,13 @@ class TestFireworksProvider:
 
             assert result == "Kimi response"
             assert llm.last_provider_used == ModelProvider.FIREWORKS.value
-            assert llm.last_model_used == "accounts/fireworks/models/kimi-k2p6"
+            assert llm.last_model_used == "accounts/fireworks/models/kimi-k2p7-code"
             call = mock_client.post.call_args
             assert (
                 call.args[0] == "https://api.fireworks.ai/inference/v1/chat/completions"
             )
             assert call.kwargs["headers"]["Authorization"] == "Bearer fw_test"
-            assert call.kwargs["json"]["model"] == "accounts/fireworks/models/kimi-k2p6"
+            assert call.kwargs["json"]["model"] == "accounts/fireworks/models/kimi-k2p7-code"
 
     @pytest.mark.asyncio
     async def test_stream_fireworks_yields_sse_chunks(self):
@@ -896,7 +896,7 @@ class TestFireworksPromptCache:
             )
 
     def test_payload_includes_prompt_cache_id_for_fireworks(self):
-        config = {"model": "accounts/fireworks/models/kimi-k2p6"}
+        config = {"model": "accounts/fireworks/models/kimi-k2p7-code"}
         payload = LLMService._openai_compatible_payload(
             ModelProvider.FIREWORKS,
             prompt="user prompt",
@@ -930,7 +930,7 @@ class TestFireworksPromptCache:
             "required": ["claims"],
             "properties": {"claims": {"type": "array"}},
         }
-        config = {"model": "accounts/fireworks/models/kimi-k2p6"}
+        config = {"model": "accounts/fireworks/models/kimi-k2p7-code"}
         payload = LLMService._openai_compatible_payload(
             ModelProvider.FIREWORKS,
             prompt="user prompt",
@@ -982,12 +982,12 @@ class TestFireworksPromptCache:
             system_prompt=None,
             temperature=0.0,
             max_tokens=64,
-            config={"model": "accounts/fireworks/models/kimi-k2p6"},
+            config={"model": "accounts/fireworks/models/kimi-k2p7-code"},
         )
         assert "response_format" not in payload
 
     def test_payload_omits_prompt_cache_id_when_unset(self):
-        config = {"model": "accounts/fireworks/models/kimi-k2p6"}
+        config = {"model": "accounts/fireworks/models/kimi-k2p7-code"}
         payload = LLMService._openai_compatible_payload(
             ModelProvider.FIREWORKS,
             prompt="x",

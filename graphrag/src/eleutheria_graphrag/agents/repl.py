@@ -46,7 +46,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         # Moonshot id (Fireworks-only constraint).
         "--model",
         default=os.getenv(
-            "ELEUTHERIA_DEFAULT_MODEL", "accounts/fireworks/models/kimi-k2p6"
+            "ELEUTHERIA_DEFAULT_MODEL", "accounts/fireworks/models/kimi-k2p7-code"
         ),
         help="LLM model id (default: Fireworks Kimi K2.6).",
     )

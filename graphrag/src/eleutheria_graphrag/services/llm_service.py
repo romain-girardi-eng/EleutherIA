@@ -72,8 +72,8 @@ class ModelProvider(Enum):
 PROVIDER_CONFIGS = {
     ModelProvider.FIREWORKS: {
         "base_url": "https://api.fireworks.ai/inference/v1",
-        "model": "accounts/fireworks/models/kimi-k2p6",
-        "thinking_model": "accounts/fireworks/models/kimi-k2p6",
+        "model": "accounts/fireworks/models/kimi-k2p7-code",
+        "thinking_model": "accounts/fireworks/models/kimi-k2p7-code",
         "env_key": "FIREWORKS_API_KEY",
         "base_url_env": "FIREWORKS_BASE_URL",
         "model_env": "FIREWORKS_MODEL",
