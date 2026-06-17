@@ -95,8 +95,8 @@ Once `mcp.free-will.app` is exposed, point opencode at the SSE endpoint:
 }
 ```
 
-Until DNS is up, target the host directly: `http://localhost:8020/sse` on the the platform
-host, or expose via the existing Cloudflare tunnel.
+Until DNS is up, target the host directly: `http://localhost:8020/sse` on the
+deploy host, or expose via a Cloudflare tunnel.
 
 ## Test against the live deployment
 
@@ -126,7 +126,7 @@ Tests stub the global `DepsContainer` so no live Postgres is required.
 
 ## Compose integration
 
-`deploy/deploy-compose.yml` defines `eleutheria-mcp` under the `mcp` profile.
+`deploy/production/docker-compose.yml` defines `eleutheria-mcp` under the `mcp` profile.
 It stays opt-in until explicitly enabled:
 
 ```bash

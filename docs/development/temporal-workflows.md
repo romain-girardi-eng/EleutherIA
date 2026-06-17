@@ -1,11 +1,8 @@
 # Temporal workflows
 
-EleutherIA dispatches long-running ingestion jobs onto the platform's Temporal
+EleutherIA dispatches long-running ingestion jobs onto a Temporal
 cluster. The worker lives in `eleutheria_worker/`; the FastAPI process holds a
 client and dispatches workflows when an API or CLI command asks it to.
-
-This is Phase D of the the platform migration — see
-`docs/plans/2026-05-14-migration-design.md` for the broader plan.
 
 ## Architecture
 
@@ -14,7 +11,7 @@ CLI / FastAPI handler ─► backend/services/temporal.py
                                 │
                                 │ (gRPC, plain)
                                 ▼
-                          temporal:7233 (the platform)
+                          <temporal-host>:7233
                                 │
                                 ▼
               eleutheria_worker container
@@ -30,8 +27,7 @@ different entrypoint (`python -m eleutheria_worker.main`).
 
 ## Task queues
 
-EleutherIA uses two dedicated task queues, kept separate from the platform's
-`eleutheria-multiversion`:
+EleutherIA uses two dedicated task queues:
 
 | Task queue | Purpose |
 |---|---|
@@ -54,7 +50,7 @@ both queues.
 ## Running the worker locally
 
 ```bash
-# 1. Start a local Temporal dev server (optional — the platform's cluster already exists)
+# 1. Start a local Temporal dev server
 temporal server start-dev   # see https://docs.temporal.io/cli
 
 # 2. Run the worker against it
@@ -65,15 +61,15 @@ GEMINI_API_KEY=... \
 python -m eleutheria_worker.main
 ```
 
-Against the platform's cluster on the shared Docker network:
+Against a cluster on the shared Docker network:
 
 ```bash
-TEMPORAL_HOST=temporal:7233 \
+TEMPORAL_HOST=<temporal-host>:7233 \
 TEMPORAL_TASK_QUEUE=eleutheria-ingestion \
 python -m eleutheria_worker.main
 ```
 
-No TLS, no API key — the cluster sits on the platform's private bridge network.
+No TLS, no API key — the cluster sits on a private bridge network.
 
 ## Dispatching from the CLI
 

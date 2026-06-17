@@ -1,4 +1,4 @@
-"""Deploy data/kg/{nodes,edges}.jsonl to the the platform Supabase Postgres.
+"""Deploy data/kg/{nodes,edges}.jsonl to the production Supabase Postgres.
 
 Closes the loop that the daily `kg-snapshot.yml` workflow leaves open: that
 workflow mirrors prod → git, but there's no built-in git → prod path. This
@@ -6,7 +6,7 @@ script provides it.
 
 Behavior:
   1. Reads git's data/kg/nodes.jsonl + edges.jsonl
-  2. Fetches prod's current state from the the platform public API (rate-limit-safe,
+  2. Fetches prod's current state from the public API (rate-limit-safe,
      no DB connection required for the dry-run)
   3. Computes the delta: nodes-to-upsert, edges-to-insert, plus an audit of
      prod-only items
@@ -131,7 +131,7 @@ def fetch_prod_state_via_api(base: str) -> tuple[list[dict], list[dict]]:
 async def fetch_prod_state_via_db(conn: "asyncpg.Connection") -> tuple[list[dict], list[dict]]:
     """Fetch prod state by querying Supabase directly. Required for environments
     where the public API is unreachable (e.g. GitHub Actions IPs are blocked by
-    the the platform Cloudflare front)."""
+    the Cloudflare front)."""
     print("Fetching prod via direct DB query …")
     node_rows = await conn.fetch(
         "SELECT node_id, label, type, description, period, metadata "

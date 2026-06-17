@@ -25,10 +25,8 @@ dependencies = [
     "typer>=0.16.0",
     "rich>=14.0.0",
     "psycopg2-binary>=2.9.10",
-    # Phase C — the platform integration (optional at runtime, gated by EXTERNAL_INTEGRATION)
     "pydantic-settings>=2.10.0",
-    "credentials-provider @ git+ssh://git@private-org/private-repo.git#subdirectory=modules/shared/credentials-provider",
-    # Phase D — Temporal workflows (workflow dispatch client; worker uses eleutheria_worker/pyproject.toml)
+    # Temporal workflows (workflow dispatch client; worker uses eleutheria_worker/pyproject.toml)
     "temporalio>=1.7.0",
 ]
 

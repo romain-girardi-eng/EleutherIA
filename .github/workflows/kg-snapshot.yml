@@ -1,7 +1,7 @@
 name: KG Snapshot
 
 # SAFETY NOTE (2026-05-16):
-# Daily cron disabled — git was getting ahead of the live the platform DB, so the
+# Daily cron disabled — git was getting ahead of the live production DB, so the
 # snapshot bot was at risk of overwriting unsynced edits. Re-enable the schedule
 # trigger ONLY after either (a) the loader script (scripts/deploy_kg_to_supabase.py)
 # is in regular use to push git → prod, or (b) the team accepts that git is
@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
     inputs:
       base_url:
-        description: 'Backend base URL (defaults to the platform production)'
+        description: 'Backend base URL (defaults to production)'
         required: false
         default: ''
       allow_destructive:
@@ -82,7 +82,7 @@ jobs:
           if { [ "$NODES_DELTA" -lt -10 ] || [ "$EDGES_DELTA" -lt -50 ]; } && [ "$ALLOW" != "true" ]; then
             echo ""
             echo "::error::Snapshot would shrink the KG by $NODES_DELTA nodes / $EDGES_DELTA edges."
-            echo "::error::This usually means git is ahead of the the platform DB (unsynced local edits)."
+            echo "::error::This usually means git is ahead of the production DB (unsynced local edits)."
             echo "::error::To override, re-run with allow_destructive=true."
             exit 2
           fi

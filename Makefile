@@ -238,45 +238,44 @@ clean:
 	@echo "Cache files cleaned!"
 
 # ==========================================================================
-# the platform infra-tenant lifecycle (standard client verbs mapped to this stack)
+# Production lifecycle
 # ==========================================================================
-PROD_SSH := deploy-host
-PROD_DIR := /home/ben/EleutherIA
-PROD_COMPOSE := docker compose -p deploy -f deploy-compose.yml -f /tmp/eleutheria-compose-runtime.yml
+PROD_SSH := <deploy-host>
+PROD_DIR := /home/deploy/EleutherIA
+PROD_COMPOSE := docker compose -p deploy -f deploy/production/docker-compose.yml
 
 .PHONY: check deploy rollback deploy-data prod-status prod-logs prod-recreate
 
-# Fast quality gate (used by private-repo `make clients-check`)
+# Fast quality gate
 check: lint
 
 # Deploy code: pull on the host, rebuild api+worker images, recreate.
-# Writes a standard deploy record to .deploy/deploys/<epoch>.json
-# ({sha,image,actor,ts}) so the the platform platform sees last_deploy and
+# Writes a deploy record to .deploys/<epoch>.json ({sha,image,actor,ts}) so
 # `make rollback` can return to the previous SHA.
 deploy:
-	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git checkout -q main && git pull origin main && cd deploy && $(PROD_COMPOSE) up -d --build --no-deps eleutheria-api eleutheria-worker'
+	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git checkout -q main && git pull origin main && $(PROD_COMPOSE) up -d --build --no-deps eleutheria-api eleutheria-worker'
 	@sleep 10 && curl -sf https://free-will.app/api/health && echo
-	@mkdir -p .deploy/deploys
+	@mkdir -p .deploys
 	@SHA=$$(ssh -o BatchMode=yes $(PROD_SSH) 'git -C $(PROD_DIR) rev-parse --short HEAD'); \
-	printf '{"sha":"%s","image":"git:%s","actor":"%s","ts":"%s"}\n' "$$SHA" "$$SHA" "$${USER:-unknown}" "$$(date -u +%FT%TZ)" > .deploy/deploys/$$(date -u +%s).json; \
+	printf '{"sha":"%s","image":"git:%s","actor":"%s","ts":"%s"}\n' "$$SHA" "$$SHA" "$${USER:-unknown}" "$$(date -u +%FT%TZ)" > .deploys/$$(date -u +%s).json; \
 	echo "deploy record: $$SHA"
 
-# Rollback: redeploy the SHA from the previous deploy record (template-standard
-# .deploy/deploys semantics; here rollback = checkout that SHA on the host and
-# rebuild, since images are built on the host from git rather than tagged).
+# Rollback: redeploy the SHA from the previous deploy record (.deploys
+# semantics; here rollback = checkout that SHA on the host and rebuild,
+# since images are built on the host from git rather than tagged).
 rollback:
-	@PREV=$$(ls -1t .deploy/deploys/*.json 2>/dev/null | sed -n 2p); \
+	@PREV=$$(ls -1t .deploys/*.json 2>/dev/null | sed -n 2p); \
 	[ -n "$$PREV" ] || { echo "no previous deploy on record"; exit 1; }; \
 	SHA=$$(python3 -c "import json;print(json.load(open('$$PREV'))['sha'])"); \
 	echo "rolling back prod to $$SHA"; \
-	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git fetch -q origin && git checkout -q '"$$SHA"' && cd deploy && $(PROD_COMPOSE) up -d --build --no-deps eleutheria-api eleutheria-worker'; \
+	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git fetch -q origin && git checkout -q '"$$SHA"' && $(PROD_COMPOSE) up -d --build --no-deps eleutheria-api eleutheria-worker'; \
 	sleep 10 && curl -sf https://free-will.app/api/health && echo; \
-	printf '{"sha":"%s","image":"git:%s","actor":"%s","ts":"%s","rollback":true}\n' "$$SHA" "$$SHA" "$${USER:-unknown}" "$$(date -u +%FT%TZ)" > .deploy/deploys/$$(date -u +%s).json
+	printf '{"sha":"%s","image":"git:%s","actor":"%s","ts":"%s","rollback":true}\n' "$$SHA" "$$SHA" "$${USER:-unknown}" "$$(date -u +%FT%TZ)" > .deploys/$$(date -u +%s).json
 
 # Deploy data: git mirror -> prod Postgres (KG + corpus), then health check
 deploy-data:
 	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git pull -q origin main && \
-	  docker run --rm --network private-repo_app-network -v $(PROD_DIR):/repo -w /repo \
+	  docker run --rm --network app-network -v $(PROD_DIR):/repo -w /repo \
 	    --env-file $(PROD_DIR)/.env python:3.12-slim bash -lc \
 	    "pip install -q asyncpg && python database/scripts/bootstrap_supabase.py --skip-schema --replace-data && python scripts/sync_corpus_to_db.py --commit"'
 	@curl -sf https://free-will.app/api/health && echo

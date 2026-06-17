@@ -4,14 +4,14 @@ name: Deploy Frontend (GHCR)
 # on every push to `main` that touches `frontend/**`. The image is published
 # as `ghcr.io/<owner>/eleutheria-frontend:{latest,sha-<short-sha>}`.
 #
-# the platform's compose file (deploy/deploy-compose.yml) consumes the `:latest`
-# tag, so the production redeploy is:
+# The production compose file consumes the `:latest` tag, so the production
+# redeploy is:
 #
-#     docker compose -f deploy/deploy-compose.yml pull eleutheria-frontend
-#     docker compose -f deploy/deploy-compose.yml up -d eleutheria-frontend
+#     docker compose -f deploy/production/docker-compose.yml pull eleutheria-frontend
+#     docker compose -f deploy/production/docker-compose.yml up -d eleutheria-frontend
 #
-# Wire those two commands into the platform's deploy hook (Watchtower, a cron, or
-# a CD agent) and every push becomes a production deploy.
+# Wire those two commands into a deploy hook (Watchtower, a cron, or a CD
+# agent) and every push becomes a production deploy.
 
 on:
   push:

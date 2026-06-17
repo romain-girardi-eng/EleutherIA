@@ -144,7 +144,7 @@ Each package can be installed and used independently.
 | **Frontend** | React 19, TypeScript, Vite, Tailwind CSS, Cosmograph, D3.js, Three.js, Framer Motion, react-i18next |
 | **LLM** | Gemini (gemini-3.1-pro-preview, primary), Kimi K2.5 Thinking (extended reasoning), OpenRouter (fallback) |
 | **Search** | PostgreSQL GIN indexes, lemmatic indexes, tree routing, passage_citations, Reciprocal Rank Fusion |
-| **Deployment** | Docker Compose (local), the platform compose + Cloudflare tunnel (production API, worker, public SPARQL), hosted SPA at `free-will.app` |
+| **Deployment** | Docker Compose (local), Docker Compose + Cloudflare tunnel (production API, worker, public SPARQL), hosted SPA at `free-will.app` |
 | **Quality** | Ruff, mypy, ESLint, Vitest, pytest (330+ tests), pre-commit hooks |
 
 ## Statistics
