@@ -3,11 +3,11 @@
 **Last reviewed:** 2026-05-16 — by Romain.
 
 This document covers how knowledge-graph state flows between git and the live
-the platform Postgres, what backups exist, and how to recover from common incidents.
+production Postgres, what backups exist, and how to recover from common incidents.
 
 ## TL;DR for the next incident
 
-- **Production data is in the platform Supabase Postgres** (free_will schema). Live
+- **Production data is in Supabase Postgres** (free_will schema). Live
   API: <https://free-will.app>.
 - **Git is a daily mirror** of prod (`.github/workflows/kg-snapshot.yml`) — NOT
   the deploy source.
@@ -24,7 +24,7 @@ the platform Postgres, what backups exist, and how to recover from common incide
                      │                                    │
                      ▼                                    │
             ┌────────────────┐                  ┌──────────────────┐
-            │  git/main      │                  │  the platform Supabase │
+            │  git/main      │                  │  Supabase        │
             │  data/kg/*.jsonl                  │  free_will.kg_*  │
             │                │                  │                  │
             └────────┬───────┘                  └──────────────────┘
@@ -83,7 +83,7 @@ The workflow's safety pipeline:
 
   1. **SHACL invariants gate** — refuses to deploy if the commit's `data/kg/*.jsonl`
      has any ontology violations.
-  2. **Compute delta** vs the live the platform API, attach as a `deploy-delta-<run-id>`
+  2. **Compute delta** vs the live API, attach as a `deploy-delta-<run-id>`
      artifact (90-day retention).
   3. **Sanity gate** — refuses if git is substantially smaller than prod
      (>10 nodes or >50 edges fewer).
@@ -213,7 +213,7 @@ git commit -m "chore(kg): restore from safe-point/2026-05-16-pre-deploy"
 The repo is on GitHub at `romain-girardi-eng/EleutherIA`. Every push to `main`
 preserves history; reflogs keep ~90 days of refs locally.
 
-### the platform Supabase backups
+### Supabase backups
 
 Supabase auto-snapshots Postgres daily (point-in-time recovery up to 7 days on
 their free tier; longer on paid). Use the Supabase dashboard to restore.
@@ -243,11 +243,11 @@ print(f'Orphan edges: {len(orphans)}')
 
 ## Incident log
 
-### 2026-05-16: Snapshot-bot overwrite risk + 403 from the platform API
+### 2026-05-16: Snapshot-bot overwrite risk + 403 from the API
 
 **Symptom:** Daily kg-snapshot workflow failed at 04:00 UTC with `HTTP 403:
-Forbidden` from the platform's API. Investigation revealed that the GH Actions runner
-IPs are blocked by the platform's Cloudflare front (User-Agent and/or IP filtering).
+Forbidden` from the API. Investigation revealed that the GH Actions runner
+IPs are blocked by the Cloudflare front (User-Agent and/or IP filtering).
 
 Simultaneously discovered that git had ~759 unsynced nodes and ~5,168 unsynced
 edges ahead of prod (multiple sessions of local-only work — 5-scholars B1,
@@ -265,7 +265,7 @@ snapshot succeeded, the destructive diff would have OVERWRITTEN all of it.
 
 **Open issues:**
 - Re-enable the daily snapshot cron only after either (a) deploys become
-  routine, or (b) the the platform Cloudflare 403 is resolved (likely needs API key
+  routine, or (b) the Cloudflare 403 is resolved (likely needs API key
   in `KG_API_BASE` or IP allowlist for GH Actions ranges).
 - Prod has 29 orphan node IDs (renamed-in-git) and 503 orphan edges. Decide
   whether to clean them up via a one-time targeted DELETE.

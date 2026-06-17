@@ -1,1 +1,1 @@
-"""Integration adapters for hosting EleutherIA inside the platform's infrastructure."""
+"""Integration adapters for external runtimes (e.g. the opencode proxy)."""

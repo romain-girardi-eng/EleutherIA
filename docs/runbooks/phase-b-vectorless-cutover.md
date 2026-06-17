@@ -71,11 +71,11 @@ On the production host (currently Railway — Phase C moves this):
 
 ```bash
 # Railway auto-redeploys on push to main; wait ~3 min then:
-curl https://api.free-will.app/api/health
+curl https://free-will.app/api/health
 ```
 
 Expect `200 OK`. If `502`, see [`incident-playbook.md`](./incident-playbook.md)
-"Symptom: api.free-will.app returns 502".
+"Symptom: free-will.app returns 502".
 
 Smoke test locally too — restart your local backend on the same branch:
 
@@ -89,7 +89,7 @@ curl http://localhost:8000/api/health
 ```bash
 python tests/eval/run_eval.py \
   --output vectorless.json \
-  --base-url https://api.free-will.app
+  --base-url https://free-will.app
 ```
 
 Same ~30 queries, same harness, against production with the vectorless branch
@@ -130,7 +130,7 @@ Re-run **only the failing queries**, not the whole suite:
 python tests/eval/run_eval.py \
   --queries tests/eval/queries/failed-001.yaml,tests/eval/queries/failed-007.yaml \
   --output vectorless-iter2.json \
-  --base-url https://api.free-will.app
+  --base-url https://free-will.app
 ```
 
 If the third iteration still fails, rollback.

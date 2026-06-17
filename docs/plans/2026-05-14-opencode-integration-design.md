@@ -21,12 +21,12 @@
 | **Agents** | Configured via `opencode.json`, `.opencode/agents/*.md` (Markdown + frontmatter), or `opencode agent create`. **Primary** agents (top-level personas) and **subagents** (invoked auto, via `@mention`, or via the `Task` tool). Subagents are first-class — a primary can delegate with scoped permissions. |
 | **Tool integration** | Three layers: (1) **built-in tools** (read/write file, bash, LSP, etc.), (2) **MCP servers** — local (`{type:"local", command:[…]}`) or remote (`{type:"remote", url:"…"}`), (3) **custom TS/JS tools** in `.opencode/tools/*.ts` using `tool({description, args: zod, async execute(args, ctx) {…}})`. Custom tools run in Bun and may shell out to Python via `Bun.$`. |
 | **LLM providers** | Wraps the **AI SDK** + Models.dev (75+ providers). Custom providers go in `opencode.json` under `provider.<id>` with `npm: "@ai-sdk/openai-compatible"`, `baseURL`, `apiKey: "{env:VAR}"`. So Fireworks/Kimi works as an OpenAI-compatible endpoint. |
-| **OpenCode Zen** | Curated hosted gateway (`https://opencode.ai/zen/v1/responses`). `OPENCODE_API_KEY` authenticates against Zen — it is **not** a generic key, it's a billing account. the platform uses it as a fallback alongside `CEREBRAS_API_KEY` / `FIREWORKS_API_KEY`. |
+| **OpenCode Zen** | Curated hosted gateway (`https://opencode.ai/zen/v1/responses`). `OPENCODE_API_KEY` authenticates against Zen — it is **not** a generic key, it's a billing account. Can be used as a fallback alongside `CEREBRAS_API_KEY` / `FIREWORKS_API_KEY`. |
 | **Deployment** | `opencode serve` as a long-running process. No official Docker image, but trivially containerised (Bun + the binary). **No multi-tenant model** — one server per user/workspace, isolation is by process. |
 
-### How the platform already uses it
+### A representative usage pattern
 
-the platform's `private-repo` invokes opencode via **subprocess CLI** (`execute_opencode(...)`) inside Temporal worker activities. The agent is treated as a black-box code generator: stdin = prompt, stdout = generated app code, parse `_APP_RESULT_RE` to find the `preview_url`. The `opencode.json` at the root has empty `mcp: {}`. So the platform uses opencode in its native mode (coding agent → preview URL), not as a research orchestrator.
+A common pattern invokes opencode via **subprocess CLI** (`execute_opencode(...)`) inside Temporal worker activities. The agent is treated as a black-box code generator: stdin = prompt, stdout = generated app code, parse `_APP_RESULT_RE` to find the `preview_url`. The `opencode.json` at the root has empty `mcp: {}`. So opencode is used in its native mode (coding agent → preview URL), not as a research orchestrator.
 
 ---
 
@@ -34,7 +34,7 @@ the platform's `private-repo` invokes opencode via **subprocess CLI** (`execute_
 
 ### A. Replace agent runtime entirely
 
-> opencode runs on the platform host, talks to EleutherIA via MCP/HTTP. Backend reduces to "tool server + data API". Frontend rebuilt against opencode's API or TUI.
+> opencode runs on a separate host, talks to EleutherIA via MCP/HTTP. Backend reduces to "tool server + data API". Frontend rebuilt against opencode's API or TUI.
 
 **What gets thrown away (~8.7k LOC):**
 - `graphrag/.../agents/react_loop.py` (452)
@@ -72,7 +72,7 @@ the platform's `private-repo` invokes opencode via **subprocess CLI** (`execute_
 
 > Keep Python. Adopt opencode's *patterns* — multi-agent (primary + subagent), MCP tools, streaming protocol — natively. No new runtime.
 
-**What gets thrown away:** Nothing forcibly. We can incrementally refactor `react_loop.py` + the FSM to clean primary/subagent semantics, formalise tools as MCP-compatible (so they're reusable from the platform later), and emit a cleaner SSE envelope.
+**What gets thrown away:** Nothing forcibly. We can incrementally refactor `react_loop.py` + the FSM to clean primary/subagent semantics, formalise tools as MCP-compatible (so they're reusable by external agents later), and emit a cleaner SSE envelope.
 
 **What gets reused:** Everything, modernised in place.
 
@@ -80,7 +80,7 @@ the platform's `private-repo` invokes opencode via **subprocess CLI** (`execute_
 
 **Effort:** ~6-10 days for a tight refactor (formalise tool registry as MCP-compatible, add a `pydantic-ai` ReAct that's robust against Kimi K2.6's tool-call format — the issue from task #35).
 
-**Pros:** No new runtime, no new ops surface, no new auth model. Romain is already fluent in the Python stack. Citation verification + KG semantics stay first-class. the platform can still consume EleutherIA via MCP from opencode if needed — best of both. We fix the actual current blocker (Kimi tool-call parser) without bringing in a 6.5M-user coding tool that we'd be using sideways.
+**Pros:** No new runtime, no new ops surface, no new auth model. Romain is already fluent in the Python stack. Citation verification + KG semantics stay first-class. External agents can still consume EleutherIA via MCP from opencode if needed — best of both. We fix the actual current blocker (Kimi tool-call parser) without bringing in a 6.5M-user coding tool that we'd be using sideways.
 **Cons:** No "free UI" — we keep building free-will.app ourselves. No third-party clients/IDE plugins. We don't ride opencode's roadmap.
 
 ---
@@ -91,7 +91,7 @@ EleutherIA is a scholarly research interface for ancient philosophy with a hand-
 
 The actual problems we need to solve — Kimi K2.6 tool-call parsing (#35), streaming polish, conversation threads, citation-grounded synthesis — are *Python-side* problems that don't get cheaper because opencode exists. Opencode's real gifts are its *patterns*: clean primary/subagent delegation, MCP tool boundaries, headless HTTP server with streaming. Those patterns are free to copy; the runtime is not.
 
-The right move: refactor the existing ReAct loop into a clean primary + subagent shape, formalise the 8 retrieval tools behind an MCP-compatible interface (so the platform's opencode *can* talk to EleutherIA later via MCP if we want cross-project agentic flows), and fix the Kimi parser. If a year from now opencode has matured into a generic agent platform — revisit. For now, Python is the right home.
+The right move: refactor the existing ReAct loop into a clean primary + subagent shape, formalise the 8 retrieval tools behind an MCP-compatible interface (so an external opencode *can* talk to EleutherIA later via MCP if we want cross-project agentic flows), and fix the Kimi parser. If a year from now opencode has matured into a generic agent platform — revisit. For now, Python is the right home.
 
 ---
 
@@ -109,7 +109,7 @@ The right move: refactor the existing ReAct loop into a clean primary + subagent
 - **Files:** `agents/tools/__init__.py`, new `agents/tools/mcp_server.py`, each tool file gets explicit `input_schema` / `output_schema`.
 - **Effort:** 2 days.
 - **Tests:** `tests/unit/test_tools_mcp_contract.py` — schema validation, round-trip via MCP stdio.
-- **Unblocks:** the platform's opencode can call EleutherIA tools as a remote MCP later. Also gives us a clean tool contract for evals.
+- **Unblocks:** An external opencode can call EleutherIA tools as a remote MCP later. Also gives us a clean tool contract for evals.
 
 ### Phase 3 — Primary + subagent split
 - **Goal:** Refactor `react_loop.py` → one **primary** agent (broker, owns user dialogue + final synthesis) + N **subagents** (`SourceFinder`, `ConceptMapper`, `Synthesizer`, `Verifier`). Subagents are dispatched via a Python `Task`-style call with their own scoped tool subset + budget.
@@ -133,7 +133,7 @@ The right move: refactor the existing ReAct loop into a clean primary + subagent
 - **Unblocks:** Academic integrity policy enforced by code, not just prompts.
 
 ### Phase 6 — Headless HTTP server profile (optional)
-- **Goal:** Add a thin `eleutheria_graphrag.server` module that exposes the primary agent over a stable HTTP + SSE contract, mirroring opencode's `serve` shape. Makes free-will.app, the CLI, and the platform all consume the same endpoint.
+- **Goal:** Add a thin `eleutheria_graphrag.server` module that exposes the primary agent over a stable HTTP + SSE contract, mirroring opencode's `serve` shape. Makes free-will.app, the CLI, and any external consumers all use the same endpoint.
 - **Files:** `backend/main.py` (registration), new `graphrag/.../api/agent_routes.py`.
 - **Effort:** 2 days.
 - **Tests:** End-to-end SSE test via httpx.
@@ -178,12 +178,12 @@ The right move: refactor the existing ReAct loop into a clean primary + subagent
    Recommendation: incremental. The current `client.ts` is fine; only `graphragQueryStream` + the pages that render trace events need replacement.
 
 3. **Expose EleutherIA tools as an MCP server *now* (Phase 2) or defer?**
-   Recommendation: do it now. It's cheap (2 days), it formalises the tool contract, and it lets the platform's opencode call EleutherIA in 2026 without re-engineering.
+   Recommendation: do it now. It's cheap (2 days), it formalises the tool contract, and it lets an external opencode call EleutherIA in 2026 without re-engineering.
 
 4. **Stick with `pydantic-ai` (in deps already) or roll bespoke loop?**
    Recommendation: stick with `pydantic-ai` for structured I/O + tool definitions; keep the bespoke primary/subagent dispatcher (`ScholarlyAgent`) for budget + streaming control. Hybrid is fine.
 
-5. **Add opencode to the platform host as a *consumer* of EleutherIA's MCP endpoint, for power-user workflows (e.g. dev asks "rewrite this passage's KG metadata" in opencode TUI)?**
+5. **Add opencode on a separate host as a *consumer* of EleutherIA's MCP endpoint, for power-user workflows (e.g. dev asks "rewrite this passage's KG metadata" in opencode TUI)?**
    Recommendation: yes, eventually — but only after Phase 2 lands. No blocker on EleutherIA's roadmap.
 
 6. **Do we deprecate `/api/graphrag/answer` (non-streaming) once Stream-v2 ships?**

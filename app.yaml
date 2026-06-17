@@ -1,25 +1,21 @@
-# EleutherIA — app manifest (the platform platform schema)
+# EleutherIA — app manifest
 #
 # ─────────────────────────────────────────────────────────────────────────
 # IMPORTANT — PUBLIC GITHUB REPOSITORY
-# EleutherIA is a published scholarly dataset, NOT a client deliverable.
+# EleutherIA is a published scholarly dataset.
 # Its home is and must remain the PUBLIC GitHub repository
 #   https://github.com/romain-girardi-eng/EleutherIA   (branch: main)
 # because the Zenodo DOIs, the CC BY 4.0 license, academic citations and
-# the GEO/llms.txt surface all point there. It is registered in private-repo
-# as an *infrastructure tenant* (fleet ops: ha-sync backups, ha-probe,
-# infra-snapshot, platform UI) via a submodule that points at GitHub —
-# never migrate it to a private GitLab remote, never mirror it.
+# the GEO/llms.txt surface all point there.
 # ─────────────────────────────────────────────────────────────────────────
 #
-# Conforms to apps-api AppManifest (slug, display_name, primary_hostname,
+# Conforms to a minimal app manifest (slug, display_name, primary_hostname,
 # preview_hostname, port required). Extra keys below the marker are
-# EleutherIA-specific and ignored by the platform.
+# EleutherIA-specific.
 
 slug: eleutheria
 display_name: EleutherIA
-entity: pragma
-blueprint_version: none   # infra-tenant — deliberately NOT the copier client template
+blueprint_version: none
 
 created_at: "2026-06-12T00:00:00Z"
 created_by: romain
@@ -31,9 +27,9 @@ partner_id: null
 
 # Hosting
 primary_hostname: free-will.app
-preview_hostname: eleutheria.app-cloud.com   # reserved; primary serving is free-will.app
-dev_hostname: eleutheria-dev.app-cloud.com    # reserved; local dev is vite+uvicorn
-port: 8015                                       # host port of eleutheria-api on prod
+preview_hostname: preview.free-will.app   # reserved; primary serving is free-will.app
+dev_hostname: dev.free-will.app           # reserved; local dev is vite+uvicorn
+port: 8015                                # host port of eleutheria-api on prod
 
 # Lifecycle state (mutated by `make deploy` / `make rollback`)
 last_deploy_sha: null
@@ -43,10 +39,10 @@ deploy_history: []
 production_tunnel_id: null
 dev_tunnel_id: null
 
-# ── EleutherIA-specific (ignored by the platform) ────────────────────────
+# ── EleutherIA-specific ───────────────────────────────────────────────────
 api_hostname: free-will.app
-home_server: p            # deploy-host
-project_dir: /home/ben/EleutherIA
+home_server: <deploy-host>
+project_dir: /home/deploy/EleutherIA
 databases:
   - container: eleutheria-db
     db: eleutheria

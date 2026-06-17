@@ -82,23 +82,23 @@ Set the `VITE_API_URL` environment variable in Cloudflare Pages:
 VITE_API_URL=https://eleutheria-backend-production.up.railway.app
 ```
 
-Or if using a custom domain, point `api.free-will.app` to Railway and set:
+Or if using a custom domain, point `free-will.app` to Railway and set:
 ```
-VITE_API_URL=https://api.free-will.app
+VITE_API_URL=https://free-will.app
 ```
 
 ## Custom Domain (optional)
 
 ```bash
-railway domain add api.free-will.app
+railway domain add free-will.app
 ```
 
 Then add a CNAME record in Cloudflare DNS:
 ```
-api.free-will.app → eleutheria-backend-production.up.railway.app
+free-will.app → eleutheria-backend-production.up.railway.app
 ```
 
-This keeps `free-will.app` for the frontend and `api.free-will.app` for the backend.
+This keeps `free-will.app` for the frontend and `free-will.app` for the backend.
 
 ## Configuration
 

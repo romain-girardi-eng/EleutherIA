@@ -8,7 +8,7 @@ For end-to-end rollback strategy (full Layer 1 → Layer 4), see
 
 ---
 
-## Symptom: `api.free-will.app` returns 502
+## Symptom: `free-will.app` returns 502
 
 **Diagnostic.** The Cloudflare tunnel reached an origin that responded with 502
 or no response at all. Either the tunnel itself is broken, or the
@@ -29,7 +29,7 @@ ssh deploy-host curl -v http://localhost:8015/api/health
 
 1. If container `(unhealthy)`: `ssh deploy-host docker compose restart eleutheria-api`. Wait 60s, recheck. If still unhealthy, inspect logs: `docker compose logs --tail=200 eleutheria-api`.
 2. If container healthy but tunnel info shows degraded: `ssh deploy-host systemctl restart cloudflared`.
-3. If both healthy but external 502 persists for ≥ 5 min: **DNS revert** to Railway. Edit `api.free-will.app` CNAME back to the old Railway target. Investigate root cause after.
+3. If both healthy but external 502 persists for ≥ 5 min: **DNS revert** to Railway. Edit `free-will.app` CNAME back to the old Railway target. Investigate root cause after.
 
 ---
 
@@ -68,7 +68,7 @@ ssh deploy-host docker compose exec eleutheria-api \
   python -c "from backend.services.credentials import resolve_provider; print(resolve_provider('gemini')[:10] + '...')"
 
 # Run eval harness on the failing query
-python tests/eval/run_eval.py --queries tests/eval/queries/<failing>.yaml --base-url https://api.free-will.app
+python tests/eval/run_eval.py --queries tests/eval/queries/<failing>.yaml --base-url https://free-will.app
 ```
 
 **Recovery:**
@@ -148,9 +148,9 @@ git ls-remote <EXTERNAL_COMMON_REPO_URL>   # must list refs
 **Diagnostic.** DNS still returns old target > 60s after the CNAME edit.
 
 ```bash
-dig api.free-will.app +short
-dig @1.1.1.1 api.free-will.app +short
-dig @8.8.8.8 api.free-will.app +short
+dig free-will.app +short
+dig @1.1.1.1 free-will.app +short
+dig @8.8.8.8 free-will.app +short
 ```
 
 **Recovery:** Confirm CNAME save persisted (session expiry can silently fail).
@@ -181,7 +181,7 @@ ssh deploy-host dmesg | grep -i "killed process"
 |--------|---------|
 | Revert API container | `ssh deploy-host docker compose restart eleutheria-api` |
 | Stop API container | `ssh deploy-host docker compose stop eleutheria-api` |
-| DNS revert to Railway | Cloudflare dashboard → edit `api.free-will.app` CNAME → `<old-railway>.up.railway.app` ⚠️ **Railway KG is stale vs Supabase (different node/edge counts as of 2026-05-26); rollback serves out-of-date data — sync Railway DB to current Supabase first or accept data drift for the incident window.** |
+| DNS revert to Railway | Cloudflare dashboard → edit `free-will.app` CNAME → `<old-railway>.up.railway.app` ⚠️ **Railway KG is stale vs Supabase (different node/edge counts as of 2026-05-26); rollback serves out-of-date data — sync Railway DB to current Supabase first or accept data drift for the incident window.** |
 | Revert DB | `export DATABASE_URL="<old-supabase>"` + restart |
 | Reload tunnel | `ssh deploy-host cloudflared tunnel reload <deploy-tunnel-id>` |
 | Tail logs | `ssh deploy-host docker compose logs -f eleutheria-api` |
