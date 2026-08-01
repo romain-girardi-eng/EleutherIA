@@ -12,6 +12,11 @@ from eleutheria_graphrag.agents.dependencies import Deps
 
 logger = logging.getLogger(__name__)
 
+# Depth used for the DB-backed fallback (no in-memory graph to run PPR on
+# — see `_fetch_db_subgraph`). Bounded to stay cheap; true PPR is only
+# available on the in-memory graph.
+_DB_FALLBACK_DEPTH = 2
+
 
 class SubgraphNode(BaseModel):
     node_id: str
@@ -76,6 +81,16 @@ class ExploreSubgraphTool:
     async def execute(self, args: dict[str, Any]) -> ExploreSubgraphResult:
         seed_ids = args["seed_node_ids"][:5]
         top_k = min(max(args.get("top_k", 20), 5), 50)
+
+        # The RAG synthesis path always warms `Deps.node_lookup` with the
+        # full KG at startup (PPR needs the whole graph). Lightweight
+        # MCP/REST callers may not have paid that cost — in that case fall
+        # back to a bounded Postgres k-hop traversal per seed instead of
+        # reporting zero results for every query. This loses true PPR
+        # ranking (which needs the full graph) but still surfaces the
+        # nearby subgraph. See `eleutheria_kg.services.db_traversal`.
+        if not self._deps.node_lookup:
+            return await self._fetch_db_subgraph(seed_ids, top_k)
 
         # Validate seeds exist
         valid_seeds = [s for s in seed_ids if s in self._deps.node_lookup]
@@ -237,4 +252,107 @@ class ExploreSubgraphTool:
                     distances[src] = depth + 1
                     queue.append((src, depth + 1))
 
+        return distances
+
+    async def _fetch_db_subgraph(
+        self, seed_ids: list[str], top_k: int
+    ) -> ExploreSubgraphResult:
+        """Bounded k-hop union over the seeds via the Postgres CTE.
+
+        No PPR (that needs the full in-memory graph) — nodes are ranked by
+        how many seeds reach them (more shared connections first) then by
+        minimum hop distance, which approximates "central to this seed set"
+        without a full graph load. Never raises: DB errors or an
+        unavailable connection degrade to an empty result, same as the
+        in-memory path's "no valid seeds" case.
+        """
+        if self._deps.db is None:
+            return ExploreSubgraphResult(nodes=[], seed_count=0)
+
+        try:
+            from eleutheria_kg.services.db_traversal import fetch_neighborhood
+
+            per_seed = [
+                await fetch_neighborhood(self._deps.db, seed, depth=_DB_FALLBACK_DEPTH)
+                for seed in seed_ids
+            ]
+        except Exception:
+            logger.warning("explore_subgraph: DB fallback failed", exc_info=True)
+            return ExploreSubgraphResult(nodes=[], seed_count=0)
+
+        valid_seeds = [
+            seed
+            for seed, result in zip(seed_ids, per_seed, strict=True)
+            if any(n.get("id") == seed for n in result["nodes"])
+        ]
+        if not valid_seeds:
+            return ExploreSubgraphResult(nodes=[], seed_count=0)
+
+        node_meta: dict[str, dict[str, Any]] = {}
+        seed_hits: dict[str, int] = defaultdict(int)
+
+        for result in per_seed:
+            nodes_by_id = {n["id"]: n for n in result["nodes"]}
+            for edge in result["edges"]:
+                src, tgt = edge.get("source"), edge.get("target")
+                for candidate in (src, tgt):
+                    if candidate in nodes_by_id:
+                        node_meta.setdefault(candidate, nodes_by_id[candidate])
+            # Every returned node (edge-connected within depth) counts as
+            # reached by this seed, including nodes with no further edges.
+            for nid, node in nodes_by_id.items():
+                node_meta.setdefault(nid, node)
+                seed_hits[nid] += 1
+
+        distances = self._bfs_distances_from_edges(valid_seeds, per_seed)
+
+        scored_nodes: list[tuple[SubgraphNode, tuple[int, int]]] = []
+        for node_id, node in node_meta.items():
+            if node_id in valid_seeds:
+                continue
+            if (node.get("type") or "").lower() == "passage":
+                continue
+            distance = distances.get(node_id, 99)
+            rank_key = (-seed_hits[node_id], distance)
+            scored_nodes.append(
+                (
+                    SubgraphNode(
+                        node_id=node_id,
+                        label=node.get("label", ""),
+                        type=node.get("type", ""),
+                        ppr_score=0.0,  # not available without the full graph
+                        distance_from_seed=distance,
+                    ),
+                    rank_key,
+                )
+            )
+
+        scored_nodes.sort(key=lambda x: x[1])
+        return ExploreSubgraphResult(
+            nodes=[n[0] for n in scored_nodes[:top_k]],
+            seed_count=len(valid_seeds),
+        )
+
+    @staticmethod
+    def _bfs_distances_from_edges(
+        seeds: list[str], per_seed_results: list[dict[str, Any]]
+    ) -> dict[str, int]:
+        """Shortest hop distance from any seed, computed from the CTE's
+        already-bounded edge sets (cheap — no extra DB round-trip)."""
+        distances: dict[str, int] = dict.fromkeys(seeds, 0)
+        adjacency: dict[str, set[str]] = defaultdict(set)
+        for result in per_seed_results:
+            for edge in result["edges"]:
+                src, tgt = edge.get("source"), edge.get("target")
+                if src and tgt:
+                    adjacency[src].add(tgt)
+                    adjacency[tgt].add(src)
+
+        queue: deque[tuple[str, int]] = deque((s, 0) for s in seeds)
+        while queue:
+            node_id, depth = queue.popleft()
+            for neighbor in adjacency.get(node_id, ()):
+                if neighbor not in distances:
+                    distances[neighbor] = depth + 1
+                    queue.append((neighbor, depth + 1))
         return distances

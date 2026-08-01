@@ -304,6 +304,99 @@ def upload_snapshot_dir(
     return results
 
 
+# ---------------------------------------------------------------------------
+# Analytics priors (PageRank / community) persistence
+# ---------------------------------------------------------------------------
+
+
+def annotate_nodes_with_analytics(
+    nodes: list[dict[str, Any]],
+    *,
+    pagerank: dict[str, float] | None = None,
+    communities: dict[str, int] | None = None,
+) -> list[dict[str, Any]]:
+    """Attach a precomputed PageRank / community_id prior to node records.
+
+    Non-destructive and backward-compatible: nodes not present in a mapping
+    are returned unchanged (no key added), so loaders that don't know about
+    `pagerank` / `community_id` keep working exactly as before. Callers
+    typically get `pagerank`/`communities` from
+    `KGAnalytics.calculate_centrality("pagerank")` /
+    `KGAnalytics.detect_communities(...)` (see `analytics.py`).
+    """
+    if not pagerank and not communities:
+        return nodes
+
+    annotated: list[dict[str, Any]] = []
+    for node in nodes:
+        node_id = node.get("id")
+        extra: dict[str, Any] = {}
+        if pagerank is not None and node_id in pagerank:
+            extra["pagerank"] = pagerank[node_id]
+        if communities is not None and node_id in communities:
+            extra["community_id"] = communities[node_id]
+        annotated.append({**node, **extra} if extra else node)
+    return annotated
+
+
+def compute_and_attach_analytics(
+    kg_data: dict[str, list[dict[str, Any]]],
+    *,
+    community_algorithm: str = "leiden",
+) -> list[dict[str, Any]]:
+    """Compute a directed-PageRank authority prior (+ best-effort community_id)
+    and attach it to `kg_data["nodes"]`.
+
+    Reuses `KGAnalytics` (see `analytics.py`) — PageRank runs on the directed
+    graph so citation/authority direction is respected rather than collapsing
+    to degree. Community detection defaults to Leiden but degrades gracefully
+    (via `KGAnalytics.detect_communities`'s own fallback, and a try/except
+    here) so a missing `igraph`/`leidenalg` install never blocks persisting
+    the pagerank prior.
+    """
+    from eleutheria_kg.services.analytics import KGAnalytics
+
+    analytics = KGAnalytics(kg_data)
+    pagerank = analytics.calculate_centrality(metric="pagerank")
+
+    communities: dict[str, int] | None = None
+    try:
+        communities = analytics.detect_communities(algorithm=community_algorithm)
+    except Exception:
+        logger.warning(
+            "Community detection failed; persisting pagerank prior only",
+            exc_info=True,
+        )
+
+    return annotate_nodes_with_analytics(
+        kg_data.get("nodes", []), pagerank=pagerank, communities=communities
+    )
+
+
+def write_kg_snapshot(
+    directory: str | os.PathLike[str],
+    nodes: list[dict[str, Any]],
+    edges: list[dict[str, Any]],
+) -> None:
+    """Write `nodes.jsonl` / `edges.jsonl` to `directory`.
+
+    Mirrors the format `load_kg_snapshot` reads back, so any extra fields
+    a node/edge dict carries (e.g. `pagerank`, `community_id` — see
+    `annotate_nodes_with_analytics`) round-trip unchanged; older readers
+    that don't recognize a field simply ignore it.
+    """
+    target = Path(directory)
+    target.mkdir(parents=True, exist_ok=True)
+    _write_jsonl(target / "nodes.jsonl", nodes)
+    _write_jsonl(target / "edges.jsonl", edges)
+
+
+def _write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
+    with path.open("w", encoding="utf-8") as handle:
+        for row in rows:
+            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
 def snapshot_public_url(object_path: str, *, bucket: str | None = None) -> str | None:
     """Return the public URL for a snapshot file, or None if unconfigured."""
     config = _storage_config()

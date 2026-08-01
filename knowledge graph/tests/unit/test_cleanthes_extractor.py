@@ -2,6 +2,7 @@
 
 Mirror structure of `test_chrysippus_svf_extractor.py`.
 """
+
 from __future__ import annotations
 
 import sys
@@ -53,7 +54,7 @@ def test_hymn_line_node_id_padding():
 
 def test_extract_fragments_returns_list(tmp_path):
     """Minimal TEI with two fragments parses cleanly."""
-    tei_sample = '''<?xml version="1.0" encoding="UTF-8"?>
+    tei_sample = """<?xml version="1.0" encoding="UTF-8"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0">
   <text>
     <body>
@@ -66,7 +67,7 @@ def test_extract_fragments_returns_list(tmp_path):
     </body>
   </text>
 </TEI>
-'''
+"""
     p = tmp_path / "tei_sample.xml"
     p.write_text(tei_sample, encoding="utf-8")
     fragments = extract_fragments_from_tei(p)
@@ -78,7 +79,9 @@ def test_extract_fragments_returns_list(tmp_path):
 
 def test_extract_fragments_real_tlg1269():
     """Real Cleanthes TEI parses to ~157 fragments including #489, #537."""
-    real_path = REPO_ROOT / "data/scholarly_sources/ocr/svf_cleanthes/svf_i_cleanthes_tei.xml"
+    real_path = (
+        REPO_ROOT / "data/scholarly_sources/ocr/svf_cleanthes/svf_i_cleanthes_tei.xml"
+    )
     if not real_path.exists():
         pytest.skip("Real Cleanthes SVF I TEI not present locally")
     fragments = extract_fragments_from_tei(real_path)
@@ -98,7 +101,7 @@ def test_extract_fragments_real_tlg1269():
 
 def test_extract_hymn_lines_from_fragment_text(tmp_path):
     """Given a TEI fragment with <lb/> markers, extract one line per <lb/>."""
-    tei_sample = '''<?xml version="1.0" encoding="UTF-8"?>
+    tei_sample = """<?xml version="1.0" encoding="UTF-8"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0">
   <text>
     <body>
@@ -114,7 +117,7 @@ def test_extract_hymn_lines_from_fragment_text(tmp_path):
     </body>
   </text>
 </TEI>
-'''
+"""
     p = tmp_path / "tei_hymn.xml"
     p.write_text(tei_sample, encoding="utf-8")
     lines = extract_hymn_lines(p, hymn_fragment_number="537")
@@ -126,7 +129,9 @@ def test_extract_hymn_lines_from_fragment_text(tmp_path):
 
 def test_extract_hymn_lines_real_hymn():
     """Real TEI Hymn = exactly 39 dactylic hexameter lines."""
-    real_path = REPO_ROOT / "data/scholarly_sources/ocr/svf_cleanthes/svf_i_cleanthes_tei.xml"
+    real_path = (
+        REPO_ROOT / "data/scholarly_sources/ocr/svf_cleanthes/svf_i_cleanthes_tei.xml"
+    )
     if not real_path.exists():
         pytest.skip("Real Cleanthes SVF I TEI not present locally")
     lines = extract_hymn_lines(real_path, hymn_fragment_number="537")

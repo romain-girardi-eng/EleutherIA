@@ -1,4 +1,5 @@
 """Tests for Chrysippus SVF II TEI fragment extraction."""
+
 from __future__ import annotations
 
 import sys
@@ -29,7 +30,7 @@ def test_fragment_node_id_with_suffix():
 
 def test_extract_fragments_returns_list(tmp_path):
     """Given a minimal TEI fragment, the parser returns structured output."""
-    tei_sample = '''<?xml version="1.0" encoding="UTF-8"?>
+    tei_sample = """<?xml version="1.0" encoding="UTF-8"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0">
   <text>
     <body>
@@ -42,7 +43,7 @@ def test_extract_fragments_returns_list(tmp_path):
     </body>
   </text>
 </TEI>
-'''
+"""
     p = tmp_path / "tei_sample.xml"
     p.write_text(tei_sample, encoding="utf-8")
     fragments = extract_fragments_from_tei(p)
@@ -54,7 +55,7 @@ def test_extract_fragments_returns_list(tmp_path):
 
 def test_extract_fragments_filters_empty(tmp_path):
     """Fragments with empty <p> are still surfaced (caller filters)."""
-    tei_sample = '''<?xml version="1.0" encoding="UTF-8"?>
+    tei_sample = """<?xml version="1.0" encoding="UTF-8"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0">
   <text>
     <body>
@@ -67,7 +68,7 @@ def test_extract_fragments_filters_empty(tmp_path):
     </body>
   </text>
 </TEI>
-'''
+"""
     p = tmp_path / "tei_sample.xml"
     p.write_text(tei_sample, encoding="utf-8")
     fragments = extract_fragments_from_tei(p)

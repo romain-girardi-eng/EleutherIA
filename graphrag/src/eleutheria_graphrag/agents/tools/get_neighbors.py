@@ -11,6 +11,11 @@ from eleutheria_graphrag.agents.dependencies import Deps
 
 logger = logging.getLogger(__name__)
 
+# Default k-hop depth used for the DB-backed fallback (see
+# `_fetch_db_neighborhood`). Kept at 1 to match this tool's "immediate
+# neighbors" contract.
+_DB_FALLBACK_DEPTH = 1
+
 
 class EdgeSummary(BaseModel):
     edge_node_id: str
@@ -85,19 +90,35 @@ class GetNeighborsTool:
         direction = args.get("direction", "both")
         limit = min(max(args.get("limit", 15), 1), 30)
 
-        center = self._deps.node_lookup.get(node_id, {})
+        # The RAG synthesis path always warms `Deps.node_lookup` with the
+        # full KG at startup (weighted traversal needs it). Lightweight
+        # MCP/REST callers may not have paid that cost — in that case fall
+        # back to a bounded Postgres k-hop CTE instead of returning an
+        # empty result for every node. See `eleutheria_kg.services.db_traversal`.
+        if self._deps.node_lookup:
+            node_lookup = self._deps.node_lookup
+            outgoing_edges = self._deps.outgoing_edges
+            incoming_edges = self._deps.incoming_edges
+        else:
+            (
+                node_lookup,
+                outgoing_edges,
+                incoming_edges,
+            ) = await self._fetch_db_neighborhood(node_id)
+
+        center = node_lookup.get(node_id, {})
         center_label = center.get("label", node_id)
 
         edges: list[tuple[EdgeSummary, float]] = []
 
         # Outgoing edges
         if direction in ("out", "both"):
-            for edge in self._deps.outgoing_edges.get(node_id, []):
+            for edge in outgoing_edges.get(node_id, []):
                 rel = edge.get("relation", "")
                 if relation_filter and rel.lower() != relation_filter.lower():
                     continue
                 target_id = edge.get("target", "")
-                target = self._deps.node_lookup.get(target_id, {})
+                target = node_lookup.get(target_id, {})
                 weight = edge.get("weight", 1.0)
                 pr = self._deps.pagerank_scores.get(target_id, 0.0)
                 sort_score = weight + pr * 10
@@ -118,12 +139,12 @@ class GetNeighborsTool:
 
         # Incoming edges
         if direction in ("in", "both"):
-            for edge in self._deps.incoming_edges.get(node_id, []):
+            for edge in incoming_edges.get(node_id, []):
                 rel = edge.get("relation", "")
                 if relation_filter and rel.lower() != relation_filter.lower():
                     continue
                 source_id = edge.get("source", "")
-                source = self._deps.node_lookup.get(source_id, {})
+                source = node_lookup.get(source_id, {})
                 weight = edge.get("weight", 1.0)
                 pr = self._deps.pagerank_scores.get(source_id, 0.0)
                 sort_score = weight + pr * 10
@@ -151,3 +172,42 @@ class GetNeighborsTool:
             center_label=center_label,
             edges=result_edges,
         )
+
+    async def _fetch_db_neighborhood(
+        self, node_id: str
+    ) -> tuple[
+        dict[str, dict[str, Any]],
+        dict[str, list[dict[str, Any]]],
+        dict[str, list[dict[str, Any]]],
+    ]:
+        """Bounded 1-hop lookup via the Postgres k-hop CTE, shaped like the
+        in-memory `node_lookup`/`outgoing_edges`/`incoming_edges` indices so
+        the rest of `execute` doesn't need to know which path served it.
+        Returns empty structures (never raises) when the DB is unavailable
+        or the query fails — the caller then reports zero neighbors, same
+        as an unknown node in the in-memory path.
+        """
+        if self._deps.db is None:
+            return {}, {}, {}
+        try:
+            from eleutheria_kg.services.db_traversal import fetch_neighborhood
+
+            result = await fetch_neighborhood(
+                self._deps.db, node_id, depth=_DB_FALLBACK_DEPTH
+            )
+        except Exception:
+            logger.warning(
+                "get_neighbors: DB fallback failed for %s", node_id, exc_info=True
+            )
+            return {}, {}, {}
+
+        node_lookup = {n["id"]: n for n in result["nodes"]}
+        outgoing: dict[str, list[dict[str, Any]]] = {}
+        incoming: dict[str, list[dict[str, Any]]] = {}
+        for edge in result["edges"]:
+            src, tgt = edge.get("source"), edge.get("target")
+            if src == node_id:
+                outgoing.setdefault(src, []).append(edge)
+            if tgt == node_id:
+                incoming.setdefault(tgt, []).append(edge)
+        return node_lookup, outgoing, incoming

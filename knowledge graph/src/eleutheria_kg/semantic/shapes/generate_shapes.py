@@ -77,6 +77,14 @@ CANONICAL_PERIODS: Final[frozenset[str]] = frozenset(
 
 PASSAGE_ROLES: Final[tuple[str, ...]] = ("original", "translation", "paraphrase")
 
+# Edge statuses that no longer denote a live, assertable relation. Shapes
+# for these would validate Domain/Range on properties that new data should
+# never use (deprecated) or that only exist as the auto-generated inverse
+# of another relation (reserved/reserved_inverse) — skip them entirely.
+INACTIVE_EDGE_STATUSES: Final[frozenset[str]] = frozenset(
+    {"deprecated", "reserved", "reserved_inverse"}
+)
+
 # Suspicious node-id prefixes whose first segment must match the node type.
 PREFIX_TO_TYPE_PREFIX: Final[dict[str, str]] = {
     "argument": "argument",
@@ -195,6 +203,12 @@ def _ttl_string(value: str) -> str:
 
 
 def _edge_shape(relation: str, definition: dict) -> str:
+    # Dead relations (deprecated / reserved / reserved_inverse) should not
+    # get Domain/Range shapes: they validate properties no new edge is
+    # expected to use, so a "violation" here is noise, not a data bug.
+    if definition.get("status") in INACTIVE_EDGE_STATUSES:
+        return ""
+
     source_types = definition.get("source_types", []) or []
     target_types = definition.get("target_types", []) or []
     prop = _property_iri(relation)

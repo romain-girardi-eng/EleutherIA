@@ -105,3 +105,73 @@ def test_legacy_connections_preserves_query(app: FastAPI) -> None:
     )
     assert response.status_code == 301
     assert "depth=2" in response.headers["location"]
+
+
+class _FakeDB:
+    """Minimal QueryableDB stub — returns canned rows for the k-hop CTE."""
+
+    def is_connected(self) -> bool:
+        return True
+
+    async def fetch(self, query: str, *args: Any) -> list[dict[str, Any]]:
+        if "WITH RECURSIVE khop" in query:
+            return [{"node_id": "work_Y", "hop": 1}]
+        if "FROM free_will.kg_nodes" in query:
+            return [
+                {
+                    "id": "passage_X",
+                    "label": "Passage X",
+                    "type": "passage",
+                    "description": None,
+                    "period": "Classical Greek",
+                    "school": None,
+                    "metadata": {},
+                },
+                {
+                    "id": "work_Y",
+                    "label": "Work Y",
+                    "type": "work",
+                    "description": None,
+                    "period": None,
+                    "school": None,
+                    "metadata": {},
+                },
+            ]
+        if "FROM free_will.kg_edges" in query:
+            return [
+                {
+                    "source": "passage_X",
+                    "target": "work_Y",
+                    "relation": "part_of",
+                    "weight": 1.0,
+                    "metadata": {},
+                }
+            ]
+        return []
+
+
+def test_neighbors_falls_back_to_db_when_in_memory_graph_cold() -> None:
+    """When `analytics.kg_data` has not been warmed (empty), the endpoint
+    must use the bounded Postgres k-hop CTE instead of 404ing outright.
+    """
+    cold_analytics = KGAnalytics()  # kg_data defaults to {"nodes": [], "edges": []}
+    cache = KGCache(default_ttl=10)
+    set_services(cold_analytics, cache, _FakeDB())
+    application = FastAPI()
+    application.include_router(kg_router, prefix="/api/kg")
+    application.include_router(kg_extras_router, prefix="/api/kg")
+    application.dependency_overrides[get_analytics] = lambda: cold_analytics
+    application.dependency_overrides[get_cache] = lambda: cache
+
+    client = TestClient(application)
+    response = client.get("/api/kg/nodes/passage_X/neighbors")
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["node_id"] == "passage_X"
+    assert "part_of" in body["neighbors"]["outgoing"]
+    assert body["neighbors"]["outgoing"]["part_of"][0]["node_id"] == "work_Y"
+
+    ungrouped = client.get("/api/kg/nodes/passage_X/neighbors?grouped=false")
+    assert ungrouped.status_code == 200, ungrouped.text
+    ungrouped_body = ungrouped.json()
+    assert {n["id"] for n in ungrouped_body["nodes"]} == {"passage_X", "work_Y"}
