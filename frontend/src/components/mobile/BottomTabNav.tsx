@@ -20,7 +20,7 @@ export default function BottomTabNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-50"
+      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-50 pb-safe"
       role="navigation"
       aria-label={t('bottomNav.ariaLabel')}
     >

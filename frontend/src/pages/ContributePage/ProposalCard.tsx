@@ -216,7 +216,7 @@ export default function ProposalCard({
         onClick={onToggle}
         aria-pressed={selected}
         className={cn(
-          'mt-4 inline-flex items-center justify-center gap-1 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors',
+          'mt-4 inline-flex min-h-11 items-center justify-center gap-1 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors',
           selected
             ? 'border-amber-500 bg-amber-500 text-white hover:bg-amber-600'
             : 'border-stone-300 bg-white text-stone-700 hover:bg-stone-50'

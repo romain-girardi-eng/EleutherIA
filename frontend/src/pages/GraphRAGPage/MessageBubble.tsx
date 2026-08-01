@@ -202,7 +202,7 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
                 <div className="border-t border-amber-200/40 pt-3">
                   <button
                     onClick={() => setShowPassages(!showPassages)}
-                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
+                    className="flex items-center gap-2 min-h-11 py-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
                   >
                     <BookOpen className="w-4 h-4" />
                     <span>{t('graphRagUi.messageBubble.verifiedPassages', { count: verifiedPassages.length })}</span>
@@ -326,7 +326,7 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
                 <div className="border-t border-amber-200/40 pt-3">
                   <button
                     onClick={() => setShowPassages(!showPassages)}
-                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
+                    className="flex items-center gap-2 min-h-11 py-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
                   >
                     <FileText className="w-4 h-4" />
                     <span>{t('graphRagUi.messageBubble.referencedTexts', { count: Object.keys(message.citationTexts).length })}</span>
@@ -380,7 +380,7 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
                 <div className="border-t border-amber-200/40 pt-3">
                   <button
                     onClick={() => setShowSources(!showSources)}
-                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
+                    className="flex items-center gap-2 min-h-11 py-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
                   >
                     <FileText className="w-4 h-4" />
                     <span>{t('graphRagUi.messageBubble.sources', { count: sources.length })}</span>
@@ -423,7 +423,7 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
                 <div className="border-t border-amber-200/40 pt-3">
                   <button
                     onClick={() => setShowReferences((p) => !p)}
-                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
+                    className="flex items-center gap-2 min-h-11 py-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
                   >
                     <BookOpen className="w-4 h-4" />
                     <span>
@@ -473,7 +473,7 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
                 <div className="border-t border-amber-200/40 pt-3">
                   <button
                     onClick={() => setShowCitationPanel((p) => !p)}
-                    className="flex items-center gap-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
+                    className="flex items-center gap-2 min-h-11 py-2 text-sm xl:text-base font-medium text-stone-700 hover:text-stone-800 transition-colors w-full"
                   >
                     <FileText className="w-4 h-4" />
                     <span>{t('graphRagUi.messageBubble.exportBibliography', { count: allCitations.length, defaultValue: 'Export bibliography ({{count}} citations)' })}</span>

@@ -417,14 +417,14 @@ function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) 
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
                   to={`/visualizer?node=${encodeURIComponent(thinker.nodeId)}`}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 bg-white/[0.04] text-white/70 hover:text-white hover:bg-white/[0.08] text-xs font-body transition-colors"
+                  className="inline-flex items-center gap-2 min-h-11 px-4 py-2 rounded-full border border-white/15 bg-white/[0.04] text-white/70 hover:text-white hover:bg-white/[0.08] text-xs font-body transition-colors"
                 >
                   <Network className="w-3.5 h-3.5" />
                   Open in graph
                 </Link>
                 <Link
                   to={`/texts/${encodeURIComponent(thinker.workId)}`}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 bg-white/[0.04] text-white/70 hover:text-white hover:bg-white/[0.08] text-xs font-body transition-colors"
+                  className="inline-flex items-center gap-2 min-h-11 px-4 py-2 rounded-full border border-white/15 bg-white/[0.04] text-white/70 hover:text-white hover:bg-white/[0.08] text-xs font-body transition-colors"
                 >
                   <BookOpen className="w-3.5 h-3.5" />
                   Read the work

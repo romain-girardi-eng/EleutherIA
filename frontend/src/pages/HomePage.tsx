@@ -169,7 +169,7 @@ export default function HomePage() {
       {/* I — How It Works */}
       <a
         href="/how-it-works"
-        className="group flex items-center gap-3 py-3 px-1 hover:bg-amber-50/60 transition-colors duration-150"
+        className="group flex items-center gap-3 py-3 px-1 min-h-11 hover:bg-amber-50/60 transition-colors duration-150"
       >
         <span className="font-mono text-[10px] w-6 text-zinc-300 group-hover:text-amber-500 tracking-widest flex-shrink-0 transition-colors duration-150 select-none">
           I
@@ -190,7 +190,7 @@ export default function HomePage() {
       {/* II — Knowledge Graph */}
       <a
         href="/visualizer"
-        className="group flex items-center gap-3 py-3 px-1 hover:bg-orange-50/60 transition-colors duration-150"
+        className="group flex items-center gap-3 py-3 px-1 min-h-11 hover:bg-orange-50/60 transition-colors duration-150"
       >
         <span className="font-mono text-[10px] w-6 text-zinc-300 group-hover:text-orange-500 tracking-widest flex-shrink-0 transition-colors duration-150 select-none">
           II
@@ -211,7 +211,7 @@ export default function HomePage() {
       {/* III — GraphRAG Q&A */}
       <a
         href="/graphrag"
-        className="group flex items-center gap-3 py-3 px-1 hover:bg-violet-50/40 transition-colors duration-150"
+        className="group flex items-center gap-3 py-3 px-1 min-h-11 hover:bg-violet-50/40 transition-colors duration-150"
       >
         <span className="font-mono text-[10px] w-6 text-zinc-300 group-hover:text-violet-500 tracking-widest flex-shrink-0 transition-colors duration-150 select-none">
           III
@@ -282,7 +282,7 @@ export default function HomePage() {
               {showParticles && (
                 <button
                   onClick={toggleFullscreen}
-                  className="absolute bottom-4 right-4 z-50 p-2 rounded-lg bg-black/40 hover:bg-black/60 border border-white/20 hover:border-white/40 transition-all duration-200 group backdrop-blur-sm"
+                  className="absolute bottom-4 right-4 z-50 p-3 min-h-11 min-w-11 flex items-center justify-center rounded-lg bg-black/40 hover:bg-black/60 border border-white/20 hover:border-white/40 transition-all duration-200 group backdrop-blur-sm"
                   title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Particles'}
                 >
                   {isFullscreen ? (

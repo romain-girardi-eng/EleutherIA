@@ -162,9 +162,9 @@ const AdminDashboard: React.FC = () => {
     <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
       <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-display font-bold text-academic-text flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-academic-text flex items-center gap-3">
             <LayoutDashboard className="w-8 h-8 text-primary-600" />
             {t('admin.title')}
           </h1>
@@ -176,7 +176,7 @@ const AdminDashboard: React.FC = () => {
           onClick={refreshMetrics}
           disabled={refreshing}
           variant="outline"
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 min-h-11"
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
           {t('admin.refreshMetrics')}
@@ -199,7 +199,7 @@ const AdminDashboard: React.FC = () => {
                 {health.overall_status.toUpperCase()}
               </span>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {Object.entries(health.services).map(([service, status]) => (
                 <div key={service} className="flex items-center gap-3 p-3 bg-parchment-50 rounded-lg">
                   {getStatusIcon(status)}

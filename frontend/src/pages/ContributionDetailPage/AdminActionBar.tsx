@@ -117,7 +117,7 @@ export default function AdminActionBar({
               onClick={() => setShowRejectModal(true)}
               disabled={busyReject || total === 0}
               className={cn(
-                'inline-flex items-center gap-1.5 rounded-full border border-rose-300/70 bg-white px-3 py-1.5 text-xs font-semibold text-rose-700 transition-colors',
+                'inline-flex min-h-11 items-center gap-1.5 rounded-full border border-rose-300/70 bg-white px-3 text-xs font-semibold text-rose-700 transition-colors',
                 'hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50'
               )}
             >
@@ -134,7 +134,7 @@ export default function AdminActionBar({
               onClick={() => setShowApplyModal(true)}
               disabled={!canApply}
               className={cn(
-                'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold text-white transition-colors',
+                'inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 text-xs font-semibold text-white transition-colors',
                 canApply
                   ? 'bg-violet-600 hover:bg-violet-700 shadow-sm'
                   : 'bg-stone-300 cursor-not-allowed'
@@ -254,7 +254,7 @@ function ConfirmModal({
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 8, scale: 0.98 }}
         transition={{ duration: 0.2 }}
-        className="w-full max-w-md rounded-2xl border border-stone-200 bg-parchment-50 p-6 shadow-xl"
+        className="w-full max-w-md max-h-[85vh] overflow-y-auto rounded-2xl border border-stone-200 bg-parchment-50 p-6 shadow-xl"
       >
         <h2
           id="contribution-confirm-title"
@@ -276,16 +276,16 @@ function ConfirmModal({
             onChange={(event) => onNotesChange(event.target.value)}
             placeholder={notesPlaceholder}
             rows={3}
-            className="mt-1 w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm text-stone-700 placeholder:text-stone-400 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+            className="mt-1 w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-base text-stone-700 placeholder:text-stone-400 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
           />
         </label>
 
-        <div className="mt-5 flex justify-end gap-2">
+        <div className="mt-5 flex flex-col-reverse justify-end gap-2 sm:flex-row">
           <button
             type="button"
             onClick={onCancel}
             disabled={busy}
-            className="rounded-full border border-stone-300 bg-white px-4 py-1.5 text-xs font-semibold text-stone-700 hover:bg-stone-50 disabled:opacity-50"
+            className="min-h-11 rounded-full border border-stone-300 bg-white px-4 text-xs font-semibold text-stone-700 hover:bg-stone-50 disabled:opacity-50"
           >
             {cancelLabel}
           </button>
@@ -294,7 +294,7 @@ function ConfirmModal({
             onClick={onConfirm}
             disabled={busy}
             className={cn(
-              'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold text-white transition-colors',
+              'inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 text-xs font-semibold text-white transition-colors',
               confirmTone === 'violet'
                 ? 'bg-violet-600 hover:bg-violet-700'
                 : 'bg-rose-600 hover:bg-rose-700',

@@ -104,7 +104,7 @@ export default function DebateMapPage() {
             className="space-y-8"
           >
             {/* ── Hero header ── */}
-            <header className="rounded-2xl bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white p-8 shadow-xl">
+            <header className="rounded-2xl bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white p-5 sm:p-8 shadow-xl">
               <div className="flex items-start gap-4">
                 <div className="p-3 bg-white/15 rounded-xl">
                   <Scroll className="w-8 h-8" />
@@ -158,7 +158,7 @@ export default function DebateMapPage() {
               <button
                 type="button"
                 onClick={() => setView('timeline')}
-                className={`inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium transition-colors ${
+                className={`inline-flex items-center gap-2 min-h-11 px-5 py-2 rounded-full text-sm font-medium transition-colors ${
                   view === 'timeline'
                     ? 'bg-primary-600 text-white shadow'
                     : 'text-stone-600 hover:text-stone-900'
@@ -170,7 +170,7 @@ export default function DebateMapPage() {
               <button
                 type="button"
                 onClick={() => setView('arguments')}
-                className={`inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium transition-colors ${
+                className={`inline-flex items-center gap-2 min-h-11 px-5 py-2 rounded-full text-sm font-medium transition-colors ${
                   view === 'arguments'
                     ? 'bg-primary-600 text-white shadow'
                     : 'text-stone-600 hover:text-stone-900'

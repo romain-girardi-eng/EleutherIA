@@ -348,14 +348,14 @@ export default function TextExplorerPage() {
                     <button
                       onClick={prevPage}
                       disabled={offset === 0}
-                      className="p-1.5 text-stone-500 hover:text-stone-700 disabled:opacity-30 disabled:cursor-not-allowed rounded-md hover:bg-stone-100 transition-colors"
+                      className="flex min-h-[44px] min-w-[44px] items-center justify-center p-1.5 text-stone-500 hover:text-stone-700 disabled:opacity-30 disabled:cursor-not-allowed rounded-md hover:bg-stone-100 transition-colors"
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
                     <button
                       onClick={nextPage}
                       disabled={offset + numericPageSize >= totalCount}
-                      className="p-1.5 text-stone-500 hover:text-stone-700 disabled:opacity-30 disabled:cursor-not-allowed rounded-md hover:bg-stone-100 transition-colors"
+                      className="flex min-h-[44px] min-w-[44px] items-center justify-center p-1.5 text-stone-500 hover:text-stone-700 disabled:opacity-30 disabled:cursor-not-allowed rounded-md hover:bg-stone-100 transition-colors"
                     >
                       <ChevronRight className="w-4 h-4" />
                     </button>

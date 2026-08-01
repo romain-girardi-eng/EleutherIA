@@ -261,8 +261,8 @@ export default function CommunityPage() {
             aria-pressed={checkKG}
             className={
               checkKG
-                ? 'inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-300 bg-amber-700 px-3 py-1.5 text-[11px] font-semibold text-amber-50 hover:bg-amber-800'
-                : 'inline-flex shrink-0 items-center gap-1.5 rounded-full border border-stone-300 bg-white/60 px-3 py-1.5 text-[11px] font-semibold text-stone-700 hover:bg-white'
+                ? 'inline-flex shrink-0 min-h-11 items-center gap-1.5 rounded-full border border-amber-300 bg-amber-700 px-3 py-1.5 text-[11px] font-semibold text-amber-50 hover:bg-amber-800'
+                : 'inline-flex shrink-0 min-h-11 items-center gap-1.5 rounded-full border border-stone-300 bg-white/60 px-3 py-1.5 text-[11px] font-semibold text-stone-700 hover:bg-white'
             }
           >
             {reproChecking ? (

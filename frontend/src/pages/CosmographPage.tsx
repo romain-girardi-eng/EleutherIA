@@ -755,7 +755,7 @@ export default function CosmographPage() {
                   : (t('cosmograph.explore.openExplore', 'Open the explore view') as string)
               }
               className={[
-                'absolute right-3 top-3 z-40 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-medium shadow-[0_8px_24px_-12px_rgba(15,23,42,0.45)] backdrop-blur-md transition-colors md:hidden',
+                'absolute right-[calc(0.75rem+env(safe-area-inset-right))] top-[calc(0.75rem+env(safe-area-inset-top))] z-40 inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-medium shadow-[0_8px_24px_-12px_rgba(15,23,42,0.45)] backdrop-blur-md transition-colors md:hidden',
                 tab === 'explore'
                   ? 'border border-amber-300/70 bg-white/85 text-amber-900 hover:bg-amber-50'
                   : 'border border-white/15 bg-slate-950/75 text-slate-100 hover:bg-slate-900/80',

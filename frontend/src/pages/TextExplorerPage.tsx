@@ -151,16 +151,16 @@ export default function TextExplorerPage() {
 
       {/* Header */}
       <div className="academic-card">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-3xl font-serif font-display font-bold mb-2">{t('texts.title')}</h1>
+              <h1 className="text-2xl sm:text-3xl font-serif font-display font-bold mb-2">{t('texts.title')}</h1>
               <p className="text-academic-muted">
                 {t('texts.subtitle', { count: stats?.total_works || 0 })}
               </p>
             </div>
 
             {stats && (
-              <div className="flex space-x-6 text-center">
+              <div className="flex flex-wrap gap-x-6 gap-y-3 text-center">
                 <div>
                   <div className="text-2xl font-bold text-primary-600">
                     {stats.total_works?.toLocaleString() || '0'}
