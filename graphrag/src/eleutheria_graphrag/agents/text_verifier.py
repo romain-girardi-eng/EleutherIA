@@ -10,10 +10,9 @@ rare-token anchor (exact orthography, so the LIKE stays cheap and bounded),
 then fold-compared in Python. The accent-insensitivity lives entirely in the
 Python fold-compare — never in an un-indexable SQL expression over 69k rows.
 
-Report-only by default: outcomes are recorded under
-``metadata.text_verification`` and prose is NEVER altered unless
-``ELEUTHERIA_TEXT_VERIFIER_ENFORCE`` is truthy (the v1 verifier was disabled
-for false positives; the rework re-ships observation-first).
+Outcomes are recorded under ``metadata.text_verification``. Enforcement is now
+the DEFAULT: a line carrying an unverified ancient-text span is dropped unless
+``ELEUTHERIA_TEXT_VERIFIER_ENFORCE`` is explicitly falsy (report-only).
 """
 
 from __future__ import annotations
@@ -34,7 +33,7 @@ from eleutheria_graphrag.agents.ancient_text_matching import (
 
 logger = logging.getLogger(__name__)
 
-# Deletion is opt-in: report-only first deployment (default false).
+# Deletion is ON by default; ``=false`` opts back into report-only.
 ENFORCE_ENV_VAR = "ELEUTHERIA_TEXT_VERIFIER_ENFORCE"
 _REMOVED_LINE_MARKER = "*[removed: unverified ancient text]*"
 
@@ -284,8 +283,15 @@ class VerificationResult:
 
 
 def enforcement_enabled() -> bool:
-    """Whether unverified spans may alter prose (default: report-only)."""
-    raw = os.getenv(ENFORCE_ENV_VAR, "false").strip().lower()
+    """Whether unverified spans may alter prose (default: ENFORCE).
+
+    The report-only default shipped unverified Greek/Latin to readers with only
+    a metadata annotation. The default is now enforcement: a line carrying an
+    ancient-text span that could not be verified against the evidence bundle or
+    the corpus is dropped. Set ``ELEUTHERIA_TEXT_VERIFIER_ENFORCE=false`` to go
+    back to report-only.
+    """
+    raw = os.getenv(ENFORCE_ENV_VAR, "true").strip().lower()
     return raw in {"1", "true", "yes", "on"}
 
 

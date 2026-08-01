@@ -38,7 +38,7 @@ STOP_TERMS = {
     "which",
     "with",
 }
-TERM_RE = re.compile(r"[A-Za-zÀ-ÿἀ-῾']+")
+TERM_RE = re.compile(r"[A-Za-zÀ-ÖØ-öø-ÿ\u0370-\u03FF\u1F00-\u1FFF']+")
 
 
 def db_is_connected(db: Any) -> bool:
