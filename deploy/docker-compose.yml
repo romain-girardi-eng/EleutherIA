@@ -100,7 +100,7 @@ services:
       OPENROUTER_HTTP_REFERER: ${OPENROUTER_HTTP_REFERER:-https://free-will.app}
       OPENROUTER_APP_NAME: ${OPENROUTER_APP_NAME:-EleutherIA}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-this-in-production} # pragma: allowlist secret
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?set JWT_SECRET_KEY} # pragma: allowlist secret
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost,http://localhost:80,http://localhost:5173}
       PROMETHEUS_ENABLED: "true"
       PYTHONUNBUFFERED: "1"
@@ -174,10 +174,10 @@ services:
       - full
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@eleutherai.local}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123} # pragma: allowlist secret
-      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:?set PGADMIN_PASSWORD} # pragma: allowlist secret
+      PGADMIN_CONFIG_SERVER_MODE: "True"
     ports:
-      - "${PGADMIN_PORT:-8080}:80"
+      - "127.0.0.1:${PGADMIN_PORT:-8080}:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
@@ -220,12 +220,12 @@ services:
       - full
     environment:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin} # pragma: allowlist secret
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:?set GRAFANA_PASSWORD} # pragma: allowlist secret
       GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
       - grafana_data:/var/lib/grafana
     ports:
-      - "${GRAFANA_PORT:-3000}:3000"
+      - "127.0.0.1:${GRAFANA_PORT:-3000}:3000"
     depends_on:
       - prometheus
     networks:
@@ -245,12 +245,12 @@ services:
       - full
     command: ["/jena-fuseki/fuseki-server", "--file=/staging/eleutheria.ttl", "/eleutheria"]
     environment:
-      ADMIN_PASSWORD: ${FUSEKI_ADMIN_PASSWORD:-eleutheria} # pragma: allowlist secret
+      ADMIN_PASSWORD: ${FUSEKI_ADMIN_PASSWORD:?set FUSEKI_ADMIN_PASSWORD} # pragma: allowlist secret
       JVM_ARGS: ${FUSEKI_JVM_ARGS:--Xmx2g}
     volumes:
       - ../data/rdf:/staging:ro
     ports:
-      - "${FUSEKI_PORT:-3030}:3030"
+      - "127.0.0.1:${FUSEKI_PORT:-3030}:3030"
     networks:
       - internal
     deploy:

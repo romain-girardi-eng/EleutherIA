@@ -29,7 +29,7 @@ from eleutheria_graphrag.agents.dependencies import Deps
 
 logger = logging.getLogger(__name__)
 
-_TERM_RE = re.compile(r"[A-Za-zÀ-ÿἀ-῾']+")
+_TERM_RE = re.compile(r"[A-Za-zÀ-ÖØ-öø-ÿ\u0370-\u03FF\u1F00-\u1FFF']+")
 
 # Node types that represent a scholarly disagreement locus.
 DEBATE_TYPES: frozenset[str] = frozenset({"debate", "controversy", "position"})

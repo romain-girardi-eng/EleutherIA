@@ -1,5 +1,11 @@
 """
-Authentication routes — login, current user, rate limit status, semativerse permissions.
+Authentication routes — passwordless email one-time-code (OTP) login,
+current user, rate limit status, semativerse permissions.
+
+Flow: POST /request-code {email} → a 6-digit code is emailed ONLY to an
+authorized, active user (the response is identical either way, so the
+endpoint never reveals whether an address is registered). POST /verify-code
+{email, code} → exchanges a valid code for a JWT.
 """
 
 import logging
@@ -7,27 +13,43 @@ from typing import Annotated, Any
 
 from eleutheria_database.services.db import DatabaseService
 from fastapi import APIRouter, Depends, HTTPException, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, EmailStr, Field
 
 from backend.dependencies import get_db
 from backend.services.auth_service import (
-    authenticate_user,
+    JWT_EXPIRATION_HOURS,
+    LOGIN_CODE_TTL_MINUTES,
     check_rate_limit,
     create_access_token,
     decode_token,
+    get_active_user_by_email,
+    is_email_authorized,
+    issue_login_code,
     record_request,
+    verify_login_code,
 )
+from backend.services.email_service import send_login_code
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["auth"])
 
+# Uniform response for /request-code — never leaks whether the email exists.
+_REQUEST_CODE_MESSAGE = (
+    "Si cet e-mail est autorisé, un code de connexion vient d'être envoyé."
+)
+
 
 # ---------- Models ----------
 
-class LoginRequest(BaseModel):
-    username: str = Field(..., min_length=3)
-    password: str = Field(..., min_length=1)
+
+class RequestCodeRequest(BaseModel):
+    email: EmailStr
+
+
+class VerifyCodeRequest(BaseModel):
+    email: EmailStr
+    code: str = Field(..., min_length=4, max_length=12)
 
 
 class SemativerseCheckRequest(BaseModel):
@@ -35,6 +57,7 @@ class SemativerseCheckRequest(BaseModel):
 
 
 # ---------- Helpers ----------
+
 
 async def get_current_user(
     request: Request,
@@ -50,7 +73,9 @@ async def get_current_user(
         payload = decode_token(token)
     except Exception:
         logger.debug("Token decode failed", exc_info=True)
-        raise HTTPException(status_code=401, detail="Invalid or expired token") from None
+        raise HTTPException(
+            status_code=401, detail="Invalid or expired token"
+        ) from None
 
     user_id = payload.get("sub")
     if not user_id:
@@ -66,6 +91,11 @@ async def get_current_user(
     if not user or not user.get("is_active", True):
         raise HTTPException(status_code=401, detail="User not found or inactive")
 
+    # Allowlist enforced on every request: revoking an email takes effect
+    # immediately, even for a JWT issued before the revocation.
+    if not is_email_authorized(user.get("email", "")):
+        raise HTTPException(status_code=403, detail="Access revoked")
+
     # Ensure user_id is a string for consistent downstream usage
     result = dict(user)
     result["user_id"] = str(result["user_id"])
@@ -74,30 +104,60 @@ async def get_current_user(
 
 # ---------- Routes ----------
 
-@router.post("/login")
-async def login(
-    body: LoginRequest,
+
+@router.post("/request-code")
+async def request_code(
+    body: RequestCodeRequest,
     request: Request,
     db: Annotated[DatabaseService, Depends(get_db)],
 ) -> dict[str, Any]:
-    """Authenticate user and return JWT token."""
-    # Rate limit by IP
+    """Email a one-time login code — but only to an authorized, active user.
+
+    The response is identical whether or not the address is registered, so it
+    can never be used to enumerate valid emails.
+    """
     client_ip = request.client.host if request.client else "unknown"
-    rl = check_rate_limit(f"login:{client_ip}")
-    if rl["remaining"] <= 0:
-        raise HTTPException(status_code=429, detail="Too many login attempts")
-    record_request(f"login:{client_ip}")
+    if check_rate_limit(f"request-code:{client_ip}")["remaining"] <= 0:
+        raise HTTPException(
+            status_code=429, detail="Trop de tentatives, réessayez plus tard."
+        )
+    record_request(f"request-code:{client_ip}")
 
-    user = await authenticate_user(db, body.username, body.password)
+    email = str(body.email)
+    if is_email_authorized(email) and await get_active_user_by_email(db, email):
+        code = await issue_login_code(db, email)
+        if code is not None:
+            await send_login_code(email, code, LOGIN_CODE_TTL_MINUTES)
+
+    return {"message": _REQUEST_CODE_MESSAGE}
+
+
+@router.post("/verify-code")
+async def verify_code(
+    body: VerifyCodeRequest,
+    request: Request,
+    db: Annotated[DatabaseService, Depends(get_db)],
+) -> dict[str, Any]:
+    """Exchange a valid login code for a JWT."""
+    client_ip = request.client.host if request.client else "unknown"
+    if check_rate_limit(f"verify-code:{client_ip}")["remaining"] <= 0:
+        raise HTTPException(
+            status_code=429, detail="Trop de tentatives, réessayez plus tard."
+        )
+    record_request(f"verify-code:{client_ip}")
+
+    email = str(body.email)
+    user = None
+    if is_email_authorized(email):
+        user = await verify_login_code(db, email, body.code)
     if not user:
-        raise HTTPException(status_code=401, detail="Invalid username or password")
+        raise HTTPException(status_code=401, detail="Code invalide ou expiré.")
 
-    token = create_access_token({"sub": user["user_id"], "role": user["role"]})
-
+    token = create_access_token({"sub": str(user["user_id"]), "role": user["role"]})
     return {
         "access_token": token,
         "token_type": "bearer",
-        "expires_in": 168 * 3600,  # 7 days in seconds
+        "expires_in": JWT_EXPIRATION_HOURS * 3600,
     }
 
 

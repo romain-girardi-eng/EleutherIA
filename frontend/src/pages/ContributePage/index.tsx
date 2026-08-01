@@ -242,6 +242,7 @@ function MetadataFormSection({
           variant="ghost"
           onClick={onReset}
           disabled={submitting}
+          className="min-h-11"
         >
           {t('contribute.metadata.chooseAnother')}
         </Button>
@@ -250,6 +251,7 @@ function MetadataFormSection({
           variant="warning"
           disabled={submitting}
           loading={submitting}
+          className="min-h-11"
         >
           {t('contribute.metadata.submit')}
         </Button>
@@ -432,7 +434,7 @@ function ReviewView({ detail, onSubmit, onAbandon }: ReviewViewProps) {
               onClick={() => setActiveTab(tab)}
               aria-pressed={isActive}
               className={cn(
-                'rounded-t-md px-3 py-2 text-sm font-medium transition-colors',
+                'min-h-11 rounded-t-md px-3 py-2 text-sm font-medium transition-colors',
                 isActive
                   ? 'bg-amber-100 text-amber-900'
                   : 'text-stone-600 hover:bg-stone-100'
@@ -464,7 +466,7 @@ function ReviewView({ detail, onSubmit, onAbandon }: ReviewViewProps) {
         </div>
       )}
 
-      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-amber-200 bg-white/95 backdrop-blur">
+      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-amber-200 bg-white/95 backdrop-blur pb-[env(safe-area-inset-bottom)]">
         <div className="academic-container flex flex-col items-stretch justify-between gap-3 py-3 sm:flex-row sm:items-center">
           <p className="text-sm text-stone-600">
             {t('contribute.review.selectionCount', {
@@ -472,11 +474,11 @@ function ReviewView({ detail, onSubmit, onAbandon }: ReviewViewProps) {
               total: totalCount,
             })}
           </p>
-          <div className="flex gap-2">
-            <Button variant="destructive" onClick={onAbandon}>
+          <div className="flex flex-col-reverse gap-2 sm:flex-row">
+            <Button variant="destructive" onClick={onAbandon} className="min-h-11">
               {t('contribute.review.abandon')}
             </Button>
-            <Button variant="warning" onClick={onSubmit}>
+            <Button variant="warning" onClick={onSubmit} className="min-h-11">
               {t('contribute.review.submit')}
             </Button>
           </div>

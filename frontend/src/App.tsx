@@ -350,7 +350,7 @@ function AppContent() {
       {/* Header / Navigation */}
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 m-0 pointer-events-auto touch-manipulation",
+          "fixed top-0 left-0 right-0 z-50 m-0 pointer-events-auto touch-manipulation pt-safe",
           // Desktop (lg+): warm parchment on inner pages, white on homepage
           isHomePage
             ? "lg:bg-academic-paper lg:border-b lg:border-academic-border lg:shadow-sm"
@@ -359,7 +359,6 @@ function AppContent() {
           isHomePage ? "bg-transparent" : "bg-parchment-50 border-b border-amber-200/40 shadow-sm"
         )}
         id="navigation"
-        style={{ marginTop: 0, paddingTop: 0 }}
       >
         <nav className="academic-container" style={{ marginTop: 0, paddingTop: 0 }}>
           <div className="flex items-center justify-between py-1 sm:py-0 sm:h-12">
@@ -393,7 +392,7 @@ function AppContent() {
             {/* Mobile Menu Button with Animation */}
             <button
               className={cn(
-                "lg:hidden relative z-[55] p-3 -m-1 rounded-lg transition-colors touch-manipulation",
+                "lg:hidden relative z-[55] min-h-11 min-w-11 flex items-center justify-center -m-1 rounded-lg transition-colors touch-manipulation",
                 // Mobile = parchment palette on every page (incl. home).
                 // Desktop on home stays on the dark-friendly white variant.
                 isHomePage

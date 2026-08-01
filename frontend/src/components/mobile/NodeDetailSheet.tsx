@@ -145,11 +145,11 @@ export const NodeDetailSheet: React.FC<NodeDetailSheetProps> = ({
                   )}
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 {typeof navigator.share === 'function' && (
                   <button
                     onClick={handleShare}
-                    className="p-2 rounded-full hover:bg-slate-800 transition-colors"
+                    className="min-h-11 min-w-11 flex items-center justify-center rounded-full hover:bg-slate-800 transition-colors touch-manipulation"
                     aria-label={t('graphUi.nodeSheet.share')}
                   >
                     <Share2 className="h-5 w-5 text-slate-400" />
@@ -157,7 +157,7 @@ export const NodeDetailSheet: React.FC<NodeDetailSheetProps> = ({
                 )}
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-full hover:bg-slate-800 transition-colors"
+                  className="min-h-11 min-w-11 flex items-center justify-center rounded-full hover:bg-slate-800 transition-colors touch-manipulation"
                   aria-label={t('graphUi.nodeSheet.close')}
                 >
                   <X className="h-5 w-5 text-slate-400" />
@@ -165,8 +165,9 @@ export const NodeDetailSheet: React.FC<NodeDetailSheetProps> = ({
               </div>
             </div>
 
-            {/* Scrollable Content */}
-            <div className="overflow-y-auto max-h-[calc(85vh-100px)] px-6 pb-6">
+            {/* Scrollable Content — pb includes safe-area so the last row
+                clears the home indicator on notched phones. */}
+            <div className="overflow-y-auto max-h-[calc(85vh-100px)] px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
               {/* Metadata Pills */}
               {(node.period || node.school) && (
                 <div className="flex flex-wrap gap-2 mb-4">

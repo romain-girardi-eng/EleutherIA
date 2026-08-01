@@ -29,9 +29,7 @@ router = APIRouter(tags=["share"])
 # Separate router for the public /share/{token} endpoint (no /api prefix)
 public_router = APIRouter(tags=["share"])
 
-_BASE_URL = os.getenv(
-    "PUBLIC_BASE_URL", "https://free-will.app"
-).rstrip("/")
+_BASE_URL = os.getenv("PUBLIC_BASE_URL", "https://free-will.app").rstrip("/")
 _SHARE_TTL_DAYS = 30
 
 
@@ -96,7 +94,9 @@ async def create_share_link(
 # ---------------------------------------------------------------------------
 
 
-@public_router.get("/share/{token}", response_class=HTMLResponse, include_in_schema=False)
+@public_router.get(
+    "/share/{token}", response_class=HTMLResponse, include_in_schema=False
+)
 async def render_shared_trace(
     token: str,
     db: Annotated[DatabaseService, Depends(get_db)],
@@ -115,13 +115,17 @@ async def render_shared_trace(
     )
 
     if not row:
-        return HTMLResponse(_error_page("Ce lien n'existe pas ou a expiré."), status_code=404)
+        return HTMLResponse(
+            _error_page("Ce lien n'existe pas ou a expiré."), status_code=404
+        )
 
     expires_at: datetime = row["expires_at"]
     if expires_at.tzinfo is None:
         expires_at = expires_at.replace(tzinfo=UTC)
     if expires_at < datetime.now(UTC):
-        return HTMLResponse(_error_page("Ce lien de partage a expiré."), status_code=410)
+        return HTMLResponse(
+            _error_page("Ce lien de partage a expiré."), status_code=410
+        )
 
     # Increment view counter (non-fatal)
     try:
@@ -135,7 +139,9 @@ async def render_shared_trace(
             token,
         )
     except Exception:  # noqa: BLE001
-        logger.warning("Could not increment view_count for token %s", token)
+        # Never log the capability token in full — logs are a lower-trust
+        # sink and the token alone grants access to the shared trace.
+        logger.warning("Could not increment view_count for token %s…", token[:8])
 
     query = row.get("query") or ""
     answer = row.get("final_answer_text") or ""
@@ -172,7 +178,7 @@ def _coerce_json_value(value: Any, default: Any) -> Any:
     if isinstance(value, str):
         try:
             return json.loads(value)
-        except (TypeError, ValueError):
+        except TypeError, ValueError:
             return default
     return value
 
@@ -219,7 +225,7 @@ def _render_page(
                 verdict_badge = '<span class="verdict warn">non vérifiée</span>'
             citation_rows += (
                 f'<li class="citation"><span class="cnum">[{i}]</span> '
-                f'<strong>{label}</strong> {verdict_badge}'
+                f"<strong>{label}</strong> {verdict_badge}"
                 + (f' <code class="urn">{urn}</code>' if urn else "")
                 + (f'<br><em class="excerpt">{excerpt}</em>' if excerpt else "")
                 + (f'<br><em class="excerpt">{note}</em>' if note else "")
@@ -275,7 +281,7 @@ def _render_page(
 <div class="wrap">
   <header>
     <div class="logo">EleutherIA</div>
-    <div class="badge">Résultat de recherche partagé{' — ' + date_str if date_str else ''}</div>
+    <div class="badge">Résultat de recherche partagé{" — " + date_str if date_str else ""}</div>
   </header>
   <h1>{q_escaped}</h1>
   <section class="answer">{a_escaped}</section>

@@ -322,7 +322,7 @@ LATIN_CHUNK_SPLIT_RE = re.compile(r"[—–()\[\]]|\s-\s")
 # MODERN_STOPWORDS (the modern-language function-word gate for candidate
 # ancient Latin) lives in ``ancient_text_matching`` — shared with the
 # post-synthesis text verifier. Imported above.
-TERM_RE = re.compile(r"[A-Za-zÀ-ÿἀ-῾']+")
+TERM_RE = re.compile(r"[A-Za-zÀ-ÖØ-öø-ÿ\u0370-\u03FF\u1F00-\u1FFF']+")
 STOP_TERMS = {
     "about",
     "above",

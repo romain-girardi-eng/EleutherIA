@@ -205,11 +205,12 @@ export function MobileMenu({
               'flex flex-col overflow-hidden',
             )}
           >
-            {/* Header */}
-            <header className="shrink-0 flex items-center justify-between px-5 py-4 border-b border-amber-200/40">
-              <div className="flex items-center gap-3">
-                <img src="/logo-880.webp" alt="EleutherIA" className="h-9 w-9" />
-                <div className="leading-tight">
+            {/* Header — pt-safe clears the notch since the drawer sits flush
+                against the top edge (viewport-fit=cover). */}
+            <header className="shrink-0 flex items-center justify-between px-5 pt-[calc(1rem+env(safe-area-inset-top))] pb-4 border-b border-amber-200/40">
+              <div className="flex items-center gap-3 min-w-0">
+                <img src="/logo-880.webp" alt="EleutherIA" className="h-9 w-9 shrink-0" />
+                <div className="leading-tight min-w-0">
                   <div className="font-display text-base font-semibold text-stone-900">
                     EleutherIA
                   </div>
@@ -222,7 +223,7 @@ export function MobileMenu({
                 type="button"
                 onClick={onClose}
                 aria-label={t('nav.closeMenu')}
-                className="h-10 w-10 inline-flex items-center justify-center rounded-full text-stone-500 hover:bg-amber-100/60 hover:text-amber-900 transition-colors"
+                className="h-11 w-11 shrink-0 inline-flex items-center justify-center rounded-full text-stone-500 hover:bg-amber-100/60 hover:text-amber-900 transition-colors touch-manipulation"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -298,8 +299,9 @@ export function MobileMenu({
               })}
             </motion.div>
 
-            {/* Footer: language + user actions */}
-            <footer className="shrink-0 border-t border-amber-200/40 bg-white/60 backdrop-blur-sm px-3 py-3 space-y-3">
+            {/* Footer: language + user actions — pb-safe clears the home
+                indicator since the drawer sits flush against the bottom edge. */}
+            <footer className="shrink-0 border-t border-amber-200/40 bg-white/60 backdrop-blur-sm px-3 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] space-y-3">
               <div>
                 <div className="px-1 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-800/80">
                   {t('common.selectLanguage')}

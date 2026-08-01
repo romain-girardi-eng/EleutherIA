@@ -209,7 +209,7 @@ export default function CanonicalPassageDetailPage() {
                   <h2 className="text-xs font-semibold uppercase tracking-wider text-stone-500">
                     {t('canonicalPassages.detail.fullText')}
                   </h2>
-                  <pre className="mt-3 whitespace-pre-wrap break-words rounded-2xl border border-stone-200/60 bg-parchment-50/70 p-4 sm:p-5 font-serif text-sm leading-relaxed text-stone-800">
+                  <pre className="mt-3 whitespace-pre-wrap break-words rounded-2xl border border-stone-200/60 bg-parchment-50/70 p-4 sm:p-5 font-serif text-base leading-relaxed text-stone-800">
                     {detail.full_text}
                   </pre>
                 </div>

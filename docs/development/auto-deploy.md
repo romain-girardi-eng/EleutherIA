@@ -44,7 +44,7 @@ Si tu préfères ne pas ajouter Watchtower, mets un cron sur le host
 the platform qui pull et restart toutes les N minutes :
 
 ```cron
-*/5 * * * * cd /opt/pragma && docker compose -f EleutherIA/deploy/deploy-compose.yml pull eleutheria-frontend && docker compose -f EleutherIA/deploy/deploy-compose.yml up -d eleutheria-frontend >> /var/log/eleutheria-deploy.log 2>&1
+*/5 * * * * cd <path-to-deploy-host> && docker compose -f EleutherIA/deploy/deploy-compose.yml pull eleutheria-frontend && docker compose -f EleutherIA/deploy/deploy-compose.yml up -d eleutheria-frontend >> /var/log/eleutheria-deploy.log 2>&1
 ```
 
 (adapte le chemin selon où le clone vit côté the platform)
