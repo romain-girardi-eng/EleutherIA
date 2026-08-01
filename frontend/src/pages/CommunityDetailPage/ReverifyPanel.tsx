@@ -213,7 +213,7 @@ export default function ReverifyPanel({
             className="fixed inset-y-0 right-0 z-50 flex w-full max-w-4xl flex-col bg-[#fdfaf3] shadow-2xl ring-1 ring-stone-200"
           >
             {/* Header */}
-            <header className="flex shrink-0 items-start justify-between gap-3 border-b border-stone-200/70 px-5 py-3">
+            <header className="flex shrink-0 items-start justify-between gap-3 border-b border-stone-200/70 px-5 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
               <div className="min-w-0 flex-1">
                 <h2
                   id="reverify-title"
@@ -230,7 +230,7 @@ export default function ReverifyPanel({
                 type="button"
                 onClick={handleClose}
                 aria-label={t('reproducibility.reverify.close')}
-                className="shrink-0 rounded-full p-1.5 text-stone-500 hover:bg-stone-100"
+                className="shrink-0 flex h-11 w-11 items-center justify-center rounded-full text-stone-500 hover:bg-stone-100"
               >
                 <X className="h-4 w-4" aria-hidden="true" />
               </button>
@@ -315,7 +315,7 @@ export default function ReverifyPanel({
                   <button
                     type="button"
                     onClick={handleRetry}
-                    className="rounded-full bg-rose-700 px-3 py-1 text-[11px] font-semibold text-rose-50 hover:bg-rose-800"
+                    className="min-h-11 rounded-full bg-rose-700 px-3 text-[11px] font-semibold text-rose-50 hover:bg-rose-800"
                   >
                     {t('reproducibility.reverify.retry')}
                   </button>
@@ -328,7 +328,7 @@ export default function ReverifyPanel({
                   <button
                     type="button"
                     onClick={handleRetry}
-                    className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-amber-700 px-3 py-1.5 text-[11px] font-semibold text-amber-50 hover:bg-amber-800"
+                    className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-full bg-amber-700 px-3 text-[11px] font-semibold text-amber-50 hover:bg-amber-800"
                   >
                     {t('reproducibility.reverify.retry')}
                     <ArrowRight className="h-3 w-3" aria-hidden="true" />
@@ -451,12 +451,12 @@ export default function ReverifyPanel({
             </div>
 
             {/* Footer */}
-            <footer className="flex shrink-0 items-center justify-end gap-2 border-t border-stone-200/70 bg-white/50 px-5 py-3">
+            <footer className="flex shrink-0 flex-wrap items-center justify-end gap-2 border-t border-stone-200/70 bg-white/50 px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               {isRunning && !result && !error && (
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-stone-300 bg-white px-4 py-1.5 text-[12px] font-semibold text-stone-700 hover:bg-stone-50"
+                  className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-stone-300 bg-white px-4 text-[12px] font-semibold text-stone-700 hover:bg-stone-50"
                 >
                   {t('reproducibility.reverify.cancel')}
                 </button>
@@ -465,7 +465,7 @@ export default function ReverifyPanel({
                 <button
                   type="button"
                   onClick={handleApplyUpdate}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-amber-700 px-4 py-1.5 text-[12px] font-semibold text-amber-50 hover:bg-amber-800"
+                  className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-amber-700 px-4 text-[12px] font-semibold text-amber-50 hover:bg-amber-800"
                 >
                   {t('reproducibility.reverify.applyUpdate')}
                   <ArrowRight className="h-3 w-3" aria-hidden="true" />
@@ -474,7 +474,7 @@ export default function ReverifyPanel({
               <button
                 type="button"
                 onClick={handleClose}
-                className="inline-flex items-center gap-1.5 rounded-full border border-stone-300 bg-white px-4 py-1.5 text-[12px] font-semibold text-stone-700 hover:bg-stone-50"
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-stone-300 bg-white px-4 text-[12px] font-semibold text-stone-700 hover:bg-stone-50"
               >
                 {t('reproducibility.reverify.close')}
               </button>

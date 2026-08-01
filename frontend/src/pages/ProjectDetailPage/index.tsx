@@ -125,13 +125,13 @@ function DocumentRow({ doc, projectId, onView, onDeleted }: DocumentRowProps) {
       </div>
 
       {/* Actions */}
-      <div className="shrink-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="shrink-0 flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 transition-opacity">
         {doc.status === 'ready' && (
           <button
             type="button"
             onClick={() => onView(doc)}
             aria-label={t('projects.document.view', { name: doc.filename })}
-            className="h-8 w-8 inline-flex items-center justify-center rounded-lg text-stone-400 hover:bg-amber-100/60 hover:text-amber-800 transition-colors"
+            className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-stone-400 hover:bg-amber-100/60 hover:text-amber-800 transition-colors"
           >
             <FileText className="h-4 w-4" />
           </button>
@@ -143,7 +143,7 @@ function DocumentRow({ doc, projectId, onView, onDeleted }: DocumentRowProps) {
               onClick={() => void handleDelete()}
               disabled={deleting}
               aria-label={t('projects.document.confirmDelete')}
-              className="h-8 px-2 rounded-lg text-xs font-medium text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors"
+              className="h-11 px-3 rounded-lg text-xs font-medium text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors"
             >
               {deleting ? <Loader2 className="h-3 w-3 animate-spin" /> : t('projects.document.yes')}
             </button>
@@ -151,7 +151,7 @@ function DocumentRow({ doc, projectId, onView, onDeleted }: DocumentRowProps) {
               type="button"
               onClick={() => setConfirmDelete(false)}
               aria-label={t('projects.document.cancelDelete')}
-              className="h-8 w-8 inline-flex items-center justify-center rounded-lg text-stone-400 hover:bg-stone-100 transition-colors"
+              className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-stone-400 hover:bg-stone-100 transition-colors"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -161,7 +161,7 @@ function DocumentRow({ doc, projectId, onView, onDeleted }: DocumentRowProps) {
             type="button"
             onClick={() => setConfirmDelete(true)}
             aria-label={t('projects.document.delete', { name: doc.filename })}
-            className="h-8 w-8 inline-flex items-center justify-center rounded-lg text-stone-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+            className="h-11 w-11 inline-flex items-center justify-center rounded-lg text-stone-400 hover:bg-red-50 hover:text-red-600 transition-colors"
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -274,8 +274,10 @@ function DeleteProjectDialog({ projectName, onConfirm, onCancel, deleting }: Del
         aria-modal="true"
         aria-labelledby="delete-dialog-title"
         className={cn(
-          'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[71]',
-          'w-full max-w-sm rounded-2xl',
+          'fixed top-1/2 left-4 right-4 -translate-y-1/2 z-[71]',
+          'sm:left-1/2 sm:right-auto sm:-translate-x-1/2',
+          'max-w-sm sm:w-full rounded-2xl',
+          'max-h-[85vh] overflow-y-auto',
           'bg-parchment-50/98 border border-amber-200/70',
           'shadow-[0_24px_60px_-20px_rgba(120,53,15,0.4)]',
           'p-6'
@@ -292,14 +294,15 @@ function DeleteProjectDialog({ projectName, onConfirm, onCancel, deleting }: Del
         <p className="text-sm text-stone-600 mb-5">
           {t('projects.deleteProject.body', { name: projectName })}
         </p>
-        <div className="flex justify-end gap-2">
-          <Button variant="ghost" onClick={onCancel} disabled={deleting}>
+        <div className="flex flex-col-reverse sm:flex-row justify-end gap-2">
+          <Button variant="ghost" onClick={onCancel} disabled={deleting} className="min-h-11">
             {t('projects.deleteProject.cancel')}
           </Button>
           <Button
             variant="destructive"
             onClick={onConfirm}
             disabled={deleting}
+            className="min-h-11"
           >
             {deleting ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : null}
             {t('projects.deleteProject.confirm')}
@@ -362,25 +365,26 @@ function ProjectHeader({ project, onUpdated, onDeleteRequest }: ProjectHeaderPro
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-xl border border-amber-300 bg-white/80 px-3.5 py-2.5 font-display text-2xl font-semibold text-stone-900 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 sm:text-3xl"
+          className="w-full rounded-xl border border-amber-300 bg-white/80 px-3.5 py-2.5 font-display text-xl font-semibold text-stone-900 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 sm:text-3xl"
         />
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder={t('projects.modal.descriptionPlaceholder')}
           rows={2}
-          className="w-full rounded-xl border border-stone-300 bg-white/80 px-3.5 py-2.5 text-sm text-stone-700 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 resize-none"
+          className="w-full rounded-xl border border-stone-300 bg-white/80 px-3.5 py-2.5 text-base text-stone-700 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 resize-none"
         />
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Button
             onClick={() => void handleSave()}
             variant="warning"
             disabled={!name.trim() || saving}
+            className="min-h-11"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : null}
             {t('projects.header.save')}
           </Button>
-          <Button variant="ghost" onClick={handleCancel} disabled={saving}>
+          <Button variant="ghost" onClick={handleCancel} disabled={saving} className="min-h-11">
             {t('projects.header.cancelEdit')}
           </Button>
         </div>
@@ -391,7 +395,7 @@ function ProjectHeader({ project, onUpdated, onDeleteRequest }: ProjectHeaderPro
   return (
     <div className="flex items-start justify-between gap-4 mb-8">
       <div className="min-w-0 flex-1">
-        <h1 className="font-display text-3xl sm:text-4xl font-semibold text-stone-900 leading-tight">
+        <h1 className="font-display text-2xl sm:text-4xl font-semibold text-stone-900 leading-tight">
           {project.name}
         </h1>
         {project.description && (
@@ -405,7 +409,7 @@ function ProjectHeader({ project, onUpdated, onDeleteRequest }: ProjectHeaderPro
           type="button"
           onClick={() => setEditing(true)}
           aria-label={t('projects.header.edit')}
-          className="h-9 w-9 inline-flex items-center justify-center rounded-full text-stone-400 hover:bg-amber-100/70 hover:text-amber-800 transition-colors"
+          className="h-11 w-11 inline-flex items-center justify-center rounded-full text-stone-400 hover:bg-amber-100/70 hover:text-amber-800 transition-colors"
         >
           <Pencil className="h-4 w-4" />
         </button>
@@ -413,7 +417,7 @@ function ProjectHeader({ project, onUpdated, onDeleteRequest }: ProjectHeaderPro
           type="button"
           onClick={onDeleteRequest}
           aria-label={t('projects.header.delete')}
-          className="h-9 w-9 inline-flex items-center justify-center rounded-full text-stone-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+          className="h-11 w-11 inline-flex items-center justify-center rounded-full text-stone-400 hover:bg-red-50 hover:text-red-600 transition-colors"
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -646,7 +650,7 @@ export default function ProjectDetailPage() {
 
           {/* Documents section */}
           <section aria-labelledby="documents-heading">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
               <h2 id="documents-heading" className="font-display text-xl font-semibold text-stone-800">
                 {t('projects.documents.title')}
                 {project.document_count > 0 && (
@@ -659,6 +663,7 @@ export default function ProjectDetailPage() {
                 onClick={() => setShowUpload((v) => !v)}
                 variant="warning"
                 size="sm"
+                className="min-h-11"
               >
                 <Upload className="h-3.5 w-3.5 mr-1.5" />
                 {showUpload ? t('projects.upload.hide') : t('projects.upload.add')}

@@ -143,17 +143,17 @@ const CitationNetworkPage: React.FC = () => {
     <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
     <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-display font-bold text-academic-text flex items-center gap-3">
-            <Network className="w-8 h-8 text-primary-600" />
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-academic-text flex items-center gap-3">
+            <Network className="w-8 h-8 text-primary-600 shrink-0" />
             {t('citationNetwork.title')}
           </h1>
           <p className="text-academic-muted mt-2">
             {t('citationNetwork.subtitle')}
           </p>
         </div>
-        <Button onClick={exportForGephi} variant="outline" className="flex items-center gap-2">
+        <Button onClick={exportForGephi} variant="outline" className="flex items-center gap-2 self-start sm:self-auto">
           <Download className="w-4 h-4" />
           {t('citationNetwork.exportGephi')}
         </Button>
@@ -210,7 +210,7 @@ const CitationNetworkPage: React.FC = () => {
       )}
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-academic-border">
+      <div className="flex gap-2 overflow-x-auto border-b border-academic-border">
         {[
           { key: 'influential', icon: TrendingUp, label: t('citationNetwork.influenceScores') },
           { key: 'clusters', icon: Users, label: t('citationNetwork.clusters') },
@@ -220,7 +220,7 @@ const CitationNetworkPage: React.FC = () => {
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key as typeof activeTab)}
-            className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
+            className={`flex shrink-0 items-center gap-2 whitespace-nowrap px-4 py-3 min-h-11 border-b-2 transition-colors ${
               activeTab === tab.key
                 ? 'border-primary-600 text-primary-600'
                 : 'border-transparent text-academic-muted hover:text-academic-text'
@@ -351,7 +351,7 @@ const CitationNetworkPage: React.FC = () => {
                           {t('citationNetwork.bridgeScore', { score: bridge.bridge_score })}
                         </span>
                       </div>
-                      <div className="grid grid-cols-2 gap-4 mt-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
                         <div>
                           <p className="text-xs font-semibold text-academic-muted uppercase mb-1">
                             {t('citationNetwork.connectedSchools', { count: bridge.connected_schools.length })}

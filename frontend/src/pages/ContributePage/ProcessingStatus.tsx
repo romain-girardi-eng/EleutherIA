@@ -71,9 +71,9 @@ export default function ProcessingStatus({
 
   return (
     <div className="mx-auto max-w-3xl">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-700">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700">
             <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
           </div>
           <div>
@@ -90,6 +90,7 @@ export default function ProcessingStatus({
           size="sm"
           onClick={onCancel}
           aria-label={t('contribute.processing.cancel')}
+          className="min-h-11"
         >
           <X className="mr-1 h-4 w-4" aria-hidden="true" />
           {t('contribute.processing.cancel')}

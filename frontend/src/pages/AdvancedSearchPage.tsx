@@ -136,16 +136,16 @@ export default function AdvancedSearchPage() {
       {/* Header */}
       <Card variant="default" padding="lg">
         <CardHeader>
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <CardTitle className="text-3xl">{t('advancedSearch.title')}</CardTitle>
+              <CardTitle className="text-2xl sm:text-3xl">{t('advancedSearch.title')}</CardTitle>
               <CardDescription>
                 {t('advancedSearch.subtitle', tCounts)}
               </CardDescription>
             </div>
 
-            {/* Keyboard Shortcuts Info */}
-            <div className="text-xs text-academic-muted space-y-1 text-right">
+            {/* Keyboard Shortcuts Info — desktop only, meaningless without a physical keyboard */}
+            <div className="hidden sm:block text-xs text-academic-muted space-y-1 text-right">
               <div><kbd className="kbd">{formatShortcut({ key: '/', ctrl: true })}</kbd> {t('advancedSearch.shortcuts.focusSearch')}</div>
               <div><kbd className="kbd">{formatShortcut({ key: 'f', ctrl: true })}</kbd> {t('advancedSearch.shortcuts.toggleFilters')}</div>
               <div><kbd className="kbd">↑↓</kbd> {t('advancedSearch.shortcuts.navigateResults')}</div>
@@ -353,12 +353,12 @@ export default function AdvancedSearchPage() {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     {/* Work & Author */}
-                    <div className="flex items-start justify-between gap-4 mb-2">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-2">
                       <div>
                         <h3 className="text-lg font-semibold text-academic-text">
                           {result.author}, <em>{result.work_title}</em> {result.canonical_ref}
                         </h3>
-                        <div className="flex gap-3 text-xs text-academic-muted mt-1">
+                        <div className="flex flex-wrap gap-3 text-xs text-academic-muted mt-1">
                           <span className="px-2 py-0.5 bg-academic-bg-secondary rounded">
                             {result.language === 'grc' ? t('advancedSearch.results.languageLabels.greek') : result.language === 'lat' ? t('advancedSearch.results.languageLabels.latin') : t('advancedSearch.results.languageLabels.english')}
                           </span>
@@ -370,6 +370,7 @@ export default function AdvancedSearchPage() {
                         variant="outline"
                         size="sm"
                         onClick={() => handleViewPassage(result)}
+                        className="self-start"
                       >
                         {t('advancedSearch.results.viewButton')}
                       </Button>

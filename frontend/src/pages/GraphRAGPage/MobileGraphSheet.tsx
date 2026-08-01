@@ -44,7 +44,7 @@ export default function MobileGraphSheet({
   return (
     <>
       <motion.button
-        className="fixed bottom-24 right-4 z-50 flex lg:hidden items-center gap-2 rounded-full border border-stone-200/80 bg-white/92 px-4 py-3 text-stone-800 shadow-[0_24px_50px_-34px_rgba(120,53,15,0.45)] backdrop-blur-xl"
+        className="fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] right-[calc(1rem+env(safe-area-inset-right))] z-50 flex lg:hidden items-center gap-2 min-h-11 rounded-full border border-stone-200/80 bg-white/92 px-4 py-3 text-stone-800 shadow-[0_24px_50px_-34px_rgba(120,53,15,0.45)] backdrop-blur-xl"
         onClick={() => setIsOpen(true)}
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}

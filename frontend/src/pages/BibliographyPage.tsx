@@ -271,7 +271,7 @@ export default function BibliographyPage() {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="px-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors min-h-[40px]"
+              className="px-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors min-h-11"
             >
               <option value="all">All Types</option>
               <option value="monograph">Monographs</option>
@@ -284,7 +284,7 @@ export default function BibliographyPage() {
             <select
               value={filterYear}
               onChange={(e) => setFilterYear(e.target.value)}
-              className="px-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors min-h-[40px]"
+              className="px-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors min-h-11"
             >
               <option value="all">All Years</option>
               <option value="2000+">2000+</option>
@@ -296,7 +296,7 @@ export default function BibliographyPage() {
             <select
               value={filterPublisher}
               onChange={(e) => setFilterPublisher(e.target.value)}
-              className="px-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors min-h-[40px]"
+              className="px-3 py-2 text-base sm:text-sm bg-stone-50 border border-stone-200/80 rounded-lg text-stone-600 focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-400/20 transition-colors min-h-11"
             >
               <option value="all">All Publishers</option>
               {uniquePublishers.map(pub => (
@@ -312,7 +312,7 @@ export default function BibliographyPage() {
                   setFilterYear('all');
                   setFilterPublisher('all');
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-2 text-sm text-stone-500 hover:text-stone-700 transition-colors"
+                className="inline-flex items-center gap-1.5 min-h-11 px-3 py-2 text-sm text-stone-500 hover:text-stone-700 transition-colors"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 Reset
@@ -326,7 +326,7 @@ export default function BibliographyPage() {
             {!loading && !error && filteredBibliography.length > 0 && (
               <button
                 onClick={expandedLetters.size > 0 ? collapseAll : expandAll}
-                className="inline-flex items-center gap-1.5 px-3 py-2 text-sm text-stone-500 hover:text-stone-700 transition-colors"
+                className="inline-flex items-center gap-1.5 min-h-11 px-3 py-2 text-sm text-stone-500 hover:text-stone-700 transition-colors"
               >
                 <ChevronsUpDown className="w-3.5 h-3.5" />
                 {expandedLetters.size > 0 ? 'Collapse' : 'Expand'} all
@@ -453,14 +453,14 @@ export default function BibliographyPage() {
                                   {ref}
                                 </p>
 
-                                {/* Access links */}
+                                {/* Access links — visible by default on touch, fades in on hover for pointer devices */}
                                 {hasAccess && (
-                                  <div className="flex-shrink-0 flex items-center gap-1 opacity-0 group-hover/ref:opacity-100 transition-opacity">
+                                  <div className="flex-shrink-0 flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover/ref:opacity-100 sm:focus-within:opacity-100 transition-opacity">
                                     <a
                                       href={entry.verified_links![0].url}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-stone-500 hover:text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-md transition-colors"
+                                      className="inline-flex items-center gap-1 min-h-11 px-2.5 py-2 text-[11px] font-medium text-stone-500 hover:text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-md transition-colors"
                                       title={entry.verified_links![0].label}
                                     >
                                       <ExternalLink className="w-3 h-3" />
@@ -469,19 +469,19 @@ export default function BibliographyPage() {
                                     {multipleLinks && (
                                       <div className="relative group/more">
                                         <button
-                                          className="inline-flex items-center p-1 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded-md transition-colors"
+                                          className="inline-flex items-center justify-center min-h-11 min-w-11 p-2 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded-md transition-colors"
                                           title="More access options"
                                         >
                                           <MoreVertical className="w-3 h-3" />
                                         </button>
-                                        <div className="absolute right-0 top-full mt-1 w-52 bg-white border border-stone-200/80 rounded-lg shadow-lg opacity-0 invisible group-hover/more:opacity-100 group-hover/more:visible transition-all z-10">
+                                        <div className="absolute right-0 top-full mt-1 w-52 bg-white border border-stone-200/80 rounded-lg shadow-lg opacity-0 invisible group-hover/more:opacity-100 group-hover/more:visible group-focus-within/more:opacity-100 group-focus-within/more:visible transition-all z-10">
                                           {entry.verified_links!.map((link, linkIdx) => (
                                             <a
                                               key={linkIdx}
                                               href={link.url}
                                               target="_blank"
                                               rel="noopener noreferrer"
-                                              className="flex items-center gap-2 px-3 py-2 text-xs text-stone-600 hover:bg-stone-50 first:rounded-t-lg last:rounded-b-lg transition-colors"
+                                              className="flex items-center gap-2 px-3 py-2.5 min-h-11 text-xs text-stone-600 hover:bg-stone-50 first:rounded-t-lg last:rounded-b-lg transition-colors"
                                             >
                                               <ExternalLink className="w-3 h-3 flex-shrink-0 text-stone-400" />
                                               <span className="truncate">{link.label}</span>

@@ -546,7 +546,7 @@ export default function SearchPage() {
                           });
                           setShowSuggestions(false);
                         }}
-                        className="rounded-lg p-2 text-stone-400 transition-colors hover:bg-orange-100 hover:text-orange-600"
+                        className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg p-2 text-stone-400 transition-colors hover:bg-orange-100 hover:text-orange-600"
                         title={t('search.lemmaIntelligenceTitle')}
                       >
                         <Sparkles className="h-4 w-4" />
@@ -997,7 +997,7 @@ function PaginationControls({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="rounded-lg p-2 text-stone-600 transition-colors hover:bg-stone-100 disabled:cursor-not-allowed disabled:opacity-30"
+        className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg p-2 text-stone-600 transition-colors hover:bg-stone-100 disabled:cursor-not-allowed disabled:opacity-30"
         title={t('search.pagination.previous')}
       >
         <ChevronLeft className="h-5 w-5" />
@@ -1009,7 +1009,7 @@ function PaginationControls({
           onClick={() => onPageChange(pageNumber)}
           aria-current={pageNumber === currentPage ? 'page' : undefined}
           className={cn(
-            'min-w-[2.25rem] rounded-lg px-3 py-2 text-sm font-medium transition-all',
+            'flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition-all',
             pageNumber === currentPage
               ? 'bg-stone-800 text-white shadow-sm'
               : 'bg-white text-stone-700 hover:bg-stone-100'
@@ -1022,7 +1022,7 @@ function PaginationControls({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="rounded-lg p-2 text-stone-600 transition-colors hover:bg-stone-100 disabled:cursor-not-allowed disabled:opacity-30"
+        className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg p-2 text-stone-600 transition-colors hover:bg-stone-100 disabled:cursor-not-allowed disabled:opacity-30"
         title={t('search.pagination.next')}
       >
         <ChevronRight className="h-5 w-5" />

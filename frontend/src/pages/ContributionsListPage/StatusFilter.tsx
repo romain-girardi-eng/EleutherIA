@@ -73,7 +73,7 @@ export default function StatusFilter({ value, onChange, counts }: StatusFilterPr
             onClick={() => onChange(status)}
             aria-pressed={active}
             className={cn(
-              'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all',
+              'inline-flex min-h-11 sm:min-h-0 items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all',
               active ? ACTIVE_BY_STATUS[status] : COLOR_BY_STATUS[status]
             )}
           >

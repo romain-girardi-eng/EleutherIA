@@ -269,28 +269,28 @@ export const MobileGraphView: React.FC<MobileGraphViewProps> = ({
       >
         <button
           onClick={handleZoomIn}
-          className="p-2 bg-slate-800/80 backdrop-blur-sm rounded-lg hover:bg-slate-700 transition-colors"
+          className="min-h-11 min-w-11 flex items-center justify-center bg-slate-800/80 backdrop-blur-sm rounded-lg hover:bg-slate-700 transition-colors touch-manipulation"
           aria-label={t('graphUi.mobileGraph.zoomIn')}
         >
           <ZoomIn className="h-5 w-5 text-white" />
         </button>
         <button
           onClick={handleZoomOut}
-          className="p-2 bg-slate-800/80 backdrop-blur-sm rounded-lg hover:bg-slate-700 transition-colors"
+          className="min-h-11 min-w-11 flex items-center justify-center bg-slate-800/80 backdrop-blur-sm rounded-lg hover:bg-slate-700 transition-colors touch-manipulation"
           aria-label={t('graphUi.mobileGraph.zoomOut')}
         >
           <ZoomOut className="h-5 w-5 text-white" />
         </button>
         <button
           onClick={handleReset}
-          className="p-2 bg-slate-800/80 backdrop-blur-sm rounded-lg hover:bg-slate-700 transition-colors"
+          className="min-h-11 min-w-11 flex items-center justify-center bg-slate-800/80 backdrop-blur-sm rounded-lg hover:bg-slate-700 transition-colors touch-manipulation"
           aria-label={t('graphUi.mobileGraph.resetZoom')}
         >
           <RotateCcw className="h-5 w-5 text-white" />
         </button>
         <button
           onClick={toggleFullscreen}
-          className="p-2 bg-slate-800/80 backdrop-blur-sm rounded-lg hover:bg-slate-700 transition-colors"
+          className="min-h-11 min-w-11 flex items-center justify-center bg-slate-800/80 backdrop-blur-sm rounded-lg hover:bg-slate-700 transition-colors touch-manipulation"
           aria-label={isFullscreen ? t('graphUi.mobileGraph.exitFullscreen') : t('graphUi.mobileGraph.enterFullscreen')}
         >
           <Maximize2 className="h-5 w-5 text-white" />
