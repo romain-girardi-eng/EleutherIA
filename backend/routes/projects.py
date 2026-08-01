@@ -17,6 +17,7 @@ import io
 import logging
 import uuid
 from typing import Annotated, Any
+from urllib.parse import quote
 
 from eleutheria_database.services.db import DatabaseService
 from fastapi import (
@@ -406,13 +407,21 @@ async def download_document(
 
     raw: bytes = bytes(blob_row["bytes"])
     media_type = meta.get("content_type") or "application/pdf"
-    filename = meta["filename"]
+    filename = str(meta["filename"])
+    # The filename comes from the upload, so it must never be interpolated raw
+    # into the header: quotes, backslashes, semicolons and CR/LF would let a
+    # crafted name inject extra header parameters. RFC 6266: ASCII-safe
+    # ``filename`` plus a percent-encoded ``filename*`` for the real name.
+    safe = filename.translate({ord(c): None for c in '"\\;\r\n'}) or "document"
 
     return StreamingResponse(
         io.BytesIO(raw),
         media_type=media_type,
         headers={
-            "Content-Disposition": f'inline; filename="{filename}"',
+            "Content-Disposition": (
+                f'inline; filename="{safe}"; '
+                f"filename*=UTF-8''{quote(filename, safe='')}"
+            ),
             "Content-Length": str(len(raw)),
         },
     )

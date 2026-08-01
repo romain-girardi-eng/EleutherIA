@@ -48,7 +48,7 @@ ssh deploy-host docker compose exec eleutheria-api env | grep DATABASE_URL
 1. **Port.** DSN must end `:5432/postgres` for migrations and `:5432` for runtime via session pooler. The transaction pooler `:6543` breaks long-lived connections. Fix: re-export with port 5432.
 2. **Service-role key expired or rotated.** Supabase dashboard → Settings → API → check `service_role` key matches the `.env`. Regenerate if needed and update `.env`, then `docker compose restart eleutheria-api`.
 3. **DSN host.** Direct DSN is `db.<REF>.supabase.co`. Pooler DSN is `aws-0-<region>.pooler.supabase.com`. Confirm which one is in use vs which is needed (direct for migrations, pooler for runtime).
-4. **IP allowlist.** If the new Supabase project has the "Restrict network access" feature on, add the the platform host's egress IP. Find IP: `ssh deploy-host curl -s ifconfig.me`.
+4. **IP allowlist.** If the new Supabase project has the "Restrict network access" feature on, add the platform host's egress IP. Find IP: `ssh deploy-host curl -s ifconfig.me`.
 
 ---
 
@@ -74,7 +74,7 @@ python tests/eval/run_eval.py --queries tests/eval/queries/<failing>.yaml --base
 **Recovery:**
 
 1. Snapshot count is 0 → snapshot bucket not reachable or file missing. Re-upload: `python -m cli.main snapshot upload`.
-2. LLM key resolves to `None` → CredentialsBridge misconfigured. Confirm `EXTERNAL_INTEGRATION=true` and `CREDENTIALS_ENCRYPTION_KEY` matches the one used to write the credentials. Re-store keys via the platform admin UI under `user_id=eleutheria-system`.
+2. LLM key resolves to `None` → the provider key is missing from the container env. Check `FIREWORKS_API_KEY` / `GEMINI_API_KEY` in the host `.env`, then `docker compose up -d --force-recreate eleutheria-api`.
 3. Eval shows the query has zero entity hits → confirms retrieval-side issue; see next entry.
 
 ---

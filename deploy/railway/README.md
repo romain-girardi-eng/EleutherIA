@@ -20,7 +20,7 @@ This document is retained only as historical rollback context.
                          (Postgres)
 ```
 
-This was the former Railway topology. It is not the production deployment path anymore; use the the platform compose fragment and Cloudflare tunnel instead.
+This was the former Railway topology. It is not the production deployment path anymore; use the platform compose fragment and Cloudflare tunnel instead.
 
 ## Quick Start
 
