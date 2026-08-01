@@ -470,7 +470,9 @@ def _heuristic_select_sections(
 ) -> list[dict[str, Any]]:
     query_terms = {
         token
-        for token in re.findall(r"[A-Za-zÀ-ÿἀ-῾]+", question.lower())
+        for token in re.findall(
+            r"[A-Za-zÀ-ÖØ-öø-ÿ\u0370-\u03FF\u1F00-\u1FFF]+", question.lower()
+        )
         if len(token) > 3
     }
     scored: list[tuple[int, dict[str, Any]]] = []

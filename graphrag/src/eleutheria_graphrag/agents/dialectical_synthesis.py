@@ -45,6 +45,10 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from typing import Any
 
+from eleutheria_graphrag.agents.ancient_text_matching import (
+    contains_word_bounded,
+    fold_ancient_text,
+)
 from eleutheria_graphrag.agents.controversy_map import (
     render_controversy_frames_layer,
 )
@@ -54,6 +58,12 @@ from eleutheria_graphrag.agents.state import (
     ControversyMap,
     GroundedPosition,
     PassageRef,
+)
+from eleutheria_graphrag.agents.text_verifier import (
+    _folded_segments,
+    extract_greek_runs,
+    extract_quoted_latin_spans,
+    is_known_term,
 )
 
 logger = logging.getLogger(__name__)
@@ -1009,6 +1019,43 @@ def format_scholar_reference(pos: GroundedPosition) -> str:
     return ", ".join(p for p in parts if p)
 
 
+def _quoted_ancient_runs(sentence: str) -> list[str]:
+    """Ancient-language runs QUOTED in ``sentence`` (inline markers stripped).
+
+    Reuses the deterministic extractors of :mod:`text_verifier`: Greek runs plus
+    quoted Latin-script spans that pass its candidate-Latin heuristic. The
+    ``[P_*]``/``[edge:*]``/``[passage_*]`` markers are removed first — an author
+    or work name inside a marker is metadata, not quoted text. 1-2-word
+    vocabulary (:func:`is_known_term`) is a free pass: a technical term used in
+    prose is not a quotation of the cited passage.
+    """
+    body = _MARKER_RE.sub(" ", sentence)
+    runs = [text for text, _ in extract_greek_runs(body)]
+    runs += [text for text, _ in extract_quoted_latin_spans(body)]
+    return [run for run in runs if not is_known_term(run)]
+
+
+def _run_contained_in(runs: list[str], original_text: str) -> bool:
+    """True when at least one quoted run is verbatim in ``original_text``.
+
+    Same accent-/sigma-/punctuation-insensitive, word-boundary-aligned compare
+    the text verifier uses (``fold_ancient_text`` + ``contains_word_bounded``),
+    with ellipsis-elided quotations handled segment-by-segment. Fails CLOSED: an
+    empty ``original_text`` (a metadata-only passage ref) can never support
+    quoted ancient text.
+    """
+    folded_source = fold_ancient_text(original_text or "")
+    if not folded_source:
+        return False
+    for run in runs:
+        segments = _folded_segments(run)
+        if segments and all(
+            contains_word_bounded(folded_source, segment) for segment in segments
+        ):
+            return True
+    return False
+
+
 def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedgerItem]:
     """Parse inline ``[P_*]``/``[edge:*]``/``[passage_*]`` markers out of the
     finished prose and resolve each to its ControversyMap entry.
@@ -1017,6 +1064,12 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
     referee. Markers resolving to a real map id become ``SUPPORTED``; markers that
     DON'T resolve are emitted ``UNVERIFIED`` (a hallucinated id) for the referee to
     hard-reject. The prose is the source of truth; this is its index.
+
+    A resolving id alone is NOT provenance: for a ``[passage_*]`` marker whose
+    sentence QUOTES ancient text, that text must be contained verbatim in the
+    resolved passage's ``original_text`` (deterministic fold-compare). A miss is
+    emitted ``INSUFFICIENT`` at confidence 0.0 so the citation is dropped
+    downstream — LLM-composed Greek/Latin can never ship as a verified citation.
     """
     pos_by_id: dict[str, GroundedPosition] = {}
     passage_by_id: dict[str, PassageRef] = {}
@@ -1040,6 +1093,7 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
             evidence_class = _classify_claim(sentence, kind)
 
             resolved = False
+            quote_mismatch = False
             quote_original: str | None = None
             quote_translation: str | None = None
             evidence_ids: list[str] = []
@@ -1059,6 +1113,21 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
                 evidence_ids = [pr.passage_id]
                 quote_original = pr.original_text  # FULL, not truncated
                 quote_translation = pr.english_text
+                # ANTI-HALLUCINATION GATE. A resolving id is NOT provenance: the
+                # Greek/Latin the sentence actually quotes must be present
+                # verbatim in THIS passage's original text. On a miss the item is
+                # emitted INSUFFICIENT with confidence 0.0, so _dialectical_citations
+                # (SUPPORTED-only) drops the bogus citation. Sentences with no
+                # ancient-language run are metadata-level claims — left untouched.
+                quoted_runs = _quoted_ancient_runs(sentence)
+                if quoted_runs and not _run_contained_in(quoted_runs, pr.original_text):
+                    quote_mismatch = True
+                    logger.warning(
+                        "Provenance ledger: quoted ancient text not contained in "
+                        "passage %s — dropping citation (quoted: %r)",
+                        pr.passage_id,
+                        quoted_runs[0][:80],
+                    )
             elif kind == "edge":
                 # edges resolve structurally; the completeness critic (M5) checks them.
                 resolved = True
@@ -1071,9 +1140,15 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
                     quote_original=quote_original,
                     quote_translation=quote_translation,
                     support_type="passage" if kind == "passage" else "position",
-                    confidence=0.8 if resolved else 0.0,
+                    confidence=0.8 if (resolved and not quote_mismatch) else 0.0,
                     status=(
-                        ClaimStatus.SUPPORTED if resolved else ClaimStatus.UNVERIFIED
+                        ClaimStatus.INSUFFICIENT
+                        if quote_mismatch
+                        else (
+                            ClaimStatus.SUPPORTED
+                            if resolved
+                            else ClaimStatus.UNVERIFIED
+                        )
                     ),
                 )
             )

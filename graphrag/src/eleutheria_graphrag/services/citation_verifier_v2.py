@@ -39,6 +39,7 @@ from eleutheria_graphrag.models.verification import (
     SynthesizedDraft,
     VerificationReport,
 )
+from eleutheria_graphrag.services.json_extractor import extract_json_object
 
 if TYPE_CHECKING:
     from eleutheria_graphrag.agents.sse_emitter import SSEEmitter
@@ -696,7 +697,13 @@ def _loads_tolerant(block: str) -> Any | None:
             return json.loads(candidate)
         except (json.JSONDecodeError, ValueError):  # fmt: skip
             continue
-    return None
+    # Last resort: the repo's hardened extractor (strips raw control characters
+    # inside string values, smart quotes, NaN — the shapes the repairs above do
+    # not cover). Never raises out of here: a failure stays a ``None`` parse.
+    try:
+        return extract_json_object(block)
+    except Exception:  # noqa: BLE001 — any extraction failure is just "unparseable"
+        return None
 
 
 def _first_present(obj: dict[str, Any], keys: tuple[str, ...]) -> Any:
@@ -709,18 +716,19 @@ def _first_present(obj: dict[str, Any], keys: tuple[str, ...]) -> Any:
 
 
 def _coerce_status(value: Any) -> str | None:
-    """Map a raw status value to a canonical enum value, or ``None``."""
+    """Map a raw status value to a canonical enum value, or ``None``.
+
+    EXACT matches only (enum value or alias). The former loose word-scan
+    fallback ("pick the first known token in the sentence") failed OPEN: it read
+    "NOT VERIFIED" / "cannot verify" / "not supported" as VERIFIED because it
+    scanned for the positive token and ignored the negation. ``None`` routes to
+    the WEAK/parse_error fallback — the adversarial bias: never silently pass.
+    """
     token = str(value or "").strip().upper()
     if token in _VALID_STATUSES:
         return token
     if token in _STATUS_ALIASES:
         return _STATUS_ALIASES[token]
-    # Sometimes the model answers with a sentence; pick the first known token.
-    for word in re.findall(r"[A-Z]+", token):
-        if word in _VALID_STATUSES:
-            return word
-        if word in _STATUS_ALIASES:
-            return _STATUS_ALIASES[word]
     return None
 
 
