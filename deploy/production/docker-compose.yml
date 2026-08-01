@@ -96,13 +96,13 @@ services:
     restart: unless-stopped
     profiles: ["sparql"]
     environment:
-      ADMIN_PASSWORD: ${FUSEKI_ADMIN_PASSWORD:-eleutheria}
+      ADMIN_PASSWORD: ${FUSEKI_ADMIN_PASSWORD:?set FUSEKI_ADMIN_PASSWORD} # pragma: allowlist secret
       JVM_ARGS: ${FUSEKI_JVM_ARGS:--Xmx1g}
     command: ["/jena-fuseki/fuseki-server", "--file=/staging/eleutheria.ttl", "/eleutheria"]
     volumes:
       - ../../data/rdf:/staging:ro
     ports:
-      - "${FUSEKI_PORT:-3030}:3030"
+      - "127.0.0.1:${FUSEKI_PORT:-3030}:3030"
     networks:
       - frontend
     deploy:

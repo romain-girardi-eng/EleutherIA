@@ -7,7 +7,9 @@ and what the eleutheria_kg package exposes.
 """
 
 import contextlib
+import hmac
 import logging
+import os
 from typing import Annotated, Any
 
 import anyio
@@ -114,6 +116,21 @@ async def get_kg_stats(
     return merged
 
 
+def _require_reload_token(request: Request) -> None:
+    """Refuse KG reload unless the shared-secret token matches.
+
+    The endpoint re-reads the whole KG from Postgres and swaps the in-memory
+    snapshot, so leaving it open would let anyone force an expensive reload at
+    will. When ``KG_RELOAD_TOKEN`` is unset the endpoint is disabled outright.
+    """
+    expected = os.environ.get("KG_RELOAD_TOKEN", "").strip()
+    if not expected:
+        raise HTTPException(status_code=403, detail="kg reload disabled")
+    provided = request.headers.get("authorization", "")
+    if not hmac.compare_digest(provided.encode(), f"Bearer {expected}".encode()):
+        raise HTTPException(status_code=401, detail="unauthorized")
+
+
 @router.post("/reload")
 async def reload_kg(
     request: Request,
@@ -129,6 +146,7 @@ async def reload_kg(
     rather than raising, so the deploy script's reload call never breaks a
     successful deploy.
     """
+    _require_reload_token(request)
     svc = get_services()
     try:
         kg_data = await svc._load_kg_data()

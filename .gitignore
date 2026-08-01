@@ -182,3 +182,7 @@ data/corpus/*.bak-*
 .env.bak*
 *.env.bak
 .deploy/
+
+# Local deploy/agent workspaces (may contain host + credential details)
+.pragma/
+.deploys/
