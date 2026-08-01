@@ -6,6 +6,7 @@ copyright. This script wires existing KG passages that mention Posidonius
 Galen DPP) to the canonical person node via ``discusses`` edges -- producing
 testimonia-level provenance evidence without ingesting new passages.
 """
+
 from __future__ import annotations
 
 import sys
@@ -66,7 +67,12 @@ def test_build_discusses_edge_metadata_flags():
     edge = build_discusses_edge("passage_cic_div_1")
     # metadata stored as JSON string (matches existing convention in edges.jsonl)
     import json
-    meta = json.loads(edge["metadata"]) if isinstance(edge["metadata"], str) else edge["metadata"]
+
+    meta = (
+        json.loads(edge["metadata"])
+        if isinstance(edge["metadata"], str)
+        else edge["metadata"]
+    )
     assert meta.get("relation_type") == "testimonium"
     assert meta.get("auto_wired") is True
     assert meta.get("wired_from_keyword_match") is True

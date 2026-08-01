@@ -19,7 +19,11 @@ def test_collects_from_node_field_and_metadata() -> None:
 
 def test_parses_json_encoded_metadata_strings() -> None:
     nodes = [
-        {"metadata": {"modern_scholarship": '["Dihle, A. (1982). The Theory of Will."]'}},
+        {
+            "metadata": {
+                "modern_scholarship": '["Dihle, A. (1982). The Theory of Will."]'
+            }
+        },
         {"metadata": {"modern_scholarship": "not json, plain citation"}},
     ]
     refs = collect_modern_scholarship(nodes)
@@ -30,7 +34,11 @@ def test_parses_json_encoded_metadata_strings() -> None:
 def test_deduplicates_and_handles_dict_entries() -> None:
     nodes = [
         {"modern_scholarship": ["Kane, R. (1996). The Significance of Free Will."]},
-        {"modern_scholarship": [{"citation": "Kane, R. (1996). The Significance of Free Will."}]},
+        {
+            "modern_scholarship": [
+                {"citation": "Kane, R. (1996). The Significance of Free Will."}
+            ]
+        },
         {"modern_scholarship": [{"title": "Untitled entry"}, "", "   "]},
     ]
     refs = collect_modern_scholarship(nodes)

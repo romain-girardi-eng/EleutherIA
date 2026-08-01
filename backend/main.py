@@ -96,7 +96,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     # Inject services into package routers
     set_db_service(svc.db)
-    set_kg_services(svc.analytics, svc.cache)
+    set_kg_services(svc.analytics, svc.cache, svc.db)
     set_graphrag_service(svc.graphrag)
 
     logger.info("All services initialized — backend ready")
