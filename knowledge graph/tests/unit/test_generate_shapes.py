@@ -303,6 +303,10 @@ def test_invariants_shapes_align_with_ontology(
         # Wildcard both sides: shape is intentionally omitted.
         if "*" in src and "*" in tgt:
             continue
+        # Inactive edge types (deprecated/reserved/reserved_inverse) are
+        # intentionally omitted so shapes never validate dead relations.
+        if defn.get("status") in gs.INACTIVE_EDGE_STATUSES:
+            continue
         from eleutheria_kg.semantic.vocab import _camel_case
 
         camel = _camel_case(relation)

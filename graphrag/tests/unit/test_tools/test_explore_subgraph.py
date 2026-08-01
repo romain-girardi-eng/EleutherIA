@@ -1,7 +1,11 @@
 """Tests for explore_subgraph tool (PPR-based exploration)."""
 
+from typing import Any
+from unittest.mock import AsyncMock
+
 import pytest
 
+from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.tools.explore_subgraph import ExploreSubgraphTool
 
 
@@ -120,3 +124,62 @@ async def test_distance_from_seed(mock_deps):
 
     for node in result.nodes:
         assert node.distance_from_seed >= 1
+
+
+@pytest.mark.asyncio
+async def test_db_fallback_when_in_memory_graph_cold():
+    """When `node_lookup` is empty (no in-memory graph warmed), the tool
+    must fall back to the bounded Postgres k-hop CTE per seed instead of
+    always reporting zero results.
+    """
+
+    def _node(node_id: str, node_type: str = "concept") -> dict[str, Any]:
+        return {
+            "id": node_id,
+            "label": node_id,
+            "type": node_type,
+            "description": None,
+            "period": None,
+            "school": None,
+            "metadata": {},
+        }
+
+    async def _fake_fetch(query: str, *args: Any) -> list[dict[str, Any]]:
+        if "WITH RECURSIVE khop" in query:
+            return [{"node_id": "concept_fate", "hop": 1}]
+        if "FROM free_will.kg_nodes" in query:
+            # `all_ids` param is args[0] for the ANY($1) queries.
+            ids = args[0]
+            return [_node(i) for i in ids if i in {"person_origen", "concept_fate"}]
+        if "FROM free_will.kg_edges" in query:
+            return [
+                {
+                    "source": "person_origen",
+                    "target": "concept_fate",
+                    "relation": "discusses",
+                    "weight": 1.0,
+                    "metadata": {},
+                }
+            ]
+        return []
+
+    db = AsyncMock()
+    db.fetch = AsyncMock(side_effect=_fake_fetch)
+    cold_deps = Deps(db=db, llm=AsyncMock())  # node_lookup defaults to {}
+
+    tool = ExploreSubgraphTool(cold_deps)
+    result = await tool.execute({"seed_node_ids": ["person_origen"], "top_k": 10})
+
+    assert result.seed_count == 1
+    ids = [n.node_id for n in result.nodes]
+    assert ids == ["concept_fate"]
+    assert "person_origen" not in ids
+
+
+@pytest.mark.asyncio
+async def test_db_fallback_no_db_returns_empty():
+    cold_deps = Deps(db=None, llm=AsyncMock())  # type: ignore[arg-type]
+    tool = ExploreSubgraphTool(cold_deps)
+    result = await tool.execute({"seed_node_ids": ["person_origen"]})
+    assert result.nodes == []
+    assert result.seed_count == 0

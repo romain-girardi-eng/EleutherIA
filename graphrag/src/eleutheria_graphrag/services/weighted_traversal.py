@@ -10,6 +10,13 @@ that considers:
 
 The traversal stops when the score drops below a threshold, rather than
 at a fixed depth, allowing adaptive exploration.
+
+When nodes carry a ``community_id`` (Leiden/Louvain assignment computed by
+KGAnalytics in the knowledge-graph package and copied onto snapshot nodes),
+expansion caps how many results may come from any single community so that
+retrieval doesn't return a handful of near-duplicate neighbours from one
+cluster. ``community_id`` is optional — nodes without it are never capped,
+so this is a no-op on snapshots/tests that don't carry community data.
 """
 
 from __future__ import annotations
@@ -19,6 +26,12 @@ import logging
 from typing import Any
 
 logger = logging.getLogger(__name__)
+
+# Topical-diversity prior: max nodes visited from any single community during
+# one expansion. Only enforced for nodes that actually carry a community_id;
+# nodes without one (the common case when analytics hasn't been run) are
+# never capped.
+_COMMUNITY_DIVERSITY_CAP = 4
 
 # ---------------------------------------------------------------------------
 # Edge-type relevance multipliers by category
@@ -135,10 +148,26 @@ class WeightedTraversal:
         visited: set[str] = set()
         # Heap entries: (-score, node_id) — negative because heapq is min-heap
         heap: list[tuple[float, str]] = []
+        # Community diversity prior: counts only track nodes with a known
+        # community_id, so graphs/snapshots without community data never hit
+        # the cap (dict.get default keeps this a no-op).
+        community_counts: dict[Any, int] = {}
+
+        def visit(node_id: str) -> None:
+            visited.add(node_id)
+            community = self._community_id(node_id)
+            if community is not None:
+                community_counts[community] = community_counts.get(community, 0) + 1
+
+        def community_saturated(node_id: str) -> bool:
+            community = self._community_id(node_id)
+            if community is None:
+                return False
+            return community_counts.get(community, 0) >= _COMMUNITY_DIVERSITY_CAP
 
         for nid in seed_ids:
             if nid in self.node_lookup:
-                visited.add(nid)
+                visit(nid)
                 heapq.heappush(heap, (-1.0, nid))  # Seeds get max score
 
         while heap and len(visited) < max_nodes:
@@ -156,10 +185,12 @@ class WeightedTraversal:
                 relation = edge.get("relation", "")
                 if edge_filter and relation not in edge_filter:
                     continue
+                if community_saturated(target):
+                    continue
 
                 neighbour_score = self._score_edge(edge, target, current_score)
                 if neighbour_score >= score_threshold:
-                    visited.add(target)
+                    visit(target)
                     heapq.heappush(heap, (-neighbour_score, target))
 
             # Expand incoming edges
@@ -170,10 +201,12 @@ class WeightedTraversal:
                 relation = edge.get("relation", "")
                 if edge_filter and relation not in edge_filter:
                     continue
+                if community_saturated(source):
+                    continue
 
                 neighbour_score = self._score_edge(edge, source, current_score)
                 if neighbour_score >= score_threshold:
-                    visited.add(source)
+                    visit(source)
                     heapq.heappush(heap, (-neighbour_score, source))
 
         logger.debug(
@@ -182,6 +215,21 @@ class WeightedTraversal:
             len(visited),
         )
         return visited
+
+    def _community_id(self, node_id: str) -> Any | None:
+        """Return the node's community_id if present, else None.
+
+        Defensive against nodes stored as plain dicts (the normal case) or
+        as objects (e.g. Pydantic models) — and against community_id simply
+        being absent, which is the expected state until KGAnalytics output
+        is threaded into the snapshot.
+        """
+        node = self.node_lookup.get(node_id)
+        if node is None:
+            return None
+        if isinstance(node, dict):
+            return node.get("community_id")
+        return getattr(node, "community_id", None)
 
     def _score_edge(
         self,
