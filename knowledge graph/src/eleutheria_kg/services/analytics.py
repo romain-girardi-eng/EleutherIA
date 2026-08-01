@@ -114,6 +114,7 @@ class KGAnalytics:
         """
         self.kg_data = kg_data or {"nodes": [], "edges": []}
         self._graph: nx.Graph | None = None
+        self._digraph: nx.DiGraph | None = None
         self._communities: dict[str, int] | None = None
         self._community_memo: dict[tuple[str, float], dict[str, int]] = {}
 
@@ -121,11 +122,18 @@ class KGAnalytics:
         """Update the knowledge graph data."""
         self.kg_data = kg_data
         self._graph = None
+        self._digraph = None
         self._communities = None
         self._community_memo.clear()
 
     def _build_graph(self) -> nx.Graph:
-        """Build a NetworkX graph from KG data."""
+        """Build an UNDIRECTED NetworkX graph from KG data.
+
+        Used for community detection and any metric where directionality
+        of a relation (e.g. authored_by, refutes, taught_by) shouldn't
+        matter for the computation (connectivity, modularity, shortest
+        path, neighbor traversal).
+        """
         if self._graph is not None:
             return self._graph
 
@@ -146,6 +154,39 @@ class KGAnalytics:
 
         self._graph = graph
         return graph
+
+    def _build_digraph(self) -> nx.DiGraph:
+        """Build a DIRECTED NetworkX graph (source -> target) from KG data.
+
+        Used for authority-style centrality (PageRank, eigenvector) so that
+        a node cited/refuted/taught-by many others outranks a node that
+        merely has a high undirected degree. On an undirected graph
+        PageRank collapses to a function of degree; the directed edge
+        orientation is what encodes "authority".
+        """
+        if self._digraph is not None:
+            return self._digraph
+
+        digraph = nx.DiGraph()
+
+        for node in self.kg_data.get("nodes", []):
+            node_id = node.get("id")
+            if node_id:
+                digraph.add_node(node_id, **node)
+
+        for edge in self.kg_data.get("edges", []):
+            source = edge.get("source")
+            target = edge.get("target")
+            if (
+                source
+                and target
+                and digraph.has_node(source)
+                and digraph.has_node(target)
+            ):
+                digraph.add_edge(source, target, **edge)
+
+        self._digraph = digraph
+        return digraph
 
     def get_statistics(self) -> dict[str, Any]:
         """
@@ -328,10 +369,15 @@ class KGAnalytics:
         if metric == "betweenness":
             scores = nx.betweenness_centrality(graph)
         elif metric == "pagerank":
-            scores = nx.pagerank(graph)
+            # Directed graph: a node cited/refuted/taught-by many others
+            # accrues authority even with modest undirected degree. On the
+            # undirected graph PageRank degenerates to ~degree.
+            digraph = self._build_digraph()
+            scores = nx.pagerank(digraph)
         elif metric == "eigenvector":
+            digraph = self._build_digraph()
             try:
-                scores = nx.eigenvector_centrality(graph, max_iter=1000)
+                scores = nx.eigenvector_centrality(digraph, max_iter=1000)
             except nx.PowerIterationFailedConvergence:
                 logger.warning("Eigenvector centrality failed, using degree")
                 scores = dict(graph.degree())

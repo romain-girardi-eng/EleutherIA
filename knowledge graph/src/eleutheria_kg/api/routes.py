@@ -4,7 +4,8 @@ FastAPI routes for knowledge graph operations.
 Provides REST endpoints for browsing and analyzing the knowledge graph.
 """
 
-from typing import Annotated, Any, cast
+import logging
+from typing import TYPE_CHECKING, Annotated, Any, cast
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
@@ -12,19 +13,37 @@ from eleutheria_kg.models.kg import KGStatistics
 from eleutheria_kg.services.analytics import KGAnalytics
 from eleutheria_kg.services.bibliography import collect_modern_scholarship
 from eleutheria_kg.services.cache import KGCache
+from eleutheria_kg.services.db_traversal import fetch_neighborhood
+
+if TYPE_CHECKING:
+    from eleutheria_database.services.db import DatabaseService
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["knowledge-graph"])
 
 # Service instances (to be injected by main app)
 _analytics: KGAnalytics | None = None
 _cache: KGCache | None = None
+# Optional — only used as the bounded-CTE fallback when the in-memory KG
+# graph on `_analytics` has not been warmed (see `get_node_neighbors`).
+_db: DatabaseService | None = None
 
 
-def set_services(analytics: KGAnalytics, cache: KGCache) -> None:
-    """Set service instances for dependency injection."""
-    global _analytics, _cache
+def set_services(
+    analytics: KGAnalytics,
+    cache: KGCache,
+    db: DatabaseService | None = None,
+) -> None:
+    """Set service instances for dependency injection.
+
+    ``db`` is optional and backward-compatible: existing callers that only
+    pass ``analytics``/``cache`` keep working with no DB-backed fallback.
+    """
+    global _analytics, _cache, _db
     _analytics = analytics
     _cache = cache
+    _db = db
 
 
 def get_analytics() -> KGAnalytics:
@@ -109,7 +128,30 @@ async def get_node_neighbors(
     fall back to the legacy ``{nodes, edges}`` neighborhood payload (used by
     Cosmograph subgraph rendering).
     """
-    nodes_by_id = {n["id"]: n for n in analytics.kg_data.get("nodes", [])}
+    all_nodes = analytics.kg_data.get("nodes", [])
+    nodes_by_id = {n["id"]: n for n in all_nodes}
+
+    # The in-memory KG (networkx graph behind `analytics`) is not warm —
+    # fall back to a bounded Postgres-side k-hop CTE over kg_edges instead
+    # of requiring the full node/edge dump in process memory. See
+    # `eleutheria_kg.services.db_traversal`. Degrades to the normal 404
+    # path below (never a 500) if the DB turns out to be unreachable too.
+    if not all_nodes and _db is not None and _db.is_connected():
+        try:
+            db_result = await fetch_neighborhood(_db, node_id, depth=depth)
+        except Exception:
+            logger.warning(
+                "get_node_neighbors: DB fallback failed for %s", node_id, exc_info=True
+            )
+            db_result = None
+        if db_result is not None:
+            if not db_result["nodes"]:
+                raise HTTPException(status_code=404, detail="Node not found")
+            if not grouped:
+                return db_result
+            nodes_by_id = {n["id"]: n for n in db_result["nodes"]}
+            return _grouped_neighbors(node_id, nodes_by_id, db_result["edges"])
+
     if node_id not in nodes_by_id:
         raise HTTPException(status_code=404, detail="Node not found")
 
@@ -119,6 +161,19 @@ async def get_node_neighbors(
             raise HTTPException(status_code=404, detail="Node not found")
         return result
 
+    return _grouped_neighbors(node_id, nodes_by_id, analytics.kg_data.get("edges", []))
+
+
+def _grouped_neighbors(
+    node_id: str,
+    nodes_by_id: dict[str, dict[str, Any]],
+    edges: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Shape a flat (nodes_by_id, edges) neighborhood into the grouped
+    ``{node_id, node, neighbors: {outgoing, incoming}, total_count}``
+    payload. Shared by the in-memory (`analytics.kg_data`) and DB-backed
+    (`db_traversal.fetch_neighborhood`) code paths.
+    """
     outgoing: dict[str, list[dict[str, Any]]] = {}
     incoming: dict[str, list[dict[str, Any]]] = {}
     total = 0
@@ -132,10 +187,10 @@ async def get_node_neighbors(
             "period": other.get("period"),
         }
 
-    for edge in analytics.kg_data.get("edges", []):
+    for edge in edges:
         relation = edge.get("relation") or "related"
-        src = edge.get("source")
-        tgt = edge.get("target")
+        src = edge.get("source", "")
+        tgt = edge.get("target", "")
         if src == node_id:
             outgoing.setdefault(relation, []).append(_summary(tgt))
             total += 1

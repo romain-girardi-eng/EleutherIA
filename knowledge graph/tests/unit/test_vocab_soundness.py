@@ -123,8 +123,6 @@ def test_all_mapped_relations_exist_in_ontology() -> None:
     edge_types.json — either as an edge type or as a declared inverse
     (e.g. ``founded_by`` exists only as the inverse of ``founded``)."""
     edge_types = _edge_types()
-    known = set(edge_types) | {
-        spec.get("inverse") for spec in edge_types.values()
-    }
+    known = set(edge_types) | {spec.get("inverse") for spec in edge_types.values()}
     unknown = [rel for rel in EDGE_TYPE_TO_PROPERTY if rel not in known]
     assert unknown == [], f"mapped relations missing from ontology: {unknown}"

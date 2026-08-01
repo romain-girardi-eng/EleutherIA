@@ -410,8 +410,7 @@ def test_cts_urn_emitted_as_resolvable_iri(
     work = mint_node_iri("work_chrysippus_on_fate")
     see_also = {str(o) for o in g.objects(work, rdflib.RDFS.seeAlso)}
     assert (
-        "https://data.perseus.org/citations/urn:cts:greekLit:tlg0331.tlg002"
-        in see_also
+        "https://data.perseus.org/citations/urn:cts:greekLit:tlg0331.tlg002" in see_also
     )
 
 

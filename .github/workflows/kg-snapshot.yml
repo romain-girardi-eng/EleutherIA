@@ -68,6 +68,9 @@ jobs:
       - name: Validate snapshot invariants
         run: python scripts/validate_kg_shacl.py --skip-quality --max-examples 50
 
+      - name: Regenerate RDF export
+        run: python cli/main.py export kg --format rdf --output data/rdf/eleutheria
+
       - name: Destructive-snapshot safety gate
         id: safety
         run: |
