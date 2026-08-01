@@ -215,13 +215,13 @@ function ProposalRow({
         </div>
 
         {isAdmin && proposal.status !== 'applied' && (
-          <div className="flex flex-shrink-0 flex-col gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+          <div className="flex flex-shrink-0 flex-col gap-1 opacity-100 sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100 sm:focus-within:opacity-100">
             <button
               type="button"
               onClick={() => onAccept(proposal.proposal_id)}
               disabled={proposal.status === 'accepted'}
               className={cn(
-                'inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-semibold transition-colors',
+                'inline-flex min-h-11 items-center gap-1 rounded-md border px-2.5 text-[10px] font-semibold transition-colors',
                 proposal.status === 'accepted'
                   ? 'border-emerald-400 bg-emerald-500 text-white'
                   : 'border-emerald-300/70 bg-white text-emerald-700 hover:bg-emerald-50'
@@ -236,7 +236,7 @@ function ProposalRow({
               onClick={() => onReject(proposal.proposal_id)}
               disabled={proposal.status === 'rejected'}
               className={cn(
-                'inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-semibold transition-colors',
+                'inline-flex min-h-11 items-center gap-1 rounded-md border px-2.5 text-[10px] font-semibold transition-colors',
                 proposal.status === 'rejected'
                   ? 'border-rose-400 bg-rose-500 text-white'
                   : 'border-rose-300/70 bg-white text-rose-700 hover:bg-rose-50'

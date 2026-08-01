@@ -112,7 +112,7 @@ export default function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
               triggerHaptic('light');
               onClose();
             }}
-            className="p-2 -mr-2 text-gray-500 hover:text-gray-700 active:bg-gray-100 rounded-full transition-colors"
+            className="min-h-11 min-w-11 -mr-2 flex items-center justify-center text-gray-500 hover:text-gray-700 active:bg-gray-100 rounded-full transition-colors touch-manipulation"
             aria-label="Close filters"
           >
             <X className="w-5 h-5" />
@@ -124,14 +124,15 @@ export default function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
           <WorkspaceFilterBar />
         </div>
 
-        {/* Footer - Apply button */}
-        <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
+        {/* Footer - Apply button — pb-safe clears the home indicator since
+            the drawer sits flush against the bottom edge. */}
+        <div className="px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] border-t border-gray-200 bg-gray-50">
           <button
             onClick={() => {
               triggerHaptic('success');
               onClose();
             }}
-            className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold rounded-lg transition-colors shadow-sm active:scale-98"
+            className="w-full min-h-11 py-3 px-4 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold rounded-lg transition-colors shadow-sm active:scale-98 touch-manipulation"
           >
             Apply Filters
           </button>

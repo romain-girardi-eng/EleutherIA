@@ -182,8 +182,10 @@ function NewProjectModal({ onClose, onCreated }: NewProjectModalProps) {
         aria-modal="true"
         aria-labelledby="modal-title"
         className={cn(
-          'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[71]',
-          'w-full max-w-md rounded-2xl',
+          'fixed top-1/2 left-4 right-4 -translate-y-1/2 z-[71]',
+          'sm:left-1/2 sm:right-auto sm:-translate-x-1/2',
+          'max-w-md sm:w-full rounded-2xl',
+          'max-h-[85vh] overflow-y-auto',
           'bg-parchment-50/98 border border-amber-200/70',
           'shadow-[0_32px_80px_-24px_rgba(120,53,15,0.45)]',
           'p-6'
@@ -200,7 +202,7 @@ function NewProjectModal({ onClose, onCreated }: NewProjectModalProps) {
             type="button"
             onClick={onClose}
             aria-label={t('projects.modal.close')}
-            className="h-8 w-8 inline-flex items-center justify-center rounded-full text-stone-400 hover:bg-amber-100/60 hover:text-amber-900 transition-colors"
+            className="h-11 w-11 -mr-1.5 inline-flex items-center justify-center rounded-full text-stone-400 hover:bg-amber-100/60 hover:text-amber-900 transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
@@ -223,7 +225,7 @@ function NewProjectModal({ onClose, onCreated }: NewProjectModalProps) {
               onChange={(e) => setName(e.target.value)}
               placeholder={t('projects.modal.namePlaceholder')}
               required
-              className="w-full rounded-xl border border-stone-300 bg-white/80 px-3.5 py-2.5 text-sm text-stone-900 shadow-sm placeholder:text-stone-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+              className="w-full rounded-xl border border-stone-300 bg-white/80 px-3.5 py-2.5 text-base text-stone-900 shadow-sm placeholder:text-stone-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
             />
           </div>
 
@@ -250,14 +252,15 @@ function NewProjectModal({ onClose, onCreated }: NewProjectModalProps) {
             </p>
           )}
 
-          <div className="flex justify-end gap-2 pt-1">
-            <Button type="button" variant="ghost" onClick={onClose} disabled={submitting}>
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-1">
+            <Button type="button" variant="ghost" onClick={onClose} disabled={submitting} className="min-h-11">
               {t('projects.modal.cancel')}
             </Button>
             <Button
               type="submit"
               variant="warning"
               disabled={!name.trim() || submitting}
+              className="min-h-11"
             >
               {submitting ? t('projects.modal.creating') : t('projects.modal.create')}
             </Button>
@@ -309,9 +312,9 @@ export default function ProjectsPage() {
     <div className="min-h-screen w-full pt-28 pb-20">
       <div className="academic-container relative z-10 max-w-5xl">
         {/* Page header */}
-        <div className="flex items-center justify-between mb-10">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
           <div>
-            <h1 className="font-display text-3xl sm:text-4xl font-semibold text-stone-900">
+            <h1 className="font-display text-2xl sm:text-4xl font-semibold text-stone-900">
               {t('projects.title')}
             </h1>
             <p className="mt-2 text-stone-500 text-sm leading-relaxed">
@@ -321,7 +324,7 @@ export default function ProjectsPage() {
           <Button
             onClick={() => setShowModal(true)}
             variant="warning"
-            className="shrink-0"
+            className="shrink-0 min-h-11"
           >
             <Plus className="h-4 w-4 mr-1.5" />
             <span className="hidden sm:inline">{t('projects.newProject')}</span>

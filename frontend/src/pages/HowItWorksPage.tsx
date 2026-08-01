@@ -617,7 +617,7 @@ export default function HowItWorksPage() {
               <p className="font-body text-sm text-stone-700 mb-5 leading-relaxed">
                 {t('howItWorksPage.architecture.agenticGraphragBody')}
               </p>
-              <div className="grid grid-cols-2 gap-3 mb-5 text-sm font-body">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5 text-sm font-body">
                 <div className="bg-white/70 rounded-xl p-4">
                   <p className="font-semibold text-violet-900 mb-1">LLM calls per query</p>
                   <p className="text-violet-700 font-mono font-bold text-lg">2 <span className="text-stone-400 font-normal text-xs">down from 10+</span></p>
@@ -629,7 +629,7 @@ export default function HowItWorksPage() {
               </div>
               <a
                 href="/how-it-works"
-                className="inline-flex items-center gap-2 text-xs font-body text-violet-600 hover:text-violet-800 border border-violet-300 rounded-full px-4 py-1.5 hover:bg-violet-100 transition-colors"
+                className="inline-flex items-center gap-2 min-h-11 text-xs font-body text-violet-600 hover:text-violet-800 border border-violet-300 rounded-full px-4 py-1.5 hover:bg-violet-100 transition-colors"
               >
                 {t('howItWorksPage.architecture.findingsLink')}
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -642,7 +642,7 @@ export default function HowItWorksPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="grid grid-cols-2 gap-4 content-start"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start"
             >
               {/* Philological */}
               <div className="rounded-2xl border-2 border-amber-200/60 bg-gradient-to-br from-parchment-50 to-amber-50 p-5">
@@ -856,7 +856,7 @@ export default function HowItWorksPage() {
               href="https://doi.org/10.5281/zenodo.17379489"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-400/50 bg-amber-100/60 text-amber-800 text-sm font-body font-medium hover:bg-amber-200/60 transition-colors"
+              className="inline-flex items-center gap-2 min-h-11 px-4 py-2 rounded-full border border-amber-400/50 bg-amber-100/60 text-amber-800 text-sm font-body font-medium hover:bg-amber-200/60 transition-colors"
             >
               <Globe className="w-4 h-4" />
               DOI: 10.5281/zenodo.17379489
@@ -931,7 +931,7 @@ export default function HowItWorksPage() {
               <GitHubPill variant="dark" label={t('learn.hero.openSource')} />
               <Link
                 to="/about"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 text-white/50 hover:text-white/80 text-sm font-body transition-colors"
+                className="inline-flex items-center gap-2 min-h-11 px-4 py-2 rounded-full border border-white/15 text-white/50 hover:text-white/80 text-sm font-body transition-colors"
               >
                 <Layers className="w-4 h-4" />
                 {t('howItWorksPage.cta.aboutProject')}

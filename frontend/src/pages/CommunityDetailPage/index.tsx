@@ -267,7 +267,7 @@ export default function CommunityDetailPage() {
                 <button
                   type="button"
                   onClick={() => setReverifyOpen(true)}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/70 bg-white/70 px-4 py-2 text-xs font-semibold text-amber-900 transition-colors hover:bg-amber-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment-50"
+                  className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-amber-300/70 bg-white/70 px-4 py-2 text-xs font-semibold text-amber-900 transition-colors hover:bg-amber-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment-50"
                   aria-label={t('reproducibility.verifyButton')}
                 >
                   <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
@@ -318,7 +318,7 @@ export default function CommunityDetailPage() {
                   <button
                     type="button"
                     onClick={handleReproduce}
-                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-700 px-4 py-2 text-xs font-semibold text-amber-50 transition-colors hover:bg-amber-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment-50"
+                    className="inline-flex shrink-0 min-h-11 items-center gap-1.5 rounded-full bg-amber-700 px-4 py-2 text-xs font-semibold text-amber-50 transition-colors hover:bg-amber-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment-50"
                   >
                     {t('recherches.detail.cta.button')}
                     <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />

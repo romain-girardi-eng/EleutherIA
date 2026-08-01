@@ -7,8 +7,13 @@ SSE streaming responses pass through completely untouched — only request
 Configuration (all optional):
 
 - ``LLM_RATE_LIMIT_ENABLED``      — "true"/"false", default "true"
-- ``LLM_RATE_LIMIT_MAX``          — requests per window per IP, default 20
+- ``LLM_RATE_LIMIT_MAX``          — requests per window per IP, default 5
 - ``LLM_RATE_LIMIT_WINDOW``       — window length in seconds, default 60
+- ``LLM_MAX_CONCURRENCY``         — process-wide cap on LLM requests in
+  flight, default 4. The per-IP window alone cannot bound provider spend when
+  the callers are unauthenticated and numerous, so admission also requires a
+  free slot in a module-level semaphore; requests that find none are rejected
+  immediately with 503 rather than queued.
 - ``LLM_RATE_LIMIT_TRUST_PROXY``  — "true"/"false", default "true". When
   true, the last ``X-Forwarded-For`` hop is the rate key. Default is true
   because in the production deployment (``deploy/deploy-compose.yml``) the
@@ -27,6 +32,7 @@ never throttled.
 
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 import time
@@ -52,6 +58,13 @@ LLM_EXACT_PATHS = frozenset(
 )
 _REVERIFY_PREFIX = "/api/graphrag/community/queries/"
 _REVERIFY_SUFFIX = "/reverify"
+
+# Process-wide cap on LLM requests in flight. Held for the whole downstream
+# call (including SSE streams, which are the expensive ones) so provider spend
+# and worker saturation stay bounded no matter how many distinct IPs call in.
+LLM_MAX_CONCURRENCY = max(1, int(os.environ.get("LLM_MAX_CONCURRENCY", "4")))
+_llm_slots = asyncio.Semaphore(LLM_MAX_CONCURRENCY)
+_BUSY_RETRY_AFTER = 5
 
 
 def _env_bool(name: str, default: bool) -> bool:
@@ -138,7 +151,7 @@ class LLMRateLimitMiddleware:
         self.limiter = SlidingWindowLimiter(
             max_requests=max_requests
             if max_requests is not None
-            else int(os.environ.get("LLM_RATE_LIMIT_MAX", "20")),
+            else int(os.environ.get("LLM_RATE_LIMIT_MAX", "5")),
             window_seconds=window_seconds
             if window_seconds is not None
             else float(os.environ.get("LLM_RATE_LIMIT_WINDOW", "60")),
@@ -172,6 +185,21 @@ class LLMRateLimitMiddleware:
                 return hops[-1], False
         return peer, peer in _LOCALHOST
 
+    @staticmethod
+    async def _reject(send: Send, status: int, detail: str, retry_after: int) -> None:
+        body = json.dumps({"detail": detail, "retry_after": retry_after}).encode()
+        await send(
+            {
+                "type": "http.response.start",
+                "status": status,
+                "headers": [
+                    (b"content-type", b"application/json"),
+                    (b"retry-after", str(retry_after).encode()),
+                ],
+            }
+        )
+        await send({"type": "http.response.body", "body": body})
+
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if (
             not self.enabled
@@ -182,26 +210,28 @@ class LLMRateLimitMiddleware:
             return
 
         key, exempt = self._client_key(scope, trust_proxy=self.trust_proxy)
-        if exempt or self.limiter.admit(key):
-            await self.app(scope, receive, send)
+        if not exempt and not self.limiter.admit(key):
+            await self._reject(
+                send,
+                status=429,
+                detail="Rate limit exceeded for LLM endpoints. Please retry later.",
+                retry_after=self.limiter.retry_after(key),
+            )
             return
 
-        retry_after = self.limiter.retry_after(key)
-        body = json.dumps(
-            {
-                "detail": "Rate limit exceeded for LLM endpoints. "
-                "Please retry later.",
-                "retry_after": retry_after,
-            }
-        ).encode()
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 429,
-                "headers": [
-                    (b"content-type", b"application/json"),
-                    (b"retry-after", str(retry_after).encode()),
-                ],
-            }
-        )
-        await send({"type": "http.response.body", "body": body})
+        # Process-wide concurrency cap. ``locked()`` is the non-blocking probe;
+        # ``acquire()`` returns without yielding to the event loop while a slot
+        # is free, so no other task can steal it between the two statements.
+        if _llm_slots.locked():
+            await self._reject(
+                send,
+                status=503,
+                detail="LLM capacity is saturated. Please retry shortly.",
+                retry_after=_BUSY_RETRY_AFTER,
+            )
+            return
+        await _llm_slots.acquire()
+        try:
+            await self.app(scope, receive, send)
+        finally:
+            _llm_slots.release()

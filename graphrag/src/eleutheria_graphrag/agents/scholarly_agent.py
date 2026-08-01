@@ -144,6 +144,27 @@ def _claim_from_answer(answer_text: str, ref: str) -> str | None:
     return None
 
 
+def _claim_from_ledger(
+    ledger: list[ClaimLedgerItem],
+    citation_id: str,
+) -> str | None:
+    """The ledger claim sentence citing ``citation_id``, or ``None``.
+
+    The dialectical path stores the full sentence carrying each inline
+    ``[passage_<id>: …]`` marker in the claim ledger (``build_provenance_ledger``),
+    so this recovers a real auditable claim where the literal-``[ref]`` lookup
+    cannot find one. First match wins; empty claims are skipped.
+    """
+    if not ledger or not citation_id:
+        return None
+    for item in ledger:
+        if not item.claim or not item.claim.strip():
+            continue
+        if _ledger_item_cites(list(item.evidence_ids), citation_id):
+            return item.claim.strip()
+    return None
+
+
 def _verifier_v2_max_claims() -> int:
     """Per-query sampling budget for the v2 verifier (0 disables it)."""
     raw = os.getenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", "8")
@@ -163,10 +184,21 @@ def _sample_citations_for_verification(
     Risk order: claims quoting ancient Greek first (fabricated ancient text is
     the worst failure mode), then ascending citation confidence (unknown
     confidence sorts last as 1.0). Ties keep the original citation order.
+
+    Claim resolution order: the sentence carrying the literal ``[<ref>]`` marker,
+    then the claim ledger item citing this citation (the dialectical prose uses
+    ``[passage_<id>: …]`` markers, so ``_claim_from_answer`` finds nothing there
+    and every claim used to degrade to the bare ``citation.label`` — which the
+    verifier's bare-label guard fails closed to WEAK, leaving it inert on the
+    live Scholar-RAG path), and only then the label.
     """
     scored: list[tuple[bool, float, int, Citation, str]] = []
     for idx, citation in enumerate(answer.citations):
-        claim_text = _claim_from_answer(answer.answer, citation.ref) or citation.label
+        claim_text = (
+            _claim_from_answer(answer.answer, citation.ref)
+            or _claim_from_ledger(answer.claim_ledger, citation.id)
+            or citation.label
+        )
         has_greek = bool(_GREEK_CHAR_RE.search(claim_text))
         confidence = citation.confidence if citation.confidence is not None else 1.0
         scored.append((not has_greek, confidence, idx, citation, claim_text))

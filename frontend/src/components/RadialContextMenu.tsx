@@ -199,6 +199,15 @@ export default function RadialContextMenu({
 
   const radius = 90; // Radius of the orbital circle
 
+  // Clamp to viewport so the orbital ring never clips off-screen on
+  // narrow phones (320px-430px) — the ring + action buttons need
+  // ~radius + 28px of margin on every side.
+  const margin = radius + 28;
+  const clampedPosition = {
+    x: Math.min(Math.max(position.x, margin), window.innerWidth - margin),
+    y: Math.min(Math.max(position.y, margin), window.innerHeight - margin),
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -210,8 +219,8 @@ export default function RadialContextMenu({
           transition={{ duration: 0.2, ease: 'easeOut' }}
           className="fixed pointer-events-none z-[1000]"
           style={{
-            left: position.x,
-            top: position.y,
+            left: clampedPosition.x,
+            top: clampedPosition.y,
             transform: 'translate(-50%, -50%)',
           }}
         >
@@ -274,10 +283,12 @@ export default function RadialContextMenu({
                   transition: { duration: 0.2 },
                 }}
                 whileTap={{ scale: 0.95 }}
+                whileFocus={{ scale: 1.2 }}
                 onClick={action.onClick}
+                aria-label={action.label}
                 className={`
                   absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                  w-14 h-14 rounded-full pointer-events-auto
+                  w-14 h-14 rounded-full pointer-events-auto touch-manipulation
                   ${action.color} text-white
                   shadow-xl ${action.glowColor}
                   flex items-center justify-center
@@ -285,15 +296,21 @@ export default function RadialContextMenu({
                   backdrop-blur-sm
                   border-2 border-white/20
                   transition-all duration-300
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80
                 `}
                 title={action.label}
               >
                 {React.createElement(Icon, { className: "w-6 h-6" })}
 
-                {/* Label on hover */}
+                {/* Label — reachable on hover AND keyboard focus, not
+                    hover-only (there is no touch equivalent of hover, so
+                    the accessible name still comes from aria-label/title
+                    for screen readers and touch users). */}
                 <motion.span
                   initial={{ opacity: 0, y: 10 }}
                   whileHover={{ opacity: 1, y: 0 }}
+                  whileFocus={{ opacity: 1, y: 0 }}
+                  aria-hidden="true"
                   className="absolute top-full mt-2 px-3 py-1 rounded-full bg-black/90 backdrop-blur-lg text-white text-xs font-medium whitespace-nowrap shadow-lg border border-white/20 pointer-events-none"
                 >
                   {action.label}

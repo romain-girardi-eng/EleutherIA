@@ -897,6 +897,30 @@
     min-width: 44px;
   }
 
+  /* Safe-area helpers for notches / home indicators — used by fixed
+     headers, bottom nav bars, and drawers that sit against a screen
+     edge (viewport meta already declares viewport-fit=cover). */
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .pl-safe {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .pr-safe {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .px-safe {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
   /* Focus trap container - no visible ring */
   .focus-trap {
     position: relative;

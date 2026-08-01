@@ -5,9 +5,9 @@ snapshot regression.
 
 ## Baseline
 
-- The target corpus baseline is the pre-the platform migration corpus: roughly 69,000
+- The target corpus baseline is the pre-migration corpus: roughly 69,000
   passages.
-- The post-the platform KG snapshot currently exposes about 16,000 passage nodes. This
+- The post-migration KG snapshot currently exposes about 16,000 passage nodes. This
   is a KG snapshot coverage problem, not proof that the underlying philological
   target has changed.
 - Do not use synthetic Greek or Latin to fill gaps. Every restored passage must

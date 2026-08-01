@@ -26,15 +26,15 @@
     "eleutheria": {
       "type": "local",
       "command": [
-        "[local-path]",
+        ".venv-py314/bin/python",
         "-m",
         "mcp_server.transports.stdio"
       ],
       "environment": {
         "DATABASE_URL": "{env:DATABASE_URL}",
         "MCP_API_TOKEN": "local-spike",
-        "PYTHONPATH": "[local-path]",
-        "ELEUTHERIA_KG_SNAPSHOT_DIR": "[local-path]"
+        "PYTHONPATH": ".",
+        "ELEUTHERIA_KG_SNAPSHOT_DIR": "data/kg"
       },
       "enabled": true,
       "timeout": 30000

@@ -7,6 +7,7 @@ mounts package routers, and adds cross-cutting middleware/routes.
 
 import logging
 import os
+import re
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Any
@@ -52,28 +53,26 @@ from backend.services.rate_limit import LLMRateLimitMiddleware
 
 logger = logging.getLogger(__name__)
 
-# Placeholder JWT secrets that must never reach production — accepting one of
-# these would let anyone with the repo forge JWTs and sign in as any user.
-_PLACEHOLDER_JWT_SECRETS = frozenset(
-    {
-        "change-this-to-a-secure-random-string",
-        "change-me-in-production",
-        "",
-    }
-)
+# Structural placeholder detection: any secret that is too short to resist
+# brute force, or that reads like one of the repo's own example values, must
+# never reach production — accepting one would let anyone with the repo forge
+# JWTs and sign in as any user.
+_MIN_JWT_SECRET_LENGTH = 32
+_PLACEHOLDER_JWT_PATTERN = re.compile(r"change|placeholder|generate|secret", re.I)
 
 
 def _assert_jwt_secret_configured() -> None:
-    """Refuse to boot when JWT_SECRET_KEY is unset or matches a known placeholder.
+    """Refuse to boot when JWT_SECRET_KEY is unset, too short, or placeholder-like.
 
     Runs at import time (before uvicorn binds a port) so misconfiguration
     surfaces as a hard, loud failure during deploy rather than silently
     accepting forgeable tokens.
     """
     secret = os.getenv("JWT_SECRET_KEY", "").strip()
-    if secret in _PLACEHOLDER_JWT_SECRETS:
+    if len(secret) < _MIN_JWT_SECRET_LENGTH or _PLACEHOLDER_JWT_PATTERN.search(secret):
         raise RuntimeError(
-            "JWT_SECRET_KEY is unset or set to a placeholder. "
+            "JWT_SECRET_KEY is unset, shorter than "
+            f"{_MIN_JWT_SECRET_LENGTH} characters, or looks like a placeholder. "
             'Generate a strong key with `python -c "import secrets; '
             'print(secrets.token_hex(64))"` and set it in the environment '
             "before starting the API."

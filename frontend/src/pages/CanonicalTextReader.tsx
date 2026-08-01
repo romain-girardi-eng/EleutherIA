@@ -291,7 +291,7 @@ export default function CanonicalTextReader() {
             <div className="flex items-center gap-2">
               <Link
                 to={`/texts/${textId}`}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-stone-600 hover:text-stone-800 hover:bg-amber-100/40 transition"
+                className="flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] px-3 py-1.5 rounded-lg text-xs text-stone-600 hover:text-stone-800 hover:bg-amber-100/40 transition"
                 title="Mode livre"
               >
                 <BookOpen size={14} />
@@ -299,7 +299,7 @@ export default function CanonicalTextReader() {
               </Link>
               <button
                 onClick={() => setShowCitationPanel((p) => !p)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-stone-600 hover:text-stone-800 hover:bg-amber-100/40 transition"
+                className="flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] px-3 py-1.5 rounded-lg text-xs text-stone-600 hover:text-stone-800 hover:bg-amber-100/40 transition"
                 title="Citations"
               >
                 <FileText size={14} />
@@ -307,7 +307,7 @@ export default function CanonicalTextReader() {
               </button>
               <button
                 onClick={() => setShowTOC(!showTOC)}
-                className="text-sm text-stone-600 hover:text-stone-800 flex items-center gap-1"
+                className="text-sm text-stone-600 hover:text-stone-800 flex items-center gap-1 min-h-[44px] px-2 rounded-lg hover:bg-amber-100/40 transition"
               >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -382,7 +382,8 @@ export default function CanonicalTextReader() {
                 <h2 className="text-sm font-semibold text-stone-800">{t('textReader.toc.title')}</h2>
                 <button
                   onClick={() => setShowTOC(false)}
-                  className="text-stone-500 hover:text-stone-800"
+                  className="flex items-center justify-center min-h-[44px] min-w-[44px] -mr-2 text-stone-500 hover:text-stone-800"
+                  aria-label={t('textReader.nav.hide')}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -403,7 +404,7 @@ export default function CanonicalTextReader() {
                             <button
                               key={section.passage_id}
                               onClick={() => jumpToTOCEntry(section.passage_id)}
-                              className="block w-full text-left text-xs text-stone-600 hover:text-stone-800 hover:bg-parchment-50 px-2 py-0.5 rounded"
+                              className="block w-full min-h-[36px] text-left text-xs text-stone-600 hover:text-stone-800 hover:bg-parchment-50 px-2 py-2 rounded flex items-center"
                             >
                               {section.canonical_ref}
                             </button>
@@ -422,7 +423,7 @@ export default function CanonicalTextReader() {
                           <button
                             key={section.passage_id}
                             onClick={() => jumpToTOCEntry(section.passage_id)}
-                            className="block w-full text-left text-xs text-stone-600 hover:text-stone-800 hover:bg-parchment-50 px-2 py-0.5 rounded"
+                            className="block w-full min-h-[36px] text-left text-xs text-stone-600 hover:text-stone-800 hover:bg-parchment-50 px-2 py-2 rounded flex items-center"
                           >
                             {section.canonical_ref}
                           </button>
@@ -438,7 +439,7 @@ export default function CanonicalTextReader() {
                         <button
                           key={entry.passage_id}
                           onClick={() => jumpToTOCEntry(entry.passage_id)}
-                          className="block w-full text-left text-xs text-stone-600 hover:text-stone-800 hover:bg-parchment-50 px-2 py-1 rounded"
+                          className="block w-full min-h-[36px] text-left text-xs text-stone-600 hover:text-stone-800 hover:bg-parchment-50 px-2 py-2 rounded flex items-center"
                         >
                           {entry.canonical_ref}
                         </button>

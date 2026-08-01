@@ -292,8 +292,12 @@ class TestLatinExtraction:
 
 
 class TestEnforcement:
-    def test_enforcement_disabled_by_default(self, monkeypatch):
+    def test_enforcement_enabled_by_default(self, monkeypatch):
         monkeypatch.delenv("ELEUTHERIA_TEXT_VERIFIER_ENFORCE", raising=False)
+        assert enforcement_enabled()
+
+    def test_enforcement_opt_out_by_env(self, monkeypatch):
+        monkeypatch.setenv("ELEUTHERIA_TEXT_VERIFIER_ENFORCE", "false")
         assert not enforcement_enabled()
 
     def test_enforcement_enabled_by_env(self, monkeypatch):
@@ -347,7 +351,7 @@ class TestAgentWiring:
 
     @pytest.mark.asyncio
     async def test_report_only_keeps_prose_and_records_flag(self, monkeypatch):
-        monkeypatch.delenv("ELEUTHERIA_TEXT_VERIFIER_ENFORCE", raising=False)
+        monkeypatch.setenv("ELEUTHERIA_TEXT_VERIFIER_ENFORCE", "false")
         agent = ScholarlyAgent(make_deps())
         state = _state_with_bundle()
         answer = ScholarlyAnswer(

@@ -16,7 +16,7 @@ export default function CreditsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
-          <h1 className="text-5xl md:text-6xl font-display font-bold text-stone-800 mb-4">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold text-stone-800 mb-4">
             <Typewriter
               text={["Credits & Attributions", "Acknowledgments", "Data Sources"]}
               speed={100}
@@ -36,7 +36,7 @@ export default function CreditsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-parchment-100/70 rounded-2xl p-8 shadow-sm"
+          className="bg-parchment-100/70 rounded-2xl p-5 sm:p-8 shadow-sm"
         >
           <div className="flex items-center gap-3 mb-6">
             <BookOpen className="w-8 h-8 text-orange-600" />
@@ -129,7 +129,7 @@ export default function CreditsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-parchment-100/70 rounded-2xl p-8 shadow-sm"
+          className="bg-parchment-100/70 rounded-2xl p-5 sm:p-8 shadow-sm"
         >
           <div className="flex items-center gap-3 mb-6">
             <Code className="w-8 h-8 text-orange-600" />
@@ -220,7 +220,7 @@ export default function CreditsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-parchment-100/70 rounded-2xl p-8 shadow-sm"
+          className="bg-parchment-100/70 rounded-2xl p-5 sm:p-8 shadow-sm"
         >
           <div className="flex items-center gap-3 mb-6">
             <Database className="w-8 h-8 text-orange-600" />
@@ -275,15 +275,15 @@ export default function CreditsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="bg-parchment-100/70 rounded-2xl p-8 shadow-sm"
+          className="bg-parchment-100/70 rounded-2xl p-5 sm:p-8 shadow-sm"
         >
           <div className="flex items-center gap-3 mb-6">
             <Award className="w-8 h-8 text-orange-600" />
             <h2 className="text-3xl font-display font-bold text-stone-800">{t('credits.projectLicense')}</h2>
           </div>
 
-          <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-8 rounded-xl border border-amber-200/60">
-            <div className="flex items-start gap-4 mb-6">
+          <div className="bg-gradient-to-br from-parchment-50 to-amber-50 p-5 sm:p-8 rounded-xl border border-amber-200/60">
+            <div className="flex flex-col sm:flex-row items-start gap-4 mb-6">
               <img
                 src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg"
                 alt="CC BY 4.0"
@@ -335,7 +335,7 @@ export default function CreditsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="bg-parchment-100/70 rounded-2xl p-8 shadow-sm"
+          className="bg-parchment-100/70 rounded-2xl p-5 sm:p-8 shadow-sm"
         >
           <h2 className="text-3xl font-display font-bold text-stone-800 mb-6">{t('credits.acknowledgments')}</h2>
 

@@ -15,7 +15,7 @@ from eleutheria_graphrag.agents.graph_helpers import node_integrity_status
 logger = logging.getLogger(__name__)
 
 DB_SCHEMA = os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
-_TERM_RE = re.compile(r"[A-Za-zÀ-ÿἀ-῾']+")
+_TERM_RE = re.compile(r"[A-Za-zÀ-ÖØ-öø-ÿ\u0370-\u03FF\u1F00-\u1FFF']+")
 
 
 class NodeSummary(BaseModel):

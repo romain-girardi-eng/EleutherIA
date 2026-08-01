@@ -44,7 +44,7 @@ function ChipGroup({
             onClick={() => onSelect(active ? null : option.key)}
             aria-pressed={active}
             className={cn(
-              'rounded-full border px-3 py-1.5 sm:py-1 min-h-[36px] sm:min-h-0 text-xs font-medium transition-all',
+              'rounded-full border px-3 py-1.5 sm:py-1 min-h-11 sm:min-h-0 text-xs font-medium transition-all',
               active
                 ? 'border-amber-400/80 bg-amber-100/70 text-amber-900 shadow-sm'
                 : 'border-stone-200/70 bg-white/60 text-stone-600 hover:border-amber-300/60 hover:bg-amber-50/60 hover:text-amber-800'
@@ -88,7 +88,7 @@ export default function FilterBar({
           onClick={() => onSortChange('recent')}
           aria-pressed={sort === 'recent'}
           className={cn(
-            'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium transition-colors',
+            'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 min-h-11 sm:min-h-0 text-xs font-medium transition-colors',
             sort === 'recent'
               ? 'bg-amber-100/80 text-amber-900'
               : 'text-stone-500 hover:text-stone-700'
@@ -102,7 +102,7 @@ export default function FilterBar({
           onClick={() => onSortChange('popular')}
           aria-pressed={sort === 'popular'}
           className={cn(
-            'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium transition-colors',
+            'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 min-h-11 sm:min-h-0 text-xs font-medium transition-colors',
             sort === 'popular'
               ? 'bg-amber-100/80 text-amber-900'
               : 'text-stone-500 hover:text-stone-700'

@@ -49,7 +49,7 @@ from eleutheria_graphrag.services.snapshot_retrieval import (
 
 logger = logging.getLogger(__name__)
 
-_TERM_RE = re.compile(r"[A-Za-zÀ-ÿἀ-῾']+")
+_TERM_RE = re.compile(r"[A-Za-zÀ-ÖØ-öø-ÿ\u0370-\u03FF\u1F00-\u1FFF']+")
 
 # Flat, star-tolerant dialectical relations (ARCHITECTURE §2.1 / §3.2).
 _FAULT_LINE_RELATIONS: frozenset[str] = frozenset(

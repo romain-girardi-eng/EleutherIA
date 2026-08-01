@@ -136,9 +136,9 @@ const UserProfilePage: React.FC = () => {
       {/* Profile Header */}
       <Card>
         <CardContent className="p-6">
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center">
+              <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center shrink-0">
                 <User className="w-10 h-10 text-primary-600" />
               </div>
               <div>
@@ -167,7 +167,7 @@ const UserProfilePage: React.FC = () => {
               <Button
                 variant="outline"
                 onClick={() => isEditing ? handleSaveProfile() : setIsEditing(true)}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 min-h-11 self-start"
               >
                 <Edit3 className="w-4 h-4" />
                 {isEditing ? t('common.save') : t('common.edit')}
@@ -182,7 +182,7 @@ const UserProfilePage: React.FC = () => {
                 value={editedProfile.bio}
                 onChange={(e) => setEditedProfile(prev => ({ ...prev, bio: e.target.value }))}
                 rows={3}
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary-500"
+                className="w-full p-3 border rounded-lg text-base focus:ring-2 focus:ring-primary-500"
                 placeholder="Tell us about your research..."
               />
             ) : (
@@ -285,8 +285,8 @@ const UserProfilePage: React.FC = () => {
                   animate={{ opacity: 1, x: 0 }}
                   className="p-4 border rounded-lg hover:bg-parchment-50 transition-colors"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       {getStatusIcon(contribution.status)}
                       <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                         contribution.type === 'correction' ? 'bg-blue-100 text-blue-700' :
@@ -321,14 +321,16 @@ const UserProfilePage: React.FC = () => {
           <p className="text-academic-muted mb-4">
             {t('community.newsletter.description')}
           </p>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="email"
+              inputMode="email"
+              autoComplete="email"
               placeholder={t('community.newsletter.emailPlaceholder')}
-              className="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-primary-500"
+              className="flex-1 min-h-11 p-3 border rounded-lg text-base focus:ring-2 focus:ring-primary-500"
               defaultValue={profile.email}
             />
-            <Button>
+            <Button className="min-h-11">
               {t('community.newsletter.subscribe')}
             </Button>
           </div>

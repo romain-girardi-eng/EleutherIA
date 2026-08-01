@@ -304,7 +304,7 @@ export default function DatabasePage() {
               <span className="text-xs font-medium text-stone-400 uppercase tracking-wider">Node Types</span>
               <button
                 onClick={() => expandedTypes.size > 0 ? setExpandedTypes(new Set()) : setExpandedTypes(new Set(nodeTypes.map(n => n.key)))}
-                className="inline-flex items-center gap-1 text-xs text-stone-400 hover:text-stone-600 transition-colors"
+                className="inline-flex min-h-[44px] items-center gap-1 px-2 -mr-2 text-xs text-stone-400 hover:text-stone-600 transition-colors"
               >
                 <ChevronsUpDown className="w-3 h-3" />
                 {expandedTypes.size > 0 ? 'Collapse' : 'Expand'} all
