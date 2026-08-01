@@ -257,7 +257,8 @@ class CachedApiClient {
   // These methods don't benefit from caching or need real-time data
 
   // Authentication
-  login = apiClient.login.bind(apiClient);
+  requestCode = apiClient.requestCode.bind(apiClient);
+  verifyCode = apiClient.verifyCode.bind(apiClient);
   getCurrentUser = apiClient.getCurrentUser.bind(apiClient);
   getRateLimitStatus = apiClient.getRateLimitStatus.bind(apiClient);
 

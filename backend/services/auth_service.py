@@ -4,6 +4,7 @@ Authentication service — JWT tokens, password hashing, rate limiting.
 
 import logging
 import os
+import secrets
 import time
 from collections import defaultdict
 from datetime import UTC, datetime, timedelta
@@ -95,7 +96,9 @@ async def authenticate_user(
             SET failed_login_attempts = $1, locked_until = $2
             WHERE user_id = $3
             """,
-            attempts, lock_until, user["user_id"],
+            attempts,
+            lock_until,
+            user["user_id"],
         )
         return None
 
@@ -144,3 +147,144 @@ def check_rate_limit(key: str) -> dict[str, Any]:
 def record_request(key: str) -> None:
     """Record a request for rate limiting."""
     _rate_windows[key].append(time.time())
+
+
+# ---------------------------------------------------------------------------
+# Email one-time-code (OTP) login + allowlist
+# ---------------------------------------------------------------------------
+
+# The allowlist. Only these emails may receive a login code, verify one, or
+# hold a valid session — enforced at request-code, at verify, AND on every
+# authenticated request (so revoking an email takes effect immediately, even
+# for an already-issued JWT). Comma-separated; defaults to the sole owner.
+_DEFAULT_AUTHORIZED = "romain-girardi@hotmail.fr"
+
+LOGIN_CODE_TTL_MINUTES = int(os.getenv("LOGIN_CODE_TTL_MINUTES", "10"))
+LOGIN_CODE_LENGTH = 6
+LOGIN_CODE_MAX_ATTEMPTS = 5
+LOGIN_CODE_RESEND_COOLDOWN_SECONDS = int(os.getenv("LOGIN_CODE_RESEND_COOLDOWN", "60"))
+
+
+def normalize_email(email: str) -> str:
+    """Canonical form used for every comparison and lookup."""
+    return (email or "").strip().lower()
+
+
+def authorized_emails() -> set[str]:
+    """The current allowlist, read from AUTHORIZED_EMAILS at call time."""
+    raw = os.getenv("AUTHORIZED_EMAILS", _DEFAULT_AUTHORIZED)
+    return {normalize_email(part) for part in raw.split(",") if part.strip()}
+
+
+def is_email_authorized(email: str) -> bool:
+    """True if ``email`` is on the allowlist."""
+    return normalize_email(email) in authorized_emails()
+
+
+def generate_login_code() -> str:
+    """A cryptographically-random numeric code, left-padded to fixed length."""
+    upper = 10**LOGIN_CODE_LENGTH
+    return str(secrets.randbelow(upper)).zfill(LOGIN_CODE_LENGTH)
+
+
+async def get_active_user_by_email(
+    db: DatabaseService, email: str
+) -> dict[str, Any] | None:
+    """Return the active user row for ``email`` (case-insensitive), or None."""
+    user = await db.fetchrow(
+        """
+        SELECT user_id, username, email, role, is_active
+        FROM free_will.users
+        WHERE lower(email) = $1 AND is_active = TRUE
+        """,
+        normalize_email(email),
+    )
+    return dict(user) if user else None
+
+
+async def issue_login_code(db: DatabaseService, email: str) -> str | None:
+    """Create and store a fresh login code for ``email``; return the plaintext.
+
+    Returns None when a code was issued within the resend cooldown (caller
+    should stay silent about it). Old codes for the email are invalidated so
+    only the newest is ever valid.
+    """
+    normalized = normalize_email(email)
+
+    recent = await db.fetchrow(
+        """
+        SELECT created_at FROM free_will.login_codes
+        WHERE lower(email) = $1 AND consumed_at IS NULL
+        ORDER BY created_at DESC LIMIT 1
+        """,
+        normalized,
+    )
+    if recent and recent.get("created_at"):
+        age = (datetime.now(UTC) - recent["created_at"]).total_seconds()
+        if age < LOGIN_CODE_RESEND_COOLDOWN_SECONDS:
+            return None
+
+    # Opportunistic prune + invalidate any outstanding codes for this email.
+    await db.execute(
+        """
+        DELETE FROM free_will.login_codes
+        WHERE lower(email) = $1 OR expires_at < now()
+        """,
+        normalized,
+    )
+
+    code = generate_login_code()
+    expires_at = datetime.now(UTC) + timedelta(minutes=LOGIN_CODE_TTL_MINUTES)
+    await db.execute(
+        """
+        INSERT INTO free_will.login_codes (email, code_hash, expires_at)
+        VALUES ($1, $2, $3)
+        """,
+        normalized,
+        hash_password(code),
+        expires_at,
+    )
+    return code
+
+
+async def verify_login_code(
+    db: DatabaseService, email: str, code: str
+) -> dict[str, Any] | None:
+    """Validate ``code`` for ``email`` and return the active user row, or None.
+
+    Fails closed: wrong/expired/consumed codes and over-limit attempts all
+    return None. A correct code is consumed (single-use) on success.
+    """
+    normalized = normalize_email(email)
+    row = await db.fetchrow(
+        """
+        SELECT code_id, code_hash, attempts, expires_at
+        FROM free_will.login_codes
+        WHERE lower(email) = $1 AND consumed_at IS NULL
+        ORDER BY created_at DESC LIMIT 1
+        """,
+        normalized,
+    )
+    if not row:
+        return None
+
+    expires_at = row["expires_at"]
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=UTC)
+    if expires_at < datetime.now(UTC):
+        return None
+    if (row.get("attempts") or 0) >= LOGIN_CODE_MAX_ATTEMPTS:
+        return None
+
+    if not verify_password(code or "", row["code_hash"]):
+        await db.execute(
+            "UPDATE free_will.login_codes SET attempts = attempts + 1 WHERE code_id = $1",
+            row["code_id"],
+        )
+        return None
+
+    await db.execute(
+        "UPDATE free_will.login_codes SET consumed_at = now() WHERE code_id = $1",
+        row["code_id"],
+    )
+    return await get_active_user_by_email(db, normalized)

@@ -15,13 +15,9 @@ export interface AuthState {
   isLoading: boolean;
 }
 
-export interface LoginCredentials {
-  username: string;
-  password: string;
-}
-
 export interface AuthContextType extends AuthState {
-  login: (credentials: LoginCredentials) => Promise<void>;
+  requestCode: (email: string) => Promise<{ message: string }>;
+  verifyCode: (email: string, code: string) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
@@ -78,9 +74,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     initializeAuth();
   }, []);
 
-  const login = async (credentials: LoginCredentials) => {
+  const requestCode = async (email: string) => {
+    return apiClient.requestCode(email);
+  };
+
+  const verifyCode = async (email: string, code: string) => {
     try {
-      const response = await apiClient.login(credentials);
+      const response = await apiClient.verifyCode(email, code);
 
       // Store token in cookie
       Cookies.set(TOKEN_COOKIE, response.access_token, {
@@ -99,7 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading: false,
       });
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error('Code verification failed:', error);
       throw error;
     }
   };
@@ -131,7 +131,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const value: AuthContextType = {
     ...state,
-    login,
+    requestCode,
+    verifyCode,
     logout,
     refreshUser,
   };
