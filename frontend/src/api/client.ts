@@ -19,7 +19,7 @@ import type {
   Conversation,
   ConversationMessage,
 } from '../types';
-import type { User, LoginCredentials } from '../context/AuthContext';
+import type { User } from '../context/AuthContext';
 
 const rawApiUrl = import.meta.env.VITE_API_URL;
 const API_URL = (
@@ -703,8 +703,16 @@ class ApiClient {
   }
 
   // Authentication Endpoints
-  async login(credentials: LoginCredentials): Promise<{ access_token: string; token_type: string; expires_in: number }> {
-    const response = await this.client.post('/api/auth/login', credentials);
+  async requestCode(email: string): Promise<{ message: string }> {
+    const response = await this.client.post('/api/auth/request-code', { email });
+    return response.data;
+  }
+
+  async verifyCode(
+    email: string,
+    code: string
+  ): Promise<{ access_token: string; token_type: string; expires_in: number }> {
+    const response = await this.client.post('/api/auth/verify-code', { email, code });
     return response.data;
   }
 

@@ -217,6 +217,20 @@ CREATE INDEX IF NOT EXISTS idx_auth_audit_user_id ON auth_audit_log(user_id);
 CREATE INDEX IF NOT EXISTS idx_auth_audit_event_type ON auth_audit_log(event_type);
 CREATE INDEX IF NOT EXISTS idx_auth_audit_created_at ON auth_audit_log(created_at);
 
+-- Email one-time login codes (OTP) — passwordless login. Hashed, single-use,
+-- short-lived, attempt-limited. See migration 20260801_01_login_codes.sql.
+CREATE TABLE IF NOT EXISTS login_codes (
+    code_id     UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
+    email       VARCHAR(255) NOT NULL,
+    code_hash   VARCHAR(255) NOT NULL,
+    expires_at  TIMESTAMPTZ  NOT NULL,
+    attempts    INTEGER      NOT NULL DEFAULT 0,
+    consumed_at TIMESTAMPTZ,
+    created_at  TIMESTAMPTZ  NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_login_codes_email ON login_codes(lower(email));
+CREATE INDEX IF NOT EXISTS idx_login_codes_expires_at ON login_codes(expires_at);
+
 -- ============================================
 -- Knowledge Graph Tables
 -- ============================================
