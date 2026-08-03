@@ -169,6 +169,16 @@ repos:
         files: ^data/kg/nodes\.jsonl$
         stages: [commit]
 
+      # Same check CI runs; catching it here avoids a red build after every
+      # KG or audit edit, since the fixtures are derived from data/audit/.
+      - id: eval-gold-sync
+        name: Eval gold fixtures in sync with the audit corpus
+        entry: python3 scripts/eval/build_gold_from_audit.py --check
+        language: system
+        pass_filenames: false
+        files: ^(data/audit/.*\.(jsonl|json)|data/eval/.*\.(jsonl|json))$
+        stages: [commit]
+
 # ==========================================
 # CI Configuration (skip some hooks in CI)
 # ==========================================
