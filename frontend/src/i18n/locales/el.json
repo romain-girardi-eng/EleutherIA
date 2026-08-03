@@ -1587,7 +1587,7 @@
     "overview": {
       "title": "Επισκόπηση Αρχιτεκτονικής",
       "architectureLabel": "Agentική Pipeline",
-      "description": "Το EleutherIA χρησιμοποιεί μια pipeline Agentic GraphRAG που συνδυάζει έναν επιμελημένο γράφο γνώσης ({{nodeCount}} κόμβοι, {{edgeCount}} ακμές) με ένα αυτόνομο σύστημα ανάκτησης και σύνθεσης. Σε αντίθεση με το παραδοσιακό RAG, το σύστημά μας χρησιμοποιεί τον Claude ως agent συλλογισμού.",
+      "description": "Το EleutherIA χρησιμοποιεί μια pipeline Agentic GraphRAG που συνδυάζει έναν επιμελημένο γράφο γνώσης ({{nodeCount}} κόμβοι, {{edgeCount}} ακμές) με ένα αυτόνομο σύστημα ανάκτησης και σύνθεσης. Σε αντίθεση με το παραδοσιακό RAG, το σύστημά μας χρησιμοποιεί ένα μεγάλο γλωσσικό μοντέλο ως agent συλλογισμού.",
       "coreInnovation": "Βασική Καινοτομία",
       "innovationDescription": "Αντί για 10+ κλήσεις LLM ανά ερώτημα, η agentική pipeline χρησιμοποιεί παράλληλη ανάκτηση, επιμελημένα passage_citations και το παράθυρο πλαισίου 1M tokens του Gemini:",
       "fsmOrchestration": "FSM pydantic-graph 12 κόμβων για αυτόνομη ενορχήστρωση",

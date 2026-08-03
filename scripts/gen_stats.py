@@ -2,7 +2,7 @@
 """Generate truthful corpus/KG statistics from the repo data snapshots.
 
 Counts are computed from the committed JSONL snapshots (``data/kg/*.jsonl``,
-``data/corpus/*.jsonl``) so that README/CLAUDE.md/prompt claims can always be
+``data/corpus/*.jsonl``) so that README/docs claims can always be
 regenerated from the actual dataset instead of hand-maintained numbers that
 drift (the README shipped "487 works / 69,277 passages" while the dataset
 holds 241 work nodes).

@@ -160,7 +160,7 @@ NEW_NODE_METADATA = {
 # but only supports a tiny edge set (no created_by/discusses/critiques as source).
 # `argument` is the type used by all 906 sibling `scholarly_argument_*` nodes
 # and supports created_by/discusses/critiques as source (per edge_types.json).
-# Per CLAUDE.md "Reuse existing ontology" rule, mirror the 906 siblings' choice.
+# Per the project "Reuse existing ontology" rule, mirror the 906 siblings' choice.
 NEW_NODE_TYPE = "argument"
 
 NEW_NODE = {

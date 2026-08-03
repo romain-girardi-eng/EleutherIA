@@ -2,7 +2,7 @@
  * Grounded FAQ content for EleutherIA.
  *
  * Every answer is a faithful condensation of the repository's own documented facts:
- * README.md, .zenodo.json, data/stats.json, CLAUDE.md, and concept/person nodes in
+ * README.md, .zenodo.json, data/stats.json, and concept/person nodes in
  * data/kg/nodes.jsonl. No claim, date, statistic, or attribution here is invented.
  * Any ancient-Greek token is copied verbatim from the source data and is never
  * generated, paraphrased, or translated (see the project integrity policy).

@@ -516,7 +516,7 @@
     "overview": {
       "title": "Architecture Overview",
       "architectureLabel": "Agentic Pipeline",
-      "description": "EleutherIA uses an Agentic GraphRAG pipeline that combines a curated knowledge graph ({{nodeCount}} nodes, {{edgeCount}} edges) with an autonomous retrieval and synthesis system. Unlike traditional RAG, our system uses Claude as a reasoning agent to navigate the graph, build context, and synthesize scholarly answers.",
+      "description": "EleutherIA uses an Agentic GraphRAG pipeline that combines a curated knowledge graph ({{nodeCount}} nodes, {{edgeCount}} edges) with an autonomous retrieval and synthesis system. Unlike traditional RAG, our system uses a large language model as a reasoning agent to navigate the graph, build context, and synthesize scholarly answers.",
       "coreInnovation": "Core Innovation",
       "innovationDescription": "The agentic pipeline uses vectorless SQL/tree/lemma retrieval, curated passage_citations, and Gemini's 1M token context window:",
       "fsmOrchestration": "12-node pydantic-graph FSM for autonomous orchestration",

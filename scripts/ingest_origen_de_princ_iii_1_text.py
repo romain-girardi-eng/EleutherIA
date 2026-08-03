@@ -1,6 +1,6 @@
 """Ingest Origen De Principiis III.1 §§1-24 text into the 27 passage shells.
 
-Sources (local DOCTORAT corpus — see CLAUDE.md "Scholarly Sources for Verification"):
+Sources (local DOCTORAT corpus — see the local scholarly-sources index):
 - SC 268 bilingual (Crouzel-Simonetti 1980)
     `02_Corpus/Sources chrétiennes txt/03_Origene/bilingue/SC268_Origenes_Traite_des_Principes_livre_3_bilingue.txt`
     Latin (Rufinus) + French translation

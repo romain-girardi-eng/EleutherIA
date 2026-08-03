@@ -488,7 +488,7 @@
     "overview": {
       "title": "Architekturüberblick",
       "architectureLabel": "Agentische Pipeline",
-      "description": "EleutherIA nutzt eine agentische GraphRAG-Pipeline, die einen kurierten Wissensgraphen ({{nodeCount}} Knoten, {{edgeCount}} Kanten) mit einem autonomen Such- und Synthese-System kombiniert. Anders als traditionelles RAG nutzt unser System Claude als Reasoning-Agent, um den Graphen zu navigieren, Kontext aufzubauen und wissenschaftliche Antworten zu synthetisieren.",
+      "description": "EleutherIA nutzt eine agentische GraphRAG-Pipeline, die einen kurierten Wissensgraphen ({{nodeCount}} Knoten, {{edgeCount}} Kanten) mit einem autonomen Such- und Synthese-System kombiniert. Anders als traditionelles RAG nutzt unser System ein großes Sprachmodell als Reasoning-Agent, um den Graphen zu navigieren, Kontext aufzubauen und wissenschaftliche Antworten zu synthetisieren.",
       "coreInnovation": "Kerninnovation",
       "innovationDescription": "Statt 10+ LLM-Aufrufe pro Abfrage nutzt die agentische Pipeline paralleles Retrieval, kurierte passage_citations und Geminis 1M-Token-Kontextfenster:",
       "fsmOrchestration": "12-Knoten pydantic-graph FSM für autonome Orchestrierung",

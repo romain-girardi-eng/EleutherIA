@@ -513,7 +513,7 @@
     "overview": {
       "title": "Vue d'ensemble de l'architecture",
       "architectureLabel": "Pipeline agentique",
-      "description": "EleutherIA utilise un pipeline GraphRAG Agentique qui combine un graphe de connaissances curé ({{nodeCount}} nœuds, {{edgeCount}} arêtes) avec un système autonome de récupération et de synthèse. Contrairement au RAG traditionnel, notre système utilise Claude comme agent de raisonnement pour naviguer le graphe, construire le contexte et synthétiser des réponses académiques.",
+      "description": "EleutherIA utilise un pipeline GraphRAG Agentique qui combine un graphe de connaissances curé ({{nodeCount}} nœuds, {{edgeCount}} arêtes) avec un système autonome de récupération et de synthèse. Contrairement au RAG traditionnel, notre système utilise un grand modèle de langage comme agent de raisonnement pour naviguer le graphe, construire le contexte et synthétiser des réponses académiques.",
       "coreInnovation": "Innovation principale",
       "innovationDescription": "Au lieu de plus de 10 appels LLM par requête, le pipeline agentique utilise la récupération parallèle, les passage_citations curées et la fenêtre de contexte de 1M tokens de Gemini :",
       "fsmOrchestration": "FSM pydantic-graph à 12 nœuds pour l'orchestration autonome",

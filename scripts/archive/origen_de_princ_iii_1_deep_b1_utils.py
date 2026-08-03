@@ -40,7 +40,7 @@ editions of De Principiis III.1) :
 - Behr (Oxford 2017) — new English with introduction
 - Goergemanns-Karpp (Darmstadt 1976/1992) — German bilingual
 
-CRITICAL : Romain's project policy (CLAUDE.md) — ZERO TOLERANCE for AI-
+CRITICAL : Romain's project policy (project policy) — ZERO TOLERANCE for AI-
 generated Greek/Latin. All shell descriptions are English structural
 summaries verifiable against any of the editions above.
 """
