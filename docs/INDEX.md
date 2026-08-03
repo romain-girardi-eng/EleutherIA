@@ -19,6 +19,7 @@
 ## For Researchers
 
 - [Methodology](academic/METHODOLOGY.md) - Scholarly methodology, FAIR principles, citation standards
+- [Academic Integrity](ACADEMIC_INTEGRITY.md) - Authenticity policy and enforcement gates
 
 ## Architecture Deep Dives
 

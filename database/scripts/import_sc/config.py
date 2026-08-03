@@ -16,8 +16,7 @@ import os
 
 SC_CORPUS_DIR = os.environ.get(
     "SC_CORPUS_DIR",
-    "[local-path] SHAL/"
-    "02_Corpus/Sources chrétiennes txt",
+    "corpus/sources_chretiennes",
 )
 
 # Category subdirectories

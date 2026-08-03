@@ -172,6 +172,7 @@ Full documentation is available in the [`docs/`](docs/INDEX.md) folder:
 - [API Reference](docs/reference/API.md) -- REST API documentation
 - [Data Dictionary](docs/reference/DATA_DICTIONARY.md) -- Database schema reference
 - [Academic Methodology](docs/academic/METHODOLOGY.md) -- FAIR principles, citation standards
+- [Academic Integrity](docs/ACADEMIC_INTEGRITY.md) -- Authenticity policy and enforcement gates
 - [Development Setup](docs/development/SETUP.md) -- Contributing guide
 
 ## Citation

@@ -59,7 +59,7 @@ make test     # Run tests
 - All ancient text must come from verified sources in the database
 - Include CTS URNs or passage IDs for citations
 - When uncertain, paraphrase in English instead
-- See [CLAUDE.md](CLAUDE.md) for the full Ancient Text Authenticity Policy
+- See [docs/ACADEMIC_INTEGRITY.md](../docs/ACADEMIC_INTEGRITY.md) for the full Ancient Text Authenticity Policy
 
 ## Package Structure
 

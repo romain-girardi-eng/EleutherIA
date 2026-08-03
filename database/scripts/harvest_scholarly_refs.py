@@ -18,6 +18,7 @@ Output: data/doxographical_audit/scholarly_refs_index.json
 from __future__ import annotations
 
 import json
+import os
 import logging
 import re
 from collections import defaultdict
@@ -26,8 +27,8 @@ from pathlib import Path
 logger = logging.getLogger("harvest_scholarly_refs")
 
 DOCROOT = Path(
-    "[local-path] SHAL/04_Littérature_secondaire"
-)
+    os.environ.get("SECONDARY_LIT_DIR", "corpus/secondary_literature")
+).expanduser()
 OUTPUT = (
     Path(__file__).resolve().parents[2]
     / "data"

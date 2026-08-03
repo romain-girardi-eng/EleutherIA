@@ -113,7 +113,6 @@ print(quality.format_markdown_report())
 
 Intégration audit : `python scripts/audit_kg_quality.py --shacl` ajoute la section SHACL au rapport markdown standard.
 
-Rapport courant sur le KG production : `docs/reports/2026-05-14-shacl-validation.md`.
 
 ## Phase C — Inférence OWL-RL
 
@@ -162,7 +161,6 @@ Câblage des primitives Phase C dans le pipeline live :
 - Shapes split en `invariants/` (must pass) et `quality/` (backlog). Conformance sur les invariants atteinte.
 - Couverture `eleutheria_kg.semantic` > 95%.
 
-Détails opérationnels dans `[local-notes]`.
 
 ## Hors-scope (intentionnel)
 
@@ -173,7 +171,4 @@ Détails opérationnels dans `[local-notes]`.
 
 ## Références
 
-- Plan : `[local-notes]`
-- Audit qualité : `docs/reports/2026-03-10-kg-quality-audit-post-batch-04.md`, `docs/reports/2026-05-14-shacl-validation.md`
 - Ontologie : `knowledge graph/ontology/{node_types.json, edge_types.json}`
-- Mémoire projet : `[local-notes]`
