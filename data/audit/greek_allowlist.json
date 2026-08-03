@@ -547,6 +547,11 @@
    {
     "hash": "42752110eb7f54c5",
     "excerpt": "ψυχῆς ἔνδοθεν κίνησις"
+   },
+   {
+    "hash": "a759b05cbb678e50",
+    "excerpt": "ἐκ τοῦ Περὶ προνοίας: θέλησίς ἐστι φυσικὴ αὐτακράτορος νοῦ αὐτεξούσιος κίνησις",
+    "source": "Clément d'Alexandrie, Περὶ προνοίας (fragment conservé par Maxime le Confesseur, PG 91, 276) — verbatim TLG0555, vérifié 2026-08-03, αὐτακράτορος inclus"
    }
   ],
   "concept_to_endechomenon_alexander_amand1945": [
@@ -951,6 +956,83 @@
     "hash": "4057f142f11c71b2",
     "excerpt": "πρόνοια ἡ μὲν ἀνωτάτω καὶ πρώτη τοῦ πρώτου θεοῦ νόησις... ἡ ",
     "provenance": "verbatim TLG0007 Ps-Plutarch De fato 572F-573A — verified 2026-06-11"
+   }
+  ],
+  "argument_cafma_futility_of_effort_8c3d5f21": [
+   {
+    "hash": "109a075d73bad47a",
+    "excerpt": "ἀργότεροι πρὸς τὸ δι' αὑτῶν τι ποιεῖν",
+    "source": "Alexandre d'Aphrodise, De fato 21 (Bruns 191) — ἀργότεροι γενόμενοι πρὸς τὸ δι' αὑτῶν τι ποιεῖν, vérifié TLG0732, 2026-08-03"
+   },
+   {
+    "hash": "c213cfaeb1c84b66",
+    "excerpt": "τοὺς ἐπὶ τοῖς πραττομένοις καμάτους",
+    "source": "Alexandre d'Aphrodise, De fato 21 (Bruns 191) — ἀργότεροι γενόμενοι πρὸς τὸ δι' αὑτῶν τι ποιεῖν, vérifié TLG0732, 2026-08-03"
+   }
+  ],
+  "argument_common_cause_alex": [
+   {
+    "hash": "ffb2802b43ee0ca9",
+    "excerpt": "ἓν καὶ ταὐτὸν αἴτιον: ὁρῶμεν γὰρ ἐπὶ πολλῶν",
+    "source": "Alexandre d'Aphrodise, De fato (Bruns 195) — ἓν καὶ ταὐτὸν αἴτιον, ἡ κατὰ τὸν λοξὸν κύκλον ἔγκλισις vérifiés TLG0732, 2026-08-03"
+   },
+   {
+    "hash": "044f788102596797",
+    "excerpt": "αὐτὸ καὶ τοῖς πρώτοις καὶ τοῖς ὑστέροις γινομένοις ὂν αἴτιον. τοῦ γοῦν ἀναστῆναι",
+    "source": "Alexandre d'Aphrodise, De fato (Bruns 195) — ἓν καὶ ταὐτὸν αἴτιον, ἡ κατὰ τὸν λοξὸν κύκλον ἔγκλισις vérifiés TLG0732, 2026-08-03"
+   },
+   {
+    "hash": "ce3943d5991977de",
+    "excerpt": "ἡ τοῦ θείου σώματος κίνησίς τε καὶ περιφορὰ καὶ ἡ κατὰ τὸν λοξὸν κύκλον ἔγκλισις",
+    "source": "Alexandre d'Aphrodise, De fato (Bruns 195) — ἓν καὶ ταὐτὸν αἴτιον, ἡ κατὰ τὸν λοξὸν κύκλον ἔγκλισις vérifiés TLG0732, 2026-08-03"
+   }
+  ],
+  "argument_wager_alex": [
+   {
+    "hash": "58792059a14411eb",
+    "excerpt": "ἀλλ' εἶναι ἐπ' ἴσης ἑκάτερον ἢ πιστὸν ἢ ἄδηλον αὐτό, ποτέρᾳ δόξῃ πείθεσθαι τοῖς",
+    "source": "Alexandre d'Aphrodise, De fato 20-21 (Bruns 190-191) — ἀσφαλέστερον / ἀκινδυνότερον / κίνδυνος vérifiés TLG0732, 2026-08-03 ; liste terminologique concaténée"
+   },
+   {
+    "hash": "5fba376ac5c55571",
+    "excerpt": "ὁ κίνδυνος τῆς κατὰ τοῦτο διαμαρτίας πρόεισιν μέχρι ῥημάτων",
+    "source": "Alexandre d'Aphrodise, De fato 20-21 (Bruns 190-191) — ἀσφαλέστερον / ἀκινδυνότερον / κίνδυνος vérifiés TLG0732, 2026-08-03 ; liste terminologique concaténée"
+   },
+   {
+    "hash": "4a8f34936cd8f885",
+    "excerpt": "ἀργότεροι γενόμενοι πρὸς τὸ δι' αὑτῶν τι ποιεῖν. ἀσφαλέστερον, ἀκινδυνότερον, κί",
+    "source": "Alexandre d'Aphrodise, De fato 20-21 (Bruns 190-191) — ἀσφαλέστερον / ἀκινδυνότερον / κίνδυνος vérifiés TLG0732, 2026-08-03 ; liste terminologique concaténée"
+   }
+  ],
+  "scholarly_argument_bobzien_vs_6": [
+   {
+    "hash": "9878c54f83c046ee",
+    "excerpt": "ἐφ' ἡμῖν — ἐλευθερία",
+    "source": "Paire terminologique (ἐφ' ἡμῖν / ἐλευθερία), non une citation — Bobzien 1998/2001 ; les deux termes sont massivement attestés"
+   }
+  ],
+  "concept_conditional_fate_9a5c8b4d": [
+   {
+    "hash": "f9bac2b69e27267d",
+    "excerpt": "εἱμαρμένη ἐξ ὑποθέσεως",
+    "source": "RECONSTRUCTION MODERNE, pas une citation antique : « εἱμαρμένη ἐξ ὑποθέσεως » a 0 occurrence TLG. Terme antique correspondant : ἐξ ὑποθέσεως appliqué à la εἱμαρμένη, [Plutarque] De fato 570B-C (TLG0007), vérifié 2026-08-03"
+   },
+   {
+    "hash": "a576bd02ac18cc47",
+    "excerpt": "οἷον μέν ἐστι τὸ ἐξ ὑποθέσεως, ὅτι δὲ τοιοῦτον καὶ ἡ εἱμαρμένη, ὁριζέσθω· ἐξ ὑπο",
+    "source": "RECONSTRUCTION MODERNE, pas une citation antique : « εἱμαρμένη ἐξ ὑποθέσεως » a 0 occurrence TLG. Terme antique correspondant : ἐξ ὑποθέσεως appliqué à la εἱμαρμένη, [Plutarque] De fato 570B-C (TLG0007), vérifié 2026-08-03"
+   }
+  ],
+  "concept_non_necessitating_cause_alex": [
+   {
+    "hash": "ee9303c89411072c",
+    "excerpt": "αἴτιον οὐκ ἀναγκαστικόν",
+    "source": "RECONSTRUCTION MODERNE, pas une citation d'Alexandre : « αἴτιον οὐκ ἀναγκαστικόν » a 0 occurrence ; ἀναγκαστικ- n'apparaît qu'une fois dans tout le corpus d'Alexandre et jamais dans le De fato (TLG0732), vérifié 2026-08-03"
+   },
+   {
+    "hash": "6e15b38091b48fd9",
+    "excerpt": "ἀναγκαστικωτάτη τῶν πίστεων",
+    "source": "RECONSTRUCTION MODERNE, pas une citation d'Alexandre : « αἴτιον οὐκ ἀναγκαστικόν » a 0 occurrence ; ἀναγκαστικ- n'apparaît qu'une fois dans tout le corpus d'Alexandre et jamais dans le De fato (TLG0732), vérifié 2026-08-03"
    }
   ]
  }
