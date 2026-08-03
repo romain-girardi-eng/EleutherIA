@@ -451,6 +451,11 @@
    {
     "hash": "1b09db5bbfa4dcc4",
     "excerpt": "ἐξουσίαν... μὴ ποιεῖν"
+   },
+   {
+    "hash": "d3eeff4caa3a1055",
+    "excerpt": "μηκέτ' ἐν ἐκείνοις ἐξουσία τοῦ καὶ μὴ ποιῆσαι τὸ καθ' ὁρμὴν ἐνεργούμενον",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
    }
   ],
   "concept_four_categories_alex": [
@@ -606,6 +611,16 @@
    {
     "hash": "4097c719e6753242",
     "excerpt": "τῶν ἰδίων θελημάτων τὰς ἡνίας πεπιστευμένος"
+   },
+   {
+    "hash": "e1bcc240f185eed7",
+    "excerpt": "Πεποίητο μὲν γὰρ ὁ ἄνθρωπος ἐν ἀρχαῖς τῶν ἰδίων θελημάτων τὰς ἡνίας πεπιστευμένο",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
+   },
+   {
+    "hash": "314c86f75e446878",
+    "excerpt": "Πεποίητο μὲν γὰρ ὁ ἄνθρωπος ἐν ἀρχαῖς τῶν ἰδίων θελημάτων τὰς ἡνίας πεπιστευμ",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
    }
   ],
   "person_cyrus_alexandria_d641": [
@@ -1033,6 +1048,183 @@
     "hash": "6e15b38091b48fd9",
     "excerpt": "ἀναγκαστικωτάτη τῶν πίστεων",
     "source": "RECONSTRUCTION MODERNE, pas une citation d'Alexandre : « αἴτιον οὐκ ἀναγκαστικόν » a 0 occurrence ; ἀναγκαστικ- n'apparaît qu'une fois dans tout le corpus d'Alexandre et jamais dans le De fato (TLG0732), vérifié 2026-08-03"
+   }
+  ],
+  "argument_chance_cosmos_middle_platonist": [
+   {
+    "hash": "cfe9d57b9df424ce",
+    "excerpt": "πάνθ᾽ ὅσα τε κατ᾽ οὐρανὸν ἅ τ᾽ ἐπὶ τὴν γῆν ἐξ ἀνάγκης ἄνωθεν συνίσταται, πάλιν μ",
+    "source": "ATTESTÉ : [Plutarque], De fato — « πάλιν τοίνυν ἐπειδὰν ἡ αὐτὴ ἀφίκηται αἰτία… » vérifié TLG0007, 2026-08-03"
+   },
+   {
+    "hash": "dee1de769d2c7a92",
+    "excerpt": "πάλιν τοίνυν ἐπειδὰν ἡ αὐτὴ ἀφίκηται αἰτία, τὰ αὐτὰ καὶ ὡσαύτως οἱ αὐτοὶ γενόμεν",
+    "source": "ATTESTÉ : [Plutarque], De fato — « πάλιν τοίνυν ἐπειδὰν ἡ αὐτὴ ἀφίκηται αἰτία… » vérifié TLG0007, 2026-08-03"
+   }
+  ],
+  "argument_irenaeus_recapitulation_theodicy": [
+   {
+    "hash": "d3053490c3abab03",
+    "excerpt": "τὴν ἀσθένειαν τοῦ ἀνθρώπου",
+    "source": "RÉTROVERSIONS, non des citations : l'Adversus haereses ne survit intégralement qu'en latin ; TLG1447 donne 0 occurrence pour ces formules — vérifié 2026-08-03. Citer le latin de l'édition SC."
+   },
+   {
+    "hash": "87d8a9a82bed22f7",
+    "excerpt": "μὴ δυναμένους σῴζειν ἑαυτούς",
+    "source": "RÉTROVERSIONS, non des citations : l'Adversus haereses ne survit intégralement qu'en latin ; TLG1447 donne 0 occurrence pour ces formules — vérifié 2026-08-03. Citer le latin de l'édition SC."
+   },
+   {
+    "hash": "9ff6518821748208",
+    "excerpt": "ὑπὸ τὴν ἁμαρτίαν πεπτωκότα' ; 'τὴν ἀσθένειαν τοῦ ἀνθρώπου",
+    "source": "RÉTROVERSIONS, non des citations : l'Adversus haereses ne survit intégralement qu'en latin ; TLG1447 donne 0 occurrence pour ces formules — vérifié 2026-08-03. Citer le latin de l'édition SC."
+   },
+   {
+    "hash": "bcc821376d10e467",
+    "excerpt": "ἀσθένειαν τοῦ ἀνθρώπου",
+    "source": "RÉTROVERSIONS, non des citations : l'Adversus haereses ne survit intégralement qu'en latin ; TLG1447 donne 0 occurrence pour ces formules — vérifié 2026-08-03. Citer le latin de l'édition SC."
+   },
+   {
+    "hash": "f3639cc380068a2f",
+    "excerpt": "μὴ δυναμένους σῴζειν ἑαυτού",
+    "source": "RÉTROVERSIONS, non des citations : l'Adversus haereses ne survit intégralement qu'en latin ; TLG1447 donne 0 occurrence pour ces formules — vérifié 2026-08-03. Citer le latin de l'édition SC."
+   }
+  ],
+  "argument_maximus_proairesis_baptismal_repair": [
+   {
+    "hash": "a8381e7898943c87",
+    "excerpt": "Διττὸς ἐν ἡμῖν τῆς ἐκ θεοῦ γεννήσεως ὁ τρόπος· ὁ μὲν πᾶσαν δυνάμει παροῦσαν τοῖς",
+    "source": "ATTESTÉ : Maxime le Confesseur — « Διττὸς ἐν ἡμῖν τῆς ἐκ θεοῦ γεννήσεως ὁ τρόπος… » vérifié TLG2892, 2026-08-03"
+   },
+   {
+    "hash": "5146330074c8b8b4",
+    "excerpt": "Οὐ γὰρ γεννᾷ γνώμην τὸ πνεῦμα μὴ θέλουσαν, ἀλλὰ βουλομένην μεταπλάττει πρὸς θέωσ",
+    "source": "ATTESTÉ : Maxime le Confesseur — « Διττὸς ἐν ἡμῖν τῆς ἐκ θεοῦ γεννήσεως ὁ τρόπος… » vérifié TLG2892, 2026-08-03"
+   }
+  ],
+  "concept_cyclical_return_great_year": [
+   {
+    "hash": "a7a3e9ef2317a8e9",
+    "excerpt": "πάλιν μὲν εἰς τὸ αὐτὸ καταστήσεται, πάλιν δ' ἐξ ἀρχῆς ὅλα κατὰ τὰ αὐτὰ ὡσαύτως ἀ",
+    "source": "ATTESTÉ : retour cyclique stoïcien — « ἐπειδὰν ἡ αὐτὴ ἀφίκηται αἰτία » vérifié TLG0007 ([Plut.] De fato) ; « πάλιν Σωκράτη γενέσθαι… κατηγορούμενον ὑπὸ Ἀνύτου » vérifié TLG2042 (Origène), 2026-08-03"
+   },
+   {
+    "hash": "88385ad722e6befb",
+    "excerpt": "πάλιν τοίνυν ἐπειδὰν ἡ αὐτὴ ἀφίκηται αἰτία, τὰ αὐτὰ καὶ ὡσαύτως οἱ αὐτοὶ γενόμεν",
+    "source": "ATTESTÉ : retour cyclique stoïcien — « ἐπειδὰν ἡ αὐτὴ ἀφίκηται αἰτία » vérifié TLG0007 ([Plut.] De fato) ; « πάλιν Σωκράτη γενέσθαι… κατηγορούμενον ὑπὸ Ἀνύτου » vérifié TLG2042 (Origène), 2026-08-03"
+   },
+   {
+    "hash": "6737f7df767948e3",
+    "excerpt": "πάλιν Σωκράτη γενέσθαι ἐκ τῶν αὐτῶν καὶ τὰ αὐτὰ παθεῖν, κατηγορούμενον ὑπὸ Ἀνύτο",
+    "source": "ATTESTÉ : retour cyclique stoïcien — « ἐπειδὰν ἡ αὐτὴ ἀφίκηται αἰτία » vérifié TLG0007 ([Plut.] De fato) ; « πάλιν Σωκράτη γενέσθαι… κατηγορούμενον ὑπὸ Ἀνύτου » vérifié TLG2042 (Origène), 2026-08-03"
+   },
+   {
+    "hash": "34c420388f5b78c1",
+    "excerpt": "ἐν γὰρ τούτῳ τῷ χρόνῳ ὡρισμένῳ τ' ὄντι καὶ θεωρουμένῳ πάνθ' ὅσα τε κατ' οὐρανὸν",
+    "source": "ATTESTÉ : retour cyclique stoïcien — « ἐπειδὰν ἡ αὐτὴ ἀφίκηται αἰτία » vérifié TLG0007 ([Plut.] De fato) ; « πάλιν Σωκράτη γενέσθαι… κατηγορούμενον ὑπὸ Ἀνύτου » vérifié TLG2042 (Origène), 2026-08-03"
+   }
+  ],
+  "concept_pithanon_8f3a6d2c": [
+   {
+    "hash": "6cf29f5353f35140",
+    "excerpt": "διεξωδευμένη-περιωδευμένη",
+    "source": "ATTESTÉ : Sextus Empiricus, critère carnéadien (φαντασία πιθανὴ καὶ διεξωδευμένη καὶ περιωδευμένη) — διεξωδευμένη vérifié TLG0544, 2026-08-03 ; la paire est ici écrite avec un trait d'union, d'où l'échec du gate"
+   },
+   {
+    "hash": "bfff6dd1c1ce3fe6",
+    "excerpt": "πιθανή; ἀπερίσπαστος; διεξωδευμένη",
+    "source": "ATTESTÉ : Sextus Empiricus, critère carnéadien (φαντασία πιθανὴ καὶ διεξωδευμένη καὶ περιωδευμένη) — διεξωδευμένη vérifié TLG0544, 2026-08-03 ; la paire est ici écrite avec un trait d'union, d'où l'échec du gate"
+   }
+  ],
+  "concept_self_happiness_alex": [
+   {
+    "hash": "909e86e61ef975c0",
+    "excerpt": "δι᾽ αὑτῶν εὐδαιμονεῖν",
+    "source": "RECONSTRUCTION MODERNE, pas une citation d'Alexandre : εὐδαιμον- a 0 occurrence dans tout le De fato (le radical n'apparaît que dans les commentaires, hors du traité) — TLG0732 vérifié 2026-08-03"
+   },
+   {
+    "hash": "5d8dc868e9b783b8",
+    "excerpt": "ἐπ᾽ αὐτῷ τῷ φρονίμῳ τὸ εἶναι τοιούτῳ, ὅτι τῆς τοιαύτης ἕξεως καὶ τῆς κτήσεως αὐτ",
+    "source": "RECONSTRUCTION MODERNE, pas une citation d'Alexandre : εὐδαιμον- a 0 occurrence dans tout le De fato (le radical n'apparaît que dans les commentaires, hors du traité) — TLG0732 vérifié 2026-08-03"
+   },
+   {
+    "hash": "ebc86e0d1d0c23b6",
+    "excerpt": "ἔστιν δὲ τὸ εὐδαιμονεῖν ἐν τῷ κατὰ ἀρετὴν πράττειν",
+    "source": "RECONSTRUCTION MODERNE, pas une citation d'Alexandre : εὐδαιμον- a 0 occurrence dans tout le De fato (le radical n'apparaît que dans les commentaires, hors du traité) — TLG0732 vérifié 2026-08-03"
+   },
+   {
+    "hash": "6e90f3535b9e6861",
+    "excerpt": "ἀνθ᾽ ἑαυτῶν εὐδαιμονεῖν",
+    "source": "RECONSTRUCTION MODERNE, pas une citation d'Alexandre : εὐδαιμον- a 0 occurrence dans tout le De fato (le radical n'apparaît que dans les commentaires, hors du traité) — TLG0732 vérifié 2026-08-03"
+   },
+   {
+    "hash": "e34966a031b8e838",
+    "excerpt": "τὸ εὐδαιμονεῖν ἐν τῷ κατὰ ἀρετὴν πράττειν",
+    "source": "RECONSTRUCTION MODERNE, pas une citation d'Alexandre : εὐδαιμον- a 0 occurrence dans tout le De fato (le radical n'apparaît que dans les commentaires, hors du traité) — TLG0732 vérifié 2026-08-03"
+   }
+  ],
+  "argument_clement_grace_synergy_assent": [
+   {
+    "hash": "343d0729372a02ce",
+    "excerpt": "θεοσεβείας συγκατάθεσις",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
+   },
+   {
+    "hash": "7c4894bc729156f6",
+    "excerpt": "ἑκούσιος τῆς ψυχῆς συγκατάθεσις",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
+   }
+  ],
+  "argument_four_categories_alex": [
+   {
+    "hash": "af8eb28d1139e7f5",
+    "excerpt": "ἀπὸ τύχης καὶ ταὐτομάτου",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
+   }
+  ],
+  "argument_pseudo_chrysostom_de_fato_v_apologetic_amand1945": [
+   {
+    "hash": "6c19b43a2ccc52df",
+    "excerpt": "ἡ δὲ τὰ ἀνθρώπινα διοικοῦσα ἐριννύς τις καὶ δαίμων πονηρός, οὕτω πάντα συγχεῖ",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
+   },
+   {
+    "hash": "5716aec7247e5a9f",
+    "excerpt": "Ποῖος φορυτός, ποῖος λαβύρινθος, ποία ζάλη ταύτην μιμήσεται τὴν σύγχυσιν, εἰπέ μ",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
+   }
+  ],
+  "concept_death_therapeutic_remedy_methodius_5eaaf3a2": [
+   {
+    "hash": "9e38fb7395efd5ba",
+    "excerpt": "οὐ γὰρ ὅτι μὴ θέλων ὁ θεὸς ἀπὸ τοῦ ξύλου δρέψασθαι τῆς ζωῆς αὐτὸν καὶ φαγεῖν ἐξέ",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
+   },
+   {
+    "hash": "e180d32c2cd26ccd",
+    "excerpt": "ἀλλ᾽ ἵνα μὴ ἀθάνατον, ὡς ὑπεθέμεθα, γενηθῇ τὸ κακόν",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
+   },
+   {
+    "hash": "03474b6f145949a7",
+    "excerpt": "ἀλλὰ διὰ τὸ νεκρωθῆναι πρῶτον θανάτῳ τὴν ἁμαρτίαν, ἵν᾽ οὕτως μετὰ τὸ ἀποθανεῖν ἐ",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
+   }
+  ],
+  "concept_tripartite_descent_iamblichus": [
+   {
+    "hash": "19d4635b50154e6d",
+    "excerpt": "ἐπὶ σωτηρίᾳ καὶ καθάρσει καὶ τελειότητι τῶν τῇδε",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
+   },
+   {
+    "hash": "727d57370e70094b",
+    "excerpt": "διὰ γυμνασίαν καὶ ἐπανόρθωσιν τῶν οἰκείων ἠθῶν",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
+   },
+   {
+    "hash": "82e59ae7641883a1",
+    "excerpt": "ἐπὶ δίκῃ καὶ κρίσει",
+    "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
    }
   ]
  }
