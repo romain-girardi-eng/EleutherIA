@@ -31,9 +31,9 @@ The ancient free will debate is scattered across hundreds of Greek and Latin tex
 
 EleutherIA unifies three systems into one platform:
 
-**1. Ancient Texts Corpus** -- 241 catalogued works and 17,800+ passages in Greek, Latin, and English with lemmatization, CTS URN referencing, and hierarchical structure from Presocratic fragments to Boethius's *Consolation*.
+**1. Ancient Texts Corpus** -- 242 catalogued works and 21,000+ passages in Greek, Latin, and English with lemmatization, CTS URN referencing, and hierarchical structure from Presocratic fragments to Boethius's *Consolation*.
 
-**2. Knowledge Graph** -- 20,060 nodes and 56,737 edges mapping philosophers, concepts, arguments, schools, and works with 75 edge types. A dual-layer architecture separates ancient primary sources from modern scholarly reception.
+**2. Knowledge Graph** -- 19,992 nodes and 57,377 edges mapping philosophers, concepts, arguments, schools, and works with 76 edge types. A dual-layer architecture separates ancient primary sources from modern scholarly reception.
 
 **3. Agentic GraphRAG** -- A 12-node reasoning engine (pydantic-graph FSM) that decomposes complex scholarly questions, retrieves evidence across the knowledge graph and text corpus, synthesizes answers with verified citations, and self-evaluates quality, all grounded in actual ancient sources with zero fabrication.
 
@@ -100,8 +100,8 @@ eleutheria shell            # Interactive mode
 
 ```
 EleutherIA/
-├── database/       Ancient texts corpus (241 works, 17.8k passages)
-├── knowledge graph/  Knowledge graph (20,060 nodes, 56,737 edges)
+├── database/       Ancient texts corpus (242 works, 21.1k passages)
+├── knowledge graph/  Knowledge graph (19,992 nodes, 57,377 edges)
 ├── graphrag/       Agentic RAG engine (12-node FSM, multi-LLM)
 ├── backend/        FastAPI gateway (auth, search, migrations)
 ├── frontend/       React 19 app (graph viz, search, i18n)
@@ -116,7 +116,7 @@ EleutherIA/
 | Package | Purpose |
 |---------|---------|
 | [`database/`](database/) | Ancient Greek/Latin texts corpus with PostgreSQL, lemmatization, and hybrid text search (full-text + lemmatic, merged via RRF) |
-| [`knowledge graph/`](knowledge%20graph/) | FAIR-compliant knowledge graph with community detection, centrality analytics, a formal ontology (24 node types, 75 edge types), and a neurosymbolic layer (RDF/OWL/SHACL exports aligned on CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, BIBO, Wikidata) |
+| [`knowledge graph/`](knowledge%20graph/) | FAIR-compliant knowledge graph with community detection, centrality analytics, a formal ontology (24 node types, 76 edge types), and a neurosymbolic layer (RDF/OWL/SHACL exports aligned on CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, BIBO, Wikidata) |
 | [`graphrag/`](graphrag/) | Agentic query engine: 12-node pydantic-graph FSM with vectorless SQL/tree/lemma discovery, multi-hop retrieval, CRAG validation, reranking, citation verification, and self-RAG refinement |
 
 Each package can be installed and used independently.
@@ -153,14 +153,14 @@ Counts are generated from the dataset snapshots by `scripts/gen_stats.py` (see `
 
 | Metric | Count |
 |--------|-------|
-| Knowledge graph nodes | 20,060 |
-| Knowledge graph edges | 56,737 |
-| Ancient works | 241 |
-| Text passages | 17,823 |
+| Knowledge graph nodes | 19,992 |
+| Knowledge graph edges | 57,377 |
+| Ancient works | 242 |
+| Text passages | 21,088 |
 | Node types | 24 |
 | Edge types | 75 |
-| RDF triples | 560,110 |
-| Passage citations | 19,751 |
+| RDF triples (v5.1.0 release export) | 560,110 |
+| Passage citations | 19,893 |
 | Supported languages | 5 (EN, FR, DE, IT, EL) |
 
 ## Documentation
