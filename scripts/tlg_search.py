@@ -17,7 +17,7 @@ import re
 import sys
 import unicodedata
 
-TLGE = os.environ.get('TLGE_DIR', '[local-path]')
+TLGE = os.environ.get('TLGE_DIR', os.path.expanduser('~/Desktop/Romain/TLGE'))
 CACHE = os.path.expanduser('~/.cache/tlge_norm')
 
 GREEK_TO_BETA = {
