@@ -7,12 +7,11 @@ import TraversalDAG from './TraversalDAG';
 import ResearchGraphPanel from './ResearchGraphPanel';
 import NodeDetailCard from './NodeDetailCard';
 import PassageReaderPanel from './PassageReaderPanel';
-import type { AgentStep } from './AgentActivityPanel';
 import ResearchTimelinePanel, { type TokenCost } from './ResearchTimelinePanel';
 import LiveReasoningPanel from './LiveReasoningPanel';
 import { cn } from '../../utils/cn';
 import type { GraphRAGResponse, SourceCitation } from '../../types';
-import type { PassageContext } from '../../types/graphrag';
+import type { AgentStep, PassageContext } from '../../types/graphrag';
 import { formatGraphNodeType, getGraphTypeTheme } from './graphTheme';
 
 export type RightPanelState = 'idle' | 'loading' | 'reasoning' | 'graph' | 'passage-reader';
@@ -27,6 +26,8 @@ interface RightPanelProps {
   agentActive?: boolean;
   /** True while the SSE stream is open (synthesis still in flight). */
   isStreaming?: boolean;
+  /** True once the SSE stream has closed, however it ended (complete or degraded). */
+  streamEnded?: boolean;
   cost?: TokenCost | null;
   onNodeClick: (nodeId: string) => void;
   onCloseDetail: () => void;
@@ -68,7 +69,7 @@ function PanelHeader({
   const stateCopy: Record<RightPanelState, string> = {
     idle: t('graphRagUi.rightPanel.states.idle'),
     loading: t('graphRagUi.rightPanel.states.loading'),
-    reasoning: 'Agent Reasoning',
+    reasoning: t('graphRagUi.rightPanel.states.reasoning'),
     graph: t('graphRagUi.rightPanel.states.graph'),
     'passage-reader': t('graphRagUi.rightPanel.states.passageReader'),
   };
@@ -93,14 +94,6 @@ function PanelHeader({
       <h2 className="mt-1.5 text-sm font-semibold leading-snug text-stone-900 line-clamp-1">
         {response?.query || t('graphRagUi.rightPanel.fallbackQuery')}
       </h2>
-      <div className="mt-1.5 flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center rounded-full border border-blue-200/80 bg-blue-50/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-blue-800">
-          {t('graphRagUi.rightPanel.previewBadge')}
-        </span>
-        <span className="text-[11px] leading-5 text-stone-500">
-          {t('graphRagUi.rightPanel.previewCopy')}
-        </span>
-      </div>
       {/* Compact inline stats */}
       <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
         {[
@@ -358,6 +351,7 @@ export default function RightPanel({
   agentSteps = [],
   agentActive = false,
   isStreaming = false,
+  streamEnded = false,
   cost = null,
   onNodeClick: _onNodeClick,
   onCloseDetail,
@@ -367,6 +361,7 @@ export default function RightPanel({
   onOpenGraphView,
   className = '',
 }: RightPanelProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const sources: SourceCitation[] = useMemo(
     () => response?.sources ?? [],
@@ -543,9 +538,9 @@ export default function RightPanel({
                 {/* Live 2-tab bar: Activity | Reasoning */}
                 <div className="shrink-0 flex gap-0.5 border-b border-stone-200/50 bg-stone-50/70 px-3 pt-2 pb-0">
                   {([
-                    { id: 'activity' as LiveTab, label: 'Activité', labelEn: 'Activity' },
-                    { id: 'reasoning' as LiveTab, label: 'Raisonnement', labelEn: 'Reasoning', hasContent: reasoningText.length > 0 },
-                  ]).map(({ id, labelEn, hasContent }) => (
+                    { id: 'activity' as LiveTab, label: t('graphRagUi.liveReasoning.tabActivity') },
+                    { id: 'reasoning' as LiveTab, label: t('graphRagUi.liveReasoning.tabReasoning'), hasContent: reasoningText.length > 0 },
+                  ]).map(({ id, label, hasContent }) => (
                     <button
                       key={id}
                       type="button"
@@ -561,7 +556,7 @@ export default function RightPanel({
                       )}
                     >
                       {id === 'reasoning' && <Brain className="h-3 w-3" />}
-                      {labelEn}
+                      {label}
                       {/* Badge: pulsing dot when reasoning is streaming and user is on Activity tab */}
                       {hasContent && activeLiveTab !== 'reasoning' && isStreaming && (
                         <motion.span
@@ -611,6 +606,7 @@ export default function RightPanel({
                         <LiveReasoningPanel
                           reasoning={reasoningText}
                           isStreaming={isStreaming}
+                          hasRunEnded={streamEnded}
                           className="h-full"
                         />
                       </motion.div>
@@ -746,6 +742,7 @@ export default function RightPanel({
                         <LiveReasoningPanel
                           reasoning={reasoningText}
                           isStreaming={false}
+                          hasRunEnded
                           className="h-full"
                         />
                       </motion.div>

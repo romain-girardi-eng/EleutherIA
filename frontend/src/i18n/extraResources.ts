@@ -282,6 +282,7 @@ export const extraResources = {
         states: {
           idle: 'Awaiting question',
           loading: 'Building answer graph',
+          reasoning: 'Agent reasoning',
           graph: 'Selected answer graph',
           sourceDetail: 'Source focus',
           passageReader: 'Text context',
@@ -297,8 +298,6 @@ export const extraResources = {
         },
         noSources:
           'This answer does not expose source nodes yet. The graph still preserves the traversal structure.',
-        previewBadge: 'Preview',
-        previewCopy: 'This right-panel workspace is still in active development.',
         sourceFallback:
           'Part of the selected knowledge graph used as evidence for the answer.',
         cards: {
@@ -415,6 +414,15 @@ export const extraResources = {
         tabHint: 'The model\'s chain-of-thought will stream here once synthesis begins. Retrieval may take several minutes before synthesis starts.',
         tabActivity: 'Activity',
         tabReasoning: 'Reasoning',
+        emptyTitleNoTrace: 'No reasoning captured',
+        emptyBodyNoTrace: 'The run finished without streaming a chain-of-thought. The activity timeline still shows how far the agent got.',
+      },
+      timeline: {
+        skipped: 'Skipped',
+      },
+      stream: {
+        incomplete: 'The pipeline stopped before the final synthesis ({{nodes}} nodes, {{passages}} passages retrieved). The agent trace is still available on the right — try the same question again.',
+        connectionLost: 'Connection lost — the server stopped sending data. Try the same question again.',
       },
     },
     howItWorksPage: {
@@ -1271,6 +1279,7 @@ export const extraResources = {
         states: {
           idle: 'En attente d’une question',
           loading: 'Construction du graphe de réponse',
+          reasoning: 'Raisonnement de l’agent',
           graph: 'Graphe de réponse sélectionné',
           sourceDetail: 'Focus sur la source',
           passageReader: 'Contexte textuel',
@@ -1286,8 +1295,6 @@ export const extraResources = {
         },
         noSources:
           'Cette réponse n’expose pas encore de nœuds sources. Le graphe conserve néanmoins la structure du parcours.',
-        previewBadge: 'Aperçu',
-        previewCopy: 'Ce panneau de droite est encore en cours de développement.',
         evidenceRail: 'Rail de preuves',
         evidenceSubtitle: 'Sources qui fondent cette réponse',
         citationsCount: '{{count}} citations',
@@ -1408,6 +1415,15 @@ export const extraResources = {
         tabHint: "La chaîne de pensée du modèle sera diffusée ici dès que la synthèse commencera. La récupération peut prendre plusieurs minutes avant le début de la synthèse.",
         tabActivity: 'Activité',
         tabReasoning: 'Raisonnement',
+        emptyTitleNoTrace: 'Aucun raisonnement capturé',
+        emptyBodyNoTrace: 'La requête s’est terminée sans diffuser de chaîne de pensée. La chronologie d’activité montre néanmoins jusqu’où l’agent est allé.',
+      },
+      timeline: {
+        skipped: 'Ignorée',
+      },
+      stream: {
+        incomplete: 'Le pipeline s’est arrêté avant la synthèse finale ({{nodes}} nœuds, {{passages}} passages récupérés). La trace de l’agent reste visible à droite — réessaie la même question.',
+        connectionLost: 'Connexion perdue — le serveur a cessé d’envoyer des données. Réessaie la même question.',
       },
     },
     howItWorksPage: {
@@ -2267,6 +2283,7 @@ export const extraResources = {
         states: {
           idle: 'Warte auf Frage',
           loading: 'Antwortgraph wird aufgebaut',
+          reasoning: 'Agenten-Reasoning',
           graph: 'Ausgewählter Antwortgraph',
           sourceDetail: 'Quellenfokus',
           passageReader: 'Textkontext',
@@ -2282,8 +2299,6 @@ export const extraResources = {
         },
         noSources:
           'Diese Antwort zeigt noch keine Quellenknoten. Der Graph bewahrt dennoch die Traversierungsstruktur.',
-        previewBadge: 'Vorschau',
-        previewCopy: 'Dieses rechte Panel befindet sich noch in aktiver Entwicklung.',
         evidenceRail: 'Evidenzleiste',
         evidenceSubtitle: 'Quellen, die diese Antwort tragen',
         citationsCount: '{{count}} Zitate',
@@ -2404,6 +2419,15 @@ export const extraResources = {
         tabHint: 'Die Gedankenkette des Modells wird hier gestreamt, sobald die Synthese beginnt. Der Abruf kann mehrere Minuten dauern.',
         tabActivity: 'Aktivität',
         tabReasoning: 'Reasoning',
+        emptyTitleNoTrace: 'Kein Reasoning erfasst',
+        emptyBodyNoTrace: 'Der Lauf endete, ohne eine Gedankenkette zu streamen. Die Aktivitätsleiste zeigt weiterhin, wie weit der Agent gekommen ist.',
+      },
+      timeline: {
+        skipped: 'Übersprungen',
+      },
+      stream: {
+        incomplete: 'Die Pipeline endete vor der finalen Synthese ({{nodes}} Knoten, {{passages}} Passagen abgerufen). Die Agenten-Spur bleibt rechts sichtbar — stelle dieselbe Frage erneut.',
+        connectionLost: 'Verbindung verloren — der Server sendet keine Daten mehr. Stelle dieselbe Frage erneut.',
       },
     },
     howItWorksPage: {
@@ -3232,6 +3256,7 @@ export const extraResources = {
         states: {
           idle: 'In attesa di una domanda',
           loading: 'Costruzione del grafo di risposta',
+          reasoning: 'Ragionamento dell’agente',
           graph: 'Grafo di risposta selezionato',
           sourceDetail: 'Focus sulla fonte',
           passageReader: 'Contesto del testo',
@@ -3247,8 +3272,6 @@ export const extraResources = {
         },
         noSources:
           'Questa risposta non espone ancora nodi sorgente. Il grafo conserva comunque la struttura del percorso.',
-        previewBadge: 'Anteprima',
-        previewCopy: 'Questo pannello destro è ancora in fase di sviluppo.',
         evidenceRail: 'Corsia delle prove',
         evidenceSubtitle: 'Fonti che fondano questa risposta',
         citationsCount: '{{count}} citazioni',
@@ -3369,6 +3392,15 @@ export const extraResources = {
         tabHint: "La catena di pensiero del modello verrà trasmessa qui non appena la sintesi inizierà. Il recupero può richiedere diversi minuti prima dell'avvio della sintesi.",
         tabActivity: 'Attività',
         tabReasoning: 'Ragionamento',
+        emptyTitleNoTrace: 'Nessun ragionamento acquisito',
+        emptyBodyNoTrace: 'L’esecuzione si è conclusa senza trasmettere una catena di pensiero. La cronologia delle attività mostra comunque fin dove è arrivato l’agente.',
+      },
+      timeline: {
+        skipped: 'Saltata',
+      },
+      stream: {
+        incomplete: 'La pipeline si è fermata prima della sintesi finale ({{nodes}} nodi, {{passages}} passi recuperati). La traccia dell’agente resta visibile a destra — riprova la stessa domanda.',
+        connectionLost: 'Connessione persa — il server ha smesso di inviare dati. Riprova la stessa domanda.',
       },
     },
     howItWorksPage: {
@@ -4227,6 +4259,7 @@ export const extraResources = {
         states: {
           idle: 'Αναμονή ερώτησης',
           loading: 'Δημιουργία γράφου απάντησης',
+          reasoning: 'Συλλογισμός πράκτορα',
           graph: 'Επιλεγμένος γράφος απάντησης',
           sourceDetail: 'Εστίαση στην πηγή',
           passageReader: 'Συμφραζόμενα κειμένου',
@@ -4242,8 +4275,6 @@ export const extraResources = {
         },
         noSources:
           'Αυτή η απάντηση δεν εκθέτει ακόμη κόμβους πηγών. Ο γράφος διατηρεί πάντως τη δομή της διάσχισης.',
-        previewBadge: 'Προεπισκόπηση',
-        previewCopy: 'Αυτό το δεξί πάνελ βρίσκεται ακόμη υπό ενεργή ανάπτυξη.',
         evidenceRail: 'Λωρίδα τεκμηρίων',
         evidenceSubtitle: 'Πηγές που θεμελιώνουν αυτή την απάντηση',
         citationsCount: '{{count}} παραπομπές',
@@ -4364,6 +4395,15 @@ export const extraResources = {
         tabHint: 'Η αλυσίδα σκέψης του μοντέλου θα μεταδοθεί εδώ μόλις ξεκινήσει η σύνθεση. Η ανάκτηση μπορεί να διαρκέσει αρκετά λεπτά.',
         tabActivity: 'Δραστηριότητα',
         tabReasoning: 'Συλλογισμός',
+        emptyTitleNoTrace: 'Δεν καταγράφηκε συλλογισμός',
+        emptyBodyNoTrace: 'Η εκτέλεση ολοκληρώθηκε χωρίς μετάδοση αλυσίδας σκέψης. Το χρονολόγιο δραστηριότητας δείχνει πόσο προχώρησε ο πράκτορας.',
+      },
+      timeline: {
+        skipped: 'Παραλείφθηκε',
+      },
+      stream: {
+        incomplete: 'Η ροή σταμάτησε πριν από την τελική σύνθεση ({{nodes}} κόμβοι, {{passages}} χωρία ανακτήθηκαν). Το ίχνος του πράκτορα παραμένει ορατό δεξιά — δοκίμασε ξανά την ίδια ερώτηση.',
+        connectionLost: 'Η σύνδεση χάθηκε — ο διακομιστής σταμάτησε να στέλνει δεδομένα. Δοκίμασε ξανά την ίδια ερώτηση.',
       },
     },
     howItWorksPage: {

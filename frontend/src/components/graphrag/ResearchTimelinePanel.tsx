@@ -18,6 +18,7 @@
 
 import { useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   Brain,
   CheckCircle2,
@@ -26,6 +27,7 @@ import {
   FileText,
   GitBranch,
   Loader2,
+  MinusCircle,
   ScrollText,
   Coins,
   Network,
@@ -34,10 +36,17 @@ import {
   Triangle,
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
-import type { AgentStep } from './AgentActivityPanel';
+import type { AgentStep } from '../../types/graphrag';
 import type { GraphRAGResponse } from '../../types';
 
 type PhaseKey = 'classify' | 'search' | 'read' | 'synthesize' | 'verify';
+
+/**
+ * `skipped` marks a phase the agent never entered even though a later phase
+ * produced rows — the pipeline jumped over it (fallback path, cached branch).
+ * Rendering it as `pending` would leave the timeline looking stuck.
+ */
+type PhaseStatus = 'pending' | 'active' | 'done' | 'skipped';
 
 interface PhaseDef {
   key: PhaseKey;
@@ -251,9 +260,16 @@ function PhaseStatusIcon({
   status,
   Icon,
 }: {
-  status: 'pending' | 'active' | 'done';
+  status: PhaseStatus;
   Icon: typeof Compass;
 }) {
+  if (status === 'skipped') {
+    return (
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-dashed border-stone-200 bg-stone-50/40 text-stone-300">
+        <MinusCircle className="h-3.5 w-3.5" />
+      </span>
+    );
+  }
   if (status === 'done') {
     return (
       <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 text-emerald-600">
@@ -287,10 +303,12 @@ function PhaseRow({
   onToggle,
 }: {
   bucket: PhaseBucket;
-  status: 'pending' | 'active' | 'done';
+  status: PhaseStatus;
   expanded: boolean;
   onToggle: () => void;
 }) {
+  const { t } = useTranslation();
+  const isInert = status === 'pending' || status === 'skipped';
   const summaryBits: string[] = [];
   if (bucket.toolCalls > 0)
     summaryBits.push(
@@ -309,16 +327,18 @@ function PhaseRow({
           ? 'border-amber-200/80 bg-amber-50/40'
           : status === 'done'
             ? 'border-stone-200/60 bg-white/60'
-            : 'border-stone-200/40 bg-white/30',
+            : status === 'skipped'
+              ? 'border-dashed border-stone-200/50 bg-white/20'
+              : 'border-stone-200/40 bg-white/30',
       )}
     >
       <button
         type="button"
         onClick={onToggle}
-        disabled={status === 'pending'}
+        disabled={isInert}
         className={cn(
           'flex w-full items-center gap-3 px-3 py-2.5 text-left',
-          status === 'pending' && 'cursor-default opacity-60',
+          isInert && 'cursor-default opacity-60',
         )}
       >
         <PhaseStatusIcon status={status} Icon={bucket.Icon} />
@@ -336,6 +356,11 @@ function PhaseRow({
             >
               {bucket.label}
             </span>
+            {status === 'skipped' && (
+              <span className="truncate text-[10px] font-medium uppercase tracking-[0.12em] text-stone-300">
+                {t('graphRagUi.timeline.skipped')}
+              </span>
+            )}
             {summaryBits.length > 0 && (
               <span className="truncate text-[11px] text-stone-400">
                 · {summaryBits.join(' · ')}
@@ -351,7 +376,7 @@ function PhaseRow({
         {status === 'active' && (
           <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-amber-600" />
         )}
-        {status !== 'pending' && (
+        {!isInert && (
           <motion.span
             animate={{ rotate: expanded ? 90 : 0 }}
             transition={{ duration: 0.18 }}
@@ -486,9 +511,11 @@ export default function ResearchTimelinePanel({
     return -1;
   }, [buckets]);
 
-  const phaseStatus = (i: number): 'pending' | 'active' | 'done' => {
+  const phaseStatus = (i: number): PhaseStatus => {
     const b = buckets[i];
-    if (b.rows.length === 0) return 'pending';
+    // A phase the run never entered while a later phase did produce rows was
+    // jumped over, not left pending.
+    if (b.rows.length === 0) return i < lastWithSteps ? 'skipped' : 'pending';
     if (!isActive) return 'done';
     if (i === lastWithSteps) return 'active';
     return 'done';

@@ -449,3 +449,25 @@ export interface PassageContext {
   /** Whether original passages exist after the current window's latest sequence. */
   hasMoreAfter?: boolean;
 }
+
+/**
+ * One entry in the live agent activity trace (ReAct loop SSE events).
+ * Consumed by the right-panel timeline, the reasoning panel and the mobile sheet.
+ */
+export interface AgentStep {
+  id: string;
+  type: 'thinking' | 'tool_start' | 'tool_result' | 'status' | 'synthesis_reasoning';
+  tool?: string;
+  args?: Record<string, unknown>;
+  reason?: string;
+  summary?: string;
+  thinking?: string;
+  /** Live dialectical-synthesis chain-of-thought (accumulated across deltas). */
+  reasoning?: string;
+  stage?: string;
+  durationMs?: number;
+  nodeCount?: number;
+  passageCount?: number;
+  remaining?: number;
+  timestamp: number;
+}

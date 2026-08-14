@@ -9,13 +9,19 @@
 
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Brain, Loader2, CheckCircle2, ScrollText } from 'lucide-react';
+import { Brain, BrainCircuit, Loader2, CheckCircle2, ScrollText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '../../utils/cn';
 
 interface LiveReasoningPanelProps {
   reasoning: string;
   isStreaming: boolean;
+  /**
+   * True once the run has ended (stream closed, whether it completed normally
+   * or degraded). Distinguishes "no trace was ever captured" from "synthesis
+   * hasn't started yet".
+   */
+  hasRunEnded?: boolean;
   className?: string;
 }
 
@@ -24,6 +30,7 @@ const NEAR_BOTTOM_THRESHOLD = 80; // px
 export default function LiveReasoningPanel({
   reasoning,
   isStreaming,
+  hasRunEnded = false,
   className,
 }: LiveReasoningPanelProps) {
   const { t } = useTranslation();
@@ -54,6 +61,37 @@ export default function LiveReasoningPanel({
       userScrolledRef.current = false;
     }
   }, [isStreaming, reasoning.length]);
+
+  // --- Empty state: the run ended without any reasoning trace --------
+  // (degraded run, cached replay, or a model that never streamed a
+  // chain-of-thought). Distinct from "synthesis hasn't started yet".
+  if (!reasoning && hasRunEnded && !isStreaming) {
+    return (
+      <motion.div
+        key="reasoning-no-trace"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.28 }}
+        className={cn(
+          'flex h-full flex-col items-center justify-center gap-6 px-8 py-12',
+          className,
+        )}
+      >
+        <div className="flex h-16 w-16 items-center justify-center rounded-[22px] border border-stone-200/70 bg-gradient-to-br from-stone-50 to-white shadow-[0_16px_40px_-20px_rgba(68,64,60,0.18)]">
+          <BrainCircuit className="h-7 w-7 text-stone-400" />
+        </div>
+
+        <div className="max-w-sm text-center">
+          <p className="font-display text-base font-semibold text-stone-700">
+            {t('graphRagUi.liveReasoning.emptyTitleNoTrace')}
+          </p>
+          <p className="mt-2 text-[13px] leading-6 text-stone-400">
+            {t('graphRagUi.liveReasoning.emptyBodyNoTrace')}
+          </p>
+        </div>
+      </motion.div>
+    );
+  }
 
   // --- Empty state: synthesis hasn't started yet ---------------------
   if (!reasoning) {

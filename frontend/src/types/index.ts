@@ -340,6 +340,9 @@ export interface GraphRAGResponse {
   };
   nodes_used: number;
   edges_traversed: number;
+  /** Client-side flag: the stream ended without a terminal `complete` event,
+   *  so this response was reconstructed from what the run had already emitted. */
+  degraded?: boolean;
   service?: string;  // e.g., "Agentic GraphRAG" or "GraphRAG (fallback)"
   hierarchy_stats?: {
     level_0_used: number;

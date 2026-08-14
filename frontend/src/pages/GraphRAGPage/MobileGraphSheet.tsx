@@ -5,8 +5,8 @@ import { BottomSheet } from '../../components/ui/BottomSheet';
 import RightPanel from '../../components/graphrag/RightPanel';
 import type { RightPanelState } from '../../components/graphrag/RightPanel';
 import type { GraphRAGResponse } from '../../types';
-import type { PassageContext } from '../../types/graphrag';
-import type { AgentStep } from '../../components/graphrag/AgentActivityPanel';
+import type { AgentStep, PassageContext } from '../../types/graphrag';
+import type { TokenCost } from '../../components/graphrag/ResearchTimelinePanel';
 
 interface MobileGraphSheetProps {
   rightPanelState: RightPanelState;
@@ -16,6 +16,9 @@ interface MobileGraphSheetProps {
   passageContext?: PassageContext | null;
   agentSteps?: AgentStep[];
   agentActive?: boolean;
+  isStreaming?: boolean;
+  streamEnded?: boolean;
+  cost?: TokenCost | null;
   onNodeClick: (nodeId: string) => void;
   onSourceSelect?: (sourceIndex: number) => void;
   onCloseDetail: () => void;
@@ -31,6 +34,9 @@ export default function MobileGraphSheet({
   passageContext,
   agentSteps,
   agentActive,
+  isStreaming,
+  streamEnded,
+  cost,
   onNodeClick,
   onSourceSelect,
   onCloseDetail,
@@ -73,6 +79,9 @@ export default function MobileGraphSheet({
             passageContext={passageContext}
             agentSteps={agentSteps}
             agentActive={agentActive}
+            isStreaming={isStreaming}
+            streamEnded={streamEnded}
+            cost={cost}
             onNodeClick={onNodeClick}
             onSourceSelect={onSourceSelect}
             onCloseDetail={onCloseDetail}

@@ -15,7 +15,7 @@ import WelcomeHero from './WelcomeHero';
 import ChatPanel from './ChatPanel';
 import MobileGraphSheet from './MobileGraphSheet';
 import type { GraphRAGResponse, GraphRAGStreamEvent, GraphRAGChatMessage, KGNode } from '../../types';
-import type { ReasoningStep, PassageContext } from '../../types/graphrag';
+import type { AgentStep, PassageContext } from '../../types/graphrag';
 import type { CacheBadgeInfo } from '../../components/research/CostCounter';
 import {
   mockGraphRAGResponse,
@@ -30,6 +30,13 @@ import {
 // don't get blasted.
 const SESSION_KEY_MESSAGES = 'eleutheria.graphrag.messages.v1';
 const SESSION_KEY_RESPONSE = 'eleutheria.graphrag.response.v1';
+
+// Time-to-first-byte budget for the SSE handshake.
+const STREAM_HEADER_TIMEOUT_MS = 120_000;
+// Mid-stream silence budget: the backend heartbeats far more often than this,
+// so a longer gap means the connection died without an SSE `error` frame
+// (Cloudflare tunnel drop, worker OOM, …).
+const STREAM_IDLE_TIMEOUT_MS = 95_000;
 
 function _restoreMessages(): GraphRAGChatMessage[] {
   try {
@@ -82,8 +89,6 @@ export default function GraphRAGPage() {
   const [ancientOnly, setAncientOnly] = useState(false);
   const [showRetryDropdown, setShowRetryDropdown] = useState(false);
   const [selectedRetryModel] = useState('kimi-k2.6');
-  const [_reasoningSteps, setReasoningSteps] = useState<ReasoningStep[]>([]);
-  const [_currentQuery, setCurrentQuery] = useState<string>('');
 
   // Right panel
   const [rightPanelState, setRightPanelState] = useState<RightPanelState>('idle');
@@ -108,10 +113,15 @@ export default function GraphRAGPage() {
   const [showReasoningTrace, setShowReasoningTrace] = useState(false);
 
   // Agent activity tracking (ReAct loop)
-  const [agentSteps, setAgentSteps] = useState<import('../../components/graphrag/AgentActivityPanel').AgentStep[]>([]);
+  const [agentSteps, setAgentSteps] = useState<AgentStep[]>([]);
   const [agentActive, setAgentActive] = useState(false);
+  // True once a run's SSE stream has closed, however it ended. Lets the right
+  // panel tell "no trace captured" apart from "synthesis hasn't started yet".
+  const [streamEnded, setStreamEnded] = useState(false);
   const [streamCost, setStreamCost] = useState<{ total_tokens: number; total_cost_usd: number } | null>(null);
   const agentStepCounterRef = useRef(0);
+  // Set by stopStreaming so the resulting AbortError isn't surfaced as a failure.
+  const userStoppedRef = useRef(false);
   // Live dialectical-synthesis reasoning accumulates into ONE growing step
   // (the right-panel AGENT REASONING card), so we track its id across deltas.
   const synthesisReasoningStepIdRef = useRef<string | null>(null);
@@ -276,8 +286,6 @@ export default function GraphRAGPage() {
     setRightPanelResponse(mockGraphRAGResponse);
     setAllResponses((prev) => [...prev, mockGraphRAGResponse]);
     setRightPanelState('graph');
-    setReasoningSteps(mockReasoningSteps);
-    setCurrentQuery(mockGraphRAGResponse.query);
     setQuery('');
   };
 
@@ -367,35 +375,12 @@ export default function GraphRAGPage() {
     }
   };
 
-  const initializeReasoningSteps = (q: string) => {
-    const steps: ReasoningStep[] = [
-      { id: 1, type: 'search', label: 'Seed Discovery', description: 'Expanding lemmas and routing through SQL, tree, and passage citations', status: 'pending' },
-      { id: 2, type: 'traverse', label: 'Graph Traversal', description: 'Expanding knowledge graph connections', status: 'pending' },
-      { id: 3, type: 'context', label: 'Context Building', description: 'Assembling passages, citations, and proof context', status: 'pending' },
-      { id: 4, type: 'synthesis', label: 'LLM Synthesis', description: 'Generating scholarly answer', status: 'pending' },
-      { id: 5, type: 'complete', label: 'Complete', description: 'Answer ready with citations', status: 'pending' },
-    ];
-    setReasoningSteps(steps);
-    setCurrentQuery(q);
-  };
-
-  const updateReasoningStep = (stepId: number, status: 'pending' | 'active' | 'complete' | 'error', nodes?: string[], duration?: number) => {
-    setReasoningSteps((prev) =>
-      prev.map((step) =>
-        step.id === stepId
-          ? { ...step, status, nodes, duration }
-          : step.id < stepId && step.status !== 'complete'
-          ? { ...step, status: 'complete' }
-          : step
-      )
-    );
-  };
-
   const handleStreamingQuery = async (queryText: string, tabId?: string, model?: string, mode?: string) => {
     const effectiveModel = model ?? selectedModel;
     const effectiveMode = mode ?? selectedMode;
 
     setStreaming(true);
+    setStreamEnded(false);
     setRightPanelState('reasoning');
     setRightPanelResponse(null);
     setActiveSourceIndex(null);
@@ -406,18 +391,39 @@ export default function GraphRAGPage() {
     setCacheInfo(null);
     agentStepCounterRef.current = 0;
     synthesisReasoningStepIdRef.current = null;
-    initializeReasoningSteps(queryText);
+    userStoppedRef.current = false;
+
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
+    // Header (time-to-first-byte) timeout + mid-stream idle watchdog. The
+    // watchdog is re-armed on every received chunk and fires only when the
+    // server has gone silent for good.
+    let headerTimeoutId: ReturnType<typeof setTimeout> | null = null;
+    let idleTimeoutId: ReturnType<typeof setTimeout> | null = null;
+    let connectionLost = false;
+
+    const clearIdleWatchdog = () => {
+      if (idleTimeoutId !== null) {
+        clearTimeout(idleTimeoutId);
+        idleTimeoutId = null;
+      }
+    };
+    const armIdleWatchdog = () => {
+      clearIdleWatchdog();
+      idleTimeoutId = setTimeout(() => {
+        connectionLost = true;
+        abortController.abort();
+      }, STREAM_IDLE_TIMEOUT_MS);
+    };
 
     try {
       const token = Cookies.get('auth_token');
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-      const abortController = new AbortController();
-      abortControllerRef.current = abortController;
-
-      const timeoutId = setTimeout(() => {
+      headerTimeoutId = setTimeout(() => {
         abortController.abort();
-      }, 120000);
+      }, STREAM_HEADER_TIMEOUT_MS);
 
       const params = new URLSearchParams({
         question: queryText,
@@ -440,9 +446,10 @@ export default function GraphRAGPage() {
         signal: abortController.signal,
       });
 
-      clearTimeout(timeoutId);
+      clearTimeout(headerTimeoutId);
+      headerTimeoutId = null;
+      armIdleWatchdog();
 
-      console.log('[GR]', response.status, response.headers.get('content-type'));
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`HTTP ${response.status}: ${errorText}`);
@@ -456,16 +463,19 @@ export default function GraphRAGPage() {
       let fullAnswer = '';
       let finalResponse: GraphRAGResponse | null = null;
       let buffer = '';
-      let _dbgChunks = 0;
+      // Retrieval counters accumulated from tool_result frames — the only
+      // node/passage figures a degraded run leaves behind.
+      let streamedNodeCount = 0;
+      let streamedPassageCount = 0;
+      let streamError: string | null = null;
 
       try {
         while (true) {
           const { done, value } = await reader.read();
-          if (done) { console.log('[GR] done after', _dbgChunks, 'reads. answer:', fullAnswer.length, 'complete:', finalResponse != null); break; }
-          _dbgChunks++;
+          if (done) break;
+          armIdleWatchdog();
 
           const chunk = decoder.decode(value, { stream: true });
-          if (_dbgChunks <= 3) console.log('[GR] read', _dbgChunks, value?.length, 'bytes:', chunk.substring(0, 300));
           buffer += chunk;
           const lines = buffer.split('\n');
           buffer = lines.pop() || '';
@@ -475,7 +485,6 @@ export default function GraphRAGPage() {
 
             try {
               const data: GraphRAGStreamEvent = JSON.parse(line.substring(6));
-              console.log('[GR] event:', data.type, JSON.stringify(data).substring(0, 150));
 
               switch (data.type) {
                 case 'status': {
@@ -493,20 +502,6 @@ export default function GraphRAGPage() {
                     timestamp: Date.now(),
                   }]);
 
-                  if (msg.includes('retrieval') || msg.includes('searching') || msg.includes('initializ')) {
-                    updateReasoningStep(1, 'active');
-                  } else if (msg.includes('retrieving') || msg.includes('found') || msg.includes('knowledge graph')) {
-                    updateReasoningStep(1, 'complete');
-                    updateReasoningStep(2, 'active');
-                  } else if (msg.includes('expand') || msg.includes('travers') || msg.includes('node')) {
-                    updateReasoningStep(2, 'active');
-                  } else if (msg.includes('context') || msg.includes('citation') || msg.includes('building')) {
-                    updateReasoningStep(2, 'complete');
-                    updateReasoningStep(3, 'active');
-                  } else if (msg.includes('generat') || msg.includes('synthesis') || msg.includes('answer')) {
-                    updateReasoningStep(3, 'complete');
-                    updateReasoningStep(4, 'active');
-                  }
                   break;
                 }
 
@@ -537,8 +532,6 @@ export default function GraphRAGPage() {
                     trimmed.startsWith('{ "type"');
                   if (chunk && !looksLikeInnerEvent) {
                     fullAnswer += chunk;
-                    if (fullAnswer.length === chunk.length)
-                      updateReasoningStep(4, 'active');
                   }
                   break;
                 }
@@ -558,7 +551,6 @@ export default function GraphRAGPage() {
                     (typeof rp === 'object' && rp?.stage) ||
                     'Reasoning over the controversy map';
                   if (!delta) break;
-                  updateReasoningStep(4, 'active');
                   setStreamStatus('reasoning over the controversy map…');
                   if (synthesisReasoningStepIdRef.current === null) {
                     agentStepCounterRef.current += 1;
@@ -636,7 +628,6 @@ export default function GraphRAGPage() {
                 case 'complete':
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   finalResponse = (data.data as any) as GraphRAGResponse;
-                  updateReasoningStep(5, 'complete');
                   break;
 
                 case 'agent_thinking': {
@@ -683,20 +674,29 @@ export default function GraphRAGPage() {
                     passageCount: resultPayload?.passage_count,
                     timestamp: Date.now(),
                   }]);
+                  streamedNodeCount += Number(resultPayload?.node_count ?? 0);
+                  streamedPassageCount += Number(resultPayload?.passage_count ?? 0);
                   break;
                 }
 
                 case 'error':
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  setError((data as any).data?.message || data.message || 'Stream error');
+                  streamError = (data as any).data?.message || data.message || 'Stream error';
+                  setError(streamError);
                   break;
               }
             } catch (err) {
               console.error('Error parsing SSE line:', line, err);
             }
           }
+
+          // An explicit `error` frame terminates the run — stop reading so the
+          // stream teardown (and the finally block below) happens right away.
+          if (streamError) break;
         }
       } finally {
+        clearIdleWatchdog();
+        await reader.cancel().catch(() => {});
         reader.releaseLock();
       }
 
@@ -812,7 +812,6 @@ export default function GraphRAGPage() {
         ]);
         setRightPanelResponse(finalResponse);
         setAllResponses((prev) => [...prev, finalResponse]);
-        setAgentActive(false);
         // Keep the right panel on the reasoning timeline after completion —
         // the timeline auto-collapses phases and grows a Sources/KG/Cost
         // footer. The user can drill into the graph view via the footer.
@@ -867,41 +866,84 @@ export default function GraphRAGPage() {
         // mid-stream, CF tunnel idle-timeout, etc.). Render a clean error
         // bubble instead of dumping raw chunks, and keep the reasoning
         // timeline visible so the user can see how far the agent got.
-        const errorMessage: GraphRAGChatMessage = {
+        const partialAnswer = fullAnswer.trim();
+        const degradedMessage: GraphRAGChatMessage = {
           role: 'assistant',
           content:
-            fullAnswer.trim().length > 200
-              ? fullAnswer.trim()
-              : (t('errors.synthesisIncomplete') ??
-                 'Le pipeline s’est arrêté avant la synthèse finale. La trace d’agent reste visible à droite — réessaie la même question.'),
+            partialAnswer.length > 200
+              ? partialAnswer
+              : t('graphRagUi.stream.incomplete', {
+                  nodes: streamedNodeCount,
+                  passages: streamedPassageCount,
+                }),
           timestamp: new Date(),
         };
-        setMessages((prev) => [...prev, errorMessage]);
+        setMessages((prev) => [...prev, degradedMessage]);
+
+        // Bind the right-panel header to what the run actually produced,
+        // instead of leaving it on the empty pre-query placeholder.
+        const degradedResponse: GraphRAGResponse = {
+          query: queryText,
+          answer: partialAnswer,
+          citations: { ancient_sources: [], modern_scholarship: [] },
+          sources: [],
+          reasoning_path: {
+            starting_nodes: [],
+            expanded_nodes: [],
+            traversed_edges: [],
+            total_nodes: streamedNodeCount,
+            total_edges: 0,
+          },
+          nodes_used: streamedNodeCount,
+          edges_traversed: 0,
+          degraded: true,
+          success: false,
+        };
+        setRightPanelResponse(degradedResponse);
+        if (tabId) {
+          setTabResponses((prev) => ({ ...prev, [tabId]: degradedResponse }));
+        }
         // Stay on the reasoning timeline so the user retains context.
       }
-
-      setStreaming(false);
-      setStreamStatus('');
     } catch (err: unknown) {
       console.error('Streaming error:', err);
-      if (err instanceof Error && err.name === 'AbortError') {
+      if (userStoppedRef.current) {
+        // Deliberate stop — not an error worth surfacing.
+      } else if (connectionLost) {
+        setError(t('graphRagUi.stream.connectionLost'));
+      } else if (err instanceof Error && err.name === 'AbortError') {
         setError(t('errors.networkErrorDesc'));
       } else {
         setError(err instanceof Error ? err.message : 'Streaming failed');
       }
+      if (!connectionLost) {
+        setRightPanelState('idle');
+      }
+    } finally {
+      // Single teardown for every exit path — normal completion, degraded
+      // stream, SSE `error` frame, idle watchdog abort, user stop, throw.
+      if (headerTimeoutId !== null) clearTimeout(headerTimeoutId);
+      clearIdleWatchdog();
       setStreaming(false);
+      setAgentActive(false);
       setStreamStatus('');
-      setRightPanelState('idle');
+      setStreamEnded(true);
+      if (abortControllerRef.current === abortController) {
+        abortControllerRef.current = null;
+      }
     }
   };
 
   const stopStreaming = () => {
+    userStoppedRef.current = true;
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
     }
     setStreaming(false);
+    setAgentActive(false);
     setStreamStatus('');
+    setStreamEnded(true);
   };
 
   const handleNodeClick = async (nodeId: string) => {
@@ -1029,6 +1071,7 @@ export default function GraphRAGPage() {
                       agentSteps={agentSteps}
                       agentActive={agentActive}
                       isStreaming={streaming}
+                      streamEnded={streamEnded}
                       cost={streamCost}
                       onNodeClick={handleNodeClick}
                       onSourceSelect={handleSourceSelect}
@@ -1069,6 +1112,9 @@ export default function GraphRAGPage() {
                 passageContext={passageContext}
                 agentSteps={agentSteps}
                 agentActive={agentActive}
+                isStreaming={streaming}
+                streamEnded={streamEnded}
+                cost={streamCost}
                 onNodeClick={handleNodeClick}
                 onSourceSelect={handleSourceSelect}
                 onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
