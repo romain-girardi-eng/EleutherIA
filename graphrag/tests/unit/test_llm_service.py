@@ -10,6 +10,7 @@ from eleutheria_graphrag.services.llm_service import (
     LLMService,
     ModelProvider,
     _redact_secrets,
+    strict_json_schema,
 )
 
 
@@ -1417,3 +1418,242 @@ class TestPromptCacheId:
 
         body = mock_client.post.call_args.kwargs["json"]
         assert body["prompt_cache_id"] == "eleutheria-concept-mapper-v1"
+
+
+class TestPerProviderRequestConfig:
+    """Every rung must speak to ITS OWN proxy — never the preferred one's.
+
+    Regression guard for the prod incident where a ``claude-opus-5`` rung was
+    suspected of posting to the Codex proxy: each resolved provider owns its
+    base_url, key and model, on BOTH the model_override path and the
+    fallback-loop path.
+    """
+
+    ENV = {
+        "CODEX_PROXY_API_KEY": "codex-key",
+        "CLAUDE_PROXY_API_KEY": "claude-key",
+        "CODEX_PROXY_BASE_URL": "http://cli-proxy-api:8317/v1",
+        "CLAUDE_PROXY_BASE_URL": "http://pragma-claude-proxy:8318/v1",
+    }
+
+    @staticmethod
+    def _ok_response() -> MagicMock:
+        response = MagicMock()
+        response.json.return_value = {"choices": [{"message": {"content": "ok"}}]}
+        response.raise_for_status = MagicMock()
+        return response
+
+    @pytest.mark.asyncio
+    async def test_model_override_posts_to_the_claude_proxy(self):
+        with patch.dict("os.environ", self.ENV, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.CODEX)
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=self._ok_response())
+            llm._client = mock_client
+
+            await llm.generate("q", model_override="claude-opus-5", max_tokens=16)
+
+        url = mock_client.post.call_args.args[0]
+        assert url == "http://pragma-claude-proxy:8318/v1/chat/completions"
+        headers = mock_client.post.call_args.kwargs["headers"]
+        assert headers["Authorization"] == "Bearer claude-key"
+        assert mock_client.post.call_args.kwargs["json"]["model"] == "claude-opus-5"
+        assert llm.last_provider_used == ModelProvider.CLAUDE.value
+
+    @pytest.mark.asyncio
+    async def test_fallback_loop_claude_rung_posts_to_the_claude_proxy(self):
+        with patch.dict("os.environ", self.ENV, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.CODEX)
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(
+                side_effect=[
+                    httpx.ConnectError("codex proxy down"),
+                    httpx.ConnectError("codex proxy down"),
+                    self._ok_response(),
+                ]
+            )
+            llm._client = mock_client
+
+            with patch("asyncio.sleep", new=AsyncMock()):
+                await llm.generate("q", max_tokens=16)
+
+        codex_call, _retry, claude_call = mock_client.post.call_args_list
+        assert codex_call.args[0] == "http://cli-proxy-api:8317/v1/chat/completions"
+        assert codex_call.kwargs["headers"]["Authorization"] == "Bearer codex-key"
+        assert claude_call.args[0] == (
+            "http://pragma-claude-proxy:8318/v1/chat/completions"
+        )
+        assert claude_call.kwargs["headers"]["Authorization"] == "Bearer claude-key"
+        assert claude_call.kwargs["json"]["model"] == "claude-opus-5"
+        assert llm.last_provider_used == ModelProvider.CLAUDE.value
+
+
+class TestStrictJsonSchemaSanitizer:
+    """OpenAI strict structured outputs: additionalProperties + full required."""
+
+    NESTED_SCHEMA: dict = {
+        "type": "object",
+        "properties": {
+            "title": {"type": "string"},
+            "citations": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "urn": {"type": "string"},
+                        "confidence": {"type": "number"},
+                    },
+                    "required": ["urn"],
+                },
+            },
+            "verdict": {
+                "anyOf": [
+                    {"type": "object", "properties": {"ok": {"type": "boolean"}}},
+                    {"type": "null"},
+                ]
+            },
+        },
+        "required": ["title"],
+        "$defs": {
+            "Note": {"type": "object", "properties": {"text": {"type": "string"}}}
+        },
+    }
+
+    def test_every_object_level_is_sanitized(self):
+        sanitized = strict_json_schema(self.NESTED_SCHEMA)
+
+        assert sanitized["additionalProperties"] is False
+        assert sanitized["required"] == ["title", "citations", "verdict"]
+
+        item = sanitized["properties"]["citations"]["items"]
+        assert item["additionalProperties"] is False
+        assert item["required"] == ["urn", "confidence"]
+
+        branch = sanitized["properties"]["verdict"]["anyOf"][0]
+        assert branch["additionalProperties"] is False
+        assert branch["required"] == ["ok"]
+        assert sanitized["properties"]["verdict"]["anyOf"][1] == {"type": "null"}
+
+        defs = sanitized["$defs"]["Note"]
+        assert defs["additionalProperties"] is False
+        assert defs["required"] == ["text"]
+
+    def test_scalar_leaves_are_left_alone(self):
+        sanitized = strict_json_schema(self.NESTED_SCHEMA)
+        assert sanitized["properties"]["title"] == {"type": "string"}
+        assert sanitized["properties"]["citations"]["type"] == "array"
+        assert "additionalProperties" not in sanitized["properties"]["citations"]
+
+    def test_callers_schema_is_never_mutated(self):
+        import copy as _copy
+
+        before = _copy.deepcopy(self.NESTED_SCHEMA)
+        strict_json_schema(self.NESTED_SCHEMA)
+        assert before == self.NESTED_SCHEMA
+
+    def test_codex_payload_carries_the_sanitized_schema(self):
+        config = LLMService._resolve_config(ModelProvider.CODEX)
+        payload = LLMService._openai_compatible_payload(
+            ModelProvider.CODEX,
+            "prompt",
+            None,
+            0.3,
+            512,
+            config,
+            response_json_schema=self.NESTED_SCHEMA,
+        )
+        schema = payload["response_format"]["json_schema"]["schema"]
+        assert schema["additionalProperties"] is False
+        assert schema["required"] == ["title", "citations", "verdict"]
+        assert schema is not self.NESTED_SCHEMA
+        assert "additionalProperties" not in self.NESTED_SCHEMA
+
+    def test_claude_path_is_unaffected(self):
+        config = LLMService._resolve_config(ModelProvider.CLAUDE)
+        payload = LLMService._openai_compatible_payload(
+            ModelProvider.CLAUDE,
+            "prompt",
+            None,
+            0.3,
+            512,
+            config,
+            response_json_schema=self.NESTED_SCHEMA,
+        )
+        assert payload["response_format"] == {"type": "json_object"}
+        assert "additionalProperties" not in self.NESTED_SCHEMA
+
+    def test_gemini_path_sends_the_raw_schema(self):
+        body = LLMService._build_gemini_request_body(
+            prompt="prompt",
+            system_prompt=None,
+            temperature=0.3,
+            max_tokens=512,
+            cached_content=None,
+            config=LLMService._resolve_config(ModelProvider.GEMINI),
+            response_mime_type="application/json",
+            response_json_schema=self.NESTED_SCHEMA,
+        )
+        sent = body["generationConfig"]["responseJsonSchema"]
+        assert sent == self.NESTED_SCHEMA
+        assert "additionalProperties" not in sent
+
+
+class TestContextOverflowFallback:
+    """A 400 context_too_large is a per-model limit, not a malformed request."""
+
+    @staticmethod
+    def _overflow(body: str) -> httpx.HTTPStatusError:
+        request = httpx.Request("POST", "https://example.com/v1/chat/completions")
+        return httpx.HTTPStatusError(
+            "bad request",
+            request=request,
+            response=httpx.Response(400, text=body, request=request),
+        )
+
+    @pytest.mark.parametrize(
+        "body",
+        [
+            '{"error":{"code":"context_too_large"}}',
+            '{"error":{"message":"Your input exceeds the context window of this model."}}',
+        ],
+    )
+    def test_context_overflow_advances_to_the_next_provider(self, body):
+        assert LLMService._should_retry_next_provider(self._overflow(body)) is True
+
+    def test_other_400_bodies_stay_fatal(self):
+        exc = self._overflow('{"error":{"message":"unknown provider for model x"}}')
+        assert LLMService._should_retry_next_provider(exc) is False
+
+    @pytest.mark.asyncio
+    async def test_oversized_prompt_falls_through_to_gemini(self):
+        env = {"CODEX_PROXY_API_KEY": "codex-key", "GEMINI_API_KEY": "gemini-key"}
+        with patch.dict("os.environ", env, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.CODEX)
+
+            request = httpx.Request("POST", "https://example.com/v1/chat/completions")
+            overflowed = MagicMock()
+            overflowed.raise_for_status = MagicMock(
+                side_effect=httpx.HTTPStatusError(
+                    "context_too_large",
+                    request=request,
+                    response=httpx.Response(
+                        400,
+                        text='{"error":{"code":"context_too_large"}}',
+                        request=request,
+                    ),
+                )
+            )
+            gemini = MagicMock()
+            gemini.json.return_value = {
+                "candidates": [{"content": {"parts": [{"text": "answer"}]}}]
+            }
+            gemini.raise_for_status = MagicMock()
+
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(side_effect=[overflowed, gemini])
+            llm._client = mock_client
+
+            result = await llm.generate("a very long pack", max_tokens=256)
+
+        assert result == "answer"
+        assert llm.last_provider_used == ModelProvider.GEMINI.value

@@ -18,6 +18,7 @@ per provider so model ids are never scattered across call sites.
 
 import asyncio
 import contextlib
+import copy
 import hashlib
 import logging
 import os
@@ -79,6 +80,70 @@ def _redact_secrets(message: str) -> str:
         return message
     redacted = _SECRET_QUERY_RE.sub(r"\1\2=REDACTED", message)
     return _BEARER_RE.sub("Bearer REDACTED", redacted)
+
+
+#: JSON-Schema keywords whose value is a MAP of sub-schemas (name → schema).
+_SCHEMA_MAP_KEYWORDS = ("properties", "$defs", "definitions", "patternProperties")
+#: Keywords whose value is a LIST of sub-schemas.
+_SCHEMA_LIST_KEYWORDS = ("anyOf", "oneOf", "allOf", "prefixItems")
+#: Keywords whose value is a single sub-schema (``items`` may also be a list).
+_SCHEMA_NODE_KEYWORDS = ("items", "not", "if", "then", "else", "contains")
+
+
+def _apply_strict_schema_rules(node: Any) -> None:
+    """Recursively make ``node`` satisfy OpenAI strict structured outputs.
+
+    Mutates IN PLACE — always call it on a deep copy
+    (:func:`strict_json_schema` owns that). OpenAI's ``strict: true``
+    ``json_schema`` demands, for EVERY object schema at every depth:
+    ``"additionalProperties": false`` and a ``required`` listing every key of
+    ``properties``. A schema missing either is rejected with
+    ``400 invalid_json_schema`` ("'additionalProperties' is required to be
+    supplied and to be false"), which used to burn the whole Codex rung.
+    """
+    if isinstance(node, list):
+        for item in node:
+            _apply_strict_schema_rules(item)
+        return
+    if not isinstance(node, dict):
+        return
+
+    for keyword in _SCHEMA_MAP_KEYWORDS:
+        submap = node.get(keyword)
+        if isinstance(submap, dict):
+            for subschema in submap.values():
+                _apply_strict_schema_rules(subschema)
+    for keyword in _SCHEMA_LIST_KEYWORDS:
+        sublist = node.get(keyword)
+        if isinstance(sublist, list):
+            _apply_strict_schema_rules(sublist)
+    for keyword in _SCHEMA_NODE_KEYWORDS:
+        subnode = node.get(keyword)
+        if isinstance(subnode, dict | list):
+            _apply_strict_schema_rules(subnode)
+
+    properties = node.get("properties")
+    is_object = isinstance(properties, dict) or node.get("type") == "object"
+    if not is_object:
+        return
+    node["additionalProperties"] = False
+    if isinstance(properties, dict):
+        # Strict mode has no notion of an optional key: every declared property
+        # must be required (order follows the schema's own declaration order).
+        node["required"] = list(properties.keys())
+
+
+def strict_json_schema(schema: dict[str, Any]) -> dict[str, Any]:
+    """Return a strict-structured-outputs-safe DEEP COPY of ``schema``.
+
+    The caller's schema object is never mutated: agent modules keep their
+    schemas as module-level constants shared across calls and providers (the
+    Gemini path sends the SAME dict as ``responseSchema``, where the strict
+    additions are unwanted).
+    """
+    sanitized = copy.deepcopy(schema)
+    _apply_strict_schema_rules(sanitized)
+    return sanitized
 
 
 class RateLimiter:
@@ -633,7 +698,11 @@ class LLMService:
                     "type": "json_schema",
                     "json_schema": {
                         "name": schema_name,
-                        "schema": response_json_schema,
+                        # strict: true is only accepted when every object
+                        # schema declares additionalProperties=false and a
+                        # complete `required` — sanitize on a deep copy so the
+                        # caller's (often module-level) schema is untouched.
+                        "schema": strict_json_schema(response_json_schema),
                         "strict": True,
                     },
                 }
@@ -649,6 +718,23 @@ class LLMService:
     #: 429, 5xx …) is an account- or provider-level failure: fall through.
     _REQUEST_SHAPE_STATUSES = frozenset({400, 404, 422})
 
+    #: Body markers of a 400 that means "this prompt is too big for THIS
+    #: model's context window" — a per-model limit, not a malformed request.
+    #: The next rung may have a much larger window (Gemini: 1M), so the failure
+    #: must advance instead of aborting the whole answer.
+    _CONTEXT_OVERFLOW_MARKERS = (
+        "context_too_large",
+        "exceeds the context window",
+    )
+
+    @staticmethod
+    def _is_context_overflow(exc: httpx.HTTPStatusError) -> bool:
+        """Whether a 400 body says the prompt overflowed the model's window."""
+        body = LLMService._safe_response_text(exc.response).lower()
+        if not body:
+            return False
+        return any(marker in body for marker in LLMService._CONTEXT_OVERFLOW_MARKERS)
+
     @staticmethod
     def _should_retry_next_provider(
         exc: Exception, *, structured_output: bool = False
@@ -661,12 +747,19 @@ class LLMService:
         provider (which gets a degraded ``json_object`` form) may well accept
         it, so the 400 advances instead of aborting. Plain calls keep the
         strict rule: a 400 is fatal.
+
+        The same relaxation covers a context-window overflow: a 400
+        ``context_too_large`` is a property of THIS model's window, not of the
+        request shape, so an oversized synthesis pack falls through to a
+        larger-window rung (Gemini) instead of emptying the answer.
         """
         if isinstance(exc, httpx.TransportError):
             return True
         if isinstance(exc, httpx.HTTPStatusError):
             status = exc.response.status_code
-            if structured_output and status == 400:
+            if status == 400 and (
+                structured_output or LLMService._is_context_overflow(exc)
+            ):
                 return True
             return status not in LLMService._REQUEST_SHAPE_STATUSES
         return False
