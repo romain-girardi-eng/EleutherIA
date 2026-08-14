@@ -522,6 +522,30 @@ class TestStructuredOutputRequest:
             kwargs.get("model_override") == "accounts/fireworks/models/deepseek-v4-pro"
         )
 
+    @pytest.mark.asyncio
+    async def test_runs_on_the_synthesis_tier(self) -> None:
+        """The anti-hallucination gate runs on the FULL-quality model.
+
+        A utility-tier model that misreads a Greek passage passes a fabricated
+        citation through — the exact failure this gate exists to stop.
+        """
+        llm = _llm_returning(_verdict_json("VERIFIED"))
+        verifier = CitationVerifierV2(llm=llm, passage_fetcher=_fetcher({"p1": "text"}))
+        await verifier.verify_one("Chrysippus held assent is up to us.", "p1")
+        _, kwargs = llm.generate.await_args
+        assert kwargs.get("tier") == "synthesis"
+
+    @pytest.mark.asyncio
+    async def test_env_model_override_still_wins(self, monkeypatch: Any) -> None:
+        """ELEUTHERIA_VERIFIER_MODEL keeps pinning the model on the new tier."""
+        monkeypatch.setenv("ELEUTHERIA_VERIFIER_MODEL", "claude-opus-5")
+        llm = _llm_returning(_verdict_json("VERIFIED"))
+        verifier = CitationVerifierV2(llm=llm, passage_fetcher=_fetcher({"p1": "text"}))
+        await verifier.verify_one("Chrysippus held assent is up to us.", "p1")
+        _, kwargs = llm.generate.await_args
+        assert kwargs.get("model_override") == "claude-opus-5"
+        assert kwargs.get("tier") == "synthesis"
+
 
 class TestBareLabelFailsClosed:
     """F1c/F1d: a bare node label is unauditable → FAIL CLOSED, never the LLM."""

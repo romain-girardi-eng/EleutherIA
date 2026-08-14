@@ -77,10 +77,13 @@ def append_reasoning_step(
 
 
 def resolve_model_api_id(state: RAGState) -> str | None:
-    """Return model_override for non-default (non-Gemini) models."""
+    """Return the explicit ``model_override`` for the selected model.
+
+    ``None`` means "let the provider loop choose", which is what an unknown
+    selection should do.
+    """
     try:
-        model_info = get_model(state.selected_model)
-        return model_info.api_id if model_info.provider == "openrouter" else None
+        return get_model(state.selected_model).api_id
     except KeyError:
         return None
 

@@ -2,6 +2,7 @@
 FastAPI routes for GraphRAG Q&A.
 """
 
+import asyncio
 import contextlib
 import hmac
 import inspect
@@ -22,6 +23,7 @@ from pydantic import ValidationError
 from eleutheria_graphrag.models.query import QueryRequest, QueryResponse
 from eleutheria_graphrag.models.thesis_output import ThesisDraft
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
+from eleutheria_graphrag.services.llm_service import CLIENT_LLM_ERROR_MESSAGE
 from eleutheria_graphrag.services.thesis_renderer import (
     CitationStyle,
     ExportFormat,
@@ -30,7 +32,69 @@ from eleutheria_graphrag.services.thesis_renderer import (
 
 logger = logging.getLogger(__name__)
 
+
+def _synthesis_is_cacheable(metadata: dict[str, Any]) -> bool:
+    """Whether this answer is good enough to replay to future askers.
+
+    ``scholar_synthesis`` is set by the dialectical synthesis: ``status="ok"``
+    with ``degraded`` falsy is a real synthesis; ``degraded`` /
+    ``deterministic_map`` / ``failed`` mean the synthesis model was unavailable
+    and the prose is a structural hedge. Absent metadata means the legacy
+    (non-Scholar-RAG) path, which is cacheable as before.
+    """
+    synthesis = metadata.get("scholar_synthesis")
+    if not isinstance(synthesis, dict):
+        return True
+    if synthesis.get("degraded"):
+        return False
+    return synthesis.get("status") == "ok"
+
+
+def _traversed_edges(
+    graphrag: GraphRAGService,
+    seed_ids: list[str],
+    context_ids: list[str],
+) -> list[dict[str, str]]:
+    """Edges of the retrieved subgraph, in the frontend's reasoning-path shape.
+
+    Both endpoints must be nodes the agent actually retrieved, so this reports
+    the traversal that happened rather than inventing connections.
+    """
+    visited = {nid for nid in (*seed_ids, *context_ids) if nid}
+    if not visited:
+        return []
+    lookup = graphrag.node_lookup
+    edges: list[dict[str, str]] = []
+    seen: set[tuple[str, str, str]] = set()
+    for source in visited:
+        for edge in graphrag.outgoing_edges.get(source, []):
+            target = edge.get("target", "")
+            if target not in visited:
+                continue
+            relation = edge.get("relation", "related_to")
+            key = (source, target, relation)
+            if key in seen:
+                continue
+            seen.add(key)
+            edges.append(
+                {
+                    "source": source,
+                    "target": target,
+                    "relation": relation,
+                    "description": (
+                        edge.get("description")
+                        or lookup.get(target, {}).get("label", target)
+                    ),
+                }
+            )
+    return edges
+
+
 router = APIRouter(tags=["graphrag"])
+
+# Strong refs to background finalize tasks so a shielded finalize survives the
+# cancellation that triggered it (a task with no strong ref can be GC'd).
+_BACKGROUND_FINALIZE_TASKS: set[asyncio.Task[None]] = set()
 
 # Defensive guard (GOAL-8, B7): a citation label that is actually a raw KG/
 # passage node id must NEVER reach the frontend. Any candidate whose label
@@ -257,9 +321,27 @@ async def query_stream(
                 "by_agent": totals.get("by_agent", {}),
             }
 
-        try:
-            complete_sent = False
+        # Fix 8: TraceWriter.finalize used to run only inside the `try`, so an
+        # asyncio.CancelledError / GeneratorExit (BaseException — the client
+        # disconnecting mid-stream) skipped every call site and left the trace
+        # row with NULL completed_at / final_answer_text. `finalized` is set at
+        # each call site and the `finally` compensates on any BaseException.
+        finalized = False
+        complete_sent = False
+        partial_answer_parts: list[str] = []
 
+        async def _finalize_once(
+            *, final_answer: str, citations: list, success: bool = True
+        ) -> None:
+            nonlocal finalized
+            if finalized or writer is None:
+                return
+            finalized = True
+            await writer.finalize(
+                final_answer=final_answer, citations=citations, success=success
+            )
+
+        try:
             # ---- Cache replay path -------------------------------------
             # If the pre-flight lookup found a fresh entry, emit a
             # synthesized `cache_hit` + `cost_summary` + `complete` and
@@ -393,17 +475,16 @@ async def query_stream(
                 }
                 yield f"data: {json.dumps(complete_payload, default=str)}\n\n"
                 complete_sent = True
-                if writer is not None:
-                    try:
-                        await writer.finalize(
-                            final_answer=cached_payload.get("answer", ""),
-                            citations=cached_passage_citations,
-                        )
-                    except Exception:  # noqa: BLE001
-                        logger.exception(
-                            "TraceWriter.finalize (cache hit) failed for %s",
-                            trace_id,
-                        )
+                try:
+                    await _finalize_once(
+                        final_answer=cached_payload.get("answer", ""),
+                        citations=cached_passage_citations,
+                    )
+                except Exception:  # noqa: BLE001
+                    logger.exception(
+                        "TraceWriter.finalize (cache hit) failed for %s",
+                        trace_id,
+                    )
                 return
 
             # Scholar-RAG (G6) flag, read once per stream. When ON we forward
@@ -624,12 +705,21 @@ async def query_stream(
                                 # preview (verifier-v2 costs are not yet in).
                                 if not is_preview:
                                     yield f"data: {json.dumps({'type': 'cost_summary', 'data': cost_payload})}\n\n"
+                            # Fix 10b: the traversal used to ship hardcoded
+                            # empty edges, so the FE research graph and
+                            # TraversalDAG rendered nodes with no connections.
+                            # Derive the real edges from the KG: every edge of
+                            # the snapshot whose BOTH endpoints are nodes the
+                            # agent actually retrieved.
+                            traversed_edges = _traversed_edges(
+                                graphrag, seed_ids, ctx_ids
+                            )
                             reasoning_path_payload: dict[str, Any] = {
                                 "starting_nodes": starting,
                                 "expanded_nodes": expanded[:20],
-                                "traversed_edges": [],
+                                "traversed_edges": traversed_edges[:200],
                                 "total_nodes": len(ctx_ids),
-                                "total_edges": 0,
+                                "total_edges": len(traversed_edges),
                             }
                             complete_payload = {
                                 "type": event_type,
@@ -667,13 +757,18 @@ async def query_stream(
 
                             complete_sent = True
 
-                            # Persist this answer for future cache hits. Skip
-                            # short/error stubs (<1000 chars) so we don't
-                            # pollute the cache with incomplete responses.
+                            # Persist this answer for future cache hits. Length
+                            # alone is NOT a quality proxy: a degraded
+                            # structural answer (the deterministic map hedge,
+                            # emitted when the synthesis model was unavailable)
+                            # easily clears 1000 chars and would then be
+                            # replayed to every future asker of the question.
+                            # Gate on the synthesis status instead.
                             if (
                                 answer_cache is not None
                                 and isinstance(final_answer, str)
                                 and len(final_answer) >= 1000
+                                and _synthesis_is_cacheable(merged_metadata)
                             ):
                                 cached_tokens = int(
                                     cost_payload["total_tokens"] if cost_payload else 0
@@ -731,7 +826,7 @@ async def query_stream(
                                         writer.metadata["claim_ledger"] = (
                                             final_claim_ledger
                                         )
-                                    await writer.finalize(
+                                    await _finalize_once(
                                         final_answer=final_answer,
                                         citations=final_citations,
                                     )
@@ -754,31 +849,92 @@ async def query_stream(
                             continue
                     except json.JSONDecodeError:
                         pass
+                # Keep the prose that has actually reached the client so a
+                # cancelled/disconnected stream finalizes with the partial
+                # answer instead of NULL.
+                if isinstance(chunk, str):
+                    partial_answer_parts.append(chunk)
                 event = json.dumps({"type": "answer_chunk", "data": chunk})
                 yield f"data: {event}\n\n"
             if not complete_sent:
+                complete_sent = True
                 yield f"data: {json.dumps({'type': 'complete', 'data': {'trace_id': trace_id}})}\n\n"
-                if writer is not None:
-                    try:
-                        await writer.finalize(final_answer="", citations=[])
-                    except Exception:  # noqa: BLE001
-                        logger.exception(
-                            "TraceWriter.finalize (no-answer) failed for %s",
-                            trace_id,
-                        )
-        except Exception as e:
-            yield f"data: {json.dumps({'type': 'error', 'message': str(e), 'trace_id': trace_id})}\n\n"
-            if writer is not None:
                 try:
-                    await writer.finalize(
-                        final_answer=f"[error] {e}", citations=[], success=False
+                    await _finalize_once(
+                        final_answer="".join(partial_answer_parts), citations=[]
                     )
                 except Exception:  # noqa: BLE001
                     logger.exception(
-                        "TraceWriter.finalize (error path) failed for %s",
+                        "TraceWriter.finalize (no-answer) failed for %s",
                         trace_id,
                     )
+        except Exception:
+            # Fix 5d: never put the raw provider exception on the wire — it can
+            # carry credentials (httpx embeds the request URL) and provider
+            # internals. The client gets a generic message; the detail stays in
+            # the server log.
+            logger.exception("Query stream failed for %s", trace_id)
+            yield (
+                "data: "
+                + json.dumps(
+                    {
+                        "type": "error",
+                        "message": CLIENT_LLM_ERROR_MESSAGE,
+                        "trace_id": trace_id,
+                    }
+                )
+                + "\n\n"
+            )
+            # TERMINAL-FRAME GUARANTEE: the client waits on `complete`. Without
+            # it an errored stream leaves the UI spinning forever, even though
+            # some prose may already have shipped.
+            if not complete_sent:
+                complete_sent = True
+                yield (
+                    "data: "
+                    + json.dumps(
+                        {
+                            "type": "complete",
+                            "data": {
+                                "trace_id": trace_id,
+                                "answer": "".join(partial_answer_parts),
+                                "error": CLIENT_LLM_ERROR_MESSAGE,
+                            },
+                        }
+                    )
+                    + "\n\n"
+                )
+            try:
+                await _finalize_once(
+                    final_answer="".join(partial_answer_parts),
+                    citations=[],
+                    success=False,
+                )
+            except Exception:  # noqa: BLE001
+                logger.exception(
+                    "TraceWriter.finalize (error path) failed for %s",
+                    trace_id,
+                )
         finally:
+            # BaseException-safe: CancelledError / GeneratorExit unwind straight
+            # through the `except Exception` above, so this is the only place
+            # guaranteed to run when the client disconnects mid-stream.
+            if not finalized and writer is not None:
+                # `contextlib.suppress(Exception)` would not cover the
+                # CancelledError that put us here, and a bare await would be
+                # cancelled instantly. Shield it: the finalize runs to
+                # completion on the loop while the cancellation propagates.
+                finalize_task = asyncio.ensure_future(
+                    _finalize_once(
+                        final_answer="".join(partial_answer_parts),
+                        citations=[],
+                        success=complete_sent,
+                    )
+                )
+                _BACKGROUND_FINALIZE_TASKS.add(finalize_task)
+                finalize_task.add_done_callback(_BACKGROUND_FINALIZE_TASKS.discard)
+                with contextlib.suppress(BaseException):
+                    await asyncio.shield(finalize_task)
             if ctx_token is not None:
                 with contextlib.suppress(Exception):
                     active_trace_writer.reset(ctx_token)

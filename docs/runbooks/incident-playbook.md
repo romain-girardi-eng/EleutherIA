@@ -74,7 +74,7 @@ python tests/eval/run_eval.py --queries tests/eval/queries/<failing>.yaml --base
 **Recovery:**
 
 1. Snapshot count is 0 → snapshot bucket not reachable or file missing. Re-upload: `python -m cli.main snapshot upload`.
-2. LLM key resolves to `None` → the provider key is missing from the container env. Check `FIREWORKS_API_KEY` / `GEMINI_API_KEY` in the host `.env`, then `docker compose up -d --force-recreate eleutheria-api`.
+2. LLM key resolves to `None` → the provider key is missing from the container env. Check `CODEX_PROXY_API_KEY` / `CLAUDE_PROXY_API_KEY` / `GEMINI_API_KEY` in the host `.env`, then `docker compose up -d --force-recreate eleutheria-api`.
 3. Eval shows the query has zero entity hits → confirms retrieval-side issue; see next entry.
 
 ---

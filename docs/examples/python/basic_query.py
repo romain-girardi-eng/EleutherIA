@@ -7,7 +7,7 @@ Prerequisites:
 
     Set environment variables:
     - POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
-    - MOONSHOT_API_KEY or GEMINI_API_KEY
+    - CODEX_PROXY_API_KEY, CLAUDE_PROXY_API_KEY or GEMINI_API_KEY
 """
 
 import asyncio

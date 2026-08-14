@@ -35,43 +35,51 @@ from backend.services.trace_writer import TraceWriter
 # ---------- llm_pricing ----------
 
 
-def test_default_fireworks_price_matches_published_rate() -> None:
-    price = get_provider_price("fireworks")
-    assert price.input_per_m == pytest.approx(0.85)
-    assert price.output_per_m == pytest.approx(3.40)
+def test_default_codex_price_matches_configured_rate() -> None:
+    price = get_provider_price("codex")
+    assert price.input_per_m == pytest.approx(1.25)
+    assert price.output_per_m == pytest.approx(10.00)
 
 
-def test_env_override_changes_fireworks_price(
+def test_only_supported_providers_are_priced() -> None:
+    """A retired provider must not silently keep a price row."""
+    for retired in ("fireworks", "moonshot", "kimi", "openrouter"):
+        price = get_provider_price(retired)
+        assert price.input_per_m == 0.0
+        assert price.output_per_m == 0.0
+
+
+def test_env_override_changes_codex_price(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setenv("FIREWORKS_PRICE_INPUT_USD_PER_M", "1.10")
-    monkeypatch.setenv("FIREWORKS_PRICE_OUTPUT_USD_PER_M", "4.20")
-    price = get_provider_price("fireworks")
+    monkeypatch.setenv("CODEX_PRICE_INPUT_USD_PER_M", "1.10")
+    monkeypatch.setenv("CODEX_PRICE_OUTPUT_USD_PER_M", "4.20")
+    price = get_provider_price("codex")
     assert price.input_per_m == pytest.approx(1.10)
     assert price.output_per_m == pytest.approx(4.20)
 
 
 def test_estimate_cost_usd_known_pair() -> None:
-    # 10k prompt + 2k completion at default fireworks rates
-    # = (10_000 * 0.85 + 2_000 * 3.40) / 1_000_000 = 0.0085 + 0.0068 = 0.0153
+    # 10k prompt + 2k completion at default codex rates
+    # = (10_000 * 1.25 + 2_000 * 10.00) / 1_000_000 = 0.0125 + 0.02 = 0.0325
     cost = estimate_cost_usd(
-        provider="fireworks", prompt_tokens=10_000, completion_tokens=2_000
+        provider="codex", prompt_tokens=10_000, completion_tokens=2_000
     )
-    assert cost == pytest.approx(0.0153)
+    assert cost == pytest.approx(0.0325)
 
 
 def test_token_usage_from_openai_usage_handles_missing_total() -> None:
     usage = TokenUsage.from_openai_usage(
         {"prompt_tokens": 1_000, "completion_tokens": 500},
-        model="kimi-k2p6",
-        provider="fireworks",
+        model="gpt-5.6-sol",
+        provider="codex",
         agent_id="scholar-orchestrator",
     )
     assert usage is not None
     assert usage.total_tokens == 1_500
     assert usage.agent_id == "scholar-orchestrator"
     assert usage.estimated_cost_usd == pytest.approx(
-        (1_000 * 0.85 + 500 * 3.40) / 1_000_000
+        (1_000 * 1.25 + 500 * 10.00) / 1_000_000
     )
 
 
@@ -109,7 +117,7 @@ def test_token_usage_to_event_includes_required_fields() -> None:
         completion_tokens=5,
         total_tokens=15,
         model="kimi-k2p6",
-        provider="fireworks",
+        provider="codex",
         estimated_cost_usd=0.000025,
         agent_id="concept-mapper",
     )
@@ -118,7 +126,7 @@ def test_token_usage_to_event_includes_required_fields() -> None:
         "type": "tokens_used",
         "agent_id": "concept-mapper",
         "model": "kimi-k2p6",
-        "provider": "fireworks",
+        "provider": "codex",
         "prompt_tokens": 10,
         "completion_tokens": 5,
         "total_tokens": 15,
@@ -161,7 +169,7 @@ async def test_record_token_usage_accumulates_totals(writer: TraceWriter) -> Non
             completion_tokens=500,
             total_tokens=4_500,
             model="kimi-k2p6",
-            provider="fireworks",
+            provider="codex",
             estimated_cost_usd=0.005100,
             agent_id="scholar-orchestrator",
         ),
@@ -173,7 +181,7 @@ async def test_record_token_usage_accumulates_totals(writer: TraceWriter) -> Non
             completion_tokens=200,
             total_tokens=2_200,
             model="kimi-k2p6",
-            provider="fireworks",
+            provider="codex",
             estimated_cost_usd=0.002380,
             agent_id="scholar-orchestrator",
         ),
@@ -184,8 +192,8 @@ async def test_record_token_usage_accumulates_totals(writer: TraceWriter) -> Non
     assert totals["by_agent"]["scholar-orchestrator"]["tokens"] == 6_700
     assert totals["by_agent"]["scholar-orchestrator"]["calls"] == 2
     assert totals["by_model"]["kimi-k2p6"]["calls"] == 2
-    assert totals["by_provider"]["fireworks"]["prompt_tokens"] == 6_000
-    assert totals["by_provider"]["fireworks"]["completion_tokens"] == 700
+    assert totals["by_provider"]["codex"]["prompt_tokens"] == 6_000
+    assert totals["by_provider"]["codex"]["completion_tokens"] == 700
 
 
 async def test_finalize_persists_cost_columns(writer: TraceWriter) -> None:
@@ -197,7 +205,7 @@ async def test_finalize_persists_cost_columns(writer: TraceWriter) -> None:
             completion_tokens=200,
             total_tokens=1_200,
             model="kimi-k2p6",
-            provider="fireworks",
+            provider="codex",
             estimated_cost_usd=0.001530,
         ),
     )
@@ -215,7 +223,7 @@ async def test_finalize_persists_cost_columns(writer: TraceWriter) -> None:
     breakdown = json.loads(args[18])
     assert "by_agent" in breakdown and "by_model" in breakdown
     provider = json.loads(args[19])
-    assert provider["fireworks"]["calls"] == 1
+    assert provider["codex"]["calls"] == 1
 
 
 # ---------- synthetic SSE envelopes ----------
@@ -234,7 +242,7 @@ async def test_synthesise_cost_events_emits_summary_on_final_answer(
             completion_tokens=348,
             total_tokens=12_348,
             model="kimi-k2p6",
-            provider="fireworks",
+            provider="codex",
             estimated_cost_usd=0.0212,
         ),
     )
@@ -263,7 +271,7 @@ async def test_synthesise_cost_events_emits_rollup_on_subagent_complete(
             completion_tokens=2,
             total_tokens=12,
             model="kimi-k2p6",
-            provider="fireworks",
+            provider="codex",
             estimated_cost_usd=0.000017,
         ),
     )

@@ -27,13 +27,12 @@ VECTORLESS throughout. Greek/Latin only ever flows verbatim from the map's
 passages (the prompt forbids inventing it). Gated by ``ELEUTHERIA_SCHOLAR_RAG`` at
 the call site; this module is import-safe and inert until a consumer invokes it.
 
-MODEL: Fireworks-only for now (Romain's constraint). :func:`resolve_scholar_synthesis_model`
-defaults to ``fireworks:deepseek-v4-pro`` — a TRUE thinking model that returns its
-chain-of-thought in ``reasoning_content`` and a clean finished answer in ``content``
-(it reads ``SCHOLAR_SYNTHESIS_MODEL`` but does not enable Moonshot here). The
-synthesis routes ``reasoning_content`` (a side-channel on ``LLMService``) to the
-trace, NEVER into the answer; the answer is ``content`` only. The agent ReAct
-retrieval loop stays on the non-reasoning k2p6 instruct model.
+MODEL: the synthesis tier. :func:`resolve_scholar_synthesis_model` defaults to
+``gpt-5.6-sol`` on the Codex proxy — a TRUE thinking model that returns its
+chain-of-thought in ``reasoning_content`` and a clean finished answer in
+``content``; ``SCHOLAR_SYNTHESIS_MODEL`` overrides it. The synthesis routes
+``reasoning_content`` (a side-channel on ``LLMService``) to the trace, NEVER
+into the answer; the answer is ``content`` only.
 """
 
 from __future__ import annotations
@@ -215,7 +214,7 @@ class SynthesisResult:
     ledger: list[ClaimLedgerItem] = field(default_factory=list)
     degraded: bool = False  # True when the degraded-mode hedge produced the prose
     # F4 instrumentation: which rung of the fallback chain produced the prose
-    # (0 = primary deepseek head, 1 = kimi content model, 2 = gemini), how many
+    # (0 = gpt-5.6-sol head, 1 = claude-opus-5, 2 = gemini), how many
     # rungs were tried, and whether the budget-eaten answer-only re-call fired.
     # Surfaced in state.metadata so the fallback/recovery rate is visible per
     # query WITHOUT changing the prod log level (failure-map F6).
@@ -225,47 +224,33 @@ class SynthesisResult:
     fell_back: bool = False  # True when a rung past the primary head produced it
 
 
-# M6: the synthesis fallback chain (ARCHITECTURE §K2.7). Fireworks-only TODAY —
-# the Moonshot K2.7 rungs are commented one-line-ready (see resolve_*_model and
-# scholar_synthesis_fallback_chain). The live chain degrades within Fireworks/
-# Gemini, never to Moonshot, per Romain's constraint.
+# M6: the synthesis fallback chain.
 #
-# The synthesis runs on a TRUE THINKING model: ``deepseek-v4-pro`` returns its
-# chain-of-thought in ``reasoning_content`` and a CLEAN finished scholarly answer
-# in ``content`` (finish_reason=stop) — fixing the k2p6 failure where a
-# non-reasoning instruct model emitted its scratchpad INLINE in ``content`` and
-# hit max_tokens while still planning (finish_reason=length). The answer budget
-# (max_tokens) now applies to ``content`` only; reasoning spends separate tokens.
+# The synthesis runs on a TRUE THINKING model: gpt-5.6-sol (Codex proxy) returns
+# its chain-of-thought in ``reasoning_content`` and a CLEAN finished scholarly
+# answer in ``content`` (finish_reason=stop) — so the answer budget
+# (max_tokens) applies to ``content`` only and reasoning spends separate tokens.
+# ``reasoning_effort`` (CODEX_REASONING_EFFORT, default "high") bounds the
+# chain-of-thought so it cannot eat the whole budget.
 #
-# ONE-LINE K2-THINKING SWAP (enable once it lands on this Fireworks account —
-# kimi-k2-thinking is currently 404 here, not enabled):
-#   - set _SCHOLAR_SYNTHESIS_DEFAULT = "accounts/fireworks/models/kimi-k2-thinking"
-#   (it also returns reasoning_content; no other wiring change needed).
-_SCHOLAR_SYNTHESIS_DEFAULT = "accounts/fireworks/models/deepseek-v4-pro"
-# _SCHOLAR_SYNTHESIS_DEFAULT = "accounts/fireworks/models/kimi-k2-thinking"  # when enabled
-# k2p6 (non-reasoning instruct) is kept ONLY for the agent ReAct retrieval loop,
-# not for synthesis — it inlines its scratchpad into content (the root-cause bug).
-_SCHOLAR_SYNTHESIS_AGENT_LOOP_MODEL = "accounts/fireworks/models/kimi-k2p7-code"
-# The SECOND rung of the synthesis chain: a CONTENT (non-reasoning) model. deepseek
-# shares its max_tokens between reasoning_content and content, so a long reasoning
-# run can eat the whole budget → finish_reason=length with ZERO content deltas →
-# empty prose. kimi-k2p7-code does NOT separate reasoning (model_separates_reasoning
-# is False), so the entire budget flows to ``content`` — it RELIABLY WRITES PROSE.
-# It is the real empty-answer guarantee: an empty deepseek result advances here.
-# Its inline scratchpad (if any) is cleaned by strip_reasoning_leak (runs because
-# model_separates_reasoning(kimi-k2p7-code) is False).
-_SCHOLAR_SYNTHESIS_CONTENT_FALLBACK = "accounts/fireworks/models/kimi-k2p7-code"
+# The chain degrades gpt-5.6-sol -> claude-opus-5 -> gemini-3.1-pro-preview:
+# each rung is a full-quality synthesis head on a DIFFERENT provider, so an
+# account-level or proxy-level outage on one cannot empty the answer.
+_SCHOLAR_SYNTHESIS_DEFAULT = "gpt-5.6-sol"
+# The ReAct retrieval loop shares the synthesis head (it needs tool calling,
+# which both proxies support natively).
+_SCHOLAR_SYNTHESIS_AGENT_LOOP_MODEL = "gpt-5.6-sol"
+_SCHOLAR_SYNTHESIS_CONTENT_FALLBACK = "claude-opus-5"
 _SCHOLAR_SYNTHESIS_GEMINI_FALLBACK = "gemini-3.1-pro-preview"
 
-# Fireworks reasoning models that return their chain-of-thought in a SEPARATE
-# ``reasoning_content`` field, leaving ``content`` a clean finished answer. For
-# these the defensive ``strip_reasoning_leak`` post-pass is a NO-OP: the content
-# is already clean, so running the stripper could only risk truncating a real
-# answer. Non-reasoning models (k2p6) still get the stripper.
+# Models that return their chain-of-thought in a SEPARATE ``reasoning_content``
+# field, leaving ``content`` a clean finished answer. For these the defensive
+# ``strip_reasoning_leak`` post-pass is a NO-OP: the content is already clean,
+# so running the stripper could only risk truncating a real answer.
 _REASONING_SEPARATED_MODELS: frozenset[str] = frozenset(
     {
-        "accounts/fireworks/models/deepseek-v4-pro",
-        "accounts/fireworks/models/kimi-k2-thinking",
+        "gpt-5.6-sol",
+        "claude-opus-5",
     }
 )
 
@@ -279,48 +264,29 @@ def model_separates_reasoning(model_id: str) -> bool:
 
 
 def resolve_scholar_synthesis_model() -> str:
-    """Resolve the synthesis model id (M6 swap lands HERE, one line).
+    """Resolve the synthesis model id.
 
     Reads ``SCHOLAR_SYNTHESIS_MODEL`` (form ``provider:model`` or a bare model
-    id). FIREWORKS-ONLY for now (Romain's constraint overrides the blueprint's
-    Moonshot opt-in): any non-Fireworks request resolves to the Fireworks
-    kimi-k2p6 default. Returns a ``model_override`` string accepted by
-    ``LLMService.generate``/``stream`` (``accounts/fireworks/...`` → Fireworks).
-
-    M6: lift the Fireworks guard + return ``(provider, model_id)`` once K2.7 is
-    available on Fireworks. Until then this is a single-line change surface.
+    id) and returns a ``model_override`` string accepted by
+    ``LLMService.generate``/``stream``, which routes it by prefix
+    (``gpt-*`` → Codex proxy, ``claude-*`` → Claude proxy, ``gemini-*`` →
+    Gemini direct).
     """
     default = _SCHOLAR_SYNTHESIS_DEFAULT
     raw = (os.getenv("SCHOLAR_SYNTHESIS_MODEL") or "").strip()
-    if not raw:
-        return default
-    provider, _, model_id = raw.partition(":")
-    if not model_id:  # bare model id
-        provider, model_id = "", provider
-    if provider and provider.lower() != "fireworks":
-        # Fireworks-only: ignore Moonshot/other opt-ins until M6 wires K2.7.
-        logger.debug(
-            "SCHOLAR_SYNTHESIS_MODEL=%s ignored (Fireworks-only); using default", raw
-        )
-        return default
-    return model_id or default
+    return raw or default
 
 
 def scholar_synthesis_fallback_chain() -> list[str]:
-    """The synthesis ``model_override`` fallback chain (ARCHITECTURE §K2.7).
+    """The synthesis ``model_override`` fallback chain.
 
-    TODAY, Fireworks-only (Romain's constraint — no Moonshot rung). The live chain
-    is ``<resolved deepseek-v4-pro> -> fireworks/kimi-k2p7-code -> gemini-3.1-pro-preview``:
-    a true thinking head (clean answer in ``content``, scratch in ``reasoning_content``)
-    whose budget-eaten empty result advances to a CONTENT (non-reasoning) model that
-    gives its WHOLE budget to ``content`` and reliably writes prose — the real
-    empty-answer guarantee — before degrading to Gemini. Never Moonshot. When
-    kimi-k2-thinking is enabled on this Fireworks account, the resolved head simply
-    becomes that id.
+    ``<resolved gpt-5.6-sol> -> claude-opus-5 -> gemini-3.1-pro-preview``:
+    three full-quality synthesis heads on three DIFFERENT providers, so an
+    account suspension or a downed proxy on one rung cannot empty the answer.
 
-    The caller (M6 synthesis node) tries each override in order; each is a string
-    ``LLMService.generate(model_override=...)`` already routes (Fireworks ids by
-    prefix, the Gemini id as a bare model). Deduped, order preserved.
+    The caller (M6 synthesis node) tries each override in order; each is a
+    string ``LLMService.generate(model_override=...)`` already routes by
+    prefix. Deduped, order preserved.
     """
     chain = [
         resolve_scholar_synthesis_model(),
@@ -357,7 +323,7 @@ _SCHOLAR_TOOL_CALL_BUDGETS: dict[str, int] = {
 # Per-tier synthesis render cap. >=5000 mandatory: reasoning eats the budget.
 # Streaming cap must match the blocking path (the two must agree — §6); the M6
 # wiring raises scholarly_agent._stream_render_max_tokens to this for flag-ON.
-# Raised (F4): deepseek-v4-pro shares max_tokens between reasoning_content and
+# Raised (F4): a thinking model shares max_tokens between reasoning_content and
 # content, so a bigger total budget — together with the reasoning_effort cap
 # (scholar_reasoning_effort) that bounds the chain-of-thought — leaves an
 # enforced answer reserve so the primary model rarely empties.
@@ -367,36 +333,38 @@ _SCHOLAR_RENDER_TOKENS: dict[str, int] = {
     "deep": 14000,
 }
 
-# F4: the reasoning-budget cap passed to the Fireworks thinking model so a long
-# chain-of-thought cannot eat the whole max_tokens and empty the answer. Verified
-# against the live Fireworks API: deepseek-v4-pro honours a top-level
-# ``reasoning_effort`` ("none"|"low"|"medium"|"high"); "low" keeps the thinking
-# model's quality (reasoning stays SEPARATE in reasoning_content, content stays a
-# clean finished answer) while bounding the scratchpad so the answer reserve
-# survives. ``SCHOLAR_SYNTHESIS_REASONING_EFFORT`` overrides; an empty/"default"
-# value disables the cap (provider default). The kimi content-model fallback rung
-# and the deterministic map hedge remain the floor.
-_SCHOLAR_REASONING_EFFORT_DEFAULT = "low"
+# F4: the reasoning-budget cap for the thinking-model synthesis. gpt-5.6-sol on
+# the Codex proxy honours a top-level ``reasoning_effort``
+# ("low"|"medium"|"high"), verified live: it bounds the scratchpad so a long
+# chain-of-thought cannot eat the whole ``max_tokens`` and empty the answer.
+#
+# By DEFAULT this returns ``None`` so the LLMService synthesis tier decides
+# (``CODEX_REASONING_EFFORT``, default "high" — full academic quality).
+# ``SCHOLAR_SYNTHESIS_REASONING_EFFORT`` pins it per-call when an operator wants
+# to trade depth for a bigger answer reserve. The claude-opus-5 rung and the
+# deterministic map hedge remain the floor.
 _VALID_REASONING_EFFORTS: frozenset[str] = frozenset({"none", "low", "medium", "high"})
 
 
 def scholar_reasoning_effort() -> str | None:
-    """Reasoning-budget cap for the Fireworks thinking-model synthesis (F4).
+    """Explicit reasoning-budget cap for the synthesis, or ``None``.
 
-    Defaults to ``"low"`` — bounds deepseek-v4-pro's ``reasoning_content`` so it
-    cannot consume the whole ``max_tokens`` and return empty ``content``. Override
-    with ``SCHOLAR_SYNTHESIS_REASONING_EFFORT``; ``""``/``"default"`` returns
-    ``None`` (no cap, provider default). An unrecognised value also returns the
-    default. Only the Fireworks/OpenRouter payloads consume it; Gemini ignores it.
+    ``None`` (the default) defers to the LLMService synthesis tier. Set
+    ``SCHOLAR_SYNTHESIS_REASONING_EFFORT`` to one of
+    ``none|low|medium|high`` to pin it. An unrecognised value is ignored.
+
+    NOTE — the pin only ever reaches the **Codex proxy**. LLMService resolves
+    the value for any provider but attaches it exclusively for Codex
+    (``LLMService._apply_reasoning_effort``): the claude-opus-5 and Gemini
+    rungs of the fallback chain ignore it entirely, so lowering the effort
+    here trades depth for answer budget on the primary rung ONLY. The
+    reciprocal guard against a reasoning run eating the whole budget is the
+    Codex synthesis ``max_tokens`` floor (``CODEX_SYNTHESIS_MAX_TOKENS``).
     """
     raw = (os.getenv("SCHOLAR_SYNTHESIS_REASONING_EFFORT") or "").strip().lower()
-    if raw == "default":
-        return None  # explicit opt-out: provider default, no cap
-    if not raw:
-        return _SCHOLAR_REASONING_EFFORT_DEFAULT
     if raw in _VALID_REASONING_EFFORTS:
         return raw
-    return _SCHOLAR_REASONING_EFFORT_DEFAULT
+    return None
 
 
 def scholar_tool_call_budget(budget_tier: str) -> int:
@@ -413,7 +381,7 @@ def scholar_tool_call_budget(budget_tier: str) -> int:
     return _SCHOLAR_TOOL_CALL_BUDGETS.get(budget_tier, 24)
 
 
-# The synthesis runs a TRUE thinking model (deepseek-v4-pro): ~150–220 s of
+# The synthesis runs a TRUE thinking model (gpt-5.6-sol): ~150–220 s of
 # generation (large reasoning_content + answer) is normal, and a hard query can
 # push past that. The shared LLM client times out at 120 s, which would cancel a
 # healthy slow synthesis into the legacy facet-template fallback — the worst
@@ -427,7 +395,7 @@ _SCHOLAR_SYNTHESIS_TIMEOUT_DEFAULT = 360.0
 def scholar_synthesis_timeout() -> float:
     """Per-call HTTP timeout (seconds) for the dialectical synthesis LLM call.
 
-    Defaults to 360 s — comfortably above the ~150–220 s deepseek-v4-pro thinking
+    Defaults to 360 s — comfortably above the ~150–220 s thinking-model
     run and the ~300 s generation budget — so a slow-but-healthy synthesis is
     NEVER cut into the facet-template fallback. Override with
     ``ELEUTHERIA_SCHOLAR_SYNTHESIS_TIMEOUT`` (clamped to [120, 900])."""
@@ -445,10 +413,10 @@ def scholar_render_max_tokens(budget_tier: str) -> int:
 
     Streaming and blocking paths MUST agree on this value (§6). Overridable with
     ``ELEUTHERIA_SCHOLAR_RENDER_MAX_TOKENS``. The ceiling was raised 20000→24000
-    and the per-tier defaults lifted (F4): deepseek shares max_tokens between
+    and the per-tier defaults lifted (F4): a thinking head shares max_tokens between
     reasoning_content and content, so a larger total budget — paired with the
     ``scholar_reasoning_effort`` cap that bounds the chain-of-thought — leaves an
-    enforced answer reserve so the answer rarely empties. The kimi content-model
+    enforced answer reserve so the answer rarely empties. The claude-opus-5
     fallback rung and the deterministic map hedge remain the floor.
     """
     raw = os.getenv("ELEUTHERIA_SCHOLAR_RENDER_MAX_TOKENS")
@@ -477,7 +445,7 @@ async def synthesize_dialectical(
         grounded, full bilingual passages, page-grounded positions, raw
         ``incident_edge_count`` order.
       - ``llm``: the shared ``LLMService``; model chosen by
-        :func:`resolve_scholar_synthesis_model` (Fireworks-only for now).
+        :func:`resolve_scholar_synthesis_model`.
     Output: prose + reasoning trace + the extracted ledger.
 
     Never raises into the pipeline: an empty/failed call yields an empty-prose
@@ -514,7 +482,7 @@ async def synthesize_dialectical(
     reasoning_effort = scholar_reasoning_effort()
 
     # Try each rung of the fallback chain in order; first non-empty prose wins
-    # (ARCHITECTURE §K2.7 — Fireworks-only today; head is deepseek-v4-pro, a true
+    # (head is gpt-5.6-sol, a true
     # thinking model whose ``content`` is already a clean finished answer).
     prose = ""
     reasoning_trace = ""
@@ -525,7 +493,7 @@ async def synthesize_dialectical(
         try:
             # The answer budget (max_tokens) applies to ``content`` only — thinking
             # models spend SEPARATE tokens on reasoning_content, so the answer is not
-            # starved. Keep temperature at 0.3 (KIMI is clamped to 1.0 in the payload).
+            # starved. Keep temperature at 0.3.
             # reasoning_effort bounds the thinking model's chain-of-thought so it
             # cannot eat the whole budget and empty the answer (F4); the Gemini and
             # non-reasoning content rungs simply ignore it.
@@ -559,8 +527,8 @@ async def synthesize_dialectical(
             break
 
     # Defensive chain-of-thought strip — ONLY for providers that inline reasoning
-    # into ``content`` (e.g. k2p6). For a true thinking model (deepseek-v4-pro,
-    # kimi-k2-thinking) ``content`` is already clean (reasoning is in
+    # into ``content``. For a true thinking model (gpt-5.6-sol,
+    # claude-opus-5) ``content`` is already clean (reasoning is in
     # reasoning_content), so the stripper is a NO-OP that could only risk
     # truncating a clean answer — skip it.
     model_used = getattr(llm, "last_model_used", "") or model_id
@@ -597,8 +565,8 @@ async def synthesize_dialectical(
 # segments are forwarded to ``on_reasoning`` (a callback the caller wires to an
 # SSE ``synthesis_reasoning`` event); the answer segments are accumulated into the
 # clean ``content`` prose. The reasoning text NEVER enters the answer (separate
-# channels by construction). deepseek emits reasoning deltas first, then content
-# deltas. Same fallback chain (Fireworks-only today), same 360 s timeout; on a
+# channels by construction). The head emits reasoning deltas first, then content
+# deltas. Same fallback chain, same 360 s timeout; on a
 # rung that yields no answer it tries the next. Never raises into the pipeline.
 
 ReasoningCallback = Callable[[str], Awaitable[None]]
@@ -748,12 +716,12 @@ async def synthesize_dialectical_stream(
             getattr(llm, "last_reasoning_content", "") or ""
         )
 
-        # Budget-eaten signature: a thinking model (deepseek) shares max_tokens
+        # Budget-eaten signature: a thinking model shares max_tokens
         # between reasoning_content and content. When reasoning ran long, the
         # answer comes back EMPTY or TOO THIN while reasoning is non-empty (and
         # finish_reason == "length"). One targeted NON-STREAMING re-call on the
         # SAME candidate, ordering it to STOP reasoning and emit the essay now,
-        # recovers deepseek's quality before advancing to the content rung.
+        # recovers the head's quality before advancing to the next rung.
         too_thin = len(prose) < _THIN_PROSE_FLOOR
         had_reasoning = bool(candidate_reasoning.strip())
         budget_eaten = (getattr(llm, "last_finish_reason", "") == "length") or (
@@ -982,9 +950,16 @@ def _classify_claim(sentence: str, kind: str) -> str:
 
 
 def _split_sentences(prose: str) -> list[str]:
-    # Cheap, deterministic. Keeps the marker attached to its sentence.
-    parts = re.split(r"(?<=[.!?])\s+(?=[A-ZΑ-Ω])", prose)
-    return [p.strip() for p in parts if p.strip()]
+    """Split prose into ledger units. Cheap, deterministic.
+
+    Splits on newlines AS WELL AS sentence boundaries. List-shaped prose (the
+    deterministic map hedge is bullet lines with no terminal punctuation) would
+    otherwise collapse into ONE unit, so every passage id in the block would be
+    checked against every quote in the block and the quote gate would drop
+    every citation as INSUFFICIENT.
+    """
+    parts = re.split(r"\n+|(?<=[.!?])\s+(?=[A-ZΑ-Ω])", prose)
+    return [p.strip() for p in parts if p and p.strip()]
 
 
 def position_marker_id(pos: GroundedPosition) -> str:
@@ -1206,8 +1181,8 @@ async def synthesize_degraded(cmap: ControversyMap, llm: Any) -> str:
         f"run (gaps: {gaps}). Attribute every position; ground in quoted text where "
         "available; do not pad. This is a scholar's hedge, not a survey."
     )
-    # The safety-belt must NOT empty the same way the head did. deepseek shares its
-    # max_tokens between reasoning_content and content, so a hedge on deepseek can
+    # The safety belt must NOT empty the same way the head did. A thinking head
+    # shares max_tokens between reasoning_content and content, so a hedge on it can
     # be eaten by reasoning exactly like the head. Use the CONTENT (non-reasoning)
     # model — its whole budget goes to ``content`` — with a real answer budget.
     model_id = _SCHOLAR_SYNTHESIS_CONTENT_FALLBACK
@@ -1231,7 +1206,7 @@ async def synthesize_degraded(cmap: ControversyMap, llm: Any) -> str:
 #
 # The absolute floor of the synthesis-robustness guarantee: NO LLM call. When a
 # populated ControversyMap exists but every LLM rung AND the degraded hedge came
-# back empty (e.g. all Fireworks rungs 429/error and Gemini 429s too), this
+# back empty (e.g. both proxies 429/error and Gemini 429s too), this
 # serialises the map's contending positions + their grounded passages into
 # readable, attributed prose DIRECTLY — so a populated map ALWAYS yields a real
 # answer instead of falling through to the legacy bare "insufficient evidence"
@@ -1302,8 +1277,15 @@ def deterministic_map_hedge(cmap: ControversyMap) -> str:
             holder = (pos.holder or "a scholar").strip()
             marker = f"[P_{pos.position_id}: {format_scholar_reference(pos) or holder}]"
             claim = (pos.claim or "").strip()
-            if claim:
+            # An empty holder_node_id means the "holder" was derived from the
+            # node's own label, not resolved to a real person — asserting that
+            # such a string "holds that …" invents an attribution. Name the
+            # position instead.
+            attributed = bool(pos.holder_node_id)
+            if claim and attributed:
                 lines.append(f"- {holder} holds that {claim} {marker}")
+            elif claim:
+                lines.append(f"- {holder} is the position that {claim} {marker}")
             else:
                 lines.append(
                     f"- {holder} is recorded as a contending position {marker}"

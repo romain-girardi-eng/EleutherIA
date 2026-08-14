@@ -35,7 +35,7 @@ feeds back into retrieval/span-editing. Capped at ``N_max`` rounds by budget tie
 template).
 
 VECTORLESS throughout (marker resolution + substring + set-diff are all string
-ops over the map; the NLI/semantic arms are short isolated Fireworks calls when
+ops over the map; the NLI/semantic arms are short isolated utility-tier calls when
 supplied). Gated by ``ELEUTHERIA_SCHOLAR_RAG`` at the call site; this module is
 import-safe and inert until a consumer invokes it — no live module imports it
 with the flag OFF.

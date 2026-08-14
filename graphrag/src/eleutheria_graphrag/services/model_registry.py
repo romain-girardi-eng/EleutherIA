@@ -1,15 +1,24 @@
-"""Model registry for multi-LLM routing."""
+"""Model registry for multi-LLM routing.
+
+Prices are NOT written down here: each entry derives ``pricing_input`` /
+``pricing_output`` from :mod:`eleutheria_graphrag.services.llm_pricing`, which
+is the single place a price is declared (and the same table the per-call cost
+accounting uses). ``ModelInfo`` is built on access, so a
+``*_PRICE_*_USD_PER_M`` env override is picked up without a restart.
+"""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+
+from eleutheria_graphrag.services.llm_pricing import get_model_price
 
 
 @dataclass(frozen=True)
 class ModelInfo:
     key: str
     api_id: str
-    provider: str  # "gemini" | "openrouter"
+    provider: str  # "codex" | "claude" | "gemini"
     context: int
     label: str
     tier: str  # "default" | "premium" | "value" | "budget"
@@ -17,57 +26,75 @@ class ModelInfo:
     pricing_output: float
 
 
-_REGISTRY: dict[str, ModelInfo] = {
-    "gemini-3.1-pro": ModelInfo(
+@dataclass(frozen=True)
+class _ModelSpec:
+    """Everything about a model EXCEPT its price (owned by llm_pricing)."""
+
+    key: str
+    api_id: str
+    provider: str
+    context: int
+    label: str
+    tier: str
+
+
+_SPECS: dict[str, _ModelSpec] = {
+    "gpt-5.6-sol": _ModelSpec(
+        key="gpt-5.6-sol",
+        api_id="gpt-5.6-sol",
+        provider="codex",
+        context=1_000_000,
+        label="GPT-5.6 Sol",
+        tier="default",
+    ),
+    "claude-opus-5": _ModelSpec(
+        key="claude-opus-5",
+        api_id="claude-opus-5",
+        provider="claude",
+        context=1_000_000,
+        label="Claude Opus 5",
+        tier="premium",
+    ),
+    "claude-sonnet-4.6": _ModelSpec(
+        key="claude-sonnet-4.6",
+        api_id="claude-sonnet-4-6",
+        provider="claude",
+        context=1_000_000,
+        label="Claude Sonnet 4.6",
+        tier="value",
+    ),
+    "gemini-3.1-pro": _ModelSpec(
         key="gemini-3.1-pro",
         api_id="gemini-3.1-pro-preview",
         provider="gemini",
         context=1_000_000,
         label="Gemini 3.1 Pro",
-        tier="default",
-        pricing_input=2.00,
-        pricing_output=12.00,
-    ),
-    "claude-sonnet-4.6": ModelInfo(
-        key="claude-sonnet-4.6",
-        api_id="anthropic/claude-sonnet-4.6",
-        provider="openrouter",
-        context=1_000_000,
-        label="Claude Sonnet 4.6",
-        tier="premium",
-        pricing_input=3.00,
-        pricing_output=15.00,
-    ),
-    "qwen-3.5-plus": ModelInfo(
-        key="qwen-3.5-plus",
-        api_id="qwen/qwen3.5-plus-02-15",
-        provider="openrouter",
-        context=1_000_000,
-        label="Qwen 3.5 Plus",
-        tier="value",
-        pricing_input=0.26,
-        pricing_output=1.56,
-    ),
-    "deepseek-r1": ModelInfo(
-        key="deepseek-r1",
-        api_id="deepseek/deepseek-r1-0528",
-        provider="openrouter",
-        context=163_840,
-        label="DeepSeek R1",
         tier="budget",
-        pricing_input=0.45,
-        pricing_output=2.15,
     ),
 }
 
-DEFAULT_MODEL = "gemini-3.1-pro"
+DEFAULT_MODEL = "gpt-5.6-sol"
+
+
+def _build(spec: _ModelSpec) -> ModelInfo:
+    price = get_model_price(spec.api_id, provider=spec.provider)
+    return ModelInfo(
+        key=spec.key,
+        api_id=spec.api_id,
+        provider=spec.provider,
+        context=spec.context,
+        label=spec.label,
+        tier=spec.tier,
+        pricing_input=price.input_per_m,
+        pricing_output=price.output_per_m,
+    )
 
 
 def get_model(key: str) -> ModelInfo:
-    if key not in _REGISTRY:
-        raise KeyError(f"Unknown model: {key!r}. Available: {list(_REGISTRY)}")
-    return _REGISTRY[key]
+    if key not in _SPECS:
+        raise KeyError(f"Unknown model: {key!r}. Available: {list(_SPECS)}")
+    return _build(_SPECS[key])
 
 
 def list_models() -> list[ModelInfo]:
-    return list(_REGISTRY.values())
+    return [_build(spec) for spec in _SPECS.values()]

@@ -115,17 +115,15 @@ async def main() -> None:
     temporal_address = os.getenv("TEMPORAL_HOST", "temporal:7233")
     task_queue = os.getenv("TEMPORAL_TASK_QUEUE", "eleutheria-ingestion")
 
-    # Optional override for the proposal-extraction model. The default in
-    # ``contribution_activities.PROPOSAL_MODEL`` points at a slug that
-    # doesn't exist on Fireworks, so prod sets ELEUTHERIA_PROPOSAL_MODEL
-    # to a known-good slug (e.g. ``accounts/fireworks/models/kimi-k2p6``).
+    # Optional override for the proposal-extraction model
+    # (``contribution_activities.PROPOSAL_MODEL``).
     proposal_model = os.getenv("ELEUTHERIA_PROPOSAL_MODEL")
     if proposal_model:
         logger.info(f"Overriding PROPOSAL_MODEL -> {proposal_model}")
         _ca.PROPOSAL_MODEL = proposal_model
 
-    # Kimi K2P6 needs more headroom for its reasoning_content before it
-    # emits the tool_call — the activity's hard-coded 2048 leaves the model
+    # A reasoning model needs more headroom for its reasoning_content before
+    # it emits the tool_call — the activity's hard-coded 2048 leaves the model
     # stuck mid-thought and it falls back to plain content. Monkey-patch
     # ``_call_tool`` to bump max_tokens. Default 8192; opt-out via env=0.
     extractor_max_tokens = int(os.getenv("ELEUTHERIA_EXTRACTOR_MAX_TOKENS", "8192"))

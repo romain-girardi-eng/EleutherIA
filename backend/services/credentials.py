@@ -1,8 +1,8 @@
 """CredentialsBridge — resolve LLM API keys from the environment.
 
-Provider keys (Fireworks / Gemini / Moonshot / OpenRouter) are read from
-environment variables and cached in-process. Keys do not rotate often enough
-to need short-TTL caching.
+Provider keys (Codex proxy / Claude proxy / Gemini) are read from environment
+variables and cached in-process. Keys do not rotate often enough to need
+short-TTL caching.
 """
 
 from __future__ import annotations
@@ -10,13 +10,12 @@ from __future__ import annotations
 import os
 from typing import Literal
 
-LLMProvider = Literal["fireworks", "gemini", "moonshot", "openrouter"]
+LLMProvider = Literal["codex", "claude", "gemini"]
 
 _PROVIDER_ENV_KEYS: dict[str, str] = {
-    "fireworks": "FIREWORKS_API_KEY",
+    "codex": "CODEX_PROXY_API_KEY",
+    "claude": "CLAUDE_PROXY_API_KEY",
     "gemini": "GEMINI_API_KEY",
-    "moonshot": "MOONSHOT_API_KEY",
-    "openrouter": "OPENROUTER_API_KEY",
 }
 
 

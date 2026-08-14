@@ -530,6 +530,7 @@ async def _navigate_sections_with_llm(
             cache_key=f"tree-nav::{work_id}",
             cache_prefix="tree_navigation_v1",
             model_override=model_api_id,
+            tier="utility",
         )
         _dur = int((_time.time() - _t0) * 1000)
         parsed = TreeNavigationResult.model_validate(_parse_json(raw))
@@ -610,6 +611,7 @@ async def _build_research_frame(ctx: GraphRunContext[RAGState, Deps]) -> None:
                 cache_key="research-frame",
                 cache_prefix="research_frame_v1",
                 model_override=model_api_id,
+                tier="utility",
             )
             _dur = int((_time.time() - _t0) * 1000)
             framed = ResearchFrame.model_validate(_parse_json(raw))
@@ -736,6 +738,7 @@ async def _plan_reading(ctx: GraphRunContext[RAGState, Deps]) -> None:
                 cache_key="reading-plan",
                 cache_prefix="reading_plan_v1",
                 model_override=model_api_id,
+                tier="utility",
             )
             _dur = int((_time.time() - _t0) * 1000)
             parsed = ReadingPlanResult.model_validate(_parse_json(raw))
@@ -905,6 +908,7 @@ class ExpandQuery(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 cache_key="query-expansion",
                 cache_prefix="query_expansion_v1",
                 model_override=model_api_id,
+                tier="utility",
             )
             _dur = int((_time.time() - _t0) * 1000)
             expansion = _merge_expansion_terms(
@@ -1530,6 +1534,7 @@ class SeekCounterEvidence(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 cache_key="counter-evidence",
                 cache_prefix="counter_evidence_v1",
                 model_override=model_api_id,
+                tier="utility",
             )
             _dur = int((_time.time() - _t0) * 1000)
             parsed = CounterEvidenceResult.model_validate(_parse_json(raw))

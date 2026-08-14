@@ -88,6 +88,7 @@ class LemmaExpander:
                 temperature=0.1,
                 max_tokens=512,
                 response_mime_type="application/json",
+                tier="utility",
             )
             lemmas = self._parse_lemmas(raw, max_lemmas)
         except Exception:

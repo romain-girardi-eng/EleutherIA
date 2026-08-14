@@ -41,6 +41,7 @@ from eleutheria_graphrag.agents.sse_emitter import SSEEmitter
 from eleutheria_graphrag.agents.state import QueryComplexity, RAGState
 from eleutheria_graphrag.agents.tool_schemas import build_tool_function_schemas
 from eleutheria_graphrag.agents.tools import ToolRegistry
+from eleutheria_graphrag.services.llm_service import CLIENT_LLM_ERROR_MESSAGE
 
 logger = logging.getLogger(__name__)
 
@@ -209,9 +210,9 @@ class AgentLoop:
                     max_tokens=1024,
                     model_override=resolve_model_api_id(self.state),
                 )
-            except Exception as e:
-                logger.error("LLM call failed in agent loop: %s", e, exc_info=True)
-                await self.emitter.emit_error(f"LLM error: {e}")
+            except Exception:
+                logger.error("LLM call failed in agent loop", exc_info=True)
+                await self.emitter.emit_error(CLIENT_LLM_ERROR_MESSAGE)
                 break
             int((time.monotonic() - t0) * 1000)
 
@@ -757,14 +758,13 @@ class NativeAgentLoop(_NativeAgentLoopBase):
                     max_tokens=2048,
                     model_override=resolve_model_api_id(self.state),
                 )
-            except Exception as exc:  # pragma: no cover — surfaced to client
+            except Exception:  # pragma: no cover — surfaced to client
                 logger.error(
-                    "LLM tool-calling failed at iteration %d: %s",
+                    "LLM tool-calling failed at iteration %d",
                     iteration,
-                    exc,
                     exc_info=True,
                 )
-                await self.emitter.emit_error(f"LLM error: {exc}")
+                await self.emitter.emit_error(CLIENT_LLM_ERROR_MESSAGE)
                 break
 
             tool_calls = message.get("tool_calls") or []

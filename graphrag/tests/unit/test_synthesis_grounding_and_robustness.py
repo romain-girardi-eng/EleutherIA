@@ -52,15 +52,15 @@ from eleutheria_graphrag.agents.tools.build_controversy_frame import (
 )
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
 
-# ── F4: reasoning_effort threads into the Fireworks payload ──────────────────
+# ── F4: reasoning_effort threads into the Codex payload ──────────────────────
 
 
-def test_fireworks_payload_carries_reasoning_effort_when_requested() -> None:
-    """The Fireworks payload gains a top-level ``reasoning_effort`` (the verified
+def test_codex_payload_carries_reasoning_effort_when_requested() -> None:
+    """The Codex payload gains a top-level ``reasoning_effort`` (the verified
     knob) ONLY when the caller passes one — never otherwise."""
-    config = {"model": "accounts/fireworks/models/deepseek-v4-pro"}
+    config = {"model": "gpt-5.6-sol"}
     with_effort = LLMService._openai_compatible_payload(
-        ModelProvider.FIREWORKS,
+        ModelProvider.CODEX,
         "prompt",
         "system",
         0.3,
@@ -71,7 +71,7 @@ def test_fireworks_payload_carries_reasoning_effort_when_requested() -> None:
     assert with_effort["reasoning_effort"] == "low"
 
     without = LLMService._openai_compatible_payload(
-        ModelProvider.FIREWORKS,
+        ModelProvider.CODEX,
         "prompt",
         "system",
         0.3,
@@ -81,28 +81,28 @@ def test_fireworks_payload_carries_reasoning_effort_when_requested() -> None:
     assert "reasoning_effort" not in without
 
 
-def test_openrouter_payload_explicit_effort_overrides_config() -> None:
-    """OpenRouter still maps effort to ``reasoning.effort``; an explicit caller
-    override wins over the env-configured default."""
-    config = {
-        "model": "anthropic/claude-sonnet-4.6",
-        "reasoning_effort": "medium",
-    }
+def test_claude_payload_omits_reasoning_effort() -> None:
+    """Only the Codex proxy is verified to honour the knob."""
     payload = LLMService._openai_compatible_payload(
-        ModelProvider.OPENROUTER,
+        ModelProvider.CLAUDE,
         "prompt",
         None,
         0.3,
         4096,
-        config,
+        {"model": "claude-opus-5"},
         reasoning_effort="high",
     )
-    assert payload["reasoning"] == {"effort": "high"}
+    assert "reasoning_effort" not in payload
+    assert "reasoning" not in payload
 
 
-def test_scholar_reasoning_effort_defaults_to_low(monkeypatch: Any) -> None:
+def test_scholar_reasoning_effort_defers_to_the_tier_by_default(
+    monkeypatch: Any,
+) -> None:
+    """``None`` lets the LLMService synthesis tier decide (CODEX_REASONING_EFFORT,
+    default "high" — full academic quality)."""
     monkeypatch.delenv("SCHOLAR_SYNTHESIS_REASONING_EFFORT", raising=False)
-    assert scholar_reasoning_effort() == "low"
+    assert scholar_reasoning_effort() is None
 
 
 def test_scholar_reasoning_effort_env_override(monkeypatch: Any) -> None:
@@ -110,14 +110,9 @@ def test_scholar_reasoning_effort_env_override(monkeypatch: Any) -> None:
     assert scholar_reasoning_effort() == "medium"
 
 
-def test_scholar_reasoning_effort_explicit_opt_out(monkeypatch: Any) -> None:
-    monkeypatch.setenv("SCHOLAR_SYNTHESIS_REASONING_EFFORT", "default")
-    assert scholar_reasoning_effort() is None
-
-
-def test_scholar_reasoning_effort_invalid_falls_back(monkeypatch: Any) -> None:
+def test_scholar_reasoning_effort_invalid_is_ignored(monkeypatch: Any) -> None:
     monkeypatch.setenv("SCHOLAR_SYNTHESIS_REASONING_EFFORT", "ludicrous")
-    assert scholar_reasoning_effort() == "low"
+    assert scholar_reasoning_effort() is None
 
 
 # ── F4: synthesize_dialectical passes the cap + records instrumentation ───────
@@ -153,9 +148,10 @@ def _two_position_map() -> ControversyMap:
 
 
 @pytest.mark.asyncio
-async def test_synthesize_passes_reasoning_effort_to_llm() -> None:
-    """The synthesis call carries the reasoning-budget cap so deepseek's
+async def test_synthesize_passes_reasoning_effort_to_llm(monkeypatch: Any) -> None:
+    """The synthesis call carries the reasoning-budget cap so the thinking head's
     chain-of-thought cannot eat the whole answer budget (F4)."""
+    monkeypatch.setenv("SCHOLAR_SYNTHESIS_REASONING_EFFORT", "low")
     prose = (
         "Bobzien [P_p_a: Bobzien] and Frede [P_p_b: Frede] clash "
         "[edge: opposes P_p_a->P_p_b] over Epictetus "
@@ -163,7 +159,7 @@ async def test_synthesize_passes_reasoning_effort_to_llm() -> None:
     )
     llm = AsyncMock()
     llm.generate.return_value = prose
-    llm.last_model_used = "accounts/fireworks/models/deepseek-v4-pro"
+    llm.last_model_used = "gpt-5.6-sol"
     llm.last_reasoning_content = ""
 
     result = await synthesize_dialectical(state=None, cmap=_two_position_map(), llm=llm)
@@ -179,10 +175,10 @@ async def test_synthesize_passes_reasoning_effort_to_llm() -> None:
 
 @pytest.mark.asyncio
 async def test_synthesis_records_fallback_rung_instrumentation() -> None:
-    """When the primary deepseek head empties and a later rung writes the prose,
-    the SynthesisResult records WHICH rung fired (F4 observability)."""
+    """When the primary head empties and a later rung writes the prose, the
+    SynthesisResult records WHICH rung fired (F4 observability)."""
 
-    class _DeepseekEmptiesThenKimiWrites:
+    class _PrimaryEmptiesThenFallbackWrites:
         def __init__(self) -> None:
             self.last_model_used = ""
             self.last_reasoning_content = ""
@@ -190,7 +186,7 @@ async def test_synthesis_records_fallback_rung_instrumentation() -> None:
         async def generate(self, _prompt: str, **kwargs: Any) -> str:
             model = kwargs.get("model_override") or ""
             self.last_model_used = model
-            if model == "accounts/fireworks/models/deepseek-v4-pro":
+            if model == "gpt-5.6-sol":
                 return ""  # budget eaten by reasoning -> empty content
             return (
                 "Bobzien [P_p_a: Bobzien] opposes Frede [P_p_b: Frede] "
@@ -198,14 +194,14 @@ async def test_synthesis_records_fallback_rung_instrumentation() -> None:
                 "[passage_epict_diss_1_1: Epictetus, Discourses 1.1]."
             )
 
-    llm = _DeepseekEmptiesThenKimiWrites()
+    llm = _PrimaryEmptiesThenFallbackWrites()
     result = await synthesize_dialectical(state=None, cmap=_two_position_map(), llm=llm)
 
     assert result.prose != ""
-    assert result.rung_index == 1  # the kimi content rung produced it
+    assert result.rung_index == 1  # the claude-opus-5 rung produced it
     assert result.fell_back is True
     assert result.rungs_tried == 2
-    assert result.model_used == "accounts/fireworks/models/kimi-k2p7-code"
+    assert result.model_used == "claude-opus-5"
 
 
 def test_render_max_tokens_raised_with_answer_reserve() -> None:

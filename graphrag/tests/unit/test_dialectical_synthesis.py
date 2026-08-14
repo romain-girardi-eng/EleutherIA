@@ -226,31 +226,19 @@ def test_content_gate_rejects_fabricated_passage_id() -> None:
 # ── model resolution (Fireworks-only) ────────────────────────────────────────
 
 
-def test_resolve_model_defaults_to_fireworks(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_resolve_model_defaults_to_the_codex_synthesis_head(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.delenv("SCHOLAR_SYNTHESIS_MODEL", raising=False)
     # the synthesis runs on the true thinking model (clean answer in `content`)
-    assert (
-        resolve_scholar_synthesis_model() == "accounts/fireworks/models/deepseek-v4-pro"
-    )
+    assert resolve_scholar_synthesis_model() == "gpt-5.6-sol"
 
 
-def test_resolve_model_ignores_moonshot_optin(
+def test_resolve_model_accepts_an_override(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    # Romain's constraint: Moonshot opt-in is NOT honoured until K2-thinking lands.
-    monkeypatch.setenv("SCHOLAR_SYNTHESIS_MODEL", "moonshot:kimi-k2.7-code-highspeed")
-    assert (
-        resolve_scholar_synthesis_model() == "accounts/fireworks/models/deepseek-v4-pro"
-    )
-
-
-def test_resolve_model_accepts_fireworks_override(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    monkeypatch.setenv(
-        "SCHOLAR_SYNTHESIS_MODEL", "fireworks:accounts/fireworks/models/kimi-k2p6"
-    )
-    assert resolve_scholar_synthesis_model() == "accounts/fireworks/models/kimi-k2p6"
+    monkeypatch.setenv("SCHOLAR_SYNTHESIS_MODEL", "claude-opus-5")
+    assert resolve_scholar_synthesis_model() == "claude-opus-5"
 
 
 # ── end-to-end synthesis with a stubbed LLM (NOT the template) ───────────────
@@ -269,14 +257,14 @@ async def test_synthesize_dialectical_runs_end_to_end_with_stub() -> None:
     )
     llm = AsyncMock()
     llm.generate.return_value = grounded_prose
-    llm.last_model_used = "accounts/fireworks/models/deepseek-v4-pro"
+    llm.last_model_used = "gpt-5.6-sol"
     llm.last_reasoning_content = ""
 
     result = await synthesize_dialectical(state=None, cmap=_map(), llm=llm)
 
     assert isinstance(result, SynthesisResult)
     assert result.prose == grounded_prose
-    assert result.model_used == "accounts/fireworks/models/deepseek-v4-pro"
+    assert result.model_used == "gpt-5.6-sol"
     # the prose became a ledger (byproduct), not the other way round
     assert len(result.ledger) == 4
     assert all(i.status == ClaimStatus.SUPPORTED for i in result.ledger)
@@ -289,7 +277,7 @@ async def test_synthesize_dialectical_runs_end_to_end_with_stub() -> None:
     assert "--opposes-->" in user_prompt
     assert "REASON" in user_prompt and "WRITE the scholarly answer" in user_prompt
     assert call.kwargs["system_prompt"] == DIALECTICAL_SYNTHESIS_SYSTEM
-    assert call.kwargs["model_override"] == "accounts/fireworks/models/deepseek-v4-pro"
+    assert call.kwargs["model_override"] == "gpt-5.6-sol"
     # the answer comes from synthesis, not a template
     assert "frames the issue as" not in result.prose
     assert passes_content_gate(result.prose, _map())
@@ -362,25 +350,34 @@ async def test_synthesize_degraded_empty_on_error() -> None:
 # ── M6: fallback chain + flag-ON budget tiers (Fireworks-only) ───────────────
 
 
-def test_fallback_chain_is_fireworks_then_gemini(
+def test_fallback_chain_is_codex_then_claude_then_gemini(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.delenv("SCHOLAR_SYNTHESIS_MODEL", raising=False)
     chain = scholar_synthesis_fallback_chain()
-    # head = resolved Fireworks thinking default; NO Moonshot rung; gemini last resort
-    assert chain[0] == "accounts/fireworks/models/deepseek-v4-pro"
-    assert chain[-1] == "gemini-3.1-pro-preview"
-    assert not any("moonshot" in m or "kimi-k2.7" in m for m in chain)
+    assert chain == ["gpt-5.6-sol", "claude-opus-5", "gemini-3.1-pro-preview"]
     assert len(chain) == len(set(chain))  # deduped
 
 
-def test_fallback_chain_ignores_moonshot_optin(
+def test_fallback_chain_drops_the_retired_providers(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setenv("SCHOLAR_SYNTHESIS_MODEL", "moonshot:kimi-k2.7-code-highspeed")
+    monkeypatch.delenv("SCHOLAR_SYNTHESIS_MODEL", raising=False)
     chain = scholar_synthesis_fallback_chain()
-    assert chain[0] == "accounts/fireworks/models/deepseek-v4-pro"
-    assert not any("moonshot" in m for m in chain)
+    assert not any(
+        token in model
+        for model in chain
+        for token in ("fireworks", "moonshot", "openrouter", "kimi")
+    )
+
+
+def test_fallback_chain_honours_an_override_head(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("SCHOLAR_SYNTHESIS_MODEL", "claude-opus-5")
+    chain = scholar_synthesis_fallback_chain()
+    assert chain[0] == "claude-opus-5"
+    assert chain[-1] == "gemini-3.1-pro-preview"
 
 
 @pytest.mark.asyncio
@@ -652,10 +649,10 @@ def test_synthesize_dialectical_strips_leak_from_prose() -> None:
 
 
 def test_model_separates_reasoning_flags_thinking_models() -> None:
-    assert model_separates_reasoning("accounts/fireworks/models/deepseek-v4-pro")
-    assert model_separates_reasoning("accounts/fireworks/models/kimi-k2-thinking")
-    # the non-reasoning instruct model still needs the defensive stripper
-    assert not model_separates_reasoning("accounts/fireworks/models/kimi-k2p6")
+    assert model_separates_reasoning("gpt-5.6-sol")
+    assert model_separates_reasoning("claude-opus-5")
+    # a non-reasoning model still needs the defensive stripper
+    assert not model_separates_reasoning("gpt-5.4-mini")
     assert not model_separates_reasoning("gemini-3.1-pro-preview")
     assert not model_separates_reasoning("")
 
@@ -664,7 +661,7 @@ def test_model_separates_reasoning_flags_thinking_models() -> None:
 async def test_synthesize_uses_content_only_excludes_reasoning_content() -> None:
     """A thinking model returns BOTH reasoning_content (scratch) + a clean content
     answer. The synthesized prose must be ``content`` ONLY; reasoning goes to the
-    trace side-channel; the scholar path runs deepseek-v4-pro; strip does NOT run."""
+    trace side-channel; the scholar path runs gpt-5.6-sol; strip does NOT run."""
     clean_answer = (
         "Bobzien (1998: 330) holds the ancients had no free-will problem "
         "[P_bobzien_no_problem: Bobzien 1998 p. 330], whereas Frede (2011: 44) dates "
@@ -682,7 +679,7 @@ async def test_synthesize_uses_content_only_excludes_reasoning_content() -> None
 
     llm = AsyncMock()
     llm.generate.return_value = clean_answer  # content ONLY (reasoning is separate)
-    llm.last_model_used = "accounts/fireworks/models/deepseek-v4-pro"
+    llm.last_model_used = "gpt-5.6-sol"
     llm.last_reasoning_content = reasoning_scratch
 
     result = await synthesize_dialectical(state=None, cmap=_map(), llm=llm)
@@ -692,10 +689,10 @@ async def test_synthesize_uses_content_only_excludes_reasoning_content() -> None
     assert "The user wants" not in result.prose
     assert "Let me check" not in result.prose
     # 2. the scholar path resolved the deepseek-v4-pro thinking model
-    assert result.model_used == "accounts/fireworks/models/deepseek-v4-pro"
+    assert result.model_used == "gpt-5.6-sol"
     assert (
         llm.generate.call_args.kwargs["model_override"]
-        == "accounts/fireworks/models/deepseek-v4-pro"
+        == "gpt-5.6-sol"
     )
     # 3. reasoning_content is routed to the trace side-channel, not the answer
     assert result.reasoning_trace == reasoning_scratch
@@ -726,8 +723,8 @@ class _BudgetEatenThenContentLLM:
     synthesis drives; ``generate`` is the targeted answer-only re-call.
     """
 
-    def __init__(self, kimi_answer: str) -> None:
-        self._kimi_answer = kimi_answer
+    def __init__(self, fallback_answer: str) -> None:
+        self._fallback_answer = fallback_answer
         self.last_reasoning_content = ""
         self.last_finish_reason = ""
         self.last_model_used = ""
@@ -744,7 +741,7 @@ class _BudgetEatenThenContentLLM:
         # finish_reason at the start of every call.
         self.last_reasoning_content = ""
         self.last_finish_reason = ""
-        if model_override == "accounts/fireworks/models/deepseek-v4-pro":
+        if model_override == "gpt-5.6-sol":
             # Budget eaten by reasoning: reasoning deltas only, NO content, and the
             # stream truncated at max_tokens (finish_reason=length).
             for delta in (
@@ -757,7 +754,7 @@ class _BudgetEatenThenContentLLM:
             return
         # The content (kimi) rung: gives its whole budget to content → real prose.
         self.last_finish_reason = "stop"
-        for delta in (self._kimi_answer,):
+        for delta in (self._fallback_answer,):
             yield ("answer", delta)
 
     async def generate(self, _prompt: str, **kwargs: Any) -> str:
@@ -770,13 +767,13 @@ class _BudgetEatenThenContentLLM:
 
 
 @pytest.mark.asyncio
-async def test_stream_never_empty_advances_to_content_rung_when_deepseek_only_reasons() -> (
+async def test_stream_never_empty_advances_to_second_rung_when_head_only_reasons() -> (
     None
 ):
     """deepseek emits ONLY reasoning + empty content (finish_reason=length) and its
     answer-only re-call also empties; the streaming synthesis MUST advance to the
     kimi-k2p7-code content rung and return NON-EMPTY prose — never ''."""
-    kimi_answer = (
+    fallback_answer = (
         "The central fault line concerns whether antiquity possessed a concept of "
         "the will at all. Bobzien (1998: 330) holds the ancients had no free-will "
         "problem [P_bobzien_no_problem: Bobzien 1998 p. 330], reading the Stoic "
@@ -789,32 +786,32 @@ async def test_stream_never_empty_advances_to_content_rung_when_deepseek_only_re
         "[passage_cic_fat_41: Cicero, De Fato 41], which each side mobilises for "
         "incompatible conclusions about the antiquity of the problem."
     )
-    assert len(kimi_answer) >= 400  # a genuine finished answer, not 'too thin'
-    llm = _BudgetEatenThenContentLLM(kimi_answer)
+    assert len(fallback_answer) >= 400  # a genuine finished answer, not 'too thin'
+    llm = _BudgetEatenThenContentLLM(fallback_answer)
 
     result = await synthesize_dialectical_stream(state=None, cmap=_map(), llm=llm)
 
     # the guarantee: NON-EMPTY prose, sourced from the content rung
-    assert result.prose == kimi_answer
+    assert result.prose == fallback_answer
     assert result.prose != ""
-    assert result.model_used == "accounts/fireworks/models/kimi-k2p7-code"
-    # the deepseek rung was tried (stream) AND its answer-only re-call fired before
-    # advancing to kimi (the targeted recovery, then the content-rung guarantee)
-    assert llm.stream_calls[0] == "accounts/fireworks/models/deepseek-v4-pro"
-    assert llm.generate_calls == ["accounts/fireworks/models/deepseek-v4-pro"]
-    assert "accounts/fireworks/models/kimi-k2p7-code" in llm.stream_calls
+    assert result.model_used == "claude-opus-5"
+    # the primary rung was tried (stream) AND its answer-only re-call fired
+    # before advancing (targeted recovery, then the second-rung guarantee)
+    assert llm.stream_calls[0] == "gpt-5.6-sol"
+    assert llm.generate_calls == ["gpt-5.6-sol"]
+    assert "claude-opus-5" in llm.stream_calls
 
 
 @pytest.mark.asyncio
-async def test_degraded_uses_content_model_not_deepseek() -> None:
-    """The safety-belt must NOT resolve to deepseek (which empties the same
-    budget-shared way) — it uses the kimi-k2p7-code content model."""
+async def test_degraded_uses_the_second_rung_not_the_primary_head() -> None:
+    """The safety belt must land on a DIFFERENT provider than the head that just
+    emptied — claude-opus-5, not the gpt-5.6-sol that failed."""
     llm = AsyncMock()
     llm.generate.return_value = "A short, honest hedge over the assembled frames."
     await synthesize_degraded(_map(), llm)
     model_override = llm.generate.call_args.kwargs["model_override"]
-    assert model_override == "accounts/fireworks/models/kimi-k2p7-code"
-    assert model_override != "accounts/fireworks/models/deepseek-v4-pro"
+    assert model_override == "claude-opus-5"
+    assert model_override != "gpt-5.6-sol"
 
 
 def test_deterministic_map_hedge_is_non_empty_and_grounded() -> None:
@@ -846,3 +843,129 @@ def test_deterministic_map_hedge_empty_for_empty_map() -> None:
         question_frame="q?", shape=_Shape.SURVEY_OF_DEBATES, frames=[]
     )
     assert deterministic_map_hedge(empty) == ""
+
+
+# ── fix 7: provenance-ledger scoping ─────────────────────────────────────────
+#
+# _split_sentences never split on newlines, so the whole bullet-shaped hedge
+# block collapsed into ONE "sentence". Every passage id in the block was then
+# checked against every ancient quote in the block, the containment gate missed,
+# and every citation was dropped INSUFFICIENT (15 bogus drops -> 0 sources).
+
+
+def test_split_sentences_splits_on_newlines() -> None:
+    from eleutheria_graphrag.agents.dialectical_synthesis import _split_sentences
+
+    block = "- Bobzien holds that X [P_a]\n- Frede holds that Y [P_b]"
+    assert _split_sentences(block) == [
+        "- Bobzien holds that X [P_a]",
+        "- Frede holds that Y [P_b]",
+    ]
+
+
+def test_split_sentences_still_splits_on_sentence_boundaries() -> None:
+    from eleutheria_graphrag.agents.dialectical_synthesis import _split_sentences
+
+    assert _split_sentences("First one. Second one.") == [
+        "First one.",
+        "Second one.",
+    ]
+
+
+def test_hedge_ledger_has_no_insufficient_items() -> None:
+    """THE regression: the deterministic hedge's own ledger must not self-reject.
+
+    Each quoted passage must be scoped to its own line, so the containment gate
+    compares a quote against the passage it actually belongs to.
+    """
+    cmap = _map()
+    hedge = deterministic_map_hedge(cmap)
+    ledger = build_provenance_ledger(hedge, cmap)
+
+    assert ledger, "a populated map must produce a non-empty ledger"
+    insufficient = [i for i in ledger if i.status == ClaimStatus.INSUFFICIENT]
+    assert insufficient == [], (
+        f"{len(insufficient)} bogus INSUFFICIENT drops: "
+        f"{[i.claim[:80] for i in insufficient]}"
+    )
+    assert any(
+        i.support_type == "passage" and i.status == ClaimStatus.SUPPORTED
+        for i in ledger
+    )
+
+
+def test_hedge_ledger_scopes_each_quote_to_its_own_passage() -> None:
+    """The exact incident mechanism.
+
+    With the block collapsed into one "sentence", a metadata-only passage ref
+    (no ``original_text``) inherited the OTHER passage's quoted Greek. The
+    containment gate then fails closed on an empty source text and drops the
+    citation INSUFFICIENT — 15 such bogus drops left the answer with 0 sources.
+    """
+    cmap = _map()
+    quoted = PassageRef(
+        passage_id="epict_diss_1_1",
+        work="Dissertationes",
+        author="Epictetus",
+        canonical_ref="1.1",
+        original_text="τῶν ὄντων τὰ μέν ἐστιν ἐφ' ἡμῖν",
+        english_text="Of things that are, some are up to us",
+        language="grc",
+    )
+    metadata_only = PassageRef(
+        passage_id="alex_fat_14",
+        work="De Fato",
+        author="Alexander of Aphrodisias",
+        canonical_ref="14",
+        original_text="",  # not yet ingested — metadata only
+        english_text="Alexander argues against the Stoic account.",
+        language="grc",
+    )
+    cmap.frames[0].contested_passages.extend([quoted, metadata_only])
+    cmap.provenance[quoted.passage_id] = quoted
+    cmap.provenance[metadata_only.passage_id] = metadata_only
+
+    ledger = build_provenance_ledger(deterministic_map_hedge(cmap), cmap)
+
+    insufficient = [i for i in ledger if i.status == ClaimStatus.INSUFFICIENT]
+    assert insufficient == [], (
+        f"{len(insufficient)} bogus INSUFFICIENT drops: "
+        f"{[i.evidence_ids for i in insufficient]}"
+    )
+    supported_passages = {
+        eid
+        for i in ledger
+        if i.support_type == "passage" and i.status == ClaimStatus.SUPPORTED
+        for eid in i.evidence_ids
+    }
+    assert {"cic_fat_41", "epict_diss_1_1", "alex_fat_14"} <= supported_passages
+
+
+# ── fix 6b: no invented attribution in the deterministic hedge ────────────────
+
+
+def test_hedge_does_not_assert_a_label_derived_holder_holds_the_claim() -> None:
+    """An empty holder_node_id means the holder was derived from the node label,
+    not resolved to a person. "<Label> holds that ..." would invent an
+    attribution; the hedge must name the position instead."""
+    cmap = _map()
+    cmap.frames[0].positions = [
+        GroundedPosition(
+            position_id="unattributed_pos",
+            holder="Argument from moral responsibility",
+            holder_node_id="",  # derived from the label — NOT a resolved person
+            claim="determinism is incompatible with praise and blame",
+        )
+    ]
+    cmap.frames[0].links = []
+
+    hedge = deterministic_map_hedge(cmap)
+    assert "Argument from moral responsibility holds that" not in hedge
+    assert "Argument from moral responsibility is the position that" in hedge
+
+
+def test_hedge_still_attributes_a_resolved_holder() -> None:
+    """A real person (holder_node_id set) keeps the "holds that" phrasing."""
+    hedge = deterministic_map_hedge(_map())
+    assert "Bobzien holds that" in hedge
+    assert "Frede holds that" in hedge

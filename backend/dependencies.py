@@ -35,17 +35,15 @@ def _env_flag(name: str, default: bool) -> bool:
 
 def _preferred_provider() -> ModelProvider:
     raw = (
-        os.getenv("LLM_PREFERRED_PROVIDER", ModelProvider.FIREWORKS.value)
+        os.getenv("LLM_PREFERRED_PROVIDER", ModelProvider.CODEX.value)
         .strip()
         .lower()
     )
     try:
         return ModelProvider(raw)
     except ValueError:
-        logger.warning(
-            "Unknown LLM_PREFERRED_PROVIDER=%s, falling back to fireworks", raw
-        )
-        return ModelProvider.FIREWORKS
+        logger.warning("Unknown LLM_PREFERRED_PROVIDER=%s, falling back to codex", raw)
+        return ModelProvider.CODEX
 
 
 @dataclass
@@ -69,16 +67,14 @@ class Services:
         # EXTERNAL_INTEGRATION is off (default for local dev), the bridge
         # transparently falls back to environment variables — so behaviour
         # is unchanged unless the platform is wired up.
-        fireworks_key = await self.credentials.get_llm_key("fireworks")
+        codex_key = await self.credentials.get_llm_key("codex")
+        claude_key = await self.credentials.get_llm_key("claude")
         gemini_key = await self.credentials.get_llm_key("gemini")
-        moonshot_key = await self.credentials.get_llm_key("moonshot")
-        openrouter_key = await self.credentials.get_llm_key("openrouter")
         self.llm = LLMService(
             preferred_provider=_preferred_provider(),
-            fireworks_api_key=fireworks_key,
+            codex_api_key=codex_key,
+            claude_api_key=claude_key,
             gemini_api_key=gemini_key,
-            moonshot_api_key=moonshot_key,
-            openrouter_api_key=openrouter_key,
         )
 
         # 1. Database. If a KG snapshot is available, the backend can still

@@ -51,8 +51,8 @@ CLASSIFY_TEXT_BUDGET = 30_000
 EXTRACT_TEXT_BUDGET = 60_000
 """Characters of full_text fed into each of the three proposal sub-extractors."""
 
-PROPOSAL_MODEL = "accounts/fireworks/ai/models/kimi-k2.6-instruct"
-"""Default Fireworks model id for tool-calling. Callers can override."""
+PROPOSAL_MODEL = "gpt-5.6-sol"
+"""Default model id for tool-calling (Codex proxy). Callers can override."""
 
 EXISTING_NODE_SIMILARITY_MIN = 0.65
 """``similarity()`` threshold for surfacing potential KG matches."""

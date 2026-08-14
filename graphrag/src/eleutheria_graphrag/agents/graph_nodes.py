@@ -292,10 +292,13 @@ def _attach_proof_chains(
 
 
 def _resolve_model_api_id(state: RAGState) -> str | None:
-    """Return model_override for non-default (non-Gemini) models."""
+    """Return the explicit ``model_override`` for the selected model.
+
+    ``None`` means "let the provider loop choose", which is what an unknown
+    selection should do.
+    """
     try:
-        model_info = get_model(state.selected_model)
-        return model_info.api_id if model_info.provider == "openrouter" else None
+        return get_model(state.selected_model).api_id
     except KeyError:
         return None
 
@@ -869,7 +872,7 @@ def _parse_json(text: str) -> Any:
     """Extract JSON from LLM output, stripping markdown code fences.
 
     Delegates to :func:`eleutheria_graphrag.services.json_extractor.extract_json`
-    so Kimi K2.6 outputs that wrap JSON in code fences, prefix it with
+    so model outputs that wrap JSON in code fences, prefix it with
     natural-language reasoning, or trail prose after the closing brace are
     all recovered. Raises ``json.JSONDecodeError`` for backward-compat with
     the prior contract.
@@ -5223,6 +5226,7 @@ class ClassifyQueryType(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     cache_key="query-classifier",
                     cache_prefix="query_classifier_v1",
                     model_override=model_api_id,
+                    tier="utility",
                 )
                 _dur = int((_time.time() - _t0) * 1000)
                 parsed = ClassificationResult.model_validate(_parse_json(raw))
@@ -5349,6 +5353,7 @@ async def assess_evidence_sufficiency(
                 cache_key="evidence-sufficiency",
                 cache_prefix="evidence_sufficiency_v1",
                 model_override=model_api_id,
+                tier="utility",
             )
             _dur = int((_time.time() - _t0) * 1000)
             assessment = SufficiencyAssessment.model_validate(_parse_json(raw))
@@ -5511,6 +5516,7 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 cache_key="claim-ledger",
                 cache_prefix="claim_ledger_v2",
                 model_override=model_api_id,
+                tier="utility",
             )
             _dur = int((_time.time() - _t0) * 1000)
             parsed = _coerce_claim_ledger_payload(_parse_json(raw))
@@ -5788,7 +5794,7 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             minimize_calls = _should_minimize_llm_calls(state)
 
             # One-shot expand retry when the first draft lands in the
-            # llm_short band (or below): ask Kimi to deepen the existing
+            # llm_short band (or below): ask the model to deepen the existing
             # exegesis without adding new claims. Skip if we're in a
             # minimal-call regime (cheap eval runs).
             if (
@@ -5861,10 +5867,6 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             # inadequate drafts (no point polishing a fallback) and for
             # minimal-call regimes.
             #
-            # Also disabled by default for Kimi K2.6 (env-gated) — the model
-            # frequently leaks its planning prose into the polish output
-            # ("Looking at the draft, I need to…", "Wait, the required
-            # format is…"), corrupting otherwise excellent renders.
             _polish_mode = "skipped"
             _enable_polish = (
                 os.getenv(
@@ -5874,11 +5876,7 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 .strip()
                 .lower()
             )
-            _polish_allowed = _enable_polish in {"1", "true", "yes", "on"} or (
-                _enable_polish == "auto"
-                and "kimi" not in (state.selected_model or "").lower()
-                and "fireworks" not in (model_api_id or "").lower()
-            )
+            _polish_allowed = _enable_polish in {"1", "true", "yes", "on", "auto"}
             if (
                 band in ("strict", "llm_short")
                 and not minimize_calls

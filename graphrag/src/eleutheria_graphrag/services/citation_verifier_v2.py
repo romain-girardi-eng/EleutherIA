@@ -117,10 +117,10 @@ VERDICT_JSON_SCHEMA: dict[str, Any] = {
     "required": ["status", "reasoning"],
 }
 
-# Env knob: an explicit model for the verifier call (e.g. a reasoning model that
-# returns parseable verdicts — ``accounts/fireworks/models/deepseek-v4-pro``).
-# Unset → the LLMService default provider chain (unchanged behaviour). Read at
-# call time so deployments can flip it without a code change.
+# Env knob: an explicit model for the verifier call (e.g. ``gpt-5.6-sol`` when a
+# heavier head is wanted than the utility tier). Unset → the LLMService utility
+# tier on the default provider chain. Read at call time so deployments can flip
+# it without a code change.
 _VERIFIER_MODEL_ENV = "ELEUTHERIA_VERIFIER_MODEL"
 
 # A claim payload that is just a bare node label ("Susanne Bobzien",
@@ -460,6 +460,13 @@ class CitationVerifierV2:
                     response_mime_type="application/json",
                     response_json_schema=VERDICT_JSON_SCHEMA,
                     model_override=self._verifier_model,
+                    # SYNTHESIS tier on purpose: this is the anti-hallucination
+                    # gate. A cheap utility model that misreads a Greek passage
+                    # passes a fabricated citation through, which is exactly the
+                    # failure this project cannot afford — the extra cost per
+                    # verdict is the point. ELEUTHERIA_VERIFIER_MODEL still pins
+                    # a specific model when an operator wants one.
+                    tier="synthesis",
                 )
                 last_raw = raw
                 parsed = _parse_verdict(raw)

@@ -1,11 +1,23 @@
 """
 LLM Service - Unified interface for multiple LLM providers.
 
-Supports Fireworks (Kimi K2.6, primary), Gemini 3, Moonshot Kimi, and
-OpenRouter with automatic fallback and rate limiting.
+Provider chain (all OpenAI-compatible except Gemini):
+
+1. **Codex proxy** (primary) — CLI-subscription proxy exposing
+   ``/v1/chat/completions``; supports ``reasoning_effort``, native tool
+   calling and SSE streaming.
+2. **Claude proxy** (fallback) — same OpenAI-compatible shape.
+3. **Gemini direct** (last resort) — the native ``generativelanguage`` API.
+
+Each call picks a *tier*: ``"synthesis"`` (full academic quality — dialectical
+synthesis, the final scholarly answer, the ReAct tool-calling loop) or
+``"utility"`` (cheap internal subtasks — lemma expansion, planning, query
+classification, citation verification). The tier selects the concrete model id
+per provider so model ids are never scattered across call sites.
 """
 
 import asyncio
+import contextlib
 import hashlib
 import logging
 import os
@@ -24,6 +36,49 @@ logger = logging.getLogger(__name__)
 
 
 TokenUsageCallback = Callable[[TokenUsage], Awaitable[None]]
+
+#: Model tier. ``"synthesis"`` = full academic quality, ``"utility"`` = cheap
+#: internal subtask. Selects the concrete model id per provider.
+ModelTier = Literal["synthesis", "utility"]
+
+SYNTHESIS_TIER: ModelTier = "synthesis"
+UTILITY_TIER: ModelTier = "utility"
+
+#: What the BROWSER is told when a provider call fails. A raw provider
+#: exception string can carry credentials (httpx embeds the request URL in the
+#: message) and provider internals, and this text is streamed to the client AND
+#: persisted; the real detail goes to the server log only. Single wording,
+#: shared by the agents (scholarly_agent, react_loop) and the API routes.
+CLIENT_LLM_ERROR_MESSAGE = (
+    "A language-model provider was unavailable while answering. Please retry."
+)
+
+#: Codex synthesis-tier answer-budget floor (failure-map F4). With
+#: ``CODEX_REASONING_EFFORT=high`` gpt-5.6-sol's reasoning tokens count against
+#: ``max_tokens``, so a synthesis call capped at 9k-14k can end with
+#: ``finish_reason=length`` and an EMPTY ``content``. Synthesis-tier Codex
+#: payloads therefore never go out below this floor; a caller asking for MORE
+#: keeps its own larger value.
+CODEX_SYNTHESIS_MAX_TOKENS_ENV = "CODEX_SYNTHESIS_MAX_TOKENS"
+CODEX_SYNTHESIS_MAX_TOKENS_DEFAULT = 32000
+
+
+# Query-string secrets (Gemini historically took ``?key=``) end up inside
+# httpx.HTTPStatusError messages, which are logged, streamed over SSE and
+# persisted in query_traces. Everything that renders a provider error must go
+# through _redact_secrets first.
+_SECRET_QUERY_RE = re.compile(
+    r"(?i)([?&])(key|api_key|apikey|access_token|token)=[^&\s\"'>]+"
+)
+_BEARER_RE = re.compile(r"(?i)\bBearer\s+[A-Za-z0-9._\-]{8,}")
+
+
+def _redact_secrets(message: str) -> str:
+    """Strip API keys out of a message before it is logged or surfaced."""
+    if not message:
+        return message
+    redacted = _SECRET_QUERY_RE.sub(r"\1\2=REDACTED", message)
+    return _BEARER_RE.sub("Bearer REDACTED", redacted)
 
 
 class RateLimiter:
@@ -60,67 +115,79 @@ class RateLimiter:
 
 
 class ModelProvider(Enum):
-    """Supported LLM providers."""
+    """Supported LLM providers, in fallback order."""
 
-    FIREWORKS = "fireworks"
-    KIMI = "kimi"
-    OPENROUTER = "openrouter"
+    CODEX = "codex"
+    CLAUDE = "claude"
     GEMINI = "gemini"
 
 
-# Provider configurations
+#: Providers speaking the OpenAI ``/chat/completions`` dialect (everything but
+#: Gemini, which uses the native generativelanguage API).
+OPENAI_COMPATIBLE_PROVIDERS = frozenset({ModelProvider.CODEX, ModelProvider.CLAUDE})
+
+#: The canonical provider fallback order: Codex proxy → Claude proxy → Gemini.
+PROVIDER_FALLBACK_ORDER: tuple[ModelProvider, ...] = (
+    ModelProvider.CODEX,
+    ModelProvider.CLAUDE,
+    ModelProvider.GEMINI,
+)
+
+
+# Provider configurations.
+#
+# ``model``       — the synthesis-tier model (full academic quality).
+# ``light_model`` — the utility-tier model (cheap internal subtasks).
 PROVIDER_CONFIGS = {
-    ModelProvider.FIREWORKS: {
-        "base_url": "https://api.fireworks.ai/inference/v1",
-        "model": "accounts/fireworks/models/kimi-k2p7-code",
-        "thinking_model": "accounts/fireworks/models/kimi-k2p7-code",
-        "env_key": "FIREWORKS_API_KEY",
-        "base_url_env": "FIREWORKS_BASE_URL",
-        "model_env": "FIREWORKS_MODEL",
-        "thinking_model_env": "FIREWORKS_THINKING_MODEL",
+    ModelProvider.CODEX: {
+        # OpenAI-compatible CLI-subscription proxy on the prod docker network.
+        "base_url": "http://cli-proxy-api:8317/v1",
+        "model": "gpt-5.6-sol",
+        "light_model": "gpt-5.4-mini",
+        "env_key": "CODEX_PROXY_API_KEY",
+        "base_url_env": "CODEX_PROXY_BASE_URL",
+        "model_env": "CODEX_MODEL",
+        "light_model_env": "CODEX_LIGHT_MODEL",
+        "reasoning_effort_env": "CODEX_REASONING_EFFORT",
+        "reasoning_effort": "high",
+        "light_reasoning_effort": "low",
+        "rate_limit": 60,
+    },
+    ModelProvider.CLAUDE: {
+        # Same OpenAI-compatible shape, second CLI-subscription proxy.
+        "base_url": "http://pragma-claude-proxy:8318/v1",
+        "model": "claude-opus-5",
+        "light_model": "claude-sonnet-4-6",
+        "env_key": "CLAUDE_PROXY_API_KEY",
+        "base_url_env": "CLAUDE_PROXY_BASE_URL",
+        "model_env": "CLAUDE_PROXY_MODEL",
+        "light_model_env": "CLAUDE_PROXY_LIGHT_MODEL",
         "rate_limit": 60,
     },
     ModelProvider.GEMINI: {
         "base_url": "https://generativelanguage.googleapis.com/v1beta",
-        "model": "gemini-3.1-pro-preview",  # Upgraded: most capable model
+        "model": "gemini-3.1-pro-preview",
+        # Utility tier only when a flash model is explicitly configured;
+        # otherwise the pro model serves both tiers.
+        "light_model_env": "GEMINI_LIGHT_MODEL",
         "env_key": "GEMINI_API_KEY",
+        "model_env": "GEMINI_MODEL",
         "thinking_budget_env": "GEMINI_THINKING_BUDGET",
         "include_thoughts_env": "GEMINI_INCLUDE_THOUGHTS",
         "rate_limit": 30,  # Pro model has lower rate limits
     },
-    ModelProvider.OPENROUTER: {
-        "base_url": "https://openrouter.ai/api/v1",
-        "model": "qwen/qwen3.6-plus-preview:free",  # Free tier: strong instruction-following
-        "thinking_model": "qwen/qwen3.6-plus-preview:free",
-        "env_key": "OPENROUTER_API_KEY",
-        "base_url_env": "OPENROUTER_BASE_URL",
-        "model_env": "OPENROUTER_MODEL",
-        "thinking_model_env": "OPENROUTER_THINKING_MODEL",
-        "provider_only_env": "OPENROUTER_PROVIDER_ONLY",
-        "provider_order_env": "OPENROUTER_PROVIDER_ORDER",
-        "reasoning_effort_env": "OPENROUTER_REASONING_EFFORT",
-        "referer_env": "OPENROUTER_HTTP_REFERER",
-        "title_env": "OPENROUTER_APP_NAME",
-        "rate_limit": 60,
-    },
-    # KIMI = Moonshot-direct, an OPT-IN provider. Disabled by default (no key
-    # configured) per Romain's Fireworks-only constraint. ONE-LINE K2.7 SWAP
-    # point (ARCHITECTURE §K2.7) — do NOT apply until K2.7 is wanted on Moonshot:
-    #   "model":          "kimi-k2.7-code-highspeed",   # primary synthesis
-    #   "thinking_model": "kimi-k2.7-code",             # deep tier
-    #   add "model_env": "MOONSHOT_MODEL", "thinking_model_env":
-    #       "MOONSHOT_THINKING_MODEL" for overridability.
-    # The mandatory temperature=1.0 clamp already lives in
-    # _openai_compatible_payload, so the swap needs no further change there.
-    ModelProvider.KIMI: {
-        "base_url": "https://api.moonshot.ai/v1",
-        "model": "kimi-latest",
-        "thinking_model": "kimi-latest",
-        "env_key": "MOONSHOT_API_KEY",
-        "base_url_env": "MOONSHOT_BASE_URL",
-        "rate_limit": 20,  # requests per minute
-    },
 }
+
+
+#: Model-id prefix → provider, used to route a bare ``model_override``.
+_MODEL_PREFIX_PROVIDERS: tuple[tuple[str, ModelProvider], ...] = (
+    ("gpt-", ModelProvider.CODEX),
+    ("codex", ModelProvider.CODEX),
+    ("o3", ModelProvider.CODEX),
+    ("o4", ModelProvider.CODEX),
+    ("claude", ModelProvider.CLAUDE),
+    ("gemini", ModelProvider.GEMINI),
+)
 
 
 class LLMService:
@@ -143,25 +210,23 @@ class LLMService:
 
     def __init__(
         self,
-        preferred_provider: ModelProvider = ModelProvider.FIREWORKS,
+        preferred_provider: ModelProvider = ModelProvider.CODEX,
         timeout: float = 120.0,
         enable_rate_limiting: bool = True,
         gemini_api_key: str | None = None,
-        moonshot_api_key: str | None = None,
-        openrouter_api_key: str | None = None,
-        fireworks_api_key: str | None = None,
+        codex_api_key: str | None = None,
+        claude_api_key: str | None = None,
     ) -> None:
         """
         Initialize LLM service.
 
         Args:
-            preferred_provider: Primary provider to use (default: Fireworks / Kimi K2.6)
+            preferred_provider: Primary provider to use (default: Codex proxy)
             timeout: Request timeout in seconds
             enable_rate_limiting: Whether to enforce rate limits
             gemini_api_key: Optional Gemini key (else read from GEMINI_API_KEY)
-            moonshot_api_key: Optional Moonshot/Kimi key (else MOONSHOT_API_KEY)
-            openrouter_api_key: Optional OpenRouter key (else OPENROUTER_API_KEY)
-            fireworks_api_key: Optional Fireworks key (else FIREWORKS_API_KEY)
+            codex_api_key: Optional Codex-proxy key (else CODEX_PROXY_API_KEY)
+            claude_api_key: Optional Claude-proxy key (else CLAUDE_PROXY_API_KEY)
         """
         self.preferred_provider = preferred_provider
         self.timeout = timeout
@@ -195,12 +260,10 @@ class LLMService:
         self._provider_keys: dict[ModelProvider, str] = {}
         if gemini_api_key:
             self._provider_keys[ModelProvider.GEMINI] = gemini_api_key
-        if moonshot_api_key:
-            self._provider_keys[ModelProvider.KIMI] = moonshot_api_key
-        if openrouter_api_key:
-            self._provider_keys[ModelProvider.OPENROUTER] = openrouter_api_key
-        if fireworks_api_key:
-            self._provider_keys[ModelProvider.FIREWORKS] = fireworks_api_key
+        if codex_api_key:
+            self._provider_keys[ModelProvider.CODEX] = codex_api_key
+        if claude_api_key:
+            self._provider_keys[ModelProvider.CLAUDE] = claude_api_key
 
         # Initialize rate limiters
         if enable_rate_limiting:
@@ -295,36 +358,16 @@ class LLMService:
             model = os.getenv(model_env)
             if model:
                 config["model"] = model
-        thinking_model_env = cast(str | None, config.get("thinking_model_env"))
-        if thinking_model_env:
-            thinking_model = os.getenv(thinking_model_env)
-            if thinking_model:
-                config["thinking_model"] = thinking_model
-        provider_only_env = cast(str | None, config.get("provider_only_env"))
-        if provider_only_env:
-            provider_only = LLMService._split_csv_env(os.getenv(provider_only_env))
-            if provider_only:
-                config["provider_only"] = provider_only
-        provider_order_env = cast(str | None, config.get("provider_order_env"))
-        if provider_order_env:
-            provider_order = LLMService._split_csv_env(os.getenv(provider_order_env))
-            if provider_order:
-                config["provider_order"] = provider_order
+        light_model_env = cast(str | None, config.get("light_model_env"))
+        if light_model_env:
+            light_model = os.getenv(light_model_env)
+            if light_model:
+                config["light_model"] = light_model
         reasoning_effort_env = cast(str | None, config.get("reasoning_effort_env"))
         if reasoning_effort_env:
             reasoning_effort = os.getenv(reasoning_effort_env)
             if reasoning_effort:
                 config["reasoning_effort"] = reasoning_effort
-        referer_env = cast(str | None, config.get("referer_env"))
-        if referer_env:
-            referer = os.getenv(referer_env)
-            if referer:
-                config["http_referer"] = referer
-        title_env = cast(str | None, config.get("title_env"))
-        if title_env:
-            app_name = os.getenv(title_env)
-            if app_name:
-                config["app_name"] = app_name
         thinking_budget_env = cast(str | None, config.get("thinking_budget_env"))
         if thinking_budget_env:
             thinking_budget = os.getenv(thinking_budget_env)
@@ -358,7 +401,9 @@ class LLMService:
         Get the best available provider.
 
         Args:
-            thinking_mode: If True, prefer the provider configured for heavier reasoning
+            thinking_mode: If True, honour ``LLM_THINKING_PROVIDER`` before the
+                normal preference (all three providers are reasoning-capable,
+                so this is now only an operator escape hatch).
         """
         if thinking_mode:
             thinking_provider_name = (
@@ -377,27 +422,19 @@ class LLMService:
                 ):
                     return thinking_provider
 
-            if (
-                ModelProvider.KIMI in self.available_providers
-                and not self._provider_in_backoff(ModelProvider.KIMI)
-            ):
-                return ModelProvider.KIMI
-
         if (
             self.preferred_provider in self.available_providers
+            and self.preferred_provider not in self._disabled_providers
             and not self._provider_in_backoff(self.preferred_provider)
         ):
             return self.preferred_provider
 
-        # Fallback chain: fireworks -> gemini -> openrouter -> kimi
-        for provider in [
-            ModelProvider.FIREWORKS,
-            ModelProvider.GEMINI,
-            ModelProvider.OPENROUTER,
-            ModelProvider.KIMI,
-        ]:
-            if provider in self.available_providers and not self._provider_in_backoff(
-                provider
+        # Fallback chain: codex -> claude -> gemini
+        for provider in PROVIDER_FALLBACK_ORDER:
+            if (
+                provider in self.available_providers
+                and provider not in self._disabled_providers
+                and not self._provider_in_backoff(provider)
             ):
                 logger.info(f"Using fallback provider: {provider.value}")
                 return provider
@@ -412,22 +449,7 @@ class LLMService:
         if preferred is None:
             return []
 
-        if thinking_mode:
-            base_order = [
-                preferred,
-                ModelProvider.FIREWORKS,
-                ModelProvider.GEMINI,
-                ModelProvider.OPENROUTER,
-                ModelProvider.KIMI,
-            ]
-        else:
-            base_order = [
-                preferred,
-                ModelProvider.FIREWORKS,
-                ModelProvider.GEMINI,
-                ModelProvider.KIMI,
-                ModelProvider.OPENROUTER,
-            ]
+        base_order = [preferred, *PROVIDER_FALLBACK_ORDER]
 
         ordered: list[ModelProvider] = []
         for provider in base_order:
@@ -446,45 +468,115 @@ class LLMService:
 
     @staticmethod
     def _model_for_request(
-        provider: ModelProvider,
         config: dict[str, Any],
         *,
-        thinking_mode: bool,
+        tier: ModelTier = SYNTHESIS_TIER,
     ) -> str:
-        """Return the concrete model id to use for this request."""
-        if (
-            provider
-            in {
-                ModelProvider.KIMI,
-                ModelProvider.OPENROUTER,
-                ModelProvider.FIREWORKS,
-            }
-            and thinking_mode
-        ):
-            thinking_model = cast(str | None, config.get("thinking_model"))
-            if thinking_model:
-                return thinking_model
+        """Return the concrete model id for this request's tier.
+
+        Utility-tier calls take the provider's ``light_model`` when one is
+        configured; otherwise they share the synthesis model (Gemini has no
+        light model unless ``GEMINI_LIGHT_MODEL`` is set).
+        """
+        if tier == UTILITY_TIER:
+            light_model = cast(str | None, config.get("light_model"))
+            if light_model:
+                return light_model
         return cast(str, config["model"])
 
     @staticmethod
-    def _openai_compatible_headers(
+    def _reasoning_effort_for_request(
         provider: ModelProvider,
-        api_key: str,
         config: dict[str, Any],
-    ) -> dict[str, str]:
+        *,
+        tier: ModelTier,
+        override: str | None,
+    ) -> str | None:
+        """Resolve the ``reasoning_effort`` to send, if the provider takes one.
+
+        An explicit caller override always wins; otherwise the tier decides
+        (synthesis → the configured ``CODEX_REASONING_EFFORT``, utility →
+        "low").
+
+        NOTE — resolution is deliberately provider-agnostic for an explicit
+        override (a caller pin is echoed back for any provider), but ONLY the
+        Codex proxy is verified to honour the directive, so the *attachment*
+        step drops it everywhere else. Every OpenAI-compatible payload must go
+        through :meth:`_apply_reasoning_effort`, which owns that Codex-only
+        rule; never write ``payload["reasoning_effort"]`` inline.
+        """
+        if override:
+            return override
+        if provider != ModelProvider.CODEX:
+            return None
+        if tier == UTILITY_TIER:
+            return cast(str | None, config.get("light_reasoning_effort")) or "low"
+        return cast(str | None, config.get("reasoning_effort")) or "high"
+
+    @staticmethod
+    def _apply_reasoning_effort(
+        payload: dict[str, Any],
+        provider: ModelProvider,
+        effort: str | None,
+    ) -> None:
+        """Attach a resolved ``reasoning_effort`` to an OpenAI-compatible payload.
+
+        The single place that decides whether the directive enters the request
+        body: only the Codex proxy is verified to honour a top-level
+        ``reasoning_effort``, so every other provider silently drops it. Shared
+        by the generate, stream and tool-calling paths.
+        """
+        if effort and provider == ModelProvider.CODEX:
+            payload["reasoning_effort"] = effort
+
+    @staticmethod
+    def _effective_max_tokens(
+        provider: ModelProvider,
+        tier: ModelTier,
+        max_tokens: int,
+    ) -> int:
+        """Apply the Codex synthesis-tier answer-budget floor (F4).
+
+        gpt-5.6-sol bills its chain-of-thought against ``max_tokens``; at
+        ``CODEX_REASONING_EFFORT=high`` a 9k-14k cap can be entirely consumed
+        by reasoning, returning ``finish_reason=length`` with empty content.
+        Synthesis-tier Codex calls are therefore raised to at least
+        ``CODEX_SYNTHESIS_MAX_TOKENS`` (default 32000). A caller that already
+        asked for more keeps its larger value — the floor only ever raises.
+        """
+        if provider != ModelProvider.CODEX or tier != SYNTHESIS_TIER:
+            return max_tokens
+        floor = CODEX_SYNTHESIS_MAX_TOKENS_DEFAULT
+        raw = os.getenv(CODEX_SYNTHESIS_MAX_TOKENS_ENV)
+        if raw:
+            try:
+                parsed = int(raw)
+            except ValueError:
+                parsed = 0
+            if parsed > 0:
+                floor = parsed
+        return max(max_tokens, floor)
+
+    @staticmethod
+    def _openai_compatible_headers(api_key: str) -> dict[str, str]:
         """Build headers for OpenAI-compatible providers."""
-        headers = {
+        return {
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
         }
-        if provider == ModelProvider.OPENROUTER:
-            referer = cast(str | None, config.get("http_referer"))
-            app_name = cast(str | None, config.get("app_name"))
-            if referer:
-                headers["HTTP-Referer"] = referer
-            if app_name:
-                headers["X-Title"] = app_name
-        return headers
+
+    @staticmethod
+    def _gemini_headers(api_key: str) -> dict[str, str]:
+        """Gemini auth header.
+
+        The key travels in ``x-goog-api-key``, NEVER as a ``?key=`` query
+        param: httpx embeds the full URL in HTTPStatusError messages, which
+        are logged, streamed to the browser and persisted in query_traces.
+        """
+        return {
+            "x-goog-api-key": api_key,
+            "Content-Type": "application/json",
+        }
 
     @staticmethod
     def _openai_compatible_payload(
@@ -500,21 +592,25 @@ class LLMService:
         response_mime_type: str | None = None,
         schema_name: str = "structured_output",
         reasoning_effort: str | None = None,
+        tier: ModelTier = SYNTHESIS_TIER,
     ) -> dict[str, Any]:
         """Build JSON payload for OpenAI-compatible providers.
 
-        Fireworks supports a ``prompt_cache_id`` directive that caches the
-        prompt prefix (system prompt + leading messages) across calls. We key
-        the id on agent identity (scholar-orchestrator / concept-mapper / …)
-        so the ~3-5k-token system prompt is paid for once per session, not
-        once per call. See Fireworks docs: prompt caching reduces TTFT and
-        per-call cost on repeated prefixes.
+        Both CLI-subscription proxies speak the same dialect. The Codex proxy
+        additionally honours a top-level ``reasoning_effort``
+        ("low"|"medium"|"high") — verified live — which bounds the
+        chain-of-thought so a long reasoning run cannot eat the whole
+        ``max_tokens`` and empty the answer (failure-map F4). The same failure
+        is guarded from the other side by :meth:`_effective_max_tokens`, which
+        floors the synthesis-tier Codex budget.
 
-        When ``response_json_schema`` is provided we attach an OpenAI-style
-        ``response_format={"type": "json_schema", ...}`` directive — Fireworks
-        and Moonshot both honour this and constrain the model to valid JSON
-        server-side. OpenRouter only guarantees ``{"type": "json_object"}``
-        so we degrade gracefully there.
+        Structured output degrades per provider: the Codex proxy constrains
+        generation server-side from a strict ``json_schema``; the Claude proxy
+        only guarantees ``{"type": "json_object"}``, so it gets that (the
+        schema requirements already live in the caller's prompt).
+
+        ``prompt_cache_id`` is a no-op on providers that ignore it; it is only
+        attached when the caller supplied an agent identity.
         """
         messages = []
         if system_prompt:
@@ -525,48 +621,14 @@ class LLMService:
             "model": config["model"],
             "messages": messages,
             "temperature": temperature,
-            "max_tokens": max_tokens,
+            "max_tokens": LLMService._effective_max_tokens(provider, tier, max_tokens),
         }
-        # KIMI/Moonshot 400s on any temperature other than 1.0 (mandatory clamp,
-        # ARCHITECTURE §K2.7). Harmless today (KIMI/Moonshot stays opt-in,
-        # disabled by default per Romain's Fireworks-only constraint); it makes
-        # the K2.7-on-Moonshot swap one-line-ready without a future 400.
-        if provider == ModelProvider.KIMI:
-            payload["temperature"] = 1.0
-        if provider == ModelProvider.FIREWORKS and prompt_cache_id:
+        LLMService._apply_reasoning_effort(payload, provider, reasoning_effort)
+        if prompt_cache_id and provider == ModelProvider.CODEX:
             payload["prompt_cache_id"] = prompt_cache_id
-        # Fireworks reasoning models (deepseek-v4-pro, kimi-k2-thinking) share
-        # ``max_tokens`` between ``reasoning_content`` and ``content``. A long
-        # reasoning run can eat the whole budget → finish_reason=length with zero
-        # content deltas → empty answer (failure-map F4). The Fireworks
-        # OpenAI-compatible endpoint honours a top-level ``reasoning_effort``
-        # ("none"|"low"|"medium"|"high"), verified against the live API: passing
-        # "low" caps the chain-of-thought so the answer reserve survives, while
-        # keeping the thinking model's quality (reasoning stays SEPARATE in
-        # reasoning_content, content stays clean). Only attach when explicitly
-        # requested by the caller — every other Fireworks call is unchanged.
-        if provider == ModelProvider.FIREWORKS and reasoning_effort:
-            payload["reasoning_effort"] = reasoning_effort
-        if provider == ModelProvider.OPENROUTER:
-            provider_block: dict[str, Any] = {}
-            provider_only = cast(list[str] | None, config.get("provider_only"))
-            provider_order = cast(list[str] | None, config.get("provider_order"))
-            if provider_only:
-                provider_block["only"] = provider_only
-            elif provider_order:
-                provider_block["order"] = provider_order
-            if provider_block:
-                payload["provider"] = provider_block
-
-            # Explicit caller override wins over the env-configured default.
-            effort = reasoning_effort or cast(
-                str | None, config.get("reasoning_effort")
-            )
-            if effort:
-                payload["reasoning"] = {"effort": effort}
 
         if response_json_schema is not None:
-            if provider in (ModelProvider.FIREWORKS, ModelProvider.KIMI):
+            if provider == ModelProvider.CODEX:
                 payload["response_format"] = {
                     "type": "json_schema",
                     "json_schema": {
@@ -581,37 +643,51 @@ class LLMService:
             payload["response_format"] = {"type": "json_object"}
         return payload
 
+    #: Statuses that mean OUR request was malformed. Retrying the same request
+    #: on another provider cannot help, so these alone stop the provider loop.
+    #: Everything else (402 payment required, 412 precondition failed, 401/403,
+    #: 429, 5xx …) is an account- or provider-level failure: fall through.
+    _REQUEST_SHAPE_STATUSES = frozenset({400, 404, 422})
+
     @staticmethod
-    def _should_retry_next_provider(exc: Exception) -> bool:
-        """Whether a failure should fall through to the next provider."""
-        if isinstance(
-            exc,
-            httpx.ConnectError
-            | httpx.ReadTimeout
-            | httpx.WriteError
-            | httpx.RemoteProtocolError,
-        ):
+    def _should_retry_next_provider(
+        exc: Exception, *, structured_output: bool = False
+    ) -> bool:
+        """Whether a failure should fall through to the next provider.
+
+        ``structured_output`` marks a call that carried a ``response_format``
+        directive. There a 400 usually means THIS provider rejected the
+        directive, not that the request is universally malformed — the next
+        provider (which gets a degraded ``json_object`` form) may well accept
+        it, so the 400 advances instead of aborting. Plain calls keep the
+        strict rule: a 400 is fatal.
+        """
+        if isinstance(exc, httpx.TransportError):
             return True
         if isinstance(exc, httpx.HTTPStatusError):
             status = exc.response.status_code
-            return status in {401, 403, 408, 409, 425, 429, 500, 502, 503, 504}
+            if structured_output and status == 400:
+                return True
+            return status not in LLMService._REQUEST_SHAPE_STATUSES
         return False
 
     @staticmethod
     def _should_retry_same_provider(exc: Exception, attempt: int) -> bool:
         if attempt >= 1:
             return False
-        if isinstance(
-            exc,
-            httpx.ConnectError
-            | httpx.ReadTimeout
-            | httpx.WriteError
-            | httpx.RemoteProtocolError,
-        ):
+        if isinstance(exc, httpx.TransportError):
             return True
         if isinstance(exc, httpx.HTTPStatusError):
             return exc.response.status_code in {408, 425, 500, 502, 503, 504}
         return False
+
+    @staticmethod
+    def _safe_response_text(response: httpx.Response) -> str:
+        """``response.text`` or "" — a streamed, unread response raises."""
+        try:
+            return response.text or ""
+        except Exception:  # noqa: BLE001 — httpx.ResponseNotRead and friends
+            return ""
 
     @staticmethod
     def _retry_delay_seconds(exc: Exception) -> float:
@@ -631,7 +707,7 @@ class LLMService:
                     return max(1.0, float(retry_after))
                 except ValueError:
                     pass
-            text = exc.response.text or ""
+            text = LLMService._safe_response_text(exc.response)
             match = re.search(
                 r"retry in ([0-9]+(?:\\.[0-9]+)?)s", text, flags=re.IGNORECASE
             )
@@ -644,10 +720,16 @@ class LLMService:
 
     @staticmethod
     def _format_provider_error(exc: Exception) -> str:
-        """Return a compact error string with HTTP status/body when available."""
+        """Return a compact, SECRET-FREE error string for logs.
+
+        ``exc.response.text`` raises ``httpx.ResponseNotRead`` on a streamed
+        response that was never read, so the body is best-effort only; the
+        result always goes through :func:`_redact_secrets` because httpx puts
+        the full request URL (historically carrying ``?key=``) in the message.
+        """
         if isinstance(exc, httpx.HTTPStatusError):
-            body = (exc.response.text or "").strip()
-            body = re.sub(r"\s+", " ", body)
+            body = LLMService._safe_response_text(exc.response).strip()
+            body = _redact_secrets(re.sub(r"\s+", " ", body))
             if len(body) > 320:
                 body = body[:317] + "..."
             return (
@@ -658,14 +740,22 @@ class LLMService:
         return exc.__class__.__name__
 
     def _mark_provider_invalid(self, provider: ModelProvider, exc: Exception) -> None:
+        # 401/403 = bad credentials, 402 = payment required, 412 = precondition
+        # failed (suspended account). All four are account-level and permanent
+        # for this process: one failure disables the provider so the next call
+        # goes straight to the fallback instead of paying the round-trip again.
         if isinstance(exc, httpx.HTTPStatusError) and exc.response.status_code in {
             401,
+            402,
             403,
+            412,
         }:
             self._disabled_providers.add(provider)
             logger.warning(
-                "Disabling LLM provider %s for this session after authentication failure",
+                "Disabling LLM provider %s for this session after account-level "
+                "failure (HTTP %s)",
                 provider.value,
+                exc.response.status_code,
             )
             return
         if isinstance(exc, httpx.HTTPStatusError) and exc.response.status_code == 429:
@@ -736,16 +826,25 @@ class LLMService:
     def _resolve_model_override(self, model_override: str) -> tuple[ModelProvider, str]:
         """Resolve a model override string to a provider and model ID.
 
-        - ``accounts/fireworks/...`` is routed through Fireworks.
-        - Other slash-containing IDs (e.g. ``anthropic/claude-sonnet-4.6``)
-          go through OpenRouter.
-        - Otherwise treated as a Gemini model.
+        Accepts an explicit ``provider:model`` form (``codex:gpt-5.6-sol``) or a
+        bare model id routed by prefix: ``gpt-*``/``o3*``/``o4*`` → Codex proxy,
+        ``claude-*`` → Claude proxy, ``gemini-*`` → Gemini direct. Anything
+        unrecognised falls back to the preferred provider so an unknown id can
+        still be served by the primary proxy rather than mis-routed to Gemini.
         """
-        if model_override.startswith("accounts/fireworks/"):
-            return ModelProvider.FIREWORKS, model_override
-        if "/" in model_override:
-            return ModelProvider.OPENROUTER, model_override
-        return ModelProvider.GEMINI, model_override
+        raw = model_override.strip()
+        prefix, sep, remainder = raw.partition(":")
+        if sep and remainder:
+            try:
+                return ModelProvider(prefix.strip().lower()), remainder.strip()
+            except ValueError:
+                pass  # a colon inside a bare model id — fall through
+
+        lowered = raw.lower()
+        for model_prefix, provider in _MODEL_PREFIX_PROVIDERS:
+            if lowered.startswith(model_prefix):
+                return provider, raw
+        return self.preferred_provider, raw
 
     async def generate(
         self,
@@ -763,6 +862,7 @@ class LLMService:
         agent_id: str | None = None,
         request_timeout: float | None = None,
         reasoning_effort: str | None = None,
+        tier: ModelTier = SYNTHESIS_TIER,
     ) -> str:
         """
         Generate a response (non-streaming).
@@ -772,17 +872,19 @@ class LLMService:
             system_prompt: Optional system prompt
             temperature: Sampling temperature
             max_tokens: Maximum tokens to generate
-            thinking_mode: If True, prefer the heavier reasoning path for the active provider
+            thinking_mode: If True, honour ``LLM_THINKING_PROVIDER`` first
             request_timeout: Optional per-call HTTP timeout (seconds) that
                 overrides the shared client timeout for THIS request only. Used
                 by the Scholar-RAG dialectical synthesis (a slow thinking model
                 whose generation can exceed the default 120 s client timeout).
                 ``None`` keeps the client-level timeout (unchanged behaviour).
-            reasoning_effort: Optional reasoning-budget cap for thinking models
-                on the OpenAI-compatible providers ("none"|"low"|"medium"|"high").
-                For Fireworks deepseek-v4-pro it bounds ``reasoning_content`` so a
-                long chain-of-thought cannot eat the whole ``max_tokens`` and empty
-                the answer (failure-map F4). ``None`` leaves provider defaults.
+            reasoning_effort: Explicit reasoning-budget cap
+                ("low"|"medium"|"high"); overrides the tier default. Bounds the
+                chain-of-thought so it cannot eat the whole ``max_tokens`` and
+                empty the answer (failure-map F4).
+            tier: ``"synthesis"`` for full academic quality, ``"utility"`` for
+                cheap internal subtasks (lemma expansion, planning, query
+                classification, citation verification).
 
         Returns:
             Generated text
@@ -830,20 +932,32 @@ class LLMService:
                         response_json_schema=response_json_schema,
                         response_mime_type=response_mime_type,
                         request_timeout=request_timeout,
-                        reasoning_effort=reasoning_effort,
+                        reasoning_effort=self._reasoning_effort_for_request(
+                            override_provider,
+                            override_config,
+                            tier=tier,
+                            override=reasoning_effort,
+                        ),
+                        tier=tier,
                     )
                 except Exception as exc:
+                    self._mark_provider_invalid(override_provider, exc)
                     logger.warning(
                         "Model override %s/%s failed (%s); falling back to provider loop",
                         override_provider.value,
                         override_model,
-                        exc,
+                        self._format_provider_error(exc),
                     )
 
         providers = self._provider_attempt_order(thinking_mode=thinking_mode)
         if not providers:
             raise RuntimeError("No LLM provider available")
 
+        # A call carrying a response_format directive gets the relaxed 400
+        # policy: the rejection is about the directive, not the request shape.
+        structured_output = (
+            response_json_schema is not None or response_mime_type == "application/json"
+        )
         last_exc: Exception | None = None
         for idx, provider in enumerate(providers):
             for attempt in range(2):
@@ -854,11 +968,7 @@ class LLMService:
                     config = self._resolve_config(provider)
                     api_key = self._api_key_for(provider)
 
-                    model_name = self._model_for_request(
-                        provider,
-                        config,
-                        thinking_mode=thinking_mode,
-                    )
+                    model_name = self._model_for_request(config, tier=tier)
                     request_config = dict(config)
                     request_config["model"] = model_name
 
@@ -892,7 +1002,13 @@ class LLMService:
                         response_json_schema=response_json_schema,
                         request_timeout=request_timeout,
                         response_mime_type=response_mime_type,
-                        reasoning_effort=reasoning_effort,
+                        reasoning_effort=self._reasoning_effort_for_request(
+                            provider,
+                            request_config,
+                            tier=tier,
+                            override=reasoning_effort,
+                        ),
+                        tier=tier,
                     )
                 except Exception as exc:
                     last_exc = exc
@@ -907,9 +1023,11 @@ class LLMService:
                         )
                         await asyncio.sleep(delay)
                         continue
-                    if idx == len(
-                        providers
-                    ) - 1 or not self._should_retry_next_provider(exc):
+                    if idx == len(providers) - 1 or not (
+                        self._should_retry_next_provider(
+                            exc, structured_output=structured_output
+                        )
+                    ):
                         raise
                     logger.warning(
                         "LLM provider %s failed (%s); falling back to %s",
@@ -932,12 +1050,15 @@ class LLMService:
         temperature: float = 0.1,
         max_tokens: int = 1024,
         model_override: str | None = None,
+        tier: ModelTier = SYNTHESIS_TIER,
+        reasoning_effort: str | None = None,
     ) -> dict[str, Any]:
         """OpenAI-style chat-completion with native tool-calling.
 
-        Currently routes through the OpenAI-compatible providers (Fireworks /
-        OpenRouter / Moonshot). Gemini is NOT supported on this path — Fireworks
-        is the primary backend for tool-calling per the K2.6 spike.
+        Routes through the OpenAI-compatible proxies (Codex, then Claude) with
+        the SAME provider loop as :meth:`generate`, so the ReAct loop survives a
+        downed provider instead of dying on the first candidate. Gemini stays
+        excluded: it does not speak the OpenAI tools dialect.
 
         Args:
             messages: Full chat history in OpenAI format. Each message is one of
@@ -948,7 +1069,11 @@ class LLMService:
             tool_choice: ``"auto"``, ``"none"``, ``"required"``, or
                 ``{"type": "function", "function": {"name": ...}}``.
             temperature, max_tokens: standard sampling params.
-            model_override: optional explicit model id.
+            model_override: optional explicit model id; used as the FIRST rung,
+                with the remaining providers still available as fallbacks.
+            tier: model tier for the non-override rungs (the ReAct loop is a
+                synthesis-tier caller).
+            reasoning_effort: explicit override of the tier default.
 
         Returns:
             The first choice's ``message`` dict, e.g.::
@@ -962,39 +1087,91 @@ class LLMService:
 
         Raises:
             RuntimeError: when no compatible provider is available.
-            httpx.HTTPStatusError: on non-2xx responses.
+            httpx.HTTPStatusError: on non-2xx responses from the last rung.
         """
-        provider: ModelProvider
-        model_name: str
-        config: dict[str, Any]
-        api_key: str
+        candidates = self._tool_call_candidates(model_override, tier=tier)
+        if not candidates:
+            raise RuntimeError(
+                "No OpenAI-compatible provider available for tool-calling"
+            )
+
+        last_exc: Exception | None = None
+        for idx, (provider, model_name) in enumerate(candidates):
+            try:
+                return await self._generate_with_tools_once(
+                    provider,
+                    model_name,
+                    messages,
+                    tools,
+                    tool_choice=tool_choice,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    reasoning_effort=reasoning_effort,
+                    tier=tier,
+                )
+            except Exception as exc:
+                last_exc = exc
+                self._mark_provider_invalid(provider, exc)
+                if idx == len(candidates) - 1 or not self._should_retry_next_provider(
+                    exc
+                ):
+                    raise
+                logger.warning(
+                    "Tool-calling provider %s failed (%s); falling back to %s",
+                    provider.value,
+                    self._format_provider_error(exc),
+                    candidates[idx + 1][0].value,
+                )
+
+        if last_exc:  # pragma: no cover — defensive
+            raise last_exc
+        raise RuntimeError("No OpenAI-compatible provider available for tool-calling")
+
+    def _tool_call_candidates(
+        self, model_override: str | None, *, tier: ModelTier
+    ) -> list[tuple[ModelProvider, str]]:
+        """Ordered (provider, model) rungs for the tool-calling path.
+
+        The override (when it resolves to an OpenAI-compatible provider) leads;
+        the normal attempt order supplies the fallbacks. Gemini is filtered out
+        and providers without a key are skipped.
+        """
+        candidates: list[tuple[ModelProvider, str]] = []
+
+        def _add(provider: ModelProvider, model: str) -> None:
+            if provider not in OPENAI_COMPATIBLE_PROVIDERS:
+                return
+            if not self._api_key_for(provider):
+                return
+            if (provider, model) not in candidates:
+                candidates.append((provider, model))
 
         if model_override:
-            provider, model_name = self._resolve_model_override(model_override)
-            if provider == ModelProvider.GEMINI:
-                raise RuntimeError(
-                    "generate_with_tools does not yet support Gemini — "
-                    "pass a Fireworks or OpenRouter model_override."
-                )
-            config = dict(self._resolve_config(provider))
-            api_key = self._api_key_for(provider)
-            if not api_key:
-                raise RuntimeError(f"No API key configured for {provider.value}")
-            config["model"] = model_name
-        else:
-            # Pick the first available non-Gemini provider.
-            candidates = [
-                p for p in self._provider_attempt_order() if p != ModelProvider.GEMINI
-            ]
-            if not candidates:
-                raise RuntimeError(
-                    "No OpenAI-compatible provider available for tool-calling"
-                )
-            provider = candidates[0]
-            config = dict(self._resolve_config(provider))
-            api_key = self._api_key_for(provider)
-            model_name = self._model_for_request(provider, config, thinking_mode=False)
-            config["model"] = model_name
+            _add(*self._resolve_model_override(model_override))
+        for provider in self._provider_attempt_order():
+            config = self._resolve_config(provider)
+            _add(provider, self._model_for_request(config, tier=tier))
+        return candidates
+
+    async def _generate_with_tools_once(
+        self,
+        provider: ModelProvider,
+        model_name: str,
+        messages: list[dict[str, Any]],
+        tools: list[dict[str, Any]],
+        *,
+        tool_choice: str | dict[str, Any],
+        temperature: float,
+        max_tokens: int,
+        reasoning_effort: str | None,
+        tier: ModelTier,
+    ) -> dict[str, Any]:
+        """One tool-calling attempt against a single provider."""
+        config = dict(self._resolve_config(provider))
+        config["model"] = model_name
+        api_key = self._api_key_for(provider)
+        if not api_key:
+            raise RuntimeError(f"No API key configured for {provider.value}")
 
         self.last_provider_used = provider.value
         self.last_model_used = model_name
@@ -1004,23 +1181,20 @@ class LLMService:
 
         client = await self._get_client()
         payload: dict[str, Any] = {
-            "model": config["model"],
+            "model": model_name,
             "messages": messages,
             "temperature": temperature,
             "max_tokens": max_tokens,
             "tools": tools,
             "tool_choice": tool_choice,
         }
-        if provider == ModelProvider.OPENROUTER:
-            provider_block: dict[str, Any] = {}
-            provider_only = cast(list[str] | None, config.get("provider_only"))
-            provider_order = cast(list[str] | None, config.get("provider_order"))
-            if provider_only:
-                provider_block["only"] = provider_only
-            elif provider_order:
-                provider_block["order"] = provider_order
-            if provider_block:
-                payload["provider"] = provider_block
+        self._apply_reasoning_effort(
+            payload,
+            provider,
+            self._reasoning_effort_for_request(
+                provider, config, tier=tier, override=reasoning_effort
+            ),
+        )
 
         # Respect existing rate-limit backoff so we don't pile on after a 429.
         if self._provider_in_backoff(provider):
@@ -1035,11 +1209,11 @@ class LLMService:
             await asyncio.sleep(min(wait, 30.0))
 
         url = f"{config['base_url']}/chat/completions"
-        headers = self._openai_compatible_headers(provider, api_key, config)
+        headers = self._openai_compatible_headers(api_key)
         response = await client.post(url, headers=headers, json=payload)
 
-        # One graceful retry on 429 / 5xx to ride out short rate-limit bursts
-        # (Fireworks free tier in particular). Honors Retry-After when present.
+        # One graceful retry on 429 / 5xx to ride out short rate-limit bursts.
+        # Honors Retry-After when present.
         if response.status_code in {408, 425, 429, 500, 502, 503, 504}:
             try:
                 delay = self._retry_delay_seconds(
@@ -1073,12 +1247,10 @@ class LLMService:
         try:
             message = data["choices"][0]["message"]
         except (KeyError, IndexError) as exc:  # pragma: no cover — defensive
-            raise RuntimeError(
-                f"Malformed response from {provider.value}: {data}"
-            ) from exc
+            raise RuntimeError(f"Malformed response from {provider.value}") from exc
         usage = TokenUsage.from_openai_usage(
             data.get("usage") if isinstance(data, dict) else None,
-            model=cast(str, config.get("model") or model_name),
+            model=model_name,
             provider=provider.value,
         )
         await self._emit_token_usage(usage)
@@ -1135,7 +1307,7 @@ class LLMService:
         try:
             response = await client.post(
                 f"{config['base_url']}/cachedContents",
-                params={"key": api_key},
+                headers=self._gemini_headers(api_key),
                 json=payload,
             )
             response.raise_for_status()
@@ -1156,8 +1328,8 @@ class LLMService:
             return None
 
     @staticmethod
-    def _fireworks_cache_id(agent_id: str | None) -> str | None:
-        """Compose the Fireworks prompt_cache_id from agent identity.
+    def _prompt_cache_id(agent_id: str | None) -> str | None:
+        """Compose the OpenAI-compatible prompt_cache_id from agent identity.
 
         Stable across calls so the cached prefix is reused. Includes a short
         version suffix so we can invalidate after a system-prompt rewrite by
@@ -1184,13 +1356,14 @@ class LLMService:
         schema_name: str = "structured_output",
         request_timeout: float | None = None,
         reasoning_effort: str | None = None,
+        tier: ModelTier = SYNTHESIS_TIER,
     ) -> str:
-        """Generate using OpenAI-compatible API (Fireworks, Kimi, OpenRouter)."""
+        """Generate using an OpenAI-compatible API (Codex / Claude proxies)."""
         client = await self._get_client()
 
         response = await client.post(
             f"{config['base_url']}/chat/completions",
-            headers=self._openai_compatible_headers(provider, api_key, config),
+            headers=self._openai_compatible_headers(api_key),
             json=self._openai_compatible_payload(
                 provider,
                 prompt,
@@ -1198,11 +1371,12 @@ class LLMService:
                 temperature,
                 max_tokens,
                 config,
-                prompt_cache_id=self._fireworks_cache_id(agent_id),
+                prompt_cache_id=self._prompt_cache_id(agent_id),
                 response_json_schema=response_json_schema,
                 response_mime_type=response_mime_type,
                 schema_name=schema_name,
                 reasoning_effort=reasoning_effort,
+                tier=tier,
             ),
             # Per-call timeout override: a slow thinking-model synthesis can run
             # well past the shared 120 s client timeout. ``None`` keeps the
@@ -1270,7 +1444,7 @@ class LLMService:
 
         response = await client.post(
             f"{config['base_url']}/models/{config['model']}:generateContent",
-            params={"key": api_key},
+            headers=self._gemini_headers(api_key),
             json=body,
             timeout=post_timeout,
         )
@@ -1303,7 +1477,7 @@ class LLMService:
         )
         retry_response = await client.post(
             f"{config['base_url']}/models/{config['model']}:generateContent",
-            params={"key": api_key},
+            headers=self._gemini_headers(api_key),
             json=retry_body,
             timeout=post_timeout,
         )
@@ -1393,6 +1567,7 @@ class LLMService:
         max_tokens: int = 4096,
         thinking_mode: bool = False,
         model_override: str | None = None,
+        tier: ModelTier = SYNTHESIS_TIER,
     ) -> AsyncIterator[str]:
         """
         Generate a streaming response.
@@ -1402,11 +1577,12 @@ class LLMService:
             system_prompt: Optional system prompt
             temperature: Sampling temperature
             max_tokens: Maximum tokens to generate
-            thinking_mode: If True, prefer the heavier reasoning path for the active provider
+            thinking_mode: If True, honour ``LLM_THINKING_PROVIDER`` first
             model_override: Pin a specific provider/model (e.g. the user-selected
                 model) instead of the default provider loop. Mirrors
                 :meth:`generate`; falls back to the provider loop if the override
                 fails before emitting any token.
+            tier: ``"synthesis"`` or ``"utility"`` model tier.
 
         Yields:
             Text chunks as they're generated
@@ -1449,6 +1625,7 @@ class LLMService:
                             max_tokens,
                             override_api_key,
                             override_config,
+                            tier=tier,
                         ):
                             yielded = True
                             yield chunk
@@ -1481,11 +1658,7 @@ class LLMService:
                     config = self._resolve_config(provider)
                     api_key = self._api_key_for(provider)
 
-                    model_name = self._model_for_request(
-                        provider,
-                        config,
-                        thinking_mode=thinking_mode,
-                    )
+                    model_name = self._model_for_request(config, tier=tier)
                     request_config = dict(config)
                     request_config["model"] = model_name
 
@@ -1512,6 +1685,7 @@ class LLMService:
                             max_tokens,
                             api_key,
                             request_config,
+                            tier=tier,
                         ):
                             yielded = True
                             yield chunk
@@ -1555,14 +1729,17 @@ class LLMService:
         max_tokens: int,
         api_key: str,
         config: dict[str, Any],
+        *,
+        tier: ModelTier = SYNTHESIS_TIER,
+        reasoning_effort: str | None = None,
     ) -> AsyncIterator[str]:
-        """Stream using OpenAI-compatible API."""
+        """Stream using an OpenAI-compatible API (Codex / Claude proxies)."""
         client = await self._get_client()
 
         async with client.stream(
             "POST",
             f"{config['base_url']}/chat/completions",
-            headers=self._openai_compatible_headers(provider, api_key, config),
+            headers=self._openai_compatible_headers(api_key),
             json={
                 **self._openai_compatible_payload(
                     provider,
@@ -1571,6 +1748,10 @@ class LLMService:
                     temperature,
                     max_tokens,
                     config,
+                    reasoning_effort=self._reasoning_effort_for_request(
+                        provider, config, tier=tier, override=reasoning_effort
+                    ),
+                    tier=tier,
                 ),
                 "stream": True,
                 # Ask the upstream to include a final ``usage`` chunk so we
@@ -1578,7 +1759,7 @@ class LLMService:
                 "stream_options": {"include_usage": True},
             },
         ) as response:
-            response.raise_for_status()
+            await self._raise_for_stream_status(response)
             stream_usage: dict[str, Any] | None = None
             reasoning_parts: list[str] = []
             async for line in response.aiter_lines():
@@ -1625,6 +1806,19 @@ class LLMService:
             )
             await self._emit_token_usage(usage)
 
+    @staticmethod
+    async def _raise_for_stream_status(response: httpx.Response) -> None:
+        """``raise_for_status`` on a streamed response, body preserved.
+
+        httpx will not have read the body of a streaming response, so
+        ``exc.response.text`` would raise ``ResponseNotRead`` and the provider's
+        error payload would be lost. Read it FIRST, then raise.
+        """
+        if response.status_code >= 400:
+            with contextlib.suppress(Exception):
+                await response.aread()
+        response.raise_for_status()
+
     async def _stream_gemini(
         self,
         prompt: str,
@@ -1633,45 +1827,67 @@ class LLMService:
         max_tokens: int,
         api_key: str,
         config: dict[str, Any],
+        *,
+        request_timeout: float | None = None,
     ) -> AsyncIterator[str]:
-        """Stream using Gemini API."""
-        client = await self._get_client()
+        """Stream using Gemini API.
 
-        contents = []
-        if system_prompt:
-            contents.append({"role": "user", "parts": [{"text": system_prompt}]})
-            contents.append({"role": "model", "parts": [{"text": "Understood."}]})
-        contents.append({"role": "user", "parts": [{"text": prompt}]})
+        Shares :meth:`_build_gemini_request_body` with the blocking path: it is
+        the ONE correct builder. The previous hand-rolled body faked a
+        ``{"role": "model", "parts": [{"text": "Understood."}]}`` turn to carry
+        the system prompt, which gemini-3-* rejects with 400 (no
+        thoughtSignature on a synthesised model turn) and which dropped
+        ``systemInstruction`` entirely.
+        """
+        client = await self._get_client()
+        post_timeout = request_timeout if request_timeout is not None else self.timeout
+
+        body = self._build_gemini_request_body(
+            prompt=prompt,
+            system_prompt=system_prompt,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            cached_content=None,
+            config=config,
+        )
 
         async with client.stream(
             "POST",
             f"{config['base_url']}/models/{config['model']}:streamGenerateContent",
-            params={"key": api_key, "alt": "sse"},
-            json={
-                "contents": contents,
-                "generationConfig": {
-                    "temperature": temperature,
-                    "maxOutputTokens": max_tokens,
-                },
-            },
+            headers=self._gemini_headers(api_key),
+            params={"alt": "sse"},
+            json=body,
+            timeout=post_timeout,
         ) as response:
-            response.raise_for_status()
+            await self._raise_for_stream_status(response)
             async for line in response.aiter_lines():
                 if line.startswith("data: "):
                     try:
                         import json
 
                         data = json.loads(line[6:])
-                        text = (
-                            data.get("candidates", [{}])[0]
-                            .get("content", {})
-                            .get("parts", [{}])[0]
-                            .get("text", "")
-                        )
-                        if text:
-                            yield text
                     except json.JSONDecodeError:
                         continue
+                    text = self._extract_gemini_stream_text(data)
+                    if text:
+                        yield text
+
+    @staticmethod
+    def _extract_gemini_stream_text(data: dict[str, Any]) -> str:
+        """Answer text out of one streamed Gemini chunk.
+
+        Unlike :meth:`_extract_gemini_text` there is NO thought fallback: a
+        chunk carrying only ``thought`` parts is chain-of-thought and must never
+        be yielded as answer prose.
+        """
+        parts_text: list[str] = []
+        for candidate in data.get("candidates") or []:
+            content = candidate.get("content") or {}
+            for part in content.get("parts") or []:
+                text = part.get("text")
+                if text and not part.get("thought"):
+                    parts_text.append(text)
+        return "".join(parts_text)
 
     # ── Segmented stream: distinguishes reasoning deltas from answer deltas ───
     #
@@ -1693,6 +1909,7 @@ class LLMService:
         model_override: str | None = None,
         request_timeout: float | None = None,
         reasoning_effort: str | None = None,
+        tier: ModelTier = SYNTHESIS_TIER,
     ) -> AsyncIterator[tuple[Literal["reasoning", "answer"], str]]:
         """Stream a reasoning-model completion as TAGGED segments.
 
@@ -1700,48 +1917,99 @@ class LLMService:
         ``("answer", delta)`` for each ``content`` delta — the two NEVER mixed.
         ``self.last_reasoning_content`` still accumulates the full chain-of-thought
         (so the existing metadata trace continues to work). Only the
-        OpenAI-compatible path (Fireworks/Moonshot/OpenRouter) emits reasoning;
-        Gemini and any non-reasoning model simply yield ``("answer", …)`` deltas.
+        OpenAI-compatible path emits reasoning; Gemini and any non-reasoning
+        model simply yield ``("answer", …)`` deltas.
 
-        Fireworks-only synthesis pins ``model_override`` (e.g. deepseek-v4-pro);
-        ``request_timeout`` is the dedicated generous per-call HTTP timeout the
-        slow thinking-model synthesis needs (mirrors :meth:`generate`). Raises on
-        provider error after first token (the caller cannot restart mid-stream).
+        ``model_override`` becomes the FIRST rung; the normal provider attempt
+        order supplies the fallbacks, so a downed rung falls through instead of
+        dead-ending on a single resolved provider. ``request_timeout`` is the
+        dedicated generous per-call HTTP timeout the slow synthesis needs.
+        Raises on provider error after the first token (the caller cannot
+        restart mid-stream).
         """
         self.last_reasoning_content = ""
         self.last_finish_reason = ""
-        provider, model = self._resolve_model_override(
-            model_override or self.preferred_provider.value
-        )
-        api_key = self._api_key_for(provider)
-        if not api_key:
-            raise RuntimeError(
-                f"No API key for provider {provider.value} (segmented stream)"
-            )
-        config = self._resolve_config(provider)
-        config["model"] = model
-        self.last_provider_used = provider.value
-        self.last_model_used = model
 
-        if provider == ModelProvider.GEMINI:
-            async for chunk in self._stream_gemini(
-                prompt, system_prompt, temperature, max_tokens, api_key, config
-            ):
-                yield ("answer", chunk)
-            return
+        candidates = self._segmented_stream_candidates(model_override, tier=tier)
+        if not candidates:
+            raise RuntimeError("No LLM provider available (segmented stream)")
 
-        async for segment in self._stream_openai_compatible_segmented(
-            provider,
-            prompt,
-            system_prompt,
-            temperature,
-            max_tokens,
-            api_key,
-            config,
-            request_timeout=request_timeout,
-            reasoning_effort=reasoning_effort,
-        ):
-            yield segment
+        for idx, (provider, model) in enumerate(candidates):
+            api_key = self._api_key_for(provider)
+            config = self._resolve_config(provider)
+            config["model"] = model
+            self.last_provider_used = provider.value
+            self.last_model_used = model
+            yielded = False
+            try:
+                if provider == ModelProvider.GEMINI:
+                    async for chunk in self._stream_gemini(
+                        prompt,
+                        system_prompt,
+                        temperature,
+                        max_tokens,
+                        api_key,
+                        config,
+                        request_timeout=request_timeout,
+                    ):
+                        yielded = True
+                        yield ("answer", chunk)
+                else:
+                    async for segment in self._stream_openai_compatible_segmented(
+                        provider,
+                        prompt,
+                        system_prompt,
+                        temperature,
+                        max_tokens,
+                        api_key,
+                        config,
+                        request_timeout=request_timeout,
+                        reasoning_effort=reasoning_effort,
+                        tier=tier,
+                    ):
+                        yielded = True
+                        yield segment
+                return
+            except Exception as exc:
+                self._mark_provider_invalid(provider, exc)
+                # Once deltas are on the wire we cannot restart cleanly.
+                if (
+                    yielded
+                    or idx == len(candidates) - 1
+                    or not self._should_retry_next_provider(exc)
+                ):
+                    raise
+                logger.warning(
+                    "Segmented stream %s/%s failed (%s); falling back to %s",
+                    provider.value,
+                    model,
+                    self._format_provider_error(exc),
+                    candidates[idx + 1][0].value,
+                )
+
+    def _segmented_stream_candidates(
+        self, model_override: str | None, *, tier: ModelTier
+    ) -> list[tuple[ModelProvider, str]]:
+        """Ordered (provider, model) rungs for :meth:`stream_segmented`.
+
+        The override leads (when its provider has a key); the normal attempt
+        order supplies the remaining rungs so a dead override still falls
+        through to Claude and then Gemini.
+        """
+        candidates: list[tuple[ModelProvider, str]] = []
+
+        def _add(provider: ModelProvider, model: str) -> None:
+            if not self._api_key_for(provider):
+                return
+            if (provider, model) not in candidates:
+                candidates.append((provider, model))
+
+        if model_override:
+            _add(*self._resolve_model_override(model_override))
+        for provider in self._provider_attempt_order(thinking_mode=True):
+            config = self._resolve_config(provider)
+            _add(provider, self._model_for_request(config, tier=tier))
+        return candidates
 
     async def _stream_openai_compatible_segmented(
         self,
@@ -1755,6 +2023,7 @@ class LLMService:
         *,
         request_timeout: float | None = None,
         reasoning_effort: str | None = None,
+        tier: ModelTier = SYNTHESIS_TIER,
     ) -> AsyncIterator[tuple[Literal["reasoning", "answer"], str]]:
         """OpenAI-compatible streaming that yields tagged reasoning/answer deltas.
 
@@ -1770,7 +2039,7 @@ class LLMService:
         async with client.stream(
             "POST",
             f"{config['base_url']}/chat/completions",
-            headers=self._openai_compatible_headers(provider, api_key, config),
+            headers=self._openai_compatible_headers(api_key),
             json={
                 **self._openai_compatible_payload(
                     provider,
@@ -1779,14 +2048,17 @@ class LLMService:
                     temperature,
                     max_tokens,
                     config,
-                    reasoning_effort=reasoning_effort,
+                    reasoning_effort=self._reasoning_effort_for_request(
+                        provider, config, tier=tier, override=reasoning_effort
+                    ),
+                    tier=tier,
                 ),
                 "stream": True,
                 "stream_options": {"include_usage": True},
             },
             timeout=post_timeout,
         ) as response:
-            response.raise_for_status()
+            await self._raise_for_stream_status(response)
             stream_usage: dict[str, Any] | None = None
             reasoning_parts: list[str] = []
             async for line in response.aiter_lines():

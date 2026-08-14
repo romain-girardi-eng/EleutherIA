@@ -3,7 +3,7 @@ OpenAI-style tool/function schemas for the EleutherIA agent.
 
 Each registered tool exposes a JSON Schema via ``parameters_schema``; this module
 re-wraps those schemas in the OpenAI ``{"type": "function", "function": {...}}``
-envelope used by Fireworks (Kimi K2.6) and any OpenAI-compatible provider.
+envelope used by every OpenAI-compatible provider.
 
 Used by the native tool-calling path in ``react_loop.py``.
 """
@@ -51,7 +51,7 @@ def build_tool_function_schemas(tools: ToolRegistry) -> list[dict[str, Any]]:
 
 
 def _normalize_schema(schema: dict[str, Any]) -> dict[str, Any]:
-    """Normalize a JSON Schema for OpenAI / Fireworks function-calling.
+    """Normalize a JSON Schema for OpenAI-compatible function-calling.
 
     Some providers reject schemas that omit ``type`` at the top level or that
     use ``minItems`` / ``maxItems`` on items they cannot enforce. We keep the

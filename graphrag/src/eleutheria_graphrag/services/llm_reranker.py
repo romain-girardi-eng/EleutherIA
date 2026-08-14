@@ -72,7 +72,9 @@ class LLMRerankerService:
         )
 
         try:
-            raw = await self.llm.generate(prompt, temperature=0.0, max_tokens=2048)
+            raw = await self.llm.generate(
+                prompt, temperature=0.0, max_tokens=2048, tier="utility"
+            )
             raw = raw.strip()
             match = re.search(r"\{[\s\S]*\}", raw)
             if match:

@@ -382,7 +382,9 @@ class BibliographyBuilder:
             max_entries=max_entries,
         )
         try:
-            return await self.llm.generate(prompt, temperature=0.2, max_tokens=2_400)
+            return await self.llm.generate(
+                prompt, temperature=0.2, max_tokens=2_400, tier="utility"
+            )
         except Exception:
             logger.warning("BibliographyBuilder LLM call failed", exc_info=True)
             return ""

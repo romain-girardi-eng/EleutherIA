@@ -7,7 +7,7 @@ Prerequisites:
 
     Set environment variables:
     - PostgreSQL connection vars
-    - MOONSHOT_API_KEY or GEMINI_API_KEY
+    - CODEX_PROXY_API_KEY, CLAUDE_PROXY_API_KEY or GEMINI_API_KEY
 """
 
 import asyncio

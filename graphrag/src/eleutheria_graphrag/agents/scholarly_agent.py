@@ -77,6 +77,7 @@ from eleutheria_graphrag.models.verification import (
     SynthesizedDraft,
     VerificationReport,
 )
+from eleutheria_graphrag.services.llm_service import CLIENT_LLM_ERROR_MESSAGE
 
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;·?!])\s+")
 _GREEK_CHAR_RE = re.compile(r"[\u0370-\u03FF\u1F00-\u1FFF]")
@@ -254,7 +255,7 @@ def _dialectical_heartbeat_ceiling() -> float:
     """Heartbeat ``max_wait`` ceiling for the Scholar-RAG dialectical synthesis.
 
     The heartbeat wrapper cancels its wrapped task once this elapses. For the
-    dialectical synthesis that task is the slow deepseek-v4-pro LLM call, whose
+    dialectical synthesis that task is the slow thinking-model LLM call, whose
     own HTTP timeout is ``scholar_synthesis_timeout()`` (default 360 s). The
     heartbeat ceiling MUST sit ABOVE that timeout — otherwise it would cancel a
     healthy-but-slow synthesis BEFORE the LLM call can return, dropping the
@@ -1850,19 +1851,30 @@ class ScholarlyAgent:
         state.metadata["scholar_diagnostics"] = diagnostics
         yield json.dumps({"type": "scholar_diagnostics", "data": diagnostics})
 
+        # TERMINAL-FRAME GUARANTEE: this is the last long await before the
+        # citations_preview / complete frames. _await_with_heartbeat re-raises
+        # whatever the wrapped task raised, and an unguarded raise here left the
+        # client with prose and NO structured citations and no terminal frame.
+        # Every stage below is best-effort; _make_answer(state) always yields
+        # something renderable from the state we already have.
         stage_started = _time.perf_counter()
         verify_node = ProgrammaticVerify()
         ctx = GraphRunContext(state=state, deps=self.deps)
         verify_result_holder: dict[str, Any] = {}
-        async for hb in self._await_with_heartbeat(
-            verify_node.run(ctx),
-            label="Verifying citations",
-            stage_id="verify",
-            interval=8.0,
-            max_wait=120.0,
-            result_into=verify_result_holder,
-        ):
-            yield hb
+        verify_error: Exception | None = None
+        try:
+            async for hb in self._await_with_heartbeat(
+                verify_node.run(ctx),
+                label="Verifying citations",
+                stage_id="verify",
+                interval=8.0,
+                max_wait=120.0,
+                result_into=verify_result_holder,
+            ):
+                yield hb
+        except Exception as exc:  # noqa: BLE001 — never strand the client
+            verify_error = exc
+            logger.warning("Citation verification stage failed", exc_info=True)
         result = verify_result_holder.get("value")
         verify_ms = int((_time.perf_counter() - stage_started) * 1000)
         yield json.dumps(
@@ -1870,23 +1882,25 @@ class ScholarlyAgent:
                 "type": "stage_complete",
                 "stage": "verify",
                 "duration_ms": verify_ms,
+                "failed": verify_error is not None,
             }
         )
 
-        if isinstance(result, End):
-            answer = result.data
-        else:
-            from eleutheria_graphrag.agents.graph_nodes import _make_answer
+        from eleutheria_graphrag.agents.graph_nodes import _make_answer
 
-            answer = _make_answer(state)
+        answer = result.data if isinstance(result, End) else _make_answer(state)
 
         # Phase 3.5: Programmatic passage injection
-        answer = self._inject_passage_quotations(answer, state)
+        with contextlib.suppress(Exception):
+            answer = self._inject_passage_quotations(answer, state)
 
         # Phase 4: deterministic ancient-text verification (whitelist-first,
         # report-only unless ELEUTHERIA_TEXT_VERIFIER_ENFORCE is set).
         if _text_verifier_enabled():
-            answer = await self._verify_ancient_text(answer, state)
+            try:
+                answer = await self._verify_ancient_text(answer, state)
+            except Exception:  # noqa: BLE001 — report-only stage
+                logger.warning("Ancient-text verification failed", exc_info=True)
 
         # Phase 4.5: Early structured-citation preview. The `citations` array
         # is fully populated by ProgrammaticVerify (+ injection) at this point,
@@ -1902,13 +1916,39 @@ class ScholarlyAgent:
         # `complete` payload supersedes this preview).
         yield self._build_complete_event(answer, event_type="citations_preview")
 
+        # A degraded synthesis must SAY SO on the wire: the prose is a
+        # structural rendering of the evidence, not a weighed scholarly answer.
+        synthesis_meta = state.metadata.get("scholar_synthesis")
+        if isinstance(synthesis_meta, dict) and (
+            synthesis_meta.get("degraded") or synthesis_meta.get("status") != "ok"
+        ):
+            yield json.dumps(
+                {
+                    "type": "status",
+                    "message": (
+                        "The synthesis model was unavailable on this run; the "
+                        "answer is a structural rendering of the assembled "
+                        "evidence."
+                    ),
+                    "data": {
+                        "step": 99,
+                        "stage": "degraded",
+                        "reason": synthesis_meta.get("reason"),
+                        "synthesis_status": synthesis_meta.get("status"),
+                    },
+                }
+            )
+
         # Phase 5: Adversarial citation audit (v2) post-render. Emits one
         # ``citation_verified`` SSE event per audited claim and merges the
         # verdicts into the answer before the authoritative `complete` event.
         if self.deps.verifier_v2 is not None:
             audit_holder: dict[str, Any] = {}
-            async for ev in self._stream_citation_audit(answer, audit_holder):
-                yield ev
+            try:
+                async for ev in self._stream_citation_audit(answer, audit_holder):
+                    yield ev
+            except Exception:  # noqa: BLE001 — audit must never eat `complete`
+                logger.warning("Citation audit stage failed", exc_info=True)
             answer = audit_holder.get("answer", answer)
 
         # Emit the authoritative `complete` event. The prose itself was
@@ -2428,9 +2468,11 @@ class ScholarlyAgent:
         """Run the agent loop and close the emitter when done."""
         try:
             await agent.run()
-        except Exception as e:
-            logger.error("Agent loop error: %s", e, exc_info=True)
-            await emitter.emit_error(str(e))
+        except Exception:
+            # Never put the raw exception on the wire: it can carry credentials
+            # (httpx embeds the request URL) and provider internals.
+            logger.error("Agent loop error", exc_info=True)
+            await emitter.emit_error(CLIENT_LLM_ERROR_MESSAGE)
         finally:
             await emitter.close()
 

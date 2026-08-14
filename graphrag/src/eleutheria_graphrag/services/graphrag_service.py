@@ -85,16 +85,12 @@ def _env_flag(name: str, *, default: bool) -> bool:
 
 
 def _preferred_provider() -> ModelProvider:
-    raw = (
-        os.getenv("LLM_PREFERRED_PROVIDER", ModelProvider.OPENROUTER.value)
-        .strip()
-        .lower()
-    )
+    raw = os.getenv("LLM_PREFERRED_PROVIDER", ModelProvider.CODEX.value).strip().lower()
     try:
         return ModelProvider(raw)
     except ValueError:
-        logger.warning("Unknown LLM_PREFERRED_PROVIDER=%s, falling back to gemini", raw)
-        return ModelProvider.GEMINI
+        logger.warning("Unknown LLM_PREFERRED_PROVIDER=%s, falling back to codex", raw)
+        return ModelProvider.CODEX
 
 
 @dataclass

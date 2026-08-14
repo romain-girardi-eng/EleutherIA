@@ -5,14 +5,14 @@ They are skipped automatically when the required environment variables
 are not set, so they never break CI without infrastructure.
 
 Run locally:
-    DATABASE_URL='...' MOONSHOT_API_KEY='...' \
+    DATABASE_URL='...' CODEX_PROXY_API_KEY='...' \
     pytest tests/integration/ -v -m integration
 
 Required env vars (at least one LLM key must be present):
     DATABASE_URL     — asyncpg-compatible PostgreSQL connection string
-    MOONSHOT_API_KEY — Kimi K2 (preferred)
+    CODEX_PROXY_API_KEY — Codex proxy (preferred)
     GEMINI_API_KEY   — Gemini (fallback)
-    OPENROUTER_API_KEY — OpenRouter (fallback)
+    CLAUDE_PROXY_API_KEY — Claude proxy (fallback)
 """
 
 from __future__ import annotations
@@ -38,10 +38,12 @@ def _require_env() -> None:
         missing.append("DATABASE_URL")
     has_llm = any(
         os.getenv(k)
-        for k in ("MOONSHOT_API_KEY", "GEMINI_API_KEY", "OPENROUTER_API_KEY")
+        for k in ("CODEX_PROXY_API_KEY", "CLAUDE_PROXY_API_KEY", "GEMINI_API_KEY")
     )
     if not has_llm:
-        missing.append("MOONSHOT_API_KEY / GEMINI_API_KEY / OPENROUTER_API_KEY")
+        missing.append(
+            "CODEX_PROXY_API_KEY / CLAUDE_PROXY_API_KEY / GEMINI_API_KEY"
+        )
     if missing:
         pytest.skip(
             f"Integration env vars not set: {', '.join(missing)}",
@@ -54,11 +56,11 @@ _require_env()
 
 def _build_llm() -> LLMService:
     """Return an LLMService using whichever key is available."""
-    if os.getenv("MOONSHOT_API_KEY"):
-        return LLMService(preferred_provider=ModelProvider.KIMI)
-    if os.getenv("GEMINI_API_KEY"):
-        return LLMService(preferred_provider=ModelProvider.GEMINI)
-    return LLMService(preferred_provider=ModelProvider.OPENROUTER)
+    if os.getenv("CODEX_PROXY_API_KEY"):
+        return LLMService(preferred_provider=ModelProvider.CODEX)
+    if os.getenv("CLAUDE_PROXY_API_KEY"):
+        return LLMService(preferred_provider=ModelProvider.CLAUDE)
+    return LLMService(preferred_provider=ModelProvider.GEMINI)
 
 
 # ---------------------------------------------------------------------------

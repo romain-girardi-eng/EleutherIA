@@ -5,19 +5,18 @@ Cost is computed per-call from the raw ``prompt_tokens`` /
 expressed in USD per million tokens and can be overridden via env vars so
 Romain can react to provider price changes without redeploying code:
 
-    FIREWORKS_PRICE_INPUT_USD_PER_M   (default 0.85)
-    FIREWORKS_PRICE_OUTPUT_USD_PER_M  (default 3.40)
+    CODEX_PRICE_INPUT_USD_PER_M       (default 1.25)
+    CODEX_PRICE_OUTPUT_USD_PER_M      (default 10.00)
     GEMINI_PRICE_INPUT_USD_PER_M      (default 1.25)
     GEMINI_PRICE_OUTPUT_USD_PER_M     (default 5.00)
-    MOONSHOT_PRICE_INPUT_USD_PER_M    (default 0.85)
-    MOONSHOT_PRICE_OUTPUT_USD_PER_M   (default 3.40)
-    OPENROUTER_PRICE_INPUT_USD_PER_M  (default 0.50)
-    OPENROUTER_PRICE_OUTPUT_USD_PER_M (default 1.50)
+    CLAUDE_PRICE_INPUT_USD_PER_M      (default 5.00)
+    CLAUDE_PRICE_OUTPUT_USD_PER_M     (default 25.00)
 
-Sources verified November 2026:
-- Fireworks Kimi K2.6 pricing:  https://fireworks.ai/models/fireworks/kimi-k2p6
-- Gemini 2.5 Pro pricing:       https://ai.google.dev/gemini-api/docs/pricing
-- Moonshot Kimi-latest pricing: https://platform.moonshot.ai/docs/pricing
+The Codex and Claude proxies are CLI-subscription backed (no per-token
+billing to us); their rows are list-price estimates so the cost rollup stays
+comparable across providers.
+
+- Gemini pricing: https://ai.google.dev/gemini-api/docs/pricing
 """
 
 from __future__ import annotations
@@ -35,24 +34,28 @@ class ProviderPrice:
     output_per_m: float
 
 
-# ONE-LINE K2.7 SWAP (ARCHITECTURE §K2.7): pricing is keyed by PROVIDER, not by
-# model, so a Fireworks K2.7 inherits the "fireworks" row and a Moonshot K2.7 the
-# "moonshot" row — no new key is needed unless K2.7 is priced differently, in
-# which case add a "kimi-k2.7" row here and route it in get_provider_price.
+# Pricing is keyed by PROVIDER, not by model. The two CLI-subscription proxies
+# are flat-rate to us, so their rows are list-price estimates kept only so the
+# cost rollup stays comparable across providers; override via the env vars.
 _DEFAULTS: Final[dict[str, ProviderPrice]] = {
-    "fireworks": ProviderPrice(input_per_m=0.85, output_per_m=3.40),
+    "codex": ProviderPrice(input_per_m=1.25, output_per_m=10.00),
+    "claude": ProviderPrice(input_per_m=5.00, output_per_m=25.00),
     "gemini": ProviderPrice(input_per_m=1.25, output_per_m=5.00),
-    "kimi": ProviderPrice(input_per_m=0.85, output_per_m=3.40),
-    "moonshot": ProviderPrice(input_per_m=0.85, output_per_m=3.40),
-    "openrouter": ProviderPrice(input_per_m=0.50, output_per_m=1.50),
 }
 
 _ENV_PREFIX: Final[dict[str, str]] = {
-    "fireworks": "FIREWORKS",
+    "codex": "CODEX",
+    "claude": "CLAUDE",
     "gemini": "GEMINI",
-    "kimi": "MOONSHOT",
-    "moonshot": "MOONSHOT",
-    "openrouter": "OPENROUTER",
+}
+
+# Models whose list price differs from their provider's headline row, keyed by
+# the model's api_id (what the provider is actually asked for). Consulted by
+# :func:`get_model_price`; anything absent inherits the provider row above.
+# This module is the SINGLE place any price is written down — the model
+# registry derives its per-model pricing from here rather than repeating it.
+_MODEL_DEFAULTS: Final[dict[str, ProviderPrice]] = {
+    "claude-sonnet-4-6": ProviderPrice(input_per_m=3.00, output_per_m=15.00),
 }
 
 
@@ -84,6 +87,21 @@ def get_provider_price(provider: str) -> ProviderPrice:
             f"{prefix}_PRICE_OUTPUT_USD_PER_M", default.output_per_m
         ),
     )
+
+
+def get_model_price(model_id: str, *, provider: str) -> ProviderPrice:
+    """Return the list price for one concrete model.
+
+    A model listed in :data:`_MODEL_DEFAULTS` (priced apart from its provider's
+    headline row, e.g. Sonnet vs Opus) uses that row; every other model
+    inherits :func:`get_provider_price`, env overrides included. Callers that
+    only know the provider (per-call cost accounting) keep using
+    :func:`get_provider_price`.
+    """
+    explicit = _MODEL_DEFAULTS.get(model_id)
+    if explicit is not None:
+        return explicit
+    return get_provider_price(provider)
 
 
 def estimate_cost_usd(

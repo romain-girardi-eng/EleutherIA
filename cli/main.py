@@ -852,13 +852,21 @@ def doctor() -> None:
         # Check for API keys
         with open(env_file) as f:
             env_content = f.read()
-            if "GEMINI_API_KEY" in env_content or "MOONSHOT_API_KEY" in env_content:
+            if any(
+                k in env_content
+                for k in (
+                    "CODEX_PROXY_API_KEY",
+                    "CLAUDE_PROXY_API_KEY",
+                    "GEMINI_API_KEY",
+                )
+            ):
                 console.print("[green]✓[/green] API keys configured")
             else:
                 issues.append(
                     (
                         "API Keys",
-                        "No LLM API keys found in .env. Add GEMINI_API_KEY or MOONSHOT_API_KEY",
+                        "No LLM API keys found in .env. Add CODEX_PROXY_API_KEY, "
+                        "CLAUDE_PROXY_API_KEY or GEMINI_API_KEY",
                     )
                 )
     else:

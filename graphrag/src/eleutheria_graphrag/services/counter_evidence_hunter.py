@@ -829,7 +829,9 @@ class CounterEvidenceHunter:
             passage_hits=passage_summary,
             kg_edges=kg_summary,
         )
-        return await self.llm.generate(prompt, temperature=0.4, max_tokens=900)
+        return await self.llm.generate(
+            prompt, temperature=0.4, max_tokens=900, tier="utility"
+        )
 
     # ------------------------------------------------------------------
     # Parsing & validation (passage-contradiction dim)
@@ -931,7 +933,9 @@ class CounterEvidenceHunter:
             findings_summary="\n".join(summary_lines)
         )
         try:
-            text = await self.llm.generate(prompt, temperature=0.2, max_tokens=220)
+            text = await self.llm.generate(
+                prompt, temperature=0.2, max_tokens=220, tier="utility"
+            )
         except Exception:
             logger.warning("Aggregate summary LLM call failed", exc_info=True)
             return (

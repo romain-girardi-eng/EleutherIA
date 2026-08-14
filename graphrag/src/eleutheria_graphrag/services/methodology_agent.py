@@ -180,6 +180,7 @@ class MethodologyAgent:
                 prompt,
                 temperature=0.2,
                 max_tokens=2_000,
+                tier="utility",
             )
         except Exception:
             logger.warning(

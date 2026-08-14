@@ -49,6 +49,56 @@ from eleutheria_graphrag.services.snapshot_retrieval import (
 
 logger = logging.getLogger(__name__)
 
+
+# Curator annotations that must never reach a rendered answer. These are
+# editorial bookkeeping left in the KG ``description`` fields, not scholarship.
+_CURATOR_ANNOTATION_RE = re.compile(
+    r"\[\s*Vérif\.[^\]]*\]|\*?\(\s*Phase\s+\d+[^)]*\)\*?", flags=re.IGNORECASE
+)
+#: A leading ``**Bold heading**`` paragraph is curator boilerplate
+#: ("**Avertissement méthodologique** …"), never the node's actual claim.
+_BOILERPLATE_LEAD_RE = re.compile(r"^\s*\*\*[^*]+\*\*")
+_CLAIM_MAX_CHARS = 300
+
+
+def _first_substantive_sentence(description: str) -> str:
+    """First real sentence of a KG ``description``, boilerplate stripped.
+
+    Skips leading ``**…**`` heading paragraphs (curator warnings such as
+    "Avertissement méthodologique…"), removes ``[Vérif. …]`` and ``*(Phase N)*``
+    annotations, and caps the result so a whole essay cannot land in a bullet.
+    Returns ``""`` when nothing substantive remains.
+    """
+    if not description:
+        return ""
+
+    paragraphs = [p.strip() for p in re.split(r"\n\s*\n", description) if p.strip()]
+    candidate = ""
+    for paragraph in paragraphs:
+        if _BOILERPLATE_LEAD_RE.match(paragraph):
+            continue
+        candidate = paragraph
+        break
+    if not candidate and paragraphs:
+        # Every paragraph was a bold-led block: drop the heading, keep the body.
+        candidate = _BOILERPLATE_LEAD_RE.sub("", paragraphs[0]).strip(" :—-–")
+
+    candidate = _CURATOR_ANNOTATION_RE.sub("", candidate)
+    candidate = re.sub(r"\s+", " ", candidate).strip()
+    if not candidate:
+        return ""
+
+    # Keep the first sentence when it already says something; otherwise fall
+    # back to a hard character cap rather than truncating mid-word.
+    match = re.search(r"^(.{40,}?[.!?])(?:\s|$)", candidate)
+    if match:
+        candidate = match.group(1)
+    if len(candidate) > _CLAIM_MAX_CHARS:
+        cut = candidate.rfind(" ", 0, _CLAIM_MAX_CHARS)
+        candidate = candidate[: cut if cut > 0 else _CLAIM_MAX_CHARS].rstrip() + "…"
+    return candidate.strip()
+
+
 _TERM_RE = re.compile(r"[A-Za-zÀ-ÖØ-öø-ÿ\u0370-\u03FF\u1F00-\u1FFF']+")
 
 # Flat, star-tolerant dialectical relations (ARCHITECTURE §2.1 / §3.2).
@@ -450,11 +500,32 @@ class BuildControversyFrameTool:
 
     @staticmethod
     def _resolve_claim(node: dict[str, Any], metadata: dict[str, Any]) -> str:
+        """The position's claim, in decreasing order of directness.
+
+        The last resort used to dump the raw KG ``description``, which for
+        curated nodes opens with French curator boilerplate ("Avertissement
+        méthodologique…") and carries ``[Vérif. …]`` / ``*(Phase N)*``
+        annotations — all of which shipped verbatim into the rendered answer.
+        """
         for key in ("stance", "claim", "thesis"):
             value = metadata.get(key)
             if isinstance(value, str) and value.strip():
                 return value.strip()
-        return (node.get("description") or node.get("label") or "").strip()
+
+        # ``conclusion`` is the argument's own stated upshot — the best claim
+        # surrogate. Stored as either a bare string or {"text": ...}.
+        conclusion = metadata.get("conclusion")
+        if isinstance(conclusion, dict):
+            conclusion = conclusion.get("text")
+        if isinstance(conclusion, str) and conclusion.strip():
+            return conclusion.strip()
+
+        description = node.get("description")
+        if isinstance(description, str) and description.strip():
+            sentence = _first_substantive_sentence(description)
+            if sentence:
+                return sentence
+        return (node.get("label") or "").strip()
 
     # ── passages ─────────────────────────────────────────────────────────
 

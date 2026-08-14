@@ -1,7 +1,7 @@
 """Question -> scholarly-answer-shape planner (Scholar-RAG M2, ARCHITECTURE §1).
 
 Replaces the keyword facet picker (``_default_research_facets``) on the
-Scholar-RAG path. One cheap Fireworks ``kimi-k2p6`` JSON-mode call classifies the
+Scholar-RAG path. One cheap utility-tier JSON-mode call classifies the
 question into ONE primary + optional secondary :class:`AnswerShape` and emits a
 typed :class:`ResearchPlan` — a *retrieval program* (a small DAG of
 :class:`GraphPattern`), not a fixed list of section titles.
@@ -336,7 +336,7 @@ def build_inventory_header(inventory: GraphInventory) -> str:
     )
 
 
-# ── LLM planner (cheap Fireworks kimi-k2p6 JSON-mode call) ───────────────────
+# ── LLM planner (cheap utility-tier JSON-mode call) ──────────────────────────
 
 PLAN_RESEARCH_SYSTEM = (
     "You are a retrieval planner for a vectorless graph-RAG over a knowledge "
@@ -413,6 +413,7 @@ async def plan_research(
             cache_key="scholar-rag-planner",
             cache_prefix="scholar_rag_plan_v1",
             model_override=model_override,
+            tier="utility",
         )
         result = _parse_plan_json(raw)
         return plan_from_shape(

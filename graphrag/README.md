@@ -100,8 +100,8 @@ Environment variables:
 ```bash
 # LLM Providers (at least one required)
 LLM_PREFERRED_PROVIDER=kimi  # kimi, openrouter, or gemini
-MOONSHOT_API_KEY=your-key    # For Kimi K2
-OPENROUTER_API_KEY=your-key  # For OpenRouter
+CODEX_PROXY_API_KEY=your-key   # Codex proxy (primary)
+CLAUDE_PROXY_API_KEY=your-key  # Claude proxy (fallback)
 GEMINI_API_KEY=your-key      # For Gemini
 
 # Retrieval

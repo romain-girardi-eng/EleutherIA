@@ -177,6 +177,7 @@ class CitationVerifier:
                 prompt,
                 temperature=0.0,
                 max_tokens=128,
+                tier="utility",
             )
             # Parse JSON response
             raw = raw.strip()
