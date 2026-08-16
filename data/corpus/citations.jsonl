@@ -5706,7 +5706,7 @@
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "sc10bis_ignatius_ad_magnesios_chap8", "passage_id": "4a796d82-181d-592c-9768-5dda19053a9d"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_lib_arb_1_3_7_en", "passage_id": "4a7c8161-68a8-511d-ab0d-3868f133ec9a"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_sen_ep_10_82_10", "passage_id": "4a7c8683-161a-4736-a82c-eac324c57cf2"}
-{"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "sc31_melito_peri_pascha_iv_chap3", "passage_id": "4a7cd1b0-93ad-52c9-8859-d5ae4da778be"}
+{"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_eusebius_he_iv_26_melito_fr_iv_chap3", "passage_id": "4a7cd1b0-93ad-52c9-8859-d5ae4da778be", "kg_node_id_remapped_2026_08_16": "sc31_melito_peri_pascha_iv_chap3"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_plato_phdr_257a", "passage_id": "4a838619-2275-4e63-8941-7e129104e9f7"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_sext_338", "passage_id": "4a846fbc-3561-4d80-93f4-b869d690abb8"}
 {"citation_type": "primary_source", "confidence": 0.6, "kg_node_id": "argument_carneadean_anti_teleology_cosmos_amand1945", "passage_id": "4a8b06da-c565-4a4f-a757-8850c3497e83"}
@@ -8279,7 +8279,7 @@
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_arist_ne_3_10", "passage_id": "6c00e3c2-0512-4d12-96f6-7f3687cd037b"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_plotinus_ii_4_13", "passage_id": "6c00ed27-5259-452a-ae31-577e00a7c208"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_epicur_59_s171", "passage_id": "6c023d89-9167-4156-a80b-a901ab047424"}
-{"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_alcin_alcinous_untitled_full_text", "passage_id": "6c05b0e0-2af2-4d4f-ba3a-27bdf930d106"}
+{"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_hegesippus_hypomnemata_fragments", "passage_id": "6c05b0e0-2af2-4d4f-ba3a-27bdf930d106", "kg_node_id_remapped_2026_08_16": "passage_alcin_alcinous_untitled_full_text"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_sen_ep_7_66_46", "passage_id": "6c09ae64-2579-4970-9a0c-3b5b1c16231a"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "sc147_origenes_contra_celsum_vi_par73", "passage_id": "6c0def87-5de7-4252-a4c7-e916d358e45e"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_plato_rep_4_437", "passage_id": "6c11b797-7b25-44fa-a319-9811a67b5b04"}
@@ -9412,7 +9412,7 @@
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "sc464_pamphilus_apologia_pro_origene_par32", "passage_id": "7bdaaf41-30d0-4541-a581-6057ff1cf7af"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_plotinus_vi_9_613", "passage_id": "7bde163b-fd82-41a7-99fd-dffb67c9436f"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "sc464_pamphilus_apologia_pro_origene_par7", "passage_id": "7bdf441b-321a-460f-9c6e-7464553667ca"}
-{"citation_type": "source_for", "confidence": 1.0, "kg_node_id": "argument_cafma_framework_5a7b9e12", "passage_id": "7bdfd343-54ca-4e5e-bccd-6fafa8345670"}
+{"citation_type": "source_for", "confidence": 1.0, "kg_node_id": "framework_cafma_5a7b9e12", "passage_id": "7bdfd343-54ca-4e5e-bccd-6fafa8345670", "kg_node_id_remapped_2026_08_16": "argument_cafma_framework_5a7b9e12"}
 {"citation_type": "grounded_in", "confidence": 1.0, "kg_node_id": "concept_academic_skepticism_epoche_n4o5p6q7", "passage_id": "7bdfd343-54ca-4e5e-bccd-6fafa8345670"}
 {"citation_type": "evidenced_by", "confidence": 0.85, "kg_node_id": "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7", "passage_id": "7bdfd343-54ca-4e5e-bccd-6fafa8345670"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_cic_fat_31", "passage_id": "7bdfd343-54ca-4e5e-bccd-6fafa8345670"}
@@ -10276,7 +10276,7 @@
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_just_tryph_64_4", "passage_id": "87122ed3-6155-4e5a-a3f5-f4dcdac79a02"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_marc_aur_4_41_1", "passage_id": "8713abf7-b6f6-4ceb-b440-277c64c5a83b"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_dl_lives_2_8_84", "passage_id": "871590b4-559d-4d2c-b997-067962f4ac9b"}
-{"citation_type": "source_for", "confidence": 1.0, "kg_node_id": "argument_cafma_framework_5a7b9e12", "passage_id": "87168bf7-dbd0-4e75-9786-13f7a277da73"}
+{"citation_type": "source_for", "confidence": 1.0, "kg_node_id": "framework_cafma_5a7b9e12", "passage_id": "87168bf7-dbd0-4e75-9786-13f7a277da73", "kg_node_id_remapped_2026_08_16": "argument_cafma_framework_5a7b9e12"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_cic_fat_32", "passage_id": "87168bf7-dbd0-4e75-9786-13f7a277da73"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "person_carneades_214_129bce_l2m3n4o5", "passage_id": "87168bf7-dbd0-4e75-9786-13f7a277da73"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_sen_ep_17_104_24", "passage_id": "871d9fee-2fb2-4f90-a31a-4115f22c3951"}
@@ -10455,7 +10455,7 @@
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6", "passage_id": "8975e53a-18ee-50fc-81d7-2e1e9b7c4698"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_epict_50", "passage_id": "8975e53a-18ee-50fc-81d7-2e1e9b7c4698"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "synthesis_epict_eph_hemin_doctrine", "passage_id": "8975e53a-18ee-50fc-81d7-2e1e9b7c4698"}
-{"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "sc31_melito_peri_pascha_iv_chap3_en", "passage_id": "89798fe0-589a-5c3e-9024-89f70b40ecae"}
+{"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_eusebius_he_iv_26_melito_fr_iv_chap3_en", "passage_id": "89798fe0-589a-5c3e-9024-89f70b40ecae", "kg_node_id_remapped_2026_08_16": "sc31_melito_peri_pascha_iv_chap3_en"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_marc_aur_6_16_5", "passage_id": "897e9e80-b701-4619-9437-562a44d256a6"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "sc150_origenes_contra_celsum_viii_par60_a", "passage_id": "89804d0d-95bb-4c64-aec4-58d7cd6a6cdd"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_dl_lives_4_6_44", "passage_id": "8988e42f-7374-4ce5-b205-6bbbfd624d48"}
@@ -19765,8 +19765,8 @@
 {"kg_node_id": "scholarly_argument_brand_original_sin_post_destruction", "passage_id": "a9ec6810-488e-5612-a82e-1e62aa7540a9", "citation_type": "discussion", "confidence": 0.85, "notes": "grounding 2026-06-11: Rom 5:20, explicitly named by the node: Paul's counter-claim that the law came in so that the trespass might increase — exactly the verse Brand contrasts with the strong Second Tem"}
 {"kg_node_id": "scholarly_argument_brand_philo_free_will_amid_pessimism", "passage_id": "efd292f2-3766-4ecd-b65f-8dc114b59de6", "citation_type": "discussion", "confidence": 0.82, "notes": "grounding 2026-06-11: Philo, De Opificio 75 — the classic locus (treated by Brand in her Philo chapter) where Philo argues God enlisted co-workers in creating man precisely so that 'the Father must be b"}
 {"kg_node_id": "scholarly_argument_brand_philo_free_will_amid_pessimism", "passage_id": "2e678ce5-ee05-41d1-ad82-2bfaeb5358be", "citation_type": "discussion", "confidence": 0.7, "notes": "grounding 2026-06-11: Philo, De Opificio 73 — the premise of the Opif. 72-75 argument: man alone is of mixed nature, receptive of contraries (wisdom/folly, temperance/licentiousness), i.e. capable of bo"}
-{"kg_node_id": "scholarly_argument_dihle_greek_vs_biblical_cosmology_an_4", "passage_id": "420df052-0249-4c0a-b1d4-547c3e2fc300", "citation_type": "discussion", "confidence": 0.78, "notes": "grounding 2026-06-11: Plato, Timaeus 30 (urn_cts_greeklit_tlg0059_tlg031_grc) is the locus classicus behind Dihle's characterization of Greek philosophical theology: the god, wishing all things good (βο"}
-{"kg_node_id": "scholarly_argument_dihle_greek_vs_biblical_cosmology_an_4", "passage_id": "625d3afa-63f8-4951-ad89-1a32fa3b3a68", "citation_type": "discussion", "confidence": 0.72, "notes": "grounding 2026-06-11: Wisdom 11:25 (in passage Wis. 11.16-26, urn_cts_greeklit_tlg0527_tlg033_grc) states the Biblical side of Dihle's contrast: nothing in the created order would even endure had God no"}
+{"kg_node_id": "scholarly_argument_dihle_greek_philosophical_theology_v_0", "passage_id": "420df052-0249-4c0a-b1d4-547c3e2fc300", "citation_type": "discussion", "confidence": 0.78, "notes": "grounding 2026-06-11: Plato, Timaeus 30 (urn_cts_greeklit_tlg0059_tlg031_grc) is the locus classicus behind Dihle's characterization of Greek philosophical theology: the god, wishing all things good (βο", "kg_node_id_remapped_2026_08_16": "scholarly_argument_dihle_greek_vs_biblical_cosmology_an_4"}
+{"kg_node_id": "scholarly_argument_dihle_greek_philosophical_theology_v_0", "passage_id": "625d3afa-63f8-4951-ad89-1a32fa3b3a68", "citation_type": "discussion", "confidence": 0.72, "notes": "grounding 2026-06-11: Wisdom 11:25 (in passage Wis. 11.16-26, urn_cts_greeklit_tlg0527_tlg033_grc) states the Biblical side of Dihle's contrast: nothing in the created order would even endure had God no", "kg_node_id_remapped_2026_08_16": "scholarly_argument_dihle_greek_vs_biblical_cosmology_an_4"}
 {"kg_node_id": "scholarly_argument_dobbin_1991_anti_stoic_polemic_origin", "passage_id": "28bc2223-dabd-4bb0-933f-faa0fbcc2ef9", "citation_type": "discussion", "confidence": 0.85, "notes": "grounding 2026-06-11: Alexander of Aphrodisias, De Fato 12 (tlg0732_tlg014_grc) is precisely the neo-Aristotelian anti-Stoic polemic Dobbin invokes: with deliberation destroyed under Stoic fate, τὸ ἐφ' "}
 {"kg_node_id": "scholarly_argument_dobbin_1991_anti_stoic_polemic_origin", "passage_id": "7bdfd343-54ca-4e5e-bccd-6fafa8345670", "citation_type": "discussion", "confidence": 0.8, "notes": "grounding 2026-06-11: Cicero, De Fato 31 (urn_cts_latinlit_phi0474_phi049_lat) reports Carneades' Academic argument against Stoic fate — if everything happens by antecedent causes, necessity rules and '"}
 {"kg_node_id": "scholarly_argument_dobbin_1991_anti_stoic_polemic_origin", "passage_id": "d366058e-a18f-44ab-a9a5-ecc1906aca91", "citation_type": "discussion", "confidence": 0.8, "notes": "grounding 2026-06-11: Cicero, De Fato 20 (urn_cts_latinlit_phi0474_phi049_lat): 'those who introduce an eternal chain of causes rob the human mind of free will and bind it with the necessity of fate' (m"}

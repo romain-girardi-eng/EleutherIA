@@ -1,5 +1,5 @@
 {
-  "entries_written": 319,
+  "entries_written": 328,
   "missing": [
     {
       "label": "Barclay 2020 — Paul and the Power of Grace",
@@ -41,7 +41,7 @@
       "missing": [
         "author"
       ],
-      "node_id": "pub_furst_2019_perspectives_origen_ad21"
+      "node_id": "pub_furst_2021_perspectives_origen_ad21"
     },
     {
       "label": "Discovering the Will: From Aristotle to Augustine (Kahn)",
@@ -84,7 +84,7 @@
       "missing": [
         "author"
       ],
-      "node_id": "scholarly_work_barclay_2007_introduction"
+      "node_id": "scholarly_work_barclay_2006_introduction"
     },
     {
       "label": "Bardy 1943 — Athénagore: Supplique au sujet des Chrétiens (Introduction et traduction)",
@@ -217,14 +217,6 @@
       "missing": [
         "author"
       ],
-      "node_id": "scholarly_work_crouzel_1962_orig_ne_et_la_philosophie"
-    },
-    {
-      "label": "Crouzel 1962 — Origène et la philosophie",
-      "missing": [
-        "author",
-        "unique_bibtex_key"
-      ],
       "node_id": "scholarly_work_crouzel_1962_origene_et_la_philosophie"
     },
     {
@@ -251,10 +243,9 @@
     {
       "label": "Currado ? — Early Church Fathers on the Freedom of the Will and Romans 9",
       "missing": [
-        "author",
-        "year"
+        "author"
       ],
-      "node_id": "scholarly_work_currado_0_early_church_fathers_on_the_freedom_of_t"
+      "node_id": "scholarly_work_currado_2014_early_church_fathers_on_the_freedom_of_t"
     },
     {
       "label": "DE MONNERON 2011 — Le Déterminisme et la Responsabilité morale",
@@ -275,7 +266,7 @@
       "missing": [
         "author"
       ],
-      "node_id": "scholarly_work_dettwiler_0_une_th_ologie_en_construction"
+      "node_id": "scholarly_work_dettwiler_2004_une_th_ologie_en_construction"
     },
     {
       "label": "Dettwiler 1990 — Le prologue johannique (Jean 1,1-18)",
@@ -532,26 +523,9 @@
     {
       "label": "Gaventa ? — Romans",
       "missing": [
-        "author",
-        "year"
+        "author"
       ],
-      "node_id": "scholarly_work_gaventa_0_romans"
-    },
-    {
-      "label": "Gaventa ? — Romans 9:1–11:36: \"All Israel\"",
-      "missing": [
-        "author",
-        "year"
-      ],
-      "node_id": "scholarly_work_gaventa_0_romans_all_israel"
-    },
-    {
-      "label": "Gaventa ? — Romans 5:1–8:39: Christ, Cosmos, and Consequences",
-      "missing": [
-        "author",
-        "year"
-      ],
-      "node_id": "scholarly_work_gaventa_0_romans_christ_cosmos_and_consequences"
+      "node_id": "scholarly_work_gaventa_2024_romans"
     },
     {
       "label": "Gerson 1996 — The Cambridge Companion to Plotinus",
@@ -610,11 +584,11 @@
       "node_id": "scholarly_work_gorday_1983_principles_of_patristic_exegesis_romans_"
     },
     {
-      "label": "D'Jeranian — Responsabilité morale et destin : une réponse possible chez Épictète à l'objecti",
+      "label": "D'Jeranian — Responsabilité morale et destin : une solution possible chez Épictète à l'objection de Cicéron (De fato 39-45)",
       "missing": [
         "year"
       ],
-      "node_id": "scholarly_work_gourinat_0_responsabilit_morale_et_destin_une_r_pon"
+      "node_id": "scholarly_work_djeranian_0_responsabilit_morale_et_destin_une_r_pon"
     },
     {
       "label": "Graeser 1972 — Plotinus and the Stoics: A Preliminary Study",
@@ -712,7 +686,7 @@
       "missing": [
         "author"
       ],
-      "node_id": "scholarly_work_hendriksen_0_new_testament_commentary_romans"
+      "node_id": "scholarly_work_hendriksen_1981_new_testament_commentary_romans"
     },
     {
       "label": "Hick 1966 — Evil and the God of Love",
@@ -755,13 +729,6 @@
         "author"
       ],
       "node_id": "scholarly_work_jewett_2007_romans_a_commentary"
-    },
-    {
-      "label": "Jewett 2007 — Romans: A Commentary (Hermeneia Series)",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_jewett_2007_romans_a_commentary_hermeneia_series"
     },
     {
       "label": "Jourdan 2011 — La théodicée développée sur le thème du larcin des Grecs : origine du mal, liber",
@@ -894,7 +861,7 @@
       "missing": [
         "author"
       ],
-      "node_id": "scholarly_work_martin_0_josephus_use_of_heimarmene_in_the_jewish"
+      "node_id": "scholarly_work_martin_1981_josephus_use_of_heimarmene_in_the_jewish"
     },
     {
       "label": "Maso 2013 — Fate, Chance, and Fortune in Ancient Thought",
@@ -927,10 +894,9 @@
     {
       "label": "Michon ? — «Je ne fais pas ce que je veux, mais je fais ce que je hais»: Thomas d'Aquin sur",
       "missing": [
-        "author",
-        "year"
+        "author"
       ],
-      "node_id": "scholarly_work_michon_0_je_ne_fais_pas_ce_que_je_veux_mais_je_fa"
+      "node_id": "scholarly_work_michon_2009_je_ne_fais_pas_ce_que_je_veux_mais_je_fa"
     },
     {
       "label": "Minns 2009 — Justin, Philosopher and Martyr: Apologies",
@@ -1337,7 +1303,7 @@
       "missing": [
         "author"
       ],
-      "node_id": "scholarly_work_wolfson_1947_philo_on_free_will_and_the_historical_in"
+      "node_id": "scholarly_work_wolfson_1942_philo_on_free_will_and_the_historical_in"
     },
     {
       "label": "Wolter 2015 — Paul: An Outline of His Theology",
@@ -1368,6 +1334,6 @@
       "node_id": "scholarly_work_zetterholm_2004_a_feminist_paul_a_hermeneutical_experime"
     }
   ],
-  "nodes_with_missing_fields": 194,
-  "publication_count": 319
+  "nodes_with_missing_fields": 190,
+  "publication_count": 328
 }

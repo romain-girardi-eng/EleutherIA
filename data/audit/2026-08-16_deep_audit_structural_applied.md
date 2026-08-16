@@ -1,0 +1,710 @@
+# Deep structural audit — applied 2026-08-16
+
+nodes 20021 -> 20016, edges 57424 -> 56916
+
+- [fix_edge_field_divergence] 2fe09122-45fa-4611-9077-28fa8c206ed4: target_id scholar_gourinat_jean_baptiste -> scholar_djeranian_o
+- [fix_edge_field_divergence] 07ed26a7-e8d1-4d18-8234-7e118100d56c: target_id scholar_gourinat_jean_baptiste -> scholar_djeranian_o
+- [fix_edge_field_divergence] 6928636c-5811-4df5-8df7-f18ba57fc8a1: target_id scholar_gourinat_jean_baptiste -> scholar_djeranian_o
+- [fix_edge_field_divergence] e61f8cc0-5b24-4a07-b6e4-40f209248572: target_id scholar_guyomarc_h_g -> scholar_koch_i
+- [fix_edge_field_divergence] 1093cf67-79e4-4068-8d29-2b9a6357d6bf: target_id scholar_guyomarc_h_g -> scholar_koch_i
+- [fix_edge_field_divergence] 2ab6cca0-2ce1-4698-9b28-ec28b7ff9c47: target_id scholar_hall_c -> scholar_hall_sg
+- [fix_dangling_metadata_pointers] scholar_position_dihle_will_christian_innovation: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle
+- [fix_dangling_metadata_pointers] scholar_position_frede_will_originates_epictetus: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_destr_e_aristotle_on_eph_h_min_and_det_0: scholarly_work_id: scholarly_work_destr_e_2014_what_is_up_to_us_studies_on_agency_and_r -> pub_destree_salles_zingano_2014_what_is_up_to_us
+- [fix_dangling_metadata_pointers] scholarly_argument_destr_e_stoic_fate_and_moral_responsib_1: scholarly_work_id: scholarly_work_destr_e_2014_what_is_up_to_us_studies_on_agency_and_r -> pub_destree_salles_zingano_2014_what_is_up_to_us
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_absence_of_will_as_arbitrary_i_2: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_augustine_s_invention_of_the_p_3: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_greek_concept_of_will_0: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_greek_philosophical_theology_a_0: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_greek_philosophical_theology_v_0: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_greek_vs_biblical_cosmology_an_4: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_historical_development_of_the__3: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_jewish_and_christian_conceptio_1: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_monotheistic_convergence_with__3: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_paul_s_concept_of_will_1: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_paul_s_doctrine_of_conscience_2: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_prayer_and_divine_immutability_2: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_prayer_and_divine_rationality_1: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_dihle_the_concept_of_will_velle_in_g_1: scholar_id: scholar_dihle_albrecht -> scholar_albrecht_dihle; scholarly_work_id: pub_dihle_1982_theory_will -> pub_dihle_1982_theory_of_will
+- [fix_dangling_metadata_pointers] scholarly_argument_eliasson_alexander_of_aphrodisias_on_2: scholarly_work_id: scholarly_work_eliasson_2008_the_notion_of_that_which_depends_on_us_i -> pub_eliasson_2008_notion_eph_hemin_plotinus
+- [fix_dangling_metadata_pointers] scholarly_argument_eliasson_aristotle_s_notion_of_1: scholarly_work_id: scholarly_work_eliasson_2008_the_notion_of_that_which_depends_on_us_i -> pub_eliasson_2008_notion_eph_hemin_plotinus
+- [fix_dangling_metadata_pointers] scholarly_argument_eliasson_chrysippus_and_stoic_3: scholarly_work_id: scholarly_work_eliasson_2008_the_notion_of_that_which_depends_on_us_i -> pub_eliasson_2008_notion_eph_hemin_plotinus
+- [fix_dangling_metadata_pointers] scholarly_argument_eliasson_middle_platonist_notions_of_4: scholarly_work_id: scholarly_work_eliasson_2008_the_notion_of_that_which_depends_on_us_i -> pub_eliasson_2008_notion_eph_hemin_plotinus
+- [fix_dangling_metadata_pointers] scholarly_argument_eliasson_plotinus_s_notion_of_reconside_5: scholarly_work_id: scholarly_work_eliasson_2008_the_notion_of_that_which_depends_on_us_i -> pub_eliasson_2008_notion_eph_hemin_plotinus
+- [fix_dangling_metadata_pointers] scholarly_argument_eliasson_that_which_depends_on_us_in_pl_0: scholarly_work_id: scholarly_work_eliasson_2008_the_notion_of_that_which_depends_on_us_i -> pub_eliasson_2008_notion_eph_hemin_plotinus
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_aristotle_on_will_1: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_aristotle_on_will_and_free_wil_1: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_augustine_on_free_will_7: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_autexousion_terminology_4: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_christian_adoption_of_free_wil_4: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_christian_motivation_for_free__7: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_epictetus_and_free_will_3: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_epictetus_as_originator_of_fre_3: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_historical_origin_of_free_will_0: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_methodology_8: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_methodology_for_studying_free__5: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_methodology_of_studying_ancien_0: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_origen_on_free_will_5: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_origen_s_differences_from_stoi_6: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_origen_s_doctrine_of_apokatast_8: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_origen_s_doctrine_of_free_will_5: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_origin_of_free_will_0: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_platonist_and_peripatetic_resp_3: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_platonist_and_peripatetic_resp_4: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_plotinus_on_free_will_6: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_stoic_origin_of_the_will_2: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_stoic_psychology_and_assent_2: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_frede_stoic_theory_of_assent_and_wil_2: scholar_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_karamanolis_free_will_and_divine_providenc_0: scholarly_work_id: scholarly_work_karamanolis_2021_the_philosophy_of_early_christianity -> pub_karamanolis_2021_philosophy_early_christianity
+- [fix_dangling_metadata_pointers] scholarly_argument_karamanolis_methodology_of_studying_early__2: scholarly_work_id: scholarly_work_karamanolis_2021_the_philosophy_of_early_christianity -> pub_karamanolis_2021_philosophy_early_christianity
+- [fix_dangling_metadata_pointers] scholarly_argument_karamanolis_status_of_early_christian_phil_1: scholarly_work_id: scholarly_work_karamanolis_2021_the_philosophy_of_early_christianity -> pub_karamanolis_2021_philosophy_early_christianity
+- [fix_dangling_metadata_pointers] scholarly_argument_sharples_alexander_of_aphrodisias_schol_2: scholarly_work_id: scholarly_work_sharples_2008_l_accident_du_d_terminisme_alexandre_d_a -> pub_sharples_2008_accident_determinisme
+- [fix_dangling_metadata_pointers] scholarly_argument_sharples_free_will_and_determinism_in_a_1: scholarly_work_id: scholarly_work_sharples_2008_l_accident_du_d_terminisme_alexandre_d_a -> pub_sharples_2008_accident_determinisme
+- [fix_dangling_metadata_pointers] scholarly_argument_sharples_historical_determinism_0: scholarly_work_id: scholarly_work_sharples_2008_l_accident_du_d_terminisme_alexandre_d_a -> pub_sharples_2008_accident_determinisme
+- [fix_dangling_metadata_pointers] scholarly_argument_voelke_determinism_and_moral_responsi_1: scholarly_work_id: scholarly_work_voelke_1973_l_id_e_de_volont_dans_le_sto_cisme -> pub_voelke_1973_idee_volonte
+- [fix_dangling_metadata_pointers] scholarly_argument_voelke_free_will_in_stoicism_0: scholarly_work_id: scholarly_work_voelke_1973_l_id_e_de_volont_dans_le_sto_cisme -> pub_voelke_1973_idee_volonte
+- [fix_dangling_metadata_pointers] scholarly_argument_voelke_prohairesis_and_the_will_2: scholarly_work_id: scholarly_work_voelke_1973_l_id_e_de_volont_dans_le_sto_cisme -> pub_voelke_1973_idee_volonte
+- [fix_dangling_metadata_pointers] pub_dihle_1982_theory_of_will: author_id: scholar_dihle_albrecht -> scholar_albrecht_dihle
+- [fix_dangling_metadata_pointers] scholarly_work_frede_1987_essays_in_ancient_philosophy: author_id: person_frede_michael_1940_2007 -> scholar_frede_michael
+- [fix_dangling_metadata_pointers] scholarly_argument_blackson_e_vs_d_object_of_choice: publication: pub_blackson_epictetus_frede_argument -> scholarly_work_blackson_2025_epictetus_the_early_stoics_and_frede_s_a
+- [merge_duplicate_nodes] sc31_melito_peri_pascha_iv -> passage_eusebius_he_iv_26_melito_fr_iv (ported: nothing)
+- [merge_duplicate_nodes] sc31_melito_peri_pascha_iv_chap3 -> passage_eusebius_he_iv_26_melito_fr_iv_chap3 (ported: nothing)
+- [merge_duplicate_nodes] sc31_melito_peri_pascha_iv_chap3_en -> passage_eusebius_he_iv_26_melito_fr_iv_chap3_en (ported: nothing)
+- [merge_duplicate_nodes] pub_long_1996_stoic_studies -> scholarly_work_long_1996_stoic_studies (ported: cited_in, place, type, description)
+- [merge_duplicate_nodes] scholarly_work_crouzel_1962_orig_ne_et_la_philosophie -> scholarly_work_crouzel_1962_origene_et_la_philosophie (ported: publisher(overwrite), doi(overwrite), isbn(overwrite))
+- [merge_duplicate_nodes] scholarly_argument_dihle_greek_vs_biblical_cosmology_an_4 -> scholarly_argument_dihle_greek_philosophical_theology_v_0 (ported: nothing)
+- [merge_duplicate_nodes] scholarly_argument_double_taxonomy_of_free_will_position_1 -> scholarly_argument_double_methodological_reframing_of_fr_1 (ported: nothing)
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: 83086917-645b-44f0-9258-040a56f45c1a
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: d3d1cb7c-6a95-4899-b4cb-9d1885a1ec3b
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: 11bf6a60-afcd-4751-a868-ff7452bdc2f3
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: e495e137-2cdc-4712-9195-d76db00fbe86
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: 88b54aaf-2cec-4908-83fb-b4f45b4d7900
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: 8310d882-2184-44fc-aaa0-762f372a93d5
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: 98086872-a7a4-4d26-b511-c7ece5061a8a
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: 4ce39b31-726b-44d8-9b43-fc1578a9c318
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: d7b8a6ac-8be4-43fc-a86f-ef4ab6010a3b
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: 2ee0b936-2977-487f-93a6-c76e89e923e8
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: 7a561f56-d3ae-4d28-b4a7-2d9f16d9e114
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: a276944d-6326-4a91-81aa-79f0581155e2
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: r3_13_created_by
+- [merge_duplicate_nodes] dropped duplicate triple created by merge: r3_14_advanced_in
+- [fix_false_translations] passage_aristide_sc470_5_en: withdrawn (copy of passage_aristide_sc470_5)
+- [fix_false_translations] passage_aug_civ_12_1_2_en: withdrawn (copy of passage_aug_civ_12_1_2)
+- [fix_false_translations] passage_aug_civ_12_6_en: withdrawn (copy of passage_aug_civ_12_6)
+- [fix_false_translations] passage_aug_civ_12_9_1_en: withdrawn (copy of passage_aug_civ_12_9_1)
+- [fix_false_translations] passage_aug_civ_14_6_en: withdrawn (copy of passage_aug_civ_14_6)
+- [fix_false_translations] passage_aug_civ_5_10_2_en: withdrawn (copy of passage_aug_civ_5_10_2)
+- [fix_false_translations] passage_aug_civ_5_9_3_en: withdrawn (copy of passage_aug_civ_5_9_3)
+- [fix_false_translations] passage_aug_gla_1_10_en: withdrawn (copy of passage_aug_gla_1_10)
+- [fix_false_translations] passage_aug_gla_1_11_en: withdrawn (copy of passage_aug_gla_1_11)
+- [fix_false_translations] passage_aug_gla_1_12_en: withdrawn (copy of passage_aug_gla_1_12)
+- [fix_false_translations] passage_aug_gla_1_13_en: withdrawn (copy of passage_aug_gla_1_13)
+- [fix_false_translations] passage_aug_gla_1_14_en: withdrawn (copy of passage_aug_gla_1_14)
+- [fix_false_translations] passage_aug_gla_1_15_en: withdrawn (copy of passage_aug_gla_1_15)
+- [fix_false_translations] passage_aug_gla_1_16_en: withdrawn (copy of passage_aug_gla_1_16)
+- [fix_false_translations] passage_aug_gla_1_17_en: withdrawn (copy of passage_aug_gla_1_17)
+- [fix_false_translations] passage_aug_gla_1_18_en: withdrawn (copy of passage_aug_gla_1_18)
+- [fix_false_translations] passage_aug_gla_1_19_en: withdrawn (copy of passage_aug_gla_1_19)
+- [fix_false_translations] passage_aug_gla_1_1_en: withdrawn (copy of passage_aug_gla_1_1)
+- [fix_false_translations] passage_aug_gla_1_20_en: withdrawn (copy of passage_aug_gla_1_20)
+- [fix_false_translations] passage_aug_gla_1_21_en: withdrawn (copy of passage_aug_gla_1_21)
+- [fix_false_translations] passage_aug_gla_1_22_en: withdrawn (copy of passage_aug_gla_1_22)
+- [fix_false_translations] passage_aug_gla_1_23_en: withdrawn (copy of passage_aug_gla_1_23)
+- [fix_false_translations] passage_aug_gla_1_24_en: withdrawn (copy of passage_aug_gla_1_24)
+- [fix_false_translations] passage_aug_gla_1_25_en: withdrawn (copy of passage_aug_gla_1_25)
+- [fix_false_translations] passage_aug_gla_1_2_en: withdrawn (copy of passage_aug_gla_1_2)
+- [fix_false_translations] passage_aug_gla_1_3_en: withdrawn (copy of passage_aug_gla_1_3)
+- [fix_false_translations] passage_aug_gla_1_4_en: withdrawn (copy of passage_aug_gla_1_4)
+- [fix_false_translations] passage_aug_gla_1_5_en: withdrawn (copy of passage_aug_gla_1_5)
+- [fix_false_translations] passage_aug_gla_1_6_en: withdrawn (copy of passage_aug_gla_1_6)
+- [fix_false_translations] passage_aug_gla_1_7_en: withdrawn (copy of passage_aug_gla_1_7)
+- [fix_false_translations] passage_aug_gla_1_8_en: withdrawn (copy of passage_aug_gla_1_8)
+- [fix_false_translations] passage_aug_gla_1_9_en: withdrawn (copy of passage_aug_gla_1_9)
+- [fix_false_translations] passage_aug_lib_arb_1_10_20_en: withdrawn (copy of passage_aug_lib_arb_1_10_20)
+- [fix_false_translations] passage_aug_lib_arb_1_10_21_en: withdrawn (copy of passage_aug_lib_arb_1_10_21)
+- [fix_false_translations] passage_aug_lib_arb_1_11_21_en: withdrawn (copy of passage_aug_lib_arb_1_11_21)
+- [fix_false_translations] passage_aug_lib_arb_1_11_22_en: withdrawn (copy of passage_aug_lib_arb_1_11_22)
+- [fix_false_translations] passage_aug_lib_arb_1_11_23_en: withdrawn (copy of passage_aug_lib_arb_1_11_23)
+- [fix_false_translations] passage_aug_lib_arb_1_12_24_en: withdrawn (copy of passage_aug_lib_arb_1_12_24)
+- [fix_false_translations] passage_aug_lib_arb_1_12_25_en: withdrawn (copy of passage_aug_lib_arb_1_12_25)
+- [fix_false_translations] passage_aug_lib_arb_1_12_26_en: withdrawn (copy of passage_aug_lib_arb_1_12_26)
+- [fix_false_translations] passage_aug_lib_arb_1_13_27_en: withdrawn (copy of passage_aug_lib_arb_1_13_27)
+- [fix_false_translations] passage_aug_lib_arb_1_13_28_en: withdrawn (copy of passage_aug_lib_arb_1_13_28)
+- [fix_false_translations] passage_aug_lib_arb_1_13_29_en: withdrawn (copy of passage_aug_lib_arb_1_13_29)
+- [fix_false_translations] passage_aug_lib_arb_1_14_30_en: withdrawn (copy of passage_aug_lib_arb_1_14_30)
+- [fix_false_translations] passage_aug_lib_arb_1_15_31_en: withdrawn (copy of passage_aug_lib_arb_1_15_31)
+- [fix_false_translations] passage_aug_lib_arb_1_15_32_en: withdrawn (copy of passage_aug_lib_arb_1_15_32)
+- [fix_false_translations] passage_aug_lib_arb_1_15_33_en: withdrawn (copy of passage_aug_lib_arb_1_15_33)
+- [fix_false_translations] passage_aug_lib_arb_1_16_34_en: withdrawn (copy of passage_aug_lib_arb_1_16_34)
+- [fix_false_translations] passage_aug_lib_arb_1_16_35_en: withdrawn (copy of passage_aug_lib_arb_1_16_35)
+- [fix_false_translations] passage_aug_lib_arb_1_1_1_en: withdrawn (copy of passage_aug_lib_arb_1_1_1)
+- [fix_false_translations] passage_aug_lib_arb_1_1_2_en: withdrawn (copy of passage_aug_lib_arb_1_1_2)
+- [fix_false_translations] passage_aug_lib_arb_1_1_3_en: withdrawn (copy of passage_aug_lib_arb_1_1_3)
+- [fix_false_translations] passage_aug_lib_arb_1_2_4_en: withdrawn (copy of passage_aug_lib_arb_1_2_4)
+- [fix_false_translations] passage_aug_lib_arb_1_2_5_en: withdrawn (copy of passage_aug_lib_arb_1_2_5)
+- [fix_false_translations] passage_aug_lib_arb_1_3_6_en: withdrawn (copy of passage_aug_lib_arb_1_3_6)
+- [fix_false_translations] passage_aug_lib_arb_1_3_7_en: withdrawn (copy of passage_aug_lib_arb_1_3_7)
+- [fix_false_translations] passage_aug_lib_arb_1_3_8_en: withdrawn (copy of passage_aug_lib_arb_1_3_8)
+- [fix_false_translations] passage_aug_lib_arb_1_4_10_en: withdrawn (copy of passage_aug_lib_arb_1_4_10)
+- [fix_false_translations] passage_aug_lib_arb_1_4_9_en: withdrawn (copy of passage_aug_lib_arb_1_4_9)
+- [fix_false_translations] passage_aug_lib_arb_1_5_11_en: withdrawn (copy of passage_aug_lib_arb_1_5_11)
+- [fix_false_translations] passage_aug_lib_arb_1_5_12_en: withdrawn (copy of passage_aug_lib_arb_1_5_12)
+- [fix_false_translations] passage_aug_lib_arb_1_5_13_en: withdrawn (copy of passage_aug_lib_arb_1_5_13)
+- [fix_false_translations] passage_aug_lib_arb_1_6_14_en: withdrawn (copy of passage_aug_lib_arb_1_6_14)
+- [fix_false_translations] passage_aug_lib_arb_1_6_15_en: withdrawn (copy of passage_aug_lib_arb_1_6_15)
+- [fix_false_translations] passage_aug_lib_arb_1_7_16_en: withdrawn (copy of passage_aug_lib_arb_1_7_16)
+- [fix_false_translations] passage_aug_lib_arb_1_7_17_en: withdrawn (copy of passage_aug_lib_arb_1_7_17)
+- [fix_false_translations] passage_aug_lib_arb_1_8_18_en: withdrawn (copy of passage_aug_lib_arb_1_8_18)
+- [fix_false_translations] passage_aug_lib_arb_1_9_19_en: withdrawn (copy of passage_aug_lib_arb_1_9_19)
+- [fix_false_translations] passage_aug_lib_arb_2_10_28_en: withdrawn (copy of passage_aug_lib_arb_2_10_28)
+- [fix_false_translations] passage_aug_lib_arb_2_10_29_en: withdrawn (copy of passage_aug_lib_arb_2_10_29)
+- [fix_false_translations] passage_aug_lib_arb_2_11_30_en: withdrawn (copy of passage_aug_lib_arb_2_11_30)
+- [fix_false_translations] passage_aug_lib_arb_2_11_31_en: withdrawn (copy of passage_aug_lib_arb_2_11_31)
+- [fix_false_translations] passage_aug_lib_arb_2_11_32_en: withdrawn (copy of passage_aug_lib_arb_2_11_32)
+- [fix_false_translations] passage_aug_lib_arb_2_12_33_en: withdrawn (copy of passage_aug_lib_arb_2_12_33)
+- [fix_false_translations] passage_aug_lib_arb_2_12_34_en: withdrawn (copy of passage_aug_lib_arb_2_12_34)
+- [fix_false_translations] passage_aug_lib_arb_2_13_35_en: withdrawn (copy of passage_aug_lib_arb_2_13_35)
+- [fix_false_translations] passage_aug_lib_arb_2_13_36_en: withdrawn (copy of passage_aug_lib_arb_2_13_36)
+- [fix_false_translations] passage_aug_lib_arb_2_13_37_en: withdrawn (copy of passage_aug_lib_arb_2_13_37)
+- [fix_false_translations] passage_aug_lib_arb_2_14_37_en: withdrawn (copy of passage_aug_lib_arb_2_14_37)
+- [fix_false_translations] passage_aug_lib_arb_2_14_38_en: withdrawn (copy of passage_aug_lib_arb_2_14_38)
+- [fix_false_translations] passage_aug_lib_arb_2_15_39_en: withdrawn (copy of passage_aug_lib_arb_2_15_39)
+- [fix_false_translations] passage_aug_lib_arb_2_15_40_en: withdrawn (copy of passage_aug_lib_arb_2_15_40)
+- [fix_false_translations] passage_aug_lib_arb_2_16_41_en: withdrawn (copy of passage_aug_lib_arb_2_16_41)
+- [fix_false_translations] passage_aug_lib_arb_2_16_42_en: withdrawn (copy of passage_aug_lib_arb_2_16_42)
+- [fix_false_translations] passage_aug_lib_arb_2_16_43_en: withdrawn (copy of passage_aug_lib_arb_2_16_43)
+- [fix_false_translations] passage_aug_lib_arb_2_16_44_en: withdrawn (copy of passage_aug_lib_arb_2_16_44)
+- [fix_false_translations] passage_aug_lib_arb_2_17_45_en: withdrawn (copy of passage_aug_lib_arb_2_17_45)
+- [fix_false_translations] passage_aug_lib_arb_2_17_46_en: withdrawn (copy of passage_aug_lib_arb_2_17_46)
+- [fix_false_translations] passage_aug_lib_arb_2_18_47_en: withdrawn (copy of passage_aug_lib_arb_2_18_47)
+- [fix_false_translations] passage_aug_lib_arb_2_18_48_en: withdrawn (copy of passage_aug_lib_arb_2_18_48)
+- [fix_false_translations] passage_aug_lib_arb_2_18_49_en: withdrawn (copy of passage_aug_lib_arb_2_18_49)
+- [fix_false_translations] passage_aug_lib_arb_2_18_50_en: withdrawn (copy of passage_aug_lib_arb_2_18_50)
+- [fix_false_translations] passage_aug_lib_arb_2_19_50_en: withdrawn (copy of passage_aug_lib_arb_2_19_50)
+- [fix_false_translations] passage_aug_lib_arb_2_19_51_en: withdrawn (copy of passage_aug_lib_arb_2_19_51)
+- [fix_false_translations] passage_aug_lib_arb_2_19_52_en: withdrawn (copy of passage_aug_lib_arb_2_19_52)
+- [fix_false_translations] passage_aug_lib_arb_2_19_53_en: withdrawn (copy of passage_aug_lib_arb_2_19_53)
+- [fix_false_translations] passage_aug_lib_arb_2_1_1_en: withdrawn (copy of passage_aug_lib_arb_2_1_1)
+- [fix_false_translations] passage_aug_lib_arb_2_1_2_en: withdrawn (copy of passage_aug_lib_arb_2_1_2)
+- [fix_false_translations] passage_aug_lib_arb_2_1_3_en: withdrawn (copy of passage_aug_lib_arb_2_1_3)
+- [fix_false_translations] passage_aug_lib_arb_2_20_54_en: withdrawn (copy of passage_aug_lib_arb_2_20_54)
+- [fix_false_translations] passage_aug_lib_arb_2_2_4_en: withdrawn (copy of passage_aug_lib_arb_2_2_4)
+- [fix_false_translations] passage_aug_lib_arb_2_2_5_en: withdrawn (copy of passage_aug_lib_arb_2_2_5)
+- [fix_false_translations] passage_aug_lib_arb_2_2_6_en: withdrawn (copy of passage_aug_lib_arb_2_2_6)
+- [fix_false_translations] passage_aug_lib_arb_2_3_7_en: withdrawn (copy of passage_aug_lib_arb_2_3_7)
+- [fix_false_translations] passage_aug_lib_arb_2_3_8_en: withdrawn (copy of passage_aug_lib_arb_2_3_8)
+- [fix_false_translations] passage_aug_lib_arb_2_3_9_en: withdrawn (copy of passage_aug_lib_arb_2_3_9)
+- [fix_false_translations] passage_aug_lib_arb_2_4_10_en: withdrawn (copy of passage_aug_lib_arb_2_4_10)
+- [fix_false_translations] passage_aug_lib_arb_2_5_11_en: withdrawn (copy of passage_aug_lib_arb_2_5_11)
+- [fix_false_translations] passage_aug_lib_arb_2_5_12_en: withdrawn (copy of passage_aug_lib_arb_2_5_12)
+- [fix_false_translations] passage_aug_lib_arb_2_6_13_en: withdrawn (copy of passage_aug_lib_arb_2_6_13)
+- [fix_false_translations] passage_aug_lib_arb_2_6_14_en: withdrawn (copy of passage_aug_lib_arb_2_6_14)
+- [fix_false_translations] passage_aug_lib_arb_2_7_15_en: withdrawn (copy of passage_aug_lib_arb_2_7_15)
+- [fix_false_translations] passage_aug_lib_arb_2_7_16_en: withdrawn (copy of passage_aug_lib_arb_2_7_16)
+- [fix_false_translations] passage_aug_lib_arb_2_7_17_en: withdrawn (copy of passage_aug_lib_arb_2_7_17)
+- [fix_false_translations] passage_aug_lib_arb_2_7_18_en: withdrawn (copy of passage_aug_lib_arb_2_7_18)
+- [fix_false_translations] passage_aug_lib_arb_2_7_19_en: withdrawn (copy of passage_aug_lib_arb_2_7_19)
+- [fix_false_translations] passage_aug_lib_arb_2_8_20_en: withdrawn (copy of passage_aug_lib_arb_2_8_20)
+- [fix_false_translations] passage_aug_lib_arb_2_8_21_en: withdrawn (copy of passage_aug_lib_arb_2_8_21)
+- [fix_false_translations] passage_aug_lib_arb_2_8_22_en: withdrawn (copy of passage_aug_lib_arb_2_8_22)
+- [fix_false_translations] passage_aug_lib_arb_2_8_23_en: withdrawn (copy of passage_aug_lib_arb_2_8_23)
+- [fix_false_translations] passage_aug_lib_arb_2_8_24_en: withdrawn (copy of passage_aug_lib_arb_2_8_24)
+- [fix_false_translations] passage_aug_lib_arb_2_9_25_en: withdrawn (copy of passage_aug_lib_arb_2_9_25)
+- [fix_false_translations] passage_aug_lib_arb_2_9_26_en: withdrawn (copy of passage_aug_lib_arb_2_9_26)
+- [fix_false_translations] passage_aug_lib_arb_2_9_27_en: withdrawn (copy of passage_aug_lib_arb_2_9_27)
+- [fix_false_translations] passage_aug_lib_arb_3_10_29_en: withdrawn (copy of passage_aug_lib_arb_3_10_29)
+- [fix_false_translations] passage_aug_lib_arb_3_10_30_en: withdrawn (copy of passage_aug_lib_arb_3_10_30)
+- [fix_false_translations] passage_aug_lib_arb_3_10_31_en: withdrawn (copy of passage_aug_lib_arb_3_10_31)
+- [fix_false_translations] passage_aug_lib_arb_3_11_32_en: withdrawn (copy of passage_aug_lib_arb_3_11_32)
+- [fix_false_translations] passage_aug_lib_arb_3_11_33_en: withdrawn (copy of passage_aug_lib_arb_3_11_33)
+- [fix_false_translations] passage_aug_lib_arb_3_11_34_en: withdrawn (copy of passage_aug_lib_arb_3_11_34)
+- [fix_false_translations] passage_aug_lib_arb_3_12_35_en: withdrawn (copy of passage_aug_lib_arb_3_12_35)
+- [fix_false_translations] passage_aug_lib_arb_3_12_36_en: withdrawn (copy of passage_aug_lib_arb_3_12_36)
+- [fix_false_translations] passage_aug_lib_arb_3_13_36_en: withdrawn (copy of passage_aug_lib_arb_3_13_36)
+- [fix_false_translations] passage_aug_lib_arb_3_13_37_en: withdrawn (copy of passage_aug_lib_arb_3_13_37)
+- [fix_false_translations] passage_aug_lib_arb_3_13_38_en: withdrawn (copy of passage_aug_lib_arb_3_13_38)
+- [fix_false_translations] passage_aug_lib_arb_3_14_39_en: withdrawn (copy of passage_aug_lib_arb_3_14_39)
+- [fix_false_translations] passage_aug_lib_arb_3_14_40_en: withdrawn (copy of passage_aug_lib_arb_3_14_40)
+- [fix_false_translations] passage_aug_lib_arb_3_14_41_en: withdrawn (copy of passage_aug_lib_arb_3_14_41)
+- [fix_false_translations] passage_aug_lib_arb_3_15_42_en: withdrawn (copy of passage_aug_lib_arb_3_15_42)
+- [fix_false_translations] passage_aug_lib_arb_3_15_43_en: withdrawn (copy of passage_aug_lib_arb_3_15_43)
+- [fix_false_translations] passage_aug_lib_arb_3_15_44_en: withdrawn (copy of passage_aug_lib_arb_3_15_44)
+- [fix_false_translations] passage_aug_lib_arb_3_16_45_en: withdrawn (copy of passage_aug_lib_arb_3_16_45)
+- [fix_false_translations] passage_aug_lib_arb_3_16_46_en: withdrawn (copy of passage_aug_lib_arb_3_16_46)
+- [fix_false_translations] passage_aug_lib_arb_3_17_47_en: withdrawn (copy of passage_aug_lib_arb_3_17_47)
+- [fix_false_translations] passage_aug_lib_arb_3_17_48_en: withdrawn (copy of passage_aug_lib_arb_3_17_48)
+- [fix_false_translations] passage_aug_lib_arb_3_17_49_en: withdrawn (copy of passage_aug_lib_arb_3_17_49)
+- [fix_false_translations] passage_aug_lib_arb_3_18_50_en: withdrawn (copy of passage_aug_lib_arb_3_18_50)
+- [fix_false_translations] passage_aug_lib_arb_3_18_51_en: withdrawn (copy of passage_aug_lib_arb_3_18_51)
+- [fix_false_translations] passage_aug_lib_arb_3_18_52_en: withdrawn (copy of passage_aug_lib_arb_3_18_52)
+- [fix_false_translations] passage_aug_lib_arb_3_19_53_en: withdrawn (copy of passage_aug_lib_arb_3_19_53)
+- [fix_false_translations] passage_aug_lib_arb_3_19_54_en: withdrawn (copy of passage_aug_lib_arb_3_19_54)
+- [fix_false_translations] passage_aug_lib_arb_3_1_1_en: withdrawn (copy of passage_aug_lib_arb_3_1_1)
+- [fix_false_translations] passage_aug_lib_arb_3_1_2_en: withdrawn (copy of passage_aug_lib_arb_3_1_2)
+- [fix_false_translations] passage_aug_lib_arb_3_1_3_en: withdrawn (copy of passage_aug_lib_arb_3_1_3)
+- [fix_false_translations] passage_aug_lib_arb_3_20_55_en: withdrawn (copy of passage_aug_lib_arb_3_20_55)
+- [fix_false_translations] passage_aug_lib_arb_3_20_56_en: withdrawn (copy of passage_aug_lib_arb_3_20_56)
+- [fix_false_translations] passage_aug_lib_arb_3_20_57_en: withdrawn (copy of passage_aug_lib_arb_3_20_57)
+- [fix_false_translations] passage_aug_lib_arb_3_20_58_en: withdrawn (copy of passage_aug_lib_arb_3_20_58)
+- [fix_false_translations] passage_aug_lib_arb_3_21_59_en: withdrawn (copy of passage_aug_lib_arb_3_21_59)
+- [fix_false_translations] passage_aug_lib_arb_3_21_60_en: withdrawn (copy of passage_aug_lib_arb_3_21_60)
+- [fix_false_translations] passage_aug_lib_arb_3_21_61_en: withdrawn (copy of passage_aug_lib_arb_3_21_61)
+- [fix_false_translations] passage_aug_lib_arb_3_21_62_en: withdrawn (copy of passage_aug_lib_arb_3_21_62)
+- [fix_false_translations] passage_aug_lib_arb_3_22_63_en: withdrawn (copy of passage_aug_lib_arb_3_22_63)
+- [fix_false_translations] passage_aug_lib_arb_3_22_64_en: withdrawn (copy of passage_aug_lib_arb_3_22_64)
+- [fix_false_translations] passage_aug_lib_arb_3_22_65_en: withdrawn (copy of passage_aug_lib_arb_3_22_65)
+- [fix_false_translations] passage_aug_lib_arb_3_23_66_en: withdrawn (copy of passage_aug_lib_arb_3_23_66)
+- [fix_false_translations] passage_aug_lib_arb_3_23_67_en: withdrawn (copy of passage_aug_lib_arb_3_23_67)
+- [fix_false_translations] passage_aug_lib_arb_3_23_68_en: withdrawn (copy of passage_aug_lib_arb_3_23_68)
+- [fix_false_translations] passage_aug_lib_arb_3_23_69_en: withdrawn (copy of passage_aug_lib_arb_3_23_69)
+- [fix_false_translations] passage_aug_lib_arb_3_23_70_en: withdrawn (copy of passage_aug_lib_arb_3_23_70)
+- [fix_false_translations] passage_aug_lib_arb_3_23_73_en: withdrawn (copy of passage_aug_lib_arb_3_23_73)
+- [fix_false_translations] passage_aug_lib_arb_3_24_71_en: withdrawn (copy of passage_aug_lib_arb_3_24_71)
+- [fix_false_translations] passage_aug_lib_arb_3_24_72_en: withdrawn (copy of passage_aug_lib_arb_3_24_72)
+- [fix_false_translations] passage_aug_lib_arb_3_25_74_en: withdrawn (copy of passage_aug_lib_arb_3_25_74)
+- [fix_false_translations] passage_aug_lib_arb_3_25_75_en: withdrawn (copy of passage_aug_lib_arb_3_25_75)
+- [fix_false_translations] passage_aug_lib_arb_3_25_76_en: withdrawn (copy of passage_aug_lib_arb_3_25_76)
+- [fix_false_translations] passage_aug_lib_arb_3_25_77_en: withdrawn (copy of passage_aug_lib_arb_3_25_77)
+- [fix_false_translations] passage_aug_lib_arb_3_2_4_en: withdrawn (copy of passage_aug_lib_arb_3_2_4)
+- [fix_false_translations] passage_aug_lib_arb_3_2_5_en: withdrawn (copy of passage_aug_lib_arb_3_2_5)
+- [fix_false_translations] passage_aug_lib_arb_3_3_6_en: withdrawn (copy of passage_aug_lib_arb_3_3_6)
+- [fix_false_translations] passage_aug_lib_arb_3_3_7_en: withdrawn (copy of passage_aug_lib_arb_3_3_7)
+- [fix_false_translations] passage_aug_lib_arb_3_3_8_en: withdrawn (copy of passage_aug_lib_arb_3_3_8)
+- [fix_false_translations] passage_aug_lib_arb_3_4_10_en: withdrawn (copy of passage_aug_lib_arb_3_4_10)
+- [fix_false_translations] passage_aug_lib_arb_3_4_11_en: withdrawn (copy of passage_aug_lib_arb_3_4_11)
+- [fix_false_translations] passage_aug_lib_arb_3_4_9_en: withdrawn (copy of passage_aug_lib_arb_3_4_9)
+- [fix_false_translations] passage_aug_lib_arb_3_5_12_en: withdrawn (copy of passage_aug_lib_arb_3_5_12)
+- [fix_false_translations] passage_aug_lib_arb_3_5_13_en: withdrawn (copy of passage_aug_lib_arb_3_5_13)
+- [fix_false_translations] passage_aug_lib_arb_3_5_14_en: withdrawn (copy of passage_aug_lib_arb_3_5_14)
+- [fix_false_translations] passage_aug_lib_arb_3_5_15_en: withdrawn (copy of passage_aug_lib_arb_3_5_15)
+- [fix_false_translations] passage_aug_lib_arb_3_5_16_en: withdrawn (copy of passage_aug_lib_arb_3_5_16)
+- [fix_false_translations] passage_aug_lib_arb_3_5_17_en: withdrawn (copy of passage_aug_lib_arb_3_5_17)
+- [fix_false_translations] passage_aug_lib_arb_3_6_18_en: withdrawn (copy of passage_aug_lib_arb_3_6_18)
+- [fix_false_translations] passage_aug_lib_arb_3_6_19_en: withdrawn (copy of passage_aug_lib_arb_3_6_19)
+- [fix_false_translations] passage_aug_lib_arb_3_7_20_en: withdrawn (copy of passage_aug_lib_arb_3_7_20)
+- [fix_false_translations] passage_aug_lib_arb_3_7_21_en: withdrawn (copy of passage_aug_lib_arb_3_7_21)
+- [fix_false_translations] passage_aug_lib_arb_3_8_22_en: withdrawn (copy of passage_aug_lib_arb_3_8_22)
+- [fix_false_translations] passage_aug_lib_arb_3_8_23_en: withdrawn (copy of passage_aug_lib_arb_3_8_23)
+- [fix_false_translations] passage_aug_lib_arb_3_9_24_en: withdrawn (copy of passage_aug_lib_arb_3_9_24)
+- [fix_false_translations] passage_aug_lib_arb_3_9_25_en: withdrawn (copy of passage_aug_lib_arb_3_9_25)
+- [fix_false_translations] passage_aug_lib_arb_3_9_26_en: withdrawn (copy of passage_aug_lib_arb_3_9_26)
+- [fix_false_translations] passage_aug_lib_arb_3_9_27_en: withdrawn (copy of passage_aug_lib_arb_3_9_27)
+- [fix_false_translations] passage_aug_lib_arb_3_9_28_en: withdrawn (copy of passage_aug_lib_arb_3_9_28)
+- [fix_false_translations] passage_boethius_cons_103_en: withdrawn (copy of passage_boethius_cons_103)
+- [fix_false_translations] passage_boethius_cons_104_en: withdrawn (copy of passage_boethius_cons_104)
+- [fix_false_translations] passage_boethius_cons_108_en: withdrawn (copy of passage_boethius_cons_108)
+- [fix_false_translations] passage_boethius_cons_117_en: withdrawn (copy of passage_boethius_cons_117)
+- [fix_false_translations] passage_boethius_cons_121_en: withdrawn (copy of passage_boethius_cons_121)
+- [fix_false_translations] passage_boethius_cons_18_en: withdrawn (copy of passage_boethius_cons_18)
+- [fix_false_translations] passage_boethius_cons_19_en: withdrawn (copy of passage_boethius_cons_19)
+- [fix_false_translations] passage_boethius_cons_1_en: withdrawn (copy of passage_boethius_cons_1)
+- [fix_false_translations] passage_boethius_cons_23_en: withdrawn (copy of passage_boethius_cons_23)
+- [fix_false_translations] passage_boethius_cons_28_en: withdrawn (copy of passage_boethius_cons_28)
+- [fix_false_translations] passage_boethius_cons_2_en: withdrawn (copy of passage_boethius_cons_2)
+- [fix_false_translations] passage_boethius_cons_33_en: withdrawn (copy of passage_boethius_cons_33)
+- [fix_false_translations] passage_boethius_cons_39_en: withdrawn (copy of passage_boethius_cons_39)
+- [fix_false_translations] passage_boethius_cons_3_en: withdrawn (copy of passage_boethius_cons_3)
+- [fix_false_translations] passage_boethius_cons_44_en: withdrawn (copy of passage_boethius_cons_44)
+- [fix_false_translations] passage_boethius_cons_48_en: withdrawn (copy of passage_boethius_cons_48)
+- [fix_false_translations] passage_boethius_cons_50_en: withdrawn (copy of passage_boethius_cons_50)
+- [fix_false_translations] passage_boethius_cons_56_en: withdrawn (copy of passage_boethius_cons_56)
+- [fix_false_translations] passage_boethius_cons_59_en: withdrawn (copy of passage_boethius_cons_59)
+- [fix_false_translations] passage_boethius_cons_5_en: withdrawn (copy of passage_boethius_cons_5)
+- [fix_false_translations] passage_boethius_cons_60_en: withdrawn (copy of passage_boethius_cons_60)
+- [fix_false_translations] passage_boethius_cons_65_en: withdrawn (copy of passage_boethius_cons_65)
+- [fix_false_translations] passage_boethius_cons_71_en: withdrawn (copy of passage_boethius_cons_71)
+- [fix_false_translations] passage_boethius_cons_72_en: withdrawn (copy of passage_boethius_cons_72)
+- [fix_false_translations] passage_boethius_cons_81_en: withdrawn (copy of passage_boethius_cons_81)
+- [fix_false_translations] passage_boethius_cons_88_en: withdrawn (copy of passage_boethius_cons_88)
+- [fix_false_translations] passage_boethius_cons_89_en: withdrawn (copy of passage_boethius_cons_89)
+- [fix_false_translations] passage_boethius_cons_90_en: withdrawn (copy of passage_boethius_cons_90)
+- [fix_false_translations] passage_boethius_cons_92_en: withdrawn (copy of passage_boethius_cons_92)
+- [fix_false_translations] passage_boethius_cons_99_en: withdrawn (copy of passage_boethius_cons_99)
+- [fix_false_translations] passage_epict_110_en: withdrawn (copy of passage_epict_110)
+- [fix_false_translations] passage_epict_148_en: withdrawn (copy of passage_epict_148)
+- [fix_false_translations] passage_epict_149_en: withdrawn (copy of passage_epict_149)
+- [fix_false_translations] passage_epict_159_en: withdrawn (copy of passage_epict_159)
+- [fix_false_translations] passage_epict_160_en: withdrawn (copy of passage_epict_160)
+- [fix_false_translations] passage_epict_3_en: withdrawn (copy of passage_epict_3)
+- [fix_false_translations] passage_irenaeus_ah_3_20_en: withdrawn (copy of passage_irenaeus_ah_3_20)
+- [fix_false_translations] passage_lucretius_2_250_en: withdrawn (copy of passage_lucretius_2_250)
+- [fix_false_translations] passage_lucretius_2_275_en: withdrawn (copy of passage_lucretius_2_275)
+- [fix_false_translations] passage_melito_pasch_47_49_en: withdrawn (copy of passage_melito_pasch_47_49)
+- [fix_false_translations] passage_origen_com_rm_7_16_en: withdrawn (copy of passage_origen_com_rm_7_16)
+- [fix_false_translations] passage_origen_com_rm_7_16_sun_en: withdrawn (copy of passage_origen_com_rm_7_16_sun)
+- [fix_false_translations] passage_plut_fat_13_en: withdrawn (copy of passage_plut_fat_13)
+- [fix_false_translations] passage_plut_fat_18_en: withdrawn (copy of passage_plut_fat_18)
+- [fix_false_translations] passage_plut_fat_7_en: withdrawn (copy of passage_plut_fat_7)
+- [fix_false_translations] passage_sen_prov_2_3_en: withdrawn (copy of passage_sen_prov_2_3)
+- [fix_false_translations] passage_sen_prov_3_10_en: withdrawn (copy of passage_sen_prov_3_10)
+- [fix_false_translations] passage_sen_prov_3_1_en: withdrawn (copy of passage_sen_prov_3_1)
+- [fix_false_translations] passage_sen_prov_3_2_en: withdrawn (copy of passage_sen_prov_3_2)
+- [fix_false_translations] passage_sen_prov_4_11_en: withdrawn (copy of passage_sen_prov_4_11)
+- [fix_false_translations] passage_sen_prov_5_11_en: withdrawn (copy of passage_sen_prov_5_11)
+- [fix_false_translations] passage_sen_prov_6_6_en: withdrawn (copy of passage_sen_prov_6_6)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par102_a_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par102_a)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par104_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par104)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par105_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par105)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par106_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par106)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par108_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par108)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par111_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par111)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par112_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par112)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par113_c_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par113_c)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par113_e_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par113_e)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par113_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par113)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par113_i_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par113_i)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par114_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par114)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par121_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par121)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par123_b_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par123_b)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par123_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par123)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par125_a_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par125_a)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par125_b_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par125_b)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par125_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par125)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par129_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par129)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par131_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par131)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par134_a_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par134_a)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par134_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par134)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par136_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par136)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par139_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par139)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par13_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par13)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par140_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par140)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par141_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par141)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par150_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par150)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par153_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par153)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par156_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par156)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par157_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par157)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par160_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par160)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par163_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par163)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par165_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par165)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par166_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par166)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par169_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par169)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par171_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par171)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par172_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par172)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par178_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par178)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par182_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par182)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par184_a_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par184_a)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par184_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par184)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par18_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par18)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par19_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par19)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par1_a_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par1_a)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par1_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par1)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par20_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par20)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par21_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par21)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par23_a_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par23_a)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par25_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par25)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par25_f_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par25_f)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par25_g_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par25_g)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par27_a_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par27_a)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par28_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par28)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par2_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par2)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par31_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par31)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par33_f_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par33_f)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par33_h_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par33_h)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par36_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par36)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par39_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par39)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par3_a_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par3_a)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par3_b_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par3_b)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par3_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par3)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par40_b_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par40_b)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par42_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par42)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par43_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par43)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par66_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par66)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par78_a_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par78_a)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par7_a_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par7_a)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par80_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par80)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par82_a_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par82_a)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par82_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par82)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par84_a_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par84_a)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par84_b_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par84_b)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par84_c_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par84_c)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par84_d_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par84_d)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par84_e_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par84_e)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par84_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par84)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par84_f_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par84_f)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par86_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par86)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par87_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par87)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par95_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par95)
+- [fix_false_translations] sc464_pamphilus_apologia_pro_origene_par9_en: withdrawn (copy of sc464_pamphilus_apologia_pro_origene_par9)
+- [fix_false_translations] sc53bis_hermas_pastor_chap110_en: withdrawn (copy of sc53bis_hermas_pastor_chap110)
+- [fix_false_translations] sc53bis_hermas_pastor_chap112_en: withdrawn (copy of sc53bis_hermas_pastor_chap112)
+- [fix_false_translations] sc53bis_hermas_pastor_chap114_en: withdrawn (copy of sc53bis_hermas_pastor_chap114)
+- [flag_empty_passages] passage_aug_civ_v_xxvi_s61: description is scraped site chrome, not text: 'Augustine Christian Latin The Latin Library The Classics Page'
+- [flag_empty_passages] passage_aug_civ_xii_xxviii_s100: description is scraped site chrome, not text: 'Augustine Christian Latin The Latin Library The Classics Page'
+- [flag_empty_passages] passage_aug_civ_xiv_xxviii_s158: description is scraped site chrome, not text: 'Augustine Christian Latin The Latin Library The Classics Page'
+- [flag_empty_passages] passage_origen_philocalia_22_1: description is empty
+- [flag_empty_passages] passage_origen_philocalia_22_10: description is empty
+- [flag_empty_passages] passage_origen_philocalia_22_2: description is empty
+- [flag_empty_passages] passage_origen_philocalia_22_3: description is empty
+- [flag_empty_passages] passage_origen_philocalia_22_4: description is empty
+- [flag_empty_passages] passage_origen_philocalia_22_5: description is empty
+- [flag_empty_passages] passage_origen_philocalia_22_6: description is empty
+- [flag_empty_passages] passage_origen_philocalia_22_7: description is empty
+- [flag_empty_passages] passage_origen_philocalia_22_8: description is empty
+- [flag_empty_passages] passage_origen_philocalia_22_9: description is empty
+- [flag_empty_passages] passage_greg_nyssa_cf_40: description is empty
+- [flag_empty_passages] passage_greg_nyssa_cf_43: description is empty
+- [flag_empty_passages] passage_greg_nyssa_cf_44: description is empty
+- [flag_empty_passages] passage_greg_nyssa_cf_48: description is empty
+- [flag_empty_passages] passage_greg_nyssa_cf_57: description is empty
+- [flag_empty_passages] passage_meth_autex_8: description is empty
+- [flag_empty_passages] passage_meth_autex_16: description is empty
+- [flag_empty_passages] passage_meth_autex_17: description is empty
+- [flag_empty_passages] passage_cic_div_2_91: description is empty
+- [flag_empty_passages] passage_cic_div_2_95: description is empty
+- [flag_empty_passages] passage_cic_div_2_97: description is empty
+- [flag_empty_passages] passage_greg_nyssa_cf_33: description is empty
+- [flag_empty_passages] passage_greg_nyssa_cf_55: description is empty
+- [flag_empty_passages] passage_greg_nyssa_cf_56: description is empty
+- [flag_empty_passages] passage_greg_nyssa_cf_59: description is empty
+- [flag_empty_passages] passage_greg_nyssa_cf_63: description is empty
+- [flag_empty_passages] passage_aug_conf_8_5_10: description is empty
+- [flag_empty_passages] passage_aug_conf_8_9_21: description is empty
+- [flag_empty_passages] passage_aug_conf_8_10_22: description is empty
+- [flag_empty_passages] passage_aug_conf_8_12_29: description is empty
+- [wire_fragment_collections] passage_alex_fat_13 part_of collection_ls (62G)
+- [wire_fragment_collections] passage_alex_fat_2 part_of collection_ls (55N)
+- [wire_fragment_collections] passage_cic_fat_12 part_of collection_ls (38E)
+- [wire_fragment_collections] passage_cic_fat_22 part_of collection_ls (20E)
+- [wire_fragment_collections] passage_cic_fat_23 part_of collection_ls (20E)
+- [wire_fragment_collections] passage_cic_fat_26 part_of collection_ls (70G)
+- [wire_fragment_collections] passage_cic_fat_28 part_of collection_ls (55S)
+- [wire_fragment_collections] passage_cic_fat_30 part_of collection_ls (55S)
+- [wire_fragment_collections] passage_cic_fat_31 part_of collection_ls (70G)
+- [wire_fragment_collections] passage_cic_fat_34 part_of collection_ls (55J)
+- [wire_fragment_collections] passage_cic_fat_39 part_of collection_ls (62C)
+- [wire_fragment_collections] passage_cic_fat_40 part_of collection_ls (62C)
+- [wire_fragment_collections] passage_cic_fat_41 part_of collection_ls (62C)
+- [wire_fragment_collections] passage_cic_fat_42 part_of collection_ls (62C)
+- [wire_fragment_collections] passage_cic_fat_43 part_of collection_ls (62C)
+- [wire_fragment_collections] passage_cic_fat_48 part_of collection_ls (20E)
+- [wire_fragment_collections] passage_dl_lives_10_1_101 part_of collection_ls (50A)
+- [wire_fragment_collections] passage_dl_lives_10_1_105 part_of collection_ls (50A)
+- [wire_fragment_collections] passage_dl_lives_10_1_118 part_of collection_ls (21J)
+- [wire_fragment_collections] passage_dl_lives_10_1_120 part_of collection_ls (22H)
+- [wire_fragment_collections] passage_dl_lives_10_1_125 part_of collection_ls (6A)
+- [wire_fragment_collections] passage_dl_lives_10_1_126 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_10_1_127 part_of collection_ls (59A)
+- [wire_fragment_collections] passage_dl_lives_10_1_129 part_of collection_ls (20A)
+- [wire_fragment_collections] passage_dl_lives_10_1_130 part_of collection_ls (67D)
+- [wire_fragment_collections] passage_dl_lives_10_1_135 part_of collection_ls (67D)
+- [wire_fragment_collections] passage_dl_lives_10_1_139 part_of collection_ls (22A)
+- [wire_fragment_collections] passage_dl_lives_10_1_140 part_of collection_ls (67D)
+- [wire_fragment_collections] passage_dl_lives_10_1_141 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_10_1_144 part_of collection_ls (67D)
+- [wire_fragment_collections] passage_dl_lives_10_1_145 part_of collection_ls (67A)
+- [wire_fragment_collections] passage_dl_lives_10_1_148 part_of collection_ls (67A)
+- [wire_fragment_collections] passage_dl_lives_10_1_150 part_of collection_ls (40A)
+- [wire_fragment_collections] passage_dl_lives_10_1_151 part_of collection_ls (64A)
+- [wire_fragment_collections] passage_dl_lives_10_1_152 part_of collection_ls (48A)
+- [wire_fragment_collections] passage_dl_lives_10_1_22 part_of collection_ls (22G)
+- [wire_fragment_collections] passage_dl_lives_10_1_31 part_of collection_dk (67A1)
+- [wire_fragment_collections] passage_dl_lives_10_1_32 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_10_1_33 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_10_1_34 part_of collection_ls (13F)
+- [wire_fragment_collections] passage_dl_lives_10_1_39 part_of collection_ls (2A)
+- [wire_fragment_collections] passage_dl_lives_10_1_40 part_of collection_ls (40A)
+- [wire_fragment_collections] passage_dl_lives_10_1_45 part_of collection_ls (1A)
+- [wire_fragment_collections] passage_dl_lives_10_1_46 part_of collection_ls (46A)
+- [wire_fragment_collections] passage_dl_lives_10_1_51 part_of collection_ls (40A)
+- [wire_fragment_collections] passage_dl_lives_10_1_67 part_of collection_ls (57D)
+- [wire_fragment_collections] passage_dl_lives_10_1_81 part_of collection_ls (23D)
+- [wire_fragment_collections] passage_dl_lives_10_1_91 part_of collection_ls (40D)
+- [wire_fragment_collections] passage_dl_lives_7_1_100 part_of collection_ls (59K)
+- [wire_fragment_collections] passage_dl_lives_7_1_101 part_of collection_ls (58A)
+- [wire_fragment_collections] passage_dl_lives_7_1_102 part_of collection_ls (64A)
+- [wire_fragment_collections] passage_dl_lives_7_1_103 part_of collection_ls (58A)
+- [wire_fragment_collections] passage_dl_lives_7_1_104 part_of collection_ls (58A)
+- [wire_fragment_collections] passage_dl_lives_7_1_105 part_of collection_ls (58B)
+- [wire_fragment_collections] passage_dl_lives_7_1_106 part_of collection_ls (61A)
+- [wire_fragment_collections] passage_dl_lives_7_1_107 part_of collection_ls (57D)
+- [wire_fragment_collections] passage_dl_lives_7_1_108 part_of collection_ls (58E)
+- [wire_fragment_collections] passage_dl_lives_7_1_109 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_110 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_111 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_112 part_of collection_ls (65D)
+- [wire_fragment_collections] passage_dl_lives_7_1_113 part_of collection_ls (65D)
+- [wire_fragment_collections] passage_dl_lives_7_1_114 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_115 part_of collection_ls (65F)
+- [wire_fragment_collections] passage_dl_lives_7_1_116 part_of collection_ls (55F)
+- [wire_fragment_collections] passage_dl_lives_7_1_117 part_of collection_ls (40F)
+- [wire_fragment_collections] passage_dl_lives_7_1_118 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_119 part_of collection_ls (40A)
+- [wire_fragment_collections] passage_dl_lives_7_1_120 part_of collection_ls (57D)
+- [wire_fragment_collections] passage_dl_lives_7_1_121 part_of collection_ls (67M)
+- [wire_fragment_collections] passage_dl_lives_7_1_122 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_123 part_of collection_ls (65D)
+- [wire_fragment_collections] passage_dl_lives_7_1_124 part_of collection_ls (64A)
+- [wire_fragment_collections] passage_dl_lives_7_1_125 part_of collection_ls (59H)
+- [wire_fragment_collections] passage_dl_lives_7_1_126 part_of collection_ls (57D)
+- [wire_fragment_collections] passage_dl_lives_7_1_127 part_of collection_ls (61I)
+- [wire_fragment_collections] passage_dl_lives_7_1_128 part_of collection_ls (67S)
+- [wire_fragment_collections] passage_dl_lives_7_1_129 part_of collection_ls (67S)
+- [wire_fragment_collections] passage_dl_lives_7_1_130 part_of collection_ls (66H)
+- [wire_fragment_collections] passage_dl_lives_7_1_131 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_132 part_of collection_ls (47A)
+- [wire_fragment_collections] passage_dl_lives_7_1_134 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_135 part_of collection_ls (46B)
+- [wire_fragment_collections] passage_dl_lives_7_1_136 part_of collection_ls (44A)
+- [wire_fragment_collections] passage_dl_lives_7_1_137 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_138 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_139 part_of collection_ls (57A)
+- [wire_fragment_collections] passage_dl_lives_7_1_140 part_of collection_ls (44A)
+- [wire_fragment_collections] passage_dl_lives_7_1_141 part_of collection_ls (57A)
+- [wire_fragment_collections] passage_dl_lives_7_1_144 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_145 part_of collection_ls (40A)
+- [wire_fragment_collections] passage_dl_lives_7_1_146 part_of collection_ls (48A)
+- [wire_fragment_collections] passage_dl_lives_7_1_147 part_of collection_ls (40A)
+- [wire_fragment_collections] passage_dl_lives_7_1_148 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_149 part_of collection_ls (57N)
+- [wire_fragment_collections] passage_dl_lives_7_1_150 part_of collection_ls (44A)
+- [wire_fragment_collections] passage_dl_lives_7_1_151 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_152 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_153 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_154 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_155 part_of collection_ls (40G)
+- [wire_fragment_collections] passage_dl_lives_7_1_156 part_of collection_ls (52N)
+- [wire_fragment_collections] passage_dl_lives_7_1_157 part_of collection_ls (57C)
+- [wire_fragment_collections] passage_dl_lives_7_1_158 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_159 part_of collection_ls (53H)
+- [wire_fragment_collections] passage_dl_lives_7_1_160 part_of collection_ls (31N)
+- [wire_fragment_collections] passage_dl_lives_7_1_23 part_of collection_ls (1A)
+- [wire_fragment_collections] passage_dl_lives_7_1_26 part_of collection_ls (1A)
+- [wire_fragment_collections] passage_dl_lives_7_1_32 part_of collection_ls (67B)
+- [wire_fragment_collections] passage_dl_lives_7_1_33 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_39 part_of collection_ls (1A)
+- [wire_fragment_collections] passage_dl_lives_7_1_40 part_of collection_ls (26C)
+- [wire_fragment_collections] passage_dl_lives_7_1_41 part_of collection_ls (31A)
+- [wire_fragment_collections] passage_dl_lives_7_1_42 part_of collection_ls (42A)
+- [wire_fragment_collections] passage_dl_lives_7_1_43 part_of collection_ls (43A)
+- [wire_fragment_collections] passage_dl_lives_7_1_44 part_of collection_ls (44A)
+- [wire_fragment_collections] passage_dl_lives_7_1_45 part_of collection_ls (1A)
+- [wire_fragment_collections] passage_dl_lives_7_1_46 part_of collection_ls (31B)
+- [wire_fragment_collections] passage_dl_lives_7_1_47 part_of collection_ls (47A)
+- [wire_fragment_collections] passage_dl_lives_7_1_48 part_of collection_ls (31B)
+- [wire_fragment_collections] passage_dl_lives_7_1_50 part_of collection_ls (39A)
+- [wire_fragment_collections] passage_dl_lives_7_1_51 part_of collection_ls (39A)
+- [wire_fragment_collections] passage_dl_lives_7_1_52 part_of collection_ls (47A)
+- [wire_fragment_collections] passage_dl_lives_7_1_53 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_54 part_of collection_ls (44A)
+- [wire_fragment_collections] passage_dl_lives_7_1_55 part_of collection_ls (49H)
+- [wire_fragment_collections] passage_dl_lives_7_1_56 part_of collection_ls (37A)
+- [wire_fragment_collections] passage_dl_lives_7_1_57 part_of collection_ls (43A)
+- [wire_fragment_collections] passage_dl_lives_7_1_58 part_of collection_ls (33M)
+- [wire_fragment_collections] passage_dl_lives_7_1_59 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_60 part_of collection_ls (47N)
+- [wire_fragment_collections] passage_dl_lives_7_1_61 part_of collection_ls (40A)
+- [wire_fragment_collections] passage_dl_lives_7_1_62 part_of collection_ls (2A)
+- [wire_fragment_collections] passage_dl_lives_7_1_63 part_of collection_ls (38A)
+- [wire_fragment_collections] passage_dl_lives_7_1_64 part_of collection_ls (38A)
+- [wire_fragment_collections] passage_dl_lives_7_1_65 part_of collection_ls (38A)
+- [wire_fragment_collections] passage_dl_lives_7_1_66 part_of collection_ls (39A)
+- [wire_fragment_collections] passage_dl_lives_7_1_68 part_of collection_ls (38A)
+- [wire_fragment_collections] passage_dl_lives_7_1_69 part_of collection_ls (39A)
+- [wire_fragment_collections] passage_dl_lives_7_1_70 part_of collection_ls (39B)
+- [wire_fragment_collections] passage_dl_lives_7_1_71 part_of collection_ls (38A)
+- [wire_fragment_collections] passage_dl_lives_7_1_72 part_of collection_ls (38A)
+- [wire_fragment_collections] passage_dl_lives_7_1_73 part_of collection_ls (40A)
+- [wire_fragment_collections] passage_dl_lives_7_1_74 part_of collection_ls (38A)
+- [wire_fragment_collections] passage_dl_lives_7_1_75 part_of collection_ls (38D)
+- [wire_fragment_collections] passage_dl_lives_7_1_76 part_of collection_ls (39A)
+- [wire_fragment_collections] passage_dl_lives_7_1_77 part_of collection_ls (39A)
+- [wire_fragment_collections] passage_dl_lives_7_1_78 part_of collection_ls (39G)
+- [wire_fragment_collections] passage_dl_lives_7_1_79 part_of collection_ls (38G)
+- [wire_fragment_collections] passage_dl_lives_7_1_80 part_of collection_ls (1A)
+- [wire_fragment_collections] passage_dl_lives_7_1_81 part_of collection_ls (38A)
+- [wire_fragment_collections] passage_dl_lives_7_1_82 part_of collection_ls (65G)
+- [wire_fragment_collections] passage_dl_lives_7_1_83 part_of collection_ls (40A)
+- [wire_fragment_collections] passage_dl_lives_7_1_84 part_of collection_ls (57A)
+- [wire_fragment_collections] passage_dl_lives_7_1_85 part_of collection_ls (56A)
+- [wire_fragment_collections] passage_dl_lives_7_1_86 part_of collection_ls (57A)
+- [wire_fragment_collections] passage_dl_lives_7_1_87 part_of collection_ls (63A)
+- [wire_fragment_collections] passage_dl_lives_7_1_88 part_of collection_ls (59B)
+- [wire_fragment_collections] passage_dl_lives_7_1_89 part_of collection_ls (57A)
+- [wire_fragment_collections] passage_dl_lives_7_1_90 part_of collection_ls (1A)
+- [wire_fragment_collections] passage_dl_lives_7_1_92 part_of collection_ls (63D)
+- [wire_fragment_collections] passage_dl_lives_7_1_93 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_94 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_95 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_96 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_97 part_of collection_ls (65A)
+- [wire_fragment_collections] passage_dl_lives_7_1_98 part_of collection_ls (58A)
+- [wire_fragment_collections] passage_dl_lives_7_1_99 part_of collection_ls (55A)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_1 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_10 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_11 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_12 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_13 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_14 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_15 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_2 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_3 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_4 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_5 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_6 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_7 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_8 part_of collection_ls (62D)
+- [wire_fragment_collections] passage_gellius_na_vii_2_7_2_9 part_of collection_ls (62D)
+- [normalise_edge_encoding] e79090f2-bd26-4ab3-a381-7c70d392d345: encoding normalised
+- [normalise_edge_encoding] 9b2fe157-b7d2-4619-a0f6-ada72b7699a5: encoding normalised
+- [normalise_edge_encoding] 601c387b-6b2e-4590-a991-e01db1ede403: encoding normalised
+- [normalise_edge_encoding] ec60fb32-3749-431c-9b1e-adcc36547589: encoding normalised
+- [normalise_edge_encoding] 53082906-8fd5-45a2-ada2-da556ef92f18: encoding normalised
+- [normalise_edge_encoding] f050bfa2-9208-4309-81bb-462a5b237b07: encoding normalised
+- [normalise_edge_encoding] 2958afb3-e278-415c-88c9-b27bc115be66: encoding normalised
+- [normalise_edge_encoding] 5f6ddb97-7a08-41b0-9dbe-d0648b8c9149: encoding normalised
+- [normalise_edge_encoding] dd943966-fa57-46ab-b7c6-a0997657b12a: encoding normalised
+- [normalise_edge_encoding] 49be16ab-4ed8-417e-b946-fe186dd7447d: encoding normalised
+- [normalise_edge_encoding] 942549d7-d40e-429f-8b84-82b5b8750976: encoding normalised
+- [normalise_edge_encoding] 826c99da-3277-48b6-96b1-5ae7a26c8199: encoding normalised
+- [normalise_edge_encoding] adcfe0b0-6e96-470c-a6ee-99cb54adba41: encoding normalised
+- [normalise_edge_encoding] 79b47891-c40f-41c5-8430-2b3cc961c912: encoding normalised
+- [normalise_edge_encoding] 55f5fc2d-3b48-4593-9b4f-abad4ee99a86: encoding normalised
+- [normalise_edge_encoding] 71aaa2e4-341c-4752-a02b-7d2a4d25a56f: encoding normalised
+- [normalise_edge_encoding] 752e1ea2-6127-4a69-a86e-ae3ec0040a1e: encoding normalised
+- [normalise_edge_encoding] fa0110d1-8821-42ac-912f-b784854f5d4d: encoding normalised
+- [normalise_edge_encoding] e0d6ac5b-bbab-4b75-968e-88fb5b971773: encoding normalised
+- [normalise_edge_encoding] 4402f7e0-e7da-428b-9122-fd5436edafaf: encoding normalised
+- [normalise_edge_encoding] 207eb573-29b8-4545-ae3e-f38fa7de466e: encoding normalised
+- [normalise_edge_encoding] 2b84f61e-3785-4dba-bc0a-66dc2b7d8460: encoding normalised
+- [normalise_edge_encoding] 76bd6a15-3120-4408-a83c-5dd916aa28c1: encoding normalised
+- [normalise_edge_encoding] 7145e201-30c1-4377-a408-96a4d8684dc8: encoding normalised
+- [normalise_edge_encoding] 93e084c2-5499-495a-a59d-7018d0058730: encoding normalised
+- [normalise_edge_encoding] e850efdb-ce15-470d-aac1-9370cfdb23a3: encoding normalised
+- [normalise_edge_encoding] fe6168c2-d04a-4f94-8481-68598ee7dae6: encoding normalised
+- [rename_ids] scholar_position_andresen_justin_middle_platonist -> scholarly_position_andresen_justin_middle_platonist
+- [rename_ids] scholar_position_bobzien_no_free_will_problem_ancients -> scholarly_position_bobzien_no_free_will_problem_ancients
+- [rename_ids] scholar_position_brennan_stoic_emotions_beliefs -> scholarly_position_brennan_stoic_emotions_beliefs
+- [rename_ids] scholar_position_dihle_will_christian_innovation -> scholarly_position_dihle_will_christian_innovation
+- [rename_ids] scholar_position_edwards_origen_anti_platonist -> scholarly_position_edwards_origen_anti_platonist
+- [rename_ids] scholar_position_frankfurt_pap_false -> scholarly_position_frankfurt_pap_false
+- [rename_ids] scholar_position_frede_will_originates_epictetus -> scholarly_position_frede_will_originates_epictetus
+- [rename_ids] scholar_position_furley_epicurus_swerve_indirect -> scholarly_position_furley_epicurus_swerve_indirect
+- [rename_ids] scholar_position_gill_structured_self_stoicism -> scholarly_position_gill_structured_self_stoicism
+- [rename_ids] scholar_position_hadot_philosophy_as_practice -> scholarly_position_hadot_philosophy_as_practice
+- [rename_ids] scholar_position_hankinson_stoic_causation_compatibilist -> scholarly_position_hankinson_stoic_causation_compatibilist
+- [rename_ids] scholar_position_inwood_stoic_action_theory -> scholarly_position_inwood_stoic_action_theory
+- [rename_ids] scholar_position_kahn_will_emerges_seneca_epictetus -> scholarly_position_kahn_will_emerges_seneca_epictetus
+- [rename_ids] scholar_position_kane_libertarian_self_forming -> scholarly_position_kane_libertarian_self_forming
+- [rename_ids] scholar_position_karamanolis_early_christian_engagement -> scholarly_position_karamanolis_early_christian_engagement
+- [rename_ids] scholar_position_long_sedley_epicurus_first_freewill -> scholarly_position_long_sedley_epicurus_first_freewill
+- [rename_ids] scholar_position_rist_augustine_platonized_christian -> scholarly_position_rist_augustine_platonized_christian
+- [rename_ids] scholar_position_salles_chrysippus_frankfurt_style -> scholarly_position_salles_chrysippus_frankfurt_style
+- [rename_ids] scholar_position_sharples_chrysippus_early_compatibilist -> scholarly_position_sharples_chrysippus_early_compatibilist
+- [rename_ids] scholar_position_sorabji_aristotle_indeterminist -> scholarly_position_sorabji_aristotle_indeterminist
+- [rename_ids] scholar_position_strawson_basic_argument -> scholarly_position_strawson_basic_argument
+- [rename_ids] scholar_position_van_inwagen_consequence_argument -> scholarly_position_van_inwagen_consequence_argument
+- [rename_ids] argument_cafma_framework_5a7b9e12 -> framework_cafma_5a7b9e12
+- [rename_ids] passage_alcin_alcinous_untitled_full_text -> passage_hegesippus_hypomnemata_fragments
+- [rename_ids] passage_eusebius_he_iv_26_melito_fr_iv -> work_eusebius_he_iv_26_melito_fr_iv
+- [wire_hegesippus] created person_hegesippus_2c_ce
+- [wire_hegesippus] created work_hegesippus_hypomnemata
+- [wire_hegesippus] passage_hegesippus_hypomnemata_fragments -[part_of]-> work_hegesippus_hypomnemata
+- [wire_hegesippus] passage_hegesippus_hypomnemata_fragments -[authored_by]-> person_hegesippus_2c_ce
+- [wire_hegesippus] work_hegesippus_hypomnemata -[authored_by]-> person_hegesippus_2c_ce
+- [propagate_to_citations] sc31_melito_peri_pascha_iv_chap3 -> passage_eusebius_he_iv_26_melito_fr_iv_chap3
+- [propagate_to_citations] passage_alcin_alcinous_untitled_full_text -> passage_hegesippus_hypomnemata_fragments
+- [propagate_to_citations] argument_cafma_framework_5a7b9e12 -> framework_cafma_5a7b9e12
+- [propagate_to_citations] argument_cafma_framework_5a7b9e12 -> framework_cafma_5a7b9e12
+- [propagate_to_citations] sc31_melito_peri_pascha_iv_chap3_en -> passage_eusebius_he_iv_26_melito_fr_iv_chap3_en
+- [propagate_to_citations] scholarly_argument_dihle_greek_vs_biblical_cosmology_an_4 -> scholarly_argument_dihle_greek_philosophical_theology_v_0
+- [propagate_to_citations] scholarly_argument_dihle_greek_vs_biblical_cosmology_an_4 -> scholarly_argument_dihle_greek_philosophical_theology_v_0
