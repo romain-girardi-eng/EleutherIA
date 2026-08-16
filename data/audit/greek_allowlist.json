@@ -415,6 +415,11 @@
    {
     "hash": "958e6af3f5015113",
     "excerpt": "ἀξία βίβλος τοῦ θεοῦ"
+   },
+   {
+    "hash": "076cbcdc1b8b6830",
+    "excerpt": "τὰ σημεῖα τοῦ θεοῦ",
+    "source": "Origène, Philocalie 23.20 (= Commentaire sur la Genèse III) : «…ἀναγινώσκειν τὰ σημεῖα τοῦ θεοῦ» — attesté verbatim dans le TLG E (TLG2042 Origenes, 3 occurrences ; vérifié via scripts/tlg_search.py le 2026-08-16). Absent du corpus local ingéré, qui ne contient pas ce chapitre de la Philocalie ; provenance enregistrée pour lever le gate — aucune fabrication. Cf. Amand 1945, p. 315-316."
    }
   ],
   "concept_causal_conception_eph_hemin_salles": [
@@ -1225,6 +1230,13 @@
     "hash": "82e59ae7641883a1",
     "excerpt": "ἐπὶ δίκῃ καὶ κρίσει",
     "source": "ATTESTÉ dans le TLG E (vérifié par check_greek_gate le 2026-08-03) mais absent du corpus local ingéré ; provenance enregistrée pour lever le gate — aucune fabrication."
+   }
+  ],
+  "concept_inner_freedom_alex": [
+   {
+    "hash": "bab1627d58b40847",
+    "excerpt": "ἐνταῦθα λῃσταὶ καὶ κλέπται καὶ δικαστήρια καὶ οἱ καλούμενοι τύραννοι δοκοῦντες ἔχειν τινὰ ἐφ' ἡμῖν ἐξουσίαν διὰ τὸ σωμάτ",
+    "source": "Épictète, Dissertationes I.9 (le nœud cite I.9.12-17), éd. Schenkl, Teubner — attesté verbatim dans le TLG E (TLG0557, hit unique ; vérifié via scripts/tlg_search.py le 2026-08-16). Le corpus local contient les Discourses mais pas cette section ; provenance enregistrée pour lever le gate — aucune fabrication."
    }
   ]
  }
