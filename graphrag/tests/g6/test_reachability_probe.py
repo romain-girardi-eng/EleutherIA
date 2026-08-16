@@ -176,15 +176,21 @@ def _period(graph: dict, nid: str) -> str:
 
 
 def _is_modern_only_person_edge(graph: dict, e: dict) -> bool:
-    """A modern metaphysics dispute (both endpoints modern persons).
+    """A modern dispute (both endpoints modern persons or publications).
 
     These are excluded by `find_debates(period_filter=antiquity)` and so are
-    out of scope for the antiquity reachability gate.
+    out of scope for the antiquity reachability gate. Historiographical
+    disagreements between modern publications (e.g. Wetzel 1992 opposing
+    Rist 1969 on Augustine) are the publication-shaped instance of the same
+    category.
     """
     s, t = e["source"], e["target"]
+    s_type, t_type = _node_type(graph, s), _node_type(graph, t)
+    if s_type == "publication" and t_type == "publication":
+        return True
     return (
-        _node_type(graph, s) == "person"
-        and _node_type(graph, t) == "person"
+        s_type == "person"
+        and t_type == "person"
         and _period(graph, s) in MODERN_PERIODS
         and _period(graph, t) in MODERN_PERIODS
     )
