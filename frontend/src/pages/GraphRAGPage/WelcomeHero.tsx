@@ -7,9 +7,8 @@ import AdvancedOptions from '../../components/graphrag/AdvancedOptions';
 interface WelcomeHeroProps {
   query: string;
   setQuery: (q: string) => void;
-  loading: boolean;
-  streaming: boolean;
-  error: string | null;
+  /** Run-independent message (server busy, concurrent-run cap). */
+  notice: string | null;
   inputRef: React.RefObject<HTMLInputElement | null>;
   onSubmit: (e: React.FormEvent) => void;
   onDemo: () => void;
@@ -22,9 +21,7 @@ interface WelcomeHeroProps {
 export default function WelcomeHero({
   query,
   setQuery,
-  loading,
-  streaming,
-  error,
+  notice,
   inputRef,
   onSubmit,
   onDemo,
@@ -75,14 +72,13 @@ export default function WelcomeHero({
                   placeholder={t('graphrag.placeholder')}
                   className="flex-1 min-w-0 px-4 sm:px-6 py-3 text-base bg-transparent focus:outline-none focus:ring-0 border-0"
                   autoFocus
-                  disabled={loading || streaming}
                 />
                 <button
                   type="submit"
-                  disabled={!query.trim() || loading || streaming}
+                  disabled={!query.trim()}
                   className="px-4 sm:px-8 py-3 min-h-[44px] bg-gradient-to-br from-orange-600 to-orange-500 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm sm:text-base font-medium whitespace-nowrap"
                 >
-                  {loading ? 'Thinking...' : t('graphrag.ask')}
+                  {t('graphrag.ask')}
                 </button>
               </div>
             </ShineBorder>
@@ -100,13 +96,15 @@ export default function WelcomeHero({
             </button>
           </div>
 
-          {error && (
+          {notice && (
             <motion.div
+              role="status"
+              data-testid="run-notice"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-4 px-6 py-4 bg-red-50 border border-red-200 text-red-800 rounded-2xl text-sm text-center"
+              className="mt-4 px-6 py-4 bg-amber-50 border border-amber-200 text-amber-900 rounded-2xl text-sm text-center"
             >
-              {error}
+              {notice}
             </motion.div>
           )}
         </motion.div>

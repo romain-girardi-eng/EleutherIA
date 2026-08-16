@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo, useReducer } from 'react';
 import Cookies from 'js-cookie';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -7,16 +7,27 @@ import { useAuth } from '../../context/AuthContext';
 import AuthModal from '../../components/AuthModal';
 import NodeDetailPanel from '../../components/NodeDetailPanel';
 import RightPanel from '../../components/graphrag/RightPanel';
-import type { RightPanelState } from '../../components/graphrag/RightPanel';
 import { ReasoningPanel } from '../../components/ReasoningPanel';
 import type { ReasoningTraceStep } from '../../components/ReasoningPanel';
-import type { ResponseTab } from '../../components/ResponseTabs';
 import WelcomeHero from './WelcomeHero';
 import ChatPanel from './ChatPanel';
 import MobileGraphSheet from './MobileGraphSheet';
+import type { RunTabItem } from './RunTabs';
+import {
+  MAX_CONCURRENT_RUNS,
+  canStartRun,
+  createRun,
+  initialRunsState,
+  runsReducer,
+  selectActiveRun,
+  selectAllResponses,
+  selectOrderedRuns,
+  type GraphRagRun,
+  type RunStatus,
+  type RunsState,
+} from './runs';
 import type { GraphRAGResponse, GraphRAGStreamEvent, GraphRAGChatMessage, KGNode } from '../../types';
 import type { AgentStep, PassageContext, ResearchNoteKind } from '../../types/graphrag';
-import type { CacheBadgeInfo } from '../../components/research/CostCounter';
 import {
   mockGraphRAGResponse,
   mockReasoningSteps,
@@ -37,6 +48,39 @@ const STREAM_HEADER_TIMEOUT_MS = 120_000;
 // so a longer gap means the connection died without an SSE `error` frame
 // (Cloudflare tunnel drop, worker OOM, …).
 const STREAM_IDLE_TIMEOUT_MS = 95_000;
+
+// Model + retrieval mode are no longer user-facing — the backend runs a single
+// vectorless agentic pipeline. Kept as constants so retry-with-model and the
+// run metadata still have something honest to record.
+const DEFAULT_MODEL = 'kimi-k2.6';
+const DEFAULT_MODE = 'auto';
+
+/**
+ * Everything about a run that is NOT state: the abort controller, the two
+ * watchdog timers, and the SSE bookkeeping counters. Lives in a ref map keyed
+ * by runId, never in the reducer.
+ */
+interface RunRuntime {
+  abort: AbortController;
+  headerTimeout: ReturnType<typeof setTimeout> | null;
+  idleTimeout: ReturnType<typeof setTimeout> | null;
+  connectionLost: boolean;
+  userStopped: boolean;
+  stepCounter: number;
+  synthesisStepId: string | null;
+  journalStepId: string | null;
+}
+
+function disposeRuntime(runtime: RunRuntime) {
+  if (runtime.headerTimeout !== null) {
+    clearTimeout(runtime.headerTimeout);
+    runtime.headerTimeout = null;
+  }
+  if (runtime.idleTimeout !== null) {
+    clearTimeout(runtime.idleTimeout);
+    runtime.idleTimeout = null;
+  }
+}
 
 function _restoreMessages(): GraphRAGChatMessage[] {
   try {
@@ -59,96 +103,101 @@ function _restoreResponse(): GraphRAGResponse | null {
   }
 }
 
+/** Rehydrate the last answered question as a single, already-finished run. */
+function restoreRunsState(): RunsState {
+  const messages = _restoreMessages();
+  if (messages.length === 0) return initialRunsState;
+  const response = _restoreResponse();
+  const run = createRun({
+    id: 'run_restored',
+    question: messages.find((m) => m.role === 'user')?.content ?? '',
+    model: DEFAULT_MODEL,
+    mode: DEFAULT_MODE,
+    status: 'done',
+    messages,
+    response,
+    streamEnded: true,
+    rightPanelState: response ? 'graph' : 'idle',
+  });
+  return { runs: { [run.id]: run }, order: [run.id], activeRunId: run.id };
+}
+
 export default function GraphRAGPage() {
   const { t } = useTranslation();
   const location = useLocation();
-  const [messages, setMessages] = useState<GraphRAGChatMessage[]>(() =>
-    _restoreMessages(),
+
+  // ── The one per-run store ────────────────────────────────────────────────
+  const [runsState, dispatch] = useReducer(runsReducer, undefined, restoreRunsState);
+  // Mirror for async code paths (SSE handlers, submission cap) that must read
+  // the CURRENT store rather than the closure they were created in.
+  const runsStateRef = useRef(runsState);
+  runsStateRef.current = runsState;
+  const runtimesRef = useRef(new Map<string, RunRuntime>());
+  const runSeqRef = useRef(0);
+
+  const activeRun = selectActiveRun(runsState);
+  const activeRunId = runsState.activeRunId;
+
+  const orderedRuns = useMemo(() => selectOrderedRuns(runsState), [runsState]);
+  const allResponses = useMemo(() => selectAllResponses(runsState), [runsState]);
+  const streamingCount = useMemo(
+    () => orderedRuns.filter((r) => r.status === 'streaming').length,
+    [orderedRuns],
   );
+  const canSubmit = streamingCount < MAX_CONCURRENT_RUNS;
+  const runTabs: RunTabItem[] = useMemo(
+    () => orderedRuns.map((r) => ({ id: r.id, question: r.question, status: r.status })),
+    [orderedRuns],
+  );
+
   const [query, setQuery] = useState('');
-  const [loading, _setLoading] = useState(false);
-  const [streaming, setStreaming] = useState(false);
-  const [_streamStatus, setStreamStatus] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  /** Page-level, run-independent message (cap reached, server busy, …). */
+  const [notice, setNotice] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [pendingQuery, setPendingQuery] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<KGNode | null>(null);
-  const abortControllerRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { isAuthenticated } = useAuth();
 
-  // Model & mode selection
-  // Model + retrieval mode are no longer user-facing — backend is Kimi K2.6
-  // on Fireworks via vectorless agentic RAG. Kept as locals (not state) so
-  // any legacy code path that still references them compiles.
-  const selectedModel = 'kimi-k2.6';
-  const selectedMode = 'auto';
-
   // Advanced settings
   const [ancientOnly, setAncientOnly] = useState(false);
   const [showRetryDropdown, setShowRetryDropdown] = useState(false);
-  const [selectedRetryModel] = useState('kimi-k2.6');
+  const [selectedRetryModel] = useState(DEFAULT_MODEL);
 
-  // Right panel
-  const [rightPanelState, setRightPanelState] = useState<RightPanelState>('idle');
-  const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(null);
-  const [rightPanelResponse, setRightPanelResponse] = useState<GraphRAGResponse | null>(
-    () => _restoreResponse(),
-  );
-  const [allResponses, setAllResponses] = useState<GraphRAGResponse[]>([]);
   const highlightNodeRef = useRef<((citationIndex: number) => void) | null>(null);
-  const [passageContext, setPassageContext] = useState<PassageContext | null>(null);
-  const [passageWindow, setPassageWindow] = useState(5);
 
-  // Response tabs (for retry-with-different-model)
-  const [responseTabs, setResponseTabs] = useState<ResponseTab[]>([]);
-  const [activeTabId, setActiveTabId] = useState<string>('');
-  const [tabMessages, setTabMessages] = useState<Record<string, GraphRAGChatMessage[]>>({});
-  const [tabResponses, setTabResponses] = useState<Record<string, GraphRAGResponse | null>>({});
-  const [reasoningTraces, setReasoningTraces] = useState<Record<string, ReasoningTraceStep[]>>({});
-  const [initialQuestion, setInitialQuestion] = useState<string>('');
-
-  // Right panel reasoning trace toggle
+  // Right panel reasoning trace toggle (a view preference, not run state)
   const [showReasoningTrace, setShowReasoningTrace] = useState(false);
 
-  // Agent activity tracking (ReAct loop)
-  const [agentSteps, setAgentSteps] = useState<AgentStep[]>([]);
-  const [agentActive, setAgentActive] = useState(false);
-  // True once a run's SSE stream has closed, however it ended. Lets the right
-  // panel tell "no trace captured" apart from "synthesis hasn't started yet".
-  const [streamEnded, setStreamEnded] = useState(false);
-  const [streamCost, setStreamCost] = useState<{ total_tokens: number; total_cost_usd: number } | null>(null);
-  const agentStepCounterRef = useRef(0);
-  // Set by stopStreaming so the resulting AbortError isn't surfaced as a failure.
-  const userStoppedRef = useRef(false);
-  // Live dialectical-synthesis reasoning accumulates into ONE growing step
-  // (the right-panel AGENT REASONING card), so we track its id across deltas.
-  const synthesisReasoningStepIdRef = useRef<string | null>(null);
-  // The pipeline's own research journal (abandoned leads) also accumulates into
-  // ONE growing step, so the Reasoning tab has something honest to show on the
-  // models that expose no chain-of-thought (the Claude rung, by design).
-  const researchJournalStepIdRef = useRef<string | null>(null);
-
-  // Cache replay state: populated when backend emits a `cache_hit` SSE event
-  // before the `complete` event. Reset to null at the start of every query so
-  // a fresh run never displays a stale cache badge.
-  const [cacheInfo, setCacheInfo] = useState<CacheBadgeInfo | null>(null);
-  // When true, the next streaming query appends `force_refresh=true` to the
-  // SSE URL, bypassing the backend answer cache. Auto-resets to false after
-  // the URL is built so subsequent natural queries don't auto-bypass.
-  const [forceRefresh, setForceRefresh] = useState(false);
-
-  // Token budget / cost metrics from last response
-  interface LastMetrics {
-    modelLabel: string;
-    retrievalMode: string;
-    estimatedCost: number | null;
-    answerLengthChars: number;
-    modelContext: number;
-  }
-  const [lastMetrics, setLastMetrics] = useState<LastMetrics | null>(null);
   const [modelContextMap, setModelContextMap] = useState<Record<string, number>>({});
+  const modelContextMapRef = useRef(modelContextMap);
+  modelContextMapRef.current = modelContextMap;
+
+  /**
+   * True once the UI cap is reached. Checks the live runtime map as well as
+   * the reducer state so two submissions in the same tick (before a re-render
+   * refreshes `runsStateRef`) can never slip past the cap.
+   */
+  const atCapacity = useCallback(
+    () =>
+      runtimesRef.current.size >= MAX_CONCURRENT_RUNS ||
+      !canStartRun(runsStateRef.current),
+    [],
+  );
+
+  const patchRun = useCallback((id: string, patch: Partial<GraphRagRun>) => {
+    dispatch({ type: 'run/patch', id, patch });
+  }, []);
+
+  const patchActiveRun = useCallback(
+    (patch: Partial<GraphRagRun>) => {
+      if (runsStateRef.current.activeRunId) {
+        dispatch({ type: 'run/patch', id: runsStateRef.current.activeRunId, patch });
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     const apiUrl = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') ?? '';
@@ -177,62 +226,87 @@ export default function GraphRAGPage() {
   }, []);
 
   const handlePassageCitationClick = useCallback(async (passageOrNodeId: string, fallbackSourceIndex?: number) => {
-    setRightPanelState('loading');
-    const ctx = await fetchPassageContext(passageOrNodeId, passageWindow);
+    const runId = runsStateRef.current.activeRunId;
+    if (!runId) return;
+    const run = runsStateRef.current.runs[runId];
+    patchRun(runId, { rightPanelState: 'loading' });
+    const ctx = await fetchPassageContext(passageOrNodeId, run?.passageWindow ?? 5);
     if (ctx) {
-      setPassageContext(ctx);
-      setRightPanelState('passage-reader');
+      patchRun(runId, { passageContext: ctx, rightPanelState: 'passage-reader' });
     } else {
-      if (fallbackSourceIndex !== undefined) {
-        setActiveSourceIndex(fallbackSourceIndex);
-        setRightPanelState(rightPanelResponse ? 'graph' : 'idle');
-      } else {
-        setRightPanelState(rightPanelResponse ? 'graph' : 'idle');
-      }
+      patchRun(runId, {
+        rightPanelState: run?.response ? 'graph' : 'idle',
+        ...(fallbackSourceIndex !== undefined ? { activeSourceIndex: fallbackSourceIndex } : {}),
+      });
     }
-  }, [fetchPassageContext, passageWindow, rightPanelResponse]);
+  }, [fetchPassageContext, patchRun]);
 
   const handleLoadMorePassages = useCallback(async (_direction: 'up' | 'down') => {
-    if (!passageContext) return;
-    const newWindow = passageWindow + 5;
-    setPassageWindow(newWindow);
-    const ctx = await fetchPassageContext(passageContext.target.passageId, newWindow);
-    if (ctx) {
-      setPassageContext(ctx);
+    const runId = runsStateRef.current.activeRunId;
+    if (!runId) return;
+    const run = runsStateRef.current.runs[runId];
+    if (!run?.passageContext) return;
+    const newWindow = run.passageWindow + 5;
+    patchRun(runId, { passageWindow: newWindow });
+    const ctx = await fetchPassageContext(run.passageContext.target.passageId, newWindow);
+    if (ctx) patchRun(runId, { passageContext: ctx });
+  }, [fetchPassageContext, patchRun]);
+
+  const handleNodeClick = useCallback(async (nodeId: string) => {
+    if (!nodeId || nodeId === 'undefined' || nodeId.startsWith('source_')) return;
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (uuidPattern.test(nodeId) || nodeId.startsWith('passage_')) return;
+    try {
+      const node = await apiClient.getNode(nodeId);
+      if (node) setSelectedNode(node);
+    } catch (err) {
+      console.error('Failed to fetch node:', err);
     }
-  }, [passageContext, passageWindow, fetchPassageContext]);
+  }, []);
 
   const handleNodeCitationClick = useCallback((nodeId: string) => {
     // B12 — open ONLY the right panel for KG scholar/argument/concept
     // citations ([P_<node_id>: ...] markers). When the cited node is part of
     // the visible answer graph, highlight it there (single surface); only fall
     // back to the NodeDetailPanel overlay when it isn't in the graph at all.
-    const idx = rightPanelResponse?.sources?.findIndex((s) => s.nodeId === nodeId) ?? -1;
-    if (idx >= 0) {
-      setActiveSourceIndex(idx);
-      setPassageContext(null);
-      setPassageWindow(5);
-      setRightPanelState(rightPanelResponse ? 'graph' : 'idle');
+    const runId = runsStateRef.current.activeRunId;
+    const run = runId ? runsStateRef.current.runs[runId] : null;
+    const idx = run?.response?.sources?.findIndex((s) => s.nodeId === nodeId) ?? -1;
+    if (runId && idx >= 0) {
+      patchRun(runId, {
+        activeSourceIndex: idx,
+        passageContext: null,
+        passageWindow: 5,
+        rightPanelState: 'graph',
+      });
       highlightNodeRef.current?.(idx);
     } else {
       // Not in the current answer graph — open the standalone detail overlay.
       handleNodeClick(nodeId);
     }
-  }, [rightPanelResponse]); // handleNodeClick is stable (no deps that change)
+  }, [handleNodeClick, patchRun]);
 
   const handleCitationClick = useCallback((citationIndex: number) => {
-    setActiveSourceIndex(citationIndex);
-    setPassageContext(null);
-    setPassageWindow(5);
-    setRightPanelState(rightPanelResponse ? 'graph' : 'idle');
+    const runId = runsStateRef.current.activeRunId;
+    if (!runId) return;
+    const run = runsStateRef.current.runs[runId];
+    patchRun(runId, {
+      activeSourceIndex: citationIndex,
+      passageContext: null,
+      passageWindow: 5,
+      rightPanelState: run?.response ? 'graph' : 'idle',
+    });
     highlightNodeRef.current?.(citationIndex);
-  }, [rightPanelResponse]);
-
+  }, [patchRun]);
 
   const handleSourceSelect = useCallback((sourceIndex: number) => {
-    setActiveSourceIndex(sourceIndex);
+    patchActiveRun({ activeSourceIndex: sourceIndex });
     highlightNodeRef.current?.(sourceIndex);
-  }, []);
+  }, [patchActiveRun]);
+
+  const handleCloseDetail = useCallback(() => {
+    patchActiveRun({ rightPanelState: 'graph', passageContext: null, passageWindow: 5 });
+  }, [patchActiveRun]);
 
   // Measure nav height so two-column layout sits flush below the fixed nav
   const [navHeight, setNavHeight] = useState(57);
@@ -245,188 +319,75 @@ export default function GraphRAGPage() {
     return () => ro.disconnect();
   }, []);
 
-  // Cleanup abort controller on unmount
+  // Abort every live run on unmount.
   useEffect(() => {
+    const runtimes = runtimesRef.current;
     return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-        abortControllerRef.current = null;
-      }
+      runtimes.forEach((runtime) => {
+        runtime.userStopped = true;
+        disposeRuntime(runtime);
+        runtime.abort.abort();
+      });
+      runtimes.clear();
     };
   }, []);
 
-  // Demo Mode
-  const loadDemoMode = () => {
-    const demoMessage: GraphRAGChatMessage = {
-      role: 'user',
-      content: mockGraphRAGResponse.query,
-      timestamp: new Date()
-    };
+  // ── Streaming ────────────────────────────────────────────────────────────
 
-    const citationTexts: Record<string, { original: string; originalLanguage: string; translation: string }> = {};
-
-    const assistantMessage: GraphRAGChatMessage = {
-      role: 'assistant',
-      content: mockGraphRAGResponse.answer,
-      timestamp: new Date(),
-      citations: {
-        ancient_sources: [
-          "Cicero, On Fate 41-43",
-          "Cicero, On Fate 42-43; Aulus Gellius, Attic Nights 7.2.11",
-          "Epictetus, Discourses 1.1; SVF 2.974-975",
-        ],
-        modern_scholarship: [
-          "Bobzien, S. (1998). Determinism and Freedom in Stoic Philosophy.",
-          "Frede, M. (2011). A Free Will: Origins of the Notion in Ancient Thought.",
-        ]
-      },
-      citationTexts,
-      reasoning_path: mockGraphRAGResponse.reasoning_path,
-      graphrag_response: mockGraphRAGResponse,
-      reasoning_steps: mockReasoningSteps
-    };
-
-    setMessages([demoMessage, assistantMessage]);
-    setRightPanelResponse(mockGraphRAGResponse);
-    setAllResponses((prev) => [...prev, mockGraphRAGResponse]);
-    setRightPanelState('graph');
-    setQuery('');
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!query.trim() || loading || streaming) return;
-
-    if (!isAuthenticated) {
-      setPendingQuery(query.trim());
-      setShowAuthModal(true);
-      return;
-    }
-
-    await processQuery(query.trim());
-  };
-
-  const processQuery = useCallback(async (queryText: string, retryModel?: string, retryMode?: string) => {
-    const isRetry = retryModel !== undefined;
-    const model = retryModel ?? selectedModel;
-    const mode = retryMode ?? selectedMode;
-
-    if (!isRetry) {
-      // First query: create initial tab
-      const tabId = `tab_${Date.now()}`;
-      const userMessage: GraphRAGChatMessage = {
-        role: 'user',
-        content: queryText,
-        timestamp: new Date(),
-      };
-
-      setMessages([userMessage]);
-      setInitialQuestion(queryText);
-      setResponseTabs([{ id: tabId, label: model.split('-').slice(0, 2).join('-'), model, mode }]);
-      setActiveTabId(tabId);
-      setTabMessages((prev) => ({ ...prev, [tabId]: [userMessage] }));
-      setTabResponses((prev) => ({ ...prev, [tabId]: null }));
-      setQuery('');
-      setError(null);
-
-      await handleStreamingQuery(queryText, tabId, model, mode);
-    } else {
-      // Retry: create new tab, re-send the same question
-      const tabId = `tab_${Date.now()}`;
-      const userMessage: GraphRAGChatMessage = {
-        role: 'user',
-        content: queryText,
-        timestamp: new Date(),
-      };
-
-      setResponseTabs((prev) => [...prev, { id: tabId, label: model.split('-').slice(0, 2).join('-'), model, mode }]);
-      setActiveTabId(tabId);
-      setMessages([userMessage]);
-      setTabMessages((prev) => ({ ...prev, [tabId]: [userMessage] }));
-      setTabResponses((prev) => ({ ...prev, [tabId]: null }));
-      setError(null);
-
-      await handleStreamingQuery(queryText, tabId, model, mode);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedModel, selectedMode]);
-
-  const initialQueryProcessedRef = useRef(false);
-  useEffect(() => {
-    const state = location.state as { initialQuery?: string } | null;
-    // Accept an initial question from router state (in-app navigation) or from
-    // a `?q=` query param (deep links, schema.org SearchAction).
-    const queryParam = new URLSearchParams(location.search).get('q')?.trim();
-    const initialQuery = state?.initialQuery ?? (queryParam || undefined);
-    if (initialQuery && !initialQueryProcessedRef.current) {
-      if (isAuthenticated) {
-        initialQueryProcessedRef.current = true;
-        processQuery(initialQuery);
-        window.history.replaceState({}, document.title);
-      } else {
-        setPendingQuery(initialQuery);
-        setShowAuthModal(true);
-        window.history.replaceState({}, document.title);
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.state, location.search, isAuthenticated]);
-
-  const handleAuthSuccess = () => {
-    if (pendingQuery) {
-      processQuery(pendingQuery);
-      setPendingQuery(null);
-    }
-  };
-
-  const handleStreamingQuery = async (queryText: string, tabId?: string, model?: string, mode?: string) => {
-    const effectiveModel = model ?? selectedModel;
-    const effectiveMode = mode ?? selectedMode;
-
-    setStreaming(true);
-    setStreamEnded(false);
-    setRightPanelState('reasoning');
-    setRightPanelResponse(null);
-    setActiveSourceIndex(null);
-    setStreamStatus('Connecting...');
-    setAgentSteps([]);
-    setAgentActive(true);
-    setStreamCost(null);
-    setCacheInfo(null);
-    agentStepCounterRef.current = 0;
-    synthesisReasoningStepIdRef.current = null;
-    researchJournalStepIdRef.current = null;
-    userStoppedRef.current = false;
-
+  const streamRun = useCallback(async (
+    runId: string,
+    queryText: string,
+    effectiveModel: string,
+    effectiveMode: string,
+    forceRefresh: boolean,
+  ) => {
     const abortController = new AbortController();
-    abortControllerRef.current = abortController;
+    const runtime: RunRuntime = {
+      abort: abortController,
+      headerTimeout: null,
+      idleTimeout: null,
+      connectionLost: false,
+      userStopped: false,
+      stepCounter: 0,
+      synthesisStepId: null,
+      journalStepId: null,
+    };
+    runtimesRef.current.set(runId, runtime);
 
-    // Header (time-to-first-byte) timeout + mid-stream idle watchdog. The
-    // watchdog is re-armed on every received chunk and fires only when the
-    // server has gone silent for good.
-    let headerTimeoutId: ReturnType<typeof setTimeout> | null = null;
-    let idleTimeoutId: ReturnType<typeof setTimeout> | null = null;
-    let connectionLost = false;
+    const patch = (p: Partial<GraphRagRun>) => dispatch({ type: 'run/patch', id: runId, patch: p });
+    const addStep = (step: Omit<AgentStep, 'id' | 'timestamp'>): string => {
+      runtime.stepCounter += 1;
+      const stepId = `step-${runtime.stepCounter}`;
+      dispatch({
+        type: 'run/appendStep',
+        id: runId,
+        step: { ...step, id: stepId, timestamp: Date.now() } as AgentStep,
+      });
+      return stepId;
+    };
 
     const clearIdleWatchdog = () => {
-      if (idleTimeoutId !== null) {
-        clearTimeout(idleTimeoutId);
-        idleTimeoutId = null;
+      if (runtime.idleTimeout !== null) {
+        clearTimeout(runtime.idleTimeout);
+        runtime.idleTimeout = null;
       }
     };
     const armIdleWatchdog = () => {
       clearIdleWatchdog();
-      idleTimeoutId = setTimeout(() => {
-        connectionLost = true;
+      runtime.idleTimeout = setTimeout(() => {
+        runtime.connectionLost = true;
         abortController.abort();
       }, STREAM_IDLE_TIMEOUT_MS);
     };
+
+    let outcome: RunStatus = 'done';
+    let rejectedByServer = false;
 
     try {
       const token = Cookies.get('auth_token');
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-      headerTimeoutId = setTimeout(() => {
+      runtime.headerTimeout = setTimeout(() => {
         abortController.abort();
       }, STREAM_HEADER_TIMEOUT_MS);
 
@@ -436,12 +397,7 @@ export default function GraphRAGPage() {
         model: effectiveModel,
         retrieval_mode: effectiveMode,
       });
-      if (forceRefresh) {
-        params.set('force_refresh', 'true');
-        // Reset immediately so the next *natural* query doesn't auto-bypass
-        // the cache.
-        setForceRefresh(false);
-      }
+      if (forceRefresh) params.set('force_refresh', 'true');
 
       const response = await fetch(`${apiUrl}/api/graphrag/query/stream?${params.toString()}`, {
         method: 'GET',
@@ -451,9 +407,25 @@ export default function GraphRAGPage() {
         signal: abortController.signal,
       });
 
-      clearTimeout(headerTimeoutId);
-      headerTimeoutId = null;
+      if (runtime.headerTimeout !== null) {
+        clearTimeout(runtime.headerTimeout);
+        runtime.headerTimeout = null;
+      }
       armIdleWatchdog();
+
+      if (response.status === 429) {
+        // Server is at capacity. Don't leave a dead tab behind — drop the run
+        // and surface a page-level notice instead.
+        const retryAfter = Number(response.headers?.get?.('Retry-After'));
+        rejectedByServer = true;
+        setNotice(
+          Number.isFinite(retryAfter) && retryAfter > 0
+            ? t('graphRagUi.runs.serverBusySeconds', { seconds: Math.ceil(retryAfter) })
+            : t('graphRagUi.runs.serverBusy'),
+        );
+        dispatch({ type: 'run/close', id: runId });
+        return;
+      }
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -496,17 +468,13 @@ export default function GraphRAGPage() {
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const payload = data.data as any;
                   const msg = (payload?.message || data.message || '').toLowerCase();
-                  setStreamStatus(msg);
+                  patch({ streamStatus: msg });
 
                   // Also surface status events in the agent activity panel
-                  agentStepCounterRef.current += 1;
-                  setAgentSteps((prev) => [...prev, {
-                    id: `step-${agentStepCounterRef.current}`,
-                    type: 'status' as const,
+                  addStep({
+                    type: 'status',
                     summary: payload?.message || data.message || 'Processing...',
-                    timestamp: Date.now(),
-                  }]);
-
+                  });
                   break;
                 }
 
@@ -519,24 +487,24 @@ export default function GraphRAGPage() {
                   // chat pane. We extract the raw chunk string, skip any
                   // payload that looks like a serialized inner event, and
                   // accumulate the rest as a `complete`-event fallback only.
-                  let chunk = '';
+                  let answerChunk = '';
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const chunkData = data.data as any;
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const eventObj = data as any;
                   if (typeof chunkData === 'string') {
-                    chunk = chunkData;
+                    answerChunk = chunkData;
                   } else if (typeof eventObj.content === 'string') {
-                    chunk = eventObj.content;
+                    answerChunk = eventObj.content;
                   } else if (chunkData && typeof chunkData === 'object') {
-                    chunk = String(chunkData.data || chunkData.chunk || chunkData.text || '');
+                    answerChunk = String(chunkData.data || chunkData.chunk || chunkData.text || '');
                   }
-                  const trimmed = chunk.trim();
+                  const trimmed = answerChunk.trim();
                   const looksLikeInnerEvent =
                     trimmed.startsWith('{"type"') ||
                     trimmed.startsWith('{ "type"');
-                  if (chunk && !looksLikeInnerEvent) {
-                    fullAnswer += chunk;
+                  if (answerChunk && !looksLikeInnerEvent) {
+                    fullAnswer += answerChunk;
                   }
                   break;
                 }
@@ -556,27 +524,22 @@ export default function GraphRAGPage() {
                     (typeof rp === 'object' && rp?.stage) ||
                     'Reasoning over the controversy map';
                   if (!delta) break;
-                  setStreamStatus('reasoning over the controversy map…');
-                  if (synthesisReasoningStepIdRef.current === null) {
-                    agentStepCounterRef.current += 1;
-                    const id = `step-${agentStepCounterRef.current}`;
-                    synthesisReasoningStepIdRef.current = id;
-                    setAgentSteps((prev) => [...prev, {
-                      id,
+                  patch({ streamStatus: 'reasoning over the controversy map…' });
+                  if (runtime.synthesisStepId === null) {
+                    runtime.synthesisStepId = addStep({
                       type: 'synthesis_reasoning',
                       reasoning: delta,
                       stage,
-                      timestamp: Date.now(),
-                    }]);
+                    });
                   } else {
-                    const id = synthesisReasoningStepIdRef.current;
-                    setAgentSteps((prev) =>
-                      prev.map((s) =>
-                        s.id === id
-                          ? { ...s, reasoning: (s.reasoning ?? '') + delta, stage }
-                          : s
-                      )
-                    );
+                    dispatch({
+                      type: 'run/growStep',
+                      id: runId,
+                      stepId: runtime.synthesisStepId,
+                      text: delta,
+                      separator: '',
+                      stage,
+                    });
                   }
                   break;
                 }
@@ -602,59 +565,43 @@ export default function GraphRAGPage() {
                     ? String(notePayload.stage)
                     : undefined;
 
-                  agentStepCounterRef.current += 1;
-                  setAgentSteps((prev) => [...prev, {
-                    id: `step-${agentStepCounterRef.current}`,
+                  addStep({
                     type: 'research_note',
                     noteKind,
                     summary: noteSummary,
                     detail: noteDetail,
                     stage: noteStage,
-                    timestamp: Date.now(),
-                  }]);
+                  });
 
                   const journalLine = noteDetail
                     ? `— ${noteSummary}\n  ${noteDetail}`
                     : `— ${noteSummary}`;
-                  if (researchJournalStepIdRef.current === null) {
-                    agentStepCounterRef.current += 1;
-                    const journalId = `step-${agentStepCounterRef.current}`;
-                    researchJournalStepIdRef.current = journalId;
-                    setAgentSteps((prev) => [...prev, {
-                      id: journalId,
+                  if (runtime.journalStepId === null) {
+                    runtime.journalStepId = addStep({
                       type: 'research_journal',
                       reasoning: journalLine,
-                      timestamp: Date.now(),
-                    }]);
+                    });
                   } else {
-                    const journalId = researchJournalStepIdRef.current;
-                    setAgentSteps((prev) =>
-                      prev.map((s) =>
-                        s.id === journalId
-                          ? { ...s, reasoning: `${s.reasoning ?? ''}\n\n${journalLine}` }
-                          : s
-                      )
-                    );
+                    dispatch({
+                      type: 'run/growStep',
+                      id: runId,
+                      stepId: runtime.journalStepId,
+                      text: journalLine,
+                      separator: '\n\n',
+                    });
                   }
                   break;
                 }
 
-                case 'tokens_used_rollup': {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  const p = (data.data ?? data) as any;
-                  setStreamCost({
-                    total_tokens: Number(p.total_tokens ?? 0),
-                    total_cost_usd: Number(p.total_cost_usd ?? 0),
-                  });
-                  break;
-                }
-
+                case 'tokens_used_rollup':
                 case 'cost_summary': {
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const p = (data.data ?? data) as any;
-                  setStreamCost({
-                    total_tokens: Number(p.total_tokens ?? 0),
-                    total_cost_usd: Number(p.total_cost_usd ?? 0),
+                  patch({
+                    cost: {
+                      total_tokens: Number(p.total_tokens ?? 0),
+                      total_cost_usd: Number(p.total_cost_usd ?? 0),
+                    },
                   });
                   break;
                 }
@@ -662,16 +609,18 @@ export default function GraphRAGPage() {
                 case 'cache_hit': {
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const p = (data.data ?? data) as any;
-                  setCacheInfo({
-                    cacheKeyShort: String(p.cache_key_short ?? ''),
-                    originalTraceId:
-                      p.original_trace_id != null && p.original_trace_id !== ''
-                        ? String(p.original_trace_id)
-                        : null,
-                    originalCostUsd: Number(p.original_cost_usd ?? 0),
-                    originalTokens: Number(p.original_tokens ?? 0),
-                    cachedAt: String(p.cached_at ?? ''),
-                    hitCount: Number(p.hit_count ?? 0),
+                  patch({
+                    cacheInfo: {
+                      cacheKeyShort: String(p.cache_key_short ?? ''),
+                      originalTraceId:
+                        p.original_trace_id != null && p.original_trace_id !== ''
+                          ? String(p.original_trace_id)
+                          : null,
+                      originalCostUsd: Number(p.original_cost_usd ?? 0),
+                      originalTokens: Number(p.original_tokens ?? 0),
+                      cachedAt: String(p.cached_at ?? ''),
+                      hitCount: Number(p.hit_count ?? 0),
+                    },
                   });
                   break;
                 }
@@ -696,47 +645,38 @@ export default function GraphRAGPage() {
                 case 'agent_thinking': {
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const thinkPayload = data.data as any;
-                  agentStepCounterRef.current += 1;
-                  setAgentSteps((prev) => [...prev, {
-                    id: `step-${agentStepCounterRef.current}`,
+                  addStep({
                     type: 'thinking',
                     thinking: thinkPayload?.thinking || '',
                     summary: thinkPayload?.summary || '',
                     remaining: thinkPayload?.remaining,
-                    timestamp: Date.now(),
-                  }]);
+                  });
                   break;
                 }
 
                 case 'tool_start': {
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const startPayload = data.data as any;
-                  agentStepCounterRef.current += 1;
-                  setAgentSteps((prev) => [...prev, {
-                    id: `step-${agentStepCounterRef.current}`,
+                  addStep({
                     type: 'tool_start',
                     tool: startPayload?.tool,
                     args: startPayload?.args,
                     reason: startPayload?.reason,
-                    timestamp: Date.now(),
-                  }]);
+                  });
                   break;
                 }
 
                 case 'tool_result': {
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const resultPayload = data.data as any;
-                  agentStepCounterRef.current += 1;
-                  setAgentSteps((prev) => [...prev, {
-                    id: `step-${agentStepCounterRef.current}`,
+                  addStep({
                     type: 'tool_result',
                     tool: resultPayload?.tool,
                     summary: resultPayload?.summary,
                     durationMs: resultPayload?.duration_ms,
                     nodeCount: resultPayload?.node_count,
                     passageCount: resultPayload?.passage_count,
-                    timestamp: Date.now(),
-                  }]);
+                  });
                   streamedNodeCount += Number(resultPayload?.node_count ?? 0);
                   streamedPassageCount += Number(resultPayload?.passage_count ?? 0);
                   break;
@@ -745,7 +685,7 @@ export default function GraphRAGPage() {
                 case 'error':
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   streamError = (data as any).data?.message || data.message || 'Stream error';
-                  setError(streamError);
+                  patch({ error: streamError });
                   break;
               }
             } catch (err) {
@@ -762,6 +702,8 @@ export default function GraphRAGPage() {
         await reader.cancel().catch(() => {});
         reader.releaseLock();
       }
+
+      if (streamError) outcome = 'error';
 
       if (finalResponse) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -869,12 +811,27 @@ export default function GraphRAGPage() {
         };
         // Replace ALL assistant messages with the final enriched one
         // (streaming may have created one or more partial assistant messages)
-        setMessages((prev) => [
-          ...prev.filter(m => m.role !== 'assistant'),
-          assistantMessage,
-        ]);
-        setRightPanelResponse(finalResponse);
-        setAllResponses((prev) => [...prev, finalResponse]);
+        dispatch({ type: 'run/replaceAssistant', id: runId, message: assistantMessage });
+        patch({
+          response: finalResponse,
+          ...(finalResponse.reasoning_trace
+            ? { reasoningTrace: finalResponse.reasoning_trace as ReasoningTraceStep[] }
+            : {}),
+          ...(finalResponse.metrics
+            ? {
+                metrics: {
+                  modelLabel: finalResponse.metrics.model_label ?? effectiveModel,
+                  retrievalMode: finalResponse.metrics.retrieval_mode_used ?? effectiveMode,
+                  estimatedCost: finalResponse.metrics.estimated_cost_usd ?? null,
+                  answerLengthChars:
+                    finalResponse.metrics.answer_length_chars ?? assistantMessage.content.length,
+                  modelContext:
+                    modelContextMapRef.current[finalResponse.metrics.model_key ?? effectiveModel]
+                    ?? 1_000_000,
+                },
+              }
+            : {}),
+        });
         // Keep the right panel on the reasoning timeline after completion —
         // the timeline auto-collapses phases and grows a Sources/KG/Cost
         // footer. The user can drill into the graph view via the footer.
@@ -886,7 +843,7 @@ export default function GraphRAGPage() {
           sessionStorage.setItem(
             SESSION_KEY_MESSAGES,
             JSON.stringify([
-              ...messages.filter((m) => m.role !== 'assistant'),
+              { role: 'user', content: queryText, timestamp: new Date() },
               assistantMessage,
             ]),
           );
@@ -897,38 +854,12 @@ export default function GraphRAGPage() {
         } catch {
           // Quota exceeded or storage disabled — degrade silently.
         }
-
-        // Update token budget display
-        if (finalResponse.metrics) {
-          const m = finalResponse.metrics;
-          setLastMetrics({
-            modelLabel: m.model_label ?? effectiveModel,
-            retrievalMode: m.retrieval_mode_used ?? effectiveMode,
-            estimatedCost: m.estimated_cost_usd ?? null,
-            answerLengthChars: m.answer_length_chars ?? assistantMessage.content.length,
-            modelContext: modelContextMap[m.model_key ?? effectiveModel] ?? 1_000_000,
-          });
-        }
-
-        // Store tab-specific data
-        if (tabId) {
-          setTabMessages((prev) => ({
-            ...prev,
-            [tabId]: [...(prev[tabId] ?? []).filter(m => m.role === 'user'), assistantMessage],
-          }));
-          setTabResponses((prev) => ({ ...prev, [tabId]: finalResponse }));
-          if (finalResponse.reasoning_trace) {
-            setReasoningTraces((prev) => ({
-              ...prev,
-              [tabId]: finalResponse.reasoning_trace as ReasoningTraceStep[],
-            }));
-          }
-        }
       } else {
         // The agent loop finished without a `complete` event (synthesis cut
         // mid-stream, CF tunnel idle-timeout, etc.). Render a clean error
         // bubble instead of dumping raw chunks, and keep the reasoning
         // timeline visible so the user can see how far the agent got.
+        outcome = 'error';
         const partialAnswer = fullAnswer.trim();
         const degradedMessage: GraphRAGChatMessage = {
           role: 'assistant',
@@ -941,7 +872,7 @@ export default function GraphRAGPage() {
                 }),
           timestamp: new Date(),
         };
-        setMessages((prev) => [...prev, degradedMessage]);
+        dispatch({ type: 'run/appendMessage', id: runId, message: degradedMessage });
 
         // Bind the right-panel header to what the run actually produced,
         // instead of leaving it on the empty pre-query placeholder.
@@ -962,105 +893,260 @@ export default function GraphRAGPage() {
           degraded: true,
           success: false,
         };
-        setRightPanelResponse(degradedResponse);
-        if (tabId) {
-          setTabResponses((prev) => ({ ...prev, [tabId]: degradedResponse }));
-        }
+        patch({ response: degradedResponse });
         // Stay on the reasoning timeline so the user retains context.
       }
     } catch (err: unknown) {
       console.error('Streaming error:', err);
-      if (userStoppedRef.current) {
+      if (runtime.userStopped) {
         // Deliberate stop — not an error worth surfacing.
-      } else if (connectionLost) {
-        setError(t('graphRagUi.stream.connectionLost'));
+        outcome = 'stopped';
+      } else if (runtime.connectionLost) {
+        outcome = 'error';
+        patch({ error: t('graphRagUi.stream.connectionLost') });
       } else if (err instanceof Error && err.name === 'AbortError') {
-        setError(t('errors.networkErrorDesc'));
+        outcome = 'error';
+        patch({ error: t('errors.networkErrorDesc'), rightPanelState: 'idle' });
       } else {
-        setError(err instanceof Error ? err.message : 'Streaming failed');
-      }
-      if (!connectionLost) {
-        setRightPanelState('idle');
+        outcome = 'error';
+        patch({
+          error: err instanceof Error ? err.message : 'Streaming failed',
+          rightPanelState: 'idle',
+        });
       }
     } finally {
       // Single teardown for every exit path — normal completion, degraded
-      // stream, SSE `error` frame, idle watchdog abort, user stop, throw.
-      if (headerTimeoutId !== null) clearTimeout(headerTimeoutId);
-      clearIdleWatchdog();
-      setStreaming(false);
-      setAgentActive(false);
-      setStreamStatus('');
-      setStreamEnded(true);
-      if (abortControllerRef.current === abortController) {
-        abortControllerRef.current = null;
+      // stream, SSE `error` frame, idle watchdog abort, user stop, throw,
+      // 429 rejection (whose run no longer exists — the patch is a no-op).
+      disposeRuntime(runtime);
+      runtimesRef.current.delete(runId);
+      if (!rejectedByServer) {
+        patch({
+          status: runtime.userStopped ? 'stopped' : outcome,
+          agentActive: false,
+          streamStatus: '',
+          streamEnded: true,
+        });
       }
     }
-  };
+  }, [ancientOnly, t]);
 
-  const stopStreaming = () => {
-    userStoppedRef.current = true;
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-      abortControllerRef.current = null;
-    }
-    setStreaming(false);
-    setAgentActive(false);
-    setStreamStatus('');
-    setStreamEnded(true);
-  };
+  const processQuery = useCallback(async (
+    queryText: string,
+    options?: { model?: string; mode?: string; forceRefresh?: boolean },
+  ) => {
+    const text = queryText.trim();
+    if (!text) return;
 
-  const handleNodeClick = async (nodeId: string) => {
-    if (!nodeId || nodeId === 'undefined' || nodeId.startsWith('source_')) return;
-    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    if (uuidPattern.test(nodeId) || nodeId.startsWith('passage_')) return;
-    try {
-      const node = await apiClient.getNode(nodeId);
-      if (node) setSelectedNode(node);
-    } catch (err) {
-      console.error('Failed to fetch node:', err);
+    if (atCapacity()) {
+      setNotice(t('graphRagUi.runs.capReached', { max: MAX_CONCURRENT_RUNS }));
+      return;
     }
-  };
 
-  // Tab switching: restore messages + right panel for the selected tab
-  const handleTabChange = useCallback((tabId: string) => {
-    setActiveTabId(tabId);
-    const savedMessages = tabMessages[tabId];
-    if (savedMessages) {
-      setMessages(savedMessages);
+    const model = options?.model ?? DEFAULT_MODEL;
+    const mode = options?.mode ?? DEFAULT_MODE;
+    runSeqRef.current += 1;
+    const runId = `run_${Date.now()}_${runSeqRef.current}`;
+
+    const userMessage: GraphRAGChatMessage = {
+      role: 'user',
+      content: text,
+      timestamp: new Date(),
+    };
+
+    // Creating the run also makes it the active tab.
+    dispatch({
+      type: 'run/open',
+      run: createRun({
+        id: runId,
+        question: text,
+        model,
+        mode,
+        status: 'streaming',
+        agentActive: true,
+        streamStatus: 'Connecting...',
+        rightPanelState: 'reasoning',
+        messages: [userMessage],
+      }),
+    });
+    setQuery('');
+    setNotice(null);
+
+    await streamRun(runId, text, model, mode, options?.forceRefresh ?? false);
+  }, [atCapacity, streamRun, t]);
+
+  const handleSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    const text = query.trim();
+    if (!text) return;
+
+    if (atCapacity()) {
+      setNotice(t('graphRagUi.runs.capReached', { max: MAX_CONCURRENT_RUNS }));
+      return;
     }
-    const savedResponse = tabResponses[tabId] ?? null;
-    setRightPanelResponse(savedResponse);
-    setRightPanelState(savedResponse ? 'graph' : 'idle');
-    setActiveSourceIndex(null);
-  }, [tabMessages, tabResponses]);
+
+    if (!isAuthenticated) {
+      setPendingQuery(text);
+      setShowAuthModal(true);
+      return;
+    }
+
+    void processQuery(text);
+  }, [query, isAuthenticated, atCapacity, processQuery, t]);
+
+  const initialQueryProcessedRef = useRef(false);
+  useEffect(() => {
+    const state = location.state as { initialQuery?: string } | null;
+    // Accept an initial question from router state (in-app navigation) or from
+    // a `?q=` query param (deep links, schema.org SearchAction).
+    const queryParam = new URLSearchParams(location.search).get('q')?.trim();
+    const initialQuery = state?.initialQuery ?? (queryParam || undefined);
+    if (initialQuery && !initialQueryProcessedRef.current) {
+      if (isAuthenticated) {
+        initialQueryProcessedRef.current = true;
+        processQuery(initialQuery);
+        window.history.replaceState({}, document.title);
+      } else {
+        setPendingQuery(initialQuery);
+        setShowAuthModal(true);
+        window.history.replaceState({}, document.title);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state, location.search, isAuthenticated]);
+
+  const handleAuthSuccess = useCallback(() => {
+    if (pendingQuery) {
+      void processQuery(pendingQuery);
+      setPendingQuery(null);
+    }
+  }, [pendingQuery, processQuery]);
+
+  /** Stops ONE run — the active tab's, from the Stop button. */
+  const stopRun = useCallback((runId: string) => {
+    const runtime = runtimesRef.current.get(runId);
+    if (!runtime) return;
+    runtime.userStopped = true;
+    disposeRuntime(runtime);
+    runtime.abort.abort();
+    dispatch({
+      type: 'run/patch',
+      id: runId,
+      patch: { status: 'stopped', agentActive: false, streamStatus: '', streamEnded: true },
+    });
+  }, []);
+
+  const handleStop = useCallback(() => {
+    if (activeRunId) stopRun(activeRunId);
+  }, [activeRunId, stopRun]);
+
+  /** Closing a tab aborts its stream if it is still live. */
+  const handleCloseRun = useCallback((runId: string) => {
+    const runtime = runtimesRef.current.get(runId);
+    if (runtime) {
+      runtime.userStopped = true;
+      disposeRuntime(runtime);
+      runtime.abort.abort();
+      runtimesRef.current.delete(runId);
+    }
+    // Closing the last tab is an explicit "clear my workspace" — drop the
+    // navigation snapshot too, so a browser back doesn't resurrect it.
+    const { order } = runsStateRef.current;
+    if (order.length === 1 && order[0] === runId) {
+      try {
+        sessionStorage.removeItem(SESSION_KEY_MESSAGES);
+        sessionStorage.removeItem(SESSION_KEY_RESPONSE);
+      } catch {
+        // Storage disabled — nothing to clear.
+      }
+    }
+    dispatch({ type: 'run/close', id: runId });
+  }, []);
+
+  const handleRunSelect = useCallback((runId: string) => {
+    dispatch({ type: 'run/activate', id: runId });
+  }, []);
+
+  // Demo Mode — a fully-formed run, no stream.
+  const loadDemoMode = useCallback(() => {
+    const citationTexts: Record<string, { original: string; originalLanguage: string; translation: string }> = {};
+
+    const demoMessage: GraphRAGChatMessage = {
+      role: 'user',
+      content: mockGraphRAGResponse.query,
+      timestamp: new Date(),
+    };
+
+    const assistantMessage: GraphRAGChatMessage = {
+      role: 'assistant',
+      content: mockGraphRAGResponse.answer,
+      timestamp: new Date(),
+      citations: {
+        ancient_sources: [
+          "Cicero, On Fate 41-43",
+          "Cicero, On Fate 42-43; Aulus Gellius, Attic Nights 7.2.11",
+          "Epictetus, Discourses 1.1; SVF 2.974-975",
+        ],
+        modern_scholarship: [
+          "Bobzien, S. (1998). Determinism and Freedom in Stoic Philosophy.",
+          "Frede, M. (2011). A Free Will: Origins of the Notion in Ancient Thought.",
+        ]
+      },
+      citationTexts,
+      reasoning_path: mockGraphRAGResponse.reasoning_path,
+      graphrag_response: mockGraphRAGResponse,
+      reasoning_steps: mockReasoningSteps
+    };
+
+    runSeqRef.current += 1;
+    dispatch({
+      type: 'run/open',
+      run: createRun({
+        id: `run_demo_${runSeqRef.current}`,
+        question: mockGraphRAGResponse.query,
+        model: DEFAULT_MODEL,
+        mode: DEFAULT_MODE,
+        status: 'done',
+        streamEnded: true,
+        messages: [demoMessage, assistantMessage],
+        response: mockGraphRAGResponse,
+        rightPanelState: 'graph',
+      }),
+    });
+    setQuery('');
+  }, []);
 
   // Retry with a different model: prompt user via simple inline select
   const availableModels = Object.keys(modelContextMap).length > 0
     ? Object.keys(modelContextMap)
-    : ['kimi-k2.6', 'gemini-3.1-pro-preview', 'kimi-k2.5-thinking'];
+    : [DEFAULT_MODEL, 'gemini-3.1-pro-preview', 'kimi-k2.5-thinking'];
 
   const handleRetry = useCallback(() => {
-    if (!initialQuestion) return;
+    if (!activeRun?.question) return;
     setShowRetryDropdown((p) => !p);
-  }, [initialQuestion]);
+  }, [activeRun?.question]);
 
   const handleRetryWithModel = useCallback((model: string) => {
     setShowRetryDropdown(false);
-    processQuery(initialQuestion, model, selectedMode);
-  }, [initialQuestion, selectedMode, processQuery]);
+    if (!activeRun?.question) return;
+    void processQuery(activeRun.question, { model, mode: DEFAULT_MODE });
+  }, [activeRun?.question, processQuery]);
 
-  // Force a fresh (non-cached) run of the last user question. Re-uses the
-  // same processQuery code path as a normal submission; ``setForceRefresh``
-  // primes the next handleStreamingQuery call to append force_refresh=true.
+  // Force a fresh (non-cached) run of the active question. Same code path as a
+  // normal submission — it simply opens another run with force_refresh=true.
   const handleRegenerate = useCallback(() => {
-    if (!initialQuestion || streaming) return;
-    setForceRefresh(true);
-    processQuery(initialQuestion);
-  }, [initialQuestion, streaming, processQuery]);
+    if (!activeRun?.question) return;
+    void processQuery(activeRun.question, { forceRefresh: true });
+  }, [activeRun?.question, processQuery]);
 
   const advancedProps = {
     ancientOnly, setAncientOnly,
   };
+
+  const activeStreaming = activeRun?.status === 'streaming';
+  const activeMessages = activeRun?.messages ?? [];
+  const activeReasoningTrace = activeRun?.reasoningTrace ?? [];
+  const rightPanelState = activeRun?.rightPanelState ?? 'idle';
 
   return (
     <div className="min-h-screen w-full bg-transparent">
@@ -1068,13 +1154,11 @@ export default function GraphRAGPage() {
         <div className="relative z-10 min-h-screen">
 
           {/* WELCOME STATE */}
-          {messages.length === 0 && !streaming && (
+          {orderedRuns.length === 0 && (
             <WelcomeHero
               query={query}
               setQuery={setQuery}
-              loading={loading}
-              streaming={streaming}
-              error={error}
+              notice={notice}
               inputRef={inputRef}
               onSubmit={handleSubmit}
               onDemo={loadDemoMode}
@@ -1083,7 +1167,7 @@ export default function GraphRAGPage() {
           )}
 
           {/* TWO-COLUMN LAYOUT */}
-          {(messages.length > 0 || streaming) && (
+          {orderedRuns.length > 0 && (
             <div
               className="flex bg-parchment-50 relative"
               style={{
@@ -1097,26 +1181,30 @@ export default function GraphRAGPage() {
               }}
             >
               <ChatPanel
-                messages={messages}
+                messages={activeMessages}
                 query={query}
                 setQuery={setQuery}
-                loading={loading}
-                streaming={streaming}
-                error={error}
-                setError={setError}
+                streaming={Boolean(activeStreaming)}
+                canSubmit={canSubmit}
+                maxConcurrentRuns={MAX_CONCURRENT_RUNS}
+                error={activeRun?.error ?? null}
+                onDismissError={() => patchActiveRun({ error: null })}
+                notice={notice}
+                onDismissNotice={() => setNotice(null)}
                 inputRef={inputRef}
                 onSubmit={handleSubmit}
-                onStop={stopStreaming}
+                onStop={handleStop}
                 onNodeClick={handleNodeClick}
                 onCitationClick={handleCitationClick}
                 onPassageCitationClick={handlePassageCitationClick}
                 onNodeCitationClick={handleNodeCitationClick}
-                responseTabs={responseTabs}
-                activeTabId={activeTabId}
-                onTabChange={handleTabChange}
+                runs={runTabs}
+                activeRunId={activeRunId}
+                onRunSelect={handleRunSelect}
+                onRunClose={handleCloseRun}
                 onRetry={handleRetry}
-                lastMetrics={lastMetrics}
-                cacheInfo={cacheInfo}
+                lastMetrics={activeRun?.metrics ?? null}
+                cacheInfo={activeRun?.cacheInfo ?? null}
                 onRegenerate={handleRegenerate}
               />
 
@@ -1124,43 +1212,43 @@ export default function GraphRAGPage() {
               <div className="hidden lg:flex flex-col w-[40%] h-full bg-parchment-50 border-l border-amber-200/40">
                 <div className="flex-1 min-h-0 overflow-hidden p-3 xl:p-4 flex flex-col">
                   {/* Main graph panel */}
-                  <div className={`${showReasoningTrace && (reasoningTraces[activeTabId]?.length ?? 0) > 0 ? 'h-[60%]' : 'flex-1'} min-h-0`}>
+                  <div className={`${showReasoningTrace && activeReasoningTrace.length > 0 ? 'h-[60%]' : 'flex-1'} min-h-0`}>
                     <RightPanel
                       state={rightPanelState}
-                      response={rightPanelResponse}
+                      response={activeRun?.response ?? null}
                       allResponses={allResponses}
-                      activeSourceIndex={activeSourceIndex}
-                      passageContext={passageContext}
-                      agentSteps={agentSteps}
-                      agentActive={agentActive}
-                      isStreaming={streaming}
-                      streamEnded={streamEnded}
-                      cost={streamCost}
+                      activeSourceIndex={activeRun?.activeSourceIndex ?? null}
+                      passageContext={activeRun?.passageContext ?? null}
+                      agentSteps={activeRun?.agentSteps ?? []}
+                      agentActive={Boolean(activeRun?.agentActive)}
+                      isStreaming={Boolean(activeStreaming)}
+                      streamEnded={Boolean(activeRun?.streamEnded)}
+                      cost={activeRun?.cost ?? null}
                       onNodeClick={handleNodeClick}
                       onSourceSelect={handleSourceSelect}
-                      onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
+                      onCloseDetail={handleCloseDetail}
                       onLoadMorePassages={handleLoadMorePassages}
                       onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
-                      onOpenGraphView={() => setRightPanelState('graph')}
+                      onOpenGraphView={() => patchActiveRun({ rightPanelState: 'graph' })}
                       className="h-full"
                     />
                   </div>
 
                   {/* Reasoning Trace toggle + panel */}
-                  {(reasoningTraces[activeTabId]?.length ?? 0) > 0 && (
+                  {activeReasoningTrace.length > 0 && (
                     <div className="shrink-0 mt-2">
                       <button
                         onClick={() => setShowReasoningTrace(!showReasoningTrace)}
                         className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-stone-500 hover:text-stone-700 transition-colors w-full border-t border-amber-200/40 pt-2"
                       >
                         <span className="inline-block w-2 h-2 rounded-full bg-amber-400" />
-                        {showReasoningTrace ? 'Hide' : 'Show'} FSM Reasoning Trace ({reasoningTraces[activeTabId]?.length ?? 0} steps)
+                        {showReasoningTrace ? 'Hide' : 'Show'} FSM Reasoning Trace ({activeReasoningTrace.length} steps)
                       </button>
                     </div>
                   )}
-                  {showReasoningTrace && (reasoningTraces[activeTabId]?.length ?? 0) > 0 && (
+                  {showReasoningTrace && activeReasoningTrace.length > 0 && (
                     <div className="h-[38%] min-h-[180px] overflow-y-auto border-t border-amber-200/40 mt-1 rounded-lg bg-white/60">
-                      <ReasoningPanel steps={reasoningTraces[activeTabId] ?? []} />
+                      <ReasoningPanel steps={activeReasoningTrace} />
                     </div>
                   )}
                 </div>
@@ -1169,18 +1257,18 @@ export default function GraphRAGPage() {
               {/* MOBILE floating sheet */}
               <MobileGraphSheet
                 rightPanelState={rightPanelState}
-                response={rightPanelResponse}
+                response={activeRun?.response ?? null}
                 allResponses={allResponses}
-                activeSourceIndex={activeSourceIndex}
-                passageContext={passageContext}
-                agentSteps={agentSteps}
-                agentActive={agentActive}
-                isStreaming={streaming}
-                streamEnded={streamEnded}
-                cost={streamCost}
+                activeSourceIndex={activeRun?.activeSourceIndex ?? null}
+                passageContext={activeRun?.passageContext ?? null}
+                agentSteps={activeRun?.agentSteps ?? []}
+                agentActive={Boolean(activeRun?.agentActive)}
+                isStreaming={Boolean(activeStreaming)}
+                streamEnded={Boolean(activeRun?.streamEnded)}
+                cost={activeRun?.cost ?? null}
                 onNodeClick={handleNodeClick}
                 onSourceSelect={handleSourceSelect}
-                onCloseDetail={() => { setRightPanelState('graph'); setPassageContext(null); setPassageWindow(5); }}
+                onCloseDetail={handleCloseDetail}
                 onLoadMorePassages={handleLoadMorePassages}
                 onHighlightRef={(fn) => { highlightNodeRef.current = fn; }}
               />
@@ -1196,7 +1284,7 @@ export default function GraphRAGPage() {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-3">
-                      Retry with model
+                      {t('graphRagUi.runs.retryTooltip')}
                     </p>
                     <div className="space-y-1">
                       {availableModels.map((model) => (

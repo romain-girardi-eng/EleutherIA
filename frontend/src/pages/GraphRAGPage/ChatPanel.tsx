@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { RotateCw } from 'lucide-react';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
+import RunTabs from './RunTabs';
+import type { RunTabItem } from './RunTabs';
 import { TerminalLoader } from '../../components/ui/terminal-loader';
-import { ResponseTabs } from '@/components/ResponseTabs';
-import type { ResponseTab } from '@/components/ResponseTabs';
 import { TokenBudget } from '@/components/TokenBudget';
 import type { GraphRAGChatMessage } from '../../types';
 import type { CacheBadgeInfo } from '../../components/research/CostCounter';
@@ -23,10 +23,16 @@ interface ChatPanelProps {
   messages: GraphRAGChatMessage[];
   query: string;
   setQuery: (q: string) => void;
-  loading: boolean;
+  /** True while the ACTIVE run streams — other runs may stream in background. */
   streaming: boolean;
+  /** False once MAX_CONCURRENT_RUNS streams are already in flight. */
+  canSubmit: boolean;
+  maxConcurrentRuns: number;
   error: string | null;
-  setError: (e: string | null) => void;
+  onDismissError: () => void;
+  /** Page-level, run-independent message (cap reached, server busy). */
+  notice?: string | null;
+  onDismissNotice?: () => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
   onSubmit: (e: React.FormEvent) => void;
   onStop: () => void;
@@ -35,14 +41,15 @@ interface ChatPanelProps {
   onPassageCitationClick?: (passageId: string) => void;
   /** Called when a [P_<kg_node_id>: ...] inline scholar/argument badge is clicked. */
   onNodeCitationClick?: (nodeId: string) => void;
-  responseTabs: ResponseTab[];
-  activeTabId: string;
-  onTabChange: (tabId: string) => void;
+  runs: RunTabItem[];
+  activeRunId: string | null;
+  onRunSelect: (runId: string) => void;
+  onRunClose: (runId: string) => void;
   onRetry: () => void;
   lastMetrics?: LastMetrics | null;
   /** When non-null, the current assistant answer was served from cache. */
   cacheInfo?: CacheBadgeInfo | null;
-  /** Force a fresh (non-cached) re-run of the last user question. */
+  /** Force a fresh (non-cached) re-run of the active question. */
   onRegenerate?: () => void;
 }
 
@@ -50,10 +57,13 @@ export default function ChatPanel({
   messages,
   query,
   setQuery,
-  loading,
   streaming,
+  canSubmit,
+  maxConcurrentRuns,
   error,
-  setError,
+  onDismissError,
+  notice = null,
+  onDismissNotice,
   inputRef,
   onSubmit,
   onStop,
@@ -61,9 +71,10 @@ export default function ChatPanel({
   onCitationClick,
   onPassageCitationClick,
   onNodeCitationClick,
-  responseTabs,
-  activeTabId,
-  onTabChange,
+  runs,
+  activeRunId,
+  onRunSelect,
+  onRunClose,
   onRetry,
   lastMetrics,
   cacheInfo = null,
@@ -92,7 +103,7 @@ export default function ChatPanel({
               <button
                 type="button"
                 onClick={onRegenerate}
-                disabled={streaming || loading}
+                disabled={!canSubmit}
                 aria-label={t('graphRagUi.regenerate.button')}
                 title={t('graphRagUi.regenerate.tooltip')}
                 className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-white/80 px-2 py-1 text-[11px] font-medium text-amber-800 hover:bg-amber-50 hover:border-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -115,11 +126,12 @@ export default function ChatPanel({
         </div>
       </div>
 
-      {/* Response tabs (only visible with 2+ tabs) */}
-      <ResponseTabs
-        tabs={responseTabs}
-        activeTabId={activeTabId}
-        onTabChange={onTabChange}
+      {/* One chip per parallel run (hidden while a single run exists) */}
+      <RunTabs
+        runs={runs}
+        activeRunId={activeRunId}
+        onSelect={onRunSelect}
+        onClose={onRunClose}
         onRetry={onRetry}
       />
 
@@ -156,7 +168,7 @@ export default function ChatPanel({
           </motion.div>
         )}
 
-        {error && !loading && !streaming && (
+        {error && !streaming && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -165,7 +177,7 @@ export default function ChatPanel({
             <div className="font-medium mb-1">{t('graphRagUi.queryFailed')}</div>
             {error}
             <button
-              onClick={() => setError(null)}
+              onClick={onDismissError}
               className="mt-2 text-red-600 hover:text-red-800 underline text-xs block mx-auto"
             >
               {t('graphRagUi.dismiss')}
@@ -176,12 +188,33 @@ export default function ChatPanel({
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Run-independent notice (server busy, cap reached) */}
+      {notice && (
+        <div
+          role="status"
+          data-testid="run-notice"
+          className="shrink-0 mx-4 xl:mx-10 2xl:mx-16 mb-2 flex items-center justify-between gap-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-900"
+        >
+          <span>{notice}</span>
+          {onDismissNotice && (
+            <button
+              type="button"
+              onClick={onDismissNotice}
+              className="shrink-0 text-xs text-amber-700 underline hover:text-amber-900"
+            >
+              {t('graphRagUi.dismiss')}
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Sticky input */}
       <ChatInput
         query={query}
         setQuery={setQuery}
-        loading={loading}
         streaming={streaming}
+        canSubmit={canSubmit}
+        maxConcurrentRuns={maxConcurrentRuns}
         inputRef={inputRef}
         onSubmit={onSubmit}
         onStop={onStop}
