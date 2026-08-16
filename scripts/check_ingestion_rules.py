@@ -139,6 +139,10 @@ LATER_SOURCE = {
 EARLIER_SOURCE = {"influences", "teaches", "precedes"}
 CHRONO_TOLERANCE = 60
 
+# Relations that assert one scholar's stance towards another's claim. R16 makes
+# these cite their evidence.
+DIALECTICAL_RELATIONS = {"opposes", "agrees_with", "critiques"}
+
 
 def person_year(node_id: str, node: dict) -> int | None:
     md = meta(node)
@@ -482,7 +486,9 @@ def check(
             declared = str(md["year"])
             # A range such as "1952-53" or "1952/53" legitimately contains the id year.
             years = set(re.findall(r"(?:1[5-9]|20)\d\d", declared))
-            years |= {declared[:2] + x for x in re.findall(r"(?<=[-/])(\d{2})$", declared)}
+            years |= {
+                declared[:2] + x for x in re.findall(r"(?<=[-/])(\d{2})$", declared)
+            }
             if id_year not in years:
                 fail(
                     "R10_id_year_contradicts_metadata",
@@ -583,6 +589,43 @@ def check(
                     nid(n),
                     "new node has no edge: it would be invisible to every retrieval path",
                 )
+
+    # ---- R16 a dialectical edge must cite its evidence --------------------
+    # Incident: every measured error in the graph's dialectical layer came from
+    # one batch. The 2026-08-16 audit sampled the COMPLETE populations of
+    # `opposes` (14) and `agrees_with` (13) and 30 of 177 `supports`, and found
+    # clear errors at 14.3% / 23.1% / 6.7%. All of them carried
+    # `provenance: g5_deep_2026_06_15`; none carried `attested_by`. Every edge
+    # that did carry `attested_by` was correct in the sample. Re-verification
+    # against the print later added a defect the audit had missed: an
+    # `agrees_with` pointing the wrong way — Salles 2005, pp. 78-81 argues
+    # AGAINST the Bobzien thesis he was recorded as agreeing with. An
+    # unattested dialectical edge is a claim about what a scholar thinks, made
+    # by nobody.
+    for e in gated_edges:
+        if e.get("relation") not in DIALECTICAL_RELATIONS:
+            continue
+        md = e.get("metadata") or {}
+        if isinstance(md, str):
+            try:
+                md = json.loads(md)
+            except json.JSONDecodeError:
+                md = {}
+        if not isinstance(md, dict):
+            md = {}
+        attested = md.get("attested_by")
+        if attested and (not isinstance(attested, (str, list)) or not attested):
+            attested = None
+        if attested:
+            continue
+        fail(
+            "R16_dialectic_unattested",
+            BLOCK if new_edges is not None else WARN,
+            e.get("edge_id", "?"),
+            f"{e.get('source')} -[{e.get('relation')}]-> {e.get('target')} carries no "
+            "metadata.attested_by: cite the page or locus that shows the relation holds, "
+            "or do not assert it",
+        )
 
     # ---- R15 id prefix must match type -----------------------------------
     PREFIX = {

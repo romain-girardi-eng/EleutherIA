@@ -1,0 +1,136 @@
+# Dialectical layer and editorial syntheses (wave 6) — applied 2026-08-17
+
+nodes 20113 -> 20114, edges 54149 -> 54102, citations 19917 -> 19917
+
+- [g5_keep_attested] d2b269d5-e3ed-48ff-8851-cc767c4d69ae Inwood (Stoic action theory) -> Bobzien (no free-will problem in the ancients)
+- [g5_keep_attested] ebc3a02a-e31e-4d53-a328-6bff0f1b6985 Inwood (Stoic action theory) -critiques-> concept: two-sidedness of τὸ ἐφ' ἡμῖν
+- [g5_retype] c6393385-0c3b-4fc7-85e6-95fc4c84b1d9 Salles (Chrysippus' Frankfurt-style argument) -> Bobzien (no free-will problem): -> opposes
+- [g5_retype] e9a05566-97e9-40fc-9bb7-3324953da859 Brennan (Stoic emotions and fate) -> Bobzien (no free-will problem): -> engages_with
+- [g5_flag_unverified] 9fba7de0-3c0e-4a63-b563-aa94572fe7b1 Brennan (Stoic emotions and fate) -critiques-> Bobzien on Origen and the Idle Argument
+- [g5_keep_attested] cd75c8b6-70e9-4f37-80ec-29c46011ff88 Karamanolis (early Christian philosophical engagement) -> Bobzien (no free-will problem)
+- [g5_keep_attested] eecd644f-a8eb-4169-b0a4-812f6fe40625 Karamanolis -> Frede (will originates with Epictetus)
+- [g5_keep_attested] c51a0f90-38a6-4ad3-bea2-cea52f87c34b Karamanolis -critiques-> Dihle (will as Christian innovation)
+- [g5_flag_unverified] d319ccd0-b346-4fb1-9342-6e5fdc654782 Sorabji (four strands of the will) -critiques-> Frede (will originates with Epictetus)
+- [g5_keep_attested] a39ea0a6-ac41-49bb-9970-ad0354c8485b Kahn (will emerges with Seneca/Epictetus) -> Frede (will originates with Epictetus)
+- [g5_keep_attested] b01bc633-7535-4545-b758-388541d423bb Irwin (Greeks may have had a concept of the will) -opposes-> Frede
+- [g5_keep_attested] df2df6bf-9e0a-41e8-90fc-17d021a35ee1 Irwin -opposes-> Dihle (will as Christian innovation)
+- [g5_retype] ac0529aa-13b2-4088-bf63-aad3c136b64f Frede -critiques-> Bobzien (Alexander as first evidence for the free-will problem): -> discusses
+- [g5_retype] c5e3815d-9279-444c-9a95-eb74fb277849 Sharples 2008 (accident thesis) -agrees_with-> Sharples 2008 (limits of historical explanation): -> extends
+- [g5_delete] 905f4fb6-c2aa-45b3-832b-0cd764966b8c Inwood (Stoic action theory) -critiques-> concept: ἐλεύθερον καὶ αὐτεξούσιον: The target is the 2nd-c. Patristic formula 'free and self-determining', first attested in Theophilus, *Ad Autolycum* II.27. Inwood
+- [g5_keep_attested] 8c34b2dc-28e1-4a37-a70d-55aabdf783aa Frede (will originates with Epictetus) -opposes-> Bobzien (no free-will problem)
+- [g5_keep_attested] 4bd99485-5a3c-46c0-8e64-f9cc81788a4c Blackson (E vs D: the object of choice) -opposes-> Frede
+- [g5_keep_attested] 526b2160-b08b-45e8-94d8-be8bd289fd8a Frede -opposes-> Dihle
+- [g5_keep_attested] 9a26acd5-0647-4245-8589-4e2b87ba10a1 Kahn (will emerges with Seneca/Epictetus) -opposes-> Dihle
+- [g5_keep_attested] 0a7b02a6-13f2-4b57-bdfc-05c62f5b801e Sorabji (Aristotle on causation and necessity) -opposes-> Bobzien (origin of the free-will problem)
+- [g5_delete] af6d44fa-b3c9-43d7-b0cc-e7c8799c166a Amand de Mendieta (Carneades' anti-fatalist argumentation) -opposes-> Ramelli (Origen knew Alexander): The two theses concern different transmission channels and can both be true. Worse for the edge, Ramelli does not oppose Amand — s
+- [g5_delete] 0494ed6b-ce74-478e-9e9a-9d901edff796 Dihle -agrees_with-> Kahn: Dihle's Sather Lectures were delivered in 1974 and published in 1982; Kahn's essay appeared in 1988. Dihle cannot be agreeing with
+- [g5_keep_attested] e9c1ce27-7cd6-4244-abaa-6c05a83567b2 Kahn -agrees_with-> Dihle
+- [g5_keep_attested] 727f9c54-d5e1-488a-87de-720b4cb25d67 Kahn -agrees_with-> Frede
+- [g5_delete] 24874839-3429-42ed-a6e1-9961f437c0aa CAFMA V (futility of piety and prayer) -supports-> Levels of Providence (Proclean): Wrong on two counts. Chronologically: the Carneadean moral argument against fatalism belongs to the 2nd c. BCE (Amand 1945 ch. III
+- [fix_node_claim] scholarly_position_sorabji_aristotle_indeterminist: description corrected
+- [lot2_classify] passage_arist_en_3_1 -> editorial_synthesis of passage_arist_ne_3_1
+- [lot2_classify] passage_arist_en_3_10 -> editorial_synthesis of passage_arist_ne_3_10
+- [lot2_classify] passage_arist_en_3_11 -> editorial_synthesis of passage_arist_ne_3_11
+- [lot2_classify] passage_arist_en_3_12 -> editorial_synthesis of passage_arist_ne_3_12
+- [lot2_classify] passage_arist_en_3_2 -> editorial_synthesis of passage_arist_ne_3_2
+- [lot2_classify] passage_arist_en_3_3 -> editorial_synthesis of passage_arist_ne_3_3
+- [lot2_classify] passage_arist_en_3_4 -> editorial_synthesis of passage_arist_ne_3_4
+- [lot2_classify] passage_arist_en_3_5 -> editorial_synthesis of passage_arist_ne_3_5
+- [lot2_classify] passage_arist_en_3_6 -> editorial_synthesis of passage_arist_ne_3_6
+- [lot2_classify] passage_arist_en_3_7 -> editorial_synthesis of passage_arist_ne_3_7
+- [lot2_classify] passage_arist_en_3_8 -> editorial_synthesis of passage_arist_ne_3_8
+- [lot2_classify] passage_arist_en_3_9 -> editorial_synthesis of passage_arist_ne_3_9
+- [lot2_classify] passage_aug_lib_arb_1_12_25 -> editorial_synthesis of passage_aug_dla_1_12_25
+- [lot2_classify] passage_aug_lib_arb_1_12_26 -> editorial_synthesis of passage_aug_dla_1_12_26
+- [lot2_classify] passage_aug_lib_arb_1_13_29 -> editorial_synthesis of passage_aug_dla_1_13_29
+- [lot2_classify] passage_aug_lib_arb_1_14_30 -> editorial_synthesis of passage_aug_dla_1_14_30
+- [lot2_classify] passage_aug_lib_arb_1_1_2 -> editorial_synthesis of passage_aug_dla_1_1_2
+- [lot2_classify] passage_aug_lib_arb_1_1_3 -> editorial_synthesis of passage_aug_dla_1_1_3
+- [lot2_classify] passage_aug_lib_arb_1_2_4 -> editorial_synthesis of passage_aug_dla_1_2_4
+- [lot2_classify] passage_aug_lib_arb_1_2_5 -> editorial_synthesis of passage_aug_dla_1_2_5
+- [lot2_classify] passage_aug_lib_arb_1_4_10 -> editorial_synthesis of passage_aug_dla_1_4_10
+- [lot2_classify] passage_aug_lib_arb_1_5_11 -> editorial_synthesis of passage_aug_dla_1_5_11
+- [lot2_classify] passage_aug_lib_arb_1_7_17 -> editorial_synthesis of passage_aug_dla_1_7_17
+- [lot2_classify] passage_aug_lib_arb_1_8_18 -> editorial_synthesis of passage_aug_dla_1_8_18
+- [lot2_classify] passage_aug_lib_arb_1_9_19 -> editorial_synthesis of passage_aug_dla_1_9_19
+- [lot2_classify] passage_aug_lib_arb_2_11_31 -> editorial_synthesis of passage_aug_dla_2_11_31
+- [lot2_classify] passage_aug_lib_arb_2_13_35 -> editorial_synthesis of passage_aug_dla_2_13_35
+- [lot2_classify] passage_aug_lib_arb_2_13_36 -> editorial_synthesis of passage_aug_dla_2_13_36
+- [lot2_classify] passage_aug_lib_arb_2_19_50 -> editorial_synthesis of passage_aug_dla_2_19_50
+- [lot2_classify] passage_aug_lib_arb_2_1_1 -> editorial_synthesis of passage_aug_dla_2_1_1
+- [lot2_classify] passage_aug_lib_arb_2_2_6 -> editorial_synthesis of passage_aug_dla_2_2_6
+- [lot2_classify] passage_aug_lib_arb_2_3_7 -> editorial_synthesis of passage_aug_dla_2_3_7
+- [lot2_classify] passage_aug_lib_arb_2_3_8 -> editorial_synthesis of passage_aug_dla_2_3_8
+- [lot2_classify] passage_aug_lib_arb_2_7_15 -> editorial_synthesis of passage_aug_dla_2_7_15
+- [lot2_classify] passage_aug_lib_arb_2_7_16 -> editorial_synthesis of passage_aug_dla_2_7_16
+- [lot2_classify] passage_aug_lib_arb_2_8_23 -> editorial_synthesis of passage_aug_dla_2_8_23
+- [lot2_classify] passage_aug_lib_arb_2_8_24 -> editorial_synthesis of passage_aug_dla_2_8_24
+- [lot2_classify] passage_aug_lib_arb_3_11_32 -> editorial_synthesis of passage_aug_dla_3_11_32
+- [lot2_classify] passage_aug_lib_arb_3_11_33 -> editorial_synthesis of passage_aug_dla_3_11_33
+- [lot2_classify] passage_aug_lib_arb_3_5_12 -> editorial_synthesis of passage_aug_dla_3_5_12
+- [lot2_classify] passage_aug_lib_arb_3_5_13 -> editorial_synthesis of passage_aug_dla_3_5_13
+- [lot2_classify] passage_aug_lib_arb_3_7_20 -> editorial_synthesis of passage_aug_dla_3_7_20
+- [lot2_classify] passage_aug_lib_arb_3_7_21 -> editorial_synthesis of passage_aug_dla_3_7_21
+- [lot2_classify] passage_aug_lib_arb_3_8_22 -> editorial_synthesis of passage_aug_dla_3_8_22
+- [lot2_classify] passage_aug_lib_arb_3_9_28 -> editorial_synthesis of passage_aug_dla_3_9_28
+- [lot2_classify] passage_justin_1apol_43 -> editorial_synthesis of passage_just_apol1_43
+- [lot2_classify] passage_justin_1apol_44 -> editorial_synthesis of passage_just_apol1_44
+- [lot2_classify] passage_ma_med_11_16 -> editorial_synthesis of passage_marc_aur_11_16_1
+- [lot2_classify] passage_ma_med_4_39 -> editorial_synthesis of passage_marc_aur_4_39_1
+- [lot2_classify] passage_ma_med_5_26 -> editorial_synthesis of passage_marc_aur_5_26_1
+- [lot2_classify] passage_ma_med_5_8 -> editorial_synthesis of passage_marc_aur_5_8_1
+- [lot2_classify] passage_ma_med_6_41 -> editorial_synthesis of passage_marc_aur_6_41_1
+- [lot2_classify] passage_ma_med_7_16 -> editorial_synthesis of passage_marc_aur_7_16_1
+- [lot2_classify] passage_ma_med_8_7 -> editorial_synthesis of passage_marc_aur_8_7_1
+- [lot2_classify] passage_plotinus_enn_4_4_30 -> editorial_synthesis of passage_plotinus_iv_4_30
+- [lot2_classify] passage_plut_fat_10 -> editorial_synthesis of passage_plut_fat_10_s10
+- [lot2_classify] passage_plut_fat_13 -> editorial_synthesis of passage_plut_fat_13_s13
+- [tert_create_work] work_tertullian_de_exhortatione_castitatis: Tertullian, De exhortatione castitatis
+- [tert_reattribute] passage_tert_adv_marc_1 -> passage_tert_exhort_cast_1 (Tertullian, De exhortatione castitatis)
+- [tert_reattribute] passage_tert_adv_marc_2 -> passage_tert_exhort_cast_2 (Tertullian, De exhortatione castitatis)
+- [tert_reattribute] passage_tert_adv_marc_3 -> passage_tert_exhort_cast_3 (Tertullian, De exhortatione castitatis)
+- [tert_reattribute] passage_tert_adv_marc_4 -> passage_tert_exhort_cast_4 (Tertullian, De exhortatione castitatis)
+- [tert_reattribute] passage_tert_adv_marc_5 -> passage_tert_exhort_cast_5 (Tertullian, De exhortatione castitatis)
+- [tert_reattribute] passage_tert_adv_marc_6 -> passage_tert_exhort_cast_6 (Tertullian, De exhortatione castitatis)
+- [tert_reattribute] passage_tert_adv_marc_7 -> passage_tert_exhort_cast_7 (Tertullian, De exhortatione castitatis)
+- [tert_reattribute] passage_tert_adv_marc_8 -> passage_tert_exhort_cast_8 (Tertullian, De exhortatione castitatis)
+- [tert_reattribute] passage_tert_adv_marc_9 -> passage_tert_exhort_cast_9 (Tertullian, De exhortatione castitatis)
+- [tert_reattribute] passage_tert_adv_marc_10 -> passage_tert_exhort_cast_10 (Tertullian, De exhortatione castitatis)
+- [tert_reattribute] passage_tert_adv_marc_11 -> passage_tert_exhort_cast_11 (Tertullian, De exhortatione castitatis)
+- [tert_reattribute] passage_tert_adv_marc_12 -> passage_tert_exhort_cast_12 (Tertullian, De exhortatione castitatis)
+- [tert_reattribute] passage_tert_adv_marc_13 -> passage_tert_exhort_cast_13 (Tertullian, De exhortatione castitatis)
+- [tert_drop_part_of] work_tertullian_adv_marcionem: 0 dropped, 13 repointed to work_tertullian_de_exhortatione_castitatis
+- [tert_drop_part_of] work_tertullian_de_monogamia: 13 dropped, 0 repointed to work_tertullian_de_exhortatione_castitatis
+- [tert_reattribute] passage_tert_de_anima_1 -> passage_tert_adv_prax_1 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_2 -> passage_tert_adv_prax_2 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_3 -> passage_tert_adv_prax_3 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_4 -> passage_tert_adv_prax_4 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_5 -> passage_tert_adv_prax_5 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_6 -> passage_tert_adv_prax_6 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_7 -> passage_tert_adv_prax_7 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_8 -> passage_tert_adv_prax_8 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_9 -> passage_tert_adv_prax_9 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_10 -> passage_tert_adv_prax_10 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_11 -> passage_tert_adv_prax_11 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_12 -> passage_tert_adv_prax_12 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_13 -> passage_tert_adv_prax_13 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_14 -> passage_tert_adv_prax_14 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_15 -> passage_tert_adv_prax_15 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_16 -> passage_tert_adv_prax_16 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_17 -> passage_tert_adv_prax_17 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_18 -> passage_tert_adv_prax_18 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_19 -> passage_tert_adv_prax_19 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_20 -> passage_tert_adv_prax_20 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_21 -> passage_tert_adv_prax_21 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_22 -> passage_tert_adv_prax_22 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_23 -> passage_tert_adv_prax_23 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_24 -> passage_tert_adv_prax_24 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_25 -> passage_tert_adv_prax_25 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_26 -> passage_tert_adv_prax_26 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_27 -> passage_tert_adv_prax_27 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_28 -> passage_tert_adv_prax_28 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_29 -> passage_tert_adv_prax_29 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_30 -> passage_tert_adv_prax_30 (Tertullian, Adversus Praxean)
+- [tert_reattribute] passage_tert_de_anima_31 -> passage_tert_adv_prax_31 (Tertullian, Adversus Praxean)
+- [tert_drop_part_of] work_tertullian_de_anima: 31 dropped, 0 repointed to work_tertullian_adversus_praxean
+- [tert_rename_propagated] 44 ids renamed across nodes/edges/citations

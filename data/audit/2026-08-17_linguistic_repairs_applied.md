@@ -1,0 +1,338 @@
+# Linguistic repairs (wave 6) — applied 2026-08-17
+
+nodes 20122 -> 20113, edges 54167 -> 54149, corpus 21112 -> 21103
+
+- [repair_magna_moralia] passage_arist_mm_1_1_8: 441 -> 444 chars
+- [repair_magna_moralia_corpus] 9ab23664-258f-4900-ad28-fbd3e65b9a27: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_1_9: 277 -> 270 chars
+- [repair_magna_moralia_corpus] d625bbbb-658c-4dba-98c9-9f70246273c9: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_1_10: 339 -> 334 chars
+- [repair_magna_moralia_corpus] e5fdac35-e7fa-44c0-8ee9-706aa45342df: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_1_11: 296 -> 292 chars
+- [repair_magna_moralia_corpus] e5ad04b6-7285-4198-871d-5890ec3f9834: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_1_21: 258 -> 264 chars
+- [repair_magna_moralia_corpus] 2b8fb1be-6e56-4844-963a-7196e66dc99d: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_1_22: 212 -> 221 chars
+- [repair_magna_moralia_corpus] aa4af56c-b2ef-4b7f-b61e-8110db58018f: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_1_23: 322 -> 324 chars
+- [repair_magna_moralia_corpus] 3ac24f6d-4751-4bb9-944c-c54de9cb5bdc: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_1_24: 254 -> 255 chars
+- [repair_magna_moralia_corpus] 694f1545-4775-4181-a42c-10355daea397: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_1_25: 155 -> 153 chars
+- [repair_magna_moralia_corpus] c36aa0fb-5d78-4e5a-97d5-2ceb300b20a7: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_1_26: 690 -> 704 chars
+- [repair_magna_moralia_corpus] ed16ed93-a120-432e-8ef6-4e6b1ff69cb3: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_2_1: 411 -> 426 chars
+- [repair_magna_moralia_corpus] e2abe236-1849-492d-992c-0cbf66dc804e: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_2_2: 198 -> 197 chars
+- [repair_magna_moralia_corpus] 214738f1-48ac-4bfe-b34a-5409d3b39f8c: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_3_2: 240 -> 245 chars
+- [repair_magna_moralia_corpus] f5ff8289-167a-4ea7-93b5-0f565414389b: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_3_3: 257 -> 261 chars
+- [repair_magna_moralia_corpus] 2d27e3e1-4c08-4f91-a484-4199abaf532a: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_3_4: 193 -> 192 chars
+- [repair_magna_moralia_corpus] c538788a-53c5-4b7b-b503-325ca1a500f3: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_3_5: 243 -> 260 chars
+- [repair_magna_moralia_corpus] 22726c88-ced5-49ae-8d14-d66ac4b27f16: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_4_1: 287 -> 287 chars
+- [repair_magna_moralia_corpus] 39678df4-05c5-41e6-b536-181229f91979: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_4_2: 218 -> 222 chars
+- [repair_magna_moralia_corpus] b3a966f7-916a-4a0b-b925-29e96f8d3582: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_4_5: 440 -> 440 chars
+- [repair_magna_moralia_corpus] 90973c2d-b8a6-4521-971b-e2a864410aec: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_5_3: 444 -> 443 chars
+- [repair_magna_moralia_corpus] 1f55109a-38bb-4cfd-a7c4-51645d590651: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_5_5: 261 -> 265 chars
+- [repair_magna_moralia_corpus] 09d52d98-2164-4886-9274-097dd9f94370: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_6_2: 205 -> 203 chars
+- [repair_magna_moralia_corpus] eaa772c3-e6e6-48b1-8e2c-a5342a4c4e99: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_6_3: 357 -> 355 chars
+- [repair_magna_moralia_corpus] 29c69f7b-c1b4-4268-a137-c77d30823995: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_1_9_7: 278 -> 285 chars
+- [repair_magna_moralia_corpus] SKIPPED: passage_arist_mm_1_9_7: corpus twin already clean
+- [repair_magna_moralia] passage_arist_mm_1_28_1: 264 -> 261 chars
+- [repair_magna_moralia_corpus] c1bef3d7-a1c1-437f-8c37-f4b7a154583b: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_6_5: 364 -> 364 chars
+- [repair_magna_moralia_corpus] 4624f631-8611-47f4-ae76-84fe2264fbf5: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_10_7: 149 -> 156 chars
+- [repair_magna_moralia_corpus] 6b2b6ffe-47d8-4ae8-a693-feb71bbbbf65: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_11_1: 195 -> 223 chars
+- [repair_magna_moralia_corpus] 5f3d3682-3143-4fa4-bf96-b27af166a427: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_11_2: 443 -> 449 chars
+- [repair_magna_moralia_corpus] 2fbcb04a-10c5-4a5f-b6f5-fdb506821815: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_11_3: 301 -> 303 chars
+- [repair_magna_moralia_corpus] f6bda576-14fc-4043-9a92-764e5299e5d6: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_11_6: 302 -> 304 chars
+- [repair_magna_moralia_corpus] 0142f61c-acaa-4677-b9c3-e8c89ea89166: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_11_9: 200 -> 197 chars
+- [repair_magna_moralia_corpus] e31e3ae8-f964-4de5-b70a-7fa058b89c3d: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_11_10: 229 -> 227 chars
+- [repair_magna_moralia_corpus] bb74a2e7-9476-4680-af94-a967c57fc312: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_11_23: 221 -> 221 chars
+- [repair_magna_moralia_corpus] e394ff02-2c45-451a-bb23-93d4d39a5777: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_11_28: 439 -> 444 chars
+- [repair_magna_moralia_corpus] 63f76dae-671a-4880-ad96-615beb5ee667: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_11_29: 260 -> 258 chars
+- [repair_magna_moralia_corpus] b3c786d2-1375-4d27-9ec4-eaf1bc33e6dc: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_11_32: 270 -> 286 chars
+- [repair_magna_moralia_corpus] 94918239-7a51-4b0d-adb8-3d862eb6f86d: text_content replaced
+- [repair_magna_moralia] passage_arist_mm_2_17_2: 362 -> 357 chars
+- [repair_magna_moralia_corpus] SKIPPED: passage_arist_mm_2_17_2: corpus twin already clean
+- [flag_needs_reingestion] passage_arist_mm_2_11_5
+- [repair_tokens] passage_just_apol1_40: '(??) αρέστησαν' -> 'παρέστησαν'
+- [repair_tokens] passage_just_apol1_40: 'ἐν τρ (??) μῳ' -> 'ἐν τρόμῳ'
+- [repair_tokens] passage_plotinus_vi_9_136: 'ʽ??’αιρεῖ' -> 'διαιρεῖ'
+- [repair_tokens] passage_plotinus_vi_9_136: 'τοσἁ??’τα' -> 'τοσαῦτα'
+- [remove_theophrastus_misfiling] deleted 9 nodes and 18 edges
+- [remove_theophrastus_misfiling_corpus] deleted 9 corpus lines
+- [flag_simplicius_work] work_simplicius_in_enchiridion
+- [rewrite_cts_urn] ps_plutarch_de_fato: rewrote 57 URNs
+- [rewrite_cts_urn] methodius_sosiphanes: rewrote 97 URNs
+- [rewrite_cts_urn] methodius_under_origen: rewrote 14 URNs
+- [rewrite_cts_urn] origen_philocalia: rewrote 57 URNs
+- [reattribute_exhortatio] passage_clement_protr_1: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_10: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_11: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_12: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_13: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_14: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_15: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_16: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_17: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_18: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_19: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_2: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_20: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_21: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_22: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_23: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_24: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_25: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_26: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_27: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_28: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_29: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_3: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_30: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_31: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_32: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_33: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_34: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_35: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_36: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_37: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_38: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_39: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_4: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_40: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_41: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_42: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_43: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_44: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_45: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_46: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_47: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_48: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_49: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_5: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_50: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_51: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_6: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_7: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_8: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio] passage_clement_protr_9: Clement/Protrepticus -> Origen/Exhortatio
+- [reattribute_exhortatio_edges] re-pointed 102 edges
+- [flag_clement_protrepticus] work_clement_protrepticus
+- [flag_pre_unicode_font] passage_boeth_cons_7
+- [flag_pre_unicode_font] passage_boeth_cons_23
+- [flag_pre_unicode_font] passage_boeth_cons_53
+- [flag_pre_unicode_font] passage_boethius_cons_7
+- [flag_pre_unicode_font] passage_boethius_cons_23
+- [flag_pre_unicode_font] passage_boethius_cons_23_en
+- [flag_pre_unicode_font] passage_boethius_cons_53
+- [requalify_lat] passage_aug_gla_1_13: lat -> eng, needs_text_ingestion
+- [requalify_lat] passage_aug_gla_1_14: lat -> eng, needs_text_ingestion
+- [requalify_lat] passage_aug_gla_1_21: lat -> eng, needs_text_ingestion
+- [requalify_lat] passage_aug_gla_1_25: lat -> eng, needs_text_ingestion
+- [requalify_lat] passage_aug_lib_arb_1_11_21: lat -> eng, needs_text_ingestion
+- [requalify_lat] SKIPPED: person_seneca_4bce_65ce_a1b2c3d4: type is 'person', not a passage
+- [requalify_lat] SKIPPED: sc123_melito_de_anima_et_corpore: type is 'work', not a passage
+- [requalify_lat] SKIPPED: sc464_pamphilus_apologia_pro_origene: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_apuleius_de_platone: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_augustine_de_gratia_la: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_augustine_retractationes: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_calcidius_in_timaeum: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_cassian_conlationes_13: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_consolatio_philosophiae_boethius_524ce_f1g2h3i4: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_de_divinatione_cicero: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_de_natura_deorum_cicero: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_de_providentia_seneca_a2b3c4d5: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_gellius_na_vii_2: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_lactantius_divinarum_institutionum: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_seneca_epistulae_morales: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_tertullian_adv_marcionem: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_tertullian_de_anima: type is 'work', not a passage
+- [requalify_lat] SKIPPED: work_tertullian_de_monogamia: type is 'work', not a passage
+- [requalify_grc] SKIPPED: passage_aristide_sc470_5: contains 40 Greek characters
+- [requalify_grc] SKIPPED: passage_aristotle_en_iii_1_1110a15: contains 38 Greek characters
+- [requalify_grc] SKIPPED: passage_epict_110: contains 28 Greek characters
+- [requalify_grc] SKIPPED: passage_epict_148: contains 35 Greek characters
+- [requalify_grc] SKIPPED: passage_epict_149: contains 39 Greek characters
+- [requalify_grc] SKIPPED: passage_epict_159: contains 41 Greek characters
+- [requalify_grc] SKIPPED: passage_epict_160: contains 26 Greek characters
+- [requalify_grc] SKIPPED: passage_melito_pasch_47_49: contains 31 Greek characters
+- [requalify_grc] passage_origen_com_rm_7_16: -> lat
+- [requalify_grc] passage_origen_com_rm_7_16_sun: -> lat
+- [requalify_grc] passage_origen_pa_3_1_1: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_10: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_11: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_12: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_13: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_14: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_15: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_16: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_17: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_18: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_19: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_2: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_20: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_21: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_22: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_23: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_24: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_4: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_5: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_6: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_7: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_8: -> fra + translation link
+- [requalify_grc] passage_origen_pa_3_1_9: -> fra + translation link
+- [requalify_grc] passage_origen_philocalia_23_1: -> fra
+- [requalify_grc] passage_origen_philocalia_23_10: -> fra
+- [requalify_grc] passage_origen_philocalia_23_11: -> fra
+- [requalify_grc] passage_origen_philocalia_23_12: -> fra
+- [requalify_grc] passage_origen_philocalia_23_13: -> fra
+- [requalify_grc] passage_origen_philocalia_23_14: -> fra
+- [requalify_grc] passage_origen_philocalia_23_15: -> fra
+- [requalify_grc] passage_origen_philocalia_23_16: -> fra
+- [requalify_grc] passage_origen_philocalia_23_17: -> fra
+- [requalify_grc] passage_origen_philocalia_23_18: -> fra
+- [requalify_grc] passage_origen_philocalia_23_19: -> fra
+- [requalify_grc] passage_origen_philocalia_23_2: -> fra
+- [requalify_grc] passage_origen_philocalia_23_20: -> fra
+- [requalify_grc] passage_origen_philocalia_23_21: -> fra
+- [requalify_grc] passage_origen_philocalia_23_22: -> fra
+- [requalify_grc] passage_origen_philocalia_23_3: -> fra
+- [requalify_grc] passage_origen_philocalia_23_4: -> fra
+- [requalify_grc] passage_origen_philocalia_23_5: -> fra
+- [requalify_grc] passage_origen_philocalia_23_6: -> fra
+- [requalify_grc] passage_origen_philocalia_23_7: -> fra
+- [requalify_grc] passage_origen_philocalia_23_8: -> fra
+- [requalify_grc] passage_origen_philocalia_23_9: -> fra
+- [requalify_grc] passage_origen_philocalia_23_titulus_1: -> fra
+- [requalify_grc] passage_origen_philocalia_23_titulus_12: -> fra
+- [requalify_grc] passage_origen_philocalia_23_titulus_14: -> fra
+- [requalify_grc] passage_origen_philocalia_23_titulus_22: -> fra
+- [requalify_grc] passage_origen_philocalia_25_1: -> fra
+- [requalify_grc] passage_origen_philocalia_25_2: -> fra
+- [requalify_grc] passage_origen_philocalia_25_3: -> fra
+- [requalify_grc] passage_origen_philocalia_25_4: -> fra
+- [requalify_grc] passage_origen_philocalia_26_1: -> fra
+- [requalify_grc] passage_origen_philocalia_26_2: -> fra
+- [requalify_grc] passage_origen_philocalia_26_3: -> fra
+- [requalify_grc] passage_origen_philocalia_26_4: -> fra
+- [requalify_grc] passage_origen_philocalia_26_5: -> fra
+- [requalify_grc] passage_origen_philocalia_26_6: -> fra
+- [requalify_grc] passage_origen_philocalia_26_7: -> fra
+- [requalify_grc] passage_origen_philocalia_26_8: -> fra
+- [requalify_grc] passage_origen_philocalia_27_1: -> fra
+- [requalify_grc] passage_origen_philocalia_27_12: -> fra
+- [requalify_grc] passage_origen_philocalia_27_2: -> fra
+- [requalify_grc] passage_origen_philocalia_27_3: -> fra
+- [requalify_grc] passage_origen_philocalia_27_4: -> fra
+- [requalify_grc] passage_origen_philocalia_27_5: -> fra
+- [requalify_grc] passage_origen_philocalia_27_6: -> fra
+- [requalify_grc] passage_origen_philocalia_27_7: -> fra
+- [requalify_grc] passage_origen_philocalia_27_8: -> fra
+- [mark_apparatus_gcs] passage_meth_dla_1
+- [mark_apparatus_gcs] passage_meth_dla_10
+- [mark_apparatus_gcs] passage_meth_dla_100
+- [mark_apparatus_gcs] passage_meth_dla_101
+- [mark_apparatus_gcs] passage_meth_dla_102
+- [mark_apparatus_gcs] passage_meth_dla_103
+- [mark_apparatus_gcs] passage_meth_dla_104
+- [mark_apparatus_gcs] passage_meth_dla_105
+- [mark_apparatus_gcs] passage_meth_dla_106
+- [mark_apparatus_gcs] passage_meth_dla_107
+- [mark_apparatus_gcs] passage_meth_dla_11
+- [mark_apparatus_gcs] passage_meth_dla_12
+- [mark_apparatus_gcs] passage_meth_dla_14
+- [mark_apparatus_gcs] passage_meth_dla_15
+- [mark_apparatus_gcs] passage_meth_dla_17
+- [mark_apparatus_gcs] passage_meth_dla_19
+- [mark_apparatus_gcs] passage_meth_dla_2
+- [mark_apparatus_gcs] passage_meth_dla_20
+- [mark_apparatus_gcs] passage_meth_dla_21
+- [mark_apparatus_gcs] passage_meth_dla_22
+- [mark_apparatus_gcs] passage_meth_dla_23
+- [mark_apparatus_gcs] passage_meth_dla_24
+- [mark_apparatus_gcs] passage_meth_dla_26
+- [mark_apparatus_gcs] passage_meth_dla_27
+- [mark_apparatus_gcs] passage_meth_dla_28
+- [mark_apparatus_gcs] passage_meth_dla_29
+- [mark_apparatus_gcs] passage_meth_dla_3
+- [mark_apparatus_gcs] passage_meth_dla_30
+- [mark_apparatus_gcs] passage_meth_dla_31
+- [mark_apparatus_gcs] passage_meth_dla_32
+- [mark_apparatus_gcs] passage_meth_dla_33
+- [mark_apparatus_gcs] passage_meth_dla_34
+- [mark_apparatus_gcs] passage_meth_dla_35
+- [mark_apparatus_gcs] passage_meth_dla_36
+- [mark_apparatus_gcs] passage_meth_dla_37
+- [mark_apparatus_gcs] passage_meth_dla_38
+- [mark_apparatus_gcs] passage_meth_dla_39
+- [mark_apparatus_gcs] passage_meth_dla_40
+- [mark_apparatus_gcs] passage_meth_dla_41
+- [mark_apparatus_gcs] passage_meth_dla_42
+- [mark_apparatus_gcs] passage_meth_dla_43
+- [mark_apparatus_gcs] passage_meth_dla_44
+- [mark_apparatus_gcs] passage_meth_dla_45
+- [mark_apparatus_gcs] passage_meth_dla_49
+- [mark_apparatus_gcs] passage_meth_dla_50
+- [mark_apparatus_gcs] passage_meth_dla_51
+- [mark_apparatus_gcs] passage_meth_dla_52
+- [mark_apparatus_gcs] passage_meth_dla_55
+- [mark_apparatus_gcs] passage_meth_dla_57
+- [mark_apparatus_gcs] passage_meth_dla_58
+- [mark_apparatus_gcs] passage_meth_dla_59
+- [mark_apparatus_gcs] passage_meth_dla_6
+- [mark_apparatus_gcs] passage_meth_dla_60
+- [mark_apparatus_gcs] passage_meth_dla_61
+- [mark_apparatus_gcs] passage_meth_dla_62
+- [mark_apparatus_gcs] passage_meth_dla_65
+- [mark_apparatus_gcs] passage_meth_dla_66
+- [mark_apparatus_gcs] passage_meth_dla_67
+- [mark_apparatus_gcs] passage_meth_dla_68
+- [mark_apparatus_gcs] passage_meth_dla_69
+- [mark_apparatus_gcs] passage_meth_dla_7
+- [mark_apparatus_gcs] passage_meth_dla_73
+- [mark_apparatus_gcs] passage_meth_dla_74
+- [mark_apparatus_gcs] passage_meth_dla_75
+- [mark_apparatus_gcs] passage_meth_dla_76
+- [mark_apparatus_gcs] passage_meth_dla_77
+- [mark_apparatus_gcs] passage_meth_dla_78
+- [mark_apparatus_gcs] passage_meth_dla_8
+- [mark_apparatus_gcs] passage_meth_dla_80
+- [mark_apparatus_gcs] passage_meth_dla_81
+- [mark_apparatus_gcs] passage_meth_dla_83
+- [mark_apparatus_gcs] passage_meth_dla_84
+- [mark_apparatus_gcs] passage_meth_dla_85
+- [mark_apparatus_gcs] passage_meth_dla_86
+- [mark_apparatus_gcs] passage_meth_dla_87
+- [mark_apparatus_gcs] passage_meth_dla_88
+- [mark_apparatus_gcs] passage_meth_dla_89
+- [mark_apparatus_gcs] passage_meth_dla_9
+- [mark_apparatus_gcs] passage_meth_dla_91
+- [mark_apparatus_gcs] passage_meth_dla_94
+- [mark_apparatus_gcs] passage_meth_dla_95
+- [mark_apparatus_gcs] passage_meth_dla_98
+- [normalise_nfc_done] 45 edge records normalised to NFC

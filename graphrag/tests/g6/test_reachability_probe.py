@@ -344,17 +344,26 @@ def test_origins_debate_recovers_frede_dihle(graph: dict) -> None:
     ), f"Dihle pole not recovered; endpoints={sorted(endpoints)}"
 
 
-def test_carneadean_debate_recovers_amand_ramelli(graph: dict) -> None:
-    """The trigger's f4 frame: Amand vs Ramelli must be recoverable."""
+def test_carneadean_debate_recovers_amand_pole(graph: dict) -> None:
+    """The trigger's f4 frame: the Amand pole must be recoverable.
+
+    2026-08-17: the original Amand-opposes-Ramelli edge was removed as
+    factually wrong — Ramelli 2014 n. 88 cites Amand 1945 in SUPPORT
+    (Origen's reception of the Carneadean argos logos), so there is no
+    Amand/Ramelli fault line to recover. The debate seed itself must
+    still reach the Amand corpus.
+    """
     fault_lines = _fallback_fault_lines(
         graph, "debate_carneadean_antiastrology_tradition"
     )
     pairs = {(e["source"], e["target"]) for e in fault_lines}
     flat = {n for pair in pairs for n in pair}
-    assert any("amand" in n for n in flat), f"Amand pole not recovered: {sorted(flat)}"
-    assert any("ramelli" in n for n in flat), (
-        f"Ramelli pole not recovered: {sorted(flat)}"
+    assert any("amand" in n or "carnead" in n for n in flat), (
+        f"Amand/Carneadean pole not recovered: {sorted(flat)}"
     )
+    assert not any(
+        "amand" in e["source"] and "ramelli" in e["target"] for e in fault_lines
+    ), "the refuted Amand-opposes-Ramelli edge is back"
 
 
 def test_emit_reachability_report(graph: dict) -> None:

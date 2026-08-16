@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "EleutherIA Knowledge Graph Edge Types",
   "description": "Edge (relationship) type definitions for the EleutherIA ancient philosophy knowledge graph",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "edge_types": {
     "argues_for": {
       "description": "Source argues in favor of target position/concept",
@@ -632,6 +632,24 @@
         "concept",
         "passage",
         "person"
+      ],
+      "status": "active"
+    },
+    "same_thesis_as": {
+      "description": "Source and target carry the same scholarly thesis at different granularity or in different namespaces (chapter synthesis vs pinpoint argument vs concept shell). Symmetric; stored one way only. Not a merge: the nodes remain distinct because they are not interchangeable.",
+      "category": "semantic",
+      "inverse": "same_thesis_as",
+      "source_types": [
+        "argument",
+        "concept",
+        "position",
+        "synthesis"
+      ],
+      "target_types": [
+        "argument",
+        "concept",
+        "position",
+        "synthesis"
       ],
       "status": "active"
     },

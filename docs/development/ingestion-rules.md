@@ -39,6 +39,7 @@ it is not a free pass, and it is never silently cleared.
 | **R13** chronology | WARN | Directional intellectual relations must respect dates. | Eleven edges said Calvin influenced Augustine, Lucretius influenced Epicurus, Boethius influenced Aristotle. |
 | **R14** no orphans | BLOCK | A new node must have at least one edge. | A verified 1,265-word Hegesippus fragment sat with zero edges, unreachable from every retrieval path. |
 | **R15** id prefix | WARN | The id prefix must match the node type. | A `work` node under a `passage_` prefix; 22 `argument` nodes under a `scholar_` prefix colliding with the person namespace. |
+| **R16** attested dialectic | BLOCK / WARN | A new `opposes` / `agrees_with` / `critiques` edge must carry `metadata.attested_by` — a citation with a page or locus (BLOCK). Existing ones without it are reported as debt (WARN). | Every measured error in the dialectical layer came from one batch. The complete populations of `opposes` (14) and `agrees_with` (13) were sampled: 14.3% and 23.1% were clear errors, all of them from `provenance: g5_deep_2026_06_15`, none carrying `attested_by`; every edge that did carry it was correct. One `agrees_with` even pointed the wrong way — Salles 2005 pp. 78-81 argues *against* the Bobzien thesis he was recorded as agreeing with. |
 
 ---
 

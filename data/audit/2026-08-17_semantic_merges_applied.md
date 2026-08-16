@@ -1,0 +1,544 @@
+# Semantic merges — applied 2026-08-17
+
+nodes 20114 -> 19742, edges 54102 -> 53392
+absorbed nodes: 371
+
+## Counts
+
+- bobichon_2003: 2
+- citations_rows_repointed: 303
+- edge_deduplicated: 761
+- edge_dropped: 4
+- edge_lot5: 1
+- edge_lot6: 53
+- edge_lot7: 6
+- edge_repair_dropped: 2
+- edge_repaired: 4
+- edge_repointed: 488
+- gill_2014: 1
+- lot2_text_unwrapped: 129
+- lot3b_cts_urn_fixed: 126
+- lot3b_primary_text_pointer: 170
+- lot3b_role_summary: 83
+- lot4_year_resolved: 1
+- lot5_rescope: 1
+- lot5_witness_fix: 1
+- lot6_page_range_flagged: 5
+- lot7: 1
+- lot7_authored_by_to_edited_by: 3
+- merge_lot1: 22
+- merge_lot2: 129
+- merge_lot3a: 1
+- merge_lot3c: 170
+- merge_lot4: 16
+- merge_lot5: 4
+- merge_lot6: 29
+- metadata_pointer: 45
+- metadata_pointer_edge: 12
+- new_edge_deduplicated: 3
+- ontology: 1
+
+## Edges deferred (ontology types)
+
+- none
+
+## Log
+
+- [ontology] declared same_thesis_as (version 3.0.0 -> 3.1.0)
+- [merge_lot1] synthesis_destree2014_ch01_johnson_democritus -> argument_johnson_2014_democritus_plasticity_intellectualism (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch02_destree_plato_er -> argument_destree_2014_plato_er_asymmetry (ported: curation_artifact_cleanup_2026_08_14, verification_notes, semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch03_frede_d_aristotle_free_will -> argument_frede_d_2014_aristotle_psychological_determinism (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch04_bobzien_aristotle_free_choice -> argument_bobzien_2014_aristotle_en_iii_1113b_anti_indeterminist (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch05_sauve_meyer_aristotle_eph_hemin_contingent -> argument_sauve_meyer_2014_aristotle_two_sidedness_not_pap (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch06_echenique_aristotle_double_position -> argument_echenique_2014_aristotle_double_position_appraisals_accountability (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch07_vogt_stoic_action -> argument_vogt_2014_stoic_cyclic_assent_eph_hemin (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch08_gomez_chrysippus_compatibilism -> argument_gomez_2014_chrysippus_reactive_compatibilism (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch09_gourinat_in_nostra_potestate -> argument_gourinat_2014_in_nostra_potestate_not_eph_hemin (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch10_vimercati_panaetius -> argument_vimercati_2014_panaetius_eph_hemin_unique_occurrence (ported: curation_artifact_cleanup_2026_08_14, verification_notes, semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch11_salles_epictetus_causal -> argument_salles_2014_epictetus_causal_eph_hemin_continuity_chrysippus (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch12_boeri_marcus_aurelius -> argument_boeri_2014_marcus_present_indifferents_eph_hemin (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch13_zingano_alexander_character_action -> argument_zingano_2014_alexander_liability_vs_possibility (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch14_morel_epicurus_primary_evidence -> argument_morel_2014_epicurean_eph_hemin_primary_evidence (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch15_maso_cicero_motus_animi_voluntarius -> argument_maso_2014_cicero_motus_animi_voluntarius_independence (ported: curation_artifact_cleanup_2026_08_14, verification_notes, semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch16_gerson_plotinus_strawson -> argument_gerson_2014_plotinus_qualified_moral_responsibility_against_strawson (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch17_taormina_porphyry_myth_er -> argument_taormina_2014_porphyry_eph_hemin_rational_soul_only (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch18_bonazzi_middle_platonist_hypothetical_fate -> argument_bonazzi_2014_middle_platonist_hypothetical_fate_partial_solution (ported: curation_artifact_cleanup_2026_08_14, second_sweep_2026_08_16, verification_notes, semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch19_horn_augustine_liberum_arbitrium -> argument_horn_2014_augustine_liberum_arbitrium_equivalent_plus_eph_hemin (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch20_steel_proclus_human_or_divine_freedom -> argument_steel_2014_proclus_causal_hierarchy_providence_fate_eph_hemin (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch21_wildberg_epictetus_simplicius -> argument_wildberg_2014_simplicius_neoplatonist_reading_epictetus_prohairesis_not_free_will (ported: semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot1] synthesis_destree2014_ch22_frede_michael_eph_hemin_ancient_overview -> argument_frede_michael_2014_eph_hemin_emerges_with_alexander_epictetus_christianity (ported: curation_artifact_cleanup_2026_08_14, verification_notes, semantic_merges_2026_08_17_chapter_synthesis)
+- [merge_lot2] passage_boeth_cons_1 -> passage_boethius_cons_1 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_10 -> passage_boethius_cons_10 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_100 -> passage_boethius_cons_100 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_101 -> passage_boethius_cons_101 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_102 -> passage_boethius_cons_102 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_103 -> passage_boethius_cons_103 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_104 -> passage_boethius_cons_104 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_105 -> passage_boethius_cons_105 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_106 -> passage_boethius_cons_106 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_107 -> passage_boethius_cons_107 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_108 -> passage_boethius_cons_108 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_109 -> passage_boethius_cons_109 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_11 -> passage_boethius_cons_11 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_110 -> passage_boethius_cons_110 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_111 -> passage_boethius_cons_111 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_112 -> passage_boethius_cons_112 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_113 -> passage_boethius_cons_113 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_114 -> passage_boethius_cons_114 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_115 -> passage_boethius_cons_115 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_116 -> passage_boethius_cons_116 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_117 -> passage_boethius_cons_117 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_118 -> passage_boethius_cons_118 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_119 -> passage_boethius_cons_119 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_12 -> passage_boethius_cons_12 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_120 -> passage_boethius_cons_120 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_121 -> passage_boethius_cons_121 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_122 -> passage_boethius_cons_122 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_123 -> passage_boethius_cons_123 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_124 -> passage_boethius_cons_124 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_125 -> passage_boethius_cons_125 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_126 -> passage_boethius_cons_126 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_127 -> passage_boethius_cons_127 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_128 -> passage_boethius_cons_128 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_129 -> passage_boethius_cons_129 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_13 -> passage_boethius_cons_13 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_14 -> passage_boethius_cons_14 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_15 -> passage_boethius_cons_15 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_16 -> passage_boethius_cons_16 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_17 -> passage_boethius_cons_17 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_18 -> passage_boethius_cons_18 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_19 -> passage_boethius_cons_19 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_2 -> passage_boethius_cons_2 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_20 -> passage_boethius_cons_20 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_21 -> passage_boethius_cons_21 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_22 -> passage_boethius_cons_22 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_23 -> passage_boethius_cons_23 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_24 -> passage_boethius_cons_24 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_25 -> passage_boethius_cons_25 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_26 -> passage_boethius_cons_26 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_27 -> passage_boethius_cons_27 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_28 -> passage_boethius_cons_28 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_29 -> passage_boethius_cons_29 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_3 -> passage_boethius_cons_3 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_30 -> passage_boethius_cons_30 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_31 -> passage_boethius_cons_31 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_32 -> passage_boethius_cons_32 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_33 -> passage_boethius_cons_33 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_34 -> passage_boethius_cons_34 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_35 -> passage_boethius_cons_35 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_36 -> passage_boethius_cons_36 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_37 -> passage_boethius_cons_37 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_38 -> passage_boethius_cons_38 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_39 -> passage_boethius_cons_39 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_4 -> passage_boethius_cons_4 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_40 -> passage_boethius_cons_40 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_41 -> passage_boethius_cons_41 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_42 -> passage_boethius_cons_42 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_43 -> passage_boethius_cons_43 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_44 -> passage_boethius_cons_44 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_45 -> passage_boethius_cons_45 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_46 -> passage_boethius_cons_46 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_47 -> passage_boethius_cons_47 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_48 -> passage_boethius_cons_48 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_49 -> passage_boethius_cons_49 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_5 -> passage_boethius_cons_5 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_50 -> passage_boethius_cons_50 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_51 -> passage_boethius_cons_51 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_52 -> passage_boethius_cons_52 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_53 -> passage_boethius_cons_53 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_54 -> passage_boethius_cons_54 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_55 -> passage_boethius_cons_55 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_56 -> passage_boethius_cons_56 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_57 -> passage_boethius_cons_57 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_58 -> passage_boethius_cons_58 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_59 -> passage_boethius_cons_59 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_6 -> passage_boethius_cons_6 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_60 -> passage_boethius_cons_60 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_61 -> passage_boethius_cons_61 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_62 -> passage_boethius_cons_62 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_63 -> passage_boethius_cons_63 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_64 -> passage_boethius_cons_64 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_65 -> passage_boethius_cons_65 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_66 -> passage_boethius_cons_66 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_67 -> passage_boethius_cons_67 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_68 -> passage_boethius_cons_68 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_69 -> passage_boethius_cons_69 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_7 -> passage_boethius_cons_7 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_70 -> passage_boethius_cons_70 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_71 -> passage_boethius_cons_71 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_72 -> passage_boethius_cons_72 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_73 -> passage_boethius_cons_73 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_74 -> passage_boethius_cons_74 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_75 -> passage_boethius_cons_75 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_76 -> passage_boethius_cons_76 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_77 -> passage_boethius_cons_77 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_78 -> passage_boethius_cons_78 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_79 -> passage_boethius_cons_79 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_8 -> passage_boethius_cons_8 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_80 -> passage_boethius_cons_80 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_81 -> passage_boethius_cons_81 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_82 -> passage_boethius_cons_82 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_83 -> passage_boethius_cons_83 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_84 -> passage_boethius_cons_84 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_85 -> passage_boethius_cons_85 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_86 -> passage_boethius_cons_86 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_87 -> passage_boethius_cons_87 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_88 -> passage_boethius_cons_88 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_89 -> passage_boethius_cons_89 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_9 -> passage_boethius_cons_9 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_90 -> passage_boethius_cons_90 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_91 -> passage_boethius_cons_91 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_92 -> passage_boethius_cons_92 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_93 -> passage_boethius_cons_93 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_94 -> passage_boethius_cons_94 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_95 -> passage_boethius_cons_95 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_96 -> passage_boethius_cons_96 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_97 -> passage_boethius_cons_97 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_98 -> passage_boethius_cons_98 (ported: word_count, char_length, db_passage_id)
+- [merge_lot2] passage_boeth_cons_99 -> passage_boethius_cons_99 (ported: word_count, char_length, db_passage_id)
+- [merge_lot3a] work_augustine_de_libero_arbitrio -> work_de_libero_arbitrio (ported: genre, editions, author_id, date_composed, original_language, frede_2011_role, frede_2011_treatment, kg_work_id(rewritten), absorbed_description)
+- [merge_lot3c] passage_aug_lib_arb_1_10_20_en -> passage_aug_lib_arb_1_10_20 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_10_21_en -> passage_aug_lib_arb_1_10_21 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_11_21_en -> passage_aug_lib_arb_1_11_21 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_11_22_en -> passage_aug_lib_arb_1_11_22 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_11_23_en -> passage_aug_lib_arb_1_11_23 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_12_24_en -> passage_aug_lib_arb_1_12_24 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_12_25_en -> passage_aug_lib_arb_1_12_25 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_12_26_en -> passage_aug_lib_arb_1_12_26 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_13_27_en -> passage_aug_lib_arb_1_13_27 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_13_28_en -> passage_aug_lib_arb_1_13_28 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_13_29_en -> passage_aug_lib_arb_1_13_29 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_14_30_en -> passage_aug_lib_arb_1_14_30 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_15_31_en -> passage_aug_lib_arb_1_15_31 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_15_32_en -> passage_aug_lib_arb_1_15_32 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_15_33_en -> passage_aug_lib_arb_1_15_33 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_16_34_en -> passage_aug_lib_arb_1_16_34 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_16_35_en -> passage_aug_lib_arb_1_16_35 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_1_1_en -> passage_aug_lib_arb_1_1_1 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_1_2_en -> passage_aug_lib_arb_1_1_2 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_1_3_en -> passage_aug_lib_arb_1_1_3 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_2_4_en -> passage_aug_lib_arb_1_2_4 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_2_5_en -> passage_aug_lib_arb_1_2_5 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_3_6_en -> passage_aug_lib_arb_1_3_6 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_3_7_en -> passage_aug_lib_arb_1_3_7 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_3_8_en -> passage_aug_lib_arb_1_3_8 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_4_10_en -> passage_aug_lib_arb_1_4_10 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_4_9_en -> passage_aug_lib_arb_1_4_9 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_5_11_en -> passage_aug_lib_arb_1_5_11 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_5_12_en -> passage_aug_lib_arb_1_5_12 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_5_13_en -> passage_aug_lib_arb_1_5_13 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_6_14_en -> passage_aug_lib_arb_1_6_14 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_6_15_en -> passage_aug_lib_arb_1_6_15 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_7_16_en -> passage_aug_lib_arb_1_7_16 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_7_17_en -> passage_aug_lib_arb_1_7_17 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_8_18_en -> passage_aug_lib_arb_1_8_18 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_1_9_19_en -> passage_aug_lib_arb_1_9_19 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_10_28_en -> passage_aug_lib_arb_2_10_28 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_10_29_en -> passage_aug_lib_arb_2_10_29 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_11_30_en -> passage_aug_lib_arb_2_11_30 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_11_31_en -> passage_aug_lib_arb_2_11_31 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_11_32_en -> passage_aug_lib_arb_2_11_32 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_12_33_en -> passage_aug_lib_arb_2_12_33 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_12_34_en -> passage_aug_lib_arb_2_12_34 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_13_35_en -> passage_aug_lib_arb_2_13_35 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_13_36_en -> passage_aug_lib_arb_2_13_36 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_13_37_en -> passage_aug_lib_arb_2_13_37 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_14_37_en -> passage_aug_lib_arb_2_14_37 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_14_38_en -> passage_aug_lib_arb_2_14_38 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_15_39_en -> passage_aug_lib_arb_2_15_39 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_15_40_en -> passage_aug_lib_arb_2_15_40 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_16_41_en -> passage_aug_lib_arb_2_16_41 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_16_42_en -> passage_aug_lib_arb_2_16_42 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_16_43_en -> passage_aug_lib_arb_2_16_43 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_16_44_en -> passage_aug_lib_arb_2_16_44 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_17_45_en -> passage_aug_lib_arb_2_17_45 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_17_46_en -> passage_aug_lib_arb_2_17_46 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_18_47_en -> passage_aug_lib_arb_2_18_47 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_18_48_en -> passage_aug_lib_arb_2_18_48 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_18_49_en -> passage_aug_lib_arb_2_18_49 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_18_50_en -> passage_aug_lib_arb_2_18_50 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_19_50_en -> passage_aug_lib_arb_2_19_50 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_19_51_en -> passage_aug_lib_arb_2_19_51 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_19_52_en -> passage_aug_lib_arb_2_19_52 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_19_53_en -> passage_aug_lib_arb_2_19_53 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_1_1_en -> passage_aug_lib_arb_2_1_1 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_1_2_en -> passage_aug_lib_arb_2_1_2 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_1_3_en -> passage_aug_lib_arb_2_1_3 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_20_54_en -> passage_aug_lib_arb_2_20_54 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_2_4_en -> passage_aug_lib_arb_2_2_4 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_2_5_en -> passage_aug_lib_arb_2_2_5 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_2_6_en -> passage_aug_lib_arb_2_2_6 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_3_7_en -> passage_aug_lib_arb_2_3_7 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_3_8_en -> passage_aug_lib_arb_2_3_8 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_3_9_en -> passage_aug_lib_arb_2_3_9 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_4_10_en -> passage_aug_lib_arb_2_4_10 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_5_11_en -> passage_aug_lib_arb_2_5_11 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_5_12_en -> passage_aug_lib_arb_2_5_12 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_6_13_en -> passage_aug_lib_arb_2_6_13 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_6_14_en -> passage_aug_lib_arb_2_6_14 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_7_15_en -> passage_aug_lib_arb_2_7_15 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_7_16_en -> passage_aug_lib_arb_2_7_16 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_7_17_en -> passage_aug_lib_arb_2_7_17 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_7_18_en -> passage_aug_lib_arb_2_7_18 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_7_19_en -> passage_aug_lib_arb_2_7_19 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_8_20_en -> passage_aug_lib_arb_2_8_20 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_8_21_en -> passage_aug_lib_arb_2_8_21 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_8_22_en -> passage_aug_lib_arb_2_8_22 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_8_23_en -> passage_aug_lib_arb_2_8_23 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_8_24_en -> passage_aug_lib_arb_2_8_24 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_9_25_en -> passage_aug_lib_arb_2_9_25 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_9_26_en -> passage_aug_lib_arb_2_9_26 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_2_9_27_en -> passage_aug_lib_arb_2_9_27 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_10_29_en -> passage_aug_lib_arb_3_10_29 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_10_30_en -> passage_aug_lib_arb_3_10_30 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_10_31_en -> passage_aug_lib_arb_3_10_31 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_11_32_en -> passage_aug_lib_arb_3_11_32 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_11_33_en -> passage_aug_lib_arb_3_11_33 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_11_34_en -> passage_aug_lib_arb_3_11_34 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_12_35_en -> passage_aug_lib_arb_3_12_35 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_12_36_en -> passage_aug_lib_arb_3_12_36 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_13_36_en -> passage_aug_lib_arb_3_13_36 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_13_37_en -> passage_aug_lib_arb_3_13_37 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_13_38_en -> passage_aug_lib_arb_3_13_38 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_14_39_en -> passage_aug_lib_arb_3_14_39 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_14_40_en -> passage_aug_lib_arb_3_14_40 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_14_41_en -> passage_aug_lib_arb_3_14_41 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_15_42_en -> passage_aug_lib_arb_3_15_42 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_15_43_en -> passage_aug_lib_arb_3_15_43 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_15_44_en -> passage_aug_lib_arb_3_15_44 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_16_45_en -> passage_aug_lib_arb_3_16_45 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_16_46_en -> passage_aug_lib_arb_3_16_46 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_17_47_en -> passage_aug_lib_arb_3_17_47 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_17_48_en -> passage_aug_lib_arb_3_17_48 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_17_49_en -> passage_aug_lib_arb_3_17_49 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_18_50_en -> passage_aug_lib_arb_3_18_50 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_18_51_en -> passage_aug_lib_arb_3_18_51 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_18_52_en -> passage_aug_lib_arb_3_18_52 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_19_53_en -> passage_aug_lib_arb_3_19_53 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_19_54_en -> passage_aug_lib_arb_3_19_54 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_1_1_en -> passage_aug_lib_arb_3_1_1 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_1_2_en -> passage_aug_lib_arb_3_1_2 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_1_3_en -> passage_aug_lib_arb_3_1_3 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_20_55_en -> passage_aug_lib_arb_3_20_55 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_20_56_en -> passage_aug_lib_arb_3_20_56 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_20_57_en -> passage_aug_lib_arb_3_20_57 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_20_58_en -> passage_aug_lib_arb_3_20_58 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_21_59_en -> passage_aug_lib_arb_3_21_59 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_21_60_en -> passage_aug_lib_arb_3_21_60 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_21_61_en -> passage_aug_lib_arb_3_21_61 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_21_62_en -> passage_aug_lib_arb_3_21_62 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_22_63_en -> passage_aug_lib_arb_3_22_63 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_22_64_en -> passage_aug_lib_arb_3_22_64 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_22_65_en -> passage_aug_lib_arb_3_22_65 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_23_66_en -> passage_aug_lib_arb_3_23_66 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_23_67_en -> passage_aug_lib_arb_3_23_67 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_23_68_en -> passage_aug_lib_arb_3_23_68 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_23_69_en -> passage_aug_lib_arb_3_23_69 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_23_70_en -> passage_aug_lib_arb_3_23_70 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_23_73_en -> passage_aug_lib_arb_3_23_73 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_24_71_en -> passage_aug_lib_arb_3_24_71 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_24_72_en -> passage_aug_lib_arb_3_24_72 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_25_74_en -> passage_aug_lib_arb_3_25_74 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_25_75_en -> passage_aug_lib_arb_3_25_75 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_25_76_en -> passage_aug_lib_arb_3_25_76 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_25_77_en -> passage_aug_lib_arb_3_25_77 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_2_4_en -> passage_aug_lib_arb_3_2_4 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_2_5_en -> passage_aug_lib_arb_3_2_5 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_3_6_en -> passage_aug_lib_arb_3_3_6 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_3_7_en -> passage_aug_lib_arb_3_3_7 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_3_8_en -> passage_aug_lib_arb_3_3_8 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_4_10_en -> passage_aug_lib_arb_3_4_10 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_4_11_en -> passage_aug_lib_arb_3_4_11 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_4_9_en -> passage_aug_lib_arb_3_4_9 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_5_12_en -> passage_aug_lib_arb_3_5_12 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_5_13_en -> passage_aug_lib_arb_3_5_13 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_5_14_en -> passage_aug_lib_arb_3_5_14 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_5_15_en -> passage_aug_lib_arb_3_5_15 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_5_16_en -> passage_aug_lib_arb_3_5_16 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_5_17_en -> passage_aug_lib_arb_3_5_17 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_6_18_en -> passage_aug_lib_arb_3_6_18 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_6_19_en -> passage_aug_lib_arb_3_6_19 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_7_20_en -> passage_aug_lib_arb_3_7_20 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_7_21_en -> passage_aug_lib_arb_3_7_21 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_8_22_en -> passage_aug_lib_arb_3_8_22 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_8_23_en -> passage_aug_lib_arb_3_8_23 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_9_24_en -> passage_aug_lib_arb_3_9_24 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_9_25_en -> passage_aug_lib_arb_3_9_25 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_9_26_en -> passage_aug_lib_arb_3_9_26 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_9_27_en -> passage_aug_lib_arb_3_9_27 (ported: nothing)
+- [merge_lot3c] passage_aug_lib_arb_3_9_28_en -> passage_aug_lib_arb_3_9_28 (ported: nothing)
+- [merge_lot4] work_frede_free_will_2011 -> pub_frede_2011_free_will (ported: absorbed_description)
+- [merge_lot4] work_bobzien_determinism_freedom_1998 -> scholarly_work_bobzien_1998_determinism_and_freedom_in_stoic_philoso (ported: needs_edition_metadata, absorbed_description)
+- [merge_lot4] work_frankfurt_alternate_possibilities_1969 -> scholarly_work_frankfurt_1969_alternate_possibilities (ported: author, issue, journal, needs_edition_metadata, pages, reference_url, type, verified_by, volume, absorbed_description)
+- [merge_lot4] work_significance_of_free_will_kane_1i2j3k4l -> scholarly_work_kane_1996_significance_free_will (ported: author, date, needs_edition_metadata, absorbed_description)
+- [merge_lot4] work_essay_on_free_will_van_inwagen_8f9g0h1i -> scholarly_work_van_inwagen_1983_essay_free_will (ported: author, date, needs_edition_metadata, absorbed_description)
+- [merge_lot4] scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let -> pub_belcastro_predestinazione_origene (ported: author_id, confidence, doi, isbn, page_range, source_file, title, type)
+- [merge_lot4] scholarly_work_craig_1991_divine_foreknowledge_and_human_freedom_t -> pub_craig_1991_divine_foreknowledge_human_freedom (ported: author_id, confidence, doi, page_range, source_file, title, type)
+- [merge_lot4] scholarly_work_byerly_2017_free_will_theodicies_for_theological_det -> pub_byerly_2017_freewill_theodicies_theological_determinists (ported: author_id, confidence, isbn, page_range, publisher, source_file, title, type)
+- [merge_lot4] scholarly_work_hick_1966_evil_and_the_god_of_love -> pub_hick_1966_evil_god_of_love (ported: author_id, confidence, doi, page_range, source_file, title, type)
+- [merge_lot4] scholarly_work_skarsaune_1987_the_proof_from_prophecy_a_study_in_justi -> pub_skarsaune_proof_from_prophecy (ported: author_id, confidence, doi, page_range, source_file, title, type)
+- [merge_lot4] scholarly_work_hausmann_2021_free_will_historical_and_analytic_perspe -> pub_hausmann_noller_2021_free_will_perspectives (ported: author_id, confidence, doi, page_range, source_file, title, type)
+- [merge_lot4] scholarly_work_nadelhoffer_2022_advances_in_experimental_philosophy_of_f -> pub_nadelhoffer_monroe_2022_exp_phil_free_will (ported: author_id, confidence, isbn, page_range, source_file, title, type)
+- [merge_lot4] scholarly_work_still_2024_the_apologists_and_paul -> pub_still_wilhite_2024_apologists_paul (ported: author_id, confidence, doi, page_range, source_file, title, type)
+- [merge_lot4] scholarly_work_frankfurt_1971_freedom_of_the_will_and_the_concept_of_a -> pub_frankfurt_1971_freedom_will_person (ported: author_id, confidence, isbn, page_range, publisher, source_file, title, type)
+- [merge_lot4] pub_timpe_2023_christianity_problem_free_will -> scholarly_work_vicens_2023_christianity_and_the_problem_of_free_wil (ported: author, description_en, description_fr, description_source, language, local_path, note, pages, series, translation_2026_08_16, wave, absorbed_description)
+- [lot4_year_resolved] pub_pouderon_2000_athenagoras -> scholarly_work_pouderon_1989_ath_nagore_d_ath_nes_philosophe_chr_tien: year 2000 superseded by the verified 1989 (see plan)
+- [merge_lot4] pub_pouderon_2000_athenagoras -> scholarly_work_pouderon_1989_ath_nagore_d_ath_nes_philosophe_chr_tien (ported: author, curation_artifact_cleanup_2026_08_14, description_en, description_fr, description_source, language, latin_locus, latin_verdict, latin_verified, local_path, pages, series, translation_2026_08_16, verification_notes, wave, absorbed_description)
+- [merge_lot5] argument_cafma_futility_of_effort_8c3d5f21 -> argument_carneadean_action_futility_amand1945 (ported: ancient_attestation_locus_classicus, ancient_sources, argument_form, argument_type, attribution_review, conclusion, curation_artifact_cleanup_2026_08_14, engaged_by_scholars, formulator, legacy_premises, modern_scholarship, premises, provenance_batch, provenance_note, provenance_status, structured_v2, structured_v2_at, structured_v2_model, targets, validity_assessment, verification_notes)
+- [merge_lot5] argument_cafma_futility_of_legislation_9d4e6g32 -> argument_carneadean_legislation_amand1945 (ported: ancient_attestation_locus_classicus, ancient_sources, argument_form, argument_type, conclusion, curation_artifact_cleanup_2026_08_14, engaged_by_scholars, formulator, legacy_premises, modern_scholarship, premises, provenance_batch, provenance_note, provenance_status, structured_v2, structured_v2_at, structured_v2_model, targets, validity_assessment, verification_notes)
+- [merge_lot5] argument_cafma_futility_of_piety_2g7h9j65 -> argument_carneadean_piety_amand1945 (ported: ancient_attestation_locus_classicus, ancient_sources, argument_form, argument_type, conclusion, curation_artifact_cleanup_2026_08_14, engaged_by_scholars, formulator, legacy_premises, modern_scholarship, premises, provenance_batch, provenance_note, provenance_status, structured_v2, structured_v2_at, structured_v2_model, targets, validity_assessment, verification_notes)
+- [merge_lot5] framework_cafma_5a7b9e12 -> argument_cafma_carneades_m3n4o5p6 (ported: attribution_review, deep_audit_2026_08_16, deep_audit_2026_08_16_note, period, related_concepts, related_persons, summary)
+- [edge_drop_lot5] argument_cafma_futility_of_piety_2g7h9j65 -supports-> concept_pronoia_levels_proclus_a6d8c9b4: DAS-098: a 2nd-c. BCE Carneadean argument cannot support Proclus's 5th-c. CE hierarchy of providence. Dropped rather than re-targeted by guesswork.
+- [lot5_witness_fix] argument_cafma_carneades_m3n4o5p6
+- [lot5_rescope] argument_cafma_character_contradiction_1f6g8i54: relabelled
+- [edge_drop_lot5] argument_cafma_character_contradiction_1f6g8i54 -contains-> framework_cafma_5a7b9e12: not a member of Amand's reconstructed series
+- [edge_lot5] argument_cafma_futility_of_sanctions_0e5f7h43 -same_thesis_as-> argument_carneadean_incentives_amand1945
+- [merge_lot6] scholarly_argument_bobzien_origin_of_the_free_will_proble_0 -> scholarly_argument_bobzien_origin_of_free_will_problem_in_0 (ported: curation_artifact_cleanup_2026_08_14, second_sweep_2026_08_16, verification_notes, absorbed_description)
+- [merge_lot6] scholarly_argument_bobzien_alexander_of_aphrodisias_as_fi_4 -> scholarly_argument_bobzien_alexander_of_aphrodisias_as_fi_3 (ported: engages_with_scholars, absorbed_description)
+- [merge_lot6] scholarly_argument_bobzien_types_of_freedom_and_moral_res_2 -> scholarly_argument_bobzien_types_of_freedom_1 (ported: engages_with_scholars, supporting_evidence, absorbed_description)
+- [merge_lot6] scholarly_argument_bobzien_vs_6 -> scholarly_argument_bobzien_greek_terminology_for_freedom_1 (ported: engages_with_scholars)
+- [merge_lot6] scholarly_argument_bobzien_marginality_of_freedom_to_do_o_5 -> scholarly_argument_bobzien_historical_marginality_of_libe_7 (ported: engages_with_scholars)
+- [merge_lot6] scholarly_argument_bobzien_development_of_two_sided_indet_3 -> scholarly_argument_bobzien_middle_platonists_on_contingen_7 (ported: engages_with_scholars, absorbed_description)
+- [merge_lot6] scholarly_argument_bobzien_middle_platonist_synthesis_4 -> scholarly_argument_bobzien_middle_platonists_on_contingen_7 (ported: curation_artifact_cleanup_2026_08_14, engages_with_scholars, second_sweep_2026_08_16, verification_notes, absorbed_description)
+- [merge_lot6] scholarly_argument_bobzien_chrysippus_psychology_of_actio_5 -> scholarly_argument_bobzien_chrysippus_compatibilism_fate__1 (ported: nothing)
+- [merge_lot6] scholarly_argument_frede_platonist_and_peripatetic_resp_4 -> scholarly_argument_frede_platonist_and_peripatetic_resp_3 (ported: engages_with_scholars, absorbed_description)
+- [merge_lot6] scholarly_argument_frede_historical_origin_of_free_will_0 -> scholarly_argument_frede_origin_of_free_will_0 (ported: absorbed_description)
+- [merge_lot6] scholarly_argument_frede_stoic_psychology_and_assent_2 -> scholarly_argument_frede_stoic_origin_of_the_will_2 (ported: absorbed_description)
+- [merge_lot6] scholarly_argument_frede_stoic_theory_of_assent_and_wil_2 -> scholarly_argument_frede_stoic_origin_of_the_will_2 (ported: absorbed_description)
+- [merge_lot6] scholarly_argument_frede_methodology_for_studying_free__5 -> scholarly_argument_frede_methodology_8 (ported: supporting_evidence)
+- [merge_lot6] scholarly_argument_dihle_greek_philosophical_theology_v_0 -> scholarly_argument_dihle_greek_philosophical_theology_a_0 (ported: ancient_attestation_locus_classicus, deep_audit_2026_08_16_merge_reason, engaged_by_scholars, engages_with_scholars)
+- [merge_lot6] scholarly_argument_dihle_prayer_and_divine_rationality_1 -> scholarly_argument_dihle_prayer_and_divine_immutability_2 (ported: ancient_attestation_locus_classicus, engaged_by_scholars, engages_with_scholars)
+- [merge_lot6] scholarly_argument_sharples_historical_determinism_0 -> scholarly_argument_sharples_free_will_and_determinism_in_a_1 (ported: engages_with_scholars)
+- [merge_lot6] scholarly_argument_ramelli_origen_s_knowledge_of_alexande_0 -> scholarly_argument_ramelli_alexander_of_aphrodisias_as_so_0 (ported: orphan_flagged_wave, orphan_scholarly_argument)
+- [merge_lot6] scholarly_argument_ramelli_determinism_and_free_will_stoi_1 -> scholarly_argument_ramelli_anti_determinism_and_free_will_1 (ported: nothing)
+- [merge_lot6] scholarly_argument_double_placeholder_definition_of_free_3 -> scholarly_argument_double_definition_of_free_will_free_c_2 (ported: nothing)
+- [merge_lot6] scholarly_argument_minns_free_will_in_justin_martyr_0 -> scholarly_argument_minns_free_will_and_determinism_in_j_0 (ported: attribution_review, curation_artifact_cleanup_2026_08_14, verification_notes, absorbed_description)
+- [merge_lot6] scholarly_argument_pouderon_intellectual_formation_of_chri_3 -> scholarly_argument_pouderon_formation_of_christian_intelle_1 (ported: engages_with_scholars)
+- [merge_lot6] scholarly_argument_pouderon_free_will_and_moral_responsibi_0 -> scholarly_argument_pouderon_free_will_in_early_christian_a_0 (ported: supporting_evidence)
+- [merge_lot6] scholarly_argument_eliasson_the_scope_and_target_of_plotin_1 -> scholarly_argument_eliasson_plotinus_s_treatise_iii_on_fat_0 (ported: absorbed_description)
+- [merge_lot6] scholarly_argument_frede_alexander_of_aphrodisias_treat_1 -> scholarly_argument_frede_alexander_of_aphrodisias_targe_1 (ported: nothing)
+- [merge_lot6] scholarly_argument_frede_tensions_in_aristotle_s_own_po_4 -> scholarly_argument_frede_tensions_in_aristotle_on_causa_3 (ported: nothing)
+- [merge_lot6] scholarly_argument_belcastro_relationship_between_divine_om_2 -> scholarly_argument_belcastro_free_will_libero_arbitrio_and__2 (ported: absorbed_description)
+- [merge_lot6] scholarly_argument_byerly_molinism_and_theological_deter_2 -> scholarly_argument_byerly_compatibilist_molinism_1 (ported: engages_with_scholars, supporting_evidence, absorbed_description)
+- [merge_lot6] scholarly_argument_telfer_origen_s_determinism_and_its_r_3 -> scholarly_argument_telfer_origen_s_systematization_and_i_4 (ported: engages_with_scholars, absorbed_description)
+- [merge_lot6] scholarly_argument_hick_moral_responsibility_2 -> scholarly_argument_hick_moral_responsibility_and_soul__4 (ported: nothing)
+- [edge_drop_lot6] scholarly_argument_sharples_accident_of_determinism_2008 -agrees_with-> scholarly_argument_sharples_free_will_and_determinism_in_a_1: DAS-094: a dialectical relation posed between two nodes of the same article by the same author. Replaced by same_thesis_as.
+- [edge_lot7] pub_destree_salles_zingano_2014_what_is_up_to_us -edited_by-> scholar_destr_e_p
+- [edge_lot7] pub_destree_salles_zingano_2014_what_is_up_to_us -edited_by-> person_salles_ricardo_contemporary
+- [edge_lot7] pub_destree_salles_zingano_2014_what_is_up_to_us -edited_by-> scholar_zingano_marco
+- [edge_lot7] synthesis_destree2014_introduction_overview -authored_by-> scholar_destr_e_p
+- [edge_lot7] synthesis_destree2014_introduction_overview -authored_by-> person_salles_ricardo_contemporary
+- [edge_lot7] synthesis_destree2014_introduction_overview -authored_by-> scholar_zingano_marco
+- [edge_drop_lot7] scholar_frede_michael -influences-> scholar_destr_e_p_salles_zingano_eds: Empty metadata, no attestation, and a target that is an editorial artifact rather than a person. Splitting it into three individual influence claims would be an inference, not a port. Dropped and recorded (DAS-100: the un-attested dialectical edges are the error-prone class).
+- [lot7] scholar_destr_e_p_salles_zingano_eds split into ['scholar_destr_e_p', 'person_salles_ricardo_contemporary', 'scholar_zingano_marco'] and removed
+- [edge_lot6] argument_furst_2022_kompatibilistischer_libertarismus -same_thesis_as-> scholarly_argument_f_rst_origen_s_libertarian_compatibi_4
+- [edge_lot6] argument_furst_2022_christian_philosophers_freedom_innovation -same_thesis_as-> concept_freiheitspathos_furst
+- [edge_lot6] argument_furst_2022_christian_philosophers_freedom_innovation -same_thesis_as-> scholarly_argument_f_rst_early_christian_freedom_theory_6
+- [edge_lot6] argument_furst_2022_continuity_homer_to_origen -same_thesis_as-> scholarly_argument_f_rst_scope_and_chronological_framew_2
+- [edge_lot6] argument_furst_2022_continuity_homer_to_origen -same_thesis_as-> synthesis_furst2022_homer_origins_selbstbestimmung
+- [edge_lot6] synthesis_furst2022_chrysippus_compatibilism -same_thesis_as-> scholarly_argument_f_rst_stoic_compatibilism_chrysippus_2
+- [edge_lot6] scholarly_argument_f_rst_free_will_terminology_and_conc_0 -same_thesis_as-> concept_selbstbestimmung_modern_furst
+- [edge_lot6] argument_furst_2022_carneades_voluntary_self_motion -same_thesis_as-> synthesis_furst2022_carneades_will_innovation
+- [edge_lot6] argument_furst_2022_justin_first_explicit_freedom_decision -same_thesis_as-> synthesis_furst2022_justin_first_christian_freiheits_philosophy
+- [edge_lot6] argument_bobzien_2001_b1_eph_hemin_one_vs_two_sided -same_thesis_as-> scholarly_argument_bobzien_chrysippus_and_early_stoics_on_1
+- [edge_lot6] synthesis_bobzien2001_ch1_determinism_and_fate -same_thesis_as-> scholarly_argument_bobzien_stoic_causal_determinism_vs_fa_0
+- [edge_lot6] argument_bobzien_2001_b1_chrysippean_modal_system -same_thesis_as-> scholarly_argument_bobzien_chrysippus_modal_logic_and_con_2
+- [edge_lot6] argument_bobzien_2001_b1_chrysippean_modal_system -same_thesis_as-> synthesis_bobzien2001_ch3_modality
+- [edge_lot6] argument_bobzien_2001_b1_cylinder_compatibilism_reconstruction -same_thesis_as-> concept_chrysippean_compatibilism_bobzien
+- [edge_lot6] argument_bobzien_2001_b1_cylinder_compatibilism_reconstruction -same_thesis_as-> scholarly_argument_bobzien_chrysippus_compatibilism_fate__1
+- [edge_lot6] argument_bobzien_2001_b1_cylinder_compatibilism_reconstruction -same_thesis_as-> synthesis_bobzien2001_ch6_chrysippean_compatibilism
+- [edge_lot6] synthesis_bobzien2001_ch4_divination_regularity -same_thesis_as-> scholarly_argument_bobzien_divination_and_determinism_the_3
+- [edge_lot6] argument_bobzien_2001_b1_epictetus_developmental_freedom -same_thesis_as-> scholarly_argument_bobzien_epictetus_on_freedom_and_what__3
+- [edge_lot6] argument_bobzien_2001_b1_epictetus_developmental_freedom -same_thesis_as-> synthesis_bobzien2001_ch7_epictetus_eph_hemin_eleutheria
+- [edge_lot6] argument_bobzien_2001_b1_philopator_late_compatibilism -same_thesis_as-> concept_philopator_compatibilism_bobzien
+- [edge_lot6] argument_bobzien_2001_b1_philopator_late_compatibilism -same_thesis_as-> scholarly_argument_bobzien_later_stoic_compatibilism_phil_6
+- [edge_lot6] argument_bobzien_2001_b1_philopator_late_compatibilism -same_thesis_as-> synthesis_bobzien2001_ch8_philopator_late_stoic
+- [edge_lot6] argument_bobzien_2001_b1_lazy_argument_cofated_solution -same_thesis_as-> scholarly_argument_bobzien_origen_s_response_to_the_idle__8
+- [edge_lot6] argument_bobzien_2001_b1_lazy_argument_cofated_solution -same_thesis_as-> synthesis_bobzien2001_ch5_idle_argument
+- [edge_lot6] synthesis_bobzien2001_ch2_chrysippean_arguments -same_thesis_as-> argument_bobzien_2001_b1_sea_battle_chrysippus_bivalence
+- [edge_lot6] synthesis_bobzien2001_ch2_chrysippean_arguments -same_thesis_as-> scholarly_argument_bobzien_chrysippus_s_arguments_for_cau_1
+- [edge_lot6] synthesis_frede2011_ch4_later_platonist_peripatetic_contributions -same_thesis_as-> scholarly_argument_frede_platonist_and_peripatetic_resp_3
+- [edge_lot6] argument_frede_2011_notion_is_technical_and_datable -same_thesis_as-> scholarly_argument_frede_origin_of_free_will_0
+- [edge_lot6] argument_frede_2011_notion_is_technical_and_datable -same_thesis_as-> synthesis_frede2011_ch1_introduction
+- [edge_lot6] argument_frede_2011_epictetus_first_free_will -same_thesis_as-> scholarly_argument_frede_epictetus_and_free_will_3
+- [edge_lot6] argument_frede_2011_epictetus_first_free_will -same_thesis_as-> synthesis_frede2011_ch5_emergence_of_free_will_in_stoicism
+- [edge_lot6] argument_frede_2011_aristotle_no_will_no_free_will -same_thesis_as-> scholarly_argument_frede_aristotle_on_will_1
+- [edge_lot6] argument_frede_2011_aristotle_no_will_no_free_will -same_thesis_as-> synthesis_frede2011_ch2_aristotle
+- [edge_lot6] argument_frede_2011_stoic_assent_is_proto_will -same_thesis_as-> scholarly_argument_frede_stoic_origin_of_the_will_2
+- [edge_lot6] argument_frede_2011_stoic_assent_is_proto_will -same_thesis_as-> synthesis_frede2011_ch3_emergence_of_will_in_stoicism
+- [edge_lot6] synthesis_frede2011_ch7_origen -same_thesis_as-> argument_frede_2011_origen_stoic_christianity_anti_gnostic
+- [edge_lot6] synthesis_frede2011_ch7_origen -same_thesis_as-> scholarly_argument_frede_origen_s_differences_from_stoi_6
+- [edge_lot6] argument_frede_2011_christianity_anti_gnostic_anti_astral_motivation -same_thesis_as-> scholarly_argument_frede_christian_adoption_of_free_wil_4
+- [edge_lot6] argument_frede_2011_augustine_no_new_notion_vs_dihle -same_thesis_as-> scholarly_argument_frede_augustine_on_free_will_7
+- [edge_lot6] argument_frede_2011_augustine_no_new_notion_vs_dihle -same_thesis_as-> synthesis_frede2011_ch9_augustine
+- [edge_lot6] synthesis_frede2011_methodology_history_not_apologetic -same_thesis_as-> scholarly_argument_frede_methodology_8
+- [edge_lot6] synthesis_frede2011_ch8_plotinus -same_thesis_as-> argument_frede_2011_plotinus_hierarchized_freedom
+- [edge_lot6] synthesis_frede2011_ch8_plotinus -same_thesis_as-> scholarly_argument_frede_plotinus_on_free_will_6
+- [edge_lot6] argument_frede_2011_autexousion_stoic_origin_then_christian -same_thesis_as-> scholarly_argument_frede_autexousion_terminology_4
+- [edge_lot6] argument_dihle_1982_greek_intellectualism_thesis -same_thesis_as-> concept_greek_intellectualism_dihle
+- [edge_lot6] argument_dihle_1982_greek_intellectualism_thesis -same_thesis_as-> scholarly_argument_dihle_greek_concept_of_will_0
+- [edge_lot6] argument_dihle_1982_greek_intellectualism_thesis -same_thesis_as-> synthesis_dihle1982_lec2_greek_intellectualism_action
+- [edge_lot6] argument_dihle_1982_augustine_invents_philosophical_voluntas -same_thesis_as-> scholarly_argument_dihle_augustine_s_invention_of_the_p_3
+- [edge_lot6] argument_dihle_1982_augustine_invents_philosophical_voluntas -same_thesis_as-> synthesis_dihle1982_lec6_augustine_invents_voluntas
+- [edge_lot6] synthesis_dihle1982_lec1_cosmology_second_century -same_thesis_as-> scholarly_argument_dihle_greek_philosophical_theology_a_0
+- [edge_lot6] argument_dihle_1982_paul_no_dedicated_term_for_will -same_thesis_as-> scholarly_argument_dihle_paul_s_concept_of_will_1
+- [edge_lot6] argument_dihle_1982_paul_no_dedicated_term_for_will -same_thesis_as-> synthesis_dihle1982_lec4_paul_philo_implicit_will
+- [edge_lot6] argument_dihle_1982_pauline_conscience_distinctive -same_thesis_as-> scholarly_argument_dihle_paul_s_doctrine_of_conscience_2
+- [gill_2014] review re-titled so Gill is no longer shown as the author of Frede's book
+- [bobichon_2003] scholarly_work_bobichon_2003_justin_martyr_dialogue_avec_tryphon_diti: label disambiguated (vol. 1)
+- [bobichon_2003] scholarly_work_bobichon_2003_justin_martyr_dialogue_avec_le_tryphon_d: label disambiguated (vol. 2)
+- [edge_dropped] argument_cafma_character_contradiction_1f6g8i54 -contains-> framework_cafma_5a7b9e12
+- [edge_repaired] argument_consequence_argument_0n1o2p3q -advanced_in-> scholarly_work_van_inwagen_1983_essay_free_will
+- [edge_repaired] argument_frankfurt_cases_1o2p3q4r -advanced_in-> scholarly_work_frankfurt_1969_alternate_possibilities
+- [edge_repair_dropped] pub_bobzien_1998_inadvertent -precedes-> scholarly_work_bobzien_1998_determinism_and_freedom_in_stoic_philoso (no legal relation)
+- [edge_repair_dropped] pub_bobzien_1998_inadvertent -responds_to-> pub_frede_2011_free_will (no legal relation)
+- [edge_dropped] pub_destree_salles_zingano_2014_what_is_up_to_us -authored_by-> scholar_destr_e_p_salles_zingano_eds
+- [edge_dropped] scholar_frede_michael -influences-> scholar_destr_e_p_salles_zingano_eds
+- [edge_repaired] argument_bobzien_2014_aristotle_en_iii_1113b_anti_indeterminist -extends-> scholarly_work_bobzien_1998_determinism_and_freedom_in_stoic_philoso
+- [edge_dropped] synthesis_destree2014_introduction_overview -authored_by-> scholar_destr_e_p_salles_zingano_eds
+- [edge_repaired] scholarly_work_frankfurt_1969_alternate_possibilities -discusses-> concept_principle_alternative_possibilities_5s6t7u8v
+- [metadata_pointer] argument_consequence_argument_0n1o2p3q: work_essay_on_free_will_van_inwagen_8f9g0h1i -> scholarly_work_van_inwagen_1983_essay_free_will
+- [metadata_pointer] argument_frankfurt_cases_1o2p3q4r: work_frankfurt_alternate_possibilities_1969 -> scholarly_work_frankfurt_1969_alternate_possibilities
+- [metadata_pointer] scholarly_argument_belcastro_free_will_libero_arbitrio_and__2: scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let -> pub_belcastro_predestinazione_origene
+- [metadata_pointer] scholarly_argument_belcastro_origen_s_doctrine_of_predestin_1: scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let -> pub_belcastro_predestinazione_origene
+- [metadata_pointer] scholarly_argument_belcastro_origen_s_late_theological_deve_4: scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let -> pub_belcastro_predestinazione_origene
+- [metadata_pointer] scholarly_argument_belcastro_origen_s_philosophical_foundat_4: scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let -> pub_belcastro_predestinazione_origene
+- [metadata_pointer] scholarly_argument_belcastro_origen_s_transformation_of_pau_0: scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let -> pub_belcastro_predestinazione_origene
+- [metadata_pointer] scholarly_argument_belcastro_philosophical_foundations_plat_5: scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let -> pub_belcastro_predestinazione_origene
+- [metadata_pointer] scholarly_argument_belcastro_predestination_as_prescience_v_3: scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let -> pub_belcastro_predestinazione_origene
+- [metadata_pointer] scholarly_argument_belcastro_prescience_as_prevision_of_pos_3: scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let -> pub_belcastro_predestinazione_origene
+- [metadata_pointer] scholarly_argument_byerly_compatibilism_and_the_value_of_1: scholarly_work_byerly_2017_free_will_theodicies_for_theological_det -> pub_byerly_2017_freewill_theodicies_theological_determinists
+- [metadata_pointer] scholarly_argument_byerly_compatibilist_character_format_1: scholarly_work_byerly_2017_free_will_theodicies_for_theological_det -> pub_byerly_2017_freewill_theodicies_theological_determinists
+- [metadata_pointer] scholarly_argument_byerly_compatibilist_molinism_1: scholarly_work_byerly_2017_free_will_theodicies_for_theological_det -> pub_byerly_2017_freewill_theodicies_theological_determinists
+- [metadata_pointer] scholarly_argument_byerly_definition_of_theological_dete_2: scholarly_work_byerly_2017_free_will_theodicies_for_theological_det -> pub_byerly_2017_freewill_theodicies_theological_determinists
+- [metadata_pointer] scholarly_argument_byerly_hick_s_libertarianism_and_its__2: scholarly_work_byerly_2017_free_will_theodicies_for_theological_det -> pub_byerly_2017_freewill_theodicies_theological_determinists
+- [metadata_pointer] scholarly_argument_byerly_theological_determinism_and_fr_0: scholarly_work_byerly_2017_free_will_theodicies_for_theological_det -> pub_byerly_2017_freewill_theodicies_theological_determinists
+- [metadata_pointer] scholarly_argument_craig_backward_causation_1: scholarly_work_craig_1991_divine_foreknowledge_and_human_freedom_t -> pub_craig_1991_divine_foreknowledge_human_freedom
+- [metadata_pointer] scholarly_argument_craig_middle_knowledge_molinism_2: scholarly_work_craig_1991_divine_foreknowledge_and_human_freedom_t -> pub_craig_1991_divine_foreknowledge_human_freedom
+- [metadata_pointer] scholarly_argument_craig_newcomb_s_paradox_4: scholarly_work_craig_1991_divine_foreknowledge_and_human_freedom_t -> pub_craig_1991_divine_foreknowledge_human_freedom
+- [metadata_pointer] scholarly_argument_craig_principle_of_bivalence_6: scholarly_work_craig_1991_divine_foreknowledge_and_human_freedom_t -> pub_craig_1991_divine_foreknowledge_human_freedom
+- [metadata_pointer] scholarly_argument_craig_temporal_necessity_accidental__3: scholarly_work_craig_1991_divine_foreknowledge_and_human_freedom_t -> pub_craig_1991_divine_foreknowledge_human_freedom
+- [metadata_pointer] scholarly_argument_craig_tensed_theory_of_time_a_theory_5: scholarly_work_craig_1991_divine_foreknowledge_and_human_freedom_t -> pub_craig_1991_divine_foreknowledge_human_freedom
+- [metadata_pointer] scholarly_argument_craig_theological_fatalism_0: scholarly_work_craig_1991_divine_foreknowledge_and_human_freedom_t -> pub_craig_1991_divine_foreknowledge_human_freedom
+- [metadata_pointer] scholarly_argument_frankfurt_concept_of_a_person_0: scholarly_work_frankfurt_1971_freedom_of_the_will_and_the_concept_of_a -> pub_frankfurt_1971_freedom_will_person
+- [metadata_pointer] scholarly_argument_frankfurt_first_order_vs_second_order_de_2: scholarly_work_frankfurt_1971_freedom_of_the_will_and_the_concept_of_a -> pub_frankfurt_1971_freedom_will_person
+- [metadata_pointer] scholarly_argument_frankfurt_free_will_and_the_structure_of_1: scholarly_work_frankfurt_1971_freedom_of_the_will_and_the_concept_of_a -> pub_frankfurt_1971_freedom_will_person
+- [metadata_pointer] scholarly_argument_frankfurt_the_will_as_a_technical_concep_3: scholarly_work_frankfurt_1971_freedom_of_the_will_and_the_concept_of_a -> pub_frankfurt_1971_freedom_will_person
+- [metadata_pointer] scholarly_argument_hausmann_methodology_of_free_will_studi_0: scholarly_work_hausmann_2021_free_will_historical_and_analytic_perspe -> pub_hausmann_noller_2021_free_will_perspectives
+- [metadata_pointer] scholarly_argument_hick_determinism_and_predestination_1: scholarly_work_hick_1966_evil_and_the_god_of_love -> pub_hick_1966_evil_god_of_love
+- [metadata_pointer] scholarly_argument_hick_fate_and_theodicy_3: scholarly_work_hick_1966_evil_and_the_god_of_love -> pub_hick_1966_evil_god_of_love
+- [metadata_pointer] scholarly_argument_hick_fate_necessity_and_cosmic_dete_3: scholarly_work_hick_1966_evil_and_the_god_of_love -> pub_hick_1966_evil_god_of_love
+- [metadata_pointer] scholarly_argument_hick_free_will_and_moral_evil_0: scholarly_work_hick_1966_evil_and_the_god_of_love -> pub_hick_1966_evil_god_of_love
+- [metadata_pointer] scholarly_argument_hick_free_will_defense_0: scholarly_work_hick_1966_evil_and_the_god_of_love -> pub_hick_1966_evil_god_of_love
+- [metadata_pointer] scholarly_argument_hick_moral_responsibility_and_soul__4: scholarly_work_hick_1966_evil_and_the_god_of_love -> pub_hick_1966_evil_god_of_love
+- [metadata_pointer] scholarly_argument_hick_the_fall_and_original_human_co_2: scholarly_work_hick_1966_evil_and_the_god_of_love -> pub_hick_1966_evil_god_of_love
+- [metadata_pointer] scholarly_argument_nadelhoffer_experimental_philosophy_method_0: scholarly_work_nadelhoffer_2022_advances_in_experimental_philosophy_of_f -> pub_nadelhoffer_monroe_2022_exp_phil_free_will
+- [metadata_pointer] scholarly_argument_nadelhoffer_folk_jurisprudence_and_free_wi_1: scholarly_work_nadelhoffer_2022_advances_in_experimental_philosophy_of_f -> pub_nadelhoffer_monroe_2022_exp_phil_free_will
+- [metadata_pointer] scholarly_argument_skarsaune_divine_foreknowledge_and_proph_2: scholarly_work_skarsaune_1987_the_proof_from_prophecy_a_study_in_justi -> pub_skarsaune_proof_from_prophecy
+- [metadata_pointer] scholarly_argument_skarsaune_free_will_in_justin_martyr_s_t_0: scholarly_work_skarsaune_1987_the_proof_from_prophecy_a_study_in_justi -> pub_skarsaune_proof_from_prophecy
+- [metadata_pointer] scholarly_argument_skarsaune_free_will_terminology_in_justi_0: scholarly_work_skarsaune_1987_the_proof_from_prophecy_a_study_in_justi -> pub_skarsaune_proof_from_prophecy
+- [metadata_pointer] scholarly_argument_skarsaune_human_moral_agency_in_recapitu_3: scholarly_work_skarsaune_1987_the_proof_from_prophecy_a_study_in_justi -> pub_skarsaune_proof_from_prophecy
+- [metadata_pointer] scholarly_argument_skarsaune_paul_s_doctrine_of_justificati_1: scholarly_work_skarsaune_1987_the_proof_from_prophecy_a_study_in_justi -> pub_skarsaune_proof_from_prophecy
+- [metadata_pointer] scholarly_argument_still_paul_as_apologist_0: scholarly_work_still_2024_the_apologists_and_paul -> pub_still_wilhite_2024_apologists_paul
+- [metadata_pointer] scholarly_argument_still_paul_s_role_as_apologist_and_d_0: scholarly_work_still_2024_the_apologists_and_paul -> pub_still_wilhite_2024_apologists_paul
+- [metadata_pointer] scholarly_argument_still_pauline_reception_in_early_chr_1: scholarly_work_still_2024_the_apologists_and_paul -> pub_still_wilhite_2024_apologists_paul
