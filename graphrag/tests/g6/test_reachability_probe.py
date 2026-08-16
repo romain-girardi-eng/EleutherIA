@@ -192,8 +192,10 @@ def _is_modern_only_person_edge(graph: dict, e: dict) -> bool:
 
 def test_all_opposes_edges_reachable_within_2_hops(graph: dict) -> None:
     all_opposes = _opposes_edges(graph)
-    assert len(all_opposes) == 11, (
-        f"expected 11 opposes edges, found {len(all_opposes)}"
+    # 11 ancient-corpus opposes + 3 grounded historiography edges added
+    # 2026-08-16 (Wetzel 1992 opposes Rist 1969 and TeSelle 1970, etc.).
+    assert len(all_opposes) == 14, (
+        f"expected 14 opposes edges, found {len(all_opposes)}"
     )
 
     # Scope to ancient-relevant fault lines: drop modern person<->person disputes
