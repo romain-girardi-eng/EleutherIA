@@ -403,11 +403,22 @@ def _summarize_result(tool: str, result: dict[str, Any], error: bool) -> str:
 
 
 def _count_results(tool: str, result: dict[str, Any]) -> tuple[int, int]:
-    """Count nodes and passages in a result."""
+    """Count nodes and passages a call actually contributed.
+
+    This feeds ``ResearchToolCall.detail_count``, which the research journal
+    reads as "did this lead produce anything?". ``get_node_detail`` returns a
+    single node rather than a list, so it needs its own branch: without one,
+    every successful node read was counted as 0 and narrated to the reader as a
+    dead end (a false "dropped lead" note about a node the run actually read).
+    """
     nodes = 0
     passages = 0
     if tool in ("search_nodes", "explore_subgraph"):
         nodes = len(result.get("nodes", []))
+    elif tool == "get_node_detail":
+        # `found` is False only for an id that resolves to nothing; an errored
+        # call carries no node_id at all. Everything else is a real read.
+        nodes = 1 if result.get("node_id") and result.get("found", True) else 0
     elif tool == "get_neighbors":
         nodes = len(result.get("edges", []))
     elif tool in ("read_passages", "search_passages"):
@@ -1016,7 +1027,9 @@ def _touched_node_ids(tool: str, result: dict[str, Any]) -> list[str]:
         ]
     if tool == "get_node_detail":
         nid = result.get("node_id")
-        return [str(nid)] if nid else []
+        if not nid or not result.get("found", True):
+            return []
+        return [str(nid)]
     if tool == "infer_transitive":
         ids = [
             str(n.get("node_id"))

@@ -15,7 +15,7 @@ import logging
 import os
 import re
 import time as _time_mod
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Mapping
 from typing import Any, Literal, cast
 
 from pydantic_graph import Graph
@@ -349,6 +349,12 @@ def counter_report_to_ledger_items(
 #
 # A flood is worse than silence: the whole run is capped at
 # ``_RESEARCH_NOTE_CAP`` frames, and each source is individually capped.
+#
+# The journal is written FOR A RESEARCHER, so it speaks the graph's own
+# vocabulary, never the pipeline's: node ids are resolved to their KG labels
+# and internal machinery (tool names, gate nicknames, mode names, scores) stays
+# out of the summary. A lead that cannot be named in the reader's language is
+# dropped rather than shown as an opaque identifier (the deleak rule).
 
 #: Hard ceiling on ``research_note`` frames per run.
 _RESEARCH_NOTE_CAP = 10
@@ -395,33 +401,118 @@ def _trim(text: str, limit: int) -> str:
     return flat if len(flat) <= limit else flat[: limit - 1].rstrip() + "…"
 
 
-def dead_end_tool_notes(state: RAGState) -> list[dict[str, str]]:
+#: Read-only view of the KG used to turn ids into the names a reader knows.
+NodeLookup = Mapping[str, Mapping[str, Any]]
+
+#: Tools whose "lead" argument is a node id, not a human-readable query.
+_NODE_ID_TOOLS = frozenset(
+    {
+        "get_node_detail",
+        "get_neighbors",
+        "explore_subgraph",
+        "infer_transitive",
+        "build_controversy_frame",
+    }
+)
+
+#: An identifier-shaped token (``pub_furst_2022_wege_freiheit``, ``debate_fate_1``).
+_NODE_ID_TOKEN_RE = re.compile(r"[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)+")
+
+#: Machine vocabulary that must never reach the reader: raw identifiers, tool
+#: names, gate nicknames, pipeline mode names. Text still carrying any of it is
+#: dropped rather than shown half-translated.
+_MACHINE_TALK_RE = re.compile(
+    r"_[a-z0-9]{3,}|\bllm\b|heuristic|\bfallback\b|sufficiency|\btsquery\b",
+    re.IGNORECASE,
+)
+
+
+def _reads_as_machine(text: str) -> bool:
+    """True when a string still carries pipeline-internal vocabulary."""
+    return bool(_MACHINE_TALK_RE.search(text or ""))
+
+
+def _node_label(node_id: str, node_lookup: NodeLookup | None) -> str:
+    """The KG label for an id, or ``""`` when the graph cannot name it.
+
+    Mirrors the subgraph builder's resolution (``_kg_node_payload``) but never
+    falls back to the id itself: an unnameable node is skipped, not printed.
+    """
+    if not node_id or not isinstance(node_lookup, Mapping):
+        return ""
+    meta = node_lookup.get(node_id)
+    if not isinstance(meta, Mapping):
+        return ""
+    label = str(meta.get("label") or "").strip()
+    if not label or label == node_id or _reads_as_machine(label):
+        return ""
+    return _trim(label, 90)
+
+
+def _first_named_node(text: str, node_lookup: NodeLookup | None) -> str:
+    """Label of the first id-shaped token in ``text`` the KG can name."""
+    for token in _NODE_ID_TOKEN_RE.findall(text or ""):
+        label = _node_label(token, node_lookup)
+        if label:
+            return label
+    return ""
+
+
+def _ingested_node_ids(state: RAGState) -> set[str]:
+    """Every node id this run actually pulled into evidence.
+
+    Defence in depth for the dead-end rule: whatever a counter says, a node
+    whose content reached the synthesis was read, not dropped.
+    """
+    ids = set(state.seed_node_ids) | set(state.context_node_ids)
+    ids.update(ev.id for ev in state.all_evidence() if ev.id)
+    return ids
+
+
+def dead_end_tool_notes(
+    state: RAGState, node_lookup: NodeLookup | None = None
+) -> list[dict[str, str]]:
     """Leads the ReAct loop followed that came back with nothing.
 
     ``ResearchToolCall.detail_count`` is the number of nodes + passages the
     collector actually ingested from that call, so ``0`` is the literal "this
-    search produced no evidence" record. A call with no nameable target (no
-    query, no node id) is skipped rather than described vaguely.
+    lead produced no evidence" record — a successful node read counts 1 and is
+    therefore never narrated as a dead end. A lead the reader cannot be shown
+    (no query, or a node id the graph cannot name) is skipped rather than
+    printed raw.
     """
+    ingested = _ingested_node_ids(state)
     notes: list[dict[str, str]] = []
-    seen: set[tuple[str, str]] = set()
+    seen: set[str] = set()
     for call in state.research_notebook.tool_calls:
         if call.detail_count > 0:
             continue
-        lead = _trim(call.query or "", 120)
-        if not lead:
+        raw_lead = _trim(call.query or "", 120)
+        if not raw_lead or raw_lead in ingested:
+            # Its content reached the evidence: read, not dropped.
             continue
-        key = (call.tool_name, lead.lower())
-        if key in seen:
+        by_id = call.tool_name in _NODE_ID_TOOLS or bool(
+            _NODE_ID_TOKEN_RE.fullmatch(raw_lead)
+        )
+        lead = (
+            _node_label(raw_lead, node_lookup)
+            if by_id
+            else ("" if _reads_as_machine(raw_lead) else raw_lead)
+        )
+        if not lead or lead.lower() in seen:
             continue
-        seen.add(key)
+        seen.add(lead.lower())
+        summary = (
+            f'Looked up "{lead}" — the entry added no usable evidence, so the '
+            "lead was set aside."
+            if by_id
+            else f'Searched for "{lead}" — nothing came back, so the lead was '
+            "set aside."
+        )
         notes.append(
             {
                 "kind": "dead_end",
-                "summary": (
-                    f'Searched "{lead}" via {call.tool_name} — no evidence came '
-                    f"back, so that lead was dropped."
-                ),
+                "summary": summary,
                 "detail": _trim(call.rationale or "", 200),
             }
         )
@@ -430,7 +521,31 @@ def dead_end_tool_notes(state: RAGState) -> list[dict[str, str]]:
     return notes
 
 
-def controversy_gap_notes(state: RAGState) -> list[dict[str, str]]:
+def _debate_gap_summary(gap: str, node_lookup: NodeLookup | None) -> str:
+    """Reader-facing sentence for one abandoned debate seed.
+
+    The assembler records its gaps in its own words ("build_controversy_frame
+    on debate_fate_1 returned no frame"). Only the debate it names survives
+    into the journal, under its KG label; an unnameable seed is dropped.
+    """
+    text = _trim(gap, 200)
+    label = _first_named_node(text, node_lookup)
+    if not label:
+        return ""
+    if "under-filled" in text.lower() or "no positions" in text.lower():
+        return (
+            f'The debate "{label}" was set aside — nothing was found to fill it '
+            "out, neither positions nor the disagreements between them."
+        )
+    return (
+        f'The debate "{label}" was set aside — no usable account of the '
+        "disagreement could be built from it."
+    )
+
+
+def controversy_gap_notes(
+    state: RAGState, node_lookup: NodeLookup | None = None
+) -> list[dict[str, str]]:
     """Debate seeds the controversy-map assembly opened and then abandoned.
 
     ``coverage_gaps`` are written by the assembler at the exact point a seed is
@@ -441,16 +556,12 @@ def controversy_gap_notes(state: RAGState) -> list[dict[str, str]]:
     notes: list[dict[str, str]] = []
     gaps = state.metadata.get("controversy_map_gaps")
     if isinstance(gaps, list):
-        for gap in gaps[:_MAX_COVERAGE_GAPS]:
-            text = _trim(str(gap), 200)
-            if text:
-                notes.append(
-                    {
-                        "kind": "abandoned",
-                        "summary": f"Debate lead abandoned — {text}.",
-                        "detail": "",
-                    }
-                )
+        for gap in gaps:
+            summary = _debate_gap_summary(str(gap), node_lookup)
+            if summary:
+                notes.append({"kind": "abandoned", "summary": summary, "detail": ""})
+            if len(notes) >= _MAX_COVERAGE_GAPS:
+                break
     if isinstance(meta, dict) and meta.get("status") == "degraded":
         notes.append(
             {
@@ -467,33 +578,35 @@ def controversy_gap_notes(state: RAGState) -> list[dict[str, str]]:
 
 
 def sufficiency_gap_notes(state: RAGState) -> list[dict[str, str]]:
-    """What the pipeline's own evidence critic said was still missing."""
+    """What the pipeline's own evidence critic said was still missing.
+
+    The reader is told what happened to the research, in plain words. The
+    numeric verdict belongs in ``detail``; the critic's own reason is quoted
+    only when it is written in the reader's language (an internal marker such
+    as the heuristic fallback's is dropped, never paraphrased into a claim the
+    critic did not make).
+    """
     check = state.metadata.get("sufficiency_check")
     if not isinstance(check, dict) or check.get("sufficient"):
         return []
-    reason = _trim(str(check.get("reason") or ""), 220)
-    if not reason:
-        return []
-    score = check.get("score")
-    score_text = (
-        f" (score {float(score):.2f})" if isinstance(score, int | float) else ""
+    summary = (
+        "The evidence gathered so far looked too thin, so one more retrieval "
+        "round was run."
+        if check.get("continued")
+        else "The evidence gathered so far looked too thin, but there was no "
+        "retrieval round left to run."
     )
+    reason = _trim(str(check.get("reason") or ""), 220)
+    if reason and not _reads_as_machine(reason):
+        summary = f"{summary} What was missing: {reason.rstrip('.')}."
     detail_bits: list[str] = []
+    score = check.get("score")
+    if isinstance(score, int | float):
+        detail_bits.append(f"Evidence-sufficiency score {float(score):.2f}.")
     refinement = _trim(str(check.get("refinement") or ""), 180)
     if refinement:
         detail_bits.append(f"Suggested refinement: {refinement}")
-    detail_bits.append(
-        "One extra retrieval round was granted."
-        if check.get("continued")
-        else "No extra retrieval round was available."
-    )
-    return [
-        {
-            "kind": "gap",
-            "summary": f"Evidence judged insufficient{score_text}: {reason}",
-            "detail": " ".join(detail_bits),
-        }
-    ]
+    return [{"kind": "gap", "summary": summary, "detail": " ".join(detail_bits)}]
 
 
 def counter_evidence_notes(state: RAGState) -> list[dict[str, str]]:
@@ -503,12 +616,15 @@ def counter_evidence_notes(state: RAGState) -> list[dict[str, str]]:
         return []
     status = hunt.get("status")
     if status == "skipped":
+        reason = _trim(str(hunt.get("reason") or ""), 160)
+        if not reason or _reads_as_machine(reason):
+            reason = "there was nothing in place to audit"
         return [
             {
                 "kind": "abandoned",
                 "summary": (
-                    "The counter-evidence hunt was abandoned before it ran — "
-                    f"{_trim(str(hunt.get('reason') or 'no reason recorded'), 160)}."
+                    "The search for evidence against the working hypotheses was "
+                    f"abandoned before it ran — {reason.rstrip('.')}."
                 ),
                 "detail": "",
             }
@@ -550,7 +666,8 @@ def rejected_claim_notes(state: RAGState) -> list[dict[str, str]]:
         if reason is None:
             continue
         claim = _trim(item.claim, 160)
-        if not claim:
+        if not claim or _reads_as_machine(claim):
+            # A claim still carrying internal markers is not shown raw.
             continue
         notes.append(
             {
@@ -1915,8 +2032,12 @@ class ScholarlyAgent:
             state.metadata["hunt_counter_evidence"] = True
 
         # Abandoned-lead journal: budgeted across the WHOLE run so the four
-        # emission points below cannot flood the timeline between them.
+        # emission points below cannot flood the timeline between them. The KG
+        # lookup is what lets the notes name nodes the way the reader does.
         journal = ResearchJournal()
+        kg_labels = getattr(self.deps, "node_lookup", None)
+        if not isinstance(kg_labels, Mapping):
+            kg_labels = None
 
         def _notes(notes: list[dict[str, str]], stage: str) -> list[str]:
             """Serialise a batch of notes into ``research_note`` SSE frames."""
@@ -1999,7 +2120,7 @@ class ScholarlyAgent:
         )
 
         # Journal: searches the loop ran that returned nothing.
-        for frame in _notes(dead_end_tool_notes(state), "agent_loop"):
+        for frame in _notes(dead_end_tool_notes(state, kg_labels), "agent_loop"):
             yield frame
 
         # Phase 2.4: Scholar-RAG (G6) controversy-map assembly. Flag-gated,
@@ -2037,7 +2158,9 @@ class ScholarlyAgent:
             )
 
             # Journal: debate seeds opened by the assembler, then dropped.
-            for frame in _notes(controversy_gap_notes(state), "controversy_map"):
+            for frame in _notes(
+                controversy_gap_notes(state, kg_labels), "controversy_map"
+            ):
                 yield frame
 
         # Phase 2.5: post-loop quality gate (rerank, sufficiency continuation,

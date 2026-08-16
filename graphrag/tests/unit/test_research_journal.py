@@ -10,6 +10,7 @@ actually follow, so every test starts from state a real run would leave behind.
 from __future__ import annotations
 
 import json
+import re
 
 import pytest
 
@@ -28,6 +29,31 @@ from eleutheria_graphrag.agents.state import (
     RAGState,
     ResearchToolCall,
 )
+
+#: A slice of the KG the way ``Deps.node_lookup`` holds it — the journal
+#: resolves ids against this so the reader sees names, never identifiers.
+_LOOKUP: dict[str, dict[str, str]] = {
+    "pub_furst_2022_wege_freiheit": {
+        "id": "pub_furst_2022_wege_freiheit",
+        "label": "Fürst, Wege zur Freiheit",
+        "type": "publication",
+    },
+    "scholarly_argument_gorday_origen_s_view_of_free_will_and_0": {
+        "id": "scholarly_argument_gorday_origen_s_view_of_free_will_and_0",
+        "label": "Gorday, Origen's view of free will",
+        "type": "scholarly_argument",
+    },
+    "debate_fate_1": {
+        "id": "debate_fate_1",
+        "label": "Fate and what is up to us",
+        "type": "debate",
+    },
+    "debate_assent_2": {
+        "id": "debate_assent_2",
+        "label": "Assent and impulse",
+        "type": "debate",
+    },
+}
 
 
 def _state(**metadata) -> RAGState:
@@ -53,7 +79,8 @@ class TestDeadEndToolNotes:
         assert len(notes) == 1
         assert notes[0]["kind"] == "dead_end"
         assert "ἐφ᾽ ἡμῖν clinamen" in notes[0]["summary"]
-        assert "search_passages" in notes[0]["summary"]
+        # The reader is told what was searched, not which tool ran it.
+        assert "search_passages" not in notes[0]["summary"]
         assert notes[0]["detail"] == "testing an Epicurean parallel"
 
     def test_a_productive_search_is_not_reported(self):
@@ -98,6 +125,145 @@ class TestDeadEndToolNotes:
         assert len(notes) == 2  # deduped by (tool, lead)
 
 
+class TestANodeThatWasReadIsNeverADeadEnd:
+    """A false "dropped lead" about a source the run actually read misleads.
+
+    ``pub_furst_2022_wege_freiheit`` exists in the KG with rich content; a
+    successful ``get_node_detail`` on it must never be narrated as a dead end.
+    """
+
+    def _read(self, node_id: str, detail_count: int) -> RAGState:
+        state = _state()
+        state.research_notebook.tool_calls = [
+            ResearchToolCall(
+                tool_call_id="c1",
+                tool_name="get_node_detail",
+                stage_id="agent_loop",
+                query=node_id,
+                rationale="checking the modern reception",
+                detail_count=detail_count,
+            )
+        ]
+        return state
+
+    def test_a_successful_node_read_produces_no_note(self):
+        state = self._read("pub_furst_2022_wege_freiheit", 1)
+        assert dead_end_tool_notes(state, _LOOKUP) == []
+
+    def test_a_node_whose_content_reached_the_evidence_produces_no_note(self):
+        """Even if the counter says 0, ingested content means it was read."""
+        state = self._read("pub_furst_2022_wege_freiheit", 0)
+        state.context_node_ids = ["pub_furst_2022_wege_freiheit"]
+        assert dead_end_tool_notes(state, _LOOKUP) == []
+
+    def test_a_genuinely_empty_read_is_reported_under_the_nodes_own_name(self):
+        state = self._read(
+            "scholarly_argument_gorday_origen_s_view_of_free_will_and_0", 0
+        )
+        notes = dead_end_tool_notes(state, _LOOKUP)
+        assert len(notes) == 1
+        assert notes[0]["kind"] == "dead_end"
+        assert "Gorday, Origen's view of free will" in notes[0]["summary"]
+        assert "scholarly_argument" not in notes[0]["summary"]
+        assert "get_node_detail" not in notes[0]["summary"]
+
+    def test_an_id_the_graph_cannot_name_is_skipped_rather_than_printed(self):
+        state = self._read("pub_not_in_the_graph_at_all", 0)
+        assert dead_end_tool_notes(state, _LOOKUP) == []
+
+    def test_an_empty_search_is_still_a_dead_end(self):
+        state = _state()
+        state.research_notebook.tool_calls = [
+            ResearchToolCall(
+                tool_call_id="c1",
+                tool_name="search_nodes",
+                stage_id="agent_loop",
+                query="Stoic theory of moral luck",
+                detail_count=0,
+            )
+        ]
+        notes = dead_end_tool_notes(state, _LOOKUP)
+        assert len(notes) == 1
+        assert "Stoic theory of moral luck" in notes[0]["summary"]
+
+
+class TestTheJournalSpeaksToAResearcher:
+    """No summary may leak identifiers, tool names or pipeline vocabulary."""
+
+    #: Raw ids (``pub_furst_2022_…``), tool names (``get_node_detail``) and
+    #: internal mode/gate names.
+    MACHINE_TALK = re.compile(r"_[a-z0-9]{6,}|llm mode|heuristic", re.IGNORECASE)
+
+    def _every_summary(self) -> list[str]:
+        state = _state(
+            controversy_map_gaps=[
+                "build_controversy_frame on debate_fate_1 returned no frame",
+                "frame debate_assent_2 under-filled (no positions or links)",
+            ],
+            controversy_map={"status": "degraded", "reason": "assembly yielded 0"},
+            sufficiency_check={
+                "score": 0.24,
+                "sufficient": False,
+                "reason": "heuristic sufficiency (minimal llm mode)",
+                "refinement": "",
+                "continued": True,
+            },
+            counter_evidence_hunt={
+                "status": "ok",
+                "claims_audited": 2,
+                "total_testimonia": 0,
+            },
+        )
+        state.research_notebook.tool_calls = [
+            ResearchToolCall(
+                tool_call_id="c1",
+                tool_name="get_node_detail",
+                stage_id="agent_loop",
+                query="pub_furst_2022_wege_freiheit",
+                detail_count=0,
+            ),
+            ResearchToolCall(
+                tool_call_id="c2",
+                tool_name="get_node_detail",
+                stage_id="agent_loop",
+                query="scholarly_argument_gorday_origen_s_view_of_free_will_and_0",
+                detail_count=0,
+            ),
+            ResearchToolCall(
+                tool_call_id="c3",
+                tool_name="search_passages",
+                stage_id="agent_loop",
+                query="αὐτεξούσιον Chrysippus",
+                detail_count=0,
+            ),
+        ]
+        state.claim_ledger = [
+            ClaimLedgerItem(
+                claim="Origen read Chrysippus directly",
+                status=ClaimStatus.INSUFFICIENT,
+            )
+        ]
+        notes = [
+            *dead_end_tool_notes(state, _LOOKUP),
+            *controversy_gap_notes(state, _LOOKUP),
+            *sufficiency_gap_notes(state),
+            *counter_evidence_notes(state),
+            *rejected_claim_notes(state),
+        ]
+        assert len(notes) >= 6, "expected every producer to contribute"
+        return [n["summary"] for n in notes]
+
+    def test_no_summary_reads_as_machine_output(self):
+        for summary in self._every_summary():
+            assert not self.MACHINE_TALK.search(summary), summary
+
+    def test_the_named_leads_use_their_kg_labels(self):
+        summaries = " || ".join(self._every_summary())
+        assert "Fürst, Wege zur Freiheit" in summaries
+        assert "Gorday, Origen's view of free will" in summaries
+        assert "Fate and what is up to us" in summaries
+
+
 class TestControversyGapNotes:
     def test_each_dropped_debate_seed_is_named(self):
         state = _state(
@@ -107,9 +273,23 @@ class TestControversyGapNotes:
             ],
             controversy_map={"status": "ok", "frames": 3},
         )
-        notes = controversy_gap_notes(state)
+        notes = controversy_gap_notes(state, _LOOKUP)
         assert [n["kind"] for n in notes] == ["abandoned", "abandoned"]
-        assert "debate_fate_1" in notes[0]["summary"]
+        # The debate is named the way the graph names it, never by its id.
+        assert "Fate and what is up to us" in notes[0]["summary"]
+        assert "debate_fate_1" not in notes[0]["summary"]
+        assert "build_controversy_frame" not in notes[0]["summary"]
+        assert "Assent and impulse" in notes[1]["summary"]
+        assert "neither positions nor" in notes[1]["summary"]
+
+    def test_a_seed_the_graph_cannot_name_is_skipped_not_printed(self):
+        state = _state(
+            controversy_map_gaps=[
+                "build_controversy_frame on debate_unknown_9 returned no frame"
+            ],
+            controversy_map={"status": "ok", "frames": 1},
+        )
+        assert controversy_gap_notes(state, _LOOKUP) == []
 
     def test_a_zero_frame_assembly_reports_the_abandoned_approach(self):
         state = _state(
@@ -130,7 +310,7 @@ class TestControversyGapNotes:
 
 
 class TestSufficiencyGapNotes:
-    def test_the_critics_verdict_is_surfaced_verbatim(self):
+    def test_the_verdict_is_told_in_plain_words_with_the_score_in_detail(self):
         state = _state(
             sufficiency_check={
                 "score": 0.42,
@@ -143,10 +323,13 @@ class TestSufficiencyGapNotes:
         notes = sufficiency_gap_notes(state)
         assert len(notes) == 1
         assert notes[0]["kind"] == "gap"
+        assert "too thin" in notes[0]["summary"]
+        assert "one more retrieval round was run" in notes[0]["summary"]
         assert "no primary passage for the Stoic side" in notes[0]["summary"]
-        assert "0.42" in notes[0]["summary"]
+        # The number is a measurement, not a sentence: it belongs in detail.
+        assert "0.42" not in notes[0]["summary"]
+        assert "0.42" in notes[0]["detail"]
         assert "Epictetus" in notes[0]["detail"]
-        assert "One extra retrieval round was granted." in notes[0]["detail"]
 
     def test_no_continuation_available_is_stated(self):
         state = _state(
@@ -158,7 +341,27 @@ class TestSufficiencyGapNotes:
                 "continued": False,
             }
         )
-        assert "No extra retrieval round" in sufficiency_gap_notes(state)[0]["detail"]
+        summary = sufficiency_gap_notes(state)[0]["summary"]
+        assert "no retrieval round left to run" in summary
+
+    def test_an_internal_verdict_marker_is_never_quoted_at_the_reader(self):
+        """The heuristic path writes machine vocabulary, not a finding."""
+        state = _state(
+            sufficiency_check={
+                "score": 0.24,
+                "sufficient": False,
+                "reason": "heuristic sufficiency (minimal llm mode)",
+                "refinement": "",
+                "continued": True,
+            }
+        )
+        note = sufficiency_gap_notes(state)[0]
+        assert "heuristic" not in note["summary"]
+        assert "llm" not in note["summary"].lower()
+        assert "What was missing" not in note["summary"]
+        # The note still says what happened to the research.
+        assert "one more retrieval round was run" in note["summary"]
+        assert "0.24" in note["detail"]
 
     def test_a_sufficient_verdict_is_silent(self):
         state = _state(

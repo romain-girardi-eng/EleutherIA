@@ -179,6 +179,105 @@ class TestSummarizeResult:
         ]
 
 
+# ── A node read is evidence, never a dead end ─────────────────────────────
+#
+# ``_count_results`` feeds ``ResearchToolCall.detail_count``, which the research
+# journal reads as "did this lead produce anything?". A missing branch here made
+# every successful ``get_node_detail`` count 0, and the journal told the reader
+# that a publication it had actually read (Fürst 2022) came back empty.
+
+
+class TestNodeReadCounts:
+    def _detail(self, **overrides) -> dict:
+        result = {
+            "node_id": "pub_furst_2022_wege_freiheit",
+            "label": "Fürst, Wege zur Freiheit",
+            "type": "publication",
+            "description": "Origen's doctrine of freedom.",
+            "neighbor_count": 4,
+            "passage_count": 0,
+            "found": True,
+        }
+        result.update(overrides)
+        return result
+
+    def test_a_successful_read_counts_as_one_node(self):
+        assert _count_results("get_node_detail", self._detail()) == (1, 0)
+
+    def test_a_read_with_no_linked_passages_still_counts(self):
+        result = self._detail(neighbor_count=0, passage_count=0)
+        assert _count_results("get_node_detail", result)[0] == 1
+
+    def test_a_missing_node_counts_nothing(self):
+        result = self._detail(label="(not found)", found=False)
+        assert _count_results("get_node_detail", result) == (0, 0)
+        assert _touched_node_ids("get_node_detail", result) == []
+
+    def test_a_failed_call_counts_nothing(self):
+        assert _count_results("get_node_detail", {"error": "DB down"}) == (0, 0)
+
+    def test_a_read_activates_its_node(self):
+        assert _touched_node_ids("get_node_detail", self._detail()) == [
+            "pub_furst_2022_wege_freiheit"
+        ]
+
+
+class TestNodeReadReachesEvidence:
+    """The collector's own record of the read must agree with the counter."""
+
+    def _collector_after(self, result: dict):
+        from eleutheria_graphrag.agents.evidence_collector import EvidenceCollector
+        from eleutheria_graphrag.agents.tools.get_node_detail import NodeDetail
+
+        collector = EvidenceCollector()
+        detail = NodeDetail(**result)
+        collector.ingest("get_node_detail", {"node_id": detail.node_id}, detail)
+        nodes, passages = _count_results("get_node_detail", detail.model_dump())
+        collector.record_call(
+            tool_name="get_node_detail",
+            args={"node_id": detail.node_id},
+            reason="checking the modern reception",
+            result_summary="",
+            node_count=nodes,
+            passage_count=passages,
+        )
+        return collector
+
+    def test_a_read_node_is_ingested_and_counted(self):
+        collector = self._collector_after(
+            {
+                "node_id": "pub_furst_2022_wege_freiheit",
+                "label": "Fürst, Wege zur Freiheit",
+                "type": "publication",
+                "description": "Origen's doctrine of freedom.",
+            }
+        )
+        state = RAGState(question="q")
+        collector.populate_state(state)
+
+        assert [ev.id for ev in state.primary_evidence] == [
+            "pub_furst_2022_wege_freiheit"
+        ]
+        assert state.research_notebook.tool_calls[0].detail_count == 1
+
+    def test_a_missing_node_enters_neither_evidence_nor_the_count(self):
+        collector = self._collector_after(
+            {
+                "node_id": "pub_not_a_real_id",
+                "label": "(not found)",
+                "type": "",
+                "description": "Node 'pub_not_a_real_id' not found in the "
+                "knowledge graph.",
+                "found": False,
+            }
+        )
+        state = RAGState(question="q")
+        collector.populate_state(state)
+
+        assert state.primary_evidence == []
+        assert state.research_notebook.tool_calls[0].detail_count == 0
+
+
 # ── _compress_old_results tests ──────────────────────────────────────────
 
 

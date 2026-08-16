@@ -342,6 +342,10 @@ class EvidenceCollector:
     def _ingest_node_detail(self, result: dict[str, Any]) -> None:
         """Ingest results from get_node_detail tool."""
         nid = result.get("node_id", "")
+        if not result.get("found", True):
+            # The id resolved to nothing: a "(not found)" placeholder must not
+            # enter Evidence as if it were a real node.
+            return
         if nid and nid not in self.seen_node_ids:
             self.seen_node_ids.add(nid)
             self.context_node_ids.append(nid)

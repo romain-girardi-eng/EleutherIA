@@ -28,6 +28,16 @@ from .test_dialectical_render_cutover import (
 )
 from .test_dialectical_stream_plumbing import _boom_prompt, _classify_like_route
 
+#: The graph the journal resolves ids against — without it a dropped debate
+#: has no name the reader would recognise, and the note is skipped.
+_LOOKUP = {
+    "debate_fate_1": {
+        "id": "debate_fate_1",
+        "label": "Fate and what is up to us",
+        "type": "debate",
+    }
+}
+
 
 def _agent() -> ScholarlyAgent:
     llm = AsyncMock()
@@ -39,6 +49,7 @@ def _agent() -> ScholarlyAgent:
     deps = AsyncMock()
     deps.llm = llm
     deps.verifier_v2 = None
+    deps.node_lookup = _LOOKUP
     return ScholarlyAgent(deps)
 
 
@@ -162,7 +173,9 @@ async def test_every_real_discard_point_reaches_the_wire(
     summaries = " || ".join(n["data"]["summary"] for n in notes)
     assert "αὐτεξούσιον Chrysippus" in summaries
     assert "Bobzien" not in summaries  # the productive search is not a dead end
-    assert "debate_fate_1" in summaries
+    # The abandoned debate is named, not identified.
+    assert "Fate and what is up to us" in summaries
+    assert "debate_fate_1" not in summaries
     assert "no primary passage on the Stoic side" in summaries
     assert "Origen read Chrysippus directly" in summaries
 

@@ -30,6 +30,11 @@ class NodeDetail(BaseModel):
     metadata: dict[str, Any] = {}
     neighbor_count: int = 0
     passage_count: int = 0
+    #: False only when the id resolves to nothing in the graph. Consumers use
+    #: this (never the ``(not found)`` label string) to tell a real read from a
+    #: miss — a successful read is evidence even when the node has no linked
+    #: passages, and must never be counted as a dead end.
+    found: bool = True
 
 
 class GetNodeDetailTool:
@@ -71,6 +76,7 @@ class GetNodeDetailTool:
                 label="(not found)",
                 type="",
                 description=f"Node '{node_id}' not found in the knowledge graph.",
+                found=False,
             )
 
         # Count edges
