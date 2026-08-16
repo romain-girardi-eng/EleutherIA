@@ -308,7 +308,8 @@ def parse_triage_scores(raw: str, id_map: Mapping[str, str]) -> dict[str, float]
         raw_id = entry.get("id", entry.get("item_id", entry.get("index")))
         if raw_id is None:
             continue
-        key = id_map.get(str(raw_id).strip())
+        # Models often echo the id as shown in the prompt ("[3]") — normalize.
+        key = id_map.get(str(raw_id).strip().strip("[]").strip())
         if key is None:
             continue
         score = _coerce_score(entry.get("score", entry.get("relevance")))
