@@ -40,6 +40,7 @@ def resolve_translation_model() -> str:
         return override
     return PROXY_DEFAULT_MODEL if _proxy_base_url() else DEFAULT_MODEL
 
+
 # Batch sizes tuned for Gemini Flash context limits.
 DEFAULT_BATCH_SIZE = 10
 DEFAULT_MAX_CHARS_PER_BATCH = 40_000
@@ -207,7 +208,9 @@ def call_gemini(prompt: str, api_key: str, model: str | None = None) -> str:
         ) from e
 
 
-def _call_openai_compatible(base_url: str, api_key: str, model: str, prompt: str) -> str:
+def _call_openai_compatible(
+    base_url: str, api_key: str, model: str, prompt: str
+) -> str:
     """POST the prompt to the proxy's /chat/completions and return the text."""
     if not api_key:
         raise RuntimeError("GEMINI_PROXY_API_KEY is required to call the proxy")
