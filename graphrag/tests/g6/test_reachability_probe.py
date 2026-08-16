@@ -198,10 +198,14 @@ def _is_modern_only_person_edge(graph: dict, e: dict) -> bool:
 
 def test_all_opposes_edges_reachable_within_2_hops(graph: dict) -> None:
     all_opposes = _opposes_edges(graph)
-    # 11 ancient-corpus opposes + 3 grounded historiography edges added
-    # 2026-08-16 (Wetzel 1992 opposes Rist 1969 and TeSelle 1970, etc.).
-    assert len(all_opposes) == 14, (
-        f"expected 14 opposes edges, found {len(all_opposes)}"
+    # Churn tripwire: any wave that adds or removes an opposes edge must
+    # update this pin IN THE SAME COMMIT, stating which edges moved.
+    # 11 ancient-corpus opposes + 3 grounded historiography edges
+    # (2026-08-16, Wetzel/Rist/TeSelle/Harrison/Brown) + 2 literature-wave
+    # disputes (2026-08-17: Irwin 1992 opposes MacIntyre 1990 and Dihle's
+    # Christian-innovation thesis).
+    assert len(all_opposes) == 16, (
+        f"expected 16 opposes edges, found {len(all_opposes)}"
     )
 
     # Scope to ancient-relevant fault lines: drop modern person<->person disputes
