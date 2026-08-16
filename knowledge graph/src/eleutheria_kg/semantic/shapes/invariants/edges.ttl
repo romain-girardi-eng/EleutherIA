@@ -731,6 +731,22 @@ kg:Shape_respondsTo_Domain a sh:NodeShape ;
     sh:severity sh:Violation ;
     sh:message "Edge `responds_to` violates source/target type constraints from edge_types.json" .
 
+kg:Shape_sameThesisAs_Range a sh:NodeShape ;
+    sh:targetSubjectsOf kg:sameThesisAs ;
+    sh:property kg:Shape_sameThesisAs_RangeProp .
+
+kg:Shape_sameThesisAs_RangeProp a sh:PropertyShape ;
+    sh:path kg:sameThesisAs ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Concept ] [ sh:class kg:Position ] [ sh:class kg:Synthesis ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `same_thesis_as` violates source/target type constraints from edge_types.json" .
+
+kg:Shape_sameThesisAs_Domain a sh:NodeShape ;
+    sh:targetSubjectsOf kg:sameThesisAs ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Concept ] [ sh:class kg:Position ] [ sh:class kg:Synthesis ] ) ;
+    sh:severity sh:Violation ;
+    sh:message "Edge `same_thesis_as` violates source/target type constraints from edge_types.json" .
+
 kg:Shape_sourceFor_Range a sh:NodeShape ;
     sh:targetSubjectsOf kg:sourceFor ;
     sh:property kg:Shape_sourceFor_RangeProp .
